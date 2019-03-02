@@ -151,7 +151,25 @@
 					<finalName>OpenHospital20/bin/OH-core</finalName>
 				</configuration>
 			</plugin>
-
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.1.1</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>project</descriptorRef>
+						<descriptorRef>src</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
