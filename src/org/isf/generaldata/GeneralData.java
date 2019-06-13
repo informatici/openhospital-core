@@ -56,6 +56,7 @@ public class GeneralData {
 	public static boolean ENHANCEDSEARCH;
 	public static boolean XMPPMODULEENABLED;
 	public static boolean DICOMMODULEENABLED;
+	public static boolean ALLOWMULTIPLEOPENEDBILL;
 	
 	private static String DEFAULT_LANGUAGE = "en";
 	private static boolean DEFAULT_SINGLEUSER = false;
@@ -87,6 +88,7 @@ public class GeneralData {
 	private static boolean DEFAULT_ENHANCEDSEARCH = false;
 	private static boolean DEFAULT_XMPPMODULEENABLED=false;
     private static boolean DEFAULT_DICOMMODULEENABLED=false;
+    private static boolean DEFAULT_ALLOWMULTIPLEOPENEDBILL=false;
 
 	private static GeneralData mySingleData;
 	private Properties p;
@@ -127,6 +129,7 @@ public class GeneralData {
 			ENHANCEDSEARCH = myGetProperty("ENHANCEDSEARCH", DEFAULT_ENHANCEDSEARCH);
 			XMPPMODULEENABLED = myGetProperty("XMPPMODULEENABLED", DEFAULT_XMPPMODULEENABLED);
 			DICOMMODULEENABLED = myGetProperty("DICOMMODULEENABLED", DEFAULT_DICOMMODULEENABLED);
+			ALLOWMULTIPLEOPENEDBILL = myGetProperty("ALLOWMULTIPLEOPENEDBILL", DEFAULT_ALLOWMULTIPLEOPENEDBILL);
 			
 		} catch (Exception e) { //no file
 			logger.error(">> " + FILE_PROPERTIES + " file not found.");
