@@ -1,10 +1,11 @@
-package org.isf.admission.service;
+package org.isf.lab.service;
 
 
+import org.isf.admission.service.*;
 import java.util.List;
 
 
-public interface AdmissionIoOperationRepositoryCustom {
+public interface LabIoOperationRepositoryCustom {
 
 	List<Object[]> findAllBySearch(String searchTerms);
 	
