@@ -118,7 +118,7 @@ public class MedicalStockWardIoOperations
 			// We have to register also the income movement for the destination Ward
 			MovementWard destinationWardIncomeMovement = new MovementWard();
 			destinationWardIncomeMovement.setDate(savedMovement.getDate());
-			destinationWardIncomeMovement.setDescription(savedMovement.getDescription());
+			destinationWardIncomeMovement.setDescription(savedMovement.getWard().getDescription());
 			destinationWardIncomeMovement.setMedical(savedMovement.getMedical());
 			destinationWardIncomeMovement.setQuantity(-savedMovement.getQuantity());
 			destinationWardIncomeMovement.setUnits(savedMovement.getUnits());
