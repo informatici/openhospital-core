@@ -2,12 +2,16 @@ package org.isf.menu.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import org.isf.audit.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /*------------------------------------------
  * User - model for the user entity
@@ -19,7 +23,8 @@ import javax.validation.constraints.NotNull;
  *------------------------------------------*/
 @Entity
 @Table(name="USER")
-public class User 
+@EntityListeners(AuditingEntityListener.class)
+public class User  extends Auditable<String>
 {
 	@Id 
 	@Column(name="US_ID_A")		

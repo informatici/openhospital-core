@@ -4,12 +4,15 @@ import java.util.GregorianCalendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.isf.audit.Auditable;
 import org.isf.generaldata.MessageBundle;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /*------------------------------------------
  * Medical Lot - model for the medical entity
@@ -21,7 +24,8 @@ import org.isf.generaldata.MessageBundle;
  *------------------------------------------*/
 @Entity
 @Table(name="MEDICALDSRLOT")
-public class Lot 
+@EntityListeners(AuditingEntityListener.class)
+public class Lot extends Auditable<String>
 {
 	@Id 
 	@Column(name="LT_ID_A")

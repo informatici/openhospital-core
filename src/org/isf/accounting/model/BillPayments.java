@@ -4,6 +4,7 @@ import java.util.GregorianCalendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import org.isf.audit.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Pure Model BillPayments : represents a patient Payment for a Bill
@@ -28,7 +32,8 @@ import javax.validation.constraints.NotNull;
  *------------------------------------------*/
 @Entity
 @Table(name="BILLPAYMENTS")
-public class BillPayments implements Comparable<Object>
+@EntityListeners(AuditingEntityListener.class)
+public class BillPayments  extends Auditable<String> implements Comparable<Object>
 {
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)

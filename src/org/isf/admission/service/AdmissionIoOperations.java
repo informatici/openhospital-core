@@ -78,8 +78,12 @@ public class AdmissionIoOperations
 			Object[] object = it.next();
 			Patient patient = patientRepository.findOne((Integer)object[0]);
 			Admission admission = null;
-			Integer admissionId = (Integer)object[26];
-			if (admissionId != null) admission = repository.findOne((Integer)object[26]);
+			/*System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHH ");
+			for(int i=0; i< object.length; i++)
+				System.out.println("object[" + i +"]= " + object[i]);
+			System.out.println("HERZEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE ");*/
+			Integer admissionId = (Integer)object[31]; //(Integer)object[26];
+			if (admissionId != null) admission =  repository.findOne((Integer)object[31]); //repository.findOne((Integer)object[26]);
 			
 					
 			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);

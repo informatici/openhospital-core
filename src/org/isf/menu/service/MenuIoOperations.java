@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+
+import org.isf.menu.model.GroupMenu;
 import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
 import org.isf.menu.model.UserMenuItem;
@@ -271,13 +275,12 @@ public class MenuIoOperations
 	{
 		boolean result = true;
 
-	
+		
 		result = _deleteGroupMenu(aGroup);
 		
 		for (UserMenuItem item : menu) {
 			result = result && _insertGroupMenu(aGroup, item, insert);
 		}
-		
 		return result;
 	}
 	
@@ -291,17 +294,18 @@ public class MenuIoOperations
 		
 		return result;
 	}
-	
 	public boolean _insertGroupMenu(
 			UserGroup aGroup,
 			UserMenuItem item, 
 			boolean insert) throws OHServiceException 
 	{
 		boolean result = true;
-				
-
-		groupMenuRepository.insert(aGroup.getCode(), item.getCode(), (item.isActive() ? "Y" : "N"));
-				
+		//groupMenuRepository.insert(aGroup.getCode(), item.getCode(), (item.isActive() ? "Y" : "N"));	
+		GroupMenu gm = new GroupMenu();
+		gm.setUserGroup(aGroup.getCode());
+		gm.setActived((item.isActive() ? 'Y' : 'N'));
+		gm.setMenuItem(item.getCode());
+		groupMenuRepository.save(gm);
 		return result;
 	}
 	

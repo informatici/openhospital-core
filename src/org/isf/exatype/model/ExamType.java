@@ -6,10 +6,14 @@ package org.isf.exatype.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import org.isf.audit.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 /**
@@ -27,7 +31,8 @@ import javax.validation.constraints.NotNull;
  *------------------------------------------*/
 @Entity
 @Table(name="EXAMTYPE")
-public class ExamType 
+@EntityListeners(AuditingEntityListener.class)
+public class ExamType extends Auditable<String>
 {
 	@Id 
 	@Column(name="EXC_ID_A") 

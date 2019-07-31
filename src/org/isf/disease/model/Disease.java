@@ -6,6 +6,7 @@ package org.isf.disease.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,7 +17,9 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.isf.audit.Auditable;
 import org.isf.distype.model.DiseaseType;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Pure Model Exam : represents a disease type
@@ -33,7 +36,8 @@ import org.isf.distype.model.DiseaseType;
  *------------------------------------------*/
 @Entity
 @Table(name="DISEASE")
-public class Disease 
+@EntityListeners(AuditingEntityListener.class)
+public class Disease extends Auditable<String> 
 {
 	@Id 
 	@Column(name="DIS_ID_A")	    

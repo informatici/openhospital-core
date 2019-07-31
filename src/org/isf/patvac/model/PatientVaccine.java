@@ -12,6 +12,7 @@ import java.util.GregorianCalendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,12 +22,15 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.isf.audit.Auditable;
 import org.isf.patient.model.Patient;
 import org.isf.vaccine.model.Vaccine;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name="PATIENTVACCINE")
-public class PatientVaccine 
+@EntityListeners(AuditingEntityListener.class) 
+public class PatientVaccine extends Auditable<String>
 {
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)

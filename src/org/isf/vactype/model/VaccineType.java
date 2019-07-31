@@ -2,10 +2,14 @@ package org.isf.vactype.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import org.isf.audit.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /*------------------------------------------
  * VaccineType - vaccine type class to model vaccine type
@@ -30,7 +34,8 @@ import javax.validation.constraints.NotNull;
  *------------------------------------------*/
 @Entity
 @Table(name="VACCINETYPE")
-public class VaccineType 
+@EntityListeners(AuditingEntityListener.class)
+public class VaccineType extends Auditable<String> 
 {
 	@Id 
 	@Column(name="VACT_ID_A")	

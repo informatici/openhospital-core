@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
 import javax.imageio.ImageIO;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,10 +21,12 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.isf.audit.Auditable;
 import org.isf.opd.model.Opd;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /*------------------------------------------
  * Patient - model for the patient entity
@@ -48,7 +51,9 @@ import org.joda.time.PeriodType;
  *------------------------------------------*/
 @Entity
 @Table(name="PATIENT")
-public class Patient {
+@EntityListeners(AuditingEntityListener.class)
+public class Patient extends Auditable<String>
+{
 	/*
 	 * PAT_ID int NOT NULL AUTO_INCREMENT , PAT_FNAME varchar (50) NOT NULL ,
 	 * --first name (nome) PAT_SNAME varchar (50) NOT NULL , --second name
