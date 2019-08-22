@@ -1,4 +1,4 @@
-package org.isf.exa.service;
+package main.java.org.isf.exa.service;
 /*------------------------------------------
  * IoOperations - provides the io operations for recovering and managing exam records from the database.
  * -----------------------------------------

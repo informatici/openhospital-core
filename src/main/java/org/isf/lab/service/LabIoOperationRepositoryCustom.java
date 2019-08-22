@@ -1,4 +1,4 @@
-package org.isf.lab.service;
+package main.java.org.isf.lab.service;
 
 
 import java.util.List;

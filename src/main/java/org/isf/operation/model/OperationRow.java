@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.isf.operation.model;
+package main.java.org.isf.operation.model;
 
 import java.util.GregorianCalendar;
 import javax.persistence.Column;
