@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.org.isf.operation.service;
+package org.isf.operation.service;
 
 import java.util.ArrayList;
 import org.isf.admission.model.Admission;

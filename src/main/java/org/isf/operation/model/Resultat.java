@@ -1,4 +1,4 @@
-package main.java.org.isf.operation.model;
+package org.isf.operation.model;
 
 /**
  *
