@@ -208,11 +208,11 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.14</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.processing</groupId>
 			<artifactId>core</artifactId>
 			<version>1.2.1</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.rxtx</groupId>
 			<artifactId>rxtx</artifactId>
@@ -380,13 +380,13 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		<repository>
+		<!-- <repository>
 			<id>cytoscape</id>
 			<name>Cytoscape Repository</name>
 			<url>http://code.cytoscape.org/nexus/content/repositories/releases/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-		</repository>
+		</repository> -->
 	</repositories>
 </project>
