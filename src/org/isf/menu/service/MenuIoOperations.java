@@ -224,9 +224,7 @@ public class MenuIoOperations
 		while (it.hasNext()) {
 			Object[] object = it.next();
 			char active = (Character) object[9];
-			UserMenuItem umi = new UserMenuItem();
-
-			
+			UserMenuItem umi = new UserMenuItem();			
 			umi.setCode((String) object[0]);
 			umi.setButtonLabel((String) object[1]);
 			umi.setAltLabel((String) object[2]);
