@@ -7,7 +7,6 @@ import org.isf.menu.manager.Context;
 import org.isf.operation.model.Operation;
 import org.isf.operation.service.OperationIoOperations;
 import org.isf.opetype.model.OperationType;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
@@ -36,7 +35,7 @@ public class OperationBrowserManager {
 	public ArrayList<Operation> getOperation() throws OHServiceException {
 		try {
 			return ioOperations.getOperation(null);
-		}  catch(OHException e){
+		}  catch(OHServiceException e){
 			/*Already cached exception with OH specific error message - 
 			 * create ready to return OHServiceException and keep existing error message
 			 */
@@ -54,7 +53,7 @@ public class OperationBrowserManager {
         public Operation getOperationByCode(String code) throws OHServiceException{
             try {
 			return ioOperations.findByCode(code);
-		}  catch(OHException e){
+		}  catch(OHServiceException e){
                     logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(null, 
 					e.getMessage(), OHSeverityLevel.ERROR));
@@ -71,7 +70,7 @@ public class OperationBrowserManager {
 	public ArrayList<Operation> getOperation(String typecode) throws OHServiceException {
 		try {
 			return ioOperations.getOperation(typecode);
-		}  catch(OHException e){
+		}  catch(OHServiceException e){
 			/*Already cached exception with OH specific error message - 
 			 * create ready to return OHServiceException and keep existing error message
 			 */
@@ -96,7 +95,7 @@ public class OperationBrowserManager {
 	public boolean newOperation(Operation operation) throws OHServiceException {
 		try {
 			return ioOperations.newOperation(operation);
-		}  catch(OHException e){
+		}  catch(OHServiceException e){
 			/*Already cached exception with OH specific error message - 
 			 * create ready to return OHServiceException and keep existing error message
 			 */
@@ -123,7 +122,7 @@ public class OperationBrowserManager {
 			// the user has confirmed he wants to overwrite the record
 			return ioOperations.updateOperation(operation);
 
-		}  catch(OHException e){
+		}  catch(OHServiceException e){
 			/*Already cached exception with OH specific error message - 
 			 * create ready to return OHServiceException and keep existing error message
 			 */
@@ -147,7 +146,7 @@ public class OperationBrowserManager {
 	public boolean deleteOperation(Operation operation) throws OHServiceException {
 		try {
 			return ioOperations.deleteOperation(operation);
-		}  catch(OHException e){
+		}  catch(OHServiceException e){
 			/*Already cached exception with OH specific error message - 
 			 * create ready to return OHServiceException and keep existing error message
 			 */
@@ -171,7 +170,7 @@ public class OperationBrowserManager {
 	public boolean codeControl(String code) throws OHServiceException {
 		try {
 			return ioOperations.isCodePresent(code);
-		}  catch(OHException e){
+		}  catch(OHServiceException e){
 			/*Already cached exception with OH specific error message - 
 			 * create ready to return OHServiceException and keep existing error message
 			 */
@@ -197,7 +196,7 @@ public class OperationBrowserManager {
 	public boolean descriptionControl(String description, String typeCode) throws OHServiceException {
 		try {
 			return ioOperations.isDescriptionPresent(description,typeCode);
-		}  catch(OHException e){
+		}  catch(OHServiceException e){
 			/*Already cached exception with OH specific error message - 
 			 * create ready to return OHServiceException and keep existing error message
 			 */

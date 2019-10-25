@@ -1,6 +1,5 @@
 package org.isf.supplier.manager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,7 +7,6 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
 import org.isf.supplier.model.Supplier;
 import org.isf.supplier.service.SupplierOperations;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
@@ -23,7 +21,7 @@ public class SupplierBrowserManager {
     public boolean saveOrUpdate(Supplier supplier) throws OHServiceException {
         try {
             return ioOperations.saveOrUpdate(supplier);
-        } catch (OHException e) {
+        } catch (OHServiceException e) {
 				/*Already cached exception with OH specific error message -
 				 * create ready to return OHServiceException and keep existing error message
 				 */
@@ -41,7 +39,7 @@ public class SupplierBrowserManager {
     public Supplier getByID(int ID) throws OHServiceException {
         try {
             return ioOperations.getByID(ID);
-        } catch (OHException e) {
+        } catch (OHServiceException e) {
 				/*Already cached exception with OH specific error message -
 				 * create ready to return OHServiceException and keep existing error message
 				 */
@@ -59,7 +57,7 @@ public class SupplierBrowserManager {
     public List<Supplier> getAll() throws OHServiceException {
         try {
             return ioOperations.getAll();
-        } catch (OHException e) {
+        } catch (OHServiceException e) {
 				/*Already cached exception with OH specific error message -
 				 * create ready to return OHServiceException and keep existing error message
 				 */
@@ -77,7 +75,7 @@ public class SupplierBrowserManager {
     public List<Supplier> getList() throws OHServiceException {
         try {
             return ioOperations.getList();
-        } catch (OHException e) {
+        } catch (OHServiceException e) {
 				/*Already cached exception with OH specific error message -
 				 * create ready to return OHServiceException and keep existing error message
 				 */

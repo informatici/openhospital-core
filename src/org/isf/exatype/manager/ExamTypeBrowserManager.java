@@ -7,7 +7,6 @@ import org.isf.exatype.model.ExamType;
 import org.isf.exatype.service.ExamTypeIoOperation;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
@@ -55,7 +54,7 @@ public class ExamTypeBrowserManager {
 	public ArrayList<ExamType> getExamType() throws OHServiceException {
 		try {
 			return ioOperations.getExamType();
-		} catch (OHException e) {
+		} catch (OHServiceException e) {
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
 		} catch (Exception e) {
@@ -85,12 +84,10 @@ public class ExamTypeBrowserManager {
 						OHSeverityLevel.ERROR));
 			}
 			return ioOperations.newExamType(examType);
-		} catch (OHException e) {
+		} catch (OHServiceException e) {
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(
 					MessageBundle.getMessage("angal.exatype.newexamtype"), e.getMessage(), OHSeverityLevel.ERROR));
-		} catch(OHServiceException e){
-			throw e;
 		} catch (Exception e) {
 			logger.error("", e);
 			throw new OHServiceException(e,
@@ -112,11 +109,9 @@ public class ExamTypeBrowserManager {
                 throw new OHServiceException(errors);
             }
 			return ioOperations.updateExamType(examType);
-		} catch (OHException e) {
+		} catch (OHServiceException e) {
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
-		} catch(OHServiceException e){
-			throw e;
 		} catch (Exception e) {
 			logger.error("", e);
 			throw new OHServiceException(e,
@@ -136,7 +131,7 @@ public class ExamTypeBrowserManager {
 	public boolean codeControl(String code) throws OHServiceException {
 		try {
 			return ioOperations.isCodePresent(code);
-		} catch (OHException e) {
+		} catch (OHServiceException e) {
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
 		} catch (Exception e) {
@@ -153,12 +148,12 @@ public class ExamTypeBrowserManager {
 	 * @param examType - the {@link ExamType} to delete.
 	 * @return <code>true</code> if the examType has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException 
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
 	public boolean deleteExamType(ExamType examType) throws OHServiceException {
 		try {
 			return ioOperations.deleteExamType(examType);
-		} catch (OHException e) {
+		} catch (OHServiceException e) {
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
 		} catch (Exception e) {
