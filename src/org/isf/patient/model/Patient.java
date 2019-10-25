@@ -137,7 +137,10 @@ public class Patient {
 	
 	@Column(name="PAT_TAXCODE")
 	private String taxCode;
-	
+
+	@Column(name="PAT_DELETED")
+	private String deleted;
+
 	@Transient
 	private float height;
 	
@@ -506,8 +509,16 @@ public class Patient {
 	public void setWeight(float weight) {
 		this.weight = weight;
 	}
-	
-	@Override
+
+    public String getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(String deleted) {
+        this.deleted = deleted;
+    }
+
+    @Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
