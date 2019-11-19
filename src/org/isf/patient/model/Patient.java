@@ -185,6 +185,7 @@ public class Patient {
 		this.taxCode = "";
 		this.height = 0;
 		this.weight = 0;
+		this.deleted = "N";
 	}
 	
 	public Patient(Opd opd) {
