@@ -12,7 +12,6 @@ import org.isf.exa.service.ExamIoOperations;
 import org.isf.exatype.model.ExamType;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
@@ -57,7 +56,7 @@ public class ExamBrowsingManager {
 	public ArrayList<Exam> getExams() throws OHServiceException {
 		try {
 			return ioOperations.getExams();
-		} catch (OHException e) {
+		} catch (OHServiceException e) {
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
 		} catch(Exception e){
@@ -89,7 +88,7 @@ public class ExamBrowsingManager {
 	public ArrayList<Exam> getExams(String description) throws OHServiceException {
 		try {
 			return ioOperations.getExamsByDesc(description);
-		} catch (OHException e) {
+		} catch (OHServiceException e) {
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
 		} catch(Exception e){
@@ -109,7 +108,7 @@ public class ExamBrowsingManager {
 	public ArrayList<ExamType> getExamType() throws OHServiceException {
 		try {
 			return ioOperations.getExamType();
-		} catch (OHException e) {
+		} catch (OHServiceException e) {
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
 		} catch(Exception e){
@@ -133,7 +132,7 @@ public class ExamBrowsingManager {
 	public boolean isKeyPresent(Exam exam) throws OHServiceException {
 		try {
 			return ioOperations.isKeyPresent(exam);
-		} catch (OHException e) {
+		} catch (OHServiceException e) {
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
 		} catch(Exception e){
@@ -164,12 +163,10 @@ public class ExamBrowsingManager {
                 throw new OHServiceException(errors);
             }
 			return ioOperations.newExam(exam);
-		} catch (OHException e) {
+		} catch (OHServiceException e) {
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
-		}  catch (OHServiceException e) {
-			throw e;
-		} catch(Exception e){
+		}  catch(Exception e){
 			//Any exception
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(null, 
@@ -192,12 +189,10 @@ public class ExamBrowsingManager {
                 throw new OHServiceException(errors);
             }
 			return ioOperations.updateExam(exam);
-		} catch (OHException e) {
+		} catch (OHServiceException e) {
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
-		}  catch (OHServiceException e) {
-			throw e;
-		} catch(Exception e){
+		}  catch(Exception e){
 			//Any exception
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(null, 
@@ -215,7 +210,7 @@ public class ExamBrowsingManager {
 	public boolean deleteExam(Exam exam) throws OHServiceException {
 		try {
 			return ioOperations.deleteExam(exam);
-		} catch (OHException e) {
+		} catch (OHServiceException e) {
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
 		} catch(Exception e){

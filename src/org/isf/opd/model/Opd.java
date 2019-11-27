@@ -49,6 +49,9 @@ public class Opd
 	@NotNull
 	@Column(name="OPD_DATE_VIS")
 	private GregorianCalendar visitDate;
+        
+	@Column(name="OPD_DATE_NEXT_VIS")
+        private GregorianCalendar nextVisitDate;
 
 	@ManyToOne
 	@JoinColumn(name="OPD_PAT_ID")
@@ -258,6 +261,14 @@ public class Opd
 
 	public void setUserID(String userID) {
 		this.userID = userID;
+	}
+        
+        public GregorianCalendar getNextVisitDate() {
+		return nextVisitDate;
+	}
+
+	public void setNextVisitDate(GregorianCalendar nextVisitDate) {
+		this.nextVisitDate = nextVisitDate;
 	}
 
 	@Override

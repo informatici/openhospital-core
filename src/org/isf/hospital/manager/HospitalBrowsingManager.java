@@ -3,13 +3,13 @@ package org.isf.hospital.manager;
 import org.isf.generaldata.MessageBundle;
 import org.isf.hospital.model.Hospital;
 import org.isf.hospital.service.HospitalIoOperations;
-import org.isf.menu.manager.Context;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Class that provides gui separation from database operations and gives some
@@ -18,11 +18,13 @@ import org.slf4j.LoggerFactory;
  * @author bob
  * 
  */
+@Component
 public class HospitalBrowsingManager {
 	
 	private final Logger logger = LoggerFactory.getLogger(HospitalBrowsingManager.class);
 	
-	private HospitalIoOperations ioOperations = Context.getApplicationContext().getBean(HospitalIoOperations.class);
+	@Autowired
+	private HospitalIoOperations ioOperations;
 
 	/**
 	 * Reads from database hospital informations
@@ -33,7 +35,7 @@ public class HospitalBrowsingManager {
 	public Hospital getHospital() throws OHServiceException {
 		try {
 			return ioOperations.getHospital();
-		} catch (OHException e) {
+		} catch (OHServiceException e) {
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
 		} catch(Exception e){
@@ -47,12 +49,12 @@ public class HospitalBrowsingManager {
 	 * Reads from database currency cod
 	 * @return currency cod
 	 * @throws OHServiceException 
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
 	public String getHospitalCurrencyCod() throws OHServiceException {
 		try {
 			return ioOperations.getHospitalCurrencyCod();
-		} catch (OHException e) {
+		} catch (OHServiceException e) {
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
 		} catch(Exception e){
@@ -72,7 +74,7 @@ public class HospitalBrowsingManager {
 	public boolean updateHospital(Hospital hospital) throws OHServiceException {
 		try {
 			return ioOperations.updateHospital(hospital);
-		} catch (OHException e) {
+		} catch (OHServiceException e) {
 			logger.error("", e);
 			throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
 		} catch(Exception e){
