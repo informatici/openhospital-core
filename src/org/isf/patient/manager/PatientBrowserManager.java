@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.isf.accounting.manager.BillBrowserManager;
 import org.isf.accounting.model.Bill;
 import org.isf.admission.manager.AdmissionBrowserManager;
@@ -307,5 +309,4 @@ public class PatientBrowserManager {
         }
         return true;
     }
-
 }

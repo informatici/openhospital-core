@@ -422,6 +422,7 @@ public class AccountingIoOperations {
 		ArrayList<BillItems> billItems =  billItemsRepository.findAllGroupByDesc();
 		return billItems;
 	}
+	
 	/**
 	 * return the bill list which date between dateFrom and dateTo and containing given billItem
 	 * added by u2g

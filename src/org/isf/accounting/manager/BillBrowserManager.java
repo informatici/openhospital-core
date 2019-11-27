@@ -346,10 +346,8 @@ public class BillBrowserManager {
 	public ArrayList<BillPayments> getPayments(ArrayList<Bill> billArray) throws OHServiceException {
 		return ioOperations.getPayments(billArray);
 	}
+
 	/**
-<<<<<<< OP-127-improve-exceptions-handling
-	 * added by u2g
-=======
 	 * Retrieves all the {@link Bill}s associated to the specified {@link Patient}.
 	 * @param patID - the Patient's ID
 	 * @return the list of {@link Bill}s
@@ -364,7 +362,6 @@ public class BillBrowserManager {
 	}
 
 	/**
->>>>>>> ea74fe5 Refactored OhExceptionTranslator -> OHExceptionTranslator
 	 * Returns all the distinct stored {@link BillItems}.
 	 * 
 	 * @return a list of  distinct {@link BillItems} or null if an error occurs.
@@ -375,7 +372,6 @@ public class BillBrowserManager {
 	}
 	/**
 	 * get the bills list with a given billItem
-	 * added by u2g
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param billItem
