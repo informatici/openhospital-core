@@ -6,6 +6,7 @@ package org.isf.vaccine.model;
   
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,7 +14,9 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.isf.audit.Auditable;
 import org.isf.vactype.model.VaccineType;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 /**
@@ -29,7 +32,8 @@ import org.isf.vactype.model.VaccineType;
  */
 @Entity
 @Table(name="VACCINE")
-public class Vaccine 
+@EntityListeners(AuditingEntityListener.class) 
+public class Vaccine extends Auditable<String> 
 {
 	@Id 
 	@Column(name="VAC_ID_A")

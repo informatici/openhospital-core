@@ -3,13 +3,16 @@ package org.isf.medicalstockward.model;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.isf.audit.Auditable;
 import org.isf.medicals.model.Medical;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /*------------------------------------------
  * Medical Ward - model for the medical entity
@@ -21,7 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  *------------------------------------------*/
 @Entity
 @Table(name="MEDICALDSRWARD")
-public class MedicalWard implements Comparable<Object> 
+@EntityListeners(AuditingEntityListener.class) 
+public class MedicalWard extends Auditable<String> implements Comparable<Object> 
 {	
 	@Autowired
 	@Transient

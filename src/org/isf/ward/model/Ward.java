@@ -5,11 +5,15 @@
 package org.isf.ward.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
+
+import org.isf.audit.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Pure Model Ward (Hospital wards): represents a ward
@@ -27,8 +31,9 @@ import javax.validation.constraints.NotNull;
  *------------------------------------------*/
 @Entity
 @Table(name="WARD")
-public class Ward {
-	@Id 
+@EntityListeners(AuditingEntityListener.class)
+public class Ward extends Auditable<String> 
+{	@Id 
 	@Column(name="WRD_ID_A")	
     private String code;
 

@@ -8,6 +8,7 @@ package org.isf.medicals.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,7 +19,9 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.isf.audit.Auditable;
 import org.isf.medtype.model.MedicalType;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Pure Model Medical DSR (Drugs Surgery Rest): represents a medical
@@ -39,7 +42,8 @@ import org.isf.medtype.model.MedicalType;
  *------------------------------------------*/
 @Entity
 @Table(name="MEDICALDSR")
-public class Medical implements Comparable<Medical>, Cloneable {
+@EntityListeners(AuditingEntityListener.class)
+public class Medical extends Auditable<String> implements Comparable<Medical>, Cloneable {
 	/**
 	 * Code of the medical
 	 */

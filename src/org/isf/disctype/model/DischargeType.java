@@ -3,10 +3,14 @@ package org.isf.disctype.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import org.isf.audit.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 /**
@@ -24,7 +28,8 @@ import javax.validation.constraints.NotNull;
 *------------------------------------------*/
 @Entity
 @Table(name="DISCHARGETYPE")
-public class DischargeType 
+@EntityListeners(AuditingEntityListener.class) 
+public class DischargeType extends Auditable<String>
 {
 	@Id 
 	@Column(name="DIST_ID_A")	    

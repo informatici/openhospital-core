@@ -4,6 +4,7 @@ import java.util.GregorianCalendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,9 +14,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.isf.audit.Auditable;
 import org.isf.medicals.model.Medical;
 import org.isf.patient.model.Patient;
 import org.isf.ward.model.Ward;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * 		   @author mwithi
@@ -31,7 +34,8 @@ import org.isf.ward.model.Ward;
  *------------------------------------------*/
 @Entity
 @Table(name="MEDICALDSRSTOCKMOVWARD")
-public class MovementWard 
+@EntityListeners(AuditingEntityListener.class) 
+public class MovementWard  extends Auditable<String>
 {
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)
