@@ -309,4 +309,16 @@ public class PatientBrowserManager {
         }
         return true;
     }
+    /**
+     * 
+     * @return patients list
+     */
+    public ArrayList<Patient> getPatientHeadWithHeightAndWeight(){
+		try {
+			return ioOperations.getPatientsHeadWithHeightAndWeight();
+		} catch (OHException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return new ArrayList<Patient>();
+		}
+	}
 }
