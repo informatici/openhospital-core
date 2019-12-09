@@ -1,6 +1,8 @@
 package org.isf.malnutrition.model;
 
 import java.util.GregorianCalendar;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 
 /*------------------------------------------
  * Malnutrition - malnutrition control model
@@ -26,13 +28,20 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.isf.admission.model.Admission;
-import org.isf.audit.Auditable;
+import org.isf.utils.db.Auditable;
 import org.isf.patient.model.Patient;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name="MALNUTRITIONCONTROL")
 @EntityListeners(AuditingEntityListener.class) 
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="MLN_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="MLN_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="MLN_LAST_MODIFIED_BY")),
+     @AttributeOverride(name="active", column=@Column(name="MLN_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="MLN_LAST_MODIFIED_DATE"))
+})
 public class Malnutrition extends Auditable<String>
 {
 	@Id 

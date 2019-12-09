@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.isf.audit;
+package org.isf.utils.db;
 
 import java.util.Optional;
 import org.isf.menu.manager.UserBrowsingManager;

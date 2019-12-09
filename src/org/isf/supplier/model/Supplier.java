@@ -1,5 +1,7 @@
 package org.isf.supplier.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -10,7 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.isf.audit.Auditable;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -19,6 +21,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name="SUPPLIER")
 @EntityListeners(AuditingEntityListener.class) 
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="SUP_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="SUP_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="SUP_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="SUP_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="SUP_LAST_MODIFIED_DATE"))
+})
 public class Supplier extends Auditable<String> implements java.io.Serializable {
 
 	/**

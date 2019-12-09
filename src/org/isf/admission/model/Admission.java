@@ -19,7 +19,7 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.isf.admtype.model.AdmissionType;
-import org.isf.audit.Auditable;
+import org.isf.utils.db.Auditable;
 import org.isf.disctype.model.DischargeType;
 import org.isf.disease.model.Disease;
 import org.isf.dlvrrestype.model.DeliveryResultType;
