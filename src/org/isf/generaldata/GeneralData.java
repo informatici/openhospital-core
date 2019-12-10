@@ -28,10 +28,13 @@ public class GeneralData {
 
 	public static String LANGUAGE;
 	public static boolean SINGLEUSER;
+	public static boolean OPDOPERATION;
 	public static boolean AUTOMATICLOT;
 	public static boolean LOTWITHCOST;
 	
 	public static String PATIENTSHEET;
+	public static String PATIENTSHEETV2;
+	public static String EXAMINATION;
 	public static String OPDCHART;
 	public static String ADMCHART;
 	public static String DISCHART;
@@ -69,7 +72,11 @@ public class GeneralData {
 	private static boolean DEFAULT_SINGLEUSER = false;
 	private static boolean DEFAULT_AUTOMATICLOT = true;
 	private static boolean DEFAULT_LOTWITHCOST = false;
+	private static boolean DEFAULT_OPDOPERATION = false;
+	
 	private static String DEFAULT_PATIENTSHEET = "patient_clinical_sheet";
+	private static String DEFAULT_PATIENTSHEETV2 = "patient_clinical_sheet_ver3";
+	private static String DEFAULT_EXAMINATION = "patient_examination";
 	private static String DEFAULT_OPDCHART = "patient_opd_chart";
 	private static String DEFAULT_ADMCHART = "patient_adm_chart";
 	private static String DEFAULT_DISCHART = "patient_dis_chart";
@@ -112,9 +119,12 @@ public class GeneralData {
 			logger.info("File generalData.properties loaded. ");
 			LANGUAGE = myGetProperty("LANGUAGE", DEFAULT_LANGUAGE);
 			SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
+			OPDOPERATION= myGetProperty("OPDOPERATION", DEFAULT_SINGLEUSER);
 			AUTOMATICLOT = myGetProperty("AUTOMATICLOT", DEFAULT_AUTOMATICLOT);
 			LOTWITHCOST = myGetProperty("LOTWITHCOST", DEFAULT_LOTWITHCOST);
 			PATIENTSHEET = myGetProperty("PATIENTSHEET", DEFAULT_PATIENTSHEET);
+			PATIENTSHEETV2 = myGetProperty("PATIENTSHEETV2", DEFAULT_PATIENTSHEETV2);
+			EXAMINATION =myGetProperty("EXAMINATION", DEFAULT_EXAMINATION);
 			OPDCHART = myGetProperty("OPDCHART", DEFAULT_OPDCHART);
 			ADMCHART = myGetProperty("ADMCHART", DEFAULT_ADMCHART);
 			DISCHART = myGetProperty("DISCHART", DEFAULT_DISCHART);

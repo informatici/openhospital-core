@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -257,6 +259,46 @@ public class JasperReportsManager {
             HashMap<String, Object> parameters = getHospitalParameters();
             parameters.put("patientID", String.valueOf(patientID)); // real param
 
+            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + String.valueOf(patientID)+".pdf";
+
+            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
+            JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
+            return result;
+        } catch(OHServiceException e){
+            //Already managed, ready to return OHServiceException
+            throw e;
+        } catch (OHException e) {
+            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
+        }catch(Exception e){
+            //Any exception
+            logger.error("", e);
+            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+                    MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
+        }
+    }
+    
+    public JasperReportResultDto getGenericReportPatientVersion2Pdf(Integer patientID, String type, Date date_From, Date date_To, String jasperFileName) throws OHServiceException {
+
+        try{
+            HashMap<String, Object> parameters = getHospitalParameters();
+    		Format formatter;
+		    formatter = new SimpleDateFormat("yyyy-MM-dd");
+		    
+		    Calendar c = Calendar.getInstance(); 
+		    c.setTime(date_From); 
+		    c.add(Calendar.DATE, -1);
+		    Date df = c.getTime();
+		    Calendar ct = Calendar.getInstance(); 
+		    ct.setTime(date_To); 
+		    ct.add(Calendar.DATE, 1);
+		    Date dt = ct.getTime();
+		    String dateFromQuery = formatter.format(df);
+		    String dateToQuery = formatter.format(dt);
+	
+            parameters.put("patientID", String.valueOf(patientID));
+            parameters.put("Type", type);
+            parameters.put("Date_from", dateFromQuery); 
+            parameters.put("Date_to", dateToQuery); 
             String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + String.valueOf(patientID)+".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);

@@ -7,6 +7,7 @@ import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
+import org.isf.patient.model.Patient;
 import org.isf.utils.db.DbQueryLogger;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -28,6 +29,8 @@ public class MedicalStockWardIoOperations
 	private MedicalStockWardIoOperationRepository repository;
 	@Autowired
 	private MovementWardIoOperationRepository movementRepository;
+	@Autowired
+	private MovementPatWard movementPat;
 	
 	/**
 	 * Get all {@link MovementWard}s with the specified criteria.
@@ -264,5 +267,12 @@ public class MedicalStockWardIoOperations
 		}
 		
 		return medicalWards;
+	}
+
+
+
+	public ArrayList<MovementWard> getWardMovementsToPatient(Integer patId) {
+		
+		return movementPat.findWardMovementPat(patId);
 	}
 }
