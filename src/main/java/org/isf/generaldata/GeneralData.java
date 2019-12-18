@@ -25,13 +25,12 @@ public class GeneralData {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final String FILE_PROPERTIES = "generalData.properties";
-
 	public static String LANGUAGE;
 	public static boolean SINGLEUSER;
 	public static boolean AUTOMATICLOT;
 	public static boolean LOTWITHCOST;
-	
 	public static String PATIENTSHEET;
+	public static String VISITSHEET;
 	public static String OPDCHART;
 	public static String ADMCHART;
 	public static String DISCHART;
@@ -71,6 +70,7 @@ public class GeneralData {
 	private static boolean DEFAULT_AUTOMATICLOT = true;
 	private static boolean DEFAULT_LOTWITHCOST = false;
 	private static String DEFAULT_PATIENTSHEET = "patient_clinical_sheet";
+	private static String DEFAULT_VISITSHEET = "WardVisits";
 	private static String DEFAULT_OPDCHART = "patient_opd_chart";
 	private static String DEFAULT_ADMCHART = "patient_adm_chart";
 	private static String DEFAULT_DISCHART = "patient_dis_chart";
@@ -117,6 +117,7 @@ public class GeneralData {
 			AUTOMATICLOT = myGetProperty("AUTOMATICLOT", DEFAULT_AUTOMATICLOT);
 			LOTWITHCOST = myGetProperty("LOTWITHCOST", DEFAULT_LOTWITHCOST);
 			PATIENTSHEET = myGetProperty("PATIENTSHEET", DEFAULT_PATIENTSHEET);
+			VISITSHEET = myGetProperty("VISITSHEET", DEFAULT_VISITSHEET);
 			OPDCHART = myGetProperty("OPDCHART", DEFAULT_OPDCHART);
 			ADMCHART = myGetProperty("ADMCHART", DEFAULT_ADMCHART);
 			DISCHART = myGetProperty("DISCHART", DEFAULT_DISCHART);

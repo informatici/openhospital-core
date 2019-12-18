@@ -11,7 +11,11 @@ import org.isf.patient.test.TestPatientContext;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
 import org.isf.visits.model.Visit;
+import org.isf.visits.model.VisitRow;
 import org.isf.visits.service.VisitsIoOperations;
+import org.isf.ward.model.Ward;
+import org.isf.ward.test.TestWard;
+import org.isf.ward.test.TestWardContext;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -30,6 +34,8 @@ public class Tests
 	private static TestVisit testVisit;
 	private static TestVisitContext testVisitContext;
 	private static TestPatient testPatient;
+	private static TestWard testWard;
+	private static TestWardContext testWardContext;
 	private static TestPatientContext testPatientContext;
 
     @Autowired
@@ -43,6 +49,8 @@ public class Tests
     	testVisitContext = new TestVisitContext();
     	testPatient = new TestPatient();
     	testPatientContext = new TestPatientContext();
+    	testWard = new TestWard();
+    	testWardContext = new TestWardContext();
     	
         return;
     }
@@ -76,7 +84,7 @@ public class Tests
     	testVisitContext = null;
     	testPatient = null;
     	testPatientContext = null;
-    	
+    	testWardContext = null;
     	return;
     }
 	
@@ -131,7 +139,7 @@ public class Tests
 		{		
 			id = _setupTestVisit(false);
 			Visit foundVisit = (Visit)jpa.find(Visit.class, id); 
-			ArrayList<Visit> visits = visitsIoOperation.getVisits(foundVisit.getPatient().getCode());
+			ArrayList<VisitRow> visits = visitsIoOperation.getVisits(foundVisit.getPatient().getCode());
 			
 			assertEquals(foundVisit.getDate(), visits.get(visits.size()-1).getDate());
 		} 
@@ -153,11 +161,13 @@ public class Tests
 		try 
 		{		
 			Patient patient = testPatient.setup(false);
+			Ward ward= testWard.setup(false);
 			jpa.beginTransaction();	
+			jpa.persist(ward);
 			jpa.persist(patient);
 			jpa.commitTransaction();
-			Visit visit = testVisit.setup(patient, true);
-			id = visitsIoOperation.newVisit(visit);
+			VisitRow visit = testVisit.setup(patient, true, ward);
+			id = visitsIoOperation.newVisit(visit).getVisitID();
 			
 			_checkVisitIntoDb(id);
 		} 
@@ -201,7 +211,7 @@ public class Tests
     {	
 		testPatientContext.saveAll(jpa);
 		testVisitContext.saveAll(jpa);
-        		
+        testWardContext.saveAll(jpa);		
         return;
     }
 	
@@ -209,20 +219,21 @@ public class Tests
     {
 		testVisitContext.deleteNews(jpa);
 		testPatientContext.deleteNews(jpa);
-        
+        testWardContext.deleteNews(jpa);
         return;
     }
         
 	private int _setupTestVisit(
 			boolean usingSet) throws OHException 
 	{
-		Visit visit;
+		VisitRow visit;
 		Patient patient = testPatient.setup(false);
-					
+		Ward ward = testWard.setup(false);		
 
     	jpa.beginTransaction();	
     	jpa.persist(patient);
-    	visit = testVisit.setup(patient, usingSet);
+    	jpa.persist(ward);
+    	visit = testVisit.setup(patient, usingSet, ward);
 		jpa.persist(visit);
     	jpa.commitTransaction();
     	

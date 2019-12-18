@@ -3,7 +3,6 @@ package org.isf.operation.manager;
 import java.util.ArrayList;
 
 import org.isf.generaldata.MessageBundle;
-import org.isf.menu.manager.Context;
 import org.isf.operation.model.Operation;
 import org.isf.operation.service.OperationIoOperations;
 import org.isf.opetype.model.OperationType;
@@ -24,6 +23,7 @@ import org.springframework.stereotype.Component;
 public class OperationBrowserManager {
 
 	private final Logger logger = LoggerFactory.getLogger(OperationBrowserManager.class);
+	
 	@Autowired
 	private OperationIoOperations ioOperations;
 
