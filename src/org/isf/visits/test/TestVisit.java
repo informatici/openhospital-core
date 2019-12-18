@@ -8,6 +8,7 @@ import java.util.GregorianCalendar;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
 import org.isf.visits.model.Visit;
+import org.isf.ward.model.Ward;
 
 
 public class TestVisit 
@@ -15,11 +16,12 @@ public class TestVisit
 	private GregorianCalendar date = new GregorianCalendar(10, 9, 8);
 	private String note = "TestNote";
 	private boolean sms = true;
-    
+	private String duration = "10";
+	private String service = "testService";
 			
 	public Visit setup(
 			Patient patient,
-			boolean usingSet) throws OHException 
+			boolean usingSet, Ward ward) throws OHException 
 	{
 		Visit visit;
 	
@@ -32,7 +34,7 @@ public class TestVisit
 		else
 		{
 			// Create Visit with all parameters 
-			visit = new Visit(0, date, patient, note, sms);
+			visit = new Visit(0, date, patient, note, sms, ward, duration, service);
 		}
 				    	
 		return visit;

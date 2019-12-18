@@ -7,11 +7,14 @@ import java.util.ArrayList;
 
 import org.isf.patient.model.Patient;
 import org.isf.patient.test.TestPatient;
+import org.isf.ward.test.TestWard;
 import org.isf.patient.test.TestPatientContext;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
+import org.isf.ward.model.Ward;
+import org.isf.ward.test.TestWard;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -30,6 +33,7 @@ public class Tests
 	private static TestVisit testVisit;
 	private static TestVisitContext testVisitContext;
 	private static TestPatient testPatient;
+	private static TestWard testWard;
 	private static TestPatientContext testPatientContext;
 
     @Autowired
@@ -153,10 +157,11 @@ public class Tests
 		try 
 		{		
 			Patient patient = testPatient.setup(false);
+			Ward ward= testWard.setup(false);
 			jpa.beginTransaction();	
 			jpa.persist(patient);
 			jpa.commitTransaction();
-			Visit visit = testVisit.setup(patient, true);
+			Visit visit = testVisit.setup(patient, true, ward);
 			id = visitsIoOperation.newVisit(visit);
 			
 			_checkVisitIntoDb(id);
@@ -218,11 +223,11 @@ public class Tests
 	{
 		Visit visit;
 		Patient patient = testPatient.setup(false);
-					
+		Ward ward = testWard.setup(false);		
 
     	jpa.beginTransaction();	
     	jpa.persist(patient);
-    	visit = testVisit.setup(patient, usingSet);
+    	visit = testVisit.setup(patient, usingSet, ward);
 		jpa.persist(visit);
     	jpa.commitTransaction();
     	

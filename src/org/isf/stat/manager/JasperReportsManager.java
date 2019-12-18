@@ -274,6 +274,30 @@ public class JasperReportsManager {
                     MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
         }
     }
+    public JasperReportResultDto getGenericReportWardVisitPdf(String wardID, Date date, String jasperFileName) throws OHServiceException {
+
+        try{
+            HashMap<String, Object> parameters = getHospitalParameters();
+            parameters.put("wardID", String.valueOf(wardID)); // real param
+            parameters.put("date", date); // real param
+            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + String.valueOf(wardID)+".pdf";
+
+            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
+            JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
+            return result;
+        } catch(OHServiceException e){
+            //Already managed, ready to return OHServiceException
+            throw e;
+        } catch (OHException e) {
+            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
+        }catch(Exception e){
+            //Any exception
+            logger.error("", e);
+            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+                    MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
+        }
+    }
+    
     
     public JasperReportResultDto getGenericReportPharmaceuticalOrderPdf(String jasperFileName) throws OHServiceException {
 

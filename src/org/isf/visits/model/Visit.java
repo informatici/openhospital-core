@@ -16,6 +16,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.isf.patient.model.Patient;
+import org.isf.ward.model.Ward;
 
  /*------------------------------------------
  * Visits : ?
@@ -38,6 +39,11 @@ public class Visit
 	@ManyToOne
 	@JoinColumn(name="VST_PAT_ID")
 	Patient patient;
+	
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name="VST_WARD_ID")
+	Ward ward;
 
 	@NotNull
 	@Column(name="VST_DATE")
@@ -45,6 +51,12 @@ public class Visit
 	
 	@Column(name="VST_NOTE")	
 	private String note;
+	
+	@Column(name="VST_DURATION")	
+	private String duration;
+	
+	@Column(name="VST_SERVICE")	
+	private String service;
 	
 	@Column(name="VST_SMS")	
 	private boolean sms;
@@ -57,13 +69,16 @@ public class Visit
 		super();
 	}
 
-	public Visit(int visitID, GregorianCalendar date, Patient patient, String note, boolean sms) {
+	public Visit(int visitID, GregorianCalendar date, Patient patient, String note, boolean sms, Ward ward, String duration, String service) {
 		super();
 		this.visitID = visitID;
 		this.date = date;
 		this.patient = patient;
 		this.note = note;
 		this.sms = sms;		
+		this.ward=ward;
+		this.duration=duration;
+		this.service=service;
 	}
 	
 	public GregorianCalendar getDate() {
@@ -95,7 +110,30 @@ public class Visit
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
+	
+	public Ward getWard() {
+		return ward;
+	}
 
+	public void setWard(Ward ward) {
+		this.ward = ward;
+	}
+
+	public String getDuration() {
+		return duration;
+	}
+
+	public void setDuration(String duration) {
+		this.duration = duration;
+	}
+	
+	public String getService() {
+		return service;
+	}
+
+	public void setService(String service) {
+		this.service = service;
+	}
 	public String getNote() {
 		return note;
 	}

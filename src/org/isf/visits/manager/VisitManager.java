@@ -48,6 +48,10 @@ public class VisitManager {
 		return ioOperations.getVisits(patID);
 	}
 	
+	public ArrayList<Visit> getVisitsWard(String ward) throws OHServiceException {
+		return ioOperations.getVisitsWard(ward);
+	}
+	
 	/**
 	 * insert a new {@link Visit} for related Patient
 	 * 

@@ -42,6 +42,25 @@ public class VisitsIoOperations {
 		return visits;
 	}
 
+	
+	public ArrayList<Visit> getVisitsWard(
+			String ward) throws OHServiceException 
+	{
+		ArrayList<Visit> visits = null;
+
+		
+		if (!ward.equals(null)) {
+			visits = new ArrayList<Visit>(repository.findAllWhereWardByOrderDateAsc(ward));
+		}
+		else
+		{
+			visits = new ArrayList<Visit>(repository.findAllByOrderPatientAndDateAsc()); 
+		}
+		
+		return visits;
+	}
+	
+	
 	/**
 	 * Insert a new {@link Visit} for a patID
 	 * 

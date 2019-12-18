@@ -18,6 +18,9 @@ public interface VisitsIoOperationRepository extends JpaRepository<Visit, Intege
     @Query(value = "SELECT * FROM VISITS WHERE VST_PAT_ID = :patient ORDER BY VST_PAT_ID, VST_DATE", nativeQuery= true)
     public List<Visit> findAllWherePatientByOrderPatientAndDateAsc(@Param("patient") Integer patient);
     
+    @Query(value = "SELECT * FROM VISITS WHERE VST_WARD_ID = :ward ORDER BY VST_DATE", nativeQuery= true)
+    public List<Visit> findAllWhereWardByOrderDateAsc(@Param("ward") String ward);
+   
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM VISITS WHERE VST_PAT_ID = :patient", nativeQuery= true)
