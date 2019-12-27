@@ -11,7 +11,9 @@ import javax.persistence.PersistenceContext;
 import org.isf.generaldata.MessageBundle;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.stereotype.Service;
 
+@Service
 @Transactional
 class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCustom {
 	
