@@ -16,6 +16,7 @@ import org.isf.utils.db.TranslateOHException;
 import org.isf.utils.exception.OHException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -24,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  * @author Rick, Vero, pupo
  */
-@Component
+@Service
 @Transactional(rollbackFor=OHException.class)
 @TranslateOHException
 public class OperationIoOperations {

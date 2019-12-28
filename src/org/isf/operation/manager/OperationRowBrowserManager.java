@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package org.isf.operation.manager;
+import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +21,11 @@ import org.isf.utils.exception.OHException;
  *
  * @author xavier
  */
+@Component
 public class OperationRowBrowserManager {
     private final Logger logger = LoggerFactory.getLogger(OperationRowBrowserManager.class);
-    private OperationRowIoOperations ioOperations = Context.getApplicationContext().getBean(OperationRowIoOperations.class);
+    @Autowired
+    private OperationRowIoOperations ioOperations;
     
     public List<OperationRow> getOperationRowByAdmission(Admission adm) throws OHException{
 	return ioOperations.getOperationRowByAdmission(adm);
