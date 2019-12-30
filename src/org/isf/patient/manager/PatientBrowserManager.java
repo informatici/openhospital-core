@@ -19,11 +19,14 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class PatientBrowserManager {
 	
-	private PatientIoOperations ioOperations = Context.getApplicationContext().getBean(PatientIoOperations.class);
+	@Autowired
+	private PatientIoOperations ioOperations;
 	
 	/**
 	 * methot that insert a new Patient in the db
