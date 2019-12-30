@@ -10,7 +10,9 @@ import org.isf.opetype.service.OperationTypeIoOperation;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OperationTypeBrowserManager {
 
 	private OperationTypeIoOperation ioOperations = Context.getApplicationContext().getBean(OperationTypeIoOperation.class);
