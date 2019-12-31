@@ -13,8 +13,10 @@ import org.isf.serviceprinting.print.PriceForPrint;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+@Component
 public class PriceListManager {
 
 	private PricesListIoOperations ioOperations = Context.getApplicationContext().getBean(PricesListIoOperations.class);
