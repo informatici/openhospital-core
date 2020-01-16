@@ -25,12 +25,10 @@ public class GeneralData {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final String FILE_PROPERTIES = "generalData.properties";
-
 	public static String LANGUAGE;
 	public static boolean SINGLEUSER;
 	public static boolean AUTOMATICLOT;
 	public static boolean LOTWITHCOST;
-	
 	public static String PATIENTSHEET;
 	public static String VISITSHEET;
 	public static String OPDCHART;
@@ -72,7 +70,6 @@ public class GeneralData {
 	private static boolean DEFAULT_LOTWITHCOST = false;
 	private static String DEFAULT_PATIENTSHEET = "patient_clinical_sheet";
 	private static String DEFAULT_VISITSHEET = "WardVisits";
-	
 	private static String DEFAULT_OPDCHART = "patient_opd_chart";
 	private static String DEFAULT_ADMCHART = "patient_adm_chart";
 	private static String DEFAULT_DISCHART = "patient_dis_chart";
