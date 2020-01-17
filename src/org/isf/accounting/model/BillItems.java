@@ -1,7 +1,10 @@
 package org.isf.accounting.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,6 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import org.isf.utils.db.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Pure Model BillItems : represents an item in the Bill
@@ -25,7 +31,17 @@ import javax.validation.constraints.NotNull;
  *------------------------------------------*/
 @Entity
 @Table(name="BILLITEMS")
-public class BillItems 
+@EntityListeners(AuditingEntityListener.class)
+
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="BLI_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="BLI_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="BLI_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="BLI_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="BLI_LAST_MODIFIED_DATE"))
+})
+
+public class BillItems extends Auditable<String>
 {
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)

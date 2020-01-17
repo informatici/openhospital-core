@@ -1,10 +1,18 @@
 package org.isf.menu.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.isf.utils.db.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /*------------------------------------------
  * User - model for the user entity
@@ -16,9 +24,18 @@ import javax.persistence.Transient;
  *------------------------------------------*/
 @Entity
 @Table(name="GROUPMENU")
-public class GroupMenu 
+@EntityListeners(AuditingEntityListener.class) 
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="GM_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="GM_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="GM_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="GMM_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="GM_LAST_MODIFIED_DATE"))
+})
+public class GroupMenu extends Auditable<String>
 {
 	@Id 
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="GM_ID")		
 	private Integer code;
 	
@@ -29,7 +46,7 @@ public class GroupMenu
 	private String menuItem;
 
 	@Column(name="GM_ACTIVE")
-	private char active;	
+	private char actived;	
 	
 	@Transient
 	private volatile int hashCode = 0;
@@ -38,12 +55,12 @@ public class GroupMenu
 	public GroupMenu(){
 	}
 	
-	public GroupMenu(Integer code, String userGroup, String menuItem, char active)
+	public GroupMenu(Integer code, String userGroup, String menuItem, char actived)
 	{
 		this.code = code;
 		this.userGroup = userGroup;
 		this.menuItem = menuItem;
-		this.active = active;
+		this.actived = actived;
 	}
 	
 	public Integer getCode() {
@@ -64,11 +81,11 @@ public class GroupMenu
 	public void setMenuItem(String menuItem) {
 		this.menuItem = menuItem;
 	}
-	public char getActive() {
-		return active;
+	public char getActived() {
+		return actived;
 	}
-	public void setActive(char active) {
-		this.active = active;
+	public void setActived(char actived) {
+		this.actived = actived;
 	}
 	
 	public String toString(){
@@ -81,7 +98,7 @@ public class GroupMenu
                 : (getCode().equals(((GroupMenu) anObject).getCode())
                   && getUserGroup().equalsIgnoreCase(((GroupMenu) anObject).getUserGroup()) 
                   && getMenuItem().equals(((GroupMenu) anObject).getMenuItem())
-                  && getActive() == ((GroupMenu) anObject).getActive());
+                  && getActived() == ((GroupMenu) anObject).getActived());
     }
 
 	@Override

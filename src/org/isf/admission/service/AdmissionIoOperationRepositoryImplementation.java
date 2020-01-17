@@ -33,7 +33,6 @@ class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationReposito
 		String[] terms = _calculateAdmittedPatientsTerms(searchTerms);
 		String query = _calculateAdmittedPatientsQuery(terms);
 		
-		
 		return query;
 	}
 	
