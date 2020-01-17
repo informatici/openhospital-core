@@ -11,8 +11,6 @@ public class TestGroupMenu
     private Integer code = 999;
     private String userGroup = "TestDescription";
     private String menuItem = "TestDescription";
-    private int active = 1;
-    
 			
 	public GroupMenu setup(
 			boolean usingSet) throws OHException 
@@ -28,7 +26,7 @@ public class TestGroupMenu
 		else
 		{
 			// Create GroupMenu with all parameters 
-			groupMenu = new GroupMenu(code, userGroup, menuItem, active);
+			groupMenu = new GroupMenu(code, userGroup, menuItem);
 		}
 				    	
 		return groupMenu;
@@ -40,7 +38,6 @@ public class TestGroupMenu
 		groupMenu.setCode(code);
 		groupMenu.setUserGroup(userGroup);
 		groupMenu.setMenuItem(menuItem);
-		groupMenu.setActive(active);
 		
 		return;
 	}
@@ -51,7 +48,6 @@ public class TestGroupMenu
     	assertEquals(code, groupMenu.getCode());
     	assertEquals(userGroup, groupMenu.getUserGroup());
     	assertEquals(menuItem, groupMenu.getMenuItem());
-    	assertEquals(active, groupMenu.getActive());
 		
 		return;
 	}

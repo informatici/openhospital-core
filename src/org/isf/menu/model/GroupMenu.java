@@ -51,12 +51,11 @@ public class GroupMenu extends Auditable<String>
 	public GroupMenu(){
 	}
 	
-	public GroupMenu(Integer code, String userGroup, String menuItem, int actived)
+	public GroupMenu(Integer code, String userGroup, String menuItem)
 	{
 		this.code = code;
 		this.userGroup = userGroup;
 		this.menuItem = menuItem;
-		this.active = actived;
 	}
 	
 	public Integer getCode() {
@@ -87,8 +86,7 @@ public class GroupMenu extends Auditable<String>
         return (anObject == null) || !(anObject instanceof GroupMenu) ? false
                 : (getCode().equals(((GroupMenu) anObject).getCode())
                   && getUserGroup().equalsIgnoreCase(((GroupMenu) anObject).getUserGroup()) 
-                  && getMenuItem().equals(((GroupMenu) anObject).getMenuItem())
-                  && getActive() == ((GroupMenu) anObject).getActive());
+                  && getMenuItem().equals(((GroupMenu) anObject).getMenuItem()));
     }
 
 	@Override
