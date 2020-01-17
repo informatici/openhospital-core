@@ -222,7 +222,7 @@ public class MenuIoOperations
 		Iterator<Object[]> it = menuList.iterator();
 		while (it.hasNext()) {
                     Object[] object = it.next();
-                    char active = (Character) object[9];
+                    int active = (Boolean) object[9] ? 1 : 0;
                     UserMenuItem umi = new UserMenuItem();			
                     umi.setCode((String) object[0]);
                     umi.setButtonLabel((String) object[1]);
@@ -233,7 +233,7 @@ public class MenuIoOperations
                     umi.setMyClass((String) object[6]);
                     umi.setASubMenu((Character)object[7] == 'Y' ? true : false);
                     umi.setPosition((Integer) object[8]);
-                    umi.setActive(active == 'Y' ? true : false);
+                    umi.setActive(active == 1 ? true : false);
                     menu.add(umi);
 		}
 		
