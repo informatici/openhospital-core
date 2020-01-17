@@ -29,7 +29,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
     @AttributeOverride(name="createdBy", column=@Column(name="GM_CREATED_BY")),
     @AttributeOverride(name="createdDate", column=@Column(name="GM_CREATED_DATE")),
     @AttributeOverride(name="lastModifiedBy", column=@Column(name="GM_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="GMM_ACTIVE")),
+    @AttributeOverride(name="active", column=@Column(name="GM_ACTIVE")),
     @AttributeOverride(name="lastModifiedDate", column=@Column(name="GM_LAST_MODIFIED_DATE"))
 })
 public class GroupMenu extends Auditable<String>
@@ -45,9 +45,6 @@ public class GroupMenu extends Auditable<String>
 	@Column(name="GM_MNI_ID_A")
 	private String menuItem;
 
-	@Column(name="GM_ACTIVE")
-	private char actived;	
-	
 	@Transient
 	private volatile int hashCode = 0;
 			
@@ -55,12 +52,12 @@ public class GroupMenu extends Auditable<String>
 	public GroupMenu(){
 	}
 	
-	public GroupMenu(Integer code, String userGroup, String menuItem, char actived)
+	public GroupMenu(Integer code, String userGroup, String menuItem, int actived)
 	{
 		this.code = code;
 		this.userGroup = userGroup;
 		this.menuItem = menuItem;
-		this.actived = actived;
+		this.active = actived;
 	}
 	
 	public Integer getCode() {
@@ -81,13 +78,7 @@ public class GroupMenu extends Auditable<String>
 	public void setMenuItem(String menuItem) {
 		this.menuItem = menuItem;
 	}
-	public char getActived() {
-		return actived;
-	}
-	public void setActived(char actived) {
-		this.actived = actived;
-	}
-	
+
 	public String toString(){
 		return code.toString();		
 	}
@@ -98,7 +89,7 @@ public class GroupMenu extends Auditable<String>
                 : (getCode().equals(((GroupMenu) anObject).getCode())
                   && getUserGroup().equalsIgnoreCase(((GroupMenu) anObject).getUserGroup()) 
                   && getMenuItem().equals(((GroupMenu) anObject).getMenuItem())
-                  && getActived() == ((GroupMenu) anObject).getActived());
+                  && getActive() == ((GroupMenu) anObject).getActive());
     }
 
 	@Override

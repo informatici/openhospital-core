@@ -300,7 +300,7 @@ public class MenuIoOperations
 		//groupMenuRepository.insert(aGroup.getCode(), item.getCode(), (item.isActive() ? "Y" : "N"));	
 		GroupMenu gm = new GroupMenu();
 		gm.setUserGroup(aGroup.getCode());
-		gm.setActived((item.isActive() ? 'Y' : 'N'));
+		gm.setActive((item.isActive() ? 1 : 0));
 		gm.setMenuItem(item.getCode());
 		groupMenuRepository.save(gm);
 		return result;

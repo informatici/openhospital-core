@@ -11,7 +11,7 @@ public class TestGroupMenu
     private Integer code = 999;
     private String userGroup = "TestDescription";
     private String menuItem = "TestDescription";
-    private char actived = 'Y';
+    private int active = 1;
     
 			
 	public GroupMenu setup(
@@ -28,7 +28,7 @@ public class TestGroupMenu
 		else
 		{
 			// Create GroupMenu with all parameters 
-			groupMenu = new GroupMenu(code, userGroup, menuItem, actived);
+			groupMenu = new GroupMenu(code, userGroup, menuItem, active);
 		}
 				    	
 		return groupMenu;
@@ -40,7 +40,7 @@ public class TestGroupMenu
 		groupMenu.setCode(code);
 		groupMenu.setUserGroup(userGroup);
 		groupMenu.setMenuItem(menuItem);
-		groupMenu.setActived(actived);
+		groupMenu.setActive(active);
 		
 		return;
 	}
@@ -51,7 +51,7 @@ public class TestGroupMenu
     	assertEquals(code, groupMenu.getCode());
     	assertEquals(userGroup, groupMenu.getUserGroup());
     	assertEquals(menuItem, groupMenu.getMenuItem());
-    	assertEquals(actived, groupMenu.getActived());
+    	assertEquals(active, groupMenu.getActive());
 		
 		return;
 	}
