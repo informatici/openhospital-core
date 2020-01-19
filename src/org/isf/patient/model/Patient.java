@@ -138,6 +138,12 @@ public class Patient {
 	@Column(name="PAT_TAXCODE")
 	private String taxCode;
 	
+	@Column(name="PAT_MAR_STAT")
+	private String maritalStatus;
+
+	@Column(name="PAT_PROFESSION")
+	private String profession;
+
 	@Transient
 	private float height;
 	
@@ -182,6 +188,8 @@ public class Patient {
 		this.taxCode = "";
 		this.height = 0;
 		this.weight = 0;
+		this.maritalStatus = "";
+		this.profession = "";
 	}
 	
 	public Patient(Opd opd) {
@@ -513,6 +521,22 @@ public class Patient {
 	public void setWeight(float weight) {
 		this.weight = weight;
 	}
+
+	public String getMaritalStatus() {
+		return maritalStatus;
+	}
+
+	public void setMaritalStatus(String maritalStatus) {
+		this.maritalStatus = maritalStatus;
+	}
+
+	public String getProfession() {
+		return profession;
+	}
+
+	public void setProfession(String profession) {
+		this.profession = profession;
+	}
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -590,4 +614,3 @@ public class Patient {
 		return infoBfr.toString();
 	}
 }
-
