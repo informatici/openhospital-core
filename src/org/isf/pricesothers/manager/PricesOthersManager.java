@@ -8,6 +8,7 @@ import org.isf.menu.manager.Context;
 import org.isf.pricesothers.model.PricesOthers;
 import org.isf.pricesothers.service.PriceOthersIoOperations;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -38,10 +39,7 @@ public class PricesOthersManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newOther(PricesOthers other) throws OHServiceException {
-        List<OHExceptionMessage> errors = validatePricesOthers(other);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validatePricesOthers(other);
         return ioOperations.newOthers(other);
 	}
 
@@ -64,14 +62,16 @@ public class PricesOthersManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateOther(PricesOthers other) throws OHServiceException {
-        List<OHExceptionMessage> errors = validatePricesOthers(other);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validatePricesOthers(other);
         return ioOperations.updateOther(other);
 	}
 
-    protected List<OHExceptionMessage> validatePricesOthers(PricesOthers pricesOthers) {
+	/**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * @param pricesOthers
+	 * @throws OHServiceValidationException 
+	 */
+    protected void validatePricesOthers(PricesOthers pricesOthers) throws OHServiceValidationException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 
         if (StringUtils.isEmpty(pricesOthers.getCode())) {  //$NON-NLS-1$
@@ -84,8 +84,9 @@ public class PricesOthersManager {
                     MessageBundle.getMessage("angal.pricesothers.pleaseinsertadescription"),
                     OHSeverityLevel.ERROR));
         }
-
-        return errors;
+        if(!errors.isEmpty()){
+	        throw new OHServiceValidationException(errors);
+	    }
     }
 	
 }

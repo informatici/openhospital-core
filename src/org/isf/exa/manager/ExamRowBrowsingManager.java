@@ -9,6 +9,7 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -22,9 +23,9 @@ public class ExamRowBrowsingManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param examRow
-	 * @return list of {@link OHExceptionMessage}
+	 * @throws OHServiceValidationException 
 	 */
-	protected List<OHExceptionMessage> validateExamRow(ExamRow examRow) {
+	protected void validateExamRow(ExamRow examRow) throws OHServiceValidationException {
 		String description = examRow.getDescription();
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         if(description.isEmpty()){
@@ -32,7 +33,9 @@ public class ExamRowBrowsingManager {
 	        		MessageBundle.getMessage("angal.exa.insertdescription"), 
 	        		OHSeverityLevel.ERROR));
         }
-        return errors;
+        if (!errors.isEmpty()){
+	        throw new OHServiceValidationException(errors);
+	    }
     }
 	
 	/**
@@ -84,10 +87,7 @@ public class ExamRowBrowsingManager {
 	 */
 	public boolean newExamRow(ExamRow examRow) throws OHServiceException {
 	    try {
-			List<OHExceptionMessage> errors = validateExamRow(examRow);
-            if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
-            }
+			validateExamRow(examRow);
 			return ioOperations.newExamRow(examRow);
 		} catch (OHException e) {
 			logger.error("", e);

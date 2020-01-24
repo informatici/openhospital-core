@@ -18,6 +18,7 @@ import org.isf.disease.service.DiseaseIoOperations;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 
@@ -141,10 +142,7 @@ public class DiseaseBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newDisease(Disease disease) throws OHServiceException {
-        List<OHExceptionMessage> errors = validateDisease(disease, true);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validateDisease(disease, true);
         return ioOperations.newDisease(disease);
 	}
 	
@@ -157,10 +155,7 @@ public class DiseaseBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateDisease(Disease disease) throws OHServiceException {
-        List<OHExceptionMessage> errors = validateDisease(disease, true);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validateDisease(disease, false);
         return ioOperations.updateDisease(disease);
 	}
 
@@ -198,7 +193,13 @@ public class DiseaseBrowserManager {
         return ioOperations.isDescriptionPresent(description,typeCode);
 	}
 
-    private List<OHExceptionMessage> validateDisease(Disease disease, boolean insert) throws OHServiceException {
+	/**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * @param disease
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHServiceException
+	 */
+    protected void validateDisease(Disease disease, boolean insert) throws OHServiceException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 
         if (insert){
@@ -237,6 +238,8 @@ public class DiseaseBrowserManager {
             }
         }
 
-	    return errors;
+        if (!errors.isEmpty()){
+	        throw new OHServiceValidationException(errors);
+	    }
     }
 }

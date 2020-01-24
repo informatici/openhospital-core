@@ -8,6 +8,7 @@ import org.isf.exatype.service.ExamTypeIoOperation;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -22,9 +23,10 @@ public class ExamTypeBrowserManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param examType
-	 * @return list of {@link OHExceptionMessage}
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHServiceException 
 	 */
-	protected List<OHExceptionMessage> validateExamType(ExamType examType) {
+	protected void validateExamType(ExamType examType, boolean insert) throws OHServiceException {
 		String key = examType.getCode();
 		String description = examType.getDescription();
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
@@ -43,7 +45,16 @@ public class ExamTypeBrowserManager {
             		MessageBundle.getMessage("angal.exatype.pleaseinsertavaliddescription"), 
             		OHSeverityLevel.ERROR));
         }
-        return errors;
+        if (insert) {
+        	if (codeControl(examType.getCode())){
+				throw new OHServiceException(new OHExceptionMessage(null, 
+						MessageBundle.getMessage("angal.common.codealreadyinuse"), 
+						OHSeverityLevel.ERROR));
+			}
+        }
+        if (!errors.isEmpty()){
+	        throw new OHServiceValidationException(errors);
+	    }
     }
 	
 	/**
@@ -74,15 +85,7 @@ public class ExamTypeBrowserManager {
 	 */
 	public boolean newExamType(ExamType examType) throws OHServiceException {
 		try {
-			List<OHExceptionMessage> errors = validateExamType(examType);
-            if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
-            }
-			if (codeControl(examType.getCode())){
-				throw new OHServiceException(new OHExceptionMessage(null, 
-						MessageBundle.getMessage("angal.common.codealreadyinuse"), 
-						OHSeverityLevel.ERROR));
-			}
+			validateExamType(examType, true);
 			return ioOperations.newExamType(examType);
 		} catch (OHServiceException e) {
 			logger.error("", e);
@@ -104,10 +107,7 @@ public class ExamTypeBrowserManager {
 	 */
 	public boolean updateExamType(ExamType examType) throws OHServiceException {
 		try {
-			List<OHExceptionMessage> errors = validateExamType(examType);
-            if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
-            }
+			validateExamType(examType, false);
 			return ioOperations.updateExamType(examType);
 		} catch (OHServiceException e) {
 			logger.error("", e);

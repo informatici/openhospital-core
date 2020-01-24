@@ -12,6 +12,7 @@ import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -39,7 +40,7 @@ public class MovStockInsertingManager {
 	 * @return list of {@link OHExceptionMessage}
 	 * @throws OHServiceException 
 	 */
-	protected List<OHExceptionMessage> validateMovement(Movement movement, boolean checkReference) throws OHServiceException {
+	protected void validateMovement(Movement movement, boolean checkReference) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 		
 		// Check the Date
@@ -125,7 +126,9 @@ public class MovStockInsertingManager {
 			}
 			errors.addAll(validateLot(lot));
 		}
-		return errors;
+		if (!errors.isEmpty()){
+	        throw new OHServiceValidationException(errors);
+	    }
 	}
 	
 	/**
@@ -316,10 +319,7 @@ public class MovStockInsertingManager {
 	@Transactional(rollbackFor=OHServiceException.class)
 	private boolean prepareChargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
 		try {
-			List<OHExceptionMessage> errors = validateMovement(movement, checkReference);
-            if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
-            }
+			validateMovement(movement, checkReference);
 			return ioOperations.prepareChargingMovement(movement);
 		} catch (OHServiceException e) {
 			throw e;
@@ -384,10 +384,7 @@ public class MovStockInsertingManager {
 	@Transactional(rollbackFor=OHServiceException.class)
 	private boolean prepareDishargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
 		try {
-			List<OHExceptionMessage> errors = validateMovement(movement, checkReference);
-            if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
-            }
+			validateMovement(movement, checkReference);
             if (isAutomaticLot()) {
             	return ioOperations.newAutomaticDischargingMovement(movement);
             } else 

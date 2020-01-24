@@ -270,7 +270,12 @@ public class PatientBrowserManager {
             }
             return ioOperations.mergePatientHistory(mergedPatient, patient2);
 	}
-
+	
+	/**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * @param patient
+	 * @throws OHServiceValidationException 
+	 */
     protected void validate(Patient patient) throws OHServiceValidationException{
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 

@@ -19,6 +19,7 @@ import org.isf.lab.model.LaboratoryRow;
 import org.isf.lab.service.LabIoOperations;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,10 +58,10 @@ public class LabManager {
 	
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
-	 * @param deliveryResultType
-	 * @return list of {@link OHExceptionMessage}
+	 * @param laboratory
+	 * @throws OHServiceValidationException 
 	 */
-	protected List<OHExceptionMessage> validateLaboratory(Laboratory laboratory) {
+	protected void validateLaboratory(Laboratory laboratory) throws OHServiceValidationException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         if (laboratory.getDate() == null) laboratory.setDate(new GregorianCalendar());
         if (laboratory.getExam().getProcedure() == 2) 
@@ -130,7 +131,9 @@ public class LabManager {
 	        		MessageBundle.getMessage("angal.lab.pleaseinsertiforipdoroforopd"), 
 	        		OHSeverityLevel.ERROR));
         }
-        return errors;
+        if (!errors.isEmpty()){
+	        throw new OHServiceValidationException(errors);
+	    }
     }
 
 	/**
@@ -197,10 +200,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	public boolean newLaboratory(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateLaboratory(laboratory);
-		if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateLaboratory(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.newLabFirstProcedure(laboratory);
 		}
@@ -224,10 +224,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	public boolean newLaboratory2(Laboratory laboratory, ArrayList<LaboratoryRow> labRow) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateLaboratory(laboratory);
-		if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateLaboratory(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.newLabFirstProcedure(laboratory);
 		}
@@ -252,10 +249,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	public boolean updateLaboratory(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateLaboratory(laboratory);
-		if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateLaboratory(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.updateLabFirstProcedure(laboratory);
 		}

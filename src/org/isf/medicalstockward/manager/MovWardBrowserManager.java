@@ -9,7 +9,6 @@ import java.util.List;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Movement;
-import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperations;
@@ -18,24 +17,25 @@ import org.isf.serviceprinting.print.MedicalWardForPrint;
 import org.isf.serviceprinting.print.MovementForPrint;
 import org.isf.serviceprinting.print.MovementWardForPrint;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.ward.model.Ward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
 
 public class MovWardBrowserManager {
 
 	private final Logger logger = LoggerFactory.getLogger(MovWardBrowserManager.class);
 	private MedicalStockWardIoOperations ioOperations=Context.getApplicationContext().getBean(MedicalStockWardIoOperations.class);
-        private MedicalStockIoOperations medicalStockIoOperations = Context.getApplicationContext().getBean(MedicalStockIoOperations.class);
-	/**
+//    private MedicalStockIoOperations medicalStockIoOperations = Context.getApplicationContext().getBean(MedicalStockIoOperations.class);
+
+    /**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
-	 * @param exam
-	 * @return list of {@link OHExceptionMessage}
+	 * @param mov
+     * @throws OHServiceValidationException 
 	 */
-	protected List<OHExceptionMessage> validateMovementWard(MovementWard mov) {
+	protected void validateMovementWard(MovementWard mov) throws OHServiceValidationException {
 		String description = mov.getDescription();
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         if(description.isEmpty() && mov.isPatient()){
@@ -53,7 +53,9 @@ public class MovWardBrowserManager {
 	        		MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug"), 
 	        		OHSeverityLevel.ERROR));
         }
-        return errors;
+        if (!errors.isEmpty()){
+	        throw new OHServiceValidationException(errors);
+	    }
     }
 
 	/**
@@ -108,10 +110,7 @@ public class MovWardBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newMovementWard(MovementWard newMovement) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateMovementWard(newMovement);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateMovementWard(newMovement);
 		return ioOperations.newMovementWard(newMovement);
 	}
 
@@ -122,17 +121,16 @@ public class MovWardBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newMovementWard(ArrayList<MovementWard> newMovements) throws OHServiceException {
+		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 		if (newMovements.size() == 0) {
-			throw new OHServiceException(new OHExceptionMessage(
+			errors.add(new OHExceptionMessage(
 					"emptyMovementListError", 
 					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug"), 
 					OHSeverityLevel.ERROR));
+			throw new OHServiceValidationException(errors);
 		}
 		for (MovementWard mov : newMovements) {
-			List<OHExceptionMessage> errors = validateMovementWard(mov);
-	        if(!errors.isEmpty()){
-	            throw new OHServiceException(errors);
-	        }
+			validateMovementWard(mov);
 		}
 		return ioOperations.newMovementWard(newMovements);
 	}

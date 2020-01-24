@@ -13,6 +13,7 @@ import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medtype.model.MedicalType;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -123,10 +124,7 @@ public class MedicalBrowsingManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
-		List<OHExceptionMessage> errors = checkMedicalForInsert(medical, ignoreSimilar);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		checkMedicalForInsert(medical, ignoreSimilar);
 		return ioOperations.newMedical(medical);
 	}
 	
@@ -150,10 +148,7 @@ public class MedicalBrowsingManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
-		List<OHExceptionMessage> errors = checkMedicalForUpdate(medical, ignoreSimilar);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		checkMedicalForUpdate(medical, ignoreSimilar);
         return ioOperations.updateMedical(medical);
 	}
 
@@ -211,8 +206,8 @@ public class MedicalBrowsingManager {
 	 * @return <code>true</code> if the {@link Medical} is ok for inserting, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	private List<OHExceptionMessage> checkMedicalForInsert(Medical medical, boolean ignoreSimilar) throws OHServiceException {
-		return checkMedical(medical, ignoreSimilar, false);
+	private void checkMedicalForInsert(Medical medical, boolean ignoreSimilar) throws OHServiceException {
+		checkMedical(medical, ignoreSimilar, false);
 	}
 	
 	/**
@@ -223,8 +218,8 @@ public class MedicalBrowsingManager {
 	 * @return <code>true</code> if the {@link Medical} is ok for updating, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public List<OHExceptionMessage> checkMedicalForUpdate(Medical medical, boolean ignoreSimilar) throws OHServiceException {
-		return checkMedical(medical, ignoreSimilar, true);
+	public void checkMedicalForUpdate(Medical medical, boolean ignoreSimilar) throws OHServiceException {
+		checkMedical(medical, ignoreSimilar, true);
 	}
 	
 	/**
@@ -236,7 +231,7 @@ public class MedicalBrowsingManager {
 	 * @return <code>true</code> if the {@link Medical} is ok for updating, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public List<OHExceptionMessage> checkMedical(Medical medical, boolean ignoreSimilar, boolean update) throws OHServiceException {
+	public void checkMedical(Medical medical, boolean ignoreSimilar, boolean update) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 		
 		//check commons
@@ -274,7 +269,9 @@ public class MedicalBrowsingManager {
 					message.toString(), 
 					OHSeverityLevel.WARNING));
 		};
-		return errors;
+		if (!errors.isEmpty()){
+	        throw new OHServiceValidationException(errors);
+	    }
 	}
 	
 }

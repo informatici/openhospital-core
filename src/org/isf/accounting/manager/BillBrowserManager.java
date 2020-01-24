@@ -13,6 +13,7 @@ import org.isf.accounting.service.AccountingIoOperations;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +41,11 @@ public class BillBrowserManager {
 	 * @param billItems 
 	 * @param deliveryResultType
 	 * @return list of {@link OHExceptionMessage}
+	 * @throws OHServiceValidationException 
 	 */
-	public List<OHExceptionMessage> validateBill(Bill bill, 
+	protected void validateBill(Bill bill, 
 			ArrayList<BillItems> billItems, 
-			ArrayList<BillPayments> billPayments) 
+			ArrayList<BillPayments> billPayments) throws OHServiceValidationException 
 	{
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         
@@ -86,7 +88,9 @@ public class BillBrowserManager {
 	        		MessageBundle.getMessage("angal.newbill.youcannotcloseabillwithoutstandingbalance"), 
 	        		OHSeverityLevel.ERROR));
 		}
-        return errors;
+		if(!errors.isEmpty()){
+	        throw new OHServiceValidationException(errors);
+	    }
     }
 	
 	/**
@@ -178,10 +182,7 @@ public class BillBrowserManager {
 			ArrayList<BillItems> billItems, 
 			ArrayList<BillPayments> billPayments) throws OHServiceException 
 	{
-		List<OHExceptionMessage> errors = validateBill(newBill, billItems, billPayments);
-		if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateBill(newBill, billItems, billPayments);
 		int billId = newBill(newBill);
 		boolean result = billId > 0;
 		if (!billItems.isEmpty()) result = newBillItems(billId, billItems);
@@ -234,10 +235,7 @@ public class BillBrowserManager {
 			ArrayList<BillItems> billItems,
 			ArrayList<BillPayments> billPayments) throws OHServiceException 
 	{
-		List<OHExceptionMessage> errors = validateBill(updateBill, billItems, billPayments);
-		if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateBill(updateBill, billItems, billPayments);
 		boolean result = updateBill(updateBill);
 		result = result && newBillItems(updateBill.getId(), billItems);
 		result = result && newBillPayments(updateBill.getId(), billPayments);

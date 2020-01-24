@@ -8,6 +8,7 @@ import org.isf.dlvrrestype.service.DeliveryResultTypeIoOperation;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -25,9 +26,10 @@ public class DeliveryResultTypeBrowserManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param deliveryResultType
-	 * @return list of {@link OHExceptionMessage}
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHServiceException 
 	 */
-	protected List<OHExceptionMessage> validateDeliveryResultType(DeliveryResultType deliveryResultType) {
+	protected void validateDeliveryResultType(DeliveryResultType deliveryResultType, boolean insert) throws OHServiceException {
 		String key = deliveryResultType.getCode();
 		String description = deliveryResultType.getDescription();
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
@@ -46,7 +48,16 @@ public class DeliveryResultTypeBrowserManager {
             		MessageBundle.getMessage("angal.dlvrrestype.pleaseinsertavaliddescription"), 
             		OHSeverityLevel.ERROR));
         }
-        return errors;
+        if (insert) {
+        	if (codeControl(key)){
+				throw new OHServiceException(new OHExceptionMessage(null, 
+						MessageBundle.getMessage("angal.common.codealreadyinuse"), 
+						OHSeverityLevel.ERROR));
+			}
+        }
+        if (!errors.isEmpty()){
+	        throw new OHServiceValidationException(errors);
+	    }
     }
 	
 	/**
@@ -83,15 +94,7 @@ public class DeliveryResultTypeBrowserManager {
 	 */
 	public boolean newDeliveryResultType(DeliveryResultType deliveryresultType) throws OHServiceException {
 		try {
-			List<OHExceptionMessage> errors = validateDeliveryResultType(deliveryresultType);
-            if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
-            }
-			if (codeControl(deliveryresultType.getCode())){
-				throw new OHServiceException(new OHExceptionMessage(null, 
-						MessageBundle.getMessage("angal.common.codealreadyinuse"), 
-						OHSeverityLevel.ERROR));
-			}
+			validateDeliveryResultType(deliveryresultType, true);
             return ioOperations.newDeliveryResultType(deliveryresultType);
 		}  catch(OHServiceException e){
 			/*Already cached exception with OH specific error message - 
@@ -118,10 +121,7 @@ public class DeliveryResultTypeBrowserManager {
 	 */
 	public boolean updateDeliveryResultType(DeliveryResultType deliveryresultType) throws OHServiceException {
 		try {
-			List<OHExceptionMessage> errors = validateDeliveryResultType(deliveryresultType);
-            if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
-            }
+			validateDeliveryResultType(deliveryresultType, false);
 			return ioOperations.updateDeliveryResultType(deliveryresultType);
 		}  catch(OHServiceException e){
 			/*Already cached exception with OH specific error message - 

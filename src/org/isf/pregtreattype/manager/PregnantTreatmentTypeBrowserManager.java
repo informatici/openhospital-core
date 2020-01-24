@@ -8,6 +8,7 @@ import org.isf.menu.manager.Context;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperation;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.util.StringUtils;
@@ -34,10 +35,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newPregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
-        List<OHExceptionMessage> errors = validatePregnantTreatmentType(pregnantTreatmentType, true);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validatePregnantTreatmentType(pregnantTreatmentType, true);
         return ioOperations.newPregnantTreatmentType(pregnantTreatmentType);
 	}
 
@@ -49,10 +47,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updatePregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
-        List<OHExceptionMessage> errors = validatePregnantTreatmentType(pregnantTreatmentType, false);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validatePregnantTreatmentType(pregnantTreatmentType, false);
         return ioOperations.updatePregnantTreatmentType(pregnantTreatmentType);
 	}
 	
@@ -78,7 +73,13 @@ public class PregnantTreatmentTypeBrowserManager {
         return ioOperations.isCodePresent(code);
 	}
 
-    protected List<OHExceptionMessage> validatePregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType, boolean insert) throws OHServiceException {
+	/**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * @param pregnantTreatmentType
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHServiceValidationException 
+	 */
+    protected void validatePregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType, boolean insert) throws OHServiceException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         String key = pregnantTreatmentType.getCode();
         if (StringUtils.isEmpty(key)){
@@ -102,7 +103,8 @@ public class PregnantTreatmentTypeBrowserManager {
                     MessageBundle.getMessage("angal.preagtreattype.pleaseinsertavaliddescription"),
                     OHSeverityLevel.ERROR));
         }
-
-        return errors;
+        if(!errors.isEmpty()){
+	        throw new OHServiceValidationException(errors);
+	    }
     }
 }

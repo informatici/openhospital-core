@@ -78,6 +78,12 @@ public class AdmissionTypeBrowserManager {
         return ioOperations.deleteAdmissionType(admissionType);
 	}
 
+	/**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * @param admissionType
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHServiceValidationException
+	 */
     protected void validateAdmissionType(AdmissionType admissionType, boolean insert) throws OHServiceException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         String key = admissionType.getCode();

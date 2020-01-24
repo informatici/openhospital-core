@@ -8,6 +8,7 @@ import org.isf.malnutrition.model.Malnutrition;
 import org.isf.malnutrition.service.MalnutritionIoOperation;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -26,9 +27,9 @@ public class MalnutritionManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param malnutrition
-	 * @return list of {@link OHExceptionMessage}
+	 * @throws OHServiceValidationException 
 	 */
-	protected List<OHExceptionMessage> validateMalnutrition(Malnutrition malnutrition) {
+	protected void validateMalnutrition(Malnutrition malnutrition) throws OHServiceValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 		if(malnutrition.getDateSupp()==null) {
 			errors.add(new OHExceptionMessage("visitDateNullError", 
@@ -57,7 +58,9 @@ public class MalnutritionManager {
 	        		MessageBundle.getMessage("angal.malnutrition.insertcorrectvalueinheightfield"), 
 	        		OHSeverityLevel.ERROR));
 		}
-        return errors;
+		if (!errors.isEmpty()){
+	        throw new OHServiceValidationException(errors);
+	    }
     }
 
 	/**
@@ -89,10 +92,7 @@ public class MalnutritionManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newMalnutrition(Malnutrition malnutrition) throws OHServiceException{
-		List<OHExceptionMessage> errors = validateMalnutrition(malnutrition);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateMalnutrition(malnutrition);
 		return ioOperation.newMalnutrition(malnutrition);
 	}
 
@@ -111,10 +111,7 @@ public class MalnutritionManager {
 	 * @throws OHServiceException
 	 */
 	public Malnutrition updateMalnutrition(Malnutrition malnutrition) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateMalnutrition(malnutrition);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateMalnutrition(malnutrition);
 		return ioOperation.updateMalnutrition(malnutrition);
 	}
 	

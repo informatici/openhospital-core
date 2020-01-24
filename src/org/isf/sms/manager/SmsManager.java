@@ -10,6 +10,7 @@ import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 
@@ -25,9 +26,9 @@ public class SmsManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param sms
-	 * @return list of {@link OHExceptionMessage}
+	 * @throws OHServiceValidationException 
 	 */
-	private List<OHExceptionMessage> validateSms(Sms sms) {
+	protected void validateSms(Sms sms) throws OHServiceValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 		String number = sms.getSmsNumber();
 		String text = sms.getSmsText();
@@ -42,7 +43,9 @@ public class SmsManager {
 	        		MessageBundle.getMessage("angal.sms.pleaseinsertatext"), 
 	        		OHSeverityLevel.ERROR));
 		}
-		return errors;
+		if(!errors.isEmpty()){
+	        throw new OHServiceValidationException(errors);
+	    }
 	}
 
 	public List<Sms> getAll(Date from, Date to) throws OHServiceException {
@@ -59,10 +62,7 @@ public class SmsManager {
 	 * TODO enable GSM Multipart Feature
 	 */
 	public void saveOrUpdate(Sms smsToSend, boolean split) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateSms(smsToSend);
-		if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateSms(smsToSend);
 		
 		List<Sms> smsList = new ArrayList<Sms>();
 		String text = smsToSend.getSmsText();
