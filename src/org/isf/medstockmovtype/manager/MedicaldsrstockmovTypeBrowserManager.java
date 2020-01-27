@@ -2,13 +2,11 @@ package org.isf.medstockmovtype.manager;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.medstockmovtype.service.MedicalStockMovementTypeIoOperation;
 import org.isf.menu.manager.Context;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;

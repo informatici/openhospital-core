@@ -191,19 +191,6 @@ public class MovStockInsertingManager {
 		return errors;
 	}
 
-	// Replaced by getMedical in MedicalBrowsingManager
-	/*
-	 * Gets the current quantity for the specified {@link Medical}. 
-	 * 
-	 * @param medical the medical to check.
-	 * 
-	 * @return the current quantity of medical.
-	 * 
-	 * public int getCurrentQuantity(Medical medical){ try { return
-	 * ioOperations.getCurrentQuantity(medical); } catch (OHException e) {
-	 * JOptionPane.showMessageDialog(null, e.getMessage()); return 0; } }
-	 */
-
 	private boolean isAutomaticLot() {
 		return GeneralData.AUTOMATICLOT;
 	}
