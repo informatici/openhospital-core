@@ -192,7 +192,6 @@ public class PatientBrowserManager {
 	 * @param regex
 	 * @return the full list of Patients with Height and Weight (could be empty)
 	 * @throws OHServiceException 
-	 * @throws OHException
 	 */
 	public ArrayList<Patient> getPatientWithHeightAndWeight(String regex) throws OHServiceException{
         return ioOperations.getPatientsWithHeightAndWeight(regex);
