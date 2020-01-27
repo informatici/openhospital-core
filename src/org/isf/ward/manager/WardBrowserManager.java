@@ -7,6 +7,7 @@ import org.isf.admission.manager.AdmissionBrowserManager;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHServiceOperationNotAllowedException;
 import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
@@ -136,7 +137,7 @@ public class WardBrowserManager {
 	public boolean deleteWard(Ward ward) throws OHServiceException {
 		AdmissionBrowserManager admManager = new AdmissionBrowserManager();
 		if (ward.getCode().equals("M")) {
-			throw new OHServiceException( new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
+			throw new OHServiceOperationNotAllowedException( new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
 					MessageBundle.getMessage("angal.ward.cannotdeletematernityward"), OHSeverityLevel.ERROR));
 		}
 		int noPatients = admManager.getUsedWardBed(ward.getCode());
@@ -150,7 +151,7 @@ public class WardBrowserManager {
 					MessageBundle.getMessage("angal.ward.selectedwardhaspatients2"), OHSeverityLevel.INFO));
 			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
 					MessageBundle.getMessage("angal.ward.pleasecheckinadmissionpatients"), OHSeverityLevel.ERROR));
-			throw new OHServiceException(messages);
+			throw new OHServiceOperationNotAllowedException(messages);
 		}
 		return ioOperations.deleteWard(ward);
 	}
