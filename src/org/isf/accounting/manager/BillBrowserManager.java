@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
 import org.isf.accounting.model.BillPayments;
@@ -114,36 +112,29 @@ public class BillBrowserManager {
 		if (billID == 0) return new ArrayList<BillItems>();
 		return ioOperations.getItems(billID);
 	}
+	
 	/**
 	 * Retrieves all the bills of a given patient between dateFrom and datTo
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param patient
 	 * @return the bills list
+	 * @throws OHServiceException 
 	 */
-	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) {
-		try {
-			return ioOperations.getBills(dateFrom, dateTo, patient);
-		} catch (OHServiceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
-			return null;
-		}
+	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) throws OHServiceException {
+		return ioOperations.getBills(dateFrom, dateTo, patient);
 	}
+	
 	/**
 	 * Retrieves all the billPayments for a given patient between dateFrom and dateTo
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param patient
-	 * @return
+	 * @return the list of payments
+	 * @throws OHServiceException 
 	 */
-	
-	public ArrayList<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) {
-		try {
-			return ioOperations.getPayments(dateFrom, dateTo, patient);
-		} catch (OHServiceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
-			return null;
-		}
+	public ArrayList<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) throws OHServiceException {
+		return ioOperations.getPayments(dateFrom, dateTo, patient);
 	}
 	
 	/**
@@ -345,24 +336,16 @@ public class BillBrowserManager {
 		return ioOperations.getPayments(billArray);
 	}
 	/**
-<<<<<<< OP-127-improve-exceptions-handling
-	 * added by u2g
-=======
 	 * Retrieves all the {@link Bill}s associated to the specified {@link Patient}.
 	 * @param patID - the Patient's ID
 	 * @return the list of {@link Bill}s
+	 * @throws OHServiceException 
 	 */
-	public ArrayList<Bill> getPendingBillsAffiliate(int patID) {
-		try {
-			return ioOperations.getPendingBillsAffiliate(patID);
-		} catch (OHServiceException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
-			return null;
-		}
+	public ArrayList<Bill> getPendingBillsAffiliate(int patID) throws OHServiceException {
+		return ioOperations.getPendingBillsAffiliate(patID);
 	}
 
 	/**
->>>>>>> ea74fe5 Refactored OhExceptionTranslator -> OHExceptionTranslator
 	 * Returns all the distinct stored {@link BillItems}.
 	 * 
 	 * @return a list of  distinct {@link BillItems} or null if an error occurs.
@@ -371,6 +354,7 @@ public class BillBrowserManager {
 	public ArrayList<BillItems> getDistinctItems() throws OHServiceException{
 		return ioOperations.getDistictsBillItems();
 	}
+	
 	/**
 	 * get the bills list with a given billItem
 	 * added by u2g
