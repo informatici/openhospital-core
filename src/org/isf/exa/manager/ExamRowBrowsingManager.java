@@ -7,7 +7,6 @@ import org.isf.exa.model.ExamRow;
 import org.isf.exa.service.ExamRowIoOperations;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -65,17 +64,7 @@ public class ExamRowBrowsingManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<ExamRow> getExamRow(int aExamRowCode, String aDescription) throws OHServiceException {
-		try {
-			return ioOperations.getExamRow(aExamRowCode, aDescription);
-		} catch (OHException e) {
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
-		} catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-                            MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), OHSeverityLevel.ERROR));
-		}
+		return ioOperations.getExamRow(aExamRowCode, aDescription);
 	}
 	
 	/**
@@ -86,18 +75,8 @@ public class ExamRowBrowsingManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newExamRow(ExamRow examRow) throws OHServiceException {
-	    try {
-			validateExamRow(examRow);
-			return ioOperations.newExamRow(examRow);
-		} catch (OHException e) {
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
-		} catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), OHSeverityLevel.ERROR));
-		}
+		validateExamRow(examRow);
+		return ioOperations.newExamRow(examRow);
 	}
 
 	/**
@@ -107,17 +86,7 @@ public class ExamRowBrowsingManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean deleteExamRow(ExamRow examRow) throws OHServiceException {
-		try {
-			return ioOperations.deleteExamRow(examRow);
-		} catch (OHException e) {
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
-		} catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), OHSeverityLevel.ERROR));
-		}
+		return ioOperations.deleteExamRow(examRow);
 	}
 
     /**
@@ -127,15 +96,6 @@ public class ExamRowBrowsingManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<ExamRow> getExamRowByExamCode(String aExamCode) throws OHServiceException {
-		try {
-			return ioOperations.getExamRowByExamCode(aExamCode);
-		} catch (OHException e) {
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
-		} catch(Exception e){
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-                            MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), OHSeverityLevel.ERROR));
-		}
+		return ioOperations.getExamRowByExamCode(aExamCode);
 	}
 }
