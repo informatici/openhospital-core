@@ -3,6 +3,7 @@ package org.isf.stat.manager;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,6 +13,8 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import javax.sql.DataSource;
+
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.hospital.manager.HospitalBrowsingManager;
@@ -19,7 +22,6 @@ import org.isf.hospital.model.Hospital;
 import org.isf.medicals.model.Medical;
 import org.isf.stat.dto.JasperReportResultDto;
 import org.isf.utils.db.DbQueryLogger;
-import org.isf.utils.db.DbSingleJpaConn;
 import org.isf.utils.db.UTF8Control;
 import org.isf.utils.excel.ExcelExporter;
 import org.isf.utils.exception.OHException;
@@ -48,6 +50,10 @@ public class JasperReportsManager {
     
     @Autowired
     private HospitalBrowsingManager hospitalManager;
+    
+    @Autowired
+    private DataSource dataSource;
+    
 
     public JasperReportResultDto getExamsListPdf() throws OHServiceException {
 
@@ -73,9 +79,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -105,9 +109,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -130,9 +132,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -161,9 +161,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -190,9 +188,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -214,9 +210,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -239,9 +233,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -263,9 +255,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -293,9 +283,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -330,9 +318,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -424,9 +410,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -504,9 +488,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -527,9 +509,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -556,9 +536,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -580,9 +558,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -602,9 +578,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -654,9 +628,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -729,11 +701,11 @@ public class JasperReportsManager {
         return parameters;
     }
 
-    private JasperReportResultDto generateJasperReport(String jasperFilename, String filename, Map parameters) throws JRException, OHException {
+    private JasperReportResultDto generateJasperReport(String jasperFilename, String filename, Map parameters) throws JRException, SQLException {
         File jasperFile = new File(jasperFilename);
         final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
         final Map localParameters = parameters;
-        Connection connection = DbSingleJpaConn.getConnection();
+        Connection connection = dataSource.getConnection();
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, localParameters, connection);
         return new JasperReportResultDto(jasperPrint, jasperFilename, filename);
     }
