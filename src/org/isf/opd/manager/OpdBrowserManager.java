@@ -14,7 +14,7 @@ import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.opd.model.Opd;
 import org.isf.opd.service.OpdIoOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -35,9 +35,9 @@ public class OpdBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param opd
 	 * @param insert <code>true</code> or updated <code>false</code>
-	 * @throws OHServiceValidationException 
+	 * @throws OHDataValidationException 
 	 */
-	protected void validateOpd(Opd opd, boolean insert) throws OHServiceValidationException {
+	protected void validateOpd(Opd opd, boolean insert) throws OHDataValidationException {
 		
 		Disease disease=opd.getDisease();
 		Disease disease2=opd.getDisease2();
@@ -103,7 +103,7 @@ public class OpdBrowserManager {
 			}
 		}
 		if (!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
     }
 	

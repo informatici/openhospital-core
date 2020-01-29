@@ -9,7 +9,7 @@ import org.isf.medtype.service.MedicalTypeIoOperation;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -58,7 +58,7 @@ public class MedicalTypeBrowserManager {
     		}
         }
         if (!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
     }
 

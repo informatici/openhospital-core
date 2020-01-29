@@ -11,7 +11,7 @@ import org.isf.priceslist.model.PriceList;
 import org.isf.priceslist.service.PricesListIoOperations;
 import org.isf.serviceprinting.print.PriceForPrint;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.util.StringUtils;
@@ -128,9 +128,9 @@ public class PriceListManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param priceList
-	 * @throws OHServiceValidationException 
+	 * @throws OHDataValidationException 
 	 */
-    protected void validatePriceList(PriceList priceList) throws OHServiceValidationException{
+    protected void validatePriceList(PriceList priceList) throws OHDataValidationException{
         java.util.List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 
         if (StringUtils.isEmpty(priceList.getCode())) { //$NON-NLS-1$
@@ -154,7 +154,7 @@ public class PriceListManager {
                     OHSeverityLevel.ERROR));
         }
         if(!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
     }
 }

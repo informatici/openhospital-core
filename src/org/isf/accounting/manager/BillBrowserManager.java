@@ -11,7 +11,7 @@ import org.isf.accounting.service.AccountingIoOperations;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +39,11 @@ public class BillBrowserManager {
 	 * @param billItems 
 	 * @param deliveryResultType
 	 * @return list of {@link OHExceptionMessage}
-	 * @throws OHServiceValidationException 
+	 * @throws OHDataValidationException 
 	 */
 	protected void validateBill(Bill bill, 
 			ArrayList<BillItems> billItems, 
-			ArrayList<BillPayments> billPayments) throws OHServiceValidationException 
+			ArrayList<BillPayments> billPayments) throws OHDataValidationException 
 	{
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         
@@ -87,7 +87,7 @@ public class BillBrowserManager {
 	        		OHSeverityLevel.ERROR));
 		}
 		if(!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
     }
 	

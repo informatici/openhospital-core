@@ -9,7 +9,7 @@ import org.isf.menu.model.UserMenuItem;
 import org.isf.menu.service.MenuIoOperations;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.MDC;
@@ -95,7 +95,7 @@ public class UserBrowsingManager {
 	 */
 	public boolean deleteUser(User user) throws OHServiceException {
         if (user.getUserName().equals("admin"))
-            throw new OHServiceValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+            throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
                     MessageBundle.getMessage("angal.menu.youcantdeleteadminuser"), OHSeverityLevel.ERROR));
         return ioOperations.deleteUser(user);
 	}
@@ -152,7 +152,7 @@ public class UserBrowsingManager {
 	 */
 	public boolean deleteGroup(UserGroup aGroup) throws OHServiceException {
 		if (aGroup.getCode().equals("admin")){
-		    throw new OHServiceValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+		    throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
                     MessageBundle.getMessage("angal.menu.youcantdeletegroupadmin"), OHSeverityLevel.WARNING));
 		}
 		ArrayList<User> users = getUser(aGroup.getCode());

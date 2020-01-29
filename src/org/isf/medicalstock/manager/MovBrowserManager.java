@@ -7,7 +7,7 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.ward.model.Ward;
@@ -94,10 +94,10 @@ public class MovBrowserManager {
 		return ioOperations.getMovements(medicalCode,medicalType,wardId,movType,movFrom,movTo,lotPrepFrom,lotPrepTo,lotDueFrom,lotDueTo);
 	}
 	
-	private void check(GregorianCalendar from, GregorianCalendar to, String errMsgKey) throws OHServiceValidationException {
+	private void check(GregorianCalendar from, GregorianCalendar to, String errMsgKey) throws OHDataValidationException {
 		if (from == null || to == null) {
 			if (!(from == null && to == null)) {
-				throw new OHServiceValidationException(
+				throw new OHDataValidationException(
 						new OHExceptionMessage(
 							MessageBundle.getMessage("angal.hospital"), 
 							MessageBundle.getMessage(errMsgKey), 

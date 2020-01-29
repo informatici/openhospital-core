@@ -8,7 +8,7 @@ import org.isf.agetype.service.AgeTypeIoOperations;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 
@@ -68,9 +68,9 @@ public class AgeTypeBrowserManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param ageTypes
-	 * @throws OHServiceValidationException
+	 * @throws OHDataValidationException
 	 */
-    protected void validateAgeTypes(ArrayList<AgeType> ageTypes) throws OHServiceValidationException {
+    protected void validateAgeTypes(ArrayList<AgeType> ageTypes) throws OHDataValidationException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         for (int i = 1; i < ageTypes.size(); i++) {
             if (ageTypes.get(i).getFrom() <= ageTypes.get(i-1).getTo()) {
@@ -83,7 +83,7 @@ public class AgeTypeBrowserManager {
             }
         }
         if (!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
     }
 }

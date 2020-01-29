@@ -13,7 +13,7 @@ import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -128,7 +128,7 @@ public class MovStockInsertingManager {
 			errors.addAll(validateLot(lot));
 		}
 		if (!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
 	}
 	
@@ -276,7 +276,7 @@ public class MovStockInsertingManager {
 		if (!checkReference) { // referenceNumber != null
 			List<OHExceptionMessage> errors = checkReferenceNumber(referenceNumber);
             if(!errors.isEmpty()){
-                throw new OHServiceValidationException(errors);
+                throw new OHDataValidationException(errors);
             }
 		}
 		for (Movement mov : movements) {
@@ -287,7 +287,7 @@ public class MovStockInsertingManager {
 				errors.add(new OHExceptionMessage("invalidMovement", 
 						mov.getMedical().getDescription(), 
 						OHSeverityLevel.INFO));
-				throw new OHServiceValidationException(errors);
+				throw new OHDataValidationException(errors);
 			}
 		}
 		return ok;
@@ -338,7 +338,7 @@ public class MovStockInsertingManager {
 		if (!checkReference) { // referenceNumber != null
 			List<OHExceptionMessage> errors = checkReferenceNumber(referenceNumber);
             if(!errors.isEmpty()){
-                throw new OHServiceValidationException(errors);
+                throw new OHDataValidationException(errors);
             }
 		}
 		for (Movement mov : movements) {
@@ -349,7 +349,7 @@ public class MovStockInsertingManager {
 				errors.add(new OHExceptionMessage("invalidMovement", 
 						mov.getMedical().getDescription(), 
 						OHSeverityLevel.INFO));
-				throw new OHServiceValidationException(errors);
+				throw new OHDataValidationException(errors);
 			}
 		}
 		return ok;

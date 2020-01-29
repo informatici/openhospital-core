@@ -8,7 +8,7 @@ import org.isf.menu.manager.Context;
 import org.isf.pricesothers.model.PricesOthers;
 import org.isf.pricesothers.service.PriceOthersIoOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -69,9 +69,9 @@ public class PricesOthersManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param pricesOthers
-	 * @throws OHServiceValidationException 
+	 * @throws OHDataValidationException 
 	 */
-    protected void validatePricesOthers(PricesOthers pricesOthers) throws OHServiceValidationException {
+    protected void validatePricesOthers(PricesOthers pricesOthers) throws OHDataValidationException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 
         if (StringUtils.isEmpty(pricesOthers.getCode())) {  //$NON-NLS-1$
@@ -85,7 +85,7 @@ public class PricesOthersManager {
                     OHSeverityLevel.ERROR));
         }
         if(!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
     }
 	

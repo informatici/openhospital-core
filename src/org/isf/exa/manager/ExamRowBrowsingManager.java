@@ -8,7 +8,7 @@ import org.isf.exa.service.ExamRowIoOperations;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -22,9 +22,9 @@ public class ExamRowBrowsingManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param examRow
-	 * @throws OHServiceValidationException 
+	 * @throws OHDataValidationException 
 	 */
-	protected void validateExamRow(ExamRow examRow) throws OHServiceValidationException {
+	protected void validateExamRow(ExamRow examRow) throws OHDataValidationException {
 		String description = examRow.getDescription();
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         if(description.isEmpty()){
@@ -33,7 +33,7 @@ public class ExamRowBrowsingManager {
 	        		OHSeverityLevel.ERROR));
         }
         if (!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
     }
 	

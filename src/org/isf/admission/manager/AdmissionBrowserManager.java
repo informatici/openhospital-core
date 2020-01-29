@@ -16,7 +16,7 @@ import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,7 +186,7 @@ public class AdmissionBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param admission
 	 * @param insert <code>true</code> or updated <code>false</code>
-	 * @throws OHServiceValidationException
+	 * @throws OHDataValidationException
 	 */
     protected void validateAdmission(Admission admission, boolean insert) throws OHServiceException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
@@ -415,7 +415,7 @@ public class AdmissionBrowserManager {
             }
         }
         if (!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
     }
 }

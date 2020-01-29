@@ -10,7 +10,7 @@ import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 
@@ -26,9 +26,9 @@ public class SmsManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param sms
-	 * @throws OHServiceValidationException 
+	 * @throws OHDataValidationException 
 	 */
-	protected void validateSms(Sms sms) throws OHServiceValidationException {
+	protected void validateSms(Sms sms) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 		String number = sms.getSmsNumber();
 		String text = sms.getSmsText();
@@ -44,7 +44,7 @@ public class SmsManager {
 	        		OHSeverityLevel.ERROR));
 		}
 		if(!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
 	}
 
@@ -74,7 +74,7 @@ public class SmsManager {
 				.append(MAX_LENGHT)
 				.append(" ")
 				.append(MessageBundle.getMessage("angal.sms.chars"));
-			throw new OHServiceValidationException(new OHExceptionMessage("testMaxLenghtError", 
+			throw new OHDataValidationException(new OHExceptionMessage("testMaxLenghtError", 
 					message.toString(), 
 					OHSeverityLevel.ERROR));
 			

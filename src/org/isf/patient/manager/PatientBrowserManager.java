@@ -11,7 +11,7 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -265,7 +265,7 @@ public class PatientBrowserManager {
 
             List<OHExceptionMessage> errors = validateMergePatients(mergedPatient, patient2);
             if(!errors.isEmpty()){
-                throw new OHServiceValidationException(errors);
+                throw new OHDataValidationException(errors);
             }
             return ioOperations.mergePatientHistory(mergedPatient, patient2);
 	}
@@ -273,9 +273,9 @@ public class PatientBrowserManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param patient
-	 * @throws OHServiceValidationException 
+	 * @throws OHDataValidationException 
 	 */
-    protected void validate(Patient patient) throws OHServiceValidationException{
+    protected void validate(Patient patient) throws OHDataValidationException{
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 
         if (StringUtils.isEmpty(patient.getFirstName())) {
@@ -295,7 +295,7 @@ public class PatientBrowserManager {
                     OHSeverityLevel.ERROR));
         }
 	    if(!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
     }
 

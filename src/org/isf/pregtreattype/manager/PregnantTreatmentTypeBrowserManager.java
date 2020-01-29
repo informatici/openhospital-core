@@ -8,7 +8,7 @@ import org.isf.menu.manager.Context;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperation;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.util.StringUtils;
@@ -77,7 +77,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param pregnantTreatmentType
 	 * @param insert <code>true</code> or updated <code>false</code>
-	 * @throws OHServiceValidationException 
+	 * @throws OHDataValidationException 
 	 */
     protected void validatePregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType, boolean insert) throws OHServiceException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
@@ -104,7 +104,7 @@ public class PregnantTreatmentTypeBrowserManager {
                     OHSeverityLevel.ERROR));
         }
         if(!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
     }
 }

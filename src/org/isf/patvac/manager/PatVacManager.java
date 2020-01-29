@@ -18,7 +18,7 @@ import org.isf.menu.manager.Context;
 import org.isf.patvac.model.PatientVaccine;
 import org.isf.patvac.service.PatVacIoOperations;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.util.StringUtils;
@@ -108,9 +108,9 @@ public class PatVacManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param patientVaccine
-	 * @throws OHServiceValidationException 
+	 * @throws OHDataValidationException 
 	 */
-    protected void validatePatientVaccine(PatientVaccine patientVaccine) throws OHServiceValidationException{
+    protected void validatePatientVaccine(PatientVaccine patientVaccine) throws OHDataValidationException{
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 
         if(patientVaccine.getVaccineDate() == null){
@@ -136,7 +136,7 @@ public class PatVacManager {
                     OHSeverityLevel.ERROR));
         }
         if(!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
     }
 }

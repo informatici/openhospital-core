@@ -8,7 +8,7 @@ import org.isf.malnutrition.model.Malnutrition;
 import org.isf.malnutrition.service.MalnutritionIoOperation;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -27,9 +27,9 @@ public class MalnutritionManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param malnutrition
-	 * @throws OHServiceValidationException 
+	 * @throws OHDataValidationException 
 	 */
-	protected void validateMalnutrition(Malnutrition malnutrition) throws OHServiceValidationException {
+	protected void validateMalnutrition(Malnutrition malnutrition) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 		if(malnutrition.getDateSupp()==null) {
 			errors.add(new OHExceptionMessage("visitDateNullError", 
@@ -59,7 +59,7 @@ public class MalnutritionManager {
 	        		OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
     }
 

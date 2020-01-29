@@ -17,7 +17,7 @@ import org.isf.serviceprinting.print.MedicalWardForPrint;
 import org.isf.serviceprinting.print.MovementForPrint;
 import org.isf.serviceprinting.print.MovementWardForPrint;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.ward.model.Ward;
@@ -33,9 +33,9 @@ public class MovWardBrowserManager {
     /**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param mov
-     * @throws OHServiceValidationException 
+     * @throws OHDataValidationException 
 	 */
-	protected void validateMovementWard(MovementWard mov) throws OHServiceValidationException {
+	protected void validateMovementWard(MovementWard mov) throws OHDataValidationException {
 		String description = mov.getDescription();
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         if(description.isEmpty() && mov.isPatient()){
@@ -54,7 +54,7 @@ public class MovWardBrowserManager {
 	        		OHSeverityLevel.ERROR));
         }
         if (!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
     }
 
@@ -127,7 +127,7 @@ public class MovWardBrowserManager {
 					"emptyMovementListError", 
 					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug"), 
 					OHSeverityLevel.ERROR));
-			throw new OHServiceValidationException(errors);
+			throw new OHDataValidationException(errors);
 		}
 		for (MovementWard mov : newMovements) {
 			validateMovementWard(mov);

@@ -8,7 +8,7 @@ import org.isf.disctype.service.DischargeTypeIoOperation;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 
@@ -76,16 +76,16 @@ public class DischargeTypeBrowserManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param dischargeType
-	 * @throws OHServiceValidationException
+	 * @throws OHDataValidationException
 	 */
-    protected void validateDeleteDischargeType(DischargeType dischargeType) throws OHServiceValidationException {
+    protected void validateDeleteDischargeType(DischargeType dischargeType) throws OHDataValidationException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         if(dischargeType.getCode().equals("D")){
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.youcannotdeletethisrecord"),
                     OHSeverityLevel.ERROR));
         }
         if (!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
 	}
     
@@ -118,7 +118,7 @@ public class DischargeTypeBrowserManager {
                     OHSeverityLevel.ERROR));
         }
         if (!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
 	}
 }
