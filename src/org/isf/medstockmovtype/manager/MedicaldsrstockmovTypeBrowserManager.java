@@ -7,6 +7,7 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.medstockmovtype.service.MedicalStockMovementTypeIoOperation;
 import org.isf.menu.manager.Context;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -30,7 +31,7 @@ public class MedicaldsrstockmovTypeBrowserManager {
 	 * @param insert <code>true</code> or updated <code>false</code>
 	 * @throws OHServiceException 
 	 */
-	protected void validateMovementType(MovementType movementType, boolean insert) throws OHServiceException {
+	protected void validateMovementType(MovementType movementType, boolean insert) throws OHServiceException  {
 		String key = movementType.getCode();
 		String key2 = movementType.getType();
 		String description = movementType.getDescription();
@@ -57,7 +58,7 @@ public class MedicaldsrstockmovTypeBrowserManager {
         }
         if (insert) {
         	if (codeControl(key)){
-    			throw new OHServiceException(new OHExceptionMessage(null, 
+    			throw new OHDataIntegrityViolationException(new OHExceptionMessage(null, 
     					MessageBundle.getMessage("angal.common.codealreadyinuse"), 
     					OHSeverityLevel.ERROR));
     		}

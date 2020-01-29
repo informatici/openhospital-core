@@ -12,6 +12,7 @@ import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medtype.model.MedicalType;
 import org.isf.menu.manager.Context;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -162,7 +163,7 @@ public class MedicalBrowsingManager {
 		boolean inStockMovement = ioOperations.isMedicalReferencedInStockMovement(medical.getCode());
 
 		if(inStockMovement){
-			throw new OHServiceException(new OHExceptionMessage("existingReferencesError", 
+			throw new OHDataIntegrityViolationException(new OHExceptionMessage("existingReferencesError", 
 					MessageBundle.getMessage("angal.medicals.therearestockmovementsreferredtothismedical"), 
 					OHSeverityLevel.ERROR));
 		}

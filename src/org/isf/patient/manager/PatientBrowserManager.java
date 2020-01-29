@@ -10,7 +10,6 @@ import org.isf.admission.manager.AdmissionBrowserManager;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperations;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -203,8 +202,9 @@ public class PatientBrowserManager {
 	 * @param mergedPatient
 	 * @param patient2
 	 * @return true - if no OHServiceException occurred
+	 * @throws OHServiceException 
 	 */
-	public boolean mergePatient(Patient mergedPatient, Patient patient2) throws OHServiceException {
+	public boolean mergePatient(Patient mergedPatient, Patient patient2) throws OHServiceException  {
 			if (mergedPatient.getBirthDate() != null &&
 					mergedPatient.getAgetype().compareTo("") == 0) {
 				//mergedPatient only Age
@@ -265,7 +265,7 @@ public class PatientBrowserManager {
 
             List<OHExceptionMessage> errors = validateMergePatients(mergedPatient, patient2);
             if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
+                throw new OHServiceValidationException(errors);
             }
             return ioOperations.mergePatientHistory(mergedPatient, patient2);
 	}

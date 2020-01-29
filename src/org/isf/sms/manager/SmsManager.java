@@ -59,9 +59,8 @@ public class SmsManager {
 	 * @param sms - the {@link Sms} to save or update
 	 * @param split - specify if to split sms's text longer than {@code MAX_LENGHT}
 	 * @throws OHServiceException 
-	 * TODO enable GSM Multipart Feature
 	 */
-	public void saveOrUpdate(Sms smsToSend, boolean split) throws OHServiceException {
+	public void saveOrUpdate(Sms smsToSend, boolean split) throws OHServiceException  {
 		validateSms(smsToSend);
 		
 		List<Sms> smsList = new ArrayList<Sms>();
@@ -75,7 +74,7 @@ public class SmsManager {
 				.append(MAX_LENGHT)
 				.append(" ")
 				.append(MessageBundle.getMessage("angal.sms.chars"));
-			throw new OHServiceException(new OHExceptionMessage("testMaxLenghtError", 
+			throw new OHServiceValidationException(new OHExceptionMessage("testMaxLenghtError", 
 					message.toString(), 
 					OHSeverityLevel.ERROR));
 			

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -57,7 +58,7 @@ public class VaccineBrowserManager {
         }
         if (insert) {
         	if (codeControl(vaccine.getCode())){
-    			throw new OHServiceException(new OHExceptionMessage(null, 
+    			throw new OHDataIntegrityViolationException(new OHExceptionMessage(null, 
     					MessageBundle.getMessage("angal.common.codealreadyinuse"), 
     					OHSeverityLevel.ERROR));
     		}

@@ -2,14 +2,11 @@ package org.isf.operation.manager;
 
 import java.util.ArrayList;
 
-import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
 import org.isf.operation.model.Operation;
 import org.isf.operation.service.OperationIoOperations;
 import org.isf.opetype.model.OperationType;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,32 +30,18 @@ public class OperationBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Operation> getOperation() throws OHServiceException {
-		try {
-			return ioOperations.getOperation(null);
-		}  catch(OHServiceException e){
-			/*Already cached exception with OH specific error message - 
-			 * create ready to return OHServiceException and keep existing error message
-			 */
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					e.getMessage(), OHSeverityLevel.ERROR));
-		}catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.sql.thedatacouldnotbesaved"), OHSeverityLevel.ERROR));
-		}
+		return ioOperations.getOperation(null);
 	}
 
-        public Operation getOperationByCode(String code) throws OHServiceException{
-            try {
-			return ioOperations.findByCode(code);
-		}  catch(OHServiceException e){
-                    logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					e.getMessage(), OHSeverityLevel.ERROR));
-                }
-        }
+	/**
+	 * return the {@link Operation} with the specified code
+	 * @param code
+	 * @return
+	 * @throws OHServiceException
+	 */
+    public Operation getOperationByCode(String code) throws OHServiceException {
+		return ioOperations.findByCode(code);
+    }
         
 	/**
 	 * return the {@link Operation}s whose type matches specified string
@@ -68,21 +51,7 @@ public class OperationBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Operation> getOperation(String typecode) throws OHServiceException {
-		try {
-			return ioOperations.getOperation(typecode);
-		}  catch(OHServiceException e){
-			/*Already cached exception with OH specific error message - 
-			 * create ready to return OHServiceException and keep existing error message
-			 */
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					e.getMessage(), OHSeverityLevel.ERROR));
-		}catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.sql.thedatacouldnotbesaved"), OHSeverityLevel.ERROR));
-		}
+		return ioOperations.getOperation(typecode);
 	}
 
 	/**
@@ -93,21 +62,7 @@ public class OperationBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newOperation(Operation operation) throws OHServiceException {
-		try {
-			return ioOperations.newOperation(operation);
-		}  catch(OHServiceException e){
-			/*Already cached exception with OH specific error message - 
-			 * create ready to return OHServiceException and keep existing error message
-			 */
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					e.getMessage(), OHSeverityLevel.ERROR));
-		}catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.sql.thedatacouldnotbesaved"), OHSeverityLevel.ERROR));
-		}
+		return ioOperations.newOperation(operation);
 	}
 	
 	/** 
@@ -118,23 +73,8 @@ public class OperationBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateOperation(Operation operation) throws OHServiceException {
-		try {
-			// the user has confirmed he wants to overwrite the record
-			return ioOperations.updateOperation(operation);
-
-		}  catch(OHServiceException e){
-			/*Already cached exception with OH specific error message - 
-			 * create ready to return OHServiceException and keep existing error message
-			 */
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					e.getMessage(), OHSeverityLevel.ERROR));
-		}catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.sql.thedatacouldnotbesaved"), OHSeverityLevel.ERROR));
-		}
+		// the user has confirmed he wants to overwrite the record
+		return ioOperations.updateOperation(operation);
 	}
 
 	/** 
@@ -144,21 +84,7 @@ public class OperationBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean deleteOperation(Operation operation) throws OHServiceException {
-		try {
-			return ioOperations.deleteOperation(operation);
-		}  catch(OHServiceException e){
-			/*Already cached exception with OH specific error message - 
-			 * create ready to return OHServiceException and keep existing error message
-			 */
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					e.getMessage(), OHSeverityLevel.ERROR));
-		}catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.sql.thedatacouldnotbesaved"), OHSeverityLevel.ERROR));
-		}
+		return ioOperations.deleteOperation(operation);
 	}
 	
 	/**
@@ -168,21 +94,7 @@ public class OperationBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean codeControl(String code) throws OHServiceException {
-		try {
-			return ioOperations.isCodePresent(code);
-		}  catch(OHServiceException e){
-			/*Already cached exception with OH specific error message - 
-			 * create ready to return OHServiceException and keep existing error message
-			 */
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					e.getMessage(), OHSeverityLevel.ERROR));
-		}catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.sql.thedatacouldnotbesaved"), OHSeverityLevel.ERROR));
-		}
+		return ioOperations.isCodePresent(code);
 	}
 	
 	/**
@@ -194,21 +106,7 @@ public class OperationBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean descriptionControl(String description, String typeCode) throws OHServiceException {
-		try {
-			return ioOperations.isDescriptionPresent(description,typeCode);
-		}  catch(OHServiceException e){
-			/*Already cached exception with OH specific error message - 
-			 * create ready to return OHServiceException and keep existing error message
-			 */
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					e.getMessage(), OHSeverityLevel.ERROR));
-		}catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.sql.thedatacouldnotbesaved"), OHSeverityLevel.ERROR));
-		}
+		return ioOperations.isDescriptionPresent(description,typeCode);
 	}
 	
 }

@@ -8,7 +8,10 @@ public class OHServiceValidationException extends OHServiceException {
 
 	public OHServiceValidationException(List<OHExceptionMessage> messages) {
 		super(messages);
-		// TODO Auto-generated constructor stub
+	}
+	
+	public OHServiceValidationException(OHExceptionMessage message) {
+		super(message);
 	}
 
 }

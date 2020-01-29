@@ -44,7 +44,7 @@ public interface DicomManagerInterface
      * @return, FileDicomDettaglio
      * @throws OHServiceException 
      */
-    public FileDicom loadDettaglio(Long idFile,int idPaziente, String numeroSerie) throws OHServiceException;
+    public FileDicom loadDetails(Long idFile,int idPaziente, String numeroSerie) throws OHServiceException;
     
     /**
      * Load detail

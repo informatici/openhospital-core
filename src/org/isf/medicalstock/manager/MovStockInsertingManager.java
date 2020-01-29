@@ -11,6 +11,7 @@ import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHServiceValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -40,7 +41,7 @@ public class MovStockInsertingManager {
 	 * @return list of {@link OHExceptionMessage}
 	 * @throws OHServiceException 
 	 */
-	protected void validateMovement(Movement movement, boolean checkReference) throws OHServiceException {
+	protected void validateMovement(Movement movement, boolean checkReference) throws OHServiceException  {
 		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 		
 		// Check the Date
@@ -135,9 +136,8 @@ public class MovStockInsertingManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param Lot - the lot to validate
 	 * @return list of {@link OHExceptionMessage}
-	 * @throws OHServiceException 
 	 */
-	protected List<OHExceptionMessage> validateLot(Lot lot) throws OHServiceException {
+	protected List<OHExceptionMessage> validateLot(Lot lot) {
 		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 		
 		if (lot != null) {
@@ -276,7 +276,7 @@ public class MovStockInsertingManager {
 		if (!checkReference) { // referenceNumber != null
 			List<OHExceptionMessage> errors = checkReferenceNumber(referenceNumber);
             if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
+                throw new OHServiceValidationException(errors);
             }
 		}
 		for (Movement mov : movements) {
@@ -287,7 +287,7 @@ public class MovStockInsertingManager {
 				errors.add(new OHExceptionMessage("invalidMovement", 
 						mov.getMedical().getDescription(), 
 						OHSeverityLevel.INFO));
-				throw new OHServiceException(errors);
+				throw new OHServiceValidationException(errors);
 			}
 		}
 		return ok;
@@ -305,12 +305,8 @@ public class MovStockInsertingManager {
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	private boolean prepareChargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
-		try {
-			validateMovement(movement, checkReference);
-			return ioOperations.prepareChargingMovement(movement);
-		} catch (OHServiceException e) {
-			throw e;
-		}
+		validateMovement(movement, checkReference);
+		return ioOperations.prepareChargingMovement(movement);
 	}
 	
 	/**
@@ -342,7 +338,7 @@ public class MovStockInsertingManager {
 		if (!checkReference) { // referenceNumber != null
 			List<OHExceptionMessage> errors = checkReferenceNumber(referenceNumber);
             if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
+                throw new OHServiceValidationException(errors);
             }
 		}
 		for (Movement mov : movements) {
@@ -353,7 +349,7 @@ public class MovStockInsertingManager {
 				errors.add(new OHExceptionMessage("invalidMovement", 
 						mov.getMedical().getDescription(), 
 						OHSeverityLevel.INFO));
-				throw new OHServiceException(errors);
+				throw new OHServiceValidationException(errors);
 			}
 		}
 		return ok;
@@ -370,14 +366,11 @@ public class MovStockInsertingManager {
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	private boolean prepareDishargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
-		try {
-			validateMovement(movement, checkReference);
-            if (isAutomaticLot()) {
-            	return ioOperations.newAutomaticDischargingMovement(movement);
-            } else 
-            	return ioOperations.prepareDischargingMovement(movement);
-		} catch (OHServiceException e) {
-			throw e;
-		}
+		validateMovement(movement, checkReference);
+        if (isAutomaticLot()) {
+        	return ioOperations.newAutomaticDischargingMovement(movement);
+        } else {
+        	return ioOperations.prepareDischargingMovement(movement);
+        }
 	}
 }

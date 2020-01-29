@@ -134,35 +134,8 @@ public class MovWardBrowserManager {
 		}
 		return ioOperations.newMovementWard(newMovements);
 	}
-        
-        /**
-         * @param movementWards
-         * @param movements
-         * @return
-         * @throws OHServiceException 
-         */
-//        @Transactional(rollbackFor=OHServiceException.class)
-//        public boolean newMovementWard(ArrayList<MovementWard> movementWards, ArrayList<Movement> movements) throws OHServiceException {
-//		if (movementWards.isEmpty()) {
-//			throw new OHServiceException(new OHExceptionMessage(
-//					"emptyMovementListError", 
-//					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug"), 
-//					OHSeverityLevel.ERROR));
-//		}
-//		for (MovementWard mov : movementWards) {
-//			List<OHExceptionMessage> errors = validateMovementWard(mov);
-//	        if(!errors.isEmpty()){
-//	            throw new OHServiceException(errors);
-//	        }
-//		}
-//		boolean result = ioOperations.newMovementWard(movementWards);
-//                for(Movement mov: movements) {
-//                    result = result && medicalStockIoOperations.prepareChargingMovement(mov);
-//                } 
-//                return result;
-//	}
-
-        /**
+    
+	/**
 	 * Updates the specified {@link MovementWard}.
 	 * @param updateMovement the movement ward to update.
 	 * @return <code>true</code> if the movement has been updated, <code>false</code> otherwise.

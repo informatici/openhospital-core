@@ -197,7 +197,7 @@ public class LabManager {
 	 * @param laboratory - the laboratory with its result (Procedure 1)
 	 * @param labRow - the list of results (Procedure 2) - it can be <code>null</code>
 	 * @return <code>true</code> if the exam has been inserted, <code>false</code> otherwise
-	 * @throws OHServiceException
+	 * @throws OHServiceException 
 	 */
 	public boolean newLaboratory(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
 		validateLaboratory(laboratory);
@@ -206,15 +206,16 @@ public class LabManager {
 		}
 		else if (laboratory.getExam().getProcedure() == 2) {
 			if (labRow == null || labRow.isEmpty())
-				throw new OHServiceException(new OHExceptionMessage("labRowNullOrEmptyError", 
+				throw new OHServiceValidationException(new OHExceptionMessage("labRowNullOrEmptyError", 
 		        		MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"), 
 		        		OHSeverityLevel.ERROR));
 			return ioOperations.newLabSecondProcedure(laboratory, labRow);
 		}
-		else 
-			throw new OHServiceException(new OHExceptionMessage("unknownProcedureError", 
+		else {
+			throw new OHServiceValidationException(new OHExceptionMessage("unknownProcedureError", 
 	        		MessageBundle.getMessage("angal.lab.unknownprocedure"), 
 	        		OHSeverityLevel.ERROR));
+		}
 	}
 	/**
 	 * Inserts one Laboratory exam {@link Laboratory} (All Procedures)
@@ -230,13 +231,13 @@ public class LabManager {
 		}
 		else if (laboratory.getExam().getProcedure() == 2) {
 			if (labRow == null || labRow.isEmpty())
-				throw new OHServiceException(new OHExceptionMessage("labRowNullOrEmptyError", 
+				throw new OHServiceValidationException(new OHExceptionMessage("labRowNullOrEmptyError", 
 		        		MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"), 
 		        		OHSeverityLevel.ERROR));
 			return ioOperations.newLabSecondProcedure2(laboratory, labRow);
 		}
 		else 
-			throw new OHServiceException(new OHExceptionMessage("unknownProcedureError", 
+			throw new OHServiceValidationException(new OHExceptionMessage("unknownProcedureError", 
 	        		MessageBundle.getMessage("angal.lab.unknownprocedure"), 
 	        		OHSeverityLevel.ERROR));
 	}
@@ -255,13 +256,13 @@ public class LabManager {
 		}
 		else if (laboratory.getExam().getProcedure() == 2) {
 			if (labRow == null || labRow.isEmpty())
-				throw new OHServiceException(new OHExceptionMessage("labRowNullOrEmptyError", 
+				throw new OHServiceValidationException(new OHExceptionMessage("labRowNullOrEmptyError", 
 		        		MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"), 
 		        		OHSeverityLevel.ERROR));
 			return ioOperations.updateLabSecondProcedure(laboratory, labRow);
 		}
 		else 
-			throw new OHServiceException(new OHExceptionMessage("unknownProcedureError", 
+			throw new OHServiceValidationException(new OHExceptionMessage("unknownProcedureError", 
 	        		MessageBundle.getMessage("angal.lab.unknownprocedure"), 
 	        		OHSeverityLevel.ERROR));
 	}
@@ -276,11 +277,11 @@ public class LabManager {
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean newLaboratory(List<Laboratory> labList, ArrayList<ArrayList<String>> labRowList) throws OHServiceException {
 		if (labList.size() == 0)
-			throw new OHServiceException(new OHExceptionMessage("emptyListError", 
+			throw new OHServiceValidationException(new OHExceptionMessage("emptyListError", 
 		    		MessageBundle.getMessage("angal.labnew.noexamsinserted"), 
 		    		OHSeverityLevel.ERROR));
 		if (labList.size() != labRowList.size())
-			throw new OHServiceException(new OHExceptionMessage("labRowNullOrEmptyError", 
+			throw new OHServiceValidationException(new OHExceptionMessage("labRowNullOrEmptyError", 
 		    		MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"), 
 		    		OHSeverityLevel.ERROR));
 		boolean result = true;
@@ -300,11 +301,11 @@ public class LabManager {
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean newLaboratory2(List<Laboratory> labList, ArrayList<ArrayList<LaboratoryRow>> labRowList) throws OHServiceException {
 		if (labList.size() == 0)
-			throw new OHServiceException(new OHExceptionMessage("emptyListError", 
+			throw new OHServiceValidationException(new OHExceptionMessage("emptyListError", 
 		    		MessageBundle.getMessage("angal.labnew.noexamsinserted"), 
 		    		OHSeverityLevel.ERROR));
 		if (labList.size() != labRowList.size())
-			throw new OHServiceException(new OHExceptionMessage("labRowNullOrEmptyError", 
+			throw new OHServiceValidationException(new OHExceptionMessage("labRowNullOrEmptyError", 
 		    		MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"), 
 		    		OHSeverityLevel.ERROR));
 		boolean result = true;

@@ -6,6 +6,7 @@ import java.util.List;
 import org.isf.admission.manager.AdmissionBrowserManager;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHServiceOperationNotAllowedException;
 import org.isf.utils.exception.OHServiceValidationException;
@@ -71,7 +72,7 @@ public class WardBrowserManager {
 		}
 		if (insert) {
 			if (codeControl(ward.getCode())){
-				throw new OHServiceException(new OHExceptionMessage(null, 
+				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null, 
 						MessageBundle.getMessage("angal.common.codealreadyinuse"), 
 						OHSeverityLevel.ERROR));
 			}
