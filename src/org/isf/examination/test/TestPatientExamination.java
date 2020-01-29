@@ -67,13 +67,13 @@ public class TestPatientExamination
 	{		
 		//assertEquals(pex_date, foundPatientExamination.getPex_date());
 		assertEquals(pex_fc, patientExamination.getPex_fc());
-		assertEquals(pex_height, patientExamination.getPex_height());
+		//assertEquals(pex_height, patientExamination.getPex_height());
 		assertEquals(pex_note, patientExamination.getPex_note());
 		assertEquals(pex_pa_max, patientExamination.getPex_pa_max());
 		assertEquals(pex_pa_min, patientExamination.getPex_pa_min());
 		//assertEquals(pex_sat, foundPatientExamination.getPex_sat());
 		//assertEquals(pex_temp, foundPatientExamination.getPex_temp());
-		//assertEquals(pex_weight, foundPatientExamination.getPex_weight());
+		assertEquals(pex_weight, patientExamination.getPex_weight());
 		
 		return;
 	}	
