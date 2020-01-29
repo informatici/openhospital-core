@@ -49,7 +49,7 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	private Patient patient;
 	
 	@Column(name="PEX_HEIGHT")
-	private int pex_height;
+	private double pex_height;
 	
 	@Column(name="PEX_WEIGHT")
 	private int pex_weight;
@@ -94,7 +94,7 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	 * @param pex_sat
 	 * @param pex_note
 	 */
-	public PatientExamination(Timestamp pex_date, Patient patient, int pex_height, int pex_weight, int pex_pa_min, int pex_pa_max, int pex_fc, double pex_temp, double pex_sat, String pex_note) {
+	public PatientExamination(Timestamp pex_date, Patient patient, double pex_height, int pex_weight, int pex_pa_min, int pex_pa_max, int pex_fc, double pex_temp, double pex_sat, String pex_note) {
 		super();
 		this.pex_date = pex_date;
 		this.patient = patient;
@@ -169,14 +169,14 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	/**
 	 * @return the pex_height
 	 */
-	public int getPex_height() {
+	public double getPex_height() {
 		return pex_height;
 	}
 
 	/**
 	 * @param pex_height the pex_height to set
 	 */
-	public void setPex_height(int pex_height) {
+	public void setPex_height(double pex_height) {
 		this.pex_height = pex_height;
 	}
 
