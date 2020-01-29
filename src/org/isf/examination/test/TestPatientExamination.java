@@ -13,7 +13,7 @@ public class TestPatientExamination
 {	
 	private Timestamp pex_date = new Timestamp(1000);
 	private int pex_height = 0;	
-	private double pex_weight = 60;	
+	private int pex_weight = 60;	
 	private int pex_pa_min = 80;	
 	private int pex_pa_max = 120;	
 	private int pex_fc = 60;	
