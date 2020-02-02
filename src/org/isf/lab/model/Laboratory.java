@@ -73,7 +73,7 @@ public class Laboratory
 	private String InOutPatient;
 	
 	@Column(name="LAB_AGE")
-	private int age;
+	private Integer age;
 	
 	@Column(name="LAB_SEX")
 	private String sex;
@@ -157,10 +157,10 @@ public class Laboratory
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
-	public int getAge() {
+	public Integer getAge() {
 		return age;
 	}
-	public void setAge(int age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
 	public String getInOutPatient() {
