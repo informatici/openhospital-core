@@ -119,8 +119,10 @@ public class Lot
 				return false;
 		} else if (!code.equals(other.code))
 			return false;
-		if (cost.compareTo(other.cost) != 0)
-			return false;
+		if (cost != null) {
+			if (cost.compareTo(other.cost) != 0)
+				return false;
+		}
 		if (dueDate == null) {
 			if (other.dueDate != null)
 				return false;

@@ -185,16 +185,13 @@ public class Laboratory
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		
-		if (!(obj instanceof Laboratory)) {
+		if (obj == null || !(obj instanceof Laboratory)) {
 			return false;
 		}
 		
 		Laboratory laboratory = (Laboratory)obj;
-		return (this.getCode() == laboratory.getCode());
+		return (this.getCode().equals(laboratory.getCode()));
+
 	}
 	
 	@Override
