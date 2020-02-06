@@ -73,17 +73,20 @@ public class ExaminationParameters {
 	public static String TEMP_UNIT;
 	private static String DEFAULT_TEMP_UNIT = "°C";
 	
-	public static int TEMP_MIN;
-	private static int DEFAULT_TEMP_MIN = 0;
+	public static Double TEMP_MIN;
+	private static Double DEFAULT_TEMP_MIN = 0.;
 	
-	public static int TEMP_MAX;
-	private static int DEFAULT_TEMP_MAX = 60;
+	public static Double TEMP_MAX;
+	private static Double DEFAULT_TEMP_MAX = 60.;
 	
-	public static int TEMP_INIT;
-	private static int DEFAULT_TEMP_INIT = 0;
+	public static Double TEMP_INIT;
+	private static Double DEFAULT_TEMP_INIT = 0.;
 	
-	public static double TEMP_STEP;
-	private static double DEFAULT_TEMP_STEP = 0.5;
+	public static Double TEMP_STEP;
+	private static Double DEFAULT_TEMP_STEP = 0.5;
+	
+	public static String SAT_UNIT;
+	private static String DEFAULT_SAT_UNIT = "%";
 	
 	public static int SAT_MIN;
 	private static int DEFAULT_SAT_MIN = 50;
@@ -127,6 +130,7 @@ public class ExaminationParameters {
 			TEMP_INIT = myGetProperty("TEMP_INIT", DEFAULT_TEMP_INIT);
 			TEMP_STEP = myGetProperty("TEMP_STEP", DEFAULT_TEMP_STEP);
 			SAT_MIN = myGetProperty("SAT_MIN", DEFAULT_SAT_MIN);
+			SAT_MIN = myGetProperty("SAT_MIN", DEFAULT_SAT_MIN);
 			SAT_MAX = myGetProperty("SAT_MAX", DEFAULT_SAT_MAX);
 			SAT_INIT = myGetProperty("SAT_INIT", DEFAULT_SAT_INIT);
 			SAT_STEP = myGetProperty("SAT_STEP", DEFAULT_SAT_STEP);
@@ -136,6 +140,7 @@ public class ExaminationParameters {
 			AP_UNIT = propertyReader.readProperty("AP_UNIT", DEFAULT_AP_UNIT);
 			HR_UNIT = propertyReader.readProperty("HR_UNIT", DEFAULT_HR_UNIT);
 			TEMP_UNIT = propertyReader.readProperty("TEMP_UNIT", DEFAULT_TEMP_UNIT);
+			SAT_UNIT = propertyReader.readProperty("SAT_UNIT", DEFAULT_SAT_UNIT);
 		} catch (Exception e) { //no file
 			logger.warn("examination.properties file not found.");
 		}
