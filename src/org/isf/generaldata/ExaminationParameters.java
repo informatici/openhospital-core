@@ -32,7 +32,7 @@ public class ExaminationParameters {
 	private static String DEFAULT_HEIGHT_UNIT = "cm";
 	
 	public static double HEIGHT_STEP;
-	private static double DEFAULT_HEIGHT_STEP = 0.1;
+	private static double DEFAULT_HEIGHT_STEP = 1;
 	
 	public static String WEIGHT_UNIT;
 	private static String DEFAULT_WEIGHT_UNIT = "Kg";
@@ -73,17 +73,17 @@ public class ExaminationParameters {
 	public static String TEMP_UNIT;
 	private static String DEFAULT_TEMP_UNIT = "°C";
 	
-	public static Double TEMP_MIN;
-	private static Double DEFAULT_TEMP_MIN = 0.;
+	public static int TEMP_MIN;
+	private static int DEFAULT_TEMP_MIN = 0;
 	
-	public static Double TEMP_MAX;
-	private static Double DEFAULT_TEMP_MAX = 60.;
+	public static int TEMP_MAX;
+	private static int DEFAULT_TEMP_MAX = 50;
 	
-	public static Double TEMP_INIT;
-	private static Double DEFAULT_TEMP_INIT = 0.;
+	public static int TEMP_INIT;
+	private static int DEFAULT_TEMP_INIT = 36;
 	
 	public static Double TEMP_STEP;
-	private static Double DEFAULT_TEMP_STEP = 0.5;
+	private static Double DEFAULT_TEMP_STEP = 0.1;
 	
 	public static String SAT_UNIT;
 	private static String DEFAULT_SAT_UNIT = "%";
@@ -91,8 +91,9 @@ public class ExaminationParameters {
 	public static int SAT_MIN;
 	private static int DEFAULT_SAT_MIN = 50;
 	
-	public static int SAT_MAX;
-	private static int DEFAULT_SAT_MAX = 100;
+	//deprecated
+	//public static int SAT_MAX;
+	//private static int DEFAULT_SAT_MAX = 100;
 	
 	public static int SAT_INIT;
 	private static int DEFAULT_SAT_INIT = 90;
@@ -131,7 +132,7 @@ public class ExaminationParameters {
 			TEMP_STEP = myGetProperty("TEMP_STEP", DEFAULT_TEMP_STEP);
 			SAT_MIN = myGetProperty("SAT_MIN", DEFAULT_SAT_MIN);
 			SAT_MIN = myGetProperty("SAT_MIN", DEFAULT_SAT_MIN);
-			SAT_MAX = myGetProperty("SAT_MAX", DEFAULT_SAT_MAX);
+			//SAT_MAX = myGetProperty("SAT_MAX", DEFAULT_SAT_MAX);
 			SAT_INIT = myGetProperty("SAT_INIT", DEFAULT_SAT_INIT);
 			SAT_STEP = myGetProperty("SAT_STEP", DEFAULT_SAT_STEP);
 			LIST_SIZE = myGetProperty("LIST_SIZE", DEFAULT_LIST_SIZE);
