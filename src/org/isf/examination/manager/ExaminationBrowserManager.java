@@ -7,6 +7,7 @@ import java.util.Date;
 import org.isf.examination.model.PatientExamination;
 import org.isf.examination.service.ExaminationOperations;
 import org.isf.generaldata.ExaminationParameters;
+import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,24 @@ public class ExaminationBrowserManager {
 	 */
 	public void remove(ArrayList<PatientExamination> patexList) throws OHServiceException {
 		ioOperations.remove(patexList);
+	}
+	
+	public String getBMIdescription(double bmi) {
+		if (bmi < 16.5)
+			return MessageBundle.getMessage("angal.examination.bmi.severeunderweight");
+		if (bmi >= 16.5 && bmi < 18.5)
+			return MessageBundle.getMessage("angal.examination.bmi.underweight");
+		if (bmi >= 18.5 && bmi < 24.5)
+			return MessageBundle.getMessage("angal.examination.bmi.normalweight");
+		if (bmi >= 24.5 && bmi < 30)
+			return MessageBundle.getMessage("angal.examination.bmi.overweight");
+		if (bmi >= 30 && bmi < 35)
+			return MessageBundle.getMessage("angal.examination.bmi.obesityclassilight");
+		if (bmi >= 35 && bmi < 40)
+			return MessageBundle.getMessage("angal.examination.bmi.obesityclassiimedium");
+		if (bmi >= 40)
+			return MessageBundle.getMessage("angal.examination.bmi.obesityclassiiisevere");
+		return "";
 	}
 
 }
