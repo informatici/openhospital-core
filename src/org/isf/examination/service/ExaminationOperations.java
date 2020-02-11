@@ -83,4 +83,11 @@ public class ExaminationOperations {
 	{
 		return (ArrayList<PatientExamination>)repository.findAllByIdOrderDesc(patID);
 	}
+	
+	public void remove(
+			ArrayList<PatientExamination> patexList) throws OHServiceException 
+	{
+		repository.delete(patexList);
+		return;
+	}
 }

@@ -8,7 +8,6 @@ import org.isf.examination.model.PatientExamination;
 import org.isf.examination.service.ExaminationOperations;
 import org.isf.generaldata.ExaminationParameters;
 import org.isf.patient.model.Patient;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -48,11 +47,8 @@ public class ExaminationBrowserManager {
 	}
 
 	/**
-	 * 
-	 * @param path
-	 *            - the PatientHistory to save
+	 * @param path - the PatientHistory to save
 	 * @throws OHServiceException 
-	 * @throws OHException 
 	 */
 	public void saveOrUpdate(PatientExamination patex) throws OHServiceException {
         ioOperations.saveOrUpdate(patex);
@@ -74,6 +70,14 @@ public class ExaminationBrowserManager {
 
 	public ArrayList<PatientExamination> getByPatID(int patID) throws OHServiceException {
         return ioOperations.getByPatID(patID);
+	}
+	
+	/**
+	 * @param patexList - the {@link PatientExamination} to delete.
+	 * @throws OHServiceException 
+	 */
+	public void remove(ArrayList<PatientExamination> patexList) throws OHServiceException {
+		ioOperations.remove(patexList);
 	}
 
 }
