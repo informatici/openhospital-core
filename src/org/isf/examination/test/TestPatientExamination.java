@@ -12,8 +12,8 @@ import org.isf.utils.exception.OHException;
 public class TestPatientExamination 
 {	
 	private Timestamp pex_date = new Timestamp(1000);
-	private Double pex_height = 0.;	
-	private Integer pex_weight = 60;	
+	private Integer pex_height = 170;	
+	private Double pex_weight = 60.;	
 	private Integer pex_ap_min = 80;	
 	private Integer pex_ap_max = 120;	
 	private Integer pex_hr = 60;	

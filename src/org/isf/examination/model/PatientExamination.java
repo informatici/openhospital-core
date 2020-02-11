@@ -49,10 +49,10 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	private Patient patient;
 	
 	@Column(name="PEX_HEIGHT")
-	private Double pex_height;
+	private Integer pex_height;
 	
 	@Column(name="PEX_WEIGHT")
-	private Integer pex_weight;
+	private Double pex_weight;
 	
 	@Column(name="PEX_AP_MIN")
 	private Integer pex_ap_min;
@@ -74,6 +74,12 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	
 	@Transient
 	private volatile int hashCode = 0;
+	
+	@Transient
+	private String WEIGHT_UOM;
+	
+	@Transient
+	private String HEIGHT_UOM;
 
 	/**
 	 * 
@@ -94,7 +100,7 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	 * @param pex_sat
 	 * @param pex_note
 	 */
-	public PatientExamination(Timestamp pex_date, Patient patient, Double pex_height, Integer pex_weight, Integer pex_ap_min, Integer pex_ap_max, Integer pex_hr, Double pex_temp, Double pex_sat, String pex_note) {
+	public PatientExamination(Timestamp pex_date, Patient patient, Integer pex_height, Double pex_weight, Integer pex_ap_min, Integer pex_ap_max, Integer pex_hr, Double pex_temp, Double pex_sat, String pex_note) {
 		super();
 		this.pex_date = pex_date;
 		this.patient = patient;
@@ -169,28 +175,28 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	/**
 	 * @return the pex_height
 	 */
-	public Double getPex_height() {
+	public Integer getPex_height() {
 		return pex_height;
 	}
 
 	/**
 	 * @param pex_height the pex_height to set
 	 */
-	public void setPex_height(Double pex_height) {
+	public void setPex_height(Integer pex_height) {
 		this.pex_height = pex_height;
 	}
 
 	/**
 	 * @return the pex_weight
 	 */
-	public Integer getPex_weight() {
+	public Double getPex_weight() {
 		return pex_weight;
 	}
 
 	/**
 	 * @param weight the pex_weight to set
 	 */
-	public void setPex_weight(Integer weight) {
+	public void setPex_weight(Double weight) {
 		this.pex_weight = weight;
 	}
 
@@ -286,7 +292,9 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	public double getBMI() {
 		if (pex_height != null) {
 			double temp = Math.pow(10, 2); // 2 <-- decimal digits;
-			return Math.round((pex_weight / Math.pow(new Double(pex_height) / 100, 2)) * temp) / temp ;
+			double height = pex_height * (1. / 100); // convert to m
+			double weight = pex_weight; // Kg
+			return Math.round(weight / Math.pow(height, 2) * temp) / temp ; //getting Kg/m2
 		} else return 0;
 	}
 	

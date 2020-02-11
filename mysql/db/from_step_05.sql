@@ -51,3 +51,4 @@ source step_54_enable_sms_on_visits.sql;
 source step_55_main_hospital_currency.sql;
 source step_56_enable_movements_between_wards.sql;
 source step_57_multiple_operations_in_admission.sql;
+source step_XX_examination_changes.sql;
