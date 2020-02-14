@@ -100,6 +100,12 @@ public class ExaminationParameters {
 	public static double SAT_STEP;
 	private static double DEFAULT_SAT_STEP = 0.1;
 	
+	public static int HGT_INIT;
+	private static int DEFAULT_HGT_INIT = 0;
+	
+	public static int DIURESIS_INIT;
+	private static int DEFAULT_DIURESIS_INIT = 0;
+	
 	public static int LIST_SIZE;
 	private static int DEFAULT_LIST_SIZE = 4;
 	
@@ -142,6 +148,9 @@ public class ExaminationParameters {
 			SAT_INIT = myGetProperty("SAT_INIT", DEFAULT_SAT_INIT);
 			SAT_STEP = myGetProperty("SAT_STEP", DEFAULT_SAT_STEP);
 //			SAT_UNIT = myGetProperty("SAT_UNIT", DEFAULT_SAT_UNIT);
+			
+			HGT_INIT = myGetProperty("HGT_INIT", DEFAULT_HGT_INIT);
+			DIURESIS_INIT = myGetProperty("DIURESIS_INIT", DEFAULT_DIURESIS_INIT);
 			
 			LIST_SIZE = myGetProperty("LIST_SIZE", DEFAULT_LIST_SIZE);
 			

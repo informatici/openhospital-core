@@ -69,18 +69,24 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	@Column(name="PEX_SAT")
 	private Double pex_sat;
 	
+	@Column(name="PEX_HGT")
+	private Integer pex_hgt;
+	
+	@Column(name="PEX_DIURESIS")
+	private Integer pex_diuresis;
+	
+	@Column(name="PEX_DIURESIS_DESC")
+	private String pex_diuresis_desc;
+	
+	@Column(name="PEX_BOWEL_DESC")
+	private String pex_bowel_desc;
+	
 	@Column(name="PEX_NOTE", length=300)
 	private String pex_note;
 	
 	@Transient
 	private volatile int hashCode = 0;
 	
-	@Transient
-	private String WEIGHT_UOM;
-	
-	@Transient
-	private String HEIGHT_UOM;
-
 	/**
 	 * 
 	 */
@@ -98,9 +104,27 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	 * @param pex_hr
 	 * @param pex_temp
 	 * @param pex_sat
+	 * @param pex_hgt
+	 * @param pex_diuresis
+	 * @param pex_diuresis_desc
+	 * @param pex_bowel_desc
 	 * @param pex_note
 	 */
-	public PatientExamination(Timestamp pex_date, Patient patient, Integer pex_height, Double pex_weight, Integer pex_ap_min, Integer pex_ap_max, Integer pex_hr, Double pex_temp, Double pex_sat, String pex_note) {
+	public PatientExamination(
+			Timestamp pex_date, 
+			Patient patient, 
+			Integer pex_height, 
+			Double pex_weight, 
+			Integer pex_ap_min, 
+			Integer pex_ap_max, 
+			Integer pex_hr, 
+			Double pex_temp, 
+			Double pex_sat,
+			Integer pex_hgt,
+			Integer pex_diuresis,
+			String pex_diuresis_desc,
+			String pex_bowel_desc,
+			String pex_note) {
 		super();
 		this.pex_date = pex_date;
 		this.patient = patient;
@@ -111,6 +135,10 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 		this.pex_hr = pex_hr;
 		this.pex_temp = pex_temp;
 		this.pex_sat = pex_sat;
+		this.pex_hgt = pex_hgt;
+		this.pex_diuresis = pex_diuresis;
+		this.pex_diuresis_desc = pex_diuresis_desc;
+		this.pex_bowel_desc = pex_bowel_desc;
 		this.pex_note = pex_note;
 	}
 
@@ -268,6 +296,62 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	 */
 	public void setPex_sat(Double pex_sat) {
 		this.pex_sat = pex_sat;
+	}
+
+	/**
+	 * @return the pex_hgt
+	 */
+	public Integer getPex_hgt() {
+		return pex_hgt;
+	}
+
+	/**
+	 * @param pex_hgt the pex_hgt to set
+	 */
+	public void setPex_hgt(Integer pex_hgt) {
+		this.pex_hgt = pex_hgt;
+	}
+
+	/**
+	 * @return the pex_diuresis
+	 */
+	public Integer getPex_diuresis() {
+		return pex_diuresis;
+	}
+
+	/**
+	 * @param pex_diuresis the pex_diuresis to set
+	 */
+	public void setPex_diuresis(Integer pex_diuresis) {
+		this.pex_diuresis = pex_diuresis;
+	}
+
+	/**
+	 * @return the pex_diuresis_desc
+	 */
+	public String getPex_diuresis_desc() {
+		return pex_diuresis_desc;
+	}
+
+	/**
+	 * @param pex_diuresis_desc the pex_diuresis_desc to set
+	 */
+	public void setPex_diuresis_desc(String pex_diuresis_desc) {
+		this.pex_diuresis_desc = pex_diuresis_desc;
+	}
+
+	/**
+	 * @return the pex_bowel_desc
+	 */
+	public String getPex_bowel_desc() {
+		return pex_bowel_desc;
+	}
+
+	/**
+	 * @param pex_bowel_desc the pex_bowel_desc to set
+	 */
+	public void setPex_bowel_desc(String pex_bowel_desc) {
+		this.pex_bowel_desc = pex_bowel_desc;
 	}
 
 	/**

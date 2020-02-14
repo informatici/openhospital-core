@@ -19,6 +19,10 @@ public class TestPatientExamination
 	private Integer pex_hr = 60;	
 	private Double pex_temp = 36.;	
 	private Double pex_sat = 1.;	
+	private Integer pex_hgt = 85;
+	private Integer pex_diuresis = 100;
+	private String pex_diuresis_desc = "physiological";
+	private String pex_bowel_desc = "regular";
 	private String pex_note = "";
 	
 	
@@ -38,7 +42,8 @@ public class TestPatientExamination
 		{
 			// Create Patient Examination with all parameters 
 			patientExamination = new PatientExamination(pex_date, patient, pex_height, pex_weight, 
-					pex_ap_min, pex_ap_max, pex_hr, pex_temp, pex_sat, pex_note);	
+					pex_ap_min, pex_ap_max, pex_hr, pex_temp, pex_sat, 
+					pex_hgt, pex_diuresis, pex_diuresis_desc, pex_bowel_desc, pex_note);	
 		}
 		
 		return patientExamination;

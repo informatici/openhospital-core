@@ -35,9 +35,20 @@ public class ExaminationOperations {
 	public PatientExamination getFromLastPatientExamination(
 			PatientExamination lastPatientExamination) 
 	{
-		PatientExamination newPatientExamination = new PatientExamination(new Timestamp(new Date().getTime()), lastPatientExamination.getPatient(), lastPatientExamination.getPex_height(),
-				lastPatientExamination.getPex_weight(), lastPatientExamination.getPex_ap_min(), lastPatientExamination.getPex_ap_max(), lastPatientExamination.getPex_hr(), 
-				lastPatientExamination.getPex_temp(), lastPatientExamination.getPex_sat(), lastPatientExamination.getPex_note());
+		PatientExamination newPatientExamination = new PatientExamination(new Timestamp(new Date().getTime()), 
+				lastPatientExamination.getPatient(), 
+				lastPatientExamination.getPex_height(),
+				lastPatientExamination.getPex_weight(), 
+				lastPatientExamination.getPex_ap_min(), 
+				lastPatientExamination.getPex_ap_max(), 
+				lastPatientExamination.getPex_hr(), 
+				lastPatientExamination.getPex_temp(), 
+				lastPatientExamination.getPex_sat(),
+				lastPatientExamination.getPex_hgt(),
+				lastPatientExamination.getPex_diuresis(),
+				lastPatientExamination.getPex_diuresis_desc(),
+				lastPatientExamination.getPex_bowel_desc(),
+				lastPatientExamination.getPex_note());
 		return newPatientExamination;
 	}
 
