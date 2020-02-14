@@ -138,8 +138,9 @@ public class Patient {
 	@Column(name="PAT_TAXCODE")
 	private String taxCode;
 
+	@NotNull
 	@Column(name="PAT_DELETED")
-	private String deleted;
+	private String deleted = "N";
 
 	@Transient
 	private float height;
@@ -185,7 +186,6 @@ public class Patient {
 		this.taxCode = "";
 		this.height = 0;
 		this.weight = 0;
-		this.deleted = "N";
 	}
 	
 	public Patient(Opd opd) {
