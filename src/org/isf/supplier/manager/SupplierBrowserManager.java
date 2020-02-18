@@ -3,17 +3,20 @@ package org.isf.supplier.manager;
 import java.util.HashMap;
 import java.util.List;
 
-import org.isf.menu.manager.Context;
 import org.isf.supplier.model.Supplier;
 import org.isf.supplier.service.SupplierOperations;
 import org.isf.utils.exception.OHServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SupplierBrowserManager {
 
     private final Logger logger = LoggerFactory.getLogger(SupplierBrowserManager.class);
-    private SupplierOperations ioOperations = Context.getApplicationContext().getBean(SupplierOperations.class);
+    @Autowired
+    private SupplierOperations ioOperations;
 
     public boolean saveOrUpdate(Supplier supplier) throws OHServiceException {
         return ioOperations.saveOrUpdate(supplier);

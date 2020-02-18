@@ -12,23 +12,26 @@ import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperations;
-import org.isf.menu.manager.Context;
 import org.isf.serviceprinting.print.MedicalWardForPrint;
 import org.isf.serviceprinting.print.MovementForPrint;
 import org.isf.serviceprinting.print.MovementWardForPrint;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.ward.model.Ward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MovWardBrowserManager {
 
 	private final Logger logger = LoggerFactory.getLogger(MovWardBrowserManager.class);
-	private MedicalStockWardIoOperations ioOperations=Context.getApplicationContext().getBean(MedicalStockWardIoOperations.class);
-//    private MedicalStockIoOperations medicalStockIoOperations = Context.getApplicationContext().getBean(MedicalStockIoOperations.class);
+	
+	@Autowired
+	private MedicalStockWardIoOperations ioOperations;
 
     /**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any

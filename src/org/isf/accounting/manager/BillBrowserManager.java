@@ -112,7 +112,7 @@ public class BillBrowserManager {
 		if (billID == 0) return new ArrayList<BillItems>();
 		return ioOperations.getItems(billID);
 	}
-	
+
 	/**
 	 * Retrieves all the bills of a given patient between dateFrom and datTo
 	 * @param dateFrom
@@ -124,7 +124,7 @@ public class BillBrowserManager {
 	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) throws OHServiceException {
 		return ioOperations.getBills(dateFrom, dateTo, patient);
 	}
-	
+
 	/**
 	 * Retrieves all the billPayments for a given patient between dateFrom and dateTo
 	 * @param dateFrom
@@ -335,6 +335,7 @@ public class BillBrowserManager {
 	public ArrayList<BillPayments> getPayments(ArrayList<Bill> billArray) throws OHServiceException {
 		return ioOperations.getPayments(billArray);
 	}
+
 	/**
 	 * Retrieves all the {@link Bill}s associated to the specified {@link Patient}.
 	 * @param patID - the Patient's ID
@@ -357,7 +358,6 @@ public class BillBrowserManager {
 	
 	/**
 	 * get the bills list with a given billItem
-	 * added by u2g
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param billItem

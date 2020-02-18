@@ -11,13 +11,13 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Persistence class for Accounting module.
  */
-@Component
+@Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class AccountingIoOperations {	
@@ -132,26 +132,6 @@ public class AccountingIoOperations {
 		}
 		
 		return payments;
-	}
-
-	/**
-	 * Converts the specified {@link Timestamp} to a {@link GregorianCalendar} instance.
-	 * @param aDate the date to convert.
-	 * @return the corresponding GregorianCalendar value or <code>null</code> if the input value is <code>null</code>.
-	 */
-	public GregorianCalendar convertToGregorianCalendar(
-			Timestamp aDate) 
-	{
-		GregorianCalendar time = null;
-		
-		
-		if (aDate != null)
-		{
-			time = new GregorianCalendar();
-			time.setTime(aDate);
-		}
-		
-		return time;
 	}
 
 	/**
@@ -376,6 +356,7 @@ public class AccountingIoOperations {
 		
 		return pPayment;
 	}
+	
 	/**
 	 * Retrieves all billPayements for a given patient in the period dateFrom -> dateTo
 	 * @param dateFrom
@@ -422,6 +403,7 @@ public class AccountingIoOperations {
 		ArrayList<BillItems> billItems =  billItemsRepository.findAllGroupByDesc();
 		return billItems;
 	}
+	
 	/**
 	 * return the bill list which date between dateFrom and dateTo and containing given billItem
 	 * added by u2g

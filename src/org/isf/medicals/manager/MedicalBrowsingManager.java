@@ -11,14 +11,15 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medtype.model.MedicalType;
-import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Class that provides gui separation from database operations and gives some
@@ -27,11 +28,13 @@ import org.slf4j.LoggerFactory;
  * @author bob
  * 
  */
+@Component
 public class MedicalBrowsingManager {
 
 	private final Logger logger = LoggerFactory.getLogger(MedicalBrowsingManager.class);
-	
-	private MedicalsIoOperations ioOperations = Context.getApplicationContext().getBean(MedicalsIoOperations.class);
+
+	@Autowired
+	private MedicalsIoOperations ioOperations;
 	
 	/**
 	 * Returns the requested medical.

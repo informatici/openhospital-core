@@ -9,6 +9,8 @@ import org.isf.opetype.model.OperationType;
 import org.isf.utils.exception.OHServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Class that provides gui separation from database operations and gives some
@@ -17,11 +19,12 @@ import org.slf4j.LoggerFactory;
  * @author Rick, Vero, Pupo
  * 
  */
+@Component
 public class OperationBrowserManager {
 
 	private final Logger logger = LoggerFactory.getLogger(OperationBrowserManager.class);
-	
-	private OperationIoOperations ioOperations = Context.getApplicationContext().getBean(OperationIoOperations.class);
+	@Autowired
+	private OperationIoOperations ioOperations;
 
 	/**
 	 * return the list of {@link Operation}s

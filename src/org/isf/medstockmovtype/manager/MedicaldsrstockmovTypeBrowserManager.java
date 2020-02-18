@@ -6,24 +6,27 @@ import java.util.List;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.medstockmovtype.service.MedicalStockMovementTypeIoOperation;
-import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Manager class for the medical stock movement type.
  *
  */
+@Component
 public class MedicaldsrstockmovTypeBrowserManager {
 
 	private final Logger logger = LoggerFactory.getLogger(MedicaldsrstockmovTypeBrowserManager.class);
 	
-	private MedicalStockMovementTypeIoOperation ioOperations = Context.getApplicationContext().getBean(MedicalStockMovementTypeIoOperation.class);
+	@Autowired
+	private MedicalStockMovementTypeIoOperation ioOperations;
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any

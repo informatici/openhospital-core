@@ -13,13 +13,17 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SmsManager {
 
 	public final static int MAX_LENGHT = 160;
 	private final String NUMBER_REGEX = "^\\+?\\d+$"; //$NON-NLS-1$
 	
-	private SmsOperations smsOperations = Context.getApplicationContext().getBean(SmsOperations.class);
+	@Autowired
+	private SmsOperations smsOperations;
 	
 	public SmsManager(){}
 	

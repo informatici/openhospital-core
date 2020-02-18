@@ -18,10 +18,10 @@ import org.isf.exatype.service.ExamTypeIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class ExamRowIoOperations {
@@ -85,7 +85,6 @@ public class ExamRowIoOperations {
 	public ArrayList<ExamRow> getExamsRowByDesc(
 			String description) throws OHServiceException 
 	{ 
-		ArrayList<String> examrowIds = null;
 		ArrayList<ExamRow> examrows = new ArrayList<ExamRow>();
 				
 		
