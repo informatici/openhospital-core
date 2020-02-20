@@ -31,7 +31,7 @@ CREATE TABLE ADMISSION  (
 	ADM_WRD_ID_A  char(1) NOT NULL default '',
 	ADM_YPROG  int NOT NULL default '0',
 	ADM_PAT_ID  int NOT NULL default '0',
-	ADM_DATE_ADM  datetime NOT NULL default '0000-00-00 00:00:00',
+	ADM_DATE_ADM datetime NOT NULL,
 	ADM_ADMT_ID_A_ADM  varchar(10) NOT NULL default '',
 	ADM_FHU  varchar(50) default NULL,
 	ADM_IN_DIS_ID_A  varchar(10) default NULL,
