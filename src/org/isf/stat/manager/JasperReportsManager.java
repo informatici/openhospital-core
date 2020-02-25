@@ -277,7 +277,7 @@ public class JasperReportsManager {
         }
     }
     
-    public JasperReportResultDto getGenericReportPatientVersion2Pdf(Integer patientID, String type, Date date_From, Date date_To, String jasperFileName) throws OHServiceException {
+    public JasperReportResultDto getGenericReportPatientVersion2Pdf(Integer patientID, Boolean all, Boolean admission, Boolean opd, Boolean drugs, Boolean examination,Date date_From, Date date_To, String jasperFileName) throws OHServiceException {
 
         try{
             HashMap<String, Object> parameters = getHospitalParameters();
@@ -296,7 +296,11 @@ public class JasperReportsManager {
 		    String dateToQuery = formatter.format(dt);
 	
             parameters.put("patientID", String.valueOf(patientID));
-            parameters.put("Type", type);
+            parameters.put("All", all);
+            parameters.put("Admission", admission);
+            parameters.put("Opd", opd);
+            parameters.put("Drugs", drugs);
+            parameters.put("Examination", examination);
             parameters.put("Date_from", dateFromQuery); 
             parameters.put("Date_to", dateToQuery); 
             String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + String.valueOf(patientID)+".pdf";
