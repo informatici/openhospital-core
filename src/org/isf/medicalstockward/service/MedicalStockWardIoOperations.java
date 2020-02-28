@@ -226,7 +226,7 @@ public class MedicalStockWardIoOperations
         }
 		else
 		{
-			if (qty.doubleValue() < 0)
+			if (qty < 0)
 			{
 				repository.updateInQuantity(-qty, ward, medical);
 			}
