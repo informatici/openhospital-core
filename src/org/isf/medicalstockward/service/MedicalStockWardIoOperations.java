@@ -45,15 +45,13 @@ public class MedicalStockWardIoOperations
 		ArrayList<MovementWard> pMovementWard = new ArrayList<MovementWard>(); 
 		
 		
-		pMovementWardCode = new ArrayList<Integer>(repository.findAllWardMovement(wardId, dateFrom, dateTo));			
-		for (int i=0; i<pMovementWardCode.size(); i++)
-		{
-			Integer code = pMovementWardCode.get(i);
-			MovementWard movementWard = movementRepository.findOne(code);
-			
-			
-			pMovementWard.add(movementWard);
-		}
+		pMovementWardCode = new ArrayList<Integer>(repository.findAllWardMovement(wardId, dateFrom, dateTo));
+        for (Integer code : pMovementWardCode) {
+            MovementWard movementWard = movementRepository.findOne(code);
+
+
+            pMovementWard.add(movementWard);
+        }
 		
 		return pMovementWard;
 	}
