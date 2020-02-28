@@ -14,6 +14,8 @@ UPDATE MENUITEM SET MNI_POSITION = '9' WHERE (MNI_ID_A = 'printing');
 UPDATE MENUITEM SET MNI_POSITION = '11' WHERE (MNI_ID_A = 'help');
 UPDATE MENUITEM SET MNI_POSITION = '10' WHERE (MNI_ID_A = 'communication');
 UPDATE MENUITEM SET MNI_SHORTCUT = 'M' WHERE (MNI_ID_A = 'communication');
+
 INSERT INTO MENUITEM VALUES ('worksheet','angal.menu.btn.worksheet','angal.menu.worksheet','x','I','main','org.isf.visits.gui.VisitView','N',8);
 
 INSERT INTO GROUPMENU VALUES (1000,'admin','Worksheet','Y');
+
