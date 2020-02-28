@@ -48,8 +48,8 @@ public class VisitManager {
 		return ioOperations.getVisits(patID);
 	}
 	
-	public ArrayList<Visit> getVisitsWard(String ward) throws OHServiceException {
-		return ioOperations.getVisitsWard(ward);
+	public ArrayList<Visit> getVisitsWard() throws OHServiceException {
+		return ioOperations.getVisitsWard();
 	}
 	
 	/**
