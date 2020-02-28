@@ -98,7 +98,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			Long[] _Longs = new Long[_longs.length];
 
 			for (int i = 0; i < _Longs.length; i++) {
-				_Longs[i] = new Long(_longs[i]);
+				_Longs[i] = _longs[i];
 				// System.out.println(" getDettaglioSerie("+idPaziente+","+numeroSerie+") = "+_longs[i]);
 			}
 
