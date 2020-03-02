@@ -22,8 +22,6 @@ public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, O
 
 	@Query(value = "SELECT MAX(OPD_PROG_YEAR) FROM OPD WHERE YEAR(OPD_DATE) = :date", nativeQuery= true)
     Integer findMaxProgYearWhereDate(@Param("date") Integer date);
-	
-	;
 
 	@Query(value = "SELECT * FROM OPD LEFT JOIN PATIENT ON OPD_PAT_ID = PAT_ID WHERE OPD_PAT_ID = ? ORDER BY OPD_DATE DESC LIMIT 1", nativeQuery= true)
     List<Opd> findAllWherePatIdByOrderByDateDescLimit1(@Param("code") Integer code);
