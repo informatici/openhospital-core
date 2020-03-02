@@ -697,7 +697,7 @@ public class BCrypt {
 		rs.append("$");
 		if (rounds < 10)
 			rs.append("0");
-		rs.append(Integer.toString(rounds));
+		rs.append(rounds);
 		rs.append("$");
 		rs.append(encode_base64(saltb, saltb.length));
 		rs.append(encode_base64(hashed,
@@ -722,7 +722,7 @@ public class BCrypt {
 		rs.append("$2a$");
 		if (log_rounds < 10)
 			rs.append("0");
-		rs.append(Integer.toString(log_rounds));
+		rs.append(log_rounds);
 		rs.append("$");
 		rs.append(encode_base64(rnd, rnd.length));
 		return rs.toString();
