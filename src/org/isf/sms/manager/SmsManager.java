@@ -127,7 +127,7 @@ public class SmsManager {
 		
 		// Number of parts
 	    int nParts = (len + MAX_LENGHT - 1) / MAX_LENGHT;
-	    String parts[] = new String[nParts];
+	    String[] parts = new String[nParts];
 
 	    // Break into parts
 	    int offset= 0;

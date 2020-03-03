@@ -116,7 +116,7 @@ public class JasperReportsManager {
             parameters.put("admID", String.valueOf(admID)); // real param
             parameters.put("patientID", String.valueOf(patID)); // real param
 
-            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + String.valueOf(admID)+".pdf";
+            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + admID +".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
@@ -143,7 +143,7 @@ public class JasperReportsManager {
             sbFilename.append("Txt");
             sbFilename.append(".jasper");
 
-            String txtFilename = "rpt/PDF/" + jasperFileName + "_" + String.valueOf(billID) + ".txt";
+            String txtFilename = "rpt/PDF/" + jasperFileName + "_" + billID + ".txt";
             JasperReportResultDto result = generateJasperReport(sbFilename.toString(), txtFilename, parameters);
             return result;
         } catch(Exception e){
@@ -166,7 +166,7 @@ public class JasperReportsManager {
             sbFilename.append("Txt");
             sbFilename.append(".jasper");
 
-            String txtFilename = "rpt/PDF/" + jasperFileName + "_" + String.valueOf(billID) + ".txt";
+            String txtFilename = "rpt/PDF/" + jasperFileName + "_" + billID + ".txt";
             JasperReportResultDto result = generateJasperReport(sbFilename.toString(), txtFilename, parameters);
             return result;
         } catch(Exception e){
@@ -182,7 +182,7 @@ public class JasperReportsManager {
             HashMap<String, Object> parameters = getHospitalParameters();
             parameters.put("billID", String.valueOf(billID)); // real param
 
-            String pdfFilename = "rpt/PDF/" + jasperFileName + "_" + String.valueOf(billID) + ".pdf";
+            String pdfFilename = "rpt/PDF/" + jasperFileName + "_" + billID + ".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
@@ -204,7 +204,7 @@ public class JasperReportsManager {
             parameters.put("opdID", String.valueOf(opdID)); // real param
             parameters.put("patientID", String.valueOf(patID)); // real param
 
-            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + String.valueOf(opdID)+".pdf";
+            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + opdID +".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
@@ -222,7 +222,7 @@ public class JasperReportsManager {
             HashMap<String, Object> parameters = getHospitalParameters();
             parameters.put("patientID", String.valueOf(patientID)); // real param
 
-            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + String.valueOf(patientID)+".pdf";
+            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + patientID +".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
@@ -399,7 +399,7 @@ public class JasperReportsManager {
             String queryString = query.getText();
             queryString = queryString.replace("$P{fromdate}", "'" + dateFromQuery + "'");
 			queryString = queryString.replace("$P{todate}", "'" + dateToQuery + "'");
-			if (medical != null) queryString = queryString.replace("$P{productID}", "'" + String.valueOf(medical.getCode()) + "'");
+			if (medical != null) queryString = queryString.replace("$P{productID}", "'" + medical.getCode() + "'");
 			if (ward != null) queryString = queryString.replace("$P{WardCode}", "'" + ward.getCode() + "'");
 
             DbQueryLogger dbQuery = new DbQueryLogger();
@@ -454,7 +454,7 @@ public class JasperReportsManager {
         try{
             HashMap<String, Object> parameters = compileGenericReportUserInDateParameters(fromDate, toDate, aUser);
             String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
-            String pdfFilename =  "rpt/PDF/" + jasperFileName + "_" + String.valueOf(aUser) + "_" + String.valueOf(date)+".pdf";
+            String pdfFilename =  "rpt/PDF/" + jasperFileName + "_" + aUser + "_" + date +".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
@@ -479,7 +479,7 @@ public class JasperReportsManager {
             sbFilename.append(".jasper");
 
             String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
-            String txtFilename = "rpt/PDF/" + jasperFileName + "_" + String.valueOf(aUser) + "_" + String.valueOf(date) + ".txt";
+            String txtFilename = "rpt/PDF/" + jasperFileName + "_" + aUser + "_" + date + ".txt";
             JasperReportResultDto result = generateJasperReport(sbFilename.toString(), txtFilename, parameters);
             return result;
         } catch(Exception e){
@@ -495,7 +495,7 @@ public class JasperReportsManager {
             HashMap<String, Object> parameters = getHospitalParameters();
             parameters.put("admID", String.valueOf(admID)); // real param
             parameters.put("patientID", String.valueOf(patID)); // real param
-            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + String.valueOf(admID)+".pdf";
+            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + admID +".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
@@ -575,8 +575,8 @@ public class JasperReportsManager {
             JasperReport jasperReport = (JasperReport)JRLoader.loadObject(jasperFile);
             JRQuery query = jasperReport.getMainDataset().getQuery();
             String queryString = query.getText();
-            queryString = queryString.replace("$P{year}", "'" + String.valueOf(year) + "'");
-            queryString = queryString.replace("$P{month}", "'" + String.valueOf(month) + "'");
+            queryString = queryString.replace("$P{year}", "'" + year + "'");
+            queryString = queryString.replace("$P{month}", "'" + month + "'");
 
             DbQueryLogger dbQuery = new DbQueryLogger();
             ResultSet resultSet = dbQuery.getData(queryString, true);

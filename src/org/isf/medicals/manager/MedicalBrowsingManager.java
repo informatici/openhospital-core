@@ -277,5 +277,4 @@ public class MedicalBrowsingManager {
 	        throw new OHDataValidationException(errors);
 	    }
 	}
-	
 }

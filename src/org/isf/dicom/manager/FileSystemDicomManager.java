@@ -161,7 +161,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		if (idFile == null)
 			return null;
 		else
-			return loadDettaglio(idFile.longValue(), idPaziente, numeroSerie);
+			return loadDetails(idFile.longValue(), idPaziente, numeroSerie);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * @return, details
 	 * @throws OHDicomException 
 	 */
-	public FileDicom loadDettaglio(long idFile, int idPaziente, String numeroSerie) throws OHDicomException {
+	public FileDicom loadDetails(long idFile, int idPaziente, String numeroSerie) throws OHDicomException {
 		try {
 			// System.out.println("FS loadDettaglio "+idFile+","+idPaziente+","+numeroSerie);
 			return loadData(idFile, idPaziente, numeroSerie);
@@ -225,8 +225,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			int patId = dicom.getPatId();
 			String numeroSerie = dicom.getDicomSeriesNumber();
 
-			// a volte numero di serie pu� essere NULL, � errato, ma aggiungo
-			// questa linea per non creare excezione
+			// some times this number could be null, it's wrong, but I add
+			// line to avoid exception
 
 			if (numeroSerie == null || numeroSerie.trim().length() == 0 || numeroSerie.equalsIgnoreCase("null"))
 				numeroSerie = NOSERIE;
@@ -322,8 +322,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	private FileDicom loadData(long idFile, int idPaziente, String serie) throws IOException, SerialException, SQLException  {
-		// a volte numero di serie pu� essere NULL, � errato, ma aggiungo questa
-		// linea per non creare excezione
+		// some times this number could be null, it's wrong, but I add
+		// line to avoid exception
 		if (serie == null || serie.trim().length() == 0 || serie.equalsIgnoreCase("null"))
 			serie = NOSERIE;
 
@@ -596,4 +596,5 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			return name.endsWith(".thumn");
 		}
 	}
+
 }
