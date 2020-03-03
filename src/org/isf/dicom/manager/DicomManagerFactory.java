@@ -5,8 +5,7 @@ import java.io.FileInputStream;
 import java.util.Properties;
 
 import org.isf.generaldata.MessageBundle;
-import org.isf.menu.manager.Context;
-import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -28,24 +27,19 @@ public class DicomManagerFactory {
 
 	/**
 	 * return the manager for DICOM acquired files
-	 * @throws OHServiceException 
+	 * @throws OHDicomException 
 	 */
-	public synchronized static DicomManagerInterface getManager() throws OHServiceException {
+	public synchronized static DicomManagerInterface getManager() throws OHDicomException {
 
 		if (instance == null) {
 
 			try {
 				init();
 
-				instance = (DicomManagerInterface) Context.getApplicationContext().getBean(Class.forName(props.getProperty("dicom.manager.impl"))); //.getConstructor(Class.forName("java.util.Properties")).newInstance(props);
-			} catch(OHServiceException e){
-				//Already managed, ready to return OHServiceException
-				logger.error("", e);
-				throw e;
-			}catch(Exception e){
+				instance = (DicomManagerInterface) Class.forName(props.getProperty("dicom.manager.impl")).getConstructor(Class.forName("java.util.Properties")).newInstance(props);
+			} catch(Exception e){
 				//Any exception
-				logger.error("", e);
-				throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
+				throw new OHDicomException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
 						props.getProperty("dicom.manager.impl") + " " + MessageBundle.getMessage("angal.dicom.manager.noimpl"), OHSeverityLevel.ERROR));
 			}
 		}
@@ -53,13 +47,13 @@ public class DicomManagerFactory {
 		return instance;
 	}
 
-	private static void init() throws OHServiceException {
+	private static void init() throws OHDicomException {
 		try {
 
 			File f = new File("rsc/dicom.properties");
 
 			if (!f.exists()) {
-				throw new OHServiceException( new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
+				throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
 						MessageBundle.getMessage("angal.dicom.nofile") + " rsc/dicom.manager.properties", OHSeverityLevel.ERROR));
 			}
 
@@ -68,9 +62,9 @@ public class DicomManagerFactory {
 			props.load(in);
 
 			in.close();
-		} catch (Exception ecc) {
-			throw new OHServiceException(ecc, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
-					MessageBundle.getMessage("angal.dicom.manager.err") + " " + ecc.getMessage(), OHSeverityLevel.ERROR));
+		} catch (Exception exc) {
+			throw new OHDicomException(exc, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
+					MessageBundle.getMessage("angal.dicom.manager.err") + " " + exc.getMessage(), OHSeverityLevel.ERROR));
 		}
 	}
 }

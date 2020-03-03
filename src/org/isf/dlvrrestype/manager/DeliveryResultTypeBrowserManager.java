@@ -6,7 +6,8 @@ import java.util.List;
 import org.isf.dlvrrestype.model.DeliveryResultType;
 import org.isf.dlvrrestype.service.DeliveryResultTypeIoOperation;
 import org.isf.generaldata.MessageBundle;
-import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
@@ -29,9 +30,10 @@ public class DeliveryResultTypeBrowserManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param deliveryResultType
-	 * @return list of {@link OHExceptionMessage}
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHServiceException 
 	 */
-	protected List<OHExceptionMessage> validateDeliveryResultType(DeliveryResultType deliveryResultType) {
+	protected void validateDeliveryResultType(DeliveryResultType deliveryResultType, boolean insert) throws OHServiceException {
 		String key = deliveryResultType.getCode();
 		String description = deliveryResultType.getDescription();
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
@@ -50,7 +52,16 @@ public class DeliveryResultTypeBrowserManager {
             		MessageBundle.getMessage("angal.dlvrrestype.pleaseinsertavaliddescription"), 
             		OHSeverityLevel.ERROR));
         }
-        return errors;
+        if (insert) {
+        	if (codeControl(key)){
+				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null, 
+						MessageBundle.getMessage("angal.common.codealreadyinuse"), 
+						OHSeverityLevel.ERROR));
+			}
+        }
+        if (!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
     }
 	
 	/**
@@ -60,22 +71,7 @@ public class DeliveryResultTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<DeliveryResultType> getDeliveryResultType() throws OHServiceException {
-		try {
-			return ioOperations.getDeliveryResultType();
-		}  catch(OHException e){
-			/*Already cached exception with OH specific error message - 
-			 * create ready to return OHServiceException and keep existing error message
-			 */
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					e.getMessage(), OHSeverityLevel.ERROR));
-		}catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.sql.thedatacouldnotbesaved"), 
-					OHSeverityLevel.ERROR));
-		}
+		return ioOperations.getDeliveryResultType();
 	}
 
 	/**
@@ -86,33 +82,8 @@ public class DeliveryResultTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newDeliveryResultType(DeliveryResultType deliveryresultType) throws OHServiceException {
-		try {
-			List<OHExceptionMessage> errors = validateDeliveryResultType(deliveryresultType);
-            if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
-            }
-			if (codeControl(deliveryresultType.getCode())){
-				throw new OHServiceException(new OHExceptionMessage(null, 
-						MessageBundle.getMessage("angal.common.codealreadyinuse"), 
-						OHSeverityLevel.ERROR));
-			}
-            return ioOperations.newDeliveryResultType(deliveryresultType);
-		}  catch(OHException e){
-			/*Already cached exception with OH specific error message - 
-			 * create ready to return OHServiceException and keep existing error message
-			 */
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					e.getMessage(), OHSeverityLevel.ERROR));
-		} catch(OHServiceException e){
-			throw e;
-		} catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.sql.thedatacouldnotbesaved"), 
-					OHSeverityLevel.ERROR));
-		}
+		validateDeliveryResultType(deliveryresultType, true);
+        return ioOperations.newDeliveryResultType(deliveryresultType);
 	}
 
 	/**
@@ -123,28 +94,8 @@ public class DeliveryResultTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateDeliveryResultType(DeliveryResultType deliveryresultType) throws OHServiceException {
-		try {
-			List<OHExceptionMessage> errors = validateDeliveryResultType(deliveryresultType);
-            if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
-            }
-			return ioOperations.updateDeliveryResultType(deliveryresultType);
-		}  catch(OHException e){
-			/*Already cached exception with OH specific error message - 
-			 * create ready to return OHServiceException and keep existing error message
-			 */
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					e.getMessage(), OHSeverityLevel.ERROR));
-		} catch(OHServiceException e){
-			throw e;
-		} catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.sql.thedatacouldnotbesaved"), 
-					OHSeverityLevel.ERROR));
-		}
+		validateDeliveryResultType(deliveryresultType, false);
+		return ioOperations.updateDeliveryResultType(deliveryresultType);
 	}
 
 	/**
@@ -155,22 +106,7 @@ public class DeliveryResultTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean codeControl(String code) throws OHServiceException {
-		try {
-			return ioOperations.isCodePresent(code);
-		}  catch(OHException e){
-			/*Already cached exception with OH specific error message - 
-			 * create ready to return OHServiceException and keep existing error message
-			 */
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					e.getMessage(), OHSeverityLevel.ERROR));
-		}catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.sql.thedatacouldnotbesaved"), 
-					OHSeverityLevel.ERROR));
-		}
+		return ioOperations.isCodePresent(code);
 	}
 
 	/**
@@ -181,22 +117,7 @@ public class DeliveryResultTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean deleteDeliveryResultType(DeliveryResultType deliveryresultType) throws OHServiceException {
-		try {
-			return ioOperations.deleteDeliveryResultType(deliveryresultType);
-		}  catch(OHException e){
-			/*Already cached exception with OH specific error message - 
-			 * create ready to return OHServiceException and keep existing error message
-			 */
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					e.getMessage(), OHSeverityLevel.ERROR));
-		}catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.sql.thedatacouldnotbesaved"), 
-					OHSeverityLevel.ERROR));
-		}
+		return ioOperations.deleteDeliveryResultType(deliveryresultType);
 	}
 
 }

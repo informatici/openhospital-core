@@ -243,7 +243,7 @@ public class OpdIoOperations {
 	 * @param opdNum - the OPD progressive in year
 	 * @param year - the year
 	 * @return <code>true<code> if the given number exists in year, <code>false</code> otherwise
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
 		
