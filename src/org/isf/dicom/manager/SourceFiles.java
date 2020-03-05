@@ -6,7 +6,9 @@ import java.text.DateFormat;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
+import javax.imageio.plugins.jpeg.JPEGImageReadParam;
 import javax.imageio.stream.ImageInputStream;
 import javax.swing.JOptionPane;
 
@@ -18,8 +20,10 @@ import org.dcm4che2.io.DicomCodingException;
 import org.imgscalr.Scalr;
 import org.isf.dicom.model.FileDicom;
 import org.isf.generaldata.MessageBundle;
+import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.exception.model.OHSeverityLevel;
 
 /**
  * Magager for DICOM Files
@@ -106,20 +110,36 @@ public class SourceFiles extends Thread {
 	public synchronized static void loadDicom(File sourceFile, int paziente) {
 		// installLibs();
 
-		// System.out.println("File "+sourceFile.getName());
+		//System.out.println("File "+sourceFile.getName());
 
 		if (".DS_Store".equals(sourceFile.getName()))
 			return;
 
 		try {
-			Iterator<?> iter = ImageIO.getImageReadersByFormatName("DICOM");
+			String filetype = sourceFile.getName().substring(sourceFile.getName().lastIndexOf('.')+1);
+			//System.out.println("filetype "+filetype);
+			
+			ImageReader reader;
+			ImageReadParam param;
+			Iterator<?> iter = null;
+			if (filetype.equalsIgnoreCase("jpg") || filetype.equalsIgnoreCase("jpeg")) {
+				iter = ImageIO.getImageReadersByFormatName("jpeg");
+				reader = (ImageReader) iter.next();
 
-			ImageReader reader = (ImageReader) iter.next();
+				param = (JPEGImageReadParam) reader.getDefaultReadParam();
+			}
+			else if (filetype.equalsIgnoreCase("dcm")) {
+				iter = ImageIO.getImageReadersByFormatName("DICOM");
+				reader = (ImageReader) iter.next();
 
-			DicomImageReadParam param = (DicomImageReadParam) reader.getDefaultReadParam();
-
+				param = (DicomImageReadParam) reader.getDefaultReadParam();
+			}
+			else {
+				throw new OHDicomException(new OHExceptionMessage("", "format not supported", OHSeverityLevel.ERROR));
+			}
+				
 			ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
-
+			
 			reader.setInput(imageInputStream, false);
 
 			BufferedImage original = null;
@@ -127,64 +147,85 @@ public class SourceFiles extends Thread {
 			try {
 				original = reader.read(0, param);
 			} catch (DicomCodingException dce) {
-				JOptionPane.showMessageDialog(null, MessageBundle.getMessage("angal.dicom.load.err") + " : " + sourceFile.getName(), MessageBundle.getMessage("angal.dicom.err"),
-						JOptionPane.ERROR_MESSAGE);
-				return;
+				throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"), 
+						MessageBundle.getMessage("angal.dicom.load.err") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
 			}
 
 			imageInputStream.close();
 
 			BufferedImage scaled = Scalr.resize(original, 100);
 
-			DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
-
-			DicomObject dicomObject = dicomStreamMetaData.getDicomObject();
-
-			String patientID = dicomObject.getString(Tag.PatientID);
-			// System.out.println("PatientID "+patientID);
-			String patientName = dicomObject.getString(Tag.PatientName);
-			String patientAddress = dicomObject.getString(Tag.PatientAddress);
-			String patientAge = dicomObject.getString(Tag.PatientAge);
-			String acquisitionsInSeries = dicomObject.getString(Tag.AcquisitionsInSeries);
-			String acquisitionsInStudy = dicomObject.getString(Tag.AcquisitionsInStudy);
-			String applicatorDescription = dicomObject.getString(Tag.ApplicatorDescription);
-			String dicomMediaRetrievalSequence = dicomObject.getString(Tag.DICOMMediaRetrievalSequence);
-			String patientComments = dicomObject.getString(Tag.PatientComments);
+			String accessionNumber = "";
+			String instanceUID = "";
+			String institutionName = "";
+			String patientAddress = "";
+			String patientAge = "";
 			String patientBirthDate = "";
-			try {
-				patientBirthDate = DateFormat.getDateInstance().format(dicomObject.getDate(Tag.PatientBirthDate));
-			} catch (Exception ecc) {
-			}
-			String patientSex = dicomObject.getString(Tag.PatientSex);
-			String modality = dicomObject.getString(Tag.Modality);
-			String studyUID = dicomObject.getString(Tag.StudyInstanceUID);
-			String studyDate = "";
-			try {
-				studyDate = DateFormat.getDateInstance().format(dicomObject.getDate(Tag.StudyDate, Tag.StudyTime));
-			} catch (Exception ecc) {
-			}
-			String accessionNumber = dicomObject.getString(Tag.AccessionNumber);
-			String studyDescription = dicomObject.getString(Tag.StudyDescription);
-			String studyComments = dicomObject.getString(Tag.StudyComments);
-			String seriesUID = dicomObject.getString(Tag.SeriesInstanceUID);
-			String directoryRecordType = dicomObject.getString(Tag.DirectoryRecordType);
-			String seriesInstanceUID = dicomObject.getString(Tag.SeriesInstanceUID);
-			String seriesNumber = dicomObject.getString(Tag.SeriesNumber);
-			String seriesDescriptionCodeSequence = dicomObject.getString(Tag.SeriesDescriptionCodeSequence);
-			String sliceVector = dicomObject.getString(Tag.SliceVector);
-			String sliceLocation = dicomObject.getString(Tag.SliceLocation);
-			String sliceThickness = dicomObject.getString(Tag.SliceThickness);
-			String sliceProgressionDirection = dicomObject.getString(Tag.SliceProgressionDirection);
+			String patientID = "";
+			String patientName = "";
+			String patientSex = "";
 			String seriesDate = "";
-			try {
-				seriesDate = DateFormat.getDateInstance().format(dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime));
-			} catch (Exception ecc) {
+			String seriesDescription = "";
+			String seriesDescriptionCodeSequence = "";
+			String seriesInstanceUID = "";
+			String seriesNumber = "";
+			String seriesUID = "";
+			String studyDate = "";
+			String studyDescription = "";
+			String studyUID = "";
+			String modality = "";
+			if (filetype.equals("jpg") || filetype.equals("jpeg")) {
 			}
-			String institutionName = dicomObject.getString(Tag.InstitutionName);
-			String seriesDescription = dicomObject.getString(Tag.SeriesDescription);
-			String instanceUID = dicomObject.getString(Tag.SOPInstanceUID);
-
-			// Caricato... pronto per il salvataggio del file
+			else if (filetype.equals("dcm")) {
+				DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
+				DicomObject dicomObject = dicomStreamMetaData.getDicomObject();
+				
+				patientID = dicomObject.getString(Tag.PatientID);
+				// System.out.println("PatientID "+patientID);
+				patientName = dicomObject.getString(Tag.PatientName);
+				patientAddress = dicomObject.getString(Tag.PatientAddress);
+				patientAge = dicomObject.getString(Tag.PatientAge);
+				String acquisitionsInSeries = dicomObject.getString(Tag.AcquisitionsInSeries);
+				String acquisitionsInStudy = dicomObject.getString(Tag.AcquisitionsInStudy);
+				String applicatorDescription = dicomObject.getString(Tag.ApplicatorDescription);
+				String dicomMediaRetrievalSequence = dicomObject.getString(Tag.DICOMMediaRetrievalSequence);
+				String patientComments = dicomObject.getString(Tag.PatientComments);
+				patientBirthDate = "";
+				try {
+					patientBirthDate = DateFormat.getDateInstance().format(dicomObject.getDate(Tag.PatientBirthDate));
+				} catch (Exception ecc) {
+				}
+				patientSex = dicomObject.getString(Tag.PatientSex);
+				modality = dicomObject.getString(Tag.Modality);
+				studyUID = dicomObject.getString(Tag.StudyInstanceUID);
+				studyDate = "";
+				try {
+					studyDate = DateFormat.getDateInstance().format(dicomObject.getDate(Tag.StudyDate, Tag.StudyTime));
+				} catch (Exception ecc) {
+				}
+				accessionNumber = dicomObject.getString(Tag.AccessionNumber);
+				studyDescription = dicomObject.getString(Tag.StudyDescription);
+				String studyComments = dicomObject.getString(Tag.StudyComments);
+				seriesUID = dicomObject.getString(Tag.SeriesInstanceUID);
+				String directoryRecordType = dicomObject.getString(Tag.DirectoryRecordType);
+				seriesInstanceUID = dicomObject.getString(Tag.SeriesInstanceUID);
+				seriesNumber = dicomObject.getString(Tag.SeriesNumber);
+				seriesDescriptionCodeSequence = dicomObject.getString(Tag.SeriesDescriptionCodeSequence);
+				String sliceVector = dicomObject.getString(Tag.SliceVector);
+				String sliceLocation = dicomObject.getString(Tag.SliceLocation);
+				String sliceThickness = dicomObject.getString(Tag.SliceThickness);
+				String sliceProgressionDirection = dicomObject.getString(Tag.SliceProgressionDirection);
+				seriesDate = "";
+				try {
+					seriesDate = DateFormat.getDateInstance().format(dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime));
+				} catch (Exception ecc) {
+				}
+				institutionName = dicomObject.getString(Tag.InstitutionName);
+				seriesDescription = dicomObject.getString(Tag.SeriesDescription);
+				instanceUID = dicomObject.getString(Tag.SOPInstanceUID);
+			}
+			
+			// Loaded... ready to save the file
 
 			FileDicom dicomFileDetail = new FileDicom();
 			dicomFileDetail.setDicomData(sourceFile);
