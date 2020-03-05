@@ -116,19 +116,21 @@ public class SourceFiles extends Thread {
 			return;
 
 		try {
-			String filetype = sourceFile.getName().substring(sourceFile.getName().lastIndexOf('.')+1);
+			boolean isJpeg = sourceFile.getName().toLowerCase().endsWith(".jpg") || 
+					sourceFile.getName().toLowerCase().endsWith(".jpeg");
+			boolean isDicom = sourceFile.getName().toLowerCase().endsWith(".dcm");
 			//System.out.println("filetype "+filetype);
 			
 			ImageReader reader;
 			ImageReadParam param;
 			Iterator<?> iter = null;
-			if (filetype.equalsIgnoreCase("jpg") || filetype.equalsIgnoreCase("jpeg")) {
+			if (isJpeg) {
 				iter = ImageIO.getImageReadersByFormatName("jpeg");
 				reader = (ImageReader) iter.next();
 
 				param = (JPEGImageReadParam) reader.getDefaultReadParam();
 			}
-			else if (filetype.equalsIgnoreCase("dcm")) {
+			else if (isDicom) {
 				iter = ImageIO.getImageReadersByFormatName("DICOM");
 				reader = (ImageReader) iter.next();
 
@@ -174,9 +176,9 @@ public class SourceFiles extends Thread {
 			String studyDescription = "";
 			String studyUID = "";
 			String modality = "";
-			if (filetype.equals("jpg") || filetype.equals("jpeg")) {
+			if (isJpeg) {
 			}
-			else if (filetype.equals("dcm")) {
+			else if (isDicom) {
 				DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
 				DicomObject dicomObject = dicomStreamMetaData.getDicomObject();
 				
