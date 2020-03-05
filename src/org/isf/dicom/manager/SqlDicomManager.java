@@ -1,10 +1,7 @@
 package org.isf.dicom.manager;
 
-import java.util.Properties;
-
 import org.isf.dicom.model.FileDicom;
 import org.isf.dicom.service.DicomIoOperations;
-import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,7 +19,7 @@ public class SqlDicomManager implements DicomManagerInterface{
 	/**
 	 * Constructor
 	 */
-	public SqlDicomManager(Properties externalPrp) {
+	public SqlDicomManager() {
 	}
 	
     /**
