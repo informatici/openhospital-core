@@ -81,17 +81,17 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * @return
 	 * @throws OHDicomException 
 	 */
-	public Long[] getSerieDetail(int idPaziente, String numeroSerie) throws OHDicomException {
+	public Long[] getSerieDetail(int patientID, String seriesNumber) throws OHDicomException {
 		try {
 
 			// sometimes the series number can be NULL, so we add this dummy line 
 			// to avoid exceptions
-			if (numeroSerie == null || numeroSerie.trim().length() == 0 || numeroSerie.equalsIgnoreCase("null"))
-				numeroSerie = NOSERIE;
+			if (seriesNumber == null || seriesNumber.trim().length() == 0 || seriesNumber.equalsIgnoreCase("null"))
+				seriesNumber = NOSERIE;
 
 			// System.out.println("FS getDettaglioSerie "+idPaziente+","+numeroSerie);
 
-			File df = getSerieDir(idPaziente, numeroSerie, false);
+			File df = getSerieDir(patientID, seriesNumber, false);
 
 			File[] files = df.listFiles(dsf);
 
@@ -111,7 +111,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 
 			for (int i = 0; i < _Longs.length; i++) {
 				_Longs[i] = _longs[i];
-				// System.out.println(" getDettaglioSerie("+idPaziente+","+numeroSerie+") = "+_longs[i]);
+				// System.out.println(" getDettaglioSerie("+patientID+","+seriesNumber+") = "+_longs[i]);
 			}
 
 			return _Longs;
