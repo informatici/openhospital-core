@@ -13,6 +13,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.Random;
 import java.util.Vector;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -20,7 +21,9 @@ import javax.sql.rowset.serial.SerialException;
 
 import org.isf.dicom.model.FileDicom;
 import org.isf.generaldata.MessageBundle;
+import org.isf.medicalstock.model.Lot;
 import org.isf.utils.exception.OHDicomException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -76,8 +79,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	/**
 	 * Load a list of idfile for series
 	 * 
-	 * @param idPaziente, the patient id
-	 * @param numeroSerie, the series number
+	 * @param patientId, the patient id
+	 * @param seriesNumber, the series number
 	 * @return
 	 * @throws OHDicomException 
 	 */
@@ -87,9 +90,9 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			// sometimes the series number can be NULL, so we add this dummy line 
 			// to avoid exceptions
 			if (seriesNumber == null || seriesNumber.trim().length() == 0 || seriesNumber.equalsIgnoreCase("null"))
-				seriesNumber = NOSERIE;
+				seriesNumber = generateSeriesNumber();
 
-			// System.out.println("FS getDettaglioSerie "+idPaziente+","+numeroSerie);
+			// System.out.println("FS getDettaglioSerie "+patientId+","+seriesNumber);
 
 			File df = getSerieDir(patientID, seriesNumber, false);
 
@@ -120,27 +123,46 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 					MessageBundle.getMessage("angal.dicom.manager.err") + " " + exc.getMessage(), OHSeverityLevel.ERROR));
 		}
 	}
+	
+	/**
+	 * Creates a new unique lot code.
+	 * @return the new unique code.
+	 * @throws OHServiceException if an error occurs during the code generation.
+	 */
+	protected String generateSeriesNumber() throws OHServiceException
+	{
+		Random random = new Random();
+		long candidateCode = 0;
+		Lot lot = null;
+		do 
+		{
+			candidateCode = Math.abs(random.nextLong());
+
+		} while (lot != null); 
+
+		return String.valueOf(candidateCode);
+	}
 
 	/**
 	 * delete series
 	 * 
-	 * @param idPaziente
+	 * @param patientId
 	 *            , the id of patient
-	 * @param numeroSerie
+	 * @param seriesNumber
 	 *            , the seres number to delete
 	 * @return, true if success
 	 * @throws OHDicomException 
 	 */
-	public boolean deleteSerie(int idPaziente, String numeroSerie) throws OHDicomException {
+	public boolean deleteSerie(int patientId, String seriesNumber) throws OHDicomException {
 		try {
 
 			// sometimes the series number can be NULL, so we add this dummy line 
 			// to avoid exceptions
-			if (numeroSerie == null || numeroSerie.trim().length() == 0 || numeroSerie.equalsIgnoreCase("null"))
-				numeroSerie = NOSERIE;
+			if (seriesNumber == null || seriesNumber.trim().length() == 0 || seriesNumber.equalsIgnoreCase("null"))
+				seriesNumber = NOSERIE;
 
-			// System.out.println("FS deleteSerie "+idPaziente+","+numeroSerie);
-			File deleteFolder = getSerieDir(idPaziente, numeroSerie, false);
+			// System.out.println("FS deleteSerie "+patientId+","+seriesNumber);
+			File deleteFolder = getSerieDir(patientId, seriesNumber, false);
 			File[] f = deleteFolder.listFiles();
 			boolean deleted = true;
 
@@ -163,16 +185,16 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * @return, FileDicomDettaglio
 	 * @throws OHDicomException 
 	 */
-	public FileDicom loadDetails(Long idFile, int idPaziente, String numeroSerie) throws OHDicomException {
+	public FileDicom loadDetails(Long idFile, int patientId, String seriesNumber) throws OHDicomException {
 		// sometimes the series number can be NULL, so we add this dummy line 
 		// to avoid exceptions
-		if (numeroSerie == null || numeroSerie.trim().length() == 0 || numeroSerie.equalsIgnoreCase("null"))
-			numeroSerie = NOSERIE;
+		if (seriesNumber == null || seriesNumber.trim().length() == 0 || seriesNumber.equalsIgnoreCase("null"))
+			seriesNumber = NOSERIE;
 
 		if (idFile == null)
 			return null;
 		else
-			return loadDetails(idFile.longValue(), idPaziente, numeroSerie);
+			return loadDetails(idFile.longValue(), patientId, seriesNumber);
 	}
 
 	/**
@@ -182,10 +204,10 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * @return, details
 	 * @throws OHDicomException 
 	 */
-	public FileDicom loadDetails(long idFile, int idPaziente, String numeroSerie) throws OHDicomException {
+	public FileDicom loadDetails(long idFile, int patientId, String seriesNumber) throws OHDicomException {
 		try {
-			// System.out.println("FS loadDettaglio "+idFile+","+idPaziente+","+numeroSerie);
-			return loadData(idFile, idPaziente, numeroSerie);
+			// System.out.println("FS loadDettaglio "+idFile+","+patientId+","+seriesNumber);
+			return loadData(idFile, patientId, seriesNumber);
 	
 		} catch (Exception exc) {
 			throw new OHDicomException(exc, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
@@ -196,20 +218,20 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	/**
 	 * load metadata from DICOM files fo the patient
 	 * 
-	 * @param idPaziente
+	 * @param patientId
 	 * @return
 	 * @throws OHDicomException 
 	 */
-	public FileDicom[] loadFilesPaziente(int idPaziente) throws OHDicomException {
+	public FileDicom[] loadFilesPaziente(int patientId) throws OHDicomException {
 		try {
-			// System.out.println("FS loadFilesPaziente "+idPaziente);
-			File df = getPatientDir(idPaziente);
+			// System.out.println("FS loadFilesPaziente "+patientId);
+			File df = getPatientDir(patientId);
 			File[] serie = df.listFiles();
 			FileDicom[] db = new FileDicom[serie.length];
 
 			for (int i = 0; i < serie.length; i++) {
 				long idFile = getFirst(serie[i]);
-				db[i] = loadMetadata(idFile, idPaziente, serie[i].getName());
+				db[i] = loadMetadata(idFile, patientId, serie[i].getName());
 			}
 
 			db = compact(db);
@@ -234,15 +256,15 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		try {
 			// System.out.println("FS saveFile");
 			int patId = dicom.getPatId();
-			String numeroSerie = dicom.getDicomSeriesNumber();
+			String seriesNumber = dicom.getDicomSeriesNumber();
 
 			// some times this number could be null, it's wrong, but I add
 			// line to avoid exception
 
-			if (numeroSerie == null || numeroSerie.trim().length() == 0 || numeroSerie.equalsIgnoreCase("null"))
-				numeroSerie = NOSERIE;
+			if (seriesNumber == null || seriesNumber.trim().length() == 0 || seriesNumber.equalsIgnoreCase("null"))
+				seriesNumber = NOSERIE;
 
-			File df = getSerieDir(patId, numeroSerie, true);
+			File df = getSerieDir(patId, seriesNumber, true);
 			long idFile = nextId();
 			File properties = new File(df, idFile + ".properties");
 			FileOutputStream fos = new FileOutputStream(properties, false);
@@ -291,13 +313,13 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		}
 	}
 
-	private FileDicom loadMetadata(long idFile, int idPaziente, String serie) throws SerialException, IOException, SQLException {
-		// System.out.println("loadMetadata "+idFile+","+idPaziente+","+series);
+	private FileDicom loadMetadata(long idFile, int patientId, String serie) throws SerialException, IOException, SQLException {
+		// System.out.println("loadMetadata "+idFile+","+patientId+","+series);
 		FileDicom rv = null;
 
 		rv = new FileDicom();
-		File sd = getSerieDir(idPaziente, serie, false);
-		rv.setFrameCount(getFramesCount(idPaziente, serie));
+		File sd = getSerieDir(patientId, serie, false);
+		rv.setFrameCount(getFramesCount(patientId, serie));
 		Properties p = loadMetadata(sd, idFile);
 		try {
 			rv.setIdFile(Long.parseLong(p.getProperty("idFile")));
@@ -332,15 +354,15 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		return rv;
 	}
 
-	private FileDicom loadData(long idFile, int idPaziente, String serie) throws IOException, SerialException, SQLException  {
+	private FileDicom loadData(long idFile, int patientId, String serie) throws IOException, SerialException, SQLException  {
 		// some times this number could be null, it's wrong, but I add
 		// line to avoid exception
 		if (serie == null || serie.trim().length() == 0 || serie.equalsIgnoreCase("null"))
 			serie = NOSERIE;
 
-		// System.out.println("loadData "+idFile+","+idPaziente+","+serie);
+		// System.out.println("loadData "+idFile+","+patientId+","+serie);
 		FileDicom rv = new FileDicom();
-		File sd = getSerieDir(idPaziente, serie, false);
+		File sd = getSerieDir(patientId, serie, false);
 
 		Properties p = loadMetadata(sd, idFile);
 		try {
