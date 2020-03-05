@@ -59,8 +59,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -211,7 +211,7 @@
 		<dependency>
 			<groupId>org.processing</groupId>
 			<artifactId>core</artifactId>
-			<version>1.2.1</version>
+			<version>2.2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rxtx</groupId>
@@ -396,14 +396,6 @@
 			<id>dcm4che</id>
 			<name>Dcm4Che Repository</name>
 			<url>http://www.dcm4che.org/maven2/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>cytoscape</id>
-			<name>Cytoscape Repository</name>
-			<url>http://code.cytoscape.org/nexus/content/repositories/releases/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
