@@ -32,7 +32,7 @@ public class DicomIoOperations
 	private DicomIoOperationRepository repository;
 	
 	/**
-	 * Load a list of idfile for series
+	 * Load a list of id file for series
 	 * 
 	 * @param idPaziente, the patient id
 	 * @param numeroSerie, the series number
@@ -179,5 +179,22 @@ public class DicomIoOperations
 		result = repository.exists(code);
 		
 		return result;	
+	}
+	
+	/**
+	 * checks if the series number is already in use
+	 *
+	 * @param dicomSeriesNumber - the series number to check
+	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @throws OHServiceException 
+	 */
+	public boolean isSeriePresent(String dicomSeriesNumber) throws OHServiceException
+	{
+		List<FileDicom> result;
+	
+		
+		result = repository.findAllWhereDicomSeriesNumber(dicomSeriesNumber);
+		
+		return !result.isEmpty();	
 	}
 }

@@ -22,7 +22,7 @@ public interface DicomManagerInterface
     /**
      * Delete series 
      * @param idPaziente, the id of patient
-     * @param numeroSerie, the seres number to delete
+     * @param numeroSerie, the series number to delete
      * @return, true if success
      * @throws OHServiceException 
      */
@@ -30,13 +30,20 @@ public interface DicomManagerInterface
     
     /**
     * Check if dicom is loaded
-    * @param idPaziente, the id of patient
-    * @param numeroSerie, the seres number
     * @param dicom, the detail od dicom
     * @return true if file exist
      * @throws OHServiceException 
     */
     public boolean exist(FileDicom dicom) throws OHServiceException;
+    
+    /**
+     * Check if dicom is loaded
+     * @param patientID, the id of patient
+     * @param numeroSerie, the series number
+     * @return true if file exist
+      * @throws OHServiceException 
+     */
+     public boolean exist(int patientID, String numeroSerie) throws OHServiceException;
 
     /**
      * Load the Detail of DICOM

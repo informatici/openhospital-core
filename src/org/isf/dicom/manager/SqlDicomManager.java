@@ -47,10 +47,8 @@ public class SqlDicomManager implements DicomManagerInterface{
     }
     
     /**
-    * ceck if dicom is loaded
-    * @param idPaziente, the id of patient
-    * @param numeroSerie, the seres number
-    * @param dicom, the detail od dicom
+    * check if dicom is loaded
+    * @param dicom - the detail of the dicom
     * @return true if file exist
      * @throws OHServiceException 
     */
@@ -58,6 +56,18 @@ public class SqlDicomManager implements DicomManagerInterface{
     {
     	return ioOperations.exist(dicom);
     }
+    
+    /**
+     * check if series number does already exist
+     * @param patientID, the id of patient
+     * @param numeroSerie, 
+     * @return true if file exist
+      * @throws OHServiceException 
+     */
+     public boolean exist(int patientID, String numeroSerie) throws OHServiceException
+     {
+     	return ioOperations.isSeriePresent(numeroSerie);
+     }
 
     /**
      * load the Detail of DICOM

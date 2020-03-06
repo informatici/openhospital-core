@@ -4,11 +4,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.DateFormat;
 import java.util.Iterator;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
-import javax.imageio.plugins.jpeg.JPEGImageReadParam;
 import javax.imageio.stream.ImageInputStream;
 import javax.swing.JOptionPane;
 
@@ -31,7 +31,6 @@ import org.isf.utils.exception.model.OHSeverityLevel;
  * @author Pietro Castellucci
  * @version 1.0.0
  */
-
 public class SourceFiles extends Thread {
 
 	private File file = null;
@@ -40,7 +39,7 @@ public class SourceFiles extends Thread {
 	private int filesLoaded = 0;
 	private AbstractDicomLoader dicomLoader = null;
 	private AbstractThumbnailViewGui thumbnail = null;
-
+	
 	public SourceFiles(File sourceFile, int patient, int filesCount, AbstractThumbnailViewGui thumbnail, AbstractDicomLoader frame) {
 		this.patient = patient;
 		this.file = sourceFile;
@@ -62,6 +61,12 @@ public class SourceFiles extends Thread {
 	private void loadDicomDir(File sourceFile, int patient) {
 		// installLibs();
 		File[] files = sourceFile.listFiles();
+		String seriesNumber = null;
+		try {
+			seriesNumber = generateSeriesNumber(patient);
+		} catch (OHServiceException e1) {
+			seriesNumber = "";
+		}
 
         for (File value : files) {
 
@@ -71,7 +76,7 @@ public class SourceFiles extends Thread {
             }
 
             if (!value.isDirectory()) {
-                loadDicom(value, patient);
+                loadDicom(value, patient, seriesNumber);
                 filesLoaded++;
                 dicomLoader.setLoaded(filesLoaded);
             }
@@ -105,9 +110,12 @@ public class SourceFiles extends Thread {
 
 	/**
 	 * load dicom file
+	 * @param sourceFile
+	 * @param patient
+	 * @param seriesNumber 
 	 */
 	@SuppressWarnings("unused")
-	public synchronized static void loadDicom(File sourceFile, int paziente) {
+	public synchronized static void loadDicom(File sourceFile, int patient, String generatedSeriesNumber) {
 		// installLibs();
 
 		//System.out.println("File "+sourceFile.getName());
@@ -119,64 +127,80 @@ public class SourceFiles extends Thread {
 			boolean isJpeg = sourceFile.getName().toLowerCase().endsWith(".jpg") || 
 					sourceFile.getName().toLowerCase().endsWith(".jpeg");
 			boolean isDicom = sourceFile.getName().toLowerCase().endsWith(".dcm");
-			//System.out.println("filetype "+filetype);
 			
 			ImageReader reader;
 			ImageReadParam param;
+			BufferedImage originalImage;
 			Iterator<?> iter = null;
 			if (isJpeg) {
 				iter = ImageIO.getImageReadersByFormatName("jpeg");
 				reader = (ImageReader) iter.next();
+				//param = (JPEGImageReadParam) reader.getDefaultReadParam();
+				
+				ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
+				
+				reader.setInput(imageInputStream, false);
 
-				param = (JPEGImageReadParam) reader.getDefaultReadParam();
+				originalImage = null;
+
+				try {
+					originalImage = reader.read(0); //, param); //TODO: handle big sizes images (java.lang.IndexOutOfBoundsException: imageIndex out of bounds!)
+				} catch (DicomCodingException dce) {
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"), 
+							MessageBundle.getMessage("angal.dicom.load.err") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
+				}
+
+				imageInputStream.close();
 			}
 			else if (isDicom) {
 				iter = ImageIO.getImageReadersByFormatName("DICOM");
 				reader = (ImageReader) iter.next();
 
 				param = (DicomImageReadParam) reader.getDefaultReadParam();
+				
+				ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
+				
+				reader.setInput(imageInputStream, false);
+
+				originalImage = null;
+
+				try {
+					originalImage = reader.read(0, param);
+				} catch (DicomCodingException dce) {
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"), 
+							MessageBundle.getMessage("angal.dicom.load.err") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
+				}
+
+				imageInputStream.close();
 			}
 			else {
 				throw new OHDicomException(new OHExceptionMessage("", "format not supported", OHSeverityLevel.ERROR));
 			}
-				
-			ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
 			
-			reader.setInput(imageInputStream, false);
-
-			BufferedImage original = null;
-
-			try {
-				original = reader.read(0, param);
-			} catch (DicomCodingException dce) {
-				throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"), 
-						MessageBundle.getMessage("angal.dicom.load.err") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
-			}
-
-			imageInputStream.close();
-
-			BufferedImage scaled = Scalr.resize(original, 100);
-
+			BufferedImage scaled = Scalr.resize(originalImage, 100);
+			
 			String accessionNumber = "";
 			String instanceUID = "";
 			String institutionName = "";
 			String patientAddress = "";
 			String patientAge = "";
 			String patientBirthDate = "";
-			String patientID = "";
+			String patientID = String.valueOf(patient);
 			String patientName = "";
 			String patientSex = "";
 			String seriesDate = "";
 			String seriesDescription = "";
 			String seriesDescriptionCodeSequence = "";
-			String seriesInstanceUID = "";
 			String seriesNumber = "";
+			String seriesInstanceUID = "";
 			String seriesUID = "";
 			String studyDate = "";
 			String studyDescription = "";
 			String studyUID = "";
 			String modality = "";
 			if (isJpeg) {
+				seriesNumber = generatedSeriesNumber != null ? generatedSeriesNumber : generateSeriesNumber(patient);
+				seriesInstanceUID = "<org_root>." + seriesNumber;
 			}
 			else if (isDicom) {
 				DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
@@ -251,21 +275,40 @@ public class SourceFiles extends Thread {
 			dicomFileDetail.setDicomStudyDescription(studyDescription);
 			dicomFileDetail.setDicomStudyId(studyUID);
 			dicomFileDetail.setIdFile(0);
-			dicomFileDetail.setPatId(paziente);
+			dicomFileDetail.setPatId(patient);
 			dicomFileDetail.setDicomThumbnail(scaled);
 			dicomFileDetail.setModality(modality);
 			try{
 				DicomManagerFactory.getManager().saveFile(dicomFileDetail);
+				//dicomFileDetail.setDicomSeriesNumber(dicom.getDicomSeriesNumber()); //series number could be generated if missing.
 			}catch(OHServiceException ex){
 				if(ex.getMessages() != null){
-					for(OHExceptionMessage msg : ex.getMessages()){
-						JOptionPane.showMessageDialog(null, msg.getMessage(), msg.getTitle() == null ? "" : msg.getTitle(), msg.getLevel().getSwingSeverity());
-					}
+					throw new OHDicomException(ex.getCause(), ex.getMessages());
 				}
 			}
 
 		} catch (Exception ecc) {
 			ecc.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Creates a new unique series number
+	 * @return the new unique code.
+	 * @throws OHServiceException if an error occurs during the code generation.
+	 */
+	public static String generateSeriesNumber(int patient) throws OHServiceException
+	{
+		Random random = new Random();
+		long candidateCode = 0;
+		boolean exists = false;
+		do 
+		{
+			candidateCode = Math.abs(random.nextLong());
+			exists = DicomManagerFactory.getManager().exist(patient, String.valueOf(candidateCode));
+
+		} while (exists != false); 
+
+		return String.valueOf(candidateCode);
 	}
 }
