@@ -5,8 +5,6 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /*------------------------------------------
  * IoOperations - dB operations for the patient entity
@@ -27,19 +25,17 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
-import org.isf.utils.db.DbQueryLogger;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@Component
+@Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class PatientIoOperations 
@@ -74,7 +70,7 @@ public class PatientIoOperations
 		ArrayList<Patient> pPatient = null;
 		
 		
-		pPatient = new ArrayList<Patient>(repository.findAllWhereDeleted(pageable));			
+		pPatient = new ArrayList<Patient>(repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName("N", pageable));
 					
 		return pPatient;
 	}

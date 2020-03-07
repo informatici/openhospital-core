@@ -221,8 +221,10 @@ public class Tests
 		{		
 			id = _setupTestAdmission(false);
 			Admission foundAdmission = (Admission)jpa.find(Admission.class, id); 
-			ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(null);
+			ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
+			ArrayList<AdmittedPatient> patientsNull = admissionIoOperation.getAdmittedPatients(null);
 			
+			assertEquals(patients.size(), patientsNull.size());
 			assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
 		} 
 		catch (Exception e) 
@@ -352,8 +354,8 @@ public class Tests
 			
 			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1, 
 					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType, 
-					deliveryType, deliveryResult, true);;
-					result = admissionIoOperation.newAdmission(admission);
+					deliveryType, deliveryResult, true);
+			result = admissionIoOperation.newAdmission(admission);
 					
 					assertEquals(true, result);
 					_checkAdmissionIntoDb(admission.getId());
@@ -413,8 +415,8 @@ public class Tests
 						
 			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1, 
 					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType, 
-					deliveryType, deliveryResult, true);;
-					id = admissionIoOperation.newAdmissionReturnKey(admission);
+					deliveryType, deliveryResult, true);
+			id = admissionIoOperation.newAdmissionReturnKey(admission);
 					
 					_checkAdmissionIntoDb(id);
 		} 

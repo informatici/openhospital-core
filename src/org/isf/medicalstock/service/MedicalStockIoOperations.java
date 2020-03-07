@@ -1,5 +1,6 @@
 package org.isf.medicalstock.service;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -18,7 +19,6 @@ import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +51,7 @@ public class MedicalStockIoOperations {
 		
 	
 	public enum MovementOrder {
-		DATE, WARD, PHARMACEUTICAL_TYPE, TYPE;
+		DATE, WARD, PHARMACEUTICAL_TYPE, TYPE
 	}
 
 	/**
@@ -332,16 +332,16 @@ public class MedicalStockIoOperations {
 		if (movement.getType().getType().contains("+")) 
 		{
 			//incoming medical stock
-			int medicalCode = movement.getMedical().getCode();
-			boolean updated = updateMedicalIncomingQuantity(medicalCode, movement.getQuantity());
+			Medical medical = movement.getMedical();
+			boolean updated = updateMedicalIncomingQuantity(medical.getCode(), movement.getQuantity());
 			
 			return updated;
 		} 
 		else 
 		{
 			//outgoing medical stock
-			int medicalCode = movement.getMedical().getCode();
-			boolean updated = updateMedicalOutcomingQuantity(medicalCode, movement.getQuantity());
+			Medical medical = movement.getMedical();
+			boolean updated = updateMedicalOutcomingQuantity(medical.getCode(), movement.getQuantity());
 			if (!updated)
 			{				
 				return false;
@@ -352,7 +352,7 @@ public class MedicalStockIoOperations {
 				if (ward != null) 
 				{
 					//updates stock quantity for wards
-					return updateMedicalWardQuantity(ward.getCode(), medicalCode, movement.getQuantity());
+					return updateMedicalWardQuantity(ward, medical, movement.getQuantity());
 
 				} 
 				else 
@@ -415,23 +415,22 @@ public class MedicalStockIoOperations {
 	 */
 	@SuppressWarnings("unchecked")
 	protected boolean updateMedicalWardQuantity(
-			String wardCode, 
-			int medicalCode, 
+			Ward ward, 
+			Medical medical, 
 			int quantity) throws OHServiceException
 	{
-		MedicalWard medicalWard = (MedicalWard)medicalStockRepository.findOneWhereCodeAndMedical(wardCode, medicalCode);		
+		MedicalWard medicalWard = (MedicalWard)medicalStockRepository.findOneWhereCodeAndMedical(ward.getCode(), medical.getCode());		
 				
 		if (medicalWard != null)
 		{			
 			medicalWard.setInQuantity(medicalWard.getInQuantity()+quantity);
-			medicalStockRepository.save(medicalWard);
 		}
 		else
 		{
-			medicalWard = new MedicalWard(wardCode.charAt(0), medicalCode, quantity, 0);
-			medicalStockRepository.save(medicalWard);
+			medicalWard = new MedicalWard(ward, medical, quantity, 0);
 		}
-		
+		medicalStockRepository.save(medicalWard);
+
 		return true;
 	}
 
@@ -603,7 +602,7 @@ public class MedicalStockIoOperations {
 		lot.setCode((String)object[0]);
 		lot.setPreparationDate(_convertTimestampToCalendar((Timestamp)object[1]));
 		lot.setDueDate(_convertTimestampToCalendar((Timestamp)object[2]));
-		lot.setCost((Double)object[3]);
+		lot.setCost(new BigDecimal((Double) object[3]));
 		lot.setQuantity(((Double)object[4]).intValue());
 		
 		return lot;

@@ -14,28 +14,34 @@ import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.opd.model.Opd;
 import org.isf.opd.service.OpdIoOperations;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 
 /**
  * @author Vero
  * 
  */
+@Component
 public class OpdBrowserManager {
 	
 	private final Logger logger = LoggerFactory.getLogger(OpdBrowserManager.class);
 	
-	private OpdIoOperations ioOperations = Context.getApplicationContext().getBean(OpdIoOperations.class);
+	@Autowired
+	private OpdIoOperations ioOperations;
 	
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param opd
-	 * @return list of {@link OHExceptionMessage}
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHDataValidationException 
 	 */
-	protected List<OHExceptionMessage> validateOpd(Opd opd, boolean insert) {
+	protected void validateOpd(Opd opd, boolean insert) throws OHDataValidationException {
 		
 		Disease disease=opd.getDisease();
 		Disease disease2=opd.getDisease2();
@@ -100,8 +106,9 @@ public class OpdBrowserManager {
 		        		OHSeverityLevel.ERROR));
 			}
 		}
-		
-        return errors;
+		if (!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
     }
 	
 	/**
@@ -154,10 +161,7 @@ public class OpdBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newOpd(Opd opd) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateOpd(opd, true);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateOpd(opd, true);
 		return ioOperations.newOpd(opd);
 	}
 
@@ -168,10 +172,7 @@ public class OpdBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public Opd updateOpd(Opd opd) throws OHServiceException{
-		List<OHExceptionMessage> errors = validateOpd(opd, false);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateOpd(opd, false);
 		return ioOperations.updateOpd(opd);
 	}
 

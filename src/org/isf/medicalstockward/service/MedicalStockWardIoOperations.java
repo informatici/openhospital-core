@@ -1,24 +1,23 @@
 package org.isf.medicalstockward.service;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
-import org.isf.utils.db.DbQueryLogger;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 /**
  * @author mwithi
  */
-@Component
+@Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class MedicalStockWardIoOperations 
@@ -46,15 +45,13 @@ public class MedicalStockWardIoOperations
 		ArrayList<MovementWard> pMovementWard = new ArrayList<MovementWard>(); 
 		
 		
-		pMovementWardCode = new ArrayList<Integer>(repository.findAllWardMovement(wardId, dateFrom, dateTo));			
-		for (int i=0; i<pMovementWardCode.size(); i++)
-		{
-			Integer code = pMovementWardCode.get(i);
-			MovementWard movementWard = movementRepository.findOne(code);
-			
-			
-			pMovementWard.add(movementWard);
-		}
+		pMovementWardCode = new ArrayList<Integer>(repository.findAllWardMovement(wardId, dateFrom, dateTo));
+        for (Integer code : pMovementWardCode) {
+            MovementWard movementWard = movementRepository.findOne(code);
+
+
+            pMovementWard.add(movementWard);
+        }
 		
 		return pMovementWard;
 	}
@@ -229,7 +226,7 @@ public class MedicalStockWardIoOperations
         }
 		else
 		{
-			if (qty.doubleValue() < 0)
+			if (qty < 0)
 			{
 				repository.updateInQuantity(-qty, ward, medical);
 			}
@@ -250,12 +247,10 @@ public class MedicalStockWardIoOperations
 	public ArrayList<MedicalWard> getMedicalsWard(
 			char wardId) throws OHServiceException
 	{
-            System.out.println("MedicalStockWardIoOperations: Looking for drugs ");
 		ArrayList<MedicalWard> medicalWards = new ArrayList<MedicalWard>(repository.findAllWhereWard(wardId));
-		System.out.println("MedicalStockWardIoOperations " + medicalWards.size() + " drugs in "+wardId);
 		for (int i=0; i<medicalWards.size(); i++)
 		{
-			double qty = Double.valueOf(medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
+			double qty = (double) (medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
 			if (qty != 0) {
 				medicalWards.get(i).setQty(qty);
 			} else {

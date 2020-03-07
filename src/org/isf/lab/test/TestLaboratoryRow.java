@@ -9,7 +9,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestLaboratoryRow 
 {	
-	private Integer code = new Integer(0);
+	private Integer code = 0;
     private String description = "TestDescription";
     
 			
@@ -20,7 +20,7 @@ public class TestLaboratoryRow
 		LaboratoryRow laboratoryRow;
 	
 				
-		if (usingSet == true)
+		if (usingSet)
 		{
 			laboratoryRow = new LaboratoryRow();
 			_setParameters(laboratoryRow, laboratory);

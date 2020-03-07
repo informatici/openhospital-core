@@ -1,12 +1,5 @@
 package org.isf.admission.service;
 
-import java.awt.Image;
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.sql.Blob;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 /*----------------------------------------------------------
  * modification history
  * ====================
@@ -28,8 +21,6 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
 import org.isf.admtype.model.AdmissionType;
@@ -37,19 +28,15 @@ import org.isf.admtype.service.AdmissionTypeIoOperationRepository;
 import org.isf.disctype.model.DischargeType;
 import org.isf.disctype.service.DischargeTypeIoOperationRepository;
 import org.isf.generaldata.GeneralData;
-import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
-import org.isf.utils.db.DbQueryLogger;
 import org.isf.utils.db.TranslateOHServiceException;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-@Component
+@Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class AdmissionIoOperations 
@@ -83,17 +70,15 @@ public class AdmissionIoOperations
 	{
 		ArrayList<AdmittedPatient> admittedPatients = new ArrayList<AdmittedPatient>();
 		List<Object[]> admittedPatientsList = (List<Object[]>)repository.findAllBySearch(searchTerms);
-		Iterator<Object[]> it = admittedPatientsList.iterator();
-		
-		
-		while (it.hasNext()) {
-			Object[] object = it.next();
-			Patient patient = patientRepository.findOne((Integer)object[0]);
+
+
+		for (Object[] object : admittedPatientsList) {
+			Patient patient = patientRepository.findOne((Integer) object[0]);
 			Admission admission = null;
-			Integer admissionId = (Integer)object[26];
-			if (admissionId != null) admission = repository.findOne((Integer)object[26]);
-			
-					
+			Integer admissionId = (Integer) object[26];
+			if (admissionId != null) admission = repository.findOne((Integer) object[26]);
+
+
 			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);
 			admittedPatients.add(admittedPatient);
 		}
@@ -115,17 +100,15 @@ public class AdmissionIoOperations
 	{
 		ArrayList<AdmittedPatient> admittedPatients = new ArrayList<AdmittedPatient>();
 		List<Object[]> admittedPatientsList = (List<Object[]>)repository.findAllBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
-		Iterator<Object[]> it = admittedPatientsList.iterator();
-		
-		
-		while (it.hasNext()) {
-			Object[] object = it.next();
-			Patient patient = patientRepository.findOne((Integer)object[0]);
+
+
+		for (Object[] object : admittedPatientsList) {
+			Patient patient = patientRepository.findOne((Integer) object[0]);
 			Admission admission = null;
-			Integer admissionId = (Integer)object[26];
-			if (admissionId != null) admission = repository.findOne((Integer)object[26]);
-			
-					
+			Integer admissionId = (Integer) object[26];
+			if (admissionId != null) admission = repository.findOne((Integer) object[26]);
+
+
 			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);
 			admittedPatients.add(admittedPatient);
 		}
@@ -345,8 +328,8 @@ public class AdmissionIoOperations
 		
 		
 		Patient foundPatient = patientRepository.findOne(patientId);  
-		foundPatient.setPhoto(null);;
-		Patient savedPatient = patientRepository.save(foundPatient);
+		foundPatient.setPhoto(null);
+        Patient savedPatient = patientRepository.save(foundPatient);
 		result = (savedPatient != null);    
 		
 		return result;

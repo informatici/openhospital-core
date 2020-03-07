@@ -1,19 +1,19 @@
 package org.isf.menu.service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
 import org.isf.menu.model.UserMenuItem;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+@Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class MenuIoOperations 
@@ -227,13 +227,11 @@ public class MenuIoOperations
 		
 		
 		menu = new ArrayList<UserMenuItem>();
-		Iterator<Object[]> it = menuList.iterator();
-		while (it.hasNext()) {
-			Object[] object = it.next();
+		for (Object[] object : menuList) {
 			char active = (Character) object[9];
 			UserMenuItem umi = new UserMenuItem();
 
-			
+
 			umi.setCode((String) object[0]);
 			umi.setButtonLabel((String) object[1]);
 			umi.setAltLabel((String) object[2]);
@@ -241,9 +239,9 @@ public class MenuIoOperations
 			umi.setShortcut((Character) object[4]);
 			umi.setMySubmenu((String) object[5]);
 			umi.setMyClass((String) object[6]);
-			umi.setASubMenu((Character)object[7] == 'Y' ? true : false);
+			umi.setASubMenu((Character) object[7] == 'Y');
 			umi.setPosition((Integer) object[8]);
-			umi.setActive(active == 'Y' ? true : false);
+			umi.setActive(active == 'Y');
 			menu.add(umi);
 		}
 		

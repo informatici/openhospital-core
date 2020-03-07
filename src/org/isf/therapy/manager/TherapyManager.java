@@ -38,6 +38,12 @@ public class TherapyManager {
 	@Autowired
 	private SmsOperations smsOp;
 	
+	@Autowired
+	private PatientBrowserManager patientManager;
+	
+	@Autowired
+	private MedicalBrowsingManager medManager;
+	
 	/**
 	 * Returns a {@link Therapy} object from a {@link TherapyRow} (DB record)
 	 * @param th - the {@link TherapyRow}
@@ -97,7 +103,6 @@ public class TherapyManager {
 			//System.out.println(formatDate(dates[i]));
 		}
 		
-		MedicalBrowsingManager medManager = new MedicalBrowsingManager();
 		Medical med = medManager.getMedical(medId);
 		Therapy th = new Therapy(therapyID,	patID, dates, med, qty, "", freqInDay, note, notify, sms);
 		datesArray.clear();
@@ -163,7 +168,7 @@ public class TherapyManager {
 		if (!thRows.isEmpty()) {
 			DateTime now = new DateTime();
 			
-			PatientBrowserManager patMan = new PatientBrowserManager();
+			
 			int patID = thRows.get(0).getPatID().getCode();
 			ioOperations.deleteAllTherapies(patID);
 			smsOp.deleteByModuleModuleID("therapy", String.valueOf(patID));
@@ -177,7 +182,7 @@ public class TherapyManager {
 					for (GregorianCalendar date : dates) {
 						date.set(Calendar.HOUR_OF_DAY, 8);
 						if (date.after(now.toDateMidnight().toGregorianCalendar())) {
-							Patient pat = patMan.getPatient(thRow.getPatID().getName());
+							Patient pat = patientManager.getPatient(thRow.getPatID().getName());
 
 							Sms sms = new Sms();
 							sms.setSmsDateSched(date.getTime());
@@ -292,7 +297,6 @@ public class TherapyManager {
 		Medical medical, Double qty, int unitID, int freqInDay, int freqInPeriod, String note, boolean notify,
 		boolean sms) throws OHServiceException {
 		
-		PatientBrowserManager patientManager = new PatientBrowserManager();
 		Patient patient = patientManager.getPatient(patID);
 		TherapyRow thRow = new TherapyRow(therapyID, patient, startDate, endDate, medical, qty, unitID, freqInDay, freqInPeriod, note, notify, sms);
 		return newTherapy(thRow);
