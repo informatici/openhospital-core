@@ -38,11 +38,10 @@ public class DicomManagerFactory {
 				init();
 
 				instance = (DicomManagerInterface) Context.getApplicationContext().getBean(Class.forName(props.getProperty("dicom.manager.impl"))); //.getConstructor(Class.forName("java.util.Properties")).newInstance(props);
-			} catch(OHServiceException e){
-				//Already managed, ready to return OHServiceException
-				logger.error("", e);
-				throw e;
-			}catch(Exception e){
+				if (instance instanceof FileSystemDicomManager) {
+					((FileSystemDicomManager) instance).setDir(props);
+				}
+			} catch(Exception e){
 				//Any exception
 				logger.error("", e);
 				throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
