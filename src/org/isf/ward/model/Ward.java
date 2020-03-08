@@ -239,10 +239,20 @@ public class Ward {
                         .equals(((Ward) anObject).getDocs())))))));
     }
 
-    public String toString() {
+    
+	
+	@Override
+	public String toString() {
         return getDescription();
     }
 	
+	public String debug() {
+		return "Ward [code=" + code + ", description=" + description + ", telephone=" + telephone + ", fax=" + fax
+				+ ", email=" + email + ", beds=" + beds + ", nurs=" + nurs + ", docs=" + docs + ", isPharmacy="
+				+ isPharmacy + ", isMale=" + isMale + ", isFemale=" + isFemale + ", lock=" + lock + ", hashCode="
+				+ hashCode + "]";
+	}
+
 	@Override
 	public int hashCode() {
 	    if (this.hashCode == 0) {

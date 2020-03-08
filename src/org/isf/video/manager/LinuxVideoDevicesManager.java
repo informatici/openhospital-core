@@ -78,7 +78,7 @@ public class LinuxVideoDevicesManager extends VideoDevicesManager {
 		String deviceFile = path[path.length-1];
 		deviceParams.put("deviceFile", deviceFile);
 		
-		String ids[] = LinuxShellInterface.getDeviceIdAndBusId(vendorHexId, productHexId);
+		String[] ids = LinuxShellInterface.getDeviceIdAndBusId(vendorHexId, productHexId);
 		String idBus = ids[0];
 		String idDevice = ids[1];
 		
@@ -121,13 +121,13 @@ public class LinuxVideoDevicesManager extends VideoDevicesManager {
 			LinuxVideoDevice linuxdev = (LinuxVideoDevice) dev;
 			
 			boolean found = false;
-			
-			for (int i=0; i < devicesFound.length; i++)	{
-				if (linuxdev.deviceFile.equals(devicesFound[i]))	{
-					found = true;
-					break;
-				}
-			}
+
+            for (String s : devicesFound) {
+                if (linuxdev.deviceFile.equals(s)) {
+                    found = true;
+                    break;
+                }
+            }
 			
 			if (! found) {
 				removedDevice = linuxdev;

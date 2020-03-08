@@ -137,7 +137,11 @@ public class Patient {
 	
 	@Column(name="PAT_TAXCODE")
 	private String taxCode;
-	
+
+	@NotNull
+	@Column(name="PAT_DELETED")
+	private String deleted = "N";
+
 	@Transient
 	private float height;
 	
@@ -506,8 +510,16 @@ public class Patient {
 	public void setWeight(float weight) {
 		this.weight = weight;
 	}
-	
-	@Override
+
+    public String getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(String deleted) {
+        this.deleted = deleted;
+    }
+
+    @Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -527,7 +539,7 @@ public class Patient {
 	        final int m = 23;
 	        int c = 133;
 	        
-	        c = m * c + ((code == null) ? 0 : code.intValue());
+	        c = m * c + ((code == null) ? 0 : code);
 	        
 	        this.hashCode = c;
 	    }

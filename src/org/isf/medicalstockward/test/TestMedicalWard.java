@@ -21,7 +21,7 @@ public class TestMedicalWard
 		MedicalWard medicalward;
 	
 				
-		if (usingSet == true)
+		if (usingSet)
 		{
 			medicalward = new MedicalWard();
 			_setParameters(medicalward, medical, ward);
@@ -29,7 +29,7 @@ public class TestMedicalWard
 		else
 		{
 			// Create MedicalWard with all parameters 
-			medicalward = new MedicalWard(ward.getCode().charAt(0), medical.getCode(), in_quantity, out_quantity);
+			medicalward = new MedicalWard(ward, medical, in_quantity, out_quantity);
 		}
 				    	
 		return medicalward;
@@ -40,8 +40,8 @@ public class TestMedicalWard
 			Medical medical,
 			Ward ward) 
 	{	
-		medicalward.setMedicalId(medical.getCode());
-		medicalward.setWardId(ward.getCode().charAt(0));
+		medicalward.setMedical(medical);
+		medicalward.setWard(ward);
 		medicalward.setInQuantity(in_quantity);
 		medicalward.setOutQuantity(out_quantity);
 		

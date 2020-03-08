@@ -73,7 +73,7 @@ public class Laboratory
 	private String InOutPatient;
 	
 	@Column(name="LAB_AGE")
-	private int age;
+	private Integer age;
 	
 	@Column(name="LAB_SEX")
 	private String sex;
@@ -157,10 +157,10 @@ public class Laboratory
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
-	public int getAge() {
+	public Integer getAge() {
 		return age;
 	}
-	public void setAge(int age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
 	public String getInOutPatient() {
@@ -185,16 +185,13 @@ public class Laboratory
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		
-		if (!(obj instanceof Laboratory)) {
+		if (obj == null || !(obj instanceof Laboratory)) {
 			return false;
 		}
 		
 		Laboratory laboratory = (Laboratory)obj;
-		return (this.getCode() == laboratory.getCode());
+		return (this.getCode().equals(laboratory.getCode()));
+
 	}
 	
 	@Override
@@ -203,7 +200,7 @@ public class Laboratory
 	        final int m = 23;
 	        int c = 133;
 	        
-	        c = m * c + (code == null ? 0 : code.intValue());
+	        c = m * c + (code == null ? 0 : code);
 	        
 	        this.hashCode = c;
 	    }

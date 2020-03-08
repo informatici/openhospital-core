@@ -7,8 +7,9 @@ import org.isf.exatype.model.ExamType;
 import org.isf.exatype.service.ExamTypeIoOperation;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
-import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -27,9 +28,10 @@ public class ExamTypeBrowserManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param examType
-	 * @return list of {@link OHExceptionMessage}
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHServiceException 
 	 */
-	protected List<OHExceptionMessage> validateExamType(ExamType examType) {
+	protected void validateExamType(ExamType examType, boolean insert) throws OHServiceException {
 		String key = examType.getCode();
 		String description = examType.getDescription();
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
@@ -48,7 +50,16 @@ public class ExamTypeBrowserManager {
             		MessageBundle.getMessage("angal.exatype.pleaseinsertavaliddescription"), 
             		OHSeverityLevel.ERROR));
         }
-        return errors;
+        if (insert) {
+        	if (codeControl(examType.getCode())){
+				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null, 
+						MessageBundle.getMessage("angal.common.codealreadyinuse"), 
+						OHSeverityLevel.ERROR));
+			}
+        }
+        if (!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
     }
 	
 	/**
@@ -57,17 +68,7 @@ public class ExamTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<ExamType> getExamType() throws OHServiceException {
-		try {
-			return ioOperations.getExamType();
-		} catch (OHException e) {
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
-		} catch (Exception e) {
-			logger.error("", e);
-			throw new OHServiceException(e,
-					new OHExceptionMessage(null,
-							MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), OHSeverityLevel.ERROR));
-		}
+		return ioOperations.getExamType();
 	}
 
 	/**
@@ -78,29 +79,8 @@ public class ExamTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newExamType(ExamType examType) throws OHServiceException {
-		try {
-			List<OHExceptionMessage> errors = validateExamType(examType);
-            if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
-            }
-			if (codeControl(examType.getCode())){
-				throw new OHServiceException(new OHExceptionMessage(null, 
-						MessageBundle.getMessage("angal.common.codealreadyinuse"), 
-						OHSeverityLevel.ERROR));
-			}
-			return ioOperations.newExamType(examType);
-		} catch (OHException e) {
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(
-					MessageBundle.getMessage("angal.exatype.newexamtype"), e.getMessage(), OHSeverityLevel.ERROR));
-		} catch(OHServiceException e){
-			throw e;
-		} catch (Exception e) {
-			logger.error("", e);
-			throw new OHServiceException(e,
-					new OHExceptionMessage(MessageBundle.getMessage("angal.exatype.newexamtype"),
-							MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), OHSeverityLevel.ERROR));
-		}
+		validateExamType(examType, true);
+		return ioOperations.newExamType(examType);
 	}
 
 	/**
@@ -110,24 +90,8 @@ public class ExamTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateExamType(ExamType examType) throws OHServiceException {
-		try {
-			List<OHExceptionMessage> errors = validateExamType(examType);
-            if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
-            }
-			return ioOperations.updateExamType(examType);
-		} catch (OHException e) {
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
-		} catch(OHServiceException e){
-			throw e;
-		} catch (Exception e) {
-			logger.error("", e);
-			throw new OHServiceException(e,
-					new OHExceptionMessage(null,
-							MessageBundle.getMessage("angal.sql.thedatacouldnotbesaved"),
-							OHSeverityLevel.ERROR));
-		}
+		validateExamType(examType, false);
+		return ioOperations.updateExamType(examType);
 	}
 
 	/**
@@ -138,18 +102,7 @@ public class ExamTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean codeControl(String code) throws OHServiceException {
-		try {
-			return ioOperations.isCodePresent(code);
-		} catch (OHException e) {
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
-		} catch (Exception e) {
-			logger.error("", e);
-			throw new OHServiceException(e,
-					new OHExceptionMessage(null,
-							MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"),
-							OHSeverityLevel.ERROR));
-		}
+		return ioOperations.isCodePresent(code);
 	}
 
 	/**
@@ -157,20 +110,9 @@ public class ExamTypeBrowserManager {
 	 * @param examType - the {@link ExamType} to delete.
 	 * @return <code>true</code> if the examType has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException 
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
 	public boolean deleteExamType(ExamType examType) throws OHServiceException {
-		try {
-			return ioOperations.deleteExamType(examType);
-		} catch (OHException e) {
-			logger.error("", e);
-			throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
-		} catch (Exception e) {
-			logger.error("", e);
-			throw new OHServiceException(e,
-					new OHExceptionMessage(MessageBundle.getMessage("angal.exatype.deleteexamtype"),
-							MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"),
-							OHSeverityLevel.ERROR));
-		}
+		return ioOperations.deleteExamType(examType);
 	}
 }

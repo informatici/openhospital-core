@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Transactional
-class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCustom {
+public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCustom {
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -60,7 +60,7 @@ class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCustom {
 			query += " AND OPD_AGE BETWEEN \"" + ageFrom + "\" AND \"" + ageTo + "\"";
 		}
 		if (sex != 'A') {
-			query += " AND OPD_SEX =  \"" + String.valueOf(sex) + "\"";
+			query += " AND OPD_SEX =  \"" + sex + "\"";
 		}
 		if (newPatient != 'A') {
 			query += " AND OPD_NEW_PAT =  \"" + newPatient + "\"";

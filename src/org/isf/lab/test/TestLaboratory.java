@@ -12,7 +12,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestLaboratory 
 {	 
-	private Integer code = new Integer(0);
+	private Integer code = 0;
 	private String material = "TestMaterial";
 	private GregorianCalendar now = new GregorianCalendar();
 	private GregorianCalendar registrationDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
@@ -21,7 +21,7 @@ public class TestLaboratory
 	private String note = "TestNote";
 	private String patName = "TestPatientName";
 	private String InOutPatient = "O";
-	private int age = 37;
+	private Integer age = 37;
 	private String sex = "F";
     
 			
@@ -33,7 +33,7 @@ public class TestLaboratory
 		Laboratory laboratory;
 	
 				
-		if (usingSet == true)
+		if (usingSet)
 		{
 			laboratory = new Laboratory();
 			_setParameters(laboratory, exam, patient);
