@@ -10,6 +10,7 @@ package org.isf.exa.service;
  *------------------------------------------*/
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.exa.model.Exam;
 import org.isf.exa.model.ExamRow;
@@ -34,47 +35,12 @@ public class ExamIoOperations {
 	
 	@Autowired
 	private ExamTypeIoOperationRepository typeRepository;
-	
-	/**
-	 * Returns a list of {@link ExamRow}s that matches passed exam code and description
-	 * @param aExamCode - the exam code
-	 * @param aDescription - the exam description
-	 * @return the list of {@link ExamRow}s
-	 * @throws OHServiceException
-	 */
-	/*public ArrayList<ExamRow> getExamRow(
-			String aExamCode, 
-			String aDescription) throws OHServiceException 
-	{
-    	ArrayList<ExamRow> examrows = null;
-    	
-    	
-		if (aExamCode != null) 
-		{
-			if (aDescription != null) 
-			{
-				examrows = (ArrayList<ExamRow>) rowRepository.findAllWhereIdAndDescriptionByOrderIdAndDescriptionAsc(aExamCode, aDescription); 	
-			}
-			else
-			{
-				examrows = (ArrayList<ExamRow>) rowRepository.findAllWhereIdByOrderIdAndDescriptionAsc(aExamCode); 	
-			}
-		}
-		else
-		{
-			examrows = (ArrayList<ExamRow>) rowRepository.findAllByOrderIdAndDescriptionAsc(); 	
-		}
-
-		return examrows;
-	}*/
 
 	/**
 	 * Returns the list of {@link Exam}s
 	 * @return the list of {@link Exam}s
-	 * @throws OHServiceException
 	 */
-	public ArrayList<Exam> getExams() throws OHServiceException 
-	{
+	public List<Exam> getExams() {
 		return getExamsByDesc(null);
 	}
 	
@@ -82,34 +48,10 @@ public class ExamIoOperations {
 	 * Returns the list of {@link Exam}s that matches passed description
 	 * @param description - the exam description
 	 * @return the list of {@link Exam}s
-	 * @throws OHServiceException
 	 */
-	public ArrayList<Exam> getExamsByDesc(
-			String description) throws OHServiceException 
-	{ 
-		ArrayList<String> examIds = null;
-		ArrayList<Exam> exams = new ArrayList<Exam>();
-				
-		
-		if (description != null) 
-		{
-			examIds = (ArrayList<String>) repository.findAllWhereDescriptionByOrderDescriptionAsc(description);	
-		}
-		else
-		{
-			examIds = (ArrayList<String>) repository.findAllByOrderDescriptionAsc();			
-		}		
-		
-		for (int i=0; i<examIds.size(); i++)
-		{
-			String code = examIds.get(i);
-			Exam exam = repository.findOne(code);
-			
-			
-			exams.add(i, exam);
-		}
-	
-		return exams;
+	public List<Exam> getExamsByDesc(String description) {
+		return description != null ? repository.findByDescriptionContainingOrderByExamtypeDescriptionAscDescriptionAsc(description) :
+				repository.findByOrderByExamtypeDescriptionAscDescriptionAsc();
 	}
 
 	/**
@@ -191,7 +133,7 @@ public class ExamIoOperations {
 		boolean result = true;		
 	
 		
-		rowRepository.deleteExamRowWhereExamCode(exam.getCode());
+		rowRepository.deleteByExam_Code(exam.getCode());
 		repository.delete(exam);
 		
 		return result;	
@@ -219,7 +161,7 @@ public class ExamIoOperations {
 	 * the parameter; Returns false if the query finds no record, else returns
 	 * true
 	 * 
-	 * @param the {@link Exam}
+	 * @param {@link Exam}
 	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
