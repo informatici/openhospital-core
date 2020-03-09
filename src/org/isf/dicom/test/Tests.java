@@ -163,7 +163,7 @@ public class Tests
 	
 	
 	@Test
-	public void testIoLoadDettaglio() 
+	public void testIoLoadFileDicom() 
 	{
 		long code = 0;
 		
@@ -189,7 +189,7 @@ public class Tests
 	
 	
 	@Test
-	public void testIoLoadFilesPaziente() 
+	public void testIoLoadPatientFiles() 
 	{
 		long code = 0;
 		
@@ -198,7 +198,7 @@ public class Tests
 		{		
 			code = _setupTestFileDicom(false);
 			FileDicom foundFileDicom = (FileDicom)jpa.find(FileDicom.class, code); 
-			FileDicom[] dicoms = dicomIoOperation.loadFilesPaziente(foundFileDicom.getPatId());
+			FileDicom[] dicoms = dicomIoOperation.loadPatientFiles(foundFileDicom.getPatId());
 
 			assertEquals(foundFileDicom.getDicomSeriesDescription(), dicoms[0].getDicomSeriesDescription());
 		} 

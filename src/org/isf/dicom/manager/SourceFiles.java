@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
-import javax.swing.JOptionPane;
 
 import org.dcm4che2.data.DicomObject;
 import org.dcm4che2.data.Tag;
@@ -100,7 +99,6 @@ public class SourceFiles extends Thread {
 	}
 
 	public boolean working() {
-		// System.out.println("working "+loaded+" < "+numeroFiles);
 		return (filesLoaded < filesCount);
 	}
 

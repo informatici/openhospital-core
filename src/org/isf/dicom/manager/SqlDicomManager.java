@@ -23,27 +23,27 @@ public class SqlDicomManager implements DicomManagerInterface{
 	}
 	
     /**
-     * Load a list of idfile for series
-     * @param idPaziente, the patient id
-     * @param numeroSerie, the series number
+     * Load a list of id file for series
+     * @param patientID, the patient id
+     * @param seriesNumber, the series number
      * @return
      * @throws OHServiceException 
      */
-    public Long[] getSerieDetail(int idPaziente, String numeroSerie) throws OHServiceException
+    public Long[] getSerieDetail(int patientID, String seriesNumber) throws OHServiceException
     {
-        return ioOperations.getSerieDetail(idPaziente, numeroSerie);
+        return ioOperations.getSerieDetail(patientID, seriesNumber);
     }
 
     /**
      * delete series 
-     * @param idPaziente, the id of patient
-     * @param numeroSerie, the seres number to delete
-     * @return, true if success
+     * @param patientID, the id of patient
+     * @param seriesNumber, the series number to delete
+     * @return true if success
      * @throws OHServiceException 
      */
-    public boolean deleteSerie(int idPaziente, String numeroSerie) throws OHServiceException 
+    public boolean deleteSerie(int patientID, String seriesNumber) throws OHServiceException 
     {
-    	return ioOperations.deleteSerie(idPaziente, numeroSerie);
+    	return ioOperations.deleteSerie(patientID, seriesNumber);
     }
     
     /**
@@ -60,47 +60,50 @@ public class SqlDicomManager implements DicomManagerInterface{
     /**
      * check if series number does already exist
      * @param patientID, the id of patient
-     * @param numeroSerie, 
+     * @param seriesNumber, 
      * @return true if file exist
       * @throws OHServiceException 
      */
-     public boolean exist(int patientID, String numeroSerie) throws OHServiceException
+     public boolean exist(int patientID, String seriesNumber) throws OHServiceException
      {
-     	return ioOperations.isSeriePresent(numeroSerie);
+     	return ioOperations.isSeriePresent(seriesNumber);
      }
 
     /**
      * load the Detail of DICOM
-     * @param, idFile
-     * @return, FileDicomDettaglio
+     * @param idFile
+     * @param patientID
+     * @param seriesNumber
+     * @return FileDicom
      * @throws OHServiceException 
      */
-    public FileDicom loadDetails(Long idFile,int idPaziente, String numeroSerie) throws OHServiceException
+    public FileDicom loadDetails(Long idFile,int patientID, String seriesNumber) throws OHServiceException
     {
-    	return  ioOperations.loadDetails(idFile, idPaziente, numeroSerie);
+    	return  ioOperations.loadDetails(idFile, patientID, seriesNumber);
     }
     
     /**
      * Load detail
-     * @param idPaziente, the id of patient
-     * @param numeroSerie, numero della serie
-     * @return, details
+     * @param idFile
+     * @param patientID
+     * @param seriesNumber
+     * @return FileDicom
      * @throws OHServiceException 
      */
-    public FileDicom loadDetails(long idFile,int idPaziente, String numeroSerie) throws OHServiceException
+    public FileDicom loadDetails(long idFile,int patientID, String seriesNumber) throws OHServiceException
     {
-    	return  ioOperations.loadDetails(idFile, idPaziente, numeroSerie);
+    	return  ioOperations.loadDetails(idFile, patientID, seriesNumber);
     }
 
     /**
-     * load metadata from DICOM files fo the patient
-     * @param idPaziente
+     * load metadata from DICOM files of the patient
+     * @param patientID
      * @return
      * @throws OHServiceException 
      */
-    public FileDicom[] loadFilesPaziente(int idPaziente) throws OHServiceException
+    public FileDicom[] loadPatientFiles(int patientID) throws OHServiceException
     {
-    	return  ioOperations.loadFilesPaziente(idPaziente);
+    	return  ioOperations.loadPatientFiles(patientID);
     }
 
     /**

@@ -13,7 +13,6 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Properties;
-import java.util.Random;
 import java.util.Vector;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -111,7 +110,6 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 
 			for (int i = 0; i < _Longs.length; i++) {
 				_Longs[i] = _longs[i];
-				// System.out.println(" getDettaglioSerie("+patientID+","+seriesNumber+") = "+_longs[i]);
 			}
 
 			return _Longs;
@@ -126,7 +124,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * 
 	 * @param patientId, the id of patient
 	 * @param seriesNumber, the series number to delete
-	 * @return, true if success
+	 * @return true if success
 	 * @throws OHDicomException 
 	 */
 	public boolean deleteSerie(int patientId, String seriesNumber) throws OHDicomException {
@@ -157,8 +155,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	/**
 	 * load the Detail of DICOM
 	 * 
-	 * @param, idFile
-	 * @return, FileDicomDettaglio
+	 * @param idFile
+	 * @return FileDicom
 	 * @throws OHDicomException 
 	 */
 	public FileDicom loadDetails(Long idFile, int patientId, String seriesNumber) throws OHDicomException {
@@ -177,12 +175,11 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * Load detail
 	 * 
 	 * @param idFile
-	 * @return, details
+	 * @return details
 	 * @throws OHDicomException 
 	 */
 	public FileDicom loadDetails(long idFile, int patientId, String seriesNumber) throws OHDicomException {
 		try {
-			// System.out.println("FS loadDettaglio "+idFile+","+patientId+","+seriesNumber);
 			return loadData(idFile, patientId, seriesNumber);
 	
 		} catch (Exception exc) {
@@ -198,9 +195,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * @return
 	 * @throws OHDicomException 
 	 */
-	public FileDicom[] loadFilesPaziente(int patientId) throws OHDicomException {
+	public FileDicom[] loadPatientFiles(int patientId) throws OHDicomException {
 		try {
-			// System.out.println("FS loadFilesPaziente "+patientId);
 			File df = getPatientDir(patientId);
 			File[] series = df.listFiles();
 			FileDicom[] db = new FileDicom[series.length];
