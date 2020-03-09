@@ -58,7 +58,7 @@ public class MedicalStockIoOperations {
 	 * @return <code>true</code> if automatic lot mode, <code>false</code> otherwise.
 	 */
 	private boolean isAutomaticLotMode() {
-		return GeneralData.AUTOMATICLOT;
+		return GeneralData.AUTOMATICLOT_IN;
 	}
 
 	/**

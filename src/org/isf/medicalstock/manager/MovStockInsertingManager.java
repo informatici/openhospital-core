@@ -201,9 +201,13 @@ public class MovStockInsertingManager {
 	 * JOptionPane.showMessageDialog(null, e.getMessage()); return 0; } }
 	 */
 
-	private boolean isAutomaticLot() {
-		return GeneralData.AUTOMATICLOT;
-	}
+	private boolean isAutomaticLot_In() {
+			return GeneralData.AUTOMATICLOT_IN;
+		}
+		
+	private boolean isAutomaticLot_Out() {
+			return GeneralData.AUTOMATICLOT_OUT;
+		 	}
 
 	/**
 	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}
@@ -388,7 +392,7 @@ public class MovStockInsertingManager {
             if(!errors.isEmpty()){
                 throw new OHServiceException(errors);
             }
-            if (isAutomaticLot()) {
+            if (isAutomaticLot_Out()) {
             	return ioOperations.newAutomaticDischargingMovement(movement);
             } else 
             	return ioOperations.prepareDischargingMovement(movement);

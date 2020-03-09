@@ -77,6 +77,8 @@ public class Movement
 	
 	@Transient
 	private volatile int hashCode = 0;
+
+private String user;
 	
 
 	public Movement() { }
@@ -162,7 +164,12 @@ public class Movement
 	public void setRefNo(String refNo) {
 		this.refNo = refNo;
 	}
-
+	public String getUser() {
+		return user;
+	}
+	public void setUser(String user) {
+		this.user = user;
+	}
 //    public Ward getWardTo() {
 //        return wardTo;
 //    }
