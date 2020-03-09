@@ -67,15 +67,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		}
 	}
 	
-	/*
-	* @param dir the dir to set
-	*/
-	public void setDir(Properties externalPrp) {
-		this.dir = new File(externalPrp.getProperty("dicom.storage.filesystem"));
-	}
-
 	/**
-	 * @param dir the dir to set
+	 * @param dir - the dir to set
 	 */
 	public void setDir(Properties externalPrp) {
 		this.dir = new File(externalPrp.getProperty("dicom.storage.filesystem"));
