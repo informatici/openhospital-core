@@ -66,6 +66,13 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 					"FileSystemDicomManager " + MessageBundle.getMessage("angal.dicom.manager.nodir"), OHSeverityLevel.ERROR));
 		}
 	}
+	
+	/*
+	* @param dir the dir to set
+	*/
+	public void setDir(Properties externalPrp) {
+		this.dir = new File(externalPrp.getProperty("dicom.storage.filesystem"));
+	}
 
 	/**
 	 * @param dir the dir to set
