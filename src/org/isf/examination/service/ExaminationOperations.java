@@ -13,6 +13,7 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +36,7 @@ public class ExaminationOperations {
 	 * Default PatientExamination
 	 */
 	public PatientExamination getDefaultPatientExamination(
-			Patient patient) 
+			Patient patient)
 	{
 		PatientExamination defaultPatient = new PatientExamination(new Timestamp(new Date().getTime()), patient, ExaminationParameters.HEIGHT_INIT, ExaminationParameters.WEIGHT_INIT,
 				ExaminationParameters.AP_MIN, ExaminationParameters.AP_MAX, ExaminationParameters.HR_INIT, ExaminationParameters.TEMP_INIT, ExaminationParameters.SAT_INIT, "");
@@ -46,7 +47,7 @@ public class ExaminationOperations {
 	 * Get from last PatientExamination (only height, weight & note)
 	 */
 	public PatientExamination getFromLastPatientExamination(
-			PatientExamination lastPatientExamination) 
+			PatientExamination lastPatientExamination)
 	{
 		PatientExamination newPatientExamination = new PatientExamination(new Timestamp(new Date().getTime()), lastPatientExamination.getPatient(), lastPatientExamination.getPex_height(),
 				lastPatientExamination.getPex_weight(), lastPatientExamination.getPex_pa_min(), lastPatientExamination.getPex_pa_max(), lastPatientExamination.getPex_fc(), 
@@ -58,42 +59,27 @@ public class ExaminationOperations {
 	 * 
 	 * @param path
 	 *            - the PatientHistory to save
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public void saveOrUpdate(
-			PatientExamination patex) throws OHServiceException 
-	{
+	public void saveOrUpdate(PatientExamination patex) throws OHServiceException {
 		repository.save(patex);
-		
-		return;
 	}
 
-	public PatientExamination getByID(
-			int ID) throws OHServiceException 
-	{
-		PatientExamination foundPatientExamination = repository.findOne(ID);
-		
-		return foundPatientExamination;
+	public PatientExamination getByID(int ID) throws OHServiceException {
+		return repository.findOne(ID);
 	}
 
-	public PatientExamination getLastByPatID(
-			int patID) throws OHServiceException 
-	{
+	public PatientExamination getLastByPatID(int patID) throws OHServiceException	{
 		ArrayList<PatientExamination> patExamination = getByPatID(patID);
-		
 		return !patExamination.isEmpty() ? patExamination.get(0) : null;
 	}
 
-	public ArrayList<PatientExamination> getLastNByPatID(
-			int patID, 
-			int number) throws OHServiceException 
-	{
-		return (ArrayList<PatientExamination>)repository.findAllByIdOrderDescLimited(patID, number);
+	public ArrayList<PatientExamination> getLastNByPatID(int patID, int number) throws OHServiceException {
+		return new ArrayList<PatientExamination>(repository
+				.findByPatient_CodeOrderByPexDateDesc(patID, new PageRequest(0, number)).getContent());
 	}
 
-	public ArrayList<PatientExamination> getByPatID(
-			int patID) throws OHServiceException 
-	{
-		return (ArrayList<PatientExamination>)repository.findAllByIdOrderDesc(patID);
+	public ArrayList<PatientExamination> getByPatID(int patID) throws OHServiceException	{
+		return (ArrayList<PatientExamination>)repository.findByPatient_CodeOrderByPexDateDesc(patID);
 	}
 }
