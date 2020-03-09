@@ -39,8 +39,9 @@ public class ExamIoOperations {
 	/**
 	 * Returns the list of {@link Exam}s
 	 * @return the list of {@link Exam}s
+	 * @throws OHServiceException
 	 */
-	public List<Exam> getExams() {
+	public List<Exam> getExams() throws OHServiceException {
 		return getExamsByDesc(null);
 	}
 	
@@ -48,8 +49,9 @@ public class ExamIoOperations {
 	 * Returns the list of {@link Exam}s that matches passed description
 	 * @param description - the exam description
 	 * @return the list of {@link Exam}s
+	 * @throws OHServiceException
 	 */
-	public List<Exam> getExamsByDesc(String description) {
+	public List<Exam> getExamsByDesc(String description) throws OHServiceException {
 		return description != null ? repository.findByDescriptionContainingOrderByExamtypeDescriptionAscDescriptionAsc(description) :
 				repository.findByOrderByExamtypeDescriptionAscDescriptionAsc();
 	}
@@ -127,12 +129,8 @@ public class ExamIoOperations {
 	 * @return <code>true</code> if the {@link Exam} has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean deleteExam(
-			Exam exam) throws OHServiceException 
-	{
+	public boolean deleteExam(Exam exam) throws OHServiceException {
 		boolean result = true;		
-	
-		
 		rowRepository.deleteByExam_Code(exam.getCode());
 		repository.delete(exam);
 		
@@ -161,7 +159,7 @@ public class ExamIoOperations {
 	 * the parameter; Returns false if the query finds no record, else returns
 	 * true
 	 * 
-	 * @param {@link Exam}
+	 * @param the {@link Exam}
 	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */

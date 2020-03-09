@@ -166,7 +166,7 @@ public class ExamRowIoOperations {
 	 * the parameter; Returns false if the query finds no record, else returns
 	 * true
 	 * 
-	 * @param {@link Exam}
+	 * @param the {@link Exam}
 	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
@@ -212,7 +212,7 @@ public class ExamRowIoOperations {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(int code) {
+	public boolean isCodePresent(int code) throws OHServiceException{
 		return rowRepository.exists(code);
 	}
 
@@ -223,7 +223,7 @@ public class ExamRowIoOperations {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isRowPresent(Integer code) {
+	public boolean isRowPresent(Integer code) throws OHServiceException {
 		return rowRepository.exists(code);
 	}
 
