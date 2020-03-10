@@ -20,9 +20,14 @@ public interface AccountingBillItemsIoOperationRepository extends JpaRepository<
 	
 	@Modifying
 	@Transactional
-	@Query(value = "DELETE FROM BILLITEMS WHERE BLI_ID_BILL = :billId", nativeQuery= true)
+	@Query(value = "delete BillItems where id = :billId")
 	void deleteWhereId(@Param("billId") Integer billId);
-	
+
+	/*
+	Cannot move this @Query to non-native.
+	More appropriate approach is to add new BillItems to Bill instance, then save the
+	Bill instance.  FIXME KTM 3/8/2020
+	 */
 	@Modifying
 	@Transactional
 	@Query(value = "INSERT INTO BILLITEMS (" +
@@ -32,7 +37,6 @@ public interface AccountingBillItemsIoOperationRepository extends JpaRepository<
 			@Param("id") Integer id, @Param("isPrice") Boolean isPrice, @Param("price") String price,
 			@Param("description") String description, @Param("amount") Double amount, @Param("qty") Integer qty);
 	
-	@Query(value = "SELECT * FROM BILLITEMS GROUP BY BLI_ITEM_DESC", nativeQuery = true)
+	@Query(value = "SELECT bi from BillItems bi GROUP BY bi.itemDescription")
 	ArrayList<BillItems> findAllGroupByDesc();
-	
 }
