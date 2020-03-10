@@ -5,10 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface HospitalIoOperationRepository extends JpaRepository<Hospital, String> {
 
-    @Query(value = "SELECT HOS_CURR_COD FROM HOSPITAL", nativeQuery= true)
-    String findHospitalCurrent();
+   @Query(value = "select h.currencyCod from Hospital h")
+	 List<String> findAllHospitalCurrencyCode();
     
 }
