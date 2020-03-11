@@ -120,7 +120,6 @@ public class FileDicom
 	@Lob
 	private Blob dicomThumbnail;
 	
-
 	@Transient
 	private int frameCount = -1;
 	
@@ -135,6 +134,29 @@ public class FileDicom
 	public FileDicom() {
 		super();
 		this.patId = 0;
+		this.dicomData = null;
+		this.idFile = 0;
+		this.fileName = "";
+		this.dicomAccessionNumber = "";
+		this.dicomInstitutionName = "";
+		this.dicomPatientID = "";
+		this.dicomPatientName = "";
+		this.dicomPatientAddress = "";
+		this.dicomPatientAge = "";
+		this.dicomPatientSex = "";
+		this.dicomPatientBirthDate = "";
+		this.dicomStudyId = "";
+		this.dicomStudyDate = "";
+		this.dicomStudyDescription = "";
+		this.dicomSeriesUID = "";
+		this.dicomSeriesInstanceUID = "";
+		this.dicomSeriesNumber = "";
+		this.dicomSeriesDescriptionCodeSequence = "";
+		this.dicomSeriesDate = "";
+		this.dicomSeriesDescription = "";
+		this.dicomInstanceUID = "";
+		this.modality = "";
+		this.dicomThumbnail = null;
 	}
 
 	/**

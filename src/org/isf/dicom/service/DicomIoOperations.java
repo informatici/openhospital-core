@@ -130,6 +130,7 @@ public class DicomIoOperations
 		for (int i=0; i<dicomList.size(); i++)
 		{
 			dicoms[i] = dicomList.get(i);
+			dicoms[i].setFrameCount(dicomList.size());
 		}
 		
 		return dicoms;
