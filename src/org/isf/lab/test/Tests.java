@@ -81,8 +81,7 @@ public class Tests
     public void setUp() throws OHException
     {
         jpa.open();
-        
-        _saveContext();
+			_saveContext();
 		
 		return;
     }
@@ -240,6 +239,30 @@ public class Tests
 		
 		return;
 	}
+
+
+	@Test
+	public void testIoGetLaboratoryWithoutDescription()
+	{
+		try	{
+			// given:
+			int id = _setupTestLaboratory(false);
+			Laboratory foundLaboratory = (Laboratory)jpa.find(Laboratory.class, id);
+
+			// when:
+			ArrayList<Laboratory> laboratories = labIoOperation.getLaboratory(null, foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
+
+			// then:
+			assertEquals(foundLaboratory.getCode(), laboratories.get(0).getCode());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+
+		return;
+	}
 	
 	@Test
 	public void testIoGetLaboratoryFromPatient() 
@@ -284,7 +307,55 @@ public class Tests
 		}
 		return;
 	}
-	
+
+	@Test
+	public void testIoGetLaboratoryForPrintWithExamDescriptionLikePersistedOne()
+	{
+		try
+		{
+			// given:
+			Integer id = _setupTestLaboratory(false);
+			Laboratory foundLaboratory = (Laboratory)jpa.find(Laboratory.class, id);
+			String description = foundLaboratory.getExam().getDescription();
+			String firstCharsOfDescription = description.substring(0, description.length() - 1);
+
+			// when:
+			ArrayList<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
+
+			// then:
+			assertEquals(foundLaboratory.getCode(), laboratories.get(0).getCode());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+		return;
+	}
+
+	@Test
+	public void testIoGetLaboratoryForPrintWithNullExamDescription()
+	{
+		try
+		{
+			// given:
+			Integer id = _setupTestLaboratory(false);
+			Laboratory foundLaboratory = (Laboratory)jpa.find(Laboratory.class, id);
+
+			// when:
+			ArrayList<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint(null, foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
+
+			// then:
+			assertEquals(foundLaboratory.getCode(), laboratories.get(0).getCode());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+		return;
+	}
+
 	@Test
 	public void testIoNewLabFirstProcedure() 
 	{

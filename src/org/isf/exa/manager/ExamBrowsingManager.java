@@ -69,7 +69,7 @@ public class ExamBrowsingManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Exam> getExams() throws OHServiceException {
-		return ioOperations.getExams();
+		return new ArrayList<Exam>(ioOperations.getExams());
 	}
 	
 	/**
@@ -89,7 +89,7 @@ public class ExamBrowsingManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Exam> getExams(String description) throws OHServiceException {
-		return ioOperations.getExamsByDesc(description);
+		return new ArrayList<Exam>(ioOperations.getExamsByDesc(description));
 	}
 	
 	/**
@@ -106,7 +106,7 @@ public class ExamBrowsingManager {
 	 * the parameter; Returns false if the query finds no record, else returns
 	 * true
 	 * 
-	 * @param the {@link Exam}
+	 * @param {@link Exam}
 	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
