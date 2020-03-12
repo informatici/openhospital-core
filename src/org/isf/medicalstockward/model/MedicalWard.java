@@ -3,10 +3,14 @@ package org.isf.medicalstockward.model;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
+import org.isf.patient.model.Patient;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,9 @@ public class MedicalWard implements Comparable<Object>
 	@EmbeddedId 
 	MedicalWardId id;
 	
+
+	
+	
 	@Column(name="MDSRWRD_IN_QTI")
 	private float in_quantity;
 	
@@ -45,28 +52,40 @@ public class MedicalWard implements Comparable<Object>
 	public MedicalWard() {
 		super();
 		this.id = new MedicalWardId(); 
+		
 	}
 	
 	public MedicalWard(Medical medical, Double qty) {
 		super();
 		this.id = new MedicalWardId(); 
+		
 		this.id.setMedicalId(medical.getCode());
 		this.qty = qty;
 	}
 	
-	public MedicalWard(char ward_id, int medical_id, float in_quantity, float out_quantity) {
+	public MedicalWard(char ward_id, int medical_id, float in_quantity, float out_quantity, String lot) {
 		super();
-		this.id = new MedicalWardId(ward_id, medical_id);  
+		this.id = new MedicalWardId(ward_id, medical_id, lot);  
 		this.in_quantity = in_quantity;
 		this.out_quantity = out_quantity;
+		
 	}
 	
+	public MedicalWard(Medical med, double qanty, String lotId) {
+		super();
+		this.id = new MedicalWardId(); 
+		
+		this.id.setMedicalId(med.getCode());
+		this.id.setLotId(lotId);
+		this.qty = qanty;
+	}
+
 	public MedicalWardId getId() {
 		return id;
 	}
 	
-	public void setId(char ward_id, int medical_id) {
-		this.id = new MedicalWardId(ward_id, medical_id); 
+	public void setId(char ward_id, int medical_id , String lot) {
+		this.id = new MedicalWardId(ward_id, medical_id, lot); 
 	}
 	
 	public Medical getMedical() throws OHException {
@@ -75,6 +94,14 @@ public class MedicalWard implements Comparable<Object>
 		Medical medical = (Medical)jpa.find(Medical.class, id.getMedicalId()); 
 		jpa.commitTransaction();
 		return medical;
+	}
+	
+	public Lot getLot() throws OHException {
+		jpa = getDbJpaUtil();
+		jpa.beginTransaction();
+		Lot lot = (Lot)jpa.find(Lot.class, id.getLotId()); 
+		jpa.commitTransaction();
+		return lot;
 	}
 	
 	private DbJpaUtil getDbJpaUtil() {
@@ -125,7 +152,7 @@ public class MedicalWard implements Comparable<Object>
 	public int getMedicalId() {
 		return this.id.getMedicalId();
 	}
-	
+
 	public void setMedicalId(int medical_id) {
 		this.id.setMedicalId(medical_id);
 	}

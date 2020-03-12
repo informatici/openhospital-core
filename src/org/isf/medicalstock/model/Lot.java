@@ -47,7 +47,10 @@ public class Lot
 
 	public Lot() { 
 	}
-	
+	public Lot(String aCode){
+		code=aCode;
+		
+	}
 	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate){
 		code=aCode;
 		preparationDate=aPreparationDate;

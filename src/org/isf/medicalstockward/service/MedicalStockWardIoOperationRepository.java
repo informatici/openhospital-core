@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface MedicalStockWardIoOperationRepository extends JpaRepository<MedicalWard, String>, MedicalStockWardIoOperationRepositoryCustom {      
 	   
-    @Query(value = "SELECT * FROM MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical", nativeQuery= true)
-    public MedicalWard findOneWhereCodeAndMedical(@Param("ward") String ward, @Param("medical") int medical);    
+    @Query(value = "SELECT * FROM MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND  MDSRWRD_LT_ID_A = :lot", nativeQuery= true)
+    public MedicalWard findOneWhereCodeAndMedical(@Param("ward") String ward, @Param("medical") int medical,@Param("lot") String lot);    
     
     @Query(value = "SELECT SUM(MDSRWRD_IN_QTI-MDSRWRD_OUT_QTI) QTY FROM MEDICALDSRWARD WHERE MDSRWRD_MDSR_ID = :medical", nativeQuery= true)
     public Double findQuantityInWardWhereMedical(@Param("medical") int medical);
@@ -30,9 +30,9 @@ public interface MedicalStockWardIoOperationRepository extends JpaRepository<Med
     public void updateOutQuantity(@Param("quantity") Double quantity, @Param("ward") String ward, @Param("medical") int medical);   
     @Modifying 
     @Transactional
-    @Query(value = "INSERT INTO MEDICALDSRWARD (MDSRWRD_WRD_ID_A, MDSRWRD_MDSR_ID, MDSRWRD_IN_QTI, MDSRWRD_OUT_QTI) " +
-    		"VALUES (?, ?, ?, '0')", nativeQuery= true)
-    public void insertMedicalWard(@Param("ward") String ward, @Param("medical") int medical, @Param("quantity") Double quantity); 
+    @Query(value = "INSERT INTO MEDICALDSRWARD (MDSRWRD_WRD_ID_A, MDSRWRD_MDSR_ID, MDSRWRD_IN_QTI, MDSRWRD_OUT_QTI, MDSRWRD_LT_ID_A) " +
+    		"VALUES (?, ?, ?, '0', ?)", nativeQuery= true)
+    public void insertMedicalWard(@Param("ward") String ward, @Param("medical") int medical, @Param("quantity") Double quantity, @Param("lot") String lot ); 
         
     @Query(value = "SELECT mw FROM MedicalWard mw WHERE mw.id.ward_id=:ward")
     public List<MedicalWard> findAllWhereWard(@Param("ward") char wardId); 

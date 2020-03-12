@@ -351,7 +351,7 @@ public class MedicalStockIoOperations {
 				if (ward != null) 
 				{
 					//updates stock quantity for wards
-					return updateMedicalWardQuantity(ward.getCode(), medicalCode, movement.getQuantity());
+					return updateMedicalWardQuantity(ward.getCode(), medicalCode, movement.getQuantity(), movement.getLot().getCode() );
 
 				} 
 				else 
@@ -416,9 +416,9 @@ public class MedicalStockIoOperations {
 	protected boolean updateMedicalWardQuantity(
 			String wardCode, 
 			int medicalCode, 
-			int quantity) throws OHServiceException
+			int quantity, String lot) throws OHServiceException
 	{
-		MedicalWard medicalWard = (MedicalWard)medicalStockRepository.findOneWhereCodeAndMedical(wardCode, medicalCode);		
+		MedicalWard medicalWard = (MedicalWard)medicalStockRepository.findOneWhereCodeAndMedical(wardCode, medicalCode , lot);		
 				
 		if (medicalWard != null)
 		{			
@@ -427,8 +427,9 @@ public class MedicalStockIoOperations {
 		}
 		else
 		{
-			medicalWard = new MedicalWard(wardCode.charAt(0), medicalCode, quantity, 0);
-			medicalStockRepository.save(medicalWard);
+			medicalWard = new MedicalWard(wardCode.charAt(0), medicalCode, quantity, 0, lot);
+			Double  quan = (double) quantity;
+			medicalStockRepository.insertMedicalWard(wardCode, medicalCode, quan, lot);;
 		}
 		
 		return true;
@@ -595,6 +596,32 @@ public class MedicalStockIoOperations {
 		return lots;
 	}	
 
+	
+	public ArrayList<Lot> getLotsByMedicalId(
+			String lotId) throws OHServiceException
+	{
+		ArrayList<Lot> lots = null;
+	
+		
+		List<Object[]> lotList = (List<Object[]>)lotRepository.findAllWhereLot(lotId);
+		lots = new ArrayList<Lot>();
+		for (Object[] object: lotList)
+		{
+			Lot lot = _convertObjectToLot(object);
+			
+			lots.add(lot);
+		}
+		
+		// remve empy lots
+		ArrayList<Lot> emptyLots = new ArrayList<Lot>();
+		for (Lot aLot : lots) {
+			if (aLot.getQuantity() == 0)
+				emptyLots.add(aLot);
+		}
+		lots.removeAll(emptyLots);
+		
+		return lots;
+	}	
 	private Lot _convertObjectToLot(Object[] object)
 	{
 

@@ -118,6 +118,11 @@ public class Medical implements Comparable<Medical>, Cloneable {
 
 	public Medical() { }
 	
+	
+	public Medical(Integer code) { 
+		super();
+		this.code = code;
+	}
 	/**
 	 * Constructor
 	 */

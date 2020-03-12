@@ -25,14 +25,18 @@ public class MedicalWardId implements Serializable
 	@Column(name="MDSRWRD_MDSR_ID")
 	private int medical_id;
 	
+	@Column(name="MDSRWRD_LT_ID_A")
+	private String lot_id;
+	
 	public MedicalWardId() 
 	{
 	}
 	
-	public MedicalWardId(char ward_id, int medical_id) 
+	public MedicalWardId(char ward_id, int medical_id, String lot_id) 
 	{
 		this.ward_id = ward_id;
 		this.medical_id = medical_id;
+		this.lot_id = lot_id;
 	}
 
 	public char getWardId() {
@@ -41,6 +45,13 @@ public class MedicalWardId implements Serializable
 	
 	public void setWardId(char ward_id) {
 		this.ward_id = ward_id;
+	}
+	public String getLotId() {
+		return this.lot_id;
+	}
+	
+	public void setLotId(String lot_id) {
+		this.lot_id = lot_id;
 	}
 
 	public int getMedicalId() {

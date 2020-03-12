@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
 import org.isf.patient.model.Patient;
 import org.isf.ward.model.Ward;
 
@@ -42,6 +43,10 @@ public class MovementWard
 	@ManyToOne
 	@JoinColumn(name="MMVN_WRD_ID_A")	
 	private Ward ward;
+	
+	@ManyToOne
+	@JoinColumn(name="MMVN_LT_ID")	
+	private Lot lot;
 
 	@NotNull
 	@Column(name="MMVN_DATE")
@@ -136,7 +141,7 @@ public class MovementWard
 	 */
 	public MovementWard(Ward ward, GregorianCalendar date, boolean isPatient,
 			Patient patient, int age, float weight, String description, Medical medical,
-			Double quantity, String units, Ward wardTo, Ward wardFrom) {
+			Double quantity, String units, Ward wardTo, Ward wardFrom,Lot lot) {
 		super();
 		this.ward = ward;
 		this.date = date;
@@ -150,6 +155,21 @@ public class MovementWard
 		this.units = units;
 		this.wardTo = wardTo;
 		this.wardFrom = wardFrom;
+		this.lot=lot;
+	}
+	
+	
+	public MovementWard(Ward ward, Lot lot,
+			String description, Medical medical,
+			Double quantity, String units) {
+		super();
+		this.ward = ward;
+		this.lot = lot;
+		this.description = description;
+		this.medical = medical;
+		this.quantity = quantity;
+		this.units = units;
+	
 	}
         
 	public int getCode(){
@@ -175,7 +195,13 @@ public class MovementWard
 	public void setWard(Ward ward) {
 		this.ward = ward;
 	}
+	public Lot getLot() {
+		return lot;
+	}
 
+	public void setlot(Lot lot) {
+		this.lot = lot;
+	}
 	public boolean isPatient() {
 		return isPatient;
 	}

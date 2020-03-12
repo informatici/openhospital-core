@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.test.TestMedical;
 import org.isf.medicals.test.TestMedicalContext;
+import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.test.TestLot;
 import org.isf.medicalstock.test.TestLotContext;
 import org.isf.medicalstock.test.TestMovement;
@@ -445,13 +446,14 @@ public class Tests
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical= testMedical.setup(medicalType, false);
 		Ward ward = testWard.setup(false);
+		Lot lot =testLot.setup(false);
 		
 	
 		jpa.beginTransaction();	
 		jpa.persist(medicalType);
 		jpa.persist(medical);
 		jpa.persist(ward);
-		medicalWard = testMedicalWard.setup(medical, ward, usingSet);
+		medicalWard = testMedicalWard.setup(medical, ward, lot, usingSet);
 		jpa.persist(medicalWard);
 		jpa.commitTransaction();
 		

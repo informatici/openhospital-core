@@ -124,6 +124,8 @@ public class MedicalStockWardIoOperations
 			destinationWardIncomeMovement.setUnits(savedMovement.getUnits());
 			destinationWardIncomeMovement.setWard(savedMovement.getWardTo());
 			destinationWardIncomeMovement.setWardFrom(savedMovement.getWard());
+			destinationWardIncomeMovement.setlot(savedMovement.getLot());
+			
 			movementRepository.save(destinationWardIncomeMovement);
 		}
 		
@@ -202,6 +204,7 @@ public class MedicalStockWardIoOperations
 	{
 		Double qty = movement.getQuantity();
 		String ward = movement.getWard().getCode();
+		String lot = movement.getLot().getCode();
                 String wardTo = null;
                 if (movement.getWardTo() != null) { 
                 	// in case of a mvnt from the ward movement.getWard() to the ward movement.getWardTO()
@@ -212,20 +215,20 @@ public class MedicalStockWardIoOperations
 		
 		
         if(wardTo != null) {
-            MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedical(wardTo, medical);
+            MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedical(wardTo, medical, lot);
             if(medicalWardTo != null) {
                 repository.updateInQuantity(Math.abs(qty), wardTo, medical);
             } else {
-                repository.insertMedicalWard(wardTo, medical, Math.abs(qty));
+                repository.insertMedicalWard(wardTo, medical, Math.abs(qty), lot);
             }
             repository.updateOutQuantity(Math.abs(qty), ward, medical);
             return result;
         }
                 
-		MedicalWard medicalWard = repository.findOneWhereCodeAndMedical(ward, medical);
+		MedicalWard medicalWard = repository.findOneWhereCodeAndMedical(ward, medical, lot);
         if (medicalWard == null)
 		{
-            repository.insertMedicalWard(ward, medical, -qty);
+            repository.insertMedicalWard(ward, medical, -qty, lot);
         }
 		else
 		{
