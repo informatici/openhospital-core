@@ -254,7 +254,7 @@ public class TimeTools {
 		} else {
 			calendar.setTimeInMillis(date.getTime());
 		}
-		System.out.println(formatDateTime(calendar, null));
+		//System.out.println(formatDateTime(calendar, null));
 
 		return calendar;
 	}

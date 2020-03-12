@@ -611,7 +611,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			seriesFolder = getSerieDir(patientId, seriesNumber, false);
 		} catch (IOException e) {
 		}
-		return seriesFolder != null;
+		return seriesFolder.exists();
 	}
 
 }

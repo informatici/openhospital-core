@@ -2,6 +2,7 @@ package org.isf.dicom.manager;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Iterator;
 import java.util.Random;
@@ -63,13 +64,14 @@ public class SourceFiles extends Thread {
 	private void loadDicomDir(FileDicom fileDicom, File sourceFile, int patient) {
 		// installLibs();
 		File[] files = sourceFile.listFiles();
-		String seriesNumber = null;
-		try {
-			seriesNumber = generateSeriesNumber(patient);
-		} catch (OHServiceException e1) {
-			seriesNumber = "";
+		String seriesNumber = fileDicom.getDicomSeriesNumber();
+		if (seriesNumber == null || seriesNumber.isEmpty()) {
+			try {
+				seriesNumber = generateSeriesNumber(patient);
+			} catch (OHServiceException e1) {
+				seriesNumber = "";
+			}
 		}
-
         for (File value : files) {
 
             try {
@@ -136,6 +138,10 @@ public class SourceFiles extends Thread {
 				iter = ImageIO.getImageReadersByFormatName("DICOM");
 				reader = (ImageReader) iter.next();
 				
+				ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
+				
+				reader.setInput(imageInputStream, false);
+				
 				DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
 				DicomObject dicomObject = dicomStreamMetaData.getDicomObject();
 				try {
@@ -148,6 +154,7 @@ public class SourceFiles extends Thread {
 				} catch (Exception ecc) {
 					System.out.println("DICOM: Unparsable StudyDate");
 				}
+				dicomFileDetail.setDicomSeriesNumber(dicomObject.getString(Tag.SeriesNumber));
 			}
 			else {
 				throw new OHDicomException(new OHExceptionMessage("", "format not supported", OHSeverityLevel.ERROR));
@@ -258,83 +265,89 @@ public class SourceFiles extends Thread {
 			String studyUID = dicomFileDetail.getDicomStudyId();
 			String modality = dicomFileDetail.getModality();
 			if (isJpeg) {
-				seriesNumber = !seriesNumber.isEmpty() ? seriesNumber : generateSeriesNumber(patient);
+				//overriden by the user
 				seriesDate = !seriesDate.isEmpty() ? seriesDate : DateFormat.getDateInstance().format(FileTools.getTimestamp(sourceFile)); //get last modified date (creation date)
 				studyDate = !studyDate.isEmpty() ? studyDate : DateFormat.getDateInstance().format(FileTools.getTimestamp(sourceFile)); //get last modified date (creation date)
+				
+				//set by the system
+				seriesNumber = !seriesNumber.isEmpty() ? seriesNumber : generateSeriesNumber(patient);
 				seriesInstanceUID = !seriesInstanceUID.isEmpty() ? seriesInstanceUID : "<org_root>." + seriesNumber;
 			}
 			else if (isDicom) {
 				DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
 				DicomObject dicomObject = dicomStreamMetaData.getDicomObject();
 				
-				patientID = !patientID.isEmpty() ? patientID : dicomObject.getString(Tag.PatientID);
-				// System.out.println("PatientID "+patientID);
-				patientName = !patientName.isEmpty() ? patientName : dicomObject.getString(Tag.PatientName);
-				patientAddress = !patientAddress.isEmpty() ? patientAddress : dicomObject.getString(Tag.PatientAddress);
-				patientAge = !patientAge.isEmpty() ? patientAge : dicomObject.getString(Tag.PatientAge);
+				//overriden by the user
+				seriesDescription = seriesDescription != null ? seriesDescription : dicomObject.getString(Tag.SeriesDescription);
+				try {
+					studyDate = studyDate != null ? studyDate : DateFormat.getDateInstance().format(dicomObject.getDate(Tag.StudyDate, Tag.StudyTime));
+				} catch (Exception ecc) {
+					System.out.println("DICOM: Unparsable StudyDate");
+				}
+				try {
+					seriesDate = seriesDate != null ? seriesDate : DateFormat.getDateInstance().format(dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime));
+				} catch (Exception ecc) {
+					System.out.println("DICOM: Unparsable StudyDate");
+				}
+
+				//set by DICOM properties
+				patientID = dicomObject.getString(Tag.PatientID) == null ? patientID : dicomObject.getString(Tag.PatientID);
+				patientName = dicomObject.getString(Tag.PatientName) == null ? patientName : dicomObject.getString(Tag.PatientName);
+				patientAddress = dicomObject.getString(Tag.PatientAddress) == null ? patientAddress : dicomObject.getString(Tag.PatientAddress);
+				patientAge = dicomObject.getString(Tag.PatientAge) == null ? patientAge : dicomObject.getString(Tag.PatientAge);
 				String acquisitionsInSeries = dicomObject.getString(Tag.AcquisitionsInSeries);
 				String acquisitionsInStudy = dicomObject.getString(Tag.AcquisitionsInStudy);
 				String applicatorDescription = dicomObject.getString(Tag.ApplicatorDescription);
 				String dicomMediaRetrievalSequence = dicomObject.getString(Tag.DICOMMediaRetrievalSequence);
 				String patientComments = dicomObject.getString(Tag.PatientComments);
 				try {
-					patientBirthDate = !patientBirthDate.isEmpty() ? patientBirthDate : DateFormat.getDateInstance().format(dicomObject.getDate(Tag.PatientBirthDate));
+					patientBirthDate = dicomObject.getDate(Tag.PatientBirthDate) == null ? patientBirthDate : DateFormat.getDateInstance().format(dicomObject.getDate(Tag.PatientBirthDate));
 				} catch (Exception ecc) {
 				}
-				patientSex = !patientSex.isEmpty() ? patientSex : dicomObject.getString(Tag.PatientSex);
-				modality = !modality.isEmpty() ? modality : dicomObject.getString(Tag.Modality);
-				studyUID = !studyUID.isEmpty() ? studyUID : dicomObject.getString(Tag.StudyInstanceUID);
-				try {
-					studyDate = !studyDate.isEmpty() ? studyDate : DateFormat.getDateInstance().format(dicomObject.getDate(Tag.StudyDate, Tag.StudyTime));
-				} catch (Exception ecc) {
-					System.out.println("DICOM: Unparsable StudyDate");
-				}
-				accessionNumber = !accessionNumber.isEmpty() ? accessionNumber : dicomObject.getString(Tag.AccessionNumber);
-				studyDescription = !studyDescription.isEmpty() ? studyDescription : dicomObject.getString(Tag.StudyDescription);
+				patientSex = dicomObject.getString(Tag.PatientSex) == null ? patientSex : dicomObject.getString(Tag.PatientSex);
+				modality = dicomObject.getString(Tag.Modality) == null ? modality : dicomObject.getString(Tag.Modality);
+				studyUID = dicomObject.getString(Tag.StudyInstanceUID) == null ? studyUID : dicomObject.getString(Tag.StudyInstanceUID);
+				accessionNumber = dicomObject.getString(Tag.AccessionNumber) == null ? accessionNumber : dicomObject.getString(Tag.AccessionNumber);
+				studyDescription = dicomObject.getString(Tag.StudyDescription) == null ? studyDescription : dicomObject.getString(Tag.StudyDescription);
 				String studyComments = dicomObject.getString(Tag.StudyComments);
-				seriesUID = !seriesUID.isEmpty() ? seriesUID : dicomObject.getString(Tag.SeriesInstanceUID);
+				seriesUID = dicomObject.getString(Tag.SeriesInstanceUID) == null ? seriesUID : dicomObject.getString(Tag.SeriesInstanceUID);
 				String directoryRecordType = dicomObject.getString(Tag.DirectoryRecordType);
-				seriesInstanceUID = !seriesInstanceUID.isEmpty() ? seriesInstanceUID : dicomObject.getString(Tag.SeriesInstanceUID);
-				seriesNumber = !seriesNumber.isEmpty() ? seriesNumber : dicomObject.getString(Tag.SeriesNumber);
-				seriesDescriptionCodeSequence = !seriesDescriptionCodeSequence.isEmpty() ? seriesDescriptionCodeSequence : dicomObject.getString(Tag.SeriesDescriptionCodeSequence);
+				seriesInstanceUID = dicomObject.getString(Tag.SeriesInstanceUID) == null ? seriesInstanceUID : dicomObject.getString(Tag.SeriesInstanceUID);
+				seriesNumber = dicomObject.getString(Tag.SeriesNumber) == null ? seriesNumber : dicomObject.getString(Tag.SeriesNumber);
+				seriesDescriptionCodeSequence = dicomObject.getString(Tag.SeriesDescriptionCodeSequence) == null ? seriesDescriptionCodeSequence : dicomObject.getString(Tag.SeriesDescriptionCodeSequence);
 				String sliceVector = dicomObject.getString(Tag.SliceVector);
 				String sliceLocation = dicomObject.getString(Tag.SliceLocation);
 				String sliceThickness = dicomObject.getString(Tag.SliceThickness);
 				String sliceProgressionDirection = dicomObject.getString(Tag.SliceProgressionDirection);
-				try {
-					seriesDate = !seriesDate.isEmpty() ? seriesDate : DateFormat.getDateInstance().format(dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime));
-				} catch (Exception ecc) {
-				}
-				institutionName = !institutionName.isEmpty() ? institutionName : dicomObject.getString(Tag.InstitutionName);
-				seriesDescription = !seriesDescription.isEmpty() ? seriesDescription : dicomObject.getString(Tag.SeriesDescription);
-				instanceUID = !instanceUID.isEmpty() ? instanceUID : dicomObject.getString(Tag.SOPInstanceUID);
+				institutionName = dicomObject.getString(Tag.InstitutionName) == null ? institutionName : dicomObject.getString(Tag.InstitutionName);
+				instanceUID = dicomObject.getString(Tag.SOPInstanceUID) == null ? instanceUID : dicomObject.getString(Tag.SOPInstanceUID);
 			}
 			
-			// Loaded... ready to save the file
-			dicomFileDetail.setDicomData(sourceFile);
-			dicomFileDetail.setFileName(sourceFile.getName());
-			dicomFileDetail.setDicomAccessionNumber(accessionNumber);
-			dicomFileDetail.setDicomInstanceUID(instanceUID);
-			dicomFileDetail.setDicomInstitutionName(institutionName);
-			dicomFileDetail.setDicomPatientAddress(patientAddress);
-			dicomFileDetail.setDicomPatientAge(patientAge);
-			dicomFileDetail.setDicomPatientBirthDate(patientBirthDate);
-			dicomFileDetail.setDicomPatientID(patientID);
-			dicomFileDetail.setDicomPatientName(patientName);
-			dicomFileDetail.setDicomPatientSex(patientSex);
-			dicomFileDetail.setDicomSeriesDate(seriesDate);
-			dicomFileDetail.setDicomSeriesDescription(seriesDescription);
-			dicomFileDetail.setDicomSeriesDescriptionCodeSequence(seriesDescriptionCodeSequence);
-			dicomFileDetail.setDicomSeriesInstanceUID(seriesInstanceUID);
-			dicomFileDetail.setDicomSeriesNumber(seriesNumber);
-			dicomFileDetail.setDicomSeriesUID(seriesUID);
-			dicomFileDetail.setDicomStudyDate(studyDate);
-			dicomFileDetail.setDicomStudyDescription(studyDescription);
-			dicomFileDetail.setDicomStudyId(studyUID);
-			dicomFileDetail.setIdFile(0);
-			dicomFileDetail.setPatId(patient);
-			dicomFileDetail.setDicomThumbnail(scaled);
-			dicomFileDetail.setModality(modality);
+			// Loaded... Update dicomFileDetail
+			if (sourceFile != null) dicomFileDetail.setDicomData(sourceFile);
+			if (sourceFile.getName() != null) dicomFileDetail.setFileName(sourceFile.getName());
+			if (accessionNumber != null) dicomFileDetail.setDicomAccessionNumber(accessionNumber);
+			if (instanceUID != null) dicomFileDetail.setDicomInstanceUID(instanceUID);
+			if (institutionName != null) dicomFileDetail.setDicomInstitutionName(institutionName);
+			if (patientAddress != null) dicomFileDetail.setDicomPatientAddress(patientAddress);
+			if (patientAge != null) dicomFileDetail.setDicomPatientAge(patientAge);
+			if (patientBirthDate != null) dicomFileDetail.setDicomPatientBirthDate(patientBirthDate);
+			if (patientID != null) dicomFileDetail.setDicomPatientID(patientID);
+			if (patientName != null) dicomFileDetail.setDicomPatientName(patientName);
+			if (patientSex != null) dicomFileDetail.setDicomPatientSex(patientSex);
+			if (seriesDate != null) dicomFileDetail.setDicomSeriesDate(seriesDate);
+			if (seriesDescription != null) dicomFileDetail.setDicomSeriesDescription(seriesDescription);
+			if (seriesDescriptionCodeSequence != null) dicomFileDetail.setDicomSeriesDescriptionCodeSequence(seriesDescriptionCodeSequence);
+			if (seriesInstanceUID != null) dicomFileDetail.setDicomSeriesInstanceUID(seriesInstanceUID);
+			if (seriesNumber != null) dicomFileDetail.setDicomSeriesNumber(seriesNumber);
+			if (seriesUID != null) dicomFileDetail.setDicomSeriesUID(seriesUID);
+			if (studyDate != null) dicomFileDetail.setDicomStudyDate(studyDate);
+			if (studyDescription != null) dicomFileDetail.setDicomStudyDescription(studyDescription);
+			if (studyUID != null) dicomFileDetail.setDicomStudyId(studyUID);
+			//dicomFileDetail.setIdFile(0);
+			if (patient != 0) dicomFileDetail.setPatId(patient);
+			if (scaled != null) dicomFileDetail.setDicomThumbnail(scaled);
+			if (modality != null) dicomFileDetail.setModality(modality);
 			try{
 				DicomManagerFactory.getManager().saveFile(dicomFileDetail);
 				//dicomFileDetail.setDicomSeriesNumber(dicom.getDicomSeriesNumber()); //series number could be generated if missing.
