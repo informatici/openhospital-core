@@ -9,7 +9,6 @@ import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,26 +86,21 @@ public class MedicalsIoOperations
 	
 	/**
 	 * Retrieves all stored {@link Medical}s.
-	 * If a description value is provides the medicals are filtered.
+	 * If a description value is provided the medicals are filtered.
 	 * @param type the medical type description.
-	 * @nameSorted if <code>true</code> return the list in alphatecial order, by code otherwise
+	 * @param nameSorted if <code>true</code> return the list in alphabetical order, by code otherwise
 	 * @return the stored medicals.
 	 * @throws OHServiceException if an error occurs retrieving the stored medicals.
 	 */
 	public ArrayList<Medical> getMedicals(String type, boolean nameSorted) throws OHServiceException {
-		ArrayList<Medical> medicals = null;
-
-		List<Object> parameters = new ArrayList<Object>();
-
-		StringBuilder query = new StringBuilder();
-		query.append("SELECT * FROM MEDICALDSR JOIN MEDICALDSRTYPE ON MDSR_MDSRT_ID_A = MDSRT_ID_A ");
+		List<Medical> medicals;
 		
 		if (type != null) {
 			
 			if (nameSorted) {
-				medicals = (ArrayList<Medical>)repository.findAllWhereTypeOrderByDescription(type);
+				medicals = repository.findAllWhereTypeOrderByDescription(type);
 			} else {
-				medicals = (ArrayList<Medical>)repository.findAllWhereTypeOrderBySmartCodeAndDescription(type);
+				medicals = repository.findAllWhereTypeOrderBySmartCodeAndDescription(type);
 			}
 			
 		} else {
@@ -114,12 +108,12 @@ public class MedicalsIoOperations
 			if (nameSorted) {
 				medicals = getMedicals(null);
 			} else {
-				medicals = (ArrayList<Medical>)repository.findAllOrderBySmartCodeAndDescription();
+				medicals = repository.findAllOrderBySmartCodeAndDescription();
 			}
 
 		}
 
-		return medicals;
+		return medicals == null ? new ArrayList<Medical>() : new ArrayList<Medical>(medicals);
 	}
 
 	/**
