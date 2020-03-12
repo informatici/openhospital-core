@@ -150,25 +150,24 @@ public class LabIoOperations {
 	public ArrayList<LaboratoryForPrint> getLaboratoryForPrint(String exam,
 			GregorianCalendar dateFrom,
 			GregorianCalendar dateTo) throws OHServiceException {
-		ArrayList<LaboratoryForPrint> pLaboratory = new ArrayList<LaboratoryForPrint>();
-    	ArrayList<Laboratory> laboritories = new ArrayList<Laboratory> (
-    			exam != null ?
-								repository.findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam) :
-								repository.findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo)
-			);
+				ArrayList<LaboratoryForPrint> pLaboratory = new ArrayList<LaboratoryForPrint>();
+				ArrayList<Laboratory> laboritories = new ArrayList<Laboratory> (
+					exam != null ?
+						repository.findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam) :
+						repository.findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo)
+				);
 
-    for (Laboratory laboratory : laboritories)
-		{
-			pLaboratory.add(new LaboratoryForPrint(
-					laboratory.getCode(),
-					laboratory.getExam(),
-					laboratory.getDate(),
-					laboratory.getResult()
-				)
-			);
-		}
+				for (Laboratory laboratory : laboritories) {
+					pLaboratory.add(new LaboratoryForPrint(
+							laboratory.getCode(),
+							laboratory.getExam(),
+							laboratory.getDate(),
+							laboratory.getResult()
+						)
+					);
+				}
 
-		return pLaboratory;	
+				return pLaboratory;
 	}
 	
 	/**
