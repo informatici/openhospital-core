@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ExaminationIoOperationRepository extends JpaRepository<PatientExamination, Integer> {
-  	@Query(value = "select p from PatientExamination p where p.patient.code = :patientCode")
+		@Query(value = "select p from PatientExamination p where p.patient.code = :patientCode")
 		List<PatientExamination> findByPatient_CodeOrderByPexDateDesc(@Param("patientCode") int patientCode);
 		@Query(value = "select p from PatientExamination p where p.patient.code = :patientCode")
-    Page<PatientExamination> findByPatient_CodeOrderByPexDateDesc(@Param("patientCode") int patientCode, Pageable pageable);
+		Page<PatientExamination> findByPatient_CodeOrderByPexDateDesc(@Param("patientCode") int patientCode, Pageable pageable);
 }
