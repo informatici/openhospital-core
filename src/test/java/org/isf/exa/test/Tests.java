@@ -4,6 +4,7 @@ package org.isf.exa.test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.exa.model.Exam;
 import org.isf.exa.model.ExamRow;
@@ -204,7 +205,7 @@ public class Tests
 		{		
 			code = _setupTestExam(false);
 			Exam foundExam = (Exam)jpa.find(Exam.class, code); 
-			ArrayList<Exam> exams = examIoOperation.getExams();
+			List<Exam> exams = examIoOperation.getExams();
 			
 			assertEquals(foundExam.getDescription(), exams.get(exams.size()-1).getDescription());
 		} 
