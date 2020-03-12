@@ -36,9 +36,9 @@ public interface MedicalsIoOperationRepository extends JpaRepository<Medical, In
     @Query(value = "SELECT m FROM Medical m JOIN m.type mt order BY mt.description, m.description")
     List<Medical> findAllByOrderByTypeAndDescritpion();
     
-    @Query(value = "SELECT m FROM Medical m JOIN m.type mt WHERE mt.description = :type AND m.description = :description")
+    @Query(value = "SELECT m FROM Medical m JOIN m.type mt WHERE mt.code = :type AND m.description = :description")
     Medical findOneWhereDescriptionAndType(@Param("description") String description, @Param("type") String type);
-    @Query(value = "SELECT m FROM Medical m JOIN m.type mt WHERE mt.description = :type AND m.description = :description AND m.code <> :id")
+    @Query(value = "SELECT m FROM Medical m JOIN m.type mt WHERE mt.code = :type AND m.description = :description AND m.code <> :id")
     Medical findOneWhereDescriptionAndType(@Param("description") String description, @Param("type") String type, @Param("id") Integer id);
     @Query(value = "SELECT m FROM Medical m JOIN m.type mt WHERE m.description LIKE :description")
     List<Medical> findAllWhereDescriptionSoundsLike(@Param("description") String description);
