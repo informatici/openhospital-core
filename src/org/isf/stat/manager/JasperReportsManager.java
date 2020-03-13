@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.Format;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import org.isf.utils.exception.OHReportException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -334,12 +336,7 @@ public class JasperReportsManager {
     		if (dateTo == null) {
     			dateTo = new Date();
     		}
-    		Format formatter;
-		    formatter = new SimpleDateFormat("yyyy-MM-dd");
-		    String dateFromQuery = formatter.format(dateFrom);
-		    String dateToQuery = formatter.format(dateTo);
-		    formatter = new SimpleDateFormat("yyyyMMdd");
-		    
+
 		    String language = GeneralData.LANGUAGE;
 		    ResourceBundle resourceBundle;
 			try {
@@ -354,8 +351,8 @@ public class JasperReportsManager {
 			}
 			
 			HashMap<String, Object> parameters = getHospitalParameters();
-			parameters.put("fromdate", dateFromQuery);
-			parameters.put("todate", dateToQuery);
+			parameters.put("fromdate", dateFrom);
+			parameters.put("todate", dateTo);
 			if (medical != null) parameters.put("productID", String.valueOf(medical.getCode()));
 			parameters.put(JRParameter.REPORT_LOCALE, new Locale(language));
 			parameters.put("REPORT_RESOURCE_BUNDLE", resourceBundle); //we need to pass our custom resource bundle
@@ -604,16 +601,55 @@ public class JasperReportsManager {
 
     private HashMap<String,Object> compileGenericReportUserInDateParameters(String fromDate, String toDate, String aUser) throws OHServiceException {
         HashMap<String, Object> parameters = getHospitalParameters();
-        parameters.put("fromdate", fromDate + ""); // real param
-        parameters.put("todate", toDate + ""); // real param
-        parameters.put("user", aUser + ""); // real param
-        return  parameters;
+
+        Date fromDateQuery;
+		Date toDateQuery;
+        try {
+			fromDateQuery = TimeTools.parseDate(fromDate, "dd/MM/yyyy", false).getTime();
+		} catch (ParseException e) {
+        	logger.error("Error parsing '" + fromDate + "' to a Date using pattern: 'dd/MM/yyyy'");
+			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
+		}
+
+        try {
+        	toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yyyy", false).getTime();;
+		} catch (ParseException e) {
+        	logger.error("Error parsing '" + toDate + "' to a Date using pattern: 'dd/MM/yyyy'");
+			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
+		}
+
+		parameters.put("fromdate", fromDateQuery); // real param
+		parameters.put("todate", toDateQuery); // real param
+		parameters.put("user", aUser + ""); // real param
+		return parameters;
+
     }
 
     private HashMap<String,Object> compileGenericReportFromDateToDateParameters(String fromDate, String toDate) throws OHServiceException {
         HashMap<String, Object> parameters = getHospitalParameters();
-        parameters.put("fromdate", fromDate + ""); // real param
-        parameters.put("todate", toDate + ""); // real param
+
+		Date fromDateQuery;
+		Date toDateQuery;
+		try {
+			fromDateQuery = TimeTools.parseDate(fromDate, "dd/MM/yyyy", false).getTime();
+		} catch (ParseException e) {
+			logger.error("Error parsing '" + fromDate + "' to a Date using pattern: 'dd/MM/yyyy'");
+			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
+		}
+
+		try {
+			toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yyyy", false).getTime();;
+		} catch (ParseException e) {
+			logger.error("Error parsing '" + toDate + "' to a Date using pattern: 'dd/MM/yyyy'");
+			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
+		}
+
+        parameters.put("fromdate", fromDateQuery); // real param
+        parameters.put("todate", toDateQuery); // real param
         return parameters;
     }
 
