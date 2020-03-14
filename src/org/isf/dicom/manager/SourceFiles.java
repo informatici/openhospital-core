@@ -2,7 +2,6 @@ package org.isf.dicom.manager;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Iterator;
 import java.util.Random;
@@ -68,6 +67,7 @@ public class SourceFiles extends Thread {
 		if (seriesNumber == null || seriesNumber.isEmpty()) {
 			try {
 				seriesNumber = generateSeriesNumber(patient);
+				fileDicom.setDicomSeriesNumber(seriesNumber);
 			} catch (OHServiceException e1) {
 				seriesNumber = "";
 			}
@@ -80,7 +80,7 @@ public class SourceFiles extends Thread {
             }
 
             if (!value.isDirectory()) {
-                loadDicom(fileDicom, value, patient, seriesNumber);
+                loadDicom(fileDicom, value, patient);
                 filesLoaded++;
                 dicomLoader.setLoaded(filesLoaded);
             }
@@ -180,7 +180,7 @@ public class SourceFiles extends Thread {
 	 * @param seriesNumber 
 	 */
 	@SuppressWarnings("unused")
-	public synchronized static void loadDicom(FileDicom dicomFileDetail, File sourceFile, int patient, String generatedSeriesNumber) {
+	public synchronized static void loadDicom(FileDicom dicomFileDetail, File sourceFile, int patient) {
 		// installLibs();
 
 		//System.out.println("File "+sourceFile.getName());
