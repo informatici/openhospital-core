@@ -85,10 +85,9 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	public Long[] getSerieDetail(int patientID, String seriesNumber) throws OHDicomException {
 		try {
 
-			// sometimes the series number can be NULL, so we add this dummy line 
-			// to avoid exceptions
+			// Series cannot miss, so it such case return null
 			if (seriesNumber == null || seriesNumber.trim().length() == 0 || seriesNumber.equalsIgnoreCase("null"))
-				seriesNumber = NOSERIE;
+				return null;
 
 			File df = getSerieDir(patientID, seriesNumber, false);
 
