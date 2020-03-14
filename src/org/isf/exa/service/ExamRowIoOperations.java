@@ -11,7 +11,6 @@ package org.isf.exa.service;
 
 import java.util.ArrayList;
 
-import org.isf.exa.model.Exam;
 import org.isf.exa.model.ExamRow;
 import org.isf.exatype.model.ExamType;
 import org.isf.exatype.service.ExamTypeIoOperationRepository;
@@ -52,16 +51,16 @@ public class ExamRowIoOperations {
             {   
                 if (aDescription != null) 
                 {
-                    examrows = (ArrayList<ExamRow>) rowRepository.findAllWhereIdAndDescriptionByOrderIdAndDescriptionAsc(aExamCode, aDescription); 	
+                    examrows = (ArrayList<ExamRow>) rowRepository.findAllByCodeAndDescriptionOrderByCodeAscDescriptionAsc(aExamCode, aDescription);
                 }
                 else
                 {
-                    examrows = (ArrayList<ExamRow>) rowRepository.findAllWhereIdByOrderIdAndDescriptionAsc(aExamCode); 	
+                    examrows = (ArrayList<ExamRow>) rowRepository.findAllByCodeOrderByDescription(aExamCode);
                 }
             }
             else
             {   
-                examrows = (ArrayList<ExamRow>) rowRepository.findAllExamRow();
+                examrows = (ArrayList<ExamRow>) rowRepository.findAll();
             }
             return examrows;
 	}
@@ -90,11 +89,11 @@ public class ExamRowIoOperations {
 		
 		if (description != null) 
 		{
-			examrows = (ArrayList<ExamRow>) rowRepository.findAllWhereDescriptionByOrderDescriptionAsc(description);	
+			examrows = (ArrayList<ExamRow>) rowRepository.findAllByDescriptionOrderByDescriptionAsc(description);
 		}
 		else
 		{
-			examrows = (ArrayList<ExamRow>) rowRepository.findAllExamRow();			
+			examrows = (ArrayList<ExamRow>) rowRepository.findAll();
 		}
 		return examrows;
 	}
@@ -213,10 +212,8 @@ public class ExamRowIoOperations {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			int code) throws OHServiceException
-	{
-            return rowRepository.exists(code);	
+	public boolean isCodePresent(int code) throws OHServiceException{
+		return rowRepository.exists(code);
 	}
 
 	/**
@@ -226,19 +223,12 @@ public class ExamRowIoOperations {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isRowPresent(
-			Integer code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = rowRepository.exists(code);
-		
-		return result;	
+	public boolean isRowPresent(Integer code) throws OHServiceException {
+		return rowRepository.exists(code);
 	}
 
     public ArrayList<ExamRow> getExamRowByExamCode(String aExamCode)  throws OHServiceException {
-       ArrayList<ExamRow> examrows = (ArrayList<ExamRow>) rowRepository.getExamRowByExamCode(aExamCode);
+       ArrayList<ExamRow> examrows = (ArrayList<ExamRow>) rowRepository.findAllByExam_CodeOrderByDescription(aExamCode);
        return examrows;
     }
 

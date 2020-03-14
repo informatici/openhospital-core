@@ -88,6 +88,8 @@ public class Tests
 				
 		return;
 	}
+
+
 	
 	@Test
 	public void testHospitalSets() 
@@ -110,30 +112,30 @@ public class Tests
 	}
 	
 	@Test
-	public void testIoUpdateHospital() 
+	public void testIoUpdateHospital()
 	{
 		String code = "";
 		boolean result = false;
-		
-		
-		try 
-		{		
+
+
+		try
+		{
 			code = _setupTestHospital(false);
 			Hospital foundHospital = (Hospital)jpa.find(Hospital.class, code);
 			jpa.flush();
 			foundHospital.setDescription("Update");
 			result = hospitalIoOperation.updateHospital(foundHospital);
-			Hospital updateHospital = (Hospital)jpa.find(Hospital.class, code); 
-			
+			Hospital updateHospital = (Hospital)jpa.find(Hospital.class, code);
+
 			assertEquals(true, result);
 			assertEquals("Update", updateHospital.getDescription());
-		} 
-		catch (Exception e) 
+		}
+		catch (Exception e)
 		{
-			e.printStackTrace();		
+			e.printStackTrace();
 			assertEquals(true, false);
 		}
-		
+
 		return;
 	}
 	
