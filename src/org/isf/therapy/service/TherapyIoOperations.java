@@ -6,7 +6,6 @@ import org.isf.therapy.model.TherapyRow;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,16 +21,11 @@ public class TherapyIoOperations {
 	 * insert a new {@link TherapyRow} (therapy) in the DB
 	 * 
 	 * @param thRow - the {@link TherapyRow} (therapy)
-	 * @param numTherapy - the therapy progressive number for the patient
 	 * @return the therapyID
 	 * @throws OHServiceException 
 	 */
-	public TherapyRow newTherapy(
-			TherapyRow thRow) throws OHServiceException 
-	{
-		TherapyRow savedTherapy = repository.save(thRow);
-		
-		return savedTherapy;
+	public TherapyRow newTherapy(TherapyRow thRow) throws OHServiceException {
+		return repository.save(thRow);
 	}
 
 	/**
@@ -43,21 +37,10 @@ public class TherapyIoOperations {
 	 * @return the list of {@link TherapyRow}s (therapies)
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<TherapyRow> getTherapyRows(
-			int patID) throws OHServiceException 
-	{
-		ArrayList<TherapyRow> therapyList = null;
-
-		
-		if (patID != 0) {
-			therapyList = new ArrayList<TherapyRow>(repository.findAllWherePatientByOrderPatientAndIdAsc(patID));
-		}
-		else
-		{
-			therapyList = new ArrayList<TherapyRow>(repository.findAllByOrderPatientAndIdAsc()); 
-		}
-		
-		return therapyList;
+	public ArrayList<TherapyRow> getTherapyRows(int patID) throws OHServiceException {
+		return patID != 0 ?
+			new ArrayList<TherapyRow>(repository.findByPatIDCodeOrderByPatIDCodeAscTherapyIDAsc(patID)) :
+			new ArrayList<TherapyRow>(repository.findAllByOrderByPatIDCodeAscTherapyIDAsc());
 	}
 	
 	/**
@@ -67,15 +50,9 @@ public class TherapyIoOperations {
 	 * @return <code>true</code> if the therapies have been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean deleteAllTherapies(
-			int patID) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		repository.deleteWherePatient(patID);
-		
-		return result;	
+	public boolean deleteAllTherapies(int patID) throws OHServiceException {
+		repository.deleteByPatIDCode(patID);
+		return true;
 	}
 
 	/**
@@ -85,14 +62,7 @@ public class TherapyIoOperations {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			Integer code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;	
+	public boolean isCodePresent(Integer code) throws OHServiceException	{
+		return repository.exists(code);
 	}
 }
