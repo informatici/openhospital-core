@@ -228,6 +228,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			// System.out.println("FS saveFile");
 			int patId = dicom.getPatId();
 			String seriesNumber = dicom.getDicomSeriesNumber();
+			String dicomInstanceUID = dicom.getDicomInstanceUID();
 
 			// some times this number could be null, it's wrong, but I add
 			// line to avoid exception
@@ -237,8 +238,14 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 				dicom.setDicomSeriesInstanceUID("<org_root>."+seriesNumber);
 			}
 
-			File df = getSerieDir(patId, seriesNumber, true);
 			long idFile = nextId();
+			// dicomInstanceUID is used to identify a unique file in the series
+			// so cannot be empty and will be used only for this cycle
+			if (dicomInstanceUID == null || dicomInstanceUID.isEmpty()) {
+				dicomInstanceUID = seriesNumber + "." + idFile;
+			}
+
+			File df = getSerieDir(patId, seriesNumber, true);
 			File properties = new File(df, idFile + ".properties");
 			FileOutputStream fos = new FileOutputStream(properties, false);
 			PrintStream ps = new PrintStream(fos);
@@ -262,7 +269,9 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			ps.println("dicomSeriesDescriptionCodeSequence =" + dicom.getDicomSeriesDescriptionCodeSequence());
 			ps.println("dicomSeriesDate =" + dicom.getDicomSeriesDate());
 			ps.println("dicomSeriesDescription =" + dicom.getDicomSeriesDescription());
-			ps.println("dicomInstanceUID =" + dicom.getDicomInstanceUID());
+			// dicomInstanceUID is used to identify a unique file in the series
+			// so cannot be empty and will be used only for this cycle
+			ps.println("dicomInstanceUID =" + dicomInstanceUID);
 			ps.println("modality =" + dicom.getModality());
 			
 			ps.flush();
