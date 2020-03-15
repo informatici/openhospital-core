@@ -32,12 +32,6 @@ public interface MedicalStockWardIoOperationRepository extends JpaRepository<Med
     @Transactional
     @Query(value = "update MedicalWard set out_quantity=out_quantity+:quantity where id.ward.code=:ward and id.medical.code=:medical")
     void updateOutQuantity(@Param("quantity") Double quantity, @Param("ward") String ward, @Param("medical") int medical);
-    @Modifying 
-    @Transactional
-    @Query(value = "INSERT INTO MEDICALDSRWARD (MDSRWRD_WRD_ID_A, MDSRWRD_MDSR_ID, MDSRWRD_IN_QTI, MDSRWRD_OUT_QTI) " +
-    		"VALUES (?, ?, ?, '0')", nativeQuery= true)
-    void insertMedicalWard(@Param("ward") String ward, @Param("medical") int medical, @Param("quantity") Double quantity);
-        
     @Query(value = "select medWard from MedicalWard medWard where medWard.id.ward.code=:ward")
     List<MedicalWard> findAllWhereWard(@Param("ward") String wordCode);
 

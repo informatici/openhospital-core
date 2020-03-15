@@ -8,6 +8,8 @@ import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -213,7 +215,12 @@ public class MedicalStockWardIoOperations
             if(medicalWardTo != null) {
                 repository.updateInQuantity(Math.abs(qty), wardTo, medical);
             } else {
-                repository.insertMedicalWard(wardTo, medical, Math.abs(qty));
+				MedicalWard medicalWard = new MedicalWard();
+				medicalWard.setWard(movement.getWard());
+				medicalWard.setMedical(movement.getMedical());
+				medicalWard.setInQuantity((float)Math.abs(qty));
+				medicalWard.setOutQuantity(0.0f);
+                repository.save(medicalWard);
             }
             repository.updateOutQuantity(Math.abs(qty), ward, medical);
             return result;
@@ -222,7 +229,12 @@ public class MedicalStockWardIoOperations
 		MedicalWard medicalWard = repository.findOneWhereCodeAndMedical(ward, medical);
         if (medicalWard == null)
 		{
-            repository.insertMedicalWard(ward, medical, -qty);
+			medicalWard = new MedicalWard();
+			medicalWard.setWard(movement.getWard());
+			medicalWard.setMedical(movement.getMedical());
+			medicalWard.setInQuantity((float) -qty);
+			medicalWard.setOutQuantity(0.0f);
+            repository.save(medicalWard);
         }
 		else
 		{

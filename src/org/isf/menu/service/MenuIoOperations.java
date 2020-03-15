@@ -1,5 +1,6 @@
 package org.isf.menu.service;
 
+import org.isf.menu.model.GroupMenu;
 import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
 import org.isf.menu.model.UserMenuItem;
@@ -324,9 +325,11 @@ public class MenuIoOperations
 			boolean insert) throws OHServiceException 
 	{
 		boolean result = true;
-				
-
-		groupMenuRepository.insert(aGroup.getCode(), item.getCode(), (item.isActive() ? "Y" : "N"));
+		GroupMenu groupMenu = new GroupMenu();
+		groupMenu.setUserGroup(aGroup.getCode());
+		groupMenu.setMenuItem(item.getCode());
+		groupMenu.setActive((item.isActive() ? 'Y' : 'N'));
+		groupMenuRepository.save(groupMenu);
 				
 		return result;
 	}
