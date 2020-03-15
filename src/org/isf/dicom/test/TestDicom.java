@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Random;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -27,13 +28,13 @@ public class TestDicom
 	private String dicomPatientSex = "TestPatientSex";
 	private String dicomPatientBirthDate = "TestPatientBirth";
 	private String dicomStudyId = "TestStudyId";
-	private String dicomStudyDate = "TestStudyDate";
+	private Date dicomStudyDate = new Date();
 	private String dicomStudyDescription = "TestStudyDescription";
 	private String dicomSeriesUID = "TestSeriesUid";
 	private String dicomSeriesInstanceUID = "TestSeriesInstanceUid";
 	private String dicomSeriesNumber = "TestSeriesNumber";
 	private String dicomSeriesDescriptionCodeSequence = "TestSeriesDescription";
-	private String dicomSeriesDate = "TestSeriesDate";
+	private Date dicomSeriesDate = new Date();
 	private String dicomSeriesDescription = "TestSeriesDescription";
 	private String dicomInstanceUID = "TestInteanceUid";
 	private String modality = "TestModality";

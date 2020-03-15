@@ -3,6 +3,7 @@ package org.isf.dicom.manager;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.DateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -122,8 +123,8 @@ public class SourceFiles extends Thread {
 		FileDicom dicomFileDetail = new FileDicom();
 		try {
 			String fileName = sourceFile.getName();
-			String seriesDate = "";
-			String studyDate = "";
+			Date seriesDate = null;
+			Date studyDate = null;
 			boolean isJpeg = fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg");
 			boolean isDicom = fileName.toLowerCase().endsWith(".dcm");
 			
@@ -131,8 +132,8 @@ public class SourceFiles extends Thread {
 			Iterator<?> iter = null;
 			if (isJpeg) {
 				
-				seriesDate = DateFormat.getDateInstance().format(FileTools.getTimestamp(sourceFile)); //get last modified date (creation date)
-				studyDate = DateFormat.getDateInstance().format(FileTools.getTimestamp(sourceFile)); //get last modified date (creation date)
+				seriesDate = FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
+				studyDate = FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
 			}
 			else if (isDicom) {
 				iter = ImageIO.getImageReadersByFormatName("DICOM");
@@ -145,12 +146,12 @@ public class SourceFiles extends Thread {
 				DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
 				DicomObject dicomObject = dicomStreamMetaData.getDicomObject();
 				try {
-					seriesDate = DateFormat.getDateInstance().format(dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime));
+					seriesDate = dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime);
 				} catch (Exception ecc) {
 					System.out.println("DICOM: Unparsable SeriesDate");
 				}
 				try {
-					studyDate = DateFormat.getDateInstance().format(dicomObject.getDate(Tag.StudyDate, Tag.StudyTime));
+					studyDate = dicomObject.getDate(Tag.StudyDate, Tag.StudyTime);
 				} catch (Exception ecc) {
 					System.out.println("DICOM: Unparsable StudyDate");
 				}
@@ -254,20 +255,20 @@ public class SourceFiles extends Thread {
 			String patientID = String.valueOf(patient);
 			String patientName = dicomFileDetail.getDicomPatientName();
 			String patientSex = dicomFileDetail.getDicomPatientSex();
-			String seriesDate = dicomFileDetail.getDicomSeriesDate();
+			Date seriesDate = dicomFileDetail.getDicomSeriesDate();
 			String seriesDescription = dicomFileDetail.getDicomSeriesDescription();
 			String seriesDescriptionCodeSequence = dicomFileDetail.getDicomSeriesDescriptionCodeSequence();
 			String seriesNumber = dicomFileDetail.getDicomSeriesNumber();
 			String seriesInstanceUID = dicomFileDetail.getDicomSeriesInstanceUID();
 			String seriesUID = dicomFileDetail.getDicomSeriesUID();
-			String studyDate = dicomFileDetail.getDicomStudyDate();
+			Date studyDate = dicomFileDetail.getDicomStudyDate();
 			String studyDescription = dicomFileDetail.getDicomStudyDescription();
 			String studyUID = dicomFileDetail.getDicomStudyId();
 			String modality = dicomFileDetail.getModality();
 			if (isJpeg) {
 				//overriden by the user
-				seriesDate = !seriesDate.isEmpty() ? seriesDate : DateFormat.getDateInstance().format(FileTools.getTimestamp(sourceFile)); //get last modified date (creation date)
-				studyDate = !studyDate.isEmpty() ? studyDate : DateFormat.getDateInstance().format(FileTools.getTimestamp(sourceFile)); //get last modified date (creation date)
+				seriesDate = seriesDate != null ? seriesDate : FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
+				studyDate = studyDate != null ? studyDate : FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
 				
 				//set by the system
 				seriesNumber = !seriesNumber.isEmpty() ? seriesNumber : generateSeriesNumber(patient);
@@ -280,12 +281,12 @@ public class SourceFiles extends Thread {
 				//overriden by the user
 				seriesDescription = seriesDescription != null ? seriesDescription : dicomObject.getString(Tag.SeriesDescription);
 				try {
-					studyDate = studyDate != null ? studyDate : DateFormat.getDateInstance().format(dicomObject.getDate(Tag.StudyDate, Tag.StudyTime));
+					studyDate = studyDate != null ? studyDate : dicomObject.getDate(Tag.StudyDate, Tag.StudyTime);
 				} catch (Exception ecc) {
 					System.out.println("DICOM: Unparsable StudyDate");
 				}
 				try {
-					seriesDate = seriesDate != null ? seriesDate : DateFormat.getDateInstance().format(dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime));
+					seriesDate = seriesDate != null ? seriesDate : dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime);
 				} catch (Exception ecc) {
 					System.out.println("DICOM: Unparsable StudyDate");
 				}

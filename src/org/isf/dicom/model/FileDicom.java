@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Blob;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
 import javax.persistence.Column;
@@ -84,7 +85,7 @@ public class FileDicom
 	private String dicomStudyId = "";
 
 	@Column(name = "DM_FILE_ST_DATE")
-	private String dicomStudyDate = "";
+	private Date dicomStudyDate = null;
 
 	@Column(name = "DM_FILE_ST_DESCR")
 	private String dicomStudyDescription = "";
@@ -104,7 +105,7 @@ public class FileDicom
 	private String dicomSeriesDescriptionCodeSequence = "";
 
 	@Column(name = "DM_FILE_SER_DATE")
-	private String dicomSeriesDate = "";
+	private Date dicomSeriesDate = null;
 
 	@Column(name = "DM_FILE_SER_DESC")
 	private String dicomSeriesDescription = "";
@@ -146,13 +147,13 @@ public class FileDicom
 		this.dicomPatientSex = "";
 		this.dicomPatientBirthDate = "";
 		this.dicomStudyId = "";
-		this.dicomStudyDate = "";
+		this.dicomStudyDate = null;
 		this.dicomStudyDescription = "";
 		this.dicomSeriesUID = "";
 		this.dicomSeriesInstanceUID = "";
 		this.dicomSeriesNumber = "";
 		this.dicomSeriesDescriptionCodeSequence = "";
-		this.dicomSeriesDate = "";
+		this.dicomSeriesDate = null;
 		this.dicomSeriesDescription = "";
 		this.dicomInstanceUID = "";
 		this.modality = "";
@@ -165,8 +166,8 @@ public class FileDicom
 
 	public FileDicom(int patId, Blob dicomData, long idFile, String fileName, String dicomAccessionNumber, String dicomInstitutionName, String dicomPatientID, 
 			String dicomPatientName, String dicomPatientAddress, String dicomPatientAge, String dicomPatientSex, String dicomPatientBirthDate, 
-			String dicomStudyId, String dicomStudyDate, String dicomStudyDescription, String dicomSeriesUID, String dicomSeriesInstanceUID, 
-			String dicomSeriesNumber, String dicomSeriesDescriptionCodeSequence, String dicomSeriesDate, String dicomSeriesDescription, 
+			String dicomStudyId, Date dicomStudyDate, String dicomStudyDescription, String dicomSeriesUID, String dicomSeriesInstanceUID, 
+			String dicomSeriesNumber, String dicomSeriesDescriptionCodeSequence, Date dicomSeriesDate, String dicomSeriesDescription, 
 			String dicomInstanceUID, String modality, Blob dicomThumbnail) 
 	{		
 		super();
@@ -385,7 +386,7 @@ public class FileDicom
 	/**
 	 * @return the dicomStudyDate
 	 */
-	public String getDicomStudyDate() {
+	public Date getDicomStudyDate() {
 		return dicomStudyDate;
 	}
 
@@ -393,7 +394,7 @@ public class FileDicom
 	 * @param dicomStudyDate
 	 *            the dicomStudyDate to set
 	 */
-	public void setDicomStudyDate(String dicomStudyDate) {
+	public void setDicomStudyDate(Date dicomStudyDate) {
 		this.dicomStudyDate = dicomStudyDate;
 	}
 
@@ -475,7 +476,7 @@ public class FileDicom
 	/**
 	 * @return the dicomSeriesDate
 	 */
-	public String getDicomSeriesDate() {
+	public Date getDicomSeriesDate() {
 		return dicomSeriesDate;
 	}
 
@@ -483,7 +484,7 @@ public class FileDicom
 	 * @param dicomSeriesDate
 	 *            the dicomSeriesDate to set
 	 */
-	public void setDicomSeriesDate(String dicomSeriesDate) {
+	public void setDicomSeriesDate(Date dicomSeriesDate) {
 		this.dicomSeriesDate = dicomSeriesDate;
 	}
 
