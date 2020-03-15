@@ -243,7 +243,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			}
 
 			long idFile = nextId();
-			// dicomInstanceUID is used to identify a unique file in the series
+			// dicomInstanceUID is used to identify a unique file in the series (like DM_FILE_ID in the DB)
 			// so cannot be empty and will be used only for this cycle
 			if (dicomInstanceUID == null || dicomInstanceUID.isEmpty()) {
 				dicomInstanceUID = seriesNumber + "." + idFile;

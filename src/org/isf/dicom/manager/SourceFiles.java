@@ -345,10 +345,10 @@ public class SourceFiles extends Thread {
 			if (studyDate != null) dicomFileDetail.setDicomStudyDate(studyDate);
 			if (studyDescription != null) dicomFileDetail.setDicomStudyDescription(studyDescription);
 			if (studyUID != null) dicomFileDetail.setDicomStudyId(studyUID);
-			//dicomFileDetail.setIdFile(0);
 			if (patient != 0) dicomFileDetail.setPatId(patient);
 			if (scaled != null) dicomFileDetail.setDicomThumbnail(scaled);
 			if (modality != null) dicomFileDetail.setModality(modality);
+			dicomFileDetail.setIdFile(0); //it trigger the DB save with SqlDicomManager
 			try{
 				DicomManagerFactory.getManager().saveFile(dicomFileDetail);
 				//dicomFileDetail.setDicomSeriesNumber(dicom.getDicomSeriesNumber()); //series number could be generated if missing.
