@@ -73,13 +73,13 @@ public class MovWardBrowserManager {
 
 	/**
 	 * Gets all the {@link MedicalWard}s associated to the specified ward.
-	 * @param wardId the ward id.
+	 * @param wardCode the ward code.
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<MedicalWard> getMedicalsWard(char wardId) throws OHServiceException {
+	public ArrayList<MedicalWard> getMedicalsWard(String wardCode) throws OHServiceException {
             System.out.println("MovWardBrowserManager: Looking for drugs ");
-		return ioOperations.getMedicalsWard(wardId);
+		return ioOperations.getMedicalsWard(wardCode);
 	}
 
 	/**

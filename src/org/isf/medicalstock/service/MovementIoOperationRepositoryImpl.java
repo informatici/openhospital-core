@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import javax.persistence.TemporalType;
 
 import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
+import org.isf.utils.db.DbJpaUtil;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.isf.medicalstock.service.QueryParameterContainer.*;
@@ -21,19 +22,6 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	private static final String MOVEMENT_FROM = "movFrom";
-	private static final String MOVEMENT_TO = "movTo";
-	private static final String LOT_PREP_FROM = "lotPrepFrom";
-	private static final String LOT_PREP_TO = "lotPrepTo";
-	private static final String LOT_DUE_FROM = "lotDueFrom";
-	private static final String LOT_DUE_TO = "lotDueTo";
-	private static final String WARD_ID = "wardId";
-	private static final String MEDICAL_TYPE = "medicalType";
-	private static final String MEDICAL_CODE = "medicalCode";
-	private static final String MOVEMENT_TYPE = "movType";
-	private static final String MEDICAL_DESC = "medicalDescription";
-	private static final String LOT_CODE = "lotCode";
-
 	@SuppressWarnings("unchecked")	
 	@Override
 	public List<Integer> findMovementWhereDatesAndId(
@@ -42,45 +30,12 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			GregorianCalendar dateTo) {
 		String qlString = _getMovementWhereDatesAndId(wardId, dateFrom, dateTo);
 		Query query = this.entityManager.createQuery(qlString);
-		QueryParameterContainer parameterContainer = QueryParameterContainerBuilder.instance()
+		QueryParameterContainer parameterContainer = QueryParameterContainer.builder()
 				.withMovementFromTo(dateFrom, dateTo)
 				.withWardId(wardId)
 				.build();
-		setNeededParameters(qlString, query, parameterContainer);
+		DbJpaUtil.addJpqlParametersToQueryByParameterContainer(qlString, query, parameterContainer);
 		return query.getResultList();
-	}
-
-	private void setNeededParameters(String qlString, Query query, QueryParameterContainer paramContainer) {
-		if (qlString.contains(MOVEMENT_FROM) && qlString.contains(MOVEMENT_TO)) {
-			query.setParameter(MOVEMENT_FROM, paramContainer.getMovementfrom(), TemporalType.DATE);
-			query.setParameter(MOVEMENT_TO, paramContainer.getMovementTo(), TemporalType.DATE);
-		}
-		if (qlString.contains(LOT_PREP_FROM) && qlString.contains(LOT_PREP_TO)) {
-			query.setParameter(LOT_PREP_FROM, paramContainer.getLotPrepFrom(), TemporalType.DATE);
-			query.setParameter(LOT_PREP_TO, paramContainer.getLotPrepTo(), TemporalType.DATE);
-		}
-		if (qlString.contains(LOT_DUE_FROM) && qlString.contains(LOT_DUE_TO)) {
-			query.setParameter(LOT_DUE_FROM, paramContainer.getLotDueFrom(), TemporalType.DATE);
-			query.setParameter(LOT_DUE_TO, paramContainer.getLotDueTo(), TemporalType.DATE);
-		}
-		if (qlString.contains(WARD_ID)) {
-			query.setParameter(WARD_ID, paramContainer.getWardId());
-		}
-		if (qlString.contains(MOVEMENT_TYPE)) {
-			query.setParameter(MOVEMENT_TYPE, paramContainer.getMovementType());
-		}
-		if (qlString.contains(MEDICAL_CODE)) {
-			query.setParameter(MEDICAL_CODE, paramContainer.getMedicalCode());
-		}
-		if (qlString.contains(MEDICAL_TYPE)) {
-			query.setParameter(MEDICAL_TYPE, paramContainer.getMedicalType());
-		}
-		if (qlString.contains(LOT_CODE)) {
-			query.setParameter(LOT_CODE, "%"+paramContainer.getLotCode()+"%");
-		}
-		if (qlString.contains(MEDICAL_DESC)) {
-			query.setParameter(MEDICAL_DESC, "%"+paramContainer.getMedicalDescription()+"%");
-		}
 	}
 
 	@SuppressWarnings("unchecked")	
@@ -99,7 +54,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 		String qlString = _getMovementWhereData(medicalCode, medicalType, wardId, movType, movFrom, movTo,
 				lotPrepFrom, lotPrepTo, lotDueFrom, lotDueTo);
 		Query query = this.entityManager.createQuery(qlString);
-		QueryParameterContainer parameterContainer = QueryParameterContainerBuilder.instance()
+		QueryParameterContainer parameterContainer = QueryParameterContainer.builder()
 				.withMedicalCode(medicalCode)
 				.withMedicalType(medicalType)
 				.withWardId(wardId)
@@ -108,7 +63,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 				.withLotPrepFromTo(lotPrepFrom, lotPrepTo)
 				.withLotDueFromTo(lotDueFrom, lotDueTo)
 				.build();
-		setNeededParameters(qlString, query, parameterContainer);
+		DbJpaUtil.addJpqlParametersToQueryByParameterContainer(qlString, query, parameterContainer);
 		return query.getResultList();
 	}		
 
@@ -126,7 +81,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 		String qlString = _getMovementForPrint(medicalDescription, medicalTypeCode, wardId, movType, movFrom, movTo,
 				lotCode, order);
 		Query query = this.entityManager.createQuery(qlString);
-		QueryParameterContainer parameterContainer = QueryParameterContainerBuilder.instance()
+		QueryParameterContainer parameterContainer = QueryParameterContainer.builder()
 				.withMedicalDescription(medicalDescription)
 				.withMedicalType(medicalTypeCode)
 				.withWardId(wardId)
@@ -134,7 +89,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 				.withMovementFromTo(movFrom, movTo)
 				.withLotCode(lotCode)
 				.build();
-		setNeededParameters(qlString, query, parameterContainer);
+		DbJpaUtil.addJpqlParametersToQueryByParameterContainer(qlString, query, parameterContainer);
 		return query.getResultList();
 	}	
 

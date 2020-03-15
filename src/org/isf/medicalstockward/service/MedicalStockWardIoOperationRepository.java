@@ -13,21 +13,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface MedicalStockWardIoOperationRepository extends JpaRepository<MedicalWard, String>, MedicalStockWardIoOperationRepositoryCustom {      
 	   
-    @Query(value = "SELECT * FROM MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical", nativeQuery= true)
+    @Query(value = "select medWard from MedicalWard medWard where medWard.id.ward.code=:ward " +
+			"and medWard.id.medical.code=:medical")
     MedicalWard findOneWhereCodeAndMedical(@Param("ward") String ward, @Param("medical") int medical);
     
-    @Query(value = "SELECT SUM(MDSRWRD_IN_QTI-MDSRWRD_OUT_QTI) QTY FROM MEDICALDSRWARD WHERE MDSRWRD_MDSR_ID = :medical", nativeQuery= true)
+    @Query(value = "select sum(medWard.in_quantity-medWard.out_quantity) from MedicalWard medWard " +
+			"where medWard.id.medical.code=:medical")
     Double findQuantityInWardWhereMedical(@Param("medical") int medical);
-    @Query(value = "SELECT SUM(MDSRWRD_IN_QTI-MDSRWRD_OUT_QTI) QTY FROM MEDICALDSRWARD WHERE MDSRWRD_MDSR_ID = :medical AND MDSRWRD_WRD_ID_A = :ward", nativeQuery= true)
+    @Query(value = "select sum(medWard.in_quantity-medWard.out_quantity) from MedicalWard medWard " +
+			"where medWard.id.medical.code=:medical and medWard.id.ward.code=:ward")
     Double findQuantityInWardWhereMedicalAndWard(@Param("medical") int medical, @Param("ward") String ward);
 	
     @Modifying 
     @Transactional
-    @Query(value = "UPDATE MEDICALDSRWARD SET MDSRWRD_IN_QTI = MDSRWRD_IN_QTI + :quantity WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical", nativeQuery= true)
+    @Query(value = "update MedicalWard set in_quantity=in_quantity+:quantity where id.ward.code=:ward and id.medical.code=:medical")
     void updateInQuantity(@Param("quantity") Double quantity, @Param("ward") String ward, @Param("medical") int medical);
     @Modifying 
     @Transactional
-    @Query(value = "UPDATE MEDICALDSRWARD SET MDSRWRD_OUT_QTI = MDSRWRD_OUT_QTI + :quantity WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical", nativeQuery= true)
+    @Query(value = "update MedicalWard set out_quantity=out_quantity+:quantity where id.ward.code=:ward and id.medical.code=:medical")
     void updateOutQuantity(@Param("quantity") Double quantity, @Param("ward") String ward, @Param("medical") int medical);
     @Modifying 
     @Transactional
@@ -35,7 +38,7 @@ public interface MedicalStockWardIoOperationRepository extends JpaRepository<Med
     		"VALUES (?, ?, ?, '0')", nativeQuery= true)
     void insertMedicalWard(@Param("ward") String ward, @Param("medical") int medical, @Param("quantity") Double quantity);
         
-    @Query(value = "SELECT * FROM MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward", nativeQuery= true)
-    List<MedicalWard> findAllWhereWard(@Param("ward") char wardId);
+    @Query(value = "select medWard from MedicalWard medWard where medWard.id.ward.code=:ward")
+    List<MedicalWard> findAllWhereWard(@Param("ward") String wordCode);
 
 }

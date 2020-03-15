@@ -1,14 +1,15 @@
 package org.isf.medicalstockward.service;
 
 
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
-import java.util.List;
+import org.isf.medicalstock.service.QueryParameterContainer;
+import org.isf.utils.db.DbJpaUtil;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import org.springframework.transaction.annotation.Transactional;
+import javax.persistence.Query;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 
 @Transactional
@@ -24,10 +25,14 @@ public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWa
 			String wardId, 
 			GregorianCalendar dateFrom, 
 			GregorianCalendar dateTo) {
-		return this.entityManager.
-				createNativeQuery(_getWardMovementQuery(
-						wardId, dateFrom, dateTo)).
-					getResultList();
+		String qlString = _getWardMovementQuery(wardId, dateFrom, dateTo);
+		QueryParameterContainer parameterContainer = QueryParameterContainer.builder()
+				.withWardId(wardId)
+				.withDateFromTo(dateFrom, dateTo)
+				.build();
+		Query query = entityManager.createQuery(qlString);
+		DbJpaUtil.addJpqlParametersToQueryByParameterContainer(qlString, query, parameterContainer);
+		return query.getResultList();
 	}	
 		
 
@@ -40,45 +45,28 @@ public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWa
 		boolean firstParam = true;
 		
 		
-		query.append("SELECT MMVN_ID FROM ((((MEDICALDSRSTOCKMOVWARD LEFT JOIN " +
-						"(PATIENT LEFT JOIN (SELECT PEX_PAT_ID, PEX_HEIGHT AS PAT_HEIGHT, PEX_WEIGHT AS PAT_WEIGHT FROM PATIENTEXAMINATION GROUP BY PEX_PAT_ID ORDER BY PEX_DATE DESC) AS HW ON PAT_ID = HW.PEX_PAT_ID) ON MMVN_PAT_ID = PAT_ID) JOIN " +
-						"WARD ON MMVN_WRD_ID_A = WRD_ID_A)) JOIN " +
-						"MEDICALDSR ON MMVN_MDSR_ID = MDSR_ID) JOIN " +
-						"MEDICALDSRTYPE ON MDSR_MDSRT_ID_A = MDSRT_ID_A ");
+		query.append("select movWard.code from MovementWard movWard ");
 		if (wardId!=null || dateFrom!=null || dateTo!=null) 
 		{
-			query.append("WHERE ");
+			query.append("where ");
 		}
 		if (wardId != null && !wardId.equals("")) 
 		{
 			firstParam = false;
-			query.append("WRD_ID_A = \"" + wardId + "\" ");
+			query.append("movWard.ward.code=:wardId ");
 		}
 		if ((dateFrom != null) && (dateTo != null)) 
 		{
 			if (!firstParam)
 			{
-				query.append("AND ");
+				query.append("and ");
 			}
-			query.append("DATE(MMVN_DATE) BETWEEN DATE(\"" + _convertToSQLDateLimited(dateFrom) + "\") and DATE(\"" + _convertToSQLDateLimited(dateTo) + "\") ");
+			query.append("movWard.date between :dateFrom and :dateTo ");
 		}
-		query.append(" ORDER BY MMVN_DATE ASC");
+		query.append(" order by movWard.date asc");
 		
 		String result = query.toString();
 
 		return result;
-	}
-		
-	/**
-	 * return a String representing the date in format <code>yyyy-MM-dd</code>
-	 * 
-	 * @param date
-	 * @return the date in format <code>yyyy-MM-dd</code>
-	 */
-	private String _convertToSQLDateLimited(GregorianCalendar date) 
-	{
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	
-		return sdf.format(date.getTime());
 	}
 }

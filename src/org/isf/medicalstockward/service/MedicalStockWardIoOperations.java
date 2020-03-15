@@ -240,14 +240,14 @@ public class MedicalStockWardIoOperations
 
 	/**
 	 * Gets all the {@link Medical}s associated to specified {@link Ward}.
-	 * @param wardId the ward id.
+	 * @param wardCode the ward id.
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException if an error occurs during the medical retrieving.
 	 */
 	public ArrayList<MedicalWard> getMedicalsWard(
-			char wardId) throws OHServiceException
+			String wardCode) throws OHServiceException
 	{
-		ArrayList<MedicalWard> medicalWards = new ArrayList<MedicalWard>(repository.findAllWhereWard(wardId));
+		ArrayList<MedicalWard> medicalWards = new ArrayList<MedicalWard>(repository.findAllWhereWard(wardCode));
 		for (int i=0; i<medicalWards.size(); i++)
 		{
 			double qty = (double) (medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
