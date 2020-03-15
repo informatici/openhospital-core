@@ -17,7 +17,7 @@ public class TestMedicalTypeContext
 			DbJpaUtil jpa) throws OHException 
     {	
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM MEDICALDSRTYPE", MedicalType.class, false);
+		jpa.createQuery("select medType from MedicalType medType", MedicalType.class, true);
 		savedMedicalType = (List<MedicalType>)jpa.getList();
 		jpa.commitTransaction();
         		
@@ -34,7 +34,7 @@ public class TestMedicalTypeContext
     		DbJpaUtil jpa) throws OHException 
     {
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM MEDICALDSRTYPE", MedicalType.class, false);
+		jpa.createQuery("select medType from MedicalType medType", MedicalType.class, true);
 		List<MedicalType> MedicalTypes = (List<MedicalType>)jpa.getList();
 		for (MedicalType medicalType: MedicalTypes) 
 		{    		
