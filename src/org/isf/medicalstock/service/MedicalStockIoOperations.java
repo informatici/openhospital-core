@@ -2,10 +2,7 @@ package org.isf.medicalstock.service;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.medicals.model.Medical;
@@ -461,7 +458,7 @@ public class MedicalStockIoOperations {
 		ArrayList<Movement> pMovement = new ArrayList<Movement>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findtMovementWhereDatesAndId(wardId, dateFrom, dateTo));			
+		pMovementCode = new ArrayList<Integer>(movRepository.findMovementWhereDatesAndId(wardId, dateFrom, dateTo));
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
 			Integer code = pMovementCode.get(i);
@@ -505,7 +502,7 @@ public class MedicalStockIoOperations {
 		ArrayList<Movement> pMovement = new ArrayList<Movement>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findtMovementWhereData(
+		pMovementCode = new ArrayList<Integer>(movRepository.findMovementWhereData(
 				medicalCode, medicalType, wardId, movType, 
 				movFrom, movTo, lotPrepFrom, lotPrepTo, lotDueFrom, lotDueTo));			
 		for (int i=0; i<pMovementCode.size(); i++)
@@ -548,7 +545,7 @@ public class MedicalStockIoOperations {
 		ArrayList<Movement> pMovement = new ArrayList<Movement>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findtMovementForPrint(
+		pMovementCode = new ArrayList<Integer>(movRepository.findMovementForPrint(
 				medicalDescription, medicalTypeCode, wardId, movType, 
 				movFrom, movTo, lotCode, order));			
 		for (int i=0; i<pMovementCode.size(); i++)
@@ -575,37 +572,37 @@ public class MedicalStockIoOperations {
 		ArrayList<Lot> lots = null;
 	
 		
-		List<Object[]> lotList = (List<Object[]>)lotRepository.findAllWhereMedical(medical.getCode());
-		lots = new ArrayList<Lot>();
-		for (Object[] object: lotList)
-		{
-			Lot lot = _convertObjectToLot(object);
-			
-			lots.add(lot);
-		}
-		
-		// remve empy lots
-		ArrayList<Lot> emptyLots = new ArrayList<Lot>();
-		for (Lot aLot : lots) {
-			if (aLot.getQuantity() == 0)
-				emptyLots.add(aLot);
-		}
-		lots.removeAll(emptyLots);
+		List<Object[]> lotList = lotRepository.findAllWhereMedical(medical.getCode());
+		lots = convertRowsToLotList(lotList);
 		
 		return lots;
-	}	
+	}
 
-	private Lot _convertObjectToLot(Object[] object)
-	{
+	private ArrayList<Lot> convertRowsToLotList(List<Object[]> lotList) {
+		TreeMap<String, Lot> lotByCode = new TreeMap<String, Lot>();
+		for (Object[] lotWithQuantityAsObject : lotList) {
+			String lotCode = (String)lotWithQuantityAsObject[0];
+			if (lotByCode.get(lotCode) == null) {
+				Lot newLot = new Lot();
+				newLot.setCode(lotCode);
+				newLot.setPreparationDate((GregorianCalendar) lotWithQuantityAsObject[1]);
+				newLot.setDueDate((GregorianCalendar)lotWithQuantityAsObject[2]);
+				newLot.setCost((BigDecimal)lotWithQuantityAsObject[3]);
+				lotByCode.put(lotCode, newLot);
+			}
+			addQuantityOfRowToLot(lotWithQuantityAsObject, lotByCode.get(lotCode));
+		}
+		return new ArrayList<Lot>(lotByCode.values());
+	}
 
-		Lot lot = new Lot();
-		lot.setCode((String)object[0]);
-		lot.setPreparationDate(_convertTimestampToCalendar((Timestamp)object[1]));
-		lot.setDueDate(_convertTimestampToCalendar((Timestamp)object[2]));
-		lot.setCost(new BigDecimal((Double) object[3]));
-		lot.setQuantity(((Double)object[4]).intValue());
-		
-		return lot;
+	private void addQuantityOfRowToLot(Object[] lotWithQuantityAsObject, Lot lot) {
+		String type = (String) lotWithQuantityAsObject[4];
+		Integer quantity = (Integer) lotWithQuantityAsObject[5];
+		if (type.contains("+")) {
+			lot.setQuantity(lot.getQuantity() + quantity);
+		} else {
+			lot.setQuantity(lot.getQuantity() - quantity);
+		}
 	}
 	
 	private GregorianCalendar _convertTimestampToCalendar(Timestamp time)
@@ -628,20 +625,7 @@ public class MedicalStockIoOperations {
 	 */
 	public GregorianCalendar getLastMovementDate() throws OHServiceException 
 	{
-		GregorianCalendar gc = new GregorianCalendar();
-				
-			
-		Timestamp time = (Timestamp)movRepository.findMaxDate();
-		if (time != null) 
-		{
-			gc.setTime(time);
-		}
-		else
-		{
-			gc = null;
-		}					
-	
-		return gc;
+		return movRepository.findMaxDate();
 	}
 	
 	/**

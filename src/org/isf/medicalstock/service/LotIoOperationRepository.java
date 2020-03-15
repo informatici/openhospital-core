@@ -9,12 +9,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LotIoOperationRepository extends JpaRepository<Lot, String> {      
-	
-    @Query(value = "select LT_ID_A,LT_PREP_DATE,LT_DUE_DATE,LT_COST,"
-			+ "SUM(IF(MMVT_TYPE LIKE '%+%',MMV_QTY,-MMV_QTY)) as quantity from "
-			+ "((MEDICALDSRLOT join MEDICALDSRSTOCKMOV on MMV_LT_ID_A=LT_ID_A) join MEDICALDSR on MMV_MDSR_ID=MDSR_ID)"
-			+ " join MEDICALDSRSTOCKMOVTYPE on MMV_MMVT_ID_A=MMVT_ID_A "
-			+ "where MDSR_ID=:code group by LT_ID_A order by LT_DUE_DATE", nativeQuery= true)
-    List<Object[]> findAllWhereMedical(@Param("code") Integer code);
+public interface LotIoOperationRepository extends JpaRepository<Lot, String> {
+	@Query(value = "select l.code,l.preparationDate,l.dueDate,l.cost,mt.type,mov.quantity " +
+			"from Movement mov join mov.lot l " +
+			"join mov.medical m " +
+			"join mov.type mt "+
+			"where m.code=:code and mov.quantity <> 0 order by l.dueDate")
+	List<Object[]> findAllWhereMedical(@Param("code") Integer code);
 }
