@@ -28,4 +28,7 @@ public interface DicomIoOperationRepository extends JpaRepository<FileDicom, Lon
 
     @Query(value = "SELECT * FROM DICOM WHERE DM_FILE_SER_NUMBER = :dicomSeriesNumber", nativeQuery= true)
 	List<FileDicom> findAllWhereDicomSeriesNumber(@Param("dicomSeriesNumber") String dicomSeriesNumber);
+
+    @Query(value = "SELECT COUNT(*) FROM DICOM WHERE DM_FILE_SER_INST_UID = :dicomSeriesNumberId", nativeQuery=true)
+	int countFramesinSeries(@Param("dicomSeriesNumberId") String dicomSeriesInstanceUID);
 }

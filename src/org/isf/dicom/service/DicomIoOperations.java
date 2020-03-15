@@ -129,8 +129,9 @@ public class DicomIoOperations
 		FileDicom[] dicoms = new FileDicom[dicomList.size()];	
 		for (int i=0; i<dicomList.size(); i++)
 		{
+			int count = repository.countFramesinSeries(dicomList.get(i).getDicomSeriesInstanceUID());
 			dicoms[i] = dicomList.get(i);
-			dicoms[i].setFrameCount(dicomList.size());
+			dicoms[i].setFrameCount(count);
 		}
 		
 		return dicoms;
