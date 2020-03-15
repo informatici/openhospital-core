@@ -17,7 +17,7 @@ public class TestUserContext
 			DbJpaUtil jpa) throws OHException 
     {	
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM USER", User.class, false);
+		jpa.createQuery("select u from User u", User.class, true);
 		savedUser = (List<User>)jpa.getList();
 		jpa.commitTransaction();
         		
@@ -34,7 +34,7 @@ public class TestUserContext
     		DbJpaUtil jpa) throws OHException 
     {
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM USER", User.class, false);
+		jpa.createQuery("select u from User u", User.class, true);
 		List<User> Users = (List<User>)jpa.getList();
 		for (User user: Users) 
 		{    		
