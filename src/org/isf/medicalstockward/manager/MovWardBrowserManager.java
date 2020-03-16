@@ -77,6 +77,11 @@ public class MovWardBrowserManager {
 		return ioOperations.getMedicalsWard(wardId);
 	}
 
+	public ArrayList<MedicalWard> getMedicalsWardDrug(char wardId) throws OHServiceException {
+        System.out.println("MovWardBrowserManager: Looking for drugs ");
+	return ioOperations.getMedicalsWardDrugs(wardId);
+}
+
 	/**
 	 * Gets all the movement ward with the specified criteria.
 	 * @param wardId the ward id.

@@ -20,6 +20,9 @@ public interface MedicalStockWardIoOperationRepository extends JpaRepository<Med
     @Query(value = "SELECT SUM(MDSRWRD_IN_QTI-MDSRWRD_OUT_QTI) QTY FROM MEDICALDSRWARD WHERE MDSRWRD_MDSR_ID = :medical AND MDSRWRD_WRD_ID_A = :ward", nativeQuery= true)
     public Double findQuantityInWardWhereMedicalAndWard(@Param("medical") int medical, @Param("ward") String ward);
 	
+    @Query(value = "SELECT SUM(MDSRWRD_IN_QTI-MDSRWRD_OUT_QTI) QTY FROM MEDICALDSRWARD WHERE MDSRWRD_MDSR_ID = :medical AND MDSRWRD_WRD_ID_A = :ward", nativeQuery= true)
+    public Double findQuantityInWardWhereMedicalAndWardChar(@Param("medical") int medical, @Param("ward") char ward);
+	
     @Modifying 
     @Transactional
     @Query(value = "UPDATE MEDICALDSRWARD SET MDSRWRD_IN_QTI = MDSRWRD_IN_QTI + :quantity WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical", nativeQuery= true)
