@@ -1,3 +1,71 @@
+commit 2b81d204fe36462fc027e67f5fa6f891023b7785
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-16
+
+    Op 183 problem with dates in operation data (#62)
+    
+    Fixed problem with dates in Operation data
+    
+    Co-authored-by: Xavier <martinxaviertchembe@gmail.com>
+    Co-authored-by: Niccolò Pasquetto <niccolo.pasquetto@intesys.it>
+    Co-authored-by: Lars Grefer <github@larsgrefer.de>
+    Co-authored-by: vicusotto <vito988@gmail.com>
+
+commit 6f4d8e53a3748f79bb73e6f74d6015038c4f07ee
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-07
+
+    Confirmed script 58
+    
+    Conflicts:
+            mysql/db/from_step_05.sql
+
+commit e6d8bbc98bd59bf6b9242d8d4a74a5f2da32f6f0
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-07
+
+    Op 183 problem with dates in operation data (#55)
+    
+    * Refactored OhExceptionTranslator -> OHExceptionTranslator
+    * Fixed problem with dates in Operation data
+    Co-authored-by: Xavier <martinxaviertchembe@gmail.com>
+    
+    Conflicts:
+            src/org/isf/exa/manager/ExamBrowsingManager.java
+            src/org/isf/patient/manager/PatientBrowserManager.java
+
+commit 1a55412764b24d058431de94cae967f8a54ca381
+Author: giuseppe.sorge <giuseppe.sorge90@gmail.com>
+Date:   2020-03-07
+
+    Op 140 update dicom libraries (#56)
+    
+    * Fix dicomManager to manage the bean
+    * fix pom to update dicom libraries
+    
+    Conflicts:
+            src/org/isf/dicom/manager/DicomManagerFactory.java
+
+commit b336db11f75b37fbeff75baa6db5a98181e2c9de
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-27
+
+    Removed unwanted std output
+
+commit e697656366bc5438edd1143488a6efefe9f05247
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-20
+
+    Trying to fixing Hibernate ERROR on linux32 version
+    
+    'Cannot convert value '0000-00-00 00:00:00' from column TIMESTAMP'
+
+commit 2a2d1b668a7eb1bb47329a12fd34cbc59559606b
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-19
+
+    Updated changelog
+
 commit 71e854bb44e7fd82f2cf149ce411ae71bc07fc60
 Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
 Date:   2020-02-15
