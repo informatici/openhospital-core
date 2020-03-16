@@ -42,7 +42,7 @@ public class Visit
 	
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="VST_WARD_ID")
+	@JoinColumn(name="VST_WRD_ID_A")
 	Ward ward;
 
 	@NotNull
