@@ -80,7 +80,6 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 			clause = " AND";
 		}		
 		query.append(" ORDER BY PAV_DATE DESC, PAV_ID");
-		System.out.println(query.toString());
 
 		return query.toString();
 	}

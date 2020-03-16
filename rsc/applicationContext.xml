@@ -63,6 +63,7 @@
  		</property>
  		<property name="jpaProperties">
  			<props>
+ 				<prop key="hibernate.connection.zeroDateTimeBehavior">convertToNull</prop>
  				<prop key="hibernate.show_sql">${hibernate.show_sql:false}</prop>
  				<prop key="hibernate.format_sql">${hibernate.format_sql:true}</prop>
  				<prop key="hibernate.dialect">${hibernate.dialect:org.hibernate.dialect.MySQLDialect}</prop>
