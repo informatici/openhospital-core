@@ -7,6 +7,7 @@ import org.isf.disctype.model.DischargeType;
 import org.isf.disctype.service.DischargeTypeIoOperation;
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,7 @@ public class DischargeTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newDischargeType(DischargeType dischargeType) throws OHServiceException {
-        List<OHExceptionMessage> errors = validateDischargeType(dischargeType, true);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validateDischargeType(dischargeType, true);
         return ioOperations.newDischargeType(dischargeType);
 	}
 
@@ -51,10 +49,7 @@ public class DischargeTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateDischargeType(DischargeType dischargeType) throws OHServiceException {
-        List<OHExceptionMessage> errors = validateDischargeType(dischargeType, false);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validateDischargeType(dischargeType, false);
         return ioOperations.newDischargeType(dischargeType);
 	}
 
@@ -77,22 +72,33 @@ public class DischargeTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean deleteDischargeType(DischargeType dischargeType) throws OHServiceException {
-        List<OHExceptionMessage> errors = validateDeleteDischargeType(dischargeType);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validateDeleteDischargeType(dischargeType);
         return ioOperations.deleteDischargeType(dischargeType);
 	}
 
-    private List<OHExceptionMessage> validateDeleteDischargeType(DischargeType dischargeType) throws OHServiceException {
+	/**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * @param dischargeType
+	 * @throws OHDataValidationException
+	 */
+    protected void validateDeleteDischargeType(DischargeType dischargeType) throws OHDataValidationException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         if(dischargeType.getCode().equals("D")){
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.youcannotdeletethisrecord"),
                     OHSeverityLevel.ERROR));
         }
-        return errors;
+        if (!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
 	}
-    private List<OHExceptionMessage> validateDischargeType(DischargeType dischargeType, boolean insert) throws OHServiceException {
+    
+    /**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * @param dischargeType
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHServiceException
+	 */
+    protected void validateDischargeType(DischargeType dischargeType, boolean insert) throws OHServiceException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         String key = dischargeType.getCode();
         if (key.equals("")){
@@ -114,6 +120,8 @@ public class DischargeTypeBrowserManager {
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.pleaseinsertavaliddescription"),
                     OHSeverityLevel.ERROR));
         }
-        return errors;
+        if (!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
 	}
 }

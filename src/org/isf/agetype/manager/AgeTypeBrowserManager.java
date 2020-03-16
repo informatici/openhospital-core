@@ -7,6 +7,7 @@ import org.isf.agetype.model.AgeType;
 import org.isf.agetype.service.AgeTypeIoOperations;
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +35,7 @@ public class AgeTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateAgeType(ArrayList<AgeType> ageTypes) throws OHServiceException {
-        List<OHExceptionMessage> errors = validateAgeTypes(ageTypes);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validateAgeTypes(ageTypes);
         return ioOperations.updateAgeType(ageTypes);
 	}
 
@@ -70,7 +68,12 @@ public class AgeTypeBrowserManager {
         return ioOperations.getAgeTypeByCode(index);
 	}
 
-    private List<OHExceptionMessage> validateAgeTypes(ArrayList<AgeType> ageTypes) {
+	/**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * @param ageTypes
+	 * @throws OHDataValidationException
+	 */
+    protected void validateAgeTypes(ArrayList<AgeType> ageTypes) throws OHDataValidationException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         for (int i = 1; i < ageTypes.size(); i++) {
             if (ageTypes.get(i).getFrom() <= ageTypes.get(i-1).getTo()) {
@@ -82,6 +85,8 @@ public class AgeTypeBrowserManager {
                         OHSeverityLevel.ERROR));
             }
         }
-        return errors;
+        if (!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
     }
 }

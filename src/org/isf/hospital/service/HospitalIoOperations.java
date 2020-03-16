@@ -3,8 +3,8 @@ package org.isf.hospital.service;
 import java.util.ArrayList;
 
 import org.isf.hospital.model.Hospital;
-import org.isf.utils.db.TranslateOHException;
-import org.isf.utils.exception.OHException;
+import org.isf.utils.db.TranslateOHServiceException;
+import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Service
-@Transactional(rollbackFor=OHException.class)
-@TranslateOHException
+@Transactional(rollbackFor=OHServiceException.class)
+@TranslateOHServiceException
 public class HospitalIoOperations {
 
 	@Autowired
@@ -28,9 +28,9 @@ public class HospitalIoOperations {
 	 * Reads from database hospital informations
 	 * 
 	 * @return {@link Hospital} object
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
-	public Hospital getHospital() throws OHException 
+	public Hospital getHospital() throws OHServiceException 
 	{
 		ArrayList<Hospital> hospitals = (ArrayList<Hospital>) repository.findAll();
 				
@@ -41,9 +41,9 @@ public class HospitalIoOperations {
 	/**
 	 * Reads from database currency cod
 	 * @return currency cod
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
-	public String getHospitalCurrencyCod() throws OHException
+	public String getHospitalCurrencyCod() throws OHServiceException
 	{
 		String currencyCod = repository.findHospitalCurrent();
 	
@@ -55,10 +55,10 @@ public class HospitalIoOperations {
 	 * updates hospital informations
 	 * 
 	 * @return <code>true</code> if the hospital informations have been updated, <code>false</code> otherwise
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
 	public boolean updateHospital(
-			Hospital hospital) throws OHException 
+			Hospital hospital) throws OHServiceException 
 	{
 		boolean result = true;
 	

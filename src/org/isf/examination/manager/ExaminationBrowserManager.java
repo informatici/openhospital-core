@@ -41,10 +41,8 @@ public class ExaminationBrowserManager {
 
 	/**
 	 * 
-	 * @param path
-	 *            - the PatientHistory to save
+	 * @param path - the PatientHistory to save
 	 * @throws OHServiceException 
-	 * @throws OHException 
 	 */
 	public void saveOrUpdate(PatientExamination patex) throws OHServiceException {
         ioOperations.saveOrUpdate(patex);

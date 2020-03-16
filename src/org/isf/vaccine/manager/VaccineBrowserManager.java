@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.vaccine.model.Vaccine;
@@ -36,9 +38,10 @@ public class VaccineBrowserManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param vaccine
-	 * @return list of {@link OHExceptionMessage}
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHServiceException 
 	 */
-	protected List<OHExceptionMessage> validateVaccine(Vaccine vaccine) {
+	protected void validateVaccine(Vaccine vaccine, boolean insert) throws OHServiceException {
 		String key = vaccine.getCode();
 		String description = vaccine.getDescription();
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
@@ -57,7 +60,16 @@ public class VaccineBrowserManager {
             		MessageBundle.getMessage("angal.vaccine.pleaseinsertadescription"), 
             		OHSeverityLevel.ERROR));
         }
-        return errors;
+        if (insert) {
+        	if (codeControl(vaccine.getCode())){
+    			throw new OHDataIntegrityViolationException(new OHExceptionMessage(null, 
+    					MessageBundle.getMessage("angal.common.codealreadyinuse"), 
+    					OHSeverityLevel.ERROR));
+    		}
+        }
+        if(!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
     }
 
 	/**
@@ -86,15 +98,7 @@ public class VaccineBrowserManager {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
 	 */
 	public boolean newVaccine(Vaccine vaccine) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateVaccine(vaccine);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
-        if (codeControl(vaccine.getCode())){
-			throw new OHServiceException(new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.common.codealreadyinuse"), 
-					OHSeverityLevel.ERROR));
-		}
+		validateVaccine(vaccine, true);
 		return ioOperations.newVaccine(vaccine);
 	}
 
@@ -104,10 +108,7 @@ public class VaccineBrowserManager {
 	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
 	 */
 	public boolean updateVaccine(Vaccine vaccine) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateVaccine(vaccine);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateVaccine(vaccine, false);
         return ioOperations.updateVaccine(vaccine);
     }
 	

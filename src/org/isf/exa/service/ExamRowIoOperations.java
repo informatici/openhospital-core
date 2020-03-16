@@ -15,15 +15,15 @@ import org.isf.exa.model.Exam;
 import org.isf.exa.model.ExamRow;
 import org.isf.exatype.model.ExamType;
 import org.isf.exatype.service.ExamTypeIoOperationRepository;
-import org.isf.utils.db.TranslateOHException;
-import org.isf.utils.exception.OHException;
+import org.isf.utils.db.TranslateOHServiceException;
+import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(rollbackFor=OHException.class)
-@TranslateOHException
+@Transactional(rollbackFor=OHServiceException.class)
+@TranslateOHServiceException
 public class ExamRowIoOperations {
 
 	//@Autowired
@@ -40,11 +40,11 @@ public class ExamRowIoOperations {
 	 * @param aExamCode - the exam code
 	 * @param aDescription - the exam description
 	 * @return the list of {@link ExamRow}s
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
 	public ArrayList<ExamRow> getExamRow(
 			int aExamCode, 
-			String aDescription) throws OHException 
+			String aDescription) throws OHServiceException 
 	{
             ArrayList<ExamRow> examrows;
             
@@ -69,9 +69,9 @@ public class ExamRowIoOperations {
 	/**
 	 * Returns the list of {@link ExamRow}s
 	 * @return the list of {@link ExamRow}s
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamRow> getExamrows() throws OHException 
+	public ArrayList<ExamRow> getExamrows() throws OHServiceException 
 	{
 		return getExamsRowByDesc(null);
 	}
@@ -80,10 +80,10 @@ public class ExamRowIoOperations {
 	 * Returns the list of {@link ExamRow}s that matches passed description
 	 * @param description - the examRow description
 	 * @return the list of {@link ExamRow}s
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
 	public ArrayList<ExamRow> getExamsRowByDesc(
-			String description) throws OHException 
+			String description) throws OHServiceException 
 	{ 
 		ArrayList<ExamRow> examrows = new ArrayList<ExamRow>();
 				
@@ -102,9 +102,9 @@ public class ExamRowIoOperations {
 	/**
 	 * Returns the list of {@link ExamType}s
 	 * @return the list of {@link ExamType}s
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamType> getExamType() throws OHException 
+	public ArrayList<ExamType> getExamType() throws OHServiceException 
 	{
 		ArrayList<ExamType> examTypes = (ArrayList<ExamType>) typeRepository.findAllByOrderByDescriptionAsc();
 				
@@ -117,10 +117,10 @@ public class ExamRowIoOperations {
 	 * 
 	 * @param examRow - the {@link ExamRow} to insert
 	 * @return <code>true</code> if the {@link ExamRow} has been inserted, <code>false</code> otherwise
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
 	public boolean newExamRow(
-			ExamRow examRow) throws OHException 
+			ExamRow examRow) throws OHServiceException 
 	{
 		boolean result = true;
 	
@@ -135,10 +135,10 @@ public class ExamRowIoOperations {
 	 * Update an already existing {@link ExamRow}.
 	 * @param examRow - the {@link ExamRow} to update
 	 * @return <code>true</code> if the {@link ExamRow} has been updated, <code>false</code> otherwise
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
 	public boolean updateExamRow(
-			ExamRow examRow) throws OHException 
+			ExamRow examRow) throws OHServiceException 
 	{
 		boolean result = true;
 		
@@ -151,10 +151,10 @@ public class ExamRowIoOperations {
 	 * Delete an {@link ExamRow}
 	 * @param examRow - the {@link ExamRow} to delete
 	 * @return <code>true</code> if the {@link ExamRow} has been deleted, <code>false</code> otherwise
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
 	public boolean deleteExamRow(
-                    ExamRow examRow) throws OHException 
+                    ExamRow examRow) throws OHServiceException 
         {
             boolean result = true;
             rowRepository.delete(examRow.getCode());
@@ -169,10 +169,10 @@ public class ExamRowIoOperations {
 	 * 
 	 * @param the {@link Exam}
 	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
 	public boolean isKeyPresent(
-			ExamRow examrow) throws OHException 
+			ExamRow examrow) throws OHServiceException 
 	{
 		boolean result = false;
 		ExamRow foundExam = rowRepository.findOne(examrow.getCode());
@@ -211,10 +211,10 @@ public class ExamRowIoOperations {
 	 *
 	 * @param code - the exam code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(
-			int code) throws OHException
+			int code) throws OHServiceException
 	{
             return rowRepository.exists(code);	
 	}
@@ -224,10 +224,10 @@ public class ExamRowIoOperations {
 	 *
 	 * @param code - the exam row code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
 	public boolean isRowPresent(
-			Integer code) throws OHException
+			Integer code) throws OHServiceException
 	{
 		boolean result = true;
 	
@@ -237,7 +237,7 @@ public class ExamRowIoOperations {
 		return result;	
 	}
 
-    public ArrayList<ExamRow> getExamRowByExamCode(String aExamCode)  throws OHException {
+    public ArrayList<ExamRow> getExamRowByExamCode(String aExamCode)  throws OHServiceException {
        ArrayList<ExamRow> examrows = (ArrayList<ExamRow>) rowRepository.getExamRowByExamCode(aExamCode);
        return examrows;
     }

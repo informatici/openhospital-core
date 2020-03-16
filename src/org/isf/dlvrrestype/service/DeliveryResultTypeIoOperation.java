@@ -3,8 +3,8 @@ package org.isf.dlvrrestype.service;
 import java.util.ArrayList;
 
 import org.isf.dlvrrestype.model.DeliveryResultType;
-import org.isf.utils.db.TranslateOHException;
-import org.isf.utils.exception.OHException;
+import org.isf.utils.db.TranslateOHServiceException;
+import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
  * Persistence class for DeliveryResultType module.
  */
 @Service
-@Transactional(rollbackFor=OHException.class)
-@TranslateOHException
+@Transactional(rollbackFor=OHServiceException.class)
+@TranslateOHServiceException
 public class DeliveryResultTypeIoOperation {
 	
 	@Autowired
@@ -23,9 +23,9 @@ public class DeliveryResultTypeIoOperation {
 	/**
 	 * Returns all stored {@link DeliveryResultType}s.
 	 * @return the stored {@link DeliveryResultType}s.
-	 * @throws OHException if an error occurs retrieving the stored delivery result types.
+	 * @throws OHServiceException if an error occurs retrieving the stored delivery result types.
 	 */
-	public ArrayList<DeliveryResultType> getDeliveryResultType() throws OHException 
+	public ArrayList<DeliveryResultType> getDeliveryResultType() throws OHServiceException 
 	{
 		return new ArrayList<DeliveryResultType>(repository.findAllByOrderByDescriptionAsc()); 		
 	}
@@ -34,10 +34,10 @@ public class DeliveryResultTypeIoOperation {
 	 * Updates the specified {@link DeliveryResultType}.
 	 * @param deliveryresultType the delivery result type to update.
 	 * @return <code>true</code> if the delivery result type has been updated, <code>false</code> otherwise.
-	 * @throws OHException if an error occurs during the update.
+	 * @throws OHServiceException if an error occurs during the update.
 	 */
 	public boolean updateDeliveryResultType(
-			DeliveryResultType deliveryResultType) throws OHException 
+			DeliveryResultType deliveryResultType) throws OHServiceException 
 	{
 		boolean result = true;
 	
@@ -52,10 +52,10 @@ public class DeliveryResultTypeIoOperation {
 	 * Stores the specified {@link DeliveryResultType}.
 	 * @param deliveryresultType the delivery result type to store.
 	 * @return <code>true</code> if the delivery result type has been stored. 
-	 * @throws OHException if an error occurs during the store operation.
+	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
 	public boolean newDeliveryResultType(
-			DeliveryResultType deliveryResultType) throws OHException 
+			DeliveryResultType deliveryResultType) throws OHServiceException 
 	{
 		boolean result = true;
 	
@@ -70,10 +70,10 @@ public class DeliveryResultTypeIoOperation {
 	 * Deletes the specified {@link DeliveryResultType}.
 	 * @param deliveryresultType the delivery result type to delete.
 	 * @return <code>true</code> if the delivery result type has been deleted, <code>false</code> otherwise.
-	 * @throws OHException if an error occurs during the delete operation.
+	 * @throws OHServiceException if an error occurs during the delete operation.
 	 */
 	public boolean deleteDeliveryResultType(
-			DeliveryResultType deliveryResultType) throws OHException 
+			DeliveryResultType deliveryResultType) throws OHServiceException 
 	{
 		boolean result = true;
 	
@@ -87,10 +87,10 @@ public class DeliveryResultTypeIoOperation {
 	 * Checks if the specified code is already used by others {@link DeliveryResultType}s.
 	 * @param code the code to check.
 	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
-	 * @throws OHException if an error occurs during the check.
+	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isCodePresent(
-			String code) throws OHException 
+			String code) throws OHServiceException 
 	{
 		boolean result = true;
 	

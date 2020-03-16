@@ -3,7 +3,9 @@ package org.isf.medtype.manager;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.service.MedicalTypeIoOperation;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -29,9 +31,10 @@ public class MedicalTypeBrowserManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param medicalType
-	 * @return list of {@link OHExceptionMessage}
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHServiceException 
 	 */
-	protected List<OHExceptionMessage> validateMedicalType(MedicalType medicalType) {
+	protected void validateMedicalType(MedicalType medicalType, boolean insert) throws OHServiceException {
 		String key = medicalType.getCode();
 		String description = medicalType.getDescription();
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
@@ -50,7 +53,16 @@ public class MedicalTypeBrowserManager {
             		MessageBundle.getMessage("angal.medtype.pleaseinsertavaliddescription"), 
             		OHSeverityLevel.ERROR));
         }
-        return errors;
+        if (insert) {
+        	if (codeControl(medicalType.getCode())){
+    			throw new OHDataIntegrityViolationException(new OHExceptionMessage(null, 
+    					MessageBundle.getMessage("angal.common.codealreadyinuse"), 
+    					OHSeverityLevel.ERROR));
+    		}
+        }
+        if (!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
     }
 
 	/**
@@ -69,15 +81,7 @@ public class MedicalTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newMedicalType(MedicalType medicalType) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateMedicalType(medicalType);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
-        if (codeControl(medicalType.getCode())){
-			throw new OHServiceException(new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.common.codealreadyinuse"), 
-					OHSeverityLevel.ERROR));
-		}
+		validateMedicalType(medicalType, true);
 		return ioOperations.newMedicalType(medicalType);
 	}
 
@@ -88,10 +92,7 @@ public class MedicalTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateMedicalType(MedicalType medicalType) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateMedicalType(medicalType);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateMedicalType(medicalType, false);
 		return ioOperations.updateMedicalType(medicalType);
 	}
 
