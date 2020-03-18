@@ -1,24 +1,35 @@
 package org.isf.medicalstock.service;
 
 
-import java.util.GregorianCalendar;
-import java.util.List;
+import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
+import org.isf.medicalstock.model.Movement;
+import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
+import org.isf.medstockmovtype.model.MovementType;
+import org.isf.medtype.model.MedicalType;
+import org.isf.ward.model.Ward;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TemporalType;
-
-import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
-import org.isf.utils.db.DbJpaUtil;
-import org.springframework.transaction.annotation.Transactional;
-
-import static org.isf.medicalstock.service.QueryParameterContainer.*;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 
 @Transactional
 public class MovementIoOperationRepositoryImpl implements MovementIoOperationRepositoryCustom {
-	
+
+	private static final String WARD = "ward";
+	private static final String DATE = "date";
+	private static final String CODE = "code";
+	private static final String REF_NO = "refNo";
+	private static final String MEDICAL = "medical";
+	private static final String LOT = "lot";
+	private static final String TYPE ="type";
+	private static final String DESCRIPTION = "description";
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -28,14 +39,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			String wardId, 
 			GregorianCalendar dateFrom, 
 			GregorianCalendar dateTo) {
-		String qlString = _getMovementWhereDatesAndId(wardId, dateFrom, dateTo);
-		Query query = this.entityManager.createQuery(qlString);
-		QueryParameterContainer parameterContainer = QueryParameterContainer.builder()
-				.withMovementFromTo(dateFrom, dateTo)
-				.withWardId(wardId)
-				.build();
-		DbJpaUtil.addJpqlParametersToQueryByParameterContainer(qlString, query, parameterContainer);
-		return query.getResultList();
+		return _getMovementWhereDatesAndId(wardId, dateFrom, dateTo);
 	}
 
 	@SuppressWarnings("unchecked")	
@@ -51,20 +55,8 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			GregorianCalendar lotPrepTo,
 			GregorianCalendar lotDueFrom, 
 			GregorianCalendar lotDueTo) {
-		String qlString = _getMovementWhereData(medicalCode, medicalType, wardId, movType, movFrom, movTo,
+		return _getMovementWhereData(medicalCode, medicalType, wardId, movType, movFrom, movTo,
 				lotPrepFrom, lotPrepTo, lotDueFrom, lotDueTo);
-		Query query = this.entityManager.createQuery(qlString);
-		QueryParameterContainer parameterContainer = QueryParameterContainer.builder()
-				.withMedicalCode(medicalCode)
-				.withMedicalType(medicalType)
-				.withWardId(wardId)
-				.withMovementType(movType)
-				.withMovementFromTo(movFrom, movTo)
-				.withLotPrepFromTo(lotPrepFrom, lotPrepTo)
-				.withLotDueFromTo(lotDueFrom, lotDueTo)
-				.build();
-		DbJpaUtil.addJpqlParametersToQueryByParameterContainer(qlString, query, parameterContainer);
-		return query.getResultList();
 	}		
 
 	@SuppressWarnings("unchecked")	
@@ -78,60 +70,39 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			GregorianCalendar movTo, 
 			String lotCode,
 			MovementOrder order) {
-		String qlString = _getMovementForPrint(medicalDescription, medicalTypeCode, wardId, movType, movFrom, movTo,
+		return _getMovementForPrint(medicalDescription, medicalTypeCode, wardId, movType, movFrom, movTo,
 				lotCode, order);
-		Query query = this.entityManager.createQuery(qlString);
-		QueryParameterContainer parameterContainer = QueryParameterContainer.builder()
-				.withMedicalDescription(medicalDescription)
-				.withMedicalType(medicalTypeCode)
-				.withWardId(wardId)
-				.withMovementType(movType)
-				.withMovementFromTo(movFrom, movTo)
-				.withLotCode(lotCode)
-				.build();
-		DbJpaUtil.addJpqlParametersToQueryByParameterContainer(qlString, query, parameterContainer);
-		return query.getResultList();
 	}	
 
 		
-	private String _getMovementWhereDatesAndId(
+	private List<Integer> _getMovementWhereDatesAndId(
 			String wardId, 
 			GregorianCalendar dateFrom, 
 			GregorianCalendar dateTo)
-	{	
-		String query = "select mov.code from Movement mov " +
-				"join mov.type movtype " +
-				"join mov.medical med " +
-				"join med.type medtype " +
-				"left join mov.lot lot " +
-				"left join mov.ward ward " +
-				"left join mov.supplier sup ";
-		boolean dateQuery = false;
-		
-		
-		if ((dateFrom != null) && (dateTo != null)) 
+	{
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
+		Root<Movement> root = query.from(Movement.class);
+		query.select(root.<Integer>get(CODE));
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if ((dateFrom != null) && (dateTo != null))
 		{
-			query += "where mov.date between :movFrom and :movTo ";
-			dateQuery = true;
+			predicates.add(builder.between(root.<GregorianCalendar>get(DATE), dateFrom, dateTo));
 		}
 		if (wardId != null && !wardId.equals("")) 
 		{
-			if (dateQuery) 
-			{
-				query += "and ";
-			}
-			else 
-			{
-				query += "where ";
-			}
-			query += "ward.code=:wardId ";
+			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
 		}
-		query += "order by mov.date desc, mov.refNo desc";
 
-		return query;
+		List<Order> orderList = new ArrayList<Order>();
+		orderList.add(builder.desc(root.get(DATE)));
+		orderList.add(builder.desc(root.get(REF_NO)));
+		query.where(predicates.toArray(new Predicate[]{})).orderBy(orderList);
+		return entityManager.createQuery(query).getResultList();
 	}
 	
-	private String _getMovementWhereData(
+	private List<Integer> _getMovementWhereData(
 			Integer medicalCode,
 			String medicalType, 
 			String wardId, 
@@ -142,78 +113,42 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			GregorianCalendar lotPrepTo,
 			GregorianCalendar lotDueFrom, 
 			GregorianCalendar lotDueTo) {
-		String query = "select mov.code from Movement mov " +
-				"join mov.type movtype " +
-				"join mov.medical med " +
-				"join med.type medtype " +
-				"left join mov.ward ward " +
-				"left join mov.lot lot " +
-				"left join mov.supplier sup " +
-				"where ";
-		boolean paramQuery = false;
-				
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
+		Root<Movement> root = query.from(Movement.class);
+		query.select(root.<Integer>get(CODE));
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		if ((medicalCode != null) || (medicalType != null)) 
-		{
-			if (medicalCode == null) 
-			{
-				query += "(medtype.code=:medicalType) ";
-				paramQuery = true;
-			} else if (medicalType == null)
-			{
-				query += "(med.code=:medicalCode) ";
-				paramQuery = true;
-			}
+		if (medicalCode != null) {
+			predicates.add(builder.equal(root.<Medical>get(MEDICAL).<String>get(CODE), medicalCode));
 		}
-		if ((movFrom != null) && (movTo != null)) 
-		{
-			if (paramQuery) 
-			{
-				query += "and ";
-			}
-			query += "(mov.date between :movFrom and :movTo) ";
-			paramQuery = true;
+		if (medicalType != null) {
+			predicates.add(builder.equal(root.<Medical>get(MEDICAL).<MedicalType>get(TYPE).<String>get(CODE), medicalType));
 		}
-		if ((lotPrepFrom != null) && (lotPrepTo != null)) 
-		{
-			if (paramQuery) 
-			{
-				query += "and ";
-			}
-			query += "(lot.preparationDate between :lotPrepFrom and :lotPrepTo) ";
-			paramQuery = true;
+		if ((movFrom != null) && (movTo != null)) {
+			predicates.add(builder.between(root.<GregorianCalendar>get(DATE), movFrom, movTo));
 		}
-		if ((lotDueFrom != null) && (lotDueTo != null)) 
-		{
-			if (paramQuery) 
-			{
-				query += "and ";
-			}
-			query += "(lot.dueDate between :lotDueFrom and :lotDueTo) ";
-			paramQuery = true;
+		if ((lotPrepFrom != null) && (lotPrepTo != null)) {
+			predicates.add(builder.between(root.<Lot>get(LOT).<GregorianCalendar>get("preparationDate"), lotPrepFrom, lotPrepTo));
+		}
+		if ((lotDueFrom != null) && (lotDueTo != null)) {
+			predicates.add(builder.between(root.<Lot>get(LOT).<GregorianCalendar>get("dueDate"), lotPrepFrom, lotPrepTo));
 		}
 		if (movType != null) {
-			if (paramQuery) 
-			{
-				query += "and ";
-			}
-			query += "(movtype.code=:movType) ";
-			paramQuery = true;
+			predicates.add(builder.equal(root.<MedicalType>get(TYPE).<String>get(CODE), movType));
 		}
-		if (wardId != null) 
-		{
-			if (paramQuery) 
-			{
-				query += "and ";
-			}
-			query += "(ward.code=:wardId) ";
+		if (wardId != null) {
+			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
 		}
-		query += " order by mov.date desc, mov.refNo desc";
-		
-		return query;
+
+		List<Order> orderList = new ArrayList<Order>();
+		orderList.add(builder.desc(root.get(DATE)));
+		orderList.add(builder.desc(root.get(REF_NO)));
+		query.where(predicates.toArray(new Predicate[]{})).orderBy(orderList);
+		return entityManager.createQuery(query).getResultList();
 	}	
 	
-	private String _getMovementForPrint(
+	private List<Integer> _getMovementForPrint(
 			String medicalDescription,
 			String medicalTypeCode, 
 			String wardId, 
@@ -222,81 +157,51 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			GregorianCalendar movTo, 
 			String lotCode,
 			MovementOrder order) {
-		String query = "";
-		boolean paramQuery = false;
-		
-		
-		query = "select mov.code from Movement mov " +
-				"join mov.type movtype " +
-				"join mov.medical med " +
-				"left join mov.ward ward " +
-				"left join mov.lot lot " +
-				"left join mov.supplier sup " +
-				"where ";
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
+		Root<Movement> root = query.from(Movement.class);
+		query.select(root.<Integer>get(CODE));
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		if ((medicalDescription != null) || (medicalTypeCode != null)) 
-		{
-			if (medicalDescription == null) 
-			{
-				query += "(medtype.code=:medicalType) ";
-				paramQuery = true;
-			} 
-			else if (medicalTypeCode == null) 
-			{
-				query += "(med.description like :medicalDescription) ";
-				paramQuery = true;
-			}
+		if (medicalDescription != null) {
+			predicates.add(builder.equal(root.<Medical>get(MEDICAL).<String>get(DESCRIPTION), medicalDescription));
 		}
-		if (lotCode != null) 
-		{
-			if (paramQuery) 
-			{
-				query += "and ";
-			}
-			query += "(lot.code like :lotCode) ";
-			paramQuery = true;
+		if (medicalTypeCode != null) {
+			predicates.add(builder.equal(root.<Medical>get(MEDICAL).<MedicalType>get(TYPE).<String>get(CODE), medicalTypeCode));
 		}
-		if ((movFrom != null) && (movTo != null)) 
-		{
-			if (paramQuery) 
-			{
-				query += "and ";
-			}
-			query += "(mov.date between :movFrom and :movTo) ";
-			paramQuery = true;
+		if (lotCode != null) {
+			predicates.add(builder.equal(root.<Ward>get(LOT).<String>get(CODE), lotCode));
 		}
-		if (movType != null) 
-		{
-			if (paramQuery) 
-			{
-				query += "and ";
-			}
-			query += "(movtype.code=:movType) ";
-			paramQuery = true;
+		if ((movFrom != null) && (movTo != null)) {
+			predicates.add(builder.between(root.<GregorianCalendar>get(DATE), movFrom, movTo));
 		}
-		if (wardId != null) 
-		{
-			if (paramQuery) 
-			{
-				query += "and ";
-			}
-			query += "(ward.code=:wardId) ";
+		if (movType != null) {
+			predicates.add(builder.equal(root.<MedicalType>get(TYPE).<String>get(CODE), movType));
 		}
+		if (wardId != null) {
+			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
+		}
+		List<Order> orderList = new ArrayList<Order>();
 		switch (order) {
 			case DATE:
-				query += "order by mov.date desc, mov.refNo desc";
+				orderList.add(builder.desc(root.get(DATE)));
+				orderList.add(builder.desc(root.get(REF_NO)));
 				break;
 			case WARD:
-				query += "order by mov.refNo desc, ward.description desc";
+				orderList.add(builder.desc(root.get(REF_NO)));
+				orderList.add(builder.desc(root.<Ward>get(WARD).get(DESCRIPTION)));
 				break;
 			case PHARMACEUTICAL_TYPE:
-				query += "order by mov.refNo desc, med.type, med.description";
+				orderList.add(builder.desc(root.get(REF_NO)));
+				orderList.add(builder.asc(root.<Medical>get(MEDICAL).<MedicalType>get(TYPE)));
+				orderList.add(builder.asc(root.<Medical>get(MEDICAL).<MedicalType>get(TYPE).get(DESCRIPTION)));
 				break;
 			case TYPE:
-				query += "order by mov.refNo desc, movtype.description";
+				orderList.add(builder.desc(root.get(REF_NO)));
+				orderList.add(builder.asc(root.<MovementType>get(TYPE).<MedicalType>get(DESCRIPTION)));
 				break;
 		}
-		
-		return query;
+		query.where(predicates.toArray(new Predicate[]{})).orderBy(orderList);
+		return entityManager.createQuery(query).getResultList();
 	}
 }

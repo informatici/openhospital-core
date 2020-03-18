@@ -185,7 +185,6 @@ public class MedicalStockIoOperations {
 	
 	/**
 	 * Prepare the insert of the specified {@link Movement} (no commit)
-	 * @param dbQuery - the session with the DB
 	 * @param movement - the movement to store.
 	 * @return <code>true</code> if the movement has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
@@ -198,7 +197,6 @@ public class MedicalStockIoOperations {
 	
 	/**
 	 * Prepare the insert of the specified {@link Movement} (no commit)
-	 * @param dbQuery - the session with the DB
 	 * @param movement - the movement to store.
 	 * @return <code>true</code> if the movement has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
@@ -404,8 +402,8 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Updates medical quantity for the specified ward.
-	 * @param wardCode the ward code.
-	 * @param medicalCode the medical code.
+	 * @param ward the ward.
+	 * @param medical the medical.
 	 * @param quantity the quantity to add to the current medical quantity.
 	 * @return <code>true</code> if the quantity has been updated/inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
@@ -570,39 +568,39 @@ public class MedicalStockIoOperations {
 			Medical medical) throws OHServiceException
 	{
 		ArrayList<Lot> lots = null;
-	
-		
-		List<Object[]> lotList = lotRepository.findAllWhereMedical(medical.getCode());
-		lots = convertRowsToLotList(lotList);
-		
+
+
+		List<Object[]> lotList = (List<Object[]>)lotRepository.findAllWhereMedical(medical.getCode());
+		lots = new ArrayList<Lot>();
+		for (Object[] object: lotList)
+		{
+			Lot lot = _convertObjectToLot(object);
+
+			lots.add(lot);
+		}
+
+		// remve empy lots
+		ArrayList<Lot> emptyLots = new ArrayList<Lot>();
+		for (Lot aLot : lots) {
+			if (aLot.getQuantity() == 0)
+				emptyLots.add(aLot);
+		}
+		lots.removeAll(emptyLots);
+
 		return lots;
 	}
 
-	private ArrayList<Lot> convertRowsToLotList(List<Object[]> lotList) {
-		TreeMap<String, Lot> lotByCode = new TreeMap<String, Lot>();
-		for (Object[] lotWithQuantityAsObject : lotList) {
-			String lotCode = (String)lotWithQuantityAsObject[0];
-			if (lotByCode.get(lotCode) == null) {
-				Lot newLot = new Lot();
-				newLot.setCode(lotCode);
-				newLot.setPreparationDate((GregorianCalendar) lotWithQuantityAsObject[1]);
-				newLot.setDueDate((GregorianCalendar)lotWithQuantityAsObject[2]);
-				newLot.setCost((BigDecimal)lotWithQuantityAsObject[3]);
-				lotByCode.put(lotCode, newLot);
-			}
-			addQuantityOfRowToLot(lotWithQuantityAsObject, lotByCode.get(lotCode));
-		}
-		return new ArrayList<Lot>(lotByCode.values());
-	}
+	private Lot _convertObjectToLot(Object[] object)
+	{
 
-	private void addQuantityOfRowToLot(Object[] lotWithQuantityAsObject, Lot lot) {
-		String type = (String) lotWithQuantityAsObject[4];
-		Integer quantity = (Integer) lotWithQuantityAsObject[5];
-		if (type.contains("+")) {
-			lot.setQuantity(lot.getQuantity() + quantity);
-		} else {
-			lot.setQuantity(lot.getQuantity() - quantity);
-		}
+		Lot lot = new Lot();
+		lot.setCode((String)object[0]);
+		lot.setPreparationDate(_convertTimestampToCalendar((Timestamp)object[1]));
+		lot.setDueDate(_convertTimestampToCalendar((Timestamp)object[2]));
+		lot.setCost(new BigDecimal((Double) object[3]));
+		lot.setQuantity(((Double)object[4]).intValue());
+
+		return lot;
 	}
 	
 	private GregorianCalendar _convertTimestampToCalendar(Timestamp time)

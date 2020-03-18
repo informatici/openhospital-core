@@ -1,16 +1,14 @@
 package org.isf.utils.db;
 
-import java.util.List;
-
-import javax.persistence.*;
-
 import org.isf.generaldata.MessageBundle;
-import org.isf.medicalstock.service.QueryParameterContainer;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Class that executes a query using JPA
@@ -526,41 +524,4 @@ public class DbJpaUtil
         
         return;
     }
-
-	public static void addJpqlParametersToQueryByParameterContainer(String qlString, Query query, QueryParameterContainer paramContainer) {
-		if (qlString.contains(MOVEMENT_FROM) && qlString.contains(MOVEMENT_TO)) {
-			query.setParameter(MOVEMENT_FROM, paramContainer.getMovementfrom(), TemporalType.DATE);
-			query.setParameter(MOVEMENT_TO, paramContainer.getMovementTo(), TemporalType.DATE);
-		}
-		if (qlString.contains(LOT_PREP_FROM) && qlString.contains(LOT_PREP_TO)) {
-			query.setParameter(LOT_PREP_FROM, paramContainer.getLotPrepFrom(), TemporalType.DATE);
-			query.setParameter(LOT_PREP_TO, paramContainer.getLotPrepTo(), TemporalType.DATE);
-		}
-		if (qlString.contains(LOT_DUE_FROM) && qlString.contains(LOT_DUE_TO)) {
-			query.setParameter(LOT_DUE_FROM, paramContainer.getLotDueFrom(), TemporalType.DATE);
-			query.setParameter(LOT_DUE_TO, paramContainer.getLotDueTo(), TemporalType.DATE);
-		}
-		if (qlString.contains(DATE_FROM) && qlString.contains(DATE_TO)) {
-			query.setParameter(DATE_FROM, paramContainer.getDateFrom(), TemporalType.DATE);
-			query.setParameter(DATE_TO, paramContainer.getDateTo(), TemporalType.DATE);
-		}
-		if (qlString.contains(WARD_ID)) {
-			query.setParameter(WARD_ID, paramContainer.getWardId());
-		}
-		if (qlString.contains(MOVEMENT_TYPE)) {
-			query.setParameter(MOVEMENT_TYPE, paramContainer.getMovementType());
-		}
-		if (qlString.contains(MEDICAL_CODE)) {
-			query.setParameter(MEDICAL_CODE, paramContainer.getMedicalCode());
-		}
-		if (qlString.contains(MEDICAL_TYPE)) {
-			query.setParameter(MEDICAL_TYPE, paramContainer.getMedicalType());
-		}
-		if (qlString.contains(LOT_CODE)) {
-			query.setParameter(LOT_CODE, "%"+paramContainer.getLotCode()+"%");
-		}
-		if (qlString.contains(MEDICAL_DESC)) {
-			query.setParameter(MEDICAL_DESC, "%"+paramContainer.getMedicalDescription()+"%");
-		}
-	}
 }

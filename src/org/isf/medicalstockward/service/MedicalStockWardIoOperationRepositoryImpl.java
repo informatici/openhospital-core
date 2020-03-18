@@ -1,72 +1,60 @@
 package org.isf.medicalstockward.service;
 
 
-import org.isf.medicalstock.service.QueryParameterContainer;
-import org.isf.utils.db.DbJpaUtil;
+import org.isf.medicalstockward.model.MovementWard;
+import org.isf.ward.model.Ward;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 
 @Transactional
 public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWardIoOperationRepositoryCustom {
-	
+
+	private static final String WARD = "ward";
+	private static final String DATE = "date";
+	private static final String CODE = "code";
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	
 	@SuppressWarnings("unchecked")	
 	@Override
 	public List<Integer> findAllWardMovement(
 			String wardId, 
 			GregorianCalendar dateFrom, 
 			GregorianCalendar dateTo) {
-		String qlString = _getWardMovementQuery(wardId, dateFrom, dateTo);
-		QueryParameterContainer parameterContainer = QueryParameterContainer.builder()
-				.withWardId(wardId)
-				.withDateFromTo(dateFrom, dateTo)
-				.build();
-		Query query = entityManager.createQuery(qlString);
-		DbJpaUtil.addJpqlParametersToQueryByParameterContainer(qlString, query, parameterContainer);
-		return query.getResultList();
+		return _getWardMovementQuery(wardId, dateFrom, dateTo);
 	}	
 		
 
-	public String _getWardMovementQuery(
+	public List<Integer> _getWardMovementQuery(
 			String wardId, 
 			GregorianCalendar dateFrom, 
 			GregorianCalendar dateTo)
-	{	
-		StringBuilder query = new StringBuilder();
-		boolean firstParam = true;
-		
-		
-		query.append("select movWard.code from MovementWard movWard ");
-		if (wardId!=null || dateFrom!=null || dateTo!=null) 
-		{
-			query.append("where ");
-		}
-		if (wardId != null && !wardId.equals("")) 
-		{
-			firstParam = false;
-			query.append("movWard.ward.code=:wardId ");
-		}
-		if ((dateFrom != null) && (dateTo != null)) 
-		{
-			if (!firstParam)
-			{
-				query.append("and ");
-			}
-			query.append("movWard.date between :dateFrom and :dateTo ");
-		}
-		query.append(" order by movWard.date asc");
-		
-		String result = query.toString();
+	{
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
+		Root<MovementWard> root = query.from(MovementWard.class);
+		query.select(root.<Integer>get(CODE));
+		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		return result;
+		if (wardId != null && !wardId.equals("")) {
+			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
+		}
+		if ((dateFrom != null) && (dateTo != null)) {
+			predicates.add(builder.between(root.<GregorianCalendar>get(DATE), dateFrom, dateTo));
+		}
+
+		List<Order> orderList = new ArrayList<Order>();
+		orderList.add(builder.asc(root.get(DATE)));
+
+		query.where(predicates.toArray(new Predicate[]{})).orderBy(orderList);
+		return entityManager.createQuery(query).getResultList();
 	}
 }
