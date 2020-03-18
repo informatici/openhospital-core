@@ -121,14 +121,9 @@ public class Tests
 	}
 	
 	@Test
-	public void testIoGetVaccine() 
-	{
-		String code = "";
-		
-		
-		try 
-		{		
-			code = _setupTestVaccine(false);
+	public void testIoGetVaccineShouldFindByTypeCode() 	{
+		try {
+			String code = _setupTestVaccine(false);
 			Vaccine foundVaccine = (Vaccine)jpa.find(Vaccine.class, code); 
 			ArrayList<Vaccine> vaccines = vaccineIoOperation.getVaccine(foundVaccine.getVaccineType().getCode());
 			
@@ -139,8 +134,26 @@ public class Tests
 			e.printStackTrace();		
 			assertEquals(true, false);
 		}
-		
-		return;
+	}
+
+	@Test
+	public void testIoGetVaccineShouldFindAllVaccinesWhenNoCodeProvided() {
+		try {
+			// given:
+			String code = _setupTestVaccine(false);
+			Vaccine foundVaccine = (Vaccine)jpa.find(Vaccine.class, code);
+
+			// when:
+			ArrayList<Vaccine> vaccines = vaccineIoOperation.getVaccine(null);
+
+			// then:
+			assertEquals(foundVaccine.getDescription(), vaccines.get(vaccines.size()-1).getDescription());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
 	}
 	
 	@Test

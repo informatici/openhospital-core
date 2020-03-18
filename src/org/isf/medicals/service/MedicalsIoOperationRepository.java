@@ -13,13 +13,13 @@ import org.springframework.stereotype.Repository;
 public interface MedicalsIoOperationRepository extends JpaRepository<Medical, Integer> {
 	@Query(value = "SELECT * FROM MEDICALDSR where MDSR_DESC like :description order BY MDSR_DESC", nativeQuery= true)
     List<Medical> findAllWhereDescriptionOrderByDescription(@Param("description") String description);
-	@Query(value = "SELECT * FROM MEDICALDSR JOIN MEDICALDSRTYPE ON MDSR_MDSRT_ID_A = MDSRT_ID_A order BY MDSR_DESC", nativeQuery= true)
-    List<Medical> findAllByOrderByDescription();
-    @Query(value = "SELECT * FROM MEDICALDSR JOIN MEDICALDSRTYPE ON MDSR_MDSRT_ID_A = MDSRT_ID_A where MDSRT_DESC like :type order BY MDSR_DESC", nativeQuery= true)
+	//@Query(value = "SELECT * FROM MEDICALDSR JOIN MEDICALDSRTYPE ON MDSR_MDSRT_ID_A = MDSRT_ID_A order BY MDSR_DESC", nativeQuery= true)
+	@Query(value = "SELECT m FROM Medical m order BY m.description")
+	List<Medical> findAllByOrderByDescription();
+	@Query(value = "SELECT m FROM Medical m where m.type.description like :type order BY m.description")
     List<Medical> findAllWhereTypeOrderByDescription(@Param("type") String type);
-      
-    
-    @Query(value = "SELECT * FROM MEDICALDSR JOIN MEDICALDSRTYPE ON MDSR_MDSRT_ID_A = MDSRT_ID_A where (MDSR_DESC like %:description% OR MDSR_CODE like %:description%) and (MDSRT_ID_A=:type) and ((MDSR_INI_STOCK_QTI+MDSR_IN_QTI-MDSR_OUT_QTI)<MDSR_MIN_STOCK_QTI) order BY MDSR_MDSRT_ID_A, MDSR_DESC", nativeQuery= true)
+
+	@Query(value = "SELECT m FROM Medical m where (m.description like %:description% OR m.prod_code like %:description%) and (m.type.code=:type) and ((m.initialqty+m.inqty-m.outqty)<m.minqty) order BY m.type.description, m.description")
     List<Medical> findAllWhereDescriptionAndTypeAndCriticalOrderByTypeAndDescritpion(@Param("description") String description, @Param("type") String type);
     @Query(value = "SELECT * FROM MEDICALDSR JOIN MEDICALDSRTYPE ON MDSR_MDSRT_ID_A = MDSRT_ID_A where (MDSR_DESC like %:description% OR MDSR_CODE like %:description%) and (MDSRT_ID_A=:type) order BY MDSR_MDSRT_ID_A, MDSR_DESC", nativeQuery= true)
     List<Medical> findAllWhereDescriptionAndTypeOrderByTypeAndDescritpion(@Param("description") String description, @Param("type") String type);

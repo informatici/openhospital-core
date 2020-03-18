@@ -31,8 +31,7 @@ public class VacTypeIoOperation {
 	 * @return the list of {@link VaccineType}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<VaccineType> getVaccineType() throws OHServiceException 
-	{
+	public ArrayList<VaccineType> getVaccineType() throws OHServiceException {
 		return new ArrayList<VaccineType>(repository.findAllByOrderByDescriptionAsc()); 
 	}
 	
@@ -43,16 +42,8 @@ public class VacTypeIoOperation {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newVaccineType(
-			VaccineType vaccineType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		VaccineType savedVaccineType = repository.save(vaccineType);
-		result = (savedVaccineType != null);
-		
-		return result;
+	public boolean newVaccineType(VaccineType vaccineType) throws OHServiceException {
+		return repository.save(vaccineType) != null;
 	}
 	
 	/**
@@ -62,16 +53,8 @@ public class VacTypeIoOperation {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean updateVaccineType(
-			VaccineType vaccineType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		VaccineType savedVaccineType = repository.save(vaccineType);
-		result = (savedVaccineType != null);
-		
-		return result;
+	public boolean updateVaccineType(VaccineType vaccineType) throws OHServiceException	{
+		return repository.save(vaccineType) != null;
 	}
 	
 	/**
@@ -81,15 +64,9 @@ public class VacTypeIoOperation {
 	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean deleteVaccineType(
-			VaccineType vaccineType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteVaccineType(VaccineType vaccineType) throws OHServiceException {
 		repository.delete(vaccineType);
-		
-		return result;
+		return true;
 	}
 	
 	
@@ -100,14 +77,7 @@ public class VacTypeIoOperation {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.exists(code);
 	}
 }

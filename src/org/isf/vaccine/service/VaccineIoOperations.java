@@ -35,21 +35,12 @@ public class VaccineIoOperations {
 	 * @return the list of {@link Vaccine}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Vaccine> getVaccine(
-			String vaccineTypeCode) throws OHServiceException 
-	{
-		ArrayList<Vaccine> pvaccine = null;
-
-		
-		if (vaccineTypeCode != null) {
-			pvaccine = new ArrayList<Vaccine>(repository.findAllWhereIdByOrderDescriptionAsc(vaccineTypeCode));
-		}
-		else
-		{
-			pvaccine = new ArrayList<Vaccine>(repository.findAllByOrderByDescriptionAsc()); 
-		}
-		
-		return pvaccine;
+	public ArrayList<Vaccine> getVaccine(String vaccineTypeCode) throws OHServiceException {
+		return new ArrayList<Vaccine>(
+			vaccineTypeCode != null ?
+				repository.findByVaccineType_CodeOrderByDescriptionAsc(vaccineTypeCode) :
+				repository.findAllByOrderByDescriptionAsc()
+		);
 	}
 
 	/**
@@ -59,16 +50,8 @@ public class VaccineIoOperations {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newVaccine(
-			Vaccine vaccine) throws OHServiceException
-	{
-		boolean result = true;
-	
-
-		Vaccine savedVaccine = repository.save(vaccine);
-		result = (savedVaccine != null);
-		
-		return result;
+	public boolean newVaccine(Vaccine vaccine) throws OHServiceException {
+		return repository.save(vaccine) != null;
 	}
 	
 	/**
@@ -78,15 +61,8 @@ public class VaccineIoOperations {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean updateVaccine(
-			Vaccine vaccine) throws OHServiceException
-	{
-		boolean result = true;
-	
-		Vaccine savedVaccine = repository.save(vaccine);
-		result = (savedVaccine != null);
-		
-		return result;
+	public boolean updateVaccine(Vaccine vaccine) throws OHServiceException {
+		return repository.save(vaccine) != null;
 	}
 
 	/**
@@ -96,15 +72,9 @@ public class VaccineIoOperations {
 	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean deleteVaccine(
-			Vaccine vaccine) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteVaccine(Vaccine vaccine) throws OHServiceException {
 		repository.delete(vaccine);
-		
-		return result;	
+		return true;
 	}
 
 	/**
@@ -114,15 +84,8 @@ public class VaccineIoOperations {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;	
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.exists(code);
 	}
 }
 
