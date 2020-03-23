@@ -7,7 +7,6 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Random;
 
@@ -15,6 +14,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
 import org.isf.dicom.model.FileDicom;
+import org.isf.dicomtype.model.DicomType;
 import org.isf.utils.exception.OHException;
 
 public class TestDicom 
@@ -42,10 +42,9 @@ public class TestDicom
 	private String dicomInstanceUID = "TestInteanceUid";
 	private String modality = "TestModality";
 	private Blob dicomThumbnail = _createRandomBlob(66);
-    
 			
 	public FileDicom setup(
-			boolean usingSet) throws OHException 
+			DicomType dicomType, boolean usingSet) throws OHException 
 	{
 		FileDicom dicom;
 	
@@ -53,7 +52,7 @@ public class TestDicom
 		if (usingSet)
 		{
 			dicom = new FileDicom();
-			_setParameters(dicom);
+			_setParameters(dicom, dicomType);
 		}
 		else
 		{
@@ -62,14 +61,14 @@ public class TestDicom
 					dicomPatientName, dicomPatientAddress, dicomPatientAge, dicomPatientSex, dicomPatientBirthDate, 
 					dicomStudyId, dicomStudyDate, dicomStudyDescription, dicomSeriesUID, dicomSeriesInstanceUID, 
 					dicomSeriesNumber, dicomSeriesDescriptionCodeSequence, dicomSeriesDate, dicomSeriesDescription, 
-					dicomInstanceUID, modality, dicomThumbnail);
+					dicomInstanceUID, modality, dicomThumbnail,dicomType);
 		}			
 		
 		return dicom;
 	}
 	
 	public void _setParameters(
-			FileDicom dicom) 
+			FileDicom dicom, DicomType dicomType) 
 	{	
 		dicom.setDicomAccessionNumber(dicomAccessionNumber);
 		dicom.setDicomData(dicomData);
@@ -94,6 +93,7 @@ public class TestDicom
 		dicom.setFileName(fileName);
 		dicom.setPatId(patId);
 		dicom.setModality(modality);
+		dicom.setDicomType(dicomType);
 		
 		return;
 	}
@@ -146,4 +146,6 @@ public class TestDicom
 	
 		return blob;
 	}
+
+	
 }

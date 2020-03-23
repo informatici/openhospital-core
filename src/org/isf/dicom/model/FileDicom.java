@@ -13,13 +13,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.validation.constraints.NotNull;
+
+import org.isf.dicomtype.model.DicomType;
 
 
 /**
@@ -128,6 +130,10 @@ public class FileDicom
 	
 	@Transient
 	private volatile int hashCode = 0;
+	
+	@ManyToOne
+	@JoinColumn(name="DM_DCMT_ID")
+	private DicomType dicomType;
 
 	
 	/**
@@ -160,6 +166,7 @@ public class FileDicom
 		this.dicomInstanceUID = "";
 		this.modality = "";
 		this.dicomThumbnail = null;
+		this.dicomType = null;
 	}
 
 	/**
@@ -170,7 +177,7 @@ public class FileDicom
 			String dicomPatientName, String dicomPatientAddress, String dicomPatientAge, String dicomPatientSex, String dicomPatientBirthDate, 
 			String dicomStudyId, Date dicomStudyDate, String dicomStudyDescription, String dicomSeriesUID, String dicomSeriesInstanceUID, 
 			String dicomSeriesNumber, String dicomSeriesDescriptionCodeSequence, Date dicomSeriesDate, String dicomSeriesDescription, 
-			String dicomInstanceUID, String modality, Blob dicomThumbnail) 
+			String dicomInstanceUID, String modality, Blob dicomThumbnail, DicomType dicomType) 
 	{		
 		super();
 		this.patId = patId;
@@ -197,6 +204,7 @@ public class FileDicom
 		this.dicomInstanceUID = dicomInstanceUID;
 		this.modality = modality;
 		this.dicomThumbnail = dicomThumbnail;
+		this.dicomType = dicomType;
 	}
 	
 	/**
@@ -563,6 +571,20 @@ public class FileDicom
 	 */
 	public void setDicomThumbnail(Blob dicomThumbnail) {
 		this.dicomThumbnail = dicomThumbnail;
+	}
+	
+	/**
+	 * @return the dicomType
+	 */
+	public DicomType getDicomType() {
+		return dicomType;
+	}
+
+	/**
+	 * @param dicomType the dicomType to set
+	 */
+	public void setDicomType(DicomType dicomType) {
+		this.dicomType = dicomType;
 	}
 
 	/**
