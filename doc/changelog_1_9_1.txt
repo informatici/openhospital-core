@@ -1,3 +1,18 @@
+commit 8b7aeac6f0d36e20caab161fee8f5571aff31ba9
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-22
+
+    OP-141 #comment Removed all versions from xsd #time 1h 30min
+    
+    as reversion of
+    https://github.com/informatici/openhospital-core/commit/1a0a8ad033fe659a778b3779e7b8758f5b48a701
+
+commit 948e39d1de25d8425b7dc2e7745549a51da23410
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-16
+
+    Updated changelog
+
 commit 2b81d204fe36462fc027e67f5fa6f891023b7785
 Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
 Date:   2020-03-16
