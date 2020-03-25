@@ -49,4 +49,9 @@ public class DicomType {
 		this.dicomTypeDescription = dicomTypeDescription;
 	}
 
+	@Override
+	public String toString() {
+		return this.dicomTypeDescription;
+	}
+
 }
