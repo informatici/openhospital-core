@@ -603,6 +603,33 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	        return object1.getDicomStudyDate().compareTo(object2.getDicomStudyDate());
 	    }
 	}
+	
+	public class DicomTypeDateComparator implements Comparator<FileDicom> {
+		
+		
+		@Override
+	    public int compare(FileDicom object1, FileDicom object2) {
+
+			//default comparing
+			int result = object1.getDicomStudyDate().compareTo(object2.getDicomStudyDate());
+
+			
+			if (object1.getDicomType() == null || object2.getDicomType() == null) {
+				return result; 
+			}
+			else 
+			{
+				result = object1.getDicomType().getDicomTypeDescription().compareTo(object2.getDicomType().getDicomTypeDescription());
+				if (result != 0) {
+	                return result;
+				}
+				else
+				{	
+					return object1.getDicomStudyDate().compareTo(object2.getDicomStudyDate());
+				}
+			}
+	    }
+	}
 
 	/**
 	 * Filter for files .thumn
