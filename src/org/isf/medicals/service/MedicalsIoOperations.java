@@ -5,22 +5,18 @@
  */
 package org.isf.medicals.service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
-import org.isf.utils.db.DbQueryLogger;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -32,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 			- column product code
  * 			- column pieces per packet
  */
-@Component
+@Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class MedicalsIoOperations 
@@ -95,7 +91,7 @@ public class MedicalsIoOperations
 	 * @param type the medical type description.
 	 * @nameSorted if <code>true</code> return the list in alphatecial order, by code otherwise
 	 * @return the stored medicals.
-	 * @throws OHException if an error occurs retrieving the stored medicals.
+	 * @throws OHServiceException if an error occurs retrieving the stored medicals.
 	 */
 	public ArrayList<Medical> getMedicals(String type, boolean nameSorted) throws OHServiceException {
 		ArrayList<Medical> medicals = null;

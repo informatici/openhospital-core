@@ -14,10 +14,14 @@ import org.isf.menu.model.UserMenuItem;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+@Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class MenuIoOperations 
@@ -59,6 +63,17 @@ public class MenuIoOperations
 				
 			
 		return users;
+	}
+	
+	/**
+	 * returns {@link User} from its username
+	 * @param userName - the {@link User}'s username
+	 * @return {@link User}
+	 * @throws OHServiceException
+	 */
+	public User getUserByName(String userName) throws OHServiceException 
+	{ 
+		return repository.findByUserName(userName);
 	}
 	
 	/**
@@ -219,22 +234,22 @@ public class MenuIoOperations
 		List<Object[]> menuList = (List<Object[]>)menuRepository.findAllWhereId(aUser.getUserName());
 				
 		menu = new ArrayList<UserMenuItem>();
-		Iterator<Object[]> it = menuList.iterator();
-		while (it.hasNext()) {
-                    Object[] object = it.next();
-                    int active = (Boolean) object[9] ? 1 : 0;
-                    UserMenuItem umi = new UserMenuItem();			
-                    umi.setCode((String) object[0]);
-                    umi.setButtonLabel((String) object[1]);
-                    umi.setAltLabel((String) object[2]);
-                    umi.setTooltip((String) object[3]);
-                    umi.setShortcut((Character) object[4]);
-                    umi.setMySubmenu((String) object[5]);
-                    umi.setMyClass((String) object[6]);
-                    umi.setASubMenu((Character)object[7] == 'Y' ? true : false);
-                    umi.setPosition((Integer) object[8]);
-                    umi.setActive(active == 1 ? true : false);
-                    menu.add(umi);
+		for (Object[] object : menuList) {
+			boolean active = (Boolean) object[9];
+			UserMenuItem umi = new UserMenuItem();
+
+
+			umi.setCode((String) object[0]);
+			umi.setButtonLabel((String) object[1]);
+			umi.setAltLabel((String) object[2]);
+			umi.setTooltip((String) object[3]);
+			umi.setShortcut((Character) object[4]);
+			umi.setMySubmenu((String) object[5]);
+			umi.setMyClass((String) object[6]);
+			umi.setASubMenu((Character) object[7] == 'Y');
+			umi.setPosition((Integer) object[8]);
+			umi.setActive(active);
+			menu.add(umi);
 		}
 		
 		return menu;

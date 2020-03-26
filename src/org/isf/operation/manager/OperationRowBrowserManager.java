@@ -12,18 +12,22 @@ import org.isf.menu.manager.Context;
 import org.isf.opd.model.Opd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.isf.operation.model.OperationRow;
 import org.isf.operation.service.OperationRowIoOperations;
-import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 /**
  *
  * @author xavier
  */
+@Component
 public class OperationRowBrowserManager {
     private final Logger logger = LoggerFactory.getLogger(OperationRowBrowserManager.class);
-    private OperationRowIoOperations ioOperations = Context.getApplicationContext().getBean(OperationRowIoOperations.class);
+    @Autowired
+    private OperationRowIoOperations ioOperations;
     
-    public List<OperationRow> getOperationRowByAdmission(Admission adm) throws OHException{
+    public List<OperationRow> getOperationRowByAdmission(Admission adm) throws OHServiceException{
 	return ioOperations.getOperationRowByAdmission(adm);
     }
     
@@ -31,7 +35,7 @@ public class OperationRowBrowserManager {
         ArrayList<OperationRow> results = new ArrayList<OperationRow>();
         try {
             results = ioOperations.getOperationRowByOpd(opd);
-        } catch (OHException ex) {
+        } catch (OHServiceException ex) {
             //ignore
         }
         return results;
@@ -41,7 +45,7 @@ public class OperationRowBrowserManager {
         try {
             boolean res = ioOperations.deleteOperationRow(operationRow);
             return res;
-        } catch (OHException ex) {
+        } catch (OHServiceException ex) {
             return false;
         }
     }
@@ -50,7 +54,7 @@ public class OperationRowBrowserManager {
         try {
             ioOperations.updateOperationRow(opRow);
             return true;
-        } catch (OHException ex) {
+        } catch (OHServiceException ex) {
             return false;
         }
     }
@@ -59,7 +63,7 @@ public class OperationRowBrowserManager {
         try {
             ioOperations.newOperationRow(opRow);
             return true;
-        } catch (OHException ex) {
+        } catch (OHServiceException ex) {
             return false;
         }
     }

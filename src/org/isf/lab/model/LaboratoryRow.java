@@ -101,7 +101,7 @@ public class LaboratoryRow extends Auditable<String>
 	        final int m = 23;
 	        int c = 133;
 	        
-	        c = m * c + (code == null ? 0 : code.intValue());
+	        c = m * c + (code == null ? 0 : code);
 	        
 	        this.hashCode = c;
 	    }

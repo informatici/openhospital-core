@@ -11,10 +11,14 @@ import org.isf.menu.manager.Context;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ExaminationBrowserManager {
-
-	private ExaminationOperations ioOperations = Context.getApplicationContext().getBean(ExaminationOperations.class);
+	
+	@Autowired
+	private ExaminationOperations ioOperations;
 
 	/**
 	 * Default PatientExamination
@@ -37,10 +41,8 @@ public class ExaminationBrowserManager {
 
 	/**
 	 * 
-	 * @param path
-	 *            - the PatientHistory to save
+	 * @param path - the PatientHistory to save
 	 * @throws OHServiceException 
-	 * @throws OHException 
 	 */
 	public void saveOrUpdate(PatientExamination patex) throws OHServiceException {
         ioOperations.saveOrUpdate(patex);

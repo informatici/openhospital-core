@@ -12,13 +12,14 @@ import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @see org.isf.sms.model.Sms
  * @author Mwithi
  */
-@Component
+@Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class SmsOperations {
@@ -76,9 +77,9 @@ public class SmsOperations {
 	public Sms getByID(
 			int ID) throws OHServiceException 
 	{
-		Sms foundSms = repository.findOne(ID);;
-    	
-		return foundSms;
+		Sms foundSms = repository.findOne(ID);
+
+        return foundSms;
 	}
 	
 	/**

@@ -498,9 +498,7 @@ public class Tests
 			UserGroup userGroup = testUserGroup.setup(false);
 			User user = testUser.setup(userGroup, false);
 			UserMenuItem menuItem = testUserMenu.setup(false);
-			GroupMenu groupMenu = testGroupMenu.setup(false);
-				groupMenu.setUserGroup(userGroup.getCode());
-				groupMenu.setMenuItem(menuItem.getCode());
+			GroupMenu groupMenu = new GroupMenu(userGroup.getCode(), menuItem.getCode());
 			jpa.persist(userGroup);
 			jpa.persist(user);
 			jpa.persist(menuItem);
@@ -529,9 +527,7 @@ public class Tests
 			UserGroup userGroup = testUserGroup.setup(false);
 			User user = testUser.setup(userGroup, false);
 			UserMenuItem menuItem = testUserMenu.setup(false);
-			GroupMenu groupMenu = testGroupMenu.setup(false);
-				groupMenu.setUserGroup(userGroup.getCode());
-				groupMenu.setMenuItem(menuItem.getCode());
+			GroupMenu groupMenu = new GroupMenu(userGroup.getCode(), menuItem.getCode());
 			jpa.persist(userGroup);
 			jpa.persist(user);
 			jpa.persist(menuItem);
@@ -618,8 +614,8 @@ public class Tests
 		{		
 			code = _setupTestUserGroup(false);
 			UserGroup foundUserGroup = (UserGroup)jpa.find(UserGroup.class, code); 
-			foundUserGroup.setDesc("Update");;
-			result = menuIoOperation.updateUserGroup(foundUserGroup);
+			foundUserGroup.setDesc("Update");
+            result = menuIoOperation.updateUserGroup(foundUserGroup);
 			UserGroup updateUserGroup = (UserGroup)jpa.find(UserGroup.class, code); 
 			
 			assertEquals(true, result);

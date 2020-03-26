@@ -130,28 +130,32 @@ public class Patient extends Auditable<String>
 	private String mother_name; // mother's name
 	
 	@Column(name="PAT_MOTH")
-	private char mother; // D=dead, A=alive
+	private char mother = ' '; // D=dead, A=alive
 
 	@NotNull
 	@Column(name="PAT_FATH_NAME")
 	private String father_name; // father's name
 	
 	@Column(name="PAT_FATH")
-	private char father; // D=dead, A=alive
+	private char father = ' '; // D=dead, A=alive
 
 	@NotNull
 	@Column(name="PAT_BTYPE")
 	private String bloodType; // (0-/+, A-/+ , B-/+, AB-/+)
 	
 	@Column(name="PAT_ESTA")
-	private char hasInsurance; // Y=Yes, N=no
+	private char hasInsurance = ' '; // Y=Yes, N=no
 	
 	@Column(name="PAT_PTOGE")
-	private char parentTogether; // parents together: Y or N
+	private char parentTogether = ' '; // parents together: Y or N
 	
 	@Column(name="PAT_TAXCODE")
 	private String taxCode;
-	
+
+	@NotNull
+	@Column(name="PAT_DELETED")
+	private String deleted = "N";
+
 	@Transient
 	private float height;
 	
@@ -520,8 +524,16 @@ public class Patient extends Auditable<String>
 	public void setWeight(float weight) {
 		this.weight = weight;
 	}
-	
-	@Override
+
+    public String getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(String deleted) {
+        this.deleted = deleted;
+    }
+
+    @Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -541,7 +553,7 @@ public class Patient extends Auditable<String>
 	        final int m = 23;
 	        int c = 133;
 	        
-	        c = m * c + ((code == null) ? 0 : code.intValue());
+	        c = m * c + ((code == null) ? 0 : code);
 	        
 	        this.hashCode = c;
 	    }

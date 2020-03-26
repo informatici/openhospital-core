@@ -51,9 +51,8 @@ public class GroupMenu extends Auditable<String>
 	public GroupMenu(){
 	}
 	
-	public GroupMenu(Integer code, String userGroup, String menuItem)
+	public GroupMenu(String userGroup, String menuItem)
 	{
-		this.code = code;
 		this.userGroup = userGroup;
 		this.menuItem = menuItem;
 	}
@@ -76,9 +75,11 @@ public class GroupMenu extends Auditable<String>
 	public void setMenuItem(String menuItem) {
 		this.menuItem = menuItem;
 	}
-
-	public String toString(){
-		return code.toString();		
+	public int getActive() {
+		return active;
+	}
+	public void setActive(char active) {
+		this.active = active;
 	}
 	
 	@Override
@@ -86,21 +87,8 @@ public class GroupMenu extends Auditable<String>
         return (anObject == null) || !(anObject instanceof GroupMenu) ? false
                 : (getCode().equals(((GroupMenu) anObject).getCode())
                   && getUserGroup().equalsIgnoreCase(((GroupMenu) anObject).getUserGroup()) 
-                  && getMenuItem().equals(((GroupMenu) anObject).getMenuItem()));
+                  && getMenuItem().equals(((GroupMenu) anObject).getMenuItem())
+                  && getActive() == ((GroupMenu) anObject).getActive());
     }
 
-	@Override
-	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + code.hashCode();
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
-	}	
-	
 }//class GroupMenu

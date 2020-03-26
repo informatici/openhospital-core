@@ -83,7 +83,7 @@ public class Movement extends Auditable<String>
 	@Column(name="MMV_REFNO")
 	private String refNo;
         
-//        @NotNull
+//  @NotNull
 //	@ManyToOne
 //	@JoinColumn(name="MMV_WRD_ID_A_TO")	
 //	private Ward wardTo;

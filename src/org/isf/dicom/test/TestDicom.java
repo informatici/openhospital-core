@@ -46,7 +46,7 @@ public class TestDicom
 		FileDicom dicom;
 	
 				
-		if (usingSet == true)
+		if (usingSet)
 		{
 			dicom = new FileDicom();
 			_setParameters(dicom);
@@ -134,10 +134,8 @@ public class TestDicom
 		try {
 			blob = new SerialBlob(data);
 		} catch (SerialException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	

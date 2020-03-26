@@ -1,5 +1,6 @@
 package org.isf.medicalstock.model;
 
+import java.math.BigDecimal;
 import java.util.GregorianCalendar;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -52,7 +53,7 @@ public class Lot extends Auditable<String>
 	private int quantity;
 	
 	@Column(name="LT_COST")
-	private double cost;
+	private BigDecimal cost;
 	
 	@Transient
 	private volatile int hashCode = 0;
@@ -72,7 +73,7 @@ public class Lot extends Auditable<String>
 		dueDate=aDueDate;
 		quantity=aQuantity;
 	}
-	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate,double aCost){
+	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate,BigDecimal aCost){
 		code=aCode;
 		preparationDate=aPreparationDate;
 		dueDate=aDueDate;
@@ -90,7 +91,7 @@ public class Lot extends Auditable<String>
 	public GregorianCalendar getDueDate(){
 		return dueDate;
 	}
-	public double getCost() {
+	public BigDecimal getCost() {
 		return cost;
 	}
 	public void setCode(String aCode){
@@ -105,7 +106,7 @@ public class Lot extends Auditable<String>
 	public void setDueDate(GregorianCalendar aDueDate){
 		dueDate=aDueDate;
 	}
-	public void setCost(double cost) {
+	public void setCost(BigDecimal cost) {
 		this.cost = cost;
 	}
 	public String toString(){
@@ -131,9 +132,10 @@ public class Lot extends Auditable<String>
 				return false;
 		} else if (!code.equals(other.code))
 			return false;
-		if (Double.doubleToLongBits(cost) != Double
-				.doubleToLongBits(other.cost))
-			return false;
+		if (cost != null) {
+			if (cost.compareTo(other.cost) != 0)
+				return false;
+		}
 		if (dueDate == null) {
 			if (other.dueDate != null)
 				return false;

@@ -15,7 +15,7 @@ import org.springframework.transaction.CannotCreateTransactionException;
 @Aspect
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
 @Component
-public class OhExceptionTranslator {
+public class OHExceptionTranslator {
 
 	@Around("within(@org.isf.utils.db.TranslateOHException *)")
 	public Object translateSqlExceptionToOhException(ProceedingJoinPoint pjp) throws OHException {
