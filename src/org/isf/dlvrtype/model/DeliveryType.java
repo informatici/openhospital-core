@@ -1,12 +1,18 @@
 
 package org.isf.dlvrtype.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import org.isf.utils.db.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Pure Model Exam : represents a disease type
@@ -23,7 +29,15 @@ import javax.validation.constraints.NotNull;
 *------------------------------------------*/
 @Entity
 @Table(name="DELIVERYTYPE")
-public class DeliveryType 
+@EntityListeners(AuditingEntityListener.class) 
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="DLT_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="DLT_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="DLT_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="DLT_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="DLT_LAST_MODIFIED_DATE"))
+})
+public class DeliveryType  extends Auditable<String>
 {
 	@Id 
 	@Column(name="DLT_ID_A")	    
