@@ -311,5 +311,4 @@ public class PatientBrowserManager {
         }
         return true;
     }
-
 }

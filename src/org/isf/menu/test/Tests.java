@@ -498,7 +498,7 @@ public class Tests
 			UserGroup userGroup = testUserGroup.setup(false);
 			User user = testUser.setup(userGroup, false);
 			UserMenuItem menuItem = testUserMenu.setup(false);
-			GroupMenu groupMenu = new GroupMenu(999, userGroup.getCode(), menuItem.getCode(), 'Y');
+			GroupMenu groupMenu = new GroupMenu(userGroup.getCode(), menuItem.getCode());
 			jpa.persist(userGroup);
 			jpa.persist(user);
 			jpa.persist(menuItem);
@@ -527,7 +527,7 @@ public class Tests
 			UserGroup userGroup = testUserGroup.setup(false);
 			User user = testUser.setup(userGroup, false);
 			UserMenuItem menuItem = testUserMenu.setup(false);
-			GroupMenu groupMenu = new GroupMenu(999, userGroup.getCode(), menuItem.getCode(), 'Y');
+			GroupMenu groupMenu = new GroupMenu(userGroup.getCode(), menuItem.getCode());
 			jpa.persist(userGroup);
 			jpa.persist(user);
 			jpa.persist(menuItem);

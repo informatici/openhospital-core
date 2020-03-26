@@ -26,6 +26,7 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * Manager for filesystem
@@ -33,11 +34,15 @@ import org.slf4j.LoggerFactory;
  * @author Pietro Castellucci
  * @version 1.0.0
  */
+@Component
 public class FileSystemDicomManager implements DicomManagerInterface {
 
 	private final Logger logger = LoggerFactory.getLogger(FileSystemDicomManager.class);
 	
 	private static String NOSERIE = "_NOSERIE";
+	
+	public FileSystemDicomManager() {
+	}
 
 	/**
 	 * Root dir for data storage
@@ -60,6 +65,13 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			throw new OHDicomException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
 					"FileSystemDicomManager " + MessageBundle.getMessage("angal.dicom.manager.nodir"), OHSeverityLevel.ERROR));
 		}
+	}
+	
+	/*
+	* @param dir the dir to set
+	*/
+	public void setDir(Properties externalPrp) {
+		this.dir = new File(externalPrp.getProperty("dicom.storage.filesystem"));
 	}
 
 	/**
