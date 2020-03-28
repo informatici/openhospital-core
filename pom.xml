@@ -427,14 +427,6 @@
 			</snapshots>
 		</repository>
 		<repository>
-			<id>cytoscape</id>
-			<name>Cytoscape Repository</name>
-			<url>http://code.cytoscape.org/nexus/content/repositories/releases/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
 			<id>boundless</id>
 			<name>Boundless Repository</name>
 			<url>https://repo.boundlessgeo.com/main//</url>
