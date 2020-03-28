@@ -1,0 +1,348 @@
+commit 3ce0597bd84083c25f11ea9542ac6051884821ed
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-28
+
+    Updated OH-core artifact version
+
+commit 169b75e7ff88987f89f2e0f73d9dee93c4a78aac
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-28
+
+    Op 173 vezo 4 new dicom features (#68)
+    
+    * Enabled FileSystemDicomManager to Spring (@Component)
+    * Removed useless constructor's argument
+    * Enabled JPG and JPEG formats
+    * Added method for SeriesNumber exist check
+    * Fixing DICOM libraries and dependencies
+    * First version of JPEG compatibility in DICOM module
+    * Added utility FileTools for retrieving information from filesystem
+    * Added new Dialog upon dicom/images loading
+    
+    TODO:
+    - possibility to add images to the same series
+    - handle big size images (IndexOutOfBoundsException)
+
+commit 2370b06d30f1e1ef234a61fc20d0287e74b6691e
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-28
+
+    Op 172 vezo 3 laboratory default material (#67)
+    
+    * Fixed Laboratory demo data
+    * OP-172 #comment Added 'undefined' default material
+
+commit 0e40e782ff19c173f0b5cf8ba418fc23776ff10b
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-28
+
+    Op 171 vezo 2 examination window changes (#66)
+    
+    * OP-171 #comment added UoM to Saturation parameter #time 30min
+    * Re-mapped Examination module with immutable nullable types
+    * Set all values to 'int' except UoM (String) and steps (double).
+    - SAT_MAX deprecated (it is always 100)
+    - HEIGHT_STEP default set to 1 (cm)
+    
+    * PatientExamination refactoring and settings
+    - Fixed UoM: removed user defined UoM and adopted SI (Kg for the Weight
+    and meter for the Height)
+    - Renamed some DB fields names
+    - Porting script for previous data
+    
+    * OP-171 #comment added Remove methods
+    
+    * Moved getBMIdescription() method to Manager
+    
+    * OP-171 #comment Added new fields HGT, Diuresis and Bowel
+    
+    * Included temporary step_XX in dockerfile
+    
+    * Update .travis.yml
+    
+    Debuggin docker
+    
+    * Debugging docker
+    
+    * Debugging Docker
+    
+    * Debugging Docker-Compose
+    
+    * Fixed table name cases
+    
+    * Removing debugger
+    
+    * Rename step_XX_examination_changes.sql to step_60_examination_changes.sql
+
+commit e566297238c790e9d69684bb6276ac91e50442ca
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-28
+
+    OP-139: Upgrading to processing core 2.2.1 (#53) (#65)
+    
+    * OP-139: Upgrading to processing core 2.2.1 (#53)
+    Version 1.2.1 cant be accessed from cytoscape repo anymore
+    * Removed Cytoscape Repository
+    
+    Co-authored-by: Alex Wibowo <alexwibowo@gmail.com>
+
+commit ad7249bff6b70b44c66d37fec7c6ba0a9d0d1a81
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-26
+
+    Op 80 audits fields (#58)
+    
+    * Minor modification  on LabIoOperationRepositoryCustom
+    * Audit trail applied
+    * Reuse of GM_ACTIVE field in GROUPMENU by converting 'Y' -> 1 and 'N' -> and then CHANGE the column to TINYINT(1).
+    * Converted *_ACTIVE fields to TINYINT(1)
+    
+    Co-authored-by: Marcellin <marcellintabou@gmail.com>
+
+commit 8ae7c14f4524ccfee690dd1ba36ffee084a79313
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-25
+
+    1.9.1 hotfixes (#64)
+    
+    * Updated changelog
+    * Trying to fixing Hibernate ERROR on linux32 version 'Cannot convert value '0000-00-00 00:00:00' from column TIMESTAMP'
+    * Removed unwanted std output
+    * Op 140 update dicom libraries (#56)
+    * Fix dicomManager to manage the bean
+    * fix pom to update dicom libraries
+    * Op 183 problem with dates in operation data (#55)
+    * Refactored OhExceptionTranslator -> OHExceptionTranslator
+    * Confirmed script 58
+    * Op 183 problem with dates in operation data (#62)
+    * OP-141 #comment Removed all versions from xsd as reversion of
+    https://github.com/informatici/openhospital-core/commit/1a0a8ad033fe659a778b3779e7b8758f5b48a701
+    
+    Co-authored-by: Xavier <martinxaviertchembe@gmail.com>
+    Co-authored-by: Niccolò Pasquetto <niccolo.pasquetto@intesys.it>
+    Co-authored-by: giuseppe.sorge <giuseppe.sorge90@gmail.com>
+    Co-authored-by: Lars Grefer <github@larsgrefer.de>
+    Co-authored-by: vicusotto <vito988@gmail.com>
+
+commit 23758561f7f32af90b58a9fd8b990934d118a803
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-24
+
+    Removed unwanted step
+
+commit b645a5b1fdbe6291c59e565c651ca6d6ebdc44b3
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-24
+
+    Updated changelog
+
+commit 8b7aeac6f0d36e20caab161fee8f5571aff31ba9
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-22
+
+    OP-141 #comment Removed all versions from xsd #time 1h 30min
+    
+    as reversion of
+    https://github.com/informatici/openhospital-core/commit/1a0a8ad033fe659a778b3779e7b8758f5b48a701
+
+commit ec2472de910b3345127952e6c67ffb22a52ea362
+Author: Niccolò Pasquetto <niccolo.pasquetto@gmail.com>
+Date:   2020-03-22
+
+    remove data jpa schema version (#63)
+    
+    * remove data jpa schema version
+    
+    To support different spring data jpa minor versions, it's been reference the unversioned xsd schema from the namespace declaration
+    
+    * OP-141 #comment Removed all versions from xsd #time 1h 30min
+    
+    as reversion of
+    https://github.com/informatici/openhospital-core/commit/1a0a8ad033fe659a778b3779e7b8758f5b48a701
+    
+    Co-authored-by: Alessandro Domanico <alessandro.domanico@yahoo.it>
+
+commit 948e39d1de25d8425b7dc2e7745549a51da23410
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-16
+
+    Updated changelog
+
+commit 2b81d204fe36462fc027e67f5fa6f891023b7785
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-16
+
+    Op 183 problem with dates in operation data (#62)
+    
+    Fixed problem with dates in Operation data
+    
+    Co-authored-by: Xavier <martinxaviertchembe@gmail.com>
+    Co-authored-by: Niccolò Pasquetto <niccolo.pasquetto@intesys.it>
+    Co-authored-by: Lars Grefer <github@larsgrefer.de>
+    Co-authored-by: vicusotto <vito988@gmail.com>
+
+commit 6f4d8e53a3748f79bb73e6f74d6015038c4f07ee
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-07
+
+    Confirmed script 58
+    
+    Conflicts:
+            mysql/db/from_step_05.sql
+
+commit e6d8bbc98bd59bf6b9242d8d4a74a5f2da32f6f0
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-07
+
+    Op 183 problem with dates in operation data (#55)
+    
+    * Refactored OhExceptionTranslator -> OHExceptionTranslator
+    * Fixed problem with dates in Operation data
+    Co-authored-by: Xavier <martinxaviertchembe@gmail.com>
+    
+    Conflicts:
+            src/org/isf/exa/manager/ExamBrowsingManager.java
+            src/org/isf/patient/manager/PatientBrowserManager.java
+
+commit 1a55412764b24d058431de94cae967f8a54ca381
+Author: giuseppe.sorge <giuseppe.sorge90@gmail.com>
+Date:   2020-03-07
+
+    Op 140 update dicom libraries (#56)
+    
+    * Fix dicomManager to manage the bean
+    * fix pom to update dicom libraries
+    
+    Conflicts:
+            src/org/isf/dicom/manager/DicomManagerFactory.java
+
+commit 09887bbbf2c33bec60d0ae2de2fdacbe918cf15e
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-07
+
+    Confirmed script 58
+
+commit f3564a96abbfb0cb8301f879386f57489671f7f9
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-07
+
+    Op 183 problem with dates in operation data (#55)
+    
+    * Refactored OhExceptionTranslator -> OHExceptionTranslator
+    * Fixed problem with dates in Operation data
+    Co-authored-by: Xavier <martinxaviertchembe@gmail.com>
+
+commit 3d3d34ae83abf5405024fa46928f681fd68160d3
+Author: giuseppe.sorge <giuseppe.sorge90@gmail.com>
+Date:   2020-03-07
+
+    Op 140 update dicom libraries (#56)
+    
+    * Fix dicomManager to manage the bean
+    * fix pom to update dicom libraries
+
+commit 936ebb2f93ea8e1eb37d025b5adabc447d916fae
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-03
+
+    Op 127 improve exceptions handling (#44)
+    
+    * Refactored OhExceptionTranslator -> OHExceptionTranslator
+    * Introduced OHServiceValidateException in all managers
+    * Removed JOptionPane from BillBrowserManager
+    * Clean up code
+    * Removed OHException -> OHServiceException
+    * Removed old OHException in some classes
+    * New OHServiceOperationNotAllowedException for (only) ward
+    * Added new specialized exceptions
+    * Removed OHException from JasperReportManager
+    * Added new specialized exception in all managers.
+    * Renamed two specialized exceptions
+
+commit 00dc1ab8d4884ddafa1051da538c594d141d4167
+Author: Lars Grefer <github@larsgrefer.de>
+Date:   2020-03-03
+
+    Fix code style issues (#50)
+    
+    * Force indentation with tabs
+    * C-style array declaration
+    * Unnecessary conversion to String
+    * Unnecessary enum modifier
+    * Unnecessary interface modifier
+    * Unnecessary semicolon
+
+commit 3ff3d8eff71e0fdf4715085439380755de3bca14
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-03
+
+    OP-178 #comment fix validation-api version conflict between api #time 1h (#49) (#52)
+    
+    Co-authored-by: vicusotto <vito988@gmail.com>
+
+commit ea156900f7cdf39dbe7f5a6ef853a447a2aa7f79
+Author: Lars Grefer <github@larsgrefer.de>
+Date:   2020-03-02
+
+    Fix control flow issues (#51)
+    
+    * 'if' statement with common parts
+    * Pointless boolean expression
+    * Redundant conditional expression
+
+commit aebd9418e7f7268522b8130e4e5c8eeddc4ade73
+Author: Lars Grefer <github@larsgrefer.de>
+Date:   2020-02-29
+
+    Update to Java 6 (#48)
+    
+    * Use enhanced for loop instead of indexed for loop
+    * Use enhanced for loop instead of while loop
+    * Remove unnecessary boxing
+    * Remove unnecessary unboxing
+
+commit 4e37cadf950086110b1509e7eb360bcff163e95b
+Author: Lars Grefer <github@larsgrefer.de>
+Date:   2020-02-29
+
+    Make the Maven Wrapper executeable (#45)
+
+commit b336db11f75b37fbeff75baa6db5a98181e2c9de
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-27
+
+    Removed unwanted std output
+
+commit e697656366bc5438edd1143488a6efefe9f05247
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-20
+
+    Trying to fixing Hibernate ERROR on linux32 version
+    
+    'Cannot convert value '0000-00-00 00:00:00' from column TIMESTAMP'
+
+commit 2a2d1b668a7eb1bb47329a12fd34cbc59559606b
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-19
+
+    Updated changelog
+
+commit fb8d3b267392515ad6778b82f04a549ab4c3a6b7
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-17
+
+    Revert version for compliance with other components
+
+commit 18897128e127b464fe1e98ac2ce716f76ce05402
+Author: Niccolò Pasquetto <niccolo.pasquetto@intesys.it>
+Date:   2020-02-17
+
+    Op 102 master refactoring for api (#38)
+    
+    * Impostazione servizi rest per modulo patient
+    * Make patients pagination working
+    * Set patient deleted default value, make return boolean on delete patient
+    * Added mvn wrapper
+    * Refactoring: rename class "Implementation" to "Impl"
+    * Update .travis.yml: add execution permissions to maven wrapper
+    * Set default value and not null annotation on patient to prevent conflict with db schema
