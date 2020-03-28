@@ -18,18 +18,22 @@ public class TestVisit
 	private boolean sms = true;
 	private String duration = "10";
 	private String service = "testService";
+	private Ward ward;
+	private Patient patient;
 			
 	public Visit setup(
 			Patient patient,
-			boolean usingSet, Ward ward) throws OHException 
+			boolean usingSet, 
+			Ward ward) throws OHException 
 	{
 		Visit visit;
-	
+		this.ward = ward;
+		this.patient = patient;
 				
 		if (usingSet)
 		{
 			visit = new Visit();
-			_setParameters(patient, visit);
+			_setParameters(patient, visit, ward);
 		}
 		else
 		{
@@ -42,12 +46,14 @@ public class TestVisit
 	
 	public void _setParameters(
 			Patient patient,
-			Visit visit) 
+			Visit visit,
+			Ward ward) 
 	{	
 		visit.setDate(date);
 		visit.setNote(note);
 		visit.setPatient(patient);
 		visit.setSms(sms);
+		visit.setWard(ward);
 				
 		return;
 	}
@@ -58,7 +64,8 @@ public class TestVisit
     	assertEquals(date,visit.getDate());
     	assertEquals(note,visit.getNote());
     	assertEquals(sms,visit.isSms());
-		
+		assertEquals(ward, visit.getWard());
+		assertEquals(patient, visit.getPatient());
 		return;
 	}
 }

@@ -51,12 +51,12 @@ public class Visit  extends Auditable<String>
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name="VST_PAT_ID")
-	Patient patient;
+	private Patient patient;
 	
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name="VST_WRD_ID_A")
-	Ward ward;
+	private Ward ward;
 
 	@NotNull
 	@Column(name="VST_DATE")
