@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstockward.model.MovementWard;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
@@ -27,20 +28,22 @@ public class TestMovementWard
 			Ward ward,
 			Patient patient,
 			Medical medical,
+			Ward wardTo,
+			Ward wardFrom,
+			Lot lot,
 			boolean usingSet) throws OHException 
 	{
 		MovementWard movementWard;
-	
 				
 		if (usingSet)
 		{
 			movementWard = new MovementWard();
-			_setParameters(movementWard, ward, patient, medical);
+			_setParameters(movementWard, ward, patient, medical, wardFrom, wardTo, lot);
 		}
 		else
 		{
 			// Create MovementWard with all parameters 
-			movementWard = new MovementWard(ward, date, isPatient, patient, age, weight, description, medical, quantity, units);
+			movementWard = new MovementWard(ward, date, isPatient, patient, age, weight, description, medical, quantity, units, wardTo, wardFrom, lot);
 		}
 				    	
 		return movementWard;
@@ -50,7 +53,10 @@ public class TestMovementWard
 			MovementWard movementWard,
 			Ward ward,
 			Patient patient,
-			Medical medical) 
+			Medical medical,
+			Ward wardTo,
+			Ward wardFrom,
+			Lot lot) 
 	{	
 		movementWard.setAge(age);
 		movementWard.setDate(date);
@@ -62,6 +68,9 @@ public class TestMovementWard
 		movementWard.setUnits(units);
 		movementWard.setWard(ward);
 		movementWard.setWeight(weight);
+		movementWard.setWardFrom(wardFrom);
+		movementWard.setWardTo(wardTo);
+		movementWard.setlot(lot);
 		
 		return;
 	}

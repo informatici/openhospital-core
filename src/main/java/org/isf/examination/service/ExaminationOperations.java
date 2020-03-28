@@ -3,9 +3,7 @@
  */
 package org.isf.examination.service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.isf.examination.model.PatientExamination;

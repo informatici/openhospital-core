@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
 import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
 import org.isf.patient.model.Patient;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -55,6 +56,10 @@ public class MovementWard  extends Auditable<String>
 	@ManyToOne
 	@JoinColumn(name="MMVN_WRD_ID_A")	
 	private Ward ward;
+	
+	@ManyToOne
+	@JoinColumn(name="MMVN_LT_ID")	
+	private Lot lot;
 
 	@NotNull
 	@Column(name="MMVN_DATE")
@@ -131,6 +136,22 @@ public class MovementWard  extends Auditable<String>
 		this.quantity = quantity;
 		this.units = units;
 	}
+	public MovementWard(Ward ward, GregorianCalendar date, boolean isPatient,
+			Patient patient, int age, float weight, String description, Medical medical,
+			Double quantity, String units,Lot lot) {
+		super();
+		this.ward = ward;
+		this.date = date;
+		this.isPatient = isPatient;
+		this.patient = patient;
+		this.age = age;
+		this.weight = weight;
+		this.description = description;
+		this.medical = medical;
+		this.quantity = quantity;
+		this.units = units;
+		this.lot=lot;
+	}
 
     /**
 	 * 
@@ -149,7 +170,7 @@ public class MovementWard  extends Auditable<String>
 	 */
 	public MovementWard(Ward ward, GregorianCalendar date, boolean isPatient,
 			Patient patient, int age, float weight, String description, Medical medical,
-			Double quantity, String units, Ward wardTo, Ward wardFrom) {
+			Double quantity, String units, Ward wardTo, Ward wardFrom,Lot lot) {
 		super();
 		this.ward = ward;
 		this.date = date;
@@ -163,6 +184,21 @@ public class MovementWard  extends Auditable<String>
 		this.units = units;
 		this.wardTo = wardTo;
 		this.wardFrom = wardFrom;
+		this.lot=lot;
+	}
+	
+	
+	public MovementWard(Ward ward, Lot lot,
+			String description, Medical medical,
+			Double quantity, String units) {
+		super();
+		this.ward = ward;
+		this.lot = lot;
+		this.description = description;
+		this.medical = medical;
+		this.quantity = quantity;
+		this.units = units;
+	
 	}
         
 	public int getCode(){
@@ -188,7 +224,13 @@ public class MovementWard  extends Auditable<String>
 	public void setWard(Ward ward) {
 		this.ward = ward;
 	}
+	public Lot getLot() {
+		return lot;
+	}
 
+	public void setlot(Lot lot) {
+		this.lot = lot;
+	}
 	public boolean isPatient() {
 		return isPatient;
 	}
