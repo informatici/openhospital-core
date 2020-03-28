@@ -14,15 +14,19 @@ import org.isf.admtype.model.AdmissionType;
 import org.isf.disctype.model.DischargeType;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
-import org.isf.menu.manager.Context;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AdmissionBrowserManager {
 
-	private AdmissionIoOperations ioOperations = Context.getApplicationContext().getBean(AdmissionIoOperations.class);
+	@Autowired
+	private AdmissionIoOperations ioOperations;
 
 	/**
 	 * Returns all patients with ward in which they are admitted.
@@ -122,10 +126,7 @@ public class AdmissionBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newAdmission(Admission admission) throws OHServiceException{
-        List<OHExceptionMessage> errors = validateAdmission(admission, true);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validateAdmission(admission, true);
         return ioOperations.newAdmission(admission);
 	}
 
@@ -136,10 +137,7 @@ public class AdmissionBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public int newAdmissionReturnKey(Admission admission) throws OHServiceException{
-        List<OHExceptionMessage> errors = validateAdmission(admission, true);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateAdmission(admission, true);
         return ioOperations.newAdmissionReturnKey(admission);
 	}
 
@@ -150,10 +148,7 @@ public class AdmissionBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateAdmission(Admission admission) throws OHServiceException{
-        List<OHExceptionMessage> errors = validateAdmission(admission, false);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateAdmission(admission, false);
         return ioOperations.updateAdmission(admission);
 	}
 
@@ -187,15 +182,20 @@ public class AdmissionBrowserManager {
         return ioOperations.deletePatientPhoto(id);
 	}
 
-    protected List<OHExceptionMessage> validateAdmission(Admission admission, boolean insert) throws OHServiceException {
+	/**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * @param admission
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHDataValidationException
+	 */
+    protected void validateAdmission(Admission admission, boolean insert) throws OHServiceException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 
         /*
          * Initizalize AdmissionBrowserManager
          */
         Patient patient = admission.getPatient();
-        AdmissionBrowserManager abm = new AdmissionBrowserManager();
-        ArrayList<Admission> admList = abm.getAdmissions(patient);
+        ArrayList<Admission> admList = getAdmissions(patient);
 
         /*
          * Today Gregorian Calendar
@@ -414,6 +414,8 @@ public class AdmissionBrowserManager {
                 }
             }
         }
-        return errors;
+        if (!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
     }
 }

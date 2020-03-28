@@ -2,35 +2,39 @@ package org.isf.medstockmovtype.manager;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.medstockmovtype.service.MedicalStockMovementTypeIoOperation;
-import org.isf.menu.manager.Context;
-import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Manager class for the medical stock movement type.
  *
  */
+@Component
 public class MedicaldsrstockmovTypeBrowserManager {
 
 	private final Logger logger = LoggerFactory.getLogger(MedicaldsrstockmovTypeBrowserManager.class);
 	
-	private MedicalStockMovementTypeIoOperation ioOperations = Context.getApplicationContext().getBean(MedicalStockMovementTypeIoOperation.class);
+	@Autowired
+	private MedicalStockMovementTypeIoOperation ioOperations;
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param movementType
-	 * @return list of {@link OHExceptionMessage}
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHServiceException 
 	 */
-	protected List<OHExceptionMessage> validateMovementType(MovementType movementType) {
+	protected void validateMovementType(MovementType movementType, boolean insert) throws OHServiceException  {
 		String key = movementType.getCode();
 		String key2 = movementType.getType();
 		String description = movementType.getDescription();
@@ -55,7 +59,16 @@ public class MedicaldsrstockmovTypeBrowserManager {
             		MessageBundle.getMessage("angal.medstockmovtype.pleaseinsertavaliddescription"), 
             		OHSeverityLevel.ERROR));
         }
-        return errors;
+        if (insert) {
+        	if (codeControl(key)){
+    			throw new OHDataIntegrityViolationException(new OHExceptionMessage(null, 
+    					MessageBundle.getMessage("angal.common.codealreadyinuse"), 
+    					OHSeverityLevel.ERROR));
+    		}
+        }
+        if (!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
     }
 	
 	/**
@@ -74,15 +87,7 @@ public class MedicaldsrstockmovTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateMovementType(medicaldsrstockmovType);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
-		if (codeControl(medicaldsrstockmovType.getCode())){
-			throw new OHServiceException(new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.common.codealreadyinuse"), 
-					OHSeverityLevel.ERROR));
-		}
+		validateMovementType(medicaldsrstockmovType, true);
 		return ioOperations.newMedicaldsrstockmovType(medicaldsrstockmovType);
 	}
 
@@ -93,10 +98,7 @@ public class MedicaldsrstockmovTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateMovementType(medicaldsrstockmovType);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateMovementType(medicaldsrstockmovType, false);
 		return ioOperations.updateMedicaldsrstockmovType(medicaldsrstockmovType);
 	}
 

@@ -4,16 +4,14 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
 import org.isf.accounting.model.BillPayments;
 import org.isf.accounting.service.AccountingIoOperations;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +39,11 @@ public class BillBrowserManager {
 	 * @param billItems 
 	 * @param deliveryResultType
 	 * @return list of {@link OHExceptionMessage}
+	 * @throws OHDataValidationException 
 	 */
-	public List<OHExceptionMessage> validateBill(Bill bill, 
+	protected void validateBill(Bill bill, 
 			ArrayList<BillItems> billItems, 
-			ArrayList<BillPayments> billPayments) 
+			ArrayList<BillPayments> billPayments) throws OHDataValidationException 
 	{
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         
@@ -87,7 +86,9 @@ public class BillBrowserManager {
 	        		MessageBundle.getMessage("angal.newbill.youcannotcloseabillwithoutstandingbalance"), 
 	        		OHSeverityLevel.ERROR));
 		}
-        return errors;
+		if(!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
     }
 	
 	/**
@@ -111,39 +112,31 @@ public class BillBrowserManager {
 		if (billID == 0) return new ArrayList<BillItems>();
 		return ioOperations.getItems(billID);
 	}
+
 	/**
 	 * Retrieves all the bills of a given patient between dateFrom and datTo
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param patient
 	 * @return the bills list
+	 * @throws OHServiceException 
 	 */
-	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) {
-		try {
-			return ioOperations.getBills(dateFrom, dateTo, patient);
-		} catch (OHException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
-			return null;
-		}
+	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) throws OHServiceException {
+		return ioOperations.getBills(dateFrom, dateTo, patient);
 	}
+
 	/**
 	 * Retrieves all the billPayments for a given patient between dateFrom and dateTo
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param patient
-	 * @return
+	 * @return the list of payments
+	 * @throws OHServiceException 
 	 */
-	
-	public ArrayList<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) {
-		try {
-			return ioOperations.getPayments(dateFrom, dateTo, patient);
-		} catch (OHException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
-			return null;
-		}
+	public ArrayList<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) throws OHServiceException {
+		return ioOperations.getPayments(dateFrom, dateTo, patient);
 	}
 	
-
 	/**
 	 * Retrieves all the stored {@link BillPayments}.
 	 * @return a list of bill payments or <code>null</code> if an error occurred.
@@ -180,10 +173,7 @@ public class BillBrowserManager {
 			ArrayList<BillItems> billItems, 
 			ArrayList<BillPayments> billPayments) throws OHServiceException 
 	{
-		List<OHExceptionMessage> errors = validateBill(newBill, billItems, billPayments);
-		if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateBill(newBill, billItems, billPayments);
 		int billId = newBill(newBill);
 		boolean result = billId > 0;
 		if (!billItems.isEmpty()) result = newBillItems(billId, billItems);
@@ -236,10 +226,7 @@ public class BillBrowserManager {
 			ArrayList<BillItems> billItems,
 			ArrayList<BillPayments> billPayments) throws OHServiceException 
 	{
-		List<OHExceptionMessage> errors = validateBill(updateBill, billItems, billPayments);
-		if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateBill(updateBill, billItems, billPayments);
 		boolean result = updateBill(updateBill);
 		result = result && newBillItems(updateBill.getId(), billItems);
 		result = result && newBillPayments(updateBill.getId(), billPayments);
@@ -353,39 +340,31 @@ public class BillBrowserManager {
 	 * Retrieves all the {@link Bill}s associated to the specified {@link Patient}.
 	 * @param patID - the Patient's ID
 	 * @return the list of {@link Bill}s
+	 * @throws OHServiceException 
 	 */
-	public ArrayList<Bill> getPendingBillsAffiliate(int patID) {
-		try {
-			return ioOperations.getPendingBillsAffiliate(patID);
-		} catch (OHException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
-			return null;
-		}
+	public ArrayList<Bill> getPendingBillsAffiliate(int patID) throws OHServiceException {
+		return ioOperations.getPendingBillsAffiliate(patID);
 	}
 
 	/**
 	 * Returns all the distinct stored {@link BillItems}.
 	 * 
 	 * @return a list of  distinct {@link BillItems} or null if an error occurs.
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
-	public ArrayList<BillItems> getDistinctItems() throws OHException{
+	public ArrayList<BillItems> getDistinctItems() throws OHServiceException{
 		return ioOperations.getDistictsBillItems();
-		//return ioOperations.getDistictsBillItems();
 	}
+	
 	/**
 	 * get the bills list with a given billItem
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param billItem
 	 * @return
+	 * @throws OHServiceException 
 	 */
-	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,BillItems billItem) {
-		try {
-			return ioOperations.getBills(dateFrom, dateTo, billItem);
-		} catch (OHException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
-			return null;
-		}
+	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,BillItems billItem) throws OHServiceException {
+		return ioOperations.getBills(dateFrom, dateTo, billItem);
 	}
 }

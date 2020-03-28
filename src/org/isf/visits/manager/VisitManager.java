@@ -21,6 +21,7 @@ import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +37,9 @@ public class VisitManager {
 	
 	@Autowired
 	private SmsOperations smsOp;
+	
+	@Autowired
+	private ApplicationContext applicationContext;
 	
 	/**
 	 * returns the list of all {@link Visit}s related to a patID
@@ -70,13 +74,12 @@ public class VisitManager {
 	 * @param visits - the list of {@link Visit}s related to patID. 
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
 	 * @throws OHServiceException 
-	 * @throws OHException 
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean newVisits(ArrayList<Visit> visits) throws OHServiceException {
 		if (!visits.isEmpty()) {
 			DateTime now = new DateTime();
-			PatientBrowserManager patMan = new PatientBrowserManager();
+			PatientBrowserManager patMan = this.applicationContext.getBean(PatientBrowserManager.class);
 			int patID = visits.get(0).getPatient().getCode();
 			ioOperations.deleteAllVisits(patID);
 			smsOp.deleteByModuleModuleID("visit", String.valueOf(patID));
@@ -115,7 +118,6 @@ public class VisitManager {
 	 * @param patID - the {@link Patient} ID
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException 
-	 * @throws OHException 
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean deleteAllVisits(int patID) throws OHServiceException {

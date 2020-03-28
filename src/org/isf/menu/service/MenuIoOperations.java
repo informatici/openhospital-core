@@ -4,16 +4,24 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+
+import org.isf.menu.model.GroupMenu;
 import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
 import org.isf.menu.model.UserMenuItem;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+@Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class MenuIoOperations 
@@ -55,6 +63,17 @@ public class MenuIoOperations
 				
 			
 		return users;
+	}
+	
+	/**
+	 * returns {@link User} from its username
+	 * @param userName - the {@link User}'s username
+	 * @return {@link User}
+	 * @throws OHServiceException
+	 */
+	public User getUserByName(String userName) throws OHServiceException 
+	{ 
+		return repository.findByUserName(userName);
 	}
 	
 	/**
@@ -213,16 +232,13 @@ public class MenuIoOperations
 	{
 		ArrayList<UserMenuItem> menu = null;		
 		List<Object[]> menuList = (List<Object[]>)menuRepository.findAllWhereId(aUser.getUserName());
-		
-		
+				
 		menu = new ArrayList<UserMenuItem>();
-		Iterator<Object[]> it = menuList.iterator();
-		while (it.hasNext()) {
-			Object[] object = it.next();
-			char active = (Character) object[9];
+		for (Object[] object : menuList) {
+			boolean active = (Boolean) object[9];
 			UserMenuItem umi = new UserMenuItem();
 
-			
+
 			umi.setCode((String) object[0]);
 			umi.setButtonLabel((String) object[1]);
 			umi.setAltLabel((String) object[2]);
@@ -230,9 +246,9 @@ public class MenuIoOperations
 			umi.setShortcut((Character) object[4]);
 			umi.setMySubmenu((String) object[5]);
 			umi.setMyClass((String) object[6]);
-			umi.setASubMenu((Character)object[7] == 'Y' ? true : false);
+			umi.setASubMenu((Character) object[7] == 'Y');
 			umi.setPosition((Integer) object[8]);
-			umi.setActive(active == 'Y' ? true : false);
+			umi.setActive(active);
 			menu.add(umi);
 		}
 		
@@ -271,13 +287,12 @@ public class MenuIoOperations
 	{
 		boolean result = true;
 
-	
+		
 		result = _deleteGroupMenu(aGroup);
 		
 		for (UserMenuItem item : menu) {
 			result = result && _insertGroupMenu(aGroup, item, insert);
 		}
-		
 		return result;
 	}
 	
@@ -291,17 +306,18 @@ public class MenuIoOperations
 		
 		return result;
 	}
-	
 	public boolean _insertGroupMenu(
 			UserGroup aGroup,
 			UserMenuItem item, 
 			boolean insert) throws OHServiceException 
 	{
 		boolean result = true;
-				
-
-		groupMenuRepository.insert(aGroup.getCode(), item.getCode(), (item.isActive() ? "Y" : "N"));
-				
+		//groupMenuRepository.insert(aGroup.getCode(), item.getCode(), (item.isActive() ? "Y" : "N"));	
+		GroupMenu gm = new GroupMenu();
+		gm.setUserGroup(aGroup.getCode());
+		gm.setActive((item.isActive() ? 1 : 0));
+		gm.setMenuItem(item.getCode());
+		groupMenuRepository.save(gm);
 		return result;
 	}
 	

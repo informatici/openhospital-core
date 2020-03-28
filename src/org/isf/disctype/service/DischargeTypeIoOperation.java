@@ -6,10 +6,10 @@ import org.isf.disctype.model.DischargeType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
+@Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class DischargeTypeIoOperation {
@@ -35,7 +35,7 @@ public class DischargeTypeIoOperation {
 	 * @return true - if the existing DischargeType has been updated
 	 * @throws OHServiceException
 	 */
-	public boolean UpdateDischargeType(
+	public boolean updateDischargeType(
 			DischargeType dischargeType) throws OHServiceException 
 	{
 		boolean result = true;

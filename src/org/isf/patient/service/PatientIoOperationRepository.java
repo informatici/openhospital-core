@@ -5,26 +5,38 @@ import java.util.Date;
 import java.util.List;
 
 import org.isf.patient.model.Patient;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 
+@Repository
 public interface PatientIoOperationRepository extends JpaRepository<Patient, Integer>, PatientIoOperationRepositoryCustom {
     
-    @Query(value = "SELECT * FROM PATIENT WHERE (PAT_DELETED='N' OR PAT_DELETED IS NULL) ORDER BY PAT_NAME", nativeQuery= true)
-    public List<Patient> findAllWhereDeleted();    
+	@Query(value = "SELECT * FROM PATIENT WHERE (PAT_DELETED='N' OR PAT_DELETED IS NULL) ORDER BY PAT_ID", nativeQuery= true)
+    List<Patient> findAllWhereDeleted();
 
+	
+	@Query(value = "SELECT * FROM PATIENT WHERE (PAT_DELETED='N' OR PAT_DELETED IS NULL) ORDER BY PAT_NAME", nativeQuery= true)
+    List<Patient> findAllWhereDeletedOrderedByName();
+
+    @Query(value = "SELECT * FROM PATIENT WHERE (PAT_DELETED='N' OR PAT_DELETED IS NULL) ORDER BY PAT_NAME, ?#{#pageable}", nativeQuery= true)
+    List<Patient> findAllWhereDeleted(Pageable pageable);
+
+    List<Patient> findAllByDeletedIsNullOrDeletedEqualsOrderByName(String patDeleted, Pageable pageable);
+    
     @Query(value = "SELECT * FROM PATIENT WHERE PAT_NAME = :name AND (PAT_DELETED='N' OR PAT_DELETED IS NULL) ORDER BY PAT_SNAME,PAT_FNAME", nativeQuery= true)
-    public List<Patient> findAllWhereNameAndDeletedOrderedByName(@Param("name") String name);
+    List<Patient> findAllWhereNameAndDeletedOrderedByName(@Param("name") String name);
 
     @Query(value = "SELECT * FROM PATIENT WHERE PAT_ID = :id AND (PAT_DELETED='N' OR PAT_DELETED IS NULL)", nativeQuery= true)
-    public List<Patient> findAllWhereIdAndDeleted(@Param("id") Integer id);
+    List<Patient> findAllWhereIdAndDeleted(@Param("id") Integer id);
     
     @Query(value = "SELECT * FROM PATIENT WHERE PAT_ID = :id", nativeQuery= true)
-    public List<Patient> findAllWhereId(@Param("id") Integer id);
+    List<Patient> findAllWhereId(@Param("id") Integer id);
     
     @Modifying
     @Transactional
@@ -32,10 +44,10 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
     int updateDeleted(@Param("id") Integer id);
             
     @Query(value = "SELECT * FROM PATIENT WHERE PAT_NAME = :name AND PAT_DELETED='N'", nativeQuery= true)
-    public List<Patient> findAllWhereName(@Param("name") String name);
+    List<Patient> findAllWhereName(@Param("name") String name);
 
     @Query(value = "SELECT MAX(PAT_ID) FROM PATIENT", nativeQuery= true)
-    public Integer findMaxCode();
+    Integer findMaxCode();
         
     @Modifying
     @Transactional

@@ -5,19 +5,28 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Blob;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.validation.constraints.NotNull;
 
+import org.isf.dicomtype.model.DicomType;
+import org.isf.utils.db.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Model for contain Detailed DICOM Data
@@ -36,7 +45,15 @@ import javax.validation.constraints.NotNull;
  *------------------------------------------*/
 @Entity
 @Table(name = "DICOM")
-public class FileDicom 
+@EntityListeners(AuditingEntityListener.class) 
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="DM_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="DM_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="DM_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="DM_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="DM_LAST_MODIFIED_DATE"))
+})
+public class FileDicom extends Auditable<String>
 {
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -84,7 +101,7 @@ public class FileDicom
 	private String dicomStudyId = "";
 
 	@Column(name = "DM_FILE_ST_DATE")
-	private String dicomStudyDate = "";
+	private Date dicomStudyDate = null;
 
 	@Column(name = "DM_FILE_ST_DESCR")
 	private String dicomStudyDescription = "";
@@ -104,7 +121,7 @@ public class FileDicom
 	private String dicomSeriesDescriptionCodeSequence = "";
 
 	@Column(name = "DM_FILE_SER_DATE")
-	private String dicomSeriesDate = "";
+	private Date dicomSeriesDate = null;
 
 	@Column(name = "DM_FILE_SER_DESC")
 	private String dicomSeriesDescription = "";
@@ -120,12 +137,15 @@ public class FileDicom
 	@Lob
 	private Blob dicomThumbnail;
 	
-
 	@Transient
 	private int frameCount = -1;
 	
 	@Transient
 	private volatile int hashCode = 0;
+	
+	@ManyToOne
+	@JoinColumn(name="DM_DCMT_ID")
+	private DicomType dicomType;
 
 	
 	/**
@@ -135,6 +155,30 @@ public class FileDicom
 	public FileDicom() {
 		super();
 		this.patId = 0;
+		this.dicomData = null;
+		this.idFile = 0;
+		this.fileName = "";
+		this.dicomAccessionNumber = "";
+		this.dicomInstitutionName = "";
+		this.dicomPatientID = "";
+		this.dicomPatientName = "";
+		this.dicomPatientAddress = "";
+		this.dicomPatientAge = "";
+		this.dicomPatientSex = "";
+		this.dicomPatientBirthDate = "";
+		this.dicomStudyId = "";
+		this.dicomStudyDate = null;
+		this.dicomStudyDescription = "";
+		this.dicomSeriesUID = "";
+		this.dicomSeriesInstanceUID = "";
+		this.dicomSeriesNumber = "";
+		this.dicomSeriesDescriptionCodeSequence = "";
+		this.dicomSeriesDate = null;
+		this.dicomSeriesDescription = "";
+		this.dicomInstanceUID = "";
+		this.modality = "";
+		this.dicomThumbnail = null;
+		this.dicomType = null;
 	}
 
 	/**
@@ -143,9 +187,9 @@ public class FileDicom
 
 	public FileDicom(int patId, Blob dicomData, long idFile, String fileName, String dicomAccessionNumber, String dicomInstitutionName, String dicomPatientID, 
 			String dicomPatientName, String dicomPatientAddress, String dicomPatientAge, String dicomPatientSex, String dicomPatientBirthDate, 
-			String dicomStudyId, String dicomStudyDate, String dicomStudyDescription, String dicomSeriesUID, String dicomSeriesInstanceUID, 
-			String dicomSeriesNumber, String dicomSeriesDescriptionCodeSequence, String dicomSeriesDate, String dicomSeriesDescription, 
-			String dicomInstanceUID, String modality, Blob dicomThumbnail) 
+			String dicomStudyId, Date dicomStudyDate, String dicomStudyDescription, String dicomSeriesUID, String dicomSeriesInstanceUID, 
+			String dicomSeriesNumber, String dicomSeriesDescriptionCodeSequence, Date dicomSeriesDate, String dicomSeriesDescription, 
+			String dicomInstanceUID, String modality, Blob dicomThumbnail, DicomType dicomType) 
 	{		
 		super();
 		this.patId = patId;
@@ -172,6 +216,7 @@ public class FileDicom
 		this.dicomInstanceUID = dicomInstanceUID;
 		this.modality = modality;
 		this.dicomThumbnail = dicomThumbnail;
+		this.dicomType = dicomType;
 	}
 	
 	/**
@@ -363,7 +408,7 @@ public class FileDicom
 	/**
 	 * @return the dicomStudyDate
 	 */
-	public String getDicomStudyDate() {
+	public Date getDicomStudyDate() {
 		return dicomStudyDate;
 	}
 
@@ -371,7 +416,7 @@ public class FileDicom
 	 * @param dicomStudyDate
 	 *            the dicomStudyDate to set
 	 */
-	public void setDicomStudyDate(String dicomStudyDate) {
+	public void setDicomStudyDate(Date dicomStudyDate) {
 		this.dicomStudyDate = dicomStudyDate;
 	}
 
@@ -453,7 +498,7 @@ public class FileDicom
 	/**
 	 * @return the dicomSeriesDate
 	 */
-	public String getDicomSeriesDate() {
+	public Date getDicomSeriesDate() {
 		return dicomSeriesDate;
 	}
 
@@ -461,7 +506,7 @@ public class FileDicom
 	 * @param dicomSeriesDate
 	 *            the dicomSeriesDate to set
 	 */
-	public void setDicomSeriesDate(String dicomSeriesDate) {
+	public void setDicomSeriesDate(Date dicomSeriesDate) {
 		this.dicomSeriesDate = dicomSeriesDate;
 	}
 
@@ -538,6 +583,20 @@ public class FileDicom
 	 */
 	public void setDicomThumbnail(Blob dicomThumbnail) {
 		this.dicomThumbnail = dicomThumbnail;
+	}
+	
+	/**
+	 * @return the dicomType
+	 */
+	public DicomType getDicomType() {
+		return dicomType;
+	}
+
+	/**
+	 * @param dicomType the dicomType to set
+	 */
+	public void setDicomType(DicomType dicomType) {
+		this.dicomType = dicomType;
 	}
 
 	/**

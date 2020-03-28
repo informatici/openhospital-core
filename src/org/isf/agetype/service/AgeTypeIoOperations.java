@@ -7,7 +7,7 @@ import org.isf.agetype.model.AgeType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Persistence class for agetype module.
  *
  */
-@Component
+@Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class AgeTypeIoOperations 
@@ -64,7 +64,7 @@ public class AgeTypeIoOperations
 		AgeType ageType = null;
 				
 		
-		code = "d" + String.valueOf(index-1);
+		code = "d" + (index - 1);
 		ageType = repository.findOneByCode(code); 
 
 		return ageType;

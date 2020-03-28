@@ -8,15 +8,16 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Repository;
 
-
+@Repository
 public interface VisitsIoOperationRepository extends JpaRepository<Visit, Integer> {
 
     @Query(value = "SELECT * FROM VISITS ORDER BY VST_PAT_ID, VST_DATE", nativeQuery= true)
-    public List<Visit> findAllByOrderPatientAndDateAsc();
+    List<Visit> findAllByOrderPatientAndDateAsc();
     
     @Query(value = "SELECT * FROM VISITS WHERE VST_PAT_ID = :patient ORDER BY VST_PAT_ID, VST_DATE", nativeQuery= true)
-    public List<Visit> findAllWherePatientByOrderPatientAndDateAsc(@Param("patient") Integer patient);
+    List<Visit> findAllWherePatientByOrderPatientAndDateAsc(@Param("patient") Integer patient);
     
     @Query(value = "SELECT * FROM VISITS WHERE VST_WARD_ID = :ward ORDER BY VST_DATE", nativeQuery= true)
     public List<Visit> findAllWhereWardByOrderDateAsc(@Param("ward") String ward);
@@ -24,5 +25,5 @@ public interface VisitsIoOperationRepository extends JpaRepository<Visit, Intege
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM VISITS WHERE VST_PAT_ID = :patient", nativeQuery= true)
-    public void deleteWherePatient(@Param("patient") Integer patient);
+    void deleteWherePatient(@Param("patient") Integer patient);
 }

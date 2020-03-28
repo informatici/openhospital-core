@@ -1,7 +1,13 @@
 language: java
 before_install:
 - sudo service mysql stop
+# for debug uncomment 
+#- sudo service docker stop
+#- sudo dockerd -D &
 - docker-compose up -d
 - docker ps
+# for debug uncomment 
+#- docker-compose logs --follow database 
+- chmod +x mvnw
 after_success:
 - docker-compose down

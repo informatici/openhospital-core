@@ -1,5 +1,6 @@
 package org.isf.medicalstock.service;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -18,7 +19,7 @@ import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -28,13 +29,13 @@ import org.springframework.transaction.annotation.Transactional;
  * 			- reflection from Medicals pieces per packet
  * 			- added complete Ward and Movement construction in getMovement()
  */
-@Component
+@Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class MedicalStockIoOperations {
 
 	@Autowired
-	private MovementIoOperationRepository repository;
+	private MovementIoOperationRepository movRepository;
 	
 	@Autowired
 	private LotIoOperationRepository lotRepository;
@@ -50,7 +51,7 @@ public class MedicalStockIoOperations {
 		
 	
 	public enum MovementOrder {
-		DATE, WARD, PHARMACEUTICAL_TYPE, TYPE;
+		DATE, WARD, PHARMACEUTICAL_TYPE, TYPE
 	}
 
 	/**
@@ -70,7 +71,7 @@ public class MedicalStockIoOperations {
 	public List<Integer> getMedicalsFromLot(
 			String lotCode) throws OHServiceException
 	{
-		List<Integer> medicalIds = repository.findAllByLot(lotCode);
+		List<Integer> medicalIds = movRepository.findAllByLot(lotCode);
 		
 		return medicalIds;
 	}
@@ -249,7 +250,7 @@ public class MedicalStockIoOperations {
 
 		Lot lot = (Lot)lotRepository.findOne(lotCode); 
 		movement.setLot(lot);
-		Movement savedMovement = repository.save(movement);
+		Movement savedMovement = movRepository.save(movement);
 		result = (savedMovement != null);
 		
 		return result;
@@ -331,16 +332,16 @@ public class MedicalStockIoOperations {
 		if (movement.getType().getType().contains("+")) 
 		{
 			//incoming medical stock
-			int medicalCode = movement.getMedical().getCode();
-			boolean updated = updateMedicalIncomingQuantity(medicalCode, movement.getQuantity());
+			Medical medical = movement.getMedical();
+			boolean updated = updateMedicalIncomingQuantity(medical.getCode(), movement.getQuantity());
 			
 			return updated;
 		} 
 		else 
 		{
 			//outgoing medical stock
-			int medicalCode = movement.getMedical().getCode();
-			boolean updated = updateMedicalOutcomingQuantity(medicalCode, movement.getQuantity());
+			Medical medical = movement.getMedical();
+			boolean updated = updateMedicalOutcomingQuantity(medical.getCode(), movement.getQuantity());
 			if (!updated)
 			{				
 				return false;
@@ -351,7 +352,7 @@ public class MedicalStockIoOperations {
 				if (ward != null) 
 				{
 					//updates stock quantity for wards
-					return updateMedicalWardQuantity(ward.getCode(), medicalCode, movement.getQuantity());
+					return updateMedicalWardQuantity(ward, medical, movement.getQuantity());
 
 				} 
 				else 
@@ -414,23 +415,22 @@ public class MedicalStockIoOperations {
 	 */
 	@SuppressWarnings("unchecked")
 	protected boolean updateMedicalWardQuantity(
-			String wardCode, 
-			int medicalCode, 
+			Ward ward, 
+			Medical medical, 
 			int quantity) throws OHServiceException
 	{
-		MedicalWard medicalWard = (MedicalWard)medicalStockRepository.findOneWhereCodeAndMedical(wardCode, medicalCode);		
+		MedicalWard medicalWard = (MedicalWard)medicalStockRepository.findOneWhereCodeAndMedical(ward.getCode(), medical.getCode());		
 				
 		if (medicalWard != null)
 		{			
 			medicalWard.setInQuantity(medicalWard.getInQuantity()+quantity);
-			medicalStockRepository.save(medicalWard);
 		}
 		else
 		{
-			medicalWard = new MedicalWard(wardCode.charAt(0), medicalCode, quantity, 0);
-			medicalStockRepository.save(medicalWard);
+			medicalWard = new MedicalWard(ward, medical, quantity, 0);
 		}
-		
+		medicalStockRepository.save(medicalWard);
+
 		return true;
 	}
 
@@ -461,11 +461,11 @@ public class MedicalStockIoOperations {
 		ArrayList<Movement> pMovement = new ArrayList<Movement>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(repository.findtMovementWhereDatesAndId(wardId, dateFrom, dateTo));			
+		pMovementCode = new ArrayList<Integer>(movRepository.findtMovementWhereDatesAndId(wardId, dateFrom, dateTo));			
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
 			Integer code = pMovementCode.get(i);
-			Movement movement = repository.findOne(code);
+			Movement movement = movRepository.findOne(code);
 			
 			
 			pMovement.add(i, movement);
@@ -505,13 +505,13 @@ public class MedicalStockIoOperations {
 		ArrayList<Movement> pMovement = new ArrayList<Movement>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(repository.findtMovementWhereData(
+		pMovementCode = new ArrayList<Integer>(movRepository.findtMovementWhereData(
 				medicalCode, medicalType, wardId, movType, 
 				movFrom, movTo, lotPrepFrom, lotPrepTo, lotDueFrom, lotDueTo));			
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
 			Integer code = pMovementCode.get(i);
-			Movement movement = repository.findOne(code);
+			Movement movement = movRepository.findOne(code);
 			
 			
 			pMovement.add(i, movement);
@@ -548,13 +548,13 @@ public class MedicalStockIoOperations {
 		ArrayList<Movement> pMovement = new ArrayList<Movement>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(repository.findtMovementForPrint(
+		pMovementCode = new ArrayList<Integer>(movRepository.findtMovementForPrint(
 				medicalDescription, medicalTypeCode, wardId, movType, 
 				movFrom, movTo, lotCode, order));			
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
 			Integer code = pMovementCode.get(i);
-			Movement movement = repository.findOne(code);
+			Movement movement = movRepository.findOne(code);
 			
 			
 			pMovement.add(i, movement);
@@ -602,7 +602,7 @@ public class MedicalStockIoOperations {
 		lot.setCode((String)object[0]);
 		lot.setPreparationDate(_convertTimestampToCalendar((Timestamp)object[1]));
 		lot.setDueDate(_convertTimestampToCalendar((Timestamp)object[2]));
-		lot.setCost((Double)object[3]);
+		lot.setCost(new BigDecimal((Double) object[3]));
 		lot.setQuantity(((Double)object[4]).intValue());
 		
 		return lot;
@@ -631,7 +631,7 @@ public class MedicalStockIoOperations {
 		GregorianCalendar gc = new GregorianCalendar();
 				
 			
-		Timestamp time = (Timestamp)repository.findMaxDate();
+		Timestamp time = (Timestamp)movRepository.findMaxDate();
 		if (time != null) 
 		{
 			gc.setTime(time);
@@ -655,7 +655,7 @@ public class MedicalStockIoOperations {
 		boolean result = false;
 		
 			
-		if (repository.findAllWhereRefNo(refNo).size() > 0)
+		if (movRepository.findAllWhereRefNo(refNo).size() > 0)
 		{
 			result = true;
 		}		
@@ -673,7 +673,7 @@ public class MedicalStockIoOperations {
 	public ArrayList<Movement> getMovementsByReference(
 			String refNo) throws OHServiceException 
 	{
-		ArrayList<Movement> movements = (ArrayList<Movement>) repository.findAllByRefNo(refNo);
+		ArrayList<Movement> movements = (ArrayList<Movement>) movRepository.findAllByRefNo(refNo);
 						
 		
 		return movements;

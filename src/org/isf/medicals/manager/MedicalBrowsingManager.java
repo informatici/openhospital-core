@@ -11,12 +11,15 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medtype.model.MedicalType;
-import org.isf.menu.manager.Context;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Class that provides gui separation from database operations and gives some
@@ -25,11 +28,13 @@ import org.slf4j.LoggerFactory;
  * @author bob
  * 
  */
+@Component
 public class MedicalBrowsingManager {
 
 	private final Logger logger = LoggerFactory.getLogger(MedicalBrowsingManager.class);
-	
-	private MedicalsIoOperations ioOperations = Context.getApplicationContext().getBean(MedicalsIoOperations.class);
+
+	@Autowired
+	private MedicalsIoOperations ioOperations;
 	
 	/**
 	 * Returns the requested medical.
@@ -123,10 +128,7 @@ public class MedicalBrowsingManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
-		List<OHExceptionMessage> errors = checkMedicalForInsert(medical, ignoreSimilar);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		checkMedicalForInsert(medical, ignoreSimilar);
 		return ioOperations.newMedical(medical);
 	}
 	
@@ -150,10 +152,7 @@ public class MedicalBrowsingManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
-		List<OHExceptionMessage> errors = checkMedicalForUpdate(medical, ignoreSimilar);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		checkMedicalForUpdate(medical, ignoreSimilar);
         return ioOperations.updateMedical(medical);
 	}
 
@@ -167,7 +166,7 @@ public class MedicalBrowsingManager {
 		boolean inStockMovement = ioOperations.isMedicalReferencedInStockMovement(medical.getCode());
 
 		if(inStockMovement){
-			throw new OHServiceException(new OHExceptionMessage("existingReferencesError", 
+			throw new OHDataIntegrityViolationException(new OHExceptionMessage("existingReferencesError", 
 					MessageBundle.getMessage("angal.medicals.therearestockmovementsreferredtothismedical"), 
 					OHSeverityLevel.ERROR));
 		}
@@ -211,8 +210,8 @@ public class MedicalBrowsingManager {
 	 * @return <code>true</code> if the {@link Medical} is ok for inserting, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	private List<OHExceptionMessage> checkMedicalForInsert(Medical medical, boolean ignoreSimilar) throws OHServiceException {
-		return checkMedical(medical, ignoreSimilar, false);
+	private void checkMedicalForInsert(Medical medical, boolean ignoreSimilar) throws OHServiceException {
+		checkMedical(medical, ignoreSimilar, false);
 	}
 	
 	/**
@@ -223,8 +222,8 @@ public class MedicalBrowsingManager {
 	 * @return <code>true</code> if the {@link Medical} is ok for updating, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public List<OHExceptionMessage> checkMedicalForUpdate(Medical medical, boolean ignoreSimilar) throws OHServiceException {
-		return checkMedical(medical, ignoreSimilar, true);
+	public void checkMedicalForUpdate(Medical medical, boolean ignoreSimilar) throws OHServiceException {
+		checkMedical(medical, ignoreSimilar, true);
 	}
 	
 	/**
@@ -236,7 +235,7 @@ public class MedicalBrowsingManager {
 	 * @return <code>true</code> if the {@link Medical} is ok for updating, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public List<OHExceptionMessage> checkMedical(Medical medical, boolean ignoreSimilar, boolean update) throws OHServiceException {
+	public void checkMedical(Medical medical, boolean ignoreSimilar, boolean update) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 		
 		//check commons
@@ -274,7 +273,8 @@ public class MedicalBrowsingManager {
 					message.toString(), 
 					OHSeverityLevel.WARNING));
 		};
-		return errors;
+		if (!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
 	}
-	
 }

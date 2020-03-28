@@ -1,7 +1,10 @@
 package org.isf.priceslist.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,6 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import org.isf.utils.db.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 /**
@@ -27,7 +33,15 @@ import javax.validation.constraints.NotNull;
  *------------------------------------------*/
 @Entity
 @Table(name="PRICES")
-public class Price 
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="PRC_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="PRC_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="PRC_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="PRC_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="PRC_LAST_MODIFIED_DATE"))
+})
+public class Price extends Auditable<String>
 {
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)

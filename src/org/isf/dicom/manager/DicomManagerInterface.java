@@ -12,56 +12,66 @@ public interface DicomManagerInterface
 {   
     /**
      * Load a list of idfile for series
-     * @param idPaziente, the patient id
-     * @param numeroSerie, the series number
+     * @param patientID, the patient id
+     * @param seriesNumber, the series number
      * @return
      * @throws OHServiceException 
      */
-    public Long[] getSerieDetail(int idPaziente, String numeroSerie) throws OHServiceException;
+    public Long[] getSerieDetail(int patientID, String seriesNumber) throws OHServiceException;
 
     /**
-     * delete series 
-     * @param idPaziente, the id of patient
-     * @param numeroSerie, the seres number to delete
-     * @return, true if success
+     * Delete series 
+     * @param patientID, the id of patient
+     * @param seriesNumber, the series number to delete
+     * @return true if success
      * @throws OHServiceException 
      */
-    public boolean deleteSerie(int idPaziente, String numeroSerie) throws OHServiceException ;
+    boolean deleteSerie(int patientID, String seriesNumber) throws OHServiceException ;
     
     /**
-    * ceck if dicom is loaded
-    * @param idPaziente, the id of patient
-    * @param numeroSerie, the seres number
-    * @param dicom, the detail od dicom
+    * Check if dicom is loaded
+    * @param dicom, the detail of dicom
     * @return true if file exist
      * @throws OHServiceException 
     */
     public boolean exist(FileDicom dicom) throws OHServiceException;
-
-    /**
-     * load the Detail of DICOM
-     * @param, idFile
-     * @return, FileDicomDettaglio
-     * @throws OHServiceException 
-     */
-    public FileDicom loadDettaglio(Long idFile,int idPaziente, String numeroSerie) throws OHServiceException;
     
     /**
-     * Load detail
-     * @param idPaziente, the id of patient
-     * @param numeroSerie, numero della serie
-     * @return, details
-     * @throws OHServiceException 
+     * Check if dicom is loaded
+     * @param patientID, the id of patient
+     * @param seriesNumber, the series number
+     * @return true if file exist
+      * @throws OHServiceException 
      */
-    public FileDicom loadDettaglio(long idFile,int idPaziente, String numeroSerie) throws OHServiceException;
+     public boolean exist(int patientID, String seriesNumber) throws OHServiceException;
 
     /**
-     * load metadata from DICOM files fo the patient
-     * @param idPaziente
+     * Load the Detail of DICOM
+     * @param idFile
+     * @param patientID
+     * @param seriesNumber
+     * @return FileDicom
+     * @throws OHServiceException 
+     */
+    public FileDicom loadDetails(Long idFile, int patientID, String seriesNumber) throws OHServiceException;
+
+    /**
+     * Load detail
+     * @param idFile
+     * @param patientID
+     * @param seriesNumber
+     * @return FileDicom
+     * @throws OHServiceException 
+     */
+    public FileDicom loadDetails(long idFile, int patientID, String seriesNumber) throws OHServiceException;
+
+    /**
+     * load metadata from DICOM files of the patient
+     * @param patientID
      * @return
      * @throws OHServiceException 
      */
-    public FileDicom[] loadFilesPaziente(int idPaziente) throws OHServiceException;
+    public FileDicom[] loadPatientFiles(int patientID) throws OHServiceException;
 
     /**
      * save the DICOM file and metadata

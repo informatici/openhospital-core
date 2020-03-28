@@ -10,24 +10,29 @@ import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SmsManager {
 
 	public final static int MAX_LENGHT = 160;
 	private final String NUMBER_REGEX = "^\\+?\\d+$"; //$NON-NLS-1$
 	
-	private SmsOperations smsOperations = Context.getApplicationContext().getBean(SmsOperations.class);
+	@Autowired
+	private SmsOperations smsOperations;
 	
 	public SmsManager(){}
 	
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param sms
-	 * @return list of {@link OHExceptionMessage}
+	 * @throws OHDataValidationException 
 	 */
-	private List<OHExceptionMessage> validateSms(Sms sms) {
+	protected void validateSms(Sms sms) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 		String number = sms.getSmsNumber();
 		String text = sms.getSmsText();
@@ -42,7 +47,9 @@ public class SmsManager {
 	        		MessageBundle.getMessage("angal.sms.pleaseinsertatext"), 
 	        		OHSeverityLevel.ERROR));
 		}
-		return errors;
+		if(!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
 	}
 
 	public List<Sms> getAll(Date from, Date to) throws OHServiceException {
@@ -56,13 +63,9 @@ public class SmsManager {
 	 * @param sms - the {@link Sms} to save or update
 	 * @param split - specify if to split sms's text longer than {@code MAX_LENGHT}
 	 * @throws OHServiceException 
-	 * TODO enable GSM Multipart Feature
 	 */
-	public void saveOrUpdate(Sms smsToSend, boolean split) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateSms(smsToSend);
-		if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+	public void saveOrUpdate(Sms smsToSend, boolean split) throws OHServiceException  {
+		validateSms(smsToSend);
 		
 		List<Sms> smsList = new ArrayList<Sms>();
 		String text = smsToSend.getSmsText();
@@ -75,7 +78,7 @@ public class SmsManager {
 				.append(MAX_LENGHT)
 				.append(" ")
 				.append(MessageBundle.getMessage("angal.sms.chars"));
-			throw new OHServiceException(new OHExceptionMessage("testMaxLenghtError", 
+			throw new OHDataValidationException(new OHExceptionMessage("testMaxLenghtError", 
 					message.toString(), 
 					OHSeverityLevel.ERROR));
 			
@@ -124,7 +127,7 @@ public class SmsManager {
 		
 		// Number of parts
 	    int nParts = (len + MAX_LENGHT - 1) / MAX_LENGHT;
-	    String parts[] = new String[nParts];
+	    String[] parts = new String[nParts];
 
 	    // Break into parts
 	    int offset= 0;

@@ -7,21 +7,28 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-
+@Repository
 public interface DicomIoOperationRepository extends JpaRepository<FileDicom, Long> {
-    public List<FileDicom> findAllByOrderByFileNameAsc();	
+    List<FileDicom> findAllByOrderByFileNameAsc();
     
     @Query(value = "SELECT * FROM DICOM WHERE DM_PAT_ID = :id AND DM_FILE_SER_NUMBER = :file ORDER BY DM_FILE_NOME", nativeQuery= true)
-    public List<FileDicom> findAllWhereIdAndNumberByOrderNameAsc(@Param("id") Long id, @Param("file") String file);
-    @Query(value = "SELECT * FROM DICOM WHERE DM_PAT_ID = :id GROUP BY DM_FILE_SER_INST_UID", nativeQuery= true)
-    public List<FileDicom> findAllWhereIdGroupByUid(@Param("id") Long id);    
+    List<FileDicom> findAllWhereIdAndNumberByOrderNameAsc(@Param("id") Long id, @Param("file") String file);
+    @Query(value = "SELECT * FROM DICOM WHERE DM_PAT_ID = :id GROUP BY DM_FILE_SER_INST_UID ORDER BY DM_FILE_SER_DATE DESC", nativeQuery= true)
+    List<FileDicom> findAllWhereIdGroupByUidOrderSerDateDesc(@Param("id") Long id);
     @Query(value = "SELECT * FROM DICOM WHERE DM_PAT_ID = :id AND DM_FILE_SER_NUMBER = :file AND DM_FILE_INST_UID = :uid", nativeQuery= true)
-    public List<FileDicom> findAllWhereIdAndFileAndUid(@Param("id") Long id, @Param("file") String file, @Param("uid") String uid);
+    List<FileDicom> findAllWhereIdAndFileAndUid(@Param("id") Long id, @Param("file") String file, @Param("uid") String uid);
     
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM DICOM WHERE DM_PAT_ID = :id AND DM_FILE_SER_NUMBER = :file", nativeQuery= true)
-    public void deleteByIdAndNumber(@Param("id") Long id, @Param("file") String file);    
+    void deleteByIdAndNumber(@Param("id") Long id, @Param("file") String file);
+
+    @Query(value = "SELECT * FROM DICOM WHERE DM_FILE_SER_NUMBER = :dicomSeriesNumber", nativeQuery= true)
+	List<FileDicom> findAllWhereDicomSeriesNumber(@Param("dicomSeriesNumber") String dicomSeriesNumber);
+
+    @Query(value = "SELECT COUNT(*) FROM DICOM WHERE DM_FILE_SER_INST_UID = :dicomSeriesNumberId", nativeQuery=true)
+	int countFramesinSeries(@Param("dicomSeriesNumberId") String dicomSeriesInstanceUID);
 }
