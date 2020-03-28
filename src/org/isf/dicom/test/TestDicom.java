@@ -5,12 +5,16 @@ import static org.junit.Assert.assertEquals;
 
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
 import org.isf.dicom.model.FileDicom;
+import org.isf.dicomtype.model.DicomType;
 import org.isf.utils.exception.OHException;
 
 public class TestDicom 
@@ -27,21 +31,20 @@ public class TestDicom
 	private String dicomPatientSex = "TestPatientSex";
 	private String dicomPatientBirthDate = "TestPatientBirth";
 	private String dicomStudyId = "TestStudyId";
-	private String dicomStudyDate = "TestStudyDate";
+	private Date dicomStudyDate = new Date();
 	private String dicomStudyDescription = "TestStudyDescription";
 	private String dicomSeriesUID = "TestSeriesUid";
 	private String dicomSeriesInstanceUID = "TestSeriesInstanceUid";
 	private String dicomSeriesNumber = "TestSeriesNumber";
 	private String dicomSeriesDescriptionCodeSequence = "TestSeriesDescription";
-	private String dicomSeriesDate = "TestSeriesDate";
+	private Date dicomSeriesDate = new Date();
 	private String dicomSeriesDescription = "TestSeriesDescription";
 	private String dicomInstanceUID = "TestInteanceUid";
 	private String modality = "TestModality";
 	private Blob dicomThumbnail = _createRandomBlob(66);
-    
 			
 	public FileDicom setup(
-			boolean usingSet) throws OHException 
+			DicomType dicomType, boolean usingSet) throws OHException 
 	{
 		FileDicom dicom;
 	
@@ -49,7 +52,7 @@ public class TestDicom
 		if (usingSet)
 		{
 			dicom = new FileDicom();
-			_setParameters(dicom);
+			_setParameters(dicom, dicomType);
 		}
 		else
 		{
@@ -58,14 +61,14 @@ public class TestDicom
 					dicomPatientName, dicomPatientAddress, dicomPatientAge, dicomPatientSex, dicomPatientBirthDate, 
 					dicomStudyId, dicomStudyDate, dicomStudyDescription, dicomSeriesUID, dicomSeriesInstanceUID, 
 					dicomSeriesNumber, dicomSeriesDescriptionCodeSequence, dicomSeriesDate, dicomSeriesDescription, 
-					dicomInstanceUID, modality, dicomThumbnail);
+					dicomInstanceUID, modality, dicomThumbnail,dicomType);
 		}			
 		
 		return dicom;
 	}
 	
 	public void _setParameters(
-			FileDicom dicom) 
+			FileDicom dicom, DicomType dicomType) 
 	{	
 		dicom.setDicomAccessionNumber(dicomAccessionNumber);
 		dicom.setDicomData(dicomData);
@@ -90,13 +93,15 @@ public class TestDicom
 		dicom.setFileName(fileName);
 		dicom.setPatId(patId);
 		dicom.setModality(modality);
+		dicom.setDicomType(dicomType);
 		
 		return;
 	}
 	
 	public void check(
 			FileDicom dicom) 
-	{		
+	{	
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
     	assertEquals(dicomAccessionNumber, dicom.getDicomAccessionNumber());
     	assertEquals(dicomInstanceUID, dicom.getDicomInstanceUID());
     	assertEquals(dicomInstitutionName, dicom.getDicomInstitutionName());
@@ -106,13 +111,13 @@ public class TestDicom
     	assertEquals(dicomPatientID, dicom.getDicomPatientID());
     	assertEquals(dicomPatientName, dicom.getDicomPatientName());
     	assertEquals(dicomPatientSex, dicom.getDicomPatientSex());
-    	assertEquals(dicomSeriesDate, dicom.getDicomSeriesDate());
+    	assertEquals(formatter.format(dicomSeriesDate), formatter.format(dicom.getDicomSeriesDate()));
     	assertEquals(dicomSeriesDescription, dicom.getDicomSeriesDescription());
     	assertEquals(dicomSeriesDescriptionCodeSequence, dicom.getDicomSeriesDescriptionCodeSequence());
     	assertEquals(dicomSeriesInstanceUID, dicom.getDicomSeriesInstanceUID());
     	assertEquals(dicomSeriesNumber, dicom.getDicomSeriesNumber());
     	assertEquals(dicomSeriesUID, dicom.getDicomSeriesUID());
-    	assertEquals(dicomStudyDate, dicom.getDicomStudyDate());
+    	assertEquals(formatter.format(dicomStudyDate), formatter.format(dicom.getDicomStudyDate()));
     	assertEquals(dicomStudyDescription, dicom.getDicomStudyDescription());
     	assertEquals(dicomStudyId, dicom.getDicomStudyId());
     	assertEquals(fileName, dicom.getFileName());
@@ -141,4 +146,6 @@ public class TestDicom
 	
 		return blob;
 	}
+
+	
 }

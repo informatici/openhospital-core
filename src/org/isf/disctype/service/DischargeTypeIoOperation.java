@@ -35,7 +35,7 @@ public class DischargeTypeIoOperation {
 	 * @return true - if the existing DischargeType has been updated
 	 * @throws OHServiceException
 	 */
-	public boolean UpdateDischargeType(
+	public boolean updateDischargeType(
 			DischargeType dischargeType) throws OHServiceException 
 	{
 		boolean result = true;
