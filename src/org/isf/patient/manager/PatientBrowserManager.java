@@ -311,4 +311,13 @@ public class PatientBrowserManager {
         }
         return true;
     }
+    
+    /**
+     * 
+     * @return patients list
+     * @throws OHServiceException 
+     */
+    public ArrayList<Patient> getPatientHeadWithHeightAndWeight() throws OHServiceException{
+   		return ioOperations.getPatientsHeadWithHeightAndWeight();
+    }
 }

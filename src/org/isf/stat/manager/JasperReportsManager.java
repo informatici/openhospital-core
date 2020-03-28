@@ -247,9 +247,7 @@ public class JasperReportsManager {
         } catch(OHServiceException e){
             //Already managed, ready to return OHServiceException
             throw e;
-        } catch (OHException e) {
-            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), e.getMessage(), OHSeverityLevel.ERROR));
-        }catch(Exception e){
+        } catch(Exception e){
             //Any exception
             logger.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
