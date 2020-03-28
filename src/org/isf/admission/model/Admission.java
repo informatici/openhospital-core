@@ -4,6 +4,7 @@ import java.util.GregorianCalendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EntityResult;
 import javax.persistence.FieldResult;
 import javax.persistence.GeneratedValue;
@@ -18,6 +19,7 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.isf.admtype.model.AdmissionType;
+import org.isf.utils.db.Auditable;
 import org.isf.disctype.model.DischargeType;
 import org.isf.disease.model.Disease;
 import org.isf.dlvrrestype.model.DeliveryResultType;
@@ -26,6 +28,7 @@ import org.isf.operation.model.Operation;
 import org.isf.patient.model.Patient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.ward.model.Ward;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /*
  * pure model
@@ -65,7 +68,8 @@ entities={
             @FieldResult(name="parentTogether", column="PAT_PTOGE"),
             @FieldResult(name="taxCode", column="PAT_TAXCODE"),
             @FieldResult(name="lock", column="PAT_LOCK"),
-            @FieldResult(name="photo", column="PAT_PHOTO")}),
+            @FieldResult(name="photo", column="PAT_PHOTO")
+    }),
      @EntityResult(entityClass=org.isf.admission.model.Admission.class, fields={
 	        @FieldResult(name="id", column="ADM_ID"),
 	        @FieldResult(name="admitted", column="ADM_IN"), 
@@ -98,9 +102,12 @@ entities={
 	        @FieldResult(name="abortDate", column="ADM_PRG_DATE_ABORT"),
 	        @FieldResult(name="userID", column="ADM_USR_ID_A"),
 	        @FieldResult(name="lock", column="ADM_LOCK"),
-	        @FieldResult(name="deleted", column="ADM_DELETED")})}
+	        @FieldResult(name="deleted", column="ADM_DELETED")
+	        
+     })}
 )
-public class Admission implements Comparable<Admission> 
+//@EntityListeners(AuditingEntityListener.class) 
+public class Admission implements Comparable<Admission>  //extends Auditable<String> implements Comparable<Admission> 
 {
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)

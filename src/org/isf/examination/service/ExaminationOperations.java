@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.isf.examination.model.PatientExamination;
-import org.isf.generaldata.ExaminationParameters;
-import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,25 +30,25 @@ public class ExaminationOperations {
 	}
 
 	/**
-	 * Default PatientExamination
-	 */
-	public PatientExamination getDefaultPatientExamination(
-			Patient patient) 
-	{
-		PatientExamination defaultPatient = new PatientExamination(new Timestamp(new Date().getTime()), patient, ExaminationParameters.HEIGHT_INIT, ExaminationParameters.WEIGHT_INIT,
-				ExaminationParameters.AP_MIN, ExaminationParameters.AP_MAX, ExaminationParameters.HR_INIT, ExaminationParameters.TEMP_INIT, ExaminationParameters.SAT_INIT, "");
-		return defaultPatient;
-	}
-
-	/**
 	 * Get from last PatientExamination (only height, weight & note)
 	 */
 	public PatientExamination getFromLastPatientExamination(
 			PatientExamination lastPatientExamination) 
 	{
-		PatientExamination newPatientExamination = new PatientExamination(new Timestamp(new Date().getTime()), lastPatientExamination.getPatient(), lastPatientExamination.getPex_height(),
-				lastPatientExamination.getPex_weight(), lastPatientExamination.getPex_pa_min(), lastPatientExamination.getPex_pa_max(), lastPatientExamination.getPex_fc(), 
-				lastPatientExamination.getPex_temp(), lastPatientExamination.getPex_sat(), lastPatientExamination.getPex_note());
+		PatientExamination newPatientExamination = new PatientExamination(new Timestamp(new Date().getTime()), 
+				lastPatientExamination.getPatient(), 
+				lastPatientExamination.getPex_height(),
+				lastPatientExamination.getPex_weight(), 
+				lastPatientExamination.getPex_ap_min(), 
+				lastPatientExamination.getPex_ap_max(), 
+				lastPatientExamination.getPex_hr(), 
+				lastPatientExamination.getPex_temp(), 
+				lastPatientExamination.getPex_sat(),
+				lastPatientExamination.getPex_hgt(),
+				lastPatientExamination.getPex_diuresis(),
+				lastPatientExamination.getPex_diuresis_desc(),
+				lastPatientExamination.getPex_bowel_desc(),
+				lastPatientExamination.getPex_note());
 		return newPatientExamination;
 	}
 
@@ -95,5 +93,12 @@ public class ExaminationOperations {
 			int patID) throws OHServiceException 
 	{
 		return (ArrayList<PatientExamination>)repository.findAllByIdOrderDesc(patID);
+	}
+	
+	public void remove(
+			ArrayList<PatientExamination> patexList) throws OHServiceException 
+	{
+		repository.delete(patexList);
+		return;
 	}
 }
