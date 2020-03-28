@@ -91,7 +91,7 @@ public class MedicalsIoOperations
 	 * @param type the medical type description.
 	 * @nameSorted if <code>true</code> return the list in alphatecial order, by code otherwise
 	 * @return the stored medicals.
-	 * @throws OHException if an error occurs retrieving the stored medicals.
+	 * @throws OHServiceException if an error occurs retrieving the stored medicals.
 	 */
 	public ArrayList<Medical> getMedicals(String type, boolean nameSorted) throws OHServiceException {
 		ArrayList<Medical> medicals = null;

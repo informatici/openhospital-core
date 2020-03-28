@@ -70,7 +70,6 @@ public class VisitManager {
 	 * @param visits - the list of {@link Visit}s related to patID. 
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
 	 * @throws OHServiceException 
-	 * @throws OHException 
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean newVisits(ArrayList<Visit> visits) throws OHServiceException {
@@ -115,7 +114,6 @@ public class VisitManager {
 	 * @param patID - the {@link Patient} ID
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException 
-	 * @throws OHException 
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean deleteAllVisits(int patID) throws OHServiceException {

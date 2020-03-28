@@ -18,6 +18,7 @@ import org.isf.menu.manager.Context;
 import org.isf.patvac.model.PatientVaccine;
 import org.isf.patvac.service.PatVacIoOperations;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,10 +70,7 @@ public class PatVacManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newPatientVaccine(PatientVaccine patVac) throws OHServiceException {
-        List<OHExceptionMessage> errors = validatePatientVaccine(patVac);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validatePatientVaccine(patVac);
         return ioOperations.newPatientVaccine(patVac);
 	}
 
@@ -84,10 +82,7 @@ public class PatVacManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updatePatientVaccine(PatientVaccine patVac) throws OHServiceException {
-        List<OHExceptionMessage> errors = validatePatientVaccine(patVac);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validatePatientVaccine(patVac);
         return ioOperations.updatePatientVaccine(patVac);
 	}
 
@@ -113,7 +108,12 @@ public class PatVacManager {
         return ioOperations.getProgYear(year);
 	}
 
-    protected List<OHExceptionMessage> validatePatientVaccine(PatientVaccine patientVaccine){
+	/**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * @param patientVaccine
+	 * @throws OHDataValidationException 
+	 */
+    protected void validatePatientVaccine(PatientVaccine patientVaccine) throws OHDataValidationException{
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 
         if(patientVaccine.getVaccineDate() == null){
@@ -138,8 +138,9 @@ public class PatVacManager {
                     MessageBundle.getMessage("angal.patvac.pleaseselectapatient"),
                     OHSeverityLevel.ERROR));
         }
-
-        return errors;
+        if(!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
     }
 }
 

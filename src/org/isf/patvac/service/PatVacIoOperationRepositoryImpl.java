@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Transactional
-class PatVacIoOperationRepositoryImpl implements PatVacIoOperationRepositoryCustom {
+public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationRepositoryCustom {
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -80,7 +80,6 @@ class PatVacIoOperationRepositoryImpl implements PatVacIoOperationRepositoryCust
 			clause = " AND";
 		}		
 		query.append(" ORDER BY PAV_DATE DESC, PAV_ID");
-		System.out.println(query.toString());
 
 		return query.toString();
 	}

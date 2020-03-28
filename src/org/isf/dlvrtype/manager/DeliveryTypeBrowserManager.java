@@ -7,6 +7,7 @@ import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.dlvrtype.service.DeliveryTypeIoOperation;
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +40,7 @@ public class DeliveryTypeBrowserManager {
      * @throws OHServiceException
      */
     public boolean newDeliveryType(DeliveryType deliveryType) throws OHServiceException {
-        List<OHExceptionMessage> errors = validateDeliveryType(deliveryType, true);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validateDeliveryType(deliveryType, true);
         return ioOperations.newDeliveryType(deliveryType);
     }
 
@@ -54,10 +52,7 @@ public class DeliveryTypeBrowserManager {
      * @throws OHServiceException
      */
     public boolean updateDeliveryType(DeliveryType deliveryType) throws OHServiceException {
-        List<OHExceptionMessage> errors = validateDeliveryType(deliveryType, false);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validateDeliveryType(deliveryType, false);
         return ioOperations.updateDeliveryType(deliveryType);
     }
 
@@ -83,7 +78,13 @@ public class DeliveryTypeBrowserManager {
         return ioOperations.deleteDeliveryType(deliveryType);
     }
 
-    private List<OHExceptionMessage> validateDeliveryType(DeliveryType deliveryType, boolean insert) throws OHServiceException {
+    /**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * @param deliveryType
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHServiceException 
+	 */
+    protected void validateDeliveryType(DeliveryType deliveryType, boolean insert) throws OHServiceException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         String key = deliveryType.getCode();
         if (key.equals("")){
@@ -104,6 +105,8 @@ public class DeliveryTypeBrowserManager {
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),  MessageBundle.getMessage("angal.dlvrtype.pleaseinsertavaliddescription"),
                     OHSeverityLevel.ERROR));
         }
-        return errors;
+        if (!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
     }
 }

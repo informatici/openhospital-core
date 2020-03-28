@@ -9,7 +9,6 @@ import org.isf.accounting.model.BillItems;
 import org.isf.accounting.model.BillPayments;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -359,16 +358,15 @@ public class AccountingIoOperations {
 	}
 	
 	/**
-
 	 * Retrieves all billPayements for a given patient in the period dateFrom -> dateTo
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param patient
 	 * @return
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
 	public ArrayList<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient)
-			throws OHException {
+			throws OHServiceException {
 		ArrayList<BillPayments> payments =  billPaymentRepository.findByDateAndPatient(dateFrom, dateTo, patient.getCode());
 		return payments;
 	}
@@ -378,9 +376,9 @@ public class AccountingIoOperations {
 	 * @param dateTo
 	 * @param patient
 	 * @return the bill list
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
-	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient) throws OHException {
+	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient) throws OHServiceException {
 		ArrayList<Bill> bills = billRepository.findByDateAndPatient(dateFrom, dateTo, patient.getCode());
 		return bills;
 	}
@@ -388,9 +386,9 @@ public class AccountingIoOperations {
 	 * 
 	 * @param patID
 	 * @return
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
-	public ArrayList<Bill> getPendingBillsAffiliate(int patID) throws OHException {
+	public ArrayList<Bill> getPendingBillsAffiliate(int patID) throws OHServiceException {
 		ArrayList<Bill> pendingBills = billRepository.findAllPendindBillsByPatient(patID);
 		return pendingBills;
 	}
@@ -399,9 +397,9 @@ public class AccountingIoOperations {
 	 * Return Distincts BillItems
 	 * added by u2g
 	 * @return BillItems list 
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
-	public ArrayList<BillItems> getDistictsBillItems() throws OHException {
+	public ArrayList<BillItems> getDistictsBillItems() throws OHServiceException {
 		ArrayList<BillItems> billItems =  billItemsRepository.findAllGroupByDesc();
 		return billItems;
 	}
@@ -413,9 +411,9 @@ public class AccountingIoOperations {
 	 * @param dateTo
 	 * @param billItem
 	 * @return the bill list
-	 * @throws OHException
+	 * @throws OHServiceException
 	 */
-	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo, BillItems billItem) throws OHException {
+	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo, BillItems billItem) throws OHServiceException {
 		ArrayList<Bill> bills = null;
 		Timestamp timestamp1 = new Timestamp(dateFrom.getTimeInMillis());
 		Timestamp timestamp2 = new Timestamp(dateTo.getTimeInMillis());

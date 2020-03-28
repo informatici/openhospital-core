@@ -1,5 +1,7 @@
 package org.isf.utils.time;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,6 +10,8 @@ import java.util.GregorianCalendar;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
+import org.isf.utils.db.DbQueryLogger;
+import org.isf.utils.exception.OHException;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
@@ -251,14 +255,151 @@ public class TimeTools {
 		GregorianCalendar calendar = new GregorianCalendar();
 		if (noTime) {
 			calendar.setTime(date);
-			System.out.println(formatDateTime(calendar, null));
 		} else {
 			calendar.setTimeInMillis(date.getTime());
-			System.out.println(formatDateTime(calendar, null));
 		}
-		
+		System.out.println(formatDateTime(calendar, null));
+
 		return calendar;
 	}
 	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+	/**
+	 * @author Mwithi
+	 * 
+	 * returns the difference in days between two dates
+	 * @param from
+	 * @param to
+	 * @return the number of days
+	 */
+	public static int getDaysBetweenDates(GregorianCalendar from, GregorianCalendar to) {
+		
+		DateTime dateFrom = new DateTime(from);
+		DateTime dateTo = new DateTime(to);
+		Period period = new Period(dateFrom, dateTo, PeriodType.days());
+		return period.getDays();
+	}
 	
+	/**
+	 * @author Mwithi
+	 * 
+	 * returns the difference in days between two dates
+	 * @param from
+	 * @param to
+	 * @return the number of days
+	 */
+	public static int getDaysBetweenDates(Date from, Date to) {
+		DateTime dateFrom = new DateTime(from);
+		DateTime dateTo = new DateTime(to);
+		Period period = new Period(dateFrom, dateTo, PeriodType.days());
+		return period.getDays();
+	}
+	
+	/**
+	 * @author Mwithi
+	 * 
+	 * returns the difference in weeks between two dates
+	 * @param from
+	 * @param to
+	 * @return the number of weeks
+	 */
+	public static int getWeeksBetweenDates(GregorianCalendar from, GregorianCalendar to) {
+		DateTime dateFrom = new DateTime(from);
+		DateTime dateTo = new DateTime(to);
+		Period period = new Period(dateFrom, dateTo, PeriodType.weeks());
+		return period.getWeeks();
+	}
+	
+	/**
+	 * @author Mwithi
+	 * 
+	 * returns the difference in months between two dates
+	 * @param from
+	 * @param to
+	 * @return the number of months
+	 */
+	public static int getMonthsBetweenDates(GregorianCalendar from, GregorianCalendar to) {
+		DateTime dateFrom = new DateTime(from);
+		DateTime dateTo = new DateTime(to);
+		Period period = new Period(dateFrom, dateTo, PeriodType.months());
+		return period.getMonths();
+	}
+
+	public static GregorianCalendar getDate(String strDate, String format) throws ParseException{
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat(format);
+			Date date=sdf.parse(strDate);
+			if(date!=null){
+				GregorianCalendar calDate=new GregorianCalendar();
+				calDate.setTime(date);
+				return calDate;
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			if(!format.equals("dd/MM/yyyy")){
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+				Date date=sdf.parse(strDate);
+				if(date!=null){
+					GregorianCalendar calDate=new GregorianCalendar();
+					calDate.setTime(date);
+					return calDate;
+				}
+			}
+		}
+		return null;
+	}
+	/**
+	 * Return the actual date and time of the server
+	 * 
+	 * @author hadesthanos 
+	 * @return DateTime 
+	 * @throws OHException 
+	 * @throws ParseException 
+	 */
+	public static GregorianCalendar getServerDateTime()  {
+		GregorianCalendar serverDate=new GregorianCalendar();
+		String query = " SELECT NOW( ) as time ";
+
+		DbQueryLogger dbQuery = new DbQueryLogger();
+		try {
+			ResultSet resultSet = dbQuery.getData(query, true);
+			while (resultSet.next()) {
+				String date = resultSet.getString("time");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				java.util.Date utilDate = new java.util.Date();
+				utilDate = sdf.parse(date);
+				serverDate.setTime(utilDate);				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (OHException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return serverDate;
+	}
+   
+    public static String getConvertedString(GregorianCalendar time) {
+		if (time == null)
+			return MessageBundle.getMessage("angal.malnutrition.nodate");
+		String string = String
+				.valueOf(time.get(GregorianCalendar.DAY_OF_MONTH));
+		string += "/" + String.valueOf(time.get(GregorianCalendar.MONTH) + 1);
+		String year = String.valueOf(time.get(GregorianCalendar.YEAR));
+		year = year.substring(2, year.length());
+		string += "/" + year;
+		return string;
+	}
+   
+ 
+  
+public static GregorianCalendar convertToDate(String string) throws ParseException {
+		GregorianCalendar date = TimeTools.getServerDateTime();
+		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy");
+		date.setTime(sdf.parse(string));
+		return date;
+	}
 }

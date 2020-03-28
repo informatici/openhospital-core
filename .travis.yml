@@ -8,5 +8,6 @@ before_install:
 - docker ps
 # for debug uncomment 
 #- docker-compose logs --follow database 
+- chmod +x mvnw
 after_success:
 - docker-compose down

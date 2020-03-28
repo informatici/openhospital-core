@@ -9,8 +9,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.imageio.ImageIO;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,10 +23,12 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.isf.utils.db.Auditable;
 import org.isf.opd.model.Opd;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /*------------------------------------------
  * Patient - model for the patient entity
@@ -48,7 +53,16 @@ import org.joda.time.PeriodType;
  *------------------------------------------*/
 @Entity
 @Table(name="PATIENT")
-public class Patient {
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="PAT_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="PAT_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="PAT_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="PAT_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="PAT_LAST_MODIFIED_DATE"))
+})
+public class Patient extends Auditable<String>
+{
 	/*
 	 * PAT_ID int NOT NULL AUTO_INCREMENT , PAT_FNAME varchar (50) NOT NULL ,
 	 * --first name (nome) PAT_SNAME varchar (50) NOT NULL , --second name
@@ -137,7 +151,11 @@ public class Patient {
 	
 	@Column(name="PAT_TAXCODE")
 	private String taxCode;
-	
+
+	@NotNull
+	@Column(name="PAT_DELETED")
+	private String deleted = "N";
+
 	@Transient
 	private float height;
 	
@@ -506,8 +524,16 @@ public class Patient {
 	public void setWeight(float weight) {
 		this.weight = weight;
 	}
-	
-	@Override
+
+    public String getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(String deleted) {
+        this.deleted = deleted;
+    }
+
+    @Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -527,7 +553,7 @@ public class Patient {
 	        final int m = 23;
 	        int c = 133;
 	        
-	        c = m * c + ((code == null) ? 0 : code.intValue());
+	        c = m * c + ((code == null) ? 0 : code);
 	        
 	        this.hashCode = c;
 	    }

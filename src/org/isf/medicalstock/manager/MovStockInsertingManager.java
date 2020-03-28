@@ -12,7 +12,9 @@ import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -40,7 +42,7 @@ public class MovStockInsertingManager {
 	 * @return list of {@link OHExceptionMessage}
 	 * @throws OHServiceException 
 	 */
-	protected List<OHExceptionMessage> validateMovement(Movement movement, boolean checkReference) throws OHServiceException {
+	protected void validateMovement(Movement movement, boolean checkReference) throws OHServiceException  {
 		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 		
 		// Check the Date
@@ -126,16 +128,17 @@ public class MovStockInsertingManager {
 			}
 			errors.addAll(validateLot(lot));
 		}
-		return errors;
+		if (!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
 	}
 	
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param Lot - the lot to validate
 	 * @return list of {@link OHExceptionMessage}
-	 * @throws OHServiceException 
 	 */
-	protected List<OHExceptionMessage> validateLot(Lot lot) throws OHServiceException {
+	protected List<OHExceptionMessage> validateLot(Lot lot) {
 		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 		
 		if (lot != null) {
@@ -188,19 +191,6 @@ public class MovStockInsertingManager {
 		}
 		return errors;
 	}
-
-	// Replaced by getMedical in MedicalBrowsingManager
-	/*
-	 * Gets the current quantity for the specified {@link Medical}. 
-	 * 
-	 * @param medical the medical to check.
-	 * 
-	 * @return the current quantity of medical.
-	 * 
-	 * public int getCurrentQuantity(Medical medical){ try { return
-	 * ioOperations.getCurrentQuantity(medical); } catch (OHException e) {
-	 * JOptionPane.showMessageDialog(null, e.getMessage()); return 0; } }
-	 */
 
 	private boolean isAutomaticLot() {
 		return GeneralData.AUTOMATICLOT;
@@ -287,7 +277,7 @@ public class MovStockInsertingManager {
 		if (!checkReference) { // referenceNumber != null
 			List<OHExceptionMessage> errors = checkReferenceNumber(referenceNumber);
             if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
+                throw new OHDataValidationException(errors);
             }
 		}
 		for (Movement mov : movements) {
@@ -298,7 +288,7 @@ public class MovStockInsertingManager {
 				errors.add(new OHExceptionMessage("invalidMovement", 
 						mov.getMedical().getDescription(), 
 						OHSeverityLevel.INFO));
-				throw new OHServiceException(errors);
+				throw new OHDataValidationException(errors);
 			}
 		}
 		return ok;
@@ -316,15 +306,8 @@ public class MovStockInsertingManager {
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	private boolean prepareChargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
-		try {
-			List<OHExceptionMessage> errors = validateMovement(movement, checkReference);
-            if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
-            }
-			return ioOperations.prepareChargingMovement(movement);
-		} catch (OHServiceException e) {
-			throw e;
-		}
+		validateMovement(movement, checkReference);
+		return ioOperations.prepareChargingMovement(movement);
 	}
 	
 	/**
@@ -356,7 +339,7 @@ public class MovStockInsertingManager {
 		if (!checkReference) { // referenceNumber != null
 			List<OHExceptionMessage> errors = checkReferenceNumber(referenceNumber);
             if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
+                throw new OHDataValidationException(errors);
             }
 		}
 		for (Movement mov : movements) {
@@ -367,7 +350,7 @@ public class MovStockInsertingManager {
 				errors.add(new OHExceptionMessage("invalidMovement", 
 						mov.getMedical().getDescription(), 
 						OHSeverityLevel.INFO));
-				throw new OHServiceException(errors);
+				throw new OHDataValidationException(errors);
 			}
 		}
 		return ok;
@@ -384,17 +367,11 @@ public class MovStockInsertingManager {
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	private boolean prepareDishargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
-		try {
-			List<OHExceptionMessage> errors = validateMovement(movement, checkReference);
-            if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
-            }
-            if (isAutomaticLot()) {
-            	return ioOperations.newAutomaticDischargingMovement(movement);
-            } else 
-            	return ioOperations.prepareDischargingMovement(movement);
-		} catch (OHServiceException e) {
-			throw e;
-		}
+		validateMovement(movement, checkReference);
+        if (isAutomaticLot()) {
+        	return ioOperations.newAutomaticDischargingMovement(movement);
+        } else {
+        	return ioOperations.prepareDischargingMovement(movement);
+        }
 	}
 }

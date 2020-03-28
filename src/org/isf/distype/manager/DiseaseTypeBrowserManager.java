@@ -7,6 +7,7 @@ import org.isf.distype.model.DiseaseType;
 import org.isf.distype.service.DiseaseTypeIoOperation;
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +38,7 @@ public class DiseaseTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newDiseaseType(DiseaseType diseaseType) throws OHServiceException {
-        List<OHExceptionMessage> errors = validateDiseaseType(diseaseType, true);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validateDiseaseType(diseaseType, true);
         return ioOperations.newDiseaseType(diseaseType);
 	}
 
@@ -51,10 +49,7 @@ public class DiseaseTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateDiseaseType(DiseaseType diseaseType) throws OHServiceException {
-        List<OHExceptionMessage> errors = validateDiseaseType(diseaseType, false);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validateDiseaseType(diseaseType, false);
         return ioOperations.updateDiseaseType(diseaseType);
 	}
 
@@ -78,7 +73,13 @@ public class DiseaseTypeBrowserManager {
         return ioOperations.deleteDiseaseType(diseaseType);
 	}
 
-    private List<OHExceptionMessage> validateDiseaseType(DiseaseType diseaseType, boolean insert) throws OHServiceException {
+	/**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * @param diseaseType
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHServiceException
+	 */
+    protected void validateDiseaseType(DiseaseType diseaseType, boolean insert) throws OHServiceException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         String key = diseaseType.getCode();
         if (key.equals("")){
@@ -100,6 +101,8 @@ public class DiseaseTypeBrowserManager {
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),  MessageBundle.getMessage("angal.distype.pleaseinsertavaliddescription"),
                     OHSeverityLevel.ERROR));
         }
-        return errors;
+        if (!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
     }
 }

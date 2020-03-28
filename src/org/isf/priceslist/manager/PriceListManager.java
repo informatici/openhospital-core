@@ -11,6 +11,7 @@ import org.isf.priceslist.model.PriceList;
 import org.isf.priceslist.service.PricesListIoOperations;
 import org.isf.serviceprinting.print.PriceForPrint;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,10 +61,7 @@ public class PriceListManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newList(PriceList list) throws OHServiceException {
-	    java.util.List<OHExceptionMessage> errors = validatePriceList(list);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+	    validatePriceList(list);
         return ioOperations.newList(list);
 	}
 
@@ -75,10 +73,7 @@ public class PriceListManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateList(PriceList updateList) throws OHServiceException {
-        java.util.List<OHExceptionMessage> errors = validatePriceList(updateList);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+        validatePriceList(updateList);
         return ioOperations.updateList(updateList);
 	}
 
@@ -134,7 +129,12 @@ public class PriceListManager {
 		return pricePrint;
 	}
 
-    protected java.util.List<OHExceptionMessage> validatePriceList(PriceList priceList){
+	/**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * @param priceList
+	 * @throws OHDataValidationException 
+	 */
+    protected void validatePriceList(PriceList priceList) throws OHDataValidationException{
         java.util.List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 
         if (StringUtils.isEmpty(priceList.getCode())) { //$NON-NLS-1$
@@ -157,6 +157,8 @@ public class PriceListManager {
                     MessageBundle.getMessage("angal.priceslist.pleaseinsertacurrency"),
                     OHSeverityLevel.ERROR));
         }
-        return errors;
+        if(!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
     }
 }

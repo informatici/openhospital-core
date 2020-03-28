@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 import org.isf.operation.model.Operation;
 import org.isf.opetype.model.OperationType;
-import org.isf.utils.db.TranslateOHException;
-import org.isf.utils.exception.OHException;
+import org.isf.utils.db.TranslateOHServiceException;
+import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Rick, Vero, pupo
  */
 @Service
-@Transactional(rollbackFor=OHException.class)
-@TranslateOHException
+@Transactional(rollbackFor=OHServiceException.class)
+@TranslateOHServiceException
 public class OperationIoOperations {
 
 	@Autowired
@@ -37,10 +37,10 @@ public class OperationIoOperations {
 	 * 
 	 * @param typeDescription - a type description
 	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
 	public ArrayList<Operation> getOperation(
-			String typeDescription) throws OHException 
+			String typeDescription) throws OHServiceException 
 	{
     	ArrayList<Operation> operations = null;
 
@@ -57,7 +57,7 @@ public class OperationIoOperations {
 		return operations;
 	}
         
-        public Operation findByCode(String code) throws OHException{
+        public Operation findByCode(String code) throws OHServiceException{
             return repository.findByCode(code);
         }
 	
@@ -66,10 +66,10 @@ public class OperationIoOperations {
 	 * 
 	 * @param operation - the {@link Operation} to insert
 	 * @return <code>true</code> if the operation has been inserted, <code>false</code> otherwise.
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
 	public boolean newOperation(
-			Operation operation) throws OHException
+			Operation operation) throws OHServiceException
 	{
 		boolean result = true;
 	
@@ -85,10 +85,10 @@ public class OperationIoOperations {
 	 * 
 	 * @param operation - the {@link Operation} to update
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise.
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
 	public boolean updateOperation(
-			Operation operation) throws OHException
+			Operation operation) throws OHServiceException
 	{
 		boolean result = true;
 	
@@ -102,10 +102,10 @@ public class OperationIoOperations {
 	 * Delete a {@link Operation} in the DB
 	 * @param operation - the {@link Operation} to delete
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise.
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
 	public boolean deleteOperation(
-			Operation operation) throws OHException
+			Operation operation) throws OHServiceException
 	{
 		boolean result = true;
 	
@@ -119,10 +119,10 @@ public class OperationIoOperations {
 	 * checks if an {@link Operation} code has already been used
 	 * @param code - the code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise.
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(
-			String code) throws OHException
+			String code) throws OHServiceException
 	{
 		boolean result = true;
 	
@@ -138,11 +138,11 @@ public class OperationIoOperations {
 	 * @param description - the {@link Operation} description
 	 * @param typeCode - the {@link OperationType} code
 	 * @return <code>true</code> if the description is already in use, <code>false</code> otherwise.
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
 	public boolean isDescriptionPresent(
 			String description, 
-			String typeCode) throws OHException
+			String typeCode) throws OHServiceException
 	{
 		Operation foundOperation = repository.findOneByDescriptionAndType(description, typeCode);
 		boolean present = false;
