@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -230,6 +231,48 @@ public class JasperReportsManager {
         } catch(Exception e){
             //Any exception
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+                    MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
+        }
+    }
+    
+    public JasperReportResultDto getGenericReportPatientVersion2Pdf(Integer patientID,Boolean all,Boolean admission,Boolean opd,Boolean drugs,Boolean examination, Date date_From, Date date_To, String jasperFileName) throws OHServiceException {
+
+        try{
+            HashMap<String, Object> parameters = getHospitalParameters();
+    		Format formatter;
+		    formatter = new SimpleDateFormat("yyyy-MM-dd");
+		    
+		    Calendar c = Calendar.getInstance(); 
+		    c.setTime(date_From); 
+		    c.add(Calendar.DATE, -1);
+		    Date df = c.getTime();
+		    Calendar ct = Calendar.getInstance(); 
+		    ct.setTime(date_To); 
+		    ct.add(Calendar.DATE, 1);
+		    Date dt = ct.getTime();
+		    String dateFromQuery = formatter.format(df);
+		    String dateToQuery = formatter.format(dt);
+	
+            parameters.put("patientID", String.valueOf(patientID));
+            parameters.put("All", all);
+            parameters.put("Drugs", drugs);
+            parameters.put("Examination", examination);
+            parameters.put("Admission", admission);
+            parameters.put("Opd", opd);
+            parameters.put("Date_from", dateFromQuery); 
+            parameters.put("Date_to", dateToQuery); 
+            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + String.valueOf(patientID)+".pdf";
+
+            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
+            JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
+            return result;
+        } catch(OHServiceException e){
+            //Already managed, ready to return OHServiceException
+            throw e;
+        } catch(Exception e){
+            //Any exception
+            logger.error("", e);
+            throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
                     MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
         }
     }

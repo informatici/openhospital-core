@@ -12,6 +12,7 @@ import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperations;
+import org.isf.patient.model.Patient;
 import org.isf.serviceprinting.print.MedicalWardForPrint;
 import org.isf.serviceprinting.print.MovementForPrint;
 import org.isf.serviceprinting.print.MovementWardForPrint;
@@ -78,7 +79,6 @@ public class MovWardBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<MedicalWard> getMedicalsWard(char wardId) throws OHServiceException {
-            System.out.println("MovWardBrowserManager: Looking for drugs ");
 		return ioOperations.getMedicalsWard(wardId);
 	}
 
@@ -104,6 +104,17 @@ public class MovWardBrowserManager {
 	 */
 	public ArrayList<MovementWard> getWardMovementsToWard(String idwardTo, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
 		return ioOperations.getWardMovementsToWard(idwardTo, dateFrom, dateTo);
+	}
+	
+    /**
+	 * Gets all the movement ward with the specified criteria.
+	 * @param patId.
+
+	 * @return all the retrieved movements.
+	 * @throws OHServiceException 
+	 */
+	public ArrayList<MovementWard> getMovementPat(Patient patient) throws OHServiceException {
+		return ioOperations.getWardMovementsToPatient(patient.getCode());
 	}
 	
 	/**

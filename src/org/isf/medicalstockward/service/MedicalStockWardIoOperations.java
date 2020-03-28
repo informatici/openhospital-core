@@ -1,5 +1,8 @@
 package org.isf.medicalstockward.service;
 
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstockward.model.MedicalWard;
@@ -10,9 +13,6 @@ import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
 
 /**
  * @author mwithi
@@ -27,6 +27,8 @@ public class MedicalStockWardIoOperations
 	private MedicalStockWardIoOperationRepository repository;
 	@Autowired
 	private MovementWardIoOperationRepository movementRepository;
+	@Autowired
+	private MovementPatWard movementPat;
 	
 	/**
 	 * Get all {@link MovementWard}s with the specified criteria.
@@ -259,5 +261,12 @@ public class MedicalStockWardIoOperations
 		}
 		
 		return medicalWards;
+	}
+
+
+
+	public ArrayList<MovementWard> getWardMovementsToPatient(Integer patId) {
+		
+		return movementPat.findWardMovementPat(patId);
 	}
 }
