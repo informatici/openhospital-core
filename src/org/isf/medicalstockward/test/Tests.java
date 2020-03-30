@@ -270,13 +270,15 @@ public class Tests
 			Medical medical= testMedical.setup(medicalType, false);
 			Ward ward = testWard.setup(false);
 			Patient patient = testPatient.setup(false);
+			Lot lot = testLot.setup(false);
 		
 			jpa.beginTransaction();	
 			jpa.persist(medicalType);
 			jpa.persist(medical);
 			jpa.persist(ward);
 			jpa.persist(patient);
-			MovementWard movementWard = testMovementWard.setup(ward, patient, medical, false);
+			jpa.persist(lot);
+			MovementWard movementWard = testMovementWard.setup(ward, patient, medical, ward, ward, lot, false);
 			jpa.persist(movementWard);
 			jpa.commitTransaction();
 			
@@ -309,15 +311,16 @@ public class Tests
 			Medical medical= testMedical.setup(medicalType, false);
 			Ward ward = testWard.setup(false);
 			Patient patient = testPatient.setup(false);
-			
+			Lot lot = testLot.setup(false);
 		
 			jpa.beginTransaction();	
 			jpa.persist(medicalType);
 			jpa.persist(medical);
 			jpa.persist(ward);
 			jpa.persist(patient);
+			jpa.persist(lot);
 			jpa.commitTransaction();
-			movementWard = testMovementWard.setup(ward, patient, medical, false);
+			movementWard = testMovementWard.setup(ward, patient, medical, ward, ward, lot, false);
 			result = medicalIoOperation.newMovementWard(movementWard);
 			Double quantity = (double) medicalIoOperation.getCurrentQuantityInWard(ward, medical);
 			
@@ -453,6 +456,7 @@ public class Tests
 		jpa.persist(medicalType);
 		jpa.persist(medical);
 		jpa.persist(ward);
+		jpa.persist(lot);
 		medicalWard = testMedicalWard.setup(medical, ward, lot, usingSet);
 		jpa.persist(medicalWard);
 		jpa.commitTransaction();
@@ -480,6 +484,7 @@ public class Tests
 		Medical medical= testMedical.setup(medicalType, false);
 		Ward ward = testWard.setup(false);
 		Patient patient = testPatient.setup(false);
+		Lot lot = testLot.setup(false);
 		
 	
 		jpa.beginTransaction();	
@@ -487,7 +492,8 @@ public class Tests
 		jpa.persist(medical);
 		jpa.persist(ward);
 		jpa.persist(patient);
-		movementWard = testMovementWard.setup(ward, patient, medical, usingSet);
+		jpa.persist(lot);
+		movementWard = testMovementWard.setup(ward, patient, medical, ward, ward, lot, usingSet);
 		jpa.persist(movementWard);
 		jpa.commitTransaction();
 		

@@ -419,7 +419,7 @@ public class MedicalStockIoOperations {
 			int quantity, 
 			Lot lot) throws OHServiceException
 	{
-		MedicalWard medicalWard = (MedicalWard)medicalStockRepository.findOneWhereCodeAndMedical(ward.getCode(), medical.getCode() , lot.getCode());		
+		MedicalWard medicalWard = (MedicalWard)medicalStockRepository.findOneWhereCodeAndMedicalAndLot(ward.getCode(), medical.getCode() , lot.getCode());		
 				
 		if (medicalWard != null)
 		{			

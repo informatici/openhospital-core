@@ -26,7 +26,7 @@ public class TestMedicalWard
 		if (usingSet)
 		{
 			medicalward = new MedicalWard();
-			_setParameters(medicalward, medical, ward);
+			_setParameters(medicalward, medical, ward, lot);
 		}
 		else
 		{
@@ -40,12 +40,13 @@ public class TestMedicalWard
 	public void _setParameters(
 			MedicalWard medicalward,
 			Medical medical,
-			Ward ward) 
+			Ward ward, Lot lot) 
 	{	
 		medicalward.setMedical(medical);
 		medicalward.setWard(ward);
 		medicalward.setInQuantity(in_quantity);
 		medicalward.setOutQuantity(out_quantity);
+		medicalward.setLot(lot);
 		
 		return;
 	}

@@ -133,7 +133,15 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	
 	public void setMedical(Medical med) {
 		this.id.setMedical(med);
-	}	
+	}
+	
+	public void setLot(Lot lot) {
+		id.setLot(lot);
+	}
+	
+	public Lot getLot() {
+		return id.getLot();
+	}
 
 	public float getInQuantity() {
 		return this.in_quantity;
@@ -178,5 +186,4 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	  
 	    return this.hashCode;
 	}
-
 }

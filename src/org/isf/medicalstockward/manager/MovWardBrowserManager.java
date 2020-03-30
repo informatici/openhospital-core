@@ -56,6 +56,7 @@ public class MovWardBrowserManager {
 	        		MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug"), 
 	        		OHSeverityLevel.ERROR));
         }
+        //TODO: check lot information
         if (!errors.isEmpty()){
 	        throw new OHDataValidationException(errors);
 	    }
