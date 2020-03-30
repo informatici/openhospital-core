@@ -13,8 +13,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.lab.model.Laboratory;
@@ -22,7 +20,6 @@ import org.isf.lab.model.LaboratoryForPrint;
 import org.isf.lab.model.LaboratoryRow;
 import org.isf.lab.service.LabIoOperations;
 import org.isf.patient.model.Patient;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -322,10 +319,9 @@ public class LabManager {
 	 * @return <code>true</code> if the exam has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
+	protected boolean newLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
 		return ioOperations.newLabFirstProcedure(laboratory);
 	}
-
 
 	/**
 	 * Inserts one Laboratory exam {@link Laboratory} with multiple results (Procedure Two) 
@@ -334,7 +330,7 @@ public class LabManager {
 	 * @return <code>true</code> if the exam has been inserted with all its results, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newLabSecondProcedure(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
+	protected boolean newLabSecondProcedure(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
 		return ioOperations.newLabSecondProcedure(laboratory, labRow);
 	}
 
@@ -346,14 +342,8 @@ public class LabManager {
 	 * @throws OHServiceException
 	 * @deprecated use updateLaboratory() for all procedures
 	 */
-	public boolean editLabFirstProcedure(Laboratory laboratory) {
-		try {
-			return ioOperations.updateLabFirstProcedure(laboratory);
-		} catch (OHServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return false;
+	protected boolean editLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
+		return ioOperations.updateLabFirstProcedure(laboratory);
 	}
 
 	/**
@@ -364,7 +354,7 @@ public class LabManager {
 	 * @throws OHServiceException 
 	 * @deprecated use updateLaboratory() for all procedures
 	 */
-	public boolean editLabSecondProcedure(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
+	protected boolean editLabSecondProcedure(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
 		return ioOperations.updateLabSecondProcedure(laboratory, labRow);
 	}
 
