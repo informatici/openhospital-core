@@ -15,6 +15,7 @@ public class MovementForPrint implements Comparable<MovementForPrint>{
 	private Date date;
 	private String medical;
 	private double quantity;
+	private String lot;
 	
 	public MovementForPrint(Movement mov) {
 		
@@ -23,12 +24,15 @@ public class MovementForPrint implements Comparable<MovementForPrint>{
 		this.date = removeTime(mov.getDate());
 		this.medical = mov.getMedical().getDescription();
 		this.quantity = mov.getQuantity();
+		this.lot = mov.getLot().getCode();
 	}
 	
 	public String getWard() {
 		return ward;
 	}
-
+	public String getLot() {
+		return lot;
+	}
 	public Date getDate() {
 		return date;
 	}

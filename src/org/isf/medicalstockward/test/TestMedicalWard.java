@@ -3,6 +3,7 @@ package org.isf.medicalstockward.test;
 import static org.junit.Assert.assertEquals;
 
 import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
@@ -16,6 +17,7 @@ public class TestMedicalWard
 	public MedicalWard setup(
 			Medical medical,
 			Ward ward,
+			Lot lot,
 			boolean usingSet) throws OHException 
 	{
 		MedicalWard medicalward;
@@ -29,7 +31,7 @@ public class TestMedicalWard
 		else
 		{
 			// Create MedicalWard with all parameters 
-			medicalward = new MedicalWard(ward, medical, in_quantity, out_quantity);
+			medicalward = new MedicalWard(ward, medical, in_quantity, out_quantity, lot);
 		}
 				    	
 		return medicalward;

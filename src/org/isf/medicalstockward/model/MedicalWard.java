@@ -9,8 +9,9 @@ import javax.persistence.EntityListeners;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.isf.utils.db.Auditable;
 import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
+import org.isf.utils.db.Auditable;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
@@ -42,7 +43,7 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	private DbJpaUtil jpa;
 	
 	@EmbeddedId 
-	MedicalWardId id;
+	private MedicalWardId id;
 	
 	@Column(name="MDSRWRD_IN_QTI")
 	private float in_quantity;
@@ -59,6 +60,7 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	public MedicalWard() {
 		super();
 		this.id = new MedicalWardId(); 
+		
 	}
 	
 	public MedicalWard(Medical medical, Double qty) {
@@ -68,23 +70,29 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 		this.qty = qty;
 	}
 	
-	public MedicalWard(Ward ward, Medical medical, float in_quantity, float out_quantity) {
+	public MedicalWard(Ward ward, Medical medical, float in_quantity, float out_quantity, Lot lot) {
 		super();
-		this.id = new MedicalWardId(ward, medical);  
+		this.id = new MedicalWardId(ward, medical, lot);  
 		this.in_quantity = in_quantity;
 		this.out_quantity = out_quantity;
+		
 	}
 	
+	public MedicalWard(Medical med, double qanty, Lot lot) {
+		super();
+		this.id = new MedicalWardId(); 
+		
+		this.id.setMedical(med);
+		this.id.setLot(lot);
+		this.qty = qanty;
+	}
+
 	public MedicalWardId getId() {
 		return id;
 	}
 	
-	public void setId(Ward ward, Medical medical) {
-		this.id = new MedicalWardId(ward, medical); 
-	}
-	
-	public void setMedical(Medical medical) {
-		this.id.setMedical(medical);
+	public void setId(Ward ward, Medical medical, Lot lot) {
+		this.id = new MedicalWardId(ward, medical, lot); 
 	}
 	
 	public Double getQty() {
@@ -98,15 +106,13 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	public int compareTo(Object anObject) {
 		
 		Medical medical;
-				
-		
 		try {
 			jpa.beginTransaction();	
 			medical = (Medical)jpa.find(Medical.class, id.getMedical());
 			jpa.commitTransaction();
 			if (anObject instanceof MedicalWard)
 				return (medical.getDescription().toUpperCase().compareTo(
-						((MedicalWard)anObject).getMedical().getDescription().toUpperCase()));
+						((MedicalWard)anObject).id.getMedical().getDescription().toUpperCase()));
 			else return 0;
 		} catch (OHException e) {
 			return 0;
@@ -120,11 +126,15 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	public void setWard(Ward ward) {
 		this.id.setWard(ward);
 	}
-
+	
 	public Medical getMedical() {
-		return this.id.getMedical();
+		return id.getMedical();
 	}
 	
+	public void setMedical(Medical med) {
+		this.id.setMedical(med);
+	}	
+
 	public float getInQuantity() {
 		return this.in_quantity;
 	}
@@ -167,5 +177,6 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	    }
 	  
 	    return this.hashCode;
-	}	
+	}
+
 }
