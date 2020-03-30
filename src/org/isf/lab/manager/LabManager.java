@@ -257,6 +257,7 @@ public class LabManager {
 		        		OHSeverityLevel.ERROR));
 			return ioOperations.updateLabSecondProcedure(laboratory, labRow);
 		}else if (laboratory.getExam().getProcedure() == 3) {
+			//TODO: is it enough to call FirstProcedure?
 			return ioOperations.updateLabFirstProcedure(laboratory);
 		}
 		else 
