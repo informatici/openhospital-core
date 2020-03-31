@@ -32,8 +32,8 @@ public class TestPatient
 	private static String taxCode = "TestTaxCode";
 	private static float height = 184;
 	private static float weight = 60;
-	private static String maritalStatus = "Divorced";
-	private static String profession = "Business";
+	private static String maritalStatus = "divorced";
+	private static String profession = "business";
 	//private static Blob photo;	
 	//private static Image photoImage;
 				
