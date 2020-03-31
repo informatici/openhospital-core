@@ -12,15 +12,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface VisitsIoOperationRepository extends JpaRepository<Visit, Integer> {
-
-    @Query(value = "SELECT * FROM VISITS ORDER BY VST_PAT_ID, VST_DATE", nativeQuery= true)
-    List<Visit> findAllByOrderPatientAndDateAsc();
-    
-    @Query(value = "SELECT * FROM VISITS WHERE VST_PAT_ID = :patient ORDER BY VST_PAT_ID, VST_DATE", nativeQuery= true)
-    List<Visit> findAllWherePatientByOrderPatientAndDateAsc(@Param("patient") Integer patient);
-    
+    List<Visit> findAllByOrderByPatient_CodeAscDateAsc();
+    List<Visit> findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(@Param("patient") Integer patient);
     @Modifying
-    @Transactional
-    @Query(value = "DELETE FROM VISITS WHERE VST_PAT_ID = :patient", nativeQuery= true)
-    void deleteWherePatient(@Param("patient") Integer patient);
+    void deleteByPatient_Code(@Param("patient") Integer patient);
 }

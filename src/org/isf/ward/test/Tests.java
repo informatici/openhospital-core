@@ -9,11 +9,7 @@ import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperations;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -299,7 +295,7 @@ public class Tests
 	}	
 
 	@Test
-	public void testIoIsMaternityPresent() 
+	public void testIoIsMaternityPresent()
 	{
 		boolean result = false;
 				
