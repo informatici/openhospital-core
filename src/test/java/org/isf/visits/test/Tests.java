@@ -130,26 +130,37 @@ public class Tests
 	}
 	
 	@Test
-	public void testIoGetVisit() 
-	{
-		int id = 0;
-		
-		
-		try 
-		{		
-			id = _setupTestVisit(false);
-			Visit foundVisit = (Visit)jpa.find(Visit.class, id); 
+	public void testIoGetVisitShouldReturnVisitWhenPatientCodeProvided() {
+		try {
+			// given:
+			int id = _setupTestVisit(false);
+			// when:
+			Visit foundVisit = (Visit)jpa.find(Visit.class, id);
 			ArrayList<Visit> visits = visitsIoOperation.getVisits(foundVisit.getPatient().getCode());
-			
+			// then:
 			assertEquals(foundVisit.getDate(), visits.get(visits.size()-1).getDate());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
+		} catch (Exception e) {
+			e.printStackTrace();
 			assertEquals(true, false);
 		}
-		
-		return;
+	}
+
+	@Test
+	public void testIoGetVisitShouldReturnAllVisitsWhenZeroPatientCodeProvided()	{
+		try	{
+			// given:
+			int id = _setupTestVisit(false);
+			Visit foundVisit = (Visit)jpa.find(Visit.class, id);
+
+			// when:
+			ArrayList<Visit> visits = visitsIoOperation.getVisits(0);
+
+			// then:
+			assertEquals(foundVisit.getDate(), visits.get(visits.size()-1).getDate());
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
 	}
 	
 	@Test
