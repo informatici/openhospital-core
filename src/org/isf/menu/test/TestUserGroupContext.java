@@ -17,7 +17,7 @@ public class TestUserGroupContext
 			DbJpaUtil jpa) throws OHException 
     {	
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM USERGROUP", UserGroup.class, false);
+		jpa.createQuery("select ug from UserGroup ug", UserGroup.class, true);
 		savedUserGroup = (List<UserGroup>)jpa.getList();
 		jpa.commitTransaction();
         		
@@ -34,7 +34,7 @@ public class TestUserGroupContext
     		DbJpaUtil jpa) throws OHException 
     {
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM USERGROUP", UserGroup.class, false);
+		jpa.createQuery("select ug from UserGroup ug", UserGroup.class, true);
 		List<UserGroup> UserGroups = (List<UserGroup>)jpa.getList();
 		for (UserGroup userGroup: UserGroups) 
 		{    		

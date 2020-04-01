@@ -396,7 +396,7 @@ public class Tests
 	}
 	
 	@Test
-	public void testIoGetMovementsWihParameters() 
+	public void testIoGetMovementsWithParameters()
 	{
 		int code = 0;
 		GregorianCalendar now = new GregorianCalendar();

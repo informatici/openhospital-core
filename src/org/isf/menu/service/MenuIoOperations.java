@@ -1,5 +1,6 @@
 package org.isf.menu.service;
 
+import org.isf.menu.model.GroupMenu;
 import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
 import org.isf.menu.model.UserMenuItem;
@@ -223,7 +224,7 @@ public class MenuIoOperations
 			User aUser) throws OHServiceException 
 	{
 		ArrayList<UserMenuItem> menu = null;		
-		List<Object[]> menuList = (List<Object[]>)menuRepository.findAllWhereId(aUser.getUserName());
+		List<Object[]> menuList = menuRepository.findAllWhereId(aUser.getUserName());
 		
 		
 		menu = new ArrayList<UserMenuItem>();
@@ -239,7 +240,7 @@ public class MenuIoOperations
 			umi.setShortcut((Character) object[4]);
 			umi.setMySubmenu((String) object[5]);
 			umi.setMyClass((String) object[6]);
-			umi.setASubMenu((Character) object[7] == 'Y');
+			umi.setASubMenu((Boolean) object[7]);
 			umi.setPosition((Integer) object[8]);
 			umi.setActive(active == 'Y');
 			menu.add(umi);
@@ -258,8 +259,25 @@ public class MenuIoOperations
 	public ArrayList<UserMenuItem> getGroupMenu(
 			UserGroup aGroup) throws OHServiceException 
 	{
-		ArrayList<UserMenuItem> menu = (ArrayList<UserMenuItem>) menuRepository.findAllWhereGroupId(aGroup.getCode());
-				
+		List<Object[]> menuList = menuRepository.findAllWhereGroupId(aGroup.getCode());
+		ArrayList<UserMenuItem> menu = new ArrayList<UserMenuItem>();
+		for (Object[] object : menuList) {
+			char active = (Character) object[9];
+			UserMenuItem umi = new UserMenuItem();
+
+
+			umi.setCode((String) object[0]);
+			umi.setButtonLabel((String) object[1]);
+			umi.setAltLabel((String) object[2]);
+			umi.setTooltip((String) object[3]);
+			umi.setShortcut((Character) object[4]);
+			umi.setMySubmenu((String) object[5]);
+			umi.setMyClass((String) object[6]);
+			umi.setASubMenu((Boolean) object[7]);
+			umi.setPosition((Integer) object[8]);
+			umi.setActive(active == 'Y');
+			menu.add(umi);
+		}
 		
 		return menu;
 	}
@@ -307,9 +325,11 @@ public class MenuIoOperations
 			boolean insert) throws OHServiceException 
 	{
 		boolean result = true;
-				
-
-		groupMenuRepository.insert(aGroup.getCode(), item.getCode(), (item.isActive() ? "Y" : "N"));
+		GroupMenu groupMenu = new GroupMenu();
+		groupMenu.setUserGroup(aGroup.getCode());
+		groupMenu.setMenuItem(item.getCode());
+		groupMenu.setActive((item.isActive() ? 'Y' : 'N'));
+		groupMenuRepository.save(groupMenu);
 				
 		return result;
 	}

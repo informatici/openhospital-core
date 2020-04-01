@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
 
 @Repository
 public interface MovementWardIoOperationRepository extends JpaRepository<MovementWard, Integer>{      
-    @Query(value = "SELECT * FROM MEDICALDSRSTOCKMOVWARD WHERE MMVN_WRD_ID_A_TO = :idwardto AND (MMVN_DATE BETWEEN :datefrom AND :dateto)", nativeQuery= true)
+    @Query(value = "select movWard from MovementWard movWard where movWard.wardTo=:idwardto and (movWard.date between :datefrom and :dateto)")
     ArrayList<MovementWard> findWardMovements(@Param("idwardto") String idWardTo,
                                               @Param("datefrom") GregorianCalendar dateFrom,
                                               @Param("dateto") GregorianCalendar dateTo);

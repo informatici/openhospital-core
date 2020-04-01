@@ -2,10 +2,7 @@ package org.isf.medicalstock.service;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.medicals.model.Medical;
@@ -188,7 +185,6 @@ public class MedicalStockIoOperations {
 	
 	/**
 	 * Prepare the insert of the specified {@link Movement} (no commit)
-	 * @param dbQuery - the session with the DB
 	 * @param movement - the movement to store.
 	 * @return <code>true</code> if the movement has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
@@ -201,7 +197,6 @@ public class MedicalStockIoOperations {
 	
 	/**
 	 * Prepare the insert of the specified {@link Movement} (no commit)
-	 * @param dbQuery - the session with the DB
 	 * @param movement - the movement to store.
 	 * @return <code>true</code> if the movement has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
@@ -407,8 +402,8 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Updates medical quantity for the specified ward.
-	 * @param wardCode the ward code.
-	 * @param medicalCode the medical code.
+	 * @param ward the ward.
+	 * @param medical the medical.
 	 * @param quantity the quantity to add to the current medical quantity.
 	 * @return <code>true</code> if the quantity has been updated/inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
@@ -461,7 +456,7 @@ public class MedicalStockIoOperations {
 		ArrayList<Movement> pMovement = new ArrayList<Movement>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findtMovementWhereDatesAndId(wardId, dateFrom, dateTo));			
+		pMovementCode = new ArrayList<Integer>(movRepository.findMovementWhereDatesAndId(wardId, dateFrom, dateTo));
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
 			Integer code = pMovementCode.get(i);
@@ -505,7 +500,7 @@ public class MedicalStockIoOperations {
 		ArrayList<Movement> pMovement = new ArrayList<Movement>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findtMovementWhereData(
+		pMovementCode = new ArrayList<Integer>(movRepository.findMovementWhereData(
 				medicalCode, medicalType, wardId, movType, 
 				movFrom, movTo, lotPrepFrom, lotPrepTo, lotDueFrom, lotDueTo));			
 		for (int i=0; i<pMovementCode.size(); i++)
@@ -548,7 +543,7 @@ public class MedicalStockIoOperations {
 		ArrayList<Movement> pMovement = new ArrayList<Movement>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findtMovementForPrint(
+		pMovementCode = new ArrayList<Integer>(movRepository.findMovementForPrint(
 				medicalDescription, medicalTypeCode, wardId, movType, 
 				movFrom, movTo, lotCode, order));			
 		for (int i=0; i<pMovementCode.size(); i++)
@@ -573,17 +568,17 @@ public class MedicalStockIoOperations {
 			Medical medical) throws OHServiceException
 	{
 		ArrayList<Lot> lots = null;
-	
-		
+
+
 		List<Object[]> lotList = (List<Object[]>)lotRepository.findAllWhereMedical(medical.getCode());
 		lots = new ArrayList<Lot>();
 		for (Object[] object: lotList)
 		{
 			Lot lot = _convertObjectToLot(object);
-			
+
 			lots.add(lot);
 		}
-		
+
 		// remve empy lots
 		ArrayList<Lot> emptyLots = new ArrayList<Lot>();
 		for (Lot aLot : lots) {
@@ -591,9 +586,9 @@ public class MedicalStockIoOperations {
 				emptyLots.add(aLot);
 		}
 		lots.removeAll(emptyLots);
-		
+
 		return lots;
-	}	
+	}
 
 	private Lot _convertObjectToLot(Object[] object)
 	{
@@ -604,7 +599,7 @@ public class MedicalStockIoOperations {
 		lot.setDueDate(_convertTimestampToCalendar((Timestamp)object[2]));
 		lot.setCost(new BigDecimal((Double) object[3]));
 		lot.setQuantity(((Double)object[4]).intValue());
-		
+
 		return lot;
 	}
 	
@@ -628,20 +623,7 @@ public class MedicalStockIoOperations {
 	 */
 	public GregorianCalendar getLastMovementDate() throws OHServiceException 
 	{
-		GregorianCalendar gc = new GregorianCalendar();
-				
-			
-		Timestamp time = (Timestamp)movRepository.findMaxDate();
-		if (time != null) 
-		{
-			gc.setTime(time);
-		}
-		else
-		{
-			gc = null;
-		}					
-	
-		return gc;
+		return movRepository.findMaxDate();
 	}
 	
 	/**

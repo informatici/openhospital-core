@@ -29,7 +29,7 @@ public class MalnutritionIoOperation {
     public ArrayList<Malnutrition> getMalnutritions(
 			String admissionId) throws OHServiceException
 	{
-		ArrayList<Malnutrition> malnutritions = (ArrayList<Malnutrition>) repository.findAllWhereAdmissionByOrderDate(admissionId);
+		ArrayList<Malnutrition> malnutritions = (ArrayList<Malnutrition>) repository.findAllWhereAdmissionByOrderDate(Integer.parseInt(admissionId));
 
 		
 		return malnutritions;
@@ -77,7 +77,7 @@ public class MalnutritionIoOperation {
 	public Malnutrition getLastMalnutrition(
 			int patientID) throws OHServiceException 
 	{
-		ArrayList<Malnutrition> malnutritions = (ArrayList<Malnutrition>) repository.findAllWhereAdmissionByOrderDateDescLimit1(patientID);
+		ArrayList<Malnutrition> malnutritions = (ArrayList<Malnutrition>) repository.findAllWhereAdmissionByOrderDateDesc(patientID);
 		
 		Malnutrition lastMalnutrition = malnutritions.get(0);
 

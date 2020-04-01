@@ -1,21 +1,5 @@
 package org.isf.utils.db;
 
-import java.util.List;
-
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.LockTimeoutException;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceException;
-import javax.persistence.PessimisticLockException;
-import javax.persistence.Query;
-import javax.persistence.QueryTimeoutException;
-import javax.persistence.RollbackException;
-import javax.persistence.TransactionRequiredException;
-
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
@@ -23,18 +7,36 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import javax.persistence.*;
+import java.util.List;
+
 /**
  * Class that executes a query using JPA
  */
 public class DbJpaUtil 
 {
 	private final Logger logger = LoggerFactory.getLogger(DbJpaUtil.class);
-	
+
+	private static final String MOVEMENT_FROM = "movFrom";
+	private static final String MOVEMENT_TO = "movTo";
+	private static final String LOT_PREP_FROM = "lotPrepFrom";
+	private static final String LOT_PREP_TO = "lotPrepTo";
+	private static final String LOT_DUE_FROM = "lotDueFrom";
+	private static final String LOT_DUE_TO = "lotDueTo";
+	private static final String DATE_FROM = "dateFrom";
+	private static final String DATE_TO = "dateTo";
+	private static final String WARD_ID = "wardId";
+	private static final String MEDICAL_TYPE = "medicalType";
+	private static final String MEDICAL_CODE = "medicalCode";
+	private static final String MOVEMENT_TYPE = "movType";
+	private static final String MEDICAL_DESC = "medicalDescription";
+	private static final String LOT_CODE = "lotCode";
+
 	private static ApplicationContext context =	new ClassPathXmlApplicationContext("applicationContext.xml");
 	private static EntityManagerFactory entityManagerFactory = context.getBean("entityManagerFactory", EntityManagerFactory.class);
 	private static EntityManager entityManager;
 	private static Query query;
-	
+
 	
 	/**
      * constructor that initialize the entity Manager

@@ -17,7 +17,7 @@ public class TestMovementWardContext
 			DbJpaUtil jpa) throws OHException 
     {	
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM MEDICALDSRSTOCKMOVWARD", MovementWard.class, false);
+		jpa.createQuery("select movWard from MovementWard movWard", MovementWard.class, true);
 		savedMovementWard = (List<MovementWard>)jpa.getList();
 		jpa.commitTransaction();
         		
@@ -34,7 +34,7 @@ public class TestMovementWardContext
     		DbJpaUtil jpa) throws OHException 
     {
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM MEDICALDSRSTOCKMOVWARD", MovementWard.class, false);
+		jpa.createQuery("select movWard from MovementWard movWard", MovementWard.class, true);
 		List<MovementWard> MovementWards = (List<MovementWard>)jpa.getList();
 		for (MovementWard movementWard: MovementWards) 
 		{    		

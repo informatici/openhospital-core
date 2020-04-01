@@ -17,7 +17,7 @@ public class TestLotContext
 			DbJpaUtil jpa) throws OHException 
     {	
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM MEDICALDSRLOT", Lot.class, false);
+		jpa.createQuery("select lot from Lot lot", Lot.class, true);
 		savedLot = (List<Lot>)jpa.getList();
 		jpa.commitTransaction();
         		
@@ -34,7 +34,7 @@ public class TestLotContext
     		DbJpaUtil jpa) throws OHException 
     {
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM MEDICALDSRLOT", Lot.class, false);
+		jpa.createQuery("select lot from Lot lot", Lot.class, true);
 		List<Lot> Lots = (List<Lot>)jpa.getList();
 		for (Lot lot: Lots) 
 		{    		

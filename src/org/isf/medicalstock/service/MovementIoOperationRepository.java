@@ -1,6 +1,7 @@
 package org.isf.medicalstock.service;
 
 import java.sql.Timestamp;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.medicalstock.model.Movement;
@@ -11,27 +12,26 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MovementIoOperationRepository extends JpaRepository<Movement, Integer>, MovementIoOperationRepositoryCustom {    
-    @Query(value = "select * from MEDICALDSRSTOCKMOV where MMV_MDSR_ID = :code", nativeQuery= true)
+    @Query(value = "select m from Movement m join m.medical med where med.code = :code")
     Movement findAllByMedicalCode(@Param("code") Integer code);
     
-    @Query(value = "select distinct MDSR_ID from " +
-		"((MEDICALDSRSTOCKMOVTYPE join MEDICALDSRSTOCKMOV on MMVT_ID_A = MMV_MMVT_ID_A) " +
-		"join MEDICALDSR  on MMV_MDSR_ID=MDSR_ID ) " +
-		"join MEDICALDSRLOT on MMV_LT_ID_A=LT_ID_A where LT_ID_A=:lot", nativeQuery= true)
+    @Query(value = "select distinct med.code from Movement mov " +
+			"join mov.medical med " +
+			"join mov.type movtype " +
+			"join mov.lot lot " +
+			"where lot.code=:lot")
     List<Integer> findAllByLot(@Param("lot") String lot);
     
-    @Query(value = "SELECT * FROM (" +
-			"(MEDICALDSRSTOCKMOVTYPE join MEDICALDSRSTOCKMOV on MMVT_ID_A = MMV_MMVT_ID_A) " +
-			"JOIN (MEDICALDSR join MEDICALDSRTYPE on MDSR_MDSRT_ID_A=MDSRT_ID_A) on MMV_MDSR_ID=MDSR_ID ) " +
-			"LEFT JOIN MEDICALDSRLOT on MMV_LT_ID_A=LT_ID_A " +
-			"LEFT JOIN WARD ON MMV_WRD_ID_A = WRD_ID_A " +
-			"WHERE MMV_REFNO = :refNo " +
-			"ORDER BY MMV_DATE DESC, MMV_REFNO DESC", nativeQuery= true)
+    @Query(value = "select mov from Movement mov " +
+			"join mov.type movtype " +
+			"left join mov.lot lot " +
+			"left join mov.ward ward " +
+			"where mov.refNo = :refNo order by mov.date, mov.refNo")
     List<Movement> findAllByRefNo(@Param("refNo") String refNo);
     
-    @Query(value = "SELECT MAX(MMV_DATE) AS DATE FROM MEDICALDSRSTOCKMOV", nativeQuery= true)
-    Timestamp findMaxDate();
+    @Query(value = "select max(mov.date) from Movement mov")
+	GregorianCalendar findMaxDate();
 
-    @Query(value = "SELECT MMV_REFNO FROM MEDICALDSRSTOCKMOV WHERE MMV_REFNO LIKE :refNo", nativeQuery= true)
+    @Query(value = "select mov.refNo from Movement mov where mov.refNo like :refNo")
     List<String> findAllWhereRefNo(@Param("refNo") String refNo);
 }
