@@ -160,6 +160,24 @@ public class Tests
 		
 		return;
 	}
+
+	@Test
+	public void testIoGetTherapyRowWithZeroAsIdentifierProvided() {
+		try	{
+			// given:
+			int id = _setupTestTherapyRow(false);
+			TherapyRow foundTherapyRow = (TherapyRow)jpa.find(TherapyRow.class, id);
+
+			// when:
+			ArrayList<TherapyRow> therapyRows = therapyIoOperation.getTherapyRows(0);
+
+			// then:
+			assertEquals(foundTherapyRow.getNote(), therapyRows.get(therapyRows.size()-1).getNote());
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+	}
 	
 	@Test
 	public void testIoNewTherapyRow() 
