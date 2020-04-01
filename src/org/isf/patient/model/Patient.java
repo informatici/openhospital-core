@@ -138,6 +138,12 @@ public class Patient {
 	@Column(name="PAT_TAXCODE")
 	private String taxCode;
 	
+	@Column(name="PAT_MAR_STAT")
+	private String maritalStatus;
+
+	@Column(name="PAT_PROFESSION")
+	private String profession;
+
 	@Transient
 	private float height;
 	
@@ -182,6 +188,8 @@ public class Patient {
 		this.taxCode = "";
 		this.height = 0;
 		this.weight = 0;
+		this.maritalStatus = "";
+		this.profession = "";
 	}
 	
 	public Patient(Opd opd) {
@@ -204,12 +212,15 @@ public class Patient {
 		this.bloodType = "";
 		this.hasInsurance = ' ';
 		this.parentTogether = ' ';
+		this.maritalStatus = "";
+		this.profession = "";
 	}
 	
 	public Patient(String firstName, String secondName, Date birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone,
 			String mother_name, char mother, String father_name, char father,
-			String bloodType, char economicStatut, char parentTogether, String personalCode) { //Changed EduLev with bloodType
+			String bloodType, char economicStatut, char parentTogether, String personalCode, 
+			String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.firstName = firstName;
 		this.secondName = secondName;
 		this.name = this.firstName + " " + this.secondName;
@@ -231,13 +242,15 @@ public class Patient {
 		this.taxCode = personalCode;
 		this.height = 0;
 		this.weight = 0;
+		this.maritalStatus = maritalStatus;
+		this.profession = profession;
 	}
 		
 	public Patient(int code, String firstName, String secondName, String name, Date birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone, String note,
 			String mother_name, char mother, String father_name, char father,
 			String bloodType, char economicStatut, char parentTogether, String taxCode,
-			float height, float weight, Blob photo, Image photoImage) { //Changed EduLev with bloodType
+			float height, float weight, Blob photo, Image photoImage, String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.code = code;
 		this.firstName = firstName;
 		this.secondName = secondName;
@@ -263,6 +276,8 @@ public class Patient {
 		this.weight = weight;
 		this.photo = photo;
 		this.photoImage = photoImage;
+		this.maritalStatus = maritalStatus;
+		this.profession = profession;
 	}
 
 	public String getAddress() {
@@ -506,6 +521,22 @@ public class Patient {
 	public void setWeight(float weight) {
 		this.weight = weight;
 	}
+
+	public String getMaritalStatus() {
+		return maritalStatus;
+	}
+
+	public void setMaritalStatus(String maritalStatus) {
+		this.maritalStatus = maritalStatus;
+	}
+
+	public String getProfession() {
+		return profession;
+	}
+
+	public void setProfession(String profession) {
+		this.profession = profession;
+	}
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -583,4 +614,3 @@ public class Patient {
 		return infoBfr.toString();
 	}
 }
-

@@ -32,6 +32,8 @@ public class TestPatient
 	private static String taxCode = "TestTaxCode";
 	private static float height = 184;
 	private static float weight = 60;
+	private static String maritalStatus = "divorced";
+	private static String profession = "business";
 	//private static Blob photo;	
 	//private static Image photoImage;
 				
@@ -52,7 +54,7 @@ public class TestPatient
 			// Create Patient with all parameters 
 			patient = new Patient(firstName, secondName, birthDate, age, agetype, sex,
 					address, city, nextKin, telephone, mother_name, mother, father_name, father,
-					bloodType, hasInsurance, parentTogether, taxCode);
+					bloodType, hasInsurance, parentTogether, taxCode, maritalStatus, profession);
 			patient.setAge(patient.getAge()); //IT WILL CHANGE WITH TIME
 		}
 				    	
@@ -82,6 +84,8 @@ public class TestPatient
 		patient.setTaxCode(taxCode);
 		patient.setHeight(height);
 		patient.setWeight(weight);
+		patient.setMaritalStatus(maritalStatus);
+		patient.setProfession(profession);
 		
 		return;
 	}
@@ -107,6 +111,8 @@ public class TestPatient
 		assertEquals(hasInsurance, patient.getHasInsurance());		
 		assertEquals(parentTogether, patient.getParentTogether());
 		assertEquals(taxCode, patient.getTaxCode());
+		assertEquals(maritalStatus, patient.getMaritalStatus());
+		assertEquals(profession, patient.getProfession());
 		//assertEquals(height, patient.getHeight());
 		//assertEquals(weight, patient.getWeight());
 		
