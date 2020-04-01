@@ -26,7 +26,7 @@ public interface DicomManagerInterface
      * @return, true if success
      * @throws OHServiceException 
      */
-    public boolean deleteSerie(int idPaziente, String numeroSerie) throws OHServiceException ;
+    boolean deleteSerie(int idPaziente, String numeroSerie) throws OHServiceException ;
     
     /**
     * Check if dicom is loaded
@@ -44,8 +44,8 @@ public interface DicomManagerInterface
      * @return, FileDicom
      * @throws OHServiceException 
      */
-    public FileDicom loadDettaglio(Long idFile,int idPaziente, String numeroSerie) throws OHServiceException;
-    
+    public FileDicom loadDetails(Long idFile, int idPaziente, String numeroSerie) throws OHServiceException;
+
     /**
      * Load detail
      * @param idPaziente, the id of patient
@@ -53,7 +53,7 @@ public interface DicomManagerInterface
      * @return, details
      * @throws OHServiceException 
      */
-    public FileDicom loadDettaglio(long idFile,int idPaziente, String numeroSerie) throws OHServiceException;
+    public FileDicom loadDetails(long idFile, int idPaziente, String numeroSerie) throws OHServiceException;
 
     /**
      * load metadata from DICOM files fo the patient

@@ -1,15 +1,21 @@
 package org.isf.medicalstock.model;
 
+import java.math.BigDecimal;
 import java.util.GregorianCalendar;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.isf.utils.db.Auditable;
 import org.isf.generaldata.MessageBundle;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /*------------------------------------------
  * Medical Lot - model for the medical entity
@@ -21,7 +27,15 @@ import org.isf.generaldata.MessageBundle;
  *------------------------------------------*/
 @Entity
 @Table(name="MEDICALDSRLOT")
-public class Lot 
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="LT_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="LT_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="LT_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="LT_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="LT_LAST_MODIFIED_DATE"))
+})
+public class Lot extends Auditable<String>
 {
 	@Id 
 	@Column(name="LT_ID_A")
@@ -39,7 +53,7 @@ public class Lot
 	private int quantity;
 	
 	@Column(name="LT_COST")
-	private double cost;
+	private BigDecimal cost;
 	
 	@Transient
 	private volatile int hashCode = 0;
@@ -59,7 +73,7 @@ public class Lot
 		dueDate=aDueDate;
 		quantity=aQuantity;
 	}
-	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate,double aCost){
+	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate,BigDecimal aCost){
 		code=aCode;
 		preparationDate=aPreparationDate;
 		dueDate=aDueDate;
@@ -77,7 +91,7 @@ public class Lot
 	public GregorianCalendar getDueDate(){
 		return dueDate;
 	}
-	public double getCost() {
+	public BigDecimal getCost() {
 		return cost;
 	}
 	public void setCode(String aCode){
@@ -92,7 +106,7 @@ public class Lot
 	public void setDueDate(GregorianCalendar aDueDate){
 		dueDate=aDueDate;
 	}
-	public void setCost(double cost) {
+	public void setCost(BigDecimal cost) {
 		this.cost = cost;
 	}
 	public String toString(){
@@ -118,9 +132,10 @@ public class Lot
 				return false;
 		} else if (!code.equals(other.code))
 			return false;
-		if (Double.doubleToLongBits(cost) != Double
-				.doubleToLongBits(other.cost))
-			return false;
+		if (cost != null) {
+			if (cost.compareTo(other.cost) != 0)
+				return false;
+		}
 		if (dueDate == null) {
 			if (other.dueDate != null)
 				return false;

@@ -8,6 +8,7 @@ import org.isf.menu.manager.Context;
 import org.isf.opetype.model.OperationType;
 import org.isf.opetype.service.OperationTypeIoOperation;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class OperationTypeBrowserManager {
 	public boolean newOperationType(OperationType operationType) throws OHServiceException {
         List<OHExceptionMessage> errors = validateOperationType(operationType, true);
         if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
+            throw new OHDataValidationException(errors);
         }
         return ioOperations.newOperationType(operationType);
 	}
@@ -54,7 +55,7 @@ public class OperationTypeBrowserManager {
 	public boolean updateOperationType(OperationType operationType) throws OHServiceException {
         List<OHExceptionMessage> errors = validateOperationType(operationType, false);
         if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
+            throw new OHDataValidationException(errors);
         }
         return ioOperations.updateOperationType(operationType);
 	}

@@ -290,12 +290,12 @@ public class LabIoOperations {
 		int newCode = newLaboratory(laboratory);
 		if (newCode > 0) 
 		{
+			laboratory = repository.getOne(newCode);
 			for (LaboratoryRow aLabRow : labRow) {
-				LaboratoryRow laboratoryRow = new LaboratoryRow();
-				laboratoryRow.setLabId(laboratory);
+				aLabRow.setLabId(laboratory);
 				//laboratoryRow.setDescription(aLabRow);	
 
-				LaboratoryRow savedLaboratoryRow = rowRepository.save(laboratoryRow);
+				LaboratoryRow savedLaboratoryRow = rowRepository.save(aLabRow);
 				result = result && (savedLaboratoryRow != null);
 			}
 		}
@@ -354,7 +354,7 @@ public class LabIoOperations {
 		boolean result = updateLabFirstProcedure(laboratory);
 		
 		
-		if (result == true)
+		if (result)
 		{		
 			for (String aLabRow : labRow) {
 				LaboratoryRow laboratoryRow = new LaboratoryRow();

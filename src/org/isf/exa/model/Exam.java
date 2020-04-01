@@ -4,8 +4,11 @@
  */
 package org.isf.exa.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,7 +17,9 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.isf.utils.db.Auditable;
 import org.isf.exatype.model.ExamType;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 /**
@@ -32,7 +37,15 @@ import org.isf.exatype.model.ExamType;
 *------------------------------------------*/
 @Entity
 @Table(name="EXAM")
-public class Exam 
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="EXA_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="EXA_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="EXA_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="EXA_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="EXA_LAST_MODIFIED_DATE"))
+})
+public class Exam extends Auditable<String> 
 {
 	@Id 
 	@Column(name="EXA_ID_A")	

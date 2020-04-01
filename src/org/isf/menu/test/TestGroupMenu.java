@@ -8,10 +8,8 @@ import org.isf.utils.exception.OHException;
 
 public class TestGroupMenu 
 {	
-    private Integer code = 999;
     private String userGroup = "TestDescription";
     private String menuItem = "TestDescription";
-    private char active = 'Y';
     
 			
 	public GroupMenu setup(
@@ -20,7 +18,7 @@ public class TestGroupMenu
 		GroupMenu groupMenu;
 	
 				
-		if (usingSet == true)
+		if (usingSet)
 		{
 			groupMenu = new GroupMenu();
 			_setParameters(groupMenu);
@@ -28,7 +26,7 @@ public class TestGroupMenu
 		else
 		{
 			// Create GroupMenu with all parameters 
-			groupMenu = new GroupMenu(code, userGroup, menuItem, active);
+			groupMenu = new GroupMenu(userGroup, menuItem);
 		}
 				    	
 		return groupMenu;
@@ -37,10 +35,8 @@ public class TestGroupMenu
 	public void _setParameters(
 			GroupMenu groupMenu) 
 	{	
-		groupMenu.setCode(code);
 		groupMenu.setUserGroup(userGroup);
 		groupMenu.setMenuItem(menuItem);
-		groupMenu.setActive(active);
 		
 		return;
 	}
@@ -48,10 +44,8 @@ public class TestGroupMenu
 	public void check(
 			GroupMenu groupMenu) 
 	{		
-    	assertEquals(code, groupMenu.getCode());
     	assertEquals(userGroup, groupMenu.getUserGroup());
     	assertEquals(menuItem, groupMenu.getMenuItem());
-    	assertEquals(active, groupMenu.getActive());
 		
 		return;
 	}

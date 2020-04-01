@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Transactional
-class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationRepositoryCustom {
+public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationRepositoryCustom {
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -32,7 +32,6 @@ class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationReposito
 	{
 		String[] terms = _calculateAdmittedPatientsTerms(searchTerms);
 		String query = _calculateAdmittedPatientsQuery(terms);
-		
 		
 		return query;
 	}

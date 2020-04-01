@@ -19,6 +19,7 @@ import org.isf.lab.model.LaboratoryRow;
 import org.isf.lab.service.LabIoOperations;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +35,6 @@ public class LabManager {
 	@Autowired
 	private LabRowManager rowManager;
 	
-	public LabManager() {
-            ioOperations = new LabIoOperations();
-	}
-	
-	public LabIoOperations getIoOperations() {
-		return ioOperations;
-	}
-
 	public void setIoOperations(LabIoOperations ioOperations) {
 		this.ioOperations = ioOperations;
 	}
@@ -57,10 +50,10 @@ public class LabManager {
 	
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
-	 * @param deliveryResultType
-	 * @return list of {@link OHExceptionMessage}
+	 * @param laboratory
+	 * @throws OHDataValidationException 
 	 */
-	protected List<OHExceptionMessage> validateLaboratory(Laboratory laboratory) {
+	protected void validateLaboratory(Laboratory laboratory) throws OHDataValidationException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         if (laboratory.getDate() == null) laboratory.setDate(new GregorianCalendar());
         if (laboratory.getExam().getProcedure() == 2) 
@@ -130,7 +123,9 @@ public class LabManager {
 	        		MessageBundle.getMessage("angal.lab.pleaseinsertiforipdoroforopd"), 
 	        		OHSeverityLevel.ERROR));
         }
-        return errors;
+        if (!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
     }
 
 	/**
@@ -194,27 +189,25 @@ public class LabManager {
 	 * @param laboratory - the laboratory with its result (Procedure 1)
 	 * @param labRow - the list of results (Procedure 2) - it can be <code>null</code>
 	 * @return <code>true</code> if the exam has been inserted, <code>false</code> otherwise
-	 * @throws OHServiceException
+	 * @throws OHServiceException 
 	 */
 	public boolean newLaboratory(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateLaboratory(laboratory);
-		if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateLaboratory(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.newLabFirstProcedure(laboratory);
 		}
 		else if (laboratory.getExam().getProcedure() == 2) {
 			if (labRow == null || labRow.isEmpty())
-				throw new OHServiceException(new OHExceptionMessage("labRowNullOrEmptyError", 
+				throw new OHDataValidationException(new OHExceptionMessage("labRowNullOrEmptyError", 
 		        		MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"), 
 		        		OHSeverityLevel.ERROR));
 			return ioOperations.newLabSecondProcedure(laboratory, labRow);
 		}
-		else 
-			throw new OHServiceException(new OHExceptionMessage("unknownProcedureError", 
+		else {
+			throw new OHDataValidationException(new OHExceptionMessage("unknownProcedureError", 
 	        		MessageBundle.getMessage("angal.lab.unknownprocedure"), 
 	        		OHSeverityLevel.ERROR));
+		}
 	}
 	/**
 	 * Inserts one Laboratory exam {@link Laboratory} (All Procedures)
@@ -224,22 +217,19 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	public boolean newLaboratory2(Laboratory laboratory, ArrayList<LaboratoryRow> labRow) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateLaboratory(laboratory);
-		if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateLaboratory(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.newLabFirstProcedure(laboratory);
 		}
 		else if (laboratory.getExam().getProcedure() == 2) {
 			if (labRow == null || labRow.isEmpty())
-				throw new OHServiceException(new OHExceptionMessage("labRowNullOrEmptyError", 
+				throw new OHDataValidationException(new OHExceptionMessage("labRowNullOrEmptyError", 
 		        		MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"), 
 		        		OHSeverityLevel.ERROR));
 			return ioOperations.newLabSecondProcedure2(laboratory, labRow);
 		}
 		else 
-			throw new OHServiceException(new OHExceptionMessage("unknownProcedureError", 
+			throw new OHDataValidationException(new OHExceptionMessage("unknownProcedureError", 
 	        		MessageBundle.getMessage("angal.lab.unknownprocedure"), 
 	        		OHSeverityLevel.ERROR));
 	}
@@ -252,22 +242,19 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	public boolean updateLaboratory(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateLaboratory(laboratory);
-		if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateLaboratory(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.updateLabFirstProcedure(laboratory);
 		}
 		else if (laboratory.getExam().getProcedure() == 2) {
 			if (labRow == null || labRow.isEmpty())
-				throw new OHServiceException(new OHExceptionMessage("labRowNullOrEmptyError", 
+				throw new OHDataValidationException(new OHExceptionMessage("labRowNullOrEmptyError", 
 		        		MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"), 
 		        		OHSeverityLevel.ERROR));
 			return ioOperations.updateLabSecondProcedure(laboratory, labRow);
 		}
 		else 
-			throw new OHServiceException(new OHExceptionMessage("unknownProcedureError", 
+			throw new OHDataValidationException(new OHExceptionMessage("unknownProcedureError", 
 	        		MessageBundle.getMessage("angal.lab.unknownprocedure"), 
 	        		OHSeverityLevel.ERROR));
 	}
@@ -282,11 +269,11 @@ public class LabManager {
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean newLaboratory(List<Laboratory> labList, ArrayList<ArrayList<String>> labRowList) throws OHServiceException {
 		if (labList.size() == 0)
-			throw new OHServiceException(new OHExceptionMessage("emptyListError", 
+			throw new OHDataValidationException(new OHExceptionMessage("emptyListError", 
 		    		MessageBundle.getMessage("angal.labnew.noexamsinserted"), 
 		    		OHSeverityLevel.ERROR));
 		if (labList.size() != labRowList.size())
-			throw new OHServiceException(new OHExceptionMessage("labRowNullOrEmptyError", 
+			throw new OHDataValidationException(new OHExceptionMessage("labRowNullOrEmptyError", 
 		    		MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"), 
 		    		OHSeverityLevel.ERROR));
 		boolean result = true;
@@ -306,11 +293,11 @@ public class LabManager {
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean newLaboratory2(List<Laboratory> labList, ArrayList<ArrayList<LaboratoryRow>> labRowList) throws OHServiceException {
 		if (labList.size() == 0)
-			throw new OHServiceException(new OHExceptionMessage("emptyListError", 
+			throw new OHDataValidationException(new OHExceptionMessage("emptyListError", 
 		    		MessageBundle.getMessage("angal.labnew.noexamsinserted"), 
 		    		OHSeverityLevel.ERROR));
 		if (labList.size() != labRowList.size())
-			throw new OHServiceException(new OHExceptionMessage("labRowNullOrEmptyError", 
+			throw new OHDataValidationException(new OHExceptionMessage("labRowNullOrEmptyError", 
 		    		MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"), 
 		    		OHSeverityLevel.ERROR));
 		boolean result = true;
@@ -383,7 +370,7 @@ public class LabManager {
 		for (LaboratoryForPrint lab : labs) {
 			String labResult = lab.getResult();
 			if (labResult.equalsIgnoreCase(MessageBundle.getMessage("angal.lab.multipleresults"))) {
-				rows = rowManager.getLabRowByLabId(lab.getCode());
+				rows = ioOperations.getLabRow(lab.getCode());
 				
 				if (rows == null || rows.size() == 0) {
 					lab.setResult(MessageBundle.getMessage("angal.lab.allnegative"));

@@ -8,10 +8,9 @@ import java.util.List;
 
 import org.isf.generaldata.ExaminationParameters;
 import org.isf.supplier.model.Supplier;
-import org.isf.utils.db.TranslateOHException;
-import org.isf.utils.exception.OHException;
+import org.isf.utils.db.TranslateOHServiceException;
+import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */
 @Service
-@Transactional(rollbackFor=OHException.class)
-@TranslateOHException
+@Transactional(rollbackFor=OHServiceException.class)
+@TranslateOHServiceException
 public class SupplierOperations {
 
 	@Autowired
@@ -38,10 +37,10 @@ public class SupplierOperations {
 	 * Save or Update a {@link Supplier}
 	 * @param supplier - the {@link Supplier} to save or update
 	 * return <code>true</code> if data has been saved, <code>false</code> otherwise. 
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
 	public boolean saveOrUpdate(
-			Supplier supplier) throws OHException 
+			Supplier supplier) throws OHServiceException 
 	{
 		boolean result = true;
 	
@@ -56,10 +55,10 @@ public class SupplierOperations {
 	 * Returns a {@link Supplier} with specified ID
 	 * @param ID - supplier ID
 	 * @return supplier - the supplier with specified ID
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
 	public Supplier getByID(
-			int ID) throws OHException 
+			int ID) throws OHServiceException 
 	{
 		Supplier foundSupplier = repository.findOne(ID);
     	
@@ -69,9 +68,9 @@ public class SupplierOperations {
 	/**
 	 * Returns the list of all {@link Supplier}s, active and inactive
 	 * @return supList - the list of {@link Supplier}s
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
-	public List<Supplier> getAll() throws OHException 
+	public List<Supplier> getAll() throws OHServiceException 
 	{
 		ArrayList<Supplier> suppliers = (ArrayList<Supplier>)repository.findAll();
 		
@@ -81,9 +80,9 @@ public class SupplierOperations {
 	/**
 	 * Returns the list of active {@link Supplier}s
 	 * @return supList - the list of {@link Supplier}s
-	 * @throws OHException 
+	 * @throws OHServiceException 
 	 */
-	public List<Supplier> getList() throws OHException 
+	public List<Supplier> getList() throws OHServiceException 
 	{
 		ArrayList<Supplier> suppliers = (ArrayList<Supplier>)repository.findAllWhereNotDeleted();
 		

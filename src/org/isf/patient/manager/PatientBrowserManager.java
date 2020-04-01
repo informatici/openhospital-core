@@ -5,17 +5,14 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import org.isf.accounting.manager.BillBrowserManager;
 import org.isf.accounting.model.Bill;
 import org.isf.admission.manager.AdmissionBrowserManager;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperations;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHServiceValidationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -274,7 +271,6 @@ public class PatientBrowserManager {
 	 * @param regex
 	 * @return the full list of Patients with Height and Weight (could be empty)
 	 * @throws OHServiceException 
-	 * @throws OHException
 	 */
 	public ArrayList<Patient> getPatientWithHeightAndWeight(String regex) throws OHServiceException{
         return ioOperations.getPatientsWithHeightAndWeight(regex);
@@ -286,8 +282,9 @@ public class PatientBrowserManager {
 	 * @param mergedPatient
 	 * @param patient2
 	 * @return true - if no OHServiceException occurred
+	 * @throws OHServiceException 
 	 */
-	public boolean mergePatient(Patient mergedPatient, Patient patient2) throws OHServiceException {
+	public boolean mergePatient(Patient mergedPatient, Patient patient2) throws OHServiceException  {
 			if (mergedPatient.getBirthDate() != null &&
 					mergedPatient.getAgetype().compareTo("") == 0) {
 				//mergedPatient only Age
@@ -348,12 +345,17 @@ public class PatientBrowserManager {
 
             List<OHExceptionMessage> errors = validateMergePatients(mergedPatient, patient2);
             if(!errors.isEmpty()){
-                throw new OHServiceException(errors);
+                throw new OHDataValidationException(errors);
             }
             return ioOperations.mergePatientHistory(mergedPatient, patient2);
 	}
-
-    protected void validate(Patient patient) throws OHServiceValidationException{
+	
+	/**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * @param patient
+	 * @throws OHDataValidationException 
+	 */
+    protected void validate(Patient patient) throws OHDataValidationException{
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 
         if (StringUtils.isEmpty(patient.getFirstName())) {
@@ -373,7 +375,7 @@ public class PatientBrowserManager {
                     OHSeverityLevel.ERROR));
         }
 	    if(!errors.isEmpty()){
-	        throw new OHServiceValidationException(errors);
+	        throw new OHDataValidationException(errors);
 	    }
     }
 
@@ -389,17 +391,4 @@ public class PatientBrowserManager {
         }
         return true;
     }
-
-    /**
-     * 
-     * @return patients list
-     */
-    public ArrayList<Patient> getPatientHeadWithHeightAndWeight(){
-		try {
-			return ioOperations.getPatientsHeadWithHeightAndWeight();
-		} catch (OHException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
-			return new ArrayList<Patient>();
-		}
-	}
 }

@@ -6,7 +6,10 @@ import java.util.List;
 import org.isf.admission.manager.AdmissionBrowserManager;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.OHOperationNotAllowedException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.ward.model.Ward;
@@ -37,9 +40,10 @@ public class WardBrowserManager {
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param ward
-	 * @return list of {@link OHExceptionMessage}
+	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @throws OHServiceException 
 	 */
-	protected List<OHExceptionMessage> validateWard(Ward ward) {
+	protected void validateWard(Ward ward, boolean insert) throws OHServiceException {
 		String key = ward.getCode();
 		String description = ward.getDescription();
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
@@ -73,7 +77,16 @@ public class WardBrowserManager {
             		MessageBundle.getMessage("angal.ward.doctorsnumbermustbepositive"), 
             		OHSeverityLevel.ERROR));
 		}
-        return errors;
+		if (insert) {
+			if (codeControl(ward.getCode())){
+				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null, 
+						MessageBundle.getMessage("angal.common.codealreadyinuse"), 
+						OHSeverityLevel.ERROR));
+			}
+		}
+		if(!errors.isEmpty()){
+	        throw new OHDataValidationException(errors);
+	    }
     }
 	
 	/**
@@ -105,15 +118,7 @@ public class WardBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newWard(Ward ward) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateWard(ward);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
-		if (codeControl(ward.getCode())){
-			throw new OHServiceException(new OHExceptionMessage(null, 
-					MessageBundle.getMessage("angal.common.codealreadyinuse"), 
-					OHSeverityLevel.ERROR));
-		}
+		validateWard(ward, true);
 		return ioOperations.newWard(ward);
 	}
 
@@ -126,10 +131,7 @@ public class WardBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateWard(Ward ward) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateWard(ward);
-        if(!errors.isEmpty()){
-            throw new OHServiceException(errors);
-        }
+		validateWard(ward, false);
 		return ioOperations.updateWard(ward);
 	}
 
@@ -142,7 +144,7 @@ public class WardBrowserManager {
 	 */
 	public boolean deleteWard(Ward ward) throws OHServiceException {
 		if (ward.getCode().equals("M")) {
-			throw new OHServiceException( new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
+			throw new OHOperationNotAllowedException( new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
 					MessageBundle.getMessage("angal.ward.cannotdeletematernityward"), OHSeverityLevel.ERROR));
 		}
 		int noPatients = admManager.getUsedWardBed(ward.getCode());
@@ -156,7 +158,7 @@ public class WardBrowserManager {
 					MessageBundle.getMessage("angal.ward.selectedwardhaspatients2"), OHSeverityLevel.INFO));
 			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
 					MessageBundle.getMessage("angal.ward.pleasecheckinadmissionpatients"), OHSeverityLevel.ERROR));
-			throw new OHServiceException(messages);
+			throw new OHOperationNotAllowedException(messages);
 		}
 		return ioOperations.deleteWard(ward);
 	}

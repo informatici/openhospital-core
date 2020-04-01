@@ -1,9 +1,12 @@
 package org.isf.therapy.model;
 
 import java.util.GregorianCalendar;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,8 +16,10 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.isf.utils.db.Auditable;
 import org.isf.medicals.model.Medical;
 import org.isf.patient.model.Patient;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * 
@@ -33,7 +38,15 @@ import org.isf.patient.model.Patient;
  *------------------------------------------*/
 @Entity
 @Table(name="THERAPIES")
-public class TherapyRow 
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="THR_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="THR_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="THR_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="THR_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="THR_LAST_MODIFIED_DATE"))
+})
+public class TherapyRow  extends Auditable<String>
 {	
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -222,7 +235,7 @@ public class TherapyRow
 	}
 	
 	public String toString() {
-		String string = medicalId.toString() + " - " + this.unitID + " " + String.valueOf(this.qty) + "/" + this.freqInDay + "/" + this.freqInPeriod; 
+		String string = medicalId.toString() + " - " + this.unitID + " " + this.qty + "/" + this.freqInDay + "/" + this.freqInPeriod;
 		return string;
 	}
 	

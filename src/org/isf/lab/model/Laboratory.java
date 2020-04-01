@@ -11,9 +11,12 @@ package org.isf.lab.model;
  *------------------------------------------*/
 
 import java.util.GregorianCalendar;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,12 +27,22 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.isf.utils.db.Auditable;
 import org.isf.exa.model.Exam;
 import org.isf.patient.model.Patient;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name="LABORATORY")
-public class Laboratory 
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="LAB_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="LAB_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="LAB_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="LAB_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="LAB_LAST_MODIFIED_DATE"))
+})
+public class Laboratory extends Auditable<String>
 {
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -73,7 +86,7 @@ public class Laboratory
 	private String InOutPatient;
 	
 	@Column(name="LAB_AGE")
-	private int age;
+	private Integer age;
 	
 	@Column(name="LAB_SEX")
 	private String sex;
@@ -157,10 +170,10 @@ public class Laboratory
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
-	public int getAge() {
+	public Integer getAge() {
 		return age;
 	}
-	public void setAge(int age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
 	public String getInOutPatient() {
@@ -185,16 +198,13 @@ public class Laboratory
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		
-		if (!(obj instanceof Laboratory)) {
+		if (obj == null || !(obj instanceof Laboratory)) {
 			return false;
 		}
 		
 		Laboratory laboratory = (Laboratory)obj;
-		return (this.getCode() == laboratory.getCode());
+		return (this.getCode().equals(laboratory.getCode()));
+
 	}
 	
 	@Override
@@ -203,7 +213,7 @@ public class Laboratory
 	        final int m = 23;
 	        int c = 133;
 	        
-	        c = m * c + (code == null ? 0 : code.intValue());
+	        c = m * c + (code == null ? 0 : code);
 	        
 	        this.hashCode = c;
 	    }
