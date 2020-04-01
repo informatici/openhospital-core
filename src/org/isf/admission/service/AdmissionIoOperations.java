@@ -74,7 +74,7 @@ public class AdmissionIoOperations
 		for (Object[] object : admittedPatientsList) {
 			Patient patient = patientRepository.findOne((Integer) object[0]);
 			Admission admission = null;
-			Integer admissionId = (Integer) object[31];
+			Integer admissionId = (Integer) object[33];
 			if (admissionId != null) admission = repository.findOne((Integer) admissionId);
 			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);
 			admittedPatients.add(admittedPatient);
