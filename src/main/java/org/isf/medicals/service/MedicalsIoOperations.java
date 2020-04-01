@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -86,40 +85,22 @@ public class MedicalsIoOperations
 	
 	/**
 	 * Retrieves all stored {@link Medical}s.
-	 * If a description value is provides the medicals are filtered.
+	 * If a description value is provided the medicals are filtered.
 	 * @param type the medical type description.
-	 * @nameSorted if <code>true</code> return the list in alphabetical order, by code otherwise
+	 * @param nameSorted if <code>true</code> return the list in alphabetical order, by code otherwise
 	 * @return the stored medicals.
 	 * @throws OHServiceException if an error occurs retrieving the stored medicals.
 	 */
 	public ArrayList<Medical> getMedicals(String type, boolean nameSorted) throws OHServiceException {
-		ArrayList<Medical> medicals = null;
-
-		List<Object> parameters = new ArrayList<Object>();
-
-		StringBuilder query = new StringBuilder();
-		query.append("SELECT * FROM MEDICALDSR JOIN MEDICALDSRTYPE ON MDSR_MDSRT_ID_A = MDSRT_ID_A ");
 		
 		if (type != null) {
-			
-			if (nameSorted) {
-				medicals = (ArrayList<Medical>)repository.findAllWhereTypeOrderByDescription(type);
-			} else {
-				medicals = (ArrayList<Medical>)repository.findAllWhereTypeOrderBySmartCodeAndDescription(type);
-			}
-			
+			return getMedicalsByType(type, nameSorted);
 		} else {
-
-			if (nameSorted) {
-				medicals = getMedicals(null);
-			} else {
-				medicals = (ArrayList<Medical>)repository.findAllOrderBySmartCodeAndDescription();
-			}
-
+			return getMedicals(nameSorted);
 		}
 
-		return medicals;
 	}
+
 
 	/**
 	 * Retrieves the stored {@link Medical}s based on the specified filter criteria.
@@ -143,22 +124,22 @@ public class MedicalsIoOperations
 			{
 				if(critical)
 				{
-					medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionAndTypeAndCriticalOrderByTypeAndDescritpion(description, type);					
+					medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionAndTypeAndCriticalOrderByTypeAndDescription(description, type);
 				}
 				else
 				{
-					medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionAndTypeOrderByTypeAndDescritpion(description, type);					
+					medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionAndTypeOrderByTypeAndDescription(description, type);
 				}
 			}
 			else
 			{
 				if(critical)
 				{
-					medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionAndCriticalOrderByTypeAndDescritpion(description);					
+					medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionAndCriticalOrderByTypeAndDescription(description);
 				}
 				else
 				{
-					medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionOrderByTypeAndDescritpion(description);					
+					medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionOrderByTypeAndDescription(description);
 				}				
 			}
 		}
@@ -168,22 +149,22 @@ public class MedicalsIoOperations
 			{
 				if(critical)
 				{
-					medicals = (ArrayList<Medical>)repository.findAllWhereTypeAndCriticalOrderByTypeAndDescritpion(type);					
+					medicals = (ArrayList<Medical>)repository.findAllWhereTypeAndCriticalOrderByTypeAndDescription(type);
 				}
 				else
 				{
-					medicals = (ArrayList<Medical>)repository.findAllWhereTypeOrderByTypeAndDescritpion(type);					
+					medicals = (ArrayList<Medical>)repository.findAllWhereTypeOrderByTypeAndDescription(type);
 				}
 			}
 			else
 			{
 				if(critical)
 				{
-					medicals = (ArrayList<Medical>)repository.findAllWhereCriticalOrderByTypeAndDescritpion();					
+					medicals = (ArrayList<Medical>)repository.findAllWhereCriticalOrderByTypeAndDescription();
 				}
 				else
 				{
-					medicals = (ArrayList<Medical>)repository.findAllByOrderByTypeAndDescritpion();					
+					medicals = (ArrayList<Medical>)repository.findAllByOrderByTypeAndDescription();
 				}				
 			}			
 		}  
@@ -337,4 +318,36 @@ public class MedicalsIoOperations
 
 		return result;
 	}
+
+	/**
+	 * Retrieves all stored medicals, sorted by description or smart code.
+	 * @param nameSorted if true the found medicals are sorted by description, otherwise sorted by
+	 *                      prod_code and description.
+	 * @return sorted List of medicals or empty list if none found.
+	 * @throws OHServiceException
+	 */
+	private ArrayList<Medical> getMedicals(boolean nameSorted) throws OHServiceException {
+		if (nameSorted) {
+			return getMedicals(null);
+		} else {
+			return repository.findAllOrderBySmartCodeAndDescription();
+		}
+	}
+
+	/**
+	 * Retrieves all stored medicals by a given type, sorted by description or smart code.
+	 * @param type the type the found medicals should have.
+	 * @param nameSorted if true the found medicals are sorted by description, otherwise sorted by
+	 *                      prod_code and description.
+	 * @return sorted List of medicals or empty list if none found.
+	 * @throws OHServiceException
+	 */
+	private ArrayList<Medical> getMedicalsByType(String type, boolean nameSorted) {
+		if (nameSorted) {
+			return repository.findAllWhereTypeOrderByDescription(type);
+		} else {
+			return repository.findAllWhereTypeOrderBySmartCodeAndDescription(type);
+		}
+	}
+
 }

@@ -2,10 +2,7 @@ package org.isf.medicalstock.service;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.medicals.model.Medical;
@@ -465,7 +462,7 @@ public class MedicalStockIoOperations {
 		ArrayList<Movement> pMovement = new ArrayList<Movement>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findtMovementWhereDatesAndId(wardId, dateFrom, dateTo));			
+		pMovementCode = new ArrayList<Integer>(movRepository.findMovementWhereDatesAndId(wardId, dateFrom, dateTo));
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
 			Integer code = pMovementCode.get(i);
@@ -509,7 +506,7 @@ public class MedicalStockIoOperations {
 		ArrayList<Movement> pMovement = new ArrayList<Movement>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findtMovementWhereData(
+		pMovementCode = new ArrayList<Integer>(movRepository.findMovementWhereData(
 				medicalCode, medicalType, wardId, movType, 
 				movFrom, movTo, lotPrepFrom, lotPrepTo, lotDueFrom, lotDueTo));			
 		for (int i=0; i<pMovementCode.size(); i++)
@@ -552,7 +549,7 @@ public class MedicalStockIoOperations {
 		ArrayList<Movement> pMovement = new ArrayList<Movement>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findtMovementForPrint(
+		pMovementCode = new ArrayList<Integer>(movRepository.findMovementForPrint(
 				medicalDescription, medicalTypeCode, wardId, movType, 
 				movFrom, movTo, lotCode, order));			
 		for (int i=0; i<pMovementCode.size(); i++)
@@ -578,28 +575,28 @@ public class MedicalStockIoOperations {
 			Medical medical) throws OHServiceException
 	{
 		ArrayList<Lot> lots = null;
-	
-		
+
+
 		List<Object[]> lotList = (List<Object[]>)lotRepository.findAllWhereMedical(medical.getCode());
 		lots = new ArrayList<Lot>();
 		for (Object[] object: lotList)
 		{
 			Lot lot = _convertObjectToLot(object);
-			
+
 			lots.add(lot);
 		}
-		
-		// remove empty lots
+
+		// remve empy lots
 		ArrayList<Lot> emptyLots = new ArrayList<Lot>();
 		for (Lot aLot : lots) {
 			if (aLot.getQuantity() == 0)
 				emptyLots.add(aLot);
 		}
 		lots.removeAll(emptyLots);
-		
+
 		return lots;
-	}	
-	
+	}
+
 	private Lot _convertObjectToLot(Object[] object)
 	{
 
@@ -610,7 +607,7 @@ public class MedicalStockIoOperations {
 		Double cost = (Double) object[3]; // LOT COST could be null because of LOTWITHCOST=no
 		lot.setCost(cost != null? new BigDecimal(cost) : null);
 		lot.setQuantity(((Double)object[4]).intValue());
-		
+
 		return lot;
 	}
 	
@@ -634,20 +631,7 @@ public class MedicalStockIoOperations {
 	 */
 	public GregorianCalendar getLastMovementDate() throws OHServiceException 
 	{
-		GregorianCalendar gc = new GregorianCalendar();
-				
-			
-		Timestamp time = (Timestamp)movRepository.findMaxDate();
-		if (time != null) 
-		{
-			gc.setTime(time);
-		}
-		else
-		{
-			gc = null;
-		}					
-	
-		return gc;
+		return movRepository.findMaxDate();
 	}
 	
 	/**

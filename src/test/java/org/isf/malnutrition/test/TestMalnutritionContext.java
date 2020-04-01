@@ -17,7 +17,7 @@ public class TestMalnutritionContext
 			DbJpaUtil jpa) throws OHException 
     {	
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM MALNUTRITIONCONTROL", Malnutrition.class, false);
+		jpa.createQuery("SELECT m FROM Malnutrition m", Malnutrition.class, true);
 		savedMalnutrition = (List<Malnutrition>)jpa.getList();
 		jpa.commitTransaction();
         		
@@ -34,7 +34,7 @@ public class TestMalnutritionContext
     		DbJpaUtil jpa) throws OHException 
     {
     	jpa.beginTransaction();	
-		jpa.createQuery("SELECT * FROM MALNUTRITIONCONTROL", Malnutrition.class, false);
+		jpa.createQuery("SELECT m FROM Malnutrition m", Malnutrition.class, true);
 		List<Malnutrition> malnutritions = (List<Malnutrition>)jpa.getList();
 		for (Malnutrition malnutrition: malnutritions) 
 		{    		

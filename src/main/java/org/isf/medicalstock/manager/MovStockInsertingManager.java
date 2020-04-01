@@ -38,7 +38,6 @@ public class MovStockInsertingManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param movement - the movement to validate
 	 * @param checkReference - if {@code true} it will use {@link #checkReferenceNumber(String) checkReferenceNumber}
-	 * @return list of {@link OHExceptionMessage}
 	 * @throws OHServiceException 
 	 */
 	protected void validateMovement(Movement movement, boolean checkReference) throws OHServiceException  {

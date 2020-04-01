@@ -17,7 +17,7 @@ public class TestUserMenuContext
 			DbJpaUtil jpa) throws OHException 
     {	
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM MENUITEM", UserMenuItem.class, false);
+		jpa.createQuery("select menuItem from UserMenuItem menuItem", UserMenuItem.class, true);
 		savedUserMenuItem = (List<UserMenuItem>)jpa.getList();
 		jpa.commitTransaction();
         		
@@ -34,7 +34,7 @@ public class TestUserMenuContext
     		DbJpaUtil jpa) throws OHException 
     {
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM MENUITEM", UserMenuItem.class, false);
+		jpa.createQuery("select menuItem from UserMenuItem menuItem", UserMenuItem.class, true);
 		List<UserMenuItem> UserMenuItems = (List<UserMenuItem>)jpa.getList();
 		for (UserMenuItem userMenuItem: UserMenuItems) 
 		{    		

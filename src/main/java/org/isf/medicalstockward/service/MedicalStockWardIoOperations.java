@@ -11,6 +11,8 @@ import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -215,7 +217,12 @@ public class MedicalStockWardIoOperations
             if(medicalWardTo != null) {
             	repository.updateInQuantity(Math.abs(qty), wardTo, medical, lot);
             } else {
-                repository.insertMedicalWard(wardTo, medical, Math.abs(qty), lot);
+				MedicalWard medicalWard = new MedicalWard();
+				medicalWard.setWard(movement.getWard());
+				medicalWard.setMedical(movement.getMedical());
+				medicalWard.setInQuantity((float)Math.abs(qty));
+				medicalWard.setOutQuantity(0.0f);
+                repository.save(medicalWard);
             }
             repository.updateOutQuantity(Math.abs(qty), ward, medical, lot);
             return result;
@@ -224,7 +231,12 @@ public class MedicalStockWardIoOperations
 		MedicalWard medicalWard = repository.findOneWhereCodeAndMedicalAndLot(ward, medical, lot);
         if (medicalWard == null)
 		{
-            repository.insertMedicalWard(ward, medical, -qty, lot);
+			medicalWard = new MedicalWard();
+			medicalWard.setWard(movement.getWard());
+			medicalWard.setMedical(movement.getMedical());
+			medicalWard.setInQuantity((float) -qty);
+			medicalWard.setOutQuantity(0.0f);
+            repository.save(medicalWard);
         }
 		else
 		{
@@ -242,15 +254,14 @@ public class MedicalStockWardIoOperations
 
 	/**
 	 * Gets all the {@link Medical}s associated to specified {@link Ward}.
-	 * @param wardId the ward id.
-	 * @param stripeEmpty - if <code>true</code>, stripes the empty lots
+	 * @param wardCode the ward id.
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException if an error occurs during the medical retrieving.
 	 */
 	public ArrayList<MedicalWard> getMedicalsWard(
-			char wardId, boolean stripeEmpty) throws OHServiceException
+			String wardCode) throws OHServiceException
 	{
-		ArrayList<MedicalWard> medicalWards = new ArrayList<MedicalWard>(repository.findAllWhereWard(wardId));
+		ArrayList<MedicalWard> medicalWards = new ArrayList<MedicalWard>(repository.findAllWhereWard(wardCode));
 		for (int i=0; i<medicalWards.size(); i++)
 			
 		{

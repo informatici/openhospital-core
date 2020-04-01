@@ -11,10 +11,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MalnutritionIoOperationRepository extends JpaRepository<Malnutrition, Integer> {
 
-    @Query(value = "SELECT * FROM MALNUTRITIONCONTROL WHERE MLN_ADM_ID = :id ORDER BY MLN_DATE_SUPP", nativeQuery= true)
-    List<Malnutrition> findAllWhereAdmissionByOrderDate(@Param("id") String id);
+    @Query(value = "SELECT m FROM Malnutrition m WHERE m.admission.id = :id ORDER BY m.dateSupp")
+    List<Malnutrition> findAllWhereAdmissionByOrderDate(@Param("id") int admissionID);
     
-    @Query(value = "SELECT * FROM MALNUTRITIONCONTROL WHERE MLN_ADM_ID = :id ORDER BY MLN_DATE_SUPP DESC LIMIT 1", nativeQuery= true)
-    List<Malnutrition> findAllWhereAdmissionByOrderDateDescLimit1(@Param("id") int patientID);
+    @Query(value = "SELECT m FROM Malnutrition m WHERE m.admission.id = :id ORDER BY m.dateSupp")
+    List<Malnutrition> findAllWhereAdmissionByOrderDateDesc(@Param("id") int admissionID);
     
 }
