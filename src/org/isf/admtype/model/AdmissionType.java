@@ -1,12 +1,18 @@
 
 package org.isf.admtype.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import org.isf.utils.db.Auditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Pure Model Exam : represents a disease type
@@ -24,7 +30,15 @@ import javax.validation.constraints.NotNull;
  *------------------------------------------*/
 @Entity
 @Table(name="ADMISSIONTYPE")
-public class AdmissionType 
+@EntityListeners(AuditingEntityListener.class) 
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="ADMT_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="ADMT_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="ADMT_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="ADMT_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="ADMT_LAST_MODIFIED_DATE"))
+})
+public class AdmissionType extends Auditable<String>
 {
 	@Id 
 	@Column(name="ADMT_ID_A")	
