@@ -22,8 +22,7 @@ You need a GUI (Graphic User Interface) in order to use the core:
 **Rebuild local database:**
 If you want to rebuild local db you should follow these steps:
 
-    docker-compose down
-    docker rmi openhospital-core_database
+    docker-compose down --rmi all
     docker-compose up [-d]*  
     
     
