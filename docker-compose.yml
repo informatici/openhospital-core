@@ -1,8 +1,9 @@
-version: '3'
-services:
-  database:
-    build:
-     context: ./
-     dockerfile: Dockerfile-ohdb
-    ports: 
-    - "3306:3306"
+  version: '3'
+  services:
+    database:
+      build:
+       context: ./
+       dockerfile: Dockerfile-ohdb
+      image: oh-core_database:latest
+      ports:
+      - "3306:3306"
