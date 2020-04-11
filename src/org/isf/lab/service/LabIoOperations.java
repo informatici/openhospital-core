@@ -206,6 +206,41 @@ public class LabIoOperations {
 	}
 	
 	/**
+	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) 
+	 * between specified dates and matching passed exam name
+	 * @param exam - the exam name as <code>String</code>
+	 * @param dateFrom - the lower date for the range
+	 * @param dateTo - the highest date for the range
+	 * @return the list of {@link LaboratoryForPrint}s 
+	 * @throws OHServiceException
+	 */
+	public ArrayList<LaboratoryForPrint> getLaboratoryForPrint(
+			Integer labCode) throws OHServiceException 
+	{
+		ArrayList<LaboratoryForPrint> pLaboratory = new ArrayList<LaboratoryForPrint>();
+    	ArrayList<Laboratory> laboritories = new ArrayList<Laboratory>();
+    	Laboratory lab = new Laboratory();
+	
+    	if(labCode == null) return pLaboratory;
+    	lab = repository.findOne(labCode);
+    	if(lab==null) return pLaboratory;
+        laboritories.add(lab);
+		
+		for (Laboratory laboratory : laboritories) 
+		{
+			pLaboratory.add(new LaboratoryForPrint(
+					laboratory.getCode(),
+					laboratory.getExam(),
+					laboratory.getDate(),
+					laboratory.getResult()
+				)
+			);
+		}
+
+		return pLaboratory;	
+	}
+	
+	/**
 	 * Insert a Laboratory exam {@link Laboratory} and return generated key. No commit is performed.
 	 * @param laboratory - the {@link Laboratory} to insert
 	 * @param dbQuery - the connection manager
