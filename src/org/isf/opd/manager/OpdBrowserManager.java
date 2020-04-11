@@ -9,7 +9,6 @@ import java.util.List;
 import org.isf.disease.model.Disease;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
-import org.isf.menu.manager.Context;
 import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.opd.model.Opd;
 import org.isf.opd.service.OpdIoOperations;
@@ -140,7 +139,11 @@ public class OpdBrowserManager {
 	public ArrayList<Opd> getOpd(String diseaseTypeCode,String diseaseCode, GregorianCalendar dateFrom,GregorianCalendar dateTo,int ageFrom, int ageTo,char sex,char newPatient) throws OHServiceException {
 		return ioOperations.getOpdList(diseaseTypeCode,diseaseCode,dateFrom,dateTo,ageFrom,ageTo,sex,newPatient);
 	}
-	
+
+	public List<Opd> getOpdPaginated(String diseaseTypeCode, String diseaseCode, GregorianCalendar dateFrom, GregorianCalendar dateTo, int ageFrom, int ageTo, char sex, char newPatient, int pageNumber, int pageSize) {
+		return ioOperations.getOpdListPaginated(diseaseTypeCode,diseaseCode,dateFrom,dateTo,ageFrom,ageTo,sex,newPatient, pageNumber, pageSize);
+	}
+
 	/**
 	 * returns all {@link Opd}s associated to specified patient ID
 	 * 

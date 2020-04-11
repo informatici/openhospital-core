@@ -1,5 +1,11 @@
 package org.isf.utils.db;
 
+import com.mysql.cj.jdbc.exceptions.CommunicationsException;
+import org.isf.generaldata.MessageBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,14 +13,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-
-import javax.swing.JOptionPane;
-
-import org.isf.generaldata.MessageBundle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
 
 /*
  * @version 0.1 2005-11-06

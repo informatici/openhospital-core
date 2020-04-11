@@ -2,6 +2,7 @@ package org.isf.opd.service;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
@@ -102,7 +103,21 @@ public class OpdIoOperations {
 		
 		return pOpd;	
 	}
-	
+
+
+	public List<Opd> getOpdListPaginated(
+			String diseaseTypeCode,
+			String diseaseCode,
+			GregorianCalendar dateFrom,
+			GregorianCalendar dateTo,
+			int ageFrom,
+			int ageTo,
+			char sex,
+			char newPatient, int pageNumber, int pageSize) {
+		return repository.findAllOpdWhereParamsWithPagination(diseaseTypeCode, diseaseCode, dateFrom, dateTo,
+				ageFrom, ageTo, sex, newPatient, pageNumber, pageSize);
+	}
+
 	/**
 	 * returns all {@link Opd}s associated to specified patient ID
 	 * 
