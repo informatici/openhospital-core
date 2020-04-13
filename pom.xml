@@ -356,14 +356,14 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-             <groupId>org.springframework</groupId>
-             <artifactId>spring-aspects</artifactId>
-             <version>${spring.framework.version}</version>
-         </dependency>
-         <dependency>
-		    <groupId>com.sun</groupId>
+         <groupId>org.springframework</groupId>
+         <artifactId>spring-aspects</artifactId>
+         <version>${spring.framework.version}</version>
+    </dependency>
+    <dependency>
+		    <groupId>com.sun.media</groupId>
 		    <artifactId>clibwrapper_jiio</artifactId>
-		    <version>1.1</version>
+		    <version>1.2-pre-dr-b04</version>
 		</dependency>
 		<dependency>
 		    <groupId>com.sun.media</groupId>
