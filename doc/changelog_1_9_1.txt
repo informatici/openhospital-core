@@ -1,3 +1,131 @@
+commit 8b7aeac6f0d36e20caab161fee8f5571aff31ba9
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-22
+
+    OP-141 #comment Removed all versions from xsd #time 1h 30min
+    
+    as reversion of
+    https://github.com/informatici/openhospital-core/commit/1a0a8ad033fe659a778b3779e7b8758f5b48a701
+
+commit 948e39d1de25d8425b7dc2e7745549a51da23410
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-16
+
+    Updated changelog
+
+commit 2b81d204fe36462fc027e67f5fa6f891023b7785
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-16
+
+    Op 183 problem with dates in operation data (#62)
+    
+    Fixed problem with dates in Operation data
+    
+    Co-authored-by: Xavier <martinxaviertchembe@gmail.com>
+    Co-authored-by: Niccolò Pasquetto <niccolo.pasquetto@intesys.it>
+    Co-authored-by: Lars Grefer <github@larsgrefer.de>
+    Co-authored-by: vicusotto <vito988@gmail.com>
+
+commit 6f4d8e53a3748f79bb73e6f74d6015038c4f07ee
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-07
+
+    Confirmed script 58
+    
+    Conflicts:
+            mysql/db/from_step_05.sql
+
+commit e6d8bbc98bd59bf6b9242d8d4a74a5f2da32f6f0
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-07
+
+    Op 183 problem with dates in operation data (#55)
+    
+    * Refactored OhExceptionTranslator -> OHExceptionTranslator
+    * Fixed problem with dates in Operation data
+    Co-authored-by: Xavier <martinxaviertchembe@gmail.com>
+    
+    Conflicts:
+            src/org/isf/exa/manager/ExamBrowsingManager.java
+            src/org/isf/patient/manager/PatientBrowserManager.java
+
+commit 1a55412764b24d058431de94cae967f8a54ca381
+Author: giuseppe.sorge <giuseppe.sorge90@gmail.com>
+Date:   2020-03-07
+
+    Op 140 update dicom libraries (#56)
+    
+    * Fix dicomManager to manage the bean
+    * fix pom to update dicom libraries
+    
+    Conflicts:
+            src/org/isf/dicom/manager/DicomManagerFactory.java
+
+commit b336db11f75b37fbeff75baa6db5a98181e2c9de
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-27
+
+    Removed unwanted std output
+
+commit e697656366bc5438edd1143488a6efefe9f05247
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-20
+
+    Trying to fixing Hibernate ERROR on linux32 version
+    
+    'Cannot convert value '0000-00-00 00:00:00' from column TIMESTAMP'
+
+commit 2a2d1b668a7eb1bb47329a12fd34cbc59559606b
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-19
+
+    Updated changelog
+
+commit 71e854bb44e7fd82f2cf149ce411ae71bc07fc60
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-15
+
+    Small Laboratory enhancements
+    
+    - improved sorting by date and by laboratory ID
+    - allowing multiple results all negative
+
+commit 84fc34ccd53f87de7be2c7b07d1982ce6c1fd5cf
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-15
+
+    Fixed issue #60
+
+commit 8c835f836e8be6b7d104bc9470c96aa5a72dc57c
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-15
+
+    Fixed issue #59
+
+commit e70b6c93c167119082390096849deb04026b61bb
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-15
+
+    Fixed issue #58
+
+commit 3b37d1d20d66f6f5f6758cdef59514fa03623f6c
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-14
+
+    Fixing https://github.com/informatici/openhospital/issues/53
+
+commit 2a6edd0641941801122c75ed9b6cbe24db116e52
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-11
+
+    Update LICENSE
+
+commit f4cbc9a30cb3aa008b753e07f976c7763da4f865
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-02-05
+
+    Updated Changelog
+
 commit 456e99ebebdae92b83f289d7d3c7c554c9ddfe20
 Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
 Date:   2020-02-05

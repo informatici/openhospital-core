@@ -209,20 +209,9 @@
 			<version>5.1.14</version>
 		</dependency>
 		<dependency>
-			<groupId>org.processing</groupId>
-			<artifactId>core</artifactId>
-			<version>1.2.1</version>
-		</dependency>
-		<dependency>
 			<groupId>org.rxtx</groupId>
 			<artifactId>rxtx</artifactId>
 			<version>2.1.7</version>
-		</dependency>
-		<dependency>
-			<groupId>jcu.sal</groupId>
-			<artifactId>sal_isf</artifactId>
-			<version>1.0</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 		    <groupId>javax.xml.bind</groupId>
@@ -367,11 +356,15 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+         <groupId>org.springframework</groupId>
+         <artifactId>spring-aspects</artifactId>
+         <version>${spring.framework.version}</version>
+    </dependency>
+    <dependency>
 		    <groupId>com.sun.media</groupId>
 		    <artifactId>clibwrapper_jiio</artifactId>
 		    <version>1.2-pre-dr-b04</version>
 		</dependency>
-
 		<dependency>
 		    <groupId>com.sun.media</groupId>
 		    <artifactId>jai_imageio</artifactId>
@@ -418,14 +411,6 @@
 			<id>dcm4che</id>
 			<name>Dcm4Che Repository</name>
 			<url>http://www.dcm4che.org/maven2/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>cytoscape</id>
-			<name>Cytoscape Repository</name>
-			<url>http://code.cytoscape.org/nexus/content/repositories/releases/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>

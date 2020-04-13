@@ -4,8 +4,11 @@
  */
 package org.isf.disease.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,7 +19,9 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.isf.utils.db.Auditable;
 import org.isf.distype.model.DiseaseType;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Pure Model Exam : represents a disease type
@@ -33,7 +38,15 @@ import org.isf.distype.model.DiseaseType;
  *------------------------------------------*/
 @Entity
 @Table(name="DISEASE")
-public class Disease 
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="DIS_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="DIS_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="DIS_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="DIS_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="DIS_LAST_MODIFIED_DATE"))
+})
+public class Disease extends Auditable<String> 
 {
 	@Id 
 	@Column(name="DIS_ID_A")	    
