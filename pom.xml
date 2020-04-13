@@ -381,6 +381,27 @@
              <artifactId>spring-aspects</artifactId>
              <version>${spring.framework.version}</version>
          </dependency>
+	    <dependency>
+		    <groupId>com.sun.media</groupId>
+		    <artifactId>clibwrapper_jiio</artifactId>
+		    <version>1.2-pre-dr-b04</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.sun.media</groupId>
+		    <artifactId>jai_imageio</artifactId>
+		    <version>1.1</version>
+		    <exclusions>
+		    	<exclusion>
+		    		<groupId>javax.media</groupId>
+		    		<artifactId>jai_core</artifactId>
+		    	</exclusion>
+		    </exclusions>
+		</dependency>
+		<dependency>
+		    <groupId>javax.media</groupId>
+		    <artifactId>jai-core</artifactId>
+		    <version>1.1.3</version>
+		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
