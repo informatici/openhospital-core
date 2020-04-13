@@ -2,6 +2,7 @@ package org.isf.vaccine.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.ArrayList;
 
@@ -121,14 +122,9 @@ public class Tests
 	}
 	
 	@Test
-	public void testIoGetVaccine() 
-	{
-		String code = "";
-		
-		
-		try 
-		{		
-			code = _setupTestVaccine(false);
+	public void testIoGetVaccineShouldFindByTypeCode() 	{
+		try {
+			String code = _setupTestVaccine(false);
 			Vaccine foundVaccine = (Vaccine)jpa.find(Vaccine.class, code); 
 			ArrayList<Vaccine> vaccines = vaccineIoOperation.getVaccine(foundVaccine.getVaccineType().getCode());
 			
@@ -139,8 +135,26 @@ public class Tests
 			e.printStackTrace();		
 			assertEquals(true, false);
 		}
-		
-		return;
+	}
+
+	@Test
+	public void testIoGetVaccineShouldFindAllVaccinesWhenNoCodeProvided() {
+		try {
+			// given:
+			String code = _setupTestVaccine(false);
+			Vaccine foundVaccine = (Vaccine)jpa.find(Vaccine.class, code);
+
+			// when:
+			ArrayList<Vaccine> vaccines = vaccineIoOperation.getVaccine(null);
+
+			// then:
+			assertFalse(vaccines.isEmpty());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
 	}
 	
 	@Test

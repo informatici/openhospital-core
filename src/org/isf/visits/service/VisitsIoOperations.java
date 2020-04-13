@@ -25,21 +25,10 @@ public class VisitsIoOperations {
 	 * @return the list of {@link Visit}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Visit> getVisits(
-			Integer patID) throws OHServiceException 
-	{
-		ArrayList<Visit> visits = null;
-
-		
-		if (patID != 0) {
-			visits = new ArrayList<Visit>(repository.findAllWherePatientByOrderPatientAndDateAsc(patID));
-		}
-		else
-		{
-			visits = new ArrayList<Visit>(repository.findAllByOrderPatientAndDateAsc()); 
-		}
-		
-		return visits;
+	public ArrayList<Visit> getVisits(Integer patID) throws OHServiceException {
+		return patID != 0 ?
+			new ArrayList<Visit>(repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID)) :
+		 	new ArrayList<Visit>(repository.findAllByOrderByPatient_CodeAscDateAsc());
 	}
 
 	/**
@@ -49,9 +38,7 @@ public class VisitsIoOperations {
 	 * @return the visitID
 	 * @throws OHServiceException 
 	 */
-	public int newVisit(
-			Visit visit) throws OHServiceException 
-	{		
+	public int newVisit(Visit visit) throws OHServiceException {
 		Visit savedVisit = repository.save(visit);
 		    	
 		return savedVisit.getVisitID();
@@ -64,15 +51,9 @@ public class VisitsIoOperations {
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean deleteAllVisits(
-			int patID) throws OHServiceException 
-	{
-		boolean result = true;
-
-		
-		repository.deleteWherePatient(patID);
-		
-        return result;
+	public boolean deleteAllVisits(int patID) throws OHServiceException {
+		repository.deleteByPatient_Code(patID);
+        return true;
 	}
 
 	/**
@@ -82,14 +63,7 @@ public class VisitsIoOperations {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			Integer code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;	
+	public boolean isCodePresent(Integer code) throws OHServiceException {
+		return repository.exists(code);
 	}
 }
