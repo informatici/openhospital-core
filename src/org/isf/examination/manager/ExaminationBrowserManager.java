@@ -25,7 +25,7 @@ public class ExaminationBrowserManager {
 	 */
 	public PatientExamination getDefaultPatientExamination(	Patient patient){
 		PatientExamination defaultPatient = new PatientExamination(new Timestamp(new Date().getTime()), patient, ExaminationParameters.HEIGHT_INIT, ExaminationParameters.WEIGHT_INIT,
-				ExaminationParameters.AP_MIN, ExaminationParameters.AP_MAX, ExaminationParameters.HR_INIT, ExaminationParameters.TEMP_INIT, ExaminationParameters.SAT_INIT, "");
+				ExaminationParameters.AP_MIN, ExaminationParameters.AP_MAX, ExaminationParameters.HR_INIT, ExaminationParameters.TEMP_INIT, ExaminationParameters.SAT_INIT, ExaminationParameters.RR_INIT, ExaminationParameters.AUSC_INIT, "");
 		return defaultPatient;
 	}
 
@@ -35,7 +35,7 @@ public class ExaminationBrowserManager {
 	public PatientExamination getFromLastPatientExamination(PatientExamination lastPatientExamination){
 		PatientExamination newPatientExamination = new PatientExamination(new Timestamp(new Date().getTime()), lastPatientExamination.getPatient(), lastPatientExamination.getPex_height(),
 				lastPatientExamination.getPex_weight(), lastPatientExamination.getPex_pa_min(), lastPatientExamination.getPex_pa_max(), lastPatientExamination.getPex_fc(), 
-				lastPatientExamination.getPex_temp(), lastPatientExamination.getPex_sat(), lastPatientExamination.getPex_note());
+				lastPatientExamination.getPex_temp(), lastPatientExamination.getPex_sat(), lastPatientExamination.getPex_rr(), lastPatientExamination.getPex_ausc(), lastPatientExamination.getPex_note());
 		return newPatientExamination;
 	}
 

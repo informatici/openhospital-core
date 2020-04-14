@@ -19,6 +19,8 @@ public class TestPatientExamination
 	private int pex_fc = 60;	
 	private double pex_temp = 36;	
 	private double pex_sat = 1;	
+	private int pex_rr = 20;
+	private String pex_ausc = "normal";
 	private String pex_note = "";
 	
 	
@@ -38,7 +40,7 @@ public class TestPatientExamination
 		{
 			// Create Patient Examination with all parameters 
 			patientExamination = new PatientExamination(pex_date, patient, pex_height, pex_weight, 
-					pex_pa_min, pex_pa_max, pex_fc, pex_temp, pex_sat, pex_note);	
+					pex_pa_min, pex_pa_max, pex_fc, pex_temp, pex_sat, pex_rr, pex_ausc, pex_note);	
 		}
 		
 		return patientExamination;
