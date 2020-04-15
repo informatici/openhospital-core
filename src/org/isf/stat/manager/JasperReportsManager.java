@@ -217,6 +217,27 @@ public class JasperReportsManager {
         }
     }
 
+    
+    public JasperReportResultDto getGenericReportPatientPdfExamin(Integer patientID, String date, String jasperFileName) throws OHServiceException {
+
+        try{
+        	HashMap<String, String> parameters = new HashMap<String, String>();
+           
+            
+            parameters.put("patientID", String.valueOf(patientID)); // real param
+            parameters.put("date", date); 
+            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + patientID +".pdf";
+
+            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
+            JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
+            return result;
+        } catch(Exception e){
+            //Any exception
+        	logger.error("", e);
+            throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+                    MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
+        }
+    }
     public JasperReportResultDto getGenericReportPatientPdf(Integer patientID, String jasperFileName) throws OHServiceException {
 
         try{

@@ -203,11 +203,7 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 		</dependency>
-		<dependency>
-		    <groupId>com.sun</groupId>
-		    <artifactId>clibwrapper_jiio</artifactId>
-		    <version>1.1</version>
-		</dependency>
+
 		<dependency>
 		    <groupId>com.sun.media</groupId>
 		    <artifactId>jai_imageio</artifactId>
