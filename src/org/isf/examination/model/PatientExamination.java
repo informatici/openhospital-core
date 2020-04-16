@@ -298,8 +298,8 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	/**
 	 * @param pex_ausc the pex_ausc to set
 	 */
-	public void setPex_ausc(int pex_ausc) {
-		this.pex_rr = pex_ausc;
+	public void setPex_ausc(String pex_ausc) {
+		this.pex_ausc = pex_ausc;
 	}
 
 	/**
