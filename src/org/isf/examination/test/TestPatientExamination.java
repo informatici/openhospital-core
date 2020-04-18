@@ -60,6 +60,8 @@ public class TestPatientExamination
 		patientExamination.setPex_sat(pex_sat);
 		patientExamination.setPex_temp(pex_temp);
 		patientExamination.setPex_weight(pex_weight);
+		patientExamination.setPex_ausc(pex_ausc);
+		patientExamination.setPex_rr(pex_rr);
 		
 		return;
 	}
