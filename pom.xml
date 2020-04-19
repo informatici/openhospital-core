@@ -20,7 +20,49 @@
 	</properties>
 
 	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<testResources>
+			<testResource>
+				<directory>rsc-test</directory>
+			</testResource>
+		</testResources>
+		<resources>
+			<resource>
+				<directory>src</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>rsc</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+
 		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.9.1</version>
+				<executions>
+					<execution>
+						<id>add-test-source</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>add-test-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/org/isf/test</source>
+								<source>rsc-test</source>
+							</sources>
+						</configuration>
+					</execution>
+
+				</executions>
+			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
@@ -34,6 +76,9 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.7</version>
 				<executions>
+					<execution>
+						<id>process</id>
+					</execution>
 					<execution>
 						<id>copy-resources</id>
 						<phase>validate</phase>
@@ -216,6 +261,17 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.14</version>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.190</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.processing</groupId>
+			<artifactId>core</artifactId>
+			<version>1.2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rxtx</groupId>
