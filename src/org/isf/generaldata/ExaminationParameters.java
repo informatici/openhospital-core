@@ -68,9 +68,6 @@ public class ExaminationParameters {
 	
 	public static int HR_INIT;
 	private static int DEFAULT_HR_INIT = 60;
-
-	public static String RR_UNIT;
-	private static String DEFAULT_RR_UNIT = "bpm";
 	
 	public static int RR_MIN;
 	private static int DEFAULT_RR_MIN = 0;
@@ -82,7 +79,6 @@ public class ExaminationParameters {
 	private static int DEFAULT_RR_INIT = 15;
 
 	public static String AUSC_INIT = "normal";
-	private static String DEAFULT_AUSC_INIT = "normal";
 	
 //	public static String TEMP_UNIT;
 //	private static String DEFAULT_TEMP_UNIT = "°C";
@@ -166,6 +162,10 @@ public class ExaminationParameters {
 			
 			HGT_INIT = myGetProperty("HGT_INIT", DEFAULT_HGT_INIT);
 			DIURESIS_INIT = myGetProperty("DIURESIS_INIT", DEFAULT_DIURESIS_INIT);
+
+			RR_MIN = myGetProperty("RR_MIN", DEFAULT_RR_MIN);
+			RR_MAX = myGetProperty("RR_MAX", DEFAULT_RR_MAX);
+			RR_INIT = myGetProperty("RR_INIT", DEFAULT_RR_INIT);
 			
 			LIST_SIZE = myGetProperty("LIST_SIZE", DEFAULT_LIST_SIZE);
 			
