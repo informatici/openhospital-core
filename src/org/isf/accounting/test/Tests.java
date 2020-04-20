@@ -257,7 +257,7 @@ public class Tests
 		{
 			id = _setupTestBill(false);
 			Bill foundBill = (Bill)jpa.find(Bill.class, id); 
-			ArrayList<Bill> bills = accountingIoOperation.getPendingBills(foundBill.getPatient().getCode());
+			ArrayList<Bill> bills = accountingIoOperation.getPendingBills(foundBill.getBillPatient().getCode());
 			
 			assertEquals(foundBill.getAmount(), bills.get(0).getAmount(), 0.1);
 		} 
@@ -770,8 +770,8 @@ public class Tests
 
 		foundBill = (Bill)jpa.find(Bill.class, id); 
 		testBill.check(foundBill);
-		testPriceList.check(foundBill.getList());
-		testPatient.check(foundBill.getPatient());
+		testPriceList.check(foundBill.getPriceList());
+		testPatient.check(foundBill.getBillPatient());
 		
 		return;
 	}
@@ -805,8 +805,8 @@ public class Tests
 		foundBillItem = (BillItems)jpa.find(BillItems.class, id); 
 		testBillItems.check(foundBillItem);
 		testBill.check(foundBillItem.getBill());
-		testPriceList.check(foundBillItem.getBill().getList());
-		testPatient.check(foundBillItem.getBill().getPatient());
+		testPriceList.check(foundBillItem.getBill().getPriceList());
+		testPatient.check(foundBillItem.getBill().getBillPatient());
 		
 		return;
 	}
@@ -840,8 +840,8 @@ public class Tests
 		foundBillPayment = (BillPayments)jpa.find(BillPayments.class, id); 
 		testBillPayments.check(foundBillPayment);
 		testBill.check(foundBillPayment.getBill());
-		testPriceList.check(foundBillPayment.getBill().getList());
-		testPatient.check(foundBillPayment.getBill().getPatient());
+		testPriceList.check(foundBillPayment.getBill().getPriceList());
+		testPatient.check(foundBillPayment.getBill().getBillPatient());
 		
 		return;
 	}
