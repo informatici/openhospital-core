@@ -3,7 +3,7 @@ package org.isf.dicom.manager;
 import javax.swing.JList;
 
 /**
- * Abstract Component for DICOM Thumnails composizion and visualizzation
+ * Abstract Component for DICOM Thumbnails composition and visualization
  * 
  * @author Mwithi
  * @version 1.0.0

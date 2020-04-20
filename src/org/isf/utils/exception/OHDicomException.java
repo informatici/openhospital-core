@@ -14,6 +14,10 @@ public class OHDicomException extends OHServiceException {
 		super(cause, message);
 	}
 	
+	public OHDicomException(Throwable cause, List<OHExceptionMessage> messages) {
+		super(cause, messages);
+	}
+	
 	public OHDicomException(OHExceptionMessage message) {
 		super(message);
 	}

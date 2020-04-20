@@ -217,7 +217,7 @@ public class Tests
 			code = _setupTestDischargeType(false);
 			DischargeType foundDischargeType = (DischargeType)jpa.find(DischargeType.class, code); 
 			foundDischargeType.setDescription("Update");
-			result = dischargeTypeIoOperation.UpdateDischargeType(foundDischargeType);
+			result = dischargeTypeIoOperation.updateDischargeType(foundDischargeType);
 			DischargeType updateDischargeType = (DischargeType)jpa.find(DischargeType.class, code); 
 			
 			assertEquals(true, result);
