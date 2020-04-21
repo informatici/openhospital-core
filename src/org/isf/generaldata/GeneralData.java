@@ -31,6 +31,7 @@ public class GeneralData {
 	
 	public static boolean AUTOMATICLOT_IN;
 	public static boolean AUTOMATICLOT_OUT;
+	public static boolean AUTOMATICLOTWARD_TOWARD;
 	public static boolean LOTWITHCOST;
 	
 	public static String PATIENTSHEET;
@@ -73,6 +74,7 @@ public class GeneralData {
 	private static boolean DEFAULT_SINGLEUSER = false;
 	private static boolean DEFAULT_AUTOMATICLOT_IN = true;
 	private static boolean DEFAULT_AUTOMATICLOT_OUT = true;
+	private static boolean DEFAULT_AUTOMATICLOTWARD_TOWARD=true;
 	private static boolean DEFAULT_LOTWITHCOST = false;
 	private static String DEFAULT_PATIENTSHEET = "patient_clinical_sheet";
 	private static String DEFAULT_OPDCHART = "patient_opd_chart";
@@ -121,6 +123,7 @@ public class GeneralData {
 			SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
 			AUTOMATICLOT_IN = myGetProperty("AUTOMATICLOT_IN", DEFAULT_AUTOMATICLOT_IN);
 			AUTOMATICLOT_OUT = myGetProperty("AUTOMATICLOT_OUT", DEFAULT_AUTOMATICLOT_OUT);
+			AUTOMATICLOTWARD_TOWARD = myGetProperty("AUTOMATICLOTWARD_TOWARD", DEFAULT_AUTOMATICLOTWARD_TOWARD);
 			LOTWITHCOST = myGetProperty("LOTWITHCOST", DEFAULT_LOTWITHCOST);
 			PATIENTSHEET = myGetProperty("PATIENTSHEET", DEFAULT_PATIENTSHEET);
 			OPDCHART = myGetProperty("OPDCHART", DEFAULT_OPDCHART);

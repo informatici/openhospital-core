@@ -214,7 +214,7 @@ public class MedicalStockWardIoOperations
         if(wardTo != null) {
             MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedicalAndLot(wardTo, medical, lot);
             if(medicalWardTo != null) {
-                repository.updateInQuantity(Math.abs(qty), wardTo, medical, lot);
+            	repository.updateInQuantity(Math.abs(qty), wardTo, medical, lot);
             } else {
                 repository.insertMedicalWard(wardTo, medical, Math.abs(qty), lot);
             }
@@ -231,11 +231,11 @@ public class MedicalStockWardIoOperations
 		{
 			if (qty < 0)
 			{
-				repository.updateInQuantity(-qty, ward, medical, lot);
+				repository.updateInQuantity(-qty, ward, medical,lot);
 			}
 			else
 			{
-                repository.updateOutQuantity(qty, ward, medical, lot);
+				repository.updateOutQuantity(qty, ward, medical,lot);
             }				
 		}
 		return result;
@@ -254,7 +254,7 @@ public class MedicalStockWardIoOperations
 		for (int i=0; i<medicalWards.size(); i++)
 		{
 			double qty = Double.valueOf(medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
-			if (qty != 0) {
+			if (qty != 0.0) {
 				medicalWards.get(i).setQty(qty);
 			} else {
 				medicalWards.remove(i);
@@ -278,6 +278,12 @@ public class MedicalStockWardIoOperations
 			if (qty != 0) {
 				medicalWards.get(i).setQty(qty);
 			} else {
+				medicalWards.remove(i);
+			}
+		}
+
+		for (int i = 0; i < medicalWards.size(); i++) {
+			if (medicalWards.get(i).getQty() == 0.0) {
 				medicalWards.remove(i);
 			}
 		}

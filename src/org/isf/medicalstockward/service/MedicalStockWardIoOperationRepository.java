@@ -27,11 +27,11 @@ public interface MedicalStockWardIoOperationRepository extends JpaRepository<Med
     @Modifying 
     @Transactional
     @Query(value = "UPDATE MEDICALDSRWARD SET MDSRWRD_IN_QTI = MDSRWRD_IN_QTI + :quantity WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot", nativeQuery= true)
-    void updateInQuantity(@Param("quantity") Double quantity, @Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
+    public void updateInQuantity(@Param("quantity") Double quantity, @Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);        
     @Modifying 
     @Transactional
-    @Query(value = "UPDATE MEDICALDSRWARD SET MDSRWRD_OUT_QTI = MDSRWRD_OUT_QTI + :quantity WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot", nativeQuery= true)
-    void updateOutQuantity(@Param("quantity") Double quantity, @Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
+    @Query(value = "UPDATE MEDICALDSRWARD SET MDSRWRD_OUT_QTI = MDSRWRD_OUT_QTI + :quantity WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot ", nativeQuery= true)
+    public void updateOutQuantity(@Param("quantity") Double quantity, @Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);   
     @Modifying 
     @Transactional
     @Query(value = "INSERT INTO MEDICALDSRWARD (MDSRWRD_WRD_ID_A, MDSRWRD_MDSR_ID, MDSRWRD_IN_QTI, MDSRWRD_OUT_QTI, MDSRWRD_LT_ID_A) " +

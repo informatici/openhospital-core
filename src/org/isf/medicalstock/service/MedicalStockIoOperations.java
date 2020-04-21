@@ -158,7 +158,7 @@ public class MedicalStockIoOperations {
 				boolean lotExists = lotExists(lotCode);
 				if (!lotExists) 
 				{
-					boolean lotStored = storeLot(lotCode, movement.getLot());
+					boolean lotStored = storeLot(lotCode, movement.getLot(), movement.getMedical());
 					if (!lotStored) 
 					{
 						return false;
@@ -303,17 +303,19 @@ public class MedicalStockIoOperations {
 	 * Stores the specified {@link Lot}.
 	 * @param lotCode the {@link Lot} code.
 	 * @param lot the lot to store.
+	 * @param medical
 	 * @return <code>true</code> if the lot has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurred storing the lot.
 	 */
 	protected boolean storeLot(
 			String lotCode, 
-			Lot lot) throws OHServiceException 
+			Lot lot, Medical medical) throws OHServiceException 
 	{
 		boolean result = false;
 
 		
 		lot.setCode(lotCode);
+		lot.setMedical(medical);
 		lotRepository.save(lot);
 		result = true; 
 		
