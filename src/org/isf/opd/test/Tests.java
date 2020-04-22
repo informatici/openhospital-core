@@ -1,9 +1,8 @@
 package org.isf.opd.test;
 
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.isf.disease.model.Disease;
@@ -28,6 +27,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -280,6 +281,72 @@ public class Tests
 			assertEquals(true, false);
 		}
 		
+		return;
+	}
+
+	@Test
+	public void testIoIsExistsOpdNumShouldReturnTrueWhenOpdWithGivenOPDProgressiveYearAndVisitYearExists() {
+		try	{
+			// given:
+			int code = _setupTestOpd(false);
+			Opd foundOpd = (Opd)jpa.find(Opd.class, code);
+
+			// when:
+			Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), foundOpd.getVisitDate().get(Calendar.YEAR));
+
+			// then:
+			assertTrue(result);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+
+		return;
+	}
+
+	@Test
+	public void testIoIsExistsOpdNumShouldReturnTrueWhenOpdNumExistsAndVisitYearIsNotProvided()	{
+		try	{
+			// given:
+			int code = _setupTestOpd(false);
+			Opd foundOpd = (Opd)jpa.find(Opd.class, code);
+
+			// when:
+			Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 0);
+
+			// then:
+			assertTrue(result);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+
+		return;
+	}
+
+	@Test
+	public void testIoIsExistsOpdNumShouldReturnFalseWhenOpdNumExistsAndVisitYearIsIncorrect() {
+		try	{
+			// given:
+			int code = _setupTestOpd(false);
+			Opd foundOpd = (Opd)jpa.find(Opd.class, code);
+
+			// when:
+			Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 1488);
+
+			// then:
+			assertFalse(result);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+
 		return;
 	}
 
