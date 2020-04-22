@@ -29,7 +29,7 @@ public class OperationRowIoOperations {
     private OperationRowIoOperationRepository repository;
     
     public ArrayList<OperationRow> getOperationRow() throws OHServiceException{
-        return repository.getOperationRow();
+        return repository.findByOrderByOpDateDesc();
     }
 
     public List<OperationRow> getOperationRowByAdmission(Admission adm) throws OHServiceException{
