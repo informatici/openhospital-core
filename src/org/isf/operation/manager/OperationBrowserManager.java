@@ -32,10 +32,15 @@ public class OperationBrowserManager {
 	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException 
 	 */
+	public ArrayList<Operation> getOperationOpd() throws OHServiceException {
+		return ioOperations.getOperationOpd();
+	}
+	public ArrayList<Operation> getOperationAdm() throws OHServiceException {
+		return ioOperations.getOperationAdm();
+	}
 	public ArrayList<Operation> getOperation() throws OHServiceException {
 		return ioOperations.getOperation(null);
 	}
-
 	/**
 	 * return the {@link Operation} with the specified code
 	 * @param code

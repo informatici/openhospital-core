@@ -68,6 +68,10 @@ public class Operation extends Auditable<String>
 	@Version
 	@Column(name="OPE_LOCK")
     private Integer lock;
+	
+	
+	@Column(name="OPE_FOR")
+    private String operFor;
 
 	@Transient
     private volatile int hashCode = 0;
@@ -94,11 +98,17 @@ public class Operation extends Auditable<String>
     public String getCode() {
         return this.code;
     }
-    
     public void setCode(String aCode) {
         this.code = aCode;
     }
+    public void setOpeFor(String operFor) {
+        this.operFor = operFor;
+    }
+    public String getOpeFor() {
+        return this.operFor;
+    }
     
+  
     public String getDescription() {
         return this.description;
     }
