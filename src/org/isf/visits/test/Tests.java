@@ -11,6 +11,7 @@ import org.isf.patient.test.TestPatientContext;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
 import org.isf.visits.model.Visit;
+import org.isf.visits.model.VisitRow;
 import org.isf.visits.service.VisitsIoOperations;
 import org.isf.ward.model.Ward;
 import org.isf.ward.test.TestWard;
@@ -138,7 +139,7 @@ public class Tests
 		{		
 			id = _setupTestVisit(false);
 			Visit foundVisit = (Visit)jpa.find(Visit.class, id); 
-			ArrayList<Visit> visits = visitsIoOperation.getVisits(foundVisit.getPatient().getCode());
+			ArrayList<VisitRow> visits = visitsIoOperation.getVisits(foundVisit.getPatient().getCode());
 			
 			assertEquals(foundVisit.getDate(), visits.get(visits.size()-1).getDate());
 		} 
@@ -165,8 +166,8 @@ public class Tests
 			jpa.persist(ward);
 			jpa.persist(patient);
 			jpa.commitTransaction();
-			Visit visit = testVisit.setup(patient, true, ward);
-			id = visitsIoOperation.newVisit(visit);
+			VisitRow visit = testVisit.setup(patient, true, ward);
+			id = visitsIoOperation.newVisit(visit).getVisitID();
 			
 			_checkVisitIntoDb(id);
 		} 
@@ -225,7 +226,7 @@ public class Tests
 	private int _setupTestVisit(
 			boolean usingSet) throws OHException 
 	{
-		Visit visit;
+		VisitRow visit;
 		Patient patient = testPatient.setup(false);
 		Ward ward = testWard.setup(false);		
 

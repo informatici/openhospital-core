@@ -6,6 +6,7 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.visits.model.Visit;
+import org.isf.visits.model.VisitRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,32 +26,32 @@ public class VisitsIoOperations {
 	 * @return the list of {@link Visit}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Visit> getVisits(
+	public ArrayList<VisitRow> getVisits(
 			Integer patID) throws OHServiceException 
 	{
-		ArrayList<Visit> visits = null;
+		ArrayList<VisitRow> visits = null;
 
 		
 		if (patID != 0) {
-			visits = new ArrayList<Visit>(repository.findAllWherePatientByOrderPatientAndDateAsc(patID));
+			visits = new ArrayList<VisitRow>(repository.findAllWherePatientByOrderPatientAndDateAsc(patID));
 		}
 		else
 		{
-			visits = new ArrayList<Visit>(repository.findAllByOrderPatientAndDateAsc()); 
+			visits = new ArrayList<VisitRow>(repository.findAllByOrderPatientAndDateAsc()); 
 		}
 		
 		return visits;
 	}
 
 	
-	public ArrayList<Visit> getVisitsWard(
+	public ArrayList<VisitRow> getVisitsWard(
 			) throws OHServiceException 
 	{
-		ArrayList<Visit> visits = null;
+		ArrayList<VisitRow> visits = null;
 
 		
 		
-			visits = new ArrayList<Visit>(repository.findAllByOrderPatientAndDateAsc()); 
+			visits = new ArrayList<VisitRow>(repository.findAllByOrderPatientAndDateAsc()); 
 		
 		
 		return visits;
@@ -64,12 +65,12 @@ public class VisitsIoOperations {
 	 * @return the visitID
 	 * @throws OHServiceException 
 	 */
-	public int newVisit(
-			Visit visit) throws OHServiceException 
+	public VisitRow newVisit(
+			VisitRow visit) throws OHServiceException 
 	{		
-		Visit savedVisit = repository.save(visit);
+		VisitRow savedVisit = repository.save(visit);
 		    	
-		return savedVisit.getVisitID();
+		return savedVisit;
 	}
 	
 	/**

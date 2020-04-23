@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.isf.generaldata.MessageBundle;
+import org.isf.medicals.manager.MedicalBrowsingManager;
+import org.isf.medicals.model.Medical;
 import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.patient.manager.PatientBrowserManager;
 import org.isf.patient.model.Patient;
@@ -15,10 +17,14 @@ import org.isf.sms.manager.SmsManager;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
 import org.isf.therapy.model.Therapy;
+import org.isf.therapy.model.TherapyRow;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.visits.model.Visit;
+import org.isf.visits.model.VisitRow;
 import org.isf.visits.service.VisitsIoOperations;
+import org.isf.ward.manager.WardBrowserManager;
+import org.isf.ward.model.Ward;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -40,6 +46,8 @@ public class VisitManager {
 	
 	@Autowired
 	private ApplicationContext applicationContext;
+	@Autowired
+	private WardBrowserManager wrdManager;
 	
 	/**
 	 * returns the list of all {@link Visit}s related to a patID
@@ -48,14 +56,70 @@ public class VisitManager {
 	 * @return the list of {@link Visit}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Visit> getVisits(int patID) throws OHServiceException {
+	public ArrayList<VisitRow> getVisits(int patID) throws OHServiceException {
 		return ioOperations.getVisits(patID);
 	}
 	
-	public ArrayList<Visit> getVisitsWard() throws OHServiceException {
+	public ArrayList<VisitRow> getVisitsWard() throws OHServiceException {
 		return ioOperations.getVisitsWard();
 	}
 	
+	public ArrayList<Visit> getVisits(ArrayList<VisitRow> vsRows) throws OHServiceException {
+		
+		if (vsRows != null) {
+			ArrayList<Visit> visits = new ArrayList<Visit>();
+			
+			for (VisitRow vsRow : vsRows) {
+				
+				visits.add(createVisit(vsRow));
+			}
+			return visits;
+		} else {
+			return null;
+		}
+	}
+	
+
+	public Visit createVisit(VisitRow vs) throws OHServiceException {
+		return createVisit(vs.getVisitID(), vs.getPatient(), vs.getWard(), vs.getDate(), vs.getNote(), vs.getDuration(),
+				vs.getService(), vs.isSms());
+	}
+	private Visit createVisit(int visitID, Patient patient, Ward ward, GregorianCalendar date, String note,
+			String duration, String service, boolean sms) {
+	ArrayList<GregorianCalendar> datesArray = new ArrayList<GregorianCalendar>();
+		
+		GregorianCalendar stepDate = new GregorianCalendar();
+		stepDate.setTime(date.getTime());
+		datesArray.add(new GregorianCalendar(
+				date.get(GregorianCalendar.YEAR),
+				date.get(GregorianCalendar.MONTH),
+				date.get(GregorianCalendar.DAY_OF_MONTH)));
+		
+		
+		GregorianCalendar[] dates = new GregorianCalendar[datesArray.size()];
+		
+		for (int i = 0; i < datesArray.size(); i++) {
+			//dates[i] = new GregorianCalendar();
+			dates[i] = datesArray.get(i);
+			//System.out.println(formatDate(dates[i]));
+		}
+		
+		
+		Visit vs = new Visit(visitID, date,patient, note, sms,  ward, duration,  service);
+		
+		dates = null;
+		
+		return vs;
+	}
+	
+	public VisitRow newVisit(int visitID, GregorianCalendar date, Patient patient,String note, boolean sms, Ward ward,
+			String duration, String service) throws OHServiceException {
+			
+			VisitRow vsRow = new VisitRow(visitID, date, patient, note, sms, ward, duration, service);
+			return newVisit(vsRow);
+		}
+	
+
 	/**
 	 * insert a new {@link Visit} for related Patient
 	 * 
@@ -63,7 +127,7 @@ public class VisitManager {
 	 * @return the visitID
 	 * @throws OHServiceException 
 	 */
-	public int newVisit(Visit visit) throws OHServiceException {
+	public VisitRow newVisit(VisitRow visit) throws OHServiceException {
 		return ioOperations.newVisit(visit);
 	}
 
@@ -76,7 +140,7 @@ public class VisitManager {
 	 * @throws OHServiceException 
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
-	public boolean newVisits(ArrayList<Visit> visits) throws OHServiceException {
+	public boolean newVisits(ArrayList<VisitRow> visits) throws OHServiceException {
 		if (!visits.isEmpty()) {
 			DateTime now = new DateTime();
 			PatientBrowserManager patMan = this.applicationContext.getBean(PatientBrowserManager.class);
@@ -84,10 +148,10 @@ public class VisitManager {
 			ioOperations.deleteAllVisits(patID);
 			smsOp.deleteByModuleModuleID("visit", String.valueOf(patID));
 
-			for (Visit visit : visits) {
+			for (VisitRow visit : visits) {
 				
 				visit.setVisitID(0); //reset ID in order to persist again (otherwise JPA think data is already persisted)
-				int visitID = ioOperations.newVisit(visit);
+				int visitID = ioOperations.newVisit(visit).getVisitID();
 				if (visitID == 0) return false;
 				
 				visit.setVisitID(visitID);
@@ -100,7 +164,7 @@ public class VisitManager {
 						Sms sms = new Sms();
 						sms.setSmsDateSched(date.getTime());
 						sms.setSmsNumber(pat.getTelephone());
-						sms.setSmsText(prepareSmsFromVisit(visit));
+//						sms.setSmsText(prepareSmsFromVisit(visit));
 						sms.setSmsUser(UserBrowsingManager.getCurrentUser());
 						sms.setModule("visit");
 						sms.setModuleID(String.valueOf(patID));
