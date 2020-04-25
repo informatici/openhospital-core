@@ -24,19 +24,8 @@ public interface AccountingBillItemsIoOperationRepository extends JpaRepository<
 	void deleteWhereId(@Param("billId") Integer billId);
 
 	/*
-	Cannot move this @Query to non-native.
-	More appropriate approach is to add new BillItems to Bill instance, then save the
-	Bill instance.  FIXME KTM 3/8/2020
+	This 'GROUP BY' does not work in more recent versions of mySQL.  FIXME KTM 4/25/2020
 	 */
-	@Modifying
-	@Transactional
-	@Query(value = "INSERT INTO BILLITEMS (" +
-			"BLI_ID_BILL, BLI_IS_PRICE, BLI_ID_PRICE, BLI_ITEM_DESC, BLI_ITEM_AMOUNT, BLI_QTY) "+
-			"VALUES (:id,:isPrice,:price,:description,:amount,:qty)", nativeQuery= true)
-	void insertBillItem(
-			@Param("id") Integer id, @Param("isPrice") Boolean isPrice, @Param("price") String price,
-			@Param("description") String description, @Param("amount") Double amount, @Param("qty") Integer qty);
-	
-	@Query(value = "SELECT bi from BillItems bi GROUP BY bi.itemDescription")
+	@Query(value = "SELECT * FROM BILLITEMS GROUP BY BLI_ITEM_DESC", nativeQuery = true)
 	ArrayList<BillItems> findAllGroupByDesc();
 }
