@@ -9,18 +9,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.imageio.ImageIO;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.Version;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
@@ -174,7 +163,14 @@ public class Patient extends Auditable<String>
 	
 	@Column(name="PAT_PHOTO")
 	@Lob
+	@Deprecated /** This will be removed soon, and replace through association with PatientPhoto */
 	private Blob photo;
+
+	@OneToOne(fetch = FetchType.LAZY,
+			mappedBy = "patient",
+			cascade = CascadeType.ALL,
+			optional = false)
+	private PatientProfilePhoto patientProfilePhoto;
 	
 	@Transient
 	private Image photoImage;
@@ -488,11 +484,13 @@ public class Patient extends Auditable<String>
 	public void setMother_name(String mother_name) {
 		this.mother_name = mother_name;
 	}
-	
+
+	@Deprecated
 	public Blob getBlobPhoto() {
 		return photo;
 	}
-	
+
+	@Deprecated
 	public void setBlobPhoto(Blob photo) {
 		this.photo = photo;
 	}
@@ -564,7 +562,22 @@ public class Patient extends Auditable<String>
         this.deleted = deleted;
     }
 
-    @Override
+	public PatientProfilePhoto getPatientProfilePhoto() {
+		return patientProfilePhoto;
+	}
+
+	public void setPatientProfilePhoto(final PatientProfilePhoto patientProfilePhoto) {
+		if (patientProfilePhoto == null) {
+			if (this.patientProfilePhoto != null) {
+				this.patientProfilePhoto.setPatient(null);
+			}
+		} else {
+			patientProfilePhoto.setPatient(this);
+		}
+		this.patientProfilePhoto = patientProfilePhoto;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;

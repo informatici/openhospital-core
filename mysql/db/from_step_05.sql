@@ -54,3 +54,4 @@ source step_57_multiple_operations_in_admission.sql;
 source step_58_add_next_visit_field_on_opd.sql;
 source step_59_audit_to_all_tables.sql;
 source step_60_patient_profession_and_marital_status.sql;
+source step_61_add_patient_photo_table.sql;
