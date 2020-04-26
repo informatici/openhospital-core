@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface PatVacIoOperationRepository extends JpaRepository<PatientVaccine, Integer>, PatVacIoOperationRepositoryCustom {
 
@@ -14,4 +16,6 @@ public interface PatVacIoOperationRepository extends JpaRepository<PatientVaccin
     
     @Query(value = "SELECT MAX(PAV_YPROG) FROM PATIENTVACCINE WHERE YEAR(PAV_DATE) = :year", nativeQuery= true)
     Integer findMaxCodeWhereVaccineDate(@Param("year") Integer year);
+
+    List<PatientVaccine> findByPatient_code(int patientId);
 }

@@ -26,10 +26,12 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientMergedEvent;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,8 +42,11 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class PatientIoOperations 
 {
+	public static final String NOT_DELETED_STATUS = "N";
 	@Autowired
 	private PatientIoOperationRepository repository;
+	@Autowired
+	private ApplicationEventPublisher applicationEventPublisher;
 	
 	/**
 	 * method that returns the full list of Patients not logically deleted
@@ -54,7 +59,7 @@ public class PatientIoOperations
 		ArrayList<Patient> pPatient = null;
 		
 		
-		pPatient = new ArrayList<Patient>(repository.findAllWhereDeleted());			
+		pPatient = new ArrayList<Patient>(repository.findByDeletedOrDeletedIsNull(NOT_DELETED_STATUS));
 					
 		return pPatient;
 	}
@@ -116,7 +121,7 @@ public class PatientIoOperations
 		Patient patient = null;	
 		
 		
-		pPatient = new ArrayList<Patient>(repository.findAllWhereNameAndDeletedOrderedByName(name));
+		pPatient = new ArrayList<Patient>(repository.findByNameAndDeletedOrderByName(name, NOT_DELETED_STATUS));
 		if (pPatient.size() > 0)
 		{			
 			patient = pPatient.get(pPatient.size()-1);			
@@ -139,7 +144,7 @@ public class PatientIoOperations
 		Patient patient = null;	
 		
 		
-		pPatient = new ArrayList<Patient>(repository.findAllWhereIdAndDeleted(code));
+		pPatient = new ArrayList<Patient>(repository.findAllWhereIdAndDeleted(code, NOT_DELETED_STATUS));
 		if (pPatient.size() > 0)
 		{			
 			patient = pPatient.get(pPatient.size()-1);			
@@ -162,7 +167,7 @@ public class PatientIoOperations
 		Patient patient = null;	
 		
 		
-		pPatient = new ArrayList<Patient>(repository.findAllWhereId(code));
+		pPatient = new ArrayList<Patient>(repository.findByCode(code));
 		if (pPatient.size() > 0)
 		{			
 			patient = pPatient.get(pPatient.size()-1);			
@@ -311,36 +316,16 @@ public class PatientIoOperations
 	 * method that merge all clinic details under the same PAT_ID
 	 * 
 	 * @param mergedPatient
-	 * @param patient2
+	 * @param obsoletePatient
 	 * @return true - if no OHServiceExceptions occurred
 	 * @throws OHServiceException 
 	 */
-	public boolean mergePatientHistory(
-			Patient mergedPatient, 
-			Patient patient2) throws OHServiceException {
-		int mergedID = mergedPatient.getCode();
-		int obsoleteID = patient2.getCode();
-		boolean result = false;
-		int updates = 0;
+	@Transactional
+	public boolean mergePatientHistory(Patient mergedPatient, Patient obsoletePatient) throws OHServiceException {
+		repository.updateDelete(obsoletePatient.getCode());
+		applicationEventPublisher.publishEvent(new PatientMergedEvent(obsoletePatient, mergedPatient));
 		
-		
-		updates = repository.updateAdmission(mergedID, obsoleteID);
-		updates += repository.updateExamination(mergedID, obsoleteID);	    
-		updates += repository.updateLaboratory(mergedID, mergedPatient.getName(), mergedPatient.getAge(), String.valueOf(mergedPatient.getSex()), obsoleteID);
-		updates += repository.updateOpd(mergedID, mergedPatient.getAge(), String.valueOf(mergedPatient.getSex()), obsoleteID);
-		updates += repository.updateBill(mergedID, mergedPatient.getName(), obsoleteID);
-		updates += repository.updateMedicalStock(mergedID, obsoleteID);
-		updates += repository.updateTherapy(mergedID, obsoleteID);
-		updates += repository.updateVisit(mergedID, obsoleteID);
-		updates += repository.updatePatientVaccine(mergedID, obsoleteID);
-		updates += repository.updateDelete(obsoleteID); 	
-		if (updates > 0)
-		{
-			result = true;
-		}
-		
-		
-		return result;
+		return true;
 	}
 
 	/**
@@ -350,15 +335,8 @@ public class PatientIoOperations
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			Integer code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;	
+	public boolean isCodePresent(Integer code) throws OHServiceException {
+		return repository.exists(code);
 	}
 	/**
 	 * Get the patient list filter by head patient

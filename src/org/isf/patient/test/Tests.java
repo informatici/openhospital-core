@@ -2,14 +2,18 @@ package org.isf.patient.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.isf.admission.test.TestAdmission;
+import org.isf.admission.test.TestAdmissionContext;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -88,7 +92,7 @@ public class Tests
 				
 		return;
 	}
-	
+
 	@Test
 	public void testPatientSets() 
 	{
@@ -338,15 +342,36 @@ public class Tests
 	}
 	
 	@Test
-	public void testMergePatientHistory()
-	{		
-		//TODO: function not yet ported to JPA
-		assertEquals(1, 1);
-		
-		return;
-	}	
-	
-	
+	public void testMergePatientHistory() throws OHException, OHServiceException {
+    	try {
+			// given:
+			jpa.beginTransaction();
+			Patient mergedPatient = testPatient.setup(false);
+			jpa.persist(mergedPatient);
+			Patient obsoletePatient = testPatient.setup(false);
+			jpa.persist(obsoletePatient);
+			jpa.commitTransaction();
+
+			// when:
+			patientIoOperation.mergePatientHistory(mergedPatient, obsoletePatient);
+
+			// then:
+			assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(mergedPatient, obsoletePatient);
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		} finally {
+			testPatientContext.deleteNews(jpa); // we create 2 entries so additional deletion needed
+		}
+	}
+
+	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) throws OHException {
+		Patient mergedPatientResult = (Patient) jpa.find(Patient.class, mergedPatient.getCode());
+		Patient obsoletePatientResult = (Patient) jpa.find(Patient.class, obsoletePatient.getCode());
+		assertEquals("Y", obsoletePatientResult.getDeleted());
+		assertEquals("N", mergedPatientResult.getDeleted());
+	}
+
 	private void _saveContext() throws OHException 
     {	
 		testPatientContext.saveAll(jpa);

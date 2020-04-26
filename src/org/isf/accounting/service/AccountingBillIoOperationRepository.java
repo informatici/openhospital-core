@@ -22,6 +22,8 @@ public interface AccountingBillIoOperationRepository
 
 	List<Bill> findAllByOrderByDateDesc();
 
+	List<Bill> findByPatient_code(int patientCode);
+
 	@Modifying
 	@Query(value = "UPDATE BILLS SET BLL_STATUS = 'D' WHERE BLL_ID = :billId", nativeQuery = true)
 	void updateDeleteWhereId(@Param("billId") Integer billId);

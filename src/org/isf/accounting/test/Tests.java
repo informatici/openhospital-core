@@ -11,6 +11,7 @@ import org.isf.accounting.model.BillItems;
 import org.isf.accounting.model.BillPayments;
 import org.isf.accounting.service.AccountingIoOperations;
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.test.TestPatient;
 import org.isf.patient.test.TestPatientContext;
 import org.isf.priceslist.model.PriceList;
@@ -25,6 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -46,6 +48,8 @@ public class Tests
 
     @Autowired
     AccountingIoOperations accountingIoOperation;
+    @Autowired
+    ApplicationEventPublisher applicationEventPublisher;
 	
 	@BeforeClass
     public static void setUpClass()  
@@ -123,7 +127,7 @@ public class Tests
 				
 		return;
 	}
-	
+
 	@Test
 	public void testBillSets() 
 	{
@@ -222,6 +226,26 @@ public class Tests
 		}
 		
 		return;
+	}
+
+	@Test
+	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() {
+		try {
+			// given:
+			int id = _setupTestBill(false);
+			Bill foundBill = (Bill)jpa.find(Bill.class, id);
+			Patient mergedPatient = _setupTestPatient(false);
+
+			// when:
+			applicationEventPublisher.publishEvent(new PatientMergedEvent(foundBill.getPatient(), mergedPatient));
+
+			// then:
+			Bill resultBill = (Bill)jpa.find(Bill.class, id);
+			assertEquals(mergedPatient.getCode(), resultBill.getPatient().getCode());
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
 	}
 
 	@Test
@@ -844,6 +868,20 @@ public class Tests
 		testPatient.check(foundBillPayment.getBill().getPatient());
 		
 		return;
+	}
+
+	private Patient _setupTestPatient(
+		boolean usingSet) throws OHException
+	{
+		Patient patient;
+
+
+		jpa.beginTransaction();
+		patient = testPatient.setup(usingSet);
+		jpa.persist(patient);
+		jpa.commitTransaction();
+
+		return patient;
 	}
 	
 }
