@@ -68,6 +68,12 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	
 	@Column(name="PEX_SAT")
 	private Double pex_sat;
+
+	@Column(name="PEX_RR")
+	private Integer pex_rr;
+
+	@Column(name="PEX_AUSC")
+	private String pex_ausc;
 	
 	@Column(name="PEX_HGT")
 	private Integer pex_hgt;
@@ -108,6 +114,8 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	 * @param pex_diuresis
 	 * @param pex_diuresis_desc
 	 * @param pex_bowel_desc
+	 * @param pex_rr
+	 * @param pex_ausc
 	 * @param pex_note
 	 */
 	public PatientExamination(
@@ -124,6 +132,8 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 			Integer pex_diuresis,
 			String pex_diuresis_desc,
 			String pex_bowel_desc,
+			Integer pex_rr,
+			String pex_ausc,
 			String pex_note) {
 		super();
 		this.pex_date = pex_date;
@@ -139,6 +149,8 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 		this.pex_diuresis = pex_diuresis;
 		this.pex_diuresis_desc = pex_diuresis_desc;
 		this.pex_bowel_desc = pex_bowel_desc;
+		this.pex_rr= pex_rr;
+		this.pex_ausc = pex_ausc;
 		this.pex_note = pex_note;
 	}
 
@@ -296,6 +308,34 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	 */
 	public void setPex_sat(Double pex_sat) {
 		this.pex_sat = pex_sat;
+	}
+
+	/**
+	 * @return the pex_rr
+	 */
+	public Integer getPex_rr() {
+		return pex_rr;
+	}
+
+	/**
+	 * @param pex_rr the pex_rr to set
+	 */
+	public void setPex_rr(Integer pex_rr) {
+		this.pex_rr = pex_rr;
+	}
+
+	/**
+	 * @return the pex_ausc
+	 */
+	public String getPex_ausc() {
+		return pex_ausc;
+	}
+
+	/**
+	 * @param pex_ausc the pex_ausc to set
+	 */
+	public void setPex_ausc(String pex_ausc) {
+		this.pex_ausc = pex_ausc;
 	}
 
 	/**

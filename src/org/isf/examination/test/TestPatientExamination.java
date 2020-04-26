@@ -23,6 +23,8 @@ public class TestPatientExamination
 	private Integer pex_diuresis = 100;
 	private String pex_diuresis_desc = "physiological";
 	private String pex_bowel_desc = "regular";
+	private Integer pex_rr = 20;
+	private String pex_ausc = "normal";
 	private String pex_note = "";
 	
 	
@@ -43,7 +45,7 @@ public class TestPatientExamination
 			// Create Patient Examination with all parameters 
 			patientExamination = new PatientExamination(pex_date, patient, pex_height, pex_weight, 
 					pex_ap_min, pex_ap_max, pex_hr, pex_temp, pex_sat, 
-					pex_hgt, pex_diuresis, pex_diuresis_desc, pex_bowel_desc, pex_note);	
+					pex_hgt, pex_diuresis, pex_diuresis_desc, pex_bowel_desc, pex_rr, pex_ausc, pex_note);	
 		}
 		
 		return patientExamination;
@@ -63,6 +65,8 @@ public class TestPatientExamination
 		patientExamination.setPex_sat(pex_sat);
 		patientExamination.setPex_temp(pex_temp);
 		patientExamination.setPex_weight(pex_weight);
+		patientExamination.setPex_ausc(pex_ausc);
+		patientExamination.setPex_rr(pex_rr);
 		
 		return;
 	}

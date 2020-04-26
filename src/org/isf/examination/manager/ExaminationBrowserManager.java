@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.isf.examination.model.PatientExamination;
 import org.isf.examination.service.ExaminationOperations;
 import org.isf.generaldata.ExaminationParameters;
 import org.isf.generaldata.MessageBundle;
+import org.isf.menu.manager.Context;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -26,6 +28,8 @@ public class ExaminationBrowserManager {
 	private ExaminationOperations ioOperations;
 	protected HashMap<String, String> diuresisDescriptionHashMap;
 	protected HashMap<String, String> bowelDescriptionHashMap;
+
+	protected LinkedHashMap<String, String> auscultationHashMap;
 
 	/**
 	 * Default PatientExamination
@@ -45,6 +49,8 @@ public class ExaminationBrowserManager {
 				new Integer(ExaminationParameters.DIURESIS_INIT),
 				null,
 				null,
+				new Integer(ExaminationParameters.RR_INIT),
+				ExaminationParameters.AUSC_INIT,
 				"");
 		return defaultPatient;
 	}
@@ -56,8 +62,45 @@ public class ExaminationBrowserManager {
 		PatientExamination newPatientExamination = new PatientExamination(new Timestamp(new Date().getTime()), lastPatientExamination.getPatient(), lastPatientExamination.getPex_height(),
 				lastPatientExamination.getPex_weight(), lastPatientExamination.getPex_ap_min(), lastPatientExamination.getPex_ap_max(), lastPatientExamination.getPex_hr(), 
 				lastPatientExamination.getPex_temp(), lastPatientExamination.getPex_sat(), lastPatientExamination.getPex_hgt(),
-				lastPatientExamination.getPex_diuresis(), lastPatientExamination.getPex_diuresis_desc(), lastPatientExamination.getPex_bowel_desc(), lastPatientExamination.getPex_note());
+				lastPatientExamination.getPex_diuresis(), lastPatientExamination.getPex_diuresis_desc(), lastPatientExamination.getPex_bowel_desc(), lastPatientExamination.getPex_rr(), 
+				lastPatientExamination.getPex_ausc(),lastPatientExamination.getPex_note());
 		return newPatientExamination;
+	}
+
+	private void buildAuscultationHashMap() {
+		auscultationHashMap = new LinkedHashMap<String, String>();
+		auscultationHashMap.put("unknown", MessageBundle.getMessage("angal.examination.auscultation.unknown"));
+		auscultationHashMap.put("normal", MessageBundle.getMessage("angal.examination.auscultation.normal"));
+		auscultationHashMap.put("wheezes", MessageBundle.getMessage("angal.examination.auscultation.wheezes"));
+		auscultationHashMap.put("rhonchi", MessageBundle.getMessage("angal.examination.auscultation.rhonchi"));
+		auscultationHashMap.put("crackles", MessageBundle.getMessage("angal.examination.auscultation.crackles"));
+		auscultationHashMap.put("stridor", MessageBundle.getMessage("angal.examination.auscultation.stridor"));
+		auscultationHashMap.put("bronchial", MessageBundle.getMessage("angal.examination.auscultation.bronchial"));
+	}
+
+	public String[] getAuscultationList() {	
+		if (auscultationHashMap == null) buildAuscultationHashMap();
+		String[] auscultationDescriptionList = auscultationHashMap.values().toArray(new String[0]);
+		return auscultationDescriptionList;
+	}
+
+	public String getAuscultationTranslated(String auscultationKey) {
+		if (auscultationHashMap == null) buildAuscultationHashMap();
+		if (auscultationKey == null || !auscultationHashMap.containsKey(auscultationKey)) 
+			return MessageBundle.getMessage("angal.examination.auscultation.unknown"); 
+		else return auscultationHashMap.get(auscultationKey);
+	}
+
+	public String getAuscultationKey(String description) {
+		if (auscultationHashMap == null) buildAuscultationHashMap();
+		String key = "undefined";
+		for (String value : auscultationHashMap.keySet()) {
+			if (auscultationHashMap.get(value).equals(description)) {
+				key = value;
+				break;
+			}
+		}
+		return key;
 	}
 
 	/**

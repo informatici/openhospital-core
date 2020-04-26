@@ -2,6 +2,7 @@ package org.isf.patient.manager;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.isf.accounting.manager.BillBrowserManager;
@@ -30,6 +31,10 @@ public class PatientBrowserManager {
 	
 	@Autowired
 	private BillBrowserManager billManager;
+
+	protected LinkedHashMap<String, String> maritalHashMap;
+
+	protected LinkedHashMap<String, String> professionHashMap;
 	
 	public PatientIoOperations getIoOperations() {
 		return ioOperations;
@@ -128,6 +133,81 @@ public class PatientBrowserManager {
         return ioOperations.getNextPatientCode();
 	}
 
+	private void buildMaritalHashMap() {
+		maritalHashMap = new LinkedHashMap<String, String>();
+		maritalHashMap.put("unknown", MessageBundle.getMessage("angal.patient.maritalstatusunknown"));
+		maritalHashMap.put("single", MessageBundle.getMessage("angal.patient.maritalstatussingle"));
+		maritalHashMap.put("married", MessageBundle.getMessage("angal.patient.maritalstatusmarried"));
+		maritalHashMap.put("divorced", MessageBundle.getMessage("angal.patient.maritalstatusdivorced"));
+		maritalHashMap.put("widowed", MessageBundle.getMessage("angal.patient.maritalstatuswidowed"));
+	}
+
+	public String[] getMaritalList() {	
+		if (maritalHashMap == null) buildMaritalHashMap();
+		String[] maritalDescriptionList = maritalHashMap.values().toArray(new String[0]);
+		return maritalDescriptionList;
+	}
+
+	public String getMaritalTranslated(String maritalKey) {
+		if (maritalHashMap == null) buildMaritalHashMap();
+		if (maritalKey == null || !maritalHashMap.containsKey(maritalKey)) 
+			return MessageBundle.getMessage("angal.patient.maritalstatusunknown"); 
+		else return maritalHashMap.get(maritalKey);
+	}
+
+	public String getMaritalKey(String description) {
+		if (maritalHashMap == null) buildMaritalHashMap();
+		String key = "undefined";
+		for (String value : maritalHashMap.keySet()) {
+			if (maritalHashMap.get(value).equals(description)) {
+				key = value;
+				break;
+			}
+		}
+		return key;
+	}
+
+	private void buildProfessionHashMap() {
+		professionHashMap = new LinkedHashMap<String, String>();
+		professionHashMap.put("unknown", MessageBundle.getMessage("angal.patient.profession.unknown"));
+		professionHashMap.put("other", MessageBundle.getMessage("angal.patient.profession.other"));
+		professionHashMap.put("farming", MessageBundle.getMessage("angal.patient.profession.farming"));
+		professionHashMap.put("construction", MessageBundle.getMessage("angal.patient.profession.construction"));
+		professionHashMap.put("medicine", MessageBundle.getMessage("angal.patient.profession.medicine"));
+		professionHashMap.put("foodhospitality", MessageBundle.getMessage("angal.patient.profession.foodhospitality"));
+		professionHashMap.put("homemaker", MessageBundle.getMessage("angal.patient.profession.homemaker"));
+		professionHashMap.put("mechanic", MessageBundle.getMessage("angal.patient.profession.mechanic"));
+		professionHashMap.put("business", MessageBundle.getMessage("angal.patient.profession.business"));
+		professionHashMap.put("janitorial", MessageBundle.getMessage("angal.patient.profession.janitorial"));
+		professionHashMap.put("mining", MessageBundle.getMessage("angal.patient.profession.mining"));
+		professionHashMap.put("engineering", MessageBundle.getMessage("angal.patient.profession.engineering"));
+	}
+
+	public String[] getProfessionList() {	
+		if (professionHashMap == null) buildProfessionHashMap();
+		String[] professionDescriptionList = professionHashMap.values().toArray(new String[0]);
+		return professionDescriptionList;
+	}
+
+	public String getProfessionTranslated(String professionKey) {
+		if (professionHashMap == null) buildProfessionHashMap();
+		if (professionKey == null || !professionHashMap.containsKey(professionKey)) 
+			return MessageBundle.getMessage("angal.patient.maritalstatusunknown"); 
+		else return professionHashMap.get(professionKey);
+	}
+
+	public String getProfessionKey(String description) {
+		if (professionHashMap == null) buildProfessionHashMap();
+		String key = "undefined";
+		for (String value : professionHashMap.keySet()) {
+			if (professionHashMap.get(value).equals(description)) {
+				key = value;
+				break;
+			}
+		}
+		return key;
+	}
+	
     protected List<OHExceptionMessage> validateMergePatients(Patient mergedPatient, Patient patient2) throws OHServiceException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         boolean admitted = false;
