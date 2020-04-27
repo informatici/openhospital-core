@@ -16,13 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface AccountingBillPaymentIoOperationRepository extends JpaRepository<BillPayments, Integer>, AccountingBillPaymentIoOperationRepositoryCustom {
 
-//	@Query(value = "SELECT DISTINCT BLP_USR_ID_A FROM BILLPAYMENTS ORDER BY BLP_USR_ID_A ASC", nativeQuery= true)
-	@Query(value = "SELECT distinct BP.user from BillPayments bp ORDER BY bp.user ASC")
+	@Query(value = "select distinct bp.user FROM BillPayments bp ORDER BY bp.user asc")
 	List<String> findUserDistinctByOrderByUserAsc();
 
-	@Query("SELECT BP FROM BillPayments BP WHERE DATE(BLP_DATE) BETWEEN ?1 AND ?2"
-				+ " ORDER BY BLP_ID_BILL, BLP_DATE ASC")
-	List<BillPayments> findByDateBetweenOrderByIdAscDateAsc(Date start, Date end);
+	@Query("SELECT BP FROM BillPayments BP WHERE DATE(BP.date) between :start AND :end"
+				+ " ORDER BY BP.bill.id, bp.date asc")
+	List<BillPayments> findByDateBetweenOrderByIdAscDateAsc(@Param("start") Date start, @Param("end") Date end);
 
 	@Query(value = "SELECT BP FROM BillPayments BP ORDER BY BP.bill, BP.date ASC")
 	List<BillPayments> findAllByOrderByBillAndDate();

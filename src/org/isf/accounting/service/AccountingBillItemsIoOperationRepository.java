@@ -20,12 +20,9 @@ public interface AccountingBillItemsIoOperationRepository extends JpaRepository<
 	
 	@Modifying
 	@Transactional
-	@Query(value = "delete BillItems where id = :billId")
+	@Query(value = "delete from BillItems b where b.id = :billId")
 	void deleteWhereId(@Param("billId") Integer billId);
 
-	/*
-	This 'GROUP BY' does not work in more recent versions of mySQL.  FIXME KTM 4/25/2020
-	 */
-	@Query(value = "SELECT * FROM BILLITEMS GROUP BY BLI_ITEM_DESC", nativeQuery = true)
+	@Query(value = "select b from BillItems b group by b.itemDescription")
 	ArrayList<BillItems> findAllGroupByDesc();
 }

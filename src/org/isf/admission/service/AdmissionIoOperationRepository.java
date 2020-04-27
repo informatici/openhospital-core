@@ -10,24 +10,24 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AdmissionIoOperationRepository extends JpaRepository<Admission, Integer>, AdmissionIoOperationRepositoryCustom {    
-    @Query(value = "SELECT * FROM ADMISSION WHERE ADM_IN = 1 AND ADM_WRD_ID_A = :ward", nativeQuery= true)
+public interface AdmissionIoOperationRepository extends JpaRepository<Admission, Integer>, AdmissionIoOperationRepositoryCustom {
+
+	@Query(value = "select a FROM Admission a WHERE a.admitted = 1 AND a.ward.code = :ward")
     List<Admission> findAllWhereWard(@Param("ward") String ward);
-    
-    @Query(value = "SELECT * FROM ADMISSION WHERE ADM_PAT_ID=:patient AND ADM_DELETED='N' AND ADM_IN = 1", nativeQuery= true)
+
+	@Query(value = "select a FROM Admission a WHERE a.patient.code = :patient and a.deleted='N' and a.admitted = 1")
     Admission findOneWherePatientIn(@Param("patient") Integer patient);
 
-    @Query(value = "SELECT * FROM ADMISSION WHERE ADM_PAT_ID=:patient and ADM_DELETED='N' ORDER BY ADM_DATE_ADM ASC", nativeQuery= true)
+	@Query(value = "select a FROM Admission a WHERE a.patient.code =:patient and a.deleted='N' order by a.admDate asc")
     List<Admission> findAllWherePatientByOrderByDate(@Param("patient") Integer patient);
-        
-    @Query(value = "SELECT * FROM ADMISSION " +
-    		"WHERE ADM_WRD_ID_A=:ward AND ADM_DATE_ADM >= :dateFrom AND ADM_DATE_ADM <= :dateTo AND ADM_DELETED='N' " +
-    		"ORDER BY ADM_YPROG DESC", nativeQuery= true)
+
+	@Query(value = "select a FROM Admission a " +
+			"WHERE a.ward.code =:ward AND a.admDate >= :dateFrom AND a.admDate <= :dateTo AND a.deleted ='N' " +
+			"ORDER BY a.yProg desc ")
     List<Admission> findAllWhereWardAndDates(
             @Param("ward") String ward, @Param("dateFrom") GregorianCalendar dateFrom,
             @Param("dateTo") GregorianCalendar dateTo);
-    
-    @Query(value = "SELECT * FROM ADMISSION WHERE ADM_IN = 1 AND ADM_WRD_ID_A = :ward AND ADM_DELETED = 'N'", nativeQuery= true)
-    List<Admission> findAllWhereWardIn(@Param("ward") String ward);
-    
+
+	@Query(value = "select a FROM Admission a WHERE a.admitted =1 and a.ward.code = :ward and a.deleted = 'N'")
+	List<Admission> findAllWhereWardIn(@Param("ward") String ward);
 }
