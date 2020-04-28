@@ -43,7 +43,7 @@ public class DicomIoOperations
 			int patientID, 
 			String seriesNumber) throws OHServiceException 
 	{
-		List<FileDicom> dicomList  = repository.findAllWhereIdAndNumberByOrderNameAsc((long)patientID, seriesNumber);
+		List<FileDicom> dicomList  = repository.findAllWhereIdAndNumberByOrderNameAsc(idPaziente, numeroSerie);
 		Long[] dicomIdArray = new Long[dicomList.size()];	
 		
 		
@@ -124,7 +124,7 @@ public class DicomIoOperations
 	public FileDicom[] loadPatientFiles(
 			int patientID) throws OHServiceException 
 	{
-		List<FileDicom> dicomList = repository.findAllWhereIdOrderSerDateDesc((long) patientID);
+		List<FileDicom> dicomList = repository.findAllWhereIdGroupByUid(patientID);
 
 		FileDicom[] dicoms = new FileDicom[dicomList.size()];	
 		for (int i=0; i<dicomList.size(); i++)
@@ -147,7 +147,7 @@ public class DicomIoOperations
 	public boolean exist(
 			FileDicom dicom) throws OHServiceException 
 	{
-		List<FileDicom> dicomList = repository.findAllWhereIdAndFileAndUid((long) dicom.getPatId(), dicom.getDicomSeriesNumber(), dicom.getDicomInstanceUID());
+		List<FileDicom> dicomList = repository.findAllWhereIdAndFileAndUid(dicom.getPatId(), dicom.getDicomSeriesNumber(), dicom.getDicomInstanceUID());
 	
 		return (dicomList.size() > 0);
 	}

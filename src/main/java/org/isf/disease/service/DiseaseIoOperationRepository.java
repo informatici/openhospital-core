@@ -9,42 +9,58 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DiseaseIoOperationRepository extends JpaRepository<Disease, String> {   
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A WHERE DIS_ID_A = :code", nativeQuery= true)
-    Disease findOneByCode(@Param("code") int code);
-    @Query(value = "SELECT * FROM DISEASE WHERE DIS_DESC = :description AND DIS_DCL_ID_A = :code", nativeQuery= true)
-    Disease findOneByDescriptionAndTypeCode(@Param("description") String description, @Param("code") String code);
+public interface DiseaseIoOperationRepository extends JpaRepository<Disease, String> {
 
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A where DCL_ID_A like :code order BY DIS_DESC", nativeQuery= true)
+    Disease findOneByCode(@Param("code") String code);
+
+	@Query(value = "select d FROM Disease d WHERE d.description = :description AND d.diseaseType.code = :code")
+	Disease findOneByDescriptionAndTypeCode(@Param("description") String description, @Param("code") String code);
+
+	@Query(value = "select d FROM Disease d where d.diseaseType.code like :code order BY d.description")
     List<Disease> findAllByDiseaseTypeCode(@Param("code") String code);
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A where DCL_ID_A like :code and (DIS_OPD_INCLUDE=1 or DIS_OPD_INCLUDE is null) order BY DIS_DESC", nativeQuery= true)
+
+	@Query(value = "select d FROM Disease d where d.diseaseType.code like :code and d.opdInclude=true order BY d.description")
     List<Disease> findAllByDiseaseTypeCodeAndOpd(@Param("code") String code);
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A where DCL_ID_A like :code and (DIS_IPD_IN_INCLUDE=1 or DIS_IPD_IN_INCLUDE is null) order BY DIS_DESC", nativeQuery= true)
+
+	@Query(value = "select d FROM Disease d where d.diseaseType.code like :code and d.ipdInInclude=true order BY d.description")
     List<Disease> findAllByDiseaseTypeCodeAndIpdIn(@Param("code") String code);
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A where DCL_ID_A like :code and (DIS_IPD_OUT_INCLUDE=1 or DIS_IPD_OUT_INCLUDE is null) order BY DIS_DESC", nativeQuery= true)
+
+	@Query(value = "select d FROM Disease d where d.diseaseType.code like :code and d.ipdOutInclude=true order BY d.description")
     List<Disease> findAllByDiseaseTypeCodeAndIpdOut(@Param("code") String code);
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A where DCL_ID_A like :code and (DIS_IPD_IN_INCLUDE=1 or DIS_IPD_IN_INCLUDE is null) and  (DIS_IPD_IN_INCLUDE=1 or DIS_IPD_IN_INCLUDE is null) order BY DIS_DESC", nativeQuery= true)
+
+	@Query(value = "select d FROM Disease d where d.diseaseType.code like :code and d.ipdInInclude=true and d.opdInclude=true order BY d.description")
     List<Disease> findAllByDiseaseTypeCodeAndOpdAndIpdIn(@Param("code") String code);
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A where DCL_ID_A like :code and (DIS_IPD_IN_INCLUDE=1 or DIS_IPD_IN_INCLUDE is null) and (DIS_IPD_OUT_INCLUDE=1 or DIS_IPD_OUT_INCLUDE is null) order BY DIS_DESC", nativeQuery= true)
+
+	@Query(value = "select d FROM Disease d where d.diseaseType.code like :code and d.opdInclude=true and d.ipdOutInclude=true order BY d.description")
     List<Disease> findAllByDiseaseTypeCodeAndOpdAndIpdOut(@Param("code") String code);
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A where DCL_ID_A like :code and (DIS_IPD_IN_INCLUDE=1 or DIS_IPD_IN_INCLUDE is null) and (DIS_IPD_OUT_INCLUDE=1 or DIS_IPD_OUT_INCLUDE is null) order BY DIS_DESC", nativeQuery= true)
+
+	@Query(value = "select d FROM Disease d where d.diseaseType.code like :code and d.ipdInInclude=true and d.ipdOutInclude=true order BY d.description")
     List<Disease> findAllByDiseaseTypeCodeAndIpdInAndIpdOut(@Param("code") String code);
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A where DCL_ID_A like :code and (DIS_IPD_IN_INCLUDE=1 or DIS_IPD_IN_INCLUDE is null) and  (DIS_IPD_IN_INCLUDE=1 or DIS_IPD_IN_INCLUDE is null) and (DIS_IPD_OUT_INCLUDE=1 or DIS_IPD_OUT_INCLUDE is null) order BY DIS_DESC", nativeQuery= true)
+
+	@Query(value = "select d FROM Disease d where d.diseaseType.code like :code and d.opdInclude=true and d.ipdInInclude=true and d.ipdOutInclude=true order BY d.description")
     List<Disease> findAllByDiseaseTypeCodeAndOpdAndIpdInAndIpdOut(@Param("code") String code);
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A order BY DIS_DESC", nativeQuery= true)
+
+	@Query(value = "select d FROM Disease d order by d.description")
     List<Disease> findAll();
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A where (DIS_OPD_INCLUDE=1 or DIS_OPD_INCLUDE is null) order BY DIS_DESC", nativeQuery= true)
+
+	@Query(value = "select d FROM Disease d where d.opdInclude=true order BY d.description")
     List<Disease> findAllByOpd();
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A where (DIS_IPD_IN_INCLUDE=1 or DIS_IPD_IN_INCLUDE is null) order BY DIS_DESC", nativeQuery= true)
+
+	@Query(value = "select d FROM Disease d where d.ipdInInclude=true order BY d.description")
     List<Disease> findAllByIpdIn();
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A where (DIS_IPD_OUT_INCLUDE=1 or DIS_IPD_OUT_INCLUDE is null) order BY DIS_DESC", nativeQuery= true)
+
+	@Query(value = "select d FROM Disease d where d.ipdOutInclude=true order BY d.description")
     List<Disease> findAllByIpdOut();
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A where (DIS_IPD_IN_INCLUDE=1 or DIS_IPD_IN_INCLUDE is null) and  (DIS_IPD_IN_INCLUDE=1 or DIS_IPD_IN_INCLUDE is null) order BY DIS_DESC", nativeQuery= true)
+
+	@Query(value = "select d FROM Disease d where d.opdInclude=true and d.ipdInInclude=true order BY d.description")
     List<Disease> findAllByOpdAndIpdIn();
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A where (DIS_IPD_IN_INCLUDE=1 or DIS_IPD_IN_INCLUDE is null) and (DIS_IPD_OUT_INCLUDE=1 or DIS_IPD_OUT_INCLUDE is null) order BY DIS_DESC", nativeQuery= true)
+
+	@Query(value = "select d FROM Disease d where d.opdInclude=true and d.ipdOutInclude=true order BY d.description")
     List<Disease> findAllByOpdAndIpdOut();
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A where (DIS_IPD_IN_INCLUDE=1 or DIS_IPD_IN_INCLUDE is null) and (DIS_IPD_OUT_INCLUDE=1 or DIS_IPD_OUT_INCLUDE is null) order BY DIS_DESC", nativeQuery= true)
+
+	@Query(value = "select d FROM Disease d where d.ipdInInclude=true and d.ipdOutInclude=true order BY d.description")
     List<Disease> findAllByIpdInAndIpdOut();
-    @Query(value = "SELECT * FROM DISEASE JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A where (DIS_IPD_IN_INCLUDE=1 or DIS_IPD_IN_INCLUDE is null) and  (DIS_IPD_IN_INCLUDE=1 or DIS_IPD_IN_INCLUDE is null) and (DIS_IPD_OUT_INCLUDE=1 or DIS_IPD_OUT_INCLUDE is null) order BY DIS_DESC", nativeQuery= true)
+
+	@Query(value = "select d FROM Disease d where d.opdInclude=true and d.ipdInInclude=true and d.ipdOutInclude=true order BY d.description")
     List<Disease> findAllByOpdAndIpdInAndIpdOut();
 }

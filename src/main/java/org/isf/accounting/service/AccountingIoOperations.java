@@ -187,13 +187,8 @@ public class AccountingIoOperations {
 		
 		for (BillItems item : billItems) 
 		{
-			billItemsRepository.insertBillItem(
-				bill.getId(),
-				item.isPrice(),
-				item.getPriceID(),
-				item.getItemDescription(),
-				item.getItemAmount(),
-				item.getItemQuantity());
+			item.setBill(bill);
+			billItemsRepository.save(item);
 		}
 		
 		return result;
@@ -241,11 +236,8 @@ public class AccountingIoOperations {
 		
 		for (BillPayments payment : billPayments) 
 		{
-			billPaymentRepository.insertBillPayment(
-				bill.getId(),
-				payment.getDate(),
-				payment.getAmount(),
-				payment.getUser());
+			payment.setBill(bill);
+			billPaymentRepository.save(payment);
 		}
 		
 		return result;
