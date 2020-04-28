@@ -13,16 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface DicomIoOperationRepository extends JpaRepository<FileDicom, Long> {
     List<FileDicom> findAllByOrderByFileNameAsc();
-    
-    @Query(value = "SELECT * FROM DICOM WHERE DM_PAT_ID = :id AND DM_FILE_SER_NUMBER = :file ORDER BY DM_FILE_NOME", nativeQuery= true)
-    List<FileDicom> findAllWhereIdAndNumberByOrderNameAsc(@Param("id") Long id, @Param("file") String file);
-    @Query(value = "SELECT * FROM DICOM WHERE DM_PAT_ID = :id GROUP BY DM_FILE_SER_INST_UID", nativeQuery= true)
-    List<FileDicom> findAllWhereIdGroupByUid(@Param("id") Long id);
-    @Query(value = "SELECT * FROM DICOM WHERE DM_PAT_ID = :id AND DM_FILE_SER_NUMBER = :file AND DM_FILE_INST_UID = :uid", nativeQuery= true)
-    List<FileDicom> findAllWhereIdAndFileAndUid(@Param("id") Long id, @Param("file") String file, @Param("uid") String uid);
+
+	@Query(value = "select f from FileDicom f WHERE f.patId = :id AND f.dicomSeriesNumber = :file order by f.fileName")
+	List<FileDicom> findAllWhereIdAndNumberByOrderNameAsc(@Param("id") int id, @Param("file") String file);
+
+	@Query(value = "select f from FileDicom f WHERE f.patId = :id group by f.dicomInstanceUID")
+    List<FileDicom> findAllWhereIdGroupByUid(@Param("id") int id);
+
+	@Query(value = "select f from FileDicom f WHERE f.patId = :id AND f.dicomSeriesNumber = :file AND f.dicomInstanceUID = :uid")
+	List<FileDicom> findAllWhereIdAndFileAndUid(@Param("id") int id, @Param("file") String file, @Param("uid") String uid);
     
     @Modifying
-    @Transactional
-    @Query(value = "DELETE FROM DICOM WHERE DM_PAT_ID = :id AND DM_FILE_SER_NUMBER = :file", nativeQuery= true)
-    void deleteByIdAndNumber(@Param("id") Long id, @Param("file") String file);
+	@Query("delete from FileDicom fd WHERE fd.patId = :id AND fd.dicomSeriesNumber = :file")
+	void deleteByIdAndNumber(@Param("id") int id, @Param("file") String file);
 }
