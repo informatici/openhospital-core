@@ -7,8 +7,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.isf.admission.test.TestAdmission;
-import org.isf.admission.test.TestAdmissionContext;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.db.DbJpaUtil;
@@ -139,7 +137,7 @@ public class Tests
 		{		
 			_setupTestPatient(false);
 			// Pay attention that query return with PAT_ID descendant
-			ArrayList<Patient> patients = patientIoOperation.getPatientsWithHeightAndWeight(null);
+			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(null);
 
 			testPatient.check(patients.get(0));
 		} 
@@ -153,22 +151,98 @@ public class Tests
 	}
 	
 	@Test
-	public void testIoGetPatientsWithHeightAndWeightRegEx() 
-	{	
-		try 
-		{	
+	public void testIoGetPatientsByOneOfFieldsLikeFirstName() {
+		try {
+			// given:
 			Integer code = _setupTestPatient(false);
-			Patient foundPatient = (Patient)jpa.find(Patient.class, code); 
-			ArrayList<Patient> patients = patientIoOperation.getPatientsWithHeightAndWeight(foundPatient.getFirstName());
-			
+			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+
+			// when:
+			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getFirstName());
+
+			// then:
 			testPatient.check(patients.get(0));
-		} 
-		catch (Exception e) 
-		{
+		} catch (Exception e) {
 			e.printStackTrace();		
 			assertEquals(true, false);
 		}
-		
+	}
+
+	@Test
+	public void testIoGetPatientsByOneOfFieldsLikeSecondName() {
+		try {
+			// given:
+			Integer code = _setupTestPatient(false);
+			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+
+			// when:
+			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
+
+			// then:
+			testPatient.check(patients.get(0));
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+	}
+
+	@Test
+	public void testIoGetPatientsByOneOfFieldsLikeNote() {
+		try {
+			// given:
+			Integer code = _setupTestPatient(false);
+			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+
+			// when:
+			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
+
+			// then:
+			testPatient.check(patients.get(0));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+	}
+
+	@Test
+	public void testIoGetPatientsByOneOfFieldsLikeTaxCode()	{
+		try	{
+			// given:
+			Integer code = _setupTestPatient(false);
+			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+
+			// when:
+			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getTaxCode());
+
+			// then:
+			testPatient.check(patients.get(0));
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+
+		return;
+	}
+
+	@Test
+	public void testIoGetPatientsByOneOfFieldsLikeNotExistingStringShouldNotFindAnything()
+	{
+		try
+		{
+			Integer code = _setupTestPatient(false);
+			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike("dupa");
+
+			assertTrue(patients.isEmpty());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+
 		return;
 	}
 

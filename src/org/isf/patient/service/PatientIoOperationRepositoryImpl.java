@@ -5,7 +5,12 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
+import org.isf.patient.model.Patient;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -18,33 +23,23 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 	
 	@SuppressWarnings("unchecked")	
 	@Override
-	public List<Integer> findAllByHeightAndWeight(String regex) {
+	public List<Patient> findByFieldsContainingWordsFromLiteral(String literal) {
 		return this.entityManager.
-				createNativeQuery(_getPatientsWithHeightAndWeightQueryByRegex(regex)).
+				createQuery(buildSearchQuery(literal)).
 					getResultList();
 	}	
 
 	
-	private String _getPatientsWithHeightAndWeightQueryByRegex(
-			String regex) 
-	{
-		String[] words = _getPatientsWithHeightAndWeightRegex(regex);
-		String query = _getPatientsWithHeightAndWeightQuery(words);
-		
-		
-		return query;
+	private CriteriaQuery<Patient> buildSearchQuery(String regex) {
+		String[] words = getWordsToSearchForInPatientsRepository(regex);
+		return createQuerySearchingForPatientContainingGivenWordsInHisProperties(words);
 	}
 	
-	private String[] _getPatientsWithHeightAndWeightRegex(
-			String regex) 
-	{
+	private String[] getWordsToSearchForInPatientsRepository(String regex)	{
 		String string = null;
 		String[] words = new String[0];
-		
-		
-		if ((regex != null) 
-			&& (!regex.equals(""))) 
-		{
+
+		if ((regex != null) && (!regex.equals(""))) {
 			string = regex.trim().toLowerCase();
 			words = string.split(" ");
 		}
@@ -52,21 +47,32 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 		return words;
 	}
 		
-	private String _getPatientsWithHeightAndWeightQuery(
-			String[] words)
-	{
-		StringBuilder queryBld = new StringBuilder(
-				"SELECT PAT_ID FROM PATIENT LEFT JOIN (SELECT PEX_PAT_ID, PEX_HEIGHT AS PAT_HEIGHT, "
-				+ "PEX_WEIGHT AS PAT_WEIGHT FROM PATIENTEXAMINATION GROUP BY PEX_PAT_ID ORDER BY PEX_DATE DESC) "
-				+ "AS HW ON PAT_ID = HW.PEX_PAT_ID WHERE (PAT_DELETED='N' or PAT_DELETED is null) ");
+	private CriteriaQuery<Patient> createQuerySearchingForPatientContainingGivenWordsInHisProperties(String[] words)	{
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
+		Root<Patient> patientRoot = query.from(Patient.class);
+		query.select(patientRoot);
 
+		for (String word : words) {
+			query.where(wordExistsInOneOfPatientFields(word, cb, patientRoot));
+		}
 
-        for (String word : words) {
-            queryBld.append("AND CONCAT_WS(PAT_ID, LOWER(PAT_SNAME), LOWER(PAT_FNAME), LOWER(PAT_NOTE), LOWER(PAT_TAXCODE)) ");
-            queryBld.append("LIKE CONCAT('%', \"" + word + "\" , '%') ");
-        }
-		queryBld.append(" ORDER BY PAT_ID DESC");
+		query.orderBy(cb.desc(patientRoot.get("code")));
 
-		return queryBld.toString();
+		return query;
+	}
+
+	private Predicate wordExistsInOneOfPatientFields(String word, CriteriaBuilder cb, Root<Patient> root) {
+		return cb.or(
+			cb.like(cb.lower(root.get("code").as(String.class)), like(word)),
+			cb.like(cb.lower(root.get("secondName").as(String.class)), like(word)),
+			cb.like(cb.lower(root.get("firstName").as(String.class)), like(word)),
+			cb.like(cb.lower(root.get("note").as(String.class)), like(word)),
+			cb.like(cb.lower(root.get("taxCode").as(String.class)), like(word))
+		);
+	}
+
+	private String like(String word) {
+		return "%" + word + "";
 	}
 }
