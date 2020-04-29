@@ -1,5 +1,21 @@
-ND;1.Malattie trasmissibili
-OC;2.Altre malattie infettive/trasmissibili
-MP;3.Malattie materno infantili
-NC;4.Malattie non trasmissibili
-AO;5. Altre
+AB;A00-B99 Infettive e parassitarie
+CD;C00-D48 Tumori
+D;D50-D89 Sangue, organi ematopoietici e sistema immunitario
+E;E00-E90 Endocrine, nutrizionali e metaboliche
+F;F00-F99 Disturbi psichici e comportamentali
+G;G00-G99 Sistema nervoso
+H1;H00-H59 Occhio e annessi oculari
+H2;H60-H95 Orecchio e apofisi mastoide
+I;I00-I99 Sistema circolatorio
+J;J00-J99 Sistema respiratorio
+K;K00-K93 Apparato digerente
+L;L00-L99 Cute e tessuto sottocutaneo
+M;M00-M99 Sistema osteomuscolare e tessuto connettivo
+N;N00-N99 Apparato genitourinario
+O;O00-O99 Gravidanza, parto e puerperio
+P;P00-P96 Condizioni morbose del periodo perinatale
+Q;Q00-Q99 Malformazioni congenite, anomalie cromosomiche
+R;R00-R99 Sintomi, risultati anormali di esami clinici e di laboratorio, non classificati altrove
+ST;S00-T98 Traumatismi, avvelenamenti e altre conseguenze di cause esterne
+VY;V01-Y98 Cause esterne morbosità e mortalità
+Z;Z00-Z99 Fattori influenzanti lo stato di salute e il ricorso ai servizi sanitari
