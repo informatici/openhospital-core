@@ -16,6 +16,7 @@ import org.isf.patient.model.Patient;
 import org.isf.patvac.model.PatientVaccine;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,24 +72,9 @@ public class PatVacIoOperations {
 			GregorianCalendar dateTo, 
 			char sex, 
 			int ageFrom, 
-			int ageTo) throws OHServiceException 
-	{
-		ArrayList<Integer> pPatientVaccineCode = null;
-		ArrayList<PatientVaccine> pPatientVaccine = new ArrayList<PatientVaccine>();
-		
-		
-		pPatientVaccineCode = (ArrayList<Integer>) repository.findAllByCodesAndDatesAndSexAndAges(
-				vaccineTypeCode, vaccineCode, dateFrom, dateTo, sex, ageFrom, ageTo);
-		for (int i=0; i<pPatientVaccineCode.size(); i++)
-		{
-			Integer code = pPatientVaccineCode.get(i);
-			PatientVaccine patientVaccine = repository.findOne(code);
-			
-			
-			pPatientVaccine.add(i, patientVaccine);
-		}
-
-		return pPatientVaccine;
+			int ageTo) throws OHServiceException {
+		return new ArrayList<PatientVaccine>(repository.findAllByCodesAndDatesAndSexAndAges(
+				vaccineTypeCode, vaccineCode, dateFrom, dateTo, sex, ageFrom, ageTo));
 	}
 
 	public List<PatientVaccine> findForPatient(int patientCode) {
@@ -102,16 +88,8 @@ public class PatVacIoOperations {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise 
 	 * @throws OHServiceException 
 	 */
-	public boolean newPatientVaccine(
-			PatientVaccine patVac) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		PatientVaccine savedVaccine = repository.save(patVac);
-		result = (savedVaccine != null);
-		
-		return result;
+	public boolean newPatientVaccine(PatientVaccine patVac) throws OHServiceException {
+		return repository.save(patVac) != null;
 	}
 
 	/**
@@ -121,16 +99,8 @@ public class PatVacIoOperations {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise 
 	 * @throws OHServiceException 
 	 */
-	public boolean updatePatientVaccine(
-			PatientVaccine patVac) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		PatientVaccine savedVaccine = repository.save(patVac);
-		result = (savedVaccine != null);
-		
-		return result;
+	public boolean updatePatientVaccine(PatientVaccine patVac) throws OHServiceException {
+		return repository.save(patVac) != null;
 	}
 
 	/**
@@ -140,15 +110,9 @@ public class PatVacIoOperations {
 	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise 
 	 * @throws OHServiceException 
 	 */
-	public boolean deletePatientVaccine(
-			PatientVaccine patVac) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deletePatientVaccine(PatientVaccine patVac) throws OHServiceException {
 		repository.delete(patVac);
-		
-		return result;	
+		return true;
 	}
 
 	/**
@@ -158,22 +122,12 @@ public class PatVacIoOperations {
 	 * @return <code>int</code> - the progressive number in the year
 	 * @throws OHServiceException 
 	 */
-	public int getProgYear(
-			int year) throws OHServiceException 
-	{
-		Integer progYear = 0;
+	public int getProgYear(int year) throws OHServiceException {
+		Integer progYear =year != 0 ?
+			repository.findMaxCodeWhereVaccineDate(getBeginningOfYear(year), getBeginningOfYear(year + 1)) :
+			repository.findMaxCode();
 
-		
-		if (year != 0) 
-		{
-			progYear = repository.findMaxCodeWhereVaccineDate(year);
-		}
-		else
-		{
-			progYear = repository.findMaxCode();
-		}
-		
-		return progYear == null ? new Integer(0) : progYear;
+		return progYear == null ? 0 : progYear;
 	}
 
 	/**
@@ -183,14 +137,11 @@ public class PatVacIoOperations {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			Integer code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;	
+	public boolean isCodePresent(Integer code) throws OHServiceException {
+		return repository.exists(code);
+	}
+
+	private GregorianCalendar getBeginningOfYear(int year) {
+		return new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar();
 	}
 }

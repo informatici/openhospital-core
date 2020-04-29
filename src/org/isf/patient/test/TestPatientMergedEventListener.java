@@ -12,10 +12,10 @@ public class TestPatientMergedEventListener {
 
 	@EventListener
 	public void handle(PatientMergedEvent patientMergedEvent) {
+		this.patientMergedEvent = patientMergedEvent;
 		if(shouldFail) {
 			throw new RuntimeException("failure testing");
 		}
-		this.patientMergedEvent = patientMergedEvent;
 	}
 
 	public PatientMergedEvent getPatientMergedEvent() {

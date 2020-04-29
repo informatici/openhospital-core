@@ -27,17 +27,12 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
     
     @Modifying
     @Transactional
-    @Query(value = "UPDATE PATIENT SET PAT_DELETED = 'Y' WHERE PAT_ID = :id", nativeQuery = true)
+    @Query(value = "update Patient p set p.deleted = 'Y' where p.code = :id")
     int updateDeleted(@Param("id") Integer id);
             
     List<Patient> findByNameAndDeleted(String name, String deletedStatus);
 
     @Query(value = "select max(p.code) from Patient p")
     Integer findMaxCode();
- 		
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE Patient p SET p.deleted = 'Y' WHERE p.code = :id")
-    int updateDelete(@Param("id") Integer id); 		
 
 }

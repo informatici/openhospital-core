@@ -172,7 +172,7 @@ public class PatientIoOperations
 	 */
 	@Transactional
 	public boolean mergePatientHistory(Patient mergedPatient, Patient obsoletePatient) throws OHServiceException {
-		repository.updateDelete(obsoletePatient.getCode());
+		repository.updateDeleted(obsoletePatient.getCode());
 		applicationEventPublisher.publishEvent(new PatientMergedEvent(obsoletePatient, mergedPatient));
 		
 		return true;
