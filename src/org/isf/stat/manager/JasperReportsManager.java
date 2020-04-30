@@ -218,14 +218,12 @@ public class JasperReportsManager {
     }
 
     
-    public JasperReportResultDto getGenericReportPatientPdfExamin(Integer patientID, String date, String jasperFileName) throws OHServiceException {
+    public JasperReportResultDto getGenericReportPatientExaminationPdf(Integer patientID, Integer examId, String jasperFileName) throws OHServiceException {
 
         try{
-        	HashMap<String, String> parameters = new HashMap<String, String>();
-           
+        	HashMap<String, Object> parameters = new HashMap<String, Object>();
             
-            parameters.put("patientID", String.valueOf(patientID)); // real param
-            parameters.put("date", date); 
+            parameters.put("examId", examId); 
             String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + patientID +".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
