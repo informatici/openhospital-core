@@ -28,6 +28,7 @@ import org.isf.utils.exception.OHReportException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -239,7 +240,7 @@ public class JasperReportsManager {
             HashMap<String, Object> parameters = getHospitalParameters();
             parameters.put("wardID", String.valueOf(wardID)); // real param
             parameters.put("date", date); // real param
-            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + String.valueOf(wardID)+".pdf";
+            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + String.valueOf(wardID)+"_"+TimeTools.formatDateTime(date, "yyyyMMdd")+".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
