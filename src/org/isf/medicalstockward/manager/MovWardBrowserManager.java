@@ -113,7 +113,7 @@ public class MovWardBrowserManager {
 	 * @return all the retrieved movements.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<MovementWard> getMovementPat(Patient patient) throws OHServiceException {
+	public ArrayList<MovementWard> getMovementToPatient(Patient patient) throws OHServiceException {
 		return ioOperations.getWardMovementsToPatient(patient.getCode());
 	}
 	
