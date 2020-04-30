@@ -65,13 +65,12 @@ public class Operation extends Auditable<String>
 	@Column(name="OPE_STAT")
     private Integer major;
 
+	@Column(name="OPE_FOR")
+    private String operFor;
+	
 	@Version
 	@Column(name="OPE_LOCK")
     private Integer lock;
-	
-	
-	@Column(name="OPE_FOR")
-    private String operFor;
 
 	@Transient
     private volatile int hashCode = 0;
