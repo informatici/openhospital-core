@@ -32,6 +32,7 @@ public class OperationBrowserManager {
 	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException 
 	 */
+	//TODO: Evulate the use of a parameter in one method only
 	public ArrayList<Operation> getOperationOpd() throws OHServiceException {
 		return ioOperations.getOperationOpd();
 	}

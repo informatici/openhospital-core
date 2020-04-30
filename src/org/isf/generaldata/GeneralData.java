@@ -28,7 +28,7 @@ public class GeneralData {
 
 	public static String LANGUAGE;
 	public static boolean SINGLEUSER;
-	public static boolean OPDOPERATION;
+	public static boolean OPDOPERATION; //TODO: Evaluate the real need of this one: if false should also hidden the ability to specify the OPE_FOR property
 	public static boolean AUTOMATICLOT;
 	public static boolean LOTWITHCOST;
 	
