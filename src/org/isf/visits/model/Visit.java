@@ -3,25 +3,12 @@ package org.isf.visits.model;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.patient.model.Patient;
+import org.isf.utils.db.Auditable;
 import org.isf.ward.model.Ward;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
  /*------------------------------------------
  * Visits : ?

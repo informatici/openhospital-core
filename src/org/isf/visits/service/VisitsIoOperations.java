@@ -44,15 +44,15 @@ public class VisitsIoOperations {
 	}
 
 	
-	public ArrayList<VisitRow> getVisitsWard(
+	public ArrayList<VisitRow> getVisitsWard(String wardId
 			) throws OHServiceException 
 	{
 		ArrayList<VisitRow> visits = null;
 
-		
-		
-			visits = new ArrayList<VisitRow>(repository.findAllByOrderPatientAndDateAsc()); 
-		
+		if (wardId != null)
+			visits = new ArrayList<VisitRow>(repository.findAllWhereWardByOrderPatientAndDateAsc(wardId)); 
+		else
+			visits = new ArrayList<VisitRow>(repository.findAllByOrderPatientAndDateAsc());
 		
 		return visits;
 	}

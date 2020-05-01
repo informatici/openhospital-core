@@ -8,8 +8,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.isf.generaldata.MessageBundle;
-import org.isf.medicals.manager.MedicalBrowsingManager;
-import org.isf.medicals.model.Medical;
 import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.patient.manager.PatientBrowserManager;
 import org.isf.patient.model.Patient;
@@ -17,13 +15,10 @@ import org.isf.sms.manager.SmsManager;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
 import org.isf.therapy.model.Therapy;
-import org.isf.therapy.model.TherapyRow;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.visits.model.Visit;
 import org.isf.visits.model.VisitRow;
 import org.isf.visits.service.VisitsIoOperations;
-import org.isf.ward.manager.WardBrowserManager;
 import org.isf.ward.model.Ward;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +41,6 @@ public class VisitManager {
 	
 	@Autowired
 	private ApplicationContext applicationContext;
-	@Autowired
-	private WardBrowserManager wrdManager;
 	
 	/**
 	 * returns the list of all {@link Visit}s related to a patID
@@ -61,7 +54,11 @@ public class VisitManager {
 	}
 	
 	public ArrayList<VisitRow> getVisitsWard() throws OHServiceException {
-		return ioOperations.getVisitsWard();
+		return getVisitsWard(null);
+	}
+	
+	public ArrayList<VisitRow> getVisitsWard(String wardId) throws OHServiceException {
+		return ioOperations.getVisitsWard(wardId);
 	}
 	
 	public ArrayList<Visit> getVisits(ArrayList<VisitRow> vsRows) throws OHServiceException {
