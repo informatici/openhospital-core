@@ -183,20 +183,6 @@ public class LabManager {
 			
 		return labs;
 	}
-	
-	/**
-	 * Return an exams suitable for printing
-	 * matching passed exam Id.
-	 * @param examId - the exam Id
-	 * @return the list of {@link LaboratoryForPrint}s . It could be <code>empty</code>.
-	 * @throws OHServiceException 
-	 */
-	public ArrayList<LaboratoryForPrint> getLaboratoryForPrint(Integer labCode) throws OHServiceException {
-		ArrayList<LaboratoryForPrint> labs = ioOperations.getLaboratoryForPrint(labCode);
-		setLabMultipleResults(labs);
-			
-		return labs;
-	}
 
 	/**
 	 * Inserts one Laboratory exam {@link Laboratory} (All Procedures)
