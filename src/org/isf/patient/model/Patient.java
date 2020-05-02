@@ -495,6 +495,11 @@ public class Patient extends Auditable<String>
 		this.photo = photo;
 	}
 
+	/**
+	 * This method will be removed soon. Use profile photo instead
+	 * @return
+	 */
+	@Deprecated
 	public Image getPhoto() {
 		try {
 			if (photo != null && photo.length() > 0) {
