@@ -19,6 +19,7 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -60,7 +61,10 @@ public class AdmissionBrowserManager {
 		return ioOperations.getAdmittedPatients(searchTerms, admissionRange, dischargeRange);
 	}
 
-	
+	public AdmittedPatient loadAdmittedPatients(final @NotNull Integer patientId) {
+		return ioOperations.loadAdmittedPatient(patientId);
+	}
+
 	/**
 	 * Returns the admission with the selected id.
 	 * @param id the admission id.
@@ -174,7 +178,7 @@ public class AdmissionBrowserManager {
 
 	/**
 	 * Deletes the patient photo.
-	 * @param patientId the patient id.
+	 * @param id the patient id.
 	 * @return <code>true</code> if the photo has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */

@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
 import org.isf.admtype.model.AdmissionType;
@@ -31,6 +32,8 @@ import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,7 +85,21 @@ public class AdmissionIoOperations
 
 		return admittedPatients;
 	}
-	
+
+	/**
+	 * Load patient together with the profile photo, or <code>null</code> if there is no patient with the given id
+	 */
+	@Nullable
+	public AdmittedPatient loadAdmittedPatient(final @NotNull Integer patientId) {
+		final Patient patient = patientRepository.findOne(patientId);
+		if (patient == null) {
+			return null;
+		}
+		Hibernate.initialize(patient.getPatientProfilePhoto());
+		final Admission admission = repository.findOneWherePatientIn(patientId);
+		return new AdmittedPatient(patient, admission);
+	}
+
 	/**
 	 * Returns all patients based on the applied filters.
 	 * @param admissionRange the patient admission range
