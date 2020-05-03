@@ -1,5 +1,6 @@
 package org.isf.patient.service;
 
+import org.hibernate.Hibernate;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHException;
@@ -116,7 +117,8 @@ public class PatientIoOperations
 		pPatient = new ArrayList<Patient>(repository.findAllWhereNameAndDeletedOrderedByName(name));
 		if (pPatient.size() > 0)
 		{			
-			patient = pPatient.get(pPatient.size()-1);			
+			patient = pPatient.get(pPatient.size()-1);
+			Hibernate.initialize(patient.getPatientProfilePhoto());
 		}
 					
 		return patient;
@@ -139,7 +141,8 @@ public class PatientIoOperations
 		pPatient = new ArrayList<Patient>(repository.findAllWhereIdAndDeleted(code));
 		if (pPatient.size() > 0)
 		{			
-			patient = pPatient.get(pPatient.size()-1);			
+			patient = pPatient.get(pPatient.size()-1);
+			Hibernate.initialize(patient.getPatientProfilePhoto());
 		}
 					
 		return patient;
@@ -162,7 +165,8 @@ public class PatientIoOperations
 		pPatient = new ArrayList<Patient>(repository.findAllWhereId(code));
 		if (pPatient.size() > 0)
 		{			
-			patient = pPatient.get(pPatient.size()-1);			
+			patient = pPatient.get(pPatient.size()-1);
+			Hibernate.initialize(patient.getPatientProfilePhoto());
 		}
 					
 		return patient;
