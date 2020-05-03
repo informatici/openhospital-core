@@ -3,6 +3,7 @@ package org.isf.patient.model;
 import java.awt.Image;
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Date;
@@ -166,10 +167,12 @@ public class Patient extends Auditable<String>
 	@Deprecated /** This will be removed soon, and replace through association with PatientPhoto */
 	private Blob photo;
 
-	@OneToOne(fetch = FetchType.LAZY,
-			mappedBy = "patient",
+	@OneToOne(
+			fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL,
-			optional = false)
+			optional = false
+	)
+	@JoinColumn(name = "PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID")
 	private PatientProfilePhoto patientProfilePhoto;
 	
 	@Transient
