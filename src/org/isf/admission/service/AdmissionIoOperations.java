@@ -15,11 +15,6 @@ package org.isf.admission.service;
  * 						 MATERNITYRESTARTINJUNE in generalData.properties                   
  *-----------------------------------------------------------*/
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 import org.hibernate.Hibernate;
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
@@ -37,6 +32,11 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -339,11 +339,12 @@ public class AdmissionIoOperations
 		boolean result = true;
 		
 		
-		Patient foundPatient = patientRepository.findOne(patientId);  
-		foundPatient.setPhoto(null);
+		Patient foundPatient = patientRepository.findOne(patientId);
+		if (foundPatient.getPatientProfilePhoto() != null && foundPatient.getPatientProfilePhoto().getPhoto() != null) {
+			foundPatient.getPatientProfilePhoto().setPhoto(null);
+		}
         Patient savedPatient = patientRepository.save(foundPatient);
 		result = (savedPatient != null);    
-		
 		return result;
 	}
 }

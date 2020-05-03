@@ -590,7 +590,7 @@ public class Tests
 			result = admissionIoOperation.deletePatientPhoto(foundAdmission.getPatient().getCode());
 			
 			assertEquals(true, result);
-			assertEquals(null, foundAdmission.getPatient().getPhoto());
+			assertEquals(null, foundAdmission.getPatient().getPatientProfilePhoto().getPhoto());
 		} 
 		catch (Exception e) 
 		{

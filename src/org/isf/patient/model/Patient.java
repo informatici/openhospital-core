@@ -1,24 +1,16 @@
 package org.isf.patient.model;
 
-import java.awt.Image;
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.Serializable;
-import java.sql.Blob;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import javax.imageio.ImageIO;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
-import org.isf.utils.db.Auditable;
 import org.isf.opd.model.Opd;
+import org.isf.utils.db.Auditable;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /*------------------------------------------
  * Patient - model for the patient entity
@@ -162,11 +154,6 @@ public class Patient extends Auditable<String>
 	@Column(name="PAT_LOCK")
 	private int lock;
 	
-	@Column(name="PAT_PHOTO")
-	@Lob
-	@Deprecated /** This will be removed soon, and replace through association with PatientPhoto */
-	private Blob photo;
-
 	@OneToOne(
 			fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL,
@@ -174,9 +161,6 @@ public class Patient extends Auditable<String>
 	)
 	@JoinColumn(name = "PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID")
 	private PatientProfilePhoto patientProfilePhoto;
-	
-	@Transient
-	private Image photoImage;
 	
 	@Transient
 	private volatile int hashCode = 0;
@@ -267,7 +251,7 @@ public class Patient extends Auditable<String>
 			String address, String city, String nextKin, String telephone, String note,
 			String mother_name, char mother, String father_name, char father,
 			String bloodType, char economicStatut, char parentTogether, String taxCode,
-			float height, float weight, Blob photo, Image photoImage, String maritalStatus, String profession) { //Changed EduLev with bloodType
+			float height, float weight, String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.code = code;
 		this.firstName = firstName;
 		this.secondName = secondName;
@@ -291,8 +275,6 @@ public class Patient extends Auditable<String>
 		this.taxCode = taxCode;
 		this.height = height;
 		this.weight = weight;
-		this.photo = photo;
-		this.photoImage = photoImage;
 		this.maritalStatus = maritalStatus;
 		this.profession = profession;
 	}
@@ -486,40 +468,6 @@ public class Patient extends Auditable<String>
 
 	public void setMother_name(String mother_name) {
 		this.mother_name = mother_name;
-	}
-
-	@Deprecated
-	public Blob getBlobPhoto() {
-		return photo;
-	}
-
-	@Deprecated
-	public void setBlobPhoto(Blob photo) {
-		this.photo = photo;
-	}
-
-	/**
-	 * This method will be removed soon. Use profile photo instead
-	 * @return
-	 */
-	@Deprecated
-	public Image getPhoto() {
-		try {
-			if (photo != null && photo.length() > 0) {
-				BufferedInputStream is = new BufferedInputStream(photo.getBinaryStream());
-				Image image = ImageIO.read(is);
-				setPhoto(image);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-		return photoImage;
-	}
-	
-	public void setPhoto(Image image) {
-		this.photoImage = image;
 	}
 
 	public String getTaxCode() {
