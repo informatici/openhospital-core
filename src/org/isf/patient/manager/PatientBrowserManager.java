@@ -48,25 +48,12 @@ public class PatientBrowserManager {
 	 * method that insert a new Patient in the db
 	 * 
 	 * @param patient
-	 * @return true - if the new Patient has been inserted
-	 * @throws OHServiceException 
+	 * @return saved / updated patient
+	 * @throws OHServiceException when validation failed
 	 */
-	public boolean newPatient(Patient patient) throws OHServiceException {
+	public Patient savePatient(Patient patient) throws OHServiceException {
         validate(patient);
-        return ioOperations.newPatient(patient);
-	}
-	
-	/**
-	 * 
-	 * method that update an existing Patient in the db
-	 * 
-	 * @param patient
-	 * @return true - if the existing Patient has been updated
-	 * @throws OHServiceException 
-	 */
-	public boolean updatePatient(Patient patient) throws OHServiceException {
-        validate(patient);
-        return ioOperations.updatePatient(patient);
+        return ioOperations.savePatient(patient);
 	}
 	
 	/**
