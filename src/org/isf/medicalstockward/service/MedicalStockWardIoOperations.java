@@ -258,6 +258,7 @@ public class MedicalStockWardIoOperations
 				medicalWards.get(i).setQty(qty);
 			} else {
 				medicalWards.remove(i);
+				i= i-1;
 			}
 		}
 		
@@ -267,8 +268,9 @@ public class MedicalStockWardIoOperations
 	public ArrayList<MedicalWard> getMedicalsWardDrugs(
 			char wardId) throws OHServiceException
 	{
+		String WardID=String.valueOf(wardId);
             System.out.println("MedicalStockWardIoOperations: Looking for drugs ");
-		ArrayList<MedicalWard> medicalWards = new ArrayList<MedicalWard>(repository.findAllWhereWard(wardId));
+		ArrayList<MedicalWard> medicalWards = getMedicalsWard(wardId);
 		System.out.println("MedicalStockWardIoOperations " + medicalWards.size() + " drugs in "+wardId);
 		
 		for (int i=0; i<medicalWards.size(); i++)
@@ -279,27 +281,20 @@ public class MedicalStockWardIoOperations
 				medicalWards.get(i).setQty(qty);
 			} else {
 				medicalWards.remove(i);
-			}
-		}
-
-		for (int i = 0; i < medicalWards.size(); i++) {
-			if (medicalWards.get(i).getQty() == 0.0) {
-				medicalWards.remove(i);
+				i= i-1;
 			}
 		}
 		ArrayList<MedicalWard> medicalWardsQty = new ArrayList<MedicalWard>();
 		
 		for (int i=0; i<medicalWards.size(); i++) {
 			
-			 Double qty = repository.findQuantityInWardWhereMedicalAndWardChar(medicalWards.get(i).getId().getMedical().getCode(),wardId);
+			 Double qty = repository.findQuantityInWardWhereMedicalAndWard(medicalWards.get(i).getId().getMedical().getCode(),WardID);
 			 
 			 medicalWards.get(i).setQty(qty);
 			 if (!medicalWardsQty.contains(medicalWards.get(i))) {
 				 medicalWardsQty.add(medicalWards.get(i));
 			 }
-			 
 		}
-		
 		return medicalWardsQty;
 	}
 }
