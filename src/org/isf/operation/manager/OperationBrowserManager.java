@@ -210,5 +210,16 @@ public class OperationBrowserManager {
 					MessageBundle.getMessage("angal.sql.thedatacouldnotbesaved"), OHSeverityLevel.ERROR));
 		}
 	}
-	
+
+	/**
+	 * Get the list of possible operation results
+	 * @return the found list
+	 */
+	public ArrayList<String> getResultsList() {
+		ArrayList<String> resultsList = new ArrayList<String>();
+		resultsList.add(MessageBundle.getMessage("angal.operation.result.sucess"));
+		resultsList.add(MessageBundle.getMessage("angal.operation.result.failure"));
+		resultsList.add(MessageBundle.getMessage("angal.operation.result.undefined"));
+		return resultsList;
+	}
 }
