@@ -188,7 +188,6 @@ public class MedicalStockIoOperations {
 	
 	/**
 	 * Prepare the insert of the specified {@link Movement} (no commit)
-	 * @param dbQuery - the session with the DB
 	 * @param movement - the movement to store.
 	 * @return <code>true</code> if the movement has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
@@ -201,7 +200,6 @@ public class MedicalStockIoOperations {
 	
 	/**
 	 * Prepare the insert of the specified {@link Movement} (no commit)
-	 * @param dbQuery - the session with the DB
 	 * @param movement - the movement to store.
 	 * @return <code>true</code> if the movement has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
