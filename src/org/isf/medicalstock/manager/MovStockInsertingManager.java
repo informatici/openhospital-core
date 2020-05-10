@@ -272,8 +272,9 @@ public class MovStockInsertingManager {
 	public boolean newMultipleChargingMovements(ArrayList<Movement> movements, String referenceNumber) throws OHServiceException {
 		
 		boolean ok = true;
-		boolean checkReference = referenceNumber == null;
-		if (!checkReference) { // referenceNumber != null
+		boolean checkReference = referenceNumber == null; // referenceNumber == null, each movement should have referenceNumber set
+		if (!checkReference) { 
+			// referenceNumber != null, all movement will have same referenceNumber, we check only once for all
 			List<OHExceptionMessage> errors = checkReferenceNumber(referenceNumber);
             if(!errors.isEmpty()){
                 throw new OHDataValidationException(errors);
@@ -334,8 +335,9 @@ public class MovStockInsertingManager {
 	public boolean newMultipleDischargingMovements(ArrayList<Movement> movements, String referenceNumber) throws OHServiceException {
 		
 		boolean ok = true;
-		boolean checkReference = referenceNumber == null;
-		if (!checkReference) { // referenceNumber != null
+		boolean checkReference = referenceNumber == null; // referenceNumber == null, each movement should have referenceNumber set
+		if (!checkReference) { 
+			// referenceNumber != null, all movement will have same referenceNumber, we check only once for all
 			List<OHExceptionMessage> errors = checkReferenceNumber(referenceNumber);
             if(!errors.isEmpty()){
                 throw new OHDataValidationException(errors);
