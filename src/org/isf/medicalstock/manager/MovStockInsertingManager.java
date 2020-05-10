@@ -83,15 +83,9 @@ public class MovStockInsertingManager {
 		}
 		
 		// Check quantity
-		Lot lot = movement.getLot();
 		if (movement.getQuantity() == 0) {
 			errors.add(new OHExceptionMessage("zeroQuantityError",
 					MessageBundle.getMessage("angal.medicalstock.thequantitymustnotbezero"), //$NON-NLS-1$
-					OHSeverityLevel.ERROR));
-		}
-		if ((movement.getType().getType().contains("-")) && (movement.getQuantity() > lot.getQuantity())) {
-			errors.add(new OHExceptionMessage("quantityGreaterThanLotError",
-					MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof"), //$NON-NLS-1$
 					OHSeverityLevel.ERROR));
 		}
 
@@ -110,23 +104,34 @@ public class MovStockInsertingManager {
 		}
 		
 		// Check Lot
-		{
-			List<Integer> medicalIds = ioOperations.getMedicalsFromLot(lot.getCode());
-			if (!(medicalIds.size() == 0 || (medicalIds.size() == 1 && medicalIds.get(0).intValue() == movement.getMedical().getCode().intValue()))) {
-				errors.add(new OHExceptionMessage("sharedLotError",
-						MessageBundle.getMessage("angal.medicalstock.thislotreferstoanothermedical"), //$NON-NLS-1$
-						OHSeverityLevel.ERROR));
-			}
-			if (GeneralData.LOTWITHCOST) {
-				BigDecimal cost = lot.getCost();
-				if (cost == null || cost.doubleValue() <= 0.) {
-					errors.add(new OHExceptionMessage("zeroLotCostError",
-							MessageBundle.getMessage("angal.medicalstock.multiplecharging.zerocostsnotallowed"), //$NON-NLS-1$
+		if (!isAutomaticLot()) {
+			Lot lot = movement.getLot();
+			{
+				errors.addAll(validateLot(lot));
+				
+				if ((movement.getType().getType().contains("-")) && (movement.getQuantity() > lot.getQuantity())) {
+					errors.add(new OHExceptionMessage("quantityGreaterThanLotError",
+							MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof"), //$NON-NLS-1$
 							OHSeverityLevel.ERROR));
 				}
+				
+				List<Integer> medicalIds = ioOperations.getMedicalsFromLot(lot.getCode());
+				if (!(medicalIds.size() == 0 || (medicalIds.size() == 1 && medicalIds.get(0).intValue() == movement.getMedical().getCode().intValue()))) {
+					errors.add(new OHExceptionMessage("sharedLotError",
+							MessageBundle.getMessage("angal.medicalstock.thislotreferstoanothermedical"), //$NON-NLS-1$
+							OHSeverityLevel.ERROR));
+				}
+				if (GeneralData.LOTWITHCOST) {
+					BigDecimal cost = lot.getCost();
+					if (cost == null || cost.doubleValue() <= 0.) {
+						errors.add(new OHExceptionMessage("zeroLotCostError",
+								MessageBundle.getMessage("angal.medicalstock.multiplecharging.zerocostsnotallowed"), //$NON-NLS-1$
+								OHSeverityLevel.ERROR));
+					}
+				}
 			}
-			errors.addAll(validateLot(lot));
 		}
+		
 		if (!errors.isEmpty()){
 	        throw new OHDataValidationException(errors);
 	    }
@@ -366,7 +371,6 @@ public class MovStockInsertingManager {
 	 *         <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	@Transactional(rollbackFor=OHServiceException.class)
 	private boolean prepareDishargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
 		validateMovement(movement, checkReference);
         if (isAutomaticLot()) {
