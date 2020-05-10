@@ -121,6 +121,8 @@ public class MedicalStockWardIoOperations
 			destinationWardIncomeMovement.setUnits(savedMovement.getUnits());
 			destinationWardIncomeMovement.setWard(savedMovement.getWardTo());
 			destinationWardIncomeMovement.setWardFrom(savedMovement.getWard());
+			destinationWardIncomeMovement.setlot(savedMovement.getLot());
+			
 			movementRepository.save(destinationWardIncomeMovement);
 		}
 		
@@ -199,6 +201,7 @@ public class MedicalStockWardIoOperations
 	{
 		Double qty = movement.getQuantity();
 		String ward = movement.getWard().getCode();
+		String lot = movement.getLot().getCode();
                 String wardTo = null;
                 if (movement.getWardTo() != null) { 
                 	// in case of a mvnt from the ward movement.getWard() to the ward movement.getWardTO()
@@ -209,30 +212,30 @@ public class MedicalStockWardIoOperations
 		
 		
         if(wardTo != null) {
-            MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedical(wardTo, medical);
+            MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedicalAndLot(wardTo, medical, lot);
             if(medicalWardTo != null) {
-                repository.updateInQuantity(Math.abs(qty), wardTo, medical);
+            	repository.updateInQuantity(Math.abs(qty), wardTo, medical, lot);
             } else {
-                repository.insertMedicalWard(wardTo, medical, Math.abs(qty));
+                repository.insertMedicalWard(wardTo, medical, Math.abs(qty), lot);
             }
-            repository.updateOutQuantity(Math.abs(qty), ward, medical);
+            repository.updateOutQuantity(Math.abs(qty), ward, medical, lot);
             return result;
         }
                 
-		MedicalWard medicalWard = repository.findOneWhereCodeAndMedical(ward, medical);
+		MedicalWard medicalWard = repository.findOneWhereCodeAndMedicalAndLot(ward, medical, lot);
         if (medicalWard == null)
 		{
-            repository.insertMedicalWard(ward, medical, -qty);
+            repository.insertMedicalWard(ward, medical, -qty, lot);
         }
 		else
 		{
 			if (qty < 0)
 			{
-				repository.updateInQuantity(-qty, ward, medical);
+				repository.updateInQuantity(-qty, ward, medical,lot);
 			}
 			else
 			{
-                repository.updateOutQuantity(qty, ward, medical);
+				repository.updateOutQuantity(qty, ward, medical,lot);
             }				
 		}
 		return result;
@@ -250,14 +253,50 @@ public class MedicalStockWardIoOperations
 		ArrayList<MedicalWard> medicalWards = new ArrayList<MedicalWard>(repository.findAllWhereWard(wardId));
 		for (int i=0; i<medicalWards.size(); i++)
 		{
-			double qty = (double) (medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
-			if (qty != 0) {
+			double qty = Double.valueOf(medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
+			if (qty != 0.0) {
 				medicalWards.get(i).setQty(qty);
 			} else {
 				medicalWards.remove(i);
+				i= i-1;
 			}
 		}
 		
 		return medicalWards;
 	}
+	
+	public ArrayList<MedicalWard> getMedicalsWardDrugs(
+			char wardId) throws OHServiceException
+	{
+		String WardID=String.valueOf(wardId);
+            System.out.println("MedicalStockWardIoOperations: Looking for drugs ");
+		ArrayList<MedicalWard> medicalWards = getMedicalsWard(wardId);
+		System.out.println("MedicalStockWardIoOperations " + medicalWards.size() + " drugs in "+wardId);
+		
+		for (int i=0; i<medicalWards.size(); i++)
+		{
+				
+			double qty = Double.valueOf(medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
+			if (qty != 0) {
+				medicalWards.get(i).setQty(qty);
+			} else {
+				medicalWards.remove(i);
+				i= i-1;
+			}
+		}
+		ArrayList<MedicalWard> medicalWardsQty = new ArrayList<MedicalWard>();
+		
+		for (int i=0; i<medicalWards.size(); i++) {
+			
+			 Double qty = repository.findQuantityInWardWhereMedicalAndWard(medicalWards.get(i).getId().getMedical().getCode(),WardID);
+			 
+			 medicalWards.get(i).setQty(qty);
+			 if (!medicalWardsQty.contains(medicalWards.get(i))) {
+				 medicalWardsQty.add(medicalWards.get(i));
+			 }
+		}
+		return medicalWardsQty;
+	}
 }
+
+

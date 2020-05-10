@@ -17,6 +17,7 @@ public class MovementWardForPrint implements Comparable<MovementWardForPrint>{
 	private String medical;
 	private Double quantity;
 	private String units;
+	private String lot;
 	private boolean patient;
 	
 	public MovementWardForPrint(MovementWard mov) {
@@ -28,6 +29,7 @@ public class MovementWardForPrint implements Comparable<MovementWardForPrint>{
 		this.quantity = mov.getQuantity();
 		this.units = mov.getUnits();
 		this.patient = mov.isPatient() || mov.getWardTo() == null || mov.getWardFrom() == null;
+		this.lot=mov.getLot().getCode();
 	}
 
 	public int getCode(){
@@ -49,7 +51,9 @@ public class MovementWardForPrint implements Comparable<MovementWardForPrint>{
 	public String getWard() {
 		return ward;
 	}
-
+	public String getLot() {
+		return lot;
+	}
 	public String getUnits() {
 		return units;
 	}

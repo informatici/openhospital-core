@@ -90,6 +90,8 @@ public class Movement extends Auditable<String>
 	
 	@Transient
 	private volatile int hashCode = 0;
+
+
 	
 
 	public Movement() { }

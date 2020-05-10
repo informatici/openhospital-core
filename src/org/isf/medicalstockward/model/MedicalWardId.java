@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
 import org.isf.ward.model.Ward;
 
 
@@ -34,14 +35,19 @@ public class MedicalWardId implements Serializable
 	@JoinColumn(name="MDSRWRD_MDSR_ID")
 	private Medical medical;
 	
+	@ManyToOne
+	@JoinColumn(name="MDSRWRD_LT_ID_A")
+	private Lot lot;
+	
 	public MedicalWardId() 
 	{
 	}
 	
-	public MedicalWardId(Ward ward, Medical medical) 
+	public MedicalWardId(Ward ward, Medical medical, Lot lot) 
 	{
 		this.ward = ward;
 		this.medical = medical;
+		this.lot = lot;
 	}
 
 	public Ward getWard() {
@@ -50,6 +56,13 @@ public class MedicalWardId implements Serializable
 	
 	public void setWard(Ward ward) {
 		this.ward = ward;
+	}
+	public Lot getLot() {
+		return this.lot;
+	}
+	
+	public void setLot(Lot lot) {
+		this.lot = lot;
 	}
 
 	public Medical getMedical() {
