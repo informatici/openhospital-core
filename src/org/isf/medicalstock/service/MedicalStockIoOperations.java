@@ -569,6 +569,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Retrieves lot referred to the specified {@link Medical}.
+	 * Lots with zero quantities will be stripepd out
 	 * @param medical the medical.
 	 * @return a list of {@link Lot}.
 	 * @throws OHServiceException if an error occurs retrieving the lot list.
@@ -588,7 +589,7 @@ public class MedicalStockIoOperations {
 			lots.add(lot);
 		}
 		
-		// remve empy lots
+		// remove empty lots
 		ArrayList<Lot> emptyLots = new ArrayList<Lot>();
 		for (Lot aLot : lots) {
 			if (aLot.getQuantity() == 0)
@@ -606,7 +607,8 @@ public class MedicalStockIoOperations {
 		lot.setCode((String)object[0]);
 		lot.setPreparationDate(_convertTimestampToCalendar((Timestamp)object[1]));
 		lot.setDueDate(_convertTimestampToCalendar((Timestamp)object[2]));
-		lot.setCost(new BigDecimal((Double) object[3]));
+		Double cost = (Double) object[3]; // LOT COST could be null because of LOTWITHCOST=no
+		lot.setCost(cost != null? new BigDecimal(cost) : null);
 		lot.setQuantity(((Double)object[4]).intValue());
 		
 		return lot;
