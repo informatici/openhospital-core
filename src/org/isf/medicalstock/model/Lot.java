@@ -49,11 +49,11 @@ public class Lot extends Auditable<String>
 	@Column(name="LT_DUE_DATE")
 	private GregorianCalendar dueDate;
 
-	@Transient
-	private int quantity;
-	
 	@Column(name="LT_COST")
 	private BigDecimal cost;
+	
+	@Transient
+	private int quantity;
 	
 	@Transient
 	private volatile int hashCode = 0;
