@@ -78,6 +78,7 @@ public class MedicalStockIoOperations {
 	
 	/**
 	 * Store the specified {@link Movement} by using automatically the most old lots
+	 * and splitting in more movements if required
 	 * @param movement - the {@link Movement} to store
 	 * @return <code>true</code> if the movement has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException
@@ -94,26 +95,31 @@ public class MedicalStockIoOperations {
 			int qty = movement.getQuantity();			
 			for (Lot lot : lots) 
 			{
+				Movement splitMovement = new Movement(movement.getMedical(), movement.getType(), movement.getWard(),
+						null, // lot to be set
+						movement.getDate(), qty, 
+						null, // quantity to be set
+						movement.getRefNo());
 				int qtLot = lot.getQuantity();
 				if (qtLot < qty) 
 				{
-					movement.setQuantity(qtLot);
-					result = storeMovement(movement, lot.getCode());
+					splitMovement.setQuantity(qtLot);
+					result = storeMovement(splitMovement, lot.getCode());
 					if (result) 
 					{
 						//medical stock movement inserted updates quantity of the medical
-						result = updateStockQuantity(movement);
+						result = updateStockQuantity(splitMovement);
 					}
 					qty = qty - qtLot;
 				} 
 				else 
 				{
-					movement.setQuantity(qty);
-					result = storeMovement(movement, lot.getCode());
+					splitMovement.setQuantity(qty);
+					result = storeMovement(splitMovement, lot.getCode());
 					if (result) 
 					{
 						//medical stock movement inserted updates quantity of the medical
-						result = updateStockQuantity(movement);
+						result = updateStockQuantity(splitMovement);
 					}
 					break;
 				}
