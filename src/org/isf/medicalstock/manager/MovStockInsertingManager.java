@@ -12,9 +12,8 @@ import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
-import org.isf.utils.exception.OHDataIntegrityViolationException;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -249,16 +248,16 @@ public class MovStockInsertingManager {
 		return ioOperations.refNoExists(refNo);
 	}
 	
-	/**
-	 * insert a list of {@link Movement}s and related {@link Lot}s
-	 * 
-	 * @param movements - the list of {@link Movement}s
-	 * @return 
-	 * @throws OHServiceException 
-	 */
-	public boolean newMultipleChargingMovements(ArrayList<Movement> movements) throws OHServiceException {
-		return newMultipleChargingMovements(movements, null);
-	}
+//	/**
+//	 * insert a list of {@link Movement}s and related {@link Lot}s
+//	 * 
+//	 * @param movements - the list of {@link Movement}s
+//	 * @return 
+//	 * @throws OHServiceException 
+//	 */
+//	public boolean newMultipleChargingMovements(ArrayList<Movement> movements) throws OHServiceException {
+//		return newMultipleChargingMovements(movements, null);
+//	}
 
 	/**
 	 * Insert a list of charging {@link Movement}s and related {@link Lot}s
@@ -310,17 +309,17 @@ public class MovStockInsertingManager {
 		return ioOperations.prepareChargingMovement(movement);
 	}
 	
-	/**
-	 * Insert a list of discharging {@link Movement}s
-	 * 
-	 * @param movements - the list of {@link Movement}s
-	 * @return 
-	 * @throws OHServiceException 
-	 */
-	@Transactional(rollbackFor=OHServiceException.class)
-	public boolean newMultipleDischargingMovements(ArrayList<Movement> movements) throws OHServiceException {
-		return newMultipleDischargingMovements(movements, null);
-	}
+//	/**
+//	 * Insert a list of discharging {@link Movement}s
+//	 * 
+//	 * @param movements - the list of {@link Movement}s
+//	 * @return 
+//	 * @throws OHServiceException 
+//	 */
+//	@Transactional(rollbackFor=OHServiceException.class)
+//	public boolean newMultipleDischargingMovements(ArrayList<Movement> movements) throws OHServiceException {
+//		return newMultipleDischargingMovements(movements, null);
+//	}
 
 	/**
 	 * Insert a list of discharging {@link Movement}s
