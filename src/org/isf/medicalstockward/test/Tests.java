@@ -271,24 +271,28 @@ public class Tests
 			Ward ward = testWard.setup(false);
 			Patient patient = testPatient.setup(false);
 			Lot lot = testLot.setup(false);
+			
+			Ward wardTo = testWard.setup(false);
+			wardTo.setCode("X");
 		
 			jpa.beginTransaction();	
 			jpa.persist(medicalType);
 			jpa.persist(medical);
 			jpa.persist(ward);
+			jpa.persist(wardTo);
 			jpa.persist(patient);
 			jpa.persist(lot);
-			MovementWard movementWard = testMovementWard.setup(ward, patient, medical, ward, ward, lot, false);
+			MovementWard movementWard = testMovementWard.setup(ward, patient, medical, wardTo, null, lot, false);
 			jpa.persist(movementWard);
 			jpa.commitTransaction();
 			
 			result = medicalIoOperation.newMovementWard(movementWard);
-			int quantity = medicalIoOperation.getCurrentQuantityInWard(
-					ward,
+			Double quantity = (double) medicalIoOperation.getCurrentQuantityInWard(
+					wardTo,
 					medical);
 
 			_checkMovementWardIntoDb(movementWard.getCode());
-			assertEquals(-46, quantity);
+			assertEquals(quantity, movementWard.getQuantity());
 		} 
 		catch (Exception e) 
 		{
@@ -312,20 +316,24 @@ public class Tests
 			Ward ward = testWard.setup(false);
 			Patient patient = testPatient.setup(false);
 			Lot lot = testLot.setup(false);
+			
+			Ward wardTo = testWard.setup(false);
+			wardTo.setCode("X");
 		
 			jpa.beginTransaction();	
 			jpa.persist(medicalType);
 			jpa.persist(medical);
 			jpa.persist(ward);
+			jpa.persist(wardTo);
 			jpa.persist(patient);
 			jpa.persist(lot);
 			jpa.commitTransaction();
-			movementWard = testMovementWard.setup(ward, patient, medical, ward, ward, lot, false);
+			movementWard = testMovementWard.setup(ward, patient, medical, wardTo, null, lot, false);
 			result = medicalIoOperation.newMovementWard(movementWard);
-			Double quantity = (double) medicalIoOperation.getCurrentQuantityInWard(ward, medical);
+			Double quantity = (double) medicalIoOperation.getCurrentQuantityInWard(wardTo, medical);
 			
 			_checkMovementWardIntoDb(movementWard.getCode());
-			assertEquals(quantity.compareTo(-movementWard.getQuantity()), 0);
+			assertEquals(quantity, movementWard.getQuantity());
 		} 
 		catch (Exception e) 
 		{
