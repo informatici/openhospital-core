@@ -22,9 +22,6 @@ public class TestMovementWard
 	private String description = "TestDescriptionm";
 	private Double quantity = 46.;
 	private String units = "TestUni";
-	private Ward wardTo;
-	private Ward wardFrom;
-	private Lot lot;
     
 			
 	public MovementWard setup(
@@ -37,10 +34,6 @@ public class TestMovementWard
 			boolean usingSet) throws OHException 
 	{
 		MovementWard movementWard;
-		this.wardTo = wardTo;
-		this.wardFrom = wardFrom;
-		this.lot = lot;
-	
 				
 		if (usingSet)
 		{

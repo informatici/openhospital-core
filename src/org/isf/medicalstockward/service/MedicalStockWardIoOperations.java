@@ -122,7 +122,6 @@ public class MedicalStockWardIoOperations
 			destinationWardIncomeMovement.setWard(savedMovement.getWardTo());
 			destinationWardIncomeMovement.setWardFrom(savedMovement.getWard());
 			destinationWardIncomeMovement.setlot(savedMovement.getLot());
-			
 			movementRepository.save(destinationWardIncomeMovement);
 		}
 		
@@ -269,9 +268,7 @@ public class MedicalStockWardIoOperations
 			char wardId) throws OHServiceException
 	{
 		String WardID=String.valueOf(wardId);
-            System.out.println("MedicalStockWardIoOperations: Looking for drugs ");
 		ArrayList<MedicalWard> medicalWards = getMedicalsWard(wardId);
-		System.out.println("MedicalStockWardIoOperations " + medicalWards.size() + " drugs in "+wardId);
 		
 		for (int i=0; i<medicalWards.size(); i++)
 		{
@@ -298,5 +295,3 @@ public class MedicalStockWardIoOperations
 		return medicalWardsQty;
 	}
 }
-
-

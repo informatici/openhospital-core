@@ -185,6 +185,5 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	    }
 	  
 	    return this.hashCode;
-	}
-	
+	}	
 }

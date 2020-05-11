@@ -449,7 +449,7 @@ public class Tests
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical= testMedical.setup(medicalType, false);
 		Ward ward = testWard.setup(false);
-		Lot lot =testLot.setup(false);
+		Lot lot = testLot.setup(false);
 		
 	
 		jpa.beginTransaction();	

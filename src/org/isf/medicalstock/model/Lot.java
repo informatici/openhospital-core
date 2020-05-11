@@ -45,8 +45,9 @@ public class Lot extends Auditable<String>
 	private String code;
 
 	@ManyToOne
-		@JoinColumn(name="LT_MDSR_ID")
-		private Medical medical;
+	@JoinColumn(name="LT_MDSR_ID")
+	private Medical medical;
+	
 	@NotNull
 	@Column(name="LT_PREP_DATE")
 	private GregorianCalendar preparationDate;
