@@ -120,8 +120,14 @@ public class ExaminationParameters {
 	public static int HGT_INIT;
 	private static int DEFAULT_HGT_INIT = 80;
 	
+	public static int DIURESIS_MIN;
+	private static int DEFAULT_DIURESIS_MIN = 0;
+	
+	public static int DIURESIS_MAX;
+	private static int DEFAULT_DIURESIS_MAX = 2500;
+	
 	public static int DIURESIS_INIT;
-	private static int DEFAULT_DIURESIS_INIT = 0;
+	private static int DEFAULT_DIURESIS_INIT = 100;
 	
 	public static int LIST_SIZE;
 	private static int DEFAULT_LIST_SIZE = 4;
@@ -170,6 +176,9 @@ public class ExaminationParameters {
 			HGT_MIN = myGetProperty("HGT_MIN", DEFAULT_HGT_MIN);
 			HGT_MAX = myGetProperty("HGT_MAX", DEFAULT_HGT_MAX);
 			HGT_INIT = myGetProperty("HGT_INIT", DEFAULT_HGT_INIT);
+			
+			DIURESIS_MIN = myGetProperty("DIURESIS_MIN", DEFAULT_DIURESIS_MIN);
+			DIURESIS_MAX = myGetProperty("DIURESIS_MAX", DEFAULT_DIURESIS_MAX);
 			DIURESIS_INIT = myGetProperty("DIURESIS_INIT", DEFAULT_DIURESIS_INIT);
 
 			RR_MIN = myGetProperty("RR_MIN", DEFAULT_RR_MIN);
