@@ -247,11 +247,13 @@ public class MedicalStockWardIoOperations
 	 * @throws OHServiceException if an error occurs during the medical retrieving.
 	 */
 	public ArrayList<MedicalWard> getMedicalsWard(
-			char wardId) throws OHServiceException
+			char wardId, boolean w) throws OHServiceException
 	{
 		ArrayList<MedicalWard> medicalWards = new ArrayList<MedicalWard>(repository.findAllWhereWard(wardId));
 		for (int i=0; i<medicalWards.size(); i++)
+			
 		{
+			if (w){
 			double qty = Double.valueOf(medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
 			if (qty != 0.0) {
 				medicalWards.get(i).setQty(qty);
@@ -259,16 +261,20 @@ public class MedicalStockWardIoOperations
 				medicalWards.remove(i);
 				i= i-1;
 			}
+			}else {
+				double qty = Double.valueOf(medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
+				medicalWards.get(i).setQty(qty);
+			}
 		}
 		
 		return medicalWards;
 	}
 	
 	public ArrayList<MedicalWard> getMedicalsWardDrugs(
-			char wardId) throws OHServiceException
+			char wardId, boolean w) throws OHServiceException
 	{
 		String WardID=String.valueOf(wardId);
-		ArrayList<MedicalWard> medicalWards = getMedicalsWard(wardId);
+		ArrayList<MedicalWard> medicalWards = getMedicalsWard(wardId, w);
 		
 		for (int i=0; i<medicalWards.size(); i++)
 		{

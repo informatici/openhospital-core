@@ -136,6 +136,22 @@ public class MovementWard  extends Auditable<String>
 		this.quantity = quantity;
 		this.units = units;
 	}
+	public MovementWard(Ward ward, GregorianCalendar date, boolean isPatient,
+			Patient patient, int age, float weight, String description, Medical medical,
+			Double quantity, String units,Lot lot) {
+		super();
+		this.ward = ward;
+		this.date = date;
+		this.isPatient = isPatient;
+		this.patient = patient;
+		this.age = age;
+		this.weight = weight;
+		this.description = description;
+		this.medical = medical;
+		this.quantity = quantity;
+		this.units = units;
+		this.lot=lot;
+	}
 
     /**
 	 * 

@@ -77,12 +77,12 @@ public class MovWardBrowserManager {
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<MedicalWard> getMedicalsWard(char wardId) throws OHServiceException {
-		return ioOperations.getMedicalsWard(wardId);
+	public ArrayList<MedicalWard> getMedicalsWard(char wardId, boolean w) throws OHServiceException {
+		return ioOperations.getMedicalsWard(wardId,w);
 	}
 
-	public ArrayList<MedicalWard> getMedicalsWardDrug(char wardId) throws OHServiceException {
-        return ioOperations.getMedicalsWardDrugs(wardId);
+	public ArrayList<MedicalWard> getMedicalsWardDrug(char wardId, boolean w) throws OHServiceException {
+        return ioOperations.getMedicalsWardDrugs(wardId,w);
 	}
 
 	/**
