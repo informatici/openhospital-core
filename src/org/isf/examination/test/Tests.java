@@ -121,26 +121,6 @@ public class Tests
 	}
 	
 	@Test
-	public void testGetDefaultPatientExamination()
-	{
-		try 
-		{		
-			Patient	patient = testPatient.setup(false);
-
-			
-			PatientExamination patientExamination = examinationOperations.getDefaultPatientExamination(patient);
-			testPatient.check(patientExamination.getPatient());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-				
-		return;
-	}	
-	
-	@Test
 	public void testGetFromLastPatientExamination()
 	{		
 		try 
@@ -172,10 +152,10 @@ public class Tests
 		{		
 			id = _setupTestPatientExamination(false);	
 			PatientExamination patientExamination = (PatientExamination)jpa.find(PatientExamination.class, id); 
-			int pex_fc = patientExamination.getPex_fc();
-			patientExamination.setPex_fc(pex_fc + 1);
+			Integer pex_hr = patientExamination.getPex_hr();
+			patientExamination.setPex_hr(pex_hr + 1);
 			examinationOperations.saveOrUpdate(patientExamination);
-			assertEquals((pex_fc + 1), patientExamination.getPex_fc());
+			assertEquals((Integer)(pex_hr + 1), patientExamination.getPex_hr());
 		} 
 		catch (Exception e) 
 		{

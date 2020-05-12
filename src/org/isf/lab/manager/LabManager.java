@@ -8,7 +8,9 @@ package org.isf.lab.manager;
  *------------------------------------------*/
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 
 import org.isf.generaldata.GeneralData;
@@ -22,6 +24,7 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.validator.DefaultSorter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,12 +35,11 @@ public class LabManager {
 	@Autowired
 	private LabIoOperations ioOperations;
 	
-	@Autowired
-	private LabRowManager rowManager;
-	
 	public void setIoOperations(LabIoOperations ioOperations) {
 		this.ioOperations = ioOperations;
 	}
+	
+	protected HashMap<String, String> materialHashMap;
 	
 	/**
 	 * For JUnitTest org.isf.lab.test.Tests.testManagerNewLaboratoryTransaction()
@@ -385,23 +387,58 @@ public class LabManager {
 		}
 	}
 	
+	public String getMaterialTranslated(String materialKey) {
+		if (materialHashMap == null) buildMaterialHashMap();
+		if (materialKey == null || !materialHashMap.containsKey(materialKey)) 
+			return MessageBundle.getMessage("angal.lab.undefined"); 
+		else return materialHashMap.get(materialKey);
+	}
+	
+	public String getMaterialKey(String description) {
+		if (materialHashMap == null) buildMaterialHashMap();
+		String key = "undefined";
+		for (String value : materialHashMap.keySet()) {
+			if (materialHashMap.get(value).equals(description)) {
+				key = value;
+				break;
+			}
+		}
+		return key;
+	}
+	
+	private void buildMaterialHashMap() {
+		materialHashMap = new HashMap<String, String>();
+		materialHashMap.put("undefined", MessageBundle.getMessage("angal.lab.undefined"));
+		materialHashMap.put("blood", MessageBundle.getMessage("angal.lab.blood"));
+		materialHashMap.put("urine", MessageBundle.getMessage("angal.lab.urine"));
+		materialHashMap.put("stool", MessageBundle.getMessage("angal.lab.stool"));
+		materialHashMap.put("sputum", MessageBundle.getMessage("angal.lab.sputum"));
+		materialHashMap.put("cfs", MessageBundle.getMessage("angal.lab.cfs"));
+		materialHashMap.put("swabs", MessageBundle.getMessage("angal.lab.swabs"));
+		materialHashMap.put("tissues", MessageBundle.getMessage("angal.lab.tissues"));
+		materialHashMap.put("film", MessageBundle.getMessage("angal.lab.film"));
+	}
+	
 	/**
-	 * The list of Materials
+	 * return a list of material descriptions (default: undefined):
+	 * undefined,
+	 * blood,
+	 * urine,
+	 * stool,
+	 * sputum,
+	 * cfs,
+	 * swabs,
+	 * tissues,
+	 * film
 	 * @return
 	 */
 	public ArrayList<String> getMaterialList() {
-		ArrayList<String> materialList = new ArrayList<String>();
-		materialList.add(MessageBundle.getMessage("angal.lab.blood"));
-		materialList.add(MessageBundle.getMessage("angal.lab.urine"));
-		materialList.add(MessageBundle.getMessage("angal.lab.stool"));
-		materialList.add(MessageBundle.getMessage("angal.lab.sputum"));
-		materialList.add(MessageBundle.getMessage("angal.lab.cfs"));
-		materialList.add(MessageBundle.getMessage("angal.lab.swabs"));
-		materialList.add(MessageBundle.getMessage("angal.lab.tissues"));
-		materialList.add(MessageBundle.getMessage("angal.lab.film"));
-		return materialList;
+		if (materialHashMap == null) buildMaterialHashMap();
+		ArrayList<String> materialDescriptionList = new ArrayList<String>(materialHashMap.values());
+		Collections.sort(materialDescriptionList,  new DefaultSorter(MessageBundle.getMessage("angal.lab.undefined")));
+		return materialDescriptionList;
 	}
-
+	
     /**
     * Returns the max progressive number within specified month of specified year.
     * 
