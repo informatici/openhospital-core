@@ -49,7 +49,7 @@ public class ExaminationOperations {
 				lastPatientExamination.getPex_diuresis_desc(),
 				lastPatientExamination.getPex_bowel_desc(),
 				lastPatientExamination.getPex_rr(),
-				lastPatientExamination.getPex_ausc(),
+				lastPatientExamination.getPex_auscultation(),
 				lastPatientExamination.getPex_note());
 		return newPatientExamination;
 	}

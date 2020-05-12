@@ -78,7 +78,11 @@ public class ExaminationParameters {
 	public static int RR_INIT;
 	private static int DEFAULT_RR_INIT = 15;
 
-	public static String AUSC_INIT = "normal";
+	public static String AUSCULTATION_INIT = "normal";
+	
+	public static String DIURESIS_DESC_INIT = "physiological";
+	
+	public static String BOWEL_DESC_INIT = "regular";
 	
 //	public static String TEMP_UNIT;
 //	private static String DEFAULT_TEMP_UNIT = "°C";
