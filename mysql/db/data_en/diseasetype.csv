@@ -1,7 +1,7 @@
 AB;A00-B99 Infectious and parasitic
 CD;C00-D48 Neoplasms
-D;"D50-D89 Blood; blood-forming organs and immune mechanism"
-E;"E00-E90 Endocrine; nutritional and metabolic diseases"
+D;D50-D89 Blood, blood-forming organs and immune mechanism
+E;E00-E90 Endocrine, nutritional and metabolic diseases
 F;F00-F99 Mental and behavioural disorders
 G;G00-G99 Nervous system
 H1;H00-H59 Eye and adnexa
@@ -12,10 +12,10 @@ K;K00-K93 Digestive system
 L;L00-L99 Skin and subcutaneous tissue
 M;M00-M99 Musculoskeletal system and connective tissue
 N;N00-N99 Genitourinary system
-O;"O00-O99 Pregnancy; childbirth and the puerperium"
+O;O00-O99 Pregnancy, childbirth and the puerperium
 P;P00-P96 Conditions originating in the perinatal period
-Q;"Q00-Q99 Congenital malformations; deformations and chromosomal abnormalities"
-R;"R00-R99 Symptoms; signs and abnormal clinical and laboratory findings; not elsewhere classified"
-ST;"S00-T98 Injury; poisoning and certain other consequences of external causes"
+Q;Q00-Q99 Congenital malformations, deformations and chromosomal abnormalities
+R;R00-R99 Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified
+ST;S00-T98 Injury, poisoning and certain other consequences of external causes
 VY;V01-Y98 External causes of morbidity and mortality
 Z;Z00-Z99 Factors influencing health status and contact with health services
