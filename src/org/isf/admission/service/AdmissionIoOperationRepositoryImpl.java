@@ -41,7 +41,52 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 		}
 		query += " ORDER BY PAT_ID DESC";
 
-		final List<Object[]> resultList = this.entityManager.createNativeQuery(query).getResultList();
+		return findPatientAdmissionQuery(this.entityManager.createNativeQuery(query).getResultList());
+	}
+
+	@Override
+	public List<PatientAdmission> findPatientAdmissionsBySearchAndDateRanges(final String searchTerms,
+																			 final GregorianCalendar[] admissionRange,
+																			 final GregorianCalendar[] dischargeRange) {
+		String[] terms = _calculateAdmittedPatientsTerms(searchTerms);
+		String query = "SELECT PAT.PAT_ID, ADM.ADM_ID " +
+				"FROM PATIENT PAT LEFT JOIN " +
+				"(SELECT * FROM ADMISSION WHERE (ADM_DELETED='N' or ADM_DELETED is null) ORDER BY ADM_IN DESC) ADM " +
+				"ON ADM.ADM_PAT_ID = PAT.PAT_ID " +
+				"WHERE (PAT.PAT_DELETED='N' or PAT.PAT_DELETED is null) ";
+
+		if(admissionRange != null) {
+			if (admissionRange.length == 2 && admissionRange[0] != null //
+					&& admissionRange[1] != null) {
+				query += " AND DATE(ADM.ADM_DATE_ADM) BETWEEN " +
+						TimeTools.formatDateTime(admissionRange[0], "'yyyy-MM-dd'") +
+						" AND " +
+						TimeTools.formatDateTime(admissionRange[1], "'yyyy-MM-dd'");
+			}
+		}
+
+		if(dischargeRange != null) {
+			if (dischargeRange.length == 2 && dischargeRange[0] != null //
+					&& dischargeRange[1] != null) {
+				query += " AND DATE(ADM.ADM_DATE_DIS) BETWEEN '" +
+						TimeTools.formatDateTime(dischargeRange[0], "yyyy-MM-dd") +
+						"' AND '" +
+						TimeTools.formatDateTime(dischargeRange[1], "yyyy-MM-dd") +
+						"'";
+			}
+		}
+
+		if (terms != null) {
+			for (String term:terms) {
+				query += " AND CONCAT(PAT_ID, LOWER(PAT_SNAME), LOWER(PAT_FNAME), LOWER(PAT_NOTE), LOWER(PAT_TAXCODE)) LIKE \"%" + term + "%\"";
+			}
+		}
+		query += " ORDER BY PAT_ID DESC";
+
+		return findPatientAdmissionQuery(this.entityManager.createNativeQuery(query).getResultList());
+	}
+
+	private List<PatientAdmission> findPatientAdmissionQuery(List<Object[]> resultList) {
 		final List<PatientAdmission> result = new ArrayList<PatientAdmission>(resultList.size());
 		for (final Object[] arrays : resultList) {
 			result.add(new PatientAdmission((Integer) arrays[0], (Integer) arrays[1]));
@@ -111,7 +156,7 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 	{
 		String[] terms = _calculateAdmittedPatientsTerms(searchTerms);
 		String query = _calculateAdmittedPatientsQuery(terms, admissionRange, dischargeRange);
-		
+
 		
 		return query;
 	}

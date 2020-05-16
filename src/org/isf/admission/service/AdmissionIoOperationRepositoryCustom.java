@@ -10,12 +10,24 @@ import java.util.List;
 
 public interface AdmissionIoOperationRepositoryCustom {
 
+	/**
+	 * @deprecated unless you need all the columns from patient and admission, use {@link #findPatientAndAdmissionId(String)} instead
+	 */
+	@Deprecated
 	List<Object[]> findAllBySearch(String searchTerms);
 
 	List<PatientAdmission> findPatientAndAdmissionId(String searchTerms);
-	
+
+	/**
+	 * @deprecated unless you need all the columns from patient and admission, use {@link #findPatientAdmissionsBySearchAndDateRanges(String, GregorianCalendar[], GregorianCalendar[])} instead
+	 */
+	@Deprecated
 	List<Object[]> findAllBySearchAndDateRanges(String searchTerms, GregorianCalendar[] admissionRange,
-			GregorianCalendar[] dischargeRange);
+												GregorianCalendar[] dischargeRange);
+
+	List<PatientAdmission> findPatientAdmissionsBySearchAndDateRanges(String searchTerms,
+																	  GregorianCalendar[] admissionRange,
+																	  GregorianCalendar[] dischargeRange);
 
 
 	class PatientAdmission {

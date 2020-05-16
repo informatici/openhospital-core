@@ -208,13 +208,24 @@ public class Tests
 	}
 
 	@Test
-	public void testIoGetAdmittedPatients() throws Exception {
+	public void test_simple_getAdmittedPatients() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
 		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
-		ArrayList<AdmittedPatient> patientsNull = admissionIoOperation.getAdmittedPatients(null);
+		ArrayList<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null);
 
-		assertEquals(patients.size(), patientsNull.size());
+		assertEquals(patients.size(), searchResult.size());
+		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+	}
+
+	@Test
+	public void test_getAdmittedPatient_with_dateRanges() throws Exception {
+		int id = _setupTestAdmission(false);
+		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
+		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
+		ArrayList<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null, null, null);
+
+		assertEquals(patients.size(), searchResult.size());
 		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
 	}
 

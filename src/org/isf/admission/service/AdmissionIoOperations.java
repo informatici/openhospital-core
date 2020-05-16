@@ -66,7 +66,7 @@ public class AdmissionIoOperations
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public ArrayList<AdmittedPatient> getAdmittedPatients(
-			String searchTerms) throws OHServiceException 
+			String searchTerms) throws OHServiceException
 	{
 		final ArrayList<AdmittedPatient> admittedPatients = new ArrayList<AdmittedPatient>();
 		final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList = repository.findPatientAndAdmissionId(searchTerms);
@@ -108,19 +108,16 @@ public class AdmissionIoOperations
 			String searchTerms, GregorianCalendar[] admissionRange, 
 			GregorianCalendar[] dischargeRange) throws OHServiceException 
 	{
-		ArrayList<AdmittedPatient> admittedPatients = new ArrayList<AdmittedPatient>();
-		List<Object[]> admittedPatientsList = (List<Object[]>)repository.findAllBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
+		final ArrayList<AdmittedPatient> admittedPatients = new ArrayList<AdmittedPatient>();
+		final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList = repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
 
-
-		for (Object[] object : admittedPatientsList) {
-			Patient patient = patientRepository.findOne((Integer) object[0]);
+		for (final AdmissionIoOperationRepositoryCustom.PatientAdmission patientAdmission : admittedPatientsList) {
+			final Patient patient = patientRepository.findOne(patientAdmission.getPatientId());
 			Admission admission = null;
-			Integer admissionId = (Integer)object[28];
-			if (admissionId != null) {
-				admission = repository.findOne(admissionId);
+			if (patientAdmission.getAdmissionId() != null) {
+				admission = repository.findOne(patientAdmission.getAdmissionId());
 			}
-			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);
-			admittedPatients.add(admittedPatient);
+			admittedPatients.add(new AdmittedPatient(patient, admission));
 		}
 
 		return admittedPatients;
