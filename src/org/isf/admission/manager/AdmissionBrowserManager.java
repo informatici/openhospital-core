@@ -1,12 +1,5 @@
 package org.isf.admission.manager;
 
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
-
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
 import org.isf.admission.service.AdmissionIoOperations;
@@ -15,13 +8,15 @@ import org.isf.disctype.model.DischargeType;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.text.DateFormat;
+import java.util.*;
 
 @Component
 public class AdmissionBrowserManager {
@@ -61,7 +56,7 @@ public class AdmissionBrowserManager {
 		return ioOperations.getAdmittedPatients(searchTerms, admissionRange, dischargeRange);
 	}
 
-	public AdmittedPatient loadAdmittedPatients(final @NotNull Integer patientId) {
+	public AdmittedPatient loadAdmittedPatients(final Integer patientId) {
 		return ioOperations.loadAdmittedPatient(patientId);
 	}
 

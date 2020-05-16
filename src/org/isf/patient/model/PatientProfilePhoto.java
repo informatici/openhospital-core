@@ -1,17 +1,11 @@
 package org.isf.patient.model;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.jetbrains.annotations.Nullable;
-
 import javax.imageio.ImageIO;
 import javax.persistence.*;
 import java.awt.*;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.Serializable;
-import java.sql.Blob;
-import java.sql.SQLException;
 
 /**
  * Photo related to a single {@link Patient}
@@ -37,7 +31,6 @@ public class PatientProfilePhoto implements Serializable {
 		return photo;
 	}
 
-	@Nullable
 	public Image getPhotoAsImage() {
 		try {
 			if (photo != null && photo.length > 0) {

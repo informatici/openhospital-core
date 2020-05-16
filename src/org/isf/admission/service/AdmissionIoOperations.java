@@ -27,8 +27,6 @@ import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,8 +87,7 @@ public class AdmissionIoOperations
 	/**
 	 * Load patient together with the profile photo, or <code>null</code> if there is no patient with the given id
 	 */
-	@Nullable
-	public AdmittedPatient loadAdmittedPatient(final @NotNull Integer patientId) {
+	public AdmittedPatient loadAdmittedPatient(final Integer patientId) {
 		final Patient patient = patientRepository.findOne(patientId);
 		if (patient == null) {
 			return null;
