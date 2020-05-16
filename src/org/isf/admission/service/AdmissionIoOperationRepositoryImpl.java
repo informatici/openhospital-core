@@ -13,7 +13,7 @@ import java.util.List;
 
 @Transactional
 public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationRepositoryCustom {
-	
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -49,41 +49,46 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 																			 final GregorianCalendar[] admissionRange,
 																			 final GregorianCalendar[] dischargeRange) {
 		String[] terms = _calculateAdmittedPatientsTerms(searchTerms);
-		String query = "SELECT PAT.PAT_ID, ADM.ADM_ID " +
+
+		final StringBuilder queryBuilder = new StringBuilder();
+		queryBuilder.append("SELECT PAT.PAT_ID, ADM.ADM_ID " +
 				"FROM PATIENT PAT LEFT JOIN " +
 				"(SELECT * FROM ADMISSION WHERE (ADM_DELETED='N' or ADM_DELETED is null) ORDER BY ADM_IN DESC) ADM " +
 				"ON ADM.ADM_PAT_ID = PAT.PAT_ID " +
-				"WHERE (PAT.PAT_DELETED='N' or PAT.PAT_DELETED is null) ";
+				"WHERE (PAT.PAT_DELETED='N' or PAT.PAT_DELETED is null) ");
 
 		if(admissionRange != null) {
 			if (admissionRange.length == 2 && admissionRange[0] != null //
 					&& admissionRange[1] != null) {
-				query += " AND DATE(ADM.ADM_DATE_ADM) BETWEEN " +
-						TimeTools.formatDateTime(admissionRange[0], "'yyyy-MM-dd'") +
-						" AND " +
-						TimeTools.formatDateTime(admissionRange[1], "'yyyy-MM-dd'");
+				queryBuilder.append(" AND DATE(ADM.ADM_DATE_ADM) BETWEEN '")
+						.append(TimeTools.formatDateTime(admissionRange[0], TimeTools.YYYY_MM_DD))
+						.append("' AND '")
+						.append(TimeTools.formatDateTime(admissionRange[1], TimeTools.YYYY_MM_DD))
+						.append("'");
 			}
 		}
 
 		if(dischargeRange != null) {
 			if (dischargeRange.length == 2 && dischargeRange[0] != null //
 					&& dischargeRange[1] != null) {
-				query += " AND DATE(ADM.ADM_DATE_DIS) BETWEEN '" +
-						TimeTools.formatDateTime(dischargeRange[0], "yyyy-MM-dd") +
-						"' AND '" +
-						TimeTools.formatDateTime(dischargeRange[1], "yyyy-MM-dd") +
-						"'";
+				queryBuilder.append(" AND DATE(ADM.ADM_DATE_DIS) BETWEEN '")
+						.append(TimeTools.formatDateTime(dischargeRange[0], TimeTools.YYYY_MM_DD))
+						.append("' AND '")
+						.append(TimeTools.formatDateTime(dischargeRange[1], TimeTools.YYYY_MM_DD))
+						.append("'");
 			}
 		}
 
 		if (terms != null) {
 			for (String term:terms) {
-				query += " AND CONCAT(PAT_ID, LOWER(PAT_SNAME), LOWER(PAT_FNAME), LOWER(PAT_NOTE), LOWER(PAT_TAXCODE)) LIKE \"%" + term + "%\"";
+				queryBuilder.append(" AND CONCAT(PAT_ID, LOWER(PAT_SNAME), LOWER(PAT_FNAME), LOWER(PAT_NOTE), LOWER(PAT_TAXCODE)) LIKE \"%")
+						.append(term)
+						.append("%\"");
 			}
 		}
-		query += " ORDER BY PAT_ID DESC";
+		queryBuilder.append(" ORDER BY PAT_ID DESC");
 
-		return findPatientAdmissionQuery(this.entityManager.createNativeQuery(query).getResultList());
+		return findPatientAdmissionQuery(this.entityManager.createNativeQuery(queryBuilder.toString()).getResultList());
 	}
 
 	private List<PatientAdmission> findPatientAdmissionQuery(List<Object[]> resultList) {
@@ -186,9 +191,9 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 			if (dischargeRange.length == 2 && dischargeRange[0] != null //
 					&& dischargeRange[1] != null) {
 				query += " AND DATE(ADM.ADM_DATE_DIS) BETWEEN '" +
-						TimeTools.formatDateTime(dischargeRange[0], "yyyy-MM-dd") + 
+						TimeTools.formatDateTime(dischargeRange[0], TimeTools.YYYY_MM_DD) +
 						"' AND '" +  
-						TimeTools.formatDateTime(dischargeRange[1], "yyyy-MM-dd") +
+						TimeTools.formatDateTime(dischargeRange[1], TimeTools.YYYY_MM_DD) +
 						"'";
 			}
 		}

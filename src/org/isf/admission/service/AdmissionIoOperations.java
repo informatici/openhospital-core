@@ -68,19 +68,37 @@ public class AdmissionIoOperations
 	public ArrayList<AdmittedPatient> getAdmittedPatients(
 			String searchTerms) throws OHServiceException
 	{
-		final ArrayList<AdmittedPatient> admittedPatients = new ArrayList<AdmittedPatient>();
 		final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList = repository.findPatientAndAdmissionId(searchTerms);
+		return loadPatientAndAdmission(admittedPatientsList);
+	}
 
+	/**
+	 * Returns all patients based on the applied filters.
+	 * @param admissionRange the patient admission range
+	 * @param dischargeRange the patient discharge range
+	 * @param searchTerms the search terms to use for filter the patient list, <code>null</code> if no filter have to be applied.
+	 * @return the filtered patient list.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public ArrayList<AdmittedPatient> getAdmittedPatients(
+			String searchTerms, GregorianCalendar[] admissionRange,
+			GregorianCalendar[] dischargeRange) throws OHServiceException
+	{
+		final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList = repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
+		return loadPatientAndAdmission(admittedPatientsList);
+	}
+
+	private ArrayList<AdmittedPatient> loadPatientAndAdmission(final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList) {
+		final ArrayList<AdmittedPatient> result = new ArrayList<AdmittedPatient>();
 		for (final AdmissionIoOperationRepositoryCustom.PatientAdmission patientAdmission : admittedPatientsList) {
 			final Patient patient = patientRepository.findOne(patientAdmission.getPatientId());
 			Admission admission = null;
 			if (patientAdmission.getAdmissionId() != null) {
 				admission = repository.findOne(patientAdmission.getAdmissionId());
 			}
-			admittedPatients.add(new AdmittedPatient(patient, admission));
+			result.add(new AdmittedPatient(patient, admission));
 		}
-
-		return admittedPatients;
+		return result;
 	}
 
 	/**
@@ -96,33 +114,6 @@ public class AdmissionIoOperations
 		return new AdmittedPatient(patient, admission);
 	}
 
-	/**
-	 * Returns all patients based on the applied filters.
-	 * @param admissionRange the patient admission range
-	 * @param dischargeRange the patient discharge range
-	 * @param searchTerms the search terms to use for filter the patient list, <code>null</code> if no filter have to be applied.
-	 * @return the filtered patient list.
-	 * @throws OHServiceException if an error occurs during database request.
-	 */
-	public ArrayList<AdmittedPatient> getAdmittedPatients(
-			String searchTerms, GregorianCalendar[] admissionRange, 
-			GregorianCalendar[] dischargeRange) throws OHServiceException 
-	{
-		final ArrayList<AdmittedPatient> admittedPatients = new ArrayList<AdmittedPatient>();
-		final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList = repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
-
-		for (final AdmissionIoOperationRepositoryCustom.PatientAdmission patientAdmission : admittedPatientsList) {
-			final Patient patient = patientRepository.findOne(patientAdmission.getPatientId());
-			Admission admission = null;
-			if (patientAdmission.getAdmissionId() != null) {
-				admission = repository.findOne(patientAdmission.getAdmissionId());
-			}
-			admittedPatients.add(new AdmittedPatient(patient, admission));
-		}
-
-		return admittedPatients;
-	}
-	
 	/**
 	 * Returns the current admission (or null if none) for the specified patient.
 	 * @param patient the patient target of the admission.
