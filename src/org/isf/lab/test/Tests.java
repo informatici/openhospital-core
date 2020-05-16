@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.isf.exa.model.Exam;
 import org.isf.exa.test.TestExam;
 import org.isf.exa.test.TestExamContext;
+import org.isf.examination.model.PatientExamination;
 import org.isf.exatype.model.ExamType;
 import org.isf.exatype.test.TestExamType;
 import org.isf.exatype.test.TestExamTypeContext;
@@ -17,6 +18,7 @@ import org.isf.lab.model.LaboratoryForPrint;
 import org.isf.lab.model.LaboratoryRow;
 import org.isf.lab.service.LabIoOperations;
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.test.TestPatient;
 import org.isf.patient.test.TestPatientContext;
 import org.isf.utils.db.DbJpaUtil;
@@ -32,6 +34,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -57,7 +60,10 @@ public class Tests
     private LabIoOperations labIoOperation;
     
     @Autowired
-    private LabManager labManager; 
+    private LabManager labManager;
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
 	
 	@BeforeClass
     public static void setUpClass()  
@@ -612,7 +618,38 @@ public class Tests
 		
 		return;
 	}
-		
+
+	@Test
+	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() {
+		try {
+			// given:
+			int id = _setupTestLaboratory(false);
+			Laboratory found = (Laboratory) jpa.find(Laboratory.class, id);
+			Patient mergedPatient = _setupTestPatient(false);
+
+			// when:
+			applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
+
+			// then:
+			Laboratory result = (Laboratory) jpa.find(Laboratory.class, id);
+			assertEquals(mergedPatient.getCode(), result.getPatient().getCode());
+			assertEquals(mergedPatient.getName(), result.getPatName());
+			assertEquals(Long.valueOf(mergedPatient.getAge()), Long.valueOf(result.getAge()));
+			assertEquals(String.valueOf(mergedPatient.getSex()), result.getSex());
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+	}
+
+	private Patient _setupTestPatient(boolean usingSet) throws OHException	{
+		jpa.beginTransaction();
+		Patient patient = testPatient.setup(usingSet);
+		jpa.persist(patient);
+		jpa.commitTransaction();
+
+		return patient;
+	}
 	
 	private void _saveContext() throws OHException 
     {	

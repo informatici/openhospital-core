@@ -10,7 +10,6 @@ import org.isf.admission.model.Admission;
 import org.isf.opd.model.Opd;
 import org.isf.operation.model.OperationRow;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -19,12 +18,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface OperationRowIoOperationRepository extends JpaRepository<OperationRow, String> {
-    	@Query(value = "SELECT * FROM OPERATIONROW ORDER BY OPER_OPDATE DESC", nativeQuery= true)
-        ArrayList<OperationRow> getOperationRow();
-        
+        ArrayList<OperationRow> findByOrderByOpDateDesc();
         ArrayList<OperationRow> findByAdmission(Admission adm);
-        
         OperationRow findById(int id);
-        
         ArrayList<OperationRow> findByOpd(Opd opd);
 }

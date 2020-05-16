@@ -193,7 +193,7 @@ public class PatientBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Patient> getPatientWithHeightAndWeight(String regex) throws OHServiceException{
-        return ioOperations.getPatientsWithHeightAndWeight(regex);
+        return ioOperations.getPatientsByOneOfFieldsLike(regex);
 	}
 
 	/**
