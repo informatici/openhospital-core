@@ -33,7 +33,7 @@
 
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">
-			<value>file:rsc/database.properties</value>
+			<value>classpath:database.properties</value>
 		</property>
 		<property name="ignoreResourceNotFound" value="true"/>
 	</bean>
@@ -67,6 +67,7 @@
  				<prop key="hibernate.format_sql">${hibernate.format_sql:true}</prop>
  				<prop key="hibernate.dialect">${hibernate.dialect:org.hibernate.dialect.MySQLDialect}</prop>
  				<prop key="hibernate.id.new_generator_mappings">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto:false}</prop>
  			</props>
  		</property>
  	</bean>
