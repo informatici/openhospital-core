@@ -75,7 +75,7 @@ public class AdmissionIoOperations
 		for (Object[] object : admittedPatientsList) {
 			Patient patient = patientRepository.findOne((Integer) object[0]);
 			Admission admission = null;
-			Integer admissionId = (Integer) object[33];
+			Integer admissionId = (Integer) object[34]; // FIXME: This is nasty!!!! There is no clear indication why we use 34 ! Have a look at how repository.findAllBySearch is implemented
 			if (admissionId != null) admission = repository.findOne((Integer) admissionId);
 			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);
 			admittedPatients.add(admittedPatient);
