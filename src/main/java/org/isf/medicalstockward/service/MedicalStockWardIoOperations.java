@@ -7,6 +7,7 @@ import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
+import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
@@ -15,6 +16,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * @author mwithi
@@ -278,7 +283,6 @@ public class MedicalStockWardIoOperations
 	}
 	
 	public ArrayList<MovementWard> getWardMovementsToPatient(Integer patId) {
-		
 		return movementRepository.findWardMovementPat(patId);
 	}
 
@@ -307,5 +311,9 @@ public class MedicalStockWardIoOperations
 			 }
 		}
 		return medicalWardsQty;
+	}
+
+	public List<MovementWard> findAllForPatient(Patient patient) {
+		return movementRepository.findByPatient_code(patient.getCode());
 	}
 }

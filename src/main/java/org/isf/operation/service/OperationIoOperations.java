@@ -9,6 +9,7 @@ package org.isf.operation.service;
  -----------------------------------------------------------*/
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.operation.model.Operation;
 import org.isf.opetype.model.OperationType;
@@ -39,51 +40,15 @@ public class OperationIoOperations {
 	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Operation> getOperation(
-			String typeDescription) throws OHServiceException 
-	{
-    	ArrayList<Operation> operations = null;
-
-    	
-		if (typeDescription == null) 
-		{
-			operations = repository.findAllWithoutDescription();
-		}
-		else
-		{
-			operations = repository.findAllByDescription(typeDescription);
-		}	
-
-		return operations;
+	public ArrayList<Operation> getOperation(String typeDescription) throws OHServiceException {
+		return new ArrayList<Operation>(typeDescription == null ?
+			repository.findByOrderByDescriptionDesc() :
+			repository.findAllByDescriptionContainsOrderByDescriptionDesc(typeDescription));
 	}
-	public ArrayList<Operation> getOperationOpd(
-			) throws OHServiceException {
-	
-    	ArrayList<Operation> operations = null;
 
-
-			operations = repository.findAllWithoutDescriptionOpd();
-		
-
-
-		return operations;
+	public Operation findByCode(String code) throws OHServiceException{
+    	return repository.findByCode(code);
 	}
-	public ArrayList<Operation> getOperationAdm(
-			) throws OHServiceException {
-	
-    	ArrayList<Operation> operations = null;
-
-
-			operations = repository.findAllWithoutDescriptionAdm();
-		
-
-
-		return operations;
-	}
-        
-        public Operation findByCode(String code) throws OHServiceException{
-            return repository.findByCode(code);
-        }
 	
 	/**
 	 * insert an {@link Operation} in the DBs
@@ -92,16 +57,8 @@ public class OperationIoOperations {
 	 * @return <code>true</code> if the operation has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean newOperation(
-			Operation operation) throws OHServiceException
-	{
-		boolean result = true;
-	
-
-		Operation savedOperation = repository.save(operation);
-		result = (savedOperation != null);
-    	
-		return result;
+	public boolean newOperation(Operation operation) throws OHServiceException {
+		return repository.save(operation) != null;
 	}
 	
 	/** 
@@ -111,15 +68,8 @@ public class OperationIoOperations {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean updateOperation(
-			Operation operation) throws OHServiceException
-	{
-		boolean result = true;
-	
-		Operation savedOperation = repository.save(operation);
-		result = (savedOperation != null);
-    	
-		return result;
+	public boolean updateOperation(Operation operation) throws OHServiceException {
+		return repository.save(operation) != null;
 	}
 	
 	/** 
@@ -128,15 +78,9 @@ public class OperationIoOperations {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean deleteOperation(
-			Operation operation) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteOperation(Operation operation) throws OHServiceException {
 		repository.delete(operation);
-    	
-		return result;
+		return true;
 	}
 	
 	/**
@@ -145,15 +89,8 @@ public class OperationIoOperations {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.exists(code);
 	}
 	
 	/**
@@ -164,20 +101,9 @@ public class OperationIoOperations {
 	 * @return <code>true</code> if the description is already in use, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean isDescriptionPresent(
-			String description, 
-			String typeCode) throws OHServiceException
-	{
-		Operation foundOperation = repository.findOneByDescriptionAndType(description, typeCode);
-		boolean present = false;
-				
-			
-		if (foundOperation != null && foundOperation.getDescription().compareTo(description) == 0)
-		{
-			present = true;
-		}
-		
-		return present;
+	public boolean isDescriptionPresent(String description, String typeCode) throws OHServiceException {
+		Operation foundOperation = repository.findOneByDescriptionAndType_Code(description, typeCode);
+		return foundOperation != null && foundOperation.getDescription().compareTo(description) == 0;
 	}
 }
 

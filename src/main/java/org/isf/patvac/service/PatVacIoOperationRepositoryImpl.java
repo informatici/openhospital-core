@@ -6,8 +6,11 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
-import org.isf.utils.time.DateConverters;
+import org.isf.patvac.model.PatientVaccine;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -20,7 +23,7 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 	
 	@SuppressWarnings("unchecked")	
 	@Override
-	public List<Integer> findAllByCodesAndDatesAndSexAndAges(
+	public List<PatientVaccine> findAllByCodesAndDatesAndSexAndAges(
 			String vaccineTypeCode, 
 			String vaccineCode, 
 			GregorianCalendar dateFrom, 
@@ -29,60 +32,57 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 			int ageFrom, 
 			int ageTo) {
 		return this.entityManager.
-				createNativeQuery(_getPatientVaccineQuery(
+				createQuery(_getPatientVaccineQuery(
 						vaccineTypeCode, vaccineCode, dateFrom, dateTo,
 						sex, ageFrom, ageTo)).
 					getResultList();
 	}	
 
-	
-	private String _getPatientVaccineQuery(
+	private CriteriaQuery<PatientVaccine> _getPatientVaccineQuery(
 			String vaccineTypeCode, 
 			String vaccineCode, 
 			GregorianCalendar dateFrom, 
 			GregorianCalendar dateTo, 
 			char sex, 
 			int ageFrom, 
-			int ageTo) 
-	{
-		StringBuilder query = new StringBuilder();
-		String clause = " WHERE";
-	
-		
-		query.append("SELECT PAV_ID"
-				+ " FROM PATIENTVACCINE JOIN VACCINE ON PAV_VAC_ID_A=VAC_ID_A"
-				+ " JOIN VACCINETYPE ON VAC_VACT_ID_A = VACT_ID_A"
-				+ " JOIN PATIENT ON PAV_PAT_ID = PAT_ID");
-		if (dateFrom != null || dateTo != null) {
-			if (dateFrom != null) {
-				query.append(clause).append(" DATE_FORMAT(PAV_DATE,'%Y-%m-%d') >= \"" + DateConverters.convertToSQLDateLimited(dateFrom) + "\"");
-				clause = " AND";
-			}
-			if (dateTo != null) {
-				query.append(clause).append(" DATE_FORMAT(PAV_DATE,'%Y-%m-%d') <= \"" + DateConverters.convertToSQLDateLimited(dateTo) + "\"");
-				clause = " AND";
-			}
+			int ageTo) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<PatientVaccine> query = cb.createQuery(PatientVaccine.class);
+		Root<PatientVaccine> pvRoot = query.from(PatientVaccine.class);
+
+		query.select(pvRoot);
+		if (dateFrom != null) {
+			query.where(
+				cb.greaterThanOrEqualTo(pvRoot.<Comparable>get("vaccineDate"), dateFrom)
+			);
+		}
+		if (dateTo != null) {
+			query.where(
+				cb.lessThanOrEqualTo(pvRoot.<Comparable>get("vaccineDate"), dateTo)
+			);
 		}
 		if (vaccineTypeCode != null) {
-			query.append(clause).append(" VACT_ID_A = \"" + vaccineTypeCode + "\"");
-			clause = " AND";
+			query.where(
+				cb.equal(pvRoot.join("vaccine").get("code"), vaccineTypeCode)
+			);
 		}
 		if (vaccineCode != null) {
-			query.append(clause).append(" VAC_ID_A = \"" + vaccineCode + "\"");
-			clause = " AND";
+			query.where(
+				cb.equal(pvRoot.join("vaccine").get("code"), vaccineCode)
+			);
 		}
 		if (sex != 'A') {
-			query.append(clause).append(" PAT_SEX = \"" + sex + "\"");
-			clause = " AND";
-		}		
+			query.where(
+				cb.equal(pvRoot.join("patient").get("sex"), sex)
+			);
+		}
 		if (ageFrom != 0 || ageTo != 0) {
-			query.append(clause).append(" PAT_AGE BETWEEN \"" + ageFrom + "\" AND \"" + ageTo + "\"");
-			clause = " AND";
-		}		
-		query.append(" ORDER BY PAV_DATE DESC, PAV_ID");
-		//System.out.println(query.toString());
+			query.where(
+				cb.between(pvRoot.join("patient").<Comparable>get("age"), ageFrom, ageTo)
+			);
+		}
+		query.orderBy(cb.desc(pvRoot.get("vaccineDate")), cb.asc(pvRoot.get("code")));
 
-		return query.toString();
+		return query;
 	}
-	
 }

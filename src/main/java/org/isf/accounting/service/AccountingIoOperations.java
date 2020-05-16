@@ -1,5 +1,10 @@
 package org.isf.accounting.service;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
 import org.isf.accounting.model.BillPayments;
@@ -387,7 +392,17 @@ public class AccountingIoOperations {
 	}
 
 	/**
-	 * Return distinct BillItems
+	 *
+	 * @param patID
+	 * @return
+	 * @throws OHServiceException
+	 */
+	public List<Bill> getAllPatientsBills(int patID) throws OHServiceException {
+		return billRepository.findByPatient_code(patID);
+	}
+
+	/**
+	 * Return Distincts BillItems
 	 * added by u2g
 	 * @return BillItems list 
 	 * @throws OHServiceException

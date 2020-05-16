@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 @Repository
 public interface MovementWardIoOperationRepository extends JpaRepository<MovementWard, Integer>{      
@@ -15,7 +16,6 @@ public interface MovementWardIoOperationRepository extends JpaRepository<Movemen
     ArrayList<MovementWard> findWardMovements(@Param("idwardto") String idWardTo,
                                               @Param("datefrom") GregorianCalendar dateFrom,
                                               @Param("dateto") GregorianCalendar dateTo);
-    
-    @Query(value = "SELECT * FROM MEDICALDSRSTOCKMOVWARD WHERE MMVN_PAT_ID = :patId", nativeQuery= true)
-    public ArrayList<MovementWard> findWardMovementPat(@Param("patId") Integer patId);
+
+    List<MovementWard> findByPatient_code(int code);
 }

@@ -6,9 +6,13 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.isf.generaldata.MessageBundle;
-import org.isf.utils.time.DateConverters;
+import org.isf.opd.model.Opd;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -18,10 +22,9 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	
 	@SuppressWarnings("unchecked")	
 	@Override
-	public List<Integer> findAllOpdWhereParams(
+	public List<Opd> findAllOpdWhereParams(
 			String diseaseTypeCode,
 			String diseaseCode, 
 			GregorianCalendar dateFrom,
@@ -30,16 +33,13 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			int ageTo,
 			char sex,
 			char newPatient) {
-		return this.entityManager.
-				createNativeQuery(_getOpdQuery(
+		return _getOpdQuery(
 						diseaseTypeCode, diseaseCode, dateFrom, dateTo,
-						ageFrom, ageTo, sex, newPatient)).
+						ageFrom, ageTo, sex, newPatient).
 					getResultList();
 	}	
 
-		
-
-	public String _getOpdQuery(
+	private TypedQuery<Opd> _getOpdQuery(
 			String diseaseTypeCode,
 			String diseaseCode, 
 			GregorianCalendar dateFrom,
@@ -47,27 +47,41 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			int ageFrom, 
 			int ageTo,
 			char sex,
-			char newPatient)
-	{	
-		String query = "SELECT OPD_ID FROM OPD LEFT JOIN PATIENT ON OPD_PAT_ID = PAT_ID LEFT JOIN DISEASE ON OPD_DIS_ID_A = DIS_ID_A LEFT JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A WHERE 1";
+			char newPatient) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Opd> query = cb.createQuery(Opd.class);
+		Root<Opd> opd = query.from(Opd.class);
+
+		query.select(opd);
 		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.opd.alltype")))) {
-			query += " AND DIS_DCL_ID_A = \"" + diseaseTypeCode + "\"";
+			query.where(
+				cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
+			);
 		}
 		if(!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldisease"))) {
-			query += " AND DIS_ID_A = \"" + diseaseCode + "\"";
+			query.where(
+				cb.equal(opd.join("disease").get("code"), diseaseCode)
+			);
 		}
 		if (ageFrom != 0 || ageTo != 0) {
-			query += " AND OPD_AGE BETWEEN \"" + ageFrom + "\" AND \"" + ageTo + "\"";
+			query.where(
+				cb.between(opd.<Comparable>get("age"), ageFrom, ageTo)
+			);
 		}
 		if (sex != 'A') {
-			query += " AND OPD_SEX =  \"" + sex + "\"";
+			query.where(
+				cb.equal(opd.get("sex"), sex)
+			);
 		}
 		if (newPatient != 'A') {
-			query += " AND OPD_NEW_PAT =  \"" + newPatient + "\"";
+			query.where(
+				cb.equal(opd.get("newPatient"), newPatient)
+			);
 		}
-		query += " AND OPD_DATE_VIS BETWEEN  \"" + DateConverters.convertToSQLDateLimited(dateFrom) + "\" AND \"" + DateConverters.convertToSQLDateLimited(dateTo) + "\"";
+		query.where(
+			cb.between(opd.<Comparable>get("visitDate"), dateFrom, dateTo)
+		);
 
-		return query;
+		return entityManager.createQuery(query);
 	}
-		
 }

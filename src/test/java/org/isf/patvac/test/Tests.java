@@ -6,7 +6,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.isf.medicalstockward.model.MovementWard;
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.test.TestPatient;
 import org.isf.patient.test.TestPatientContext;
 import org.isf.patvac.model.PatientVaccine;
@@ -26,6 +28,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -46,6 +49,8 @@ public class Tests
 
     @Autowired
     PatVacIoOperations patvacIoOperation;
+    @Autowired
+    ApplicationEventPublisher applicationEventPublisher;
 	
 	@BeforeClass
     public static void setUpClass()  
@@ -281,6 +286,35 @@ public class Tests
 		}
 		
 		return;
+	}
+
+	@Test
+	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() {
+		try {
+			// given:
+			int id = _setupTestPatientVaccine(false);
+			PatientVaccine found = (PatientVaccine) jpa.find(PatientVaccine.class, id);
+			Patient mergedPatient = _setupTestPatient(false);
+
+			// when:
+			applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
+
+			// then:
+			PatientVaccine result = (PatientVaccine)jpa.find(PatientVaccine.class, id);
+			assertEquals(mergedPatient.getCode(), result.getPatient().getCode());
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+	}
+
+	private Patient _setupTestPatient(boolean usingSet) throws OHException	{
+		jpa.beginTransaction();
+		Patient patient = testPatient.setup(usingSet);
+		jpa.persist(patient);
+		jpa.commitTransaction();
+
+		return patient;
 	}
 	
 	

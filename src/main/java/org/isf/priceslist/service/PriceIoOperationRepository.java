@@ -14,19 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 public interface PriceIoOperationRepository extends JpaRepository<Price, Integer> {
     List<Price> findAllByOrderByDescriptionAsc();
 	
-    @Query(value = "SELECT * FROM PRICES WHERE PRC_LST_ID = :id", nativeQuery= true)
-    List<Price> findAllWhereList(@Param("id") Integer id);
+    List<Price> findByList_id(Integer id);
 
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM PRICES WHERE PRC_LST_ID = :listId", nativeQuery= true)
-    void deleteWhereList(@Param("listId") Integer listId);
-    
-    @Modifying
-    @Transactional
-    @Query(value = "INSERT INTO PRICES (PRC_LST_ID, PRC_GRP, PRC_ITEM, PRC_DESC, PRC_PRICE) VALUES (:listId,:group,:item,:description,:price)", nativeQuery= true)
-    void insertPrice(
-            @Param("listId") Integer listId, @Param("group") String group, @Param("item") String item,
-            @Param("description") String description, @Param("price") Double price);
-    
+    @Query("delete from Price p where p.list.id = :listId")
+	void deleteByListId(@Param("listId") Integer listId);
 }
