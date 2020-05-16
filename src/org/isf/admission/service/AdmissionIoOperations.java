@@ -68,17 +68,16 @@ public class AdmissionIoOperations
 	public ArrayList<AdmittedPatient> getAdmittedPatients(
 			String searchTerms) throws OHServiceException 
 	{
-		ArrayList<AdmittedPatient> admittedPatients = new ArrayList<AdmittedPatient>();
-		List<Object[]> admittedPatientsList = (List<Object[]>)repository.findAllBySearch(searchTerms);
+		final ArrayList<AdmittedPatient> admittedPatients = new ArrayList<AdmittedPatient>();
+		final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList = repository.findPatientAndAdmissionId(searchTerms);
 
-
-		for (Object[] object : admittedPatientsList) {
-			Patient patient = patientRepository.findOne((Integer) object[0]);
+		for (final AdmissionIoOperationRepositoryCustom.PatientAdmission patientAdmission : admittedPatientsList) {
+			final Patient patient = patientRepository.findOne(patientAdmission.getPatientId());
 			Admission admission = null;
-			Integer admissionId = (Integer) object[34]; // FIXME: This is nasty!!!! There is no clear indication why we use 34 ! Have a look at how repository.findAllBySearch is implemented
-			if (admissionId != null) admission = repository.findOne((Integer) admissionId);
-			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);
-			admittedPatients.add(admittedPatient);
+			if (patientAdmission.getAdmissionId() != null) {
+				admission = repository.findOne(patientAdmission.getAdmissionId());
+			}
+			admittedPatients.add(new AdmittedPatient(patient, admission));
 		}
 
 		return admittedPatients;
@@ -117,7 +116,9 @@ public class AdmissionIoOperations
 			Patient patient = patientRepository.findOne((Integer) object[0]);
 			Admission admission = null;
 			Integer admissionId = (Integer)object[28];
-			if (admissionId != null) admission = repository.findOne((Integer)object[28]);
+			if (admissionId != null) {
+				admission = repository.findOne(admissionId);
+			}
 			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);
 			admittedPatients.add(admittedPatient);
 		}

@@ -1,10 +1,6 @@
 package org.isf.admission.test;
 
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
 import org.isf.admission.service.AdmissionIoOperations;
@@ -43,15 +39,15 @@ import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
 import org.isf.ward.test.TestWard;
 import org.isf.ward.test.TestWardContext;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -212,28 +208,14 @@ public class Tests
 	}
 
 	@Test
-	public void testIoGetAdmittedPatients() 
-	{
-		int id = 0;
-		
-		
-		try 
-		{		
-			id = _setupTestAdmission(false);
-			Admission foundAdmission = (Admission)jpa.find(Admission.class, id); 
-			ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
-			ArrayList<AdmittedPatient> patientsNull = admissionIoOperation.getAdmittedPatients(null);
-			
-			assertEquals(patients.size(), patientsNull.size());
-			assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-		
-		return;
+	public void testIoGetAdmittedPatients() throws Exception {
+		int id = _setupTestAdmission(false);
+		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
+		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
+		ArrayList<AdmittedPatient> patientsNull = admissionIoOperation.getAdmittedPatients(null);
+
+		assertEquals(patients.size(), patientsNull.size());
+		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
 	}
 
 	@Test

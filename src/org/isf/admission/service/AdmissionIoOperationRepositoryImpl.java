@@ -1,14 +1,14 @@
 package org.isf.admission.service;
 
 
-import java.util.GregorianCalendar;
-import java.util.List;
+import org.isf.utils.time.TimeTools;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import org.isf.utils.time.TimeTools;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 
 @Transactional
@@ -24,9 +24,31 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 		return this.entityManager.
 				createNativeQuery(_getAdmissionsBySearch(searchTerms)).
 					getResultList();
-	}	
+	}
 
-	
+	@Override
+	public List<PatientAdmission> findPatientAndAdmissionId(final String searchTerms) {
+		String[] terms = _calculateAdmittedPatientsTerms(searchTerms);
+		String query = "SELECT PAT.PAT_ID, ADM.ADM_ID " +
+				"FROM PATIENT PAT LEFT JOIN " +
+				"(SELECT * FROM ADMISSION WHERE (ADM_DELETED='N' or ADM_DELETED is null) AND ADM_IN = 1) ADM " +
+				"ON ADM.ADM_PAT_ID = PAT.PAT_ID " +
+				"WHERE (PAT.PAT_DELETED='N' or PAT.PAT_DELETED is null) ";
+		if (terms != null) {
+			for (String term: terms) {
+				query += " AND CONCAT(PAT_ID, LOWER(PAT_SNAME), LOWER(PAT_FNAME), LOWER(PAT_NOTE), LOWER(PAT_TAXCODE)) LIKE \"%" + term + "%\"";
+			}
+		}
+		query += " ORDER BY PAT_ID DESC";
+
+		final List<Object[]> resultList = this.entityManager.createNativeQuery(query).getResultList();
+		final List<PatientAdmission> result = new ArrayList<PatientAdmission>(resultList.size());
+		for (final Object[] arrays : resultList) {
+			result.add(new PatientAdmission((Integer) arrays[0], (Integer) arrays[1]));
+		}
+		return result;
+	}
+
 	private String _getAdmissionsBySearch(
 			String searchTerms) 
 	{
@@ -50,8 +72,8 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
     	
     	return terms;
 	}
-    
-    private String _calculateAdmittedPatientsQuery(
+
+	private String _calculateAdmittedPatientsQuery(
     		String[] terms)
 	{
     	String query = null;	
