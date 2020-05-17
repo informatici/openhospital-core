@@ -13,8 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AccountingBillIoOperationRepository
-		extends JpaRepository<Bill, Integer>, AccountingBillIoOperationRepositoryCustom {
+public interface AccountingBillIoOperationRepository extends JpaRepository<Bill, Integer> {
 
 	List<Bill> findByStatusOrderByDateDesc(String status);
 

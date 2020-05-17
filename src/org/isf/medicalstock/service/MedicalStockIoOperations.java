@@ -567,10 +567,7 @@ public class MedicalStockIoOperations {
 	public ArrayList<Lot> getLotsByMedical(
 			Medical medical) throws OHServiceException
 	{
-		ArrayList<Lot> lots = null;
-
-
-		List<Object[]> lotList = (List<Object[]>)lotRepository.findAllWhereMedical(medical.getCode());
+		List<Lot> lots = lotRepository.findByMovements_MedicalOrderByDueDate(medical.getCode());/*(List<Object[]>)lotRepository.findAllWhereMedical(medical.getCode());
 		lots = new ArrayList<Lot>();
 		for (Object[] object: lotList)
 		{
@@ -578,8 +575,9 @@ public class MedicalStockIoOperations {
 
 			lots.add(lot);
 		}
+		*/
 
-		// remve empy lots
+		// remve empty lots
 		ArrayList<Lot> emptyLots = new ArrayList<Lot>();
 		for (Lot aLot : lots) {
 			if (aLot.getQuantity() == 0)
@@ -587,7 +585,7 @@ public class MedicalStockIoOperations {
 		}
 		lots.removeAll(emptyLots);
 
-		return lots;
+		return new ArrayList<Lot>(lots);
 	}
 
 	private Lot _convertObjectToLot(Object[] object)
@@ -598,7 +596,7 @@ public class MedicalStockIoOperations {
 		lot.setPreparationDate(_convertTimestampToCalendar((Timestamp)object[1]));
 		lot.setDueDate(_convertTimestampToCalendar((Timestamp)object[2]));
 		lot.setCost(new BigDecimal((Double) object[3]));
-		lot.setQuantity(((Double)object[4]).intValue());
+		//lot.setQuantity(((Double)object[4]).intValue());
 
 		return lot;
 	}

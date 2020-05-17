@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import org.isf.priceslist.model.Price;
 import org.isf.priceslist.model.PriceList;
+import org.isf.priceslist.service.PriceIoOperationRepository;
+import org.isf.priceslist.service.PriceListIoOperationRepository;
 import org.isf.priceslist.service.PricesListIoOperations;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
@@ -33,6 +35,10 @@ public class Tests
 
     @Autowired
     PricesListIoOperations priceListIoOperation;
+    @Autowired
+    PriceListIoOperationRepository priceListIoOperationRepository;
+    @Autowired
+    PriceIoOperationRepository priceIoOperationRepository;
 		
 	@BeforeClass
     public static void setUpClass()  
@@ -47,24 +53,10 @@ public class Tests
     }
 
     @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-		
-		return;
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-                
-        return;
+    public void setUp() throws OHException {
+
+		priceIoOperationRepository.deleteAll();
+		priceListIoOperationRepository.deleteAll();
     }
     
     @AfterClass
@@ -120,22 +112,20 @@ public class Tests
 	}
 	
 	@Test
-	public void testIoGetLists() 
-	{	
-		try 
-		{		
+	public void testIoGetLists() {
+		try {
+			// given:
+			int id = _setupTestPriceList(true);
+
+			// when:
 			ArrayList<PriceList> priceLists = priceListIoOperation.getLists();
 			
-			
-			assertEquals(testPriceListContext.getAllSaved().get(0).getName(), priceLists.get(0).getName());
-		} 
-		catch (Exception e) 
-		{
+			// then:
+			assertEquals(priceListIoOperationRepository.findOne(id).getName(), priceLists.get(0).getName());
+		} catch (Exception e) {
 			e.printStackTrace();		
 			assertEquals(true, false);
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -179,14 +169,16 @@ public class Tests
 	}
 	
 	@Test
-	public void testIoGetPrices()
-	{		
-		try 
-		{		
+	public void testIoGetPrices() {
+		try {
+			// given:
+			int id = _setupTestPrice(false);
+
+			// when:
 			ArrayList<Price> prices = priceListIoOperation.getPrices();
 			
-			
-			assertEquals(testPriceContext.getAllSaved().get(0).getPrice(), prices.get(0).getPrice());
+			// then:
+			assertEquals(priceIoOperationRepository.findOne(id).getPrice(), prices.get(0).getPrice());
 		} 
 		catch (Exception e) 
 		{
@@ -279,29 +271,21 @@ public class Tests
 	}
 	
 	@Test
-	public void testIoDeleteList()
-	{
-		int id = 0, maxId = 0;
-		
-		
-		try 
-		{		
-			maxId = _getListMax();
-			id = _setupTestPriceList(true);
-			PriceList priceList = (PriceList)jpa.find(PriceList.class, id); 
-			
+	public void testIoDeleteList()	{
+		try {
+			// given:
+			int id = _setupTestPriceList(true);
+			PriceList priceList = priceListIoOperationRepository.findOne(id);
+
+			// when:
 			priceListIoOperation.deleteList(priceList);
-			
-			id = _getListMax();
-			assertEquals(maxId, id);
-		} 
-		catch (Exception e) 
-		{
+
+			// then:
+			assertEquals(0, priceListIoOperationRepository.count());
+		} catch (Exception e) {
 			e.printStackTrace();		
 			assertEquals(true, false);
 		}
-						
-		return;
 	}
 	
 	@Test
@@ -377,15 +361,9 @@ public class Tests
     }
               
 	private int _setupTestPriceList(
-			boolean usingSet) throws OHException 
-	{
-		PriceList priceList;
-	
-
-    	jpa.beginTransaction();	
-    	priceList = testPriceList.setup(usingSet);
-		jpa.persist(priceList);
-    	jpa.commitTransaction();
+			boolean usingSet) throws OHException {
+		PriceList priceList = testPriceList.setup(usingSet);
+		priceListIoOperationRepository.save(priceList);
 		
 		return priceList.getId();
 	}
@@ -396,31 +374,22 @@ public class Tests
 		PriceList foundPriceList;
 		
 
-		foundPriceList = (PriceList)jpa.find(PriceList.class, id); 
+		foundPriceList = priceListIoOperationRepository.findOne(id);
 		testPriceList.check(foundPriceList);
 		
 		return;
 	}
 	
-    private int _setupTestPrice(
-		boolean usingSet) throws OHException 
-	{
-		Price price;
+    private int _setupTestPrice(boolean usingSet) throws OHException {
 		PriceList priceList = testPriceList.setup(true);
-		
-		
-		jpa.beginTransaction();	
-		price = testPrice.setup(priceList, usingSet);
-		jpa.persist(priceList);
-		jpa.persist(price);
-		jpa.commitTransaction();
-		
+		Price price = testPrice.setup(priceList, usingSet);
+		priceListIoOperationRepository.save(priceList);
+		priceIoOperationRepository.save(price);
+
 		return price.getId();
 	}
 	
-	private void _checkPriceIntoDb(
-		int id) throws OHException 
-	{
+	private void _checkPriceIntoDb(int id) throws OHException {
 		Price foundPrice;
 		
 		

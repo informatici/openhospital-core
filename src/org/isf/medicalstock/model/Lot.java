@@ -1,16 +1,15 @@
 package org.isf.medicalstock.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.isf.generaldata.MessageBundle;
+import org.isf.medstockmovtype.model.MovementType;
 
 /*------------------------------------------
  * Medical Lot - model for the medical entity
@@ -35,18 +34,17 @@ public class Lot
 	@NotNull
 	@Column(name="LT_DUE_DATE")
 	private GregorianCalendar dueDate;
-
-	@Transient
-	private int quantity;
 	
 	@Column(name="LT_COST")
 	private BigDecimal cost;
 	
 	@Transient
 	private volatile int hashCode = 0;
-	
 
-	public Lot() { 
+	@OneToMany(mappedBy = "lot")
+	private List<Movement> movements = new ArrayList<Movement>();
+	
+	public Lot() {
 	}
 	
 	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate){
@@ -54,24 +52,30 @@ public class Lot
 		preparationDate=aPreparationDate;
 		dueDate=aDueDate;
 	}
-	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate,int aQuantity){
-		code=aCode;
-		preparationDate=aPreparationDate;
-		dueDate=aDueDate;
-		quantity=aQuantity;
-	}
+
 	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate,BigDecimal aCost){
 		code=aCode;
 		preparationDate=aPreparationDate;
 		dueDate=aDueDate;
 		cost=aCost;
 	}
+
 	public String getCode(){
 		return code;
 	}
+
 	public int getQuantity(){
+		int quantity = 0;
+		for (Movement movement: movements) {
+			if (movement.getType().getType().equals("-")) {
+				quantity -= movement.getQuantity();
+			} else if (movement.getType().getType().equals("+")) {
+				quantity += movement.getQuantity();
+			}
+		}
 		return quantity;
 	}
+
 	public GregorianCalendar getPreparationDate(){
 		return preparationDate;
 	}
@@ -86,9 +90,6 @@ public class Lot
 	}
 	public void setPreparationDate(GregorianCalendar aPreparationDate){
 		preparationDate=aPreparationDate;
-	}
-	public void setQuantity(int aQuantity){
-		quantity=aQuantity;
 	}
 	public void setDueDate(GregorianCalendar aDueDate){
 		dueDate=aDueDate;
@@ -133,7 +134,7 @@ public class Lot
 				return false;
 		} else if (!preparationDate.equals(other.preparationDate))
 			return false;
-		if (quantity != other.quantity)
+		if (getQuantity() != other.getQuantity())
 			return false;
 		return true;
 	}

@@ -1,8 +1,7 @@
 package org.isf.accounting.service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
@@ -107,7 +106,7 @@ public class AccountingIoOperations {
 		GregorianCalendar dateTo) throws OHServiceException {
 
 		return new ArrayList<BillPayments>(
-			billPaymentRepository.findByDateBetweenOrderByIdAscDateAsc(dateFrom.getTime(), dateTo.getTime()));
+			billPaymentRepository.findByDateBetweenOrderByIdAscDateAsc(dateFrom, dateTo));
 	}
 
 	/**
@@ -186,13 +185,8 @@ public class AccountingIoOperations {
 		
 		for (BillItems item : billItems) 
 		{
-			billItemsRepository.insertBillItem(
-				bill.getId(),
-				item.isPrice(),
-				item.getPriceID(),
-				item.getItemDescription(),
-				item.getItemAmount(),
-				item.getItemQuantity());
+			item.setBill(bill);
+			billItemsRepository.save(item);
 		}
 		
 		return result;
@@ -240,11 +234,8 @@ public class AccountingIoOperations {
 		
 		for (BillPayments payment : billPayments) 
 		{
-			billPaymentRepository.insertBillPayment(
-				bill.getId(),
-				payment.getDate(),
-				payment.getAmount(),
-				payment.getUser());
+			payment.setBill(bill);
+			billPaymentRepository.save(payment);
 		}
 		
 		return result;
@@ -310,24 +301,18 @@ public class AccountingIoOperations {
 	 * @return a list of {@link Bill} associated to the passed {@link BillPayments}.
 	 * @throws OHServiceException if an error occurs retrieving the bill list.
 	 */
-	public ArrayList<Bill> getBills(
-			ArrayList<BillPayments> payments) throws OHServiceException 
-	{
-		ArrayList<Integer> pBillCode = null;
-		ArrayList<Bill> pBill = new ArrayList<Bill>();
-		
-		
-		pBillCode = new ArrayList<Integer>(billRepository.findAllByPayments(payments));			
-		for (int i=0; i<pBillCode.size(); i++)
-		{
-			Integer code = pBillCode.get(i);
-			Bill bill = billRepository.findOne(code);
-			
-			
-			pBill.add(i, bill);
+	public ArrayList<Bill> getBills(ArrayList<BillPayments> payments) throws OHServiceException {
+		Set<Bill> bills = new TreeSet<Bill>(new Comparator<Bill>() {
+			@Override
+			public int compare(Bill o1, Bill o2) {
+				return o1.getId() == o2.getId() ? 1 : 0;
+			}
+		});
+		for(BillPayments bp : payments) {
+			bills.add(bp.getBill());
 		}
-		
-		return pBill;
+
+		return new ArrayList<Bill>(bills);
 	}
 
 	/**
@@ -336,25 +321,8 @@ public class AccountingIoOperations {
 	 * @return a list of {@link BillPayments} associated to the passed bill list.
 	 * @throws OHServiceException if an error occurs retrieving the payments.
 	 */
-	public ArrayList<BillPayments> getPayments(
-			ArrayList<Bill> bills) throws OHServiceException 
-	{
-
-		ArrayList<Integer> pPaymentCode = null;
-		ArrayList<BillPayments> pPayment = new ArrayList<BillPayments>();
-		
-		
-		pPaymentCode = new ArrayList<Integer>(billPaymentRepository.findAllByBills(bills));			
-		for (int i=0; i<pPaymentCode.size(); i++)
-		{
-			Integer code = pPaymentCode.get(i);
-			BillPayments payment = billPaymentRepository.findOne(code);
-			
-			
-			pPayment.add(i, payment);
-		}
-		
-		return pPayment;
+	public ArrayList<BillPayments> getPayments(ArrayList<Bill> bills) throws OHServiceException {
+		return new ArrayList<BillPayments>(billPaymentRepository.findAllByBillIn(bills));
 	}
 	
 	/**
@@ -391,6 +359,16 @@ public class AccountingIoOperations {
 	public ArrayList<Bill> getPendingBillsAffiliate(int patID) throws OHServiceException {
 		ArrayList<Bill> pendingBills = billRepository.findAllPendindBillsByPatient(patID);
 		return pendingBills;
+	}
+
+	/**
+	 *
+	 * @param patID
+	 * @return
+	 * @throws OHServiceException
+	 */
+	public List<Bill> getAllPatientsBills(int patID) throws OHServiceException {
+		return billRepository.findByPatient_code(patID);
 	}
 
 	/**
