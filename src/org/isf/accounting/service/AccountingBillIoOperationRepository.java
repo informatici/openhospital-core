@@ -1,16 +1,16 @@
 package org.isf.accounting.service;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 import org.isf.accounting.model.Bill;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 @Repository
 public interface AccountingBillIoOperationRepository extends JpaRepository<Bill, Integer> {
@@ -21,20 +21,19 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 
 	List<Bill> findAllByOrderByDateDesc();
 
+	List<Bill> findByPatient_code(int patientCode);
+
 	@Modifying
-	@Query(value = "UPDATE BILLS SET BLL_STATUS = 'D' WHERE BLL_ID = :billId", nativeQuery = true)
+	@Query(value = "update Bill b set b.status='D' where b.id = :billId")
 	void updateDeleteWhereId(@Param("billId") Integer billId);
 
-	@Query(value = "SELECT * FROM BILLS WHERE DATE(BLL_DATE) BETWEEN :dateFrom AND :dateTo", nativeQuery = true)
-	List<Bill> findAllWhereDates(@Param("dateFrom") Timestamp dateFrom, @Param("dateTo") Timestamp dateTo);
+	@Query(value = "select b from Bill b where DATE(b.date) BETWEEN :dateFrom and :dateTo")
+	List<Bill> findAllWhereDates(@Param("dateFrom")Timestamp dateFrom, @Param("dateTo")Timestamp dateTo);
 	
-	@Query(value = "SELECT * FROM BILLS  WHERE  (DATE(BLL_DATE) BETWEEN :dateFrom AND :dateTo ) "
-			+" AND ( BLL_ID_PAT= :patientCode)", nativeQuery = true)
+	@Query(value = "select b from Bill b where b.id = :patientCode and DATE(b.date) BETWEEN :dateFrom and :dateTo")
 	ArrayList<Bill> findByDateAndPatient(@Param("dateFrom")GregorianCalendar dateFrom, @Param("dateTo") GregorianCalendar dateTo, @Param("patientCode")Integer patientCode);
-	
-	@Query(value = "SELECT * FROM BILLS "
-			+"WHERE BLL_STATUS='O' "
-			+"  AND BLL_ID_PAT=:patID ", nativeQuery = true)
+
+	@Query(value = "select b from Bill b where b.status='O' and b.id = :patID")
 	ArrayList<Bill> findAllPendindBillsByPatient(@Param("patID")int patID);
 
 	/**
@@ -44,6 +43,6 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 	 * @param desc
 	 * @return the bill list
 	 */
-	@Query(value = "SELECT * FROM BILLS WHERE DATE(BLL_DATE) BETWEEN :dateFrom AND :dateTo AND  BLL_ID  IN (SELECT BLI_ID_BILL FROM BILLITEMS WHERE BLI_ITEM_DESC=:desc)", nativeQuery = true)
+	@Query(value = "select bi.bill from BillItems bi where bi.itemDescription = :desc and DATE(bi.bill.date) BETWEEN :dateFrom and :dateTo")
 	List<Bill> findAllWhereDatesAndBillItem(@Param("dateFrom") Timestamp dateFrom, @Param("dateTo") Timestamp dateTo, @Param("desc") String desc);
 }

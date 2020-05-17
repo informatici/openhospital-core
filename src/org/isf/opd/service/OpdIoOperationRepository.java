@@ -1,34 +1,32 @@
 package org.isf.opd.service;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.opd.model.Opd;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, OpdIoOperationRepositoryCustom {    
+public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, OpdIoOperationRepositoryCustom {
 	
-	@Query(value = "SELECT * FROM OPD LEFT JOIN PATIENT ON OPD_PAT_ID = PAT_ID ORDER BY OPD_PROG_YEAR DESC", nativeQuery= true)
-    List<Opd> findAllByOrderByProgYearDesc();
+    @Query("select o from Opd o order by o.prog_year")
+	List<Opd> findAllOrderByProgYearDesc();
 	
-	@Query(value = "SELECT * FROM OPD LEFT JOIN PATIENT ON OPD_PAT_ID = PAT_ID WHERE OPD_PAT_ID = :code ORDER BY OPD_PROG_YEAR DESC", nativeQuery= true)
-    List<Opd> findAllWherePatIdByOrderByProgYearDesc(@Param("code") Integer code);
+	@Query("select o from Opd o where o.patient.code = :code order by o.prog_year")
+	List<Opd> findAllByPatient_CodeOrderByProgYearDesc(@Param("code") Integer code);
 	
-	@Query(value = "SELECT MAX(OPD_PROG_YEAR) FROM OPD", nativeQuery= true)
+	@Query("select max(o.prog_year) from Opd o")
     Integer findMaxProgYear();
 
-	@Query(value = "SELECT MAX(OPD_PROG_YEAR) FROM OPD WHERE YEAR(OPD_DATE) = :date", nativeQuery= true)
-    Integer findMaxProgYearWhereDate(@Param("date") Integer date);
+	@Query(value = "select max(o.prog_year) from Opd o where o.date >= :dateFrom and o.date < :dateTo")
+    Integer findMaxProgYearWhereDateBetween(@Param("dateFrom") GregorianCalendar dateFrom, @Param("dateTo") GregorianCalendar dateTo);
 
-	@Query(value = "SELECT * FROM OPD LEFT JOIN PATIENT ON OPD_PAT_ID = PAT_ID WHERE OPD_PAT_ID = ? ORDER BY OPD_DATE DESC LIMIT 1", nativeQuery= true)
-    List<Opd> findAllWherePatIdByOrderByDateDescLimit1(@Param("code") Integer code);
+    List<Opd> findTop1ByPatient_CodeOrderByDateDesc(Integer code);
 	
-	@Query(value = "SELECT * FROM OPD WHERE OPD_PROG_YEAR = :prog_year", nativeQuery= true)
-    List<Opd> findAllByProgYear(@Param("prog_year") Integer prog_year);
+	@Query("select o from Opd o where o.prog_year = :prog_year")
+    List<Opd> findByProgYear(@Param("prog_year") Integer prog_year);
 	
-	@Query(value = "SELECT * FROM OPD WHERE OPD_PROG_YEAR = :prog_year AND YEAR(OPD_DATE_VIS) = :year", nativeQuery= true)
-    List<Opd> findAllByProgYearWithinYear(@Param("prog_year") Integer prog_year, @Param("year") Integer year);
+	@Query(value = "select op from Opd op where op.prog_year = :prog_year and op.visitDate >= :dateVisitFrom and op.visitDate < :dateVisitTo")
+    List<Opd> findByProgYearAndVisitDateBetween(@Param("prog_year") Integer prog_year, @Param("dateVisitFrom") GregorianCalendar dateVisitFrom, @Param("dateVisitTo") GregorianCalendar dateVisitTo);
 }
