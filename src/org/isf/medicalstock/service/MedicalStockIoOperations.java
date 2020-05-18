@@ -311,7 +311,7 @@ public class MedicalStockIoOperations {
 	 * @return <code>true</code> if the lot has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurred storing the lot.
 	 */
-	protected boolean storeLot(
+	public boolean storeLot(
 			String lotCode, 
 			Lot lot, Medical medical) throws OHServiceException 
 	{

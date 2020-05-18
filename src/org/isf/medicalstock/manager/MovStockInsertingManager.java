@@ -338,6 +338,11 @@ public class MovStockInsertingManager {
 		return ioOperations.prepareChargingMovement(movement);
 	}
 	
+	public boolean storeLot(String LotCode, Lot lot, Medical med) throws OHServiceException {
+		
+		return ioOperations.storeLot(LotCode, lot, med);
+	}
+	
 //	/**
 //	 * Insert a list of discharging {@link Movement}s
 //	 * 
