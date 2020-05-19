@@ -283,16 +283,8 @@ public class AccountingIoOperations {
 	 * @return a list of retrieved {@link Bill}s.
 	 * @throws OHServiceException if an error occurs retrieving the bill list.
 	 */
-	public ArrayList<Bill> getBills(
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo) throws OHServiceException 
-	{
-		ArrayList<Bill> bills = (ArrayList<Bill>) billRepository.findAllWhereDates(
-				new Timestamp(dateFrom.getTime().getTime()),
-				new Timestamp(dateTo.getTime().getTime()));
-		
-
-		return bills;
+	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+		return new ArrayList<Bill>(billRepository.findByDateBetween(dateFrom, dateTo));
 	}
 
 	/**
@@ -393,13 +385,11 @@ public class AccountingIoOperations {
 	 */
 	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo, BillItems billItem) throws OHServiceException {
 		ArrayList<Bill> bills = null;
-		Timestamp timestamp1 = new Timestamp(dateFrom.getTimeInMillis());
-		Timestamp timestamp2 = new Timestamp(dateTo.getTimeInMillis());
 		if(billItem == null) {
-			bills = (ArrayList<Bill>) billRepository.findAllWhereDates(timestamp1, timestamp2);
+			bills = (ArrayList<Bill>) billRepository.findByDateBetween(dateFrom, dateTo);
 		}
 		else {
-			bills = (ArrayList<Bill>)billRepository.findAllWhereDatesAndBillItem(timestamp1, timestamp2, billItem.getItemDescription());
+			bills = (ArrayList<Bill>)billRepository.findAllWhereDatesAndBillItem(dateFrom, dateTo, billItem.getItemDescription());
 			//for(Bill bill: bills)System.out.println("***************bill****************"+bill.toString());
 		}
 		return bills;
