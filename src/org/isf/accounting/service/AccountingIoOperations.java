@@ -285,7 +285,7 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the bill list.
 	 */
 	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
-		return new ArrayList<Bill>(billRepository.findByDateBetween(dateFrom, dateTo));
+		return new ArrayList<Bill>(billRepository.findByDateBetween(getBeginningOfDay(dateFrom), getBeginningOfNextDay(dateTo)));
 	}
 
 	/**
