@@ -30,7 +30,7 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 
 	List<Bill> findByDateBetween(Calendar dateFrom, Calendar dateTo);
 	
-	@Query(value = "select b from Bill b where b.id = :patientCode and b.date >= :dateFrom and b.date <= :dateTo")
+	@Query(value = "select b from Bill b where b.id = :patientCode and b.date >= :dateFrom and b.date < :dateTo")
 	ArrayList<Bill> findByDateAndPatient(@Param("dateFrom")GregorianCalendar dateFrom, @Param("dateTo") GregorianCalendar dateTo, @Param("patientCode")Integer patientCode);
 
 	@Query(value = "select b from Bill b where b.status='O' and b.id = :patID")
@@ -43,6 +43,6 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 	 * @param desc
 	 * @return the bill list
 	 */
-	@Query(value = "select bi.bill from BillItems bi where bi.itemDescription = :desc and bi.bill.date >= :dateFrom and bi.bill.date <= :dateTo")
+	@Query(value = "select bi.bill from BillItems bi where bi.itemDescription = :desc and bi.bill.date >= :dateFrom and bi.bill.date < :dateTo")
 	List<Bill> findAllWhereDatesAndBillItem(@Param("dateFrom") Calendar dateFrom, @Param("dateTo") Calendar dateTo, @Param("desc") String desc);
 }

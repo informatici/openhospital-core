@@ -40,6 +40,7 @@ import org.isf.pregtreattype.test.TestPregnantTreatmentType;
 import org.isf.pregtreattype.test.TestPregnantTreatmentTypeContext;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.isf.ward.test.TestWard;
 import org.isf.ward.test.TestWardContext;
@@ -212,28 +213,14 @@ public class Tests
 	}
 
 	@Test
-	public void testIoGetAdmittedPatients() 
-	{
-		int id = 0;
-		
-		
-		try 
-		{		
-			id = _setupTestAdmission(false);
-			Admission foundAdmission = (Admission)jpa.find(Admission.class, id); 
-			ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
-			ArrayList<AdmittedPatient> patientsNull = admissionIoOperation.getAdmittedPatients(null);
+	public void testIoGetAdmittedPatients() throws OHException, InterruptedException, OHServiceException {
+		int id = _setupTestAdmission(false);
+		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
+		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
+		ArrayList<AdmittedPatient> patientsNull = admissionIoOperation.getAdmittedPatients(null);
 			
-			assertEquals(patients.size(), patientsNull.size());
-			assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-		
-		return;
+		assertEquals(patients.size(), patientsNull.size());
+		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
 	}
 
 	@Test

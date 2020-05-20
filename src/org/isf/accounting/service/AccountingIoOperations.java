@@ -9,6 +9,7 @@ import org.isf.accounting.model.BillPayments;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -386,12 +387,20 @@ public class AccountingIoOperations {
 	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo, BillItems billItem) throws OHServiceException {
 		ArrayList<Bill> bills = null;
 		if(billItem == null) {
-			bills = (ArrayList<Bill>) billRepository.findByDateBetween(dateFrom, dateTo);
+			bills = (ArrayList<Bill>) billRepository.findByDateBetween(getBeginningOfDay(dateFrom), getBeginningOfNextDay(dateTo));
 		}
 		else {
-			bills = (ArrayList<Bill>)billRepository.findAllWhereDatesAndBillItem(dateFrom, dateTo, billItem.getItemDescription());
+			bills = (ArrayList<Bill>)billRepository.findAllWhereDatesAndBillItem(getBeginningOfDay(dateFrom), getBeginningOfNextDay(dateTo), billItem.getItemDescription());
 			//for(Bill bill: bills)System.out.println("***************bill****************"+bill.toString());
 		}
 		return bills;
+	}
+
+	private GregorianCalendar getBeginningOfDay(GregorianCalendar date) {
+		return new DateTime(date).withTimeAtStartOfDay().toGregorianCalendar();
+	}
+
+	private GregorianCalendar getBeginningOfNextDay(GregorianCalendar date) {
+		return new DateTime(date).plusDays(1).withTimeAtStartOfDay().toGregorianCalendar();
 	}
 }

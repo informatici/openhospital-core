@@ -161,8 +161,7 @@ public class Tests
 		priceListIoOperation.newList(pricelist);
 
 		// then:
-		int id = _getListMax();
-		PriceList foundPriceList = priceListIoOperationRepository.findOne(id);
+		PriceList foundPriceList = priceListIoOperationRepository.findOne(pricelist.getId());
 		_checkPriceListIntoDb(foundPriceList.getId());
 	}
 	
@@ -204,9 +203,8 @@ public class Tests
 		priceListIoOperation.copyList(priceList, 2, 0);
 
 		// then:
-		int maxId = _getPriceMax();
-		Price copyPrice = priceIoOperationRepository.findOne(maxId);
-		assertEquals(id+1, maxId);
+		Price copyPrice = priceIoOperationRepository.findAll().get(1);
+		assertEquals(id+1, copyPrice.getId());
 		assertEquals(2 * price.getPrice(), copyPrice.getPrice(), 0.10);
 	}
 	
@@ -221,9 +219,8 @@ public class Tests
 		priceListIoOperation.copyList(priceList, 2, 3);
 
 		// then:
-		int maxId = _getPriceMax();
-		Price copyPrice = priceIoOperationRepository.findOne(maxId);
-		assertEquals(id+1, maxId);
+		Price copyPrice = priceIoOperationRepository.findAll().get(1);
+		assertEquals(id+1, copyPrice.getId());
 		assertEquals(Math.round(2 * price.getPrice() / 3) *3, copyPrice.getPrice(), 0.10);
 	}
 
