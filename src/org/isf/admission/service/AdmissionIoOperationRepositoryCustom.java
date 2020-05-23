@@ -11,7 +11,7 @@ public interface AdmissionIoOperationRepositoryCustom {
 
 	List<Admission> findAllBySearch(String searchTerms);
 	
-	List<Object[]> findAllBySearchAndDateRanges(String searchTerms, GregorianCalendar[] admissionRange,
-			GregorianCalendar[] dischargeRange);
+	List<Admission> findAllBySearchAndDateRanges(String searchTerms, GregorianCalendar[] admissionRange,
+												 GregorianCalendar[] dischargeRange);
 	
 }

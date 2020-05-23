@@ -14,6 +14,9 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.time.TimeTools;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.isf.utils.time.TimeTools.getBeginningOfDay;
+import static org.isf.utils.time.TimeTools.getBeginningOfNextDay;
+
 
 @Transactional
 public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationRepositoryCustom {
@@ -52,28 +55,101 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 		CriteriaQuery<Admission> query = cb.createQuery(Admission.class);
 		Root<Admission> admissionRoot = query.from(Admission.class);
 		List<Predicate> where = new ArrayList<Predicate>();
+
 		query.select(admissionRoot);
-		where.add(cb.or(
-			cb.equal(admissionRoot.get("deleted"), "N"),
-			cb.isNull(admissionRoot.get("deleted"))
-		));
+		where.add(admissionNotDeletedPredicate(cb, admissionRoot));
 		Join<Admission, Patient> patient = admissionRoot.join("patient");
-		if(terms != null) {
-			for(String term : terms) {
-				where.add(wordExistsInOneOfPatientFields(term, cb, patient));
-			}
+		if (terms != null) {
+			where.addAll(termsPredicates(terms, cb, patient));
 		}
-
-		where.add(cb.or(
-			cb.equal(patient.get("deleted"), "N"),
-			cb.isNull(patient.get("deleted"))
-		));
+		where.add(patientNotDeletedPredicate(cb, patient));
 		query.where(cb.and(where.toArray(new Predicate[where.size()])));
-
 		query.orderBy(cb.desc(patient.get("code")));
 
     	return query;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Admission> findAllBySearchAndDateRanges(String searchTerms, GregorianCalendar[] admissionRange,
+														GregorianCalendar[] dischargeRange) {
+		return this.entityManager.
+				createQuery(createQuerySearchingForPatientContainingGivenWordsInHisProperties(getTermsToSearch(searchTerms), admissionRange, dischargeRange)).
+					getResultList();
+	}
+
+	private CriteriaQuery<Admission> createQuerySearchingForPatientContainingGivenWordsInHisProperties(String[] terms,
+																									   GregorianCalendar[] admissionRange,
+																									   GregorianCalendar[] dischargeRange) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Admission> query = cb.createQuery(Admission.class);
+		Root<Admission> admissionRoot = query.from(Admission.class);
+		List<Predicate> where = new ArrayList<Predicate>();
+
+		query.select(admissionRoot);
+		where.add(admissionNotDeletedPredicate(cb, admissionRoot));
+		Join<Admission, Patient> patient = admissionRoot.join("patient");
+		if (terms != null) {
+			where.addAll(termsPredicates(terms, cb, patient));
+		}
+		where.add(patientNotDeletedPredicate(cb, patient));
+		where.addAll(dateRangePredicates(cb, admissionRoot, admissionRange, dischargeRange));
+		query.where(cb.and(where.toArray(new Predicate[where.size()])));
+		query.orderBy(cb.desc(patient.get("code")));
+
+		return query;
+	}
+
+	private List<Predicate> dateRangePredicates(CriteriaBuilder cb,
+										 Root<Admission> admissionRoot,
+										 GregorianCalendar[] admissionRange,
+										 GregorianCalendar[] dischargeRange) {
+		List<Predicate> predicates = new ArrayList<Predicate>();
+
+		if(admissionRange != null) {
+			if (admissionRange.length == 2 && admissionRange[0] != null && admissionRange[1] != null) {
+				predicates.add(
+					cb.and(
+						cb.greaterThanOrEqualTo(admissionRoot.<Comparable>get("admDate"), getBeginningOfDay(admissionRange[0])),
+						cb.lessThan(admissionRoot.<Comparable>get("admDate"),  getBeginningOfNextDay(admissionRange[1])))
+					);
+			}
+		}
+
+		if (dischargeRange != null) {
+			if (dischargeRange.length == 2 && dischargeRange[0] != null && dischargeRange[1] != null) {
+				predicates.add(
+					cb.and(
+						cb.greaterThanOrEqualTo(admissionRoot.<Comparable>get("disDate"), getBeginningOfDay(dischargeRange[0])),
+						cb.lessThan(admissionRoot.<Comparable>get("disDate"), getBeginningOfNextDay(dischargeRange[1]))
+					));
+			}
+		}
+		return predicates;
+	}
+
+	private Predicate admissionNotDeletedPredicate(CriteriaBuilder cb, Root<Admission> admissionRoot) {
+		return cb.or(
+			cb.equal(admissionRoot.get("deleted"), "N"),
+			cb.isNull(admissionRoot.get("deleted"))
+		);
+	}
+
+	private Predicate patientNotDeletedPredicate(CriteriaBuilder cb, Join<Admission, Patient> patient) {
+		return cb.or(
+			cb.equal(patient.get("deleted"), "N"),
+			cb.isNull(patient.get("deleted"))
+		);
+	}
+
+	private List<Predicate> termsPredicates(String[] terms, CriteriaBuilder cb, Join<Admission, Patient> patient) {
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		for(String term : terms) {
+			predicates.add(wordExistsInOneOfPatientFields(term, cb, patient));
+		}
+		return predicates;
+	}
+
 
 	private Predicate wordExistsInOneOfPatientFields(String word, CriteriaBuilder cb, Join<Admission, Patient> patientRoot) {
 		return cb.or(
@@ -87,68 +163,5 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 
 	private String like(String word) {
 		return "%" + word + "%";
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Object[]> findAllBySearchAndDateRanges(String searchTerms, GregorianCalendar[] admissionRange,
-			GregorianCalendar[] dischargeRange) {
-		return this.entityManager.
-				createNativeQuery(_getAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange)).
-					getResultList();
-	}
-	
-	private String _getAdmissionsBySearchAndDateRanges(
-			String searchTerms, GregorianCalendar[] admissionRange, GregorianCalendar[] dischargeRange) 
-	{
-		String[] terms = getTermsToSearch(searchTerms);
-		String query = createQuerySearchingForPatientContainingGivenWordsInHisProperties(terms, admissionRange, dischargeRange);
-		
-		
-		return query;
-	}
-	
-	private String createQuerySearchingForPatientContainingGivenWordsInHisProperties(
-    		String[] terms, GregorianCalendar[] admissionRange, GregorianCalendar[] dischargeRange)
-	{
-    	String query = null;
-    	
-    	query = "SELECT PAT.*, ADM.* " +
-    			"FROM PATIENT PAT LEFT JOIN " +
-    			"(SELECT * FROM ADMISSION WHERE (ADM_DELETED='N' or ADM_DELETED is null) ORDER BY ADM_IN DESC) ADM " +
-    			"ON ADM.ADM_PAT_ID = PAT.PAT_ID " +
-    			"WHERE (PAT.PAT_DELETED='N' or PAT.PAT_DELETED is null) ";
-    	
-    	if(admissionRange != null) {
-			if (admissionRange.length == 2 && admissionRange[0] != null //
-					&& admissionRange[1] != null) {
-				query += " AND DATE(ADM.ADM_DATE_ADM) BETWEEN " + 
-					TimeTools.formatDateTime(admissionRange[0], "'yyyy-MM-dd'") + 
-					" AND " +  
-					TimeTools.formatDateTime(admissionRange[1], "'yyyy-MM-dd'");
-			}
-		}
-    	
-    	if(dischargeRange != null) {
-			if (dischargeRange.length == 2 && dischargeRange[0] != null //
-					&& dischargeRange[1] != null) {
-				query += " AND DATE(ADM.ADM_DATE_DIS) BETWEEN '" +
-						TimeTools.formatDateTime(dischargeRange[0], "yyyy-MM-dd") + 
-						"' AND '" +  
-						TimeTools.formatDateTime(dischargeRange[1], "yyyy-MM-dd") +
-						"'";
-			}
-		}
-    	
-    	if (terms != null) 
-		{
-			for (String term:terms) 
-			{
-				query += " AND CONCAT(PAT_ID, LOWER(PAT_SNAME), LOWER(PAT_FNAME), LOWER(PAT_NOTE), LOWER(PAT_TAXCODE)) LIKE \"%" + term + "%\"";
-			}
-		}
-		query += " ORDER BY PAT_ID DESC";
-    	
-    	return query;
 	}
 }
