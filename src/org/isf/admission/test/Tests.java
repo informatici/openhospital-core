@@ -2,6 +2,7 @@ package org.isf.admission.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
@@ -221,6 +222,33 @@ public class Tests
 			
 		assertEquals(patients.size(), patientsNull.size());
 		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+	}
+
+	@Test
+	public void testIoGetAdmittedPatientsByOneOfFieldsLikeFirstName() throws OHException, InterruptedException, OHServiceException {
+		// given:
+		int id = _setupTestAdmission(false);
+		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
+		Patient foundPatient = foundAdmission.getPatient();
+
+		// when:
+		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getFirstName());
+
+		// then:
+		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+	}
+
+	@Test
+	public void testIoGetAdmittedPatientsByOneOfFieldsShouldNotFindAnythingWhenNotExistingWordProvided() throws OHException, InterruptedException, OHServiceException {
+		// given:
+		int id = _setupTestAdmission(false);
+		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
+
+		// when:
+		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients("dupsko");
+
+		// then:
+		assertTrue(patients.isEmpty());
 	}
 
 	@Test

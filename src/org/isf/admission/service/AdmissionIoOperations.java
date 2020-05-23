@@ -65,22 +65,12 @@ public class AdmissionIoOperations
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public ArrayList<AdmittedPatient> getAdmittedPatients(
-			String searchTerms) throws OHServiceException 
-	{
+	public ArrayList<AdmittedPatient> getAdmittedPatients(String searchTerms) throws OHServiceException	{
 		ArrayList<AdmittedPatient> admittedPatients = new ArrayList<AdmittedPatient>();
-		List<Object[]> admittedPatientsList = (List<Object[]>)repository.findAllBySearch(searchTerms);
+		List<Admission> admissions = repository.findAllBySearch(searchTerms);
 
-
-		for (Object[] object : admittedPatientsList) {
-			Patient patient = patientRepository.findOne((Integer) object[0]);
-			Admission admission = null;
-			Integer admissionId = (Integer) object[26];
-			if (admissionId != null) admission = repository.findOne((Integer) object[26]);
-
-
-			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);
-			admittedPatients.add(admittedPatient);
+		for (Admission admission : admissions) {
+			admittedPatients.add(new AdmittedPatient(admission.getPatient(), admission));
 		}
 
 		return admittedPatients;
