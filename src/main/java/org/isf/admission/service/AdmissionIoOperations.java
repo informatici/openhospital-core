@@ -65,11 +65,15 @@ public class AdmissionIoOperations
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public ArrayList<AdmittedPatient> getAdmittedPatients(
-			String searchTerms) throws OHServiceException
-	{
-		final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList = repository.findPatientAndAdmissionId(searchTerms);
-		return loadPatientAndAdmission(admittedPatientsList);
+	public ArrayList<AdmittedPatient> getAdmittedPatients(String searchTerms) throws OHServiceException	{
+		ArrayList<AdmittedPatient> admittedPatients = new ArrayList<AdmittedPatient>();
+		List<Admission> admissions = repository.findAllBySearch(searchTerms);
+
+		for (Admission admission : admissions) {
+			admittedPatients.add(new AdmittedPatient(admission.getPatient(), admission));
+		}
+
+		return admittedPatients;
 	}
 
 	/**
@@ -80,24 +84,13 @@ public class AdmissionIoOperations
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public ArrayList<AdmittedPatient> getAdmittedPatients(
-			String searchTerms, GregorianCalendar[] admissionRange,
-			GregorianCalendar[] dischargeRange) throws OHServiceException
-	{
-		final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList = repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
-		return loadPatientAndAdmission(admittedPatientsList);
-	}
-
-	private ArrayList<AdmittedPatient> loadPatientAndAdmission(final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList) {
-		final ArrayList<AdmittedPatient> result = new ArrayList<AdmittedPatient>();
-		for (final AdmissionIoOperationRepositoryCustom.PatientAdmission patientAdmission : admittedPatientsList) {
-			final Patient patient = patientRepository.findOne(patientAdmission.getPatientId());
-			Admission admission = null;
-			if (patientAdmission.getAdmissionId() != null) {
-				admission = repository.findOne(patientAdmission.getAdmissionId());
-			}
-			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);
-			result.add(admittedPatient);
+	public ArrayList<AdmittedPatient> getAdmittedPatients(String searchTerms,
+														  GregorianCalendar[] admissionRange,
+														  GregorianCalendar[] dischargeRange) throws OHServiceException {
+		ArrayList<AdmittedPatient> admittedPatients = new ArrayList<AdmittedPatient>();
+		List<Admission> admissions = repository.findAllBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
+		for (Admission admission : admissions) {
+			admittedPatients.add(new AdmittedPatient(admission.getPatient(), admission));
 		}
 		return result;
 	}

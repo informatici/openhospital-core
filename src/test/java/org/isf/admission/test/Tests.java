@@ -1,8 +1,15 @@
 package org.isf.admission.test;
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
+import org.isf.admission.service.AdmissionIoOperationRepository;
 import org.isf.admission.service.AdmissionIoOperations;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.admtype.test.TestAdmissionType;
@@ -36,10 +43,16 @@ import org.isf.pregtreattype.test.TestPregnantTreatmentType;
 import org.isf.pregtreattype.test.TestPregnantTreatmentTypeContext;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.isf.ward.test.TestWard;
 import org.isf.ward.test.TestWardContext;
-import org.junit.*;
+import org.joda.time.DateTime;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -83,7 +96,7 @@ public class Tests
 
     @Autowired
     AdmissionIoOperations admissionIoOperation;
-	
+
 	@BeforeClass
     public static void setUpClass()  
     {
@@ -122,6 +135,8 @@ public class Tests
         jpa.open();
         
         _saveContext();
+
+
 		
 		return;
     }
@@ -210,87 +225,165 @@ public class Tests
 	}
 
 	@Test
-	public void test_simple_getAdmittedPatients() throws Exception {
+	public void testIoGetAdmittedPatients() throws OHException, InterruptedException, OHServiceException {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
 		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
-		ArrayList<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null);
-
-		assertEquals(patients.size(), searchResult.size());
+		ArrayList<AdmittedPatient> patientsNull = admissionIoOperation.getAdmittedPatients(null);
+			
+		assertEquals(patients.size(), patientsNull.size());
 		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
 	}
 
 	@Test
-	public void test_getAdmittedPatient_with_dateRanges() throws Exception {
+	public void testIoGetAdmittedPatientsShouldFindByOneOfFieldsLikeFirstName() throws OHException, InterruptedException, OHServiceException {
+		// given:
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
-		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
-		final GregorianCalendar admissionDate = foundAdmission.getAdmDate();
-		final GregorianCalendar dischargeDate = foundAdmission.getDisDate();
-		{
-			ArrayList<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null, null, null);
-			assertEquals(patients.size(), searchResult.size());
-			assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
-		}
-		final GregorianCalendar beforeAdmissionDate = copyFrom(admissionDate);
-		beforeAdmissionDate.add(Calendar.DATE, -1);
+		Patient foundPatient = foundAdmission.getPatient();
 
-		final GregorianCalendar oneDayAfterAdmissionDate = copyFrom(admissionDate);
-		oneDayAfterAdmissionDate.add(Calendar.DATE, 1);
+		// when:
+		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getFirstName());
 
-		final GregorianCalendar twoDaysAfterAdmissionDate = copyFrom(admissionDate);
-		twoDaysAfterAdmissionDate.add(Calendar.DATE, 2);
-
-		final GregorianCalendar beforeDischargeDate = copyFrom(dischargeDate);
-		beforeDischargeDate.add(Calendar.DATE, -1);
-
-		final GregorianCalendar oneDayAfterDischargeDate = copyFrom(dischargeDate);
-		oneDayAfterDischargeDate.add(Calendar.DATE, 1);
-
-		final GregorianCalendar twoDaysAfterDischargeDate = copyFrom(dischargeDate);
-		twoDaysAfterDischargeDate.add(Calendar.DATE, 2);
-		{
-			// search by admission date
-			final ArrayList<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null,
-					new GregorianCalendar[]{beforeAdmissionDate, oneDayAfterAdmissionDate},
-					null
-			);
-			assertEquals(patients.size(), searchOneresult.size());
-			assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
-
-			final ArrayList<AdmittedPatient> searchTwoResult = admissionIoOperation.getAdmittedPatients(null,
-					new GregorianCalendar[]{oneDayAfterAdmissionDate, twoDaysAfterAdmissionDate},
-					null
-			);
-			assertEquals(0, searchTwoResult.size());
-		}
-		{
-			// search by discharge date
-			final ArrayList<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null, null,
-					new GregorianCalendar[]{beforeDischargeDate, oneDayAfterDischargeDate}
-			);
-			assertEquals(patients.size(), searchOneresult.size());
-			assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
-
-			final ArrayList<AdmittedPatient> searchTwoResult = admissionIoOperation.getAdmittedPatients(null, null,
-					new GregorianCalendar[]{oneDayAfterDischargeDate, twoDaysAfterDischargeDate}
-			);
-			assertEquals(0, searchTwoResult.size());
-		}
-		{
-			// complex search by both admission and discharge date
-			final ArrayList<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null,
-					new GregorianCalendar[]{beforeAdmissionDate, oneDayAfterAdmissionDate},
-					new GregorianCalendar[]{beforeDischargeDate, oneDayAfterDischargeDate}
-			);
-			assertEquals(patients.size(), searchOneresult.size());
-			assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
-		}
+		// then:
+		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
 	}
 
-	private GregorianCalendar copyFrom(final GregorianCalendar source) {
-		return new GregorianCalendar(source.get(Calendar.YEAR), source.get(Calendar.MONTH), source.get(Calendar.DATE));
+	@Test
+	public void testIoGetAdmittedPatientsShouldFindByOneOfFieldsLikeLastName() throws OHException, InterruptedException, OHServiceException {
+		// given:
+		int id = _setupTestAdmission(false);
+		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
+		Patient foundPatient = foundAdmission.getPatient();
+
+		// when:
+		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getName());
+
+		// then:
+		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
 	}
+
+	@Test
+	public void testIoGetAdmittedPatientsShouldFindByOneOfFieldsLikeNote() throws OHException, InterruptedException, OHServiceException {
+		// given:
+		int id = _setupTestAdmission(false);
+		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
+		Patient foundPatient = foundAdmission.getPatient();
+
+		// when:
+		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getNote());
+
+		// then:
+		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+	}
+
+	@Test
+	public void testIoGetAdmittedPatientsShouldFindByOneOfFieldsLikeTaxCode() throws OHException, InterruptedException, OHServiceException {
+		// given:
+		int id = _setupTestAdmission(false);
+		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
+		Patient foundPatient = foundAdmission.getPatient();
+
+		// when:
+		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getTaxCode());
+
+		// then:
+		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+	}
+
+	@Test
+	public void testIoGetAdmittedPatientsShouldFindByOneOfFieldsLikeId() throws OHException, InterruptedException, OHServiceException {
+		// given:
+		int id = _setupTestAdmission(false);
+		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
+		Patient foundPatient = foundAdmission.getPatient();
+
+		// when:
+		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString());
+
+		// then:
+		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+	}
+
+	@Test
+	public void testIoGetAdmittedPatientsShouldNotFindAnythingWhenNotExistingWordProvided() throws OHException, InterruptedException, OHServiceException {
+		// given:
+		int id = _setupTestAdmission(false);
+		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
+
+		// when:
+		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients("dupsko");
+
+		// then:
+		assertTrue(patients.isEmpty());
+	}
+
+	@Test
+	public void testIoGetAdmittedPatientsByOneOfFieldsLikeIdAndDateRange() throws OHException, InterruptedException, OHServiceException {
+		// given:
+		int id = _setupTestAdmission(false);
+		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
+		Patient foundPatient = foundAdmission.getPatient();
+		GregorianCalendar[] admissionRange = {
+			new DateTime(foundAdmission.getAdmDate()).minusDays(1).toGregorianCalendar(),
+			new DateTime(foundAdmission.getAdmDate()).plusDays(1).toGregorianCalendar()
+		};
+		GregorianCalendar[] dischargeRange = {
+			new DateTime(foundAdmission.getDisDate()).minusDays(1).toGregorianCalendar(),
+			new DateTime(foundAdmission.getDisDate()).plusDays(1).toGregorianCalendar()
+		};
+
+		// when:
+		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString(), admissionRange, dischargeRange);
+
+		// then:
+		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+	}
+
+	@Test
+	public void testIoGetAdmittedPatientsShouldNotFindWhenAdmissionOutsideOfDateRange() throws OHException, InterruptedException, OHServiceException {
+		// given:
+		int id = _setupTestAdmission(false);
+		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
+		Patient foundPatient = foundAdmission.getPatient();
+		GregorianCalendar[] admissionRange = {
+			new DateTime(foundAdmission.getAdmDate()).minusDays(2).toGregorianCalendar(),
+			new DateTime(foundAdmission.getAdmDate()).minusDays(1).toGregorianCalendar()
+		};
+		GregorianCalendar[] dischargeRange = {
+			new DateTime(foundAdmission.getDisDate()).minusDays(1).toGregorianCalendar(),
+			new DateTime(foundAdmission.getDisDate()).plusDays(1).toGregorianCalendar()
+		};
+
+		// when:
+		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString(), admissionRange, dischargeRange);
+
+		// then:
+		assertTrue(patients.isEmpty());
+	}
+
+	@Test
+	public void testIoGetAdmittedPatientsShouldNotFindWhenDischargeOutsideOfDateRange() throws OHException, InterruptedException, OHServiceException {
+		// given:
+		int id = _setupTestAdmission(false);
+		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
+		Patient foundPatient = foundAdmission.getPatient();
+		GregorianCalendar[] admissionRange = {
+			new DateTime(foundAdmission.getAdmDate()).minusDays(1).toGregorianCalendar(),
+			new DateTime(foundAdmission.getAdmDate()).plusDays(1).toGregorianCalendar()
+		};
+		GregorianCalendar[] dischargeRange = {
+			new DateTime(foundAdmission.getDisDate()).minusDays(2).toGregorianCalendar(),
+			new DateTime(foundAdmission.getDisDate()).minusDays(1).toGregorianCalendar()
+		};
+
+		// when:
+		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString(), admissionRange, dischargeRange);
+
+		// then:
+		assertTrue(patients.isEmpty());
+	}
+
 
 	@Test
 	public void testIoGetCurrentAdmission() 

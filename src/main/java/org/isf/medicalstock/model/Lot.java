@@ -1,24 +1,16 @@
 package org.isf.medicalstock.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
 import org.isf.generaldata.MessageBundle;
-import org.isf.medicals.model.Medical;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.isf.medstockmovtype.model.MovementType;
 
 /*------------------------------------------
  * Medical Lot - model for the medical entity
@@ -55,7 +47,7 @@ public class Lot extends Auditable<String>
 	@NotNull
 	@Column(name="LT_DUE_DATE")
 	private GregorianCalendar dueDate;
-
+	
 	@Column(name="LT_COST")
 	private BigDecimal cost;
 	
@@ -64,9 +56,11 @@ public class Lot extends Auditable<String>
 	
 	@Transient
 	private volatile int hashCode = 0;
-	
 
-	public Lot() { 
+	@OneToMany(mappedBy = "lot")
+	private List<Movement> movements = new ArrayList<Movement>();
+	
+	public Lot() {
 	}
 	public Lot(String aCode){
 		code=aCode;
@@ -77,26 +71,28 @@ public class Lot extends Auditable<String>
 		preparationDate=aPreparationDate;
 		dueDate=aDueDate;
 	}
-	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate,int aQuantity){
-		code=aCode;
-		preparationDate=aPreparationDate;
-		dueDate=aDueDate;
-		quantity=aQuantity;
-	}
+
 	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate,BigDecimal aCost){
 		code=aCode;
 		preparationDate=aPreparationDate;
 		dueDate=aDueDate;
 		cost=aCost;
 	}
+
 	public String getCode(){
 		return code;
 	}
+
 	public int getQuantity(){
+		int quantity = 0;
+		for (Movement movement: movements) {
+			if (movement.getType().getType().equals("-")) {
+				quantity -= movement.getQuantity();
+			} else if (movement.getType().getType().equals("+")) {
+				quantity += movement.getQuantity();
+			}
+		}
 		return quantity;
-	}
-	public Medical getMedical(){
-			return medical;
 	}
 	public GregorianCalendar getPreparationDate(){
 		return preparationDate;
@@ -112,12 +108,6 @@ public class Lot extends Auditable<String>
 	}
 	public void setPreparationDate(GregorianCalendar aPreparationDate){
 		preparationDate=aPreparationDate;
-	}
-	public void setQuantity(int aQuantity){
-		quantity=aQuantity;
-	}
-	public void setMedical(Medical aMedical){
-				medical=aMedical;
 	}
 	public void setDueDate(GregorianCalendar aDueDate){
 		dueDate=aDueDate;
@@ -162,7 +152,7 @@ public class Lot extends Auditable<String>
 				return false;
 		} else if (!preparationDate.equals(other.preparationDate))
 			return false;
-		if (quantity != other.quantity)
+		if (getQuantity() != other.getQuantity())
 			return false;
 		return true;
 	}
