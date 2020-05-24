@@ -422,8 +422,6 @@ public class Tests
 			BillPayments foundBillPayment = (BillPayments)jpa.find(BillPayments.class, id); 
 			GregorianCalendar dateFrom = new GregorianCalendar(4, 3, 2);
 			GregorianCalendar dateTo = new GregorianCalendar();
-			// added 1 secons because h2 database "BETWEEN" function compares date using < instead of <= like mysql
-			dateTo.add(Calendar.SECOND, 1);
 			ArrayList<BillPayments> billPayments = accountingIoOperation.getPayments(dateFrom, dateTo);
 			
 			assertEquals(true, billPayments.contains(foundBillPayment));

@@ -17,6 +17,7 @@ public interface AccountingBillPaymentIoOperationRepository extends JpaRepositor
 	@Query(value = "select distinct bp.user FROM BillPayments bp ORDER BY bp.user asc")
 	List<String> findUserDistinctByOrderByUserAsc();
 
+	@Query(value = "SELECT BP FROM BillPayments BP where BP.date >= :start and BP.date < :end ORDER BY BP.id")
 	List<BillPayments> findByDateBetweenOrderByIdAscDateAsc(@Param("start") GregorianCalendar start, @Param("end") GregorianCalendar end);
 
 	List<BillPayments> findAllByBillIn(Collection<Bill> bills);
