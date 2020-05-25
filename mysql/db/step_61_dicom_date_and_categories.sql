@@ -21,6 +21,6 @@ ADD CONSTRAINT FK_DICOM_DICOMTYPE
   ON UPDATE NO ACTION;
   
 INSERT INTO MENUITEM (MNI_ID_A, MNI_BTN_LABEL, MNI_LABEL, MNI_TOOLTIP, MNI_SHORTCUT, MNI_SUBMENU, MNI_CLASS, MNI_IS_SUBMENU, MNI_POSITION) VALUES ('dicomtype', 'angal.menu.btn.dicomtype', 'angal.menu.dicomtype', 'x', 'X', 'types', 'org.isf.dicomtype.gui.DicomTypeBrowser', 'N', '13');
-INSERT INTO GROUPMENU (GM_UG_ID_A, GM_MNI_ID_A, GM_ACTIVE) VALUES ('admin','dicomtype','Y');
+INSERT INTO GROUPMENU (GM_UG_ID_A, GM_MNI_ID_A, GM_ACTIVE) VALUES ('admin','dicomtype',1);
   
 
