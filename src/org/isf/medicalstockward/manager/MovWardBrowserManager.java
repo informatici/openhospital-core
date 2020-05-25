@@ -74,13 +74,21 @@ public class MovWardBrowserManager {
 	/**
 	 * Gets all the {@link MedicalWard}s associated to the specified ward.
 	 * @param wardId the ward id.
+	 * @param stripeEmpty - if <code>true</code>, stripes the empty lots
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<MedicalWard> getMedicalsWard(char wardId, boolean w) throws OHServiceException {
-		return ioOperations.getMedicalsWard(wardId,w);
+	public ArrayList<MedicalWard> getMedicalsWard(char wardId, boolean stripeEmpty) throws OHServiceException {
+		return ioOperations.getMedicalsWard(wardId, stripeEmpty);
 	}
 
+	/**
+	 * TODO: add description, what this method differ from getMedicalsWard(char wardId, boolean w)?
+	 * @param wardId
+	 * @param w
+	 * @return
+	 * @throws OHServiceException
+	 */
 	public ArrayList<MedicalWard> getMedicalsWardDrug(char wardId, boolean w) throws OHServiceException {
         return ioOperations.getMedicalsWardDrugs(wardId,w);
 	}

@@ -243,33 +243,36 @@ public class MedicalStockWardIoOperations
 	/**
 	 * Gets all the {@link Medical}s associated to specified {@link Ward}.
 	 * @param wardId the ward id.
+	 * @param stripeEmpty - if <code>true</code>, stripes the empty lots
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException if an error occurs during the medical retrieving.
 	 */
 	public ArrayList<MedicalWard> getMedicalsWard(
-			char wardId, boolean w) throws OHServiceException
+			char wardId, boolean stripeEmpty) throws OHServiceException
 	{
 		ArrayList<MedicalWard> medicalWards = new ArrayList<MedicalWard>(repository.findAllWhereWard(wardId));
 		for (int i=0; i<medicalWards.size(); i++)
 			
 		{
-			if (w){
 			double qty = Double.valueOf(medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
-			if (qty != 0.0) {
-				medicalWards.get(i).setQty(qty);
-			} else {
+			medicalWards.get(i).setQty(qty);
+			
+			if (stripeEmpty && qty == 0) {
 				medicalWards.remove(i);
-				i= i-1;
-			}
-			}else {
-				double qty = Double.valueOf(medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
-				medicalWards.get(i).setQty(qty);
-			}
+				i = i - 1;
+			} 
 		}
 		
 		return medicalWards;
 	}
 	
+	/**
+	 * TODO: add description, what this method differ from getMedicalsWard(char wardId, boolean stripeEmpty)?
+	 * @param wardId
+	 * @param w
+	 * @return
+	 * @throws OHServiceException
+	 */
 	public ArrayList<MedicalWard> getMedicalsWardDrugs(
 			char wardId, boolean w) throws OHServiceException
 	{
