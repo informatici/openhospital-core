@@ -258,6 +258,13 @@ public class TimeTools {
 
 		return calendar;
 	}
-	
-	
+
+
+	public static GregorianCalendar getBeginningOfDay(GregorianCalendar date) {
+		return new DateTime(date).withTimeAtStartOfDay().toGregorianCalendar();
+	}
+
+	public static GregorianCalendar getBeginningOfNextDay(GregorianCalendar date) {
+		return new DateTime(date).plusDays(1).withTimeAtStartOfDay().toGregorianCalendar();
+	}
 }

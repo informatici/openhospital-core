@@ -1,6 +1,7 @@
 package org.isf.patient.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -36,11 +37,10 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 	}
 	
 	private String[] getWordsToSearchForInPatientsRepository(String regex)	{
-		String string = null;
 		String[] words = new String[0];
 
 		if ((regex != null) && (!regex.equals(""))) {
-			string = regex.trim().toLowerCase();
+			String string = regex.trim().toLowerCase();
 			words = string.split(" ");
 		}
 
@@ -52,11 +52,18 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
 		Root<Patient> patientRoot = query.from(Patient.class);
 		query.select(patientRoot);
+		List<Predicate> where = new ArrayList<Predicate>();
 
 		for (String word : words) {
-			query.where(wordExistsInOneOfPatientFields(word, cb, patientRoot));
+			where.add(wordExistsInOneOfPatientFields(word, cb, patientRoot));
 		}
 
+		where.add(cb.or(
+			cb.equal(patientRoot.get("deleted"), "N"),
+			cb.isNull(patientRoot.get("deleted"))
+		));
+
+		query.where(cb.and(where.toArray(new Predicate[where.size()])));
 		query.orderBy(cb.desc(patientRoot.get("code")));
 
 		return query;

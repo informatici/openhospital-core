@@ -222,6 +222,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+			<!-- in mem db downgrade to java 6 supporting -->
 			<version>1.4.190</version>
 			<scope>test</scope>
 		</dependency>

@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Repository;
 public interface MovementIoOperationRepository extends JpaRepository<Movement, Integer>, MovementIoOperationRepositoryCustom {    
     @Query(value = "select m from Movement m join m.medical med where med.code = :code")
     Movement findAllByMedicalCode(@Param("code") Integer code);
+
+	@Query(value = "select m from Movement m join m.medical med where med.code = :code")
+	Movement findAllByMedicalCodeOrderByLot_(@Param("code") Integer code);
     
     @Query(value = "select distinct med.code from Movement mov " +
 			"join mov.medical med " +
@@ -28,6 +32,8 @@ public interface MovementIoOperationRepository extends JpaRepository<Movement, I
 			"left join mov.ward ward " +
 			"where mov.refNo = :refNo order by mov.date, mov.refNo")
     List<Movement> findAllByRefNo(@Param("refNo") String refNo);
+
+    List<Movement> findByLot(Lot lot);
     
     @Query(value = "select max(mov.date) from Movement mov")
 	GregorianCalendar findMaxDate();
