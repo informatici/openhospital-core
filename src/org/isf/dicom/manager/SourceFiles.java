@@ -97,16 +97,27 @@ public class SourceFiles extends Thread {
                 loadDicomDir(fileDicom, value, patient);
         }
 	}
+	
+	public static boolean checkSize(File sourceFile) throws OHDicomException {
+		
+		return DicomManagerFactory.getMaxDicomSizeLong() > sourceFile.length();
+	}
 
-	public static int countFiles(File sourceFile, int patient) {
+	public static int countFiles(File sourceFile, int patient) throws OHDicomException {
 		int num = 0;
 
 		File[] files = sourceFile.listFiles();
 
         for (File value : files) {
-            if (!value.isDirectory())
+            if (!value.isDirectory()) {
+            	if (!checkSize(value)) {
+            		throw new OHDicomException(new OHExceptionMessage("DICOM", 
+            				MessageBundle.getMessage("angal.dicom.afileinthefolderistoobigpleasesetdicommaxsizeproperty") + 
+            				" (" + DicomManagerFactory.getMaxDicomSize() + ")", 
+            				OHSeverityLevel.ERROR));
+            	}
                 num++;
-            else if (!".".equals(value.getName()) && !"..".equals(value.getName()))
+            } else if (!".".equals(value.getName()) && !"..".equals(value.getName()))
                 num = num + countFiles(value, patient);
         }
 		return num;
