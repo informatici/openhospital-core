@@ -2,6 +2,7 @@ package org.isf.dicom.manager;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -18,6 +19,7 @@ import org.dcm4che2.imageio.plugins.dcm.DicomImageReadParam;
 import org.dcm4che2.imageio.plugins.dcm.DicomStreamMetaData;
 import org.dcm4che2.io.DicomCodingException;
 import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Rotation;
 import org.isf.dicom.model.FileDicom;
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDicomException;
@@ -25,6 +27,12 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.file.FileTools;
+
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.MetadataException;
+import com.drew.metadata.exif.ExifIFD0Directory;
 
 /**
  * Magager for DICOM Files
@@ -211,6 +219,17 @@ public class SourceFiles extends Thread {
 
 				try {
 					originalImage = reader.read(0); //, param); //TODO: handle big sizes images (java.lang.IndexOutOfBoundsException: imageIndex out of bounds!)
+					
+					int orientation = checkOrientation(sourceFile);
+			        
+					if (orientation != 1) {
+						originalImage = autoRotate(originalImage, orientation);
+						String fileType = sourceFile.getName().toLowerCase().endsWith(".jpg") ? "jpg" : "jpeg";
+						File f = File.createTempFile(sourceFile.getName(),"."+fileType);
+						ImageIO.write(originalImage, fileType, f);
+						sourceFile = f;
+			        }
+		            
 				} catch (DicomCodingException dce) {
 					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"), 
 							MessageBundle.getMessage("angal.dicom.load.err") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
@@ -361,6 +380,53 @@ public class SourceFiles extends Thread {
 		} catch (Exception ecc) {
 			ecc.printStackTrace();
 		}
+	}
+
+	private static int checkOrientation(File sourceFile) throws ImageProcessingException, IOException {
+		Metadata metadata = ImageMetadataReader.readMetadata(sourceFile);
+		ExifIFD0Directory exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+		int orientation = 1;
+		try {
+		    orientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+		} catch (Exception ex) {
+		    System.out.println("No EXIF information found for image: " + sourceFile.getName());
+		}
+		return orientation;
+	}
+
+	private static BufferedImage autoRotate(BufferedImage originalImage, int orientation)
+			throws MetadataException {
+		switch (orientation) {
+        case 1:
+            break;
+        case 2: // Flip X
+        	originalImage = Scalr.rotate(originalImage, Rotation.FLIP_HORZ);
+            break;
+        case 3: // PI rotation
+            originalImage = Scalr.rotate(originalImage, Rotation.CW_180);
+            break;
+        case 4: // Flip Y
+            originalImage = Scalr.rotate(originalImage, Rotation.FLIP_VERT);
+            break;
+        case 5: // - PI/2 and Flip X
+            originalImage = Scalr.rotate(originalImage, Rotation.CW_90);
+            originalImage = Scalr.rotate(originalImage, Rotation.FLIP_HORZ);
+            break;
+        case 6: // -PI/2 and -width
+            originalImage = Scalr.rotate(originalImage, Rotation.CW_90);
+            break;
+        case 7: // PI/2 and Flip
+            originalImage = Scalr.rotate(originalImage, Rotation.CW_90);
+            originalImage = Scalr.rotate(originalImage, Rotation.FLIP_VERT);
+            break;
+        case 8: // PI / 2
+            originalImage = Scalr.rotate(originalImage, Rotation.CW_270);
+            break;
+        default:
+            break;
+        }       
+
+		return originalImage;
 	}
 	
 	/**
