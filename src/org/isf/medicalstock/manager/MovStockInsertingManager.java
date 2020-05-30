@@ -12,9 +12,8 @@ import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
-import org.isf.utils.exception.OHDataIntegrityViolationException;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
@@ -84,15 +83,9 @@ public class MovStockInsertingManager {
 		}
 		
 		// Check quantity
-		Lot lot = movement.getLot();
 		if (movement.getQuantity() == 0) {
 			errors.add(new OHExceptionMessage("zeroQuantityError",
 					MessageBundle.getMessage("angal.medicalstock.thequantitymustnotbezero"), //$NON-NLS-1$
-					OHSeverityLevel.ERROR));
-		}
-		if ((movement.getType().getType().contains("-")) && (movement.getQuantity() > lot.getQuantity())) {
-			errors.add(new OHExceptionMessage("quantityGreaterThanLotError",
-					MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof"), //$NON-NLS-1$
 					OHSeverityLevel.ERROR));
 		}
 
@@ -111,23 +104,34 @@ public class MovStockInsertingManager {
 		}
 		
 		// Check Lot
-		{
-			List<Integer> medicalIds = ioOperations.getMedicalsFromLot(lot.getCode());
-			if (!(medicalIds.size() == 0 || (medicalIds.size() == 1 && medicalIds.get(0).intValue() == movement.getMedical().getCode().intValue()))) {
-				errors.add(new OHExceptionMessage("sharedLotError",
-						MessageBundle.getMessage("angal.medicalstock.thislotreferstoanothermedical"), //$NON-NLS-1$
-						OHSeverityLevel.ERROR));
-			}
-			if (GeneralData.LOTWITHCOST) {
-				BigDecimal cost = lot.getCost();
-				if (cost == null || cost.doubleValue() <= 0.) {
-					errors.add(new OHExceptionMessage("zeroLotCostError",
-							MessageBundle.getMessage("angal.medicalstock.multiplecharging.zerocostsnotallowed"), //$NON-NLS-1$
+		if (!isAutomaticLot()) {
+			Lot lot = movement.getLot();
+			{
+				errors.addAll(validateLot(lot));
+				
+				if ((movement.getType().getType().contains("-")) && (movement.getQuantity() > lot.getQuantity())) {
+					errors.add(new OHExceptionMessage("quantityGreaterThanLotError",
+							MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof"), //$NON-NLS-1$
 							OHSeverityLevel.ERROR));
 				}
+				
+				List<Integer> medicalIds = ioOperations.getMedicalsFromLot(lot.getCode());
+				if (!(medicalIds.size() == 0 || (medicalIds.size() == 1 && medicalIds.get(0).intValue() == movement.getMedical().getCode().intValue()))) {
+					errors.add(new OHExceptionMessage("sharedLotError",
+							MessageBundle.getMessage("angal.medicalstock.thislotreferstoanothermedical"), //$NON-NLS-1$
+							OHSeverityLevel.ERROR));
+				}
+				if (GeneralData.LOTWITHCOST) {
+					BigDecimal cost = lot.getCost();
+					if (cost == null || cost.doubleValue() <= 0.) {
+						errors.add(new OHExceptionMessage("zeroLotCostError",
+								MessageBundle.getMessage("angal.medicalstock.multiplecharging.zerocostsnotallowed"), //$NON-NLS-1$
+								OHSeverityLevel.ERROR));
+					}
+				}
 			}
-			errors.addAll(validateLot(lot));
 		}
+		
 		if (!errors.isEmpty()){
 	        throw new OHDataValidationException(errors);
 	    }
@@ -249,16 +253,16 @@ public class MovStockInsertingManager {
 		return ioOperations.refNoExists(refNo);
 	}
 	
-	/**
-	 * insert a list of {@link Movement}s and related {@link Lot}s
-	 * 
-	 * @param movements - the list of {@link Movement}s
-	 * @return 
-	 * @throws OHServiceException 
-	 */
-	public boolean newMultipleChargingMovements(ArrayList<Movement> movements) throws OHServiceException {
-		return newMultipleChargingMovements(movements, null);
-	}
+//	/**
+//	 * insert a list of {@link Movement}s and related {@link Lot}s
+//	 * 
+//	 * @param movements - the list of {@link Movement}s
+//	 * @return 
+//	 * @throws OHServiceException 
+//	 */
+//	public boolean newMultipleChargingMovements(ArrayList<Movement> movements) throws OHServiceException {
+//		return newMultipleChargingMovements(movements, null);
+//	}
 
 	/**
 	 * Insert a list of charging {@link Movement}s and related {@link Lot}s
@@ -273,8 +277,9 @@ public class MovStockInsertingManager {
 	public boolean newMultipleChargingMovements(ArrayList<Movement> movements, String referenceNumber) throws OHServiceException {
 		
 		boolean ok = true;
-		boolean checkReference = referenceNumber == null;
-		if (!checkReference) { // referenceNumber != null
+		boolean checkReference = referenceNumber == null; // referenceNumber == null, each movement should have referenceNumber set
+		if (!checkReference) { 
+			// referenceNumber != null, all movement will have same referenceNumber, we check only once for all
 			List<OHExceptionMessage> errors = checkReferenceNumber(referenceNumber);
             if(!errors.isEmpty()){
                 throw new OHDataValidationException(errors);
@@ -310,17 +315,17 @@ public class MovStockInsertingManager {
 		return ioOperations.prepareChargingMovement(movement);
 	}
 	
-	/**
-	 * Insert a list of discharging {@link Movement}s
-	 * 
-	 * @param movements - the list of {@link Movement}s
-	 * @return 
-	 * @throws OHServiceException 
-	 */
-	@Transactional(rollbackFor=OHServiceException.class)
-	public boolean newMultipleDischargingMovements(ArrayList<Movement> movements) throws OHServiceException {
-		return newMultipleDischargingMovements(movements, null);
-	}
+//	/**
+//	 * Insert a list of discharging {@link Movement}s
+//	 * 
+//	 * @param movements - the list of {@link Movement}s
+//	 * @return 
+//	 * @throws OHServiceException 
+//	 */
+//	@Transactional(rollbackFor=OHServiceException.class)
+//	public boolean newMultipleDischargingMovements(ArrayList<Movement> movements) throws OHServiceException {
+//		return newMultipleDischargingMovements(movements, null);
+//	}
 
 	/**
 	 * Insert a list of discharging {@link Movement}s
@@ -335,8 +340,9 @@ public class MovStockInsertingManager {
 	public boolean newMultipleDischargingMovements(ArrayList<Movement> movements, String referenceNumber) throws OHServiceException {
 		
 		boolean ok = true;
-		boolean checkReference = referenceNumber == null;
-		if (!checkReference) { // referenceNumber != null
+		boolean checkReference = referenceNumber == null; // referenceNumber == null, each movement should have referenceNumber set
+		if (!checkReference) { 
+			// referenceNumber != null, all movement will have same referenceNumber, we check only once for all
 			List<OHExceptionMessage> errors = checkReferenceNumber(referenceNumber);
             if(!errors.isEmpty()){
                 throw new OHDataValidationException(errors);
@@ -365,7 +371,6 @@ public class MovStockInsertingManager {
 	 *         <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	@Transactional(rollbackFor=OHServiceException.class)
 	private boolean prepareDishargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
 		validateMovement(movement, checkReference);
         if (isAutomaticLot()) {
