@@ -9,17 +9,17 @@
 	xmlns:repository="http://www.springframework.org/schema/data/repository"
 	
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
-		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context 
-		http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/aop 
-		http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/aop/spring-aop.xsd
 		http://www.springframework.org/schema/data/jpa 
-		http://www.springframework.org/schema/data/jpa/spring-jpa-1.11.xsd
+		http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
 		http://www.springframework.org/schema/tx 
-		http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/data/repository 
-		http://www.springframework.org/schema/data/repository/spring-repository-1.11.xsd
+		http://www.springframework.org/schema/data/repository/spring-repository.xsd
 		">
 		
 	<context:component-scan base-package="org.isf" />
@@ -63,6 +63,7 @@
  		</property>
  		<property name="jpaProperties">
  			<props>
+ 				<prop key="hibernate.connection.zeroDateTimeBehavior">convertToNull</prop>
  				<prop key="hibernate.show_sql">${hibernate.show_sql:false}</prop>
  				<prop key="hibernate.format_sql">${hibernate.format_sql:true}</prop>
  				<prop key="hibernate.dialect">${hibernate.dialect:org.hibernate.dialect.MySQLDialect}</prop>

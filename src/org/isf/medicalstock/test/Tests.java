@@ -280,6 +280,57 @@ public class Tests
 	}
 	
 	@Test
+	public void testIoNewAutomaticDischargingMovementDifferentLots() 
+	{
+		int code = 0;
+		
+		try 
+		{	
+			code = _setupTestMovement(false);
+			Movement foundMovement = (Movement)jpa.find(Movement.class, code);
+			//medicalStockIoOperation.newMovement(foundMovement);
+			
+			Medical medical = foundMovement.getMedical();
+			MovementType medicalType = foundMovement.getType();
+			Ward ward = foundMovement.getWard();
+			Supplier supplier = foundMovement.getSupplier();
+			Lot lot = foundMovement.getLot(); //we are going to charge same lot
+			Movement newMovement = new Movement(
+					medical,
+					medicalType, 
+					ward, 
+					lot, 
+					new GregorianCalendar(),
+					10, // new lot with 10 quantitye
+					supplier, 
+					"newReference");
+			medicalStockIoOperation.newMovement(newMovement);
+			
+			Movement dischargeMovement = new Movement(
+					medical,
+					medicalType,
+					ward,
+					null, // automatic lot selection
+					new GregorianCalendar(),
+					15,	// quantity of 15 should use first lot of 10 + second lot of 5
+					null,
+					"newReference2");
+			medicalStockIoOperation.newAutomaticDischargingMovement(dischargeMovement);
+			
+			ArrayList<Lot> lots = medicalStockIoOperation.getLotsByMedical(medical);
+			assertEquals(1, lots.size()); // first lot should be 0 quantity and stripped by the list
+			
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();		
+			assertEquals(true, false);
+		}
+		
+		return;
+	}
+	
+	@Test
 	public void testIoNewMovement() 
 	{
 		int code = 0;

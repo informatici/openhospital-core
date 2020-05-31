@@ -75,6 +75,7 @@ public class MedicalStockIoOperations {
 	
 	/**
 	 * Store the specified {@link Movement} by using automatically the most old lots
+	 * and splitting in more movements if required
 	 * @param movement - the {@link Movement} to store
 	 * @return <code>true</code> if the movement has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException
@@ -91,26 +92,31 @@ public class MedicalStockIoOperations {
 			int qty = movement.getQuantity();			
 			for (Lot lot : lots) 
 			{
+				Movement splitMovement = new Movement(movement.getMedical(), movement.getType(), movement.getWard(),
+						null, // lot to be set
+						movement.getDate(), qty,
+						null, // quantity to be set
+						movement.getRefNo());
 				int qtLot = lot.getQuantity();
 				if (qtLot < qty) 
 				{
-					movement.setQuantity(qtLot);
-					result = storeMovement(movement, lot.getCode());
+					splitMovement.setQuantity(qtLot);
+					result = storeMovement(splitMovement, lot.getCode());
 					if (result) 
 					{
 						//medical stock movement inserted updates quantity of the medical
-						result = updateStockQuantity(movement);
+						result = updateStockQuantity(splitMovement);
 					}
 					qty = qty - qtLot;
 				} 
 				else 
 				{
-					movement.setQuantity(qty);
-					result = storeMovement(movement, lot.getCode());
+					splitMovement.setQuantity(qty);
+					result = storeMovement(splitMovement, lot.getCode());
 					if (result) 
 					{
 						//medical stock movement inserted updates quantity of the medical
-						result = updateStockQuantity(movement);
+						result = updateStockQuantity(splitMovement);
 					}
 					break;
 				}
@@ -560,6 +566,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Retrieves lot referred to the specified {@link Medical}.
+	 * Lots with zero quantities will be stripepd out
 	 * @param medical the medical.
 	 * @return a list of {@link Lot}.
 	 * @throws OHServiceException if an error occurs retrieving the lot list.
@@ -567,17 +574,9 @@ public class MedicalStockIoOperations {
 	public ArrayList<Lot> getLotsByMedical(
 			Medical medical) throws OHServiceException
 	{
-		List<Lot> lots = lotRepository.findByMovements_MedicalOrderByDueDate(medical.getCode());/*(List<Object[]>)lotRepository.findAllWhereMedical(medical.getCode());
-		lots = new ArrayList<Lot>();
-		for (Object[] object: lotList)
-		{
-			Lot lot = _convertObjectToLot(object);
+		List<Lot> lots = lotRepository.findByMovements_MedicalOrderByDueDate(medical.getCode());
 
-			lots.add(lot);
-		}
-		*/
-
-		// remve empty lots
+		// remove empty lots
 		ArrayList<Lot> emptyLots = new ArrayList<Lot>();
 		for (Lot aLot : lots) {
 			if (aLot.getQuantity() == 0)
@@ -588,19 +587,6 @@ public class MedicalStockIoOperations {
 		return new ArrayList<Lot>(lots);
 	}
 
-	private Lot _convertObjectToLot(Object[] object)
-	{
-
-		Lot lot = new Lot();
-		lot.setCode((String)object[0]);
-		lot.setPreparationDate(_convertTimestampToCalendar((Timestamp)object[1]));
-		lot.setDueDate(_convertTimestampToCalendar((Timestamp)object[2]));
-		lot.setCost(new BigDecimal((Double) object[3]));
-		//lot.setQuantity(((Double)object[4]).intValue());
-
-		return lot;
-	}
-	
 	private GregorianCalendar _convertTimestampToCalendar(Timestamp time)
 	{
 		GregorianCalendar calendar = null;
