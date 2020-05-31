@@ -3,8 +3,12 @@ package org.isf.dicom.test;
 
 import static org.junit.Assert.assertEquals;
 
+import org.isf.admtype.model.AdmissionType;
 import org.isf.dicom.model.FileDicom;
 import org.isf.dicom.service.DicomIoOperations;
+import org.isf.dicomtype.model.DicomType;
+import org.isf.dicomtype.test.TestDicomType;
+import org.isf.dicomtype.test.TestDicomTypeContext;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
 import org.junit.After;
@@ -24,6 +28,8 @@ public class Tests
 	private static DbJpaUtil jpa;
 	private static TestDicom testFileDicom;
 	private static TestDicomContext testFileDicomContext;
+	private static TestDicomType testDicomType;
+	private static TestDicomTypeContext testDicomTypeContext;
 
     @Autowired
     DicomIoOperations dicomIoOperation;
@@ -34,6 +40,8 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testFileDicom = new TestDicom();
     	testFileDicomContext = new TestDicomContext();
+    	testDicomType = new TestDicomType();
+    	testDicomTypeContext = new TestDicomTypeContext();
     	
         return;
     } 
@@ -64,6 +72,8 @@ public class Tests
     {
     	testFileDicom = null;
     	testFileDicomContext = null;
+    	testDicomType = null;
+    	testDicomTypeContext = null;
 
     	return;
     }
@@ -76,7 +86,8 @@ public class Tests
 			
 
 		try 
-		{		
+		{	
+			DicomType dicomType = testDicomType.setup(false);
 			code = _setupTestFileDicom(false);
 			_checkFileDicomIntoDb(code);
 		} 
@@ -163,7 +174,7 @@ public class Tests
 	
 	
 	@Test
-	public void testIoLoadDettaglio() 
+	public void testIoLoadFileDicom() 
 	{
 		long code = 0;
 		
@@ -189,7 +200,7 @@ public class Tests
 	
 	
 	@Test
-	public void testIoLoadFilesPaziente() 
+	public void testIoLoadPatientFiles() 
 	{
 		long code = 0;
 		
@@ -198,7 +209,7 @@ public class Tests
 		{		
 			code = _setupTestFileDicom(false);
 			FileDicom foundFileDicom = (FileDicom)jpa.find(FileDicom.class, code); 
-			FileDicom[] dicoms = dicomIoOperation.loadFilesPaziente(foundFileDicom.getPatId());
+			FileDicom[] dicoms = dicomIoOperation.loadPatientFiles(foundFileDicom.getPatId());
 
 			assertEquals(foundFileDicom.getDicomSeriesDescription(), dicoms[0].getDicomSeriesDescription());
 		} 
@@ -262,12 +273,11 @@ public class Tests
 		
 		return;
 	}
-		
-	
 	
 	private void _saveContext() throws OHException 
     {	
 		testFileDicomContext.saveAll(jpa);
+		testDicomTypeContext.saveAll(jpa);
         		
         return;
     }
@@ -275,6 +285,7 @@ public class Tests
     private void _restoreContext() throws OHException 
     {
 		testFileDicomContext.deleteNews(jpa);
+		testDicomTypeContext.deleteNews(jpa);
         
         return;
     }
@@ -283,10 +294,13 @@ public class Tests
 			boolean usingSet) throws OHException 
 	{
 		FileDicom dicom;
+		DicomType dicomType;
 		
-
+		dicomType = testDicomType.setup(true);
+		
     	jpa.beginTransaction();	
-    	dicom = testFileDicom.setup(usingSet);
+    	dicom = testFileDicom.setup(dicomType, usingSet);
+    	jpa.persist(dicomType);
 		jpa.persist(dicom);
     	jpa.commitTransaction();
     	

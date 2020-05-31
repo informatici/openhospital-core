@@ -7,8 +7,10 @@ import java.util.Properties;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHDicomException;
+import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.file.FileTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +27,22 @@ public class DicomManagerFactory {
 	private static DicomManagerInterface instance = null;
 
 	private static Properties props = new Properties();
+	
+	public static String getMaxDicomSize() {
+		return props.getProperty("dicom.max.size", "4M");
+	}
+	
+	public static Long getMaxDicomSizeLong() throws OHDicomException {
+		String sizeHumanReadable = props.getProperty("dicom.max.size", "4M");
+		long sizeLong = 4194304L; // default for 4M
+		try {
+			sizeLong = FileTools.humanReadableByteCountParse(sizeHumanReadable);
+		} catch (OHException e) {
+			throw new OHDicomException(e, new OHExceptionMessage("DICOM", 
+					e.getMessage(), OHSeverityLevel.WARNING));
+		}
+		return sizeLong;
+	}
 
 	/**
 	 * return the manager for DICOM acquired files
@@ -71,4 +89,6 @@ public class DicomManagerFactory {
 					MessageBundle.getMessage("angal.dicom.manager.err") + " " + exc.getMessage(), OHSeverityLevel.ERROR));
 		}
 	}
+	
+	
 }

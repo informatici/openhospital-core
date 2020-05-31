@@ -12,7 +12,7 @@
 	<groupId>org.isf</groupId>
 	<artifactId>OH-core</artifactId>
 	<packaging>jar</packaging>
-	<version>1.9</version>
+	<version>1.10</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -156,6 +156,11 @@
 	</build>
 
 	<dependencies>
+		<dependency>
+		  <groupId>com.drewnoakes</groupId>
+		  <artifactId>metadata-extractor</artifactId>
+		  <version>2.10.0</version>
+		</dependency>
 		<dependency>
 			<groupId>com.googlecode.gstreamer-java</groupId>
 			<artifactId>gstreamer-java</artifactId>
