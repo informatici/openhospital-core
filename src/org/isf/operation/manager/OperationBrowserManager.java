@@ -2,6 +2,7 @@ package org.isf.operation.manager;
 
 import java.util.ArrayList;
 
+import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
 import org.isf.operation.model.Operation;
 import org.isf.operation.service.OperationIoOperations;
@@ -112,4 +113,15 @@ public class OperationBrowserManager {
 		return ioOperations.isDescriptionPresent(description,typeCode);
 	}
 	
+	/**
+	 * Get the list of possible operation results
+	 * @return the found list
+	 */
+	public ArrayList<String> getResultsList() {
+		ArrayList<String> resultsList = new ArrayList<String>();
+		resultsList.add(MessageBundle.getMessage("angal.operation.result.sucess"));
+		resultsList.add(MessageBundle.getMessage("angal.operation.result.failure"));
+		resultsList.add(MessageBundle.getMessage("angal.operation.result.undefined"));
+		return resultsList;
+	}
 }
