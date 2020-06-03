@@ -1,5 +1,21 @@
-﻿ND;1. MALADIES À DÉCLARATION OBLIGATOIRE
-OC;2. AUTRES MALADIES INFECTIEUSES/TRANSMISSIBLES
-MP;3.  MALADIES MATERNELLES ET PÉRINATALES
-NC;4. MALADIE NON-TRANSMISSIBLE
-AO;5. Toutes les autres
+AB;A00-B99 Infectieuses et parasitaires
+CD;C00-D48 Tumeurs
+D;D50-D89 Sang; organes hématopoïétique et système immunitaire
+E;E00-E90 Endocriniennes; nutritionnelles et métaboliques
+F;F00-F99 Troubles mentaux et du comportement
+G;G00-G99 Système nerveux
+H1;H00-H59 Oeil et ses annexes
+H2;H60-H95 Oreille et apophyse mastoïde
+I;I00-I99 Appareil circulatoire
+J;J00-J99 Appareil respiratoire
+K;K00-K93 Appareil digestif
+L;L00-L99 Peau et tissu cellulaire souscutané
+M;M00-M99 Système ostéoarticulaire et tissu conjonctif
+N;N00-N99 Appareil génito-urinaire
+O;O00-O99 Grossesse; accouchement et puerpéralité
+P;P00-P96 Affections dans la période périnatale
+Q;Q00-Q99 Malformations congénitales et anomalies chromosomiques
+R;R00-R99 Symptômes; résultats anormaux d'examens cliniques et de laboratoire non classés ailleurs
+ST;S00-T98 Lésions traumatiques; empoisonnements et conséquences de causes externes
+VY;V01-Y98 Causes externes de morbidité et de mortalité
+Z;Z00-Z99 Facteurs influant sur l'état de santé et motifs de recours aux services de santé
