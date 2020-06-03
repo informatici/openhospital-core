@@ -1,13 +1,13 @@
 package org.isf.medicalstockward.service;
 
 
-import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.isf.utils.time.DateConverters;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -60,7 +60,7 @@ public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWa
 			{
 				query.append("AND ");
 			}
-			query.append("DATE(MMVN_DATE) BETWEEN DATE(\"" + _convertToSQLDateLimited(dateFrom) + "\") and DATE(\"" + _convertToSQLDateLimited(dateTo) + "\") ");
+			query.append("DATE(MMVN_DATE) BETWEEN DATE(\"" + DateConverters.convertToSQLDateLimited(dateFrom) + "\") and DATE(\"" + DateConverters.convertToSQLDateLimited(dateTo) + "\") ");
 		}
 		query.append(" ORDER BY MMVN_DATE ASC");
 		
@@ -69,16 +69,4 @@ public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWa
 		return result;
 	}
 		
-	/**
-	 * return a String representing the date in format <code>yyyy-MM-dd</code>
-	 * 
-	 * @param date
-	 * @return the date in format <code>yyyy-MM-dd</code>
-	 */
-	private String _convertToSQLDateLimited(GregorianCalendar date) 
-	{
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	
-		return sdf.format(date.getTime());
-	}
 }

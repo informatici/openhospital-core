@@ -56,6 +56,30 @@ public class OperationIoOperations {
 
 		return operations;
 	}
+	public ArrayList<Operation> getOperationOpd(
+			) throws OHServiceException {
+	
+    	ArrayList<Operation> operations = null;
+
+
+			operations = repository.findAllWithoutDescriptionOpd();
+		
+
+
+		return operations;
+	}
+	public ArrayList<Operation> getOperationAdm(
+			) throws OHServiceException {
+	
+    	ArrayList<Operation> operations = null;
+
+
+			operations = repository.findAllWithoutDescriptionAdm();
+		
+
+
+		return operations;
+	}
         
         public Operation findByCode(String code) throws OHServiceException{
             return repository.findByCode(code);
