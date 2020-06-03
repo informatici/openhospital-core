@@ -61,15 +61,21 @@ public class SourceFiles extends Thread {
 	}
 
 	public void run() {
-		loadDicomDir(fileDicom, file, patient);
+		try {
+			loadDicomDir(fileDicom, file, patient);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		dicomLoader.setVisible(false);
 		thumbnail.initialize();
 	}
 
 	/**
 	 * load a DICOM directory
+	 * @throws Exception 
 	 */
-	private void loadDicomDir(FileDicom fileDicom, File sourceFile, int patient) {
+	private void loadDicomDir(FileDicom fileDicom, File sourceFile, int patient) throws Exception {
 		// installLibs();
 		File[] files = sourceFile.listFiles();
 		String seriesNumber = fileDicom.getDicomSeriesNumber();
@@ -89,7 +95,11 @@ public class SourceFiles extends Thread {
             }
 
             if (!value.isDirectory()) {
-                loadDicom(fileDicom, value, patient);
+                try {
+					loadDicom(fileDicom, value, patient);
+				} catch (Exception e) {
+					throw e;
+				}
                 filesLoaded++;
                 dicomLoader.setLoaded(filesLoaded);
             }
@@ -198,9 +208,10 @@ public class SourceFiles extends Thread {
 	 * @param sourceFile
 	 * @param patient
 	 * @param seriesNumber 
+	 * @throws Exception 
 	 */
 	@SuppressWarnings("unused")
-	public synchronized static void loadDicom(FileDicom dicomFileDetail, File sourceFile, int patient) {
+	public synchronized static void loadDicom(FileDicom dicomFileDetail, File sourceFile, int patient) throws Exception {
 		// installLibs();
 
 		//System.out.println("File "+sourceFile.getName());
@@ -213,14 +224,14 @@ public class SourceFiles extends Thread {
 					sourceFile.getName().toLowerCase().endsWith(".jpeg");
 			boolean isDicom = sourceFile.getName().toLowerCase().endsWith(".dcm");
 			
-			ImageReader reader;
+			ImageReader reader = null;
 			ImageReadParam param;
 			BufferedImage originalImage;
 			Iterator<?> iter = null;
 			if (isJpeg) {
 				iter = ImageIO.getImageReadersByFormatName("jpeg");
-				reader = (ImageReader) iter.next();
-				//param = (JPEGImageReadParam) reader.getDefaultReadParam ();
+				reader = (ImageReader) new com.sun.imageio.plugins.jpeg.JPEGImageReader(null);
+				//JPEGImageReadParam jpgParam = new JPEGImageReadParam();
 				
 				ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
 				
@@ -229,7 +240,7 @@ public class SourceFiles extends Thread {
 				originalImage = null;
 
 				try {
-					originalImage = reader.read(0); //, param); //TODO: handle big sizes images (java.lang.IndexOutOfBoundsException: imageIndex out of bounds!)
+					originalImage = reader.read(0); //, jpgParam);
 					
 					int orientation = checkOrientation(sourceFile);
 			        
@@ -244,6 +255,9 @@ public class SourceFiles extends Thread {
 				} catch (DicomCodingException dce) {
 					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"), 
 							MessageBundle.getMessage("angal.dicom.load.err") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
+				} catch (IndexOutOfBoundsException ioe) {
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"), 
+							MessageBundle.getMessage("angal.dicom.unknownformat") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
 				}
 
 				imageInputStream.close();
@@ -388,8 +402,8 @@ public class SourceFiles extends Thread {
 				}
 			}
 
-		} catch (Exception ecc) {
-			ecc.printStackTrace();
+		} catch (OHDicomException ecc) {
+			throw ecc;
 		}
 	}
 
