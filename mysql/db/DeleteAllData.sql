@@ -10,13 +10,14 @@ delete from DELIVERYRESULTTYPE;
 delete from DELIVERYTYPE;
 delete from HOSPITAL;
 delete from AGETYPE;
-delete from MEDICALSRSTOCKMOV_N;
-delete from PRICELISTS;
-delete from PRICES;
-delete from PRICESOTHERS;
+delete from MEDICALDSRSTOCKMOVTYPE;
+delete from MEDICALDSRSTOCKMOV;
 delete from BILLITEMS;
 delete from BILLPAYMENTS;
 delete from BILLS;
+delete from PRICELISTS;
+delete from PRICES;
+delete from PRICESOTHERS;
 delete from THERAPIES;
 delete from VISITS;
 
