@@ -83,14 +83,14 @@ public class MovWardBrowserManager {
 	}
 
 	/**
-	 * TODO: add description, what this method differ from getMedicalsWard(char wardId, boolean w)?
-	 * @param wardId
-	 * @param w
-	 * @return
+	 * Gets all the {@link MedicalWard}s associated to the specified ward summarized by lot 
+	 * (total quantity, regardless the lot)
+	 * @param wardId the ward id.
+	 * @return the retrieved medicals.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<MedicalWard> getMedicalsWardDrug(char wardId, boolean w) throws OHServiceException {
-        return ioOperations.getMedicalsWardDrugs(wardId,w);
+	public ArrayList<MedicalWard> getMedicalsWardTotalQuantity(char wardId) throws OHServiceException {
+        return ioOperations.getMedicalsWardTotalQuantity(wardId);
 	}
 
 	/**

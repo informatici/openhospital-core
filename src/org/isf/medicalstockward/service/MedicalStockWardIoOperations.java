@@ -1,5 +1,8 @@
 package org.isf.medicalstockward.service;
 
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstockward.model.MedicalWard;
@@ -10,9 +13,6 @@ import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
 
 /**
  * @author mwithi
@@ -267,37 +267,25 @@ public class MedicalStockWardIoOperations
 	}
 	
 	/**
-	 * TODO: add description, what this method differ from getMedicalsWard(char wardId, boolean stripeEmpty)?
+	 * Gets all the {@link MedicalWard}s associated to the specified ward summarized by lot 
+	 * (total quantity, regardless the lot)
 	 * @param wardId
-	 * @param w
-	 * @return
+	 * @return the retrieved medicals.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<MedicalWard> getMedicalsWardDrugs(
-			char wardId, boolean w) throws OHServiceException
+	public ArrayList<MedicalWard> getMedicalsWardTotalQuantity(
+			char wardId) throws OHServiceException
 	{
 		String WardID=String.valueOf(wardId);
-		ArrayList<MedicalWard> medicalWards = getMedicalsWard(wardId, w);
+		ArrayList<MedicalWard> medicalWards = getMedicalsWard(wardId, true);
 		
-		for (int i=0; i<medicalWards.size(); i++)
-		{
-				
-			double qty = Double.valueOf(medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
-			if (qty != 0) {
-				medicalWards.get(i).setQty(qty);
-			} else {
-				medicalWards.remove(i);
-				i= i-1;
-			}
-		}
 		ArrayList<MedicalWard> medicalWardsQty = new ArrayList<MedicalWard>();
 		
 		for (int i=0; i<medicalWards.size(); i++) {
-			
-			 Double qty = repository.findQuantityInWardWhereMedicalAndWard(medicalWards.get(i).getId().getMedical().getCode(),WardID);
 			 
-			 medicalWards.get(i).setQty(qty);
 			 if (!medicalWardsQty.contains(medicalWards.get(i))) {
+				 Double qty = repository.findQuantityInWardWhereMedicalAndWard(medicalWards.get(i).getId().getMedical().getCode(),WardID);
+				 medicalWards.get(i).setQty(qty);
 				 medicalWardsQty.add(medicalWards.get(i));
 			 }
 		}
