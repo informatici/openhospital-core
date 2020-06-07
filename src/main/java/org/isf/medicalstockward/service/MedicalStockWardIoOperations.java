@@ -29,8 +29,6 @@ public class MedicalStockWardIoOperations
 	private MedicalStockWardIoOperationRepository repository;
 	@Autowired
 	private MovementWardIoOperationRepository movementRepository;
-	@Autowired
-	private MovementPatWard movementPat;
 	
 	/**
 	 * Get all {@link MovementWard}s with the specified criteria.
@@ -269,6 +267,6 @@ public class MedicalStockWardIoOperations
 
 	public ArrayList<MovementWard> getWardMovementsToPatient(Integer patId) {
 		
-		return movementPat.findWardMovementPat(patId);
+		return movementRepository.findWardMovementPat(patId);
 	}
 }
