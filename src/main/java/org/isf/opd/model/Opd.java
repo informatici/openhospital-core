@@ -64,7 +64,7 @@ public class Opd extends Auditable<String>
 	private GregorianCalendar visitDate;
         
 	@Column(name="OPD_DATE_NEXT_VIS")
-        private GregorianCalendar nextVisitDate;
+    private GregorianCalendar nextVisitDate;
 
 	@ManyToOne
 	@JoinColumn(name="OPD_PAT_ID")

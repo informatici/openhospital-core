@@ -1,5 +1,6 @@
 package org.isf.utils.table;
 
+import java.awt.Component;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -313,4 +314,21 @@ public class TableSorter extends TableMap {
 		JTableHeader th = tableView.getTableHeader();
 		th.addMouseListener(listMouseListener);
 	}
+
+	public void updateRowHeights(JTable tabel) {
+	    for (int row = 0; row < tabel.getRowCount(); row++)
+	    {
+	        int rowHeight = tabel.getRowHeight();
+
+	        for (int column = 0; column < tabel.getColumnCount(); column++)
+	        {
+	            Component comp = tabel.prepareRenderer(tabel.getCellRenderer(row, column), row, column);
+	            rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
+	        }
+
+	        tabel.setRowHeight(row, rowHeight);
+	    }
+	}
+		
+	
 }

@@ -1,7 +1,6 @@
 package org.isf.opd.service;
 
 
-import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.isf.generaldata.MessageBundle;
+import org.isf.utils.time.DateConverters;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -65,21 +65,9 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		if (newPatient != 'A') {
 			query += " AND OPD_NEW_PAT =  \"" + newPatient + "\"";
 		}
-		query += " AND OPD_DATE_VIS BETWEEN  \"" + _convertToSQLDateLimited(dateFrom) + "\" AND \"" + _convertToSQLDateLimited(dateTo) + "\"";
+		query += " AND OPD_DATE_VIS BETWEEN  \"" + DateConverters.convertToSQLDateLimited(dateFrom) + "\" AND \"" + DateConverters.convertToSQLDateLimited(dateTo) + "\"";
 
 		return query;
 	}
 		
-	/**
-	 * return a String representing the date in format <code>yyyy-MM-dd</code>
-	 * 
-	 * @param date
-	 * @return the date in format <code>yyyy-MM-dd</code>
-	 */
-	private String _convertToSQLDateLimited(GregorianCalendar date) 
-	{
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	
-		return sdf.format(date.getTime());
-	}
 }
