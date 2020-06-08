@@ -6,10 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -27,7 +25,6 @@ import org.isf.stat.dto.JasperReportResultDto;
 import org.isf.utils.db.DbQueryLogger;
 import org.isf.utils.db.UTF8Control;
 import org.isf.utils.excel.ExcelExporter;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHReportException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -257,7 +254,7 @@ public class JasperReportsManager {
         }
     }
     
-    public JasperReportResultDto getGenericReportPatientVersion2Pdf(Integer patientID,Boolean all,Boolean admission,Boolean opd,Boolean drugs,Boolean examination, Date date_From, Date date_To, String jasperFileName) throws OHServiceException {
+    public JasperReportResultDto getGenericReportPatientVersion2Pdf(Integer patientID, String parametersString, Date date_From, Date date_To, String jasperFileName) throws OHServiceException {
 
         try{
             HashMap<String, Object> parameters = getHospitalParameters();
@@ -276,11 +273,13 @@ public class JasperReportsManager {
 		    String dateToQuery = formatter.format(dt);
 	
             parameters.put("patientID", String.valueOf(patientID));
-            parameters.put("All", all);
-            parameters.put("Drugs", drugs);
-            parameters.put("Examination", examination);
-            parameters.put("Admission", admission);
-            parameters.put("Opd", opd);
+            parameters.put("All", parametersString.contains("All"));
+            parameters.put("Drugs", parametersString.contains("Drugs"));
+            parameters.put("Examination", parametersString.contains("Examination"));
+            parameters.put("Admission", parametersString.contains("Admission"));
+            parameters.put("Opd", parametersString.contains("Opd"));
+            parameters.put("Laboratory", parametersString.contains("Laboratory"));
+            parameters.put("Operations", parametersString.contains("Operations"));
             parameters.put("Date_from", dateFromQuery); 
             parameters.put("Date_to", dateToQuery); 
             String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + String.valueOf(patientID)+".pdf";
