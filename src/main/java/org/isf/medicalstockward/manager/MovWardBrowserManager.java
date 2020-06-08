@@ -79,7 +79,6 @@ public class MovWardBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<MedicalWard> getMedicalsWard(char wardId) throws OHServiceException {
-            System.out.println("MovWardBrowserManager: Looking for drugs ");
 		return ioOperations.getMedicalsWard(wardId);
 	}
 
