@@ -1,9 +1,8 @@
 package org.isf.examination.manager;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,7 +33,7 @@ public class ExaminationBrowserManager {
 	 */
 	public PatientExamination getDefaultPatientExamination(Patient patient){
 		PatientExamination defaultPatient = new PatientExamination(
-				new Timestamp(new Date().getTime()), 
+				new GregorianCalendar(), 
 				patient, 
 				new Integer(ExaminationParameters.HEIGHT_INIT), 
 				new Double(ExaminationParameters.WEIGHT_INIT), 
@@ -57,7 +56,7 @@ public class ExaminationBrowserManager {
 	 * Get from last PatientExamination (only height, weight & note)
 	 */
 	public PatientExamination getFromLastPatientExamination(PatientExamination lastPatientExamination){
-		PatientExamination newPatientExamination = new PatientExamination(new Timestamp(new Date().getTime()), lastPatientExamination.getPatient(), lastPatientExamination.getPex_height(),
+		PatientExamination newPatientExamination = new PatientExamination(new GregorianCalendar(), lastPatientExamination.getPatient(), lastPatientExamination.getPex_height(),
 				lastPatientExamination.getPex_weight(), lastPatientExamination.getPex_ap_min(), lastPatientExamination.getPex_ap_max(), lastPatientExamination.getPex_hr(), 
 				lastPatientExamination.getPex_temp(), lastPatientExamination.getPex_sat(), lastPatientExamination.getPex_hgt(),
 				lastPatientExamination.getPex_diuresis(), lastPatientExamination.getPex_diuresis_desc(), lastPatientExamination.getPex_bowel_desc(), lastPatientExamination.getPex_rr(), 
