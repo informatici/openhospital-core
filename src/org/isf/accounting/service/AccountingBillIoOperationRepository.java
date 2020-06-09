@@ -18,7 +18,7 @@ public interface AccountingBillIoOperationRepository
 
 	List<Bill> findByStatusOrderByDateDesc(String status);
 
-	List<Bill> findByStatusAndPatient_codeOrderByDateDesc(String status, int patientId);
+	List<Bill> findByStatusAndBillPatient_codeOrderByDateDesc(String status, int billPatient);
 
 	List<Bill> findAllByOrderByDateDesc();
 

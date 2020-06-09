@@ -38,7 +38,7 @@ public class AccountingIoOperations {
 	 */
 	public ArrayList<Bill> getPendingBills(int patID) throws OHServiceException {
 		if (patID != 0)
-			return new ArrayList<Bill>(billRepository.findByStatusAndPatient_codeOrderByDateDesc("O", patID));
+			return new ArrayList<Bill>(billRepository.findByStatusAndBillPatient_codeOrderByDateDesc("O", patID));
 
 		return new ArrayList<Bill>(billRepository.findByStatusOrderByDateDesc("O"));
 	}
