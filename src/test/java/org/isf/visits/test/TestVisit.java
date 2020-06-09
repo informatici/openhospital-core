@@ -8,7 +8,7 @@ import java.util.GregorianCalendar;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
 import org.isf.visits.model.Visit;
-import org.isf.visits.model.VisitRow;
+import org.isf.visits.model.Visit;
 import org.isf.ward.model.Ward;
 
 
@@ -22,24 +22,24 @@ public class TestVisit
 	private Ward ward;
 	private Patient patient;
 			
-	public VisitRow setup(
+	public Visit setup(
 			Patient patient,
 			boolean usingSet, 
 			Ward ward) throws OHException 
 	{
-		VisitRow visit;
+		Visit visit;
 		this.ward = ward;
 		this.patient = patient;
 				
 		if (usingSet)
 		{
-			visit = new VisitRow();
+			visit = new Visit();
 			_setParameters(patient, visit, ward);
 		}
 		else
 		{
 			// Create Visit with all parameters 
-			visit = new VisitRow(0, date, patient, note, sms, ward, duration, service);
+			visit = new Visit(0, date, patient, note, sms, ward, duration, service);
 		}
 				    	
 		return visit;
@@ -47,7 +47,7 @@ public class TestVisit
 	
 	public void _setParameters(
 			Patient patient,
-			VisitRow visit,
+			Visit visit,
 			Ward ward) 
 	{	
 		visit.setDate(date);
