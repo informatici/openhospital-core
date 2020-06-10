@@ -9,6 +9,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
+import org.isf.utils.time.DateConverters;
+import org.isf.utils.time.TimeTools;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -87,7 +89,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 		
 		if ((dateFrom != null) && (dateTo != null)) 
 		{
-			query += "WHERE DATE(MMV_DATE) BETWEEN DATE(\"" + _convertToSQLDateLimited(dateFrom) + "\") and DATE(\"" + _convertToSQLDateLimited(dateTo) + "\") ";
+			query += "WHERE DATE(MMV_DATE) BETWEEN DATE(\"" + DateConverters.convertToSQLDateLimited(dateFrom) + "\") and DATE(\"" + DateConverters.convertToSQLDateLimited(dateTo) + "\") ";
 			dateQuery = true;
 		}
 		if (wardId != null && !wardId.equals("")) 
@@ -158,7 +160,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			{
 				query += "and ";
 			}
-			query += "(DATE(MMV_DATE) between DATE(\"" + _convertToSQLDateLimited(movFrom) + "\") and DATE(\"" + _convertToSQLDateLimited(movTo) + "\")) ";
+			query += "(DATE(MMV_DATE) between DATE(\"" + DateConverters.convertToSQLDateLimited(movFrom) + "\") and DATE(\"" + DateConverters.convertToSQLDateLimited(movTo) + "\")) ";
 			paramQuery = true;
 		}
 		if ((lotPrepFrom != null) && (lotPrepTo != null)) 
@@ -167,7 +169,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			{
 				query += "and ";
 			}
-			query += "(DATE(LT_PREP_DATE) between DATE(\"" + _convertToSQLDateLimited(lotPrepFrom) + "\") and DATE(\"" + _convertToSQLDateLimited(lotPrepTo) + "\")) ";
+			query += "(DATE(LT_PREP_DATE) between DATE(\"" + DateConverters.convertToSQLDateLimited(lotPrepFrom) + "\") and DATE(\"" + DateConverters.convertToSQLDateLimited(lotPrepTo) + "\")) ";
 			paramQuery = true;
 		}
 		if ((lotDueFrom != null) && (lotDueTo != null)) 
@@ -176,7 +178,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			{
 				query += "and ";
 			}
-			query += "(DATE(LT_DUE_DATE) between DATE(\"" + _convertToSQLDateLimited(lotDueFrom) + "\") and DATE(\"" + _convertToSQLDateLimited(lotDueTo) + "\")) ";
+			query += "(DATE(LT_DUE_DATE) between DATE(\"" + DateConverters.convertToSQLDateLimited(lotDueFrom) + "\") and DATE(\"" + DateConverters.convertToSQLDateLimited(lotDueTo) + "\")) ";
 			paramQuery = true;
 		}
 		if (movType != null) {
@@ -249,7 +251,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			{
 				query += "and ";
 			}
-			query += "(DATE(MMV_DATE) between DATE(\"" + _convertToSQLDateLimited(movFrom) + "\") and DATE(\"" + _convertToSQLDateLimited(movTo) + "\")) ";
+			query += "(DATE(MMV_DATE) between DATE(\"" + DateConverters.convertToSQLDateLimited(movFrom) + "\") and DATE(\"" + DateConverters.convertToSQLDateLimited(movTo) + "\")) ";
 			paramQuery = true;
 		}		
 		if (movType != null) 
@@ -286,18 +288,5 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 		}
 		
 		return query;
-	}
-		
-	/**
-	 * return a String representing the date in format <code>yyyy-MM-dd</code>
-	 * 
-	 * @param date
-	 * @return the date in format <code>yyyy-MM-dd</code>
-	 */
-	private String _convertToSQLDateLimited(GregorianCalendar date) 
-	{
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	
-		return sdf.format(date.getTime());
 	}
 }

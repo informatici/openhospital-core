@@ -57,4 +57,5 @@ source step_60_examination_changes.sql;
 source step_61_dicom_date_and_categories.sql;
 source step_62_patient_profession_and_marital_status.sql;
 source step_63_respiratory_rate_and_auscultation.sql;
-source step_64_daily_worksheet_for_services.sql;
+source step_64_operations_in_opd.sql;
+source step_65_daily_worksheet_for_services.sql;
