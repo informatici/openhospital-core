@@ -15,10 +15,11 @@ import org.isf.sms.manager.SmsManager;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
 import org.isf.therapy.model.Therapy;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.visits.model.Visit;
+import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
+import org.isf.ward.model.Ward;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -52,6 +53,70 @@ public class VisitManager {
 		return ioOperations.getVisits(patID);
 	}
 	
+	public ArrayList<Visit> getVisitsWard() throws OHServiceException {
+		return getVisitsWard(null);
+	}
+	
+	public ArrayList<Visit> getVisitsWard(String wardId) throws OHServiceException {
+		return ioOperations.getVisitsWard(wardId);
+	}
+	
+	public ArrayList<Visit> getVisits(ArrayList<Visit> vsRows) throws OHServiceException {
+		
+		if (vsRows != null) {
+			ArrayList<Visit> visits = new ArrayList<Visit>();
+			
+			for (Visit vsRow : vsRows) {
+				
+				visits.add(createVisit(vsRow));
+			}
+			return visits;
+		} else {
+			return null;
+		}
+	}
+	
+
+	public Visit createVisit(Visit vs) throws OHServiceException {
+		return createVisit(vs.getVisitID(), vs.getPatient(), vs.getWard(), vs.getDate(), vs.getNote(), vs.getDuration(),
+				vs.getService(), vs.isSms());
+	}
+	private Visit createVisit(int visitID, Patient patient, Ward ward, GregorianCalendar date, String note,
+			String duration, String service, boolean sms) {
+	ArrayList<GregorianCalendar> datesArray = new ArrayList<GregorianCalendar>();
+		
+		GregorianCalendar stepDate = new GregorianCalendar();
+		stepDate.setTime(date.getTime());
+		datesArray.add(new GregorianCalendar(
+				date.get(GregorianCalendar.YEAR),
+				date.get(GregorianCalendar.MONTH),
+				date.get(GregorianCalendar.DAY_OF_MONTH)));
+		
+		
+		GregorianCalendar[] dates = new GregorianCalendar[datesArray.size()];
+		
+		for (int i = 0; i < datesArray.size(); i++) {
+			//dates[i] = new GregorianCalendar();
+			dates[i] = datesArray.get(i);
+			//System.out.println(formatDate(dates[i]));
+		}
+		
+		
+		Visit vs = new Visit(visitID, date,patient, note, sms,  ward, duration,  service);
+		
+		dates = null;
+		
+		return vs;
+	}
+	
+	public Visit newVisit(int visitID, GregorianCalendar date, Patient patient,String note, boolean sms, Ward ward,
+			String duration, String service) throws OHServiceException {
+			
+			Visit vsRow = new Visit(visitID, date, patient, note, sms, ward, duration, service);
+			return newVisit(vsRow);
+		}
+	
+
 	/**
 	 * insert a new {@link Visit} for related Patient
 	 * 
@@ -59,7 +124,7 @@ public class VisitManager {
 	 * @return the visitID
 	 * @throws OHServiceException 
 	 */
-	public int newVisit(Visit visit) throws OHServiceException {
+	public Visit newVisit(Visit visit) throws OHServiceException {
 		return ioOperations.newVisit(visit);
 	}
 
@@ -83,7 +148,7 @@ public class VisitManager {
 			for (Visit visit : visits) {
 				
 				visit.setVisitID(0); //reset ID in order to persist again (otherwise JPA think data is already persisted)
-				int visitID = ioOperations.newVisit(visit);
+				int visitID = ioOperations.newVisit(visit).getVisitID();
 				if (visitID == 0) return false;
 				
 				visit.setVisitID(visitID);
@@ -96,7 +161,7 @@ public class VisitManager {
 						Sms sms = new Sms();
 						sms.setSmsDateSched(date.getTime());
 						sms.setSmsNumber(pat.getTelephone());
-						sms.setSmsText(prepareSmsFromVisit(visit));
+//						sms.setSmsText(prepareSmsFromVisit(visit));
 						sms.setSmsUser(UserBrowsingManager.getCurrentUser());
 						sms.setModule("visit");
 						sms.setModuleID(String.valueOf(patID));

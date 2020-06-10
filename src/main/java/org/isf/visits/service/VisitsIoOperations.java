@@ -6,6 +6,7 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.visits.model.Visit;
+import org.isf.visits.model.Visit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +43,21 @@ public class VisitsIoOperations {
 		return visits;
 	}
 
+	
+	public ArrayList<Visit> getVisitsWard(String wardId
+			) throws OHServiceException 
+	{
+		ArrayList<Visit> visits = null;
+
+		if (wardId != null)
+			visits = new ArrayList<Visit>(repository.findAllWhereWardByOrderPatientAndDateAsc(wardId)); 
+		else
+			visits = new ArrayList<Visit>(repository.findAllByOrderPatientAndDateAsc());
+		
+		return visits;
+	}
+	
+	
 	/**
 	 * Insert a new {@link Visit} for a patID
 	 * 
@@ -49,12 +65,12 @@ public class VisitsIoOperations {
 	 * @return the visitID
 	 * @throws OHServiceException 
 	 */
-	public int newVisit(
+	public Visit newVisit(
 			Visit visit) throws OHServiceException 
 	{		
 		Visit savedVisit = repository.save(visit);
 		    	
-		return savedVisit.getVisitID();
+		return savedVisit;
 	}
 	
 	/**
