@@ -599,33 +599,7 @@ public class MedicalStockIoOperations {
 		
 		return lots;
 	}	
-
 	
-	public ArrayList<Lot> getLotsByMedicalId(
-			String lotId) throws OHServiceException
-	{
-		ArrayList<Lot> lots = null;
-	
-		
-		List<Object[]> lotList = (List<Object[]>)lotRepository.findAllWhereLot(lotId);
-		lots = new ArrayList<Lot>();
-		for (Object[] object: lotList)
-		{
-			Lot lot = _convertObjectToLot(object);
-			
-			lots.add(lot);
-		}
-		
-		// remve empy lots
-		ArrayList<Lot> emptyLots = new ArrayList<Lot>();
-		for (Lot aLot : lots) {
-			if (aLot.getQuantity() == 0)
-				emptyLots.add(aLot);
-		}
-		lots.removeAll(emptyLots);
-		
-		return lots;
-	}	
 	private Lot _convertObjectToLot(Object[] object)
 	{
 

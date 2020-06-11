@@ -232,14 +232,6 @@ public class MovStockInsertingManager {
 		return ioOperations.getLotsByMedical(medical);
 	}
 	
-	
-	public ArrayList<Lot> getLotByMedicalId(String medical) throws OHServiceException {
-		if (medical == null) {
-			return new ArrayList<Lot>();
-		}
-		return ioOperations.getLotsByMedicalId(medical);
-	}
-
 	/**
 	 * Checks if the provided quantity is under the medical limits. 
 	 * 

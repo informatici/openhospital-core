@@ -95,7 +95,7 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 		this.id = new MedicalWardId(ward, medical, lot); 
 	}
 	
-	public Lot getLot() throws OHException {
+	public Lot getLot() {
 		return id.getLot();
 	}
 	
