@@ -17,13 +17,11 @@ public class EntityManagerFactoryBean implements FactoryBean<EntityManagerFactor
 
 	@Override
 	public Class<?> getObjectType() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean isSingleton() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
