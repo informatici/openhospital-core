@@ -78,6 +78,7 @@ public class ExamBrowsingManager {
 	 * @throws OHServiceException 
 	 * @deprecated use getExam() instead
 	 */
+	@Deprecated
 	public ArrayList<Exam> getExamsbyDesc() throws OHServiceException {
 		return this.getExams();
 	}
