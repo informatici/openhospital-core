@@ -1,5 +1,8 @@
 package org.isf.medicalstockward.service;
 
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstockward.model.MedicalWard;
@@ -12,9 +15,6 @@ import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
 
 /**
  * @author mwithi
@@ -123,6 +123,7 @@ public class MedicalStockWardIoOperations
 			destinationWardIncomeMovement.setUnits(savedMovement.getUnits());
 			destinationWardIncomeMovement.setWard(savedMovement.getWardTo());
 			destinationWardIncomeMovement.setWardFrom(savedMovement.getWard());
+			destinationWardIncomeMovement.setlot(savedMovement.getLot());
 			movementRepository.save(destinationWardIncomeMovement);
 		}
 		
@@ -201,6 +202,7 @@ public class MedicalStockWardIoOperations
 	{
 		Double qty = movement.getQuantity();
 		String ward = movement.getWard().getCode();
+		String lot = movement.getLot().getCode();
                 String wardTo = null;
                 if (movement.getWardTo() != null) { 
                 	// in case of a mvnt from the ward movement.getWard() to the ward movement.getWardTO()
@@ -211,30 +213,30 @@ public class MedicalStockWardIoOperations
 		
 		
         if(wardTo != null) {
-            MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedical(wardTo, medical);
+            MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedicalAndLot(wardTo, medical, lot);
             if(medicalWardTo != null) {
-                repository.updateInQuantity(Math.abs(qty), wardTo, medical);
+            	repository.updateInQuantity(Math.abs(qty), wardTo, medical, lot);
             } else {
-                repository.insertMedicalWard(wardTo, medical, Math.abs(qty));
+                repository.insertMedicalWard(wardTo, medical, Math.abs(qty), lot);
             }
-            repository.updateOutQuantity(Math.abs(qty), ward, medical);
+            repository.updateOutQuantity(Math.abs(qty), ward, medical, lot);
             return result;
         }
                 
-		MedicalWard medicalWard = repository.findOneWhereCodeAndMedical(ward, medical);
+		MedicalWard medicalWard = repository.findOneWhereCodeAndMedicalAndLot(ward, medical, lot);
         if (medicalWard == null)
 		{
-            repository.insertMedicalWard(ward, medical, -qty);
+            repository.insertMedicalWard(ward, medical, -qty, lot);
         }
 		else
 		{
 			if (qty < 0)
 			{
-				repository.updateInQuantity(-qty, ward, medical);
+				repository.updateInQuantity(-qty, ward, medical,lot);
 			}
 			else
 			{
-                repository.updateOutQuantity(qty, ward, medical);
+				repository.updateOutQuantity(qty, ward, medical,lot);
             }				
 		}
 		return result;
@@ -243,30 +245,58 @@ public class MedicalStockWardIoOperations
 	/**
 	 * Gets all the {@link Medical}s associated to specified {@link Ward}.
 	 * @param wardId the ward id.
+	 * @param stripeEmpty - if <code>true</code>, stripes the empty lots
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException if an error occurs during the medical retrieving.
 	 */
 	public ArrayList<MedicalWard> getMedicalsWard(
-			char wardId) throws OHServiceException
+			char wardId, boolean stripeEmpty) throws OHServiceException
 	{
 		ArrayList<MedicalWard> medicalWards = new ArrayList<MedicalWard>(repository.findAllWhereWard(wardId));
 		for (int i=0; i<medicalWards.size(); i++)
+			
 		{
-			double qty = (double) (medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
-			if (qty != 0) {
-				medicalWards.get(i).setQty(qty);
-			} else {
+			double qty = Double.valueOf(medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
+			medicalWards.get(i).setQty(qty);
+			
+			if (stripeEmpty && qty == 0) {
 				medicalWards.remove(i);
-			}
+				i = i - 1;
+			} 
 		}
 		
 		return medicalWards;
 	}
-
-
-
+	
 	public ArrayList<MovementWard> getWardMovementsToPatient(Integer patId) {
 		
 		return movementRepository.findWardMovementPat(patId);
+	}
+
+	
+	/**
+	 * Gets all the {@link MedicalWard}s associated to the specified ward summarized by lot 
+	 * (total quantity, regardless the lot)
+	 * @param wardId
+	 * @return the retrieved medicals.
+	 * @throws OHServiceException
+	 */
+	public ArrayList<MedicalWard> getMedicalsWardTotalQuantity(
+			char wardId) throws OHServiceException
+	{
+		String WardID=String.valueOf(wardId);
+		ArrayList<MedicalWard> medicalWards = getMedicalsWard(wardId, true);
+		
+		ArrayList<MedicalWard> medicalWardsQty = new ArrayList<MedicalWard>();
+		
+		for (int i=0; i<medicalWards.size(); i++) {
+			 
+			 if (!medicalWardsQty.contains(medicalWards.get(i))) {
+				 Double qty = repository.findQuantityInWardWhereMedicalAndWard(medicalWards.get(i).getId().getMedical().getCode(),WardID);
+				 medicalWards.get(i).setQty(qty);
+				 medicalWardsQty.add(medicalWards.get(i));
+			 }
+		}
+		return medicalWardsQty;
 	}
 }

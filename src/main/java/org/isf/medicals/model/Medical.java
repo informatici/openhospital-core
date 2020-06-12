@@ -131,6 +131,11 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 
 	public Medical() { }
 	
+	
+	public Medical(Integer code) { 
+		super();
+		this.code = code;
+	}
 	/**
 	 * Constructor
 	 */

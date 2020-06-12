@@ -104,7 +104,7 @@ public class MovStockInsertingManager {
 		}
 		
 		// Check Lot
-		if (!isAutomaticLot()) {
+		if (!isAutomaticLot_Out()) {
 			Lot lot = movement.getLot();
 			{
 				errors.addAll(validateLot(lot));
@@ -196,8 +196,25 @@ public class MovStockInsertingManager {
 		return errors;
 	}
 
-	private boolean isAutomaticLot() {
-		return GeneralData.AUTOMATICLOT;
+	// Replaced by getMedical in MedicalBrowsingManager
+	/*
+	 * Gets the current quantity for the specified {@link Medical}. 
+	 * 
+	 * @param medical the medical to check.
+	 * 
+	 * @return the current quantity of medical.
+	 * 
+	 * public int getCurrentQuantity(Medical medical){ try { return
+	 * ioOperations.getCurrentQuantity(medical); } catch (OHException e) {
+	 * JOptionPane.showMessageDialog(null, e.getMessage()); return 0; } }
+	 */
+
+	private boolean isAutomaticLot_In() {
+			return GeneralData.AUTOMATICLOT_IN;
+		}
+		
+	private boolean isAutomaticLot_Out() {
+		return GeneralData.AUTOMATICLOT_OUT;
 	}
 
 	/**
@@ -214,7 +231,7 @@ public class MovStockInsertingManager {
 		}
 		return ioOperations.getLotsByMedical(medical);
 	}
-
+	
 	/**
 	 * Checks if the provided quantity is under the medical limits. 
 	 * 
@@ -315,6 +332,11 @@ public class MovStockInsertingManager {
 		return ioOperations.prepareChargingMovement(movement);
 	}
 	
+	public boolean storeLot(String LotCode, Lot lot, Medical med) throws OHServiceException {
+		
+		return ioOperations.storeLot(LotCode, lot, med);
+	}
+	
 //	/**
 //	 * Insert a list of discharging {@link Movement}s
 //	 * 
@@ -372,11 +394,14 @@ public class MovStockInsertingManager {
 	 * @throws OHServiceException 
 	 */
 	private boolean prepareDishargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
-		validateMovement(movement, checkReference);
-        if (isAutomaticLot()) {
-        	return ioOperations.newAutomaticDischargingMovement(movement);
-        } else {
-        	return ioOperations.prepareDischargingMovement(movement);
-        }
+		try {
+			validateMovement(movement, checkReference);
+            if (isAutomaticLot_Out()) {
+            	return ioOperations.newAutomaticDischargingMovement(movement);
+            } else 
+            	return ioOperations.prepareDischargingMovement(movement);
+		} catch (OHServiceException e) {
+			throw e;
+		}
 	}
 }

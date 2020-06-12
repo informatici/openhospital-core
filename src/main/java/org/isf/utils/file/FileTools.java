@@ -42,9 +42,7 @@ public class FileTools {
 	/**
 	 * 
 	 */
-	public FileTools() {
-		// TODO Auto-generated constructor stub
-	}
+	public FileTools() {}
 	
 	/**
 	 * Retrieves the last modified date

@@ -361,7 +361,6 @@ public class TimeTools {
 				return calDate;
 			}
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			if(!format.equals("dd/MM/yyyy")){
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 				Date date=sdf.parse(strDate);
