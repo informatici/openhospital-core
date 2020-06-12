@@ -26,7 +26,7 @@ public class PropertyReader {
 	 * 
 	 * Method to retrieve a property
 	 * 
-	 * @param property
+	 * @param propertyName
 	 * @param defaultValue
 	 * @return
 	 */

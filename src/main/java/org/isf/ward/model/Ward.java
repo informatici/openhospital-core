@@ -95,14 +95,14 @@ public class Ward extends Auditable<String>
 	}
 	
     /**
-     * @param aCode
-     * @param aName
-     * @param aTelephone
-     * @param aFax
-     * @param aEmail
-     * @param aBeds
-     * @param aNurs
-     * @param aDocs
+     * @param code
+	 * @param description
+     * @param telephone
+     * @param fax
+     * @param email
+     * @param beds
+     * @param nurs
+     * @param docs
      * @param isPharmacy
      * @param isMale
      * @param isFemale

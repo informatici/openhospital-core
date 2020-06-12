@@ -57,8 +57,8 @@ public class ExaminationOperations {
 
 	/**
 	 * 
-	 * @param path
-	 *            - the PatientHistory to save
+	 * @param patex
+	 *            - the PatientExamination to save
 	 * @throws OHServiceException 
 	 */
 	public void saveOrUpdate(

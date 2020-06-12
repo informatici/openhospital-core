@@ -32,7 +32,7 @@ public class DeliveryResultTypeIoOperation {
 
 	/**
 	 * Updates the specified {@link DeliveryResultType}.
-	 * @param deliveryresultType the delivery result type to update.
+	 * @param deliveryResultType the delivery result type to update.
 	 * @return <code>true</code> if the delivery result type has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
@@ -50,7 +50,7 @@ public class DeliveryResultTypeIoOperation {
 
 	/**
 	 * Stores the specified {@link DeliveryResultType}.
-	 * @param deliveryresultType the delivery result type to store.
+	 * @param deliveryResultType the delivery result type to store.
 	 * @return <code>true</code> if the delivery result type has been stored. 
 	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
@@ -68,7 +68,7 @@ public class DeliveryResultTypeIoOperation {
 
 	/**
 	 * Deletes the specified {@link DeliveryResultType}.
-	 * @param deliveryresultType the delivery result type to delete.
+	 * @param deliveryResultType the delivery result type to delete.
 	 * @return <code>true</code> if the delivery result type has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the delete operation.
 	 */

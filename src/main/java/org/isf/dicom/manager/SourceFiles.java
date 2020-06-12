@@ -145,8 +145,7 @@ public class SourceFiles extends Thread {
 	 * preLoad dicom file for validation in gui with some
 	 * data from filesystem
 	 * @param sourceFile
-	 * @param patient
-	 * @param seriesNumber 
+	 * @param numfiles
 	 */
 	public static FileDicom preLoadDicom(File sourceFile, int numfiles) {
 		FileDicom dicomFileDetail = new FileDicom();
@@ -205,10 +204,10 @@ public class SourceFiles extends Thread {
 
 	/**
 	 * load dicom file
+	 * @param dicomFileDetail
 	 * @param sourceFile
 	 * @param patient
-	 * @param seriesNumber 
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@SuppressWarnings("unused")
 	public synchronized static void loadDicom(FileDicom dicomFileDetail, File sourceFile, int patient) throws Exception {

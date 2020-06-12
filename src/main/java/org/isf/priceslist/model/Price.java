@@ -80,8 +80,6 @@ public class Price extends Auditable<String>
 	}
     
     /**
-     * 
-     * @param id
      * @param list
      * @param group
      * @param item

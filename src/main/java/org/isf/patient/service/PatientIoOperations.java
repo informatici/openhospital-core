@@ -249,7 +249,7 @@ public class PatientIoOperations
 	/**
 	 * method that logically delete a Patient (not physically deleted)
 	 * 
-	 * @param aPatient
+	 * @param patient
 	 * @return true - if the Patient has been deleted (logically)
 	 * @throws OHServiceException
 	 */

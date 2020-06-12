@@ -35,9 +35,9 @@ public class BillBrowserManager {
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
-	 * @param billPayments 
-	 * @param billItems 
-	 * @param deliveryResultType
+	 * @param bill
+	 * @param billItems
+	 * @param billPayments
 	 * @return list of {@link OHExceptionMessage}
 	 * @throws OHDataValidationException 
 	 */
@@ -306,7 +306,7 @@ public class BillBrowserManager {
 
 	/**
 	 * Gets all the {@link Bill}s associated to the passed {@link BillPayments}.
-	 * @param payments the {@link BillPayments} associated to the bill to retrieve.
+	 * @param billPayments the {@link BillPayments} associated to the bill to retrieve.
 	 * @return a list of {@link Bill} associated to the passed {@link BillPayments} or <code>null</code> if an error occurred.
 	 * @throws OHServiceException 
 	 */
@@ -328,7 +328,7 @@ public class BillBrowserManager {
 
 	/**
 	 * Retrieves all the {@link BillPayments} associated to the passed {@link Bill} list.
-	 * @param bills the bill list.
+	 * @param billArray the bill array list of {@link Bill}s.
 	 * @return a list of {@link BillPayments} associated to the passed bill list or <code>null</code> if an error occurred. 
 	 * @throws OHServiceException 
 	 */

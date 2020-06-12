@@ -100,8 +100,7 @@ public class WardIoOperations {
 	
 	/**
 	 * Updates the specified {@link Ward}.
-	 * @param disease the {@link Ward} to update.
-	 * @param isConfirmedOverwriteRecord if the user has confirmed he wants to overwrite the record
+	 * @param ward the {@link Ward} to update.
 	 * @return <code>true</code> if the ward has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */

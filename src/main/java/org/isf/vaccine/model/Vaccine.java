@@ -67,7 +67,7 @@ public class Vaccine extends Auditable<String>
     /**
      * @param aCode
      * @param aDescription
-     * @param avaccineType
+     * @param aVaccineType
      */
     public Vaccine(String aCode, String aDescription, VaccineType aVaccineType) {
         super();

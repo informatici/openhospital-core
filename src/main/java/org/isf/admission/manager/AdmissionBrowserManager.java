@@ -174,7 +174,7 @@ public class AdmissionBrowserManager {
 
 	/**
 	 * Deletes the patient photo.
-	 * @param patientId the patient id.
+	 * @param id the patient id.
 	 * @return <code>true</code> if the photo has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
