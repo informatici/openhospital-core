@@ -77,7 +77,7 @@ public class ExaminationBrowserManager {
 	public ArrayList<String> getAuscultationList() {	
 		if (auscultationHashMap == null) buildAuscultationHashMap();
 		ArrayList<String> auscultationDescriptionList = new ArrayList<>(auscultationHashMap.values());
-		Collections.sort(auscultationDescriptionList, new DefaultSorter(MessageBundle.getMessage("angal.examination.auscultation.normal")));
+		auscultationDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.examination.auscultation.normal")));
 		return auscultationDescriptionList;
 	}
 
@@ -189,7 +189,7 @@ public class ExaminationBrowserManager {
 	public ArrayList<String> getDiuresisDescriptionList() {
 		if (diuresisDescriptionHashMap == null) buildDiuresisDescriptionHashMap();
 		ArrayList<String> diuresisDescriptionList = new ArrayList<>(diuresisDescriptionHashMap.values());
-		Collections.sort(diuresisDescriptionList, new DefaultSorter(MessageBundle.getMessage("angal.examination.diuresis.physiological")));
+		diuresisDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.examination.diuresis.physiological")));
 		return diuresisDescriptionList;
 	}
 	
@@ -204,7 +204,7 @@ public class ExaminationBrowserManager {
 	public ArrayList<String> getBowelDescriptionList() {
 		if (bowelDescriptionHashMap == null) buildBowelDescriptionHashMap();
 		ArrayList<String> bowelDescriptionList = new ArrayList<>(bowelDescriptionHashMap.values());
-		Collections.sort(bowelDescriptionList,  new DefaultSorter(MessageBundle.getMessage("angal.examination.bowel.regular")));
+		bowelDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.examination.bowel.regular")));
 		return bowelDescriptionList;
 	}
 	

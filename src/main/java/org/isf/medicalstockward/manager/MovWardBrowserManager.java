@@ -196,7 +196,7 @@ public class MovWardBrowserManager {
 		for (MovementWard mov : wardOutcomes) {
 			movPrint.add(new MovementWardForPrint(mov));
 		}
-		Collections.sort(movPrint, new ComparatorMovementWardForPrint());
+		movPrint.sort(new ComparatorMovementWardForPrint());
 		return movPrint;
 	}
 
@@ -205,7 +205,7 @@ public class MovWardBrowserManager {
 		for (Movement mov : wardIncomes) {
 			movPrint.add(new MovementForPrint(mov));
 		}
-		Collections.sort(movPrint, new ComparatorMovementForPrint());
+		movPrint.sort(new ComparatorMovementForPrint());
 		return movPrint;
 	}
 

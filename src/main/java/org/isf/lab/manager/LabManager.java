@@ -442,7 +442,7 @@ public class LabManager {
 	public ArrayList<String> getMaterialList() {
 		if (materialHashMap == null) buildMaterialHashMap();
 		ArrayList<String> materialDescriptionList = new ArrayList<>(materialHashMap.values());
-		Collections.sort(materialDescriptionList,  new DefaultSorter(MessageBundle.getMessage("angal.lab.undefined")));
+		materialDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.lab.undefined")));
 		return materialDescriptionList;
 	}
 	
