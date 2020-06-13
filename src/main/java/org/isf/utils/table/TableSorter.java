@@ -100,10 +100,7 @@ public class TableSorter extends TableMap {
 					return 0;
 				}
 
-			} catch (NumberFormatException e3) {
-				System.out.println("Compare (" + str1 + ") with (" + str2 + ")");
-				return str1.compareTo(str2);
-			} catch (ParseException p) {
+			} catch (NumberFormatException | ParseException e3) {
 				System.out.println("Compare (" + str1 + ") with (" + str2 + ")");
 				return str1.compareTo(str2);
 			}

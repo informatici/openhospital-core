@@ -504,12 +504,10 @@ public class Patient extends Auditable<String>
 				Image image = ImageIO.read(is);
 				setPhoto(image);
 			}
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-		return photoImage;
+		}
+        return photoImage;
 	}
 	
 	public void setPhoto(Image image) {

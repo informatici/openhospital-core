@@ -108,8 +108,6 @@ public class ImportTranslatedProperties {
 				propsOri.store(out, null);
 				out.close();
 				
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

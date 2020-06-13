@@ -138,9 +138,7 @@ public class ExportUntranslatedProperties {
 					writerPT.println(key + " = " + value.replace("\n", "\\n"));
 				}
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} finally {
 			System.out.println("Done.");

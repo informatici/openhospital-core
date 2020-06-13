@@ -148,14 +148,10 @@ public class PrintReceipt {
 			brStream.close();
 			frStream.close();
 
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (PrintException e) {
+		} catch (PrintException | IOException e) {
 			e.printStackTrace();
 		}
-	}
+    }
 	
 	/**
 	 * 

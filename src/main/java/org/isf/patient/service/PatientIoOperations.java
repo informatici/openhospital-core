@@ -237,13 +237,11 @@ public class PatientIoOperations
 			
 			if (outStream != null) byteArray = outStream.toByteArray();
 			
-		} catch (IOException ioe) {
-			//TODO: handle exception
 		} catch (Exception ioe) {
 			//TODO: handle exception
 		}
-		
-		return byteArray;
+
+        return byteArray;
 	}
 	
 	/**

@@ -138,13 +138,11 @@ public class TestDicom
 		new Random().nextBytes(data);		 
 		try {
 			blob = new SerialBlob(data);
-		} catch (SerialException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	
-		return blob;
+
+        return blob;
 	}
 
 	

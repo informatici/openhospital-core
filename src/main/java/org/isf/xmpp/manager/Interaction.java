@@ -59,12 +59,10 @@ public class Interaction{
 
 		try {
 			chat.sendMessage(message);
-		} catch (XMPPException e) {
-			e.printStackTrace();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+    }
 
 
 	public String userFromAddress(String address)

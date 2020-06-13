@@ -138,14 +138,11 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 				if (!debug) outputStream.write(text.getBytes());
 				Thread.sleep(1000);
 
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			} catch (InterruptedException e) {
+			} catch (IOException | InterruptedException e) {
 				e.printStackTrace();
 				return false;
 			}
-			return true;			
+            return true;
 		} else {
 			logger.error("Device not connected. Please initialize stream first.");
 		}

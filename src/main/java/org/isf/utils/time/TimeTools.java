@@ -395,14 +395,10 @@ public class TimeTools {
 				utilDate = sdf.parse(date);
 				serverDate.setTime(utilDate);				
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (OHException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
+		} catch (SQLException | ParseException | OHException e) {
 			e.printStackTrace();
 		}
-		return serverDate;
+        return serverDate;
 	}
    
     public static String getConvertedString(GregorianCalendar time) {
