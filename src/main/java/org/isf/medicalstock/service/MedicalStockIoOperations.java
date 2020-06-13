@@ -247,7 +247,7 @@ public class MedicalStockIoOperations {
 		boolean result = true;
 	
 
-		Lot lot = (Lot)lotRepository.findOne(lotCode); 
+		Lot lot = lotRepository.findOne(lotCode);
 		movement.setLot(lot);
 		Movement savedMovement = movRepository.save(movement);
 		result = (savedMovement != null);
@@ -270,7 +270,7 @@ public class MedicalStockIoOperations {
 		{
 			candidateCode = Math.abs(random.nextLong());
 
-			lot = (Lot)lotRepository.findOne(String.valueOf(candidateCode)); 
+			lot = lotRepository.findOne(String.valueOf(candidateCode));
 		} while (lot !=null); 
 
 		return String.valueOf(candidateCode);
@@ -289,7 +289,7 @@ public class MedicalStockIoOperations {
 		boolean result = false;
 		
 		
-		lot = (Lot)lotRepository.findOne(lotCode); 
+		lot = lotRepository.findOne(lotCode);
 		if (lot != null)
 		{
 			result = true;
@@ -378,7 +378,7 @@ public class MedicalStockIoOperations {
 		boolean result = true;
 				
 		
-		Medical medical = (Medical)medicalRepository.findOne(medicalCode); 
+		Medical medical = medicalRepository.findOne(medicalCode);
 		medical.setInqty(medical.getInqty()+incrementQuantity);
 		medicalRepository.save(medical);
 		
@@ -399,7 +399,7 @@ public class MedicalStockIoOperations {
 		boolean result = true;
 				
 
-		Medical medical = (Medical)medicalRepository.findOne(medicalCode); 
+		Medical medical = medicalRepository.findOne(medicalCode);
 		medical.setOutqty(medical.getOutqty()+incrementQuantity);
 		medicalRepository.save(medical);
 				
@@ -421,7 +421,7 @@ public class MedicalStockIoOperations {
 			int quantity, 
 			Lot lot) throws OHServiceException
 	{
-		MedicalWard medicalWard = (MedicalWard)medicalStockRepository.findOneWhereCodeAndMedicalAndLot(ward.getCode(), medical.getCode() , lot.getCode());		
+		MedicalWard medicalWard = medicalStockRepository.findOneWhereCodeAndMedicalAndLot(ward.getCode(), medical.getCode() , lot.getCode());
 				
 		if (medicalWard != null)
 		{			
@@ -580,7 +580,7 @@ public class MedicalStockIoOperations {
 		ArrayList<Lot> lots = null;
 	
 		
-		List<Object[]> lotList = (List<Object[]>)lotRepository.findAllWhereMedical(medical.getCode());
+		List<Object[]> lotList = lotRepository.findAllWhereMedical(medical.getCode());
 		lots = new ArrayList<>();
 		for (Object[] object: lotList)
 		{
@@ -637,7 +637,7 @@ public class MedicalStockIoOperations {
 		GregorianCalendar gc = new GregorianCalendar();
 				
 			
-		Timestamp time = (Timestamp)movRepository.findMaxDate();
+		Timestamp time = movRepository.findMaxDate();
 		if (time != null) 
 		{
 			gc.setTime(time);

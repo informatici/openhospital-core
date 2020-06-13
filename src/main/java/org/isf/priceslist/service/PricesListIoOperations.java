@@ -187,7 +187,7 @@ public class PricesListIoOperations {
 		boolean result = true; 			
 
 		
-		List<Price> Prices = (List<Price>)priceRepository.findAllWhereList(list.getId());
+		List<Price> Prices = priceRepository.findAllWhereList(list.getId());
 		for (Price price: Prices) 
 		{    
 			Price newPrice = new Price();

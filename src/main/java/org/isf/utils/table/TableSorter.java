@@ -83,8 +83,8 @@ public class TableSorter extends TableMap {
 				DateFormat myDateFormat = new SimpleDateFormat("dd/MM/yy");
 				Date d1 = myDateFormat.parse(str1);
 				Date d2 = myDateFormat.parse(str2);
-				Long n1 = (Long) d1.getTime();
-				Long n2 = (Long) d2.getTime();
+				Long n1 = d1.getTime();
+				Long n2 = d2.getTime();
 
 				return n1.compareTo(n2);
 
@@ -132,7 +132,7 @@ public class TableSorter extends TableMap {
 	public int compare(int row1, int row2) {
 		compares++;
 		for (int level = 0; level < sortingColumns.size(); level++) {
-			Integer column = (Integer) sortingColumns.elementAt(level);
+			Integer column = sortingColumns.elementAt(level);
 			int result = compareRowsByColumn(row1, row2, column);
 			if (result != 0) {
 				return ascending ? result : -result;
@@ -173,7 +173,7 @@ public class TableSorter extends TableMap {
 		compares = 0;
 		// n2sort();
 		// qsort(0, indexes.length-1);
-		shuttlesort((int[]) indexes.clone(), indexes, 0, indexes.length);
+		shuttlesort(indexes.clone(), indexes, 0, indexes.length);
 		// System.out.println("Compares: "+compares);
 	}
 

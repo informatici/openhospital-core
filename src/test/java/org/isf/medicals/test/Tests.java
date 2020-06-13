@@ -223,7 +223,7 @@ public class Tests
 			Medical foundMedical = (Medical)jpa.find(Medical.class, code); 
 			ArrayList<Medical> medicals = medicalsIoOperations.getMedicals(foundMedical.getDescription(), foundMedical.getType().getCode(), false);
 			
-			assertEquals((Integer)code, medicals.get(medicals.size()-1).getCode());
+			assertEquals(code, medicals.get(medicals.size()-1).getCode());
 		} 
 		catch (Exception e) 
 		{

@@ -106,7 +106,7 @@ public class MedicalsIoOperations
 			if (nameSorted) {
 				medicals = (ArrayList<Medical>)repository.findAllWhereTypeOrderByDescription(type);
 			} else {
-				medicals = (ArrayList<Medical>)repository.findAllWhereTypeOrderBySmartCodeAndDescription(type);
+				medicals = repository.findAllWhereTypeOrderBySmartCodeAndDescription(type);
 			}
 			
 		} else {
@@ -114,7 +114,7 @@ public class MedicalsIoOperations
 			if (nameSorted) {
 				medicals = getMedicals(null);
 			} else {
-				medicals = (ArrayList<Medical>)repository.findAllOrderBySmartCodeAndDescription();
+				medicals = repository.findAllOrderBySmartCodeAndDescription();
 			}
 
 		}

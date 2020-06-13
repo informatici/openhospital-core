@@ -85,7 +85,7 @@ public class MenuIoOperations
 	public String getUsrInfo(
 			String userName) throws OHServiceException 
 	{ 
-		User user = (User)repository.findOne(userName); 
+		User user = repository.findOne(userName);
 		
 		
 		return user.getDesc();
@@ -231,7 +231,7 @@ public class MenuIoOperations
 			User aUser) throws OHServiceException 
 	{
 		ArrayList<UserMenuItem> menu = null;		
-		List<Object[]> menuList = (List<Object[]>)menuRepository.findAllWhereId(aUser.getUserName());
+		List<Object[]> menuList = menuRepository.findAllWhereId(aUser.getUserName());
 				
 		menu = new ArrayList<>();
 		for (Object[] object : menuList) {

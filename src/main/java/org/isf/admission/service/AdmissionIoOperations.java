@@ -68,14 +68,14 @@ public class AdmissionIoOperations
 			String searchTerms) throws OHServiceException 
 	{
 		ArrayList<AdmittedPatient> admittedPatients = new ArrayList<>();
-		List<Object[]> admittedPatientsList = (List<Object[]>)repository.findAllBySearch(searchTerms);
+		List<Object[]> admittedPatientsList = repository.findAllBySearch(searchTerms);
 
 
 		for (Object[] object : admittedPatientsList) {
 			Patient patient = patientRepository.findOne((Integer) object[0]);
 			Admission admission = null;
 			Integer admissionId = (Integer) object[33];
-			if (admissionId != null) admission = repository.findOne((Integer) admissionId);
+			if (admissionId != null) admission = repository.findOne(admissionId);
 			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);
 			admittedPatients.add(admittedPatient);
 		}
@@ -96,7 +96,7 @@ public class AdmissionIoOperations
 			GregorianCalendar[] dischargeRange) throws OHServiceException 
 	{
 		ArrayList<AdmittedPatient> admittedPatients = new ArrayList<>();
-		List<Object[]> admittedPatientsList = (List<Object[]>)repository.findAllBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
+		List<Object[]> admittedPatientsList = repository.findAllBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
 
 
 		for (Object[] object : admittedPatientsList) {

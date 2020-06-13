@@ -256,7 +256,7 @@ public class MedicalStockWardIoOperations
 		for (int i=0; i<medicalWards.size(); i++)
 			
 		{
-			double qty = (double) (medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
+			double qty = medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity();
 			medicalWards.get(i).setQty(qty);
 			
 			if (stripeEmpty && qty == 0) {

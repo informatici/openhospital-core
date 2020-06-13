@@ -229,7 +229,7 @@ public class SourceFiles extends Thread {
 			Iterator<?> iter = null;
 			if (isJpeg) {
 				iter = ImageIO.getImageReadersByFormatName("jpeg");
-				reader = (ImageReader) new com.sun.imageio.plugins.jpeg.JPEGImageReader(null);
+				reader = new com.sun.imageio.plugins.jpeg.JPEGImageReader(null);
 				//JPEGImageReadParam jpgParam = new JPEGImageReadParam();
 				
 				ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
@@ -265,7 +265,7 @@ public class SourceFiles extends Thread {
 				iter = ImageIO.getImageReadersByFormatName("DICOM");
 				reader = (ImageReader) iter.next();
 
-				param = (DicomImageReadParam) reader.getDefaultReadParam();
+				param = reader.getDefaultReadParam();
 				
 				ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
 				
