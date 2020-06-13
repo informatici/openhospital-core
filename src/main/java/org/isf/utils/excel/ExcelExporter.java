@@ -107,6 +107,7 @@ public class ExcelExporter {
 	 * @throws IOException
 	 * @deprecated use exportTableToExcel method
 	 */
+	@Deprecated
 	public void exportTableToCSV(JTable jtable, File file) throws IOException {
 		exportTableToCSV(jtable, file, ";");
 	}
@@ -184,6 +185,7 @@ public class ExcelExporter {
 	 * @throws OHException
 	 * @deprecated use exportTableToExcel method
 	 */
+	@Deprecated
 	public void exportResultsetToCSV(ResultSet resultSet, File exportFile) throws IOException, OHException {
 		exportResultsetToCSV(resultSet, exportFile, ";");
 	}
@@ -266,6 +268,7 @@ public class ExcelExporter {
 	 * @throws OHException
 	 * @deprecated use exportDataToExcel
 	 */
+	@Deprecated
 	public void exportDataToCSV(Collection data, File exportFile) throws IOException, OHException {
 		
 		FileWriter outFile = new FileWriter(exportFile);

@@ -343,6 +343,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 * @deprecated use updateLaboratory() for all procedures
 	 */
+	@Deprecated
 	protected boolean editLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
 		return ioOperations.updateLabFirstProcedure(laboratory);
 	}
@@ -355,6 +356,7 @@ public class LabManager {
 	 * @throws OHServiceException 
 	 * @deprecated use updateLaboratory() for all procedures
 	 */
+	@Deprecated
 	protected boolean editLabSecondProcedure(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
 		return ioOperations.updateLabSecondProcedure(laboratory, labRow);
 	}

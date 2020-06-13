@@ -21,8 +21,9 @@ import java.sql.Statement;
  * autocommit flag set to false have the responsability
  * of doing the commit/rollback operation
  * 
- * @Deprecated since OpenHospital 1.7.0 replaced by {@link DbQueryLogger}
+ * @deprecated since OpenHospital 1.7.0 replaced by {@link DbQueryLogger}
  */
+@Deprecated
 public class DbQuery {
     /**
      * method that executes a query and returns a resultset
@@ -33,8 +34,9 @@ public class DbQuery {
      * @throws SQLException
      * @throws IOException
      * 
-     * @Deprecated since OpenHospital 1.7.0 replaced by {@link DbQueryLogger}
+     * @deprecated since OpenHospital 1.7.0 replaced by {@link DbQueryLogger}
      */
+    @Deprecated
     public ResultSet getData(String aQuery,boolean autocommit) throws SQLException, IOException {
         Connection conn = DbSingleConn.getConnection();
         conn.setAutoCommit(autocommit);
@@ -50,8 +52,9 @@ public class DbQuery {
      * @throws SQLException
      * @throws IOException
      * 
-     * @Deprecated since OpenHospital 1.7.0 replaced by {@link DbQueryLogger}
+     * @deprecated since OpenHospital 1.7.0 replaced by {@link DbQueryLogger}
      */
+    @Deprecated
     public boolean setData(String aQuery,boolean autocommit) throws SQLException , IOException {
         Connection conn = DbSingleConn.getConnection();
         conn.setAutoCommit(autocommit);
@@ -70,8 +73,9 @@ public class DbQuery {
      * @throws SQLException
      * @throws IOException
      * 
-     * @Deprecated since OpenHospital 1.7.0 replaced by {@link DbQueryLogger}
+     * @deprecated since OpenHospital 1.7.0 replaced by {@link DbQueryLogger}
      */
+    @Deprecated
     public ResultSet setDataReturnGeneratedKey(String aQuery,boolean autocommit) throws SQLException , IOException {
         Connection conn = DbSingleConn.getConnection();
         conn.setAutoCommit(autocommit);

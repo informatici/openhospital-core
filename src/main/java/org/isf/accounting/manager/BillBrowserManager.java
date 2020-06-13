@@ -144,6 +144,7 @@ public class BillBrowserManager {
 	 * @deprecated this method shouls always be called with a parameter. 
 	 * See {@link #getPayments(int) getPayments} method.
 	 */
+	@Deprecated
 	public ArrayList<BillPayments> getPayments() throws OHServiceException {
 		return ioOperations.getPayments(0);
 	}
@@ -260,6 +261,7 @@ public class BillBrowserManager {
 	 * @throws OHServiceException
 	 * @deprecated this method should not be called for its potentially huge resultset
 	 */
+	@Deprecated
 	public ArrayList<Bill> getBills() throws OHServiceException {
 		return ioOperations.getBills();
 	}
