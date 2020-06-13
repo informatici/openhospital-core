@@ -287,7 +287,7 @@ public class MedicalStockWardIoOperations
 		String WardID=String.valueOf(wardId);
 		ArrayList<MedicalWard> medicalWards = getMedicalsWard(wardId, true);
 		
-		ArrayList<MedicalWard> medicalWardsQty = new ArrayList<MedicalWard>();
+		ArrayList<MedicalWard> medicalWardsQty = new ArrayList<>();
 		
 		for (int i=0; i<medicalWards.size(); i++) {
 			 

@@ -64,7 +64,7 @@ public class VisitManager {
 	public ArrayList<Visit> getVisits(ArrayList<Visit> vsRows) throws OHServiceException {
 		
 		if (vsRows != null) {
-			ArrayList<Visit> visits = new ArrayList<Visit>();
+			ArrayList<Visit> visits = new ArrayList<>();
 			
 			for (Visit vsRow : vsRows) {
 				
@@ -83,7 +83,7 @@ public class VisitManager {
 	}
 	private Visit createVisit(int visitID, Patient patient, Ward ward, GregorianCalendar date, String note,
 			String duration, String service, boolean sms) {
-	ArrayList<GregorianCalendar> datesArray = new ArrayList<GregorianCalendar>();
+	ArrayList<GregorianCalendar> datesArray = new ArrayList<>();
 		
 		GregorianCalendar stepDate = new GregorianCalendar();
 		stepDate.setTime(date.getTime());

@@ -222,7 +222,7 @@ public class JasperReportsManager {
     public JasperReportResultDto getGenericReportPatientExaminationPdf(Integer patientID, Integer examId, String jasperFileName) throws OHServiceException {
 
         try{
-        	HashMap<String, Object> parameters = new HashMap<String, Object>();
+        	HashMap<String, Object> parameters = new HashMap<>();
             
             parameters.put("examId", examId); 
             String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + patientID +".pdf";

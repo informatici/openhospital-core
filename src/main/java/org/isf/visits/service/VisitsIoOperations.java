@@ -50,9 +50,9 @@ public class VisitsIoOperations {
 		ArrayList<Visit> visits = null;
 
 		if (wardId != null)
-			visits = new ArrayList<Visit>(repository.findAllWhereWardByOrderPatientAndDateAsc(wardId)); 
+			visits = new ArrayList<>(repository.findAllWhereWardByOrderPatientAndDateAsc(wardId));
 		else
-			visits = new ArrayList<Visit>(repository.findAllByOrderPatientAndDateAsc());
+			visits = new ArrayList<>(repository.findAllByOrderPatientAndDateAsc());
 		
 		return visits;
 	}
