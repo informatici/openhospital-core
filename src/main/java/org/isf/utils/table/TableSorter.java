@@ -211,7 +211,7 @@ public class TableSorter extends TableMap {
 	// This is a home-grown implementation which we have not had time
 	// to research - it may perform poorly in some circumstances. It
 	// requires twice the space of an in-place algorithm and makes
-	// NlogN assigments shuttling the values between the two
+	// NlogN assignments shuttling the values between the two
 	// arrays. The number of compares appears to vary between N-1 and
 	// NlogN depending on the initial order but the main reason for
 	// using it here is that, unlike qsort, it is stable.
@@ -315,18 +315,18 @@ public class TableSorter extends TableMap {
 		th.addMouseListener(listMouseListener);
 	}
 
-	public void updateRowHeights(JTable tabel) {
-	    for (int row = 0; row < tabel.getRowCount(); row++)
+	public void updateRowHeights(JTable table) {
+	    for (int row = 0; row < table.getRowCount(); row++)
 	    {
-	        int rowHeight = tabel.getRowHeight();
+	        int rowHeight = table.getRowHeight();
 
-	        for (int column = 0; column < tabel.getColumnCount(); column++)
+	        for (int column = 0; column < table.getColumnCount(); column++)
 	        {
-	            Component comp = tabel.prepareRenderer(tabel.getCellRenderer(row, column), row, column);
+	            Component comp = table.prepareRenderer(table.getCellRenderer(row, column), row, column);
 	            rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
 	        }
 
-	        tabel.setRowHeight(row, rowHeight);
+	        table.setRowHeight(row, rowHeight);
 	    }
 	}
 		

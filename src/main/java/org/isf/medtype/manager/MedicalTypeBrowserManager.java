@@ -99,7 +99,7 @@ public class MedicalTypeBrowserManager {
 	/**
 	 * Checks if the specified medical type code is already used.
 	 * @param code the code to check.
-	 * @return <code>true</code> if the code is used, <code>false</code> owtherwise.
+	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
 	public boolean codeControl(String code) throws OHServiceException {

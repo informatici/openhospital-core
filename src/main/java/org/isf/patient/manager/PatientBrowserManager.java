@@ -124,7 +124,7 @@ public class PatientBrowserManager {
 	}
 	
 	/**
-	 * methot that get next PAT_ID is going to be used.
+	 * method that get next PAT_ID is going to be used.
 	 * 
 	 * @return code
 	 * @throws OHServiceException 

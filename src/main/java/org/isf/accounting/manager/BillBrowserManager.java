@@ -95,7 +95,7 @@ public class BillBrowserManager {
 	 * Returns all the stored {@link BillItems}.
 	 * @return a list of {@link BillItems} or null if an error occurs.
 	 * @throws OHServiceException 
-	 * @deprecated this method shouls always be called with a parameter. 
+	 * @deprecated this method should always be called with a parameter.
 	 * See {@link #getItems(int) getItems} method.
 	 */
 	public ArrayList<BillItems> getItems() throws OHServiceException {
@@ -141,7 +141,7 @@ public class BillBrowserManager {
 	 * Retrieves all the stored {@link BillPayments}.
 	 * @return a list of bill payments or <code>null</code> if an error occurred.
 	 * @throws OHServiceException
-	 * @deprecated this method shouls always be called with a parameter. 
+	 * @deprecated this method should always be called with a parameter.
 	 * See {@link #getPayments(int) getPayments} method.
 	 */
 	@Deprecated

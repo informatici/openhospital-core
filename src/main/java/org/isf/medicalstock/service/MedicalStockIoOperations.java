@@ -569,7 +569,7 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Retrieves lot referred to the specified {@link Medical}.
-	 * Lots with zero quantities will be stripepd out
+	 * Lots with zero quantities will be stripped out
 	 * @param medical the medical.
 	 * @return a list of {@link Lot}.
 	 * @throws OHServiceException if an error occurs retrieving the lot list.

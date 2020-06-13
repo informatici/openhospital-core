@@ -35,7 +35,7 @@ import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifIFD0Directory;
 
 /**
- * Magager for DICOM Files
+ * Manager for DICOM Files
  * 
  * @author Pietro Castellucci
  * @version 1.0.0
@@ -309,7 +309,7 @@ public class SourceFiles extends Thread {
 			String studyUID = dicomFileDetail.getDicomStudyId();
 			String modality = dicomFileDetail.getModality();
 			if (isJpeg) {
-				//overriden by the user
+				//overridden by the user
 				seriesDate = seriesDate != null ? seriesDate : FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
 				studyDate = studyDate != null ? studyDate : FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
 				
@@ -321,7 +321,7 @@ public class SourceFiles extends Thread {
 				DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
 				DicomObject dicomObject = dicomStreamMetaData.getDicomObject();
 				
-				//overriden by the user
+				//overridden by the user
 				seriesDescription = seriesDescription != null ? seriesDescription : dicomObject.getString(Tag.SeriesDescription);
 				try {
 					studyDate = studyDate != null ? studyDate : dicomObject.getDate(Tag.StudyDate, Tag.StudyTime);

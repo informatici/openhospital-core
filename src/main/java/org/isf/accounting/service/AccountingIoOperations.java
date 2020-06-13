@@ -358,7 +358,7 @@ public class AccountingIoOperations {
 	}
 	
 	/**
-	 * Retrieves all billPayements for a given patient in the period dateFrom -> dateTo
+	 * Retrieves all billPayments for a given patient in the period dateFrom -> dateTo
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param patient
@@ -394,7 +394,7 @@ public class AccountingIoOperations {
 	}
 
 	/**
-	 * Return Distincts BillItems
+	 * Return distinct BillItems
 	 * added by u2g
 	 * @return BillItems list 
 	 * @throws OHServiceException

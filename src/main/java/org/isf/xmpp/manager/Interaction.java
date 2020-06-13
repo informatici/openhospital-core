@@ -91,12 +91,12 @@ public class Interaction{
 		} catch (XMPPException e) {
 			e.printStackTrace();
 		}
-		logger.debug("Trasfer status: " + transfer.isDone() + ", " + transfer.getStatus());
+		logger.debug("Transfer status: " + transfer.isDone() + ", " + transfer.getStatus());
 
 		if(transfer.isDone())
 			logger.debug("Transfer successfully completed!");
 		if(transfer.getStatus().equals(Status.error))
-			logger.debug("Error while transfering: " + transfer.getError());
+			logger.debug("Error while transferring: " + transfer.getError());
 
 	}
 

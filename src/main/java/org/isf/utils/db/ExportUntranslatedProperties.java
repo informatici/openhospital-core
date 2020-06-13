@@ -32,7 +32,7 @@ public class ExportUntranslatedProperties {
 	
 	/**
 	 * This utility creates in the specified path
-	 * a file for each language with untraslated keys (empty or unchanged from english)
+	 * a file for each language with untranslated keys (empty or unchanged from english)
 	 */
 	public ExportUntranslatedProperties() {
 		
