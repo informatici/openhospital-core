@@ -208,7 +208,7 @@ public class TimeTools {
 	
 	/**
 	 * Return a string representation of the dateTime with the given pattern
-	 * @param dateTime - a Date object
+	 * @param date - a Date object
 	 * @param pattern - the pattern. If <code>null</code> "yyyy-MM-dd HH:mm:ss" will be used
 	 * @return the String represetation of the GregorianCalendar
 	 */
@@ -222,7 +222,7 @@ public class TimeTools {
 
 	/**
 	 * Return a string representation of the dateTime in the form "yyyy-MM-dd HH:mm:ss"
-	 * @param dateTime - a GregorianCalendar object
+	 * @param time - a GregorianCalendar object
 	 * @return the String represetation of the GregorianCalendar
 	 */
 	public static String formatDateTimeReport(GregorianCalendar time) {
@@ -231,7 +231,7 @@ public class TimeTools {
 	
 	/**
 	 * Return a string representation of the dateTime in the form "yyyy-MM-dd HH:mm:ss"
-	 * @param dateTime - a Date object
+	 * @param date - a Date object
 	 * @return the String represetation of the Date
 	 */
 	public static String formatDateTimeReport(Date date) {

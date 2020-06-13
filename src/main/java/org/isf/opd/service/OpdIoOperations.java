@@ -129,7 +129,7 @@ public class OpdIoOperations {
 	/**
 	 * insert a new item in the db
 	 * 
-	 * @param an {@link Opd}
+	 * @param opd - an {@link Opd}
 	 * @return <code>true</code> if the item has been inserted
 	 * @throws OHServiceException 
 	 */
@@ -148,7 +148,7 @@ public class OpdIoOperations {
 	/**
 	 * modify an {@link Opd} in the db
 	 * 
-	 * @param an {@link Opd}
+	 * @param opd - an {@link Opd}
 	 * @return the updated {@link Opd}.
 	 * @throws OHServiceException 
 	 */

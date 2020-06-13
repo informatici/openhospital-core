@@ -262,7 +262,7 @@ public class ExcelExporter {
 	/**
 	 * Export a {@link Collection} to CSV using Apache POI library
 	 * 
-	 * @param resultSet
+	 * @param data
 	 * @param exportFile
 	 * @throws IOException
 	 * @throws OHException
@@ -423,7 +423,7 @@ public class ExcelExporter {
 	/**
 	 * Export a {@link ResultSet} to Excel using Apache POI library
 	 * 
-	 * @param resultSet
+	 * @param data
 	 * @param exportFile
 	 * @throws IOException
 	 * @throws OHException
@@ -596,7 +596,7 @@ public class ExcelExporter {
 	/**
 	 * Export a {@link ResultSet} to Excel 97-2003 using Apache POI library
 	 * 
-	 * @param resultSet
+	 * @param data
 	 * @param exportFile
 	 * @throws IOException
 	 * @throws OHException

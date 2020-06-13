@@ -30,7 +30,7 @@ public class AgeTypeBrowserManager {
 
 	/**
 	 * Updates the list of {@link AgeType}s.
-	 * @param ageType the {@link AgeType} to update.
+	 * @param ageTypes the {@link AgeType}s to update.
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */

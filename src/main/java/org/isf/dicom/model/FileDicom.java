@@ -237,7 +237,7 @@ public class FileDicom extends Auditable<String>
 	/**
 	 * Load bytes of DICOM file and store it in a Blob type
 	 * 
-	 * @param dicomData
+	 * @param dicomFile
 	 *            the dicomFile to set
 	 */
 	public void setDicomData(File dicomFile) {
@@ -602,8 +602,8 @@ public class FileDicom extends Auditable<String>
 	/**
 	 * Load bytes of Image and store it in a Blob type
 	 * 
-	 * @param dicomData
-	 *            the dicomFile to set
+	 * @param dicomThumbnail
+	 *            the dicomThumbnail to set
 	 */
 	public void setDicomThumbnail(BufferedImage dicomThumbnail) {
 		try {

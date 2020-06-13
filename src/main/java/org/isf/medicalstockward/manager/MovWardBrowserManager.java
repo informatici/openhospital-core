@@ -120,8 +120,7 @@ public class MovWardBrowserManager {
 	
     /**
 	 * Gets all the movement ward with the specified criteria.
-	 * @param patId.
-
+	 * @param patient
 	 * @return all the retrieved movements.
 	 * @throws OHServiceException 
 	 */

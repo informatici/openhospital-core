@@ -147,7 +147,7 @@ public class AccountingIoOperations {
 
 	/**
 	 * Stores a list of {@link BillItems} associated to a {@link Bill}.
-	 * @param billID the bill id.
+	 * @param bill the bill.
 	 * @param billItems the bill items to store.
 	 * @return <code>true</code> if the {@link BillItems} have been store, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
@@ -200,7 +200,7 @@ public class AccountingIoOperations {
 	
 	/**
 	 * Stores a list of {@link BillPayments} associated to a {@link Bill}.
-	 * @param billID the bill id.
+	 * @param bill the bill.
 	 * @param payItems the bill payments.
 	 * @return <code>true</code> if the payment have stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store procedure.

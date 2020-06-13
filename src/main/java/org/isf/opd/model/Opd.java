@@ -124,9 +124,8 @@ public class Opd extends Auditable<String>
 	}
 	
 	/**
-     * @param aYear
+     * @param aProgYear
      * @param aSex
-     * @param aDate
      * @param aAge
      * @param aDisease
      */

@@ -408,8 +408,8 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Updates medical quantity for the specified ward.
-	 * @param wardCode the ward code.
-	 * @param medicalCode the medical code.
+	 * @param ward the ward.
+	 * @param medical the medical.
 	 * @param quantity the quantity to add to the current medical quantity.
 	 * @return <code>true</code> if the quantity has been updated/inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.

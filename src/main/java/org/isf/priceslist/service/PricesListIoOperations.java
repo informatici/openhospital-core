@@ -170,9 +170,9 @@ public class PricesListIoOperations {
     }
 
 	/**
-	 * duplicate {@link list} multiplying by <code>factor</code> and rounding by <code>step</code>
+	 * duplicate {@link PriceList} multiplying by <code>factor</code> and rounding by <code>step</code>
 	 * 
-	 * @param list - the {@link list} to be duplicated
+	 * @param list - the {@link PriceList} to be duplicated
 	 * @param factor - the multiplying factor
 	 * @param step - the rounding step
 	 * @return <code>true</code> if the list has been duplicated, <code>false</code> otherwise

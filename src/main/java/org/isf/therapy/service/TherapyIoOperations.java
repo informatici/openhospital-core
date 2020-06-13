@@ -22,7 +22,6 @@ public class TherapyIoOperations {
 	 * insert a new {@link TherapyRow} (therapy) in the DB
 	 * 
 	 * @param thRow - the {@link TherapyRow} (therapy)
-	 * @param numTherapy - the therapy progressive number for the patient
 	 * @return the therapyID
 	 * @throws OHServiceException 
 	 */

@@ -131,8 +131,7 @@ public class VisitManager {
 	/**
 	 * inserts or replaces all {@link Visit}s related to a patID
 	 * 
-	 * @param patient - the {@link Patient} ID
-	 * @param visits - the list of {@link Visit}s related to patID. 
+	 * @param visits - the list of {@link Visit}s related to patID.
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
@@ -192,7 +191,7 @@ public class VisitManager {
 	 * If lenght exceed {@link SmsManager.MAX_LENGHT} the message will be cropped
 	 * (example: 
 	 * "REMINDER: dd/MM/yy - HH:mm:ss - {@link Visit.getNote()}")
-	 * @param th - the {@link Therapy}s
+	 * @param visit - the {@link Visit}
 	 * @return a string containing the text
 	 */
 	private String prepareSmsFromVisit(Visit visit) {

@@ -36,7 +36,7 @@ public class MovStockInsertingManager {
 	
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
-	 * @param Movement - the movement to validate
+	 * @param movement - the movement to validate
 	 * @param checkReference - if {@code true} it will use {@link #checkReferenceNumber(String) checkReferenceNumber}
 	 * @return list of {@link OHExceptionMessage}
 	 * @throws OHServiceException 
@@ -139,7 +139,7 @@ public class MovStockInsertingManager {
 	
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
-	 * @param Lot - the lot to validate
+	 * @param lot - the lot to validate
 	 * @return list of {@link OHExceptionMessage}
 	 */
 	protected List<OHExceptionMessage> validateLot(Lot lot) {

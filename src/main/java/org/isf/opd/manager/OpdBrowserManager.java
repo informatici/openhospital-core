@@ -144,7 +144,7 @@ public class OpdBrowserManager {
 	/**
 	 * returns all {@link Opd}s associated to specified patient ID
 	 * 
-	 * @param patID - the patient ID
+	 * @param patientcode - the patient ID
 	 * @return the list of {@link Opd}s associated to specified patient ID.
 	 * 		   the whole list of {@link Opd}s if <code>0</code> is passed.
 	 * @throws OHServiceException 
@@ -156,7 +156,7 @@ public class OpdBrowserManager {
 	/**
 	 * insert a new item in the db
 	 * 
-	 * @param an {@link Opd}
+	 * @param opd an {@link Opd}
 	 * @return <code>true</code> if the item has been inserted
 	 * @throws OHServiceException 
 	 */
@@ -201,7 +201,7 @@ public class OpdBrowserManager {
 	/**
 	 * return the last Opd in time associated with specified patient ID. 
 	 * 
-	 * @param patID - the patient ID
+	 * @param patientcode - the patient ID
 	 * @return last Opd associated with specified patient ID or <code>null</code>
 	 * @throws OHServiceException 
 	 */

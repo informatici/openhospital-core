@@ -208,7 +208,6 @@ public class LabIoOperations {
 	/**
 	 * Insert a Laboratory exam {@link Laboratory} and return generated key. No commit is performed.
 	 * @param laboratory - the {@link Laboratory} to insert
-	 * @param dbQuery - the connection manager
 	 * @return the generated key
 	 * @throws OHServiceException
 	 */
@@ -224,7 +223,6 @@ public class LabIoOperations {
 	/**
 	 * Inserts one Laboratory exam {@link Laboratory} (Procedure One)
 	 * @param laboratory - the {@link Laboratory} to insert
-	 * @param dbQuery - the connection manager
 	 * @return <code>true</code> if the exam has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
@@ -306,7 +304,6 @@ public class LabIoOperations {
 	/**
 	 * Update an already existing Laboratory exam {@link Laboratory}. No commit is performed.
 	 * @param laboratory - the {@link Laboratory} to update
-	 * @param dbQuery - the connection manager
 	 * @return <code>true</code> if the exam has been updated with all its results, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
@@ -370,7 +367,7 @@ public class LabIoOperations {
 	/**
 	 * Delete a Laboratory exam {@link Laboratory} (Procedure One or Two).
 	 * Previous results, if any, are deleted as well.
-	 * @param laboratory - the {@link Laboratory} to delete
+	 * @param aLaboratory - the {@link Laboratory} to delete
 	 * @return <code>true</code> if the exam has been deleted with all its results, if any. <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */

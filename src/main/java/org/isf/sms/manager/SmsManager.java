@@ -60,7 +60,7 @@ public class SmsManager {
 	 * Save or Update a {@link Sms}. If the sms's text lenght is greater than 
 	 * {@code MAX_LENGHT} it will throw a {@code testMaxLenghtError} error if
 	 * {@code split} parameter is set to {@code false}
-	 * @param sms - the {@link Sms} to save or update
+	 * @param smsToSend - the {@link Sms} to save or update
 	 * @param split - specify if to split sms's text longer than {@code MAX_LENGHT}
 	 * @throws OHServiceException 
 	 */

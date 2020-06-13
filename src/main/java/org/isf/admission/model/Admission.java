@@ -240,17 +240,17 @@ public class Admission implements Comparable<Admission>  //extends Auditable<Str
 	 * @param id
 	 * @param admitted
 	 * @param type
-	 * @param wardId
+	 * @param ward
 	 * @param prog
-	 * @param patId
+	 * @param patient
 	 * @param admDate
 	 * @param admType
 	 * @param fhu
-	 * @param diseaseInId
-	 * @param diseaseOutId1
-	 * @param diseaseOutId2
-	 * @param diseaseOutId3
-	 * @param operationId
+	 * @param diseaseIn
+	 * @param diseaseOut1
+	 * @param diseaseOut2
+	 * @param diseaseOut3
+	 * @param operation
 	 * @param opResult
 	 * @param opDate
 	 * @param disDate
@@ -260,8 +260,8 @@ public class Admission implements Comparable<Admission>  //extends Auditable<Str
 	 * @param visitDate
 	 * @param pregTreatmentType
 	 * @param deliveryDate
-	 * @param deliveryTypeId
-	 * @param deliveryResultId
+	 * @param deliveryType
+	 * @param deliveryResult
 	 * @param weight
 	 * @param ctrlDate1
 	 * @param ctrlDate2

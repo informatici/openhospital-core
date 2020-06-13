@@ -19,9 +19,9 @@ public class PriceOthersIoOperations {
 	private PriceOthersIoOperationRepository repository;
 	
 	/**
-	 * return the list of {@link PriceOthers}s in the DB
+	 * return the list of {@link PricesOthers}s in the DB
 	 * 
-	 * @return the list of {@link PriceOthers}s
+	 * @return the list of {@link PricesOthers}s
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<PricesOthers> getOthers() throws OHServiceException 
@@ -32,9 +32,9 @@ public class PriceOthersIoOperations {
 	}
 
 	/**
-	 * insert a new {@link PriceOthers} in the DB
+	 * insert a new {@link PricesOthers} in the DB
 	 * 
-	 * @param other - the {@link PriceOthers} to insert
+	 * @param other - the {@link PricesOthers} to insert
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
@@ -51,9 +51,9 @@ public class PriceOthersIoOperations {
 	}
 
 	/**
-	 * delete a {@link PriceOthers} in the DB
+	 * delete a {@link PricesOthers} in the DB
 	 * 
-	 * @param other - the {@link PriceOthers} to delete
+	 * @param other - the {@link PricesOthers} to delete
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
@@ -69,9 +69,9 @@ public class PriceOthersIoOperations {
 	}
 
 	/**
-	 * update a {@link PriceOthers} in the DB
+	 * update a {@link PricesOthers} in the DB
 	 * 
-	 * @param other - the {@link PriceOthers} to update
+	 * @param other - the {@link PricesOthers} to update
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
@@ -90,7 +90,7 @@ public class PriceOthersIoOperations {
 	/**
 	 * checks if the code is already in use
 	 *
-	 * @param code - the price other code
+	 * @param id - the price other code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */

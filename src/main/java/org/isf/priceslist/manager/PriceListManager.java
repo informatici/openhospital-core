@@ -68,7 +68,7 @@ public class PriceListManager {
 	/**
 	 * update a {@link List} in the DB
 	 * 
-	 * @param list - the {@link List} to update
+	 * @param updateList - the {@link List} to update
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
@@ -80,7 +80,7 @@ public class PriceListManager {
 	/**
 	 * delete a {@link List} in the DB
 	 * 
-	 * @param list - the {@link List} to delete
+	 * @param deleteList - the {@link List} to delete
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
@@ -100,9 +100,9 @@ public class PriceListManager {
 	}
 	
 	/**
-	 * duplicate {@link list} multiplying by <code>factor</code> and rounding by <code>step</code>
+	 * duplicate {@link PriceList} multiplying by <code>factor</code> and rounding by <code>step</code>
 	 * 
-	 * @param list - the {@link list} to be duplicated
+	 * @param list - the {@link PriceList} to be duplicated
 	 * @param factor - the multiplying factor
 	 * @param step - the rounding step
 	 * @return <code>true</code> if the list has been duplicated, <code>false</code> otherwise

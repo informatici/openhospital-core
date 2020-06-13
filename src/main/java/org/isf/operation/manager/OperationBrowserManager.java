@@ -56,7 +56,7 @@ public class OperationBrowserManager {
 	/**
 	 * return the {@link Operation}s whose type matches specified string
 	 * 
-	 * @param typeDescription - a type description
+	 * @param typecode - a type code
 	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException 
 	 */
