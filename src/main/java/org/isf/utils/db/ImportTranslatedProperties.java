@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -59,7 +60,7 @@ public class ImportTranslatedProperties {
 
 				//in = new FileInputStream(pathOriginal + filename);
 				inputStream = new FileInputStream(pathOriginal + filename);
-				in = new InputStreamReader(inputStream, "UTF-8");
+				in = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
 				Properties propsOri = new Properties();
 				propsOri.load(in);
 				in.close();
@@ -67,7 +68,7 @@ public class ImportTranslatedProperties {
 
 				//in = new FileInputStream(pathIn + filename);
 				inputStream = new FileInputStream(pathIn + filename);
-				in = new InputStreamReader(inputStream, "UTF-8");
+				in = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
 				Properties propsIn = new Properties();
 				propsIn.load(in);
 				in.close();
