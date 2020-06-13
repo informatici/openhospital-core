@@ -45,8 +45,6 @@ public class CSV2SQL {
 		try {
 			CSV2SQL converter = new CSV2SQL();
 			converter.pharmacyStartCVS(fileIn, fileOut);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (OHException | IOException e) {
 			e.printStackTrace();
 		}
