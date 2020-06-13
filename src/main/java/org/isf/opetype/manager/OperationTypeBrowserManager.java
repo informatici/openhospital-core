@@ -84,7 +84,7 @@ public class OperationTypeBrowserManager {
     protected List<OHExceptionMessage> validateOperationType(OperationType operationType, boolean insert) throws OHServiceException {
         String key = operationType.getCode();
         String description = operationType.getDescription();
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         if(key == null || key.isEmpty() ){
             errors.add(new OHExceptionMessage("codeEmptyError",
                     MessageBundle.getMessage("angal.opetype.pleaseinsertacode"),

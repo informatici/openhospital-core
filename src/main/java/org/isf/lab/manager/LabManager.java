@@ -56,7 +56,7 @@ public class LabManager {
 	 * @throws OHDataValidationException 
 	 */
 	protected void validateLaboratory(Laboratory laboratory) throws OHDataValidationException {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         if (laboratory.getDate() == null) laboratory.setDate(new GregorianCalendar());
         if (laboratory.getExam().getProcedure() == 2) 
 		{
@@ -414,7 +414,7 @@ public class LabManager {
 	}
 	
 	private void buildMaterialHashMap() {
-		materialHashMap = new HashMap<String, String>();
+		materialHashMap = new HashMap<>();
 		materialHashMap.put("undefined", MessageBundle.getMessage("angal.lab.undefined"));
 		materialHashMap.put("blood", MessageBundle.getMessage("angal.lab.blood"));
 		materialHashMap.put("urine", MessageBundle.getMessage("angal.lab.urine"));
@@ -441,7 +441,7 @@ public class LabManager {
 	 */
 	public ArrayList<String> getMaterialList() {
 		if (materialHashMap == null) buildMaterialHashMap();
-		ArrayList<String> materialDescriptionList = new ArrayList<String>(materialHashMap.values());
+		ArrayList<String> materialDescriptionList = new ArrayList<>(materialHashMap.values());
 		Collections.sort(materialDescriptionList,  new DefaultSorter(MessageBundle.getMessage("angal.lab.undefined")));
 		return materialDescriptionList;
 	}

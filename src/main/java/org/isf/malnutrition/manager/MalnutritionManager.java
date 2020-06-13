@@ -33,7 +33,7 @@ public class MalnutritionManager {
 	 * @throws OHDataValidationException 
 	 */
 	protected void validateMalnutrition(Malnutrition malnutrition) throws OHDataValidationException {
-		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		if(malnutrition.getDateSupp()==null) {
 			errors.add(new OHExceptionMessage("visitDateNullError", 
 	        		MessageBundle.getMessage("angal.malnutrition.pleaseinsertavalidvisitdate"), 

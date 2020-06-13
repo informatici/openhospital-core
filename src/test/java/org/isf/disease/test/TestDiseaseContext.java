@@ -60,10 +60,10 @@ public class TestDiseaseContext
 		jpa.beginTransaction();			
 		jpa.createQuery("SELECT DISTINCT DCL_ID_A FROM DISEASETYPE", null, false);
 		List<String> diseaseTypeList = (List<String>)jpa.getList();
-		ArrayList<String> diseaseTypeArray = new ArrayList<String>(diseaseTypeList);
+		ArrayList<String> diseaseTypeArray = new ArrayList<>(diseaseTypeList);
 		jpa.createQuery("SELECT DISTINCT DIS_DCL_ID_A FROM DISEASE", null, false);
 		List<String> missingDiseaseTypeList = (List<String>)jpa.getList();
-		ArrayList<String> missingDiseaseType = new ArrayList<String>(missingDiseaseTypeList);	
+		ArrayList<String> missingDiseaseType = new ArrayList<>(missingDiseaseTypeList);
 		missingDiseaseType.removeAll(diseaseTypeArray);
         for (String s : missingDiseaseType) {
             DiseaseType diseaseType = new DiseaseType(s, "Add because missing...");

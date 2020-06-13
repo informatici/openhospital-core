@@ -85,7 +85,7 @@ public class AdmissionTypeBrowserManager {
 	 * @throws OHDataValidationException
 	 */
     protected void validateAdmissionType(AdmissionType admissionType, boolean insert) throws OHServiceException {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         String key = admissionType.getCode();
         if (key.equals("")){
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),MessageBundle.getMessage("angal.admtype.pleaseinsertacode"),

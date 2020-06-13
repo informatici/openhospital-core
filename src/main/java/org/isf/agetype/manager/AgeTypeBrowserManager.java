@@ -74,7 +74,7 @@ public class AgeTypeBrowserManager {
 	 * @throws OHDataValidationException
 	 */
     protected void validateAgeTypes(ArrayList<AgeType> ageTypes) throws OHDataValidationException {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         for (int i = 1; i < ageTypes.size(); i++) {
             if (ageTypes.get(i).getFrom() <= ageTypes.get(i-1).getTo()) {
                 errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),MessageBundle.getMessage("angal.agetype.rangesoverlappleasecheck"),

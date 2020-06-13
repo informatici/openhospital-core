@@ -134,7 +134,7 @@ public class PatientBrowserManager {
 	}
 
 	private void buildMaritalHashMap() {
-		maritalHashMap = new LinkedHashMap<String, String>();
+		maritalHashMap = new LinkedHashMap<>();
 		maritalHashMap.put("unknown", MessageBundle.getMessage("angal.patient.maritalstatusunknown"));
 		maritalHashMap.put("single", MessageBundle.getMessage("angal.patient.maritalstatussingle"));
 		maritalHashMap.put("married", MessageBundle.getMessage("angal.patient.maritalstatusmarried"));
@@ -168,7 +168,7 @@ public class PatientBrowserManager {
 	}
 
 	private void buildProfessionHashMap() {
-		professionHashMap = new LinkedHashMap<String, String>();
+		professionHashMap = new LinkedHashMap<>();
 		professionHashMap.put("unknown", MessageBundle.getMessage("angal.patient.profession.unknown"));
 		professionHashMap.put("other", MessageBundle.getMessage("angal.patient.profession.other"));
 		professionHashMap.put("farming", MessageBundle.getMessage("angal.patient.profession.farming"));
@@ -209,7 +209,7 @@ public class PatientBrowserManager {
 	}
 	
     protected List<OHExceptionMessage> validateMergePatients(Patient mergedPatient, Patient patient2) throws OHServiceException {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         boolean admitted = false;
         
         if (admissionManager.getCurrentAdmission(mergedPatient) != null) admitted = true;
@@ -356,7 +356,7 @@ public class PatientBrowserManager {
 	 * @throws OHDataValidationException 
 	 */
     protected void validate(Patient patient) throws OHDataValidationException{
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
 
         if (StringUtils.isEmpty(patient.getFirstName())) {
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.patient.insertfirstname"),

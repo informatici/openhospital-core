@@ -54,7 +54,7 @@ public class PatientIoOperations
 		ArrayList<Patient> pPatient = null;
 		
 		
-		pPatient = new ArrayList<Patient>(repository.findAllWhereDeleted());			
+		pPatient = new ArrayList<>(repository.findAllWhereDeleted());
 					
 		return pPatient;
 	}
@@ -70,7 +70,7 @@ public class PatientIoOperations
 		ArrayList<Patient> pPatient = null;
 		
 		
-		pPatient = new ArrayList<Patient>(repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName("N", pageable));
+		pPatient = new ArrayList<>(repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName("N", pageable));
 					
 		return pPatient;
 	}
@@ -86,10 +86,10 @@ public class PatientIoOperations
 			String regex) throws OHServiceException 
 	{
 		ArrayList<Integer> pPatientCode = null;
-		ArrayList<Patient> pPatient = new ArrayList<Patient>();
+		ArrayList<Patient> pPatient = new ArrayList<>();
 		
 		
-		pPatientCode = new ArrayList<Integer>(repository.findAllByHeightAndWeight(regex));			
+		pPatientCode = new ArrayList<>(repository.findAllByHeightAndWeight(regex));
 		for (int i=0; i<pPatientCode.size(); i++)
 		{
 			Integer code = pPatientCode.get(i);
@@ -116,7 +116,7 @@ public class PatientIoOperations
 		Patient patient = null;	
 		
 		
-		pPatient = new ArrayList<Patient>(repository.findAllWhereNameAndDeletedOrderedByName(name));
+		pPatient = new ArrayList<>(repository.findAllWhereNameAndDeletedOrderedByName(name));
 		if (pPatient.size() > 0)
 		{			
 			patient = pPatient.get(pPatient.size()-1);			
@@ -139,7 +139,7 @@ public class PatientIoOperations
 		Patient patient = null;	
 		
 		
-		pPatient = new ArrayList<Patient>(repository.findAllWhereIdAndDeleted(code));
+		pPatient = new ArrayList<>(repository.findAllWhereIdAndDeleted(code));
 		if (pPatient.size() > 0)
 		{			
 			patient = pPatient.get(pPatient.size()-1);			
@@ -162,7 +162,7 @@ public class PatientIoOperations
 		Patient patient = null;	
 		
 		
-		pPatient = new ArrayList<Patient>(repository.findAllWhereId(code));
+		pPatient = new ArrayList<>(repository.findAllWhereId(code));
 		if (pPatient.size() > 0)
 		{			
 			patient = pPatient.get(pPatient.size()-1);			
@@ -285,7 +285,7 @@ public class PatientIoOperations
 		ArrayList<Patient> pPatient = null;
 		
 		
-		pPatient = new ArrayList<Patient>(repository.findAllWhereName(name));
+		pPatient = new ArrayList<>(repository.findAllWhereName(name));
 		if (pPatient.size() > 0)
 		{			
 			result = true;				

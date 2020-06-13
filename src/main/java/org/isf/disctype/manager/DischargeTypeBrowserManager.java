@@ -82,7 +82,7 @@ public class DischargeTypeBrowserManager {
 	 * @throws OHDataValidationException
 	 */
     protected void validateDeleteDischargeType(DischargeType dischargeType) throws OHDataValidationException {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         if(dischargeType.getCode().equals("D")){
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.youcannotdeletethisrecord"),
                     OHSeverityLevel.ERROR));
@@ -99,7 +99,7 @@ public class DischargeTypeBrowserManager {
 	 * @throws OHServiceException
 	 */
     protected void validateDischargeType(DischargeType dischargeType, boolean insert) throws OHServiceException {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         String key = dischargeType.getCode();
         if (key.equals("")){
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.pleaseinsertacode"),

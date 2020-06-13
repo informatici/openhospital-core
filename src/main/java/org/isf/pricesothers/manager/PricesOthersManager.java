@@ -76,7 +76,7 @@ public class PricesOthersManager {
 	 * @throws OHDataValidationException 
 	 */
     protected void validatePricesOthers(PricesOthers pricesOthers) throws OHDataValidationException {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
 
         if (StringUtils.isEmpty(pricesOthers.getCode())) {  //$NON-NLS-1$
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),

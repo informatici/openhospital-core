@@ -189,7 +189,7 @@ public class AdmissionBrowserManager {
 	 * @throws OHDataValidationException
 	 */
     protected void validateAdmission(Admission admission, boolean insert) throws OHServiceException {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
 
         /*
          * Initizalize AdmissionBrowserManager

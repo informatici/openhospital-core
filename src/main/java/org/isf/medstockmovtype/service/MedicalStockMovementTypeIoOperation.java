@@ -29,7 +29,7 @@ public class MedicalStockMovementTypeIoOperation {
 	 */
 	public ArrayList<MovementType> getMedicaldsrstockmovType() throws OHServiceException 
 	{
-		return new ArrayList<MovementType>(repository.findAllByOrderByDescriptionAsc()); 	
+		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 
 	/**

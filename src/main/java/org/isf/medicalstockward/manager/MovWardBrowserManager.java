@@ -41,7 +41,7 @@ public class MovWardBrowserManager {
 	 */
 	protected void validateMovementWard(MovementWard mov) throws OHDataValidationException {
 		String description = mov.getDescription();
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         if(description.isEmpty() && mov.isPatient()){
 	        errors.add(new OHExceptionMessage("descriptionPatientEmptyError", 
 	        		MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectapatient"), 
@@ -146,7 +146,7 @@ public class MovWardBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean newMovementWard(ArrayList<MovementWard> newMovements) throws OHServiceException {
-		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (newMovements.size() == 0) {
 			errors.add(new OHExceptionMessage(
 					"emptyMovementListError", 
@@ -192,7 +192,7 @@ public class MovWardBrowserManager {
 	}
 
 	public ArrayList<MovementWardForPrint> convertMovementWardForPrint(ArrayList<MovementWard> wardOutcomes) {
-		ArrayList<MovementWardForPrint> movPrint = new ArrayList<MovementWardForPrint>();
+		ArrayList<MovementWardForPrint> movPrint = new ArrayList<>();
 		for (MovementWard mov : wardOutcomes) {
 			movPrint.add(new MovementWardForPrint(mov));
 		}
@@ -201,7 +201,7 @@ public class MovWardBrowserManager {
 	}
 
 	public ArrayList<MovementForPrint> convertMovementForPrint(ArrayList<Movement> wardIncomes) {
-		ArrayList<MovementForPrint> movPrint = new ArrayList<MovementForPrint>();
+		ArrayList<MovementForPrint> movPrint = new ArrayList<>();
 		for (Movement mov : wardIncomes) {
 			movPrint.add(new MovementForPrint(mov));
 		}
@@ -210,7 +210,7 @@ public class MovWardBrowserManager {
 	}
 
 	public ArrayList<MedicalWardForPrint> convertWardDrugs(Ward wardSelected, ArrayList<MedicalWard> wardDrugs) {
-		ArrayList<MedicalWardForPrint> drugPrint = new ArrayList<MedicalWardForPrint>();
+		ArrayList<MedicalWardForPrint> drugPrint = new ArrayList<>();
 		for (MedicalWard mov : wardDrugs) {
 			drugPrint.add(new MedicalWardForPrint(mov, wardSelected));
 		}

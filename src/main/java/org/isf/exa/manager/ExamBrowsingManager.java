@@ -45,7 +45,7 @@ public class ExamBrowsingManager {
 	protected void validateExam(Exam exam, boolean insert) throws OHServiceException {
 		String key = exam.getCode();
 		String description = exam.getDescription();
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         if(key.isEmpty() || description.isEmpty()){
 	        errors.add(new OHExceptionMessage("codeAndOrDescriptionEmptyError", 
 	        		MessageBundle.getMessage("angal.exa.pleaseinsertcodeoranddescription"), 

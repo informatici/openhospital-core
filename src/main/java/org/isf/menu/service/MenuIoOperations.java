@@ -233,7 +233,7 @@ public class MenuIoOperations
 		ArrayList<UserMenuItem> menu = null;		
 		List<Object[]> menuList = (List<Object[]>)menuRepository.findAllWhereId(aUser.getUserName());
 				
-		menu = new ArrayList<UserMenuItem>();
+		menu = new ArrayList<>();
 		for (Object[] object : menuList) {
 			boolean active = (Boolean) object[9];
 			UserMenuItem umi = new UserMenuItem();

@@ -91,7 +91,7 @@ public class SmsOperations {
 			Date dateFrom, 
 			Date dateTo) throws OHServiceException 
 	{		
-		ArrayList<Sms> smsList = new ArrayList<Sms>(repository.findAllWhereBetweenDatesByOrderDate(dateFrom, dateTo));
+		ArrayList<Sms> smsList = new ArrayList<>(repository.findAllWhereBetweenDatesByOrderDate(dateFrom, dateTo));
 		
 		return smsList;
 	}
@@ -105,7 +105,7 @@ public class SmsOperations {
 			Date dateFrom, 
 			Date dateTo) throws OHServiceException 
 	{
-		ArrayList<Sms> smsList = new ArrayList<Sms>(repository.findAllWhereSentNotNullBetweenDatesByOrderDate(dateFrom, dateTo));
+		ArrayList<Sms> smsList = new ArrayList<>(repository.findAllWhereSentNotNullBetweenDatesByOrderDate(dateFrom, dateTo));
 		
 		return smsList;
 	}
@@ -117,7 +117,7 @@ public class SmsOperations {
 	 */
 	public List<Sms> getList() throws OHServiceException 
 	{
-		ArrayList<Sms> smsList = new ArrayList<Sms>(repository.findAllWhereSentNotNullByOrderDate());
+		ArrayList<Sms> smsList = new ArrayList<>(repository.findAllWhereSentNotNullByOrderDate());
 		
 		return smsList;
 	}

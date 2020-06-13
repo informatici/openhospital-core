@@ -85,10 +85,10 @@ public class OpdIoOperations {
 			char newPatient) throws OHServiceException
 	{
 		ArrayList<Integer> pOpdCode = null;
-		ArrayList<Opd> pOpd = new ArrayList<Opd>();
+		ArrayList<Opd> pOpd = new ArrayList<>();
 		
 		
-		pOpdCode = new ArrayList<Integer>(repository.findAllOpdWhereParams(
+		pOpdCode = new ArrayList<>(repository.findAllOpdWhereParams(
 				diseaseTypeCode, diseaseCode, dateFrom, dateTo,
 				ageFrom, ageTo, sex, newPatient));			
 		for (int i=0; i<pOpdCode.size(); i++)

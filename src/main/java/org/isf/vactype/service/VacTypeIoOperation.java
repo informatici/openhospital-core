@@ -33,7 +33,7 @@ public class VacTypeIoOperation {
 	 */
 	public ArrayList<VaccineType> getVaccineType() throws OHServiceException 
 	{
-		return new ArrayList<VaccineType>(repository.findAllByOrderByDescriptionAsc()); 
+		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 	
 	/**

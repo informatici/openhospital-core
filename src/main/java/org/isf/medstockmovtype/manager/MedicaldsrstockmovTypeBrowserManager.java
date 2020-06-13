@@ -38,7 +38,7 @@ public class MedicaldsrstockmovTypeBrowserManager {
 		String key = movementType.getCode();
 		String key2 = movementType.getType();
 		String description = movementType.getDescription();
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         if(key.isEmpty() ){
 	        errors.add(new OHExceptionMessage("codeEmptyError", 
 	        		MessageBundle.getMessage("angal.medstockmovtype.pleaseinsertacode"), 

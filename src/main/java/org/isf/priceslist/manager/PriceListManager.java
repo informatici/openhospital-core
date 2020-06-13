@@ -113,7 +113,7 @@ public class PriceListManager {
 	}
 	
 	public ArrayList<PriceForPrint> convertPrice(PriceList listSelected, ArrayList<Price> prices) {
-		ArrayList<PriceForPrint> pricePrint = new ArrayList<PriceForPrint>();
+		ArrayList<PriceForPrint> pricePrint = new ArrayList<>();
 		for (Price price : prices) {
 			if (price.getList().getId() == listSelected.getId() && price.getPrice() != 0.) {
 				PriceForPrint price4print = new PriceForPrint();
@@ -135,7 +135,7 @@ public class PriceListManager {
 	 * @throws OHDataValidationException 
 	 */
     protected void validatePriceList(PriceList priceList) throws OHDataValidationException{
-        java.util.List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        java.util.List<OHExceptionMessage> errors = new ArrayList<>();
 
         if (StringUtils.isEmpty(priceList.getCode())) { //$NON-NLS-1$
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),

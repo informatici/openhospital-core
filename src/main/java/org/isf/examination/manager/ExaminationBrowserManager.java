@@ -65,7 +65,7 @@ public class ExaminationBrowserManager {
 	}
 
 	private void buildAuscultationHashMap() {
-		auscultationHashMap = new LinkedHashMap<String, String>();
+		auscultationHashMap = new LinkedHashMap<>();
 		auscultationHashMap.put("normal", MessageBundle.getMessage("angal.examination.auscultation.normal"));
 		auscultationHashMap.put("wheezes", MessageBundle.getMessage("angal.examination.auscultation.wheezes"));
 		auscultationHashMap.put("rhonchi", MessageBundle.getMessage("angal.examination.auscultation.rhonchi"));
@@ -76,7 +76,7 @@ public class ExaminationBrowserManager {
 
 	public ArrayList<String> getAuscultationList() {	
 		if (auscultationHashMap == null) buildAuscultationHashMap();
-		ArrayList<String> auscultationDescriptionList = new ArrayList<String>(auscultationHashMap.values());
+		ArrayList<String> auscultationDescriptionList = new ArrayList<>(auscultationHashMap.values());
 		Collections.sort(auscultationDescriptionList, new DefaultSorter(MessageBundle.getMessage("angal.examination.auscultation.normal")));
 		return auscultationDescriptionList;
 	}
@@ -155,7 +155,7 @@ public class ExaminationBrowserManager {
 	}
 	
 	private void buildDiuresisDescriptionHashMap() {
-		diuresisDescriptionHashMap = new HashMap<String, String>();
+		diuresisDescriptionHashMap = new HashMap<>();
 		diuresisDescriptionHashMap.put("physiological", MessageBundle.getMessage("angal.examination.diuresis.physiological"));
 		diuresisDescriptionHashMap.put("oliguria", MessageBundle.getMessage("angal.examination.diuresis.oliguria"));
 		diuresisDescriptionHashMap.put("anuria", MessageBundle.getMessage("angal.examination.diuresis.anuria"));
@@ -167,7 +167,7 @@ public class ExaminationBrowserManager {
 	}
 	
 	private void buildBowelDescriptionHashMap() {
-		bowelDescriptionHashMap = new HashMap<String, String>();
+		bowelDescriptionHashMap = new HashMap<>();
 		bowelDescriptionHashMap.put("regular", MessageBundle.getMessage("angal.examination.bowel.regular"));
 		bowelDescriptionHashMap.put("irregular", MessageBundle.getMessage("angal.examination.bowel.irregular"));
 		bowelDescriptionHashMap.put("constipation", MessageBundle.getMessage("angal.examination.bowel.constipation"));
@@ -188,7 +188,7 @@ public class ExaminationBrowserManager {
 	 */
 	public ArrayList<String> getDiuresisDescriptionList() {
 		if (diuresisDescriptionHashMap == null) buildDiuresisDescriptionHashMap();
-		ArrayList<String> diuresisDescriptionList = new ArrayList<String>(diuresisDescriptionHashMap.values());
+		ArrayList<String> diuresisDescriptionList = new ArrayList<>(diuresisDescriptionHashMap.values());
 		Collections.sort(diuresisDescriptionList, new DefaultSorter(MessageBundle.getMessage("angal.examination.diuresis.physiological")));
 		return diuresisDescriptionList;
 	}
@@ -203,7 +203,7 @@ public class ExaminationBrowserManager {
 	 */
 	public ArrayList<String> getBowelDescriptionList() {
 		if (bowelDescriptionHashMap == null) buildBowelDescriptionHashMap();
-		ArrayList<String> bowelDescriptionList = new ArrayList<String>(bowelDescriptionHashMap.values());
+		ArrayList<String> bowelDescriptionList = new ArrayList<>(bowelDescriptionHashMap.values());
 		Collections.sort(bowelDescriptionList,  new DefaultSorter(MessageBundle.getMessage("angal.examination.bowel.regular")));
 		return bowelDescriptionList;
 	}
@@ -248,7 +248,7 @@ public class ExaminationBrowserManager {
 	 * @return list of {@link OHExceptionMessage}
 	 */
 	protected List<OHExceptionMessage> validateExamination(PatientExamination patex) {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         if (patex.getPex_diuresis_desc() != null && !diuresisDescriptionHashMap.keySet().contains(patex.getPex_diuresis_desc()))
         	errors.add(new OHExceptionMessage("diuresisDescriptionNotAllowed", 
         		MessageBundle.getMessage("angal.examination.pleaseinsertavaliddiuresisdescription"), 

@@ -27,7 +27,7 @@ public class MedicalTypeIoOperation {
 	 */
 	public ArrayList<MedicalType> getMedicalTypes() throws OHServiceException 
 	{
-		return new ArrayList<MedicalType>(repository.findAllByOrderByDescriptionAsc()); 
+		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 
 	/**

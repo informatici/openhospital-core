@@ -85,7 +85,7 @@ public class DeliveryTypeBrowserManager {
 	 * @throws OHServiceException 
 	 */
     protected void validateDeliveryType(DeliveryType deliveryType, boolean insert) throws OHServiceException {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         String key = deliveryType.getCode();
         if (key.equals("")){
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),  MessageBundle.getMessage("angal.dlvrtype.pleaseinsertacode"),

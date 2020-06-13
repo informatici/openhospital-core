@@ -321,7 +321,7 @@ public class Tests
 	public void testIoNewLabSecondProcedure() 
 	{
 		boolean result = false;
-		ArrayList<String> labRow = new ArrayList<String>();
+		ArrayList<String> labRow = new ArrayList<>();
 		
 		
 		try 
@@ -355,7 +355,7 @@ public class Tests
 	public void testIoNewLabSecondProcedureTransaction() 
 	{
 		boolean result = false;
-		ArrayList<String> labRow = new ArrayList<String>();
+		ArrayList<String> labRow = new ArrayList<>();
 		Laboratory laboratory = null;
 		
 		try 
@@ -404,8 +404,8 @@ public class Tests
 	{
 		boolean result = false;
 		Laboratory laboratory = null;
-		ArrayList<Laboratory> laboratories = new ArrayList<Laboratory>();
-		ArrayList<ArrayList<String>> labRowList = new ArrayList<ArrayList<String>>();
+		ArrayList<Laboratory> laboratories = new ArrayList<>();
+		ArrayList<ArrayList<String>> labRowList = new ArrayList<>();
 		
 		try 
 		{				
@@ -422,7 +422,7 @@ public class Tests
 			jpa.commitTransaction();
 			
 			// laboratory 1, Procedure One
-			ArrayList<String> labRow = new ArrayList<String>();
+			ArrayList<String> labRow = new ArrayList<>();
 			laboratory = testLaboratory.setup(exam, patient, false);
 			laboratories.add(laboratory);
 			labRowList.add(labRow);
@@ -486,7 +486,7 @@ public class Tests
 	public void testIoEditLabSecondProcedure() 
 	{
 		Integer code = 0;
-		ArrayList<String> labRow = new ArrayList<String>();
+		ArrayList<String> labRow = new ArrayList<>();
 		boolean result = false;
 		
 		

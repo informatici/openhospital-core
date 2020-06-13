@@ -25,7 +25,7 @@ public class DicomTypeIoOperation {
 	 */
 	public ArrayList<DicomType> getDicomType() throws OHServiceException 
 	{
-		return new ArrayList<DicomType>(repository.findAllByOrderByDicomTypeDescriptionAsc());
+		return new ArrayList<>(repository.findAllByOrderByDicomTypeDescriptionAsc());
 	}
 
 	/**

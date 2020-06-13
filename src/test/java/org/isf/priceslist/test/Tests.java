@@ -200,7 +200,7 @@ public class Tests
 	@Test
 	public void testIoUpdatePrices() 
 	{
-		ArrayList<Price> prices = new ArrayList<Price>(); 
+		ArrayList<Price> prices = new ArrayList<>();
 		int deleteId = 0, insertId = 0;
 		boolean result = false;
 			

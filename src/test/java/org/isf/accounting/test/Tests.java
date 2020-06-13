@@ -465,7 +465,7 @@ public class Tests
 	@Test
 	public void testIoNewBillItems()
 	{
-		ArrayList<BillItems> billItems = new ArrayList<BillItems>(); 
+		ArrayList<BillItems> billItems = new ArrayList<>();
 		int deleteId = 0, insertId = 0;
 		boolean result = false;
 			
@@ -497,7 +497,7 @@ public class Tests
 	@Test
 	public void testIoNewBillPayments() 
 	{
-		ArrayList<BillPayments> billPayments = new ArrayList<BillPayments>(); 
+		ArrayList<BillPayments> billPayments = new ArrayList<>();
 		int deleteId = 0, insertId = 0;
 		boolean result = false;
 			
@@ -649,7 +649,7 @@ public class Tests
 	public void testIoGetBillsPayment() 
 	{
 		int id = 0;
-		ArrayList<BillPayments> payments = new ArrayList<BillPayments>();
+		ArrayList<BillPayments> payments = new ArrayList<>();
 		
 		
 		try 
@@ -675,7 +675,7 @@ public class Tests
 	public void testIoGetPaymentsBill()
 	{
 		int id = 0;
-		ArrayList<Bill> bills = new ArrayList<Bill>();
+		ArrayList<Bill> bills = new ArrayList<>();
 		
 		
 		try 

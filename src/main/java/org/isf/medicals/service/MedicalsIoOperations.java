@@ -96,7 +96,7 @@ public class MedicalsIoOperations
 	public ArrayList<Medical> getMedicals(String type, boolean nameSorted) throws OHServiceException {
 		ArrayList<Medical> medicals = null;
 
-		List<Object> parameters = new ArrayList<Object>();
+		List<Object> parameters = new ArrayList<>();
 
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT * FROM MEDICALDSR JOIN MEDICALDSRTYPE ON MDSR_MDSRT_ID_A = MDSRT_ID_A ");

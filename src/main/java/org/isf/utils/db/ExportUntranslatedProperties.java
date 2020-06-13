@@ -93,7 +93,7 @@ public class ExportUntranslatedProperties {
 			writerES = new PrintWriter(fileES, "UTF-8"); writerES.println(warning);
 			writerPT = new PrintWriter(filePT, "UTF-8"); writerPT.println(warning);
 		
-			ArrayList<String> keys = new ArrayList<String>(resourceBundleEN.keySet());
+			ArrayList<String> keys = new ArrayList<>(resourceBundleEN.keySet());
 			Collections.sort(keys);
 			System.out.println("Found " + keys.size() + " keys.");
 			

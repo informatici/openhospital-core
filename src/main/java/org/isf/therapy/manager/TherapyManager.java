@@ -76,7 +76,7 @@ public class TherapyManager {
 			GregorianCalendar startDate, GregorianCalendar endDate, int freqInPeriod,
 			int freqInDay, String note, boolean notify, boolean sms) throws OHServiceException {
 		
-		ArrayList<GregorianCalendar> datesArray = new ArrayList<GregorianCalendar>();
+		ArrayList<GregorianCalendar> datesArray = new ArrayList<>();
 		
 		GregorianCalendar stepDate = new GregorianCalendar();
 		stepDate.setTime(startDate.getTime());
@@ -120,7 +120,7 @@ public class TherapyManager {
 	public ArrayList<Therapy> getTherapies(ArrayList<TherapyRow> thRows) throws OHServiceException {
 		
 		if (thRows != null) {
-			ArrayList<Therapy> therapies = new ArrayList<Therapy>();
+			ArrayList<Therapy> therapies = new ArrayList<>();
 			
 			for (TherapyRow thRow : thRows) {
 				
@@ -248,7 +248,7 @@ public class TherapyManager {
 	public ArrayList<Medical> getMedicalsOutOfStock(ArrayList<Therapy> therapies) throws OHServiceException {
 		MovWardBrowserManager wardManager = new MovWardBrowserManager();
 		MedicalBrowsingManager medManager = new MedicalBrowsingManager();
-		ArrayList<Medical> medOutStock = new ArrayList<Medical>();
+		ArrayList<Medical> medOutStock = new ArrayList<>();
 
 		ArrayList<Medical> medArray = medManager.getMedicals();
 

@@ -114,7 +114,7 @@ public class PatVacManager {
 	 * @throws OHDataValidationException 
 	 */
     protected void validatePatientVaccine(PatientVaccine patientVaccine) throws OHDataValidationException{
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
 
         if(patientVaccine.getVaccineDate() == null){
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),

@@ -33,7 +33,7 @@ public class SmsManager {
 	 * @throws OHDataValidationException 
 	 */
 	protected void validateSms(Sms sms) throws OHDataValidationException {
-		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		String number = sms.getSmsNumber();
 		String text = sms.getSmsText();
 		
@@ -67,7 +67,7 @@ public class SmsManager {
 	public void saveOrUpdate(Sms smsToSend, boolean split) throws OHServiceException  {
 		validateSms(smsToSend);
 		
-		List<Sms> smsList = new ArrayList<Sms>();
+		List<Sms> smsList = new ArrayList<>();
 		String text = smsToSend.getSmsText();
 		int textLenght = text.length();
 		if (textLenght > MAX_LENGHT && !split) {

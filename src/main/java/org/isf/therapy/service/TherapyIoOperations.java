@@ -49,11 +49,11 @@ public class TherapyIoOperations {
 
 		
 		if (patID != 0) {
-			therapyList = new ArrayList<TherapyRow>(repository.findAllWherePatientByOrderPatientAndIdAsc(patID));
+			therapyList = new ArrayList<>(repository.findAllWherePatientByOrderPatientAndIdAsc(patID));
 		}
 		else
 		{
-			therapyList = new ArrayList<TherapyRow>(repository.findAllByOrderPatientAndIdAsc()); 
+			therapyList = new ArrayList<>(repository.findAllByOrderPatientAndIdAsc());
 		}
 		
 		return therapyList;

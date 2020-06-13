@@ -44,10 +44,10 @@ public class MedicalStockWardIoOperations
 			GregorianCalendar dateTo) throws OHServiceException 
 	{
 		ArrayList<Integer> pMovementWardCode = null;
-		ArrayList<MovementWard> pMovementWard = new ArrayList<MovementWard>(); 
+		ArrayList<MovementWard> pMovementWard = new ArrayList<>();
 		
 		
-		pMovementWardCode = new ArrayList<Integer>(repository.findAllWardMovement(wardId, dateFrom, dateTo));
+		pMovementWardCode = new ArrayList<>(repository.findAllWardMovement(wardId, dateFrom, dateTo));
         for (Integer code : pMovementWardCode) {
             MovementWard movementWard = movementRepository.findOne(code);
 
@@ -252,7 +252,7 @@ public class MedicalStockWardIoOperations
 	public ArrayList<MedicalWard> getMedicalsWard(
 			char wardId, boolean stripeEmpty) throws OHServiceException
 	{
-		ArrayList<MedicalWard> medicalWards = new ArrayList<MedicalWard>(repository.findAllWhereWard(wardId));
+		ArrayList<MedicalWard> medicalWards = new ArrayList<>(repository.findAllWhereWard(wardId));
 		for (int i=0; i<medicalWards.size(); i++)
 			
 		{

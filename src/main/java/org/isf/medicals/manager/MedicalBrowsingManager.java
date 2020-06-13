@@ -180,7 +180,7 @@ public class MedicalBrowsingManager {
 	 * @return list of {@link OHExceptionMessage}
 	 */
 	private List<OHExceptionMessage> checkMedicalCommon(Medical medical) {
-		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		if(medical.getMinqty()<0)
 		{
 			errors.add(new OHExceptionMessage("quantityLesserThanZeroError", 
@@ -236,7 +236,7 @@ public class MedicalBrowsingManager {
 	 * @throws OHServiceException
 	 */
 	public void checkMedical(Medical medical, boolean ignoreSimilar, boolean update) throws OHServiceException {
-		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		
 		//check commons
 		errors.addAll(checkMedicalCommon(medical));

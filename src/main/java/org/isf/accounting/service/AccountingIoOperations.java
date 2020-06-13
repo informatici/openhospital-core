@@ -38,9 +38,9 @@ public class AccountingIoOperations {
 	 */
 	public ArrayList<Bill> getPendingBills(int patID) throws OHServiceException {
 		if (patID != 0)
-			return new ArrayList<Bill>(billRepository.findByStatusAndPatient_codeOrderByDateDesc("O", patID));
+			return new ArrayList<>(billRepository.findByStatusAndPatient_codeOrderByDateDesc("O", patID));
 
-		return new ArrayList<Bill>(billRepository.findByStatusOrderByDateDesc("O"));
+		return new ArrayList<>(billRepository.findByStatusOrderByDateDesc("O"));
 	}
 	
 	/**
@@ -49,7 +49,7 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the bills.
 	 */
 	public ArrayList<Bill> getBills() throws OHServiceException {
-		return new ArrayList<Bill>(billRepository.findAllByOrderByDateDesc());
+		return new ArrayList<>(billRepository.findAllByOrderByDateDesc());
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class AccountingIoOperations {
 	 */
     public ArrayList<String> getUsers() throws OHServiceException {
 
-		return new ArrayList<String>(billPaymentRepository.findUserDistinctByOrderByUserAsc());
+		return new ArrayList<>(billPaymentRepository.findUserDistinctByOrderByUserAsc());
 	}
 
 	/**
@@ -85,11 +85,11 @@ public class AccountingIoOperations {
 		
 		if (billID != 0)
 		{
-			billItems = new ArrayList<BillItems>(billItemsRepository.findByBill_idOrderByIdAsc(billID));			
+			billItems = new ArrayList<>(billItemsRepository.findByBill_idOrderByIdAsc(billID));
 		}
 		else
 		{
-			billItems = new ArrayList<BillItems>(billItemsRepository.findAllByOrderByIdAsc()); 
+			billItems = new ArrayList<>(billItemsRepository.findAllByOrderByIdAsc());
 		}
 
 		return billItems;
@@ -106,8 +106,8 @@ public class AccountingIoOperations {
 		GregorianCalendar dateFrom, 
 		GregorianCalendar dateTo) throws OHServiceException {
 
-		return new ArrayList<BillPayments>(
-			billPaymentRepository.findByDateBetweenOrderByIdAscDateAsc(dateFrom.getTime(), dateTo.getTime()));
+		return new ArrayList<>(
+				billPaymentRepository.findByDateBetweenOrderByIdAscDateAsc(dateFrom.getTime(), dateTo.getTime()));
 	}
 
 	/**
@@ -314,10 +314,10 @@ public class AccountingIoOperations {
 			ArrayList<BillPayments> payments) throws OHServiceException 
 	{
 		ArrayList<Integer> pBillCode = null;
-		ArrayList<Bill> pBill = new ArrayList<Bill>();
+		ArrayList<Bill> pBill = new ArrayList<>();
 		
 		
-		pBillCode = new ArrayList<Integer>(billRepository.findAllByPayments(payments));			
+		pBillCode = new ArrayList<>(billRepository.findAllByPayments(payments));
 		for (int i=0; i<pBillCode.size(); i++)
 		{
 			Integer code = pBillCode.get(i);
@@ -341,10 +341,10 @@ public class AccountingIoOperations {
 	{
 
 		ArrayList<Integer> pPaymentCode = null;
-		ArrayList<BillPayments> pPayment = new ArrayList<BillPayments>();
+		ArrayList<BillPayments> pPayment = new ArrayList<>();
 		
 		
-		pPaymentCode = new ArrayList<Integer>(billPaymentRepository.findAllByBills(bills));			
+		pPaymentCode = new ArrayList<>(billPaymentRepository.findAllByBills(bills));
 		for (int i=0; i<pPaymentCode.size(); i++)
 		{
 			Integer code = pPaymentCode.get(i);

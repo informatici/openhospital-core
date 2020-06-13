@@ -42,7 +42,7 @@ public class MovStockInsertingManager {
 	 * @throws OHServiceException 
 	 */
 	protected void validateMovement(Movement movement, boolean checkReference) throws OHServiceException  {
-		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		
 		// Check the Date
 		GregorianCalendar today = new GregorianCalendar();
@@ -143,7 +143,7 @@ public class MovStockInsertingManager {
 	 * @return list of {@link OHExceptionMessage}
 	 */
 	protected List<OHExceptionMessage> validateLot(Lot lot) {
-		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		
 		if (lot != null) {
 
@@ -181,7 +181,7 @@ public class MovStockInsertingManager {
 	 * @throws OHServiceException 
 	 */
 	protected List<OHExceptionMessage> checkReferenceNumber(String referenceNumber) throws OHServiceException {
-		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (referenceNumber == null || referenceNumber.isEmpty()) { //$NON-NLS-1$
 			errors.add(new OHExceptionMessage("emptyOrNullRefNumberError",
 					MessageBundle.getMessage("angal.medicalstock.multiplecharging.pleaseinsertareferencenumber"), //$NON-NLS-1$
@@ -227,7 +227,7 @@ public class MovStockInsertingManager {
 	 */
 	public ArrayList<Lot> getLotByMedical(Medical medical) throws OHServiceException {
 		if (medical == null) {
-			return new ArrayList<Lot>();
+			return new ArrayList<>();
 		}
 		return ioOperations.getLotsByMedical(medical);
 	}

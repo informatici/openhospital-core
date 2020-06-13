@@ -178,7 +178,7 @@ public class LabIoOperations {
 			GregorianCalendar dateFrom, 
 			GregorianCalendar dateTo) throws OHServiceException 
 	{
-		ArrayList<LaboratoryForPrint> pLaboratory = new ArrayList<LaboratoryForPrint>();
+		ArrayList<LaboratoryForPrint> pLaboratory = new ArrayList<>();
     	ArrayList<Laboratory> laboritories = null;
 	
 	

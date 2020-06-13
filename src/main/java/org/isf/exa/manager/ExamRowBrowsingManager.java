@@ -30,7 +30,7 @@ public class ExamRowBrowsingManager {
 	 */
 	protected void validateExamRow(ExamRow examRow) throws OHDataValidationException {
 		String description = examRow.getDescription();
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         if(description.isEmpty()){
 	        errors.add(new OHExceptionMessage("descriptionEmptyError", 
 	        		MessageBundle.getMessage("angal.exa.insertdescription"), 

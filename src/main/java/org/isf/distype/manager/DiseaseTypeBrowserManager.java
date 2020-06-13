@@ -80,7 +80,7 @@ public class DiseaseTypeBrowserManager {
 	 * @throws OHServiceException
 	 */
     protected void validateDiseaseType(DiseaseType diseaseType, boolean insert) throws OHServiceException {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         String key = diseaseType.getCode();
         if (key.equals("")){
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),  MessageBundle.getMessage("angal.distype.pleaseinsertacode"),

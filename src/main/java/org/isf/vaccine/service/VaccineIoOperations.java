@@ -42,11 +42,11 @@ public class VaccineIoOperations {
 
 		
 		if (vaccineTypeCode != null) {
-			pvaccine = new ArrayList<Vaccine>(repository.findAllWhereIdByOrderDescriptionAsc(vaccineTypeCode));
+			pvaccine = new ArrayList<>(repository.findAllWhereIdByOrderDescriptionAsc(vaccineTypeCode));
 		}
 		else
 		{
-			pvaccine = new ArrayList<Vaccine>(repository.findAllByOrderByDescriptionAsc()); 
+			pvaccine = new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 		}
 		
 		return pvaccine;

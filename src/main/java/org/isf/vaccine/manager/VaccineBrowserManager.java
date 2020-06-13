@@ -44,7 +44,7 @@ public class VaccineBrowserManager {
 	protected void validateVaccine(Vaccine vaccine, boolean insert) throws OHServiceException {
 		String key = vaccine.getCode();
 		String description = vaccine.getDescription();
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         if(key.isEmpty() ){
 	        errors.add(new OHExceptionMessage("codeEmptyError", 
 	        		MessageBundle.getMessage("angal.vaccine.pleaseinsertacode"), 

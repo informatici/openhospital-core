@@ -34,7 +34,7 @@ public class ExamTypeBrowserManager {
 	protected void validateExamType(ExamType examType, boolean insert) throws OHServiceException {
 		String key = examType.getCode();
 		String description = examType.getDescription();
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         if(key.isEmpty() ){
 	        errors.add(new OHExceptionMessage("codeEmptyError", 
 	        		MessageBundle.getMessage("angal.exatype.pleaseinsertacode"), 

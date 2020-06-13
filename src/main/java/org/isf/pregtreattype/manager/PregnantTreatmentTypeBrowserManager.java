@@ -84,7 +84,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	 * @throws OHDataValidationException 
 	 */
     protected void validatePregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType, boolean insert) throws OHServiceException {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         String key = pregnantTreatmentType.getCode();
         if (StringUtils.isEmpty(key)){
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),

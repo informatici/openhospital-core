@@ -36,7 +36,7 @@ public class DeliveryResultTypeBrowserManager {
 	protected void validateDeliveryResultType(DeliveryResultType deliveryResultType, boolean insert) throws OHServiceException {
 		String key = deliveryResultType.getCode();
 		String description = deliveryResultType.getDescription();
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         if(key.isEmpty() ){
 	        errors.add(new OHExceptionMessage("codeEmptyError", 
 	        		MessageBundle.getMessage("angal.dlvrrestype.pleaseinsertacode"), 

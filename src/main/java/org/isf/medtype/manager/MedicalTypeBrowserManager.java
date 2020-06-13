@@ -37,7 +37,7 @@ public class MedicalTypeBrowserManager {
 	protected void validateMedicalType(MedicalType medicalType, boolean insert) throws OHServiceException {
 		String key = medicalType.getCode();
 		String description = medicalType.getDescription();
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         if(key.isEmpty() ){
 	        errors.add(new OHExceptionMessage("codeEmptyError", 
 	        		MessageBundle.getMessage("angal.medtype.pleaseinsertacode"), 

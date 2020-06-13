@@ -25,7 +25,7 @@ public class DischargeTypeIoOperation {
 	 */
 	public ArrayList<DischargeType> getDischargeType() throws OHServiceException 
 	{
-		return new ArrayList<DischargeType>(repository.findAllByOrderByDescriptionAsc());
+		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 
 	/**

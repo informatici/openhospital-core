@@ -462,10 +462,10 @@ public class MedicalStockIoOperations {
 			GregorianCalendar dateTo) throws OHServiceException 
 	{
 		ArrayList<Integer> pMovementCode = null;
-		ArrayList<Movement> pMovement = new ArrayList<Movement>();
+		ArrayList<Movement> pMovement = new ArrayList<>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findtMovementWhereDatesAndId(wardId, dateFrom, dateTo));			
+		pMovementCode = new ArrayList<>(movRepository.findtMovementWhereDatesAndId(wardId, dateFrom, dateTo));
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
 			Integer code = pMovementCode.get(i);
@@ -506,11 +506,11 @@ public class MedicalStockIoOperations {
 			GregorianCalendar lotDueTo) throws OHServiceException 
 	{
 		ArrayList<Integer> pMovementCode = null;
-		ArrayList<Movement> pMovement = new ArrayList<Movement>();
+		ArrayList<Movement> pMovement = new ArrayList<>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findtMovementWhereData(
-				medicalCode, medicalType, wardId, movType, 
+		pMovementCode = new ArrayList<>(movRepository.findtMovementWhereData(
+				medicalCode, medicalType, wardId, movType,
 				movFrom, movTo, lotPrepFrom, lotPrepTo, lotDueFrom, lotDueTo));			
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
@@ -549,11 +549,11 @@ public class MedicalStockIoOperations {
 	{
 
 		ArrayList<Integer> pMovementCode = null;
-		ArrayList<Movement> pMovement = new ArrayList<Movement>();
+		ArrayList<Movement> pMovement = new ArrayList<>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findtMovementForPrint(
-				medicalDescription, medicalTypeCode, wardId, movType, 
+		pMovementCode = new ArrayList<>(movRepository.findtMovementForPrint(
+				medicalDescription, medicalTypeCode, wardId, movType,
 				movFrom, movTo, lotCode, order));			
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
@@ -581,7 +581,7 @@ public class MedicalStockIoOperations {
 	
 		
 		List<Object[]> lotList = (List<Object[]>)lotRepository.findAllWhereMedical(medical.getCode());
-		lots = new ArrayList<Lot>();
+		lots = new ArrayList<>();
 		for (Object[] object: lotList)
 		{
 			Lot lot = _convertObjectToLot(object);
@@ -590,7 +590,7 @@ public class MedicalStockIoOperations {
 		}
 		
 		// remove empty lots
-		ArrayList<Lot> emptyLots = new ArrayList<Lot>();
+		ArrayList<Lot> emptyLots = new ArrayList<>();
 		for (Lot aLot : lots) {
 			if (aLot.getQuantity() == 0)
 				emptyLots.add(aLot);

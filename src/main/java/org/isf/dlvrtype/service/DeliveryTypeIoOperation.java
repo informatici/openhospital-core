@@ -28,7 +28,7 @@ public class DeliveryTypeIoOperation {
 	 */
 	public ArrayList<DeliveryType> getDeliveryType() throws OHServiceException 
 	{
-		return new ArrayList<DeliveryType>(repository.findAll());
+		return new ArrayList<>(repository.findAll());
 	}
 
 	/**

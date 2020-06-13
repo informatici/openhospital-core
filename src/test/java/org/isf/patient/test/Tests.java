@@ -391,7 +391,7 @@ public class Tests
 	private Patient _getDeletedPatient(
 			Integer Code) throws OHException 
 	{	
-		ArrayList<Object> params = new ArrayList<Object>();
+		ArrayList<Object> params = new ArrayList<>();
 		
 		
 		jpa.beginTransaction();			

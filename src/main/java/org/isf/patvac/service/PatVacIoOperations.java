@@ -72,7 +72,7 @@ public class PatVacIoOperations {
 			int ageTo) throws OHServiceException 
 	{
 		ArrayList<Integer> pPatientVaccineCode = null;
-		ArrayList<PatientVaccine> pPatientVaccine = new ArrayList<PatientVaccine>();
+		ArrayList<PatientVaccine> pPatientVaccine = new ArrayList<>();
 		
 		
 		pPatientVaccineCode = (ArrayList<Integer>) repository.findAllByCodesAndDatesAndSexAndAges(

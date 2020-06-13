@@ -33,11 +33,11 @@ public class VisitsIoOperations {
 
 		
 		if (patID != 0) {
-			visits = new ArrayList<Visit>(repository.findAllWherePatientByOrderPatientAndDateAsc(patID));
+			visits = new ArrayList<>(repository.findAllWherePatientByOrderPatientAndDateAsc(patID));
 		}
 		else
 		{
-			visits = new ArrayList<Visit>(repository.findAllByOrderPatientAndDateAsc()); 
+			visits = new ArrayList<>(repository.findAllByOrderPatientAndDateAsc());
 		}
 		
 		return visits;

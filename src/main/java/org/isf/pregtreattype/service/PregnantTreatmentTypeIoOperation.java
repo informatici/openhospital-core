@@ -26,7 +26,7 @@ public class PregnantTreatmentTypeIoOperation {
 	 */
 	public ArrayList<PregnantTreatmentType> getPregnantTreatmentType() throws OHServiceException 
 	{
-		return new ArrayList<PregnantTreatmentType>(repository.findAllByOrderByDescriptionAsc()); 
+		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 	
 	/**

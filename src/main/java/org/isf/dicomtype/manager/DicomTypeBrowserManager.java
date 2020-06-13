@@ -53,7 +53,7 @@ public class DicomTypeBrowserManager {
 	protected List<OHExceptionMessage> validateVaccineType(DicomType dicomType, boolean insert) throws OHServiceException {
 		String key = dicomType.getDicomTypeID();
 		String description = dicomType.getDicomTypeDescription();
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         if(key.isEmpty() ){
 	        errors.add(new OHExceptionMessage("codeEmptyError", 
 	        		MessageBundle.getMessage("angal.dicomtype.pleaseinsertacode"), 

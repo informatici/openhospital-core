@@ -24,7 +24,7 @@ public class ExamTypeIoOperation {
 	 */
 	public ArrayList<ExamType> getExamType() throws OHServiceException 
 	{
-		return new ArrayList<ExamType>(repository.findAllByOrderByDescriptionAsc()); 	
+		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 	
 	/**

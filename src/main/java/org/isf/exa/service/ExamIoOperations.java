@@ -88,7 +88,7 @@ public class ExamIoOperations {
 			String description) throws OHServiceException 
 	{ 
 		ArrayList<String> examIds = null;
-		ArrayList<Exam> exams = new ArrayList<Exam>();
+		ArrayList<Exam> exams = new ArrayList<>();
 				
 		
 		if (description != null) 

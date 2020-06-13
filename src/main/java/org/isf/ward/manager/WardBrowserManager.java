@@ -46,7 +46,7 @@ public class WardBrowserManager {
 	protected void validateWard(Ward ward, boolean insert) throws OHServiceException {
 		String key = ward.getCode();
 		String description = ward.getDescription();
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         if(key.isEmpty() ){
 	        errors.add(new OHExceptionMessage("codeEmptyError", 
 	        		MessageBundle.getMessage("angal.ward.pleaseinsertacode"), 
@@ -153,7 +153,7 @@ public class WardBrowserManager {
 		
 		if (noPatients > 0) {
 			
-			List<OHExceptionMessage> messages = new ArrayList<OHExceptionMessage>();
+			List<OHExceptionMessage> messages = new ArrayList<>();
 			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
 					MessageBundle.getMessage("angal.ward.selectedwardhaspatients1") +
 					" " + noPatients + " " +

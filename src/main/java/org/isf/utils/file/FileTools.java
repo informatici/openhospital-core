@@ -82,7 +82,7 @@ public class FileTools {
 	 * @return the list of retrieved date (first null)
 	 */
 	public static List<Date> getTimestampFromName(String formattedString) {
-		List<Date> datesFound = new ArrayList<Date>();
+		List<Date> datesFound = new ArrayList<>();
 		return getTimestampFromName(formattedString, datesFound);
 	}
 	

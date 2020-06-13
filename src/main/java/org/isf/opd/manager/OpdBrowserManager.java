@@ -49,7 +49,7 @@ public class OpdBrowserManager {
 		if (opd.getDate() == null) opd.setDate(new Date());
 		if (opd.getUserID() == null) opd.setUserID(UserBrowsingManager.getCurrentUser());
 		
-		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		//Check Visit Date
 				if (opd.getVisitDate() == null) {
 					errors.add(new OHExceptionMessage("noVisitDateError", 

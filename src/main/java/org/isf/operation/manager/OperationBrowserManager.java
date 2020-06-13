@@ -124,7 +124,7 @@ public class OperationBrowserManager {
 	 * @return the found list
 	 */
 	public ArrayList<String> getResultsList() {
-		ArrayList<String> resultsList = new ArrayList<String>();
+		ArrayList<String> resultsList = new ArrayList<>();
 		resultsList.add(MessageBundle.getMessage("angal.operation.result.sucess"));
 		resultsList.add(MessageBundle.getMessage("angal.operation.result.failure"));
 		resultsList.add(MessageBundle.getMessage("angal.operation.result.undefined"));

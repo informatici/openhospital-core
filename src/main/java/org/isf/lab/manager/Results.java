@@ -10,7 +10,7 @@ import org.isf.generaldata.MessageBundle;
 public class Results {
 
 	public static ArrayList<JRadioButton> getResults(){
-		ArrayList<JRadioButton> list=new ArrayList<JRadioButton>();
+		ArrayList<JRadioButton> list= new ArrayList<>();
 		list.add(new JRadioButton("P = " + MessageBundle.getMessage("angal.lab.positive")));
 		list.add(new JRadioButton("N = " + MessageBundle.getMessage("angal.lab.negative") ));
 		list.add(new JRadioButton("R = " + MessageBundle.getMessage("angal.lab.reactive")));

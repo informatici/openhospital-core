@@ -147,7 +147,7 @@ public class Tests
 			AgeType foundAgeType = (AgeType)jpa.find(AgeType.class, code); 
 			foundAgeType.setFrom(4);
 			foundAgeType.setTo(40);
-			ArrayList<AgeType> ageTypes = new ArrayList<AgeType>();
+			ArrayList<AgeType> ageTypes = new ArrayList<>();
 			ageTypes.add(foundAgeType);
 			result = ageTypeIoOperations.updateAgeType(ageTypes);
 			AgeType updateAgeType = (AgeType)jpa.find(AgeType.class, code); 
