@@ -270,9 +270,8 @@ public class ExcelExporter {
 	 */
 	@Deprecated
 	public void exportDataToCSV(Collection data, File exportFile) throws IOException, OHException {
-		
-		FileWriter outFile = new FileWriter(exportFile);
-		try {
+
+		try (FileWriter outFile = new FileWriter(exportFile)) {
 			boolean header = false;
 			for (Object map : data) {
 				Map thisMap = ((Map) map);
@@ -284,7 +283,7 @@ public class ExcelExporter {
 					outFile.write("\n");
 					header = true;
 				}
-				
+
 				String strVal;
 				Collection values = thisMap.values();
 				for (Object value : values) {
@@ -293,8 +292,6 @@ public class ExcelExporter {
 				}
 				outFile.write("\n");
 			}
-		} finally {
-			outFile.close();
 		}
 	}
 
