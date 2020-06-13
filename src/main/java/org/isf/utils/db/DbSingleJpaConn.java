@@ -42,12 +42,7 @@ public class DbSingleJpaConn {
         }
         final Connection[] jpaConnection = {null};
         Session session =  jpa.getEntityManager().unwrap(Session.class);
-        session.doWork(new Work() {
-            @Override
-            public void execute(Connection connection) throws SQLException {
-                jpaConnection[0] = connection;
-            }
-        });
+        session.doWork(connection -> jpaConnection[0] = connection);
         return jpaConnection[0];
 	}
 

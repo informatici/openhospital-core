@@ -43,11 +43,7 @@ public class ImportTranslatedProperties {
 		String pathOut = "E:\\translations\\bundle\\"; //new generated bundle to copy (replace) in OH
 		File folderIn = new File(pathIn);
 		
-		FileFilter fileFilter = new FileFilter() {
-			public boolean accept(File file) {
-				return !file.isDirectory();
-			}
-		};
+		FileFilter fileFilter = file -> !file.isDirectory();
 		
 		for (final File file : folderIn.listFiles(fileFilter)) {
 			String filename = file.getName();
