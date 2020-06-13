@@ -288,14 +288,14 @@ public class MedicalStockWardIoOperations
 		ArrayList<MedicalWard> medicalWards = getMedicalsWard(wardId, true);
 		
 		ArrayList<MedicalWard> medicalWardsQty = new ArrayList<>();
-		
-		for (int i=0; i<medicalWards.size(); i++) {
-			 
-			 if (!medicalWardsQty.contains(medicalWards.get(i))) {
-				 Double qty = repository.findQuantityInWardWhereMedicalAndWard(medicalWards.get(i).getId().getMedical().getCode(),WardID);
-				 medicalWards.get(i).setQty(qty);
-				 medicalWardsQty.add(medicalWards.get(i));
-			 }
+
+		for (MedicalWard medicalWard : medicalWards) {
+
+			if (!medicalWardsQty.contains(medicalWard)) {
+				Double qty = repository.findQuantityInWardWhereMedicalAndWard(medicalWard.getId().getMedical().getCode(), WardID);
+				medicalWard.setQty(qty);
+				medicalWardsQty.add(medicalWard);
+			}
 		}
 		return medicalWardsQty;
 	}
