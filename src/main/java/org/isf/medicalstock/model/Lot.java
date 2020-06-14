@@ -9,12 +9,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
 import org.isf.generaldata.MessageBundle;
+import org.isf.medicals.model.Medical;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /*------------------------------------------
@@ -41,6 +44,10 @@ public class Lot extends Auditable<String>
 	@Column(name="LT_ID_A")
 	private String code;
 
+	@ManyToOne
+	@JoinColumn(name="LT_MDSR_ID")
+	private Medical medical;
+	
 	@NotNull
 	@Column(name="LT_PREP_DATE")
 	private GregorianCalendar preparationDate;
@@ -61,7 +68,10 @@ public class Lot extends Auditable<String>
 
 	public Lot() { 
 	}
-	
+	public Lot(String aCode){
+		code=aCode;
+		
+	}
 	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate){
 		code=aCode;
 		preparationDate=aPreparationDate;
@@ -85,6 +95,9 @@ public class Lot extends Auditable<String>
 	public int getQuantity(){
 		return quantity;
 	}
+	public Medical getMedical(){
+			return medical;
+	}
 	public GregorianCalendar getPreparationDate(){
 		return preparationDate;
 	}
@@ -102,6 +115,9 @@ public class Lot extends Auditable<String>
 	}
 	public void setQuantity(int aQuantity){
 		quantity=aQuantity;
+	}
+	public void setMedical(Medical aMedical){
+				medical=aMedical;
 	}
 	public void setDueDate(GregorianCalendar aDueDate){
 		dueDate=aDueDate;

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -36,6 +37,29 @@ public class TimeTools {
 		System.out.println("Days between: " + getDaysBetweenDates(dateFrom, dateTo, true));
 		System.out.println("Weeks between: " + getWeeksBetweenDates(dateFrom, dateTo, true));
 		System.out.println("Months between: " + getMonthsBetweenDates(dateFrom, dateTo, true));
+	}
+	
+	
+	
+	/**
+	 * @author Mwithi
+	 * 
+	 * returns <code>true</code> if the DATE part is the same (no matter the time)
+	 * @param aDate
+	 * @param today
+	 * @return
+	 */
+	public static boolean isSameDay(Date aDate, Date today) {
+		GregorianCalendar date1 = new GregorianCalendar();
+		GregorianCalendar date2 = new GregorianCalendar();
+		date1.setTime(aDate);
+		date2.setTime(today);
+		return isSameDay(date1, date2);
+	}
+	public static boolean isSameDay(GregorianCalendar aDate, GregorianCalendar today) {
+		return (aDate.get(Calendar.YEAR) == today.get(Calendar.YEAR)) &&
+			   (aDate.get(Calendar.MONTH) == today.get(Calendar.MONTH)) &&
+			   (aDate.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH));
 	}
 
 	/**
@@ -185,7 +209,7 @@ public class TimeTools {
 	
 	/**
 	 * Return a string representation of the dateTime with the given pattern
-	 * @param dateTime - a Date object
+	 * @param date - a Date object
 	 * @param pattern - the pattern. If <code>null</code> "yyyy-MM-dd HH:mm:ss" will be used
 	 * @return the String represetation of the GregorianCalendar
 	 */
@@ -199,7 +223,7 @@ public class TimeTools {
 
 	/**
 	 * Return a string representation of the dateTime in the form "yyyy-MM-dd HH:mm:ss"
-	 * @param dateTime - a GregorianCalendar object
+	 * @param time - a GregorianCalendar object
 	 * @return the String represetation of the GregorianCalendar
 	 */
 	public static String formatDateTimeReport(GregorianCalendar time) {
@@ -208,7 +232,7 @@ public class TimeTools {
 	
 	/**
 	 * Return a string representation of the dateTime in the form "yyyy-MM-dd HH:mm:ss"
-	 * @param dateTime - a Date object
+	 * @param date - a Date object
 	 * @return the String represetation of the Date
 	 */
 	public static String formatDateTimeReport(Date date) {
@@ -338,7 +362,6 @@ public class TimeTools {
 				return calDate;
 			}
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			if(!format.equals("dd/MM/yyyy")){
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 				Date date=sdf.parse(strDate);

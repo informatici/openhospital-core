@@ -3,7 +3,7 @@ package org.isf.examination.test;
 
 import static org.junit.Assert.assertEquals;
 
-import java.sql.Timestamp;
+import java.util.GregorianCalendar;
 
 import org.isf.examination.model.PatientExamination;
 import org.isf.patient.model.Patient;
@@ -11,7 +11,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestPatientExamination 
 {	
-	private Timestamp pex_date = new Timestamp(1000);
+	private GregorianCalendar pex_date = new GregorianCalendar(2020, 1, 10);
 	private Integer pex_height = 170;	
 	private Double pex_weight = 60.;	
 	private Integer pex_ap_min = 80;	

@@ -325,10 +325,7 @@ public class AdmissionBrowserManager {
                     limit = admission.getDisDate();
                 }
 
-                if (visitDate.before(dateIn) || visitDate.after(limit)) {
-                    errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.admission.pleaseinsertavalidvisitdate"),
-                            OHSeverityLevel.ERROR));
-                }
+
             }
 
             Float f = admission.getWeight();

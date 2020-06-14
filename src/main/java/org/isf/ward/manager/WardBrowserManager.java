@@ -98,7 +98,9 @@ public class WardBrowserManager {
 	public ArrayList<Ward> getWards() throws OHServiceException {
 		return ioOperations.getWards(null);
 	}
-	
+	public ArrayList<Ward> getWards(Ward ward) throws OHServiceException {
+		return ioOperations.getWards(ward.getCode());
+	}
 	/**
 	 * Returns all the stored {@link Ward} with maternity flag <code>false</code>.
 	 * In case of error a message error is shown and a <code>null</code> value is returned.

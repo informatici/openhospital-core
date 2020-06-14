@@ -167,7 +167,7 @@ public class ExamRowIoOperations {
 	 * the parameter; Returns false if the query finds no record, else returns
 	 * true
 	 * 
-	 * @param the {@link Exam}
+	 * @param examrow the {@link Exam}
 	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */

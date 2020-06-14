@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  * 20/12/2008 - isf bari - added patientextended
  * 01/01/2009 - Fabrizio - added OPDEXTENDED
  * 20/01/2009 - Chiara   - added attribute MATERNITYRESTARTINJUNE to reset progressive number of maternity ward
- * 25/02/2011 - Claudia  - added attribute MAINMENUALWAYSONTOP to handle main men� always on Top 
+ * 25/02/2011 - Claudia  - added attribute MAINMENUALWAYSONTOP to handle main menu always on Top 
  * 01/05/2011 - Vito 	 - added attribute VIDEOMODULEENABLED to enable/disable video module
  * 10/08/2011 - Claudia  - added PATIENTVACCINEEXTENDED to show patient on Patient Vaccine 
  * 19/10/2011 - Mwithi   - GeneralData 2.0: catching exception on single property and assign DEFAULT value  
@@ -25,13 +25,16 @@ public class GeneralData {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final String FILE_PROPERTIES = "generalData.properties";
-
 	public static String LANGUAGE;
 	public static boolean SINGLEUSER;
-	public static boolean AUTOMATICLOT;
+	public static boolean OPDOPERATION; //TODO: Evaluate the real need of this one: if false should also hidden the ability to specify the OPE_FOR property
+	public static boolean AUTOMATICLOT_IN;
+	public static boolean AUTOMATICLOT_OUT;
+	public static boolean AUTOMATICLOTWARD_TOWARD;
 	public static boolean LOTWITHCOST;
-	
 	public static String PATIENTSHEET;
+	public static String VISITSHEET;
+	public static String EXAMINATIONCHART;
 	public static String OPDCHART;
 	public static String ADMCHART;
 	public static String DISCHART;
@@ -41,6 +44,7 @@ public class GeneralData {
 	public static String BILLSREPORTMONTHLY;
 	public static String PHARMACEUTICALORDER;
 	public static String PHARMACEUTICALSTOCK;
+	public static String PHARMACEUTICALSTOCKLOT;
 	public static String PHARMACEUTICALAMC;
 	public static boolean PATIENTEXTENDED;
 	public static boolean OPDEXTENDED;
@@ -68,9 +72,14 @@ public class GeneralData {
 	
 	private static String DEFAULT_LANGUAGE = "en";
 	private static boolean DEFAULT_SINGLEUSER = false;
-	private static boolean DEFAULT_AUTOMATICLOT = true;
+	private static boolean DEFAULT_AUTOMATICLOT_IN = true;
+	private static boolean DEFAULT_AUTOMATICLOT_OUT = true;
+	private static boolean DEFAULT_AUTOMATICLOTWARD_TOWARD=true;
 	private static boolean DEFAULT_LOTWITHCOST = false;
+	
 	private static String DEFAULT_PATIENTSHEET = "patient_clinical_sheet";
+	private static String DEFAULT_VISITSHEET = "WardVisits";
+	private static String DEFAULT_EXAMINATIONCHART = "patient_examination";
 	private static String DEFAULT_OPDCHART = "patient_opd_chart";
 	private static String DEFAULT_ADMCHART = "patient_adm_chart";
 	private static String DEFAULT_DISCHART = "patient_dis_chart";
@@ -79,7 +88,8 @@ public class GeneralData {
 	private static String DEFAULT_BILLSREPORTPENDING = "BillsReportPending";
 	private static String DEFAULT_BILLSREPORTMONTHLY = "BillsReportMonthly";
 	private static String DEFAULT_PHARMACEUTICALORDER = "PharmaceuticalOrder";
-	private static String DEFAULT_PHARMACEUTICALSTOCK = "PharmaceuticalStock";
+	private static String DEFAULT_PHARMACEUTICALSTOCK = "PharmaceuticalStock_ver4";
+	private static String DEFAULT_PHARMACEUTICALSTOCKLOT = "PharmaceuticalStock_ver5"; //TODO: verify if really used
 	private static String DEFAULT_PHARMACEUTICALAMC = "PharmaceuticalAMC";
 	private static boolean DEFAULT_PATIENTEXTENDED = false;
 	private static boolean DEFAULT_OPDEXTENDED = false;
@@ -114,9 +124,14 @@ public class GeneralData {
 			logger.info("File generalData.properties loaded. ");
 			LANGUAGE = myGetProperty("LANGUAGE", DEFAULT_LANGUAGE);
 			SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
-			AUTOMATICLOT = myGetProperty("AUTOMATICLOT", DEFAULT_AUTOMATICLOT);
+			OPDOPERATION= myGetProperty("OPDOPERATION", DEFAULT_SINGLEUSER);
+			AUTOMATICLOT_IN = myGetProperty("AUTOMATICLOT_IN", DEFAULT_AUTOMATICLOT_IN);
+			AUTOMATICLOT_OUT = myGetProperty("AUTOMATICLOT_OUT", DEFAULT_AUTOMATICLOT_OUT);
+			AUTOMATICLOTWARD_TOWARD = myGetProperty("AUTOMATICLOTWARD_TOWARD", DEFAULT_AUTOMATICLOTWARD_TOWARD);
 			LOTWITHCOST = myGetProperty("LOTWITHCOST", DEFAULT_LOTWITHCOST);
 			PATIENTSHEET = myGetProperty("PATIENTSHEET", DEFAULT_PATIENTSHEET);
+			VISITSHEET = myGetProperty("VISITSHEET", DEFAULT_VISITSHEET);
+			EXAMINATIONCHART =myGetProperty("EXAMINATIONCHART", DEFAULT_EXAMINATIONCHART);
 			OPDCHART = myGetProperty("OPDCHART", DEFAULT_OPDCHART);
 			ADMCHART = myGetProperty("ADMCHART", DEFAULT_ADMCHART);
 			DISCHART = myGetProperty("DISCHART", DEFAULT_DISCHART);
@@ -126,6 +141,7 @@ public class GeneralData {
 			BILLSREPORTMONTHLY = myGetProperty("BILLSREPORTMONTHLY", DEFAULT_BILLSREPORTMONTHLY);
 			PHARMACEUTICALORDER = myGetProperty("PHARMACEUTICALORDER", DEFAULT_PHARMACEUTICALORDER);
 			PHARMACEUTICALSTOCK = myGetProperty("PHARMACEUTICALSTOCK", DEFAULT_PHARMACEUTICALSTOCK);
+			PHARMACEUTICALSTOCKLOT = myGetProperty("PHARMACEUTICALSTOCKLOT", DEFAULT_PHARMACEUTICALSTOCKLOT);
 			PHARMACEUTICALAMC = myGetProperty("PHARMACEUTICALAMC", DEFAULT_PHARMACEUTICALAMC);
 			PATIENTEXTENDED = myGetProperty("PATIENTEXTENDED", DEFAULT_PATIENTEXTENDED);
 			OPDEXTENDED = myGetProperty("OPDEXTENDED", DEFAULT_OPDEXTENDED);

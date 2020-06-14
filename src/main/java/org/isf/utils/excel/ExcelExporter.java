@@ -107,6 +107,7 @@ public class ExcelExporter {
 	 * @throws IOException
 	 * @deprecated use exportTableToExcel method
 	 */
+	@Deprecated
 	public void exportTableToCSV(JTable jtable, File file) throws IOException {
 		exportTableToCSV(jtable, file, ";");
 	}
@@ -184,6 +185,7 @@ public class ExcelExporter {
 	 * @throws OHException
 	 * @deprecated use exportTableToExcel method
 	 */
+	@Deprecated
 	public void exportResultsetToCSV(ResultSet resultSet, File exportFile) throws IOException, OHException {
 		exportResultsetToCSV(resultSet, exportFile, ";");
 	}
@@ -260,12 +262,13 @@ public class ExcelExporter {
 	/**
 	 * Export a {@link Collection} to CSV using Apache POI library
 	 * 
-	 * @param resultSet
+	 * @param data
 	 * @param exportFile
 	 * @throws IOException
 	 * @throws OHException
 	 * @deprecated use exportDataToExcel
 	 */
+	@Deprecated
 	public void exportDataToCSV(Collection data, File exportFile) throws IOException, OHException {
 		
 		FileWriter outFile = new FileWriter(exportFile);
@@ -420,7 +423,7 @@ public class ExcelExporter {
 	/**
 	 * Export a {@link ResultSet} to Excel using Apache POI library
 	 * 
-	 * @param resultSet
+	 * @param data
 	 * @param exportFile
 	 * @throws IOException
 	 * @throws OHException
@@ -593,7 +596,7 @@ public class ExcelExporter {
 	/**
 	 * Export a {@link ResultSet} to Excel 97-2003 using Apache POI library
 	 * 
-	 * @param resultSet
+	 * @param data
 	 * @param exportFile
 	 * @throws IOException
 	 * @throws OHException

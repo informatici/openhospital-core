@@ -44,9 +44,8 @@ public class PrintReceipt {
 	private final Logger logger = LoggerFactory.getLogger(PrintReceipt.class);
 
 	/**
-	 * @param jasperFileName
-	 * @param parameters
-	 * @param conn
+	 * @param jasperPrint
+	 * @param fileName
 	 */
 	public PrintReceipt(JasperPrint jasperPrint, String fileName) {
 				
@@ -160,7 +159,7 @@ public class PrintReceipt {
 	
 	/**
 	 * 
-	 * @param file
+	 * @param jasperPrint
 	 */
 	private void printReversPages(JasperPrint jasperPrint) {
 		try {

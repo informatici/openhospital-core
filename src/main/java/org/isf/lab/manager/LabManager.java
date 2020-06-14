@@ -229,6 +229,8 @@ public class LabManager {
 		        		MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"), 
 		        		OHSeverityLevel.ERROR));
 			return ioOperations.newLabSecondProcedure2(laboratory, labRow);
+		}else if (laboratory.getExam().getProcedure() == 3) {
+			return ioOperations.newLabFirstProcedure(laboratory);
 		}
 		else 
 			throw new OHDataValidationException(new OHExceptionMessage("unknownProcedureError", 
@@ -254,6 +256,9 @@ public class LabManager {
 		        		MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"), 
 		        		OHSeverityLevel.ERROR));
 			return ioOperations.updateLabSecondProcedure(laboratory, labRow);
+		}else if (laboratory.getExam().getProcedure() == 3) {
+			//TODO: is it enough to call FirstProcedure?
+			return ioOperations.updateLabFirstProcedure(laboratory);
 		}
 		else 
 			throw new OHDataValidationException(new OHExceptionMessage("unknownProcedureError", 
@@ -338,6 +343,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 * @deprecated use updateLaboratory() for all procedures
 	 */
+	@Deprecated
 	protected boolean editLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
 		return ioOperations.updateLabFirstProcedure(laboratory);
 	}
@@ -350,6 +356,7 @@ public class LabManager {
 	 * @throws OHServiceException 
 	 * @deprecated use updateLaboratory() for all procedures
 	 */
+	@Deprecated
 	protected boolean editLabSecondProcedure(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
 		return ioOperations.updateLabSecondProcedure(laboratory, labRow);
 	}

@@ -42,9 +42,7 @@ public class FileTools {
 	/**
 	 * 
 	 */
-	public FileTools() {
-		// TODO Auto-generated constructor stub
-	}
+	public FileTools() {}
 	
 	/**
 	 * Retrieves the last modified date
@@ -80,7 +78,7 @@ public class FileTools {
 	 * - dd-MM-yy_HHmm -> "20-10-09_0123"<br />
 	 * - yyyy-MM-dd HHmm -> "2020-10-09 0123"<br />
 	 * - yyyy-MM-dd_HHmm -> "2020-10-09_0123" <br />
-	 * @param string
+	 * @param formattedString
 	 * @return the list of retrieved date (first null)
 	 */
 	public static List<Date> getTimestampFromName(String formattedString) {

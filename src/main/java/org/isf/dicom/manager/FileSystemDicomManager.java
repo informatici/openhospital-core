@@ -75,7 +75,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 	
 	/**
-	 * @param dir - the dir to set
+	 * @param externalPrp - the properties to set
 	 */
 	public void setDir(Properties externalPrp) {
 		this.dir = new File(externalPrp.getProperty("dicom.storage.filesystem"));
@@ -84,7 +84,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	/**
 	 * Load a list of id file for series
 	 * 
-	 * @param patientId, the patient id
+	 * @param patientID, the patient id
 	 * @param seriesNumber, the series number
 	 * @return
 	 * @throws OHDicomException 

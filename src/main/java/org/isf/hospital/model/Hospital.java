@@ -79,16 +79,6 @@ public class Hospital extends Auditable<String>
 	@Transient
 	private volatile int hashCode = 0;
 	
-    /**
-     * @param aCode
-     * @param aDescription
-     * @param aAddress
-     * @param aCity
-     * @param aTelephone
-     * @param aFax
-     * @param aEmail
-     * @param aCurrencyCod
-     */
     public Hospital(){
     	super();
         this.code = null;
@@ -100,8 +90,18 @@ public class Hospital extends Auditable<String>
         this.email = null;
         this.currencyCod = null;
     }
-    
-    public Hospital(String aCode, String aDescription, String aAddress, 
+
+	/**
+	 * @param aCode
+	 * @param aDescription
+	 * @param aAddress
+	 * @param aCity
+	 * @param aTelephone
+	 * @param aFax
+	 * @param aEmail
+	 * @param aCurrencyCod
+	 */
+	public Hospital(String aCode, String aDescription, String aAddress,
     		String aCity, String aTelephone, String aFax, 
     		String aEmail, String aCurrencyCod) {
         super();

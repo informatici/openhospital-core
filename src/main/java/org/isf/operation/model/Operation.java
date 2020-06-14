@@ -65,6 +65,9 @@ public class Operation extends Auditable<String>
 	@Column(name="OPE_STAT")
     private Integer major;
 
+	@Column(name="OPE_FOR")
+    private String operFor;
+	
 	@Version
 	@Column(name="OPE_LOCK")
     private Integer lock;
@@ -94,11 +97,17 @@ public class Operation extends Auditable<String>
     public String getCode() {
         return this.code;
     }
-    
     public void setCode(String aCode) {
         this.code = aCode;
     }
+    public void setOpeFor(String operFor) {
+        this.operFor = operFor;
+    }
+    public String getOpeFor() {
+        return this.operFor;
+    }
     
+  
     public String getDescription() {
         return this.description;
     }

@@ -233,7 +233,7 @@ public class PatientBrowserManager {
     /**
 	 * method that logically delete a Patient (not physically deleted)
 	 * 
-	 * @param aPatient - the {@link Patient} to be deleted
+	 * @param patient - the {@link Patient} to be deleted
 	 * @return true - if the Patient has been deleted (logically)
 	 * @throws OHServiceException 
 	 */
@@ -377,5 +377,14 @@ public class PatientBrowserManager {
             return false;
         }
         return true;
+    }
+    
+    /**
+     * 
+     * @return patients list
+     * @throws OHServiceException 
+     */
+    public ArrayList<Patient> getPatientHeadWithHeightAndWeight() throws OHServiceException{
+   		return ioOperations.getPatientsHeadWithHeightAndWeight();
     }
 }

@@ -109,7 +109,7 @@ public class MalnutritionManager {
 	 *  
 	 *  throws an exception if the update fails for some other reason
 	 *  
-	 * @param the {@link Malnutrition} to update
+	 * @param malnutrition the {@link Malnutrition} to update
 	 * @return the updated {@link Malnutrition}
 	 * @throws OHServiceException
 	 */

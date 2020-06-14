@@ -3,9 +3,8 @@
  */
 package org.isf.examination.service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.isf.examination.model.PatientExamination;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -35,7 +34,7 @@ public class ExaminationOperations {
 	public PatientExamination getFromLastPatientExamination(
 			PatientExamination lastPatientExamination) 
 	{
-		PatientExamination newPatientExamination = new PatientExamination(new Timestamp(new Date().getTime()), 
+		PatientExamination newPatientExamination = new PatientExamination(new GregorianCalendar(), 
 				lastPatientExamination.getPatient(), 
 				lastPatientExamination.getPex_height(),
 				lastPatientExamination.getPex_weight(), 
@@ -56,8 +55,8 @@ public class ExaminationOperations {
 
 	/**
 	 * 
-	 * @param path
-	 *            - the PatientHistory to save
+	 * @param patex
+	 *            - the PatientExamination to save
 	 * @throws OHServiceException 
 	 */
 	public void saveOrUpdate(

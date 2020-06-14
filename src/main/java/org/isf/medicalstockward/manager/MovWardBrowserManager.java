@@ -12,6 +12,7 @@ import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperations;
+import org.isf.patient.model.Patient;
 import org.isf.serviceprinting.print.MedicalWardForPrint;
 import org.isf.serviceprinting.print.MovementForPrint;
 import org.isf.serviceprinting.print.MovementWardForPrint;
@@ -74,12 +75,23 @@ public class MovWardBrowserManager {
 	/**
 	 * Gets all the {@link MedicalWard}s associated to the specified ward.
 	 * @param wardId the ward id.
+	 * @param stripeEmpty - if <code>true</code>, stripes the empty lots
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<MedicalWard> getMedicalsWard(char wardId) throws OHServiceException {
-            System.out.println("MovWardBrowserManager: Looking for drugs ");
-		return ioOperations.getMedicalsWard(wardId);
+	public ArrayList<MedicalWard> getMedicalsWard(char wardId, boolean stripeEmpty) throws OHServiceException {
+		return ioOperations.getMedicalsWard(wardId, stripeEmpty);
+	}
+
+	/**
+	 * Gets all the {@link MedicalWard}s associated to the specified ward summarized by lot 
+	 * (total quantity, regardless the lot)
+	 * @param wardId the ward id.
+	 * @return the retrieved medicals.
+	 * @throws OHServiceException
+	 */
+	public ArrayList<MedicalWard> getMedicalsWardTotalQuantity(char wardId) throws OHServiceException {
+        return ioOperations.getMedicalsWardTotalQuantity(wardId);
 	}
 
 	/**
@@ -104,6 +116,16 @@ public class MovWardBrowserManager {
 	 */
 	public ArrayList<MovementWard> getWardMovementsToWard(String idwardTo, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
 		return ioOperations.getWardMovementsToWard(idwardTo, dateFrom, dateTo);
+	}
+	
+    /**
+	 * Gets all the movement ward with the specified criteria.
+	 * @param patient
+	 * @return all the retrieved movements.
+	 * @throws OHServiceException 
+	 */
+	public ArrayList<MovementWard> getMovementToPatient(Patient patient) throws OHServiceException {
+		return ioOperations.getWardMovementsToPatient(patient.getCode());
 	}
 	
 	/**

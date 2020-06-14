@@ -3,7 +3,6 @@ package org.isf.operation.manager;
 import java.util.ArrayList;
 
 import org.isf.generaldata.MessageBundle;
-import org.isf.menu.manager.Context;
 import org.isf.operation.model.Operation;
 import org.isf.operation.service.OperationIoOperations;
 import org.isf.opetype.model.OperationType;
@@ -24,6 +23,7 @@ import org.springframework.stereotype.Component;
 public class OperationBrowserManager {
 
 	private final Logger logger = LoggerFactory.getLogger(OperationBrowserManager.class);
+	
 	@Autowired
 	private OperationIoOperations ioOperations;
 
@@ -33,10 +33,16 @@ public class OperationBrowserManager {
 	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException 
 	 */
+	//TODO: Evaluate the use of a parameter in one method only
+	public ArrayList<Operation> getOperationOpd() throws OHServiceException {
+		return ioOperations.getOperationOpd();
+	}
+	public ArrayList<Operation> getOperationAdm() throws OHServiceException {
+		return ioOperations.getOperationAdm();
+	}
 	public ArrayList<Operation> getOperation() throws OHServiceException {
 		return ioOperations.getOperation(null);
 	}
-
 	/**
 	 * return the {@link Operation} with the specified code
 	 * @param code
@@ -50,7 +56,7 @@ public class OperationBrowserManager {
 	/**
 	 * return the {@link Operation}s whose type matches specified string
 	 * 
-	 * @param typeDescription - a type description
+	 * @param typecode - a type code
 	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException 
 	 */

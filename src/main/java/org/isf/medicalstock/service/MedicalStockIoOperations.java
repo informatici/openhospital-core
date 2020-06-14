@@ -14,7 +14,6 @@ import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperationRepository;
-import org.isf.medstockmovtype.service.MedicalStockMovementTypeIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
@@ -46,10 +45,6 @@ public class MedicalStockIoOperations {
 	@Autowired
 	private MedicalStockWardIoOperationRepository medicalStockRepository;
 
-	@Autowired
-	private MedicalStockMovementTypeIoOperationRepository medicalStockMovementTypeIoRepository;
-		
-	
 	public enum MovementOrder {
 		DATE, WARD, PHARMACEUTICAL_TYPE, TYPE
 	}
@@ -59,7 +54,7 @@ public class MedicalStockIoOperations {
 	 * @return <code>true</code> if automatic lot mode, <code>false</code> otherwise.
 	 */
 	private boolean isAutomaticLotMode() {
-		return GeneralData.AUTOMATICLOT;
+		return GeneralData.AUTOMATICLOT_IN;
 	}
 
 	/**
@@ -164,7 +159,7 @@ public class MedicalStockIoOperations {
 				boolean lotExists = lotExists(lotCode);
 				if (!lotExists) 
 				{
-					boolean lotStored = storeLot(lotCode, movement.getLot());
+					boolean lotStored = storeLot(lotCode, movement.getLot(), movement.getMedical());
 					if (!lotStored) 
 					{
 						return false;
@@ -307,17 +302,19 @@ public class MedicalStockIoOperations {
 	 * Stores the specified {@link Lot}.
 	 * @param lotCode the {@link Lot} code.
 	 * @param lot the lot to store.
+	 * @param medical
 	 * @return <code>true</code> if the lot has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurred storing the lot.
 	 */
-	protected boolean storeLot(
+	public boolean storeLot(
 			String lotCode, 
-			Lot lot) throws OHServiceException 
+			Lot lot, Medical medical) throws OHServiceException 
 	{
 		boolean result = false;
 
 		
 		lot.setCode(lotCode);
+		lot.setMedical(medical);
 		lotRepository.save(lot);
 		result = true; 
 		
@@ -356,7 +353,7 @@ public class MedicalStockIoOperations {
 				if (ward != null) 
 				{
 					//updates stock quantity for wards
-					return updateMedicalWardQuantity(ward, medical, movement.getQuantity());
+					return updateMedicalWardQuantity(ward, medical, movement.getQuantity(), movement.getLot());
 
 				} 
 				else 
@@ -411,8 +408,8 @@ public class MedicalStockIoOperations {
 
 	/**
 	 * Updates medical quantity for the specified ward.
-	 * @param wardCode the ward code.
-	 * @param medicalCode the medical code.
+	 * @param ward the ward.
+	 * @param medical the medical.
 	 * @param quantity the quantity to add to the current medical quantity.
 	 * @return <code>true</code> if the quantity has been updated/inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
@@ -421,20 +418,23 @@ public class MedicalStockIoOperations {
 	protected boolean updateMedicalWardQuantity(
 			Ward ward, 
 			Medical medical, 
-			int quantity) throws OHServiceException
+			int quantity, 
+			Lot lot) throws OHServiceException
 	{
-		MedicalWard medicalWard = (MedicalWard)medicalStockRepository.findOneWhereCodeAndMedical(ward.getCode(), medical.getCode());		
+		MedicalWard medicalWard = (MedicalWard)medicalStockRepository.findOneWhereCodeAndMedicalAndLot(ward.getCode(), medical.getCode() , lot.getCode());		
 				
 		if (medicalWard != null)
 		{			
 			medicalWard.setInQuantity(medicalWard.getInQuantity()+quantity);
+			medicalStockRepository.save(medicalWard);
 		}
 		else
 		{
-			medicalWard = new MedicalWard(ward, medical, quantity, 0);
+			medicalWard = new MedicalWard(ward, medical, quantity, 0, lot);
+			Double  quan = (double) quantity;
+			medicalStockRepository.insertMedicalWard(ward.getCode(), medical.getCode(), quan, lot.getCode());
 		}
 		medicalStockRepository.save(medicalWard);
-
 		return true;
 	}
 
@@ -599,7 +599,7 @@ public class MedicalStockIoOperations {
 		
 		return lots;
 	}	
-
+	
 	private Lot _convertObjectToLot(Object[] object)
 	{
 
