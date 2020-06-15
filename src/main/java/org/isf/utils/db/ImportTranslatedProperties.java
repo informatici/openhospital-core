@@ -1,5 +1,5 @@
 /**
- * ExportUntraslatedProperties.java - 04/set/2013
+ * ImportTranslatedProperties.java - 04/set/2013
  */
 package org.isf.utils.db;
 
@@ -27,7 +27,7 @@ public class ImportTranslatedProperties {
 	 * the keys in the original language properties.
 	 * 
 	 * Results are unsorted and unaligned so a refresh in
-	 * ResourceBundleEditor plugin is neeed before commit
+	 * ResourceBundleEditor plugin is needed before commit
 	 */
 	public ImportTranslatedProperties() {
 	}

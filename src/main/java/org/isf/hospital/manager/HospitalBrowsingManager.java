@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Class that provides gui separation from database operations and gives some
- * useful logic manipulations of the dinamic data (memory)
+ * useful logic manipulations of the dynamic data (memory)
  * 
  * @author bob
  * 
@@ -24,7 +24,7 @@ public class HospitalBrowsingManager {
 	private HospitalIoOperations ioOperations;
 
 	/**
-	 * Reads from database hospital informations
+	 * Reads from database hospital information
 	 * 
 	 * @return {@link Hospital} object
 	 * @throws OHServiceException 
@@ -42,7 +42,7 @@ public class HospitalBrowsingManager {
 	}
 
 	/**
-	 * updates hospital informations
+	 * Updates hospital information
 	 * 
 	 * @return <code>true</code> if the hospital informations have been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 

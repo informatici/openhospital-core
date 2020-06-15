@@ -16,8 +16,8 @@ public interface DicomIoOperationRepository extends JpaRepository<FileDicom, Lon
     
     @Query(value = "SELECT * FROM DICOM WHERE DM_PAT_ID = :id AND DM_FILE_SER_NUMBER = :file ORDER BY DM_FILE_NOME", nativeQuery= true)
     List<FileDicom> findAllWhereIdAndNumberByOrderNameAsc(@Param("id") Long id, @Param("file") String file);
-    @Query(value = "SELECT * FROM DICOM WHERE DM_PAT_ID = :id GROUP BY DM_FILE_SER_INST_UID ORDER BY DM_FILE_SER_DATE DESC", nativeQuery= true)
-    List<FileDicom> findAllWhereIdGroupByUidOrderSerDateDesc(@Param("id") Long id);
+    @Query(value = "SELECT * FROM DICOM WHERE DM_PAT_ID = :id ORDER BY DM_FILE_SER_DATE DESC", nativeQuery= true)
+    List<FileDicom> findAllWhereIdOrderSerDateDesc(@Param("id") Long id);
     @Query(value = "SELECT * FROM DICOM WHERE DM_PAT_ID = :id AND DM_FILE_SER_NUMBER = :file AND DM_FILE_INST_UID = :uid", nativeQuery= true)
     List<FileDicom> findAllWhereIdAndFileAndUid(@Param("id") Long id, @Param("file") String file, @Param("uid") String uid);
     

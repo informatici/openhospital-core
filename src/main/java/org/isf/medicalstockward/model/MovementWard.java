@@ -321,8 +321,8 @@ public class MovementWard  extends Auditable<String>
 			return false;
 		}
 		
-		MovementWard movment = (MovementWard)obj;
-		return (this.getCode() == movment.getCode());
+		MovementWard movement = (MovementWard)obj;
+		return (this.getCode() == movement.getCode());
 	}
 	
 	@Override

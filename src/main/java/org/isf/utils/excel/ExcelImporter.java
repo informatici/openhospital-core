@@ -11,7 +11,7 @@ import javax.swing.JTable;
 public class ExcelImporter {
 	public ExcelImporter(){}
 	
-	public void OpenInTable(JTable jtebale,File file) throws FileNotFoundException,IOException
+	public void OpenInTable(JTable jtable,File file) throws FileNotFoundException,IOException
 	{
 		FileReader inFile = new FileReader(file);
 		BufferedReader bis = new BufferedReader(inFile);

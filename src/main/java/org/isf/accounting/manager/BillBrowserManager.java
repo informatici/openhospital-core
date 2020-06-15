@@ -1,22 +1,22 @@
 package org.isf.accounting.manager;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
 import org.isf.accounting.model.BillPayments;
 import org.isf.accounting.service.AccountingIoOperations;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 @Component
 public class BillBrowserManager {
@@ -95,7 +95,7 @@ public class BillBrowserManager {
 	 * Returns all the stored {@link BillItems}.
 	 * @return a list of {@link BillItems} or null if an error occurs.
 	 * @throws OHServiceException 
-	 * @deprecated this method shouls always be called with a parameter. 
+	 * @deprecated this method should always be called with a parameter.
 	 * See {@link #getItems(int) getItems} method.
 	 */
 	public ArrayList<BillItems> getItems() throws OHServiceException {
@@ -141,7 +141,7 @@ public class BillBrowserManager {
 	 * Retrieves all the stored {@link BillPayments}.
 	 * @return a list of bill payments or <code>null</code> if an error occurred.
 	 * @throws OHServiceException
-	 * @deprecated this method shouls always be called with a parameter. 
+	 * @deprecated this method should always be called with a parameter.
 	 * See {@link #getPayments(int) getPayments} method.
 	 */
 	@Deprecated
@@ -354,7 +354,7 @@ public class BillBrowserManager {
 	 * @return a list of  distinct {@link BillItems} or null if an error occurs.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<BillItems> getDistinctItems() throws OHServiceException{
+	public List<BillItems> getDistinctItems() throws OHServiceException{
 		return ioOperations.getDistictsBillItems();
 	}
 	

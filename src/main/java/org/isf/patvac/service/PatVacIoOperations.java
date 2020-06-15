@@ -6,7 +6,7 @@ package org.isf.patvac.service;
  * modification history
  * 25/08/2011 - claudia - first beta version
  * 20/10/2011 - insert vaccine type management
- * 14/11/2011 - claudia - inserted search condtion on date
+ * 14/11/2011 - claudia - inserted search condition on date
  *------------------------------------------*/
 import java.util.ArrayList;
 import java.util.GregorianCalendar;

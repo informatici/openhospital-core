@@ -1,30 +1,6 @@
 package org.isf.patient.service;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-/*------------------------------------------
- * IoOperations - dB operations for the patient entity
- * -----------------------------------------
- * modification history
- * 05/05/2005 - giacomo  - first beta version 
- * 03/11/2006 - ross - added toString method. Gestione apici per
- *                     nome, cognome, citta', indirizzo e note
- * 11/08/2008 - alessandro - added father & mother's names
- * 26/08/2008 - claudio    - added birth date
- * 							 modififed age
- * 01/01/2009 - Fabrizio   - changed the calls to PAT_AGE fields to
- *                           return again an int type
- * 03/12/2009 - Alex       - added method for merge two patients history
- *------------------------------------------*/
-
-import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
-
+import org.hibernate.Hibernate;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHException;
@@ -33,6 +9,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+
+/*------------------------------------------
+ * IoOperations - dB operations for the patient entity
+ * -----------------------------------------
+ * modification history
+ * 05/05/2005 - giacomo  - first beta version
+ * 03/11/2006 - ross - added toString method. Gestione apici per
+ *                     nome, cognome, citta', indirizzo e note
+ * 11/08/2008 - alessandro - added father & mother's names
+ * 26/08/2008 - claudio    - added birth date
+ * 							 modified age
+ * 01/01/2009 - Fabrizio   - changed the calls to PAT_AGE fields to
+ *                           return again an int type
+ * 03/12/2009 - Alex       - added method for merge two patients history
+ *------------------------------------------*/
 
 
 @Service
@@ -119,7 +117,8 @@ public class PatientIoOperations
 		pPatient = new ArrayList<>(repository.findAllWhereNameAndDeletedOrderedByName(name));
 		if (pPatient.size() > 0)
 		{			
-			patient = pPatient.get(pPatient.size()-1);			
+			patient = pPatient.get(pPatient.size()-1);
+			Hibernate.initialize(patient.getPatientProfilePhoto());
 		}
 					
 		return patient;
@@ -142,7 +141,8 @@ public class PatientIoOperations
 		pPatient = new ArrayList<>(repository.findAllWhereIdAndDeleted(code));
 		if (pPatient.size() > 0)
 		{			
-			patient = pPatient.get(pPatient.size()-1);			
+			patient = pPatient.get(pPatient.size()-1);
+			Hibernate.initialize(patient.getPatientProfilePhoto());
 		}
 					
 		return patient;
@@ -165,60 +165,25 @@ public class PatientIoOperations
 		pPatient = new ArrayList<>(repository.findAllWhereId(code));
 		if (pPatient.size() > 0)
 		{			
-			patient = pPatient.get(pPatient.size()-1);			
+			patient = pPatient.get(pPatient.size()-1);
+			Hibernate.initialize(patient.getPatientProfilePhoto());
 		}
 					
 		return patient;
 	}
 
 	/**
-	 * Method that insert a new Patient in the dB
+	 * Save / update patient
 	 * 
 	 * @param patient
-	 * @return true - if the new Patient has been inserted
-	 * @throws OHServiceException
+	 * @return saved / updated patient
 	 */
-	public boolean newPatient(
-			Patient patient) throws OHServiceException 
+	public Patient savePatient(
+			Patient patient)
 	{
-		boolean result = true;
-	
-
-		Patient patientVaccine = repository.save(patient);
-		result = (patientVaccine != null);
-		
-		return result;
+		return repository.save(patient);
 	}
-	
-	/**
-	 * 
-	 * method that update an existing {@link Patient} in the db
-	 * 
-	 * @param patient - the {@link Patient} to update
-	 * @return true - if the existing {@link Patient} has been updated
-	 * @throws OHServiceException
-	 */
-	public boolean updatePatient(
-			Patient patient) throws OHServiceException 
-	{
-		int lock = 0;
-		boolean result = false;
-				
 
-		if (repository.updateLockByCode(
-				patient.getFirstName(), patient.getSecondName(), patient.getName(),
-				patient.getBirthDate(), patient.getAge(), patient.getAgetype(), patient.getSex(), patient.getAddress(), patient.getCity(),
-				patient.getNextKin(), patient.getTelephone(), patient.getMother(), patient.getMother_name(),
-				patient.getFather(), patient.getFather_name(), patient.getBloodType(), patient.getHasInsurance(), patient.getParentTogether(),
-				patient.getNote(), patient.getTaxCode(), (lock + 1), _createPatientPhotoInputStream(patient.getPhoto()),
-				patient.getCode()) > 0)
-		{
-			result = true;
-		}
-	
-		return result;
-	}
-	
 	private byte[] _createPatientPhotoInputStream(
 			Image anImage) 
 	{

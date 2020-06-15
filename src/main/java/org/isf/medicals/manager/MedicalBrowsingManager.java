@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Class that provides gui separation from database operations and gives some
- * useful logic manipulations of the dinamic data (memory)
+ * useful logic manipulations of the dynamic data (memory)
  * 
  * @author bob
  * 
@@ -89,7 +89,7 @@ public class MedicalBrowsingManager {
 	 * Returns all the medicals with the specified description.
 	 * In case of error a message error is shown and a <code>null</code> value is returned.
 	 * @param type the medical type description.
-	 * @nameSorted if <code>true</code> return the list in alphatecial order, by code otherwise
+	 * @nameSorted if <code>true</code> return the list in alphabetical order, by code otherwise
 	 * @return all the medicals with the specified description.
 	 */
 	public ArrayList<Medical> getMedicals(String type, boolean nameSorted) throws OHServiceException {
@@ -205,7 +205,7 @@ public class MedicalBrowsingManager {
 	/**
 	 * Perform several checks on the provided medical, useful for insert
 	 * @param medical - the {@link Medical} to check
-	 * @param ignoreSimilar - if <code>true</code>, it will not perform a similiraty check. 
+	 * @param ignoreSimilar - if <code>true</code>, it will not perform a similarity check.
 	 * 	{@code warning}: same Medical description in the same {@link MedicalType} category is not allowed anyway
 	 * @return <code>true</code> if the {@link Medical} is ok for inserting, <code>false</code> otherwise
 	 * @throws OHServiceException
@@ -217,7 +217,7 @@ public class MedicalBrowsingManager {
 	/**
 	 * Perform several checks on the provided medical, useful for update
 	 * @param medical - the {@link Medical} to check
-	 * @param ignoreSimilar - if <code>true</code>, it will not perform a similiraty check. 
+	 * @param ignoreSimilar - if <code>true</code>, it will not perform a similarity check.
 	 * 	{@code warning}: same Medical description in the same {@link MedicalType} category is not allowed anyway
 	 * @return <code>true</code> if the {@link Medical} is ok for updating, <code>false</code> otherwise
 	 * @throws OHServiceException
@@ -229,7 +229,7 @@ public class MedicalBrowsingManager {
 	/**
 	 * Perform several checks on the provided medical, useful for update
 	 * @param medical - the {@link Medical} to check
-	 * @param ignoreSimilar - if <code>true</code>, it will not perform a similiraty check. 
+	 * @param ignoreSimilar - if <code>true</code>, it will not perform a similarity check.
 	 * 	{@code warning}: same Medical description in the same {@link MedicalType} category is not allowed anyway
 	 * @param update - if <code>true</code>, it will not consider the actual {@link Medical}
 	 * @return <code>true</code> if the {@link Medical} is ok for updating, <code>false</code> otherwise

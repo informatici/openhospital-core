@@ -28,7 +28,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * Bean to collect data from DB table THERAPIES
  *
  */ /*------------------------------------------
- * Therapies : informations extract
+ * Therapies : information extract
  * from TherapyRow beans
  * -----------------------------------------
  * modification history

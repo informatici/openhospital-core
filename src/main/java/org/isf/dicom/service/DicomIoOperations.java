@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Manager for hybernate database communication
+ * Manager for hibernate database communication
  * 
  * @author Pietro Castellucci
  * @version 1.0.0
@@ -124,7 +124,7 @@ public class DicomIoOperations
 	public FileDicom[] loadPatientFiles(
 			int patientID) throws OHServiceException 
 	{
-		List<FileDicom> dicomList = repository.findAllWhereIdGroupByUidOrderSerDateDesc((long) patientID);
+		List<FileDicom> dicomList = repository.findAllWhereIdOrderSerDateDesc((long) patientID);
 
 		FileDicom[] dicoms = new FileDicom[dicomList.size()];	
 		for (int i=0; i<dicomList.size(); i++)

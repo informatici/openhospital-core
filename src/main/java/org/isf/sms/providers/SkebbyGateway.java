@@ -1,7 +1,7 @@
 package org.isf.sms.providers;
 
 /*
-    If you use maven, add the folowing dependency to your pom.xml.
+    If you use maven, add the following dependency to your pom.xml.
     <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>

@@ -204,8 +204,8 @@ public class Movement extends Auditable<String>
 			return false;
 		}
 		
-		Movement movment = (Movement)obj;
-		return (this.getCode() == movment.getCode());
+		Movement movement = (Movement)obj;
+		return (this.getCode() == movement.getCode());
 	}
 	
 	@Override

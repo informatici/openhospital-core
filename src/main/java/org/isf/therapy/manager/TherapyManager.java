@@ -57,7 +57,7 @@ public class TherapyManager {
 	}
 	
 	/**
-	 * Creates a {@link Therapy} from its parameters, fecthing the {@link Medical} 
+	 * Creates a {@link Therapy} from its parameters, fetching the {@link Medical}
 	 * and building the array of Dates ({@link GregorianCalendar})
 	 * @param therapyID
 	 * @param patID
@@ -202,7 +202,7 @@ public class TherapyManager {
 
 	/**
 	 * Builds the {@link Sms} text for the specified {@link Therapy}
-	 * If lenght exceed {@link SmsManager.MAX_LENGHT} the message will be cropped
+	 * If length exceed {@link SmsManager.MAX_LENGHT} the message will be cropped
 	 * (example: 
 	 * "REMINDER: {@link Medical} 3pcs - 2pd - {@link Thearapy.getNote()}")
 	 * @param th - the {@link Therapy}s
