@@ -72,7 +72,7 @@ public class AdmissionBrowserManager {
 	}
 
 	/**
-	 * Returns the only one admission without dimission date (or null if none) for the specified patient.
+	 * Returns the only one admission without adimission date (or null if none) for the specified patient.
 	 * @param patient the patient target of the admission.
 	 * @return the patient admission or <code>null</code> if the operation fails.
 	 * @throws OHServiceException 
@@ -192,7 +192,7 @@ public class AdmissionBrowserManager {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 
         /*
-         * Initizalize AdmissionBrowserManager
+         * Initialize AdmissionBrowserManager
          */
         Patient patient = admission.getPatient();
         ArrayList<Admission> admList = getAdmissions(patient);

@@ -15,7 +15,7 @@ import java.io.IOException;
  *                     nome, cognome, citta', indirizzo e note
  * 11/08/2008 - alessandro - added father & mother's names
  * 26/08/2008 - claudio    - added birth date
- * 							 modififed age
+ * 							 modified age
  * 01/01/2009 - Fabrizio   - changed the calls to PAT_AGE fields to
  *                           return again an int type
  * 03/12/2009 - Alex       - added method for merge two patients history

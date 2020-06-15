@@ -25,7 +25,7 @@ public class HospitalIoOperations {
 	private HospitalIoOperationRepository repository;
 	
 	/**
-	 * Reads from database hospital informations
+	 * Reads from database hospital information
 	 * 
 	 * @return {@link Hospital} object
 	 * @throws OHServiceException 
@@ -52,7 +52,7 @@ public class HospitalIoOperations {
 	}
 	
 	/**
-	 * updates hospital informations
+	 * Updates hospital information
 	 * 
 	 * @return <code>true</code> if the hospital informations have been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 

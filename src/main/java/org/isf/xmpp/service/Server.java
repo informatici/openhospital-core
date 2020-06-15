@@ -51,12 +51,12 @@ public class Server {
 		return roster;
 	}
 
-	public Chat getChat(String to, String id, MessageListener listner) {
+	public Chat getChat(String to, String id, MessageListener listener) {
 		Chat chat = null;
 		id = id + "@" + user;
 		if (connection.getChatManager().getThreadChat(id) == null) {
 			logger.debug("Creation chat: " + to + ", id = " + id);
-			chat = connection.getChatManager().createChat(to, id, listner);
+			chat = connection.getChatManager().createChat(to, id, listener);
 		} else {
 			logger.debug("Existing chat: " + to + ", id = " + id);
 			chat = connection.getChatManager().getThreadChat(id);

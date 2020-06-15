@@ -198,7 +198,7 @@ public class TimeTools {
 	 * Return a string representation of the dateTime with the given pattern
 	 * @param dateTime - a GregorianCalendar object
 	 * @param pattern - the pattern. If <code>null</code> "yyyy-MM-dd HH:mm:ss" will be used
-	 * @return the String represetation of the GregorianCalendar
+	 * @return the String representation of the GregorianCalendar
 	 */
 	public static String formatDateTime(GregorianCalendar dateTime, String pattern) {
 		if (pattern == null) pattern = "yyyy-MM-dd HH:mm:ss";
@@ -210,7 +210,7 @@ public class TimeTools {
 	 * Return a string representation of the dateTime with the given pattern
 	 * @param date - a Date object
 	 * @param pattern - the pattern. If <code>null</code> "yyyy-MM-dd HH:mm:ss" will be used
-	 * @return the String represetation of the GregorianCalendar
+	 * @return the String representation of the GregorianCalendar
 	 */
 	public static String formatDateTime(Date date, String pattern) {
 		if (pattern == null) pattern = "yyyy-MM-dd HH:mm:ss";
@@ -223,7 +223,7 @@ public class TimeTools {
 	/**
 	 * Return a string representation of the dateTime in the form "yyyy-MM-dd HH:mm:ss"
 	 * @param time - a GregorianCalendar object
-	 * @return the String represetation of the GregorianCalendar
+	 * @return the String representation of the GregorianCalendar
 	 */
 	public static String formatDateTimeReport(GregorianCalendar time) {
 		return formatDateTime(time, null);
@@ -241,7 +241,7 @@ public class TimeTools {
 	}
 	
 	/**
-	 * Return the first istant of the current date
+	 * Return the first instance of the current date
 	 * @return
 	 */
 	public static GregorianCalendar getDateToday0() {
@@ -253,7 +253,7 @@ public class TimeTools {
 	}
 	
 	/**
-	 * Return the last istant of the current date
+	 * Return the last instance of the current date
 	 * @return
 	 */
 	public static GregorianCalendar getDateToday24() {
@@ -269,7 +269,7 @@ public class TimeTools {
 	 * @param string - a String object to be passed
 	 * @param pattern - the pattern. If <code>null</code> "yyyy-MM-dd HH:mm:ss" will be used
 	 * @param noTime - if <code>True</code> the time will be 00:00:00, actual time otherwise.
-	 * @return the String represetation of the GregorianCalendar
+	 * @return the String representation of the GregorianCalendar
 	 * @throws ParseException 
 	 */
 	public static GregorianCalendar parseDate(String string, String pattern, boolean noTime) throws ParseException {

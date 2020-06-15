@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Class that executes a query using the connection DbSingleJpaConn
  * The various methods that open a connection with the 
- * autocommit flag set to false have the responsability
+ * autocommit flag set to false have the responsibility
  * of doing the commit/rollback operation
  */
 public class DbQueryLogger {

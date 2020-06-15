@@ -18,7 +18,7 @@ import java.sql.Statement;
 /**
  * Class that executes a query using the connection DbSingleConn
  * The various methods that open a connection with the 
- * autocommit flag set to false have the responsability
+ * autocommit flag set to false have the responsibility
  * of doing the commit/rollback operation
  * 
  * @deprecated since OpenHospital 1.7.0 replaced by {@link DbQueryLogger}

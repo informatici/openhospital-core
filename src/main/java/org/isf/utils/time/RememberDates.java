@@ -10,7 +10,7 @@ package org.isf.utils.time;
  * 09/11/06 - ross - modificata per fornire, la prima volta, la data di sistema (metodi get gregorian)
  * 11/08/10 - claudia - inserita la voce per PATIENTVACCINE
  * 11/12/14 - mwithi - completely changed the behaviour: no more {Date} type, only {GregorianCalendar}
- * 					   and only date keeped, time is up to date.
+ * 					   and only date kept, time is up to date.
  *-------------------------------------------------------------------*/
 
 
