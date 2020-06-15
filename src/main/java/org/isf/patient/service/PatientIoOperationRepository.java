@@ -99,20 +99,6 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
     @Query(value = "UPDATE PATIENT SET PAT_DELETED = 'Y' WHERE PAT_ID = :id", nativeQuery= true)
     int updateDelete(@Param("id") Integer id); 		
     
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE PATIENT SET PAT_FNAME = :firstName, PAT_SNAME = :secondName, PAT_NAME  = :name, "
-    		+ "PAT_BDATE = :bdate, PAT_AGE = :age, PAT_AGETYPE = :ageType, PAT_SEX = :sex, PAT_ADDR = :address, PAT_CITY = :city, "
-    		+ "PAT_NEXT_KIN = :nextKin, PAT_TELE = :telephone, PAT_MOTH = :mother, PAT_MOTH_NAME = :motherName, "
-    		+ "PAT_FATH = :father, PAT_FATH_NAME = :fatherName, PAT_BTYPE = :bType, PAT_ESTA = :esta, PAT_PTOGE = :ptoge, "
-    		+ "PAT_NOTE = :note, PAT_TAXCODE = :taxCode, PAT_LOCK = :lock, PAT_PHOTO = :photo WHERE PAT_ID = :id", nativeQuery= true)
-    int updateLockByCode(
-    		@Param("firstName") String firstName, @Param("secondName") String secondName, @Param("name") String name,
-    		@Param("bdate") Date bdate, @Param("age") Integer age, @Param("ageType") String ageType, @Param("sex") char sex, @Param("address") String address, @Param("city") String city,
-    		@Param("nextKin") String nextKin, @Param("telephone") String telephone, @Param("mother") char mother, @Param("motherName") String motherName,
-    		@Param("father") char father, @Param("fatherName") String fatherName, @Param("bType") String bType, @Param("esta") char esta, @Param("ptoge") char ptoge,
-    		@Param("note") String note, @Param("taxCode") String taxCode, @Param("lock") Integer lock, @Param("photo") byte[] photo,
-    		@Param("id") Integer id); 
     @Query(value = "SELECT * FROM PATIENT "
     		+"LEFT JOIN (SELECT PEX_PAT_ID, PEX_HEIGHT AS PAT_HEIGHT, PEX_WEIGHT AS PAT_WEIGHT FROM PATIENTEXAMINATION GROUP BY PEX_PAT_ID ORDER BY PEX_DATE DESC) "
     		+"AS HW ON PAT_ID = HW.PEX_PAT_ID WHERE (PAT_DELETED='N' or PAT_DELETED is null) "

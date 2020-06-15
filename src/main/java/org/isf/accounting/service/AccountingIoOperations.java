@@ -1,9 +1,5 @@
 package org.isf.accounting.service;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
 import org.isf.accounting.model.BillPayments;
@@ -13,6 +9,11 @@ import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Persistence class for Accounting module.
@@ -399,9 +400,8 @@ public class AccountingIoOperations {
 	 * @return BillItems list 
 	 * @throws OHServiceException
 	 */
-	public ArrayList<BillItems> getDistictsBillItems() throws OHServiceException {
-		ArrayList<BillItems> billItems =  billItemsRepository.findAllGroupByDesc();
-		return billItems;
+	public List<BillItems> getDistictsBillItems() throws OHServiceException {
+		return billItemsRepository.findAll();
 	}
 	
 	/**

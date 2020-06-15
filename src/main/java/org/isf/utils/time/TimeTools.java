@@ -25,8 +25,9 @@ import org.joda.time.PeriodType;
  *
  */
 public class TimeTools {
-	
-	
+
+	public static final String YYYY_MM_DD = "yyyy-MM-dd";
+
 	public static void main(String[] args) {
 		GeneralData.getGeneralData();
 		MessageBundle.initialize();

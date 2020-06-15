@@ -15,11 +15,7 @@ package org.isf.admission.service;
  * 						 MATERNITYRESTARTINJUNE in generalData.properties                   
  *-----------------------------------------------------------*/
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-
+import org.hibernate.Hibernate;
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
 import org.isf.admtype.model.AdmissionType;
@@ -34,6 +30,11 @@ import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -65,24 +66,12 @@ public class AdmissionIoOperations
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public ArrayList<AdmittedPatient> getAdmittedPatients(
-			String searchTerms) throws OHServiceException 
+			String searchTerms) throws OHServiceException
 	{
-		ArrayList<AdmittedPatient> admittedPatients = new ArrayList<AdmittedPatient>();
-		List<Object[]> admittedPatientsList = (List<Object[]>)repository.findAllBySearch(searchTerms);
-
-
-		for (Object[] object : admittedPatientsList) {
-			Patient patient = patientRepository.findOne((Integer) object[0]);
-			Admission admission = null;
-			Integer admissionId = (Integer) object[33];
-			if (admissionId != null) admission = repository.findOne((Integer) admissionId);
-			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);
-			admittedPatients.add(admittedPatient);
-		}
-
-		return admittedPatients;
+		final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList = repository.findPatientAndAdmissionId(searchTerms);
+		return loadPatientAndAdmission(admittedPatientsList);
 	}
-	
+
 	/**
 	 * Returns all patients based on the applied filters.
 	 * @param admissionRange the patient admission range
@@ -92,25 +81,40 @@ public class AdmissionIoOperations
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public ArrayList<AdmittedPatient> getAdmittedPatients(
-			String searchTerms, GregorianCalendar[] admissionRange, 
-			GregorianCalendar[] dischargeRange) throws OHServiceException 
+			String searchTerms, GregorianCalendar[] admissionRange,
+			GregorianCalendar[] dischargeRange) throws OHServiceException
 	{
-		ArrayList<AdmittedPatient> admittedPatients = new ArrayList<AdmittedPatient>();
-		List<Object[]> admittedPatientsList = (List<Object[]>)repository.findAllBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
-
-
-		for (Object[] object : admittedPatientsList) {
-			Patient patient = patientRepository.findOne((Integer) object[0]);
-			Admission admission = null;
-			Integer admissionId = (Integer)object[33];
-			if (admissionId != null) admission = repository.findOne((Integer)object[33]);
-			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);
-			admittedPatients.add(admittedPatient);
-		}
-
-		return admittedPatients;
+		final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList = repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
+		return loadPatientAndAdmission(admittedPatientsList);
 	}
-	
+
+	private ArrayList<AdmittedPatient> loadPatientAndAdmission(final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList) {
+		final ArrayList<AdmittedPatient> result = new ArrayList<AdmittedPatient>();
+		for (final AdmissionIoOperationRepositoryCustom.PatientAdmission patientAdmission : admittedPatientsList) {
+			final Patient patient = patientRepository.findOne(patientAdmission.getPatientId());
+			Admission admission = null;
+			if (patientAdmission.getAdmissionId() != null) {
+				admission = repository.findOne(patientAdmission.getAdmissionId());
+			}
+			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);
+			result.add(admittedPatient);
+		}
+		return result;
+	}
+
+	/**
+	 * Load patient together with the profile photo, or <code>null</code> if there is no patient with the given id
+	 */
+	public AdmittedPatient loadAdmittedPatient(final Integer patientId) {
+		final Patient patient = patientRepository.findOne(patientId);
+		if (patient == null) {
+			return null;
+		}
+		Hibernate.initialize(patient.getPatientProfilePhoto());
+		final Admission admission = repository.findOneWherePatientIn(patientId);
+		return new AdmittedPatient(patient, admission);
+	}
+
 	/**
 	 * Returns the current admission (or null if none) for the specified patient.
 	 * @param patient the patient target of the admission.
@@ -322,11 +326,12 @@ public class AdmissionIoOperations
 		boolean result = true;
 		
 		
-		Patient foundPatient = patientRepository.findOne(patientId);  
-		foundPatient.setPhoto(null);
+		Patient foundPatient = patientRepository.findOne(patientId);
+		if (foundPatient.getPatientProfilePhoto() != null && foundPatient.getPatientProfilePhoto().getPhoto() != null) {
+			foundPatient.getPatientProfilePhoto().setPhoto(null);
+		}
         Patient savedPatient = patientRepository.save(foundPatient);
 		result = (savedPatient != null);    
-		
 		return result;
 	}
 }

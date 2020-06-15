@@ -1,11 +1,6 @@
 package org.isf.accounting.test;
 
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
 import org.isf.accounting.model.BillPayments;
@@ -18,15 +13,18 @@ import org.isf.priceslist.test.TestPriceList;
 import org.isf.priceslist.test.TestPriceListContext;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.isf.utils.exception.OHServiceException;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -699,29 +697,13 @@ public class Tests
 	}
 	
 	@Test
-	public void testIoGetDistictsBillItems() 
-	{
-		int id = 0;
-		
-		
-		try 
-		{
-			id = _setupTestBillItems(false);
-			BillItems foundBillItem = (BillItems)jpa.find(BillItems.class, id); 
-			ArrayList<BillItems> billItems = accountingIoOperation.getDistictsBillItems();
-			
-			assertEquals(true, billItems.contains(foundBillItem));
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-				
-		return;
+	public void testIoGetDistictsBillItems() throws OHException, OHServiceException {
+		int id = _setupTestBillItems(false);
+		BillItems foundBillItem = (BillItems)jpa.find(BillItems.class, id);
+		List<BillItems> billItems = accountingIoOperation.getDistictsBillItems();
+		assertEquals(true, billItems.contains(foundBillItem));
 	}
-	
-	
+
 	private void _saveContext() throws OHException 
     {	
 		testBillContext.saveAll(jpa);

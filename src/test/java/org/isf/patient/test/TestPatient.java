@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.utils.exception.OHException;
 
 public class TestPatient 
@@ -47,6 +48,7 @@ public class TestPatient
 		if (usingSet)
 		{
 			patient = new Patient();
+			patient.setPatientProfilePhoto(new PatientProfilePhoto());
 			_setParameters(patient);
 		}
 		else
@@ -56,6 +58,7 @@ public class TestPatient
 					address, city, nextKin, telephone, mother_name, mother, father_name, father,
 					bloodType, hasInsurance, parentTogether, taxCode, maritalStatus, profession);
 			patient.setAge(patient.getAge()); //IT WILL CHANGE WITH TIME
+			patient.setPatientProfilePhoto(new PatientProfilePhoto());
 		}
 				    	
 		return patient;

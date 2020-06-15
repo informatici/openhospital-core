@@ -1,24 +1,20 @@
 package org.isf.patient.test;
 
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -233,44 +229,19 @@ public class Tests
 	}
 	
 	@Test
-	public void testNewPatient() 
-	{		
-		try 
-		{		
-			Patient patient = testPatient.setup(true);
-            boolean result = patientIoOperation.newPatient(patient);
-			
-			assertEquals(true, result);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-				
-		return;
+	public void testNewPatient() throws OHException {
+		Patient patient = testPatient.setup(true);
+		assertNotNull(patientIoOperation.savePatient(patient));
 	}
 		
 	@Test
-	public void testUpdatePatientTrue() 
-	{
-		
-		try 
-		{		
-			Integer code = _setupTestPatient(false);
-			Patient patient = (Patient)jpa.find(Patient.class, code); 
-			jpa.flush();
-			boolean result = patientIoOperation.updatePatient(patient);
-			
-			assertEquals(true, result);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-		
-		return;
+	public void testUpdatePatientTrue() throws OHException {
+		Integer code = _setupTestPatient(false);
+		Patient patient = (Patient)jpa.find(Patient.class, code);
+		jpa.flush();
+		Patient result = patientIoOperation.savePatient(patient);
+
+		assertNotNull(result);
 	}
 	
 	@Test
