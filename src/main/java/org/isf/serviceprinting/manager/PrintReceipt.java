@@ -137,8 +137,8 @@ public class PrintReceipt {
 				i++;
 			}
 			zpl.append("^XZ");//end
-			String labelLenght = "^LL" + charH * i;
-			header+=labelLenght;
+			String labelLength = "^LL" + charH * i;
+			header+=labelLength;
 			String label = header+zpl;
 			
 			//System.out.println(label);

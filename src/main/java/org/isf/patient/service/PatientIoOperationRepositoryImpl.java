@@ -55,15 +55,14 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 	private String _getPatientsWithHeightAndWeightQuery(
 			String[] words)
 	{
+		// FIXME: not sure why need to LEFT JOIN with PATIENTEXAMINATION here. Seems unnecessary.
 		StringBuilder queryBld = new StringBuilder(
-				"SELECT PAT_ID FROM PATIENT LEFT JOIN (SELECT PEX_PAT_ID, PEX_HEIGHT AS PAT_HEIGHT, "
-				+ "PEX_WEIGHT AS PAT_WEIGHT FROM PATIENTEXAMINATION GROUP BY PEX_PAT_ID ORDER BY PEX_DATE DESC) "
+				"SELECT PAT_ID FROM PATIENT LEFT JOIN (SELECT PEX_PAT_ID FROM PATIENTEXAMINATION) "
 				+ "AS HW ON PAT_ID = HW.PEX_PAT_ID WHERE (PAT_DELETED='N' or PAT_DELETED is null) ");
 
-
-        for (String word : words) {
+        for (final String word : words) {
             queryBld.append("AND CONCAT_WS(PAT_ID, LOWER(PAT_SNAME), LOWER(PAT_FNAME), LOWER(PAT_NOTE), LOWER(PAT_TAXCODE)) ");
-            queryBld.append("LIKE CONCAT('%', \"" + word + "\" , '%') ");
+            queryBld.append("LIKE '%").append(word).append("%'");
         }
 		queryBld.append(" ORDER BY PAT_ID DESC");
 

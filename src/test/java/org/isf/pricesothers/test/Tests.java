@@ -118,9 +118,9 @@ public class Tests
 		{		
 			id = _setupTestPricesOthers(false);
 			PricesOthers foundPricesOthers = (PricesOthers)jpa.find(PricesOthers.class, id); 
-			ArrayList<PricesOthers> pricesOtherss = otherIoOperation.getOthers();
+			ArrayList<PricesOthers> pricesOthers = otherIoOperation.getOthers();
 			
-			assertEquals(foundPricesOthers.getDescription(), pricesOtherss.get(1).getDescription());
+			assertEquals(foundPricesOthers.getDescription(), pricesOthers.get(1).getDescription());
 		} 
 		catch (Exception e) 
 		{

@@ -196,30 +196,15 @@ public class Tests
 		}
 		
 		return;
-	}	
-	
-	
-	@Test
-	public void testIoLoadPatientFiles() 
-	{
-		long code = 0;
-		
-		
-		try 
-		{		
-			code = _setupTestFileDicom(false);
-			FileDicom foundFileDicom = (FileDicom)jpa.find(FileDicom.class, code); 
-			FileDicom[] dicoms = dicomIoOperation.loadPatientFiles(foundFileDicom.getPatId());
+	}
 
-			assertEquals(foundFileDicom.getDicomSeriesDescription(), dicoms[0].getDicomSeriesDescription());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-		
-		return;
+
+	@Test
+	public void testIoLoadPatientFiles() throws Exception{
+		long code = _setupTestFileDicom(false);
+		FileDicom foundFileDicom = (FileDicom) jpa.find(FileDicom.class, code);
+		FileDicom[] dicoms = dicomIoOperation.loadPatientFiles(foundFileDicom.getPatId());
+		assertEquals(foundFileDicom.getDicomSeriesDescription(), dicoms[0].getDicomSeriesDescription());
 	}
 
 	

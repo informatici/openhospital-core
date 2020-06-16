@@ -3,7 +3,7 @@ package org.isf.utils.validator;
 import java.util.Comparator;
 
 /**
- * DefaulSorter (implements {@Link Comparator}) in order to sort
+ * DefaultSorter (implements {@Link Comparator}) in order to sort
  * by specifying a default element that will be on top
  * @author Nanni
  */
@@ -12,7 +12,7 @@ public class DefaultSorter implements Comparator<String> {
 	private String defaultValue;
 
 	/**
-	 * DefaulSorter (implements {@Link Comparator})
+	 * DefaultSorter (implements {@Link Comparator})
 	 * @param defaultValue - the default element that will be on top
 	 */
 	public DefaultSorter(String defaultValue) {

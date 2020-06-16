@@ -23,7 +23,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @author  bob
  */
 /*------------------------------------------
- * Medical Type - model for the medival type entity
+ * Medical Type - model for the medical type entity
  * -----------------------------------------
  * modification history
  * ? - bob - first version 

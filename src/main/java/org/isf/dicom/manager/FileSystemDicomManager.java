@@ -528,8 +528,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/**
-	 * 
-	 * recorsive function for create folder structure if missing
+	 * Recursive function for create folder structure if missing
 	 */
 	private void recourse(File f) throws IOException {
 		if (f.exists())

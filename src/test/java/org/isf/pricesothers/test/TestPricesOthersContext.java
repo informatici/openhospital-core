@@ -35,17 +35,17 @@ public class TestPricesOthersContext
     {
 		jpa.beginTransaction();			
 		jpa.createQuery("SELECT * FROM PRICESOTHERS", PricesOthers.class, false);
-		List<PricesOthers> pricesOtherss = (List<PricesOthers>)jpa.getList();
-		for (PricesOthers pricesOthers: pricesOtherss)
+		List<PricesOthers> pricesOthers = (List<PricesOthers>)jpa.getList();
+		for (PricesOthers price: pricesOthers)
 		{    		
-			int index = savedPricesOthers.indexOf(pricesOthers);
+			int index = savedPricesOthers.indexOf(price);
 			
 			
 			if (index == -1)
 			{				
-				jpa.remove(pricesOthers);
+				jpa.remove(price);
 			}
-	    }        
+	  }        
 		jpa.commitTransaction();
 		        
         return;

@@ -89,7 +89,7 @@ public class MedicalsIoOperations
 	 * Retrieves all stored {@link Medical}s.
 	 * If a description value is provides the medicals are filtered.
 	 * @param type the medical type description.
-	 * @nameSorted if <code>true</code> return the list in alphatecial order, by code otherwise
+	 * @nameSorted if <code>true</code> return the list in alphabetical order, by code otherwise
 	 * @return the stored medicals.
 	 * @throws OHServiceException if an error occurs retrieving the stored medicals.
 	 */
