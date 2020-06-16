@@ -35,8 +35,8 @@ public class TestPricesOthersContext
     {
 		jpa.beginTransaction();			
 		jpa.createQuery("SELECT * FROM PRICESOTHERS", PricesOthers.class, false);
-		List<PricesOthers> PricesOtherss = (List<PricesOthers>)jpa.getList();
-		for (PricesOthers pricesOthers: PricesOtherss) 
+		List<PricesOthers> pricesOtherss = (List<PricesOthers>)jpa.getList();
+		for (PricesOthers pricesOthers: pricesOtherss)
 		{    		
 			int index = savedPricesOthers.indexOf(pricesOthers);
 			
