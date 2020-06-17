@@ -188,9 +188,9 @@ public class VisitManager {
 	
 	/**
 	 * Builds the {@link Sms} text for the specified {@link Visit}
-	 * If length exceed {@link SmsManager.MAX_LENGHT} the message will be cropped
+	 * If length exceed {@code SmsManager.MAX_LENGHT} the message will be cropped
 	 * (example: 
-	 * "REMINDER: dd/MM/yy - HH:mm:ss - {@link Visit.getNote()}")
+	 * "REMINDER: dd/MM/yy - HH:mm:ss - {@link Visit#getNote()}")
 	 * @param visit - the {@link Visit}
 	 * @return a string containing the text
 	 */
