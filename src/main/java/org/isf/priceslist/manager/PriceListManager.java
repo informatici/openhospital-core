@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.isf.generaldata.MessageBundle;
-import org.isf.menu.manager.Context;
 import org.isf.priceslist.model.List;
 import org.isf.priceslist.model.Price;
 import org.isf.priceslist.model.PriceList;

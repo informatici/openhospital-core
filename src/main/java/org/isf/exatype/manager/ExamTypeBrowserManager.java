@@ -6,7 +6,6 @@ import java.util.List;
 import org.isf.exatype.model.ExamType;
 import org.isf.exatype.service.ExamTypeIoOperation;
 import org.isf.generaldata.MessageBundle;
-import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;

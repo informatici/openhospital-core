@@ -10,9 +10,6 @@ import java.util.List;
 
 import org.isf.admission.model.Admission;
 import org.isf.opd.model.Opd;
-import org.isf.operation.model.OperationRow;
-import org.isf.operation.service.OperationRowIoOperations;
-import org.isf.utils.exception.OHServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

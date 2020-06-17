@@ -3,7 +3,6 @@ package org.isf.patient.service;
 import org.hibernate.Hibernate;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
