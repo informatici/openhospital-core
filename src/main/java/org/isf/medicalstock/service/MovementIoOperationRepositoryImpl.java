@@ -1,7 +1,6 @@
 package org.isf.medicalstock.service;
 
 
-import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import javax.persistence.PersistenceContext;
 
 import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
 import org.isf.utils.time.DateConverters;
-import org.isf.utils.time.TimeTools;
 import org.springframework.transaction.annotation.Transactional;
 
 

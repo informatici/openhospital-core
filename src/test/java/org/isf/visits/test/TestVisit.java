@@ -8,7 +8,6 @@ import java.util.GregorianCalendar;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
 import org.isf.visits.model.Visit;
-import org.isf.visits.model.Visit;
 import org.isf.ward.model.Ward;
 
 

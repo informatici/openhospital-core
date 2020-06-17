@@ -17,7 +17,6 @@ import org.isf.sms.service.SmsOperations;
 import org.isf.therapy.model.Therapy;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.visits.model.Visit;
-import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
 import org.isf.ward.model.Ward;
 import org.joda.time.DateTime;
@@ -188,9 +187,9 @@ public class VisitManager {
 	
 	/**
 	 * Builds the {@link Sms} text for the specified {@link Visit}
-	 * If lenght exceed {@link SmsManager.MAX_LENGHT} the message will be cropped
+	 * If lenght exceed {@code SmsManager.MAX_LENGHT} the message will be cropped
 	 * (example: 
-	 * "REMINDER: dd/MM/yy - HH:mm:ss - {@link Visit.getNote()}")
+	 * "REMINDER: dd/MM/yy - HH:mm:ss - {@link Visit#getNote()}")
 	 * @param visit - the {@link Visit}
 	 * @return a string containing the text
 	 */

@@ -4,7 +4,6 @@
 package org.isf.examination.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.GregorianCalendar;
 
 import javax.persistence.Column;

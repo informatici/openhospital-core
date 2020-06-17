@@ -11,7 +11,6 @@ import org.isf.patient.test.TestPatientContext;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
 import org.isf.visits.model.Visit;
-import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
 import org.isf.ward.model.Ward;
 import org.isf.ward.test.TestWard;
