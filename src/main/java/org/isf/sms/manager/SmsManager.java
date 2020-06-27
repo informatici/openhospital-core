@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
-import org.isf.menu.manager.Context;
 import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;

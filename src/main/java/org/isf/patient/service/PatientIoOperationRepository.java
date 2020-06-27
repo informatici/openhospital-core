@@ -1,7 +1,6 @@
 package org.isf.patient.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.isf.patient.model.Patient;

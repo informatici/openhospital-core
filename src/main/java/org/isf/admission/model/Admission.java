@@ -4,7 +4,6 @@ import java.util.GregorianCalendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.EntityResult;
 import javax.persistence.FieldResult;
 import javax.persistence.GeneratedValue;
@@ -19,7 +18,6 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.isf.admtype.model.AdmissionType;
-import org.isf.utils.db.Auditable;
 import org.isf.disctype.model.DischargeType;
 import org.isf.disease.model.Disease;
 import org.isf.dlvrrestype.model.DeliveryResultType;
@@ -28,7 +26,6 @@ import org.isf.operation.model.Operation;
 import org.isf.patient.model.Patient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.ward.model.Ward;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /*
  * pure model

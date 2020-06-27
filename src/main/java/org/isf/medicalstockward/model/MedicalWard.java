@@ -13,7 +13,6 @@ import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
 import org.isf.utils.db.Auditable;
 import org.isf.utils.db.DbJpaUtil;
-import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
