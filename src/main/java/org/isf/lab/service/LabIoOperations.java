@@ -134,9 +134,6 @@ public class LabIoOperations {
 	/**
 	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) 
 	 * within last year
-	 * @param exam - the exam name as <code>String</code>
-	 * @param dateFrom - the lower date for the range
-	 * @param dateTo - the highest date for the range
 	 * @return the list of {@link LaboratoryForPrint}s 
 	 * @throws OHServiceException
 	 */

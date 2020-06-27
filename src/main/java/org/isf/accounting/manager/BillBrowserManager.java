@@ -98,6 +98,7 @@ public class BillBrowserManager {
 	 * @deprecated this method should always be called with a parameter.
 	 * See {@link #getItems(int) getItems} method.
 	 */
+	@Deprecated
 	public ArrayList<BillItems> getItems() throws OHServiceException {
 		return ioOperations.getItems(0);
 	}

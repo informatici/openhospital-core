@@ -202,9 +202,9 @@ public class TherapyManager {
 
 	/**
 	 * Builds the {@link Sms} text for the specified {@link Therapy}
-	 * If length exceed {@link SmsManager.MAX_LENGHT} the message will be cropped
+	 * If length exceed {@code SmsManager.MAX_LENGHT} the message will be cropped
 	 * (example: 
-	 * "REMINDER: {@link Medical} 3pcs - 2pd - {@link Thearapy.getNote()}")
+	 * "REMINDER: {@link Medical} 3pcs - 2pd - {@link Therapy#getNote()}")
 	 * @param th - the {@link Therapy}s
 	 * @return a string containing the text
 	 */
