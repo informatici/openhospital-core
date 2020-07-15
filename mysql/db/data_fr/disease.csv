@@ -1,109 +1,437 @@
-﻿1;Paralysie flasque aiguë;ND;0;1;1
-2;Choléra;ND;0;1;1
-3;Diarrhée-dysenterie;ND;2;1;1
-4;Ver de Guinée;ND;0;1;1
-5;Rougeole;ND;0;1;1
-6;Méningite;ND;0;1;1
-7;Tétanos néonatal (âge moins de 28 jours);ND;3;1;1
-8;Peste;ND;0;1;1
-9;Rage;ND;0;1;1
-10;Fièvre Haemorragic virale;ND;0;1;1
-11;Fièvre jaune;ND;0;1;1
-12;Anémie;NC;0;1;1
-13;Soins dentaires maladies et pathologies;NC;0;1;1
-14;Diabète sucré;NC;0;1;1
-15;Atteintes gastro-intestinales (non infectieuses);NC;1;1;1
-16;Hypertension artérielle;NC;0;1;1
-17;Maladie mentale;NC;0;1;1
-18;Épilepsie;NC;0;1;1
-19;Autres maladies cardio-vasculaires;NC;0;1;1
-20;Malnutrition sévère (marasme; kwashiorkor; deux-kwash);NC;6;1;0
-22;Trauma-Domestic Violence;NC;0;1;1
-23;Trauma-autres intensional;NC;0;1;1
-24;Trauma accidents de la route;NC;0;1;1
-25;Trauma-autres non intensional;NC;0;1;1
-26;Autres complications de la grossesse;MP;1;0;1
-27;Affections périnatales;MP;0;1;1
-28;Avortements;MP;0;1;1
-29;SIDA;OC;0;1;1
-30;Diarrhée non sanglante;OC;0;1;1
-31;Diarrhée persistante;OC;0;1;1
-32;Infection de l'oreille;OC;1;0;1
-33;Infection de l'oeil;OC;0;1;1
-34;INF.-urétral génitale;OC;1;0;1
-35;INF.-vaginales génitale;OC;1;0;1
-36;INF.-ulcéreuse génitale;OC;1;0;1
-37;Vers intestinaux;OC;0;1;1
-38;Lèpre;OC;0;1;1
-39;Paludisme;OC;0;1;1
-40;Aucun froid-pneumonie ou toux;OC;0;1;1
-41;Onchocercose;OC;0;1;1
-42;Pneumonie;OC;0;1;1
-43;Maladies de la peau;OC;0;1;1
-44;Tuberculose;OC;2;1;1
-46;Fièvre typhoïde;OC;0;1;1
-47;Infections des voies urinaires (IVU);OC;2;1;1
-48;Autres (non spécifiés);OC;1;0;1
-49;Toutes les autres maladies;AO;2;1;1
-50;Autres maladies infectieuses émergentes;ND;0;1;1
-56;Mort en DPO;OC;0;1;1
-57;Conditions de l'ENT;OC;0;1;1
-58;Affections oculaires;OC;0;1;1
-59;Transmise sexuellement (ITS);OC;1;1;1
-60;Hépatite;OC;1;0;1
-61;Ostéomyélite;OC;1;0;1
-62;Péritonite;OC;1;0;1
-63;Pyrexiaof origine inconnue (UPO);OC;1;0;1
-64;Septicémie;OC;1;0;1
-65;Hypertension artérielle pendant la grossesse;MP;0;1;1
-66;Hémorragie liée à la grossesse (APH/lb/h);MP;0;1;1
-67;Septicémie liée à la grossesse;MP;1;0;1
-68;Asthme;NC;0;1;1
-69;Maladies et état ​​bucco-dentaire;NC;0;1;1
-70;Troubles endocriniens et métaboliques (autre);NC;0;1;1
-71;Troubles anxieux;NC;0;1;1
-72;Mania;NC;0;1;1
-73;Dépression;NC;0;1;1
-74;Schizophrénie;NC;0;1;1
-75;Abus d'alcool et de drogues;NC;0;1;1
-76;Enfance et troubles mentaux;NC;0;1;1
-77;Malnutrition sévère (kwashiorkor);NC;2;0;1
-78;Malnutrition sévère (marasme);NC;3;0;1
-79;Malnutrition sévère (avec kwash);NC;2;0;1
-80;Faible poids pour âge;NC;0;1;1
-81;Blessures - (traumatisme à d'autres causes);NC;0;1;1
-82;Morsure d'animal/serpent;NC;0;1;1
-83;Empoisonnement;NC;1;0;1
-84;Cirrhose du foie;NC;0;1;1
-85;Carcinome hépatocellulaire;NC;0;1;1
-86;Maladie du foie (autres);NC;0;1;1
-87;Hernies;NC;0;1;1
-88;Maladies de l'appendice;NC;0;1;1
-89; Maladie musculo squelettiques et des tissus conjonctif;NC;0;1;1
-90;Génito urinaires maladies (non infectieuses);NC;0;1;1
-91;Malformations congénitales et anomalies chromosomiques;ND;1;0;1
-92;Complication et soins chirurgicaux;NC;0;1;1
-93;Benine néoplasme (tout type);NC;16;1;1
-94;Cancer du sein;NC;0;1;1
-95;Cancer de la prostate;ND;1;0;1
-96;Néoplasme malin des organes digestifs;NC;0;1;1
-97;Malignes des poumons;NC;0;1;1
-98;Kaposi et autres cancers de la peau;NC;0;1;1
-99;Tumeurs malignes du tissu hématopoïétique;NC;0;1;1
-100;Autres tumeurs malignes;NC;0;1;1
-101;Ulcères guérissables;NC;0;1;1
-102;Événement Cerebro-vasculaire;NC;0;1;1
-103;Arrêt cardiaque;NC;0;1;1
-104;Saignements gastro-intestinaux;NC;0;1;1
-105;Détresse respiratoire;NC;0;1;1
-106;Insuffisance rénale aiguë;NC;1;0;1
-107;Septicémie aiguë;NC;1;0;1
-108;Schistosomiase;NC;0;1;1
-110;Maladies inflammatoire pelvienne (PID);OC;0;1;1
-111;Tétanos (âge de plus de 28 jours);OC;1;1;1
-112;Dystocie;MP;0;1;1
-113;Autres types de méningite;OC;0;1;1
-114;Schistosomiase;OC;0;1;1
-115;Maladie du sommeil;OC;0;1;1
-116;Paludisme pendant la grossesse;MP;0;1;1
-117;Blessures - (accident de la route);NC;0;1;1
+1;Fièvres typhoïde et paratyphoïde;AB;0;1;1
+2;Amibiase;AB;0;1;1
+3;Autres maladies intestinales à protozoaires;AB;0;1;1
+4;Giardiase [lambliase];AB;0;1;1
+5;Autres gastroentérites et colites d'origine infectieuse et non précisée;AB;0;1;1
+6;Gastroentérites et colites d'origine infectieuse, autres et non précisées;AB;0;1;1
+7;Tuberculose de l'appareil respiratoire, avec confirmation bacteriol, et istol.;AB;0;1;1
+8;Tuberculose de l'appareil respiratoire, sans confirmation bacteriol, et istol.;AB;0;1;1
+9;Tuberculose d'autres organes;AB;0;1;1
+10;Tuberculose miliaire;AB;0;1;1
+11;Peste;AB;0;1;1
+12;Autres anthropozoonoses bactériennes, non classées ailleurs;AB;0;1;1
+13;Lèpre [maladie de Hansen];AB;0;1;1
+14;Autres formes de tétanos;AB;0;1;1
+15;Diphtérie;AB;0;1;1
+16;Coqueluche;AB;0;1;1
+17;Scarlatine;AB;0;1;1
+18;Syphilis congénitale;AB;0;1;1
+19;Syphilis précoce;AB;0;1;1
+20;Syphilis tardive;AB;0;1;1
+21;Infection gonococcique;AB;0;1;1
+22;Lymphogranulomatose vénérienne à Chlamydia;AB;0;1;1
+23;Autres infections à Chlamydia transmises par voie sexuelle;AB;0;1;1
+24;Chancre mou;AB;0;1;1
+25;Trichomonase;AB;0;1;1
+26;Infection ano génitale par le virus de l'herpès [Herpes simplex];AB;0;1;1
+27;Maladie sexuellement transmise, sans précision;AB;0;1;1
+28;Poliomyélite aiguë;AB;0;1;1
+29;Méningite virale;AB;0;1;1
+30;Infection virale du système nerveux central, sans précision;AB;0;1;1
+31;Autres fièvres virales transmises par des moustique;AB;0;1;1
+32;Fièvre hémorragique virale, sans précision;AB;0;1;1
+33;Infections par le virus de l'herpès [Herpes simplex];AB;0;1;1
+34;Varicelle;AB;0;1;1
+35;Zona [herpès zoster];AB;0;1;1
+36;Rougeole;AB;0;1;1
+37;Rubéole;AB;0;1;1
+38;Verrues d'origine virale;AB;0;1;1
+39;Infection virale caractérisée par des lésions cutanéomuqueuses, sans précision;AB;0;1;1
+40;Hépatite aiguë B;AB;0;1;1
+41;Autres hépatites virales aiguës;AB;0;1;1
+42;Hépatite aiguë C;AB;0;1;1
+43;Immunodéficience humaine virale [VIH], sans précision;AB;0;1;1
+44;Oreillons;AB;0;1;1
+45;Infection virale, siège non précisé;AB;0;1;1
+46;Candidose;AB;0;1;1
+47;Mycétom;AB;0;1;1
+48;Mycose, sans précision;AB;0;1;1
+49;Autres paludismes confirmés par examen parasitologique;AB;0;1;1
+50;Paludisme, sans précision;AB;0;1;1
+51;Schistosomiase [bilharziose];AB;0;1;1
+52;Échinococcose;AB;0;1;1
+53;Infection à Taenia [téniase];AB;0;1;1
+54;Cysticercose;AB;0;1;1
+55;Onchocercose;AB;0;1;1
+56;Filariose;AB;0;1;1
+57;Ascaridiase;AB;0;1;1
+58;Infection à Trichuris trichiuria;AB;0;1;1
+59;Parasitose intestinale, sans précision;AB;0;1;1
+60;Autres helminthiases;AB;0;1;1
+61;Pédiculose et phtiriase;AB;0;1;1
+62;Gale;AB;0;1;1
+63;Maladies infectieuses, autres et non précisées;AB;0;1;1
+64;Tumeur maligne de la le?vre, de la cavite? buccale et du pharynx, de sie?ges autres et mal de?finis ;CD;0;1;1
+65;Tumeur maligne de l'estomac ;CD;0;1;1
+66;Tumeur maligne de l'intestin gre?le ;CD;0;1;1
+67;Tumeur maligne du co?lon ;CD;0;1;1
+68;Tumeur maligne de la ve?sicule biliaire ;CD;0;1;1
+69;Tumeur maligne des organes digestifs, de sie?ges autres et mal de?finis ;CD;0;1;1
+70;Me?lanome malin de la peau;CD;0;1;1
+71;Me?lanome malin de la peau;CD;0;1;1
+72;Tumeur maligne du sein ;CD;0;1;1
+73;Tumeur maligne du col de l'ute?rus;CD;0;1;1
+74;Tumeur maligne du corps de l'ute?rus ;CD;0;1;1
+75;Tumeur maligne de l'ovaire ;CD;0;1;1
+76;Tumeur maligne du testicule ;CD;0;1;1
+77;Tumeur maligne des organes ge?nitaux de l'homme, autres et non pre?cise?s ;CD;0;1;1
+78;Tumeur maligne du rein, a? l'exception du bassinet ;CD;0;1;1
+79;Tumeur maligne de l'urete?re;CD;0;1;1
+80;Tumeur maligne de la thyroi?de ;CD;0;1;1
+81;Tumeur maligne de sie?ge non pre?cise? ;CD;0;1;1
+82;Tumeur be?nigne du co?lon, du rectum, de l'anus et du canal ana ;CD;0;1;1
+83;He?mangiome et lymphangiome, tout sie?ge;CD;0;1;1
+84;Nævus a? me?lanocytes;CD;0;1;1
+85;Autres tumeurs be?nignes de la peau ;CD;0;1;1
+86;Tumeur be?nigne du sein ;CD;0;1;1
+87;Le?iomyome de l'ute?rus;CD;0;1;1
+88;Tumeur be?nigne de l'ovaire ;CD;0;1;1
+89;Tumeur be?nigne des organes ge?nitaux de l'homme ;CD;0;1;1
+90;Tumeur be?nigne de la thyroi?de ;CD;0;1;1
+91;Tumeur be?nigne de sie?ges autres et non pre?cise?s ;CD;0;1;1
+92;Autres ane?mies nutritionnelles;D;0;1;1
+93;Autres ane?mies he?molytiques he?re?ditaires ;D;0;1;1
+94;Ane?mie posthe?morragique aigu?e;D;0;1;1
+95;Ane?mie au cours de maladies chroniques classe?es ailleurs ;D;0;1;1
+96;Autres ane?mies;D;0;1;1
+97;Autres anomalies des leucocytes;D;0;1;1
+98;Maladies de la rate ;D;0;1;1
+99;Autres maladies du sang et des organes he?matopoi?e?tiques ;D;0;1;1
+100;Syndrome d'insuffisance thyroi?dienne conge?nitale;E;0;1;1
+101;Autres hypothyroïdies;E;0;1;1
+102;Thyréotoxicose [hyperthyroïdie];E;0;1;1
+103;Autres affections de la thyroïde;E;0;1;1
+104;Diabète sucré de type 1;E;0;1;1
+105;Diabète sucré de type 2;E;0;1;1
+106;Coma hypoglycémique non diabétique;E;0;1;1
+107;Autres maladies de la glande surrénal;E;0;1;1
+108;Malnutrition protéino énergétique grave, sans précision;E;0;1;1
+109;Retard de développement après malnutrition protéino énergétique;E;0;1;1
+110;Malnutrition protéino énergétique grave, sans précision;E;0;1;1
+111;Carence nutritionnelle, sans précision;E;0;1;1
+112;Séquelles d'excès d'apport;E;0;1;1
+113;Intolérance au lactose;E;0;1;1
+114;Hypovolémie;E;0;1;1
+115;Démence, sans précision;F;0;1;1
+116;Troubles mentaux et du comportement liés à l'utilisation d'alcool;F;0;1;1
+117;Troubles mentaux et du comportement liés à l'utilisation de drogues multiples et troubles liés à l'utilisation d'autres substances psychoactives;F;0;1;1
+118;Schizophrénie;F;0;1;1
+119;Troubles psychotiques aigus et transitoires;F;0;1;1
+120;Trouble de l'humeur [affectif], sans précision;F;0;1;1
+121;Autres troubles anxieux;F;0;1;1
+122;Troubles somatoformes;F;0;1;1
+123;Troubles de l'alimentation;F;0;1;1
+124;Dysfonctionnement sexuel, non dû à un trouble ou à une maladie organique;F;0;1;1
+125;Trouble de la personnalité et du comportement chez l'adulte, sans précision;F;0;1;1
+126;Retard mental, sans précision;F;0;1;1
+127;Troubles spécifiques du développement de la parole et du langage;F;0;1;1
+128;Trouble spécifique du développement moteur;F;0;1;1
+129;Troubles hyperkinétiques;F;0;1;1
+130;Autres troubles du comportement et troubles émotionnels apparaissant habituellement durant l'enfance et l'adolescence;F;0;1;1
+131;Méningite au cours d'autres maladies infectieuses et parasitaires classées ailleurs;G;0;1;1
+132;Méningite due à des causes autres et non précisées;G;0;1;1
+133;Encéphalite, myélite et encéphalomyélite;G;0;1;1
+134;Amyotrophie spinale et syndromes apparentés;G;0;1;1
+135;Syndrome post poliomyélitique;G;0;1;1
+136;Maladie de Parkinson;G;0;1;1
+137;Maladie d'Alzheimer;G;0;1;1
+138;Épilepsie;G;0;1;1
+139;État de mal épileptique;G;0;1;1
+140;Migraine;G;0;1;1
+141;Autres syndromes d'algies céphaliques;G;0;1;1
+142;Accidents ischémiques cérébraux transitoires et syndromes apparentés;G;0;1;1
+143;Syndromes vasculaires cérébraux au cours de maladies cérébrovasculaires;G;0;1;1
+144;Troubles du sommeil;G;0;1;1
+145;Affections des nerfs crâniens au cours de maladies classées ailleurs;G;0;1;1
+146;Affections des racines et des plexus nerveux;G;0;1;1
+147;Neuropathie héréditaire et idiopathique;G;0;1;1
+148;Polynévrite au cours de maladies classées ailleurs;G;0;1;1
+149;Affections musculaires primitives;G;0;1;1
+150;Paralysie cérébrale;G;0;1;1
+151;Hydrocéphalie;G;0;1;1
+152;Encéphalopathie toxique;G;0;1;1
+153;Orgelet et chalazion;H1;0;1;1
+154;Conjonctivite;H1;0;1;1
+155;Cicatrices et opacités cornéenne;H1;0;1;1
+156;Cataracte sénile;H1;0;1;1
+157;Glaucome;H1;0;1;1
+158;Autres strabismes;H1;0;1;1
+159;Troubles de la vision;H1;0;1;1
+160;Déficience visuelle incluant la cécité [binoculaire ou monoculaire];H1;0;1;1
+161;Autres affections de l'œil et de ses annexes;H1;0;1;1
+162;Otite externe;H2;0;1;1
+163;Perforation du tympan;H2;0;1;1
+164;Autres affections du tympan;H2;0;1;1
+165;Atteintes des fonctions vestibulaires;H2;0;1;1
+166;Surdite? de transmission et neurosensorielle ;H2;0;1;1
+167;Autres affections de l'oreille, non classées ailleurs;H2;0;1;1
+168;Rhumatisme articulaire aigu, sans mention d'atteinte cardiaque;I;0;1;1
+169;Hypertension essentielle [primitive];I;0;1;1
+170;Cardiopathie hypertensive;I;0;1;1
+171;Néphropathie hypertensive;I;0;1;1
+172;Hypertension secondaire;I;0;1;1
+173;Angine de poitrine;I;0;1;1
+174;Infarctus aigu du myocarde;I;0;1;1
+175;Infarctus du myocarde à répétition;I;0;1;1
+176;Embolie pulmonaire;I;0;1;1
+177;Autres affections cardiopulmonaires;I;0;1;1
+178;Myocardiopathie;I;0;1;1
+179;Arrêt cardiaque;I;0;1;1
+180;Tachycardie paroxystique;I;0;1;1
+181;Autres arythmies cardiaques;I;0;1;1
+182;Insuffisance cardiaque;I;0;1;1
+183;Infarctus cérébral;I;0;1;1
+184;Autres anévrismes et dissections;I;0;1;1
+185;Phlébite et thrombophlébite;I;0;1;1
+186;Autres embolies et thromboses veineuses;I;0;1;1
+187;Varices des membres inférieurs;I;0;1;1
+188;Varices œsophagiennes;I;0;1;1
+189;Lymphadénite non spécifique;I;0;1;1
+190;Hypotension;I;0;1;1
+191;Rhinopharyngite aiguë [rhume banal];J;0;1;1
+192;Sinusite aigüe;J;0;1;1
+193;Pharyngite aigüe;J;0;1;1
+194;Amygdalite aiguë;J;0;1;1
+195;Laryngite et trachéite aiguës;J;0;1;1
+196;Grippe avec pneumopathie, autre virus grippal identifié;J;0;1;1
+197;Grippe, virus non identifié;J;0;1;1
+198;Pneumopathies virales, non classées ailleurs;J;0;1;1
+199;Pneumopathies bactériennes, non classées ailleurs;J;0;1;1
+200;Pneumopathie au cours de maladies classées ailleurs;J;0;1;1
+201;Bronchite aigüe;J;0;1;1
+202;Bronchiolite aigüe;J;0;1;1
+203;Rhinite allergique et vasomotrice;J;0;1;1
+204;Rhinite, rhinopharyngite et pharyngite chroniques;J;0;1;1
+205;Sinusite chronique;J;0;1;1
+206;Angine phlegmoneuse ;J;0;1;1
+207;Autres maladies des voies respiratoires supérieures;J;0;1;1
+208;Emphysème;J;0;1;1
+209;Asthme;J;0;1;1
+210;Syndrome de détresse respiratoire de l'adulte;J;0;1;1
+211;Œdème pulmonaire;J;0;1;1
+212;Pyothorax;J;0;1;1
+213;Épanchement pleural, non classé ailleurs;J;0;1;1
+214;Pneumothorax;J;0;1;1
+215;Autres affections pleurales;J;0;1;1
+216;Insuffisance respiratoire, non classée ailleurs;J;0;1;1
+217;Autres troubles respiratoires;J;0;1;1
+218;Dents incluses et enclavées;K;0;1;1
+219;Caries dentaires;K;0;1;1
+220;Maladies de la pulpe et des tissus périapicaux;K;0;1;1
+221;Gingivite et maladies périodontales;K;0;1;1
+222;Maladies des glandes salivaires;K;0;1;1
+223;Stomatites et affections apparentées;K;0;1;1
+224;Autres maladies des lèvres et de la muqueuse buccale;K;0;1;1
+225;Maladies de la langue;K;0;1;1
+226;Ulcère de l'estomac;K;0;1;1
+227;Ulcère du duodénum;K;0;1;1
+228;Gastrite et duodénite;K;0;1;1
+229;Appendicite aigüe;K;0;1;1
+230;Hernie inguinale;K;0;1;1
+231;Hernie ombilicale;K;0;1;1
+232;Autres hernies de la paroi abdominale antérieure;K;0;1;1
+233;Autres hernies abdominales;K;0;1;1
+234;Rectocolite hémorragique [colite ulcéreuse];K;0;1;1
+235;Iléus paralytique et occlusion intestinale sans hernie;K;0;1;1
+236;Diverticulose de l'intestin;K;0;1;1
+237;Autres troubles fonctionnels de l'intestin;K;0;1;1
+238;Fissure et fistule des régions anale et rectale;K;0;1;1
+239;Abce?s des re?gions anale et rectale ;K;0;1;1
+240;Hémorroïdes et thrombose veineuse périanale;K;0;1;1
+241;Péritonite;K;0;1;1
+242;Fibrose et cirrhose du foie;K;0;1;1
+243;Autres maladies inflammatoires du foie;K;0;1;1
+244;Cholélithiase;K;0;1;1
+245;Cholécystite;K;0;1;1
+246;Malabsorption intestinale;K;0;1;1
+247;Autres maladies du système digestif;K;0;1;1
+248;Abce?s cutane?, furoncle et anthrax ;L;0;1;1
+249;Pemphigus;L;0;1;1
+250;Autres dermatoses bulleuses;L;0;1;1
+251;Dermite séborrhéique;L;0;1;1
+252;Dermite fessière du nourrisson;L;0;1;1
+253;Dermite allergique de contact;L;0;1;1
+254;Dermite exfoliatrice;L;0;1;1
+255;Autres dermites;L;0;1;1
+256;Autres lésions papulo squameuses;L;0;1;1
+257;Urticaire;L;0;1;1
+258;Autres formes d'érythème;L;0;1;1
+259;Pelade;L;0;1;1
+260;Acné;L;0;1;1
+261;Kystes folliculaires de la peau et du tissu cellulaire souscutané;L;0;1;1
+262;Vitiligo;L;0;1;1
+263;Kératose séborrhéique;L;0;1;1
+264;Ulcère de décubitus et zone de pression;L;0;1;1
+265;Affections hypertrophiques de la peau;L;0;1;1
+266;Lupus érythémateux;L;0;1;1
+267;Ulcère du membre inférieur, non classé ailleurs;L;0;1;1
+268;Arthrites à bactéries pyogènes;M;0;1;1
+269;Autres polyarthrites rhumatoïdes;M;0;1;1
+270;Polyarthrites juvéniles;M;0;1;1
+271;Goutte;M;0;1;1
+272;Autres arthrites;M;0;1;1
+273;Polyarthrose;M;0;1;1
+274;Coxarthrose [arthrose de la hanche];M;0;1;1
+275;Gonarthrose [arthrose du genou];M;0;1;1
+276;Autres arthroses;M;0;1;1
+277;Déformations des doigts et des orteils;M;0;1;1
+278;Autres affections articulaires spécifiques;M;0;1;1
+279;Scoliose;M;0;1;1
+280;Spondylarthrite ankylosante;M;0;1;1
+281;Dorsalgies;M;0;1;1
+282;Myosite;M;0;1;1
+283;Affections des tissus mous par sollicitation excessive de l'articulation;M;0;1;1
+284;Lésions de l'épaule;M;0;1;1
+285;Ostéomyélite;M;0;1;1
+286;Autres maladies osseuses;M;0;1;1
+287;Autres déformations du système ostéoarticulaire, des muscles et du tissu conjonctif;M;0;1;1
+288;Hématurie récidivante et persistante;N;0;1;1
+289;Syndrome néphrotique;N;0;1;1
+290;Uropathie obstructive et par reflux;N;0;1;1
+291;Insuffisance rénale aigüe;N;0;1;1
+292;Maladie rénale chronique;N;0;1;1
+293;Calcul du rein et de l'uretère;N;0;1;1
+294;Calcul des voies urinaires inférieures;N;0;1;1
+295;Autres affections du rein et de l'uretère, non classées ailleurs;N;0;1;1
+296;Cystite;N;0;1;1
+297;Autres affections de la vessie;N;0;1;1
+298;Rétrécissement urétral;N;0;1;1
+299;Autres affections de l'urètre;N;0;1;1
+300;Hyperplasie de la prostate;N;0;1;1
+301;Affections inflammatoires de la prostate;N;0;1;1
+302;Hydrocèle et spermatocèle;N;0;1;1
+303;Torsion du testicule;N;0;1;1
+304;Orchite et épididymite;N;0;1;1
+305;Stérilité chez l'homme;N;0;1;1
+306;Hypertrophie du prépuce, phimosis et paraphimosis;N;0;1;1
+307;Affections inflammatoires des organes génitaux de l'homme, non classées ailleurs;N;0;1;1
+308;Affections inflammatoires du sein;N;0;1;1
+309;Hypertrophie mammaire;N;0;1;1
+310;Tuméfaction mammaire, sans précision;N;0;1;1
+311;Autres affections du sein;N;0;1;1
+312;Salpingite et ovarite;N;0;1;1
+313;Autres affections inflammatoires pelviennes de la femme;N;0;1;1
+314;Autres inflammations du vagin et de la vulve;N;0;1;1
+315;Endométriose;N;0;1;1
+316;Prolapsus génital;N;0;1;1
+317;Fistules de l'appareil génital de la femme;N;0;1;1
+318;Polype de l'appareil génital de la femme;N;0;1;1
+319;Autres affections non inflammatoires de l'utérus, sauf le col;N;0;1;1
+320;Aménorrhée, oligoménorrhée et hypoménorrhée;N;0;1;1
+321;Ménorragie, polyménorrhée et métrorragie;N;0;1;1
+322;Autres saignements anormaux de l'utérus et du vagin;N;0;1;1
+323;Avortements à répétition;N;0;1;1
+324;Ste?rilite? de la femme ;N;0;1;1
+325;Grossesse extra ute?rine;O;0;1;1
+326;Avortement spontane? ;O;0;1;1
+327;Avortement me?dical;O;0;1;1
+328;E?chec d'une tentative d'avortement ;O;0;1;1
+329;Hypertension pre?existante compliquant la grossesse, l'accouchement et la puerpe?ralite? ;O;0;1;1
+330;Hypertension gestationnelle [lie?e a? la grossesse];O;0;1;1
+331;E?clampsie ;O;0;1;1
+332;Hypertension de la me?re, sans pre?cision;O;0;1;1
+333;Infections de l'appareil ge?nito-urinaire au cours de la grossesse ;O;0;1;1
+334;Diabe?te sucre? au cours de la grossesse;O;0;1;1
+335;Grossesse multiple;O;0;1;1
+336;Autres anomalies du liquide amniotique et des membranes ;O;0;1;1
+337;Rupture pre?mature?e des membranes ;O;0;1;1
+338;Placenta prævia ;O;0;1;1
+339;De?collement pre?mature? du placenta [he?matome re?troplacentaire];O;0;1;1
+340;Travail et accouchement pre?mature?s [avant terme];O;0;1;1
+341;Travail prolonge? ;O;0;1;1
+342;Travail et accouchement complique?s d'une he?morragie, non classe?e ailleurs ;O;0;1;1
+343;De?chirure obste?tricale du pe?rine?e ;O;0;1;1
+344;Autres traumatismes obste?tricaux ;O;0;1;1
+345;He?morragie du postpartum ;O;0;1;1
+346;Re?tention du placenta et des membranes, sans he?morragie ;O;0;1;1
+347;Accouchement unique et spontane? ;O;0;1;1
+348;Accouchement unique par ce?sarienne ;O;0;1;1
+349;Accouchements multiples;O;0;1;1
+350;Autres mastopathies et anomalies de la lactation associe?es a? l'accouchement ;O;0;1;1
+351;Mort d'origine obste?tricale de cause non pre?cise?e;O;0;1;1
+352;Fœtus et nouveau-ne? affecte?s par des troubles maternels et par des complications de la grossesse, du travail et de l'accouchement ;P;0;1;1
+353;Fœtus et nouveau-ne? affecte?s par d'autres complications du travail et de l'accouchement ;P;0;1;1
+354;Fœtus et nouveau-ne? affecte?s par des effets nocifs transmis par voie transplacentaire ou par le lait maternel ;P;0;1;1
+355;Retard de croissance et malnutrition du fœtus ;P;0;1;1
+356;Anomalies lie?es a? une gestation prolonge?e et un poids e?leve? a? la naissance ;P;0;1;1
+357;Autres traumatismes obste?tricaux ;P;0;1;1
+358;Asphyxie obste?tricale;P;0;1;1
+359;De?tresse respiratoire du nouveau-ne?;P;0;1;1
+360;Infection bacte?rienne du nouveau-ne? ;P;0;1;1
+361;Autres maladies infectieuses et parasitaires conge?nitales ;P;0;1;1
+362;Autres he?morragies du nouveau-ne?;P;0;1;1
+363;Icte?re nucle?aire ;P;0;1;1
+364;Icte?re du nouveau-ne? du? a? des causes autres et sans pre?cision ;P;0;1;1
+365;Autres affections he?matologiques de la pe?riode pe?rinatale ;P;0;1;1
+366;Ile?us me?conial dans la fibrose kystique du pancre?as [mucoviscidose];P;0;1;1
+367;Hypothermie du nouveau-ne? ;P;0;1;1
+368;Mort fœtale de cause non pre?cise?e ;P;0;1;1
+369;Microce?phalie;Q;0;1;1
+370;Autres malformations conge?nitales de l'œil ;Q;0;1;1
+371;Autres malformations conge?nitales de l'oreille ;Q;0;1;1
+372;Autres malformations conge?nitales de la face et du cou;Q;0;1;1
+373;Autres malformations conge?nitales cardiaques ;Q;0;1;1
+374;Autres malformations conge?nitales de l'appareil circulatoire pe?riphe?rique ;Q;0;1;1
+375;Autres malformations conge?nitales de l'appareil circulatoire ;Q;0;1;1
+376;Autres malformations conge?nitales de l'appareil respiratoire ;Q;0;1;1
+377;Fente labiale;Q;0;1;1
+378;Autres malformations conge?nitales de la langue, de la bouche et du pharynx ;Q;0;1;1
+379;Autres malformations conge?nitales de l'intestin ;Q;0;1;1
+380;Autres malformations conge?nitales de l'appareil digestif ;Q;0;1;1
+381;Autres malformations conge?nitales des organes ge?nitaux de la femme ;Q;0;1;1
+382;Cryptorchidie ;Q;0;1;1
+383;Hypospadias;Q;0;1;1
+384;Autres malformations conge?nitales des organes ge?nitaux de l'homme ;Q;0;1;1
+385;Autres malformations conge?nitales du rein;Q;0;1;1
+386;Autres malformations conge?nitales de l'appareil urinaire ;Q;0;1;1
+387;Autres malformations conge?nitales d'un [des] membre[s] ;Q;0;1;1
+388;Autres malformations conge?nitales des os du cra?ne et de la face ;Q;0;1;1
+389;Malformations conge?nitales du rachis et du thorax osseux;Q;0;1;1
+390;Autres malformations congénitales, non classées ailleurs;Q;0;1;1
+391;Syndrome de Down ;Q;0;1;1
+392;Affections de la vessie au cours de maladies classe?es ailleurs ;R;0;1;1
+393;Somnolence, stupeur et coma;R;0;1;1
+394;Fièvre d'origine autre et inconnue;R;0;1;1
+395;Céphalée;R;0;1;1
+396;Le?sion traumatique superficielle de la te?te ;ST;0;1;1
+397;Plaie ouverte de la tête;ST;0;1;1
+398;Le?sion traumatique superficielle du cou ;ST;0;1;1
+399;Lésions traumatiques du cou, autres et sans précision;ST;0;1;1
+400;Le?sion traumatique superficielle du thorax ;ST;0;1;1
+401;Plaie ouverte du thorax;ST;0;1;1
+402;Lésions traumatiques du thorax, autres et sans précision;ST;0;1;1
+403;Le?sion traumatique superficielle de l'abdomen, des lombes et du bassin ;ST;0;1;1
+404;Plaie ouverte de l'abdomen, des lombes et du bassin;ST;0;1;1
+405;Le?sion traumatique d'organes intraabdominaux;ST;0;1;1
+406;Lésions traumatiques de l'abdomen, des lombes et du bassin, autres et sans précision;ST;0;1;1
+407;Le?sion traumatique superficielle de l'e?paule et du bras ;ST;0;1;1
+408;Lésions traumatiques de l'épaule et du bras, autres et sans précision;ST;0;1;1
+409;Le?sion traumatique superficielle de l'avant-bras;ST;0;1;1
+410;Lésions traumatiques de l'avant-bras, autres et sans précision;ST;0;1;1
+411;Le?sion traumatique superficielle du poignet et de la main ;ST;0;1;1
+412;Lésions traumatiques du poignet et de la main, autres et sans précision;ST;0;1;1
+413;Le?sion traumatique superficielle de la hanche et de la cuisse ;ST;0;1;1
+414;Lésions traumatiques de la hanche et de la cuisse, autres et sans précision;ST;0;1;1
+415;Le?sion traumatique superficielle de la jambe;ST;0;1;1
+416;Lésions traumatiques de la jambe, autres et sans précision;ST;0;1;1
+417;Le?sion traumatique superficielle de la cheville et du pied ;ST;0;1;1
+418;Lésions traumatiques de la cheville et du pied, autres et sans précision;ST;0;1;1
+419;Fractures de plusieurs parties du corps;ST;0;1;1
+420;Amputations traumatiques de plusieurs parties du corps ;ST;0;1;1
+421;Lésions traumatiques multiples, sans précision;ST;0;1;1
+422;Lésions traumatiques d'une partie du corps non précisée;ST;0;1;1
+423;Brûlures et corrosions de parties multiples du corps;ST;0;1;1
+424;Brûlure et corrosion, partie du corps non précisée;ST;0;1;1
+425;Intoxication par diurétiques et médicaments et substances biologiques, autres et sans précisions;ST;0;1;1
+426;Effet toxique de l'alcool;ST;0;1;1
+427;Effet toxique de substances autres et non précisées;ST;0;1;1
+428;Effets d'autres causes externes;ST;0;1;1
+429;Effets indésirables, non classés ailleurs;ST;0;1;1
+430;Choc anaphylactique, sans précision;ST;0;1;1
+431;Œdème angioneurotique;ST;0;1;1
+432;Morsure de rat;VY;0;1;1
+433;Morsure ou coup donné par d'autres mammifères;VY;0;1;1
+434;Contact avec un animal marin;VY;0;1;1
+435;Morsure ou piqûre non venimeuse d'insectes et autres arthropodes;VY;0;1;1
+436;Examen ge?ne?ral et investigations de sujets ne se plaignant de rien ou pour les quels aucun diagnostic n'est rapporté;Z;0;1;1
+437;Examen et mise en observation pour d'autres raisons;Z;0;1;1

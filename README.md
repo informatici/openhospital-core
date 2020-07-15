@@ -1,5 +1,6 @@
-[![Build Status](https://travis-ci.org/informatici/openhospital-core.svg?branch=master)](https://travis-ci.org/informatici/openhospital-core)
 # OpenHospital-core
+[![Java CI](https://github.com/informatici/openhospital-core/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/informatici/openhospital-core/actions?query=workflow%3A%22Java+CI+with+Maven%22)
+
 OpenHospital 2.0 (ISF OpenHospital web version) - WIP
 
 **How to build with Maven:**
