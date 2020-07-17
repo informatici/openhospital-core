@@ -217,13 +217,7 @@ public class MedicalStockWardIoOperations
             if(medicalWardTo != null) {
             	repository.updateInQuantity(Math.abs(qty), wardTo, medical, lot);
             } else {
-				MedicalWard medicalWard = new MedicalWard();
-				medicalWard.setWard(movement.getWard());
-				medicalWard.setMedical(movement.getMedical());
-				medicalWard.setInQuantity((float)Math.abs(qty));
-				medicalWard.setOutQuantity(0.0f);
-				medicalWard.setLot(movement.getLot());
-                repository.save(medicalWard);
+                repository.insertMedicalWard(wardTo, medical, Math.abs(qty), lot);
             }
             repository.updateOutQuantity(Math.abs(qty), ward, medical, lot);
             return result;
@@ -232,13 +226,7 @@ public class MedicalStockWardIoOperations
 		MedicalWard medicalWard = repository.findOneWhereCodeAndMedicalAndLot(ward, medical, lot);
         if (medicalWard == null)
 		{
-			medicalWard = new MedicalWard();
-			medicalWard.setWard(movement.getWard());
-			medicalWard.setMedical(movement.getMedical());
-			medicalWard.setInQuantity((float) -qty);
-			medicalWard.setOutQuantity(0.0f);
-			medicalWard.setLot(movement.getLot());
-            repository.save(medicalWard);
+            repository.insertMedicalWard(ward, medical, -qty, lot);
         }
 		else
 		{

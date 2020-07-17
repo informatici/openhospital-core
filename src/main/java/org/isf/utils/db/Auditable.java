@@ -45,7 +45,7 @@ public abstract class Auditable<U> {
     protected Date lastModifiedDate;
    
     @Column(name="ACTIVE")
-    protected int active = 1;
+    protected Integer active = 1;
 
     public U getCreatedBy() {
         return createdBy;

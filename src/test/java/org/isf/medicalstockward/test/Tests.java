@@ -19,7 +19,9 @@ import org.isf.medicalstock.test.TestMovementContext;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MedicalWardId;
 import org.isf.medicalstockward.model.MovementWard;
+import org.isf.medicalstockward.service.MedicalStockWardIoOperationRepository;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperations;
+import org.isf.medicalstockward.service.MovementWardIoOperationRepository;
 import org.isf.medstockmovtype.test.TestMovementType;
 import org.isf.medstockmovtype.test.TestMovementTypeContext;
 import org.isf.medtype.model.MedicalType;
@@ -27,6 +29,7 @@ import org.isf.medtype.test.TestMedicalType;
 import org.isf.medtype.test.TestMedicalTypeContext;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
+import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.test.TestPatient;
 import org.isf.patient.test.TestPatientContext;
 import org.isf.supplier.test.TestSupplier;
@@ -338,7 +341,7 @@ public class Tests
 			Double quantity = (double) medicalIoOperation.getCurrentQuantityInWard(wardTo, medical);
 			
 			_checkMovementWardIntoDb(movementWard.getCode());
-			jpa.commitTransaction();
+
 			assertEquals(quantity, movementWard.getQuantity());
 		} 
 		catch (Exception e) 
