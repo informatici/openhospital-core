@@ -17,6 +17,8 @@ public interface AccountingBillItemsIoOperationRepository extends JpaRepository<
 		
 	List<BillItems> findAllByOrderByIdAsc();
 
+	@Query("select b from BillItems b group by b.itemDescription")
+	List<BillItems> findAllGroupByDescription();
 
 	@Modifying
 	@Transactional
