@@ -370,7 +370,7 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<BillItems> getDistictsBillItems() throws OHServiceException {
-		return billItemsRepository.findAllGroupByDescription(); // TODO: restore groupping
+		return billItemsRepository.findAllGroupByDescription();
 	}
 	
 	/**

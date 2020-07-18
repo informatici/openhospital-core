@@ -217,26 +217,37 @@ public class MedicalStockWardIoOperations
             if(medicalWardTo != null) {
             	repository.updateInQuantity(Math.abs(qty), wardTo, medical, lot);
             } else {
-                repository.insertMedicalWard(wardTo, medical, Math.abs(qty), lot);
+				MedicalWard medicalWard = new MedicalWard();
+				medicalWard.setWard(movement.getWardTo());
+				medicalWard.setMedical(movement.getMedical());
+				medicalWard.setInQuantity((float)Math.abs(qty));
+				medicalWard.setOutQuantity(0.0f);
+				medicalWard.setLot(movement.getLot());
+				repository.save(medicalWard);
             }
-            repository.updateOutQuantity(Math.abs(qty), ward, medical, lot);
             return result;
         }
                 
 		MedicalWard medicalWard = repository.findOneWhereCodeAndMedicalAndLot(ward, medical, lot);
         if (medicalWard == null)
 		{
-            repository.insertMedicalWard(ward, medical, -qty, lot);
+			medicalWard = new MedicalWard();
+			medicalWard.setWard(movement.getWard());
+			medicalWard.setMedical(movement.getMedical());
+			medicalWard.setInQuantity((float) -qty);
+			medicalWard.setOutQuantity(0.0f);
+			medicalWard.setLot(movement.getLot());
+			repository.save(medicalWard);
         }
 		else
 		{
 			if (qty < 0)
 			{
-				repository.updateInQuantity(-qty, ward, medical,lot);
+				repository.updateInQuantity(-qty, ward, medical,lot); // TODO: change to jpa
 			}
 			else
 			{
-				repository.updateOutQuantity(qty, ward, medical,lot);
+				repository.updateOutQuantity(qty, ward, medical,lot); // TODO: change to jpa
             }				
 		}
 		return result;
