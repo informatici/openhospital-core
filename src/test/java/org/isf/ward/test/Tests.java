@@ -18,8 +18,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests {
+public class Tests
+{
+	private static DbJpaUtil jpa;
 	private static TestWard testWard;
+	private static TestWardContext testWardContext;
 
     @Autowired
     WardIoOperations wardIoOperation;
@@ -28,12 +31,28 @@ public class Tests {
 	
 	@BeforeClass
     public static void setUpClass() {
+    	jpa = new DbJpaUtil();
     	testWard = new TestWard();
+    	testWardContext = new TestWardContext();
     }
 
     @Before
-    public void setUp() {
-		wardIoOperationRepository.deleteAll();
+    public void setUp() throws OHException {
+        jpa.open();
+
+        _saveContext();
+
+		return;
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        _restoreContext();
+
+        jpa.flush();
+        jpa.close();
+
+        return;
     }
     
     @AfterClass
@@ -212,9 +231,30 @@ public class Tests {
 		}
 	}
 
-	private String _setupTestWard(boolean usingSet) throws OHException {
-		Ward ward = testWard.setup(usingSet);
-		wardIoOperationRepository.save(ward);
+	private void _saveContext() throws OHException
+    {
+		testWardContext.saveAll(jpa);
+
+        return;
+    }
+
+    private void _restoreContext() throws OHException
+    {
+		testWardContext.deleteNews(jpa);
+
+        return;
+    }
+
+	private String _setupTestWard(
+			boolean usingSet) throws OHException
+	{
+		Ward ward;
+
+
+    	jpa.beginTransaction();
+    	ward = testWard.setup(usingSet);
+		jpa.persist(ward);
+    	jpa.commitTransaction();
 
 		return ward.getCode();
 	}
