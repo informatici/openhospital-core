@@ -64,6 +64,9 @@ public class Lot extends Auditable<String>
 	private BigDecimal cost;
 
 	@Transient
+	private int quantity;
+
+	@Transient
 	private volatile int hashCode = 0;
 
 	@OneToMany(mappedBy = "lot")
@@ -94,6 +97,10 @@ public class Lot extends Auditable<String>
 	}
 
 	public int getQuantity(){
+		return quantity;
+	}
+
+	public int calculateQuantity(){ // TODO: this should replace getter logic, for now we are leaving transient field to avoid unnecessary changes in ui
 		int quantity = 0;
 		for (Movement movement: movements) {
 			if (movement.getType().getType().equals("-")) {
@@ -123,7 +130,9 @@ public class Lot extends Auditable<String>
 	public void setPreparationDate(GregorianCalendar aPreparationDate){
 		preparationDate=aPreparationDate;
 	}
-
+	public void setQuantity(int aQuantity){
+		quantity=aQuantity;
+	}
 	public void setMedical(Medical aMedical){
 				medical=aMedical;
 	}
@@ -170,7 +179,7 @@ public class Lot extends Auditable<String>
 				return false;
 		} else if (!preparationDate.equals(other.preparationDate))
 			return false;
-		if (getQuantity() != other.getQuantity())
+		if (quantity != other.quantity)
 			return false;
 		return true;
 	}

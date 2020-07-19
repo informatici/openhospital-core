@@ -579,6 +579,7 @@ public class MedicalStockIoOperations {
 		// remove empty lots
 		ArrayList<Lot> emptyLots = new ArrayList<Lot>();
 		for (Lot aLot : lots) {
+			aLot.setQuantity(aLot.calculateQuantity());
 			if (aLot.getQuantity() == 0)
 				emptyLots.add(aLot);
 		}
