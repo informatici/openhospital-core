@@ -19,7 +19,7 @@ public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, O
 	@Query("select max(o.prog_year) from Opd o")
     Integer findMaxProgYear();
 
-	@Query(value = "select max(o.prog_year) from Opd o where o.date >= :dateFrom and o.date < :dateTo")
+	@Query(value = "select max(o.prog_year) from Opd o where o.visitDate >= :dateFrom and o.visitDate < :dateTo")
     Integer findMaxProgYearWhereDateBetween(@Param("dateFrom") GregorianCalendar dateFrom, @Param("dateTo") GregorianCalendar dateTo);
 
     List<Opd> findTop1ByPatient_CodeOrderByDateDesc(Integer code);
