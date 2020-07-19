@@ -1,12 +1,15 @@
 package org.isf.opd.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,15 +47,11 @@ public class OpdIoOperations {
 	 * @return the list of Opds. It could be <code>empty</code>.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Opd> getOpdList(
-			boolean oneWeek) throws OHServiceException
-	{
+	public ArrayList<Opd> getOpdList(boolean oneWeek) throws OHServiceException	{
 		GregorianCalendar dateFrom=new GregorianCalendar();
 		GregorianCalendar dateTo=new GregorianCalendar();
 		
-		
-		if (oneWeek) 
-		{
+		if (oneWeek) {
 			dateFrom.add(GregorianCalendar.WEEK_OF_YEAR,-1);
 		}
 		
@@ -82,25 +81,10 @@ public class OpdIoOperations {
 			int ageFrom, 
 			int ageTo,
 			char sex,
-			char newPatient) throws OHServiceException
-	{
-		ArrayList<Integer> pOpdCode = null;
-		ArrayList<Opd> pOpd = new ArrayList<Opd>();
-		
-		
-		pOpdCode = new ArrayList<Integer>(repository.findAllOpdWhereParams(
+			char newPatient) throws OHServiceException	{
+		return new ArrayList<Opd>(repository.findAllOpdWhereParams(
 				diseaseTypeCode, diseaseCode, dateFrom, dateTo,
 				ageFrom, ageTo, sex, newPatient));			
-		for (int i=0; i<pOpdCode.size(); i++)
-		{
-			Integer code = pOpdCode.get(i);
-			Opd opd = repository.findOne(code);
-			
-			
-			pOpd.add(i, opd);
-		}
-		
-		return pOpd;	
 	}
 	
 	/**
@@ -111,19 +95,10 @@ public class OpdIoOperations {
 	 * 		   the whole list of {@link Opd}s if <code>0</code> is passed.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Opd> getOpdList(
-			int patID) throws OHServiceException 
-	{
-		ArrayList<Opd> opdList = null;
-		
-		
-		if (patID == 0) {
-			opdList = (ArrayList<Opd>) repository.findAllByOrderByProgYearDesc();
-		} else {
-			opdList = (ArrayList<Opd>) repository.findAllWherePatIdByOrderByProgYearDesc(patID);
-		}
-		
-		return opdList;
+	public ArrayList<Opd> getOpdList(int patID) throws OHServiceException {
+		return  new ArrayList<Opd>(patID == 0 ?
+			repository.findAllOrderByProgYearDesc() :
+			repository.findAllByPatient_CodeOrderByProgYearDesc(patID));
 	}
 		
 	/**
@@ -133,16 +108,8 @@ public class OpdIoOperations {
 	 * @return <code>true</code> if the item has been inserted
 	 * @throws OHServiceException 
 	 */
-	public boolean newOpd(
-			Opd opd) throws OHServiceException
-	{
-		boolean result = true;
-	
-
-		Opd savedOpd = repository.save(opd);
-		result = (savedOpd != null);
-		
-		return result;	
+	public boolean newOpd(Opd opd) throws OHServiceException {
+		return repository.save(opd) != null;
 	}
 	
 	/**
@@ -152,12 +119,8 @@ public class OpdIoOperations {
 	 * @return the updated {@link Opd}.
 	 * @throws OHServiceException 
 	 */
-	public Opd updateOpd(
-			Opd opd) throws OHServiceException 
-	{
-		Opd savedOpd = repository.save(opd);
-		
-		return savedOpd;
+	public Opd updateOpd(Opd opd) throws OHServiceException {
+		return repository.save(opd);
 	}
 	
 	/**
@@ -167,15 +130,9 @@ public class OpdIoOperations {
 	 * @return <code>true</code> if the item has been deleted. <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean deleteOpd(
-			Opd opd) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteOpd(Opd opd) throws OHServiceException {
 		repository.delete(opd);
-		
-		return result;	
+		return true;
 	}
 	
 	/**
@@ -185,21 +142,14 @@ public class OpdIoOperations {
 	 * @return <code>int</code> - the progressive number in the year
 	 * @throws OHServiceException 
 	 */
-	public int getProgYear(
-			int year) throws OHServiceException 
-	{
-		Integer progYear = 0;
-			
-		
-		if (year == 0) {
-			progYear = repository.findMaxProgYear();
-		} else {
-			progYear = repository.findMaxProgYearWhereDate(year);
-		}
-				
-		return progYear == null ? new Integer(0) : progYear;
+	public int getProgYear(int year) throws OHServiceException {
+		Integer progYear = year == 0 ?
+			repository.findMaxProgYear() :
+			repository.findMaxProgYearWhereDateBetween(getBeginningOfYear(year), getBeginningOfYear(year + 1));
+
+		return progYear == null ? 0 : progYear;
 	}
-	
+
 	/**
 	 * return the last Opd in time associated with specified patient ID. 
 	 * 
@@ -207,17 +157,10 @@ public class OpdIoOperations {
 	 * @return last Opd associated with specified patient ID or <code>null</code>
 	 * @throws OHServiceException 
 	 */
-	public Opd getLastOpd(
-			int patID) throws OHServiceException 
-	{
-		ArrayList<Opd> opdList = null;
-		
-		
-		opdList = (ArrayList<Opd>) repository.findAllWherePatIdByOrderByDateDescLimit1(patID);
-		if (!opdList.isEmpty())
-			return opdList.get(0);
-		else return null;
-	}	
+	public Opd getLastOpd(int patID) throws OHServiceException {
+		List<Opd> opdList = repository.findTop1ByPatient_CodeOrderByDateDesc(patID);
+		return opdList.isEmpty() ? null : opdList.get(0);
+	}
 
 	/**
 	 * checks if the code is already in use
@@ -226,15 +169,8 @@ public class OpdIoOperations {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			Integer code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;	
+	public boolean isCodePresent(Integer code) throws OHServiceException {
+		return repository.exists(code);
 	}
 	
 	/**
@@ -246,15 +182,14 @@ public class OpdIoOperations {
 	 * @throws OHServiceException
 	 */
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
-		
-		boolean result = true;
-		
-		if (year == 0) {
-			result = !repository.findAllByProgYear(opdNum).isEmpty();
-		} else {
-			result = !repository.findAllByProgYearWithinYear(opdNum, year).isEmpty();
-		}
-		
-		return result;
+		List<Opd> opds = year == 0 ?
+			repository.findByProgYear(opdNum) :
+			repository.findByProgYearAndVisitDateBetween(opdNum, getBeginningOfYear(year), getBeginningOfYear(year + 1));
+
+		return !opds.isEmpty();
+	}
+
+	private GregorianCalendar getBeginningOfYear(int year) {
+		return new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar();
 	}
 }

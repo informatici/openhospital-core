@@ -11,10 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WardIoOperationRepository extends JpaRepository<Ward, String> {
     List<Ward> findAllByOrderByDescriptionAsc();
-    
-    @Query(value = "SELECT * FROM WARD WHERE WRD_ID_A <> 'M'", nativeQuery= true)
-    List<Ward> findAllWhereWardIsM();
-    
-    @Query(value = "SELECT * FROM WARD WHERE WRD_ID_A LIKE :id", nativeQuery= true)
-    List<Ward> findAllWhereIdLike(@Param("id") String id);
+    List<Ward> findByCodeNot(String code);
+    List<Ward> findByCodeContains(String id);
 }

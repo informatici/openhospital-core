@@ -1,18 +1,10 @@
 package org.isf.menu.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.isf.utils.db.Auditable;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /*------------------------------------------
  * User - model for the user entity
@@ -24,18 +16,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  *------------------------------------------*/
 @Entity
 @Table(name="GROUPMENU")
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="GM_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="GM_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="GM_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="GM_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="GM_LAST_MODIFIED_DATE"))
-})
-public class GroupMenu extends Auditable<String>
+public class GroupMenu 
 {
 	@Id 
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="GM_ID")		
 	private Integer code;
 	
@@ -45,16 +28,22 @@ public class GroupMenu extends Auditable<String>
 	@Column(name="GM_MNI_ID_A")
 	private String menuItem;
 
+	@Column(name="GM_ACTIVE")
+	private char active;	
+	
 	@Transient
 	private volatile int hashCode = 0;
+			
 	
 	public GroupMenu(){
 	}
 	
-	public GroupMenu(String userGroup, String menuItem)
+	public GroupMenu(Integer code, String userGroup, String menuItem, char active)
 	{
+		this.code = code;
 		this.userGroup = userGroup;
 		this.menuItem = menuItem;
+		this.active = active;
 	}
 	
 	public Integer getCode() {
@@ -75,11 +64,15 @@ public class GroupMenu extends Auditable<String>
 	public void setMenuItem(String menuItem) {
 		this.menuItem = menuItem;
 	}
-	public int getActive() {
+	public char getActive() {
 		return active;
 	}
 	public void setActive(char active) {
 		this.active = active;
+	}
+	
+	public String toString(){
+		return code.toString();		
 	}
 	
 	@Override
@@ -91,4 +84,18 @@ public class GroupMenu extends Auditable<String>
                   && getActive() == ((GroupMenu) anObject).getActive());
     }
 
+	@Override
+	public int hashCode() {
+	    if (this.hashCode == 0) {
+	        final int m = 23;
+	        int c = 133;
+	        
+	        c = m * c + code.hashCode();
+	        
+	        this.hashCode = c;
+	    }
+	  
+	    return this.hashCode;
+	}	
+	
 }//class GroupMenu

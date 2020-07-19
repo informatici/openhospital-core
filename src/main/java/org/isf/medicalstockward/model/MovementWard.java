@@ -54,7 +54,7 @@ public class MovementWard  extends Auditable<String>
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="MMVN_WRD_ID_A")	
+	@JoinColumn(name="MMVN_WRD_ID_A")
 	private Ward ward;
 	
 	@ManyToOne

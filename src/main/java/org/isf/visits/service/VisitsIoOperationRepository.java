@@ -12,21 +12,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface VisitsIoOperationRepository extends JpaRepository<Visit, Integer> {
-
-    @Query(value = "SELECT * FROM VISITS ORDER BY VST_PAT_ID, VST_DATE", nativeQuery= true)
-    List<Visit> findAllByOrderPatientAndDateAsc();
-    
-    @Query(value = "SELECT * FROM VISITS WHERE VST_WRD_ID_A = :wardId ORDER BY VST_PAT_ID, VST_DATE", nativeQuery= true)
-    List<Visit> findAllWhereWardByOrderPatientAndDateAsc(@Param("wardId") String wardId);
-    
-    @Query(value = "SELECT * FROM VISITS WHERE VST_PAT_ID = :patient ORDER BY VST_PAT_ID, VST_DATE", nativeQuery= true)
-    List<Visit> findAllWherePatientByOrderPatientAndDateAsc(@Param("patient") Integer patient);
-    
-    @Query(value = "SELECT * FROM VISITS WHERE VST_WARD_ID = :ward ORDER BY VST_DATE", nativeQuery= true)
-    public List<Visit> findAllWhereWardByOrderDateAsc(@Param("ward") String ward);
-   
+    List<Visit> findAllByOrderByPatient_CodeAscDateAsc();
+    List<Visit> findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(@Param("patient") Integer patient);
     @Modifying
-    @Transactional
-    @Query(value = "DELETE FROM VISITS WHERE VST_PAT_ID = :patient", nativeQuery= true)
-    void deleteWherePatient(@Param("patient") Integer patient);
+    void deleteByPatient_Code(@Param("patient") Integer patient);
+
+	@Query(value = "SELECT * FROM VISITS WHERE VST_WRD_ID_A = :wardId ORDER BY VST_PAT_ID, VST_DATE", nativeQuery= true)
+	List<Visit> findAllWhereWardByOrderPatientAndDateAsc(@Param("wardId") String wardId);
+
+	@Query(value = "SELECT * FROM VISITS WHERE VST_WARD_ID = :ward ORDER BY VST_DATE", nativeQuery= true)
+	public List<Visit> findAllWhereWardByOrderDateAsc(@Param("ward") String ward);
+
+	@Query(value = "SELECT * FROM VISITS WHERE VST_PAT_ID = :patient ORDER BY VST_PAT_ID, VST_DATE", nativeQuery= true)
+	List<Visit> findAllWherePatientByOrderPatientAndDateAsc(@Param("patient") Integer patient);
+
 }

@@ -1,6 +1,7 @@
 package org.isf.hospital.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.hospital.model.Hospital;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -43,12 +44,9 @@ public class HospitalIoOperations {
 	 * @return currency cod
 	 * @throws OHServiceException
 	 */
-	public String getHospitalCurrencyCod() throws OHServiceException
-	{
-		String currencyCod = repository.findHospitalCurrent();
-	
-		
-		return currencyCod;
+	public String getHospitalCurrencyCod() throws OHServiceException {
+		List<String> currencyCodes = repository.findAllHospitalCurrencyCode();
+		return currencyCodes.isEmpty() ? null : currencyCodes.get(0);
 	}
 	
 	/**

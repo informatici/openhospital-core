@@ -223,11 +223,12 @@ public class MenuIoOperations
 			User aUser) throws OHServiceException 
 	{
 		ArrayList<UserMenuItem> menu = null;		
-		List<Object[]> menuList = (List<Object[]>)menuRepository.findAllWhereId(aUser.getUserName());
-				
+		List<Object[]> menuList = menuRepository.findAllWhereId(aUser.getUserName());
+		
+		
 		menu = new ArrayList<UserMenuItem>();
 		for (Object[] object : menuList) {
-			boolean active = (Boolean) object[9];
+			boolean active = (Character) object[9] == '1';
 			UserMenuItem umi = new UserMenuItem();
 
 
@@ -238,7 +239,7 @@ public class MenuIoOperations
 			umi.setShortcut((Character) object[4]);
 			umi.setMySubmenu((String) object[5]);
 			umi.setMyClass((String) object[6]);
-			umi.setASubMenu((Character) object[7] == 'Y');
+			umi.setASubMenu((Boolean) object[7]);
 			umi.setPosition((Integer) object[8]);
 			umi.setActive(active);
 			menu.add(umi);
@@ -257,8 +258,24 @@ public class MenuIoOperations
 	public ArrayList<UserMenuItem> getGroupMenu(
 			UserGroup aGroup) throws OHServiceException 
 	{
-		ArrayList<UserMenuItem> menu = (ArrayList<UserMenuItem>) menuRepository.findAllWhereGroupId(aGroup.getCode());
-				
+		List<Object[]> menuList = menuRepository.findAllWhereGroupId(aGroup.getCode());
+		ArrayList<UserMenuItem> menu = new ArrayList<UserMenuItem>();
+		for (Object[] object : menuList) {
+			boolean active = (Character) object[9] == '1';
+			UserMenuItem umi = new UserMenuItem();
+
+			umi.setCode((String) object[0]);
+			umi.setButtonLabel((String) object[1]);
+			umi.setAltLabel((String) object[2]);
+			umi.setTooltip((String) object[3]);
+			umi.setShortcut((Character) object[4]);
+			umi.setMySubmenu((String) object[5]);
+			umi.setMyClass((String) object[6]);
+			umi.setASubMenu((Boolean) object[7]);
+			umi.setPosition((Integer) object[8]);
+			umi.setActive(active);
+			menu.add(umi);
+		}
 		
 		return menu;
 	}
@@ -279,12 +296,13 @@ public class MenuIoOperations
 	{
 		boolean result = true;
 
-		
+	
 		result = _deleteGroupMenu(aGroup);
 		
 		for (UserMenuItem item : menu) {
 			result = result && _insertGroupMenu(aGroup, item, insert);
 		}
+		
 		return result;
 	}
 	
@@ -298,18 +316,19 @@ public class MenuIoOperations
 		
 		return result;
 	}
+	
 	public boolean _insertGroupMenu(
 			UserGroup aGroup,
 			UserMenuItem item, 
 			boolean insert) throws OHServiceException 
 	{
 		boolean result = true;
-		//groupMenuRepository.insert(aGroup.getCode(), item.getCode(), (item.isActive() ? "Y" : "N"));	
-		GroupMenu gm = new GroupMenu();
-		gm.setUserGroup(aGroup.getCode());
-		gm.setActive((item.isActive() ? 1 : 0));
-		gm.setMenuItem(item.getCode());
-		groupMenuRepository.save(gm);
+		GroupMenu groupMenu = new GroupMenu();
+		groupMenu.setUserGroup(aGroup.getCode());
+		groupMenu.setMenuItem(item.getCode());
+		groupMenu.setActive((item.isActive() ? '1' : '0'));
+		groupMenuRepository.save(groupMenu);
+				
 		return result;
 	}
 	

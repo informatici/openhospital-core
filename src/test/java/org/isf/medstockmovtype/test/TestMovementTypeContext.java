@@ -17,7 +17,7 @@ public class TestMovementTypeContext
 			DbJpaUtil jpa) throws OHException 
     {	
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM MEDICALDSRSTOCKMOVTYPE", MovementType.class, false);
+		jpa.createQuery("select movType from MovementType movType", MovementType.class, true);
 		savedMovementType = (List<MovementType>)jpa.getList();
 		jpa.commitTransaction();
         		
@@ -34,7 +34,7 @@ public class TestMovementTypeContext
     		DbJpaUtil jpa) throws OHException 
     {
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM MEDICALDSRSTOCKMOVTYPE", MovementType.class, false);
+		jpa.createQuery("select movType from MovementType movType", MovementType.class, true);
 		List<MovementType> MovementTypes = (List<MovementType>)jpa.getList();
 		for (MovementType movementType: MovementTypes) 
 		{    		

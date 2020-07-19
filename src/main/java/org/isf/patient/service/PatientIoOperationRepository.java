@@ -16,94 +16,32 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface PatientIoOperationRepository extends JpaRepository<Patient, Integer>, PatientIoOperationRepositoryCustom {
     
-	@Query(value = "SELECT * FROM PATIENT WHERE (PAT_DELETED='N' OR PAT_DELETED IS NULL) ORDER BY PAT_ID", nativeQuery= true)
-    List<Patient> findAllWhereDeleted();
-
-	
-	@Query(value = "SELECT * FROM PATIENT WHERE (PAT_DELETED='N' OR PAT_DELETED IS NULL) ORDER BY PAT_NAME", nativeQuery= true)
-    List<Patient> findAllWhereDeletedOrderedByName();
-
-    @Query(value = "SELECT * FROM PATIENT WHERE (PAT_DELETED='N' OR PAT_DELETED IS NULL) ORDER BY PAT_NAME, ?#{#pageable}", nativeQuery= true)
-    List<Patient> findAllWhereDeleted(Pageable pageable);
+    List<Patient> findByDeletedOrDeletedIsNull(String deletionStatus);
 
     List<Patient> findAllByDeletedIsNullOrDeletedEqualsOrderByName(String patDeleted, Pageable pageable);
     
-    @Query(value = "SELECT * FROM PATIENT WHERE PAT_NAME = :name AND (PAT_DELETED='N' OR PAT_DELETED IS NULL) ORDER BY PAT_SNAME,PAT_FNAME", nativeQuery= true)
-    List<Patient> findAllWhereNameAndDeletedOrderedByName(@Param("name") String name);
+    @Query("select p from Patient p where p.name = :name and (p.deleted = :deletedStatus or p.deleted is null) order by p.secondName, p.firstName")
+	List<Patient> findByNameAndDeletedOrderByName(@Param("name") String name, @Param("deletedStatus") String deletedStatus);
 
-    @Query(value = "SELECT * FROM PATIENT WHERE PAT_ID = :id AND (PAT_DELETED='N' OR PAT_DELETED IS NULL)", nativeQuery= true)
-    List<Patient> findAllWhereIdAndDeleted(@Param("id") Integer id);
-    
-    @Query(value = "SELECT * FROM PATIENT WHERE PAT_ID = :id", nativeQuery= true)
-    List<Patient> findAllWhereId(@Param("id") Integer id);
+	@Query("select p from Patient p where p.code = :id and (p.deleted = :deletedStatus or p.deleted is null)")
+	List<Patient> findAllWhereIdAndDeleted(@Param("id") Integer id, @Param("deletedStatus") String deletedStatus);
     
     @Modifying
     @Transactional
-    @Query(value = "UPDATE PATIENT SET PAT_DELETED = 'Y' WHERE PAT_ID = :id", nativeQuery = true)
+    @Query(value = "update Patient p set p.deleted = 'Y' where p.code = :id")
     int updateDeleted(@Param("id") Integer id);
             
-    @Query(value = "SELECT * FROM PATIENT WHERE PAT_NAME = :name AND PAT_DELETED='N'", nativeQuery= true)
-    List<Patient> findAllWhereName(@Param("name") String name);
+    List<Patient> findByNameAndDeleted(String name, String deletedStatus);
 
-    @Query(value = "SELECT MAX(PAT_ID) FROM PATIENT", nativeQuery= true)
+    @Query(value = "select max(p.code) from Patient p")
     Integer findMaxCode();
-        
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE ADMISSION SET ADM_PAT_ID = :new_id WHERE ADM_PAT_ID = :old_id", nativeQuery= true)
-    int updateAdmission(@Param("new_id") Integer new_id, @Param("old_id") Integer old_id);
 
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE PATIENTEXAMINATION SET PEX_PAT_ID = :new_id WHERE PEX_PAT_ID = :old_id", nativeQuery= true)
-    int updateExamination(@Param("new_id") Integer new_id, @Param("old_id") Integer old_id);
-    
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE LABORATORY SET LAB_PAT_ID = :new_id, LAB_PAT_NAME = :name, LAB_AGE = :age, LAB_SEX = :sex WHERE LAB_PAT_ID = :old_id", nativeQuery= true)
-    int updateLaboratory(@Param("new_id") Integer new_id, @Param("name") String name, @Param("age") Integer age, @Param("sex") String sex, @Param("old_id") Integer old_id);
-
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE OPD SET OPD_PAT_ID = :new_id, OPD_AGE = :age, OPD_SEX = :sex WHERE OPD_PAT_ID = :old_id", nativeQuery= true)
-    int updateOpd(@Param("new_id") Integer new_id, @Param("age") Integer age, @Param("sex") String sex, @Param("old_id") Integer old_id);
-    
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE BILLS SET BLL_ID_PAT = :new_id, BLL_PAT_NAME = :name WHERE BLL_ID_PAT = :old_id", nativeQuery= true)
-    int updateBill(@Param("new_id") Integer new_id, @Param("name") String name, @Param("old_id") Integer old_id);
-	
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE MEDICALDSRSTOCKMOVWARD SET MMVN_PAT_ID = :new_id WHERE MMVN_PAT_ID = :old_id", nativeQuery= true)
-    int updateMedicalStock(@Param("new_id") Integer new_id, @Param("old_id") Integer old_id);
-    
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE THERAPIES SET THR_PAT_ID = :new_id WHERE THR_PAT_ID = :old_id", nativeQuery= true)
-    int updateTherapy(@Param("new_id") Integer new_id, @Param("old_id") Integer old_id);
-	
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE VISITS SET VST_PAT_ID = :new_id WHERE VST_PAT_ID = :old_id", nativeQuery= true)
-    int updateVisit(@Param("new_id") Integer new_id, @Param("old_id") Integer old_id);
-
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE PATIENTVACCINE SET PAV_PAT_ID = :new_id WHERE PAV_PAT_ID = :old_id", nativeQuery= true)
-    int updatePatientVaccine(@Param("new_id") Integer new_id, @Param("old_id") Integer old_id);
- 		
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE PATIENT SET PAT_DELETED = 'Y' WHERE PAT_ID = :id", nativeQuery= true)
-    int updateDelete(@Param("id") Integer id); 		
-    
-    @Query(value = "SELECT * FROM PATIENT "
-    		+"LEFT JOIN (SELECT PEX_PAT_ID, PEX_HEIGHT AS PAT_HEIGHT, PEX_WEIGHT AS PAT_WEIGHT FROM PATIENTEXAMINATION GROUP BY PEX_PAT_ID ORDER BY PEX_DATE DESC) "
-    		+"AS HW ON PAT_ID = HW.PEX_PAT_ID WHERE (PAT_DELETED='N' or PAT_DELETED is null) "
-    		+"AND (PAT_AFFILIATED_PERSON < 1 OR PAT_AFFILIATED_PERSON is null) "
-    		+"AND (PAT_IS_HEAD_AFFILIATION = 1) "
-    		+"ORDER BY PAT_ID DESC", 
-    		nativeQuery= true)
-    ArrayList<Patient> getPatientsHeadWithHeightAndWeight();
+	@Query(value = "SELECT * FROM PATIENT "
+		+"LEFT JOIN (SELECT PEX_PAT_ID, PEX_HEIGHT AS PAT_HEIGHT, PEX_WEIGHT AS PAT_WEIGHT FROM PATIENTEXAMINATION GROUP BY PEX_PAT_ID ORDER BY PEX_DATE DESC) "
+		+"AS HW ON PAT_ID = HW.PEX_PAT_ID WHERE (PAT_DELETED='N' or PAT_DELETED is null) "
+		+"AND (PAT_AFFILIATED_PERSON < 1 OR PAT_AFFILIATED_PERSON is null) "
+		+"AND (PAT_IS_HEAD_AFFILIATION = 1) "
+		+"ORDER BY PAT_ID DESC",
+		nativeQuery= true)
+	ArrayList<Patient> getPatientsHeadWithHeightAndWeight();
 }

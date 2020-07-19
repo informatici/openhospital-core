@@ -287,29 +287,37 @@ public class TimeTools {
 
 		return calendar;
 	}
+
+	public static GregorianCalendar getBeginningOfDay(GregorianCalendar date) {
+		return new DateTime(date).withTimeAtStartOfDay().toGregorianCalendar();
+	}
+
+	public static GregorianCalendar getBeginningOfNextDay(GregorianCalendar date) {
+		return new DateTime(date).plusDays(1).withTimeAtStartOfDay().toGregorianCalendar();
+	}
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 	/**
 	 * @author Mwithi
-	 * 
+	 *
 	 * returns the difference in days between two dates
 	 * @param from
 	 * @param to
 	 * @return the number of days
 	 */
 	public static int getDaysBetweenDates(GregorianCalendar from, GregorianCalendar to) {
-		
+
 		DateTime dateFrom = new DateTime(from);
 		DateTime dateTo = new DateTime(to);
 		Period period = new Period(dateFrom, dateTo, PeriodType.days());
 		return period.getDays();
 	}
-	
+
 	/**
 	 * @author Mwithi
-	 * 
+	 *
 	 * returns the difference in days between two dates
 	 * @param from
 	 * @param to
@@ -321,10 +329,10 @@ public class TimeTools {
 		Period period = new Period(dateFrom, dateTo, PeriodType.days());
 		return period.getDays();
 	}
-	
+
 	/**
 	 * @author Mwithi
-	 * 
+	 *
 	 * returns the difference in weeks between two dates
 	 * @param from
 	 * @param to
@@ -336,10 +344,10 @@ public class TimeTools {
 		Period period = new Period(dateFrom, dateTo, PeriodType.weeks());
 		return period.getWeeks();
 	}
-	
+
 	/**
 	 * @author Mwithi
-	 * 
+	 *
 	 * returns the difference in months between two dates
 	 * @param from
 	 * @param to
@@ -376,11 +384,11 @@ public class TimeTools {
 	}
 	/**
 	 * Return the actual date and time of the server
-	 * 
-	 * @author hadesthanos 
-	 * @return DateTime 
-	 * @throws OHException 
-	 * @throws ParseException 
+	 *
+	 * @author hadesthanos
+	 * @return DateTime
+	 * @throws OHException
+	 * @throws ParseException
 	 */
 	public static GregorianCalendar getServerDateTime()  {
 		GregorianCalendar serverDate=new GregorianCalendar();
@@ -394,7 +402,7 @@ public class TimeTools {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				java.util.Date utilDate = new java.util.Date();
 				utilDate = sdf.parse(date);
-				serverDate.setTime(utilDate);				
+				serverDate.setTime(utilDate);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -405,7 +413,7 @@ public class TimeTools {
 		}
 		return serverDate;
 	}
-   
+
     public static String getConvertedString(GregorianCalendar time) {
 		if (time == null)
 			return MessageBundle.getMessage("angal.malnutrition.nodate");
@@ -417,9 +425,9 @@ public class TimeTools {
 		string += "/" + year;
 		return string;
 	}
-   
- 
-  
+
+
+
 public static GregorianCalendar convertToDate(String string) throws ParseException {
 		GregorianCalendar date = TimeTools.getServerDateTime();
 		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy");

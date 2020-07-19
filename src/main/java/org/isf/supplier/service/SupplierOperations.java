@@ -26,9 +26,6 @@ public class SupplierOperations {
 	@Autowired
 	private SupplierIoOperationRepository repository;
 	
-	/**
-	 * 
-	 */
 	public SupplierOperations() {
 		ExaminationParameters.getExaminationParameters();
 	}
@@ -39,16 +36,8 @@ public class SupplierOperations {
 	 * return <code>true</code> if data has been saved, <code>false</code> otherwise. 
 	 * @throws OHServiceException 
 	 */
-	public boolean saveOrUpdate(
-			Supplier supplier) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		Supplier savedSupplier = repository.save(supplier);
-		result = (savedSupplier != null);
-		
-		return result;
+	public boolean saveOrUpdate(Supplier supplier) throws OHServiceException {
+		return repository.save(supplier) != null;
 	}
 
 	/**
@@ -57,12 +46,8 @@ public class SupplierOperations {
 	 * @return supplier - the supplier with specified ID
 	 * @throws OHServiceException 
 	 */
-	public Supplier getByID(
-			int ID) throws OHServiceException 
-	{
-		Supplier foundSupplier = repository.findOne(ID);
-    	
-		return foundSupplier;
+	public Supplier getByID(int ID) throws OHServiceException {
+		return repository.findOne(ID);
 	}
 	
 	/**
@@ -70,11 +55,8 @@ public class SupplierOperations {
 	 * @return supList - the list of {@link Supplier}s
 	 * @throws OHServiceException 
 	 */
-	public List<Supplier> getAll() throws OHServiceException 
-	{
-		ArrayList<Supplier> suppliers = (ArrayList<Supplier>)repository.findAll();
-		
-		return suppliers;
+	public List<Supplier> getAll() throws OHServiceException {
+		return repository.findAll();
 	}
 
 	/**
@@ -82,10 +64,7 @@ public class SupplierOperations {
 	 * @return supList - the list of {@link Supplier}s
 	 * @throws OHServiceException 
 	 */
-	public List<Supplier> getList() throws OHServiceException 
-	{
-		ArrayList<Supplier> suppliers = (ArrayList<Supplier>)repository.findAllWhereNotDeleted();
-		
-		return suppliers;
+	public List<Supplier> getList() throws OHServiceException {
+		return repository.findAllWhereNotDeleted();
 	}
 }

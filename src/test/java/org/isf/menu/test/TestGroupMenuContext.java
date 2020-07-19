@@ -17,7 +17,7 @@ public class TestGroupMenuContext
 			DbJpaUtil jpa) throws OHException 
     {	
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM GROUPMENU", GroupMenu.class, false);
+		jpa.createQuery("SELECT gm FROM GroupMenu gm", GroupMenu.class, true);
 		savedGroupMenu = (List<GroupMenu>)jpa.getList();
 		jpa.commitTransaction();
         		
@@ -34,7 +34,7 @@ public class TestGroupMenuContext
     		DbJpaUtil jpa) throws OHException 
     {
 		jpa.beginTransaction();			
-		jpa.createQuery("SELECT * FROM GROUPMENU", GroupMenu.class, false);
+		jpa.createQuery("SELECT gm FROM GroupMenu gm", GroupMenu.class, true);
 		List<GroupMenu> GroupMenus = (List<GroupMenu>)jpa.getList();
 		for (GroupMenu groupMenu: GroupMenus) 
 		{    		

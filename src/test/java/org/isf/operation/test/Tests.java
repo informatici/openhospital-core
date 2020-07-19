@@ -2,6 +2,7 @@ package org.isf.operation.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.ArrayList;
 
@@ -141,6 +142,33 @@ public class Tests
 			assertEquals(true, false);
 		}
 		
+		return;
+	}
+
+	@Test
+	public void testIoGetOperationsShouldFindOperationsWithoutProvidingDescription() throws OHException
+	{
+		String code = "";
+
+
+		try
+		{
+			// given:
+			code = _setupTestOperation(false);
+			Operation foundOperation = (Operation)jpa.find(Operation.class, code);
+
+			// when:
+			ArrayList<Operation> operations = operationIoOperations.getOperation(foundOperation.getDescription());
+
+			// then:
+			assertFalse(operations.isEmpty());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+
 		return;
 	}
 	

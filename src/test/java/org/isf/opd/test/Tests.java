@@ -1,9 +1,8 @@
 package org.isf.opd.test;
 
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.isf.disease.model.Disease;
@@ -15,6 +14,7 @@ import org.isf.distype.test.TestDiseaseTypeContext;
 import org.isf.opd.model.Opd;
 import org.isf.opd.service.OpdIoOperations;
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.test.TestPatient;
 import org.isf.patient.test.TestPatientContext;
 import org.isf.utils.db.DbJpaUtil;
@@ -26,8 +26,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -44,7 +47,9 @@ public class Tests
 	private static TestDiseaseContext testDiseaseContext;
 
     @Autowired
-    OpdIoOperations opdIoOperation;	
+    OpdIoOperations opdIoOperation;
+    @Autowired
+    ApplicationEventPublisher applicationEventPublisher;
 	
 	@BeforeClass
     public static void setUpClass()  
@@ -284,6 +289,72 @@ public class Tests
 	}
 
 	@Test
+	public void testIoIsExistsOpdNumShouldReturnTrueWhenOpdWithGivenOPDProgressiveYearAndVisitYearExists() {
+		try	{
+			// given:
+			int code = _setupTestOpd(false);
+			Opd foundOpd = (Opd)jpa.find(Opd.class, code);
+
+			// when:
+			Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), foundOpd.getVisitDate().get(Calendar.YEAR));
+
+			// then:
+			assertTrue(result);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+
+		return;
+	}
+
+	@Test
+	public void testIoIsExistsOpdNumShouldReturnTrueWhenOpdNumExistsAndVisitYearIsNotProvided()	{
+		try	{
+			// given:
+			int code = _setupTestOpd(false);
+			Opd foundOpd = (Opd)jpa.find(Opd.class, code);
+
+			// when:
+			Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 0);
+
+			// then:
+			assertTrue(result);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+
+		return;
+	}
+
+	@Test
+	public void testIoIsExistsOpdNumShouldReturnFalseWhenOpdNumExistsAndVisitYearIsIncorrect() {
+		try	{
+			// given:
+			int code = _setupTestOpd(false);
+			Opd foundOpd = (Opd)jpa.find(Opd.class, code);
+
+			// when:
+			Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 1488);
+
+			// then:
+			assertFalse(result);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+
+		return;
+	}
+
+	@Test
 	public void testIoGetLastOpd()  
 	{
 		int code = 0;
@@ -305,7 +376,35 @@ public class Tests
 		
 		return;
 	}
-		
+
+	@Test
+	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() {
+		try {
+			// given:
+			int id = _setupTestOpd(false);
+			Opd found = (Opd) jpa.find(Opd.class, id);
+			Patient mergedPatient = _setupTestPatient(false);
+
+			// when:
+			applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
+
+			// then:
+			Opd result = (Opd)jpa.find(Opd.class, id);
+			assertEquals(mergedPatient.getCode(), result.getPatient().getCode());
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+	}
+
+	private Patient _setupTestPatient(boolean usingSet) throws OHException	{
+		jpa.beginTransaction();
+		Patient patient = testPatient.setup(usingSet);
+		jpa.persist(patient);
+		jpa.commitTransaction();
+
+		return patient;
+	}
 	
 	private void _saveContext() throws OHException 
     {	

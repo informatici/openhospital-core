@@ -69,7 +69,7 @@ public class ExamBrowsingManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Exam> getExams() throws OHServiceException {
-		return ioOperations.getExams();
+		return new ArrayList<Exam>(ioOperations.getExams());
 	}
 	
 	/**
@@ -90,7 +90,7 @@ public class ExamBrowsingManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Exam> getExams(String description) throws OHServiceException {
-		return ioOperations.getExamsByDesc(description);
+		return new ArrayList<Exam>(ioOperations.getExamsByDesc(description));
 	}
 	
 	/**

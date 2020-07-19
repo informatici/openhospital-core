@@ -47,7 +47,7 @@ public class DiseaseIoOperations {
 	public Disease getDiseaseByCode(
 			int code) throws OHServiceException 
 	{
-		return repository.findOneByCode(code);
+		return repository.findOneByCode(String.valueOf(code));
 	}
 	
 	/**

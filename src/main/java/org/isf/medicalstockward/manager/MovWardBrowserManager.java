@@ -77,14 +77,14 @@ public class MovWardBrowserManager {
 	 * @param wardId the ward id.
 	 * @param stripeEmpty - if <code>true</code>, stripes the empty lots
 	 * @return the retrieved medicals.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public ArrayList<MedicalWard> getMedicalsWard(char wardId, boolean stripeEmpty) throws OHServiceException {
 		return ioOperations.getMedicalsWard(wardId, stripeEmpty);
 	}
 
 	/**
-	 * Gets all the {@link MedicalWard}s associated to the specified ward summarized by lot 
+	 * Gets all the {@link MedicalWard}s associated to the specified ward summarized by lot
 	 * (total quantity, regardless the lot)
 	 * @param wardId the ward id.
 	 * @return the retrieved medicals.
@@ -122,12 +122,12 @@ public class MovWardBrowserManager {
 	 * Gets all the movement ward with the specified criteria.
 	 * @param patient
 	 * @return all the retrieved movements.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public ArrayList<MovementWard> getMovementToPatient(Patient patient) throws OHServiceException {
 		return ioOperations.getWardMovementsToPatient(patient.getCode());
 	}
-	
+
 	/**
 	 * Persists the specified movement.
 	 * @param newMovement the movement to persist.

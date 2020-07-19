@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.isf.examination.model.PatientExamination;
 import org.isf.examination.service.ExaminationOperations;
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.test.TestPatient;
 import org.isf.patient.test.TestPatientContext;
 import org.isf.utils.db.DbJpaUtil;
@@ -19,6 +20,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -34,6 +36,8 @@ public class Tests
 
     @Autowired
     ExaminationOperations examinationOperations;
+    @Autowired
+	ApplicationEventPublisher applicationEventPublisher;
 	
 	@BeforeClass
     public static void setUpClass()  
@@ -258,7 +262,36 @@ public class Tests
 		}
 		
 		return;
-	}	
+	}
+
+	@Test
+	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() {
+		try {
+			// given:
+			int id = _setupTestPatientExamination(false);
+			PatientExamination found = (PatientExamination) jpa.find(PatientExamination.class, id);
+			Patient mergedPatient = _setupTestPatient(false);
+
+			// when:
+			applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
+
+			// then:
+			PatientExamination result = (PatientExamination)jpa.find(PatientExamination.class, id);
+			assertEquals(mergedPatient.getCode(), result.getPatient().getCode());
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+	}
+
+	private Patient _setupTestPatient(boolean usingSet) throws OHException {
+		jpa.beginTransaction();
+		Patient patient = testPatient.setup(usingSet);
+		jpa.persist(patient);
+		jpa.commitTransaction();
+
+		return patient;
+	}
 
 	private void _saveContext() throws OHException 
     {	

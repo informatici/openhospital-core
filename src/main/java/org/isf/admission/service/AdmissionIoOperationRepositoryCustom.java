@@ -12,17 +12,19 @@ public interface AdmissionIoOperationRepositoryCustom {
 
 	/**
 	 * @deprecated unless you need all the columns from patient and admission, use {@link #findPatientAndAdmissionId(String)} instead
+	 * @return
 	 */
 	@Deprecated
-	List<Object[]> findAllBySearch(String searchTerms);
+	List<Admission> findAllBySearch(String searchTerms);
 
 	List<PatientAdmission> findPatientAndAdmissionId(String searchTerms);
 
 	/**
 	 * @deprecated unless you need all the columns from patient and admission, use {@link #findPatientAdmissionsBySearchAndDateRanges(String, GregorianCalendar[], GregorianCalendar[])} instead
+	 * @return
 	 */
 	@Deprecated
-	List<Object[]> findAllBySearchAndDateRanges(String searchTerms, GregorianCalendar[] admissionRange,
+	List<Admission> findAllBySearchAndDateRanges(String searchTerms, GregorianCalendar[] admissionRange,
 												GregorianCalendar[] dischargeRange);
 
 	List<PatientAdmission> findPatientAdmissionsBySearchAndDateRanges(String searchTerms,

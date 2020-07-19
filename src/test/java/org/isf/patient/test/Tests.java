@@ -1,10 +1,22 @@
 package org.isf.patient.test;
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +96,7 @@ public class Tests
 				
 		return;
 	}
-	
+
 	@Test
 	public void testPatientSets() 
 	{
@@ -131,7 +143,7 @@ public class Tests
 		{		
 			_setupTestPatient(false);
 			// Pay attention that query return with PAT_ID descendant
-			ArrayList<Patient> patients = patientIoOperation.getPatientsWithHeightAndWeight(null);
+			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(null);
 
 			testPatient.check(patients.get(0));
 		} 
@@ -145,22 +157,98 @@ public class Tests
 	}
 	
 	@Test
-	public void testIoGetPatientsWithHeightAndWeightRegEx() 
-	{	
-		try 
-		{	
+	public void testIoGetPatientsByOneOfFieldsLikeFirstName() {
+		try {
+			// given:
 			Integer code = _setupTestPatient(false);
-			Patient foundPatient = (Patient)jpa.find(Patient.class, code); 
-			ArrayList<Patient> patients = patientIoOperation.getPatientsWithHeightAndWeight(foundPatient.getFirstName());
-			
+			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+
+			// when:
+			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getFirstName());
+
+			// then:
 			testPatient.check(patients.get(0));
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
+		} catch (Exception e) {
+			e.printStackTrace();
 			assertEquals(true, false);
 		}
-		
+	}
+
+	@Test
+	public void testIoGetPatientsByOneOfFieldsLikeSecondName() {
+		try {
+			// given:
+			Integer code = _setupTestPatient(false);
+			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+
+			// when:
+			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
+
+			// then:
+			testPatient.check(patients.get(0));
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+	}
+
+	@Test
+	public void testIoGetPatientsByOneOfFieldsLikeNote() {
+		try {
+			// given:
+			Integer code = _setupTestPatient(false);
+			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+
+			// when:
+			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
+
+			// then:
+			testPatient.check(patients.get(0));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+	}
+
+	@Test
+	public void testIoGetPatientsByOneOfFieldsLikeTaxCode()	{
+		try	{
+			// given:
+			Integer code = _setupTestPatient(false);
+			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+
+			// when:
+			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getTaxCode());
+
+			// then:
+			testPatient.check(patients.get(0));
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+
+		return;
+	}
+
+	@Test
+	public void testIoGetPatientsByOneOfFieldsLikeNotExistingStringShouldNotFindAnything()
+	{
+		try
+		{
+			Integer code = _setupTestPatient(false);
+			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike("dupa");
+
+			assertTrue(patients.isEmpty());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+
 		return;
 	}
 
@@ -309,15 +397,36 @@ public class Tests
 	}
 	
 	@Test
-	public void testMergePatientHistory()
-	{		
-		//TODO: function not yet ported to JPA
-		assertEquals(1, 1);
-		
-		return;
-	}	
-	
-	
+	public void testMergePatientHistory() throws OHException, OHServiceException {
+    	try {
+			// given:
+			jpa.beginTransaction();
+			Patient mergedPatient = testPatient.setup(false);
+			jpa.persist(mergedPatient);
+			Patient obsoletePatient = testPatient.setup(false);
+			jpa.persist(obsoletePatient);
+			jpa.commitTransaction();
+
+			// when:
+			patientIoOperation.mergePatientHistory(mergedPatient, obsoletePatient);
+
+			// then:
+			assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(mergedPatient, obsoletePatient);
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		} finally {
+			testPatientContext.deleteNews(jpa); // we create 2 entries so additional deletion needed
+		}
+	}
+
+	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) throws OHException {
+		Patient mergedPatientResult = (Patient) jpa.find(Patient.class, mergedPatient.getCode());
+		Patient obsoletePatientResult = (Patient) jpa.find(Patient.class, obsoletePatient.getCode());
+		assertEquals("Y", obsoletePatientResult.getDeleted());
+		assertEquals("N", mergedPatientResult.getDeleted());
+	}
+
 	private void _saveContext() throws OHException 
     {	
 		testPatientContext.saveAll(jpa);

@@ -8,9 +8,9 @@ _(requires Maven 3.2.5 or lesser installed and configured)_
 
     mvn clean install
     
-You need a local (or remote) MySQL server where to run the JUnit tests. Simply run:
+To run the JUnit tests simply run:
 
-	docker-compose up 
+	mvn test
 
 **How to launch the software:**
 

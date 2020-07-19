@@ -50,7 +50,7 @@ public class WardIoOperations {
 	 */
 	public ArrayList<Ward> getWardsNoMaternity() throws OHServiceException 
 	{		
-		ArrayList<Ward> wards = new ArrayList<Ward>(repository.findAllWhereWardIsM());
+		ArrayList<Ward> wards = new ArrayList<Ward>(repository.findByCodeNot("M"));
 
 		return wards;
 	}
@@ -69,7 +69,7 @@ public class WardIoOperations {
 		
 		if (wardID != null && wardID.trim().length() > 0) 
 		{
-			wards = new ArrayList<Ward>(repository.findAllWhereIdLike(wardID));
+			wards = new ArrayList<Ward>(repository.findByCodeContains(wardID));
 		}	
 		else
 		{
@@ -85,16 +85,8 @@ public class WardIoOperations {
 	 * @return <code>true</code> if the ward has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs storing the ward.
 	 */
-	public boolean newWard(
-			Ward ward) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		Ward savedWard = repository.save(ward);
-		result = (savedWard != null);
-		
-		return result;
+	public boolean newWard(Ward ward) throws OHServiceException {
+		return repository.save(ward) != null;
 	}
 	
 	/**
@@ -103,16 +95,8 @@ public class WardIoOperations {
 	 * @return <code>true</code> if the ward has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateWard(
-			Ward ward) throws OHServiceException
-	{				
-		boolean result = true;
-	
-
-		Ward savedWard = repository.save(ward);
-		result = (savedWard != null);
-		
-		return result;
+	public boolean updateWard(Ward ward) throws OHServiceException {
+		return repository.save(ward) != null;
 	}
 	
 	/**
@@ -121,15 +105,9 @@ public class WardIoOperations {
 	 * @return <code>true</code> if the ward has been marked, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurred during the delete operation.
 	 */
-	public boolean deleteWard(
-			Ward ward) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteWard(Ward ward) throws OHServiceException {
 		repository.delete(ward);
-		
-		return result;	
+		return true;
 	}
 	
 	/**
@@ -138,15 +116,8 @@ public class WardIoOperations {
 	 * @return <code>true</code> if it is already used, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;	
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.exists(code);
 	}
 	
 	
@@ -155,14 +126,8 @@ public class WardIoOperations {
 	 * @return <code>true</code> if is exist, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean isMaternityPresent() throws OHServiceException
-	{
-		boolean result = false;
-		
-		
-		result = isCodePresent("M");
-    	
-    	return result;
+	public boolean isMaternityPresent() throws OHServiceException {
+		return isCodePresent("M");
 	}
 	
 }

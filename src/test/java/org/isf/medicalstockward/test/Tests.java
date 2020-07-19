@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import org.isf.examination.model.PatientExamination;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.test.TestMedical;
 import org.isf.medicals.test.TestMedicalContext;
@@ -18,13 +19,17 @@ import org.isf.medicalstock.test.TestMovementContext;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MedicalWardId;
 import org.isf.medicalstockward.model.MovementWard;
+import org.isf.medicalstockward.service.MedicalStockWardIoOperationRepository;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperations;
+import org.isf.medicalstockward.service.MovementWardIoOperationRepository;
 import org.isf.medstockmovtype.test.TestMovementType;
 import org.isf.medstockmovtype.test.TestMovementTypeContext;
 import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.test.TestMedicalType;
 import org.isf.medtype.test.TestMedicalTypeContext;
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientMergedEvent;
+import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.test.TestPatient;
 import org.isf.patient.test.TestPatientContext;
 import org.isf.supplier.test.TestSupplier;
@@ -41,6 +46,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner; 
 
@@ -72,7 +78,9 @@ public class Tests
 
     @Autowired
     MedicalStockWardIoOperations medicalIoOperation;
-	
+    @Autowired
+    ApplicationEventPublisher applicationEventPublisher;
+
 	@BeforeClass
     public static void setUpClass()  
     {
@@ -271,10 +279,10 @@ public class Tests
 			Ward ward = testWard.setup(false);
 			Patient patient = testPatient.setup(false);
 			Lot lot = testLot.setup(false);
-			
+
 			Ward wardTo = testWard.setup(false);
 			wardTo.setCode("X");
-		
+
 			jpa.beginTransaction();	
 			jpa.persist(medicalType);
 			jpa.persist(medical);
@@ -316,10 +324,10 @@ public class Tests
 			Ward ward = testWard.setup(false);
 			Patient patient = testPatient.setup(false);
 			Lot lot = testLot.setup(false);
-			
+
 			Ward wardTo = testWard.setup(false);
 			wardTo.setCode("X");
-		
+
 			jpa.beginTransaction();	
 			jpa.persist(medicalType);
 			jpa.persist(medical);
@@ -333,6 +341,7 @@ public class Tests
 			Double quantity = (double) medicalIoOperation.getCurrentQuantityInWard(wardTo, medical);
 			
 			_checkMovementWardIntoDb(movementWard.getCode());
+
 			assertEquals(quantity, movementWard.getQuantity());
 		} 
 		catch (Exception e) 
@@ -405,7 +414,7 @@ public class Tests
 		{		
 			code = _setupTestMedicalWard(false);
 			MedicalWard foundMedicalWard = (MedicalWard)jpa.find(MedicalWard.class, code); 
-			ArrayList<MedicalWard> medicalWards = medicalIoOperation.getMedicalsWard(foundMedicalWard.getWard().getCode().charAt(0), true);			
+			ArrayList<MedicalWard> medicalWards = medicalIoOperation.getMedicalsWard(foundMedicalWard.getWard().getCode().charAt(0), true);
 			assertEquals((double)(foundMedicalWard.getInQuantity()-foundMedicalWard.getOutQuantity()), medicalWards.get(0).getQty(), 0.1);
 		} 
 		catch (Exception e) 
@@ -416,7 +425,36 @@ public class Tests
 		
 		return;
 	}
-	
+
+	@Test
+	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() {
+		try {
+			// given:
+			int id = _setupTestMovementWard(false);
+			MovementWard found = (MovementWard) jpa.find(MovementWard.class, id);
+			Patient mergedPatient = _setupTestPatient(false);
+
+			// when:
+			applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
+
+			// then:
+			MovementWard result = (MovementWard)jpa.find(MovementWard.class, id);
+			assertEquals(mergedPatient.getCode(), result.getPatient().getCode());
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+	}
+
+	private Patient _setupTestPatient(boolean usingSet) throws OHException	{
+		jpa.beginTransaction();
+		Patient patient = testPatient.setup(usingSet);
+		jpa.persist(patient);
+		jpa.commitTransaction();
+
+		return patient;
+	}
+
 	
 	private void _saveContext() throws OHException 
     {	
@@ -458,7 +496,7 @@ public class Tests
 		Medical medical= testMedical.setup(medicalType, false);
 		Ward ward = testWard.setup(false);
 		Lot lot = testLot.setup(false);
-		
+
 	
 		jpa.beginTransaction();	
 		jpa.persist(medicalType);
@@ -493,7 +531,7 @@ public class Tests
 		Ward ward = testWard.setup(false);
 		Patient patient = testPatient.setup(false);
 		Lot lot = testLot.setup(false);
-		
+
 	
 		jpa.beginTransaction();	
 		jpa.persist(medicalType);

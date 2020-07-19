@@ -40,10 +40,10 @@ public class DicomIoOperations
 	 * @throws OHServiceException 
 	 */
 	public Long[] getSerieDetail(
-			int patientID, 
-			String seriesNumber) throws OHServiceException 
+			int patientID,
+			String seriesNumber) throws OHServiceException
 	{
-		List<FileDicom> dicomList  = repository.findAllWhereIdAndNumberByOrderNameAsc((long)patientID, seriesNumber);
+		List<FileDicom> dicomList  = repository.findAllWhereIdAndNumberByOrderNameAsc(patientID, seriesNumber);
 		Long[] dicomIdArray = new Long[dicomList.size()];	
 		
 		
@@ -64,13 +64,13 @@ public class DicomIoOperations
 	 * @throws OHServiceException 
 	 */
 	public boolean deleteSerie(
-			int patientID, 
-			String seriesNumber) throws OHServiceException 
+			int patientID,
+			String seriesNumber) throws OHServiceException
 	{
 		boolean result = true;
         
 
-		repository.deleteByIdAndNumber((long)patientID, seriesNumber);
+		repository.deleteByIdAndNumber(patientID, seriesNumber);
 				
         return result;
 	}
@@ -86,8 +86,8 @@ public class DicomIoOperations
 	 */
 	public FileDicom loadDetails(
 			Long idFile, 
-			int patientID, 
-			String seriesNumber) throws OHServiceException 
+			int patientID,
+			String seriesNumber) throws OHServiceException
 	{
 		if (idFile == null)
 			return null;
@@ -106,8 +106,8 @@ public class DicomIoOperations
 	 */
 	public FileDicom loadDetails(
 			long idFile, 
-			int patientID, 
-			String seriesNumber) throws OHServiceException 
+			int patientID,
+			String seriesNumber) throws OHServiceException
 	{
 		FileDicom dicom = repository.findOne(idFile);
 				
@@ -122,9 +122,9 @@ public class DicomIoOperations
 	 * @throws OHServiceException 
 	 */
 	public FileDicom[] loadPatientFiles(
-			int patientID) throws OHServiceException 
+			int patientID) throws OHServiceException
 	{
-		List<FileDicom> dicomList = repository.findAllWhereIdOrderSerDateDesc((long) patientID);
+		List<FileDicom> dicomList = repository.findAllWhereIdGroupByUid(patientID);
 
 		FileDicom[] dicoms = new FileDicom[dicomList.size()];	
 		for (int i=0; i<dicomList.size(); i++)
@@ -139,7 +139,7 @@ public class DicomIoOperations
 
 	/**
 	 * check if dicom is loaded
-	 * 
+	 *
 	 * @param dicom, the detail od dicom
 	 * @return true if file exist
 	 * @throws OHServiceException 
@@ -147,7 +147,7 @@ public class DicomIoOperations
 	public boolean exist(
 			FileDicom dicom) throws OHServiceException 
 	{
-		List<FileDicom> dicomList = repository.findAllWhereIdAndFileAndUid((long) dicom.getPatId(), dicom.getDicomSeriesNumber(), dicom.getDicomInstanceUID());
+		List<FileDicom> dicomList = repository.findAllWhereIdAndFileAndUid(dicom.getPatId(), dicom.getDicomSeriesNumber(), dicom.getDicomInstanceUID());
 	
 		return (dicomList.size() > 0);
 	}
@@ -183,21 +183,21 @@ public class DicomIoOperations
 		
 		return result;	
 	}
-	
+
 	/**
 	 * checks if the series number is already in use
 	 *
 	 * @param dicomSeriesNumber - the series number to check
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean isSeriePresent(String dicomSeriesNumber) throws OHServiceException
 	{
 		List<FileDicom> result;
-	
-		
+
+
 		result = repository.findAllWhereDicomSeriesNumber(dicomSeriesNumber);
-		
-		return !result.isEmpty();	
+
+		return !result.isEmpty();
 	}
 }

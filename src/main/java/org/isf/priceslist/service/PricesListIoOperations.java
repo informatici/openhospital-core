@@ -60,12 +60,10 @@ public class PricesListIoOperations {
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean updatePrices(
-			PriceList list, 
-			ArrayList<Price> prices) throws OHServiceException {
+	public boolean updatePrices(PriceList list,	ArrayList<Price> prices) throws OHServiceException {
 		boolean result = true;
-		
-		
+
+
 		result = _deletePricesInsideList(list.getId());
 		
 		result &= _insertNewPricesInsideList(list, prices);
@@ -75,31 +73,19 @@ public class PricesListIoOperations {
 	
 	private boolean _deletePricesInsideList(
 			int id) throws OHServiceException 
-    {			
-		boolean result = true;
-
-		
-		priceRepository.deleteWhereList(id);
+    {
+		priceRepository.deleteByListId(id);
         				
-        return result;
+        return true;
     }
 	
-	private boolean _insertNewPricesInsideList(
-			PriceList list,
-			ArrayList<Price> prices) throws OHServiceException 
-    {	
-		boolean result = true;
-        		
-		
-		for (Price price : prices) 
-		{
-			priceRepository.insertPrice(
-					list.getId(), price.getGroup(), price.getItem(),
-					price.getDesc(),
-					price.getPrice());
+	private boolean _insertNewPricesInsideList(PriceList list, ArrayList<Price> prices) throws OHServiceException {
+		for (Price price : prices) {
+			price.setList(list);
+			priceRepository.save(price);
 		}
 		
-        return result;
+        return true;
     }
 
 	/**
@@ -109,14 +95,8 @@ public class PricesListIoOperations {
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newList(
-			PriceList list) throws OHServiceException {
-		boolean result = true;
-        		
-		
-		repository.insertPriceList(list.getCode(), list.getName(), list.getDescription(), list.getCurrency());
-		
-		return result;
+	public boolean newList(PriceList list) throws OHServiceException {
+		return repository.save(list) != null;
 	}
 	
 	/**
@@ -126,17 +106,8 @@ public class PricesListIoOperations {
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean updateList(
-			PriceList list) throws OHServiceException {
-		boolean result = false;
-        				
-
-		if (repository.updatePriceList(list.getCode(), list.getName(), list.getDescription(), list.getCurrency(), list.getId()) > 0)
-		{
-			result = true;
-		}		
-		
-		return result;
+	public boolean updateList(PriceList list) throws OHServiceException {
+		return repository.save(list) != null;
 	}
 	
 	/**
@@ -164,7 +135,7 @@ public class PricesListIoOperations {
 		boolean result = true;
 		
 		
-		repository.deleteWhereId(id);
+		repository.deleteById(id);
 		
         return result;
     }
@@ -187,7 +158,7 @@ public class PricesListIoOperations {
 		boolean result = true; 			
 
 		
-		List<Price> Prices = (List<Price>)priceRepository.findAllWhereList(list.getId());
+		List<Price> Prices = (List<Price>)priceRepository.findByList_id(list.getId());
 		for (Price price: Prices) 
 		{    
 			Price newPrice = new Price();

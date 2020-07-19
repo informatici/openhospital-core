@@ -1,9 +1,11 @@
 package org.isf.medicalstock.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,12 +15,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.isf.medstockmovtype.model.MovementType;
 
 /*------------------------------------------
  * Medical Lot - model for the medical entity
@@ -47,7 +51,7 @@ public class Lot extends Auditable<String>
 	@ManyToOne
 	@JoinColumn(name="LT_MDSR_ID")
 	private Medical medical;
-	
+
 	@NotNull
 	@Column(name="LT_PREP_DATE")
 	private GregorianCalendar preparationDate;
@@ -58,46 +62,59 @@ public class Lot extends Auditable<String>
 
 	@Column(name="LT_COST")
 	private BigDecimal cost;
-	
+
 	@Transient
 	private int quantity;
-	
+
 	@Transient
 	private volatile int hashCode = 0;
-	
 
-	public Lot() { 
+	@OneToMany(mappedBy = "lot")
+	private List<Movement> movements = new ArrayList<Movement>();
+
+	public Lot() {
 	}
+
 	public Lot(String aCode){
 		code=aCode;
-		
+
 	}
 	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate){
 		code=aCode;
 		preparationDate=aPreparationDate;
 		dueDate=aDueDate;
 	}
-	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate,int aQuantity){
-		code=aCode;
-		preparationDate=aPreparationDate;
-		dueDate=aDueDate;
-		quantity=aQuantity;
-	}
+
 	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate,BigDecimal aCost){
 		code=aCode;
 		preparationDate=aPreparationDate;
 		dueDate=aDueDate;
 		cost=aCost;
 	}
+
 	public String getCode(){
 		return code;
 	}
+
 	public int getQuantity(){
+		return quantity;
+	}
+
+	public int calculateQuantity(){ // TODO: this should replace getter logic, for now we are leaving transient field to avoid unnecessary changes in ui
+		int quantity = 0;
+		for (Movement movement: movements) {
+			if (movement.getType().getType().equals("-")) {
+				quantity -= movement.getQuantity();
+			} else if (movement.getType().getType().equals("+")) {
+				quantity += movement.getQuantity();
+			}
+		}
 		return quantity;
 	}
 	public Medical getMedical(){
 			return medical;
 	}
+
 	public GregorianCalendar getPreparationDate(){
 		return preparationDate;
 	}

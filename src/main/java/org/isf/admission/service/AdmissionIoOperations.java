@@ -5,7 +5,7 @@ package org.isf.admission.service;
  * ====================
  * 10/11/06 - ross - removed from the list the deleted patients
  *                   the list is now in alphabetical  order
- * 11/08/08 - alessandro - added getFather&Mother Names
+ * 11/08/08 - alessandro - addedd getFather&Mother Names
  * 26/08/08 - claudio - changed getAge for managing varchar type
  * 					  - added getBirthDate
  * 01/01/09 - Fabrizio - changed the calls to PAT_AGE fields to
@@ -14,6 +14,11 @@ package org.isf.admission.service;
  * 						 ward on 1st July conditioned to parameter 
  * 						 MATERNITYRESTARTINJUNE in generalData.properties                   
  *-----------------------------------------------------------*/
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.hibernate.Hibernate;
 import org.isf.admission.model.Admission;
@@ -114,7 +119,7 @@ public class AdmissionIoOperations
 		final Admission admission = repository.findOneWherePatientIn(patientId);
 		return new AdmittedPatient(patient, admission);
 	}
-
+	
 	/**
 	 * Returns the current admission (or null if none) for the specified patient.
 	 * @param patient the patient target of the admission.
@@ -332,6 +337,7 @@ public class AdmissionIoOperations
 		}
         Patient savedPatient = patientRepository.save(foundPatient);
 		result = (savedPatient != null);    
+		
 		return result;
 	}
 }

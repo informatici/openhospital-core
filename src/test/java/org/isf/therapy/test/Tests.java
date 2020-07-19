@@ -12,6 +12,7 @@ import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.test.TestMedicalType;
 import org.isf.medtype.test.TestMedicalTypeContext;
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.test.TestPatient;
 import org.isf.patient.test.TestPatientContext;
 import org.isf.therapy.model.TherapyRow;
@@ -25,6 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -44,6 +46,8 @@ public class Tests
 
     @Autowired
     private TherapyIoOperations therapyIoOperation;
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
 	
 	@BeforeClass
     public static void setUpClass()  
@@ -160,6 +164,24 @@ public class Tests
 		
 		return;
 	}
+
+	@Test
+	public void testIoGetTherapyRowWithZeroAsIdentifierProvided() {
+		try	{
+			// given:
+			int id = _setupTestTherapyRow(false);
+			TherapyRow foundTherapyRow = (TherapyRow)jpa.find(TherapyRow.class, id);
+
+			// when:
+			ArrayList<TherapyRow> therapyRows = therapyIoOperation.getTherapyRows(0);
+
+			// then:
+			assertEquals(foundTherapyRow.getNote(), therapyRows.get(therapyRows.size()-1).getNote());
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+	}
 	
 	@Test
 	public void testIoNewTherapyRow() 
@@ -215,6 +237,36 @@ public class Tests
 		}
 		
 		return;
+	}
+
+	@Test
+	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() {
+		try {
+			// given:
+			int id = _setupTestTherapyRow(false);
+			TherapyRow found = (TherapyRow) jpa.find(TherapyRow.class, id);
+			Patient obsoletePatient = found.getPatID();
+			Patient mergedPatient = _setupTestPatient(false);
+
+			// when:
+			applicationEventPublisher.publishEvent(new PatientMergedEvent(obsoletePatient, mergedPatient));
+
+			// then:
+			TherapyRow result = (TherapyRow)jpa.find(TherapyRow.class, id);
+			assertEquals(mergedPatient.getCode(), result.getPatID().getCode());
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+	}
+
+	private Patient _setupTestPatient(boolean usingSet) throws OHException	{
+		jpa.beginTransaction();
+		Patient patient = testPatient.setup(usingSet);
+		jpa.persist(patient);
+		jpa.commitTransaction();
+
+		return patient;
 	}
 		
 	
