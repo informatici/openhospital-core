@@ -2,7 +2,6 @@ package org.isf.medicalstock.service;
 
 import java.util.List;
 
-import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

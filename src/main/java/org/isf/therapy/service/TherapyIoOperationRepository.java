@@ -5,7 +5,6 @@ import java.util.List;
 import org.isf.therapy.model.TherapyRow;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface TherapyIoOperationRepository extends JpaRepository<TherapyRow, Integer> {

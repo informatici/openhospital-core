@@ -15,11 +15,6 @@ package org.isf.admission.service;
  * 						 MATERNITYRESTARTINJUNE in generalData.properties                   
  *-----------------------------------------------------------*/
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 import org.hibernate.Hibernate;
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
