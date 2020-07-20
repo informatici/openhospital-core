@@ -25,7 +25,7 @@ public class FileTools {
 	
 	private static final String[] BINARY_UNITS = { "B", "M", "G" }; //Byte, Megabyte, Gigabyte 
 
-	protected final static String[][] dateTimeFormats = new String[][] {
+	protected static final String[][] dateTimeFormats = new String[][] {
 		{"yyyy-MM-dd", "\\d{4}-\\d{2}-\\d{2}"},
 		{"dd-MM-yyyy", "\\d{2}-\\d{2}-\\d{4}"},
 		{"dd-MM-yy", "\\d{2}-\\d{2}-\\d{2}"},

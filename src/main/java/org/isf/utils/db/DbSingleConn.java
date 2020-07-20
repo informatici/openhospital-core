@@ -30,7 +30,7 @@ public class DbSingleConn {
 	
 	protected static Logger logger = LoggerFactory.getLogger(DbSingleConn.class);
 
-	private final static int MYSQL_DEFAULT_PORT = 3306;
+	private static final int MYSQL_DEFAULT_PORT = 3306;
 	
 	private static Connection pConn;
 

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SmsManager {
 
-	public final static int MAX_LENGHT = 160;
+	public static final int MAX_LENGHT = 160;
 	private final String NUMBER_REGEX = "^\\+?\\d+$"; //$NON-NLS-1$
 	
 	@Autowired

@@ -42,7 +42,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 public class Tests  
 {
-	private final static Logger logger = LoggerFactory.getLogger(Tests.class);
+	private static final Logger logger = LoggerFactory.getLogger(Tests.class);
 	
 	private static DbJpaUtil jpa;
 	private static TestLaboratory testLaboratory;

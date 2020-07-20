@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DicomManagerFactory {
 
-	private final static Logger logger = LoggerFactory.getLogger(DicomManagerFactory.class);
+	private static final Logger logger = LoggerFactory.getLogger(DicomManagerFactory.class);
 	
 	private static DicomManagerInterface instance = null;
 
@@ -48,7 +48,7 @@ public class DicomManagerFactory {
 	 * return the manager for DICOM acquired files
 	 * @throws OHDicomException 
 	 */
-	public synchronized static DicomManagerInterface getManager() throws OHDicomException {
+    public static synchronized DicomManagerInterface getManager() throws OHDicomException {
 
 		if (instance == null) {
 

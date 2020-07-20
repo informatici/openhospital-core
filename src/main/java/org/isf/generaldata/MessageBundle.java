@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 public class MessageBundle {
 	
-	private final static Logger logger = LoggerFactory.getLogger(MessageBundle.class);
+	private static final Logger logger = LoggerFactory.getLogger(MessageBundle.class);
 
 	private static ResourceBundle resourceBundle = null;
 	
