@@ -155,6 +155,10 @@
 					<groupId>com.lowagie</groupId>
 					<artifactId>itext</artifactId>
 				</exclusion>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
 			</exclusions>
 			<version>3.0.0</version>
 		</dependency>
