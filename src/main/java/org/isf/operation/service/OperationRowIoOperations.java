@@ -36,9 +36,13 @@ public class OperationRowIoOperations {
     public List<OperationRow> getOperationRowByAdmission(Admission adm) throws OHServiceException{
         return repository.findByAdmission(adm);
     }
-    
+
     public ArrayList<OperationRow> getOperationRowByOpd(Opd opd) throws OHServiceException {
-        return repository.findByOpd(opd);
+		if(opd.isPersisted()) {
+			return repository.findByOpd(opd);
+		} else {
+			return new ArrayList<OperationRow>();
+		}
     }
 
     public boolean deleteOperationRow(OperationRow operationRow) throws OHServiceException{

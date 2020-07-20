@@ -283,6 +283,10 @@ public class Opd extends Auditable<String>
 		this.nextVisitDate = nextVisitDate;
 	}
 
+	public boolean isPersisted() {
+		return code > 0;
+	}
+
 	@Override
 	public int hashCode() {
 		if (this.hashCode == 0) {
