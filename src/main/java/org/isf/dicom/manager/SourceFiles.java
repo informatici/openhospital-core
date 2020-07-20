@@ -183,6 +183,9 @@ public class SourceFiles extends Thread {
 				} catch (Exception ecc) {
 					System.out.println("DICOM: Unparsable StudyDate");
 				}
+				if (dicomObject.getString(Tag.SeriesNumber) == null) {
+					System.out.println("DICOM: Unparsable SeriesNumber");
+				} 
 				dicomFileDetail.setDicomSeriesNumber(dicomObject.getString(Tag.SeriesNumber));
 			}
 			else {
@@ -357,7 +360,7 @@ public class SourceFiles extends Thread {
 				seriesUID = dicomObject.getString(Tag.SeriesInstanceUID) == null ? seriesUID : dicomObject.getString(Tag.SeriesInstanceUID);
 				String directoryRecordType = dicomObject.getString(Tag.DirectoryRecordType);
 				seriesInstanceUID = dicomObject.getString(Tag.SeriesInstanceUID) == null ? seriesInstanceUID : dicomObject.getString(Tag.SeriesInstanceUID);
-				seriesNumber = dicomObject.getString(Tag.SeriesNumber) == null ? seriesNumber : dicomObject.getString(Tag.SeriesNumber);
+				seriesNumber = dicomObject.getString(Tag.SeriesNumber) == null ? generateSeriesNumber(patient) : dicomObject.getString(Tag.SeriesNumber);
 				seriesDescriptionCodeSequence = dicomObject.getString(Tag.SeriesDescriptionCodeSequence) == null ? seriesDescriptionCodeSequence : dicomObject.getString(Tag.SeriesDescriptionCodeSequence);
 				String sliceVector = dicomObject.getString(Tag.SliceVector);
 				String sliceLocation = dicomObject.getString(Tag.SliceLocation);
