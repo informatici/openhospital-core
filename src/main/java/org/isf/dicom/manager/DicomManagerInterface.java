@@ -43,7 +43,7 @@ public interface DicomManagerInterface
      * @return true if file exist
       * @throws OHServiceException 
      */
-	boolean exist(int patientID, String seriesNumber) throws OHServiceException;
+    boolean exist(int patientID, String seriesNumber) throws OHServiceException;
 
     /**
      * Load the Detail of DICOM
@@ -53,7 +53,7 @@ public interface DicomManagerInterface
      * @return FileDicom
      * @throws OHServiceException 
      */
-	FileDicom loadDetails(Long idFile, int patientID, String seriesNumber) throws OHServiceException;
+    FileDicom loadDetails(Long idFile, int patientID, String seriesNumber) throws OHServiceException;
 
     /**
      * Load detail
@@ -63,7 +63,7 @@ public interface DicomManagerInterface
      * @return FileDicom
      * @throws OHServiceException 
      */
-	FileDicom loadDetails(long idFile, int patientID, String seriesNumber) throws OHServiceException;
+    FileDicom loadDetails(long idFile, int patientID, String seriesNumber) throws OHServiceException;
 
     /**
      * load metadata from DICOM files of the patient
@@ -71,12 +71,12 @@ public interface DicomManagerInterface
      * @return
      * @throws OHServiceException 
      */
-	FileDicom[] loadPatientFiles(int patientID) throws OHServiceException;
+    FileDicom[] loadPatientFiles(int patientID) throws OHServiceException;
 
     /**
      * save the DICOM file and metadata
      * @param dicom
      * @throws OHServiceException 
      */
-	void saveFile(FileDicom dicom) throws OHServiceException;
+    void saveFile(FileDicom dicom) throws OHServiceException;
 }
