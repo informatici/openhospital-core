@@ -34,7 +34,7 @@ public interface DicomManagerInterface
     * @return true if file exist
      * @throws OHServiceException 
     */
-	boolean exist(FileDicom dicom) throws OHServiceException;
+    boolean exist(FileDicom dicom) throws OHServiceException;
     
     /**
      * Check if dicom is loaded
