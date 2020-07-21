@@ -17,7 +17,7 @@ public interface DicomManagerInterface
      * @return
      * @throws OHServiceException 
      */
-	Long[] getSerieDetail(int patientID, String seriesNumber) throws OHServiceException;
+    Long[] getSerieDetail(int patientID, String seriesNumber) throws OHServiceException;
 
     /**
      * Delete series 
