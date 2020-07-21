@@ -209,8 +209,8 @@ public class SourceFiles extends Thread {
 	 * @param patient
 	 * @throws Exception
 	 */
-    @SuppressWarnings("unused")
-    public static synchronized void loadDicom(FileDicom dicomFileDetail, File sourceFile, int patient) throws Exception {
+     @SuppressWarnings("unused")
+     public static synchronized void loadDicom(FileDicom dicomFileDetail, File sourceFile, int patient) throws Exception {
 		// installLibs();
 
 		//System.out.println("File "+sourceFile.getName());
