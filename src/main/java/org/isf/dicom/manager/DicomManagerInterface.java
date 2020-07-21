@@ -43,7 +43,7 @@ public interface DicomManagerInterface
      * @return true if file exist
       * @throws OHServiceException 
      */
-    boolean exist(int patientID, String seriesNumber) throws OHServiceException;
+     boolean exist(int patientID, String seriesNumber) throws OHServiceException;
 
     /**
      * Load the Detail of DICOM
