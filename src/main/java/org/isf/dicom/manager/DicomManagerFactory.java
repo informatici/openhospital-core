@@ -48,7 +48,7 @@ public class DicomManagerFactory {
 	 * return the manager for DICOM acquired files
 	 * @throws OHDicomException 
 	 */
-       public static synchronized DicomManagerInterface getManager() throws OHDicomException {
+      public static synchronized DicomManagerInterface getManager() throws OHDicomException {
 
 		if (instance == null) {
 
