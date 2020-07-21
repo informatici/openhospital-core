@@ -19,5 +19,5 @@ public interface LotIoOperationRepository extends JpaRepository<Lot, String> {
 		+ "((MEDICALDSRLOT join MEDICALDSRSTOCKMOV on MMV_LT_ID_A=LT_ID_A) join MEDICALDSR on MMV_MDSR_ID=MDSR_ID)"
 		+ " join MEDICALDSRSTOCKMOVTYPE on MMV_MMVT_ID_A=MMVT_ID_A "
 		+ "where LT_ID_A=:code group by LT_ID_A order by LT_DUE_DATE", nativeQuery= true)
-    List<Object[]> findAllWhereLot(@Param("code") String code);
+	List<Object[]> findAllWhereLot(@Param("code") String code);
 }
