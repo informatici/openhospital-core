@@ -145,8 +145,7 @@ public class SourceFiles extends Thread {
 	 * preLoad dicom file for validation in gui with some
 	 * data from filesystem
 	 * @param sourceFile
-	 * @param patient
-	 * @param seriesNumber 
+	 * @param numfiles
 	 */
 	public static FileDicom preLoadDicom(File sourceFile, int numfiles) {
 		FileDicom dicomFileDetail = new FileDicom();
@@ -407,7 +406,7 @@ public class SourceFiles extends Thread {
 		}
 	}
 
-	private static int checkOrientation(File sourceFile) throws ImageProcessingException, IOException {
+	public static int checkOrientation(File sourceFile) throws ImageProcessingException, IOException {
 		Metadata metadata = ImageMetadataReader.readMetadata(sourceFile);
 		ExifIFD0Directory exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 		int orientation = 1;

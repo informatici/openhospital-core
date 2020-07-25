@@ -73,18 +73,18 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 					"FileSystemDicomManager " + MessageBundle.getMessage("angal.dicom.manager.nodir"), OHSeverityLevel.ERROR));
 		}
 	}
-	
-	/**
-	 * @param dir - the dir to set
-	 */
-	public void setDir(Properties externalPrp) {
-		this.dir = new File(externalPrp.getProperty("dicom.storage.filesystem"));
+
+	/*
+	* @param dir the dir to set
+	*/
+	public void setDir(String dirPath) {
+		this.dir = new File(dirPath);
 	}
 
 	/**
 	 * Load a list of id file for series
 	 * 
-	 * @param patientId, the patient id
+	 * @param patientID, the patient id
 	 * @param seriesNumber, the series number
 	 * @return
 	 * @throws OHDicomException 

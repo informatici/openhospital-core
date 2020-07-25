@@ -37,14 +37,14 @@ public class ExportUntranslatedProperties {
 	public ExportUntranslatedProperties() {
 		
 		try {
-			resourceBundleEN = ResourceBundle.getBundle("language", new Locale("en"));
-			resourceBundleIT = ResourceBundle.getBundle("language", new Locale("it"));
-			resourceBundleFR = ResourceBundle.getBundle("language", new Locale("fr"));
-			resourceBundleSW = ResourceBundle.getBundle("language", new Locale("sw"));
-			resourceBundleDE = ResourceBundle.getBundle("language", new Locale("de"));
-			resourceBundleAR = ResourceBundle.getBundle("language", new Locale("ar"));
-			resourceBundleES = ResourceBundle.getBundle("language", new Locale("es"));
-			resourceBundlePT = ResourceBundle.getBundle("language", new Locale("pt"));
+			resourceBundleEN = ResourceBundle.getBundle("org/isf/generaldata/language", new Locale("en"));
+			resourceBundleIT = ResourceBundle.getBundle("org/isf/generaldata/language", new Locale("it"));
+			resourceBundleFR = ResourceBundle.getBundle("org/isf/generaldata/language", new Locale("fr"));
+			resourceBundleSW = ResourceBundle.getBundle("org/isf/generaldata/language", new Locale("sw"));
+			resourceBundleDE = ResourceBundle.getBundle("org/isf/generaldata/language", new Locale("de"));
+			resourceBundleAR = ResourceBundle.getBundle("org/isf/generaldata/language", new Locale("ar"));
+			resourceBundleES = ResourceBundle.getBundle("org/isf/generaldata/language", new Locale("es"));
+			resourceBundlePT = ResourceBundle.getBundle("org/isf/generaldata/language", new Locale("pt"));
 			System.out.println(">> Resources bundles loaded.");
 		} catch (MissingResourceException e) {
 			System.out.println(">> any missing resource bundle? Please comment out in case...");

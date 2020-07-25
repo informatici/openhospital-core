@@ -57,12 +57,12 @@ public class DicomManagerFactory {
 
 				instance = (DicomManagerInterface) Context.getApplicationContext().getBean(Class.forName(props.getProperty("dicom.manager.impl"))); //.getConstructor(Class.forName("java.util.Properties")).newInstance(props);
 				if (instance instanceof FileSystemDicomManager) {
-					((FileSystemDicomManager) instance).setDir(props);
+					((FileSystemDicomManager) instance).setDir(props.getProperty("dicom.storage.filesystem"));
 				}
 			} catch(Exception e){
 				//Any exception
 				throw new OHDicomException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
-						props.getProperty("dicom.manager.impl") + " " + MessageBundle.getMessage("angal.dicom.manager.noimpl"), OHSeverityLevel.ERROR));
+ 						props.getProperty("dicom.manager.impl") + " " + MessageBundle.getMessage("angal.dicom.manager.noimpl"), OHSeverityLevel.ERROR));
 			}
 		}
 
