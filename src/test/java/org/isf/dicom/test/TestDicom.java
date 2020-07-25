@@ -100,8 +100,8 @@ public class TestDicom
 	
 	public void check(
 			FileDicom dicom) 
-	{	
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+	{
+		SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy", Locale.ENGLISH);
     	assertEquals(dicomAccessionNumber, dicom.getDicomAccessionNumber());
     	assertEquals(dicomInstanceUID, dicom.getDicomInstanceUID());
     	assertEquals(dicomInstitutionName, dicom.getDicomInstitutionName());

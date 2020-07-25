@@ -409,7 +409,7 @@ public class SourceFiles extends Thread {
 		}
 	}
 
-	private static int checkOrientation(File sourceFile) throws ImageProcessingException, IOException {
+	public static int checkOrientation(File sourceFile) throws ImageProcessingException, IOException {
 		Metadata metadata = ImageMetadataReader.readMetadata(sourceFile);
 		ExifIFD0Directory exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 		int orientation = 1;
