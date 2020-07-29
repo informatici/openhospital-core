@@ -160,7 +160,7 @@
 					<groupId>commons-logging</groupId>
 				</exclusion>
 			</exclusions>
-			<version>3.0.0</version>
+			<version>3.5.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.lowagie</groupId>
