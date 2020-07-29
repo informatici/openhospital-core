@@ -3,7 +3,6 @@ package org.isf.dicom.test;
 
 import static org.junit.Assert.assertEquals;
 
-import org.isf.admtype.model.AdmissionType;
 import org.isf.dicom.model.FileDicom;
 import org.isf.dicom.service.DicomIoOperations;
 import org.isf.dicomtype.model.DicomType;

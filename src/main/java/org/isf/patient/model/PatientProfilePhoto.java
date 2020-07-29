@@ -1,11 +1,19 @@
 package org.isf.patient.model;
 
-import javax.imageio.ImageIO;
-import javax.persistence.*;
-import java.awt.*;
+import java.awt.Image;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
+
+import javax.imageio.ImageIO;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * Photo related to a single {@link Patient}

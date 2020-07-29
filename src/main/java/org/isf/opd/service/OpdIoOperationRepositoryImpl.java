@@ -1,7 +1,6 @@
 package org.isf.opd.service;
 
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;

@@ -9,7 +9,6 @@ package org.isf.operation.service;
  -----------------------------------------------------------*/
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.isf.operation.model.Operation;
 import org.isf.opetype.model.OperationType;
