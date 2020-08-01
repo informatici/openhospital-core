@@ -3,8 +3,6 @@ package org.isf.dicom.test;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
-
-import org.apache.poi.util.IOUtils;
 import org.isf.dicom.manager.*;
 import org.isf.dicom.model.FileDicom;
 import org.isf.dicom.service.DicomIoOperations;

@@ -1,15 +1,10 @@
 package org.isf.admission.test;
 
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
 
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
-import org.isf.admission.service.AdmissionIoOperationRepository;
 import org.isf.admission.service.AdmissionIoOperations;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.admtype.test.TestAdmissionType;
@@ -53,7 +48,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

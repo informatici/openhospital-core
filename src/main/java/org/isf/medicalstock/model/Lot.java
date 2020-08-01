@@ -3,26 +3,25 @@ package org.isf.medicalstock.model;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import java.util.List;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.isf.medstockmovtype.model.MovementType;
 
 /*------------------------------------------
  * Medical Lot - model for the medical entity

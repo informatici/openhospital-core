@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import org.isf.exa.model.Exam;
 import org.isf.exa.test.TestExam;
 import org.isf.exa.test.TestExamContext;
-import org.isf.examination.model.PatientExamination;
 import org.isf.exatype.model.ExamType;
 import org.isf.exatype.test.TestExamType;
 import org.isf.exatype.test.TestExamTypeContext;

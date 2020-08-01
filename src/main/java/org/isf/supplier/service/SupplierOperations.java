@@ -3,7 +3,6 @@
  */
 package org.isf.supplier.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.generaldata.ExaminationParameters;
