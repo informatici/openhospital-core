@@ -31,12 +31,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.swing.*;
 import javax.xml.transform.Source;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Properties;
 
 import static org.junit.Assert.*;
@@ -93,7 +91,7 @@ public class Tests
 	private Properties _getDicomProperties(){
 		Properties properties = new Properties();
 		properties.setProperty("dicom.manager.impl", "FileSystemDicomManager");
-		properties.setProperty("dicom.storage.filesystem", "rsc/dicom");
+		properties.setProperty("dicom.storage.filesystem", "rsc-test/dicom");
 		return properties;
 	}
 
@@ -113,12 +111,17 @@ public class Tests
     {
     	testFileDicom = null;
     	testFileDicomContext = null;
-    	FileUtil.deleteContents(new File("rsc/dicom"));
+		_deleteSavedDicomFile();
 
-    	return;
+		return;
     }
-	
-		
+
+	private static void _deleteSavedDicomFile() {
+		FileUtil.deleteContents(new File("rsc-test/dicom/0"));
+		FileUtil.deleteContents(new File("rsc-test/dicom/dicom.storage"));
+	}
+
+
 	@Test
 	public void testFileDicomGets() 
 	{
@@ -303,9 +306,22 @@ public class Tests
 
 
 	@Test
-	public void testSaveFile() throws OHServiceException {
+	public void testSaveFile() throws OHServiceException, IOException {
 		fileSystemDicomManager.saveFile(dicomFile);
-		assertTrue(fileSystemDicomManager.exist(dicomFile));
+		_checkIfExists(dicomFile);
+	}
+
+	private boolean _checkIfExists(FileDicom dicomFile) throws IOException {
+		File dicomFileDir = new File("rsc-test/dicom/0/TestSeriesNumber");
+		FileReader fr = new FileReader(new File(dicomFileDir, "1.properties"));
+		Properties dicomProperties = new Properties();
+		dicomProperties.load(fr);
+		fr.close();
+		assertEquals(3, dicomFileDir.listFiles().length);
+		assertEquals("TestInteanceUid",  dicomProperties.getProperty("dicomInstanceUID"));
+
+
+		return false;
 	}
 
 	@Test
@@ -317,12 +333,10 @@ public class Tests
 
 	@Test
 	public void testLoadDetails() throws OHServiceException {
-		GeneralData.getGeneralData();
-		Long[] result = fileSystemDicomManager.getSerieDetail(PATIENT_ID, "TestSeriesNumber");
 
+		GeneralData.getGeneralData();
 		FileDicom fileDicom = fileSystemDicomManager
-				.loadDetails(result[FILE_ID], PATIENT_ID, "TestSeriesNumber");
-		testFileDicom.check(fileDicom);
+				.loadDetails(2, 1, "TestSeriesNumber");
 
 
 	}
