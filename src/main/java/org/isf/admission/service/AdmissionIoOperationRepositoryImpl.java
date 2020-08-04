@@ -2,6 +2,7 @@ package org.isf.admission.service;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -174,8 +175,8 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 			if (admissionRange.length == 2 && admissionRange[0] != null && admissionRange[1] != null) {
 				predicates.add(
 					cb.and(
-						cb.greaterThanOrEqualTo(admissionRoot.<Comparable>get("admDate"), getBeginningOfDay(admissionRange[0])),
-						cb.lessThan(admissionRoot.<Comparable>get("admDate"),  getBeginningOfNextDay(admissionRange[1])))
+						cb.greaterThanOrEqualTo(admissionRoot.<Date>get("admDate"), getBeginningOfDay(admissionRange[0]).getTime()),
+						cb.lessThan(admissionRoot.<Date>get("admDate"),  getBeginningOfNextDay(admissionRange[1]).getTime()))
 					);
 			}
 		}
@@ -184,8 +185,8 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 			if (dischargeRange.length == 2 && dischargeRange[0] != null && dischargeRange[1] != null) {
 				predicates.add(
 					cb.and(
-						cb.greaterThanOrEqualTo(admissionRoot.<Comparable>get("disDate"), getBeginningOfDay(dischargeRange[0])),
-						cb.lessThan(admissionRoot.<Comparable>get("disDate"), getBeginningOfNextDay(dischargeRange[1]))
+						cb.greaterThanOrEqualTo(admissionRoot.<Date>get("disDate"), getBeginningOfDay(dischargeRange[0]).getTime()),
+						cb.lessThan(admissionRoot.<Date>get("disDate"), getBeginningOfNextDay(dischargeRange[1]).getTime())
 					));
 			}
 		}

@@ -2,6 +2,7 @@ package org.isf.patvac.service;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -56,12 +57,12 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 		query.select(pvRoot);
 		if (dateFrom != null) {
 			predicates.add(
-				cb.greaterThanOrEqualTo(pvRoot.<Comparable>get("vaccineDate"), dateFrom)
+				cb.greaterThanOrEqualTo(pvRoot.<Date> get("vaccineDate"), dateFrom.getTime())
 			);
 		}
 		if (dateTo != null) {
 			predicates.add(
-				cb.lessThanOrEqualTo(pvRoot.<Comparable>get("vaccineDate"), dateTo)
+				cb.lessThanOrEqualTo(pvRoot.<Date> get("vaccineDate"), dateTo.getTime())
 			);
 		}
 		if (vaccineTypeCode != null) {
@@ -81,7 +82,7 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 		}
 		if (ageFrom != 0 || ageTo != 0) {
 			predicates.add(
-				cb.between(pvRoot.join("patient").<Comparable>get("age"), ageFrom, ageTo)
+				cb.between(pvRoot.join("patient").<Integer>get("age"), ageFrom, ageTo)
 			);
 		}
 		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
