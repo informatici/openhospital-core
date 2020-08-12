@@ -310,7 +310,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-c3p0</artifactId>
-			<version>4.2.13.Final</version>
+			<version>5.4.20.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.validation</groupId>
