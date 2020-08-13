@@ -441,8 +441,6 @@ public class Tests
 		assertTrue(count > 0);
 
 	}
-	@Test
-
 
 
 	private File _getFile(String fileName){
