@@ -442,15 +442,7 @@ public class Tests
 
 	}
 	@Test
-	public void testSourceFilesRun() throws Exception {
-		AbstractDicomLoader dicomLoader = new AbstractDicomLoader(2, new JFrame()) {};
-		AbstractThumbnailViewGui thumbnailViewGui = new AbstractThumbnailViewGui() {};
-		File file = _getFile("dicomdir");
-		SourceFiles sourceFiles =
-				new SourceFiles(dicomFile,file,PATIENT_ID,2,thumbnailViewGui,dicomLoader);
-		sourceFiles.run();
 
-	}
 
 
 	private File _getFile(String fileName){
