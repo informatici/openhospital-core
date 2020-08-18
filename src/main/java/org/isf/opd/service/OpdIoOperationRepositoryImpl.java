@@ -2,6 +2,7 @@ package org.isf.opd.service;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		}
 		if (ageFrom != 0 || ageTo != 0) {
 			predicates.add(
-				cb.between(opd.<Comparable>get("age"), ageFrom, ageTo)
+				cb.between(opd.<Integer>get("age"), ageFrom, ageTo)
 			);
 		}
 		if (sex != 'A') {
@@ -82,7 +83,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			);
 		}
 		predicates.add(
-			cb.between(opd.<Comparable>get("visitDate"), dateFrom, dateTo)
+			cb.between(opd.<Date>get("visitDate"), dateFrom.getTime(), dateTo.getTime())
 		);
 		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 
