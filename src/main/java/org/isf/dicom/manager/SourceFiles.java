@@ -36,7 +36,7 @@ import com.drew.metadata.exif.ExifIFD0Directory;
 
 /**
  * Manager for DICOM Files
- * 
+ *
  * @author Pietro Castellucci
  * @version 1.0.0
  */
@@ -49,7 +49,7 @@ public class SourceFiles extends Thread {
 	private int filesLoaded = 0;
 	private AbstractDicomLoader dicomLoader = null;
 	private AbstractThumbnailViewGui thumbnail = null;
-	
+
 	public SourceFiles(FileDicom fileDicom, File sourceFile, int patient, int filesCount, AbstractThumbnailViewGui thumbnail, AbstractDicomLoader frame) {
 		this.patient = patient;
 		this.file = sourceFile;
@@ -72,8 +72,9 @@ public class SourceFiles extends Thread {
 	}
 
 	/**
-	 * load a DICOM directory
-	 * @throws Exception 
+	 * Load a DICOM directory
+	 *
+	 * @throws Exception
 	 */
 	private void loadDicomDir(FileDicom fileDicom, File sourceFile, int patient) throws Exception {
 		// installLibs();
@@ -87,29 +88,28 @@ public class SourceFiles extends Thread {
 				seriesNumber = "";
 			}
 		}
-        for (File value : files) {
+		for (File value : files) {
 
-            try {
-                Thread.sleep(10);
-            } catch (Exception e) {
-            }
+			try {
+				Thread.sleep(10);
+			} catch (Exception e) {
+			}
 
-            if (!value.isDirectory()) {
-                try {
+			if (!value.isDirectory()) {
+				try {
 					loadDicom(fileDicom, value, patient);
 				} catch (Exception e) {
 					throw e;
 				}
-                filesLoaded++;
-                dicomLoader.setLoaded(filesLoaded);
-            }
-            else if (!".".equals(value.getName()) && !"..".equals(value.getName()))
-                loadDicomDir(fileDicom, value, patient);
-        }
+				filesLoaded++;
+				dicomLoader.setLoaded(filesLoaded);
+			} else if (!".".equals(value.getName()) && !"..".equals(value.getName()))
+				loadDicomDir(fileDicom, value, patient);
+		}
 	}
-	
+
 	public static boolean checkSize(File sourceFile) throws OHDicomException {
-		
+
 		return DicomManagerFactory.getMaxDicomSizeLong() > sourceFile.length();
 	}
 
@@ -118,18 +118,18 @@ public class SourceFiles extends Thread {
 
 		File[] files = sourceFile.listFiles();
 
-        for (File value : files) {
-            if (!value.isDirectory()) {
-            	if (!checkSize(value)) {
-            		throw new OHDicomException(new OHExceptionMessage("DICOM", 
-            				MessageBundle.getMessage("angal.dicom.afileinthefolderistoobigpleasesetdicommaxsizeproperty") + 
-            				" (" + DicomManagerFactory.getMaxDicomSize() + ")", 
-            				OHSeverityLevel.ERROR));
-            	}
-                num++;
-            } else if (!".".equals(value.getName()) && !"..".equals(value.getName()))
-                num = num + countFiles(value, patient);
-        }
+		for (File value : files) {
+			if (!value.isDirectory()) {
+				if (!checkSize(value)) {
+					throw new OHDicomException(new OHExceptionMessage("DICOM",
+							MessageBundle.getMessage("angal.dicom.afileinthefolderistoobigpleasesetdicommaxsizeproperty") +
+									" (" + DicomManagerFactory.getMaxDicomSize() + ")",
+							OHSeverityLevel.ERROR));
+				}
+				num++;
+			} else if (!".".equals(value.getName()) && !"..".equals(value.getName()))
+				num = num + countFiles(value, patient);
+		}
 		return num;
 	}
 
@@ -140,10 +140,11 @@ public class SourceFiles extends Thread {
 	public int getLoaded() {
 		return filesLoaded;
 	}
-	
+
 	/**
-	 * preLoad dicom file for validation in gui with some
+	 * PreLoad dicom file for validation in gui with some
 	 * data from filesystem
+	 *
 	 * @param sourceFile
 	 * @param numfiles
 	 */
@@ -155,22 +156,21 @@ public class SourceFiles extends Thread {
 			Date studyDate = null;
 			boolean isJpeg = fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg");
 			boolean isDicom = fileName.toLowerCase().endsWith(".dcm");
-			
+
 			ImageReader reader;
 			Iterator<?> iter = null;
 			if (isJpeg) {
-				
+
 				seriesDate = FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
 				studyDate = FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
-			}
-			else if (isDicom) {
+			} else if (isDicom) {
 				iter = ImageIO.getImageReadersByFormatName("DICOM");
 				reader = (ImageReader) iter.next();
-				
+
 				ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
-				
+
 				reader.setInput(imageInputStream, false);
-				
+
 				DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
 				DicomObject dicomObject = dicomStreamMetaData.getDicomObject();
 				try {
@@ -185,10 +185,9 @@ public class SourceFiles extends Thread {
 				}
 				if (dicomObject.getString(Tag.SeriesNumber) == null) {
 					System.out.println("DICOM: Unparsable SeriesNumber");
-				} 
+				}
 				dicomFileDetail.setDicomSeriesNumber(dicomObject.getString(Tag.SeriesNumber));
-			}
-			else {
+			} else {
 				throw new OHDicomException(new OHExceptionMessage("", "format not supported", OHSeverityLevel.ERROR));
 			}
 			dicomFileDetail.setFrameCount(numfiles);
@@ -196,9 +195,9 @@ public class SourceFiles extends Thread {
 			dicomFileDetail.setFileName(fileName);
 			dicomFileDetail.setDicomSeriesDate(seriesDate);
 			dicomFileDetail.setDicomStudyDate(studyDate);
-			
+
 			return dicomFileDetail;
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -206,14 +205,15 @@ public class SourceFiles extends Thread {
 	}
 
 	/**
-	 * load dicom file
+	 * Load dicom file
+	 *
 	 * @param dicomFileDetail
 	 * @param sourceFile
 	 * @param patient
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unused")
-	public synchronized static void loadDicom(FileDicom dicomFileDetail, File sourceFile, int patient) throws Exception {
+	public static synchronized void loadDicom(FileDicom dicomFileDetail, File sourceFile, int patient) throws Exception {
 		// installLibs();
 
 		//System.out.println("File "+sourceFile.getName());
@@ -222,10 +222,10 @@ public class SourceFiles extends Thread {
 			return;
 
 		try {
-			boolean isJpeg = sourceFile.getName().toLowerCase().endsWith(".jpg") || 
+			boolean isJpeg = sourceFile.getName().toLowerCase().endsWith(".jpg") ||
 					sourceFile.getName().toLowerCase().endsWith(".jpeg");
 			boolean isDicom = sourceFile.getName().toLowerCase().endsWith(".dcm");
-			
+
 			ImageReader reader = null;
 			ImageReadParam param;
 			BufferedImage originalImage;
@@ -234,44 +234,43 @@ public class SourceFiles extends Thread {
 				iter = ImageIO.getImageReadersByFormatName("jpeg");
 				reader = (ImageReader) new com.sun.imageio.plugins.jpeg.JPEGImageReader(null);
 				//JPEGImageReadParam jpgParam = new JPEGImageReadParam();
-				
+
 				ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
-				
+
 				reader.setInput(imageInputStream, false);
-				
+
 				originalImage = null;
 
 				try {
 					originalImage = reader.read(0); //, jpgParam);
-					
+
 					int orientation = checkOrientation(sourceFile);
-			        
+
 					if (orientation != 1) {
 						originalImage = autoRotate(originalImage, orientation);
 						String fileType = sourceFile.getName().toLowerCase().endsWith(".jpg") ? "jpg" : "jpeg";
-						File f = File.createTempFile(sourceFile.getName(),"."+fileType);
+						File f = File.createTempFile(sourceFile.getName(), "." + fileType);
 						ImageIO.write(originalImage, fileType, f);
 						sourceFile = f;
-			        }
-		            
+					}
+
 				} catch (DicomCodingException dce) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"), 
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"),
 							MessageBundle.getMessage("angal.dicom.load.err") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
 				} catch (IndexOutOfBoundsException ioe) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"), 
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"),
 							MessageBundle.getMessage("angal.dicom.unknownformat") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
 				}
 
 				imageInputStream.close();
-			}
-			else if (isDicom) {
+			} else if (isDicom) {
 				iter = ImageIO.getImageReadersByFormatName("DICOM");
 				reader = (ImageReader) iter.next();
 
 				param = (DicomImageReadParam) reader.getDefaultReadParam();
-				
+
 				ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
-				
+
 				reader.setInput(imageInputStream, false);
 
 				originalImage = null;
@@ -279,19 +278,17 @@ public class SourceFiles extends Thread {
 				try {
 					originalImage = reader.read(0, param);
 				} catch (DicomCodingException dce) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"), 
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"),
 							MessageBundle.getMessage("angal.dicom.load.err") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
 				}
 
 				imageInputStream.close();
-			}
-			else {
+			} else {
 				throw new OHDicomException(new OHExceptionMessage("", "format not supported", OHSeverityLevel.ERROR));
 			}
-			
+
 			BufferedImage scaled = Scalr.resize(originalImage, 100);
-			
-			
+
 			String accessionNumber = dicomFileDetail.getDicomAccessionNumber();
 			String instanceUID = dicomFileDetail.getDicomInstanceUID();
 			String institutionName = dicomFileDetail.getDicomInstitutionName();
@@ -315,15 +312,14 @@ public class SourceFiles extends Thread {
 				//overridden by the user
 				seriesDate = seriesDate != null ? seriesDate : FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
 				studyDate = studyDate != null ? studyDate : FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
-				
+
 				//set by the system
 				seriesNumber = !seriesNumber.isEmpty() ? seriesNumber : generateSeriesNumber(patient);
 				seriesInstanceUID = !seriesInstanceUID.isEmpty() ? seriesInstanceUID : "<org_root>." + seriesNumber;
-			}
-			else if (isDicom) {
+			} else if (isDicom) {
 				DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
 				DicomObject dicomObject = dicomStreamMetaData.getDicomObject();
-				
+
 				//overridden by the user
 				seriesDescription = seriesDescription != null ? seriesDescription : dicomObject.getString(Tag.SeriesDescription);
 				try {
@@ -348,7 +344,9 @@ public class SourceFiles extends Thread {
 				String dicomMediaRetrievalSequence = dicomObject.getString(Tag.DICOMMediaRetrievalSequence);
 				String patientComments = dicomObject.getString(Tag.PatientComments);
 				try {
-					patientBirthDate = dicomObject.getDate(Tag.PatientBirthDate) == null ? patientBirthDate : DateFormat.getDateInstance().format(dicomObject.getDate(Tag.PatientBirthDate));
+					patientBirthDate = dicomObject.getDate(Tag.PatientBirthDate) == null ?
+							patientBirthDate :
+							DateFormat.getDateInstance().format(dicomObject.getDate(Tag.PatientBirthDate));
 				} catch (Exception ecc) {
 				}
 				patientSex = dicomObject.getString(Tag.PatientSex) == null ? patientSex : dicomObject.getString(Tag.PatientSex);
@@ -361,7 +359,9 @@ public class SourceFiles extends Thread {
 				String directoryRecordType = dicomObject.getString(Tag.DirectoryRecordType);
 				seriesInstanceUID = dicomObject.getString(Tag.SeriesInstanceUID) == null ? seriesInstanceUID : dicomObject.getString(Tag.SeriesInstanceUID);
 				seriesNumber = dicomObject.getString(Tag.SeriesNumber) == null ? generateSeriesNumber(patient) : dicomObject.getString(Tag.SeriesNumber);
-				seriesDescriptionCodeSequence = dicomObject.getString(Tag.SeriesDescriptionCodeSequence) == null ? seriesDescriptionCodeSequence : dicomObject.getString(Tag.SeriesDescriptionCodeSequence);
+				seriesDescriptionCodeSequence = dicomObject.getString(Tag.SeriesDescriptionCodeSequence) == null ?
+						seriesDescriptionCodeSequence :
+						dicomObject.getString(Tag.SeriesDescriptionCodeSequence);
 				String sliceVector = dicomObject.getString(Tag.SliceVector);
 				String sliceLocation = dicomObject.getString(Tag.SliceLocation);
 				String sliceThickness = dicomObject.getString(Tag.SliceThickness);
@@ -369,37 +369,60 @@ public class SourceFiles extends Thread {
 				institutionName = dicomObject.getString(Tag.InstitutionName) == null ? institutionName : dicomObject.getString(Tag.InstitutionName);
 				instanceUID = dicomObject.getString(Tag.SOPInstanceUID) == null ? instanceUID : dicomObject.getString(Tag.SOPInstanceUID);
 			}
-			
+
 			// Loaded... Update dicomFileDetail
-			if (sourceFile != null) dicomFileDetail.setDicomData(sourceFile);
-			if (sourceFile.getName() != null) dicomFileDetail.setFileName(sourceFile.getName());
-			if (accessionNumber != null) dicomFileDetail.setDicomAccessionNumber(accessionNumber);
-			if (instanceUID != null) dicomFileDetail.setDicomInstanceUID(instanceUID);
-			if (institutionName != null) dicomFileDetail.setDicomInstitutionName(institutionName);
-			if (patientAddress != null) dicomFileDetail.setDicomPatientAddress(patientAddress);
-			if (patientAge != null) dicomFileDetail.setDicomPatientAge(patientAge);
-			if (patientBirthDate != null) dicomFileDetail.setDicomPatientBirthDate(patientBirthDate);
-			if (patientID != null) dicomFileDetail.setDicomPatientID(patientID);
-			if (patientName != null) dicomFileDetail.setDicomPatientName(patientName);
-			if (patientSex != null) dicomFileDetail.setDicomPatientSex(patientSex);
-			if (seriesDate != null) dicomFileDetail.setDicomSeriesDate(seriesDate);
-			if (seriesDescription != null) dicomFileDetail.setDicomSeriesDescription(seriesDescription);
-			if (seriesDescriptionCodeSequence != null) dicomFileDetail.setDicomSeriesDescriptionCodeSequence(seriesDescriptionCodeSequence);
-			if (seriesInstanceUID != null) dicomFileDetail.setDicomSeriesInstanceUID(seriesInstanceUID);
-			if (seriesNumber != null) dicomFileDetail.setDicomSeriesNumber(seriesNumber);
-			if (seriesUID != null) dicomFileDetail.setDicomSeriesUID(seriesUID);
-			if (studyDate != null) dicomFileDetail.setDicomStudyDate(studyDate);
-			if (studyDescription != null) dicomFileDetail.setDicomStudyDescription(studyDescription);
-			if (studyUID != null) dicomFileDetail.setDicomStudyId(studyUID);
-			if (patient != 0) dicomFileDetail.setPatId(patient);
-			if (scaled != null) dicomFileDetail.setDicomThumbnail(scaled);
-			if (modality != null) dicomFileDetail.setModality(modality);
+			if (sourceFile != null)
+				dicomFileDetail.setDicomData(sourceFile);
+			if (sourceFile.getName() != null)
+				dicomFileDetail.setFileName(sourceFile.getName());
+			if (accessionNumber != null)
+				dicomFileDetail.setDicomAccessionNumber(accessionNumber);
+			if (instanceUID != null)
+				dicomFileDetail.setDicomInstanceUID(instanceUID);
+			if (institutionName != null)
+				dicomFileDetail.setDicomInstitutionName(institutionName);
+			if (patientAddress != null)
+				dicomFileDetail.setDicomPatientAddress(patientAddress);
+			if (patientAge != null)
+				dicomFileDetail.setDicomPatientAge(patientAge);
+			if (patientBirthDate != null)
+				dicomFileDetail.setDicomPatientBirthDate(patientBirthDate);
+			if (patientID != null)
+				dicomFileDetail.setDicomPatientID(patientID);
+			if (patientName != null)
+				dicomFileDetail.setDicomPatientName(patientName);
+			if (patientSex != null)
+				dicomFileDetail.setDicomPatientSex(patientSex);
+			if (seriesDate != null)
+				dicomFileDetail.setDicomSeriesDate(seriesDate);
+			if (seriesDescription != null)
+				dicomFileDetail.setDicomSeriesDescription(seriesDescription);
+			if (seriesDescriptionCodeSequence != null)
+				dicomFileDetail.setDicomSeriesDescriptionCodeSequence(seriesDescriptionCodeSequence);
+			if (seriesInstanceUID != null)
+				dicomFileDetail.setDicomSeriesInstanceUID(seriesInstanceUID);
+			if (seriesNumber != null)
+				dicomFileDetail.setDicomSeriesNumber(seriesNumber);
+			if (seriesUID != null)
+				dicomFileDetail.setDicomSeriesUID(seriesUID);
+			if (studyDate != null)
+				dicomFileDetail.setDicomStudyDate(studyDate);
+			if (studyDescription != null)
+				dicomFileDetail.setDicomStudyDescription(studyDescription);
+			if (studyUID != null)
+				dicomFileDetail.setDicomStudyId(studyUID);
+			if (patient != 0)
+				dicomFileDetail.setPatId(patient);
+			if (scaled != null)
+				dicomFileDetail.setDicomThumbnail(scaled);
+			if (modality != null)
+				dicomFileDetail.setModality(modality);
 			dicomFileDetail.setIdFile(0); //it trigger the DB save with SqlDicomManager
-			try{
+			try {
 				DicomManagerFactory.getManager().saveFile(dicomFileDetail);
 				//dicomFileDetail.setDicomSeriesNumber(dicom.getDicomSeriesNumber()); //series number could be generated if missing.
-			}catch(OHServiceException ex){
-				if(ex.getMessages() != null){
+			} catch (OHServiceException ex) {
+				if (ex.getMessages() != null) {
 					throw new OHDicomException(ex.getCause(), ex.getMessages());
 				}
 			}
@@ -414,9 +437,9 @@ public class SourceFiles extends Thread {
 		ExifIFD0Directory exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 		int orientation = 1;
 		try {
-		    orientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+			orientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
 		} catch (Exception ex) {
-		    System.out.println("No EXIF information found for image: " + sourceFile.getName());
+			System.out.println("No EXIF information found for image: " + sourceFile.getName());
 		}
 		return orientation;
 	}
@@ -424,54 +447,53 @@ public class SourceFiles extends Thread {
 	private static BufferedImage autoRotate(BufferedImage originalImage, int orientation)
 			throws MetadataException {
 		switch (orientation) {
-        case 1:
-            break;
-        case 2: // Flip X
-        	originalImage = Scalr.rotate(originalImage, Rotation.FLIP_HORZ);
-            break;
-        case 3: // PI rotation
-            originalImage = Scalr.rotate(originalImage, Rotation.CW_180);
-            break;
-        case 4: // Flip Y
-            originalImage = Scalr.rotate(originalImage, Rotation.FLIP_VERT);
-            break;
-        case 5: // - PI/2 and Flip X
-            originalImage = Scalr.rotate(originalImage, Rotation.CW_90);
-            originalImage = Scalr.rotate(originalImage, Rotation.FLIP_HORZ);
-            break;
-        case 6: // -PI/2 and -width
-            originalImage = Scalr.rotate(originalImage, Rotation.CW_90);
-            break;
-        case 7: // PI/2 and Flip
-            originalImage = Scalr.rotate(originalImage, Rotation.CW_90);
-            originalImage = Scalr.rotate(originalImage, Rotation.FLIP_VERT);
-            break;
-        case 8: // PI / 2
-            originalImage = Scalr.rotate(originalImage, Rotation.CW_270);
-            break;
-        default:
-            break;
-        }       
+			case 1:
+				break;
+			case 2: // Flip X
+				originalImage = Scalr.rotate(originalImage, Rotation.FLIP_HORZ);
+				break;
+			case 3: // PI rotation
+				originalImage = Scalr.rotate(originalImage, Rotation.CW_180);
+				break;
+			case 4: // Flip Y
+				originalImage = Scalr.rotate(originalImage, Rotation.FLIP_VERT);
+				break;
+			case 5: // - PI/2 and Flip X
+				originalImage = Scalr.rotate(originalImage, Rotation.CW_90);
+				originalImage = Scalr.rotate(originalImage, Rotation.FLIP_HORZ);
+				break;
+			case 6: // -PI/2 and -width
+				originalImage = Scalr.rotate(originalImage, Rotation.CW_90);
+				break;
+			case 7: // PI/2 and Flip
+				originalImage = Scalr.rotate(originalImage, Rotation.CW_90);
+				originalImage = Scalr.rotate(originalImage, Rotation.FLIP_VERT);
+				break;
+			case 8: // PI / 2
+				originalImage = Scalr.rotate(originalImage, Rotation.CW_270);
+				break;
+			default:
+				break;
+		}
 
 		return originalImage;
 	}
-	
+
 	/**
 	 * Creates a new unique series number
+	 *
 	 * @return the new unique code.
 	 * @throws OHServiceException if an error occurs during the code generation.
 	 */
-	public static String generateSeriesNumber(int patient) throws OHServiceException
-	{
+	public static String generateSeriesNumber(int patient) throws OHServiceException {
 		Random random = new Random();
 		long candidateCode = 0;
 		boolean exists = false;
-		do 
-		{
+		do {
 			candidateCode = Math.abs(random.nextLong());
 			exists = DicomManagerFactory.getManager().exist(patient, String.valueOf(candidateCode));
 
-		} while (exists != false); 
+		} while (exists != false);
 
 		return String.valueOf(candidateCode);
 	}

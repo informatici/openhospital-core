@@ -17,13 +17,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MessageBundle {
-	
-	private final static Logger logger = LoggerFactory.getLogger(MessageBundle.class);
+
+	private static final Logger logger = LoggerFactory.getLogger(MessageBundle.class);
 
 	private static ResourceBundle resourceBundle = null;
-	
+
 	private static ResourceBundle defaultResourceBundle = null;
-	
+
 	public static void initialize() throws RuntimeException {
 		try {
 			defaultResourceBundle = ResourceBundle.getBundle("language", new Locale("en"));
@@ -35,15 +35,16 @@ public class MessageBundle {
 			//throw new RuntimeException("no resource bundle found.");
 		}
 	}
-	
+
 	public static String getMessage(String key) {
 		String message = "";
-		
+
 		try {
 			if (resourceBundle != null) {
 				//message = new String(resourceBundle.getString(key).getBytes("ISO-8859-1"), "UTF-8");
 				message = resourceBundle.getString(key);
-			} else return key;
+			} else
+				return key;
 		} catch (MissingResourceException e) {
 			if (GeneralData.DEBUG) {
 				message = key;
@@ -55,54 +56,54 @@ public class MessageBundle {
 				}
 			}
 			logger.error(">> key not found: " + key);
-		} 
-		return message;
-	}
-	
-	public static String getMessagePattern(String key, Object input) {
-		String message = "";
-		
-		try {
-			if (resourceBundle != null) {
-				//message = new String(resourceBundle.getString(key).getBytes("ISO-8859-1"), "UTF-8");
-				message = resourceBundle.getString(key);
-			}
-		} catch (MissingResourceException e) {
-			if (GeneralData.DEBUG) {
-				message = key;
-			} else {
-				message = defaultResourceBundle.getString(key);
-			}
-			logger.error(">> key not found: " + key);
-		} 
-		message = message.replace("#",	input.toString());
-		return message;
-	}
-	
-	public static String getMessagePattern(String key, Object[] inputs) {
-		String message = "";
-		
-		try {
-			if (resourceBundle != null) {
-				//message = new String(resourceBundle.getString(key).getBytes("ISO-8859-1"), "UTF-8");
-				message = resourceBundle.getString(key);
-			}
-		} catch (MissingResourceException e) {
-			if (GeneralData.DEBUG) {
-				message = key;
-			} else {
-				message = defaultResourceBundle.getString(key);
-			}
-			logger.error(">> key not found: " + key);
-		} 
-		
-		for (Object input : inputs) {
-			message = message.replaceFirst("#",	input.toString());
 		}
 		return message;
 	}
-	
-	public static ResourceBundle getBundle(){
+
+	public static String getMessagePattern(String key, Object input) {
+		String message = "";
+
+		try {
+			if (resourceBundle != null) {
+				//message = new String(resourceBundle.getString(key).getBytes("ISO-8859-1"), "UTF-8");
+				message = resourceBundle.getString(key);
+			}
+		} catch (MissingResourceException e) {
+			if (GeneralData.DEBUG) {
+				message = key;
+			} else {
+				message = defaultResourceBundle.getString(key);
+			}
+			logger.error(">> key not found: " + key);
+		}
+		message = message.replace("#", input.toString());
+		return message;
+	}
+
+	public static String getMessagePattern(String key, Object[] inputs) {
+		String message = "";
+
+		try {
+			if (resourceBundle != null) {
+				//message = new String(resourceBundle.getString(key).getBytes("ISO-8859-1"), "UTF-8");
+				message = resourceBundle.getString(key);
+			}
+		} catch (MissingResourceException e) {
+			if (GeneralData.DEBUG) {
+				message = key;
+			} else {
+				message = defaultResourceBundle.getString(key);
+			}
+			logger.error(">> key not found: " + key);
+		}
+
+		for (Object input : inputs) {
+			message = message.replaceFirst("#", input.toString());
+		}
+		return message;
+	}
+
+	public static ResourceBundle getBundle() {
 		return resourceBundle;
 	}
 }
