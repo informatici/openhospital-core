@@ -2,6 +2,10 @@ package org.isf.malnutrition.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -193,7 +197,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -213,7 +217,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -236,7 +240,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -259,7 +263,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -280,15 +284,14 @@ public class Tests
 			foundMalnutrition.setHeight(200);
 			result = malnutritionIoOperation.updateMalnutrition(foundMalnutrition);
 			Malnutrition updateMalnutrition = (Malnutrition)jpa.find(Malnutrition.class, code);
-			
-			
-			assertEquals(true, (result != null));
+
+			assertNotNull(result);
 			assertEquals(200.0, updateMalnutrition.getHeight(), 0.000001d);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -343,14 +346,14 @@ public class Tests
 						
 			Malnutrition malnutrition = testMalnutrition.setup(admission, true);
 			result = malnutritionIoOperation.newMalnutrition(malnutrition);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkMalnutritionIntoDb(malnutrition.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -370,15 +373,15 @@ public class Tests
 			jpa.flush();
 			
 			result = malnutritionIoOperation.deleteMalnutrition(foundMalnutrition);
-			
-			assertEquals(true, result);
-			result = malnutritionIoOperation.isCodePresent(code);			
-			assertEquals(false, result);
+
+			assertTrue(result);
+			result = malnutritionIoOperation.isCodePresent(code);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

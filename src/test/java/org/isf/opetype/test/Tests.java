@@ -2,6 +2,9 @@ package org.isf.opetype.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -84,7 +87,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -104,7 +107,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -127,7 +130,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -146,15 +149,15 @@ public class Tests
 			OperationType foundOperationType = (OperationType)jpa.find(OperationType.class, code); 
 			foundOperationType.setDescription("Update");
 			result = operationTypeIoOperation.updateOperationType(foundOperationType);
-			OperationType updateOperationType = (OperationType)jpa.find(OperationType.class, code); 
-			
-			assertEquals(true, result);
+			OperationType updateOperationType = (OperationType)jpa.find(OperationType.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateOperationType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -170,14 +173,14 @@ public class Tests
 		{		
 			OperationType operationType = testOperationType.setup(true);
 			result = operationTypeIoOperation.newOperationType(operationType);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkOperationTypeIntoDb(operationType.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -194,13 +197,13 @@ public class Tests
 		{		
 			code = _setupTestOperationType(false);
 			result = operationTypeIoOperation.isCodePresent(code);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -218,15 +221,15 @@ public class Tests
 			code = _setupTestOperationType(false);
 			OperationType foundOperationType = (OperationType)jpa.find(OperationType.class, code); 
 			result = operationTypeIoOperation.deleteOperationType(foundOperationType);
-			
-			assertEquals(true, result);
-			result = operationTypeIoOperation.isCodePresent(code);			
-			assertEquals(false, result);
+
+			assertTrue(result);
+			result = operationTypeIoOperation.isCodePresent(code);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

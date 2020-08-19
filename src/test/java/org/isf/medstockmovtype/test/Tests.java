@@ -2,6 +2,9 @@ package org.isf.medstockmovtype.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -83,7 +86,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -103,7 +106,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -126,7 +129,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -145,15 +148,15 @@ public class Tests
 			MovementType foundMovementType = (MovementType)jpa.find(MovementType.class, code); 
 			foundMovementType.setDescription("Update");
 			result = medicalStockMovementTypeIoOperation.updateMedicaldsrstockmovType(foundMovementType);
-			MovementType updateMovementType = (MovementType)jpa.find(MovementType.class, code); 
-			
-			assertEquals(true, result);
+			MovementType updateMovementType = (MovementType)jpa.find(MovementType.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateMovementType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -169,14 +172,14 @@ public class Tests
 		{		
 			MovementType movementType = testMovementType.setup(true);
 			result = medicalStockMovementTypeIoOperation.newMedicaldsrstockmovType(movementType);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkMovementTypeIntoDb(movementType.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -193,13 +196,13 @@ public class Tests
 		{		
 			code = _setupTestMovementType(false);
 			result = medicalStockMovementTypeIoOperation.isCodePresent(code);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -217,15 +220,15 @@ public class Tests
 			code = _setupTestMovementType(false);
 			MovementType foundMovementType = (MovementType)jpa.find(MovementType.class, code); 
 			result = medicalStockMovementTypeIoOperation.deleteMedicaldsrstockmovType(foundMovementType);
-			
-			assertEquals(true, result);
-			result = medicalStockMovementTypeIoOperation.isCodePresent(code);			
-			assertEquals(false, result);
+
+			assertTrue(result);
+			result = medicalStockMovementTypeIoOperation.isCodePresent(code);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

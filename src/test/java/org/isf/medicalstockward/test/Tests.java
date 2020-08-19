@@ -2,6 +2,8 @@ package org.isf.medicalstockward.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -168,7 +170,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -188,7 +190,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -208,7 +210,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -228,7 +230,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -257,7 +259,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -300,7 +302,7 @@ public class Tests
 		} 
 		catch (Exception e) 
 		{
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -343,7 +345,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -362,15 +364,15 @@ public class Tests
 			MovementWard foundMovementWard = (MovementWard)jpa.find(MovementWard.class, code); 
 			foundMovementWard.setDescription("Update");
 			result = medicalIoOperation.updateMovementWard(foundMovementWard);
-			MovementWard updateMovementWard = (MovementWard)jpa.find(MovementWard.class, code); 
-			
-			assertEquals(true, result);
+			MovementWard updateMovementWard = (MovementWard)jpa.find(MovementWard.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateMovementWard.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -388,13 +390,13 @@ public class Tests
 			code = _setupTestMovementWard(false);
 			MovementWard foundMovementWard = (MovementWard)jpa.find(MovementWard.class, code); 
 			result = medicalIoOperation.deleteMovementWard(foundMovementWard);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -416,7 +418,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -438,7 +440,7 @@ public class Tests
 			assertEquals(mergedPatient.getCode(), result.getPatient().getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 	}
 

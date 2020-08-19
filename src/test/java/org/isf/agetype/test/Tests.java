@@ -1,6 +1,8 @@
 package org.isf.agetype.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -85,7 +87,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -105,7 +107,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -128,7 +130,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -150,16 +152,16 @@ public class Tests
 			ArrayList<AgeType> ageTypes = new ArrayList<AgeType>();
 			ageTypes.add(foundAgeType);
 			result = ageTypeIoOperations.updateAgeType(ageTypes);
-			AgeType updateAgeType = (AgeType)jpa.find(AgeType.class, code); 
-			
-			assertEquals(true, result);
+			AgeType updateAgeType = (AgeType)jpa.find(AgeType.class, code);
+
+			assertTrue(result);
 			assertEquals(4, updateAgeType.getFrom());
 			assertEquals(40, updateAgeType.getTo());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -183,7 +185,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

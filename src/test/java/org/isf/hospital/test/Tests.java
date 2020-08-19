@@ -2,6 +2,8 @@ package org.isf.hospital.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.isf.hospital.model.Hospital;
 import org.isf.hospital.service.HospitalIoOperations;
@@ -83,7 +85,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -105,7 +107,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -127,13 +129,13 @@ public class Tests
 			result = hospitalIoOperation.updateHospital(foundHospital);
 			Hospital updateHospital = (Hospital)jpa.find(Hospital.class, code);
 
-			assertEquals(true, result);
+			assertTrue(result);
 			assertEquals("Update", updateHospital.getDescription());
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 
 		return;

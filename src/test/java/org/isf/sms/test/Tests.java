@@ -2,6 +2,9 @@ package org.isf.sms.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -84,7 +87,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -104,7 +107,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -120,14 +123,14 @@ public class Tests
 		{		
 			Sms sms = testSms.setup(true);
 			result = smsIoOperation.saveOrUpdate(sms);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checksmsIntoDb(sms.getSmsId());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -149,7 +152,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -174,7 +177,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -197,7 +200,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -215,13 +218,13 @@ public class Tests
 			Sms foundSms = (Sms)jpa.find(Sms.class, code); 
 			smsIoOperation.delete(foundSms);
 			
-			boolean result = smsIoOperation.isCodePresent(code);			
-			assertEquals(false, result);
+			boolean result = smsIoOperation.isCodePresent(code);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -242,13 +245,13 @@ public class Tests
 					foundSms.getModule(), 
 					foundSms.getModuleID());
 
-			boolean result = smsIoOperation.isCodePresent(code);			
-			assertEquals(false, result);
+			boolean result = smsIoOperation.isCodePresent(code);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
