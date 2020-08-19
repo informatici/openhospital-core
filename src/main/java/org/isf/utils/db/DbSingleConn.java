@@ -19,7 +19,7 @@ import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
 /*
  * @version 0.1 2005-11-06
  * @author bob
- * 
+ *
  */
 
 /**
@@ -27,26 +27,27 @@ import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
  * connessione,database, user, passwd ecc sono letti da file properties
  */
 public class DbSingleConn {
-	
+
 	protected static Logger logger = LoggerFactory.getLogger(DbSingleConn.class);
 
-	private final static int MYSQL_DEFAULT_PORT = 3306;
-	
+	private static final int MYSQL_DEFAULT_PORT = 3306;
+
 	private static Connection pConn;
 
-	private DbSingleConn() { }
+	private DbSingleConn() {
+	}
 
 	public static Connection getConnection() throws SQLException, IOException {
 		if (pConn == null) {
 			try {
 				pConn = createConnection();
-			} catch (CommunicationsException ce){
+			} catch (CommunicationsException ce) {
 				String message = MessageBundle.getMessage("angal.utils.dbserverconnectionfailure");
 				logger.error(">> " + message);
 				JOptionPane.showMessageDialog(null, message);
 				System.exit(1);
 			}
-				
+
 		}
 		return pConn;
 	}
@@ -60,16 +61,16 @@ public class DbSingleConn {
 		pConn = null;
 	}
 
-	public static void commitConnection() throws SQLException , IOException{
+	public static void commitConnection() throws SQLException, IOException {
 		pConn.commit();
 	}
-	
-	public static void rollbackConnection() throws SQLException , IOException{
+
+	public static void rollbackConnection() throws SQLException, IOException {
 		pConn.rollback();
 	}
-	
+
 	private static Connection createConnection() throws SQLException, IOException {
-		
+
 		Properties props = new Properties();
 		InputStream is = DbSingleConn.class.getClassLoader().getResourceAsStream("database.properties");
 		if (is == null) {
@@ -80,7 +81,7 @@ public class DbSingleConn {
 			props.load(is);
 			is.close();
 		}
-		
+
 		String drivers = props.getProperty("jdbc.drivers");
 		if (drivers != null)
 			System.setProperty("jdbc.drivers", drivers);
@@ -93,7 +94,7 @@ public class DbSingleConn {
 		if (port == null) {
 			port = String.valueOf(MYSQL_DEFAULT_PORT);
 		}
-		
+
 		StringBuilder sbURL = new StringBuilder();
 		sbURL.append(url);
 		sbURL.append("//");
@@ -107,7 +108,6 @@ public class DbSingleConn {
 		sbURL.append(username);
 		sbURL.append("&password=");
 		sbURL.append(password);
-		
 
 		return DriverManager.getConnection(sbURL.toString());
 	}
