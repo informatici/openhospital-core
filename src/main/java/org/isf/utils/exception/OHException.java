@@ -19,8 +19,8 @@ public class OHException extends Exception {
 	public OHException(String message, Throwable cause) {
 		super(message, cause);
 		if (logger.isErrorEnabled()) {
-			logger.error(">> EXCEPTION: " + sanitize(message));
-			logger.error(">> " + cause);
+			logger.error(">> EXCEPTION: {}", sanitize(message));
+			logger.error(">> {}", cause);
 		}
 	}
 	
@@ -31,7 +31,7 @@ public class OHException extends Exception {
 	public OHException(String message) {
 		super(message);
 		if (logger.isErrorEnabled()) {
-			logger.error(">> EXCEPTION: " + sanitize(message));
+			logger.error(">> EXCEPTION: {}", sanitize(message));
 		}
 	}
 	

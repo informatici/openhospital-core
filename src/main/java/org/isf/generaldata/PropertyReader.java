@@ -37,7 +37,7 @@ public class PropertyReader {
 			value = (T) typePropertyExtractorMap.get(defaultValue.getClass())
 					.getProperty(propertyName);
 		} catch (Exception e) {
-			this.logger.warn(">> " + propertyName + " property not found: default is " + defaultValue);
+			this.logger.warn(">> {} property not found: default is {}", propertyName, defaultValue);
 			return defaultValue;
 		}
 		

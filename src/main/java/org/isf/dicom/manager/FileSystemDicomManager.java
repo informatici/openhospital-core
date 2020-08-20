@@ -335,12 +335,12 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		try {
 			rv.setIdFile(Long.parseLong(p.getProperty("idFile")));
 		} catch (Exception e) {
-			logger.debug("Unparsable 'idFile': " + p.getProperty("idFile"));
+			logger.debug("Unparsable 'idFile': {}", p.getProperty("idFile"));
 		}
 		try {
 			rv.setPatId(Integer.parseInt(p.getProperty("patId")));
 		} catch (Exception e) {
-			logger.debug("Unparsable 'patId': " + p.getProperty("patId"));
+			logger.debug("Unparsable 'patId': {}", p.getProperty("patId"));
 		}
 		rv.setFileName(p.getProperty("fileName"));
 		rv.setDicomAccessionNumber(p.getProperty("dicomAccessionNumber"));
@@ -355,8 +355,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		try {
 			rv.setDicomStudyDate(new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale(GeneralData.LANGUAGE)).parse(p.getProperty("dicomStudyDate")));
 		} catch (ParseException e) {
-			logger.debug("1. example: " + new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale(GeneralData.LANGUAGE)).format(new Date()));
-			logger.debug("1. Unparsable 'dicomStudyDate': " + p.getProperty("dicomStudyDate"));
+			logger.debug("1. example: {}", new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale(GeneralData.LANGUAGE)).format(new Date()));
+			logger.debug("1. Unparsable 'dicomStudyDate': {}", p.getProperty("dicomStudyDate"));
 		}
 		rv.setDicomStudyDescription(p.getProperty("dicomStudyDescription"));
 		rv.setDicomSeriesUID(p.getProperty("dicomSeriesUID"));
@@ -366,8 +366,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		try {
 			rv.setDicomSeriesDate(new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale(GeneralData.LANGUAGE)).parse(p.getProperty("dicomSeriesDate")));
 		} catch (ParseException e) {
-			logger.debug("2. example: " + new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale(GeneralData.LANGUAGE)).format(new Date()));
-			logger.debug("Unparsable 'dicomSeriesDate': " + p.getProperty("dicomSeriesDate"));
+			logger.debug("2. example: {}", new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale(GeneralData.LANGUAGE)).format(new Date()));
+			logger.debug("Unparsable 'dicomSeriesDate': {}", p.getProperty("dicomSeriesDate"));
 		}
 		rv.setDicomSeriesDescription(p.getProperty("dicomSeriesDescription"));
 		rv.setDicomInstanceUID(p.getProperty("dicomInstanceUID"));

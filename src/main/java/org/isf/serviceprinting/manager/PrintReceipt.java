@@ -83,7 +83,7 @@ public class PrintReceipt {
 
 				} else {
 					logger.debug("invalid MODE");
-					logger.debug("MODE: " + TxtPrinter.MODE);
+					logger.debug("MODE: {}", TxtPrinter.MODE);
 				}
 			} else {
 				logger.debug("printer was not found.");
@@ -177,7 +177,7 @@ public class PrintReceipt {
 	 * @param printService
 	 */
 	private void getPrinterDetails(PrintService printService) {
-		logger.debug("Printer: " + printService.getName());
+		logger.debug("Printer: {}", printService.getName());
 		logger.debug("Supported flavors:");
 		DocFlavor[] flavors = printService.getSupportedDocFlavors();
 		if (flavors != null) {
@@ -189,7 +189,7 @@ public class PrintReceipt {
 		Attribute[] attributes = printService.getAttributes().toArray();
 		if (attributes != null) {
 			for (Attribute attr : attributes) {
-				logger.debug(attr.getName() + ": " + (attr.getClass()).toString());
+				logger.debug("{}: {}", attr.getName(), (attr.getClass()).toString());
 			}
 		}
 	}
