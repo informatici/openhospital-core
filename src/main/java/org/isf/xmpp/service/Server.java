@@ -55,10 +55,10 @@ public class Server {
 		Chat chat = null;
 		id = id + "@" + user;
 		if (connection.getChatManager().getThreadChat(id) == null) {
-			logger.debug("Creation chat: " + to + ", id = " + id);
+			logger.debug("Creation chat: {}, id = {}", to, id);
 			chat = connection.getChatManager().createChat(to, id, listener);
 		} else {
-			logger.debug("Existing chat: " + to + ", id = " + id);
+			logger.debug("Existing chat: {}, id = {}", to, id);
 			chat = connection.getChatManager().getThreadChat(id);
 		}
 		return chat;

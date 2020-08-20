@@ -431,7 +431,7 @@ public class JasperReportsManager {
 						new Locale(language), 
 						new UTF8Control());
 			} catch (MissingResourceException e) {
-				logger.error(">> no resource bundle for language = " + language + " found for this report.");
+				logger.error(">> no resource bundle for language = {} found for this report.", language);
 				logger.error(e.getMessage());
 				resourceBundle = ResourceBundle.getBundle(jasperFileName, new Locale("en"));
 			}
@@ -693,7 +693,7 @@ public class JasperReportsManager {
         try {
 			fromDateQuery = TimeTools.parseDate(fromDate, "dd/MM/yyyy", false).getTime();
 		} catch (ParseException e) {
-        	logger.error("Error parsing '" + fromDate + "' to a Date using pattern: 'dd/MM/yyyy'");
+	        logger.error("Error parsing '{}' to a Date using pattern: 'dd/MM/yyyy'", fromDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
 					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
 		}
@@ -701,7 +701,7 @@ public class JasperReportsManager {
         try {
         	toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yyyy", false).getTime();;
 		} catch (ParseException e) {
-        	logger.error("Error parsing '" + toDate + "' to a Date using pattern: 'dd/MM/yyyy'");
+	        logger.error("Error parsing '{}' to a Date using pattern: 'dd/MM/yyyy'", toDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
 					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
 		}
@@ -721,7 +721,7 @@ public class JasperReportsManager {
 		try {
 			fromDateQuery = TimeTools.parseDate(fromDate, "dd/MM/yyyy", false).getTime();
 		} catch (ParseException e) {
-			logger.error("Error parsing '" + fromDate + "' to a Date using pattern: 'dd/MM/yyyy'");
+			logger.error("Error parsing '{}' to a Date using pattern: 'dd/MM/yyyy'", fromDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
 					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
 		}
@@ -729,7 +729,7 @@ public class JasperReportsManager {
 		try {
 			toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yyyy", false).getTime();;
 		} catch (ParseException e) {
-			logger.error("Error parsing '" + toDate + "' to a Date using pattern: 'dd/MM/yyyy'");
+			logger.error("Error parsing '{}' to a Date using pattern: 'dd/MM/yyyy'", toDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
 					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
 		}

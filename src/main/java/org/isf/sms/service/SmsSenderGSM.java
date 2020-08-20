@@ -70,8 +70,8 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 			portId = (CommPortIdentifier) portList.nextElement();
 			
 			if (portId.getName().equals(port) && portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-				
-				logger.debug("COM PORT found (" + port + ")");
+
+				logger.debug("COM PORT found ({})", port);
 				break;
 				
 			} else portId = null; 
@@ -94,12 +94,12 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 				} else logger.debug("Not possible to open the stream");
 				
 			} catch (PortInUseException e) {
-				logger.error("Port in use: " + portId.getCurrentOwner());
+				logger.error("Port in use: {}", portId.getCurrentOwner());
 			} catch (Exception e) {
-				logger.error("Failed to open port " + portId.getName() + " " + e);
+				logger.error("Failed to open port {} {}", portId.getName(), e);
 			}
 		} else {
-			logger.error("COM PORT not found (" + port + ")!!!");
+			logger.error("COM PORT not found ({})!!!", port);
  		}
 		return connected;
 	}
@@ -107,8 +107,8 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 	@Override
 	public boolean sendSMS(Sms sms, boolean debug) {
 		if (connected) {
-			logger.debug("Sending SMS (" + sms.getSmsId() + ") to: " + sms.getSmsNumber());
-			logger.debug("Sending text: " + sms.getSmsText());
+			logger.debug("Sending SMS ({}) to: {}", sms.getSmsId(), sms.getSmsNumber());
+			logger.debug("Sending text: {}", sms.getSmsText());
 			
 			StringBuilder build_CMGS = new StringBuilder(GSMParameters.CMGS);
 			build_CMGS.append(sms.getSmsNumber());
@@ -183,7 +183,7 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		logger.debug("Found " + smsList.size() + " SMS to send");
+		logger.debug("Found {} SMS to send", smsList.size());
 		
 		//Send
 		SmsSenderGSM sender = new SmsSenderGSM();
@@ -191,6 +191,6 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 		if (sender.initialize()) {
 			result = sender.sendSMS(smsList.get(0), true);
 		}
-		logger.debug(""+result);
+		logger.debug("{}", result);
 	}
 }

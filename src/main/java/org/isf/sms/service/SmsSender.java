@@ -32,7 +32,7 @@ public class SmsSender implements Runnable {
 		logger.info("SMS Sender started...");
 		SmsParameters.getSmsParameters();
 		delay = SmsParameters.LOOP;
-		logger.info("SMS Sender loop set to " + delay + " seconds.");
+		logger.info("SMS Sender loop set to {} seconds.", delay);
 	}
 
 	public void run() {
@@ -47,7 +47,7 @@ public class SmsSender implements Runnable {
 				e1.printStackTrace();
 			}
 			if (!smsList.isEmpty()) {
-				logger.info("Found " + smsList.size() + " SMS to send");
+				logger.info("Found {} SMS to send", smsList.size());
 				if (SmsParameters.MODE.equals("GSM")) {
 					
 					SmsSenderGSM sender = new SmsSenderGSM();

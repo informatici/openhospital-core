@@ -45,7 +45,7 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHException;
 
 public class ExcelExporter {
-	
+
 	private CharsetEncoder encoder;
 	private Locale currentLocale;
 	private Workbook workbook;
@@ -55,53 +55,54 @@ public class ExcelExporter {
 	private CellStyle bigDecimalStyle;
 	private CellStyle headerStyle;
 	private CreationHelper createHelper;
-	
+
 	public ExcelExporter() {
 		encoder = Charset.forName("UTF-8").newEncoder();
 		encoder.onMalformedInput(CodingErrorAction.REPORT);
 		encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
 		currentLocale = Locale.getDefault();
 	}
-	
+
 	private void initStyles() {
-		
+
 		headerStyle = workbook.createCellStyle();
 		Font font = workbook.createFont();
-		font.setFontHeightInPoints((short)10);
+		font.setFontHeightInPoints((short) 10);
 		font.setBoldweight(Font.BOLDWEIGHT_BOLD);
 		headerStyle.setFont(font);
-		
+
 		short doubleFormat = workbook.createDataFormat().getFormat("#,##0.00");
 		doubleStyle = workbook.createCellStyle();
 		doubleStyle.setDataFormat(doubleFormat);
-		
+
 		short dateFormat = workbook.createDataFormat().getFormat("yyyy-mm-dd");
 		dateStyle = workbook.createCellStyle();
 		dateStyle.setDataFormat(dateFormat);
-		
+
 		short dateTimeFormat = workbook.createDataFormat().getFormat("yyyy-mm-dd hh:mm:ss");
 		dateTimeStyle = workbook.createCellStyle();
 		dateTimeStyle.setDataFormat(dateTimeFormat);
-		
+
 		short bigDecimalFormat = workbook.createDataFormat().getFormat("#,##0");
 		bigDecimalStyle = workbook.createCellStyle();
 		bigDecimalStyle.setDataFormat(bigDecimalFormat);
-		
+
 	}
 
 	/**
 	 * Writes BOM for Excel UTF-8 automatic handling
-	 * @param fileStream - the filestream to use 
-	 * @throws IOException 
+	 *
+	 * @param fileStream - the filestream to use
+	 * @throws IOException
 	 */
 	private void writeBOM(FileOutputStream fileStream) throws IOException {
-		byte[] bom = new byte[] { (byte)0xEF, (byte)0xBB, (byte)0xBF }; 
-		fileStream.write(bom); 
+		byte[] bom = new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF };
+		fileStream.write(bom);
 	}
-	
+
 	/**
 	 * Export a jTable to CSV file with a semi-column (;) as list separator
-	 * 
+	 *
 	 * @param jtable
 	 * @param file
 	 * @throws IOException
@@ -111,10 +112,10 @@ public class ExcelExporter {
 	public void exportTableToCSV(JTable jtable, File file) throws IOException {
 		exportTableToCSV(jtable, file, ";");
 	}
-	
+
 	/**
 	 * Export a jTable to CSV file format
-	 * 
+	 *
 	 * @param jtable
 	 * @param file
 	 * @param separator - the character to use as separator (usually ',' or ';')
@@ -123,21 +124,21 @@ public class ExcelExporter {
 	private void exportTableToCSV(JTable jtable, File file, String separator) throws IOException {
 		TableModel model = jtable.getModel();
 		FileOutputStream fileStream = new FileOutputStream(file);
-		writeBOM(fileStream); 
-		
+		writeBOM(fileStream);
+
 		BufferedWriter outFile = new BufferedWriter(new OutputStreamWriter(fileStream, encoder));
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
-		int colCount =  model.getColumnCount();
+		int colCount = model.getColumnCount();
 		for (int i = 0; i < colCount; i++) {
-			if (i == colCount -1)
+			if (i == colCount - 1)
 				outFile.write(model.getColumnName(i));
 			else
 				outFile.write(model.getColumnName(i) + separator);
 		}
 		outFile.write("\n");
 
-		int rowCount =  model.getColumnCount();
+		int rowCount = model.getColumnCount();
 		for (int i = 0; i < rowCount; i++) {
 			for (int j = 0; j < colCount; j++) {
 				String strVal;
@@ -147,24 +148,24 @@ public class ExcelExporter {
 						Integer val = (Integer) objVal;
 						NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
 						strVal = format.format(val);
-						
+
 					} else if (objVal instanceof Double) {
-						
+
 						Double val = (Double) objVal;
 						NumberFormat format = NumberFormat.getInstance(currentLocale);
 						strVal = format.format(val);
 					} else if (objVal instanceof Timestamp) {
-						
+
 						Timestamp val = (Timestamp) objVal;
 						strVal = sdf.format(val);
 					} else {
-						
+
 						strVal = objVal.toString();
 					}
 				} else {
 					strVal = " ";
 				}
-				if (j == colCount -1)
+				if (j == colCount - 1)
 					outFile.write(strVal);
 				else
 					outFile.write(strVal + separator);
@@ -175,10 +176,10 @@ public class ExcelExporter {
 
 		outFile.close();
 	}
-	
+
 	/**
 	 * Export a {@link ResultSet} to CSV file with a semi-column (;) as list separator
-	 * 
+	 *
 	 * @param resultSet
 	 * @param exportFile
 	 * @throws IOException
@@ -189,10 +190,10 @@ public class ExcelExporter {
 	public void exportResultsetToCSV(ResultSet resultSet, File exportFile) throws IOException, OHException {
 		exportResultsetToCSV(resultSet, exportFile, ";");
 	}
-	
+
 	/**
 	 * Export a {@link ResultSet} to CSV file
-	 * 
+	 *
 	 * @param resultSet
 	 * @param exportFile
 	 * @param separator - the character to use as separator (usually ',' or ';')
@@ -200,21 +201,21 @@ public class ExcelExporter {
 	 * @throws OHException
 	 */
 	private void exportResultsetToCSV(ResultSet resultSet, File exportFile, String separator) throws IOException, OHException {
-		
+
 		/*
 		 * write BOM for Excel UTF-8 automatic handling
 		 */
 		FileOutputStream fileStream = new FileOutputStream(exportFile);
-		writeBOM(fileStream); 
-		
+		writeBOM(fileStream);
+
 		BufferedWriter output = new BufferedWriter(new OutputStreamWriter(fileStream, encoder));
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		NumberFormat numFormat = NumberFormat.getInstance(Locale.getDefault());
-		
+
 		try {
 			ResultSetMetaData rsmd = resultSet.getMetaData();
 
-			int colCount =  rsmd.getColumnCount();
+			int colCount = rsmd.getColumnCount();
 			for (int i = 1; i <= colCount; i++) {
 				if (i == colCount - 1)
 					output.write(rsmd.getColumnName(i));
@@ -222,23 +223,23 @@ public class ExcelExporter {
 					output.write(rsmd.getColumnName(i) + separator);
 			}
 			output.write("\n");
-			
-			while(resultSet.next()) {
-				
+
+			while (resultSet.next()) {
+
 				String strVal;
 				for (int i = 1; i <= colCount; i++) {
 					Object objVal = resultSet.getObject(i);
 					if (objVal != null) {
 						if (objVal instanceof Double) {
-							
+
 							Double val = (Double) objVal;
 							strVal = numFormat.format(val);
 						} else if (objVal instanceof Timestamp) {
-							
+
 							Timestamp val = (Timestamp) objVal;
 							strVal = sdf.format(val);
 						} else {
-							
+
 							strVal = objVal.toString();
 						}
 					} else {
@@ -248,20 +249,20 @@ public class ExcelExporter {
 						output.write(strVal);
 					else
 						output.write(strVal + separator);
-						
+
 				}
 				output.write("\n");
-				
+
 			}
 		} catch (SQLException e) {
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
 		}
 		output.close();
 	}
-	
+
 	/**
 	 * Export a {@link Collection} to CSV using Apache POI library
-	 * 
+	 *
 	 * @param data
 	 * @param exportFile
 	 * @throws IOException
@@ -270,9 +271,8 @@ public class ExcelExporter {
 	 */
 	@Deprecated
 	public void exportDataToCSV(Collection data, File exportFile) throws IOException, OHException {
-		
-		FileWriter outFile = new FileWriter(exportFile);
-		try {
+
+		try (FileWriter outFile = new FileWriter(exportFile)) {
 			boolean header = false;
 			for (Object map : data) {
 				Map thisMap = ((Map) map);
@@ -284,7 +284,7 @@ public class ExcelExporter {
 					outFile.write("\n");
 					header = true;
 				}
-				
+
 				String strVal;
 				Collection values = thisMap.values();
 				for (Object value : values) {
@@ -293,8 +293,6 @@ public class ExcelExporter {
 				}
 				outFile.write("\n");
 			}
-		} finally {
-			outFile.close();
 		}
 	}
 
@@ -327,10 +325,10 @@ public class ExcelExporter {
 		}
 		return strVal;
 	}
-	
+
 	/**
 	 * Export a {@link JTable} to Excel using Apache POI library
-	 * 
+	 *
 	 * @param jtable
 	 * @param file
 	 * @throws IOException
@@ -338,27 +336,27 @@ public class ExcelExporter {
 	public void exportTableToExcel(JTable jtable, File file) throws IOException {
 		TableModel model = jtable.getModel();
 		FileOutputStream fileStream = new FileOutputStream(file);
-		
+
 		workbook = new XSSFWorkbook();
 		createHelper = workbook.getCreationHelper();
-		
+
 		Sheet worksheet = workbook.createSheet();
 		initStyles();
-		
+
 		Row headers = worksheet.createRow((short) 0);
-		int colCount =  model.getColumnCount();
+		int colCount = model.getColumnCount();
 		for (int i = 0; i < colCount; i++) {
 			Cell cell = headers.createCell((short) i);
 			RichTextString value = createHelper.createRichTextString(model.getColumnName(i));
 			cell.setCellStyle(headerStyle);
 			cell.setCellValue(value);
 		}
-		
-		int rowCount =  model.getRowCount();
+
+		int rowCount = model.getRowCount();
 		for (int i = 0; i < rowCount; i++) {
 			int index = i + 1;
 			Row row = worksheet.createRow(index);
-			
+
 			for (int j = 0; j < colCount; j++) {
 				Cell cell = row.createCell((short) j);
 				Object value = model.getValueAt(i, j);
@@ -369,10 +367,10 @@ public class ExcelExporter {
 		fileStream.flush();
 		fileStream.close();
 	}
-	
+
 	/**
 	 * Export a {@link ResultSet} to Excel using Apache POI library
-	 * 
+	 *
 	 * @param resultSet
 	 * @param exportFile
 	 * @throws IOException
@@ -380,31 +378,31 @@ public class ExcelExporter {
 	 */
 	public void exportResultsetToExcel(ResultSet resultSet, File exportFile) throws IOException, OHException {
 		FileOutputStream fileStream = new FileOutputStream(exportFile);
-		
+
 		workbook = new XSSFWorkbook();
 		createHelper = workbook.getCreationHelper();
-		
+
 		Sheet worksheet = workbook.createSheet();
 		initStyles();
 
 		Row headers = worksheet.createRow((short) 0);
 		try {
 			ResultSetMetaData rsmd = resultSet.getMetaData();
-		
-			int colCount =  rsmd.getColumnCount();
+
+			int colCount = rsmd.getColumnCount();
 			for (int i = 0; i < colCount; i++) {
 				Cell cell = headers.createCell((short) i);
-				RichTextString value = createHelper.createRichTextString(rsmd.getColumnName(i+1));
+				RichTextString value = createHelper.createRichTextString(rsmd.getColumnName(i + 1));
 				cell.setCellStyle(headerStyle);
 				cell.setCellValue(value);
 			}
-			
+
 			int index = 1;
-			while(resultSet.next()) {
+			while (resultSet.next()) {
 				Row row = worksheet.createRow(index);
-				
+
 				for (int j = 0; j < colCount; j++) {
-					Object value = resultSet.getObject(j+1);
+					Object value = resultSet.getObject(j + 1);
 					Cell cell = row.createCell((short) j);
 					setValueForExcel(cell, value);
 				}
@@ -413,16 +411,16 @@ public class ExcelExporter {
 			workbook.write(fileStream);
 			fileStream.flush();
 			fileStream.close();
-		
+
 		} catch (SQLException e) {
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Export a {@link ResultSet} to Excel using Apache POI library
-	 * 
+	 *
 	 * @param data
 	 * @param exportFile
 	 * @throws IOException
@@ -430,7 +428,7 @@ public class ExcelExporter {
 	 */
 	public void exportDataToExcel(Collection data, File exportFile) throws IOException, OHException {
 		FileOutputStream fileStream = new FileOutputStream(exportFile);
-		
+
 		workbook = new XSSFWorkbook();
 		createHelper = workbook.getCreationHelper();
 		Sheet worksheet = workbook.createSheet();
@@ -454,7 +452,7 @@ public class ExcelExporter {
 				header = true;
 				continue;
 			}
-			
+
 			Row row = worksheet.createRow(index);
 			Collection values = thisMap.values();
 			int j = 0;
@@ -469,9 +467,9 @@ public class ExcelExporter {
 		fileStream.flush();
 		fileStream.close();
 	}
-	
+
 	private void setValueForExcel(Cell cell, Object value) {
-		
+
 		if (value != null) {
 			if (value instanceof Integer) {
 				Integer val = (Integer) value;
@@ -503,10 +501,10 @@ public class ExcelExporter {
 			}
 		}
 	}
-	
+
 	/**
 	 * Export a {@link JTable} to Excel 97-2003 using Apache POI library
-	 * 
+	 *
 	 * @param jtable
 	 * @param file
 	 * @throws IOException
@@ -515,25 +513,25 @@ public class ExcelExporter {
 		TableModel model = jtable.getModel();
 		FileOutputStream fileStream = new FileOutputStream(file);
 		//BufferedWriter outFile = new BufferedWriter(new OutputStreamWriter(fileStream, encoder));
-		
+
 		workbook = new HSSFWorkbook();
 		HSSFSheet worksheet = (HSSFSheet) workbook.createSheet();
 		initStyles();
-		
+
 		HSSFRow headers = worksheet.createRow((short) 0);
-		int colCount =  model.getColumnCount();
+		int colCount = model.getColumnCount();
 		for (int i = 0; i < colCount; i++) {
 			HSSFCell cell = headers.createCell((short) i);
 			HSSFRichTextString value = new HSSFRichTextString(model.getColumnName(i));
 			cell.setCellStyle(headerStyle);
 			cell.setCellValue(value);
 		}
-		
-		int rowCount =  model.getRowCount();
+
+		int rowCount = model.getRowCount();
 		for (int i = 0; i < rowCount; i++) {
 			int index = i + 1;
 			HSSFRow row = worksheet.createRow((short) index);
-			
+
 			for (int j = 0; j < colCount; j++) {
 				HSSFCell cell = row.createCell((short) j);
 				Object value = model.getValueAt(i, j);
@@ -544,10 +542,10 @@ public class ExcelExporter {
 		fileStream.flush();
 		fileStream.close();
 	}
-	
+
 	/**
 	 * Export a {@link ResultSet} to Excel 97-2003 using Apache POI library
-	 * 
+	 *
 	 * @param resultSet
 	 * @param exportFile
 	 * @throws IOException
@@ -555,7 +553,7 @@ public class ExcelExporter {
 	 */
 	public void exportResultsetToExcelOLD(ResultSet resultSet, File exportFile) throws IOException, OHException {
 		FileOutputStream fileStream = new FileOutputStream(exportFile);
-		
+
 		workbook = new HSSFWorkbook();
 		HSSFSheet worksheet = (HSSFSheet) workbook.createSheet();
 		initStyles();
@@ -563,21 +561,21 @@ public class ExcelExporter {
 		HSSFRow headers = worksheet.createRow((short) 0);
 		try {
 			ResultSetMetaData rsmd = resultSet.getMetaData();
-		
-			int colCount =  rsmd.getColumnCount();
+
+			int colCount = rsmd.getColumnCount();
 			for (int i = 0; i < colCount; i++) {
 				HSSFCell cell = headers.createCell((short) i);
-				HSSFRichTextString value = new HSSFRichTextString(rsmd.getColumnName(i+1));
+				HSSFRichTextString value = new HSSFRichTextString(rsmd.getColumnName(i + 1));
 				cell.setCellStyle(headerStyle);
 				cell.setCellValue(value);
 			}
-			
+
 			int index = 1;
-			while(resultSet.next()) {
+			while (resultSet.next()) {
 				HSSFRow row = worksheet.createRow((short) index);
-				
+
 				for (int j = 0; j < colCount; j++) {
-					Object value = resultSet.getObject(j+1);
+					Object value = resultSet.getObject(j + 1);
 					HSSFCell cell = row.createCell((short) j);
 					setValueForExcelOLD(cell, value);
 				}
@@ -586,16 +584,16 @@ public class ExcelExporter {
 			workbook.write(fileStream);
 			fileStream.flush();
 			fileStream.close();
-		
+
 		} catch (SQLException e) {
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Export a {@link ResultSet} to Excel 97-2003 using Apache POI library
-	 * 
+	 *
 	 * @param data
 	 * @param exportFile
 	 * @throws IOException
@@ -603,7 +601,7 @@ public class ExcelExporter {
 	 */
 	public void exportDataToExcelOLD(Collection data, File exportFile) throws IOException, OHException {
 		FileOutputStream fileStream = new FileOutputStream(exportFile);
-		
+
 		workbook = new HSSFWorkbook();
 		HSSFSheet worksheet = (HSSFSheet) workbook.createSheet();
 		initStyles();
@@ -626,7 +624,7 @@ public class ExcelExporter {
 				header = true;
 				continue;
 			}
-			
+
 			HSSFRow row = worksheet.createRow((short) index);
 			Collection values = thisMap.values();
 			int j = 0;
@@ -641,9 +639,9 @@ public class ExcelExporter {
 		fileStream.flush();
 		fileStream.close();
 	}
-	
+
 	private void setValueForExcelOLD(HSSFCell cell, Object value) {
-		
+
 		if (value != null) {
 			if (value instanceof Integer) {
 				Integer val = (Integer) value;
@@ -675,11 +673,11 @@ public class ExcelExporter {
 			}
 		}
 	}
-	
+
 	public static JFileChooser getJFileChooserExcel(File defaultFilename) {
 		JFileChooser fcExcel = new JFileChooser();
-		FileNameExtensionFilter excelFilter = new FileNameExtensionFilter("Excel (*.xlsx)","xlsx");
-		FileNameExtensionFilter excelFilter2003 = new FileNameExtensionFilter("Excel 97-2003 (*.xls)","xls");
+		FileNameExtensionFilter excelFilter = new FileNameExtensionFilter("Excel (*.xlsx)", "xlsx");
+		FileNameExtensionFilter excelFilter2003 = new FileNameExtensionFilter("Excel 97-2003 (*.xls)", "xls");
 		fcExcel.addChoosableFileFilter(excelFilter);
 		fcExcel.addChoosableFileFilter(excelFilter2003);
 		fcExcel.setFileFilter(excelFilter);

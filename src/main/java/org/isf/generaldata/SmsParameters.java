@@ -66,7 +66,7 @@ public class SmsParameters {
 		String value;
 		value = p.getProperty(property);
 		if (value == null) {
-			logger.warn(">> " + property + " property not found: default is " + defaultValue);
+			logger.warn(">> {} property not found: default is {}", property, defaultValue);
 			return defaultValue;
 		}
 		return value;
@@ -84,7 +84,7 @@ public class SmsParameters {
 		try {
 			value = Integer.parseInt(p.getProperty(property));
 		} catch (Exception e) {
-			logger.warn(">> " + property + " property not found: default is " + defaultValue);
+			logger.warn(">> {} property not found: default is {}", property, defaultValue);
 			return defaultValue;
 		}
 		return value;

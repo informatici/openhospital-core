@@ -392,16 +392,16 @@ public class Tests {
 			assertTrue(result);
 			_checkLaboratoryIntoDb(laboratory.getCode());
 		} catch (OHServiceException e) {
-			logger.debug("==> Voluntary Exception: " + e);
+			logger.debug("==> Voluntary Exception: {}", e);
 			try {
 				Laboratory foundlaboratory = (Laboratory) jpa.find(Laboratory.class, laboratory.getCode());
 				assertNull(foundlaboratory);
 			} catch (Exception e1) {
-				logger.debug("==> Test Exception: " + e);
+				logger.debug("==> Test Exception: {}", e);
 				fail();
 			}
 		} catch (Exception e) {
-			logger.debug("==> Test Exception: " + e);
+			logger.debug("==> Test Exception: {}", e);
 			fail();
 		}
 
@@ -449,10 +449,10 @@ public class Tests {
 		} catch (OHServiceException e) {
 			logger.debug("==> Voluntary Exception: ");
 			for (OHExceptionMessage error : e.getMessages())
-				logger.debug("    " + error.getMessage());
+				logger.debug("    {}", error.getMessage());
 		} catch (Exception e) {
-			logger.debug("==> Test Exception: " + e);
-			fail();
+			logger.debug("==> Test Exception: {}", e);
+			assertEquals(true, false);
 		}
 		return;
 	}
@@ -517,7 +517,7 @@ public class Tests {
 			result = labIoOperation.isCodePresent(code);
 			assertFalse(result);
 		} catch (OHServiceException e) {
-			logger.debug("==> Test Exception: " + e);
+			logger.debug("==> Test Exception: {}", e);
 			e.printStackTrace();
 			fail();
 		} catch (Exception e) {

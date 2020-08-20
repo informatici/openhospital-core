@@ -43,7 +43,7 @@ public class DbSingleConn {
 				pConn = createConnection();
 			} catch (CommunicationsException ce) {
 				String message = MessageBundle.getMessage("angal.utils.dbserverconnectionfailure");
-				logger.error(">> " + message);
+				logger.error(">> {}", message);
 				JOptionPane.showMessageDialog(null, message);
 				System.exit(1);
 			}
