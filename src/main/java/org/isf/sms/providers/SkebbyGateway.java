@@ -75,7 +75,7 @@ public class SkebbyGateway implements SmsSenderInterface {
 		// For eventual errors see http:#www.skebby.com/business/index/send-docs/#errorCodesSection
 		// WARNING: in case of error DON'T retry the sending, since they are blocking errors
 		// ------------------------------------------------------------------	
-        logger.debug("result: "+result);
+		logger.debug("result: {}", result);
     }
     
     /**
@@ -163,7 +163,7 @@ public class SkebbyGateway implements SmsSenderInterface {
 		SkebbyParameters.getSkebbyParameters();
 		String url = SkebbyParameters.URL;
 		if (url.equals("")) {
-			logger.error("No HTTP URL has been set for the Gateway: " + SmsParameters.GATEWAY);
+			logger.error("No HTTP URL has been set for the Gateway: {}", SmsParameters.GATEWAY);
 			logger.error("Please check Skebby.properties file");
 			return false;
 		}

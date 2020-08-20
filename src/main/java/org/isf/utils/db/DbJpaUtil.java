@@ -97,7 +97,7 @@ public class DbJpaUtil
     		Object entity) throws OHException
     {    	
     	try {
-    		logger.debug("Persist: " + entity);
+		    logger.debug("Persist: {}", entity);
     		entityManager.persist(entity);  
 		} catch (EntityExistsException e) {
 			logger.error("EntityExistsException");
@@ -127,8 +127,8 @@ public class DbJpaUtil
     	
     	
     	try {
-    		mergedEntity = entityManager.merge(entity);  
-    		logger.debug("Merge: " + mergedEntity);
+    		mergedEntity = entityManager.merge(entity);
+		    logger.debug("Merge: {}", mergedEntity);
 		} catch (IllegalArgumentException e) {
 			logger.error("IllegalArgumentException");
 			e.printStackTrace();
@@ -155,8 +155,8 @@ public class DbJpaUtil
     	
 
     	try {
-    		entity = entityManager.find(entityClass, primaryKey);  
-    		logger.debug("Find: " + entity);
+    		entity = entityManager.find(entityClass, primaryKey);
+		    logger.debug("Find: {}", entity);
 		} catch (IllegalArgumentException e) {
 			logger.error("IllegalArgumentException");
 			e.printStackTrace();
@@ -175,7 +175,7 @@ public class DbJpaUtil
     		Object entity) throws OHException
     {    
     	try {
-    		logger.debug("Remove: " + entity);
+		    logger.debug("Remove: {}", entity);
     		entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));  
 		} catch (IllegalArgumentException e) {
 			logger.error("IllegalArgumentException");

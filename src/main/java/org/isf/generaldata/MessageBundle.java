@@ -55,7 +55,7 @@ public class MessageBundle {
 					message = key;
 				}
 			}
-			logger.error(">> key not found: " + key);
+			logger.error(">> key not found: {}", key);
 		}
 		return message;
 	}
@@ -74,7 +74,7 @@ public class MessageBundle {
 			} else {
 				message = defaultResourceBundle.getString(key);
 			}
-			logger.error(">> key not found: " + key);
+			logger.error(">> key not found: {}", key);
 		}
 		message = message.replace("#", input.toString());
 		return message;
@@ -94,7 +94,7 @@ public class MessageBundle {
 			} else {
 				message = defaultResourceBundle.getString(key);
 			}
-			logger.error(">> key not found: " + key);
+			logger.error(">> key not found: {}", key);
 		}
 
 		for (Object input : inputs) {

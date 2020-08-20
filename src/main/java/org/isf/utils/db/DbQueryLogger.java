@@ -35,7 +35,7 @@ public class DbQueryLogger {
      */
     public ResultSet getData(String aQuery, boolean autocommit) throws OHException {
     	if (logger.isDebugEnabled()) {
-			logger.debug("Query " + sanitize(aQuery));
+		    logger.debug("Query {}", sanitize(aQuery));
 		}
     	try{
 	        Connection conn = DbSingleJpaConn.getConnection();
@@ -61,8 +61,9 @@ public class DbQueryLogger {
      */
     public ResultSet getDataWithParams(String aQuery, List<?> params, boolean autocommit) throws OHException {
     	if (logger.isDebugEnabled()) {
-			logger.debug("Query " + sanitize(aQuery));
-			if (!params.isEmpty()) logger.trace("	parameters : " + sanitize(params));
+		    logger.debug("Query {}", sanitize(aQuery));
+			if (!params.isEmpty())
+				logger.trace("	parameters : {}", sanitize(params));
 		}
     	ResultSet results = null;
     	Connection conn = null;
@@ -95,7 +96,7 @@ public class DbQueryLogger {
      */
     public boolean setData(String aQuery, boolean autocommit) throws OHException {
     	if (logger.isDebugEnabled()) {
-			logger.debug("Query " + sanitize(aQuery));
+		    logger.debug("Query {}", sanitize(aQuery));
 		}
     	try{
 	        Connection conn = DbSingleJpaConn.getConnection();
@@ -124,8 +125,9 @@ public class DbQueryLogger {
      */
     public boolean setDataWithParams(String aQuery, List<?> params, boolean autocommit) throws OHException {
     	if (logger.isDebugEnabled()) {
-			logger.debug("Query " + sanitize(aQuery));
-			if (!params.isEmpty()) logger.trace("	parameters : " + sanitize(params));
+		    logger.debug("Query {}", sanitize(aQuery));
+			if (!params.isEmpty())
+				logger.trace("	parameters : {}", sanitize(params));
 		}
     	Connection conn = null;
     	try {
@@ -159,7 +161,7 @@ public class DbQueryLogger {
      */
     public ResultSet setDataReturnGeneratedKey(String aQuery, boolean autocommit) throws OHException {
     	if (logger.isDebugEnabled()) {
-			logger.debug("Query " + sanitize(aQuery));
+		    logger.debug("Query {}", sanitize(aQuery));
 		}
     	try{
 	        Connection conn = DbSingleJpaConn.getConnection();
@@ -188,8 +190,9 @@ public class DbQueryLogger {
      */
     public ResultSet setDataReturnGeneratedKeyWithParams(String aQuery, List<?> params, boolean autocommit) throws OHException {
     	if (logger.isDebugEnabled()) {
-			logger.debug("Query " + sanitize(aQuery));
-			if (!params.isEmpty()) logger.trace("	parameters : " + sanitize(params));
+		    logger.debug("Query {}", sanitize(aQuery));
+			if (!params.isEmpty())
+				logger.trace("	parameters : {}", sanitize(params));
 		}
     	try{
 	        Connection conn = DbSingleJpaConn.getConnection();
@@ -220,7 +223,7 @@ public class DbQueryLogger {
      */
     public boolean isData(String aQuery) throws OHException {
     	if (logger.isDebugEnabled()) {
-			logger.debug("Query " + sanitize(aQuery));
+		    logger.debug("Query {}", sanitize(aQuery));
 		}
     	try {
             Connection conn = DbSingleJpaConn.getConnection();

@@ -28,7 +28,7 @@ public class DbSingleJpaConn {
 				connection = createConnection();
 			} catch (Exception e){
 				String message = MessageBundle.getMessage("angal.utils.dbserverconnectionfailure");
-				logger.error(">> " + message);
+				logger.error(">> {}", message);
                 throw new OHException(message, e);
 			}
 		}

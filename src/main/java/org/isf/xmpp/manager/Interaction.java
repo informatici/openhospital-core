@@ -80,10 +80,10 @@ public class Interaction{
 		new ServiceDiscoveryManager(server.getConnection());
 		FileTransferManager manager= new FileTransferManager(server.getConnection());
 		FileTransferNegotiator.setServiceEnabled(server.getConnection(), true);
-		logger.debug("Manager: " + manager);
+		logger.debug("Manager: {}", manager);
 		String userID = user+server.getUserAddress()+"/Smack";
 		//String userID=getUseradd(user);
-		logger.debug("Recipient: " + userID);
+		logger.debug("Recipient: {}", userID);
 		//OutgoingFileTransfer.setResponseTimeout(10000);
 		OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(userID);
 		try {
@@ -91,12 +91,12 @@ public class Interaction{
 		} catch (XMPPException e) {
 			e.printStackTrace();
 		}
-		logger.debug("Transfer status: " + transfer.isDone() + ", " + transfer.getStatus());
+		logger.debug("Transfer status: {}, {}", transfer.isDone(), transfer.getStatus());
 
 		if(transfer.isDone())
 			logger.debug("Transfer successfully completed!");
 		if(transfer.getStatus().equals(Status.error))
-			logger.debug("Error while transferring: " + transfer.getError());
+			logger.debug("Error while transferring: {}", transfer.getError());
 
 	}
 
