@@ -4,6 +4,7 @@ package org.isf.patient.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +87,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -106,7 +107,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -125,7 +126,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -145,7 +146,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -165,7 +166,7 @@ public class Tests
 			testPatient.check(patients.get(0));
 		} catch (Exception e) {
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 	}
 
@@ -183,7 +184,7 @@ public class Tests
 			testPatient.check(patients.get(0));
 		} catch (Exception e) {
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 	}
 
@@ -203,7 +204,7 @@ public class Tests
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 	}
 
@@ -221,7 +222,7 @@ public class Tests
 			testPatient.check(patients.get(0));
 		} catch (Exception e) {
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 
 		return;
@@ -241,7 +242,7 @@ public class Tests
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 
 		return;
@@ -261,7 +262,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -281,7 +282,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -305,7 +306,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -336,14 +337,14 @@ public class Tests
 			Patient patient = (Patient)jpa.find(Patient.class, code); 
 			boolean result = patientIoOperation.deletePatient(patient);
 			Patient deletedPatient = _getDeletedPatient(code);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			assertEquals(code, deletedPatient.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -357,13 +358,13 @@ public class Tests
 			Integer code = _setupTestPatient(false);
 			Patient foundPatient = (Patient)jpa.find(Patient.class, code); 
 			boolean result = patientIoOperation.isPatientPresent(foundPatient.getName());
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -385,7 +386,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -409,7 +410,7 @@ public class Tests
 			assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(mergedPatient, obsoletePatient);
 		} catch (Exception e) {
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		} finally {
 			testPatientContext.deleteNews(jpa); // we create 2 entries so additional deletion needed
 		}

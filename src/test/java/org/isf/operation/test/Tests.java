@@ -3,6 +3,8 @@ package org.isf.operation.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -96,7 +98,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -116,7 +118,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -139,7 +141,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -166,7 +168,7 @@ public class Tests
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 
 		return;
@@ -186,14 +188,14 @@ public class Tests
 			jpa.persist(operationType);
 			jpa.commitTransaction();
 			result = operationIoOperations.newOperation(operation);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkOperationIntoDb(operation.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -213,16 +215,16 @@ public class Tests
 			int lock = foundOperation.getLock();
 			foundOperation.setDescription("Update");
 			result = operationIoOperations.updateOperation(foundOperation);
-			Operation updateOperation = (Operation)jpa.find(Operation.class, code); 
-			
-			assertEquals(true, result);
+			Operation updateOperation = (Operation)jpa.find(Operation.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateOperation.getDescription());
 			assertEquals(lock + 1, updateOperation.getLock().intValue());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -240,13 +242,13 @@ public class Tests
 			code = _setupTestOperation(false);
 			Operation foundOperation = (Operation)jpa.find(Operation.class, code); 
 			result = operationIoOperations.deleteOperation(foundOperation);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -263,13 +265,13 @@ public class Tests
 		{		
 			code = _setupTestOperation(false);
 			result = operationIoOperations.isCodePresent(code);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -287,13 +289,13 @@ public class Tests
 			code = _setupTestOperation(false);
 			Operation foundOperation = (Operation)jpa.find(Operation.class, code); 
 			result = operationIoOperations.isDescriptionPresent(foundOperation.getDescription(), foundOperation.getType().getCode());
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

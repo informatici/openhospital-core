@@ -2,6 +2,9 @@ package org.isf.visits.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -102,7 +105,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -122,7 +125,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -140,7 +143,7 @@ public class Tests
 			assertEquals(foundVisit.getDate(), visits.get(visits.size()-1).getDate());
 		} catch (Exception e) {
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 	}
 
@@ -158,7 +161,7 @@ public class Tests
 			assertEquals(foundVisit.getDate(), visits.get(visits.size()-1).getDate());
 		} catch (Exception e) {
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 	}
 	
@@ -184,7 +187,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -203,14 +206,14 @@ public class Tests
 			Visit foundVisit = (Visit)jpa.find(Visit.class, id); 
 			result = visitsIoOperation.deleteAllVisits(foundVisit.getPatient().getCode());
 
-			assertEquals(true, result);
-			result = visitsIoOperation.isCodePresent(id);			
-			assertEquals(false, result);
+			assertTrue(result);
+			result = visitsIoOperation.isCodePresent(id);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

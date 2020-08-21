@@ -1,7 +1,9 @@
 package org.isf.admtype.test;
 
-
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -86,7 +88,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -106,7 +108,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -126,7 +128,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -146,15 +148,15 @@ public class Tests
 			jpa.flush();
 			foundAdmissionType.setDescription("Update");
 			result = admissionTypeIoOperation.updateAdmissionType(foundAdmissionType);
-			AdmissionType updateAdmissionType = (AdmissionType)jpa.find(AdmissionType.class, code); 
-			
-			assertEquals(true, result);
+			AdmissionType updateAdmissionType = (AdmissionType)jpa.find(AdmissionType.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateAdmissionType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -170,14 +172,14 @@ public class Tests
 		{		
 			AdmissionType admissionType = testAdmissionType.setup(true);
 			result = admissionTypeIoOperation.newAdmissionType(admissionType);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkAdmissionTypeIntoDb(admissionType.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -198,10 +200,10 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
-		
-		assertEquals(true, result);
+
+		assertTrue(result);
 		
 		return;
 	}
@@ -218,15 +220,15 @@ public class Tests
 			code = _setupTestAdmissionType(false);
 			AdmissionType foundAdmissionType = (AdmissionType)jpa.find(AdmissionType.class, code); 
 			result = admissionTypeIoOperation.deleteAdmissionType(foundAdmissionType);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			result = admissionTypeIoOperation.isCodePresent(code);
-			assertEquals(false, result);			
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

@@ -2,6 +2,9 @@ package org.isf.therapy.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -116,7 +119,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -136,7 +139,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -159,7 +162,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -179,7 +182,7 @@ public class Tests
 			assertEquals(foundTherapyRow.getNote(), therapyRows.get(therapyRows.size()-1).getNote());
 		} catch (Exception e) {
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 	}
 	
@@ -207,7 +210,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -226,14 +229,14 @@ public class Tests
 			TherapyRow foundTherapyRow = (TherapyRow)jpa.find(TherapyRow.class, id); 
 			result = therapyIoOperation.deleteAllTherapies(foundTherapyRow.getPatID().getCode());
 
-			assertEquals(true, result);
-			result = therapyIoOperation.isCodePresent(id);			
-			assertEquals(false, result);
+			assertTrue(result);
+			result = therapyIoOperation.isCodePresent(id);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -256,7 +259,7 @@ public class Tests
 			assertEquals(mergedPatient.getCode(), result.getPatID().getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 	}
 

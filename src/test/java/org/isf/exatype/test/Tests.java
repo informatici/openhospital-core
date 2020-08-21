@@ -2,6 +2,9 @@ package org.isf.exatype.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -87,7 +90,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -107,7 +110,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -124,13 +127,13 @@ public class Tests
 			code = _setupTestExamType(false);
 			ExamType foundExamType = (ExamType)jpa.find(ExamType.class, code); 
 			ArrayList<ExamType> examTypes = examTypeIoOperation.getExamType();
-			
-			assertEquals(examTypes.contains(foundExamType), true);
+
+			assertTrue(examTypes.contains(foundExamType));
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -149,15 +152,15 @@ public class Tests
 			ExamType foundExamType = (ExamType)jpa.find(ExamType.class, code); 
 			foundExamType.setDescription("Update");
 			result = examTypeIoOperation.updateExamType(foundExamType);
-			ExamType updateExamType = (ExamType)jpa.find(ExamType.class, code); 
-			
-			assertEquals(true, result);
+			ExamType updateExamType = (ExamType)jpa.find(ExamType.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateExamType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -173,14 +176,14 @@ public class Tests
 		{		
 			ExamType examType = testExamType.setup(true);
 			result = examTypeIoOperation.newExamType(examType);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkExamTypeIntoDb(examType.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -197,13 +200,13 @@ public class Tests
 		{		
 			code = _setupTestExamType(false);
 			result = examTypeIoOperation.isCodePresent(code);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -221,15 +224,15 @@ public class Tests
 			code = _setupTestExamType(false);
 			ExamType foundExamType = (ExamType)jpa.find(ExamType.class, code); 
 			result = examTypeIoOperation.deleteExamType(foundExamType);
-			assertEquals(true, result);
+			assertTrue(result);
 
 			result = examTypeIoOperation.isCodePresent(code);
-			assertEquals(false, result);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

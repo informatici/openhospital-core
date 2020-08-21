@@ -2,6 +2,9 @@ package org.isf.exa.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +109,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -126,7 +129,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -146,7 +149,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -166,7 +169,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -189,7 +192,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -212,7 +215,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -229,13 +232,13 @@ public class Tests
 			code = _setupTestExamType(false);
 			ExamType foundExamType = (ExamType)jpa.find(ExamType.class, code); 
 			ArrayList<ExamType> examTypes = examIoOperation.getExamType();
-			
-			assertEquals(examTypes.contains(foundExamType), true);
+
+			assertTrue(examTypes.contains(foundExamType));
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -258,14 +261,14 @@ public class Tests
 			jpa.persist(exam);
 			jpa.commitTransaction();
 			result = examIoOperation.newExamRow(examRow);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkExamRowIntoDb(examRow.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -287,14 +290,14 @@ public class Tests
 			jpa.commitTransaction();
 			Exam exam = testExam.setup(examType, 1, false);
 			result = examIoOperation.newExam(exam);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkExamIntoDb(exam.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -314,15 +317,15 @@ public class Tests
 			jpa.flush();
 			foundExam.setDescription("Update");
 			result = examIoOperation.updateExam(foundExam);
-			Exam updateExam = (Exam)jpa.find(Exam.class, code); 
-			
-			assertEquals(true, result);
+			Exam updateExam = (Exam)jpa.find(Exam.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateExam.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -341,14 +344,14 @@ public class Tests
 			Exam foundExam = (Exam)jpa.find(Exam.class, code); 
 			result = examIoOperation.deleteExam(foundExam);
 
-			assertEquals(true, result);
-			result = examIoOperation.isCodePresent(code);			
-			assertEquals(false, result);
+			assertTrue(result);
+			result = examIoOperation.isCodePresent(code);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -366,15 +369,15 @@ public class Tests
 			code = _setupTestExamRow(false);
 			ExamRow foundExamRow = (ExamRow)jpa.find(ExamRow.class, code); 
 			result = examIoOperation.deleteExamRow(foundExamRow);
-			
-			assertEquals(true, result);
-			result = examIoOperation.isRowPresent(code);			
-			assertEquals(false, result);
+
+			assertTrue(result);
+			result = examIoOperation.isRowPresent(code);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -396,13 +399,13 @@ public class Tests
 			jpa.persist(exam);
 			jpa.commitTransaction();
 			result = examIoOperation.isKeyPresent(exam);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

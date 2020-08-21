@@ -1,7 +1,13 @@
 package org.isf.admission.test;
 
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
@@ -52,12 +58,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
-import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -191,7 +191,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -211,7 +211,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -460,7 +460,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	
 		return;
@@ -482,7 +482,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	
 		return;
@@ -505,7 +505,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	
 		return;
@@ -559,14 +559,14 @@ public class Tests
 					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType, 
 					deliveryType, deliveryResult, true);
 			result = admissionIoOperation.newAdmission(admission);
-					
-					assertEquals(true, result);
-					_checkAdmissionIntoDb(admission.getId());
+
+			assertTrue(result);
+			_checkAdmissionIntoDb(admission.getId());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -626,7 +626,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -646,15 +646,15 @@ public class Tests
 			jpa.flush();
 			foundAdmission.setNote("Update");
 			result = admissionIoOperation.updateAdmission(foundAdmission);
-			Admission updateAdmission = (Admission)jpa.find(Admission.class, id); 
-			
-			assertEquals(true, result);
+			Admission updateAdmission = (Admission)jpa.find(Admission.class, id);
+
+			assertTrue(result);
 			assertEquals("Update", updateAdmission.getNote());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -677,7 +677,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -700,7 +700,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -724,7 +724,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	
 		return;
@@ -743,13 +743,13 @@ public class Tests
 			Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
 			jpa.flush();
 			result = admissionIoOperation.setDeleted(foundAdmission.getId());
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 
 		return;
@@ -773,7 +773,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 
 		return;
@@ -791,14 +791,14 @@ public class Tests
 			id = _setupTestAdmission(false);
 			Admission foundAdmission = (Admission)jpa.find(Admission.class, id);  
 			result = admissionIoOperation.deletePatientPhoto(foundAdmission.getPatient().getCode());
-			
-			assertEquals(true, result);
-			assertEquals(null, foundAdmission.getPatient().getPatientProfilePhoto().getPhoto());
+
+			assertTrue(result);
+			assertNull(foundAdmission.getPatient().getPatientProfilePhoto().getPhoto());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 
 		return;

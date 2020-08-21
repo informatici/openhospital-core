@@ -2,6 +2,9 @@ package org.isf.medtype.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -82,7 +85,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -102,7 +105,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -125,7 +128,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -144,15 +147,15 @@ public class Tests
 			MedicalType foundMedicalType = (MedicalType)jpa.find(MedicalType.class, code); 
 			foundMedicalType.setDescription("Update");
 			result = medicalTypeIoOperation.updateMedicalType(foundMedicalType);
-			MedicalType updateMedicalType = (MedicalType)jpa.find(MedicalType.class, code); 
-			
-			assertEquals(true, result);
+			MedicalType updateMedicalType = (MedicalType)jpa.find(MedicalType.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateMedicalType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -168,14 +171,14 @@ public class Tests
 		{		
 			MedicalType medicalType = testMedicalType.setup(true);
 			result = medicalTypeIoOperation.newMedicalType(medicalType);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkMedicalTypeIntoDb(medicalType.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -192,16 +195,16 @@ public class Tests
 		{		
 			code = _setupTestMedicalType(false);
 			result = medicalTypeIoOperation.isCodePresent(code);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
-		
-		assertEquals(true, result);
+
+		assertTrue(result);
 		
 		return;
 	}
@@ -218,15 +221,15 @@ public class Tests
 			code = _setupTestMedicalType(false);
 			MedicalType foundMedicalType = (MedicalType)jpa.find(MedicalType.class, code); 
 			result = medicalTypeIoOperation.deleteMedicalType(foundMedicalType);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			result = medicalTypeIoOperation.isCodePresent(code);
-			assertEquals(false, result);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

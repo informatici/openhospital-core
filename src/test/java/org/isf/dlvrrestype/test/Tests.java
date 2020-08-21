@@ -2,6 +2,9 @@ package org.isf.dlvrrestype.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.isf.dlvrrestype.model.DeliveryResultType;
 import org.isf.dlvrrestype.service.DeliveryResultTypeIoOperation;
@@ -84,7 +87,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -104,7 +107,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -125,7 +128,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -144,15 +147,15 @@ public class Tests
 			DeliveryResultType foundDeliveryResultType = (DeliveryResultType)jpa.find(DeliveryResultType.class, code); 
 			foundDeliveryResultType.setDescription("Update");
 			result = deliveryResultTypeIoOperation.updateDeliveryResultType(foundDeliveryResultType);
-			DeliveryResultType updateDeliveryResultType = (DeliveryResultType)jpa.find(DeliveryResultType.class, code); 
-			
-			assertEquals(true, result);
+			DeliveryResultType updateDeliveryResultType = (DeliveryResultType)jpa.find(DeliveryResultType.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateDeliveryResultType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -168,14 +171,14 @@ public class Tests
 		{		
 			DeliveryResultType deliveryResultType = testDeliveryResultType.setup(true);
 			result = deliveryResultTypeIoOperation.newDeliveryResultType(deliveryResultType);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkDeliveryResultTypeIntoDb(deliveryResultType.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -192,13 +195,13 @@ public class Tests
 		{		
 			code = _setupTestDeliveryResultType(false);
 			result = deliveryResultTypeIoOperation.isCodePresent(code);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -217,13 +220,13 @@ public class Tests
 			DeliveryResultType foundDeliveryResultType = (DeliveryResultType)jpa.find(DeliveryResultType.class, code); 
 			result = deliveryResultTypeIoOperation.deleteDeliveryResultType(foundDeliveryResultType);
 			
-			result = deliveryResultTypeIoOperation.isCodePresent(code);			
-			assertEquals(false, result);
+			result = deliveryResultTypeIoOperation.isCodePresent(code);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

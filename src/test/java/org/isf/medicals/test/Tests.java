@@ -2,6 +2,9 @@ package org.isf.medicals.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -139,7 +142,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -159,7 +162,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -182,7 +185,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -205,7 +208,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -228,7 +231,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -246,13 +249,13 @@ public class Tests
 			code = _setupTestMedical(false);
 			Medical foundMedical = (Medical)jpa.find(Medical.class, code); 
 			result = medicalsIoOperations.medicalExists(foundMedical, false);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -272,15 +275,15 @@ public class Tests
 			jpa.flush();
 			foundMedical.setDescription("Update");
 			result = medicalsIoOperations.updateMedical(foundMedical);
-			Medical updateMedical = (Medical)jpa.find(Medical.class, code); 
-			
-			assertEquals(true, result);
+			Medical updateMedical = (Medical)jpa.find(Medical.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateMedical.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -300,14 +303,14 @@ public class Tests
 			jpa.commitTransaction();			
 			Medical medical = testMedical.setup(medicalType, true);
 			result = medicalsIoOperations.newMedical(medical);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkMedicalIntoDb(medical.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -325,16 +328,16 @@ public class Tests
 			code = _setupTestMedical(false);
 			Medical foundMedical = (Medical)jpa.find(Medical.class, code); 
 			result = medicalsIoOperations.deleteMedical(foundMedical);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			Medical deletedMedical = (Medical)jpa.find(Medical.class, code); 
-			result = medicalsIoOperations.medicalExists(deletedMedical,true);			
-			assertEquals(false, result);
+			result = medicalsIoOperations.medicalExists(deletedMedical,true);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -352,13 +355,13 @@ public class Tests
 			code = _setupTestMovement(false);
 			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
 			result = medicalsIoOperations.isMedicalReferencedInStockMovement(foundMovement.getMedical().getCode());
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

@@ -2,6 +2,9 @@ package org.isf.ward.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -71,7 +74,7 @@ public class Tests
 			_checkWardIntoDb(code);
 		} catch (Exception e) {
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	}
 	
@@ -82,7 +85,7 @@ public class Tests
 			_checkWardIntoDb(code);
 		} catch (Exception e) {
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	}
 
@@ -100,7 +103,7 @@ public class Tests
 			assertEquals(foundWard.getDescription(), wards.get(wards.size()-1).getDescription());
 		} catch (Exception e) {
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	}
 
@@ -118,7 +121,7 @@ public class Tests
 			assertEquals(foundWard.getDescription(), wards.get(0).getDescription());
 		} catch (Exception e) {
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	}
 	
@@ -128,11 +131,11 @@ public class Tests
 			Ward ward = testWard.setup(true);
 			boolean result = wardIoOperation.newWard(ward);
 
-			assertEquals(true, result);
+			assertTrue(result);
 			_checkWardIntoDb(ward.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	}
 	
@@ -149,11 +152,11 @@ public class Tests
 			Ward updateWard = wardIoOperationRepository.findOne(code);
 
 			// then:
-			assertEquals(true, result);
+			assertTrue(result);
 			assertEquals("Update", updateWard.getDescription());
 		} catch (Exception e) {
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	}
 	
@@ -164,10 +167,10 @@ public class Tests
 			ward.setCode("X");
 			boolean result = wardIoOperation.updateWard(ward);
 
-			assertEquals(true, result);
+			assertTrue(result);
 		} catch (Exception e) {
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	}
 	
@@ -182,12 +185,12 @@ public class Tests
 			boolean result = wardIoOperation.deleteWard(foundWard);
 
 			// then:
-			assertEquals(true, result);
-			result = wardIoOperation.isCodePresent(code);			
-			assertEquals(false, result);
+			assertTrue(result);
+			result = wardIoOperation.isCodePresent(code);
+			assertFalse(result);
 		} catch (Exception e) {
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	}
 
@@ -197,10 +200,10 @@ public class Tests
 			String code = _setupTestWard(false);
 			boolean result = wardIoOperation.isCodePresent(code);
 
-			assertEquals(true, result);
+			assertTrue(result);
 		} catch (Exception e) {
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	}
 
@@ -210,10 +213,10 @@ public class Tests
 
 		try {
 			result = wardIoOperation.isCodePresent("X");
-			assertEquals(false, result);
+			assertFalse(result);
 		} catch (Exception e) {
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	}
 
@@ -227,11 +230,11 @@ public class Tests
 			wardIoOperationRepository.save(ward);
 
 			result = wardIoOperation.isMaternityPresent();
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} catch (Exception e) {
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	}
 

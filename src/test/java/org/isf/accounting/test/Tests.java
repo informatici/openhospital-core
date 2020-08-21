@@ -1,7 +1,9 @@
 package org.isf.accounting.test;
 
-
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -126,7 +128,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();	
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -146,7 +148,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -166,7 +168,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -186,7 +188,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -206,7 +208,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -226,7 +228,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -248,7 +250,7 @@ public class Tests
 			assertEquals(mergedPatient.getCode(), resultBill.getPatient().getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 	}
 
@@ -263,13 +265,13 @@ public class Tests
 			id = _setupTestBill(false);
 			Bill foundBill = (Bill)jpa.find(Bill.class, id); 
 			ArrayList<Bill> bills = accountingIoOperation.getPendingBills(0);
-			
-			assertEquals(true, bills.contains(foundBill));
+
+			assertTrue(bills.contains(foundBill));
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}	
 				
 		return;
@@ -292,7 +294,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -309,13 +311,13 @@ public class Tests
 			id = _setupTestBill(false);
 			Bill foundBill = (Bill)jpa.find(Bill.class, id); 
 			ArrayList<Bill> bills = accountingIoOperation.getBills();
-			
-			assertEquals(true, bills.contains(foundBill));
+
+			assertTrue(bills.contains(foundBill));
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -338,7 +340,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -356,13 +358,13 @@ public class Tests
 			id = _setupTestBillPayments(false);
 			BillPayments foundBillPayment = (BillPayments)jpa.find(BillPayments.class, id); 
 			userIds = accountingIoOperation.getUsers();
-			
-			assertEquals(true, userIds.contains(foundBillPayment.getUser()));
+
+			assertTrue(userIds.contains(foundBillPayment.getUser()));
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -377,13 +379,13 @@ public class Tests
 			
 			BillItems foundBillItem = (BillItems)jpa.find(BillItems.class, billItemID); 
 			ArrayList<BillItems> billItems = accountingIoOperation.getItems(foundBillItem.getBill().getId());
-			
-			assertEquals(true, billItems.contains(foundBillItem));
+
+			assertTrue(billItems.contains(foundBillItem));
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -406,7 +408,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -425,13 +427,13 @@ public class Tests
 			GregorianCalendar dateFrom = new GregorianCalendar(4, 3, 2);
 			GregorianCalendar dateTo = new GregorianCalendar();
 			ArrayList<BillPayments> billPayments = accountingIoOperation.getPayments(dateFrom, dateTo);
-			
-			assertEquals(true, billPayments.contains(foundBillPayment));
+
+			assertTrue(billPayments.contains(foundBillPayment));
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -454,7 +456,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -484,7 +486,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 						
 		return;
@@ -509,14 +511,14 @@ public class Tests
 			billItems.add(insertBillItem);	
 			result = accountingIoOperation.newBillItems(bill, billItems);
 			
-			BillItems foundBillItems = (BillItems)jpa.find(BillItems.class, insertId); 		
-			assertEquals(true, result);				
+			BillItems foundBillItems = (BillItems)jpa.find(BillItems.class, insertId);
+			assertTrue(result);
 			assertEquals(bill.getId(), foundBillItems.getBill().getId());		
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -541,14 +543,14 @@ public class Tests
 			billPayments.add(insertBillPayment);	
 			result = accountingIoOperation.newBillPayments(bill, billPayments);
 			
-			BillPayments foundBillPayments = (BillPayments)jpa.find(BillPayments.class, insertId); 		
-			assertEquals(true, result);				
+			BillPayments foundBillPayments = (BillPayments)jpa.find(BillPayments.class, insertId);
+			assertTrue(result);
 			assertEquals(bill.getId(), foundBillPayments.getBill().getId());		
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}	
 		
 		return;
@@ -573,7 +575,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 						
 		return;
@@ -591,13 +593,13 @@ public class Tests
 			Bill bill = (Bill)jpa.find(Bill.class, id); 
 			
 			boolean result = accountingIoOperation.deleteBill(bill);
-			 		
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 						
 		return;
@@ -616,13 +618,13 @@ public class Tests
 			GregorianCalendar dateFrom = new GregorianCalendar(4, 3, 2);
 			GregorianCalendar dateTo = new GregorianCalendar();
 			ArrayList<Bill> bills = accountingIoOperation.getBills(dateFrom, dateTo);
-			
-			assertEquals(true, bills.contains(foundBill));
+
+			assertTrue(bills.contains(foundBill));
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -642,32 +644,32 @@ public class Tests
 			Bill foundBill = (Bill)jpa.find(Bill.class, id); 
 			
 			ArrayList<Bill> bills = accountingIoOperation.getBills(dateFrom, dateTo);
-			assertEquals(true, bills.contains(foundBill));
+			assertTrue(bills.contains(foundBill));
 			
 			bills = accountingIoOperation.getBills(new GregorianCalendar(10, 0, 1), dateFrom);
-			assertEquals(false, bills.contains(foundBill));
+			assertFalse(bills.contains(foundBill));
 			
 			bills = accountingIoOperation.getBills(dateTo, new GregorianCalendar(11, 0, 1));
-			assertEquals(false, bills.contains(foundBill));
+			assertFalse(bills.contains(foundBill));
 			
 			id = _setupTestBillItems(false);
 			BillItems foundBillItem = (BillItems)jpa.find(BillItems.class, id);
 			foundBill = (Bill)jpa.find(Bill.class, foundBillItem.getBill().getId());
 			
 			bills = accountingIoOperation.getBills(dateFrom, dateTo, foundBillItem);
-			assertEquals(true, bills.contains(foundBill));
+			assertTrue(bills.contains(foundBill));
 			
 			id = _setupTestBillItems(true);
 			foundBillItem = (BillItems)jpa.find(BillItems.class, id);
 			
 			bills = accountingIoOperation.getBills(dateFrom, dateTo, foundBillItem);
-			assertEquals(true, bills.contains(foundBill));
+			assertTrue(bills.contains(foundBill));
 			
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -693,7 +695,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -720,7 +722,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -731,7 +733,7 @@ public class Tests
 		int id = _setupTestBillItems(false);
 		BillItems foundBillItem = (BillItems)jpa.find(BillItems.class, id);
 		List<BillItems> billItems = accountingIoOperation.getDistictsBillItems();
-		assertEquals(true, billItems.contains(foundBillItem));
+		assertTrue(billItems.contains(foundBillItem));
 	}
 
 	private void _saveContext() throws OHException 
