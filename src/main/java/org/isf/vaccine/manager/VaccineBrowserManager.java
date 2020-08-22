@@ -130,4 +130,14 @@ public class VaccineBrowserManager {
 	public boolean codeControl(String code) throws OHServiceException {
 		return ioOperations.isCodePresent(code);
 	}
+	
+	/**
+	 * returns the {@link Vaccine} based on vaccine code
+	 *
+	 * @param code - the  {@link Vaccine} code.
+	 * @return the {@link Vaccine}
+	 */
+	public Vaccine findVaccine(String code) throws OHServiceException {
+		return ioOperations.findVaccine(code);
+	}
 }
