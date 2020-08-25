@@ -32,9 +32,11 @@ import org.isf.supplier.test.TestSupplier;
 import org.isf.supplier.test.TestSupplierContext;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.isf.ward.test.TestWard;
 import org.isf.ward.test.TestWardContext;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -212,6 +214,24 @@ public class Tests
 		}
 				
 		return;
+	}
+
+	@Test
+	public void testTotalQuantityShouldFindMovementWardByWardCodeAndDates() throws OHException, OHServiceException {
+		// given:
+		int code = _setupTestMovementWard(false);
+		MovementWard foundMovement = (MovementWard)jpa.find(MovementWard.class, code);
+		DateTime startDate = new DateTime(foundMovement.getDate()).minusDays(1);
+		DateTime endDate = new DateTime(foundMovement.getDate()).plusDays(1);
+
+		// when:
+		ArrayList<MovementWard> wardMovementsToWard = medicalIoOperation.getWardMovementsToWard(
+			foundMovement.getWard().getCode(), startDate.toGregorianCalendar(), endDate.toGregorianCalendar()
+		);
+
+		// then:
+		assertEquals(1, wardMovementsToWard.size());
+		assertEquals(foundMovement.getCode(), wardMovementsToWard.get(0).getCode());
 	}
 	
 	@Test
