@@ -2,6 +2,9 @@ package org.isf.disease.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -96,7 +99,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -116,7 +119,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -138,7 +141,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -156,31 +159,31 @@ public class Tests
 			Disease foundDisease = (Disease)jpa.find(Disease.class, code); 
 
 			ArrayList<Disease> diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), false, false, false);
-			assertEquals(true, diseases.contains(foundDisease));
+			assertTrue(diseases.contains(foundDisease));
 			
 			diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), true, false, false);
-			assertEquals(false, diseases.contains(foundDisease));
+			assertFalse(diseases.contains(foundDisease));
 			foundDisease.setOpdInclude(true);
 			jpa.beginTransaction();	
 			jpa.persist(foundDisease);
 			jpa.commitTransaction();
 			diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), true, false, false);
-			assertEquals(true, diseases.contains(foundDisease));
+			assertTrue(diseases.contains(foundDisease));
 
 			foundDisease = (Disease)jpa.find(Disease.class, code);
 			diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), true, true, false);
-			assertEquals(false, diseases.contains(foundDisease));
+			assertFalse(diseases.contains(foundDisease));
 			foundDisease.setOpdInclude(true);
 			foundDisease.setIpdInInclude(true);
 			jpa.beginTransaction();	
 			jpa.persist(foundDisease);
 			jpa.commitTransaction();
 			diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), true, true, false);
-			assertEquals(true, diseases.contains(foundDisease));
+			assertTrue(diseases.contains(foundDisease));
 
 			foundDisease = (Disease)jpa.find(Disease.class, code);
 			diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), true, true, true);
-			assertEquals(false, diseases.contains(foundDisease));
+			assertFalse(diseases.contains(foundDisease));
 			foundDisease.setOpdInclude(true);
 			foundDisease.setIpdInInclude(true);
 			foundDisease.setIpdOutInclude(true);
@@ -188,22 +191,22 @@ public class Tests
 			jpa.persist(foundDisease);
 			jpa.commitTransaction();
 			diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), true, true, true);
-			assertEquals(true, diseases.contains(foundDisease));
+			assertTrue(diseases.contains(foundDisease));
 			
 			diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), false, true, true);
-			assertEquals(true, diseases.contains(foundDisease));
+			assertTrue(diseases.contains(foundDisease));
 			
 			diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), false, false, true);
-			assertEquals(true, diseases.contains(foundDisease));
+			assertTrue(diseases.contains(foundDisease));
 			
 			diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), false, true, false);
-			assertEquals(true, diseases.contains(foundDisease));
+			assertTrue(diseases.contains(foundDisease));
 			
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -225,14 +228,14 @@ public class Tests
 			jpa.persist(diseaseType);
 			jpa.commitTransaction();
 			result = diseaseIoOperation.newDisease(disease);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkDiseaseIntoDb(disease.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -253,15 +256,15 @@ public class Tests
  			foundDisease.setDescription("Update");
  			result = diseaseIoOperation.updateDisease(foundDisease);
 			jpa.open();
- 			Disease updateDisease = (Disease)jpa.find(Disease.class, code); 
-			
-			assertEquals(true, result);
+ 			Disease updateDisease = (Disease)jpa.find(Disease.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateDisease.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -281,14 +284,14 @@ public class Tests
 			jpa.flush();
 			result = diseaseIoOperation.deleteDisease(foundDisease);
 			jpa.open();
- 			assertEquals(true, result);
- 			assertEquals(false, foundDisease.getIpdInInclude());
- 			assertEquals(false, foundDisease.getIpdOutInclude());
+			assertTrue(result);
+			assertFalse(foundDisease.getIpdInInclude());
+			assertFalse(foundDisease.getIpdOutInclude());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -308,15 +311,15 @@ public class Tests
 			jpa.flush();
 			result = diseaseIoOperation.deleteDisease(foundDisease);
 			jpa.open();
-			assertEquals(true, result);
-			assertEquals(false, foundDisease.getIpdInInclude());
-			assertEquals(false, foundDisease.getIpdOutInclude());
-			assertEquals(false, foundDisease.getOpdInclude());
+			assertTrue(result);
+			assertFalse(foundDisease.getIpdInInclude());
+			assertFalse(foundDisease.getIpdOutInclude());
+			assertFalse(foundDisease.getOpdInclude());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -333,13 +336,13 @@ public class Tests
 		{		
 			code = _setupTestDisease(false);
 			result = diseaseIoOperation.isCodePresent(code);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -357,13 +360,13 @@ public class Tests
 			code = _setupTestDisease(false);
 			Disease foundDisease = (Disease)jpa.find(Disease.class, code); 
 			result = diseaseIoOperation.isDescriptionPresent(foundDisease.getDescription(), foundDisease.getType().getCode());
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

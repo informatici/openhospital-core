@@ -2,6 +2,9 @@ package org.isf.disctype.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -84,7 +87,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -104,7 +107,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -127,7 +130,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -143,14 +146,14 @@ public class Tests
 		{		
 			DischargeType dischargeType = testDischargeType.setup(true);
 			result = dischargeTypeIoOperation.newDischargeType(dischargeType);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkDischargeTypeIntoDb(dischargeType.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -167,13 +170,13 @@ public class Tests
 		{		
 			code = _setupTestDischargeType(false);
 			result = dischargeTypeIoOperation.isCodePresent(code);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -191,15 +194,15 @@ public class Tests
 			code = _setupTestDischargeType(false);
 			DischargeType foundDischargeType = (DischargeType)jpa.find(DischargeType.class, code); 
 			result = dischargeTypeIoOperation.deleteDischargeType(foundDischargeType);
-			
-			assertEquals(true, result);
-			result = dischargeTypeIoOperation.isCodePresent(code);			
-			assertEquals(false, result);
+
+			assertTrue(result);
+			result = dischargeTypeIoOperation.isCodePresent(code);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -218,15 +221,15 @@ public class Tests
 			DischargeType foundDischargeType = (DischargeType)jpa.find(DischargeType.class, code); 
 			foundDischargeType.setDescription("Update");
 			result = dischargeTypeIoOperation.updateDischargeType(foundDischargeType);
-			DischargeType updateDischargeType = (DischargeType)jpa.find(DischargeType.class, code); 
-			
-			assertEquals(true, result);
+			DischargeType updateDischargeType = (DischargeType)jpa.find(DischargeType.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateDischargeType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

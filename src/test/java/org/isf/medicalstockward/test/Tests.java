@@ -2,6 +2,8 @@ package org.isf.medicalstockward.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,9 +34,11 @@ import org.isf.supplier.test.TestSupplier;
 import org.isf.supplier.test.TestSupplierContext;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.isf.ward.test.TestWard;
 import org.isf.ward.test.TestWardContext;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -168,7 +172,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -188,7 +192,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -208,10 +212,28 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
+	}
+
+	@Test
+	public void testTotalQuantityShouldFindMovementWardByWardCodeAndDates() throws OHException, OHServiceException {
+		// given:
+		int code = _setupTestMovementWard(false);
+		MovementWard foundMovement = (MovementWard)jpa.find(MovementWard.class, code);
+		DateTime startDate = new DateTime(foundMovement.getDate()).minusDays(1);
+		DateTime endDate = new DateTime(foundMovement.getDate()).plusDays(1);
+
+		// when:
+		ArrayList<MovementWard> wardMovementsToWard = medicalIoOperation.getWardMovementsToWard(
+			foundMovement.getWard().getCode(), startDate.toGregorianCalendar(), endDate.toGregorianCalendar()
+		);
+
+		// then:
+		assertEquals(1, wardMovementsToWard.size());
+		assertEquals(foundMovement.getCode(), wardMovementsToWard.get(0).getCode());
 	}
 	
 	@Test
@@ -228,7 +250,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -257,7 +279,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -300,7 +322,7 @@ public class Tests
 		} 
 		catch (Exception e) 
 		{
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -343,7 +365,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -362,15 +384,15 @@ public class Tests
 			MovementWard foundMovementWard = (MovementWard)jpa.find(MovementWard.class, code); 
 			foundMovementWard.setDescription("Update");
 			result = medicalIoOperation.updateMovementWard(foundMovementWard);
-			MovementWard updateMovementWard = (MovementWard)jpa.find(MovementWard.class, code); 
-			
-			assertEquals(true, result);
+			MovementWard updateMovementWard = (MovementWard)jpa.find(MovementWard.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateMovementWard.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -388,13 +410,13 @@ public class Tests
 			code = _setupTestMovementWard(false);
 			MovementWard foundMovementWard = (MovementWard)jpa.find(MovementWard.class, code); 
 			result = medicalIoOperation.deleteMovementWard(foundMovementWard);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -416,7 +438,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -438,7 +460,7 @@ public class Tests
 			assertEquals(mergedPatient.getCode(), result.getPatient().getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 	}
 

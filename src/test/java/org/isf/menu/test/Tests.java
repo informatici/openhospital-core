@@ -2,6 +2,8 @@ package org.isf.menu.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -98,7 +100,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -118,7 +120,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -138,7 +140,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -158,7 +160,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -178,7 +180,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -198,7 +200,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -219,7 +221,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -239,7 +241,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -262,7 +264,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -285,7 +287,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -308,7 +310,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -331,7 +333,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -348,13 +350,13 @@ public class Tests
 		{		
 			code = _setupTestUser(false);
 			result = menuIoOperation.isUserNamePresent(code);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -371,13 +373,13 @@ public class Tests
 		{		
 			code = _setupTestUserGroup(false);
 			result = menuIoOperation.isGroupNamePresent(code);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -398,14 +400,14 @@ public class Tests
 			jpa.persist(userGroup);
 			jpa.commitTransaction();
 			result = menuIoOperation.newUser(user);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkUserIntoDb(user.getUserName());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -424,15 +426,15 @@ public class Tests
 			User foundUser = (User)jpa.find(User.class, code); 
 			foundUser.setDesc("Update");
 			result = menuIoOperation.updateUser(foundUser);
-			User updateUser = (User)jpa.find(User.class, code); 
-			
-			assertEquals(true, result);
+			User updateUser = (User)jpa.find(User.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateUser.getDesc());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -451,15 +453,15 @@ public class Tests
 			User foundUser = (User)jpa.find(User.class, code); 
 			foundUser.setPasswd("Update");
 			result = menuIoOperation.updatePassword(foundUser);
-			User updateDisease = (User)jpa.find(User.class, code); 
-			
-			assertEquals(true, result);
+			User updateDisease = (User)jpa.find(User.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateDisease.getPasswd());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -477,13 +479,13 @@ public class Tests
 			code = _setupTestUser(false);
 			User foundUser = (User)jpa.find(User.class, code); 
 			result = menuIoOperation.deleteUser(foundUser);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -512,7 +514,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -541,7 +543,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -551,7 +553,7 @@ public class Tests
 	public void testIoSetGroupMenu() 
 	{
 		//TODO: Do unit test checking insert
-		assertEquals(true, true);	
+		assertTrue(true);
 		
 		return;
 	}
@@ -568,13 +570,13 @@ public class Tests
 			code = _setupTestUserGroup(false);
 			UserGroup foundUserGroup = (UserGroup)jpa.find(UserGroup.class, code); 
 			result = menuIoOperation.deleteGroup(foundUserGroup);
-			
-			assertEquals(true, result);			
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -590,14 +592,14 @@ public class Tests
 		{						
 			UserGroup userGroup= testUserGroup.setup(false);
 			result = menuIoOperation.newUserGroup(userGroup);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkUserGroupIntoDb(userGroup.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -616,15 +618,15 @@ public class Tests
 			UserGroup foundUserGroup = (UserGroup)jpa.find(UserGroup.class, code); 
 			foundUserGroup.setDesc("Update");
             result = menuIoOperation.updateUserGroup(foundUserGroup);
-			UserGroup updateUserGroup = (UserGroup)jpa.find(UserGroup.class, code); 
-			
-			assertEquals(true, result);
+			UserGroup updateUserGroup = (UserGroup)jpa.find(UserGroup.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateUserGroup.getDesc());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

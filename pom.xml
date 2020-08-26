@@ -117,7 +117,35 @@
 					<finalName>OpenHospital20/bin/OH-core</finalName>
 				</configuration>
 			</plugin>
-
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.0.0</version>
+				<configuration>
+					<verbose>false</verbose>
+					<addSvnKeyWords>true</addSvnKeyWords>
+				</configuration>
+				<executions>
+					<execution>
+						<id>first</id>
+						<goals>
+							<goal>update-file-header</goal>
+						</goals>
+						<phase>process-sources</phase>
+						<configuration>
+							<licenseName>gpl_v3</licenseName>
+							<inceptionYear>2006</inceptionYear>
+							<organizationName>Informatici Senza Frontiere</organizationName>
+							<projectName>OpenHospital</projectName>
+							<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+							<roots>
+								<root>src/main/java</root>
+								<root>src/test</root>
+							</roots>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -160,7 +188,7 @@
 					<groupId>commons-logging</groupId>
 				</exclusion>
 			</exclusions>
-			<version>3.5.3</version>
+			<version>3.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.lowagie</groupId>
@@ -181,8 +209,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<!-- in mem db downgrade to java 6 supporting -->
-			<version>1.4.190</version>
+			<version>1.4.200</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

@@ -1,10 +1,9 @@
 package org.isf.dicomtype.test;
 
+import static org.junit.Assert.fail;
 
-import static org.junit.Assert.assertEquals;
-
-import org.isf.dicomtype.model.DicomType;
 import org.isf.dicom.service.DicomIoOperations;
+import org.isf.dicomtype.model.DicomType;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
 import org.junit.After;
@@ -83,7 +82,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -104,7 +103,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

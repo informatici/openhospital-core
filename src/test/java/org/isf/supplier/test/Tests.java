@@ -1,7 +1,7 @@
 package org.isf.supplier.test;
 
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -85,7 +85,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -105,7 +105,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -121,14 +121,14 @@ public class Tests
 		{		
 			Supplier supplier = testSupplier.setup(true);
 			result = supplierIoOperation.saveOrUpdate(supplier);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkSupplierIntoDb(supplier.getSupId());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -150,7 +150,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -166,14 +166,14 @@ public class Tests
 		{		
 			code = _setupTestSupplier(false);
 			Supplier foundSupplier = (Supplier)jpa.find(Supplier.class, code); 
-			List<Supplier> suppliers = supplierIoOperation.getAll();			
-			
-			assertEquals(true, suppliers.contains(foundSupplier));
+			List<Supplier> suppliers = supplierIoOperation.getAll();
+
+			assertTrue(suppliers.contains(foundSupplier));
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -189,14 +189,14 @@ public class Tests
 		{		
 			code = _setupTestSupplier(false);
 			Supplier foundSupplier = (Supplier)jpa.find(Supplier.class, code); 
-			List<Supplier> suppliers = supplierIoOperation.getList();			
-			
-			assertEquals(true, suppliers.contains(foundSupplier));
+			List<Supplier> suppliers = supplierIoOperation.getList();
+
+			assertTrue(suppliers.contains(foundSupplier));
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

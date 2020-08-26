@@ -2,6 +2,9 @@ package org.isf.pregtreattype.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -84,7 +87,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -104,7 +107,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -131,7 +134,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -150,15 +153,15 @@ public class Tests
 			PregnantTreatmentType foundPregnantTreatmentType = (PregnantTreatmentType)jpa.find(PregnantTreatmentType.class, code); 
 			foundPregnantTreatmentType.setDescription("Update");
 			result = pregnantTreatmentTypeIoOperation.updatePregnantTreatmentType(foundPregnantTreatmentType);
-			PregnantTreatmentType updatePregnantTreatmentType = (PregnantTreatmentType)jpa.find(PregnantTreatmentType.class, code); 
-			
-			assertEquals(true, result);
+			PregnantTreatmentType updatePregnantTreatmentType = (PregnantTreatmentType)jpa.find(PregnantTreatmentType.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updatePregnantTreatmentType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -174,14 +177,14 @@ public class Tests
 		{		
 			PregnantTreatmentType pregnantTreatmentType = testPregnantTreatmentType.setup(true);
 			result = pregnantTreatmentTypeIoOperation.newPregnantTreatmentType(pregnantTreatmentType);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkPregnantTreatmentTypeIntoDb(pregnantTreatmentType.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -198,13 +201,13 @@ public class Tests
 		{		
 			code = _setupTestPregnantTreatmentType(false);
 			result = pregnantTreatmentTypeIoOperation.isCodePresent(code);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -222,15 +225,15 @@ public class Tests
 			code = _setupTestPregnantTreatmentType(false);
 			PregnantTreatmentType foundPregnantTreatmentType = (PregnantTreatmentType)jpa.find(PregnantTreatmentType.class, code); 
 			result = pregnantTreatmentTypeIoOperation.deletePregnantTreatmentType(foundPregnantTreatmentType);
-			
-			assertEquals(true, result);
-			result = pregnantTreatmentTypeIoOperation.isCodePresent(code);			
-			assertEquals(false, result);
+
+			assertTrue(result);
+			result = pregnantTreatmentTypeIoOperation.isCodePresent(code);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

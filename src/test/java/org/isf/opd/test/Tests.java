@@ -119,7 +119,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -139,7 +139,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -170,7 +170,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -196,14 +196,14 @@ public class Tests
 			Opd opd = testOpd.setup(patient, disease, false);
 	    	opd.setDate(new Date());
 			result = opdIoOperation.newOpd(opd);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkOpdIntoDb(opd.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -224,15 +224,15 @@ public class Tests
 			foundOpd.setNote("Update");
 			result = opdIoOperation.updateOpd(foundOpd);
 			jpa.open();
-			Opd updateOpd = (Opd)jpa.find(Opd.class, code); 
-			
-			assertEquals(true, (result != null));
+			Opd updateOpd = (Opd)jpa.find(Opd.class, code);
+
+			assertNotNull(result);
 			assertEquals("Update", updateOpd.getNote());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -251,14 +251,14 @@ public class Tests
 			Opd foundOpd = (Opd)jpa.find(Opd.class, code); 
 			result = opdIoOperation.deleteOpd(foundOpd);
 
-			assertEquals(true, result);
-			result = opdIoOperation.isCodePresent(code);			
-			assertEquals(false, result);
+			assertTrue(result);
+			result = opdIoOperation.isCodePresent(code);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -282,7 +282,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -304,7 +304,7 @@ public class Tests
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 
 		return;
@@ -326,7 +326,7 @@ public class Tests
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 
 		return;
@@ -348,7 +348,7 @@ public class Tests
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 
 		return;
@@ -371,7 +371,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -393,7 +393,7 @@ public class Tests
 			assertEquals(mergedPatient.getCode(), result.getPatient().getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 	}
 

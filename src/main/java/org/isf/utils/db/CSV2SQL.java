@@ -24,15 +24,15 @@ import org.isf.utils.exception.OHException;
 import org.isf.utils.time.TimeTools;
 
 /**
- * 
+ *
  */
 
 /**
  * @author Mwithi
- * 
+ *
  */
 public class CSV2SQL {
-	
+
 	/**
 	 * @param args
 	 * @throws IOException
@@ -40,9 +40,9 @@ public class CSV2SQL {
 	public static void main(String[] args) {
 		File fileIn = new File("E:\\prova.csv");
 		File fileOut = new File("E:\\prova.sql");
-		
+
 		try {
-			CSV2SQL converter = new CSV2SQL();  
+			CSV2SQL converter = new CSV2SQL();
 			converter.pharmacyStartCVS(fileIn, fileOut);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -54,52 +54,50 @@ public class CSV2SQL {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public CSV2SQL() {
 	}
 
 	/**
 	 * It uses a CSV to start the OpenHospital pharmacy, taking care about LOT management.
 	 * (If LOT name is not provided a random number will be generated)
-	 * 
+	 *
 	 * Tables involved: 
 	 * MEDICALDSR, MEDICALDSRTYPE, MEDICALDSRLOT, MEDICALDSRSTOCKMOV 
 	 * Fields needed:
 	 * MDSR_ID,MDSR_CODE,MDSR_DESC,MDSR_PCS_X_PCK,MDSR_MDSRT_ID_A,MDSRT_DESC,LT_ID_A,QTY,LT_DUE_DATE,LT_COST
-	 * @throws IOException 
-	 * @throws OHException 
-	 * 
+	 * @throws IOException
+	 * @throws OHException
+	 *
 	 */
 	public void pharmacyStartCVS(File fileIn, File fileOut) throws IOException, OHException {
 		NumberFormat numFormat = NumberFormat.getInstance(Locale.getDefault());
-		
+
 		CharsetEncoder encoder = Charset.forName("UTF-8").newEncoder();
 		encoder.onMalformedInput(CodingErrorAction.REPORT);
 		encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
 
 		/*
-		 * WINDOWS Encodings: 
-		 * windows-1250 (Central Europe) 
-		 * windows-1251 (Cyrillic) 
-		 * windows-1252 (Latin I) 
-		 * windows-1253 (Greek) 
-		 * windows-1254 (Turkish) 
-		 * windows-1255 (Hebrew) 
-		 * windows-1256 (Arabic) 
-		 * windows-1257 (Baltic) 
-		 * windows-1258 (Vietnam) 
-		 * windows-874 (Thai) 
-		 * windows-932 (Japanese Shift-JIS) 
-		 * windows-936 (Simplified Chinese GBK) 
-		 * windows-949 (Korean) 
+		 * WINDOWS Encodings:
+		 * windows-1250 (Central Europe)
+		 * windows-1251 (Cyrillic)
+		 * windows-1252 (Latin I)
+		 * windows-1253 (Greek)
+		 * windows-1254 (Turkish)
+		 * windows-1255 (Hebrew)
+		 * windows-1256 (Arabic)
+		 * windows-1257 (Baltic)
+		 * windows-1258 (Vietnam)
+		 * windows-874 (Thai)
+		 * windows-932 (Japanese Shift-JIS)
+		 * windows-936 (Simplified Chinese GBK)
+		 * windows-949 (Korean)
 		 * windows-950 (Traditional Chinese Big5)
 		 */
-		BufferedReader input = new BufferedReader(new InputStreamReader(
-				new FileInputStream(fileIn), "windows-1250"));
-		BufferedWriter output = new BufferedWriter(new OutputStreamWriter(
-				new FileOutputStream(fileOut), encoder));
-		
-		try {
+
+		try (BufferedReader input = new BufferedReader(new InputStreamReader(
+				new FileInputStream(fileIn), "windows-1250")); BufferedWriter output = new BufferedWriter(new OutputStreamWriter(
+				new FileOutputStream(fileOut), encoder))) {
 			String line = null;
 			String[] st = null;
 
@@ -119,7 +117,7 @@ public class CSV2SQL {
 			 * Check COLUMN HEADERS
 			 */
 			line = input.readLine();
-			
+
 			if (line != null) {
 				// System.out.println(line);
 				st = line.replace("\"", "").split(";");
@@ -172,29 +170,29 @@ public class CSV2SQL {
 				try {
 					new Integer(MDSR_ID);
 				} catch (NumberFormatException e) {
-					throw new OHException("ERROR MDSR_ID on line "+lineNumber+": " + MDSR_ID);
+					throw new OHException("ERROR MDSR_ID on line " + lineNumber + ": " + MDSR_ID);
 				}
 				int lotQty;
 				try {
 					lotQty = Integer.parseInt(QTY);
 					//System.out.print("QTY: " + lotQty);
 				} catch (NumberFormatException e) {
-					throw new OHException("ERROR QTY on line "+lineNumber+": " + QTY);
+					throw new OHException("ERROR QTY on line " + lineNumber + ": " + QTY);
 				}
 				double lotCost;
 				try {
 					lotCost = numFormat.parse(LT_COST).doubleValue();
 					//System.out.print(" COST: " + lotCost);
 				} catch (ParseException e) {
-					throw new OHException("ERROR LT_COST on line "+lineNumber+": " + LT_COST);
+					throw new OHException("ERROR LT_COST on line " + lineNumber + ": " + LT_COST);
 				}
 				//System.out.print("\n");
-				
+
 				GregorianCalendar dueDate;
 				try {
 					dueDate = TimeTools.parseDate(LT_DUE_DATE, "dd/MM/yyyy", true);
 				} catch (ParseException e) {
-					throw new OHException("ERROR LT_DUE_DATE on line "+lineNumber+": " + LT_DUE_DATE);
+					throw new OHException("ERROR LT_DUE_DATE on line " + lineNumber + ": " + LT_DUE_DATE);
 				}
 
 				// MEDICALDSRTYPE
@@ -223,7 +221,7 @@ public class CSV2SQL {
 								+ ", "
 								+ QTY + ");\n");
 					} catch (NumberFormatException e) {
-						System.out.println("Wrong MDSR_PCS_X_PCK: "	+ MDSR_PCS_X_PCK);
+						System.out.println("Wrong MDSR_PCS_X_PCK: " + MDSR_PCS_X_PCK);
 						System.exit(-2);
 					}
 				}
@@ -242,15 +240,15 @@ public class CSV2SQL {
 								+ "', '"
 								+ prepDate
 								+ "', '"
-								+ TimeTools.formatDateTime(dueDate, null) 
-								+ "', " 
-								+ lotCost 
+								+ TimeTools.formatDateTime(dueDate, null)
+								+ "', "
+								+ lotCost
 								+ ");\n");
 					} catch (NumberFormatException e) {
 						System.out.println("Wrong LT_COST: " + LT_COST);
 						System.exit(-3);
 
-					} 
+					}
 				}
 
 				// MEDICALDSRSTOCKMOV
@@ -274,9 +272,6 @@ public class CSV2SQL {
 				}
 				lineNumber++;
 			}
-		} finally {
-			input.close();
-			output.close();
 		}
 
 	}

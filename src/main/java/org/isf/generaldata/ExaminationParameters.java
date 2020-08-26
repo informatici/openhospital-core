@@ -209,7 +209,7 @@ public class ExaminationParameters {
 		try {
 			value = Integer.parseInt(p.getProperty(property));
 		} catch (Exception e) {
-			logger.warn(property + " property not found: default is " + defaultValue);
+			logger.warn("{} property not found: default is {}", property, defaultValue);
 			return defaultValue;
 		}
 		return value;
@@ -227,7 +227,7 @@ public class ExaminationParameters {
 		try {
 			value = Double.parseDouble(p.getProperty(property));
 		} catch (Exception e) {
-			logger.warn(property + " property not found: default is " + defaultValue);
+			logger.warn("{} property not found: default is {}", property, defaultValue);
 			return defaultValue;
 		}
 		return value;

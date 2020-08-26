@@ -3,6 +3,8 @@ package org.isf.vaccine.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -95,7 +97,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -115,7 +117,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -133,7 +135,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 	}
 
@@ -153,7 +155,7 @@ public class Tests
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			assertEquals(true, false);
+			fail();
 		}
 	}
 	
@@ -171,15 +173,15 @@ public class Tests
 			jpa.flush();
 			foundVaccine.setDescription("Update");
 			result = vaccineIoOperation.updateVaccine(foundVaccine);
-			Vaccine updateVaccine = (Vaccine)jpa.find(Vaccine.class, code); 
-			
-			assertEquals(true, result);
+			Vaccine updateVaccine = (Vaccine)jpa.find(Vaccine.class, code);
+
+			assertTrue(result);
 			assertEquals("Update", updateVaccine.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -200,14 +202,14 @@ public class Tests
 	    	
 			Vaccine vaccine = testVaccine.setup(vaccineType, true);
 			result = vaccineIoOperation.newVaccine(vaccine);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 			_checkVaccineIntoDb(vaccine.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -225,15 +227,15 @@ public class Tests
 			code = _setupTestVaccine(false);
 			Vaccine foundVaccine = (Vaccine)jpa.find(Vaccine.class, code); 
 			result = vaccineIoOperation.deleteVaccine(foundVaccine);
-			
-			assertEquals(true, result);
-			result = vaccineIoOperation.isCodePresent(code);			
-			assertEquals(false, result);
+
+			assertTrue(result);
+			result = vaccineIoOperation.isCodePresent(code);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -250,13 +252,13 @@ public class Tests
 		{		
 			code = _setupTestVaccine(false);
 			result = vaccineIoOperation.isCodePresent(code);
-			
-			assertEquals(true, result);
+
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;

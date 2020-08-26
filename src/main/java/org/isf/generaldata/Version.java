@@ -53,7 +53,7 @@ public class Version {
 		String value;
 		value = p.getProperty(property);
 		if (value == null) {
-			logger.warn(">> " + property + " property not found: default is " + defaultValue);
+			logger.warn(">> {} property not found: default is {}", property, defaultValue);
 			return defaultValue;
 		}
 		return value;

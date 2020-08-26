@@ -2,6 +2,8 @@ package org.isf.pricesothers.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
@@ -81,7 +83,7 @@ public class Tests {
 		PricesOthers updatePricesOthers = repository.findOne(id);
 
 		// then:
-		assertEquals(true, result);
+		assertTrue(result);
 		assertEquals("Update", updatePricesOthers.getDescription());
 	}
 
@@ -94,7 +96,7 @@ public class Tests {
 		boolean result = otherIoOperation.newOthers(pricesOthers);
 
 		// then:
-		assertEquals(true, result);
+		assertTrue(result);
 		_checkPricesOthersIntoDb(pricesOthers.getId());
 	}
 
@@ -108,8 +110,8 @@ public class Tests {
 		boolean result = otherIoOperation.deleteOthers(foundPricesOthers);
 
 		// then:
-		assertEquals(true, result);
-		assertEquals(false, repository.exists(id));
+		assertTrue(result);
+		assertFalse(repository.exists(id));
 	}
 
 	private int _setupTestPricesOthers(boolean usingSet) throws OHException {

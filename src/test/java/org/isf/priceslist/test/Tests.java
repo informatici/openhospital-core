@@ -2,6 +2,7 @@ package org.isf.priceslist.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
@@ -147,7 +148,7 @@ public class Tests
 
 		// then:
 		Price foundPrice = priceIoOperationRepository.findOne(insertId);
-		assertEquals(true, result);
+		assertTrue(result);
 		assertEquals(priceList.getId(), foundPrice.getList().getId());
 	}
 		

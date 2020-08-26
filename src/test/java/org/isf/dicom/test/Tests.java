@@ -3,6 +3,9 @@ package org.isf.dicom.test;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.isf.dicom.manager.*;
 import org.isf.dicom.model.FileDicom;
@@ -136,7 +139,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 				
 		return;
@@ -157,7 +160,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -181,7 +184,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -200,15 +203,15 @@ public class Tests
 			code = _setupTestFileDicom(false);
 			FileDicom foundFileDicom = (FileDicom)jpa.find(FileDicom.class, code); 
 			result = dicomIoOperation.deleteSerie(foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
-			
-			assertEquals(true, result);
-			result = dicomIoOperation.isCodePresent(code);			
-			assertEquals(false, result);
+
+			assertTrue(result);
+			result = dicomIoOperation.isCodePresent(code);
+			assertFalse(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -234,7 +237,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
@@ -263,12 +266,12 @@ public class Tests
 			FileDicom foundFileDicom = (FileDicom)jpa.find(FileDicom.class, code); 
 			result = dicomIoOperation.exist(foundFileDicom);
 
-			assertEquals(true, result);
+			assertTrue(result);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		
@@ -295,7 +298,7 @@ public class Tests
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
-			assertEquals(true, false);
+			fail();
 		}
 		
 		return;
