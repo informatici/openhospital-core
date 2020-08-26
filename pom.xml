@@ -332,7 +332,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>4.2.5.Final</version>
+			<version>5.4.20.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
