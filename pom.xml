@@ -388,7 +388,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-test</artifactId>
-			<version>1.4.0.RELEASE</version>
+			<version>1.5.22.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -399,7 +399,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<version>1.4.0.RELEASE</version>
+			<version>1.5.22.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
