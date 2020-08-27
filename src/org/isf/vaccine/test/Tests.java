@@ -2,6 +2,8 @@ package org.isf.vaccine.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -246,6 +248,28 @@ public class Tests
 		}
 		
 		return;
+	}
+	
+	
+	@Test
+	public void testFindVaccine() 
+	{
+		String code = "";
+		Vaccine result;
+
+		try 
+		{		
+			code = _setupTestVaccine(false);
+			result = vaccineIoOperation.findVaccine(code);
+			
+			assertNotNull(result);
+			assertEquals(code,result.getCode());
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();		
+			fail();
+		}
 	}
 	
 	
