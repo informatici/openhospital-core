@@ -2,6 +2,9 @@ package org.isf.dicom.test;
 
 
 import org.aspectj.util.FileUtil;
+import org.dcm4che2.data.DicomObject;
+import org.dcm4che2.data.Tag;
+import org.dcm4che2.imageio.plugins.dcm.DicomStreamMetaData;
 import org.isf.dicom.manager.DicomManagerFactory;
 import org.isf.dicom.manager.DicomManagerInterface;
 import org.isf.dicom.manager.FileSystemDicomManager;
@@ -23,11 +26,16 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -56,12 +64,9 @@ public class Tests
 
 	private DicomManagerInterface fileSystemDicomManager;
 	private FileDicom dicomFile;
-	private SimpleDateFormat dateFormatter =
-			new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy", Locale.ENGLISH);
 
 	@BeforeClass
-    public static void setUpClass()  
-    {
+    public static void setUpClass() throws ParseException {
     	jpa = new DbJpaUtil();
     	testFileDicom = new TestDicom();
     	testFileDicomContext = new TestDicomContext();
@@ -332,6 +337,7 @@ public class Tests
 
 		FileDicom fileDicom = fileSystemDicomManager
 				.loadDetails(2, 1, "TestSeriesNumber");
+		testFileDicom.check(fileDicom);
 
 
 	}
@@ -419,17 +425,28 @@ public class Tests
 
 	@Test
 	public void testSourceFilesPreloadDicom() throws Exception {
-		Date expectedStudyDate = dateFormatter.parse(STUDY_DATE);
-		Date expectedSeriesDate = dateFormatter.parse(SERIES_DATE);
 		File file = _getFile("case3c_002.dcm");
+		Date expectedStudyDate = _getDicomObject(file).getDate(Tag.SeriesDate, Tag.SeriesTime);
+		Date expectedSeriesDate= _getDicomObject(file).getDate(Tag.SeriesDate, Tag.SeriesTime);
+
 
 		FileDicom dicomFile = SourceFiles.preLoadDicom(file, 1);
 
-
 		assertEquals("case3c_002.dcm", dicomFile.getFileName());
 		assertEquals(1, dicomFile.getFrameCount());
-		assertEquals(STUDY_DATE, dateFormatter.format(dicomFile.getDicomStudyDate()));
-		assertEquals(SERIES_DATE, dateFormatter.format(dicomFile.getDicomSeriesDate()));
+		assertTrue(_areDatesEquals(expectedSeriesDate, dicomFile.getDicomSeriesDate()));
+		assertTrue(_areDatesEquals(expectedSeriesDate, dicomFile.getDicomSeriesDate()));
+
+	}
+
+	private DicomObject _getDicomObject(File sourceFile) throws IOException {
+		Iterator<ImageReader> iter = ImageIO.getImageReadersByFormatName("DICOM");
+		ImageReader reader = (ImageReader) iter.next();
+		ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
+		reader.setInput(imageInputStream, false);
+		DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
+		return dicomStreamMetaData.getDicomObject();
+
 	}
 
 	private boolean _areDatesEquals(Date date, Date date2){

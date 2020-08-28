@@ -160,8 +160,6 @@ public class SourceFiles extends Thread {
 			ImageReader reader;
 			Iterator<?> iter = null;
 			if (isJpeg) {
-
-				seriesDate = FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
 				studyDate = FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
 			} else if (isDicom) {
 				iter = ImageIO.getImageReadersByFormatName("DICOM");
