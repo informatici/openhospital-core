@@ -1,44 +1,36 @@
 package org.isf.dicom.test;
 
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import org.isf.dicom.manager.*;
+import org.aspectj.util.FileUtil;
+import org.isf.dicom.manager.DicomManagerFactory;
+import org.isf.dicom.manager.DicomManagerInterface;
+import org.isf.dicom.manager.FileSystemDicomManager;
+import org.isf.dicom.manager.SourceFiles;
 import org.isf.dicom.model.FileDicom;
 import org.isf.dicom.service.DicomIoOperations;
 import org.isf.dicomtype.model.DicomType;
 import org.isf.dicomtype.test.TestDicomType;
 import org.isf.dicomtype.test.TestDicomTypeContext;
-import org.aspectj.util.FileUtil;
-import org.isf.generaldata.GeneralData;
 import org.isf.menu.manager.Context;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.swing.*;
-import javax.xml.transform.Source;
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Properties;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -46,7 +38,6 @@ import static org.junit.Assert.*;
 public class Tests  
 {
 	public static final int PATIENT_ID = 0;
-	public static final int FILE_ID = 0;
 	public static final Long _4M = new Long(4194304);
 	private static DbJpaUtil jpa;
 	private static TestDicom testFileDicom;
@@ -62,8 +53,7 @@ public class Tests
 
 	private DicomManagerInterface fileSystemDicomManager;
 	private FileDicom dicomFile;
-	private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-
+	private SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy");
 
 	@BeforeClass
     public static void setUpClass()  
@@ -336,7 +326,6 @@ public class Tests
 	@Test
 	public void testLoadDetails() throws OHServiceException {
 
-		GeneralData.getGeneralData();
 		FileDicom fileDicom = fileSystemDicomManager
 				.loadDetails(2, 1, "TestSeriesNumber");
 
@@ -418,23 +407,32 @@ public class Tests
 	public void testSourceFilesLoadDicomWhenImageFormatIsJpeg() throws Exception {
 		File file = _getFile("image.0007.jpg");
 		SourceFiles.loadDicom(dicomFile, file, PATIENT_ID);
+		String fileName = dicomFile.getFileName();
+		assertEquals("image.0007.jpg", fileName);
 
 
 	}
 
 	@Test
 	public void testSourceFilesPreloadDicom() throws Exception {
-		String studyDate = "01/01/2001 10:22:33";
-		String seriesDate ="14/05/2007 10:22:33";
-		Date expectedSeriesDate = dateFormatter.parse(seriesDate);
-		Date expectedStudyDate = dateFormatter.parse(studyDate);
+		String expectedStudyDate = "Mon Jan 01 10:22:33 AST 2001";
+		String expectedSeriesDate = "Mon May 14 10:22:33 AST 2007";
 		File file = _getFile("case3c_002.dcm");
-		FileDicom fileDicom = SourceFiles.preLoadDicom(file, 1);
 
-		assertEquals("case3c_002.dcm", fileDicom.getFileName());
-		assertEquals(1, fileDicom.getFrameCount());
-		assertTrue((expectedSeriesDate.getTime() - fileDicom.getDicomSeriesDate().getTime()) < 1000);
-		assertTrue((expectedStudyDate.getTime() - fileDicom.getDicomStudyDate().getTime()) < 1000);
+		FileDicom dicomFile = SourceFiles.preLoadDicom(file, 1);
+
+
+		assertEquals("case3c_002.dcm", dicomFile.getFileName());
+		assertEquals(1, dicomFile.getFrameCount());
+		assertTrue(_areDatesEquals(dateFormatter.parse(expectedStudyDate),
+														dicomFile.getDicomStudyDate()));
+		assertTrue(_areDatesEquals(dateFormatter.parse(expectedSeriesDate),
+														dicomFile.getDicomSeriesDate()));
+
+	}
+
+	private boolean _areDatesEquals(Date date, Date date2){
+		return date.compareTo(date2) == 0;
 	}
 
 	@Test
