@@ -426,7 +426,7 @@ public class Tests
 	@Test
 	public void testSourceFilesPreloadDicom() throws Exception {
 		File file = _getFile("case3c_002.dcm");
-		Date expectedStudyDate = _getDicomObject(file).getDate(Tag.SeriesDate, Tag.SeriesTime);
+		Date expectedStudyDate = _getDicomObject(file).getDate(Tag.StudyDate, Tag.StudyTime);
 		Date expectedSeriesDate= _getDicomObject(file).getDate(Tag.SeriesDate, Tag.SeriesTime);
 
 
@@ -434,7 +434,7 @@ public class Tests
 
 		assertEquals("case3c_002.dcm", dicomFile.getFileName());
 		assertEquals(1, dicomFile.getFrameCount());
-		assertTrue(_areDatesEquals(expectedSeriesDate, dicomFile.getDicomSeriesDate()));
+		assertTrue(_areDatesEquals(expectedStudyDate, dicomFile.getDicomStudyDate()));
 		assertTrue(_areDatesEquals(expectedSeriesDate, dicomFile.getDicomSeriesDate()));
 
 	}
