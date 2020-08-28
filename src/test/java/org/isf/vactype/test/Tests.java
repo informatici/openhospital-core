@@ -4,6 +4,7 @@ package org.isf.vactype.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -235,6 +236,27 @@ public class Tests
 		return;
 	}
 	
+	
+	@Test
+	public void testFindVaccineType() 
+	{
+		String code = "";
+		VaccineType result;
+
+		try 
+		{		
+			code = _setupTestVaccineType(false);
+			result = vaccineTypeIoOperation.findVaccineType(code);
+			
+			assertNotNull(result);
+			assertEquals(code,result.getCode());
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();		
+			fail();
+		}
+	}
 	
 	private void _saveContext() throws OHException 
     {	

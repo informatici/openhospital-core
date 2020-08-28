@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.vaccine.model.Vaccine;
 import org.isf.vactype.model.VaccineType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,4 +81,20 @@ public class VacTypeIoOperation {
 	public boolean isCodePresent(String code) throws OHServiceException {
 		return repository.exists(code);
 	}
+	
+	/**
+	 * returns the {@link VaccineType} based on code
+	 *
+	 * @param code - the code, must not be {@literal null}
+	 * @return the {@link VaccineType} or {@literal null} if none found
+	 * @throws OHServiceException 
+	 * @throws IllegalArgumentException if {@code code} is {@literal null}
+	 */
+	public VaccineType findVaccineType(String code) throws OHServiceException 
+	{
+		if (code != null) {
+			return repository.findOne(code);
+		}else
+			throw new IllegalArgumentException("code must not be null");
+	} 
 }

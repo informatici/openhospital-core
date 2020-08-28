@@ -12,8 +12,8 @@ import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.vactype.model.VaccineType;
@@ -122,5 +122,15 @@ public class VaccineTypeBrowserManager {
 	 */
 	public boolean codeControl(String code) throws OHServiceException {
 		return ioOperations.isCodePresent(code);
+	}
+	
+	/**
+	 * returns the {@link VaccineType} based on vaccine type code
+	 *
+	 * @param code - the  {@link VaccineType} code.
+	 * @return the {@link VaccineType}
+	 */
+	public VaccineType findVaccine(String code) throws OHServiceException {
+		return ioOperations.findVaccineType(code);
 	}
 }
