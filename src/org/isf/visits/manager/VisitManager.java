@@ -15,7 +15,6 @@ import org.isf.sms.manager.SmsManager;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
 import org.isf.therapy.model.Therapy;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
@@ -142,5 +141,15 @@ public class VisitManager {
 		    return sb.toString().substring(0, SmsManager.MAX_LENGHT);
 		}
 		return sb.toString();
+	}
+
+	/**
+	 * returns the {@link Visit} based on visit id
+	 *
+	 * @param code - the  {@link Visit} id.
+	 * @return the {@link Visit}
+	 */
+	public Visit findVaccine(int id) throws OHServiceException {
+		return ioOperations.findVisit(id);
 	}
 }
