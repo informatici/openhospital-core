@@ -28,6 +28,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Properties;
 
 import static org.hamcrest.Matchers.instanceOf;
@@ -55,7 +56,8 @@ public class Tests
 
 	private DicomManagerInterface fileSystemDicomManager;
 	private FileDicom dicomFile;
-	private SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy");
+	private SimpleDateFormat dateFormatter =
+			new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy", Locale.ENGLISH);
 
 	@BeforeClass
     public static void setUpClass()  
