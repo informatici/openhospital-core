@@ -282,7 +282,7 @@
 		<dependency>
 			<groupId>dcm4che</groupId>
 			<artifactId>dcm4che-core</artifactId>
-			<version>2.0.26</version>
+			<version>2.0.29</version>
 		</dependency>
 		<dependency>
 			<groupId>dcm4che</groupId>
