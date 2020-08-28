@@ -39,6 +39,8 @@ public class Tests
 {
 	public static final int PATIENT_ID = 0;
 	public static final Long _4M = new Long(4194304);
+	final String STUDY_DATE = "Mon Jan 01 10:22:33 AST 2001";
+	final String SERIES_DATE = "Mon May 14 10:22:33 AST 2007";
 	private static DbJpaUtil jpa;
 	private static TestDicom testFileDicom;
 	private static TestDicomContext testFileDicomContext;
@@ -415,8 +417,8 @@ public class Tests
 
 	@Test
 	public void testSourceFilesPreloadDicom() throws Exception {
-		String expectedStudyDate = "Mon Jan 01 10:22:33 AST 2001";
-		String expectedSeriesDate = "Mon May 14 10:22:33 AST 2007";
+		Date expectedStudyDate = dateFormatter.parse(STUDY_DATE);
+		Date expectedSeriesDate = dateFormatter.parse(SERIES_DATE);
 		File file = _getFile("case3c_002.dcm");
 
 		FileDicom dicomFile = SourceFiles.preLoadDicom(file, 1);
@@ -424,11 +426,8 @@ public class Tests
 
 		assertEquals("case3c_002.dcm", dicomFile.getFileName());
 		assertEquals(1, dicomFile.getFrameCount());
-		assertTrue(_areDatesEquals(dateFormatter.parse(expectedStudyDate),
-														dicomFile.getDicomStudyDate()));
-		assertTrue(_areDatesEquals(dateFormatter.parse(expectedSeriesDate),
-														dicomFile.getDicomSeriesDate()));
-
+		assertEquals(STUDY_DATE, dateFormatter.format(dicomFile.getDicomStudyDate()));
+		assertEquals(SERIES_DATE, dateFormatter.format(dicomFile.getDicomSeriesDate()));
 	}
 
 	private boolean _areDatesEquals(Date date, Date date2){
