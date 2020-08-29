@@ -6,9 +6,9 @@ import java.util.List;
 import org.isf.admission.manager.AdmissionBrowserManager;
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
-import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.OHOperationNotAllowedException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHOperationNotAllowedException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.ward.model.Ward;
@@ -234,5 +234,15 @@ public class WardBrowserManager {
 	public int getCurrentOccupation(Ward ward) throws OHServiceException {
 		return ioOperations.getCurrentOccupation(ward);
 	}
-	
+
+	/**
+	 * returns the {@link Ward} based on ward code
+	 *
+	 * @param code - the  {@link Ward} code.
+	 * @return the {@link Ward}
+	 */
+	public Ward findVaccine(String code) throws OHServiceException {
+		return ioOperations.findWard(code);
+	}
+
 }
