@@ -2,6 +2,8 @@ package org.isf.ward.test;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -317,6 +319,27 @@ public class Tests
 		}
 		
 		return;
+	}
+
+	@Test
+	public void testFindWard()
+	{
+		String code = "";
+		Ward result;
+
+		try
+		{
+			code = _setupTestWard(false);
+			result = wardIoOperation.findWard(code);
+
+			assertNotNull(result);
+			assertEquals(code,result.getCode());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			fail();
+		}
 	}
 
 	private void _saveContext() throws OHException 

@@ -8,7 +8,6 @@ import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -166,5 +165,20 @@ public class WardIoOperations {
     	
     	return result;
 	}
-	
+
+	/**
+	 * returns the {@link Ward} based on code
+	 *
+	 * @param code - the code, must not be {@literal null}
+	 * @return the {@link Ward} or {@literal null} if none found
+	 * @throws OHServiceException
+	 * @throws IllegalArgumentException if {@code code} is {@literal null}
+	 */
+	public Ward findWard(String code) throws OHServiceException
+	{
+		if (code != null) {
+			return repository.findOne(code);
+		}else
+			throw new IllegalArgumentException("code must not be null");
+	}
 }
