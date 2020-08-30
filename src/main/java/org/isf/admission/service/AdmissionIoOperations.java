@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -55,7 +56,7 @@ public class AdmissionIoOperations
 	 * @return the patient list with associated ward.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public ArrayList<AdmittedPatient> getAdmittedPatients() throws OHServiceException {
+	public List<AdmittedPatient> getAdmittedPatients() throws OHServiceException {
 		return getAdmittedPatients(null);
 	}
 
@@ -65,11 +66,10 @@ public class AdmissionIoOperations
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public ArrayList<AdmittedPatient> getAdmittedPatients(
-			String searchTerms) throws OHServiceException
-	{
-		final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList = repository.findPatientAndAdmissionId(searchTerms);
-		return loadPatientAndAdmission(admittedPatientsList);
+	public List<AdmittedPatient> getAdmittedPatients(String searchTerms) throws OHServiceException {
+		return patientRepository.findByFieldsContainingWordsFromLiteral(searchTerms).stream()
+			.map(patient -> new AdmittedPatient(patient, repository.findOneWherePatientIn(patient.getCode())))
+			.collect(Collectors.toList());
 	}
 
 	/**
@@ -80,26 +80,13 @@ public class AdmissionIoOperations
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public ArrayList<AdmittedPatient> getAdmittedPatients(
+	public List<AdmittedPatient> getAdmittedPatients(
 			String searchTerms, GregorianCalendar[] admissionRange,
-			GregorianCalendar[] dischargeRange) throws OHServiceException
-	{
-		final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList = repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
-		return loadPatientAndAdmission(admittedPatientsList);
-	}
-
-	private ArrayList<AdmittedPatient> loadPatientAndAdmission(final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList) {
-		final ArrayList<AdmittedPatient> result = new ArrayList<AdmittedPatient>();
-		for (final AdmissionIoOperationRepositoryCustom.PatientAdmission patientAdmission : admittedPatientsList) {
-			final Patient patient = patientRepository.findOne(patientAdmission.getPatientId());
-			Admission admission = null;
-			if (patientAdmission.getAdmissionId() != null) {
-				admission = repository.findOne(patientAdmission.getAdmissionId());
-			}
-			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);
-			result.add(admittedPatient);
-		}
-		return result;
+			GregorianCalendar[] dischargeRange) throws OHServiceException {
+		return patientRepository.findByFieldsContainingWordsFromLiteral(searchTerms).stream()
+			.map(patient -> new AdmittedPatient(patient, repository.findOneByPatientAndDateRanges(patient, admissionRange, dischargeRange).orElse(null)))
+			.filter(admittedPatient -> admittedPatient.getPatient()!= null && admittedPatient.getAdmission() != null)
+			.collect(Collectors.toList());
 	}
 
 	/**
@@ -121,13 +108,8 @@ public class AdmissionIoOperations
 	 * @return the patient admission.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public Admission getCurrentAdmission(
-			Patient patient) throws OHServiceException 
-	{ 
-		Admission admission = repository.findOneWherePatientIn(patient.getCode());
-		
-		
-		return admission;
+	public Admission getCurrentAdmission(Patient patient) throws OHServiceException	{
+		return repository.findOneWherePatientIn(patient.getCode());
 	}
 
 	/**
@@ -136,13 +118,8 @@ public class AdmissionIoOperations
 	 * @return the admission with the specified id, <code>null</code> otherwise.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public Admission getAdmission(
-			int id) throws OHServiceException 
-	{
-		Admission admission = repository.findOne(id);
-		
-		
-		return admission;
+	public Admission getAdmission(int id) throws OHServiceException {
+		return repository.findOne(id);
 	}
 
 	/**
@@ -151,13 +128,8 @@ public class AdmissionIoOperations
 	 * @return the admission list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public ArrayList<Admission> getAdmissions(
-			Patient patient) throws OHServiceException 
-	{
-		ArrayList<Admission> padmission = (ArrayList<Admission>) repository.findAllWherePatientByOrderByDate(patient.getCode());
-	
-		
-		return padmission;
+	public ArrayList<Admission> getAdmissions(Patient patient) throws OHServiceException {
+		return  (ArrayList<Admission>) repository.findAllWherePatientByOrderByDate(patient.getCode());
 	}
 	
 	/**

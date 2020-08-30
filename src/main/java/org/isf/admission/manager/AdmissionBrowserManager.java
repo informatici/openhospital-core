@@ -34,7 +34,7 @@ public class AdmissionBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<AdmittedPatient> getAdmittedPatients() throws OHServiceException{
-        return ioOperations.getAdmittedPatients();
+        return new ArrayList<>(ioOperations.getAdmittedPatients());
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class AdmissionBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<AdmittedPatient> getAdmittedPatients(String searchTerms) throws OHServiceException{
-        return ioOperations.getAdmittedPatients(searchTerms);
+        return new ArrayList<>(ioOperations.getAdmittedPatients(searchTerms));
 	}
 	
 	/**
@@ -57,7 +57,7 @@ public class AdmissionBrowserManager {
 	 */
 	public ArrayList<AdmittedPatient> getAdmittedPatients(GregorianCalendar[] admissionRange, //
 			GregorianCalendar[] dischargeRange, String searchTerms) throws OHServiceException{
-		return ioOperations.getAdmittedPatients(searchTerms, admissionRange, dischargeRange);
+		return new ArrayList<>(ioOperations.getAdmittedPatients(searchTerms, admissionRange, dischargeRange));
 	}
 
 	public AdmittedPatient loadAdmittedPatients(final Integer patientId) {

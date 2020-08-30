@@ -5,9 +5,10 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
@@ -221,8 +222,8 @@ public class Tests
 	public void test_simple_getAdmittedPatients() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
-		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
-		ArrayList<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null);
+		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
+		List<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null);
 
 		assertEquals(patients.size(), searchResult.size());
 		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
@@ -232,11 +233,11 @@ public class Tests
 	public void test_getAdmittedPatient_with_dateRanges() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
-		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
+		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
 		final GregorianCalendar admissionDate = foundAdmission.getAdmDate();
 		final GregorianCalendar dischargeDate = foundAdmission.getDisDate();
 		{
-			ArrayList<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null, null, null);
+			List<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null, null, null);
 			assertEquals(patients.size(), searchResult.size());
 			assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
 		}
@@ -259,14 +260,14 @@ public class Tests
 		twoDaysAfterDischargeDate.add(Calendar.DATE, 2);
 		{
 			// search by admission date
-			final ArrayList<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null,
+			final List<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null,
 					new GregorianCalendar[]{beforeAdmissionDate, oneDayAfterAdmissionDate},
 					null
 			);
 			assertEquals(patients.size(), searchOneresult.size());
 			assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
 
-			final ArrayList<AdmittedPatient> searchTwoResult = admissionIoOperation.getAdmittedPatients(null,
+			final List<AdmittedPatient> searchTwoResult = admissionIoOperation.getAdmittedPatients(null,
 					new GregorianCalendar[]{oneDayAfterAdmissionDate, twoDaysAfterAdmissionDate},
 					null
 			);
@@ -274,20 +275,20 @@ public class Tests
 		}
 		{
 			// search by discharge date
-			final ArrayList<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null, null,
+			final List<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null, null,
 					new GregorianCalendar[]{beforeDischargeDate, oneDayAfterDischargeDate}
 			);
 			assertEquals(patients.size(), searchOneresult.size());
 			assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
 
-			final ArrayList<AdmittedPatient> searchTwoResult = admissionIoOperation.getAdmittedPatients(null, null,
+			final List<AdmittedPatient> searchTwoResult = admissionIoOperation.getAdmittedPatients(null, null,
 					new GregorianCalendar[]{oneDayAfterDischargeDate, twoDaysAfterDischargeDate}
 			);
 			assertEquals(0, searchTwoResult.size());
 		}
 		{
 			// complex search by both admission and discharge date
-			final ArrayList<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null,
+			final List<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null,
 					new GregorianCalendar[]{beforeAdmissionDate, oneDayAfterAdmissionDate},
 					new GregorianCalendar[]{beforeDischargeDate, oneDayAfterDischargeDate}
 			);
@@ -304,8 +305,8 @@ public class Tests
 	public void testIoGetAdmittedPatients() throws OHException, InterruptedException, OHServiceException {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
-		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
-		ArrayList<AdmittedPatient> patientsNull = admissionIoOperation.getAdmittedPatients(null);
+		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
+		List<AdmittedPatient> patientsNull = admissionIoOperation.getAdmittedPatients(null);
 
 		assertEquals(patients.size(), patientsNull.size());
 		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
@@ -319,7 +320,7 @@ public class Tests
 		Patient foundPatient = foundAdmission.getPatient();
 
 		// when:
-		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getFirstName());
+		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getFirstName());
 
 		// then:
 		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
@@ -333,7 +334,7 @@ public class Tests
 		Patient foundPatient = foundAdmission.getPatient();
 
 		// when:
-		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getName());
+		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getName());
 
 		// then:
 		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
@@ -347,7 +348,7 @@ public class Tests
 		Patient foundPatient = foundAdmission.getPatient();
 
 		// when:
-		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getNote());
+		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getNote());
 
 		// then:
 		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
@@ -361,7 +362,7 @@ public class Tests
 		Patient foundPatient = foundAdmission.getPatient();
 
 		// when:
-		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getTaxCode());
+		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getTaxCode());
 
 		// then:
 		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
@@ -375,7 +376,7 @@ public class Tests
 		Patient foundPatient = foundAdmission.getPatient();
 
 		// when:
-		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString());
+		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString());
 
 		// then:
 		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
@@ -388,7 +389,7 @@ public class Tests
 		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
 
 		// when:
-		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients("dupsko");
+		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients("dupsko");
 
 		// then:
 		assertTrue(patients.isEmpty());
@@ -410,7 +411,7 @@ public class Tests
 		};
 
 		// when:
-		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString(), admissionRange, dischargeRange);
+		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString(), admissionRange, dischargeRange);
 
 		// then:
 		assertTrue(patients.isEmpty());
@@ -432,7 +433,7 @@ public class Tests
 		};
 
 		// when:
-		ArrayList<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString(), admissionRange, dischargeRange);
+		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString(), admissionRange, dischargeRange);
 
 		// then:
 		assertTrue(patients.isEmpty());
@@ -498,7 +499,7 @@ public class Tests
 		{		
 			id = _setupTestAdmission(false);
 			Admission foundAdmission = (Admission)jpa.find(Admission.class, id); 
-			ArrayList<Admission> admissions = admissionIoOperation.getAdmissions(foundAdmission.getPatient());
+			List<Admission> admissions = admissionIoOperation.getAdmissions(foundAdmission.getPatient());
 			
 			assertEquals(foundAdmission.getId(), admissions.get(admissions.size()-1).getId());
 		} 
@@ -670,7 +671,7 @@ public class Tests
 		{		
 			id = _setupTestAdmission(false);
 			Admission foundAdmission = (Admission)jpa.find(Admission.class, id); 
-			ArrayList<AdmissionType> admissionTypes = admissionIoOperation.getAdmissionType();
+			List<AdmissionType> admissionTypes = admissionIoOperation.getAdmissionType();
 			
 			assertEquals(foundAdmission.getAdmType().getDescription(), admissionTypes.get(admissionTypes.size()-1).getDescription());
 		} 
@@ -693,7 +694,7 @@ public class Tests
 		{		
 			id = _setupTestAdmission(false);
 			Admission foundAdmission = (Admission)jpa.find(Admission.class, id);  
-			ArrayList<DischargeType> dischargeTypes = admissionIoOperation.getDischargeType();
+			List<DischargeType> dischargeTypes = admissionIoOperation.getDischargeType();
 			
 			assertEquals(foundAdmission.getDisType().getDescription(), dischargeTypes.get(dischargeTypes.size()-1).getDescription());
 		} 
