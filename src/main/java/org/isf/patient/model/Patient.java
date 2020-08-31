@@ -170,8 +170,7 @@ public class Patient extends Auditable<String>
 	
 	@OneToOne(
 			fetch = FetchType.LAZY,
-			cascade = CascadeType.ALL,
-			optional = false
+			cascade = CascadeType.ALL
 	)
 	@JoinColumn(name = "PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID")
 	private PatientProfilePhoto patientProfilePhoto;
