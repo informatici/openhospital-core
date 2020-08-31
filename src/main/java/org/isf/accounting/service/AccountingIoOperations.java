@@ -399,4 +399,16 @@ public class AccountingIoOperations {
 		return bills;
 	}
 
+	/**
+	 * Return the entire bill list when the date is between dateFrom and dateTo
+	 *
+	 * @param dateFrom
+	 * @param dateTo
+	 * @return the bill list
+	 * @throws OHServiceException
+	 */
+	public ArrayList<Bill> getAllBills(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+		return (ArrayList<Bill>)billRepository.findByDateBetween(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo));
+	}
+
 }
