@@ -92,4 +92,15 @@ public class VisitsIoOperations {
 		
 		return result;	
 	}
+
+	/**
+	 * returns the {@link Visit} based on code
+	 *
+	 * @param code - the id
+	 * @return the {@link Visit} or {@literal null} if none found
+	 */
+	public Visit findVisit(int id)
+	{
+		return repository.findOne(id);
+	}
 }
