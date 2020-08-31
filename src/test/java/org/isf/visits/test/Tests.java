@@ -4,6 +4,7 @@ package org.isf.visits.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -218,7 +219,27 @@ public class Tests
 		
 		return;
 	}
-		
+
+	@Test
+	public void testFindVisit()
+	{
+		int id = 1;
+		Visit result;
+
+		try
+		{
+			id = _setupTestVisit(false);
+			result = visitsIoOperation.findVisit(id);
+
+			assertNotNull(result);
+			assertEquals(id,result.getVisitID());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			fail();
+		}
+	}
 	
 	private void _saveContext() throws OHException 
     {	

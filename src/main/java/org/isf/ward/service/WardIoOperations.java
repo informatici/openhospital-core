@@ -129,5 +129,20 @@ public class WardIoOperations {
 	public boolean isMaternityPresent() throws OHServiceException {
 		return isCodePresent("M");
 	}
-	
+
+	/**
+	 * returns the {@link Ward} based on code
+	 *
+	 * @param code - the code, must not be {@literal null}
+	 * @return the {@link Ward} or {@literal null} if none found
+	 * @throws OHServiceException
+	 * @throws IllegalArgumentException if {@code code} is {@literal null}
+	 */
+	public Ward findWard(String code) throws OHServiceException
+	{
+		if (code != null) {
+			return repository.findOne(code);
+		}else
+			throw new IllegalArgumentException("code must not be null");
+	}
 }

@@ -87,6 +87,22 @@ public class VaccineIoOperations {
 	public boolean isCodePresent(String code) throws OHServiceException {
 		return repository.exists(code);
 	}
+	
+	/**
+	 * returns the {@link Vaccine} based on code
+	 *
+	 * @param code - the code, must not be {@literal null}
+	 * @return the {@link Vaccine} or {@literal null} if none found
+	 * @throws OHServiceException 
+	 * @throws IllegalArgumentException if {@code code} is {@literal null}
+	 */
+	public Vaccine findVaccine(String code) throws OHServiceException 
+	{
+		if (code != null) {
+			return repository.findOne(code);
+		}else
+			throw new IllegalArgumentException("code must not be null");
+	} 
 }
 
 
