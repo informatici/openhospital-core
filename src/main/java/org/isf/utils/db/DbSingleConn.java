@@ -35,8 +35,6 @@ import org.isf.generaldata.MessageBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
-
 /*
  * @version 0.1 2005-11-06
  * @author bob
@@ -62,7 +60,7 @@ public class DbSingleConn {
 		if (pConn == null) {
 			try {
 				pConn = createConnection();
-			} catch (CommunicationsException ce) {
+			} catch (Exception ex){
 				String message = MessageBundle.getMessage("angal.utils.dbserverconnectionfailure");
 				logger.error(">> {}", message);
 				JOptionPane.showMessageDialog(null, message);
