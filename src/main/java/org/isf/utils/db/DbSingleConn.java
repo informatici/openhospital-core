@@ -35,15 +35,9 @@ import org.isf.generaldata.MessageBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*
- * @version 0.1 2005-11-06
- * @author bob
- *
- */
-
 /**
- * classe singleton che provvede alla connessione con database i parametri: dati
- * connessione,database, user, passwd ecc sono letti da file properties
+ * Singleton class to manage database connections.
+ * Connection parameters are read from Properties file.
  */
 public class DbSingleConn {
 
