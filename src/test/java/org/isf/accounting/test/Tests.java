@@ -658,7 +658,7 @@ public class Tests
 			
 			bills = accountingIoOperation.getBills(dateFrom, dateTo, foundBillItem);
 			assertTrue(bills.contains(foundBill));
-			
+
 			id = _setupTestBillItems(true);
 			foundBillItem = (BillItems)jpa.find(BillItems.class, id);
 			
