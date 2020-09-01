@@ -3,6 +3,7 @@ package org.isf.ward.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -234,6 +235,22 @@ public class Tests
 			assertTrue(result);
 		} catch (Exception e) {
 			e.printStackTrace();		
+			fail();
+		}
+	}
+
+	@Test
+	public void testFindWard() {
+		String code = "";
+		Ward result;
+
+		try {
+			code = _setupTestWard(false);
+			result = wardIoOperation.findWard(code);
+			assertNotNull(result);
+			assertEquals(code,result.getCode());
+		} catch (Exception e){
+			e.printStackTrace();
 			fail();
 		}
 	}
