@@ -287,11 +287,11 @@ public class AccountingIoOperations {
 	 * @param dateTo the high date range endpoint, inclusive.
 	 * @return a list of retrieved {@link Bill}s.
 	 * @throws OHServiceException if an error occurs retrieving the bill list.
-	 * @deprecated use {@link #getBillsBetweenDates (GregorianCalendar, GregorianCalendar)}
+	 * @deprecated use {@link #getBillsBetweenDates(GregorianCalendar, GregorianCalendar)}
 	 */
 	@Deprecated
 	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
-		return getBillsBetweenDates (dateFrom, dateTo);
+		return getBillsBetweenDates(dateFrom, dateTo);
 	}
 
 	/**
@@ -301,7 +301,7 @@ public class AccountingIoOperations {
 	 * @return a list of retrieved {@link Bill}s.
 	 * @throws OHServiceException if an error occurs retrieving the bill list.
 	 */
-	public ArrayList<Bill> getBillsBetweenDates (GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public ArrayList<Bill> getBillsBetweenDates(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
 		return new ArrayList<Bill>(billRepository.findByDateBetween(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo)));
 	}
 
