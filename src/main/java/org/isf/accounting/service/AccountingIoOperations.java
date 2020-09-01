@@ -287,8 +287,21 @@ public class AccountingIoOperations {
 	 * @param dateTo the high date range endpoint, inclusive.
 	 * @return a list of retrieved {@link Bill}s.
 	 * @throws OHServiceException if an error occurs retrieving the bill list.
+	 * @deprecated use {@link #getBillsByDate(GregorianCalendar, GregorianCalendar)}
 	 */
+	@Deprecated
 	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+		return getBillsByDate(dateFrom, dateTo);
+	}
+
+	/**
+	 * Retrieves all the {@link Bill}s for the specified date range.
+	 * @param dateFrom the low date range endpoint, inclusive.
+	 * @param dateTo the high date range endpoint, inclusive.
+	 * @return a list of retrieved {@link Bill}s.
+	 * @throws OHServiceException if an error occurs retrieving the bill list.
+	 */
+	public ArrayList<Bill> getBillsByDate(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
 		return new ArrayList<Bill>(billRepository.findByDateBetween(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo)));
 	}
 
@@ -329,12 +342,42 @@ public class AccountingIoOperations {
 	 * @param patient
 	 * @return
 	 * @throws OHServiceException
+	 * @deprecated use {@link #getPaymentsForPatient(GregorianCalendar, GregorianCalendar, Patient)}
 	 */
+	@Deprecated
 	public ArrayList<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient)
+			throws OHServiceException {
+		return getPaymentsForPatient(dateFrom, dateTo, patient);
+	}
+
+	/**
+	 * Retrieves all billPayments for a given patient in the period dateFrom -> dateTo
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param patient
+	 * @return
+	 * @throws OHServiceException
+	 */
+	public ArrayList<BillPayments> getPaymentsForPatient(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient)
 			throws OHServiceException {
 		ArrayList<BillPayments> payments =  billPaymentRepository.findByDateAndPatient(dateFrom, dateTo, patient.getCode());
 		return payments;
 	}
+
+	/**
+	 * Retrieves all the bills for a given patient in the period dateFrom -> dateTo
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param patient
+	 * @return the bill list
+	 * @throws OHServiceException
+	 * @deprecated use {@link #getBillsForPatient(GregorianCalendar, GregorianCalendar, Patient)}
+	 */
+	@Deprecated
+	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient) throws OHServiceException {
+		return getBillsForPatient(dateFrom, dateTo, patient);
+	}
+
 	/**
 	 * Retrieves all the bills for a given patient in the period dateFrom -> dateTo
 	 * @param dateFrom
@@ -343,10 +386,11 @@ public class AccountingIoOperations {
 	 * @return the bill list
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient) throws OHServiceException {
+	public ArrayList<Bill> getBillsForPatient(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient) throws OHServiceException {
 		ArrayList<Bill> bills = billRepository.findByDateAndPatient(dateFrom, dateTo, patient.getCode());
 		return bills;
 	}
+
 	/**
 	 * 
 	 * @param patID
@@ -379,15 +423,30 @@ public class AccountingIoOperations {
 	}
 	
 	/**
-	 * return the bill list which date between dateFrom and dateTo and containing given billItem
+	 * Return the bill list which date between dateFrom and dateTo and containing given billItem
 	 * added by u2g
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param billItem
 	 * @return the bill list
 	 * @throws OHServiceException
+	 * @deprecated use {@link #getBillsWithBillItem(GregorianCalendar, GregorianCalendar, BillItems)}
 	 */
+	@Deprecated
 	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo, BillItems billItem) throws OHServiceException {
+		return getBillsWithBillItem(dateFrom, dateTo, billItem);
+	}
+
+	/**
+	 * Return the bill list which date between dateFrom and dateTo and containing given billItem
+	 *
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param billItem
+	 * @return the bill list
+	 * @throws OHServiceException
+	 */
+	public ArrayList<Bill> getBillsWithBillItem(GregorianCalendar dateFrom, GregorianCalendar dateTo, BillItems billItem) throws OHServiceException {
 		ArrayList<Bill> bills = null;
 		if(billItem == null) {
 			bills = (ArrayList<Bill>) billRepository.findByDateBetween(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo));
@@ -398,17 +457,4 @@ public class AccountingIoOperations {
 		}
 		return bills;
 	}
-
-	/**
-	 * Return the entire bill list when the date is between dateFrom and dateTo
-	 *
-	 * @param dateFrom
-	 * @param dateTo
-	 * @return the bill list
-	 * @throws OHServiceException
-	 */
-	public ArrayList<Bill> getAllBills(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
-		return (ArrayList<Bill>)billRepository.findByDateBetween(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo));
-	}
-
 }
