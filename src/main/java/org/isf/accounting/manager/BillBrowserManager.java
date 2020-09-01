@@ -123,7 +123,7 @@ public class BillBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) throws OHServiceException {
-		return ioOperations.getBills(dateFrom, dateTo, patient);
+		return ioOperations.getBillsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class BillBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) throws OHServiceException {
-		return ioOperations.getPayments(dateFrom, dateTo, patient);
+		return ioOperations.getPaymentsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
 	
 	/**
@@ -304,7 +304,7 @@ public class BillBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
-		return ioOperations.getBills(dateFrom, dateTo);
+		return ioOperations.getBillsBetweenDates(dateFrom, dateTo);
 	}
 
 	/**
@@ -368,6 +368,6 @@ public class BillBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,BillItems billItem) throws OHServiceException {
-		return ioOperations.getBills(dateFrom, dateTo, billItem);
+		return ioOperations.getBillsBetweenDatesWhereBillItem(dateFrom, dateTo, billItem);
 	}
 }
