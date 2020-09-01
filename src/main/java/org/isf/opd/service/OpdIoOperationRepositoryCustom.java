@@ -10,6 +10,16 @@ import java.util.List;
 public interface OpdIoOperationRepositoryCustom {
 
 	List<Opd> findAllOpdWhereParams(String diseaseTypeCode, String diseaseCode, GregorianCalendar dateFrom,
-									GregorianCalendar dateTo, int ageFrom, int ageTo, char sex, char newPatient);
+										GregorianCalendar dateTo, int ageFrom, int ageTo, char sex, char newPatient);
 
+	List<Opd> findAllOpdWhereParamsWithPagination(
+			String diseaseTypeCode,
+			String diseaseCode,
+			GregorianCalendar dateFrom,
+			GregorianCalendar dateTo,
+			int ageFrom,
+			int ageTo,
+			char sex,
+			char newPatient, int pageNumber, int pageSize);
+	
 }

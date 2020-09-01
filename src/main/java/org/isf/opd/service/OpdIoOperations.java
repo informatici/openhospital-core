@@ -85,7 +85,21 @@ public class OpdIoOperations {
 				diseaseTypeCode, diseaseCode, dateFrom, dateTo,
 				ageFrom, ageTo, sex, newPatient));			
 	}
-	
+
+
+	public List<Opd> getOpdListPaginated(
+			String diseaseTypeCode,
+			String diseaseCode,
+			GregorianCalendar dateFrom,
+			GregorianCalendar dateTo,
+			int ageFrom,
+			int ageTo,
+			char sex,
+			char newPatient, int pageNumber, int pageSize) {
+		return repository.findAllOpdWhereParamsWithPagination(diseaseTypeCode, diseaseCode, dateFrom, dateTo,
+				ageFrom, ageTo, sex, newPatient, pageNumber, pageSize);
+	}
+
 	/**
 	 * returns all {@link Opd}s associated to specified patient ID
 	 * 
