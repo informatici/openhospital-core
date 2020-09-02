@@ -20,7 +20,7 @@ public class PrintLabels {
 	
 	public PrintLabels(String filename, Integer patId  )throws OHServiceException {
 		try{
-		HashMap<String, String> parameters = new HashMap<String, String>();
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
 
 		parameters.put("patientID", String.valueOf(patId));
 
