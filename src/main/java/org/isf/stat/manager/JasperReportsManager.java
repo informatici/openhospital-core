@@ -561,7 +561,7 @@ public class JasperReportsManager {
             sbFilename.append("Txt");
             sbFilename.append(".jasper");
 
-            String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+            String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             String txtFilename = "rpt/PDF/" + jasperFileName + "_" + aUser + "_" + date + ".txt";
             JasperReportResultDto result = generateJasperReport(sbFilename.toString(), txtFilename, parameters);
             return result;
@@ -691,17 +691,17 @@ public class JasperReportsManager {
         Date fromDateQuery;
 		Date toDateQuery;
         try {
-			fromDateQuery = TimeTools.parseDate(fromDate, "dd/MM/yyyy", false).getTime();
+			fromDateQuery = TimeTools.parseDate(fromDate, null, false).getTime();
 		} catch (ParseException e) {
-	        logger.error("Error parsing '{}' to a Date using pattern: 'dd/MM/yyyy'", fromDate);
+	        logger.error("Error parsing '{}' to a Date using pattern: 'yyyy-MM-dd HH:mm:ss'", fromDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
 					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
 		}
 
         try {
-        	toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yyyy", false).getTime();;
+        	toDateQuery = TimeTools.parseDate(toDate, null, false).getTime();;
 		} catch (ParseException e) {
-	        logger.error("Error parsing '{}' to a Date using pattern: 'dd/MM/yyyy'", toDate);
+	        logger.error("Error parsing '{}' to a Date using pattern: 'yyyy-MM-dd HH:mm:ss'", toDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
 					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
 		}
