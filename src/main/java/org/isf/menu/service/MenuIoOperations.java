@@ -228,10 +228,8 @@ public class MenuIoOperations
 		
 		menu = new ArrayList<UserMenuItem>();
 		for (Object[] object : menuList) {
-			boolean active = (Character) object[9] == '1';
+			
 			UserMenuItem umi = new UserMenuItem();
-
-
 			umi.setCode((String) object[0]);
 			umi.setButtonLabel((String) object[1]);
 			umi.setAltLabel((String) object[2]);
@@ -241,7 +239,7 @@ public class MenuIoOperations
 			umi.setMyClass((String) object[6]);
 			umi.setASubMenu((Boolean) object[7]);
 			umi.setPosition((Integer) object[8]);
-			umi.setActive(active);
+			umi.setActive((Integer) object[9] == 1 ? true : false);
 			menu.add(umi);
 		}
 		
@@ -261,7 +259,7 @@ public class MenuIoOperations
 		List<Object[]> menuList = menuRepository.findAllWhereGroupId(aGroup.getCode());
 		ArrayList<UserMenuItem> menu = new ArrayList<UserMenuItem>();
 		for (Object[] object : menuList) {
-			boolean active = (Character) object[9] == '1';
+			boolean active = (Integer) object[9] == '1' ? true : false;
 			UserMenuItem umi = new UserMenuItem();
 
 			umi.setCode((String) object[0]);
@@ -326,7 +324,7 @@ public class MenuIoOperations
 		GroupMenu groupMenu = new GroupMenu();
 		groupMenu.setUserGroup(aGroup.getCode());
 		groupMenu.setMenuItem(item.getCode());
-		groupMenu.setActive((item.isActive() ? '1' : '0'));
+		groupMenu.setActive((item.isActive() ? 1 : 0));
 		groupMenuRepository.save(groupMenu);
 				
 		return result;

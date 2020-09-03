@@ -1,5 +1,7 @@
 package org.isf.menu.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -8,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import org.isf.utils.db.Auditable;
 
 /*------------------------------------------
  * User - model for the user entity
@@ -18,8 +22,15 @@ import javax.validation.constraints.NotNull;
  * 
  *------------------------------------------*/
 @Entity
-@Table(name="USER")
-public class User 
+@Table(name="USER")	
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="US_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="US_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="US_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="US_LAST_MODIFIED_DATE")),
+    @AttributeOverride(name="active", column=@Column(name="US_ACTIVE")),
+})
+public class User extends Auditable<String>
 {
 	@Id 
 	@Column(name="US_ID_A")		
