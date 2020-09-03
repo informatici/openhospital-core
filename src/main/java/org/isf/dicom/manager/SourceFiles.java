@@ -160,8 +160,6 @@ public class SourceFiles extends Thread {
 			ImageReader reader;
 			Iterator<?> iter = null;
 			if (isJpeg) {
-
-				seriesDate = FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
 				studyDate = FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
 			} else if (isDicom) {
 				iter = ImageIO.getImageReadersByFormatName("DICOM");
@@ -432,7 +430,7 @@ public class SourceFiles extends Thread {
 		}
 	}
 
-	private static int checkOrientation(File sourceFile) throws ImageProcessingException, IOException {
+	public static int checkOrientation(File sourceFile) throws ImageProcessingException, IOException {
 		Metadata metadata = ImageMetadataReader.readMetadata(sourceFile);
 		ExifIFD0Directory exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 		int orientation = 1;

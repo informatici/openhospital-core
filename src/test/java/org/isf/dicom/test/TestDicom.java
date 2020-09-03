@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -18,7 +19,9 @@ import org.isf.dicomtype.model.DicomType;
 import org.isf.utils.exception.OHException;
 
 public class TestDicom 
-{	    
+{
+
+	SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy");
 	private Blob dicomData = _createRandomBlob(100);
 	private int patId = 0;
 	private String fileName = "TestFileName";
@@ -31,18 +34,21 @@ public class TestDicom
 	private String dicomPatientSex = "TestPatientSex";
 	private String dicomPatientBirthDate = "TestPatientBirth";
 	private String dicomStudyId = "TestStudyId";
-	private Date dicomStudyDate = new Date();
+	private Date dicomStudyDate = formatter.parse("Sat Aug 01 10:02:03 AST 2020");
 	private String dicomStudyDescription = "TestStudyDescription";
 	private String dicomSeriesUID = "TestSeriesUid";
 	private String dicomSeriesInstanceUID = "TestSeriesInstanceUid";
 	private String dicomSeriesNumber = "TestSeriesNumber";
 	private String dicomSeriesDescriptionCodeSequence = "TestSeriesDescription";
-	private Date dicomSeriesDate = new Date();
+	private Date dicomSeriesDate = formatter.parse("Sat Aug 01 10:02:03 AST 2020");
 	private String dicomSeriesDescription = "TestSeriesDescription";
 	private String dicomInstanceUID = "TestInteanceUid";
 	private String modality = "TestModality";
 	private Blob dicomThumbnail = _createRandomBlob(66);
-			
+
+	public TestDicom() throws ParseException {
+	}
+
 	public FileDicom setup(
 			DicomType dicomType, boolean usingSet) throws OHException 
 	{
@@ -100,8 +106,7 @@ public class TestDicom
 	
 	public void check(
 			FileDicom dicom) 
-	{	
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+	{
     	assertEquals(dicomAccessionNumber, dicom.getDicomAccessionNumber());
     	assertEquals(dicomInstanceUID, dicom.getDicomInstanceUID());
     	assertEquals(dicomInstitutionName, dicom.getDicomInstitutionName());
