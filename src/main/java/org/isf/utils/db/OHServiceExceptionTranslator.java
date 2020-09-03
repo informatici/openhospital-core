@@ -37,7 +37,8 @@ public class OHServiceExceptionTranslator {
     	} catch (ObjectOptimisticLockingFailureException e) {
 			throw new OHDataLockFailureException(e, new OHExceptionMessage(null, MessageBundle.getMessage("angal.sql.thedatahasbeenupdatedbysomeoneelse"), OHSeverityLevel.ERROR));
     	} catch (Throwable e) {
-    		throw new OHServiceException(e, new OHExceptionMessage(null, e.getMessage(), OHSeverityLevel.ERROR));
+    		e.printStackTrace();
+    		throw new OHServiceException(e, new OHExceptionMessage(null, MessageBundle.getMessage("angal.sql.anunexpectederroroccurredpleasecheckthelogs"), OHSeverityLevel.ERROR));
 		}
 	}
 }
