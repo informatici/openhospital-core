@@ -39,7 +39,7 @@ public interface AccountingBillPaymentIoOperationRepository extends JpaRepositor
 	
 	@Query(value = "SELECT BP FROM BillPayments BP WHERE " +
 			"BP.bill.patient.code = :patientCode and " +
-			"DATE(BP.bill.date) between :dateFrom and :dateTo " +
+			"DATE(BP.bill.date) between DATE(:dateFrom) and DATE(:dateTo) " +
 			"ORDER BY BP.bill, BP.date ASC")
 	ArrayList<BillPayments> findByDateAndPatient(@Param("dateFrom") GregorianCalendar dateFrom , @Param("dateTo") GregorianCalendar dateTo, @Param("patientCode") Integer patientCode);
 }
