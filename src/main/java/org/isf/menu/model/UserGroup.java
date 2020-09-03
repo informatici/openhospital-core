@@ -1,10 +1,14 @@
 package org.isf.menu.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.isf.utils.db.Auditable;
 
 /*------------------------------------------
  * User - model for the user entity
@@ -16,7 +20,14 @@ import javax.persistence.Transient;
  *------------------------------------------*/
 @Entity
 @Table(name="USERGROUP")
-public class UserGroup 
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="UG_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="UG_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="UG_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="UG_LAST_MODIFIED_DATE")),
+    @AttributeOverride(name="active", column=@Column(name="UG_ACTIVE")),
+})
+public class UserGroup extends Auditable<String>
 {
 	@Id 
 	@Column(name="UG_ID_A")
