@@ -18,7 +18,8 @@ public class Movement4Print {
 		pharmaceuticalName=movement.getMedical().getDescription();
 		pharmaceuticalType=movement.getMedical().getType().getDescription();
 		movementType=movement.getType().getType();
-		ward=movement.getWard().getDescription();
+		if (movement.getWard() != null)
+			ward=movement.getWard().getDescription();
 		quantity=movement.getQuantity();
 		lot=movement.getLot().getCode();
 	}
