@@ -413,7 +413,13 @@ public class TimeTools {
 		}
 		return serverDate;
 	}
-
+	
+	/**
+	 * Convert GregorianCalendar -> String using format "dd/MM/yy"
+	 * @param time - a Calendar datetime
+	 * @return a String representing the Calendar in the format "dd/MM/yy" 
+	 * @deprecated use formatDateTime(GregorianCalendar dateTime, String pattern) instead
+	 */
     public static String getConvertedString(GregorianCalendar time) {
 		if (time == null)
 			return MessageBundle.getMessage("angal.malnutrition.nodate");
@@ -426,9 +432,15 @@ public class TimeTools {
 		return string;
 	}
 
-
-
-public static GregorianCalendar convertToDate(String string) throws ParseException {
+    /**
+     * Convert String -> Date using pattern "ddMMyy" and the server time
+     * ( SELECT NOW() as time )
+     * @param string - a date in the form ddMMyy
+     * @return a Calendar datetime
+     * @throws ParseException
+     * @deprecated use getDate(String strDate, String format) instead 
+     */
+    public static GregorianCalendar convertToDate(String string) throws ParseException {
 		GregorianCalendar date = TimeTools.getServerDateTime();
 		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy");
 		date.setTime(sdf.parse(string));
