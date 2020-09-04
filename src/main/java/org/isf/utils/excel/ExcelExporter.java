@@ -2,6 +2,7 @@ package org.isf.utils.excel;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -377,7 +378,12 @@ public class ExcelExporter {
 	 * @throws OHException
 	 */
 	public void exportResultsetToExcel(ResultSet resultSet, File exportFile) throws IOException, OHException {
-		FileOutputStream fileStream = new FileOutputStream(exportFile);
+		FileOutputStream fileStream = null;
+		try {
+			fileStream = new FileOutputStream(exportFile);
+		} catch (FileNotFoundException e) {
+			throw new OHException(e.getLocalizedMessage());
+		}
 
 		workbook = new XSSFWorkbook();
 		createHelper = workbook.getCreationHelper();
