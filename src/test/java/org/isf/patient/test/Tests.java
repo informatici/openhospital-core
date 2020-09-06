@@ -171,6 +171,25 @@ public class Tests
 	}
 
 	@Test
+	public void testIoGetPatientsByOneOfFieldsLikeMiddleOfFirstName() {
+		try {
+			// given:
+			Integer code = _setupTestPatient(false);
+			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+
+			// when:
+			ArrayList<Patient> patients = patientIoOperation
+					.getPatientsByOneOfFieldsLike(foundPatient.getFirstName().substring(1, foundPatient.getFirstName().length() - 2));
+
+			// then:
+			testPatient.check(patients.get(0));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
 	public void testIoGetPatientsByOneOfFieldsLikeSecondName() {
 		try {
 			// given:
