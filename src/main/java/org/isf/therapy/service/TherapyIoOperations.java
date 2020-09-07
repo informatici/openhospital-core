@@ -51,7 +51,7 @@ public class TherapyIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean deleteAllTherapies(int patID) throws OHServiceException {
-		repository.deleteBypatCode(patID);
+		repository.deleteByPatID(patID);
 		return true;
 	}
 

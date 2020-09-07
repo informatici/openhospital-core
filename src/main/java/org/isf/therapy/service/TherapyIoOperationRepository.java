@@ -11,5 +11,5 @@ public interface TherapyIoOperationRepository extends JpaRepository<TherapyRow, 
     List<TherapyRow> findAllByOrderByPatIDAscTherapyIDAsc();
     List<TherapyRow> findByPatIDOrderByPatIDAscTherapyIDAsc(Integer patient);
     @Modifying
-    void deleteBypatCode(@Param("patient") Integer patient);
+    void deleteByPatID(@Param("patient") Integer patient);
 }
