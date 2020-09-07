@@ -36,12 +36,4 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
     @Query(value = "select max(p.code) from Patient p")
     Integer findMaxCode();
 
-	@Query(value = "SELECT * FROM PATIENT "
-		+"LEFT JOIN (SELECT PEX_PAT_ID, PEX_HEIGHT AS PAT_HEIGHT, PEX_WEIGHT AS PAT_WEIGHT FROM PATIENTEXAMINATION GROUP BY PEX_PAT_ID ORDER BY PEX_DATE DESC) "
-		+"AS HW ON PAT_ID = HW.PEX_PAT_ID WHERE (PAT_DELETED='N' or PAT_DELETED is null) "
-		+"AND (PAT_AFFILIATED_PERSON < 1 OR PAT_AFFILIATED_PERSON is null) "
-		+"AND (PAT_IS_HEAD_AFFILIATION = 1) "
-		+"ORDER BY PAT_ID DESC",
-		nativeQuery= true)
-	ArrayList<Patient> getPatientsHeadWithHeightAndWeight();
 }

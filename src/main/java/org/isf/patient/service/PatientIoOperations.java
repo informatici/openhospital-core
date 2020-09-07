@@ -205,13 +205,4 @@ public class PatientIoOperations
 		return repository.exists(code);
 	}
 
-	/**
-	 * Get the patient list filter by head patient
-	 * @return patient list
-	 * @throws OHServiceException
-	 */
-	public ArrayList<Patient> getPatientsHeadWithHeightAndWeight() throws OHServiceException {
-		 ArrayList<Patient> pPatient = repository.getPatientsHeadWithHeightAndWeight(); // TODO: findAll?
-		return pPatient;
-	}
 }
