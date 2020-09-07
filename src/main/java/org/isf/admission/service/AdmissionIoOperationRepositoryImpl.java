@@ -1,10 +1,7 @@
 package org.isf.admission.service;
 
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,94 +25,16 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 	@PersistenceContext
 	private EntityManager entityManager;
 
-
 	@Override
-	public List<PatientAdmission> findPatientAndAdmissionId(final String searchTerms) {
-		String[] terms = getTermsToSearch(searchTerms);
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Object[]> query = cb.createQuery(Object[].class);
-		Root<Admission> admissionRoot = query.from(Admission.class);
-		Join<Admission, Patient> patient = admissionRoot.join("patient");
-		query.multiselect(patient.get("code"), admissionRoot.get("id"));
-		List<Predicate> where = new ArrayList<Predicate>();
-		where.add(admissionNotDeletedPredicate(cb, admissionRoot));
-		if (terms != null) {
-			where.addAll(termsPredicates(terms, cb, patient));
-		}
-		where.add(patientNotDeletedPredicate(cb, patient));
-		query.where(cb.and(where.toArray(new Predicate[where.size()])));
-		query.orderBy(cb.desc(patient.get("code")));
-
-		return mapToPatientAdmission(this.entityManager.createQuery(query).getResultList());
-	}
-
-
-	@SuppressWarnings("unchecked")	
-	@Override
-	public List<Admission> findAllBySearch(String literal) {
+	public Optional<Admission> findOneByPatientAndDateRanges(Patient patient, GregorianCalendar[] admissionRange,
+															 GregorianCalendar[] dischargeRange) {
 		return this.entityManager.
-				createQuery(buildSearchQuery(literal)).
-					getResultList();
-	}	
-
-	
-	private CriteriaQuery<Admission> buildSearchQuery(String searchTerms) {
-		String[] terms = getTermsToSearch(searchTerms);
-		return createQuerySearchingForPatientContainingGivenWordsInHisProperties(terms);
+			createQuery(createQueryToSearchByPatientAndDates(patient, admissionRange, dischargeRange)).
+			getResultList().stream()
+			.findFirst();
 	}
 
-	@Override
-	public List<PatientAdmission> findPatientAdmissionsBySearchAndDateRanges(final String searchTerms,
-																			 final GregorianCalendar[] admissionRange,
-																			 final GregorianCalendar[] dischargeRange) {
-		String[] terms = getTermsToSearch(searchTerms);
-
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Object[]> query = cb.createQuery(Object[].class);
-		Root<Admission> admissionRoot = query.from(Admission.class);
-		List<Predicate> where = new ArrayList<Predicate>();
-		where.add(admissionNotDeletedPredicate(cb, admissionRoot));
-		Join<Admission, Patient> patient = admissionRoot.join("patient");
-		query.multiselect(patient.get("code"), admissionRoot.get("id"));
-		if (terms != null) {
-			where.addAll(termsPredicates(terms, cb, patient));
-		}
-		where.add(patientNotDeletedPredicate(cb, patient));
-		where.addAll(dateRangePredicates(cb, admissionRoot, admissionRange, dischargeRange));
-		query.where(cb.and(where.toArray(new Predicate[where.size()])));
-		query.orderBy(cb.desc(patient.get("code")));
-
-		return mapToPatientAdmission(this.entityManager.createQuery(query).getResultList());
-	}
-
-
-	private List<PatientAdmission> mapToPatientAdmission(List<Object[]> resultList) {
-		final List<PatientAdmission> result = new ArrayList<PatientAdmission>(resultList.size());
-		for (final Object[] arrays : resultList) {
-			result.add(new PatientAdmission((Integer) arrays[0], (Integer) arrays[1]));
-		}
-		return result;
-
-	}
-
-
-
-
-
-    private String[] getTermsToSearch(String searchTerms) {
-    	String[] terms = null;
-
-    	if (searchTerms != null && !searchTerms.isEmpty()) {
-			searchTerms = searchTerms.trim().toLowerCase();
-			terms = searchTerms.split(" ");
-		}
-
-    	return terms;
-	}
-
-
-    
-    private CriteriaQuery<Admission> createQuerySearchingForPatientContainingGivenWordsInHisProperties(String[] terms) {
+	private CriteriaQuery<Admission> createQueryToSearchByPatientAndDates(Patient patient, GregorianCalendar[] admissionRange, GregorianCalendar[] dischargeRange) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Admission> query = cb.createQuery(Admission.class);
 		Root<Admission> admissionRoot = query.from(Admission.class);
@@ -123,44 +42,12 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 
 		query.select(admissionRoot);
 		where.add(admissionNotDeletedPredicate(cb, admissionRoot));
-		Join<Admission, Patient> patient = admissionRoot.join("patient");
-		if (terms != null) {
-			where.addAll(termsPredicates(terms, cb, patient));
-		}
-		where.add(patientNotDeletedPredicate(cb, patient));
-		query.where(cb.and(where.toArray(new Predicate[where.size()])));
-		query.orderBy(cb.desc(patient.get("code")));
-
-    	return query;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Admission> findAllBySearchAndDateRanges(String searchTerms, GregorianCalendar[] admissionRange,
-														GregorianCalendar[] dischargeRange) {
-		return this.entityManager.
-				createQuery(createQuerySearchingForPatientContainingGivenWordsInHisProperties(getTermsToSearch(searchTerms), admissionRange, dischargeRange)).
-					getResultList();
-	}
-
-	private CriteriaQuery<Admission> createQuerySearchingForPatientContainingGivenWordsInHisProperties(String[] terms,
-																									   GregorianCalendar[] admissionRange,
-																									   GregorianCalendar[] dischargeRange) {
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Admission> query = cb.createQuery(Admission.class);
-		Root<Admission> admissionRoot = query.from(Admission.class);
-		List<Predicate> where = new ArrayList<Predicate>();
-
-		query.select(admissionRoot);
-		where.add(admissionNotDeletedPredicate(cb, admissionRoot));
-		Join<Admission, Patient> patient = admissionRoot.join("patient");
-		if (terms != null) {
-			where.addAll(termsPredicates(terms, cb, patient));
-		}
-		where.add(patientNotDeletedPredicate(cb, patient));
+		Join<Admission, Patient> patientJoin = admissionRoot.join("patient");
+		where.add(patientEqualPredicate(cb, patientJoin, patient));
+		where.add(patientNotDeletedPredicate(cb, patientJoin));
 		where.addAll(dateRangePredicates(cb, admissionRoot, admissionRange, dischargeRange));
 		query.where(cb.and(where.toArray(new Predicate[where.size()])));
-		query.orderBy(cb.desc(patient.get("code")));
+		query.orderBy(cb.desc(patientJoin.get("code")));
 
 		return query;
 	}
@@ -207,26 +94,7 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 		);
 	}
 
-	private List<Predicate> termsPredicates(String[] terms, CriteriaBuilder cb, Join<Admission, Patient> patient) {
-		List<Predicate> predicates = new ArrayList<Predicate>();
-		for(String term : terms) {
-			predicates.add(wordExistsInOneOfPatientFields(term, cb, patient));
-		}
-		return predicates;
-	}
-
-
-	private Predicate wordExistsInOneOfPatientFields(String word, CriteriaBuilder cb, Join<Admission, Patient> patientRoot) {
-		return cb.or(
-			cb.like(cb.lower(patientRoot.get("code").as(String.class)), like(word)),
-			cb.like(cb.lower(patientRoot.get("secondName").as(String.class)), like(word)),
-			cb.like(cb.lower(patientRoot.get("firstName").as(String.class)), like(word)),
-			cb.like(cb.lower(patientRoot.get("note").as(String.class)), like(word)),
-			cb.like(cb.lower(patientRoot.get("taxCode").as(String.class)), like(word))
-		);
-	}
-
-	private String like(String word) {
-		return "%" + word + "%";
+	private Predicate patientEqualPredicate(CriteriaBuilder cb, Join<Admission, Patient> patientJoin, Patient patient) {
+		return cb.equal(patientJoin.get("code"), patient.getCode());
 	}
 }
