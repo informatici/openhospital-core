@@ -46,7 +46,7 @@ public class SupplierOperations {
 	 * @throws OHServiceException 
 	 */
 	public Supplier getByID(int ID) throws OHServiceException {
-		return repository.findOne(ID);
+		return repository.getOne(ID);
 	}
 	
 	/**

@@ -108,34 +108,34 @@ public class MergePatientTests {
 	}
 
 	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) throws OHException {
-		Patient mergedPatientResult = patientIoOperationRepository.findOne(mergedPatient.getCode());
-		Patient obsoletePatientResult = patientIoOperationRepository.findOne(obsoletePatient.getCode());
+		Patient mergedPatientResult = patientIoOperationRepository.getOne(mergedPatient.getCode());
+		Patient obsoletePatientResult = patientIoOperationRepository.getOne(obsoletePatient.getCode());
 		assertEquals("Y", obsoletePatientResult.getDeleted());
 		assertEquals("N", mergedPatientResult.getDeleted());
 	}
 
 	private void assertThatObsoletePatientWasNotDeletedAndIsTheActiveOne(Patient obsoletePatient) throws OHException {
-		Patient obsoletePatientResult = patientIoOperationRepository.findOne(obsoletePatient.getCode());
+		Patient obsoletePatientResult = patientIoOperationRepository.getOne(obsoletePatient.getCode());
 		assertEquals("N", obsoletePatientResult.getDeleted());
 	}
 
 	private void assertThatVisitWasMovedFromObsoleteToMergedPatient(Visit visit, Patient mergedPatient) throws OHException {
-		Visit visitResult = visitsIoOperationRepository.findOne(visit.getVisitID());
+		Visit visitResult = visitsIoOperationRepository.getOne(visit.getVisitID());
 		assertEquals(mergedPatient.getCode(), visitResult.getPatient().getCode());
 	}
 
 	private void assertThatVisitIsStillAssignedToObsoletePatient(Visit visit, Patient obsoletePatient) throws OHException {
-		Visit visitResult = visitsIoOperationRepository.findOne(visit.getVisitID());
+		Visit visitResult = visitsIoOperationRepository.getOne(visit.getVisitID());
 		assertEquals(obsoletePatient.getCode(), visitResult.getPatient().getCode());
 	}
 
 	private void assertThatExaminationWasMovedFromObsoleteToMergedPatient(PatientExamination examination, Patient mergedPatient) throws OHException {
-		PatientExamination patientResult = examinationIoOperationRepository.findOne(examination.getPex_ID());
+		PatientExamination patientResult = examinationIoOperationRepository.getOne(examination.getPex_ID());
 		assertEquals(mergedPatient.getCode(), patientResult.getPatient().getCode());
 	}
 
 	private void assertThatExaminationIsStillAssignedToObsoletePatient(PatientExamination patientExamination, Patient obsoletePatient) throws OHException {
-		PatientExamination patientResult = examinationIoOperationRepository.findOne(patientExamination.getPex_ID());
+		PatientExamination patientResult = examinationIoOperationRepository.getOne(patientExamination.getPex_ID());
 		assertEquals(obsoletePatient.getCode(), patientResult.getPatient().getCode());
 	}
 

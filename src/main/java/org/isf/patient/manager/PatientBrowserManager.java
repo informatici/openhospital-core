@@ -73,7 +73,7 @@ public class PatientBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Patient> getPatient(int page, int size) throws OHServiceException {
-        return ioOperations.getPatients(new PageRequest(page, size));
+        return ioOperations.getPatients(PageRequest.of(page, size));
 	}
 
 	/**

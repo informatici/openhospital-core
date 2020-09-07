@@ -45,7 +45,7 @@ public class MedicalsIoOperations
 	public Medical getMedical(
 			int code) throws OHServiceException 
 	{
-		return repository.findOne(code);
+		return repository.getOne(code);
 	}
 
 	/**

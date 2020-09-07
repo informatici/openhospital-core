@@ -63,6 +63,6 @@ public class TherapyIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException	{
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 }

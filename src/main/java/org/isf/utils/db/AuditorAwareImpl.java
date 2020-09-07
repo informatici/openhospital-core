@@ -5,6 +5,8 @@
  */
 package org.isf.utils.db;
 
+import java.util.Optional;
+
 import org.isf.menu.manager.UserBrowsingManager;
 import org.springframework.data.domain.AuditorAware;
 
@@ -14,8 +16,13 @@ import org.springframework.data.domain.AuditorAware;
  */
 public class AuditorAwareImpl implements AuditorAware<String>{
 
-    @Override
+	@Override
+	public Optional<String> getCurrentAuditor() {
+		return Optional.empty();
+	}
+
+/*    @Override
     public String getCurrentAuditor() {
         return UserBrowsingManager.getCurrentUser();
-    }
+    }*/
 }

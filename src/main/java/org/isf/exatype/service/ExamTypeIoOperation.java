@@ -92,7 +92,7 @@ public class ExamTypeIoOperation {
 		boolean result = true;
 	
 		
-		result = repository.exists(code);
+		result = repository.existsById(code);
 		
 		return result;
 	}

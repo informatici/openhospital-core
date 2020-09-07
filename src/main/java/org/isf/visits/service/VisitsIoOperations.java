@@ -77,7 +77,7 @@ public class VisitsIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 
 	/**
@@ -88,6 +88,6 @@ public class VisitsIoOperations {
 	 */
 	public Visit findVisit(int id)
 	{
-		return repository.findOne(id);
+		return repository.getOne(id);
 	}
 }

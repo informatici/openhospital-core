@@ -49,7 +49,7 @@ public class MedicalStockWardIoOperations
 		
 		pMovementWardCode = new ArrayList<Integer>(repository.findAllWardMovement(wardId, dateFrom, dateTo));
         for (Integer code : pMovementWardCode) {
-            MovementWard movementWard = movementRepository.findOne(code);
+            MovementWard movementWard = movementRepository.getOne(code);
 
 
             pMovementWard.add(movementWard);

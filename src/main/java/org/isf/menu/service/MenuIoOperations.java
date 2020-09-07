@@ -77,7 +77,7 @@ public class MenuIoOperations
 	public String getUsrInfo(
 			String userName) throws OHServiceException 
 	{ 
-		User user = (User)repository.findOne(userName); 
+		User user = (User)repository.getOne(userName);
 		
 		
 		return user.getDesc();
@@ -110,7 +110,7 @@ public class MenuIoOperations
 		boolean result = true;
 	
 		
-		result = repository.exists(userName);
+		result = repository.existsById(userName);
 		
 		return result;	
 	}
@@ -128,7 +128,7 @@ public class MenuIoOperations
 		boolean result = true;
 	
 		
-		result = groupRepository.exists(groupName);
+		result = groupRepository.existsById(groupName);
 		
 		return result;	
 	}
