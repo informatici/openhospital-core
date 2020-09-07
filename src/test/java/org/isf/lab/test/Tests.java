@@ -69,6 +69,7 @@ public class Tests {
 
 	@BeforeClass
 	public static void setUpClass() {
+		
 		jpa = new DbJpaUtil();
 		testLaboratory = new TestLaboratory();
 		testLaboratoryRow = new TestLaboratoryRow();
@@ -86,7 +87,9 @@ public class Tests {
 
 	@Before
 	public void setUp() throws OHException {
+		
 		jpa.open();
+		
 		_saveContext();
 
 		return;
@@ -94,6 +97,7 @@ public class Tests {
 
 	@After
 	public void tearDown() throws Exception {
+		
 		_restoreContext();
 
 		jpa.flush();
@@ -104,6 +108,7 @@ public class Tests {
 
 	@AfterClass
 	public static void tearDownClass() throws OHException {
+		
 		testLaboratory = null;
 		testLaboratoryRow = null;
 		testLaboratoryContext = null;

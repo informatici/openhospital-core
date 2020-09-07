@@ -69,6 +69,9 @@ public class Tests
     @AfterClass
     public static void tearDownClass() throws OHException 
     {
+    	testSms = null;
+    	testSmsContext = null;
+    	
     	return;
     }
 	

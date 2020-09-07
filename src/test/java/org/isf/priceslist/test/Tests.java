@@ -11,9 +11,12 @@ import org.isf.priceslist.model.PriceList;
 import org.isf.priceslist.service.PriceIoOperationRepository;
 import org.isf.priceslist.service.PriceListIoOperationRepository;
 import org.isf.priceslist.service.PricesListIoOperations;
+import org.isf.sms.test.TestSms;
+import org.isf.sms.test.TestSmsContext;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -52,14 +55,28 @@ public class Tests
 
         return;
     }
-
+	
     @Before
-    public void setUp() throws OHException {
-
-		priceIoOperationRepository.deleteAll();
-		priceListIoOperationRepository.deleteAll();
+    public void setUp() throws OHException
+    {
+        jpa.open();
+        
+        _saveContext();
+		
+		return;
     }
-    
+        
+    @After
+    public void tearDown() throws Exception 
+    {
+        _restoreContext();   
+        
+        jpa.flush();
+        jpa.close();
+                
+        return;
+    }
+
     @AfterClass
     public static void tearDownClass() throws OHException 
     {
@@ -307,4 +324,20 @@ public class Tests
 
 		return id;
 	}
+	
+	private void _saveContext() throws OHException 
+    {	
+		testPriceContext.saveAll(jpa);
+		testPriceListContext.saveAll(jpa);
+        		
+        return;
+    }
+	
+    private void _restoreContext() throws OHException 
+    {
+		testPriceContext.deleteNews(jpa);
+		testPriceListContext.deleteNews(jpa);
+        
+        return;
+    }
 }

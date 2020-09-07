@@ -70,6 +70,9 @@ public class Tests
     @AfterClass
     public static void tearDownClass() throws OHException 
     {
+    	testVaccineType = null;
+    	testVaccineTypeContext = null;
+    	
     	return;
     }
 	

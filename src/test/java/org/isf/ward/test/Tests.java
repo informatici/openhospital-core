@@ -65,6 +65,10 @@ public class Tests
     
     @AfterClass
     public static void tearDownClass() throws OHException {
+    	
+    	testWard = null;
+    	testWardContext = null;
+    	
     	return;
     }
 
