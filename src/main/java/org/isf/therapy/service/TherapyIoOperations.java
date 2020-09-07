@@ -39,8 +39,8 @@ public class TherapyIoOperations {
 	 */
 	public ArrayList<TherapyRow> getTherapyRows(int patID) throws OHServiceException {
 		return patID != 0 ?
-			new ArrayList<TherapyRow>(repository.findByPatIDCodeOrderByPatIDCodeAscTherapyIDAsc(patID)) :
-			new ArrayList<TherapyRow>(repository.findAllByOrderByPatIDCodeAscTherapyIDAsc());
+			new ArrayList<TherapyRow>(repository.findByPatIDOrderByPatIDAscTherapyIDAsc(patID)) :
+			new ArrayList<TherapyRow>(repository.findAllByOrderByPatIDAscTherapyIDAsc());
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class TherapyIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean deleteAllTherapies(int patID) throws OHServiceException {
-		repository.deleteByPatIDCode(patID);
+		repository.deleteBypatCode(patID);
 		return true;
 	}
 

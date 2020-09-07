@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.query.Param;
 
 public interface TherapyIoOperationRepository extends JpaRepository<TherapyRow, Integer> {
-    List<TherapyRow> findAllByOrderByPatIDCodeAscTherapyIDAsc();
-    List<TherapyRow> findByPatIDCodeOrderByPatIDCodeAscTherapyIDAsc(Integer patient);
+    List<TherapyRow> findAllByOrderByPatIDAscTherapyIDAsc();
+    List<TherapyRow> findByPatIDOrderByPatIDAscTherapyIDAsc(Integer patient);
     @Modifying
-    void deleteByPatIDCode(@Param("patient") Integer patient);
+    void deleteBypatCode(@Param("patient") Integer patient);
 }
