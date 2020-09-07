@@ -357,7 +357,7 @@ public class Tests
 		{		
 			Integer code = _setupTestPatient(false);
 			Patient foundPatient = (Patient)jpa.find(Patient.class, code); 
-			boolean result = patientIoOperation.isPatientPresent(foundPatient.getName());
+			boolean result = patientIoOperation.isPatientPresentByName(foundPatient.getName());
 
 			assertTrue(result);
 		} 
