@@ -189,7 +189,7 @@ public class ExamIoOperations {
 			Exam exam) throws OHServiceException 
 	{
 		boolean result = false;
-		Exam foundExam = repository.findOne(exam.getCode());
+		Exam foundExam = repository.getOne(exam.getCode());
 		
 		if (foundExam != null)
 		{
@@ -232,7 +232,7 @@ public class ExamIoOperations {
 		boolean result = true;
 	
 		
-		result = repository.exists(code);
+		result = repository.existsById(code);
 		
 		return result;	
 	}
@@ -250,7 +250,7 @@ public class ExamIoOperations {
 		boolean result = true;
 	
 		
-		result = rowRepository.exists(code);
+		result = rowRepository.existsById(code);
 		
 		return result;	
 	}

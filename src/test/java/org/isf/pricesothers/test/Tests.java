@@ -1,27 +1,9 @@
-/*
- * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
- *
- * Open Hospital is a free and open source software for healthcare data management.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * https://www.gnu.org/licenses/gpl-3.0-standalone.html
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package org.isf.pricesothers.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
@@ -80,29 +62,29 @@ public class Tests {
 	public void testIoGetPricesOthers() throws OHException, OHServiceException {
 		// given:
 		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = repository.findOne(id);
+		PricesOthers foundPricesOthers = repository.getOne(id);
 
 		// when:
 		ArrayList<PricesOthers> result = otherIoOperation.getOthers();
 
 		// then:
-		assertThat(result.get(0).getDescription()).isEqualTo(foundPricesOthers.getDescription());
+		assertEquals(foundPricesOthers.getDescription(), result.get(0).getDescription());
 	}
 
 	@Test
 	public void testIoUpdatePricesOthers() throws OHServiceException, OHException {
 		// given:
 		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = repository.findOne(id);
+		PricesOthers foundPricesOthers = repository.getOne(id);
 		foundPricesOthers.setDescription("Update");
 
 		// when:
 		boolean result = otherIoOperation.updateOther(foundPricesOthers);
-		PricesOthers updatePricesOthers = repository.findOne(id);
+		PricesOthers updatePricesOthers = repository.getOne(id);
 
 		// then:
-		assertThat(result).isTrue();
-		assertThat(updatePricesOthers.getDescription()).isEqualTo("Update");
+		assertTrue(result);
+		assertEquals("Update", updatePricesOthers.getDescription());
 	}
 
 	@Test
@@ -114,7 +96,7 @@ public class Tests {
 		boolean result = otherIoOperation.newOthers(pricesOthers);
 
 		// then:
-		assertThat(result).isTrue();
+		assertTrue(result);
 		_checkPricesOthersIntoDb(pricesOthers.getId());
 	}
 
@@ -122,14 +104,14 @@ public class Tests {
 	public void testIoDeletePricesOthers() throws OHException, OHServiceException {
 		// given:
 		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = repository.findOne(id);
+		PricesOthers foundPricesOthers = repository.getOne(id);
 
 		// when:
 		boolean result = otherIoOperation.deleteOthers(foundPricesOthers);
 
 		// then:
-		assertThat(result).isTrue();
-		assertThat(repository.exists(id)).isFalse();
+		assertTrue(result);
+		assertFalse(repository.existsById(id));
 	}
 
 	private int _setupTestPricesOthers(boolean usingSet) throws OHException {
@@ -139,7 +121,7 @@ public class Tests {
 	}
 
 	private void _checkPricesOthersIntoDb(int id) {
-		PricesOthers foundPricesOthers = repository.findOne(id);
+		PricesOthers foundPricesOthers = repository.getOne(id);
 		testPricesOthers.check(foundPricesOthers);
 	}
 }

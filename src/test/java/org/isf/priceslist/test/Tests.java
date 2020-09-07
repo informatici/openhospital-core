@@ -1,28 +1,8 @@
-/*
- * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
- *
- * Open Hospital is a free and open source software for healthcare data management.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * https://www.gnu.org/licenses/gpl-3.0-standalone.html
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package org.isf.priceslist.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.within;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
@@ -42,6 +22,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -68,6 +49,8 @@ public class Tests
     	testPriceListContext = new TestPriceListContext();
     	testPrice = new TestPrice();
     	testPriceContext = new TestPriceContext();
+
+        return;
     }
 
     @Before
@@ -84,6 +67,8 @@ public class Tests
     	testPriceListContext = null;
     	testPrice = null;
     	testPriceContext = null;
+
+    	return;
     }
 	
 		
@@ -114,7 +99,7 @@ public class Tests
 		ArrayList<PriceList> priceLists = priceListIoOperation.getLists();
 			
 		// then:
-		assertThat(priceLists.get(0).getName()).isEqualTo(priceListIoOperationRepository.findOne(id).getName());
+		assertEquals(priceListIoOperationRepository.getOne(id).getName(), priceLists.get(0).getName());
 	}
 	
 	@Test
@@ -144,15 +129,15 @@ public class Tests
 		ArrayList<Price> prices = priceListIoOperation.getPrices();
 			
 		// then:
-		assertThat(prices.get(0).getPrice()).isEqualTo(priceIoOperationRepository.findOne(id).getPrice());
+		assertEquals(priceIoOperationRepository.getOne(id).getPrice(), prices.get(0).getPrice());
 	}
 	
 	@Test
 	public void testIoUpdatePrices() throws OHException, OHServiceException {
 		// given:
-		ArrayList<Price> prices = new ArrayList<>();
+		ArrayList<Price> prices = new ArrayList<Price>();
 		int deleteId = _setupTestPrice(false);
-		Price deletePrice = priceIoOperationRepository.findOne(deleteId);
+		Price deletePrice = priceIoOperationRepository.getOne(deleteId);
 
 		// when:
 		PriceList priceList = deletePrice.getList();
@@ -162,9 +147,9 @@ public class Tests
 		boolean result = priceListIoOperation.updatePrices(priceList, prices);
 
 		// then:
-		Price foundPrice = priceIoOperationRepository.findOne(insertId);
-		assertThat(result).isTrue();
-		assertThat(foundPrice.getList().getId()).isEqualTo(priceList.getId());
+		Price foundPrice = priceIoOperationRepository.getOne(insertId);
+		assertTrue(result);
+		assertEquals(priceList.getId(), foundPrice.getList().getId());
 	}
 		
 	@Test
@@ -176,7 +161,7 @@ public class Tests
 		priceListIoOperation.newList(pricelist);
 
 		// then:
-		PriceList foundPriceList = priceListIoOperationRepository.findOne(pricelist.getId());
+		PriceList foundPriceList = priceListIoOperationRepository.getOne(pricelist.getId());
 		_checkPriceListIntoDb(foundPriceList.getId());
 	}
 	
@@ -184,34 +169,34 @@ public class Tests
 	public void testIoUpdateList() throws OHException, OHServiceException {
 		// given:
 		int id = _setupTestPriceList(true);
-		PriceList priceList = priceListIoOperationRepository.findOne(id);
+		PriceList priceList = priceListIoOperationRepository.getOne(id);
 		priceList.setName("NewListName");
 
 		// when:
 		priceListIoOperation.updateList(priceList);
 
 		// then:
-		assertThat(priceList.getName()).isEqualTo("NewListName");
+		assertEquals("NewListName", priceList.getName());
 	}
 	
 	@Test
 	public void testIoDeleteList() throws OHServiceException, OHException {
 		// given:
 		int id = _setupTestPriceList(true);
-		PriceList priceList = priceListIoOperationRepository.findOne(id);
+		PriceList priceList = priceListIoOperationRepository.getOne(id);
 
 		// when:
 		priceListIoOperation.deleteList(priceList);
 
 		// then:
-		assertThat(priceListIoOperationRepository.count()).isZero();
+		assertEquals(0, priceListIoOperationRepository.count());
 	}
 	
 	@Test
 	public void testIoCopyList() throws OHException, OHServiceException {
 		// given:
 		int id = _setupTestPrice(true);
-		Price price = priceIoOperationRepository.findOne(id);
+		Price price = priceIoOperationRepository.getOne(id);
 		PriceList priceList = price.getList();
 
 		// when:
@@ -219,15 +204,15 @@ public class Tests
 
 		// then:
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
-		assertThat(copyPrice.getId()).isEqualTo(id + 1);
-		assertThat(copyPrice.getPrice()).isCloseTo(2 * price.getPrice(), within(0.10D));
+		assertEquals(id+1, copyPrice.getId());
+		assertEquals(2 * price.getPrice(), copyPrice.getPrice(), 0.10);
 	}
 	
 	@Test
 	public void testIoCopyListSteps() throws OHException, OHServiceException {
 		// given:
 		int id = _setupTestPrice(true);
-		Price price = priceIoOperationRepository.findOne(id);
+		Price price = priceIoOperationRepository.getOne(id);
 		PriceList priceList = price.getList();
 
 		// when:
@@ -235,8 +220,8 @@ public class Tests
 
 		// then:
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
-		assertThat(copyPrice.getId()).isEqualTo(id + 1);
-		assertThat(copyPrice.getPrice()).isCloseTo(Math.round(2 * price.getPrice() / 3) * 3, within(0.10D));
+		assertEquals(id+1, copyPrice.getId());
+		assertEquals(Math.round(2 * price.getPrice() / 3) *3, copyPrice.getPrice(), 0.10);
 	}
 
 
@@ -254,8 +239,10 @@ public class Tests
 		PriceList foundPriceList;
 		
 
-		foundPriceList = priceListIoOperationRepository.findOne(id);
+		foundPriceList = priceListIoOperationRepository.getOne(id);
 		testPriceList.check(foundPriceList);
+		
+		return;
 	}
 	
     private int _setupTestPrice(boolean usingSet) throws OHException {
@@ -271,9 +258,11 @@ public class Tests
 		Price foundPrice;
 		
 		
-		foundPrice = priceIoOperationRepository.findOne(id);
+		foundPrice = priceIoOperationRepository.getOne(id);
 		testPrice.check(foundPrice);
 		testPriceList.check(foundPrice.getList());
+		
+		return;
 	}
 	
 	private int _getListMax() throws OHException 

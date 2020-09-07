@@ -130,7 +130,7 @@ public class DicomIoOperations
 			int patientID,
 			String seriesNumber) throws OHServiceException
 	{
-		FileDicom dicom = repository.findOne(idFile);
+		FileDicom dicom = repository.getOne(idFile);
 				
 		return dicom;
 	}
@@ -200,7 +200,7 @@ public class DicomIoOperations
 		boolean result = true;
 	
 		
-		result = repository.exists(code);
+		result = repository.existsById(code);
 		
 		return result;	
 	}

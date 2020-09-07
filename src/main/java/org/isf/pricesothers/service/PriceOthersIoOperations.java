@@ -120,7 +120,7 @@ public class PriceOthersIoOperations {
 		boolean result = true;
 	
 		
-		result = repository.exists(id);
+		result = repository.existsById(id);
 		
 		return result;	
 	}

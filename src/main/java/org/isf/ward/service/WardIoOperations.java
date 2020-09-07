@@ -136,7 +136,7 @@ public class WardIoOperations {
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 	
 	
@@ -160,7 +160,7 @@ public class WardIoOperations {
 	public Ward findWard(String code) throws OHServiceException
 	{
 		if (code != null) {
-			return repository.findOne(code);
+			return repository.getOne(code);
 		}else
 			throw new IllegalArgumentException("code must not be null");
 	}

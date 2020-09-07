@@ -105,7 +105,7 @@ public class VaccineIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 	
 	/**
@@ -116,10 +116,10 @@ public class VaccineIoOperations {
 	 * @throws OHServiceException 
 	 * @throws IllegalArgumentException if {@code code} is {@literal null}
 	 */
-	public Vaccine findVaccine(String code) throws OHServiceException 
+	public Vaccine findVaccine(String code) throws OHServiceException
 	{
 		if (code != null) {
-			return repository.findOne(code);
+			return repository.getOne(code);
 		}else
 			throw new IllegalArgumentException("code must not be null");
 	} 

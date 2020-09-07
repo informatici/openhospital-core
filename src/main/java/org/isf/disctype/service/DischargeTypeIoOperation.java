@@ -118,7 +118,7 @@ public class DischargeTypeIoOperation {
 		boolean result = true;
 	
 		
-		result = repository.exists(code);
+		result = repository.existsById(code);
 		
 		return result;
 	}

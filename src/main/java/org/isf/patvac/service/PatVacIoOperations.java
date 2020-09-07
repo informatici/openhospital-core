@@ -158,7 +158,7 @@ public class PatVacIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 
 	private GregorianCalendar getBeginningOfYear(int year) {

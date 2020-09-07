@@ -323,12 +323,12 @@ public class LabIoOperations {
 	 */
 	public boolean deleteLaboratory(Laboratory aLaboratory) throws OHServiceException {
 		boolean result = true;
-		Laboratory objToRemove = repository.findOne(aLaboratory.getCode());
+		Laboratory objToRemove = repository.getOne(aLaboratory.getCode());
 		
 		if (objToRemove.getExam().getProcedure() == 2) {
 			rowRepository.deleteByLaboratory_Code(objToRemove.getCode());
 		}
-		repository.delete(objToRemove.getCode());
+		repository.deleteById(objToRemove.getCode());
 		
 		return result;
 	}
@@ -341,7 +341,7 @@ public class LabIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 
 
