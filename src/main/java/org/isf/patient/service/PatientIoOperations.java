@@ -158,12 +158,13 @@ public class PatientIoOperations
 
 	/**
 	 * method that check if a Patient is already present in the DB by his/her name
+	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName
 	 * 
 	 * @param name
 	 * @return true - if the patient is already present
 	 * @throws OHServiceException
 	 */
-	public boolean isPatientPresent(String name) throws OHServiceException {
+	public boolean isPatientPresentByName(String name) throws OHServiceException {
 		return repository.findByNameAndDeleted(name, NOT_DELETED_STATUS).size() > 0;
 	}
 

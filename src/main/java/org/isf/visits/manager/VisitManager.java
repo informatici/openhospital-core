@@ -15,6 +15,7 @@ import org.isf.sms.manager.SmsManager;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
 import org.isf.ward.model.Ward;
@@ -152,8 +153,8 @@ public class VisitManager {
 				if (visit.isSms()) {
 					GregorianCalendar date = (GregorianCalendar) visit.getDate().clone(); 
 					date.add(Calendar.DAY_OF_MONTH, -1);
-					if (visit.getDate().after(now.toDateMidnight().toGregorianCalendar())) {
-						Patient pat = patMan.getPatient(visit.getPatient().getName());
+					if (visit.getDate().after(TimeTools.getDateToday24())) {
+						Patient pat = patMan.getPatientById(visit.getPatient().getCode());
 						
 						Sms sms = new Sms();
 						sms.setSmsDateSched(date.getTime());

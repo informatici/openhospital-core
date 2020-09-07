@@ -18,6 +18,7 @@ import org.isf.therapy.model.Therapy;
 import org.isf.therapy.model.TherapyRow;
 import org.isf.therapy.service.TherapyIoOperations;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -181,8 +182,8 @@ public class TherapyManager {
 					GregorianCalendar[] dates = th.getDates();						
 					for (GregorianCalendar date : dates) {
 						date.set(Calendar.HOUR_OF_DAY, 8);
-						if (date.after(now.toDateMidnight().toGregorianCalendar())) {
-							Patient pat = patientManager.getPatient(thRow.getPatID().getName());
+						if (date.after(TimeTools.getDateToday24())) {
+							Patient pat = patientManager.getPatientById(patID);
 
 							Sms sms = new Sms();
 							sms.setSmsDateSched(date.getTime());
@@ -297,7 +298,7 @@ public class TherapyManager {
 		Medical medical, Double qty, int unitID, int freqInDay, int freqInPeriod, String note, boolean notify,
 		boolean sms) throws OHServiceException {
 		
-		Patient patient = patientManager.getPatient(patID);
+		Patient patient = patientManager.getPatientById(patID);
 		TherapyRow thRow = new TherapyRow(therapyID, patient, startDate, endDate, medical, qty, unitID, freqInDay, freqInPeriod, note, notify, sms);
 		return newTherapy(thRow);
 	}

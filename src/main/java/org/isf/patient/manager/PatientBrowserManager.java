@@ -82,8 +82,10 @@ public class PatientBrowserManager {
 	 * @param name
 	 * @return the Patient that match specified name (could be null)
 	 * @throws OHServiceException 
+	 * @deprecated use getPatient(Integer code) for one patient or 
+	 * getPatientWithHeightAndWeight(regex) for a list
 	 */
-	public Patient getPatient(String name) throws OHServiceException {
+	public Patient getPatientByName(String name) throws OHServiceException {
         return ioOperations.getPatient(name);
 	}
 
@@ -94,7 +96,7 @@ public class PatientBrowserManager {
 	 * @return the Patient (could be null)
 	 * @throws OHServiceException 
 	 */
-	public Patient getPatient(Integer code) throws OHServiceException {
+	public Patient getPatientById(Integer code) throws OHServiceException {
         return ioOperations.getPatient(code);
 	}
 	
@@ -242,14 +244,15 @@ public class PatientBrowserManager {
 	}
 	
 	/**
-	 * method that check if a Patient is already present in the DB by his/her name
+	 * method that check if the patient's name is already present in the DB
+	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName
 	 * 
-	 * @param name
+	 * @param name - name of the patient
 	 * @return true - if the patient is already present
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean isPatientPresent(String name) throws OHServiceException {
-        return ioOperations.isPatientPresent(name);
+	public boolean isNamePresent(String name) throws OHServiceException {
+        return ioOperations.isPatientPresentByName(name);
 	}
 	
 	/**
