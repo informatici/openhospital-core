@@ -21,7 +21,7 @@ import org.isf.utils.exception.OHException;
 public class TestDicom 
 {
 
-	SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy");
+	SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy", new Locale("en"));
 	private Blob dicomData = _createRandomBlob(100);
 	private int patId = 0;
 	private String fileName = "TestFileName";
