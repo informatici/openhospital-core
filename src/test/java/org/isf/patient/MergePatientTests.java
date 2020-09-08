@@ -6,15 +6,21 @@ import static org.junit.Assert.fail;
 import org.isf.examination.model.PatientExamination;
 import org.isf.examination.service.ExaminationIoOperationRepository;
 import org.isf.examination.test.TestPatientExamination;
+import org.isf.examination.test.TestPatientExaminationContext;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.patient.test.TestPatient;
+import org.isf.patient.test.TestPatientContext;
+import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperationRepository;
 import org.isf.visits.test.TestVisit;
+import org.isf.visits.test.TestVisitContext;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,9 +32,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 public class MergePatientTests {
+	
+	private static DbJpaUtil jpa;
 	private static TestPatient testPatient;
+	private static TestPatientContext testPatientContext;
 	private static TestPatientExamination testPatientExamination;
+	private static TestPatientExaminationContext testPatientExaminationContext;
 	private static TestVisit testVisit;
+	private static TestVisitContext testVisitContext;
 
 	@Autowired
 	PatientIoOperations patientIoOperation;
@@ -43,18 +54,61 @@ public class MergePatientTests {
 
 	@BeforeClass
 	public static void setUpClass()	{
+		
+		jpa = new DbJpaUtil();
 		testPatient = new TestPatient();
+		testPatientContext = new TestPatientContext();
 		testPatientExamination = new TestPatientExamination();
+		testPatientExaminationContext = new TestPatientExaminationContext();
 		testVisit = new TestVisit();
+		testVisitContext = new TestVisitContext();
 	}
 
 	@Before
 	public void setUp() throws OHException {
-		visitsIoOperationRepository.deleteAll();
-		examinationIoOperationRepository.deleteAll();
-		patientIoOperationRepository.deleteAll();
-		testPatientMergedEventListener.setShouldFail(false);
+
+		jpa.open();
+        
+        _saveContext();
+        testPatientMergedEventListener.setShouldFail(false);
+		
+		return;
 	}
+	
+	@After
+    public void tearDown() throws Exception 
+    {
+        _restoreContext();   
+        
+        jpa.flush();
+        jpa.close();
+                
+        return;
+    }
+    
+    @AfterClass
+    public static void tearDownClass() throws OHException 
+    {
+    	return;
+    }
+    
+    private void _saveContext() throws OHException 
+    {	
+		testPatientContext.saveAll(jpa);
+		testPatientExaminationContext.saveAll(jpa);
+		testVisitContext.saveAll(jpa);
+        		
+        return;
+    }
+		
+    private void _restoreContext() throws OHException 
+    {
+    	testVisitContext.deleteNews(jpa);
+    	testPatientExaminationContext.deleteNews(jpa);
+    	testPatientContext.deleteNews(jpa);
+        
+        return;
+    }
 
 	@Test
 	public void testMergePatientHistory() throws OHException, OHServiceException {
@@ -155,4 +209,5 @@ public class MergePatientTests {
 		examinationIoOperationRepository.save(patientExamination);
 		return patientExamination;
 	}
+
 }
