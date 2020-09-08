@@ -53,7 +53,7 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 	@Query(value = "select b from Bill b where b.patient.id = :patientCode and b.date >= :dateFrom and b.date < :dateTo")
 	ArrayList<Bill> findByDateAndPatient(@Param("dateFrom") Calendar dateFrom, @Param("dateTo") Calendar dateTo, @Param("patientCode")Integer patientCode);
 
-	@Query(value = "select b from Bill b where b.status='O' and b.id = :patID")
+	@Query(value = "select b from Bill b where b.status='O' and b.patient.id = :patID")
 	ArrayList<Bill> findAllPendindBillsByPatient(@Param("patID")int patID);
 
 	/**
