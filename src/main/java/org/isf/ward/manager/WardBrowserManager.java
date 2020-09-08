@@ -268,7 +268,7 @@ public class WardBrowserManager {
 	 * @param code - the  {@link Ward} code.
 	 * @return the {@link Ward}
 	 */
-	public Ward findVaccine(String code) throws OHServiceException {
+	public Ward findWard(String code) throws OHServiceException {
 		return ioOperations.findWard(code);
 	}
 

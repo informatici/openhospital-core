@@ -260,16 +260,21 @@ public class Tests
 	}
 
 	@Test
-	public void testFindWard() {
+	public void testFindWard()
+	{
 		String code = "";
 		Ward result;
 
-		try {
+		try
+		{
 			code = _setupTestWard(false);
 			result = wardIoOperation.findWard(code);
+
 			assertNotNull(result);
 			assertEquals(code,result.getCode());
-		} catch (Exception e){
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 			fail();
 		}
