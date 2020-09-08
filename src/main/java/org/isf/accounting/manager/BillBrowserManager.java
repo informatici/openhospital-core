@@ -69,9 +69,9 @@ public class BillBrowserManager {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         
         GregorianCalendar today = new GregorianCalendar();
-        GregorianCalendar upDate = new GregorianCalendar();
-		GregorianCalendar firstPay = new GregorianCalendar();
-		GregorianCalendar lastPay = new GregorianCalendar();
+        GregorianCalendar upDate = today;
+		GregorianCalendar firstPay = today;
+		GregorianCalendar lastPay = today;
 		GregorianCalendar billDate = bill.getDate();
 		if (billPayments.size() > 0) {
 			firstPay = billPayments.get(0).getDate();
