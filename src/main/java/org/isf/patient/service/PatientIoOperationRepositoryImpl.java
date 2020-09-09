@@ -99,6 +99,6 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 	}
 
 	private String like(String word) {
-		return "%" + word + "";
+		return "%" + word + "%";
 	}
 }
