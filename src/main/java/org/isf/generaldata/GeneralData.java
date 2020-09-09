@@ -48,7 +48,6 @@ public class GeneralData {
 	private final String FILE_PROPERTIES = "generalData.properties";
 	public static String LANGUAGE;
 	public static boolean SINGLEUSER;
-	public static boolean OPDOPERATION; //TODO: Evaluate the real need of this one: if false should also hidden the ability to specify the OPE_FOR property
 	public static boolean AUTOMATICLOT_IN;
 	public static boolean AUTOMATICLOT_OUT;
 	public static boolean AUTOMATICLOTWARD_TOWARD;
@@ -69,6 +68,7 @@ public class GeneralData {
 	public static String PHARMACEUTICALAMC;
 	public static boolean PATIENTEXTENDED;
 	public static boolean OPDEXTENDED;
+	public static boolean OPDOPERATION; //TODO: Evaluate the real need of this one: if false should also hidden the ability to specify the OPE_FOR property
 	public static boolean MATERNITYRESTARTINJUNE;
 	public static boolean LABEXTENDED;
 	public static boolean INTERNALVIEWER;
@@ -97,7 +97,6 @@ public class GeneralData {
 	private static boolean DEFAULT_AUTOMATICLOT_OUT = true;
 	private static boolean DEFAULT_AUTOMATICLOTWARD_TOWARD=true;
 	private static boolean DEFAULT_LOTWITHCOST = false;
-	
 	private static String DEFAULT_PATIENTSHEET = "patient_clinical_sheet";
 	private static String DEFAULT_VISITSHEET = "WardVisits";
 	private static String DEFAULT_EXAMINATIONCHART = "patient_examination";
@@ -114,6 +113,7 @@ public class GeneralData {
 	private static String DEFAULT_PHARMACEUTICALAMC = "PharmaceuticalAMC";
 	private static boolean DEFAULT_PATIENTEXTENDED = false;
 	private static boolean DEFAULT_OPDEXTENDED = false;
+	private static boolean DEFAULT_OPDOPERATION = true;
 	private static boolean DEFAULT_MATERNITYRESTARTINJUNE = false;
 	private static boolean DEFAULT_LABEXTENDED = false;
 	private static boolean DEFAULT_INTERNALVIEWER = true;
@@ -145,7 +145,7 @@ public class GeneralData {
 			logger.info("File generalData.properties loaded. ");
 			LANGUAGE = myGetProperty("LANGUAGE", DEFAULT_LANGUAGE);
 			SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
-			OPDOPERATION= myGetProperty("OPDOPERATION", DEFAULT_SINGLEUSER);
+			OPDOPERATION= myGetProperty("OPDOPERATION", DEFAULT_OPDOPERATION);
 			AUTOMATICLOT_IN = myGetProperty("AUTOMATICLOT_IN", DEFAULT_AUTOMATICLOT_IN);
 			AUTOMATICLOT_OUT = myGetProperty("AUTOMATICLOT_OUT", DEFAULT_AUTOMATICLOT_OUT);
 			AUTOMATICLOTWARD_TOWARD = myGetProperty("AUTOMATICLOTWARD_TOWARD", DEFAULT_AUTOMATICLOTWARD_TOWARD);
