@@ -112,9 +112,9 @@ public class Visit  extends Auditable<String>
 		this.patient = patient;
 		this.note = note;
 		this.sms = sms;		
-		this.ward=ward;
-		this.duration=duration;
-		this.service=service;
+		this.ward = ward;
+		this.duration = duration;
+		this.service = service;
 	}
 	
 	public GregorianCalendar getDate() {
@@ -217,7 +217,7 @@ public class Visit  extends Auditable<String>
 		return (visitID == visit.getVisitID());
 	}
 	public String toString() {
-		String desc = ""+ ward.getDescription()+ " - "+ this.service + " - " + formatDateTime(this.date);
+		String desc = ""+ (ward == null ? "" : ward.getDescription()) + " - "+ this.service + " - " + formatDateTime(this.date);
 		
 		return desc;
 	}
