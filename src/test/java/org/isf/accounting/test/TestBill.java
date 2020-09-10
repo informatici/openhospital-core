@@ -21,7 +21,7 @@
  */
 package org.isf.accounting.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.GregorianCalendar;
 
@@ -79,6 +79,7 @@ public class TestBill
 		bill.setListName(listName);
 		bill.setPatient(isPatient);
 		bill.setPatient(patient);
+		bill.setPatName(patName);
 		bill.setStatus(status);
 		bill.setAmount(amount);
 		bill.setBalance(balance);
@@ -89,16 +90,17 @@ public class TestBill
 	
 	public void check(
 			Bill bill) 
-	{		
-    	assertEquals(date, bill.getDate());
-    	assertEquals(update, bill.getUpdate());
-    	assertEquals(isList, bill.isList());
-    	assertEquals(listName, bill.getListName());
-    	assertEquals(isPatient,bill.isPatient());
-    	assertEquals(status,bill.getStatus());
-    	assertEquals(amount, bill.getAmount());
-    	assertEquals(balance, bill.getBalance());
-    	assertEquals(user, bill.getUser());
+	{
+		assertThat(bill.getDate()).isEqualTo(date);
+		assertThat(bill.getUpdate()).isEqualTo(update);
+		assertThat(bill.isList()).isEqualTo(isList);
+		assertThat(bill.getListName()).isEqualTo(listName);
+		assertThat(bill.isPatient()).isEqualTo(isPatient);
+		assertThat(bill.getPatName()).isEqualTo(patName);
+		assertThat(bill.getStatus()).isEqualTo(status);
+		assertThat(bill.getAmount()).isEqualTo(amount);
+		assertThat(bill.getBalance()).isEqualTo(balance);
+		assertThat(bill.getUser()).isEqualTo(user);
 		
 		return;
 	}

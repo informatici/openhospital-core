@@ -21,7 +21,8 @@
  */
 package org.isf.accounting.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.data.Offset.offset;
 
 import java.util.GregorianCalendar;
 
@@ -71,11 +72,9 @@ public class TestBillPayments
 	
 	public void check(
 			BillPayments billPayment) 
-	{		
-		assertEquals(paymentAmount, billPayment.getAmount(), 0.1);
-		assertEquals(paymentDate, billPayment.getDate());
-		assertEquals(paymentUser, billPayment.getUser());
-				
-		return;
+	{
+		assertThat(billPayment.getAmount()).isCloseTo(paymentAmount, offset(0.1));
+		assertThat(billPayment.getDate()).isEqualTo(paymentDate);
+		assertThat(billPayment.getUser()).isEqualTo(paymentUser);
 	}
 }
