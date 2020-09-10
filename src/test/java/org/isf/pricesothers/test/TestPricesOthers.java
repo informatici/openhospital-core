@@ -21,7 +21,7 @@
  */
 package org.isf.pricesothers.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.pricesothers.model.PricesOthers;
 import org.isf.utils.exception.OHException;
@@ -66,22 +66,18 @@ public class TestPricesOthers
 		pricesOthers.setDischarge(discharge);
 		pricesOthers.setIpdInclude(ipdInclude);
 		pricesOthers.setOpdInclude(opdInclude);
-		pricesOthers.setUndefined(undefined);		
-		
-		return;
+		pricesOthers.setUndefined(undefined);
 	}
 	
 	public void check(
 			PricesOthers pricesOthers) 
 	{		
-    	assertEquals(Code, pricesOthers.getCode());
-    	assertEquals(Description, pricesOthers.getDescription());
-    	assertEquals(daily, pricesOthers.isDaily());
-    	assertEquals(discharge, pricesOthers.isDischarge());
-    	assertEquals(ipdInclude, pricesOthers.isIpdInclude());
-    	assertEquals(opdInclude, pricesOthers.isOpdInclude());
-    	assertEquals(undefined, pricesOthers.isUndefined());	
-		
-		return;
+    	assertThat(pricesOthers.getCode()).isEqualTo(Code);
+    	assertThat(pricesOthers.getDescription()).isEqualTo(Description);
+    	assertThat(pricesOthers.isDaily()).isEqualTo(daily);
+    	assertThat(pricesOthers.isDischarge()).isEqualTo(discharge);
+    	assertThat(pricesOthers.isIpdInclude()).isEqualTo(ipdInclude);
+    	assertThat(pricesOthers.isOpdInclude()).isEqualTo(opdInclude);
+    	assertThat(pricesOthers.isUndefined()).isEqualTo(undefined);
 	}
 }

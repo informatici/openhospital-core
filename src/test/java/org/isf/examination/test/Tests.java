@@ -21,7 +21,7 @@
  */
 package org.isf.examination.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -68,8 +68,6 @@ public class Tests
     	testPatientExamination = new TestPatientExamination();
     	testPatientContext = new TestPatientContext();
     	testPatientExaminationContext = new TestPatientExaminationContext();
-
-        return;
     }
 
     @Before
@@ -78,8 +76,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -89,8 +85,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -100,8 +94,6 @@ public class Tests
     	testPatientExamination = null;
     	testPatientContext = null;
     	testPatientExaminationContext = null;
-
-    	return;
     }
 	
 		
@@ -121,8 +113,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -141,8 +131,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -163,8 +151,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -180,15 +166,13 @@ public class Tests
 			Integer pex_hr = patientExamination.getPex_hr();
 			patientExamination.setPex_hr(pex_hr + 1);
 			examinationOperations.saveOrUpdate(patientExamination);
-			assertEquals((Integer)(pex_hr + 1), patientExamination.getPex_hr());
+			assertThat(patientExamination.getPex_hr()).isEqualTo((Integer) (pex_hr + 1));
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -209,8 +193,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}	
 
 	@Test
@@ -233,8 +215,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}	
 
 	@Test
@@ -257,8 +237,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}	
 
 	@Test
@@ -281,8 +259,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -298,7 +274,7 @@ public class Tests
 
 			// then:
 			PatientExamination result = (PatientExamination)jpa.find(PatientExamination.class, id);
-			assertEquals(mergedPatient.getCode(), result.getPatient().getCode());
+			assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -318,16 +294,12 @@ public class Tests
     {	
 		testPatientContext.saveAll(jpa);
 		testPatientExaminationContext.saveAll(jpa);
-        		
-        return;
     }
 		
     private void _restoreContext() throws OHException 
     {
     	testPatientExaminationContext.deleteNews(jpa);
 		testPatientContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private int _setupTestPatientExamination(
@@ -355,7 +327,5 @@ public class Tests
 		foundPatientExamination = (PatientExamination)jpa.find(PatientExamination.class, id); 
 		testPatientExamination.check(foundPatientExamination);
 		testPatient.check(foundPatientExamination.getPatient());
-		
-		return;
 	}
 }

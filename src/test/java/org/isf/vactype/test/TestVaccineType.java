@@ -21,7 +21,7 @@
  */
 package org.isf.vactype.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.utils.exception.OHException;
 import org.isf.vactype.model.VaccineType;
@@ -57,16 +57,12 @@ public class TestVaccineType
 	{	
 		vaccineType.setCode(code);
 		vaccineType.setDescription(description);
-		
-		return;
 	}
 	
 	public void check(
 			VaccineType vaccineType) 
 	{		
-    	assertEquals(code, vaccineType.getCode());
-    	assertEquals(description, vaccineType.getDescription());
-		
-		return;
+    	assertThat(vaccineType.getCode()).isEqualTo(code);
+    	assertThat(vaccineType.getDescription()).isEqualTo(description);
 	}
 }

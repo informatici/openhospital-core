@@ -21,9 +21,7 @@
  */
 package org.isf.operation.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -67,8 +65,6 @@ public class Tests
     	testOperationType = new TestOperationType();
     	testOperationContext = new TestOperationContext();
     	testOperationTypeContext = new TestOperationTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -77,8 +73,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -88,8 +82,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -99,8 +91,6 @@ public class Tests
     	testOperationType = null;
     	testOperationContext = null;
     	testOperationTypeContext = null;
-
-    	return;
     }
 	
 		
@@ -120,8 +110,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -140,8 +128,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -156,15 +142,13 @@ public class Tests
 			Operation foundOperation = (Operation)jpa.find(Operation.class, code); 
 			ArrayList<Operation> operations = operationIoOperations.getOperation(foundOperation.getDescription());
 			
-			assertEquals(foundOperation.getDescription(), operations.get(0).getDescription());
+			assertThat(operations.get(0).getDescription()).isEqualTo(foundOperation.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -183,15 +167,13 @@ public class Tests
 			ArrayList<Operation> operations = operationIoOperations.getOperation(foundOperation.getDescription());
 
 			// then:
-			assertFalse(operations.isEmpty());
+			assertThat(operations).isNotEmpty();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 	
 	@Test
@@ -209,7 +191,7 @@ public class Tests
 			jpa.commitTransaction();
 			result = operationIoOperations.newOperation(operation);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkOperationIntoDb(operation.getCode());
 		} 
 		catch (Exception e) 
@@ -217,8 +199,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	public void testIoUpdateOperation() throws OHException 
@@ -237,17 +217,15 @@ public class Tests
 			result = operationIoOperations.updateOperation(foundOperation);
 			Operation updateOperation = (Operation)jpa.find(Operation.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateOperation.getDescription());
-			assertEquals(lock + 1, updateOperation.getLock().intValue());
+			assertThat(result).isTrue();
+			assertThat(updateOperation.getDescription()).isEqualTo("Update");
+			assertThat(updateOperation.getLock().intValue()).isEqualTo(lock + 1);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -263,15 +241,13 @@ public class Tests
 			Operation foundOperation = (Operation)jpa.find(Operation.class, code); 
 			result = operationIoOperations.deleteOperation(foundOperation);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -286,15 +262,13 @@ public class Tests
 			code = _setupTestOperation(false);
 			result = operationIoOperations.isCodePresent(code);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -310,15 +284,13 @@ public class Tests
 			Operation foundOperation = (Operation)jpa.find(Operation.class, code); 
 			result = operationIoOperations.isDescriptionPresent(foundOperation.getDescription(), foundOperation.getType().getCode());
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	
@@ -326,16 +298,12 @@ public class Tests
     {	
 		testOperationContext.saveAll(jpa);
 		testOperationTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testOperationContext.deleteNews(jpa);
 		testOperationTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestOperation(
@@ -360,9 +328,7 @@ public class Tests
 		Operation foundOperation;
 		
 
-		foundOperation = (Operation)jpa.find(Operation.class, code); 
+		foundOperation = (Operation)jpa.find(Operation.class, code);
 		testOperation.check(foundOperation);
-		
-		return;
 	}	
 }

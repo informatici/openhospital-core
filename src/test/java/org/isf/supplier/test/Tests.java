@@ -21,7 +21,7 @@
  */
 package org.isf.supplier.test;
 
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.List;
@@ -57,8 +57,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testSupplier = new TestSupplier();
     	testSupplierContext = new TestSupplierContext();
-    	
-        return;
     }
 
     @Before
@@ -67,8 +65,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -78,8 +74,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -87,8 +81,6 @@ public class Tests
     {
     	testSupplier = null;
     	testSupplierContext = null;
-
-    	return;
     }
 	
 	
@@ -108,8 +100,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -128,8 +118,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -143,7 +131,7 @@ public class Tests
 			Supplier supplier = testSupplier.setup(true);
 			result = supplierIoOperation.saveOrUpdate(supplier);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkSupplierIntoDb(supplier.getSupId());
 		} 
 		catch (Exception e) 
@@ -151,8 +139,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -173,8 +159,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -189,15 +173,13 @@ public class Tests
 			Supplier foundSupplier = (Supplier)jpa.find(Supplier.class, code); 
 			List<Supplier> suppliers = supplierIoOperation.getAll();
 
-			assertTrue(suppliers.contains(foundSupplier));
+			assertThat(suppliers).contains(foundSupplier);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -212,30 +194,24 @@ public class Tests
 			Supplier foundSupplier = (Supplier)jpa.find(Supplier.class, code); 
 			List<Supplier> suppliers = supplierIoOperation.getList();
 
-			assertTrue(suppliers.contains(foundSupplier));
+			assertThat(suppliers).contains(foundSupplier);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 		
 	
 	private void _saveContext() throws OHException 
     {	
 		testSupplierContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testSupplierContext.deleteNews(jpa);
-        
-        return;
     }
     
 	private int _setupTestSupplier(
@@ -260,7 +236,5 @@ public class Tests
 	
 		foundSupplier = (Supplier)jpa.find(Supplier.class, code); 
 		testSupplier.check(foundSupplier);
-		
-		return;
 	}	
 }

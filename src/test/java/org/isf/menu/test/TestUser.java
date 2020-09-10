@@ -21,7 +21,7 @@
  */
 package org.isf.menu.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
@@ -64,17 +64,13 @@ public class TestUser
 		user.setDesc(desc);
 		user.setUserGroupName(userGroupName);
 		user.setPasswd(passwd);
-		
-		return;
 	}
 	
 	public void check(
 			User user) 
 	{		
-    	assertEquals(name, user.getUserName());
-    	assertEquals(desc, user.getDesc());
-    	assertEquals(passwd, user.getPasswd());
-		
-		return;
+    	assertThat(user.getUserName()).isEqualTo(name);
+    	assertThat(user.getDesc()).isEqualTo(desc);
+    	assertThat(user.getPasswd()).isEqualTo(passwd);
 	}
 }

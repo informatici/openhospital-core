@@ -21,10 +21,7 @@
  */
 package org.isf.visits.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -74,8 +71,6 @@ public class Tests
     	testPatientContext = new TestPatientContext();
     	testWard = new TestWard();
     	testWardContext = new TestWardContext();
-    	
-        return;
     }
 
     @Before
@@ -84,8 +79,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -95,8 +88,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -108,7 +99,6 @@ public class Tests
     	testPatient = null;
     	testPatientContext = null;
     	testWardContext = null;
-    	return;
     }
 	
 		
@@ -128,8 +118,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -148,8 +136,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -161,7 +147,7 @@ public class Tests
 			Visit foundVisit = (Visit)jpa.find(Visit.class, id);
 			ArrayList<Visit> visits = visitsIoOperation.getVisits(foundVisit.getPatient().getCode());
 			// then:
-			assertEquals(foundVisit.getDate(), visits.get(visits.size()-1).getDate());
+			assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(foundVisit.getDate());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -179,7 +165,7 @@ public class Tests
 			ArrayList<Visit> visits = visitsIoOperation.getVisits(0);
 
 			// then:
-			assertEquals(foundVisit.getDate(), visits.get(visits.size()-1).getDate());
+			assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(foundVisit.getDate());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -210,8 +196,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -227,17 +211,15 @@ public class Tests
 			Visit foundVisit = (Visit)jpa.find(Visit.class, id); 
 			result = visitsIoOperation.deleteAllVisits(foundVisit.getPatient().getCode());
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = visitsIoOperation.isCodePresent(id);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -251,8 +233,8 @@ public class Tests
 			id = _setupTestVisit(false);
 			result = visitsIoOperation.findVisit(id);
 
-			assertNotNull(result);
-			assertEquals(id,result.getVisitID());
+			assertThat(result).isNotNull();
+			assertThat(result.getVisitID()).isEqualTo(id);
 		}
 		catch (Exception e)
 		{
@@ -266,7 +248,6 @@ public class Tests
 		testPatientContext.saveAll(jpa);
 		testVisitContext.saveAll(jpa);
         testWardContext.saveAll(jpa);		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
@@ -274,7 +255,6 @@ public class Tests
 		testVisitContext.deleteNews(jpa);
 		testPatientContext.deleteNews(jpa);
         testWardContext.deleteNews(jpa);
-        return;
     }
         
 	private int _setupTestVisit(
@@ -302,7 +282,5 @@ public class Tests
 
 		foundVisit = (Visit)jpa.find(Visit.class, id); 
 		testVisit.check(foundVisit);
-		
-		return;
 	}	
 }

@@ -21,7 +21,7 @@
  */
 package org.isf.dlvrrestype.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.dlvrrestype.model.DeliveryResultType;
 import org.isf.utils.exception.OHException;
@@ -57,16 +57,12 @@ public class TestDeliveryResultType
 	{	
 		deliveryResultType.setCode(code);
 		deliveryResultType.setDescription(description);
-		
-		return;
 	}
 	
 	public void check(
 			DeliveryResultType deliveryResultType) 
 	{		
-    	assertEquals(code, deliveryResultType.getCode());
-    	assertEquals(description, deliveryResultType.getDescription());
-		
-		return;
+    	assertThat(deliveryResultType.getCode()).isEqualTo(code);
+    	assertThat(deliveryResultType.getDescription()).isEqualTo(description);
 	}
 }

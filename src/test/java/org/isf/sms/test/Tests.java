@@ -21,9 +21,7 @@
  */
 package org.isf.sms.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.Date;
@@ -61,8 +59,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testSms = new TestSms();
     	testSmsContext = new TestSmsContext();
-    	
-        return;
     }
 
     @Before
@@ -71,8 +67,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -82,14 +76,12 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
     public static void tearDownClass() throws OHException 
     {
-    	return;
+
     }
 	
 	
@@ -109,8 +101,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -129,8 +119,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -144,7 +132,7 @@ public class Tests
 			Sms sms = testSms.setup(true);
 			result = smsIoOperation.saveOrUpdate(sms);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checksmsIntoDb(sms.getSmsId());
 		} 
 		catch (Exception e) 
@@ -152,8 +140,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -174,8 +160,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -192,15 +176,13 @@ public class Tests
 			Sms foundSms = (Sms)jpa.find(Sms.class, code); 
 			List<Sms> sms = smsIoOperation.getAll(smsDateStart, smsDateEnd);			
 			
-			assertEquals(foundSms.getSmsText(), sms.get(0).getSmsText());
+			assertThat(sms.get(0).getSmsText()).isEqualTo(foundSms.getSmsText());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -215,15 +197,13 @@ public class Tests
 			Sms foundSms = (Sms)jpa.find(Sms.class, code); 
 			List<Sms> sms = smsIoOperation.getList();			
 			
-			assertEquals(foundSms.getSmsText(), sms.get(0).getSmsText());
+			assertThat(sms.get(0).getSmsText()).isEqualTo(foundSms.getSmsText());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -239,15 +219,13 @@ public class Tests
 			smsIoOperation.delete(foundSms);
 			
 			boolean result = smsIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 
@@ -266,15 +244,13 @@ public class Tests
 					foundSms.getModuleID());
 
 			boolean result = smsIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 		
@@ -282,15 +258,11 @@ public class Tests
 	private void _saveContext() throws OHException 
     {	
 		testSmsContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testSmsContext.deleteNews(jpa);
-        
-        return;
     }
     
 	private int _setupTestSms(
@@ -315,7 +287,5 @@ public class Tests
 	
 		foundSms = (Sms)jpa.find(Sms.class, code); 
 		testSms.check(foundSms);
-		
-		return;
 	}	
 }

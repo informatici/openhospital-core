@@ -21,7 +21,7 @@
  */
 package org.isf.menu.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.menu.model.GroupMenu;
 import org.isf.utils.exception.OHException;
@@ -57,16 +57,12 @@ public class TestGroupMenu
 	{	
 		groupMenu.setUserGroup(userGroup);
 		groupMenu.setMenuItem(menuItem);
-		
-		return;
 	}
 	
 	public void check(
 			GroupMenu groupMenu) 
 	{		
-    	assertEquals(userGroup, groupMenu.getUserGroup());
-    	assertEquals(menuItem, groupMenu.getMenuItem());
-		
-		return;
+    	assertThat(groupMenu.getUserGroup()).isEqualTo(userGroup);
+    	assertThat(groupMenu.getMenuItem()).isEqualTo(menuItem);
 	}
 }

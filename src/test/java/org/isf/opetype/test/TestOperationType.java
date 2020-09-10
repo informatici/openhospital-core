@@ -21,7 +21,7 @@
  */
 package org.isf.opetype.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.opetype.model.OperationType;
 import org.isf.utils.exception.OHException;
@@ -57,16 +57,12 @@ public class TestOperationType
 	{	
 		operationType.setCode(code);
 		operationType.setDescription(description);
-		
-		return;
 	}
 	
 	public void check(
 			OperationType operationType) 
 	{		
-    	assertEquals(code, operationType.getCode());
-    	assertEquals(description, operationType.getDescription());
-		
-		return;
+		assertThat(operationType.getCode()).isEqualTo(code);
+    	assertThat(operationType.getDescription()).isEqualTo(description);
 	}
 }

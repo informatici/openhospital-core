@@ -21,7 +21,7 @@
  */
 package org.isf.menu.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.menu.model.UserGroup;
 import org.isf.utils.exception.OHException;
@@ -57,16 +57,12 @@ public class TestUserGroup
 	{	
 		userGroup.setCode(code);
 		userGroup.setDesc(description);
-		
-		return;
 	}
 	
 	public void check(
 			UserGroup userGroup) 
 	{		
-    	assertEquals(code, userGroup.getCode());
-    	assertEquals(description, userGroup.getDesc());
-		
-		return;
+    	assertThat(userGroup.getCode()).isEqualTo(code);
+    	assertThat(userGroup.getDesc()).isEqualTo(description);
 	}
 }

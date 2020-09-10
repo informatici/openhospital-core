@@ -21,9 +21,7 @@
  */
 package org.isf.therapy.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -84,8 +82,6 @@ public class Tests
     	testMedicalContext = new TestMedicalContext();
     	testMedicalType = new TestMedicalType();
     	testMedicalTypeContext = new TestMedicalTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -94,8 +90,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -105,8 +99,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -120,8 +112,6 @@ public class Tests
     	testMedicalContext = null;
     	testMedicalType = null;
     	testMedicalTypeContext = null;
-
-    	return;
     }
 	
 		
@@ -141,8 +131,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -161,8 +149,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -177,15 +163,13 @@ public class Tests
 			TherapyRow foundTherapyRow = (TherapyRow)jpa.find(TherapyRow.class, id); 
 			ArrayList<TherapyRow> therapyRows = therapyIoOperation.getTherapyRows(foundTherapyRow.getPatID().getCode());
 			
-			assertEquals(foundTherapyRow.getNote(), therapyRows.get(therapyRows.size()-1).getNote());
+			assertThat(therapyRows.get(therapyRows.size() - 1).getNote()).isEqualTo(foundTherapyRow.getNote());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -199,7 +183,7 @@ public class Tests
 			ArrayList<TherapyRow> therapyRows = therapyIoOperation.getTherapyRows(0);
 
 			// then:
-			assertEquals(foundTherapyRow.getNote(), therapyRows.get(therapyRows.size()-1).getNote());
+			assertThat(therapyRows.get(therapyRows.size() - 1).getNote()).isEqualTo(foundTherapyRow.getNote());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -232,8 +216,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -249,17 +231,15 @@ public class Tests
 			TherapyRow foundTherapyRow = (TherapyRow)jpa.find(TherapyRow.class, id); 
 			result = therapyIoOperation.deleteAllTherapies(foundTherapyRow.getPatID().getCode());
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = therapyIoOperation.isCodePresent(id);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -276,7 +256,7 @@ public class Tests
 
 			// then:
 			TherapyRow result = (TherapyRow)jpa.find(TherapyRow.class, id);
-			assertEquals(mergedPatient.getCode(), result.getPatID().getCode());
+			assertThat(result.getPatID().getCode()).isEqualTo(mergedPatient.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -299,8 +279,6 @@ public class Tests
 		testMedicalTypeContext.saveAll(jpa);
 		testPatientContext.saveAll(jpa);
 		testTherapyRowContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
@@ -309,8 +287,6 @@ public class Tests
 		testPatientContext.deleteNews(jpa);
 		testMedicalContext.deleteNews(jpa);
 		testMedicalTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private int _setupTestTherapyRow(
@@ -341,7 +317,5 @@ public class Tests
 
 		foundTherapyRow = (TherapyRow)jpa.find(TherapyRow.class, id); 
 		testTherapyRow.check(foundTherapyRow);
-		
-		return;
 	}	
 }

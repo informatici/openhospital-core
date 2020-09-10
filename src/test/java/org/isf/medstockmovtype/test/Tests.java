@@ -21,9 +21,7 @@
  */
 package org.isf.medstockmovtype.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -60,8 +58,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testMovementType = new TestMovementType();
     	testMovementTypeContext = new TestMovementTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -70,8 +66,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -81,14 +75,12 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
     public static void tearDownClass() throws OHException 
     {
-    	return;
+
     }
 	
 		
@@ -108,8 +100,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -128,8 +118,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -144,15 +132,13 @@ public class Tests
 			MovementType foundMovementType = (MovementType)jpa.find(MovementType.class, code); 
 			ArrayList<MovementType> movementTypes = medicalStockMovementTypeIoOperation.getMedicaldsrstockmovType();
 			
-			assertEquals(foundMovementType.getDescription(), movementTypes.get(movementTypes.size()-1).getDescription());
+			assertThat(movementTypes.get(movementTypes.size() - 1).getDescription()).isEqualTo(foundMovementType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -170,16 +156,14 @@ public class Tests
 			result = medicalStockMovementTypeIoOperation.updateMedicaldsrstockmovType(foundMovementType);
 			MovementType updateMovementType = (MovementType)jpa.find(MovementType.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateMovementType.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updateMovementType.getDescription()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -193,7 +177,7 @@ public class Tests
 			MovementType movementType = testMovementType.setup(true);
 			result = medicalStockMovementTypeIoOperation.newMedicaldsrstockmovType(movementType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkMovementTypeIntoDb(movementType.getCode());
 		} 
 		catch (Exception e) 
@@ -201,8 +185,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -217,15 +199,13 @@ public class Tests
 			code = _setupTestMovementType(false);
 			result = medicalStockMovementTypeIoOperation.isCodePresent(code);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -241,32 +221,26 @@ public class Tests
 			MovementType foundMovementType = (MovementType)jpa.find(MovementType.class, code); 
 			result = medicalStockMovementTypeIoOperation.deleteMedicaldsrstockmovType(foundMovementType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = medicalStockMovementTypeIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	
 	private void _saveContext() throws OHException 
     {	
 		testMovementTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testMovementTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestMovementType(
@@ -291,7 +265,5 @@ public class Tests
 
 		foundMovementType = (MovementType)jpa.find(MovementType.class, code); 
 		testMovementType.check(foundMovementType);
-		
-		return;
 	}	
 }

@@ -21,7 +21,7 @@
  */
 package org.isf.exa.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.exa.model.Exam;
 import org.isf.exatype.model.ExamType;
@@ -65,17 +65,13 @@ public class TestExam
 		exam.setExamtype(examtype);
 		exam.setProcedure(procedure);
 		exam.setDefaultResult(defaultResult);
-		
-		return;
 	}
 	
 	public void check(
 			Exam exam) 
 	{		
-    	assertEquals(code, exam.getCode());
-    	assertEquals(description, exam.getDescription());
-    	assertEquals(defaultResult, exam.getDefaultResult());
-		
-		return;
+    	assertThat(exam.getCode()).isEqualTo(code);
+    	assertThat(exam.getDescription()).isEqualTo(description);
+    	assertThat(exam.getDefaultResult()).isEqualTo(defaultResult);
 	}
 }

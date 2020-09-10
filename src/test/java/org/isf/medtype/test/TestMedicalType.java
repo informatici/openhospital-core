@@ -21,7 +21,7 @@
  */
 package org.isf.medtype.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.medtype.model.MedicalType;
 import org.isf.utils.exception.OHException;
@@ -57,16 +57,12 @@ public class TestMedicalType
 	{	
 		medicalType.setCode(code);
 		medicalType.setDescription(description);
-		
-		return;
 	}
 	
 	public void check(
 			MedicalType medicalType) 
 	{		
-    	assertEquals(code, medicalType.getCode());
-    	assertEquals(description, medicalType.getDescription());
-		
-		return;
+    	assertThat(medicalType.getCode()).isEqualTo(code);
+    	assertThat(medicalType.getDescription()).isEqualTo(description);
 	}
 }

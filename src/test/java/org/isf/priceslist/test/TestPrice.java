@@ -21,7 +21,7 @@
  */
 package org.isf.priceslist.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.priceslist.model.Price;
 import org.isf.priceslist.model.PriceList;
@@ -67,18 +67,14 @@ public class TestPrice
 		price.setItem(item);
 		price.setList(list);
 		price.setPrice(priceValue);
-		
-		return;
 	}
 	
 	public void check(
 			Price price) 
 	{		
-		assertEquals(desc, price.getDesc());
-		assertEquals(group, price.getGroup());
-		assertEquals(item, price.getItem());		
-		assertEquals(priceValue, price.getPrice());
-		
-		return;
+		assertThat(price.getDesc()).isEqualTo(desc);
+		assertThat(price.getGroup()).isEqualTo(group);
+		assertThat(price.getItem()).isEqualTo(item);
+		assertThat(price.getPrice()).isEqualTo(priceValue);
 	}
 }

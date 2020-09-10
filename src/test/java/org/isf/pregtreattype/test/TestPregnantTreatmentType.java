@@ -21,7 +21,7 @@
  */
 package org.isf.pregtreattype.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.utils.exception.OHException;
@@ -57,16 +57,12 @@ public class TestPregnantTreatmentType
 	{	
 		pregnantTreatmentType.setCode(code);
 		pregnantTreatmentType.setDescription(description);
-		
-		return;
 	}
 	
 	public void check(
 			PregnantTreatmentType pregnantTreatmentType) 
 	{		
-    	assertEquals(code, pregnantTreatmentType.getCode());
-    	assertEquals(description, pregnantTreatmentType.getDescription());
-		
-		return;
+    	assertThat(pregnantTreatmentType.getCode()).isEqualTo(code);
+    	assertThat(pregnantTreatmentType.getDescription()).isEqualTo(description);
 	}
 }

@@ -21,9 +21,7 @@
  */
 package org.isf.distype.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -59,8 +57,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testDiseaseType = new TestDiseaseType();
     	testDiseaseTypeContext = new TestDiseaseTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -69,8 +65,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -80,8 +74,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -89,8 +81,6 @@ public class Tests
     {
     	testDiseaseType = null;
     	testDiseaseTypeContext = null;
-
-    	return;
     }
 	
 		
@@ -110,8 +100,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -130,8 +118,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -146,15 +132,13 @@ public class Tests
 			DiseaseType foundDiseaseType = (DiseaseType)jpa.find(DiseaseType.class, code); 
 			ArrayList<DiseaseType> diseaseTypes = diseaseTypeIoOperation.getDiseaseTypes();
 
-			assertTrue(diseaseTypes.contains(foundDiseaseType));
+			assertThat(diseaseTypes).contains(foundDiseaseType);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -173,16 +157,14 @@ public class Tests
 			result = diseaseTypeIoOperation.updateDiseaseType(foundDiseaseType);
 			DiseaseType updateDiseaseType = (DiseaseType)jpa.find(DiseaseType.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateDiseaseType.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updateDiseaseType.getDescription()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -196,7 +178,7 @@ public class Tests
 			DiseaseType diseaseType = testDiseaseType.setup(true);
 			result = diseaseTypeIoOperation.newDiseaseType(diseaseType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkDiseaseTypeIntoDb(diseaseType.getCode());
 		} 
 		catch (Exception e) 
@@ -204,8 +186,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -220,15 +200,13 @@ public class Tests
 			code = _setupTestDiseaseType(false);
 			result = diseaseTypeIoOperation.isCodePresent(code);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -245,30 +223,24 @@ public class Tests
 			result = diseaseTypeIoOperation.deleteDiseaseType(foundDiseaseType);
 
 			result = diseaseTypeIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 		
 	
 	private void _saveContext() throws OHException 
     {	
 		testDiseaseTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testDiseaseTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestDiseaseType(
@@ -293,7 +265,5 @@ public class Tests
 
 		foundDiseaseType = (DiseaseType)jpa.find(DiseaseType.class, code); 
 		testDiseaseType.check(foundDiseaseType);
-		
-		return;
 	}	
 }

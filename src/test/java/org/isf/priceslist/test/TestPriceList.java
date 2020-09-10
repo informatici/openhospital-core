@@ -21,7 +21,7 @@
  */
 package org.isf.priceslist.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.priceslist.model.PriceList;
 import org.isf.utils.exception.OHException;
@@ -61,18 +61,14 @@ public class TestPriceList
 		priceList.setCurrency(listCurrency);
 		priceList.setDescription(listDescription);
 		priceList.setName(listName);
-		
-		return;
 	}
 	
 	public void check(
 			PriceList priceList) 
 	{		
-		assertEquals(listCode, priceList.getCode());
-		assertEquals(listCurrency, priceList.getCurrency());
-		assertEquals(listDescription, priceList.getDescription());
-		assertEquals(listName, priceList.getName());
-		
-		return;
+		assertThat(priceList.getCode()).isEqualTo(listCode);
+		assertThat(priceList.getCurrency()).isEqualTo(listCurrency);
+		assertThat(priceList.getDescription()).isEqualTo(listDescription);
+		assertThat(priceList.getName()).isEqualTo(listName);
 	}
 }

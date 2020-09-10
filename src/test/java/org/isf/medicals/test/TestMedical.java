@@ -21,7 +21,8 @@
  */
 package org.isf.medicals.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.data.Offset.offset;
 
 import org.isf.medicals.model.Medical;
 import org.isf.medtype.model.MedicalType;
@@ -72,21 +73,17 @@ public class TestMedical
 		medical.setPcsperpck(pcsperpck);
 		medical.setProd_code(prod_code);
 		medical.setType(medicalType);
-		
-		return;
 	}
 	
 	public void check(
 			Medical medical) 
 	{		
-    	assertEquals(description, medical.getDescription());
-    	assertEquals(initialqty, medical.getInitialqty(), 0.1);
-    	assertEquals(inqty, medical.getInqty(), 0.1);
-    	assertEquals(minqty, medical.getMinqty(), 0.1);
-    	assertEquals(outqty, medical.getOutqty(), 0.1);
-    	assertEquals(pcsperpck, medical.getPcsperpck());
-    	assertEquals(prod_code, medical.getProd_code());
-		
-		return;
+    	assertThat(medical.getDescription()).isEqualTo(description);
+    	assertThat(medical.getInitialqty()).isCloseTo(initialqty, offset(0.1));
+    	assertThat(medical.getInqty()).isCloseTo(inqty, offset(0.1));
+    	assertThat(medical.getMinqty()).isCloseTo(minqty, offset(0.1));
+    	assertThat(medical.getOutqty()).isCloseTo(outqty, offset(0.1));
+    	assertThat(medical.getPcsperpck()).isEqualTo(pcsperpck);
+    	assertThat(medical.getProd_code()).isEqualTo(prod_code);
 	}
 }

@@ -21,9 +21,7 @@
  */
 package org.isf.disctype.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -41,7 +39,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -61,8 +58,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testDischargeType = new TestDischargeType();
     	testDischargeTypeContext = new TestDischargeTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -71,8 +66,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -82,14 +75,12 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
     public static void tearDownClass() throws OHException 
     {
-    	return;
+
     }
 	
 		
@@ -109,8 +100,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -129,8 +118,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -145,15 +132,13 @@ public class Tests
 			DischargeType foundDischargeType = (DischargeType)jpa.find(DischargeType.class, code); 
 			ArrayList<DischargeType> dischargeTypes = dischargeTypeIoOperation.getDischargeType();
 			
-			assertEquals(foundDischargeType.getDescription(), dischargeTypes.get(dischargeTypes.size()-1).getDescription());
+			assertThat(dischargeTypes.get(dischargeTypes.size() - 1).getDescription()).isEqualTo(foundDischargeType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
     
     @Test
@@ -167,7 +152,7 @@ public class Tests
 			DischargeType dischargeType = testDischargeType.setup(true);
 			result = dischargeTypeIoOperation.newDischargeType(dischargeType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkDischargeTypeIntoDb(dischargeType.getCode());
 		} 
 		catch (Exception e) 
@@ -175,8 +160,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -191,15 +174,13 @@ public class Tests
 			code = _setupTestDischargeType(false);
 			result = dischargeTypeIoOperation.isCodePresent(code);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
    
 	@Test
@@ -215,17 +196,15 @@ public class Tests
 			DischargeType foundDischargeType = (DischargeType)jpa.find(DischargeType.class, code); 
 			result = dischargeTypeIoOperation.deleteDischargeType(foundDischargeType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = dischargeTypeIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	 
 	@Test
@@ -243,31 +222,25 @@ public class Tests
 			result = dischargeTypeIoOperation.updateDischargeType(foundDischargeType);
 			DischargeType updateDischargeType = (DischargeType)jpa.find(DischargeType.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateDischargeType.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updateDischargeType.getDescription()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 		
 	
 	private void _saveContext() throws OHException 
     {	
 		testDischargeTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testDischargeTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestDischargeType(
@@ -292,7 +265,5 @@ public class Tests
 
 		foundDischargeType = (DischargeType)jpa.find(DischargeType.class, code); 
 		testDischargeType.check(foundDischargeType);
-		
-		return;
 	}	
 }

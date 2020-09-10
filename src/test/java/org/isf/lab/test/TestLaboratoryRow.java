@@ -21,7 +21,7 @@
  */
 package org.isf.lab.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryRow;
@@ -60,15 +60,11 @@ public class TestLaboratoryRow
 	{	
 		laboratoryRow.setDescription(description);
 		laboratoryRow.setLabId(laboratory);
-		
-		return;
 	}
 	
 	public void check(
 			LaboratoryRow laboratoryRow) 
 	{		
-    	assertEquals(description, laboratoryRow.getDescription());
-		
-		return;
+    	assertThat(laboratoryRow.getDescription()).isEqualTo(description);
 	}
 }

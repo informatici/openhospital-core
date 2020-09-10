@@ -21,10 +21,7 @@
  */
 package org.isf.lab.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -101,16 +98,12 @@ public class Tests {
 		testExamTypeContext = new TestExamTypeContext();
 		testPatient = new TestPatient();
 		testPatientContext = new TestPatientContext();
-
-		return;
 	}
 
 	@Before
 	public void setUp() throws OHException {
 		jpa.open();
 		_saveContext();
-
-		return;
 	}
 
 	@After
@@ -119,8 +112,6 @@ public class Tests {
 
 		jpa.flush();
 		jpa.close();
-
-		return;
 	}
 
 	@AfterClass
@@ -135,8 +126,6 @@ public class Tests {
 		testExamTypeContext = null;
 		testPatient = null;
 		testPatientContext = null;
-
-		return;
 	}
 
 	@Test
@@ -150,8 +139,6 @@ public class Tests {
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
@@ -165,8 +152,6 @@ public class Tests {
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
@@ -180,8 +165,6 @@ public class Tests {
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
@@ -195,8 +178,6 @@ public class Tests {
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
@@ -208,13 +189,11 @@ public class Tests {
 			LaboratoryRow foundLaboratoryRow = (LaboratoryRow) jpa.find(LaboratoryRow.class, id);
 			ArrayList<LaboratoryRow> laboratoryRows = labIoOperation.getLabRow(foundLaboratoryRow.getLabId().getCode());
 
-			assertTrue(laboratoryRows.contains(foundLaboratoryRow));
+			assertThat(laboratoryRows).contains(foundLaboratoryRow);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
@@ -227,13 +206,11 @@ public class Tests {
 			ArrayList<Laboratory> laboratories = labIoOperation
 					.getLaboratory(foundLaboratory.getExam().getDescription(), foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
 
-			assertEquals(foundLaboratory.getCode(), laboratories.get(0).getCode());
+			assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
@@ -247,13 +224,11 @@ public class Tests {
 			ArrayList<Laboratory> laboratories = labIoOperation.getLaboratory(null, foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
 
 			// then:
-			assertEquals(foundLaboratory.getCode(), laboratories.get(0).getCode());
+			assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
@@ -265,13 +240,11 @@ public class Tests {
 			LaboratoryRow foundLaboratoryRow = (LaboratoryRow) jpa.find(LaboratoryRow.class, id);
 			ArrayList<Laboratory> laboratories = labIoOperation.getLaboratory(foundLaboratoryRow.getLabId().getPatient());
 
-			assertEquals(foundLaboratoryRow.getLabId().getCode(), laboratories.get(0).getCode());
+			assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratoryRow.getLabId().getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
@@ -283,12 +256,11 @@ public class Tests {
 			Laboratory foundLaboratory = (Laboratory) jpa.find(Laboratory.class, id);
 			ArrayList<LaboratoryForPrint> laboratories = labIoOperation
 					.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
-			assertEquals(foundLaboratory.getCode(), laboratories.get(0).getCode());
+			assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
-		return;
 	}
 
 	@Test
@@ -305,12 +277,11 @@ public class Tests {
 					.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
 
 			// then:
-			assertEquals(foundLaboratory.getCode(), laboratories.get(0).getCode());
+			assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
-		return;
 	}
 
 	@Test
@@ -325,12 +296,11 @@ public class Tests {
 					.getLaboratoryForPrint(null, foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
 
 			// then:
-			assertEquals(foundLaboratory.getCode(), laboratories.get(0).getCode());
+			assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
-		return;
 	}
 
 	@Test
@@ -350,20 +320,18 @@ public class Tests {
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 			result = labIoOperation.newLabFirstProcedure(laboratory);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkLaboratoryIntoDb(laboratory.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
 	public void testIoNewLabSecondProcedure() {
 		boolean result = false;
-		ArrayList<String> labRow = new ArrayList<String>();
+		ArrayList<String> labRow = new ArrayList<>();
 
 		try {
 			jpa.beginTransaction();
@@ -379,20 +347,18 @@ public class Tests {
 			labRow.add("TestLabRow");
 			result = labIoOperation.newLabSecondProcedure(laboratory, labRow);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkLaboratoryIntoDb(laboratory.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
 	public void testIoNewLabSecondProcedureTransaction() {
 		boolean result = false;
-		ArrayList<String> labRow = new ArrayList<String>();
+		ArrayList<String> labRow = new ArrayList<>();
 		Laboratory laboratory = null;
 
 		try {
@@ -410,13 +376,13 @@ public class Tests {
 			labRow.add("TestLabRowTestLabRowTestLabRowTestLabRowTestLabRowTestLabRow"); // Causing rollback
 			result = labIoOperation.newLabSecondProcedure(laboratory, labRow);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkLaboratoryIntoDb(laboratory.getCode());
 		} catch (OHServiceException e) {
 			logger.debug("==> Voluntary Exception: {}", e);
 			try {
 				Laboratory foundlaboratory = (Laboratory) jpa.find(Laboratory.class, laboratory.getCode());
-				assertNull(foundlaboratory);
+				assertThat(foundlaboratory).isNull();
 			} catch (Exception e1) {
 				logger.debug("==> Test Exception: {}", e);
 				fail();
@@ -425,15 +391,13 @@ public class Tests {
 			logger.debug("==> Test Exception: {}", e);
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
 	public void testManagerNewLaboratoryTransaction() {
 		boolean result = false;
 		Laboratory laboratory = null;
-		ArrayList<Laboratory> laboratories = new ArrayList<Laboratory>();
+		ArrayList<Laboratory> laboratories = new ArrayList<>();
 		ArrayList<ArrayList<String>> labRowList = new ArrayList<ArrayList<String>>();
 
 		try {
@@ -450,7 +414,7 @@ public class Tests {
 			jpa.commitTransaction();
 
 			// laboratory 1, Procedure One
-			ArrayList<String> labRow = new ArrayList<String>();
+			ArrayList<String> labRow = new ArrayList<>();
 			laboratory = testLaboratory.setup(exam, patient, false);
 			laboratories.add(laboratory);
 			labRowList.add(labRow);
@@ -465,7 +429,7 @@ public class Tests {
 			labManager.setIoOperations(labIoOperation);
 			result = labManager.newLaboratory(laboratories, labRowList);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkLaboratoryIntoDb(laboratory.getCode());
 		} catch (OHServiceException e) {
 			logger.debug("==> Voluntary Exception: ");
@@ -473,9 +437,8 @@ public class Tests {
 				logger.debug("    {}", error.getMessage());
 		} catch (Exception e) {
 			logger.debug("==> Test Exception: {}", e);
-			assertEquals(true, false);
+			fail();
 		}
-		return;
 	}
 
 	@Test
@@ -491,20 +454,18 @@ public class Tests {
 			result = labIoOperation.updateLabFirstProcedure(foundlaboratory);
 			Laboratory updateLaboratory = (Laboratory) jpa.find(Laboratory.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateLaboratory.getNote());
+			assertThat(result).isTrue();
+			assertThat(updateLaboratory.getNote()).isEqualTo("Update");
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
 	public void testIoEditLabSecondProcedure() {
 		Integer code = 0;
-		ArrayList<String> labRow = new ArrayList<String>();
+		ArrayList<String> labRow = new ArrayList<>();
 		boolean result = false;
 
 		try {
@@ -514,14 +475,12 @@ public class Tests {
 			result = labIoOperation.updateLabSecondProcedure(foundLaboratoryRow.getLabId(), labRow);
 			LaboratoryRow updateLaboratoryRow = (LaboratoryRow) jpa.find(LaboratoryRow.class, (code + 1));
 
-			assertTrue(result);
-			assertEquals("Update", updateLaboratoryRow.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updateLaboratoryRow.getDescription()).isEqualTo("Update");
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
@@ -534,9 +493,9 @@ public class Tests {
 			Laboratory foundLaboratory = (Laboratory) jpa.find(Laboratory.class, code);
 			result = labIoOperation.deleteLaboratory(foundLaboratory);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = labIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} catch (OHServiceException e) {
 			logger.debug("==> Test Exception: {}", e);
 			e.printStackTrace();
@@ -545,8 +504,6 @@ public class Tests {
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
@@ -562,10 +519,10 @@ public class Tests {
 
 			// then:
 			Laboratory result = (Laboratory) jpa.find(Laboratory.class, id);
-			assertEquals(mergedPatient.getCode(), result.getPatient().getCode());
-			assertEquals(mergedPatient.getName(), result.getPatName());
-			assertEquals(Long.valueOf(mergedPatient.getAge()), Long.valueOf(result.getAge()));
-			assertEquals(String.valueOf(mergedPatient.getSex()), result.getSex());
+			assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
+			assertThat(result.getPatName()).isEqualTo(mergedPatient.getName());
+			assertThat(Long.valueOf(result.getAge())).isEqualTo(Long.valueOf(mergedPatient.getAge()));
+			assertThat(result.getSex()).isEqualTo(String.valueOf(mergedPatient.getSex()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -587,8 +544,6 @@ public class Tests {
 		testExamContext.saveAll(jpa);
 		testExamTypeContext.saveAll(jpa);
 		testPatientContext.saveAll(jpa);
-
-		return;
 	}
 
 	private void _restoreContext() throws OHException {
@@ -597,8 +552,6 @@ public class Tests {
 		testExamContext.deleteNews(jpa);
 		testExamTypeContext.deleteNews(jpa);
 		testPatientContext.deleteNews(jpa);
-
-		return;
 	}
 
 	private Integer _setupTestLaboratory(
@@ -625,8 +578,6 @@ public class Tests {
 
 		foundLaboratory = (Laboratory) jpa.find(Laboratory.class, code);
 		testLaboratory.check(foundLaboratory);
-
-		return;
 	}
 
 	private Integer _setupTestLaboratoryRow(
@@ -655,7 +606,5 @@ public class Tests {
 
 		foundLaboratoryRow = (LaboratoryRow) jpa.find(LaboratoryRow.class, code);
 		testLaboratoryRow.check(foundLaboratoryRow);
-
-		return;
 	}
 }
