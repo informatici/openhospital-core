@@ -130,7 +130,7 @@ public class VaccineTypeBrowserManager {
 	 * @param code - the  {@link VaccineType} code.
 	 * @return the {@link VaccineType}
 	 */
-	public VaccineType findVaccine(String code) throws OHServiceException {
+	public VaccineType findVaccineType(String code) throws OHServiceException {
 		return ioOperations.findVaccineType(code);
 	}
 }
