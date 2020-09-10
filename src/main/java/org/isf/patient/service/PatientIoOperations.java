@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.patient.service;
 
 import org.hibernate.Hibernate;
@@ -158,12 +179,13 @@ public class PatientIoOperations
 
 	/**
 	 * method that check if a Patient is already present in the DB by his/her name
+	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName
 	 * 
 	 * @param name
 	 * @return true - if the patient is already present
 	 * @throws OHServiceException
 	 */
-	public boolean isPatientPresent(String name) throws OHServiceException {
+	public boolean isPatientPresentByName(String name) throws OHServiceException {
 		return repository.findByNameAndDeleted(name, NOT_DELETED_STATUS).size() > 0;
 	}
 
@@ -204,13 +226,4 @@ public class PatientIoOperations
 		return repository.existsById(code);
 	}
 
-	/**
-	 * Get the patient list filter by head patient
-	 * @return patient list
-	 * @throws OHServiceException
-	 */
-	public ArrayList<Patient> getPatientsHeadWithHeightAndWeight() throws OHServiceException {
-		 ArrayList<Patient> pPatient = repository.getPatientsHeadWithHeightAndWeight(); // TODO: findAll?
-		return pPatient;
-	}
 }

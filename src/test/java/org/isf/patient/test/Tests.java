@@ -1,5 +1,25 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.patient.test;
-
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -161,6 +181,25 @@ public class Tests
 
 			// when:
 			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getFirstName());
+
+			// then:
+			testPatient.check(patients.get(0));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void testIoGetPatientsByOneOfFieldsLikeMiddleOfFirstName() {
+		try {
+			// given:
+			Integer code = _setupTestPatient(false);
+			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+
+			// when:
+			ArrayList<Patient> patients = patientIoOperation
+					.getPatientsByOneOfFieldsLike(foundPatient.getFirstName().substring(1, foundPatient.getFirstName().length() - 2));
 
 			// then:
 			testPatient.check(patients.get(0));
@@ -357,7 +396,7 @@ public class Tests
 		{		
 			Integer code = _setupTestPatient(false);
 			Patient foundPatient = (Patient)jpa.find(Patient.class, code); 
-			boolean result = patientIoOperation.isPatientPresent(foundPatient.getName());
+			boolean result = patientIoOperation.isPatientPresentByName(foundPatient.getName());
 
 			assertTrue(result);
 		} 

@@ -17,6 +17,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.framework.version>5.2.8.RELEASE</spring.framework.version>
+		<license.maven.plugin.version>4.0.rc2</license.maven.plugin.version>
 	</properties>
 
 	<build>
@@ -116,6 +117,55 @@
 					</archive>
 					<finalName>OpenHospital20/bin/OH-core</finalName>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>${license.maven.plugin.version}</version>
+				<configuration>
+					<!-- <header>.license-header/license-header.txt</header> -->
+					<licenseSets>
+						<licenseSet>
+							<header>.license-header/license-header.txt</header>
+							<excludes>
+								<exclude>./license-header/**</exclude>
+								<exclude>./ide-settings/eclipse/**</exclude>
+								<exclude>./ide-settings/idea/**</exclude>
+								<exclude>.editorconfig</exclude>
+								<exclude>.springBeans</exclude>
+								<exclude>**/README</exclude>
+								<exclude>doc/**/*.txt</exclude>
+								<exclude>lib/**</exclude>
+								<exclude>mysql/db/**</exclude>
+								<exclude>repo/**</exclude>
+								<exclude>rpt/**</exclude>
+								<exclude>rsc/**</exclude>
+								<exclude>rsc-test/**</exclude>
+								<exclude>src/test/resources/**</exclude>
+								<exclude>src/main/resources/**</exclude>
+								<exclude>**/*.properties</exclude>
+								<exclude>**/*.xml</exclude>
+								<exclude>**/*.yml</exclude>
+								<exclude>**/*.jfd</exclude>
+							</excludes>
+						</licenseSet>
+					</licenseSets>
+					<properties>
+						<owner>Informatici Senza Frontiere</owner>
+						<email>info@informaticisenzafrontiere.org</email>
+						<project.inceptionYear>2006</project.inceptionYear>
+						<project.name>Open Hospital</project.name>
+						<project.url>www.open-hospital.org</project.url>
+						<project.description>Open Hospital is a free and open source software for healthcare data management.</project.description>
+					</properties>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.mycila</groupId>
+						<artifactId>license-maven-plugin-git</artifactId>
+						<version>${license.maven.plugin.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>

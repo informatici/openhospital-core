@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.patient.manager;
 
 import java.util.ArrayList;
@@ -82,8 +103,10 @@ public class PatientBrowserManager {
 	 * @param name
 	 * @return the Patient that match specified name (could be null)
 	 * @throws OHServiceException 
+	 * @deprecated use getPatient(Integer code) for one patient or 
+	 * getPatientWithHeightAndWeight(regex) for a list
 	 */
-	public Patient getPatient(String name) throws OHServiceException {
+	public Patient getPatientByName(String name) throws OHServiceException {
         return ioOperations.getPatient(name);
 	}
 
@@ -94,7 +117,7 @@ public class PatientBrowserManager {
 	 * @return the Patient (could be null)
 	 * @throws OHServiceException 
 	 */
-	public Patient getPatient(Integer code) throws OHServiceException {
+	public Patient getPatientById(Integer code) throws OHServiceException {
         return ioOperations.getPatient(code);
 	}
 	
@@ -242,14 +265,15 @@ public class PatientBrowserManager {
 	}
 	
 	/**
-	 * method that check if a Patient is already present in the DB by his/her name
+	 * method that check if the patient's name is already present in the DB
+	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName
 	 * 
-	 * @param name
+	 * @param name - name of the patient
 	 * @return true - if the patient is already present
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean isPatientPresent(String name) throws OHServiceException {
-        return ioOperations.isPatientPresent(name);
+	public boolean isNamePresent(String name) throws OHServiceException {
+        return ioOperations.isPatientPresentByName(name);
 	}
 	
 	/**
@@ -379,12 +403,4 @@ public class PatientBrowserManager {
         return true;
     }
     
-    /**
-     * 
-     * @return patients list
-     * @throws OHServiceException 
-     */
-    public ArrayList<Patient> getPatientHeadWithHeightAndWeight() throws OHServiceException{
-   		return ioOperations.getPatientsHeadWithHeightAndWeight();
-    }
 }
