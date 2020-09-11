@@ -250,7 +250,7 @@ public class LabIoOperations {
 		int newCode = newLaboratory(laboratory);
 		if (newCode > 0) 
 		{
-			laboratory = repository.getOne(newCode);
+			laboratory = repository.findById(newCode).get();
 			for (LaboratoryRow aLabRow : labRow) {
 				aLabRow.setLabId(laboratory);
 				//laboratoryRow.setDescription(aLabRow);	
@@ -323,7 +323,7 @@ public class LabIoOperations {
 	 */
 	public boolean deleteLaboratory(Laboratory aLaboratory) throws OHServiceException {
 		boolean result = true;
-		Laboratory objToRemove = repository.getOne(aLaboratory.getCode());
+		Laboratory objToRemove = repository.findById(aLaboratory.getCode()).get();
 		
 		if (objToRemove.getExam().getProcedure() == 2) {
 			rowRepository.deleteByLaboratory_Code(objToRemove.getCode());

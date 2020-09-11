@@ -74,7 +74,7 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public Sms getByID(int ID) throws OHServiceException {
-		return repository.getOne(ID);
+		return repository.findById(ID).get();
 	}
 	
 	/**

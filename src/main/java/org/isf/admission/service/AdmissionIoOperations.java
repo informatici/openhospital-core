@@ -114,7 +114,7 @@ public class AdmissionIoOperations
 	 * Load patient together with the profile photo, or <code>null</code> if there is no patient with the given id
 	 */
 	public AdmittedPatient loadAdmittedPatient(final Integer patientId) {
-		Patient patient = patientRepository.getOne(patientId);
+		Patient patient = patientRepository.findById(patientId).get();
 		if (patient == null) {
 			return null;
 		}
@@ -140,7 +140,7 @@ public class AdmissionIoOperations
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public Admission getAdmission(int id) throws OHServiceException {
-		return repository.getOne(id);
+		return repository.findById(id).get();
 	}
 
 	/**
@@ -284,7 +284,7 @@ public class AdmissionIoOperations
 		boolean result = true;
 		
 		
-		Admission foundAdmission = repository.getOne(admissionId);
+		Admission foundAdmission = repository.findById(admissionId).get();
 		foundAdmission.setDeleted("Y");
 		Admission savedAdmission = repository.save(foundAdmission);
 		result = (savedAdmission != null);    	
@@ -319,7 +319,7 @@ public class AdmissionIoOperations
 		boolean result = true;
 		
 		
-		Patient foundPatient = patientRepository.getOne(patientId);
+		Patient foundPatient = patientRepository.findById(patientId).get();
 		if (foundPatient.getPatientProfilePhoto() != null && foundPatient.getPatientProfilePhoto().getPhoto() != null) {
 			foundPatient.getPatientProfilePhoto().setPhoto(null);
 		}

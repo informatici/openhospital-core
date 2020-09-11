@@ -160,7 +160,7 @@ public class WardIoOperations {
 	public Ward findWard(String code) throws OHServiceException
 	{
 		if (code != null) {
-			return repository.getOne(code);
+			return repository.findById(code).get();
 		}else
 			throw new IllegalArgumentException("code must not be null");
 	}

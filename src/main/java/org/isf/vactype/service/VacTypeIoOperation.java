@@ -113,7 +113,7 @@ public class VacTypeIoOperation {
 	public VaccineType findVaccineType(String code) throws OHServiceException 
 	{
 		if (code != null) {
-			return repository.getOne(code);
+			return repository.findById(code).get();
 		}else
 			throw new IllegalArgumentException("code must not be null");
 	} 

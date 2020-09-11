@@ -136,7 +136,7 @@ public class PatientIoOperations
 	 * @throws OHServiceException
 	 */
 	public Patient getPatientAll(Integer code) throws OHServiceException {
-		Patient patient = repository.getOne(code);
+		Patient patient = repository.findById(code).get();
 		if (patient != null) {
 			Hibernate.initialize(patient.getPatientProfilePhoto());
 		}

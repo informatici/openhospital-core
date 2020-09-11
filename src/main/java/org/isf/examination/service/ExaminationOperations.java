@@ -82,7 +82,7 @@ public class ExaminationOperations {
 	}
 
 	public PatientExamination getByID(int ID) throws OHServiceException {
-		return repository.getOne(ID);
+		return repository.findById(ID).get();
 	}
 
 	public PatientExamination getLastByPatID(int patID) throws OHServiceException	{
