@@ -130,7 +130,7 @@ public class DicomIoOperations
 			int patientID,
 			String seriesNumber) throws OHServiceException
 	{
-		FileDicom dicom = repository.getOne(idFile);
+		FileDicom dicom = repository.findById(idFile).get();
 				
 		return dicom;
 	}

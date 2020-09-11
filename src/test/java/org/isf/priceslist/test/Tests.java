@@ -99,7 +99,7 @@ public class Tests
 		ArrayList<PriceList> priceLists = priceListIoOperation.getLists();
 			
 		// then:
-		assertEquals(priceListIoOperationRepository.getOne(id).getName(), priceLists.get(0).getName());
+		assertEquals(priceListIoOperationRepository.findById(id).get().getName(), priceLists.get(0).getName());
 	}
 	
 	@Test
@@ -129,7 +129,7 @@ public class Tests
 		ArrayList<Price> prices = priceListIoOperation.getPrices();
 			
 		// then:
-		assertEquals(priceIoOperationRepository.getOne(id).getPrice(), prices.get(0).getPrice());
+		assertEquals(priceIoOperationRepository.findById(id).get().getPrice(), prices.get(0).getPrice());
 	}
 	
 	@Test
@@ -137,7 +137,7 @@ public class Tests
 		// given:
 		ArrayList<Price> prices = new ArrayList<Price>();
 		int deleteId = _setupTestPrice(false);
-		Price deletePrice = priceIoOperationRepository.getOne(deleteId);
+		Price deletePrice = priceIoOperationRepository.findById(deleteId).get();
 
 		// when:
 		PriceList priceList = deletePrice.getList();
@@ -147,7 +147,7 @@ public class Tests
 		boolean result = priceListIoOperation.updatePrices(priceList, prices);
 
 		// then:
-		Price foundPrice = priceIoOperationRepository.getOne(insertId);
+		Price foundPrice = priceIoOperationRepository.findById(insertId).get();
 		assertTrue(result);
 		assertEquals(priceList.getId(), foundPrice.getList().getId());
 	}
@@ -161,7 +161,7 @@ public class Tests
 		priceListIoOperation.newList(pricelist);
 
 		// then:
-		PriceList foundPriceList = priceListIoOperationRepository.getOne(pricelist.getId());
+		PriceList foundPriceList = priceListIoOperationRepository.findById(pricelist.getId()).get();
 		_checkPriceListIntoDb(foundPriceList.getId());
 	}
 	
@@ -169,7 +169,7 @@ public class Tests
 	public void testIoUpdateList() throws OHException, OHServiceException {
 		// given:
 		int id = _setupTestPriceList(true);
-		PriceList priceList = priceListIoOperationRepository.getOne(id);
+		PriceList priceList = priceListIoOperationRepository.findById(id).get();
 		priceList.setName("NewListName");
 
 		// when:
@@ -183,7 +183,7 @@ public class Tests
 	public void testIoDeleteList() throws OHServiceException, OHException {
 		// given:
 		int id = _setupTestPriceList(true);
-		PriceList priceList = priceListIoOperationRepository.getOne(id);
+		PriceList priceList = priceListIoOperationRepository.findById(id).get();
 
 		// when:
 		priceListIoOperation.deleteList(priceList);
@@ -196,7 +196,7 @@ public class Tests
 	public void testIoCopyList() throws OHException, OHServiceException {
 		// given:
 		int id = _setupTestPrice(true);
-		Price price = priceIoOperationRepository.getOne(id);
+		Price price = priceIoOperationRepository.findById(id).get();
 		PriceList priceList = price.getList();
 
 		// when:
@@ -212,7 +212,7 @@ public class Tests
 	public void testIoCopyListSteps() throws OHException, OHServiceException {
 		// given:
 		int id = _setupTestPrice(true);
-		Price price = priceIoOperationRepository.getOne(id);
+		Price price = priceIoOperationRepository.findById(id).get();
 		PriceList priceList = price.getList();
 
 		// when:
@@ -239,7 +239,7 @@ public class Tests
 		PriceList foundPriceList;
 		
 
-		foundPriceList = priceListIoOperationRepository.getOne(id);
+		foundPriceList = priceListIoOperationRepository.findById(id).get();
 		testPriceList.check(foundPriceList);
 		
 		return;
@@ -258,7 +258,7 @@ public class Tests
 		Price foundPrice;
 		
 		
-		foundPrice = priceIoOperationRepository.getOne(id);
+		foundPrice = priceIoOperationRepository.findById(id).get();
 		testPrice.check(foundPrice);
 		testPriceList.check(foundPrice.getList());
 		

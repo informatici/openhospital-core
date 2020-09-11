@@ -109,6 +109,6 @@ public class VisitsIoOperations {
 	 */
 	public Visit findVisit(int id)
 	{
-		return repository.getOne(id);
+		return repository.findById(id).get();
 	}
 }

@@ -84,7 +84,7 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the bill.
 	 */
 	public Bill getBill(int billID) throws OHServiceException {
-		return billRepository.getOne(billID);
+		return billRepository.findById(billID).get();
 	}
 
 	/**
