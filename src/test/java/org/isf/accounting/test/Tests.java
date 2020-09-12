@@ -33,12 +33,17 @@ import java.util.List;
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
 import org.isf.accounting.model.BillPayments;
+import org.isf.accounting.service.AccountingBillIoOperationRepository;
+import org.isf.accounting.service.AccountingBillItemsIoOperationRepository;
+import org.isf.accounting.service.AccountingBillPaymentIoOperationRepository;
 import org.isf.accounting.service.AccountingIoOperations;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
+import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.test.TestPatient;
 import org.isf.patient.test.TestPatientContext;
 import org.isf.priceslist.model.PriceList;
+import org.isf.priceslist.service.PriceListIoOperationRepository;
 import org.isf.priceslist.test.TestPriceList;
 import org.isf.priceslist.test.TestPriceListContext;
 import org.isf.utils.db.DbJpaUtil;
@@ -60,7 +65,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 public class Tests  
 {
-	private static DbJpaUtil jpa;
 	private static TestBill testBill;
 	private static TestBillItems testBillItems;
 	private static TestBillPayments testBillPayments;
@@ -76,12 +80,22 @@ public class Tests
     AccountingIoOperations accountingIoOperation;
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
+    
+    @Autowired
+    AccountingBillIoOperationRepository accountingBillIoOperationRepository;
+    @Autowired
+    AccountingBillItemsIoOperationRepository accountingBillItemsIoOperationRepository;
+    @Autowired
+    AccountingBillPaymentIoOperationRepository accountingBillPaymentIoOperationRepository;
+    @Autowired
+    PriceListIoOperationRepository priceListIoOperationRepository;
+    @Autowired
+    PatientIoOperationRepository patientIoOperationRepository;
 
 
 	@BeforeClass
     public static void setUpClass()  
     {
-		jpa = new DbJpaUtil();
     	testBill = new TestBill();
     	testBillItems = new TestBillItems();
     	testBillPayments = new TestBillPayments();
@@ -99,22 +113,17 @@ public class Tests
     @Before
     public void setUp() throws OHException
     {
-        jpa.open();
-        
-        _saveContext();
-		
-		return;
-    }
+		accountingBillItemsIoOperationRepository.deleteAll();
+		accountingBillPaymentIoOperationRepository.deleteAll();
+		accountingBillIoOperationRepository.deleteAll();
+		priceListIoOperationRepository.deleteAll();
+		patientIoOperationRepository.deleteAll();
+	}
         
     @After
     public void tearDown() throws Exception 
     {
-        _restoreContext();   
         
-        jpa.flush();
-        jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -260,14 +269,14 @@ public class Tests
 		try {
 			// given:
 			int id = _setupTestBill(false);
-			Bill foundBill = (Bill)jpa.find(Bill.class, id);
+			Bill foundBill = accountingBillIoOperationRepository.findOne(id);
 			Patient mergedPatient = _setupTestPatient(false);
 
 			// when:
 			applicationEventPublisher.publishEvent(new PatientMergedEvent(foundBill.getPatient(), mergedPatient));
 
 			// then:
-			Bill resultBill = (Bill)jpa.find(Bill.class, id);
+			Bill resultBill = accountingBillIoOperationRepository.findOne(id);
 			assertEquals(mergedPatient.getCode(), resultBill.getPatient().getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -284,7 +293,7 @@ public class Tests
 		try 
 		{
 			id = _setupTestBill(false);
-			Bill foundBill = (Bill)jpa.find(Bill.class, id); 
+			Bill foundBill = accountingBillIoOperationRepository.findOne(id);
 			ArrayList<Bill> bills = accountingIoOperation.getPendingBills(0);
 
 			assertTrue(bills.contains(foundBill));
@@ -307,7 +316,7 @@ public class Tests
 		try 
 		{
 			id = _setupTestBill(false);
-			Bill foundBill = (Bill)jpa.find(Bill.class, id); 
+			Bill foundBill = accountingBillIoOperationRepository.findOne(id);
 			ArrayList<Bill> bills = accountingIoOperation.getPendingBills(foundBill.getPatient().getCode());
 			
 			assertEquals(foundBill.getAmount(), bills.get(0).getAmount(), 0.1);
@@ -330,7 +339,7 @@ public class Tests
 		try 
 		{
 			id = _setupTestBill(false);
-			Bill foundBill = (Bill)jpa.find(Bill.class, id); 
+			Bill foundBill = accountingBillIoOperationRepository.findOne(id);
 			ArrayList<Bill> bills = accountingIoOperation.getBills();
 
 			assertTrue(bills.contains(foundBill));
@@ -353,7 +362,7 @@ public class Tests
 		try 
 		{
 			id = _setupTestBill(false);
-			Bill foundBill = (Bill)jpa.find(Bill.class, id); 
+			Bill foundBill = accountingBillIoOperationRepository.findOne(id);
 			Bill bill = accountingIoOperation.getBill(id);
 			
 			assertEquals(foundBill.getAmount(), bill.getAmount(), 0.1);
@@ -377,7 +386,7 @@ public class Tests
 		try 
 		{
 			id = _setupTestBillPayments(false);
-			BillPayments foundBillPayment = (BillPayments)jpa.find(BillPayments.class, id); 
+			BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
 			userIds = accountingIoOperation.getUsers();
 
 			assertTrue(userIds.contains(foundBillPayment.getUser()));
@@ -398,7 +407,7 @@ public class Tests
 		{
 			int billItemID = _setupTestBillItems(false);
 			
-			BillItems foundBillItem = (BillItems)jpa.find(BillItems.class, billItemID); 
+			BillItems foundBillItem = accountingBillItemsIoOperationRepository.findOne(billItemID); 
 			ArrayList<BillItems> billItems = accountingIoOperation.getItems(foundBillItem.getBill().getId());
 
 			assertTrue(billItems.contains(foundBillItem));
@@ -421,7 +430,7 @@ public class Tests
 		try 
 		{
 			id = _setupTestBillItems(false);
-			BillItems foundBillItem = (BillItems)jpa.find(BillItems.class, id); 
+			BillItems foundBillItem = accountingBillItemsIoOperationRepository.findOne(id); 
 			ArrayList<BillItems> billItems = accountingIoOperation.getItems(foundBillItem.getBill().getId());
 			
 			assertEquals(foundBillItem.getItemAmount(), billItems.get(0).getItemAmount(), 0.1);
@@ -444,7 +453,7 @@ public class Tests
 		try 
 		{
 			id = _setupTestBillPayments(false);
-			BillPayments foundBillPayment = (BillPayments)jpa.find(BillPayments.class, id); 
+			BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
 			GregorianCalendar dateFrom = new GregorianCalendar(4, 3, 2);
 			GregorianCalendar dateTo = new GregorianCalendar();
 			ArrayList<BillPayments> billPayments = accountingIoOperation.getPayments(dateFrom, dateTo);
@@ -469,7 +478,7 @@ public class Tests
 		try 
 		{
 			id = _setupTestBillPayments(false);
-			BillPayments foundBillPayment = (BillPayments)jpa.find(BillPayments.class, id); 
+			BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
 			ArrayList<BillPayments> billItems = accountingIoOperation.getPayments(foundBillPayment.getBill().getId());
 			
 			assertEquals(foundBillPayment.getAmount(), billItems.get(0).getAmount(), 0.1);
@@ -497,10 +506,8 @@ public class Tests
 			patient = testPatient.setup(false); 
 			priceList = testPriceList.setup(false);
 			bill = testBill.setup(priceList, patient, false);
-			jpa.beginTransaction();	
-			jpa.persist(priceList);
-			jpa.persist(patient);
-			jpa.commitTransaction();
+			priceListIoOperationRepository.save(priceList);
+			patientIoOperationRepository.save(patient);
 			id = accountingIoOperation.newBill(bill);
 			_checkBillIntoDb(id);
 		} 
@@ -524,7 +531,7 @@ public class Tests
 		try 
 		{
 			deleteId = _setupTestBillItems(false);
-			BillItems deleteBillItem = (BillItems)jpa.find(BillItems.class, deleteId); 
+			BillItems deleteBillItem = accountingBillItemsIoOperationRepository.findOne(deleteId); 
 			
 			Bill bill = deleteBillItem.getBill();
 			BillItems insertBillItem = testBillItems.setup(null, false);
@@ -532,7 +539,7 @@ public class Tests
 			billItems.add(insertBillItem);	
 			result = accountingIoOperation.newBillItems(bill, billItems);
 			
-			BillItems foundBillItems = (BillItems)jpa.find(BillItems.class, insertId);
+			BillItems foundBillItems = accountingBillItemsIoOperationRepository.findOne(insertId);
 			assertTrue(result);
 			assertEquals(bill.getId(), foundBillItems.getBill().getId());		
 		} 
@@ -556,7 +563,7 @@ public class Tests
 		try 
 		{		
 			deleteId = _setupTestBillPayments(false);
-			BillPayments deleteBillPayment = (BillPayments)jpa.find(BillPayments.class, deleteId); 
+			BillPayments deleteBillPayment = accountingBillPaymentIoOperationRepository.findOne(deleteId);
 			
 			Bill bill = deleteBillPayment.getBill();
 			BillPayments insertBillPayment = testBillPayments.setup(null, false);
@@ -564,7 +571,7 @@ public class Tests
 			billPayments.add(insertBillPayment);	
 			result = accountingIoOperation.newBillPayments(bill, billPayments);
 			
-			BillPayments foundBillPayments = (BillPayments)jpa.find(BillPayments.class, insertId);
+			BillPayments foundBillPayments = accountingBillPaymentIoOperationRepository.findOne(insertId);
 			assertTrue(result);
 			assertEquals(bill.getId(), foundBillPayments.getBill().getId());		
 		} 
@@ -586,7 +593,7 @@ public class Tests
 		try 
 		{		
 			id = _setupTestBill(true);
-			Bill bill = (Bill)jpa.find(Bill.class, id); 
+			Bill bill = accountingBillIoOperationRepository.findOne(id);
 			bill.setAmount(12.34);
 			
 			accountingIoOperation.updateBill(bill);
@@ -611,7 +618,7 @@ public class Tests
 		try 
 		{		
 			id = _setupTestBill(true);
-			Bill bill = (Bill)jpa.find(Bill.class, id); 
+			Bill bill = accountingBillIoOperationRepository.findOne(id);
 			
 			boolean result = accountingIoOperation.deleteBill(bill);
 
@@ -635,7 +642,7 @@ public class Tests
 		try 
 		{		
 			id = _setupTestBill(false);
-			Bill foundBill = (Bill)jpa.find(Bill.class, id); 
+			Bill foundBill = accountingBillIoOperationRepository.findOne(id);
 			GregorianCalendar dateFrom = new GregorianCalendar(4, 3, 2);
 			GregorianCalendar dateTo = new GregorianCalendar();
 			ArrayList<Bill> bills = accountingIoOperation.getBills(dateFrom, dateTo);
@@ -662,7 +669,7 @@ public class Tests
 		try 
 		{
 			id = _setupTestBill(false);
-			Bill foundBill = (Bill)jpa.find(Bill.class, id); 
+			Bill foundBill = accountingBillIoOperationRepository.findOne(id);
 			
 			ArrayList<Bill> bills = accountingIoOperation.getBills(dateFrom, dateTo);
 			assertTrue(bills.contains(foundBill));
@@ -674,14 +681,14 @@ public class Tests
 			assertFalse(bills.contains(foundBill));
 			
 			id = _setupTestBillItems(false);
-			BillItems foundBillItem = (BillItems)jpa.find(BillItems.class, id);
-			foundBill = (Bill)jpa.find(Bill.class, foundBillItem.getBill().getId());
+			BillItems foundBillItem = accountingBillItemsIoOperationRepository.findOne(id);
+			foundBill = accountingBillIoOperationRepository.findOne(foundBillItem.getBill().getId());
 			
 			bills = accountingIoOperation.getBills(dateFrom, dateTo, foundBillItem);
 			assertTrue(bills.contains(foundBill));
 
 			id = _setupTestBillItems(true);
-			foundBillItem = (BillItems)jpa.find(BillItems.class, id);
+			foundBillItem = accountingBillItemsIoOperationRepository.findOne(id);
 			
 			bills = accountingIoOperation.getBills(dateFrom, dateTo, foundBillItem);
 			assertTrue(bills.contains(foundBill));
@@ -706,7 +713,7 @@ public class Tests
 		try 
 		{		
 			id = _setupTestBillPayments(false);
-			BillPayments foundBillPayment = (BillPayments)jpa.find(BillPayments.class, id); 
+			BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id); 
 			
 			payments.add(foundBillPayment);	
 			ArrayList<Bill> bills = accountingIoOperation.getBills(payments);
@@ -732,7 +739,7 @@ public class Tests
 		try 
 		{		
 			id = _setupTestBillPayments(false);
-			BillPayments foundBillPayment = (BillPayments)jpa.find(BillPayments.class, id); 
+			BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id); 
 			Bill foundBill = foundBillPayment.getBill(); 
 			
 			bills.add(foundBill);	
@@ -752,32 +759,11 @@ public class Tests
 	@Test
 	public void testIoGetDistictsBillItems() throws OHException, OHServiceException {
 		int id = _setupTestBillItems(false);
-		BillItems foundBillItem = (BillItems)jpa.find(BillItems.class, id);
+		BillItems foundBillItem = accountingBillItemsIoOperationRepository.findOne(id);
 		List<BillItems> billItems = accountingIoOperation.getDistictsBillItems();
 		assertTrue(billItems.contains(foundBillItem));
 	}
-
-	private void _saveContext() throws OHException 
-    {	
-		testBillContext.saveAll(jpa);
-		testBillItemsContext.saveAll(jpa);
-		testBillPaymentsContext.saveAll(jpa);
-		testPatientContext.saveAll(jpa);
-		testPriceListContext.saveAll(jpa);
-        		
-        return;
-    }
 	
-    private void _restoreContext() throws OHException 
-    {
-		testBillPaymentsContext.deleteNews(jpa);
-		testBillItemsContext.deleteNews(jpa);
-		testBillContext.deleteNews(jpa);
-		testPatientContext.deleteNews(jpa);
-		testPriceListContext.deleteNews(jpa);
-        
-        return;
-    }
         
 	private int _setupTestBill(
 			boolean usingSet) throws OHException 
@@ -785,15 +771,11 @@ public class Tests
 		Bill bill;
 		Patient	patient = testPatient.setup(false); 
 		PriceList priceList = testPriceList.setup(false);
-		
-
-    	jpa.beginTransaction();	
     	bill = testBill.setup(priceList, patient, usingSet);
-    	jpa.persist(priceList);
-    	jpa.persist(patient);
-		jpa.persist(bill);
-    	jpa.commitTransaction();
-    	
+		priceListIoOperationRepository.save(priceList);
+		patientIoOperationRepository.save(patient);
+		accountingBillIoOperationRepository.save(bill);
+
 		return bill.getId();
 	}
 		
@@ -803,7 +785,7 @@ public class Tests
 		Bill foundBill;
 		
 
-		foundBill = (Bill)jpa.find(Bill.class, id); 
+		foundBill = accountingBillIoOperationRepository.findOne(id); 
 		testBill.check(foundBill);
 		testPriceList.check(foundBill.getList());
 		testPatient.check(foundBill.getPatient());
@@ -820,13 +802,11 @@ public class Tests
 		Bill bill = testBill.setup(priceList, patient, false);
 		
 
-    	jpa.beginTransaction();	
     	billItem = testBillItems.setup(bill, usingSet);
-    	jpa.persist(priceList);
-    	jpa.persist(patient);
-		jpa.persist(bill);
-		jpa.persist(billItem);
-    	jpa.commitTransaction();
+    	priceListIoOperationRepository.save(priceList);
+    	patientIoOperationRepository.save(patient);
+		accountingBillIoOperationRepository.save(bill);
+		accountingBillItemsIoOperationRepository.save(billItem);
     	
 		return billItem.getId();		
 	}
@@ -837,7 +817,7 @@ public class Tests
 		BillItems foundBillItem;
 		
 
-		foundBillItem = (BillItems)jpa.find(BillItems.class, id); 
+		foundBillItem = accountingBillItemsIoOperationRepository.findOne(id); 
 		testBillItems.check(foundBillItem);
 		testBill.check(foundBillItem.getBill());
 		testPriceList.check(foundBillItem.getBill().getList());
@@ -853,15 +833,12 @@ public class Tests
 		Patient	patient = testPatient.setup(false); 
 		PriceList priceList = testPriceList.setup(false);
 		Bill bill = testBill.setup(priceList, patient, false);
-		
 
-    	jpa.beginTransaction();	
     	billPayment = testBillPayments.setup(bill, usingSet);
-    	jpa.persist(priceList);
-    	jpa.persist(patient);
-		jpa.persist(bill);
-		jpa.persist(billPayment);
-    	jpa.commitTransaction();
+		priceListIoOperationRepository.save(priceList);
+		patientIoOperationRepository.save(patient);
+		accountingBillIoOperationRepository.save(bill);
+		accountingBillPaymentIoOperationRepository.save(billPayment);
     			
 		return billPayment.getId();
 	}
@@ -872,7 +849,7 @@ public class Tests
 		BillPayments foundBillPayment;
 		
 
-		foundBillPayment = (BillPayments)jpa.find(BillPayments.class, id); 
+		foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id); 
 		testBillPayments.check(foundBillPayment);
 		testBill.check(foundBillPayment.getBill());
 		testPriceList.check(foundBillPayment.getBill().getList());
@@ -884,14 +861,8 @@ public class Tests
 	private Patient _setupTestPatient(
 		boolean usingSet) throws OHException
 	{
-		Patient patient;
-
-
-		jpa.beginTransaction();
-		patient = testPatient.setup(usingSet);
-		jpa.persist(patient);
-		jpa.commitTransaction();
-
+		Patient patient = testPatient.setup(usingSet);
+		patientIoOperationRepository.save(patient);
 		return patient;
 	}
 
