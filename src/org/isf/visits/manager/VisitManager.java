@@ -149,7 +149,7 @@ public class VisitManager {
 	 * @param code - the  {@link Visit} id.
 	 * @return the {@link Visit}
 	 */
-	public Visit findVaccine(int id) throws OHServiceException {
+	public Visit findVisit(int id) throws OHServiceException {
 		return ioOperations.findVisit(id);
 	}
 }
