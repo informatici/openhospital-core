@@ -1,6 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.patient;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import org.isf.examination.model.PatientExamination;
@@ -110,38 +131,38 @@ public class MergePatientTests {
 	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) throws OHException {
 		Patient mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode()).get();
 		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).get();
-		assertEquals("Y", obsoletePatientResult.getDeleted());
-		assertEquals("N", mergedPatientResult.getDeleted());
+		assertThat(obsoletePatientResult.getDeleted()).isEqualTo("Y");
+		assertThat(mergedPatientResult.getDeleted()).isEqualTo("N");
 	}
 
 	private void assertThatObsoletePatientWasNotDeletedAndIsTheActiveOne(Patient obsoletePatient) throws OHException {
 		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).get();
-		assertEquals("N", obsoletePatientResult.getDeleted());
+		assertThat(obsoletePatientResult.getDeleted()).isEqualTo("N");
 	}
 
 	private void assertThatVisitWasMovedFromObsoleteToMergedPatient(Visit visit, Patient mergedPatient) throws OHException {
 		Visit visitResult = visitsIoOperationRepository.findById(visit.getVisitID()).get();
-		assertEquals(mergedPatient.getCode(), visitResult.getPatient().getCode());
+		assertThat(visitResult.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 	}
 
 	private void assertThatVisitIsStillAssignedToObsoletePatient(Visit visit, Patient obsoletePatient) throws OHException {
 		Visit visitResult = visitsIoOperationRepository.findById(visit.getVisitID()).get();
-		assertEquals(obsoletePatient.getCode(), visitResult.getPatient().getCode());
+		assertThat(visitResult.getPatient().getCode()).isEqualTo(obsoletePatient.getCode());
 	}
 
 	private void assertThatExaminationWasMovedFromObsoleteToMergedPatient(PatientExamination examination, Patient mergedPatient) throws OHException {
 		PatientExamination patientResult = examinationIoOperationRepository.findById(examination.getPex_ID()).get();
-		assertEquals(mergedPatient.getCode(), patientResult.getPatient().getCode());
+		assertThat(patientResult.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 	}
 
 	private void assertThatExaminationIsStillAssignedToObsoletePatient(PatientExamination patientExamination, Patient obsoletePatient) throws OHException {
 		PatientExamination patientResult = examinationIoOperationRepository.findById(patientExamination.getPex_ID()).get();
-		assertEquals(obsoletePatient.getCode(), patientResult.getPatient().getCode());
+		assertThat(patientResult.getPatient().getCode()).isEqualTo(obsoletePatient.getCode());
 	}
 
 	private void assertThatPatientMergedEventWasSent(Patient mergedPatient, Patient obsoletePatient) {
-		assertEquals(mergedPatient.getCode(), testPatientMergedEventListener.getPatientMergedEvent().getMergedPatient().getCode());
-		assertEquals(obsoletePatient.getCode(), testPatientMergedEventListener.getPatientMergedEvent().getObsoletePatient().getCode());
+		assertThat(testPatientMergedEventListener.getPatientMergedEvent().getMergedPatient().getCode()).isEqualTo(mergedPatient.getCode());
+		assertThat(testPatientMergedEventListener.getPatientMergedEvent().getObsoletePatient().getCode()).isEqualTo(obsoletePatient.getCode());
 	}
 
 	private Visit setupVisitAndAssignPatient(Patient patient) throws OHException {
