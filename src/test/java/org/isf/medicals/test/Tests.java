@@ -21,9 +21,7 @@
  */
 package org.isf.medicals.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -101,8 +99,6 @@ public class Tests
     	testLotContext = new TestLotContext();
     	testSupplier = new TestSupplier();
     	testSupplierContext = new TestSupplierContext();
-    	
-        return;
     }
 
     @Before
@@ -111,8 +107,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -122,8 +116,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -143,8 +135,6 @@ public class Tests
     	testLotContext = null;
     	testSupplier = null;
     	testSupplierContext = null;
-
-    	return;
     }
 	
 	
@@ -164,8 +154,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -184,8 +172,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -200,15 +186,13 @@ public class Tests
 			Medical foundMedical = (Medical)jpa.find(Medical.class, code); 
 			Medical medical = medicalsIoOperations.getMedical(code);
 
-			assertEquals(foundMedical.getCode(), medical.getCode());
+			assertThat(medical.getCode()).isEqualTo(foundMedical.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -223,15 +207,13 @@ public class Tests
 			Medical foundMedical = (Medical)jpa.find(Medical.class, code); 
 			ArrayList<Medical> medicals = medicalsIoOperations.getMedicals(String.valueOf(foundMedical.getDescription()));
 			
-			assertEquals((Integer)code, medicals.get(medicals.size()-1).getCode());
+			assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo((Integer) code);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -246,15 +228,13 @@ public class Tests
 			Medical foundMedical = (Medical)jpa.find(Medical.class, code); 
 			ArrayList<Medical> medicals = medicalsIoOperations.getMedicals(foundMedical.getDescription(), foundMedical.getType().getCode(), false);
 			
-			assertEquals((Integer)code, medicals.get(medicals.size()-1).getCode());
+			assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo((Integer) code);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -270,15 +250,13 @@ public class Tests
 			Medical foundMedical = (Medical)jpa.find(Medical.class, code); 
 			result = medicalsIoOperations.medicalExists(foundMedical, false);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -297,16 +275,14 @@ public class Tests
 			result = medicalsIoOperations.updateMedical(foundMedical);
 			Medical updateMedical = (Medical)jpa.find(Medical.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateMedical.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updateMedical.getDescription()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -324,7 +300,7 @@ public class Tests
 			Medical medical = testMedical.setup(medicalType, true);
 			result = medicalsIoOperations.newMedical(medical);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkMedicalIntoDb(medical.getCode());
 		} 
 		catch (Exception e) 
@@ -332,8 +308,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -349,18 +323,16 @@ public class Tests
 			Medical foundMedical = (Medical)jpa.find(Medical.class, code); 
 			result = medicalsIoOperations.deleteMedical(foundMedical);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			Medical deletedMedical = (Medical)jpa.find(Medical.class, code); 
 			result = medicalsIoOperations.medicalExists(deletedMedical,true);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -376,15 +348,13 @@ public class Tests
 			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
 			result = medicalsIoOperations.isMedicalReferencedInStockMovement(foundMovement.getMedical().getCode());
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}		
 	
 	
@@ -397,8 +367,6 @@ public class Tests
 		testWardContext.saveAll(jpa);
 		testLotContext.saveAll(jpa);
 		testSupplierContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
@@ -410,8 +378,6 @@ public class Tests
 		testWardContext.deleteNews(jpa);
 		testLotContext.deleteNews(jpa);
 		testSupplierContext.deleteNews(jpa);
-        
-        return;
     }
     
 	private int _setupTestMedical(
@@ -438,8 +404,6 @@ public class Tests
 	
 		foundMedical = (Medical)jpa.find(Medical.class, code); 
 		testMedical.check(foundMedical);
-		
-		return;
 	}	
 
     private int _setupTestMovement(

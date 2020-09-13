@@ -21,6 +21,9 @@
  */
 package org.isf.opd.test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,8 +52,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -83,8 +84,6 @@ public class Tests
     	testDiseaseContext = new TestDiseaseContext();
     	testDiseaseType = new TestDiseaseType();
     	testDiseaseTypeContext = new TestDiseaseTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -93,8 +92,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -104,8 +101,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -120,8 +115,6 @@ public class Tests
     	testDiseaseContext = null;
     	testDiseaseType = null;
     	testDiseaseTypeContext = null;
-
-    	return;
     }
 	
 		
@@ -141,8 +134,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -161,8 +152,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -185,15 +174,13 @@ public class Tests
 					foundOpd.getSex(),
 					foundOpd.getNewPatient());			
 						
-			assertEquals(foundOpd.getCode(), opds.get(opds.size()-1).getCode());
+			assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -217,7 +204,7 @@ public class Tests
 	    	opd.setDate(new Date());
 			result = opdIoOperation.newOpd(opd);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkOpdIntoDb(opd.getCode());
 		} 
 		catch (Exception e) 
@@ -225,8 +212,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -246,16 +231,14 @@ public class Tests
 			jpa.open();
 			Opd updateOpd = (Opd)jpa.find(Opd.class, code);
 
-			assertNotNull(result);
-			assertEquals("Update", updateOpd.getNote());
+			assertThat(result).isNotNull();
+			assertThat(updateOpd.getNote()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -271,17 +254,15 @@ public class Tests
 			Opd foundOpd = (Opd)jpa.find(Opd.class, code); 
 			result = opdIoOperation.deleteOpd(foundOpd);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = opdIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -297,15 +278,13 @@ public class Tests
 			progYear = opdIoOperation.getProgYear(0);
 
 			Opd foundOpd = (Opd)jpa.find(Opd.class, code); 
-			assertEquals(foundOpd.getProgYear(), progYear);
+			assertThat(progYear).isEqualTo(foundOpd.getProgYear());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -319,15 +298,13 @@ public class Tests
 			Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), foundOpd.getVisitDate().get(Calendar.YEAR));
 
 			// then:
-			assertTrue(result);
+			assertThat(result).isTrue();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
@@ -341,15 +318,13 @@ public class Tests
 			Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 0);
 
 			// then:
-			assertTrue(result);
+			assertThat(result).isTrue();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
@@ -363,15 +338,13 @@ public class Tests
 			Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 1488);
 
 			// then:
-			assertFalse(result);
+			assertThat(result).isFalse();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			fail();
 		}
-
-		return;
 	}
 
 	@Test
@@ -386,15 +359,13 @@ public class Tests
 			Opd foundOpd = (Opd)jpa.find(Opd.class, code); 
 			Opd lastOpd = opdIoOperation.getLastOpd(foundOpd.getPatient().getCode());
 
-			assertEquals(foundOpd.getCode(), lastOpd.getCode());
+			assertThat(lastOpd.getCode()).isEqualTo(foundOpd.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -410,7 +381,7 @@ public class Tests
 
 			// then:
 			Opd result = (Opd)jpa.find(Opd.class, id);
-			assertEquals(mergedPatient.getCode(), result.getPatient().getCode());
+			assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -433,8 +404,6 @@ public class Tests
 		testDiseaseContext.saveAll(jpa);
 		testDiseaseTypeContext.saveAll(jpa);
 		testDiseaseContext.addMissingKey(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
@@ -443,8 +412,6 @@ public class Tests
 		testPatientContext.deleteNews(jpa);
 		testDiseaseContext.deleteNews(jpa);
 		testDiseaseTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private int _setupTestOpd(
@@ -476,7 +443,5 @@ public class Tests
 
 		foundOpd = (Opd)jpa.find(Opd.class, code); 
 		testOpd.check(foundOpd);
-		
-		return;
 	}	
 }

@@ -21,10 +21,7 @@
  */
 package org.isf.vactype.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -61,8 +58,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testVaccineType = new TestVaccineType();
     	testVaccineTypeContext = new TestVaccineTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -71,8 +66,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -82,14 +75,12 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
     public static void tearDownClass() throws OHException 
     {
-    	return;
+
     }
 	
 		
@@ -109,8 +100,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -129,8 +118,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -145,15 +132,13 @@ public class Tests
 			VaccineType foundVaccineType = (VaccineType)jpa.find(VaccineType.class, code); 
 			ArrayList<VaccineType> vaccineTypes = vaccineTypeIoOperation.getVaccineType();
 			
-			assertEquals(foundVaccineType.getDescription(), vaccineTypes.get(vaccineTypes.size()-1).getDescription());
+			assertThat(vaccineTypes.get(vaccineTypes.size() - 1).getDescription()).isEqualTo(foundVaccineType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -171,16 +156,14 @@ public class Tests
 			result = vaccineTypeIoOperation.updateVaccineType(foundVaccineType);
 			VaccineType updateVaccineType = (VaccineType)jpa.find(VaccineType.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateVaccineType.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updateVaccineType.getDescription()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -194,7 +177,7 @@ public class Tests
 			VaccineType vaccineType = testVaccineType.setup(true);
 			result = vaccineTypeIoOperation.newVaccineType(vaccineType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkVaccineTypeIntoDb(vaccineType.getCode());
 		} 
 		catch (Exception e) 
@@ -202,8 +185,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -218,15 +199,13 @@ public class Tests
 			code = _setupTestVaccineType(false);
 			result = vaccineTypeIoOperation.isCodePresent(code);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -242,17 +221,15 @@ public class Tests
 			VaccineType foundVaccineType = (VaccineType)jpa.find(VaccineType.class, code); 
 			result = vaccineTypeIoOperation.deleteVaccineType(foundVaccineType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = vaccineTypeIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	
@@ -267,8 +244,8 @@ public class Tests
 			code = _setupTestVaccineType(false);
 			result = vaccineTypeIoOperation.findVaccineType(code);
 			
-			assertNotNull(result);
-			assertEquals(code,result.getCode());
+			assertThat(result).isNotNull();
+			assertThat(result.getCode()).isEqualTo(code);
 		} 
 		catch (Exception e) 
 		{
@@ -280,15 +257,11 @@ public class Tests
 	private void _saveContext() throws OHException 
     {	
 		testVaccineTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testVaccineTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestVaccineType(
@@ -313,7 +286,5 @@ public class Tests
 
 		foundVaccineType = (VaccineType)jpa.find(VaccineType.class, code); 
 		testVaccineType.check(foundVaccineType);
-		
-		return;
 	}	
 }

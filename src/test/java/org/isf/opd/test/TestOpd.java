@@ -21,7 +21,7 @@
  */
 package org.isf.opd.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -92,24 +92,20 @@ public class TestOpd
 		opd.setPatient(patient);
 		opd.setDisease(disease);
 		opd.setDisease2(disease);
-		opd.setDisease3(disease);		
-		
-		return;
+		opd.setDisease3(disease);
 	}
 	
 	public void check(
 			Opd opd) 
 	{		
-    	assertEquals(visitDate, opd.getVisitDate());
-    	assertEquals(age, opd.getAge());
-    	assertEquals(sex, opd.getSex());
-    	assertEquals(note, opd.getNote());
-    	assertEquals(prog_year, opd.getProgYear());
-    	assertEquals(newPatient, opd.getNewPatient());
-    	assertEquals(referralFrom, opd.getReferralFrom());
-    	assertEquals(referralTo, opd.getReferralTo());
-    	assertEquals(userID, opd.getUserID());
-		
-		return;
+    	assertThat(opd.getVisitDate()).isEqualTo(visitDate);
+    	assertThat(opd.getAge()).isEqualTo(age);
+    	assertThat(opd.getSex()).isEqualTo(sex);
+    	assertThat(opd.getNote()).isEqualTo(note);
+    	assertThat(opd.getProgYear()).isEqualTo(prog_year);
+    	assertThat(opd.getNewPatient()).isEqualTo(newPatient);
+    	assertThat(opd.getReferralFrom()).isEqualTo(referralFrom);
+    	assertThat(opd.getReferralTo()).isEqualTo(referralTo);
+    	assertThat(opd.getUserID()).isEqualTo(userID);
 	}
 }

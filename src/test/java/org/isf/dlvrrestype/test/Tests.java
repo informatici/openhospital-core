@@ -21,9 +21,7 @@
  */
 package org.isf.dlvrrestype.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import org.isf.dlvrrestype.model.DeliveryResultType;
@@ -58,8 +56,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testDeliveryResultType = new TestDeliveryResultType();
     	testDeliveryResultTypeContext = new TestDeliveryResultTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -68,8 +64,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -79,8 +73,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -88,8 +80,6 @@ public class Tests
     {
     	testDeliveryResultType = null;
     	testDeliveryResultTypeContext = null;
-
-    	return;
     }
 	
 		
@@ -109,8 +99,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -129,8 +117,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -143,15 +129,13 @@ public class Tests
 			code = _setupTestDeliveryResultType(false);
 			DeliveryResultType foundDeliveryResultType = (DeliveryResultType)jpa.find(DeliveryResultType.class, code); 
 			
-			assertEquals("TestDescription", foundDeliveryResultType.getDescription());
+			assertThat(foundDeliveryResultType.getDescription()).isEqualTo("TestDescription");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -169,16 +153,14 @@ public class Tests
 			result = deliveryResultTypeIoOperation.updateDeliveryResultType(foundDeliveryResultType);
 			DeliveryResultType updateDeliveryResultType = (DeliveryResultType)jpa.find(DeliveryResultType.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateDeliveryResultType.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updateDeliveryResultType.getDescription()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -192,7 +174,7 @@ public class Tests
 			DeliveryResultType deliveryResultType = testDeliveryResultType.setup(true);
 			result = deliveryResultTypeIoOperation.newDeliveryResultType(deliveryResultType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkDeliveryResultTypeIntoDb(deliveryResultType.getCode());
 		} 
 		catch (Exception e) 
@@ -200,8 +182,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -216,15 +196,13 @@ public class Tests
 			code = _setupTestDeliveryResultType(false);
 			result = deliveryResultTypeIoOperation.isCodePresent(code);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -241,30 +219,24 @@ public class Tests
 			result = deliveryResultTypeIoOperation.deleteDeliveryResultType(foundDeliveryResultType);
 			
 			result = deliveryResultTypeIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 		
 	
 	private void _saveContext() throws OHException 
     {	
 		testDeliveryResultTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testDeliveryResultTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestDeliveryResultType(
@@ -289,7 +261,5 @@ public class Tests
 
 		foundDeliveryResultType = (DeliveryResultType)jpa.find(DeliveryResultType.class, code); 
 		testDeliveryResultType.check(foundDeliveryResultType);
-		
-		return;
 	}	
 }

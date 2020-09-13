@@ -21,8 +21,7 @@
  */
 package org.isf.agetype.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -59,8 +58,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testAgeType = new TestAgeType();
     	testAgeTypeContext = new TestAgeTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -69,8 +66,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -80,8 +75,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -89,8 +82,6 @@ public class Tests
     {
     	testAgeType = null;
     	testAgeTypeContext = null;
-
-    	return;
     }
 	
 		
@@ -110,8 +101,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -130,8 +119,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -146,15 +133,13 @@ public class Tests
 			AgeType foundAgeType = (AgeType)jpa.find(AgeType.class, code); 
 			ArrayList<AgeType> ageTypes = ageTypeIoOperations.getAgeType();
 			
-			assertEquals(foundAgeType.getDescription(), ageTypes.get(ageTypes.size()-1).getDescription());
+			assertThat(ageTypes.get(ageTypes.size() - 1).getDescription()).isEqualTo(foundAgeType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -170,22 +155,20 @@ public class Tests
 			AgeType foundAgeType = (AgeType)jpa.find(AgeType.class, code); 
 			foundAgeType.setFrom(4);
 			foundAgeType.setTo(40);
-			ArrayList<AgeType> ageTypes = new ArrayList<AgeType>();
+			ArrayList<AgeType> ageTypes = new ArrayList<>();
 			ageTypes.add(foundAgeType);
 			result = ageTypeIoOperations.updateAgeType(ageTypes);
 			AgeType updateAgeType = (AgeType)jpa.find(AgeType.class, code);
 
-			assertTrue(result);
-			assertEquals(4, updateAgeType.getFrom());
-			assertEquals(40, updateAgeType.getTo());
+			assertThat(result).isTrue();
+			assertThat(updateAgeType.getFrom()).isEqualTo(4);
+			assertThat(updateAgeType.getTo()).isEqualTo(40);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -199,32 +182,26 @@ public class Tests
 			AgeType ageType = (AgeType)jpa.find(AgeType.class, code); 
 			AgeType foundAgeType = ageTypeIoOperations.getAgeTypeByCode(9);
 			
-			assertEquals(ageType.getFrom(), foundAgeType.getFrom());
-			assertEquals(ageType.getTo(), foundAgeType.getTo());
-			assertEquals(ageType.getDescription(), foundAgeType.getDescription());
+			assertThat(foundAgeType.getFrom()).isEqualTo(ageType.getFrom());
+			assertThat(foundAgeType.getTo()).isEqualTo(ageType.getTo());
+			assertThat(foundAgeType.getDescription()).isEqualTo(ageType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	
 	private void _saveContext() throws OHException 
     {	
 		testAgeTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testAgeTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestAgeType(
@@ -249,7 +226,5 @@ public class Tests
 
 		foundAgeType = (AgeType)jpa.find(AgeType.class, code); 
 		testAgeType.check(foundAgeType);
-		
-		return;
 	}	
 }

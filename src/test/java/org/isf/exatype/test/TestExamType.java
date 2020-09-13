@@ -21,7 +21,7 @@
  */
 package org.isf.exatype.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.exatype.model.ExamType;
 import org.isf.utils.exception.OHException;
@@ -57,16 +57,12 @@ public class TestExamType
 	{	
 		examType.setCode(code);
 		examType.setDescription(description);
-		
-		return;
 	}
 	
 	public void check(
 			ExamType examType) 
 	{		
-    	assertEquals(code, examType.getCode());
-    	assertEquals(description, examType.getDescription());
-		
-		return;
+    	assertThat(examType.getCode()).isEqualTo(code);
+    	assertThat(examType.getDescription()).isEqualTo(description);
 	}
 }

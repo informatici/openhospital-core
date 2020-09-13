@@ -21,10 +21,7 @@
  */
 package org.isf.ward.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -69,8 +66,6 @@ public class Tests
         jpa.open();
 
         _saveContext();
-
-		return;
     }
 
     @After
@@ -79,13 +74,11 @@ public class Tests
 
         jpa.flush();
         jpa.close();
-
-        return;
     }
     
     @AfterClass
     public static void tearDownClass() throws OHException {
-    	return;
+
     }
 
 	@Test
@@ -121,7 +114,7 @@ public class Tests
 			ArrayList<Ward> wards = wardIoOperation.getWardsNoMaternity();
 
 			// then:
-			assertEquals(foundWard.getDescription(), wards.get(wards.size()-1).getDescription());
+			assertThat(wards.get(wards.size() - 1).getDescription()).isEqualTo(foundWard.getDescription());
 		} catch (Exception e) {
 			e.printStackTrace();		
 			fail();
@@ -139,7 +132,7 @@ public class Tests
 			ArrayList<Ward> wards = wardIoOperation.getWards(code);			
 
 			// then:
-			assertEquals(foundWard.getDescription(), wards.get(0).getDescription());
+			assertThat(wards.get(0).getDescription()).isEqualTo(foundWard.getDescription());
 		} catch (Exception e) {
 			e.printStackTrace();		
 			fail();
@@ -152,7 +145,7 @@ public class Tests
 			Ward ward = testWard.setup(true);
 			boolean result = wardIoOperation.newWard(ward);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkWardIntoDb(ward.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();		
@@ -173,8 +166,8 @@ public class Tests
 			Ward updateWard = wardIoOperationRepository.findById(code).get();
 
 			// then:
-			assertTrue(result);
-			assertEquals("Update", updateWard.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updateWard.getDescription()).isEqualTo("Update");
 		} catch (Exception e) {
 			e.printStackTrace();		
 			fail();
@@ -188,7 +181,7 @@ public class Tests
 			ward.setCode("X");
 			boolean result = wardIoOperation.updateWard(ward);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} catch (Exception e) {
 			e.printStackTrace();		
 			fail();
@@ -206,9 +199,9 @@ public class Tests
 			boolean result = wardIoOperation.deleteWard(foundWard);
 
 			// then:
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = wardIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} catch (Exception e) {
 			e.printStackTrace();		
 			fail();
@@ -221,7 +214,7 @@ public class Tests
 			String code = _setupTestWard(false);
 			boolean result = wardIoOperation.isCodePresent(code);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} catch (Exception e) {
 			e.printStackTrace();		
 			fail();
@@ -234,7 +227,7 @@ public class Tests
 
 		try {
 			result = wardIoOperation.isCodePresent("X");
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} catch (Exception e) {
 			e.printStackTrace();		
 			fail();
@@ -252,7 +245,7 @@ public class Tests
 
 			result = wardIoOperation.isMaternityPresent();
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} catch (Exception e) {
 			e.printStackTrace();		
 			fail();
@@ -270,8 +263,8 @@ public class Tests
 			code = _setupTestWard(false);
 			result = wardIoOperation.findWard(code);
 
-			assertNotNull(result);
-			assertEquals(code,result.getCode());
+			assertThat(result).isNotNull();
+			assertThat(result.getCode()).isEqualTo(code);
 		}
 		catch (Exception e)
 		{
@@ -283,15 +276,11 @@ public class Tests
 	private void _saveContext() throws OHException
     {
 		testWardContext.saveAll(jpa);
-
-        return;
     }
 
     private void _restoreContext() throws OHException
     {
 		testWardContext.deleteNews(jpa);
-
-        return;
     }
 
 	private String _setupTestWard(

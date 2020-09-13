@@ -21,7 +21,7 @@
  */
 package org.isf.operation.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.operation.model.Operation;
 import org.isf.opetype.model.OperationType;
@@ -63,16 +63,12 @@ public class TestOperation
 		operation.setDescription(description);
 		operation.setType(operationType);
 		operation.setMajor(major);
-		
-		return;
 	}
 	
 	public void check(
 			Operation operation) 
 	{		
-    	assertEquals(code, operation.getCode());
-    	assertEquals(description, operation.getDescription());
-		
-		return;
+    	assertThat(operation.getCode()).isEqualTo(code);
+    	assertThat(operation.getDescription()).isEqualTo(description);
 	}
 }

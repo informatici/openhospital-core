@@ -21,7 +21,7 @@
  */
 package org.isf.ward.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
@@ -76,25 +76,21 @@ public class TestWard
 		ward.setNurs(nurs);
 		ward.setPharmacy(isPharmacy);
 		ward.setTelephone(telephone);
-		
-		return;
 	}
 	
 	public void check(
 			Ward ward) 
 	{		
-    	assertEquals(code, ward.getCode());
-    	assertEquals(beds, ward.getBeds());
-    	assertEquals(description, ward.getDescription());
-    	assertEquals(docs, ward.getDocs());
-    	assertEquals(email, ward.getEmail());
-    	assertEquals(fax, ward.getFax());
-    	assertEquals(isFemale, ward.isFemale());
-    	assertEquals(isMale, ward.isMale());
-    	assertEquals(nurs, ward.getNurs());
-    	assertEquals(isPharmacy, ward.isPharmacy());
-    	assertEquals(telephone, ward.getTelephone());
-		
-		return;
+    	assertThat(ward.getCode()).isEqualTo(code);
+    	assertThat(ward.getBeds()).isEqualTo(beds);
+    	assertThat(ward.getDescription()).isEqualTo(description);
+    	assertThat(ward.getDocs()).isEqualTo(docs);
+    	assertThat(ward.getEmail()).isEqualTo(email);
+    	assertThat(ward.getFax()).isEqualTo(fax);
+    	assertThat(ward.isFemale()).isEqualTo(isFemale);
+    	assertThat(ward.isMale()).isEqualTo(isMale);
+    	assertThat(ward.getNurs()).isEqualTo(nurs);
+    	assertThat(ward.isPharmacy()).isEqualTo(isPharmacy);
+    	assertThat(ward.getTelephone()).isEqualTo(telephone);
 	}
 }

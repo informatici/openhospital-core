@@ -54,8 +54,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testDicomType = new TestDicomType();
     	testDicomTypeContext = new TestDicomTypeContext();
-    	
-        return;
     } 
 
     @Before
@@ -64,8 +62,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -75,8 +71,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -84,8 +78,6 @@ public class Tests
     {
     	testDicomType = null;
     	testDicomTypeContext = null;
-
-    	return;
     }
 	
 		
@@ -105,8 +97,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	
@@ -126,23 +116,17 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	
 	private void _saveContext() throws OHException 
     {	
 		testDicomTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testDicomTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestDicomType(
@@ -167,7 +151,5 @@ public class Tests
 
 		foundDicomType = (DicomType)jpa.find(DicomType.class, code); 
 		testDicomType.check(foundDicomType);
-		
-		return;
 	}	
 }

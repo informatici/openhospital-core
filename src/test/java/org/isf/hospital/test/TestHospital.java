@@ -21,7 +21,7 @@
  */
 package org.isf.hospital.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.hospital.model.Hospital;
 import org.isf.utils.exception.OHException;
@@ -69,22 +69,18 @@ public class TestHospital
 		hospital.setEmail(email);
 		hospital.setFax(fax);
 		hospital.setCurrencyCod(currencyCod);
-		
-		return;
 	}
 	
 	public void check(
 			Hospital hospital) 
 	{		
-    	assertEquals(code, hospital.getCode());
-    	assertEquals(description, hospital.getDescription());
-    	assertEquals(address, hospital.getAddress());
-    	assertEquals(city, hospital.getCity());
-    	assertEquals(telephone, hospital.getTelephone());
-    	assertEquals(email, hospital.getEmail());
-    	assertEquals(fax, hospital.getFax());
-    	assertEquals(currencyCod, hospital.getCurrencyCod());
-		
-		return;
+    	assertThat(hospital.getCode()).isEqualTo(code);
+    	assertThat(hospital.getDescription()).isEqualTo(description);
+    	assertThat(hospital.getAddress()).isEqualTo(address);
+    	assertThat(hospital.getCity()).isEqualTo(city);
+    	assertThat(hospital.getTelephone()).isEqualTo(telephone);
+    	assertThat(hospital.getEmail()).isEqualTo(email);
+    	assertThat(hospital.getFax()).isEqualTo(fax);
+    	assertThat(hospital.getCurrencyCod()).isEqualTo(currencyCod);
 	}
 }

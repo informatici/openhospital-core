@@ -21,7 +21,7 @@
  */
 package org.isf.dicomtype.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -63,15 +63,13 @@ public class TestDicomType
 	{	
 		dicomType.setDicomTypeID(dicomTypeId);
 		dicomType.setDicomTypeDescription(dicomTypeDescription);
-		return;
 	}
 	
 	public void check(
 			DicomType dicomType) 
 	{	
-    	assertEquals(dicomTypeId, dicomType.getDicomTypeID());
-    	assertEquals(dicomTypeDescription, dicomType.getDicomTypeDescription());
-		return;
+    	assertThat(dicomType.getDicomTypeID()).isEqualTo(dicomTypeId);
+    	assertThat(dicomType.getDicomTypeDescription()).isEqualTo(dicomTypeDescription);
 	}
 
 	public Blob _createRandomBlob(

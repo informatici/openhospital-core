@@ -21,9 +21,7 @@
  */
 package org.isf.admtype.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -60,8 +58,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testAdmissionType = new TestAdmissionType();
     	testAdmissionTypeContext = new TestAdmissionTypeContext();
-    	
-        return;
     } 
 
     @Before
@@ -70,8 +66,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -81,8 +75,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -90,8 +82,6 @@ public class Tests
     {
     	testAdmissionType = null;
     	testAdmissionTypeContext = null;
-
-    	return;
     }
 	
 		
@@ -111,8 +101,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -131,8 +119,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -144,15 +130,13 @@ public class Tests
 			AdmissionType foundAdmissionType = (AdmissionType)jpa.find(AdmissionType.class, code); 
 			ArrayList<AdmissionType> admissionTypes = admissionTypeIoOperation.getAdmissionType();
 			
-			assertEquals(foundAdmissionType.getDescription(), admissionTypes.get(admissionTypes.size()-1).getDescription());
+			assertThat(admissionTypes.get(admissionTypes.size() - 1).getDescription()).isEqualTo(foundAdmissionType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -171,16 +155,14 @@ public class Tests
 			result = admissionTypeIoOperation.updateAdmissionType(foundAdmissionType);
 			AdmissionType updateAdmissionType = (AdmissionType)jpa.find(AdmissionType.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateAdmissionType.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updateAdmissionType.getDescription()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -194,7 +176,7 @@ public class Tests
 			AdmissionType admissionType = testAdmissionType.setup(true);
 			result = admissionTypeIoOperation.newAdmissionType(admissionType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkAdmissionTypeIntoDb(admissionType.getCode());
 		} 
 		catch (Exception e) 
@@ -202,8 +184,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -224,9 +204,7 @@ public class Tests
 			fail();
 		}
 
-		assertTrue(result);
-		
-		return;
+		assertThat(result).isTrue();
 	}
 
 	@Test
@@ -242,32 +220,26 @@ public class Tests
 			AdmissionType foundAdmissionType = (AdmissionType)jpa.find(AdmissionType.class, code); 
 			result = admissionTypeIoOperation.deleteAdmissionType(foundAdmissionType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = admissionTypeIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	
 	private void _saveContext() throws OHException 
     {	
 		testAdmissionTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testAdmissionTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestAdmissionType(
@@ -292,7 +264,5 @@ public class Tests
 
 		foundAdmissionType = (AdmissionType)jpa.find(AdmissionType.class, code); 
 		testAdmissionType.check(foundAdmissionType);
-		
-		return;
 	}	
 }

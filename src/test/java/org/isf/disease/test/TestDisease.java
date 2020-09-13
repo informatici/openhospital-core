@@ -21,7 +21,7 @@
  */
 package org.isf.disease.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.disease.model.Disease;
 import org.isf.distype.model.DiseaseType;
@@ -61,16 +61,12 @@ public class TestDisease
 		disease.setCode(code);
 		disease.setDescription(description);
 		disease.setType(diseaseType);
-		
-		return;
 	}
 	
 	public void check(
 			Disease disease) 
 	{		
-    	assertEquals(code, disease.getCode());
-    	assertEquals(description, disease.getDescription());
-		
-		return;
+    	assertThat(disease.getCode()).isEqualTo(code);
+    	assertThat(disease.getDescription()).isEqualTo(description);
 	}
 }

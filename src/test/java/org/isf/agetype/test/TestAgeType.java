@@ -21,7 +21,7 @@
  */
 package org.isf.agetype.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.agetype.model.AgeType;
 import org.isf.utils.exception.OHException;
@@ -61,18 +61,14 @@ public class TestAgeType
 		ageType.setFrom(from);
 		ageType.setTo(to);
 		ageType.setDescription(description);
-		
-		return;
 	}
 	
 	public void check(
 			AgeType ageType) 
 	{		
-    	assertEquals(code, ageType.getCode());
-    	assertEquals(from, ageType.getFrom());
-    	assertEquals(to, ageType.getTo());
-    	assertEquals(description, ageType.getDescription());
-		
-		return;
+    	assertThat(ageType.getCode()).isEqualTo(code);
+    	assertThat(ageType.getFrom()).isEqualTo(from);
+    	assertThat(ageType.getTo()).isEqualTo(to);
+    	assertThat(ageType.getDescription()).isEqualTo(description);
 	}
 }

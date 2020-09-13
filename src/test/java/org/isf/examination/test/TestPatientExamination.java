@@ -21,7 +21,7 @@
  */
 package org.isf.examination.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.GregorianCalendar;
 
@@ -87,23 +87,19 @@ public class TestPatientExamination
 		patientExamination.setPex_weight(pex_weight);
 		patientExamination.setPex_auscultation(pex_ausc);
 		patientExamination.setPex_rr(pex_rr);
-		
-		return;
 	}
 	
 	public void check(
 			PatientExamination patientExamination)  
 	{		
 		//assertEquals(pex_date, foundPatientExamination.getPex_date());
-		assertEquals(pex_hr, patientExamination.getPex_hr());
+		assertThat(patientExamination.getPex_hr()).isEqualTo(pex_hr);
 		//assertEquals(pex_height, patientExamination.getPex_height());
-		assertEquals(pex_note, patientExamination.getPex_note());
-		assertEquals(pex_ap_max, patientExamination.getPex_ap_max());
-		assertEquals(pex_ap_min, patientExamination.getPex_ap_min());
+		assertThat(patientExamination.getPex_note()).isEqualTo(pex_note);
+		assertThat(patientExamination.getPex_ap_max()).isEqualTo(pex_ap_max);
+		assertThat(patientExamination.getPex_ap_min()).isEqualTo(pex_ap_min);
 		//assertEquals(pex_sat, foundPatientExamination.getPex_sat());
 		//assertEquals(pex_temp, foundPatientExamination.getPex_temp());
-		assertEquals(pex_weight, patientExamination.getPex_weight());
-		
-		return;
+		assertThat(patientExamination.getPex_weight()).isEqualTo(pex_weight);
 	}	
 }

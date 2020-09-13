@@ -21,7 +21,7 @@
  */
 package org.isf.admission.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -143,32 +143,28 @@ public class TestAdmission
 		admission.setWard(ward);
 		admission.setWeight(weight);
 		admission.setYProg(yProg);
-		
-		return;
 	}
 	
 	public void check(
 			Admission admission) 
 	{		
-    	assertEquals(abortDate, admission.getAbortDate());
-    	assertEquals(admDate, admission.getAdmDate());
-    	assertEquals(admitted, admission.getAdmitted());
-    	assertEquals(ctrlDate1, admission.getCtrlDate1());
-    	assertEquals(ctrlDate2, admission.getCtrlDate2());
-    	assertEquals(deleted, admission.getDeleted());
-    	assertEquals(deliveryDate, admission.getDeliveryDate());
-    	assertEquals(disDate, admission.getDisDate());
-    	assertEquals(FHU, admission.getFHU());
-    	assertEquals(note, admission.getNote());
-    	assertEquals(opDate, admission.getOpDate());
-    	assertEquals(opResult, admission.getOpResult());
-    	assertEquals(transUnit, admission.getTransUnit());
-    	assertEquals(type, admission.getType());
-    	assertEquals(userID, admission.getUserID());
-    	assertEquals(visitDate, admission.getVisitDate());
-    	assertEquals(weight, admission.getWeight());
-    	assertEquals(yProg, admission.getYProg());
-		
-		return;
+    	assertThat(admission.getAbortDate()).isEqualTo(abortDate);
+    	assertThat(admission.getAdmDate()).isEqualTo(admDate);
+    	assertThat(admission.getAdmitted()).isEqualTo(admitted);
+    	assertThat(admission.getCtrlDate1()).isEqualTo(ctrlDate1);
+    	assertThat(admission.getCtrlDate2()).isEqualTo(ctrlDate2);
+    	assertThat(admission.getDeleted()).isEqualTo(deleted);
+    	assertThat(admission.getDeliveryDate()).isEqualTo(deliveryDate);
+    	assertThat(admission.getDisDate()).isEqualTo(disDate);
+    	assertThat(admission.getFHU()).isEqualTo(FHU);
+    	assertThat(admission.getNote()).isEqualTo(note);
+    	assertThat(admission.getOpDate()).isEqualTo(opDate);
+    	assertThat(admission.getOpResult()).isEqualTo(opResult);
+    	assertThat(admission.getTransUnit()).isEqualTo(transUnit);
+    	assertThat(admission.getType()).isEqualTo(type);
+    	assertThat(admission.getUserID()).isEqualTo(userID);
+    	assertThat(admission.getVisitDate()).isEqualTo(visitDate);
+    	assertThat(admission.getWeight()).isEqualTo(weight);
+    	assertThat(admission.getYProg()).isEqualTo(yProg);
 	}
 }

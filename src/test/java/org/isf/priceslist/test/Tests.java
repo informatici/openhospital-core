@@ -21,8 +21,8 @@
  */
 package org.isf.priceslist.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 import java.util.ArrayList;
 
@@ -68,8 +68,6 @@ public class Tests
     	testPriceListContext = new TestPriceListContext();
     	testPrice = new TestPrice();
     	testPriceContext = new TestPriceContext();
-
-        return;
     }
 
     @Before
@@ -86,8 +84,6 @@ public class Tests
     	testPriceListContext = null;
     	testPrice = null;
     	testPriceContext = null;
-
-    	return;
     }
 	
 		
@@ -118,7 +114,7 @@ public class Tests
 		ArrayList<PriceList> priceLists = priceListIoOperation.getLists();
 			
 		// then:
-		assertEquals(priceListIoOperationRepository.findById(id).get().getName(), priceLists.get(0).getName());
+		assertThat(priceLists.get(0).getName()).isEqualTo(priceListIoOperationRepository.findOne(id).getName());
 	}
 	
 	@Test
@@ -148,13 +144,13 @@ public class Tests
 		ArrayList<Price> prices = priceListIoOperation.getPrices();
 			
 		// then:
-		assertEquals(priceIoOperationRepository.findById(id).get().getPrice(), prices.get(0).getPrice());
+		assertThat(prices.get(0).getPrice()).isEqualTo(priceIoOperationRepository.findOne(id).getPrice());
 	}
 	
 	@Test
 	public void testIoUpdatePrices() throws OHException, OHServiceException {
 		// given:
-		ArrayList<Price> prices = new ArrayList<Price>();
+		ArrayList<Price> prices = new ArrayList<>();
 		int deleteId = _setupTestPrice(false);
 		Price deletePrice = priceIoOperationRepository.findById(deleteId).get();
 
@@ -166,9 +162,9 @@ public class Tests
 		boolean result = priceListIoOperation.updatePrices(priceList, prices);
 
 		// then:
-		Price foundPrice = priceIoOperationRepository.findById(insertId).get();
-		assertTrue(result);
-		assertEquals(priceList.getId(), foundPrice.getList().getId());
+		Price foundPrice = priceIoOperationRepository.findOne(insertId);
+		assertThat(result).isTrue();
+		assertThat(foundPrice.getList().getId()).isEqualTo(priceList.getId());
 	}
 		
 	@Test
@@ -195,7 +191,7 @@ public class Tests
 		priceListIoOperation.updateList(priceList);
 
 		// then:
-		assertEquals("NewListName", priceList.getName());
+		assertThat(priceList.getName()).isEqualTo("NewListName");
 	}
 	
 	@Test
@@ -208,7 +204,7 @@ public class Tests
 		priceListIoOperation.deleteList(priceList);
 
 		// then:
-		assertEquals(0, priceListIoOperationRepository.count());
+		assertThat(priceListIoOperationRepository.count()).isZero();
 	}
 	
 	@Test
@@ -223,8 +219,8 @@ public class Tests
 
 		// then:
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
-		assertEquals(id+1, copyPrice.getId());
-		assertEquals(2 * price.getPrice(), copyPrice.getPrice(), 0.10);
+		assertThat(copyPrice.getId()).isEqualTo(id + 1);
+		assertThat(copyPrice.getPrice()).isCloseTo(2 * price.getPrice(), within(0.10D));
 	}
 	
 	@Test
@@ -239,8 +235,8 @@ public class Tests
 
 		// then:
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
-		assertEquals(id+1, copyPrice.getId());
-		assertEquals(Math.round(2 * price.getPrice() / 3) *3, copyPrice.getPrice(), 0.10);
+		assertThat(copyPrice.getId()).isEqualTo(id + 1);
+		assertThat(copyPrice.getPrice()).isCloseTo(Math.round(2 * price.getPrice() / 3) * 3, within(0.10D));
 	}
 
 
@@ -260,8 +256,6 @@ public class Tests
 
 		foundPriceList = priceListIoOperationRepository.findById(id).get();
 		testPriceList.check(foundPriceList);
-		
-		return;
 	}
 	
     private int _setupTestPrice(boolean usingSet) throws OHException {
@@ -280,8 +274,6 @@ public class Tests
 		foundPrice = priceIoOperationRepository.findById(id).get();
 		testPrice.check(foundPrice);
 		testPriceList.check(foundPrice.getList());
-		
-		return;
 	}
 	
 	private int _getListMax() throws OHException 

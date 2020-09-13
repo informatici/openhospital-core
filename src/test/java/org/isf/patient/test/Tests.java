@@ -21,9 +21,7 @@
  */
 package org.isf.patient.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -61,8 +59,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testPatient = new TestPatient();
     	testPatientContext = new TestPatientContext();
-
-        return;
     }
 
     @Before
@@ -71,8 +67,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -82,14 +76,12 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
     public static void tearDownClass() throws OHException 
     {
-    	return;
+
     }
     
 	
@@ -109,8 +101,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 
 	@Test
@@ -129,8 +119,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -148,8 +136,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -168,8 +154,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -276,7 +260,7 @@ public class Tests
 			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
 			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike("dupa");
 
-			assertTrue(patients.isEmpty());
+			assertThat(patients).isEmpty();
 		}
 		catch (Exception e)
 		{
@@ -296,7 +280,7 @@ public class Tests
 			Patient foundPatient = (Patient)jpa.find(Patient.class, code); 
 			Patient patient = patientIoOperation.getPatient(foundPatient.getName());
 			
-			assertEquals(foundPatient.getName(), patient.getName());
+			assertThat(patient.getName()).isEqualTo(foundPatient.getName());
 		} 
 		catch (Exception e) 
 		{
@@ -316,7 +300,7 @@ public class Tests
 			Patient foundPatient = (Patient)jpa.find(Patient.class, code); 
 			Patient patient = patientIoOperation.getPatient(code);
 
-			assertEquals(foundPatient.getName(), patient.getName());
+			assertThat(patient.getName()).isEqualTo(foundPatient.getName());
 		} 
 		catch (Exception e) 
 		{
@@ -340,7 +324,7 @@ public class Tests
 			Patient patient = patientIoOperation.getPatientAll(code);
 			
 			
-			assertEquals(foundPatient.getName(), patient.getName());
+			assertThat(patient.getName()).isEqualTo(foundPatient.getName());
 		} 
 		catch (Exception e) 
 		{
@@ -354,7 +338,7 @@ public class Tests
 	@Test
 	public void testNewPatient() throws OHException {
 		Patient patient = testPatient.setup(true);
-		assertNotNull(patientIoOperation.savePatient(patient));
+		assertThat(patientIoOperation.savePatient(patient)).isNotNull();
 	}
 		
 	@Test
@@ -364,7 +348,7 @@ public class Tests
 		jpa.flush();
 		Patient result = patientIoOperation.savePatient(patient);
 
-		assertNotNull(result);
+		assertThat(result).isNotNull();
 	}
 	
 	@Test
@@ -377,8 +361,8 @@ public class Tests
 			boolean result = patientIoOperation.deletePatient(patient);
 			Patient deletedPatient = _getDeletedPatient(code);
 
-			assertTrue(result);
-			assertEquals(code, deletedPatient.getCode());
+			assertThat(result).isTrue();
+			assertThat(deletedPatient.getCode()).isEqualTo(code);
 		} 
 		catch (Exception e) 
 		{
@@ -398,7 +382,7 @@ public class Tests
 			Patient foundPatient = (Patient)jpa.find(Patient.class, code); 
 			boolean result = patientIoOperation.isPatientPresentByName(foundPatient.getName());
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
@@ -420,7 +404,7 @@ public class Tests
 		{				
 			code = _setupTestPatient(false);
 			max = patientIoOperation.getNextPatientCode();			
-			assertEquals(max, (code + 1), 0.1);
+			assertThat((code + 1)).isEqualTo(max);
 		} 
 		catch (Exception e) 
 		{
@@ -458,8 +442,8 @@ public class Tests
 	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) throws OHException {
 		Patient mergedPatientResult = (Patient) jpa.find(Patient.class, mergedPatient.getCode());
 		Patient obsoletePatientResult = (Patient) jpa.find(Patient.class, obsoletePatient.getCode());
-		assertEquals("Y", obsoletePatientResult.getDeleted());
-		assertEquals("N", mergedPatientResult.getDeleted());
+		assertThat(obsoletePatientResult.getDeleted()).isEqualTo("Y");
+		assertThat(mergedPatientResult.getDeleted()).isEqualTo("N");
 	}
 
 	private void _saveContext() throws OHException 
@@ -498,15 +482,13 @@ public class Tests
 
 		foundPatient = (Patient)jpa.find(Patient.class, code); 
 		testPatient.check(foundPatient);
-		
-		return;
 	}
 		
 	@SuppressWarnings("unchecked")
 	private Patient _getDeletedPatient(
 			Integer Code) throws OHException 
 	{	
-		ArrayList<Object> params = new ArrayList<Object>();
+		ArrayList<Object> params = new ArrayList<>();
 		
 		
 		jpa.beginTransaction();			

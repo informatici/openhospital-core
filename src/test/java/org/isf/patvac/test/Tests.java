@@ -21,9 +21,7 @@
  */
 package org.isf.patvac.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -53,7 +51,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -86,8 +83,6 @@ public class Tests
     	testVaccineContext = new TestVaccineContext();
     	testVaccineType = new TestVaccineType();
     	testVaccineTypeContext = new TestVaccineTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -96,8 +91,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -107,8 +100,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -122,8 +113,6 @@ public class Tests
     	testVaccineContext = null;
     	testVaccineType = null;
     	testVaccineTypeContext = null;
-
-    	return;
     }
 	
 		
@@ -143,8 +132,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 
 	@Test
@@ -163,8 +150,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -186,15 +171,13 @@ public class Tests
 					foundPatientVaccine.getPatient().getAge(),
 					foundPatientVaccine.getPatient().getAge());
 			
-			assertEquals(foundPatientVaccine.getPatName(), patientVaccines.get(patientVaccines.size()-1).getPatName());
+			assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(foundPatientVaccine.getPatName());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -212,16 +195,14 @@ public class Tests
 			result = patvacIoOperation.updatePatientVaccine(foundPatientVaccine);
 			PatientVaccine updatePatientVaccine = (PatientVaccine)jpa.find(PatientVaccine.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updatePatientVaccine.getPatName());
+			assertThat(result).isTrue();
+			assertThat(updatePatientVaccine.getPatName()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -244,7 +225,7 @@ public class Tests
 			PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 			result = patvacIoOperation.newPatientVaccine(patientVaccine);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkPatientVaccineIntoDb(patientVaccine.getCode());
 		} 
 		catch (Exception e) 
@@ -252,8 +233,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -269,17 +248,15 @@ public class Tests
 			PatientVaccine foundPatientVaccine = (PatientVaccine)jpa.find(PatientVaccine.class, code); 
 			result = patvacIoOperation.deletePatientVaccine(foundPatientVaccine);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = patvacIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -296,18 +273,16 @@ public class Tests
 				if (patVac.getProgr() > found_prog_year) found_prog_year = patVac.getProgr();
 			}
 			prog_year = patvacIoOperation.getProgYear(0);
-			assertEquals(found_prog_year, prog_year);
+			assertThat(prog_year).isEqualTo(found_prog_year);
 			
 			prog_year = patvacIoOperation.getProgYear(1984); //TestPatientVaccine's year
-			assertEquals(10, prog_year);
+			assertThat(prog_year).isEqualTo(10);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -323,7 +298,7 @@ public class Tests
 
 			// then:
 			PatientVaccine result = (PatientVaccine)jpa.find(PatientVaccine.class, id);
-			assertEquals(mergedPatient.getCode(), result.getPatient().getCode());
+			assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -346,8 +321,6 @@ public class Tests
 		testVaccineTypeContext.saveAll(jpa);
 		testVaccineContext.saveAll(jpa);
 		testPatientContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
@@ -356,8 +329,6 @@ public class Tests
 		testPatientContext.deleteNews(jpa);
 		testVaccineContext.deleteNews(jpa);
 		testVaccineTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private int _setupTestPatientVaccine(
@@ -388,7 +359,5 @@ public class Tests
 
 		foundPatientVaccine = (PatientVaccine)jpa.find(PatientVaccine.class, code); 
 		testPatientVaccine.check(foundPatientVaccine);
-		
-		return;
 	}	
 }

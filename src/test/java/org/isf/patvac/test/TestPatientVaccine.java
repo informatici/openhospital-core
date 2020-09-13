@@ -21,7 +21,7 @@
  */
 package org.isf.patvac.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -72,17 +72,13 @@ public class TestPatientVaccine
 		patientVaccine.setPatient(patient);
 		patientVaccine.setVaccine(vaccine);
 		patientVaccine.setLock(lock);
-		
-		return;
 	}
 	
 	public void check(
 			PatientVaccine patientVaccine) 
 	{		
-    	assertEquals(lock, patientVaccine.getLock());
-    	assertEquals(progr, patientVaccine.getProgr());
-    	assertEquals(vaccineDate, patientVaccine.getVaccineDate());
-		
-		return;
+    	assertThat(patientVaccine.getLock()).isEqualTo(lock);
+    	assertThat(patientVaccine.getProgr()).isEqualTo(progr);
+    	assertThat(patientVaccine.getVaccineDate()).isEqualTo(vaccineDate);
 	}
 }
