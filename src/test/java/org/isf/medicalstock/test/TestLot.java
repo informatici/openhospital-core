@@ -21,7 +21,8 @@
  */
 package org.isf.medicalstock.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.data.Offset.offset;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -66,17 +67,13 @@ public class TestLot
 		lot.setCost(cost);
 		lot.setDueDate(dueDate);
 		lot.setPreparationDate(preparationDate);
-		
-		return;
 	}
 	
 	public void check(
 			Lot lot) 
 	{		
-    	assertEquals(cost.doubleValue(), lot.getCost().doubleValue(), 0.0);
-    	assertEquals(dueDate, lot.getDueDate());
-    	assertEquals(preparationDate, lot.getPreparationDate());
-		
-		return;
+    	assertThat(lot.getCost().doubleValue()).isCloseTo(cost.doubleValue(), offset(0.0));
+    	assertThat(lot.getDueDate()).isEqualTo(dueDate);
+    	assertThat(lot.getPreparationDate()).isEqualTo(preparationDate);
 	}
 }

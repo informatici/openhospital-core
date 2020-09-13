@@ -21,7 +21,7 @@
  */
 package org.isf.dicom.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -120,36 +120,32 @@ public class TestDicom
 		dicom.setPatId(patId);
 		dicom.setModality(modality);
 		dicom.setDicomType(dicomType);
-		
-		return;
 	}
 	
 	public void check(
 			FileDicom dicom) 
 	{
-    	assertEquals(dicomAccessionNumber, dicom.getDicomAccessionNumber());
-    	assertEquals(dicomInstanceUID, dicom.getDicomInstanceUID());
-    	assertEquals(dicomInstitutionName, dicom.getDicomInstitutionName());
-    	assertEquals(dicomPatientAddress, dicom.getDicomPatientAddress());
-    	assertEquals(dicomPatientAge, dicom.getDicomPatientAge());
-    	assertEquals(dicomPatientBirthDate, dicom.getDicomPatientBirthDate());
-    	assertEquals(dicomPatientID, dicom.getDicomPatientID());
-    	assertEquals(dicomPatientName, dicom.getDicomPatientName());
-    	assertEquals(dicomPatientSex, dicom.getDicomPatientSex());
-    	assertEquals(formatter.format(dicomSeriesDate), formatter.format(dicom.getDicomSeriesDate()));
-    	assertEquals(dicomSeriesDescription, dicom.getDicomSeriesDescription());
-    	assertEquals(dicomSeriesDescriptionCodeSequence, dicom.getDicomSeriesDescriptionCodeSequence());
-    	assertEquals(dicomSeriesInstanceUID, dicom.getDicomSeriesInstanceUID());
-    	assertEquals(dicomSeriesNumber, dicom.getDicomSeriesNumber());
-    	assertEquals(dicomSeriesUID, dicom.getDicomSeriesUID());
-    	assertEquals(formatter.format(dicomStudyDate), formatter.format(dicom.getDicomStudyDate()));
-    	assertEquals(dicomStudyDescription, dicom.getDicomStudyDescription());
-    	assertEquals(dicomStudyId, dicom.getDicomStudyId());
-    	assertEquals(fileName, dicom.getFileName());
-    	assertEquals(patId, dicom.getPatId());
-    	assertEquals(modality, dicom.getModality());
-		
-		return;
+    	assertThat(dicom.getDicomAccessionNumber()).isEqualTo(dicomAccessionNumber);
+    	assertThat(dicom.getDicomInstanceUID()).isEqualTo(dicomInstanceUID);
+    	assertThat(dicom.getDicomInstitutionName()).isEqualTo(dicomInstitutionName);
+    	assertThat(dicom.getDicomPatientAddress()).isEqualTo(dicomPatientAddress);
+    	assertThat(dicom.getDicomPatientAge()).isEqualTo(dicomPatientAge);
+    	assertThat(dicom.getDicomPatientBirthDate()).isEqualTo(dicomPatientBirthDate);
+    	assertThat(dicom.getDicomPatientID()).isEqualTo(dicomPatientID);
+    	assertThat(dicom.getDicomPatientName()).isEqualTo(dicomPatientName);
+    	assertThat(dicom.getDicomPatientSex()).isEqualTo(dicomPatientSex);
+    	assertThat(formatter.format(dicom.getDicomSeriesDate())).isEqualTo(formatter.format(dicomSeriesDate));
+    	assertThat(dicom.getDicomSeriesDescription()).isEqualTo(dicomSeriesDescription);
+    	assertThat(dicom.getDicomSeriesDescriptionCodeSequence()).isEqualTo(dicomSeriesDescriptionCodeSequence);
+    	assertThat(dicom.getDicomSeriesInstanceUID()).isEqualTo(dicomSeriesInstanceUID);
+    	assertThat(dicom.getDicomSeriesNumber()).isEqualTo(dicomSeriesNumber);
+    	assertThat(dicom.getDicomSeriesUID()).isEqualTo(dicomSeriesUID);
+    	assertThat(formatter.format(dicom.getDicomStudyDate())).isEqualTo(formatter.format(dicomStudyDate));
+    	assertThat(dicom.getDicomStudyDescription()).isEqualTo(dicomStudyDescription);
+    	assertThat(dicom.getDicomStudyId()).isEqualTo(dicomStudyId);
+    	assertThat(dicom.getFileName()).isEqualTo(fileName);
+    	assertThat(dicom.getPatId()).isEqualTo(patId);
+    	assertThat(dicom.getModality()).isEqualTo(modality);
 	}
 
 	public Blob _createRandomBlob(

@@ -21,7 +21,7 @@
  */
 package org.isf.disctype.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.disctype.model.DischargeType;
 import org.isf.utils.exception.OHException;
@@ -57,16 +57,12 @@ public class TestDischargeType
 	{	
 		dischargeType.setCode(code);
 		dischargeType.setDescription(description);
-		
-		return;
 	}
 	
 	public void check(
 			DischargeType dischargeType) 
 	{		
-    	assertEquals(code, dischargeType.getCode());
-    	assertEquals(description, dischargeType.getDescription());
-		
-		return;
+    	assertThat(dischargeType.getCode()).isEqualTo(code);
+    	assertThat(dischargeType.getDescription()).isEqualTo(description);
 	}
 }

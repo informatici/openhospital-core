@@ -21,7 +21,7 @@
  */
 package org.isf.medstockmovtype.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.utils.exception.OHException;
@@ -59,17 +59,13 @@ public class TestMovementType
 		movementType.setCode(code);
 		movementType.setDescription(description);
 		movementType.setType(type);
-		
-		return;
 	}
 	
 	public void check(
 			MovementType movementType) 
 	{		
-    	assertEquals(code, movementType.getCode());
-    	assertEquals(description, movementType.getDescription());
-    	assertEquals(type, movementType.getType());
-		
-		return;
+    	assertThat(movementType.getCode()).isEqualTo(code);
+    	assertThat(movementType.getDescription()).isEqualTo(description);
+    	assertThat(movementType.getType()).isEqualTo(type);
 	}
 }

@@ -21,7 +21,8 @@
  */
 package org.isf.medicalstockward.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
@@ -68,16 +69,12 @@ public class TestMedicalWard
 		medicalward.setInQuantity(in_quantity);
 		medicalward.setOutQuantity(out_quantity);
 		medicalward.setLot(lot);
-		
-		return;
 	}
 	
 	public void check(
 			MedicalWard medicalward) 
 	{		
-    	assertEquals(in_quantity, medicalward.getInQuantity(), 0.1);
-    	assertEquals(out_quantity, medicalward.getOutQuantity(), 0.1);
-		
-		return;
+    	assertThat(medicalward.getInQuantity()).isCloseTo(in_quantity, within(0.1F));
+    	assertThat(medicalward.getOutQuantity()).isCloseTo(out_quantity, within(0.1F));
 	}
 }

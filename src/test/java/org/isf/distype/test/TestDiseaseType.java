@@ -21,7 +21,7 @@
  */
 package org.isf.distype.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.distype.model.DiseaseType;
 import org.isf.utils.exception.OHException;
@@ -57,16 +57,12 @@ public class TestDiseaseType
 	{	
 		diseaseType.setCode(code);
 		diseaseType.setDescription(description);
-		
-		return;
 	}
 	
 	public void check(
 			DiseaseType diseaseType) 
 	{		
-    	assertEquals(code, diseaseType.getCode());
-    	assertEquals(description, diseaseType.getDescription());
-		
-		return;
+    	assertThat(diseaseType.getCode()).isEqualTo(code);
+    	assertThat(diseaseType.getDescription()).isEqualTo(description);
 	}
 }

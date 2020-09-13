@@ -21,10 +21,7 @@
  */
 package org.isf.vaccine.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -67,8 +64,6 @@ public class Tests
     	testVaccineContext = new TestVaccineContext();
     	testVaccineType = new TestVaccineType();
     	testVaccineTypeContext = new TestVaccineTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -77,8 +72,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -88,8 +81,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -99,8 +90,6 @@ public class Tests
     	testVaccineContext = null;
     	testVaccineType = null;
     	testVaccineTypeContext = null;
-
-    	return;
     }
 	
 		
@@ -120,8 +109,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -140,8 +127,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -151,7 +136,7 @@ public class Tests
 			Vaccine foundVaccine = (Vaccine)jpa.find(Vaccine.class, code); 
 			ArrayList<Vaccine> vaccines = vaccineIoOperation.getVaccine(foundVaccine.getVaccineType().getCode());
 			
-			assertEquals(foundVaccine.getDescription(), vaccines.get(vaccines.size()-1).getDescription());
+			assertThat(vaccines.get(vaccines.size() - 1).getDescription()).isEqualTo(foundVaccine.getDescription());
 		} 
 		catch (Exception e) 
 		{
@@ -171,7 +156,7 @@ public class Tests
 			ArrayList<Vaccine> vaccines = vaccineIoOperation.getVaccine(null);
 
 			// then:
-			assertFalse(vaccines.isEmpty());
+			assertThat(vaccines).isNotEmpty();
 		}
 		catch (Exception e)
 		{
@@ -196,16 +181,14 @@ public class Tests
 			result = vaccineIoOperation.updateVaccine(foundVaccine);
 			Vaccine updateVaccine = (Vaccine)jpa.find(Vaccine.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateVaccine.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updateVaccine.getDescription()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -224,7 +207,7 @@ public class Tests
 			Vaccine vaccine = testVaccine.setup(vaccineType, true);
 			result = vaccineIoOperation.newVaccine(vaccine);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkVaccineIntoDb(vaccine.getCode());
 		} 
 		catch (Exception e) 
@@ -232,8 +215,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -249,17 +230,15 @@ public class Tests
 			Vaccine foundVaccine = (Vaccine)jpa.find(Vaccine.class, code); 
 			result = vaccineIoOperation.deleteVaccine(foundVaccine);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = vaccineIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -274,15 +253,13 @@ public class Tests
 			code = _setupTestVaccine(false);
 			result = vaccineIoOperation.isCodePresent(code);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	
@@ -297,8 +274,8 @@ public class Tests
 			code = _setupTestVaccine(false);
 			result = vaccineIoOperation.findVaccine(code);
 			
-			assertNotNull(result);
-			assertEquals(code,result.getCode());
+			assertThat(result).isNotNull();
+			assertThat(result.getCode()).isEqualTo(code);
 		} 
 		catch (Exception e) 
 		{
@@ -312,16 +289,12 @@ public class Tests
     {	
 		testVaccineContext.saveAll(jpa);
 		testVaccineTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testVaccineContext.deleteNews(jpa);
 		testVaccineTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestVaccine(
@@ -348,7 +321,5 @@ public class Tests
 
 		foundVaccine = (Vaccine)jpa.find(Vaccine.class, code); 
 		testVaccine.check(foundVaccine);
-		
-		return;
 	}	
 }

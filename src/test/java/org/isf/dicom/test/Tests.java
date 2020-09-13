@@ -21,6 +21,9 @@
  */
 package org.isf.dicom.test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+
 import org.aspectj.util.FileUtil;
 import org.dcm4che2.data.DicomObject;
 import org.dcm4che2.data.Tag;
@@ -53,14 +56,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Properties;
-
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -92,8 +90,6 @@ public class Tests
     	testFileDicomContext = new TestDicomContext();
     	testDicomType = new TestDicomType();
     	testDicomTypeContext = new TestDicomTypeContext();
-    	
-        return;
     } 
 
     @Before
@@ -105,8 +101,6 @@ public class Tests
 		dicomType = testDicomType.setup(true);
 		dicomFile = testFileDicom.setup(dicomType, true);
         _saveContext();
-		
-		return;
     }
 
 	private Properties _getDicomProperties(){
@@ -123,8 +117,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -133,8 +125,6 @@ public class Tests
     	testFileDicom = null;
     	testFileDicomContext = null;
 		_deleteSavedDicomFile();
-
-		return;
     }
 
 	private static void _deleteSavedDicomFile() {
@@ -160,8 +150,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	
@@ -181,8 +169,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	
@@ -198,15 +184,13 @@ public class Tests
 			FileDicom foundFileDicom = (FileDicom)jpa.find(FileDicom.class, code); 
 			Long[] dicoms = dicomIoOperation.getSerieDetail(foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
 			
-			assertEquals(1, dicoms.length);
+			assertThat(dicoms).hasSize(1);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 
@@ -223,17 +207,15 @@ public class Tests
 			FileDicom foundFileDicom = (FileDicom)jpa.find(FileDicom.class, code); 
 			result = dicomIoOperation.deleteSerie(foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = dicomIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	
@@ -250,16 +232,14 @@ public class Tests
 			FileDicom dicom = dicomIoOperation.loadDetails(foundFileDicom.getIdFile(), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
 			FileDicom dicom2 = dicomIoOperation.loadDetails(new Long(foundFileDicom.getIdFile()), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
 			
-			assertEquals(dicom.getDicomInstanceUID(), dicom2.getDicomInstanceUID());
-			assertEquals(foundFileDicom.getDicomSeriesDescription(), dicom.getDicomSeriesDescription());
+			assertThat(dicom2.getDicomInstanceUID()).isEqualTo(dicom.getDicomInstanceUID());
+			assertThat(dicom.getDicomSeriesDescription()).isEqualTo(foundFileDicom.getDicomSeriesDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 
@@ -268,7 +248,7 @@ public class Tests
 		long code = _setupTestFileDicom(false);
 		FileDicom foundFileDicom = (FileDicom) jpa.find(FileDicom.class, code);
 		FileDicom[] dicoms = dicomIoOperation.loadPatientFiles(foundFileDicom.getPatId());
-		assertEquals(foundFileDicom.getDicomSeriesDescription(), dicoms[0].getDicomSeriesDescription());
+		assertThat(dicoms[0].getDicomSeriesDescription()).isEqualTo(foundFileDicom.getDicomSeriesDescription());
 	}
 
 	
@@ -285,16 +265,13 @@ public class Tests
 			FileDicom foundFileDicom = (FileDicom)jpa.find(FileDicom.class, code); 
 			result = dicomIoOperation.exist(foundFileDicom);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		
-		return;
 	}
 	
 		
@@ -312,15 +289,13 @@ public class Tests
 			dicomIoOperation.saveFile(foundFileDicom);
 			FileDicom updateFileDicom = (FileDicom)jpa.find(FileDicom.class, code); 
 			
-			assertEquals("Update", updateFileDicom.getDicomSeriesDescription());
+			assertThat(updateFileDicom.getDicomSeriesDescription()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 
@@ -338,8 +313,8 @@ public class Tests
 		Properties dicomProperties = new Properties();
 		dicomProperties.load(fr);
 		fr.close();
-		assertEquals(3, dicomFileDir.listFiles().length);
-		assertEquals("TestInteanceUid",  dicomProperties.getProperty("dicomInstanceUID"));
+		assertThat(dicomFileDir.listFiles()).hasSize(3);
+		assertThat(dicomProperties.getProperty("dicomInstanceUID")).isEqualTo("TestInteanceUid");
 
 
 		return false;
@@ -348,7 +323,7 @@ public class Tests
 	@Test
 	public void testLoadPatientFiles() throws OHServiceException {
 		FileDicom[] fileDicoms = fileSystemDicomManager.loadPatientFiles(PATIENT_ID);
-		assertTrue(fileDicoms.length > 0);
+		assertThat(fileDicoms.length).isGreaterThan(0);
 
 	}
 
@@ -365,21 +340,21 @@ public class Tests
 	@Test
 	public void testGetSerieDetail() throws OHServiceException {
 		Long[] result = fileSystemDicomManager.getSerieDetail(PATIENT_ID, "TestSeriesNumber");
-		assertTrue(result.length > 0);
+		assertThat(result.length).isGreaterThan(0);
 	}
 
 
 	@Test
 	public void tesExist() throws OHServiceException {
 		boolean fileExits = fileSystemDicomManager.exist(dicomFile);
-		assertTrue(fileExits);
+		assertThat(fileExits).isTrue();
 	}
 
 	@Test
 	public void testExistWhenDicomFileNoExist() throws OHServiceException {
 		FileDicom dicomFile = new FileDicom();
 		boolean fileExits = fileSystemDicomManager.exist(dicomFile);
-		assertFalse(fileExits);
+		assertThat(fileExits).isFalse();
 	}
 
 
@@ -393,20 +368,20 @@ public class Tests
 		dicomFile.setPatId(idPaziente);
 		fileSystemDicomManager.saveFile(dicomFile);
 		boolean serieDeleted = fileSystemDicomManager.deleteSerie(idPaziente, "SeriesNumber");
-		assertTrue(serieDeleted);
+		assertThat(serieDeleted).isTrue();
 	}
 
 
 	@Test
 	public void testDicomManagerFactoryGetManager() throws OHDicomException {
 		DicomManagerInterface manager = DicomManagerFactory.getManager();
-		assertThat(manager, instanceOf(FileSystemDicomManager.class));
+		assertThat(manager).isInstanceOf(FileSystemDicomManager.class);
 	}
 
 	@Test
 	public void testDicomManagerFactoryGetMaxDicomSize() throws OHDicomException {
 		String maxDicomSize = DicomManagerFactory.getMaxDicomSize();
-		assertEquals("4M", maxDicomSize);
+		assertThat(maxDicomSize).isEqualTo("4M");
 	}
 
 
@@ -414,13 +389,13 @@ public class Tests
 	@Test
 	public void testDicomManagerFactoryGetMaxDicomSizeLong() throws OHDicomException {
 		Long maxDicomSize = DicomManagerFactory.getMaxDicomSizeLong();
-		assertEquals(_4M, maxDicomSize);
+		assertThat(maxDicomSize).isEqualTo(_4M);
 	}
 
 	@Test
 	public void testSourceFilesGenerateSeriesNumber() throws OHServiceException {
 		String seriesNumber = SourceFiles.generateSeriesNumber(PATIENT_ID);
-		assertFalse(seriesNumber.isEmpty());
+		assertThat(seriesNumber).isNotEmpty();
 
 	}
 
@@ -428,9 +403,9 @@ public class Tests
 	public void testSourceFilesLoadDicom() throws Exception {
 		File file = _getFile("case3c_002.dcm");
 		SourceFiles.loadDicom(dicomFile, file, PATIENT_ID);
-		assertEquals("case3c_002.dcm", dicomFile.getFileName());
-		assertEquals("Anonymized Hospital", dicomFile.getDicomInstitutionName());
-		assertEquals("MRT Oberbauch", dicomFile.getDicomStudyDescription());
+		assertThat(dicomFile.getFileName()).isEqualTo("case3c_002.dcm");
+		assertThat(dicomFile.getDicomInstitutionName()).isEqualTo("Anonymized Hospital");
+		assertThat(dicomFile.getDicomStudyDescription()).isEqualTo("MRT Oberbauch");
 
 	}
 	@Test
@@ -438,7 +413,7 @@ public class Tests
 		File file = _getFile("image.0007.jpg");
 		SourceFiles.loadDicom(dicomFile, file, PATIENT_ID);
 		String fileName = dicomFile.getFileName();
-		assertEquals("image.0007.jpg", fileName);
+		assertThat(fileName).isEqualTo("image.0007.jpg");
 
 
 	}
@@ -452,10 +427,10 @@ public class Tests
 
 		FileDicom dicomFile = SourceFiles.preLoadDicom(file, 1);
 
-		assertEquals("case3c_002.dcm", dicomFile.getFileName());
-		assertEquals(1, dicomFile.getFrameCount());
-		assertTrue(_areDatesEquals(expectedStudyDate, dicomFile.getDicomStudyDate()));
-		assertTrue(_areDatesEquals(expectedSeriesDate, dicomFile.getDicomSeriesDate()));
+		assertThat(dicomFile.getFileName()).isEqualTo("case3c_002.dcm");
+		assertThat(dicomFile.getFrameCount()).isEqualTo(1);
+		assertThat(_areDatesEquals(expectedStudyDate, dicomFile.getDicomStudyDate())).isTrue();
+		assertThat(_areDatesEquals(expectedSeriesDate, dicomFile.getDicomSeriesDate())).isTrue();
 
 	}
 
@@ -477,7 +452,7 @@ public class Tests
 	public void testSourceFilesCountFiles() throws Exception {
 		File file = _getFile("dicomdir");
 		int count = SourceFiles.countFiles(file, 1);
-		assertTrue(count > 0);
+		assertThat(count).isGreaterThan(0);
 
 	}
 
@@ -494,16 +469,12 @@ public class Tests
     {
 		testFileDicomContext.saveAll(jpa);
 		testDicomTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testFileDicomContext.deleteNews(jpa);
 		testDicomTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private long _setupTestFileDicom(
@@ -531,7 +502,5 @@ public class Tests
 
 		foundFileDicom = (FileDicom)jpa.find(FileDicom.class, code); 
 		testFileDicom.check(foundFileDicom);
-		
-		return;
 	}	
 }

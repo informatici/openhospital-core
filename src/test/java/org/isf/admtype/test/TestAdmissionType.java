@@ -21,7 +21,7 @@
  */
 package org.isf.admtype.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.admtype.model.AdmissionType;
 import org.isf.utils.exception.OHException;
@@ -57,16 +57,12 @@ public class TestAdmissionType
 	{	
 		admissionType.setCode(code);
 		admissionType.setDescription(description);
-		
-		return;
 	}
 	
 	public void check(
 			AdmissionType admissionType) 
 	{		
-    	assertEquals(code, admissionType.getCode());
-    	assertEquals(description, admissionType.getDescription());
-		
-		return;
+    	assertThat(admissionType.getCode()).isEqualTo(code);
+    	assertThat(admissionType.getDescription()).isEqualTo(description);
 	}
 }

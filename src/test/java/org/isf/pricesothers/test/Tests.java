@@ -21,9 +21,7 @@
  */
 package org.isf.pricesothers.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 
@@ -88,7 +86,7 @@ public class Tests {
 		ArrayList<PricesOthers> result = otherIoOperation.getOthers();
 
 		// then:
-		assertEquals(foundPricesOthers.getDescription(), result.get(0).getDescription());
+		assertThat(result.get(0).getDescription()).isEqualTo(foundPricesOthers.getDescription());
 	}
 
 	@Test
@@ -103,8 +101,8 @@ public class Tests {
 		PricesOthers updatePricesOthers = repository.findOne(id);
 
 		// then:
-		assertTrue(result);
-		assertEquals("Update", updatePricesOthers.getDescription());
+		assertThat(result).isTrue();
+		assertThat(updatePricesOthers.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
@@ -116,7 +114,7 @@ public class Tests {
 		boolean result = otherIoOperation.newOthers(pricesOthers);
 
 		// then:
-		assertTrue(result);
+		assertThat(result).isTrue();
 		_checkPricesOthersIntoDb(pricesOthers.getId());
 	}
 
@@ -130,8 +128,8 @@ public class Tests {
 		boolean result = otherIoOperation.deleteOthers(foundPricesOthers);
 
 		// then:
-		assertTrue(result);
-		assertFalse(repository.exists(id));
+		assertThat(result).isTrue();
+		assertThat(repository.exists(id)).isFalse();
 	}
 
 	private int _setupTestPricesOthers(boolean usingSet) throws OHException {

@@ -21,7 +21,7 @@
  */
 package org.isf.sms.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -74,22 +74,21 @@ public class TestSms
 		sms.setSmsNumber(smsNumber);
 		sms.setSmsText(smsText);
 		sms.setSmsUser(smsUser);
-		
-		return;
 	}
 	
 	public void check(
 			Sms sms) 
 	{		
-    	assertEquals(module, sms.getModule());
-    	assertEquals(moduleID, sms.getModuleID());
-    	assertEquals(smsDate, sms.getSmsDate());
-    	assertEquals(smsDateSched, sms.getSmsDateSched());
-    	assertEquals(smsDateSent, sms.getSmsDateSent());
-    	assertEquals(smsNumber, sms.getSmsNumber());
-    	assertEquals(smsText, sms.getSmsText());
-    	assertEquals(smsUser, sms.getSmsUser());
-    			
-		return;
+    	assertThat(sms.getModule()).isEqualTo(module);
+    	assertThat(sms.getModuleID()).isEqualTo(moduleID);
+    	assertThat(sms.getSmsDate()).isInSameDayAs(smsDate);
+    	assertThat(sms.getSmsDateSched()).isInSameDayAs(smsDateSched);
+    	if (sms.getSmsDateSent() == null)
+    		assertThat(smsDateSent).isNull();
+    	else
+    	    assertThat(sms.getSmsDateSent()).isInSameDayAs(smsDateSent);
+    	assertThat(sms.getSmsNumber()).isEqualTo(smsNumber);
+    	assertThat(sms.getSmsText()).isEqualTo(smsText);
+    	assertThat(sms.getSmsUser()).isEqualTo(smsUser);
 	}
 }

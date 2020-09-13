@@ -21,7 +21,7 @@
  */
 package org.isf.menu.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.menu.model.UserMenuItem;
 import org.isf.utils.exception.OHException;
@@ -72,23 +72,19 @@ public class TestUserMenu
 		userMenuItem.setPosition(position);
 		userMenuItem.setShortcut(shortcut);
 		userMenuItem.setTooltip(tooltip);
-		
-		return;
 	}
 	
 	public void check(
 			UserMenuItem userMenuItem) 
 	{		
-    	assertEquals(code, userMenuItem.getCode());
-    	assertEquals(altLabel, userMenuItem.getAltLabel());
-    	assertEquals(buttonLabel, userMenuItem.getButtonLabel());
-    	assertEquals(isASubMenu, userMenuItem.isASubMenu());
-    	assertEquals(myClass, userMenuItem.getMyClass());
-    	assertEquals(mySubmenu, userMenuItem.getMySubmenu());
-    	assertEquals(position, userMenuItem.getPosition());
-    	assertEquals(shortcut, userMenuItem.getShortcut());
-    	assertEquals(tooltip, userMenuItem.getTooltip());
-		
-		return;
+    	assertThat(userMenuItem.getCode()).isEqualTo(code);
+    	assertThat(userMenuItem.getAltLabel()).isEqualTo(altLabel);
+    	assertThat(userMenuItem.getButtonLabel()).isEqualTo(buttonLabel);
+    	assertThat(userMenuItem.isASubMenu()).isEqualTo(isASubMenu);
+    	assertThat(userMenuItem.getMyClass()).isEqualTo(myClass);
+    	assertThat(userMenuItem.getMySubmenu()).isEqualTo(mySubmenu);
+    	assertThat(userMenuItem.getPosition()).isEqualTo(position);
+    	assertThat(userMenuItem.getShortcut()).isEqualTo(shortcut);
+    	assertThat(userMenuItem.getTooltip()).isEqualTo(tooltip);
 	}
 }

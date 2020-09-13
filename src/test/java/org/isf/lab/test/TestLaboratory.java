@@ -21,7 +21,7 @@
  */
 package org.isf.lab.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -90,23 +90,19 @@ public class TestLaboratory
 		laboratory.setPatName(patName);
 		laboratory.setResult(result);
 		laboratory.setSex(sex);
-		
-		return;
 	}
 	
 	public void check(
 			Laboratory laboratory) 
 	{		
-    	assertEquals(age, laboratory.getAge());		
-    	assertEquals(registrationDate, laboratory.getDate());	
-    	assertEquals(examDate, laboratory.getExamDate());
-    	assertEquals(InOutPatient, laboratory.getInOutPatient());
-    	assertEquals(material, laboratory.getMaterial());		
-    	assertEquals(note, laboratory.getNote());	
-    	assertEquals(patName, laboratory.getPatName());		
-    	assertEquals(result, laboratory.getResult());	
-    	assertEquals(sex, laboratory.getSex());		
-		
-		return;
+    	assertThat(laboratory.getAge()).isEqualTo(age);
+    	assertThat(laboratory.getDate()).isEqualTo(registrationDate);
+    	assertThat(laboratory.getExamDate()).isEqualTo(examDate);
+    	assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
+    	assertThat(laboratory.getMaterial()).isEqualTo(material);
+    	assertThat(laboratory.getNote()).isEqualTo(note);
+    	assertThat(laboratory.getPatName()).isEqualTo(patName);
+    	assertThat(laboratory.getResult()).isEqualTo(result);
+    	assertThat(laboratory.getSex()).isEqualTo(sex);
 	}
 }

@@ -21,9 +21,7 @@
  */
 package org.isf.pregtreattype.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -41,7 +39,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -61,8 +58,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testPregnantTreatmentType = new TestPregnantTreatmentType();
     	testPregnantTreatmentTypeContext = new TestPregnantTreatmentTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -71,8 +66,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -82,14 +75,12 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
     public static void tearDownClass() throws OHException 
     {
-    	return;
+
     }
 	
 		
@@ -109,8 +100,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -129,8 +118,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -147,7 +134,7 @@ public class Tests
 
             for (PregnantTreatmentType pregnantTreatmentType : pregnantTreatmentTypes) {
                 if (pregnantTreatmentType.getCode().equals(code)) {
-                    assertEquals(foundPregnantTreatmentType.getDescription(), pregnantTreatmentType.getDescription());
+                    assertThat(pregnantTreatmentType.getDescription()).isEqualTo(foundPregnantTreatmentType.getDescription());
                 }
             }
 		} 
@@ -156,8 +143,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -175,16 +160,14 @@ public class Tests
 			result = pregnantTreatmentTypeIoOperation.updatePregnantTreatmentType(foundPregnantTreatmentType);
 			PregnantTreatmentType updatePregnantTreatmentType = (PregnantTreatmentType)jpa.find(PregnantTreatmentType.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updatePregnantTreatmentType.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updatePregnantTreatmentType.getDescription()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -198,7 +181,7 @@ public class Tests
 			PregnantTreatmentType pregnantTreatmentType = testPregnantTreatmentType.setup(true);
 			result = pregnantTreatmentTypeIoOperation.newPregnantTreatmentType(pregnantTreatmentType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkPregnantTreatmentTypeIntoDb(pregnantTreatmentType.getCode());
 		} 
 		catch (Exception e) 
@@ -206,8 +189,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -222,15 +203,13 @@ public class Tests
 			code = _setupTestPregnantTreatmentType(false);
 			result = pregnantTreatmentTypeIoOperation.isCodePresent(code);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -246,32 +225,26 @@ public class Tests
 			PregnantTreatmentType foundPregnantTreatmentType = (PregnantTreatmentType)jpa.find(PregnantTreatmentType.class, code); 
 			result = pregnantTreatmentTypeIoOperation.deletePregnantTreatmentType(foundPregnantTreatmentType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = pregnantTreatmentTypeIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 		
 	
 	private void _saveContext() throws OHException 
     {	
 		testPregnantTreatmentTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testPregnantTreatmentTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestPregnantTreatmentType(
@@ -297,7 +270,5 @@ public class Tests
 
 		foundPregnantTreatmentType = (PregnantTreatmentType)jpa.find(PregnantTreatmentType.class, code); 
 		testPregnantTreatmentType.check(foundPregnantTreatmentType);
-		
-		return;
 	}	
 }

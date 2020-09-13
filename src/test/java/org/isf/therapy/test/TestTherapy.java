@@ -21,7 +21,7 @@
  */
 package org.isf.therapy.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.GregorianCalendar;
 
@@ -82,23 +82,19 @@ public class TestTherapy
 		therapyRow.setSms(sms);
 		therapyRow.setStartDate(startDate);
 		therapyRow.setUnitID(unitID);
-				
-		return;
 	}
 	
 	public void check(
 			TherapyRow therapyRow) 
 	{		
-    	assertEquals(endDate,therapyRow.getEndDate());
-    	assertEquals(freqInDay,therapyRow.getFreqInDay());
-    	assertEquals(freqInPeriod,therapyRow.getFreqInPeriod());
-    	assertEquals(note,therapyRow.getNote());
-    	assertEquals(notify,therapyRow.isNotify());
-    	assertEquals(qty,therapyRow.getQty());
-    	assertEquals(sms,therapyRow.isSms());
-    	assertEquals(startDate,therapyRow.getStartDate());
-    	assertEquals(unitID,therapyRow.getUnitID());	
-		
-		return;
+    	assertThat(therapyRow.getEndDate()).isEqualTo(endDate);
+    	assertThat(therapyRow.getFreqInDay()).isEqualTo(freqInDay);
+    	assertThat(therapyRow.getFreqInPeriod()).isEqualTo(freqInPeriod);
+    	assertThat(therapyRow.getNote()).isEqualTo(note);
+    	assertThat(therapyRow.isNotify()).isEqualTo(notify);
+    	assertThat(therapyRow.getQty()).isEqualTo(qty);
+    	assertThat(therapyRow.isSms()).isEqualTo(sms);
+    	assertThat(therapyRow.getStartDate()).isEqualTo(startDate);
+    	assertThat(therapyRow.getUnitID()).isEqualTo(unitID);
 	}
 }

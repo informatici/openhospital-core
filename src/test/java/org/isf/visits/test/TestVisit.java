@@ -21,7 +21,7 @@
  */
 package org.isf.visits.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.GregorianCalendar;
 
@@ -73,18 +73,15 @@ public class TestVisit
 		visit.setPatient(patient);
 		visit.setSms(sms);
 		visit.setWard(ward);
-				
-		return;
 	}
 	
 	public void check(
 			Visit visit) 
 	{		
-    	assertEquals(date,visit.getDate());
-    	assertEquals(note,visit.getNote());
-    	assertEquals(sms,visit.isSms());
-		assertEquals(ward, visit.getWard());
-		assertEquals(patient, visit.getPatient());
-		return;
+    	assertThat(visit.getDate()).isEqualTo(date);
+    	assertThat(visit.getNote()).isEqualTo(note);
+    	assertThat(visit.isSms()).isEqualTo(sms);
+		assertThat(visit.getWard()).isEqualTo(ward);
+		assertThat(visit.getPatient()).isEqualTo(patient);
 	}
 }

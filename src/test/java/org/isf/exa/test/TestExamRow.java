@@ -21,7 +21,7 @@
  */
 package org.isf.exa.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.exa.model.Exam;
 import org.isf.exa.model.ExamRow;
@@ -59,15 +59,11 @@ public class TestExamRow
 	{	
 		examRow.setDescription(description);
 		examRow.setExamCode(exam);
-		
-		return;
 	}
 	
 	public void check(
 			ExamRow examRow) 
 	{		
-    	assertEquals(description, examRow.getDescription());
-		
-		return;
+    	assertThat(examRow.getDescription()).isEqualTo(description);
 	}
 }

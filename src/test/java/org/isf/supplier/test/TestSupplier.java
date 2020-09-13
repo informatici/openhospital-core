@@ -21,7 +21,7 @@
  */
 package org.isf.supplier.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.supplier.model.Supplier;
 import org.isf.utils.exception.OHException;
@@ -69,22 +69,18 @@ public class TestSupplier
 		supplier.setSupNote(supNote);
 		supplier.setSupPhone(supPhone);
 		supplier.setSupTaxcode(supTaxcode);
-		
-		return;
 	}
 	
 	public void check(
 			Supplier supplier) 
 	{		
-    	assertEquals(supAddress, supplier.getSupAddress());
-    	assertEquals(supDeleted, supplier.getSupDeleted());
-    	assertEquals(supEmail, supplier.getSupEmail());
-    	assertEquals(supFax, supplier.getSupFax());
-    	assertEquals(supName, supplier.getSupName());
-    	assertEquals(supNote, supplier.getSupNote());
-    	assertEquals(supPhone, supplier.getSupPhone());
-    	assertEquals(supTaxcode, supplier.getSupTaxcode());
-		
-		return;
+    	assertThat(supplier.getSupAddress()).isEqualTo(supAddress);
+    	assertThat(supplier.getSupDeleted()).isEqualTo(supDeleted);
+    	assertThat(supplier.getSupEmail()).isEqualTo(supEmail);
+    	assertThat(supplier.getSupFax()).isEqualTo(supFax);
+    	assertThat(supplier.getSupName()).isEqualTo(supName);
+    	assertThat(supplier.getSupNote()).isEqualTo(supNote);
+    	assertThat(supplier.getSupPhone()).isEqualTo(supPhone);
+    	assertThat(supplier.getSupTaxcode()).isEqualTo(supTaxcode);
 	}
 }

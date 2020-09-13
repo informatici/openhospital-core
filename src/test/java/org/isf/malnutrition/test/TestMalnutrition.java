@@ -21,7 +21,8 @@
  */
 package org.isf.malnutrition.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -66,18 +67,14 @@ public class TestMalnutrition
 		malnutrition.setDateSupp(dateSupp);
 		malnutrition.setHeight(height);
 		malnutrition.setWeight(weight);
-		
-		return;
 	}
 	
 	public void check(
 			Malnutrition malnutrition) 
 	{		
-    	assertEquals(dateConf, malnutrition.getDateConf());
-    	assertEquals(dateSupp, malnutrition.getDateSupp());
-    	assertEquals(height, malnutrition.getHeight(), 0.1);
-    	assertEquals(weight, malnutrition.getWeight(), 0.1);
-		
-		return;
+    	assertThat(malnutrition.getDateConf()).isEqualTo(dateConf);
+    	assertThat(malnutrition.getDateSupp()).isEqualTo(dateSupp);
+    	assertThat(malnutrition.getHeight()).isCloseTo(height, within(0.1F));
+    	assertThat(malnutrition.getWeight()).isCloseTo(weight, within(0.1F));
 	}
 }

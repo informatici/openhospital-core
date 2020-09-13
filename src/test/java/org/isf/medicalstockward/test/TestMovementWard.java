@@ -21,7 +21,8 @@
  */
 package org.isf.medicalstockward.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -92,21 +93,17 @@ public class TestMovementWard
 		movementWard.setWardFrom(wardFrom);
 		movementWard.setWardTo(wardTo);
 		movementWard.setlot(lot);
-		
-		return;
 	}
 	
 	public void check(
 			MovementWard movementWard) 
 	{		
-    	assertEquals(age, movementWard.getAge());
-    	assertEquals(date, movementWard.getDate());
-    	assertEquals(description, movementWard.getDescription());
-    	assertEquals(isPatient, movementWard.isPatient());
-    	assertEquals(quantity, movementWard.getQuantity());
-    	assertEquals(units, movementWard.getUnits());
-    	assertEquals(weight, movementWard.getWeight(), 0.1);
-		
-		return;
+    	assertThat(movementWard.getAge()).isEqualTo(age);
+    	assertThat(movementWard.getDate()).isEqualTo(date);
+    	assertThat(movementWard.getDescription()).isEqualTo(description);
+    	assertThat(movementWard.isPatient()).isEqualTo(isPatient);
+    	assertThat(movementWard.getQuantity()).isEqualTo(quantity);
+    	assertThat(movementWard.getUnits()).isEqualTo(units);
+    	assertThat(movementWard.getWeight()).isCloseTo(weight, within(0.1F));
 	}
 }

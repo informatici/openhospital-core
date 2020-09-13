@@ -21,8 +21,7 @@
  */
 package org.isf.menu.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -74,8 +73,6 @@ public class Tests
     	testUserMenuContext = new TestUserMenuContext();
     	testGroupMenu = new TestGroupMenu();
     	testGroupMenuContext = new TestGroupMenuContext();
-    	
-        return;
     }
 
     @Before
@@ -84,8 +81,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -95,14 +90,12 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
     public static void tearDownClass() throws OHException 
     {
-    	return;
+
     }
 	
 		
@@ -122,8 +115,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -142,8 +133,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}	
 	
 	@Test
@@ -162,8 +151,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -182,8 +169,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -202,8 +187,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -222,8 +205,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}	
 	
 	@Test
@@ -243,8 +224,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -263,8 +242,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -279,15 +256,13 @@ public class Tests
 			User foundUser = (User)jpa.find(User.class, code); 
 			ArrayList<User> users = menuIoOperation.getUser();
 			
-			assertEquals(foundUser.getDesc(), users.get(users.size()-1).getDesc());
+			assertThat(users.get(users.size() - 1).getDesc()).isEqualTo(foundUser.getDesc());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -302,15 +277,13 @@ public class Tests
 			User foundUser = (User)jpa.find(User.class, code); 
 			ArrayList<User> users = menuIoOperation.getUser(foundUser.getUserGroupName().getCode());
 			
-			assertEquals(foundUser.getDesc(), users.get(users.size()-1).getDesc());
+			assertThat(users.get(users.size() - 1).getDesc()).isEqualTo(foundUser.getDesc());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -325,15 +298,13 @@ public class Tests
 			User foundUser = (User)jpa.find(User.class, code); 
 			String description = menuIoOperation.getUsrInfo(foundUser.getUserName());
 			
-			assertEquals(foundUser.getDesc(), description);
+			assertThat(description).isEqualTo(foundUser.getDesc());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -348,15 +319,13 @@ public class Tests
 			UserGroup foundUserGroup = (UserGroup)jpa.find(UserGroup.class, code); 
 			ArrayList<UserGroup> userGroups = menuIoOperation.getUserGroup();
 			
-			assertEquals(foundUserGroup.getDesc(), userGroups.get(userGroups.size()-1).getDesc());
+			assertThat(userGroups.get(userGroups.size() - 1).getDesc()).isEqualTo(foundUserGroup.getDesc());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -371,15 +340,13 @@ public class Tests
 			code = _setupTestUser(false);
 			result = menuIoOperation.isUserNamePresent(code);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -394,15 +361,13 @@ public class Tests
 			code = _setupTestUserGroup(false);
 			result = menuIoOperation.isGroupNamePresent(code);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -421,7 +386,7 @@ public class Tests
 			jpa.commitTransaction();
 			result = menuIoOperation.newUser(user);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkUserIntoDb(user.getUserName());
 		} 
 		catch (Exception e) 
@@ -429,8 +394,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -448,16 +411,14 @@ public class Tests
 			result = menuIoOperation.updateUser(foundUser);
 			User updateUser = (User)jpa.find(User.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateUser.getDesc());
+			assertThat(result).isTrue();
+			assertThat(updateUser.getDesc()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -475,16 +436,14 @@ public class Tests
 			result = menuIoOperation.updatePassword(foundUser);
 			User updateDisease = (User)jpa.find(User.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateDisease.getPasswd());
+			assertThat(result).isTrue();
+			assertThat(updateDisease.getPasswd()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -500,15 +459,13 @@ public class Tests
 			User foundUser = (User)jpa.find(User.class, code); 
 			result = menuIoOperation.deleteUser(foundUser);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 		
 	@Test
@@ -529,15 +486,13 @@ public class Tests
 			 
 			ArrayList<UserMenuItem> menus = menuIoOperation.getMenu(user);
 			
-			assertEquals(menuItem.getCode(), menus.get(menus.size()-1).getCode());
+			assertThat(menus.get(menus.size() - 1).getCode()).isEqualTo(menuItem.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -558,24 +513,20 @@ public class Tests
 			 
 			ArrayList<UserMenuItem> menus = menuIoOperation.getGroupMenu(userGroup);
 			
-			assertEquals(menuItem.getCode(), menus.get(menus.size()-1).getCode());
+			assertThat(menus.get(menus.size() - 1).getCode()).isEqualTo(menuItem.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
 	public void testIoSetGroupMenu() 
 	{
 		//TODO: Do unit test checking insert
-		assertTrue(true);
-		
-		return;
+		assertThat(true).isTrue();
 	}
 	
 	@Test
@@ -591,15 +542,13 @@ public class Tests
 			UserGroup foundUserGroup = (UserGroup)jpa.find(UserGroup.class, code); 
 			result = menuIoOperation.deleteGroup(foundUserGroup);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -613,7 +562,7 @@ public class Tests
 			UserGroup userGroup= testUserGroup.setup(false);
 			result = menuIoOperation.newUserGroup(userGroup);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkUserGroupIntoDb(userGroup.getCode());
 		} 
 		catch (Exception e) 
@@ -621,8 +570,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -640,16 +587,14 @@ public class Tests
             result = menuIoOperation.updateUserGroup(foundUserGroup);
 			UserGroup updateUserGroup = (UserGroup)jpa.find(UserGroup.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateUserGroup.getDesc());
+			assertThat(result).isTrue();
+			assertThat(updateUserGroup.getDesc()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	
@@ -659,8 +604,6 @@ public class Tests
 		testUserContext.saveAll(jpa);
 		testUserMenuContext.saveAll(jpa);
 		testGroupMenuContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
@@ -669,8 +612,6 @@ public class Tests
 		testUserGroupContext.deleteNews(jpa);
 		testUserMenuContext.deleteNews(jpa);
 		testGroupMenuContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestUserGroup(
@@ -695,8 +636,6 @@ public class Tests
 
 		foundUserGroup = (UserGroup)jpa.find(UserGroup.class, code); 
 		testUserGroup.check(foundUserGroup);
-		
-		return;
 	}	
     
 	private String _setupTestUser(
@@ -723,8 +662,6 @@ public class Tests
 	
 		foundUser = (User)jpa.find(User.class, code); 
 		testUser.check(foundUser);
-		
-		return;
 	}		
 	
 	private String _setupTestUserMenu(
@@ -749,8 +686,6 @@ public class Tests
 	
 		foundUserMenu = (UserMenuItem)jpa.find(UserMenuItem.class, code); 
 		testUserMenu.check(foundUserMenu);
-		
-		return;
 	}
 	
 	private Integer _setupTestGroupMenu(
@@ -775,7 +710,5 @@ public class Tests
 	
 		foundGroupMenu = (GroupMenu)jpa.find(GroupMenu.class, code); 
 		testGroupMenu.check(foundGroupMenu);
-		
-		return;
 	}
 }

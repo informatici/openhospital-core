@@ -21,7 +21,7 @@
  */
 package org.isf.medicalstock.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -83,17 +83,13 @@ public class TestMovement
 		movement.setSupplier(supplier);
 		movement.setType(movementType);
 		movement.setWard(ward);
-				
-		return;
 	}
 	
 	public void check(
 			Movement movement) 
 	{		
-    	assertEquals(date, movement.getDate());
-    	assertEquals(quantity, movement.getQuantity());
-    	assertEquals(refNo, movement.getRefNo());
-		
-		return;
+    	assertThat(movement.getDate()).isEqualTo(date);
+    	assertThat(movement.getQuantity()).isEqualTo(quantity);
+    	assertThat(movement.getRefNo()).isEqualTo(refNo);
 	}
 }
