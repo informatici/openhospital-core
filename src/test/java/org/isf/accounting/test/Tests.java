@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.isf.OHCoreIntegrationTest;
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
 import org.isf.accounting.model.BillPayments;
@@ -61,20 +62,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
+public class Tests extends OHCoreIntegrationTest
 {
 	private static TestBill testBill;
 	private static TestBillItems testBillItems;
 	private static TestBillPayments testBillPayments;
 	private static TestPatient testPatient;
 	private static TestPriceList testPriceList;
-	private static TestBillContext testBillContext;
-	private static TestBillItemsContext testBillItemsContext;
-	private static TestBillPaymentsContext testBillPaymentsContext;
-	private static TestPatientContext testPatientContext;
-	private static TestPriceListContext testPriceListContext;
 
     @Autowired
     AccountingIoOperations accountingIoOperation;
@@ -101,49 +95,13 @@ public class Tests
     	testBillPayments = new TestBillPayments();
     	testPatient = new TestPatient();
     	testPriceList = new TestPriceList();
-    	testBillContext = new TestBillContext();
-    	testBillItemsContext = new TestBillItemsContext();
-    	testBillPaymentsContext = new TestBillPaymentsContext();
-    	testPatientContext = new TestPatientContext();
-    	testPriceListContext = new TestPriceListContext();
-    	
-        return;
     }
 
-    @Before
-    public void setUp() throws OHException
-    {
-		accountingBillItemsIoOperationRepository.deleteAll();
-		accountingBillPaymentIoOperationRepository.deleteAll();
-		accountingBillIoOperationRepository.deleteAll();
-		priceListIoOperationRepository.deleteAll();
-		patientIoOperationRepository.deleteAll();
+	@Before
+	public void setUp() throws OHException {
+		cleanH2InMemoryDb();
 	}
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-    	testBill = null;
-    	testBillItems = null;
-    	testBillPayments = null;
-    	testPatient = null;
-    	testPriceList = null;
-    	testBillContext = null;
-    	testBillItemsContext = null;
-    	testBillPaymentsContext = null;
-    	testPatientContext = null;
-    	testPriceListContext = null;
 
-    	return;
-    }
-	
-		
 	@Test
 	public void testBillGets()
 	{
