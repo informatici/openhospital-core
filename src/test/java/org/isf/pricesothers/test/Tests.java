@@ -129,7 +129,7 @@ public class Tests {
 
 		// then:
 		assertThat(result).isTrue();
-		assertThat(repository.exists(id)).isFalse();
+		assertThat(repository.existsById(id)).isFalse();
 	}
 
 	private int _setupTestPricesOthers(boolean usingSet) throws OHException {

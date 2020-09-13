@@ -114,7 +114,7 @@ public class Tests
 		ArrayList<PriceList> priceLists = priceListIoOperation.getLists();
 			
 		// then:
-		assertThat(priceLists.get(0).getName()).isEqualTo(priceListIoOperationRepository.findOne(id).getName());
+		assertThat(priceLists.get(0).getName()).isEqualTo(priceListIoOperationRepository.findById(id).get().getName());
 	}
 	
 	@Test
@@ -144,7 +144,7 @@ public class Tests
 		ArrayList<Price> prices = priceListIoOperation.getPrices();
 			
 		// then:
-		assertThat(prices.get(0).getPrice()).isEqualTo(priceIoOperationRepository.findOne(id).getPrice());
+		assertThat(prices.get(0).getPrice()).isEqualTo(priceIoOperationRepository.findById(id).get().getPrice());
 	}
 	
 	@Test
@@ -162,7 +162,7 @@ public class Tests
 		boolean result = priceListIoOperation.updatePrices(priceList, prices);
 
 		// then:
-		Price foundPrice = priceIoOperationRepository.findOne(insertId);
+		Price foundPrice = priceIoOperationRepository.findById(insertId).get();
 		assertThat(result).isTrue();
 		assertThat(foundPrice.getList().getId()).isEqualTo(priceList.getId());
 	}
