@@ -29,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
@@ -314,7 +315,15 @@ public class TimeTools {
 	public static GregorianCalendar getBeginningOfNextDay(GregorianCalendar date) {
 		return new DateTime(date).plusDays(1).withTimeAtStartOfDay().toGregorianCalendar();
 	}
-	
+
+	public static Calendar getBeginningOfDayCalendar(GregorianCalendar date) {
+		return new DateTime(date).withTimeAtStartOfDay().toCalendar(Locale.getDefault());
+	}
+
+	public static Calendar getBeginningOfNextDayCalendar(GregorianCalendar date) {
+		return new DateTime(date).plusDays(1).withTimeAtStartOfDay().toCalendar(Locale.getDefault());
+	}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

@@ -22,7 +22,7 @@
 package org.isf.opd.service;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -101,8 +101,12 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 				cb.equal(opd.get("newPatient"), newPatient)
 			);
 		}
+		Calendar calFrom = Calendar.getInstance();
+		calFrom.setTime(dateFrom.getTime());
+		Calendar calTo = Calendar.getInstance();
+		calTo.setTime(dateTo.getTime());
 		predicates.add(
-			cb.between(opd.<Date>get("visitDate"), dateFrom.getTime(), dateTo.getTime())
+			cb.between(opd.<Calendar>get("visitDate"), calFrom, calTo)
 		);
 		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 
