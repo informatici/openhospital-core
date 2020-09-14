@@ -36,6 +36,7 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperationRepository;
 import org.isf.visits.test.TestVisit;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -70,6 +71,7 @@ public class MergePatientTests {
 	}
 
 	@Before
+	@After
 	public void setUp() throws OHException {
 		visitsIoOperationRepository.deleteAll();
 		examinationIoOperationRepository.deleteAll();

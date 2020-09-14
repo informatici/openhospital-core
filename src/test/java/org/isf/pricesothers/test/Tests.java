@@ -30,6 +30,7 @@ import org.isf.pricesothers.service.PriceOthersIoOperationRepository;
 import org.isf.pricesothers.service.PriceOthersIoOperations;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -54,6 +55,7 @@ public class Tests {
 	}
 
 	@Before
+	@After
 	public void setUp() throws OHException {
 		repository.deleteAll();
 	}
