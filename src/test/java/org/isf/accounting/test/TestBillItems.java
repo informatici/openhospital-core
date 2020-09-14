@@ -21,7 +21,8 @@
  */
 package org.isf.accounting.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.data.Offset.offset;
 
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
@@ -73,13 +74,11 @@ public class TestBillItems
 	
 	public void check(
 			BillItems billItem) 
-	{		
-		assertEquals(itemAmount, billItem.getItemAmount(), 0.1);
-		assertEquals(itemDescription, billItem.getItemDescription());
-		assertEquals(itemQuantity, billItem.getItemQuantity());
-		assertEquals(isPrice, billItem.isPrice());
-		assertEquals(priceID, billItem.getPriceID());
-				
-		return;
+	{
+		assertThat(billItem.getItemAmount()).isCloseTo(itemAmount, offset(0.1));
+		assertThat(billItem.getItemDescription()).isEqualTo(itemDescription);
+		assertThat(billItem.getItemQuantity()).isEqualTo(itemQuantity);
+		assertThat(billItem.isPrice()).isEqualTo(isPrice);
+		assertThat(billItem.getPriceID()).isEqualTo(priceID);
 	}
 }
