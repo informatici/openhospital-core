@@ -22,7 +22,7 @@
 package org.isf.patvac.service;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -75,13 +75,17 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 
 		query.select(pvRoot);
 		if (dateFrom != null) {
+			Calendar calFrom = Calendar.getInstance();
+			calFrom.setTime(dateFrom.getTime());
 			predicates.add(
-				cb.greaterThanOrEqualTo(pvRoot.<Date> get("vaccineDate"), dateFrom.getTime())
+				cb.greaterThanOrEqualTo(pvRoot.<Calendar> get("vaccineDate"), calFrom)
 			);
 		}
 		if (dateTo != null) {
+			Calendar calTo = Calendar.getInstance();
+			calTo.setTime(dateFrom.getTime());
 			predicates.add(
-				cb.lessThanOrEqualTo(pvRoot.<Date> get("vaccineDate"), dateTo.getTime())
+				cb.lessThanOrEqualTo(pvRoot.<Calendar> get("vaccineDate"), calTo)
 			);
 		}
 		if (vaccineTypeCode != null) {
