@@ -239,11 +239,17 @@ public class Tests
 		boolean result = false;
 
 		try {
-			Ward ward = testWard.setup(false);
-			ward.setCode("M");
-			wardIoOperationRepository.save(ward);
-
+			
 			result = wardIoOperation.isMaternityPresent();
+			
+			if (!result) {
+				Ward ward = testWard.setup(false);
+				ward.setCode("M");
+				wardIoOperationRepository.save(ward);
+				
+				result = wardIoOperation.isMaternityPresent();
+				
+			} 
 
 			assertThat(result).isTrue();
 		} catch (Exception e) {
