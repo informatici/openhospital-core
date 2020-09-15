@@ -21,6 +21,8 @@
  */
 package org.isf.lab.model;
 
+import java.util.Calendar;
+
 /*------------------------------------------
  * Laboratory - laboratory exam execution model
  * -----------------------------------------
@@ -44,6 +46,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
@@ -83,7 +87,8 @@ public class Laboratory extends Auditable<String>
 	private GregorianCalendar registrationDate;
 	
 	@Column(name="LAB_EXAM_DATE")
-	private GregorianCalendar examDate;
+	@Temporal(TemporalType.DATE)
+	private Calendar examDate;
 
 	@NotNull
 	@Column(name="LAB_RES")
@@ -162,7 +167,7 @@ public class Laboratory extends Auditable<String>
 		lock=aLock;
 	}
 	public GregorianCalendar getExamDate() {
-		return examDate;
+		return (GregorianCalendar) examDate;
 	}
 	public void setExamDate(GregorianCalendar exDate) {
 		this.examDate = exDate;
