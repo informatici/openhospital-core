@@ -39,11 +39,11 @@ public class PrintLabels {
 	public static final int toPdf = 1;
 	public static final int toPrint = 2;
 	
-	public PrintLabels(String filename, Integer patId  )throws OHServiceException {
+	public PrintLabels(String filename, Integer labId)throws OHServiceException {
 		try{
 		HashMap<String, String> parameters = new HashMap<String, String>();
 
-		parameters.put("patientID", String.valueOf(patId));
+		parameters.put("laboratoryID", String.valueOf(labId == null ? "" : labId));
 
 		StringBuilder sbFilename = new StringBuilder();
 		sbFilename.append("rpt");
