@@ -29,11 +29,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LabIoOperationRepository extends JpaRepository<Laboratory, Integer> {
 
-    List<Laboratory> findByExamDateBetweenOrderByExamDateDesc(
+    List<Laboratory> findByExamDateBetweenOrderByExamDateDescRegistrationDateDesc(
             GregorianCalendar dateFrom,
             GregorianCalendar dateTo);
 
-    List<Laboratory> findByExamDateBetweenAndExam_DescriptionOrderByExamDateDesc(
+    List<Laboratory> findByExamDateBetweenAndExam_DescriptionOrderByExamDateDescRegistrationDateDesc(
             GregorianCalendar dateFrom,
             GregorianCalendar dateTo,
             String exam);

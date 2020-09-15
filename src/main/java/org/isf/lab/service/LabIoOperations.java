@@ -112,8 +112,8 @@ public class LabIoOperations {
 	 */
 	public ArrayList<Laboratory> getLaboratory(String exam,	GregorianCalendar dateFrom,	GregorianCalendar dateTo) throws OHServiceException {
 		return new ArrayList<Laboratory>(exam != null ?
-				repository.findByExamDateBetweenAndExam_DescriptionOrderByExamDateDesc(dateFrom, dateTo, exam) :
-				repository.findByExamDateBetweenOrderByExamDateDesc(dateFrom, dateTo));
+				repository.findByExamDateBetweenAndExam_DescriptionOrderByExamDateDescRegistrationDateDesc(dateFrom, dateTo, exam) :
+				repository.findByExamDateBetweenOrderByExamDateDescRegistrationDateDesc(dateFrom, dateTo));
 	}
 	
 	/**
