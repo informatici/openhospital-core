@@ -80,18 +80,20 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 		if(admissionRange != null) {
 			if (admissionRange.length == 2 && admissionRange[0] != null && admissionRange[1] != null) {
 				predicates.add(
-						cb.between(admissionRoot.<Calendar>get("admDate"), getBeginningOfDay(admissionRange[0]),
-						getBeginningOfNextDay(admissionRange[1]))
-				);
+					cb.and(
+						cb.greaterThanOrEqualTo(admissionRoot.<Calendar>get("admDate"), getBeginningOfDay(admissionRange[0])),
+						cb.lessThan(admissionRoot.<Calendar>get("admDate"), getBeginningOfNextDay(admissionRange[1]))
+					));
 			}
 		}
 
 		if (dischargeRange != null) {
 			if (dischargeRange.length == 2 && dischargeRange[0] != null && dischargeRange[1] != null) {
 				predicates.add(
-						cb.between(admissionRoot.<Calendar>get("disDate"), getBeginningOfDay(dischargeRange[0]),
-								getBeginningOfNextDay(dischargeRange[1]))
-				);
+					cb.and(
+						cb.greaterThanOrEqualTo(admissionRoot.<Calendar>get("disDate"), getBeginningOfDay(dischargeRange[0])),
+						cb.lessThan(admissionRoot.<Calendar>get("disDate"), getBeginningOfNextDay(dischargeRange[1]))
+					));
 			}
 		}
 		return predicates;
