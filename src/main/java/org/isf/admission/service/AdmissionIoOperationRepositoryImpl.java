@@ -35,9 +35,7 @@ import org.isf.admission.model.Admission;
 import org.isf.patient.model.Patient;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.isf.utils.time.TimeTools.getBeginningOfDay;
 import static org.isf.utils.time.TimeTools.getBeginningOfDayCalendar;
-import static org.isf.utils.time.TimeTools.getBeginningOfNextDay;
 import static org.isf.utils.time.TimeTools.getBeginningOfNextDayCalendar;
 
 @Transactional

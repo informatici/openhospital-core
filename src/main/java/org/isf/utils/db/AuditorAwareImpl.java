@@ -23,7 +23,6 @@ package org.isf.utils.db;
 
 import java.util.Optional;
 
-import org.isf.menu.manager.UserBrowsingManager;
 import org.springframework.data.domain.AuditorAware;
 
 /**
