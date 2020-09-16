@@ -44,7 +44,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.sql.Date;
 import java.util.GregorianCalendar;
 
 /*------------------------------------------
@@ -259,7 +259,7 @@ public class Patient extends Auditable<String>
 		this.firstName = firstName;
 		this.secondName = secondName;
 		this.name = this.firstName + " " + this.secondName;
-		this.birthDate = birthDate;
+		this.birthDate = new Date(birthDate.getTime());
 		this.age = age;
 		this.agetype = agetype;
 		this.sex = sex;

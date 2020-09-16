@@ -21,7 +21,7 @@
  */
 package org.isf.opd.model;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.GregorianCalendar;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -82,10 +82,10 @@ public class Opd extends Auditable<String>
 
 	@NotNull
 	@Column(name="OPD_DATE_VIS")
-	private GregorianCalendar visitDate;
+	private Date visitDate;
         
 	@Column(name="OPD_DATE_NEXT_VIS")
-    private GregorianCalendar nextVisitDate;
+    private Date nextVisitDate;
 
 	@ManyToOne
 	@JoinColumn(name="OPD_PAT_ID")
@@ -264,11 +264,11 @@ public class Opd extends Auditable<String>
 		this.date = date;
 	}
 	
-	public GregorianCalendar getVisitDate() {
+	public Date getVisitDate() {
 		return visitDate;
 	}
 
-	public void setVisitDate(GregorianCalendar visDate) {
+	public void setVisitDate(Date visDate) {
 		this.visitDate = visDate;
 	}	
 	
@@ -296,11 +296,11 @@ public class Opd extends Auditable<String>
 		this.userID = userID;
 	}
         
-        public GregorianCalendar getNextVisitDate() {
+    public Date getNextVisitDate() {
 		return nextVisitDate;
 	}
 
-	public void setNextVisitDate(GregorianCalendar nextVisitDate) {
+	public void setNextVisitDate(Date nextVisitDate) {
 		this.nextVisitDate = nextVisitDate;
 	}
 

@@ -22,7 +22,7 @@
 package org.isf.opd.service;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -49,8 +49,8 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 	public List<Opd> findAllOpdWhereParams(
 			String diseaseTypeCode,
 			String diseaseCode, 
-			GregorianCalendar dateFrom,
-			GregorianCalendar dateTo,
+			Date dateFrom,
+			Date dateTo,
 			int ageFrom, 
 			int ageTo,
 			char sex,
@@ -64,8 +64,8 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 	private TypedQuery<Opd> _getOpdQuery(
 			String diseaseTypeCode,
 			String diseaseCode, 
-			GregorianCalendar dateFrom,
-			GregorianCalendar dateTo,
+			Date dateFrom,
+			Date dateTo,
 			int ageFrom, 
 			int ageTo,
 			char sex,
@@ -102,7 +102,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			);
 		}
 		predicates.add(
-			cb.between(opd.<Date>get("visitDate"), dateFrom.getTime(), dateTo.getTime())
+			cb.between(opd.<Date>get("visitDate"), dateFrom, dateTo)
 		);
 		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 

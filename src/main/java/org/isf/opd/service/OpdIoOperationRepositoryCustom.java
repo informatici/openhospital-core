@@ -25,10 +25,11 @@ import org.isf.opd.model.Opd;
 
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.sql.Date;
 
 public interface OpdIoOperationRepositoryCustom {
 
-	List<Opd> findAllOpdWhereParams(String diseaseTypeCode, String diseaseCode, GregorianCalendar dateFrom,
-									GregorianCalendar dateTo, int ageFrom, int ageTo, char sex, char newPatient);
+	List<Opd> findAllOpdWhereParams(String diseaseTypeCode, String diseaseCode, Date dateFrom,
+									Date dateTo, int ageFrom, int ageTo, char sex, char newPatient);
 
 }

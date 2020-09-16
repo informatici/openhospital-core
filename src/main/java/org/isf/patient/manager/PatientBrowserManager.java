@@ -22,7 +22,7 @@
 package org.isf.patient.manager;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -391,7 +391,7 @@ public class PatientBrowserManager {
     }
 
     private boolean checkAge(Patient patient) {
-	    Date now = new Date();
+	    Date now = new Date((new java.util.Date()).getTime());
         Date birthDate = patient.getBirthDate();
 
         if(birthDate == null || birthDate.after(now)){

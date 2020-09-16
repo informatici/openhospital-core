@@ -21,6 +21,7 @@
  */
 package org.isf.opd.service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -68,12 +69,10 @@ public class OpdIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Opd> getOpdList(boolean oneWeek) throws OHServiceException	{
-		GregorianCalendar dateFrom=new GregorianCalendar();
-		GregorianCalendar dateTo=new GregorianCalendar();
-		
-		if (oneWeek) {
-			dateFrom.add(GregorianCalendar.WEEK_OF_YEAR,-1);
-		}
+		GregorianCalendar calFrom = new GregorianCalendar();
+		calFrom.add(GregorianCalendar.WEEK_OF_YEAR, -1);
+		Date dateFrom = new Date(calFrom.getTimeInMillis());
+		Date dateTo = new Date((new GregorianCalendar()).getTimeInMillis());
 		
 		return getOpdList(MessageBundle.getMessage("angal.opd.alltype"),MessageBundle.getMessage("angal.opd.alldisease"),dateFrom,dateTo,0,0,'A','A');
 	}
@@ -96,8 +95,8 @@ public class OpdIoOperations {
 	public ArrayList<Opd> getOpdList(
 			String diseaseTypeCode,
 			String diseaseCode, 
-			GregorianCalendar dateFrom,
-			GregorianCalendar dateTo,
+			Date dateFrom,
+			Date dateTo,
 			int ageFrom, 
 			int ageTo,
 			char sex,
@@ -209,7 +208,7 @@ public class OpdIoOperations {
 		return !opds.isEmpty();
 	}
 
-	private GregorianCalendar getBeginningOfYear(int year) {
-		return new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar();
+	private Date getBeginningOfYear(int year) {
+		return new Date((new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar()).getTimeInMillis());
 	}
 }

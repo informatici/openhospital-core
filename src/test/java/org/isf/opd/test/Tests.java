@@ -26,7 +26,7 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.sql.Date;
 
 import org.isf.disease.model.Disease;
 import org.isf.disease.test.TestDisease;
@@ -201,7 +201,7 @@ public class Tests
 			jpa.commitTransaction();
 
 			Opd opd = testOpd.setup(patient, disease, false);
-	    	opd.setDate(new Date());
+	    	opd.setDate(new Date((new java.util.Date()).getTime()));
 			result = opdIoOperation.newOpd(opd);
 
 			assertThat(result).isTrue();
@@ -295,7 +295,10 @@ public class Tests
 			Opd foundOpd = (Opd)jpa.find(Opd.class, code);
 
 			// when:
-			Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), foundOpd.getVisitDate().get(Calendar.YEAR));
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(foundOpd.getVisitDate());
+			int foundOpdVisitYear = cal.get(Calendar.YEAR);
+			Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), foundOpdVisitYear);
 
 			// then:
 			assertThat(result).isTrue();
@@ -425,7 +428,7 @@ public class Tests
 
     	jpa.beginTransaction();	
     	opd = testOpd.setup(patient, disease, usingSet);
-    	opd.setDate(new Date());
+    	opd.setDate(new Date((new java.util.Date()).getTime()));
     	jpa.persist(patient);
     	jpa.persist(diseaseType);
     	jpa.persist(disease);
