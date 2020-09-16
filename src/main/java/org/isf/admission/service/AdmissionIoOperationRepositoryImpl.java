@@ -35,8 +35,8 @@ import org.isf.admission.model.Admission;
 import org.isf.patient.model.Patient;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.isf.utils.time.TimeTools.getBeginningOfDayCalendar;
-import static org.isf.utils.time.TimeTools.getBeginningOfNextDayCalendar;
+import static org.isf.utils.time.TimeTools.getBeginningOfDay;
+import static org.isf.utils.time.TimeTools.getBeginningOfNextDay;
 
 @Transactional
 public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationRepositoryCustom {
@@ -80,8 +80,8 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 		if(admissionRange != null) {
 			if (admissionRange.length == 2 && admissionRange[0] != null && admissionRange[1] != null) {
 				predicates.add(
-						cb.between(admissionRoot.<Calendar>get("admDate"), getBeginningOfDayCalendar(admissionRange[0]),
-						getBeginningOfNextDayCalendar(admissionRange[1]))
+						cb.between(admissionRoot.<Calendar>get("admDate"), getBeginningOfDay(admissionRange[0]),
+						getBeginningOfNextDay(admissionRange[1]))
 				);
 			}
 		}
@@ -89,8 +89,8 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 		if (dischargeRange != null) {
 			if (dischargeRange.length == 2 && dischargeRange[0] != null && dischargeRange[1] != null) {
 				predicates.add(
-						cb.between(admissionRoot.<Calendar>get("disDate"), getBeginningOfDayCalendar(dischargeRange[0]),
-								getBeginningOfNextDayCalendar(dischargeRange[1]))
+						cb.between(admissionRoot.<Calendar>get("disDate"), getBeginningOfDay(dischargeRange[0]),
+								getBeginningOfNextDay(dischargeRange[1]))
 				);
 			}
 		}

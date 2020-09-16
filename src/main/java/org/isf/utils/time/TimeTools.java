@@ -316,14 +316,6 @@ public class TimeTools {
 		return new DateTime(date).plusDays(1).withTimeAtStartOfDay().toGregorianCalendar();
 	}
 
-	public static Calendar getBeginningOfDayCalendar(GregorianCalendar date) {
-		return new DateTime(date).withTimeAtStartOfDay().toCalendar(Locale.getDefault());
-	}
-
-	public static Calendar getBeginningOfNextDayCalendar(GregorianCalendar date) {
-		return new DateTime(date).plusDays(1).withTimeAtStartOfDay().toCalendar(Locale.getDefault());
-	}
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
