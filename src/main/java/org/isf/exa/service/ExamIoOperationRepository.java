@@ -31,4 +31,5 @@ import org.springframework.stereotype.Repository;
 public interface ExamIoOperationRepository extends JpaRepository<Exam, String> {
     List<Exam> findByOrderByExamtypeDescriptionAscDescriptionAsc();
     List<Exam> findByDescriptionContainingOrderByExamtypeDescriptionAscDescriptionAsc(String description);
+	List<Exam> findByExamtype_DescriptionContainingOrderByExamtypeDescriptionAscDescriptionAsc(String description);
 }

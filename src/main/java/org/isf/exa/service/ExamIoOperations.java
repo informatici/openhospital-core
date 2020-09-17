@@ -77,6 +77,17 @@ public class ExamIoOperations {
 		return description != null ? repository.findByDescriptionContainingOrderByExamtypeDescriptionAscDescriptionAsc(description) :
 				repository.findByOrderByExamtypeDescriptionAscDescriptionAsc();
 	}
+	
+	/**
+	 * Returns the list of {@link Exam}s by {@link ExamType} description
+	 * @param description - the exam description
+	 * @return the list of {@link Exam}s
+	 * @throws OHServiceException
+	 */
+	public List<Exam> getExamsByExamTypeDesc(String description) throws OHServiceException {
+		return description != null ? repository.findByExamtype_DescriptionContainingOrderByExamtypeDescriptionAscDescriptionAsc(description) :
+				repository.findByOrderByExamtypeDescriptionAscDescriptionAsc();
+	}
 
 	/**
 	 * Returns the list of {@link ExamType}s

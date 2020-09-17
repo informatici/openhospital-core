@@ -116,6 +116,16 @@ public class ExamBrowsingManager {
 	}
 	
 	/**
+	 * Returns the list of {@link Exam}s by {@link ExamType} description
+	 * @param description - the exam description
+	 * @return the list of {@link Exam}s. It could be <code>null</code>
+	 * @throws OHServiceException 
+	 */
+	public ArrayList<Exam> getExamsByTypeDescription(String description) throws OHServiceException {
+		return new ArrayList<Exam>(ioOperations.getExamsByExamTypeDesc(description));
+	}
+	
+	/**
 	 * Returns the list of {@link ExamType}s
 	 * @return the list of {@link ExamType}s. It could be <code>null</code>
 	 * @throws OHServiceException 
