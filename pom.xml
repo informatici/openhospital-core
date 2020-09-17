@@ -17,6 +17,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.framework.version>5.2.9.RELEASE</spring.framework.version>
+		<spring.boot.version>2.3.4.RELEASE</spring.boot.version>
 		<license.maven.plugin.version>4.0.rc2</license.maven.plugin.version>
 	</properties>
 
@@ -254,6 +255,8 @@
 		    <artifactId>clibwrapper_jiio</artifactId>
 		    <version>1.1</version>
 		</dependency>
+		<!--
+		   dup of lines 237-247
 		<dependency>
 		    <groupId>com.sun.media</groupId>
 		    <artifactId>jai_imageio</artifactId>
@@ -270,6 +273,7 @@
 		    <artifactId>jai-core</artifactId>
 		    <version>1.1.3</version>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -400,12 +404,12 @@
 		<dependency>
 		    <groupId>org.springframework.data</groupId>
 		    <artifactId>spring-data-jpa</artifactId>
-		    <version>2.3.3.RELEASE</version>
+		    <version>2.3.4.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-test</artifactId>
-			<version>2.3.3.RELEASE</version>
+			<version>${spring.boot.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -416,13 +420,13 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<version>2.3.3.RELEASE</version>
+			<version>${spring.boot.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-			<version>2.3.3.RELEASE</version>
+			<version>${spring.boot.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
