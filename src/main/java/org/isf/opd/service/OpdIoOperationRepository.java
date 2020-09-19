@@ -21,9 +21,8 @@
  */
 package org.isf.opd.service;
 
-import java.sql.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
+import java.time.*;
 
 import org.isf.opd.model.Opd;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -42,7 +41,7 @@ public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, O
     Integer findMaxProgYear();
 
 	@Query(value = "select max(o.prog_year) from Opd o where o.visitDate >= :dateFrom and o.visitDate < :dateTo")
-    Integer findMaxProgYearWhereDateBetween(@Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
+    Integer findMaxProgYearWhereDateBetween(@Param("dateFrom") LocalDate dateFrom, @Param("dateTo") LocalDate dateTo);
 
     List<Opd> findTop1ByPatient_CodeOrderByDateDesc(Integer code);
 	
@@ -50,5 +49,5 @@ public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, O
     List<Opd> findByProgYear(@Param("prog_year") Integer prog_year);
 	
 	@Query(value = "select op from Opd op where op.prog_year = :prog_year and op.visitDate >= :dateVisitFrom and op.visitDate < :dateVisitTo")
-    List<Opd> findByProgYearAndVisitDateBetween(@Param("prog_year") Integer prog_year, @Param("dateVisitFrom") Date dateVisitFrom, @Param("dateVisitTo") Date dateVisitTo);
+    List<Opd> findByProgYearAndVisitDateBetween(@Param("prog_year") Integer prog_year, @Param("dateVisitFrom") LocalDate dateVisitFrom, @Param("dateVisitTo") LocalDate dateVisitTo);
 }

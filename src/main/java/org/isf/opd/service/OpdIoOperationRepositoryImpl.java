@@ -22,9 +22,8 @@
 package org.isf.opd.service;
 
 import java.util.ArrayList;
-import java.sql.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
+import java.time.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -44,13 +43,12 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	@SuppressWarnings("unchecked")	
 	@Override
 	public List<Opd> findAllOpdWhereParams(
 			String diseaseTypeCode,
 			String diseaseCode, 
-			Date dateFrom,
-			Date dateTo,
+			LocalDate dateFrom,
+			LocalDate dateTo,
 			int ageFrom, 
 			int ageTo,
 			char sex,
@@ -64,8 +62,8 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 	private TypedQuery<Opd> _getOpdQuery(
 			String diseaseTypeCode,
 			String diseaseCode, 
-			Date dateFrom,
-			Date dateTo,
+			LocalDate dateFrom,
+			LocalDate dateTo,
 			int ageFrom, 
 			int ageTo,
 			char sex,
@@ -102,7 +100,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			);
 		}
 		predicates.add(
-			cb.between(opd.<Date>get("visitDate"), dateFrom, dateTo)
+			cb.between(opd.<LocalDate>get("visitDate"), dateFrom, dateTo)
 		);
 		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 

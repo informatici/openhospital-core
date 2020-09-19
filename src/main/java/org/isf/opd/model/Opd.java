@@ -21,8 +21,7 @@
  */
 package org.isf.opd.model;
 
-import java.sql.Date;
-import java.util.GregorianCalendar;
+import java.time.*;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 
@@ -77,15 +76,15 @@ public class Opd extends Auditable<String>
 	private int code;
 
 	@NotNull
-	@Column(name="OPD_DATE")
-	private Date date;
+	@Column(name="OPD_DATE") // SQL type: datetime
+	private LocalDateTime date;
 
 	@NotNull
-	@Column(name="OPD_DATE_VIS")
-	private Date visitDate;
+	@Column(name="OPD_DATE_VIS") // SQL type: date
+	private LocalDate visitDate;
         
-	@Column(name="OPD_DATE_NEXT_VIS")
-    private Date nextVisitDate;
+	@Column(name="OPD_DATE_NEXT_VIS") // SQL type: datetime
+    private LocalDateTime nextVisitDate;
 
 	@ManyToOne
 	@JoinColumn(name="OPD_PAT_ID")
@@ -257,18 +256,18 @@ public class Opd extends Auditable<String>
 	public void setLock(int lock) {
 		this.lock = lock;
 	}
-	public Date getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 	
-	public Date getVisitDate() {
+	public LocalDate getVisitDate() {
 		return visitDate;
 	}
 
-	public void setVisitDate(Date visDate) {
+	public void setVisitDate(LocalDate visDate) {
 		this.visitDate = visDate;
 	}	
 	
@@ -296,11 +295,11 @@ public class Opd extends Auditable<String>
 		this.userID = userID;
 	}
         
-    public Date getNextVisitDate() {
+  public LocalDateTime getNextVisitDate() {
 		return nextVisitDate;
 	}
 
-	public void setNextVisitDate(Date nextVisitDate) {
+	public void setNextVisitDate(LocalDateTime nextVisitDate) {
 		this.nextVisitDate = nextVisitDate;
 	}
 

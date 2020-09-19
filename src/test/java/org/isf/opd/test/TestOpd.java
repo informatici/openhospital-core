@@ -23,9 +23,7 @@ package org.isf.opd.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.sql.Date;
+import java.time.*;
 
 import org.isf.disease.model.Disease;
 import org.isf.opd.model.Opd;
@@ -34,7 +32,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestOpd 
 {	
-	private Date visitDate = new Date((new GregorianCalendar(1984, Calendar.AUGUST, 14)).getTimeInMillis());
+	private LocalDate visitDate = LocalDate.of(1984, 8, 14);
 	private int age = 9;
 	private char sex = 'F';
 	private String note = "TestNote";
