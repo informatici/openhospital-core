@@ -280,7 +280,7 @@ public class MenuIoOperations
 		List<Object[]> menuList = menuRepository.findAllWhereGroupId(aGroup.getCode());
 		ArrayList<UserMenuItem> menu = new ArrayList<UserMenuItem>();
 		for (Object[] object : menuList) {
-			boolean active = (Integer) object[9] == '1' ? true : false;
+			boolean active = (Integer) object[9] == 1 ? true : false;
 			UserMenuItem umi = new UserMenuItem();
 
 			umi.setCode((String) object[0]);
