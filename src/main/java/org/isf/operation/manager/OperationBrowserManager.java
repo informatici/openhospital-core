@@ -62,7 +62,7 @@ public class OperationBrowserManager {
 		return ioOperations.getOperationAdm();
 	}
 	public ArrayList<Operation> getOperation() throws OHServiceException {
-		return ioOperations.getOperation(null);
+		return ioOperations.getOperationByTypeDescription(null);
 	}
 	/**
 	 * return the {@link Operation} with the specified code
@@ -75,14 +75,14 @@ public class OperationBrowserManager {
     }
         
 	/**
-	 * return the {@link Operation}s whose type matches specified string
+	 * return the {@link Operation}s whose {@link OperationType} matches specified string
 	 * 
-	 * @param typecode - a type code
+	 * @param typecode - a type description
 	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Operation> getOperation(String typecode) throws OHServiceException {
-		return ioOperations.getOperation(typecode);
+	public ArrayList<Operation> getOperationByTypeDescription(String typecode) throws OHServiceException {
+		return ioOperations.getOperationByTypeDescription(typecode);
 	}
 
 	/**

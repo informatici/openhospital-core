@@ -60,10 +60,10 @@ public class OperationIoOperations {
 	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Operation> getOperation(String typeDescription) throws OHServiceException {
+	public ArrayList<Operation> getOperationByTypeDescription(String typeDescription) throws OHServiceException {
 		return new ArrayList<Operation>(typeDescription == null ?
 			repository.findByOrderByDescriptionDesc() :
-			repository.findAllByDescriptionContainsOrderByDescriptionDesc(typeDescription));
+			repository.findAllByType_DescriptionContainsOrderByDescriptionDesc(typeDescription));
 	}
 
 	public Operation findByCode(String code) throws OHServiceException{

@@ -140,7 +140,7 @@ public class Tests
 		{		
 			code = _setupTestOperation(false);
 			Operation foundOperation = (Operation)jpa.find(Operation.class, code); 
-			ArrayList<Operation> operations = operationIoOperations.getOperation(foundOperation.getDescription());
+			ArrayList<Operation> operations = operationIoOperations.getOperationByTypeDescription(foundOperation.getDescription());
 			
 			assertThat(operations.get(0).getDescription()).isEqualTo(foundOperation.getDescription());
 		} 
@@ -152,7 +152,7 @@ public class Tests
 	}
 
 	@Test
-	public void testIoGetOperationsShouldFindOperationsWithoutProvidingDescription() throws OHException
+	public void testIoGetOperationByTypeDescription() throws OHException
 	{
 		String code = "";
 
@@ -164,7 +164,7 @@ public class Tests
 			Operation foundOperation = (Operation)jpa.find(Operation.class, code);
 
 			// when:
-			ArrayList<Operation> operations = operationIoOperations.getOperation(foundOperation.getDescription());
+			ArrayList<Operation> operations = operationIoOperations.getOperationByTypeDescription(foundOperation.getType().getDescription());
 
 			// then:
 			assertThat(operations).isNotEmpty();
