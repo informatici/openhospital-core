@@ -243,24 +243,6 @@ public class Tests
 	}
 
 	@Test
-	public void testTotalQuantityShouldFindMovementWardByWardCodeAndDates() throws OHException, OHServiceException {
-		// given:
-		int code = _setupTestMovementWard(false);
-		MovementWard foundMovement = (MovementWard)jpa.find(MovementWard.class, code);
-		DateTime startDate = new DateTime(foundMovement.getDate()).minusDays(1);
-		DateTime endDate = new DateTime(foundMovement.getDate()).plusDays(1);
-
-		// when:
-		ArrayList<MovementWard> wardMovementsToWard = medicalIoOperation.getWardMovementsToWard(
-			foundMovement.getWard().getCode(), startDate.toGregorianCalendar(), endDate.toGregorianCalendar()
-		);
-
-		// then:
-		assertEquals(1, wardMovementsToWard.size());
-		assertEquals(foundMovement.getCode(), wardMovementsToWard.get(0).getCode());
-	}
-	
-	@Test
 	public void testMovementWardSets() 
 	{
 		int id = 0;
