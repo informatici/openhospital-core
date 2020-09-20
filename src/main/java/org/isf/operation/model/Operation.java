@@ -86,6 +86,12 @@ public class Operation extends Auditable<String>
 	@Column(name="OPE_STAT")
     private Integer major;
 
+	/*
+	 * //TODO: replace "integers" values with mnemonic ones, CHAR(1) -> VARCHAR(10)
+	 * "1" = OPD / ADMISSION
+	 * "2" = ADMISSION
+	 * "3" = OPD
+	 */
 	@Column(name="OPE_FOR")
     private String operFor;
 	
