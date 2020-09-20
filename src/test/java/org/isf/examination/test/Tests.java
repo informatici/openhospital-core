@@ -1,7 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.examination.test;
 
-
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -48,8 +68,6 @@ public class Tests
     	testPatientExamination = new TestPatientExamination();
     	testPatientContext = new TestPatientContext();
     	testPatientExaminationContext = new TestPatientExaminationContext();
-
-        return;
     }
 
     @Before
@@ -58,8 +76,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -69,8 +85,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -80,8 +94,6 @@ public class Tests
     	testPatientExamination = null;
     	testPatientContext = null;
     	testPatientExaminationContext = null;
-
-    	return;
     }
 	
 		
@@ -101,8 +113,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -121,8 +131,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -143,8 +151,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -160,15 +166,13 @@ public class Tests
 			Integer pex_hr = patientExamination.getPex_hr();
 			patientExamination.setPex_hr(pex_hr + 1);
 			examinationOperations.saveOrUpdate(patientExamination);
-			assertEquals((Integer)(pex_hr + 1), patientExamination.getPex_hr());
+			assertThat(patientExamination.getPex_hr()).isEqualTo((Integer) (pex_hr + 1));
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -189,8 +193,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}	
 
 	@Test
@@ -213,8 +215,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}	
 
 	@Test
@@ -237,8 +237,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}	
 
 	@Test
@@ -261,8 +259,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -278,7 +274,7 @@ public class Tests
 
 			// then:
 			PatientExamination result = (PatientExamination)jpa.find(PatientExamination.class, id);
-			assertEquals(mergedPatient.getCode(), result.getPatient().getCode());
+			assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -298,16 +294,12 @@ public class Tests
     {	
 		testPatientContext.saveAll(jpa);
 		testPatientExaminationContext.saveAll(jpa);
-        		
-        return;
     }
 		
     private void _restoreContext() throws OHException 
     {
     	testPatientExaminationContext.deleteNews(jpa);
 		testPatientContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private int _setupTestPatientExamination(
@@ -335,7 +327,5 @@ public class Tests
 		foundPatientExamination = (PatientExamination)jpa.find(PatientExamination.class, id); 
 		testPatientExamination.check(foundPatientExamination);
 		testPatient.check(foundPatientExamination.getPatient());
-		
-		return;
 	}
 }

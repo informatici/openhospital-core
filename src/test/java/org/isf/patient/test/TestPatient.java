@@ -1,7 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.patient.test;
 
-
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -89,36 +109,32 @@ public class TestPatient
 		patient.setWeight(weight);
 		patient.setMaritalStatus(maritalStatus);
 		patient.setProfession(profession);
-		
-		return;
 	}
 	
 	public void check(
 			Patient patient) 
-	{		
-		assertEquals(firstName, patient.getFirstName());
-		assertEquals(secondName, patient.getSecondName());
-		assertEquals(birthDate, patient.getBirthDate());
-		//assertEquals(age, patient.getAge());
-		assertEquals(agetype, patient.getAgetype());
-		assertEquals(sex, patient.getSex());
-		assertEquals(address, patient.getAddress());
-		assertEquals(city, patient.getCity());
-		assertEquals(nextKin, patient.getNextKin());
-		assertEquals(telephone, patient.getTelephone());
-		assertEquals(mother_name, patient.getMother_name());
-		assertEquals(mother, patient.getMother());
-		assertEquals(father_name, patient.getFather_name());
-		assertEquals(father, patient.getFather());
-		assertEquals(bloodType, patient.getBloodType());
-		assertEquals(hasInsurance, patient.getHasInsurance());		
-		assertEquals(parentTogether, patient.getParentTogether());
-		assertEquals(taxCode, patient.getTaxCode());
-		assertEquals(maritalStatus, patient.getMaritalStatus());
-		assertEquals(profession, patient.getProfession());
-		//assertEquals(height, patient.getHeight());
-		//assertEquals(weight, patient.getWeight());
-		
-		return;
+	{
+		assertThat(patient.getFirstName()).isEqualTo(firstName);
+		assertThat(patient.getSecondName()).isEqualTo(secondName);
+		assertThat(patient.getBirthDate()).hasSameTimeAs(birthDate);
+		//assertThat(patient.getAge()).isEqualTo(age);
+		assertThat(patient.getAgetype()).isEqualTo(agetype);
+		assertThat(patient.getSex()).isEqualTo(sex);
+		assertThat(patient.getAddress()).isEqualTo(address);
+		assertThat(patient.getCity()).isEqualTo(city);
+		assertThat(patient.getNextKin()).isEqualTo(nextKin);
+		assertThat(patient.getTelephone()).isEqualTo(telephone);
+		assertThat(patient.getMother_name()).isEqualTo(mother_name);
+		assertThat(patient.getMother()).isEqualTo(mother);
+		assertThat(patient.getFather_name()).isEqualTo(father_name);
+		assertThat(patient.getFather()).isEqualTo(father);
+		assertThat(patient.getBloodType()).isEqualTo(bloodType);
+		assertThat(patient.getHasInsurance()).isEqualTo(hasInsurance);
+		assertThat(patient.getParentTogether()).isEqualTo(parentTogether);
+		assertThat(patient.getTaxCode()).isEqualTo(taxCode);
+		assertThat(patient.getMaritalStatus()).isEqualTo(maritalStatus);
+		assertThat(patient.getProfession()).isEqualTo(profession);
+		//assertThat(patient.getHeight()).isEqualTo(height);
+		//assertThat(patient.getWeight()).isEqualTo(weight);
 	}
 }

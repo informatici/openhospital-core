@@ -1,6 +1,6 @@
 -- Alter VISITS
 ALTER TABLE VISITS
-	ADD COLUMN VST_WRD_ID_A char(1) NOT NULL,
+	ADD COLUMN VST_WRD_ID_A char(1) DEFAULT NULL,
 	ADD COLUMN VST_DURATION int(11) DEFAULT NULL,
 	ADD COLUMN VST_SERVICE varchar(45) DEFAULT NULL;
 	
@@ -15,6 +15,6 @@ UPDATE MENUITEM SET MNI_POSITION = '11' WHERE (MNI_ID_A = 'help');
 UPDATE MENUITEM SET MNI_POSITION = '10' WHERE (MNI_ID_A = 'communication');
 UPDATE MENUITEM SET MNI_SHORTCUT = 'M' WHERE (MNI_ID_A = 'communication');
 
-INSERT INTO MENUITEM VALUES ('worksheet','angal.menu.btn.worksheet','angal.menu.worksheet','x','I','main','org.isf.visits.gui.VisitView','N',8);
-INSERT INTO GROUPMENU (GM_UG_ID_A, GM_MNI_ID_A, GM_ACTIVE) VALUES ('admin','Worksheet',1);
+INSERT INTO MENUITEM VALUES ('worksheet','angal.menu.btn.worksheet','angal.menu.worksheet','x','W','main','org.isf.visits.gui.VisitView','N',8);
+INSERT INTO GROUPMENU (GM_UG_ID_A, GM_MNI_ID_A, GM_ACTIVE) VALUES ('admin','worksheet',1);
 

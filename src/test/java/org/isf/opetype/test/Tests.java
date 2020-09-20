@@ -1,9 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.opetype.test;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -21,7 +39,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -41,8 +58,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testOperationType = new TestOperationType();
     	testOperationTypeContext = new TestOperationTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -51,8 +66,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -62,14 +75,12 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
     public static void tearDownClass() throws OHException 
     {
-    	return;
+
     }
 	
 		
@@ -89,8 +100,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -109,8 +118,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -125,15 +132,13 @@ public class Tests
 			OperationType foundOperationType = (OperationType)jpa.find(OperationType.class, code); 
 			ArrayList<OperationType> operationTypes = operationTypeIoOperation.getOperationType();
 			
-			assertEquals(foundOperationType.getDescription(), operationTypes.get(operationTypes.size() - 1).getDescription());
+			assertThat(operationTypes.get(operationTypes.size() - 1).getDescription()).isEqualTo(foundOperationType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -151,16 +156,14 @@ public class Tests
 			result = operationTypeIoOperation.updateOperationType(foundOperationType);
 			OperationType updateOperationType = (OperationType)jpa.find(OperationType.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateOperationType.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updateOperationType.getDescription()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -174,7 +177,7 @@ public class Tests
 			OperationType operationType = testOperationType.setup(true);
 			result = operationTypeIoOperation.newOperationType(operationType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkOperationTypeIntoDb(operationType.getCode());
 		} 
 		catch (Exception e) 
@@ -182,8 +185,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -198,15 +199,13 @@ public class Tests
 			code = _setupTestOperationType(false);
 			result = operationTypeIoOperation.isCodePresent(code);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -222,32 +221,26 @@ public class Tests
 			OperationType foundOperationType = (OperationType)jpa.find(OperationType.class, code); 
 			result = operationTypeIoOperation.deleteOperationType(foundOperationType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = operationTypeIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 		
 	
 	private void _saveContext() throws OHException 
     {	
 		testOperationTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testOperationTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestOperationType(
@@ -272,7 +265,5 @@ public class Tests
 
 		foundOperationType = (OperationType)jpa.find(OperationType.class, code); 
 		testOperationType.check(foundOperationType);
-		
-		return;
 	}	
 }

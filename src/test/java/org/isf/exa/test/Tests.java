@@ -1,9 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.exa.test;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -56,8 +74,6 @@ public class Tests
     	testExamContext = new TestExamContext();
     	testExamTypeContext = new TestExamTypeContext();
     	testExamRowContext = new TestExamRowContext();
-    	
-        return;
     }
 
     @Before
@@ -66,8 +82,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -77,8 +91,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -90,8 +102,6 @@ public class Tests
     	testExamContext = null;
     	testExamTypeContext = null;
     	testExamRowContext = null;
-
-    	return;
     }
 	
 	
@@ -111,8 +121,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -131,8 +139,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -146,13 +152,10 @@ public class Tests
 			code = _setupTestExamRow(false);
 			_checkExamRowIntoDb(code);
 		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
+		catch (Exception e) {
+			e.printStackTrace();
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -171,8 +174,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -187,15 +188,13 @@ public class Tests
 			ExamRow foundExamRow = (ExamRow)jpa.find(ExamRow.class, code); 
 			ArrayList<ExamRow> examRows = examRowIoOperation.getExamRow(0, null);
 			
-			assertEquals(foundExamRow.getDescription(), examRows.get(examRows.size()-1).getDescription());
+			assertThat(examRows.get(examRows.size() - 1).getDescription()).isEqualTo(foundExamRow.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -210,15 +209,13 @@ public class Tests
 			Exam foundExam = (Exam)jpa.find(Exam.class, code); 
 			List<Exam> exams = examIoOperation.getExams();
 			
-			assertEquals(foundExam.getDescription(), exams.get(exams.size()-1).getDescription());
+			assertThat(exams.get(exams.size() - 1).getDescription()).isEqualTo(foundExam.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -233,15 +230,13 @@ public class Tests
 			ExamType foundExamType = (ExamType)jpa.find(ExamType.class, code); 
 			ArrayList<ExamType> examTypes = examIoOperation.getExamType();
 
-			assertTrue(examTypes.contains(foundExamType));
+			assertThat(examTypes).contains(foundExamType);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -262,7 +257,7 @@ public class Tests
 			jpa.commitTransaction();
 			result = examIoOperation.newExamRow(examRow);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkExamRowIntoDb(examRow.getCode());
 		} 
 		catch (Exception e) 
@@ -270,8 +265,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -291,7 +284,7 @@ public class Tests
 			Exam exam = testExam.setup(examType, 1, false);
 			result = examIoOperation.newExam(exam);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkExamIntoDb(exam.getCode());
 		} 
 		catch (Exception e) 
@@ -299,8 +292,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -319,16 +310,14 @@ public class Tests
 			result = examIoOperation.updateExam(foundExam);
 			Exam updateExam = (Exam)jpa.find(Exam.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateExam.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updateExam.getDescription()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -344,17 +333,15 @@ public class Tests
 			Exam foundExam = (Exam)jpa.find(Exam.class, code); 
 			result = examIoOperation.deleteExam(foundExam);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = examIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -370,17 +357,15 @@ public class Tests
 			ExamRow foundExamRow = (ExamRow)jpa.find(ExamRow.class, code); 
 			result = examIoOperation.deleteExamRow(foundExamRow);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = examIoOperation.isRowPresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -400,15 +385,13 @@ public class Tests
 			jpa.commitTransaction();
 			result = examIoOperation.isKeyPresent(exam);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 		
 	
@@ -417,8 +400,6 @@ public class Tests
 		testExamContext.saveAll(jpa);
 		testExamTypeContext.saveAll(jpa);
 		testExamRowContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
@@ -426,8 +407,6 @@ public class Tests
 		testExamRowContext.deleteNews(jpa);
 		testExamContext.deleteNews(jpa);
 		testExamTypeContext.deleteNews(jpa);
-        
-        return;
     }
     
 	private String _setupTestExam(
@@ -453,8 +432,6 @@ public class Tests
 	
 		foundExam = (Exam)jpa.find(Exam.class, code); 
 		testExam.check(foundExam);
-		
-		return;
 	}	
 
 	private int _setupTestExamRow(
@@ -482,8 +459,6 @@ public class Tests
 
 		foundExamRow = (ExamRow)jpa.find(ExamRow.class, code); 
 		testExamRow.check(foundExamRow);
-		
-		return;
 	}	
 
 	private String _setupTestExamType(

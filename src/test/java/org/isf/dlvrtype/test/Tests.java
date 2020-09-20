@@ -1,9 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.dlvrtype.test;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -21,7 +39,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -41,8 +58,6 @@ public class Tests
 		jpa = new DbJpaUtil();
     	testDeliveryType = new TestDeliveryType();
     	testDeliveryTypeContext = new TestDeliveryTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -51,8 +66,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -62,8 +75,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -71,8 +82,6 @@ public class Tests
     {
     	testDeliveryType = null;
     	testDeliveryTypeContext = null;
-
-    	return;
     }
 	
     
@@ -92,8 +101,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -112,8 +119,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	        
 	@Test
@@ -125,15 +130,13 @@ public class Tests
 			DeliveryType foundDeliveryType = (DeliveryType)jpa.find(DeliveryType.class, code); 
 			ArrayList<DeliveryType> deliveryTypes = deliveryTypeIoOperation.getDeliveryType();
 			
-			assertEquals(foundDeliveryType.getDescription(), deliveryTypes.get(deliveryTypes.size()-1).getDescription());
+			assertThat(deliveryTypes.get(deliveryTypes.size() - 1).getDescription()).isEqualTo(foundDeliveryType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -152,16 +155,14 @@ public class Tests
 			result = deliveryTypeIoOperation.updateDeliveryType(foundDeliveryType);
 			DeliveryType updateDeliveryType = (DeliveryType)jpa.find(DeliveryType.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateDeliveryType.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updateDeliveryType.getDescription()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -175,7 +176,7 @@ public class Tests
 			DeliveryType deliveryType = testDeliveryType.setup(true);
 			result = deliveryTypeIoOperation.newDeliveryType(deliveryType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkDeliveryTypeIntoDb(deliveryType.getCode());
 		} 
 		catch (Exception e) 
@@ -183,8 +184,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -199,15 +198,13 @@ public class Tests
 			code = _setupTestDeliveryType(false);
 			result = deliveryTypeIoOperation.isCodePresent(code);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -222,32 +219,26 @@ public class Tests
 			code = _setupTestDeliveryType(false);
 			DeliveryType foundDeliveryType = (DeliveryType)jpa.find(DeliveryType.class, code); 
 			result = deliveryTypeIoOperation.deleteDeliveryType(foundDeliveryType);
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = deliveryTypeIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	
 	private void _saveContext() throws OHException 
     {	
 		testDeliveryTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testDeliveryTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestDeliveryType(
@@ -272,7 +263,5 @@ public class Tests
 
 		foundDeliveryType = (DeliveryType)jpa.find(DeliveryType.class, code); 
 		testDeliveryType.check(foundDeliveryType);
-		
-		return;
 	}	
 }

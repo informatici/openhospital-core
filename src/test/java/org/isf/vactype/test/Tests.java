@@ -1,10 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.vactype.test;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -22,7 +39,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -42,8 +58,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testVaccineType = new TestVaccineType();
     	testVaccineTypeContext = new TestVaccineTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -52,8 +66,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -63,8 +75,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -93,8 +103,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -113,8 +121,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -129,15 +135,13 @@ public class Tests
 			VaccineType foundVaccineType = (VaccineType)jpa.find(VaccineType.class, code); 
 			ArrayList<VaccineType> vaccineTypes = vaccineTypeIoOperation.getVaccineType();
 			
-			assertEquals(foundVaccineType.getDescription(), vaccineTypes.get(vaccineTypes.size()-1).getDescription());
+			assertThat(vaccineTypes.get(vaccineTypes.size() - 1).getDescription()).isEqualTo(foundVaccineType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -155,16 +159,14 @@ public class Tests
 			result = vaccineTypeIoOperation.updateVaccineType(foundVaccineType);
 			VaccineType updateVaccineType = (VaccineType)jpa.find(VaccineType.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateVaccineType.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updateVaccineType.getDescription()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -178,7 +180,7 @@ public class Tests
 			VaccineType vaccineType = testVaccineType.setup(true);
 			result = vaccineTypeIoOperation.newVaccineType(vaccineType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkVaccineTypeIntoDb(vaccineType.getCode());
 		} 
 		catch (Exception e) 
@@ -186,8 +188,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -202,15 +202,13 @@ public class Tests
 			code = _setupTestVaccineType(false);
 			result = vaccineTypeIoOperation.isCodePresent(code);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -226,17 +224,15 @@ public class Tests
 			VaccineType foundVaccineType = (VaccineType)jpa.find(VaccineType.class, code); 
 			result = vaccineTypeIoOperation.deleteVaccineType(foundVaccineType);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = vaccineTypeIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	
@@ -251,8 +247,8 @@ public class Tests
 			code = _setupTestVaccineType(false);
 			result = vaccineTypeIoOperation.findVaccineType(code);
 			
-			assertNotNull(result);
-			assertEquals(code,result.getCode());
+			assertThat(result).isNotNull();
+			assertThat(result.getCode()).isEqualTo(code);
 		} 
 		catch (Exception e) 
 		{
@@ -264,15 +260,11 @@ public class Tests
 	private void _saveContext() throws OHException 
     {	
 		testVaccineTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testVaccineTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestVaccineType(
@@ -297,7 +289,5 @@ public class Tests
 
 		foundVaccineType = (VaccineType)jpa.find(VaccineType.class, code); 
 		testVaccineType.check(foundVaccineType);
-		
-		return;
 	}	
 }
