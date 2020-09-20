@@ -32,7 +32,6 @@ import java.util.ArrayList;
 
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.vaccine.model.Vaccine;
 import org.isf.vactype.model.VaccineType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
