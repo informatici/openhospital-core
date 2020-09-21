@@ -52,9 +52,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+
+import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
+import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -102,8 +105,8 @@ public class AdmissionIoOperations
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public List<AdmittedPatient> getAdmittedPatients(
-			String searchTerms, GregorianCalendar[] admissionRange,
-			GregorianCalendar[] dischargeRange) throws OHServiceException {
+			String searchTerms, LocalDateTime[] admissionRange,
+			LocalDateTime[] dischargeRange) throws OHServiceException {
 		return patientRepository.findByFieldsContainingWordsFromLiteral(searchTerms).stream()
 			.map(patient -> new AdmittedPatient(patient, repository.findOneByPatientAndDateRanges(patient, admissionRange, dischargeRange).orElse(null)))
 			.filter(admittedPatient -> admittedPatient.getPatient()!= null && admittedPatient.getAdmission() != null)
@@ -239,28 +242,28 @@ public class AdmissionIoOperations
 			String wardId) throws OHServiceException 
 	{
 		int next = 1;
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar first = null;
-		GregorianCalendar last = null;
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime first = null;
+		LocalDateTime last = null;
 		
 		if (wardId.equalsIgnoreCase("M") && GeneralData.MATERNITYRESTARTINJUNE) 
 		{
-			if (now.get(Calendar.MONTH) < 6) 
+			if (now.getMonthValue() < Month.JUNE.getValue()) 
 			{
-				first = new GregorianCalendar(now.get(Calendar.YEAR) - 1, Calendar.JULY, 1);
-				last = new GregorianCalendar(now.get(Calendar.YEAR), Calendar.JUNE, 30);
+				first = now.minusYears(1).withMonth(Month.JULY.getValue()).withDayOfMonth(1);
+				last = now.withMonth(Month.JUNE.getValue()).withDayOfMonth(30);
 			} 
 			else 
 			{
-				first = new GregorianCalendar(now.get(Calendar.YEAR), Calendar.JULY, 1);
-				last = new GregorianCalendar(now.get(Calendar.YEAR) + 1, Calendar.JUNE, 30);
+				first = now.withMonth(Month.JULY.getValue()).withDayOfMonth(1);
+				last = now.plusYears(1).withMonth(Month.JUNE.getValue()).withDayOfMonth(30);
 			}
 
 		} 
 		else 
 		{
-			first = new GregorianCalendar(now.get(Calendar.YEAR), 0, 1);
-			last = new GregorianCalendar(now.get(Calendar.YEAR), 11, 31);
+			first = now.with(firstDayOfYear());
+			last = now.with(lastDayOfYear());
 		}
 		
 		List<Admission> admissions = repository.findAllWhereWardAndDates(wardId, first, last);

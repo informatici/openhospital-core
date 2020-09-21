@@ -24,14 +24,14 @@ package org.isf.admission.service;
 import org.isf.admission.model.Admission;
 import org.isf.patient.model.Patient;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 
 public interface AdmissionIoOperationRepositoryCustom {
 
-	Optional<Admission> findOneByPatientAndDateRanges(Patient patient, GregorianCalendar[] admissionRange,
-													  GregorianCalendar[] dischargeRange);
+	Optional<Admission> findOneByPatientAndDateRanges(Patient patient, LocalDateTime[] admissionRange,
+													  LocalDateTime[] dischargeRange);
 
 
 	class PatientAdmission {
