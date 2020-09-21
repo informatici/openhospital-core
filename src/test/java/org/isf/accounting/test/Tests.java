@@ -822,7 +822,7 @@ public class Tests
 		BillItems billItem = billItems.get(0);
 		assertThat(foundBillItem.equals(foundBillItem)).isTrue();
 		assertThat(foundBillItem.equals(new GregorianCalendar())).isFalse();
-		assertThat(foundBillItem.equals(billItem));
+		assertThat(foundBillItem.equals(billItem)).isTrue();
 		foundBillItem.setId(-1);
 		assertThat(foundBillItem.equals(billItem)).isFalse();
 		foundBillItem.setId(id);
