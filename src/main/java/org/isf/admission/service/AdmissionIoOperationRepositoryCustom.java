@@ -25,7 +25,6 @@ import org.isf.admission.model.Admission;
 import org.isf.patient.model.Patient;
 
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Optional;
 
 

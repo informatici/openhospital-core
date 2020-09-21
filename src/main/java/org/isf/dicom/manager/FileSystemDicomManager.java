@@ -46,7 +46,6 @@ import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
 import org.isf.dicom.model.FileDicom;
-import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHServiceException;

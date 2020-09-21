@@ -21,7 +21,14 @@
  */
 package org.isf.admission.service;
 
-import java.util.*;
+import static org.isf.utils.time.TimeTools.getBeginningOfDay;
+import static org.isf.utils.time.TimeTools.getBeginningOfNextDay;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -34,9 +41,6 @@ import javax.persistence.criteria.Root;
 import org.isf.admission.model.Admission;
 import org.isf.patient.model.Patient;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.isf.utils.time.TimeTools.getBeginningOfDay;
-import static org.isf.utils.time.TimeTools.getBeginningOfNextDay;
 
 
 @Transactional
