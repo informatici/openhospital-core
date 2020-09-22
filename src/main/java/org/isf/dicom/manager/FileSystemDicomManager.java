@@ -32,12 +32,12 @@ import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Vector;
@@ -64,7 +64,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileSystemDicomManager implements DicomManagerInterface {
 
-	private static final String DICOM_DATE_FORMAT = "EEE MMM dd hh:mm:ss z yyyy";
+	private static final String DICOM_DATE_FORMAT = "EEE MMM dd HH:mm:ss z yyyy";
 
 	private final Logger logger = LoggerFactory.getLogger(FileSystemDicomManager.class);
 	
@@ -372,10 +372,11 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		rv.setDicomPatientSex(p.getProperty("dicomPatientSex"));
 		rv.setDicomPatientBirthDate(p.getProperty("dicomPatientBirthDate"));
 		rv.setDicomStudyId(p.getProperty("dicomStudyId"));
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DICOM_DATE_FORMAT, new Locale("en"));
 		try {
-			rv.setDicomStudyDate(new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale("en")).parse(p.getProperty("dicomStudyDate")));
-		} catch (ParseException e) {
-			logger.debug("1. example: {}", new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale("en")).format(new Date()));
+			rv.setDicomStudyDate(ZonedDateTime.parse(p.getProperty("dicomStudyDate"), dtf).toLocalDateTime());
+		} catch (DateTimeParseException e) {
+			logger.debug("1. example: {}", ZonedDateTime.now().format(dtf));
 			logger.debug("1. Unparsable 'dicomStudyDate': {}", p.getProperty("dicomStudyDate"));
 		}
 		rv.setDicomStudyDescription(p.getProperty("dicomStudyDescription"));
@@ -384,9 +385,9 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		rv.setDicomSeriesNumber(p.getProperty("dicomSeriesNumber"));
 		rv.setDicomSeriesDescriptionCodeSequence(p.getProperty("dicomSeriesDescriptionCodeSequence"));
 		try {
-			rv.setDicomSeriesDate(new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale("en")).parse(p.getProperty("dicomSeriesDate")));
-		} catch (ParseException e) {
-			logger.debug("2. example: {}", new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale("en")).format(new Date()));
+			rv.setDicomSeriesDate(ZonedDateTime.parse(p.getProperty("dicomSeriesDate"), dtf).toLocalDateTime());
+		} catch (DateTimeParseException e) {
+			logger.debug("2. example: {}", ZonedDateTime.now().format(dtf));
 			logger.debug("Unparsable 'dicomSeriesDate': {}", p.getProperty("dicomSeriesDate"));
 		}
 		rv.setDicomSeriesDescription(p.getProperty("dicomSeriesDescription"));
@@ -620,6 +621,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		
 		@Override
 	    public int compare(FileDicom object1, FileDicom object2) {
+			if (object2.getDicomStudyDate() == null)
+				return -1;
 	        return object1.getDicomStudyDate().compareTo(object2.getDicomStudyDate());
 	    }
 	}
