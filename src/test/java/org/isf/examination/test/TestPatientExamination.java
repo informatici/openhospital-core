@@ -23,7 +23,7 @@ package org.isf.examination.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.examination.model.PatientExamination;
 import org.isf.patient.model.Patient;
@@ -31,7 +31,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestPatientExamination 
 {	
-	private GregorianCalendar pex_date = new GregorianCalendar(2020, 1, 10);
+	private LocalDateTime pex_date = LocalDateTime.of(2020, 1, 10, 9, 0);
 	private Integer pex_height = 170;	
 	private Double pex_weight = 60.;	
 	private Integer pex_ap_min = 80;	
