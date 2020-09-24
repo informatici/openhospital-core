@@ -23,8 +23,8 @@ package org.isf.lab.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.isf.exa.model.Exam;
 import org.isf.lab.model.Laboratory;
@@ -35,9 +35,8 @@ public class TestLaboratory
 {	 
 	private Integer code = 0;
 	private String material = "TestMaterial";
-	private GregorianCalendar now = new GregorianCalendar();
-	private GregorianCalendar registrationDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-	private GregorianCalendar examDate = new GregorianCalendar(now.get(Calendar.YEAR), 10, 11);
+	private LocalDateTime registrationDate = LocalDateTime.now().withMonth(1).withDayOfMonth(1);
+	private LocalDate examDate = LocalDate.now().withMonth(10).withDayOfMonth(11);
 	private String result = "TestResult";
 	private String note = "TestNote";
 	private String patName = "TestPatientName";

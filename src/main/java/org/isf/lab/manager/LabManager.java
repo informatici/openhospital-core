@@ -21,6 +21,9 @@
  */
 package org.isf.lab.manager;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 /*------------------------------------------
  * LabManager - laboratory exam manager class
  * -----------------------------------------
@@ -30,7 +33,6 @@ package org.isf.lab.manager;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -78,7 +80,7 @@ public class LabManager {
 	 */
 	protected void validateLaboratory(Laboratory laboratory) throws OHDataValidationException {
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
-        if (laboratory.getDate() == null) laboratory.setDate(new GregorianCalendar());
+        if (laboratory.getDate() == null) laboratory.setDate(LocalDateTime.now());
         if (laboratory.getExam().getProcedure() == 2) 
 		{
 			laboratory.setResult(MessageBundle.getMessage("angal.lab.multipleresults"));
@@ -186,7 +188,7 @@ public class LabManager {
 	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Laboratory> getLaboratory(String exam, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public ArrayList<Laboratory> getLaboratory(String exam, LocalDate dateFrom, LocalDate dateTo) throws OHServiceException {
 		return ioOperations.getLaboratory(exam, dateFrom, dateTo);
 	}
 
@@ -200,7 +202,7 @@ public class LabManager {
 	 * @return the list of {@link LaboratoryForPrint}s . It could be <code>empty</code>.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<LaboratoryForPrint> getLaboratoryForPrint(String exam, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public ArrayList<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDate dateFrom, LocalDate dateTo) throws OHServiceException {
 		ArrayList<LaboratoryForPrint> labs = ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo);
 		setLabMultipleResults(labs);
 			
