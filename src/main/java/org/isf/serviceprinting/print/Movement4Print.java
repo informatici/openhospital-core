@@ -21,12 +21,12 @@
  */
 package org.isf.serviceprinting.print;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.medicalstock.model.Movement;
 
 public class Movement4Print {
-	private GregorianCalendar date;
+	private LocalDateTime date;
 	private String pharmaceuticalName;
 	private String pharmaceuticalType;
 	private String movementType;
@@ -49,7 +49,7 @@ public class Movement4Print {
 		return getConvertedString(date);
 	}
 
-	public void setDate(GregorianCalendar date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
@@ -102,13 +102,11 @@ public class Movement4Print {
 	public void setWard(String ward) {
 		this.ward = ward;
 	}
-	private String getConvertedString(GregorianCalendar time) {
+	private String getConvertedString(LocalDateTime time) {
 		if (time == null)
 			return "No Date";
-		String string = String
-				.valueOf(time.get(GregorianCalendar.DAY_OF_MONTH));
-		string += "/" + (time.get(GregorianCalendar.MONTH) + 1);
-		String year = String.valueOf(time.get(GregorianCalendar.YEAR));
+		String string = time.getDayOfMonth() + "/" + time.getMonthValue();
+		String year = String.valueOf(time.getYear());
 		year = year.substring(2, year.length());
 		string += "/" + year;
 		return string;
