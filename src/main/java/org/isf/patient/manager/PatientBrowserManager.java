@@ -21,8 +21,8 @@
  */
 package org.isf.patient.manager;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -299,7 +299,7 @@ public class PatientBrowserManager {
 			if (mergedPatient.getBirthDate() != null &&
 					mergedPatient.getAgetype().compareTo("") == 0) {
 				//mergedPatient only Age
-				Date bdate2 = patient2.getBirthDate();
+				LocalDate bdate2 = patient2.getBirthDate();
 				int age2 = patient2.getAge();
 				String ageType2 = patient2.getAgetype();
 				if (bdate2 != null) {
@@ -391,10 +391,10 @@ public class PatientBrowserManager {
     }
 
     private boolean checkAge(Patient patient) {
-	    Date now = new Date((new java.util.Date()).getTime());
-        Date birthDate = patient.getBirthDate();
+	    LocalDate now = LocalDate.now();
+      LocalDate birthDate = patient.getBirthDate();
 
-        if(birthDate == null || birthDate.after(now)){
+        if (birthDate == null || birthDate.isAfter(now)){
             return false;
         }
         if(patient.getAge() < 0 || patient.getAge() > 200){
