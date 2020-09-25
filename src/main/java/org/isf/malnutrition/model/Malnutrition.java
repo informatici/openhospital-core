@@ -21,7 +21,8 @@
  */
 package org.isf.malnutrition.model;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 
@@ -72,14 +73,14 @@ public class Malnutrition extends Auditable<String>
 	 * Date of this control
 	 */
 	@NotNull
-	@Column(name="MLN_DATE_SUPP")
-	private GregorianCalendar dateSupp;
+	@Column(name="MLN_DATE_SUPP")		// SQL type: datetime
+	private LocalDateTime dateSupp;
 
 	/*
 	 * Date of next control
 	 */
-	@Column(name="MNL_DATE_CONF")
-	private GregorianCalendar dateConf;
+	@Column(name="MNL_DATE_CONF")		// SQL type: datetime. NB: possible typo in column name ("MNL")
+	private LocalDateTime dateConf;
 
 	@ManyToOne
 	@JoinColumn(name="MLN_ADM_ID")
@@ -103,8 +104,8 @@ public class Malnutrition extends Auditable<String>
 
 	public Malnutrition() { }
 	
-	public Malnutrition(int aCode, GregorianCalendar aDateSupp,
-			GregorianCalendar aDateConf, Admission anAdmission, float aHeight,
+	public Malnutrition(int aCode, LocalDateTime aDateSupp,
+			LocalDateTime aDateConf, Admission anAdmission, float aHeight,
 			float aWeight) {
 		code = aCode;
 		dateSupp = aDateSupp;
@@ -114,8 +115,8 @@ public class Malnutrition extends Auditable<String>
 		weight = aWeight;
 	}
 	
-	public Malnutrition(int aCode, GregorianCalendar aDateSupp,
-			GregorianCalendar aDateConf, Admission anAdmission, Patient aPatient, float aHeight,
+	public Malnutrition(int aCode, LocalDateTime aDateSupp,
+			LocalDateTime aDateConf, Admission anAdmission, Patient aPatient, float aHeight,
 			float aWeight) {
 		code = aCode;
 		dateSupp = aDateSupp;
@@ -149,11 +150,11 @@ public class Malnutrition extends Auditable<String>
 		this.admission = admission;
 	}
 
-	public void setDateSupp(GregorianCalendar aDateSupp) {
+	public void setDateSupp(LocalDateTime aDateSupp) {
 		dateSupp = aDateSupp;
 	}
 
-	public void setDateConf(GregorianCalendar aDateConf) {
+	public void setDateConf(LocalDateTime aDateConf) {
 		dateConf = aDateConf;
 	}
 	
@@ -165,11 +166,11 @@ public class Malnutrition extends Auditable<String>
 		weight = aWeight;
 	}
 
-	public GregorianCalendar getDateSupp() {
+	public LocalDateTime getDateSupp() {
 		return dateSupp;
 	}
 
-	public GregorianCalendar getDateConf() {
+	public LocalDateTime getDateConf() {
 		return dateConf;
 	}
 

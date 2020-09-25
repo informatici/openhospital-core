@@ -24,8 +24,7 @@ package org.isf.malnutrition.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.admission.model.Admission;
 import org.isf.malnutrition.model.Malnutrition;
@@ -34,9 +33,9 @@ import org.isf.utils.exception.OHException;
 public class TestMalnutrition 
 {	 
 	private int code = 0;
-	private GregorianCalendar now = new GregorianCalendar();
-	private GregorianCalendar dateSupp = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-    private GregorianCalendar dateConf = new GregorianCalendar(now.get(Calendar.YEAR), 10, 11);
+	private LocalDateTime now = LocalDateTime.now();
+	private LocalDateTime dateSupp = now.withMonth(1).withDayOfMonth(1);
+    private LocalDateTime dateConf = now.withMonth(10).withDayOfMonth(11);
     private float height = (float)185.47;
 	private float weight = (float)70.70;
 	
