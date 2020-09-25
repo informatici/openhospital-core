@@ -33,8 +33,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -61,8 +61,8 @@ public class MedicalStockWardIoOperations
 	 */
 	public ArrayList<MovementWard> getWardMovements(
 			String wardId, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo) throws OHServiceException 
+			LocalDateTime dateFrom, 
+			LocalDateTime dateTo) throws OHServiceException 
 	{
 		ArrayList<Integer> pMovementWardCode = null;
 		ArrayList<MovementWard> pMovementWard = new ArrayList<MovementWard>(); 
@@ -89,8 +89,8 @@ public class MedicalStockWardIoOperations
 	 */
 	public ArrayList<MovementWard> getWardMovementsToWard(
 			String idwardTo, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo) throws OHServiceException 
+			LocalDateTime dateFrom, 
+			LocalDateTime dateTo) throws OHServiceException 
 	{
             return movementRepository.findWardMovements(idwardTo, dateFrom, dateTo);
 	}
