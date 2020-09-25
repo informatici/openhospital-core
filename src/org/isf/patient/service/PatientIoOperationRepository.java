@@ -28,6 +28,9 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
     List<Patient> findAllWhereDeleted(Pageable pageable);
 
     List<Patient> findAllByDeletedIsNullOrDeletedEqualsOrderByName(String patDeleted, Pageable pageable);
+
+	@Query(value = "SELECT * FROM PATIENT WHERE lower(PAT_NAME) like lower(:name) OR lower(PAT_FNAME) like lower(:name)", nativeQuery= true)
+	List<Patient> findAllLikeNameOrderedByName(@Param("name") String name);
     
     @Query(value = "SELECT * FROM PATIENT WHERE PAT_NAME = :name AND (PAT_DELETED='N' OR PAT_DELETED IS NULL) ORDER BY PAT_SNAME,PAT_FNAME", nativeQuery= true)
     List<Patient> findAllWhereNameAndDeletedOrderedByName(@Param("name") String name);

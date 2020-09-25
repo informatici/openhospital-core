@@ -101,6 +101,17 @@ public class PatientBrowserManager {
 	}
 
 	/**
+	 * method that get a Patient list by his/her name
+	 *
+	 * @param name
+	 * @return the list of Patients that match specified name
+	 * @throws OHServiceException
+	 */
+	public ArrayList<Patient> getPatients(String name) throws OHServiceException {
+		return ioOperations.getPatients(name);
+	}
+
+	/**
 	 * method that get a Patient by his/her ID
 	 * 
 	 * @param code

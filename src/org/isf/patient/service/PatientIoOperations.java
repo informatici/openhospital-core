@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.persistence.Query;
 
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -69,9 +70,24 @@ public class PatientIoOperations
 	{
 		ArrayList<Patient> pPatient = null;
 		
-		
 		pPatient = new ArrayList<Patient>(repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName("N", pageable));
 					
+		return pPatient;
+	}
+
+	/**
+	 * method that returns the full list of Patients by name
+	 *
+	 * @param name
+	 * @return
+	 * @throws OHServiceException
+	 */
+	public ArrayList<Patient> getPatients(String name) throws OHServiceException {
+
+		ArrayList<Patient> pPatient = null;
+
+		pPatient = new ArrayList<Patient>(repository.findAllLikeNameOrderedByName(name + "%"));
+
 		return pPatient;
 	}
 

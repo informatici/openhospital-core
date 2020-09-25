@@ -1,8 +1,6 @@
 package org.isf.patient.test;
 
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +17,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -125,6 +125,25 @@ public class Tests
 			assertEquals(true, false);
 		}
 		
+		return;
+	}
+
+	@Test
+	public void testIoGetPatientsByName()
+	{
+		try
+		{
+			_setupTestPatient(false);
+			ArrayList<Patient> patients = patientIoOperation.getPatients("TestFirstName");
+
+			assertTrue(patients.size()>0);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			assertEquals(true, false);
+		}
+
 		return;
 	}
 	
