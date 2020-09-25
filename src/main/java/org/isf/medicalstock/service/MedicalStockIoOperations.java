@@ -21,9 +21,8 @@
  */
 package org.isf.medicalstock.service;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 
@@ -478,8 +477,8 @@ public class MedicalStockIoOperations {
 	 */
 	public ArrayList<Movement> getMovements(
 			String wardId, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo) throws OHServiceException 
+			LocalDateTime dateFrom, 
+			LocalDateTime dateTo) throws OHServiceException 
 	{
 		ArrayList<Integer> pMovementCode = null;
 		ArrayList<Movement> pMovement = new ArrayList<Movement>();
@@ -518,12 +517,12 @@ public class MedicalStockIoOperations {
 			String medicalType, 
 			String wardId, 
 			String movType,
-			GregorianCalendar movFrom, 
-			GregorianCalendar movTo,
-			GregorianCalendar lotPrepFrom, 
-			GregorianCalendar lotPrepTo,
-			GregorianCalendar lotDueFrom, 
-			GregorianCalendar lotDueTo) throws OHServiceException 
+			LocalDateTime movFrom, 
+			LocalDateTime movTo,
+			LocalDateTime lotPrepFrom, 
+			LocalDateTime lotPrepTo,
+			LocalDateTime lotDueFrom, 
+			LocalDateTime lotDueTo) throws OHServiceException 
 	{
 		ArrayList<Integer> pMovementCode = null;
 		ArrayList<Movement> pMovement = new ArrayList<Movement>();
@@ -562,8 +561,8 @@ public class MedicalStockIoOperations {
 			String medicalTypeCode, 
 			String wardId, 
 			String movType,
-			GregorianCalendar movFrom, 
-			GregorianCalendar movTo, 
+			LocalDateTime movFrom, 
+			LocalDateTime movTo, 
 			String lotCode,
 			MovementOrder order) throws OHServiceException 
 	{
@@ -611,25 +610,12 @@ public class MedicalStockIoOperations {
 		return new ArrayList<Lot>(lots);
 	}
 
-	private GregorianCalendar _convertTimestampToCalendar(Timestamp time)
-	{
-		GregorianCalendar calendar = null;
-		
-		if (time != null) 
-		{
-			calendar = new GregorianCalendar();
-			calendar.setTimeInMillis(time.getTime());
-		}
-		
-		return calendar;
-	}
-		
 	/**
 	 * returns the date of the last movement
 	 * @return 
 	 * @throws OHServiceException
 	 */
-	public GregorianCalendar getLastMovementDate() throws OHServiceException 
+	public LocalDateTime getLastMovementDate() throws OHServiceException 
 	{
 		return movRepository.findMaxDate();
 	}

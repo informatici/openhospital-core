@@ -38,8 +38,8 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 
@@ -62,8 +62,8 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 	@Override
 	public List<Integer> findMovementWhereDatesAndId(
 			String wardId, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo) {
+			LocalDateTime dateFrom, 
+			LocalDateTime dateTo) {
 		return _getMovementWhereDatesAndId(wardId, dateFrom, dateTo);
 	}
 
@@ -74,12 +74,12 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			String medicalType, 
 			String wardId, 
 			String movType,
-			GregorianCalendar movFrom, 
-			GregorianCalendar movTo,
-			GregorianCalendar lotPrepFrom, 
-			GregorianCalendar lotPrepTo,
-			GregorianCalendar lotDueFrom, 
-			GregorianCalendar lotDueTo) {
+			LocalDateTime movFrom, 
+			LocalDateTime movTo,
+			LocalDateTime lotPrepFrom, 
+			LocalDateTime lotPrepTo,
+			LocalDateTime lotDueFrom, 
+			LocalDateTime lotDueTo) {
 		return _getMovementWhereData(medicalCode, medicalType, wardId, movType, movFrom, movTo,
 				lotPrepFrom, lotPrepTo, lotDueFrom, lotDueTo);
 	}		
@@ -91,8 +91,8 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			String medicalTypeCode, 
 			String wardId, 
 			String movType,
-			GregorianCalendar movFrom, 
-			GregorianCalendar movTo, 
+			LocalDateTime movFrom, 
+			LocalDateTime movTo, 
 			String lotCode,
 			MovementOrder order) {
 		return _getMovementForPrint(medicalDescription, medicalTypeCode, wardId, movType, movFrom, movTo,
@@ -102,8 +102,8 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 		
 	private List<Integer> _getMovementWhereDatesAndId(
 			String wardId, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo)
+			LocalDateTime dateFrom, 
+			LocalDateTime dateTo)
 	{
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
@@ -113,7 +113,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 
 		if ((dateFrom != null) && (dateTo != null))
 		{
-			predicates.add(builder.between(root.<GregorianCalendar>get(DATE), dateFrom, dateTo));
+			predicates.add(builder.between(root.<LocalDateTime>get(DATE), dateFrom, dateTo));
 		}
 		if (wardId != null && !wardId.equals("")) 
 		{
@@ -132,12 +132,12 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			String medicalType, 
 			String wardId, 
 			String movType,
-			GregorianCalendar movFrom, 
-			GregorianCalendar movTo,
-			GregorianCalendar lotPrepFrom, 
-			GregorianCalendar lotPrepTo,
-			GregorianCalendar lotDueFrom, 
-			GregorianCalendar lotDueTo) {
+			LocalDateTime movFrom, 
+			LocalDateTime movTo,
+			LocalDateTime lotPrepFrom, 
+			LocalDateTime lotPrepTo,
+			LocalDateTime lotDueFrom, 
+			LocalDateTime lotDueTo) {
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
 		Root<Movement> root = query.from(Movement.class);
@@ -151,13 +151,13 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			predicates.add(builder.equal(root.<Medical>get(MEDICAL).<MedicalType>get(TYPE).<String>get(CODE), medicalType));
 		}
 		if ((movFrom != null) && (movTo != null)) {
-			predicates.add(builder.between(root.<GregorianCalendar>get(DATE), movFrom, movTo));
+			predicates.add(builder.between(root.<LocalDateTime>get(DATE), movFrom, movTo));
 		}
 		if ((lotPrepFrom != null) && (lotPrepTo != null)) {
-			predicates.add(builder.between(root.<Lot>get(LOT).<GregorianCalendar>get("preparationDate"), lotPrepFrom, lotPrepTo));
+			predicates.add(builder.between(root.<Lot>get(LOT).<LocalDateTime>get("preparationDate"), lotPrepFrom, lotPrepTo));
 		}
 		if ((lotDueFrom != null) && (lotDueTo != null)) {
-			predicates.add(builder.between(root.<Lot>get(LOT).<GregorianCalendar>get("dueDate"), lotPrepFrom, lotPrepTo));
+			predicates.add(builder.between(root.<Lot>get(LOT).<LocalDateTime>get("dueDate"), lotPrepFrom, lotPrepTo));
 		}
 		if (movType != null) {
 			predicates.add(builder.equal(root.<MedicalType>get(TYPE).<String>get(CODE), movType));
@@ -178,8 +178,8 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			String medicalTypeCode, 
 			String wardId, 
 			String movType,
-			GregorianCalendar movFrom, 
-			GregorianCalendar movTo, 
+			LocalDateTime movFrom, 
+			LocalDateTime movTo, 
 			String lotCode,
 			MovementOrder order) {
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -198,7 +198,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			predicates.add(builder.equal(root.<Ward>get(LOT).<String>get(CODE), lotCode));
 		}
 		if ((movFrom != null) && (movTo != null)) {
-			predicates.add(builder.between(root.<GregorianCalendar>get(DATE), movFrom, movTo));
+			predicates.add(builder.between(root.<LocalDateTime>get(DATE), movFrom, movTo));
 		}
 		if (movType != null) {
 			predicates.add(builder.equal(root.<MedicalType>get(TYPE).<String>get(CODE), movType));
