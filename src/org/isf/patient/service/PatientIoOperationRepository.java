@@ -3,6 +3,7 @@ package org.isf.patient.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.isf.patient.model.Patient;
 import org.springframework.data.domain.Pageable;
@@ -124,4 +125,6 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
     		+"ORDER BY PAT_ID DESC", 
     		nativeQuery= true)
     ArrayList<Patient> getPatientsHeadWithHeightAndWeight();
+
+	List<Patient> getPatientsByParams(Map<String, String> params);
 }

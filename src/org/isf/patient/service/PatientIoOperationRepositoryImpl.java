@@ -1,11 +1,15 @@
 package org.isf.patient.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.*;
 
+import org.isf.patient.model.Patient;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -68,5 +72,25 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 		queryBld.append(" ORDER BY PAT_ID DESC");
 
 		return queryBld.toString();
+	}
+
+	public List<Patient> getPatientsByParams(Map<String, String> params) {
+
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
+		Root<Patient> patient = query.from(Patient.class);
+
+//		Path<String> emailPath = user.get("email");
+
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		for (Map.Entry<String, String> entry : params.entrySet()) {
+			Path<String> keyPath = patient.get(entry.getKey());
+			predicates.add(cb.like(keyPath, entry.getValue()));
+		}
+		query.select(patient).where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+
+		return entityManager.createQuery(query)
+				.getResultList();
+
 	}
 }

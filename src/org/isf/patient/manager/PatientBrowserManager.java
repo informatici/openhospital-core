@@ -1,9 +1,6 @@
 package org.isf.patient.manager;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 import org.isf.accounting.manager.BillBrowserManager;
 import org.isf.accounting.model.Bill;
@@ -103,12 +100,12 @@ public class PatientBrowserManager {
 	/**
 	 * method that get a Patient list by his/her name
 	 *
-	 * @param name
+	 * @param params
 	 * @return the list of Patients that match specified name
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatients(String name) throws OHServiceException {
-		return ioOperations.getPatients(name);
+	public ArrayList<Patient> getPatients(Map<String, String> params) throws OHServiceException {
+		return ioOperations.getPatients(params);
 	}
 
 	/**

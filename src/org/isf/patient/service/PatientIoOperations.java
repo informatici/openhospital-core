@@ -22,6 +22,7 @@ import java.io.IOException;
  *------------------------------------------*/
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.persistence.Query;
@@ -82,11 +83,11 @@ public class PatientIoOperations
 	 * @return
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatients(String name) throws OHServiceException {
+	public ArrayList<Patient> getPatients(Map<String, String> parameters) throws OHServiceException {
 
 		ArrayList<Patient> pPatient = null;
 
-		pPatient = new ArrayList<Patient>(repository.findAllLikeNameOrderedByName(name + "%"));
+		pPatient = new ArrayList<Patient>(repository.getPatientsByParams(parameters));
 
 		return pPatient;
 	}

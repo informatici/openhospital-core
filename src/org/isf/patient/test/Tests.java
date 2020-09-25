@@ -2,7 +2,9 @@ package org.isf.patient.test;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperations;
@@ -134,7 +136,9 @@ public class Tests
 		try
 		{
 			_setupTestPatient(false);
-			ArrayList<Patient> patients = patientIoOperation.getPatients("TestFirstName");
+			Map<String, String> params = new HashMap<String, String>();
+			params.put("firstName", "TestFirstName");
+			ArrayList<Patient> patients = patientIoOperation.getPatients(params);
 
 			assertTrue(patients.size()>0);
 		}
