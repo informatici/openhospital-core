@@ -419,6 +419,19 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<version>1.5.22.RELEASE</version>
 			<scope>test</scope>
+			<!-- TODO remove exclusion and assertj-core when upgrading spring-boot-starter-test -->
+			<exclusions>
+				<exclusion>
+					<groupId>org.assertj</groupId>
+					<artifactId>assertj-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.17.2</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
              <groupId>org.springframework</groupId>
