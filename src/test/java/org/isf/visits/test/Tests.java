@@ -1,10 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.visits.test;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -54,8 +71,6 @@ public class Tests
     	testPatientContext = new TestPatientContext();
     	testWard = new TestWard();
     	testWardContext = new TestWardContext();
-    	
-        return;
     }
 
     @Before
@@ -64,8 +79,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -75,8 +88,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -88,7 +99,6 @@ public class Tests
     	testPatient = null;
     	testPatientContext = null;
     	testWardContext = null;
-    	return;
     }
 	
 		
@@ -108,8 +118,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -128,8 +136,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -141,7 +147,7 @@ public class Tests
 			Visit foundVisit = (Visit)jpa.find(Visit.class, id);
 			ArrayList<Visit> visits = visitsIoOperation.getVisits(foundVisit.getPatient().getCode());
 			// then:
-			assertEquals(foundVisit.getDate(), visits.get(visits.size()-1).getDate());
+			assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(foundVisit.getDate());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -159,7 +165,7 @@ public class Tests
 			ArrayList<Visit> visits = visitsIoOperation.getVisits(0);
 
 			// then:
-			assertEquals(foundVisit.getDate(), visits.get(visits.size()-1).getDate());
+			assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(foundVisit.getDate());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -190,8 +196,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -207,17 +211,15 @@ public class Tests
 			Visit foundVisit = (Visit)jpa.find(Visit.class, id); 
 			result = visitsIoOperation.deleteAllVisits(foundVisit.getPatient().getCode());
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = visitsIoOperation.isCodePresent(id);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -231,8 +233,8 @@ public class Tests
 			id = _setupTestVisit(false);
 			result = visitsIoOperation.findVisit(id);
 
-			assertNotNull(result);
-			assertEquals(id,result.getVisitID());
+			assertThat(result).isNotNull();
+			assertThat(result.getVisitID()).isEqualTo(id);
 		}
 		catch (Exception e)
 		{
@@ -246,7 +248,6 @@ public class Tests
 		testPatientContext.saveAll(jpa);
 		testVisitContext.saveAll(jpa);
         testWardContext.saveAll(jpa);		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
@@ -254,7 +255,6 @@ public class Tests
 		testVisitContext.deleteNews(jpa);
 		testPatientContext.deleteNews(jpa);
         testWardContext.deleteNews(jpa);
-        return;
     }
         
 	private int _setupTestVisit(
@@ -282,7 +282,5 @@ public class Tests
 
 		foundVisit = (Visit)jpa.find(Visit.class, id); 
 		testVisit.check(foundVisit);
-		
-		return;
 	}	
 }

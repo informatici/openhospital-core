@@ -1,6 +1,28 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.malnutrition.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -45,18 +67,14 @@ public class TestMalnutrition
 		malnutrition.setDateSupp(dateSupp);
 		malnutrition.setHeight(height);
 		malnutrition.setWeight(weight);
-		
-		return;
 	}
 	
 	public void check(
 			Malnutrition malnutrition) 
 	{		
-    	assertEquals(dateConf, malnutrition.getDateConf());
-    	assertEquals(dateSupp, malnutrition.getDateSupp());
-    	assertEquals(height, malnutrition.getHeight(), 0.1);
-    	assertEquals(weight, malnutrition.getWeight(), 0.1);
-		
-		return;
+    	assertThat(malnutrition.getDateConf()).isEqualTo(dateConf);
+    	assertThat(malnutrition.getDateSupp()).isEqualTo(dateSupp);
+    	assertThat(malnutrition.getHeight()).isCloseTo(height, within(0.1F));
+    	assertThat(malnutrition.getWeight()).isCloseTo(weight, within(0.1F));
 	}
 }

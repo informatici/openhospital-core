@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.stat.manager;
 
 import java.io.File;
@@ -26,6 +47,7 @@ import org.isf.stat.dto.JasperReportResultDto;
 import org.isf.utils.db.DbQueryLogger;
 import org.isf.utils.db.UTF8Control;
 import org.isf.utils.excel.ExcelExporter;
+import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHReportException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -382,9 +404,7 @@ public class JasperReportsManager {
         try {
         	if (date == null)
 				date = new Date();
-			Format formatter;
-		    formatter = new SimpleDateFormat("yyyy-MM-dd");
-		    String dateQuery = formatter.format(date);
+		    String dateQuery = TimeTools.formatDateTime(date, "yyyy-MM-dd");
             File jasperFile = new File(compileJasperFilename(jasperFileName));
             
             JasperReport jasperReport = (JasperReport)JRLoader.loadObject(jasperFile);
@@ -468,11 +488,8 @@ public class JasperReportsManager {
     		if (dateTo == null) {
     			dateTo = new Date();
     		}
-    		Format formatter;
-		    formatter = new SimpleDateFormat("yyyy-MM-dd");
-		    String dateFromQuery = formatter.format(dateFrom);
-		    String dateToQuery = formatter.format(dateTo);
-		    formatter = new SimpleDateFormat("yyyyMMdd");
+		    String dateFromQuery = TimeTools.formatDateTime(dateFrom, "yyyy-MM-dd");
+		    String dateToQuery = TimeTools.formatDateTime(dateTo, "yyyy-MM-dd");
 		    
             File jasperFile = new File(compileJasperFilename(jasperFileName));
             
@@ -606,8 +623,6 @@ public class JasperReportsManager {
         }
     }
 
-
-
     public void getGenericReportFromDateToDateExcel(String fromDate, String toDate, String jasperFileName, String exportFilename) throws OHServiceException {
 
         try{
@@ -615,8 +630,12 @@ public class JasperReportsManager {
             JasperReport jasperReport = (JasperReport)JRLoader.loadObject(jasperFile);
             JRQuery query = jasperReport.getMainDataset().getQuery();
             String queryString = query.getText();
-            queryString = queryString.replace("$P{fromdate}", "'" + fromDate + "'");
-            queryString = queryString.replace("$P{todate}", "'" + toDate + "'");
+            
+            String dateFromQuery = TimeTools.formatDateTime(TimeTools.getDate(fromDate, "dd/MM/yyyy"), "yyyy-MM-dd");
+            String dateToQuery = TimeTools.formatDateTime(TimeTools.getDate(toDate, "dd/MM/yyyy"), "yyyy-MM-dd");
+            
+            queryString = queryString.replace("$P{fromdate}", "'" + dateFromQuery + "'");
+            queryString = queryString.replace("$P{todate}", "'" +  dateToQuery + "'");
 
             DbQueryLogger dbQuery = new DbQueryLogger();
             ResultSet resultSet = dbQuery.getData(queryString, true);
@@ -628,7 +647,10 @@ public class JasperReportsManager {
 			else
 				xlsExport.exportResultsetToExcel(resultSet, exportFile);
 
-        } catch(Exception e){
+        } catch (OHException e) {
+        	throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+                            e.getLocalizedMessage(), OHSeverityLevel.ERROR));
+    	} catch(Exception e){
             //Any exception
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
                     MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));

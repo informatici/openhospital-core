@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.dicom.manager;
 
 import java.awt.image.BufferedImage;
@@ -160,8 +181,6 @@ public class SourceFiles extends Thread {
 			ImageReader reader;
 			Iterator<?> iter = null;
 			if (isJpeg) {
-
-				seriesDate = FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
 				studyDate = FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
 			} else if (isDicom) {
 				iter = ImageIO.getImageReadersByFormatName("DICOM");
@@ -432,7 +451,7 @@ public class SourceFiles extends Thread {
 		}
 	}
 
-	private static int checkOrientation(File sourceFile) throws ImageProcessingException, IOException {
+	public static int checkOrientation(File sourceFile) throws ImageProcessingException, IOException {
 		Metadata metadata = ImageMetadataReader.readMetadata(sourceFile);
 		ExifIFD0Directory exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 		int orientation = 1;

@@ -1,10 +1,31 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.dicom.test;
 
-
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -18,7 +39,9 @@ import org.isf.dicomtype.model.DicomType;
 import org.isf.utils.exception.OHException;
 
 public class TestDicom 
-{	    
+{
+
+	SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy", new Locale("en"));
 	private Blob dicomData = _createRandomBlob(100);
 	private int patId = 0;
 	private String fileName = "TestFileName";
@@ -31,18 +54,21 @@ public class TestDicom
 	private String dicomPatientSex = "TestPatientSex";
 	private String dicomPatientBirthDate = "TestPatientBirth";
 	private String dicomStudyId = "TestStudyId";
-	private Date dicomStudyDate = new Date();
+	private Date dicomStudyDate = formatter.parse("Sat Aug 01 10:02:03 AST 2020");
 	private String dicomStudyDescription = "TestStudyDescription";
 	private String dicomSeriesUID = "TestSeriesUid";
 	private String dicomSeriesInstanceUID = "TestSeriesInstanceUid";
 	private String dicomSeriesNumber = "TestSeriesNumber";
 	private String dicomSeriesDescriptionCodeSequence = "TestSeriesDescription";
-	private Date dicomSeriesDate = new Date();
+	private Date dicomSeriesDate = formatter.parse("Sat Aug 01 10:02:03 AST 2020");
 	private String dicomSeriesDescription = "TestSeriesDescription";
 	private String dicomInstanceUID = "TestInteanceUid";
 	private String modality = "TestModality";
 	private Blob dicomThumbnail = _createRandomBlob(66);
-			
+
+	public TestDicom() throws ParseException {
+	}
+
 	public FileDicom setup(
 			DicomType dicomType, boolean usingSet) throws OHException 
 	{
@@ -94,37 +120,32 @@ public class TestDicom
 		dicom.setPatId(patId);
 		dicom.setModality(modality);
 		dicom.setDicomType(dicomType);
-		
-		return;
 	}
 	
 	public void check(
 			FileDicom dicom) 
-	{	
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
-    	assertEquals(dicomAccessionNumber, dicom.getDicomAccessionNumber());
-    	assertEquals(dicomInstanceUID, dicom.getDicomInstanceUID());
-    	assertEquals(dicomInstitutionName, dicom.getDicomInstitutionName());
-    	assertEquals(dicomPatientAddress, dicom.getDicomPatientAddress());
-    	assertEquals(dicomPatientAge, dicom.getDicomPatientAge());
-    	assertEquals(dicomPatientBirthDate, dicom.getDicomPatientBirthDate());
-    	assertEquals(dicomPatientID, dicom.getDicomPatientID());
-    	assertEquals(dicomPatientName, dicom.getDicomPatientName());
-    	assertEquals(dicomPatientSex, dicom.getDicomPatientSex());
-    	assertEquals(formatter.format(dicomSeriesDate), formatter.format(dicom.getDicomSeriesDate()));
-    	assertEquals(dicomSeriesDescription, dicom.getDicomSeriesDescription());
-    	assertEquals(dicomSeriesDescriptionCodeSequence, dicom.getDicomSeriesDescriptionCodeSequence());
-    	assertEquals(dicomSeriesInstanceUID, dicom.getDicomSeriesInstanceUID());
-    	assertEquals(dicomSeriesNumber, dicom.getDicomSeriesNumber());
-    	assertEquals(dicomSeriesUID, dicom.getDicomSeriesUID());
-    	assertEquals(formatter.format(dicomStudyDate), formatter.format(dicom.getDicomStudyDate()));
-    	assertEquals(dicomStudyDescription, dicom.getDicomStudyDescription());
-    	assertEquals(dicomStudyId, dicom.getDicomStudyId());
-    	assertEquals(fileName, dicom.getFileName());
-    	assertEquals(patId, dicom.getPatId());
-    	assertEquals(modality, dicom.getModality());
-		
-		return;
+	{
+    	assertThat(dicom.getDicomAccessionNumber()).isEqualTo(dicomAccessionNumber);
+    	assertThat(dicom.getDicomInstanceUID()).isEqualTo(dicomInstanceUID);
+    	assertThat(dicom.getDicomInstitutionName()).isEqualTo(dicomInstitutionName);
+    	assertThat(dicom.getDicomPatientAddress()).isEqualTo(dicomPatientAddress);
+    	assertThat(dicom.getDicomPatientAge()).isEqualTo(dicomPatientAge);
+    	assertThat(dicom.getDicomPatientBirthDate()).isEqualTo(dicomPatientBirthDate);
+    	assertThat(dicom.getDicomPatientID()).isEqualTo(dicomPatientID);
+    	assertThat(dicom.getDicomPatientName()).isEqualTo(dicomPatientName);
+    	assertThat(dicom.getDicomPatientSex()).isEqualTo(dicomPatientSex);
+    	assertThat(formatter.format(dicom.getDicomSeriesDate())).isEqualTo(formatter.format(dicomSeriesDate));
+    	assertThat(dicom.getDicomSeriesDescription()).isEqualTo(dicomSeriesDescription);
+    	assertThat(dicom.getDicomSeriesDescriptionCodeSequence()).isEqualTo(dicomSeriesDescriptionCodeSequence);
+    	assertThat(dicom.getDicomSeriesInstanceUID()).isEqualTo(dicomSeriesInstanceUID);
+    	assertThat(dicom.getDicomSeriesNumber()).isEqualTo(dicomSeriesNumber);
+    	assertThat(dicom.getDicomSeriesUID()).isEqualTo(dicomSeriesUID);
+    	assertThat(formatter.format(dicom.getDicomStudyDate())).isEqualTo(formatter.format(dicomStudyDate));
+    	assertThat(dicom.getDicomStudyDescription()).isEqualTo(dicomStudyDescription);
+    	assertThat(dicom.getDicomStudyId()).isEqualTo(dicomStudyId);
+    	assertThat(dicom.getFileName()).isEqualTo(fileName);
+    	assertThat(dicom.getPatId()).isEqualTo(patId);
+    	assertThat(dicom.getModality()).isEqualTo(modality);
 	}
 
 	public Blob _createRandomBlob(

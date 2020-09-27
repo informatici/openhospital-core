@@ -1,8 +1,28 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.medicalstockward.test;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.data.Offset.offset;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -105,8 +125,6 @@ public class Tests
     	testSupplierContext = new TestSupplierContext();
     	testLot = new TestLot();
     	testLotContext = new TestLotContext();
-    	
-        return;
     }
 
     @Before
@@ -115,8 +133,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -126,8 +142,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -153,8 +167,6 @@ public class Tests
     	testSupplierContext = null;
     	testLot = null;
     	testLotContext = null;
-
-    	return;
     }
 	
 	
@@ -174,8 +186,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -194,8 +204,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -214,8 +222,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 
 	@Test
@@ -232,10 +238,10 @@ public class Tests
 		);
 
 		// then:
-		assertEquals(1, wardMovementsToWard.size());
-		assertEquals(foundMovement.getCode(), wardMovementsToWard.get(0).getCode());
+		assertThat(wardMovementsToWard).hasSize(1);
+		assertThat(wardMovementsToWard.get(0).getCode()).isEqualTo(foundMovement.getCode());
 	}
-	
+
 	@Test
 	public void testMovementWardSets() 
 	{
@@ -252,8 +258,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -274,15 +278,13 @@ public class Tests
 					fromDate,
 					toDate);
 
-			assertEquals(foundMovement.getCode(), movements.get(0).getCode());
+			assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -318,14 +320,12 @@ public class Tests
 					medical);
 
 			_checkMovementWardIntoDb(movementWard.getCode());
-			assertEquals(quantity, movementWard.getQuantity());
+			assertThat(movementWard.getQuantity()).isEqualTo(quantity);
 		} 
 		catch (Exception e) 
 		{
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -360,15 +360,12 @@ public class Tests
 			
 			_checkMovementWardIntoDb(movementWard.getCode());
 
-			assertEquals(quantity, movementWard.getQuantity());
+			assertThat(movementWard.getQuantity()).isEqualTo(quantity);
 		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
+		catch (Exception e) {
+			e.printStackTrace();
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -386,16 +383,15 @@ public class Tests
 			result = medicalIoOperation.updateMovementWard(foundMovementWard);
 			MovementWard updateMovementWard = (MovementWard)jpa.find(MovementWard.class, code);
 
-			assertTrue(result);
-			assertEquals("Update", updateMovementWard.getDescription());
+			assertThat(result).isTrue();
+			assertThat(updateMovementWard.getDescription()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
+
 	}
 
 	@Test
@@ -411,15 +407,13 @@ public class Tests
 			MovementWard foundMovementWard = (MovementWard)jpa.find(MovementWard.class, code); 
 			result = medicalIoOperation.deleteMovementWard(foundMovementWard);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -433,15 +427,13 @@ public class Tests
 			code = _setupTestMedicalWard(false);
 			MedicalWard foundMedicalWard = (MedicalWard)jpa.find(MedicalWard.class, code); 
 			ArrayList<MedicalWard> medicalWards = medicalIoOperation.getMedicalsWard(foundMedicalWard.getWard().getCode().charAt(0), true);
-			assertEquals((double)(foundMedicalWard.getInQuantity()-foundMedicalWard.getOutQuantity()), medicalWards.get(0).getQty(), 0.1);
+			assertThat(medicalWards.get(0).getQty()).isCloseTo((double) (foundMedicalWard.getInQuantity() - foundMedicalWard.getOutQuantity()), offset(0.1));
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -457,7 +449,7 @@ public class Tests
 
 			// then:
 			MovementWard result = (MovementWard)jpa.find(MovementWard.class, id);
-			assertEquals(mergedPatient.getCode(), result.getPatient().getCode());
+			assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -486,8 +478,6 @@ public class Tests
     	testMovementTypeContext.saveAll(jpa);
     	testSupplierContext.saveAll(jpa);
 		testLotContext.saveAll(jpa);
-		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
@@ -502,8 +492,6 @@ public class Tests
 		testPatientContext.deleteNews(jpa);
     	testMovementTypeContext.deleteNews(jpa);
     	testSupplierContext.deleteNews(jpa);
-        
-        return;
     }
     
 	private MedicalWardId _setupTestMedicalWard(
@@ -536,8 +524,6 @@ public class Tests
 	
 		foundMedicalWard = (MedicalWard)jpa.find(MedicalWard.class, id); 
 		testMedicalWard.check(foundMedicalWard);
-		
-		return;
 	}	
     
 	private int _setupTestMovementWard(
@@ -572,7 +558,5 @@ public class Tests
 	
 		foundMovementWard = (MovementWard)jpa.find(MovementWard.class, id); 
 		testMovementWard.check(foundMovementWard);
-		
-		return;
 	}	
 }

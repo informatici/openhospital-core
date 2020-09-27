@@ -1,6 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.hospital.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.hospital.model.Hospital;
 import org.isf.utils.exception.OHException;
@@ -48,22 +69,18 @@ public class TestHospital
 		hospital.setEmail(email);
 		hospital.setFax(fax);
 		hospital.setCurrencyCod(currencyCod);
-		
-		return;
 	}
 	
 	public void check(
 			Hospital hospital) 
 	{		
-    	assertEquals(code, hospital.getCode());
-    	assertEquals(description, hospital.getDescription());
-    	assertEquals(address, hospital.getAddress());
-    	assertEquals(city, hospital.getCity());
-    	assertEquals(telephone, hospital.getTelephone());
-    	assertEquals(email, hospital.getEmail());
-    	assertEquals(fax, hospital.getFax());
-    	assertEquals(currencyCod, hospital.getCurrencyCod());
-		
-		return;
+    	assertThat(hospital.getCode()).isEqualTo(code);
+    	assertThat(hospital.getDescription()).isEqualTo(description);
+    	assertThat(hospital.getAddress()).isEqualTo(address);
+    	assertThat(hospital.getCity()).isEqualTo(city);
+    	assertThat(hospital.getTelephone()).isEqualTo(telephone);
+    	assertThat(hospital.getEmail()).isEqualTo(email);
+    	assertThat(hospital.getFax()).isEqualTo(fax);
+    	assertThat(hospital.getCurrencyCod()).isEqualTo(currencyCod);
 	}
 }

@@ -1,6 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.supplier.test;
 
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.List;
@@ -36,8 +57,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testSupplier = new TestSupplier();
     	testSupplierContext = new TestSupplierContext();
-    	
-        return;
     }
 
     @Before
@@ -46,8 +65,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -57,8 +74,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -66,8 +81,6 @@ public class Tests
     {
     	testSupplier = null;
     	testSupplierContext = null;
-
-    	return;
     }
 	
 	
@@ -87,8 +100,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -107,8 +118,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -122,7 +131,7 @@ public class Tests
 			Supplier supplier = testSupplier.setup(true);
 			result = supplierIoOperation.saveOrUpdate(supplier);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkSupplierIntoDb(supplier.getSupId());
 		} 
 		catch (Exception e) 
@@ -130,8 +139,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -152,8 +159,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -168,15 +173,13 @@ public class Tests
 			Supplier foundSupplier = (Supplier)jpa.find(Supplier.class, code); 
 			List<Supplier> suppliers = supplierIoOperation.getAll();
 
-			assertTrue(suppliers.contains(foundSupplier));
+			assertThat(suppliers).contains(foundSupplier);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -191,30 +194,24 @@ public class Tests
 			Supplier foundSupplier = (Supplier)jpa.find(Supplier.class, code); 
 			List<Supplier> suppliers = supplierIoOperation.getList();
 
-			assertTrue(suppliers.contains(foundSupplier));
+			assertThat(suppliers).contains(foundSupplier);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 		
 	
 	private void _saveContext() throws OHException 
     {	
 		testSupplierContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testSupplierContext.deleteNews(jpa);
-        
-        return;
     }
     
 	private int _setupTestSupplier(
@@ -239,7 +236,5 @@ public class Tests
 	
 		foundSupplier = (Supplier)jpa.find(Supplier.class, code); 
 		testSupplier.check(foundSupplier);
-		
-		return;
 	}	
 }

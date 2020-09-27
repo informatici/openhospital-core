@@ -1,7 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.ward.test;
 
-
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
@@ -56,25 +76,21 @@ public class TestWard
 		ward.setNurs(nurs);
 		ward.setPharmacy(isPharmacy);
 		ward.setTelephone(telephone);
-		
-		return;
 	}
 	
 	public void check(
 			Ward ward) 
 	{		
-    	assertEquals(code, ward.getCode());
-    	assertEquals(beds, ward.getBeds());
-    	assertEquals(description, ward.getDescription());
-    	assertEquals(docs, ward.getDocs());
-    	assertEquals(email, ward.getEmail());
-    	assertEquals(fax, ward.getFax());
-    	assertEquals(isFemale, ward.isFemale());
-    	assertEquals(isMale, ward.isMale());
-    	assertEquals(nurs, ward.getNurs());
-    	assertEquals(isPharmacy, ward.isPharmacy());
-    	assertEquals(telephone, ward.getTelephone());
-		
-		return;
+    	assertThat(ward.getCode()).isEqualTo(code);
+    	assertThat(ward.getBeds()).isEqualTo(beds);
+    	assertThat(ward.getDescription()).isEqualTo(description);
+    	assertThat(ward.getDocs()).isEqualTo(docs);
+    	assertThat(ward.getEmail()).isEqualTo(email);
+    	assertThat(ward.getFax()).isEqualTo(fax);
+    	assertThat(ward.isFemale()).isEqualTo(isFemale);
+    	assertThat(ward.isMale()).isEqualTo(isMale);
+    	assertThat(ward.getNurs()).isEqualTo(nurs);
+    	assertThat(ward.isPharmacy()).isEqualTo(isPharmacy);
+    	assertThat(ward.getTelephone()).isEqualTo(telephone);
 	}
 }

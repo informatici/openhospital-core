@@ -1,8 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.medicalstock.test;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -82,8 +101,6 @@ public class Tests
     	testWardContext = new TestWardContext();
     	testSupplier = new TestSupplier();
     	testSupplierContext = new TestSupplierContext();
-    	
-        return;
     }
 
     @Before
@@ -94,8 +111,6 @@ public class Tests
         testLot.setup(false);
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -105,8 +120,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -126,8 +139,6 @@ public class Tests
     	testWardContext = null;
     	testSupplier = null;
     	testSupplierContext = null;
-
-    	return;
     }
 	
 	
@@ -147,8 +158,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -167,8 +176,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -187,8 +194,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -207,8 +212,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -223,15 +226,13 @@ public class Tests
 			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
 			List<Integer> medicalIds = medicalStockIoOperation.getMedicalsFromLot(foundMovement.getLot().getCode());
 
-			assertEquals(foundMovement.getMedical().getCode(), medicalIds.get(0));
+			assertThat(medicalIds.get(0)).isEqualTo(foundMovement.getMedical().getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -246,15 +247,13 @@ public class Tests
 			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
 			List<Lot> lots = medicalStockIoOperation.getLotsByMedical(foundMovement.getMedical());
 
-			assertEquals(foundMovement.getLot().getCode(), lots.get(0).getCode());
+			assertThat(lots.get(0).getCode()).isEqualTo(foundMovement.getLot().getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -269,15 +268,13 @@ public class Tests
 			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
 			boolean result = medicalStockIoOperation.newAutomaticDischargingMovement(foundMovement);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -319,7 +316,7 @@ public class Tests
 			medicalStockIoOperation.newAutomaticDischargingMovement(dischargeMovement);
 			
 			ArrayList<Lot> lots = medicalStockIoOperation.getLotsByMedical(medical);
-			assertEquals(1, lots.size()); // first lot should be 0 quantity and stripped by the list
+			assertThat(lots).hasSize(1); // first lot should be 0 quantity and stripped by the list
 			
 		} 
 		catch (Exception e) 
@@ -327,8 +324,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -343,15 +338,13 @@ public class Tests
 			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
 			boolean result = medicalStockIoOperation.newMovement(foundMovement);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -366,15 +359,13 @@ public class Tests
 			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
 			boolean result = medicalStockIoOperation.prepareChargingMovement(foundMovement);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -389,15 +380,13 @@ public class Tests
 			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
 			boolean result = medicalStockIoOperation.prepareDischargingMovement(foundMovement);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}	
 	
 	@Test
@@ -412,15 +401,13 @@ public class Tests
 			code = _setupTestLot(false);
 			result = medicalStockIoOperation.lotExists(code);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}	
 	
 	@Test
@@ -436,15 +423,13 @@ public class Tests
 			ArrayList<Movement> movements = medicalStockIoOperation.getMovements();
 
 			//assertEquals(foundMovement.getCode(), movements.get(0).getCode());
-			assertTrue(movements.size() >= 1);
+			assertThat(movements).isNotEmpty();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -465,15 +450,13 @@ public class Tests
 					fromDate,
 					toDate);
 
-			assertEquals(foundMovement.getCode(), movements.get(0).getCode());
+			assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -501,15 +484,13 @@ public class Tests
 					fromDate, 
 					toDate);
 
-			assertEquals(foundMovement.getCode(), movements.get(0).getCode());
+			assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -537,15 +518,13 @@ public class Tests
 												order
 											);
 
-			assertEquals(foundMovement.getCode(), movements.get(0).getCode());
+			assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}	
 	
 	@Test
@@ -561,15 +540,13 @@ public class Tests
 			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
 			GregorianCalendar gc = medicalStockIoOperation.getLastMovementDate();
 
-			assertEquals(movements.get(0).getDate(), gc);
+			assertThat(gc).isEqualTo(movements.get(0).getDate());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -584,15 +561,13 @@ public class Tests
 			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
 			boolean result = medicalStockIoOperation.refNoExists(foundMovement.getRefNo());
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -607,15 +582,13 @@ public class Tests
 			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
 			ArrayList<Movement> movements = medicalStockIoOperation.getMovementsByReference(foundMovement.getRefNo() );
 
-			assertEquals(foundMovement.getCode(), movements.get(0).getCode());
+			assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	
@@ -628,8 +601,6 @@ public class Tests
     	testMovementTypeContext.saveAll(jpa);
     	testWardContext.saveAll(jpa);
     	testSupplierContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
@@ -641,8 +612,6 @@ public class Tests
     	testMovementTypeContext.deleteNews(jpa);
     	testWardContext.deleteNews(jpa);
     	testSupplierContext.deleteNews(jpa);
-        
-        return;
     }
     
 	private String _setupTestLot(
@@ -667,8 +636,6 @@ public class Tests
 	
 		foundLot = (Lot)jpa.find(Lot.class, code); 
 		testLot.check(foundLot);
-		
-		return;
 	}	
     
 	private int _setupTestMovement(
@@ -705,7 +672,5 @@ public class Tests
 	
 		foundMovement = (Movement)jpa.find(Movement.class, code); 
 		testMovement.check(foundMovement);
-		
-		return;
 	}	
 }

@@ -1,9 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.pricesothers.test;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 
@@ -12,6 +30,7 @@ import org.isf.pricesothers.service.PriceOthersIoOperationRepository;
 import org.isf.pricesothers.service.PriceOthersIoOperations;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -36,6 +55,7 @@ public class Tests {
 	}
 
 	@Before
+	@After
 	public void setUp() throws OHException {
 		repository.deleteAll();
 	}
@@ -68,7 +88,7 @@ public class Tests {
 		ArrayList<PricesOthers> result = otherIoOperation.getOthers();
 
 		// then:
-		assertEquals(foundPricesOthers.getDescription(), result.get(0).getDescription());
+		assertThat(result.get(0).getDescription()).isEqualTo(foundPricesOthers.getDescription());
 	}
 
 	@Test
@@ -83,8 +103,8 @@ public class Tests {
 		PricesOthers updatePricesOthers = repository.findOne(id);
 
 		// then:
-		assertTrue(result);
-		assertEquals("Update", updatePricesOthers.getDescription());
+		assertThat(result).isTrue();
+		assertThat(updatePricesOthers.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
@@ -96,7 +116,7 @@ public class Tests {
 		boolean result = otherIoOperation.newOthers(pricesOthers);
 
 		// then:
-		assertTrue(result);
+		assertThat(result).isTrue();
 		_checkPricesOthersIntoDb(pricesOthers.getId());
 	}
 
@@ -110,8 +130,8 @@ public class Tests {
 		boolean result = otherIoOperation.deleteOthers(foundPricesOthers);
 
 		// then:
-		assertTrue(result);
-		assertFalse(repository.exists(id));
+		assertThat(result).isTrue();
+		assertThat(repository.exists(id)).isFalse();
 	}
 
 	private int _setupTestPricesOthers(boolean usingSet) throws OHException {

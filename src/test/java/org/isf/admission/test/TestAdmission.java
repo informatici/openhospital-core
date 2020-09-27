@@ -1,7 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.admission.test;
 
-
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -123,32 +143,28 @@ public class TestAdmission
 		admission.setWard(ward);
 		admission.setWeight(weight);
 		admission.setYProg(yProg);
-		
-		return;
 	}
 	
 	public void check(
 			Admission admission) 
 	{		
-    	assertEquals(abortDate, admission.getAbortDate());
-    	assertEquals(admDate, admission.getAdmDate());
-    	assertEquals(admitted, admission.getAdmitted());
-    	assertEquals(ctrlDate1, admission.getCtrlDate1());
-    	assertEquals(ctrlDate2, admission.getCtrlDate2());
-    	assertEquals(deleted, admission.getDeleted());
-    	assertEquals(deliveryDate, admission.getDeliveryDate());
-    	assertEquals(disDate, admission.getDisDate());
-    	assertEquals(FHU, admission.getFHU());
-    	assertEquals(note, admission.getNote());
-    	assertEquals(opDate, admission.getOpDate());
-    	assertEquals(opResult, admission.getOpResult());
-    	assertEquals(transUnit, admission.getTransUnit());
-    	assertEquals(type, admission.getType());
-    	assertEquals(userID, admission.getUserID());
-    	assertEquals(visitDate, admission.getVisitDate());
-    	assertEquals(weight, admission.getWeight());
-    	assertEquals(yProg, admission.getYProg());
-		
-		return;
+    	assertThat(admission.getAbortDate()).isEqualTo(abortDate);
+    	assertThat(admission.getAdmDate()).isEqualTo(admDate);
+    	assertThat(admission.getAdmitted()).isEqualTo(admitted);
+    	assertThat(admission.getCtrlDate1()).isEqualTo(ctrlDate1);
+    	assertThat(admission.getCtrlDate2()).isEqualTo(ctrlDate2);
+    	assertThat(admission.getDeleted()).isEqualTo(deleted);
+    	assertThat(admission.getDeliveryDate()).isEqualTo(deliveryDate);
+    	assertThat(admission.getDisDate()).isEqualTo(disDate);
+    	assertThat(admission.getFHU()).isEqualTo(FHU);
+    	assertThat(admission.getNote()).isEqualTo(note);
+    	assertThat(admission.getOpDate()).isEqualTo(opDate);
+    	assertThat(admission.getOpResult()).isEqualTo(opResult);
+    	assertThat(admission.getTransUnit()).isEqualTo(transUnit);
+    	assertThat(admission.getType()).isEqualTo(type);
+    	assertThat(admission.getUserID()).isEqualTo(userID);
+    	assertThat(admission.getVisitDate()).isEqualTo(visitDate);
+    	assertThat(admission.getWeight()).isEqualTo(weight);
+    	assertThat(admission.getYProg()).isEqualTo(yProg);
 	}
 }

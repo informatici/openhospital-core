@@ -1,7 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.agetype.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -38,8 +58,6 @@ public class Tests
     	jpa = new DbJpaUtil();
     	testAgeType = new TestAgeType();
     	testAgeTypeContext = new TestAgeTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -48,8 +66,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -59,8 +75,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -68,8 +82,6 @@ public class Tests
     {
     	testAgeType = null;
     	testAgeTypeContext = null;
-
-    	return;
     }
 	
 		
@@ -89,8 +101,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -109,8 +119,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -125,15 +133,13 @@ public class Tests
 			AgeType foundAgeType = (AgeType)jpa.find(AgeType.class, code); 
 			ArrayList<AgeType> ageTypes = ageTypeIoOperations.getAgeType();
 			
-			assertEquals(foundAgeType.getDescription(), ageTypes.get(ageTypes.size()-1).getDescription());
+			assertThat(ageTypes.get(ageTypes.size() - 1).getDescription()).isEqualTo(foundAgeType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -149,22 +155,20 @@ public class Tests
 			AgeType foundAgeType = (AgeType)jpa.find(AgeType.class, code); 
 			foundAgeType.setFrom(4);
 			foundAgeType.setTo(40);
-			ArrayList<AgeType> ageTypes = new ArrayList<AgeType>();
+			ArrayList<AgeType> ageTypes = new ArrayList<>();
 			ageTypes.add(foundAgeType);
 			result = ageTypeIoOperations.updateAgeType(ageTypes);
 			AgeType updateAgeType = (AgeType)jpa.find(AgeType.class, code);
 
-			assertTrue(result);
-			assertEquals(4, updateAgeType.getFrom());
-			assertEquals(40, updateAgeType.getTo());
+			assertThat(result).isTrue();
+			assertThat(updateAgeType.getFrom()).isEqualTo(4);
+			assertThat(updateAgeType.getTo()).isEqualTo(40);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -178,32 +182,26 @@ public class Tests
 			AgeType ageType = (AgeType)jpa.find(AgeType.class, code); 
 			AgeType foundAgeType = ageTypeIoOperations.getAgeTypeByCode(9);
 			
-			assertEquals(ageType.getFrom(), foundAgeType.getFrom());
-			assertEquals(ageType.getTo(), foundAgeType.getTo());
-			assertEquals(ageType.getDescription(), foundAgeType.getDescription());
+			assertThat(foundAgeType.getFrom()).isEqualTo(ageType.getFrom());
+			assertThat(foundAgeType.getTo()).isEqualTo(ageType.getTo());
+			assertThat(foundAgeType.getDescription()).isEqualTo(ageType.getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	
 	private void _saveContext() throws OHException 
     {	
 		testAgeTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
     {
 		testAgeTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private String _setupTestAgeType(
@@ -228,7 +226,5 @@ public class Tests
 
 		foundAgeType = (AgeType)jpa.find(AgeType.class, code); 
 		testAgeType.check(foundAgeType);
-		
-		return;
 	}	
 }

@@ -1,10 +1,28 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.malnutrition.test;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -124,8 +142,6 @@ public class Tests
     	testDeliveryResultTypeContext = new TestDeliveryResultTypeContext();
     	testMalnutrition = new TestMalnutrition();
     	testMalnutritionContext = new TestMalnutritionContext();
-    	
-        return;
     }
 
     @Before
@@ -134,8 +150,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -145,8 +159,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -178,8 +190,6 @@ public class Tests
     	testDeliveryResultTypeContext = null;
     	testMalnutrition = null;
     	testMalnutritionContext = null;
-
-    	return;
     }
 	
 	
@@ -199,8 +209,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -219,8 +227,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -235,15 +241,13 @@ public class Tests
 			Malnutrition foundMalnutrition = (Malnutrition)jpa.find(Malnutrition.class, code); 
 			ArrayList<Malnutrition> malnutritions = malnutritionIoOperation.getMalnutritions(String.valueOf(foundMalnutrition.getAdmission().getId()));
 			
-			assertEquals(code, malnutritions.get(malnutritions.size()-1).getCode());
+			assertThat(malnutritions.get(malnutritions.size() - 1).getCode()).isEqualTo(code);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -258,15 +262,13 @@ public class Tests
 			Malnutrition foundMalnutrition = (Malnutrition)jpa.find(Malnutrition.class, code); 
 			Malnutrition malnutrition = malnutritionIoOperation.getLastMalnutrition(foundMalnutrition.getAdmission().getId());
 			
-			assertEquals(code, malnutrition.getCode());
+			assertThat(malnutrition.getCode()).isEqualTo(code);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -285,16 +287,14 @@ public class Tests
 			result = malnutritionIoOperation.updateMalnutrition(foundMalnutrition);
 			Malnutrition updateMalnutrition = (Malnutrition)jpa.find(Malnutrition.class, code);
 
-			assertNotNull(result);
-			assertEquals(200.0, updateMalnutrition.getHeight(), 0.000001d);
+			assertThat(result).isNotNull();
+			assertThat(updateMalnutrition.getHeight()).isCloseTo(200.0F, within(0.000001F));
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -347,7 +347,7 @@ public class Tests
 			Malnutrition malnutrition = testMalnutrition.setup(admission, true);
 			result = malnutritionIoOperation.newMalnutrition(malnutrition);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkMalnutritionIntoDb(malnutrition.getCode());
 		} 
 		catch (Exception e) 
@@ -355,8 +355,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -374,17 +372,15 @@ public class Tests
 			
 			result = malnutritionIoOperation.deleteMalnutrition(foundMalnutrition);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			result = malnutritionIoOperation.isCodePresent(code);
-			assertFalse(result);
+			assertThat(result).isFalse();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 		
 	
@@ -404,8 +400,6 @@ public class Tests
     	testPregnantTreatmentTypeContext.saveAll(jpa);
     	testDeliveryTypeContext.saveAll(jpa);
     	testDeliveryResultTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
@@ -423,8 +417,6 @@ public class Tests
     	testPregnantTreatmentTypeContext.deleteNews(jpa);
     	testDeliveryTypeContext.deleteNews(jpa);
     	testDeliveryResultTypeContext.deleteNews(jpa);
-        
-        return;
     }
     
 	private int _setupTestMalnutrition(
@@ -482,7 +474,5 @@ public class Tests
 	
 		foundMalnutrition = (Malnutrition)jpa.find(Malnutrition.class, code); 
 		testMalnutrition.check(foundMalnutrition);
-		
-		return;
 	}	
 }

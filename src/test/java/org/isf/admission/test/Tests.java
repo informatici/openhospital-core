@@ -1,11 +1,29 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.admission.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
-import java.util.List;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -121,8 +139,6 @@ public class Tests
     	testDeliveryTypeContext = new TestDeliveryTypeContext();
     	testDeliveryResultType = new TestDeliveryResultType();
     	testDeliveryResultTypeContext = new TestDeliveryResultTypeContext();
-    	
-        return;
     }
 
     @Before
@@ -131,8 +147,6 @@ public class Tests
         jpa.open();
         
         _saveContext();
-		
-		return;
     }
         
     @After
@@ -142,8 +156,6 @@ public class Tests
         
         jpa.flush();
         jpa.close();
-                
-        return;
     }
     
     @AfterClass
@@ -173,8 +185,6 @@ public class Tests
     	testDeliveryTypeContext = null;
     	testDeliveryResultType = null;
     	testDeliveryResultTypeContext = null;
-
-    	return;
     }
 	
 		
@@ -194,8 +204,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-				
-		return;
 	}
 	
 	@Test
@@ -214,8 +222,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -225,8 +231,8 @@ public class Tests
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
 		List<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null);
 
-		assertEquals(patients.size(), searchResult.size());
-		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+		assertThat(searchResult).hasSameSizeAs(patients);
+		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 	}
 
 	@Test
@@ -238,8 +244,8 @@ public class Tests
 		final GregorianCalendar dischargeDate = foundAdmission.getDisDate();
 		{
 			List<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null, null, null);
-			assertEquals(patients.size(), searchResult.size());
-			assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+			assertThat(searchResult).hasSameSizeAs(patients);
+			assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 		}
 		final GregorianCalendar beforeAdmissionDate = copyFrom(admissionDate);
 		beforeAdmissionDate.add(Calendar.DATE, -1);
@@ -264,27 +270,27 @@ public class Tests
 					new GregorianCalendar[]{beforeAdmissionDate, oneDayAfterAdmissionDate},
 					null
 			);
-			assertEquals(patients.size(), searchOneresult.size());
-			assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+			assertThat(searchOneresult).hasSameSizeAs(patients);
+			assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 
 			final List<AdmittedPatient> searchTwoResult = admissionIoOperation.getAdmittedPatients(null,
 					new GregorianCalendar[]{oneDayAfterAdmissionDate, twoDaysAfterAdmissionDate},
 					null
 			);
-			assertEquals(0, searchTwoResult.size());
+			assertThat(searchTwoResult).isEmpty();
 		}
 		{
 			// search by discharge date
 			final List<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null, null,
 					new GregorianCalendar[]{beforeDischargeDate, oneDayAfterDischargeDate}
 			);
-			assertEquals(patients.size(), searchOneresult.size());
-			assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+			assertThat(searchOneresult).hasSameSizeAs(patients);
+			assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 
 			final List<AdmittedPatient> searchTwoResult = admissionIoOperation.getAdmittedPatients(null, null,
 					new GregorianCalendar[]{oneDayAfterDischargeDate, twoDaysAfterDischargeDate}
 			);
-			assertEquals(0, searchTwoResult.size());
+			assertThat(searchTwoResult).isEmpty();
 		}
 		{
 			// complex search by both admission and discharge date
@@ -292,8 +298,8 @@ public class Tests
 					new GregorianCalendar[]{beforeAdmissionDate, oneDayAfterAdmissionDate},
 					new GregorianCalendar[]{beforeDischargeDate, oneDayAfterDischargeDate}
 			);
-			assertEquals(patients.size(), searchOneresult.size());
-			assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+			assertThat(searchOneresult).hasSameSizeAs(patients);
+			assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 		}
 	}
 
@@ -308,8 +314,8 @@ public class Tests
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
 		List<AdmittedPatient> patientsNull = admissionIoOperation.getAdmittedPatients(null);
 
-		assertEquals(patients.size(), patientsNull.size());
-		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+		assertThat(patientsNull).hasSameSizeAs(patients);
+		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 	}
 
 	@Test
@@ -323,7 +329,7 @@ public class Tests
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getFirstName());
 
 		// then:
-		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 	}
 
 	@Test
@@ -337,7 +343,7 @@ public class Tests
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getName());
 
 		// then:
-		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 	}
 
 	@Test
@@ -351,7 +357,7 @@ public class Tests
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getNote());
 
 		// then:
-		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 	}
 
 	@Test
@@ -365,7 +371,7 @@ public class Tests
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getTaxCode());
 
 		// then:
-		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 	}
 
 	@Test
@@ -379,7 +385,7 @@ public class Tests
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString());
 
 		// then:
-		assertEquals(foundAdmission.getId(), patients.get(0).getAdmission().getId());
+		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 	}
 
 	@Test
@@ -392,7 +398,7 @@ public class Tests
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients("dupsko");
 
 		// then:
-		assertTrue(patients.isEmpty());
+		assertThat(patients).isEmpty();
 	}
 
 	@Test
@@ -414,7 +420,7 @@ public class Tests
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString(), admissionRange, dischargeRange);
 
 		// then:
-		assertTrue(patients.isEmpty());
+		assertThat(patients).isEmpty();
 	}
 
 	@Test
@@ -436,7 +442,7 @@ public class Tests
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString(), admissionRange, dischargeRange);
 
 		// then:
-		assertTrue(patients.isEmpty());
+		assertThat(patients).isEmpty();
 	}
 
 
@@ -456,15 +462,13 @@ public class Tests
 			jpa.commitTransaction();
 			Admission ioAdmission = admissionIoOperation.getCurrentAdmission(foundAdmission.getPatient());
 			
-			assertEquals(foundAdmission.getNote(), ioAdmission.getNote());
+			assertThat(ioAdmission.getNote()).isEqualTo(foundAdmission.getNote());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-	
-		return;
 	}
 	
 	@Test
@@ -485,8 +489,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-	
-		return;
 	}
 	
 	@Test
@@ -501,15 +503,13 @@ public class Tests
 			Admission foundAdmission = (Admission)jpa.find(Admission.class, id); 
 			List<Admission> admissions = admissionIoOperation.getAdmissions(foundAdmission.getPatient());
 			
-			assertEquals(foundAdmission.getId(), admissions.get(admissions.size()-1).getId());
+			assertThat(admissions.get(admissions.size() - 1).getId()).isEqualTo(foundAdmission.getId());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-	
-		return;
 	}
 	
 	@Test
@@ -561,7 +561,7 @@ public class Tests
 					deliveryType, deliveryResult, true);
 			result = admissionIoOperation.newAdmission(admission);
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 			_checkAdmissionIntoDb(admission.getId());
 		} 
 		catch (Exception e) 
@@ -569,8 +569,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -629,8 +627,6 @@ public class Tests
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -649,16 +645,14 @@ public class Tests
 			result = admissionIoOperation.updateAdmission(foundAdmission);
 			Admission updateAdmission = (Admission)jpa.find(Admission.class, id);
 
-			assertTrue(result);
-			assertEquals("Update", updateAdmission.getNote());
+			assertThat(result).isTrue();
+			assertThat(updateAdmission.getNote()).isEqualTo("Update");
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -673,15 +667,13 @@ public class Tests
 			Admission foundAdmission = (Admission)jpa.find(Admission.class, id); 
 			List<AdmissionType> admissionTypes = admissionIoOperation.getAdmissionType();
 			
-			assertEquals(foundAdmission.getAdmType().getDescription(), admissionTypes.get(admissionTypes.size()-1).getDescription());
+			assertThat(admissionTypes.get(admissionTypes.size() - 1).getDescription()).isEqualTo(foundAdmission.getAdmType().getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 
 	@Test
@@ -696,15 +688,13 @@ public class Tests
 			Admission foundAdmission = (Admission)jpa.find(Admission.class, id);  
 			List<DischargeType> dischargeTypes = admissionIoOperation.getDischargeType();
 			
-			assertEquals(foundAdmission.getDisType().getDescription(), dischargeTypes.get(dischargeTypes.size()-1).getDescription());
+			assertThat(dischargeTypes.get(dischargeTypes.size() - 1).getDescription()).isEqualTo(foundAdmission.getDisType().getDescription());
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-		
-		return;
 	}
 	
 	@Test
@@ -720,15 +710,13 @@ public class Tests
 			Admission foundAdmission = (Admission)jpa.find(Admission.class, id);  
 			next = admissionIoOperation.getNextYProg(foundAdmission.getWard().getCode());
 			
-			assertEquals(foundAdmission.getYProg() + 1, next);
+			assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-	
-		return;
 	}
 	
 	@Test
@@ -745,15 +733,13 @@ public class Tests
 			jpa.flush();
 			result = admissionIoOperation.setDeleted(foundAdmission.getId());
 
-			assertTrue(result);
+			assertThat(result).isTrue();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-
-		return;
 	}
 	
 	@Test
@@ -769,15 +755,13 @@ public class Tests
 			Admission foundAdmission = (Admission)jpa.find(Admission.class, id);  
 			result = admissionIoOperation.getUsedWardBed(foundAdmission.getWard().getCode());
 			
-			assertEquals(1, result);
+			assertThat(result).isEqualTo(1);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-
-		return;
 	}
 	
 	@Test
@@ -793,16 +777,14 @@ public class Tests
 			Admission foundAdmission = (Admission)jpa.find(Admission.class, id);  
 			result = admissionIoOperation.deletePatientPhoto(foundAdmission.getPatient().getCode());
 
-			assertTrue(result);
-			assertNull(foundAdmission.getPatient().getPatientProfilePhoto().getPhoto());
+			assertThat(result).isTrue();
+			assertThat(foundAdmission.getPatient().getPatientProfilePhoto().getPhoto()).isNull();
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();		
 			fail();
 		}
-
-		return;
 	}
 	
 	
@@ -821,8 +803,6 @@ public class Tests
     	testPregnantTreatmentTypeContext.saveAll(jpa);
     	testDeliveryTypeContext.saveAll(jpa);
     	testDeliveryResultTypeContext.saveAll(jpa);
-        		
-        return;
     }
 	
     private void _restoreContext() throws OHException 
@@ -839,8 +819,6 @@ public class Tests
     	testPregnantTreatmentTypeContext.deleteNews(jpa);
     	testDeliveryTypeContext.deleteNews(jpa);
     	testDeliveryResultTypeContext.deleteNews(jpa);
-        
-        return;
     }
         
 	private int _setupTestAdmission(
@@ -898,7 +876,5 @@ public class Tests
 
 		foundAdmission = (Admission)jpa.find(Admission.class, id); 
 		testAdmission.check(foundAdmission);
-		
-		return;
 	}	
 }

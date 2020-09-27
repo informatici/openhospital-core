@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.dicom.manager;
 
 import java.io.File;
@@ -25,7 +46,6 @@ import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
 import org.isf.dicom.model.FileDicom;
-import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHServiceException;
@@ -353,9 +373,9 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		rv.setDicomPatientBirthDate(p.getProperty("dicomPatientBirthDate"));
 		rv.setDicomStudyId(p.getProperty("dicomStudyId"));
 		try {
-			rv.setDicomStudyDate(new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale(GeneralData.LANGUAGE)).parse(p.getProperty("dicomStudyDate")));
+			rv.setDicomStudyDate(new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale("en")).parse(p.getProperty("dicomStudyDate")));
 		} catch (ParseException e) {
-			logger.debug("1. example: {}", new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale(GeneralData.LANGUAGE)).format(new Date()));
+			logger.debug("1. example: {}", new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale("en")).format(new Date()));
 			logger.debug("1. Unparsable 'dicomStudyDate': {}", p.getProperty("dicomStudyDate"));
 		}
 		rv.setDicomStudyDescription(p.getProperty("dicomStudyDescription"));
@@ -364,9 +384,9 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		rv.setDicomSeriesNumber(p.getProperty("dicomSeriesNumber"));
 		rv.setDicomSeriesDescriptionCodeSequence(p.getProperty("dicomSeriesDescriptionCodeSequence"));
 		try {
-			rv.setDicomSeriesDate(new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale(GeneralData.LANGUAGE)).parse(p.getProperty("dicomSeriesDate")));
+			rv.setDicomSeriesDate(new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale("en")).parse(p.getProperty("dicomSeriesDate")));
 		} catch (ParseException e) {
-			logger.debug("2. example: {}", new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale(GeneralData.LANGUAGE)).format(new Date()));
+			logger.debug("2. example: {}", new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale("en")).format(new Date()));
 			logger.debug("Unparsable 'dicomSeriesDate': {}", p.getProperty("dicomSeriesDate"));
 		}
 		rv.setDicomSeriesDescription(p.getProperty("dicomSeriesDescription"));
@@ -528,7 +548,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/**
-	 * Recursive function for create folder structure if missing
+	 * 
+	 * recorsive function for create folder structure if missing
 	 */
 	private void recourse(File f) throws IOException {
 		if (f.exists())
