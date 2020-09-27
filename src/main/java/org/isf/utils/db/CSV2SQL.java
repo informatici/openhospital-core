@@ -36,8 +36,8 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Random;
 
@@ -209,7 +209,7 @@ public class CSV2SQL {
 				}
 				//System.out.print("\n");
 
-				GregorianCalendar dueDate;
+				LocalDateTime dueDate;
 				try {
 					dueDate = TimeTools.parseDate(LT_DUE_DATE, "dd/MM/yyyy", true);
 				} catch (ParseException e) {
@@ -254,7 +254,7 @@ public class CSV2SQL {
 				}
 				if (!lotList.contains(LT_ID_A)) {
 					lotList.add(LT_ID_A);
-					String prepDate = TimeTools.formatDateTime(new GregorianCalendar(), null);
+					String prepDate = TimeTools.formatDateTime(LocalDateTime.now(), null);
 					try {
 						output.write("INSERT INTO MEDICALDSRLOT (LT_ID_A, LT_PREP_DATE, LT_DUE_DATE, LT_COST) VALUES ('"
 								+ LT_ID_A
@@ -274,7 +274,7 @@ public class CSV2SQL {
 
 				// MEDICALDSRSTOCKMOV
 				try {
-					String date = TimeTools.formatDateTime(new GregorianCalendar(), null);
+					String date = TimeTools.formatDateTime(LocalDateTime.now(), null);
 					String reference = String.format("INV%5s", lineNumber).replace(' ', '0');
 					output.write("INSERT INTO MEDICALDSRSTOCKMOV (MMV_MDSR_ID, MMV_MMVT_ID_A, MMV_LT_ID_A, MMV_DATE, MMV_QTY, MMV_FROM, MMV_REFNO) VALUES ("
 							+ MDSR_ID
