@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.admission.model.Admission;
 import org.isf.malnutrition.model.Malnutrition;
@@ -71,8 +72,8 @@ public class TestMalnutrition
 	public void check(
 			Malnutrition malnutrition) 
 	{		
-    	assertThat(malnutrition.getDateConf()).isEqualTo(dateConf);
-    	assertThat(malnutrition.getDateSupp()).isEqualTo(dateSupp);
+    	assertThat(malnutrition.getDateConf()).isCloseTo(dateConf, within(1, ChronoUnit.SECONDS));
+    	assertThat(malnutrition.getDateSupp()).isCloseTo(dateSupp, within(1, ChronoUnit.SECONDS));
     	assertThat(malnutrition.getHeight()).isCloseTo(height, within(0.1F));
     	assertThat(malnutrition.getWeight()).isCloseTo(weight, within(0.1F));
 	}

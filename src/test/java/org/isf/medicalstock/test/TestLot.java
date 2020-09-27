@@ -21,11 +21,12 @@
  */
 package org.isf.medicalstock.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.data.Offset.offset;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.medicalstock.model.Lot;
 import org.isf.utils.exception.OHException;
@@ -72,7 +73,7 @@ public class TestLot
 			Lot lot) 
 	{		
     	assertThat(lot.getCost().doubleValue()).isCloseTo(cost.doubleValue(), offset(0.0));
-    	assertThat(lot.getDueDate()).isEqualTo(dueDate);
-    	assertThat(lot.getPreparationDate()).isEqualTo(preparationDate);
+    	assertThat(lot.getDueDate()).isCloseTo(dueDate, within(1, ChronoUnit.SECONDS));
+    	assertThat(lot.getPreparationDate()).isCloseTo(preparationDate, within(1, ChronoUnit.SECONDS));
 	}
 }

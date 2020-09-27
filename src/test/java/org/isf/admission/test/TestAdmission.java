@@ -21,9 +21,10 @@
  */
 package org.isf.admission.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.admission.model.Admission;
 import org.isf.admtype.model.AdmissionType;
@@ -148,7 +149,7 @@ public class TestAdmission
 			Admission admission) 
 	{		
     	assertThat(admission.getAbortDate()).isEqualTo(abortDate);
-    	assertThat(admission.getAdmDate()).isEqualTo(admDate);
+    	assertThat(admission.getAdmDate()).isCloseTo(admDate, within(1, ChronoUnit.SECONDS));
     	assertThat(admission.getAdmitted()).isEqualTo(admitted);
     	assertThat(admission.getCtrlDate1()).isEqualTo(ctrlDate1);
     	assertThat(admission.getCtrlDate2()).isEqualTo(ctrlDate2);

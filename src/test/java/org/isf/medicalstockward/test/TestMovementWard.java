@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
@@ -98,7 +99,7 @@ public class TestMovementWard
 			MovementWard movementWard) 
 	{		
     	assertThat(movementWard.getAge()).isEqualTo(age);
-    	assertThat(movementWard.getDate()).isEqualTo(date);
+    	assertThat(movementWard.getDate()).isCloseTo(date, within(1, ChronoUnit.SECONDS));
     	assertThat(movementWard.getDescription()).isEqualTo(description);
     	assertThat(movementWard.isPatient()).isEqualTo(isPatient);
     	assertThat(movementWard.getQuantity()).isEqualTo(quantity);
