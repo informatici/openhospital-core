@@ -266,7 +266,7 @@ public class MedicalStockIoOperations {
 		boolean result = true;
 	
 
-		Lot lot = (Lot)lotRepository.findOne(lotCode); 
+		Lot lot = (Lot)lotRepository.findById(lotCode).get();
 		movement.setLot(lot);
 		Movement savedMovement = movRepository.save(movement);
 		result = (savedMovement != null);
@@ -289,7 +289,7 @@ public class MedicalStockIoOperations {
 		{
 			candidateCode = Math.abs(random.nextLong());
 
-			lot = (Lot)lotRepository.findOne(String.valueOf(candidateCode)); 
+			lot = (Lot)lotRepository.findById(String.valueOf(candidateCode)).get();
 		} while (lot !=null); 
 
 		return String.valueOf(candidateCode);
@@ -308,7 +308,7 @@ public class MedicalStockIoOperations {
 		boolean result = false;
 		
 		
-		lot = (Lot)lotRepository.findOne(lotCode); 
+		lot = (Lot)lotRepository.findById(lotCode).get();
 		if (lot != null)
 		{
 			result = true;
@@ -397,7 +397,7 @@ public class MedicalStockIoOperations {
 		boolean result = true;
 				
 		
-		Medical medical = (Medical)medicalRepository.findOne(medicalCode); 
+		Medical medical = (Medical)medicalRepository.findById(medicalCode).get();
 		medical.setInqty(medical.getInqty()+incrementQuantity);
 		medicalRepository.save(medical);
 		
@@ -418,7 +418,7 @@ public class MedicalStockIoOperations {
 		boolean result = true;
 				
 
-		Medical medical = (Medical)medicalRepository.findOne(medicalCode); 
+		Medical medical = (Medical)medicalRepository.findById(medicalCode).get();
 		medical.setOutqty(medical.getOutqty()+incrementQuantity);
 		medicalRepository.save(medical);
 				
@@ -488,7 +488,7 @@ public class MedicalStockIoOperations {
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
 			Integer code = pMovementCode.get(i);
-			Movement movement = movRepository.findOne(code);
+			Movement movement = movRepository.findById(code).get();
 			
 			
 			pMovement.add(i, movement);
@@ -534,7 +534,7 @@ public class MedicalStockIoOperations {
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
 			Integer code = pMovementCode.get(i);
-			Movement movement = movRepository.findOne(code);
+			Movement movement = movRepository.findById(code).get();
 			
 			
 			pMovement.add(i, movement);
@@ -577,7 +577,7 @@ public class MedicalStockIoOperations {
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
 			Integer code = pMovementCode.get(i);
-			Movement movement = movRepository.findOne(code);
+			Movement movement = movRepository.findById(code).get();
 			
 			
 			pMovement.add(i, movement);

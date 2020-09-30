@@ -66,7 +66,7 @@ public class AgeTypeIoOperations
 		boolean result = true;
 	
 		
-		List<AgeType> savedAgeType = repository.save(ageType);
+		List<AgeType> savedAgeType = repository.saveAll(ageType);
 		result = (savedAgeType != null);
 		
 		return result;

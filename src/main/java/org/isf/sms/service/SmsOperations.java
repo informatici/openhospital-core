@@ -65,7 +65,7 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean saveOrUpdate(List<Sms> smsList) throws OHServiceException {
-		return repository.save(smsList) != null;
+		return repository.saveAll(smsList) != null;
 	}
 	
 	/**
@@ -75,7 +75,7 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public Sms getByID(int ID) throws OHServiceException {
-		return repository.findOne(ID);
+		return repository.findById(ID).get();
 	}
 	
 	/**
@@ -120,7 +120,7 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public void delete(List<Sms> smsList) throws OHServiceException	{
-		repository.delete(smsList);
+		repository.deleteAll(smsList);
 	}
 
 	/**
@@ -141,6 +141,6 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 }

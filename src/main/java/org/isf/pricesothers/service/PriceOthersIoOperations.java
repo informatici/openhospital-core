@@ -117,11 +117,6 @@ public class PriceOthersIoOperations {
 	public boolean isCodePresent(
 			Integer id) throws OHServiceException
 	{
-		boolean result = true;
-	
-		
-		result = repository.exists(id);
-		
-		return result;	
+		return repository.existsById(id);
 	}
 }
