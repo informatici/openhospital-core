@@ -1,10 +1,7 @@
 package org.isf.patient.test;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperations;
@@ -131,13 +128,15 @@ public class Tests
 	}
 
 	@Test
-	public void testIoGetPatientsByName()
+	public void testIoGetPatientsByParams()
 	{
 		try
 		{
 			_setupTestPatient(false);
-			Map<String, String> params = new HashMap<String, String>();
-			params.put("firstName", "TestFirstName");
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("firstName", "TestFirstN");
+			params.put("birthDate", new GregorianCalendar(1984, Calendar.AUGUST, 14).getTime());
+			params.put("address", "TestAddress");
 			ArrayList<Patient> patients = patientIoOperation.getPatients(params);
 
 			assertTrue(patients.size()>0);

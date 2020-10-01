@@ -104,7 +104,7 @@ public class PatientBrowserManager {
 	 * @return the list of Patients that match specified name
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatients(Map<String, String> params) throws OHServiceException {
+	public ArrayList<Patient> getPatients(Map<String, Object> params) throws OHServiceException {
 		return ioOperations.getPatients(params);
 	}
 

@@ -74,7 +74,7 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 		return queryBld.toString();
 	}
 
-	public List<Patient> getPatientsByParams(Map<String, String> params) {
+	public List<Patient> getPatientsByParams(Map<String, Object> params) {
 
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
@@ -83,9 +83,18 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 //		Path<String> emailPath = user.get("email");
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		for (Map.Entry<String, String> entry : params.entrySet()) {
+		for (Map.Entry<String, Object> entry : params.entrySet()) {
 			Path<String> keyPath = patient.get(entry.getKey());
-			predicates.add(cb.like(keyPath, entry.getValue()));
+			// FIXME: trovare un modo migliore per gestire le date
+			if (entry.getKey().equals("birthDate")) {
+				predicates.add(cb.equal(keyPath, entry.getValue()));
+			} else {
+				if (entry.getValue() instanceof String) {
+					predicates.add(cb.like(keyPath, (String) entry.getValue() + "%"));
+				} else {
+					// FIXME: non dovrebbe mai arrivare
+				}
+			}
 		}
 		query.select(patient).where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 

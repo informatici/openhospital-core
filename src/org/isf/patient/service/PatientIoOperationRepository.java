@@ -126,5 +126,5 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
     		nativeQuery= true)
     ArrayList<Patient> getPatientsHeadWithHeightAndWeight();
 
-	List<Patient> getPatientsByParams(Map<String, String> params);
+	List<Patient> getPatientsByParams(Map<String, Object> params);
 }

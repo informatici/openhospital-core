@@ -83,7 +83,7 @@ public class PatientIoOperations
 	 * @return
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatients(Map<String, String> parameters) throws OHServiceException {
+	public ArrayList<Patient> getPatients(Map<String, Object> parameters) throws OHServiceException {
 
 		ArrayList<Patient> pPatient = null;
 
