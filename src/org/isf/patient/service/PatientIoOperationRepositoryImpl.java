@@ -2,6 +2,7 @@ package org.isf.patient.service;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -87,7 +88,10 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 			Path<String> keyPath = patient.get(entry.getKey());
 			// FIXME: trovare un modo migliore per gestire le date
 			if (entry.getKey().equals("birthDate")) {
-				predicates.add(cb.equal(keyPath, entry.getValue()));
+				Date birthDateFrom = (Date) entry.getValue();
+				Date birthDateTo = new Date(birthDateFrom.getTime() + (1000 * 60 * 60 * 24));;
+				// predicates.add(cb.equal(keyPath.as(Date.class), birthDateFrom));
+				predicates.add(cb.between(keyPath.as(Date.class), birthDateFrom, birthDateTo));
 			} else {
 				if (entry.getValue() instanceof String) {
 					predicates.add(cb.like(keyPath, (String) entry.getValue() + "%"));
