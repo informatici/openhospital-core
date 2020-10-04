@@ -74,11 +74,11 @@ public class TestBill
 	{		
 		bill.setDate(date);
 		bill.setUpdate(update);
-		bill.setList(isList);
-		bill.setList(priceList);
+		bill.setIsList(isList);
+		bill.setPriceList(priceList);
 		bill.setListName(listName);
-		bill.setPatient(isPatient);
-		bill.setPatient(patient);
+		bill.setIsPatient(isPatient);
+		bill.setBillPatient(patient);
 		bill.setPatName(patName);
 		bill.setStatus(status);
 		bill.setAmount(amount);

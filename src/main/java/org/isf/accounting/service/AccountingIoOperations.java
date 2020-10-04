@@ -63,7 +63,7 @@ public class AccountingIoOperations {
 	 */
 	public ArrayList<Bill> getPendingBills(int patID) throws OHServiceException {
 		if (patID != 0)
-			return new ArrayList<Bill>(billRepository.findByStatusAndPatient_codeOrderByDateDesc("O", patID));
+			return new ArrayList<Bill>(billRepository.findByStatusAndBillPatient_codeOrderByDateDesc("O", patID));
 
 		return new ArrayList<Bill>(billRepository.findByStatusOrderByDateDesc("O"));
 	}
@@ -419,7 +419,7 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException
 	 */
 	public ArrayList<Bill> getPendingBillsAffiliate(int patID) throws OHServiceException {
-		ArrayList<Bill> pendingBills = billRepository.findAllPendindBillsByPatient(patID);
+		ArrayList<Bill> pendingBills = billRepository.findAllPendindBillsByBillPatient(patID);
 		return pendingBills;
 	}
 
@@ -430,7 +430,7 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Bill> getAllPatientsBills(int patID) throws OHServiceException {
-		return billRepository.findByPatient_code(patID);
+		return billRepository.findByBillPatient_code(patID);
 	}
 
 	/**

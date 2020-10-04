@@ -98,7 +98,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 	
 	@ManyToOne
 	@JoinColumn(name="BLL_ID_PAT")
-	private Patient patient;
+	private Patient billPatient;
 		
 	@Column(name="BLL_PAT_NAME")
 	private String patName;
@@ -137,7 +137,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 
 	public Bill(int id, GregorianCalendar date, GregorianCalendar update,
 			boolean isList, PriceList list, String listName, boolean isPatient,
-			Patient patient, String patName, String status, Double amount, Double balance, String user) {
+			Patient billPatient, String patName, String status, Double amount, Double balance, String user) {
 		super();
 		this.id = id;
 		this.date = date;
@@ -146,7 +146,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 		this.list = list;
 		this.listName = listName;
 		this.isPatient = isPatient;
-		this.patient = patient;
+		this.billPatient = billPatient;
 		this.patName = patName;
 		this.status = status;
 		this.amount = amount;
@@ -176,13 +176,13 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 	public boolean isList() {
 		return isList;
 	}
-	public void setList(boolean isList) {
+	public void setIsList(boolean isList) {
 		this.isList = isList;
 	}
-	public PriceList getList() {
+	public PriceList getPriceList() {
 		return list;
 	}
-	public void setList(PriceList list) {
+	public void setPriceList(PriceList list) {
 		this.list = list;
 	}
 	public String getListName() {
@@ -194,14 +194,14 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 	public boolean isPatient() {
 		return isPatient;
 	}
-	public void setPatient(boolean isPatient) {
+	public void setIsPatient(boolean isPatient) {
 		this.isPatient = isPatient;
 	}
-	public Patient getPatient() {
-		return patient;
+	public Patient getBillPatient() {
+		return billPatient;
 	}
-	public void setPatient(Patient patient) {
-		this.patient = patient;
+	public void setBillPatient(Patient billPatient) {
+		this.billPatient = billPatient;
 	}
 	public String getPatName() {
 		return patName;
