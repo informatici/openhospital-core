@@ -1,0 +1,48 @@
+1;OB;Secção cesariana;1;0
+2;OB;Histerectomia;1;0
+3;OB;Ruptura do útero;1;0
+4;OB;Útero ferido;1;0
+5;OB;Evacuações;1;0
+6;OB;Aborto incompleto;1;0
+7;OB;Aborto séptico;1;0
+8;OB;Dilatação e curetagem;1;0
+9;OB;Reparo de fístula vésico-vaginal (vvf);1;0
+10;GY;Abdome agudo;1;0
+11;GY;Gravidez ectópica;1;0
+12;GY;Peritonite;1;0
+13;GY;Abscesso pélvico;1;0
+14;GY;Miomas uterinos;1;0
+15;GY;Tumores ovarianos;1;0
+16;GY;Prolapso uterino;1;0
+17;GY;Cistocele;1;0
+18;MG;Circuncisão;1;0
+19;MG;Fimose;1;0
+20;MG;Parafimose;1;0
+21;MG;Parafimose-fenda dorsal;1;0
+22;MG;Ureteral estenose-bougienage;1;0
+23;MG;Hidrocelectomia;1;0
+24;MG;Tumores testiculares;1;0
+25;MG;Prostatectomia;1;0
+26;MG;Biópsia de próstata;1;0
+27;MG;Biópsia de bexiga;1;0
+28;AG;Hérnia (inguinal e femoral);1;0
+29;AG;Estrangulada;1;0
+30;AG;Não estrangulada;1;0
+31;AG;Hérnia Epigastrical;1;0
+32;AG;Obstrução intestinal;1;0
+33;AG;Mecânica;1;0
+34;AG;Oclusão intestinal;1;0
+35;AG;Laparotomia;1;0
+36;AG;Lesões abdominais penetrantes;1;0
+37;AG;Peritonite;1;0
+38;AG;Apendicite;1;0
+39;AG;Colecistite;1;0
+40;AG;Tumores abdominais;1;0
+41;OR;Redução de fraturas;1;0
+42;OR;Membro superior;1;0
+43;OR;Membro inferior;1;0
+44;OR;Osteomielite - seqüestrectomia;1;0
+45;OS;Incisão e drenagem;1;0
+46;OS;Desbridamento;1;0
+47;OS;Mise-um-plat;1;0
+48;OS;Toalete cirúrgica e sutura;1;0

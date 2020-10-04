@@ -1,0 +1,268 @@
+commit 956ac540c5d9c42ffb848112f64b535c223303ef
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-06-04
+
+    Solved 32/347 tests fails (removed the useLegacyDatetimeCode flag)
+
+commit 85b7060382a0dc1b817a4a3bdecab09430654ef9
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-06-04
+
+    Forced to use com.sun.imageio.plugins.jpeg.JPEGImageReader (#103)
+    
+    the com.sun.media.imageioimpl.plugins.jpeg.CLibJPEGImageReader
+    provided by dcm4che library was unstable
+
+commit c7070599e4c318735904b85646aa76e061d2910b
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-06-01
+
+    Removed lib commited by mistake
+
+commit 3109fc41614324862b4fcdb833b79f4d57183b06
+Author: Paolo <pviotti@users.noreply.github.com>
+Date:   2020-05-31
+
+    Replace Travis with GitHub Actions for CI (#97)
+    
+    * add github action for CI
+    * replace CI badge in the readme
+    * delete travis.yml
+    * add docker compose up to the github actions file
+    * remove applicationContext file added by mistake
+    
+    Conflicts:
+            .travis.yml
+
+commit 418286b13a72413d59409789221901fd11346b53
+Author: Paolo <pviotti@users.noreply.github.com>
+Date:   2020-05-31
+
+    Replace Travis with GitHub Actions for CI (#97)
+    
+    * add github action for CI
+    * replace CI badge in the readme
+    * delete travis.yml
+    * add docker compose up to the github actions file
+    * remove applicationContext file added by mistake
+    
+    Conflicts:
+            .travis.yml
+
+commit 6150c43226be96c090e63404fe340c0692a18c92
+Author: Paolo <pviotti@users.noreply.github.com>
+Date:   2020-05-31
+
+    Replace Travis with GitHub Actions for CI (#97)
+    
+    * add github action for CI
+    * replace CI badge in the readme
+    * delete travis.yml
+    * add docker compose up to the github actions file
+    * remove applicationContext file added by mistake
+
+commit fa12601bcc7c5c3d9907f23ce97b6daf0e7231bc
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-05-31
+
+    Applied Maven Standard Layout
+
+commit 3c0dc308609c7c3a422024ee16975424dd9bb00e
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-05-31
+
+    1.10 Release Process (includes #96) (#99)
+    
+    * Adding profession and marital status fields
+    * OP-171 Added new fields HGT, Diuresis and Bowel (#66)
+    * Re-mapped Examination module with immutable nullable types
+    * Set all values to 'int' except UoM (String) and steps (double).
+    * SAT_MAX deprecated (it is always 100)
+    * HEIGHT_STEP default set to 1 (cm)
+    * PatientExamination refactoring and settings
+    * Fixed UoM: removed user defined UoM and adopted SI (Kg for the Weight
+    and meter for the Height)
+    * Renamed some DB fields names
+    * Porting script for previous data
+    * Moved getBMIdescription() method to Manager
+    * Fixed table name cases
+    * OP-172 laboratory 'undefined' default material (#67)
+    * Fixed Laboratory demo data
+    * OP-173 new dicom features (#68)
+    * Enabled FileSystemDicomManager to Spring (@Component)
+    * Removed useless constructor's argument
+    * Enabled JPG and JPEG formats
+    * Added method for SeriesNumber exist check
+    * Fixing DICOM libraries and dependencies
+    * First version of JPEG compatibility in DICOM module
+    * Added utility FileTools for retrieving information from filesystem
+    * Added new Dialog upon dicom/images loading
+    * OP-143: "patient profession" and "marital status" fields (#33) (#76)
+    * OP-140 fix library clibwrapper_jiio (#80)
+    * remove useless boundless repository (#84)
+    * OP-207 automaticlot not working (#93)
+    * Adopted a subset of ICD10 for it, en and fr languages (#89)
+    * Updated OH-core artifact version
+    * removed duplicated dependencies
+    * OP-194 provides more understandable, localized, set of values for operation results
+    * new 'dicom.max.size' property
+    
+    TODO:
+    - possibility to add images to the same series
+    - handle big size images
+    
+    Co-authored-by: aalsabag <43807484+aalsabag@users.noreply.github.com>
+    Co-authored-by: Alessandro Domanico <alessandro.domanico@yahoo.it>
+    Co-authored-by: giuseppe.sorge <giuseppe.sorge90@gmail.com>
+    Co-authored-by: Paolo <pviotti@users.noreply.github.com>
+    Co-authored-by: Xavier <martinxaviertchembe@gmail.com>
+
+commit a754ecb7575c4464bba800c841a53e608f2e3219
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-05-12
+
+    Op 140 providing library clibwrapper jiio (#94)
+    
+    * providing no longer available library clibwrapper_jiio-1.1
+
+commit 6366099e31c1f12c4517305e5245c7603bd3242c
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-05-10
+
+    Op 207 automaticlot not working (#93)
+    
+    * Commented useless methods
+    * Removed no longer existing parameters from javadoc
+    * More explanatory comments although the logic seems uselsess
+    * OP-207 #comment fixed AUTOMATICLOT behavior #time 2h
+    * Rearranged lot validation logic
+    * Changed fields position
+    * Fixed lot creation when LOTWITHCOST=no
+    * Added missing testIoNewAutomaticDischargingMovementDifferentLots
+
+commit 69627f85f024b8e69f5dd75ec8efd8152d9f39d1
+Author: Paolo <pviotti@users.noreply.github.com>
+Date:   2020-04-19
+
+    remove useless boundless repository (#84)
+
+commit 9be6f8f13537cd1c7bd2a61d677c0521df5102d1
+Author: giuseppe.sorge <giuseppe.sorge90@gmail.com>
+Date:   2020-04-13
+
+    OP-140 fix library clibwrapper_jiio (#80)
+    
+    Co-authored-by: Alessandro Domanico <alessandro.domanico@yahoo.it>
+
+commit dd2937cd3ccfe4f0a403ed990b25b78cdfe50ec3
+Author: andreafalco1991 <37925990+andreafalco1991@users.noreply.github.com>
+Date:   2020-04-08
+
+    Updated README to rebuild DB (#69)
+    
+    * Updated README to rebuild DB
+    * Change docker database image name and update readme
+    
+    Co-authored-by: Andrea Falco <andrea.falco@intesys.it>
+
+commit b3361df6defc51f20e710ea90ddcfa41b37ab362
+Author: Alex Wibowo <alexwibowo@gmail.com>
+Date:   2020-04-07
+
+    OP-203: Removing references to processing-core (#77)
+    
+    It has been replaced by a different library within OH-gui
+
+commit 131d2c3df034c8ca79784afaaecc7dcff698a32c
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-04-03
+
+    Added missing scripts in dockerfile
+
+commit cabedbdbbd8f8110854a59da92a184e31f1953b5
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-04-01
+
+    OP-143: "patient profession" and "marital status" fields (#33) (#76)
+    
+    * OP-143: "patient profession" and "marital status" fields (#33)
+    * Adding profession and marital status fields
+    * Adding new DB script to alter patient table
+    
+    Co-authored-by: aalsabag <43807484+aalsabag@users.noreply.github.com>
+
+commit 3ce0597bd84083c25f11ea9542ac6051884821ed
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-28
+
+    Updated OH-core artifact version
+
+commit 169b75e7ff88987f89f2e0f73d9dee93c4a78aac
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-28
+
+    Op 173 vezo 4 new dicom features (#68)
+    
+    * Enabled FileSystemDicomManager to Spring (@Component)
+    * Removed useless constructor's argument
+    * Enabled JPG and JPEG formats
+    * Added method for SeriesNumber exist check
+    * Fixing DICOM libraries and dependencies
+    * First version of JPEG compatibility in DICOM module
+    * Added utility FileTools for retrieving information from filesystem
+    * Added new Dialog upon dicom/images loading
+    
+    TODO:
+    - possibility to add images to the same series
+    - handle big size images (IndexOutOfBoundsException)
+
+commit 2370b06d30f1e1ef234a61fc20d0287e74b6691e
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-28
+
+    Op 172 vezo 3 laboratory default material (#67)
+    
+    * Fixed Laboratory demo data
+    * OP-172 #comment Added 'undefined' default material
+
+commit 0e40e782ff19c173f0b5cf8ba418fc23776ff10b
+Author: Alessandro Domanico <alessandro.domanico@yahoo.it>
+Date:   2020-03-28
+
+    Op 171 vezo 2 examination window changes (#66)
+    
+    * OP-171 #comment added UoM to Saturation parameter #time 30min
+    * Re-mapped Examination module with immutable nullable types
+    * Set all values to 'int' except UoM (String) and steps (double).
+    - SAT_MAX deprecated (it is always 100)
+    - HEIGHT_STEP default set to 1 (cm)
+    
+    * PatientExamination refactoring and settings
+    - Fixed UoM: removed user defined UoM and adopted SI (Kg for the Weight
+    and meter for the Height)
+    - Renamed some DB fields names
+    - Porting script for previous data
+    
+    * OP-171 #comment added Remove methods
+    
+    * Moved getBMIdescription() method to Manager
+    
+    * OP-171 #comment Added new fields HGT, Diuresis and Bowel
+    
+    * Included temporary step_XX in dockerfile
+    
+    * Update .travis.yml
+    
+    Debuggin docker
+    
+    * Debugging docker
+    
+    * Debugging Docker
+    
+    * Debugging Docker-Compose
+    
+    * Fixed table name cases
+    
+    * Removing debugger
+    
+    * Rename step_XX_examination_changes.sql to step_60_examination_changes.sql

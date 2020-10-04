@@ -1,0 +1,592 @@
+1;A;Aciclovir - cpr - 200mg
+2;A;Aciclovir - cpr - 400mg
+3;A;Acido nalidixico  - cpr - 500mg
+4;A;Amantadina - cps - 100mg
+5;A;Amikacina  - amp - 2ml
+6;A;Amoxacillin 100ml - xarope - 250mg/5ml
+7;A;Amoxacillina - cpr - 250mg
+8;A;Amoxacillina - cpr - 500mg
+9;A;Amoxacillina - amp - 1g
+10;A;Amoxacillina 60ml - xarope - 125mg/5ml
+11;A;Amoxacillina+acido clavulanico - cpr - 625mg
+12;A;Amoxacillina+acido clavulanico - cpr - 1000mg
+13;A;Amoxacillina+acido clavulanico - 100ml - xarope - 156-25mg/5ml
+14;A;Ampicilina - amp - 500mg
+15;A;Ampicilina - cps - 250mg
+16;A;Ampicilina - cps - 500mg
+17;A;Ampicilina - amp - 1gr
+18;A;Ampicilina 60ml - xarope - 125mg/5ml
+19;A;Ampicilina 60ml - xarope - 250mg/5ml
+20;A;Azitromicina - cpr - 250mg
+21;A;Azitromicina - cpr - 500mg
+22;A;Azitromicina - 15ml - xarope - 200mg/5ml
+23;A;BenzilPenicilina - frasco - 1 Mega
+24;A;BenzilPenicilina - frasco - 5 Mega
+25;A;Benzilpenicilina - frasco - 1 Mega
+26;A;Benzilpenicilina - frasco - 5 Mega
+27;A;Benzilpenicilina + Penicilina procaína (Fortificada) - frasco - 1 Mega
+28;A;Benzilpenicilina + Penicilina procaína (Fortificada) - frasco - 4 Mega
+29;A;Cefalexina - cpr - 500mg
+30;A;Cefalexina - 60ml - xarope - 125mg/5ml
+31;A;Cefazolina - frasco - 1g
+32;A;Cefotaxina - frasco - 1g
+33;A;Ceftazidima - frasco - 1g
+34;A;Ceftriaxone - amp - 250mg
+35;A;Ceftriaxone - amp - 500mg
+36;A;Ceftriaxone - amp - 1gr
+37;A;Ciprofloxacina - frasco - 200mg/100ml
+38;A;Ciprofloxacina - cpr - 250mg
+39;A;Ciprofloxacina - cpr - 500mg
+40;A;Claritromicina - cpr - 250 mg
+41;A;Cloramfenicole - cps - 250mg
+42;A;Cloramfenicole - amp - 1g/10ml
+43;A;Cloroquina - amp - 40mg/ml
+44;A;Cloroquina - cpr - 150mg base
+45;A;Cloxacilina - amp - 500mg
+46;A;Cloxacilina - cps - 250mg
+47;A;Cloxacilina - cps - 500mg
+48;A;Cotrimoxazole - cpr - 120mg
+49;A;Cotrimoxazole - cpr - 480mg
+50;A;Cotrimoxazole - cpr - 960mg
+51;A;Cotrimoxazole - amp - 480mg/5ml
+52;A;Cotrimoxazole - 60ml - xarope - 240mg/5ml
+53;A;Doxiciclina  - cpr - 100mg
+54;A;Eritromicina - cpr - 250mg
+55;A;Eritromicina - cpr - 500mg
+56;A;Eritromicina 60 ml - xarope  - 125mg/5ml
+57;A;Fluconazole - cps - 150mg
+58;A;Fluconazole - cpr - 200mg
+59;A;Gentamicina - 2ml - amp - 40mg/ml
+60;A;Gentamicina - 2ml - amp - 10mg/ml
+61;A;Ketoconazole  - cpr - 200mg
+62;A;Metronidazole - cpr - 250mg
+63;A;Metronidazole - cpr - 500mg
+64;A;Metronidazole - 100ml - frasco - 5mg/ml
+65;A;Metronidazole 60ml - xarope - 125mg/5ml
+66;A;Nitrofurantoina - cpr - 100mg
+67;A;Penicilina Benzatinica  - frasco - 2,4 Mega
+68;A;Penicilina Benzatinica  - frasco - 2,4 Mega
+69;A;Penicilina Procaína - frasco - 1 Mega
+70;A;Penicilina V - cpr - 250mg
+71;A;Spectinomicina - frasco - 2g
+72;A;Sulfadiazina - cpr - 500mg
+73;A;Tetraciclina - cps - 250mg
+74;B;Álcool - frasco - 95°
+75;B;Álcool Etílico - 250ml - frasco - 96%
+76;B;Álcool Etílico - 500ml - frasco - 70%
+77;B;Ammonium Oxalate 1'hydrate PRS - frasco - 1000gr
+78;B;Amoniaco - 1L - garrafa - 25%
+79;B;Blue methylene - frasco - 1000ml
+80;B;Bolsas para transfusão de sangue - 250ml - unidade
+81;B;Bolsas para transfusão de sangue - 450ml - unidade
+82;B;Giemsa - frasco - 500ml
+83;B;Hepatite B teste - unidade
+84;B;Lancetas - unidade
+85;B;Lugol's iodine solução - frasco - 1 lt
+86;B;Metanolo  - garrafa - 5 lt
+87;B;Óleo de imersão - frasco - 100ml
+88;B;Pipeta de embolo - unidade
+89;B;Potassium Hydrogénophosphate anhydre - frascos - 500gr
+90;B;Sistema para transfusão de sangue - lab
+91;B;Sódio Hydrogénophosphate anhydre - frasco - 500gr
+92;B;Teste de gravidez - kit
+93;B;Teste Rápido Hepatite B - fita
+94;B;Teste Rápido Hepatite C - fita
+95;B;Teste Rápido Malaria - kit
+96;B;Teste Rápido Sifílide - kit
+97;C;Adesivo perforado - rolo - 10cmx5mt
+98;C;Adesivo perforado - rolo - 18cmx5mt
+99;C;Agulha Artrocentese - unidade - 18G
+100;C;Agulha Dentaria - unidade - 30G
+101;C;Agulha Espinal - unidade - 20G
+102;C;Agulha Espinal - unidade - 22G
+103;C;Agulha Espinal - unidade - 27G
+104;C;Algodão para gesso - rolo - 500gr
+105;C;Bata Descartável - item
+106;C;Bisturi - unidade - 10
+107;C;Bisturi - unidade - 11
+108;C;Bisturi - unidade - 12
+109;C;Bisturi - unidade - 13
+110;C;Bisturi - unidade - 15
+111;C;Bisturi - unidade - 17
+112;C;Bisturi - unidade - 18
+113;C;Bisturi - unidade - 19
+114;C;Bisturi - unidade - 20
+115;C;Bisturi - unidade - 21
+116;C;Bisturi - unidade - 22
+117;C;Bisturi - unidade - 23
+118;C;Cânulas para traqueostomia - unidade
+119;C;Compressas de gaze estéril - unidade - 5cmx5cm
+120;C;Compressas de gaze estéril - unidade - 10cmx10cm
+121;C;Esponjas Cirúrgicas - unidade
+122;C;Fio de sutura - unidade - 1
+123;C;Fio de sutura - unidade - 2
+124;C;Fio de sutura - unidade - 1/0
+125;C;Fio de sutura - unidade - 2/0
+126;C;Fio de sutura - unidade - 3/0
+127;C;Fio de sutura - unidade - 5/0
+128;C;Fio de sutura - unidade - 6/0
+129;C;Fio de sutura - unidade - 7/0
+130;C;Fio de sutura acido poliglicolico - unidade - 3/0
+131;C;Fio de sutura Black Braided Silk - unidade - 0
+132;C;Fio de sutura Black Braided Silk - unidade - 5/0
+133;C;Fio de sutura Black Braided Silk - unidade - 6/0
+134;C;Fio de sutura Black Braided Silk - unidade - 7/0
+135;C;Fio de sutura catgut crómico - unidade - 2/0
+136;C;Fio de sutura catgut crómico - unidade - 3/0
+137;C;Fio de sutura Nylon monofilamento - unidade - 1/0
+138;C;Fio de sutura Poliester - unidade - 4/0
+139;C;Fio de sutura seda - unidade - 3/0
+140;C;Fio de sutura seda preta - unidade - 0
+141;C;Fio de sutura seda troncada  - unidade - 1/0
+142;C;Fio de sutura seda troncada  - unidade - 2/0
+143;C;Fio de sutura Vicryl - unidade - 0
+144;C;Fio de sutura Vicryl - unidade - 1/0
+145;C;Fio de sutura Vicryl - unidade - 2/0
+146;C;Fio de sutura Vicryl - unidade - 3/0
+147;C;Gaze compressa - Estéril - 12 - pacote - 5cmx5cm
+148;C;Gaze compressa - Estéril - 12 - pacote - 10cmx10cm
+149;C;Gaze compressa - Não estéril - 12 - pacote - 10cmx10cm
+150;C;Gaze compressa -Não estéril - 12 - pacote - 5cmx5cm
+151;C;Gaze parafinada - unidade - 10x10cm
+152;C;Ligadura de gaze - rolo - 5cmx5mt
+153;C;Ligadura de gaze - rolo - 7,5cmx5mt
+154;C;Ligadura de gaze - rolo - 10cmx5mt
+155;C;Ligadura elástica - rolo - 8cmx5mt
+156;C;Ligadura elástica - rolo - 10cmx5mt
+157;C;Ligadura para gesso - rolo - 7,5cmx2,7mt
+158;C;Ligadura para gesso - rolo - 10cmx2,7mt
+159;C;Ligadura para gesso - rolo - 15cmx2,7mt
+160;C;Ligadura para gesso - rolo - 20cmx2,7mt
+161;C;Luvas ginecológicas estéreis - par - curto
+162;C;Luvas ginecológicas estéreis - par - medio
+163;C;Luvas ginecológicas estéreis - par - largo
+164;C;Mascara descartável cirúrgica - unidade
+165;C;Rolo de gaze - unidade - 90cmx100mt
+166;C;Saco para colostomia
+167;C;Tubo de dreno - unidade - 10G
+168;C;Tubo de dreno - unidade - 12G
+169;C;Tubo de dreno - unidade - 14G
+170;C;Tubo de dreno - unidade - 16G
+171;C;Tubo de dreno - unidade - 18G
+172;C;Tubo de dreno - unidade - 20G
+173;C;Tubo de dreno - unidade - 22G
+174;C;Tubo de dreno - unidade - 24G
+175;E;Aspirador manual - item
+176;E;Aventais plásticos brancos - item
+177;E;Aventais plásticos verdes - item
+178;E;Balança para criança - item
+179;E;Bata Branca - item
+180;E;Bata verde - item
+181;E;Blocos - unidade
+182;E;Camisa verde - item - corto
+183;E;Camisa verde - item - médio
+184;E;Camisa verde - item - largo
+185;E;Colares Cervicais - unidade
+186;E;Esfigmomanómetro - item
+187;E;Esfigmomanómetro - item
+188;E;Especulo vaginal - item
+189;E;Estetoscópio - unidade
+190;E;Lapiseiras - unidade
+191;E;Lençol - item
+192;E;Mascara com filtro - unidade
+193;E;Mascara com viseira - unidade
+194;E;MUAC - fita - unidade
+195;E;Prontuário com descrições Farmacêuticas - unidade
+196;E;Rede Mosquiteira - item
+197;E;Saco para Balanças - item
+198;E;Saquinho para medicamentos - unidade
+199;E;Suporte para pesar a criança - item
+200;E;Termómetro Clinico - unidade
+201;E;Toalha Cirúrgica verde - unidade
+202;E;Toucas verde - unidade
+203;G;Adesivo - rolo - 2,5cmx5mt
+204;G;Adesivo - rolo - 5cmx5mt
+205;G;Adesivo - rolo - 7,5cmx5mt
+206;G;Agulha - unidade - 18G
+207;G;Agulha - unidade - 19G
+208;G;Agulha - unidade - 20G
+209;G;Agulha - unidade - 21G
+210;G;Agulha - unidade - 22G
+211;G;Agulha - unidade - 23G
+212;G;Agulha - unidade - 25G
+213;G;Agulha com aletas - unidade - 23G
+214;G;Agulha com aletas - unidade - 21G
+215;G;Algália de Foley - unidade - N°8
+216;G;Algália de Foley - unidade - N°10
+217;G;Algália de Foley - unidade - N°12
+218;G;Algália de Foley - unidade - N°14
+219;G;Algália de Foley - unidade - N°16
+220;G;Algália de Foley - unidade - N°18
+221;G;Algália de Foley - unidade - N°20
+222;G;Baixa língua - unidade
+223;G;Cânula - unidade - N° 14
+224;G;Cânula - unidade - N° 16
+225;G;Cânula - unidade - N° 18
+226;G;Cânula - unidade - N° 20
+227;G;Cânula - unidade - N° 22
+228;G;Cânula - unidade - N° 24
+229;G;Clamp. P/Cordão umbilical - unidade
+230;G;Gel para ecografia - frasco - 250ml
+231;G;Luvas de borracha - unidade - curto
+232;G;Luvas de borracha - unidade - medio
+233;G;Luvas de borracha - unidade - largo
+234;G;Luvas descartáveis - 100 unidades - pacote - curto
+235;G;Luvas descartáveis - 100 unidades - pacote - medio
+236;G;Luvas descartáveis - 100 unidades - pacote - largo
+237;G;Luvas estéreis - par - 7
+238;G;Luvas estéreis - par - 7,5
+239;G;Luvas estéreis - par - 8
+240;G;Luvas estéreis - par - 8,5
+241;G;Mascara de papel - unidade
+242;G;Mascara particulate - unidade
+243;G;Mascaras com nebulizador - unidade
+244;G;Pó' para preparação de luvas - sacos
+245;G;Preservativos - unidade
+246;G;Rolo de papel (50cmx100m) - unidade
+247;G;Saco para urina - 2000ml - unidade
+248;G;Saco para urina (pediátrico) - 100ml - unidade
+249;G;Seringa - unidade - 0,5cc
+250;G;Seringa - unidade - 1cc
+251;G;Seringa - unidade - 2cc
+252;G;Seringa - unidade - 2,5cc
+253;G;Seringa - unidade - 5cc
+254;G;Seringa - unidade - 10cc
+255;G;Seringa - unidade - 18cc
+256;G;Seringa - unidade - 21cc
+257;G;Seringa - unidade - 20cc
+258;G;Seringa para insulina - unidade - 1ml
+259;G;Sistema para soro - unidade
+260;G;Sonda nasogastrica - unidade - N° 5
+261;G;Sonda nasogastrica - unidade - N° 6
+262;G;Sonda nasogastrica - unidade - N° 8
+263;G;Sonda nasogastrica - unidade - N° 9
+264;G;Sonda nasogastrica - unidade - N° 10
+265;G;Sonda nasogastrica - unidade - N° 12
+266;G;Sonda nasogastrica - unidade - N° 20
+267;G;Sonda nasogastrica - unidade - N° 14
+268;G;Sonda nasogastrica - unidade - N° 16
+269;G;Sonda nasogastrica - unidade - N° 18
+270;I;Ac. tranexamico - amp - 500mg/5ml
+271;I;Acido aminocaproico (Epsicapron) - amp - 2,5g/10ml
+272;I;Adrenalina (Epinefrine)  - amp - 1mg/1ml
+273;I;Agua p/injeções  - amp - 5ml
+274;I;Agua p/injeções  - amp - 10ml
+275;I;Aminofilina - amp - 250mg/10ml
+276;I;Atropina  - amp - 1mg/1ml
+277;I;Atropina  - amp - 0,5mg/1ml
+278;I;Bicarbonato de sódio - 20ml - amp - 8,4%
+279;I;Butilbromuro de hyoscina (Buscopan) - amp - 20mg/1ml
+280;I;Cálcio Gluconato - amp - 1g/10ml
+281;I;Cálcio Gluconato - 5ml - amp - 500mg/ml
+282;I;Cimetidina - amp - 200mg/2ml
+283;I;Cloreto de potássio  - amp - 1g/10ml
+284;I;Cloreto de potássio - 7,5% - amp - 750mg/10ml
+285;I;Dexamethazona - 1ml - amp - 4mg/ml
+286;I;Dexamethazona - 2ml - amp - 4mg/ml
+287;I;Diclofenac - amp - 75mg/3ml
+288;I;Difenidramina  - amp - 20mg/2ml
+289;I;Digoxina - amp - 0,5mg/2ml
+290;I;Dipirona - amp - 500mg/ml
+291;I;Dipirona - amp - 2,5g/5ml
+292;I;Dopamina (BASI) - amp - 200mg/5ml
+293;I;Furosemida  - amp - 20mg/2ml
+294;I;Furosemida  - amp - 10mg/2ml
+295;I;Gluconato de Cálcio  - amp - 1g - 10%
+296;I;Heparina - 5ml - amp - 5000 U.I./ml
+297;I;Hidralazina - 1ml - amp - 20mg/ml
+298;I;Hidrocortisona - amp - 100mg
+299;I;Metilergometrina- 1ml - amp - 0,2mg/ml
+300;I;Metilprednisolona (sucinato sódico) - frasco - 1gr
+301;I;Metoclopramida - 2ml - amp - 5mg/ml
+302;I;Nitroglicerina - 10ml - amp - 5mg/ml
+303;I;Nitroglicerina - 5ml - amp - 5mg/ml
+304;I;Oxitocina - 1ml - amp - 10UI/ml
+305;I;Piracetam - 15ml - amp - 1gr/5ml
+306;I;Piracetam - 30ml - amp - 1gr/5ml
+307;I;Prednisolona - 1ml - amp - 25mg
+308;I;Prednisolona - 5ml - amp - 250mg
+309;I;Progesterona - amp - 150mg
+310;I;Progesterona - amp - 25mg
+311;I;Progesterona (Depo-provera) - amp - 150mg/ml
+312;I;Prometazina - 2ml - amp - 25mg/ml
+313;I;Ranitidina - 5ml - amp - 10mg/ml
+314;I;Salbutamol - 1ml - amp - 0,5mg/ml
+315;I;Sódio bicarbonato - 10ml - amp - 8,4%
+316;I;Solfato de Magnésio - 10ml (50%) - amp - 500mg/ml
+317;I;Vacina anti-rabia (Rabisin) - amp - 1ml
+318;L;Dapsone + Rifampicina (MDT-COMBI) - blister - 50mg+450mg
+319;L;Dapsone + Rifampicina (MDT-COMBI) - blister - 100mg+600mg
+320;L;Estreptomicina - frasco - 1g
+321;L;Etambutolo  - cpr - 400mg
+322;L;Etambutolo + Hisoniazida - cpr - 400+150mg
+323;L;Isoniazida - cpr - 100mg
+324;L;Isoniazida - cpr - 300mg
+325;L;Pirazinamida - cpr - 400mg
+326;L;Rif + Iso + Piraz + Etam (composto) - cpr - 150+75+400+275mg
+327;L;Rifampicina + Hisoniazida - cpr - 300+150mg
+328;L;Rifampicina + Isoniazida - cpr - 150mg/100mg
+329;L;Rifampicina + Isoniazida - cpr - 150mg/75mg
+330;L;Rifampicina + Isoniazida + Etambutol - cpr - 150mg/75mg/275mg
+331;M;Amodiaquina - cpr - 200mg
+332;M;Artesunate - frasco - 60mg/6ml
+333;M;Artesunate - supp - 50mg
+334;M;Artesunate - supp - 200mg
+335;M;Artesunate+Amodiaquina - 3 cpr - blister - 100mg/270mg
+336;M;Artesunate+Amodiaquina - 3 cpr - blister - 50mg/136mg
+337;M;Artesunate+Amodiaquina - 3 cpr - blister - 25mg/67,5mg
+338;M;Artesunate+Amodiaquina - 6 cpr - blister - 100mg/270mg
+339;M;Arthemeter - amp - 20mg/1ml
+340;M;Arthemeter - amp - 80mg/1ml
+341;M;Coartem 12 cpr - laminas - 20+120mg
+342;M;Coartem 18 cpr - laminas - 20+120mg
+343;M;Coartem 24 cpr - laminas - 20+120mg
+344;M;Coartem 6 cpr - laminas - 20+120mg
+345;M;Quinino - cpr - 300mg
+346;M;Quinino - 2ml - amp - 300mg/ml
+347;M;Quinino - 2ml - amp - 150mg/ml
+348;M;Sulphadoxina+Pirimetamina - cpr - 500+25mg
+349;N;Acido ascorbico (Vitamina C) - cpr - 500mg
+350;N;Acido ascorbico (Vitamina C) - amp - 500mg/5ml
+351;N;Acido ascorbico (Vitamina C) - 10ml - gotas orais - 100mg/ml
+352;N;Acido Fólico - cpr - 5mg
+353;N;Ferro Fumarato - 50ml - xarope - 100mg/5ml
+354;N;Ferro Sulfato - cpr - 200mg
+355;N;Ferro Sulfato + Ac. Fólico  - cpr - 200+0,25mg
+356;N;Fitomenadione (Vitamina K) - solução oral - 2mg/0,2ml
+357;N;Fitomenadione (Vitamina K) - 1ml - amp - 10mg/ml
+358;N;Fitomenadione (Vitamina K) - 1ml - amp - 1mg/1ml
+359;N;Leite terapêutico F100 - pacote - 114gr
+360;N;Leite terapêutico F75 - pacote - 102,5gr
+361;N;Multivitamina  - cpr
+362;N;Piridoxina (vit. B6)  - cpr - 100mg
+363;N;Piridoxina (vit. B6) - 2ml - amp - 50mg/ml
+364;N;Plumpynut - pacote - 92gr
+365;N;Plumpysup - pacote - 92gr
+366;N;Pyridoxine (Vitamina B6) - amp - 100mg/2ml
+367;N;Pyridoxine (Vitamina b6) - cpr - 100mg
+368;N;Tiamina (VIT. B1) - 2ml - amp - 50mg/ml
+369;N;Vitamina A - cpr - 50.000I.U.
+370;N;Vitamina A - cpr - 100.000I.U.
+371;N;Vitamina A - cpr - 200.000I.U.
+372;N;Vitamina B compl. 100 ml - xarope
+373;N;Vitamina B complexo (B1-B6-B12 Neurobion) - amp - 2mg/3ml
+374;N;Vitamina B complexo (Neurobion) - cpr - 300mg
+375;N;Vitamina B12 (Cianocobalamina) - amp - 5mg/2ml
+376;N;Vitamina B12 (Hidroxicobalamina) - amp - 1mg/ml
+377;N;Vitamina E - cps - 400mg
+378;O;Acetazolamida - cpr - 250mg
+379;O;Ácido acetilsalicílico (Aspirina - ASA) - cpr - 500mg
+380;O;Ácido acetilsalicílico (Aspirina - ASA) - cpr - 100 mg
+381;O;Albendazole - cpr - 200mg
+382;O;Albendazole - cpr - 400mg
+383;O;Albendazole suspensão - xarope - 200mg/5ml
+384;O;Allopurinol - cpr - 100mg
+385;O;Ambroxol - cpr - 30mg
+386;O;Ambroxol - 200ml - xarope - 6mg/ml
+387;O;Aminofilina - cpr - 100mg
+388;O;Amlodipina  - cpr - 5mg
+389;O;Amlodipina  - cpr - 10mg
+390;O;Atenololo  - cpr - 25mg
+391;O;Atenololo  - cpr - 50mg
+392;O;Atenololo  - cpr - 100mg
+393;O;Atropina  - cpr - 1mg
+394;O;Bisacodyl - cpr - 5mg
+395;O;Bromexina HCL 100ml - xarope - 4mg/5ml
+396;O;Butilbromuro de hyoscina (Buscopan) - cpr - 10mg
+397;O;Captopril - cpr - 25mg
+398;O;Captopril - cpr - 50mg
+399;O;Carbamazepina  - cpr - 200mg
+400;O;Carbocisteina (Mucolar) - 100ml - xarope - 50 mg/ml
+401;O;Carbocisteina 200ml (Mucoral) - xarope - 50mg/ml
+402;O;Carvão ativado  - cpr - 125mg
+403;O;Cimetidina - cpr - 200mg
+404;O;Cloreto de potássio  - cpr - 600mg
+405;O;Clorfeniramina - cpr - 4mg
+406;O;Clortalidona  - cpr - 25mg
+407;O;Codeina+Fenitoloxamina 90ml - xarope - 2,22+0,733mg/ml
+408;O;Dexamethazona - cpr - 0,5mg
+409;O;Dextromethorphano 100ml - xarope - 5mg/5ml
+410;O;Diclofenac  - cpr - 50mg
+411;O;Diclofenac  - cpr - 100mg
+412;O;Dietilcarbamazina  - cpr - 50mg
+413;O;Digoxina - cpr - 0,125mg
+414;O;Digoxina - cpr - 0,250mg
+415;O;Enalapril - cpr - 5mg
+416;O;Enalapril - cpr - 20mg
+417;O;Espironolactona - cpr - 25mg
+418;O;Espironolactona - cpr - 100mg
+419;O;Ethilenestr./levonorgel 28cpr - blister - 0,03+0,15mg
+420;O;Ethinilestradiol + Levonorgestrel (pilula) - cpr - 0,03mg/0,15mg
+421;O;Furosemida  - cpr - 40mg
+422;O;Glibenclamida  - cpr - 5mg
+423;O;Griseofulvina - cpr - 125mg
+424;O;Griseofulvina - cpr - 500mg
+425;O;Hidroclortiazida - cpr - 25mg
+426;O;Hidroclortiazida - cpr - 50mg
+427;O;Hidroxido alumínio  - cpr - 500mg
+428;O;Ibuprofene - cpr - 200mg
+429;O;ibuprofene - cpr - 400mg
+430;O;Ibuprofene - 100ml - xarope - 100mg/5ml
+431;O;Indometacina - cpr - 25mg
+432;O;Isosorbide dinitrato  - cpr - 10mg
+433;O;Legalon (Silimarina) - cpr - 140mg
+434;O;Leite de magnésia - 200ml - frasco
+435;O;Levamisole  - cpr - 50mg
+436;O;Levonorgestrel - cpr - 0,75mg
+437;O;Lisado bactérico polivalente (Broncho-Vaxom) - cps - 3,5mg
+438;O;Loperamide - cpr - 2mg
+439;O;Loratadina - cpr - 10mg
+440;O;Losartana - cpr - 50mg
+441;O;Magnésio Trisilicato  - cpr - 500mg
+442;O;Mebendazole - cpr - 100mg
+443;O;Mebendazole - cpr - 500mg
+444;O;Metamizole sodium (Novamine sulfone) - cpr - 500mg
+445;O;Metformina - cpr - 500mg
+446;O;Metformina - cpr - 850mg
+447;O;Metildopa - cpr - 250mg
+448;O;Metilergometrina - cpr - 0,125mg
+449;O;Metoclopramida - cpr - 10mg
+450;O;Metoclopramida - 120ml - xarope - 10mg/10ml
+451;O;Naproxene  - cpr - 250mg
+452;O;Nifedipina - cpr - 10mg
+453;O;Nifedipina (retarde) - cpr - 20mg
+454;O;Nifedipina (retarde) - cpr - 30 mg
+455;O;Omeprazole  - cpr - 20mg
+456;O;Omeprazole  - amp - 40mg/10ml
+457;O;Paracetamol - cpr - 100mg
+458;O;Paracetamol - cpr - 500mg
+459;O;Paracetamol - cpr - 750mg
+460;O;Paracetamol - 100ml - xarope - 120mg/5ml
+461;O;Pentoxifilina (Trental) - cpr - 400mg
+462;O;Praziquantel - cpr - 600mg
+463;O;Prednisolona  - cpr - 5mg
+464;O;Prometazina - cpr - 25mg
+465;O;Prometazina - 100ml - xarope - 1mg/1ml
+466;O;Propranolol - cpr - 40mg
+467;O;Ranitidina - cpr - 150mg
+468;O;Ranitidina - cpr - 300mg
+469;O;Resomal (SRO baixa osmolaridade) - pacote - 42gr
+470;O;Sais de reidratação oral (SRO) - pacote - 22gr
+471;O;Salbutamol+Bromhexine 125ml - xarope - 2+4mg/10ml
+472;O;Salbutamolo - cpr - 4mg
+473;O;Salbutamolo - cpr - 2mg
+474;O;Salbutamolo 100ml - xarope - 2mg/5ml
+475;O;Sildenafil Citrate (Davigra) - cpr - 50mg
+476;O;Solfato de Zinco - cpr - 20 mg
+477;O;Tinidazole - cpr - 500mg
+478;O;Verapamil  - cpr - 40mg
+479;O;Verapamil  - cpr - 80mg
+480;O;Zinco  sulfato - cpr - 20mg
+481;S;Cloreto de sódio - 500ml - frasco - 0,9%
+482;S;Dextro-salina - 500 ml - solução - 2,5%/0,45%
+483;S;Dextrose - 20ml - solução - 50%
+484;S;Dextrose - 500ml - solução - 5%
+485;S;Dextrose - 500ml - solução - 10%
+486;S;Dextrose - 500ml - solução - 30%
+487;S;Dextrose - 50ml - solução - 50%
+488;S;Hemagel - 500ml - solução - 35gr/l
+489;S;Manitol - 250ml - solução - 20%
+490;S;Manitol - 500ml - solução - 20%
+491;S;Ringer Lactate - solução - 500ml
+492;S;Ringer lactate  - solução - 1000ml
+493;T;Acido Benzoico - pomada - 30g
+494;T;Acido benzoico - Acido salicilico (Withfield) - 40gr - unguento - 6%/3%
+495;T;Acido benzoico - Acido salicilico (Withfield) - 800gr - unguento - 6%/3%
+496;T;Acido Benzoico + Acido Salicilico - pomada - 60mg+30mg
+497;T;Agua Tabs - cpr - 1,67gm
+498;T;Atropina - 10ml - gotas oft - 1%
+499;T;Balsamo analgésico (BASI) - 50g - pomada - 1mg/g
+500;T;Bebé gel - 30g - pomada
+501;T;Benzil benzoato - 1000ml - loção - 25%
+502;T;Benzoato de benzile - 110ml - loção - 10%
+503;T;Betadina - 100ml - solução - 10%
+504;T;Betamethasone - 30g - pomada - 0,1%
+505;T;Butilbromuro de hyoscina (Buscopan) - supp - 10mg
+506;T;Calamina - loção - 8%
+507;T;Calamina - loção - 15%
+508;T;Chlorhexidine Gluconate - 100ml - solução - 20%
+509;T;Cloramfenicole - gotas oft - 0,5% - 10ml
+510;T;Cloramfenicole 15g - pomada oft - 0,01
+511;T;Cloridreto de efedrina - gotas oft - 15ml
+512;T;Clotrimazole - ovulo - 100mg
+513;T;Clotrimazole - ovulo - 500mg
+514;T;Clotrimazole - 30g - pomada - 2%
+515;T;Desinfetantes para mãos - 500ml - solução - 75%
+516;T;Dexamethazona - 5ml - gotas oft - 1mg/ml
+517;T;Diclofenac gel - 30g - pomada - 2%
+518;T;Dicloroisocianurato de Sódio (Certeza) - cpr - 61mg
+519;T;Efedrina cloridrato - 15ml - gotas oft - 0,122gr
+520;T;Gentamicina (gotas oft.) - 10ml - colírio - 0,3%
+521;T;Gentamicina+Desametazona - 5ml - colírio - 3mg+1mg/ml
+522;T;Glicerina - frasco - 1 lt
+523;T;Griseofulvina - 30g - pomada - 1%
+524;T;Griseofulvina - 30g - pomada - 5%
+525;T;Hidrocortisona - 30g - pomada - 1%
+526;T;Iodopovidona - 100g - pomada - 10%
+527;T;Iodopovidona - 125ml - solução - 10%
+528;T;Iodopovidona - 30g - pomada - 10%
+529;T;Ketoconazole - 30g - pomada - 2%
+530;T;Miconazole - 30gr - crema - 2%
+531;T;Neomicina + Bacitracina - 15gr - unguento - 0,5%/500Iu/gr
+532;T;Nistatina - ovulo - 100.000 I.U./ml
+533;T;Nistatina - 30ml - solução - 100.000I.U./ml
+534;T;Nitrofurazona - pomada - 0,2%
+535;T;Oxibuprocaina - 10ml - gotas oft - 4mg/ml
+536;T;Oxido de zinco - 100gr - unguento - 10%
+537;T;Oxido de zinco - 800gr - unguento - 10%
+538;T;Paracetamol - supp - 125mg
+539;T;Peroxido de Hidrogeno (Agua Oxigenada) - 250ml - solução - 3%
+540;T;Peroxido de Hidrogeno (Agua Oxigenada) - 500ml - solução - 3%
+541;T;Salbutamol - spray - 150mg/30ml
+542;T;Salbutamolo (nebulizador) - 200 doses - solução - 100mcg/dose
+543;T;Sulfadiazina de prata - 200g - crema - 1%
+544;T;Sulfadiazina de prata - 50g - crema - 1%
+545;T;Tetracaina gotas oftálmicas - colírio - 1%
+546;T;Tetraciclina - 15gr - unguento - 3%
+547;T;Tetraciclina - 3,5gr - pomada oft - 1%
+548;T;Timololo (maleato) - 0,25% - colírio - 2,5mg/ml
+549;T;Timololo (maleato) - 0,5% - colírio - 5mg/ml
+550;T;Tirotricina (Hydrotricina) - cpr - 1mg
+551;T;Xylometazoline Hydroclorido - 10ml - gotas oft - 0,5%
+552;V;Amitriptilina - cpr - 25 mg
+553;V;Bupivacaina HCL - 20ml - amp - 0,5%
+554;V;Bupivacaina HCL - 5ml - amp - 0,5%
+555;V;Cetamina - amp - 50mg/ml
+556;V;Clorpromazina - cpr - 100mg
+557;V;Clorpromazina - cpr - 25mg
+558;V;Clorpromazina - amp - 50mg/2ml
+559;V;Diazepam - amp - 10mg/2ml
+560;V;Diazepam  - cpr - 5mg
+561;V;Diazepam  - cpr - 10mg
+562;V;Droperidrolo  - amp - 2,5mg/1ml
+563;V;Fenitoine - cpr - 100mg
+564;V;Fenobarbital - cpr - 100mg
+565;V;Fenobarbital - cpr - 50mg
+566;V;Fenobarbital - cpr - 30mg
+567;V;Fenobarbital - 1ml - amp - 200mg/ml
+568;V;Fenobarbital - 2ml - amp - 100mg/ml
+569;V;Fentanil - 2ml - amp - 50mcg/ml
+570;V;Flumazenil - 10 ml - amp - 0,1mg/ml
+571;V;Haloperidol  - cpr - 5mg
+572;V;Haloperidol - 1ml - amp - 5mg/ml
+573;V;Lidocaína - 30g - pomada - 2%
+574;V;Lidocaína + adrenalina - 20ml - frasco - 1%+1/100.000
+575;V;Lidocaína + adrenalina - 20ml - frasco - 2%+1/100.000
+576;V;Lidocaína + dextrose espinal - 2ml - amp - 5% + 7,5%
+577;V;Lidocaína 1% - 20ml - frasco - 10mgml
+578;V;Lidocaína 1% - 50ml - frasco - 10mg/ml
+579;V;Lidocaína 2% - 20ml - amp - 20mg/ml
+580;V;Lidocaína 2% - 2ml - amp - 20mg/ml
+581;V;Lidocaína 2% - 50ml - frasco - 20mg/ml
+582;V;Lidocaína 2% - 5ml - amp - 20mg/ml
+583;V;Lidocaína 2% - 90ml - frasco - 20mg/ml
+584;V;Neostigmina - 1ml - amp - 0,5mg/ml
+585;V;Nitrazepam  - cpr - 5mg
+586;V;Noscapina - cpr - 20mg
+587;V;Procaína - 2ml - amp - 2%
+588;V;Procaína - 5ml - amp - 2%
+589;V;Thiopentale sodium - frasco - 500mg
+590;V;Tramadol  - cps - 50mg
+591;V;Tramadol  - cpr - 100mg
+592;V;Tramadol  - amp - 100mg/2ml
