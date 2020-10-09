@@ -76,8 +76,8 @@ public class TherapyRow  extends Auditable<String>
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="THR_PAT_ID")
-	Patient patID;
+	@JoinColumn(name = "THR_PAT_ID")
+	Patient patient;
 
 	@NotNull
 	@Column(name="THR_STARTDATE")	
@@ -125,10 +125,10 @@ public class TherapyRow  extends Auditable<String>
 	public TherapyRow() {
 		super();
 	}
-	
+
 	/**
 	 * @param therapyID
-	 * @param patID
+	 * @param patient
 	 * @param startDate
 	 * @param endDate
 	 * @param medical
@@ -140,13 +140,13 @@ public class TherapyRow  extends Auditable<String>
 	 * @param notify
 	 * @param sms
 	 */
-	public TherapyRow(int therapyID, Patient patID, 
+	public TherapyRow(int therapyID, Patient patient,
 			GregorianCalendar startDate, GregorianCalendar endDate,
 			Medical medical, Double qty, int unitID, int freqInDay,
 			int freqInPeriod, String note, boolean notify, boolean sms) {
 		super();
 		this.therapyID = therapyID;
-		this.patID = patID;
+		this.patient = patient;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.medicalId = medical.getCode();
@@ -158,7 +158,7 @@ public class TherapyRow  extends Auditable<String>
 		this.notifyInt = notify ? 1 : 0;
 		this.smsInt = sms ? 1 : 0;
 	}
-	
+
 	public int getTherapyID() {
 		return therapyID;
 	}
@@ -167,12 +167,12 @@ public class TherapyRow  extends Auditable<String>
 		this.therapyID = therapyID;
 	}
 
-	public Patient getPatID() {
-		return patID;
+	public Patient getPatient() {
+		return patient;
 	}
 
-	public void setPatID(Patient patID) {
-		this.patID = patID;
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
 
 	public GregorianCalendar getStartDate() {
@@ -254,7 +254,7 @@ public class TherapyRow  extends Auditable<String>
 	public void setSms(boolean sms) {
 		this.smsInt = sms ? 1 : 0;
 	}
-	
+
 	public String toString() {
 		String string = medicalId.toString() + " - " + this.unitID + " " + this.qty + "/" + this.freqInDay + "/" + this.freqInPeriod;
 		return string;

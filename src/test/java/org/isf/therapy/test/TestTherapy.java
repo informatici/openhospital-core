@@ -70,14 +70,14 @@ public class TestTherapy
 			Patient patient,
 			Medical medical,
 			TherapyRow therapyRow) 
-	{	
+	{
 		therapyRow.setEndDate(endDate);
 		therapyRow.setFreqInDay(freqInDay);
 		therapyRow.setFreqInPeriod(freqInPeriod);
 		therapyRow.setMedical(medical);
 		therapyRow.setNote(note);
 		therapyRow.setNotify(notify);
-		therapyRow.setPatID(patient);
+		therapyRow.setPatient(patient);
 		therapyRow.setQty(qty);
 		therapyRow.setSms(sms);
 		therapyRow.setStartDate(startDate);

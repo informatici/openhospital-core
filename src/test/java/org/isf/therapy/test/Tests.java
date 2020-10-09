@@ -157,17 +157,17 @@ public class Tests
 		int id = 0;
 		
 		
-		try 
-		{		
-			id = _setupTestTherapyRow(false);
-			TherapyRow foundTherapyRow = (TherapyRow)jpa.find(TherapyRow.class, id); 
-			ArrayList<TherapyRow> therapyRows = therapyIoOperation.getTherapyRows(foundTherapyRow.getPatID().getCode());
-			
-			assertThat(therapyRows.get(therapyRows.size() - 1).getNote()).isEqualTo(foundTherapyRow.getNote());
-		} 
-		catch (Exception e) 
+		try
 		{
-			e.printStackTrace();		
+			id = _setupTestTherapyRow(false);
+			TherapyRow foundTherapyRow = (TherapyRow) jpa.find(TherapyRow.class, id);
+			ArrayList<TherapyRow> therapyRows = therapyIoOperation.getTherapyRows(foundTherapyRow.getPatient().getCode());
+
+			assertThat(therapyRows.get(therapyRows.size() - 1).getNote()).isEqualTo(foundTherapyRow.getNote());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 			fail();
 		}
 	}
@@ -219,23 +219,23 @@ public class Tests
 	}
 
 	@Test
-	public void testIoDeleteTherapyRow() 
+	public void testIoDeleteTherapyRow()
 	{
 		int id = 0;
 		boolean result = false;
-		
 
-		try 
-		{		
+
+		try
+		{
 			id = _setupTestTherapyRow(false);
-			TherapyRow foundTherapyRow = (TherapyRow)jpa.find(TherapyRow.class, id); 
-			result = therapyIoOperation.deleteAllTherapies(foundTherapyRow.getPatID().getCode());
+			TherapyRow foundTherapyRow = (TherapyRow)jpa.find(TherapyRow.class, id);
+			result = therapyIoOperation.deleteAllTherapies(foundTherapyRow.getPatient());
 
 			assertThat(result).isTrue();
 			result = therapyIoOperation.isCodePresent(id);
 			assertThat(result).isFalse();
-		} 
-		catch (Exception e) 
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();		
 			fail();
@@ -248,7 +248,7 @@ public class Tests
 			// given:
 			int id = _setupTestTherapyRow(false);
 			TherapyRow found = (TherapyRow) jpa.find(TherapyRow.class, id);
-			Patient obsoletePatient = found.getPatID();
+			Patient obsoletePatient = found.getPatient();
 			Patient mergedPatient = _setupTestPatient(false);
 
 			// when:
@@ -256,7 +256,7 @@ public class Tests
 
 			// then:
 			TherapyRow result = (TherapyRow)jpa.find(TherapyRow.class, id);
-			assertThat(result.getPatID().getCode()).isEqualTo(mergedPatient.getCode());
+			assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
