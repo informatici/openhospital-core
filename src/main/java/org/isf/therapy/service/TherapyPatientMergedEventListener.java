@@ -41,7 +41,7 @@ public class TherapyPatientMergedEventListener {
 	public void handle(PatientMergedEvent patientMergedEvent) throws OHServiceException {
 		List<TherapyRow> therapyRows = therapyIoOperations.getTherapyRows(patientMergedEvent.getObsoletePatient().getCode());
 		for (TherapyRow therapyRow : therapyRows) {
-			therapyRow.setPatID(patientMergedEvent.getMergedPatient());
+			therapyRow.setPatient(patientMergedEvent.getMergedPatient());
 		}
 	}
 

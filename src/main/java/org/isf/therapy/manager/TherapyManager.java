@@ -73,8 +73,8 @@ public class TherapyManager {
 	 * @throws OHServiceException
 	 */
 	public Therapy createTherapy(TherapyRow th) throws OHServiceException {
-		return createTherapy(th.getTherapyID(), th.getPatID().getCode(), th.getMedical(), th.getQty(),
-				th.getStartDate(), th.getEndDate(), th.getFreqInPeriod(), th.getFreqInDay(), 
+		return createTherapy(th.getTherapyID(), th.getPatient().getCode(), th.getMedical(), th.getQty(),
+				th.getStartDate(), th.getEndDate(), th.getFreqInPeriod(), th.getFreqInDay(),
 				th.getNote(), th.isNotify(), th.isSms());
 	}
 	
@@ -97,18 +97,18 @@ public class TherapyManager {
 	private Therapy createTherapy(int therapyID, int patID, Integer medId, Double qty,
 			GregorianCalendar startDate, GregorianCalendar endDate, int freqInPeriod,
 			int freqInDay, String note, boolean notify, boolean sms) throws OHServiceException {
-		
+
 		ArrayList<GregorianCalendar> datesArray = new ArrayList<GregorianCalendar>();
-		
+
 		GregorianCalendar stepDate = new GregorianCalendar();
 		stepDate.setTime(startDate.getTime());
 		datesArray.add(new GregorianCalendar(
 				startDate.get(GregorianCalendar.YEAR),
 				startDate.get(GregorianCalendar.MONTH),
 				startDate.get(GregorianCalendar.DAY_OF_MONTH)));
-		
+
 		while (stepDate.before(endDate)) {
-			
+
 			stepDate.add(GregorianCalendar.DAY_OF_MONTH, freqInPeriod);
 			datesArray.add(new GregorianCalendar(
 					stepDate.get(GregorianCalendar.YEAR),
@@ -143,9 +143,9 @@ public class TherapyManager {
 		
 		if (thRows != null) {
 			ArrayList<Therapy> therapies = new ArrayList<Therapy>();
-			
+
 			for (TherapyRow thRow : thRows) {
-				
+
 				therapies.add(createTherapy(thRow));
 			}
 			return therapies;
@@ -189,10 +189,10 @@ public class TherapyManager {
 	public boolean newTherapies(ArrayList<TherapyRow> thRows) throws OHServiceException {
 		if (!thRows.isEmpty()) {
 			DateTime now = new DateTime();
-			
-			
-			int patID = thRows.get(0).getPatID().getCode();
-			ioOperations.deleteAllTherapies(patID);
+
+
+			int patID = thRows.get(0).getPatient().getCode();
+			// FIXME FIXME			ioOperations.deleteAllTherapies(patID);
 			smsOp.deleteByModuleModuleID("therapy", String.valueOf(patID));
 
 			for (TherapyRow thRow : thRows) {
@@ -200,7 +200,7 @@ public class TherapyManager {
 				ioOperations.newTherapy(thRow);
 				if (thRow.isSms()) {
 					Therapy th = createTherapy(thRow);
-					GregorianCalendar[] dates = th.getDates();						
+					GregorianCalendar[] dates = th.getDates();
 					for (GregorianCalendar date : dates) {
 						date.set(Calendar.HOUR_OF_DAY, 8);
 						if (date.after(TimeTools.getDateToday24())) {
@@ -255,7 +255,7 @@ public class TherapyManager {
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean deleteAllTherapies(Integer code) throws OHServiceException {
-		ioOperations.deleteAllTherapies(code);
+		// FIXME FIXME	ioOperations.deleteAllTherapies(code);
 		smsOp.deleteByModuleModuleID("therapy", String.valueOf(code));
 		return true;
 	}

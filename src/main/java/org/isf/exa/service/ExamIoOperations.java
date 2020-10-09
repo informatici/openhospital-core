@@ -75,7 +75,7 @@ public class ExamIoOperations {
 	 */
 	public List<Exam> getExamsByDesc(String description) throws OHServiceException {
 		return description != null ? repository.findByDescriptionContainingOrderByExamtypeDescriptionAscDescriptionAsc(description) :
-				repository.findByOrderByExamtypeDescriptionAscDescriptionAsc();
+				repository.findByOrderByDescriptionAscDescriptionAsc();
 	}
 	
 	/**
@@ -86,7 +86,7 @@ public class ExamIoOperations {
 	 */
 	public List<Exam> getExamsByExamTypeDesc(String description) throws OHServiceException {
 		return description != null ? repository.findByExamtype_DescriptionContainingOrderByExamtypeDescriptionAscDescriptionAsc(description) :
-				repository.findByOrderByExamtypeDescriptionAscDescriptionAsc();
+				repository.findByOrderByDescriptionAscDescriptionAsc();
 	}
 
 	/**

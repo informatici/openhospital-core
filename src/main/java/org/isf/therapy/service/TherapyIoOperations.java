@@ -23,6 +23,7 @@ package org.isf.therapy.service;
 
 import java.util.ArrayList;
 
+import org.isf.patient.model.Patient;
 import org.isf.therapy.model.TherapyRow;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -60,19 +61,19 @@ public class TherapyIoOperations {
 	 */
 	public ArrayList<TherapyRow> getTherapyRows(int patID) throws OHServiceException {
 		return patID != 0 ?
-			new ArrayList<TherapyRow>(repository.findByPatIDCodeOrderByPatIDCodeAscTherapyIDAsc(patID)) :
-			new ArrayList<TherapyRow>(repository.findAllByOrderByPatIDCodeAscTherapyIDAsc());
+				new ArrayList<>(repository.findByPatientCodeOrderByPatientCodeAscTherapyIDAsc(patID)) :
+				new ArrayList<>(repository.findAllByOrderByPatientAscTherapyIDAsc());
 	}
-	
+
 	/**
 	 * delete all {@link TherapyRow}s (therapies) for specified Patient ID
-	 * 
+	 *
 	 * @param patID - the Patient ID
 	 * @return <code>true</code> if the therapies have been deleted, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean deleteAllTherapies(int patID) throws OHServiceException {
-		repository.deleteByPatIDCode(patID);
+	public boolean deleteAllTherapies(Patient patient) throws OHServiceException {
+		repository.deleteByPatient(patient);
 		return true;
 	}
 
