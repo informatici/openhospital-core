@@ -41,7 +41,7 @@ public class PrintLabels {
 	
 	public PrintLabels(String filename, Integer labId)throws OHServiceException {
 		try{
-		HashMap<String, String> parameters = new HashMap<String, String>();
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
 
 		parameters.put("laboratoryID", String.valueOf(labId == null ? "" : labId));
 
