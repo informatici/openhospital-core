@@ -21,11 +21,12 @@
  */
 package org.isf.sms.service;
 
+import java.time.LocalDateTime;
+
 /**
  * SmsThread.java - 31/gen/2014
  */
 
-import java.util.Date;
 import java.util.List;
 
 import org.isf.generaldata.GeneralData;
@@ -74,10 +75,10 @@ public class SmsSender implements Runnable {
 					SmsSenderGSM sender = new SmsSenderGSM();
 					if (sender.initialize()) {
 						for (Sms sms : smsList) {
-							if (sms.getSmsDateSched().before(new Date())) {
+							if (sms.getSmsDateSched().isBefore(LocalDateTime.now())) {
 								boolean result = sender.sendSMS(sms, GeneralData.DEBUG);
 								if (result) {
-									sms.setSmsDateSent(new Date());
+									sms.setSmsDateSent(LocalDateTime.now());
 									try {
 										smsOp.saveOrUpdate(sms);
 									} catch (OHServiceException e) {
@@ -102,10 +103,10 @@ public class SmsSender implements Runnable {
 					SmsSenderHTTP sender = new SmsSenderHTTP();
 					if (sender.initialize()) {
 						for (Sms sms : smsList) {
-							if (sms.getSmsDateSched().before(new Date())) {
+							if (sms.getSmsDateSched().isBefore(LocalDateTime.now())) {
 								boolean result = sender.sendSMS(sms, GeneralData.DEBUG);
 								if (result) {
-									sms.setSmsDateSent(new Date());
+									sms.setSmsDateSent(LocalDateTime.now());
 									try {
 										smsOp.saveOrUpdate(sms);
 									} catch (OHServiceException e) {

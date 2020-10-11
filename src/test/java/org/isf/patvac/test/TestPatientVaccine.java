@@ -23,8 +23,8 @@ package org.isf.patvac.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+import java.time.Month;
 
 import org.isf.patient.model.Patient;
 import org.isf.patvac.model.PatientVaccine;
@@ -35,7 +35,7 @@ public class TestPatientVaccine
 {	
 	private int code = 0;
 	private int progr = 10;
-	private GregorianCalendar vaccineDate = new GregorianCalendar(1984, Calendar.AUGUST, 14);
+	private LocalDateTime vaccineDate = LocalDateTime.of(1984, Month.AUGUST, 14, 9, 0, 0);
     private int lock = 0;
     
 			

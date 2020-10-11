@@ -21,9 +21,9 @@
  */
 package org.isf.therapy.manager;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.manager.MedicalBrowsingManager;
@@ -40,7 +40,6 @@ import org.isf.therapy.model.TherapyRow;
 import org.isf.therapy.service.TherapyIoOperations;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +79,7 @@ public class TherapyManager {
 	
 	/**
 	 * Creates a {@link Therapy} from its parameters, fetching the {@link Medical}
-	 * and building the array of Dates ({@link GregorianCalendar})
+	 * and building the array of Dates ({@link LocalDateTime})
 	 * @param therapyID
 	 * @param patID
 	 * @param medId
@@ -95,34 +94,24 @@ public class TherapyManager {
 	 * @return the {@link Therapy}
 	 */
 	private Therapy createTherapy(int therapyID, int patID, Integer medId, Double qty,
-			GregorianCalendar startDate, GregorianCalendar endDate, int freqInPeriod,
+			LocalDateTime startDate, LocalDateTime endDate, int freqInPeriod,
 			int freqInDay, String note, boolean notify, boolean sms) throws OHServiceException {
 		
-		ArrayList<GregorianCalendar> datesArray = new ArrayList<GregorianCalendar>();
+		ArrayList<LocalDateTime> datesArray = new ArrayList<LocalDateTime>();
 		
-		GregorianCalendar stepDate = new GregorianCalendar();
-		stepDate.setTime(startDate.getTime());
-		datesArray.add(new GregorianCalendar(
-				startDate.get(GregorianCalendar.YEAR),
-				startDate.get(GregorianCalendar.MONTH),
-				startDate.get(GregorianCalendar.DAY_OF_MONTH)));
+		LocalDateTime stepDate = startDate;
+		datesArray.add(startDate);
 		
-		while (stepDate.before(endDate)) {
-			
-			stepDate.add(GregorianCalendar.DAY_OF_MONTH, freqInPeriod);
-			datesArray.add(new GregorianCalendar(
-					stepDate.get(GregorianCalendar.YEAR),
-					stepDate.get(GregorianCalendar.MONTH),
-					stepDate.get(GregorianCalendar.DAY_OF_MONTH))
-			);
+		while (stepDate.isBefore(endDate)) {
+			LocalDateTime newDate = stepDate.plusDays(freqInPeriod);
+			datesArray.add(newDate);
+			stepDate = newDate;
 		}
 		
-		GregorianCalendar[] dates = new GregorianCalendar[datesArray.size()];
+		LocalDateTime[] dates = new LocalDateTime[datesArray.size()];
 		
 		for (int i = 0; i < datesArray.size(); i++) {
-			//dates[i] = new GregorianCalendar();
 			dates[i] = datesArray.get(i);
-			//System.out.println(formatDate(dates[i]));
 		}
 		
 		Medical med = medManager.getMedical(medId);
@@ -188,9 +177,6 @@ public class TherapyManager {
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean newTherapies(ArrayList<TherapyRow> thRows) throws OHServiceException {
 		if (!thRows.isEmpty()) {
-			DateTime now = new DateTime();
-			
-			
 			int patID = thRows.get(0).getPatID().getCode();
 			ioOperations.deleteAllTherapies(patID);
 			smsOp.deleteByModuleModuleID("therapy", String.valueOf(patID));
@@ -200,14 +186,14 @@ public class TherapyManager {
 				ioOperations.newTherapy(thRow);
 				if (thRow.isSms()) {
 					Therapy th = createTherapy(thRow);
-					GregorianCalendar[] dates = th.getDates();						
-					for (GregorianCalendar date : dates) {
-						date.set(Calendar.HOUR_OF_DAY, 8);
-						if (date.after(TimeTools.getDateToday24())) {
+					LocalDateTime[] dates = th.getDates();						
+					for (LocalDateTime date : dates) {
+						date = date.withHour(8);
+						if (date.isAfter(TimeTools.getDateToday24())) {
 							Patient pat = patientManager.getPatientById(patID);
 
 							Sms sms = new Sms();
-							sms.setSmsDateSched(date.getTime());
+							sms.setSmsDateSched(date);
 							sms.setSmsNumber(pat.getTelephone());
 							sms.setSmsText(prepareSmsFromTherapy(th));
 							sms.setSmsUser(UserBrowsingManager.getCurrentUser());
@@ -282,16 +268,12 @@ public class TherapyManager {
 			// CALCULATING NEEDINGS
 			Double qty = th.getQty();
 			int freq = th.getFreqInDay();
-			GregorianCalendar now = new GregorianCalendar();
-			GregorianCalendar todayDate = new GregorianCalendar(now
-					.get(GregorianCalendar.YEAR), now
-					.get(GregorianCalendar.MONTH), now
-					.get(GregorianCalendar.DAY_OF_MONTH));
+			LocalDateTime todayDate = LocalDateTime.now().with(LocalTime.MIN); 
 
 			// todayDate.set(2010, 0, 1);
 			int dayCount = 0;
-			for (GregorianCalendar date : th.getDates()) {
-				if (date.after(todayDate) || date.equals(todayDate))
+			for (LocalDateTime date : th.getDates()) {
+				if (date.isAfter(todayDate) || date.equals(todayDate))
 					dayCount++;
 			}
 
@@ -315,7 +297,7 @@ public class TherapyManager {
 		return medOutStock;
 	}
 
-	public TherapyRow newTherapy(int therapyID, int patID, GregorianCalendar startDate, GregorianCalendar endDate,
+	public TherapyRow newTherapy(int therapyID, int patID, LocalDateTime startDate, LocalDateTime endDate,
 		Medical medical, Double qty, int unitID, int freqInDay, int freqInPeriod, String note, boolean notify,
 		boolean sms) throws OHServiceException {
 		

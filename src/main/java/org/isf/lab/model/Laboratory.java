@@ -21,7 +21,8 @@
  */
 package org.isf.lab.model;
 
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /*------------------------------------------
  * Laboratory - laboratory exam execution model
@@ -33,7 +34,6 @@ import java.util.Calendar;
  * 
  *------------------------------------------*/
 
-import java.util.GregorianCalendar;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 
@@ -46,8 +46,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
@@ -83,12 +81,11 @@ public class Laboratory extends Auditable<String>
 	private Exam exam;
 
 	@NotNull
-	@Column(name="LAB_DATE")
-	private GregorianCalendar registrationDate;
+	@Column(name="LAB_DATE")		// SQL type: datetime
+	private LocalDateTime registrationDate;
 	
-	@Column(name="LAB_EXAM_DATE")
-	@Temporal(TemporalType.DATE)
-	private Calendar examDate;
+	@Column(name="LAB_EXAM_DATE")	// SQL type: date
+	private LocalDate examDate;
 
 	@NotNull
 	@Column(name="LAB_RES")
@@ -122,7 +119,7 @@ public class Laboratory extends Auditable<String>
 	
 	public Laboratory() { }
 	
-	public Laboratory(Exam aExam,GregorianCalendar aDate,String aResult,
+	public Laboratory(Exam aExam, LocalDateTime aDate,String aResult,
 			String aNote, Patient aPatId, String aPatName){
 		exam=aExam;
 		registrationDate=aDate;
@@ -132,7 +129,7 @@ public class Laboratory extends Auditable<String>
 		patName=aPatName;
 	}
 
-	public Laboratory(Integer aCode,Exam aExam,GregorianCalendar aDate,String aResult,
+	public Laboratory(Integer aCode,Exam aExam, LocalDateTime aDate,String aResult,
 			String aNote, Patient aPatId, String aPatName){
 		code=aCode;
 		exam=aExam;
@@ -145,7 +142,7 @@ public class Laboratory extends Auditable<String>
 	public Exam getExam(){
 		return exam;
 	}
-	public GregorianCalendar getDate(){
+	public LocalDateTime getDate(){
 		return registrationDate;
 	}
 	public String getResult(){
@@ -166,13 +163,13 @@ public class Laboratory extends Auditable<String>
 	public void setLock(int aLock){
 		lock=aLock;
 	}
-	public GregorianCalendar getExamDate() {
-		return (GregorianCalendar) examDate;
+	public LocalDate getExamDate() {
+		return examDate;
 	}
-	public void setExamDate(GregorianCalendar exDate) {
+	public void setExamDate(LocalDate exDate) {
 		this.examDate = exDate;
 	}	
-	public void setDate(GregorianCalendar aDate){
+	public void setDate(LocalDateTime aDate){
 		registrationDate=aDate;
 	}
 	public void setResult(String aResult){

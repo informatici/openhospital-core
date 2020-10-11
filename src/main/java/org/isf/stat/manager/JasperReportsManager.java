@@ -28,8 +28,8 @@ import java.sql.SQLException;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -57,6 +57,7 @@ import org.isf.ward.model.Ward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import net.sf.jasperreports.engine.JRException;
@@ -277,7 +278,7 @@ public class JasperReportsManager {
                     MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
         }
     }
-    public JasperReportResultDto getGenericReportWardVisitPdf(String wardID, Date date, String jasperFileName) throws OHServiceException {
+    public JasperReportResultDto getGenericReportWardVisitPdf(String wardID, LocalDateTime date, String jasperFileName) throws OHServiceException {
 
         try{
             HashMap<String, Object> parameters = getHospitalParameters();
@@ -300,23 +301,15 @@ public class JasperReportsManager {
     }
     
     
-    public JasperReportResultDto getGenericReportPatientVersion2Pdf(Integer patientID, String parametersString, Date date_From, Date date_To, String jasperFileName) throws OHServiceException {
+    public JasperReportResultDto getGenericReportPatientVersion2Pdf(Integer patientID, String parametersString, LocalDateTime date_From, LocalDateTime date_To, String jasperFileName) throws OHServiceException {
 
         try{
             HashMap<String, Object> parameters = getHospitalParameters();
-    		Format formatter;
-		    formatter = new SimpleDateFormat("yyyy-MM-dd");
-		    
-		    Calendar c = Calendar.getInstance(); 
-		    c.setTime(date_From); 
-		    c.add(Calendar.DATE, -1);
-		    Date df = c.getTime();
-		    Calendar ct = Calendar.getInstance(); 
-		    ct.setTime(date_To); 
-		    ct.add(Calendar.DATE, 1);
-		    Date dt = ct.getTime();
-		    String dateFromQuery = formatter.format(df);
-		    String dateToQuery = formatter.format(dt);
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            date_From = date_From.minusDays(1);
+            date_To = date_To.plusDays(1);
+		    String dateFromQuery = date_From.format(dtf);
+		    String dateToQuery = date_To.format(dtf);
 	
             parameters.put("patientID", String.valueOf(patientID));
             parameters.put("All", parametersString.contains("All"));
@@ -347,11 +340,11 @@ public class JasperReportsManager {
     public JasperReportResultDto getGenericReportPharmaceuticalOrderPdf(String jasperFileName) throws OHServiceException {
 
         try{
-            Date date = new Date();
-            Format formatter;
-            formatter = new SimpleDateFormat("E d, MMMM yyyy");
+            LocalDateTime date = LocalDateTime.now();
+            DateTimeFormatter formatter;
+            formatter = DateTimeFormatter.ofPattern("E d, MMMM yyyy");
             String todayReport = formatter.format(date);
-            formatter = new SimpleDateFormat("yyyyMMdd");
+            formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
             String todayFile = formatter.format(date);
             HashMap<String, Object> parameters = getHospitalParameters();
             parameters.put("Date", todayReport);
@@ -368,17 +361,17 @@ public class JasperReportsManager {
         }
     }
     
-    public JasperReportResultDto getGenericReportPharmaceuticalStockPdf(Date date, String jasperFileName, String filter, String groupBy, String sortBy) throws OHServiceException {
+    public JasperReportResultDto getGenericReportPharmaceuticalStockPdf(LocalDateTime date, String jasperFileName, String filter, String groupBy, String sortBy) throws OHServiceException {
     	
     	try{
     		if (date == null)
-				date = new Date();
-			Format formatter;
-			formatter = new SimpleDateFormat("E d, MMMM yyyy");
+				date = LocalDateTime.now();
+			DateTimeFormatter formatter;
+			formatter = DateTimeFormatter.ofPattern("E d, MMMM yyyy");
 		    String dateReport = formatter.format(date);
-		    formatter = new SimpleDateFormat("yyyy-MM-dd");
+		    formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		    String dateQuery = formatter.format(date);
-		    formatter = new SimpleDateFormat("yyyyMMdd");
+		    formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 		    String dateFile = formatter.format(date);
             HashMap<String, Object> parameters = getHospitalParameters();
             parameters.put("Date", dateReport);
@@ -399,11 +392,11 @@ public class JasperReportsManager {
         }
     }
     
-    public void getGenericReportPharmaceuticalStockExcel(Date date, String jasperFileName, String exportFilename, String filter, String groupBy, String sortBy) throws OHServiceException {
+    public void getGenericReportPharmaceuticalStockExcel(LocalDateTime date, String jasperFileName, String exportFilename, String filter, String groupBy, String sortBy) throws OHServiceException {
 
         try {
         	if (date == null)
-				date = new Date();
+				date = LocalDateTime.now();
 		    String dateQuery = TimeTools.formatDateTime(date, "yyyy-MM-dd");
             File jasperFile = new File(compileJasperFilename(jasperFileName));
             
@@ -433,14 +426,14 @@ public class JasperReportsManager {
         }
     }
     
-    public JasperReportResultDto getGenericReportPharmaceuticalStockCardPdf(String jasperFileName, String exportFileName, Date dateFrom, Date dateTo, Medical medical, Ward ward) throws OHServiceException {
+    public JasperReportResultDto getGenericReportPharmaceuticalStockCardPdf(String jasperFileName, String exportFileName, LocalDateTime dateFrom, LocalDateTime dateTo, Medical medical, Ward ward) throws OHServiceException {
     	
     	try{
     		if (dateFrom == null) {
-    			dateFrom = new Date();
+    			dateFrom = LocalDateTime.now();
     		}
     		if (dateTo == null) {
-    			dateTo = new Date();
+    			dateTo = LocalDateTime.now();
     		}
 
 		    String language = GeneralData.LANGUAGE;
@@ -479,14 +472,14 @@ public class JasperReportsManager {
         }
     }
     
-    public void getGenericReportPharmaceuticalStockCardExcel(String jasperFileName, String exportFileName, Date dateFrom, Date dateTo, Medical medical, Ward ward) throws OHServiceException {
+    public void getGenericReportPharmaceuticalStockCardExcel(String jasperFileName, String exportFileName, LocalDateTime dateFrom, LocalDateTime dateTo, Medical medical, Ward ward) throws OHServiceException {
 
         try {
         	if (dateFrom == null) {
-    			dateFrom = new Date();
+    			dateFrom = LocalDateTime.now();
     		}
     		if (dateTo == null) {
-    			dateTo = new Date();
+    			dateTo = LocalDateTime.now();
     		}
 		    String dateFromQuery = TimeTools.formatDateTime(dateFrom, "yyyy-MM-dd");
 		    String dateToQuery = TimeTools.formatDateTime(dateTo, "yyyy-MM-dd");
@@ -519,11 +512,11 @@ public class JasperReportsManager {
         }
     }
     
-    public JasperReportResultDto getGenericReportPharmaceuticalStockWardPdf(Date date, String jasperFileName, Ward ward) throws OHServiceException {
+    public JasperReportResultDto getGenericReportPharmaceuticalStockWardPdf(LocalDateTime date, String jasperFileName, Ward ward) throws OHServiceException {
     	
     	try{
     		if (date == null)
-				date = new Date();
+				date = LocalDateTime.now();
 			Format formatter;
 			formatter = new SimpleDateFormat("E d, MMMM yyyy");
 		    String dateReport = formatter.format(date);
@@ -553,7 +546,7 @@ public class JasperReportsManager {
 
         try{
             HashMap<String, Object> parameters = compileGenericReportUserInDateParameters(fromDate, toDate, aUser);
-            String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+            String date = DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDateTime.now());
             String pdfFilename =  "rpt/PDF/" + jasperFileName + "_" + aUser + "_" + date +".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
@@ -578,7 +571,7 @@ public class JasperReportsManager {
             sbFilename.append("Txt");
             sbFilename.append(".jasper");
 
-            String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String date = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss").format(LocalDateTime.now());
             String txtFilename = "rpt/PDF/" + jasperFileName + "_" + aUser + "_" + date + ".txt";
             JasperReportResultDto result = generateJasperReport(sbFilename.toString(), txtFilename, parameters);
             return result;
@@ -710,10 +703,10 @@ public class JasperReportsManager {
     private HashMap<String,Object> compileGenericReportUserInDateParameters(String fromDate, String toDate, String aUser) throws OHServiceException {
         HashMap<String, Object> parameters = getHospitalParameters();
 
-        Date fromDateQuery;
-		Date toDateQuery;
+        LocalDateTime fromDateQuery;
+		LocalDateTime toDateQuery;
         try {
-			fromDateQuery = TimeTools.parseDate(fromDate, null, false).getTime();
+			fromDateQuery = TimeTools.parseDate(fromDate, null, false);
 		} catch (ParseException e) {
 	        logger.error("Error parsing '{}' to a Date using pattern: 'yyyy-MM-dd HH:mm:ss'", fromDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -721,7 +714,7 @@ public class JasperReportsManager {
 		}
 
         try {
-        	toDateQuery = TimeTools.parseDate(toDate, null, false).getTime();;
+        	toDateQuery = TimeTools.parseDate(toDate, null, false);
 		} catch (ParseException e) {
 	        logger.error("Error parsing '{}' to a Date using pattern: 'yyyy-MM-dd HH:mm:ss'", toDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -738,10 +731,10 @@ public class JasperReportsManager {
     private HashMap<String,Object> compileGenericReportFromDateToDateParameters(String fromDate, String toDate) throws OHServiceException {
         HashMap<String, Object> parameters = getHospitalParameters();
 
-		Date fromDateQuery;
-		Date toDateQuery;
+		LocalDateTime fromDateQuery;
+		LocalDateTime toDateQuery;
 		try {
-			fromDateQuery = TimeTools.parseDate(fromDate, "dd/MM/yyyy", false).getTime();
+			fromDateQuery = TimeTools.parseDate(fromDate, "dd/MM/yyyy", false);
 		} catch (ParseException e) {
 			logger.error("Error parsing '{}' to a Date using pattern: 'dd/MM/yyyy'", fromDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -749,7 +742,7 @@ public class JasperReportsManager {
 		}
 
 		try {
-			toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yyyy", false).getTime();;
+			toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yyyy", false);
 		} catch (ParseException e) {
 			logger.error("Error parsing '{}' to a Date using pattern: 'dd/MM/yyyy'", toDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),

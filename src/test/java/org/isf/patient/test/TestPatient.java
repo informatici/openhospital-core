@@ -23,9 +23,7 @@ package org.isf.patient.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
 
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientProfilePhoto;
@@ -35,7 +33,7 @@ public class TestPatient
 {			
 	private static String firstName = "TestFirstName";
 	private static String secondName = "TestSecondName";
-	private static Date birthDate = new GregorianCalendar(1984, Calendar.AUGUST, 14).getTime();
+	private static LocalDate birthDate = LocalDate.of(1984, 8, 14);
 	private static int age = 31; //IT WILL CHANGE WITH TIME
 	private static String agetype = "Date";
 	private static char sex = 'F';
@@ -116,7 +114,7 @@ public class TestPatient
 	{
 		assertThat(patient.getFirstName()).isEqualTo(firstName);
 		assertThat(patient.getSecondName()).isEqualTo(secondName);
-		assertThat(patient.getBirthDate()).hasSameTimeAs(birthDate);
+		assertThat(patient.getBirthDate()).isEqualTo(birthDate);
 		//assertThat(patient.getAge()).isEqualTo(age);
 		assertThat(patient.getAgetype()).isEqualTo(agetype);
 		assertThat(patient.getSex()).isEqualTo(sex);

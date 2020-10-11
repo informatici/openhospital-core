@@ -21,7 +21,8 @@
  */
 package org.isf.medicalstockward.model;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 
@@ -83,8 +84,8 @@ public class MovementWard  extends Auditable<String>
 	private Lot lot;
 
 	@NotNull
-	@Column(name="MMVN_DATE")
-	private GregorianCalendar date;
+	@Column(name="MMVN_DATE")		// SQL type: datetime
+	private LocalDateTime date;
 
 	@NotNull
 	@Column(name="MMVN_IS_PATIENT")
@@ -142,7 +143,7 @@ public class MovementWard  extends Auditable<String>
 	 * @param quantity
 	 * @param units
 	 */
-	public MovementWard(Ward ward, GregorianCalendar date, boolean isPatient,
+	public MovementWard(Ward ward, LocalDateTime date, boolean isPatient,
 			Patient patient, int age, float weight, String description, Medical medical,
 			Double quantity, String units) {
 		super();
@@ -157,7 +158,7 @@ public class MovementWard  extends Auditable<String>
 		this.quantity = quantity;
 		this.units = units;
 	}
-	public MovementWard(Ward ward, GregorianCalendar date, boolean isPatient,
+	public MovementWard(Ward ward, LocalDateTime date, boolean isPatient,
 			Patient patient, int age, float weight, String description, Medical medical,
 			Double quantity, String units,Lot lot) {
 		super();
@@ -189,7 +190,7 @@ public class MovementWard  extends Auditable<String>
      * @param wardTo
      * @param wardFrom
 	 */
-	public MovementWard(Ward ward, GregorianCalendar date, boolean isPatient,
+	public MovementWard(Ward ward, LocalDateTime date, boolean isPatient,
 			Patient patient, int age, float weight, String description, Medical medical,
 			Double quantity, String units, Ward wardTo, Ward wardFrom,Lot lot) {
 		super();
@@ -230,7 +231,7 @@ public class MovementWard  extends Auditable<String>
 		return medical;
 	}
 	
-	public GregorianCalendar getDate(){
+	public LocalDateTime getDate(){
 		return date;
 	}
 	
@@ -300,7 +301,7 @@ public class MovementWard  extends Auditable<String>
 		this.units = units;
 	}
 
-	public void setDate(GregorianCalendar date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 

@@ -178,7 +178,7 @@ public class ExamRowIoOperations {
                     ExamRow examRow) throws OHServiceException 
         {
             boolean result = true;
-            rowRepository.delete(examRow.getCode());
+            rowRepository.deleteById(examRow.getCode());
             return result;	
 	}
 
@@ -196,7 +196,7 @@ public class ExamRowIoOperations {
 			ExamRow examrow) throws OHServiceException 
 	{
 		boolean result = false;
-		ExamRow foundExam = rowRepository.findOne(examrow.getCode());
+		ExamRow foundExam = rowRepository.findById(examrow.getCode()).get();
 		
 		
 		if (foundExam != null)
@@ -235,7 +235,7 @@ public class ExamRowIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(int code) throws OHServiceException{
-		return rowRepository.exists(code);
+		return rowRepository.existsById(code);
 	}
 
 	/**
@@ -246,7 +246,7 @@ public class ExamRowIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isRowPresent(Integer code) throws OHServiceException {
-		return rowRepository.exists(code);
+		return rowRepository.existsById(code);
 	}
 
     public ArrayList<ExamRow> getExamRowByExamCode(String aExamCode)  throws OHServiceException {

@@ -21,10 +21,10 @@
  */
 package org.isf.medicalstock.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
@@ -36,8 +36,8 @@ import org.isf.ward.model.Ward;
 
 public class TestMovement 
 {	
-	private GregorianCalendar now = new GregorianCalendar();
-	private GregorianCalendar date = new GregorianCalendar(now.get(Calendar.YEAR), 2, 2);
+	private LocalDateTime now = LocalDateTime.now();
+	private LocalDateTime date = now.withMonth(2).withDayOfMonth(2);
 	private int quantity = 10;
 	private String refNo = "TestRef";
     
@@ -88,7 +88,7 @@ public class TestMovement
 	public void check(
 			Movement movement) 
 	{		
-    	assertThat(movement.getDate()).isEqualTo(date);
+    	assertThat(movement.getDate()).isCloseTo(date, within(1, ChronoUnit.SECONDS));
     	assertThat(movement.getQuantity()).isEqualTo(quantity);
     	assertThat(movement.getRefNo()).isEqualTo(refNo);
 	}

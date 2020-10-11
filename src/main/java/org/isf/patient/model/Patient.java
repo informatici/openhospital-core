@@ -23,10 +23,10 @@ package org.isf.patient.model;
 
 import org.isf.opd.model.Opd;
 import org.isf.utils.db.Auditable;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDate;
+import java.time.Period;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -44,8 +44,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /*------------------------------------------
  * Patient - model for the patient entity
@@ -111,8 +109,8 @@ public class Patient extends Auditable<String>
 	@Column(name="PAT_NAME")
 	private String name;
 	
-	@Column(name="PAT_BDATE")
-	private Date birthDate;
+	@Column(name="PAT_BDATE")	// SQL type: date
+	private LocalDate birthDate;
 
 	@NotNull
 	@Column(name="PAT_AGE")
@@ -251,7 +249,7 @@ public class Patient extends Auditable<String>
 		this.profession = "";
 	}
 	
-	public Patient(String firstName, String secondName, Date birthDate, int age, String agetype, char sex,
+	public Patient(String firstName, String secondName, LocalDate birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone,
 			String mother_name, char mother, String father_name, char father,
 			String bloodType, char economicStatut, char parentTogether, String personalCode, 
@@ -281,7 +279,7 @@ public class Patient extends Auditable<String>
 		this.profession = profession;
 	}
 		
-	public Patient(int code, String firstName, String secondName, String name, Date birthDate, int age, String agetype, char sex,
+	public Patient(int code, String firstName, String secondName, String name, LocalDate birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone, String note,
 			String mother_name, char mother, String father_name, char father,
 			String bloodType, char economicStatut, char parentTogether, String taxCode,
@@ -321,22 +319,18 @@ public class Patient extends Auditable<String>
 		this.address = address;
 	}
 	
-	public Date getBirthDate() {
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 
 	public int getAge() {
 		if (this.birthDate != null) {
-			GregorianCalendar birthday = new GregorianCalendar();
-			birthday.setTime(birthDate);
-			DateTime now = new DateTime();
-			DateTime birth = new DateTime(birthday.getTime());
-			Period period = new Period(birth, now, PeriodType.yearMonthDay());
-			age = period.getYears();
+		    Period periodAge = Period.between(birthDate, LocalDate.now());
+		    age = periodAge.getYears();
 		}
 		return age;
 	}
@@ -344,12 +338,8 @@ public class Patient extends Auditable<String>
 	public int getMonths() {
 		int months = 0;
 		if (this.birthDate != null) {
-			GregorianCalendar birthday = new GregorianCalendar();
-			birthday.setTime(birthDate);
-			DateTime now = new DateTime();
-			DateTime birth = new DateTime(birthday.getTime());
-			Period period = new Period(birth, now, PeriodType.months());
-			months = period.getMonths();
+		    Period periodAge = Period.between(birthDate, LocalDate.now());
+		    age = periodAge.getMonths();
 		}
 		return months;
 	}

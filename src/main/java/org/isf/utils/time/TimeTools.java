@@ -25,18 +25,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.db.DbQueryLogger;
 import org.isf.utils.exception.OHException;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 
 /**
  * @author Mwithi
@@ -50,9 +51,9 @@ public class TimeTools {
 	public static void main(String[] args) {
 		GeneralData.getGeneralData();
 		MessageBundle.initialize();
-		GregorianCalendar dateFrom = new GregorianCalendar(2014, 10, 1);
-		GregorianCalendar dateTo = new GregorianCalendar();
-		System.out.println("Formatted Age: " + getFormattedAge(dateFrom.getTime()));
+		LocalDateTime dateFrom = LocalDateTime.of(2014, 10, 1, 9, 0, 0);
+		LocalDateTime dateTo = LocalDateTime.now();
+		System.out.println("Formatted Age: " + getFormattedAge(dateFrom.toLocalDate()));
 		System.out.println("Days between: " + getDaysBetweenDates(dateFrom, dateTo, true));
 		System.out.println("Weeks between: " + getWeeksBetweenDates(dateFrom, dateTo, true));
 		System.out.println("Months between: " + getMonthsBetweenDates(dateFrom, dateTo, true));
@@ -61,136 +62,79 @@ public class TimeTools {
 	
 	
 	/**
-	 * @author Mwithi
-	 * 
 	 * returns <code>true</code> if the DATE part is the same (no matter the time)
 	 * @param aDate
 	 * @param today
 	 * @return
 	 */
-	public static boolean isSameDay(Date aDate, Date today) {
-		GregorianCalendar date1 = new GregorianCalendar();
-		GregorianCalendar date2 = new GregorianCalendar();
-		date1.setTime(aDate);
-		date2.setTime(today);
-		return isSameDay(date1, date2);
+	public static boolean isSameDay(LocalDate aDate, LocalDate today) {
+		return today.equals(aDate);
 	}
-	public static boolean isSameDay(GregorianCalendar aDate, GregorianCalendar today) {
-		return (aDate.get(Calendar.YEAR) == today.get(Calendar.YEAR)) &&
-			   (aDate.get(Calendar.MONTH) == today.get(Calendar.MONTH)) &&
-			   (aDate.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH));
+
+	public static boolean isSameDay(LocalDateTime aDate, LocalDateTime today) {
+		LocalDate d1 = aDate.toLocalDate();
+		LocalDate d2 = today.toLocalDate();
+		return isSameDay(d1, d2);
 	}
 
 	/**
-	 * @author Mwithi
-	 * 
 	 * returns the difference in days between two dates
 	 * @param from
 	 * @param to
 	 * @param ignoreTime - if <code>True</code> only dates will be compared
 	 * @return the number of days, negative if from is after to
 	 */
-	public static int getDaysBetweenDates(GregorianCalendar from, GregorianCalendar to, boolean ignoreTime) {
-		
+	public static int getDaysBetweenDates(LocalDateTime from, LocalDateTime to, boolean ignoreTime) {
 		if (ignoreTime) {
-			from.set(GregorianCalendar.HOUR_OF_DAY, 0);
-			from.set(GregorianCalendar.MINUTE, 0);
-			from.set(GregorianCalendar.SECOND, 0);
-			to.set(GregorianCalendar.HOUR_OF_DAY, 0);
-			to.set(GregorianCalendar.MINUTE, 0);
-			to.set(GregorianCalendar.SECOND, 0);
+			from = from.withHour(0).withMinute(0).withSecond(0);
+			to = to.withHour(0).withMinute(0).withSecond(0);
 		}
-		
-		DateTime dateFrom = new DateTime(from);
-		DateTime dateTo = new DateTime(to);
-		Period period = new Period(dateFrom, dateTo, PeriodType.days());
-		return period.getDays();
+		return (int) ChronoUnit.DAYS.between(from, to);
 	}
 	
 	/**
-	 * @author Mwithi
-	 * 
 	 * returns the difference in days between two dates
 	 * @param from
 	 * @param to
 	 * @param ignoreTime - if <code>True</code> only dates will be compared
 	 * @return the number of days, negative if from is after to
 	 */
-	public static int getDaysBetweenDates(Date from, Date to, boolean ignoreTime) {
-		
+	public static int getDaysBetweenDates(LocalDate from, LocalDate to, boolean ignoreTime) {
 		if (ignoreTime) {
-			GregorianCalendar dateFrom = new GregorianCalendar(); 
-			GregorianCalendar dateTo = new GregorianCalendar();
-			dateFrom.setTime(from);
-			dateFrom.set(GregorianCalendar.HOUR_OF_DAY, 0);
-			dateFrom.set(GregorianCalendar.MINUTE, 0);
-			dateFrom.set(GregorianCalendar.SECOND, 0);
-			
-			dateTo.setTime(to);
-			dateTo.set(GregorianCalendar.HOUR_OF_DAY, 0);
-			dateTo.set(GregorianCalendar.MINUTE, 0);
-			dateTo.set(GregorianCalendar.SECOND, 0);
-			
-			from = dateFrom.getTime();
-			to = dateFrom.getTime();
+			// LocalDate does not have time notion
+			// TODO remove or change signature of this legacy function
 		}
-		
-		DateTime dateFrom = new DateTime(from);
-		DateTime dateTo = new DateTime(to);
-		Period period = new Period(dateFrom, dateTo, PeriodType.days());
-		return period.getDays();
+		return (int) ChronoUnit.WEEKS.between(from, to);
 	}
 	
 	/**
-	 * @author Mwithi
-	 * 
 	 * returns the difference in weeks between two dates
 	 * @param from
 	 * @param to
 	 * @param ignoreTime - if <code>True</code> only dates will be compared
 	 * @return the number of days, negative if from is after to
 	 */
-	public static int getWeeksBetweenDates(GregorianCalendar from, GregorianCalendar to, boolean ignoreTime) {
-
+	public static int getWeeksBetweenDates(LocalDateTime from, LocalDateTime to, boolean ignoreTime) {
 		if (ignoreTime) {
-			from.set(GregorianCalendar.HOUR_OF_DAY, 0);
-			from.set(GregorianCalendar.MINUTE, 0);
-			from.set(GregorianCalendar.SECOND, 0);
-			to.set(GregorianCalendar.HOUR_OF_DAY, 0);
-			to.set(GregorianCalendar.MINUTE, 0);
-			to.set(GregorianCalendar.SECOND, 0);
+			from = from.withHour(0).withMinute(0).withSecond(0);
+			to = to.withHour(0).withMinute(0).withSecond(0);
 		}
-		
-		DateTime dateFrom = new DateTime(from);
-		DateTime dateTo = new DateTime(to);
-		Period period = new Period(dateFrom, dateTo, PeriodType.weeks());
-		return period.getWeeks();
+		return (int) ChronoUnit.WEEKS.between(from, to);
 	}
 	
 	/**
-	 * @author Mwithi
-	 * 
 	 * returns the difference in months between two dates
 	 * @param from
 	 * @param to
 	 * @param ignoreTime - if <code>True</code> only dates will be compared
 	 * @return the number of days, negative if from is after to
 	 */
-	public static int getMonthsBetweenDates(GregorianCalendar from, GregorianCalendar to, boolean ignoreTime) {
-		
+	public static int getMonthsBetweenDates(LocalDateTime from, LocalDateTime to, boolean ignoreTime) {
 		if (ignoreTime) {
-			from.set(GregorianCalendar.HOUR_OF_DAY, 0);
-			from.set(GregorianCalendar.MINUTE, 0);
-			from.set(GregorianCalendar.SECOND, 0);
-			to.set(GregorianCalendar.HOUR_OF_DAY, 0);
-			to.set(GregorianCalendar.MINUTE, 0);
-			to.set(GregorianCalendar.SECOND, 0);
+			from = from.withHour(0).withMinute(0).withSecond(0);
+			to = to.withHour(0).withMinute(0).withSecond(0);
 		}
-		
-		DateTime dateFrom = new DateTime(from);
-		DateTime dateTo = new DateTime(to);
-		Period period = new Period(dateFrom, dateTo, PeriodType.months());
-		return period.getMonths();
+		return (int) ChronoUnit.MONTHS.between(from, to);
 	}
 	
 	/**
@@ -200,15 +144,12 @@ public class TimeTools {
 	 * @param birthDate - the birthdate
 	 * @return string with the formatted age
 	 */
-	public static String getFormattedAge(Date birthDate) {
-		GregorianCalendar birthday = new GregorianCalendar();
+	public static String getFormattedAge(LocalDate birthDate) {
 		String pattern = MessageBundle.getMessage("angal.common.agepattern");
 		String age = "";
 		if (birthDate != null) {
-			birthday.setTime(birthDate);
-			DateTime now = new DateTime();
-			DateTime birth = new DateTime(birthday.getTime());
-			Period period = new Period(birth, now, PeriodType.yearMonthDay());
+			LocalDate now = LocalDate.now();
+			Period period = Period.between(birthDate, now);
 			age = MessageFormat.format(pattern, period.getYears(), period.getMonths(), period.getDays());
 		}
 		return age;
@@ -216,36 +157,22 @@ public class TimeTools {
 	
 	/**
 	 * Return a string representation of the dateTime with the given pattern
-	 * @param dateTime - a GregorianCalendar object
+	 * @param dateTime - a LocalDateTime object
 	 * @param pattern - the pattern. If <code>null</code> "yyyy-MM-dd HH:mm:ss" will be used
-	 * @return the String representation of the GregorianCalendar
+	 * @return the String representation of the LocalDateTime
 	 */
-	public static String formatDateTime(GregorianCalendar dateTime, String pattern) {
+	public static String formatDateTime(LocalDateTime dateTime, String pattern) {
 		if (pattern == null) pattern = "yyyy-MM-dd HH:mm:ss";
-		SimpleDateFormat format = new SimpleDateFormat(pattern);  //$NON-NLS-1$
-		return format.format(dateTime.getTime());
+		DateTimeFormatter format = DateTimeFormatter.ofPattern(pattern);
+		return dateTime.format(format);
 	}
 	
 	/**
-	 * Return a string representation of the dateTime with the given pattern
-	 * @param date - a Date object
-	 * @param pattern - the pattern. If <code>null</code> "yyyy-MM-dd HH:mm:ss" will be used
-	 * @return the String representation of the GregorianCalendar
-	 */
-	public static String formatDateTime(Date date, String pattern) {
-		if (pattern == null) pattern = "yyyy-MM-dd HH:mm:ss";
-		GregorianCalendar dateTime = new GregorianCalendar();
-		dateTime.setTime(date);
-		SimpleDateFormat format = new SimpleDateFormat(pattern);  //$NON-NLS-1$
-		return format.format(dateTime.getTime());
-	}
-
-	/**
 	 * Return a string representation of the dateTime in the form "yyyy-MM-dd HH:mm:ss"
-	 * @param time - a GregorianCalendar object
-	 * @return the String representation of the GregorianCalendar
+	 * @param time - a LocalDateTime object
+	 * @return the String representation of the LocalDateTime
 	 */
-	public static String formatDateTimeReport(GregorianCalendar time) {
+	public static String formatDateTimeReport(LocalDateTime time) {
 		return formatDateTime(time, null);
 	}
 	
@@ -254,163 +181,108 @@ public class TimeTools {
 	 * @param date - a Date object
 	 * @return the String represetation of the Date
 	 */
-	public static String formatDateTimeReport(Date date) {
-		GregorianCalendar time = new GregorianCalendar();
-		time.setTime(date);
+	public static String formatDateTimeReport(LocalDate date) {
+		LocalDateTime time = LocalDateTime.from(date);
 		return formatDateTime(time, null);
 	}
 	
 	/**
-	 * Return the first instance of the current date
+	 * Return the first instant of the current date.
 	 * @return
 	 */
-	public static GregorianCalendar getDateToday0() {
-		GregorianCalendar date = new GregorianCalendar();
-		date.set(GregorianCalendar.HOUR_OF_DAY, 0);
-		date.set(GregorianCalendar.MINUTE, 0);
-		date.set(GregorianCalendar.SECOND, 0);
-		return date;
+	public static LocalDateTime getDateToday0() {
+		return LocalDateTime.now().with(LocalTime.MIN);
 	}
 	
 	/**
-	 * Return the last instance of the current date
+	 * Return the last instant of the current date.
 	 * @return
 	 */
-	public static GregorianCalendar getDateToday24() {
-		GregorianCalendar date = new GregorianCalendar();
-		date.set(GregorianCalendar.HOUR_OF_DAY, 23);
-		date.set(GregorianCalendar.MINUTE, 59);
-		date.set(GregorianCalendar.SECOND, 59);
-		return date;
+	public static LocalDateTime getDateToday24() {
+		return LocalDateTime.now().with(LocalTime.MAX);
 	}
 	
 	/**
-	 * Return a {@link GregorianCalendar} representation of the string using the given pattern
+	 * Return a {@link LocalDateTime} representation of the string using the given pattern
 	 * @param string - a String object to be passed
 	 * @param pattern - the pattern. If <code>null</code> "yyyy-MM-dd HH:mm:ss" will be used
 	 * @param noTime - if <code>True</code> the time will be 00:00:00, actual time otherwise.
-	 * @return the String representation of the GregorianCalendar
+	 * @return the String representation of the LocalDateTime
 	 * @throws ParseException 
 	 */
-	public static GregorianCalendar parseDate(String string, String pattern, boolean noTime) throws ParseException {
+	public static LocalDateTime parseDate(String string, String pattern, boolean noTime) throws ParseException {
 		if (pattern == null) pattern = "yyyy-MM-dd HH:mm:ss";
-		SimpleDateFormat format = new SimpleDateFormat(pattern);  //$NON-NLS-1$
-		Date date = format.parse(string);
-		GregorianCalendar calendar = new GregorianCalendar();
+		DateTimeFormatter format = DateTimeFormatter.ofPattern(pattern);
+		LocalDateTime dateTime = LocalDateTime.parse(string, format);
 		if (noTime) {
-			calendar.setTime(date);
-		} else {
-			calendar.setTimeInMillis(date.getTime());
+			dateTime = dateTime.with(LocalTime.MIN);
 		}
-		//System.out.println(formatDateTime(calendar, null));
-
-		return calendar;
+		return dateTime;
 	}
 
-	public static GregorianCalendar getBeginningOfDay(GregorianCalendar date) {
-		return new DateTime(date).withTimeAtStartOfDay().toGregorianCalendar();
+	public static LocalDateTime getBeginningOfDay(LocalDateTime date) {
+		return date.with(LocalTime.MIN);
 	}
 
-	public static GregorianCalendar getBeginningOfNextDay(GregorianCalendar date) {
-		return new DateTime(date).plusDays(1).withTimeAtStartOfDay().toGregorianCalendar();
+	public static LocalDateTime getBeginningOfNextDay(LocalDateTime date) {
+		return date.plusDays(1).with(LocalTime.MIN);
 	}
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 	/**
-	 * @author Mwithi
-	 *
 	 * returns the difference in days between two dates
 	 * @param from
 	 * @param to
 	 * @return the number of days
 	 */
-	public static int getDaysBetweenDates(GregorianCalendar from, GregorianCalendar to) {
-
-		DateTime dateFrom = new DateTime(from);
-		DateTime dateTo = new DateTime(to);
-		Period period = new Period(dateFrom, dateTo, PeriodType.days());
-		return period.getDays();
+	public static int getDaysBetweenDates(LocalDateTime from, LocalDateTime to) {
+		return (int) ChronoUnit.DAYS.between(from, to);
 	}
 
 	/**
-	 * @author Mwithi
-	 *
-	 * returns the difference in days between two dates
-	 * @param from
-	 * @param to
-	 * @return the number of days
-	 */
-	public static int getDaysBetweenDates(Date from, Date to) {
-		DateTime dateFrom = new DateTime(from);
-		DateTime dateTo = new DateTime(to);
-		Period period = new Period(dateFrom, dateTo, PeriodType.days());
-		return period.getDays();
-	}
-
-	/**
-	 * @author Mwithi
-	 *
 	 * returns the difference in weeks between two dates
 	 * @param from
 	 * @param to
 	 * @return the number of weeks
 	 */
-	public static int getWeeksBetweenDates(GregorianCalendar from, GregorianCalendar to) {
-		DateTime dateFrom = new DateTime(from);
-		DateTime dateTo = new DateTime(to);
-		Period period = new Period(dateFrom, dateTo, PeriodType.weeks());
-		return period.getWeeks();
+	public static int getWeeksBetweenDates(LocalDateTime from, LocalDateTime to) {
+		return (int) ChronoUnit.WEEKS.between(from, to);
 	}
 
 	/**
-	 * @author Mwithi
-	 *
 	 * returns the difference in months between two dates
 	 * @param from
 	 * @param to
 	 * @return the number of months
 	 */
-	public static int getMonthsBetweenDates(GregorianCalendar from, GregorianCalendar to) {
-		DateTime dateFrom = new DateTime(from);
-		DateTime dateTo = new DateTime(to);
-		Period period = new Period(dateFrom, dateTo, PeriodType.months());
-		return period.getMonths();
+	public static int getMonthsBetweenDates(LocalDateTime from, LocalDateTime to) {
+		return (int) ChronoUnit.MONTHS.between(from, to);
 	}
 
-	public static GregorianCalendar getDate(String strDate, String format) throws ParseException{
+	public static LocalDateTime getDate(String strDate, String format) throws ParseException{
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat(format);
-			Date date=sdf.parse(strDate);
-			if(date!=null){
-				GregorianCalendar calDate=new GregorianCalendar();
-				calDate.setTime(date);
-				return calDate;
-			}
-		} catch (ParseException e) {
-			if(!format.equals("dd/MM/yyyy")){
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				Date date=sdf.parse(strDate);
-				if(date!=null){
-					GregorianCalendar calDate=new GregorianCalendar();
-					calDate.setTime(date);
-					return calDate;
-				}
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+			return LocalDateTime.parse(strDate, formatter);
+		} catch (DateTimeParseException e) {
+			if (!format.equals("dd/MM/yyyy")){
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				return LocalDateTime.parse(strDate, formatter);
 			}
 		}
 		return null;
 	}
+
 	/**
-	 * Return the actual date and time of the server
+	 * Return the date and time of the server.
 	 *
 	 * @author hadesthanos
 	 * @return DateTime
 	 * @throws OHException
 	 * @throws ParseException
 	 */
-	public static GregorianCalendar getServerDateTime()  {
-		GregorianCalendar serverDate=new GregorianCalendar();
+	public static LocalDateTime getServerDateTime()  {
 		String query = " SELECT NOW( ) as time ";
 
 		DbQueryLogger dbQuery = new DbQueryLogger();
@@ -418,37 +290,31 @@ public class TimeTools {
 			ResultSet resultSet = dbQuery.getData(query, true);
 			while (resultSet.next()) {
 				String date = resultSet.getString("time");
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				java.util.Date utilDate = new java.util.Date();
-				utilDate = sdf.parse(date);
-				serverDate.setTime(utilDate);
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				return LocalDateTime.parse(date, formatter);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (OHException e) {
 			e.printStackTrace();
-		} catch (ParseException e) {
+		} catch (DateTimeParseException e) {
 			e.printStackTrace();
 		}
-		return serverDate;
+		return null;
 	}
 	
 	/**
-	 * Convert GregorianCalendar -> String using format "dd/MM/yy"
+	 * Convert LocalDateTime -> String using format "dd/MM/yy"
 	 * @param time - a Calendar datetime
 	 * @return a String representing the Calendar in the format "dd/MM/yy" 
-	 * @deprecated use formatDateTime(GregorianCalendar dateTime, String pattern) instead
+	 * @deprecated use formatDateTime(LocalDateTime dateTime, String pattern) instead
 	 */
-    public static String getConvertedString(GregorianCalendar time) {
+    public static String getConvertedString(LocalDateTime time) {
 		if (time == null)
 			return MessageBundle.getMessage("angal.malnutrition.nodate");
-		String string = String
-				.valueOf(time.get(GregorianCalendar.DAY_OF_MONTH));
-		string += "/" + String.valueOf(time.get(GregorianCalendar.MONTH) + 1);
-		String year = String.valueOf(time.get(GregorianCalendar.YEAR));
-		year = year.substring(2, year.length());
-		string += "/" + year;
-		return string;
+		LocalDate date = time.toLocalDate();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
+		return date.format(formatter);
 	}
 
     /**
@@ -459,10 +325,10 @@ public class TimeTools {
      * @throws ParseException
      * @deprecated use getDate(String strDate, String format) instead 
      */
-    public static GregorianCalendar convertToDate(String string) throws ParseException {
-		GregorianCalendar date = TimeTools.getServerDateTime();
-		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy");
-		date.setTime(sdf.parse(string));
-		return date;
+    public static LocalDateTime convertToDate(String string) throws ParseException {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyy");
+		LocalDateTime date = LocalDateTime.parse(string, formatter);
+		LocalDateTime serverDateTime = TimeTools.getServerDateTime();
+		return date.with(serverDateTime.toLocalTime());
 	}
 }

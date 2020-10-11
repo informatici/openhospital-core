@@ -24,8 +24,8 @@ package org.isf.medicalstockward.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
@@ -36,8 +36,8 @@ import org.isf.ward.model.Ward;
 
 public class TestMovementWard 
 {	 
-	private GregorianCalendar now = new GregorianCalendar();
-	private GregorianCalendar date = new GregorianCalendar(now.get(Calendar.YEAR), 2, 2);
+	private LocalDateTime now = LocalDateTime.now();
+	private LocalDateTime date = now.withMonth(2).withDayOfMonth(2);
 	private boolean isPatient = false;
 	private int age = 10;
 	private float weight = 78;
@@ -99,7 +99,7 @@ public class TestMovementWard
 			MovementWard movementWard) 
 	{		
     	assertThat(movementWard.getAge()).isEqualTo(age);
-    	assertThat(movementWard.getDate()).isEqualTo(date);
+    	assertThat(movementWard.getDate()).isCloseTo(date, within(1, ChronoUnit.SECONDS));
     	assertThat(movementWard.getDescription()).isEqualTo(description);
     	assertThat(movementWard.isPatient()).isEqualTo(isPatient);
     	assertThat(movementWard.getQuantity()).isEqualTo(quantity);
