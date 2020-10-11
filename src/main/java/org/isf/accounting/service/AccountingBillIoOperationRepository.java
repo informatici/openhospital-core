@@ -37,11 +37,11 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 
 	List<Bill> findByStatusOrderByDateDesc(String status);
 
-	List<Bill> findByStatusAndPatient_codeOrderByDateDesc(String status, int patientId);
+	List<Bill> findByStatusAndBillPatient_codeOrderByDateDesc(String status, int patientId);
 
 	List<Bill> findAllByOrderByDateDesc();
 
-	List<Bill> findByPatient_code(int patientCode);
+	List<Bill> findByBillPatient_code(int patientCode);
 
 	@Modifying
 	@Query(value = "update Bill b set b.status='D' where b.id = :billId")
@@ -50,11 +50,11 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 	@Query(value = "select b from Bill b where b.date >= :dateFrom and b.date < :dateTo")
 	List<Bill> findByDateBetween(@Param("dateFrom") Calendar dateFrom, @Param("dateTo") Calendar dateTo);
 	
-	@Query(value = "select b from Bill b where b.patient.id = :patientCode and b.date >= :dateFrom and b.date < :dateTo")
+	@Query(value = "select b from Bill b where b.billPatient.id = :patientCode and b.date >= :dateFrom and b.date < :dateTo")
 	ArrayList<Bill> findByDateAndPatient(@Param("dateFrom") Calendar dateFrom, @Param("dateTo") Calendar dateTo, @Param("patientCode")Integer patientCode);
 
-	@Query(value = "select b from Bill b where b.status='O' and b.patient.id = :patID")
-	ArrayList<Bill> findAllPendindBillsByPatient(@Param("patID")int patID);
+	@Query(value = "select b from Bill b where b.status='O' and b.billPatient.id = :patID")
+	ArrayList<Bill> findAllPendindBillsByBillPatient(@Param("patID")int patID);
 
 	/**
 	 * return the bills for date between dateFrom and dateFrom to dateTo and containing items with description desc

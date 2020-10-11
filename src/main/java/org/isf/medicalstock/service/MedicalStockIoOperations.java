@@ -112,7 +112,7 @@ public class MedicalStockIoOperations {
 			{
 				Movement splitMovement = new Movement(movement.getMedical(), movement.getType(), movement.getWard(),
 						null, // lot to be set
-						movement.getDate(), qty,
+						movement.getDate(), qty, 
 						null, // quantity to be set
 						movement.getRefNo());
 				int qtLot = lot.getQuantity();

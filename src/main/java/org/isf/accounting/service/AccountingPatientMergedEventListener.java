@@ -41,7 +41,7 @@ public class AccountingPatientMergedEventListener {
 	public void handle(PatientMergedEvent patientMergedEvent) throws OHServiceException {
 		List<Bill> bills = accountingIoOperations.getAllPatientsBills(patientMergedEvent.getObsoletePatient().getCode());
 		for (Bill bill : bills) {
-			bill.setPatient(patientMergedEvent.getMergedPatient());
+			bill.setBillPatient(patientMergedEvent.getMergedPatient());
 		}
 	}
 }

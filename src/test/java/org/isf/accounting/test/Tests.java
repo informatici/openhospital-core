@@ -247,11 +247,11 @@ public class Tests
 			Patient mergedPatient = _setupTestPatient(false);
 
 			// when:
-			applicationEventPublisher.publishEvent(new PatientMergedEvent(foundBill.getPatient(), mergedPatient));
+			applicationEventPublisher.publishEvent(new PatientMergedEvent(foundBill.getBillPatient(), mergedPatient));
 
 			// then:
 			Bill resultBill = (Bill)jpa.find(Bill.class, id);
-			assertThat(resultBill.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
+			assertThat(resultBill.getBillPatient().getCode()).isEqualTo(mergedPatient.getCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
@@ -289,7 +289,7 @@ public class Tests
 		{
 			id = _setupTestBill(false);
 			Bill foundBill = (Bill)jpa.find(Bill.class, id); 
-			ArrayList<Bill> bills = accountingIoOperation.getPendingBills(foundBill.getPatient().getCode());
+			ArrayList<Bill> bills = accountingIoOperation.getPendingBills(foundBill.getBillPatient().getCode());
 			
 			assertThat(foundBill.getAmount()).isCloseTo(bills.get(0).getAmount(), offset(0.1));
 		}
@@ -496,7 +496,7 @@ public class Tests
 			Bill foundBill = (Bill)jpa.find(Bill.class, id);
 			GregorianCalendar dateFrom = new GregorianCalendar(1, 3, 2);
 			GregorianCalendar dateTo = new GregorianCalendar();
-			ArrayList<Bill> billItems = accountingIoOperation.getBills(dateFrom, dateTo, foundBill.getPatient());
+			ArrayList<Bill> billItems = accountingIoOperation.getBills(dateFrom, dateTo, foundBill.getBillPatient());
 			assertThat(billItems).isNotEmpty();
 			assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
 		}
@@ -516,7 +516,7 @@ public class Tests
 		{
 			id = _setupTestBill(false);
 			Bill foundBill = (Bill)jpa.find(Bill.class, id);
-			ArrayList<Bill> billItems = accountingIoOperation.getPendingBillsAffiliate(foundBill.getPatient().getCode());
+			ArrayList<Bill> billItems = accountingIoOperation.getPendingBillsAffiliate(foundBill.getBillPatient().getCode());
 			assertThat(billItems).isNotEmpty();
 			assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
 		}
@@ -849,7 +849,7 @@ public class Tests
 		BillPayments foundBillPayment = (BillPayments) jpa.find(BillPayments.class, id);
 		GregorianCalendar dateFrom = new GregorianCalendar(1, 3, 2);
 		GregorianCalendar dateTo = new GregorianCalendar();
-		ArrayList<BillPayments> billItems = accountingIoOperation.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getPatient());
+		ArrayList<BillPayments> billItems = accountingIoOperation.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
 	}
@@ -876,7 +876,7 @@ public class Tests
 		BillPayments foundBillPayment = (BillPayments) jpa.find(BillPayments.class, id);
 		GregorianCalendar dateFrom = new GregorianCalendar(1, 3, 2);
 		GregorianCalendar dateTo = new GregorianCalendar();
-		ArrayList<BillPayments> billItems = billBrowserManager.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getPatient());
+		ArrayList<BillPayments> billItems = billBrowserManager.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
 	}
@@ -921,7 +921,7 @@ public class Tests
 		Bill foundBill = (Bill)jpa.find(Bill.class, id);
 		GregorianCalendar dateFrom = new GregorianCalendar(1, 3, 2);
 		GregorianCalendar dateTo = new GregorianCalendar();
-		ArrayList<Bill> billItems = billBrowserManager.getBills(dateFrom, dateTo, foundBill.getPatient());
+		ArrayList<Bill> billItems = billBrowserManager.getBills(dateFrom, dateTo, foundBill.getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
 	}
@@ -930,7 +930,7 @@ public class Tests
 	public void mgrGetPendingBillsForPatientId() throws OHException, OHServiceException {
 		int id = _setupTestBill(false);
 		Bill foundBill = (Bill)jpa.find(Bill.class, id);
-		ArrayList<Bill> bills = billBrowserManager.getPendingBills(foundBill.getPatient().getCode());
+		ArrayList<Bill> bills = billBrowserManager.getPendingBills(foundBill.getBillPatient().getCode());
 		assertThat(bills.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
 	}
 
@@ -1120,7 +1120,7 @@ public class Tests
 	public void mgrGetPendingBillsAffiliate() throws OHException, OHServiceException {
 		int id = _setupTestBill(false);
 		Bill foundBill = (Bill) jpa.find(Bill.class, id);
-		ArrayList<Bill> billItems = billBrowserManager.getPendingBillsAffiliate(foundBill.getPatient().getCode());
+		ArrayList<Bill> billItems = billBrowserManager.getPendingBillsAffiliate(foundBill.getBillPatient().getCode());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
 	}
@@ -1200,8 +1200,8 @@ public class Tests
 
 		foundBill = (Bill)jpa.find(Bill.class, id); 
 		testBill.check(foundBill);
-		testPriceList.check(foundBill.getList());
-		testPatient.check(foundBill.getPatient());
+		testPriceList.check(foundBill.getPriceList());
+		testPatient.check(foundBill.getBillPatient());
 	}
 	
 	private int _setupTestBillItems(
@@ -1233,8 +1233,8 @@ public class Tests
 		foundBillItem = (BillItems)jpa.find(BillItems.class, id); 
 		testBillItems.check(foundBillItem);
 		testBill.check(foundBillItem.getBill());
-		testPriceList.check(foundBillItem.getBill().getList());
-		testPatient.check(foundBillItem.getBill().getPatient());
+		testPriceList.check(foundBillItem.getBill().getPriceList());
+		testPatient.check(foundBillItem.getBill().getBillPatient());
 	}
 	
 	private int _setupTestBillPayments(
@@ -1266,8 +1266,8 @@ public class Tests
 		foundBillPayment = (BillPayments)jpa.find(BillPayments.class, id); 
 		testBillPayments.check(foundBillPayment);
 		testBill.check(foundBillPayment.getBill());
-		testPriceList.check(foundBillPayment.getBill().getList());
-		testPatient.check(foundBillPayment.getBill().getPatient());
+		testPriceList.check(foundBillPayment.getBill().getPriceList());
+		testPatient.check(foundBillPayment.getBill().getBillPatient());
 	}
 
 	private Patient _setupTestPatient(
