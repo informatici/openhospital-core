@@ -207,7 +207,7 @@ public class SourceFiles extends Thread {
 				}
 				dicomFileDetail.setDicomSeriesNumber(dicomObject.getString(Tag.SeriesNumber));
 			} else {
-				throw new OHDicomException(new OHExceptionMessage("", "format not supported", OHSeverityLevel.ERROR));
+				throw new OHDicomException(new OHExceptionMessage("DICOM: format not supported", "DICOM format not supported: " + fileName.toLowerCase(), OHSeverityLevel.ERROR));
 			}
 			dicomFileDetail.setFrameCount(numfiles);
 			dicomFileDetail.setDicomData(sourceFile);
@@ -217,6 +217,8 @@ public class SourceFiles extends Thread {
 
 			return dicomFileDetail;
 
+		} catch (OHDicomException e) {
+			System.out.println(e.getMessages().get(0).getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
