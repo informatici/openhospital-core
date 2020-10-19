@@ -22,6 +22,7 @@
 package org.isf.disease.model;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -67,9 +68,9 @@ public class Disease extends Auditable<String> {
     private String description;
 
 	@NotNull
-	@ManyToOne
-	@NotFound(action = NotFoundAction.IGNORE)
-	@JoinColumn(name="DIS_DCL_ID_A")
+	@ManyToOne(cascade = {CascadeType.ALL})
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name="DIS_DCL_ID_A")
 	private DiseaseType diseaseType; 
 
 	@Version

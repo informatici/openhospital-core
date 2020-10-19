@@ -60,7 +60,7 @@
  		<!-- these are C3P0 properties -->
  		<property name="acquireIncrement" value="1" />
  		<property name="minPoolSize" value="0" />
- 		<property name="maxPoolSize" value="10" />
+ 		<property name="maxPoolSize" value="1" />
  		<property name="maxIdleTime" value="300" />
  		<property name="maxStatements" value="0" />
  		<property name="checkoutTimeout" value="5000" />
