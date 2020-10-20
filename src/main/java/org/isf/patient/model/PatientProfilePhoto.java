@@ -52,7 +52,7 @@ public class PatientProfilePhoto implements Serializable {
 	private Patient patient;
 
 	@Column(name="PAT_PHOTO")
-	@Lob
+	//@Lob https://github.com/xerial/sqlite-jdbc/issues/135#issuecomment-522299951
 	private byte[] photo;
 
 
