@@ -35,17 +35,9 @@ import org.isf.generaldata.MessageBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
-
-/*
- * @version 0.1 2005-11-06
- * @author bob
- *
- */
-
 /**
- * classe singleton che provvede alla connessione con database i parametri: dati
- * connessione,database, user, passwd ecc sono letti da file properties
+ * Singleton class to manage database connections.
+ * Connection parameters are read from Properties file.
  */
 public class DbSingleConn {
 
@@ -62,7 +54,7 @@ public class DbSingleConn {
 		if (pConn == null) {
 			try {
 				pConn = createConnection();
-			} catch (CommunicationsException ce) {
+			} catch (Exception ex){
 				String message = MessageBundle.getMessage("angal.utils.dbserverconnectionfailure");
 				logger.error(">> {}", message);
 				JOptionPane.showMessageDialog(null, message);

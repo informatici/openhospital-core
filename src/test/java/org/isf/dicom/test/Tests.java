@@ -28,7 +28,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -426,16 +427,16 @@ public class Tests
 	@Test
 	public void testSourceFilesPreloadDicom() throws Exception {
 		File file = _getFile("case3c_002.dcm");
-		Date expectedStudyDate = _getDicomObject(file).getDate(Tag.StudyDate, Tag.StudyTime);
-		Date expectedSeriesDate= _getDicomObject(file).getDate(Tag.SeriesDate, Tag.SeriesTime);
+		LocalDateTime expectedStudyDate = LocalDateTime.ofInstant(_getDicomObject(file).getDate(Tag.StudyDate, Tag.StudyTime).toInstant(), ZoneId.systemDefault());
+		LocalDateTime expectedSeriesDate= LocalDateTime.ofInstant(_getDicomObject(file).getDate(Tag.SeriesDate, Tag.SeriesTime).toInstant(), ZoneId.systemDefault());
 
 
 		FileDicom dicomFile = SourceFiles.preLoadDicom(file, 1);
 
 		assertThat(dicomFile.getFileName()).isEqualTo("case3c_002.dcm");
 		assertThat(dicomFile.getFrameCount()).isEqualTo(1);
-		assertThat(_areDatesEquals(expectedStudyDate, dicomFile.getDicomStudyDate())).isTrue();
-		assertThat(_areDatesEquals(expectedSeriesDate, dicomFile.getDicomSeriesDate())).isTrue();
+		assertThat(expectedStudyDate.isEqual(dicomFile.getDicomStudyDate())).isTrue();
+		assertThat(expectedSeriesDate.isEqual(dicomFile.getDicomSeriesDate())).isTrue();
 
 	}
 
@@ -447,10 +448,6 @@ public class Tests
 		DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
 		return dicomStreamMetaData.getDicomObject();
 
-	}
-
-	private boolean _areDatesEquals(Date date, Date date2){
-		return date.compareTo(date2) == 0;
 	}
 
 	@Test

@@ -21,7 +21,7 @@
  */
 package org.isf.admission.model;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -155,8 +155,8 @@ public class Admission implements Comparable<Admission>  //extends Auditable<Str
 	private Patient patient;				// patient key
 
 	@NotNull
-	@Column(name="ADM_DATE_ADM")
-	private GregorianCalendar admDate;		// admission date
+	@Column(name="ADM_DATE_ADM") 		// SQL type: datetime
+	private LocalDateTime admDate;		// admission date
 
 	@NotNull
 	@ManyToOne
@@ -186,14 +186,14 @@ public class Admission implements Comparable<Admission>  //extends Auditable<Str
 	@JoinColumn(name="ADM_OPE_ID_A")
 	private Operation operation;				// operation key (null)
 
-	@Column(name="ADM_DATE_OP")
-	private GregorianCalendar opDate; 		// operation date (null)
+	@Column(name="ADM_DATE_OP")					// SQL type: datetime
+	private LocalDateTime opDate; 				// operation date (null)
 
 	@Column(name="ADM_RESOP")
 	private String opResult;				// value is 'P' or 'N' (null)
 
-	@Column(name="ADM_DATE_DIS")
-	private GregorianCalendar disDate; 		// discharge date (null)
+	@Column(name="ADM_DATE_DIS")		// SQL type: datetime
+	private LocalDateTime disDate; 		// discharge date (null)
 	
 	@ManyToOne
 	@JoinColumn(name="ADM_DIST_ID_A")
@@ -205,15 +205,15 @@ public class Admission implements Comparable<Admission>  //extends Auditable<Str
 	@Column(name="ADM_TRANS")
 	private Float transUnit;				// transfusional unit
 
-	@Column(name="ADM_PRG_DATE_VIS")
-	private GregorianCalendar visitDate;	// ADM_PRG_DATE_VIS	
+	@Column(name="ADM_PRG_DATE_VIS")		// SQL type: datetime
+	private LocalDateTime visitDate;	// ADM_PRG_DATE_VIS	
 		
 	@ManyToOne
 	@JoinColumn(name="ADM_PRG_PTT_ID_A")
 	private PregnantTreatmentType pregTreatmentType;		// ADM_PRG_PTT_ID_A treatmentType key
 	
-	@Column(name="ADM_PRG_DATE_DEL")
-	private GregorianCalendar deliveryDate;	// ADM_PRG_DATE_DEL delivery date	
+	@Column(name="ADM_PRG_DATE_DEL")		// SQL type: datetime
+	private LocalDateTime deliveryDate;	// ADM_PRG_DATE_DEL delivery date	
 		
 	@ManyToOne
 	@JoinColumn(name="ADM_PRG_DLT_ID_A")	
@@ -226,14 +226,14 @@ public class Admission implements Comparable<Admission>  //extends Auditable<Str
 	@Column(name="ADM_PRG_WEIGHT")
 	private Float weight;					// ADM_PRG_WEIGHT	weight
 	
-	@Column(name="ADM_PRG_DATE_CTRL1")
-	private GregorianCalendar ctrlDate1;	// ADM_PRG_DATE_CTRL1
+	@Column(name="ADM_PRG_DATE_CTRL1")	// SQL type: datetime
+	private LocalDateTime ctrlDate1;	// ADM_PRG_DATE_CTRL1
 	
-	@Column(name="ADM_PRG_DATE_CTRL2")
-	private GregorianCalendar ctrlDate2;	// ADM_PRG_DATE_CTRL2
+	@Column(name="ADM_PRG_DATE_CTRL2")	// SQL type: datetime
+	private LocalDateTime ctrlDate2;	// ADM_PRG_DATE_CTRL2
 	
-	@Column(name="ADM_PRG_DATE_ABORT")
-	private GregorianCalendar abortDate;	// ADM_PRG_DATE_ABORT
+	@Column(name="ADM_PRG_DATE_ABORT")	// SQL type: datetime
+	private LocalDateTime abortDate;	// ADM_PRG_DATE_ABORT
 	
 	@Column(name="ADM_USR_ID_A")
 	private String userID;					// the user ID
@@ -287,10 +287,10 @@ public class Admission implements Comparable<Admission>  //extends Auditable<Str
 	 * @param userID
 	 * @param deleted
 	 */
-	public Admission(int id, int admitted, String type, Ward ward, int prog, Patient patient, GregorianCalendar admDate, AdmissionType admType, String fhu, Disease diseaseIn, Disease diseaseOut1, Disease diseaseOut2, Disease diseaseOut3,
-			Operation operation, String opResult, GregorianCalendar opDate, GregorianCalendar disDate, DischargeType disType, String note, Float transUnit, GregorianCalendar visitDate,
-			PregnantTreatmentType pregTreatmentType, GregorianCalendar deliveryDate, DeliveryType deliveryType, DeliveryResultType deliveryResult, Float weight, GregorianCalendar ctrlDate1, GregorianCalendar ctrlDate2,
-			GregorianCalendar abortDate, String userID, String deleted) 
+	public Admission(int id, int admitted, String type, Ward ward, int prog, Patient patient, LocalDateTime admDate, AdmissionType admType, String fhu, Disease diseaseIn, Disease diseaseOut1, Disease diseaseOut2, Disease diseaseOut3,
+			Operation operation, String opResult, LocalDateTime opDate, LocalDateTime disDate, DischargeType disType, String note, Float transUnit, LocalDateTime visitDate,
+			PregnantTreatmentType pregTreatmentType, LocalDateTime deliveryDate, DeliveryType deliveryType, DeliveryResultType deliveryResult, Float weight, LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
+			LocalDateTime abortDate, String userID, String deleted) 
 	{
 		super();
 		this.id = id;
@@ -326,11 +326,11 @@ public class Admission implements Comparable<Admission>  //extends Auditable<Str
 		this.deleted = deleted;
 	}
 	
-	public GregorianCalendar getOpDate() {
+	public LocalDateTime getOpDate() {
 		return opDate;
 	}
 
-	public void setOpDate(GregorianCalendar opDate) {
+	public void setOpDate(LocalDateTime opDate) {
 		this.opDate = opDate;
 	}
 
@@ -350,19 +350,19 @@ public class Admission implements Comparable<Admission>  //extends Auditable<Str
 		this.userID = string;
 	}
 
-	public GregorianCalendar getAbortDate() {
+	public LocalDateTime getAbortDate() {
 		return abortDate;
 	}
 
-	public void setAbortDate(GregorianCalendar abortDate) {
+	public void setAbortDate(LocalDateTime abortDate) {
 		this.abortDate = abortDate;
 	}
 
-	public GregorianCalendar getAdmDate() {
+	public LocalDateTime getAdmDate() {
 		return admDate;
 	}
 
-	public void setAdmDate(GregorianCalendar admDate) {
+	public void setAdmDate(LocalDateTime admDate) {
 		this.admDate = admDate;
 	}
 
@@ -382,19 +382,19 @@ public class Admission implements Comparable<Admission>  //extends Auditable<Str
 		this.admissionType = admType;
 	}
 
-	public GregorianCalendar getCtrlDate1() {
+	public LocalDateTime getCtrlDate1() {
 		return ctrlDate1;
 	}
 
-	public void setCtrlDate1(GregorianCalendar ctrlDate1) {
+	public void setCtrlDate1(LocalDateTime ctrlDate1) {
 		this.ctrlDate1 = ctrlDate1;
 	}
 
-	public GregorianCalendar getCtrlDate2() {
+	public LocalDateTime getCtrlDate2() {
 		return ctrlDate2;
 	}
 
-	public void setCtrlDate2(GregorianCalendar ctrlDate2) {
+	public void setCtrlDate2(LocalDateTime ctrlDate2) {
 		this.ctrlDate2 = ctrlDate2;
 	}
 
@@ -406,11 +406,11 @@ public class Admission implements Comparable<Admission>  //extends Auditable<Str
 		this.deleted = deleted;
 	}
 
-	public GregorianCalendar getDeliveryDate() {
+	public LocalDateTime getDeliveryDate() {
 		return deliveryDate;
 	}
 
-	public void setDeliveryDate(GregorianCalendar deliveryDate) {
+	public void setDeliveryDate(LocalDateTime deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
 
@@ -430,11 +430,11 @@ public class Admission implements Comparable<Admission>  //extends Auditable<Str
 		this.deliveryType = deliveryTypeId;
 	}
 
-	public GregorianCalendar getDisDate() {
+	public LocalDateTime getDisDate() {
 		return disDate;
 	}
 
-	public void setDisDate(GregorianCalendar disDate) {
+	public void setDisDate(LocalDateTime disDate) {
 		this.disDate = disDate;
 	}
 
@@ -550,11 +550,11 @@ public class Admission implements Comparable<Admission>  //extends Auditable<Str
 		this.type = type;
 	}
 
-	public GregorianCalendar getVisitDate() {
+	public LocalDateTime getVisitDate() {
 		return visitDate;
 	}
 
-	public void setVisitDate(GregorianCalendar visitDate) {
+	public void setVisitDate(LocalDateTime visitDate) {
 		this.visitDate = visitDate;
 	}
 

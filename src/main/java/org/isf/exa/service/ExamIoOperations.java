@@ -200,7 +200,7 @@ public class ExamIoOperations {
 			Exam exam) throws OHServiceException 
 	{
 		boolean result = false;
-		Exam foundExam = repository.findOne(exam.getCode());
+		Exam foundExam = repository.findById(exam.getCode()).get();
 		
 		if (foundExam != null)
 		{
@@ -240,12 +240,7 @@ public class ExamIoOperations {
 	public boolean isCodePresent(
 			String code) throws OHServiceException
 	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;	
+		return repository.existsById(code);
 	}
 
 	/**
@@ -258,11 +253,6 @@ public class ExamIoOperations {
 	public boolean isRowPresent(
 			Integer code) throws OHServiceException
 	{
-		boolean result = true;
-	
-		
-		result = rowRepository.exists(code);
-		
-		return result;	
+		return rowRepository.existsById(code);
 	}
 }

@@ -21,6 +21,8 @@
  */
 package org.isf.patvac.model;
 
+import java.time.LocalDateTime;
+
 /*------------------------------------------
 * PatientVaccine - class 
 * -----------------------------------------
@@ -29,7 +31,6 @@ package org.isf.patvac.model;
 * 04/06/2015 - Antonio - ported to JPA
 *------------------------------------------*/
 
-import java.util.GregorianCalendar;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 
@@ -72,8 +73,8 @@ public class PatientVaccine extends Auditable<String>
 	private int progr;
 
 	@NotNull
-	@Column(name="PAV_DATE")
-	private GregorianCalendar vaccineDate;
+	@Column(name="PAV_DATE")		// SQL type: datetime
+	private LocalDateTime vaccineDate;
 
 	@NotNull
 	@ManyToOne
@@ -96,7 +97,7 @@ public class PatientVaccine extends Auditable<String>
 	{		
 	}
 	
-	public PatientVaccine(int codeIn, int progIn, GregorianCalendar vacDateIn, 
+	public PatientVaccine(int codeIn, int progIn, LocalDateTime vacDateIn, 
 			Patient patient, Vaccine vacIn, int lockIn) {
 		this.code = codeIn;
 		this.progr = progIn;
@@ -106,7 +107,7 @@ public class PatientVaccine extends Auditable<String>
 		this.lock = lockIn ;
 	}
 	
-	public PatientVaccine(int codeIn, int progIn, GregorianCalendar vacDateIn, 
+	public PatientVaccine(int codeIn, int progIn, LocalDateTime vacDateIn, 
 			Patient patient, Vaccine vacIn, int lockIn,
                           String patNameIn, int patAgeIn, char patSexIn) {
 		this.code = codeIn;
@@ -137,11 +138,11 @@ public class PatientVaccine extends Auditable<String>
 		this.progr = progr;
 	}
 
-	public GregorianCalendar getVaccineDate() {
+	public LocalDateTime getVaccineDate() {
 		return vaccineDate;
 	}
 
-	public void setVaccineDate(GregorianCalendar vaccineDate) {
+	public void setVaccineDate(LocalDateTime vaccineDate) {
 		this.vaccineDate = vaccineDate;
 	}
 

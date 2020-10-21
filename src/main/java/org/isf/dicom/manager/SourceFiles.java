@@ -25,7 +25,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -173,8 +174,8 @@ public class SourceFiles extends Thread {
 		FileDicom dicomFileDetail = new FileDicom();
 		try {
 			String fileName = sourceFile.getName();
-			Date seriesDate = null;
-			Date studyDate = null;
+			LocalDateTime seriesDate = null;
+			LocalDateTime studyDate = null;
 			boolean isJpeg = fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg");
 			boolean isDicom = fileName.toLowerCase().endsWith(".dcm");
 
@@ -193,12 +194,12 @@ public class SourceFiles extends Thread {
 				DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
 				DicomObject dicomObject = dicomStreamMetaData.getDicomObject();
 				try {
-					seriesDate = dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime);
+					seriesDate = LocalDateTime.ofInstant(dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime).toInstant(), ZoneId.systemDefault());
 				} catch (Exception ecc) {
 					System.out.println("DICOM: Unparsable SeriesDate");
 				}
 				try {
-					studyDate = dicomObject.getDate(Tag.StudyDate, Tag.StudyTime);
+					studyDate = LocalDateTime.ofInstant(dicomObject.getDate(Tag.StudyDate, Tag.StudyTime).toInstant(), ZoneId.systemDefault());
 				} catch (Exception ecc) {
 					System.out.println("DICOM: Unparsable StudyDate");
 				}
@@ -317,13 +318,13 @@ public class SourceFiles extends Thread {
 			String patientID = String.valueOf(patient);
 			String patientName = dicomFileDetail.getDicomPatientName();
 			String patientSex = dicomFileDetail.getDicomPatientSex();
-			Date seriesDate = dicomFileDetail.getDicomSeriesDate();
+			LocalDateTime seriesDate = dicomFileDetail.getDicomSeriesDate();
 			String seriesDescription = dicomFileDetail.getDicomSeriesDescription();
 			String seriesDescriptionCodeSequence = dicomFileDetail.getDicomSeriesDescriptionCodeSequence();
 			String seriesNumber = dicomFileDetail.getDicomSeriesNumber();
 			String seriesInstanceUID = dicomFileDetail.getDicomSeriesInstanceUID();
 			String seriesUID = dicomFileDetail.getDicomSeriesUID();
-			Date studyDate = dicomFileDetail.getDicomStudyDate();
+			LocalDateTime studyDate = dicomFileDetail.getDicomStudyDate();
 			String studyDescription = dicomFileDetail.getDicomStudyDescription();
 			String studyUID = dicomFileDetail.getDicomStudyId();
 			String modality = dicomFileDetail.getModality();
@@ -342,12 +343,12 @@ public class SourceFiles extends Thread {
 				//overridden by the user
 				seriesDescription = seriesDescription != null ? seriesDescription : dicomObject.getString(Tag.SeriesDescription);
 				try {
-					studyDate = studyDate != null ? studyDate : dicomObject.getDate(Tag.StudyDate, Tag.StudyTime);
+					studyDate = studyDate != null ? studyDate : LocalDateTime.ofInstant(dicomObject.getDate(Tag.StudyDate, Tag.StudyTime).toInstant(), ZoneId.systemDefault());
 				} catch (Exception ecc) {
 					System.out.println("DICOM: Unparsable StudyDate");
 				}
 				try {
-					seriesDate = seriesDate != null ? seriesDate : dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime);
+					seriesDate = seriesDate != null ? seriesDate : LocalDateTime.ofInstant(dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime).toInstant(), ZoneId.systemDefault());
 				} catch (Exception ecc) {
 					System.out.println("DICOM: Unparsable StudyDate");
 				}

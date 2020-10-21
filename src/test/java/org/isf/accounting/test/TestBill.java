@@ -23,7 +23,8 @@ package org.isf.accounting.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+import java.time.Month;
 
 import org.isf.accounting.model.Bill;
 import org.isf.patient.model.Patient;
@@ -32,8 +33,8 @@ import org.isf.utils.exception.OHException;
 
 public class TestBill 
 {	
-	private static GregorianCalendar date = new GregorianCalendar(10, 9, 8);
-	private static GregorianCalendar update = new GregorianCalendar(7, 6, 5);
+	public static LocalDateTime date = LocalDateTime.of(10, 9, 8, 0, 0, 0);
+	public static LocalDateTime update = LocalDateTime.of(7, 6, 5, 0, 0, 0);
 	private static boolean isList = false;
 	private static String listName = "TestListName";
 	private static boolean isPatient = true;

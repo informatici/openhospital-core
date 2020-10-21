@@ -21,8 +21,8 @@
  */
 package org.isf.sms.manager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
@@ -74,7 +74,7 @@ public class SmsManager {
 		}
 	}
 
-	public List<Sms> getAll(Date from, Date to) throws OHServiceException {
+	public List<Sms> getAll(LocalDateTime from, LocalDateTime to) throws OHServiceException {
 		return smsOperations.getAll(from, to);
 	}
 
@@ -109,7 +109,7 @@ public class SmsManager {
 
 			String[] parts = split(text);
 			String number = smsToSend.getSmsNumber();
-			Date schedDate = smsToSend.getSmsDateSched();
+			LocalDateTime schedDate = smsToSend.getSmsDateSched();
 
 			for (String part : parts) {
 				Sms sms = new Sms();

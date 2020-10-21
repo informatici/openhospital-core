@@ -21,9 +21,10 @@
  */
 package org.isf.sms.service;
 
+import java.time.LocalDateTime;
+
 // Generated 31-gen-2014 15.39.04 by Hibernate Tools 3.4.0.CR1
 
-import java.util.Date;
 import java.util.List;
 
 import org.isf.sms.model.Sms;
@@ -64,7 +65,7 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean saveOrUpdate(List<Sms> smsList) throws OHServiceException {
-		return repository.save(smsList) != null;
+		return repository.saveAll(smsList) != null;
 	}
 	
 	/**
@@ -74,7 +75,7 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public Sms getByID(int ID) throws OHServiceException {
-		return repository.findOne(ID);
+		return repository.findById(ID).get();
 	}
 	
 	/**
@@ -82,7 +83,7 @@ public class SmsOperations {
 	 * @return smsList - the list of {@link Sms}s
 	 * @throws OHServiceException 
 	 */
-	public List<Sms> getAll(Date dateFrom, Date dateTo) throws OHServiceException {
+	public List<Sms> getAll(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return repository.findBySmsDateSchedBetweenOrderBySmsDateSchedAsc(dateFrom, dateTo);
 	}
 	
@@ -91,7 +92,7 @@ public class SmsOperations {
 	 * @return smsList - the list of {@link Sms}s
 	 * @throws OHServiceException 
 	 */
-	public List<Sms> getList(Date dateFrom,	Date dateTo) throws OHServiceException {
+	public List<Sms> getList(LocalDateTime dateFrom,	LocalDateTime dateTo) throws OHServiceException {
 		return repository.findBySmsDateSchedBetweenAndSmsDateSentIsNullOrderBySmsDateSchedAsc(dateFrom, dateTo);
 	}
 	
@@ -119,7 +120,7 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public void delete(List<Sms> smsList) throws OHServiceException	{
-		repository.delete(smsList);
+		repository.deleteAll(smsList);
 	}
 
 	/**
@@ -140,6 +141,6 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 }

@@ -67,7 +67,7 @@ public class MalnutritionManager {
 		}
 		if(malnutrition.getDateSupp()!=null && 
 				malnutrition.getDateConf()!=null &&
-				malnutrition.getDateConf().before(malnutrition.getDateSupp())) {
+				malnutrition.getDateConf().isBefore(malnutrition.getDateSupp())) {
 			errors.add(new OHExceptionMessage("controlBeforeVisitError", 
 	        		MessageBundle.getMessage("angal.malnutrition.controldatemustbeaftervisitdate"), 
 	        		OHSeverityLevel.ERROR));

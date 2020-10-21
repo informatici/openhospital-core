@@ -23,8 +23,9 @@ package org.isf.sms.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import org.isf.sms.model.Sms;
 import org.isf.utils.exception.OHException;
@@ -32,11 +33,11 @@ import org.isf.utils.exception.OHException;
 public class TestSms 
 {	 
 	private int smsId = 0;	
-	private Date smsDate = new GregorianCalendar(2010, 9, 8).getTime();
-	private Date smsDateSched = new GregorianCalendar(2011, 9, 8).getTime();	
+	private LocalDateTime smsDate = LocalDateTime.of(2010, 9, 8, 0, 0, 0);
+	private LocalDateTime smsDateSched = LocalDateTime.of(2011, 9, 8, 0, 0, 0);
 	private String smsNumber = "TestNumber";	
 	private String smsText = "TestText";
-	private Date smsDateSent = null;
+	private LocalDateTime smsDateSent = null;
 	private String smsUser = "TestUser";
 	private String module = "TestModule";
 	private String moduleID = "TestModId";
@@ -81,12 +82,12 @@ public class TestSms
 	{		
     	assertThat(sms.getModule()).isEqualTo(module);
     	assertThat(sms.getModuleID()).isEqualTo(moduleID);
-    	assertThat(sms.getSmsDate()).isInSameDayAs(smsDate);
-    	assertThat(sms.getSmsDateSched()).isInSameDayAs(smsDateSched);
+    	assertThat(Date.from(sms.getSmsDate().toInstant(ZoneOffset.UTC))).isInSameDayAs(Date.from(smsDate.toInstant(ZoneOffset.UTC)));
+    	assertThat(Date.from(sms.getSmsDateSched().toInstant(ZoneOffset.UTC))).isInSameDayAs(Date.from(smsDateSched.toInstant(ZoneOffset.UTC)));
     	if (sms.getSmsDateSent() == null)
     		assertThat(smsDateSent).isNull();
     	else
-    	    assertThat(sms.getSmsDateSent()).isInSameDayAs(smsDateSent);
+    	    assertThat(Date.from(sms.getSmsDateSent().toInstant(ZoneOffset.UTC))).isInSameDayAs(Date.from(smsDateSent.toInstant(ZoneOffset.UTC)));
     	assertThat(sms.getSmsNumber()).isEqualTo(smsNumber);
     	assertThat(sms.getSmsText()).isEqualTo(smsText);
     	assertThat(sms.getSmsUser()).isEqualTo(smsUser);

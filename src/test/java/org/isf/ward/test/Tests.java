@@ -108,7 +108,7 @@ public class Tests
 		try {
 			// given:
 			String code = _setupTestWard(false);
-			Ward foundWard = wardIoOperationRepository.findOne(code);
+			Ward foundWard = wardIoOperationRepository.findById(code).get();
 
 			// when:
 			ArrayList<Ward> wards = wardIoOperation.getWardsNoMaternity();
@@ -126,7 +126,7 @@ public class Tests
 		try {
 			// given:
 			String code = _setupTestWard(false);
-			Ward foundWard = wardIoOperationRepository.findOne(code);
+			Ward foundWard = wardIoOperationRepository.findById(code).get();
 
 			// when:
 			ArrayList<Ward> wards = wardIoOperation.getWards(code);			
@@ -158,12 +158,12 @@ public class Tests
 		try {
 			// given:
 			String code = _setupTestWard(false);
-			Ward foundWard = wardIoOperationRepository.findOne(code);
+			Ward foundWard = wardIoOperationRepository.findById(code).get();
 			foundWard.setDescription("Update");
 
 			// when:
 			boolean result = wardIoOperation.updateWard(foundWard);
-			Ward updateWard = wardIoOperationRepository.findOne(code);
+			Ward updateWard = wardIoOperationRepository.findById(code).get();
 
 			// then:
 			assertThat(result).isTrue();
@@ -193,7 +193,7 @@ public class Tests
 		try {
 			// given:
 			String code = _setupTestWard(false);
-			Ward foundWard = wardIoOperationRepository.findOne(code);
+			Ward foundWard = wardIoOperationRepository.findById(code).get();
 
 			// when:
 			boolean result = wardIoOperation.deleteWard(foundWard);
@@ -304,7 +304,7 @@ public class Tests
 	}
 		
 	private void  _checkWardIntoDb(String code) throws OHException {
-		Ward foundWard = wardIoOperationRepository.findOne(code);
+		Ward foundWard = wardIoOperationRepository.findById(code).get();
 		testWard.check(foundWard);
 	}
 }

@@ -21,7 +21,7 @@
  */
 package org.isf.lab.service;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.isf.lab.model.Laboratory;
@@ -30,23 +30,23 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface LabIoOperationRepository extends JpaRepository<Laboratory, Integer> {
 
     List<Laboratory> findByExamDateBetweenOrderByExamDateDescRegistrationDateDesc(
-            GregorianCalendar dateFrom,
-            GregorianCalendar dateTo);
+            LocalDate dateFrom,
+            LocalDate dateTo);
 
     List<Laboratory> findByExamDateBetweenAndExam_DescriptionOrderByExamDateDescRegistrationDateDesc(
-            GregorianCalendar dateFrom,
-            GregorianCalendar dateTo,
+            LocalDate dateFrom,
+            LocalDate dateTo,
             String exam);
 
     List<Laboratory> findByPatient_CodeOrderByRegistrationDate(Integer patient);
 
     List<Laboratory> findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(
-            GregorianCalendar dateFrom,
-            GregorianCalendar dateTo);
+            LocalDate dateFrom,
+            LocalDate dateTo);
 
     List<Laboratory> findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(
-            GregorianCalendar dateFrom,
-            GregorianCalendar dateTo,
+            LocalDate dateFrom,
+            LocalDate dateTo,
             String exam);
 
 }

@@ -21,7 +21,8 @@
  */
 package org.isf.therapy.model;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 
@@ -80,12 +81,12 @@ public class TherapyRow  extends Auditable<String>
 	Patient patient;
 
 	@NotNull
-	@Column(name="THR_STARTDATE")	
-	private GregorianCalendar startDate;
+	@Column(name="THR_STARTDATE")		// SQL type: datetime	
+	private LocalDateTime startDate;
 
 	@NotNull
-	@Column(name="THR_ENDDATE")	
-	private GregorianCalendar endDate;
+	@Column(name="THR_ENDDATE")			// SQL type: datetime	
+	private LocalDateTime endDate;
 
 	@NotNull
 	@Column(name="THR_MDSR_ID")	
@@ -140,8 +141,8 @@ public class TherapyRow  extends Auditable<String>
 	 * @param notify
 	 * @param sms
 	 */
-	public TherapyRow(int therapyID, Patient patient,
-			GregorianCalendar startDate, GregorianCalendar endDate,
+	public TherapyRow(int therapyID, Patient patient, 
+			LocalDateTime startDate, LocalDateTime endDate,
 			Medical medical, Double qty, int unitID, int freqInDay,
 			int freqInPeriod, String note, boolean notify, boolean sms) {
 		super();
@@ -175,19 +176,19 @@ public class TherapyRow  extends Auditable<String>
 		this.patient = patient;
 	}
 
-	public GregorianCalendar getStartDate() {
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(GregorianCalendar startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
 
-	public GregorianCalendar getEndDate() {
+	public LocalDateTime getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(GregorianCalendar endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
 
