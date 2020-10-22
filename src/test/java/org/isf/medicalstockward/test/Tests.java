@@ -25,9 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.data.Offset.offset;
 import static org.junit.Assert.fail;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.test.TestMedical;
@@ -58,7 +57,6 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.isf.ward.test.TestWard;
 import org.isf.ward.test.TestWardContext;
-import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -229,12 +227,13 @@ public class Tests
 		// given:
 		int code = _setupTestMovementWard(false);
 		MovementWard foundMovement = (MovementWard)jpa.find(MovementWard.class, code);
-		DateTime startDate = new DateTime(foundMovement.getDate()).minusDays(1);
-		DateTime endDate = new DateTime(foundMovement.getDate()).plusDays(1);
+
+		LocalDateTime startDate = foundMovement.getDate().minusDays(1);
+		LocalDateTime endDate = foundMovement.getDate().plusDays(1);
 
 		// when:
 		ArrayList<MovementWard> wardMovementsToWard = medicalIoOperation.getWardMovementsToWard(
-			foundMovement.getWard().getCode(), startDate.toGregorianCalendar(), endDate.toGregorianCalendar()
+			foundMovement.getWard().getCode(), startDate, endDate
 		);
 
 		// then:
@@ -264,9 +263,9 @@ public class Tests
 	public void testIoGetWardMovements() 
 	{
 		int code = 0;
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime fromDate = now.withMonth(1).withDayOfMonth(1);
+		LocalDateTime toDate = now.withMonth(3).withDayOfMonth(3);
 		
 		
 		try 

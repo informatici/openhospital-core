@@ -21,8 +21,8 @@
  */
 package org.isf.examination.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 
 import org.isf.examination.model.PatientExamination;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -52,7 +52,7 @@ public class ExaminationOperations {
 	public PatientExamination getFromLastPatientExamination(
 			PatientExamination lastPatientExamination)
 	{
-		PatientExamination newPatientExamination = new PatientExamination(new GregorianCalendar(),
+		PatientExamination newPatientExamination = new PatientExamination(LocalDateTime.now(),
 				lastPatientExamination.getPatient(),
 				lastPatientExamination.getPex_height(),
 				lastPatientExamination.getPex_weight(),
@@ -82,7 +82,7 @@ public class ExaminationOperations {
 	}
 
 	public PatientExamination getByID(int ID) throws OHServiceException {
-		return repository.findOne(ID);
+		return repository.findById(ID).get();
 	}
 
 	public PatientExamination getLastByPatID(int patID) throws OHServiceException	{
@@ -92,7 +92,7 @@ public class ExaminationOperations {
 
 	public ArrayList<PatientExamination> getLastNByPatID(int patID, int number) throws OHServiceException {
 		return new ArrayList<PatientExamination>(repository
-				.findByPatient_CodeOrderByPexDateDesc(patID, new PageRequest(0, number)).getContent());
+				.findByPatient_CodeOrderByPexDateDesc(patID, PageRequest.of(0, number)).getContent());
 	}
 
 	public ArrayList<PatientExamination> getByPatID(int patID) throws OHServiceException	{
@@ -100,6 +100,6 @@ public class ExaminationOperations {
 	}
 
 	public void remove(ArrayList<PatientExamination> patexList) throws OHServiceException {
-		repository.delete(patexList);
+		repository.deleteAll(patexList);
 	}
 }

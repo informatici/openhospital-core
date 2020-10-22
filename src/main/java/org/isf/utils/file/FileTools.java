@@ -24,10 +24,13 @@ package org.isf.utils.file;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,10 +69,11 @@ public class FileTools {
 	 * @param file
 	 * @return
 	 */
-	public static Date getTimestamp(File file) {
+	public static LocalDateTime getTimestamp(File file) {
 		if (file == null)
 			return null;
-		return new Date(file.lastModified());
+		return LocalDateTime.ofInstant(Instant.ofEpochMilli(file.lastModified()), 
+                                TimeZone.getDefault().toZoneId());
 	}
 
 	/**

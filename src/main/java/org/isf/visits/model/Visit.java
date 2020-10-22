@@ -21,9 +21,8 @@
  */
 package org.isf.visits.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -82,8 +81,8 @@ public class Visit  extends Auditable<String>
 	private Ward ward;
 
 	@NotNull
-	@Column(name="VST_DATE")
-	private GregorianCalendar date;
+	@Column(name="VST_DATE")		// SQL type: datetime
+	private LocalDateTime date;
 	
 	@Column(name="VST_NOTE")	
 	private String note;
@@ -105,7 +104,7 @@ public class Visit  extends Auditable<String>
 		super();
 	}
 
-	public Visit(int visitID, GregorianCalendar date, Patient patient, String note, boolean sms, Ward ward, String duration, String service) {
+	public Visit(int visitID, LocalDateTime date, Patient patient, String note, boolean sms, Ward ward, String duration, String service) {
 		super();
 		this.visitID = visitID;
 		this.date = date;
@@ -117,20 +116,14 @@ public class Visit  extends Auditable<String>
 		this.service = service;
 	}
 	
-	public GregorianCalendar getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(GregorianCalendar date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 	
-	public void setDate(Date date) {
-		GregorianCalendar gregorian = new GregorianCalendar();
-		gregorian.setTime(date);
-		setDate(gregorian);
-	}
-
 	public int getVisitID() {
 		return visitID;
 	}
@@ -189,18 +182,17 @@ public class Visit  extends Auditable<String>
 
 	
 	public String toStringSMS() {
-		
 		return formatDateTimeSMS(this.date);
 	}
 
-	public String formatDateTime(GregorianCalendar time) {
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy - HH:mm:ss"); //$NON-NLS-1$
-		return format.format(time.getTime());
+	public String formatDateTime(LocalDateTime time) {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yy - HH:mm:ss");
+		return time.format(dtf);
 	}
 	
-	public String formatDateTimeSMS(GregorianCalendar time) {
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm"); //$NON-NLS-1$
-		return format.format(time.getTime());
+	public String formatDateTimeSMS(LocalDateTime time) {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
+		return time.format(dtf);
 	}
 	
 	@Override

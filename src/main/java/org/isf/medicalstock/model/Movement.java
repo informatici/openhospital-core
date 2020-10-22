@@ -21,7 +21,8 @@
  */
 package org.isf.medicalstock.model;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 
@@ -89,8 +90,8 @@ public class Movement extends Auditable<String>
 	private Lot lot;
 
 	@NotNull
-	@Column(name="MMV_DATE")
-	private GregorianCalendar date;
+	@Column(name="MMV_DATE")		// SQL type: datetime
+	private LocalDateTime date;
 
 	@NotNull
 	@Column(name="MMV_QTY")
@@ -115,7 +116,7 @@ public class Movement extends Auditable<String>
 
 	public Movement() { }
 		
-	public Movement(Medical aMedical,MovementType aType,Ward aWard,Lot aLot,GregorianCalendar aDate,int aQuantity,Supplier aSupplier, String aRefNo){
+	public Movement(Medical aMedical,MovementType aType,Ward aWard,Lot aLot,LocalDateTime aDate,int aQuantity,Supplier aSupplier, String aRefNo){
 		medical = aMedical;
 		type = aType;
 		ward = aWard;
@@ -127,18 +128,6 @@ public class Movement extends Auditable<String>
                 //this.wardTo = null;
 	}
 
-//        public Movement(Medical aMedical,MovementType aType,Ward aWard,Lot aLot,GregorianCalendar aDate,int aQuantity,Supplier aSupplier, String aRefNo, Ward wardTo){
-//		medical = aMedical;
-//		type = aType;
-//		ward = aWard;
-//		lot = aLot;
-//		date = aDate;
-//		quantity = aQuantity;
-//		supplier = aSupplier;
-//		refNo=aRefNo;
-//		this.wardTo = wardTo;
-//	}
-	
 	public int getCode(){
 		return code;
 	}
@@ -154,7 +143,7 @@ public class Movement extends Auditable<String>
 	public Lot getLot(){
 		return lot;
 	}
-	public GregorianCalendar getDate(){
+	public LocalDateTime getDate(){
 		return date;
 	}
 	public Supplier getSupplier() {
@@ -175,7 +164,7 @@ public class Movement extends Auditable<String>
 	public void setLot(Lot lot) {
 		this.lot = lot;
 	}
-	public void setDate(GregorianCalendar date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 	public void setSupplier(Supplier supplier) {

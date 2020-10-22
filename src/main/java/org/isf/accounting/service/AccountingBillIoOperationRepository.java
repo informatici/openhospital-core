@@ -28,8 +28,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 @Repository
@@ -48,10 +48,10 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 	void updateDeleteWhereId(@Param("billId") Integer billId);
 
 	@Query(value = "select b from Bill b where b.date >= :dateFrom and b.date < :dateTo")
-	List<Bill> findByDateBetween(@Param("dateFrom") Calendar dateFrom, @Param("dateTo") Calendar dateTo);
+	List<Bill> findByDateBetween(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
 	
 	@Query(value = "select b from Bill b where b.billPatient.id = :patientCode and b.date >= :dateFrom and b.date < :dateTo")
-	ArrayList<Bill> findByDateAndPatient(@Param("dateFrom") Calendar dateFrom, @Param("dateTo") Calendar dateTo, @Param("patientCode")Integer patientCode);
+	ArrayList<Bill> findByDateAndPatient(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, @Param("patientCode")Integer patientCode);
 
 	@Query(value = "select b from Bill b where b.status='O' and b.billPatient.id = :patID")
 	ArrayList<Bill> findAllPendindBillsByBillPatient(@Param("patID")int patID);
@@ -64,5 +64,5 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 	 * @return the bill list
 	 */
 	@Query(value = "select bi.bill from BillItems bi where bi.itemDescription = :desc and bi.bill.date >= :dateFrom and bi.bill.date < :dateTo")
-	List<Bill> findAllWhereDatesAndBillItem(@Param("dateFrom") Calendar dateFrom, @Param("dateTo") Calendar dateTo, @Param("desc") String desc);
+	List<Bill> findAllWhereDatesAndBillItem(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, @Param("desc") String desc);
 }

@@ -21,7 +21,7 @@
  */
 package org.isf.admission.service;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.admission.model.Admission;
@@ -46,8 +46,8 @@ public interface AdmissionIoOperationRepository extends JpaRepository<Admission,
 			"WHERE a.ward.code =:ward AND a.admDate >= :dateFrom AND a.admDate <= :dateTo AND a.deleted ='N' " +
 			"ORDER BY a.yProg desc ")
     List<Admission> findAllWhereWardAndDates(
-            @Param("ward") String ward, @Param("dateFrom") GregorianCalendar dateFrom,
-            @Param("dateTo") GregorianCalendar dateTo);
+            @Param("ward") String ward, @Param("dateFrom") LocalDateTime dateFrom,
+            @Param("dateTo") LocalDateTime dateTo);
 
 	@Query(value = "select a FROM Admission a WHERE a.admitted =1 and a.ward.code = :ward and a.deleted = 'N'")
 	List<Admission> findAllWhereWardIn(@Param("ward") String ward);

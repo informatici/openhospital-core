@@ -21,8 +21,7 @@
  */
 package org.isf.serviceprinting.print;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.medicalstockward.model.MovementWard;
 
@@ -33,7 +32,7 @@ public class MovementWardForPrint implements Comparable<MovementWardForPrint>{
 
 	private int code;
 	private String ward;
-	private Date date;
+	private LocalDateTime date;
 	private String medical;
 	private Double quantity;
 	private String units;
@@ -60,7 +59,7 @@ public class MovementWardForPrint implements Comparable<MovementWardForPrint>{
 		return medical;
 	}
 	
-	public Date getDate(){
+	public LocalDateTime getDate(){
 		return date;
 	}
 	
@@ -86,11 +85,7 @@ public class MovementWardForPrint implements Comparable<MovementWardForPrint>{
 		return this.date.compareTo(o.getDate());
 	}
 	
-	private Date removeTime(GregorianCalendar date) {
-		GregorianCalendar newDate = date;
-		date.set(GregorianCalendar.HOUR_OF_DAY, 0);
-		date.set(GregorianCalendar.MINUTE, 0);
-		date.set(GregorianCalendar.SECOND, 0);
-		return newDate.getTime();
+	private LocalDateTime removeTime(LocalDateTime date) {
+		return date.withHour(0).withMinute(0).withSecond(0);
 	}
 }

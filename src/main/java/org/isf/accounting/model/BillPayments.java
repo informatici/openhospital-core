@@ -21,7 +21,7 @@
  */
 package org.isf.accounting.model;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 
@@ -75,8 +75,8 @@ public class BillPayments  extends Auditable<String> implements Comparable<Objec
 	private Bill bill;
 
 	@NotNull
-	@Column(name="BLP_DATE")
-	private GregorianCalendar date;
+	@Column(name="BLP_DATE")		// SQL type: datetime
+	private LocalDateTime date;
 
 	@NotNull
 	@Column(name="BLP_AMOUNT")
@@ -94,7 +94,7 @@ public class BillPayments  extends Auditable<String> implements Comparable<Objec
 		super();
 	}
 	
-	public BillPayments(int id, Bill bill, GregorianCalendar date,
+	public BillPayments(int id, Bill bill, LocalDateTime date,
 			double amount, String user) {
 		super();
 		this.id = id;
@@ -120,11 +120,11 @@ public class BillPayments  extends Auditable<String> implements Comparable<Objec
 		this.bill = bill;
 	}
 
-	public GregorianCalendar getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(GregorianCalendar date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
@@ -146,7 +146,7 @@ public class BillPayments  extends Auditable<String> implements Comparable<Objec
 	
 	public int compareTo(Object anObject) {
 		if (anObject instanceof BillPayments)
-			if (this.date.after(((BillPayments)anObject).getDate()))
+			if (this.date.isAfter(((BillPayments)anObject).getDate()))
 				return 1;
 			else
 				return 0;

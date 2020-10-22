@@ -22,7 +22,7 @@
 package org.isf.examination.model;
 
 import java.io.Serializable;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -58,8 +58,8 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	private int pex_ID;
 
 	@NotNull
-	@Column(name="PEX_DATE")
-	private GregorianCalendar pex_date;
+	@Column(name="PEX_DATE")		// SQL type: datetime
+	private LocalDateTime pex_date;
 
 	@NotNull
 	@ManyToOne
@@ -137,7 +137,7 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	 * @param pex_note
 	 */
 	public PatientExamination(
-			GregorianCalendar pex_date, 
+			LocalDateTime pex_date, 
 			Patient patient, 
 			Integer pex_height, 
 			Double pex_weight, 
@@ -205,14 +205,14 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	/**
 	 * @return the pex_date
 	 */
-	public GregorianCalendar getPex_date() {
+	public LocalDateTime getPex_date() {
 		return pex_date;
 	}
 
 	/**
 	 * @param pex_date the pex_date to set
 	 */
-	public void setPex_date(GregorianCalendar pex_date) {
+	public void setPex_date(LocalDateTime pex_date) {
 		this.pex_date = pex_date;
 	}
 

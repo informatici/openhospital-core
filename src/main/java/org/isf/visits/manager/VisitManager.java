@@ -21,9 +21,8 @@
  */
 package org.isf.visits.manager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.UserBrowsingManager;
@@ -37,7 +36,6 @@ import org.isf.utils.time.TimeTools;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
 import org.isf.ward.model.Ward;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -98,37 +96,13 @@ public class VisitManager {
 		return createVisit(vs.getVisitID(), vs.getPatient(), vs.getWard(), vs.getDate(), vs.getNote(), vs.getDuration(),
 				vs.getService(), vs.isSms());
 	}
-	private Visit createVisit(int visitID, Patient patient, Ward ward, GregorianCalendar date, String note,
+	private Visit createVisit(int visitID, Patient patient, Ward ward, LocalDateTime date, String note,
 			String duration, String service, boolean sms) {
-	ArrayList<GregorianCalendar> datesArray = new ArrayList<GregorianCalendar>();
-		
-		GregorianCalendar stepDate = new GregorianCalendar();
-		stepDate.setTime(date.getTime());
-		datesArray.add(new GregorianCalendar(
-				date.get(GregorianCalendar.YEAR),
-				date.get(GregorianCalendar.MONTH),
-				date.get(GregorianCalendar.DAY_OF_MONTH)));
-		
-		
-		GregorianCalendar[] dates = new GregorianCalendar[datesArray.size()];
-		
-		for (int i = 0; i < datesArray.size(); i++) {
-			//dates[i] = new GregorianCalendar();
-			dates[i] = datesArray.get(i);
-			//System.out.println(formatDate(dates[i]));
-		}
-		
-		
-		Visit vs = new Visit(visitID, date,patient, note, sms,  ward, duration,  service);
-		
-		dates = null;
-		
-		return vs;
+		return new Visit(visitID, date, patient, note, sms,  ward, duration,  service);
 	}
 	
-	public Visit newVisit(int visitID, GregorianCalendar date, Patient patient,String note, boolean sms, Ward ward,
+	public Visit newVisit(int visitID, LocalDateTime date, Patient patient,String note, boolean sms, Ward ward,
 			String duration, String service) throws OHServiceException {
-			
 			Visit vsRow = new Visit(visitID, date, patient, note, sms, ward, duration, service);
 			return newVisit(vsRow);
 		}
@@ -155,7 +129,6 @@ public class VisitManager {
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean newVisits(ArrayList<Visit> visits) throws OHServiceException {
 		if (!visits.isEmpty()) {
-			DateTime now = new DateTime();
 			PatientBrowserManager patMan = this.applicationContext.getBean(PatientBrowserManager.class);
 			int patID = visits.get(0).getPatient().getCode();
 			ioOperations.deleteAllVisits(patID);
@@ -169,13 +142,12 @@ public class VisitManager {
 				
 				visit.setVisitID(visitID);
 				if (visit.isSms()) {
-					GregorianCalendar date = (GregorianCalendar) visit.getDate().clone(); 
-					date.add(Calendar.DAY_OF_MONTH, -1);
-					if (visit.getDate().after(TimeTools.getDateToday24())) {
+					LocalDateTime date = visit.getDate().minusDays(1);
+					if (visit.getDate().isAfter(TimeTools.getDateToday24())) {
 						Patient pat = patMan.getPatientById(visit.getPatient().getCode());
 						
 						Sms sms = new Sms();
-						sms.setSmsDateSched(date.getTime());
+						sms.setSmsDateSched(date);
 						sms.setSmsNumber(pat.getTelephone());
 //						sms.setSmsText(prepareSmsFromVisit(visit));
 						sms.setSmsUser(UserBrowsingManager.getCurrentUser());

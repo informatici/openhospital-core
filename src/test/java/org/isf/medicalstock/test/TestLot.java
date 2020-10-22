@@ -21,12 +21,12 @@
  */
 package org.isf.medicalstock.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.data.Offset.offset;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.medicalstock.model.Lot;
 import org.isf.utils.exception.OHException;
@@ -34,9 +34,9 @@ import org.isf.utils.exception.OHException;
 public class TestLot 
 {	 
 	private String code = "123456";
-	private GregorianCalendar now = new GregorianCalendar();
-	private GregorianCalendar preparationDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-	private GregorianCalendar dueDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
+	private LocalDateTime now = LocalDateTime.now();
+	private LocalDateTime preparationDate = now.withMonth(1).withDayOfMonth(2);
+	private LocalDateTime dueDate = now.withMonth(1).withDayOfMonth(2);
 	private BigDecimal cost = new BigDecimal(10.10);
 	    
 			
@@ -73,7 +73,7 @@ public class TestLot
 			Lot lot) 
 	{		
     	assertThat(lot.getCost().doubleValue()).isCloseTo(cost.doubleValue(), offset(0.0));
-    	assertThat(lot.getDueDate()).isEqualTo(dueDate);
-    	assertThat(lot.getPreparationDate()).isEqualTo(preparationDate);
+    	assertThat(lot.getDueDate()).isCloseTo(dueDate, within(1, ChronoUnit.SECONDS));
+    	assertThat(lot.getPreparationDate()).isCloseTo(preparationDate, within(1, ChronoUnit.SECONDS));
 	}
 }

@@ -24,7 +24,7 @@ package org.isf.accounting.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.data.Offset.offset;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillPayments;
@@ -32,7 +32,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestBillPayments 
 {	
-	private GregorianCalendar paymentDate = new GregorianCalendar(4, 3, 2);
+	private LocalDateTime paymentDate = LocalDateTime.of(4, 3, 2, 9, 0, 0);
 	private static double paymentAmount = 10.10;
 	private static String paymentUser = "TestUser";
 

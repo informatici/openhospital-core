@@ -21,7 +21,7 @@
  */
 package org.isf.lab.model;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.exa.model.Exam;
 
@@ -40,20 +40,20 @@ public class LaboratoryForPrint {
 		this.code = code;
 	}
 
-	public LaboratoryForPrint(Integer aCode, Exam aExam,GregorianCalendar aDate,String aResult){
+	public LaboratoryForPrint(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult){
 		code = aCode;
 		exam=aExam.getDescription();
 		date=getConvertedString(aDate);
 		result=aResult;
 	}
 	
-	private String getConvertedString(GregorianCalendar time){
-		String string=String.valueOf(time.get(GregorianCalendar.DAY_OF_MONTH));
-		string+="/"+ (time.get(GregorianCalendar.MONTH) + 1);
-		string+="/"+ time.get(GregorianCalendar.YEAR);
-		string+="  "+ time.get(GregorianCalendar.HOUR_OF_DAY);
-		string+=":"+ time.get(GregorianCalendar.MINUTE);
-		string+=":"+ time.get(GregorianCalendar.SECOND);
+	private String getConvertedString(LocalDateTime time){
+		String string= "" + time.getDayOfMonth();
+		string+= "/"+ time.getMonthValue();
+		string+= "/"+ time.getYear();
+		string+= "  "+ time.getHour();
+		string+= ":"+ time.getMinute();
+		string+= ":"+ time.getSecond();
 		return string;
 	}
 

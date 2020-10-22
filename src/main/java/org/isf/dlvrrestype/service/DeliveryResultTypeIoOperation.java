@@ -113,11 +113,6 @@ public class DeliveryResultTypeIoOperation {
 	public boolean isCodePresent(
 			String code) throws OHServiceException 
 	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+		return repository.existsById(code);
 	}
 }

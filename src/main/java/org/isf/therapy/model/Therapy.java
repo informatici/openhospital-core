@@ -21,7 +21,8 @@
  */
 package org.isf.therapy.model;
 
-import java.util.GregorianCalendar;
+
+import java.time.LocalDateTime;
 
 import org.isf.medicals.model.Medical;
 
@@ -35,7 +36,7 @@ public class Therapy {
 	
 	private int therapyID;
 	private int patID;
-	private GregorianCalendar[] dates;
+	private LocalDateTime[] dates;
 	private Medical medical;
 	private Double qty;
 	private String units;
@@ -64,7 +65,7 @@ public class Therapy {
 	 * @param notify
 	 * @param sms
 	 */
-	public Therapy(int therapyID, int patID, GregorianCalendar[] dates,
+	public Therapy(int therapyID, int patID, LocalDateTime[] dates,
 			Medical medical, Double qty, String units, int freqInDay,
 			String note, boolean notify, boolean sms) {
 		super();
@@ -88,11 +89,11 @@ public class Therapy {
 		this.therapyID = therapyID;
 	}
 
-	public GregorianCalendar[] getDates() {
+	public LocalDateTime[] getDates() {
 		return dates;
 	}
 
-	public void setDates(GregorianCalendar[] dates) {
+	public void setDates(LocalDateTime[] dates) {
 		this.dates = dates;
 	}
 

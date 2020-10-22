@@ -22,8 +22,8 @@
 package org.isf.medicalstock.manager;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.generaldata.GeneralData;
@@ -65,10 +65,10 @@ public class MovStockInsertingManager {
 		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
 		
 		// Check the Date
-		GregorianCalendar today = new GregorianCalendar();
-		GregorianCalendar movDate = movement.getDate();
-		GregorianCalendar lastDate = getLastMovementDate();
-		if (movDate.after(today)) {
+		LocalDateTime today = LocalDateTime.now();
+		LocalDateTime movDate = movement.getDate();
+		LocalDateTime lastDate = getLastMovementDate();
+		if (movDate.isAfter(today)) {
 			errors.add(new OHExceptionMessage("movementDateInFutureError",
 					MessageBundle.getMessage("angal.medicalstock.multiplecharging.futuredatenotallowed"), //$NON-NLS-1$
 					OHSeverityLevel.ERROR));
@@ -275,7 +275,7 @@ public class MovStockInsertingManager {
 	 * @return
 	 * @throws OHServiceException 
 	 */
-	public GregorianCalendar getLastMovementDate() throws OHServiceException {
+	public LocalDateTime getLastMovementDate() throws OHServiceException {
 		return ioOperations.getLastMovementDate();
 	}
 

@@ -22,14 +22,13 @@
 package org.isf.opd.service;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
+import java.time.LocalDate;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,12 +67,8 @@ public class OpdIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Opd> getOpdList(boolean oneWeek) throws OHServiceException	{
-		GregorianCalendar dateFrom=new GregorianCalendar();
-		GregorianCalendar dateTo=new GregorianCalendar();
-		
-		if (oneWeek) {
-			dateFrom.add(GregorianCalendar.WEEK_OF_YEAR,-1);
-		}
+		LocalDate dateTo = LocalDate.now();
+		LocalDate dateFrom = dateTo.minusWeeks(1);
 		
 		return getOpdList(MessageBundle.getMessage("angal.opd.alltype"),MessageBundle.getMessage("angal.opd.alldisease"),dateFrom,dateTo,0,0,'A','A');
 	}
@@ -96,8 +91,8 @@ public class OpdIoOperations {
 	public ArrayList<Opd> getOpdList(
 			String diseaseTypeCode,
 			String diseaseCode, 
-			GregorianCalendar dateFrom,
-			GregorianCalendar dateTo,
+			LocalDate dateFrom,
+			LocalDate dateTo,
 			int ageFrom, 
 			int ageTo,
 			char sex,
@@ -165,7 +160,7 @@ public class OpdIoOperations {
 	public int getProgYear(int year) throws OHServiceException {
 		Integer progYear = year == 0 ?
 			repository.findMaxProgYear() :
-			repository.findMaxProgYearWhereDateBetween(getBeginningOfYear(year), getBeginningOfYear(year + 1));
+			repository.findMaxProgYearWhereDateBetween(LocalDate.of(year, 1, 1), LocalDate.of(year + 1, 1, 1));
 
 		return progYear == null ? 0 : progYear;
 	}
@@ -190,7 +185,7 @@ public class OpdIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 	
 	/**
@@ -204,12 +199,8 @@ public class OpdIoOperations {
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
 		List<Opd> opds = year == 0 ?
 			repository.findByProgYear(opdNum) :
-			repository.findByProgYearAndVisitDateBetween(opdNum, getBeginningOfYear(year), getBeginningOfYear(year + 1));
+			repository.findByProgYearAndVisitDateBetween(opdNum, LocalDate.of(year, 1, 1), LocalDate.of(year + 1, 1, 1));
 
 		return !opds.isEmpty();
-	}
-
-	private GregorianCalendar getBeginningOfYear(int year) {
-		return new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar();
 	}
 }

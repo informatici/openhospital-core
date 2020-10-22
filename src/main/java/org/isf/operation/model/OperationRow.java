@@ -21,7 +21,8 @@
  */
 package org.isf.operation.model;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -62,8 +63,8 @@ public class OperationRow {
     private String opResult;
 
     @NotNull
-    @Column(name = "OPER_OPDATE")
-    private GregorianCalendar opDate;
+    @Column(name = "OPER_OPDATE")       // SQL type: datetime
+    private LocalDateTime opDate;
 
     @Column(name = "OPER_REMARKS")
     private String remarks;
@@ -96,7 +97,7 @@ public class OperationRow {
     public OperationRow(Operation operation, 
             String prescriber, 
             String opResult, 
-            GregorianCalendar opDate, 
+            LocalDateTime opDate, 
             String remarks, 
             Admission admission, 
             Opd opd, 
@@ -118,7 +119,7 @@ public class OperationRow {
             Operation operation, 
             String prescriber, 
             String opResult, 
-            GregorianCalendar opDate, 
+            LocalDateTime opDate, 
             String remarks, 
             Admission admission, 
             Opd opd, 
@@ -161,11 +162,11 @@ public class OperationRow {
         this.opResult = opResult;
     }
 
-    public GregorianCalendar getOpDate() {
+    public LocalDateTime getOpDate() {
         return opDate;
     }
 
-    public void setOpDate(GregorianCalendar opDate) {
+    public void setOpDate(LocalDateTime opDate) {
         this.opDate = opDate;
     }
 

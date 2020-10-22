@@ -21,10 +21,10 @@
  */
 package org.isf.admission.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.admission.model.Admission;
 import org.isf.admtype.model.AdmissionType;
@@ -44,20 +44,20 @@ public class TestAdmission
 	private int admitted = 1;	
 	private String type = "T"; 
 	private int yProg = 0;		
-	private GregorianCalendar now = new GregorianCalendar();
-	private GregorianCalendar admDate = new GregorianCalendar(now.get(Calendar.YEAR), 9, 8);	
+	private LocalDateTime now = LocalDateTime.now();
+	private LocalDateTime admDate = now.withMonth(9).withDayOfMonth(8);
 	private String FHU = "TestFHU";		
 	private String opResult = "Result";
-	private GregorianCalendar opDate = new GregorianCalendar(7, 6, 5); 	
-	private GregorianCalendar disDate = new GregorianCalendar(4, 3, 2); 	
+	private LocalDateTime opDate = LocalDateTime.of(2015, 9, 8, 0, 0);
+	private LocalDateTime disDate = LocalDateTime.of(2015, 7, 6, 0, 0); 	
 	private String note = "TestNote";
 	private Float transUnit = (float)10.10;	
-	private GregorianCalendar visitDate = new GregorianCalendar(1, 0, 1);
-	private GregorianCalendar deliveryDate = new GregorianCalendar(2, 3, 4);	
+	private LocalDateTime visitDate = LocalDateTime.of(2015, 5, 4, 0, 0);
+	private LocalDateTime deliveryDate = LocalDateTime.of(2015, 3, 2, 0, 0);
 	private Float weight = (float)20.20;		
-	private GregorianCalendar ctrlDate1 = new GregorianCalendar(5, 6, 7);	
-	private GregorianCalendar ctrlDate2 = new GregorianCalendar(8, 9, 10);
-	private GregorianCalendar abortDate = new GregorianCalendar(9, 8, 7);
+	private LocalDateTime ctrlDate1 =  LocalDateTime.of(2015, 2, 1, 0, 0);
+	private LocalDateTime ctrlDate2 =  LocalDateTime.of(2015, 1, 2, 0, 0);
+	private LocalDateTime abortDate =  LocalDateTime.of(2015, 3, 4, 0, 0);
 	private String userID = "TestUserId";	
 	private String deleted = "N";	
 	
@@ -149,7 +149,7 @@ public class TestAdmission
 			Admission admission) 
 	{		
     	assertThat(admission.getAbortDate()).isEqualTo(abortDate);
-    	assertThat(admission.getAdmDate()).isEqualTo(admDate);
+    	assertThat(admission.getAdmDate()).isCloseTo(admDate, within(1, ChronoUnit.SECONDS));
     	assertThat(admission.getAdmitted()).isEqualTo(admitted);
     	assertThat(admission.getCtrlDate1()).isEqualTo(ctrlDate1);
     	assertThat(admission.getCtrlDate2()).isEqualTo(ctrlDate2);

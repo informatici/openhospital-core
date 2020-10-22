@@ -33,8 +33,8 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 @Transactional
@@ -51,16 +51,16 @@ public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWa
 	@Override
 	public List<Integer> findAllWardMovement(
 			String wardId, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo) {
+			LocalDateTime dateFrom, 
+			LocalDateTime dateTo) {
 		return _getWardMovementQuery(wardId, dateFrom, dateTo);
 	}	
 		
 
 	public List<Integer> _getWardMovementQuery(
 			String wardId, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo)
+			LocalDateTime dateFrom, 
+			LocalDateTime dateTo)
 	{
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
@@ -72,7 +72,7 @@ public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWa
 			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
 		}
 		if ((dateFrom != null) && (dateTo != null)) {
-			predicates.add(builder.between(root.<GregorianCalendar>get(DATE), dateFrom, dateTo));
+			predicates.add(builder.between(root.<LocalDateTime>get(DATE), dateFrom, dateTo));
 		}
 
 		List<Order> orderList = new ArrayList<Order>();

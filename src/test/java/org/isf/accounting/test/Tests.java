@@ -26,8 +26,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.data.Offset.offset;
 import static org.junit.Assert.fail;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.accounting.manager.BillBrowserManager;
@@ -351,7 +351,6 @@ public class Tests
 		Bill bill = bills.get(0);
 
 		assertThat(bill.equals(bill)).isTrue();
-		assertThat(bill.equals(new GregorianCalendar())).isFalse();
 		assertThat(bill.equals(foundBill)).isTrue();
 		foundBill.setId(-1);
 		assertThat(bill.equals(foundBill)).isFalse();
@@ -451,8 +450,8 @@ public class Tests
 		{
 			id = _setupTestBillPayments(false);
 			BillPayments foundBillPayment = (BillPayments)jpa.find(BillPayments.class, id); 
-			GregorianCalendar dateFrom = new GregorianCalendar(4, 3, 2);
-			GregorianCalendar dateTo = new GregorianCalendar();
+			LocalDateTime dateFrom = LocalDateTime.of(4, 3, 2, 0, 0, 0);
+			LocalDateTime dateTo = LocalDateTime.now();
 			ArrayList<BillPayments> billPayments = accountingIoOperation.getPayments(dateFrom, dateTo);
 
 			assertThat(billPayments).contains(foundBillPayment);
@@ -494,8 +493,8 @@ public class Tests
 		{
 			id = _setupTestBill(false);
 			Bill foundBill = (Bill)jpa.find(Bill.class, id);
-			GregorianCalendar dateFrom = new GregorianCalendar(1, 3, 2);
-			GregorianCalendar dateTo = new GregorianCalendar();
+			LocalDateTime dateFrom = TestBill.date.minusYears(1);
+			LocalDateTime dateTo = LocalDateTime.now();
 			ArrayList<Bill> billItems = accountingIoOperation.getBills(dateFrom, dateTo, foundBill.getBillPatient());
 			assertThat(billItems).isNotEmpty();
 			assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
@@ -670,8 +669,8 @@ public class Tests
 		{		
 			id = _setupTestBill(false);
 			Bill foundBill = (Bill)jpa.find(Bill.class, id); 
-			GregorianCalendar dateFrom = new GregorianCalendar(4, 3, 2);
-			GregorianCalendar dateTo = new GregorianCalendar();
+			LocalDateTime dateFrom = TestBill.date.minusYears(1);
+			LocalDateTime dateTo = LocalDateTime.now();
 			ArrayList<Bill> bills = accountingIoOperation.getBills(dateFrom, dateTo);
 
 			assertThat(bills).contains(foundBill);
@@ -688,8 +687,8 @@ public class Tests
 	{
 		int id = 0;
 		//billDate = new GregorianCalendar(10, 9, 8); //from src/org/isf/accounting/test/TestBill.java
-		GregorianCalendar dateFrom = new GregorianCalendar(10, 9, 7);
-		GregorianCalendar dateTo = new GregorianCalendar(10, 9, 9);
+		LocalDateTime dateFrom = TestBill.date.minusDays(1);
+		LocalDateTime dateTo = TestBill.date.plusDays(1);
 		
 		try 
 		{
@@ -699,10 +698,10 @@ public class Tests
 			ArrayList<Bill> bills = accountingIoOperation.getBills(dateFrom, dateTo);
 			assertThat(bills).contains(foundBill);
 			
-			bills = accountingIoOperation.getBills(new GregorianCalendar(10, 0, 1), dateFrom);
+			bills = accountingIoOperation.getBills(dateFrom.minusMonths(1), dateFrom);
 			assertThat(bills).doesNotContain(foundBill);
 			
-			bills = accountingIoOperation.getBills(dateTo, new GregorianCalendar(11, 0, 1));
+			bills = accountingIoOperation.getBills(dateTo, dateTo.plusMonths(1));
 			assertThat(bills).doesNotContain(foundBill);;
 			
 			id = _setupTestBillItems(false);
@@ -790,15 +789,14 @@ public class Tests
 
 		BillPayments billPayment = payments.get(0);
 		assertThat(foundBillPayment.equals(foundBillPayment)).isTrue();
-		assertThat(foundBillPayment.equals(new GregorianCalendar())).isFalse();
 		assertThat(foundBillPayment.equals(billPayment)).isTrue();
 		foundBillPayment.setId(-1);
 		assertThat(foundBillPayment.equals(billPayment)).isFalse();
 		foundBillPayment.setId(id);
 
-		assertThat(billPayment.compareTo(new GregorianCalendar())).isEqualTo(0);
+		assertThat(billPayment.compareTo(LocalDateTime.now())).isEqualTo(0);
 		assertThat(billPayment.compareTo(billPayment)).isEqualTo(0);
-		billPayment.setDate(new GregorianCalendar());
+		billPayment.setDate(LocalDateTime.now());
 		assertThat(billPayment.compareTo(foundBillPayment)).isEqualTo(1);
 
 		assertThat(billPayment.hashCode()).isPositive();
@@ -821,7 +819,6 @@ public class Tests
 
 		BillItems billItem = billItems.get(0);
 		assertThat(foundBillItem.equals(foundBillItem)).isTrue();
-		assertThat(foundBillItem.equals(new GregorianCalendar())).isFalse();
 		assertThat(foundBillItem.equals(billItem)).isTrue();
 		foundBillItem.setId(-1);
 		assertThat(foundBillItem.equals(billItem)).isFalse();
@@ -847,8 +844,8 @@ public class Tests
 	public void ioGetPaymentsByDateForPatient() throws OHException, OHServiceException {
 		int id = _setupTestBillPayments(false);
 		BillPayments foundBillPayment = (BillPayments) jpa.find(BillPayments.class, id);
-		GregorianCalendar dateFrom = new GregorianCalendar(1, 3, 2);
-		GregorianCalendar dateTo = new GregorianCalendar();
+		LocalDateTime dateFrom = TestBill.date.minusYears(1);
+		LocalDateTime dateTo = LocalDateTime.now();
 		ArrayList<BillPayments> billItems = accountingIoOperation.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
@@ -874,8 +871,8 @@ public class Tests
 	public void mgrGetPaymentsByDateForPatient() throws OHException, OHServiceException {
 		int id = _setupTestBillPayments(false);
 		BillPayments foundBillPayment = (BillPayments) jpa.find(BillPayments.class, id);
-		GregorianCalendar dateFrom = new GregorianCalendar(1, 3, 2);
-		GregorianCalendar dateTo = new GregorianCalendar();
+		LocalDateTime dateFrom = TestBill.date.minusYears(1);
+		LocalDateTime dateTo = LocalDateTime.now();
 		ArrayList<BillPayments> billItems = billBrowserManager.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
@@ -919,8 +916,8 @@ public class Tests
 	public void mgrGetBillsBetweenDatesWherePatient() throws OHException, OHServiceException {
 		int id = _setupTestBill(false);
 		Bill foundBill = (Bill)jpa.find(Bill.class, id);
-		GregorianCalendar dateFrom = new GregorianCalendar(1, 3, 2);
-		GregorianCalendar dateTo = new GregorianCalendar();
+		LocalDateTime dateFrom = TestBill.date.minusYears(1);
+		LocalDateTime dateTo = LocalDateTime.now();
 		ArrayList<Bill> billItems = billBrowserManager.getBills(dateFrom, dateTo, foundBill.getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
@@ -982,7 +979,7 @@ public class Tests
 		jpa.commitTransaction();
 		Bill bill = testBill.setup(priceList, patient, false);
 		BillPayments insertBillPayment = testBillPayments.setup(bill, false);
-		insertBillPayment.setDate(new GregorianCalendar());
+		insertBillPayment.setDate(LocalDateTime.now());
 		ArrayList<BillPayments> billPayments = new ArrayList<BillPayments>();
 		billPayments.add(insertBillPayment);
 		boolean success = billBrowserManager.newBill(
@@ -1003,7 +1000,7 @@ public class Tests
 		Bill bill = testBill.setup(priceList, patient, false);
 		BillItems insertBillItem = testBillItems.setup(bill, false);
 		BillPayments insertBillPayment = testBillPayments.setup(bill, false);
-		insertBillPayment.setDate(new GregorianCalendar());
+		insertBillPayment.setDate(LocalDateTime.now());
 		ArrayList<BillItems> billItems = new ArrayList<>();
 		billItems.add(insertBillItem);
 		ArrayList<BillPayments> billPayments = new ArrayList<BillPayments>();
@@ -1028,6 +1025,7 @@ public class Tests
 		BillPayments payments = testBillPayments.setup(bill, false);
 		billPayments.add(payments);
 
+		// Will fail because the date of the Bill is after the first pay of the BillPayments
 		assertThatThrownBy(() -> billBrowserManager.newBill(bill, billItems, billPayments))
 				.isInstanceOf(OHDataValidationException.class);
 	}
@@ -1054,8 +1052,8 @@ public class Tests
 	public void mgrGetPayments() throws OHException, OHServiceException {
 		int id = _setupTestBillPayments(false);
 		BillPayments foundBillPayment = (BillPayments) jpa.find(BillPayments.class, id);
-		GregorianCalendar dateFrom = new GregorianCalendar(4, 3, 2);
-		GregorianCalendar dateTo = new GregorianCalendar();
+		LocalDateTime dateFrom = LocalDateTime.of(1, 3, 2, 0, 0, 0);
+		LocalDateTime dateTo = LocalDateTime.now();
 		ArrayList<BillPayments> billPayments = billBrowserManager.getPayments(dateFrom, dateTo);
 		assertThat(billPayments).contains(foundBillPayment);
 	}
@@ -1073,8 +1071,8 @@ public class Tests
 
 	@Test
 	public void mgrGetBills() throws OHException, OHServiceException {
-		GregorianCalendar dateFrom = new GregorianCalendar(10, 9, 7);
-		GregorianCalendar dateTo = new GregorianCalendar(10, 9, 9);
+		LocalDateTime dateFrom = TestBill.date.minusDays(1);
+		LocalDateTime dateTo = TestBill.date.plusDays(1);
 
 		int	id = _setupTestBill(false);
 		Bill foundBill = (Bill)jpa.find(Bill.class, id);
@@ -1082,10 +1080,10 @@ public class Tests
 		ArrayList<Bill> bills = billBrowserManager.getBills(dateFrom, dateTo);
 		assertThat(bills).contains(foundBill);
 
-		bills = billBrowserManager.getBills(new GregorianCalendar(10, 0, 1), dateFrom);
+		bills = billBrowserManager.getBills(dateFrom.minusMonths(1), dateFrom);
 		assertThat(bills).doesNotContain(foundBill);
 
-		bills = billBrowserManager.getBills(dateTo, new GregorianCalendar(11, 0, 1));
+		bills = billBrowserManager.getBills(dateTo, dateTo.plusMonths(1));
 		assertThat(bills).doesNotContain(foundBill);
 
 		id = _setupTestBillItems(false);

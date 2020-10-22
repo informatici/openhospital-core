@@ -27,7 +27,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -37,7 +37,7 @@ public interface PatVacIoOperationRepository extends JpaRepository<PatientVaccin
     Integer findMaxCode();
     
 	@Query("select max(pv.progr) from PatientVaccine pv where pv.vaccineDate >= :yearStart and pv.vaccineDate < :yearEnd")
-	Integer findMaxCodeWhereVaccineDate(@Param("yearStart") GregorianCalendar yearStart, @Param("yearEnd") GregorianCalendar yearEnd);
+	Integer findMaxCodeWhereVaccineDate(@Param("yearStart") LocalDateTime yearStart, @Param("yearEnd") LocalDateTime yearEnd);
 
     List<PatientVaccine> findByPatient_code(int patientId);
 }

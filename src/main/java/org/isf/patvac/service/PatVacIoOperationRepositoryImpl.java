@@ -22,8 +22,7 @@
 package org.isf.patvac.service;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -43,13 +42,12 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 	private EntityManager entityManager;
 
 	
-	@SuppressWarnings("unchecked")	
 	@Override
 	public List<PatientVaccine> findAllByCodesAndDatesAndSexAndAges(
 			String vaccineTypeCode, 
 			String vaccineCode, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo, 
+			LocalDateTime dateFrom, 
+			LocalDateTime dateTo, 
 			char sex, 
 			int ageFrom, 
 			int ageTo) {
@@ -63,8 +61,8 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 	private CriteriaQuery<PatientVaccine> _getPatientVaccineQuery(
 			String vaccineTypeCode, 
 			String vaccineCode, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo, 
+			LocalDateTime dateFrom, 
+			LocalDateTime dateTo, 
 			char sex, 
 			int ageFrom, 
 			int ageTo) {
@@ -76,12 +74,12 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 		query.select(pvRoot);
 		if (dateFrom != null) {
 			predicates.add(
-				cb.greaterThanOrEqualTo(pvRoot.<Date> get("vaccineDate"), dateFrom.getTime())
+				cb.greaterThanOrEqualTo(pvRoot.<LocalDateTime> get("vaccineDate"), dateFrom)
 			);
 		}
 		if (dateTo != null) {
 			predicates.add(
-				cb.lessThanOrEqualTo(pvRoot.<Date> get("vaccineDate"), dateTo.getTime())
+				cb.lessThanOrEqualTo(pvRoot.<LocalDateTime> get("vaccineDate"), dateTo)
 			);
 		}
 		if (vaccineTypeCode != null) {

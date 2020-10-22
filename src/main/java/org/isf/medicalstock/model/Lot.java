@@ -22,8 +22,8 @@
 package org.isf.medicalstock.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.AttributeOverride;
@@ -73,12 +73,12 @@ public class Lot extends Auditable<String>
 	private Medical medical;
 
 	@NotNull
-	@Column(name="LT_PREP_DATE")
-	private GregorianCalendar preparationDate;
+	@Column(name="LT_PREP_DATE")		// SQL type: datetime
+	private LocalDateTime preparationDate;
 
 	@NotNull
-	@Column(name="LT_DUE_DATE")
-	private GregorianCalendar dueDate;
+	@Column(name="LT_DUE_DATE")		// SQL type: datetime
+	private LocalDateTime dueDate;
 
 	@Column(name="LT_COST")
 	private BigDecimal cost;
@@ -99,13 +99,13 @@ public class Lot extends Auditable<String>
 		code=aCode;
 
 	}
-	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate){
+	public Lot(String aCode,LocalDateTime aPreparationDate,LocalDateTime aDueDate){
 		code=aCode;
 		preparationDate=aPreparationDate;
 		dueDate=aDueDate;
 	}
 
-	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate,BigDecimal aCost){
+	public Lot(String aCode,LocalDateTime aPreparationDate,LocalDateTime aDueDate,BigDecimal aCost){
 		code=aCode;
 		preparationDate=aPreparationDate;
 		dueDate=aDueDate;
@@ -135,10 +135,10 @@ public class Lot extends Auditable<String>
 			return medical;
 	}
 
-	public GregorianCalendar getPreparationDate(){
+	public LocalDateTime getPreparationDate(){
 		return preparationDate;
 	}
-	public GregorianCalendar getDueDate(){
+	public LocalDateTime getDueDate(){
 		return dueDate;
 	}
 	public BigDecimal getCost() {
@@ -147,7 +147,7 @@ public class Lot extends Auditable<String>
 	public void setCode(String aCode){
 		code=aCode;
 	}
-	public void setPreparationDate(GregorianCalendar aPreparationDate){
+	public void setPreparationDate(LocalDateTime aPreparationDate){
 		preparationDate=aPreparationDate;
 	}
 	public void setQuantity(int aQuantity){
@@ -156,7 +156,7 @@ public class Lot extends Auditable<String>
 	public void setMedical(Medical aMedical){
 				medical=aMedical;
 	}
-	public void setDueDate(GregorianCalendar aDueDate){
+	public void setDueDate(LocalDateTime aDueDate){
 		dueDate=aDueDate;
 	}
 	public void setCost(BigDecimal cost) {

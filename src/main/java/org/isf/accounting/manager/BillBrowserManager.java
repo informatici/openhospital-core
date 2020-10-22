@@ -35,8 +35,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 @Component
@@ -68,16 +68,12 @@ public class BillBrowserManager {
 	{
         List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
         
-        GregorianCalendar today = new GregorianCalendar();
-		GregorianCalendar upDate = new GregorianCalendar();
-		GregorianCalendar firstPay = new GregorianCalendar();
-		GregorianCalendar lastPay = new GregorianCalendar();
-		// ensure all the times are exactly the same in case constructor generates different value
-		upDate.setTime(today.getTime());
-		firstPay.setTime(today.getTime());
-		lastPay.setTime(today.getTime());
+        LocalDateTime today = LocalDateTime.now();
+		LocalDateTime upDate = LocalDateTime.from(today);
+		LocalDateTime firstPay = LocalDateTime.from(today);
+		LocalDateTime lastPay = LocalDateTime.from(today);
 
-		GregorianCalendar billDate = bill.getDate();
+		LocalDateTime billDate = bill.getDate();
 		if (billPayments.size() > 0) {
 			firstPay = billPayments.get(0).getDate();
 			lastPay = billPayments.get(billPayments.size()-1).getDate(); //most recent payment
@@ -87,17 +83,17 @@ public class BillBrowserManager {
 		}
 		bill.setUpdate(upDate);
         
-		if (billDate.after(today)) {
+		if (billDate.isAfter(today)) {
 			errors.add(new OHExceptionMessage("billAfterTodayError", 
 	        		MessageBundle.getMessage("angal.newbill.billsinfuturenotallowed"), 
 	        		OHSeverityLevel.ERROR));
 		}
-		if (lastPay.after(today)) {
+		if (lastPay.isAfter(today)) {
 			errors.add(new OHExceptionMessage("paymentAfterTodayError", 
 	        		MessageBundle.getMessage("angal.newbill.payementinthefuturenotallowed"), 
 	        		OHSeverityLevel.ERROR));
 		}
-		if (billDate.after(firstPay)) {
+		if (billDate.isAfter(firstPay)) {
 			errors.add(new OHExceptionMessage("billAfterFirstPaymentError", 
 	        		MessageBundle.getMessage("angal.newbill.billdateafterfirstpayment"), 
 	        		OHSeverityLevel.ERROR));
@@ -148,7 +144,7 @@ public class BillBrowserManager {
 	 * @return the bills list
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) throws OHServiceException {
+	public ArrayList<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo,Patient patient) throws OHServiceException {
 		return ioOperations.getBillsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
 
@@ -160,7 +156,7 @@ public class BillBrowserManager {
 	 * @return the list of payments
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) throws OHServiceException {
+	public ArrayList<BillPayments> getPayments(LocalDateTime dateFrom, LocalDateTime dateTo,Patient patient) throws OHServiceException {
 		return ioOperations.getPaymentsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
 	
@@ -329,7 +325,7 @@ public class BillBrowserManager {
 	 * @return a list of retrieved {@link Bill}s or <code>null</code> if an error occurred.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public ArrayList<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return ioOperations.getBillsBetweenDates(dateFrom, dateTo);
 	}
 
@@ -351,7 +347,7 @@ public class BillBrowserManager {
 	 * @return a list of {@link BillPayments} for the specified date range or <code>null</code> if an error occurred.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public ArrayList<BillPayments> getPayments(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return ioOperations.getPayments(dateFrom, dateTo);
 	}
 
@@ -393,7 +389,7 @@ public class BillBrowserManager {
 	 * @return
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,BillItems billItem) throws OHServiceException {
+	public ArrayList<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo,BillItems billItem) throws OHServiceException {
 		return ioOperations.getBillsBetweenDatesWhereBillItem(dateFrom, dateTo, billItem);
 	}
 }

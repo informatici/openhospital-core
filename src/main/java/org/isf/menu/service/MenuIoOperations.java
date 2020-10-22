@@ -98,7 +98,7 @@ public class MenuIoOperations
 	public String getUsrInfo(
 			String userName) throws OHServiceException 
 	{ 
-		User user = (User)repository.findOne(userName); 
+		User user = (User)repository.findById(userName).get();
 		
 		
 		return user.getDesc();
@@ -128,12 +128,7 @@ public class MenuIoOperations
 	public boolean isUserNamePresent(
 			String userName) throws OHServiceException 
 	{
-		boolean result = true;
-	
-		
-		result = repository.exists(userName);
-		
-		return result;	
+		return repository.existsById(userName);
 	}
 	
 	/**
@@ -146,12 +141,7 @@ public class MenuIoOperations
 	public boolean isGroupNamePresent(
 			String groupName) throws OHServiceException 
 	{
-		boolean result = true;
-	
-		
-		result = groupRepository.exists(groupName);
-		
-		return result;	
+		return groupRepository.existsById(groupName);
 	}
 	
 	/**

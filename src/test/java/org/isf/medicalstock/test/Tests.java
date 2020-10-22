@@ -24,9 +24,8 @@ package org.isf.medicalstock.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.medicals.model.Medical;
@@ -298,7 +297,7 @@ public class Tests
 					medicalType, 
 					ward, 
 					lot, 
-					new GregorianCalendar(),
+					LocalDateTime.now(),
 					10, // new lot with 10 quantitye
 					supplier, 
 					"newReference");
@@ -309,7 +308,7 @@ public class Tests
 					medicalType,
 					ward,
 					null, // automatic lot selection
-					new GregorianCalendar(),
+					LocalDateTime.now(),
 					15,	// quantity of 15 should use first lot of 10 + second lot of 5
 					null,
 					"newReference2");
@@ -436,9 +435,9 @@ public class Tests
 	public void testIoGetMovementsWithParameters()
 	{
 		int code = 0;
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime fromDate = now.withMonth(1).withDayOfMonth(1);
+		LocalDateTime toDate = now.withMonth(3).withDayOfMonth(3);
 		
 		
 		try 
@@ -463,10 +462,9 @@ public class Tests
 	public void testIoGetMovementsWihAllParameters() 
 	{
 		int code = 0;
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
-		
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime fromDate = now.withMonth(1).withDayOfMonth(1);
+		LocalDateTime toDate = now.withMonth(3).withDayOfMonth(3);
 		
 		try 
 		{		
@@ -497,9 +495,9 @@ public class Tests
 	public void testIoGetMovementForPrint() 
 	{
 		int code = 0;
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime fromDate = now.withMonth(1).withDayOfMonth(1);
+		LocalDateTime toDate = now.withMonth(3).withDayOfMonth(3);
 		MovementOrder order = MedicalStockIoOperations.MovementOrder.DATE;
 		
 		
@@ -538,7 +536,7 @@ public class Tests
 			code = _setupTestMovement(false);
 			ArrayList<Movement> movements = medicalStockIoOperation.getMovements();
 			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
-			GregorianCalendar gc = medicalStockIoOperation.getLastMovementDate();
+			LocalDateTime gc = medicalStockIoOperation.getLastMovementDate();
 
 			assertThat(gc).isEqualTo(movements.get(0).getDate());
 		} 

@@ -21,7 +21,7 @@
  */
 package org.isf.medicalstock.service;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.medicalstock.model.Lot;
@@ -56,7 +56,7 @@ public interface MovementIoOperationRepository extends JpaRepository<Movement, I
     List<Movement> findByLot(Lot lot);
     
     @Query(value = "select max(mov.date) from Movement mov")
-	GregorianCalendar findMaxDate();
+	LocalDateTime findMaxDate();
 
     @Query(value = "select mov.refNo from Movement mov where mov.refNo like :refNo")
     List<String> findAllWhereRefNo(@Param("refNo") String refNo);

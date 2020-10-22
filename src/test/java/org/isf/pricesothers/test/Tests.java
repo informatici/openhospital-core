@@ -82,7 +82,7 @@ public class Tests {
 	public void testIoGetPricesOthers() throws OHException, OHServiceException {
 		// given:
 		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = repository.findOne(id);
+		PricesOthers foundPricesOthers = repository.findById(id).get();
 
 		// when:
 		ArrayList<PricesOthers> result = otherIoOperation.getOthers();
@@ -95,12 +95,12 @@ public class Tests {
 	public void testIoUpdatePricesOthers() throws OHServiceException, OHException {
 		// given:
 		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = repository.findOne(id);
+		PricesOthers foundPricesOthers = repository.findById(id).get();
 		foundPricesOthers.setDescription("Update");
 
 		// when:
 		boolean result = otherIoOperation.updateOther(foundPricesOthers);
-		PricesOthers updatePricesOthers = repository.findOne(id);
+		PricesOthers updatePricesOthers = repository.findById(id).get();
 
 		// then:
 		assertThat(result).isTrue();
@@ -124,14 +124,14 @@ public class Tests {
 	public void testIoDeletePricesOthers() throws OHException, OHServiceException {
 		// given:
 		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = repository.findOne(id);
+		PricesOthers foundPricesOthers = repository.findById(id).get();
 
 		// when:
 		boolean result = otherIoOperation.deleteOthers(foundPricesOthers);
 
 		// then:
 		assertThat(result).isTrue();
-		assertThat(repository.exists(id)).isFalse();
+		assertThat(repository.existsById(id)).isFalse();
 	}
 
 	private int _setupTestPricesOthers(boolean usingSet) throws OHException {
@@ -141,7 +141,7 @@ public class Tests {
 	}
 
 	private void _checkPricesOthersIntoDb(int id) {
-		PricesOthers foundPricesOthers = repository.findOne(id);
+		PricesOthers foundPricesOthers = repository.findById(id).get();
 		testPricesOthers.check(foundPricesOthers);
 	}
 }

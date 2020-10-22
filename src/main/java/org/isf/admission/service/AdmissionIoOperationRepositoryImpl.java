@@ -24,11 +24,10 @@ package org.isf.admission.service;
 import static org.isf.utils.time.TimeTools.getBeginningOfDay;
 import static org.isf.utils.time.TimeTools.getBeginningOfNextDay;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -50,15 +49,15 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 	private EntityManager entityManager;
 
 	@Override
-	public Optional<Admission> findOneByPatientAndDateRanges(Patient patient, GregorianCalendar[] admissionRange,
-															 GregorianCalendar[] dischargeRange) {
+	public Optional<Admission> findOneByPatientAndDateRanges(Patient patient, LocalDateTime[] admissionRange,
+															 LocalDateTime[] dischargeRange) {
 		return this.entityManager.
 			createQuery(createQueryToSearchByPatientAndDates(patient, admissionRange, dischargeRange)).
 			getResultList().stream()
 			.findFirst();
 	}
 
-	private CriteriaQuery<Admission> createQueryToSearchByPatientAndDates(Patient patient, GregorianCalendar[] admissionRange, GregorianCalendar[] dischargeRange) {
+	private CriteriaQuery<Admission> createQueryToSearchByPatientAndDates(Patient patient, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Admission> query = cb.createQuery(Admission.class);
 		Root<Admission> admissionRoot = query.from(Admission.class);
@@ -78,16 +77,16 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 
 	private List<Predicate> dateRangePredicates(CriteriaBuilder cb,
 										 Root<Admission> admissionRoot,
-										 GregorianCalendar[] admissionRange,
-										 GregorianCalendar[] dischargeRange) {
+										 LocalDateTime[] admissionRange,
+										 LocalDateTime[] dischargeRange) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		if(admissionRange != null) {
 			if (admissionRange.length == 2 && admissionRange[0] != null && admissionRange[1] != null) {
 				predicates.add(
 					cb.and(
-						cb.greaterThanOrEqualTo(admissionRoot.<Date>get("admDate"), getBeginningOfDay(admissionRange[0]).getTime()),
-						cb.lessThan(admissionRoot.<Date>get("admDate"),  getBeginningOfNextDay(admissionRange[1]).getTime()))
+						cb.greaterThanOrEqualTo(admissionRoot.<LocalDateTime>get("admDate"), getBeginningOfDay(admissionRange[0])),
+						cb.lessThan(admissionRoot.<LocalDateTime>get("admDate"),  getBeginningOfNextDay(admissionRange[1])))
 					);
 			}
 		}
@@ -96,8 +95,8 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 			if (dischargeRange.length == 2 && dischargeRange[0] != null && dischargeRange[1] != null) {
 				predicates.add(
 					cb.and(
-						cb.greaterThanOrEqualTo(admissionRoot.<Date>get("disDate"), getBeginningOfDay(dischargeRange[0]).getTime()),
-						cb.lessThan(admissionRoot.<Date>get("disDate"), getBeginningOfNextDay(dischargeRange[1]).getTime())
+						cb.greaterThanOrEqualTo(admissionRoot.<LocalDateTime>get("disDate"), getBeginningOfDay(dischargeRange[0])),
+						cb.lessThan(admissionRoot.<LocalDateTime>get("disDate"), getBeginningOfNextDay(dischargeRange[1]))
 					));
 			}
 		}

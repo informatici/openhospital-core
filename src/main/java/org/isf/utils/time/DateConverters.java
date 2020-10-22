@@ -25,7 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.joda.time.DateTime;
 
 /**
  * Created by nicosalvato on 2016-08-25.
@@ -89,12 +88,6 @@ public class DateConverters {
         return new Date(calendar.getTimeInMillis());
     }
     
-    public static DateTime toDateTime(GregorianCalendar calendar) {
-        if (calendar == null)
-            return null;
-        return new DateTime(calendar.getTimeInMillis());
-    }
-
     /**
      * Converts the specified {@link java.sql.Date} to a {@link GregorianCalendar}.
      * @param date the date to convert.

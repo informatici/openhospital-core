@@ -24,8 +24,7 @@ package org.isf.admission.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.admission.model.Admission;
@@ -67,7 +66,6 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.isf.ward.test.TestWard;
 import org.isf.ward.test.TestWardContext;
-import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -240,41 +238,35 @@ public class Tests
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
-		final GregorianCalendar admissionDate = foundAdmission.getAdmDate();
-		final GregorianCalendar dischargeDate = foundAdmission.getDisDate();
+		final LocalDateTime admissionDate = foundAdmission.getAdmDate();
+		final LocalDateTime dischargeDate = foundAdmission.getDisDate();
 		{
 			List<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null, null, null);
 			assertThat(searchResult).hasSameSizeAs(patients);
 			assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 		}
-		final GregorianCalendar beforeAdmissionDate = copyFrom(admissionDate);
-		beforeAdmissionDate.add(Calendar.DATE, -1);
+		final LocalDateTime beforeAdmissionDate = admissionDate.minusDays(1);
 
-		final GregorianCalendar oneDayAfterAdmissionDate = copyFrom(admissionDate);
-		oneDayAfterAdmissionDate.add(Calendar.DATE, 1);
+		final LocalDateTime oneDayAfterAdmissionDate = admissionDate.plusDays(1);
 
-		final GregorianCalendar twoDaysAfterAdmissionDate = copyFrom(admissionDate);
-		twoDaysAfterAdmissionDate.add(Calendar.DATE, 2);
+		final LocalDateTime twoDaysAfterAdmissionDate = admissionDate.plusDays(2);
 
-		final GregorianCalendar beforeDischargeDate = copyFrom(dischargeDate);
-		beforeDischargeDate.add(Calendar.DATE, -1);
+		final LocalDateTime beforeDischargeDate = dischargeDate.minusDays(1);
 
-		final GregorianCalendar oneDayAfterDischargeDate = copyFrom(dischargeDate);
-		oneDayAfterDischargeDate.add(Calendar.DATE, 1);
+		final LocalDateTime oneDayAfterDischargeDate = dischargeDate.plusDays(1);
 
-		final GregorianCalendar twoDaysAfterDischargeDate = copyFrom(dischargeDate);
-		twoDaysAfterDischargeDate.add(Calendar.DATE, 2);
+		final LocalDateTime twoDaysAfterDischargeDate = dischargeDate.plusDays(2);
 		{
 			// search by admission date
 			final List<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null,
-					new GregorianCalendar[]{beforeAdmissionDate, oneDayAfterAdmissionDate},
+					new LocalDateTime[]{beforeAdmissionDate, oneDayAfterAdmissionDate},
 					null
 			);
 			assertThat(searchOneresult).hasSameSizeAs(patients);
 			assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 
 			final List<AdmittedPatient> searchTwoResult = admissionIoOperation.getAdmittedPatients(null,
-					new GregorianCalendar[]{oneDayAfterAdmissionDate, twoDaysAfterAdmissionDate},
+					new LocalDateTime[]{oneDayAfterAdmissionDate, twoDaysAfterAdmissionDate},
 					null
 			);
 			assertThat(searchTwoResult).isEmpty();
@@ -282,29 +274,25 @@ public class Tests
 		{
 			// search by discharge date
 			final List<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null, null,
-					new GregorianCalendar[]{beforeDischargeDate, oneDayAfterDischargeDate}
+					new LocalDateTime[]{beforeDischargeDate, oneDayAfterDischargeDate}
 			);
 			assertThat(searchOneresult).hasSameSizeAs(patients);
 			assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 
 			final List<AdmittedPatient> searchTwoResult = admissionIoOperation.getAdmittedPatients(null, null,
-					new GregorianCalendar[]{oneDayAfterDischargeDate, twoDaysAfterDischargeDate}
+					new LocalDateTime[]{oneDayAfterDischargeDate, twoDaysAfterDischargeDate}
 			);
 			assertThat(searchTwoResult).isEmpty();
 		}
 		{
 			// complex search by both admission and discharge date
 			final List<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null,
-					new GregorianCalendar[]{beforeAdmissionDate, oneDayAfterAdmissionDate},
-					new GregorianCalendar[]{beforeDischargeDate, oneDayAfterDischargeDate}
+					new LocalDateTime[]{beforeAdmissionDate, oneDayAfterAdmissionDate},
+					new LocalDateTime[]{beforeDischargeDate, oneDayAfterDischargeDate}
 			);
 			assertThat(searchOneresult).hasSameSizeAs(patients);
 			assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 		}
-	}
-
-	private GregorianCalendar copyFrom(final GregorianCalendar source) {
-		return new GregorianCalendar(source.get(Calendar.YEAR), source.get(Calendar.MONTH), source.get(Calendar.DATE));
 	}
 
 	@Test
@@ -407,13 +395,13 @@ public class Tests
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
 		Patient foundPatient = foundAdmission.getPatient();
-		GregorianCalendar[] admissionRange = {
-			new DateTime(foundAdmission.getAdmDate()).minusDays(2).toGregorianCalendar(),
-			new DateTime(foundAdmission.getAdmDate()).minusDays(1).toGregorianCalendar()
+		LocalDateTime[] admissionRange = {
+			foundAdmission.getAdmDate().minusDays(2),
+			foundAdmission.getAdmDate().minusDays(1)
 		};
-		GregorianCalendar[] dischargeRange = {
-			new DateTime(foundAdmission.getDisDate()).minusDays(1).toGregorianCalendar(),
-			new DateTime(foundAdmission.getDisDate()).plusDays(1).toGregorianCalendar()
+		LocalDateTime[] dischargeRange = {
+			foundAdmission.getDisDate().minusDays(1),
+			foundAdmission.getDisDate().plusDays(1)
 		};
 
 		// when:
@@ -429,13 +417,13 @@ public class Tests
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = (Admission)jpa.find(Admission.class, id);
 		Patient foundPatient = foundAdmission.getPatient();
-		GregorianCalendar[] admissionRange = {
-			new DateTime(foundAdmission.getAdmDate()).minusDays(1).toGregorianCalendar(),
-			new DateTime(foundAdmission.getAdmDate()).plusDays(1).toGregorianCalendar()
+		LocalDateTime[] admissionRange = {
+			foundAdmission.getAdmDate().minusDays(1),
+			foundAdmission.getAdmDate()
 		};
-		GregorianCalendar[] dischargeRange = {
-			new DateTime(foundAdmission.getDisDate()).minusDays(2).toGregorianCalendar(),
-			new DateTime(foundAdmission.getDisDate()).minusDays(1).toGregorianCalendar()
+		LocalDateTime[] dischargeRange = {
+			foundAdmission.getDisDate().minusDays(2),
+			foundAdmission.getDisDate().minusDays(1)
 		};
 
 		// when:

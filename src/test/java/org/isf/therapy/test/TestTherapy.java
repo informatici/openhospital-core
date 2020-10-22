@@ -23,7 +23,7 @@ package org.isf.therapy.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.medicals.model.Medical;
 import org.isf.patient.model.Patient;
@@ -32,8 +32,8 @@ import org.isf.utils.exception.OHException;
 
 public class TestTherapy 
 {	
-	private GregorianCalendar startDate = new GregorianCalendar(10, 9, 8);
-	private GregorianCalendar endDate = new GregorianCalendar(11, 10, 9);
+	private LocalDateTime startDate = LocalDateTime.of(10, 9, 8, 0, 0, 0);
+	private LocalDateTime endDate = LocalDateTime.of(11, 10, 9, 0, 0, 0);
 	private Double qty = 9.9;
 	private int unitID = 10;
 	private int freqInDay = 11;

@@ -24,8 +24,7 @@ package org.isf.sms.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.sms.model.Sms;
@@ -166,9 +165,8 @@ public class Tests
 	public void testSmsGetAll() 
 	{		
 		int code = 0;
-		Date smsDateStart = new GregorianCalendar(2011, 9, 6).getTime();
-		Date smsDateEnd = new GregorianCalendar(2011, 9, 9).getTime();
-		
+		LocalDateTime smsDateStart = LocalDateTime.of(2011, 9, 6, 0, 0, 0);
+		LocalDateTime smsDateEnd = LocalDateTime.of(2011, 9, 9, 0, 0, 0);
 		
 		try 
 		{		
