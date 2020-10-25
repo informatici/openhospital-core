@@ -66,7 +66,7 @@ public class MedicalsIoOperations
 	public Medical getMedical(
 			int code) throws OHServiceException 
 	{
-		return repository.findById(code).get();
+		return repository.findById(code).orElse(null);
 	}
 
 	/**

@@ -288,7 +288,7 @@ public class LabIoOperations {
 	 */
 	public boolean deleteLaboratory(Laboratory aLaboratory) throws OHServiceException {
 		boolean result = true;
-		Laboratory objToRemove = repository.findById(aLaboratory.getCode()).get();
+		Laboratory objToRemove = repository.findById(aLaboratory.getCode()).orElse(null);
 		
 		if (objToRemove.getExam().getProcedure() == 2) {
 			rowRepository.deleteByLaboratory_Code(objToRemove.getCode());

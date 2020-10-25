@@ -200,7 +200,7 @@ public class ExamIoOperations {
 			Exam exam) throws OHServiceException 
 	{
 		boolean result = false;
-		Exam foundExam = repository.findById(exam.getCode()).get();
+		Exam foundExam = repository.findById(exam.getCode()).orElse(null);
 		
 		if (foundExam != null)
 		{
