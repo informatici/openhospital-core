@@ -213,9 +213,15 @@ public class TimeTools {
 	public static LocalDateTime parseDate(String string, String pattern, boolean noTime) throws ParseException {
 		if (pattern == null) pattern = "yyyy-MM-dd HH:mm:ss";
 		DateTimeFormatter format = DateTimeFormatter.ofPattern(pattern);
-		LocalDateTime dateTime = LocalDateTime.parse(string, format);
+		LocalDateTime dateTime;
 		if (noTime) {
-			dateTime = dateTime.with(LocalTime.MIN);
+			/**
+			 * regarding to https://stackoverflow.com/questions/27454025/unable-to-obtain-localdatetime-from-temporalaccessor-when-parsing-localdatetime
+			 * Java does not accept a bare Date value as DateTime
+			 */
+			dateTime = LocalDate.parse(string, format).atStartOfDay();
+		} else {
+			dateTime = LocalDateTime.parse(string, format);
 		}
 		return dateTime;
 	}

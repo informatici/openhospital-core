@@ -30,6 +30,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -52,12 +53,12 @@ import org.isf.utils.exception.OHReportException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.time.DateConverters;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import net.sf.jasperreports.engine.JRException;
@@ -283,7 +284,7 @@ public class JasperReportsManager {
         try{
             HashMap<String, Object> parameters = getHospitalParameters();
             parameters.put("wardID", String.valueOf(wardID)); // real param
-            parameters.put("date", date); // real param
+            parameters.put("date", convertToLegacyFormatForLibWithoutJavaTimeSupport(date)); // real param
             String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + String.valueOf(wardID)+"_"+TimeTools.formatDateTime(date, "yyyyMMdd")+".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
@@ -450,8 +451,8 @@ public class JasperReportsManager {
 			}
 			
 			HashMap<String, Object> parameters = getHospitalParameters();
-			parameters.put("fromdate", dateFrom);
-			parameters.put("todate", dateTo);
+			parameters.put("fromdate", convertToLegacyFormatForLibWithoutJavaTimeSupport(dateFrom));
+			parameters.put("todate", convertToLegacyFormatForLibWithoutJavaTimeSupport(dateTo));
 			if (medical != null) parameters.put("productID", String.valueOf(medical.getCode()));
 			parameters.put(JRParameter.REPORT_LOCALE, new Locale(language));
 			parameters.put("REPORT_RESOURCE_BUNDLE", resourceBundle); //we need to pass our custom resource bundle
@@ -471,8 +472,8 @@ public class JasperReportsManager {
                     MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
         }
     }
-    
-    public void getGenericReportPharmaceuticalStockCardExcel(String jasperFileName, String exportFileName, LocalDateTime dateFrom, LocalDateTime dateTo, Medical medical, Ward ward) throws OHServiceException {
+
+	public void getGenericReportPharmaceuticalStockCardExcel(String jasperFileName, String exportFileName, LocalDateTime dateFrom, LocalDateTime dateTo, Medical medical, Ward ward) throws OHServiceException {
 
         try {
         	if (dateFrom == null) {
@@ -483,12 +484,12 @@ public class JasperReportsManager {
     		}
 		    String dateFromQuery = TimeTools.formatDateTime(dateFrom, "yyyy-MM-dd");
 		    String dateToQuery = TimeTools.formatDateTime(dateTo, "yyyy-MM-dd");
-		    
+
             File jasperFile = new File(compileJasperFilename(jasperFileName));
-            
+
             JasperReport jasperReport = (JasperReport)JRLoader.loadObject(jasperFile);
             JRQuery query = jasperReport.getMainDataset().getQuery();
-            
+
             String queryString = query.getText();
             queryString = queryString.replace("$P{fromdate}", "'" + dateFromQuery + "'");
 			queryString = queryString.replace("$P{todate}", "'" + dateToQuery + "'");
@@ -511,9 +512,9 @@ public class JasperReportsManager {
                     MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
         }
     }
-    
+
     public JasperReportResultDto getGenericReportPharmaceuticalStockWardPdf(LocalDateTime date, String jasperFileName, Ward ward) throws OHServiceException {
-    	
+
     	try{
     		if (date == null)
 				date = LocalDateTime.now();
@@ -623,10 +624,10 @@ public class JasperReportsManager {
             JasperReport jasperReport = (JasperReport)JRLoader.loadObject(jasperFile);
             JRQuery query = jasperReport.getMainDataset().getQuery();
             String queryString = query.getText();
-            
+
             String dateFromQuery = TimeTools.formatDateTime(TimeTools.getDate(fromDate, "dd/MM/yyyy"), "yyyy-MM-dd");
             String dateToQuery = TimeTools.formatDateTime(TimeTools.getDate(toDate, "dd/MM/yyyy"), "yyyy-MM-dd");
-            
+
             queryString = queryString.replace("$P{fromdate}", "'" + dateFromQuery + "'");
             queryString = queryString.replace("$P{todate}", "'" +  dateToQuery + "'");
 
@@ -693,6 +694,13 @@ public class JasperReportsManager {
         }
     }
 
+	/**
+	 * temporary workaround can be deleted after upgrading jasper reports to version supporting java 8 time
+	 */
+	private Date convertToLegacyFormatForLibWithoutJavaTimeSupport(LocalDateTime dateFrom) {
+		return DateConverters.toDate(dateFrom);
+	}
+
     private HashMap<String,Object> compileGenericReportMYParameters(Integer month, Integer year) throws OHServiceException {
         HashMap<String, Object> parameters = getHospitalParameters();
         parameters.put("year", String.valueOf(year)); // real param
@@ -721,8 +729,8 @@ public class JasperReportsManager {
 					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
 		}
 
-		parameters.put("fromdate", fromDateQuery); // real param
-		parameters.put("todate", toDateQuery); // real param
+		parameters.put("fromdate", convertToLegacyFormatForLibWithoutJavaTimeSupport(fromDateQuery)); // real param
+		parameters.put("todate", convertToLegacyFormatForLibWithoutJavaTimeSupport(toDateQuery)); // real param
 		parameters.put("user", aUser + ""); // real param
 		return parameters;
 
@@ -734,7 +742,7 @@ public class JasperReportsManager {
 		LocalDateTime fromDateQuery;
 		LocalDateTime toDateQuery;
 		try {
-			fromDateQuery = TimeTools.parseDate(fromDate, "dd/MM/yyyy", false);
+			fromDateQuery = TimeTools.parseDate(fromDate, "dd/MM/yyyy", true);
 		} catch (ParseException e) {
 			logger.error("Error parsing '{}' to a Date using pattern: 'dd/MM/yyyy'", fromDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -742,15 +750,15 @@ public class JasperReportsManager {
 		}
 
 		try {
-			toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yyyy", false);
+			toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yyyy", true);
 		} catch (ParseException e) {
 			logger.error("Error parsing '{}' to a Date using pattern: 'dd/MM/yyyy'", toDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
 					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
 		}
 
-        parameters.put("fromdate", fromDateQuery); // real param
-        parameters.put("todate", toDateQuery); // real param
+        parameters.put("fromdate", convertToLegacyFormatForLibWithoutJavaTimeSupport(fromDateQuery)); // real param
+        parameters.put("todate", convertToLegacyFormatForLibWithoutJavaTimeSupport(toDateQuery)); // real param
         return parameters;
     }
 
