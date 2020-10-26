@@ -196,7 +196,7 @@ public class ExamRowIoOperations {
 			ExamRow examrow) throws OHServiceException 
 	{
 		boolean result = false;
-		ExamRow foundExam = rowRepository.findById(examrow.getCode()).get();
+		ExamRow foundExam = rowRepository.findById(examrow.getCode()).orElse(null);
 		
 		
 		if (foundExam != null)

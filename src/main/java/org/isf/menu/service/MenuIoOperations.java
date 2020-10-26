@@ -98,7 +98,7 @@ public class MenuIoOperations
 	public String getUsrInfo(
 			String userName) throws OHServiceException 
 	{ 
-		User user = (User)repository.findById(userName).get();
+		User user = (User)repository.findById(userName).orElse(null);
 		
 		
 		return user.getDesc();
