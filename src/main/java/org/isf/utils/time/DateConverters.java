@@ -22,8 +22,11 @@
 package org.isf.utils.time;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Optional;
 
 
 /**
@@ -87,6 +90,12 @@ public class DateConverters {
             return null;
         return new Date(calendar.getTimeInMillis());
     }
+
+	public static Date toDate(LocalDateTime localDateTime) {
+		return Optional.ofNullable(localDateTime)
+				.map(ldt -> Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant()))
+				.orElse(null);
+	}
     
     /**
      * Converts the specified {@link java.sql.Date} to a {@link GregorianCalendar}.
