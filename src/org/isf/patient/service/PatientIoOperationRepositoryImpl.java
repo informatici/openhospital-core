@@ -81,9 +81,13 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
 		Root<Patient> patient = query.from(Patient.class);
 
-//		Path<String> emailPath = user.get("email");
+		// Only not deleted patient
+		Predicate deletedN = cb.equal(patient.get("deleted"), "N");
+		Predicate deletedNull = cb.isNull(patient.get("deleted"));
+		Predicate notDeleted = cb.or(deletedN, deletedNull);
 
 		List<Predicate> predicates = new ArrayList<Predicate>();
+		predicates.add(notDeleted);
 		for (Map.Entry<String, Object> entry : params.entrySet()) {
 			Path<String> keyPath = patient.get(entry.getKey());
 			// FIXME: trovare un modo migliore per gestire le date
