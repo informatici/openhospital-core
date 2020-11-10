@@ -151,7 +151,7 @@ public class Tests
     }
 
 	@Parameterized.Parameters(name ="Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
-	public static Collection primeNumbers() {
+	public static Collection automaticlot() {
 		return Arrays.asList(new Object[][] {
 				{ false, false, false },
 				{ false, false, true },
