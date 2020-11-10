@@ -31,6 +31,8 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.isf.generaldata.GeneralData;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.test.TestMedical;
@@ -66,7 +68,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @RunWith(Parameterized.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 public class Tests  
@@ -92,6 +96,9 @@ public class Tests
 	private static TestWardContext testWardContext;
 	private static TestSupplier testSupplier;
 	private static TestSupplierContext testSupplierContext;
+
+	@Autowired
+	private EntityManager entityManager;
 
     @Autowired
     MedicalStockIoOperations medicalStockIoOperation;
@@ -128,16 +135,13 @@ public class Tests
         jpa.open();
         
         testLot.setup(false);
-
-        _saveContext();
     }
         
     @After
     public void tearDown() throws Exception 
     {
-        _restoreContext();   
+        cleanH2InMemoryDB();
         
-        jpa.flush();
         jpa.close();
     }
     
@@ -310,52 +314,42 @@ public class Tests
 	}
 	
 	@Test
-	public void testIoNewAutomaticDischargingMovementDifferentLots() 
+	public void testIoNewAutomaticDischargingMovementDifferentLots() throws Exception
 	{
 		int code = 0;
-		
-		try 
-		{	
-			code = _setupTestMovement(false);
-			Movement foundMovement = (Movement)jpa.find(Movement.class, code);
-			//medicalStockIoOperation.newMovement(foundMovement);
-			
-			Medical medical = foundMovement.getMedical();
-			MovementType medicalType = foundMovement.getType();
-			Ward ward = foundMovement.getWard();
-			Supplier supplier = foundMovement.getSupplier();
-			Lot lot = foundMovement.getLot(); //we are going to charge same lot
-			Movement newMovement = new Movement(
-					medical,
-					medicalType, 
-					ward, 
-					lot, 
-					new GregorianCalendar(),
-					10, // new lot with 10 quantitye
-					supplier, 
-					"newReference");
-			medicalStockIoOperation.newMovement(newMovement);
-			
-			Movement dischargeMovement = new Movement(
-					medical,
-					medicalType,
-					ward,
-					null, // automatic lot selection
-					new GregorianCalendar(),
-					15,	// quantity of 15 should use first lot of 10 + second lot of 5
-					null,
-					"newReference2");
-			medicalStockIoOperation.newAutomaticDischargingMovement(dischargeMovement);
-			
-			ArrayList<Lot> lots = medicalStockIoOperation.getLotsByMedical(medical);
-			assertThat(lots).hasSize(1); // first lot should be 0 quantity and stripped by the list
-			
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+		code = _setupTestMovement(false);
+		Movement foundMovement = (Movement) jpa.find(Movement.class, code);
+		//medicalStockIoOperation.newMovement(foundMovement);
+
+		Medical medical = foundMovement.getMedical();
+		MovementType medicalType = foundMovement.getType();
+		Ward ward = foundMovement.getWard();
+		Supplier supplier = foundMovement.getSupplier();
+		Lot lot = foundMovement.getLot(); //we are going to charge same lot
+		Movement newMovement = new Movement(
+				medical,
+				medicalType,
+				ward,
+				lot,
+				new GregorianCalendar(),
+				10, // new lot with 10 quantitye
+				supplier,
+				"newReference");
+		medicalStockIoOperation.newMovement(newMovement);
+
+		Movement dischargeMovement = new Movement(
+				medical,
+				medicalType,
+				ward,
+				null, // automatic lot selection
+				new GregorianCalendar(),
+				15,    // quantity of 15 should use first lot of 10 + second lot of 5
+				null,
+				"newReference2");
+		medicalStockIoOperation.newAutomaticDischargingMovement(dischargeMovement);
+
+		ArrayList<Lot> lots = medicalStockIoOperation.getLotsByMedical(medical);
+		assertThat(lots).hasSize(1); // first lot should be 0 quantity and stripped by the list
 	}
 	
 	@Test
@@ -623,29 +617,20 @@ public class Tests
 		}
 	}
 	
-	
-	private void _saveContext() throws OHException 
-    {	
-		testLotContext.saveAll(jpa);
-		testMovementContext.saveAll(jpa);
-    	testMedicalContext.saveAll(jpa);
-    	testMedicalTypeContext.saveAll(jpa);
-    	testMovementTypeContext.saveAll(jpa);
-    	testWardContext.saveAll(jpa);
-    	testSupplierContext.saveAll(jpa);
+    private void cleanH2InMemoryDB() throws OHException {
+	    List<Object[]> show_tables = entityManager.createNativeQuery("SHOW TABLES").getResultList();
+	    show_tables
+			    .stream()
+			    .map(result -> (String) result[0])
+			    .forEach(this::truncateTable);
     }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testMovementContext.deleteNews(jpa);
-		testMedicalContext.deleteNews(jpa);
-		testLotContext.deleteNews(jpa);
-    	testMedicalTypeContext.deleteNews(jpa);
-    	testMovementTypeContext.deleteNews(jpa);
-    	testWardContext.deleteNews(jpa);
-    	testSupplierContext.deleteNews(jpa);
-    }
-    
+
+    private void truncateTable(String name) {
+		entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
+		entityManager.createNativeQuery("TRUNCATE TABLE " + name).executeUpdate();
+		entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
+	}
+
 	private String _setupTestLot(
 			boolean usingSet) throws OHException 
 	{
