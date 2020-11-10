@@ -57,16 +57,26 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.rules.SpringClassRule;
+import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
 @RunWith(Parameterized.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 public class Tests  
 {
+	@ClassRule
+	public static final SpringClassRule scr = new SpringClassRule();
+
+	@Rule
+	public final SpringMethodRule smr = new SpringMethodRule();
+
 	private static DbJpaUtil jpa;
 	private static TestLot testLot;
 	private static TestLotContext testLotContext;
