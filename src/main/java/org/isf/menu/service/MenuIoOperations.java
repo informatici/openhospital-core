@@ -155,7 +155,7 @@ public class MenuIoOperations
 	}
 	
 	/**
-	 * inserts a new {@link User} in the DB
+	 * Inserts a new {@link User} in the DB
 	 * 
 	 * @param user - the {@link User} to insert
 	 * @return <code>true</code> if the user has been inserted, <code>false</code> otherwise.
@@ -174,7 +174,7 @@ public class MenuIoOperations
 	}
 		
 	/**
-	 * updates an existing {@link User} in the DB
+	 * Updates an existing {@link User} in the DB
 	 * 
 	 * @param user - the {@link User} to update
 	 * @return <code>true</code> if the user has been updated, <code>false</code> otherwise.
@@ -195,7 +195,7 @@ public class MenuIoOperations
 	}
 	
 	/**
-	 * updates the password of an existing {@link User} in the DB
+	 * Updates the password of an existing {@link User} in the DB
 	 * 
 	 * @param user - the {@link User} to update
 	 * @return <code>true</code> if the user has been updated, <code>false</code> otherwise.
@@ -216,7 +216,7 @@ public class MenuIoOperations
 	}
 
 	/**
-	 * deletes an existing {@link User}
+	 * Deletes an existing {@link User}
 	 * 
 	 * @param user - the {@link User} to delete
 	 * @return <code>true</code> if the user has been deleted, <code>false</code> otherwise.
@@ -352,7 +352,7 @@ public class MenuIoOperations
 	}
 	
 	/**
-	 * deletes a {@link UserGroup}
+	 * Deletes a {@link UserGroup}
 	 * 
 	 * @param aGroup - the {@link UserGroup} to delete
 	 * @return <code>true</code> if the group has been deleted, <code>false</code> otherwise.
@@ -372,7 +372,7 @@ public class MenuIoOperations
 	}
 
 	/**
-	 * insert a new {@link UserGroup} with a minimum set of rights
+	 * Insert a new {@link UserGroup} with a minimum set of rights
 	 * 
 	 * @param aGroup - the {@link UserGroup} to insert
 	 * @return <code>true</code> if the group has been inserted, <code>false</code> otherwise.
@@ -391,7 +391,7 @@ public class MenuIoOperations
 	}
 
 	/**
-	 * updates an existing {@link UserGroup} in the DB
+	 * Updates an existing {@link UserGroup} in the DB
 	 * 
 	 * @param aGroup - the {@link UserGroup} to update
 	 * @return <code>true</code> if the group has been updated, <code>false</code> otherwise.

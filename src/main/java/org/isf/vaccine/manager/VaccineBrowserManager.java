@@ -112,7 +112,7 @@ public class VaccineBrowserManager {
 	}
 	
 	/**
-	 * inserts a new {@link Vaccine} in the DB
+	 * Inserts a new {@link Vaccine} in the DB
 	 *
 	 * @param vaccine - the item to insert
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
@@ -123,7 +123,7 @@ public class VaccineBrowserManager {
 	}
 
 	/**
-	 * updates the specified {@link Vaccine} object.
+	 * Updates the specified {@link Vaccine} object.
 	 * @param vaccine - the {@link Vaccine} object to update.
 	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
 	 */
@@ -133,7 +133,7 @@ public class VaccineBrowserManager {
     }
 	
 	/**
-	 * deletes a {@link Vaccine} in the DB
+	 * Deletes a {@link Vaccine} in the DB
 	 *
 	 * @param vaccine - the item to delete
 	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
@@ -143,7 +143,7 @@ public class VaccineBrowserManager {
 	}
 	
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the vaccine code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise

@@ -82,7 +82,7 @@ public class PatVacManager {
 	}
 
 	/**
-	 * inserts a {@link PatientVaccine} in the DB
+	 * Inserts a {@link PatientVaccine} in the DB
 	 * 
 	 * @param patVac - the {@link PatientVaccine} to insert
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise 
@@ -94,7 +94,7 @@ public class PatVacManager {
 	}
 
 	/**
-	 * updates a {@link PatientVaccine} 
+	 * Updates a {@link PatientVaccine}
 	 * 
 	 * @param patVac - the {@link PatientVaccine} to update
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise 
@@ -106,7 +106,7 @@ public class PatVacManager {
 	}
 
 	/**
-	 * deletes a {@link PatientVaccine} 
+	 * Deletes a {@link PatientVaccine}
 	 * 
 	 * @param patVac - the {@link PatientVaccine} to delete
 	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise 

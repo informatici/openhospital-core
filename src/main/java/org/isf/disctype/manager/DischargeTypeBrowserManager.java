@@ -41,7 +41,7 @@ public class DischargeTypeBrowserManager {
 	private DischargeTypeIoOperation ioOperations;
 
 	/**
-	 * method that returns all DischargeTypes in a list
+	 * Method that returns all DischargeTypes in a list
 	 * 
 	 * @return the list of all DischargeTypes (could be null)
 	 * @throws OHServiceException 
@@ -51,7 +51,7 @@ public class DischargeTypeBrowserManager {
 	}
 
 	/**
-	 * method that create a new DischargeType
+	 * Method that create a new DischargeType
 	 * 
 	 * @param dischargeType
 	 * @return true - if the new DischargeType has been inserted
@@ -63,7 +63,7 @@ public class DischargeTypeBrowserManager {
 	}
 
 	/**
-	 * method that updates an already existing DischargeType
+	 * Method that updates an already existing DischargeType
 	 * 
 	 * @param dischargeType
 	 * @return true - if the existing DischargeType has been updated
@@ -75,7 +75,7 @@ public class DischargeTypeBrowserManager {
 	}
 
 	/**
-	 * method that check if a DischargeType already exists
+	 * Method that check if a DischargeType already exists
 	 * 
 	 * @param code
 	 * @return true - if the DischargeType already exists
@@ -86,7 +86,7 @@ public class DischargeTypeBrowserManager {
 	}
 
 	/**
-	 * method that delete a DischargeType
+	 * Method that delete a DischargeType
 	 * 
 	 * @param dischargeType
 	 * @return true - if the DischargeType has been deleted

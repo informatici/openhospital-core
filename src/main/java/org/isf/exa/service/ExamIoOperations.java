@@ -231,7 +231,7 @@ public class ExamIoOperations {
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the exam code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
@@ -249,7 +249,7 @@ public class ExamIoOperations {
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the exam row code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise

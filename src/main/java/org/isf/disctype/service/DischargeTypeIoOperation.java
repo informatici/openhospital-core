@@ -39,7 +39,7 @@ public class DischargeTypeIoOperation {
 	private DischargeTypeIoOperationRepository repository;
 	
 	/**
-	 * method that returns all DischargeTypes in a list
+	 * Method that returns all DischargeTypes in a list
 	 * 
 	 * @return the list of all DischargeTypes
 	 * @throws OHServiceException
@@ -50,7 +50,7 @@ public class DischargeTypeIoOperation {
 	}
 
 	/**
-	 * method that updates an already existing DischargeType
+	 * Method that updates an already existing DischargeType
 	 * 
 	 * @param dischargeType
 	 * @return true - if the existing DischargeType has been updated
@@ -69,7 +69,7 @@ public class DischargeTypeIoOperation {
 	}
 
 	/**
-	 * method that create a new DischargeType
+	 * Method that create a new DischargeType
 	 * 
 	 * @param dischargeType
 	 * @return true - if the new DischargeType has been inserted
@@ -88,7 +88,7 @@ public class DischargeTypeIoOperation {
 	}
 
 	/**
-	 * method that delete a DischargeType
+	 * Method that delete a DischargeType
 	 * 
 	 * @param dischargeType
 	 * @return true - if the DischargeType has been deleted
@@ -106,7 +106,7 @@ public class DischargeTypeIoOperation {
 	}
 
 	/**
-	 * method that check if a DischargeType already exists
+	 * Method that check if a DischargeType already exists
 	 * 
 	 * @param code
 	 * @return true - if the DischargeType already exists

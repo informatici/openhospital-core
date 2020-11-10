@@ -72,7 +72,7 @@ import javax.swing.event.EventListenerList;
  * @version %I% %G% 
  * 
  * A base class for CellEditors, providing default implementations for all 
- * methods in the CellEditor interface and support for managing a series 
+ * methods in the CellEditor interface and support for managing a series
  * of listeners. 
  *
  * @author Philip Milne

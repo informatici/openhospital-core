@@ -64,7 +64,7 @@ public class PatientIoOperations
 	private ApplicationEventPublisher applicationEventPublisher;
 
 	/**
-	 * method that returns the full list of Patients not logically deleted
+	 * Method that returns the full list of Patients not logically deleted
 	 * 
 	 * @return the list of patients
 	 * @throws OHServiceException
@@ -74,7 +74,7 @@ public class PatientIoOperations
 	}
 	
 	/**
-	 * method that returns the full list of Patients not logically deleted by page
+	 * Method that returns the full list of Patients not logically deleted by page
 	 * 
 	 * @return the list of patients
 	 * @throws OHServiceException
@@ -84,7 +84,7 @@ public class PatientIoOperations
 	}
 
 	/**
-	 * method that returns the full list of Patients not logically deleted with Height and Weight 
+	 * Method that returns the full list of Patients not logically deleted with Height and Weight
 	 * 
 	 * @param regex
 	 * @return the full list of Patients with Height and Weight
@@ -95,7 +95,7 @@ public class PatientIoOperations
 	}	
 
 	/**
-	 * method that get a Patient by his/her name
+	 * Method that get a Patient by his/her name
 	 * 
 	 * @param name
 	 * @return the Patient that match specified name
@@ -112,7 +112,7 @@ public class PatientIoOperations
 	}
 
 	/**
-	 * method that get a Patient by his/her ID
+	 * Method that get a Patient by his/her ID
 	 * 
 	 * @param code
 	 * @return the Patient
@@ -155,7 +155,7 @@ public class PatientIoOperations
 
 	/**
 	 * 
-	 * method that update an existing {@link Patient} in the db
+	 * Method that update an existing {@link Patient} in the db
 	 * 
 	 * @param patient - the {@link Patient} to update
 	 * @return true - if the existing {@link Patient} has been updated
@@ -167,7 +167,7 @@ public class PatientIoOperations
 	}
 
 	/**
-	 * method that logically delete a Patient (not physically deleted)
+	 * Method that logically delete a Patient (not physically deleted)
 	 * 
 	 * @param patient
 	 * @return true - if the Patient has been deleted (logically)
@@ -178,7 +178,7 @@ public class PatientIoOperations
 	}
 
 	/**
-	 * method that check if a Patient is already present in the DB by his/her name
+	 * Method that check if a Patient is already present in the DB by his/her name
 	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName
 	 * 
 	 * @param name
@@ -200,7 +200,7 @@ public class PatientIoOperations
 	}
 
 	/**
-	 * method that merge all clinic details under the same PAT_ID
+	 * Method that merge all clinic details under the same PAT_ID
 	 * 
 	 * @param mergedPatient
 	 * @param obsoletePatient
@@ -216,7 +216,7 @@ public class PatientIoOperations
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the patient code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise

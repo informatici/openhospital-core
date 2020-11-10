@@ -41,7 +41,7 @@ public class OperationTypeBrowserManager {
 	private OperationTypeIoOperation ioOperations;
 	
 	/**
-	 * return the list of {@link OperationType}s
+	 * Return the list of {@link OperationType}s
 	 * 
 	 * @return the list of {@link OperationType}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException 
@@ -51,7 +51,7 @@ public class OperationTypeBrowserManager {
 	}
 	
 	/**
-	 * insert an {@link OperationType} in the DB
+	 * Insert an {@link OperationType} in the DB
 	 * 
 	 * @param operationType - the {@link OperationType} to insert
 	 * @return <code>true</code> if the {@link OperationType} has been inserted, <code>false</code> otherwise.
@@ -66,7 +66,7 @@ public class OperationTypeBrowserManager {
 	}
 
 	/**
-	 * update an {@link OperationType}
+	 * Update an {@link OperationType}
 	 * 
 	 * @param operationType - the {@link OperationType} to update
 	 * @return <code>true</code> if the {@link OperationType} has been updated, <code>false</code> otherwise.
@@ -81,7 +81,7 @@ public class OperationTypeBrowserManager {
 	}
 	
 	/**
-	 * delete an {@link OperationType}
+	 * Delete an {@link OperationType}
 	 * 
 	 * @param operationType - the {@link OperationType} to delete
 	 * @return <code>true</code> if the {@link OperationType} has been delete, <code>false</code> otherwise.
@@ -92,7 +92,7 @@ public class OperationTypeBrowserManager {
 	}
 	
 	/**
-	 * checks if an {@link OperationType} code has already been used
+	 * Checks if an {@link OperationType} code has already been used
 	 * @param code - the code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise.
 	 * @throws OHServiceException 

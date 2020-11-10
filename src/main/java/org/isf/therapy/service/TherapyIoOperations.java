@@ -40,7 +40,7 @@ public class TherapyIoOperations {
 	private TherapyIoOperationRepository repository;
 	
 	/**
-	 * insert a new {@link TherapyRow} (therapy) in the DB
+	 * Insert a new {@link TherapyRow} (therapy) in the DB
 	 * 
 	 * @param thRow - the {@link TherapyRow} (therapy)
 	 * @return the therapyID
@@ -51,7 +51,7 @@ public class TherapyIoOperations {
 	}
 
 	/**
-	 * return the list of {@link TherapyRow}s (therapies) for specified Patient ID
+	 * Return the list of {@link TherapyRow}s (therapies) for specified Patient ID
 	 * or
 	 * return all {@link TherapyRow}s (therapies) if <code>0</code> is passed
 	 * 
@@ -66,7 +66,7 @@ public class TherapyIoOperations {
 	}
 
 	/**
-	 * delete all {@link TherapyRow}s (therapies) for specified Patient ID
+	 * Delete all {@link TherapyRow}s (therapies) for specified Patient ID
 	 *
 	 * @param patID - the Patient ID
 	 * @return <code>true</code> if the therapies have been deleted, <code>false</code> otherwise
@@ -78,7 +78,7 @@ public class TherapyIoOperations {
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the therapy code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise

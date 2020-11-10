@@ -57,7 +57,7 @@ public class VacTypeIoOperation {
 	}
 	
 	/**
-	 * inserts a new {@link VaccineType} into DB
+	 * Inserts a new {@link VaccineType} into DB
 	 * 
 	 * @param vaccineType - the {@link VaccineType} to insert 
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
@@ -68,7 +68,7 @@ public class VacTypeIoOperation {
 	}
 	
 	/**
-	 * updates a {@link VaccineType} in the DB
+	 * Updates a {@link VaccineType} in the DB
 	 *
 	 * @param vaccineType - the item to update
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
@@ -79,7 +79,7 @@ public class VacTypeIoOperation {
 	}
 	
 	/**
-	 * deletes a {@link VaccineType} in the DB
+	 * Deletes a {@link VaccineType} in the DB
 	 *
 	 * @param vaccineType - the item to delete
 	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
@@ -92,7 +92,7 @@ public class VacTypeIoOperation {
 	
 	
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the {@link VaccineType} code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
