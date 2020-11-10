@@ -25,10 +25,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.isf.generaldata.GeneralData;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.test.TestMedical;
 import org.isf.medicals.test.TestMedicalContext;
@@ -56,11 +59,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
+@RunWith(Parameterized.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 public class Tests  
 {
@@ -82,7 +85,13 @@ public class Tests
 
     @Autowired
     MedicalStockIoOperations medicalStockIoOperation;
-	
+
+    public Tests(boolean in, boolean out, boolean toward) {
+	    GeneralData.AUTOMATICLOT_IN = in;
+	    GeneralData.AUTOMATICLOT_OUT = out;
+	    GeneralData.AUTOMATICLOTWARD_TOWARD = toward;
+    }
+
 	@BeforeClass
     public static void setUpClass()  
     {
@@ -109,7 +118,7 @@ public class Tests
         jpa.open();
         
         testLot.setup(false);
-        
+
         _saveContext();
     }
         
@@ -140,8 +149,21 @@ public class Tests
     	testSupplier = null;
     	testSupplierContext = null;
     }
-	
-	
+
+	@Parameterized.Parameters(name ="Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	public static Collection primeNumbers() {
+		return Arrays.asList(new Object[][] {
+				{ false, false, false },
+				{ false, false, true },
+				{ false, true, false },
+				{ false, true, true },
+				{ true, false, false },
+				{ true, false, true },
+				{ true, true, false },
+				{ true, true, true }
+		});
+	}
+
 	@Test
 	public void testLotGets() 
 	{
