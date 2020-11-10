@@ -100,7 +100,7 @@ public class VaccineTypeBrowserManager {
 	}
 	
 	/**
-	 * inserts a new {@link VaccineType} into DB
+	 * Inserts a new {@link VaccineType} into DB
 	 * 
 	 * @param vaccineType - the {@link VaccineType} to insert 
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
@@ -112,7 +112,7 @@ public class VaccineTypeBrowserManager {
 	}
 
 	/**
-	 * update a {@link VaccineType} in the DB
+	 * Update a {@link VaccineType} in the DB
 	 *
 	 * @param vaccineType - the item to update
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
@@ -124,7 +124,7 @@ public class VaccineTypeBrowserManager {
 	}
 	
 	/**
-	 * deletes a {@link VaccineType} in the DB
+	 * Deletes a {@link VaccineType} in the DB
 	 *
 	 * @param vaccineType - the item to delete
 	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
@@ -135,7 +135,7 @@ public class VaccineTypeBrowserManager {
 	}
 	
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the {@link VaccineType} code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
@@ -146,7 +146,7 @@ public class VaccineTypeBrowserManager {
 	}
 	
 	/**
-	 * returns the {@link VaccineType} based on vaccine type code
+	 * Returns the {@link VaccineType} based on vaccine type code
 	 *
 	 * @param code - the  {@link VaccineType} code.
 	 * @return the {@link VaccineType}

@@ -30,7 +30,7 @@ Date:   2018-09-05
     Upgrade to 1.8.3 - Commit 17. and 18.
     
     - Enhanced Ant build in order to build portable versions too (only
-    OpenHospital part)
+    Open Hospital part)
     - Fixed Ant script and added missing poh-win32 files
 
 commit 1bd571e6b6a7ddb196923103cc967dcb835e46ac

@@ -77,7 +77,7 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * delete series from DB
+	 * Delete series from DB
 	 * 
 	 * @param patientID, the id of patient
 	 * @param seriesNumber, the series number to delete
@@ -97,7 +97,7 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * load the Detail of DICOM
+	 * Load the Detail of DICOM
 	 * 
 	 * @param idFile
 	 * @param patientID
@@ -136,7 +136,7 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * load metadata from DICOM files stored in database fot the patient
+	 * Load metadata from DICOM files stored in database fot the patient
 	 * 
 	 * @param patientID
 	 * @return FileDicom array
@@ -159,7 +159,7 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * check if dicom is loaded
+	 * Check if dicom is loaded
 	 *
 	 * @param dicom, the detail od dicom
 	 * @return true if file exist
@@ -174,7 +174,7 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * save the DICOM file and metadata in the database
+	 * Save the DICOM file and metadata in the database
 	 * 
 	 * @param dicom
 	 * @throws OHServiceException 
@@ -188,7 +188,7 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the DICOM code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
@@ -206,7 +206,7 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * checks if the series number is already in use
+	 * Checks if the series number is already in use
 	 *
 	 * @param dicomSeriesNumber - the series number to check
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise

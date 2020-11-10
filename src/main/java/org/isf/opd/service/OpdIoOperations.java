@@ -122,7 +122,7 @@ public class OpdIoOperations {
 	}
 		
 	/**
-	 * insert a new item in the db
+	 * Insert a new item in the db
 	 * 
 	 * @param opd - an {@link Opd}
 	 * @return <code>true</code> if the item has been inserted
@@ -144,7 +144,7 @@ public class OpdIoOperations {
 	}
 	
 	/**
-	 * delete an {@link Opd} from the db
+	 * Delete an {@link Opd} from the db
 	 * 
 	 * @param opd - the {@link Opd} to delete
 	 * @return <code>true</code> if the item has been deleted. <code>false</code> otherwise.
@@ -183,7 +183,7 @@ public class OpdIoOperations {
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the opd code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise

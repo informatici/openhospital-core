@@ -49,7 +49,7 @@ public class OperationBrowserManager {
 	private OperationIoOperations ioOperations;
 
 	/**
-	 * return the list of {@link Operation}s
+	 * Return the list of {@link Operation}s
 	 * 
 	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException 
@@ -86,7 +86,7 @@ public class OperationBrowserManager {
 	}
 
 	/**
-	 * insert an {@link Operation} in the DB
+	 * Insert an {@link Operation} in the DB
 	 * 
 	 * @param operation - the {@link Operation} to insert
 	 * @return <code>true</code> if the operation has been inserted, <code>false</code> otherwise.
@@ -97,7 +97,7 @@ public class OperationBrowserManager {
 	}
 	
 	/** 
-	 * updates an {@link Operation} in the DB
+	 * Updates an {@link Operation} in the DB
 	 * 
 	 * @param operation - the {@link Operation} to update
 	 * @return <code>true</code> if the item has been updated. <code>false</code> other
@@ -119,7 +119,7 @@ public class OperationBrowserManager {
 	}
 	
 	/**
-	 * checks if an {@link Operation} code has already been used
+	 * Checks if an {@link Operation} code has already been used
 	 * @param code - the code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise.
 	 * @throws OHServiceException 
@@ -129,7 +129,7 @@ public class OperationBrowserManager {
 	}
 	
 	/**
-	 * checks if an {@link Operation} description has already been used within the specified {@link OperationType} 
+	 * Checks if an {@link Operation} description has already been used within the specified {@link OperationType}
 	 * 
 	 * @param description - the {@link Operation} description
 	 * @param typeCode - the {@link OperationType} code

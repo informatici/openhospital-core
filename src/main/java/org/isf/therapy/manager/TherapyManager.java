@@ -155,7 +155,7 @@ public class TherapyManager {
 	}
 
 	/**
-	 * return the list of {@link TherapyRow}s (therapies) for specified Patient ID
+	 * Return the list of {@link TherapyRow}s (therapies) for specified Patient ID
 	 * or
 	 * return all {@link TherapyRow}s (therapies) if <code>0</code> is passed
 	 * 
@@ -168,7 +168,7 @@ public class TherapyManager {
 	}
 	
 	/**
-	 * insert a new {@link TherapyRow} (therapy) for related Patient
+	 * Insert a new {@link TherapyRow} (therapy) for related Patient
 	 * 
 	 * @param thRow - the {@link TherapyRow}s (therapy)
 	 * @return the therapyID
@@ -247,7 +247,7 @@ public class TherapyManager {
 	}
 
 	/**
-	 * delete all {@link TherapyRow}s (therapies) for specified Patient ID
+	 * Delete all {@link TherapyRow}s (therapies) for specified Patient ID
 	 * 
 	 * @param code - the Patient ID
 	 * @return <code>true</code> if the therapies have been deleted, <code>false</code> otherwise

@@ -91,7 +91,7 @@ public class VisitsIoOperations {
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the visit code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise

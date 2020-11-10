@@ -66,7 +66,7 @@ public class PatientBrowserManager {
 	}
 	
 	/**
-	 * method that insert a new Patient in the db
+	 * Method that insert a new Patient in the db
 	 * 
 	 * @param patient
 	 * @return saved / updated patient
@@ -78,7 +78,7 @@ public class PatientBrowserManager {
 	}
 	
 	/**
-	 * method that returns the full list of Patients not logically deleted
+	 * Method that returns the full list of Patients not logically deleted
 	 * 
 	 * @return the list of patients (could be empty)
 	 * @throws OHServiceException 
@@ -88,7 +88,7 @@ public class PatientBrowserManager {
 	}
 
 	/**
-	 * method that returns the full list of Patients not logically deleted by pages
+	 * Method that returns the full list of Patients not logically deleted by pages
 	 * 
 	 * @return the list of patients (could be empty)
 	 * @throws OHServiceException 
@@ -98,7 +98,7 @@ public class PatientBrowserManager {
 	}
 
 	/**
-	 * method that get a Patient by his/her name
+	 * Method that get a Patient by his/her name
 	 * 
 	 * @param name
 	 * @return the Patient that match specified name (could be null)
@@ -111,7 +111,7 @@ public class PatientBrowserManager {
 	}
 
 	/**
-	 * method that get a Patient by his/her ID
+	 * Method that get a Patient by his/her ID
 	 * 
 	 * @param code
 	 * @return the Patient (could be null)
@@ -134,7 +134,7 @@ public class PatientBrowserManager {
 	}
 	
 	/**
-	 * method that get next PAT_ID is going to be used.
+	 * Method that get next PAT_ID is going to be used.
 	 * 
 	 * @return code
 	 * @throws OHServiceException 
@@ -254,7 +254,7 @@ public class PatientBrowserManager {
     }
 
     /**
-	 * method that logically delete a Patient (not physically deleted)
+	 * Method that logically delete a Patient (not physically deleted)
 	 * 
 	 * @param patient - the {@link Patient} to be deleted
 	 * @return true - if the Patient has been deleted (logically)
@@ -265,7 +265,7 @@ public class PatientBrowserManager {
 	}
 	
 	/**
-	 * method that check if the patient's name is already present in the DB
+	 * Method that check if the patient's name is already present in the DB
 	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName
 	 * 
 	 * @param name - name of the patient
@@ -277,7 +277,7 @@ public class PatientBrowserManager {
 	}
 	
 	/**
-	 * method that returns the full list of Patients not logically deleted with Height and Weight 
+	 * Method that returns the full list of Patients not logically deleted with Height and Weight
 	 * 
 	 * @param regex
 	 * @return the full list of Patients with Height and Weight (could be empty)
@@ -288,7 +288,7 @@ public class PatientBrowserManager {
 	}
 
 	/**
-	 * method that merge patients and all clinic details under the same PAT_ID
+	 * Method that merge patients and all clinic details under the same PAT_ID
 	 * 
 	 * @param mergedPatient
 	 * @param patient2

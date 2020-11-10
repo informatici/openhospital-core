@@ -44,7 +44,7 @@ public class PricesListIoOperations {
 	private PriceIoOperationRepository priceRepository;
 	
 	/**
-	 * return the list of {@link List}s in the DB
+	 * Return the list of {@link List}s in the DB
 	 * 
 	 * @return the list of {@link List}s
 	 * @throws OHServiceException 
@@ -59,7 +59,7 @@ public class PricesListIoOperations {
 	}
 	
 	/**
-	 * return the list of {@link Price}s in the DB
+	 * Return the list of {@link Price}s in the DB
 	 * 
 	 * @return the list of {@link Price}s
 	 * @throws OHServiceException 
@@ -74,7 +74,7 @@ public class PricesListIoOperations {
 	}
 
 	/**
-	 * updates all {@link Price}s in the specified {@link List}
+	 * Updates all {@link Price}s in the specified {@link List}
 	 * 
 	 * @param list - the {@link List}
 	 * @param prices - the list of {@link Price}s
@@ -110,7 +110,7 @@ public class PricesListIoOperations {
     }
 
 	/**
-	 * insert a new {@link List} in the DB
+	 * Insert a new {@link List} in the DB
 	 * 
 	 * @param list - the {@link List}
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
@@ -121,7 +121,7 @@ public class PricesListIoOperations {
 	}
 	
 	/**
-	 * update a {@link List} in the DB
+	 * Update a {@link List} in the DB
 	 * 
 	 * @param list - the {@link List} to update
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
@@ -132,7 +132,7 @@ public class PricesListIoOperations {
 	}
 	
 	/**
-	 * delete a {@link List} in the DB
+	 * Delete a {@link List} in the DB
 	 * 
 	 * @param list - the {@link List} to delete
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
@@ -162,7 +162,7 @@ public class PricesListIoOperations {
     }
 
 	/**
-	 * duplicate {@link PriceList} multiplying by <code>factor</code> and rounding by <code>step</code>
+	 * Duplicate {@link PriceList} multiplying by <code>factor</code> and rounding by <code>step</code>
 	 * 
 	 * @param list - the {@link PriceList} to be duplicated
 	 * @param factor - the multiplying factor

@@ -39,7 +39,7 @@ public class DicomTypeIoOperation {
 	private DicomTypeIoOperationRepository repository;
 	
 	/**
-	 * method that returns all DicomTypes in a list
+	 * Method that returns all DicomTypes in a list
 	 * 
 	 * @return the list of all DicomTypes
 	 * @throws OHServiceException
@@ -50,7 +50,7 @@ public class DicomTypeIoOperation {
 	}
 
 	/**
-	 * method that updates an already existing DicomType
+	 * Method that updates an already existing DicomType
 	 * 
 	 * @param DicomType
 	 * @return true - if the existing DicomType has been updated
@@ -69,7 +69,7 @@ public class DicomTypeIoOperation {
 	}
 
 	/**
-	 * method that create a new DicomType
+	 * Method that create a new DicomType
 	 * 
 	 * @param DicomType
 	 * @return true - if the new DicomType has been inserted
@@ -88,7 +88,7 @@ public class DicomTypeIoOperation {
 	}
 
 	/**
-	 * method that delete a DicomType
+	 * Method that delete a DicomType
 	 * 
 	 * @param DicomType
 	 * @return true - if the DicomType has been deleted
@@ -106,7 +106,7 @@ public class DicomTypeIoOperation {
 	}
 
 	/**
-	 * method that check if a DicomType already exists
+	 * Method that check if a DicomType already exists
 	 * 
 	 * @param code
 	 * @return true - if the DicomType already exists

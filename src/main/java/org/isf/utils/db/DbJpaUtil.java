@@ -111,7 +111,7 @@ public class DbJpaUtil
 	}
 
 	/**
-     * method to persist an object
+     * Method to persist an object
      * @throws OHException 
      */
     public void persist(
@@ -138,7 +138,7 @@ public class DbJpaUtil
     }   
 
     /**
-     * method to merge an object
+     * Method to merge an object
      * @throws OHException 
      */
     public Object merge(
@@ -164,7 +164,7 @@ public class DbJpaUtil
     }  
     
     /**
-     * method to find an object
+     * Method to find an object
      * @return merged entity
      * @throws OHException 
      */
@@ -188,7 +188,7 @@ public class DbJpaUtil
     }     
 
     /**
-     * method to remove an object
+     * Method to remove an object
      * @return 
      * @throws OHException 
      */
@@ -212,7 +212,7 @@ public class DbJpaUtil
     } 
     
 	/**
-     * method to start a JPA transaction
+     * Method to start a JPA transaction
 	 * @throws OHException 
      */
     public void beginTransaction() throws OHException
@@ -233,7 +233,7 @@ public class DbJpaUtil
     } 
 		         
 	/**
-	  * method to create a query
+	  * Method to create a query
 	  * @param aQuery
 	  * @param aClass
 	  * @param jpql
@@ -258,7 +258,7 @@ public class DbJpaUtil
 	}
 	
 	/**
-     * method that executes a query and returns a list
+     * Method that executes a query and returns a list
      * @param parameters
      * @param jpql
      * @throws OHException
@@ -282,7 +282,7 @@ public class DbJpaUtil
     }    
     
 	/**
-     * method that executes a query and returns a list
+     * Method that executes a query and returns a list
      * @return List of objects
      * @throws OHException
      */
@@ -327,7 +327,7 @@ public class DbJpaUtil
     }    
     
     /**
-     * method that executes a query and return an object
+     * Method that executes a query and return an object
      * @return Object
      * @throws OHException
      */
@@ -378,7 +378,7 @@ public class DbJpaUtil
     }    
     
 	/**
-     * method that executes a query and returns a list
+     * Method that executes a query and returns a list
      * @throws OHException
      */
     public void executeUpdate() throws OHException 
@@ -411,7 +411,7 @@ public class DbJpaUtil
 	}
     
   	/**
-     * method to commit a JPA transactions
+     * Method to commit a JPA transactions
   	 * @throws OHException 
      */
 	public void commitTransaction() throws OHException
@@ -433,7 +433,7 @@ public class DbJpaUtil
 	} 
 	
 	/**
-     * method to flush the JPA transactions
+     * Method to flush the JPA transactions
 	 * @throws OHException 
      */
     public void flush() throws OHException
@@ -461,7 +461,7 @@ public class DbJpaUtil
     }
 	
     /**
-     * method to close the JPA entity manager
+     * Method to close the JPA entity manager
      * @throws OHException 
      */
     public void close() throws OHException
@@ -478,7 +478,7 @@ public class DbJpaUtil
     } 
     
     /**
-     * method to destroy the factory
+     * Method to destroy the factory
      * @throws OHException 
      */
     public void destroy() throws OHException
@@ -535,7 +535,7 @@ public class DbJpaUtil
     }
 
 	   /**
-     * method to rollback a JPA transactions
+     * Method to rollback a JPA transactions
        * @throws OHException 
      */
     public void rollbackTransaction() throws OHException

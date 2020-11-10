@@ -39,7 +39,7 @@ public class PriceOthersIoOperations {
 	private PriceOthersIoOperationRepository repository;
 	
 	/**
-	 * return the list of {@link PricesOthers}s in the DB
+	 * Return the list of {@link PricesOthers}s in the DB
 	 * 
 	 * @return the list of {@link PricesOthers}s
 	 * @throws OHServiceException 
@@ -52,7 +52,7 @@ public class PriceOthersIoOperations {
 	}
 
 	/**
-	 * insert a new {@link PricesOthers} in the DB
+	 * Insert a new {@link PricesOthers} in the DB
 	 * 
 	 * @param other - the {@link PricesOthers} to insert
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
@@ -71,7 +71,7 @@ public class PriceOthersIoOperations {
 	}
 
 	/**
-	 * delete a {@link PricesOthers} in the DB
+	 * Delete a {@link PricesOthers} in the DB
 	 * 
 	 * @param other - the {@link PricesOthers} to delete
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
@@ -89,7 +89,7 @@ public class PriceOthersIoOperations {
 	}
 
 	/**
-	 * update a {@link PricesOthers} in the DB
+	 * Update a {@link PricesOthers} in the DB
 	 * 
 	 * @param other - the {@link PricesOthers} to update
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
@@ -108,7 +108,7 @@ public class PriceOthersIoOperations {
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param id - the price other code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise

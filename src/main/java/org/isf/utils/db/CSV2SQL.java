@@ -80,7 +80,7 @@ public class CSV2SQL {
 	}
 
 	/**
-	 * It uses a CSV to start the OpenHospital pharmacy, taking care about LOT management.
+	 * It uses a CSV to start the Open Hospital pharmacy, taking care about LOT management.
 	 * (If LOT name is not provided a random number will be generated)
 	 *
 	 * Tables involved: 

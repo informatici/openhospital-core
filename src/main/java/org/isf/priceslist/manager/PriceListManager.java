@@ -45,7 +45,7 @@ public class PriceListManager {
 	private PricesListIoOperations ioOperations;
 	
 	/**
-	 * return the list of {@link List}s in the DB
+	 * Return the list of {@link List}s in the DB
 	 * @return the list of {@link List}s
 	 * @throws OHServiceException 
 	 */
@@ -54,7 +54,7 @@ public class PriceListManager {
 	}
 	
 	/**
-	 * return the list of {@link Price}s in the DB
+	 * Return the list of {@link Price}s in the DB
 	 * @return the list of {@link Price}s
 	 * @throws OHServiceException 
 	 */
@@ -63,7 +63,7 @@ public class PriceListManager {
 	}
 
 	/**
-	 * updates all {@link Price}s in the specified {@link List}
+	 * Updates all {@link Price}s in the specified {@link List}
 	 * @param list - the {@link List}
 	 * @param prices - the list of {@link Price}s
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
@@ -74,7 +74,7 @@ public class PriceListManager {
 	}
 
 	/**
-	 * insert a new {@link List} in the DB
+	 * Insert a new {@link List} in the DB
 	 * 
 	 * @param list - the {@link List}
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
@@ -86,7 +86,7 @@ public class PriceListManager {
 	}
 
 	/**
-	 * update a {@link List} in the DB
+	 * Update a {@link List} in the DB
 	 * 
 	 * @param updateList - the {@link List} to update
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
@@ -98,7 +98,7 @@ public class PriceListManager {
 	}
 
 	/**
-	 * delete a {@link List} in the DB
+	 * Delete a {@link List} in the DB
 	 * 
 	 * @param deleteList - the {@link List} to delete
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
@@ -109,7 +109,7 @@ public class PriceListManager {
 	}
 
 	/**
-	 * duplicate specified {@List list}
+	 * Duplicate specified {@List list}
 	 * 
 	 * @param list
 	 * @return <code>true</code> if the list has been duplicated, <code>false</code> otherwise
@@ -120,7 +120,7 @@ public class PriceListManager {
 	}
 	
 	/**
-	 * duplicate {@link PriceList} multiplying by <code>factor</code> and rounding by <code>step</code>
+	 * Duplicate {@link PriceList} multiplying by <code>factor</code> and rounding by <code>step</code>
 	 * 
 	 * @param list - the {@link PriceList} to be duplicated
 	 * @param factor - the multiplying factor

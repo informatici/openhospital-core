@@ -280,7 +280,7 @@ public class MovStockInsertingManager {
 	}
 
 	/**
-	 * check if the reference number is already used
+	 * Check if the reference number is already used
 	 * 
 	 * @return <code>true</code> if is already used, <code>false</code>
 	 *         otherwise.
@@ -291,7 +291,7 @@ public class MovStockInsertingManager {
 	}
 	
 //	/**
-//	 * insert a list of {@link Movement}s and related {@link Lot}s
+//	 * Insert a list of {@link Movement}s and related {@link Lot}s
 //	 * 
 //	 * @param movements - the list of {@link Movement}s
 //	 * @return 

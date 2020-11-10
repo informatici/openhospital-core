@@ -46,7 +46,7 @@ public class PricesOthersManager {
 	private PriceOthersIoOperations ioOperations;
 
 	/**
-	 * return the list of {@link PricesOthers}s in the DB
+	 * Return the list of {@link PricesOthers}s in the DB
 	 * 
 	 * @return the list of {@link PricesOthers}s
 	 * @throws OHServiceException 
@@ -56,7 +56,7 @@ public class PricesOthersManager {
 	}
 
 	/**
-	 * insert a new {@link PricesOthers} in the DB
+	 * Insert a new {@link PricesOthers} in the DB
 	 * 
 	 * @param other - the {@link PricesOthers} to insert
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
@@ -68,7 +68,7 @@ public class PricesOthersManager {
 	}
 
 	/**
-	 * delete a {@link PricesOthers} in the DB
+	 * Delete a {@link PricesOthers} in the DB
 	 * 
 	 * @param other - the {@link PricesOthers} to delete
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
@@ -79,7 +79,7 @@ public class PricesOthersManager {
 	}
 
 	/**
-	 * update a {@link PricesOthers} in the DB
+	 * Update a {@link PricesOthers} in the DB
 	 * 
 	 * @param other - the {@link PricesOthers} to update
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise

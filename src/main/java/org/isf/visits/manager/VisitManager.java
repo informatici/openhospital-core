@@ -135,7 +135,7 @@ public class VisitManager {
 	
 
 	/**
-	 * insert a new {@link Visit} for related Patient
+	 * Insert a new {@link Visit} for related Patient
 	 * 
 	 * @param visit - the {@link Visit}
 	 * @return the visitID
@@ -146,7 +146,7 @@ public class VisitManager {
 	}
 
 	/**
-	 * inserts or replaces all {@link Visit}s related to a patID
+	 * Inserts or replaces all {@link Visit}s related to a patID
 	 * 
 	 * @param visits - the list of {@link Visit}s related to patID.
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
@@ -190,7 +190,7 @@ public class VisitManager {
 	}
 	
 	/**
-	 * deletes all {@link Visit}s related to a patID
+	 * Deletes all {@link Visit}s related to a patID
 	 * 
 	 * @param patID - the {@link Patient} ID
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
