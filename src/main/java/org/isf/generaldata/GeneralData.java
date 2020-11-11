@@ -23,6 +23,9 @@ package org.isf.generaldata;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -135,11 +138,21 @@ public class GeneralData {
 
 	private static GeneralData mySingleData;
 	private Properties p;
-
+	
+	public static void reset() {
+		mySingleData  = null;
+	}
+	
+	
 	private GeneralData() {
 		try {
 			p = new Properties();
-			p.load(new FileInputStream("rsc" + File.separator + FILE_PROPERTIES));
+			
+			ClassLoader classLoader = getClass().getClassLoader();
+			URL url = classLoader.getResource(FILE_PROPERTIES);
+			Path path = Paths.get(url.toURI());
+			p.load(new FileInputStream(path.toFile()));
+			
 			logger.info("File generalData.properties loaded. ");
 			LANGUAGE = myGetProperty("LANGUAGE", DEFAULT_LANGUAGE);
 			SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
@@ -189,7 +202,9 @@ public class GeneralData {
 			logger.error(">> " + FILE_PROPERTIES + " file not found.");
 			System.exit(1);
 		}
+		
 		MessageBundle.initialize();
+		
 	}
 	
 	/**
@@ -235,5 +250,74 @@ public class GeneralData {
 		}
 		return mySingleData;
 	}
+	
+	
+	
+	//OP-425 Experimental Code
+		
+	public static void main(String[] args) {
+		GeneralData generalData =  GeneralData.getGeneralData();
+		System.out.print("GeneralData.LANGUAGE="+GeneralData.LANGUAGE);
+		generalData.printAllProperties();
+	}
+	
+	
+	public static boolean isJUnitTest() {
+		for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
+			if (element.getClassName().startsWith("org.junit.")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void printAllProperties() {
+		
+		logger.info("FILE_PROPERTIES {}",FILE_PROPERTIES);
+		logger.info("LANGUAGE {}",LANGUAGE);
+		logger.info("SINGLEUSER {}",SINGLEUSER);
+		logger.info("AUTOMATICLOT_IN {}",AUTOMATICLOT_IN);
+		logger.info("AUTOMATICLOT_OUT {}",AUTOMATICLOT_OUT);
+		logger.info("AUTOMATICLOTWARD_TOWARD {}",AUTOMATICLOTWARD_TOWARD);
+		logger.info("LOTWITHCOST {}",LOTWITHCOST);
+		logger.info("PATIENTSHEET {}",PATIENTSHEET);
+		logger.info("VISITSHEET {}",VISITSHEET);
+		logger.info("EXAMINATIONCHART {}",EXAMINATIONCHART);
+		logger.info("OPDCHART {}",OPDCHART);
+		logger.info("ADMCHART {}",ADMCHART);
+		logger.info("DISCHART {}",DISCHART);
+		logger.info("PATIENTBILL {}",PATIENTBILL);
+		logger.info("BILLSREPORT {}",BILLSREPORT);
+		logger.info("BILLSREPORTPENDING {}",BILLSREPORTPENDING);
+		logger.info("BILLSREPORTMONTHLY {}",BILLSREPORTMONTHLY);
+		logger.info("PHARMACEUTICALORDER {}",PHARMACEUTICALORDER);
+		logger.info("PHARMACEUTICALSTOCK {}",PHARMACEUTICALSTOCK);
+		logger.info("PHARMACEUTICALSTOCKLOT {}",PHARMACEUTICALSTOCKLOT);
+		logger.info("PHARMACEUTICALAMC {}",PHARMACEUTICALAMC);
+		logger.info("PATIENTEXTENDED {}",PATIENTEXTENDED);
+		logger.info("OPDEXTENDED {}",OPDEXTENDED);
+		logger.info("MATERNITYRESTARTINJUNE {}",MATERNITYRESTARTINJUNE);
+		logger.info("LABEXTENDED {}",LABEXTENDED);
+		logger.info("INTERNALVIEWER {}",INTERNALVIEWER);
+		logger.info("LABMULTIPLEINSERT {}",LABMULTIPLEINSERT);
+		logger.info("INTERNALPHARMACIES {}",INTERNALPHARMACIES);
+		logger.info("MERGEFUNCTION {}",MERGEFUNCTION);
+		logger.info("SMSENABLED {}",SMSENABLED);
+		logger.info("VIEWER {}",VIEWER);
+		logger.info("MAINMENUALWAYSONTOP {}",MAINMENUALWAYSONTOP);
+		logger.info("RECEIPTPRINTER {}",RECEIPTPRINTER);
+		logger.info("VIDEOMODULEENABLED {}",VIDEOMODULEENABLED);
+		logger.info("PATIENTVACCINEEXTENDED {}",PATIENTVACCINEEXTENDED);
+		logger.info("ENHANCEDSEARCH {}",ENHANCEDSEARCH);
+		logger.info("XMPPMODULEENABLED {}",XMPPMODULEENABLED);
+		logger.info("DICOMMODULEENABLED {}",DICOMMODULEENABLED);
+		logger.info("DICOMTHUMBNAILS {}",DICOMTHUMBNAILS);
+		logger.info("ALLOWPRINTOPENEDBILL {}",ALLOWPRINTOPENEDBILL);
+		logger.info("ALLOWMULTIPLEOPENEDBILL {}",ALLOWMULTIPLEOPENEDBILL);
+		logger.info("PATIENTBILLGROUPED {}",PATIENTBILLGROUPED);
+		logger.info("PATIENTBILLSTATEMENT {}",PATIENTBILLSTATEMENT);
+		logger.info("DEBUG {}",DEBUG);
+	}
+
 }
 
