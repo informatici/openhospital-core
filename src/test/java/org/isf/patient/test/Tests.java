@@ -44,124 +44,101 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests 
-{	
-	private static DbJpaUtil jpa;	
+public class Tests {
+
+	private static DbJpaUtil jpa;
 	private static TestPatient testPatient;
 	private static TestPatientContext testPatientContext;
 
-    @Autowired
-    PatientIoOperations patientIoOperation;
+	@Autowired
+	PatientIoOperations patientIoOperation;
 
-    @BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testPatient = new TestPatient();
-    	testPatientContext = new TestPatientContext();
-    }
+	@BeforeClass
+	public static void setUpClass() {
+		jpa = new DbJpaUtil();
+		testPatient = new TestPatient();
+		testPatientContext = new TestPatientContext();
+	}
 
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
+	@Before
+	public void setUp() throws OHException {
+		jpa.open();
 
-    }
-    
-	
+		_saveContext();
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		_restoreContext();
+
+		jpa.flush();
+		jpa.close();
+	}
+
+	@AfterClass
+	public static void tearDownClass() throws OHException {
+
+	}
+
 	@Test
-	public void testPatientGets() throws OHException 
-	{
+	public void testPatientGets() throws OHException {
 		Integer code = 0;
-				
 
-		try 
-		{		
+		try {
 			code = _setupTestPatient(false);
 			_checkPatientIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
+		} catch (Exception e) {
+			e.printStackTrace();
 			fail();
 		}
 	}
 
 	@Test
-	public void testPatientSets() 
-	{
+	public void testPatientSets() {
 		Integer code = 0;
-		
-				
-		try 
-		{		
-			code = _setupTestPatient(true);	
+
+		try {
+			code = _setupTestPatient(true);
 			_checkPatientIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
+		} catch (Exception e) {
+			e.printStackTrace();
 			fail();
 		}
 	}
-	
+
 	@Test
-	public void testIoGetPatients() 
-	{		
-		try 
-		{		
+	public void testIoGetPatients() {
+		try {
 			_setupTestPatient(false);
 			ArrayList<Patient> patients = patientIoOperation.getPatients();
-			
-			testPatient.check( patients.get(patients.size()-1));
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
+
+			testPatient.check(patients.get(patients.size() - 1));
+		} catch (Exception e) {
+			e.printStackTrace();
 			fail();
 		}
 	}
-	
+
 	@Test
-	public void testIoGetPatientsWithHeightAndWeight() 
-	{	
-		try 
-		{		
+	public void testIoGetPatientsWithHeightAndWeight() {
+		try {
 			_setupTestPatient(false);
 			// Pay attention that query return with PAT_ID descendant
 			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(null);
 
 			testPatient.check(patients.get(0));
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
+		} catch (Exception e) {
+			e.printStackTrace();
 			fail();
 		}
 	}
-	
+
 	@Test
 	public void testIoGetPatientsByOneOfFieldsLikeFirstName() {
 		try {
 			// given:
 			Integer code = _setupTestPatient(false);
-			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+			Patient foundPatient = (Patient) jpa.find(Patient.class, code);
 
 			// when:
 			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getFirstName());
@@ -179,7 +156,7 @@ public class Tests
 		try {
 			// given:
 			Integer code = _setupTestPatient(false);
-			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+			Patient foundPatient = (Patient) jpa.find(Patient.class, code);
 
 			// when:
 			ArrayList<Patient> patients = patientIoOperation
@@ -198,7 +175,7 @@ public class Tests
 		try {
 			// given:
 			Integer code = _setupTestPatient(false);
-			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+			Patient foundPatient = (Patient) jpa.find(Patient.class, code);
 
 			// when:
 			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
@@ -216,27 +193,25 @@ public class Tests
 		try {
 			// given:
 			Integer code = _setupTestPatient(false);
-			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+			Patient foundPatient = (Patient) jpa.find(Patient.class, code);
 
 			// when:
 			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
 
 			// then:
 			testPatient.check(patients.get(0));
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
 	}
 
 	@Test
-	public void testIoGetPatientsByOneOfFieldsLikeTaxCode()	{
-		try	{
+	public void testIoGetPatientsByOneOfFieldsLikeTaxCode() {
+		try {
 			// given:
 			Integer code = _setupTestPatient(false);
-			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+			Patient foundPatient = (Patient) jpa.find(Patient.class, code);
 
 			// when:
 			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getTaxCode());
@@ -252,18 +227,14 @@ public class Tests
 	}
 
 	@Test
-	public void testIoGetPatientsByOneOfFieldsLikeNotExistingStringShouldNotFindAnything()
-	{
-		try
-		{
+	public void testIoGetPatientsByOneOfFieldsLikeNotExistingStringShouldNotFindAnything() {
+		try {
 			Integer code = _setupTestPatient(false);
-			Patient foundPatient = (Patient)jpa.find(Patient.class, code);
+			Patient foundPatient = (Patient) jpa.find(Patient.class, code);
 			ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike("dupa");
 
 			assertThat(patients).isEmpty();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -272,152 +243,125 @@ public class Tests
 	}
 
 	@Test
-	public void testIoGetPatientFromName() 
-	{	
-		try 
-		{	
+	public void testIoGetPatientFromName() {
+		try {
 			Integer code = _setupTestPatient(false);
-			Patient foundPatient = (Patient)jpa.find(Patient.class, code); 
+			Patient foundPatient = (Patient) jpa.find(Patient.class, code);
 			Patient patient = patientIoOperation.getPatient(foundPatient.getName());
-			
+
 			assertThat(patient.getName()).isEqualTo(foundPatient.getName());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
+		} catch (Exception e) {
+			e.printStackTrace();
 			fail();
 		}
-		
+
 		return;
 	}
-	
+
 	@Test
-	public void testIoGetPatientFromCode() 
-	{	
-		try 
-		{		
+	public void testIoGetPatientFromCode() {
+		try {
 			Integer code = _setupTestPatient(false);
-			Patient foundPatient = (Patient)jpa.find(Patient.class, code); 
+			Patient foundPatient = (Patient) jpa.find(Patient.class, code);
 			Patient patient = patientIoOperation.getPatient(code);
 
 			assertThat(patient.getName()).isEqualTo(foundPatient.getName());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
+		} catch (Exception e) {
+			e.printStackTrace();
 			fail();
 		}
-		
+
 		return;
 	}
-	
+
 	@Test
-	public void testIoGetPatientAll() 
-	{	
+	public void testIoGetPatientAll() {
 		Integer code = 0;
-		
-		
-		try 
-		{		
+
+		try {
 			code = _setupTestPatient(false);
-			Patient foundPatient = (Patient)jpa.find(Patient.class, code); 
+			Patient foundPatient = (Patient) jpa.find(Patient.class, code);
 			Patient patient = patientIoOperation.getPatientAll(code);
-			
-			
+
 			assertThat(patient.getName()).isEqualTo(foundPatient.getName());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
+		} catch (Exception e) {
+			e.printStackTrace();
 			fail();
 		}
-		
+
 		return;
 	}
-	
+
 	@Test
 	public void testNewPatient() throws OHException {
 		Patient patient = testPatient.setup(true);
 		assertThat(patientIoOperation.savePatient(patient)).isNotNull();
 	}
-		
+
 	@Test
 	public void testUpdatePatientTrue() throws OHException {
 		Integer code = _setupTestPatient(false);
-		Patient patient = (Patient)jpa.find(Patient.class, code);
+		Patient patient = (Patient) jpa.find(Patient.class, code);
 		jpa.flush();
 		Patient result = patientIoOperation.savePatient(patient);
 
 		assertThat(result).isNotNull();
 	}
-	
+
 	@Test
-	public void testDeletePatient() 
-	{		
-		try 
-		{		
+	public void testDeletePatient() {
+		try {
 			Integer code = _setupTestPatient(false);
-			Patient patient = (Patient)jpa.find(Patient.class, code); 
+			Patient patient = (Patient) jpa.find(Patient.class, code);
 			boolean result = patientIoOperation.deletePatient(patient);
 			Patient deletedPatient = _getDeletedPatient(code);
 
 			assertThat(result).isTrue();
 			assertThat(deletedPatient.getCode()).isEqualTo(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
+		} catch (Exception e) {
+			e.printStackTrace();
 			fail();
 		}
-		
+
 		return;
-	}	
-	
+	}
+
 	@Test
-	public void testIsPatientPresent() 
-	{	
-		try 
-		{		
+	public void testIsPatientPresent() {
+		try {
 			Integer code = _setupTestPatient(false);
-			Patient foundPatient = (Patient)jpa.find(Patient.class, code); 
+			Patient foundPatient = (Patient) jpa.find(Patient.class, code);
 			boolean result = patientIoOperation.isPatientPresentByName(foundPatient.getName());
 
 			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
+		} catch (Exception e) {
+			e.printStackTrace();
 			fail();
 		}
-		
-		return;
-	}	
-	
-	@Test
-	public void testGetNextPatientCode() 
-	{
-		Integer code = 0;
-		Integer max = 0;
-		
-		
-		try 
-		{				
-			code = _setupTestPatient(false);
-			max = patientIoOperation.getNextPatientCode();			
-			assertThat((code + 1)).isEqualTo(max);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-		
+
 		return;
 	}
-	
+
+	@Test
+	public void testGetNextPatientCode() {
+		Integer code = 0;
+		Integer max = 0;
+
+		try {
+			code = _setupTestPatient(false);
+			max = patientIoOperation.getNextPatientCode();
+			assertThat((code + 1)).isEqualTo(max);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		return;
+	}
+
 	@Test
 	public void testMergePatientHistory() throws OHException, OHServiceException {
-    	try {
+		try {
 			// given:
 			jpa.beginTransaction();
 			Patient mergedPatient = testPatient.setup(false);
@@ -446,58 +390,50 @@ public class Tests
 		assertThat(mergedPatientResult.getDeleted()).isEqualTo("N");
 	}
 
-	private void _saveContext() throws OHException 
-    {	
+	private void _saveContext() throws OHException {
 		testPatientContext.saveAll(jpa);
-        		
-        return;
-    }
-		
-    private void _restoreContext() throws OHException 
-    {
+
+		return;
+	}
+
+	private void _restoreContext() throws OHException {
 		testPatientContext.deleteNews(jpa);
-        
-        return;
-    }
-    	
+
+		return;
+	}
+
 	private Integer _setupTestPatient(
-			boolean usingSet) throws OHException 
-	{
+			boolean usingSet) throws OHException {
 		Patient patient;
-	
-		
-    	jpa.beginTransaction();	
-    	patient = testPatient.setup(usingSet);
+
+		jpa.beginTransaction();
+		patient = testPatient.setup(usingSet);
 		jpa.persist(patient);
-    	jpa.commitTransaction();
-				    	
+		jpa.commitTransaction();
+
 		return patient.getCode();
 	}
-		
-	private void _checkPatientIntoDb(
-			Integer code) throws OHException 
-	{
-		Patient foundPatient; 
-			
 
-		foundPatient = (Patient)jpa.find(Patient.class, code); 
+	private void _checkPatientIntoDb(
+			Integer code) throws OHException {
+		Patient foundPatient;
+
+		foundPatient = (Patient) jpa.find(Patient.class, code);
 		testPatient.check(foundPatient);
 	}
-		
+
 	@SuppressWarnings("unchecked")
 	private Patient _getDeletedPatient(
-			Integer Code) throws OHException 
-	{	
+			Integer Code) throws OHException {
 		ArrayList<Object> params = new ArrayList<>();
-		
-		
-		jpa.beginTransaction();			
+
+		jpa.beginTransaction();
 		jpa.createQuery("SELECT * FROM PATIENT WHERE PAT_DELETED = 'Y' AND PAT_ID = ?", Patient.class, false);
 		params.add(Code);
 		jpa.setParameters(params, false);
-		List<Patient> patients = (List<Patient>)jpa.getList();
+		List<Patient> patients = (List<Patient>) jpa.getList();
 		jpa.commitTransaction();
-		
+
 		return patients.get(0);
 	}
 }

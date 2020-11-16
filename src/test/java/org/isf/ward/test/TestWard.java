@@ -26,45 +26,36 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
 
-public class TestWard 
-{	
-    private String code = "Z";
-    private String description = "TestDescription";
-    private String telephone = "TestTelephone";
-    private String fax = "TestFac";
-    private String email = "TestEmail";
-    private Integer beds = 100;
-    private Integer nurs = 101;
-    private Integer docs = 102;   
-    private boolean isPharmacy = true;    
-    private boolean isFemale = false;  
-    private boolean isMale = true;
-    
-			
-	public Ward setup(
-			boolean usingSet) throws OHException 
-	{
+public class TestWard {
+
+	private String code = "Z";
+	private String description = "TestDescription";
+	private String telephone = "TestTelephone";
+	private String fax = "TestFac";
+	private String email = "TestEmail";
+	private Integer beds = 100;
+	private Integer nurs = 101;
+	private Integer docs = 102;
+	private boolean isPharmacy = true;
+	private boolean isFemale = false;
+	private boolean isMale = true;
+
+	public Ward setup(boolean usingSet) throws OHException {
 		Ward ward;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			ward = new Ward();
 			_setParameters(ward);
-		}
-		else
-		{
+		} else {
 			// Create Ward with all parameters 
 			ward = new Ward(code, description, telephone, fax, email, beds, nurs, docs,
 					isPharmacy, isMale, isFemale);
 		}
-				    	
+
 		return ward;
 	}
-	
-	public void _setParameters(
-			Ward ward) 
-	{	
+
+	public void _setParameters(Ward ward) {
 		ward.setCode(code);
 		ward.setBeds(beds);
 		ward.setDescription(description);
@@ -77,20 +68,18 @@ public class TestWard
 		ward.setPharmacy(isPharmacy);
 		ward.setTelephone(telephone);
 	}
-	
-	public void check(
-			Ward ward) 
-	{		
-    	assertThat(ward.getCode()).isEqualTo(code);
-    	assertThat(ward.getBeds()).isEqualTo(beds);
-    	assertThat(ward.getDescription()).isEqualTo(description);
-    	assertThat(ward.getDocs()).isEqualTo(docs);
-    	assertThat(ward.getEmail()).isEqualTo(email);
-    	assertThat(ward.getFax()).isEqualTo(fax);
-    	assertThat(ward.isFemale()).isEqualTo(isFemale);
-    	assertThat(ward.isMale()).isEqualTo(isMale);
-    	assertThat(ward.getNurs()).isEqualTo(nurs);
-    	assertThat(ward.isPharmacy()).isEqualTo(isPharmacy);
-    	assertThat(ward.getTelephone()).isEqualTo(telephone);
+
+	public void check(Ward ward) {
+		assertThat(ward.getCode()).isEqualTo(code);
+		assertThat(ward.getBeds()).isEqualTo(beds);
+		assertThat(ward.getDescription()).isEqualTo(description);
+		assertThat(ward.getDocs()).isEqualTo(docs);
+		assertThat(ward.getEmail()).isEqualTo(email);
+		assertThat(ward.getFax()).isEqualTo(fax);
+		assertThat(ward.isFemale()).isEqualTo(isFemale);
+		assertThat(ward.isMale()).isEqualTo(isMale);
+		assertThat(ward.getNurs()).isEqualTo(nurs);
+		assertThat(ward.isPharmacy()).isEqualTo(isPharmacy);
+		assertThat(ward.getTelephone()).isEqualTo(telephone);
 	}
 }

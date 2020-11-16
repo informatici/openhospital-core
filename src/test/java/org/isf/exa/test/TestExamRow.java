@@ -27,43 +27,30 @@ import org.isf.exa.model.Exam;
 import org.isf.exa.model.ExamRow;
 import org.isf.utils.exception.OHException;
 
-public class TestExamRow 
-{	
-    private String description = "TestDescription";
-    
-			
-	public ExamRow setup(
-			Exam exam,
-			boolean usingSet) throws OHException 
-	{
+public class TestExamRow {
+
+	private String description = "TestDescription";
+
+	public ExamRow setup(Exam exam, boolean usingSet) throws OHException {
 		ExamRow examRow;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			examRow = new ExamRow();
 			_setParameters(examRow, exam);
-		}
-		else
-		{
+		} else {
 			// Create ExamRow with all parameters 
 			examRow = new ExamRow(exam, description);
 		}
-				    	
+
 		return examRow;
 	}
-	
-	public void _setParameters(
-			ExamRow examRow,
-			Exam exam) 
-	{	
+
+	public void _setParameters(ExamRow examRow, Exam exam) {
 		examRow.setDescription(description);
 		examRow.setExamCode(exam);
 	}
-	
-	public void check(
-			ExamRow examRow) 
-	{		
-    	assertThat(examRow.getDescription()).isEqualTo(description);
+
+	public void check(ExamRow examRow) {
+		assertThat(examRow.getDescription()).isEqualTo(description);
 	}
 }

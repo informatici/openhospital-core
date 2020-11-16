@@ -26,131 +26,102 @@ import static org.assertj.core.api.Assertions.within;
 
 import java.util.ArrayList;
 
+import org.isf.OHCoreTestCase;
 import org.isf.priceslist.model.Price;
 import org.isf.priceslist.model.PriceList;
 import org.isf.priceslist.service.PriceIoOperationRepository;
 import org.isf.priceslist.service.PriceListIoOperationRepository;
 import org.isf.priceslist.service.PricesListIoOperations;
-import org.isf.utils.db.DbJpaUtil;
-import org.isf.utils.exception.OHException;
-import org.isf.utils.exception.OHServiceException;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests 
-{
+public class Tests extends OHCoreTestCase {
+
 	private static TestPriceList testPriceList;
-	private static TestPriceListContext testPriceListContext;
 	private static TestPrice testPrice;
-	private static TestPriceContext testPriceContext;
-	private static DbJpaUtil jpa;
 
-    @Autowired
-    PricesListIoOperations priceListIoOperation;
-    @Autowired
-    PriceListIoOperationRepository priceListIoOperationRepository;
-    @Autowired
-    PriceIoOperationRepository priceIoOperationRepository;
-		
+	@Autowired
+	PricesListIoOperations priceListIoOperation;
+	@Autowired
+	PriceListIoOperationRepository priceListIoOperationRepository;
+	@Autowired
+	PriceIoOperationRepository priceIoOperationRepository;
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-		jpa = new DbJpaUtil();
-    	testPriceList = new TestPriceList();
-    	testPriceListContext = new TestPriceListContext();
-    	testPrice = new TestPrice();
-    	testPriceContext = new TestPriceContext();
-    }
+	public static void setUpClass() {
+		testPriceList = new TestPriceList();
+		testPrice = new TestPrice();
+	}
 
-    @Before
-    @After
-    public void setUp() throws OHException {
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
+	}
 
-		priceIoOperationRepository.deleteAll();
-		priceListIoOperationRepository.deleteAll();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-    	testPriceList = null;
-    	testPriceListContext = null;
-    	testPrice = null;
-    	testPriceContext = null;
-    }
-	
-		
 	@Test
-	public void testPriceListGets() throws OHException {
+	public void testPriceListGets() throws Exception {
 		// given:
 		int id = _setupTestPriceList(false);
 
 		// when, then:
 		_checkPriceListIntoDb(id);
 	}
-	
+
 	@Test
-	public void testPriceListSets() throws OHException {
+	public void testPriceListSets() throws Exception {
 		// given, when:
 		int id = _setupTestPriceList(true);
 
 		// then:
 		_checkPriceListIntoDb(id);
 	}
-	
+
 	@Test
-	public void testIoGetLists() throws OHException, OHServiceException {
+	public void testIoGetLists() throws Exception {
 		// given:
 		int id = _setupTestPriceList(true);
 
 		// when:
 		ArrayList<PriceList> priceLists = priceListIoOperation.getLists();
-			
+
 		// then:
 		assertThat(priceLists.get(0).getName()).isEqualTo(priceListIoOperationRepository.findOne(id).getName());
 	}
-	
+
 	@Test
-	public void testPriceGets() throws OHException {
+	public void testPriceGets() throws Exception {
 		// given:
 		int id = _setupTestPrice(false);
 
 		// when, then:
 		_checkPriceIntoDb(id);
 	}
-	
+
 	@Test
-	public void testPriceSets() throws OHException {
+	public void testPriceSets() throws Exception {
 		// given, when:
 		int id = _setupTestPrice(false);
 
 		// then:
 		_checkPriceIntoDb(id);
 	}
-	
+
 	@Test
-	public void testIoGetPrices() throws OHException, OHServiceException {
+	public void testIoGetPrices() throws Exception {
 		// given:
 		int id = _setupTestPrice(false);
 
 		// when:
 		ArrayList<Price> prices = priceListIoOperation.getPrices();
-			
+
 		// then:
 		assertThat(prices.get(0).getPrice()).isEqualTo(priceIoOperationRepository.findOne(id).getPrice());
 	}
-	
+
 	@Test
-	public void testIoUpdatePrices() throws OHException, OHServiceException {
+	public void testIoUpdatePrices() throws Exception {
 		// given:
 		ArrayList<Price> prices = new ArrayList<>();
 		int deleteId = _setupTestPrice(false);
@@ -168,9 +139,9 @@ public class Tests
 		assertThat(result).isTrue();
 		assertThat(foundPrice.getList().getId()).isEqualTo(priceList.getId());
 	}
-		
+
 	@Test
-	public void testIoNewList() throws OHServiceException, OHException {
+	public void testIoNewList() throws Exception {
 		// given:
 		PriceList pricelist = testPriceList.setup(false);
 
@@ -181,9 +152,9 @@ public class Tests
 		PriceList foundPriceList = priceListIoOperationRepository.findOne(pricelist.getId());
 		_checkPriceListIntoDb(foundPriceList.getId());
 	}
-	
+
 	@Test
-	public void testIoUpdateList() throws OHException, OHServiceException {
+	public void testIoUpdateList() throws Exception {
 		// given:
 		int id = _setupTestPriceList(true);
 		PriceList priceList = priceListIoOperationRepository.findOne(id);
@@ -195,9 +166,9 @@ public class Tests
 		// then:
 		assertThat(priceList.getName()).isEqualTo("NewListName");
 	}
-	
+
 	@Test
-	public void testIoDeleteList() throws OHServiceException, OHException {
+	public void testIoDeleteList() throws Exception {
 		// given:
 		int id = _setupTestPriceList(true);
 		PriceList priceList = priceListIoOperationRepository.findOne(id);
@@ -208,9 +179,9 @@ public class Tests
 		// then:
 		assertThat(priceListIoOperationRepository.count()).isZero();
 	}
-	
+
 	@Test
-	public void testIoCopyList() throws OHException, OHServiceException {
+	public void testIoCopyList() throws Exception {
 		// given:
 		int id = _setupTestPrice(true);
 		Price price = priceIoOperationRepository.findOne(id);
@@ -224,9 +195,9 @@ public class Tests
 		assertThat(copyPrice.getId()).isEqualTo(id + 1);
 		assertThat(copyPrice.getPrice()).isCloseTo(2 * price.getPrice(), within(0.10D));
 	}
-	
+
 	@Test
-	public void testIoCopyListSteps() throws OHException, OHServiceException {
+	public void testIoCopyListSteps() throws Exception {
 		// given:
 		int id = _setupTestPrice(true);
 		Price price = priceIoOperationRepository.findOne(id);
@@ -241,83 +212,29 @@ public class Tests
 		assertThat(copyPrice.getPrice()).isCloseTo(Math.round(2 * price.getPrice() / 3) * 3, within(0.10D));
 	}
 
-
-	private int _setupTestPriceList(
-			boolean usingSet) throws OHException {
+	private int _setupTestPriceList(boolean usingSet) throws Exception {
 		PriceList priceList = testPriceList.setup(usingSet);
-		priceListIoOperationRepository.save(priceList);
-		
+		priceListIoOperationRepository.saveAndFlush(priceList);
 		return priceList.getId();
 	}
-	
-	private void _checkPriceListIntoDb(
-			int id) throws OHException 
-	{
-		PriceList foundPriceList;
-		
 
+	private void _checkPriceListIntoDb(int id) throws Exception {
+		PriceList foundPriceList;
 		foundPriceList = priceListIoOperationRepository.findOne(id);
 		testPriceList.check(foundPriceList);
 	}
-	
-    private int _setupTestPrice(boolean usingSet) throws OHException {
+
+	private int _setupTestPrice(boolean usingSet) throws Exception {
 		PriceList priceList = testPriceList.setup(true);
 		Price price = testPrice.setup(priceList, usingSet);
-		priceListIoOperationRepository.save(priceList);
-		priceIoOperationRepository.save(price);
-
+		priceListIoOperationRepository.saveAndFlush(priceList);
+		priceIoOperationRepository.saveAndFlush(price);
 		return price.getId();
 	}
-	
-	private void _checkPriceIntoDb(int id) throws OHException {
-		Price foundPrice;
-		
-		
-		foundPrice = priceIoOperationRepository.findOne(id);
+
+	private void _checkPriceIntoDb(int id) throws Exception {
+		Price foundPrice = priceIoOperationRepository.findOne(id);
 		testPrice.check(foundPrice);
 		testPriceList.check(foundPrice.getList());
-	}
-	
-	private int _getListMax() throws OHException 
-	{
-		String query = null;
-		Integer id = 0;
-				
-
-		jpa.beginTransaction();		
-		
-		try {
-			query = "SELECT MAX(LST_ID) FROM PRICELISTS";
-			jpa.createQuery(query, null, false);
-			id = (Integer)jpa.getResult();
-		}  catch (OHException e) {
-			e.printStackTrace();
-		} 				
-	
-		jpa.commitTransaction();
-
-		return id;
-	}	
-
-	
-	private int _getPriceMax() throws OHException 
-	{
-		String query = null;
-		Integer id = 0;
-				
-
-		jpa.beginTransaction();		
-		
-		try {
-			query = "SELECT MAX(PRC_ID) FROM PRICES";
-			jpa.createQuery(query, null, false);
-			id = (Integer)jpa.getResult();
-		}  catch (OHException e) {
-			e.printStackTrace();
-		} 				
-	
-		jpa.commitTransaction();
-
-		return id;
 	}
 }

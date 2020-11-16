@@ -34,8 +34,8 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
 
-public class TestMovementWard 
-{	 
+public class TestMovementWard {
+
 	private GregorianCalendar now = new GregorianCalendar();
 	private GregorianCalendar date = new GregorianCalendar(now.get(Calendar.YEAR), 2, 2);
 	private boolean isPatient = false;
@@ -44,8 +44,7 @@ public class TestMovementWard
 	private String description = "TestDescriptionm";
 	private Double quantity = 46.;
 	private String units = "TestUni";
-    
-			
+
 	public MovementWard setup(
 			Ward ward,
 			Patient patient,
@@ -53,24 +52,20 @@ public class TestMovementWard
 			Ward wardTo,
 			Ward wardFrom,
 			Lot lot,
-			boolean usingSet) throws OHException 
-	{
+			boolean usingSet) throws OHException {
 		MovementWard movementWard;
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			movementWard = new MovementWard();
 			_setParameters(movementWard, ward, patient, medical, wardFrom, wardTo, lot);
-		}
-		else
-		{
+		} else {
 			// Create MovementWard with all parameters 
 			movementWard = new MovementWard(ward, date, isPatient, patient, age, weight, description, medical, quantity, units, wardTo, wardFrom, lot);
 		}
-				    	
+
 		return movementWard;
 	}
-	
+
 	public void _setParameters(
 			MovementWard movementWard,
 			Ward ward,
@@ -78,8 +73,7 @@ public class TestMovementWard
 			Medical medical,
 			Ward wardTo,
 			Ward wardFrom,
-			Lot lot) 
-	{	
+			Lot lot) {
 		movementWard.setAge(age);
 		movementWard.setDate(date);
 		movementWard.setDescription(description);
@@ -94,16 +88,14 @@ public class TestMovementWard
 		movementWard.setWardTo(wardTo);
 		movementWard.setlot(lot);
 	}
-	
-	public void check(
-			MovementWard movementWard) 
-	{		
-    	assertThat(movementWard.getAge()).isEqualTo(age);
-    	assertThat(movementWard.getDate()).isEqualTo(date);
-    	assertThat(movementWard.getDescription()).isEqualTo(description);
-    	assertThat(movementWard.isPatient()).isEqualTo(isPatient);
-    	assertThat(movementWard.getQuantity()).isEqualTo(quantity);
-    	assertThat(movementWard.getUnits()).isEqualTo(units);
-    	assertThat(movementWard.getWeight()).isCloseTo(weight, within(0.1F));
+
+	public void check(MovementWard movementWard) {
+		assertThat(movementWard.getAge()).isEqualTo(age);
+		assertThat(movementWard.getDate()).isEqualTo(date);
+		assertThat(movementWard.getDescription()).isEqualTo(description);
+		assertThat(movementWard.isPatient()).isEqualTo(isPatient);
+		assertThat(movementWard.getQuantity()).isEqualTo(quantity);
+		assertThat(movementWard.getUnits()).isEqualTo(units);
+		assertThat(movementWard.getWeight()).isCloseTo(weight, within(0.1F));
 	}
 }

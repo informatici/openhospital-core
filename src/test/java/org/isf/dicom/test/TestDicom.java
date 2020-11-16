@@ -32,14 +32,12 @@ import java.util.Locale;
 import java.util.Random;
 
 import javax.sql.rowset.serial.SerialBlob;
-import javax.sql.rowset.serial.SerialException;
 
 import org.isf.dicom.model.FileDicom;
 import org.isf.dicomtype.model.DicomType;
 import org.isf.utils.exception.OHException;
 
-public class TestDicom 
-{
+public class TestDicom {
 
 	SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy", new Locale("en"));
 	private Blob dicomData = _createRandomBlob(100);
@@ -69,33 +67,25 @@ public class TestDicom
 	public TestDicom() throws ParseException {
 	}
 
-	public FileDicom setup(
-			DicomType dicomType, boolean usingSet) throws OHException 
-	{
+	public FileDicom setup(DicomType dicomType, boolean usingSet) throws OHException {
 		FileDicom dicom;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			dicom = new FileDicom();
 			_setParameters(dicom, dicomType);
-		}
-		else
-		{
+		} else {
 			// Create FileDicom with all parameters 
-			dicom = new FileDicom(patId, dicomData, 0, fileName, dicomAccessionNumber, dicomInstitutionName, dicomPatientID, 
-					dicomPatientName, dicomPatientAddress, dicomPatientAge, dicomPatientSex, dicomPatientBirthDate, 
-					dicomStudyId, dicomStudyDate, dicomStudyDescription, dicomSeriesUID, dicomSeriesInstanceUID, 
-					dicomSeriesNumber, dicomSeriesDescriptionCodeSequence, dicomSeriesDate, dicomSeriesDescription, 
-					dicomInstanceUID, modality, dicomThumbnail,dicomType);
-		}			
-		
+			dicom = new FileDicom(patId, dicomData, 0, fileName, dicomAccessionNumber, dicomInstitutionName, dicomPatientID,
+					dicomPatientName, dicomPatientAddress, dicomPatientAge, dicomPatientSex, dicomPatientBirthDate,
+					dicomStudyId, dicomStudyDate, dicomStudyDescription, dicomSeriesUID, dicomSeriesInstanceUID,
+					dicomSeriesNumber, dicomSeriesDescriptionCodeSequence, dicomSeriesDate, dicomSeriesDescription,
+					dicomInstanceUID, modality, dicomThumbnail, dicomType);
+		}
+
 		return dicom;
 	}
-	
-	public void _setParameters(
-			FileDicom dicom, DicomType dicomType) 
-	{	
+
+	public void _setParameters(FileDicom dicom, DicomType dicomType) {
 		dicom.setDicomAccessionNumber(dicomAccessionNumber);
 		dicom.setDicomData(dicomData);
 		dicom.setDicomInstanceUID(dicomInstanceUID);
@@ -121,52 +111,45 @@ public class TestDicom
 		dicom.setModality(modality);
 		dicom.setDicomType(dicomType);
 	}
-	
-	public void check(
-			FileDicom dicom) 
-	{
-    	assertThat(dicom.getDicomAccessionNumber()).isEqualTo(dicomAccessionNumber);
-    	assertThat(dicom.getDicomInstanceUID()).isEqualTo(dicomInstanceUID);
-    	assertThat(dicom.getDicomInstitutionName()).isEqualTo(dicomInstitutionName);
-    	assertThat(dicom.getDicomPatientAddress()).isEqualTo(dicomPatientAddress);
-    	assertThat(dicom.getDicomPatientAge()).isEqualTo(dicomPatientAge);
-    	assertThat(dicom.getDicomPatientBirthDate()).isEqualTo(dicomPatientBirthDate);
-    	assertThat(dicom.getDicomPatientID()).isEqualTo(dicomPatientID);
-    	assertThat(dicom.getDicomPatientName()).isEqualTo(dicomPatientName);
-    	assertThat(dicom.getDicomPatientSex()).isEqualTo(dicomPatientSex);
-    	assertThat(formatter.format(dicom.getDicomSeriesDate())).isEqualTo(formatter.format(dicomSeriesDate));
-    	assertThat(dicom.getDicomSeriesDescription()).isEqualTo(dicomSeriesDescription);
-    	assertThat(dicom.getDicomSeriesDescriptionCodeSequence()).isEqualTo(dicomSeriesDescriptionCodeSequence);
-    	assertThat(dicom.getDicomSeriesInstanceUID()).isEqualTo(dicomSeriesInstanceUID);
-    	assertThat(dicom.getDicomSeriesNumber()).isEqualTo(dicomSeriesNumber);
-    	assertThat(dicom.getDicomSeriesUID()).isEqualTo(dicomSeriesUID);
-    	assertThat(formatter.format(dicom.getDicomStudyDate())).isEqualTo(formatter.format(dicomStudyDate));
-    	assertThat(dicom.getDicomStudyDescription()).isEqualTo(dicomStudyDescription);
-    	assertThat(dicom.getDicomStudyId()).isEqualTo(dicomStudyId);
-    	assertThat(dicom.getFileName()).isEqualTo(fileName);
-    	assertThat(dicom.getPatId()).isEqualTo(patId);
-    	assertThat(dicom.getModality()).isEqualTo(modality);
+
+	public void check(FileDicom dicom) {
+		assertThat(dicom.getDicomAccessionNumber()).isEqualTo(dicomAccessionNumber);
+		assertThat(dicom.getDicomInstanceUID()).isEqualTo(dicomInstanceUID);
+		assertThat(dicom.getDicomInstitutionName()).isEqualTo(dicomInstitutionName);
+		assertThat(dicom.getDicomPatientAddress()).isEqualTo(dicomPatientAddress);
+		assertThat(dicom.getDicomPatientAge()).isEqualTo(dicomPatientAge);
+		assertThat(dicom.getDicomPatientBirthDate()).isEqualTo(dicomPatientBirthDate);
+		assertThat(dicom.getDicomPatientID()).isEqualTo(dicomPatientID);
+		assertThat(dicom.getDicomPatientName()).isEqualTo(dicomPatientName);
+		assertThat(dicom.getDicomPatientSex()).isEqualTo(dicomPatientSex);
+		assertThat(formatter.format(dicom.getDicomSeriesDate())).isEqualTo(formatter.format(dicomSeriesDate));
+		assertThat(dicom.getDicomSeriesDescription()).isEqualTo(dicomSeriesDescription);
+		assertThat(dicom.getDicomSeriesDescriptionCodeSequence()).isEqualTo(dicomSeriesDescriptionCodeSequence);
+		assertThat(dicom.getDicomSeriesInstanceUID()).isEqualTo(dicomSeriesInstanceUID);
+		assertThat(dicom.getDicomSeriesNumber()).isEqualTo(dicomSeriesNumber);
+		assertThat(dicom.getDicomSeriesUID()).isEqualTo(dicomSeriesUID);
+		assertThat(formatter.format(dicom.getDicomStudyDate())).isEqualTo(formatter.format(dicomStudyDate));
+		assertThat(dicom.getDicomStudyDescription()).isEqualTo(dicomStudyDescription);
+		assertThat(dicom.getDicomStudyId()).isEqualTo(dicomStudyId);
+		assertThat(dicom.getFileName()).isEqualTo(fileName);
+		assertThat(dicom.getPatId()).isEqualTo(patId);
+		assertThat(dicom.getModality()).isEqualTo(modality);
 	}
 
 	public Blob _createRandomBlob(
-			int byteCount)
-	{	
+			int byteCount) {
 		Blob blob = null;
 		byte[] data;
-		
-		
-		data = new byte[byteCount];		
-		new Random().nextBytes(data);		 
+
+		data = new byte[byteCount];
+		new Random().nextBytes(data);
 		try {
 			blob = new SerialBlob(data);
-		} catch (SerialException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	
+
 		return blob;
 	}
 
-	
 }

@@ -27,44 +27,31 @@ import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryRow;
 import org.isf.utils.exception.OHException;
 
-public class TestLaboratoryRow 
-{	
+public class TestLaboratoryRow {
+
 	private Integer code = 0;
-    private String description = "TestDescription";
-    
-			
-	public LaboratoryRow setup(
-			Laboratory laboratory,
-			boolean usingSet) throws OHException 
-	{
+	private String description = "TestDescription";
+
+	public LaboratoryRow setup(Laboratory laboratory, boolean usingSet) throws OHException {
 		LaboratoryRow laboratoryRow;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			laboratoryRow = new LaboratoryRow();
 			_setParameters(laboratoryRow, laboratory);
-		}
-		else
-		{
+		} else {
 			// Create LaboratoryRow with all parameters 
 			laboratoryRow = new LaboratoryRow(laboratory, description);
 		}
-				    	
+
 		return laboratoryRow;
 	}
-	
-	public void _setParameters(
-			LaboratoryRow laboratoryRow,
-			Laboratory laboratory) 
-	{	
+
+	public void _setParameters(LaboratoryRow laboratoryRow, Laboratory laboratory) {
 		laboratoryRow.setDescription(description);
 		laboratoryRow.setLabId(laboratory);
 	}
-	
-	public void check(
-			LaboratoryRow laboratoryRow) 
-	{		
-    	assertThat(laboratoryRow.getDescription()).isEqualTo(description);
+
+	public void check(LaboratoryRow laboratoryRow) {
+		assertThat(laboratoryRow.getDescription()).isEqualTo(description);
 	}
 }

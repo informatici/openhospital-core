@@ -30,51 +30,35 @@ import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
 
-public class TestMedicalWard 
-{	 
-	private float in_quantity = (float)100.100;
-	private float out_quantity = (float)30.30;
-    
-			
-	public MedicalWard setup(
-			Medical medical,
-			Ward ward,
-			Lot lot,
-			boolean usingSet) throws OHException 
-	{
+public class TestMedicalWard {
+
+	private float in_quantity = (float) 100.100;
+	private float out_quantity = (float) 30.30;
+
+	public MedicalWard setup(Medical medical, Ward ward, Lot lot, boolean usingSet) throws OHException {
 		MedicalWard medicalward;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			medicalward = new MedicalWard();
 			_setParameters(medicalward, medical, ward, lot);
-		}
-		else
-		{
+		} else {
 			// Create MedicalWard with all parameters 
 			medicalward = new MedicalWard(ward, medical, in_quantity, out_quantity, lot);
 		}
-				    	
+
 		return medicalward;
 	}
-	
-	public void _setParameters(
-			MedicalWard medicalward,
-			Medical medical,
-			Ward ward, Lot lot) 
-	{	
+
+	public void _setParameters(MedicalWard medicalward, Medical medical, Ward ward, Lot lot) {
 		medicalward.setMedical(medical);
 		medicalward.setWard(ward);
 		medicalward.setInQuantity(in_quantity);
 		medicalward.setOutQuantity(out_quantity);
 		medicalward.setLot(lot);
 	}
-	
-	public void check(
-			MedicalWard medicalward) 
-	{		
-    	assertThat(medicalward.getInQuantity()).isCloseTo(in_quantity, within(0.1F));
-    	assertThat(medicalward.getOutQuantity()).isCloseTo(out_quantity, within(0.1F));
+
+	public void check(MedicalWard medicalward) {
+		assertThat(medicalward.getInQuantity()).isCloseTo(in_quantity, within(0.1F));
+		assertThat(medicalward.getOutQuantity()).isCloseTo(out_quantity, within(0.1F));
 	}
 }

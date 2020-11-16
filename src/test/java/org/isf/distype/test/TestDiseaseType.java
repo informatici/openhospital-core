@@ -26,43 +26,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.distype.model.DiseaseType;
 import org.isf.utils.exception.OHException;
 
-public class TestDiseaseType 
-{	
-    private String code = "ZZ";
-    private String description = "TestDescription";
-    
-			
-	public DiseaseType setup(
-			boolean usingSet) throws OHException 
-	{
+public class TestDiseaseType {
+
+	private String code = "ZZ";
+	private String description = "TestDescription";
+
+	public DiseaseType setup(boolean usingSet) throws OHException {
 		DiseaseType diseaseType;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			diseaseType = new DiseaseType();
 			_setParameters(diseaseType);
-		}
-		else
-		{
+		} else {
 			// Create DiseaseType with all parameters 
 			diseaseType = new DiseaseType(code, description);
 		}
-				    	
+
 		return diseaseType;
 	}
-	
-	public void _setParameters(
-			DiseaseType diseaseType) 
-	{	
+
+	public void _setParameters(DiseaseType diseaseType) {
 		diseaseType.setCode(code);
 		diseaseType.setDescription(description);
 	}
-	
-	public void check(
-			DiseaseType diseaseType) 
-	{		
-    	assertThat(diseaseType.getCode()).isEqualTo(code);
-    	assertThat(diseaseType.getDescription()).isEqualTo(description);
+
+	public void check(DiseaseType diseaseType) {
+		assertThat(diseaseType.getCode()).isEqualTo(code);
+		assertThat(diseaseType.getDescription()).isEqualTo(description);
 	}
 }

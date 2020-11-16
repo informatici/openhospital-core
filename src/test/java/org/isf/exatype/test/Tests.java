@@ -22,249 +22,102 @@
 package org.isf.exatype.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
+import org.isf.OHCoreTestCase;
 import org.isf.exatype.model.ExamType;
 import org.isf.exatype.service.ExamTypeIoOperation;
-import org.isf.utils.db.DbJpaUtil;
+import org.isf.exatype.service.ExamTypeIoOperationRepository;
 import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestExamType testExamType;
-	private static TestExamTypeContext testExamTypeContext;
 
-    @Autowired
-    ExamTypeIoOperation examTypeIoOperation;
+	@Autowired
+	ExamTypeIoOperation examTypeIoOperation;
+	@Autowired
+	ExamTypeIoOperationRepository examTypeIoOperationRepository;
 
-    
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testExamType = new TestExamType();
-    	testExamTypeContext = new TestExamTypeContext();
-    }
-
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-    	testExamType = null;
-    	testExamTypeContext = null;
-    }
-	
-		
-	@Test
-	public void testExamTypeGets() 
-	{
-		String code = "";
-			
-
-		try 
-		{		
-			code = _setupTestExamType(false);
-			_checkExamTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public static void setUpClass() {
+		testExamType = new TestExamType();
 	}
-	
-	@Test
-	public void testExamTypeSets() 
-	{
-		String code = "";
-			
 
-		try 
-		{		
-			code = _setupTestExamType(true);
-			_checkExamTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoGetExamType()
-	{
-		String code = "";
-		
-		
-		try 
-		{		
-			code = _setupTestExamType(false);
-			ExamType foundExamType = (ExamType)jpa.find(ExamType.class, code); 
-			ArrayList<ExamType> examTypes = examTypeIoOperation.getExamType();
-
-			assertThat(examTypes).contains(foundExamType);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoUpdateExamType() 
-	{
-		String code = "";
-		boolean result = false;
-		
-		
-		try 
-		{		
-			code = _setupTestExamType(false);
-			ExamType foundExamType = (ExamType)jpa.find(ExamType.class, code); 
-			foundExamType.setDescription("Update");
-			result = examTypeIoOperation.updateExamType(foundExamType);
-			ExamType updateExamType = (ExamType)jpa.find(ExamType.class, code);
-
-			assertThat(result).isTrue();
-			assertThat(updateExamType.getDescription()).isEqualTo("Update");
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoNewExamType()
-	{
-		boolean result = false;
-		
-		
-		try 
-		{		
-			ExamType examType = testExamType.setup(true);
-			result = examTypeIoOperation.newExamType(examType);
-
-			assertThat(result).isTrue();
-			_checkExamTypeIntoDb(examType.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
 
 	@Test
-	public void testIoIsCodePresent()  
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestExamType(false);
-			result = examTypeIoOperation.isCodePresent(code);
-
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testExamTypeGets() throws Exception {
+		String code = _setupTestExamType(false);
+		_checkExamTypeIntoDb(code);
 	}
 
 	@Test
-	public void testIoDeleteExamType() 
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestExamType(false);
-			ExamType foundExamType = (ExamType)jpa.find(ExamType.class, code); 
-			result = examTypeIoOperation.deleteExamType(foundExamType);
-			assertThat(result).isTrue();
-
-			result = examTypeIoOperation.isCodePresent(code);
-			assertThat(result).isFalse();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testExamTypeSets() throws Exception {
+		String code = _setupTestExamType(true);
+		_checkExamTypeIntoDb(code);
 	}
-	
-	
-	private void _saveContext() throws OHException 
-    {	
-		testExamTypeContext.saveAll(jpa);
-    }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testExamTypeContext.deleteNews(jpa);
-    }
-        
-	private String _setupTestExamType(
-			boolean usingSet) throws OHException 
-	{
-		ExamType examType;
-		
 
-    	jpa.beginTransaction();	
-    	examType = testExamType.setup(usingSet);
-		jpa.persist(examType);
-    	jpa.commitTransaction();
-    	
+	@Test
+	public void testIoGetExamType() throws Exception {
+		String code = _setupTestExamType(false);
+		ExamType foundExamType = examTypeIoOperationRepository.findOne(code);
+		ArrayList<ExamType> examTypes = examTypeIoOperation.getExamType();
+		assertThat(examTypes).contains(foundExamType);
+	}
+
+	@Test
+	public void testIoUpdateExamType() throws Exception {
+		String code = _setupTestExamType(false);
+		ExamType foundExamType = examTypeIoOperationRepository.findOne(code);
+		foundExamType.setDescription("Update");
+		boolean result = examTypeIoOperation.updateExamType(foundExamType);
+		assertThat(result).isTrue();
+		ExamType updateExamType = examTypeIoOperationRepository.findOne(code);
+		assertThat(updateExamType.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testIoNewExamType() throws Exception {
+		ExamType examType = testExamType.setup(true);
+		boolean result = examTypeIoOperation.newExamType(examType);
+		assertThat(result).isTrue();
+		_checkExamTypeIntoDb(examType.getCode());
+	}
+
+	@Test
+	public void testIoIsCodePresent() throws Exception {
+		String code = _setupTestExamType(false);
+		boolean result = examTypeIoOperation.isCodePresent(code);
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void testIoDeleteExamType() throws Exception {
+		String code = _setupTestExamType(false);
+		ExamType foundExamType = examTypeIoOperationRepository.findOne(code);
+		boolean result = examTypeIoOperation.deleteExamType(foundExamType);
+		assertThat(result).isTrue();
+		result = examTypeIoOperation.isCodePresent(code);
+		assertThat(result).isFalse();
+	}
+
+	private String _setupTestExamType(boolean usingSet) throws OHException {
+		ExamType examType = testExamType.setup(usingSet);
+		examTypeIoOperationRepository.saveAndFlush(examType);
 		return examType.getCode();
 	}
-		
-	private void  _checkExamTypeIntoDb(
-			String code) throws OHException 
-	{
-		ExamType foundExamType;
-		
 
-		foundExamType = (ExamType)jpa.find(ExamType.class, code); 
+	private void _checkExamTypeIntoDb(String code) throws OHException {
+		ExamType foundExamType = examTypeIoOperationRepository.findOne(code);
 		testExamType.check(foundExamType);
-	}	
+	}
 }

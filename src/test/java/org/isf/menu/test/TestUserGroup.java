@@ -26,43 +26,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.menu.model.UserGroup;
 import org.isf.utils.exception.OHException;
 
-public class TestUserGroup 
-{	
-    private String code = "Z";
-    private String description = "TestDescription";
-    
-			
-	public UserGroup setup(
-			boolean usingSet) throws OHException 
-	{
+public class TestUserGroup {
+
+	private String code = "Z";
+	private String description = "TestDescription";
+
+	public UserGroup setup(boolean usingSet) throws OHException {
 		UserGroup userGroup;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			userGroup = new UserGroup();
 			_setParameters(userGroup);
-		}
-		else
-		{
+		} else {
 			// Create UserGroup with all parameters 
 			userGroup = new UserGroup(code, description);
 		}
-				    	
+
 		return userGroup;
 	}
-	
-	public void _setParameters(
-			UserGroup userGroup) 
-	{	
+
+	public void _setParameters(UserGroup userGroup) {
 		userGroup.setCode(code);
 		userGroup.setDesc(description);
 	}
-	
-	public void check(
-			UserGroup userGroup) 
-	{		
-    	assertThat(userGroup.getCode()).isEqualTo(code);
-    	assertThat(userGroup.getDesc()).isEqualTo(description);
+
+	public void check(UserGroup userGroup) {
+		assertThat(userGroup.getCode()).isEqualTo(code);
+		assertThat(userGroup.getDesc()).isEqualTo(description);
 	}
 }

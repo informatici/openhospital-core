@@ -22,248 +22,102 @@
 package org.isf.medstockmovtype.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
+import org.isf.OHCoreTestCase;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.medstockmovtype.service.MedicalStockMovementTypeIoOperation;
-import org.isf.utils.db.DbJpaUtil;
+import org.isf.medstockmovtype.service.MedicalStockMovementTypeIoOperationRepository;
 import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestMovementType testMovementType;
-	private static TestMovementTypeContext testMovementTypeContext;
 
-    @Autowired
-    MedicalStockMovementTypeIoOperation medicalStockMovementTypeIoOperation;
-    
-	
+	@Autowired
+	MedicalStockMovementTypeIoOperation medicalStockMovementTypeIoOperation;
+	@Autowired
+	MedicalStockMovementTypeIoOperationRepository medicalStockMovementTypeIoOperationRepository;
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testMovementType = new TestMovementType();
-    	testMovementTypeContext = new TestMovementTypeContext();
-    }
-
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-
-    }
-	
-		
-	@Test
-	public void testMovementTypeGets()
-	{
-		String code = "";
-			
-
-		try 
-		{		
-			code = _setupTestMovementType(false);
-			_checkMovementTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public static void setUpClass() {
+		testMovementType = new TestMovementType();
 	}
-	
-	@Test
-	public void testMovementTypeSets() 
-	{
-		String code = "";
-			
 
-		try 
-		{		
-			code = _setupTestMovementType(true);
-			_checkMovementTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoGetMovementType() 
-	{
-		String code = "";
-		
-		
-		try 
-		{		
-			code = _setupTestMovementType(false);
-			MovementType foundMovementType = (MovementType)jpa.find(MovementType.class, code); 
-			ArrayList<MovementType> movementTypes = medicalStockMovementTypeIoOperation.getMedicaldsrstockmovType();
-			
-			assertThat(movementTypes.get(movementTypes.size() - 1).getDescription()).isEqualTo(foundMovementType.getDescription());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoUpdateMovementType() 
-	{
-		String code = "";
-		boolean result = false;
-		
-		
-		try 
-		{		
-			code = _setupTestMovementType(false);
-			MovementType foundMovementType = (MovementType)jpa.find(MovementType.class, code); 
-			foundMovementType.setDescription("Update");
-			result = medicalStockMovementTypeIoOperation.updateMedicaldsrstockmovType(foundMovementType);
-			MovementType updateMovementType = (MovementType)jpa.find(MovementType.class, code);
-
-			assertThat(result).isTrue();
-			assertThat(updateMovementType.getDescription()).isEqualTo("Update");
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoNewMovementType() 
-	{
-		boolean result = false;
-		
-		
-		try 
-		{		
-			MovementType movementType = testMovementType.setup(true);
-			result = medicalStockMovementTypeIoOperation.newMedicaldsrstockmovType(movementType);
-
-			assertThat(result).isTrue();
-			_checkMovementTypeIntoDb(movementType.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
 
 	@Test
-	public void testIoIsCodePresent() 
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestMovementType(false);
-			result = medicalStockMovementTypeIoOperation.isCodePresent(code);
-
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testMovementTypeGets() throws Exception {
+		String code = _setupTestMovementType(false);
+		_checkMovementTypeIntoDb(code);
 	}
 
 	@Test
-	public void testIoDeleteMovementType() 
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestMovementType(false);
-			MovementType foundMovementType = (MovementType)jpa.find(MovementType.class, code); 
-			result = medicalStockMovementTypeIoOperation.deleteMedicaldsrstockmovType(foundMovementType);
-
-			assertThat(result).isTrue();
-			result = medicalStockMovementTypeIoOperation.isCodePresent(code);
-			assertThat(result).isFalse();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testMovementTypeSets() throws Exception {
+		String code = _setupTestMovementType(true);
+		_checkMovementTypeIntoDb(code);
 	}
-	
-	
-	private void _saveContext() throws OHException 
-    {	
-		testMovementTypeContext.saveAll(jpa);
-    }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testMovementTypeContext.deleteNews(jpa);
-    }
-        
-	private String _setupTestMovementType(
-			boolean usingSet) throws OHException 
-	{
-		MovementType movementType;
-		
 
-    	jpa.beginTransaction();	
-    	movementType = testMovementType.setup(usingSet);
-		jpa.persist(movementType);
-    	jpa.commitTransaction();
-    	
+	@Test
+	public void testIoGetMovementType() throws Exception {
+		String code = _setupTestMovementType(false);
+		MovementType foundMovementType = medicalStockMovementTypeIoOperation.getMovementType(code);
+		ArrayList<MovementType> movementTypes = medicalStockMovementTypeIoOperation.getMedicaldsrstockmovType();
+		assertThat(movementTypes.get(movementTypes.size() - 1).getDescription()).isEqualTo(foundMovementType.getDescription());
+	}
+
+	@Test
+	public void testIoUpdateMovementType() throws Exception {
+		String code = _setupTestMovementType(false);
+		MovementType foundMovementType = medicalStockMovementTypeIoOperation.getMovementType(code);
+		foundMovementType.setDescription("Update");
+		boolean result = medicalStockMovementTypeIoOperation.updateMedicaldsrstockmovType(foundMovementType);
+		assertThat(result).isTrue();
+		MovementType updateMovementType = medicalStockMovementTypeIoOperation.getMovementType(code);
+		assertThat(updateMovementType.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testIoNewMovementType() throws Exception {
+		MovementType movementType = testMovementType.setup(true);
+		boolean result = medicalStockMovementTypeIoOperation.newMedicaldsrstockmovType(movementType);
+		assertThat(result).isTrue();
+		_checkMovementTypeIntoDb(movementType.getCode());
+	}
+
+	@Test
+	public void testIoIsCodePresent() throws Exception {
+		String code = _setupTestMovementType(false);
+		boolean result = medicalStockMovementTypeIoOperation.isCodePresent(code);
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void testIoDeleteMovementType() throws Exception {
+		String code = _setupTestMovementType(false);
+		MovementType foundMovementType = medicalStockMovementTypeIoOperation.getMovementType(code);
+		boolean result = medicalStockMovementTypeIoOperation.deleteMedicaldsrstockmovType(foundMovementType);
+		assertThat(result).isTrue();
+		result = medicalStockMovementTypeIoOperation.isCodePresent(code);
+		assertThat(result).isFalse();
+	}
+
+	private String _setupTestMovementType(boolean usingSet) throws OHException {
+		MovementType movementType = testMovementType.setup(usingSet);
+		medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
 		return movementType.getCode();
 	}
-		
-	private void  _checkMovementTypeIntoDb(
-			String code) throws OHException 
-	{
-		MovementType foundMovementType;
-		
 
-		foundMovementType = (MovementType)jpa.find(MovementType.class, code); 
+	private void _checkMovementTypeIntoDb(String code) throws OHException {
+		MovementType foundMovementType = medicalStockMovementTypeIoOperation.getMovementType(code);
 		testMovementType.check(foundMovementType);
-	}	
+	}
 }

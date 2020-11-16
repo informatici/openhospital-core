@@ -26,43 +26,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.utils.exception.OHException;
 import org.isf.vactype.model.VaccineType;
 
-public class TestVaccineType 
-{	
-    private String code = "Z";
-    private String description = "TestDescription";
-    
-			
-	public VaccineType setup(
-			boolean usingSet) throws OHException 
-	{
+public class TestVaccineType {
+
+	private String code = "Z";
+	private String description = "TestDescription";
+
+	public VaccineType setup(boolean usingSet) throws OHException {
 		VaccineType vaccineType;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			vaccineType = new VaccineType();
 			_setParameters(vaccineType);
-		}
-		else
-		{
+		} else {
 			// Create VaccineType with all parameters 
 			vaccineType = new VaccineType(code, description);
 		}
-				    	
+
 		return vaccineType;
 	}
-	
-	public void _setParameters(
-			VaccineType vaccineType) 
-	{	
+
+	public void _setParameters(VaccineType vaccineType) {
 		vaccineType.setCode(code);
 		vaccineType.setDescription(description);
 	}
-	
-	public void check(
-			VaccineType vaccineType) 
-	{		
-    	assertThat(vaccineType.getCode()).isEqualTo(code);
-    	assertThat(vaccineType.getDescription()).isEqualTo(description);
+
+	public void check(VaccineType vaccineType) {
+		assertThat(vaccineType.getCode()).isEqualTo(code);
+		assertThat(vaccineType.getDescription()).isEqualTo(description);
 	}
 }

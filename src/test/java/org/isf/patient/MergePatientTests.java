@@ -48,6 +48,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 public class MergePatientTests {
+
 	private static TestPatient testPatient;
 	private static TestPatientExamination testPatientExamination;
 	private static TestVisit testVisit;
@@ -64,7 +65,7 @@ public class MergePatientTests {
 	TestPatientMergedEventListener testPatientMergedEventListener;
 
 	@BeforeClass
-	public static void setUpClass()	{
+	public static void setUpClass() {
 		testPatient = new TestPatient();
 		testPatientExamination = new TestPatientExamination();
 		testVisit = new TestVisit();

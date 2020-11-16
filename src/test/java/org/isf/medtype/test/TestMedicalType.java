@@ -26,43 +26,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.medtype.model.MedicalType;
 import org.isf.utils.exception.OHException;
 
-public class TestMedicalType 
-{	
-    private String code = "Z";
-    private String description = "TestDescription";
-    
-			
-	public MedicalType setup(
-			boolean usingSet) throws OHException 
-	{
+public class TestMedicalType {
+
+	private String code = "Z";
+	private String description = "TestDescription";
+
+	public MedicalType setup(boolean usingSet) throws OHException {
 		MedicalType medicalType;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			medicalType = new MedicalType();
 			_setParameters(medicalType);
-		}
-		else
-		{
+		} else {
 			// Create MedicalType with all parameters 
 			medicalType = new MedicalType(code, description);
 		}
-				    	
+
 		return medicalType;
 	}
-	
-	public void _setParameters(
-			MedicalType medicalType) 
-	{	
+
+	public void _setParameters(MedicalType medicalType) {
 		medicalType.setCode(code);
 		medicalType.setDescription(description);
 	}
-	
-	public void check(
-			MedicalType medicalType) 
-	{		
-    	assertThat(medicalType.getCode()).isEqualTo(code);
-    	assertThat(medicalType.getDescription()).isEqualTo(description);
+
+	public void check(MedicalType medicalType) {
+		assertThat(medicalType.getCode()).isEqualTo(code);
+		assertThat(medicalType.getDescription()).isEqualTo(description);
 	}
 }

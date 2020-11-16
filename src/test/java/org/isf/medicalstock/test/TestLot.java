@@ -31,49 +31,38 @@ import java.util.GregorianCalendar;
 import org.isf.medicalstock.model.Lot;
 import org.isf.utils.exception.OHException;
 
-public class TestLot 
-{	 
+public class TestLot {
+
 	private String code = "123456";
 	private GregorianCalendar now = new GregorianCalendar();
 	private GregorianCalendar preparationDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
 	private GregorianCalendar dueDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
 	private BigDecimal cost = new BigDecimal(10.10);
-	    
-			
-	public Lot setup(
-			boolean usingSet) throws OHException 
-	{
+
+	public Lot setup(boolean usingSet) throws OHException {
 		Lot lot;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			lot = new Lot();
 			_setParameters(lot);
-		}
-		else
-		{
+		} else {
 			// Create Lot with all parameters 
 			lot = new Lot(code, preparationDate, dueDate, cost);
 		}
-				    	
+
 		return lot;
 	}
-	
-	public void _setParameters(
-			Lot lot) 
-	{	
+
+	public void _setParameters(Lot lot) {
 		lot.setCode(code);
 		lot.setCost(cost);
 		lot.setDueDate(dueDate);
 		lot.setPreparationDate(preparationDate);
 	}
-	
-	public void check(
-			Lot lot) 
-	{		
-    	assertThat(lot.getCost().doubleValue()).isCloseTo(cost.doubleValue(), offset(0.0));
-    	assertThat(lot.getDueDate()).isEqualTo(dueDate);
-    	assertThat(lot.getPreparationDate()).isEqualTo(preparationDate);
+
+	public void check(Lot lot) {
+		assertThat(lot.getCost().doubleValue()).isCloseTo(cost.doubleValue(), offset(0.0));
+		assertThat(lot.getDueDate()).isEqualTo(dueDate);
+		assertThat(lot.getPreparationDate()).isEqualTo(preparationDate);
 	}
 }
