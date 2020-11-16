@@ -110,7 +110,7 @@ public class OperationTypeBrowserManager {
                     MessageBundle.getMessage("angal.opetype.pleaseinsertacode"),
                     OHSeverityLevel.ERROR));
         }
-        if(key.length()>1){
+        if(key.length()>2){
             errors.add(new OHExceptionMessage("codeTooLongError",
                     MessageBundle.getMessage("angal.opetype.codetoolongmaxchars"),
                     OHSeverityLevel.ERROR));
