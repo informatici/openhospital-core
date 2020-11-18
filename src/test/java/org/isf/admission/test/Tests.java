@@ -72,6 +72,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 public class Tests extends OHCoreTestCase {
 
@@ -532,6 +533,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	@Transactional // requires active session because of lazy loading of patient photo
 	public void testIoDeletePatientPhoto() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);

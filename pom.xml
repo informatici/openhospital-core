@@ -448,5 +448,13 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+			<id>JFrog</id>
+			<name>Atlassian JFrog></name>
+			<url>https://packages.atlassian.com/maven-3rdparty-legacy-local</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 </project>

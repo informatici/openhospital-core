@@ -61,8 +61,7 @@ public class TestDicomType {
 		assertThat(dicomType.getDicomTypeDescription()).isEqualTo(dicomTypeDescription);
 	}
 
-	public Blob _createRandomBlob(
-			int byteCount) {
+	public Blob _createRandomBlob(int byteCount) {
 		Blob blob = null;
 		byte[] data;
 

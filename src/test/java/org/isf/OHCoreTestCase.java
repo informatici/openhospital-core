@@ -24,32 +24,33 @@ package org.isf;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.FlushModeType;
+import javax.persistence.EntityManagerFactory;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 @RunWith(SpringRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 public abstract class OHCoreTestCase {
 
 	@Autowired
-	private EntityManager entityManager;
+	private EntityManagerFactory entityManagerFactory;
 
-	protected void cleanH2InMemoryDb() {
+	public void cleanH2InMemoryDb() {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
 		List<Object[]> show_tables = entityManager.createNativeQuery("SHOW TABLES").getResultList();
 		show_tables
 				.stream()
 				.map(result -> (String) result[0])
-				.forEach(this::truncateTable);
-		entityManager.setFlushMode(FlushModeType.AUTO);
+				.forEach(s -> truncateTable(s, entityManager));
+		entityManager.getTransaction().commit();
+		entityManager.close();
 	}
 
-	private void truncateTable(String name) {
+	public void truncateTable(String name, EntityManager entityManager) {
 		entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
 		entityManager.createNativeQuery("TRUNCATE TABLE " + name).executeUpdate();
 		entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();

@@ -136,8 +136,7 @@ public class TestDicom {
 		assertThat(dicom.getModality()).isEqualTo(modality);
 	}
 
-	public Blob _createRandomBlob(
-			int byteCount) {
+	public Blob _createRandomBlob(int byteCount) {
 		Blob blob = null;
 		byte[] data;
 
