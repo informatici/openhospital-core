@@ -235,12 +235,6 @@
 		    <artifactId>clibwrapper_jiio</artifactId>
 		    <version>1.1</version>
 		</dependency>
-		<!-- <dependency>
-		  <groupId>com.github.jai-imageio</groupId>
-		  <artifactId>jai-imageio-core</artifactId>
-		  <version>1.2.1</version>
-		  <type>pom</type>
-		</dependency> -->
 		<dependency>
 		    <groupId>com.sun.media</groupId>
 		    <artifactId>jai_imageio</artifactId>
@@ -422,14 +416,6 @@
 			<name>Legacy dependencies Repository</name>
 			<url>file:${project.basedir}/repo</url>
 		</repository>
-		<!-- <repository>
-			<id>spring-libs-release</id>
-			<name>Spring Releases</name>
-			<url>https://repo.spring.io/libs-release</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository> -->
 		<repository>
 			<id>dcm4che</id>
 			<name>Dcm4Che Repository</name>
