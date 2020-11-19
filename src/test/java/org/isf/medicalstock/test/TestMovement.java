@@ -34,47 +34,40 @@ import org.isf.supplier.model.Supplier;
 import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
 
-public class TestMovement 
-{	
+public class TestMovement {
+
 	private GregorianCalendar now = new GregorianCalendar();
 	private GregorianCalendar date = new GregorianCalendar(now.get(Calendar.YEAR), 2, 2);
 	private int quantity = 10;
 	private String refNo = "TestRef";
-    
-			
+
 	public Movement setup(
 			Medical medical,
 			MovementType movementType,
 			Ward ward,
 			Lot lot,
 			Supplier supplier,
-			boolean usingSet) throws OHException 
-	{
+			boolean usingSet) throws OHException {
 		Movement movement;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			movement = new Movement();
 			_setParameters(movement, medical, movementType, ward, lot, supplier);
-		}
-		else
-		{
+		} else {
 			// Create Movement with all parameters 
 			movement = new Movement(medical, movementType, ward, lot, date, quantity, supplier, refNo);
 		}
-				    	
+
 		return movement;
 	}
-	
+
 	public void _setParameters(
 			Movement movement,
 			Medical medical,
 			MovementType movementType,
 			Ward ward,
 			Lot lot,
-			Supplier supplier) 
-	{	
+			Supplier supplier) {
 		movement.setDate(date);
 		movement.setLot(lot);
 		movement.setMedical(medical);
@@ -84,12 +77,10 @@ public class TestMovement
 		movement.setType(movementType);
 		movement.setWard(ward);
 	}
-	
-	public void check(
-			Movement movement) 
-	{		
-    	assertThat(movement.getDate()).isEqualTo(date);
-    	assertThat(movement.getQuantity()).isEqualTo(quantity);
-    	assertThat(movement.getRefNo()).isEqualTo(refNo);
+
+	public void check(Movement movement) {
+		assertThat(movement.getDate()).isEqualTo(date);
+		assertThat(movement.getQuantity()).isEqualTo(quantity);
+		assertThat(movement.getRefNo()).isEqualTo(refNo);
 	}
 }

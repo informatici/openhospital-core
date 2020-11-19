@@ -30,8 +30,8 @@ import org.isf.patient.model.Patient;
 import org.isf.therapy.model.TherapyRow;
 import org.isf.utils.exception.OHException;
 
-public class TestTherapy 
-{	
+public class TestTherapy {
+
 	private GregorianCalendar startDate = new GregorianCalendar(10, 9, 8);
 	private GregorianCalendar endDate = new GregorianCalendar(11, 10, 9);
 	private Double qty = 9.9;
@@ -41,36 +41,23 @@ public class TestTherapy
 	private String note = "TestNote";
 	private boolean notify = false;
 	private boolean sms = true;
-    
-			
-	public TherapyRow setup(
-			Patient patient,
-			Medical medical,
-			boolean usingSet) throws OHException 
-	{
+
+	public TherapyRow setup(Patient patient, Medical medical, boolean usingSet) throws OHException {
 		TherapyRow therapyRow;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			therapyRow = new TherapyRow();
 			_setParameters(patient, medical, therapyRow);
-		}
-		else
-		{
+		} else {
 			// Create TherapyRow with all parameters 
 			therapyRow = new TherapyRow(0, patient, startDate, endDate,
 					medical, qty, unitID, freqInDay, freqInPeriod, note, notify, sms);
 		}
-				    	
+
 		return therapyRow;
 	}
-	
-	public void _setParameters(
-			Patient patient,
-			Medical medical,
-			TherapyRow therapyRow) 
-	{
+
+	public void _setParameters(Patient patient, Medical medical, TherapyRow therapyRow) {
 		therapyRow.setEndDate(endDate);
 		therapyRow.setFreqInDay(freqInDay);
 		therapyRow.setFreqInPeriod(freqInPeriod);
@@ -83,18 +70,16 @@ public class TestTherapy
 		therapyRow.setStartDate(startDate);
 		therapyRow.setUnitID(unitID);
 	}
-	
-	public void check(
-			TherapyRow therapyRow) 
-	{		
-    	assertThat(therapyRow.getEndDate()).isEqualTo(endDate);
-    	assertThat(therapyRow.getFreqInDay()).isEqualTo(freqInDay);
-    	assertThat(therapyRow.getFreqInPeriod()).isEqualTo(freqInPeriod);
-    	assertThat(therapyRow.getNote()).isEqualTo(note);
-    	assertThat(therapyRow.isNotify()).isEqualTo(notify);
-    	assertThat(therapyRow.getQty()).isEqualTo(qty);
-    	assertThat(therapyRow.isSms()).isEqualTo(sms);
-    	assertThat(therapyRow.getStartDate()).isEqualTo(startDate);
-    	assertThat(therapyRow.getUnitID()).isEqualTo(unitID);
+
+	public void check(TherapyRow therapyRow) {
+		assertThat(therapyRow.getEndDate()).isEqualTo(endDate);
+		assertThat(therapyRow.getFreqInDay()).isEqualTo(freqInDay);
+		assertThat(therapyRow.getFreqInPeriod()).isEqualTo(freqInPeriod);
+		assertThat(therapyRow.getNote()).isEqualTo(note);
+		assertThat(therapyRow.isNotify()).isEqualTo(notify);
+		assertThat(therapyRow.getQty()).isEqualTo(qty);
+		assertThat(therapyRow.isSms()).isEqualTo(sms);
+		assertThat(therapyRow.getStartDate()).isEqualTo(startDate);
+		assertThat(therapyRow.getUnitID()).isEqualTo(unitID);
 	}
 }

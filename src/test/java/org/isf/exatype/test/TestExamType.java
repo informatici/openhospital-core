@@ -26,43 +26,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.exatype.model.ExamType;
 import org.isf.utils.exception.OHException;
 
-public class TestExamType 
-{	
-    private String code = "Z";
-    private String description = "TestDescription";
-    
-			
-	public ExamType setup(
-			boolean usingSet) throws OHException 
-	{
+public class TestExamType {
+
+	private String code = "Z";
+	private String description = "TestDescription";
+
+	public ExamType setup(boolean usingSet) throws OHException {
 		ExamType examType;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			examType = new ExamType();
 			_setParameters(examType);
-		}
-		else
-		{
+		} else {
 			// Create ExamType with all parameters 
 			examType = new ExamType(code, description);
 		}
-				    	
+
 		return examType;
 	}
-	
-	public void _setParameters(
-			ExamType examType) 
-	{	
+
+	public void _setParameters(ExamType examType) {
 		examType.setCode(code);
 		examType.setDescription(description);
 	}
-	
-	public void check(
-			ExamType examType) 
-	{		
-    	assertThat(examType.getCode()).isEqualTo(code);
-    	assertThat(examType.getDescription()).isEqualTo(description);
+
+	public void check(ExamType examType) {
+		assertThat(examType.getCode()).isEqualTo(code);
+		assertThat(examType.getDescription()).isEqualTo(description);
 	}
 }

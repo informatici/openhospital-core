@@ -27,46 +27,33 @@ import org.isf.utils.exception.OHException;
 import org.isf.vaccine.model.Vaccine;
 import org.isf.vactype.model.VaccineType;
 
-public class TestVaccine 
-{	
-    private String code = "Z";
-    private String description = "TestDescription";
-    
-			
-	public Vaccine setup(
-			VaccineType vaccineType,
-			boolean usingSet) throws OHException 
-	{
+public class TestVaccine {
+
+	private String code = "Z";
+	private String description = "TestDescription";
+
+	public Vaccine setup(VaccineType vaccineType, boolean usingSet) throws OHException {
 		Vaccine vaccine;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			vaccine = new Vaccine();
 			_setParameters(vaccineType, vaccine);
-		}
-		else
-		{
+		} else {
 			// Create Vaccine with all parameters 
 			vaccine = new Vaccine(code, description, vaccineType);
 		}
-				    	
+
 		return vaccine;
 	}
-	
-	public void _setParameters(
-			VaccineType vaccineType,
-			Vaccine vaccine) 
-	{	
+
+	public void _setParameters(VaccineType vaccineType, Vaccine vaccine) {
 		vaccine.setCode(code);
 		vaccine.setDescription(description);
 		vaccine.setVaccineType(vaccineType);
 	}
-	
-	public void check(
-			Vaccine vaccine) 
-	{		
-    	assertThat(vaccine.getCode()).isEqualTo(code);
-    	assertThat(vaccine.getDescription()).isEqualTo(description);
+
+	public void check(Vaccine vaccine) {
+		assertThat(vaccine.getCode()).isEqualTo(code);
+		assertThat(vaccine.getDescription()).isEqualTo(description);
 	}
 }

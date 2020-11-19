@@ -26,43 +26,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.dlvrrestype.model.DeliveryResultType;
 import org.isf.utils.exception.OHException;
 
-public class TestDeliveryResultType 
-{	
-    private String code = "Z";
-    private String description = "TestDescription";
-    
-			
-	public DeliveryResultType setup(
-			boolean usingSet) throws OHException 
-	{
+public class TestDeliveryResultType {
+
+	private String code = "Z";
+	private String description = "TestDescription";
+
+	public DeliveryResultType setup(boolean usingSet) throws OHException {
 		DeliveryResultType deliveryResultType;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			deliveryResultType = new DeliveryResultType();
 			_setParameters(deliveryResultType);
-		}
-		else
-		{
+		} else {
 			// Create DeliveryResultType with all parameters 
 			deliveryResultType = new DeliveryResultType(code, description);
 		}
-				    	
+
 		return deliveryResultType;
 	}
-	
-	public void _setParameters(
-			DeliveryResultType deliveryResultType) 
-	{	
+
+	public void _setParameters(DeliveryResultType deliveryResultType) {
 		deliveryResultType.setCode(code);
 		deliveryResultType.setDescription(description);
 	}
-	
-	public void check(
-			DeliveryResultType deliveryResultType) 
-	{		
-    	assertThat(deliveryResultType.getCode()).isEqualTo(code);
-    	assertThat(deliveryResultType.getDescription()).isEqualTo(description);
+
+	public void check(DeliveryResultType deliveryResultType) {
+		assertThat(deliveryResultType.getCode()).isEqualTo(code);
+		assertThat(deliveryResultType.getDescription()).isEqualTo(description);
 	}
 }

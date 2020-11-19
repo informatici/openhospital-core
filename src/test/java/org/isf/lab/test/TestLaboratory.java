@@ -31,8 +31,8 @@ import org.isf.lab.model.Laboratory;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
 
-public class TestLaboratory 
-{	 
+public class TestLaboratory {
+
 	private Integer code = 0;
 	private String material = "TestMaterial";
 	private GregorianCalendar now = new GregorianCalendar();
@@ -44,23 +44,14 @@ public class TestLaboratory
 	private String InOutPatient = "O";
 	private Integer age = 37;
 	private String sex = "F";
-    
-			
-	public Laboratory setup(
-			Exam exam,
-			Patient patient,
-			boolean usingSet) throws OHException 
-	{
+
+	public Laboratory setup(Exam exam, Patient patient, boolean usingSet) throws OHException {
 		Laboratory laboratory;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			laboratory = new Laboratory();
 			_setParameters(laboratory, exam, patient);
-		}
-		else
-		{
+		} else {
 			// Create Laboratory with all parameters 
 			laboratory = new Laboratory(exam, registrationDate, result, note, patient, patName);
 			laboratory.setAge(age);
@@ -70,15 +61,11 @@ public class TestLaboratory
 			laboratory.setResult(result);
 			laboratory.setSex(sex);
 		}
-				    	
+
 		return laboratory;
 	}
-	
-	public void _setParameters(
-			Laboratory laboratory,
-			Exam exam,
-			Patient patient) 
-	{	
+
+	public void _setParameters(Laboratory laboratory, Exam exam, Patient patient) {
 		laboratory.setAge(age);
 		laboratory.setDate(registrationDate);
 		laboratory.setExam(exam);
@@ -91,18 +78,16 @@ public class TestLaboratory
 		laboratory.setResult(result);
 		laboratory.setSex(sex);
 	}
-	
-	public void check(
-			Laboratory laboratory) 
-	{		
-    	assertThat(laboratory.getAge()).isEqualTo(age);
-    	assertThat(laboratory.getDate()).isEqualTo(registrationDate);
-    	assertThat(laboratory.getExamDate()).isEqualTo(examDate);
-    	assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
-    	assertThat(laboratory.getMaterial()).isEqualTo(material);
-    	assertThat(laboratory.getNote()).isEqualTo(note);
-    	assertThat(laboratory.getPatName()).isEqualTo(patName);
-    	assertThat(laboratory.getResult()).isEqualTo(result);
-    	assertThat(laboratory.getSex()).isEqualTo(sex);
+
+	public void check(Laboratory laboratory) {
+		assertThat(laboratory.getAge()).isEqualTo(age);
+		assertThat(laboratory.getDate()).isEqualTo(registrationDate);
+		assertThat(laboratory.getExamDate()).isEqualTo(examDate);
+		assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
+		assertThat(laboratory.getMaterial()).isEqualTo(material);
+		assertThat(laboratory.getNote()).isEqualTo(note);
+		assertThat(laboratory.getPatName()).isEqualTo(patName);
+		assertThat(laboratory.getResult()).isEqualTo(result);
+		assertThat(laboratory.getSex()).isEqualTo(sex);
 	}
 }

@@ -28,53 +28,38 @@ import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
 import org.isf.utils.exception.OHException;
 
-public class TestBillItems 
-{	
+public class TestBillItems {
+
 	private static boolean isPrice = false;
 	private static String priceID = "TestPId";
 	private static String itemDescription = "TestItemDescription";
 	private static double itemAmount = 10.10;
 	private static int itemQuantity = 20;
 
-			
-	public BillItems setup(
-			Bill  bill,
-			boolean usingSet) throws OHException 
-	{
+	public BillItems setup(Bill bill, boolean usingSet) throws OHException {
 		BillItems billItem;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			billItem = new BillItems();
 			_setParameters(billItem, bill);
-		}
-		else
-		{
+		} else {
 			// Create BillItem with all parameters 
 			billItem = new BillItems(0, bill, isPrice, priceID, itemDescription, itemAmount, itemQuantity);
 		}
-				    	
+
 		return billItem;
 	}
-	
-	public void _setParameters(
-			BillItems billItem,
-			Bill bill) 
-	{		
+
+	public void _setParameters(BillItems billItem, Bill bill) {
 		billItem.setBill(bill);
 		billItem.setItemAmount(itemAmount);
 		billItem.setItemDescription(itemDescription);
 		billItem.setItemQuantity(itemQuantity);
 		billItem.setPrice(isPrice);
 		billItem.setPriceID(priceID);
-		
-		return;
 	}
-	
-	public void check(
-			BillItems billItem) 
-	{
+
+	public void check(BillItems billItem) {
 		assertThat(billItem.getItemAmount()).isCloseTo(itemAmount, offset(0.1));
 		assertThat(billItem.getItemDescription()).isEqualTo(itemDescription);
 		assertThat(billItem.getItemQuantity()).isEqualTo(itemQuantity);

@@ -26,43 +26,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.disctype.model.DischargeType;
 import org.isf.utils.exception.OHException;
 
-public class TestDischargeType 
-{	
-    private String code = "ZZ";
-    private String description = "TestDescription";
-    
-			
-	public DischargeType setup(
-			boolean usingSet) throws OHException 
-	{
+public class TestDischargeType {
+
+	private String code = "ZZ";
+	private String description = "TestDescription";
+
+	public DischargeType setup(boolean usingSet) throws OHException {
 		DischargeType dischargeType;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			dischargeType = new DischargeType();
 			_setParameters(dischargeType);
-		}
-		else
-		{
+		} else {
 			// Create DischargeType with all parameters 
 			dischargeType = new DischargeType(code, description);
 		}
-				    	
+
 		return dischargeType;
 	}
-	
-	public void _setParameters(
-			DischargeType dischargeType) 
-	{	
+
+	public void _setParameters(DischargeType dischargeType) {
 		dischargeType.setCode(code);
 		dischargeType.setDescription(description);
 	}
-	
-	public void check(
-			DischargeType dischargeType) 
-	{		
-    	assertThat(dischargeType.getCode()).isEqualTo(code);
-    	assertThat(dischargeType.getDescription()).isEqualTo(description);
+
+	public void check(DischargeType dischargeType) {
+		assertThat(dischargeType.getCode()).isEqualTo(code);
+		assertThat(dischargeType.getDescription()).isEqualTo(description);
 	}
 }

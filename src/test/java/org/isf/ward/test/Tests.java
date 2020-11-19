@@ -22,288 +22,167 @@
 package org.isf.ward.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
-import org.isf.utils.db.DbJpaUtil;
+import org.isf.OHCoreTestCase;
 import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
 import org.isf.ward.service.WardIoOperations;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestWard testWard;
-	private static TestWardContext testWardContext;
 
-    @Autowired
-    WardIoOperations wardIoOperation;
-    @Autowired
-    WardIoOperationRepository wardIoOperationRepository;
-	
+	@Autowired
+	WardIoOperations wardIoOperation;
+	@Autowired
+	WardIoOperationRepository wardIoOperationRepository;
+
 	@BeforeClass
-    public static void setUpClass() {
-    	jpa = new DbJpaUtil();
-    	testWard = new TestWard();
-    	testWardContext = new TestWardContext();
-    }
-
-    @Before
-    public void setUp() throws OHException {
-        jpa.open();
-
-        _saveContext();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        _restoreContext();
-
-        jpa.flush();
-        jpa.close();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException {
-
-    }
-
-	@Test
-	public void testWardGets() {
-		try {
-			String code = _setupTestWard(false);
-			_checkWardIntoDb(code);
-		} catch (Exception e) {
-			e.printStackTrace();		
-			fail();
-		}
+	public static void setUpClass() {
+		testWard = new TestWard();
 	}
-	
-	@Test
-	public void testWardSets() throws OHException {
-		try {
-			String code = _setupTestWard(true);
-			_checkWardIntoDb(code);
-		} catch (Exception e) {
-			e.printStackTrace();		
-			fail();
-		}
+
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
 
 	@Test
-	public void testIoGetWardsNoMaternity() {
-		try {
-			// given:
-			String code = _setupTestWard(false);
-			Ward foundWard = wardIoOperationRepository.findOne(code);
-
-			// when:
-			ArrayList<Ward> wards = wardIoOperation.getWardsNoMaternity();
-
-			// then:
-			assertThat(wards.get(wards.size() - 1).getDescription()).isEqualTo(foundWard.getDescription());
-		} catch (Exception e) {
-			e.printStackTrace();		
-			fail();
-		}
+	public void testWardGets() throws Exception {
+		String code = _setupTestWard(false);
+		_checkWardIntoDb(code);
 	}
 
 	@Test
-	public void testIoGetWards() {
-		try {
-			// given:
-			String code = _setupTestWard(false);
-			Ward foundWard = wardIoOperationRepository.findOne(code);
-
-			// when:
-			ArrayList<Ward> wards = wardIoOperation.getWards(code);			
-
-			// then:
-			assertThat(wards.get(0).getDescription()).isEqualTo(foundWard.getDescription());
-		} catch (Exception e) {
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoNewWard() {
-		try {
-			Ward ward = testWard.setup(true);
-			boolean result = wardIoOperation.newWard(ward);
-
-			assertThat(result).isTrue();
-			_checkWardIntoDb(ward.getCode());
-		} catch (Exception e) {
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoUpdateWard() {
-		try {
-			// given:
-			String code = _setupTestWard(false);
-			Ward foundWard = wardIoOperationRepository.findOne(code);
-			foundWard.setDescription("Update");
-
-			// when:
-			boolean result = wardIoOperation.updateWard(foundWard);
-			Ward updateWard = wardIoOperationRepository.findOne(code);
-
-			// then:
-			assertThat(result).isTrue();
-			assertThat(updateWard.getDescription()).isEqualTo("Update");
-		} catch (Exception e) {
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoUpdateWardNoCodePresent() {
-		try {
-			Ward ward = testWard.setup(true);
-			ward.setCode("X");
-			boolean result = wardIoOperation.updateWard(ward);
-
-			assertThat(result).isTrue();
-		} catch (Exception e) {
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoDeleteWard() {
-		try {
-			// given:
-			String code = _setupTestWard(false);
-			Ward foundWard = wardIoOperationRepository.findOne(code);
-
-			// when:
-			boolean result = wardIoOperation.deleteWard(foundWard);
-
-			// then:
-			assertThat(result).isTrue();
-			result = wardIoOperation.isCodePresent(code);
-			assertThat(result).isFalse();
-		} catch (Exception e) {
-			e.printStackTrace();		
-			fail();
-		}
+	public void testWardSets() throws Exception {
+		String code = _setupTestWard(true);
+		_checkWardIntoDb(code);
 	}
 
 	@Test
-	public void testIoIsCodePresent() {
-		try {
-			String code = _setupTestWard(false);
-			boolean result = wardIoOperation.isCodePresent(code);
+	public void testIoGetWardsNoMaternity() throws Exception {
+		// given:
+		String code = _setupTestWard(false);
+		Ward foundWard = wardIoOperationRepository.findOne(code);
 
-			assertThat(result).isTrue();
-		} catch (Exception e) {
-			e.printStackTrace();		
-			fail();
-		}
+		// when:
+		ArrayList<Ward> wards = wardIoOperation.getWardsNoMaternity();
+
+		// then:
+		assertThat(wards.get(wards.size() - 1).getDescription()).isEqualTo(foundWard.getDescription());
 	}
 
 	@Test
-	public void testIoIsCodePresentFalse() {
-		boolean result = false;
+	public void testIoGetWards() throws Exception {
+		// given:
+		String code = _setupTestWard(false);
+		Ward foundWard = wardIoOperationRepository.findOne(code);
 
-		try {
-			result = wardIoOperation.isCodePresent("X");
-			assertThat(result).isFalse();
-		} catch (Exception e) {
-			e.printStackTrace();		
-			fail();
-		}
+		// when:
+		ArrayList<Ward> wards = wardIoOperation.getWards(code);
+
+		// then:
+		assertThat(wards.get(0).getDescription()).isEqualTo(foundWard.getDescription());
 	}
 
 	@Test
-	public void testIoIsMaternityPresent() {
-		boolean result = false;
+	public void testIoNewWard() throws Exception {
+		Ward ward = testWard.setup(true);
+		boolean result = wardIoOperation.newWard(ward);
 
-		try {
-			
+		assertThat(result).isTrue();
+		_checkWardIntoDb(ward.getCode());
+	}
+
+	@Test
+	public void testIoUpdateWard() throws Exception {
+		// given:
+		String code = _setupTestWard(false);
+		Ward foundWard = wardIoOperationRepository.findOne(code);
+		foundWard.setDescription("Update");
+
+		// when:
+		boolean result = wardIoOperation.updateWard(foundWard);
+		Ward updateWard = wardIoOperationRepository.findOne(code);
+
+		// then:
+		assertThat(result).isTrue();
+		assertThat(updateWard.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testIoUpdateWardNoCodePresent() throws Exception {
+		Ward ward = testWard.setup(true);
+		ward.setCode("X");
+		boolean result = wardIoOperation.updateWard(ward);
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void testIoDeleteWard() throws Exception {
+		// given:
+		String code = _setupTestWard(false);
+		Ward foundWard = wardIoOperationRepository.findOne(code);
+
+		// when:
+		boolean result = wardIoOperation.deleteWard(foundWard);
+
+		// then:
+		assertThat(result).isTrue();
+		result = wardIoOperation.isCodePresent(code);
+		assertThat(result).isFalse();
+	}
+
+	@Test
+	public void testIoIsCodePresent() throws Exception {
+		String code = _setupTestWard(false);
+		boolean result = wardIoOperation.isCodePresent(code);
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void testIoIsCodePresentFalse() throws Exception {
+		boolean result = wardIoOperation.isCodePresent("X");
+		assertThat(result).isFalse();
+	}
+
+	@Test
+	public void testIoIsMaternityPresent() throws Exception {
+		boolean result = wardIoOperation.isMaternityPresent();
+
+		if (!result) {
+			Ward ward = testWard.setup(false);
+			ward.setCode("M");
+			wardIoOperationRepository.saveAndFlush(ward);
 			result = wardIoOperation.isMaternityPresent();
-			
-			if (!result) {
-				Ward ward = testWard.setup(false);
-				ward.setCode("M");
-				wardIoOperationRepository.save(ward);
-				
-				result = wardIoOperation.isMaternityPresent();
-				
-			} 
-
-			assertThat(result).isTrue();
-		} catch (Exception e) {
-			e.printStackTrace();		
-			fail();
 		}
+
+		assertThat(result).isTrue();
 	}
 
 	@Test
-	public void testFindWard()
-	{
-		String code = "";
-		Ward result;
+	public void testFindWard() throws Exception {
+		String code = _setupTestWard(false);
+		Ward result = wardIoOperation.findWard(code);
 
-		try
-		{
-			code = _setupTestWard(false);
-			result = wardIoOperation.findWard(code);
-
-			assertThat(result).isNotNull();
-			assertThat(result.getCode()).isEqualTo(code);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			fail();
-		}
+		assertThat(result).isNotNull();
+		assertThat(result.getCode()).isEqualTo(code);
 	}
 
-	private void _saveContext() throws OHException
-    {
-		testWardContext.saveAll(jpa);
-    }
-
-    private void _restoreContext() throws OHException
-    {
-		testWardContext.deleteNews(jpa);
-    }
-
-	private String _setupTestWard(
-			boolean usingSet) throws OHException
-	{
-		Ward ward;
-
-
-    	jpa.beginTransaction();
-    	ward = testWard.setup(usingSet);
-		jpa.persist(ward);
-    	jpa.commitTransaction();
-
+	private String _setupTestWard(boolean usingSet) throws OHException {
+		Ward ward = testWard.setup(usingSet);
+		wardIoOperationRepository.saveAndFlush(ward);
 		return ward.getCode();
 	}
-		
-	private void  _checkWardIntoDb(String code) throws OHException {
+
+	private void _checkWardIntoDb(String code) throws OHException {
 		Ward foundWard = wardIoOperationRepository.findOne(code);
 		testWard.check(foundWard);
 	}
