@@ -133,10 +133,8 @@ public class Tests
 			Hospital foundHospital = (Hospital)jpa.find(Hospital.class, code);
 			jpa.flush();
 			foundHospital.setDescription("Update");
-			result = hospitalIoOperation.updateHospital(foundHospital);
-			Hospital updateHospital = (Hospital)jpa.find(Hospital.class, code);
+			Hospital updateHospital = hospitalIoOperation.updateHospital(foundHospital);
 
-			assertThat(result).isTrue();
 			assertThat(updateHospital.getDescription()).isEqualTo("Update");
 		}
 		catch (Exception e)
