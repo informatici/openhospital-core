@@ -26,46 +26,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.utils.exception.OHException;
 
-public class TestMovementType 
-{	
-    private String code = "ZZABCD";
-    private String description = "TestDescription";
-    private String type = "+";
-    
-			
-	public MovementType setup(
-			boolean usingSet) throws OHException 
-	{
+public class TestMovementType {
+
+	private String code = "ZZABCD";
+	private String description = "TestDescription";
+	private String type = "+";
+
+	public MovementType setup(boolean usingSet) throws OHException {
 		MovementType movementType;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			movementType = new MovementType();
 			_setParameters(movementType);
-		}
-		else
-		{
+		} else {
 			// Create MovementType with all parameters 
 			movementType = new MovementType(code, description, type);
 		}
-				    	
+
 		return movementType;
 	}
-	
-	public void _setParameters(
-			MovementType movementType) 
-	{	
+
+	public void _setParameters(MovementType movementType) {
 		movementType.setCode(code);
 		movementType.setDescription(description);
 		movementType.setType(type);
 	}
-	
-	public void check(
-			MovementType movementType) 
-	{		
-    	assertThat(movementType.getCode()).isEqualTo(code);
-    	assertThat(movementType.getDescription()).isEqualTo(description);
-    	assertThat(movementType.getType()).isEqualTo(type);
+
+	public void check(MovementType movementType) {
+		assertThat(movementType.getCode()).isEqualTo(code);
+		assertThat(movementType.getDescription()).isEqualTo(description);
+		assertThat(movementType.getType()).isEqualTo(type);
 	}
 }

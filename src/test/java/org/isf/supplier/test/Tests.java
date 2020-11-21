@@ -22,219 +22,91 @@
 package org.isf.supplier.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import org.isf.OHCoreTestCase;
 import org.isf.supplier.model.Supplier;
+import org.isf.supplier.service.SupplierIoOperationRepository;
 import org.isf.supplier.service.SupplierOperations;
-import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestSupplier testSupplier;
-	private static TestSupplierContext testSupplierContext;
 
-    @Autowired
-    private SupplierOperations supplierIoOperation;
-	
+	@Autowired
+	SupplierOperations supplierIoOperation;
+	@Autowired
+	SupplierIoOperationRepository supplierIoOperationRepository;
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testSupplier = new TestSupplier();
-    	testSupplierContext = new TestSupplierContext();
-    }
+	public static void setUpClass() {
+		testSupplier = new TestSupplier();
+	}
 
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-    	testSupplier = null;
-    	testSupplierContext = null;
-    }
-	
-	
-	@Test
-	public void testSupplierGets() 
-	{
-		int code = 0;
-			
-		
-		try 
-		{		
-			code = _setupTestSupplier(false);
-			_checkSupplierIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
-	
-	@Test
-	public void testSupplierSets() 
-	{
-		int code = 0;
-			
 
-		try 
-		{		
-			code = _setupTestSupplier(true);
-			_checkSupplierIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
 	@Test
-	public void testSupplierSaveOrUpdate() 
-	{		
-		boolean result = false;
-		
-		
-		try 
-		{		
-			Supplier supplier = testSupplier.setup(true);
-			result = supplierIoOperation.saveOrUpdate(supplier);
+	public void testSupplierGets() throws Exception {
+		int code = _setupTestSupplier(false);
+		_checkSupplierIntoDb(code);
+	}
 
-			assertThat(result).isTrue();
-			_checkSupplierIntoDb(supplier.getSupId());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
 	@Test
-	public void testSupplierGetByID() 
-	{	
-		int code = 0;
-		
-		
-		try 
-		{		
-			code = _setupTestSupplier(false);
-			Supplier foundSupplier = supplierIoOperation.getByID(code);
-			
-			_checkSupplierIntoDb(foundSupplier.getSupId());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testSupplierSets() throws Exception {
+		int code = _setupTestSupplier(true);
+		_checkSupplierIntoDb(code);
 	}
-	
-	@Test
-	public void testSupplierGetAll() 
-	{		
-		int code = 0;
-		
-		
-		try 
-		{		
-			code = _setupTestSupplier(false);
-			Supplier foundSupplier = (Supplier)jpa.find(Supplier.class, code); 
-			List<Supplier> suppliers = supplierIoOperation.getAll();
 
-			assertThat(suppliers).contains(foundSupplier);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
 	@Test
-	public void testSupplierGetList() 
-	{	
-		int code = 0;
-		
-		
-		try 
-		{		
-			code = _setupTestSupplier(false);
-			Supplier foundSupplier = (Supplier)jpa.find(Supplier.class, code); 
-			List<Supplier> suppliers = supplierIoOperation.getList();
+	public void testSupplierSaveOrUpdate() throws Exception {
+		Supplier supplier = testSupplier.setup(true);
+		boolean result = supplierIoOperation.saveOrUpdate(supplier);
 
-			assertThat(suppliers).contains(foundSupplier);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+		assertThat(result).isTrue();
+		_checkSupplierIntoDb(supplier.getSupId());
 	}
-		
-	
-	private void _saveContext() throws OHException 
-    {	
-		testSupplierContext.saveAll(jpa);
-    }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testSupplierContext.deleteNews(jpa);
-    }
-    
-	private int _setupTestSupplier(
-			boolean usingSet) throws OHException 
-	{
-		Supplier supplier;
-		
-	
-		jpa.beginTransaction();	
-		supplier = testSupplier.setup(usingSet);
-		jpa.persist(supplier);
-		jpa.commitTransaction();
-		
+
+	@Test
+	public void testSupplierGetByID() throws Exception {
+		int code = _setupTestSupplier(false);
+		Supplier foundSupplier = supplierIoOperation.getByID(code);
+		_checkSupplierIntoDb(foundSupplier.getSupId());
+	}
+
+	@Test
+	public void testSupplierGetAll() throws Exception {
+		int code = _setupTestSupplier(false);
+		Supplier foundSupplier = supplierIoOperation.getByID(code);
+		List<Supplier> suppliers = supplierIoOperation.getAll();
+		assertThat(suppliers).contains(foundSupplier);
+	}
+
+	@Test
+	public void testSupplierGetList() throws Exception {
+		int code = _setupTestSupplier(false);
+		Supplier foundSupplier = supplierIoOperation.getByID(code);
+		List<Supplier> suppliers = supplierIoOperation.getList();
+		assertThat(suppliers).contains(foundSupplier);
+	}
+
+	private int _setupTestSupplier(boolean usingSet) throws OHException {
+		Supplier supplier = testSupplier.setup(usingSet);
+		supplierIoOperationRepository.saveAndFlush(supplier);
 		return supplier.getSupId();
 	}
-		
-	private void  _checkSupplierIntoDb(
-			int code) throws OHException 
-	{
-		Supplier foundSupplier;
-		
-	
-		foundSupplier = (Supplier)jpa.find(Supplier.class, code); 
+
+	private void _checkSupplierIntoDb(int code) throws OHServiceException {
+		Supplier foundSupplier = supplierIoOperation.getByID(code);
 		testSupplier.check(foundSupplier);
-	}	
+	}
 }

@@ -30,8 +30,8 @@ import org.isf.patient.model.Patient;
 import org.isf.priceslist.model.PriceList;
 import org.isf.utils.exception.OHException;
 
-public class TestBill 
-{	
+public class TestBill {
+
 	private static GregorianCalendar date = new GregorianCalendar(10, 9, 8);
 	private static GregorianCalendar update = new GregorianCalendar(7, 6, 5);
 	private static boolean isList = false;
@@ -42,36 +42,22 @@ public class TestBill
 	private static Double amount = 10.10;
 	private static Double balance = 20.20;
 	private static String user = "TestUser";
-	
-			
-	public Bill setup(
-			PriceList priceList,
-			Patient patient,
-			boolean usingSet) throws OHException 
-	{
+
+	public Bill setup(PriceList priceList, Patient patient, boolean usingSet) throws OHException {
 		Bill bill;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			bill = new Bill();
 			_setParameters(bill, priceList, patient);
-		}
-		else
-		{
+		} else {
 			// Create Bill with all parameters 
-			bill = new Bill(0, date, update, isList, priceList, listName, isPatient, patient, patName, 
+			bill = new Bill(0, date, update, isList, priceList, listName, isPatient, patient, patName,
 					status, amount, balance, user);
 		}
-				    	
 		return bill;
 	}
-	
-	public void _setParameters(
-			Bill bill,
-			PriceList priceList,
-			Patient patient) 
-	{		
+
+	public void _setParameters(Bill bill, PriceList priceList, Patient patient) {
 		bill.setDate(date);
 		bill.setUpdate(update);
 		bill.setIsList(isList);
@@ -84,13 +70,9 @@ public class TestBill
 		bill.setAmount(amount);
 		bill.setBalance(balance);
 		bill.setUser(user);
-		
-		return;
 	}
-	
-	public void check(
-			Bill bill) 
-	{
+
+	public void check(Bill bill) {
 		assertThat(bill.getDate()).isEqualTo(date);
 		assertThat(bill.getUpdate()).isEqualTo(update);
 		assertThat(bill.isList()).isEqualTo(isList);
@@ -101,7 +83,5 @@ public class TestBill
 		assertThat(bill.getAmount()).isEqualTo(amount);
 		assertThat(bill.getBalance()).isEqualTo(balance);
 		assertThat(bill.getUser()).isEqualTo(user);
-		
-		return;
 	}
 }

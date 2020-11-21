@@ -22,250 +22,102 @@
 package org.isf.medtype.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
+import org.isf.OHCoreTestCase;
 import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.service.MedicalTypeIoOperation;
-import org.isf.utils.db.DbJpaUtil;
+import org.isf.medtype.service.MedicalTypeIoOperationRepository;
 import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestMedicalType testMedicalType;
-	private static TestMedicalTypeContext testMedicalTypeContext;
 
-    @Autowired
-    MedicalTypeIoOperation medicalTypeIoOperation;
-	
+	@Autowired
+	MedicalTypeIoOperation medicalTypeIoOperation;
+	@Autowired
+	MedicalTypeIoOperationRepository medicalTypeIoOperationRepository;
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testMedicalType = new TestMedicalType();
-    	testMedicalTypeContext = new TestMedicalTypeContext();
-    }
-
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-
-    }
-	
-		
-	@Test
-	public void testMedicalTypeGets() throws OHException 
-	{
-		String code = "";
-			
-
-		try 
-		{		
-			code = _setupTestMedicalType(false);
-			_checkMedicalTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public static void setUpClass() {
+		testMedicalType = new TestMedicalType();
 	}
-	
-	@Test
-	public void testMedicalTypeSets() throws OHException 
-	{
-		String code = "";
-			
 
-		try 
-		{		
-			code = _setupTestMedicalType(true);
-			_checkMedicalTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoGetMedicalType() 
-	{
-		String code = "";
-		
-		
-		try 
-		{		
-			code = _setupTestMedicalType(false);
-			MedicalType foundMedicalType = (MedicalType)jpa.find(MedicalType.class, code); 
-			ArrayList<MedicalType> medicalTypes = medicalTypeIoOperation.getMedicalTypes();
-			
-			assertThat(medicalTypes.get(medicalTypes.size() - 1).getDescription()).isEqualTo(foundMedicalType.getDescription());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoUpdateMedicalType()
-	{
-		String code = "";
-		boolean result = false;
-		
-		
-		try 
-		{		
-			code = _setupTestMedicalType(false);
-			MedicalType foundMedicalType = (MedicalType)jpa.find(MedicalType.class, code); 
-			foundMedicalType.setDescription("Update");
-			result = medicalTypeIoOperation.updateMedicalType(foundMedicalType);
-			MedicalType updateMedicalType = (MedicalType)jpa.find(MedicalType.class, code);
-
-			assertThat(result).isTrue();
-			assertThat(updateMedicalType.getDescription()).isEqualTo("Update");
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoNewMedicalType() 
-	{
-		boolean result = false;
-		
-		
-		try 
-		{		
-			MedicalType medicalType = testMedicalType.setup(true);
-			result = medicalTypeIoOperation.newMedicalType(medicalType);
-
-			assertThat(result).isTrue();
-			_checkMedicalTypeIntoDb(medicalType.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
 
 	@Test
-	public void testIoIsCodePresent() 
-	{
-		String code = "";
-		boolean result = false;
-		
+	public void testMedicalTypeGets() throws Exception {
+		String code = _setupTestMedicalType(false);
+		_checkMedicalTypeIntoDb(code);
+	}
 
-		try 
-		{		
-			code = _setupTestMedicalType(false);
-			result = medicalTypeIoOperation.isCodePresent(code);
+	@Test
+	public void testMedicalTypeSets() throws Exception {
+		String code = _setupTestMedicalType(true);
+		_checkMedicalTypeIntoDb(code);
+	}
 
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Test
+	public void testIoGetMedicalType() throws Exception {
+		String code = _setupTestMedicalType(false);
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		ArrayList<MedicalType> medicalTypes = medicalTypeIoOperation.getMedicalTypes();
+		assertThat(medicalTypes.get(medicalTypes.size() - 1).getDescription()).isEqualTo(foundMedicalType.getDescription());
+	}
 
+	@Test
+	public void testIoUpdateMedicalType() throws Exception {
+		String code = _setupTestMedicalType(false);
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		foundMedicalType.setDescription("Update");
+		boolean result = medicalTypeIoOperation.updateMedicalType(foundMedicalType);
+		assertThat(result).isTrue();
+		MedicalType updateMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		assertThat(updateMedicalType.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testIoNewMedicalType() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(true);
+		boolean result = medicalTypeIoOperation.newMedicalType(medicalType);
+		assertThat(result).isTrue();
+		_checkMedicalTypeIntoDb(medicalType.getCode());
+	}
+
+	@Test
+	public void testIoIsCodePresent() throws Exception {
+		String code = _setupTestMedicalType(false);
+		boolean result = medicalTypeIoOperation.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
-	public void testIoDeleteMedicalType() 
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestMedicalType(false);
-			MedicalType foundMedicalType = (MedicalType)jpa.find(MedicalType.class, code); 
-			result = medicalTypeIoOperation.deleteMedicalType(foundMedicalType);
-
-			assertThat(result).isTrue();
-			result = medicalTypeIoOperation.isCodePresent(code);
-			assertThat(result).isFalse();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoDeleteMedicalType() throws Exception {
+		String code = _setupTestMedicalType(false);
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		boolean result = medicalTypeIoOperation.deleteMedicalType(foundMedicalType);
+		assertThat(result).isTrue();
+		result = medicalTypeIoOperation.isCodePresent(code);
+		assertThat(result).isFalse();
 	}
-	
-	
-	private void _saveContext() throws OHException 
-    {	
-		testMedicalTypeContext.saveAll(jpa);
 
-    }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testMedicalTypeContext.deleteNews(jpa);
-    }
-        
-	private String _setupTestMedicalType(
-			boolean usingSet) throws OHException 
-	{
-		MedicalType medicalType;
-		
-
-    	jpa.beginTransaction();	
-    	medicalType = testMedicalType.setup(usingSet);
-		jpa.persist(medicalType);
-    	jpa.commitTransaction();
-    	
+	private String _setupTestMedicalType(boolean usingSet) throws OHException {
+		MedicalType medicalType = testMedicalType.setup(usingSet);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		return medicalType.getCode();
 	}
-		
-	private void  _checkMedicalTypeIntoDb(
-			String code) throws OHException 
-	{
-		MedicalType foundMedicalType;
-		
 
-		foundMedicalType = (MedicalType)jpa.find(MedicalType.class, code); 
+	private void _checkMedicalTypeIntoDb(String code) throws OHException {
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
 		testMedicalType.check(foundMedicalType);
-	}	
+	}
 }

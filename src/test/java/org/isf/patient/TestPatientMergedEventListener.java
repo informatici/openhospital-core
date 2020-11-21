@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TestPatientMergedEventListener {
+
 	private PatientMergedEvent patientMergedEvent;
 
 	private boolean shouldFail = false;
@@ -34,7 +35,7 @@ public class TestPatientMergedEventListener {
 	@EventListener
 	public void handle(PatientMergedEvent patientMergedEvent) {
 		this.patientMergedEvent = patientMergedEvent;
-		if(shouldFail) {
+		if (shouldFail) {
 			throw new RuntimeException("failure testing");
 		}
 	}

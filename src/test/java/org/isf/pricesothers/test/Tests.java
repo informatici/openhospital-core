@@ -25,29 +25,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 
+import org.isf.OHCoreTestCase;
 import org.isf.pricesothers.model.PricesOthers;
 import org.isf.pricesothers.service.PriceOthersIoOperationRepository;
 import org.isf.pricesothers.service.PriceOthersIoOperations;
-import org.isf.utils.exception.OHException;
-import org.isf.utils.exception.OHServiceException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
-public class Tests {
+public class Tests extends OHCoreTestCase {
+
 	private static TestPricesOthers testPricesOthers;
 
 	@Autowired
-	PriceOthersIoOperations otherIoOperation;
+	PriceOthersIoOperations priceOthersIoOperations;
 	@Autowired
-	PriceOthersIoOperationRepository repository;
+	PriceOthersIoOperationRepository priceOthersIoOperationRepository;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -55,13 +49,12 @@ public class Tests {
 	}
 
 	@Before
-	@After
-	public void setUp() throws OHException {
-		repository.deleteAll();
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
 
 	@Test
-	public void testPricesOthersGets() throws OHException {
+	public void testPricesOthersGets() throws Exception {
 		// given:
 		int id = _setupTestPricesOthers(false);
 
@@ -70,7 +63,7 @@ public class Tests {
 	}
 
 	@Test
-	public void testPricesOthersSets() throws OHException {
+	public void testPricesOthersSets() throws Exception {
 		// given:
 		int id = _setupTestPricesOthers(true);
 
@@ -79,28 +72,28 @@ public class Tests {
 	}
 
 	@Test
-	public void testIoGetPricesOthers() throws OHException, OHServiceException {
+	public void testIoGetPricesOthers() throws Exception {
 		// given:
 		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = repository.findOne(id);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
 
 		// when:
-		ArrayList<PricesOthers> result = otherIoOperation.getOthers();
+		ArrayList<PricesOthers> result = priceOthersIoOperations.getOthers();
 
 		// then:
 		assertThat(result.get(0).getDescription()).isEqualTo(foundPricesOthers.getDescription());
 	}
 
 	@Test
-	public void testIoUpdatePricesOthers() throws OHServiceException, OHException {
+	public void testIoUpdatePricesOthers() throws Exception {
 		// given:
 		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = repository.findOne(id);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
 		foundPricesOthers.setDescription("Update");
 
 		// when:
-		boolean result = otherIoOperation.updateOther(foundPricesOthers);
-		PricesOthers updatePricesOthers = repository.findOne(id);
+		boolean result = priceOthersIoOperations.updateOther(foundPricesOthers);
+		PricesOthers updatePricesOthers = priceOthersIoOperationRepository.findOne(id);
 
 		// then:
 		assertThat(result).isTrue();
@@ -108,12 +101,12 @@ public class Tests {
 	}
 
 	@Test
-	public void testIoNewPricesOthers() throws OHException, OHServiceException {
+	public void testIoNewPricesOthers() throws Exception {
 		// given:
 		PricesOthers pricesOthers = testPricesOthers.setup(true);
 
 		// when:
-		boolean result = otherIoOperation.newOthers(pricesOthers);
+		boolean result = priceOthersIoOperations.newOthers(pricesOthers);
 
 		// then:
 		assertThat(result).isTrue();
@@ -121,27 +114,27 @@ public class Tests {
 	}
 
 	@Test
-	public void testIoDeletePricesOthers() throws OHException, OHServiceException {
+	public void testIoDeletePricesOthers() throws Exception {
 		// given:
 		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = repository.findOne(id);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
 
 		// when:
-		boolean result = otherIoOperation.deleteOthers(foundPricesOthers);
+		boolean result = priceOthersIoOperations.deleteOthers(foundPricesOthers);
 
 		// then:
 		assertThat(result).isTrue();
-		assertThat(repository.exists(id)).isFalse();
+		assertThat(priceOthersIoOperationRepository.exists(id)).isFalse();
 	}
 
-	private int _setupTestPricesOthers(boolean usingSet) throws OHException {
+	private int _setupTestPricesOthers(boolean usingSet) throws Exception {
 		PricesOthers pricesOthers = testPricesOthers.setup(usingSet);
-		repository.save(pricesOthers);
+		priceOthersIoOperationRepository.saveAndFlush(pricesOthers);
 		return pricesOthers.getId();
 	}
 
 	private void _checkPricesOthersIntoDb(int id) {
-		PricesOthers foundPricesOthers = repository.findOne(id);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
 		testPricesOthers.check(foundPricesOthers);
 	}
 }

@@ -31,8 +31,8 @@ import org.isf.opd.model.Opd;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
 
-public class TestOpd 
-{	
+public class TestOpd {
+
 	private GregorianCalendar visitDate = new GregorianCalendar(1984, Calendar.AUGUST, 14);
 	private int age = 9;
 	private char sex = 'F';
@@ -42,44 +42,31 @@ public class TestOpd
 	private String referralFrom = "R";
 	private String referralTo = "R";
 	private String userID = "TestUser";
-    
-			
-	public Opd setup(
-			Patient patient,
-			Disease disease,
-			boolean usingSet) throws OHException 
-	{
+
+	public Opd setup(Patient patient, Disease disease, boolean usingSet) throws OHException {
 		Opd opd;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			opd = new Opd();
 			_setParameters(patient, disease, opd);
-		}
-		else
-		{
+		} else {
 			// Create Opd with all parameters 
 			opd = new Opd(prog_year, sex, age, disease);
 			opd.setVisitDate(visitDate);
 			opd.setNote(note);
-			opd.setNewPatient(newPatient); 
-			opd.setReferralFrom(referralFrom); 
+			opd.setNewPatient(newPatient);
+			opd.setReferralFrom(referralFrom);
 			opd.setReferralTo(referralTo);
 			opd.setUserID(userID);
 			opd.setPatient(patient);
 			opd.setDisease2(disease);
 			opd.setDisease3(disease);
 		}
-				    	
+
 		return opd;
 	}
-	
-	public void _setParameters(
-			Patient patient,
-			Disease disease,
-			Opd opd) 
-	{	
+
+	public void _setParameters(Patient patient, Disease disease, Opd opd) {
 		opd.setVisitDate(visitDate);
 		opd.setAge(age);
 		opd.setSex(sex);
@@ -94,18 +81,16 @@ public class TestOpd
 		opd.setDisease2(disease);
 		opd.setDisease3(disease);
 	}
-	
-	public void check(
-			Opd opd) 
-	{		
-    	assertThat(opd.getVisitDate()).isEqualTo(visitDate);
-    	assertThat(opd.getAge()).isEqualTo(age);
-    	assertThat(opd.getSex()).isEqualTo(sex);
-    	assertThat(opd.getNote()).isEqualTo(note);
-    	assertThat(opd.getProgYear()).isEqualTo(prog_year);
-    	assertThat(opd.getNewPatient()).isEqualTo(newPatient);
-    	assertThat(opd.getReferralFrom()).isEqualTo(referralFrom);
-    	assertThat(opd.getReferralTo()).isEqualTo(referralTo);
-    	assertThat(opd.getUserID()).isEqualTo(userID);
+
+	public void check(Opd opd) {
+		assertThat(opd.getVisitDate()).isEqualTo(visitDate);
+		assertThat(opd.getAge()).isEqualTo(age);
+		assertThat(opd.getSex()).isEqualTo(sex);
+		assertThat(opd.getNote()).isEqualTo(note);
+		assertThat(opd.getProgYear()).isEqualTo(prog_year);
+		assertThat(opd.getNewPatient()).isEqualTo(newPatient);
+		assertThat(opd.getReferralFrom()).isEqualTo(referralFrom);
+		assertThat(opd.getReferralTo()).isEqualTo(referralTo);
+		assertThat(opd.getUserID()).isEqualTo(userID);
 	}
 }

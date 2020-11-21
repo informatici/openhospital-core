@@ -28,8 +28,8 @@ import org.isf.medicals.model.Medical;
 import org.isf.medtype.model.MedicalType;
 import org.isf.utils.exception.OHException;
 
-public class TestMedical 
-{	 
+public class TestMedical {
+
 	private Integer code = null;
 	private String prod_code = "TP1";
 	private String description = "TestDescription";
@@ -38,33 +38,22 @@ public class TestMedical
 	private double inqty = 20.20;
 	private double outqty = 30.30;
 	private double minqty = 40.40;
-    
-			
-	public Medical setup(
-			MedicalType medicalType,
-			boolean usingSet) throws OHException 
-	{
+
+	public Medical setup(MedicalType medicalType, boolean usingSet) throws OHException {
 		Medical medical;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			medical = new Medical();
 			_setParameters(medical, medicalType);
-		}
-		else
-		{
+		} else {
 			// Create Medical with all parameters 
 			medical = new Medical(code, medicalType, prod_code, description, initialqty, pcsperpck, minqty, inqty, outqty);
 		}
-				    	
+
 		return medical;
 	}
-	
-	public void _setParameters(
-			Medical medical,
-			MedicalType medicalType) 
-	{	
+
+	public void _setParameters(Medical medical, MedicalType medicalType) {
 		medical.setDescription(description);
 		medical.setInitialqty(initialqty);
 		medical.setInqty(inqty);
@@ -74,16 +63,14 @@ public class TestMedical
 		medical.setProd_code(prod_code);
 		medical.setType(medicalType);
 	}
-	
-	public void check(
-			Medical medical) 
-	{		
-    	assertThat(medical.getDescription()).isEqualTo(description);
-    	assertThat(medical.getInitialqty()).isCloseTo(initialqty, offset(0.1));
-    	assertThat(medical.getInqty()).isCloseTo(inqty, offset(0.1));
-    	assertThat(medical.getMinqty()).isCloseTo(minqty, offset(0.1));
-    	assertThat(medical.getOutqty()).isCloseTo(outqty, offset(0.1));
-    	assertThat(medical.getPcsperpck()).isEqualTo(pcsperpck);
-    	assertThat(medical.getProd_code()).isEqualTo(prod_code);
+
+	public void check(Medical medical) {
+		assertThat(medical.getDescription()).isEqualTo(description);
+		assertThat(medical.getInitialqty()).isCloseTo(initialqty, offset(0.1));
+		assertThat(medical.getInqty()).isCloseTo(inqty, offset(0.1));
+		assertThat(medical.getMinqty()).isCloseTo(minqty, offset(0.1));
+		assertThat(medical.getOutqty()).isCloseTo(outqty, offset(0.1));
+		assertThat(medical.getPcsperpck()).isEqualTo(pcsperpck);
+		assertThat(medical.getProd_code()).isEqualTo(prod_code);
 	}
 }

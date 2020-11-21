@@ -22,248 +22,102 @@
 package org.isf.disctype.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
+import org.isf.OHCoreTestCase;
 import org.isf.disctype.model.DischargeType;
 import org.isf.disctype.service.DischargeTypeIoOperation;
-import org.isf.utils.db.DbJpaUtil;
+import org.isf.disctype.service.DischargeTypeIoOperationRepository;
 import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestDischargeType testDischargeType;
-	private static TestDischargeTypeContext testDischargeTypeContext;
 
-    @Autowired
-    DischargeTypeIoOperation dischargeTypeIoOperation;
-    
-	
+	@Autowired
+	DischargeTypeIoOperation dischargeTypeIoOperation;
+	@Autowired
+	DischargeTypeIoOperationRepository dischargeTypeIoOperationRepository;
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testDischargeType = new TestDischargeType();
-    	testDischargeTypeContext = new TestDischargeTypeContext();
-    }
+	public static void setUpClass() {
+		testDischargeType = new TestDischargeType();
+	}
 
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
+	}
 
-    }
-	
-		
 	@Test
-	public void testDischargeTypeGets()
-	{
-		String code = "";
-
-		
-		try 
-		{		
-			code = _setupTestDischargeType(false);
-			_checkDischargeTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testDischargeTypeGets() throws Exception {
+		String code = _setupTestDischargeType(false);
+		_checkDischargeTypeIntoDb(code);
 	}
-	
+
 	@Test
-	public void testDischargeTypeSets()
-	{
-		String code = "";
-			
-
-		try 
-		{		
-			code = _setupTestDischargeType(true);
-			_checkDischargeTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testDischargeTypeSets() throws Exception {
+		String code = _setupTestDischargeType(true);
+		_checkDischargeTypeIntoDb(code);
 	}
-	
+
 	@Test
-	public void testIoGetDischargeType() 
-	{
-		String code = "";
-		
-
-		try 
-		{		
-			code = _setupTestDischargeType(false);
-			DischargeType foundDischargeType = (DischargeType)jpa.find(DischargeType.class, code); 
-			ArrayList<DischargeType> dischargeTypes = dischargeTypeIoOperation.getDischargeType();
-			
-			assertThat(dischargeTypes.get(dischargeTypes.size() - 1).getDescription()).isEqualTo(foundDischargeType.getDescription());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoGetDischargeType() throws Exception {
+		String code = _setupTestDischargeType(false);
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		ArrayList<DischargeType> dischargeTypes = dischargeTypeIoOperation.getDischargeType();
+		assertThat(dischargeTypes.get(dischargeTypes.size() - 1).getDescription()).isEqualTo(foundDischargeType.getDescription());
 	}
-    
-    @Test
-	public void testIoNewDischargeType()  
-	{
-		boolean result = false;
-		
-		
-		try 
-		{		
-			DischargeType dischargeType = testDischargeType.setup(true);
-			result = dischargeTypeIoOperation.newDischargeType(dischargeType);
 
-			assertThat(result).isTrue();
-			_checkDischargeTypeIntoDb(dischargeType.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
 	@Test
-	public void testIoIsCodePresent() 
-	{
-		String code = "";
-		boolean result = false;
-		
-	
-		try 
-		{		
-			code = _setupTestDischargeType(false);
-			result = dischargeTypeIoOperation.isCodePresent(code);
-
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoNewDischargeType() throws Exception {
+		DischargeType dischargeType = testDischargeType.setup(true);
+		boolean result = dischargeTypeIoOperation.newDischargeType(dischargeType);
+		assertThat(result).isTrue();
+		_checkDischargeTypeIntoDb(dischargeType.getCode());
 	}
-   
+
 	@Test
-	public void testIoDeleteDischargeType()
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestDischargeType(false);
-			DischargeType foundDischargeType = (DischargeType)jpa.find(DischargeType.class, code); 
-			result = dischargeTypeIoOperation.deleteDischargeType(foundDischargeType);
-
-			assertThat(result).isTrue();
-			result = dischargeTypeIoOperation.isCodePresent(code);
-			assertThat(result).isFalse();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoIsCodePresent() throws Exception {
+		String code = _setupTestDischargeType(false);
+		boolean result = dischargeTypeIoOperation.isCodePresent(code);
+		assertThat(result).isTrue();
 	}
-	 
+
 	@Test
-	public void testIoUpdateDischargeType()
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestDischargeType(false);
-			DischargeType foundDischargeType = (DischargeType)jpa.find(DischargeType.class, code); 
-			foundDischargeType.setDescription("Update");
-			result = dischargeTypeIoOperation.updateDischargeType(foundDischargeType);
-			DischargeType updateDischargeType = (DischargeType)jpa.find(DischargeType.class, code);
-
-			assertThat(result).isTrue();
-			assertThat(updateDischargeType.getDescription()).isEqualTo("Update");
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoDeleteDischargeType() throws Exception {
+		String code = _setupTestDischargeType(false);
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		boolean result = dischargeTypeIoOperation.deleteDischargeType(foundDischargeType);
+		assertThat(result).isTrue();
+		result = dischargeTypeIoOperation.isCodePresent(code);
+		assertThat(result).isFalse();
 	}
-		
-	
-	private void _saveContext() throws OHException 
-    {	
-		testDischargeTypeContext.saveAll(jpa);
-    }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testDischargeTypeContext.deleteNews(jpa);
-    }
-        
-	private String _setupTestDischargeType(
-			boolean usingSet) throws OHException 
-	{
-		DischargeType dischargeType;
-		
 
-    	jpa.beginTransaction();	
-    	dischargeType = testDischargeType.setup(usingSet);
-		jpa.persist(dischargeType);
-    	jpa.commitTransaction();
-    	
+	@Test
+	public void testIoUpdateDischargeType() throws Exception {
+		String code = _setupTestDischargeType(false);
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		foundDischargeType.setDescription("Update");
+		boolean result = dischargeTypeIoOperation.updateDischargeType(foundDischargeType);
+		assertThat(result).isTrue();
+		DischargeType updateDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		assertThat(updateDischargeType.getDescription()).isEqualTo("Update");
+	}
+
+	private String _setupTestDischargeType(boolean usingSet) throws OHException {
+		DischargeType dischargeType = testDischargeType.setup(usingSet);
+		dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
 		return dischargeType.getCode();
 	}
-		
-	private void  _checkDischargeTypeIntoDb(
-			String code) throws OHException 
-	{
-		DischargeType foundDischargeType;
-		
 
-		foundDischargeType = (DischargeType)jpa.find(DischargeType.class, code); 
+	private void _checkDischargeTypeIntoDb(String code) throws OHException {
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
 		testDischargeType.check(foundDischargeType);
-	}	
+	}
 }

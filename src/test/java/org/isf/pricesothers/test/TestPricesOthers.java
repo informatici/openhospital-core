@@ -26,40 +26,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.pricesothers.model.PricesOthers;
 import org.isf.utils.exception.OHException;
 
-public class TestPricesOthers 
-{	
-    private String Code = "TestCode";
-    private String Description = "TestDescription";
+public class TestPricesOthers {
+
+	private String Code = "TestCode";
+	private String Description = "TestDescription";
 	private boolean opdInclude = true;
 	private boolean ipdInclude = false;
 	private boolean daily = true;
 	private boolean discharge = false;
 	private boolean undefined = true;
-    
-			
-	public PricesOthers setup(
-			boolean usingSet) throws OHException 
-	{
+
+	public PricesOthers setup(boolean usingSet) throws OHException {
 		PricesOthers pricesOthers;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			pricesOthers = new PricesOthers();
 			_setParameters(pricesOthers);
-		}
-		else
-		{
+		} else {
 			// Create PricesOthers with all parameters 
 			pricesOthers = new PricesOthers(0, Code, Description, opdInclude, ipdInclude, daily, discharge, undefined);
 		}
-				    	
+
 		return pricesOthers;
 	}
-	
-	public void _setParameters(
-			PricesOthers pricesOthers) 
-	{	
+
+	public void _setParameters(PricesOthers pricesOthers) {
 		pricesOthers.setCode(Code);
 		pricesOthers.setDescription(Description);
 		pricesOthers.setDaily(daily);
@@ -68,16 +59,14 @@ public class TestPricesOthers
 		pricesOthers.setOpdInclude(opdInclude);
 		pricesOthers.setUndefined(undefined);
 	}
-	
-	public void check(
-			PricesOthers pricesOthers) 
-	{		
-    	assertThat(pricesOthers.getCode()).isEqualTo(Code);
-    	assertThat(pricesOthers.getDescription()).isEqualTo(Description);
-    	assertThat(pricesOthers.isDaily()).isEqualTo(daily);
-    	assertThat(pricesOthers.isDischarge()).isEqualTo(discharge);
-    	assertThat(pricesOthers.isIpdInclude()).isEqualTo(ipdInclude);
-    	assertThat(pricesOthers.isOpdInclude()).isEqualTo(opdInclude);
-    	assertThat(pricesOthers.isUndefined()).isEqualTo(undefined);
+
+	public void check(PricesOthers pricesOthers) {
+		assertThat(pricesOthers.getCode()).isEqualTo(Code);
+		assertThat(pricesOthers.getDescription()).isEqualTo(Description);
+		assertThat(pricesOthers.isDaily()).isEqualTo(daily);
+		assertThat(pricesOthers.isDischarge()).isEqualTo(discharge);
+		assertThat(pricesOthers.isIpdInclude()).isEqualTo(ipdInclude);
+		assertThat(pricesOthers.isOpdInclude()).isEqualTo(opdInclude);
+		assertThat(pricesOthers.isUndefined()).isEqualTo(undefined);
 	}
 }

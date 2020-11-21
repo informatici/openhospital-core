@@ -26,43 +26,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.utils.exception.OHException;
 
-public class TestAdmissionType 
-{	
-    private String code = "ZZ";
-    private String description = "TestDescription";
-    
-			
-	public AdmissionType setup(
-			boolean usingSet) throws OHException 
-	{
+public class TestAdmissionType {
+
+	private String code = "ZZ";
+	private String description = "TestDescription";
+
+	public AdmissionType setup(boolean usingSet) throws OHException {
 		AdmissionType admissionType;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			admissionType = new AdmissionType();
 			_setParameters(admissionType);
-		}
-		else
-		{
+		} else {
 			// Create AdmissionType with all parameters 
 			admissionType = new AdmissionType(code, description);
 		}
-				    	
+
 		return admissionType;
 	}
-	
-	public void _setParameters(
-			AdmissionType admissionType) 
-	{	
+
+	public void _setParameters(AdmissionType admissionType) {
 		admissionType.setCode(code);
 		admissionType.setDescription(description);
 	}
-	
-	public void check(
-			AdmissionType admissionType) 
-	{		
-    	assertThat(admissionType.getCode()).isEqualTo(code);
-    	assertThat(admissionType.getDescription()).isEqualTo(description);
+
+	public void check(AdmissionType admissionType) {
+		assertThat(admissionType.getCode()).isEqualTo(code);
+		assertThat(admissionType.getDescription()).isEqualTo(description);
 	}
 }

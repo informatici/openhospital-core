@@ -22,248 +22,104 @@
 package org.isf.distype.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
+import org.isf.OHCoreTestCase;
 import org.isf.distype.model.DiseaseType;
 import org.isf.distype.service.DiseaseTypeIoOperation;
-import org.isf.utils.db.DbJpaUtil;
+import org.isf.distype.service.DiseaseTypeIoOperationRepository;
 import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
-{
-	private static DbJpaUtil jpa;
+@Transactional
+public class Tests extends OHCoreTestCase {
+
 	private static TestDiseaseType testDiseaseType;
-	private static TestDiseaseTypeContext testDiseaseTypeContext;
 
-    @Autowired
-    DiseaseTypeIoOperation diseaseTypeIoOperation;
-	
+	@Autowired
+	DiseaseTypeIoOperation diseaseTypeIoOperation;
+	@Autowired
+	DiseaseTypeIoOperationRepository diseaseTypeIoOperationRepository;
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testDiseaseType = new TestDiseaseType();
-    	testDiseaseTypeContext = new TestDiseaseTypeContext();
-    }
-
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-    	testDiseaseType = null;
-    	testDiseaseTypeContext = null;
-    }
-	
-		
-	@Test
-	public void testDiseaseTypeGets() 
-	{
-		String code = "";
-			
-		
-		try 
-		{		
-			code = _setupTestDiseaseType(false);
-			_checkDiseaseTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public static void setUpClass() {
+		testDiseaseType = new TestDiseaseType();
 	}
-	
-	@Test
-	public void testDiseaseTypeSets() 
-	{
-		String code = "";
-			
 
-		try 
-		{		
-			code = _setupTestDiseaseType(true);
-			_checkDiseaseTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoGetDiseaseType()  
-	{
-		String code = "";
-		
-		
-		try 
-		{		
-			code = _setupTestDiseaseType(false);
-			DiseaseType foundDiseaseType = (DiseaseType)jpa.find(DiseaseType.class, code); 
-			ArrayList<DiseaseType> diseaseTypes = diseaseTypeIoOperation.getDiseaseTypes();
-
-			assertThat(diseaseTypes).contains(foundDiseaseType);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoUpdateDiseaseType() 
-	{
-		String code = "";
-		boolean result = false;
-		
-		
-		try 
-		{		
-			code = _setupTestDiseaseType(false);
-			DiseaseType foundDiseaseType = (DiseaseType)jpa.find(DiseaseType.class, code);
-			jpa.flush();
-			foundDiseaseType.setDescription("Update");
-			result = diseaseTypeIoOperation.updateDiseaseType(foundDiseaseType);
-			DiseaseType updateDiseaseType = (DiseaseType)jpa.find(DiseaseType.class, code);
-
-			assertThat(result).isTrue();
-			assertThat(updateDiseaseType.getDescription()).isEqualTo("Update");
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoNewDiseaseType() 
-	{
-		boolean result = false;
-		
-		
-		try 
-		{		
-			DiseaseType diseaseType = testDiseaseType.setup(true);
-			result = diseaseTypeIoOperation.newDiseaseType(diseaseType);
-
-			assertThat(result).isTrue();
-			_checkDiseaseTypeIntoDb(diseaseType.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
 
 	@Test
-	public void testIoIsCodePresent()
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestDiseaseType(false);
-			result = diseaseTypeIoOperation.isCodePresent(code);
-
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testDiseaseTypeGets() throws Exception {
+		String code = _setupTestDiseaseType(false);
+		_checkDiseaseTypeIntoDb(code);
 	}
 
 	@Test
-	public void testIoDeleteDiseaseType() 
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestDiseaseType(false);
-			DiseaseType foundDiseaseType = (DiseaseType)jpa.find(DiseaseType.class, code); 
-			result = diseaseTypeIoOperation.deleteDiseaseType(foundDiseaseType);
-
-			result = diseaseTypeIoOperation.isCodePresent(code);
-			assertThat(result).isFalse();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testDiseaseTypeSets() throws Exception {
+		String code = _setupTestDiseaseType(true);
+		_checkDiseaseTypeIntoDb(code);
 	}
-		
-	
-	private void _saveContext() throws OHException 
-    {	
-		testDiseaseTypeContext.saveAll(jpa);
-    }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testDiseaseTypeContext.deleteNews(jpa);
-    }
-        
-	private String _setupTestDiseaseType(
-			boolean usingSet) throws OHException 
-	{
-		DiseaseType diseaseType;
-		
 
-    	jpa.beginTransaction();	
-    	diseaseType = testDiseaseType.setup(usingSet);
-		jpa.persist(diseaseType);
-    	jpa.commitTransaction();
-    	
+	@Test
+	public void testIoGetDiseaseType() throws Exception {
+		String code = _setupTestDiseaseType(false);
+		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getOne(code);
+		ArrayList<DiseaseType> diseaseTypes = diseaseTypeIoOperation.getDiseaseTypes();
+		assertThat(diseaseTypes).contains(foundDiseaseType);
+
+	}
+
+	@Test
+	public void testIoUpdateDiseaseType() throws Exception {
+		String code = _setupTestDiseaseType(false);
+		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getOne(code);
+		foundDiseaseType.setDescription("Update");
+		boolean result = diseaseTypeIoOperation.updateDiseaseType(foundDiseaseType);
+		DiseaseType updateDiseaseType = diseaseTypeIoOperationRepository.getOne(code);
+		assertThat(result).isTrue();
+		assertThat(updateDiseaseType.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testIoNewDiseaseType() throws Exception {
+		DiseaseType diseaseType = testDiseaseType.setup(true);
+		boolean result = diseaseTypeIoOperation.newDiseaseType(diseaseType);
+		assertThat(result).isTrue();
+		_checkDiseaseTypeIntoDb(diseaseType.getCode());
+	}
+
+	@Test
+	public void testIoIsCodePresent() throws Exception {
+		String code = _setupTestDiseaseType(false);
+		boolean result = diseaseTypeIoOperation.isCodePresent(code);
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void testIoDeleteDiseaseType() throws Exception {
+		String code = _setupTestDiseaseType(false);
+		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getOne(code);
+		boolean result = diseaseTypeIoOperation.deleteDiseaseType(foundDiseaseType);
+		result = diseaseTypeIoOperation.isCodePresent(code);
+		assertThat(result).isFalse();
+	}
+
+	private String _setupTestDiseaseType(boolean usingSet) throws OHException {
+		DiseaseType diseaseType = testDiseaseType.setup(usingSet);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		return diseaseType.getCode();
 	}
-		
-	private void  _checkDiseaseTypeIntoDb(
-			String code) throws OHException 
-	{
-		DiseaseType foundDiseaseType;
-		
 
-		foundDiseaseType = (DiseaseType)jpa.find(DiseaseType.class, code); 
+	private void _checkDiseaseTypeIntoDb(String code) throws OHException {
+		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getOne(code);
 		testDiseaseType.check(foundDiseaseType);
-	}	
+	}
 }

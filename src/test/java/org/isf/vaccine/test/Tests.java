@@ -22,304 +22,135 @@
 package org.isf.vaccine.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
-import org.isf.utils.db.DbJpaUtil;
+import org.isf.OHCoreTestCase;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.vaccine.model.Vaccine;
+import org.isf.vaccine.service.VaccineIoOperationRepository;
 import org.isf.vaccine.service.VaccineIoOperations;
 import org.isf.vactype.model.VaccineType;
+import org.isf.vactype.service.VaccineTypeIoOperationRepository;
 import org.isf.vactype.test.TestVaccineType;
-import org.isf.vactype.test.TestVaccineTypeContext;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestVaccine testVaccine;
-	private static TestVaccineContext testVaccineContext;
 	private static TestVaccineType testVaccineType;
-	private static TestVaccineTypeContext testVaccineTypeContext;
 
-    @Autowired
-    VaccineIoOperations vaccineIoOperation;
-	
+	@Autowired
+	VaccineIoOperations vaccineIoOperation;
+	@Autowired
+	VaccineIoOperationRepository vaccineIoOperationRepository;
+	@Autowired
+	VaccineTypeIoOperationRepository vaccineTypeIoOperationRepository;
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testVaccine = new TestVaccine();
-    	testVaccineContext = new TestVaccineContext();
-    	testVaccineType = new TestVaccineType();
-    	testVaccineTypeContext = new TestVaccineTypeContext();
-    }
-
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-    	testVaccine = null;
-    	testVaccineContext = null;
-    	testVaccineType = null;
-    	testVaccineTypeContext = null;
-    }
-	
-		
-	@Test
-	public void testVaccineGets() throws OHException 
-	{
-		String code = "";
-			
-
-		try 
-		{		
-			code = _setupTestVaccine(false);
-			_checkVaccineIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public static void setUpClass() {
+		testVaccine = new TestVaccine();
+		testVaccineType = new TestVaccineType();
 	}
-	
-	@Test
-	public void testVaccineSets() 
-	{
-		String code = "";
-			
 
-		try 
-		{		
-			code = _setupTestVaccine(true);
-			_checkVaccineIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoGetVaccineShouldFindByTypeCode() 	{
-		try {
-			String code = _setupTestVaccine(false);
-			Vaccine foundVaccine = (Vaccine)jpa.find(Vaccine.class, code); 
-			ArrayList<Vaccine> vaccines = vaccineIoOperation.getVaccine(foundVaccine.getVaccineType().getCode());
-			
-			assertThat(vaccines.get(vaccines.size() - 1).getDescription()).isEqualTo(foundVaccine.getDescription());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
 
 	@Test
-	public void testIoGetVaccineShouldFindAllVaccinesWhenNoCodeProvided() {
-		try {
-			// given:
-			String code = _setupTestVaccine(false);
-			Vaccine foundVaccine = (Vaccine)jpa.find(Vaccine.class, code);
-
-			// when:
-			ArrayList<Vaccine> vaccines = vaccineIoOperation.getVaccine(null);
-
-			// then:
-			assertThat(vaccines).isNotEmpty();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoUpdateVaccine() 
-	{
-		String code = "";
-		boolean result = false;
-		
-		
-		try 
-		{		
-			code = _setupTestVaccine(false);
-			Vaccine foundVaccine = (Vaccine)jpa.find(Vaccine.class, code);
-			jpa.flush();
-			foundVaccine.setDescription("Update");
-			result = vaccineIoOperation.updateVaccine(foundVaccine);
-			Vaccine updateVaccine = (Vaccine)jpa.find(Vaccine.class, code);
-
-			assertThat(result).isTrue();
-			assertThat(updateVaccine.getDescription()).isEqualTo("Update");
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoNewVaccine() 
-	{
-		boolean result = false;
-		
-		
-		try 
-		{		
-	    	jpa.beginTransaction();	
-	    	VaccineType vaccineType = testVaccineType.setup(false);
-	    	jpa.persist(vaccineType);
-			jpa.commitTransaction();
-	    	
-			Vaccine vaccine = testVaccine.setup(vaccineType, true);
-			result = vaccineIoOperation.newVaccine(vaccine);
-
-			assertThat(result).isTrue();
-			_checkVaccineIntoDb(vaccine.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testVaccineGets() throws Exception {
+		String code =_setupTestVaccine(false);
+		_checkVaccineIntoDb(code);
 	}
 
 	@Test
-	public void testIoDeleteVaccine() 
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestVaccine(false);
-			Vaccine foundVaccine = (Vaccine)jpa.find(Vaccine.class, code); 
-			result = vaccineIoOperation.deleteVaccine(foundVaccine);
-
-			assertThat(result).isTrue();
-			result = vaccineIoOperation.isCodePresent(code);
-			assertThat(result).isFalse();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testVaccineSets() throws Exception {
+		String code = _setupTestVaccine(true);
+		_checkVaccineIntoDb(code);
 	}
 
 	@Test
-	public void testIoIsCodePresent() 
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestVaccine(false);
-			result = vaccineIoOperation.isCodePresent(code);
-
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoGetVaccineShouldFindByTypeCode() throws Exception {
+		String code = _setupTestVaccine(false);
+		Vaccine foundVaccine = vaccineIoOperation.findVaccine(code);
+		ArrayList<Vaccine> vaccines = vaccineIoOperation.getVaccine(foundVaccine.getVaccineType().getCode());
+		assertThat(vaccines.get(vaccines.size() - 1).getDescription()).isEqualTo(foundVaccine.getDescription());
 	}
-	
-	
+
 	@Test
-	public void testFindVaccine() 
-	{
-		String code = "";
-		Vaccine result;
+	public void testIoGetVaccineShouldFindAllVaccinesWhenNoCodeProvided() throws Exception {
+		// given:
+		String code = _setupTestVaccine(false);
+		Vaccine foundVaccine = vaccineIoOperation.findVaccine(code);
 
-		try 
-		{		
-			code = _setupTestVaccine(false);
-			result = vaccineIoOperation.findVaccine(code);
-			
-			assertThat(result).isNotNull();
-			assertThat(result.getCode()).isEqualTo(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+		// when:
+		ArrayList<Vaccine> vaccines = vaccineIoOperation.getVaccine(null);
+
+		// then:
+		assertThat(vaccines).isNotEmpty();
 	}
-	
-	
-	private void _saveContext() throws OHException 
-    {	
-		testVaccineContext.saveAll(jpa);
-		testVaccineTypeContext.saveAll(jpa);
-    }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testVaccineContext.deleteNews(jpa);
-		testVaccineTypeContext.deleteNews(jpa);
-    }
-        
-	private String _setupTestVaccine(
-			boolean usingSet) throws OHException 
-	{
-		Vaccine vaccine;
+
+	@Test
+	public void testIoUpdateVaccine() throws Exception {
+		String code = _setupTestVaccine(false);
+		Vaccine foundVaccine = vaccineIoOperation.findVaccine(code);
+		foundVaccine.setDescription("Update");
+		boolean result = vaccineIoOperation.updateVaccine(foundVaccine);
+		assertThat(result).isTrue();
+		Vaccine updateVaccine = vaccineIoOperation.findVaccine(code);
+		assertThat(updateVaccine.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testIoNewVaccine() throws Exception {
 		VaccineType vaccineType = testVaccineType.setup(false);
-		
+		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
+		Vaccine vaccine = testVaccine.setup(vaccineType, true);
+		boolean result = vaccineIoOperation.newVaccine(vaccine);
+		assertThat(result).isTrue();
+		_checkVaccineIntoDb(vaccine.getCode());
+	}
 
-    	jpa.beginTransaction();	
-    	vaccine = testVaccine.setup(vaccineType, usingSet);
-		jpa.persist(vaccineType);
-		jpa.persist(vaccine);
-    	jpa.commitTransaction();
-    	
+	@Test
+	public void testIoDeleteVaccine() throws Exception {
+		String code = _setupTestVaccine(false);
+		Vaccine foundVaccine = vaccineIoOperation.findVaccine(code);
+		boolean result = vaccineIoOperation.deleteVaccine(foundVaccine);
+		assertThat(result).isTrue();
+		result = vaccineIoOperation.isCodePresent(code);
+		assertThat(result).isFalse();
+	}
+
+	@Test
+	public void testIoIsCodePresent() throws Exception {
+		String code = _setupTestVaccine(false);
+		boolean result = vaccineIoOperation.isCodePresent(code);
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void testFindVaccine() throws Exception {
+		String code = _setupTestVaccine(false);
+		Vaccine result = vaccineIoOperation.findVaccine(code);
+		assertThat(result).isNotNull();
+		assertThat(result.getCode()).isEqualTo(code);
+	}
+
+	private String _setupTestVaccine(boolean usingSet) throws OHException {
+		VaccineType vaccineType = testVaccineType.setup(false);
+		Vaccine vaccine = testVaccine.setup(vaccineType, usingSet);
+		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
+		vaccineIoOperationRepository.saveAndFlush(vaccine);
 		return vaccine.getCode();
 	}
-		
-	private void  _checkVaccineIntoDb(
-			String code) throws OHException 
-	{
-		Vaccine foundVaccine;
-		
 
-		foundVaccine = (Vaccine)jpa.find(Vaccine.class, code); 
+	private void _checkVaccineIntoDb(String code) throws OHServiceException {
+		Vaccine foundVaccine = vaccineIoOperation.findVaccine(code);
 		testVaccine.check(foundVaccine);
-	}	
+	}
 }
