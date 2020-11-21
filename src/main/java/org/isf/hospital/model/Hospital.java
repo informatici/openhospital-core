@@ -219,7 +219,7 @@ public class Hospital extends Auditable<String>
 						&& getAddress().equalsIgnoreCase(((Hospital) anObject).getAddress())
 						&& getCity().equalsIgnoreCase(((Hospital) anObject).getCity())
 						&& getEmail().equalsIgnoreCase(((Hospital) anObject).getEmail()) 
-						&& (getCurrencyCod() == ((Hospital) anObject).getCurrencyCod()));
+						&& getCurrencyCod().equalsIgnoreCase(((Hospital) anObject).getCurrencyCod()));
 	}
 
 	public String toString() {
