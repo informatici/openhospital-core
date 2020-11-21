@@ -105,7 +105,7 @@ public class GroupMenu extends Auditable<String>
 	
 	@Override
 	public boolean equals(Object anObject) {
-        return (anObject == null) || !(anObject instanceof GroupMenu) ? false
+        return !(anObject instanceof GroupMenu) ? false
                 : (getCode().equals(((GroupMenu) anObject).getCode())
                   && getUserGroup().equalsIgnoreCase(((GroupMenu) anObject).getUserGroup()) 
                   && getMenuItem().equals(((GroupMenu) anObject).getMenuItem())

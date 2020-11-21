@@ -102,7 +102,7 @@ public class MedicalType extends Auditable<String>
 
 	@Override
 	public boolean equals(Object anObject) {
-		return (anObject == null) || !(anObject instanceof MedicalType) ? false
+		return !(anObject instanceof MedicalType) ? false
 				: (getCode().equalsIgnoreCase(
 						((MedicalType) anObject).getCode()) && getDescription()
 						.equalsIgnoreCase(

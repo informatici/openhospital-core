@@ -107,7 +107,7 @@ public class VaccineType extends Auditable<String>
 
 	@Override
 	public boolean equals(Object anObject) {
-		return (anObject == null) || !(anObject instanceof VaccineType) ? false
+		return !(anObject instanceof VaccineType) ? false
 				: (getCode().equals(((VaccineType) anObject).getCode())
 						&& getDescription().equalsIgnoreCase(
 								((VaccineType) anObject).getDescription()));

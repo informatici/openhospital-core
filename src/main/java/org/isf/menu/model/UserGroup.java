@@ -87,7 +87,7 @@ public class UserGroup extends Auditable<String>
 	
 	@Override
 	public boolean equals(Object anObject) {
-		return (anObject == null) || !(anObject instanceof UserGroup) ? false
+		return !(anObject instanceof UserGroup) ? false
 				: (getCode().equalsIgnoreCase(
 						((UserGroup) anObject).getCode()) && getDesc()
 						.equalsIgnoreCase(

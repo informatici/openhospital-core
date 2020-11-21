@@ -129,7 +129,7 @@ public class Vaccine extends Auditable<String>
     }
 
     public boolean equals(Object anObject) {
-        return (anObject == null) || !(anObject instanceof Vaccine) ? false
+        return !(anObject instanceof Vaccine) ? false
                 : (getCode().equals(((Vaccine) anObject).getCode())
                         && getDescription().equalsIgnoreCase(
                                 ((Vaccine) anObject).getDescription())

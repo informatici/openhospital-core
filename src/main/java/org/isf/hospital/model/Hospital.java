@@ -211,7 +211,7 @@ public class Hospital extends Auditable<String>
 
 	@Override
 	public boolean equals(Object anObject) {
-		return (anObject == null) || !(anObject instanceof Hospital) ? false
+		return !(anObject instanceof Hospital) ? false
 				: (getCode().equals(((Hospital) anObject).getCode())
 						&& getDescription().equalsIgnoreCase(((Hospital) anObject).getDescription())
 						&& getTelephone().equalsIgnoreCase(((Hospital) anObject).getTelephone())
