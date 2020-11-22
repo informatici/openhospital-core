@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*
  * Open Hospital (www.open-hospital.org)
  * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*
  * Open Hospital (www.open-hospital.org)
  * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
@@ -12,36 +11,13 @@
  *
  * https://www.gnu.org/licenses/gpl-3.0-standalone.html
  *
-=======
-/*-
- * #%L
- * OpenHospital
- * $Id:$
- * $HeadURL:$
- * %%
- * Copyright (C) 2006 - 2020 Informatici Senza Frontiere
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
->>>>>>> 1e7c42900a486f154cf95232f7189b88b929e885
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
-<<<<<<< HEAD
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
-=======
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
->>>>>>> 1e7c42900a486f154cf95232f7189b88b929e885
  */
 package org.isf.ward.test;
 
@@ -117,31 +93,16 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-<<<<<<< HEAD
 	public void testIoNewWard() throws Exception {
 		Ward ward = testWard.setup(true);
 		Ward newWard = wardIoOperation.newWard(ward);
 
-		assertThat(newWard.getDescription()).isEqualTo("TestDescription");
+
+		assertThat("TestDescription").isEqualTo(newWard.getDescription());
 		_checkWardIntoDb(ward.getCode());
-=======
-	public void testIoNewWard() {
-		try {
-			Ward ward = testWard.setup(true);
-			Ward newWard = wardIoOperation.newWard(ward);
-
-
-			assertEquals("TestDescription", newWard.getDescription());
-			_checkWardIntoDb(ward.getCode());
-		} catch (Exception e) {
-			e.printStackTrace();		
-			fail();
-		}
->>>>>>> 1e7c42900a486f154cf95232f7189b88b929e885
 	}
 
 	@Test
-<<<<<<< HEAD
 	public void testIoUpdateWard() throws Exception {
 		// given:
 		String code = _setupTestWard(false);
@@ -154,48 +115,14 @@ public class Tests extends OHCoreTestCase {
 
 		// then:
 		assertThat(updateWard.getDescription()).isEqualTo("Update");
-=======
-	public void testIoUpdateWard() {
-		try {
-			// given:
-			String code = _setupTestWard(false);
-			Ward foundWard = wardIoOperationRepository.findOne(code);
-			foundWard.setDescription("Update");
-
-			// when:
-			wardIoOperation.updateWard(foundWard);
-			Ward updateWard = wardIoOperationRepository.findOne(code);
-
-			// then:
-			assertEquals("Update", updateWard.getDescription());
-		} catch (Exception e) {
-			e.printStackTrace();		
-			fail();
-		}
->>>>>>> 1e7c42900a486f154cf95232f7189b88b929e885
 	}
 
 	@Test
-<<<<<<< HEAD
 	public void testIoUpdateWardNoCodePresent() throws Exception {
 		Ward ward = testWard.setup(true);
 		ward.setCode("X");
-		Ward result = wardIoOperation.updateWard(ward);
-		assertThat(result.getCode()).isEqualTo("X");
-=======
-	public void testIoUpdateWardNoCodePresent() {
-		try {
-			Ward ward = testWard.setup(true);
-			ward.setCode("X");
-			Ward updateWard = wardIoOperation.updateWard(ward);
-
-			
-			assertEquals("X", updateWard.getCode());
-		} catch (Exception e) {
-			e.printStackTrace();		
-			fail();
-		}
->>>>>>> 1e7c42900a486f154cf95232f7189b88b929e885
+		Ward updateWard = wardIoOperation.updateWard(ward);
+		assertThat("X").isEqualTo(updateWard.getCode());
 	}
 
 	@Test
