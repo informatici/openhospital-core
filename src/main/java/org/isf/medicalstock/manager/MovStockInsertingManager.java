@@ -347,7 +347,7 @@ public class MovStockInsertingManager {
 	 * @throws OHServiceException 
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
-	private boolean prepareChargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
+	protected boolean prepareChargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
 		validateMovement(movement, checkReference);
 		return ioOperations.prepareChargingMovement(movement);
 	}
