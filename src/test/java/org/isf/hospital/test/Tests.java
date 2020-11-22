@@ -69,9 +69,7 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestHospital(false);
 		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
 		foundHospital.setDescription("Update");
-		boolean result = hospitalIoOperation.updateHospital(foundHospital);
-		assertThat(result).isTrue();
-		Hospital updateHospital = hospitalIoOperationRepository.findOne(code);
+		Hospital updateHospital = hospitalIoOperation.updateHospital(foundHospital);
 		assertThat(updateHospital.getDescription()).isEqualTo("Update");
 	}
 

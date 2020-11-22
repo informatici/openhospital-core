@@ -74,19 +74,12 @@ public class HospitalIoOperations {
 	 * Updates hospital information
 	 * 
 	 * @return <code>true</code> if the hospital informations have been updated, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean updateHospital(
-			Hospital hospital) throws OHServiceException 
+	public Hospital updateHospital(Hospital hospital) throws OHServiceException
 	{
-		boolean result = true;
-	
-
-		Hospital savedHospital = repository.save(hospital);
-		result = (savedHospital != null);
-		
-		return result;
-	} 
+		return repository.save(hospital);
+	}
 	
 	/**
 	 * Sanitize the given {@link String} value. 
