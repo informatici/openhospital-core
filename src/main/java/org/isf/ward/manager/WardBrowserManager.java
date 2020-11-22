@@ -142,10 +142,10 @@ public class WardBrowserManager {
 	 * Stores the specified {@link Ward}. 
 	 * In case of error a message error is shown and a <code>false</code> value is returned.
 	 * @param ward the ward to store.
-	 * @return <code>true</code> if the ward has been stored, <code>false</code> otherwise.
+	 * @return ward that has been stored
 	 * @throws OHServiceException 
 	 */
-	public boolean newWard(Ward ward) throws OHServiceException {
+	public Ward newWard(Ward ward) throws OHServiceException {
 		validateWard(ward, true);
 		return ioOperations.newWard(ward);
 	}
@@ -155,10 +155,10 @@ public class WardBrowserManager {
 	 * If the ward has been updated concurrently a overwrite confirmation message is shown.
 	 * In case of error a message error is shown and a <code>false</code> value is returned.
 	 * @param ward the ward to update.
-	 * @return <code>true</code> if the ward has been updated, <code>false</code> otherwise.
+	 * @return ward that has been updated
 	 * @throws OHServiceException 
 	 */
-	public boolean updateWard(Ward ward) throws OHServiceException {
+	public Ward updateWard(Ward ward) throws OHServiceException {
 		validateWard(ward, false);
 		return ioOperations.updateWard(ward);
 	}
