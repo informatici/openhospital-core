@@ -95,9 +95,10 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoNewWard() throws Exception {
 		Ward ward = testWard.setup(true);
-		boolean result = wardIoOperation.newWard(ward);
+		Ward newWard = wardIoOperation.newWard(ward);
 
-		assertThat(result).isTrue();
+
+		assertThat("TestDescription").isEqualTo(newWard.getDescription());
 		_checkWardIntoDb(ward.getCode());
 	}
 
@@ -109,11 +110,10 @@ public class Tests extends OHCoreTestCase {
 		foundWard.setDescription("Update");
 
 		// when:
-		boolean result = wardIoOperation.updateWard(foundWard);
+		wardIoOperation.updateWard(foundWard);
 		Ward updateWard = wardIoOperationRepository.findOne(code);
 
 		// then:
-		assertThat(result).isTrue();
 		assertThat(updateWard.getDescription()).isEqualTo("Update");
 	}
 
@@ -121,8 +121,8 @@ public class Tests extends OHCoreTestCase {
 	public void testIoUpdateWardNoCodePresent() throws Exception {
 		Ward ward = testWard.setup(true);
 		ward.setCode("X");
-		boolean result = wardIoOperation.updateWard(ward);
-		assertThat(result).isTrue();
+		Ward updateWard = wardIoOperation.updateWard(ward);
+		assertThat("X").isEqualTo(updateWard.getCode());
 	}
 
 	@Test
