@@ -142,7 +142,11 @@ public class WardBrowserManager {
 	 * Stores the specified {@link Ward}. 
 	 * In case of error a message error is shown and a <code>false</code> value is returned.
 	 * @param ward the ward to store.
+<<<<<<< HEAD
 	 * @return ward that has been stored
+=======
+	 * @return ward that has been stored.
+>>>>>>> 1e7c42900a486f154cf95232f7189b88b929e885
 	 * @throws OHServiceException 
 	 */
 	public Ward newWard(Ward ward) throws OHServiceException {
