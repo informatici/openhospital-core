@@ -1,3 +1,26 @@
+/*-
+ * #%L
+ * OpenHospital
+ * $Id:$
+ * $HeadURL:$
+ * %%
+ * Copyright (C) 2006 - 2020 Informatici Senza Frontiere
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
 package org.isf.ward.service;
 
 import java.util.ArrayList;
@@ -82,21 +105,21 @@ public class WardIoOperations {
 	/**
 	 * Stores the specified {@link Ward}. 
 	 * @param ward the ward to store.
-	 * @return <code>true</code> if the ward has been stored, <code>false</code> otherwise.
+	 * @return ward that has been stored.
 	 * @throws OHServiceException if an error occurs storing the ward.
 	 */
-	public boolean newWard(Ward ward) throws OHServiceException {
-		return repository.save(ward) != null;
+	public Ward newWard(Ward ward) throws OHServiceException {
+		return repository.save(ward);
 	}
 	
 	/**
 	 * Updates the specified {@link Ward}.
 	 * @param ward the {@link Ward} to update.
-	 * @return <code>true</code> if the ward has been updated, <code>false</code> otherwise.
+	 * @return ward that has been updated.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateWard(Ward ward) throws OHServiceException {
-		return repository.save(ward) != null;
+	public Ward updateWard(Ward ward) throws OHServiceException {
+		return repository.save(ward);
 	}
 	
 	/**
