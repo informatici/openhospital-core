@@ -263,7 +263,7 @@ public class Ward extends Auditable<String>
 
 	@Override
 	public boolean equals(Object anObject) {
-        return (anObject == null) || !(anObject instanceof Ward) ? false
+        return !(anObject instanceof Ward) ? false
                 : (getCode().equals(((Ward) anObject).getCode())
                         && getDescription().equalsIgnoreCase(
                                 ((Ward) anObject).getDescription())

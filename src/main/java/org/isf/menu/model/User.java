@@ -114,7 +114,7 @@ public class User extends Auditable<String>
 	
 	@Override
 	public boolean equals(Object anObject) {
-		return (anObject == null) || !(anObject instanceof User) ? false
+		return !(anObject instanceof User) ? false
 				: (getUserName().equalsIgnoreCase(
 						((User) anObject).getUserName()) && getDesc()
 						.equalsIgnoreCase(

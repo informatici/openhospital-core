@@ -188,7 +188,7 @@ public class UserMenuItem
 		
 	@Override
 	public boolean equals(Object anObject) {
-        return (anObject == null) || !(anObject instanceof UserMenuItem) ? false
+        return !(anObject instanceof UserMenuItem) ? false
                 : (getCode().equals(((UserMenuItem) anObject).getCode())
                   && getButtonLabel().equalsIgnoreCase(((UserMenuItem) anObject).getButtonLabel()) 
                   && getAltLabel().equals(((UserMenuItem) anObject).getAltLabel())

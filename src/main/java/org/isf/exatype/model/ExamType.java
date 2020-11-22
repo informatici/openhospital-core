@@ -104,7 +104,7 @@ public class ExamType extends Auditable<String>
 
 	@Override
 	public boolean equals(Object anObject) {
-		return (anObject == null) || !(anObject instanceof ExamType) ? false
+		return !(anObject instanceof ExamType) ? false
 				: (getCode().equals(((ExamType) anObject).getCode())
 						&& getDescription().equalsIgnoreCase(
 								((ExamType) anObject).getDescription()));
