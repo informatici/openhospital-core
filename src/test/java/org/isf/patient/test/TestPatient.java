@@ -51,8 +51,6 @@ public class TestPatient {
 	private static char hasInsurance = 'Y'; // Y=Yes, N=no
 	private static char parentTogether = 'Y'; // parents together: Y or N
 	private static String taxCode = "TestTaxCode";
-	private static float height = 184;
-	private static float weight = 60;
 	private static String maritalStatus = "divorced";
 	private static String profession = "business";
 	//private static Blob photo;	
@@ -96,8 +94,6 @@ public class TestPatient {
 		patient.setHasInsurance(hasInsurance);
 		patient.setParentTogether(parentTogether);
 		patient.setTaxCode(taxCode);
-		patient.setHeight(height);
-		patient.setWeight(weight);
 		patient.setMaritalStatus(maritalStatus);
 		patient.setProfession(profession);
 	}

@@ -179,12 +179,6 @@ public class Patient extends Auditable<String>
 	@Column(name="PAT_DELETED")
 	private String deleted = "N";
 
-	@Transient
-	private float height;
-	
-	@Transient
-	private float weight;
-	
 	@Version
 	@Column(name="PAT_LOCK")
 	private int lock;
@@ -221,8 +215,6 @@ public class Patient extends Auditable<String>
 		this.hasInsurance = ' ';
 		this.parentTogether = ' ';
 		this.taxCode = "";
-		this.height = 0;
-		this.weight = 0;
 		this.maritalStatus = "";
 		this.profession = "";
 	}
@@ -275,8 +267,6 @@ public class Patient extends Auditable<String>
 		this.bloodType = bloodType;
 		this.parentTogether = parentTogether;
 		this.taxCode = personalCode;
-		this.height = 0;
-		this.weight = 0;
 		this.maritalStatus = maritalStatus;
 		this.profession = profession;
 	}
@@ -285,7 +275,7 @@ public class Patient extends Auditable<String>
 			String address, String city, String nextKin, String telephone, String note,
 			String mother_name, char mother, String father_name, char father,
 			String bloodType, char economicStatut, char parentTogether, String taxCode,
-			float height, float weight, String maritalStatus, String profession) { //Changed EduLev with bloodType
+			String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.code = code;
 		this.firstName = firstName;
 		this.secondName = secondName;
@@ -307,8 +297,6 @@ public class Patient extends Auditable<String>
 		this.bloodType = bloodType;
 		this.parentTogether = parentTogether;
 		this.taxCode = taxCode;
-		this.height = height;
-		this.weight = weight;
 		this.maritalStatus = maritalStatus;
 		this.profession = profession;
 	}
@@ -512,22 +500,6 @@ public class Patient extends Auditable<String>
 		this.taxCode = taxCode;
 	}
 	
-	public float getHeight() {
-		return height;
-	}
-
-	public void setHeight(float height) {
-		this.height = height;
-	}
-
-	public float getWeight() {
-		return weight;
-	}
-
-	public void setWeight(float weight) {
-		this.weight = weight;
-	}
-
 	public String getMaritalStatus() {
 		return maritalStatus;
 	}
