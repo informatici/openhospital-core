@@ -119,7 +119,5 @@ public class TestPatient {
 		assertThat(patient.getTaxCode()).isEqualTo(taxCode);
 		assertThat(patient.getMaritalStatus()).isEqualTo(maritalStatus);
 		assertThat(patient.getProfession()).isEqualTo(profession);
-		//assertThat(patient.getHeight()).isEqualTo(height);
-		//assertThat(patient.getWeight()).isEqualTo(weight);
 	}
 }

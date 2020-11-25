@@ -104,7 +104,7 @@ public class PatientBrowserManager {
 	 * @return the Patient that match specified name (could be null)
 	 * @throws OHServiceException 
 	 * @deprecated use getPatient(Integer code) for one patient or 
-	 * getPatientWithHeightAndWeight(regex) for a list
+	 * getPatientsByOneOfFieldsLike(String regex) for a list
 	 */
 	public Patient getPatientByName(String name) throws OHServiceException {
         return ioOperations.getPatient(name);
@@ -277,14 +277,19 @@ public class PatientBrowserManager {
 	}
 	
 	/**
-	 * Method that returns the full list of Patients not logically deleted with Height and Weight
-	 * 
-	 * @param regex
-	 * @return the full list of Patients with Height and Weight (could be empty)
-	 * @throws OHServiceException 
+	 * Method that returns the full list of Patients not logically deleted, having the passed String in:<br>
+	 * - code<br>
+	 * - firstName<br>
+	 * - secondName<br>
+	 * - taxCode<br>
+	 * - note<br>
+	 *  
+	 * @param keyword - String to search, <code>null</code> for full list
+	 * @return the list of Patients (could be empty)
+	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatientWithHeightAndWeight(String regex) throws OHServiceException{
-        return ioOperations.getPatientsByOneOfFieldsLike(regex);
+	public ArrayList<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException{
+        return ioOperations.getPatientsByOneOfFieldsLike(keyword);
 	}
 
 	/**

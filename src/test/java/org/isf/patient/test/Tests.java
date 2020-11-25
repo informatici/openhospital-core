@@ -75,7 +75,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testIoGetPatientsWithHeightAndWeight() throws Exception {
+	public void testIoGetPatientsByOneOfFieldsLike() throws Exception {
 		_setupTestPatient(false);
 		// Pay attention that query return with PAT_ID descendant
 		ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(null);
