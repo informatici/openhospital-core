@@ -116,6 +116,7 @@ public class DbQuery {
      * 
      * @Deprecated since Open Hospital 1.7.0 replaced by {@link DbQueryLogger}
      */
+    @Deprecated
     public boolean isData(String aQuery) throws SQLException , IOException {
         Connection conn = DbSingleConn.getConnection();
         Statement stat = conn.createStatement();
