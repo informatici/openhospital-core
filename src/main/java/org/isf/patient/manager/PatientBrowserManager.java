@@ -106,6 +106,7 @@ public class PatientBrowserManager {
 	 * @deprecated use getPatient(Integer code) for one patient or 
 	 * getPatientsByOneOfFieldsLike(String regex) for a list
 	 */
+	@Deprecated
 	public Patient getPatientByName(String name) throws OHServiceException {
         return ioOperations.getPatient(name);
 	}
