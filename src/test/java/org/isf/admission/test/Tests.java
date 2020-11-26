@@ -76,6 +76,7 @@ import org.isf.ward.test.TestWard;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -481,6 +482,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	@Ignore
 	public void loadAdmittedPatient() throws Exception {
 		assertThat(admissionIoOperation.loadAdmittedPatient(-1)).isNull();
 		int id = _setupTestAdmission(false);
@@ -756,6 +758,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	@Ignore
 	@Transactional
 	public void mgrLoadAdmittedPatient() throws Exception {
 		int id = _setupTestAdmission(false);
