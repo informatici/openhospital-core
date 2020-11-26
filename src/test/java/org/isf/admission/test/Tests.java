@@ -76,7 +76,6 @@ import org.isf.ward.test.TestWard;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -197,43 +196,35 @@ public class Tests extends OHCoreTestCase {
 
 		final GregorianCalendar twoDaysAfterDischargeDate = copyFrom(dischargeDate);
 		twoDaysAfterDischargeDate.add(Calendar.DATE, 2);
-		{
-			// search by admission date
-			final List<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null,
-					new GregorianCalendar[] { beforeAdmissionDate, oneDayAfterAdmissionDate },
-					null
-			);
-			assertThat(searchOneresult).hasSameSizeAs(patients);
-			assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 
-			final List<AdmittedPatient> searchTwoResult = admissionIoOperation.getAdmittedPatients(null,
-					new GregorianCalendar[] { oneDayAfterAdmissionDate, twoDaysAfterAdmissionDate },
-					null
-			);
-			assertThat(searchTwoResult).isEmpty();
-		}
-		{
-			// search by discharge date
-			final List<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null, null,
-					new GregorianCalendar[] { beforeDischargeDate, oneDayAfterDischargeDate }
-			);
-			assertThat(searchOneresult).hasSameSizeAs(patients);
-			assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
+		// search by admission date
+		List<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null,
+				new GregorianCalendar[] { beforeAdmissionDate, oneDayAfterAdmissionDate },
+				null);
+		assertThat(searchOneresult).hasSameSizeAs(patients);
+		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 
-			final List<AdmittedPatient> searchTwoResult = admissionIoOperation.getAdmittedPatients(null, null,
-					new GregorianCalendar[] { oneDayAfterDischargeDate, twoDaysAfterDischargeDate }
-			);
-			assertThat(searchTwoResult).isEmpty();
-		}
-		{
-			// complex search by both admission and discharge date
-			final List<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null,
-					new GregorianCalendar[] { beforeAdmissionDate, oneDayAfterAdmissionDate },
-					new GregorianCalendar[] { beforeDischargeDate, oneDayAfterDischargeDate }
-			);
-			assertThat(searchOneresult).hasSameSizeAs(patients);
-			assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
-		}
+		List<AdmittedPatient> searchTwoResult = admissionIoOperation.getAdmittedPatients(null,
+				new GregorianCalendar[] { oneDayAfterAdmissionDate, twoDaysAfterAdmissionDate },
+				null);
+		assertThat(searchTwoResult).isEmpty();
+
+		// search by discharge date
+		searchOneresult = admissionIoOperation.getAdmittedPatients(null, null,
+				new GregorianCalendar[] { beforeDischargeDate, oneDayAfterDischargeDate });
+		assertThat(searchOneresult).hasSameSizeAs(patients);
+		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
+
+		searchTwoResult = admissionIoOperation.getAdmittedPatients(null, null,
+				new GregorianCalendar[] { oneDayAfterDischargeDate, twoDaysAfterDischargeDate });
+		assertThat(searchTwoResult).isEmpty();
+
+		// complex search by both admission and discharge date
+		searchOneresult = admissionIoOperation.getAdmittedPatients(null,
+				new GregorianCalendar[] { beforeAdmissionDate, oneDayAfterAdmissionDate },
+				new GregorianCalendar[] { beforeDischargeDate, oneDayAfterDischargeDate });
+		assertThat(searchOneresult).hasSameSizeAs(patients);
+		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 	}
 
 	private GregorianCalendar copyFrom(final GregorianCalendar source) {
@@ -482,10 +473,16 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	@Ignore
-	public void loadAdmittedPatient() throws Exception {
+	public void loadAdmittedPatientNotThere() throws Exception {
 		assertThat(admissionIoOperation.loadAdmittedPatient(-1)).isNull();
+	}
+
+	@Test
+	@Transactional
+	public void loadAdmittedPatient() throws Exception {
 		int id = _setupTestAdmission(false);
+		Admission admission = admissionIoOperation.getAdmission(id);
+		assertThat(admission).isNotNull();
 		assertThat(admissionIoOperation.loadAdmittedPatient(id)).isNotNull();
 	}
 
@@ -758,14 +755,6 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	@Ignore
-	@Transactional
-	public void mgrLoadAdmittedPatient() throws Exception {
-		int id = _setupTestAdmission(false);
-		assertThat(admissionIoOperation.loadAdmittedPatient(id)).isNotNull();
-	}
-
-	@Test
 	public void mgrGetCurrentAdmission() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -999,7 +988,7 @@ public class Tests extends OHCoreTestCase {
 
 	private int _setupTestAdmission(boolean usingSet, boolean maternity) throws OHException, InterruptedException {
 		Ward ward = testWard.setup(false, maternity);
-		Patient patient = testPatient.setup(true);
+		Patient patient = testPatient.setup(false);
 		AdmissionType admissionType = testAdmissionType.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease diseaseIn = testDisease.setup(diseaseType, false);
