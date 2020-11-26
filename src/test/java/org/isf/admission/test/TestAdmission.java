@@ -23,7 +23,6 @@ package org.isf.admission.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.isf.admission.model.Admission;
@@ -40,24 +39,26 @@ import org.isf.ward.model.Ward;
 
 public class TestAdmission {
 
+	// set dates in reasonable order to pass any validatation tests
+	private static GregorianCalendar admDate = new GregorianCalendar(1, 0, 31);
+	private static GregorianCalendar visitDate = new GregorianCalendar(2, 1, 31);
+	private static GregorianCalendar opDate = new GregorianCalendar(3, 2, 1);
+	private static GregorianCalendar abortDate = null;
+	private static GregorianCalendar deliveryDate = new GregorianCalendar(4, 12, 1);
+	private static GregorianCalendar ctrlDate1 = new GregorianCalendar(5, 2, 1);
+	private static GregorianCalendar ctrlDate2 = new GregorianCalendar(5, 2, 2);
+	private static GregorianCalendar disDate = new GregorianCalendar(6, 11, 1);
+
 	private int id = 0;
 	private int admitted = 1;
 	private String type = "T";
 	private int yProg = 0;
 	private GregorianCalendar now = new GregorianCalendar();
-	private GregorianCalendar admDate = new GregorianCalendar(now.get(Calendar.YEAR), 9, 8);
 	private String FHU = "TestFHU";
 	private String opResult = "Result";
-	private GregorianCalendar opDate = new GregorianCalendar(7, 6, 5);
-	private GregorianCalendar disDate = new GregorianCalendar(4, 3, 2);
 	private String note = "TestNote";
 	private Float transUnit = (float) 10.10;
-	private GregorianCalendar visitDate = new GregorianCalendar(1, 0, 1);
-	private GregorianCalendar deliveryDate = new GregorianCalendar(2, 3, 4);
 	private Float weight = (float) 20.20;
-	private GregorianCalendar ctrlDate1 = new GregorianCalendar(5, 6, 7);
-	private GregorianCalendar ctrlDate2 = new GregorianCalendar(8, 9, 10);
-	private GregorianCalendar abortDate = new GregorianCalendar(9, 8, 7);
 	private String userID = "TestUserId";
 	private String deleted = "N";
 

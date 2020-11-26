@@ -29,6 +29,7 @@ import org.isf.ward.model.Ward;
 public class TestWard {
 
 	private String code = "Z";
+	private String maternityCode = "M";
 	private String description = "TestDescription";
 	private String telephone = "TestTelephone";
 	private String fax = "TestFac";
@@ -41,22 +42,31 @@ public class TestWard {
 	private boolean isMale = true;
 
 	public Ward setup(boolean usingSet) throws OHException {
+		return setup(usingSet, false);
+	}
+
+	public Ward setup(boolean usingSet, boolean maternity) throws OHException {
 		Ward ward;
 
 		if (usingSet) {
 			ward = new Ward();
-			_setParameters(ward);
+			_setParameters(ward, maternity);
 		} else {
 			// Create Ward with all parameters 
 			ward = new Ward(code, description, telephone, fax, email, beds, nurs, docs,
 					isPharmacy, isMale, isFemale);
 		}
-
+		if (maternity) {
+			ward.setCode(maternityCode);
+		}
 		return ward;
 	}
 
-	public void _setParameters(Ward ward) {
+	public void _setParameters(Ward ward, boolean maternity) {
 		ward.setCode(code);
+		if (maternity) {
+			ward.setCode(maternityCode);
+		}
 		ward.setBeds(beds);
 		ward.setDescription(description);
 		ward.setDocs(docs);
