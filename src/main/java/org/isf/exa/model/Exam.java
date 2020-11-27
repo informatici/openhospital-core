@@ -160,7 +160,7 @@ public class Exam extends Auditable<String>
 
 	@Override
 	public boolean equals(Object anObject) {
-		return (anObject == null) || !(anObject instanceof Exam) ? false
+		return !(anObject instanceof Exam) ? false
 				: (getCode().equals(((Exam) anObject).getCode())
 						&& getDescription().equalsIgnoreCase(
 								((Exam) anObject).getDescription())

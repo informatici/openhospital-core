@@ -26,43 +26,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.utils.exception.OHException;
 
-public class TestPregnantTreatmentType 
-{	
-    private String code = "ZZ";
-    private String description = "TestDescription";
-    
-			
-	public PregnantTreatmentType setup(
-			boolean usingSet) throws OHException 
-	{
+public class TestPregnantTreatmentType {
+
+	private String code = "ZZ";
+	private String description = "TestDescription";
+
+	public PregnantTreatmentType setup(boolean usingSet) throws OHException {
 		PregnantTreatmentType pregnantTreatmentType;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			pregnantTreatmentType = new PregnantTreatmentType();
 			_setParameters(pregnantTreatmentType);
-		}
-		else
-		{
+		} else {
 			// Create PregnantTreatmentType with all parameters 
 			pregnantTreatmentType = new PregnantTreatmentType(code, description);
 		}
-				    	
+
 		return pregnantTreatmentType;
 	}
-	
-	public void _setParameters(
-			PregnantTreatmentType pregnantTreatmentType) 
-	{	
+
+	public void _setParameters(PregnantTreatmentType pregnantTreatmentType) {
 		pregnantTreatmentType.setCode(code);
 		pregnantTreatmentType.setDescription(description);
 	}
-	
-	public void check(
-			PregnantTreatmentType pregnantTreatmentType) 
-	{		
-    	assertThat(pregnantTreatmentType.getCode()).isEqualTo(code);
-    	assertThat(pregnantTreatmentType.getDescription()).isEqualTo(description);
+
+	public void check(PregnantTreatmentType pregnantTreatmentType) {
+		assertThat(pregnantTreatmentType.getCode()).isEqualTo(code);
+		assertThat(pregnantTreatmentType.getDescription()).isEqualTo(description);
 	}
 }

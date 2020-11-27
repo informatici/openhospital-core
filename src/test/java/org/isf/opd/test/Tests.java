@@ -22,426 +22,221 @@
 package org.isf.opd.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.isf.OHCoreTestCase;
 import org.isf.disease.model.Disease;
+import org.isf.disease.service.DiseaseIoOperationRepository;
 import org.isf.disease.test.TestDisease;
-import org.isf.disease.test.TestDiseaseContext;
 import org.isf.distype.model.DiseaseType;
+import org.isf.distype.service.DiseaseTypeIoOperationRepository;
 import org.isf.distype.test.TestDiseaseType;
-import org.isf.distype.test.TestDiseaseTypeContext;
 import org.isf.opd.model.Opd;
+import org.isf.opd.service.OpdIoOperationRepository;
 import org.isf.opd.service.OpdIoOperations;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
+import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.test.TestPatient;
-import org.isf.patient.test.TestPatientContext;
-import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestOpd testOpd;
-	private static TestOpdContext testOpdContext;
 	private static TestPatient testPatient;
-	private static TestPatientContext testPatientContext;
 	private static TestDiseaseType testDiseaseType;
-	private static TestDiseaseTypeContext testDiseaseTypeContext;
 	private static TestDisease testDisease;
-	private static TestDiseaseContext testDiseaseContext;
 
-    @Autowired
-    OpdIoOperations opdIoOperation;
-    @Autowired
-    ApplicationEventPublisher applicationEventPublisher;
-	
+	@Autowired
+	OpdIoOperations opdIoOperation;
+	@Autowired
+	OpdIoOperationRepository opdIoOperationRepository;
+	@Autowired
+	PatientIoOperationRepository patientIoOperationRepository;
+	@Autowired
+	DiseaseTypeIoOperationRepository diseaseTypeIoOperationRepository;
+	@Autowired
+	DiseaseIoOperationRepository diseaseIoOperationRepository;
+	@Autowired
+	ApplicationEventPublisher applicationEventPublisher;
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testOpd = new TestOpd();
-    	testOpdContext = new TestOpdContext();
-    	testPatient = new TestPatient();
-    	testPatientContext = new TestPatientContext();
-    	testDisease = new TestDisease();
-    	testDiseaseContext = new TestDiseaseContext();
-    	testDiseaseType = new TestDiseaseType();
-    	testDiseaseTypeContext = new TestDiseaseTypeContext();
-    }
-
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-    	//jpa.destroy();
-    	testOpd = null;
-    	testOpdContext = null;
-    	testPatient = null;
-    	testPatientContext = null;
-    	testDisease = null;
-    	testDiseaseContext = null;
-    	testDiseaseType = null;
-    	testDiseaseTypeContext = null;
-    }
-	
-		
-	@Test
-	public void testOpdGets() 
-	{
-		int code = 0;
-			
-
-		try 
-		{		
-			code = _setupTestOpd(false);
-			_checkOpdIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public static void setUpClass() {
+		testOpd = new TestOpd();
+		testPatient = new TestPatient();
+		testDisease = new TestDisease();
+		testDiseaseType = new TestDiseaseType();
 	}
-	
-	@Test
-	public void testOpdSets() 
-	{
-		int code = 0;
-			
 
-		try 
-		{		
-			code = _setupTestOpd(true);
-			_checkOpdIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
-	
+
 	@Test
-	public void testIoGetOpd()
-	{
-		int code = 0;
-		
-		
-		try 
-		{		
-			code = _setupTestOpd(false);
-			Opd foundOpd = (Opd)jpa.find(Opd.class, code); 
-			ArrayList<Opd> opds = opdIoOperation.getOpdList(
-					foundOpd.getDisease().getType().getCode(), 
-					foundOpd.getDisease().getCode(),
-					foundOpd.getVisitDate(),
-					foundOpd.getVisitDate(),
-					foundOpd.getAge()-1,
-					foundOpd.getAge()+1,
-					foundOpd.getSex(),
-					foundOpd.getNewPatient());			
-						
-			assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testOpdGets() throws Exception {
+		int code = _setupTestOpd(false);
+		_checkOpdIntoDb(code);
 	}
-	
+
 	@Test
-	public void testIoNewOpd() throws OHException
-	{
-		Patient	patient = testPatient.setup(false); 
+	public void testOpdSets() throws Exception {
+		int code = _setupTestOpd(true);
+		_checkOpdIntoDb(code);
+	}
+
+	@Test
+	public void testIoGetOpd() throws Exception {
+		int code = _setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		ArrayList<Opd> opds = opdIoOperation.getOpdList(
+				foundOpd.getDisease().getType().getCode(),
+				foundOpd.getDisease().getCode(),
+				foundOpd.getVisitDate(),
+				foundOpd.getVisitDate(),
+				foundOpd.getAge() - 1,
+				foundOpd.getAge() + 1,
+				foundOpd.getSex(),
+				foundOpd.getNewPatient());
+		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
+	}
+
+	@Test
+	public void testIoNewOpd() throws Exception {
+		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
-		boolean result = false;
-
-    	
-		try 
-		{		
-			jpa.beginTransaction();	
-			jpa.persist(patient);
-			jpa.persist(diseaseType);
-			jpa.persist(disease);
-			jpa.commitTransaction();
-
-			Opd opd = testOpd.setup(patient, disease, false);
-	    	opd.setDate(new Date());
-			result = opdIoOperation.newOpd(opd);
-
-			assertThat(result).isTrue();
-			_checkOpdIntoDb(opd.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoUpdateOpd() 
-	{
-		int code = 0;
-		Opd result = null;
-		
-		
-		try 
-		{		
-			code = _setupTestOpd(false);
-			Opd foundOpd = (Opd)jpa.find(Opd.class, code); 
-			jpa.flush();
-			foundOpd.setNote("Update");
-			result = opdIoOperation.updateOpd(foundOpd);
-			jpa.open();
-			Opd updateOpd = (Opd)jpa.find(Opd.class, code);
-
-			assertThat(result).isNotNull();
-			assertThat(updateOpd.getNote()).isEqualTo("Update");
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+		patientIoOperationRepository.saveAndFlush(patient);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+		diseaseIoOperationRepository.saveAndFlush(disease);
+		Opd opd = testOpd.setup(patient, disease, false);
+		opd.setDate(new Date());
+		boolean result = opdIoOperation.newOpd(opd);
+		assertThat(result).isTrue();
+		_checkOpdIntoDb(opd.getCode());
 	}
 
 	@Test
-	public void testIoDeleteOpd() 
-	{
-		int code = 0;
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestOpd(false);
-			Opd foundOpd = (Opd)jpa.find(Opd.class, code); 
-			result = opdIoOperation.deleteOpd(foundOpd);
-
-			assertThat(result).isTrue();
-			result = opdIoOperation.isCodePresent(code);
-			assertThat(result).isFalse();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoUpdateOpd() throws Exception {
+		int code = _setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		foundOpd.setNote("Update");
+		Opd result = opdIoOperation.updateOpd(foundOpd);
+		Opd updateOpd = opdIoOperationRepository.findOne(code);
+		assertThat(result).isNotNull();
+		assertThat(updateOpd.getNote()).isEqualTo("Update");
 	}
 
 	@Test
-	public void testIoGetProgYear()  
-	{
-		int code = 0;
-		int progYear = 0;
-		
-
-		try 
-		{		
-			code = _setupTestOpd(false);
-			progYear = opdIoOperation.getProgYear(0);
-
-			Opd foundOpd = (Opd)jpa.find(Opd.class, code); 
-			assertThat(progYear).isEqualTo(foundOpd.getProgYear());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoDeleteOpd() throws Exception {
+		int code = _setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		boolean result = opdIoOperation.deleteOpd(foundOpd);
+		assertThat(result).isTrue();
+		result = opdIoOperation.isCodePresent(code);
+		assertThat(result).isFalse();
 	}
 
 	@Test
-	public void testIoIsExistsOpdNumShouldReturnTrueWhenOpdWithGivenOPDProgressiveYearAndVisitYearExists() {
-		try	{
-			// given:
-			int code = _setupTestOpd(false);
-			Opd foundOpd = (Opd)jpa.find(Opd.class, code);
-
-			// when:
-			Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), foundOpd.getVisitDate().get(Calendar.YEAR));
-
-			// then:
-			assertThat(result).isTrue();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			fail();
-		}
+	public void testIoGetProgYear() throws Exception {
+		int code = _setupTestOpd(false);
+		int progYear = opdIoOperation.getProgYear(0);
+		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		assertThat(progYear).isEqualTo(foundOpd.getProgYear());
 	}
 
 	@Test
-	public void testIoIsExistsOpdNumShouldReturnTrueWhenOpdNumExistsAndVisitYearIsNotProvided()	{
-		try	{
-			// given:
-			int code = _setupTestOpd(false);
-			Opd foundOpd = (Opd)jpa.find(Opd.class, code);
+	public void testIoIsExistsOpdNumShouldReturnTrueWhenOpdWithGivenOPDProgressiveYearAndVisitYearExists() throws Exception {
+		// given:
+		int code = _setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findOne(code);
 
-			// when:
-			Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 0);
+		// when:
+		Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), foundOpd.getVisitDate().get(Calendar.YEAR));
 
-			// then:
-			assertThat(result).isTrue();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			fail();
-		}
+		// then:
+		assertThat(result).isTrue();
 	}
 
 	@Test
-	public void testIoIsExistsOpdNumShouldReturnFalseWhenOpdNumExistsAndVisitYearIsIncorrect() {
-		try	{
-			// given:
-			int code = _setupTestOpd(false);
-			Opd foundOpd = (Opd)jpa.find(Opd.class, code);
+	public void testIoIsExistsOpdNumShouldReturnTrueWhenOpdNumExistsAndVisitYearIsNotProvided() throws Exception {
+		// given:
+		int code = _setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findOne(code);
 
-			// when:
-			Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 1488);
+		// when:
+		Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 0);
 
-			// then:
-			assertThat(result).isFalse();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			fail();
-		}
+		// then:
+		assertThat(result).isTrue();
 	}
 
 	@Test
-	public void testIoGetLastOpd()  
-	{
-		int code = 0;
-		
+	public void testIoIsExistsOpdNumShouldReturnFalseWhenOpdNumExistsAndVisitYearIsIncorrect() throws Exception {
+		// given:
+		int code = _setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findOne(code);
 
-		try 
-		{		
-			code = _setupTestOpd(false);
-			Opd foundOpd = (Opd)jpa.find(Opd.class, code); 
-			Opd lastOpd = opdIoOperation.getLastOpd(foundOpd.getPatient().getCode());
+		// when:
+		Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 1488);
 
-			assertThat(lastOpd.getCode()).isEqualTo(foundOpd.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+		// then:
+		assertThat(result).isFalse();
 	}
 
 	@Test
-	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() {
-		try {
-			// given:
-			int id = _setupTestOpd(false);
-			Opd found = (Opd) jpa.find(Opd.class, id);
-			Patient mergedPatient = _setupTestPatient(false);
-
-			// when:
-			applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
-
-			// then:
-			Opd result = (Opd)jpa.find(Opd.class, id);
-			assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
+	public void testIoGetLastOpd() throws Exception {
+		int code = _setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		Opd lastOpd = opdIoOperation.getLastOpd(foundOpd.getPatient().getCode());
+		assertThat(lastOpd.getCode()).isEqualTo(foundOpd.getCode());
 	}
 
-	private Patient _setupTestPatient(boolean usingSet) throws OHException	{
-		jpa.beginTransaction();
+	@Test
+	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() throws Exception {
+		// given:
+		int id = _setupTestOpd(false);
+		Opd found = opdIoOperationRepository.findOne(id);
+		Patient mergedPatient = _setupTestPatient(false);
+
+		// when:
+		applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
+
+		// then:
+		Opd result = opdIoOperationRepository.findOne(id);
+		assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
+	}
+
+	private Patient _setupTestPatient(boolean usingSet) throws Exception {
 		Patient patient = testPatient.setup(usingSet);
-		jpa.persist(patient);
-		jpa.commitTransaction();
-
+		patientIoOperationRepository.saveAndFlush(patient);
 		return patient;
 	}
-	
-	private void _saveContext() throws OHException 
-    {	
-		testOpdContext.saveAll(jpa);
-		testPatientContext.saveAll(jpa);
-		testDiseaseContext.saveAll(jpa);
-		testDiseaseTypeContext.saveAll(jpa);
-		testDiseaseContext.addMissingKey(jpa);
-    }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testOpdContext.deleteNews(jpa);
-		testPatientContext.deleteNews(jpa);
-		testDiseaseContext.deleteNews(jpa);
-		testDiseaseTypeContext.deleteNews(jpa);
-    }
-        
-	private int _setupTestOpd(
-			boolean usingSet) throws OHException 
-	{
-		Opd opd;
-		Patient	patient = testPatient.setup(false); 
+
+	private int _setupTestOpd(boolean usingSet) throws Exception {
+		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
-		
 
-    	jpa.beginTransaction();	
-    	opd = testOpd.setup(patient, disease, usingSet);
-    	opd.setDate(new Date());
-    	jpa.persist(patient);
-    	jpa.persist(diseaseType);
-    	jpa.persist(disease);
-		jpa.persist(opd);
-    	jpa.commitTransaction();
-    	
+		Opd opd = testOpd.setup(patient, disease, usingSet);
+		opd.setDate(new Date());
+		patientIoOperationRepository.saveAndFlush(patient);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+		diseaseIoOperationRepository.saveAndFlush(disease);
+		opdIoOperationRepository.saveAndFlush(opd);
 		return opd.getCode();
 	}
-		
-	private void  _checkOpdIntoDb(
-			int code) throws OHException 
-	{
-		Opd foundOpd;
-		
 
-		foundOpd = (Opd)jpa.find(Opd.class, code); 
+	private void _checkOpdIntoDb(int code) throws OHException {
+		Opd foundOpd = opdIoOperationRepository.findOne(code);
 		testOpd.check(foundOpd);
-	}	
+	}
 }

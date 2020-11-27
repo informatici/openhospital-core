@@ -64,7 +64,7 @@ public class VaccineIoOperations {
 	}
 
 	/**
-	 * inserts a new {@link Vaccine} in the DB
+	 * Inserts a new {@link Vaccine} in the DB
 	 *
 	 * @param vaccine - the item to insert
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
@@ -75,7 +75,7 @@ public class VaccineIoOperations {
 	}
 	
 	/**
-	 * updates a {@link Vaccine} in the DB
+	 * Updates a {@link Vaccine} in the DB
 	 *
 	 * @param vaccine - the item to update
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
@@ -86,7 +86,7 @@ public class VaccineIoOperations {
 	}
 
 	/**
-	 * deletes a {@link Vaccine} in the DB
+	 * Deletes a {@link Vaccine} in the DB
 	 *
 	 * @param vaccine - the item to delete
 	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
@@ -98,7 +98,7 @@ public class VaccineIoOperations {
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the vaccine code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise

@@ -439,6 +439,7 @@ public class TimeTools {
 	 * @return a String representing the Calendar in the format "dd/MM/yy" 
 	 * @deprecated use formatDateTime(GregorianCalendar dateTime, String pattern) instead
 	 */
+	@Deprecated
     public static String getConvertedString(GregorianCalendar time) {
 		if (time == null)
 			return MessageBundle.getMessage("angal.malnutrition.nodate");
@@ -459,6 +460,7 @@ public class TimeTools {
      * @throws ParseException
      * @deprecated use getDate(String strDate, String format) instead 
      */
+	@Deprecated
     public static GregorianCalendar convertToDate(String string) throws ParseException {
 		GregorianCalendar date = TimeTools.getServerDateTime();
 		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyy");

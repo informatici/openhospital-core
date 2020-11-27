@@ -146,7 +146,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 	
 	/**
-	 * delete series
+	 * Delete series
 	 * 
 	 * @param patientId, the id of patient
 	 * @param seriesNumber, the series number to delete
@@ -177,7 +177,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/**
-	 * load the Detail of DICOM
+	 * Load the Detail of DICOM
 	 * 
 	 * @param idFile
 	 * @return FileDicom
@@ -212,7 +212,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/**
-	 * load metadata from DICOM files fo the patient
+	 * Load metadata from DICOM files fo the patient
 	 * 
 	 * @param patientId
 	 * @return
@@ -239,7 +239,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/**
-	 * save the DICOM file and metadata
+	 * Save the DICOM file and metadata
 	 * 
 	 * @param dicom
 	 * @throws OHDicomException 
@@ -320,7 +320,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/*
-	* load DICOM data + Thumbnail
+	* Load DICOM data + Thumbnail
 	*/
 	private FileDicom loadMetadata(long idFile, int patientId, String series) throws SerialException, IOException, SQLException {
 		// Series must exists, so we need to check it and return null in case
@@ -336,7 +336,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/*
-	* load DICOM data + Image
+	* Load DICOM data + Image
 	*/
 	private FileDicom loadData(long idFile, int patientId, String series) throws IOException, SerialException, SQLException, OHDicomException  {
 		// Series must exists, so we need to check it and return null in case
@@ -395,7 +395,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/**
-	 * load image for thumbnail
+	 * Load image for thumbnail
 	 * @throws SQLException 
 	 * @throws SerialException 
 	 */
@@ -411,7 +411,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/**
-	 * load DICOM image
+	 * Load DICOM image
 	 * @throws SQLException 
 	 * @throws SerialException 
 	 */
@@ -565,7 +565,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/**
-	 * save content in specified file
+	 * Save content in specified file
 	 * 
 	 * @param outFile - the file to write into
 	 * @param content - byte vector to write

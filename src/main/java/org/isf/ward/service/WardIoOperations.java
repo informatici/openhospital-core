@@ -101,21 +101,21 @@ public class WardIoOperations {
 	/**
 	 * Stores the specified {@link Ward}. 
 	 * @param ward the ward to store.
-	 * @return <code>true</code> if the ward has been stored, <code>false</code> otherwise.
+	 * @return ward that has been stored.
 	 * @throws OHServiceException if an error occurs storing the ward.
 	 */
-	public boolean newWard(Ward ward) throws OHServiceException {
-		return repository.save(ward) != null;
+	public Ward newWard(Ward ward) throws OHServiceException {
+		return repository.save(ward);
 	}
 	
 	/**
 	 * Updates the specified {@link Ward}.
 	 * @param ward the {@link Ward} to update.
-	 * @return <code>true</code> if the ward has been updated, <code>false</code> otherwise.
+	 * @return ward that has been updated.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateWard(Ward ward) throws OHServiceException {
-		return repository.save(ward) != null;
+	public Ward updateWard(Ward ward) throws OHServiceException {
+		return repository.save(ward);
 	}
 	
 	/**

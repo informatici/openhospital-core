@@ -103,7 +103,7 @@ public class PregnantTreatmentType extends Auditable<String>
 
 	@Override
     public boolean equals(Object anObject) {
-        return (anObject == null) || !(anObject instanceof PregnantTreatmentType) ? false
+        return !(anObject instanceof PregnantTreatmentType) ? false
                 : (getCode().equals(((PregnantTreatmentType) anObject).getCode())
                         && getDescription().equalsIgnoreCase(
                                 ((PregnantTreatmentType) anObject).getDescription()));

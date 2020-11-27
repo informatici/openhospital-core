@@ -178,7 +178,7 @@ public class Disease extends Auditable<String>
 
 	@Override
 	public boolean equals(Object anObject) {
-        return (anObject == null) || !(anObject instanceof Disease) ? false
+        return !(anObject instanceof Disease) ? false
                 : (getCode().equals(((Disease) anObject).getCode())
                         && getDescription().equalsIgnoreCase(
                                 ((Disease) anObject).getDescription()) && getType()

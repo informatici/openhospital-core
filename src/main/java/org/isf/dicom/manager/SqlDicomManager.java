@@ -56,7 +56,7 @@ public class SqlDicomManager implements DicomManagerInterface{
     }
 
     /**
-     * delete series 
+     * Delete series
      * @param patientID, the id of patient
      * @param seriesNumber, the series number to delete
      * @return true if success
@@ -68,7 +68,7 @@ public class SqlDicomManager implements DicomManagerInterface{
     }
     
     /**
-    * check if dicom is loaded
+    * Check if dicom is loaded
     * @param dicom - the detail of the dicom
     * @return true if file exist
      * @throws OHServiceException 
@@ -79,7 +79,7 @@ public class SqlDicomManager implements DicomManagerInterface{
     }
     
     /**
-     * check if series number does already exist
+     * Check if series number does already exist
      * @param patientID, the id of patient
      * @param seriesNumber, 
      * @return true if file exist
@@ -91,7 +91,7 @@ public class SqlDicomManager implements DicomManagerInterface{
      }
 
     /**
-     * load the Detail of DICOM
+     * Load the Detail of DICOM
      * @param idFile
      * @param patientID
      * @param seriesNumber
@@ -117,7 +117,7 @@ public class SqlDicomManager implements DicomManagerInterface{
     }
 
     /**
-     * load metadata from DICOM files of the patient
+     * Load metadata from DICOM files of the patient
      * @param patientID
      * @return
      * @throws OHServiceException 
@@ -128,7 +128,7 @@ public class SqlDicomManager implements DicomManagerInterface{
     }
 
     /**
-     * save the DICOM file and metadata
+     * Save the DICOM file and metadata
      * @param dicom
      * @throws OHServiceException 
      */

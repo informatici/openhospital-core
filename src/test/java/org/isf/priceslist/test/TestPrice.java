@@ -27,40 +27,29 @@ import org.isf.priceslist.model.Price;
 import org.isf.priceslist.model.PriceList;
 import org.isf.utils.exception.OHException;
 
-public class TestPrice 
-{	
-    private static String group = "TG";
-    private static String item = "TestItem";
-    private static String desc = "TestDescription";
-    private static Double priceValue = 10.10; 
-    private static boolean editable = true;
-				
-		
-	public Price setup(
-			PriceList list,
-			boolean usingSet) throws OHException 
-	{
+public class TestPrice {
+
+	private static String group = "TG";
+	private static String item = "TestItem";
+	private static String desc = "TestDescription";
+	private static Double priceValue = 10.10;
+	private static boolean editable = true;
+
+	public Price setup(PriceList list, boolean usingSet) throws OHException {
 		Price price;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			price = new Price();
 			_setParameters(list, price);
-		}
-		else
-		{
+		} else {
 			// Create PriceList with all parameters 
 			price = new Price(0, list, group, item, desc, priceValue);
 		}
-				    	
+
 		return price;
 	}
-	
-	public void _setParameters(
-			PriceList list,
-			Price price) 
-	{		
+
+	public void _setParameters(PriceList list, Price price) {
 		price.setDesc(desc);
 		price.setEditable(editable);
 		price.setGroup(group);
@@ -68,10 +57,8 @@ public class TestPrice
 		price.setList(list);
 		price.setPrice(priceValue);
 	}
-	
-	public void check(
-			Price price) 
-	{		
+
+	public void check(Price price) {
 		assertThat(price.getDesc()).isEqualTo(desc);
 		assertThat(price.getGroup()).isEqualTo(group);
 		assertThat(price.getItem()).isEqualTo(item);

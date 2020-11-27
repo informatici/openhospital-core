@@ -31,8 +31,8 @@ import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.utils.exception.OHException;
 
-public class TestPatient 
-{			
+public class TestPatient {
+
 	private static String firstName = "TestFirstName";
 	private static String secondName = "TestSecondName";
 	private static Date birthDate = new GregorianCalendar(1984, Calendar.AUGUST, 14).getTime();
@@ -57,22 +57,15 @@ public class TestPatient
 	private static String profession = "business";
 	//private static Blob photo;	
 	//private static Image photoImage;
-				
-		
-	public Patient setup(
-			boolean usingSet) throws OHException 
-	{
+
+	public Patient setup(boolean usingSet) throws OHException {
 		Patient patient;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			patient = new Patient();
 			patient.setPatientProfilePhoto(new PatientProfilePhoto());
 			_setParameters(patient);
-		}
-		else
-		{
+		} else {
 			// Create Patient with all parameters 
 			patient = new Patient(firstName, secondName, birthDate, age, agetype, sex,
 					address, city, nextKin, telephone, mother_name, mother, father_name, father,
@@ -80,13 +73,11 @@ public class TestPatient
 			patient.setAge(patient.getAge()); //IT WILL CHANGE WITH TIME
 			patient.setPatientProfilePhoto(new PatientProfilePhoto());
 		}
-				    	
+
 		return patient;
 	}
-	
-	public void _setParameters(
-			Patient patient) 
-	{		
+
+	public void _setParameters(Patient patient) {
 		patient.setFirstName(firstName);
 		patient.setSecondName(secondName);
 		patient.setBirthDate(birthDate);
@@ -102,7 +93,7 @@ public class TestPatient
 		patient.setFather_name(father_name);
 		patient.setFather(father);
 		patient.setBloodType(bloodType);
-		patient.setHasInsurance(hasInsurance);		
+		patient.setHasInsurance(hasInsurance);
 		patient.setParentTogether(parentTogether);
 		patient.setTaxCode(taxCode);
 		patient.setHeight(height);
@@ -110,10 +101,8 @@ public class TestPatient
 		patient.setMaritalStatus(maritalStatus);
 		patient.setProfession(profession);
 	}
-	
-	public void check(
-			Patient patient) 
-	{
+
+	public void check(Patient patient) {
 		assertThat(patient.getFirstName()).isEqualTo(firstName);
 		assertThat(patient.getSecondName()).isEqualTo(secondName);
 		assertThat(patient.getBirthDate()).hasSameTimeAs(birthDate);

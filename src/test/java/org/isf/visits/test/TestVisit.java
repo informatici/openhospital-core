@@ -30,8 +30,8 @@ import org.isf.utils.exception.OHException;
 import org.isf.visits.model.Visit;
 import org.isf.ward.model.Ward;
 
-public class TestVisit 
-{	
+public class TestVisit {
+
 	private GregorianCalendar date = new GregorianCalendar(10, 9, 8);
 	private String note = "TestNote";
 	private boolean sms = true;
@@ -39,48 +39,35 @@ public class TestVisit
 	private String service = "testService";
 	private Ward ward;
 	private Patient patient;
-			
-	public Visit setup(
-			Patient patient,
-			boolean usingSet, 
-			Ward ward) throws OHException 
-	{
+
+	public Visit setup(Patient patient, boolean usingSet, Ward ward) throws OHException {
 		Visit visit;
 		this.ward = ward;
 		this.patient = patient;
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			visit = new Visit();
 			_setParameters(patient, visit, ward);
-		}
-		else
-		{
+		} else {
 			// Create Visit with all parameters 
 			visit = new Visit(0, date, patient, note, sms, ward, duration, service);
 		}
-				    	
+
 		return visit;
 	}
-	
-	public void _setParameters(
-			Patient patient,
-			Visit visit,
-			Ward ward) 
-	{	
+
+	public void _setParameters(Patient patient, Visit visit, Ward ward) {
 		visit.setDate(date);
 		visit.setNote(note);
 		visit.setPatient(patient);
 		visit.setSms(sms);
 		visit.setWard(ward);
 	}
-	
-	public void check(
-			Visit visit) 
-	{		
-    	assertThat(visit.getDate()).isEqualTo(date);
-    	assertThat(visit.getNote()).isEqualTo(note);
-    	assertThat(visit.isSms()).isEqualTo(sms);
+
+	public void check(Visit visit) {
+		assertThat(visit.getDate()).isEqualTo(date);
+		assertThat(visit.getNote()).isEqualTo(note);
+		assertThat(visit.isSms()).isEqualTo(sms);
 		assertThat(visit.getWard()).isEqualTo(ward);
 		assertThat(visit.getPatient()).isEqualTo(patient);
 	}

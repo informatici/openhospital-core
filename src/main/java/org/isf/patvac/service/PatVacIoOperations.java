@@ -102,7 +102,7 @@ public class PatVacIoOperations {
 	}
 
 	/**
-	 * inserts a {@link PatientVaccine} in the DB
+	 * Inserts a {@link PatientVaccine} in the DB
 	 * 
 	 * @param patVac - the {@link PatientVaccine} to insert
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise 
@@ -113,7 +113,7 @@ public class PatVacIoOperations {
 	}
 
 	/**
-	 * updates a {@link PatientVaccine} 
+	 * Updates a {@link PatientVaccine}
 	 * 
 	 * @param patVac - the {@link PatientVaccine} to update
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise 
@@ -124,7 +124,7 @@ public class PatVacIoOperations {
 	}
 
 	/**
-	 * deletes a {@link PatientVaccine} 
+	 * Deletes a {@link PatientVaccine}
 	 * 
 	 * @param patVac - the {@link PatientVaccine} to delete
 	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise 
@@ -151,7 +151,7 @@ public class PatVacIoOperations {
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the patient vaccine code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise

@@ -635,7 +635,7 @@ public class MedicalStockIoOperations {
 	}
 	
 	/**
-	 * check if the reference number is already used
+	 * Check if the reference number is already used
 	 * @return <code>true</code> if is already used, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */

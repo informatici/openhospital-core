@@ -22,309 +22,149 @@
 package org.isf.examination.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
+import org.isf.OHCoreTestCase;
 import org.isf.examination.model.PatientExamination;
+import org.isf.examination.service.ExaminationIoOperationRepository;
 import org.isf.examination.service.ExaminationOperations;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
+import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.test.TestPatient;
-import org.isf.patient.test.TestPatientContext;
-import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests 
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestPatient testPatient;
 	private static TestPatientExamination testPatientExamination;
-	private static TestPatientContext testPatientContext;
-	private static TestPatientExaminationContext testPatientExaminationContext;
 
-    @Autowired
-    ExaminationOperations examinationOperations;
-    @Autowired
+	@Autowired
+	ExaminationOperations examinationOperations;
+	@Autowired
+	ExaminationIoOperationRepository examinationIoOperationRepository;
+	@Autowired
+	PatientIoOperationRepository patientIoOperationRepository;
+	@Autowired
 	ApplicationEventPublisher applicationEventPublisher;
-	
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testPatient = new TestPatient();
-    	testPatientExamination = new TestPatientExamination();
-    	testPatientContext = new TestPatientContext();
-    	testPatientExaminationContext = new TestPatientExaminationContext();
-    }
-
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-    	testPatient = null;
-    	testPatientExamination = null;
-    	testPatientContext = null;
-    	testPatientExaminationContext = null;
-    }
-	
-		
-	@Test
-	public void testPatientExaminationGets() 
-	{
-		int id = 0;
-			
-
-		try 
-		{		
-			id = _setupTestPatientExamination(false);
-			_checkPatientExaminationIntoDb(id);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public static void setUpClass() {
+		testPatient = new TestPatient();
+		testPatientExamination = new TestPatientExamination();
 	}
-	
-	@Test
-	public void testPatientExaminationSets() 
-	{
-		int id = 0;
-			
 
-		try 
-		{		
-			id = _setupTestPatientExamination(true);
-			_checkPatientExaminationIntoDb(id);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testGetFromLastPatientExamination()
-	{		
-		try 
-		{		
-			Patient	patient = testPatient.setup(false);		
-			PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);	
-
-			
-			PatientExamination patientExamination = examinationOperations.getFromLastPatientExamination(lastPatientExamination);
-			testPatientExamination.check(patientExamination);
-			testPatient.check(patientExamination.getPatient());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testSaveOrUpdate() 
-	{
-		int id = 0;
-			
-
-		try 
-		{		
-			id = _setupTestPatientExamination(false);	
-			PatientExamination patientExamination = (PatientExamination)jpa.find(PatientExamination.class, id); 
-			Integer pex_hr = patientExamination.getPex_hr();
-			patientExamination.setPex_hr(pex_hr + 1);
-			examinationOperations.saveOrUpdate(patientExamination);
-			assertThat(patientExamination.getPex_hr()).isEqualTo((Integer) (pex_hr + 1));
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testGetByID() 
-	{
-		int id = 0;
-			
-
-		try 
-		{		
-			id = _setupTestPatientExamination(false);	
-			PatientExamination patientExamination = examinationOperations.getByID(id);
-			testPatientExamination.check(patientExamination);
-			testPatient.check(patientExamination.getPatient());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}	
-
-	@Test
-	public void testGetLastByPatID()
-	{				
-		try 
-		{		
-			jpa.beginTransaction();				
-			Patient	patient = testPatient.setup(false);		
-			PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);	
-			jpa.persist(patient);
-			jpa.persist(lastPatientExamination);
-			jpa.commitTransaction();
-			PatientExamination foundExamination = examinationOperations.getLastByPatID(patient.getCode());
-			
-			_checkPatientExaminationIntoDb(foundExamination.getPex_ID());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}	
-
-	@Test
-	public void testGetLastNByPatID()
-	{				
-		try 
-		{		
-			jpa.beginTransaction();				
-			Patient	patient = testPatient.setup(false);		
-			PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);	
-			jpa.persist(patient);
-			jpa.persist(lastPatientExamination);
-			jpa.commitTransaction();
-			ArrayList<PatientExamination> foundExamination = examinationOperations.getLastNByPatID(patient.getCode(), 1);
-			
-			_checkPatientExaminationIntoDb(foundExamination.get(0).getPex_ID());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}	
-
-	@Test
-	public void testGetByPatID()
-	{	
-		try 
-		{		
-			jpa.beginTransaction();				
-			Patient	patient = testPatient.setup(false);		
-			PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);	
-			jpa.persist(patient);
-			jpa.persist(lastPatientExamination);
-			jpa.commitTransaction();
-			ArrayList<PatientExamination> foundExamination = examinationOperations.getByPatID(patient.getCode());
-			
-			_checkPatientExaminationIntoDb(foundExamination.get(0).getPex_ID());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
 
 	@Test
-	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() {
-		try {
-			// given:
-			int id = _setupTestPatientExamination(false);
-			PatientExamination found = (PatientExamination) jpa.find(PatientExamination.class, id);
-			Patient mergedPatient = _setupTestPatient(false);
+	public void testPatientExaminationGets() throws Exception {
+		int id = _setupTestPatientExamination(false);
+		_checkPatientExaminationIntoDb(id);
+	}
 
-			// when:
-			applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
+	@Test
+	public void testPatientExaminationSets() throws Exception {
+		int id = _setupTestPatientExamination(true);
+		_checkPatientExaminationIntoDb(id);
+	}
 
-			// then:
-			PatientExamination result = (PatientExamination)jpa.find(PatientExamination.class, id);
-			assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
+	@Test
+	public void testGetFromLastPatientExamination() throws Exception {
+		Patient patient = testPatient.setup(false);
+		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
+		PatientExamination patientExamination = examinationOperations.getFromLastPatientExamination(lastPatientExamination);
+		testPatientExamination.check(patientExamination);
+		testPatient.check(patientExamination.getPatient());
+	}
+
+	@Test
+	public void testSaveOrUpdate() throws Exception {
+		int id = _setupTestPatientExamination(false);
+		PatientExamination patientExamination = examinationIoOperationRepository.findOne(id);
+		Integer pex_hr = patientExamination.getPex_hr();
+		patientExamination.setPex_hr(pex_hr + 1);
+		examinationOperations.saveOrUpdate(patientExamination);
+		assertThat(patientExamination.getPex_hr()).isEqualTo((Integer) (pex_hr + 1));
+	}
+
+	@Test
+	public void testGetByID() throws Exception {
+		int id = _setupTestPatientExamination(false);
+		PatientExamination patientExamination = examinationOperations.getByID(id);
+		testPatientExamination.check(patientExamination);
+		testPatient.check(patientExamination.getPatient());
+	}
+
+	@Test
+	public void testGetLastByPatID() throws Exception {
+		Patient patient = testPatient.setup(false);
+		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
+		patientIoOperationRepository.saveAndFlush(patient);
+		examinationIoOperationRepository.saveAndFlush(lastPatientExamination);
+		PatientExamination foundExamination = examinationOperations.getLastByPatID(patient.getCode());
+		_checkPatientExaminationIntoDb(foundExamination.getPex_ID());
+	}
+
+	@Test
+	public void testGetLastNByPatID() throws Exception {
+		Patient patient = testPatient.setup(false);
+		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
+		patientIoOperationRepository.saveAndFlush(patient);
+		examinationIoOperationRepository.saveAndFlush(lastPatientExamination);
+		ArrayList<PatientExamination> foundExamination = examinationOperations.getLastNByPatID(patient.getCode(), 1);
+		_checkPatientExaminationIntoDb(foundExamination.get(0).getPex_ID());
+	}
+
+	@Test
+	public void testGetByPatID() throws Exception {
+		Patient patient = testPatient.setup(false);
+		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
+		patientIoOperationRepository.saveAndFlush(patient);
+		examinationIoOperationRepository.saveAndFlush(lastPatientExamination);
+		ArrayList<PatientExamination> foundExamination = examinationOperations.getByPatID(patient.getCode());
+		_checkPatientExaminationIntoDb(foundExamination.get(0).getPex_ID());
+	}
+
+	@Test
+	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() throws Exception {
+		// given:
+		int id = _setupTestPatientExamination(false);
+		PatientExamination found = examinationIoOperationRepository.findOne(id);
+		Patient mergedPatient = _setupTestPatient(false);
+
+		// when:
+		applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
+
+		// then:
+		PatientExamination result = examinationIoOperationRepository.findOne(id);
+		assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 	}
 
 	private Patient _setupTestPatient(boolean usingSet) throws OHException {
-		jpa.beginTransaction();
 		Patient patient = testPatient.setup(usingSet);
-		jpa.persist(patient);
-		jpa.commitTransaction();
-
+		patientIoOperationRepository.saveAndFlush(patient);
 		return patient;
 	}
 
-	private void _saveContext() throws OHException 
-    {	
-		testPatientContext.saveAll(jpa);
-		testPatientExaminationContext.saveAll(jpa);
-    }
-		
-    private void _restoreContext() throws OHException 
-    {
-    	testPatientExaminationContext.deleteNews(jpa);
-		testPatientContext.deleteNews(jpa);
-    }
-        
-	private int _setupTestPatientExamination(
-			boolean usingSet) throws OHException 
-	{
-		PatientExamination patientExamination;
-		Patient	patient = testPatient.setup(false);
-	
-
-    	jpa.beginTransaction();	
-    	patientExamination = testPatientExamination.setup(patient, usingSet);
-		jpa.persist(patient);
-		jpa.persist(patientExamination);
-    	jpa.commitTransaction();
-		
+	private int _setupTestPatientExamination(boolean usingSet) throws OHException {
+		Patient patient = testPatient.setup(false);
+		PatientExamination patientExamination = testPatientExamination.setup(patient, usingSet);
+		patientIoOperationRepository.saveAndFlush(patient);
+		examinationIoOperationRepository.saveAndFlush(patientExamination);
 		return patientExamination.getPex_ID();
 	}
-		
-	private void _checkPatientExaminationIntoDb(
-			int id) throws OHException 
-	{
-		PatientExamination foundPatientExamination;
-		
 
-		foundPatientExamination = (PatientExamination)jpa.find(PatientExamination.class, id); 
+	private void _checkPatientExaminationIntoDb(int id) throws OHException {
+		PatientExamination foundPatientExamination = examinationIoOperationRepository.findOne(id);
 		testPatientExamination.check(foundPatientExamination);
 		testPatient.check(foundPatientExamination.getPatient());
 	}

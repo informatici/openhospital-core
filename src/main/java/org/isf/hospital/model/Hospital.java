@@ -211,7 +211,7 @@ public class Hospital extends Auditable<String>
 
 	@Override
 	public boolean equals(Object anObject) {
-		return (anObject == null) || !(anObject instanceof Hospital) ? false
+		return !(anObject instanceof Hospital) ? false
 				: (getCode().equals(((Hospital) anObject).getCode())
 						&& getDescription().equalsIgnoreCase(((Hospital) anObject).getDescription())
 						&& getTelephone().equalsIgnoreCase(((Hospital) anObject).getTelephone())
@@ -219,7 +219,7 @@ public class Hospital extends Auditable<String>
 						&& getAddress().equalsIgnoreCase(((Hospital) anObject).getAddress())
 						&& getCity().equalsIgnoreCase(((Hospital) anObject).getCity())
 						&& getEmail().equalsIgnoreCase(((Hospital) anObject).getEmail()) 
-						&& (getCurrencyCod() == ((Hospital) anObject).getCurrencyCod()));
+						&& getCurrencyCod().equalsIgnoreCase(((Hospital) anObject).getCurrencyCod()));
 	}
 
 	public String toString() {

@@ -38,66 +38,60 @@ import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
 
-public class TestAdmission 
-{	
-	private int id = 0;	
-	private int admitted = 1;	
-	private String type = "T"; 
-	private int yProg = 0;		
+public class TestAdmission {
+
+	private int id = 0;
+	private int admitted = 1;
+	private String type = "T";
+	private int yProg = 0;
 	private GregorianCalendar now = new GregorianCalendar();
-	private GregorianCalendar admDate = new GregorianCalendar(now.get(Calendar.YEAR), 9, 8);	
-	private String FHU = "TestFHU";		
+	private GregorianCalendar admDate = new GregorianCalendar(now.get(Calendar.YEAR), 9, 8);
+	private String FHU = "TestFHU";
 	private String opResult = "Result";
-	private GregorianCalendar opDate = new GregorianCalendar(7, 6, 5); 	
-	private GregorianCalendar disDate = new GregorianCalendar(4, 3, 2); 	
+	private GregorianCalendar opDate = new GregorianCalendar(7, 6, 5);
+	private GregorianCalendar disDate = new GregorianCalendar(4, 3, 2);
 	private String note = "TestNote";
-	private Float transUnit = (float)10.10;	
+	private Float transUnit = (float) 10.10;
 	private GregorianCalendar visitDate = new GregorianCalendar(1, 0, 1);
-	private GregorianCalendar deliveryDate = new GregorianCalendar(2, 3, 4);	
-	private Float weight = (float)20.20;		
-	private GregorianCalendar ctrlDate1 = new GregorianCalendar(5, 6, 7);	
+	private GregorianCalendar deliveryDate = new GregorianCalendar(2, 3, 4);
+	private Float weight = (float) 20.20;
+	private GregorianCalendar ctrlDate1 = new GregorianCalendar(5, 6, 7);
 	private GregorianCalendar ctrlDate2 = new GregorianCalendar(8, 9, 10);
 	private GregorianCalendar abortDate = new GregorianCalendar(9, 8, 7);
-	private String userID = "TestUserId";	
-	private String deleted = "N";	
-	
-			
+	private String userID = "TestUserId";
+	private String deleted = "N";
+
 	public Admission setup(
 			Ward ward,
 			Patient patient,
 			AdmissionType admissionType,
 			Disease diseaseIn,
 			Disease diseaseOut1,
-			Disease diseaseOut2, 	
-			Disease diseaseOut3, 
+			Disease diseaseOut2,
+			Disease diseaseOut3,
 			Operation operation,
 			DischargeType dischargeType,
 			PregnantTreatmentType pregTreatmentType,
 			DeliveryType deliveryType,
 			DeliveryResultType deliveryResult,
-			boolean usingSet) throws OHException 
-	{
+			boolean usingSet) throws OHException {
 		Admission admission;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			admission = new Admission();
-			_setParameters(admission, ward, patient, admissionType, diseaseIn, diseaseOut1, diseaseOut2, 	
-					diseaseOut3, operation, dischargeType, pregTreatmentType, deliveryType,	deliveryResult);
-		}
-		else
-		{
+			_setParameters(admission, ward, patient, admissionType, diseaseIn, diseaseOut1, diseaseOut2,
+					diseaseOut3, operation, dischargeType, pregTreatmentType, deliveryType, deliveryResult);
+		} else {
 			// Create Admission with all parameters 
-			admission = new Admission(id, admitted, type, ward, yProg, patient, admDate, admissionType, FHU, diseaseIn, 
-					diseaseOut1, diseaseOut2, diseaseOut3, operation, opResult, opDate, disDate, dischargeType, note, 
-					transUnit, visitDate, pregTreatmentType, deliveryDate, deliveryType, deliveryResult, weight, 
+			admission = new Admission(id, admitted, type, ward, yProg, patient, admDate, admissionType, FHU, diseaseIn,
+					diseaseOut1, diseaseOut2, diseaseOut3, operation, opResult, opDate, disDate, dischargeType, note,
+					transUnit, visitDate, pregTreatmentType, deliveryDate, deliveryType, deliveryResult, weight,
 					ctrlDate1, ctrlDate2, abortDate, userID, deleted);
 		}
-				    	
+
 		return admission;
 	}
-	
+
 	public void _setParameters(
 			Admission admission,
 			Ward ward,
@@ -105,14 +99,13 @@ public class TestAdmission
 			AdmissionType admissionType,
 			Disease diseaseIn,
 			Disease diseaseOut1,
-			Disease diseaseOut2, 	
-			Disease diseaseOut3, 
+			Disease diseaseOut2,
+			Disease diseaseOut3,
 			Operation operation,
 			DischargeType dischargeType,
 			PregnantTreatmentType pregTreatmentType,
 			DeliveryType deliveryType,
-			DeliveryResultType deliveryResult) 
-	{	
+			DeliveryResultType deliveryResult) {
 		admission.setAbortDate(abortDate);
 		admission.setAdmDate(admDate);
 		admission.setAdmitted(admitted);
@@ -144,27 +137,25 @@ public class TestAdmission
 		admission.setWeight(weight);
 		admission.setYProg(yProg);
 	}
-	
-	public void check(
-			Admission admission) 
-	{		
-    	assertThat(admission.getAbortDate()).isEqualTo(abortDate);
-    	assertThat(admission.getAdmDate()).isEqualTo(admDate);
-    	assertThat(admission.getAdmitted()).isEqualTo(admitted);
-    	assertThat(admission.getCtrlDate1()).isEqualTo(ctrlDate1);
-    	assertThat(admission.getCtrlDate2()).isEqualTo(ctrlDate2);
-    	assertThat(admission.getDeleted()).isEqualTo(deleted);
-    	assertThat(admission.getDeliveryDate()).isEqualTo(deliveryDate);
-    	assertThat(admission.getDisDate()).isEqualTo(disDate);
-    	assertThat(admission.getFHU()).isEqualTo(FHU);
-    	assertThat(admission.getNote()).isEqualTo(note);
-    	assertThat(admission.getOpDate()).isEqualTo(opDate);
-    	assertThat(admission.getOpResult()).isEqualTo(opResult);
-    	assertThat(admission.getTransUnit()).isEqualTo(transUnit);
-    	assertThat(admission.getType()).isEqualTo(type);
-    	assertThat(admission.getUserID()).isEqualTo(userID);
-    	assertThat(admission.getVisitDate()).isEqualTo(visitDate);
-    	assertThat(admission.getWeight()).isEqualTo(weight);
-    	assertThat(admission.getYProg()).isEqualTo(yProg);
+
+	public void check(Admission admission) {
+		assertThat(admission.getAbortDate()).isEqualTo(abortDate);
+		assertThat(admission.getAdmDate()).isEqualTo(admDate);
+		assertThat(admission.getAdmitted()).isEqualTo(admitted);
+		assertThat(admission.getCtrlDate1()).isEqualTo(ctrlDate1);
+		assertThat(admission.getCtrlDate2()).isEqualTo(ctrlDate2);
+		assertThat(admission.getDeleted()).isEqualTo(deleted);
+		assertThat(admission.getDeliveryDate()).isEqualTo(deliveryDate);
+		assertThat(admission.getDisDate()).isEqualTo(disDate);
+		assertThat(admission.getFHU()).isEqualTo(FHU);
+		assertThat(admission.getNote()).isEqualTo(note);
+		assertThat(admission.getOpDate()).isEqualTo(opDate);
+		assertThat(admission.getOpResult()).isEqualTo(opResult);
+		assertThat(admission.getTransUnit()).isEqualTo(transUnit);
+		assertThat(admission.getType()).isEqualTo(type);
+		assertThat(admission.getUserID()).isEqualTo(userID);
+		assertThat(admission.getVisitDate()).isEqualTo(visitDate);
+		assertThat(admission.getWeight()).isEqualTo(weight);
+		assertThat(admission.getYProg()).isEqualTo(yProg);
 	}
 }

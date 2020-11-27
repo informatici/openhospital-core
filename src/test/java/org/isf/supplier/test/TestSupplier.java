@@ -26,8 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.supplier.model.Supplier;
 import org.isf.utils.exception.OHException;
 
-public class TestSupplier 
-{	 
+public class TestSupplier {
+
 	private Integer supId = null;
 	private String supName = "TestName";
 	private String supAddress = "TestAddress";
@@ -36,31 +36,23 @@ public class TestSupplier
 	private String supFax = "TestFax";
 	private String supEmail = "TestEmail";
 	private String supNote = "TestNote";
-	private Character supDeleted = 'N';    
-			
-	public Supplier setup(
-			boolean usingSet) throws OHException 
-	{
+	private Character supDeleted = 'N';
+
+	public Supplier setup(boolean usingSet) throws OHException {
 		Supplier supplier;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			supplier = new Supplier();
 			_setParameters(supplier);
-		}
-		else
-		{
+		} else {
 			// Create Supplier with all parameters 
 			supplier = new Supplier(supId, supName, supAddress, supTaxcode, supPhone, supFax, supEmail, supNote, supDeleted);
 		}
-				    	
+
 		return supplier;
 	}
-	
-	public void _setParameters(
-			Supplier supplier) 
-	{	
+
+	public void _setParameters(Supplier supplier) {
 		supplier.setSupAddress(supAddress);
 		supplier.setSupDeleted(supDeleted);
 		supplier.setSupEmail(supEmail);
@@ -70,17 +62,15 @@ public class TestSupplier
 		supplier.setSupPhone(supPhone);
 		supplier.setSupTaxcode(supTaxcode);
 	}
-	
-	public void check(
-			Supplier supplier) 
-	{		
-    	assertThat(supplier.getSupAddress()).isEqualTo(supAddress);
-    	assertThat(supplier.getSupDeleted()).isEqualTo(supDeleted);
-    	assertThat(supplier.getSupEmail()).isEqualTo(supEmail);
-    	assertThat(supplier.getSupFax()).isEqualTo(supFax);
-    	assertThat(supplier.getSupName()).isEqualTo(supName);
-    	assertThat(supplier.getSupNote()).isEqualTo(supNote);
-    	assertThat(supplier.getSupPhone()).isEqualTo(supPhone);
-    	assertThat(supplier.getSupTaxcode()).isEqualTo(supTaxcode);
+
+	public void check(Supplier supplier) {
+		assertThat(supplier.getSupAddress()).isEqualTo(supAddress);
+		assertThat(supplier.getSupDeleted()).isEqualTo(supDeleted);
+		assertThat(supplier.getSupEmail()).isEqualTo(supEmail);
+		assertThat(supplier.getSupFax()).isEqualTo(supFax);
+		assertThat(supplier.getSupName()).isEqualTo(supName);
+		assertThat(supplier.getSupNote()).isEqualTo(supNote);
+		assertThat(supplier.getSupPhone()).isEqualTo(supPhone);
+		assertThat(supplier.getSupTaxcode()).isEqualTo(supTaxcode);
 	}
 }

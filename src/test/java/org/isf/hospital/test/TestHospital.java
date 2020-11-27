@@ -26,41 +26,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.hospital.model.Hospital;
 import org.isf.utils.exception.OHException;
 
-public class TestHospital 
-{	
-    private String code = "ZZ";
-    private String description = "TestDescription";    
-    private String address = "TestAddress";
-    private String city = "TestCity";
-    private String telephone = "Testtelephone";
-    private String fax = "TestFax";
-    private String email = "TestEmail";
-    private String currencyCod = "Cod";
-    
-			
-	public Hospital setup(
-			boolean usingSet) throws OHException 
-	{
+public class TestHospital {
+
+	private String code = "ZZ";
+	private String description = "TestDescription";
+	private String address = "TestAddress";
+	private String city = "TestCity";
+	private String telephone = "Testtelephone";
+	private String fax = "TestFax";
+	private String email = "TestEmail";
+	private String currencyCod = "Cod";
+
+	public Hospital setup(boolean usingSet) throws OHException {
 		Hospital hospital;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			hospital = new Hospital();
 			_setParameters(hospital);
-		}
-		else
-		{
+		} else {
 			// Create Hospital with all parameters 
 			hospital = new Hospital(code, description, address, city, telephone, fax, email, currencyCod);
 		}
-				    	
+
 		return hospital;
 	}
-	
-	public void _setParameters(
-			Hospital hospital) 
-	{	
+
+	public void _setParameters(Hospital hospital) {
 		hospital.setCode(code);
 		hospital.setDescription(description);
 		hospital.setAddress(address);
@@ -70,17 +61,15 @@ public class TestHospital
 		hospital.setFax(fax);
 		hospital.setCurrencyCod(currencyCod);
 	}
-	
-	public void check(
-			Hospital hospital) 
-	{		
-    	assertThat(hospital.getCode()).isEqualTo(code);
-    	assertThat(hospital.getDescription()).isEqualTo(description);
-    	assertThat(hospital.getAddress()).isEqualTo(address);
-    	assertThat(hospital.getCity()).isEqualTo(city);
-    	assertThat(hospital.getTelephone()).isEqualTo(telephone);
-    	assertThat(hospital.getEmail()).isEqualTo(email);
-    	assertThat(hospital.getFax()).isEqualTo(fax);
-    	assertThat(hospital.getCurrencyCod()).isEqualTo(currencyCod);
+
+	public void check(Hospital hospital) {
+		assertThat(hospital.getCode()).isEqualTo(code);
+		assertThat(hospital.getDescription()).isEqualTo(description);
+		assertThat(hospital.getAddress()).isEqualTo(address);
+		assertThat(hospital.getCity()).isEqualTo(city);
+		assertThat(hospital.getTelephone()).isEqualTo(telephone);
+		assertThat(hospital.getEmail()).isEqualTo(email);
+		assertThat(hospital.getFax()).isEqualTo(fax);
+		assertThat(hospital.getCurrencyCod()).isEqualTo(currencyCod);
 	}
 }

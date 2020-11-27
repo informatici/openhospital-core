@@ -31,41 +31,28 @@ import org.isf.patvac.model.PatientVaccine;
 import org.isf.utils.exception.OHException;
 import org.isf.vaccine.model.Vaccine;
 
-public class TestPatientVaccine 
-{	
+public class TestPatientVaccine {
+
 	private int code = 0;
 	private int progr = 10;
 	private GregorianCalendar vaccineDate = new GregorianCalendar(1984, Calendar.AUGUST, 14);
-    private int lock = 0;
-    
-			
-	public PatientVaccine setup(
-			Patient patient,
-			Vaccine vaccine,
-			boolean usingSet) throws OHException 
-	{
+	private int lock = 0;
+
+	public PatientVaccine setup(Patient patient, Vaccine vaccine, boolean usingSet) throws OHException {
 		PatientVaccine patientVaccine;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			patientVaccine = new PatientVaccine();
 			_setParameters(patient, vaccine, patientVaccine);
-		}
-		else
-		{
+		} else {
 			// Create PatientVaccine with all parameters 
 			patientVaccine = new PatientVaccine(code, progr, vaccineDate, patient, vaccine, lock);
 		}
-				    	
+
 		return patientVaccine;
 	}
-	
-	public void _setParameters(
-			Patient patient,
-			Vaccine vaccine,
-			PatientVaccine patientVaccine) 
-	{	
+
+	public void _setParameters(Patient patient, Vaccine vaccine, PatientVaccine patientVaccine) {
 		patientVaccine.setCode(code);
 		patientVaccine.setProgr(progr);
 		patientVaccine.setVaccineDate(vaccineDate);
@@ -73,12 +60,10 @@ public class TestPatientVaccine
 		patientVaccine.setVaccine(vaccine);
 		patientVaccine.setLock(lock);
 	}
-	
-	public void check(
-			PatientVaccine patientVaccine) 
-	{		
-    	assertThat(patientVaccine.getLock()).isEqualTo(lock);
-    	assertThat(patientVaccine.getProgr()).isEqualTo(progr);
-    	assertThat(patientVaccine.getVaccineDate()).isEqualTo(vaccineDate);
+
+	public void check(PatientVaccine patientVaccine) {
+		assertThat(patientVaccine.getLock()).isEqualTo(lock);
+		assertThat(patientVaccine.getProgr()).isEqualTo(progr);
+		assertThat(patientVaccine.getVaccineDate()).isEqualTo(vaccineDate);
 	}
 }

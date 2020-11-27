@@ -22,313 +22,132 @@
 package org.isf.operation.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
+import org.isf.OHCoreTestCase;
 import org.isf.operation.model.Operation;
+import org.isf.operation.service.OperationIoOperationRepository;
 import org.isf.operation.service.OperationIoOperations;
 import org.isf.opetype.model.OperationType;
+import org.isf.opetype.service.OperationTypeIoOperationRepository;
 import org.isf.opetype.test.TestOperationType;
-import org.isf.opetype.test.TestOperationTypeContext;
-import org.isf.utils.db.DbJpaUtil;
-import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestOperation testOperation;
 	private static TestOperationType testOperationType;
-	private static TestOperationContext testOperationContext;
-	private static TestOperationTypeContext testOperationTypeContext;
-	
-    @Autowired
-    OperationIoOperations operationIoOperations;
-    
-    
+
+	@Autowired
+	OperationIoOperations operationIoOperations;
+	@Autowired
+	OperationIoOperationRepository operationIoOperationRepository;
+	@Autowired
+	OperationTypeIoOperationRepository operationTypeIoOperationRepository;
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testOperation = new TestOperation();
-    	testOperationType = new TestOperationType();
-    	testOperationContext = new TestOperationContext();
-    	testOperationTypeContext = new TestOperationTypeContext();
-    }
-
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-    	testOperation = null;
-    	testOperationType = null;
-    	testOperationContext = null;
-    	testOperationTypeContext = null;
-    }
-	
-		
-	@Test
-	public void testOperationGets() throws OHException 
-	{
-		String code = "";
-	
-		
-		try 
-		{		
-			code = _setupTestOperation(false);
-			_checkOperationIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public static void setUpClass() {
+		testOperation = new TestOperation();
+		testOperationType = new TestOperationType();
 	}
-	
-	@Test
-	public void testOperationSets() throws OHException 
-	{
-		String code = "";
-			
 
-		try 
-		{		
-			code = _setupTestOperation(true);
-			_checkOperationIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoGetOperations() throws OHException 
-	{
-		String code = "";
-		
-		
-		try 
-		{		
-			code = _setupTestOperation(false);
-			Operation foundOperation = (Operation)jpa.find(Operation.class, code); 
-			ArrayList<Operation> operations = operationIoOperations.getOperationByTypeDescription(foundOperation.getDescription());
-			
-			assertThat(operations.get(0).getDescription()).isEqualTo(foundOperation.getDescription());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
 
 	@Test
-	public void testIoGetOperationByTypeDescription() throws OHException
-	{
-		String code = "";
-
-
-		try
-		{
-			// given:
-			code = _setupTestOperation(false);
-			Operation foundOperation = (Operation)jpa.find(Operation.class, code);
-
-			// when:
-			ArrayList<Operation> operations = operationIoOperations.getOperationByTypeDescription(foundOperation.getType().getDescription());
-
-			// then:
-			assertThat(operations).isNotEmpty();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			fail();
-		}
+	public void testOperationGets() throws Exception {
+		String code = _setupTestOperation(false);
+		_checkOperationIntoDb(code);
 	}
-	
+
 	@Test
-	public void testIoNewOperation() throws OHException 
-	{
+	public void testOperationSets() throws Exception {
+		String code = _setupTestOperation(true);
+		_checkOperationIntoDb(code);
+	}
+
+	@Test
+	public void testIoGetOperations() throws Exception {
+		String code = _setupTestOperation(false);
+		Operation foundOperation = operationIoOperations.findByCode(code);
+		ArrayList<Operation> operations = operationIoOperations.getOperationByTypeDescription(foundOperation.getDescription());
+		assertThat(operations.get(0).getDescription()).isEqualTo(foundOperation.getDescription());
+	}
+
+	@Test
+	public void testIoGetOperationByTypeDescription() throws Exception {
+		// given:
+		String code = _setupTestOperation(false);
+		Operation foundOperation = operationIoOperations.findByCode(code);
+
+		// when:
+		ArrayList<Operation> operations = operationIoOperations.getOperationByTypeDescription(foundOperation.getType().getDescription());
+
+		// then:
+		assertThat(operations).isNotEmpty();
+	}
+
+	@Test
+	public void testIoNewOperation() throws Exception {
 		OperationType operationType = testOperationType.setup(false);
-		boolean result = false;
-		
-		
-		try 
-		{		
-			jpa.beginTransaction();	
-			Operation operation = testOperation.setup(operationType, true);
-			jpa.persist(operationType);
-			jpa.commitTransaction();
-			result = operationIoOperations.newOperation(operation);
-
-			assertThat(result).isTrue();
-			_checkOperationIntoDb(operation.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+		operationTypeIoOperationRepository.saveAndFlush(operationType);
+		Operation operation = testOperation.setup(operationType, true);
+		boolean result = operationIoOperations.newOperation(operation);
+		assertThat(result).isTrue();
+		_checkOperationIntoDb(operation.getCode());
 	}
 
-	public void testIoUpdateOperation() throws OHException 
-	{
-		String code = "";
-		boolean result = false;
-		
-		
-		try 
-		{		
-			code = _setupTestOperation(false);
-			Operation foundOperation = (Operation)jpa.find(Operation.class, code);
-			jpa.flush();
-			int lock = foundOperation.getLock();
-			foundOperation.setDescription("Update");
-			result = operationIoOperations.updateOperation(foundOperation);
-			Operation updateOperation = (Operation)jpa.find(Operation.class, code);
-
-			assertThat(result).isTrue();
-			assertThat(updateOperation.getDescription()).isEqualTo("Update");
-			assertThat(updateOperation.getLock().intValue()).isEqualTo(lock + 1);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoDeleteOperation() throws OHException 
-	{
-		String code = "";
-		boolean result = false;
-		
-		
-		try 
-		{		
-			code = _setupTestOperation(false);
-			Operation foundOperation = (Operation)jpa.find(Operation.class, code); 
-			result = operationIoOperations.deleteOperation(foundOperation);
-
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoUpdateOperation() throws Exception {
+		String code = _setupTestOperation(false);
+		Operation foundOperation = operationIoOperations.findByCode(code);
+		int lock = foundOperation.getLock();
+		foundOperation.setDescription("Update");
+		boolean result = operationIoOperations.updateOperation(foundOperation);
+		assertThat(result).isTrue();
+		Operation updateOperation = operationIoOperations.findByCode(code);
+		assertThat(updateOperation.getDescription()).isEqualTo("Update");
+		assertThat(updateOperation.getLock().intValue()).isEqualTo(lock + 1);
 	}
 
 	@Test
-	public void testIoIsCodePresent() throws OHException 
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestOperation(false);
-			result = operationIoOperations.isCodePresent(code);
-
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoDeleteOperation() throws Exception {
+		String code = _setupTestOperation(false);
+		Operation foundOperation = operationIoOperations.findByCode(code);
+		boolean result = operationIoOperations.deleteOperation(foundOperation);
+		assertThat(result).isTrue();
 	}
 
 	@Test
-	public void testIoIsDescriptionPresent() throws OHException 
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestOperation(false);
-			Operation foundOperation = (Operation)jpa.find(Operation.class, code); 
-			result = operationIoOperations.isDescriptionPresent(foundOperation.getDescription(), foundOperation.getType().getCode());
-
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoIsCodePresent() throws Exception {
+		String code = _setupTestOperation(false);
+		boolean result = operationIoOperations.isCodePresent(code);
+		assertThat(result).isTrue();
 	}
-	
-	
-	private void _saveContext() throws OHException 
-    {	
-		testOperationContext.saveAll(jpa);
-		testOperationTypeContext.saveAll(jpa);
-    }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testOperationContext.deleteNews(jpa);
-		testOperationTypeContext.deleteNews(jpa);
-    }
-        
-	private String _setupTestOperation(
-			boolean usingSet) throws OHException 
-	{
-		Operation operation;
+
+	@Test
+	public void testIoIsDescriptionPresent() throws Exception {
+		String code = _setupTestOperation(false);
+		Operation foundOperation = operationIoOperations.findByCode(code);
+		boolean result = operationIoOperations.isDescriptionPresent(foundOperation.getDescription(), foundOperation.getType().getCode());
+		assertThat(result).isTrue();
+	}
+
+	private String _setupTestOperation(boolean usingSet) throws Exception {
 		OperationType operationType = testOperationType.setup(false);
-		
-
-    	jpa.beginTransaction();	
-    	operation = testOperation.setup(operationType, usingSet);
-    	jpa.persist(operationType);
-		jpa.persist(operation);
-    	jpa.commitTransaction();
-    	
+		Operation operation = testOperation.setup(operationType, usingSet);
+		operationTypeIoOperationRepository.saveAndFlush(operationType);
+		operationIoOperationRepository.saveAndFlush(operation);
 		return operation.getCode();
 	}
-		
-	private void  _checkOperationIntoDb(
-			String code) throws OHException 
-	{
-		Operation foundOperation;
-		
 
-		foundOperation = (Operation)jpa.find(Operation.class, code);
+	private void _checkOperationIntoDb(String code) throws Exception {
+		Operation foundOperation = operationIoOperations.findByCode(code);
 		testOperation.check(foundOperation);
-	}	
+	}
 }

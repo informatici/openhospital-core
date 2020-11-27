@@ -22,253 +22,110 @@
 package org.isf.pregtreattype.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
+import org.isf.OHCoreTestCase;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperation;
-import org.isf.utils.db.DbJpaUtil;
+import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperationRepository;
 import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestPregnantTreatmentType testPregnantTreatmentType;
-	private static TestPregnantTreatmentTypeContext testPregnantTreatmentTypeContext;
 
-    @Autowired
-    PregnantTreatmentTypeIoOperation pregnantTreatmentTypeIoOperation;
-    
-	
+	@Autowired
+	PregnantTreatmentTypeIoOperation pregnantTreatmentTypeIoOperation;
+	@Autowired
+	PregnantTreatmentTypeIoOperationRepository pregnantTreatmentTypeIoOperationRepository;
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testPregnantTreatmentType = new TestPregnantTreatmentType();
-    	testPregnantTreatmentTypeContext = new TestPregnantTreatmentTypeContext();
-    }
-
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-
-    }
-	
-		
-	@Test
-	public void testPregnantTreatmentTypeGets() 
-	{
-		String code = "";
-			
-
-		try 
-		{		
-			code = _setupTestPregnantTreatmentType(false);
-			_checkPregnantTreatmentTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public static void setUpClass() {
+		testPregnantTreatmentType = new TestPregnantTreatmentType();
 	}
-	
-	@Test
-	public void testPregnantTreatmentTypeSets() 
-	{
-		String code = "";
-			
 
-		try 
-		{		
-			code = _setupTestPregnantTreatmentType(true);
-			_checkPregnantTreatmentTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
-	
-	@Test
-	public void testIoGetPregnantTreatmentType() 
-	{
-		String code = "";
-		
-		
-		try 
-		{		
-			code = _setupTestPregnantTreatmentType(false);
-			PregnantTreatmentType foundPregnantTreatmentType = (PregnantTreatmentType)jpa.find(PregnantTreatmentType.class, code); 
-			ArrayList<PregnantTreatmentType> pregnantTreatmentTypes = pregnantTreatmentTypeIoOperation.getPregnantTreatmentType();
 
-            for (PregnantTreatmentType pregnantTreatmentType : pregnantTreatmentTypes) {
-                if (pregnantTreatmentType.getCode().equals(code)) {
-                    assertThat(pregnantTreatmentType.getDescription()).isEqualTo(foundPregnantTreatmentType.getDescription());
-                }
-            }
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Test
+	public void testPregnantTreatmentTypeGets() throws Exception {
+		String code = _setupTestPregnantTreatmentType(false);
+		_checkPregnantTreatmentTypeIntoDb(code);
 	}
-	
-	@Test
-	public void testIoUpdatePregnantTreatmentType() 
-	{
-		String code = "";
-		boolean result = false;
-		
-		
-		try 
-		{		
-			code = _setupTestPregnantTreatmentType(false);
-			PregnantTreatmentType foundPregnantTreatmentType = (PregnantTreatmentType)jpa.find(PregnantTreatmentType.class, code); 
-			foundPregnantTreatmentType.setDescription("Update");
-			result = pregnantTreatmentTypeIoOperation.updatePregnantTreatmentType(foundPregnantTreatmentType);
-			PregnantTreatmentType updatePregnantTreatmentType = (PregnantTreatmentType)jpa.find(PregnantTreatmentType.class, code);
 
-			assertThat(result).isTrue();
-			assertThat(updatePregnantTreatmentType.getDescription()).isEqualTo("Update");
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Test
+	public void testPregnantTreatmentTypeSets() throws Exception {
+		String code = _setupTestPregnantTreatmentType(true);
+		_checkPregnantTreatmentTypeIntoDb(code);
 	}
-	
-	@Test
-	public void testIoNewPregnantTreatmentType() 
-	{
-		boolean result = false;
-		
-		
-		try 
-		{		
-			PregnantTreatmentType pregnantTreatmentType = testPregnantTreatmentType.setup(true);
-			result = pregnantTreatmentTypeIoOperation.newPregnantTreatmentType(pregnantTreatmentType);
 
-			assertThat(result).isTrue();
-			_checkPregnantTreatmentTypeIntoDb(pregnantTreatmentType.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
+	@Test
+	public void testIoGetPregnantTreatmentType() throws Exception {
+		String code = _setupTestPregnantTreatmentType(false);
+		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findOne(code);
+		ArrayList<PregnantTreatmentType> pregnantTreatmentTypes = pregnantTreatmentTypeIoOperation.getPregnantTreatmentType();
+
+		for (PregnantTreatmentType pregnantTreatmentType : pregnantTreatmentTypes) {
+			if (pregnantTreatmentType.getCode().equals(code)) {
+				assertThat(pregnantTreatmentType.getDescription()).isEqualTo(foundPregnantTreatmentType.getDescription());
+			}
 		}
 	}
 
 	@Test
-	public void testIoIsCodePresent() 
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestPregnantTreatmentType(false);
-			result = pregnantTreatmentTypeIoOperation.isCodePresent(code);
-
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoUpdatePregnantTreatmentType() throws Exception {
+		String code = _setupTestPregnantTreatmentType(false);
+		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findOne(code);
+		foundPregnantTreatmentType.setDescription("Update");
+		boolean result = pregnantTreatmentTypeIoOperation.updatePregnantTreatmentType(foundPregnantTreatmentType);
+		assertThat(result).isTrue();
+		PregnantTreatmentType updatePregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findOne(code);
+		assertThat(updatePregnantTreatmentType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
-	public void testIoDeletePregnantTreatmentType() 
-	{
-		String code = "";
-		boolean result = false;
-		
+	public void testIoNewPregnantTreatmentType() throws Exception {
+		PregnantTreatmentType pregnantTreatmentType = testPregnantTreatmentType.setup(true);
+		boolean result = pregnantTreatmentTypeIoOperation.newPregnantTreatmentType(pregnantTreatmentType);
 
-		try 
-		{		
-			code = _setupTestPregnantTreatmentType(false);
-			PregnantTreatmentType foundPregnantTreatmentType = (PregnantTreatmentType)jpa.find(PregnantTreatmentType.class, code); 
-			result = pregnantTreatmentTypeIoOperation.deletePregnantTreatmentType(foundPregnantTreatmentType);
-
-			assertThat(result).isTrue();
-			result = pregnantTreatmentTypeIoOperation.isCodePresent(code);
-			assertThat(result).isFalse();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+		assertThat(result).isTrue();
+		_checkPregnantTreatmentTypeIntoDb(pregnantTreatmentType.getCode());
 	}
-		
-	
-	private void _saveContext() throws OHException 
-    {	
-		testPregnantTreatmentTypeContext.saveAll(jpa);
-    }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testPregnantTreatmentTypeContext.deleteNews(jpa);
-    }
-        
-	private String _setupTestPregnantTreatmentType(
-			boolean usingSet) throws OHException 
-	{
+
+	@Test
+	public void testIoIsCodePresent() throws Exception {
+		String code = _setupTestPregnantTreatmentType(false);
+		boolean result = pregnantTreatmentTypeIoOperation.isCodePresent(code);
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void testIoDeletePregnantTreatmentType() throws Exception {
+		String code = _setupTestPregnantTreatmentType(false);
+		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findOne(code);
+		boolean result = pregnantTreatmentTypeIoOperation.deletePregnantTreatmentType(foundPregnantTreatmentType);
+		assertThat(result).isTrue();
+		result = pregnantTreatmentTypeIoOperation.isCodePresent(code);
+		assertThat(result).isFalse();
+	}
+
+	private String _setupTestPregnantTreatmentType(boolean usingSet) throws OHException {
 		PregnantTreatmentType pregnantTreatmentType = new PregnantTreatmentType();
 		pregnantTreatmentType.setDescription("Test Description");
-		
-
-    	jpa.beginTransaction();	
-    	pregnantTreatmentType = testPregnantTreatmentType.setup(usingSet);
-		jpa.persist(pregnantTreatmentType);
-    	jpa.commitTransaction();
-    	
+		pregnantTreatmentType = testPregnantTreatmentType.setup(usingSet);
+		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregnantTreatmentType);
 		return pregnantTreatmentType.getCode();
 	}
-		
-	private void  _checkPregnantTreatmentTypeIntoDb(
-			String code) throws OHException 
-	{
-		PregnantTreatmentType foundPregnantTreatmentType;
-		
 
-		foundPregnantTreatmentType = (PregnantTreatmentType)jpa.find(PregnantTreatmentType.class, code); 
+	private void _checkPregnantTreatmentTypeIntoDb(String code) {
+		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findOne(code);
 		testPregnantTreatmentType.check(foundPregnantTreatmentType);
-	}	
+	}
 }

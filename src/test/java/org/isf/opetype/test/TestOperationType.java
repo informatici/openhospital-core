@@ -26,43 +26,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.opetype.model.OperationType;
 import org.isf.utils.exception.OHException;
 
-public class TestOperationType 
-{	
-    private String code = "ZZ";
-    private String description = "TestDescription";
-    
-			
-	public OperationType setup(
-			boolean usingSet) throws OHException 
-	{
+public class TestOperationType {
+
+	private String code = "ZZ";
+	private String description = "TestDescription";
+
+	public OperationType setup(boolean usingSet) throws OHException {
 		OperationType operationType;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			operationType = new OperationType();
 			_setParameters(operationType);
-		}
-		else
-		{
+		} else {
 			// Create OperationType with all parameters 
 			operationType = new OperationType(code, description);
 		}
-				    	
+
 		return operationType;
 	}
-	
-	public void _setParameters(
-			OperationType operationType) 
-	{	
+
+	public void _setParameters(OperationType operationType) {
 		operationType.setCode(code);
 		operationType.setDescription(description);
 	}
-	
-	public void check(
-			OperationType operationType) 
-	{		
+
+	public void check(OperationType operationType) {
 		assertThat(operationType.getCode()).isEqualTo(code);
-    	assertThat(operationType.getDescription()).isEqualTo(description);
+		assertThat(operationType.getDescription()).isEqualTo(description);
 	}
 }

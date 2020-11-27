@@ -29,43 +29,34 @@ import java.util.GregorianCalendar;
 import org.isf.sms.model.Sms;
 import org.isf.utils.exception.OHException;
 
-public class TestSms 
-{	 
-	private int smsId = 0;	
+public class TestSms {
+
+	private int smsId = 0;
 	private Date smsDate = new GregorianCalendar(2010, 9, 8).getTime();
-	private Date smsDateSched = new GregorianCalendar(2011, 9, 8).getTime();	
-	private String smsNumber = "TestNumber";	
+	private Date smsDateSched = new GregorianCalendar(2011, 9, 8).getTime();
+	private String smsNumber = "TestNumber";
 	private String smsText = "TestText";
 	private Date smsDateSent = null;
 	private String smsUser = "TestUser";
 	private String module = "TestModule";
 	private String moduleID = "TestModId";
-	 
-			
-	public Sms setup(
-			boolean usingSet) throws OHException 
-	{
+
+	public Sms setup(boolean usingSet) throws OHException {
 		Sms sms;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			sms = new Sms();
 			_setParameters(sms);
-		}
-		else
-		{
+		} else {
 			// Create Sms with all parameters 
-			sms = new Sms(smsId, smsDate, smsDateSched, smsNumber, smsText, 
-							smsDateSent, smsUser, module, moduleID);
+			sms = new Sms(smsId, smsDate, smsDateSched, smsNumber, smsText,
+					smsDateSent, smsUser, module, moduleID);
 		}
-				    	
+
 		return sms;
 	}
-	
-	public void _setParameters(
-			Sms sms) 
-	{	
+
+	public void _setParameters(Sms sms) {
 		sms.setModule(module);
 		sms.setModuleID(moduleID);
 		sms.setSmsDate(smsDate);
@@ -75,20 +66,18 @@ public class TestSms
 		sms.setSmsText(smsText);
 		sms.setSmsUser(smsUser);
 	}
-	
-	public void check(
-			Sms sms) 
-	{		
-    	assertThat(sms.getModule()).isEqualTo(module);
-    	assertThat(sms.getModuleID()).isEqualTo(moduleID);
-    	assertThat(sms.getSmsDate()).isInSameDayAs(smsDate);
-    	assertThat(sms.getSmsDateSched()).isInSameDayAs(smsDateSched);
-    	if (sms.getSmsDateSent() == null)
-    		assertThat(smsDateSent).isNull();
-    	else
-    	    assertThat(sms.getSmsDateSent()).isInSameDayAs(smsDateSent);
-    	assertThat(sms.getSmsNumber()).isEqualTo(smsNumber);
-    	assertThat(sms.getSmsText()).isEqualTo(smsText);
-    	assertThat(sms.getSmsUser()).isEqualTo(smsUser);
+
+	public void check(Sms sms) {
+		assertThat(sms.getModule()).isEqualTo(module);
+		assertThat(sms.getModuleID()).isEqualTo(moduleID);
+		assertThat(sms.getSmsDate()).isInSameDayAs(smsDate);
+		assertThat(sms.getSmsDateSched()).isInSameDayAs(smsDateSched);
+		if (sms.getSmsDateSent() == null)
+			assertThat(smsDateSent).isNull();
+		else
+			assertThat(sms.getSmsDateSent()).isInSameDayAs(smsDateSent);
+		assertThat(sms.getSmsNumber()).isEqualTo(smsNumber);
+		assertThat(sms.getSmsText()).isEqualTo(smsText);
+		assertThat(sms.getSmsUser()).isEqualTo(smsUser);
 	}
 }

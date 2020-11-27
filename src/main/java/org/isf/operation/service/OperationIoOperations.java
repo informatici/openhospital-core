@@ -98,7 +98,7 @@ public class OperationIoOperations {
 
 
 	/**
-	 * insert an {@link Operation} in the DBs
+	 * Insert an {@link Operation} in the DBs
 	 * 
 	 * @param operation - the {@link Operation} to insert
 	 * @return <code>true</code> if the operation has been inserted, <code>false</code> otherwise.
@@ -109,7 +109,7 @@ public class OperationIoOperations {
 	}
 	
 	/** 
-	 * updates an {@link Operation} in the DB
+	 * Updates an {@link Operation} in the DB
 	 * 
 	 * @param operation - the {@link Operation} to update
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise.
@@ -131,7 +131,7 @@ public class OperationIoOperations {
 	}
 	
 	/**
-	 * checks if an {@link Operation} code has already been used
+	 * Checks if an {@link Operation} code has already been used
 	 * @param code - the code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise.
 	 * @throws OHServiceException 
@@ -141,7 +141,7 @@ public class OperationIoOperations {
 	}
 	
 	/**
-	 * checks if an {@link Operation} description has already been used within the specified {@link OperationType} 
+	 * Checks if an {@link Operation} description has already been used within the specified {@link OperationType}
 	 * 
 	 * @param description - the {@link Operation} description
 	 * @param typeCode - the {@link OperationType} code

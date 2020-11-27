@@ -26,9 +26,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.menu.model.UserMenuItem;
 import org.isf.utils.exception.OHException;
 
-public class TestUserMenu 
-{	
-    private String code = "Z";
+public class TestUserMenu {
+
+	private String code = "Z";
 	private String buttonLabel = "TestButtonLabel";
 	private String altLabel = "TestAltLabel";
 	private String tooltip = "TestToolTip";
@@ -37,31 +37,22 @@ public class TestUserMenu
 	private String myClass = "TestMyClass";
 	private boolean isASubMenu = true;
 	private int position = 11;
-    
-			
-	public UserMenuItem setup(
-			boolean usingSet) throws OHException 
-	{
+
+	public UserMenuItem setup(boolean usingSet) throws OHException {
 		UserMenuItem userMenuItem;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			userMenuItem = new UserMenuItem();
 			_setParameters(userMenuItem);
-		}
-		else
-		{
+		} else {
 			// Create UserMenuItem with all parameters 
 			userMenuItem = new UserMenuItem(code, buttonLabel, altLabel, tooltip, shortcut, mySubmenu, myClass, isASubMenu, position, true);
 		}
-				    	
+
 		return userMenuItem;
 	}
-	
-	public void _setParameters(
-			UserMenuItem userMenuItem) 
-	{	
+
+	public void _setParameters(UserMenuItem userMenuItem) {
 		userMenuItem.setCode(code);
 		userMenuItem.setAltLabel(altLabel);
 		userMenuItem.setButtonLabel(buttonLabel);
@@ -73,18 +64,16 @@ public class TestUserMenu
 		userMenuItem.setShortcut(shortcut);
 		userMenuItem.setTooltip(tooltip);
 	}
-	
-	public void check(
-			UserMenuItem userMenuItem) 
-	{		
-    	assertThat(userMenuItem.getCode()).isEqualTo(code);
-    	assertThat(userMenuItem.getAltLabel()).isEqualTo(altLabel);
-    	assertThat(userMenuItem.getButtonLabel()).isEqualTo(buttonLabel);
-    	assertThat(userMenuItem.isASubMenu()).isEqualTo(isASubMenu);
-    	assertThat(userMenuItem.getMyClass()).isEqualTo(myClass);
-    	assertThat(userMenuItem.getMySubmenu()).isEqualTo(mySubmenu);
-    	assertThat(userMenuItem.getPosition()).isEqualTo(position);
-    	assertThat(userMenuItem.getShortcut()).isEqualTo(shortcut);
-    	assertThat(userMenuItem.getTooltip()).isEqualTo(tooltip);
+
+	public void check(UserMenuItem userMenuItem) {
+		assertThat(userMenuItem.getCode()).isEqualTo(code);
+		assertThat(userMenuItem.getAltLabel()).isEqualTo(altLabel);
+		assertThat(userMenuItem.getButtonLabel()).isEqualTo(buttonLabel);
+		assertThat(userMenuItem.isASubMenu()).isEqualTo(isASubMenu);
+		assertThat(userMenuItem.getMyClass()).isEqualTo(myClass);
+		assertThat(userMenuItem.getMySubmenu()).isEqualTo(mySubmenu);
+		assertThat(userMenuItem.getPosition()).isEqualTo(position);
+		assertThat(userMenuItem.getShortcut()).isEqualTo(shortcut);
+		assertThat(userMenuItem.getTooltip()).isEqualTo(tooltip);
 	}
 }

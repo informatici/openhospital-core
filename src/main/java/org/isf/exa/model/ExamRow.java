@@ -110,7 +110,7 @@ public class ExamRow extends Auditable<String>
 	
 	@Override
 	public boolean equals(Object anObject) {
-		return (anObject == null) || !(anObject instanceof ExamRow) ? false
+		return !(anObject instanceof ExamRow) ? false
 				: (getCode() == ((ExamRow) anObject).getCode()
 						&& getDescription().equalsIgnoreCase(
 								((ExamRow) anObject).getDescription())

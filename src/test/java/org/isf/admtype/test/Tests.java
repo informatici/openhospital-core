@@ -22,247 +22,102 @@
 package org.isf.admtype.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
+import org.isf.OHCoreTestCase;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.admtype.service.AdmissionTypeIoOperation;
-import org.isf.utils.db.DbJpaUtil;
+import org.isf.admtype.service.AdmissionTypeIoOperationRepository;
 import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestAdmissionType testAdmissionType;
-	private static TestAdmissionTypeContext testAdmissionTypeContext;
 
-    @Autowired
-    AdmissionTypeIoOperation admissionTypeIoOperation;
-    
-	
+	@Autowired
+	AdmissionTypeIoOperation admissionTypeIoOperation;
+	@Autowired
+	private AdmissionTypeIoOperationRepository admissionTypeIoOperationRepository;
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testAdmissionType = new TestAdmissionType();
-    	testAdmissionTypeContext = new TestAdmissionTypeContext();
-    } 
-
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-    	testAdmissionType = null;
-    	testAdmissionTypeContext = null;
-    }
-	
-		
-	@Test
-	public void testAdmissionTypeGets() 
-	{
-		String code = "";
-			
-
-		try 
-		{		
-			code = _setupTestAdmissionType(false);
-			_checkAdmissionTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public static void setUpClass() {
+		testAdmissionType = new TestAdmissionType();
 	}
-	
-	@Test
-	public void testAdmissionTypeSets()
-	{
-		String code = "";
-			
 
-		try 
-		{		
-			code = _setupTestAdmissionType(true);
-			_checkAdmissionTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoGetAdmissionType() 
-	{		
-		try 
-		{		
-			String code = _setupTestAdmissionType(false);
-			AdmissionType foundAdmissionType = (AdmissionType)jpa.find(AdmissionType.class, code); 
-			ArrayList<AdmissionType> admissionTypes = admissionTypeIoOperation.getAdmissionType();
-			
-			assertThat(admissionTypes.get(admissionTypes.size() - 1).getDescription()).isEqualTo(foundAdmissionType.getDescription());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoUpdateAdmissionType() 
-	{
-		String code = "";
-		boolean result = false;
-		
-		
-		try 
-		{		
-			code = _setupTestAdmissionType(false);
-			AdmissionType foundAdmissionType = (AdmissionType)jpa.find(AdmissionType.class, code);
-			jpa.flush();
-			foundAdmissionType.setDescription("Update");
-			result = admissionTypeIoOperation.updateAdmissionType(foundAdmissionType);
-			AdmissionType updateAdmissionType = (AdmissionType)jpa.find(AdmissionType.class, code);
-
-			assertThat(result).isTrue();
-			assertThat(updateAdmissionType.getDescription()).isEqualTo("Update");
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testIoNewAdmissionType() 
-	{
-		boolean result = false;
-		
-		
-		try 
-		{		
-			AdmissionType admissionType = testAdmissionType.setup(true);
-			result = admissionTypeIoOperation.newAdmissionType(admissionType);
-
-			assertThat(result).isTrue();
-			_checkAdmissionTypeIntoDb(admissionType.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
 
 	@Test
-	public void testIoIsCodePresent() 
-	{
-		String code = "";
-		boolean result = false;
-		
+	public void testAdmissionTypeGets() throws Exception {
+		String code = _setupTestAdmissionType(false);
+		_checkAdmissionTypeIntoDb(code);
+	}
 
-		try 
-		{		
-			code = _setupTestAdmissionType(false);
-			result = admissionTypeIoOperation.isCodePresent(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Test
+	public void testAdmissionTypeSets() throws Exception {
+		String code = _setupTestAdmissionType(true);
+		_checkAdmissionTypeIntoDb(code);
+	}
 
+	@Test
+	public void testIoGetAdmissionType() throws Exception {
+		String code = _setupTestAdmissionType(false);
+		ArrayList<AdmissionType> admissionTypes = admissionTypeIoOperation.getAdmissionType();
+		assertThat(admissionTypes).hasSize(1);
+		assertThat(admissionTypes.get(0).getDescription()).isEqualTo("TestDescription");
+	}
+
+	@Test
+	public void testIoUpdateAdmissionType() throws Exception {
+		String code = _setupTestAdmissionType(false);
+		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findOne(code);
+		foundAdmissionType.setDescription("Update");
+		boolean result = admissionTypeIoOperation.updateAdmissionType(foundAdmissionType);
+		assertThat(result).isTrue();
+		AdmissionType updateAdmissionType = admissionTypeIoOperationRepository.findOne(code);
+		assertThat(updateAdmissionType.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testIoNewAdmissionType() throws Exception {
+		AdmissionType admissionType = testAdmissionType.setup(true);
+		boolean result = admissionTypeIoOperation.newAdmissionType(admissionType);
+		assertThat(result).isTrue();
+		_checkAdmissionTypeIntoDb(admissionType.getCode());
+	}
+
+	@Test
+	public void testIoIsCodePresent() throws Exception {
+		String code = _setupTestAdmissionType(false);
+		boolean result = admissionTypeIoOperation.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
-	public void testIoDeleteAdmissionType() 
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestAdmissionType(false);
-			AdmissionType foundAdmissionType = (AdmissionType)jpa.find(AdmissionType.class, code); 
-			result = admissionTypeIoOperation.deleteAdmissionType(foundAdmissionType);
-
-			assertThat(result).isTrue();
-			result = admissionTypeIoOperation.isCodePresent(code);
-			assertThat(result).isFalse();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoDeleteAdmissionType() throws Exception {
+		String code = _setupTestAdmissionType(false);
+		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findOne(code);
+		boolean result = admissionTypeIoOperation.deleteAdmissionType(foundAdmissionType);
+		assertThat(result).isTrue();
+		result = admissionTypeIoOperation.isCodePresent(code);
+		assertThat(result).isFalse();
 	}
-	
-	
-	private void _saveContext() throws OHException 
-    {	
-		testAdmissionTypeContext.saveAll(jpa);
-    }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testAdmissionTypeContext.deleteNews(jpa);
-    }
-        
-	private String _setupTestAdmissionType(
-			boolean usingSet) throws OHException 
-	{
-		AdmissionType admissionType;
-		
 
-    	jpa.beginTransaction();	
-    	admissionType = testAdmissionType.setup(usingSet);
-		jpa.persist(admissionType);
-    	jpa.commitTransaction();
-    	
+	private String _setupTestAdmissionType(boolean usingSet) throws OHException {
+		AdmissionType admissionType = testAdmissionType.setup(usingSet);
+		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
 		return admissionType.getCode();
 	}
-		
-	private void  _checkAdmissionTypeIntoDb(
-			String code) throws OHException 
-	{
-		AdmissionType foundAdmissionType;
-		
 
-		foundAdmissionType = (AdmissionType)jpa.find(AdmissionType.class, code); 
+	private void _checkAdmissionTypeIntoDb(String code) throws OHException {
+		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findOne(code);
 		testAdmissionType.check(foundAdmissionType);
-	}	
+	}
 }

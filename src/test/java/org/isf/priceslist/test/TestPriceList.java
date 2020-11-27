@@ -26,46 +26,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.isf.priceslist.model.PriceList;
 import org.isf.utils.exception.OHException;
 
-public class TestPriceList 
-{	
-    private static String listCode = "Code";
-    private static String listName = "TestName";
-    private static String listDescription = "TestDescription";
-    private static String listCurrency = "Curr";
-				
-		
-	public PriceList setup(
-			boolean usingSet) throws OHException 
-	{
+public class TestPriceList {
+
+	private static String listCode = "Code";
+	private static String listName = "TestName";
+	private static String listDescription = "TestDescription";
+	private static String listCurrency = "Curr";
+
+	public PriceList setup(boolean usingSet) throws OHException {
 		PriceList priceList;
-	
-				
-		if (usingSet)
-		{
+
+		if (usingSet) {
 			priceList = new PriceList();
 			_setParameters(priceList);
-		}
-		else
-		{
+		} else {
 			// Create PriceList with all parameters 
 			priceList = new PriceList(0, listCode, listName, listDescription, listCurrency);
 		}
-				    	
+
 		return priceList;
 	}
-	
-	public void _setParameters(
-			PriceList priceList) 
-	{		
+
+	public void _setParameters(PriceList priceList) {
 		priceList.setCode(listCode);
 		priceList.setCurrency(listCurrency);
 		priceList.setDescription(listDescription);
 		priceList.setName(listName);
 	}
-	
-	public void check(
-			PriceList priceList) 
-	{		
+
+	public void check(PriceList priceList) {
 		assertThat(priceList.getCode()).isEqualTo(listCode);
 		assertThat(priceList.getCurrency()).isEqualTo(listCurrency);
 		assertThat(priceList.getDescription()).isEqualTo(listDescription);

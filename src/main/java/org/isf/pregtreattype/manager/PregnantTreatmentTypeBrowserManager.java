@@ -42,7 +42,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	private PregnantTreatmentTypeIoOperation ioOperations;
 	
 	/**
-	 * return the list of {@link PregnantTreatmentType}s
+	 * Return the list of {@link PregnantTreatmentType}s
 	 * 
 	 * @return the list of {@link PregnantTreatmentType}s
 	 * @throws OHServiceException 
@@ -52,7 +52,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	}
 	
 	/**
-	 * insert a {@link PregnantTreatmentType} in the DB
+	 * Insert a {@link PregnantTreatmentType} in the DB
 	 * 
 	 * @param pregnantTreatmentType - the {@link PregnantTreatmentType} to insert
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
@@ -64,7 +64,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	}
 
 	/**
-	 * update a {@link PregnantTreatmentType} in the DB
+	 * Update a {@link PregnantTreatmentType} in the DB
 	 * 
 	 * @param pregnantTreatmentType - the {@link PregnantTreatmentType} to update
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
@@ -76,7 +76,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	}
 	
 	/**
-	 * delete a {@link PregnantTreatmentType} in the DB
+	 * Delete a {@link PregnantTreatmentType} in the DB
 	 * 
 	 * @param pregnantTreatmentType - the {@link PregnantTreatmentType} to delete
 	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
@@ -87,7 +87,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	}
 	
 	/**
-	 * check if the code is already in use
+	 * Check if the code is already in use
 	 * 
 	 * @param code - the code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise

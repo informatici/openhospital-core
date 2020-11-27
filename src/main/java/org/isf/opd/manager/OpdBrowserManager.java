@@ -171,7 +171,7 @@ public class OpdBrowserManager {
 	}
 
 	/**
-	 * insert a new item in the db
+	 * Insert a new item in the db
 	 * 
 	 * @param opd an {@link Opd}
 	 * @return <code>true</code> if the item has been inserted
@@ -194,7 +194,7 @@ public class OpdBrowserManager {
 	}
 
 	/**
-	 * delete an {@link Opd} from the db
+	 * Delete an {@link Opd} from the db
 	 * 
 	 * @param opd - the {@link Opd} to delete
 	 * @return <code>true</code> if the item has been deleted. <code>false</code> otherwise.

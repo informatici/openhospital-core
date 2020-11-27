@@ -90,7 +90,7 @@ public class DeliveryResultType
 
 	@Override
     public boolean equals(Object anObject) {
-        return (anObject == null) || !(anObject instanceof DeliveryResultType) ? false
+        return !(anObject instanceof DeliveryResultType) ? false
                 : (getCode().equals(((DeliveryResultType) anObject).getCode())
                         && getDescription().equalsIgnoreCase(
                                 ((DeliveryResultType) anObject).getDescription()));
