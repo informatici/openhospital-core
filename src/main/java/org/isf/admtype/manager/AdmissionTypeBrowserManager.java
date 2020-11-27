@@ -27,8 +27,8 @@ import java.util.List;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.admtype.service.AdmissionTypeIoOperation;
 import org.isf.generaldata.MessageBundle;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,18 +40,10 @@ public class AdmissionTypeBrowserManager {
 	@Autowired
 	private AdmissionTypeIoOperation ioOperations;
 
-	public AdmissionTypeIoOperation getIoOperations() {
-		return ioOperations;
-	}
-
-	public void setIoOperations(AdmissionTypeIoOperation ioOperations) {
-		this.ioOperations = ioOperations;
-	}
-
 	/**
 	 * Returns all the available {@link AdmissionType}s.
 	 * @return a list of admission types or <code>null</code> if the operation fails.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public ArrayList<AdmissionType> getAdmissionType() throws OHServiceException {
         return ioOperations.getAdmissionType();
@@ -61,7 +53,7 @@ public class AdmissionTypeBrowserManager {
 	 * Stores a new {@link AdmissionType}.
 	 * @param admissionType the admission type to store.
 	 * @return <code>true</code> if the admission type has been stored, <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean newAdmissionType(AdmissionType admissionType) throws OHServiceException {
         validateAdmissionType(admissionType, true);
@@ -72,7 +64,7 @@ public class AdmissionTypeBrowserManager {
 	 * Updates the specified {@link AdmissionType}.
 	 * @param admissionType the admission type to update.
 	 * @return <code>true</code> if the admission type has been updated, <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean updateAdmissionType(AdmissionType admissionType) throws OHServiceException {
         validateAdmissionType(admissionType, false);
@@ -83,7 +75,7 @@ public class AdmissionTypeBrowserManager {
 	 * Checks if the specified Code is already used by others {@link AdmissionType}s.
 	 * @param code the admission type code to check.
 	 * @return <code>true</code> if the code is already used, <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean codeControl(String code) throws OHServiceException {
         return ioOperations.isCodePresent(code);
@@ -93,7 +85,7 @@ public class AdmissionTypeBrowserManager {
 	 * Deletes the specified {@link AdmissionType}.
 	 * @param admissionType the admission type to delete.
 	 * @return <code>true</code> if the admission type has been deleted, <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean deleteAdmissionType(AdmissionType admissionType) throws OHServiceException {
         return ioOperations.deleteAdmissionType(admissionType);
