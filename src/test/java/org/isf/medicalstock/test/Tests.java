@@ -122,7 +122,7 @@ public class Tests extends OHCoreTestCase {
     @After
     public void tearDown() throws Exception 
     {
-    	cleanH2InMemoryDb();
+    	cleanH2InMemoryDB();
         jpa.close();
     }
     
@@ -139,7 +139,7 @@ public class Tests extends OHCoreTestCase {
     }
 
 	@Parameterized.Parameters(name ="Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
-	public static Collection automaticlot() {
+	public static Collection<Object[]> automaticlot() {
 		return Arrays.asList(new Object[][] {
 				{ false, false, false },
 				{ false, false, true },
@@ -153,8 +153,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testLotGets() 
-	{
+	public void testLotGets()  throws Exception	{
 		String code = "";
 			
 		
@@ -591,8 +590,7 @@ public class Tests extends OHCoreTestCase {
 		}
 	}
 	
-	@Override
-    public void cleanH2InMemoryDb() {
+    private void cleanH2InMemoryDB() throws OHException {
 	    List<Object[]> show_tables = entityManager.createNativeQuery("SHOW TABLES").getResultList();
 	    show_tables
 			    .stream()
