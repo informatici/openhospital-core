@@ -22,7 +22,6 @@
 package org.isf.medicalstock.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,20 +35,29 @@ import javax.persistence.EntityManager;
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
 import org.isf.medicals.model.Medical;
+import org.isf.medicals.service.MedicalsIoOperationRepository;
 import org.isf.medicals.test.TestMedical;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
+import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
+import org.isf.medicalstock.service.MovementIoOperationRepository;
+import org.isf.medicalstockward.service.MedicalStockWardIoOperationRepository;
+import org.isf.medicalstockward.service.MovementWardIoOperationRepository;
 import org.isf.medstockmovtype.model.MovementType;
+import org.isf.medstockmovtype.service.MedicalStockMovementTypeIoOperationRepository;
 import org.isf.medstockmovtype.test.TestMovementType;
 import org.isf.medtype.model.MedicalType;
+import org.isf.medtype.service.MedicalTypeIoOperationRepository;
 import org.isf.medtype.test.TestMedicalType;
 import org.isf.supplier.model.Supplier;
+import org.isf.supplier.service.SupplierIoOperationRepository;
 import org.isf.supplier.test.TestSupplier;
 import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
+import org.isf.ward.service.WardIoOperationRepository;
 import org.isf.ward.test.TestWard;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -61,10 +69,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Transactional
 @RunWith(Parameterized.class)
@@ -76,7 +86,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Rule
 	public final SpringMethodRule smr = new SpringMethodRule();
-
+	
 	private static DbJpaUtil jpa;
 	private static TestLot testLot;
 	private static TestMovement testMovement;
@@ -85,58 +95,76 @@ public class Tests extends OHCoreTestCase {
 	private static TestMovementType testMovementType;
 	private static TestWard testWard;
 	private static TestSupplier testSupplier;
-
+	
 	@Autowired
 	private EntityManager entityManager;
 
-    @Autowired
-    MedicalStockIoOperations medicalStockIoOperation;
+	@Autowired
+	MedicalStockIoOperations medicalStockIoOperation;
+	@Autowired
+	LotIoOperationRepository lotIoOperationRepository;
+	@Autowired
+	MedicalStockWardIoOperationRepository medicalStockWardIoOperationRepository;
+	@Autowired
+	MovementWardIoOperationRepository movementWardIoOperationRepository;
+	@Autowired
+	MedicalsIoOperationRepository medicalsIoOperationRepository;
+	@Autowired
+	MedicalTypeIoOperationRepository medicalTypeIoOperationRepository;
+	@Autowired
+	WardIoOperationRepository wardIoOperationRepository;
+	@Autowired
+	MovementIoOperationRepository movementIoOperationRepository;
+	@Autowired
+	MedicalStockMovementTypeIoOperationRepository medicalStockMovementTypeIoOperationRepository;
+	@Autowired
+	SupplierIoOperationRepository supplierIoOperationRepository;
+	@Autowired
+	ApplicationEventPublisher applicationEventPublisher;
 
-    public Tests(boolean in, boolean out, boolean toward) {
-	    GeneralData.AUTOMATICLOT_IN = in;
-	    GeneralData.AUTOMATICLOT_OUT = out;
-	    GeneralData.AUTOMATICLOTWARD_TOWARD = toward;
-    }
-
+	public Tests(boolean in, boolean out, boolean toward) {
+		GeneralData.AUTOMATICLOT_IN = in;
+		GeneralData.AUTOMATICLOT_OUT = out;
+		GeneralData.AUTOMATICLOTWARD_TOWARD = toward;
+	}
+	
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testLot = new TestLot();
-    	testMovement = new TestMovement();
-    	testMedical = new TestMedical();
-    	testMedicalType = new TestMedicalType();
-    	testMovementType = new TestMovementType();
-    	testWard = new TestWard();
-    	testSupplier = new TestSupplier();
-    }
+	public static void setUpClass() {
+		jpa = new DbJpaUtil();
+		testLot = new TestLot();
+		testMovement = new TestMovement();
+		testMedical = new TestMedical();
+		testMedicalType = new TestMedicalType();
+		testMovementType = new TestMovementType();
+		testWard = new TestWard();
+		testSupplier = new TestSupplier();
+	}
 
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        testLot.setup(false);
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-    	cleanH2InMemoryDB();
-        jpa.close();
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-    	testLot = null;
-    	testMovement = null;
-    	testMedical = null;
-    	testMedicalType = null;
-    	testMovementType = null;
-    	testWard = null;
-    	testSupplier = null;
-    }
+	@Before
+	public void setUp() throws OHException {
+		cleanH2InMemoryDB();
+		jpa.open();
+		testLot.setup(false);
+	}
+
+	@After
+	public void tearDown() throws Exception
+	{
+		jpa.flush();
+		jpa.close();
+	}
+
+	@AfterClass
+	public static void tearDownClass() throws OHException 
+	{
+		testLot = null;
+		testMovement = null;
+		testMedical = null;
+		testMedicalType = null;
+		testMovementType = null;
+		testWard = null;
+		testSupplier = null;
+	}
 
 	@Parameterized.Parameters(name ="Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
 	public static Collection<Object[]> automaticlot() {
@@ -153,147 +181,59 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testLotGets()  throws Exception	{
-		String code = "";
-			
-		
-		try 
-		{		
-			code = _setupTestLot(false);
-			_checkLotIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testLotSets() 
-	{
-		String code = "";
-			
-
-		try 
-		{		
-			code = _setupTestLot(true);
-			_checkLotIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testMovementGets() 
-	{
-		int code = 0;
-			
-		
-		try 
-		{		
-			code = _setupTestMovement(false);
-			_checkMovementIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-	@Test
-	public void testMovementSets() 
-	{
-		int code = 0;
-			
-
-		try 
-		{		
-			code = _setupTestMovement(true);
-			_checkMovementIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testLotGets() throws Exception {
+		String code = _setupTestLot(false);
+		_checkLotIntoDb(code);
 	}
 
 	@Test
-	public void testIoGetMedicalsFromLot() 
-	{
-		int code = 0;
-		
-		
-		try 
-		{		
-			code = _setupTestMovement(false);
-			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
-			List<Integer> medicalIds = medicalStockIoOperation.getMedicalsFromLot(foundMovement.getLot().getCode());
-
-			assertThat(medicalIds.get(0)).isEqualTo(foundMovement.getMedical().getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testLotSets() throws Exception {
+		String code = _setupTestLot(true);
+		_checkLotIntoDb(code);
 	}
-	
-	@Test
-	public void testIoGetLotsByMedical() 
-	{
-		int code = 0;
-		
-		
-		try 
-		{		
-			code = _setupTestMovement(false);
-			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
-			List<Lot> lots = medicalStockIoOperation.getLotsByMedical(foundMovement.getMedical());
 
-			assertThat(lots.get(0).getCode()).isEqualTo(foundMovement.getLot().getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
 	@Test
-	public void testIoNewAutomaticDischargingMovement() 
-	{
-		int code = 0;
-		
-		
-		try 
-		{		
-			code = _setupTestMovement(false);
-			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
-			boolean result = medicalStockIoOperation.newAutomaticDischargingMovement(foundMovement);
+	public void testMovementGets() throws Exception {
+		int code = _setupTestMovement(false);
+		_checkMovementIntoDb(code);
+	}
 
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
 	@Test
-	public void testIoNewAutomaticDischargingMovementDifferentLots() throws Exception
-	{
-		int code = 0;
-		code = _setupTestMovement(false);
-		Movement foundMovement = (Movement) jpa.find(Movement.class, code);
+	public void testMovementSets() throws Exception {
+		int code = _setupTestMovement(true);
+		_checkMovementIntoDb(code);
+	}
+
+	@Test
+	public void testIoGetMedicalsFromLot() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		List<Integer> medicalIds = medicalStockIoOperation.getMedicalsFromLot(foundMovement.getLot().getCode());
+		assertThat(medicalIds.get(0)).isEqualTo(foundMovement.getMedical().getCode());
+	}
+
+	@Test
+	public void testIoGetLotsByMedical() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		List<Lot> lots = medicalStockIoOperation.getLotsByMedical(foundMovement.getMedical());
+		assertThat(lots).hasSize(1);
+		assertThat(lots.get(0).getCode()).isEqualTo(foundMovement.getLot().getCode());
+	}
+
+	@Test
+	public void testIoNewAutomaticDischargingMovement() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		boolean result = medicalStockIoOperation.newAutomaticDischargingMovement(foundMovement);
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void testIoNewAutomaticDischargingMovementDifferentLots() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
 		//medicalStockIoOperation.newMovement(foundMovement);
-
 		Medical medical = foundMovement.getMedical();
 		MovementType medicalType = foundMovement.getType();
 		Ward ward = foundMovement.getWard();
@@ -324,324 +264,157 @@ public class Tests extends OHCoreTestCase {
 		ArrayList<Lot> lots = medicalStockIoOperation.getLotsByMedical(medical);
 		assertThat(lots).hasSize(1); // first lot should be 0 quantity and stripped by the list
 	}
-	
-	@Test
-	public void testIoNewMovement() 
-	{
-		int code = 0;
-		
-		
-		try 
-		{		
-			code = _setupTestMovement(false);
-			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
-			boolean result = medicalStockIoOperation.newMovement(foundMovement);
 
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Test
+	public void testIoNewMovement() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		boolean result = medicalStockIoOperation.newMovement(foundMovement);
+		assertThat(result).isTrue();
 	}
-	
-	@Test
-	public void testIoPrepareChargingMovement() 
-	{
-		int code = 0;
-		
-		
-		try 
-		{		
-			code = _setupTestMovement(false);
-			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
-			boolean result = medicalStockIoOperation.prepareChargingMovement(foundMovement);
 
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	@Test
+	public void testIoPrepareChargingMovement() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		boolean result = medicalStockIoOperation.prepareChargingMovement(foundMovement);
+		assertThat(result).isTrue();
 	}
-	
-	@Test
-	public void testIoPrepareDischargingMovement() 
-	{
-		int code = 0;
-		
-		
-		try 
-		{		
-			code = _setupTestMovement(false);
-			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
-			boolean result = medicalStockIoOperation.prepareDischargingMovement(foundMovement);
 
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}	
-	
 	@Test
-	public void testIoLotExists() 
-	{
-		String code = "";
-		boolean result = false;
-		
-		
-		try 
-		{		
-			code = _setupTestLot(false);
-			result = medicalStockIoOperation.lotExists(code);
-
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}	
-	
-	@Test
-	public void testIoGetMovements() 
-	{
-		int code = 0;
-		
-		
-		try 
-		{		
-			code = _setupTestMovement(false);
-			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
-			ArrayList<Movement> movements = medicalStockIoOperation.getMovements();
-
-			//assertEquals(foundMovement.getCode(), movements.get(0).getCode());
-			assertThat(movements).isNotEmpty();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoPrepareDischargingMovement() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		boolean result = medicalStockIoOperation.prepareDischargingMovement(foundMovement);
+		assertThat(result).isTrue();
 	}
-	
+
 	@Test
-	public void testIoGetMovementsWithParameters()
-	{
-		int code = 0;
+	public void testIoLotExists() throws Exception {
+		String code = _setupTestLot(false);
+		boolean result = medicalStockIoOperation.lotExists(code);
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void testIoGetMovements() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = medicalStockIoOperation.getMovements();
+		//assertEquals(foundMovement.getCode(), movements.get(0).getCode());
+		assertThat(movements).isNotEmpty();
+	}
+
+	@Test
+	public void testIoGetMovementsWithParameters() throws Exception {
 		GregorianCalendar now = new GregorianCalendar();
 		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
 		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
-		
-		
-		try 
-		{		
-			code = _setupTestMovement(false);
-			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
-			ArrayList<Movement> movements = medicalStockIoOperation.getMovements(
-					foundMovement.getWard().getCode(),
-					fromDate,
-					toDate);
-
-			assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = medicalStockIoOperation.getMovements(
+				foundMovement.getWard().getCode(),
+				fromDate,
+				toDate);
+		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 	}
-	
+
 	@Test
-	public void testIoGetMovementsWihAllParameters() 
-	{
-		int code = 0;
+	public void testIoGetMovementsWihAllParameters() throws Exception {
 		GregorianCalendar now = new GregorianCalendar();
 		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
 		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
-		
-		
-		try 
-		{		
-			code = _setupTestMovement(false);
-			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
-			ArrayList<Movement> movements = medicalStockIoOperation.getMovements(
-					foundMovement.getMedical().getCode(),
-					foundMovement.getMedical().getType().getCode(),
-					foundMovement.getWard().getCode(), 
-					foundMovement.getType().getCode(),
-					fromDate, 
-					toDate,
-					fromDate, 
-					toDate,
-					fromDate, 
-					toDate);
-
-			assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = medicalStockIoOperation.getMovements(
+				foundMovement.getMedical().getCode(),
+				foundMovement.getMedical().getType().getCode(),
+				foundMovement.getWard().getCode(),
+				foundMovement.getType().getCode(),
+				fromDate,
+				toDate,
+				fromDate,
+				toDate,
+				fromDate,
+				toDate);
+		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 	}
-	
+
 	@Test
-	public void testIoGetMovementForPrint() 
-	{
-		int code = 0;
+	public void testIoGetMovementForPrint() throws Exception {
 		GregorianCalendar now = new GregorianCalendar();
 		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
 		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
 		MovementOrder order = MedicalStockIoOperations.MovementOrder.DATE;
-		
-		
-		try 
-		{		
-			code = _setupTestMovement(false);
-			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
-			ArrayList<Movement> movements = medicalStockIoOperation.getMovementForPrint(												
-												foundMovement.getMedical().getDescription(), 
-												null,
-												foundMovement.getWard().getCode(),
-												foundMovement.getType().getCode(),
-												fromDate,
-												toDate,
-												foundMovement.getLot().getCode(),
-												order
-											);
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = medicalStockIoOperation.getMovementForPrint(
+				foundMovement.getMedical().getDescription(),
+				null,
+				foundMovement.getWard().getCode(),
+				foundMovement.getType().getCode(),
+				fromDate,
+				toDate,
+				foundMovement.getLot().getCode(),
+				order
+		);
+		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
+	}
 
-			assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}	
-	
 	@Test
-	public void testIoGetLastMovementDate() 
-	{
-		int code = 0;
-		
-		
-		try 
-		{		
-			code = _setupTestMovement(false);
-			ArrayList<Movement> movements = medicalStockIoOperation.getMovements();
-			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
-			GregorianCalendar gc = medicalStockIoOperation.getLastMovementDate();
-
-			assertThat(gc).isEqualTo(movements.get(0).getDate());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoGetLastMovementDate() throws Exception {
+		int code = _setupTestMovement(false);
+		ArrayList<Movement> movements = medicalStockIoOperation.getMovements();
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		GregorianCalendar gc = medicalStockIoOperation.getLastMovementDate();
+		assertThat(gc).isEqualTo(movements.get(0).getDate());
 	}
-	
+
 	@Test
-	public void testIoRefNoExists() 
-	{
-		int code = 0;
-		
-		
-		try 
-		{		
-			code = _setupTestMovement(false);
-			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
-			boolean result = medicalStockIoOperation.refNoExists(foundMovement.getRefNo());
-
-			assertThat(result).isTrue();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
+	public void testIoRefNoExists() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		boolean result = medicalStockIoOperation.refNoExists(foundMovement.getRefNo());
+		assertThat(result).isTrue();
 	}
-	
+
 	@Test
-	public void testIoGetMovementsByReference() 
-	{
-		int code = 0;
-		
-		
-		try 
-		{		
-			code = _setupTestMovement(false);
-			Movement foundMovement = (Movement)jpa.find(Movement.class, code); 
-			ArrayList<Movement> movements = medicalStockIoOperation.getMovementsByReference(foundMovement.getRefNo() );
-
-			assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-	}
-	
-    private void cleanH2InMemoryDB() throws OHException {
-	    List<Object[]> show_tables = entityManager.createNativeQuery("SHOW TABLES").getResultList();
-	    show_tables
-			    .stream()
-			    .map(result -> (String) result[0])
-			    .forEach(this::truncateTable);
-    }
-
-    private void truncateTable(String name) {
-		entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
-		entityManager.createNativeQuery("TRUNCATE TABLE " + name).executeUpdate();
-		entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
+	public void testIoGetMovementsByReference() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = medicalStockIoOperation.getMovementsByReference(foundMovement.getRefNo());
+		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 	}
 
-	private String _setupTestLot(
-			boolean usingSet) throws OHException 
-	{
-		Lot lot;
-		
-	
-		jpa.beginTransaction();	
-		lot = testLot.setup(usingSet);
-		jpa.persist(lot);
-		jpa.commitTransaction();
-		
+	private String _setupTestLot(boolean usingSet) throws OHException {
+		Lot lot = testLot.setup(usingSet);
+		lotIoOperationRepository.saveAndFlush(lot);
 		return lot.getCode();
 	}
-		
-	private void  _checkLotIntoDb(
-			String code) throws OHException 
-	{
-		Lot foundLot;
-		
-	
-		foundLot = (Lot)jpa.find(Lot.class, code); 
+
+	private void _checkLotIntoDb(String code) throws OHException {
+		Lot foundLot = lotIoOperationRepository.findOne(code);
 		testLot.check(foundLot);
-	}	
-    
-	private int _setupTestMovement(
-			boolean usingSet) throws OHException 
-	{
-		Movement movement;
+	}
+
+	private int _setupTestMovement(boolean usingSet) throws OHException {
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
 		MovementType movementType = testMovementType.setup(false);
 		Ward ward = testWard.setup(false);
 		Lot lot = testLot.setup(false);
 		Supplier supplier = testSupplier.setup(false);
-				
-	
-		jpa.beginTransaction();	
-		movement = testMovement.setup(medical, movementType, ward, lot, supplier, usingSet);
+		Movement movement = testMovement.setup(medical, movementType, ward, lot, supplier, usingSet);
+		//	Should not this be the same as the jpa persist statement below?
+		//  It appears not as
+		//		supplierIoOperationRepository.saveAndFlush(supplier);
+		//		lotIoOperationRepository.saveAndFlush(lot);
+		//		wardIoOperationRepository.saveAndFlush(ward);
+		//		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		//		medicalsIoOperationRepository.saveAndFlush(medical);
+		//		medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
+		//		movementIoOperationRepository.saveAndFlush(movement);
+		jpa.beginTransaction();
 		jpa.persist(supplier);
 		jpa.persist(lot);
 		jpa.persist(ward);
@@ -650,17 +423,25 @@ public class Tests extends OHCoreTestCase {
 		jpa.persist(movementType);
 		jpa.persist(movement);
 		jpa.commitTransaction();
-		
 		return movement.getCode();
 	}
-		
-	private void  _checkMovementIntoDb(
-			int code) throws OHException 
-	{
-		Movement foundMovement;
-		
-	
-		foundMovement = (Movement)jpa.find(Movement.class, code); 
+
+	private void _checkMovementIntoDb(int code) throws OHException {
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
 		testMovement.check(foundMovement);
-	}	
+	}
+
+	private void cleanH2InMemoryDB() throws OHException {
+		List<Object[]> show_tables = entityManager.createNativeQuery("SHOW TABLES").getResultList();
+		show_tables
+			.stream()
+			.map(result -> (String) result[0])
+			.forEach(this::truncateTable);
+	}
+
+	private void truncateTable(String name) {
+		entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
+		entityManager.createNativeQuery("TRUNCATE TABLE " + name).executeUpdate();
+		entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
+	}
 }
