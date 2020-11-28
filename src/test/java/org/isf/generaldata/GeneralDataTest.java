@@ -7,7 +7,6 @@ import org.junit.Test;
 
 public class GeneralDataTest {
 
-	@Ignore
 	@Test
 	public void testGetGeneralData() {
 		GeneralData generalData =  GeneralData.getGeneralData();

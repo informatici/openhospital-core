@@ -150,7 +150,6 @@ public class Tests extends OHCoreTestCase {
 	@After
 	public void tearDown() throws Exception
 	{
-		jpa.flush();
 		jpa.close();
 	}
 
@@ -232,8 +231,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoNewAutomaticDischargingMovementDifferentLots() throws Exception {
 		int code = _setupTestMovement(false);
-		Movement foundMovement = movementIoOperationRepository.findOne(code);
-		//medicalStockIoOperation.newMovement(foundMovement);
+		Movement foundMovement = (Movement) jpa.find(Movement.class, code);
+		
 		Medical medical = foundMovement.getMedical();
 		MovementType medicalType = foundMovement.getType();
 		Ward ward = foundMovement.getWard();
