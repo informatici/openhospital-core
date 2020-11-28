@@ -22,13 +22,17 @@
 package org.isf.agetype.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 
+import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
+import org.isf.agetype.manager.AgeTypeBrowserManager;
 import org.isf.agetype.model.AgeType;
 import org.isf.agetype.service.AgeTypeIoOperationRepository;
 import org.isf.agetype.service.AgeTypeIoOperations;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,6 +46,8 @@ public class Tests extends OHCoreTestCase {
 	AgeTypeIoOperations ageTypeIoOperations;
 	@Autowired
 	AgeTypeIoOperationRepository ageTypeIoOperationRepository;
+	@Autowired
+	AgeTypeBrowserManager ageTypeBrowserManager;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -98,6 +104,103 @@ public class Tests extends OHCoreTestCase {
 		assertThat(foundAgeType.getFrom()).isEqualTo(ageType.getFrom());
 		assertThat(foundAgeType.getTo()).isEqualTo(ageType.getTo());
 		assertThat(foundAgeType.getDescription()).isEqualTo(ageType.getDescription());
+	}
+
+	@Test
+	public void mgrGetAgeType() throws Exception {
+		String code = _setupTestAgeType(false);
+		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
+		ArrayList<AgeType> ageTypes = ageTypeBrowserManager.getAgeType();
+
+		assertThat(ageTypes.get(ageTypes.size() - 1).getDescription()).isEqualTo(foundAgeType.getDescription());
+	}
+
+	@Test
+	public void mgrUpdateAgeType() throws Exception {
+		String code = _setupTestAgeType(false);
+		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
+		foundAgeType.setFrom(4);
+		foundAgeType.setTo(40);
+		ArrayList<AgeType> ageTypes = new ArrayList<>();
+		ageTypes.add(foundAgeType);
+		boolean result = ageTypeBrowserManager.updateAgeType(ageTypes);
+		AgeType updateAgeType = ageTypeIoOperationRepository.findOneByCode(code);
+		assertThat(result).isTrue();
+		assertThat(updateAgeType.getFrom()).isEqualTo(4);
+		assertThat(updateAgeType.getTo()).isEqualTo(40);
+	}
+
+	@Test
+	public void mgrGetTypeByAge() throws Exception {
+		String code = _setupTestAgeType(false);
+		AgeType ageType = ageTypeIoOperationRepository.findOneByCode(code);
+		String foundCode = ageTypeBrowserManager.getTypeByAge(9);
+		assertThat(foundCode).isEqualTo(code);
+
+		assertThat(ageTypeBrowserManager.getTypeByAge(-1)).isNull();
+	}
+
+	@Test
+	public void mgrGetAgeTypeByCode() throws Exception {
+		String code = _setupTestAgeType(false);
+		AgeType ageType = ageTypeIoOperationRepository.findOneByCode(code);
+		AgeType foundAgeType = ageTypeBrowserManager.getTypeByCode(9);
+
+		assertThat(foundAgeType.getFrom()).isEqualTo(ageType.getFrom());
+		assertThat(foundAgeType.getTo()).isEqualTo(ageType.getTo());
+		assertThat(foundAgeType.getDescription()).isEqualTo(ageType.getDescription());
+	}
+
+	@Test
+	public void ageTypeEqualHashToString() throws Exception {
+		String code = _setupTestAgeType(false);
+		AgeType ageType = ageTypeIoOperationRepository.findOneByCode(code);
+		AgeType ageType2 = new AgeType(ageType.getCode(), ageType.getDescription());
+		ageType2.setFrom(ageType.getFrom());
+		ageType2.setTo(ageType.getTo());
+		assertThat(ageType.equals(ageType)).isTrue();
+		assertThat(ageType.equals(ageType2)).isTrue();
+		assertThat(ageType.equals(new String("xyzzy"))).isFalse();
+		ageType2.setCode("xxxx");
+		assertThat(ageType.equals(ageType2)).isFalse();
+
+		assertThat(ageType.hashCode()).isPositive();
+
+		assertThat(ageType2.toString()).isEqualTo(ageType.getDescription());
+	}
+
+	@Test
+	public void mgrValidation() throws Exception {
+		String code = _setupTestAgeType(false);
+		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
+		foundAgeType.setFrom(0);
+		foundAgeType.setTo(1);
+		AgeType foundAgeType2 = ageTypeIoOperationRepository.findOneByCode(code);
+		foundAgeType2.setFrom(0);
+		foundAgeType2.setTo(1);
+		ArrayList<AgeType> ageTypes = new ArrayList<>();
+		ageTypes.add(foundAgeType);
+		ageTypes.add(foundAgeType2);
+
+		// Range overlap
+		assertThatThrownBy(() -> ageTypeBrowserManager.updateAgeType(ageTypes))
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// Age range not defined
+		foundAgeType2.setFrom(90);
+		foundAgeType2.setTo(100);
+		ArrayList<AgeType> ageTypes2 = new ArrayList<>();
+		ageTypes2.add(foundAgeType);
+		ageTypes2.add(foundAgeType2);
+		assertThatThrownBy(() -> ageTypeBrowserManager.updateAgeType(ageTypes2))
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
 	}
 
 	private String _setupTestAgeType(boolean usingSet) throws Exception {

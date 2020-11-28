@@ -22,14 +22,18 @@
 package org.isf.admtype.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 
+import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
+import org.isf.admtype.manager.AdmissionTypeBrowserManager;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.admtype.service.AdmissionTypeIoOperation;
 import org.isf.admtype.service.AdmissionTypeIoOperationRepository;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -40,9 +44,11 @@ public class Tests extends OHCoreTestCase {
 	private static TestAdmissionType testAdmissionType;
 
 	@Autowired
-	AdmissionTypeIoOperation admissionTypeIoOperation;
+	private AdmissionTypeIoOperation admissionTypeIoOperation;
 	@Autowired
 	private AdmissionTypeIoOperationRepository admissionTypeIoOperationRepository;
+	@Autowired
+	private AdmissionTypeBrowserManager admissionTypeBrowserManager;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -107,6 +113,108 @@ public class Tests extends OHCoreTestCase {
 		boolean result = admissionTypeIoOperation.deleteAdmissionType(foundAdmissionType);
 		assertThat(result).isTrue();
 		result = admissionTypeIoOperation.isCodePresent(code);
+		assertThat(result).isFalse();
+	}
+
+	@Test
+	public void mgrGetAdmissionType() throws Exception {
+		String code = _setupTestAdmissionType(false);
+		ArrayList<AdmissionType> admissionTypes = admissionTypeBrowserManager.getAdmissionType();
+		assertThat(admissionTypes).hasSize(1);
+		assertThat(admissionTypes.get(0).getDescription()).isEqualTo("TestDescription");
+	}
+
+	@Test
+	public void mgrUpdateAdmissionType() throws Exception {
+		String code = _setupTestAdmissionType(false);
+		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findOne(code);
+		foundAdmissionType.setDescription("Update");
+		boolean result = admissionTypeBrowserManager.updateAdmissionType(foundAdmissionType);
+		assertThat(result).isTrue();
+		AdmissionType updateAdmissionType = admissionTypeIoOperationRepository.findOne(code);
+		assertThat(updateAdmissionType.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void admissionTypeEqualHashToString() throws Exception {
+		String code = _setupTestAdmissionType(false);
+		AdmissionType admissionType = admissionTypeIoOperationRepository.findOne(code);
+		AdmissionType admissionType2 = new AdmissionType("someCode", "someDescription");
+		assertThat(admissionType.equals(admissionType)).isTrue();
+		assertThat(admissionType.equals(admissionType2)).isFalse();
+		assertThat(admissionType.equals(new String("xyzzy"))).isFalse();
+		admissionType2.setCode(code);
+		assertThat(admissionType.equals(admissionType2)).isTrue();
+
+		assertThat(admissionType.hashCode()).isPositive();
+
+		assertThat(admissionType2.toString()).isEqualTo("someDescription");
+	}
+
+	@Test
+	public void mgrValidation() throws Exception {
+		String code = _setupTestAdmissionType(false);
+		AdmissionType admissionType = admissionTypeIoOperationRepository.findOne(code);
+
+		// Empty string
+		admissionType.setCode("");
+		assertThatThrownBy(() -> admissionTypeBrowserManager.updateAdmissionType(admissionType))
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// Code is too long
+		admissionType.setCode("123456789ABCDEF");
+		assertThatThrownBy(() -> admissionTypeBrowserManager.updateAdmissionType(admissionType))
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// Description is empty
+		admissionType.setCode(code);
+		String description = admissionType.getDescription();
+		admissionType.setDescription("");
+		assertThatThrownBy(() -> admissionTypeBrowserManager.updateAdmissionType(admissionType))
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// Code already exists
+		admissionType.setDescription(description);
+		assertThatThrownBy(() -> admissionTypeBrowserManager.newAdmissionType(admissionType))
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+
+	}
+
+	@Test
+	public void mgrNewAdmissionType() throws Exception {
+		AdmissionType admissionType = testAdmissionType.setup(true);
+		boolean result = admissionTypeBrowserManager.newAdmissionType(admissionType);
+		assertThat(result).isTrue();
+		_checkAdmissionTypeIntoDb(admissionType.getCode());
+	}
+
+	@Test
+	public void mgrIsCodePresent() throws Exception {
+		String code = _setupTestAdmissionType(false);
+		boolean result = admissionTypeBrowserManager.codeControl(code);
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void mgrDeleteAdmissionType() throws Exception {
+		String code = _setupTestAdmissionType(false);
+		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findOne(code);
+		boolean result = admissionTypeBrowserManager.deleteAdmissionType(foundAdmissionType);
+		assertThat(result).isTrue();
+		result = admissionTypeBrowserManager.codeControl(code);
 		assertThat(result).isFalse();
 	}
 
