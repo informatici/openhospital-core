@@ -22,14 +22,19 @@
 package org.isf.disctype.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 
+import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
+import org.isf.disctype.manager.DischargeTypeBrowserManager;
 import org.isf.disctype.model.DischargeType;
 import org.isf.disctype.service.DischargeTypeIoOperation;
 import org.isf.disctype.service.DischargeTypeIoOperationRepository;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,6 +48,8 @@ public class Tests extends OHCoreTestCase {
 	DischargeTypeIoOperation dischargeTypeIoOperation;
 	@Autowired
 	DischargeTypeIoOperationRepository dischargeTypeIoOperationRepository;
+	@Autowired
+	DischargeTypeBrowserManager dischargeTypeBrowserManager;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -108,6 +115,119 @@ public class Tests extends OHCoreTestCase {
 		assertThat(result).isTrue();
 		DischargeType updateDischargeType = dischargeTypeIoOperationRepository.findOne(code);
 		assertThat(updateDischargeType.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void mgrGetDischargeType() throws Exception {
+		String code = _setupTestDischargeType(false);
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		ArrayList<DischargeType> dischargeTypes = dischargeTypeBrowserManager.getDischargeType();
+		assertThat(dischargeTypes.get(dischargeTypes.size() - 1).getDescription()).isEqualTo(foundDischargeType.getDescription());
+	}
+
+	@Test
+	public void mgrNewDischargeType() throws Exception {
+		DischargeType dischargeType = testDischargeType.setup(true);
+		boolean result = dischargeTypeBrowserManager.newDischargeType(dischargeType);
+		assertThat(result).isTrue();
+		_checkDischargeTypeIntoDb(dischargeType.getCode());
+	}
+
+	@Test
+	public void mgrIsCodePresent() throws Exception {
+		String code = _setupTestDischargeType(false);
+		boolean result = dischargeTypeBrowserManager.codeControl(code);
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void mgrDeleteDischargeType() throws Exception {
+		String code = _setupTestDischargeType(false);
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		boolean result = dischargeTypeBrowserManager.deleteDischargeType(foundDischargeType);
+		assertThat(result).isTrue();
+		result = dischargeTypeBrowserManager.codeControl(code);
+		assertThat(result).isFalse();
+	}
+
+	@Test
+	public void mgrUpdateDischargeType() throws Exception {
+		String code = _setupTestDischargeType(false);
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		foundDischargeType.setDescription("Update");
+		boolean result = dischargeTypeBrowserManager.updateDischargeType(foundDischargeType);
+		assertThat(result).isTrue();
+		DischargeType updateDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		assertThat(updateDischargeType.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void mgrValidateDeleteDischargeType() throws Exception {
+		DischargeType dischargeType = new DischargeType("D", "TestDescription");
+		dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(dischargeType.getCode());
+		assertThatThrownBy(() -> dischargeTypeBrowserManager.deleteDischargeType(foundDischargeType))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+	}
+
+	@Test
+	public void mgrValidateDischargeType() throws Exception {
+		String code = _setupTestDischargeType(false);
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		foundDischargeType.setDescription("Update");
+		boolean result = dischargeTypeBrowserManager.updateDischargeType(foundDischargeType);
+		// empty string
+		foundDischargeType.setCode("");
+		assertThatThrownBy(() -> dischargeTypeBrowserManager.updateDischargeType(foundDischargeType))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// too long
+		foundDischargeType.setCode("123456789ABCDEF");
+		assertThatThrownBy(() -> dischargeTypeBrowserManager.updateDischargeType(foundDischargeType))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// key already exists
+		foundDischargeType.setCode(code);
+		assertThatThrownBy(() -> dischargeTypeBrowserManager.newDischargeType(foundDischargeType))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// description empty
+		foundDischargeType.setDescription("");
+		assertThatThrownBy(() -> dischargeTypeBrowserManager.updateDischargeType(foundDischargeType))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+	}
+
+	@Test
+	public void dischargeTypeEqualHashToString() throws Exception {
+		String code = _setupTestDischargeType(false);
+		DischargeType dischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		DischargeType dischargeType2 = new DischargeType("someCode", "someDescription");
+		assertThat(dischargeType.equals(dischargeType)).isTrue();
+		assertThat(dischargeType.equals(dischargeType2)).isFalse();
+		assertThat(dischargeType.equals(new String("xyzzy"))).isFalse();
+		dischargeType2.setCode(code);
+		assertThat(dischargeType.equals(dischargeType2)).isTrue();
+
+		assertThat(dischargeType.hashCode()).isPositive();
+
+		assertThat(dischargeType2.toString()).isEqualTo("someDescription");
 	}
 
 	private String _setupTestDischargeType(boolean usingSet) throws OHException {
