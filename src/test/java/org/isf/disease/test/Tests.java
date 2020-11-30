@@ -22,16 +22,21 @@
 package org.isf.disease.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 
+import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
+import org.isf.disease.manager.DiseaseBrowserManager;
 import org.isf.disease.model.Disease;
 import org.isf.disease.service.DiseaseIoOperationRepository;
 import org.isf.disease.service.DiseaseIoOperations;
 import org.isf.distype.model.DiseaseType;
 import org.isf.distype.service.DiseaseTypeIoOperationRepository;
 import org.isf.distype.test.TestDiseaseType;
+import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -48,6 +53,8 @@ public class Tests extends OHCoreTestCase {
 	DiseaseIoOperations diseaseIoOperation;
 	@Autowired
 	DiseaseIoOperationRepository diseaseIoOperationRepository;
+	@Autowired
+	DiseaseBrowserManager diseaseBrowserManager;
 	@Autowired
 	DiseaseTypeIoOperationRepository diseaseTypeIoOperationRepository;
 
@@ -181,6 +188,194 @@ public class Tests extends OHCoreTestCase {
 		Disease foundDisease = diseaseIoOperation.getDiseaseByCode(Integer.valueOf(code));
 		boolean result = diseaseIoOperation.isDescriptionPresent(foundDisease.getDescription(), foundDisease.getType().getCode());
 		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void mgrGetDiseaseByCode() throws Exception {
+		String code = _setupTestDisease(false);
+		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.valueOf(code));
+		testDisease.check(foundDisease);
+	}
+
+	@Test
+	public void mgrGetDiseases() throws Exception {
+		String code = _setupTestDisease(false);
+		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.valueOf(code));
+
+		ArrayList<Disease> diseases = diseaseBrowserManager.getDisease(foundDisease.getType().getCode());
+		assertThat(diseases).contains(foundDisease);
+
+		diseases = diseaseBrowserManager.getDiseaseOpd(foundDisease.getType().getCode());
+		assertThat(diseases).doesNotContain(foundDisease);
+		foundDisease.setOpdInclude(true);
+		diseaseIoOperationRepository.saveAndFlush(foundDisease);
+		diseases = diseaseBrowserManager.getDiseaseOpd(foundDisease.getType().getCode());
+		assertThat(diseases).contains(foundDisease);
+
+		foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.valueOf(code));
+		diseases = diseaseBrowserManager.getDiseaseIpdIn();
+		assertThat(diseases).doesNotContain(foundDisease);
+		foundDisease.setOpdInclude(true);
+		foundDisease.setIpdInInclude(true);
+		diseaseIoOperationRepository.saveAndFlush(foundDisease);
+		diseases = diseaseBrowserManager.getDiseaseOpd();
+		assertThat(diseases).contains(foundDisease);
+
+		foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.valueOf(code));
+		diseases = diseaseBrowserManager.getDiseaseIpdOut(foundDisease.getType().getCode());
+		assertThat(diseases).doesNotContain(foundDisease);
+		foundDisease.setOpdInclude(true);
+		foundDisease.setIpdInInclude(true);
+		foundDisease.setIpdOutInclude(true);
+		diseaseIoOperationRepository.saveAndFlush(foundDisease);
+		diseases = diseaseBrowserManager.getDiseaseIpdOut();
+		assertThat(diseases).contains(foundDisease);
+
+		diseases = diseaseBrowserManager.getDiseaseIpdIn();
+		assertThat(diseases).contains(foundDisease);
+
+		diseases = diseaseBrowserManager.getDiseaseIpdOut(foundDisease.getType().getCode());
+		assertThat(diseases).contains(foundDisease);
+
+		diseases = diseaseBrowserManager.getDiseaseIpdIn(foundDisease.getType().getCode());
+		assertThat(diseases).contains(foundDisease);
+
+		diseases = diseaseBrowserManager.getDiseaseAll();
+		assertThat(diseases).contains(foundDisease);
+
+		diseases = diseaseBrowserManager.getDisease();
+		assertThat(diseases).contains(foundDisease);
+	}
+
+	@Test
+	public void mgrNewDisease() throws Exception {
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+		Disease disease = testDisease.setup(diseaseType, true);
+		boolean result = diseaseBrowserManager.newDisease(disease);
+		assertThat(result).isTrue();
+		_checkDiseaseIntoDb(disease.getCode());
+	}
+
+	@Test
+	public void mgrUpdateDisease() throws Exception {
+		String code = _setupTestDisease(false);
+		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.valueOf(code));
+		foundDisease.setDescription("Update");
+		boolean result = diseaseBrowserManager.updateDisease(foundDisease);
+		assertThat(result).isTrue();
+		Disease updateDisease = diseaseBrowserManager.getDiseaseByCode(Integer.valueOf(code));
+		assertThat(updateDisease.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void mgrHasDiseaseModified() throws Exception {
+		String code = _setupTestDisease(false);
+		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.valueOf(code));
+		boolean result = diseaseBrowserManager.deleteDisease(foundDisease);
+		assertThat(result).isTrue();
+		assertThat(foundDisease.getIpdInInclude()).isFalse();
+		assertThat(foundDisease.getIpdOutInclude()).isFalse();
+	}
+
+	@Test
+	public void mgrDeleteDisease() throws Exception {
+		String code = _setupTestDisease(false);
+		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.valueOf(code));
+		boolean result = diseaseBrowserManager.deleteDisease(foundDisease);
+		assertThat(result).isTrue();
+		assertThat(foundDisease.getIpdInInclude()).isFalse();
+		assertThat(foundDisease.getIpdOutInclude()).isFalse();
+		assertThat(foundDisease.getOpdInclude()).isFalse();
+	}
+
+	@Test
+	public void mgrIsCodePresent() throws Exception {
+		String code = _setupTestDisease(false);
+		boolean result = diseaseBrowserManager.codeControl(code);
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void mgrIsDescriptionPresent() throws Exception {
+		String code = _setupTestDisease(false);
+		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.valueOf(code));
+		boolean result = diseaseBrowserManager.descriptionControl(foundDisease.getDescription(), foundDisease.getType().getCode());
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void diseaseEqualHashToString() throws Exception {
+		String code = _setupTestDisease(false);
+		Disease disease = diseaseBrowserManager.getDiseaseByCode(Integer.valueOf(code));
+		DiseaseType diseaseType2 = testDiseaseType.setup(false);
+		Disease disease2 = new Disease("998", "someDescription", diseaseType2);
+		assertThat(disease.equals(disease)).isTrue();
+		assertThat(disease.equals(disease2)).isFalse();
+		assertThat(disease.equals(new String("xyzzy"))).isFalse();
+		disease2.setCode(disease.getCode());
+		disease2.setType(disease.getType());
+		disease2.setDescription(disease.getDescription());
+		assertThat(disease.equals(disease2)).isTrue();
+
+		assertThat(disease.hashCode()).isPositive();
+
+		assertThat(disease2.toString()).isEqualTo(disease.getDescription());
+	}
+
+	@Test
+	public void getterSetter() throws Exception {
+		String code = _setupTestDisease(false);
+		Disease disease = diseaseBrowserManager.getDiseaseByCode(Integer.valueOf(code));
+		disease.setLock(-99);
+		assertThat(disease.getLock()).isEqualTo(-99);
+	}
+
+	@Test
+	public void mgrValidationUpdate() throws Exception {
+		DiseaseType diseaseType = new DiseaseType("ZZ", "TestDescription");
+		Disease disease = testDisease.setup(diseaseType, false);
+		String code = disease.getCode();
+		// code = ""
+		disease.setCode("");
+		assertThatThrownBy(() -> diseaseBrowserManager.newDisease(disease))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// code is too long
+		disease.setCode("12345678901234567");
+		assertThatThrownBy(() -> diseaseBrowserManager.newDisease(disease))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// description = ""
+		disease.setCode(code);
+		disease.setDescription("");
+		assertThatThrownBy(() -> diseaseBrowserManager.updateDisease(disease))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+	}
+
+	@Test
+	public void mgrValidationInsert() throws Exception {
+		String code = _setupTestDisease(false);
+		Disease disease = diseaseBrowserManager.getDiseaseByCode(Integer.valueOf(code));
+		// code already exists and same description used
+		DiseaseType diseaseType = new DiseaseType("ZZ", "TestDescription");
+		Disease disease2 = testDisease.setup(diseaseType, false);
+		disease2.setCode(code);
+		assertThatThrownBy(() -> diseaseBrowserManager.newDisease(disease2))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 2), "Expecting two validation errors")
+				);
 	}
 
 	private String _setupTestDisease(boolean usingSet) throws Exception {
