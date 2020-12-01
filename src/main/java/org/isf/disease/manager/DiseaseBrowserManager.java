@@ -240,7 +240,7 @@ public class DiseaseBrowserManager {
 	 * @throws OHServiceException
 	 */
 	protected void validateDisease(Disease disease, boolean insert) throws OHServiceException {
-		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (insert) {
 			String key = disease.getCode();

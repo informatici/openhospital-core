@@ -120,7 +120,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetDiseaseType() throws Exception {
+	public void testMgrGetDiseaseType() throws Exception {
 		String code = _setupTestDiseaseType(false);
 		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getOne(code);
 		ArrayList<DiseaseType> diseaseTypes = diseaseTypeBrowserManager.getDiseaseType();
@@ -129,7 +129,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrUpdateDiseaseType() throws Exception {
+	public void testMgrUpdateDiseaseType() throws Exception {
 		String code = _setupTestDiseaseType(false);
 		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getOne(code);
 		foundDiseaseType.setDescription("Update");
@@ -140,7 +140,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrNewDiseaseType() throws Exception {
+	public void testMgrNewDiseaseType() throws Exception {
 		DiseaseType diseaseType = testDiseaseType.setup(true);
 		boolean result = diseaseTypeBrowserManager.newDiseaseType(diseaseType);
 		assertThat(result).isTrue();
@@ -148,14 +148,14 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrIsCodePresent() throws Exception {
+	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestDiseaseType(false);
 		boolean result = diseaseTypeBrowserManager.codeControl(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
-	public void mgrDeleteDiseaseType() throws Exception {
+	public void testMgrDeleteDiseaseType() throws Exception {
 		String code = _setupTestDiseaseType(false);
 		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getOne(code);
 		boolean result = diseaseTypeBrowserManager.deleteDiseaseType(foundDiseaseType);
@@ -164,7 +164,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrValidateDiseaseType() throws Exception {
+	public void testMgrValidateDiseaseType() throws Exception {
 		DiseaseType diseaseType = new DiseaseType("ZZ", "TestDescription");
 		String code = diseaseType.getCode();
 		// code = ""
@@ -195,7 +195,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrValidationInsert() throws Exception {
+	public void testMgrValidationInsert() throws Exception {
 		String code = _setupTestDiseaseType(false);
 		DiseaseType diseaseType = diseaseTypeIoOperationRepository.getOne(code);
 		// code already exists
@@ -210,7 +210,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void diseaseTypeEqualHashToString() throws Exception {
+	public void testDiseaseTypeEqualHashToString() throws Exception {
 		String code = _setupTestDiseaseType(false);
 		DiseaseType diseaseType = diseaseTypeIoOperationRepository.getOne(code);
 		DiseaseType diseaseType2 = new DiseaseType("code", "description");
