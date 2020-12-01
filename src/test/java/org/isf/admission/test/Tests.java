@@ -160,7 +160,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void test_simple_getAdmittedPatients() throws Exception {
+	public void testSimpleGetAdmittedPatients() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
@@ -170,7 +170,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void test_getAdmittedPatient_with_dateRanges() throws Exception {
+	public void testGetAdmittedPatientWithDateRanges() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
@@ -475,14 +475,14 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void loadAdmittedPatientNotThere() throws Exception {
+	public void testIoLoadAdmittedPatientNotThere() throws Exception {
 		assertThat(admissionIoOperation.loadAdmittedPatient(-1)).isNull();
 	}
 
 	@Ignore
 	@Test
 	@Transactional
-	public void loadAdmittedPatient() throws Exception {
+	public void testIoLoadAdmittedPatient() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission admission = admissionIoOperation.getAdmission(id);
 		assertThat(admission).isNotNull();
@@ -490,7 +490,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void getNextYProgMaternityWard() throws Exception {
+	public void testIoGetNextYProgMaternityWard() throws Exception {
 		int id = _setupTestAdmission(false, true);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		int next = admissionIoOperation.getNextYProg(foundAdmission.getWard().getCode());
@@ -499,7 +499,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void getNextYProgMaternityWardRestartInJune() throws Exception {
+	public void testIoGetNextYProgMaternityWardRestartInJune() throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = true;
 		int id = _setupTestAdmission(false, true);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
@@ -509,7 +509,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void gettersSettersAdmission() throws Exception {
+	public void testAdmissionGettersSetters() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		Patient foundPatient = foundAdmission.getPatient();
@@ -532,7 +532,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void gettersSettersAdmittedPatient() throws Exception {
+	public void testAdmittedPatientGettersSetters() throws Exception {
 		int id = _setupTestAdmission(false);
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
 		assertThat(patients).hasSize(1);
@@ -550,7 +550,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrSimpleGetAdmittedPatients() throws Exception {
+	public void testMgrSimpleGetAdmittedPatients() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
@@ -560,7 +560,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetAdmittedPatientWithDateRanges() throws Exception {
+	public void testMgrGetAdmittedPatientWithDateRanges() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		List<AdmittedPatient> patients = admissionBrowserManager.getAdmittedPatients();
@@ -616,7 +616,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetAdmittedPatients() throws Exception {
+	public void testMgrGetAdmittedPatients() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		List<AdmittedPatient> patients = admissionBrowserManager.getAdmittedPatients();
@@ -626,7 +626,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetAdmittedPatientsShouldFindByOneOfFieldsLikeFirstName() throws Exception {
+	public void testMgrGetAdmittedPatientsShouldFindByOneOfFieldsLikeFirstName() throws Exception {
 		// given:
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -640,7 +640,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetAdmittedPatientsShouldFindByOneOfFieldsLikeLastName() throws Exception {
+	public void testMgrGetAdmittedPatientsShouldFindByOneOfFieldsLikeLastName() throws Exception {
 		// given:
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -654,7 +654,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetAdmittedPatientsShouldFindByOneOfFieldsLikeNote() throws Exception {
+	public void testMgrGetAdmittedPatientsShouldFindByOneOfFieldsLikeNote() throws Exception {
 		// given:
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -668,7 +668,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetAdmittedPatientsShouldFindByOneOfFieldsLikeTaxCode() throws Exception {
+	public void testMgrGetAdmittedPatientsShouldFindByOneOfFieldsLikeTaxCode() throws Exception {
 		// given:
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -682,7 +682,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetAdmittedPatientsShouldFindByOneOfFieldsLikeId() throws Exception {
+	public void testMgrGetAdmittedPatientsShouldFindByOneOfFieldsLikeId() throws Exception {
 		// given:
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -696,7 +696,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetAdmittedPatientsShouldNotFindAnythingWhenNotExistingWordProvided() throws Exception {
+	public void testMgrGetAdmittedPatientsShouldNotFindAnythingWhenNotExistingWordProvided() throws Exception {
 		// given:
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -709,7 +709,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetAdmittedPatientsShouldNotFindWhenAdmissionOutsideOfDateRange() throws Exception {
+	public void testMgrGetAdmittedPatientsShouldNotFindWhenAdmissionOutsideOfDateRange() throws Exception {
 		// given:
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -731,7 +731,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetAdmittedPatientsShouldNotFindWhenDischargeOutsideOfDateRange() throws Exception {
+	public void testMgrGetAdmittedPatientsShouldNotFindWhenDischargeOutsideOfDateRange() throws Exception {
 		// given:
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -753,12 +753,12 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrLoadAdmittedPatientsNotThere() throws Exception {
+	public void testMgrLoadAdmittedPatientsNotThere() throws Exception {
 		assertThat(admissionBrowserManager.loadAdmittedPatients(-1)).isNull();
 	}
 
 	@Test
-	public void mgrGetCurrentAdmission() throws Exception {
+	public void testMgrGetCurrentAdmission() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		foundAdmission.setDisDate(null);
@@ -767,7 +767,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetAdmissions() throws Exception {
+	public void testMgrGetAdmissions() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		List<Admission> admissions = admissionBrowserManager.getAdmissions(foundAdmission.getPatient());
@@ -775,7 +775,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetNextYProg() throws Exception {
+	public void testMgrGetNextYProg() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		int next = admissionBrowserManager.getNextYProg(foundAdmission.getWard().getCode());
@@ -784,7 +784,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetNextYProgMaternityWard() throws Exception {
+	public void testMgrGetNextYProgMaternityWard() throws Exception {
 		int id = _setupTestAdmission(false, true);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		int next = admissionBrowserManager.getNextYProg(foundAdmission.getWard().getCode());
@@ -793,7 +793,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetNextYProgMaternityWardRestartInJune() throws Exception {
+	public void testMgrGetNextYProgMaternityWardRestartInJune() throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = true;
 		int id = _setupTestAdmission(false, true);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
@@ -803,7 +803,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetAdmissionType() throws Exception {
+	public void testMgrGetAdmissionType() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		List<AdmissionType> admissionTypes = admissionBrowserManager.getAdmissionType();
@@ -811,7 +811,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetDischargeType() throws Exception {
+	public void testMgrGetDischargeType() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		List<DischargeType> dischargeTypes = admissionBrowserManager.getDischargeType();
@@ -819,7 +819,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrNewAdmission() throws Exception {
+	public void testMgrNewAdmission() throws Exception {
 		Admission admission = buildNewAdmission();
 		boolean result = admissionBrowserManager.newAdmission(admission);
 		assertThat(result).isTrue();
@@ -828,7 +828,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrNewAdmissionReturnKey() throws Exception {
+	public void testMgrNewAdmissionReturnKey() throws Exception {
 		GeneralData.LANGUAGE = "en";
 		int id = admissionBrowserManager.newAdmissionReturnKey(buildNewAdmission());
 		Admission admission = admissionBrowserManager.getAdmission(id);
@@ -836,7 +836,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrUpdateAdmission() throws Exception {
+	public void testMgrUpdateAdmission() throws Exception {
 		GeneralData.LANGUAGE = "en";
 		Admission admission = buildNewAdmission();
 		boolean result = admissionBrowserManager.newAdmission(admission);
@@ -849,7 +849,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrSetDeleted() throws Exception {
+	public void testMgrSetDeleted() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		boolean result = admissionBrowserManager.setDeleted(foundAdmission.getId());
@@ -857,7 +857,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetUsedWardBed() throws Exception {
+	public void testMgrGetUsedWardBed() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		int result = admissionBrowserManager.getUsedWardBed(foundAdmission.getWard().getCode());
@@ -866,7 +866,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	@Transactional // requires active session because of lazy loading of patient photo
-	public void mgrDeletePatientPhoto() throws Exception {
+	public void testMgrDeletePatientPhoto() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		boolean result = admissionBrowserManager.deletePatientPhoto(foundAdmission.getPatient().getCode());
@@ -875,7 +875,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrValidate() throws Exception {
+	public void testMgrValidate() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission admission = admissionBrowserManager.getAdmission(id);
 		GeneralData.LANGUAGE = "en";
@@ -987,7 +987,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void admissionEqualHash() throws Exception {
+	public void testAdmissionEqualHash() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission admission = admissionBrowserManager.getAdmission(id);
 		Admission admission2 = buildNewAdmission();
@@ -1005,7 +1005,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void admissionIoOperationRepositoryCustom() throws Exception {
+	public void testIoAdmissionIoOperationRepositoryCustom() throws Exception {
 		MyAdmissionIoOperationRepositoryCustom myAdmissionIoOperationRepositoryCustom = new MyAdmissionIoOperationRepositoryCustom();
 		AdmissionIoOperationRepositoryCustom.PatientAdmission patientAdmission =
 				new AdmissionIoOperationRepositoryCustom.PatientAdmission(1, 2);
