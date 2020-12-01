@@ -107,7 +107,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetAgeType() throws Exception {
+	public void testMgrGetAgeType() throws Exception {
 		String code = _setupTestAgeType(false);
 		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
 		ArrayList<AgeType> ageTypes = ageTypeBrowserManager.getAgeType();
@@ -116,7 +116,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrUpdateAgeType() throws Exception {
+	public void testMgrUpdateAgeType() throws Exception {
 		String code = _setupTestAgeType(false);
 		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
 		foundAgeType.setFrom(4);
@@ -131,7 +131,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetTypeByAge() throws Exception {
+	public void testMgrGetTypeByAge() throws Exception {
 		String code = _setupTestAgeType(false);
 		AgeType ageType = ageTypeIoOperationRepository.findOneByCode(code);
 		String foundCode = ageTypeBrowserManager.getTypeByAge(9);
@@ -141,7 +141,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetAgeTypeByCode() throws Exception {
+	public void testMgrGetAgeTypeByCode() throws Exception {
 		String code = _setupTestAgeType(false);
 		AgeType ageType = ageTypeIoOperationRepository.findOneByCode(code);
 		AgeType foundAgeType = ageTypeBrowserManager.getTypeByCode(9);
@@ -152,7 +152,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void ageTypeEqualHashToString() throws Exception {
+	public void testAgeTypeEqualHashToString() throws Exception {
 		String code = _setupTestAgeType(false);
 		AgeType ageType = ageTypeIoOperationRepository.findOneByCode(code);
 		AgeType ageType2 = new AgeType(ageType.getCode(), ageType.getDescription());
@@ -170,7 +170,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrValidation() throws Exception {
+	public void testMgrAgeTypeValidation() throws Exception {
 		String code = _setupTestAgeType(false);
 		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
 		foundAgeType.setFrom(0);

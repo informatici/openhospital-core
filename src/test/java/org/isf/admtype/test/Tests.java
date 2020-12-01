@@ -117,7 +117,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetAdmissionType() throws Exception {
+	public void testMgrGetAdmissionType() throws Exception {
 		String code = _setupTestAdmissionType(false);
 		ArrayList<AdmissionType> admissionTypes = admissionTypeBrowserManager.getAdmissionType();
 		assertThat(admissionTypes).hasSize(1);
@@ -125,7 +125,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrUpdateAdmissionType() throws Exception {
+	public void testMgrUpdateAdmissionType() throws Exception {
 		String code = _setupTestAdmissionType(false);
 		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findOne(code);
 		foundAdmissionType.setDescription("Update");
@@ -136,7 +136,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void admissionTypeEqualHashToString() throws Exception {
+	public void testAdmissionTypeEqualHashToString() throws Exception {
 		String code = _setupTestAdmissionType(false);
 		AdmissionType admissionType = admissionTypeIoOperationRepository.findOne(code);
 		AdmissionType admissionType2 = new AdmissionType("someCode", "someDescription");
@@ -152,7 +152,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrValidation() throws Exception {
+	public void testMgrAdmissionValidation() throws Exception {
 		String code = _setupTestAdmissionType(false);
 		AdmissionType admissionType = admissionTypeIoOperationRepository.findOne(code);
 
@@ -194,7 +194,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrNewAdmissionType() throws Exception {
+	public void testMgrNewAdmissionType() throws Exception {
 		AdmissionType admissionType = testAdmissionType.setup(true);
 		boolean result = admissionTypeBrowserManager.newAdmissionType(admissionType);
 		assertThat(result).isTrue();
@@ -202,14 +202,14 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrIsCodePresent() throws Exception {
+	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestAdmissionType(false);
 		boolean result = admissionTypeBrowserManager.codeControl(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
-	public void mgrDeleteAdmissionType() throws Exception {
+	public void testMgrDeleteAdmissionType() throws Exception {
 		String code = _setupTestAdmissionType(false);
 		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findOne(code);
 		boolean result = admissionTypeBrowserManager.deleteAdmissionType(foundAdmissionType);

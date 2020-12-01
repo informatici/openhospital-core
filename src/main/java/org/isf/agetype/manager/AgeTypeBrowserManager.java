@@ -27,8 +27,8 @@ import java.util.List;
 import org.isf.agetype.model.AgeType;
 import org.isf.agetype.service.AgeTypeIoOperations;
 import org.isf.generaldata.MessageBundle;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,72 +42,78 @@ public class AgeTypeBrowserManager {
 
 	/**
 	 * Returns all available age types.
+	 *
 	 * @return a list of {@link AgeType} or <code>null</code> if the operation fails.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public ArrayList<AgeType> getAgeType() throws OHServiceException {
-        return ioOperations.getAgeType();
+		return ioOperations.getAgeType();
 	}
 
 	/**
 	 * Updates the list of {@link AgeType}s.
+	 *
 	 * @param ageTypes the {@link AgeType}s to update.
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean updateAgeType(ArrayList<AgeType> ageTypes) throws OHServiceException {
-        validateAgeTypes(ageTypes);
-        return ioOperations.updateAgeType(ageTypes);
+		validateAgeTypes(ageTypes);
+		return ioOperations.updateAgeType(ageTypes);
 	}
 
-
-    /**
+	/**
 	 * Retrieves the {@link AgeType} code using the age value.
+	 *
 	 * @param age the age value.
 	 * @return the retrieved code, <code>null</code> if age value is out of any range.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public String getTypeByAge(int age) throws OHServiceException {
-        ArrayList<AgeType> ageTable = ioOperations.getAgeType();
+		ArrayList<AgeType> ageTable = ioOperations.getAgeType();
 
-        for (AgeType ageType : ageTable) {
+		for (AgeType ageType : ageTable) {
 
-            if (age >= ageType.getFrom() && age <= ageType.getTo()) {
-                return ageType.getCode();
-            }
-        }
-        return null;
+			if (age >= ageType.getFrom() && age <= ageType.getTo()) {
+				return ageType.getCode();
+			}
+		}
+		return null;
 	}
 
 	/**
 	 * Gets the {@link AgeType} from the code index.
+	 *
 	 * @param index the code index.
 	 * @return the retrieved element, <code>null</code> otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public AgeType getTypeByCode(int index) throws OHServiceException {
-        return ioOperations.getAgeTypeByCode(index);
+		return ioOperations.getAgeTypeByCode(index);
 	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 *
 	 * @param ageTypes
 	 * @throws OHDataValidationException
 	 */
-    protected void validateAgeTypes(ArrayList<AgeType> ageTypes) throws OHDataValidationException {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
-        for (int i = 1; i < ageTypes.size(); i++) {
-            if (ageTypes.get(i).getFrom() <= ageTypes.get(i-1).getTo()) {
-                errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),MessageBundle.getMessage("angal.agetype.rangesoverlappleasecheck"),
-                        OHSeverityLevel.ERROR));
-            }
-            if (ageTypes.get(i).getFrom() - ageTypes.get(i-1).getTo() > 1) {
-                errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),MessageBundle.getMessage("angal.agetype.rangesnotdefinedpleasecheck"),
-                        OHSeverityLevel.ERROR));
-            }
-        }
-        if (!errors.isEmpty()){
-	        throw new OHDataValidationException(errors);
-	    }
-    }
+	protected void validateAgeTypes(ArrayList<AgeType> ageTypes) throws OHDataValidationException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		for (int i = 1; i < ageTypes.size(); i++) {
+			if (ageTypes.get(i).getFrom() <= ageTypes.get(i - 1).getTo()) {
+				errors.add(
+						new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.agetype.rangesoverlappleasecheck"),
+								OHSeverityLevel.ERROR));
+			}
+			if (ageTypes.get(i).getFrom() - ageTypes.get(i - 1).getTo() > 1) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+						MessageBundle.getMessage("angal.agetype.rangesnotdefinedpleasecheck"),
+						OHSeverityLevel.ERROR));
+			}
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
+	}
 }
