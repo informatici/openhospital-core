@@ -118,7 +118,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetDeliveryType() throws Exception {
+	public void testMgrGetDeliveryType() throws Exception {
 		String code = _setupTestDeliveryType(false);
 		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
 		ArrayList<DeliveryType> deliveryTypes = deliveryTypeBrowserManager.getDeliveryType();
@@ -126,7 +126,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrUpdateDeliveryType() throws Exception {
+	public void testMgrUpdateDeliveryType() throws Exception {
 		String code = _setupTestDeliveryType(false);
 		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
 		foundDeliveryType.setDescription("Update");
@@ -137,7 +137,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrNewDeliveryType() throws Exception {
+	public void testMgrNewDeliveryType() throws Exception {
 		DeliveryType deliveryType = testDeliveryType.setup(true);
 		boolean result = deliveryTypeBrowserManager.newDeliveryType(deliveryType);
 		assertThat(result).isTrue();
@@ -145,14 +145,14 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void tmgrIsCodePresent() throws Exception {
+	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestDeliveryType(false);
 		boolean result = deliveryTypeBrowserManager.codeControl(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
-	public void mgrDeleteDeliveryType() throws Exception {
+	public void testMgrDeleteDeliveryType() throws Exception {
 		String code = _setupTestDeliveryType(false);
 		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
 		boolean result = deliveryTypeBrowserManager.deleteDeliveryType(foundDeliveryType);
@@ -162,7 +162,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrValidateDeliveryType() throws Exception {
+	public void testMgrDeliveryTypeValidate() throws Exception {
 		String code = _setupTestDeliveryType(false);
 		DeliveryType deliveryType = deliveryTypeIoOperationRepository.findOne(code);
 		deliveryType.setDescription("Update");
@@ -201,9 +201,8 @@ public class Tests extends OHCoreTestCase {
 				);
 	}
 
-
 	@Test
-	public void deliveryTypeEqualHashToString() throws Exception {
+	public void testDeliveryTypeEqualHashToString() throws Exception {
 		String code = _setupTestDeliveryType(false);
 		DeliveryType deliveryType = deliveryTypeIoOperationRepository.findOne(code);
 		DeliveryType deliveryType2 = new DeliveryType("someCode", "someDescription");

@@ -117,7 +117,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetDeliveryResultType() throws Exception {
+	public void testMgrGetDeliveryResultType() throws Exception {
 		String code = _setupTestDeliveryResultType(false);
 		DeliveryResultType foundDeliveryResultType = deliveryResultIoOperationRepository.findOne(code);
 		ArrayList<DeliveryResultType> foundDeliveryResultTypes = deliveryResultTypeBrowserManager.getDeliveryResultType();
@@ -125,7 +125,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrUpdateDeliveryResultType() throws Exception {
+	public void testMgrUpdateDeliveryResultType() throws Exception {
 		String code = _setupTestDeliveryResultType(false);
 		DeliveryResultType foundDeliveryResultType = deliveryResultIoOperationRepository.findOne(code);
 		foundDeliveryResultType.setDescription("Update");
@@ -136,7 +136,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrNewDeliveryResultType() throws Exception {
+	public void testMgrNewDeliveryResultType() throws Exception {
 		DeliveryResultType deliveryResultType = testDeliveryResultType.setup(true);
 		boolean result = deliveryResultTypeBrowserManager.newDeliveryResultType(deliveryResultType);
 		assertThat(result).isTrue();
@@ -144,14 +144,14 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrIsCodePresent() throws Exception {
+	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestDeliveryResultType(false);
 		boolean result = deliveryResultTypeBrowserManager.codeControl(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
-	public void mgrDeleteDeliveryResultType() throws Exception {
+	public void testMgrDeleteDeliveryResultType() throws Exception {
 		String code = _setupTestDeliveryResultType(false);
 		DeliveryResultType foundDeliveryResultType = deliveryResultIoOperationRepository.findOne(code);
 		boolean result = deliveryResultTypeBrowserManager.deleteDeliveryResultType(foundDeliveryResultType);
@@ -160,7 +160,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrValidateDischargeType() throws Exception {
+	public void testMgrDeliveryResultTypeValidate() throws Exception {
 		String code = _setupTestDeliveryResultType(false);
 		DeliveryResultType deliveryResultType = deliveryResultIoOperationRepository.findOne(code);
 		deliveryResultType.setDescription("Update");
@@ -200,7 +200,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void deliveryResultTypeHashToString() throws Exception {
+	public void testDeliveryResultTypeHashToString() throws Exception {
 		String code = _setupTestDeliveryResultType(false);
 		DeliveryResultType deliveryResultType = deliveryResultIoOperationRepository.findOne(code);
 		assertThat(deliveryResultType.hashCode()).isPositive();
