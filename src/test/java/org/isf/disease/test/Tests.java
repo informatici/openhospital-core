@@ -323,7 +323,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void getterSetter() throws Exception {
+	public void testDiseaseGetterSetter() throws Exception {
 		String code = _setupTestDisease(false);
 		Disease disease = diseaseBrowserManager.getDiseaseByCode(Integer.valueOf(code));
 		disease.setLock(-99);
