@@ -588,7 +588,7 @@ public class MedicalStockIoOperations {
 	}
 
 	/**
-	 * Retrieves lot referred to the specified {@link Medical}.
+	 * Retrieves lot referred to the specified {@link Medical}, expiring first on top
 	 * Lots with zero quantities will be stripped out
 	 * @param medical the medical.
 	 * @return a list of {@link Lot}.
