@@ -108,7 +108,6 @@ public class PrintReceipt {
 				}
 			} else {
 				logger.debug("printer was not found.");
-				logger.debug(defaultPrintService.toString());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
