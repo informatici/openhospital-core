@@ -238,7 +238,7 @@ public class MovStockInsertingManager {
 	}
 
 	/**
-	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}
+	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top
 	 * 
 	 * @param medical
 	 *            the medical.
