@@ -27,8 +27,8 @@ import java.util.List;
 import org.isf.disctype.model.DischargeType;
 import org.isf.disctype.service.DischargeTypeIoOperation;
 import org.isf.generaldata.MessageBundle;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,107 +42,110 @@ public class DischargeTypeBrowserManager {
 
 	/**
 	 * Method that returns all DischargeTypes in a list
-	 * 
+	 *
 	 * @return the list of all DischargeTypes (could be null)
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public ArrayList<DischargeType> getDischargeType() throws OHServiceException {
-        return ioOperations.getDischargeType();
+		return ioOperations.getDischargeType();
 	}
 
 	/**
 	 * Method that create a new DischargeType
-	 * 
+	 *
 	 * @param dischargeType
 	 * @return true - if the new DischargeType has been inserted
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean newDischargeType(DischargeType dischargeType) throws OHServiceException {
-        validateDischargeType(dischargeType, true);
-        return ioOperations.newDischargeType(dischargeType);
+		validateDischargeType(dischargeType, true);
+		return ioOperations.newDischargeType(dischargeType);
 	}
 
 	/**
 	 * Method that updates an already existing DischargeType
-	 * 
+	 *
 	 * @param dischargeType
 	 * @return true - if the existing DischargeType has been updated
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean updateDischargeType(DischargeType dischargeType) throws OHServiceException {
-        validateDischargeType(dischargeType, false);
-        return ioOperations.newDischargeType(dischargeType);
+		validateDischargeType(dischargeType, false);
+		return ioOperations.newDischargeType(dischargeType);
 	}
 
 	/**
 	 * Method that check if a DischargeType already exists
-	 * 
+	 *
 	 * @param code
 	 * @return true - if the DischargeType already exists
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean codeControl(String code) throws OHServiceException {
-        return ioOperations.isCodePresent(code);
+		return ioOperations.isCodePresent(code);
 	}
 
 	/**
 	 * Method that delete a DischargeType
-	 * 
+	 *
 	 * @param dischargeType
 	 * @return true - if the DischargeType has been deleted
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean deleteDischargeType(DischargeType dischargeType) throws OHServiceException {
-        validateDeleteDischargeType(dischargeType);
-        return ioOperations.deleteDischargeType(dischargeType);
+		validateDeleteDischargeType(dischargeType);
+		return ioOperations.deleteDischargeType(dischargeType);
 	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 *
 	 * @param dischargeType
 	 * @throws OHDataValidationException
 	 */
-    protected void validateDeleteDischargeType(DischargeType dischargeType) throws OHDataValidationException {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
-        if(dischargeType.getCode().equals("D")){
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.youcannotdeletethisrecord"),
-                    OHSeverityLevel.ERROR));
-        }
-        if (!errors.isEmpty()){
-	        throw new OHDataValidationException(errors);
-	    }
+	protected void validateDeleteDischargeType(DischargeType dischargeType) throws OHDataValidationException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		if (dischargeType.getCode().equals("D")) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.youcannotdeletethisrecord"),
+					OHSeverityLevel.ERROR));
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
 	}
-    
-    /**
+
+	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 *
 	 * @param dischargeType
 	 * @param insert <code>true</code> or updated <code>false</code>
 	 * @throws OHServiceException
 	 */
-    protected void validateDischargeType(DischargeType dischargeType, boolean insert) throws OHServiceException {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
-        String key = dischargeType.getCode();
-        if (key.equals("")){
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.pleaseinsertacode"),
-                    OHSeverityLevel.ERROR));
-        }
-        if (key.length()>10){
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.codetoolongmaxchars"),
-                    OHSeverityLevel.ERROR));
-        }
+	protected void validateDischargeType(DischargeType dischargeType, boolean insert) throws OHServiceException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		String key = dischargeType.getCode();
+		if (key.equals("")) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.pleaseinsertacode"),
+					OHSeverityLevel.ERROR));
+		}
+		if (key.length() > 10) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.codetoolongmaxchars"),
+					OHSeverityLevel.ERROR));
+		}
 
-        if(insert){
-            if(codeControl(key)){
-                errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.common.codealreadyinuse"),
-                        OHSeverityLevel.ERROR));
-            }
-        }
-        if (dischargeType.getDescription().equals("")){
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.pleaseinsertavaliddescription"),
-                    OHSeverityLevel.ERROR));
-        }
-        if (!errors.isEmpty()){
-	        throw new OHDataValidationException(errors);
-	    }
+		if (insert) {
+			if (codeControl(key)) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.common.codealreadyinuse"),
+						OHSeverityLevel.ERROR));
+			}
+		}
+		if (dischargeType.getDescription().equals("")) {
+			errors.add(
+					new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.pleaseinsertavaliddescription"),
+							OHSeverityLevel.ERROR));
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
 	}
 }
