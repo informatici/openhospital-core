@@ -164,10 +164,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrValidateDiseaseType() throws Exception {
+	public void testMgrValidateDiseaseTypeCodeEmpty() throws Exception {
 		DiseaseType diseaseType = new DiseaseType("ZZ", "TestDescription");
-		String code = diseaseType.getCode();
-		// code = ""
 		diseaseType.setCode("");
 		assertThatThrownBy(() -> diseaseTypeBrowserManager.newDiseaseType(diseaseType))
 				.isInstanceOf(OHDataValidationException.class)
@@ -175,7 +173,11 @@ public class Tests extends OHCoreTestCase {
 						new Condition<Throwable>(
 								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
 				);
-		// code is too long
+	}
+
+	@Test
+	public void testMgrValidateDiseaseTypeCodeTooLong() throws Exception {
+		DiseaseType diseaseType = new DiseaseType("ZZ", "TestDescription");
 		diseaseType.setCode("12345678901234567");
 		assertThatThrownBy(() -> diseaseTypeBrowserManager.newDiseaseType(diseaseType))
 				.isInstanceOf(OHDataValidationException.class)
@@ -183,8 +185,11 @@ public class Tests extends OHCoreTestCase {
 						new Condition<Throwable>(
 								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
 				);
-		// description = ""
-		diseaseType.setCode(code);
+	}
+
+	@Test
+	public void testMgrValidateDiseaseTypeDescriptionEmpty() throws Exception {
+		DiseaseType diseaseType = new DiseaseType("ZZ", "TestDescription");
 		diseaseType.setDescription("");
 		assertThatThrownBy(() -> diseaseTypeBrowserManager.newDiseaseType(diseaseType))
 				.isInstanceOf(OHDataValidationException.class)
