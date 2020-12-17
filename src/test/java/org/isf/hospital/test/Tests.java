@@ -23,7 +23,10 @@ package org.isf.hospital.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.lang.reflect.Method;
+
 import org.isf.OHCoreTestCase;
+import org.isf.hospital.manager.HospitalBrowsingManager;
 import org.isf.hospital.model.Hospital;
 import org.isf.hospital.service.HospitalIoOperationRepository;
 import org.isf.hospital.service.HospitalIoOperations;
@@ -41,6 +44,8 @@ public class Tests extends OHCoreTestCase {
 	HospitalIoOperations hospitalIoOperation;
 	@Autowired
 	HospitalIoOperationRepository hospitalIoOperationRepository;
+	@Autowired
+	HospitalBrowsingManager hospitalBrowsingManager;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -65,12 +70,90 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	public void testIoGetHospital() throws Exception {
+		String code = _setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		Hospital getHospital = hospitalIoOperation.getHospital();
+		assertThat(getHospital).isEqualTo(foundHospital);
+	}
+
+	@Test
 	public void testIoUpdateHospital() throws Exception {
 		String code = _setupTestHospital(false);
 		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
 		foundHospital.setDescription("Update");
 		Hospital updateHospital = hospitalIoOperation.updateHospital(foundHospital);
 		assertThat(updateHospital.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testIoGetHospitalCurrencyCod() throws Exception {
+		String code = _setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		String cod = hospitalIoOperation.getHospitalCurrencyCod();
+		assertThat(foundHospital.getCurrencyCod()).isEqualTo(cod);
+
+		foundHospital.setCurrencyCod(null);
+		Hospital updateHospital = hospitalIoOperation.updateHospital(foundHospital);
+		assertThat(updateHospital.getCurrencyCod()).isNull();
+	}
+
+	@Test
+	public void testIoHospitalSanitize() throws Exception {
+		Method method = hospitalIoOperation.getClass().getDeclaredMethod("sanitize", String.class);
+		method.setAccessible(true);
+		assertThat((String) method.invoke(hospitalIoOperation, "abc'de'f")).isEqualTo("abc''de''f");
+		assertThat((String) method.invoke(hospitalIoOperation, (String) null)).isNull();
+		assertThat((String) method.invoke(hospitalIoOperation, "abcdef")).isEqualTo("abcdef");
+	}
+
+	@Test
+	public void testMgrGetHospital() throws Exception {
+		String code = _setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		Hospital getHospital = hospitalBrowsingManager.getHospital();
+		assertThat(getHospital).isEqualTo(foundHospital);
+	}
+
+	@Test
+	public void testMgrUpdateHospital() throws Exception {
+		String code = _setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		foundHospital.setDescription("Update");
+		Hospital updateHospital = hospitalBrowsingManager.updateHospital(foundHospital);
+		assertThat(updateHospital.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testMgrGetHospitalCurrencyCod() throws Exception {
+		String code = _setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		String cod = hospitalBrowsingManager.getHospitalCurrencyCod();
+		assertThat(foundHospital.getCurrencyCod()).isEqualTo(cod);
+
+		foundHospital.setCurrencyCod(null);
+		Hospital updateHospital = hospitalBrowsingManager.updateHospital(foundHospital);
+		assertThat(updateHospital.getCurrencyCod()).isNull();
+	}
+
+	@Test
+	public void testHospitalGetterSetter() throws Exception {
+		String code = _setupTestHospital(false);
+		Hospital hospital = hospitalIoOperationRepository.findOne(code);
+
+		Integer lock = hospital.getLock();
+		hospital.setLock(-1);
+		assertThat(hospital.getLock()).isEqualTo(-1);
+	}
+
+	@Test
+	public void testHospitalHashToString() throws Exception {
+		String code = _setupTestHospital(false);
+		Hospital hospital = hospitalIoOperationRepository.findOne(code);
+
+		assertThat(hospital.hashCode()).isPositive();
+
+		assertThat(hospital.toString()).isEqualTo(hospital.getDescription());
 	}
 
 	private String _setupTestHospital(boolean usingSet) throws OHException {
