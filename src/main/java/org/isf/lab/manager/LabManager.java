@@ -58,7 +58,6 @@ public class LabManager {
 
 
 	protected HashMap<String, String> materialHashMap;
-	protected String abcdefg;
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
