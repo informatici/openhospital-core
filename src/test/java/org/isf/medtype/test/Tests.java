@@ -22,13 +22,17 @@
 package org.isf.medtype.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 
 import org.isf.OHCoreTestCase;
+import org.isf.medtype.manager.MedicalTypeBrowserManager;
 import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.service.MedicalTypeIoOperation;
 import org.isf.medtype.service.MedicalTypeIoOperationRepository;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -43,6 +47,8 @@ public class Tests extends OHCoreTestCase {
 	MedicalTypeIoOperation medicalTypeIoOperation;
 	@Autowired
 	MedicalTypeIoOperationRepository medicalTypeIoOperationRepository;
+	@Autowired
+	MedicalTypeBrowserManager medicalTypeBrowserManager;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -108,6 +114,117 @@ public class Tests extends OHCoreTestCase {
 		assertThat(result).isTrue();
 		result = medicalTypeIoOperation.isCodePresent(code);
 		assertThat(result).isFalse();
+	}
+
+	@Test
+	public void testMgrGetMedicalType() throws Exception {
+		String code = _setupTestMedicalType(false);
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		ArrayList<MedicalType> medicalTypes = medicalTypeBrowserManager.getMedicalType();
+		assertThat(medicalTypes.get(medicalTypes.size() - 1).getDescription()).isEqualTo(foundMedicalType.getDescription());
+	}
+
+	@Test
+	public void testMgrUpdateMedicalType() throws Exception {
+		String code = _setupTestMedicalType(false);
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		foundMedicalType.setDescription("Update");
+		assertThat(medicalTypeBrowserManager.updateMedicalType(foundMedicalType)).isTrue();
+		MedicalType updateMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		assertThat(updateMedicalType.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testMgrNewMedicalType() throws Exception {
+		MedicalType medicalType = testMedicalType.setup(true);
+		assertThat(medicalTypeBrowserManager.newMedicalType(medicalType)).isTrue();
+		_checkMedicalTypeIntoDb(medicalType.getCode());
+	}
+
+	@Test
+	public void testMgrIsCodePresent() throws Exception {
+		String code = _setupTestMedicalType(false);
+		assertThat(medicalTypeBrowserManager.codeControl(code)).isTrue();
+		assertThat(medicalTypeBrowserManager.codeControl("isNotThere")).isFalse();
+	}
+
+	@Test
+	public void testMgrDeleteMedicalType() throws Exception {
+		String code = _setupTestMedicalType(false);
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		assertThat(medicalTypeBrowserManager.deleteMedicalType(foundMedicalType)).isTrue();
+		assertThat(medicalTypeBrowserManager.codeControl(code)).isFalse();
+	}
+
+	@Test
+	public void testMgrValidateMedicalTypeNoKey() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			MedicalType medicalType = new MedicalType("", "description");
+			medicalTypeBrowserManager.newMedicalType(medicalType);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateMedicalTypeKeyTooLong() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			MedicalType medicalType = new MedicalType("thisIsTooLong", "description");
+			medicalTypeBrowserManager.newMedicalType(medicalType);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateMedicalTypeNoDescription() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			MedicalType medicalType = new MedicalType("Z", "");
+			medicalTypeBrowserManager.newMedicalType(medicalType);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateMedicalTypeCodeAlreadyExists() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			String code = _setupTestMedicalType(false);
+			MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+			MedicalType medicalType = new MedicalType(foundMedicalType.getCode(), foundMedicalType.getDescription());
+			medicalTypeBrowserManager.newMedicalType(medicalType);
+		})
+				.isInstanceOf(OHDataIntegrityViolationException.class);
+	}
+
+	@Test
+	public void testMedicalTypeToString() throws Exception {
+		String code = _setupTestMedicalType(false);
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		assertThat(foundMedicalType.toString()).isEqualTo(foundMedicalType.getDescription());
+	}
+
+	@Test
+	public void testMedicalTypeEquals() throws Exception {
+		MedicalType medicalType1 = new MedicalType("Z", "description");
+		MedicalType medicalType2 = new MedicalType("A", "description");
+		MedicalType medicalType3 = new MedicalType("Z", "otherDescription");
+
+		assertThat(medicalType1.equals(medicalType1)).isTrue();
+		assertThat(medicalType1.equals(new Integer(1))).isFalse();
+		assertThat(medicalType1.equals(medicalType2)).isFalse();
+		assertThat(medicalType1.equals(medicalType3)).isFalse();
+	}
+
+	@Test
+	public void testMedicalTypeHashCode() throws Exception {
+		MedicalType medicalType = new MedicalType("Z", "description");
+		// compute value
+		int hashCode = medicalType.hashCode();
+		assertThat(hashCode).isPositive();
+		// used already computed value
+		assertThat(medicalType.hashCode()).isEqualTo(hashCode);
 	}
 
 	private String _setupTestMedicalType(boolean usingSet) throws OHException {
