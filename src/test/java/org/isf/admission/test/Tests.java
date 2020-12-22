@@ -479,7 +479,7 @@ public class Tests extends OHCoreTestCase {
 		assertThat(admissionIoOperation.loadAdmittedPatient(-1)).isNull();
 	}
 
-	@Ignore
+	//@Ignore
 	@Test
 	@Transactional
 	public void testIoLoadAdmittedPatient() throws Exception {
