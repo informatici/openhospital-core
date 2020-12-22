@@ -22,9 +22,11 @@
 package org.isf.malnutrition.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.within;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 import org.isf.OHCoreTestCase;
 import org.isf.admission.model.Admission;
@@ -48,6 +50,7 @@ import org.isf.dlvrrestype.test.TestDeliveryResultType;
 import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.dlvrtype.service.DeliveryTypeIoOperationRepository;
 import org.isf.dlvrtype.test.TestDeliveryType;
+import org.isf.malnutrition.manager.MalnutritionManager;
 import org.isf.malnutrition.model.Malnutrition;
 import org.isf.malnutrition.service.MalnutritionIoOperation;
 import org.isf.malnutrition.service.MalnutritionIoOperationRepository;
@@ -63,6 +66,7 @@ import org.isf.patient.test.TestPatient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperationRepository;
 import org.isf.pregtreattype.test.TestPregnantTreatmentType;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
@@ -92,6 +96,8 @@ public class Tests extends OHCoreTestCase {
 	MalnutritionIoOperation malnutritionIoOperation;
 	@Autowired
 	MalnutritionIoOperationRepository malnutritionIoOperationRepository;
+	@Autowired
+	MalnutritionManager malnutritionManager;
 	@Autowired
 	AdmissionIoOperationRepository admissionIoOperationRepository;
 	@Autowired
@@ -228,6 +234,483 @@ public class Tests extends OHCoreTestCase {
 		int code = _setupTestMalnutrition(false);
 		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findOne(code);
 		boolean result = malnutritionIoOperation.deleteMalnutrition(foundMalnutrition);
+		assertThat(result).isTrue();
+		result = malnutritionIoOperation.isCodePresent(code);
+		assertThat(result).isFalse();
+	}
+
+	// ===================================
+	@Test
+	public void testMgrGetMalnutrition() throws Exception {
+		int code = _setupTestMalnutrition(false);
+		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findOne(code);
+		ArrayList<Malnutrition> malnutritions = malnutritionManager.getMalnutrition(String.valueOf(foundMalnutrition.getAdmission().getId()));
+		assertThat(malnutritions.get(malnutritions.size() - 1).getCode()).isEqualTo(code);
+	}
+
+	@Test
+	public void testMgrGetLastMalnutrition() throws Exception {
+		int code = _setupTestMalnutrition(false);
+		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findOne(code);
+		Malnutrition malnutrition = malnutritionManager.getLastMalnutrition(foundMalnutrition.getAdmission().getId());
+		assertThat(malnutrition.getCode()).isEqualTo(code);
+	}
+
+	@Test
+	public void testMgrUpdateMalnutrition() throws Exception {
+		int code = _setupTestMalnutrition(false);
+		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findOne(code);
+		foundMalnutrition.setHeight(200);
+		Malnutrition result = malnutritionManager.updateMalnutrition(foundMalnutrition);
+		assertThat(result).isNotNull();
+		Malnutrition updateMalnutrition = malnutritionIoOperationRepository.findOne(code);
+		assertThat(updateMalnutrition.getHeight()).isCloseTo(200.0F, within(0.000001F));
+	}
+
+	@Test
+	public void testMgrNewMalnutrition() throws Exception {
+		Ward ward = testWard.setup(false);
+		Patient patient = testPatient.setup(true);
+		AdmissionType admissionType = testAdmissionType.setup(false);
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+		Disease diseaseIn = testDisease.setup(diseaseType, false);
+		Disease diseaseOut1 = testDisease.setup(diseaseType, false);
+		diseaseOut1.setCode("888");
+		Disease diseaseOut2 = testDisease.setup(diseaseType, false);
+		diseaseOut2.setCode("777");
+		Disease diseaseOut3 = testDisease.setup(diseaseType, false);
+		diseaseOut3.setCode("666");
+		OperationType operationType = testOperationType.setup(false);
+		Operation operation = testOperation.setup(operationType, false);
+		DischargeType dischargeType = testDischargeType.setup(false);
+		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
+		DeliveryType deliveryType = testDeliveryType.setup(false);
+		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
+				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+				deliveryType, deliveryResult, true);
+
+		wardIoOperationRepository.saveAndFlush(ward);
+		patientIoOperationRepository.saveAndFlush(patient);
+		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+		diseaseIoOperationRepository.saveAndFlush(diseaseIn);
+		diseaseIoOperationRepository.saveAndFlush(diseaseOut1);
+		diseaseIoOperationRepository.saveAndFlush(diseaseOut2);
+		diseaseIoOperationRepository.saveAndFlush(diseaseOut3);
+		operationTypeIoOperationRepository.saveAndFlush(operationType);
+		operationIoOperationRepository.saveAndFlush(operation);
+		dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
+		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
+		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
+		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+		admissionIoOperationRepository.saveAndFlush(admission);
+
+		Malnutrition malnutrition = testMalnutrition.setup(admission, true);
+		boolean result = malnutritionManager.newMalnutrition(malnutrition);
+		assertThat(result).isTrue();
+		_checkMalnutritionIntoDb(malnutrition.getCode());
+	}
+
+	@Test
+	public void testMgrNewMalnutritionValidateNoDateSupp() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			Ward ward = testWard.setup(false);
+			Patient patient = testPatient.setup(true);
+			AdmissionType admissionType = testAdmissionType.setup(false);
+			DiseaseType diseaseType = testDiseaseType.setup(false);
+			Disease diseaseIn = testDisease.setup(diseaseType, false);
+			Disease diseaseOut1 = testDisease.setup(diseaseType, false);
+			diseaseOut1.setCode("888");
+			Disease diseaseOut2 = testDisease.setup(diseaseType, false);
+			diseaseOut2.setCode("777");
+			Disease diseaseOut3 = testDisease.setup(diseaseType, false);
+			diseaseOut3.setCode("666");
+			OperationType operationType = testOperationType.setup(false);
+			Operation operation = testOperation.setup(operationType, false);
+			DischargeType dischargeType = testDischargeType.setup(false);
+			PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
+			DeliveryType deliveryType = testDeliveryType.setup(false);
+			DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
+					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+					deliveryType, deliveryResult, true);
+
+			wardIoOperationRepository.saveAndFlush(ward);
+			patientIoOperationRepository.saveAndFlush(patient);
+			admissionTypeIoOperationRepository.saveAndFlush(admissionType);
+			diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+			diseaseIoOperationRepository.saveAndFlush(diseaseIn);
+			diseaseIoOperationRepository.saveAndFlush(diseaseOut1);
+			diseaseIoOperationRepository.saveAndFlush(diseaseOut2);
+			diseaseIoOperationRepository.saveAndFlush(diseaseOut3);
+			operationTypeIoOperationRepository.saveAndFlush(operationType);
+			operationIoOperationRepository.saveAndFlush(operation);
+			dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
+			pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
+			deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
+			deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+			admissionIoOperationRepository.saveAndFlush(admission);
+
+			Malnutrition malnutrition = testMalnutrition.setup(admission, true);
+
+			malnutrition.setDateSupp(null);
+
+			malnutritionManager.newMalnutrition(malnutrition);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrNewMalnutritionValidateNoDateConf() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			Ward ward = testWard.setup(false);
+			Patient patient = testPatient.setup(true);
+			AdmissionType admissionType = testAdmissionType.setup(false);
+			DiseaseType diseaseType = testDiseaseType.setup(false);
+			Disease diseaseIn = testDisease.setup(diseaseType, false);
+			Disease diseaseOut1 = testDisease.setup(diseaseType, false);
+			diseaseOut1.setCode("888");
+			Disease diseaseOut2 = testDisease.setup(diseaseType, false);
+			diseaseOut2.setCode("777");
+			Disease diseaseOut3 = testDisease.setup(diseaseType, false);
+			diseaseOut3.setCode("666");
+			OperationType operationType = testOperationType.setup(false);
+			Operation operation = testOperation.setup(operationType, false);
+			DischargeType dischargeType = testDischargeType.setup(false);
+			PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
+			DeliveryType deliveryType = testDeliveryType.setup(false);
+			DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
+					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+					deliveryType, deliveryResult, true);
+
+			wardIoOperationRepository.saveAndFlush(ward);
+			patientIoOperationRepository.saveAndFlush(patient);
+			admissionTypeIoOperationRepository.saveAndFlush(admissionType);
+			diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+			diseaseIoOperationRepository.saveAndFlush(diseaseIn);
+			diseaseIoOperationRepository.saveAndFlush(diseaseOut1);
+			diseaseIoOperationRepository.saveAndFlush(diseaseOut2);
+			diseaseIoOperationRepository.saveAndFlush(diseaseOut3);
+			operationTypeIoOperationRepository.saveAndFlush(operationType);
+			operationIoOperationRepository.saveAndFlush(operation);
+			dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
+			pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
+			deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
+			deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+			admissionIoOperationRepository.saveAndFlush(admission);
+
+			Malnutrition malnutrition = testMalnutrition.setup(admission, true);
+
+			malnutrition.setDateConf(null);
+
+			malnutritionManager.newMalnutrition(malnutrition);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrNewMalnutritionValidateDatesOutOfOrder() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			Ward ward = testWard.setup(false);
+			Patient patient = testPatient.setup(true);
+			AdmissionType admissionType = testAdmissionType.setup(false);
+			DiseaseType diseaseType = testDiseaseType.setup(false);
+			Disease diseaseIn = testDisease.setup(diseaseType, false);
+			Disease diseaseOut1 = testDisease.setup(diseaseType, false);
+			diseaseOut1.setCode("888");
+			Disease diseaseOut2 = testDisease.setup(diseaseType, false);
+			diseaseOut2.setCode("777");
+			Disease diseaseOut3 = testDisease.setup(diseaseType, false);
+			diseaseOut3.setCode("666");
+			OperationType operationType = testOperationType.setup(false);
+			Operation operation = testOperation.setup(operationType, false);
+			DischargeType dischargeType = testDischargeType.setup(false);
+			PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
+			DeliveryType deliveryType = testDeliveryType.setup(false);
+			DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
+					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+					deliveryType, deliveryResult, true);
+
+			wardIoOperationRepository.saveAndFlush(ward);
+			patientIoOperationRepository.saveAndFlush(patient);
+			admissionTypeIoOperationRepository.saveAndFlush(admissionType);
+			diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+			diseaseIoOperationRepository.saveAndFlush(diseaseIn);
+			diseaseIoOperationRepository.saveAndFlush(diseaseOut1);
+			diseaseIoOperationRepository.saveAndFlush(diseaseOut2);
+			diseaseIoOperationRepository.saveAndFlush(diseaseOut3);
+			operationTypeIoOperationRepository.saveAndFlush(operationType);
+			operationIoOperationRepository.saveAndFlush(operation);
+			dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
+			pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
+			deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
+			deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+			admissionIoOperationRepository.saveAndFlush(admission);
+
+			Malnutrition malnutrition = testMalnutrition.setup(admission, true);
+
+			malnutrition.setDateConf(new GregorianCalendar(1, 1, 1));
+			malnutrition.setDateSupp(new GregorianCalendar(2, 2, 2));
+
+			malnutritionManager.newMalnutrition(malnutrition);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrNewMalnutritionValidateDatesNoWeight() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			Ward ward = testWard.setup(false);
+			Patient patient = testPatient.setup(true);
+			AdmissionType admissionType = testAdmissionType.setup(false);
+			DiseaseType diseaseType = testDiseaseType.setup(false);
+			Disease diseaseIn = testDisease.setup(diseaseType, false);
+			Disease diseaseOut1 = testDisease.setup(diseaseType, false);
+			diseaseOut1.setCode("888");
+			Disease diseaseOut2 = testDisease.setup(diseaseType, false);
+			diseaseOut2.setCode("777");
+			Disease diseaseOut3 = testDisease.setup(diseaseType, false);
+			diseaseOut3.setCode("666");
+			OperationType operationType = testOperationType.setup(false);
+			Operation operation = testOperation.setup(operationType, false);
+			DischargeType dischargeType = testDischargeType.setup(false);
+			PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
+			DeliveryType deliveryType = testDeliveryType.setup(false);
+			DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
+					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+					deliveryType, deliveryResult, true);
+
+			wardIoOperationRepository.saveAndFlush(ward);
+			patientIoOperationRepository.saveAndFlush(patient);
+			admissionTypeIoOperationRepository.saveAndFlush(admissionType);
+			diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+			diseaseIoOperationRepository.saveAndFlush(diseaseIn);
+			diseaseIoOperationRepository.saveAndFlush(diseaseOut1);
+			diseaseIoOperationRepository.saveAndFlush(diseaseOut2);
+			diseaseIoOperationRepository.saveAndFlush(diseaseOut3);
+			operationTypeIoOperationRepository.saveAndFlush(operationType);
+			operationIoOperationRepository.saveAndFlush(operation);
+			dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
+			pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
+			deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
+			deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+			admissionIoOperationRepository.saveAndFlush(admission);
+
+			Malnutrition malnutrition = testMalnutrition.setup(admission, true);
+
+			malnutrition.setWeight(0);
+
+			malnutritionManager.newMalnutrition(malnutrition);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrNewMalnutritionValidateDatesNoHeight() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			Ward ward = testWard.setup(false);
+			Patient patient = testPatient.setup(true);
+			AdmissionType admissionType = testAdmissionType.setup(false);
+			DiseaseType diseaseType = testDiseaseType.setup(false);
+			Disease diseaseIn = testDisease.setup(diseaseType, false);
+			Disease diseaseOut1 = testDisease.setup(diseaseType, false);
+			diseaseOut1.setCode("888");
+			Disease diseaseOut2 = testDisease.setup(diseaseType, false);
+			diseaseOut2.setCode("777");
+			Disease diseaseOut3 = testDisease.setup(diseaseType, false);
+			diseaseOut3.setCode("666");
+			OperationType operationType = testOperationType.setup(false);
+			Operation operation = testOperation.setup(operationType, false);
+			DischargeType dischargeType = testDischargeType.setup(false);
+			PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
+			DeliveryType deliveryType = testDeliveryType.setup(false);
+			DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
+					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+					deliveryType, deliveryResult, true);
+
+			wardIoOperationRepository.saveAndFlush(ward);
+			patientIoOperationRepository.saveAndFlush(patient);
+			admissionTypeIoOperationRepository.saveAndFlush(admissionType);
+			diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+			diseaseIoOperationRepository.saveAndFlush(diseaseIn);
+			diseaseIoOperationRepository.saveAndFlush(diseaseOut1);
+			diseaseIoOperationRepository.saveAndFlush(diseaseOut2);
+			diseaseIoOperationRepository.saveAndFlush(diseaseOut3);
+			operationTypeIoOperationRepository.saveAndFlush(operationType);
+			operationIoOperationRepository.saveAndFlush(operation);
+			dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
+			pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
+			deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
+			deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+			admissionIoOperationRepository.saveAndFlush(admission);
+
+			Malnutrition malnutrition = testMalnutrition.setup(admission, true);
+
+			malnutrition.setHeight(0);
+
+			malnutritionManager.newMalnutrition(malnutrition);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMalnutritionConstructor() throws Exception {
+		Ward ward = testWard.setup(false);
+		Patient patient = testPatient.setup(true);
+		AdmissionType admissionType = testAdmissionType.setup(false);
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+		Disease diseaseIn = testDisease.setup(diseaseType, false);
+		Disease diseaseOut1 = testDisease.setup(diseaseType, false);
+		diseaseOut1.setCode("888");
+		Disease diseaseOut2 = testDisease.setup(diseaseType, false);
+		diseaseOut2.setCode("777");
+		Disease diseaseOut3 = testDisease.setup(diseaseType, false);
+		diseaseOut3.setCode("666");
+		OperationType operationType = testOperationType.setup(false);
+		Operation operation = testOperation.setup(operationType, false);
+		DischargeType dischargeType = testDischargeType.setup(false);
+		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
+		DeliveryType deliveryType = testDeliveryType.setup(false);
+		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
+				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+				deliveryType, deliveryResult, true);
+
+		wardIoOperationRepository.saveAndFlush(ward);
+		patientIoOperationRepository.saveAndFlush(patient);
+		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+		diseaseIoOperationRepository.saveAndFlush(diseaseIn);
+		diseaseIoOperationRepository.saveAndFlush(diseaseOut1);
+		diseaseIoOperationRepository.saveAndFlush(diseaseOut2);
+		diseaseIoOperationRepository.saveAndFlush(diseaseOut3);
+		operationTypeIoOperationRepository.saveAndFlush(operationType);
+		operationIoOperationRepository.saveAndFlush(operation);
+		dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
+		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
+		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
+		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+		admissionIoOperationRepository.saveAndFlush(admission);
+
+		Malnutrition malnutrition = new Malnutrition(0, new GregorianCalendar(1, 1, 1),
+				new GregorianCalendar(1, 10, 11), admission, patient, 185.47f, 70.70f);
+		assertThat(malnutrition).isNotNull();
+		assertThat(malnutrition.getCode()).isZero();
+	}
+
+	@Test
+	public void testMalnutritionGetterSetter() throws Exception {
+		int code = _setupTestMalnutrition(false);
+		Malnutrition malnutrition = malnutritionIoOperationRepository.findOne(code);
+
+		malnutrition.setCode(-1);
+		assertThat(malnutrition.getCode()).isEqualTo(-1);
+
+		assertThat(malnutrition.getLock()).isZero();
+		malnutrition.setLock(-1);
+		assertThat(malnutrition.getLock()).isEqualTo(-1);
+	}
+
+	@Test
+	public void testMalnutritionEquals() throws Exception {
+		Ward ward = testWard.setup(false);
+		Patient patient = testPatient.setup(true);
+		AdmissionType admissionType = testAdmissionType.setup(false);
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+		Disease diseaseIn = testDisease.setup(diseaseType, false);
+		Disease diseaseOut1 = testDisease.setup(diseaseType, false);
+		diseaseOut1.setCode("888");
+		Disease diseaseOut2 = testDisease.setup(diseaseType, false);
+		diseaseOut2.setCode("777");
+		Disease diseaseOut3 = testDisease.setup(diseaseType, false);
+		diseaseOut3.setCode("666");
+		OperationType operationType = testOperationType.setup(false);
+		Operation operation = testOperation.setup(operationType, false);
+		DischargeType dischargeType = testDischargeType.setup(false);
+		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
+		DeliveryType deliveryType = testDeliveryType.setup(false);
+		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
+				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+				deliveryType, deliveryResult, true);
+
+		wardIoOperationRepository.saveAndFlush(ward);
+		patientIoOperationRepository.saveAndFlush(patient);
+		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+		diseaseIoOperationRepository.saveAndFlush(diseaseIn);
+		diseaseIoOperationRepository.saveAndFlush(diseaseOut1);
+		diseaseIoOperationRepository.saveAndFlush(diseaseOut2);
+		diseaseIoOperationRepository.saveAndFlush(diseaseOut3);
+		operationTypeIoOperationRepository.saveAndFlush(operationType);
+		operationIoOperationRepository.saveAndFlush(operation);
+		dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
+		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
+		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
+		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+		admissionIoOperationRepository.saveAndFlush(admission);
+
+		Malnutrition malnutrition1 = new Malnutrition(0, new GregorianCalendar(1, 1, 1),
+				new GregorianCalendar(1, 10, 11), admission, patient, 185.47f, 70.70f);
+
+		// matches itself
+		assertThat(malnutrition1.equals(malnutrition1)).isTrue();
+
+		// does not match because wrong class
+		assertThat(malnutrition1.equals(null)).isFalse();
+		assertThat(malnutrition1.equals(new Integer(1))).isFalse();
+
+		Malnutrition malnutrition2 = new Malnutrition(0, new GregorianCalendar(11, 1, 1),
+				new GregorianCalendar(11, 10, 11), admission, patient, 1185.47f, 170.70f);
+
+		// does not match because dates do not match
+		assertThat(malnutrition1.equals(malnutrition2)).isFalse();
+
+		Malnutrition malnutrition3 = new Malnutrition(0, new GregorianCalendar(111, 1, 1),
+				new GregorianCalendar(111, 10, 11), admission, patient, 4185.47f, 470.70f);
+
+		malnutrition2.setDateConf(null);
+		malnutrition2.setDateSupp(null);
+
+		malnutrition3.setDateConf(null);
+		malnutrition3.setDateSupp(null);
+
+		// dates are null but the height and weight do not match
+		assertThat(malnutrition2.equals(malnutrition3)).isFalse();
+
+		Malnutrition malnutrition4 = new Malnutrition(0, new GregorianCalendar(1, 1, 1),
+				new GregorianCalendar(1, 10, 11), admission, patient, 185.47f, 70.70f);
+
+		// matches because all the same values
+		assertThat(malnutrition4.equals(malnutrition1)).isTrue();
+	}
+
+	@Test
+	public void testMalnutritionHasCode() throws Exception {
+		int code = _setupTestMalnutrition(false);
+		Malnutrition malnutrition = malnutritionIoOperationRepository.findOne(code);
+		// compute first time
+		int hashCode = malnutrition.hashCode();
+		assertThat(hashCode).isEqualTo(23 * 133 + code);
+		// use stored value
+		assertThat(malnutrition.hashCode()).isEqualTo(23 * 133 + code);
+	}
+
+	@Test
+	public void testMgrDeleteMalnutrition() throws Exception {
+		int code = _setupTestMalnutrition(false);
+		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findOne(code);
+		boolean result = malnutritionManager.deleteMalnutrition(foundMalnutrition);
 		assertThat(result).isTrue();
 		result = malnutritionIoOperation.isCodePresent(code);
 		assertThat(result).isFalse();
