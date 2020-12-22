@@ -22,14 +22,19 @@
 package org.isf.dlvrtype.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 
+import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
+import org.isf.dlvrtype.manager.DeliveryTypeBrowserManager;
 import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.dlvrtype.service.DeliveryTypeIoOperation;
 import org.isf.dlvrtype.service.DeliveryTypeIoOperationRepository;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,6 +48,8 @@ public class Tests extends OHCoreTestCase {
 	DeliveryTypeIoOperation deliveryTypeIoOperation;
 	@Autowired
 	DeliveryTypeIoOperationRepository deliveryTypeIoOperationRepository;
+	@Autowired
+	DeliveryTypeBrowserManager deliveryTypeBrowserManager;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -108,6 +115,107 @@ public class Tests extends OHCoreTestCase {
 		assertThat(result).isTrue();
 		result = deliveryTypeIoOperation.isCodePresent(code);
 		assertThat(result).isFalse();
+	}
+
+	@Test
+	public void testMgrGetDeliveryType() throws Exception {
+		String code = _setupTestDeliveryType(false);
+		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
+		ArrayList<DeliveryType> deliveryTypes = deliveryTypeBrowserManager.getDeliveryType();
+		assertThat(deliveryTypes.get(deliveryTypes.size() - 1).getDescription()).isEqualTo(foundDeliveryType.getDescription());
+	}
+
+	@Test
+	public void testMgrUpdateDeliveryType() throws Exception {
+		String code = _setupTestDeliveryType(false);
+		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
+		foundDeliveryType.setDescription("Update");
+		boolean result = deliveryTypeBrowserManager.updateDeliveryType(foundDeliveryType);
+		DeliveryType updateDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
+		assertThat(result).isTrue();
+		assertThat(updateDeliveryType.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testMgrNewDeliveryType() throws Exception {
+		DeliveryType deliveryType = testDeliveryType.setup(true);
+		boolean result = deliveryTypeBrowserManager.newDeliveryType(deliveryType);
+		assertThat(result).isTrue();
+		_checkDeliveryTypeIntoDb(deliveryType.getCode());
+	}
+
+	@Test
+	public void testMgrIsCodePresent() throws Exception {
+		String code = _setupTestDeliveryType(false);
+		boolean result = deliveryTypeBrowserManager.codeControl(code);
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void testMgrDeleteDeliveryType() throws Exception {
+		String code = _setupTestDeliveryType(false);
+		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
+		boolean result = deliveryTypeBrowserManager.deleteDeliveryType(foundDeliveryType);
+		assertThat(result).isTrue();
+		result = deliveryTypeBrowserManager.codeControl(code);
+		assertThat(result).isFalse();
+	}
+
+	@Test
+	public void testMgrDeliveryTypeValidate() throws Exception {
+		String code = _setupTestDeliveryType(false);
+		DeliveryType deliveryType = deliveryTypeIoOperationRepository.findOne(code);
+		deliveryType.setDescription("Update");
+		boolean result = deliveryTypeBrowserManager.updateDeliveryType(deliveryType);
+		// empty string
+		deliveryType.setCode("");
+		assertThatThrownBy(() -> deliveryTypeBrowserManager.updateDeliveryType(deliveryType))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// too long
+		deliveryType.setCode("123456789ABCDEF");
+		assertThatThrownBy(() -> deliveryTypeBrowserManager.updateDeliveryType(deliveryType))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// key already exists
+		deliveryType.setCode(code);
+		assertThatThrownBy(() -> deliveryTypeBrowserManager.newDeliveryType(deliveryType))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// description empty
+		deliveryType.setDescription("");
+		assertThatThrownBy(() -> deliveryTypeBrowserManager.updateDeliveryType(deliveryType))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+	}
+
+	@Test
+	public void testDeliveryTypeEqualHashToString() throws Exception {
+		String code = _setupTestDeliveryType(false);
+		DeliveryType deliveryType = deliveryTypeIoOperationRepository.findOne(code);
+		DeliveryType deliveryType2 = new DeliveryType("someCode", "someDescription");
+		assertThat(deliveryType.equals(deliveryType)).isTrue();
+		assertThat(deliveryType.equals(deliveryType2)).isFalse();
+		assertThat(deliveryType.equals(new String("xyzzy"))).isFalse();
+		deliveryType2.setCode(code);
+		deliveryType2.setDescription(deliveryType.getDescription());
+		assertThat(deliveryType.equals(deliveryType2)).isTrue();
+
+		assertThat(deliveryType.hashCode()).isPositive();
+
+		assertThat(deliveryType2.toString()).isEqualTo(deliveryType.getDescription());
 	}
 
 	private String _setupTestDeliveryType(boolean usingSet) throws OHException {
