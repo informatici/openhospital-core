@@ -23,7 +23,6 @@ package org.isf.admission.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.isf.admission.model.Admission;
@@ -40,24 +39,26 @@ import org.isf.ward.model.Ward;
 
 public class TestAdmission {
 
+	// set dates in reasonable order to pass any validatation tests
+	private static final GregorianCalendar ADMINDATE = new GregorianCalendar(2001, 0, 28);
+	private static final GregorianCalendar VISITDATE = new GregorianCalendar(2002, 1, 28);
+	private static final GregorianCalendar OPDATE = new GregorianCalendar(2003, 2, 1);
+	private static final GregorianCalendar ABORTDATE = null;
+	private static final GregorianCalendar DELIVERYDATE = new GregorianCalendar(2004, 12, 1);
+	private static final GregorianCalendar CTRLDATE1 = new GregorianCalendar(2005, 2, 1);
+	private static final GregorianCalendar CTRLDATE2 = new GregorianCalendar(2005, 2, 2);
+	private static final GregorianCalendar DISDATE = new GregorianCalendar(2006, 11, 1);
+
 	private int id = 0;
 	private int admitted = 1;
 	private String type = "T";
 	private int yProg = 0;
 	private GregorianCalendar now = new GregorianCalendar();
-	private GregorianCalendar admDate = new GregorianCalendar(now.get(Calendar.YEAR), 9, 8);
 	private String FHU = "TestFHU";
 	private String opResult = "Result";
-	private GregorianCalendar opDate = new GregorianCalendar(7, 6, 5);
-	private GregorianCalendar disDate = new GregorianCalendar(4, 3, 2);
 	private String note = "TestNote";
 	private Float transUnit = (float) 10.10;
-	private GregorianCalendar visitDate = new GregorianCalendar(1, 0, 1);
-	private GregorianCalendar deliveryDate = new GregorianCalendar(2, 3, 4);
 	private Float weight = (float) 20.20;
-	private GregorianCalendar ctrlDate1 = new GregorianCalendar(5, 6, 7);
-	private GregorianCalendar ctrlDate2 = new GregorianCalendar(8, 9, 10);
-	private GregorianCalendar abortDate = new GregorianCalendar(9, 8, 7);
 	private String userID = "TestUserId";
 	private String deleted = "N";
 
@@ -83,10 +84,10 @@ public class TestAdmission {
 					diseaseOut3, operation, dischargeType, pregTreatmentType, deliveryType, deliveryResult);
 		} else {
 			// Create Admission with all parameters 
-			admission = new Admission(id, admitted, type, ward, yProg, patient, admDate, admissionType, FHU, diseaseIn,
-					diseaseOut1, diseaseOut2, diseaseOut3, operation, opResult, opDate, disDate, dischargeType, note,
-					transUnit, visitDate, pregTreatmentType, deliveryDate, deliveryType, deliveryResult, weight,
-					ctrlDate1, ctrlDate2, abortDate, userID, deleted);
+			admission = new Admission(id, admitted, type, ward, yProg, patient, ADMINDATE, admissionType, FHU, diseaseIn,
+					diseaseOut1, diseaseOut2, diseaseOut3, operation, opResult, OPDATE, DISDATE, dischargeType, note,
+					transUnit, VISITDATE, pregTreatmentType, DELIVERYDATE, deliveryType, deliveryResult, weight,
+					CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted);
 		}
 
 		return admission;
@@ -106,17 +107,17 @@ public class TestAdmission {
 			PregnantTreatmentType pregTreatmentType,
 			DeliveryType deliveryType,
 			DeliveryResultType deliveryResult) {
-		admission.setAbortDate(abortDate);
-		admission.setAdmDate(admDate);
+		admission.setAbortDate(ABORTDATE);
+		admission.setAdmDate(ADMINDATE);
 		admission.setAdmitted(admitted);
 		admission.setAdmType(admissionType);
-		admission.setCtrlDate1(ctrlDate1);
-		admission.setCtrlDate2(ctrlDate2);
+		admission.setCtrlDate1(CTRLDATE1);
+		admission.setCtrlDate2(CTRLDATE2);
 		admission.setDeleted(deleted);
-		admission.setDeliveryDate(deliveryDate);
+		admission.setDeliveryDate(DELIVERYDATE);
 		admission.setDeliveryResult(deliveryResult);
 		admission.setDeliveryType(deliveryType);
-		admission.setDisDate(disDate);
+		admission.setDisDate(DISDATE);
 		admission.setDiseaseIn(diseaseIn);
 		admission.setDiseaseOut1(diseaseOut1);
 		admission.setDiseaseOut2(diseaseOut2);
@@ -124,7 +125,7 @@ public class TestAdmission {
 		admission.setDisType(dischargeType);
 		admission.setFHU(FHU);
 		admission.setNote(note);
-		admission.setOpDate(opDate);
+		admission.setOpDate(OPDATE);
 		admission.setOperation(operation);
 		admission.setOpResult(opResult);
 		admission.setPatient(patient);
@@ -132,29 +133,29 @@ public class TestAdmission {
 		admission.setTransUnit(transUnit);
 		admission.setType(type);
 		admission.setUserID(userID);
-		admission.setVisitDate(visitDate);
+		admission.setVisitDate(VISITDATE);
 		admission.setWard(ward);
 		admission.setWeight(weight);
 		admission.setYProg(yProg);
 	}
 
 	public void check(Admission admission) {
-		assertThat(admission.getAbortDate()).isEqualTo(abortDate);
-		assertThat(admission.getAdmDate()).isEqualTo(admDate);
+		assertThat(admission.getAbortDate()).isEqualTo(ABORTDATE);
+		assertThat(admission.getAdmDate()).isEqualTo(ADMINDATE);
 		assertThat(admission.getAdmitted()).isEqualTo(admitted);
-		assertThat(admission.getCtrlDate1()).isEqualTo(ctrlDate1);
-		assertThat(admission.getCtrlDate2()).isEqualTo(ctrlDate2);
+		assertThat(admission.getCtrlDate1()).isEqualTo(CTRLDATE1);
+		assertThat(admission.getCtrlDate2()).isEqualTo(CTRLDATE2);
 		assertThat(admission.getDeleted()).isEqualTo(deleted);
-		assertThat(admission.getDeliveryDate()).isEqualTo(deliveryDate);
-		assertThat(admission.getDisDate()).isEqualTo(disDate);
+		assertThat(admission.getDeliveryDate()).isEqualTo(DELIVERYDATE);
+		assertThat(admission.getDisDate()).isEqualTo(DISDATE);
 		assertThat(admission.getFHU()).isEqualTo(FHU);
 		assertThat(admission.getNote()).isEqualTo(note);
-		assertThat(admission.getOpDate()).isEqualTo(opDate);
+		assertThat(admission.getOpDate()).isEqualTo(OPDATE);
 		assertThat(admission.getOpResult()).isEqualTo(opResult);
 		assertThat(admission.getTransUnit()).isEqualTo(transUnit);
 		assertThat(admission.getType()).isEqualTo(type);
 		assertThat(admission.getUserID()).isEqualTo(userID);
-		assertThat(admission.getVisitDate()).isEqualTo(visitDate);
+		assertThat(admission.getVisitDate()).isEqualTo(VISITDATE);
 		assertThat(admission.getWeight()).isEqualTo(weight);
 		assertThat(admission.getYProg()).isEqualTo(yProg);
 	}
