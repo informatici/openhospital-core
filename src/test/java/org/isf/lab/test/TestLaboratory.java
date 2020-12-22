@@ -37,7 +37,7 @@ public class TestLaboratory {
 	private String material = "TestMaterial";
 	private GregorianCalendar now = new GregorianCalendar();
 	private GregorianCalendar registrationDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-	private GregorianCalendar examDate = new GregorianCalendar(now.get(Calendar.YEAR), 10, 11);
+	private GregorianCalendar examDate = new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
 	private String result = "TestResult";
 	private String note = "TestNote";
 	private String patName = "TestPatientName";
