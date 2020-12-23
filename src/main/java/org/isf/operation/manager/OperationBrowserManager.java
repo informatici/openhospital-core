@@ -144,11 +144,11 @@ public class OperationBrowserManager {
 	 * Get the list of possible operation results
 	 * @return the found list
 	 */
-	public ArrayList<String> getResultsList() { //TODO (OP-372): deal with codes instead of translations!!!
+	public ArrayList<String> getResultsList() { 
 		ArrayList<String> resultsList = new ArrayList<String>();
-		resultsList.add(MessageBundle.getMessage("angal.operation.result.sucess"));
-		resultsList.add(MessageBundle.getMessage("angal.operation.result.failure"));
-		resultsList.add(MessageBundle.getMessage("angal.operation.result.undefined"));
+		resultsList.add("angal.operation.result.sucess");
+		resultsList.add("angal.operation.result.failure");
+		resultsList.add("angal.operation.result.undefined");
 		return resultsList;
 	}
 }
