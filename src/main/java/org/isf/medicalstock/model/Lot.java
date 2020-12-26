@@ -186,7 +186,7 @@ public class Lot extends Auditable<String>
 		} else if (!code.equals(other.code))
 			return false;
 		if (cost != null) {
-			if (cost.compareTo(other.cost) != 0)
+			if (other.cost != null && cost.compareTo(other.cost) != 0)
 				return false;
 		}
 		if (dueDate == null) {
