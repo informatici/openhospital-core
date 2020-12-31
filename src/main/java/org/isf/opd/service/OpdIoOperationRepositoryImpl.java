@@ -22,6 +22,7 @@
 package org.isf.opd.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -101,6 +102,15 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 				cb.equal(opd.get("newPatient"), newPatient)
 			);
 		}
+		dateFrom.clear(Calendar.HOUR);
+		dateFrom.clear(Calendar.MINUTE);
+		dateFrom.clear(Calendar.SECOND);
+		dateFrom.clear(Calendar.MILLISECOND);
+		dateTo.clear(Calendar.HOUR);
+		dateTo.clear(Calendar.MINUTE);
+		dateTo.clear(Calendar.SECOND);
+		dateTo.clear(Calendar.MILLISECOND);
+		dateTo.add(Calendar.DAY_OF_WEEK, 1);
 		predicates.add(
 			cb.between(opd.<Date>get("visitDate"), dateFrom.getTime(), dateTo.getTime())
 		);

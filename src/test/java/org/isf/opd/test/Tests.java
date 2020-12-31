@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.isf.OHCoreTestCase;
 import org.isf.disease.model.Disease;
@@ -107,6 +108,51 @@ public class Tests extends OHCoreTestCase {
 				foundOpd.getSex(),
 				foundOpd.getNewPatient());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
+	}
+
+	@Test
+	public void testIoGetOpdListToday() throws Exception {
+		Patient patient = testPatient.setup(false);
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+
+		Disease disease = testDisease.setup(diseaseType, false);
+		disease.setCode("angal.opd.alldisease");
+		disease.getType().setCode("angal.opd.alltype");
+
+		Opd opd = testOpd.setup(patient, disease, true);
+		GregorianCalendar now = new GregorianCalendar();
+		opd.setVisitDate(now);
+
+		patientIoOperationRepository.saveAndFlush(patient);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+		diseaseIoOperationRepository.saveAndFlush(disease);
+		opdIoOperationRepository.saveAndFlush(opd);
+
+		ArrayList<Opd> opds = opdIoOperation.getOpdList(false);
+		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(opd.getCode());
+	}
+
+	@Test
+	public void testIoGetOpdListLastWeek() throws Exception {
+		Patient patient = testPatient.setup(false);
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+
+		Disease disease = testDisease.setup(diseaseType, false);
+		disease.setCode("angal.opd.alldisease");
+		disease.getType().setCode("angal.opd.alltype");
+
+		Opd opd = testOpd.setup(patient, disease, true);
+		GregorianCalendar date = new GregorianCalendar();
+		date.add(Calendar.DAY_OF_MONTH, -3);
+		opd.setVisitDate(date);
+
+		patientIoOperationRepository.saveAndFlush(patient);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+		diseaseIoOperationRepository.saveAndFlush(disease);
+		opdIoOperationRepository.saveAndFlush(opd);
+
+		ArrayList<Opd> opds = opdIoOperation.getOpdList(true);
+		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(opd.getCode());
 	}
 
 	@Test
