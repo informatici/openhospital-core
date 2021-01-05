@@ -22,13 +22,16 @@
 package org.isf.pregtreattype.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 
 import org.isf.OHCoreTestCase;
+import org.isf.pregtreattype.manager.PregnantTreatmentTypeBrowserManager;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperation;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperationRepository;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -43,6 +46,8 @@ public class Tests extends OHCoreTestCase {
 	PregnantTreatmentTypeIoOperation pregnantTreatmentTypeIoOperation;
 	@Autowired
 	PregnantTreatmentTypeIoOperationRepository pregnantTreatmentTypeIoOperationRepository;
+	@Autowired
+	PregnantTreatmentTypeBrowserManager pregnantTreatmentTypeBrowserManager;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -114,6 +119,141 @@ public class Tests extends OHCoreTestCase {
 		assertThat(result).isTrue();
 		result = pregnantTreatmentTypeIoOperation.isCodePresent(code);
 		assertThat(result).isFalse();
+	}
+
+	@Test
+	public void testMgrGetPregnantTreatmentType() throws Exception {
+		String code = _setupTestPregnantTreatmentType(false);
+		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findOne(code);
+		ArrayList<PregnantTreatmentType> pregnantTreatmentTypes = pregnantTreatmentTypeBrowserManager.getPregnantTreatmentType();
+
+		for (PregnantTreatmentType pregnantTreatmentType : pregnantTreatmentTypes) {
+			if (pregnantTreatmentType.getCode().equals(code)) {
+				assertThat(pregnantTreatmentType.getDescription()).isEqualTo(foundPregnantTreatmentType.getDescription());
+			}
+		}
+	}
+
+	@Test
+	public void testMgrUpdatePregnantTreatmentType() throws Exception {
+		String code = _setupTestPregnantTreatmentType(false);
+		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findOne(code);
+		foundPregnantTreatmentType.setDescription("Update");
+		assertThat(pregnantTreatmentTypeBrowserManager.updatePregnantTreatmentType(foundPregnantTreatmentType)).isTrue();
+		PregnantTreatmentType updatePregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findOne(code);
+		assertThat(updatePregnantTreatmentType.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testMgrNewPregnantTreatmentType() throws Exception {
+		PregnantTreatmentType pregnantTreatmentType = testPregnantTreatmentType.setup(true);
+		assertThat(pregnantTreatmentTypeBrowserManager.newPregnantTreatmentType(pregnantTreatmentType)).isTrue();
+		_checkPregnantTreatmentTypeIntoDb(pregnantTreatmentType.getCode());
+	}
+
+	@Test
+	public void testMgrCodeControl() throws Exception {
+		String code = _setupTestPregnantTreatmentType(false);
+		assertThat(pregnantTreatmentTypeBrowserManager.codeControl(code)).isTrue();
+	}
+
+	@Test
+	public void testMgrDeletePregnantTreatmentType() throws Exception {
+		String code = _setupTestPregnantTreatmentType(false);
+		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findOne(code);
+		assertThat(pregnantTreatmentTypeBrowserManager.deletePregnantTreatmentType(foundPregnantTreatmentType)).isTrue();
+		assertThat(pregnantTreatmentTypeBrowserManager.codeControl(code)).isFalse();
+	}
+
+	@Test
+	public void testMgrValidationCodeEmpty() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			PregnantTreatmentType pregnantTreatmentType = new PregnantTreatmentType();
+			pregnantTreatmentType.setCode("");
+			pregnantTreatmentType.setDescription("someDescription");
+			pregnantTreatmentTypeBrowserManager.newPregnantTreatmentType(pregnantTreatmentType);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidationCodeTooLong() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			PregnantTreatmentType pregnantTreatmentType = new PregnantTreatmentType();
+			pregnantTreatmentType.setCode("thisIsAVeryLongKey");
+			pregnantTreatmentType.setDescription("someDescription");
+			pregnantTreatmentTypeBrowserManager.newPregnantTreatmentType(pregnantTreatmentType);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidationCodeAlreadyExists() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			_setupTestPregnantTreatmentType(true);
+			PregnantTreatmentType pregnantTreatmentType = new PregnantTreatmentType();
+			pregnantTreatmentType.setCode("ZZ");
+			pregnantTreatmentType.setDescription("someDescription");
+			pregnantTreatmentTypeBrowserManager.newPregnantTreatmentType(pregnantTreatmentType);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidationDescriptionIsEmpty() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			PregnantTreatmentType pregnantTreatmentType = new PregnantTreatmentType();
+			pregnantTreatmentType.setCode("ZZ");
+			pregnantTreatmentType.setDescription("");
+			pregnantTreatmentTypeBrowserManager.newPregnantTreatmentType(pregnantTreatmentType);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testPregnantTreatmentTypeEquals() throws Exception {
+		PregnantTreatmentType pregnantTreatmentType = new PregnantTreatmentType();
+		pregnantTreatmentType.setCode("ZZ");
+		pregnantTreatmentType.setDescription("someDescription");
+
+		assertThat(pregnantTreatmentType).isEqualTo(pregnantTreatmentType);
+		assertThat(pregnantTreatmentType).isNotEqualTo(null);
+		assertThat(pregnantTreatmentType).isNotEqualTo("someString");
+
+		PregnantTreatmentType pregnantTreatmentType2 = new PregnantTreatmentType();
+		pregnantTreatmentType.setCode("XX");
+		pregnantTreatmentType.setDescription("someDescription");
+
+		assertThat(pregnantTreatmentType).isNotEqualTo(pregnantTreatmentType2);
+		pregnantTreatmentType2.setCode(pregnantTreatmentType.getCode());
+		pregnantTreatmentType2.setDescription("someOtherDescription");
+		assertThat(pregnantTreatmentType).isNotEqualTo(pregnantTreatmentType2);
+
+		pregnantTreatmentType2.setDescription(pregnantTreatmentType.getDescription().toUpperCase());
+		assertThat(pregnantTreatmentType).isEqualTo(pregnantTreatmentType2);
+	}
+
+	@Test
+	public void testPregnantTreatmentTypeToString() throws Exception {
+		PregnantTreatmentType pregnantTreatmentType = new PregnantTreatmentType();
+		pregnantTreatmentType.setCode("ZZ");
+		pregnantTreatmentType.setDescription("someDescription");
+		assertThat(pregnantTreatmentType).hasToString("someDescription");
+	}
+
+	@Test
+	public void testPregnantTreatmentTypeHashCode() throws Exception {
+		PregnantTreatmentType pregnantTreatmentType = new PregnantTreatmentType();
+		pregnantTreatmentType.setCode("ZZ");
+		pregnantTreatmentType.setDescription("someDescription");
+
+		int hashCode = pregnantTreatmentType.hashCode();
+		// use computed value
+		assertThat(pregnantTreatmentType.hashCode()).isEqualTo(hashCode);
 	}
 
 	private String _setupTestPregnantTreatmentType(boolean usingSet) throws OHException {
