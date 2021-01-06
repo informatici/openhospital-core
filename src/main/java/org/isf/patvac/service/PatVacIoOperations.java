@@ -38,6 +38,7 @@ import java.util.List;
 import org.isf.patvac.model.PatientVaccine;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,25 +53,15 @@ public class PatVacIoOperations {
 	private PatVacIoOperationRepository repository;
 
 	/**
-	 * returns all {@link PatientVaccine}s of today or one week ago
+	 * Returns all {@link PatientVaccine}s of today or one week ago
 	 *
 	 * @param minusOneWeek - if <code>true</code> return the last week
 	 * @return the list of {@link PatientVaccine}s
 	 * @throws OHServiceException
 	 */
 	public ArrayList<PatientVaccine> getPatientVaccine(boolean minusOneWeek) throws OHServiceException {
-		GregorianCalendar timeTo = new GregorianCalendar();
-		GregorianCalendar timeFrom = new GregorianCalendar();
-
-		timeFrom.clear(Calendar.HOUR);
-		timeFrom.clear(Calendar.MINUTE);
-		timeFrom.clear(Calendar.SECOND);
-		timeFrom.clear(Calendar.MILLISECOND);
-		timeTo.clear(Calendar.HOUR);
-		timeTo.clear(Calendar.MINUTE);
-		timeTo.clear(Calendar.SECOND);
-		timeTo.clear(Calendar.MILLISECOND);
-		timeTo.add(Calendar.DAY_OF_WEEK, 1);
+		GregorianCalendar timeFrom = TimeTools.getDateToday0();
+		GregorianCalendar timeTo = TimeTools.getDateToday24();
 
 		if (minusOneWeek) {
 			timeFrom.add(GregorianCalendar.WEEK_OF_YEAR, -1);
