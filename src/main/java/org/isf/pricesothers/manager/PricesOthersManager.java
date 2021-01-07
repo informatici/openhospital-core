@@ -27,12 +27,10 @@ import java.util.List;
 import org.isf.generaldata.MessageBundle;
 import org.isf.pricesothers.model.PricesOthers;
 import org.isf.pricesothers.service.PriceOthersIoOperations;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -40,77 +38,75 @@ import org.springframework.util.StringUtils;
 @Component
 public class PricesOthersManager {
 
-	private final Logger logger = LoggerFactory.getLogger(PricesOthersManager.class);
-	
 	@Autowired
 	private PriceOthersIoOperations ioOperations;
 
 	/**
 	 * Return the list of {@link PricesOthers}s in the DB
-	 * 
+	 *
 	 * @return the list of {@link PricesOthers}s
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public ArrayList<PricesOthers> getOthers() throws OHServiceException {
-        return ioOperations.getOthers();
+		return ioOperations.getOthers();
 	}
 
 	/**
 	 * Insert a new {@link PricesOthers} in the DB
-	 * 
+	 *
 	 * @param other - the {@link PricesOthers} to insert
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean newOther(PricesOthers other) throws OHServiceException {
-        validatePricesOthers(other);
-        return ioOperations.newOthers(other);
+		validatePricesOthers(other);
+		return ioOperations.newOthers(other);
 	}
 
 	/**
 	 * Delete a {@link PricesOthers} in the DB
-	 * 
+	 *
 	 * @param other - the {@link PricesOthers} to delete
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean deleteOther(PricesOthers other) throws OHServiceException {
-        return ioOperations.deleteOthers(other);
+		return ioOperations.deleteOthers(other);
 	}
 
 	/**
 	 * Update a {@link PricesOthers} in the DB
-	 * 
+	 *
 	 * @param other - the {@link PricesOthers} to update
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean updateOther(PricesOthers other) throws OHServiceException {
-        validatePricesOthers(other);
-        return ioOperations.updateOther(other);
+		validatePricesOthers(other);
+		return ioOperations.updateOther(other);
 	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 *
 	 * @param pricesOthers
-	 * @throws OHDataValidationException 
+	 * @throws OHDataValidationException
 	 */
-    protected void validatePricesOthers(PricesOthers pricesOthers) throws OHDataValidationException {
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+	protected void validatePricesOthers(PricesOthers pricesOthers) throws OHDataValidationException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
 
-        if (StringUtils.isEmpty(pricesOthers.getCode())) {  //$NON-NLS-1$
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-                    MessageBundle.getMessage("angal.pricesothers.pleaseinsertacode"),
-                    OHSeverityLevel.ERROR));
-        }
-        if (StringUtils.isEmpty(pricesOthers.getDescription())) {  //$NON-NLS-1$
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-                    MessageBundle.getMessage("angal.pricesothers.pleaseinsertadescription"),
-                    OHSeverityLevel.ERROR));
-        }
-        if(!errors.isEmpty()){
-	        throw new OHDataValidationException(errors);
-	    }
-    }
-	
+		if (StringUtils.isEmpty(pricesOthers.getCode())) {  //$NON-NLS-1$
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+					MessageBundle.getMessage("angal.pricesothers.pleaseinsertacode"),
+					OHSeverityLevel.ERROR));
+		}
+		if (StringUtils.isEmpty(pricesOthers.getDescription())) {  //$NON-NLS-1$
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+					MessageBundle.getMessage("angal.pricesothers.pleaseinsertadescription"),
+					OHSeverityLevel.ERROR));
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
+	}
 }

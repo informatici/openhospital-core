@@ -25,13 +25,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.isf.generaldata.MessageBundle;
-import org.isf.priceslist.model.List;
 import org.isf.priceslist.model.Price;
 import org.isf.priceslist.model.PriceList;
 import org.isf.priceslist.service.PricesListIoOperations;
 import org.isf.serviceprinting.print.PriceForPrint;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,97 +42,100 @@ public class PriceListManager {
 
 	@Autowired
 	private PricesListIoOperations ioOperations;
-	
+
 	/**
 	 * Return the list of {@link List}s in the DB
+	 *
 	 * @return the list of {@link List}s
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public ArrayList<PriceList> getLists() throws OHServiceException {
-        return ioOperations.getLists();
+		return ioOperations.getLists();
 	}
-	
+
 	/**
 	 * Return the list of {@link Price}s in the DB
+	 *
 	 * @return the list of {@link Price}s
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public ArrayList<Price> getPrices() throws OHServiceException {
-        return ioOperations.getPrices();
+		return ioOperations.getPrices();
 	}
 
 	/**
 	 * Updates all {@link Price}s in the specified {@link List}
+	 *
 	 * @param list - the {@link List}
 	 * @param prices - the list of {@link Price}s
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean updatePrices(PriceList list, ArrayList<Price> prices) throws OHServiceException {
-        return ioOperations.updatePrices(list, prices);
+		return ioOperations.updatePrices(list, prices);
 	}
 
 	/**
 	 * Insert a new {@link List} in the DB
-	 * 
+	 *
 	 * @param list - the {@link List}
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean newList(PriceList list) throws OHServiceException {
-	    validatePriceList(list);
-        return ioOperations.newList(list);
+		validatePriceList(list);
+		return ioOperations.newList(list);
 	}
 
 	/**
 	 * Update a {@link List} in the DB
-	 * 
+	 *
 	 * @param updateList - the {@link List} to update
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean updateList(PriceList updateList) throws OHServiceException {
-        validatePriceList(updateList);
-        return ioOperations.updateList(updateList);
+		validatePriceList(updateList);
+		return ioOperations.updateList(updateList);
 	}
 
 	/**
 	 * Delete a {@link List} in the DB
-	 * 
+	 *
 	 * @param deleteList - the {@link List} to delete
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean deleteList(PriceList deleteList) throws OHServiceException {
-        return ioOperations.deleteList(deleteList);
+		return ioOperations.deleteList(deleteList);
 	}
 
 	/**
 	 * Duplicate specified {@List list}
-	 * 
+	 *
 	 * @param list
 	 * @return <code>true</code> if the list has been duplicated, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean copyList(PriceList list) throws OHServiceException {
 		return copyList(list, 1., 0.);
 	}
-	
+
 	/**
 	 * Duplicate {@link PriceList} multiplying by <code>factor</code> and rounding by <code>step</code>
-	 * 
+	 *
 	 * @param list - the {@link PriceList} to be duplicated
 	 * @param factor - the multiplying factor
 	 * @param step - the rounding step
 	 * @return <code>true</code> if the list has been duplicated, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean copyList(PriceList list, double factor, double step) throws OHServiceException {
-        return ioOperations.copyList(list, factor, step);
+		return ioOperations.copyList(list, factor, step);
 	}
-	
+
 	public ArrayList<PriceForPrint> convertPrice(PriceList listSelected, ArrayList<Price> prices) {
-		ArrayList<PriceForPrint> pricePrint = new ArrayList<PriceForPrint>();
+		ArrayList<PriceForPrint> pricePrint = new ArrayList<>();
 		for (Price price : prices) {
 			if (price.getList().getId() == listSelected.getId() && price.getPrice() != 0.) {
 				PriceForPrint price4print = new PriceForPrint();
@@ -151,34 +153,35 @@ public class PriceListManager {
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 *
 	 * @param priceList
-	 * @throws OHDataValidationException 
+	 * @throws OHDataValidationException
 	 */
-    protected void validatePriceList(PriceList priceList) throws OHDataValidationException{
-        java.util.List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+	protected void validatePriceList(PriceList priceList) throws OHDataValidationException {
+		java.util.List<OHExceptionMessage> errors = new ArrayList<>();
 
-        if (StringUtils.isEmpty(priceList.getCode())) { //$NON-NLS-1$
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-                    MessageBundle.getMessage("angal.priceslist.pleaseinsertacode"),
-                    OHSeverityLevel.ERROR));
-        }
-        if (StringUtils.isEmpty(priceList.getName())){ //$NON-NLS-1$
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-                    MessageBundle.getMessage("angal.priceslist.pleaseinsertaname"),
-                    OHSeverityLevel.ERROR));
-        }
-        if (StringUtils.isEmpty(priceList.getDescription())) { //$NON-NLS-1$
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-                    MessageBundle.getMessage("angal.priceslist.pleaseinsertadescription"),
-                    OHSeverityLevel.ERROR));
-        }
-        if (StringUtils.isEmpty(priceList.getCurrency())){ //$NON-NLS-1$
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-                    MessageBundle.getMessage("angal.priceslist.pleaseinsertacurrency"),
-                    OHSeverityLevel.ERROR));
-        }
-        if(!errors.isEmpty()){
-	        throw new OHDataValidationException(errors);
-	    }
-    }
+		if (StringUtils.isEmpty(priceList.getCode())) { //$NON-NLS-1$
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+					MessageBundle.getMessage("angal.priceslist.pleaseinsertacode"),
+					OHSeverityLevel.ERROR));
+		}
+		if (StringUtils.isEmpty(priceList.getName())) { //$NON-NLS-1$
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+					MessageBundle.getMessage("angal.priceslist.pleaseinsertaname"),
+					OHSeverityLevel.ERROR));
+		}
+		if (StringUtils.isEmpty(priceList.getDescription())) { //$NON-NLS-1$
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+					MessageBundle.getMessage("angal.priceslist.pleaseinsertadescription"),
+					OHSeverityLevel.ERROR));
+		}
+		if (StringUtils.isEmpty(priceList.getCurrency())) { //$NON-NLS-1$
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+					MessageBundle.getMessage("angal.priceslist.pleaseinsertacurrency"),
+					OHSeverityLevel.ERROR));
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
+	}
 }
