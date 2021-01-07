@@ -345,9 +345,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetMovementsWithParameters() throws Exception {
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
 		ArrayList<Movement> movements = medicalStockIoOperation.getMovements(
@@ -359,9 +358,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetMovementsWihAllParameters() throws Exception {
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
 		ArrayList<Movement> movements = medicalStockIoOperation.getMovements(
@@ -380,9 +378,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetMovementForPrintDateOrder() throws Exception {
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 		MovementOrder order = MovementOrder.DATE;
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
@@ -401,9 +398,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetMovementForPrintWardOrderateWard() throws Exception {
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 		MovementOrder order = MovementOrder.WARD;
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
@@ -422,9 +418,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetMovementForPrintPharmaceuticalTypeOrder() throws Exception {
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 		MovementOrder order = MovementOrder.PHARMACEUTICAL_TYPE;
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
@@ -443,9 +438,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetMovementForPrintTypeOrder() throws Exception {
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 		MovementOrder order = MovementOrder.TYPE;
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
@@ -497,9 +491,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetMovementsWithParameters() throws Exception {
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
 		ArrayList<Movement> movements = movBrowserManager.getMovements(foundMovement.getWard().getCode(), fromDate, toDate);
@@ -518,9 +511,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetMovementsWihAllParameters() throws Exception {
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
 		ArrayList<Movement> movements = movBrowserManager.getMovements(foundMovement.getMedical().getCode(), foundMovement.getMedical().getType().getCode(),
@@ -532,9 +524,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMovementsCheckMovParameters() throws Exception {
 		assertThatThrownBy(() ->
 		{
-			GregorianCalendar now = new GregorianCalendar();
-			GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-			GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+			GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+			GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 			int code = _setupTestMovement(false);
 			Movement foundMovement = movementIoOperationRepository.findOne(code);
 			movBrowserManager.getMovements(foundMovement.getMedical().getCode(), foundMovement.getMedical().getType().getCode(),
@@ -547,9 +538,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMovementsCheckLotPrepParameters() throws Exception {
 		assertThatThrownBy(() ->
 		{
-			GregorianCalendar now = new GregorianCalendar();
-			GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-			GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+			GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+			GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 			int code = _setupTestMovement(false);
 			Movement foundMovement = movementIoOperationRepository.findOne(code);
 			movBrowserManager.getMovements(foundMovement.getMedical().getCode(), foundMovement.getMedical().getType().getCode(),
@@ -562,9 +552,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMovementsCheckLotDueParameters() throws Exception {
 		assertThatThrownBy(() ->
 		{
-			GregorianCalendar now = new GregorianCalendar();
-			GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-			GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+			GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+			GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 			int code = _setupTestMovement(false);
 			Movement foundMovement = movementIoOperationRepository.findOne(code);
 			movBrowserManager.getMovements(foundMovement.getMedical().getCode(), foundMovement.getMedical().getType().getCode(),
@@ -575,9 +564,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetMovementsWihAllParametersNull() throws Exception {
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
 		ArrayList<Movement> movements = movBrowserManager.getMovements(null, null, foundMovement.getWard().getCode(), null,
@@ -715,8 +703,7 @@ public class Tests extends OHCoreTestCase {
 		{
 			int code = _setupTestMovement(false);
 			Movement movement = movementIoOperationRepository.findOne(code);
-			GregorianCalendar now = new GregorianCalendar();
-			movement.setDate(new GregorianCalendar(now.get(Calendar.YEAR), 1, 1));
+			movement.setDate(new GregorianCalendar(2000, 1, 1));
 			ArrayList<Movement> movements = new ArrayList<>();
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, "refNo");
