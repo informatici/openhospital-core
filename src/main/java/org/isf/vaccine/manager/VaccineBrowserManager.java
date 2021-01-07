@@ -26,14 +26,12 @@ import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.vaccine.model.Vaccine;
 import org.isf.vaccine.service.VaccineIoOperations;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,58 +40,57 @@ import org.springframework.stereotype.Component;
  * useful logic manipulations of the dynamic data (memory)
  *
  * @author Eva
- *
- *
+ * <p>
+ * <p>
  * modification history
- *  20/10/2011 - Cla - insert vaccinetype managment
- *
+ * 20/10/2011 - Cla - insert vaccinetype managment
  */
 @Component
 public class VaccineBrowserManager {
 
-    private final Logger logger = LoggerFactory.getLogger(VaccineBrowserManager.class);
-    @Autowired
+	@Autowired
 	private VaccineIoOperations ioOperations;
-	
+
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 *
 	 * @param vaccine
 	 * @param insert <code>true</code> or updated <code>false</code>
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	protected void validateVaccine(Vaccine vaccine, boolean insert) throws OHServiceException {
 		String key = vaccine.getCode();
 		String description = vaccine.getDescription();
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
-        if(key.isEmpty() ){
-	        errors.add(new OHExceptionMessage("codeEmptyError", 
-	        		MessageBundle.getMessage("angal.vaccine.pleaseinsertacode"), 
-	        		OHSeverityLevel.ERROR));
-        }
-        if(key.length()>10){
-	        errors.add(new OHExceptionMessage("codeTooLongError", 
-	        		MessageBundle.getMessage("angal.vaccine.codemaxchars"), 
-	        		OHSeverityLevel.ERROR));
-        }
-        if(description.isEmpty() ){
-            errors.add(new OHExceptionMessage("descriptionEmptyError", 
-            		MessageBundle.getMessage("angal.vaccine.pleaseinsertadescription"), 
-            		OHSeverityLevel.ERROR));
-        }
-        if (insert) {
-        	if (codeControl(vaccine.getCode())){
-    			throw new OHDataIntegrityViolationException(new OHExceptionMessage(null, 
-    					MessageBundle.getMessage("angal.common.codealreadyinuse"), 
-    					OHSeverityLevel.ERROR));
-    		}
-        }
-        if(!errors.isEmpty()){
-	        throw new OHDataValidationException(errors);
-	    }
-    }
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		if (key.isEmpty()) {
+			errors.add(new OHExceptionMessage("codeEmptyError",
+					MessageBundle.getMessage("angal.vaccine.pleaseinsertacode"),
+					OHSeverityLevel.ERROR));
+		}
+		if (key.length() > 10) {
+			errors.add(new OHExceptionMessage("codeTooLongError",
+					MessageBundle.getMessage("angal.vaccine.codemaxchars"),
+					OHSeverityLevel.ERROR));
+		}
+		if (description.isEmpty()) {
+			errors.add(new OHExceptionMessage("descriptionEmptyError",
+					MessageBundle.getMessage("angal.vaccine.pleaseinsertadescription"),
+					OHSeverityLevel.ERROR));
+		}
+		if (insert) {
+			if (codeControl(vaccine.getCode())) {
+				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null,
+						MessageBundle.getMessage("angal.common.codealreadyinuse"),
+						OHSeverityLevel.ERROR));
+			}
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
+	}
 
 	/**
-	 * returns the list of {@link Vaccine}s in the DB
+	 * Returns the list of {@link Vaccine}s in the DB
 	 *
 	 * @return the list of {@link Vaccine}s
 	 */
@@ -102,7 +99,7 @@ public class VaccineBrowserManager {
 	}
 
 	/**
-	 * returns the list of {@link Vaccine}s based on vaccine type code
+	 * Returns the list of {@link Vaccine}s based on vaccine type code
 	 *
 	 * @param vaccineTypeCode - the type code.
 	 * @return the list of {@link Vaccine}s
@@ -110,7 +107,7 @@ public class VaccineBrowserManager {
 	public ArrayList<Vaccine> getVaccine(String vaccineTypeCode) throws OHServiceException {
 		return ioOperations.getVaccine(vaccineTypeCode);
 	}
-	
+
 	/**
 	 * Inserts a new {@link Vaccine} in the DB
 	 *
@@ -124,14 +121,15 @@ public class VaccineBrowserManager {
 
 	/**
 	 * Updates the specified {@link Vaccine} object.
+	 *
 	 * @param vaccine - the {@link Vaccine} object to update.
 	 * @return vaccine that has been updated.
 	 */
 	public Vaccine updateVaccine(Vaccine vaccine) throws OHServiceException {
 		validateVaccine(vaccine, false);
-        return ioOperations.updateVaccine(vaccine);
-    }
-	
+		return ioOperations.updateVaccine(vaccine);
+	}
+
 	/**
 	 * Deletes a {@link Vaccine} in the DB
 	 *
@@ -141,7 +139,7 @@ public class VaccineBrowserManager {
 	public boolean deleteVaccine(Vaccine vaccine) throws OHServiceException {
 		return ioOperations.deleteVaccine(vaccine);
 	}
-	
+
 	/**
 	 * Checks if the code is already in use
 	 *
@@ -151,14 +149,14 @@ public class VaccineBrowserManager {
 	public boolean codeControl(String code) throws OHServiceException {
 		return ioOperations.isCodePresent(code);
 	}
-	
+
 	/**
-	 * returns the {@link Vaccine} based on vaccine code
+	 * Returns the {@link Vaccine} based on vaccine code
 	 *
 	 * @param code - the  {@link Vaccine} code.
 	 * @return the {@link Vaccine}
 	 */
-	public Vaccine findVaccine(String code) throws OHServiceException {
+	public Vaccine findVaccine(String code) {
 		return ioOperations.findVaccine(code);
 	}
 }
