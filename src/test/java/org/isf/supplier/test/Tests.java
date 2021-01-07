@@ -23,9 +23,11 @@ package org.isf.supplier.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
+import org.isf.supplier.manager.SupplierBrowserManager;
 import org.isf.supplier.model.Supplier;
 import org.isf.supplier.service.SupplierIoOperationRepository;
 import org.isf.supplier.service.SupplierOperations;
@@ -44,6 +46,8 @@ public class Tests extends OHCoreTestCase {
 	SupplierOperations supplierIoOperation;
 	@Autowired
 	SupplierIoOperationRepository supplierIoOperationRepository;
+	@Autowired
+	SupplierBrowserManager supplierBrowserManager;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -68,7 +72,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testSupplierSaveOrUpdate() throws Exception {
+	public void testIoSupplierSaveOrUpdate() throws Exception {
 		Supplier supplier = testSupplier.setup(true);
 		boolean result = supplierIoOperation.saveOrUpdate(supplier);
 
@@ -77,26 +81,98 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testSupplierGetByID() throws Exception {
+	public void testIoSupplierGetByID() throws Exception {
 		int code = _setupTestSupplier(false);
 		Supplier foundSupplier = supplierIoOperation.getByID(code);
 		_checkSupplierIntoDb(foundSupplier.getSupId());
 	}
 
 	@Test
-	public void testSupplierGetAll() throws Exception {
+	public void testIoSupplierGetAll() throws Exception {
 		int code = _setupTestSupplier(false);
 		Supplier foundSupplier = supplierIoOperation.getByID(code);
-		List<Supplier> suppliers = supplierIoOperation.getAll();
+		List<Supplier> suppliers = supplierBrowserManager.getAll();
 		assertThat(suppliers).contains(foundSupplier);
 	}
 
 	@Test
-	public void testSupplierGetList() throws Exception {
+	public void testIoSupplierGetList() throws Exception {
 		int code = _setupTestSupplier(false);
 		Supplier foundSupplier = supplierIoOperation.getByID(code);
-		List<Supplier> suppliers = supplierIoOperation.getList();
+		List<Supplier> suppliers = supplierBrowserManager.getList();
 		assertThat(suppliers).contains(foundSupplier);
+	}
+
+	@Test
+	public void testMgrSupplierSaveOrUpdate() throws Exception {
+		Supplier supplier = testSupplier.setup(true);
+		assertThat(supplierBrowserManager.saveOrUpdate(supplier)).isTrue();
+		_checkSupplierIntoDb(supplier.getSupId());
+	}
+
+	@Test
+	public void testMgrSupplierGetByID() throws Exception {
+		int code = _setupTestSupplier(false);
+		Supplier foundSupplier = supplierBrowserManager.getByID(code);
+		_checkSupplierIntoDb(foundSupplier.getSupId());
+	}
+
+	@Test
+	public void testMgrSupplierGetAll() throws Exception {
+		int code = _setupTestSupplier(false);
+		Supplier foundSupplier = supplierBrowserManager.getByID(code);
+		List<Supplier> suppliers = supplierBrowserManager.getAll();
+		assertThat(suppliers).contains(foundSupplier);
+	}
+
+	@Test
+	public void testMgrSupplierGetList() throws Exception {
+		int code = _setupTestSupplier(false);
+		Supplier foundSupplier = supplierBrowserManager.getByID(code);
+		List<Supplier> suppliers = supplierBrowserManager.getList();
+		assertThat(suppliers).contains(foundSupplier);
+	}
+
+	@Test
+	public void testMgrGetHashMap() throws Exception {
+		int code = _setupTestSupplier(false);
+		Supplier foundSupplier = supplierBrowserManager.getByID(code);
+		// get all (including deleted)
+		HashMap<Integer, String> allSuppliers = supplierBrowserManager.getHashMap(true);
+		// get all (not including deleted)
+		HashMap<Integer, String> suppliers = supplierBrowserManager.getHashMap(true);
+		assertThat(allSuppliers).isEqualTo(suppliers);
+	}
+
+	@Test
+	public void testSupplierToString() throws Exception {
+		Supplier supplier = new Supplier(null, "TestName", "TestAddress", "TestTax", "TestPhone", "TestFax", "TestEmail", "TestNode");
+		assertThat(supplier).hasToString("TestName");
+	}
+
+	@Test
+	public void testSupplierEquals() throws Exception {
+		Supplier supplier = new Supplier(1, "TestName", "TestAddress", "TestTax", "TestPhone", "TestFax", "TestEmail", "TestNode");
+
+		assertThat(supplier.equals(supplier)).isTrue();
+		assertThat(supplier).isNotEqualTo(null);
+		assertThat(supplier).isNotEqualTo("someString");
+
+		Supplier supplier2 = new Supplier(2, "TestName", "TestAddress", "TestTax", "TestPhone", "TestFax", "TestEmail", "TestNode");
+		assertThat(supplier).isNotEqualTo(supplier2);
+
+		supplier2.setSupId(supplier.getSupId());
+		assertThat(supplier).isEqualTo(supplier2);
+	}
+
+	@Test
+	public void testSupplierHashCode() throws Exception {
+		int code = _setupTestSupplier(false);
+		Supplier supplier = supplierBrowserManager.getByID(code);
+		// compute value
+		int hashCode = supplier.hashCode();
+		// use computed stored value
+		assertThat(supplier.hashCode()).isEqualTo(hashCode);
 	}
 
 	private int _setupTestSupplier(boolean usingSet) throws OHException {
