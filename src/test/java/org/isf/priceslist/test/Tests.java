@@ -27,6 +27,7 @@ import static org.assertj.core.api.Assertions.within;
 
 import java.util.ArrayList;
 
+import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.priceslist.manager.PriceListManager;
 import org.isf.priceslist.model.Price;
@@ -36,11 +37,11 @@ import org.isf.priceslist.service.PriceListIoOperationRepository;
 import org.isf.priceslist.service.PricesListIoOperations;
 import org.isf.serviceprinting.print.PriceForPrint;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestComponent;
 
 public class Tests extends OHCoreTestCase {
 
@@ -325,7 +326,11 @@ public class Tests extends OHCoreTestCase {
 			priceList.setCode("");
 			priceListManager.newList(priceList);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
 	}
 
 	@Test
@@ -336,7 +341,11 @@ public class Tests extends OHCoreTestCase {
 			priceList.setName("");
 			priceListManager.newList(priceList);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
 	}
 
 	@Test
@@ -347,7 +356,11 @@ public class Tests extends OHCoreTestCase {
 			priceList.setDescription("");
 			priceListManager.newList(priceList);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
 	}
 
 	@Test
@@ -358,7 +371,11 @@ public class Tests extends OHCoreTestCase {
 			priceList.setCurrency("");
 			priceListManager.newList(priceList);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
 	}
 
 	@Test

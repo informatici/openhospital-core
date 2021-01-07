@@ -26,13 +26,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 
+import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
-import org.isf.priceslist.model.PriceList;
 import org.isf.pricesothers.manager.PricesOthersManager;
 import org.isf.pricesothers.model.PricesOthers;
 import org.isf.pricesothers.service.PriceOthersIoOperationRepository;
 import org.isf.pricesothers.service.PriceOthersIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -182,7 +183,11 @@ public class Tests extends OHCoreTestCase {
 			pricesOthers.setCode("");
 			pricesOthersManager.newOther(pricesOthers);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
 	}
 
 	@Test
@@ -193,7 +198,11 @@ public class Tests extends OHCoreTestCase {
 			pricesOthers.setDescription("");
 			pricesOthersManager.newOther(pricesOthers);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
 	}
 
 	@Test
