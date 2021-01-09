@@ -241,7 +241,7 @@ public class Tests extends OHCoreTestCase {
 	public void testVaccinePrint() throws Exception {
 		String code = _setupTestVaccineType(true);
 		VaccineType vaccineType = vaccineTypeBrowserManager.findVaccineType(code);
-		assertThat(vaccineType.print()).isEqualTo("vaccineType code=." + vaccineType.getCode() + ". description=." + vaccineType.getDescription() + ".");
+		assertThat(vaccineType.print()).isEqualTo("vaccineType code=." + vaccineType.getCode() + ". description=." + vaccineType.getDescription() + '.');
 	}
 
 	@Test

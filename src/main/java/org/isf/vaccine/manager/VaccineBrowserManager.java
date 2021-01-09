@@ -40,8 +40,7 @@ import org.springframework.stereotype.Component;
  * useful logic manipulations of the dynamic data (memory)
  *
  * @author Eva
- * <p>
- * <p>
+ *
  * modification history
  * 20/10/2011 - Cla - insert vaccinetype managment
  */
