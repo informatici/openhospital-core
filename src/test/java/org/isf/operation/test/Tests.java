@@ -957,31 +957,18 @@ public class Tests extends OHCoreTestCase {
 	public void testOperationRowToString() throws Exception {
 		OperationType operationType = testOperationType.setup(true);
 		Operation operation = testOperation.setup(operationType, false);
-		operation.setDescription("some new description");
+
+		operation.setDescription("aDescription");
 		OperationRow operationRow = testOperationRow.setup(operation, true);
 
-		Ward ward = testWard.setup(false, false);
 		Patient patient = testPatient.setup(false);
-		AdmissionType admissionType = testAdmissionType.setup(false);
-		DiseaseType diseaseType = testDiseaseType.setup(false);
-		Disease diseaseIn = testDisease.setup(diseaseType, false);
-		Disease diseaseOut1 = testDisease.setup(diseaseType, false);
-		diseaseOut1.setCode("888");
-		Disease diseaseOut2 = testDisease.setup(diseaseType, false);
-		diseaseOut2.setCode("777");
-		Disease diseaseOut3 = testDisease.setup(diseaseType, false);
-		diseaseOut3.setCode("666");
-		DischargeType dischargeType = testDischargeType.setup(false);
-		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
-		DeliveryType deliveryType = testDeliveryType.setup(false);
-		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
-
-		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, false);
+		Admission admission = testAdmission.setup(null, patient, null, null, null,
+				null, null, operation, null, null,
+				null, null, false);
+		admission.setUserID("UserID");
 		operationRow.setAdmission(admission);
 
-		assertThat(operationRow).hasToString("some new description TestUserId");
+		assertThat(operationRow).hasToString("aDescription UserID");
 	}
 
 	private String _setupTestOperation(boolean usingSet) throws Exception {
