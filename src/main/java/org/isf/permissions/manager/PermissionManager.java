@@ -17,4 +17,28 @@ public class PermissionManager {
 		return this.operations.retrivePermisionsByGroupCode(userGropupCode);
 	}
 
+	public List<Permission> retrievePermissionsByUsername(String currentUserName) {
+		return this.operations.retrievePermissionsByCurrentLoggedInUser(currentUserName);
+	}
+
+	public Permission retrievePermissionById(Integer id) {
+		return this.operations.retrievePermissionById(id);
+	}
+
+	public Permission retrievePermissionByName(String name) {
+		return this.operations.retrievePermissionByName(name);
+	}
+
+	public Permission insertPermission(Permission permission) {
+		return this.operations.insertPermission(permission);
+	}
+
+	public Permission updatePermission(Permission model) {
+		return this.operations.updatePermission(model);
+	}
+
+	public Boolean deletePermission(Integer id) {
+		return this.operations.deletePermission(id);
+	}
+
 }

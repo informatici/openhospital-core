@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -63,7 +64,7 @@ public class Permission extends Auditable<String> {
 	@Column(name="P_DESCRIPTION")
 	private String description;
 	
-	@OneToMany(mappedBy = "permission")
+	@OneToMany(mappedBy = "permission", cascade = CascadeType.REMOVE)
 	private List<GroupPermission> groupPermission;
 
 	public int getId() {
@@ -88,6 +89,16 @@ public class Permission extends Auditable<String> {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<GroupPermission> getGroupPermission() {
+		return groupPermission;
+	}
+
+	public void setGroupPermission(List<GroupPermission> groupPermission) {
+		this.groupPermission = groupPermission;
 	}	
+	
+	
 
 }

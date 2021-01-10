@@ -83,4 +83,14 @@ public class GroupPermission extends Auditable<String> {
 		this.permission = permission;
 	}
 
+	public UserGroup getUserGroup() {
+		return userGroup;
+	}
+
+	public void setUserGroup(UserGroup userGroup) {
+		this.userGroup = userGroup;
+	}
+	
+	
+
 }

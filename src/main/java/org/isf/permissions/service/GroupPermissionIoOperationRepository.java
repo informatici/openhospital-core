@@ -23,21 +23,19 @@ package org.isf.permissions.service;
 
 import java.util.List;
 
-import org.isf.permissions.model.Permission;
+import org.isf.permissions.model.GroupPermission;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PermissionIoOperationRepository extends JpaRepository<Permission, Integer> {
+public interface GroupPermissionIoOperationRepository extends JpaRepository<GroupPermission, Integer> {
 
-	@Query(value = "FROM Permission p WHERE p.active=1 and p.id in (select permission.id from GroupPermission where active=1 and userGroup.code like :userGroupCode)")
-	List<Permission> findAllByUserGroupCode(@Param("userGroupCode") String userGroupCode);
+	List<GroupPermission> findByIdIn(List<Integer> ids);
 
-	@Query(value = "FROM Permission p WHERE p.active=1 and p.id in (select permission.id from GroupPermission where active=1 and userGroup.code in (select userGroupName from User where active=1 and userName like :currentUserName))")
-	List<Permission> retrievePermissionsByCurrentLoggedInUser(@Param("currentUserName") String currentUserName);
+	List<GroupPermission> findByUserGroup_codeInAndPermission_id(List<String> userGroupCodes, int id);
 
-	Permission findByName(String name);
+	List<GroupPermission> findByPermission_IdAndUserGroup_CodeIn(Integer permissionId, List<String> userGroupCodes);
+
+	List<GroupPermission> findByPermission_id(int id);
 
 }

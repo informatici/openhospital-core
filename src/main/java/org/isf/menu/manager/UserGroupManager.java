@@ -19,26 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.menu.service;
-
-import org.isf.menu.model.UserGroup;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+package org.isf.menu.manager;
 
 import java.util.List;
 
-@Repository
-public interface UserGroupIoOperationRepository extends JpaRepository<UserGroup, String> {
-    List<UserGroup> findAllByOrderByCodeAsc();
+import org.isf.menu.model.UserGroup;
+import org.isf.menu.service.UserGroupIoOperationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-    @Modifying
-    @Transactional
-    @Query(value =  "update UserGroup ug set ug.desc=:description where ug.code=:id")
-    int updateDescription(@Param("description") String description, @Param("id") String id);
+@Component
+public class UserGroupManager {
 
-	List<UserGroup> findByCodeIn(List<String> userGroupIds);    
+	@Autowired
+	private UserGroupIoOperationRepository userGroupIoOperationRepository;
+
+	public List<UserGroup> findByIdIn(List<String> userGroupIds) {
+		return this.userGroupIoOperationRepository.findByCodeIn(userGroupIds);
+	}
+
 }
