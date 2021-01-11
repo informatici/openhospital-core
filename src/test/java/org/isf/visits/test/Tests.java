@@ -23,13 +23,18 @@ package org.isf.visits.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.isf.OHCoreTestCase;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.test.TestPatient;
 import org.isf.utils.exception.OHException;
+import org.isf.visits.manager.VisitManager;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperationRepository;
 import org.isf.visits.service.VisitsIoOperations;
@@ -51,6 +56,8 @@ public class Tests extends OHCoreTestCase {
 	VisitsIoOperations visitsIoOperation;
 	@Autowired
 	VisitsIoOperationRepository visitsIoOperationRepository;
+	@Autowired
+	VisitManager visitManager;
 	@Autowired
 	PatientIoOperationRepository patientIoOperationRepository;
 	@Autowired
@@ -105,6 +112,22 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	public void testIoGetVisitsWardNullWardId() throws Exception {
+		int id = _setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findOne(id);
+		ArrayList<Visit> visits = visitsIoOperation.getVisitsWard(null);
+		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
+	}
+
+	@Test
+	public void testIoGetVisitsWardWardId() throws Exception {
+		int id = _setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findOne(id);
+		ArrayList<Visit> visits = visitsIoOperation.getVisitsWard(visit.getWard().getCode());
+		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
+	}
+
+	@Test
 	public void testIoNewVisit() throws Exception {
 		Patient patient = testPatient.setup(false);
 		Ward ward = testWard.setup(false);
@@ -127,7 +150,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testFindVisit() throws Exception {
+	public void testIoFindVisit() throws Exception {
 		int id = _setupTestVisit(false);
 		Visit result = visitsIoOperation.findVisit(id);
 
@@ -135,13 +158,207 @@ public class Tests extends OHCoreTestCase {
 		assertThat(result.getVisitID()).isEqualTo(id);
 	}
 
-	private int _setupTestVisit(boolean usingSet) throws OHException {
-		Visit visit;
+	@Test
+	public void testMgrGetVisitPatientCode() throws Exception {
+		int id = _setupTestVisit(false);
+		Visit vist = visitsIoOperationRepository.findOne(id);
+		ArrayList<Visit> visits = visitManager.getVisits(vist.getPatient().getCode());
+		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(vist.getDate());
+	}
+
+	@Test
+	public void testMgrGetVisiNoPatientCode() throws Exception {
+		int id = _setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findOne(id);
+		ArrayList<Visit> visits = visitManager.getVisits(0);
+		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
+	}
+
+	@Test
+	public void testMgrGetVisitsWard() throws Exception {
+		int id = _setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findOne(id);
+		ArrayList<Visit> visits = visitManager.getVisitsWard();
+		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
+	}
+
+	@Test
+	public void testMgrGetVisitsWardWardId() throws Exception {
+		int id = _setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findOne(id);
+		ArrayList<Visit> visits = visitManager.getVisitsWard(visit.getWard().getCode());
+		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
+	}
+
+	@Test
+	public void testMgrGetVisitsNull() throws Exception {
+		assertThat(visitManager.getVisits(null)).isNull();
+	}
+
+	@Test
+	public void testMgrGetVisitsEmpty() throws Exception {
+		assertThat(visitManager.getVisits(new ArrayList<Visit>())).isEmpty();
+	}
+
+	@Test
+	public void testMgrGetVisits() throws Exception {
+		ArrayList<Visit> visits = new ArrayList<>();
+		int id = _setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findOne(id);
+		visits.add(visit);
+		assertThat(visitManager.getVisits(visits)).hasSize(1);
+	}
+
+	@Test
+	public void testMgrNewVisitNewVisit() throws Exception {
 		Patient patient = testPatient.setup(false);
 		Ward ward = testWard.setup(false);
 		patientIoOperationRepository.saveAndFlush(patient);
 		wardIoOperationRepository.saveAndFlush(ward);
-		visit = testVisit.setup(patient, usingSet, ward);
+		GregorianCalendar date = new GregorianCalendar(10, 9, 8);
+		Visit visit = visitManager.newVisit(2, date, patient, "TestNote", true, ward, "10", "testService");
+		assertThat(visit.getDate()).isEqualTo(date);
+		assertThat(visit.getNote()).isEqualTo("TestNote");
+		assertThat(visit.isSms()).isTrue();
+		assertThat(visit.getWard()).isEqualTo(ward);
+	}
+
+	@Test
+	public void testMgrNewVisit() throws Exception {
+		Patient patient = testPatient.setup(false);
+		Ward ward = testWard.setup(false);
+		patientIoOperationRepository.saveAndFlush(patient);
+		wardIoOperationRepository.saveAndFlush(ward);
+		Visit visit = testVisit.setup(patient, true, ward);
+		int id = visitManager.newVisit(visit).getVisitID();
+		_checkVisitIntoDb(id);
+	}
+
+	@Test
+	public void testMgrNewVisitsEmptyList() throws Exception {
+		assertThat(visitManager.newVisits(new ArrayList<Visit>())).isTrue();
+	}
+
+	@Test
+	public void testMgrNewVisitsSMSFalse() throws Exception {
+		ArrayList<Visit> visits = new ArrayList<>();
+		int id = _setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findOne(id);
+		visit.setSms(false);
+		visits.add(visit);
+		assertThat(visitManager.newVisits(visits)).isTrue();
+	}
+
+	@Test
+	public void testMgrNewVisitsSMSTrueDatePassed() throws Exception {
+		ArrayList<Visit> visits = new ArrayList<>();
+		int id = _setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findOne(id);
+		visits.add(visit);
+		assertThat(visitManager.newVisits(visits)).isTrue();
+	}
+
+	@Test
+	public void testMgrNewVisitsSMSTrueDateFuture() throws Exception {
+		ArrayList<Visit> visits = new ArrayList<>();
+		int id = _setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findOne(id);
+		LocalDate localDate = LocalDate.now().plusMonths(1);
+		visit.setDate(Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		visits.add(visit);
+		assertThat(visitManager.newVisits(visits)).isTrue();
+	}
+
+	@Test
+	public void testMgrDeleteVisit() throws Exception {
+		int id = _setupTestVisit(false);
+		Visit foundVisit = visitManager.findVisit(id);
+		assertThat(visitManager.deleteAllVisits(foundVisit.getPatient().getCode())).isTrue();
+		assertThat(visitsIoOperation.isCodePresent(id)).isFalse();
+	}
+
+	@Test
+	public void testMgrFindVisit() throws Exception {
+		int id = _setupTestVisit(false);
+		Visit result = visitManager.findVisit(id);
+		assertThat(result).isNotNull();
+		assertThat(result.getVisitID()).isEqualTo(id);
+	}
+
+	@Test
+	public void testVisitGetSet() throws Exception {
+		int id = _setupTestVisit(false);
+		Visit visit = visitManager.findVisit(id);
+
+		assertThat(visit.getDuration()).isEqualTo("10");
+		visit.setDuration("");
+		assertThat(visit.getDuration()).isEmpty();
+
+		assertThat(visit.getService()).isEqualTo("testService");
+		visit.setService("");
+		assertThat(visit.getService()).isEmpty();
+	}
+
+	@Test
+	public void testVisitToStringSMS() throws Exception {
+		int id = _setupTestVisit(false);
+		Visit visit = visitManager.findVisit(id);
+		assertThat(visit.toStringSMS()).isEqualTo("08/10/10 00:00");
+	}
+
+	@Test
+	public void testVisitToString() throws Exception {
+		int id = _setupTestVisit(false);
+		Visit visit = visitManager.findVisit(id);
+		assertThat(visit).hasToString("TestDescription - testService - 08/10/10 - 00:00:00");
+	}
+
+	@Test
+	public void testVisitFormatDateTime() throws Exception {
+		int id = _setupTestVisit(false);
+		Visit visit = visitManager.findVisit(id);
+		assertThat(visit.formatDateTime(visit.getDate())).isEqualTo("08/10/10 - 00:00:00");
+	}
+
+	@Test
+	public void testVisitFormatDateTimeSMS() throws Exception {
+		int id = _setupTestVisit(false);
+		Visit visit = visitManager.findVisit(id);
+		assertThat(visit.formatDateTimeSMS(visit.getDate())).isEqualTo("08/10/10 00:00");
+	}
+
+	@Test
+	public void testVisitEquals() throws Exception {
+		int id = _setupTestVisit(false);
+		Visit visit = visitManager.findVisit(id);
+
+		assertThat(visit.equals(visit)).isTrue();
+		assertThat(visit).isNotEqualTo(null);
+		assertThat(visit).isNotEqualTo("someString");
+
+		Visit visit2 = new Visit(-1, null, null, null, false, null, null, null);
+		assertThat(visit).isNotEqualTo(visit2);
+
+		visit2.setVisitID(visit.getVisitID());
+		assertThat(visit).isEqualTo(visit2);
+	}
+
+	@Test
+	public void testVisitHashCode() throws Exception {
+		int id = _setupTestVisit(true);
+		Visit visit = visitManager.findVisit(id);
+		int hashCode = visit.hashCode();
+		assertThat(hashCode).isEqualTo(23 * 133 + visit.getVisitID());
+		// return computed value
+		assertThat(visit.hashCode()).isEqualTo(hashCode);
+	}
+
+	private int _setupTestVisit(boolean usingSet) throws OHException {
+		Patient patient = testPatient.setup(false);
+		Ward ward = testWard.setup(false);
+		patientIoOperationRepository.saveAndFlush(patient);
+		wardIoOperationRepository.saveAndFlush(ward);
+		Visit visit = testVisit.setup(patient, usingSet, ward);
 		visitsIoOperationRepository.saveAndFlush(visit);
 		return visit.getVisitID();
 	}

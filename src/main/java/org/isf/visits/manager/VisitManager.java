@@ -25,11 +25,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.patient.manager.PatientBrowserManager;
 import org.isf.patient.model.Patient;
-import org.isf.sms.manager.SmsManager;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
 import org.isf.utils.exception.OHServiceException;
@@ -37,7 +35,6 @@ import org.isf.utils.time.TimeTools;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
 import org.isf.ward.model.Ward;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -81,7 +78,7 @@ public class VisitManager {
 	public ArrayList<Visit> getVisits(ArrayList<Visit> vsRows) throws OHServiceException {
 		
 		if (vsRows != null) {
-			ArrayList<Visit> visits = new ArrayList<Visit>();
+			ArrayList<Visit> visits = new ArrayList<>();
 			
 			for (Visit vsRow : vsRows) {
 				
@@ -100,7 +97,7 @@ public class VisitManager {
 	}
 	private Visit createVisit(int visitID, Patient patient, Ward ward, GregorianCalendar date, String note,
 			String duration, String service, boolean sms) {
-	ArrayList<GregorianCalendar> datesArray = new ArrayList<GregorianCalendar>();
+	ArrayList<GregorianCalendar> datesArray = new ArrayList<>();
 		
 		GregorianCalendar stepDate = new GregorianCalendar();
 		stepDate.setTime(date.getTime());
@@ -155,7 +152,6 @@ public class VisitManager {
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean newVisits(ArrayList<Visit> visits) throws OHServiceException {
 		if (!visits.isEmpty()) {
-			DateTime now = new DateTime();
 			PatientBrowserManager patMan = this.applicationContext.getBean(PatientBrowserManager.class);
 			int patID = visits.get(0).getPatient().getCode();
 			ioOperations.deleteAllVisits(patID);
@@ -203,27 +199,27 @@ public class VisitManager {
 		return true;
 	}
 	
-	/**
-	 * Builds the {@link Sms} text for the specified {@link Visit}
-	 * If length exceed {@code SmsManager.MAX_LENGHT} the message will be cropped
-	 * (example: 
-	 * "REMINDER: dd/MM/yy - HH:mm:ss - {@link Visit#getNote()}")
-	 * @param visit - the {@link Visit}
-	 * @return a string containing the text
-	 */
-	private String prepareSmsFromVisit(Visit visit) {
-		
-		String note = visit.getNote();
-		StringBuilder sb = new StringBuilder(MessageBundle.getMessage("angal.visit.reminderm")).append(": ");
-		sb.append(visit.toStringSMS());
-		if (note != null && !note.equals("")) {
-			sb.append(" - ").append(note);
-		}
-		if (sb.toString().length() > SmsManager.MAX_LENGHT) {
-		    return sb.toString().substring(0, SmsManager.MAX_LENGHT);
-		}
-		return sb.toString();
-	}
+//	/**
+//	 * Builds the {@link Sms} text for the specified {@link Visit}
+//	 * If length exceed {@code SmsManager.MAX_LENGHT} the message will be cropped
+//	 * (example:
+//	 * "REMINDER: dd/MM/yy - HH:mm:ss - {@link Visit#getNote()}")
+//	 * @param visit - the {@link Visit}
+//	 * @return a string containing the text
+//	 */
+//	private String prepareSmsFromVisit(Visit visit) {
+//
+//		String note = visit.getNote();
+//		StringBuilder sb = new StringBuilder(MessageBundle.getMessage("angal.visit.reminderm")).append(": ");
+//		sb.append(visit.toStringSMS());
+//		if (note != null && !note.equals("")) {
+//			sb.append(" - ").append(note);
+//		}
+//		if (sb.toString().length() > SmsManager.MAX_LENGHT) {
+//		    return sb.toString().substring(0, SmsManager.MAX_LENGHT);
+//		}
+//		return sb.toString();
+//	}
 
 	/**
 	 * returns the {@link Visit} based on visit id
