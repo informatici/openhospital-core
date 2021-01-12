@@ -125,11 +125,19 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetPregnantTreatmentType() throws Exception {
 		String code = _setupTestPregnantTreatmentType(false);
 		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findOne(code);
+		PregnantTreatmentType pregnantTreatmentType2 = new PregnantTreatmentType("AA", "AA description");
+		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregnantTreatmentType2);
+		PregnantTreatmentType pregnantTreatmentType3 = new PregnantTreatmentType("BB", "BB description");
+		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregnantTreatmentType3);
+
 		ArrayList<PregnantTreatmentType> pregnantTreatmentTypes = pregnantTreatmentTypeBrowserManager.getPregnantTreatmentType();
+		assertThat(pregnantTreatmentTypes).hasSize(3);
 
 		for (PregnantTreatmentType pregnantTreatmentType : pregnantTreatmentTypes) {
 			if (pregnantTreatmentType.getCode().equals(code)) {
 				assertThat(pregnantTreatmentType.getDescription()).isEqualTo(foundPregnantTreatmentType.getDescription());
+			} else {
+				assertThat(pregnantTreatmentType.getDescription()).isNotEqualTo(foundPregnantTreatmentType.getDescription());
 			}
 		}
 	}
