@@ -23,16 +23,21 @@ package org.isf.visits.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.isf.OHCoreTestCase;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.test.TestPatient;
+import org.isf.sms.model.Sms;
+import org.isf.sms.service.SmsOperations;
 import org.isf.utils.exception.OHException;
 import org.isf.visits.manager.VisitManager;
 import org.isf.visits.model.Visit;
@@ -62,6 +67,8 @@ public class Tests extends OHCoreTestCase {
 	PatientIoOperationRepository patientIoOperationRepository;
 	@Autowired
 	WardIoOperationRepository wardIoOperationRepository;
+	@Autowired
+	private SmsOperations smsOperations;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -264,9 +271,16 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findOne(id);
 		LocalDate localDate = LocalDate.now().plusMonths(1);
-		visit.setDate(Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		visit.setDate(date);
 		visits.add(visit);
 		assertThat(visitManager.newVisits(visits)).isTrue();
+
+		List<Sms> sms = smsOperations.getAll(new Date(), date);
+		assertThat(sms).hasSize(1);
+		GregorianCalendar scheduledDate = (GregorianCalendar) visit.getDate().clone();
+		scheduledDate.add(Calendar.DAY_OF_MONTH, -1);
+		assertThat(sms.get(0).getSmsDateSched()).isEqualTo(new Timestamp(scheduledDate.getTimeInMillis()));
 	}
 
 	@Test
