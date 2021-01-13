@@ -92,10 +92,10 @@ public class Tests extends OHCoreTestCase {
 		Ward ward = wardIoOperationRepository.findOne(code);
 		Admission admission1 = new Admission(1, 1, null, ward, 1, null, null, null, null, null,
 				null, null, null, null, null, null, null, null, null, null,
-				null, null, null, null, null, null, null, null, null, null, null);
-		Admission admission2 = new Admission(2, 1, null, ward, 1, null, null, null, null, null,
+				null, null, null, null, null, null, null, null, null, null, "N");
+		Admission admission2 = new Admission(2, 1, null, ward, 2, null, null, null, null, null,
 				null, null, null, null, null, null, null, null, null, null,
-				null, null, null, null, null, null, null, null, null, null, null);
+				null, null, null, null, null, null, null, null, null, null, "N");
 		admissionIoOperationRepository.saveAndFlush(admission1);
 		admissionIoOperationRepository.saveAndFlush(admission2);
 		assertThat(wardIoOperation.getCurrentOccupation(ward)).isEqualTo(2);
