@@ -22,6 +22,7 @@
 package org.isf.opd.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -29,6 +30,7 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,13 +70,14 @@ public class OpdIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Opd> getOpdList(boolean oneWeek) throws OHServiceException	{
-		GregorianCalendar dateFrom=new GregorianCalendar();
-		GregorianCalendar dateTo=new GregorianCalendar();
-		
+		GregorianCalendar dateFrom = TimeTools.getDateToday0();
+		GregorianCalendar dateTo = TimeTools.getDateToday24();
+
 		if (oneWeek) {
 			dateFrom.add(GregorianCalendar.WEEK_OF_YEAR,-1);
 		}
-		
+
+
 		return getOpdList(MessageBundle.getMessage("angal.opd.alltype"),MessageBundle.getMessage("angal.opd.alldisease"),dateFrom,dateTo,0,0,'A','A');
 	}
 	
