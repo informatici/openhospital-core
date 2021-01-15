@@ -60,7 +60,12 @@ public class SupplierBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public HashMap<Integer, String> getHashMap(boolean all) throws OHServiceException {
-		List<Supplier> supList = getAll();
+		List<Supplier> supList;
+		if (all) {
+			supList = ioOperations.getAll();
+		} else {
+			supList = ioOperations.getList();
+		}
 		HashMap<Integer, String> supMap = new HashMap<>();
 		for (Supplier sup : supList) {
 			supMap.put(sup.getSupId(), sup.getSupName());
