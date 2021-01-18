@@ -44,9 +44,9 @@ public class PricesListIoOperations {
 	private PriceIoOperationRepository priceRepository;
 	
 	/**
-	 * Return the list of {@link List}s in the DB
+	 * Return the list of {@link PriceList}s in the DB
 	 * 
-	 * @return the list of {@link List}s
+	 * @return the list of {@link PriceList}s
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<PriceList> getLists() throws OHServiceException {
@@ -74,9 +74,9 @@ public class PricesListIoOperations {
 	}
 
 	/**
-	 * Updates all {@link Price}s in the specified {@link List}
+	 * Updates all {@link Price}s in the specified {@link PriceList}
 	 * 
-	 * @param list - the {@link List}
+	 * @param list - the {@link PriceList}
 	 * @param prices - the list of {@link Price}s
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
 	 * @throws OHServiceException 
@@ -110,9 +110,9 @@ public class PricesListIoOperations {
     }
 
 	/**
-	 * Insert a new {@link List} in the DB
+	 * Insert a new {@link PriceList} in the DB
 	 * 
-	 * @param list - the {@link List}
+	 * @param list - the {@link PriceList}
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
@@ -121,9 +121,9 @@ public class PricesListIoOperations {
 	}
 	
 	/**
-	 * Update a {@link List} in the DB
+	 * Update a {@link PriceList} in the DB
 	 * 
-	 * @param list - the {@link List} to update
+	 * @param list - the {@link PriceList} to update
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
@@ -132,9 +132,9 @@ public class PricesListIoOperations {
 	}
 	
 	/**
-	 * Delete a {@link List} in the DB
+	 * Delete a {@link PriceList} in the DB
 	 * 
-	 * @param list - the {@link List} to delete
+	 * @param list - the {@link PriceList} to delete
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
