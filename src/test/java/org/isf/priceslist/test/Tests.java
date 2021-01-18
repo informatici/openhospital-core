@@ -395,8 +395,10 @@ public class Tests extends OHCoreTestCase {
 		assertThat(price).isNotEqualTo("someString");
 
 		PriceList priceList2 = testPriceList.setup(true);
-		Price price2 = testPrice.setup(priceList, true);
+		Price price2 = new Price(priceList2, "TG", "TestItem", "TestDescriptionOther", 10.10);
+		assertThat(price.equals(price2)).isTrue();
 
+		price2.setDesc("TestDescription");
 		price.setId(-1);
 		price2.setId(-99);
 		assertThat(price).isNotEqualTo(price2);
