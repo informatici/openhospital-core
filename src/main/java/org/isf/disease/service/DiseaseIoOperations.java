@@ -208,38 +208,25 @@ public class DiseaseIoOperations {
 	/**
 	 * Stores the specified {@link Disease}. 
 	 * @param disease the disease to store.
-	 * @return <code>true</code> if the disease has been stored, <code>false</code> otherwise.
+	 * @return disease that has been stored
 	 * @throws OHServiceException if an error occurs storing the disease.
 	 */
-	public boolean newDisease(
+	public Disease newDisease(
 			Disease disease) throws OHServiceException
 	{
-		boolean result = true;
-	
-		
-		Disease savedDisease = repository.save(disease);
-		result = (savedDisease != null);
-		
-		return result;
+		return repository.save(disease);
 	}
 
 	/**
 	 * Updates the specified {@link Disease}.
 	 * @param disease the {@link Disease} to update.
-	 * @return <code>true</code> if the disease has been updated, <code>false</code> otherwise.
+	 * @return disease that has been updated
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateDisease(
+	public Disease updateDisease(
 			Disease disease) throws OHServiceException 
 	{
-		boolean result = true;
-	
-		
-		//disease.setLock(disease.getLock() + 1);
-		Disease savedDisease = repository.save(disease);
-		result = (savedDisease != null);
-		
-		return result;
+		return repository.save(disease);
 	}
 
 	/**

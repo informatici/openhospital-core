@@ -100,8 +100,8 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestVaccine(false);
 		Vaccine foundVaccine = vaccineIoOperation.findVaccine(code);
 		foundVaccine.setDescription("Update");
-		boolean result = vaccineIoOperation.updateVaccine(foundVaccine);
-		assertThat(result).isTrue();
+		Vaccine result = vaccineIoOperation.updateVaccine(foundVaccine);
+		assertThat(result.getDescription()).isEqualTo("Update");
 		Vaccine updateVaccine = vaccineIoOperation.findVaccine(code);
 		assertThat(updateVaccine.getDescription()).isEqualTo("Update");
 	}
@@ -111,8 +111,8 @@ public class Tests extends OHCoreTestCase {
 		VaccineType vaccineType = testVaccineType.setup(false);
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
 		Vaccine vaccine = testVaccine.setup(vaccineType, true);
-		boolean result = vaccineIoOperation.newVaccine(vaccine);
-		assertThat(result).isTrue();
+		Vaccine result = vaccineIoOperation.newVaccine(vaccine);
+		assertThat(result.getCode()).isEqualTo("Z");
 		_checkVaccineIntoDb(vaccine.getCode());
 	}
 

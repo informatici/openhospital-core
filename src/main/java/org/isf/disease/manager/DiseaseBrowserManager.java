@@ -173,10 +173,10 @@ public class DiseaseBrowserManager {
 	 * In case of error a message error is shown and a <code>false</code> value is returned.
 	 *
 	 * @param disease the disease to store.
-	 * @return <code>true</code> if the disease has been stored, <code>false</code> otherwise.
+	 * @return the disease that has been stored.
 	 * @throws OHServiceException
 	 */
-	public boolean newDisease(Disease disease) throws OHServiceException {
+	public Disease newDisease(Disease disease) throws OHServiceException {
 		validateDisease(disease, true);
 		return ioOperations.newDisease(disease);
 	}
@@ -187,10 +187,10 @@ public class DiseaseBrowserManager {
 	 * In case of error a message error is shown and a <code>false</code> value is returned.
 	 *
 	 * @param disease the disease to update.
-	 * @return <code>true</code> if the disease has been updated, <code>false</code> otherwise.
+	 * @return the disease that has been updated.
 	 * @throws OHServiceException
 	 */
-	public boolean updateDisease(Disease disease) throws OHServiceException {
+	public Disease updateDisease(Disease disease) throws OHServiceException {
 		validateDisease(disease, false);
 		return ioOperations.updateDisease(disease);
 	}

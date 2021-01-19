@@ -115,9 +115,9 @@ public class VaccineBrowserManager {
 	 * Inserts a new {@link Vaccine} in the DB
 	 *
 	 * @param vaccine - the item to insert
-	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
+	 * @return vaccine that has been inserted
 	 */
-	public boolean newVaccine(Vaccine vaccine) throws OHServiceException {
+	public Vaccine newVaccine(Vaccine vaccine) throws OHServiceException {
 		validateVaccine(vaccine, true);
 		return ioOperations.newVaccine(vaccine);
 	}
@@ -125,9 +125,9 @@ public class VaccineBrowserManager {
 	/**
 	 * Updates the specified {@link Vaccine} object.
 	 * @param vaccine - the {@link Vaccine} object to update.
-	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
+	 * @return vaccine that has been updated.
 	 */
-	public boolean updateVaccine(Vaccine vaccine) throws OHServiceException {
+	public Vaccine updateVaccine(Vaccine vaccine) throws OHServiceException {
 		validateVaccine(vaccine, false);
         return ioOperations.updateVaccine(vaccine);
     }
