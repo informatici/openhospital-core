@@ -92,9 +92,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetVaccineShouldFindAllVaccinesWhenNoCodeProvided() throws Exception {
 		// given:
-		String code = _setupTestVaccine(false);
-		Vaccine foundVaccine = vaccineIoOperation.findVaccine(code);
-
+		_setupTestVaccine(false);
+		
 		// when:
 		ArrayList<Vaccine> vaccines = vaccineIoOperation.getVaccine(null);
 
@@ -164,8 +163,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetVaccineShouldFindAllVaccinesWhenNoCodeProvided() throws Exception {
-		String code = _setupTestVaccine(false);
-		Vaccine foundVaccine = vaccineBrowserManager.findVaccine(code);
+		_setupTestVaccine(false);
 		ArrayList<Vaccine> vaccines = vaccineBrowserManager.getVaccine();
 		assertThat(vaccines).isNotEmpty();
 	}
