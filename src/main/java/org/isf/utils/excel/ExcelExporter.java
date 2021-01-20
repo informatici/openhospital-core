@@ -90,8 +90,7 @@ public class ExcelExporter {
 		headerStyle = workbook.createCellStyle();
 		Font font = workbook.createFont();
 		font.setFontHeightInPoints((short) 10);
-		font.setBoldweight(Font.BOLDWEIGHT_BOLD);
-		headerStyle.setFont(font);
+		font.setBold(true);
 
 		short doubleFormat = workbook.createDataFormat().getFormat("#,##0.00");
 		doubleStyle = workbook.createCellStyle();

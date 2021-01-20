@@ -22,13 +22,16 @@
 package org.isf.opetype.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 
 import org.isf.OHCoreTestCase;
+import org.isf.opetype.manager.OperationTypeBrowserManager;
 import org.isf.opetype.model.OperationType;
 import org.isf.opetype.service.OperationTypeIoOperation;
 import org.isf.opetype.service.OperationTypeIoOperationRepository;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -43,6 +46,8 @@ public class Tests extends OHCoreTestCase {
 	OperationTypeIoOperation operationTypeIoOperation;
 	@Autowired
 	OperationTypeIoOperationRepository operationTypeIoOperationRepository;
+	@Autowired
+	OperationTypeBrowserManager operationTypeBrowserManager;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -110,6 +115,144 @@ public class Tests extends OHCoreTestCase {
 		assertThat(result).isFalse();
 	}
 
+	@Test
+	public void testMgrGetOperationType() throws Exception {
+		String code = _setupTestOperationType(false);
+		OperationType foundOperationType = operationTypeIoOperationRepository.findOne(code);
+		ArrayList<OperationType> operationTypes = operationTypeBrowserManager.getOperationType();
+		assertThat(operationTypes.get(operationTypes.size() - 1).getDescription()).isEqualTo(foundOperationType.getDescription());
+	}
+
+	@Test
+	public void testMgrUpdateOperationType() throws Exception {
+		String code = _setupTestOperationType(false);
+		OperationType foundOperationType = operationTypeIoOperationRepository.findOne(code);
+		foundOperationType.setDescription("Update");
+		assertThat(operationTypeBrowserManager.updateOperationType(foundOperationType)).isTrue();
+		OperationType updateOperationType = operationTypeIoOperationRepository.findOne(code);
+		assertThat(updateOperationType.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testMgrNewOperationType() throws Exception {
+		OperationType operationType = testOperationType.setup(true);
+		assertThat(operationTypeBrowserManager.newOperationType(operationType)).isTrue();
+		_checkOperationTypeIntoDb(operationType.getCode());
+	}
+
+	@Test
+	public void testMgrCodeControl() throws Exception {
+		String code = _setupTestOperationType(false);
+		assertThat(operationTypeBrowserManager.codeControl(code)).isTrue();
+	}
+
+	@Test
+	public void testMgrDeleteOperationType() throws Exception {
+		String code = _setupTestOperationType(false);
+		OperationType foundOperationType = operationTypeIoOperationRepository.findOne(code);
+		assertThat(operationTypeBrowserManager.deleteOperationType(foundOperationType)).isTrue();
+		assertThat(operationTypeBrowserManager.codeControl(code)).isFalse();
+	}
+
+	@Test
+	public void testMgrValidationKeyNull() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			OperationType operationType = new OperationType("Z", "description");
+			operationType.setCode(null);
+			operationTypeBrowserManager.updateOperationType(operationType);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidationKeyEmpty() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			OperationType operationType = new OperationType("Z", "description");
+			operationType.setCode("");
+			operationTypeBrowserManager.updateOperationType(operationType);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidationKeyTooLong() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			OperationType operationType = new OperationType("Z", "description");
+			operationType.setCode("keyIsTooLong");
+			operationTypeBrowserManager.updateOperationType(operationType);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidationDescriptionNull() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			OperationType operationType = new OperationType("Z", "description");
+			operationType.setDescription(null);
+			operationTypeBrowserManager.updateOperationType(operationType);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidationDescriptionEmpty() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			OperationType operationType = new OperationType("Z", "description");
+			operationType.setDescription("");
+			operationTypeBrowserManager.updateOperationType(operationType);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidationCodeAlreadyInUse() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			OperationType operationType = new OperationType("Z", "description");
+			operationTypeBrowserManager.newOperationType(operationType);
+			operationTypeBrowserManager.newOperationType(operationType);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testOperationTypeEquals() throws Exception {
+		OperationType operationType = new OperationType("Z", "description");
+
+		assertThat(operationType.equals(operationType)).isTrue();
+		assertThat(operationType).isNotEqualTo(null);
+		assertThat(operationType).isNotEqualTo("someString");
+
+		OperationType operationType1 = new OperationType("Z", "description");
+		assertThat(operationType).isEqualTo(operationType1);
+
+		operationType1.setCode("A");
+		assertThat(operationType).isNotEqualTo(operationType1);
+
+		operationType1.setCode(operationType.getCode());
+		operationType1.setDescription("some other description");
+		assertThat(operationType).isNotEqualTo(operationType1);
+	}
+
+	@Test
+	public void testOperationTypeHashCode() throws Exception {
+		OperationType operationType = new OperationType("Z", "description");
+		int hashCode = operationType.hashCode();
+		// used computed value
+		assertThat(operationType.hashCode()).isEqualTo(hashCode);
+	}
+
+	@Test
+	public void testOperationTypeToString() throws Exception {
+		OperationType operationType = new OperationType("Z", "description");
+		assertThat(operationType).hasToString("description");
+	}
+
 	private String _setupTestOperationType(boolean usingSet) throws OHException {
 		OperationType operationType = testOperationType.setup(usingSet);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
@@ -117,8 +260,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void _checkOperationTypeIntoDb(String code) throws OHException {
-		OperationType foundOperationType;
-		foundOperationType = operationTypeIoOperationRepository.findOne(code);
+		OperationType foundOperationType = operationTypeIoOperationRepository.findOne(code);
 		testOperationType.check(foundOperationType);
 	}
 }

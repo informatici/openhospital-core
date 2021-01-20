@@ -24,6 +24,8 @@ package org.isf.patvac.test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
@@ -90,6 +92,44 @@ public class Tests extends OHCoreTestCase {
 	public void testPatientVaccineSets() throws Exception {
 		int code = _setupTestPatientVaccine(true);
 		_checkPatientVaccineIntoDb(code);
+	}
+
+	@Test
+	public void testIoGetPatientVaccineToday() throws Exception {
+		VaccineType vaccineType = testVaccineType.setup(false);
+		Vaccine vaccine = testVaccine.setup(vaccineType, false);
+		Patient patient = testPatient.setup(false);
+		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
+
+		patientVaccine.setVaccineDate(new GregorianCalendar());
+
+		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
+		vaccineIoOperationRepository.saveAndFlush(vaccine);
+		patientIoOperationRepository.saveAndFlush(patient);
+		patVacIoOperationRepository.saveAndFlush(patientVaccine);
+
+		ArrayList<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(false);
+		assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(patientVaccine.getPatName());
+	}
+
+	@Test
+	public void testIoGetPatientVaccineLastWeek() throws Exception {
+		VaccineType vaccineType = testVaccineType.setup(false);
+		Vaccine vaccine = testVaccine.setup(vaccineType, false);
+		Patient patient = testPatient.setup(false);
+		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
+
+		GregorianCalendar date = new GregorianCalendar();
+		date.add(Calendar.DAY_OF_MONTH, -3);
+		patientVaccine.setVaccineDate(date);
+
+		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
+		vaccineIoOperationRepository.saveAndFlush(vaccine);
+		patientIoOperationRepository.saveAndFlush(patient);
+		patVacIoOperationRepository.saveAndFlush(patientVaccine);
+
+		ArrayList<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(true);
+		assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(patientVaccine.getPatName());
 	}
 
 	@Test

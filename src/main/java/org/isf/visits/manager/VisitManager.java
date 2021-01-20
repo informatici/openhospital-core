@@ -76,57 +76,11 @@ public class VisitManager {
 		return ioOperations.getVisitsWard(wardId);
 	}
 
-	public ArrayList<Visit> getVisits(ArrayList<Visit> vsRows) throws OHServiceException {
-
-		if (vsRows != null) {
-			ArrayList<Visit> visits = new ArrayList<>();
-
-			for (Visit vsRow : vsRows) {
-
-				visits.add(createVisit(vsRow));
-			}
-			return visits;
-		} else {
-			return null;
-		}
-	}
-
-	public Visit createVisit(Visit vs) throws OHServiceException {
-		return createVisit(vs.getVisitID(), vs.getPatient(), vs.getWard(), vs.getDate(), vs.getNote(), vs.getDuration(),
-				vs.getService(), vs.isSms());
-	}
-
-	private Visit createVisit(int visitID, Patient patient, Ward ward, GregorianCalendar date, String note,
-			String duration, String service, boolean sms) {
-		ArrayList<GregorianCalendar> datesArray = new ArrayList<>();
-
-		GregorianCalendar stepDate = new GregorianCalendar();
-		stepDate.setTime(date.getTime());
-		datesArray.add(new GregorianCalendar(
-				date.get(GregorianCalendar.YEAR),
-				date.get(GregorianCalendar.MONTH),
-				date.get(GregorianCalendar.DAY_OF_MONTH)));
-
-		GregorianCalendar[] dates = new GregorianCalendar[datesArray.size()];
-
-		for (int i = 0; i < datesArray.size(); i++) {
-			//dates[i] = new GregorianCalendar();
-			dates[i] = datesArray.get(i);
-			//System.out.println(formatDate(dates[i]));
-		}
-
-		Visit vs = new Visit(visitID, date, patient, note, sms, ward, duration, service);
-
-		dates = null;
-
-		return vs;
-	}
-
-	public Visit newVisit(int visitID, GregorianCalendar date, Patient patient, String note, boolean sms, Ward ward,
+  public Visit newVisit(int visitID, GregorianCalendar date, Patient patient,String note, boolean sms, Ward ward,
 			String duration, String service) throws OHServiceException {
-
-		Visit vsRow = new Visit(visitID, date, patient, note, sms, ward, duration, service);
-		return newVisit(vsRow);
+			
+			Visit vsRow = new Visit(visitID, date, patient, note, sms, ward, duration, service);
+			return newVisit(vsRow);
 	}
 
 	/**
@@ -223,7 +177,7 @@ public class VisitManager {
 	}
 
 	/**
-	 * returns the {@link Visit} based on visit id
+	 * Returns the {@link Visit} based on visit id
 	 *
 	 * @param code - the  {@link Visit} id.
 	 * @return the {@link Visit}
