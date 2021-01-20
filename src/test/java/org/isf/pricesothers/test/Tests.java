@@ -22,13 +22,18 @@
 package org.isf.pricesothers.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 
+import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
+import org.isf.pricesothers.manager.PricesOthersManager;
 import org.isf.pricesothers.model.PricesOthers;
 import org.isf.pricesothers.service.PriceOthersIoOperationRepository;
 import org.isf.pricesothers.service.PriceOthersIoOperations;
+import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,6 +47,8 @@ public class Tests extends OHCoreTestCase {
 	PriceOthersIoOperations priceOthersIoOperations;
 	@Autowired
 	PriceOthersIoOperationRepository priceOthersIoOperationRepository;
+	@Autowired
+	PricesOthersManager pricesOthersManager;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -125,6 +132,109 @@ public class Tests extends OHCoreTestCase {
 		// then:
 		assertThat(result).isTrue();
 		assertThat(priceOthersIoOperationRepository.exists(id)).isFalse();
+	}
+
+	@Test
+	public void testIoIsCodePresent() throws Exception {
+		int id = _setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		assertThat(priceOthersIoOperations.isCodePresent(foundPricesOthers.getId())).isTrue();
+		assertThat(priceOthersIoOperations.isCodePresent(-1)).isFalse();
+	}
+
+	@Test
+	public void testMgrGetPricesOthers() throws Exception {
+		int id = _setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		ArrayList<PricesOthers> result = pricesOthersManager.getOthers();
+		assertThat(result.get(0).getDescription()).isEqualTo(foundPricesOthers.getDescription());
+	}
+
+	@Test
+	public void testMgrUpdatePricesOthers() throws Exception {
+		int id = _setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		foundPricesOthers.setDescription("Update");
+		assertThat(pricesOthersManager.updateOther(foundPricesOthers)).isTrue();
+		PricesOthers updatePricesOthers = priceOthersIoOperationRepository.findOne(id);
+		assertThat(updatePricesOthers.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testMgrNewPricesOther() throws Exception {
+		PricesOthers pricesOthers = testPricesOthers.setup(true);
+		assertThat(pricesOthersManager.newOther(pricesOthers)).isTrue();
+		_checkPricesOthersIntoDb(pricesOthers.getId());
+	}
+
+	@Test
+	public void testMgrDeletePricesOther() throws Exception {
+		int id = _setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		assertThat(pricesOthersManager.deleteOther(foundPricesOthers)).isTrue();
+		assertThat(priceOthersIoOperationRepository.exists(id)).isFalse();
+	}
+
+	@Test
+	public void testMgrValidationCodeEmpty() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			PricesOthers pricesOthers = testPricesOthers.setup(true);
+			pricesOthers.setCode("");
+			pricesOthersManager.newOther(pricesOthers);
+		})
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+	}
+
+	@Test
+	public void testMgrValidationDescriptionEmpty() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			PricesOthers pricesOthers = testPricesOthers.setup(true);
+			pricesOthers.setDescription("");
+			pricesOthersManager.newOther(pricesOthers);
+		})
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+	}
+
+	@Test
+	public void testPricesOthersToString() throws Exception {
+		PricesOthers pricesOthers = new PricesOthers("TestCode", "TestDescription", true, false, false, true);
+		assertThat(pricesOthers).hasToString("TestDescription");
+	}
+
+	@Test
+	public void testPricesOthersEquals() throws Exception {
+		PricesOthers pricesOthers = new PricesOthers(-1, "TestCode", "TestDescription", true, false, false, true);
+
+		assertThat(pricesOthers.equals(pricesOthers)).isTrue();
+		assertThat(pricesOthers).isNotEqualTo(null);
+		assertThat(pricesOthers).isNotEqualTo("someString");
+
+		PricesOthers pricesOthers2 = testPricesOthers.setup(true);
+		pricesOthers2.setId(-99);
+		assertThat(pricesOthers).isNotEqualTo(pricesOthers2);
+
+		pricesOthers2.setId(-1);
+		assertThat(pricesOthers).isEqualTo(pricesOthers2);
+	}
+
+	@Test
+	public void testPricesOthersHashCode() throws Exception {
+		PricesOthers pricesOthers = testPricesOthers.setup(true);
+		pricesOthers.setId(1);
+		int hashCode = pricesOthers.hashCode();
+		assertThat(hashCode).isEqualTo(23 * 133 + 1);
+		// check computed value
+		assertThat(pricesOthers.hashCode()).isEqualTo(hashCode);
 	}
 
 	private int _setupTestPricesOthers(boolean usingSet) throws Exception {
