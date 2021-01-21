@@ -173,8 +173,7 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestVaccine(false);
 		Vaccine foundVaccine = vaccineBrowserManager.findVaccine(code);
 		foundVaccine.setDescription("Update");
-		boolean result = vaccineBrowserManager.updateVaccine(foundVaccine);
-		assertThat(result).isTrue();
+		assertThat(vaccineBrowserManager.updateVaccine(foundVaccine)).isNotNull();
 		Vaccine updateVaccine = vaccineBrowserManager.findVaccine(code);
 		assertThat(updateVaccine.getDescription()).isEqualTo("Update");
 	}
@@ -184,7 +183,7 @@ public class Tests extends OHCoreTestCase {
 		VaccineType vaccineType = testVaccineType.setup(false);
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
 		Vaccine vaccine = testVaccine.setup(vaccineType, true);
-		assertThat(vaccineBrowserManager.newVaccine(vaccine)).isTrue();
+		assertThat(vaccineBrowserManager.newVaccine(vaccine)).isNotNull();
 		_checkVaccineIntoDb(vaccine.getCode());
 	}
 
@@ -278,7 +277,7 @@ public class Tests extends OHCoreTestCase {
 	public void testVaccinePrint() throws Exception {
 		String code = _setupTestVaccine(true);
 		Vaccine vaccine = vaccineBrowserManager.findVaccine(code);
-		assertThat(vaccine.print()).isEqualTo("Vaccine code =." + vaccine.getCode() + ". description =." + vaccine.getDescription() + ".");
+		assertThat(vaccine.print()).isEqualTo("Vaccine code =." + vaccine.getCode() + ". description =." + vaccine.getDescription() + '.');
 	}
 
 	@Test
