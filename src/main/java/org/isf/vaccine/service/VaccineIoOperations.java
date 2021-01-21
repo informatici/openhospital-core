@@ -113,10 +113,9 @@ public class VaccineIoOperations {
 	 *
 	 * @param code - the code, must not be {@literal null}
 	 * @return the {@link Vaccine} or {@literal null} if none found
-	 * @throws OHServiceException 
 	 * @throws IllegalArgumentException if {@code code} is {@literal null}
 	 */
-	public Vaccine findVaccine(String code) throws OHServiceException 
+	public Vaccine findVaccine(String code)
 	{
 		if (code != null) {
 			return repository.findOne(code);
