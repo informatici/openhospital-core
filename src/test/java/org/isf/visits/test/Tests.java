@@ -174,7 +174,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrGetVisiNoPatientCode() throws Exception {
+	public void testMgrGetVisitNoPatientCode() throws Exception {
 		int id = _setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findOne(id);
 		ArrayList<Visit> visits = visitManager.getVisits(0);
@@ -200,20 +200,6 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetVisitsEmpty() throws Exception {
 		assertThat(visitManager.getVisits(0)).isEmpty();
-	}
-
-	@Test
-	public void testMgrGetVisitsAll() throws Exception {
-		int id = _setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findOne(id);
-		assertThat(visitManager.getVisits(0)).hasSize(1);
-	}
-
-	@Test
-	public void testMgrGetVisitsbyID() throws Exception {
-		int id = _setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findOne(id);
-		assertThat(visitManager.getVisits(id)).hasSize(1);
 	}
 
 	@Test
