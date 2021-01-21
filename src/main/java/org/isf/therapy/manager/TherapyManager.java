@@ -255,9 +255,8 @@ public class TherapyManager {
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean deleteAllTherapies(Integer code) throws OHServiceException {
-		// FIXME FIXME	ioOperations.deleteAllTherapies(code);
-		smsOp.deleteByModuleModuleID("therapy", String.valueOf(code));
-		return true;
+		Patient patient = patientManager.getPatientById(code);
+		return ioOperations.deleteAllTherapies(patient);
 	}
 
 	/**
