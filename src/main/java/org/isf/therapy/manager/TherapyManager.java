@@ -40,7 +40,6 @@ import org.isf.therapy.model.TherapyRow;
 import org.isf.therapy.service.TherapyIoOperations;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -179,7 +178,7 @@ public class TherapyManager {
 	}
 	
 	/**
-	 * replace all {@link TherapyRow}s (therapies) for related Patient
+	 * Replace all {@link TherapyRow}s (therapies) for related Patient
 	 * 
 	 * @param thRows - the list of {@link TherapyRow}s (therapies)
 	 * @return <code>true</code> if the row has been inserted, <code>false</code> otherwise
@@ -188,11 +187,8 @@ public class TherapyManager {
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean newTherapies(ArrayList<TherapyRow> thRows) throws OHServiceException {
 		if (!thRows.isEmpty()) {
-			DateTime now = new DateTime();
-
 
 			int patID = thRows.get(0).getPatient().getCode();
-			// FIXME FIXME			ioOperations.deleteAllTherapies(patID);
 			smsOp.deleteByModuleModuleID("therapy", String.valueOf(patID));
 
 			for (TherapyRow thRow : thRows) {
@@ -255,9 +251,8 @@ public class TherapyManager {
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean deleteAllTherapies(Integer code) throws OHServiceException {
-		// FIXME FIXME	ioOperations.deleteAllTherapies(code);
-		smsOp.deleteByModuleModuleID("therapy", String.valueOf(code));
-		return true;
+		Patient patient = patientManager.getPatientById(code);
+		return ioOperations.deleteAllTherapies(patient);
 	}
 
 	/**
