@@ -77,7 +77,6 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetDicomType() throws Exception {
 		String typeId = _setupTestDicomType(false);
-		DicomType dicomType = dicomTypeIoOperationRepository.findOne(typeId);
 		ArrayList<DicomType> dicomTypes = dicomTypeIoOperation.getDicomType();
 		testDicomType.check(dicomTypes.get(0));
 	}
@@ -118,7 +117,6 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetDicomType() throws Exception {
 		String typeId = _setupTestDicomType(false);
-		DicomType dicomType = dicomTypeIoOperationRepository.findOne(typeId);
 		ArrayList<DicomType> dicomTypes = dicomTypeBrowserManager.getDicomType();
 		testDicomType.check(dicomTypes.get(0));
 	}
