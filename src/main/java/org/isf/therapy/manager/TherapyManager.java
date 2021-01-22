@@ -189,8 +189,7 @@ public class TherapyManager {
 		if (!thRows.isEmpty()) {
 
 			int patID = thRows.get(0).getPatient().getCode();
-			Patient patient = patientManager.getPatientById(patID);
-			ioOperations.deleteAllTherapies(patient);
+			smsOp.deleteByModuleModuleID("therapy", String.valueOf(patID));
 
 			for (TherapyRow thRow : thRows) {
 
