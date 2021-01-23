@@ -493,7 +493,7 @@ public class Tests extends OHCoreTestCase {
 		Exam exam2 = new Exam("XXX", "TestDescription", examType, 1, "TestDefaultResult");
 		assertThat(exam.equals(exam)).isTrue();
 		assertThat(exam.equals(exam2)).isFalse();
-		assertThat(exam.equals(new String("xyzzy"))).isFalse();
+		assertThat(exam.equals("xyzzy")).isFalse();
 		exam2.setCode(exam.getCode());
 		exam2.setDescription(exam.getDescription());
 		exam2.setExamtype(exam.getExamtype());
@@ -513,7 +513,7 @@ public class Tests extends OHCoreTestCase {
 		ExamRow examRow2 = new ExamRow(exam2, "NewDescription");
 		assertThat(examRow.equals(examRow)).isTrue();
 		assertThat(examRow.equals(examRow2)).isFalse();
-		assertThat(examRow.equals(new String("xyzzy"))).isFalse();
+		assertThat(examRow.equals("xyzzy")).isFalse();
 		examRow2.setCode(examRow.getCode());
 		examRow2.setExamCode(examRow.getExamCode());
 		examRow2.setDescription(examRow.getDescription());

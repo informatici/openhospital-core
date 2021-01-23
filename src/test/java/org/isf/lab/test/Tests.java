@@ -1322,7 +1322,7 @@ public class Tests extends OHCoreTestCase {
 		Laboratory laboratory2 = new Laboratory(code + 1, null, new GregorianCalendar(), "result", "note", null, "name");
 		assertThat(laboratory.equals(laboratory)).isTrue();
 		assertThat(laboratory.equals(laboratory2)).isFalse();
-		assertThat(laboratory.equals(new String("xyzzy"))).isFalse();
+		assertThat(laboratory.equals("xyzzy")).isFalse();
 		laboratory2.setCode(code);
 		assertThat(laboratory.equals(laboratory2)).isTrue();
 
@@ -1354,7 +1354,7 @@ public class Tests extends OHCoreTestCase {
 		LaboratoryRow laboratoryRow2 = new LaboratoryRow(code + 1, null, "description");
 		assertThat(laboratoryRow.equals(laboratoryRow)).isTrue();
 		assertThat(laboratoryRow.equals(laboratoryRow2)).isFalse();
-		assertThat(laboratoryRow.equals(new String("xyzzy"))).isFalse();
+		assertThat(laboratoryRow.equals("xyzzy")).isFalse();
 		laboratoryRow2.setCode(code);
 		assertThat(laboratoryRow.equals(laboratoryRow2)).isTrue();
 

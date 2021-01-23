@@ -221,7 +221,7 @@ public class Tests extends OHCoreTestCase {
 		DischargeType dischargeType2 = new DischargeType("someCode", "someDescription");
 		assertThat(dischargeType.equals(dischargeType)).isTrue();
 		assertThat(dischargeType.equals(dischargeType2)).isFalse();
-		assertThat(dischargeType.equals(new String("xyzzy"))).isFalse();
+		assertThat(dischargeType.equals("xyzzy")).isFalse();
 		dischargeType2.setCode(code);
 		assertThat(dischargeType.equals(dischargeType2)).isTrue();
 

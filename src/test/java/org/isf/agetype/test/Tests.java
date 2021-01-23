@@ -160,7 +160,7 @@ public class Tests extends OHCoreTestCase {
 		ageType2.setTo(ageType.getTo());
 		assertThat(ageType.equals(ageType)).isTrue();
 		assertThat(ageType.equals(ageType2)).isTrue();
-		assertThat(ageType.equals(new String("xyzzy"))).isFalse();
+		assertThat(ageType.equals("xyzzy")).isFalse();
 		ageType2.setCode("xxxx");
 		assertThat(ageType.equals(ageType2)).isFalse();
 
