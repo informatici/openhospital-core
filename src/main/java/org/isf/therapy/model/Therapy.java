@@ -46,13 +46,6 @@ public class Therapy {
 
 	/**
 	 * 
-	 */
-	public Therapy() {
-		super();
-	}
-
-	/**
-	 * 
 	 * @param therapyID
 	 * @param patID
 	 * @param dates
