@@ -66,9 +66,9 @@ public class TherapyIoOperations {
 	}
 
 	/**
-	 * Delete all {@link TherapyRow}s (therapies) for specified Patient
+	 * Delete all {@link TherapyRow}s (therapies) for specified {@link Patient}
 	 *
-	 * @param patient - the Patient
+	 * @param patient - the {@link Patient}
 	 * @return <code>true</code> if the therapies have been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */

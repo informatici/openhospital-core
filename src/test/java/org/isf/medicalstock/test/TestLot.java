@@ -25,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.data.Offset.offset;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.isf.medicalstock.model.Lot;

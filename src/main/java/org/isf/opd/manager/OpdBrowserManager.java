@@ -140,8 +140,7 @@ public class OpdBrowserManager {
 	}
 	
 	/**
-	 * 
-	 * return all Opds within specified dates
+	 * Return all Opds within specified dates
 	 * 
 	 * @param diseaseTypeCode
 	 * @param diseaseCode
@@ -159,7 +158,7 @@ public class OpdBrowserManager {
 	}
 	
 	/**
-	 * returns all {@link Opd}s associated to specified patient ID
+	 * Returns all {@link Opd}s associated to specified patient ID
 	 * 
 	 * @param patientcode - the patient ID
 	 * @return the list of {@link Opd}s associated to specified patient ID.
@@ -216,7 +215,7 @@ public class OpdBrowserManager {
 	}
 	
 	/**
-	 * return the last Opd in time associated with specified patient ID. 
+	 * Return the last {@link Opd} in time associated with specified patient ID.
 	 * 
 	 * @param patientcode - the patient ID
 	 * @return last Opd associated with specified patient ID or <code>null</code>
@@ -227,10 +226,10 @@ public class OpdBrowserManager {
 	}
 	
 	/**
-	 * Check if the given <param>opdNum<param> does already exist for the give <param>year<param>
+	 * Check if the given {@code opdNum} does already exist for the give {@code year}
 	 * @param opdNum - the OPD progressive in year
 	 * @param year - the year
-	 * @return <code>true<code> if the given number exists in year, <code>false</code> otherwise
+	 * @return <code>true</code> if the given number exists in year, <code>false</code> otherwise
 	 */
 	public Boolean isExistOpdNum(int opdNum, int year)  throws OHServiceException {
 		return ioOperations.isExistOpdNum(opdNum, year);

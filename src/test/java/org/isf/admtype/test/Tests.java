@@ -142,7 +142,7 @@ public class Tests extends OHCoreTestCase {
 		AdmissionType admissionType2 = new AdmissionType("someCode", "someDescription");
 		assertThat(admissionType.equals(admissionType)).isTrue();
 		assertThat(admissionType.equals(admissionType2)).isFalse();
-		assertThat(admissionType.equals(new String("xyzzy"))).isFalse();
+		assertThat(admissionType.equals("xyzzy")).isFalse();
 		admissionType2.setCode(code);
 		assertThat(admissionType.equals(admissionType2)).isTrue();
 

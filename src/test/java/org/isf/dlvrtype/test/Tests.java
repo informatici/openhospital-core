@@ -208,7 +208,7 @@ public class Tests extends OHCoreTestCase {
 		DeliveryType deliveryType2 = new DeliveryType("someCode", "someDescription");
 		assertThat(deliveryType.equals(deliveryType)).isTrue();
 		assertThat(deliveryType.equals(deliveryType2)).isFalse();
-		assertThat(deliveryType.equals(new String("xyzzy"))).isFalse();
+		assertThat(deliveryType.equals("xyzzy")).isFalse();
 		deliveryType2.setCode(code);
 		deliveryType2.setDescription(deliveryType.getDescription());
 		assertThat(deliveryType.equals(deliveryType2)).isTrue();

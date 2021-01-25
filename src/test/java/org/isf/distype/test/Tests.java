@@ -221,7 +221,7 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType2 = new DiseaseType("code", "description");
 		assertThat(diseaseType.equals(diseaseType)).isTrue();
 		assertThat(diseaseType.equals(diseaseType2)).isFalse();
-		assertThat(diseaseType.equals(new String("xyzzy"))).isFalse();
+		assertThat(diseaseType.equals("xyzzy")).isFalse();
 		diseaseType2.setCode(diseaseType.getCode());
 		diseaseType2.setDescription(diseaseType.getDescription());
 		assertThat(diseaseType.equals(diseaseType2)).isTrue();

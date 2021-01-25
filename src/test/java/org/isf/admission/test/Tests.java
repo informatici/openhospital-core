@@ -994,7 +994,7 @@ public class Tests extends OHCoreTestCase {
 		admission2.setId(id);   // no really legal but needed for these tests
 		assertThat(admission.equals(admission)).isTrue();
 		assertThat(admission.equals(admission2)).isTrue();
-		assertThat(admission.equals(new String("xyzzy"))).isFalse();
+		assertThat(admission.equals("xyzzy")).isFalse();
 		assertThat(admission.equals(admission2)).isTrue();
 
 		assertThat(admission.compareTo(admission2)).isZero();
