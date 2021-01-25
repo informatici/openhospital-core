@@ -33,7 +33,6 @@ import org.isf.utils.exception.OHException;
 
 public class TestLaboratory {
 
-	private Integer code = 0;
 	private String material = "TestMaterial";
 	private GregorianCalendar now = new GregorianCalendar();
 	private GregorianCalendar registrationDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
