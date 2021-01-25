@@ -58,7 +58,7 @@ public class VisitManager {
 	private ApplicationContext applicationContext;
 
 	/**
-	 * returns the list of all {@link Visit}s related to a patID
+	 * Returns the list of all {@link Visit}s related to a patID
 	 *
 	 * @param patID - the {@link Patient} ID. If <code>0</code> return the list of all {@link Visit}s
 	 * @return the list of {@link Visit}s
@@ -154,7 +154,8 @@ public class VisitManager {
 
 	/**
 	 * Builds the {@link Sms} text for the specified {@link Visit}
-	 * If length exceed {@code SmsManager.MAX_LENGHT} the message will be cropped
+	 * If the length exceeds {@code SmsManager.MAX_LENGHT} the message will be truncated to
+	 * the maximum length.
 	 * (example:
 	 * "REMINDER: dd/MM/yy - HH:mm:ss - {@link Visit#getNote()}")
 	 *
@@ -178,7 +179,7 @@ public class VisitManager {
 	/**
 	 * Returns the {@link Visit} based on visit id
 	 *
-	 * @param code - the  {@link Visit} id.
+	 * @param id - the  {@link Visit} id.
 	 * @return the {@link Visit}
 	 */
 	public Visit findVisit(int id) throws OHServiceException {

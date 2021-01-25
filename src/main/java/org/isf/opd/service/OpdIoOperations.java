@@ -82,8 +82,7 @@ public class OpdIoOperations {
 	}
 	
 	/**
-	 * 
-	 * return all Opds within specified dates
+	 * Return all {@link Opd}s within specified dates
 	 * 
 	 * @param diseaseTypeCode
 	 * @param diseaseCode
@@ -111,7 +110,7 @@ public class OpdIoOperations {
 	}
 	
 	/**
-	 * returns all {@link Opd}s associated to specified patient ID
+	 * Return all {@link Opd}s associated to specified patient ID
 	 * 
 	 * @param patID - the patient ID
 	 * @return the list of {@link Opd}s associated to specified patient ID.
@@ -136,7 +135,7 @@ public class OpdIoOperations {
 	}
 	
 	/**
-	 * modify an {@link Opd} in the db
+	 * Modify an {@link Opd} in the db
 	 * 
 	 * @param opd - an {@link Opd}
 	 * @return the updated {@link Opd}.
@@ -174,7 +173,7 @@ public class OpdIoOperations {
 	}
 
 	/**
-	 * return the last Opd in time associated with specified patient ID. 
+	 * Return the last {@link Opd} in time associated with specified patient ID.
 	 * 
 	 * @param patID - the patient ID
 	 * @return last Opd associated with specified patient ID or <code>null</code>
@@ -197,11 +196,11 @@ public class OpdIoOperations {
 	}
 	
 	/**
-	 * Check if the given <param>opdNum<param> does already exist for the give <param>year<param>
+	 * Check if the given {@code opdNum} does already exist for the give {@code year}
 	 * 
 	 * @param opdNum - the OPD progressive in year
 	 * @param year - the year
-	 * @return <code>true<code> if the given number exists in year, <code>false</code> otherwise
+	 * @return <code>true</code> if the given number exists in year, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
