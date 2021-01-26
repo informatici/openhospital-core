@@ -44,6 +44,10 @@ public class Therapy {
 	private boolean notify;
 	private boolean sms;
 
+	public Therapy() {
+		super();
+	}
+
 	/**
 	 * 
 	 * @param therapyID
