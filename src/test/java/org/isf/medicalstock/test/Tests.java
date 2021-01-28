@@ -160,7 +160,6 @@ public class Tests extends OHCoreTestCase {
 	@After
 	public void tearDown() throws Exception
 	{
-		jpa.flush();
 		jpa.close();
 	}
 
