@@ -84,14 +84,19 @@ public class PatientIoOperations
 	}
 
 	/**
-	 * Method that returns the full list of Patients not logically deleted with Height and Weight
-	 * 
-	 * @param regex
-	 * @return the full list of Patients with Height and Weight
+	 * Method that returns the full list of Patients not logically deleted, having the passed String in:<br>
+	 * - code<br>
+	 * - firstName<br>
+	 * - secondName<br>
+	 * - taxCode<br>
+	 * - note<br>
+	 *  
+	 * @param keyword - String to search, <code>null</code> for full list
+	 * @return the list of Patients (could be empty)
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatientsByOneOfFieldsLike(String regex) throws OHServiceException {
-		return new ArrayList<Patient>(repository.findByFieldsContainingWordsFromLiteral(regex));
+	public ArrayList<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException {
+		return new ArrayList<Patient>(repository.findByFieldsContainingWordsFromLiteral(keyword));
 	}	
 
 	/**

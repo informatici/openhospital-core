@@ -22,7 +22,9 @@
 package org.isf.medicalstock.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -37,12 +39,15 @@ import org.isf.generaldata.GeneralData;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperationRepository;
 import org.isf.medicals.test.TestMedical;
+import org.isf.medicalstock.manager.MovBrowserManager;
+import org.isf.medicalstock.manager.MovStockInsertingManager;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
+import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperationRepository;
 import org.isf.medicalstockward.service.MovementWardIoOperationRepository;
 import org.isf.medstockmovtype.model.MovementType;
@@ -55,6 +60,7 @@ import org.isf.supplier.model.Supplier;
 import org.isf.supplier.service.SupplierIoOperationRepository;
 import org.isf.supplier.test.TestSupplier;
 import org.isf.utils.db.DbJpaUtil;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
@@ -101,6 +107,10 @@ public class Tests extends OHCoreTestCase {
 
 	@Autowired
 	MedicalStockIoOperations medicalStockIoOperation;
+	@Autowired
+	MovBrowserManager movBrowserManager;
+	@Autowired
+	MovStockInsertingManager movStockInsertingManager;
 	@Autowired
 	LotIoOperationRepository lotIoOperationRepository;
 	@Autowired
@@ -150,6 +160,7 @@ public class Tests extends OHCoreTestCase {
 	@After
 	public void tearDown() throws Exception
 	{
+		jpa.flush();
 		jpa.close();
 	}
 
@@ -221,11 +232,32 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	public void testIoGetLotsByMedicalEmptyLot() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+
+		foundMovement.setQuantity(0);
+		movementIoOperationRepository.saveAndFlush(foundMovement);
+
+		List<Lot> lots = medicalStockIoOperation.getLotsByMedical(foundMovement.getMedical());
+		assertThat(lots).isEmpty();
+	}
+
+	@Test
 	public void testIoNewAutomaticDischargingMovement() throws Exception {
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
 		boolean result = medicalStockIoOperation.newAutomaticDischargingMovement(foundMovement);
 		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void testIoNewAutomaticDischargingMovementLotQuantityLessMovementQuantity() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		foundMovement.getLot().setQuantity(10);
+		foundMovement.setQuantity(100);
+		assertThat(medicalStockIoOperation.newAutomaticDischargingMovement(foundMovement)).isTrue();
 	}
 
 	@Test
@@ -265,11 +297,77 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	public void testIoNewMovementOutGoingLots() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		Medical medical = foundMovement.getMedical();
+		MovementType medicalType = foundMovement.getType();
+		medicalType.setType("-");
+		Ward ward = foundMovement.getWard();
+		Supplier supplier = foundMovement.getSupplier();
+		Lot lot = foundMovement.getLot();
+		Movement newMovement = new Movement(
+				medical,
+				medicalType,
+				ward,
+				lot,
+				new GregorianCalendar(),
+				10, // new lot with 10 quantitye
+				supplier,
+				"newReference");
+		assertThat(medicalStockIoOperation.newMovement(newMovement)).isTrue();
+	}
+
+	@Test
+	public void testIoNewMovementOutGoingLotsWardNull() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		Medical medical = foundMovement.getMedical();
+		MovementType medicalType = foundMovement.getType();
+		medicalType.setType("-");
+		Supplier supplier = foundMovement.getSupplier();
+		Lot lot = foundMovement.getLot();
+		Movement newMovement = new Movement(
+				medical,
+				medicalType,
+				null,
+				lot,
+				new GregorianCalendar(),
+				10, // new lot with 10 quantitye
+				supplier,
+				"newReference");
+		assertThat(medicalStockIoOperation.newMovement(newMovement)).isTrue();
+	}
+
+	@Test
 	public void testIoNewMovement() throws Exception {
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
 		boolean result = medicalStockIoOperation.newMovement(foundMovement);
 		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void testIoNewMovementAutomaticLotMode() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		boolean automaticLotMode = GeneralData.AUTOMATICLOT_IN;
+		GeneralData.AUTOMATICLOT_IN = true;
+		assertThat(medicalStockIoOperation.newMovement(foundMovement)).isTrue();
+		GeneralData.AUTOMATICLOT_IN = automaticLotMode;
+	}
+
+	@Test
+	public void testIoNewMovementUpdateMedicalWardQuantityMedicalWardFound() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement movement = movementIoOperationRepository.findOne(code);
+		MovementType medicalType = movement.getType();
+		medicalType.setType("-");
+		MedicalWard medicalWard = new MedicalWard(movement.getWard(), movement.getMedical(), 0, 0, movement.getLot());
+		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
+		Movement newMovement = new Movement(movement.getMedical(), medicalType, movement.getWard(), movement.getLot(),
+				new GregorianCalendar(), 10, movement.getSupplier(), "newReference");
+		medicalStockIoOperation.newMovement(newMovement);
 	}
 
 	@Test
@@ -306,9 +404,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetMovementsWithParameters() throws Exception {
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
 		ArrayList<Movement> movements = medicalStockIoOperation.getMovements(
@@ -320,9 +417,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetMovementsWihAllParameters() throws Exception {
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
 		ArrayList<Movement> movements = medicalStockIoOperation.getMovements(
@@ -340,16 +436,75 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testIoGetMovementForPrint() throws Exception {
-		GregorianCalendar now = new GregorianCalendar();
-		GregorianCalendar fromDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
-		MovementOrder order = MedicalStockIoOperations.MovementOrder.DATE;
+	public void testIoGetMovementForPrintDateOrder() throws Exception {
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
+		MovementOrder order = MovementOrder.DATE;
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
 		ArrayList<Movement> movements = medicalStockIoOperation.getMovementForPrint(
 				foundMovement.getMedical().getDescription(),
-				null,
+				foundMovement.getMedical().getType().getCode(),
+				foundMovement.getWard().getCode(),
+				foundMovement.getType().getCode(),
+				fromDate,
+				toDate,
+				foundMovement.getLot().getCode(),
+				order
+		);
+		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
+	}
+
+	@Test
+	public void testIoGetMovementForPrintWardOrderateWard() throws Exception {
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
+		MovementOrder order = MovementOrder.WARD;
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = medicalStockIoOperation.getMovementForPrint(
+				foundMovement.getMedical().getDescription(),
+				foundMovement.getMedical().getType().getCode(),
+				foundMovement.getWard().getCode(),
+				foundMovement.getType().getCode(),
+				fromDate,
+				toDate,
+				foundMovement.getLot().getCode(),
+				order
+		);
+		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
+	}
+
+	@Test
+	public void testIoGetMovementForPrintPharmaceuticalTypeOrder() throws Exception {
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
+		MovementOrder order = MovementOrder.PHARMACEUTICAL_TYPE;
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = medicalStockIoOperation.getMovementForPrint(
+				foundMovement.getMedical().getDescription(),
+				foundMovement.getMedical().getType().getCode(),
+				foundMovement.getWard().getCode(),
+				foundMovement.getType().getCode(),
+				fromDate,
+				toDate,
+				foundMovement.getLot().getCode(),
+				order
+		);
+		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
+	}
+
+	@Test
+	public void testIoGetMovementForPrintTypeOrder() throws Exception {
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
+		MovementOrder order = MovementOrder.TYPE;
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = medicalStockIoOperation.getMovementForPrint(
+				foundMovement.getMedical().getDescription(),
+				foundMovement.getMedical().getType().getCode(),
 				foundMovement.getWard().getCode(),
 				foundMovement.getType().getCode(),
 				fromDate,
@@ -385,6 +540,529 @@ public class Tests extends OHCoreTestCase {
 		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 	}
 
+	@Test
+	public void testMgrGetMovements() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = movBrowserManager.getMovements();
+		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
+	}
+
+	@Test
+	public void testMgrGetMovementsWithParameters() throws Exception {
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = movBrowserManager.getMovements(foundMovement.getWard().getCode(), fromDate, toDate);
+		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
+	}
+
+	@Test
+	public void testMgrGetMovementsByReference() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = movBrowserManager.getMovementsByReference("notThere");
+		assertThat(movements).isEmpty();
+		movements = movBrowserManager.getMovementsByReference(foundMovement.getRefNo());
+		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
+	}
+
+	@Test
+	public void testMgrGetMovementsWihAllParameters() throws Exception {
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = movBrowserManager.getMovements(foundMovement.getMedical().getCode(), foundMovement.getMedical().getType().getCode(),
+				foundMovement.getWard().getCode(), foundMovement.getType().getCode(), fromDate, toDate, fromDate, toDate, fromDate, toDate);
+		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
+	}
+
+	@Test
+	public void testMgrGetMovementsCheckMovParameters() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+			GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
+			int code = _setupTestMovement(false);
+			Movement foundMovement = movementIoOperationRepository.findOne(code);
+			movBrowserManager.getMovements(foundMovement.getMedical().getCode(), foundMovement.getMedical().getType().getCode(),
+					foundMovement.getWard().getCode(), foundMovement.getType().getCode(), fromDate, null, fromDate, toDate, fromDate, toDate);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrGetMovementsCheckLotPrepParameters() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+			GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
+			int code = _setupTestMovement(false);
+			Movement foundMovement = movementIoOperationRepository.findOne(code);
+			movBrowserManager.getMovements(foundMovement.getMedical().getCode(), foundMovement.getMedical().getType().getCode(),
+					foundMovement.getWard().getCode(), foundMovement.getType().getCode(), fromDate, toDate, null, toDate, fromDate, toDate);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrGetMovementsCheckLotDueParameters() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+			GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
+			int code = _setupTestMovement(false);
+			Movement foundMovement = movementIoOperationRepository.findOne(code);
+			movBrowserManager.getMovements(foundMovement.getMedical().getCode(), foundMovement.getMedical().getType().getCode(),
+					foundMovement.getWard().getCode(), foundMovement.getType().getCode(), fromDate, toDate, fromDate, toDate, fromDate, null);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrGetMovementsWihAllParametersNull() throws Exception {
+		GregorianCalendar fromDate = new GregorianCalendar(2000, 1, 1);
+		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = movBrowserManager.getMovements(null, null, foundMovement.getWard().getCode(), null,
+				null, null, null, null, null, null);
+		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
+	}
+
+	@Test
+	public void testMgrGetLotsByMedical() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		List<Lot> lots = movStockInsertingManager.getLotByMedical(foundMovement.getMedical());
+		assertThat(lots).hasSize(1);
+		assertThat(lots.get(0).getCode()).isEqualTo(foundMovement.getLot().getCode());
+	}
+
+	@Test
+	public void testMgrGetLotsByMedicalNull() throws Exception {
+		assertThat(movStockInsertingManager.getLotByMedical(null)).isEmpty();
+	}
+
+	@Test
+	public void testMgrAlertCriticalQuantityUnderLimit() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		assertThat(movStockInsertingManager.alertCriticalQuantity(foundMovement.getMedical(), 100)).isTrue();
+	}
+
+	@Test
+	public void testMgrAlertCriticalQuantityOverLimit() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		assertThat(movStockInsertingManager.alertCriticalQuantity(foundMovement.getMedical(), -50)).isFalse();
+	}
+
+	@Test
+	public void testMgrGetLastMovementDate() throws Exception {
+		int code = _setupTestMovement(false);
+		ArrayList<Movement> movements = medicalStockIoOperation.getMovements();
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		GregorianCalendar gregorianCalendar = movStockInsertingManager.getLastMovementDate();
+		assertThat(gregorianCalendar).isEqualTo(movements.get(0).getDate());
+	}
+
+	@Test
+	public void testMgrRefNoExists() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
+		assertThat(movStockInsertingManager.refNoExists(foundMovement.getRefNo())).isTrue();
+		assertThat(movStockInsertingManager.refNoExists("notThere")).isFalse();
+	}
+
+	@Test
+	public void testMgrPrepareChargingMovement() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement movement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = new ArrayList<>();
+		movements.add(movement);
+		assertThat(movStockInsertingManager.newMultipleChargingMovements(movements, "refNo")).isTrue();
+	}
+
+	@Test
+	public void testMgrPrepareChargingMovementBadRefNumber() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			movement.setRefNo(null);
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			movStockInsertingManager.newMultipleChargingMovements(movements, null);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrPrepareDischargingMovement() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement movement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = new ArrayList<>();
+		movements.add(movement);
+		assertThat(movStockInsertingManager.newMultipleDischargingMovements(movements, "refNo")).isTrue();
+	}
+
+	@Test
+	public void testMgrPrepareDischargingMovementBadRefNumber() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			movement.setRefNo(null);
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			movStockInsertingManager.newMultipleDischargingMovements(movements, null);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrPrepareDischargingMovementIsAutomaticLotOut() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement movement = movementIoOperationRepository.findOne(code);
+		ArrayList<Movement> movements = new ArrayList<>();
+		movements.add(movement);
+		boolean isAutomaticLot_Out = GeneralData.AUTOMATICLOT_OUT;
+		GeneralData.AUTOMATICLOT_OUT = true;
+		assertThat(movStockInsertingManager.newMultipleDischargingMovements(movements, "refNo")).isTrue();
+		GeneralData.AUTOMATICLOT_OUT = isAutomaticLot_Out;
+	}
+
+	@Test
+	public void testMgrStoreLot() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement movement = movementIoOperationRepository.findOne(code);
+		assertThat(movStockInsertingManager.storeLot(movement.getLot().getCode(), movement.getLot(), movement.getMedical())).isTrue();
+	}
+
+	@Test
+	public void testMgrValidateMovementMoveDateAfterToday() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			movement.setDate(new GregorianCalendar(2099, 1, 1));
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			movStockInsertingManager.newMultipleChargingMovements(movements, "refNo");
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateMovementDateBeforeLastDate() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			movement.setDate(new GregorianCalendar(2000, 1, 1));
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			movStockInsertingManager.newMultipleChargingMovements(movements, "refNo");
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateReferenceNumber() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			movStockInsertingManager.newMultipleChargingMovements(movements, null);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateNullSupplier() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			movement.getType().setType("+");
+			movement.setSupplier(null);
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			movStockInsertingManager.newMultipleChargingMovements(movements, null);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateNullWard() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			movement.getType().setType("-");
+			movement.setWard(null);
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			movStockInsertingManager.newMultipleChargingMovements(movements, null);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateQuantityZero() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			movement.setQuantity(0);
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			movStockInsertingManager.newMultipleChargingMovements(movements, null);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateNullMedical() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			movement.setMedical(null);
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			movStockInsertingManager.newMultipleChargingMovements(movements, null);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateNullMovementType() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			movement.setType(null);
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			movStockInsertingManager.newMultipleChargingMovements(movements, null);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateLotRefersToAnotherMedical() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			movement.getMedical().setCode(-99);
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			movStockInsertingManager.newMultipleChargingMovements(movements, null);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateLotWithCostZero() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			boolean lotWithCost = GeneralData.LOTWITHCOST;
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			Lot lot = movement.getLot();
+			lot.setCost(new BigDecimal(0.));
+			lotIoOperationRepository.saveAndFlush(lot);
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			GeneralData.LOTWITHCOST = true;
+			movStockInsertingManager.newMultipleChargingMovements(movements, null);
+			GeneralData.LOTWITHCOST = lotWithCost;
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateLotCodeTooLong() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			Lot lot = movement.getLot();
+			lot.setCode("thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong");
+			lotIoOperationRepository.saveAndFlush(lot);
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			movStockInsertingManager.newMultipleChargingMovements(movements, null);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateLotDueDateNull() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			Lot lot = movement.getLot();
+			lot.setDueDate(null);
+			lotIoOperationRepository.saveAndFlush(lot);
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			movStockInsertingManager.newMultipleChargingMovements(movements, null);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateLotPrepationDateNull() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			Lot lot = movement.getLot();
+			lot.setPreparationDate(null);
+			lotIoOperationRepository.saveAndFlush(lot);
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			movStockInsertingManager.newMultipleChargingMovements(movements, null);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrValidateLotPreparationDateAfterDueDate() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			int code = _setupTestMovement(false);
+			Movement movement = movementIoOperationRepository.findOne(code);
+			Lot lot = movement.getLot();
+			lot.setPreparationDate(new GregorianCalendar(99, 1, 1));
+			lot.setDueDate(new GregorianCalendar(1, 1, 1));
+			lotIoOperationRepository.saveAndFlush(lot);
+			ArrayList<Movement> movements = new ArrayList<>();
+			movements.add(movement);
+			movStockInsertingManager.newMultipleChargingMovements(movements, null);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testLotToString() throws Exception {
+		String code = _setupTestLot(true);
+		Lot lot = lotIoOperationRepository.findOne(code);
+		lot.setCode(null);
+		// TODO: if resource bundles are available this string test needs to change
+		assertThat(lot.toString()).isEqualTo("angal.medicalstock.nolot");
+		lot.setCode(code);
+		assertThat(lot.toString()).isEqualTo(code);
+	}
+
+	@Test
+	public void testLotIsValidLot() throws Exception {
+		String code = _setupTestLot(true);
+		Lot lot = lotIoOperationRepository.findOne(code);
+		assertThat(lot.isValidLot()).isTrue();
+		lot.setCode("thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong");
+		assertThat(lot.isValidLot()).isFalse();
+	}
+
+	@Test
+	public void testLotEquals() throws Exception {
+		String code = _setupTestLot(true);
+		Lot lot = lotIoOperationRepository.findOne(code);
+		assertThat(lot.equals(lot)).isTrue();
+		assertThat(lot.equals(null)).isFalse();
+		assertThat(lot.equals("someString")).isFalse();
+
+		Lot lot2 = new Lot(null);
+		assertThat(lot.equals(lot2)).isFalse();
+		assertThat(lot2.equals(lot)).isFalse();
+
+		lot2.setCode(lot.getCode());
+		assertThat(lot2.equals(lot)).isFalse();
+		assertThat(lot.equals(lot2)).isFalse();
+
+		lot2.setCost(new BigDecimal(1));
+		assertThat(lot2.equals(lot)).isFalse();
+		assertThat(lot.equals(lot2)).isFalse();
+
+		lot2.setCost(lot.getCost());
+		assertThat(lot2.equals(lot)).isFalse();
+		assertThat(lot.equals(lot2)).isFalse();
+
+		lot2.setDueDate(lot.getDueDate());
+		assertThat(lot2.equals(lot)).isFalse();
+		assertThat(lot.equals(lot2)).isFalse();
+
+		lot2.setPreparationDate(lot.getPreparationDate());
+		assertThat(lot2.equals(lot)).isTrue();
+		assertThat(lot.equals(lot2)).isTrue();
+
+		lot2.setQuantity(1);
+		assertThat(lot2.equals(lot)).isFalse();
+		assertThat(lot.equals(lot2)).isFalse();
+
+		lot2.setQuantity(lot.getQuantity());
+		assertThat(lot2.equals(lot)).isTrue();
+		assertThat(lot.equals(lot2)).isTrue();
+	}
+
+	@Test
+	public void testLotHashCode() throws Exception {
+		Lot lot = new Lot("aCode", new GregorianCalendar(), new GregorianCalendar());
+		int hashCode = lot.hashCode();
+		assertThat(hashCode).isPositive();
+		// use computed value
+		assertThat(lot.hashCode()).isEqualTo(hashCode);
+	}
+
+	@Test
+	public void testMovementToString() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement movement = movementIoOperationRepository.findOne(code);
+		// TODO: if resource bundles are available this string test needs to change
+		assertThat(movement.toString()).isEqualTo("angal.medicalstock.medical:TestDescriptionangal.medicalstock.type:TestDescriptionangal.common.quantity:10");
+	}
+
+	@Test
+	public void testMovementEquals() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement movement = movementIoOperationRepository.findOne(code);
+		assertThat(movement.equals(movement)).isTrue();
+		assertThat(movement.equals(null)).isFalse();
+		assertThat(movement.equals("someString")).isFalse();
+
+		Movement movement2 = new Movement();
+		movement2.setCode(-99);
+		assertThat(movement.equals(movement2)).isFalse();
+		movement2.setCode(movement.getCode());
+		assertThat(movement.equals(movement2)).isTrue();
+	}
+
+	@Test
+	public void testMovementHashCode() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement movement = movementIoOperationRepository.findOne(code);
+		int hashCode = movement.hashCode();
+		assertThat(hashCode).isEqualTo(23 * 133 + code);
+		// use computed value
+		assertThat(movement.hashCode()).isEqualTo(hashCode);
+	}
+
+	@Test
+	public void testMovementGetOrigin() throws Exception {
+		int code = _setupTestMovement(false);
+		Movement movement = movementIoOperationRepository.findOne(code);
+		assertThat(movement.getSupplier()).isEqualTo(movement.getOrigin());
+	}
+
 	private String _setupTestLot(boolean usingSet) throws OHException {
 		Lot lot = testLot.setup(usingSet);
 		lotIoOperationRepository.saveAndFlush(lot);
@@ -404,8 +1082,8 @@ public class Tests extends OHCoreTestCase {
 		Lot lot = testLot.setup(false);
 		Supplier supplier = testSupplier.setup(false);
 		Movement movement = testMovement.setup(medical, movementType, ward, lot, supplier, usingSet);
-		//	Should not this be the same as the jpa persist statement below?
-		//  It appears not as
+		// TODO: Should not this be the same as the jpa persist statements below?
+		//  It appears not to be
 		//		supplierIoOperationRepository.saveAndFlush(supplier);
 		//		lotIoOperationRepository.saveAndFlush(lot);
 		//		wardIoOperationRepository.saveAndFlush(ward);

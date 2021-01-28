@@ -38,8 +38,8 @@ public interface DicomIoOperationRepository extends JpaRepository<FileDicom, Lon
 	@Query(value = "select f from FileDicom f WHERE f.patId = :id AND f.dicomSeriesNumber = :file order by f.fileName")
 	List<FileDicom> findAllWhereIdAndNumberByOrderNameAsc(@Param("id") int id, @Param("file") String file);
 
-	@Query(value = "select f from FileDicom f WHERE f.patId = :id group by f.dicomInstanceUID")
-    List<FileDicom> findAllWhereIdGroupByUid(@Param("id") int id);
+	@Query(value = "select f from FileDicom f WHERE f.patId = :id group by f.dicomSeriesInstanceUID order by f.dicomSeriesDate desc")
+    List<FileDicom> findAllWhereIdGroupBySeriesInstanceUIDOrderSerDateDesc(@Param("id") int id);
 
 	@Query(value = "select f from FileDicom f WHERE f.patId = :id AND f.dicomSeriesNumber = :file AND f.dicomInstanceUID = :uid")
 	List<FileDicom> findAllWhereIdAndFileAndUid(@Param("id") int id, @Param("file") String file, @Param("uid") String uid);

@@ -67,22 +67,22 @@ public class VaccineIoOperations {
 	 * Inserts a new {@link Vaccine} in the DB
 	 *
 	 * @param vaccine - the item to insert
-	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
+	 * @return vaccine that has been inserted
 	 * @throws OHServiceException 
 	 */
-	public boolean newVaccine(Vaccine vaccine) throws OHServiceException {
-		return repository.save(vaccine) != null;
+	public Vaccine newVaccine(Vaccine vaccine) throws OHServiceException {
+		return repository.save(vaccine);
 	}
 	
 	/**
 	 * Updates a {@link Vaccine} in the DB
 	 *
 	 * @param vaccine - the item to update
-	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
+	 * @return vaccine that has been updated
 	 * @throws OHServiceException 
 	 */
-	public boolean updateVaccine(Vaccine vaccine) throws OHServiceException {
-		return repository.save(vaccine) != null;
+	public Vaccine updateVaccine(Vaccine vaccine) throws OHServiceException {
+		return repository.save(vaccine);
 	}
 
 	/**
@@ -113,10 +113,9 @@ public class VaccineIoOperations {
 	 *
 	 * @param code - the code, must not be {@literal null}
 	 * @return the {@link Vaccine} or {@literal null} if none found
-	 * @throws OHServiceException 
 	 * @throws IllegalArgumentException if {@code code} is {@literal null}
 	 */
-	public Vaccine findVaccine(String code) throws OHServiceException 
+	public Vaccine findVaccine(String code)
 	{
 		if (code != null) {
 			return repository.findOne(code);

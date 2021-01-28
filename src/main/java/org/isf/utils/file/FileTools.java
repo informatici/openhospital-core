@@ -83,19 +83,19 @@ public class FileTools {
 
 	/**
 	 * Retrieves the timestamp from formattedString
-	 * using these date and time formats:<br />
+	 * using these date and time formats:<br>
 	 *
-	 * - yyyy-MM-dd -> "2020-02-01"<br />
-	 * - dd-MM-yyyy -> "02-03-2020"<br />
-	 * - dd-MM-yy -> "03-04-20"<br />
-	 * - dd/MM/yyyy -> "04/05/2020"<br />
-	 * - dd/MM/yy -> "05/06/20"<br />
-	 * - yyyy-MM-dd HHmm -> "2020-07-06 0123"<br />
-	 * - yyyy-MM-dd HHmmss -> "2020-08-07 012345"<br />
-	 * - yyyy-MM-dd_HHmmss -> "2020-09-08_012345"<br />
-	 * - dd-MM-yy_HHmm -> "20-10-09_0123"<br />
-	 * - yyyy-MM-dd HHmm -> "2020-10-09 0123"<br />
-	 * - yyyy-MM-dd_HHmm -> "2020-10-09_0123" <br />
+	 * - yyyy-MM-dd -> "2020-02-01"<br>
+	 * - dd-MM-yyyy -> "02-03-2020"<br>
+	 * - dd-MM-yy -> "03-04-20"<br>
+	 * - dd/MM/yyyy -> "04/05/2020"<br>
+	 * - dd/MM/yy -> "05/06/20"<br>
+	 * - yyyy-MM-dd HHmm -> "2020-07-06 0123"<br>
+	 * - yyyy-MM-dd HHmmss -> "2020-08-07 012345"<br>
+	 * - yyyy-MM-dd_HHmmss -> "2020-09-08_012345"<br>
+	 * - dd-MM-yy_HHmm -> "20-10-09_0123"<br>
+	 * - yyyy-MM-dd HHmm -> "2020-10-09 0123"<br>
+	 * - yyyy-MM-dd_HHmm -> "2020-10-09_0123" <br>
 	 * @param formattedString
 	 * @return the list of retrieved date (first null)
 	 */

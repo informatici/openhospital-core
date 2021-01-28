@@ -32,7 +32,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LotIoOperationRepository extends JpaRepository<Lot, String> {
 
-	@Query("select l from Lot l left join l.movements m where m.medical.code = :medical group by l.code")
+	@Query("select l from Lot l left join l.movements m where m.medical.code = :medical group by l.code order by l.dueDate")
 	List<Lot> findByMovements_MedicalOrderByDueDate(@Param("medical") int medicalCode);
 
 	@Query(value = "select LT_ID_A,LT_PREP_DATE,LT_DUE_DATE,LT_COST,"

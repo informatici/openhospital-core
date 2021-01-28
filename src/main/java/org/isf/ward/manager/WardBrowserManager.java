@@ -35,8 +35,6 @@ import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.validator.EmailValidator;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperations;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -50,8 +48,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class WardBrowserManager {
 
-	private final Logger logger = LoggerFactory.getLogger(WardBrowserManager.class);
-	
 	@Autowired
 	private AdmissionBrowserManager admManager;
 	
@@ -67,7 +63,7 @@ public class WardBrowserManager {
 	protected void validateWard(Ward ward, boolean insert) throws OHServiceException {
 		String key = ward.getCode();
 		String description = ward.getDescription();
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         if(key.isEmpty() ){
 	        errors.add(new OHExceptionMessage("codeEmptyError", 
 	        		MessageBundle.getMessage("angal.ward.pleaseinsertacode"), 
@@ -179,10 +175,10 @@ public class WardBrowserManager {
 		
 		if (noPatients > 0) {
 			
-			List<OHExceptionMessage> messages = new ArrayList<OHExceptionMessage>();
+			List<OHExceptionMessage> messages = new ArrayList<>();
 			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
 					MessageBundle.getMessage("angal.ward.selectedwardhaspatients1") +
-					" " + noPatients + " " +
+					' ' + noPatients + ' ' +
 					MessageBundle.getMessage("angal.ward.selectedwardhaspatients2"), OHSeverityLevel.INFO));
 			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
 					MessageBundle.getMessage("angal.ward.pleasecheckinadmissionpatients"), OHSeverityLevel.ERROR));

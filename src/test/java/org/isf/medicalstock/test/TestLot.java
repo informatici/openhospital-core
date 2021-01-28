@@ -25,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.data.Offset.offset;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.isf.medicalstock.model.Lot;
@@ -34,9 +33,8 @@ import org.isf.utils.exception.OHException;
 public class TestLot {
 
 	private String code = "123456";
-	private GregorianCalendar now = new GregorianCalendar();
-	private GregorianCalendar preparationDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-	private GregorianCalendar dueDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
+	private GregorianCalendar preparationDate = new GregorianCalendar(2000, 1, 1);
+	private GregorianCalendar dueDate = new GregorianCalendar(2000, 1, 1);
 	private BigDecimal cost = new BigDecimal(10.10);
 
 	public Lot setup(boolean usingSet) throws OHException {

@@ -145,7 +145,7 @@ public class DicomIoOperations
 	public FileDicom[] loadPatientFiles(
 			int patientID) throws OHServiceException
 	{
-		List<FileDicom> dicomList = repository.findAllWhereIdGroupByUid(patientID);
+		List<FileDicom> dicomList = repository.findAllWhereIdGroupBySeriesInstanceUIDOrderSerDateDesc(patientID);
 
 		FileDicom[] dicoms = new FileDicom[dicomList.size()];	
 		for (int i=0; i<dicomList.size(); i++)

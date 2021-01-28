@@ -22,10 +22,12 @@
 package org.isf.menu.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 
 import org.isf.OHCoreTestCase;
+import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.menu.model.GroupMenu;
 import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
@@ -35,10 +37,11 @@ import org.isf.menu.service.MenuIoOperations;
 import org.isf.menu.service.UserGroupIoOperationRepository;
 import org.isf.menu.service.UserIoOperationRepository;
 import org.isf.menu.service.UserMenuItemIoOperationRepository;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -51,6 +54,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Autowired
 	MenuIoOperations menuIoOperation;
+	@Autowired
+	UserBrowsingManager userBrowsingManager;
 	@Autowired
 	GroupMenuIoOperationRepository groupMenuIoOperationRepository;
 	@Autowired
@@ -87,14 +92,14 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testUserGets() throws Exception {
-		String code = _setupTestUser(false);
-		_checkUserIntoDb(code);
+		String userName = _setupTestUser(false);
+		_checkUserIntoDb(userName);
 	}
 
 	@Test
 	public void testUserSets() throws Exception {
-		String code = _setupTestUser(true);
-		_checkUserIntoDb(code);
+		String userName = _setupTestUser(true);
+		_checkUserIntoDb(userName);
 	}
 
 	@Test
@@ -123,25 +128,33 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetUser() throws Exception {
-		String code = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(code);
+		String userName = _setupTestUser(false);
+		User foundUser = userIoOperationRepository.findOne(userName);
 		ArrayList<User> users = menuIoOperation.getUser();
 		assertThat(users.get(users.size() - 1).getDesc()).isEqualTo(foundUser.getDesc());
 	}
 
 	@Test
-	public void testIoGetUserFromId() throws Exception {
-		String code = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(code);
+	public void testIoGetUsersFromGroupId() throws Exception {
+		String userName = _setupTestUser(false);
+		User foundUser = userIoOperationRepository.findOne(userName);
 		ArrayList<User> users = menuIoOperation.getUser(foundUser.getUserGroupName().getCode());
 		assertThat(users.get(users.size() - 1).getDesc()).isEqualTo(foundUser.getDesc());
 	}
 
 	@Test
+	public void testIoGetUserByName() throws Exception {
+		String userName = _setupTestUser(false);
+		User foundUser = userIoOperationRepository.findOne(userName);
+		User user = menuIoOperation.getUserByName(userName);
+		assertThat(user.getDesc()).isEqualTo(foundUser.getDesc());
+	}
+
+	@Test
 	public void testIoGetUserInfo() throws Exception {
-		String code = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(code);
-		String description = menuIoOperation.getUsrInfo(foundUser.getUserName());
+		String userName = _setupTestUser(false);
+		User foundUser = userIoOperationRepository.findOne(userName);
+		String description = menuIoOperation.getUsrInfo(userName);
 		assertThat(description).isEqualTo(foundUser.getDesc());
 	}
 
@@ -155,16 +168,14 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoIsUserNamePresent() throws Exception {
-		String code = _setupTestUser(false);
-		boolean result = menuIoOperation.isUserNamePresent(code);
-		assertThat(result).isTrue();
+		String userName = _setupTestUser(false);
+		assertThat(menuIoOperation.isUserNamePresent(userName)).isTrue();
 	}
 
 	@Test
 	public void testIoIsGroupNamePresent() throws Exception {
 		String code = _setupTestUserGroup(false);
-		boolean result = menuIoOperation.isGroupNamePresent(code);
-		assertThat(result).isTrue();
+		assertThat(menuIoOperation.isGroupNamePresent(code)).isTrue();
 	}
 
 	@Test
@@ -173,39 +184,38 @@ public class Tests extends OHCoreTestCase {
 		User user = testUser.setup(userGroup, false);
 		userGroupIoOperationRepository.saveAndFlush(userGroup);
 		userIoOperationRepository.saveAndFlush(user);
-		boolean result = menuIoOperation.newUser(user);
-		assertThat(result).isTrue();
+		// TODO: this illustrates that if the user exists the newUser() method still succeeds; probably not what is expected
+		assertThat(menuIoOperation.newUser(user)).isTrue();
 		_checkUserIntoDb(user.getUserName());
 	}
 
 	@Test
 	public void testIoUpdateUser() throws Exception {
-		String code = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(code);
+		String userName = _setupTestUser(false);
+		User foundUser = userIoOperationRepository.findOne(userName);
 		foundUser.setDesc("Update");
-		boolean result = menuIoOperation.updateUser(foundUser);
-		User updateUser = userIoOperationRepository.findOne(code);
-		assertThat(result).isTrue();
+		assertThat(menuIoOperation.updateUser(foundUser)).isTrue();
+		User updateUser = userIoOperationRepository.findOne(userName);
 		assertThat(updateUser.getDesc()).isEqualTo("Update");
 	}
 
 	@Test
-	public void updatePassword() throws Exception {
-		String code = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(code);
+	public void testIoUpdatePassword() throws Exception {
+		String userName = _setupTestUser(false);
+		User foundUser = userIoOperationRepository.findOne(userName);
 		foundUser.setPasswd("Update");
-		boolean result = menuIoOperation.updatePassword(foundUser);
-		User updateDisease = userIoOperationRepository.findOne(code);
-		assertThat(result).isTrue();
+		assertThat(menuIoOperation.updatePassword(foundUser)).isTrue();
+		User updateDisease = userIoOperationRepository.findOne(userName);
 		assertThat(updateDisease.getPasswd()).isEqualTo("Update");
 	}
 
 	@Test
-	public void testIoDeleteDisease() throws Exception {
-		String code = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(code);
-		boolean result = menuIoOperation.deleteUser(foundUser);
-		assertThat(result).isTrue();
+	public void testIoDeleteUser() throws Exception {
+		String userName = _setupTestUser(false);
+		User foundUser = userIoOperationRepository.findOne(userName);
+		assertThat(menuIoOperation.deleteUser(foundUser)).isTrue();
+		ArrayList<User> users = menuIoOperation.getUser(userName);
+		assertThat(users).isEmpty();
 	}
 
 	@Test
@@ -236,25 +246,27 @@ public class Tests extends OHCoreTestCase {
 		assertThat(menus.get(menus.size() - 1).getCode()).isEqualTo(menuItem.getCode());
 	}
 
-	@Ignore
 	@Test
 	public void testIoSetGroupMenu() throws Exception {
-		//TODO: Do unit test checking insert
+		UserGroup userGroup = testUserGroup.setup(false);
+		UserMenuItem menuItem = testUserMenu.setup(false);
+		ArrayList<UserMenuItem> userMenuItems = new ArrayList<>();
+		userMenuItems.add(menuItem);
+		assertThat(menuIoOperation.setGroupMenu(userGroup, userMenuItems, true)).isTrue();
 	}
 
 	@Test
-	public void testIoDeleteUserGroup() throws Exception {
+	public void testIoDeleteGroup() throws Exception {
 		String code = _setupTestUserGroup(false);
 		UserGroup foundUserGroup = userGroupIoOperationRepository.findOne(code);
-		boolean result = menuIoOperation.deleteGroup(foundUserGroup);
-		assertThat(result).isTrue();
+		assertThat(menuIoOperation.deleteGroup(foundUserGroup)).isTrue();
+		assertThat(menuIoOperation.isGroupNamePresent(foundUserGroup.getCode())).isFalse();
 	}
 
 	@Test
 	public void testIoNewUserGroup() throws Exception {
 		UserGroup userGroup = testUserGroup.setup(false);
-		boolean result = menuIoOperation.newUserGroup(userGroup);
-		assertThat(result).isTrue();
+		assertThat(menuIoOperation.newUserGroup(userGroup)).isTrue();
 		_checkUserGroupIntoDb(userGroup.getCode());
 	}
 
@@ -263,10 +275,402 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestUserGroup(false);
 		UserGroup foundUserGroup = userGroupIoOperationRepository.findOne(code);
 		foundUserGroup.setDesc("Update");
-		boolean result = menuIoOperation.updateUserGroup(foundUserGroup);
+		assertThat(menuIoOperation.updateUserGroup(foundUserGroup)).isTrue();
 		UserGroup updateUserGroup = userGroupIoOperationRepository.findOne(code);
-		assertThat(result).isTrue();
 		assertThat(updateUserGroup.getDesc()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testMgrGetUser() throws Exception {
+		String userName = _setupTestUser(false);
+		User foundUser = userIoOperationRepository.findOne(userName);
+		ArrayList<User> users = userBrowsingManager.getUser();
+		assertThat(users.get(users.size() - 1).getDesc()).isEqualTo(foundUser.getDesc());
+	}
+
+	@Test
+	public void testMgrGetUsersFromGroupId() throws Exception {
+		String userName = _setupTestUser(false);
+		User foundUser = userIoOperationRepository.findOne(userName);
+		ArrayList<User> users = userBrowsingManager.getUser(foundUser.getUserGroupName().getCode());
+		assertThat(users.get(users.size() - 1).getDesc()).isEqualTo(foundUser.getDesc());
+	}
+
+	@Test
+	public void testMgrGetUserByName() throws Exception {
+		String userName = _setupTestUser(false);
+		User foundUser = userIoOperationRepository.findOne(userName);
+		User user = userBrowsingManager.getUserByName(userName);
+		assertThat(user.getDesc()).isEqualTo(foundUser.getDesc());
+	}
+
+	@Test
+	public void testMgrGetUserInfo() throws Exception {
+		String userName = _setupTestUser(false);
+		User foundUser = userIoOperationRepository.findOne(userName);
+		String description = userBrowsingManager.getUsrInfo(userName);
+		assertThat(description).isEqualTo(foundUser.getDesc());
+	}
+
+	@Test
+	public void testMgrDeleteGroup() throws Exception {
+		String code = _setupTestUserGroup(false);
+		UserGroup foundUserGroup = userGroupIoOperationRepository.findOne(code);
+		assertThat(userBrowsingManager.deleteGroup(foundUserGroup)).isTrue();
+		assertThat(menuIoOperation.isGroupNamePresent(foundUserGroup.getCode())).isFalse();
+	}
+
+	@Test
+	public void testMgrDeleteGroupAdminGroup() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			UserGroup userGroup = testUserGroup.setup(true);
+			userGroup.setCode("admin");
+			userGroupIoOperationRepository.saveAndFlush(userGroup);
+			userBrowsingManager.deleteGroup(userGroup);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrDeleteGroupHasUsers() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			String userName = _setupTestUser(true);
+			User user = userIoOperationRepository.findOne(userName);
+			userBrowsingManager.deleteGroup(user.getUserGroupName());
+		})
+				.isInstanceOf(OHDataIntegrityViolationException.class);
+	}
+
+	@Test
+	public void testMgrGetUserGroup() throws Exception {
+		String code = _setupTestUserGroup(false);
+		UserGroup foundUserGroup = userGroupIoOperationRepository.findOne(code);
+		ArrayList<UserGroup> userGroups = userBrowsingManager.getUserGroup();
+		assertThat(userGroups.get(userGroups.size() - 1).getDesc()).isEqualTo(foundUserGroup.getDesc());
+	}
+
+	@Test
+	public void testMgrNewUser() throws Exception {
+		UserGroup userGroup = testUserGroup.setup(false);
+		User user = testUser.setup(userGroup, false);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		assertThat(userBrowsingManager.newUser(user)).isTrue();
+		_checkUserIntoDb(user.getUserName());
+	}
+
+	@Test
+	public void testMgrNewUserAlreadyExists() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			UserGroup userGroup = testUserGroup.setup(false);
+			User user = testUser.setup(userGroup, false);
+			userGroupIoOperationRepository.saveAndFlush(userGroup);
+			userIoOperationRepository.saveAndFlush(user);
+			userBrowsingManager.newUser(user);
+		})
+				.isInstanceOf(OHDataIntegrityViolationException.class);
+	}
+
+	@Test
+	public void testMgrUpdateUser() throws Exception {
+		String userName = _setupTestUser(false);
+		User foundUser = userIoOperationRepository.findOne(userName);
+		foundUser.setDesc("Update");
+		assertThat(userBrowsingManager.updateUser(foundUser)).isTrue();
+		User updateUser = userIoOperationRepository.findOne(userName);
+		assertThat(updateUser.getDesc()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testMgrUpdatePassword() throws Exception {
+		String userName = _setupTestUser(false);
+		User foundUser = userIoOperationRepository.findOne(userName);
+		foundUser.setPasswd("Update");
+		assertThat(userBrowsingManager.updatePassword(foundUser)).isTrue();
+		User updateDisease = userIoOperationRepository.findOne(userName);
+		assertThat(updateDisease.getPasswd()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testMgrDeleteUser() throws Exception {
+		String userName = _setupTestUser(false);
+		User foundUser = userIoOperationRepository.findOne(userName);
+		assertThat(userBrowsingManager.deleteUser(foundUser)).isTrue();
+		ArrayList<User> users = userBrowsingManager.getUser(userName);
+		assertThat(users).isEmpty();
+	}
+
+	@Test
+	public void testMgrDeleteAdminUser() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			String userName = _setupTestUser(false);
+			User foundUser = userIoOperationRepository.findOne(userName);
+			foundUser.setUserName("admin");
+			userBrowsingManager.deleteUser(foundUser);
+		})
+				.isInstanceOf(OHDataValidationException.class);
+	}
+
+	@Test
+	public void testMgrGetMenu() throws Exception {
+		UserGroup userGroup = testUserGroup.setup(false);
+		User user = testUser.setup(userGroup, false);
+		UserMenuItem menuItem = testUserMenu.setup(false);
+		GroupMenu groupMenu = new GroupMenu(userGroup.getCode(), menuItem.getCode());
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
+		userMenuItemIoOperationRepository.saveAndFlush(menuItem);
+		groupMenuIoOperationRepository.saveAndFlush(groupMenu);
+		ArrayList<UserMenuItem> menus = userBrowsingManager.getMenu(user);
+		assertThat(menus.get(menus.size() - 1).getCode()).isEqualTo(menuItem.getCode());
+	}
+
+	@Test
+	public void testMgrGetGroupMenu() throws Exception {
+		UserGroup userGroup = testUserGroup.setup(false);
+		User user = testUser.setup(userGroup, false);
+		UserMenuItem menuItem = testUserMenu.setup(false);
+		GroupMenu groupMenu = new GroupMenu(userGroup.getCode(), menuItem.getCode());
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
+		userMenuItemIoOperationRepository.saveAndFlush(menuItem);
+		groupMenuIoOperationRepository.saveAndFlush(groupMenu);
+		ArrayList<UserMenuItem> menus = userBrowsingManager.getGroupMenu(userGroup);
+		assertThat(menus.get(menus.size() - 1).getCode()).isEqualTo(menuItem.getCode());
+	}
+
+	@Test
+	public void testMgrSetGroupMenu() throws Exception {
+		UserGroup userGroup = testUserGroup.setup(false);
+		UserMenuItem menuItem = testUserMenu.setup(false);
+		ArrayList<UserMenuItem> userMenuItems = new ArrayList<>();
+		userMenuItems.add(menuItem);
+		assertThat(userBrowsingManager.setGroupMenu(userGroup, userMenuItems)).isTrue();
+	}
+
+	@Test
+	public void testMgrNewUserGroup() throws Exception {
+		UserGroup userGroup = testUserGroup.setup(false);
+		assertThat(userBrowsingManager.newUserGroup(userGroup)).isTrue();
+		_checkUserGroupIntoDb(userGroup.getCode());
+	}
+
+	@Test
+	public void testMgrNewUserGroupAlreadyExists() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			String code = _setupTestUserGroup(true);
+			UserGroup foundUserGroup = userGroupIoOperationRepository.findOne(code);
+			userBrowsingManager.newUserGroup(foundUserGroup);
+		})
+				.isInstanceOf(OHDataIntegrityViolationException.class);
+	}
+
+	@Test
+	public void testMgrUpdateUserGroup() throws Exception {
+		String code = _setupTestUserGroup(false);
+		UserGroup foundUserGroup = userGroupIoOperationRepository.findOne(code);
+		foundUserGroup.setDesc("Update");
+		assertThat(userBrowsingManager.updateUserGroup(foundUserGroup)).isTrue();
+		UserGroup updateUserGroup = userGroupIoOperationRepository.findOne(code);
+		assertThat(updateUserGroup.getDesc()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testGroupMenuSettersGetters() throws Exception {
+		GroupMenu groupMenu = testGroupMenu.setup(true);
+
+		Integer code = groupMenu.getCode();
+		groupMenu.setCode(-1);
+		assertThat(groupMenu.getCode()).isEqualTo(-1);
+		groupMenu.setCode(code);
+
+		int active = groupMenu.getActive();
+		groupMenu.setActive(-1);
+		assertThat(groupMenu.getActive()).isEqualTo(-1);
+		groupMenu.setActive(active);
+	}
+
+	@Test
+	public void testGroupMenuEquals() throws Exception {
+		GroupMenu groupMenu = testGroupMenu.setup(true);
+		groupMenu.setCode(1);
+
+		assertThat(groupMenu.equals(null)).isFalse();
+		assertThat(groupMenu.equals("aString")).isFalse();
+
+		GroupMenu groupMenu1 = testGroupMenu.setup(false);
+		groupMenu1.setCode(-1);
+		assertThat(groupMenu.equals(groupMenu1)).isFalse();
+
+		groupMenu1.setCode(groupMenu.getCode());
+		groupMenu1.setUserGroup("someOtherGroup");
+		assertThat(groupMenu.equals(groupMenu1)).isFalse();
+
+		groupMenu1.setUserGroup(groupMenu.getUserGroup());
+		groupMenu1.setMenuItem("someOtherMenuItem");
+		assertThat(groupMenu.equals(groupMenu1)).isFalse();
+
+		groupMenu1.setMenuItem(groupMenu.getMenuItem());
+		groupMenu1.setActive(-1);
+		assertThat(groupMenu.equals(groupMenu1)).isFalse();
+
+		groupMenu1.setActive(groupMenu.getActive());
+		assertThat(groupMenu.equals(groupMenu1)).isTrue();
+	}
+
+	@Test
+	public void testUserToString() throws Exception {
+		UserGroup userGroup = testUserGroup.setup(true);
+		User user = testUser.setup(userGroup, true);
+		assertThat(user.toString()).isEqualTo(user.getUserName());
+	}
+
+	@Test
+	public void testUserEquals() throws Exception {
+		UserGroup userGroup = testUserGroup.setup(true);
+		User user = testUser.setup(userGroup, true);
+
+		assertThat(user.equals(null)).isFalse();
+		assertThat(user.equals("someString")).isFalse();
+
+		User user1 = testUser.setup(userGroup, false);
+		user1.setUserName("someOtherName");
+		assertThat(user.equals(user1)).isFalse();
+
+		user1.setUserName(user.getUserName());
+		user1.setDesc("someOtherDescription");
+		assertThat(user.equals(user1)).isFalse();
+
+		user1.setDesc(user.getDesc().toLowerCase());
+		assertThat(user.equals(user1)).isTrue();
+	}
+
+	@Test
+	public void testUserHashCode() throws Exception {
+		UserGroup userGroup = testUserGroup.setup(true);
+		User user = testUser.setup(userGroup, true);
+		// compute value
+		int hashCode = user.hashCode();
+		// reuse value
+		assertThat(user.hashCode()).isEqualTo(hashCode);
+	}
+
+	@Test
+	public void testUserGroupToString() throws Exception {
+		UserGroup userGroup = testUserGroup.setup(true);
+		userGroup.setCode("someCode");
+		assertThat(userGroup.toString()).isEqualTo("someCode");
+	}
+
+	@Test
+	public void testUserGroupEquals() throws Exception {
+		UserGroup userGroup = testUserGroup.setup(true);
+
+		assertThat(userGroup.equals(null)).isFalse();
+		assertThat(userGroup.equals("someString")).isFalse();
+
+		UserGroup userGroup1 = testUserGroup.setup(false);
+
+		userGroup.setCode("code1");
+		userGroup1.setCode("code2");
+		assertThat(userGroup.equals(userGroup1)).isFalse();
+
+		userGroup1.setCode(userGroup.getCode());
+		userGroup1.setDesc("someOtherDescription");
+		assertThat(userGroup.equals(userGroup1)).isFalse();
+
+		userGroup1.setDesc(userGroup.getDesc().toLowerCase());
+		assertThat(userGroup.equals(userGroup1)).isTrue();
+	}
+
+	@Test
+	public void testUserGroupHashCode() throws Exception {
+		UserGroup userGroup = testUserGroup.setup(true);
+		// compute value
+		int hashCode = userGroup.hashCode();
+		// reuse value
+		assertThat(userGroup.hashCode()).isEqualTo(hashCode);
+	}
+
+	@Test
+	public void testUserMenuItemEquals() throws Exception {
+		UserMenuItem userMenuItem = testUserMenu.setup(true);
+
+		assertThat(userMenuItem.equals(null)).isFalse();
+		assertThat(userMenuItem.equals("someString")).isFalse();
+
+		UserMenuItem userMenuItem1 = testUserMenu.setup(false);
+		userMenuItem.setCode("code1");
+		userMenuItem1.setCode("code2");
+		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+
+		userMenuItem1.setCode(userMenuItem.getCode());
+		userMenuItem1.setButtonLabel("someOtherButtonLabel");
+		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+
+		userMenuItem1.setButtonLabel(userMenuItem.getButtonLabel());
+		userMenuItem1.setAltLabel("someOtherLabel");
+		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+
+		userMenuItem1.setAltLabel(userMenuItem.getAltLabel());
+		userMenuItem1.setTooltip("someOtherToolTip");
+		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+
+		userMenuItem1.setTooltip(userMenuItem.getTooltip());
+		userMenuItem1.setShortcut('?');
+		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+
+		userMenuItem1.setShortcut(userMenuItem.getShortcut());
+		userMenuItem1.setMySubmenu("someOtherSubMenu");
+		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+
+		userMenuItem1.setMySubmenu(userMenuItem.getMySubmenu());
+		userMenuItem1.setMyClass("someOtherClass");
+		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+
+		userMenuItem1.setMyClass(userMenuItem.getMyClass());
+		userMenuItem1.setASubMenu(!userMenuItem.isASubMenu());
+		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+
+		userMenuItem1.setASubMenu(userMenuItem.isASubMenu());
+		userMenuItem1.setPosition(-1);
+		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+
+		userMenuItem1.setPosition(userMenuItem.getPosition());
+		userMenuItem1.setActive(!userMenuItem.isActive());
+		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+
+		userMenuItem1.setActive(userMenuItem.isActive());
+		assertThat(userMenuItem.equals(userMenuItem1)).isTrue();
+	}
+
+	@Test
+	public void testUserMenuItemToString() throws Exception {
+		UserMenuItem userMenuItem = testUserMenu.setup(true);
+		assertThat(userMenuItem.toString()).isEqualTo(userMenuItem.getButtonLabel());
+	}
+
+	@Test
+	public void testUserMenuItemGetDescription() throws Exception {
+		UserMenuItem userMenuItem = testUserMenu.setup(true);
+		// TODO: this will need to change if resource bundles are made available.
+		assertThat(userMenuItem.getDescription())
+				.isEqualTo("angal.menu.usermenuitemZangal.menu.labelstooltipshortTestButtonLabel-TestAltLabel-TestToolTip-Y...\n" +
+						"angal.menu.submenuTestMySubmenuangal.menu.classTestMyClass...\n angal.menu.issubmenutrueangal.menu.isactivetrueangal.menu.inposition11");
+	}
+
+	@Test
+	public void testUserMenuItemHashCode() throws Exception {
+		UserMenuItem userMenuItem = testUserMenu.setup(false);
+		userMenuItem.setCode("someCode");
+		// compute value
+		int hashCode = userMenuItem.hashCode();
+		// reuse value
+		assertThat(userMenuItem.hashCode()).isEqualTo(hashCode);
 	}
 
 	private String _setupTestUserGroup(boolean usingSet) throws OHException {

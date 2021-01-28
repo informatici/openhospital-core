@@ -23,7 +23,6 @@ package org.isf.medicalstock.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.isf.medicals.model.Medical;
@@ -36,8 +35,7 @@ import org.isf.ward.model.Ward;
 
 public class TestMovement {
 
-	private GregorianCalendar now = new GregorianCalendar();
-	private GregorianCalendar date = new GregorianCalendar(now.get(Calendar.YEAR), 2, 2);
+	private GregorianCalendar date = new GregorianCalendar(2000, 2, 2);
 	private int quantity = 10;
 	private String refNo = "TestRef";
 

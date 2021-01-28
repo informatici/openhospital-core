@@ -21,7 +21,6 @@
  */
 package org.isf.medicalstock.service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -102,49 +101,36 @@ public class MedicalStockIoOperations {
 			Movement movement) throws OHServiceException 
 	{
 		boolean result = false;
-	
-		try
-		{			
-			ArrayList<Lot> lots = getLotsByMedical(movement.getMedical());
 
-			int qty = movement.getQuantity();			
-			for (Lot lot : lots) 
-			{
-				Movement splitMovement = new Movement(movement.getMedical(), movement.getType(), movement.getWard(),
-						null, // lot to be set
-						movement.getDate(), qty, 
-						null, // quantity to be set
-						movement.getRefNo());
-				int qtLot = lot.getQuantity();
-				if (qtLot < qty) 
-				{
-					splitMovement.setQuantity(qtLot);
-					result = storeMovement(splitMovement, lot.getCode());
-					if (result) 
-					{
-						//medical stock movement inserted updates quantity of the medical
-						result = updateStockQuantity(splitMovement);
-					}
-					qty = qty - qtLot;
-				} 
-				else 
-				{
-					splitMovement.setQuantity(qty);
-					result = storeMovement(splitMovement, lot.getCode());
-					if (result) 
-					{
-						//medical stock movement inserted updates quantity of the medical
-						result = updateStockQuantity(splitMovement);
-					}
-					break;
+		ArrayList<Lot> lots = getLotsByMedical(movement.getMedical());
+
+		int qty = movement.getQuantity();
+		for (Lot lot : lots) {
+			Movement splitMovement = new Movement(movement.getMedical(), movement.getType(), movement.getWard(),
+					null, // lot to be set
+					movement.getDate(), qty,
+					null, // quantity to be set
+					movement.getRefNo());
+			int qtLot = lot.getQuantity();
+			if (qtLot < qty) {
+				splitMovement.setQuantity(qtLot);
+				result = storeMovement(splitMovement, lot.getCode());
+				if (result) {
+					//medical stock movement inserted updates quantity of the medical
+					result = updateStockQuantity(splitMovement);
 				}
+				qty = qty - qtLot;
+			} else {
+				splitMovement.setQuantity(qty);
+				result = storeMovement(splitMovement, lot.getCode());
+				if (result) {
+					//medical stock movement inserted updates quantity of the medical
+					result = updateStockQuantity(splitMovement);
+				}
+				break;
 			}
 		}
-		catch (OHServiceException e)
-		{
-			throw e;	
-		}
-		
+
 		return result;
 	}
 		
@@ -158,53 +144,38 @@ public class MedicalStockIoOperations {
 			Movement movement) throws OHServiceException 
 	{
 		String lotCode = null;
-		
-		
-		if (movement.getLot() != null)
-		{
+
+		if (movement.getLot() != null) {
 			lotCode = movement.getLot().getCode();
 		}
 
-		try 
-		{
-			//we have to manage the Lot
-			if (movement.getType().getType().contains("+")) 
-			{
-				//if is in automatic lot mode then we have to generate a new lot code
-				if (isAutomaticLotMode() || lotCode.equals("")) 
-				{
-					lotCode = generateLotCode();
-				}
-
-				boolean lotExists = lotExists(lotCode);
-				if (!lotExists) 
-				{
-					boolean lotStored = storeLot(lotCode, movement.getLot(), movement.getMedical());
-					if (!lotStored) 
-					{
-						return false;
-					}
-				}
+		//we have to manage the Lot
+		if (movement.getType().getType().contains("+")) {
+			//if is in automatic lot mode then we have to generate a new lot code
+			if (isAutomaticLotMode() || lotCode.equals("")) {
+				lotCode = generateLotCode();
 			}
 
-			boolean movementStored = storeMovement(movement, lotCode);
-			if (movementStored) 
-			{
-				//medical stock movement inserted updates quantity of the medical
-				boolean stockQuantityUpdated = updateStockQuantity(movement);
-				if (stockQuantityUpdated) 
-				{
-					return true;
+			boolean lotExists = lotExists(lotCode);
+			if (!lotExists) {
+				boolean lotStored = storeLot(lotCode, movement.getLot(), movement.getMedical());
+				if (!lotStored) {
+					return false;
 				}
 			}
-
-			//something is failed
-			return false;
-		} 
-		finally 
-		{
-			//Nothing to do
 		}
+
+		boolean movementStored = storeMovement(movement, lotCode);
+		if (movementStored) {
+			//medical stock movement inserted updates quantity of the medical
+			boolean stockQuantityUpdated = updateStockQuantity(movement);
+			if (stockQuantityUpdated) {
+				return true;
+			}
+		}
+
+		//something is failed
+		return false;
 	}
 	
 	/**
@@ -588,7 +559,7 @@ public class MedicalStockIoOperations {
 	}
 
 	/**
-	 * Retrieves lot referred to the specified {@link Medical}.
+	 * Retrieves lot referred to the specified {@link Medical}, expiring first on top
 	 * Lots with zero quantities will be stripped out
 	 * @param medical the medical.
 	 * @return a list of {@link Lot}.
@@ -611,18 +582,19 @@ public class MedicalStockIoOperations {
 		return new ArrayList<Lot>(lots);
 	}
 
-	private GregorianCalendar _convertTimestampToCalendar(Timestamp time)
-	{
-		GregorianCalendar calendar = null;
-		
-		if (time != null) 
-		{
-			calendar = new GregorianCalendar();
-			calendar.setTimeInMillis(time.getTime());
-		}
-		
-		return calendar;
-	}
+	// Method is not used anywhere
+	//	private GregorianCalendar _convertTimestampToCalendar(Timestamp time)
+	//	{
+	//		GregorianCalendar calendar = null;
+	//
+	//		if (time != null)
+	//		{
+	//			calendar = new GregorianCalendar();
+	//			calendar.setTimeInMillis(time.getTime());
+	//		}
+	//
+	//		return calendar;
+	//	}
 		
 	/**
 	 * returns the date of the last movement
