@@ -284,15 +284,15 @@ public class ExaminationBrowserManager {
 	 */
 	protected List<OHExceptionMessage> validateExamination(PatientExamination patex) {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		if (patex.getPex_diuresis_desc() != null && !diuresisDescriptionHashMap.keySet().contains(patex.getPex_diuresis_desc()))
+		if (patex.getPex_diuresis_desc() != null && !diuresisDescriptionHashMap.containsKey(patex.getPex_diuresis_desc()))
 			errors.add(new OHExceptionMessage("diuresisDescriptionNotAllowed",
 					MessageBundle.getMessage("angal.examination.pleaseinsertavaliddiuresisdescription"),
 					OHSeverityLevel.ERROR));
-		if (patex.getPex_bowel_desc() != null && !bowelDescriptionHashMap.keySet().contains(patex.getPex_bowel_desc()))
+		if (patex.getPex_bowel_desc() != null && !bowelDescriptionHashMap.containsKey(patex.getPex_bowel_desc()))
 			errors.add(new OHExceptionMessage("bowelDescriptionNotAllowed",
 					MessageBundle.getMessage("angal.examination.pleaseinsertavalidboweldescription"),
 					OHSeverityLevel.ERROR));
-		if (patex.getPex_auscultation() != null && !auscultationHashMap.keySet().contains(patex.getPex_auscultation()))
+		if (patex.getPex_auscultation() != null && !auscultationHashMap.containsKey(patex.getPex_auscultation()))
 			errors.add(new OHExceptionMessage("auscultationDescriptionNotAllowed",
 					MessageBundle.getMessage("angal.examination.pleaseinsertavalidauscultationdescription"),
 					OHSeverityLevel.ERROR));
