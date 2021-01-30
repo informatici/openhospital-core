@@ -157,9 +157,9 @@ public class OperationBrowserManager {
 	
 	private void buildResultHashMap() {
 		resultsListHashMap = new LinkedHashMap<>();
-		resultsListHashMap.put("Success", MessageBundle.getMessage("angal.operation.result.success"));
-		resultsListHashMap.put("Failure", MessageBundle.getMessage("angal.operation.result.failure"));
-		resultsListHashMap.put("Unknown", MessageBundle.getMessage("angal.operation.result.undefined"));
+		resultsListHashMap.put("success", MessageBundle.getMessage("angal.operation.result.success"));
+		resultsListHashMap.put("failure", MessageBundle.getMessage("angal.operation.result.failure"));
+		resultsListHashMap.put("unknown", MessageBundle.getMessage("angal.operation.result.undefined"));
 	}
 	
 	public String getResultDescriptionKey(String description) {
