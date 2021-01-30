@@ -91,12 +91,24 @@ public class ExamRowIoOperations {
 	 * Returns the list of {@link ExamRow}s
 	 * @return the list of {@link ExamRow}s
 	 * @throws OHServiceException
+	 * @deprecated use <code>getExamRows()</code>
 	 */
+	@Deprecated
 	public ArrayList<ExamRow> getExamrows() throws OHServiceException 
+	{
+		return getExamRows();
+	}
+
+	/**
+	 * Returns the list of {@link ExamRow}s
+	 * @return the list of {@link ExamRow}s
+	 * @throws OHServiceException
+	 */
+	public ArrayList<ExamRow> getExamRows() throws OHServiceException
 	{
 		return getExamsRowByDesc(null);
 	}
-	
+
 	/**
 	 * Returns the list of {@link ExamRow}s that matches passed description
 	 * @param description - the examRow description
@@ -188,7 +200,7 @@ public class ExamRowIoOperations {
 	 * the parameter; Returns false if the query finds no record, else returns
 	 * true
 	 * 
-	 * @param examrow the {@link Exam}
+	 * @param examrow the {@link ExamRow}
 	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */

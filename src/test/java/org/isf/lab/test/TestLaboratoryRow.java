@@ -29,7 +29,6 @@ import org.isf.utils.exception.OHException;
 
 public class TestLaboratoryRow {
 
-	private Integer code = 0;
 	private String description = "TestDescription";
 
 	public LaboratoryRow setup(Laboratory laboratory, boolean usingSet) throws OHException {

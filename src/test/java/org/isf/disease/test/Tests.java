@@ -137,8 +137,8 @@ public class Tests extends OHCoreTestCase {
 	public void testIoNewDisease() throws Exception {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, true);
-		boolean result = diseaseIoOperation.newDisease(disease);
-		assertThat(result).isTrue();
+		Disease result = diseaseIoOperation.newDisease(disease);
+		assertThat(result.getCode()).isEqualTo("999");
 		_checkDiseaseIntoDb(disease.getCode());
 	}
 
@@ -147,10 +147,10 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestDisease(false);
 		Disease foundDisease = diseaseIoOperation.getDiseaseByCode(Integer.valueOf(code));
 		foundDisease.setDescription("Update");
-		boolean result = diseaseIoOperation.updateDisease(foundDisease);
+		Disease result = diseaseIoOperation.updateDisease(foundDisease);
 		Disease updateDisease = diseaseIoOperation.getDiseaseByCode(Integer.valueOf(code));
 
-		assertThat(result).isTrue();
+		assertThat(result.getDescription()).isEqualTo("Update");
 		assertThat(updateDisease.getDescription()).isEqualTo("Update");
 	}
 
@@ -251,8 +251,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewDisease() throws Exception {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, true);
-		boolean result = diseaseBrowserManager.newDisease(disease);
-		assertThat(result).isTrue();
+		Disease result = diseaseBrowserManager.newDisease(disease);
+		assertThat(result.getCode()).isEqualTo("999");
 		_checkDiseaseIntoDb(disease.getCode());
 	}
 
@@ -261,8 +261,8 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestDisease(false);
 		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.valueOf(code));
 		foundDisease.setDescription("Update");
-		boolean result = diseaseBrowserManager.updateDisease(foundDisease);
-		assertThat(result).isTrue();
+		Disease result = diseaseBrowserManager.updateDisease(foundDisease);
+		assertThat(result.getDescription()).isEqualTo("Update");
 		Disease updateDisease = diseaseBrowserManager.getDiseaseByCode(Integer.valueOf(code));
 		assertThat(updateDisease.getDescription()).isEqualTo("Update");
 	}
@@ -311,7 +311,7 @@ public class Tests extends OHCoreTestCase {
 		Disease disease2 = new Disease("998", "someDescription", diseaseType2);
 		assertThat(disease.equals(disease)).isTrue();
 		assertThat(disease.equals(disease2)).isFalse();
-		assertThat(disease.equals(new String("xyzzy"))).isFalse();
+		assertThat(disease.equals("xyzzy")).isFalse();
 		disease2.setCode(disease.getCode());
 		disease2.setType(disease.getType());
 		disease2.setDescription(disease.getDescription());

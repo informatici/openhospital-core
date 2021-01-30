@@ -40,7 +40,7 @@ public class VisitsIoOperations {
 	private VisitsIoOperationRepository repository;
 	
 	/**
-	 * returns the list of all {@link Visit}s related to a patID
+	 * Returns the list of all {@link Visit}s related to a patID
 	 * 
 	 * @param patID - the {@link Patient} ID. If <code>0</code> return the list of all {@link Visit}s
 	 * @return the list of {@link Visit}s
@@ -68,10 +68,10 @@ public class VisitsIoOperations {
 
 
 	/**
-	 * Insert a new {@link Visit} for a patID
+	 * Insert a new {@link Visit} for a specified {@link Visit}
 	 * 
-	 * @param visit - the {@link Visit} related to patID. 
-	 * @return the visitID
+	 * @param visit - the {@link Visit}.
+	 * @return the {@link Visit}
 	 * @throws OHServiceException 
 	 */
 	public Visit newVisit(Visit visit) throws OHServiceException {
@@ -102,9 +102,9 @@ public class VisitsIoOperations {
 	}
 
 	/**
-	 * returns the {@link Visit} based on code
+	 * Returns the {@link Visit} based on the Visit id
 	 *
-	 * @param code - the id
+	 * @param id - the id
 	 * @return the {@link Visit} or {@literal null} if none found
 	 */
 	public Visit findVisit(int id)
