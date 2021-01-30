@@ -143,7 +143,7 @@ public class JasperReportsManager {
 
             String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + admID +".pdf";
 
-            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
+            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
             return result;
         } catch(Exception e){
@@ -209,7 +209,7 @@ public class JasperReportsManager {
 
             String pdfFilename = "rpt/PDF/" + jasperFileName + "_" + billID + ".pdf";
 
-            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
+            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
             return result;
         } catch(Exception e){
@@ -231,7 +231,7 @@ public class JasperReportsManager {
 
             String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + opdID +".pdf";
 
-            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
+            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
             return result;
         } catch(Exception e){
@@ -250,7 +250,7 @@ public class JasperReportsManager {
             parameters.put("examId", examId); 
             String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + patientID +".pdf";
 
-            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
+            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
             return result;
         } catch(Exception e){
@@ -268,7 +268,7 @@ public class JasperReportsManager {
 
             String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + patientID +".pdf";
 
-            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
+            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
             return result;
         } catch(Exception e){
@@ -285,7 +285,7 @@ public class JasperReportsManager {
             parameters.put("date", date); // real param
             String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + String.valueOf(wardID)+"_"+TimeTools.formatDateTime(date, "yyyyMMdd")+".pdf";
 
-            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
+            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
             return result;
         } catch(OHServiceException e){
@@ -330,7 +330,7 @@ public class JasperReportsManager {
             parameters.put("Date_to", dateToQuery); 
             String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + String.valueOf(patientID)+".pdf";
 
-            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename.toString(), parameters);
+            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
             return result;
         } catch(OHServiceException e){
@@ -356,7 +356,7 @@ public class JasperReportsManager {
             HashMap<String, Object> parameters = getHospitalParameters();
             parameters.put("Date", todayReport);
 
-            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + todayFile.toString()+".pdf";
+            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + todayFile +".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
@@ -387,7 +387,7 @@ public class JasperReportsManager {
 			if (sortBy != null) parameters.put("sortBy", sortBy);
 			if (filter != null) parameters.put("filter", filter);
 
-            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + dateFile.toString()+".pdf";
+            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + dateFile +".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
@@ -467,7 +467,7 @@ public class JasperReportsManager {
 				parameters.put("WardName", String.valueOf(ward.getDescription()));
 			}
 
-            String pdfFilename = "rpt/PDF/"+exportFileName.toString()+".pdf";
+            String pdfFilename = "rpt/PDF/"+ exportFileName +".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
@@ -537,7 +537,7 @@ public class JasperReportsManager {
 			parameters.put("Ward", ward.getDescription());
 			parameters.put("WardCode", ward.getCode());
 
-            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + dateFile.toString()+".pdf";
+            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + dateFile +".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
             JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
