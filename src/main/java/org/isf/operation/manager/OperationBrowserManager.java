@@ -22,7 +22,9 @@
 package org.isf.operation.manager;
 
 import java.util.ArrayList;
-
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import org.isf.generaldata.MessageBundle;
 import org.isf.operation.model.Operation;
 import org.isf.operation.service.OperationIoOperations;
@@ -30,6 +32,8 @@ import org.isf.opetype.model.OperationType;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import org.isf.utils.validator.DefaultSorter;
 
 /**
  * Class that provides gui separation from database operations and gives some
@@ -42,6 +46,8 @@ public class OperationBrowserManager {
 
 	@Autowired
 	private OperationIoOperations ioOperations;
+	
+	LinkedHashMap<String, String> resultsListHashMap;
 
 	/**
 	 * Return the list of {@link Operation}s
@@ -146,11 +152,39 @@ public class OperationBrowserManager {
 	 *
 	 * @return the found list
 	 */
-	public ArrayList<String> getResultsList() { //TODO (OP-372): deal with codes instead of translations!!!
-		ArrayList<String> resultsList = new ArrayList<>();
-		resultsList.add(MessageBundle.getMessage("angal.operation.result.sucess"));
-		resultsList.add(MessageBundle.getMessage("angal.operation.result.failure"));
-		resultsList.add(MessageBundle.getMessage("angal.operation.result.undefined"));
-		return resultsList;
+	public LinkedHashMap<String, String> getResultsList() { 
+		if (resultsListHashMap == null) buildResultHashMap();
+		return resultsListHashMap;
+	}
+	
+	private void buildResultHashMap() {
+		resultsListHashMap = new LinkedHashMap<>();
+		resultsListHashMap.put("success", MessageBundle.getMessage("angal.operation.result.success"));
+		resultsListHashMap.put("failure", MessageBundle.getMessage("angal.operation.result.failure"));
+		resultsListHashMap.put("unknown", MessageBundle.getMessage("angal.operation.result.undefined"));
+	}
+	
+	public String getResultDescriptionKey(String description) {
+		if (resultsListHashMap == null) buildResultHashMap();
+		String key = "";
+		for (String value : resultsListHashMap.keySet()) {
+			if (resultsListHashMap.get(value).equals(description)) {
+				key = value;
+				break;
+			}
+		}
+		return key;
+	}
+	
+	public ArrayList<String> getResultDescriptionList() {
+		if (resultsListHashMap == null) buildResultHashMap();
+		ArrayList<String> resultDescriptionList = new ArrayList<String>(resultsListHashMap.values());
+		Collections.sort(resultDescriptionList,  new DefaultSorter(MessageBundle.getMessage("angal.operation.result.success")));
+		return resultDescriptionList;
+	}
+	
+	public String getResultDescriptionTranslated(String result_desc_key) {
+		if (resultsListHashMap == null) buildResultHashMap();
+		return resultsListHashMap.get(result_desc_key);
 	}
 }
