@@ -156,7 +156,7 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 				Thread.sleep(1000);
 
 				//SET SMS TEXT
-				logger.trace(text.toString());
+				logger.trace(text);
 				if (!debug) outputStream.write(text.getBytes());
 				Thread.sleep(1000);
 
