@@ -25,9 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class OHException extends Exception {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	
 	protected Logger logger = LoggerFactory.getLogger(OHException.class);
@@ -41,7 +39,7 @@ public class OHException extends Exception {
 		super(message, cause);
 		if (logger.isErrorEnabled()) {
 			logger.error(">> EXCEPTION: {}", sanitize(message));
-			logger.error(">> {}", cause);
+			logger.error(">> ", cause);
 		}
 	}
 	
