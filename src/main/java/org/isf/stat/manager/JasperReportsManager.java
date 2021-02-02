@@ -721,7 +721,7 @@ public class JasperReportsManager {
 		}
 
         try {
-        	toDateQuery = TimeTools.parseDate(toDate, null, false).getTime();;
+        	toDateQuery = TimeTools.parseDate(toDate, null, false).getTime();
 		} catch (ParseException e) {
 	        logger.error("Error parsing '{}' to a Date using pattern: 'yyyy-MM-dd HH:mm:ss'", toDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
@@ -749,7 +749,7 @@ public class JasperReportsManager {
 		}
 
 		try {
-			toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yyyy", false).getTime();;
+			toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yyyy", false).getTime();
 		} catch (ParseException e) {
 			logger.error("Error parsing '{}' to a Date using pattern: 'dd/MM/yyyy'", toDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
