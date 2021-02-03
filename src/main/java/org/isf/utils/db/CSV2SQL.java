@@ -31,9 +31,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -43,10 +43,6 @@ import java.util.Random;
 
 import org.isf.utils.exception.OHException;
 import org.isf.utils.time.TimeTools;
-
-/**
- *
- */
 
 /**
  * @author Mwithi
@@ -94,7 +90,7 @@ public class CSV2SQL {
 	public void pharmacyStartCVS(File fileIn, File fileOut) throws IOException, OHException {
 		NumberFormat numFormat = NumberFormat.getInstance(Locale.getDefault());
 
-		CharsetEncoder encoder = Charset.forName("UTF-8").newEncoder();
+		CharsetEncoder encoder = StandardCharsets.UTF_8.newEncoder();
 		encoder.onMalformedInput(CodingErrorAction.REPORT);
 		encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
 

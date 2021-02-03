@@ -32,6 +32,7 @@ import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -79,7 +80,7 @@ public class ExcelExporter {
 	private CreationHelper createHelper;
 
 	public ExcelExporter() {
-		encoder = Charset.forName("UTF-8").newEncoder();
+		encoder = StandardCharsets.UTF_8.newEncoder();
 		encoder.onMalformedInput(CodingErrorAction.REPORT);
 		encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
 		currentLocale = Locale.getDefault();
