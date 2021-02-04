@@ -41,9 +41,8 @@ import org.springframework.stereotype.Component;
 /**
  * Class that provides gui separation from database operations and gives some
  * useful logic manipulations of the dinamic data (memory)
- * 
+ *
  * @author Rick
- * 
  */
 @Component
 public class WardBrowserManager {
@@ -259,7 +258,7 @@ public class WardBrowserManager {
 	}
 
 	/**
-	 * returns the {@link Ward} based on ward code
+	 * Returns the {@link Ward} based on ward code
 	 *
 	 * @param code - the  {@link Ward} code.
 	 * @return the {@link Ward}

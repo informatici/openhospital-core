@@ -21,11 +21,6 @@
  */
 package org.isf.exa.manager;
 
-/**
- * 19-dec-2005
- * 14-jan-2006
- */
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +41,8 @@ import org.springframework.stereotype.Component;
  * useful logic manipulations of the dinamic data (memory)
  *
  * @author bob
+ * 19-dec-2005
+ * 14-jan-2006
  */
 @Component
 public class ExamBrowsingManager {

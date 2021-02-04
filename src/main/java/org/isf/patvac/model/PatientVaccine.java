@@ -21,14 +21,6 @@
  */
 package org.isf.patvac.model;
 
-/*------------------------------------------
-* PatientVaccine - class 
-* -----------------------------------------
-* modification history
-* 25/08/2011 - claudia - first beta version
-* 04/06/2015 - Antonio - ported to JPA
-*------------------------------------------*/
-
 import java.util.GregorianCalendar;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -50,6 +42,15 @@ import org.isf.patient.model.Patient;
 import org.isf.vaccine.model.Vaccine;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ * ------------------------------------------
+ * PatientVaccine - class
+ * -----------------------------------------
+ * modification history
+ * 25/08/2011 - claudia - first beta version
+ * 04/06/2015 - Antonio - ported to JPA
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="PATIENTVACCINE")
 @EntityListeners(AuditingEntityListener.class) 

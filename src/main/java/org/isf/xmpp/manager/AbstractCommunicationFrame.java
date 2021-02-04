@@ -32,9 +32,6 @@ import org.jivesoftware.smackx.filetransfer.FileTransferListener;
  */
 public abstract class AbstractCommunicationFrame extends JFrame implements MessageListener, FileTransferListener, ChatManagerListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 }

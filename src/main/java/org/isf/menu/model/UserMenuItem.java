@@ -20,6 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.menu.model;
+
 import javax.persistence.Column;
 import javax.persistence.ColumnResult;
 import javax.persistence.Entity;
@@ -34,18 +35,15 @@ import javax.validation.constraints.NotNull;
 import org.isf.generaldata.MessageBundle;
 
 /**
+ * ------------------------------------------
+ * UserUserMenuItem - an item in user menu
  * not pure model class
- * @author flavio
- *	an item in user menu
- */
-/*------------------------------------------
- * User - model for the user entity
  * -----------------------------------------
  * modification history
- * ? 		  - flavio - first version 
+ * ? 		  - flavio - first version
  * 07/05/2016 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="MENUITEM")
 @SqlResultSetMapping(name="UserMenuItemWithStatus",

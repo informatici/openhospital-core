@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.isf.dlvrrestype.model;
 
 import javax.persistence.Column;
@@ -30,18 +29,14 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 /**
- * Pure Model Exam : represents a disease type
- * @author bob
- *
+ * ------------------------------------------
+ * Delivery Type - model for the delivery type entity
+ * -----------------------------------------
+ * modification history
+ * ? - bob - first version
+ * 11/01/2015 - Antonio - ported to JPA
+ * ------------------------------------------
  */
-/*------------------------------------------
-* Delivery Type - model for the delivery type entity
-* -----------------------------------------
-* modification history
-* ? - bob - first version 
-* 11/01/2015 - Antonio - ported to JPA
-* 
-*------------------------------------------*/
 @Entity
 @Table(name="DELIVERYRESULTTYPE")
 public class DeliveryResultType 

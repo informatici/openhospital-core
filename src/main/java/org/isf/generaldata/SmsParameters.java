@@ -76,7 +76,6 @@ public class SmsParameters {
     }
     
     /**
-	 * 
 	 * Method to retrieve a string property
 	 * 
 	 * @param property
@@ -111,4 +110,3 @@ public class SmsParameters {
 		return value;
 	}
 }
-

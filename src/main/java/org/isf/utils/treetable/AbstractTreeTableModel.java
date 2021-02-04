@@ -60,7 +60,6 @@ package org.isf.utils.treetable;
  * intended for use in the design, construction, operation or
  * maintenance of any nuclear facility.
  */
-
 import javax.swing.event.EventListenerList;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -68,13 +67,10 @@ import javax.swing.tree.TreePath;
  
 /**
  * An abstract implementation of the TreeTableModel interface, handling 
- * the list of listeners. 
- *
- * @version %I% %G%
+ * the list of listeners.
  *
  * @author Philip Milne
  */
-
 public abstract class AbstractTreeTableModel implements TreeTableModel {
     protected Object root;     
     protected EventListenerList listenerList = new EventListenerList();
@@ -225,7 +221,8 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
 
     public Class<?> getColumnClass(int column) { return Object.class; }
 
-   /** By default, make the column with the Tree in it the only editable one. 
+   /**
+    * By default, make the column with the Tree in it the only editable one.
     *  Making this column editable causes the JTable to forward mouse 
     *  and keyboard events in the Tree column to the underlying JTree. 
     */ 

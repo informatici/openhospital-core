@@ -27,7 +27,7 @@ import java.util.GregorianCalendar;
 import org.isf.medicalstock.model.Movement;
 
 /**
- * 		   @author mwithi
+ * @author mwithi
  */
 public class MovementForPrint implements Comparable<MovementForPrint>{
 

@@ -48,17 +48,15 @@ import org.isf.patient.model.Patient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.ward.model.Ward;
 
-/*
- * pure model
- */
-/*------------------------------------------
- * Bill - model for the bill entity
+/**
+ * ------------------------------------------
+ * Admission - model for a patient admission
  * -----------------------------------------
  * modification history
- * ? - ? - first version 
+ * ? - ? - first version
  * 30/09/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="ADMISSION")
 @SqlResultSetMapping(name="AdmittedPatient",

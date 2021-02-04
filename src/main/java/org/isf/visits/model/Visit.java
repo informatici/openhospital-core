@@ -44,15 +44,15 @@ import org.isf.utils.db.Auditable;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
- /*------------------------------------------
- * Visits : ?
+/**
+ * ------------------------------------------
+ * Visits
  * -----------------------------------------
  * modification history
- * ? - ? - first version 
+ * ? - ? - first version
  * 1/08/2016 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
-
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="VISITS")
 @EntityListeners(AuditingEntityListener.class)

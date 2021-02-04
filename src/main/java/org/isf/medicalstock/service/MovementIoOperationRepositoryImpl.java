@@ -42,7 +42,6 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-
 @Transactional
 public class MovementIoOperationRepositoryImpl implements MovementIoOperationRepositoryCustom {
 

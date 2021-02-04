@@ -78,8 +78,6 @@ import javax.swing.tree.TreePath;
  * @author Philip Milne
  * @author Scott Violet
  */
-
-
 public class TreeTableModelAdapter extends AbstractTableModel
 {
     /**
@@ -140,5 +138,3 @@ public class TreeTableModelAdapter extends AbstractTableModel
 	treeTableModel.setValueAt(value, nodeForRow(row), column);
     }
 }
-
-

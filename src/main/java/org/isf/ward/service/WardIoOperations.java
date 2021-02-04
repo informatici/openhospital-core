@@ -141,7 +141,7 @@ public class WardIoOperations {
 	
 	
 	/**
-	 * Check if the maternity ward exist
+	 * Check if the maternity ward exists
 	 * @return <code>true</code> if is exist, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
@@ -150,7 +150,7 @@ public class WardIoOperations {
 	}
 
 	/**
-	 * returns the {@link Ward} based on code
+	 * Returns the {@link Ward} based on code
 	 *
 	 * @param code - the code, must not be {@literal null}
 	 * @return the {@link Ward} or {@literal null} if none found

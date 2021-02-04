@@ -42,7 +42,6 @@ import org.isf.admission.model.Admission;
 import org.isf.patient.model.Patient;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Transactional
 public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationRepositoryCustom {
 	

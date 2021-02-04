@@ -43,20 +43,14 @@ import org.isf.patient.model.Patient;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * 
- * @author Mwithi
- * 
- * Bean to collect data from DB table THERAPIES
- *
- */ /*------------------------------------------
- * Therapies : information extract
- * from TherapyRow beans
+ * ------------------------------------------
+ * TherapyRow : Bean to collect data from DB table THERAPIES
  * -----------------------------------------
  * modification history
- * ? - Mwithi - first version 
+ * ? - Mwithi - first version
  * 1/08/2016 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="THERAPIES")
 @EntityListeners(AuditingEntityListener.class)

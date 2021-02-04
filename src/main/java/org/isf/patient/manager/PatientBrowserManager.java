@@ -66,7 +66,7 @@ public class PatientBrowserManager {
 	}
 	
 	/**
-	 * Method that insert a new Patient in the db
+	 * Method that inserts a new Patient in the db
 	 * 
 	 * @param patient
 	 * @return saved / updated patient
@@ -98,7 +98,7 @@ public class PatientBrowserManager {
 	}
 
 	/**
-	 * Method that get a Patient by his/her name
+	 * Method that gets a Patient by his/her name
 	 * 
 	 * @param name
 	 * @return the Patient that match specified name (could be null)
@@ -112,7 +112,7 @@ public class PatientBrowserManager {
 	}
 
 	/**
-	 * Method that get a Patient by his/her ID
+	 * Method that gets a Patient by his/her ID
 	 * 
 	 * @param code
 	 * @return the Patient (could be null)
@@ -124,7 +124,7 @@ public class PatientBrowserManager {
 	
 
 	/**
-	 * get a Patient by his/her ID, even if he/her has been logically deleted
+	 * Get a Patient by his/her ID, even if he/her has been logically deleted
 	 * 
 	 * @param code
 	 * @return the list of Patients (could be null)
@@ -135,7 +135,7 @@ public class PatientBrowserManager {
 	}
 	
 	/**
-	 * Method that get next PAT_ID is going to be used.
+	 * Method that gets the next PAT_ID is going to be used.
 	 * 
 	 * @return code
 	 * @throws OHServiceException 
@@ -266,8 +266,8 @@ public class PatientBrowserManager {
 	}
 	
 	/**
-	 * Method that check if the patient's name is already present in the DB
-	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName
+	 * Method that checks if the patient's name is already present in the DB
+	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName)
 	 * 
 	 * @param name - name of the patient
 	 * @return true - if the patient is already present
@@ -276,7 +276,7 @@ public class PatientBrowserManager {
 	public boolean isNamePresent(String name) throws OHServiceException {
         return ioOperations.isPatientPresentByName(name);
 	}
-	
+
 	/**
 	 * Method that returns the full list of Patients not logically deleted, having the passed String in:<br>
 	 * - code<br>
@@ -284,7 +284,7 @@ public class PatientBrowserManager {
 	 * - secondName<br>
 	 * - taxCode<br>
 	 * - note<br>
-	 *  
+	 *
 	 * @param keyword - String to search, <code>null</code> for full list
 	 * @return the list of Patients (could be empty)
 	 * @throws OHServiceException
@@ -294,7 +294,7 @@ public class PatientBrowserManager {
 	}
 
 	/**
-	 * Method that merge patients and all clinic details under the same PAT_ID
+	 * Method that merges patients and all clinic details under the same PAT_ID
 	 * 
 	 * @param mergedPatient
 	 * @param patient2

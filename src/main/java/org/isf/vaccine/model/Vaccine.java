@@ -21,10 +21,6 @@
  */
 package org.isf.vaccine.model;
 
-/**
- * @(#) Vaccine.java
- */
-  
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -50,7 +46,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * 20/10/2011 - Cla - insert vaccinetype managment
  * 18/11/2011 - Cla - inserted print method
  * 04/06/2015 - Antonio - ported to JPA
- *
  */
 @Entity
 @Table(name="VACCINE")

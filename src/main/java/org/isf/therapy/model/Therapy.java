@@ -26,10 +26,9 @@ import java.util.GregorianCalendar;
 import org.isf.medicals.model.Medical;
 
 /**
- * @author Mwithi
+ * Bean to host Therapies informations extract from TherapyRow beans.
  *
- * Bean to host Therapies informations extract
- * from TherapyRow beans.
+ * @author Mwithi
  */
 public class Therapy {
 	
@@ -49,7 +48,6 @@ public class Therapy {
 	}
 
 	/**
-	 * 
 	 * @param therapyID
 	 * @param patID
 	 * @param dates

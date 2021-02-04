@@ -55,9 +55,6 @@ public class FileTools {
 			{ "yyyy-MM-dd_HHmm", "\\d{4}-\\d{2}-\\d{2}_\\d{4}" },
 	};
 
-	/**
-	 *
-	 */
 	public FileTools() {
 	}
 

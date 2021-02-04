@@ -57,7 +57,7 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 	ArrayList<Bill> findAllPendindBillsByBillPatient(@Param("patID")int patID);
 
 	/**
-	 * return the bills for date between dateFrom and dateFrom to dateTo and containing items with description desc
+	 * Return the bills for date between dateFrom and dateFrom to dateTo and containing items with description desc
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param desc

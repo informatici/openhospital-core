@@ -21,8 +21,6 @@
  */
 package org.isf.sms.model;
 
-// Generated 31-gen-2014 15.39.04 by Hibernate Tools 3.4.0.CR1
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -35,6 +33,8 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 /**
+ * Generated 31-gen-2014 15.39.04 by Hibernate Tools 3.4.0.CR1
+ *
  * @author Mwithi
  */
 @Entity

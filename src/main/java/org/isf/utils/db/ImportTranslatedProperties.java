@@ -21,10 +21,6 @@
  */
 package org.isf.utils.db;
 
-/**
- * ImportTranslatedProperties.java - 04/set/2013
- */
-
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -39,6 +35,8 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 /**
+ * ImportTranslatedProperties.java - 04/set/2013
+ *
  * @author Mwithi
  */
 public class ImportTranslatedProperties {

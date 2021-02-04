@@ -34,14 +34,15 @@ import javax.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
 
-/*------------------------------------------
+/**
+ * ------------------------------------------
  * User - model for the user entity
  * -----------------------------------------
  * modification history
- * ? - ? - first version 
+ * ? - ? - first version
  * 07/05/2016 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="USER")	
 @AttributeOverrides({

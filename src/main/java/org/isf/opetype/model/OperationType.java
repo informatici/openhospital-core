@@ -35,19 +35,14 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Pure Model Exam : represents a disease type
- * 
- * @author Rick, Vero, Pupo
- *
+ * ------------------------------------------
+ * OperationType - model for the operation type
+ * -----------------------------------------
+ * modification history
+ * ? - bob - first version
+ * 07/01/2015 - Antonio - ported to JPA
+ * ------------------------------------------
  */
-/*------------------------------------------
-* OperationType - model for the bill entity
-* -----------------------------------------
-* modification history
-* ? - bob - first version 
-* 007/01/2015 - Antonio - ported to JPA
-* 
-*------------------------------------------*/
 @Entity
 @Table(name="OPERATIONTYPE")
 @EntityListeners(AuditingEntityListener.class)
@@ -138,5 +133,3 @@ public class OperationType extends Auditable<String>
     }
 
 }
-
-

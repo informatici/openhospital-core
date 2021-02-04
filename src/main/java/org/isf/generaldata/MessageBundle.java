@@ -21,10 +21,6 @@
  */
 package org.isf.generaldata;
 
-/*
- * Created on 27/ott/07
- */
-
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -35,6 +31,9 @@ import org.isf.utils.db.UTF8Control;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/*
+ * Created on 27/ott/07
+ */
 public class MessageBundle {
 
 	private static final Logger logger = LoggerFactory.getLogger(MessageBundle.class);

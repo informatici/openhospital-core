@@ -76,7 +76,6 @@ public class GSMParameters {
     }
     
     /**
-	 * 
 	 * Method to retrieve a string property
 	 * 
 	 * @param property
@@ -93,4 +92,3 @@ public class GSMParameters {
 		return value;
 	}
 }
-

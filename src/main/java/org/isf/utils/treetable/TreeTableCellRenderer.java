@@ -34,9 +34,6 @@ import javax.swing.tree.TreeModel;
 //
 public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	protected int visibleRow;
 	protected JTreeTable jTreeTable;

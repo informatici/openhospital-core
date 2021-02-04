@@ -44,7 +44,6 @@ public class PropertyReader {
 	}
 
 	/**
-	 * 
 	 * Method to retrieve a property
 	 * 
 	 * @param propertyName
@@ -108,5 +107,3 @@ public class PropertyReader {
 		}
 	}
 }
-
-

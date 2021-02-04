@@ -51,9 +51,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 })
 public class Supplier extends Auditable<String> implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	@Id 
@@ -88,17 +85,12 @@ public class Supplier extends Auditable<String> implements java.io.Serializable 
 	
 	@Transient
 	private volatile int hashCode = 0;
-	
 
-	/**
-	 * 
-	 */
 	public Supplier() {
 		super();
 	}
 
 	/**
-	 * 
 	 * @param supID
 	 * @param supName
 	 * @param supAddress
@@ -121,7 +113,6 @@ public class Supplier extends Auditable<String> implements java.io.Serializable 
 	}
 	
 	/**
-	 * 
 	 * @param supID
 	 * @param supName
 	 * @param supAddress

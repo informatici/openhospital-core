@@ -21,15 +21,6 @@
  */
 package org.isf.patvac.service;
 
-/*------------------------------------------
- * IoOperations  - Patient Vaccine Io operations
- * -----------------------------------------
- * modification history
- * 25/08/2011 - claudia - first beta version
- * 20/10/2011 - insert vaccine type management
- * 14/11/2011 - claudia - inserted search condition on date
- *------------------------------------------*/
-
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -43,6 +34,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * ------------------------------------------
+ * PatVacIoOperations  - Patient Vaccine Io operations
+ * -----------------------------------------
+ * modification history
+ * 25/08/2011 - claudia - first beta version
+ * 20/10/2011 - insert vaccine type management
+ * 14/11/2011 - claudia - inserted search condition on date
+ * ------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
@@ -70,7 +71,7 @@ public class PatVacIoOperations {
 	}
 
 	/**
-	 * returns all {@link PatientVaccine}s within <code>dateFrom</code> and
+	 * Returns all {@link PatientVaccine}s within <code>dateFrom</code> and
 	 * <code>dateTo</code>
 	 *
 	 * @param vaccineTypeCode

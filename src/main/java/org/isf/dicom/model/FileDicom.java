@@ -50,20 +50,14 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Model for contain Detailed DICOM Data
- * 
- * @author Pietro Castellucci
- * @version 1.0.0
- * 
- */
-/*------------------------------------------
- * Dicom - model for the DICOM entity
+ * ------------------------------------------
+ * Dicom - model for the DICOM entity; contains detailed DICOM Data
  * -----------------------------------------
  * modification history
- * ? -  Pietro Castellucci - first version 
+ * ? -  Pietro Castellucci - first version
  * 29/08/2016 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name = "DICOM")
 @EntityListeners(AuditingEntityListener.class) 

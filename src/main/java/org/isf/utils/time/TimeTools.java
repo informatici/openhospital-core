@@ -39,9 +39,9 @@ import org.joda.time.Period;
 import org.joda.time.PeriodType;
 
 /**
- * @author Mwithi
- * 
  * Some useful functions for time calculation.
+ *
+ * @author Mwithi
  */
 public class TimeTools {
 
@@ -61,9 +61,7 @@ public class TimeTools {
 	
 	
 	/**
-	 * @author Mwithi
-	 * 
-	 * returns <code>true</code> if the DATE part is the same (no matter the time)
+	 * Returns <code>true</code> if the DATE part is the same (no matter the time)
 	 * @param aDate
 	 * @param today
 	 * @return
@@ -82,9 +80,7 @@ public class TimeTools {
 	}
 
 	/**
-	 * @author Mwithi
-	 * 
-	 * returns the difference in days between two dates
+	 * Returns the difference in days between two dates
 	 * @param from
 	 * @param to
 	 * @param ignoreTime - if <code>True</code> only dates will be compared
@@ -108,9 +104,7 @@ public class TimeTools {
 	}
 	
 	/**
-	 * @author Mwithi
-	 * 
-	 * returns the difference in days between two dates
+	 * Returns the difference in days between two dates
 	 * @param from
 	 * @param to
 	 * @param ignoreTime - if <code>True</code> only dates will be compared
@@ -142,9 +136,7 @@ public class TimeTools {
 	}
 	
 	/**
-	 * @author Mwithi
-	 * 
-	 * returns the difference in weeks between two dates
+	 * Returns the difference in weeks between two dates
 	 * @param from
 	 * @param to
 	 * @param ignoreTime - if <code>True</code> only dates will be compared
@@ -168,9 +160,7 @@ public class TimeTools {
 	}
 	
 	/**
-	 * @author Mwithi
-	 * 
-	 * returns the difference in months between two dates
+	 * Returns the difference in months between two dates
 	 * @param from
 	 * @param to
 	 * @param ignoreTime - if <code>True</code> only dates will be compared
@@ -319,9 +309,7 @@ public class TimeTools {
 
 
 	/**
-	 * @author Mwithi
-	 *
-	 * returns the difference in days between two dates
+	 * Returns the difference in days between two dates
 	 * @param from
 	 * @param to
 	 * @return the number of days
@@ -335,9 +323,7 @@ public class TimeTools {
 	}
 
 	/**
-	 * @author Mwithi
-	 *
-	 * returns the difference in days between two dates
+	 * Returns the difference in days between two dates
 	 * @param from
 	 * @param to
 	 * @return the number of days
@@ -350,9 +336,7 @@ public class TimeTools {
 	}
 
 	/**
-	 * @author Mwithi
-	 *
-	 * returns the difference in weeks between two dates
+	 * Returns the difference in weeks between two dates
 	 * @param from
 	 * @param to
 	 * @return the number of weeks
@@ -365,9 +349,7 @@ public class TimeTools {
 	}
 
 	/**
-	 * @author Mwithi
-	 *
-	 * returns the difference in months between two dates
+	 * Returns the difference in months between two dates
 	 * @param from
 	 * @param to
 	 * @return the number of months
@@ -406,8 +388,6 @@ public class TimeTools {
 	 *
 	 * @author hadesthanos
 	 * @return DateTime
-	 * @throws OHException
-	 * @throws ParseException
 	 */
 	public static GregorianCalendar getServerDateTime()  {
 		GregorianCalendar serverDate=new GregorianCalendar();

@@ -44,14 +44,15 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/*------------------------------------------
- * Medical Lot - model for the medical entity
+/**
+ * ------------------------------------------
+ * Medical Lot - model for the medical lot entity
  * -----------------------------------------
  * modification history
  * ? - ?
  * 17/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="MEDICALDSRLOT")
 @EntityListeners(AuditingEntityListener.class)

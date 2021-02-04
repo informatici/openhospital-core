@@ -21,18 +21,6 @@
  */
 package org.isf.sms.providers;
 
-/*
-    If you use maven, add the following dependency to your pom.xml.
-    <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpclient</artifactId>
-        <version>4.1.1</version>
-    </dependency>
-
-    Otherwise download Apache HttpComponents from http://hc.apache.org/
-    and add the libs to your classpath.
-*/
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,10 +46,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Mwithi
  * Starting from example model at http://www.skebby.it/business/index/code-examples/
  *
+ * @author Mwithi
  */
+/*
+    If you use maven, add the following dependency to your pom.xml.
+    <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>4.1.1</version>
+    </dependency>
+
+    Otherwise download Apache HttpComponents from http://hc.apache.org/
+    and add the libs to your classpath.
+*/
 public class SkebbyGateway implements SmsSenderInterface {
 
 	private static Logger logger = LoggerFactory.getLogger(SkebbyGateway.class);
@@ -100,7 +99,6 @@ public class SkebbyGateway implements SmsSenderInterface {
     }
     
     /**
-     * 
      * @param username
      * @param password
      * @param recipients

@@ -111,7 +111,7 @@ public class PriceListManager {
 	}
 
 	/**
-	 * Duplicate specified {@List list}
+	 * Duplicate specified {@link PriceList}
 	 *
 	 * @param list
 	 * @return <code>true</code> if the list has been duplicated, <code>false</code> otherwise

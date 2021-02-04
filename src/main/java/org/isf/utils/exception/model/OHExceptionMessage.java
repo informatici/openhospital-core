@@ -25,13 +25,11 @@ import java.io.Serializable;
 
 /**
  * Composed exception information
+ *
  * @author akashytsa
  */
 public class OHExceptionMessage implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private String title;
 	private String message;

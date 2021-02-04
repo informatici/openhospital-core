@@ -129,7 +129,7 @@ public class OpdBrowserManager {
     }
 	
 	/**
-	 * return all Opds of today or since one week
+	 * Return all Opds of today or since one week ago
 	 * 
 	 * @param oneWeek - if <code>true</code> return the last week, only today otherwise.
 	 * @return the list of Opds. It could be <code>null</code>.

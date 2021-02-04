@@ -579,7 +579,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/**
-	 * return first idFile in the serie
+	 * Return the first idFile in the serie
 	 */
 	private long getFirst(File df) {
 		File[] files = df.listFiles(dsf);

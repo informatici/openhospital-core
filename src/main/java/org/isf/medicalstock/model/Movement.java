@@ -45,14 +45,15 @@ import org.isf.supplier.model.Supplier;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/*------------------------------------------
- * Medical Stock Movement- model for the medical entity
+/**
+ * ------------------------------------------
+ * Medical Stock Movement - model for the medical stock movement entity
  * -----------------------------------------
  * modification history
  * ? - ?
  * 17/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="MEDICALDSRSTOCKMOV")
 @EntityListeners(AuditingEntityListener.class) 

@@ -267,7 +267,7 @@ public class MovStockInsertingManager {
 	}
 
 	/**
-	 * returns the date of the last movement
+	 * Returns the date of the last movement
 	 *
 	 * @return
 	 * @throws OHServiceException

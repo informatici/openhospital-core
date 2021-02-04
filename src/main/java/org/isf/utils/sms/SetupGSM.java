@@ -45,9 +45,6 @@ import gnu.io.SerialPortEventListener;
  */
 public class SetupGSM extends JFrame implements SerialPortEventListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private Properties props = new Properties();
