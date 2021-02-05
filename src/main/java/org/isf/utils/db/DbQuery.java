@@ -110,7 +110,7 @@ public class DbQuery {
      * @throws SQLException
      * @throws IOException
      * 
-     * @deprecated eprecated since Open Hospital 1.7.0 replaced by {@link DbQueryLogger}
+     * @deprecated since Open Hospital 1.7.0 replaced by {@link DbQueryLogger}
      */
     @Deprecated
     public boolean isData(String aQuery) throws SQLException , IOException {
