@@ -38,8 +38,7 @@ import org.slf4j.LoggerFactory;
 import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
 
 /**
- * Classe singleton che provvede alla connessione con database i parametri: dati
- * connessione,database, user, passwd ecc sono letti da file properties
+ * Singleton class that provides connection with the database
  *
  * @author bob 2005-11-06
  */

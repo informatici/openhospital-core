@@ -37,7 +37,8 @@ import java.sql.Statement;
  * <p>
  * modified Mwithi - Added method for getting Connection object
  * (to manage Prepared Statement)
- * @deprecated since Open Hospital 1.7.0 replaced by {@link DbQueryLogger}
+ * <p>
+ * @deprecated   Since Open Hospital 1.7.0 replaced by {@link DbQueryLogger}
  */
 @Deprecated
 public class DbQuery {
