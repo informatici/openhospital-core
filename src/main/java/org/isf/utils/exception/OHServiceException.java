@@ -29,13 +29,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * OH service layer exception. Can encapsulate messages to show in UI. 
+ * OH service layer exception. Can encapsulate messages to show in UI.
+ *
  * @author akashytsa
  */
 public class OHServiceException extends Exception {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	
 	protected Logger logger = LoggerFactory.getLogger(OHServiceException.class);

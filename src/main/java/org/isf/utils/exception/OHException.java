@@ -31,7 +31,6 @@ public class OHException extends Exception {
 	protected Logger logger = LoggerFactory.getLogger(OHException.class);
 	
 	/**
-	 * 
 	 * @param message
 	 * @param cause
 	 */
@@ -44,7 +43,6 @@ public class OHException extends Exception {
 	}
 	
 	/**
-	 * 
 	 * @param message
 	 */
 	public OHException(String message) {

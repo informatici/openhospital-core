@@ -38,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  * modification history
  * 20/10/2011 - Cla - insert vaccinetype managment
- *
  */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -49,7 +48,7 @@ public class VaccineIoOperations {
 	private VaccineIoOperationRepository repository;
 	
 	/**
-	 * returns the list of {@link Vaccine}s based on vaccine type code
+	 * Returns the list of {@link Vaccine}s based on vaccine type code
 	 *
 	 * @param vaccineTypeCode - the type code. If <code>null</code> returns all {@link Vaccine}s in the DB
 	 * @return the list of {@link Vaccine}s
@@ -109,7 +108,7 @@ public class VaccineIoOperations {
 	}
 	
 	/**
-	 * returns the {@link Vaccine} based on code
+	 * Returns the {@link Vaccine} based on code
 	 *
 	 * @param code - the code, must not be {@literal null}
 	 * @return the {@link Vaccine} or {@literal null} if none found

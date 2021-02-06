@@ -41,18 +41,14 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Pure Model BillPayments : represents a patient Payment for a Bill
- * @author Mwithi
- *
- */
-/*------------------------------------------
- * BillPayments - model for the bill entity
+ * ------------------------------------------
+ * BillPayments - model a patient Payment for a Bill
  * -----------------------------------------
  * modification history
- * ? - Mwithi - first version 
+ * ? - Mwithi - first version
  * 23/08/2051 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="BILLPAYMENTS")
 @EntityListeners(AuditingEntityListener.class)

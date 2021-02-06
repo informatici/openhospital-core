@@ -43,19 +43,14 @@ import org.isf.priceslist.model.PriceList;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Pure Model Bill : represents a Bill 
- * @author Mwithi
- *
- */
-/*------------------------------------------
+ * ------------------------------------------
  * Bill - model for the bill entity
  * -----------------------------------------
  * modification history
- * ? - Mwithi - first version 
+ * ? - Mwithi - first version
  * 25/08/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
-
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="BILLS")
 @EntityListeners(AuditingEntityListener.class) 

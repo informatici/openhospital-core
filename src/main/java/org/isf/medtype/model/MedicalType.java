@@ -21,12 +21,6 @@
  */
 package org.isf.medtype.model;
 
-/**
- * @(#) TipoFarmaco.java
- * 11-dec-2005
- * 14-jan-2006
- */
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -40,17 +34,16 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Defines a medical type: D: k: S: R:
- * @author  bob
- */
-/*------------------------------------------
+ * ------------------------------------------
  * Medical Type - model for the medical type entity
+ * Defines a medical type: D: k: S: R:
  * -----------------------------------------
  * modification history
- * ? - bob - first version 
+ * 11-dec-2005 - bob - first version
+ * 14-jan-2006
  * 18/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="MEDICALDSRTYPE")
 @EntityListeners(AuditingEntityListener.class)

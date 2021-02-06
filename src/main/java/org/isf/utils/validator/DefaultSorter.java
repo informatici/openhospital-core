@@ -24,8 +24,9 @@ package org.isf.utils.validator;
 import java.util.Comparator;
 
 /**
- * DefaultSorter (implements {@Link Comparator}) in order to sort
+ * DefaultSorter (implements {@link Comparator}) in order to sort
  * by specifying a default element that will be on top
+ *
  * @author Nanni
  */
 public class DefaultSorter implements Comparator<String> {
@@ -33,7 +34,7 @@ public class DefaultSorter implements Comparator<String> {
 	private String defaultValue;
 
 	/**
-	 * DefaultSorter (implements {@Link Comparator})
+	 * DefaultSorter (implements {@link Comparator})
 	 * @param defaultValue - the default element that will be on top
 	 */
 	public DefaultSorter(String defaultValue) {

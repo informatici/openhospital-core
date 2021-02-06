@@ -35,8 +35,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/*----------------------------------------------------
- * (org.isf.opd.service)IoOperations - services for opd class
+/**
+ * ----------------------------------------------------
+ * (org.isf.opd.service)OpdIoOperations - services for opd class
  * ---------------------------------------------------
  * modification history
  * 11/12/2005 - Vero, Rick  - first beta version 
@@ -51,8 +52,8 @@ import org.springframework.transaction.annotation.Transactional;
  *                         Modified construction of queries, concatenation is performed with
  *                         StringBuilders instead than operator +. Removed some nested try-catch
  *                         blocks. Modified methods to format dates.                          
- *------------------------------------------*/
-
+ * ------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -62,7 +63,7 @@ public class OpdIoOperations {
 	private OpdIoOperationRepository repository;
 	
 	/**
-	 * return all Opds of today or one week ago
+	 * Return all Opds of today or one week ago
 	 * 
 	 * @param oneWeek - if <code>true</code> return the last week, only today otherwise.
 	 * @return the list of Opds. It could be <code>empty</code>.

@@ -47,27 +47,29 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-/*------------------------------------------
+/**
+ * ------------------------------------------
  * Patient - model for the patient entity
  * -----------------------------------------
  * modification history
- * 05/05/2005 - giacomo  - first beta version 
+ * 05/05/2005 - giacomo  - first beta version
  * 03/11/2006 - ross - added toString method
- * 11/08/2008 - Alessandro - added mother and father names textfield
- * 						   - added birthdate and age check
+ * 11/08/2008 - Alessandro
+ * - added mother and father names textfield
+ * - added birthdate and age check
  * 19/08/2008 - Mex        - substitute EduLevel with BloodType
- * 22/08/2008 - Claudio    - added birth date field
- * 						   - modified age field
- * 01/01/2009 - Fabrizio   - modified age field type back to int
- *                         - removed unuseful super() call in constructor
- *                         - removed unuseful todo comment
- *                         - removed assignment to attribute hasInsurance
- *                           since it had no effect
- * 16/09/2009 - Alessandro - added equals override to support comparing
- * 							 and filtering
+ * 22/08/2008 - Claudio
+ * - added birth date field
+ * - modified age field
+ * 01/01/2009 - Fabrizio
+ * - modified age field type back to int
+ * - removed unuseful super() call in constructor
+ * - removed unuseful todo comment
+ * - removed assignment to attribute hasInsurance since it had no effect
+ * 16/09/2009 - Alessandro - added equals override to support comparing and filtering
  * 17/10/2011 - Alessandro - added height and weight (from malnutritionalcontrol)
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="PATIENT")
 @EntityListeners(AuditingEntityListener.class)

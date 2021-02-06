@@ -46,13 +46,11 @@ import org.isf.utils.time.TimeTools;
 
 /**
  * @author Mwithi
- *
  */
 public class CSV2SQL {
 
 	/**
 	 * @param args
-	 * @throws IOException
 	 */
 	public static void main(String[] args) {
 		File fileIn = new File("E:\\prova.csv");

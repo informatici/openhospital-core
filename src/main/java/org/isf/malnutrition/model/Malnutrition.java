@@ -22,17 +22,9 @@
 package org.isf.malnutrition.model;
 
 import java.util.GregorianCalendar;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-
-/*------------------------------------------
- * Malnutrition - malnutrition control model
- * -----------------------------------------
- * modification history
- * 11/01/2016 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -47,10 +39,18 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.isf.admission.model.Admission;
-import org.isf.utils.db.Auditable;
 import org.isf.patient.model.Patient;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ * ------------------------------------------
+ * Malnutrition - malnutrition control model
+ * -----------------------------------------
+ * modification history
+ * 11/01/2016 - Antonio - ported to JPA
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="MALNUTRITIONCONTROL")
 @EntityListeners(AuditingEntityListener.class) 

@@ -38,9 +38,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 public class TableSorter extends TableMap {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	int[] indexes;
 	Vector<Integer> sortingColumns = new Vector<Integer>();
@@ -350,6 +348,5 @@ public class TableSorter extends TableMap {
 	        table.setRowHeight(row, rowHeight);
 	    }
 	}
-		
-	
+
 }

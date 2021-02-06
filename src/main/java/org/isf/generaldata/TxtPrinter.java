@@ -95,7 +95,6 @@ public class TxtPrinter {
 	}
 
 	/**
-	 * 
 	 * Method to retrieve a boolean property
 	 * 
 	 * @param property
@@ -121,7 +120,6 @@ public class TxtPrinter {
     }
     
     /**
-	 * 
 	 * Method to retrieve a string property
 	 * 
 	 * @param property
@@ -139,4 +137,3 @@ public class TxtPrinter {
 	}
 
 }
-

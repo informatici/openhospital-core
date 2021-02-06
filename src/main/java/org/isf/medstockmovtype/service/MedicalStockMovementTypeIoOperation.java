@@ -33,7 +33,6 @@ import java.util.List;
 
 /**
  * Persistence class for the medstockmovtype module.
- *
  */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -122,9 +121,10 @@ public class MedicalStockMovementTypeIoOperation {
 		
 		return result;
 	}
-        
-        /**
+
+	/**
 	 * Get an existing movementType.
+	 *
 	 * @param code the code to check.
 	 * @return MovementType object whose code is provided as parameter.
 	 */

@@ -34,20 +34,15 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
 /**
- * Age Model: represent age's ranges
- * @author alex
- *
- */
-/*------------------------------------------
- * AgeType - model for the age type entity
+ * ------------------------------------------
+ * AgeType - model for the age type entity; represent age's ranges
  * -----------------------------------------
  * modification history
- * ? - bob - first version 
+ * ? - bob - first version
  * 17/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="AGETYPE")
 @EntityListeners(AuditingEntityListener.class) 

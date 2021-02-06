@@ -21,21 +21,6 @@
  */
 package org.isf.admission.service;
 
-/*----------------------------------------------------------
- * modification history
- * ====================
- * 10/11/06 - ross - removed from the list the deleted patients
- *                   the list is now in alphabetical  order
- * 11/08/08 - alessandro - addedd getFather&Mother Names
- * 26/08/08 - claudio - changed getAge for managing varchar type
- * 					  - added getBirthDate
- * 01/01/09 - Fabrizio - changed the calls to PAT_AGE fields to
- *                       return again an integer type
- * 20/01/09 - Chiara -   restart of progressive number of maternity 
- * 						 ward on 1st July conditioned to parameter 
- * 						 MATERNITYRESTARTINJUNE in generalData.properties                   
- *-----------------------------------------------------------*/
-
 import org.hibernate.Hibernate;
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
@@ -58,6 +43,22 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * ---------------------------------------------------------
+ * modification history
+ * ====================
+ * 10/11/06 - ross - removed from the list the deleted patients
+ *                   the list is now in alphabetical  order
+ * 11/08/08 - alessandro - addedd getFather&Mother Names
+ * 26/08/08 - claudio - changed getAge for managing varchar type
+ * 					  - added getBirthDate
+ * 01/01/09 - Fabrizio - changed the calls to PAT_AGE fields to
+ *                       return again an integer type
+ * 20/01/09 - Chiara -   restart of progressive number of maternity
+ * 						 ward on 1st July conditioned to parameter
+ * 						 MATERNITYRESTARTINJUNE in generalData.properties
+ * -----------------------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException

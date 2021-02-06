@@ -52,12 +52,10 @@ import net.sf.jasperreports.engine.export.JRTextExporter;
 import net.sf.jasperreports.engine.export.JRTextExporterParameter;
 
 /**
- * 
+ * This class will read generic/text printer parameters and compile and
+ * print given jasper report. A copy will be at given file path
+ *
  * @author Mwithi
- * 
- *         This class will read generic/text printer parameters and compile and
- *         print given jasper report. A copy will be at given file path
- * 
  */
 public class PrintReceipt {
 	
@@ -115,7 +113,6 @@ public class PrintReceipt {
 	}
 	
 	/**
-	 * 
 	 * @param file
 	 * @param showDialog
 	 */
@@ -178,7 +175,6 @@ public class PrintReceipt {
 	}
 	
 	/**
-	 * 
 	 * @param jasperPrint
 	 */
 	private void printReversPages(JasperPrint jasperPrint) {
@@ -193,7 +189,6 @@ public class PrintReceipt {
 	}
 	
 	/**
-	 * 
 	 * @param printService
 	 */
 	private void getPrinterDetails(PrintService printService) {

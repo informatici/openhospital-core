@@ -35,19 +35,14 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Pure Model Exam : represents a disease type
- * @author bob
- *
- *
- */
-/*------------------------------------------
+ * ------------------------------------------
  * Admission Type - model for the admission type entity
  * -----------------------------------------
  * modification history
- * ? - bob - first version 
+ * ? - bob - first version
  * 03/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="ADMISSIONTYPE")
 @EntityListeners(AuditingEntityListener.class) 

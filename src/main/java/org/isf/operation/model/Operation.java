@@ -38,25 +38,16 @@ import org.isf.utils.db.Auditable;
 import org.isf.opetype.model.OperationType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/*----------------------------------------------------------
- * modification history
- * ====================
- * 13/02/09 - Alex - added Major/Minor control
- -----------------------------------------------------------*/
-
 /**
- * Pure Model Operation : represents a disease
- * 
- * @author Rick, Vero, Pupo
+ * ------------------------------------------
+ * Operation - model for the bill entity
+ * -----------------------------------------
+ * modification history
+ * ? - bob - first version
+ * 13/02/09 - Alex - added Major/Minor control
+ * 007/01/2015 - Antonio - ported to JPA
+ * ------------------------------------------
  */
-/*------------------------------------------
-* Operation - model for the bill entity
-* -----------------------------------------
-* modification history
-* ? - bob - first version 
-* 007/01/2015 - Antonio - ported to JPA
-* 
-*------------------------------------------*/
 @Entity
 @Table(name="OPERATION")
 @EntityListeners(AuditingEntityListener.class)

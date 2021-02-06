@@ -28,7 +28,10 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/*-------------------------------------------
+/**
+ * ------------------------------------------
+ * General Data
+ *
  *    12/2007 - isf bari - added resource bundle for internationalization
  * 19/06/2008 - isf bari - added patientsheet jasper report name
  * 20/12/2008 - isf bari - added patientextended
@@ -39,8 +42,8 @@ import org.slf4j.LoggerFactory;
  * 10/08/2011 - Claudia  - added PATIENTVACCINEEXTENDED to show patient on Patient Vaccine 
  * 19/10/2011 - Mwithi   - GeneralData 2.0: catching exception on single property and assign DEFAULT value  
  * 29/12/2011 - Nicola   - added XMPPMODULEENABLED to enable/disable communication module
- -------------------------------------------*/
-
+ * -------------------------------------------
+ */
 public class GeneralData {
 	
 	
@@ -193,7 +196,6 @@ public class GeneralData {
 	}
 	
 	/**
-	 * 
 	 * Method to retrieve a boolean property
 	 * 
 	 * @param property
@@ -212,7 +214,6 @@ public class GeneralData {
 	}
 
 	/**
-	 * 
 	 * Method to retrieve a string property
 	 * 
 	 * @param property
@@ -236,4 +237,3 @@ public class GeneralData {
 		return mySingleData;
 	}
 }
-

@@ -21,10 +21,6 @@
  */
 package org.isf.sms.service;
 
-/**
- * SmsSenderGSM.java - 03/feb/2014
- */
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,7 +43,7 @@ import gnu.io.SerialPortEventListener;
 
 /**
  * @author Mwithi
- *
+ * 03/feb/2014
  */
 public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener {
 
@@ -63,23 +59,20 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 	private OutputStream outputStream;
 	private InputStream inputStream;
 	
-	/**
-	 * 
-	 */
 	public SmsSenderGSM() {
 		logger.info("SMS Sender GSM started...");
 		GSMParameters.getGSMParameters();
 	}
 	
 	/**
-	 * Method that close the serial port 
+	 * Method that closes the serial port
 	 */
 	public void terminate() {
 		serialPort.close();
 	}
 	
 	/**
-	 * Method that look for the port specified 
+	 * Method that looks for the port specified
 	 * @return <code>true</code> if the COM port is ready to be used, <code>false</code> otherwise.
 	 */
 	public boolean initialize() {

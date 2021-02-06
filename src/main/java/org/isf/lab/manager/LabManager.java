@@ -21,13 +21,6 @@
  */
 package org.isf.lab.manager;
 
-/*------------------------------------------
- * LabManager - laboratory exam manager class
- * -----------------------------------------
- * modification history
- * 10/11/2006 - ross - added editing capability
- *------------------------------------------*/
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
@@ -50,6 +43,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * ------------------------------------------
+ * LabManager - laboratory exam manager class
+ * -----------------------------------------
+ * modification history
+ * 10/11/2006 - ross - added editing capability
+ * ------------------------------------------
+ */
 @Component
 public class LabManager {
 
@@ -464,13 +465,13 @@ public class LabManager {
 		return materialDescriptionList;
 	}
 
-	/**
-	 * Returns the max progressive number within specified month of specified year.
-	 *
-	 * @param lab
-	 * @return <code>int</code> - the progressive number in the month
-	 * @throws org.isf.utils.exception.OHServiceException
-	 */
+//	/**
+//	 * Returns the max progressive number within specified month of specified year.
+//	 *
+//	 * @param lab
+//	 * @return <code>int</code> - the progressive number in the month
+//	 * @throws org.isf.utils.exception.OHServiceException
+//	 */
    /*public int getProgMonth(int month, int year)  throws OHServiceException {
         return ioOperations.getProgMonth(month, year);
    }*/

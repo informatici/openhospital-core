@@ -22,8 +22,6 @@
 package org.isf.utils.treetable;
 
 /*
- * %W% %E%
- *
  * Copyright 1997, 1998 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
@@ -73,14 +71,11 @@ import javax.swing.tree.DefaultTreeSelectionModel;
 /**
  * This example shows how to create a simple JTreeTable component, 
  * by using a JTree as a renderer (and editor) for the cells in a 
- * particular column in the JTable.  
- *
- * @version %I% %G%
+ * particular column in the JTable.
  *
  * @author Philip Milne
  * @author Scott Violet
  */
-
 public class JTreeTable extends JTable {
 	/**
 	 * 

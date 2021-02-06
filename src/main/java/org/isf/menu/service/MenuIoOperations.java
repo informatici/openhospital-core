@@ -49,7 +49,7 @@ public class MenuIoOperations
 	private GroupMenuIoOperationRepository groupMenuRepository;
 	
 	/**
-	 * returns the list of {@link User}s
+	 * Returns the list of {@link User}s
 	 * 
 	 * @return the list of {@link User}s
 	 * @throws OHServiceException
@@ -63,7 +63,7 @@ public class MenuIoOperations
 	}
 
 	/**
-	 * returns the list of {@link User}s in specified groupID
+	 * Returns the list of {@link User}s in specified groupID
 	 * 
 	 * @param groupID - the group ID
 	 * @return the list of {@link User}s
@@ -79,7 +79,7 @@ public class MenuIoOperations
 	}
 	
 	/**
-	 * returns {@link User} from its username
+	 * Returns {@link User} from its username
 	 * @param userName - the {@link User}'s username
 	 * @return {@link User}
 	 * @throws OHServiceException
@@ -90,7 +90,7 @@ public class MenuIoOperations
 	}
 	
 	/**
-	 * returns {@link User} description from its username
+	 * Returns {@link User} description from its username
 	 * @param userName - the {@link User}'s username
 	 * @return the {@link User}'s description
 	 * @throws OHServiceException
@@ -105,7 +105,7 @@ public class MenuIoOperations
 	}
 	
 	/**
-	 * returns the list of {@link UserGroup}s
+	 * Returns the list of {@link UserGroup}s
 	 * 
 	 * @return the list of {@link UserGroup}s
 	 * @throws OHServiceException
@@ -234,7 +234,7 @@ public class MenuIoOperations
 	}
 	
 	/**
-	 * returns the list of {@link UserMenuItem}s that compose the menu for specified {@link User}
+	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link User}
 	 * 
 	 * @param aUser - the {@link User}
 	 * @return the list of {@link UserMenuItem}s 
@@ -268,7 +268,7 @@ public class MenuIoOperations
 	}
 
 	/**
-	 * returns the list of {@link UserMenuItem}s that compose the menu for specified {@link UserGroup}
+	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link UserGroup}
 	 * 
 	 * @param aGroup - the {@link UserGroup}
 	 * @return the list of {@link UserMenuItem}s 
@@ -300,7 +300,7 @@ public class MenuIoOperations
 	}
 
 	/**
-	 * replaces the {@link UserGroup} rights
+	 * Replaces the {@link UserGroup} rights
 	 * 
 	 * @param aGroup - the {@link UserGroup}
 	 * @param menu - the list of {@link UserMenuItem}s

@@ -73,14 +73,12 @@ public class DbJpaUtil
 
 	
 	/**
-     * constructor that initialize the entity Manager
-	 * @throws ClassNotFoundException 
-	 * @throws OHException 
+     * Constructor that initialize the entity Manager
      */
 	public DbJpaUtil() {}	
 	
 	/**
-     * constructor that initialize the entity Manager
+     * Constructor that initialize the entity Manager
 	 * @throws OHException 
      */
 	public void open() throws OHException
@@ -189,8 +187,7 @@ public class DbJpaUtil
 
     /**
      * Method to remove an object
-     * @return 
-     * @throws OHException 
+     * @throws OHException
      */
     public void remove(
     		Object entity) throws OHException
@@ -237,8 +234,7 @@ public class DbJpaUtil
 	  * @param aQuery
 	  * @param aClass
 	  * @param jpql
-	  * @return "Query"
-	  * @throws OHException 
+	  * @throws OHException
 	  */
 	public void createQuery(
 	  		String aQuery, 

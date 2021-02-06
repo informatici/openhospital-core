@@ -21,16 +21,6 @@
  */
 package org.isf.disease.manager;
 
-/*------------------------------------------
- * DiseaseBrowserManager - Class that provides gui separation from database operations and gives some
- * 						   useful logic manipulations of the dinamic data (memory)
- * -----------------------------------------
- * modification history
- * 25/01/2006 - Rick, Vero, Pupo  - first beta version
- * 08/11/2006 - ross - added getDiseaseOpd members, and getDiseaseIpd
- * 					   to get only opd/ipd related diseases
- *------------------------------------------*/
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +35,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * The manage class for the disease module.
+ * ------------------------------------------
+ * DiseaseBrowserManager - Class that provides gui separation from database operations and gives some
+ * useful logic manipulations of the dinamic data (memory)
+ * -----------------------------------------
+ * modification history
+ * 25/01/2006 - Rick, Vero, Pupo  - first beta version
+ * 08/11/2006 - ross - added getDiseaseOpd members, and getDiseaseIpd to get only opd/ipd related diseases
+ * ------------------------------------------
  */
 @Component
 public class DiseaseBrowserManager {

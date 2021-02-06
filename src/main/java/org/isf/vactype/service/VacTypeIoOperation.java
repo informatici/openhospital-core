@@ -21,13 +21,6 @@
  */
 package org.isf.vactype.service;
 
-/*------------------------------------------
- * IoOperation - methods to interact with DB
- * -----------------------------------------
- * modification history
- * 19/10/2011 - Cla - version is now 1.0
- *------------------------------------------*/
-
 import java.util.ArrayList;
 
 import org.isf.utils.db.TranslateOHServiceException;
@@ -37,6 +30,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * ------------------------------------------
+ * VacTypeIoOperation - methods to interact with DB
+ * -----------------------------------------
+ * modification history
+ * 19/10/2011 - Cla - version is now 1.0
+ * ------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -46,7 +47,7 @@ public class VacTypeIoOperation {
 	private VaccineTypeIoOperationRepository repository;
 	
 	/**
-	 * returns all {@link VaccineType}s from DB	
+	 * Returns all {@link VaccineType}s from DB
 	 * 	
 	 * @return the list of {@link VaccineType}s
 	 * @throws OHServiceException 
@@ -102,7 +103,7 @@ public class VacTypeIoOperation {
 	}
 	
 	/**
-	 * returns the {@link VaccineType} based on code
+	 * Returns the {@link VaccineType} based on code
 	 *
 	 * @param code - the code, must not be {@literal null}
 	 * @return the {@link VaccineType} or {@literal null} if none found

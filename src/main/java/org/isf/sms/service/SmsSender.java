@@ -21,10 +21,6 @@
  */
 package org.isf.sms.service;
 
-/**
- * SmsThread.java - 31/gen/2014
- */
-
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author Mwithi
+ * 31/gen/2014
  */
 public class SmsSender implements Runnable {
 
@@ -45,10 +42,7 @@ public class SmsSender implements Runnable {
 
 	private boolean running = true;
 	private int delay = 10;
-	
-	/**
-	 * 
-	 */
+
 	public SmsSender() {
 		logger.info("SMS Sender started...");
 		SmsParameters.getSmsParameters();

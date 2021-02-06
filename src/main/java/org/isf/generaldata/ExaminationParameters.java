@@ -29,11 +29,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
- * @author Mwithi
- * 
- * settings for Examination form
+ * Settings for Examination form
  *
+ * @author Mwithi
  */
 public class ExaminationParameters {
 	
@@ -261,6 +259,4 @@ public class ExaminationParameters {
         return mySingleData;
     }
     
-    
 }
-

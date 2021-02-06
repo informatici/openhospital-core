@@ -21,12 +21,6 @@
  */
 package org.isf.medicals.model;
 
-/**
- * @(#) Farmaco.java
- * 11-dec-2005
- * 14-jan-2006
- */
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -47,22 +41,18 @@ import org.isf.medtype.model.MedicalType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Pure Model Medical DSR (Drugs Surgery Rest): represents a medical
- * 
- * @author bob
- * 		   modified by alex:
- * 			- product code
- * 			- pieces per packet
- */
-/*------------------------------------------
- * Medical - model for the medical entity
+ * ------------------------------------------
+ * MedicalDSR - model for the Medical DSR (Drugs Surgery Rest): represents a medical
  * -----------------------------------------
  * modification history
- * ? - bob - first version 
+ * 11-dec-2005 - bob - first version
+ * 14-jan-2006
  * ? - modified by alex
+ * 			- product code
+ * 			- pieces per packet
  * 13/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="MEDICALDSR")
 @EntityListeners(AuditingEntityListener.class)
@@ -105,35 +95,35 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 	private String description;
 
 	/**
-	 * initial quantity
+	 * Initial quantity
 	 */
 	@NotNull
 	@Column(name="MDSR_INI_STOCK_QTI")
 	private double initialqty;
 	
 	/**
-	 * pieces per packet
+	 * Pieces per packet
 	 */
 	@NotNull
 	@Column(name="MDSR_PCS_X_PCK")
 	private Integer pcsperpck;
 
 	/**
-	 * input quantity
+	 * Input quantity
 	 */
 	@NotNull
 	@Column(name="MDSR_IN_QTI")
 	private double inqty;
 
 	/**
-	 * out quantity
+	 * Out quantity
 	 */
 	@NotNull
 	@Column(name="MDSR_OUT_QTI")
 	private double outqty;
 	
 	/**
-	 * min quantity
+	 * Minimum quantity
 	 */
 	@NotNull
 	@Column(name="MDSR_MIN_STOCK_QTI")

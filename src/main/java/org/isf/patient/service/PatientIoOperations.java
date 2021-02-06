@@ -23,21 +23,6 @@ package org.isf.patient.service;
 
 import org.hibernate.Hibernate;
 
-/*------------------------------------------
- * IoOperations - dB operations for the patient entity
- * -----------------------------------------
- * modification history
- * 05/05/2005 - giacomo  - first beta version
- * 03/11/2006 - ross - added toString method. Gestione apici per
- *                     nome, cognome, citta', indirizzo e note
- * 11/08/2008 - alessandro - added father & mother's names
- * 26/08/2008 - claudio    - added birth date
- * 							 modified age
- * 01/01/2009 - Fabrizio   - changed the calls to PAT_AGE fields to
- *                           return again an int type
- * 03/12/2009 - Alex       - added method for merge two patients history
- *------------------------------------------*/
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +36,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+/**
+ * ------------------------------------------
+ * PatientIoOperations - dB operations for the patient entity
+ * -----------------------------------------
+ * modification history
+ * 05/05/2005 - giacomo  - first beta version
+ * 03/11/2006 - ross - added toString method. Gestione apici per
+ *                     nome, cognome, citta', indirizzo e note
+ * 11/08/2008 - alessandro - added father & mother's names
+ * 26/08/2008 - claudio    - added birth date
+ * 							 modified age
+ * 01/01/2009 - Fabrizio   - changed the calls to PAT_AGE fields to
+ *                           return again an int type
+ * 03/12/2009 - Alex       - added method for merge two patients history
+ * ------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -100,7 +100,7 @@ public class PatientIoOperations
 	}	
 
 	/**
-	 * Method that get a Patient by his/her name
+	 * Method that gets a Patient by his/her name
 	 * 
 	 * @param name
 	 * @return the Patient that match specified name
@@ -117,7 +117,7 @@ public class PatientIoOperations
 	}
 
 	/**
-	 * Method that get a Patient by his/her ID
+	 * Method that gets a Patient by his/her ID
 	 * 
 	 * @param code
 	 * @return the Patient
@@ -134,7 +134,7 @@ public class PatientIoOperations
 	}
 
 	/**
-	 * get a Patient by his/her ID, even if he/her has been logically deleted
+	 * Get a Patient by his/her ID, even if he/her has been logically deleted
 	 * 
 	 * @param code
 	 * @return the list of Patients
@@ -160,7 +160,7 @@ public class PatientIoOperations
 
 	/**
 	 * 
-	 * Method that update an existing {@link Patient} in the db
+	 * Method that updates an existing {@link Patient} in the db
 	 * 
 	 * @param patient - the {@link Patient} to update
 	 * @return true - if the existing {@link Patient} has been updated
@@ -172,7 +172,7 @@ public class PatientIoOperations
 	}
 
 	/**
-	 * Method that logically delete a Patient (not physically deleted)
+	 * Method that logically deletes a Patient (not physically deleted)
 	 * 
 	 * @param patient
 	 * @return true - if the Patient has been deleted (logically)
@@ -205,7 +205,7 @@ public class PatientIoOperations
 	}
 
 	/**
-	 * Method that merge all clinic details under the same PAT_ID
+	 * Method that merges all clinic details under the same PAT_ID
 	 * 
 	 * @param mergedPatient
 	 * @param obsoletePatient

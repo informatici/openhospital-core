@@ -21,10 +21,6 @@
  */
 package org.isf.utils.db;
 
-/**
- * ExportUntraslatedProperties.java - 04/set/2013
- */
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -36,6 +32,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
+ * ExportUntraslatedProperties.java - 04/set/2013
+ *
  * @author Mwithi
  */
 public class ExportUntranslatedProperties {

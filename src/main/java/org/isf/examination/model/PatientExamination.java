@@ -38,18 +38,14 @@ import javax.validation.constraints.NotNull;
 import org.isf.patient.model.Patient;
 
 /**
- * @author Mwithi
- * 
- * the model for Patient Examination
+ * The model for Patient Examination
  *
+ * @author Mwithi
  */
 @Entity
 @Table(name="PATIENTEXAMINATION")
 public class PatientExamination implements Serializable, Comparable<PatientExamination> {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	@Id 
@@ -110,10 +106,7 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	
 	@Transient
 	private volatile int hashCode = 0;
-	
-	/**
-	 * 
-	 */
+
 	public PatientExamination() {
 		super();
 	}

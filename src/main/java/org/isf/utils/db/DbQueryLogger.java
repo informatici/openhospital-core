@@ -50,9 +50,8 @@ public class DbQueryLogger {
      * Method that executes a query and returns a resultset
      * @param aQuery
      * @param autocommit
-     * @return "ResultSet"
-     * @throws SQLException
-     * @throws IOException
+     * @return ResultSet
+     * @throws OHException
      */
     public ResultSet getData(String aQuery, boolean autocommit) throws OHException {
     	if (logger.isDebugEnabled()) {
@@ -239,8 +238,7 @@ public class DbQueryLogger {
      * the Recordset
      * @param aQuery
      * @return Boolean True/False
-     * @throws SQLException
-     * @throws IOException
+     * @throws OHException
      */
     public boolean isData(String aQuery) throws OHException {
     	if (logger.isDebugEnabled()) {

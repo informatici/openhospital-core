@@ -63,7 +63,6 @@ public class Version {
     }
     
     /**
-	 * 
 	 * Method to retrieve a string property
 	 * 
 	 * @param property
@@ -81,4 +80,3 @@ public class Version {
 	}
 
 }
-

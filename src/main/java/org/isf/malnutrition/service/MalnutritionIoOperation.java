@@ -90,7 +90,7 @@ public class MalnutritionIoOperation {
 	}
 	
 	/**
-	 * returns the last {@link Malnutrition} entry for specified patient ID
+	 * Returns the last {@link Malnutrition} entry for specified patient ID
 	 * @param patientID - the patient ID
 	 * @return the last {@link Malnutrition} for specified patient ID. <code>null</code> if none.
 	 * @throws OHServiceException

@@ -35,16 +35,14 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Represent a movement type.
- */
-/*------------------------------------------
- * Movement Medical - model for the movement entity
+ * ------------------------------------------
+ * MovementType - model for the movement type
  * -----------------------------------------
  * modification history
- * ? - bob - first version 
+ * ? - bob - first version
  * 18/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="MEDICALDSRSTOCKMOVTYPE")
 @EntityListeners(AuditingEntityListener.class) 

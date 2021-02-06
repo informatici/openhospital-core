@@ -27,7 +27,7 @@ import java.util.GregorianCalendar;
 import org.isf.medicalstockward.model.MovementWard;
 
 /**
- * 		   @author mwithi
+ * @author mwithi
  */
 public class MovementWardForPrint implements Comparable<MovementWardForPrint>{
 

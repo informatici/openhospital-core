@@ -21,14 +21,11 @@
  */
 package org.isf.sms.service;
 
-/**
- * SmsSenderInterface.java - 03/feb/2014
- */
-
 import org.isf.sms.model.Sms;
 
 /**
  * @author Mwithi
+ * 03/feb/2014
  */
 public interface SmsSenderInterface {
 	

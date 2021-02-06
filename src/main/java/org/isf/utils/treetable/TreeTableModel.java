@@ -22,8 +22,6 @@
 package org.isf.utils.treetable;
 
 /*
- * %W% %E%
- *
  * Copyright 1997, 1998 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
@@ -69,9 +67,7 @@ import javax.swing.tree.TreeModel;
  * node in the TreeTableModel may have. Each column, like a column in 
  * a TableModel, has a name and a type associated with it. Each node in 
  * the TreeTableModel can return a value for each of the columns and 
- * set that value if isCellEditable() returns true. 
- *
- * @version %I% %G%
+ * set that value if isCellEditable() returns true.
  *
  * @author Philip Milne 
  * @author Scott Violet

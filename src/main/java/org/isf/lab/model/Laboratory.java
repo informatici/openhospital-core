@@ -22,21 +22,10 @@
 package org.isf.lab.model;
 
 import java.util.Calendar;
-
-/*------------------------------------------
- * Laboratory - laboratory exam execution model
- * -----------------------------------------
- * modification history
- * 02/03/2006 - theo - first beta version
- * 10/11/2006 - ross - new fields data esame, sex, age, material, inout flag added
- * 06/01/2016 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
-
 import java.util.GregorianCalendar;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -52,11 +41,21 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.exa.model.Exam;
 import org.isf.patient.model.Patient;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ * ------------------------------------------
+ * Laboratory - laboratory execution model
+ * -----------------------------------------
+ * modification history
+ * 02/03/2006 - theo - first beta version
+ * 10/11/2006 - ross - new fields data esame, sex, age, material, inout flag added
+ * 06/01/2016 - Antonio - ported to JPA
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="LABORATORY")
 @EntityListeners(AuditingEntityListener.class)

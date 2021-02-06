@@ -45,17 +45,14 @@ import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * 		   @author mwithi
- * 
- */
-/*------------------------------------------
- * Medical Ward Movement - model for the medical entity
+ * -----------------------------------------
+ * Medical Ward - model for the medical ward entity
  * -----------------------------------------
  * modification history
- * ? - ?
+ * ? - mwithi
  * 17/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="MEDICALDSRSTOCKMOVWARD")
 @EntityListeners(AuditingEntityListener.class) 

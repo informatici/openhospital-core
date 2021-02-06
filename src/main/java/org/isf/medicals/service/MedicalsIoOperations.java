@@ -21,12 +21,6 @@
  */
 package org.isf.medicals.service;
 
-/**
- * 11-dec-2005
- * 14-jan-2006
- * author bob
- */
-
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
@@ -46,6 +40,8 @@ import java.util.ArrayList;
  * 		   modified by alex:
  * 			- column product code
  * 			- column pieces per packet
+ * 11-dec-2005
+ * 14-jan-2006
  */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -108,7 +104,7 @@ public class MedicalsIoOperations
 	 * Retrieves all stored {@link Medical}s.
 	 * If a description value is provided the medicals are filtered.
 	 * @param type the medical type description.
-	 * @nameSorted if <code>true</code> return the list in alphabetical order, by code otherwise
+	 * @param nameSorted if <code>true</code> return the list in alphabetical order, by code otherwise
 	 * @return the stored medicals.
 	 * @throws OHServiceException if an error occurs retrieving the stored medicals.
 	 */

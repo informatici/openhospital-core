@@ -73,4 +73,3 @@ public class SupplierBrowserManager {
 		return supMap;
 	}
 }
-

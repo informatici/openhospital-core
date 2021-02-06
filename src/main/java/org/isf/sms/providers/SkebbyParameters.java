@@ -83,7 +83,6 @@ public class SkebbyParameters {
     }
     
     /**
-	 * 
 	 * Method to retrieve a string property
 	 * 
 	 * @param property
@@ -100,4 +99,3 @@ public class SkebbyParameters {
 		return value;
 	}
 }
-

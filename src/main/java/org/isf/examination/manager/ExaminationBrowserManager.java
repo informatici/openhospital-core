@@ -201,7 +201,7 @@ public class ExaminationBrowserManager {
 	}
 
 	/**
-	 * return a list of diuresis descriptions:
+	 * Return a list of diuresis descriptions:
 	 * physiological,
 	 * oliguria,
 	 * anuria,
@@ -222,7 +222,7 @@ public class ExaminationBrowserManager {
 	}
 
 	/**
-	 * return a list of bowel descriptions:
+	 * Return a list of bowel descriptions:
 	 * regular,
 	 * irregular,
 	 * constipation,

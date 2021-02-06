@@ -21,11 +21,6 @@
  */
 package org.isf.hospital.model;
 
-/**
- * @(#) Hospital.java
- * 21-jan-2006
- */
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -40,20 +35,15 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
 /**
- * Pure Model Hospital : represents the Hospital 
- * @author bob
- *
+ * ------------------------------------------
+ * Hospital - model representing the Hospital
+ * -----------------------------------------
+ * modification history
+ * 21-jan-2006 - bob - first version
+ * 06/01/2016 - Antonio - ported to JPA
+ * ------------------------------------------
  */
-/*------------------------------------------
-* Disease Type - model for the disease type entity
-* -----------------------------------------
-* modification history
-* ? - bob - first version 
-* 06/01/2016 - Antonio - ported to JPA
-* 
-*------------------------------------------*/
 @Entity
 @Table(name="HOSPITAL")
 @EntityListeners(AuditingEntityListener.class)

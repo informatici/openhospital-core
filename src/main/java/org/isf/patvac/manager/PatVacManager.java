@@ -21,14 +21,6 @@
  */
 package org.isf.patvac.manager;
 
-/*------------------------------------------
-* PatVacManager - patient-vaccine manager
-* -----------------------------------------
-* modification history
-* 25/08/2011 - claudia - first beta version
-* 14/11/2011 - claudia - inserted search condition on date
-*------------------------------------------*/
-
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -44,6 +36,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+/**
+ * ------------------------------------------
+ * PatVacManager - patient-vaccine manager
+ * -----------------------------------------
+ * modification history
+ * 25/08/2011 - claudia - first beta version
+ * 14/11/2011 - claudia - inserted search condition on date
+ * ------------------------------------------
+ */
 @Component
 public class PatVacManager {
 
@@ -51,7 +52,7 @@ public class PatVacManager {
 	private PatVacIoOperations ioOperations;
 	
 	/**
-	 * returns all {@link PatientVaccine}s of today or one week ago
+	 * Returns all {@link PatientVaccine}s of today or one week ago
 	 * 
 	 * @param minusOneWeek - if <code>true</code> return the last week
 	 * @return the list of {@link PatientVaccine}s
@@ -62,7 +63,7 @@ public class PatVacManager {
 	}
 	
 	/**
-	 * returns all {@link PatientVaccine}s within <code>dateFrom</code> and
+	 * Returns all {@link PatientVaccine}s within <code>dateFrom</code> and
 	 * <code>dateTo</code>
 	 * 
 	 * @param vaccineTypeCode
@@ -162,4 +163,3 @@ public class PatVacManager {
 	    }
     }
 }
-

@@ -59,8 +59,7 @@ public class BillBrowserManager {
 	 * @param bill
 	 * @param billItems
 	 * @param billPayments
-	 * @return list of {@link OHExceptionMessage}
-	 * @throws OHDataValidationException 
+	 * @throws OHDataValidationException
 	 */
 	protected void validateBill(Bill bill, 
 			ArrayList<BillItems> billItems, 
@@ -386,7 +385,7 @@ public class BillBrowserManager {
 	}
 	
 	/**
-	 * get the bills list with a given billItem
+	 * Get the bills list with a given billItem
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param billItem
