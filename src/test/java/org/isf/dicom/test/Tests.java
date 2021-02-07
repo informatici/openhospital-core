@@ -54,6 +54,7 @@ import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHException;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -240,6 +241,10 @@ public class Tests extends OHCoreTestCase {
 		assertThat(count).isPositive();
 	}
 
+	@Ignore
+	// Reason ignored when running CI it generates this error:
+	//    java.awt.HeadlessException:
+	// 	  No X11 DISPLAY variable was set, but this program performed an operation which requires it.
 	@Test
 	public void testSourceFilesConstructorDirectoryNumberOfFiles() throws Exception {
 		ThumbnailViewGui thumbnailViewGui = new ThumbnailViewGui();
