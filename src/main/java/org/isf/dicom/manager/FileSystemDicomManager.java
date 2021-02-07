@@ -267,6 +267,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			// so cannot be empty and will be used only for this cycle
 			if (dicomInstanceUID == null || dicomInstanceUID.isEmpty()) {
 				dicomInstanceUID = seriesNumber + "." + idFile;
+				dicom.setDicomInstanceUID(dicomInstanceUID);
 			}
 
 			File df = getSerieDir(patId, seriesNumber, true);
@@ -320,8 +321,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/*
-	* Load DICOM data + Thumbnail
-	*/
+	 * Load DICOM data + Thumbnail
+	 */
 	private FileDicom loadMetadata(long idFile, int patientId, String series) throws SerialException, IOException, SQLException {
 		// Series must exists, so we need to check it and return null in case
 		if (series == null || series.trim().length() == 0 || series.equalsIgnoreCase("null")) 
@@ -437,7 +438,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			String diuid = dicom.getDicomInstanceUID();
 			if (serieNumber == null || serieNumber.trim().length() == 0 || serieNumber.equalsIgnoreCase("null"))
 				return false;
-
+			if (diuid == null || diuid.trim().isEmpty() || diuid.equalsIgnoreCase("null"))
+				return false;
 			File df = getSerieDir(patId, serieNumber, true);
 			File[] files = df.listFiles();
 			int i = 0;

@@ -32,8 +32,6 @@ import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.file.FileTools;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Factory for instantiate DicomManager
@@ -42,8 +40,6 @@ import org.slf4j.LoggerFactory;
  * @version 1.0.0
  */
 public class DicomManagerFactory {
-
-	private static final Logger logger = LoggerFactory.getLogger(DicomManagerFactory.class);
 
 	private static DicomManagerInterface instance = null;
 
@@ -76,7 +72,7 @@ public class DicomManagerFactory {
 
 			try {
 				init();
-
+                Object appContext = Context.getApplicationContext();
 				instance = (DicomManagerInterface) Context.getApplicationContext().getBean(
 						Class.forName(props.getProperty("dicom.manager.impl"))); //.getConstructor(Class.forName("java.util.Properties")).newInstance(props);
 				if (instance instanceof FileSystemDicomManager) {
