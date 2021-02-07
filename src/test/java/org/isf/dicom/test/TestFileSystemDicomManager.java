@@ -117,6 +117,8 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 		props.set(clazz, properties);
 		String maxDicomSize = DicomManagerFactory.getMaxDicomSize();
 		assertThat(maxDicomSize).isEqualTo("2M");
+		// reset/clear properties
+		props.set(clazz, new Properties());
 	}
 
 	@Test
@@ -130,6 +132,8 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 		props.set(clazz, properties);
 		long maxDicomSize = DicomManagerFactory.getMaxDicomSizeLong();
 		assertThat(maxDicomSize).isEqualTo(2097152L);
+		// reset/clear properties
+		props.set(clazz, new Properties());
 	}
 
 	@Test
@@ -146,6 +150,11 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 			DicomManagerFactory.getMaxDicomSizeLong();
 		})
 				.isInstanceOf(OHDicomException.class);
+		Class clazz = Class.forName("org.isf.dicom.manager.DicomManagerFactory");
+		// reset/clear properties
+		Field props = clazz.getDeclaredField("props");
+		props.setAccessible(true);
+		props.set(clazz, new Properties());
 	}
 
 	@Test
