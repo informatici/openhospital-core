@@ -43,7 +43,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
-public class SqlDicomManagerTests extends OHCoreTestCase {
+public class TestSqlDicomManager extends OHCoreTestCase {
 
 	private static TestDicom testFileDicom;
 	private static TestDicomType testDicomType;

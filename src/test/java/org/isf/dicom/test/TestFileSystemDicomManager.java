@@ -53,7 +53,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.FileSystemUtils;
 
-public class FileSystemDicomManagerTests extends OHCoreTestCase {
+public class TestFileSystemDicomManager extends OHCoreTestCase {
 
 	public static final Long _4M = 4194304l;
 	private static TestDicom testFileDicom;
