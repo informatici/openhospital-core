@@ -24,7 +24,9 @@ package org.isf.admission.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
@@ -77,12 +79,25 @@ import org.isf.ward.test.TestWard;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit4.rules.SpringClassRule;
+import org.springframework.test.context.junit4.rules.SpringMethodRule;
 import org.springframework.transaction.annotation.Transactional;
 
+@RunWith(Parameterized.class)
 public class Tests extends OHCoreTestCase {
+
+	@ClassRule
+	public static final SpringClassRule springClassRule = new SpringClassRule();
+
+	@Rule
+	public final SpringMethodRule springMethodRule = new SpringMethodRule();
 
 	private static TestAdmission testAdmission;
 	private static TestWard testWard;
@@ -126,6 +141,10 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	DeliveryResultIoOperationRepository deliveryResultIoOperationRepository;
 
+	public Tests(boolean maternityRestartInJune) {
+		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
+	}
+
 	@BeforeClass
 	public static void setUpClass() {
 		testAdmission = new TestAdmission();
@@ -145,6 +164,14 @@ public class Tests extends OHCoreTestCase {
 	@Before
 	public void setUp() {
 		cleanH2InMemoryDb();
+	}
+
+	@Parameterized.Parameters(name ="Test with MATERNITYRESTARTINJUNE={0}")
+	public static Collection<Object[]> automaticlot() {
+		return Arrays.asList(new Object[][] {
+				{ false },
+				{ true }
+		});
 	}
 
 	@Test
@@ -499,16 +526,6 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testIoGetNextYProgMaternityWardRestartInJune() throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = true;
-		int id = _setupTestAdmission(false, true);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		int next = admissionIoOperation.getNextYProg(foundAdmission.getWard().getCode());
-
-		assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
-	}
-
-	@Test
 	public void testAdmissionGettersSetters() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
@@ -785,16 +802,6 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetNextYProgMaternityWard() throws Exception {
-		int id = _setupTestAdmission(false, true);
-		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
-		int next = admissionBrowserManager.getNextYProg(foundAdmission.getWard().getCode());
-
-		assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
-	}
-
-	@Test
-	public void testMgrGetNextYProgMaternityWardRestartInJune() throws Exception {
-		GeneralData.MATERNITYRESTARTINJUNE = true;
 		int id = _setupTestAdmission(false, true);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		int next = admissionBrowserManager.getNextYProg(foundAdmission.getWard().getCode());
