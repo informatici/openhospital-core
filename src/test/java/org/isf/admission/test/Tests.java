@@ -21,14 +21,22 @@
  */
 package org.isf.admission.test;
 
+import static java.time.Instant.ofEpochMilli;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.time.Clock;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.assertj.core.api.Condition;
@@ -166,7 +174,7 @@ public class Tests extends OHCoreTestCase {
 		cleanH2InMemoryDb();
 	}
 
-	@Parameterized.Parameters(name ="Test with MATERNITYRESTARTINJUNE={0}")
+	@Parameterized.Parameters(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	public static Collection<Object[]> maternityRestartInJune() {
 		return Arrays.asList(new Object[][] {
 				{ false },
@@ -470,6 +478,10 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetNextYProg() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
+		foundAdmission.setYProg(99);
+		foundAdmission.setAdmDate(new GregorianCalendar());
+		admissionIoOperation.updateAdmission(foundAdmission);
+		foundAdmission = admissionIoOperation.getAdmission(id);
 		int next = admissionIoOperation.getNextYProg(foundAdmission.getWard().getCode());
 
 		assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
@@ -517,12 +529,49 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testIoGetNextYProgMaternityWard() throws Exception {
+	public void testIoGetNextYProgMaternityWardBeforeJune() throws Exception {
+		// set date before June
+		AdmissionIoOperations.testing = true;
+		AdmissionIoOperations.afterJune = false;
+
 		int id = _setupTestAdmission(false, true);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
+		foundAdmission.setYProg(99);
+		foundAdmission.setAdmDate(new GregorianCalendar());
+		admissionIoOperation.updateAdmission(foundAdmission);
+		foundAdmission = admissionIoOperation.getAdmission(id);
+
 		int next = admissionIoOperation.getNextYProg(foundAdmission.getWard().getCode());
 
 		assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
+		// reset
+		AdmissionIoOperations.testing = false;
+		AdmissionIoOperations.afterJune = false;
+	}
+
+	@Test
+	public void testIoGetNextYProgMaternityWardAfterJune() throws Exception {
+		// set date after June
+		AdmissionIoOperations.testing = true;
+		AdmissionIoOperations.afterJune = true;
+
+		int id = _setupTestAdmission(false, true);
+		Admission foundAdmission = admissionIoOperation.getAdmission(id);
+		foundAdmission.setYProg(99);
+		foundAdmission.setAdmDate(new GregorianCalendar());
+		admissionIoOperation.updateAdmission(foundAdmission);
+		foundAdmission = admissionIoOperation.getAdmission(id);
+
+		int next = admissionIoOperation.getNextYProg(foundAdmission.getWard().getCode());
+
+		if (!GeneralData.MATERNITYRESTARTINJUNE) {
+			assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
+		} else {
+			assertThat(next).isEqualTo(1);
+		}
+		// reset
+		AdmissionIoOperations.testing = false;
+		AdmissionIoOperations.afterJune = false;
 	}
 
 	@Test
@@ -795,18 +844,57 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetNextYProg() throws Exception {
 		int id = _setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
+		foundAdmission.setYProg(99);
+		foundAdmission.setAdmDate(new GregorianCalendar());
+		admissionIoOperation.updateAdmission(foundAdmission);
+		foundAdmission = admissionIoOperation.getAdmission(id);
 		int next = admissionBrowserManager.getNextYProg(foundAdmission.getWard().getCode());
 
 		assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
 	}
 
 	@Test
-	public void testMgrGetNextYProgMaternityWard() throws Exception {
+	public void testMgrGetNextYProgMaternityWardBeforeJune() throws Exception {
+		// set date before June
+		AdmissionIoOperations.testing = true;
+		AdmissionIoOperations.afterJune = false;
+
 		int id = _setupTestAdmission(false, true);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
+		foundAdmission.setYProg(99);
+		foundAdmission.setAdmDate(new GregorianCalendar());
+		admissionIoOperation.updateAdmission(foundAdmission);
+		foundAdmission = admissionIoOperation.getAdmission(id);
 		int next = admissionBrowserManager.getNextYProg(foundAdmission.getWard().getCode());
 
 		assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
+		// reset
+		AdmissionIoOperations.testing = false;
+		AdmissionIoOperations.afterJune = false;
+	}
+
+	@Test
+	public void testMgrGetNextYProgMaternityWardAfterJune() throws Exception {
+		// set date after June
+		AdmissionIoOperations.testing = true;
+		AdmissionIoOperations.afterJune = true;
+
+		int id = _setupTestAdmission(false, true);
+		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
+		foundAdmission.setYProg(99);
+		foundAdmission.setAdmDate(new GregorianCalendar());
+		admissionIoOperation.updateAdmission(foundAdmission);
+		foundAdmission = admissionIoOperation.getAdmission(id);
+		int next = admissionBrowserManager.getNextYProg(foundAdmission.getWard().getCode());
+
+		if (!GeneralData.MATERNITYRESTARTINJUNE) {
+			assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
+		} else {
+			assertThat(next).isEqualTo(1);
+		}
+		// reset
+		AdmissionIoOperations.testing = false;
+		AdmissionIoOperations.afterJune = false;
 	}
 
 	@Test

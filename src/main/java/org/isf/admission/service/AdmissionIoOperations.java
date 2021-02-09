@@ -240,7 +240,7 @@ public class AdmissionIoOperations
 			String wardId) throws OHServiceException 
 	{
 		int next = 1;
-		GregorianCalendar now = new GregorianCalendar();
+		GregorianCalendar now = getNow();
 		GregorianCalendar first = null;
 		GregorianCalendar last = null;
 		
@@ -271,6 +271,21 @@ public class AdmissionIoOperations
 		} 
 		
 		return next;
+	}
+
+	public static boolean testing = false;
+	public static boolean afterJune = false;
+	protected GregorianCalendar getNow() {
+		GregorianCalendar now = new GregorianCalendar();
+		if (!testing) {
+			return now;
+		}
+		// testing date June or later
+		if (afterJune) {
+			return new GregorianCalendar(now.get(Calendar.YEAR), 8, 1);
+		}
+		// testing data before June
+		return new GregorianCalendar(now.get(Calendar.YEAR), 0, 1);
 	}
 
 	/**
