@@ -167,7 +167,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Parameterized.Parameters(name ="Test with MATERNITYRESTARTINJUNE={0}")
-	public static Collection<Object[]> automaticlot() {
+	public static Collection<Object[]> maternityRestartInJune() {
 		return Arrays.asList(new Object[][] {
 				{ false },
 				{ true }
