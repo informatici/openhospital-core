@@ -277,6 +277,7 @@ public class AdmissionIoOperations
 	 * The variables, {@code testing} and {@code afterJune}, are here only for testing purposes and are **NOT** to be used
 	 * in production code.   The default path ({@code testsing == false}) ensures that the code performs as it
 	 * always has in the past.
+	 * This code permits the unit testing of maternity wards with dates before and after June.
 	 * TODO: once the GregorianCalendar object is replaced by Java 8+ date/time objects this can be revisited
 	 * as there is more flexibility in modifying the new objects in Java 8+.
 	 */
