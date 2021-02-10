@@ -27,6 +27,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.isf.disease.model.Disease;
+import org.isf.generaldata.GeneralData;
 import org.isf.opd.model.Opd;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
@@ -84,8 +85,12 @@ public class TestOpd {
 
 	public void check(Opd opd) {
 		assertThat(opd.getVisitDate()).isEqualTo(visitDate);
-		assertThat(opd.getAge()).isEqualTo(age);
-		assertThat(opd.getSex()).isEqualTo(sex);
+		if (!(GeneralData.OPDEXTENDED && opd.getPatient() != null)) {
+			// skip checks as OpdBrowserManager sets values from patient
+			// thus only do checks when not OPDEXTENDED and patient == null
+			assertThat(opd.getAge()).isEqualTo(age);
+			assertThat(opd.getSex()).isEqualTo(sex);
+		}
 		assertThat(opd.getNote()).isEqualTo(note);
 		assertThat(opd.getProgYear()).isEqualTo(prog_year);
 		assertThat(opd.getNewPatient()).isEqualTo(newPatient);

@@ -168,7 +168,7 @@ public class Opd extends Auditable<String>
 	}
 	
 	public String getFullName() {
-		return patient.getName();
+		return patient == null ? "" : patient.getName();
 	}
 
 	public Patient getPatient() {
