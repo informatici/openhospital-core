@@ -273,6 +273,13 @@ public class AdmissionIoOperations
 		return next;
 	}
 
+	/**
+	 * The variables, {@code testing} and {@code afterJune}, are here only for testing purposes and are **NOT** to be used
+	 * in production code.   The default path ({@code testsing == false}) ensures that the code performs as it
+	 * always has in the past.
+	 * TODO: once the GregorianCalendar object is replaced by Java 8+ date/time objects this can be revisited
+	 * as there is more flexibility in modifying the new objects in Java 8+.
+	 */
 	public static boolean testing = false;
 	public static boolean afterJune = false;
 	protected GregorianCalendar getNow() {
