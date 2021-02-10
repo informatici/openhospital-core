@@ -24,7 +24,9 @@ package org.isf.opd.test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -35,6 +37,7 @@ import org.isf.disease.test.TestDisease;
 import org.isf.distype.model.DiseaseType;
 import org.isf.distype.service.DiseaseTypeIoOperationRepository;
 import org.isf.distype.test.TestDiseaseType;
+import org.isf.generaldata.GeneralData;
 import org.isf.opd.model.Opd;
 import org.isf.opd.service.OpdIoOperationRepository;
 import org.isf.opd.service.OpdIoOperations;
@@ -45,11 +48,24 @@ import org.isf.patient.test.TestPatient;
 import org.isf.utils.exception.OHException;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.junit4.rules.SpringClassRule;
+import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
+@RunWith(Parameterized.class)
 public class Tests extends OHCoreTestCase {
+
+	@ClassRule
+	public static final SpringClassRule springClassRule = new SpringClassRule();
+
+	@Rule
+	public final SpringMethodRule springMethodRule = new SpringMethodRule();
 
 	private static TestOpd testOpd;
 	private static TestPatient testPatient;
@@ -69,6 +85,10 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	ApplicationEventPublisher applicationEventPublisher;
 
+	public Tests(boolean opdExtended) {
+		GeneralData.OPDEXTENDED = opdExtended;
+	}
+
 	@BeforeClass
 	public static void setUpClass() {
 		testOpd = new TestOpd();
@@ -86,6 +106,14 @@ public class Tests extends OHCoreTestCase {
 	public void testOpdGets() throws Exception {
 		int code = _setupTestOpd(false);
 		_checkOpdIntoDb(code);
+	}
+
+	@Parameterized.Parameters(name = "Test with OPDEXTENDED={0}")
+	public static Collection<Object[]> opdExtended() {
+		return Arrays.asList(new Object[][] {
+				{ false },
+				{ true }
+		});
 	}
 
 	@Test
