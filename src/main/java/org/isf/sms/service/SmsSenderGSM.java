@@ -117,7 +117,7 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 					serialPort.addEventListener(this);
 					serialPort.notifyOnDataAvailable(true);
 				} catch (TooManyListenersException e) {
-					logger.debug("Too many listeners. (" + e.toString() + ")");
+					logger.debug("Too many listeners. ({})", e.toString());
 				}
 
 			} catch (PortInUseException e) {
