@@ -57,7 +57,6 @@ public class LabManager {
 	@Autowired
 	private LabIoOperations ioOperations;
 
-
 	protected HashMap<String, String> materialHashMap;
 
 	/**
@@ -66,29 +65,28 @@ public class LabManager {
 	 * @param laboratory
 	 * @throws OHDataValidationException
 	 */
-	protected void validateLaboratory(Laboratory laboratory) throws OHDataValidationException {
-		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+	protected void validateLaboratory(Laboratory laboratory, boolean insert) throws OHDataValidationException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (laboratory.getDate() == null)
 			laboratory.setDate(new GregorianCalendar());
 		if (laboratory.getExam() != null && laboratory.getExam().getProcedure() == 2) {
 			laboratory.setResult(MessageBundle.getMessage("angal.lab.multipleresults"));
 		}
 
-		//Check Exam Date
+		// Check Exam Date
 		if (laboratory.getExamDate() == null) {
 			errors.add(new OHExceptionMessage("noExamDateError",
 					MessageBundle.getMessage("angal.lab.pleaseinsertavalidexamdate"),
 					OHSeverityLevel.ERROR));
 		}
-		//Check Patient
+		// Check Patient
 		if (GeneralData.LABEXTENDED && laboratory.getPatient() == null) {
 			errors.add(new OHExceptionMessage("patientNullError",
 					MessageBundle.getMessage("angal.lab.pleaseselectapatient"),
 					OHSeverityLevel.ERROR));
-		} else if (GeneralData.LABEXTENDED && laboratory.getPatient() != null) {
+		} else if (GeneralData.LABEXTENDED && laboratory.getPatient() != null && insert) {
 			/*
-			 * Age and Sex has not to be updated
-			 * for reporting purposes
+			 * Age and Sex has not to be updated for reporting purposes
 			 */
 			laboratory.setPatName(laboratory.getPatient().getName());
 			laboratory.setAge(laboratory.getPatient().getAge());
@@ -204,7 +202,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	public boolean newLaboratory(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
-		validateLaboratory(laboratory);
+		validateLaboratory(laboratory, true);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.newLabFirstProcedure(laboratory);
 		} else if (laboratory.getExam().getProcedure() == 2) {
@@ -229,7 +227,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	public boolean newLaboratory2(Laboratory laboratory, ArrayList<LaboratoryRow> labRow) throws OHServiceException {
-		validateLaboratory(laboratory);
+		validateLaboratory(laboratory, true);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.newLabFirstProcedure(laboratory);
 		} else if (laboratory.getExam().getProcedure() == 2) {
@@ -255,7 +253,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	public boolean updateLaboratory(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
-		validateLaboratory(laboratory);
+		validateLaboratory(laboratory, false);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.updateLabFirstProcedure(laboratory);
 		} else if (laboratory.getExam().getProcedure() == 2) {
@@ -431,7 +429,7 @@ public class LabManager {
 	}
 
 	private void buildMaterialHashMap() {
-		materialHashMap = new HashMap<String, String>();
+		materialHashMap = new HashMap<>();
 		materialHashMap.put("undefined", MessageBundle.getMessage("angal.lab.undefined"));
 		materialHashMap.put("blood", MessageBundle.getMessage("angal.lab.blood"));
 		materialHashMap.put("urine", MessageBundle.getMessage("angal.lab.urine"));
@@ -460,18 +458,18 @@ public class LabManager {
 	public ArrayList<String> getMaterialList() {
 		if (materialHashMap == null)
 			buildMaterialHashMap();
-		ArrayList<String> materialDescriptionList = new ArrayList<String>(materialHashMap.values());
+		ArrayList<String> materialDescriptionList = new ArrayList<>(materialHashMap.values());
 		Collections.sort(materialDescriptionList, new DefaultSorter(MessageBundle.getMessage("angal.lab.undefined")));
 		return materialDescriptionList;
 	}
 
-//	/**
-//	 * Returns the max progressive number within specified month of specified year.
-//	 *
-//	 * @param lab
-//	 * @return <code>int</code> - the progressive number in the month
-//	 * @throws org.isf.utils.exception.OHServiceException
-//	 */
+	//	/**
+	//	 * Returns the max progressive number within specified month of specified year.
+	//	 *
+	//	 * @param lab
+	//	 * @return <code>int</code> - the progressive number in the month
+	//	 * @throws org.isf.utils.exception.OHServiceException
+	//	 */
    /*public int getProgMonth(int month, int year)  throws OHServiceException {
         return ioOperations.getProgMonth(month, year);
    }*/

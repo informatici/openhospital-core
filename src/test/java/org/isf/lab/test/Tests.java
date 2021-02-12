@@ -100,9 +100,9 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	private ApplicationEventPublisher applicationEventPublisher;
 
-	public Tests(boolean labExtended, boolean labMultipleInsert) {
+	public Tests(boolean labExtended) {
 		GeneralData.LABEXTENDED = labExtended;
-		GeneralData.LABMULTIPLEINSERT = labMultipleInsert;
+		// Note: GeneralData.LABMULTIPLEINSERT is only used in the GUI code
 	}
 
 	@BeforeClass
@@ -119,13 +119,11 @@ public class Tests extends OHCoreTestCase {
 		cleanH2InMemoryDb();
 	}
 
-	@Parameterized.Parameters(name = "Test with LABEXTENDED={0}, LABMULTIPLEINSERT={1}")
+	@Parameterized.Parameters(name = "Test with LABEXTENDED={0}")
 	public static Collection<Object[]> generalDataLab() {
 		return Arrays.asList(new Object[][] {
-				{ false, false },
-				{ true, true },
-				{ false, true },
-				{ true, false }
+				{ false },
+				{ true }
 		});
 	}
 
