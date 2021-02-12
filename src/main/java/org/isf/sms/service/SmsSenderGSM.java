@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.TooManyListenersException;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.isf.sms.model.Sms;
@@ -49,7 +50,7 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 
 	private static Logger logger = LoggerFactory.getLogger(SmsSenderGSM.class);
 	
-	private final String EOF = "\032\r";
+	private final String EOF = "\r";
 	
 	private Enumeration<?> portList;
 	private CommPortIdentifier portId;
@@ -58,6 +59,8 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 	private boolean connected;
 	private OutputStream outputStream;
 	private InputStream inputStream;
+
+	private boolean sent = true;
 	
 	public SmsSenderGSM() {
 		logger.info("SMS Sender GSM started...");
@@ -96,18 +99,27 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 			try {
 				serialPort = (SerialPort) portId.open("SmsSender", 1000);
 				if (serialPort != null) {
-					
+
 					outputStream = serialPort.getOutputStream();
 					if (outputStream != null) {
-						inputStream = serialPort.getInputStream(); 
-						
+						inputStream = serialPort.getInputStream();
+
 						logger.debug("Output stream OK");
 						connected = true;
-						
-					} else logger.debug("A problem occured on output stream");
-					
-				} else logger.debug("Not possible to open the stream");
-				
+
+					} else
+						logger.debug("A problem occured on output stream");
+
+				} else
+					logger.debug("Not possible to open the stream");
+
+				try {
+					serialPort.addEventListener(this);
+					serialPort.notifyOnDataAvailable(true);
+				} catch (TooManyListenersException e) {
+					logger.debug("Too many listeners. (" + e.toString() + ")");
+				}
+
 			} catch (PortInUseException e) {
 				logger.error("Port in use: {}", portId.getCurrentOwner());
 			} catch (Exception e) {
@@ -152,7 +164,20 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 				logger.trace(text);
 				if (!debug) outputStream.write(text.getBytes());
 				Thread.sleep(1000);
-
+				
+				//SEND SMS
+				if (!debug) outputStream.write("\u001A".getBytes()); // Ctrl-Z();
+				Thread.sleep(1000);
+				
+				//FLUSH STREAM
+//				if (!debug) outputStream.flush(); // missing callback function on Windows OS
+//				Thread.sleep(1000);
+				
+				if (!sent) {
+					sent = true; //for next message but return false (not sent)
+					return false;
+				}
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;
@@ -178,6 +203,10 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 			}
 			String answer = sb.toString();
 			logger.debug(answer);
+			if (answer.contains("ERROR")) {
+				logger.error("ERROR: {}", answer);
+				sent  = false;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
