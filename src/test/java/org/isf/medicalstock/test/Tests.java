@@ -696,7 +696,7 @@ public class Tests extends OHCoreTestCase {
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -761,7 +761,9 @@ public class Tests extends OHCoreTestCase {
 		{
 			int code = _setupTestMovement(false);
 			Movement movement = movementIoOperationRepository.findOne(code);
-			movement.setDate(new GregorianCalendar(2000, 1, 1));
+			GregorianCalendar todayPlusAYear = new GregorianCalendar();
+			todayPlusAYear.add(GregorianCalendar.YEAR, 1);
+			movement.setDate(todayPlusAYear);
 			ArrayList<Movement> movements = new ArrayList<>();
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, "refNo");
