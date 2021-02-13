@@ -895,12 +895,11 @@ public class Tests extends OHCoreTestCase {
 			Movement movement = movementIoOperationRepository.findOne(code);
 			Lot lot = movement.getLot();
 			lot.setCode("thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong");
-			lotIoOperationRepository.saveAndFlush(lot);
 			ArrayList<Movement> movements = new ArrayList<>();
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
