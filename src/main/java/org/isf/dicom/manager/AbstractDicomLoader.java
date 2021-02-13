@@ -27,15 +27,12 @@ import javax.swing.JFrame;
 
 /**
  * Abstract Component for Progress loading
- * 
+ *
  * @author Mwithi
  * @version 1.0.0
  */
 public abstract class AbstractDicomLoader extends Window {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	public AbstractDicomLoader(JFrame owner) {
@@ -48,5 +45,4 @@ public abstract class AbstractDicomLoader extends Window {
 
 	public void setLoaded(int loaded) {
 	}
-	
 }

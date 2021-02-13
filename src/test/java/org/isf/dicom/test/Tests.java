@@ -24,22 +24,22 @@ package org.isf.dicom.test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Properties;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
+import javax.swing.JFrame;
 
 import org.aspectj.util.FileUtil;
 import org.dcm4che2.data.DicomObject;
 import org.dcm4che2.data.Tag;
 import org.dcm4che2.imageio.plugins.dcm.DicomStreamMetaData;
 import org.isf.OHCoreTestCase;
+import org.isf.dicom.manager.AbstractDicomLoader;
+import org.isf.dicom.manager.AbstractThumbnailViewGui;
 import org.isf.dicom.manager.DicomManagerFactory;
 import org.isf.dicom.manager.DicomManagerInterface;
 import org.isf.dicom.manager.FileSystemDicomManager;
@@ -51,21 +51,19 @@ import org.isf.dicomtype.model.DicomType;
 import org.isf.dicomtype.service.DicomTypeIoOperationRepository;
 import org.isf.dicomtype.test.TestDicomType;
 import org.isf.menu.manager.Context;
-import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHException;
-import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.util.FileSystemUtils;
 
 public class Tests extends OHCoreTestCase {
 
 	public static final int PATIENT_ID = 0;
-	public static final Long _4M = new Long(4194304);
-	final String STUDY_DATE = "Mon Jan 01 10:22:33 AST 2001";
-	final String SERIES_DATE = "Mon May 14 10:22:33 AST 2007";
+	public static final Long _4M = 4194304L;
 	private static TestDicom testFileDicom;
 	private static TestDicomType testDicomType;
 
@@ -78,9 +76,6 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	private ApplicationContext applicationContext;
 
-	private DicomManagerInterface fileSystemDicomManager;
-	private FileDicom dicomFile;
-
 	@BeforeClass
 	public static void setUpClass() throws ParseException {
 		testFileDicom = new TestDicom();
@@ -88,25 +83,9 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Before
-	public void setUp() throws OHException, OHDicomException {
+	public void setUp() throws Exception {
 		cleanH2InMemoryDb();
 		Context.setApplicationContext(applicationContext);
-		fileSystemDicomManager = new FileSystemDicomManager(_getDicomProperties());
-		DicomType dicomType;
-		dicomType = testDicomType.setup(true);
-		dicomFile = testFileDicom.setup(dicomType, true);
-	}
-
-	private Properties _getDicomProperties() {
-		Properties properties = new Properties();
-		properties.setProperty("dicom.manager.impl", "FileSystemDicomManager");
-		properties.setProperty("dicom.storage.filesystem", "rsc-test/dicom");
-		return properties;
-	}
-
-	private static void _deleteSavedDicomFile() {
-		FileUtil.deleteContents(new File("rsc-test/dicom/0"));
-		FileUtil.deleteContents(new File("rsc-test/dicom/dicom.storage"));
 	}
 
 	@Test
@@ -141,13 +120,18 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testIoLoadFileDicom() throws Exception {
+	public void testIoLoadDetails() throws Exception {
 		long code = _setupTestFileDicom(false);
 		FileDicom foundFileDicom = dicomIoOperationRepository.findOne(code);
 		FileDicom dicom = dicomIoOperation.loadDetails(foundFileDicom.getIdFile(), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
 		FileDicom dicom2 = dicomIoOperation.loadDetails(new Long(foundFileDicom.getIdFile()), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
 		assertThat(dicom2.getDicomInstanceUID()).isEqualTo(dicom.getDicomInstanceUID());
 		assertThat(dicom.getDicomSeriesDescription()).isEqualTo(foundFileDicom.getDicomSeriesDescription());
+	}
+
+	@Test
+	public void testIoLoadDetailsNullIdFile() throws Exception {
+		assertThat(dicomIoOperation.loadDetails(null, 1, "someSeriesNumber")).isNull();
 	}
 
 	@Test
@@ -167,7 +151,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testIoSaveFile() throws Exception {
+	public void testIoSaveFileUpate() throws Exception {
 		long code = _setupTestFileDicom(false);
 		FileDicom foundFileDicom = dicomIoOperationRepository.findOne(code);
 		foundFileDicom.setDicomSeriesDescription("Update");
@@ -177,79 +161,19 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testSaveFile() throws Exception {
-		fileSystemDicomManager.saveFile(dicomFile);
-		_checkIfExists(dicomFile);
-	}
-
-	private void _checkIfExists(FileDicom dicomFile) throws IOException {
-		File dicomFileDir = new File("rsc-test/dicom/0/TestSeriesNumber");
-		FileReader fr = new FileReader(new File(dicomFileDir, "1.properties"));
-		Properties dicomProperties = new Properties();
-		dicomProperties.load(fr);
-		fr.close();
-		assertThat(dicomFileDir.listFiles()).hasSize(3);
-		assertThat(dicomProperties.getProperty("dicomInstanceUID")).isEqualTo("TestInteanceUid");
-	}
-
-	@Test
-	public void testLoadPatientFiles() throws Exception {
-		FileDicom[] fileDicoms = fileSystemDicomManager.loadPatientFiles(PATIENT_ID);
-		assertThat(fileDicoms).isNotEmpty();
-	}
-
-	@Test
-	public void testLoadDetails() throws Exception {
-		FileDicom fileDicom = fileSystemDicomManager.loadDetails(2, 1, "TestSeriesNumber");
-		testFileDicom.check(fileDicom);
-	}
-
-	@Test
-	public void testGetSerieDetail() throws Exception {
-		Long[] result = fileSystemDicomManager.getSerieDetail(PATIENT_ID, "TestSeriesNumber");
-		assertThat(result).isNotEmpty();
-	}
-
-	@Test
-	public void tesExist() throws Exception {
-		boolean fileExits = fileSystemDicomManager.exist(dicomFile);
-		assertThat(fileExits).isTrue();
-	}
-
-	@Test
-	public void testExistWhenDicomFileNoExist() throws OHServiceException {
-		FileDicom dicomFile = new FileDicom();
-		boolean fileExits = fileSystemDicomManager.exist(dicomFile);
-		assertThat(fileExits).isFalse();
-	}
-
-	@Test
-	public void testDeleteSerie() throws Exception {
-		int idPaziente = 2;
-		DicomType dicomType;
-		dicomType = testDicomType.setup(true);
-		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
-		dicomFile.setDicomSeriesNumber("SeriesNumber");
-		dicomFile.setPatId(idPaziente);
-		fileSystemDicomManager.saveFile(dicomFile);
-		boolean serieDeleted = fileSystemDicomManager.deleteSerie(idPaziente, "SeriesNumber");
-		assertThat(serieDeleted).isTrue();
-	}
-
-	@Test
 	public void testDicomManagerFactoryGetManager() throws Exception {
 		DicomManagerInterface manager = DicomManagerFactory.getManager();
 		assertThat(manager).isInstanceOf(FileSystemDicomManager.class);
 	}
 
 	@Test
-	public void testDicomManagerFactoryGetMaxDicomSize() throws Exception {
+	public void testDicomManagerFactoryGetMaxDicomSizeDefault() throws Exception {
 		String maxDicomSize = DicomManagerFactory.getMaxDicomSize();
 		assertThat(maxDicomSize).isEqualTo("4M");
 	}
 
 	@Test
-	public void testDicomManagerFactoryGetMaxDicomSizeLong() throws Exception {
+	public void testDicomManagerFactoryGetMaxDicomSizeLongDefault() throws Exception {
 		Long maxDicomSize = DicomManagerFactory.getMaxDicomSizeLong();
 		assertThat(maxDicomSize).isEqualTo(_4M);
 	}
@@ -263,18 +187,26 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testSourceFilesLoadDicom() throws Exception {
 		File file = _getFile("case3c_002.dcm");
+		DicomType dicomType = testDicomType.setup(true);
+		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 		SourceFiles.loadDicom(dicomFile, file, PATIENT_ID);
 		assertThat(dicomFile.getFileName()).isEqualTo("case3c_002.dcm");
 		assertThat(dicomFile.getDicomInstitutionName()).isEqualTo("Anonymized Hospital");
 		assertThat(dicomFile.getDicomStudyDescription()).isEqualTo("MRT Oberbauch");
+
+		_cleanupDicomFiles(dicomFile.getPatId());
 	}
 
 	@Test
 	public void testSourceFilesLoadDicomWhenImageFormatIsJpeg() throws Exception {
 		File file = _getFile("image.0007.jpg");
+		DicomType dicomType = testDicomType.setup(true);
+		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 		SourceFiles.loadDicom(dicomFile, file, PATIENT_ID);
 		String fileName = dicomFile.getFileName();
 		assertThat(fileName).isEqualTo("image.0007.jpg");
+
+		_cleanupDicomFiles(dicomFile.getPatId());
 	}
 
 	@Test
@@ -306,7 +238,90 @@ public class Tests extends OHCoreTestCase {
 	public void testSourceFilesCountFiles() throws Exception {
 		File file = _getFile("dicomdir");
 		int count = SourceFiles.countFiles(file, 1);
-		assertThat(count).isGreaterThan(0);
+		assertThat(count).isPositive();
+	}
+
+	@Ignore
+	// Reason ignored when running CI it generates this error:
+	//    java.awt.HeadlessException:
+	// 	  No X11 DISPLAY variable was set, but this program performed an operation which requires it.
+	@Test
+	public void testSourceFilesConstructorDirectoryNumberOfFiles() throws Exception {
+		ThumbnailViewGui thumbnailViewGui = new ThumbnailViewGui();
+		thumbnailViewGui.initialize();
+		SourceFiles sourceFiles = new SourceFiles(new FileDicom(), new File("src/test/resources/org/isf/dicom/test/dicomdir/"), 2, 1, thumbnailViewGui,
+				new DicomLoader(1, new JFrame()));
+		assertThat(sourceFiles).isNotNull();
+		assertThat(sourceFiles.working()).isTrue();
+		while (sourceFiles.working()) {
+			Thread.sleep(2000);
+		}
+		assertThat(sourceFiles.getLoaded()).isEqualTo(1);
+		_cleanupDicomFiles(2);
+	}
+
+	class ThumbnailViewGui extends AbstractThumbnailViewGui {
+
+		public void initialize() {
+
+		}
+	}
+
+	class DicomLoader extends AbstractDicomLoader {
+
+		public DicomLoader(int numfiles, JFrame owner) {
+			super(numfiles, owner);
+		}
+
+		public void setLoaded(int loaded) {
+		}
+	}
+
+	@Test
+	public void testFileDicomEquals() throws Exception {
+		DicomType dicomType = testDicomType.setup(false);
+		FileDicom fileDicom = testFileDicom.setup(dicomType, true);
+
+		assertThat(fileDicom.equals(fileDicom)).isTrue();
+		assertThat(fileDicom).isNotEqualTo(null);
+		assertThat(fileDicom).isNotEqualTo("someString");
+
+		FileDicom fileDicom2 = testFileDicom.setup(dicomType, true);
+		fileDicom2.setIdFile(99L);
+		assertThat(fileDicom).isNotEqualTo(fileDicom2);
+
+		fileDicom2.setIdFile(fileDicom.getIdFile());
+		assertThat(fileDicom).isEqualTo(fileDicom2);
+	}
+
+	@Test
+	public void testFileDicomHashCode() throws Exception {
+		DicomType dicomType = testDicomType.setup(true);
+		FileDicom fileDicom = testFileDicom.setup(dicomType, false);
+		// compute value
+		int hashCode = fileDicom.hashCode();
+		assertThat(hashCode).isEqualTo(23 * 133 + fileDicom.getIdFile());
+		// used computed value
+		assertThat(fileDicom.hashCode()).isEqualTo(hashCode);
+	}
+
+	@Test
+	public void testFileDicomGetDicomType() throws Exception {
+		DicomType dicomType = testDicomType.setup(true);
+		FileDicom fileDicom = testFileDicom.setup(dicomType, true);
+		assertThat(fileDicom.getDicomType()).isEqualTo(dicomType);
+	}
+
+	@Test
+	public void testFileDicomGetThumbnailasImage() throws Exception {
+		DicomType dicomType = testDicomType.setup(false);
+		FileDicom fileDicom = testFileDicom.setup(dicomType, false);
+		assertThat(fileDicom.getDicomThumbnailAsImage()).isNull();
+	}
+
+	private static void _cleanupDicomFiles(int patientId) {
+		FileSystemUtils.deleteRecursively(new File("rsc-test/dicom/" + patientId));
+		FileUtil.deleteContents(new File("rsc-test/dicom/dicom.storage"));
 	}
 
 	private File _getFile(String fileName) {
@@ -321,7 +336,7 @@ public class Tests extends OHCoreTestCase {
 		return dicom.getIdFile();
 	}
 
-	private void _checkFileDicomIntoDb(long code) throws OHException {
+	private void _checkFileDicomIntoDb(long code) throws Exception {
 		FileDicom foundFileDicom = dicomIoOperationRepository.findOne(code);
 		testFileDicom.check(foundFileDicom);
 	}
