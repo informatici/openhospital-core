@@ -21,8 +21,10 @@
  */
 package org.isf.generaldata;
 
-import java.io.File;
 import java.io.FileInputStream;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -138,11 +140,21 @@ public class GeneralData {
 
 	private static GeneralData mySingleData;
 	private Properties p;
-
+	
+	public static void reset() {
+		mySingleData  = null;
+	}
+	
+	
 	private GeneralData() {
 		try {
 			p = new Properties();
-			p.load(new FileInputStream("rsc" + File.separator + FILE_PROPERTIES));
+			
+			ClassLoader classLoader = getClass().getClassLoader();
+			URL url = classLoader.getResource(FILE_PROPERTIES);
+			Path path = Paths.get(url.toURI());
+			p.load(new FileInputStream(path.toFile()));
+			
 			logger.info("File generalData.properties loaded. ");
 			LANGUAGE = myGetProperty("LANGUAGE", DEFAULT_LANGUAGE);
 			SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
@@ -192,7 +204,9 @@ public class GeneralData {
 			logger.error(">> " + FILE_PROPERTIES + " file not found.");
 			System.exit(1);
 		}
+		
 		MessageBundle.initialize();
+		
 	}
 	
 	/**
@@ -236,4 +250,5 @@ public class GeneralData {
 		}
 		return mySingleData;
 	}
+	
 }
