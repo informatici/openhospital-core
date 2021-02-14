@@ -28,8 +28,8 @@ import java.util.List;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patvac.model.PatientVaccine;
 import org.isf.patvac.service.PatVacIoOperations;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,22 +50,22 @@ public class PatVacManager {
 
 	@Autowired
 	private PatVacIoOperations ioOperations;
-	
+
 	/**
 	 * Returns all {@link PatientVaccine}s of today or one week ago
-	 * 
+	 *
 	 * @param minusOneWeek - if <code>true</code> return the last week
 	 * @return the list of {@link PatientVaccine}s
-	 * @throws OHServiceException 
-	 */  
+	 * @throws OHServiceException
+	 */
 	public ArrayList<PatientVaccine> getPatientVaccine(boolean minusOneWeek) throws OHServiceException {
-        return  ioOperations.getPatientVaccine(minusOneWeek);
+		return ioOperations.getPatientVaccine(minusOneWeek);
 	}
-	
+
 	/**
 	 * Returns all {@link PatientVaccine}s within <code>dateFrom</code> and
 	 * <code>dateTo</code>
-	 * 
+	 *
 	 * @param vaccineTypeCode
 	 * @param vaccineCode
 	 * @param dateFrom
@@ -74,92 +74,93 @@ public class PatVacManager {
 	 * @param ageFrom
 	 * @param ageTo
 	 * @return the list of {@link PatientVaccine}s
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public ArrayList<PatientVaccine> getPatientVaccine(String vaccineTypeCode,String vaccineCode, 
-													   GregorianCalendar dateFrom, GregorianCalendar dateTo, 
-													   char sex, int ageFrom, int ageTo) throws OHServiceException {
-        return ioOperations.getPatientVaccine(vaccineTypeCode, vaccineCode, dateFrom, dateTo, sex, ageFrom, ageTo);
+	public ArrayList<PatientVaccine> getPatientVaccine(String vaccineTypeCode, String vaccineCode,
+			GregorianCalendar dateFrom, GregorianCalendar dateTo,
+			char sex, int ageFrom, int ageTo) throws OHServiceException {
+		return ioOperations.getPatientVaccine(vaccineTypeCode, vaccineCode, dateFrom, dateTo, sex, ageFrom, ageTo);
 	}
 
 	/**
 	 * Inserts a {@link PatientVaccine} in the DB
-	 * 
+	 *
 	 * @param patVac - the {@link PatientVaccine} to insert
-	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise 
-	 * @throws OHServiceException 
+	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
+	 * @throws OHServiceException
 	 */
 	public boolean newPatientVaccine(PatientVaccine patVac) throws OHServiceException {
-        validatePatientVaccine(patVac);
-        return ioOperations.newPatientVaccine(patVac);
+		validatePatientVaccine(patVac);
+		return ioOperations.newPatientVaccine(patVac);
 	}
 
 	/**
 	 * Updates a {@link PatientVaccine}
-	 * 
+	 *
 	 * @param patVac - the {@link PatientVaccine} to update
-	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise 
-	 * @throws OHServiceException 
+	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
+	 * @throws OHServiceException
 	 */
 	public boolean updatePatientVaccine(PatientVaccine patVac) throws OHServiceException {
-        validatePatientVaccine(patVac);
-        return ioOperations.updatePatientVaccine(patVac);
+		validatePatientVaccine(patVac);
+		return ioOperations.updatePatientVaccine(patVac);
 	}
 
 	/**
 	 * Deletes a {@link PatientVaccine}
-	 * 
+	 *
 	 * @param patVac - the {@link PatientVaccine} to delete
-	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise 
-	 * @throws OHServiceException 
+	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
+	 * @throws OHServiceException
 	 */
 	public boolean deletePatientVaccine(PatientVaccine patVac) throws OHServiceException {
-        return ioOperations.deletePatientVaccine(patVac);
+		return ioOperations.deletePatientVaccine(patVac);
 	}
-	
+
 	/**
 	 * Returns the max progressive number within specified year or within current year if <code>0</code>.
-	 * 
+	 *
 	 * @param year
 	 * @return <code>int</code> - the progressive number in the year
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public int getProgYear(int year) throws OHServiceException {
-        return ioOperations.getProgYear(year);
+		return ioOperations.getProgYear(year);
 	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 *
 	 * @param patientVaccine
-	 * @throws OHDataValidationException 
+	 * @throws OHDataValidationException
 	 */
-    protected void validatePatientVaccine(PatientVaccine patientVaccine) throws OHDataValidationException{
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+	protected void validatePatientVaccine(PatientVaccine patientVaccine) throws OHDataValidationException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
 
-        if(patientVaccine.getVaccineDate() == null){
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-                    MessageBundle.getMessage("angal.patvac.pleaseinsertvaccinedate"),
-                    OHSeverityLevel.ERROR));
-        }
-        if(patientVaccine.getProgr() < 0){
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-                    MessageBundle.getMessage("angal.patvac.pleaseinsertavalidprogressive"),
-                    OHSeverityLevel.ERROR));
-        }
-        if(patientVaccine.getVaccine() == null){
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-                    MessageBundle.getMessage("angal.patvac.pleaseselectavaccine"),
-                    OHSeverityLevel.ERROR));
-        }
-        if(patientVaccine.getPatient() == null
-                || StringUtils.isEmpty(patientVaccine.getPatName())
-                || StringUtils.isEmpty(String.valueOf(patientVaccine.getPatSex()))){
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-                    MessageBundle.getMessage("angal.patvac.pleaseselectapatient"),
-                    OHSeverityLevel.ERROR));
-        }
-        if(!errors.isEmpty()){
-	        throw new OHDataValidationException(errors);
-	    }
-    }
+		if (patientVaccine.getVaccineDate() == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+					MessageBundle.getMessage("angal.patvac.pleaseinsertvaccinedate"),
+					OHSeverityLevel.ERROR));
+		}
+		if (patientVaccine.getProgr() < 0) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+					MessageBundle.getMessage("angal.patvac.pleaseinsertavalidprogressive"),
+					OHSeverityLevel.ERROR));
+		}
+		if (patientVaccine.getVaccine() == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+					MessageBundle.getMessage("angal.patvac.pleaseselectavaccine"),
+					OHSeverityLevel.ERROR));
+		}
+		if (patientVaccine.getPatient() == null
+				|| StringUtils.isEmpty(patientVaccine.getPatName())
+				|| StringUtils.isEmpty(String.valueOf(patientVaccine.getPatSex()))) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+					MessageBundle.getMessage("angal.patvac.pleaseselectapatient"),
+					OHSeverityLevel.ERROR));
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
+	}
 }
