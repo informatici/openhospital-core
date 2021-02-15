@@ -48,6 +48,16 @@ public class OpdBrowserManager {
 	@Autowired
 	private OpdIoOperations ioOperations;
 
+	protected void setPatientConsistency(Opd opd) {
+		if (GeneralData.OPDEXTENDED && opd.getPatient() != null) {
+			/*
+			 * Age and Sex has not to be updated for reporting purposes
+			 */
+			opd.setAge(opd.getPatient().getAge());
+			opd.setSex(opd.getPatient().getSex());
+		}
+	}
+
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
@@ -65,7 +75,7 @@ public class OpdBrowserManager {
 		if (opd.getUserID() == null)
 			opd.setUserID(UserBrowsingManager.getCurrentUser());
 
-		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		// Check Visit Date
 		if (opd.getVisitDate() == null) {
 			errors.add(new OHExceptionMessage("noVisitDateError",
@@ -77,16 +87,6 @@ public class OpdBrowserManager {
 			errors.add(new OHExceptionMessage("patientNullError",
 					MessageBundle.getMessage("angal.opd.pleaseselectapatient"),
 					OHSeverityLevel.ERROR));
-		}
-		if (GeneralData.OPDEXTENDED && opd.getPatient() != null) {
-			/*
-			 * Age and Sex has not to be updated
-			 * for reporting purposes
-			 */
-			if (insert) {
-				opd.setAge(opd.getPatient().getAge());
-				opd.setSex(opd.getPatient().getSex());
-			}
 		}
 		// Check Sex and Age
 		if (opd.getAge() < 0) {
@@ -178,6 +178,7 @@ public class OpdBrowserManager {
 	 */
 	public boolean newOpd(Opd opd) throws OHServiceException {
 		validateOpd(opd, true);
+		setPatientConsistency(opd);
 		return ioOperations.newOpd(opd);
 	}
 
