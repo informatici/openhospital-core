@@ -59,13 +59,24 @@ public class LabManager {
 
 	protected HashMap<String, String> materialHashMap;
 
+	protected void setPatientConsistency(Laboratory laboratory) {
+		if (GeneralData.LABEXTENDED && laboratory.getPatient() != null) {
+			/*
+			 * Age and Sex has not to be updated for reporting purposes
+			 */
+			laboratory.setPatName(laboratory.getPatient().getName());
+			laboratory.setAge(laboratory.getPatient().getAge());
+			laboratory.setSex(String.valueOf(laboratory.getPatient().getSex()));
+		}
+	}
+
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param laboratory
 	 * @throws OHDataValidationException
 	 */
-	protected void validateLaboratory(Laboratory laboratory, boolean insert) throws OHDataValidationException {
+	protected void validateLaboratory(Laboratory laboratory) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (laboratory.getDate() == null)
 			laboratory.setDate(new GregorianCalendar());
@@ -84,13 +95,6 @@ public class LabManager {
 			errors.add(new OHExceptionMessage("patientNullError",
 					MessageBundle.getMessage("angal.lab.pleaseselectapatient"),
 					OHSeverityLevel.ERROR));
-		} else if (GeneralData.LABEXTENDED && laboratory.getPatient() != null && insert) {
-			/*
-			 * Age and Sex has not to be updated for reporting purposes
-			 */
-			laboratory.setPatName(laboratory.getPatient().getName());
-			laboratory.setAge(laboratory.getPatient().getAge());
-			laboratory.setSex(String.valueOf(laboratory.getPatient().getSex()));
 		} else if (laboratory.getPatient() == null) {
 			String sex = laboratory.getSex().toUpperCase();
 			if (!(sex.equals("M") || sex.equals("F"))) {
@@ -202,7 +206,8 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	public boolean newLaboratory(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
-		validateLaboratory(laboratory, true);
+		validateLaboratory(laboratory);
+		setPatientConsistency(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.newLabFirstProcedure(laboratory);
 		} else if (laboratory.getExam().getProcedure() == 2) {
@@ -227,7 +232,8 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	public boolean newLaboratory2(Laboratory laboratory, ArrayList<LaboratoryRow> labRow) throws OHServiceException {
-		validateLaboratory(laboratory, true);
+		validateLaboratory(laboratory);
+		setPatientConsistency(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.newLabFirstProcedure(laboratory);
 		} else if (laboratory.getExam().getProcedure() == 2) {
@@ -253,7 +259,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	public boolean updateLaboratory(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
-		validateLaboratory(laboratory, false);
+		validateLaboratory(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.updateLabFirstProcedure(laboratory);
 		} else if (laboratory.getExam().getProcedure() == 2) {
@@ -306,7 +312,7 @@ public class LabManager {
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
 	public boolean newLaboratory2(List<Laboratory> labList, ArrayList<ArrayList<LaboratoryRow>> labRowList) throws OHServiceException {
-		if (labList.size() == 0)
+		if (labList.isEmpty())
 			throw new OHDataValidationException(new OHExceptionMessage("emptyListError",
 					MessageBundle.getMessage("angal.labnew.noexamsinserted"),
 					OHSeverityLevel.ERROR));
@@ -393,7 +399,7 @@ public class LabManager {
 			if (labResult.equalsIgnoreCase(MessageBundle.getMessage("angal.lab.multipleresults"))) {
 				rows = ioOperations.getLabRow(lab.getCode());
 
-				if (rows == null || rows.size() == 0) {
+				if (rows == null || rows.isEmpty()) {
 					lab.setResult(MessageBundle.getMessage("angal.lab.allnegative"));
 				} else {
 					lab.setResult(MessageBundle.getMessage("angal.lab.positive") + " : " + rows.get(0).getDescription());
@@ -442,7 +448,7 @@ public class LabManager {
 	}
 
 	/**
-	 * return a list of material descriptions (default: undefined):
+	 * Return a list of material descriptions (default: undefined):
 	 * undefined,
 	 * blood,
 	 * urine,
