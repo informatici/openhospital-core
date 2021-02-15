@@ -21,12 +21,7 @@
  */
 package org.isf.patient.model;
 
-import org.isf.opd.model.Opd;
-import org.isf.utils.db.Auditable;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import java.util.Date;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -44,8 +39,14 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.GregorianCalendar;
+
+import org.apache.commons.lang3.StringUtils;
+import org.isf.opd.model.Opd;
+import org.isf.utils.db.Auditable;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * ------------------------------------------
@@ -200,7 +201,7 @@ public class Patient extends Auditable<String>
 		
 		this.firstName = "";
 		this.secondName = ""; 
-		this.name = this.firstName + " " + this.secondName;
+		this.name = this.firstName + ' ' + this.secondName;
 		this.birthDate = null;
 		this.age = 0;
 		this.agetype = "";
@@ -225,7 +226,7 @@ public class Patient extends Auditable<String>
 		
 		this.firstName = opd.getfirstName();
 		this.secondName = opd.getsecondName(); 
-		this.name = this.firstName + " " + this.secondName;
+		this.name = this.firstName + ' ' + this.secondName;
 		this.birthDate = null;
 		this.age = opd.getAge();
 		this.agetype = "";
@@ -252,7 +253,7 @@ public class Patient extends Auditable<String>
 			String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.firstName = firstName;
 		this.secondName = secondName;
-		this.name = this.firstName + " " + this.secondName;
+		this.name = this.firstName + ' ' + this.secondName;
 		this.birthDate = birthDate;
 		this.age = age;
 		this.agetype = agetype;
@@ -321,10 +322,8 @@ public class Patient extends Auditable<String>
 
 	public int getAge() {
 		if (this.birthDate != null) {
-			GregorianCalendar birthday = new GregorianCalendar();
-			birthday.setTime(birthDate);
 			DateTime now = new DateTime();
-			DateTime birth = new DateTime(birthday.getTime());
+			DateTime birth = new DateTime(birthDate);
 			Period period = new Period(birth, now, PeriodType.yearMonthDay());
 			age = period.getYears();
 		}
@@ -334,10 +333,8 @@ public class Patient extends Auditable<String>
 	public int getMonths() {
 		int months = 0;
 		if (this.birthDate != null) {
-			GregorianCalendar birthday = new GregorianCalendar();
-			birthday.setTime(birthDate);
 			DateTime now = new DateTime();
-			DateTime birth = new DateTime(birthday.getTime());
+			DateTime birth = new DateTime(birthDate);
 			Period period = new Period(birth, now, PeriodType.months());
 			months = period.getMonths();
 		}
@@ -378,7 +375,7 @@ public class Patient extends Auditable<String>
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
-		this.name = this.firstName + " " + this.secondName;
+		this.name = this.firstName + ' ' + this.secondName;
 	}
 
 	public int getLock() {
@@ -403,7 +400,7 @@ public class Patient extends Auditable<String>
 
 	public void setSecondName(String secondName) {
 		this.secondName = secondName;
-		this.name = this.firstName + " " + this.secondName;
+		this.name = this.firstName + ' ' + this.secondName;
 	}
 
 	public char getSex() {
@@ -572,47 +569,45 @@ public class Patient extends Auditable<String>
 	public String getSearchString() {
 		StringBuffer sbName = new StringBuffer();
 		sbName.append(getCode());
-		sbName.append(" ");
+		sbName.append(' ');
 		sbName.append(getFirstName().toLowerCase());
-		sbName.append(" ");
+		sbName.append(' ');
 		sbName.append(getSecondName().toLowerCase());
-		sbName.append(" ");
+		sbName.append(' ');
 		sbName.append(getCity().toLowerCase());
-		sbName.append(" ");
-		if (getAddress() != null) sbName.append(getAddress().toLowerCase()).append(" ");
-		if (getTelephone() != null) sbName.append(getTelephone()).append(" ");
-		if (getNote() != null) sbName.append(getNote().toLowerCase()).append(" ");
-		if (getTaxCode() != null) sbName.append(getTaxCode().toLowerCase()).append(" ");
+		sbName.append(' ');
+		if (getAddress() != null) sbName.append(getAddress().toLowerCase()).append(' ');
+		if (getTelephone() != null) sbName.append(getTelephone()).append(' ');
+		if (getNote() != null) sbName.append(getNote().toLowerCase()).append(' ');
+		if (getTaxCode() != null) sbName.append(getTaxCode().toLowerCase()).append(' ');
 		return sbName.toString();
 	}
 	
 	public String getInformations() {
 		int i = 0;
 		StringBuffer infoBfr = new StringBuffer();
-		if (city != null && !city.equals("")) {
-			infoBfr.append(i > 0 ? " - " : "");
+		if (StringUtils.isNotEmpty(city)) {
 			infoBfr.append(city);
 			i++;
 		}
-		if (address != null && !address.equals("")) {
+		if (StringUtils.isNotEmpty(address)) {
 			infoBfr.append(i > 0 ? " - " : "");
 			infoBfr.append(address);
 			i++;
 		}
-		if (telephone != null && !telephone.equals("")) {
+		if (StringUtils.isNotEmpty(telephone)) {
 			infoBfr.append(i > 0 ? " - " : "");
 			infoBfr.append(telephone);
 			i++;
 		}
-		if (note != null && !note.equals("")) {
+		if (StringUtils.isNotEmpty(note)) {
 			infoBfr.append(i > 0 ? " - " : "");
 			infoBfr.append(note);
 			i++;
 		}
-		if (taxCode != null && !taxCode.equals("")) {
+		if (StringUtils.isNotEmpty(taxCode)) {
 			infoBfr.append(i > 0 ? " - " : "");
 			infoBfr.append(taxCode);
-			i++;
 		}
 		return infoBfr.toString();
 	}
