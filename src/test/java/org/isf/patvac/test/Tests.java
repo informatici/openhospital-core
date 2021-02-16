@@ -228,7 +228,6 @@ public class Tests extends OHCoreTestCase {
 		Vaccine vaccine = testVaccine.setup(vaccineType, false);
 		vaccine.setCode("ABC");
 		Patient patient = testPatient.setup(false);
-		patient.setCode(1);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 
 		// Today
@@ -241,11 +240,10 @@ public class Tests extends OHCoreTestCase {
 		patVacIoOperationRepository.saveAndFlush(patientVaccine);
 
 		VaccineType vaccineType2 = testVaccineType.setup(false);
-		vaccineType2.setCode("Z");
-		Vaccine vaccine2 = testVaccine.setup(vaccineType, false);
+		vaccineType2.setCode("X");
+		Vaccine vaccine2 = testVaccine.setup(vaccineType2, false);
 		vaccine2.setCode("CBA");
 		Patient patient2 = testPatient.setup(false);
-		patient2.setCode(2);
 		PatientVaccine patientVaccine2 = testPatientVaccine.setup(patient2, vaccine2, true);
 
 		// 8 days ago
@@ -266,10 +264,13 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetPatientVaccineLastWeek() throws Exception {
 		VaccineType vaccineType = testVaccineType.setup(false);
 		vaccineType.setCode("A");
+		vaccineType.setDescription("Type Description1");
 		Vaccine vaccine = testVaccine.setup(vaccineType, false);
 		vaccine.setCode("ABC");
+		vaccine.setDescription("Description1");
 		Patient patient = testPatient.setup(false);
-		patient.setCode(1);
+		patient.setFirstName("firstName1");
+		patient.setSecondName("secondName1");
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 
 		GregorianCalendar now = new GregorianCalendar();
@@ -283,10 +284,13 @@ public class Tests extends OHCoreTestCase {
 
 		VaccineType vaccineType2 = testVaccineType.setup(false);
 		vaccineType2.setCode("Z");
-		Vaccine vaccine2 = testVaccine.setup(vaccineType, false);
+		vaccineType2.setDescription("Type Description2");
+		Vaccine vaccine2 = testVaccine.setup(vaccineType2, false);
 		vaccine2.setCode("CBA");
+		vaccine2.setDescription("Description2");
 		Patient patient2 = testPatient.setup(false);
-		patient2.setCode(2);
+		patient2.setFirstName("firstName2");
+		patient2.setSecondName("secondName2");
 		PatientVaccine patientVaccine2 = testPatientVaccine.setup(patient2, vaccine2, true);
 
 		// 8 days ago
