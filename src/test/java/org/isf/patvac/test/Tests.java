@@ -193,7 +193,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetProgYear() throws Exception {
 		int prog_year = 0;
 		int found_prog_year = 0;
-		_setupTestPatientVaccine(false);
+		_setupTestPatientVaccine(true);
 		List<PatientVaccine> patientVaccineList = patvacIoOperation.getPatientVaccine(null, null, null, null, 'A', 0, 0);
 		for (PatientVaccine patVac : patientVaccineList) {
 			if (patVac.getProgr() > found_prog_year)
@@ -224,38 +224,82 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetPatientVaccineToday() throws Exception {
 		VaccineType vaccineType = testVaccineType.setup(false);
+		vaccineType.setCode("A");
 		Vaccine vaccine = testVaccine.setup(vaccineType, false);
+		vaccine.setCode("ABC");
 		Patient patient = testPatient.setup(false);
+		patient.setCode(1);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 
-		patientVaccine.setVaccineDate(new GregorianCalendar());
+		// Today
+		GregorianCalendar now = new GregorianCalendar();
+		patientVaccine.setVaccineDate(now);
 
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
 		vaccineIoOperationRepository.saveAndFlush(vaccine);
 		patientIoOperationRepository.saveAndFlush(patient);
 		patVacIoOperationRepository.saveAndFlush(patientVaccine);
 
+		VaccineType vaccineType2 = testVaccineType.setup(false);
+		vaccineType2.setCode("Z");
+		Vaccine vaccine2 = testVaccine.setup(vaccineType, false);
+		vaccine2.setCode("CBA");
+		Patient patient2 = testPatient.setup(false);
+		patient2.setCode(2);
+		PatientVaccine patientVaccine2 = testPatientVaccine.setup(patient2, vaccine2, true);
+
+		// 8 days ago
+		now.add(Calendar.DATE, -8);
+		patientVaccine2.setVaccineDate(now);
+
+		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType2);
+		vaccineIoOperationRepository.saveAndFlush(vaccine2);
+		patientIoOperationRepository.saveAndFlush(patient2);
+		patVacIoOperationRepository.saveAndFlush(patientVaccine2);
+
 		ArrayList<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(false);
+		assertThat(patientVaccines).hasSize(1);
 		assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(patientVaccine.getPatName());
 	}
 
 	@Test
 	public void testMgrGetPatientVaccineLastWeek() throws Exception {
 		VaccineType vaccineType = testVaccineType.setup(false);
+		vaccineType.setCode("A");
 		Vaccine vaccine = testVaccine.setup(vaccineType, false);
+		vaccine.setCode("ABC");
 		Patient patient = testPatient.setup(false);
+		patient.setCode(1);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 
-		GregorianCalendar date = new GregorianCalendar();
-		date.add(Calendar.DAY_OF_MONTH, -3);
-		patientVaccine.setVaccineDate(date);
+		GregorianCalendar now = new GregorianCalendar();
+		now.add(Calendar.DAY_OF_MONTH, -3);
+		patientVaccine.setVaccineDate(now);
 
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
 		vaccineIoOperationRepository.saveAndFlush(vaccine);
 		patientIoOperationRepository.saveAndFlush(patient);
 		patVacIoOperationRepository.saveAndFlush(patientVaccine);
 
+		VaccineType vaccineType2 = testVaccineType.setup(false);
+		vaccineType2.setCode("Z");
+		Vaccine vaccine2 = testVaccine.setup(vaccineType, false);
+		vaccine2.setCode("CBA");
+		Patient patient2 = testPatient.setup(false);
+		patient2.setCode(2);
+		PatientVaccine patientVaccine2 = testPatientVaccine.setup(patient2, vaccine2, true);
+
+		// 8 days ago
+		now.add(Calendar.DATE, -8);
+		patientVaccine2.setVaccineDate(now);
+
+		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType2);
+		vaccineIoOperationRepository.saveAndFlush(vaccine2);
+		patientIoOperationRepository.saveAndFlush(patient2);
+		patVacIoOperationRepository.saveAndFlush(patientVaccine2);
+
 		ArrayList<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(true);
+		assertThat(patientVaccines).hasSize(1);
 		assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(patientVaccine.getPatName());
 	}
 
