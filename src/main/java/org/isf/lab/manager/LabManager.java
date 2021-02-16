@@ -57,8 +57,18 @@ public class LabManager {
 	@Autowired
 	private LabIoOperations ioOperations;
 
-
 	protected HashMap<String, String> materialHashMap;
+
+	protected void setPatientConsistency(Laboratory laboratory) {
+		if (GeneralData.LABEXTENDED && laboratory.getPatient() != null) {
+			/*
+			 * Age and Sex has not to be updated for reporting purposes
+			 */
+			laboratory.setPatName(laboratory.getPatient().getName());
+			laboratory.setAge(laboratory.getPatient().getAge());
+			laboratory.setSex(String.valueOf(laboratory.getPatient().getSex()));
+		}
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
@@ -67,32 +77,24 @@ public class LabManager {
 	 * @throws OHDataValidationException
 	 */
 	protected void validateLaboratory(Laboratory laboratory) throws OHDataValidationException {
-		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (laboratory.getDate() == null)
 			laboratory.setDate(new GregorianCalendar());
 		if (laboratory.getExam() != null && laboratory.getExam().getProcedure() == 2) {
 			laboratory.setResult(MessageBundle.getMessage("angal.lab.multipleresults"));
 		}
 
-		//Check Exam Date
+		// Check Exam Date
 		if (laboratory.getExamDate() == null) {
 			errors.add(new OHExceptionMessage("noExamDateError",
 					MessageBundle.getMessage("angal.lab.pleaseinsertavalidexamdate"),
 					OHSeverityLevel.ERROR));
 		}
-		//Check Patient
+		// Check Patient
 		if (GeneralData.LABEXTENDED && laboratory.getPatient() == null) {
 			errors.add(new OHExceptionMessage("patientNullError",
 					MessageBundle.getMessage("angal.lab.pleaseselectapatient"),
 					OHSeverityLevel.ERROR));
-		} else if (GeneralData.LABEXTENDED && laboratory.getPatient() != null) {
-			/*
-			 * Age and Sex has not to be updated
-			 * for reporting purposes
-			 */
-			laboratory.setPatName(laboratory.getPatient().getName());
-			laboratory.setAge(laboratory.getPatient().getAge());
-			laboratory.setSex(String.valueOf(laboratory.getPatient().getSex()));
 		} else if (laboratory.getPatient() == null) {
 			String sex = laboratory.getSex().toUpperCase();
 			if (!(sex.equals("M") || sex.equals("F"))) {
@@ -205,6 +207,7 @@ public class LabManager {
 	 */
 	public boolean newLaboratory(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
 		validateLaboratory(laboratory);
+		setPatientConsistency(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.newLabFirstProcedure(laboratory);
 		} else if (laboratory.getExam().getProcedure() == 2) {
@@ -230,6 +233,7 @@ public class LabManager {
 	 */
 	public boolean newLaboratory2(Laboratory laboratory, ArrayList<LaboratoryRow> labRow) throws OHServiceException {
 		validateLaboratory(laboratory);
+		setPatientConsistency(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.newLabFirstProcedure(laboratory);
 		} else if (laboratory.getExam().getProcedure() == 2) {
@@ -308,7 +312,7 @@ public class LabManager {
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
 	public boolean newLaboratory2(List<Laboratory> labList, ArrayList<ArrayList<LaboratoryRow>> labRowList) throws OHServiceException {
-		if (labList.size() == 0)
+		if (labList.isEmpty())
 			throw new OHDataValidationException(new OHExceptionMessage("emptyListError",
 					MessageBundle.getMessage("angal.labnew.noexamsinserted"),
 					OHSeverityLevel.ERROR));
@@ -395,7 +399,7 @@ public class LabManager {
 			if (labResult.equalsIgnoreCase(MessageBundle.getMessage("angal.lab.multipleresults"))) {
 				rows = ioOperations.getLabRow(lab.getCode());
 
-				if (rows == null || rows.size() == 0) {
+				if (rows == null || rows.isEmpty()) {
 					lab.setResult(MessageBundle.getMessage("angal.lab.allnegative"));
 				} else {
 					lab.setResult(MessageBundle.getMessage("angal.lab.positive") + " : " + rows.get(0).getDescription());
@@ -431,7 +435,7 @@ public class LabManager {
 	}
 
 	private void buildMaterialHashMap() {
-		materialHashMap = new HashMap<String, String>();
+		materialHashMap = new HashMap<>();
 		materialHashMap.put("undefined", MessageBundle.getMessage("angal.lab.undefined"));
 		materialHashMap.put("blood", MessageBundle.getMessage("angal.lab.blood"));
 		materialHashMap.put("urine", MessageBundle.getMessage("angal.lab.urine"));
@@ -444,7 +448,7 @@ public class LabManager {
 	}
 
 	/**
-	 * return a list of material descriptions (default: undefined):
+	 * Return a list of material descriptions (default: undefined):
 	 * undefined,
 	 * blood,
 	 * urine,
@@ -460,18 +464,18 @@ public class LabManager {
 	public ArrayList<String> getMaterialList() {
 		if (materialHashMap == null)
 			buildMaterialHashMap();
-		ArrayList<String> materialDescriptionList = new ArrayList<String>(materialHashMap.values());
+		ArrayList<String> materialDescriptionList = new ArrayList<>(materialHashMap.values());
 		Collections.sort(materialDescriptionList, new DefaultSorter(MessageBundle.getMessage("angal.lab.undefined")));
 		return materialDescriptionList;
 	}
 
-//	/**
-//	 * Returns the max progressive number within specified month of specified year.
-//	 *
-//	 * @param lab
-//	 * @return <code>int</code> - the progressive number in the month
-//	 * @throws org.isf.utils.exception.OHServiceException
-//	 */
+	//	/**
+	//	 * Returns the max progressive number within specified month of specified year.
+	//	 *
+	//	 * @param lab
+	//	 * @return <code>int</code> - the progressive number in the month
+	//	 * @throws org.isf.utils.exception.OHServiceException
+	//	 */
    /*public int getProgMonth(int month, int year)  throws OHServiceException {
         return ioOperations.getProgMonth(month, year);
    }*/
