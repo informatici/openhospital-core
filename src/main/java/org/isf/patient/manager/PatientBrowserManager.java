@@ -313,7 +313,7 @@ public class PatientBrowserManager {
 				mergedPatient.setAge(age2);
 				mergedPatient.setBirthDate(bdate2);
 			}
-			if (bdate2 != null && !ageType2.isEmpty()) {
+			if (bdate2 != null && !StringUtils.isEmpty(ageType2)) {
 				//patient2 has AgeType
 				mergedPatient.setAge(age2);
 				mergedPatient.setAgetype(ageType2);

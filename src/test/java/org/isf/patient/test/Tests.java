@@ -94,11 +94,11 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetPatientsPageable() throws Exception {
 		_setupTestPatient(false);
-		ArrayList<Patient> patients = patientIoOperation.getPatients(createPageReqest());
+		ArrayList<Patient> patients = patientIoOperation.getPatients(createPageRequest());
 		testPatient.check(patients.get(patients.size() - 1));
 	}
 
-	private Pageable createPageReqest() {
+	private Pageable createPageRequest() {
 		return new PageRequest(0, 10);   // Page size 10
 	}
 
@@ -287,9 +287,18 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetPatientsPageable() throws Exception {
-		_setupTestPatient(false);
+		for (int idx = 0; idx < 15; idx++) {
+			_setupTestPatient(false);
+		}
+
+		// First page of 10
 		ArrayList<Patient> patients = patientBrowserManager.getPatient(0, 10);
+		assertThat(patients).hasSize(10);
 		testPatient.check(patients.get(patients.size() - 1));
+
+		// Go get the next page or 10
+		patients = patientBrowserManager.getPatient(1, 10);
+		assertThat(patients).hasSize(5);
 	}
 
 	@Test
@@ -426,14 +435,14 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrGetMartialList() throws Exception {
+	public void testMgrGetMaritalList() throws Exception {
 		resetHashMaps();
 		String[] maritalDescriptionList = patientBrowserManager.getMaritalList();
 		assertThat(maritalDescriptionList).isNotEmpty();
 	}
 
 	@Test
-	public void testMgrGetMartialTranslated() throws Exception {
+	public void testMgrGetMaritalTranslated() throws Exception {
 		resetHashMaps();
 		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
 		assertThat(patientBrowserManager.getMaritalTranslated(null)).isEqualTo("angal.patient.maritalstatusunknown");
@@ -442,7 +451,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrGetMartialKey() throws Exception {
+	public void testMgrGetMaritalKey() throws Exception {
 		resetHashMaps();
 		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
 		assertThat(patientBrowserManager.getMaritalKey(null)).isEqualTo("undefined");
