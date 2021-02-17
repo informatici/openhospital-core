@@ -109,18 +109,18 @@ public class Tests extends OHCoreTestCase {
 		cleanH2InMemoryDb();
 	}
 
-	@Test
-	public void testOpdGets() throws Exception {
-		int code = _setupTestOpd(false);
-		_checkOpdIntoDb(code);
-	}
-
 	@Parameterized.Parameters(name = "Test with OPDEXTENDED={0}")
 	public static Collection<Object[]> opdExtended() {
 		return Arrays.asList(new Object[][] {
 				{ false },
 				{ true }
 		});
+	}
+	
+	@Test
+	public void testOpdGets() throws Exception {
+		int code = _setupTestOpd(false);
+		_checkOpdIntoDb(code);
 	}
 
 	@Test
