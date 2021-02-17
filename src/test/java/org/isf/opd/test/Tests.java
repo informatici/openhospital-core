@@ -185,15 +185,31 @@ public class Tests extends OHCoreTestCase {
 		disease.getType().setCode("angal.opd.alltype");
 
 		Opd opd = testOpd.setup(patient, disease, true);
-		GregorianCalendar now = new GregorianCalendar();
-		opd.setVisitDate(now);
+		// set date to be today
+		opd.setVisitDate(new GregorianCalendar());
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		opdIoOperationRepository.saveAndFlush(opd);
+		Patient patient2 = testPatient.setup(false);
+		DiseaseType diseaseType2 = testDiseaseType.setup(false);
+
+		Disease disease2 = testDisease.setup(diseaseType2, false);
+
+		Opd opd2 = testOpd.setup(patient2, disease2, true);
+		GregorianCalendar now = new GregorianCalendar();
+		// set date to be 14 days ago (not within the TODAY test)
+		now.add(Calendar.DAY_OF_MONTH, -14);
+		opd2.setVisitDate(now);
+
+		patientIoOperationRepository.saveAndFlush(patient2);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
+		diseaseIoOperationRepository.saveAndFlush(disease2);
+		opdIoOperationRepository.saveAndFlush(opd2);
 
 		ArrayList<Opd> opds = opdIoOperation.getOpdList(false);
+		assertThat(opds).hasSize(1);
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(opd.getCode());
 	}
 
@@ -208,6 +224,7 @@ public class Tests extends OHCoreTestCase {
 
 		Opd opd = testOpd.setup(patient, disease, true);
 		GregorianCalendar date = new GregorianCalendar();
+		// set date to be 3 days ago (within last week)
 		date.add(Calendar.DAY_OF_MONTH, -3);
 		opd.setVisitDate(date);
 
@@ -216,7 +233,24 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		opdIoOperationRepository.saveAndFlush(opd);
 
+		Patient patient2 = testPatient.setup(false);
+		DiseaseType diseaseType2 = testDiseaseType.setup(false);
+
+		Disease disease2 = testDisease.setup(diseaseType2, false);
+
+		Opd opd2 = testOpd.setup(patient2, disease2, true);
+		GregorianCalendar date2 = new GregorianCalendar();
+		// set date to be 13 days aga (not within last week)
+		date2.add(Calendar.DAY_OF_MONTH, -13);
+		opd2.setVisitDate(date2);
+
+		patientIoOperationRepository.saveAndFlush(patient2);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
+		diseaseIoOperationRepository.saveAndFlush(disease2);
+		opdIoOperationRepository.saveAndFlush(opd2);
+
 		ArrayList<Opd> opds = opdIoOperation.getOpdList(true);
+		assertThat(opds).hasSize(1);
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(opd.getCode());
 	}
 
@@ -390,15 +424,32 @@ public class Tests extends OHCoreTestCase {
 		disease.getType().setCode("angal.opd.alltype");
 
 		Opd opd = testOpd.setup(patient, disease, true);
-		GregorianCalendar now = new GregorianCalendar();
-		opd.setVisitDate(now);
+		// set date to be today
+		opd.setVisitDate(new GregorianCalendar());
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		opdIoOperationRepository.saveAndFlush(opd);
 
+		Patient patient2 = testPatient.setup(false);
+		DiseaseType diseaseType2 = testDiseaseType.setup(false);
+
+		Disease disease2 = testDisease.setup(diseaseType2, false);
+
+		Opd opd2 = testOpd.setup(patient2, disease2, true);
+		GregorianCalendar now = new GregorianCalendar();
+		// set date to be 14 days ago (not within the TODAY test)
+		now.add(Calendar.DAY_OF_MONTH, -14);
+		opd2.setVisitDate(now);
+
+		patientIoOperationRepository.saveAndFlush(patient2);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
+		diseaseIoOperationRepository.saveAndFlush(disease2);
+		opdIoOperationRepository.saveAndFlush(opd2);
+
 		ArrayList<Opd> opds = opdBrowserManager.getOpd(false);
+		assertThat(opds).hasSize(1);
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(opd.getCode());
 	}
 
@@ -413,6 +464,7 @@ public class Tests extends OHCoreTestCase {
 
 		Opd opd = testOpd.setup(patient, disease, true);
 		GregorianCalendar date = new GregorianCalendar();
+		// set date to be 3 days ago (within last week)
 		date.add(Calendar.DAY_OF_MONTH, -3);
 		opd.setVisitDate(date);
 
@@ -421,7 +473,24 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		opdIoOperationRepository.saveAndFlush(opd);
 
+		Patient patient2 = testPatient.setup(false);
+		DiseaseType diseaseType2 = testDiseaseType.setup(false);
+
+		Disease disease2 = testDisease.setup(diseaseType2, false);
+
+		Opd opd2 = testOpd.setup(patient2, disease2, true);
+		GregorianCalendar date2 = new GregorianCalendar();
+		// set date to be 13 days ago (not within last week)
+		date2.add(Calendar.DAY_OF_MONTH, -13);
+		opd2.setVisitDate(date2);
+
+		patientIoOperationRepository.saveAndFlush(patient2);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
+		diseaseIoOperationRepository.saveAndFlush(disease2);
+		opdIoOperationRepository.saveAndFlush(opd2);
+
 		ArrayList<Opd> opds = opdBrowserManager.getOpd(true);
+		assertThat(opds).hasSize(1);
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(opd.getCode());
 	}
 
