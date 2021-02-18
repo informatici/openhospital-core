@@ -41,7 +41,7 @@ public class FileTools {
 
 	private static final String[] BINARY_UNITS = { "B", "M", "G" }; //Byte, Megabyte, Gigabyte 
 
-	protected static final String[][] dateTimeFormats = new String[][] {
+	private static final String[][] dateTimeFormats = new String[][] {
 			{ "yyyy-MM-dd", "\\d{4}-\\d{2}-\\d{2}" },
 			{ "dd-MM-yyyy", "\\d{2}-\\d{2}-\\d{4}" },
 			{ "dd-MM-yy", "\\d{2}-\\d{2}-\\d{2}" },
@@ -55,7 +55,7 @@ public class FileTools {
 			{ "yyyy-MM-dd_HHmm", "\\d{4}-\\d{2}-\\d{2}_\\d{4}" },
 	};
 
-	public FileTools() {
+	private FileTools() {
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class FileTools {
 	 * @return the list of retrieved date (first null)
 	 */
 	public static List<Date> getTimestampFromName(String formattedString) {
-		List<Date> datesFound = new ArrayList<Date>();
+		List<Date> datesFound = new ArrayList<>();
 		return getTimestampFromName(formattedString, datesFound);
 	}
 
@@ -119,7 +119,6 @@ public class FileTools {
 					datesFound.add(date);
 				}
 			} catch (ParseException e) {
-				date = null;
 			}
 		}
 
@@ -135,7 +134,7 @@ public class FileTools {
 		}
 
 		final int exponent = (int) (Math.log(bytes) / Math.log(base));
-		final String unit = BINARY_UNITS[exponent];
+		final String unit = BINARY_UNITS[exponent-1];
 		return String.format(locale, "%.1f %s", bytes / Math.pow(base, exponent), unit);
 	}
 
@@ -163,27 +162,4 @@ public class FileTools {
 		return size;
 	}
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		System.out.println("1. 09-03-2020      -> " + FileTools.getTimestampFromName("09-03-2020"));
-		System.out.println("2. 01-04-2020 1238 -> " + FileTools.getTimestampFromName("01-04-2020 1238"));
-		System.out.println("3. 02-05-2020_1122 -> " + FileTools.getTimestampFromName("02-05-2020_1122"));
-		System.out.println("4. 03-06-2020      -> " + FileTools.getTimestampFromName("03-06-2020"));
-		System.out.println("5. 04/03/2020      -> " + FileTools.getTimestampFromName("04/03/2020"));
-		System.out.println("6. 05/05/20        -> " + FileTools.getTimestampFromName("05/05/20"));
-		System.out.println("7. 2021-12-22 1100 -> " + FileTools.getTimestampFromName("2021-12-22 1100"));
-		System.out.println("8. 21-11-21_0922   -> " + FileTools.getTimestampFromName("21-11-21_0922"));
-
-		try {
-			System.out.println("1. 1024B -> " + FileTools.humanReadableByteCountParse("1024B"));
-			System.out.println("2. 4M   -> " + FileTools.humanReadableByteCountParse("4M"));
-			System.out.println("2. 16M   -> " + FileTools.humanReadableByteCountParse("16M"));
-			System.out.println("3. 256M  -> " + FileTools.humanReadableByteCountParse("256M"));
-			System.out.println("4. 1G    -> " + FileTools.humanReadableByteCountParse("1G"));
-		} catch (OHException e) {
-			e.printStackTrace();
-		}
-	}
 }
