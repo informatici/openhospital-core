@@ -27,10 +27,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.isf.generaldata.MessageBundle;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestTimeTools {
 
+	@Ignore
 	@Test
 	public void testGetDaysBetweenDatesDate() {
 		Date dateFrom = new Date(114, 10, 3, 0, 0, 0);
