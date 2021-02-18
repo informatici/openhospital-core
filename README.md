@@ -81,5 +81,5 @@ For Eclipse the process requires loading the formatting style and the import ord
  [openhospital-ui]: https://github.com/informatici/openhospital-ui
  [openhospital-api]: https://github.com/informatici/openhospital-api
  [contribution-guide]: https://openhospital.atlassian.net/wiki/display/OH/Contribution+Guidelines
- [jira]: https://openhospital.atlassian.net/issues/
+ [jira]: https://openhospital.atlassian.net/jira/software/c/projects/OP/issues/
  [database.prop]: https://github.com/informatici/openhospital-core/blob/develop/src/test/resources/database.properties
