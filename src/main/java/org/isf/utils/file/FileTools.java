@@ -46,17 +46,17 @@ public class FileTools {
 	private static final String[] BINARY_UNITS = { "B", "M", "G" }; //Byte, Megabyte, Gigabyte 
 
 	private static final String[][] dateTimeFormats = new String[][] {
-			{ "yyyy-MM-dd", "\\d{4}-\\d{2}-\\d{2}" },
-			{ "dd-MM-yyyy", "\\d{2}-\\d{2}-\\d{4}" },
-			{ "dd-MM-yy", "\\d{2}-\\d{2}-\\d{2}" },
-			{ "dd/MM/yyyy", "\\d{2}/\\d{2}/\\d{4}" },
-			{ "dd/MM/yy", "\\d{2}/\\d{2}/\\d{2}" },
-			{ "yyyy-MM-dd HHmm", "\\d{4}-\\d{2}-\\d{2} \\d{4}" },
-			{ "yyyy-MM-dd HHmmss", "\\d{4}-\\d{2}-\\d{2} \\d{6}" },
-			{ "yyyy-MM-dd_HHmmss", "\\d{4}-\\d{2}-\\d{2}_\\d{6}" },
-			{ "dd-MM-yy_HHmm", "\\d{2}-\\d{2}-\\d{2}_\\d{4}" },
-			{ "yyyy-MM-dd HHmm", "\\d{4}-\\d{2}-\\d{2} \\d{4}" },
-			{ "yyyy-MM-dd_HHmm", "\\d{4}-\\d{2}-\\d{2}_\\d{4}" },
+			{ "yyyy-MM-dd", "\\d{4}-\\d{2}-\\d{2}\\z" },
+			{ "dd-MM-yyyy", "\\d{2}-\\d{2}-\\d{4}\\z" },
+			{ "dd-MM-yyyy HHmm", "\\d{2}-\\d{2}-\\d{4} \\d{4}\\z" },
+			{ "dd-MM-yy", "\\d{2}-\\d{2}-\\d{2}\\z" },
+			{ "dd/MM/yyyy", "\\d{2}/\\d{2}/\\d{4}\\z" },
+			{ "dd/MM/yy", "\\d{2}/\\d{2}/\\d{2}\\z" },
+			{ "yyyy-MM-dd HHmm", "\\d{4}-\\d{2}-\\d{2} \\d{4}\\z" },
+			{ "yyyy-MM-dd HHmmss", "\\d{4}-\\d{2}-\\d{2} \\d{6}\\z" },
+			{ "yyyy-MM-dd_HHmmss", "\\d{4}-\\d{2}-\\d{2}_\\d{6}\\z" },
+			{ "dd-MM-yy_HHmm", "\\d{2}-\\d{2}-\\d{2}_\\d{4}\\z" },
+			{ "yyyy-MM-dd_HHmm", "\\d{4}-\\d{2}-\\d{2}_\\d{4}\\z" },
 	};
 
 	private FileTools() {
