@@ -23,64 +23,109 @@ package org.isf.utils.file;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestFileTools {
 
-	@Ignore
 	@Test
 	public void testGetTimestampFromName() throws Exception {
 		List<Date> dates = FileTools.getTimestampFromName("09-03-2020");
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2020, 2, 9, 0, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 		assertThat(dates)
 				.containsExactly(
-						new Date("Mon Mar 09 00:00:00 EDT 2020"),
-						new Date("Mon Mar 09 00:00:00 EDT 2020")
+						calendar.getTime(),
+						calendar.getTime()
 				);
+
 		dates = FileTools.getTimestampFromName("01-04-2020 1238");
+		calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2020, 3, 1, 0, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 		assertThat(dates)
 				.containsExactly(
-						new Date("Wed Apr 01 00:00:00 EDT 2020"),
-						new Date("Wed Apr 01 00:00:00 EDT 2020")
+						calendar.getTime(),
+						calendar.getTime()
 				);
-		dates = FileTools.getTimestampFromName("02-05-2020_1122");
+
+		dates = FileTools.getTimestampFromName("02-05-20_1122");
+		Calendar calendar1 = Calendar.getInstance(TimeZone.getDefault());
+		calendar1.set(2020, 4, 2, 0, 0, 0);
+		calendar1.set(Calendar.MILLISECOND, 0);
+		Calendar calendar2 = Calendar.getInstance(TimeZone.getDefault());
+		calendar2.set(2020, 4, 2, 11, 22, 0);
+		calendar2.set(Calendar.MILLISECOND, 0);
 		assertThat(dates)
 				.containsExactly(
-						new Date("Sat May 02 00:00:00 EDT 2020"),
-						new Date("Sat May 02 00:00:00 EDT 2020")
+						calendar1.getTime(),
+						calendar2.getTime()
 				);
+
 		dates = FileTools.getTimestampFromName("03-06-2020");
+		calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2020, 5, 3, 0, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 		assertThat(dates)
 				.containsExactly(
-						new Date("Wed Jun 03 00:00:00 EDT 2020"),
-						new Date("Wed Jun 03 00:00:00 EDT 2020")
+						calendar.getTime(),
+						calendar.getTime()
 				);
+
 		dates = FileTools.getTimestampFromName("04/03/2020");
+		calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2020, 2, 4, 0, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 		assertThat(dates)
 				.containsExactly(
-						new Date("Wed Mar 04 00:00:00 EST 2020"),
-						new Date("Wed Mar 04 00:00:00 EST 2020")
+						calendar.getTime(),
+						calendar.getTime()
 				);
+
 		dates = FileTools.getTimestampFromName("05/05/20");
-		assertThat(dates)
-				.containsExactly(new Date("Tue May 05 00:00:00 EDT 2020"));
-		dates = FileTools.getTimestampFromName("2021-12-22 1100");
+		calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2020, 4, 5, 0, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 		assertThat(dates)
 				.containsExactly(
-						new Date("Wed Dec 22 00:00:00 EST 2021"),
-						new Date("Wed Dec 21 00:00:00 EST 2022"),
-						new Date("Wed Dec 22 11:00:00 EST 2021"),
-						new Date("Wed Dec 22 11:00:00 EST 2021")
+						calendar.getTime()
 				);
-		dates = FileTools.getTimestampFromName("21-11-21_0922");
+
+		dates = FileTools.getTimestampFromName("2021-12-22 1100");
+		calendar1 = Calendar.getInstance(TimeZone.getDefault());
+		calendar1.set(2021, 11, 22, 0, 0, 0);
+		calendar1.set(Calendar.MILLISECOND, 0);
+		calendar2 = Calendar.getInstance(TimeZone.getDefault());
+		calendar2.set(2022, 11, 21, 0, 0, 0);
+		calendar2.set(Calendar.MILLISECOND, 0);
+		Calendar calendar3 = Calendar.getInstance(TimeZone.getDefault());
+		calendar3.set(2021, 11, 22, 11, 0, 0);
+		calendar3.set(Calendar.MILLISECOND, 0);
 		assertThat(dates)
 				.containsExactly(
-						new Date("Sun Nov 21 00:00:00 EST 2021"),
-						new Date("Sun Nov 21 09:22:00 EST 2021")
+						calendar1.getTime(),
+						calendar2.getTime(),
+						calendar3.getTime(),
+						calendar3.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("21-11-21_0922");
+		calendar1 = Calendar.getInstance(TimeZone.getDefault());
+		calendar1.set(2021, 10, 21, 0, 0, 0);
+		calendar1.set(Calendar.MILLISECOND, 0);
+		calendar2 = Calendar.getInstance(TimeZone.getDefault());
+		calendar2.set(2021, 10, 21, 9, 22, 0);
+		calendar2.set(Calendar.MILLISECOND, 0);
+		assertThat(dates)
+				.containsExactly(
+						calendar1.getTime(),
+						calendar2.getTime()
 				);
 	}
 
