@@ -120,6 +120,7 @@ public class TestTimeTools {
 		assertThat(TimeTools.getFormattedAge(dateTime)).isEqualTo("angal.common.agepattern");
 	}
 
+	@Ignore
 	@Test
 	public void testParseDate() throws Exception {
 		assertThat(TimeTools.parseDate("2021-11-03 23:59:59", "yyyy-MM-dd HH:mm:ss", false))
