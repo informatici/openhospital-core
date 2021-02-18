@@ -564,7 +564,9 @@ public class Tests extends OHCoreTestCase {
 		assertThatThrownBy(() -> {
 			Patient patient = testPatient.setup(true);
 
-			patient.setBirthDate(new Date(9999, 1, 1));
+			Calendar date = Calendar.getInstance();
+			date.set(999, 1, 1);
+			patient.setBirthDate(date.getTime());
 
 			patientBrowserManager.savePatient(patient);
 		})
@@ -669,7 +671,9 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		patient.setBirthDate(null);
 		assertThat(patient.getMonths()).isZero();
-		patient.setBirthDate(new Date(84, Calendar.AUGUST, 14));
+		Calendar date = Calendar.getInstance();
+		date.set(84, Calendar.AUGUST, 14);
+		patient.setBirthDate(date.getTime());
 		assertThat(patient.getMonths()).isGreaterThanOrEqualTo(438);
 	}
 
