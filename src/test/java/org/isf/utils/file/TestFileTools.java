@@ -27,10 +27,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestFileTools {
 
+	@Ignore
 	@Test
 	public void testGetTimestampFromName() throws Exception {
 		List<Date> dates = FileTools.getTimestampFromName("09-03-2020");
