@@ -33,11 +33,15 @@ import java.util.regex.Pattern;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Mwithi
  */
 public class FileTools {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileTools.class);
 
 	private static final String[] BINARY_UNITS = { "B", "M", "G" }; //Byte, Megabyte, Gigabyte 
 
@@ -119,9 +123,9 @@ public class FileTools {
 					datesFound.add(date);
 				}
 			} catch (ParseException e) {
+				LOGGER.error("ParseException (no date patterns found) in '{0}'", formattedString);
 			}
 		}
-
 		return datesFound;
 	}
 
