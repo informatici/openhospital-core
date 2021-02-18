@@ -21,11 +21,10 @@
  */
 package org.isf.patient.service;
 
-import org.hibernate.Hibernate;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -108,7 +107,7 @@ public class PatientIoOperations
 	 */
 	public Patient getPatient(String name) throws OHServiceException {
 		List<Patient> patients = repository.findByNameAndDeletedOrderByName(name, NOT_DELETED_STATUS);
-		if (patients.size() > 0) {
+		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size()-1);
 			Hibernate.initialize(patient.getPatientProfilePhoto());
 			return patient;
@@ -125,7 +124,7 @@ public class PatientIoOperations
 	 */
 	public Patient getPatient(Integer code) throws OHServiceException {
 		List<Patient> patients = repository.findAllWhereIdAndDeleted(code, NOT_DELETED_STATUS);
-		if (patients.size() > 0) {
+		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size()-1);
 			Hibernate.initialize(patient.getPatientProfilePhoto());
 			return patient;
