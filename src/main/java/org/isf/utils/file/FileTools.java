@@ -46,17 +46,17 @@ public class FileTools {
 	private static final String[] BINARY_UNITS = { "B", "M", "G" }; //Byte, Megabyte, Gigabyte 
 
 	private static final String[][] dateTimeFormats = new String[][] {
-			{ "yyyy-MM-dd", "\\d{4}-\\d{2}-\\d{2}\\z" },
-			{ "dd-MM-yyyy", "\\d{2}-\\d{2}-\\d{4}\\z" },
-			{ "dd-MM-yyyy HHmm", "\\d{2}-\\d{2}-\\d{4} \\d{4}\\z" },
-			{ "dd-MM-yy", "\\d{2}-\\d{2}-\\d{2}\\z" },
-			{ "dd/MM/yyyy", "\\d{2}/\\d{2}/\\d{4}\\z" },
-			{ "dd/MM/yy", "\\d{2}/\\d{2}/\\d{2}\\z" },
-			{ "yyyy-MM-dd HHmm", "\\d{4}-\\d{2}-\\d{2} \\d{4}\\z" },
-			{ "yyyy-MM-dd HHmmss", "\\d{4}-\\d{2}-\\d{2} \\d{6}\\z" },
-			{ "yyyy-MM-dd_HHmmss", "\\d{4}-\\d{2}-\\d{2}_\\d{6}\\z" },
-			{ "dd-MM-yy_HHmm", "\\d{2}-\\d{2}-\\d{2}_\\d{4}\\z" },
-			{ "yyyy-MM-dd_HHmm", "\\d{4}-\\d{2}-\\d{2}_\\d{4}\\z" },
+			{ "yyyy-MM-dd", "\\b\\d{4}-\\d{2}-\\d{2}" },
+			{ "dd-MM-yyyy", "\\b\\d{2}-\\d{2}-\\d{4}" },
+			{ "dd-MM-yyyy HHmm", "\\b\\d{2}-\\d{2}-\\d{4} \\d{4}" },
+			{ "dd-MM-yy", "\\b\\d{2}-\\d{2}-\\d{2}" },
+			{ "dd/MM/yyyy", "\\b\\d{2}/\\d{2}/\\d{4}" },
+			{ "dd/MM/yy", "\\b\\d{2}/\\d{2}/\\d{2}" },
+			{ "yyyy-MM-dd HHmm", "\\b\\d{4}-\\d{2}-\\d{2} \\d{4}" },
+			{ "yyyy-MM-dd HHmmss", "\\b\\d{4}-\\d{2}-\\d{2} \\d{6}" },
+			{ "yyyy-MM-dd_HHmmss", "\\b\\d{4}-\\d{2}-\\d{2}_\\d{6}" },
+			{ "dd-MM-yy_HHmm", "\\b\\d{2}-\\d{2}-\\d{2}_\\d{4}" },
+			{ "yyyy-MM-dd_HHmm", "\\b\\d{4}-\\d{2}-\\d{2}_\\d{4}" },
 	};
 
 	private FileTools() {
@@ -120,7 +120,9 @@ public class FileTools {
 
 				if (matcher.find()) {
 					date = sdf.parse(matcher.group());
-					datesFound.add(date);
+					if (!datesFound.contains(date)) {
+						datesFound.add(date);
+					}
 				}
 			} catch (ParseException e) {
 				LOGGER.error("ParseException (no date patterns found) in '{0}'", formattedString);
