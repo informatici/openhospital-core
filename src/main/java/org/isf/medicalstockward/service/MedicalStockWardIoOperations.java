@@ -120,40 +120,33 @@ public class MedicalStockWardIoOperations
 
 		return (int) (mainQuantity != null ? mainQuantity : 0.0);	
 	}
-	
+
 	/**
 	 * Stores the specified {@link Movement}.
+	 *
 	 * @param movement the movement to store.
 	 * @return <code>true</code> if has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs.
-	 */	
-	public boolean newMovementWard(
-			MovementWard movement) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
+	 */
+	public boolean newMovementWard(MovementWard movement) throws OHServiceException {
 		MovementWard savedMovement = movementRepository.save(movement);
-		if (savedMovement.getWardTo() != null) {
-			// We have to register also the income movement for the destination Ward
-			MovementWard destinationWardIncomeMovement = new MovementWard();
-			destinationWardIncomeMovement.setDate(savedMovement.getDate());
-			destinationWardIncomeMovement.setDescription(savedMovement.getWard().getDescription());
-			destinationWardIncomeMovement.setMedical(savedMovement.getMedical());
-			destinationWardIncomeMovement.setQuantity(-savedMovement.getQuantity());
-			destinationWardIncomeMovement.setUnits(savedMovement.getUnits());
-			destinationWardIncomeMovement.setWard(savedMovement.getWardTo());
-			destinationWardIncomeMovement.setWardFrom(savedMovement.getWard());
-			destinationWardIncomeMovement.setlot(savedMovement.getLot());
-			movementRepository.save(destinationWardIncomeMovement);
-		}
-		
 		if (savedMovement != null) {
+			if (savedMovement.getWardTo() != null) {
+				// We have to register also the income movement for the destination Ward
+				MovementWard destinationWardIncomeMovement = new MovementWard();
+				destinationWardIncomeMovement.setDate(savedMovement.getDate());
+				destinationWardIncomeMovement.setDescription(savedMovement.getWard().getDescription());
+				destinationWardIncomeMovement.setMedical(savedMovement.getMedical());
+				destinationWardIncomeMovement.setQuantity(-savedMovement.getQuantity());
+				destinationWardIncomeMovement.setUnits(savedMovement.getUnits());
+				destinationWardIncomeMovement.setWard(savedMovement.getWardTo());
+				destinationWardIncomeMovement.setWardFrom(savedMovement.getWard());
+				destinationWardIncomeMovement.setlot(savedMovement.getLot());
+				movementRepository.save(destinationWardIncomeMovement);
+			}
 			updateStockWardQuantity(movement);
 		}
-		result = (savedMovement != null);
-		
-		return result;
+		return (savedMovement != null);
 	}
 
 	/**
