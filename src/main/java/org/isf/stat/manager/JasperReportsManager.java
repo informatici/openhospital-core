@@ -780,6 +780,7 @@ public class JasperReportsManager {
         final Map localParameters = parameters;
         Connection connection = dataSource.getConnection();
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, localParameters, connection);
+        connection.close();
         return new JasperReportResultDto(jasperPrint, jasperFilename, filename);
     }
 
