@@ -23,7 +23,6 @@ package org.isf.operation.manager;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import org.isf.generaldata.MessageBundle;
 import org.isf.operation.model.Operation;
