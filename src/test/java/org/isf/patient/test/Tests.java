@@ -29,7 +29,6 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;

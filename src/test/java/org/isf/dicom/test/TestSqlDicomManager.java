@@ -35,7 +35,6 @@ import org.isf.dicomtype.test.TestDicomType;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHException;
-import org.isf.utils.exception.OHServiceException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
