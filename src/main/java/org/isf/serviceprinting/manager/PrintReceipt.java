@@ -147,9 +147,9 @@ public class PrintReceipt {
 			int i = 0;
 			while (!aLine.equals("")) {
 				//System.out.println(aLine);
-				zpl.append("^FO0," + (i * charH));//line position
-				zpl.append(font + "," + charH);//font size
-				zpl.append("^FD" + aLine + "^FS");//line field
+				zpl.append("^FO0,").append(i * charH);         //line position
+				zpl.append(font).append(",").append(charH);    //font size
+				zpl.append("^FD").append(aLine).append("^FS"); //line field
 				aLine = brStream.readLine();
 				i++;
 			}
