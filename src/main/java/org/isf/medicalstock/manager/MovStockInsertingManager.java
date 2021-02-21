@@ -92,14 +92,14 @@ public class MovStockInsertingManager {
 			// Check supplier
 			if (movement.getType().getType().contains("+")) {
 				Object supplier = movement.getSupplier();
-				if (supplier == null || supplier instanceof String) {
+				if (supplier instanceof String) {
 					errors.add(new OHExceptionMessage("emptyOrNullSupplierError",
 							MessageBundle.getMessage("angal.medicalstock.multiplecharging.pleaseselectasupplier"), //$NON-NLS-1$
 							OHSeverityLevel.ERROR));
 				}
 			} else {
 				Object ward = movement.getWard();
-				if (ward == null || ward instanceof String) {
+				if (ward instanceof String) {
 					errors.add(new OHExceptionMessage("emptyOrNullWardError",
 							MessageBundle.getMessage("angal.medicalstock.multipledischarging.pleaseselectaward"), //$NON-NLS-1$
 							OHSeverityLevel.ERROR));
