@@ -35,8 +35,177 @@ public class TestFileTools {
 
 	@Test
 	public void testGetTimestampFromName() throws Exception {
-		List<Date> dates = FileTools.getTimestampFromName("09-03-2020");
+
+		// Variations of "2021-12-22"
+		List<Date> dates = FileTools.getTimestampFromName("2021-12-22");
 		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2021, 11, 22, 0, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		assertThat(dates)
+				.containsExactly(
+						calendar.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_2021-12-22");
+		assertThat(dates)
+				.containsExactly(
+						calendar.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_2021-12-22_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendar.getTime()
+				);
+		dates = FileTools.getTimestampFromName("2021-12-22_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendar.getTime()
+				);
+
+		// Variations of "2021-12-22 1101"
+		dates = FileTools.getTimestampFromName("2021-12-22 1101");
+		Calendar calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarNoTime.set(2021, 11, 22, 0, 0, 0);
+		calendarNoTime.set(Calendar.MILLISECOND, 0);
+		Calendar calendarTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarTime.set(2021, 11, 22, 11, 1, 0);
+		calendarTime.set(Calendar.MILLISECOND, 0);
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_2021-12-22 1101");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_2021-12-22 1101_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("2021-12-22 1101_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		// Variations of "2021-12-22 110135"
+		dates = FileTools.getTimestampFromName("2021-12-22 110135");
+		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarNoTime.set(2021, 11, 22, 0, 0, 0);
+		calendarNoTime.set(Calendar.MILLISECOND, 0);
+		calendarTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarTime.set(2021, 11, 22, 11, 1, 35);
+		calendarTime.set(Calendar.MILLISECOND, 0);
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_2021-12-22 110135");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_2021-12-22 110135_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("2021-12-22 110135_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		// Variations of "2021-12-22_1101"
+		dates = FileTools.getTimestampFromName("2021-12-22_1101");
+		calendarTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarTime.set(2021, 11, 22, 11, 1, 0);
+		calendarTime.set(Calendar.MILLISECOND, 0);
+		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarNoTime.set(2021, 11, 22, 0, 0, 0);
+		calendarNoTime.set(Calendar.MILLISECOND, 0);
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_2021-12-22_1101");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_2021-12-22_1101_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("2021-12-22_1101_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		// Variations of "2021-12-22_110142"
+		dates = FileTools.getTimestampFromName("2021-12-22_110142");
+		calendarTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarTime.set(2021, 11, 22, 11, 1, 42);
+		calendarTime.set(Calendar.MILLISECOND, 0);
+		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarNoTime.set(2021, 11, 22, 0, 0, 0);
+		calendarNoTime.set(Calendar.MILLISECOND, 0);
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_2021-12-22_110142");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_2021-12-22_110142_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("2021-12-22_110142_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		// Variations of "09-03-2020"
+		dates = FileTools.getTimestampFromName("09-03-2020");
+		calendar = Calendar.getInstance(TimeZone.getDefault());
 		calendar.set(2020, 2, 9, 0, 0, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
 		assertThat(dates)
@@ -44,83 +213,387 @@ public class TestFileTools {
 						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("01-04-2020 1238");
-		calendar = Calendar.getInstance(TimeZone.getDefault());
-		calendar.set(2020, 3, 1, 0, 0, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
-		Calendar calendar1 = Calendar.getInstance(TimeZone.getDefault());
-		calendar1.set(2020, 3, 1, 12, 38, 0);
-		calendar1.set(Calendar.MILLISECOND, 0);
+		dates = FileTools.getTimestampFromName("someText_09-03-2020");
 		assertThat(dates)
 				.containsExactly(
-						calendar.getTime(),
-						calendar1.getTime()
+						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("02-05-20_1122");
-		calendar = Calendar.getInstance(TimeZone.getDefault());
-		calendar.set(2020, 4, 2, 0, 0, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
-		calendar1 = Calendar.getInstance(TimeZone.getDefault());
-		calendar1.set(2020, 4, 2, 11, 22, 0);
-		calendar1.set(Calendar.MILLISECOND, 0);
+		dates = FileTools.getTimestampFromName("someText_09-03-2020_text.txt");
 		assertThat(dates)
 				.containsExactly(
-						calendar.getTime(),
-						calendar1.getTime()
+						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("03-06-2020");
+		dates = FileTools.getTimestampFromName("09-03-2020_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendar.getTime()
+				);
+
+		// Variations of "09-03-2020 1212"
+		dates = FileTools.getTimestampFromName("09-03-2020 1122");
+		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
+		calendarNoTime.set(Calendar.MILLISECOND, 0);
+		calendarTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarTime.set(2020, 2, 9, 11, 22, 0);
+		calendarTime.set(Calendar.MILLISECOND, 0);
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09-03-2020 1122");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09-03-2020 1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("09-03-2020 1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		// Variations of "09-03-2020_1212"
+		dates = FileTools.getTimestampFromName("09-03-2020_1122");
+		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
+		calendarNoTime.set(Calendar.MILLISECOND, 0);
+		calendarTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarTime.set(2020, 2, 9, 11, 22, 0);
+		calendarTime.set(Calendar.MILLISECOND, 0);
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09-03-2020_1122");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09-03-2020_1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("09-03-2020_1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		// Variations of "09/03/2020"
+		dates = FileTools.getTimestampFromName("09/03/2020");
 		calendar = Calendar.getInstance(TimeZone.getDefault());
-		calendar.set(2020, 5, 3, 0, 0, 0);
+		calendar.set(2020, 2, 9, 0, 0, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
 		assertThat(dates)
 				.containsExactly(
 						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("04/03/2020");
+		dates = FileTools.getTimestampFromName("someText_09/03/2020");
+		assertThat(dates)
+				.containsExactly(
+						calendar.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09/03/2020_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendar.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("09/03/2020_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendar.getTime()
+				);
+
+		// Variations of "09/03/2020 1212"
+		dates = FileTools.getTimestampFromName("09/03/2020 1122");
+		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
+		calendarNoTime.set(Calendar.MILLISECOND, 0);
+		calendarTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarTime.set(2020, 2, 9, 11, 22, 0);
+		calendarTime.set(Calendar.MILLISECOND, 0);
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09/03/2020 1122");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09/03/2020 1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("09/03/2020 1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		// Variations of "09/03/2020_1212"
+		dates = FileTools.getTimestampFromName("09/03/2020_1122");
+		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
+		calendarNoTime.set(Calendar.MILLISECOND, 0);
+		calendarTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarTime.set(2020, 2, 9, 11, 22, 0);
+		calendarTime.set(Calendar.MILLISECOND, 0);
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09/03/2020_1122");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09/03/2020_1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("09/03/2020_1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		// Variations of "09-03-20"
+		dates = FileTools.getTimestampFromName("09-03-20");
 		calendar = Calendar.getInstance(TimeZone.getDefault());
-		calendar.set(2020, 2, 4, 0, 0, 0);
+		calendar.set(2020, 2, 9, 0, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		// TODO: this date string does not match
+		assertThat(dates)
+				.containsExactly(
+						calendar.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09-03-20");
+		assertThat(dates)
+				.containsExactly(
+						calendar.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09-03-20_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendar.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("09-03-20_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendar.getTime()
+				);
+
+		// Variations of "09-03-20 1212"
+		dates = FileTools.getTimestampFromName("09-03-20 1122");
+		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
+		calendarNoTime.set(Calendar.MILLISECOND, 0);
+		calendarTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarTime.set(2020, 2, 9, 11, 22, 0);
+		calendarTime.set(Calendar.MILLISECOND, 0);
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09-03-20 1122");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09-03-20 1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("09-03-20 1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		// Variations of "09-03-20_1212"
+		dates = FileTools.getTimestampFromName("09-03-20_1122");
+		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
+		calendarNoTime.set(Calendar.MILLISECOND, 0);
+		calendarTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarTime.set(2020, 2, 9, 11, 22, 0);
+		calendarTime.set(Calendar.MILLISECOND, 0);
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09-03-20_1122");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09-03-20_1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("09-03-20_1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		// Variations of "09/03/20"
+		dates = FileTools.getTimestampFromName("09/03/20");
+		calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2020, 2, 9, 0, 0, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
 		assertThat(dates)
 				.containsExactly(
 						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("05/05/20");
-		calendar = Calendar.getInstance(TimeZone.getDefault());
-		calendar.set(2020, 4, 5, 0, 0, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
+		dates = FileTools.getTimestampFromName("someText_09/03/20");
 		assertThat(dates)
 				.containsExactly(
 						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("2021-12-22 1101");
-		calendar = Calendar.getInstance(TimeZone.getDefault());
-		calendar.set(2021, 11, 22, 0, 0, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
-		calendar1 = Calendar.getInstance(TimeZone.getDefault());
-		calendar1.set(2021, 11, 22, 11, 1, 0);
-		calendar1.set(Calendar.MILLISECOND, 0);
+		dates = FileTools.getTimestampFromName("someText_09/03/20_text.txt");
 		assertThat(dates)
 				.containsExactly(
-						calendar.getTime(),
-						calendar1.getTime()
+						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("21-11-21_0922");
-		calendar = Calendar.getInstance(TimeZone.getDefault());
-		calendar.set(2021, 10, 21, 0, 0, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
-		calendar1 = Calendar.getInstance(TimeZone.getDefault());
-		calendar1.set(2021, 10, 21, 9, 22, 0);
-		calendar1.set(Calendar.MILLISECOND, 0);
+		dates = FileTools.getTimestampFromName("09/03/20_text.txt");
 		assertThat(dates)
 				.containsExactly(
-						calendar.getTime(),
-						calendar1.getTime()
+						calendar.getTime()
+				);
+
+		// Variations of "09/03/20 1212"
+		dates = FileTools.getTimestampFromName("09/03/20 1122");
+		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
+		calendarNoTime.set(Calendar.MILLISECOND, 0);
+		calendarTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarTime.set(2020, 2, 9, 11, 22, 0);
+		calendarTime.set(Calendar.MILLISECOND, 0);
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09/03/20 1122");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09/03/20 1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("09-03-2020 1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		// Variations of "09/03/20_1212"
+		dates = FileTools.getTimestampFromName("09/03/20_1122");
+		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
+		calendarNoTime.set(Calendar.MILLISECOND, 0);
+		calendarTime = Calendar.getInstance(TimeZone.getDefault());
+		calendarTime.set(2020, 2, 9, 11, 22, 0);
+		calendarTime.set(Calendar.MILLISECOND, 0);
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09/03/20_1122");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("someText_09/03/20_1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
+				);
+
+		dates = FileTools.getTimestampFromName("09/03/20_1122_text.txt");
+		assertThat(dates)
+				.containsExactly(
+						calendarNoTime.getTime(),
+						calendarTime.getTime()
 				);
 	}
 

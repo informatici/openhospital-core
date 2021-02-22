@@ -45,18 +45,36 @@ public class FileTools {
 
 	private static final String[] BINARY_UNITS = { "B", "M", "G" }; //Byte, Megabyte, Gigabyte 
 
+	// TODO: consider more specific versions of \d that do "some" validation
+	// DAY:   (0[1-9]|[12][0-9]|3[01])
+	// MONTH: (0[1-9]|1[012])
+	// YEAR:  (2\d\d\d)
+
+	// HOUR:  (0[0-9]|1[0-9]|2[0-3])
+	// MIN:   ([0-5][0-9])
+
 	private static final String[][] dateTimeFormats = new String[][] {
-			{ "yyyy-MM-dd", "\\b\\d{4}-\\d{2}-\\d{2}" },
-			{ "dd-MM-yyyy", "\\b\\d{2}-\\d{2}-\\d{4}" },
-			{ "dd-MM-yyyy HHmm", "\\b\\d{2}-\\d{2}-\\d{4} \\d{4}" },
-			{ "dd-MM-yy", "\\b\\d{2}-\\d{2}-\\d{2}" },
-			{ "dd/MM/yyyy", "\\b\\d{2}/\\d{2}/\\d{4}" },
-			{ "dd/MM/yy", "\\b\\d{2}/\\d{2}/\\d{2}" },
-			{ "yyyy-MM-dd HHmm", "\\b\\d{4}-\\d{2}-\\d{2} \\d{4}" },
-			{ "yyyy-MM-dd HHmmss", "\\b\\d{4}-\\d{2}-\\d{2} \\d{6}" },
-			{ "yyyy-MM-dd_HHmmss", "\\b\\d{4}-\\d{2}-\\d{2}_\\d{6}" },
-			{ "dd-MM-yy_HHmm", "\\b\\d{2}-\\d{2}-\\d{2}_\\d{4}" },
-			{ "yyyy-MM-dd_HHmm", "\\b\\d{4}-\\d{2}-\\d{2}_\\d{4}" },
+			{ "yyyy-MM-dd", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2})(?![0-9])" },
+			{ "yyyy-MM-dd HHmm", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2} \\d{4})(?![0-9])" },
+			{ "yyyy-MM-dd_HHmm", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2}_\\d{4})(?![0-9])" },
+			{ "yyyy-MM-dd HHmmss", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2} \\d{6})(?![0-9])" },
+			{ "yyyy-MM-dd_HHmmss", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2}_\\d{6})(?![0-9])" },
+
+			{ "dd-MM-yyyy", "(?<![0-9])(\\d{2}-\\d{2}-\\d{4})(?![0-9])" },
+			{ "dd-MM-yyyy HHmm", "(?<![0-9])(\\d{2}-\\d{2}-\\d{4} \\d{4})(?![0-9])" },
+			{ "dd-MM-yyyy_HHmm", "(?<![0-9])(\\d{2}-\\d{2}-\\d{4}_\\d{4})(?![0-9])" },
+
+			{ "dd-MM-yy", "(?<![0-9])(\\d{2}-\\d{2}-\\d{2})(?![0-9])" },
+			{ "dd-MM-yy HHmm", "(?<![0-9])(\\d{2}-\\d{2}-\\d{2} \\d{4})(?![0-9])" },
+			{ "dd-MM-yy_HHmm", "(?<![0-9])(\\d{2}-\\d{2}-\\d{2}_\\d{4})(?![0-9])" },
+
+			{ "dd/MM/yyyy", "(?<![0-9])(\\d{2}/\\d{2}/\\d{4})(?![0-9])" },
+			{ "dd/MM/yyyy HHmm", "(?<![0-9])(\\d{2}/\\d{2}/\\d{4} \\d{4})(?![0-9])" },
+			{ "dd/MM/yyyy_HHmm", "(?<![0-9])(\\d{2}/\\d{2}/\\d{4}_\\d{4})(?![0-9])" },
+
+			{ "dd/MM/yy", "(?<![0-9])(\\d{2}/\\d{2}/\\d{2})(?![0-9])" },
+			{ "dd/MM/yy HHmm", "(?<![0-9])(\\d{2}/\\d{2}/\\d{2} \\d{4})(?![0-9])" },
+			{ "dd/MM/yy_HHmm", "(?<![0-9])(\\d{2}/\\d{2}/\\d{2}_\\d{4})(?![0-9])" },
 	};
 
 	private FileTools() {
@@ -64,6 +82,7 @@ public class FileTools {
 
 	/**
 	 * Retrieves the last modified date
+	 *
 	 * @param file
 	 * @return
 	 */
@@ -75,6 +94,7 @@ public class FileTools {
 
 	/**
 	 * Retrieve timestamp from filename
+	 *
 	 * @param file
 	 * @return the list of retrieved date or <code>null</code> if nothing is found
 	 */
@@ -85,7 +105,7 @@ public class FileTools {
 	/**
 	 * Retrieves the timestamp from formattedString
 	 * using these date and time formats:<br>
-	 *
+	 * <p>
 	 * - yyyy-MM-dd -> "2020-02-01"<br>
 	 * - dd-MM-yyyy -> "02-03-2020"<br>
 	 * - dd-MM-yy -> "03-04-20"<br>
@@ -97,6 +117,7 @@ public class FileTools {
 	 * - dd-MM-yy_HHmm -> "20-10-09_0123"<br>
 	 * - yyyy-MM-dd HHmm -> "2020-10-09 0123"<br>
 	 * - yyyy-MM-dd_HHmm -> "2020-10-09_0123" <br>
+	 *
 	 * @param formattedString
 	 * @return the list of retrieved date (first null)
 	 */
@@ -113,13 +134,11 @@ public class FileTools {
 			String regex = dateTimeFormat[1];
 
 			SimpleDateFormat sdf = new SimpleDateFormat(format);
-
 			try {
 				Pattern pattern = Pattern.compile(regex);
 				Matcher matcher = pattern.matcher(formattedString);
-
 				if (matcher.find()) {
-					date = sdf.parse(matcher.group());
+					date = sdf.parse(matcher.group(1));
 					if (!datesFound.contains(date)) {
 						datesFound.add(date);
 					}
@@ -140,7 +159,7 @@ public class FileTools {
 		}
 
 		final int exponent = (int) (Math.log(bytes) / Math.log(base));
-		final String unit = BINARY_UNITS[exponent-1];
+		final String unit = BINARY_UNITS[exponent - 1];
 		return String.format(locale, "%.1f %s", bytes / Math.pow(base, exponent), unit);
 	}
 
