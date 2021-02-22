@@ -515,7 +515,7 @@ public class SourceFiles extends Thread {
 			candidateCode = Math.abs(random.nextLong());
 			exists = DicomManagerFactory.getManager().exist(patient, String.valueOf(candidateCode));
 
-		} while (exists != false);
+		} while (exists);
 
 		return String.valueOf(candidateCode);
 	}
