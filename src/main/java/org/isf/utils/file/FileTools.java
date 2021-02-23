@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
@@ -104,7 +105,7 @@ public class FileTools {
 	 * @param file
 	 * @return the list of retrieved date or <code>null</code> if nothing is found
 	 */
-	public static Date getTimestampFromName(File file) {
+	public static List<Date> getTimestampFromName(File file) {
 		return getTimestampFromName(file.getName());
 	}
 
@@ -127,9 +128,15 @@ public class FileTools {
 	 * @param formattedString
 	 * @return the list of retrieved date (first null)
 	 */
+	public static List<Date> getTimestampFromName(String formattedString) {
+		List<Date> datesFound = new ArrayList<Date>();
+		return getTimestampFromName(formattedString, datesFound);
+	}
 
-	public static Date getTimestampFromName(String formattedString) {
-		Date date = null;
+	private static List<Date> getTimestampFromName(String formattedString, List<Date> datesFound) {
+		if (null == formattedString || StringUtils.isEmpty(formattedString)) {
+			return datesFound;
+		}
 		for (String[] dateTimeFormat : dateTimeFormats) {
 			String format = dateTimeFormat[0];
 			String regex = dateTimeFormat[1];
@@ -139,14 +146,15 @@ public class FileTools {
 				Pattern pattern = Pattern.compile(regex);
 				Matcher matcher = pattern.matcher(formattedString);
 				if (matcher.find()) {
-					date = sdf.parse(matcher.group(1));
-					return date;
+					// only return the longest match
+					datesFound.add(sdf.parse(matcher.group(1)));
+					return datesFound;
 				}
 			} catch (ParseException e) {
 				LOGGER.error("ParseException (no date patterns found) in '{0}'", formattedString);
 			}
 		}
-		return date;
+		return datesFound;
 	}
 
 	public static String humanReadableByteCount(final long bytes, final Locale locale) {
