@@ -25,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -34,567 +33,465 @@ import org.junit.Test;
 public class TestFileTools {
 
 	@Test
-	public void testGetTimestampFromName() throws Exception {
+	public void testGetTimestampFromNameyyyydashMMdashdd_HHmmss() throws Exception {
 
-		// Variations of "2021-12-22"
-		List<Date> dates = FileTools.getTimestampFromName("2021-12-22");
+		// Variations of "yyyy-MM-dd_HHmmss"
 		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-		calendar.set(2021, 11, 22, 0, 0, 0);
+		calendar.set(2021, 2, 31, 12, 0, 59);
 		calendar.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
 
-		dates = FileTools.getTimestampFromName("some-Text_2021-12-22");
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
+		Date timestampFromName = FileTools.getTimestampFromName("2021-03-31_120059");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("some-Text2021-12-22_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
-		dates = FileTools.getTimestampFromName("2021-12-22_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_2021-03-31_120059");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		// Variations of "2021-12-22 1101"
-		dates = FileTools.getTimestampFromName("2021-12-22 1101");
-		Calendar calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarNoTime.set(2021, 11, 22, 0, 0, 0);
-		calendarNoTime.set(Calendar.MILLISECOND, 0);
-		Calendar calendarTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarTime.set(2021, 11, 22, 11, 1, 0);
-		calendarTime.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_2021-03-31_120059_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("some-Text_2021-12-22 1101");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("2021-03-31_120059_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
 
-		dates = FileTools.getTimestampFromName("some-Text_2021-12-22 1101_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+	@Test
+	public void testGetTimestampFromNameyyyydashMMdashddblanlHHmmss() throws Exception {
 
-		dates = FileTools.getTimestampFromName("2021-12-22 1101_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		// Variations of "yyyy-MM-dd HHmmss"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2021, 2, 31, 12, 0, 59);
+		calendar.set(Calendar.MILLISECOND, 0);
 
-		// Variations of "2021-12-22 110135"
-		dates = FileTools.getTimestampFromName("2021-12-22 110135");
-		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarNoTime.set(2021, 11, 22, 0, 0, 0);
-		calendarNoTime.set(Calendar.MILLISECOND, 0);
-		calendarTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarTime.set(2021, 11, 22, 11, 1, 35);
-		calendarTime.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		Date timestampFromName = FileTools.getTimestampFromName("2021-03-31 120059");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("some-Text_2021-12-22 110135");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_2021-03-31 120059");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("some-Text2021-12-22 110135_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_2021-03-31 120059_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("2021-12-22 110135_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("2021-03-31 120059_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
 
-		// Variations of "2021-12-22_1101"
-		dates = FileTools.getTimestampFromName("2021-12-22_1101");
-		calendarTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarTime.set(2021, 11, 22, 11, 1, 0);
-		calendarTime.set(Calendar.MILLISECOND, 0);
-		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarNoTime.set(2021, 11, 22, 0, 0, 0);
-		calendarNoTime.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+	@Test
+	public void testGetTimestampFromNameyyyydashMMdashdd_HHmm() throws Exception {
 
-		dates = FileTools.getTimestampFromName("some-Text_2021-12-22_1101");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		// Variations of "yyyy-MM-dd_HHmm"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2021, 8, 11, 12, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 
-		dates = FileTools.getTimestampFromName("some-Text_2021-12-22_1101_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		Date timestampFromName = FileTools.getTimestampFromName("2021-09-11_1200");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("2021-12-22_1101_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_2021-09-11_1200");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		// Variations of "2021-12-22_110142"
-		dates = FileTools.getTimestampFromName("2021-12-22_110142");
-		calendarTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarTime.set(2021, 11, 22, 11, 1, 42);
-		calendarTime.set(Calendar.MILLISECOND, 0);
-		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarNoTime.set(2021, 11, 22, 0, 0, 0);
-		calendarNoTime.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_2021-09-11_1200_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("some-Text_2021-12-22_110142");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("2021-09-11_1200_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
 
-		dates = FileTools.getTimestampFromName("some-Text_2021-12-22_110142_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+	@Test
+	public void testGetTimestampFromNameyyyydashMMdashddblankHHmm() throws Exception {
 
-		dates = FileTools.getTimestampFromName("2021-12-22_110142_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		// Variations of "yyyy-MM-dd HHmm"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2021, 9, 15, 12, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 
-		// Variations of "09-03-2020"
-		dates = FileTools.getTimestampFromName("09-03-2020");
-		calendar = Calendar.getInstance(TimeZone.getDefault());
+		Date timestampFromName = FileTools.getTimestampFromName("2021-10-15 1200");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_2021-10-15 1200");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_2021-10-15 1200_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("2021-10-15 1200_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
+
+	@Test
+	public void testGetTimestampFromNameyyyydashMMdashdd() throws Exception {
+
+		// Variations of "yyyy-MM-dd"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2023, 9, 15, 12, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		Date timestampFromName = FileTools.getTimestampFromName("2023-10-15 1200");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_2023-10-15 1200");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_2023-10-15 1200_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("2023-10-15 1200_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
+
+	@Test
+	public void testGetTimestampFromNameyyyyMMdd_HHmmss() throws Exception {
+
+		// Variations of "yyyyMMdd_HHmmss"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2021, 2, 31, 12, 0, 59);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		Date timestampFromName = FileTools.getTimestampFromName("20210331_120059");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_20210331_120059");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_20210331_120059_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("20210331_120059_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
+
+	@Test
+	public void testGetTimestampFromNameyyyyMMddblanlHHmmss() throws Exception {
+
+		// Variations of "yyyyMMdd HHmmss"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2021, 2, 31, 12, 0, 59);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		Date timestampFromName = FileTools.getTimestampFromName("20210331 120059");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_20210331 120059");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_20210331 120059_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("20210331 120059_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
+
+	@Test
+	public void testGetTimestampFromNameyyyyMMdd_HHmm() throws Exception {
+
+		// Variations of "yyyyMMdd_HHmm"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2021, 8, 11, 12, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		Date timestampFromName = FileTools.getTimestampFromName("20210911_1200");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_20210911_1200");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_20210911_1200_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("20210911_1200_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
+
+	@Test
+	public void testGetTimestampFromNameyyyyMMddblankHHmm() throws Exception {
+
+		// Variations of "yyyyMMdd HHmm"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2021, 9, 15, 12, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		Date timestampFromName = FileTools.getTimestampFromName("20211015 1200");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_20211015 1200");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_20211015 1200_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("20211015 1200_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
+
+	@Test
+	public void testGetTimestampFromNameyyyyMMdd() throws Exception {
+
+		// Variations of "yyyyMMdd"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2023, 9, 15, 12, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		Date timestampFromName = FileTools.getTimestampFromName("20231015 1200");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_20231015 1200");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_20231015 1200_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("20231015 1200_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
+
+	@Test
+	public void testGetTimeStampFromNamedddashMMdashyyyy_HHmm() throws Exception {
+
+		// Variations of "dd-MM-yyyy_HHmm"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2020, 2, 9, 11, 22, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		Date timestampFromName = FileTools.getTimestampFromName("09-03-2020_1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09-03-2020_1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09-03-2020_1122_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("09-03-2020_1122_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
+
+	@Test
+	public void testGetTimeStampFromNamedddashMMdashyyyyblankHHmm() throws Exception {
+
+		// Variations of "dd-MM-yyyy HHmm"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2020, 2, 9, 11, 22, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		Date timestampFromName = FileTools.getTimestampFromName("09-03-2020 1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09-03-2020 1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09-03-2020 1122_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("09-03-2020_1122 text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
+
+	@Test
+	public void testGetTimeStampFromNamedddashMMdashyyyy() throws Exception {
+
+		// Variations of "dd-MM-yyyy"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 		calendar.set(2020, 2, 9, 0, 0, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
 
-		dates = FileTools.getTimestampFromName("some-Text_09-03-2020");
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
+		Date timestampFromName = FileTools.getTimestampFromName("09-03-2020");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("some-Text09-03-2020_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09-03-2020");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("09-03-2020_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09-03-2020_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		// Variations of "09-03-2020 1212"
-		dates = FileTools.getTimestampFromName("09-03-2020 1122");
-		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
-		calendarNoTime.set(Calendar.MILLISECOND, 0);
-		calendarTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarTime.set(2020, 2, 9, 11, 22, 0);
-		calendarTime.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("09-03-2020text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
 
-		dates = FileTools.getTimestampFromName("some-Text_09-03-2020 1122");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+	@Test
+	public void testGetTimeStampFromNamedddashMMdashyy_HHmm() throws Exception {
 
-		dates = FileTools.getTimestampFromName("some-Text_09-03-2020 1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		// Variations of "dd-MM-yy_HHmm"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2037, 2, 9, 11, 22, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 
-		dates = FileTools.getTimestampFromName("09-03-2020 1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		Date timestampFromName = FileTools.getTimestampFromName("09-03-37_1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		// Variations of "09-03-2020_1212"
-		dates = FileTools.getTimestampFromName("09-03-2020_1122");
-		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
-		calendarNoTime.set(Calendar.MILLISECOND, 0);
-		calendarTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarTime.set(2020, 2, 9, 11, 22, 0);
-		calendarTime.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09-03-37_1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("some-Text_09-03-2020_1122");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09-03-37_1122_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("some-Text_09-03-2020_1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("09-03-37_1122_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
 
-		dates = FileTools.getTimestampFromName("09-03-2020_1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+	@Test
+	public void testGetTimeStampFromNamedddashMMdashyyblankHHmm() throws Exception {
 
-		// Variations of "09/03/2020"
-		dates = FileTools.getTimestampFromName("09/03/2020");
-		calendar = Calendar.getInstance(TimeZone.getDefault());
+		// Variations of "dd-MM-yy HHmm"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2020, 2, 9, 11, 22, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		Date timestampFromName = FileTools.getTimestampFromName("09-03-20 1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09-03-20 1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09-03-20 1122_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("09-03-20_1122 text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
+
+	@Test
+	public void testGetTimeStampFromNamedddashMMdashyy() throws Exception {
+
+		// Variations of "dd-MM-yy"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2020, 2, 22, 0, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		Date timestampFromName = FileTools.getTimestampFromName("22-03-20");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_22-03-20");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_22-03-20_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("22-03-20text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
+
+	@Test
+	public void testGetTimeStampFromNameddslashMMslashyyyy_HHmm() throws Exception {
+
+		// Variations of "dd/MM/yyyy_HHmm"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2020, 2, 9, 11, 22, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		Date timestampFromName = FileTools.getTimestampFromName("09/03/2020_1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09/03/2020_1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09/03/2020_1122_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("09/03/2020_1122_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
+
+	@Test
+	public void testGetTimeStampFromNameddslashMMslashyyyyblankHHmm() throws Exception {
+
+		// Variations of "dd/MM/yyyy HHmm"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2020, 2, 9, 11, 22, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		Date timestampFromName = FileTools.getTimestampFromName("09/03/2020 1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09/03/2020 1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09/03/2020 1122_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("09/03/2020_1122 text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
+
+	@Test
+	public void testGetTimeStampFromNameddslashMMslashyyyy() throws Exception {
+
+		// Variations of "dd/MM/yyyy"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 		calendar.set(2020, 2, 9, 0, 0, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
 
-		dates = FileTools.getTimestampFromName("some-Text_09/03/2020");
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
+		Date timestampFromName = FileTools.getTimestampFromName("09/03/2020");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("some-Text09/03/2020_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09/03/2020");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("09/03/2020_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09/03/2020_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		// Variations of "09/03/2020 1212"
-		dates = FileTools.getTimestampFromName("09/03/2020 1122");
-		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
-		calendarNoTime.set(Calendar.MILLISECOND, 0);
-		calendarTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarTime.set(2020, 2, 9, 11, 22, 0);
-		calendarTime.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("09/03/2020text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
 
-		dates = FileTools.getTimestampFromName("some-Text_09/03/2020 1122");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+	@Test
+	public void testGetTimeStampFromNameddslashMMslashyy_HHmm() throws Exception {
 
-		dates = FileTools.getTimestampFromName("some-Text09/03/2020 1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		// Variations of "dd/MM/yy_HHmm"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2020, 2, 9, 11, 22, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 
-		dates = FileTools.getTimestampFromName("09/03/2020 1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		Date timestampFromName = FileTools.getTimestampFromName("09/03/20_1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		// Variations of "09/03/2020_1212"
-		dates = FileTools.getTimestampFromName("09/03/2020_1122");
-		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
-		calendarNoTime.set(Calendar.MILLISECOND, 0);
-		calendarTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarTime.set(2020, 2, 9, 11, 22, 0);
-		calendarTime.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09/03/20_1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("some-Text_09/03/2020_1122");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09/03/20_1122_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("some-Text_09/03/2020_1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("09/03/20_1122_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
 
-		dates = FileTools.getTimestampFromName("09/03/2020_1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+	@Test
+	public void testGetTimeStampFromNameddslashMMslashyyblankHHmm() throws Exception {
 
-		// Variations of "09-03-20"
-		dates = FileTools.getTimestampFromName("09-03-20");
-		calendar = Calendar.getInstance(TimeZone.getDefault());
+		// Variations of "dd/MM/yy HHmm"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.set(2020, 2, 9, 11, 22, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		Date timestampFromName = FileTools.getTimestampFromName("09/03/20 1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09/03/20 1122");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09/03/20 1122_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+
+		timestampFromName = FileTools.getTimestampFromName("09/03/20_1122 text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
+	}
+
+	@Test
+	public void testGetTimeStampFromNameddslashMMslashyy() throws Exception {
+
+		// Variations of "dd/MM/yy"
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 		calendar.set(2020, 2, 9, 0, 0, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
-		// TODO: this date string does not match
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
 
-		dates = FileTools.getTimestampFromName("some-Text_09-03-20");
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
+		Date timestampFromName = FileTools.getTimestampFromName("09/03/20");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("some-Text_09-03-20_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09/03/20");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		dates = FileTools.getTimestampFromName("09-03-20_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("some-Text_09/03/20_text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		// Variations of "09-03-20 1212"
-		dates = FileTools.getTimestampFromName("09-03-20 1122");
-		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
-		calendarNoTime.set(Calendar.MILLISECOND, 0);
-		calendarTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarTime.set(2020, 2, 9, 11, 22, 0);
-		calendarTime.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
-
-		dates = FileTools.getTimestampFromName("some-Text_09-03-20 1122");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
-
-		dates = FileTools.getTimestampFromName("some-Text09-03-20 1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
-
-		dates = FileTools.getTimestampFromName("09-03-20 1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
-
-		// Variations of "09-03-20_1212"
-		dates = FileTools.getTimestampFromName("09-03-20_1122");
-		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
-		calendarNoTime.set(Calendar.MILLISECOND, 0);
-		calendarTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarTime.set(2020, 2, 9, 11, 22, 0);
-		calendarTime.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
-
-		dates = FileTools.getTimestampFromName("some-Text_09-03-20_1122");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
-
-		dates = FileTools.getTimestampFromName("some-Text_09-03-20_1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
-
-		dates = FileTools.getTimestampFromName("09-03-20_1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
-
-		// Variations of "09/03/20"
-		dates = FileTools.getTimestampFromName("09/03/20");
-		calendar = Calendar.getInstance(TimeZone.getDefault());
-		calendar.set(2020, 2, 9, 0, 0, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
-
-		dates = FileTools.getTimestampFromName("some-Text_09/03/20");
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
-
-		dates = FileTools.getTimestampFromName("some-Text_09/03/20_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
-
-		dates = FileTools.getTimestampFromName("09/03/20_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendar.getTime()
-				);
-
-		// Variations of "09/03/20 1212"
-		dates = FileTools.getTimestampFromName("09/03/20 1122");
-		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
-		calendarNoTime.set(Calendar.MILLISECOND, 0);
-		calendarTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarTime.set(2020, 2, 9, 11, 22, 0);
-		calendarTime.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
-
-		dates = FileTools.getTimestampFromName("some-Text_09/03/20 1122");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
-
-		dates = FileTools.getTimestampFromName("some-Text_09/03/20 1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
-
-		dates = FileTools.getTimestampFromName("09-03-2020 1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
-
-		// Variations of "09/03/20_1212"
-		dates = FileTools.getTimestampFromName("09/03/20_1122");
-		calendarNoTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarNoTime.set(2020, 2, 9, 0, 0, 0);
-		calendarNoTime.set(Calendar.MILLISECOND, 0);
-		calendarTime = Calendar.getInstance(TimeZone.getDefault());
-		calendarTime.set(2020, 2, 9, 11, 22, 0);
-		calendarTime.set(Calendar.MILLISECOND, 0);
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
-
-		dates = FileTools.getTimestampFromName("some-Text09/03/20_1122");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
-
-		dates = FileTools.getTimestampFromName("some-Text_09/03/20_1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
-
-		dates = FileTools.getTimestampFromName("09/03/20_1122_text.txt");
-		assertThat(dates)
-				.containsExactly(
-						calendarNoTime.getTime(),
-						calendarTime.getTime()
-				);
+		timestampFromName = FileTools.getTimestampFromName("09/03/20text.txt");
+		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 	}
 
 	@Test

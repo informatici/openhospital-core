@@ -54,27 +54,33 @@ public class FileTools {
 	// MIN:   ([0-5][0-9])
 
 	private static final String[][] dateTimeFormats = new String[][] {
-			{ "yyyy-MM-dd", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2})(?![0-9])" },
-			{ "yyyy-MM-dd HHmm", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2} \\d{4})(?![0-9])" },
-			{ "yyyy-MM-dd_HHmm", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2}_\\d{4})(?![0-9])" },
-			{ "yyyy-MM-dd HHmmss", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2} \\d{6})(?![0-9])" },
 			{ "yyyy-MM-dd_HHmmss", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2}_\\d{6})(?![0-9])" },
+			{ "yyyy-MM-dd HHmmss", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2} \\d{6})(?![0-9])" },
+			{ "yyyy-MM-dd_HHmm", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2}_\\d{4})(?![0-9])" },
+			{ "yyyy-MM-dd HHmm", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2} \\d{4})(?![0-9])" },
+			{ "yyyy-MM-dd", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2})(?![0-9])" },
 
-			{ "dd-MM-yyyy", "(?<![0-9])(\\d{2}-\\d{2}-\\d{4})(?![0-9])" },
-			{ "dd-MM-yyyy HHmm", "(?<![0-9])(\\d{2}-\\d{2}-\\d{4} \\d{4})(?![0-9])" },
+			{ "yyyyMMdd_HHmmss", "(?<![0-9])(\\d{4}\\d{2}\\d{2}_\\d{6})(?![0-9])" },
+			{ "yyyyMMdd HHmmss", "(?<![0-9])(\\d{4}\\d{2}\\d{2} \\d{6})(?![0-9])" },
+			{ "yyyyMMdd_HHmm", "(?<![0-9])(\\d{4}\\d{2}\\d{2}_\\d{4})(?![0-9])" },
+			{ "yyyyMMdd HHmm", "(?<![0-9])(\\d{4}\\d{2}\\d{2} \\d{4})(?![0-9])" },
+			{ "yyyyMMdd", "(?<![0-9])(\\d{4}\\d{2}\\d{2})(?![0-9])" },
+
 			{ "dd-MM-yyyy_HHmm", "(?<![0-9])(\\d{2}-\\d{2}-\\d{4}_\\d{4})(?![0-9])" },
+			{ "dd-MM-yyyy HHmm", "(?<![0-9])(\\d{2}-\\d{2}-\\d{4} \\d{4})(?![0-9])" },
+			{ "dd-MM-yyyy", "(?<![0-9])(\\d{2}-\\d{2}-\\d{4})(?![0-9])" },
 
-			{ "dd-MM-yy", "(?<![0-9])(\\d{2}-\\d{2}-\\d{2})(?![0-9])" },
-			{ "dd-MM-yy HHmm", "(?<![0-9])(\\d{2}-\\d{2}-\\d{2} \\d{4})(?![0-9])" },
 			{ "dd-MM-yy_HHmm", "(?<![0-9])(\\d{2}-\\d{2}-\\d{2}_\\d{4})(?![0-9])" },
+			{ "dd-MM-yy HHmm", "(?<![0-9])(\\d{2}-\\d{2}-\\d{2} \\d{4})(?![0-9])" },
+			{ "dd-MM-yy", "(?<![0-9])(\\d{2}-\\d{2}-\\d{2})(?![0-9])" },
 
-			{ "dd/MM/yyyy", "(?<![0-9])(\\d{2}/\\d{2}/\\d{4})(?![0-9])" },
-			{ "dd/MM/yyyy HHmm", "(?<![0-9])(\\d{2}/\\d{2}/\\d{4} \\d{4})(?![0-9])" },
 			{ "dd/MM/yyyy_HHmm", "(?<![0-9])(\\d{2}/\\d{2}/\\d{4}_\\d{4})(?![0-9])" },
+			{ "dd/MM/yyyy HHmm", "(?<![0-9])(\\d{2}/\\d{2}/\\d{4} \\d{4})(?![0-9])" },
+			{ "dd/MM/yyyy", "(?<![0-9])(\\d{2}/\\d{2}/\\d{4})(?![0-9])" },
 
-			{ "dd/MM/yy", "(?<![0-9])(\\d{2}/\\d{2}/\\d{2})(?![0-9])" },
-			{ "dd/MM/yy HHmm", "(?<![0-9])(\\d{2}/\\d{2}/\\d{2} \\d{4})(?![0-9])" },
 			{ "dd/MM/yy_HHmm", "(?<![0-9])(\\d{2}/\\d{2}/\\d{2}_\\d{4})(?![0-9])" },
+			{ "dd/MM/yy HHmm", "(?<![0-9])(\\d{2}/\\d{2}/\\d{2} \\d{4})(?![0-9])" },
+			{ "dd/MM/yy", "(?<![0-9])(\\d{2}/\\d{2}/\\d{2})(?![0-9])" },
 	};
 
 	private FileTools() {
@@ -98,7 +104,7 @@ public class FileTools {
 	 * @param file
 	 * @return the list of retrieved date or <code>null</code> if nothing is found
 	 */
-	public static List<Date> getTimestampFromName(File file) {
+	public static Date getTimestampFromName(File file) {
 		return getTimestampFromName(file.getName());
 	}
 
@@ -121,14 +127,9 @@ public class FileTools {
 	 * @param formattedString
 	 * @return the list of retrieved date (first null)
 	 */
-	public static List<Date> getTimestampFromName(String formattedString) {
-		List<Date> datesFound = new ArrayList<>();
-		return getTimestampFromName(formattedString, datesFound);
-	}
 
-	private static List<Date> getTimestampFromName(String formattedString, List<Date> datesFound) {
+	public static Date getTimestampFromName(String formattedString) {
 		Date date = null;
-
 		for (String[] dateTimeFormat : dateTimeFormats) {
 			String format = dateTimeFormat[0];
 			String regex = dateTimeFormat[1];
@@ -139,15 +140,13 @@ public class FileTools {
 				Matcher matcher = pattern.matcher(formattedString);
 				if (matcher.find()) {
 					date = sdf.parse(matcher.group(1));
-					if (!datesFound.contains(date)) {
-						datesFound.add(date);
-					}
+					return date;
 				}
 			} catch (ParseException e) {
 				LOGGER.error("ParseException (no date patterns found) in '{0}'", formattedString);
 			}
 		}
-		return datesFound;
+		return date;
 	}
 
 	public static String humanReadableByteCount(final long bytes, final Locale locale) {
