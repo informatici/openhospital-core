@@ -46,13 +46,13 @@ public class TestFileTools {
 						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_2021-12-22");
+		dates = FileTools.getTimestampFromName("some-Text_2021-12-22");
 		assertThat(dates)
 				.containsExactly(
 						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_2021-12-22_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text2021-12-22_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendar.getTime()
@@ -77,14 +77,14 @@ public class TestFileTools {
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_2021-12-22 1101");
+		dates = FileTools.getTimestampFromName("some-Text_2021-12-22 1101");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_2021-12-22 1101_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text_2021-12-22 1101_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
@@ -112,14 +112,14 @@ public class TestFileTools {
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_2021-12-22 110135");
+		dates = FileTools.getTimestampFromName("some-Text_2021-12-22 110135");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_2021-12-22 110135_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text2021-12-22 110135_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
@@ -147,14 +147,14 @@ public class TestFileTools {
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_2021-12-22_1101");
+		dates = FileTools.getTimestampFromName("some-Text_2021-12-22_1101");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_2021-12-22_1101_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text_2021-12-22_1101_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
@@ -182,14 +182,14 @@ public class TestFileTools {
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_2021-12-22_110142");
+		dates = FileTools.getTimestampFromName("some-Text_2021-12-22_110142");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_2021-12-22_110142_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text_2021-12-22_110142_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
@@ -213,13 +213,13 @@ public class TestFileTools {
 						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09-03-2020");
+		dates = FileTools.getTimestampFromName("some-Text_09-03-2020");
 		assertThat(dates)
 				.containsExactly(
 						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09-03-2020_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text09-03-2020_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendar.getTime()
@@ -245,14 +245,14 @@ public class TestFileTools {
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09-03-2020 1122");
+		dates = FileTools.getTimestampFromName("some-Text_09-03-2020 1122");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09-03-2020 1122_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text_09-03-2020 1122_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
@@ -280,14 +280,14 @@ public class TestFileTools {
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09-03-2020_1122");
+		dates = FileTools.getTimestampFromName("some-Text_09-03-2020_1122");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09-03-2020_1122_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text_09-03-2020_1122_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
@@ -311,13 +311,13 @@ public class TestFileTools {
 						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09/03/2020");
+		dates = FileTools.getTimestampFromName("some-Text_09/03/2020");
 		assertThat(dates)
 				.containsExactly(
 						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09/03/2020_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text09/03/2020_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendar.getTime()
@@ -343,14 +343,14 @@ public class TestFileTools {
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09/03/2020 1122");
+		dates = FileTools.getTimestampFromName("some-Text_09/03/2020 1122");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09/03/2020 1122_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text09/03/2020 1122_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
@@ -378,14 +378,14 @@ public class TestFileTools {
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09/03/2020_1122");
+		dates = FileTools.getTimestampFromName("some-Text_09/03/2020_1122");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09/03/2020_1122_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text_09/03/2020_1122_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
@@ -410,13 +410,13 @@ public class TestFileTools {
 						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09-03-20");
+		dates = FileTools.getTimestampFromName("some-Text_09-03-20");
 		assertThat(dates)
 				.containsExactly(
 						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09-03-20_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text_09-03-20_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendar.getTime()
@@ -442,14 +442,14 @@ public class TestFileTools {
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09-03-20 1122");
+		dates = FileTools.getTimestampFromName("some-Text_09-03-20 1122");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09-03-20 1122_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text09-03-20 1122_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
@@ -477,14 +477,14 @@ public class TestFileTools {
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09-03-20_1122");
+		dates = FileTools.getTimestampFromName("some-Text_09-03-20_1122");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09-03-20_1122_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text_09-03-20_1122_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
@@ -508,13 +508,13 @@ public class TestFileTools {
 						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09/03/20");
+		dates = FileTools.getTimestampFromName("some-Text_09/03/20");
 		assertThat(dates)
 				.containsExactly(
 						calendar.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09/03/20_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text_09/03/20_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendar.getTime()
@@ -540,14 +540,14 @@ public class TestFileTools {
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09/03/20 1122");
+		dates = FileTools.getTimestampFromName("some-Text_09/03/20 1122");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09/03/20 1122_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text_09/03/20 1122_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
@@ -575,14 +575,14 @@ public class TestFileTools {
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09/03/20_1122");
+		dates = FileTools.getTimestampFromName("some-Text09/03/20_1122");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
 						calendarTime.getTime()
 				);
 
-		dates = FileTools.getTimestampFromName("someText_09/03/20_1122_text.txt");
+		dates = FileTools.getTimestampFromName("some-Text_09/03/20_1122_text.txt");
 		assertThat(dates)
 				.containsExactly(
 						calendarNoTime.getTime(),
