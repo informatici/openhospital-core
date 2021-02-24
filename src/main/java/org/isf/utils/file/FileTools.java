@@ -129,7 +129,7 @@ public class FileTools {
 	 * @return the list of retrieved date (first null)
 	 */
 	public static List<Date> getTimestampFromName(String formattedString) {
-		List<Date> datesFound = new ArrayList<Date>();
+		List<Date> datesFound = new ArrayList<>(1);
 		return getTimestampFromName(formattedString, datesFound);
 	}
 
@@ -151,7 +151,7 @@ public class FileTools {
 					return datesFound;
 				}
 			} catch (ParseException e) {
-				LOGGER.error("ParseException (no date patterns found) in '{0}'", formattedString);
+				LOGGER.error("ParseException (no date patterns found) in '{}'", formattedString);
 			}
 		}
 		return datesFound;
@@ -172,7 +172,7 @@ public class FileTools {
 
 	public static Long humanReadableByteCountParse(String string) throws OHException {
 		final int base = 1024;
-		Long size = null;
+		long size;
 
 		try {
 			if (string.contains(BINARY_UNITS[0])) { // Byte
@@ -189,7 +189,7 @@ public class FileTools {
 			}
 		} catch (NumberFormatException e) {
 			throw new OHException(MessageBundle.getMessage("angal.dicom.unknownsizeformatpleasesetdicommaxsizeproperty") +
-					" (" + string + ")");
+					" (" + string + ')');
 		}
 		return size;
 	}
