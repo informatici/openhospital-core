@@ -92,18 +92,6 @@ public class ExamRowIoOperations {
 	 * Returns the list of {@link ExamRow}s
 	 * @return the list of {@link ExamRow}s
 	 * @throws OHServiceException
-	 * @deprecated use <code>getExamRows()</code>
-	 */
-	@Deprecated
-	public ArrayList<ExamRow> getExamrows() throws OHServiceException 
-	{
-		return getExamRows();
-	}
-
-	/**
-	 * Returns the list of {@link ExamRow}s
-	 * @return the list of {@link ExamRow}s
-	 * @throws OHServiceException
 	 */
 	public ArrayList<ExamRow> getExamRows() throws OHServiceException
 	{
