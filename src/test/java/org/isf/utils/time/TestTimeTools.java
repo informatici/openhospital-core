@@ -26,13 +26,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.isf.generaldata.MessageBundle;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestTimeTools {
 
-	@Ignore
 	@Test
 	public void testGetDaysBetweenDatesDate() {
 		Date dateFrom = new Date(114, 10, 3, 0, 0, 0);
@@ -68,7 +65,7 @@ public class TestTimeTools {
 	}
 
 	@Test
-	public void testIsSameDayDate() throws Exception {
+	public void testIsSameDayDate() {
 		Date day1 = new Date(114, 10, 3, 0, 0, 0);
 		Date day2 = new Date(114, 10, 3, 10, 10, 0);
 		assertThat(TimeTools.isSameDay(day1, day2)).isTrue();
@@ -78,7 +75,7 @@ public class TestTimeTools {
 	}
 
 	@Test
-	public void testIsSameDayGregorian() throws Exception {
+	public void testIsSameDayGregorian() {
 		GregorianCalendar day1 = new GregorianCalendar(2014, 10, 3, 0, 0, 0);
 		GregorianCalendar day2 = new GregorianCalendar(2014, 10, 3, 10, 10, 0);
 		assertThat(TimeTools.isSameDay(day1, day2)).isTrue();
@@ -88,31 +85,31 @@ public class TestTimeTools {
 	}
 
 	@Test
-	public void testFormatDateTimeGregorian() throws Exception {
+	public void testFormatDateTimeGregorian() {
 		GregorianCalendar dateTime = new GregorianCalendar(2021, 10, 3, 23, 59, 59);
 		assertThat(TimeTools.formatDateTime(dateTime, null)).isEqualTo("2021-11-03 23:59:59");
 	}
 
 	@Test
-	public void testFormatDateTimeDate() throws Exception {
+	public void testFormatDateTimeDate() {
 		Date dateTime = new Date(121, 10, 3, 23, 59, 59);
 		assertThat(TimeTools.formatDateTime(dateTime, null)).isEqualTo("2021-11-03 23:59:59");
 	}
 
 	@Test
-	public void testFormatDateTimeReportGregorian() throws Exception {
+	public void testFormatDateTimeReportGregorian() {
 		GregorianCalendar dateTime = new GregorianCalendar(2021, 10, 3, 23, 59, 59);
 		assertThat(TimeTools.formatDateTimeReport(dateTime)).isEqualTo("2021-11-03 23:59:59");
 	}
 
 	@Test
-	public void testFormatDateTimeReportDate() throws Exception {
+	public void testFormatDateTimeReportDate() {
 		Date dateTime = new Date(121, 10, 3, 23, 59, 59);
 		assertThat(TimeTools.formatDateTimeReport(dateTime)).isEqualTo("2021-11-03 23:59:59");
 	}
 
 	@Test
-	public void testFormatAge() throws Exception {
+	public void testFormatAge() {
 		assertThat(TimeTools.getFormattedAge(null)).isEmpty();
 		Date dateTime = new Date(121, 10, 3, 23, 59, 59);
 		// If message bundles were accessbile the age would look something like the pattern below
@@ -120,7 +117,6 @@ public class TestTimeTools {
 		assertThat(TimeTools.getFormattedAge(dateTime)).isEqualTo("angal.common.agepattern");
 	}
 
-	@Ignore
 	@Test
 	public void testParseDate() throws Exception {
 		assertThat(TimeTools.parseDate("2021-11-03 23:59:59", "yyyy-MM-dd HH:mm:ss", false))
