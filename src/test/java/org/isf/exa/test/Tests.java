@@ -138,7 +138,7 @@ public class Tests extends OHCoreTestCase {
 		ArrayList<ExamRow> examRows = examRowIoOperation.getExamRows();
 		assertThat(examRows.get(examRows.size() - 1).getDescription()).isEqualTo(foundExamRow.getDescription());
 		// deprecated method
-		examRows = examRowIoOperation.getExamrows();
+		examRows = examRowIoOperation.getExamRows();
 		assertThat(examRows.get(examRows.size() - 1).getDescription()).isEqualTo(foundExamRow.getDescription());
 	}
 
