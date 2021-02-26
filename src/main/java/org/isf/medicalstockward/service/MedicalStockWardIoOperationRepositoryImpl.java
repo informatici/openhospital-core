@@ -21,9 +21,9 @@
  */
 package org.isf.medicalstockward.service;
 
-import org.isf.medicalstockward.model.MovementWard;
-import org.isf.ward.model.Ward;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,9 +33,10 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import org.isf.medicalstockward.model.MovementWard;
+import org.isf.ward.model.Ward;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWardIoOperationRepositoryCustom {
@@ -47,38 +48,30 @@ public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWa
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	@SuppressWarnings("unchecked")	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Integer> findAllWardMovement(
-			String wardId, 
-			GregorianCalendar dateFrom, 
+			String wardId,
+			GregorianCalendar dateFrom,
 			GregorianCalendar dateTo) {
-		return _getWardMovementQuery(wardId, dateFrom, dateTo);
-	}	
-		
 
-	public List<Integer> _getWardMovementQuery(
-			String wardId, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo)
-	{
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
 		Root<MovementWard> root = query.from(MovementWard.class);
 		query.select(root.<Integer>get(CODE));
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 
-		if (wardId != null && !wardId.equals("")) {
+		if (!StringUtils.isEmpty(wardId)) {
 			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
 		}
 		if ((dateFrom != null) && (dateTo != null)) {
 			predicates.add(builder.between(root.<GregorianCalendar>get(DATE), dateFrom, dateTo));
 		}
 
-		List<Order> orderList = new ArrayList<Order>();
+		List<Order> orderList = new ArrayList<>();
 		orderList.add(builder.asc(root.get(DATE)));
 
-		query.where(predicates.toArray(new Predicate[]{})).orderBy(orderList);
+		query.where(predicates.toArray(new Predicate[] {})).orderBy(orderList);
 		return entityManager.createQuery(query).getResultList();
 	}
 }
