@@ -75,7 +75,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * Root dir for data storage
 	 */
 	private File dir = null;
-	private filterSerieDetail dsf = new filterSerieDetail();
+	private FilterSerieDetail dsf = new FilterSerieDetail();
 
 	/**
 	 * Constructor
@@ -656,7 +656,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	/**
 	 * Filter for files .thumn
 	 */
-	class filterSerieDetail implements FilenameFilter {
+	class FilterSerieDetail implements FilenameFilter {
 
 		public boolean accept(File dir, String name) {
 			if (name == null)
