@@ -40,7 +40,7 @@ import org.springframework.stereotype.Component;
 public class SmsManager {
 
 	public static final int MAX_LENGHT = 160;
-	private final String NUMBER_REGEX = "^\\+?\\d+$"; //$NON-NLS-1$
+	private static final String NUMBER_REGEX = "^\\+?\\d+$"; //$NON-NLS-1$
 
 	@Autowired
 	private SmsOperations smsOperations;

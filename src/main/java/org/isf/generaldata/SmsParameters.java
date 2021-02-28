@@ -31,22 +31,22 @@ import org.slf4j.LoggerFactory;
 public class SmsParameters {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private final String FILE_PROPERTIES = "sms.properties";
+	private static final String FILE_PROPERTIES = "sms.properties";
 
 	public static String MODE;
-	private static String DEFAULT_MODE = "GSM";
+	private static final String DEFAULT_MODE = "GSM";
 	
 	public static String GATEWAY;
-	private static String DEFAULT_GATEWAY = "";
+	private static final String DEFAULT_GATEWAY = "";
 	
 	public static int TIMEOUT;
-	private static int DEFAULT_TIMEOUT = 3000;
+	private static final int DEFAULT_TIMEOUT = 3000;
 	
     public static int LOOP;
-    private static int DEFAULT_LOOP = 300;
+    private static final int DEFAULT_LOOP = 300;
     
     public static String ICC;
-    private static String DEFAULT_ICC = "";
+    private static final String DEFAULT_ICC = "";
     
     private static SmsParameters mySingleData;
 	private Properties p;

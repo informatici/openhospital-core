@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 public class TxtPrinter {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private final String FILE_PROPERTIES = "txtPrinter.properties";
+	private static final String FILE_PROPERTIES = "txtPrinter.properties";
 
 	public static boolean USE_DEFAULT_PRINTER;
 	public static boolean PRINT_AS_PAID;
@@ -43,14 +43,14 @@ public class TxtPrinter {
     public static int ZPL_ROW_HEIGHT;
     public static String PRINTER;
     
-    private static boolean DEFAULT_USE_DEFAULT_PRINTER = true;
-    private static boolean DEFAULT_PRINT_AS_PAID = false;
-    private static boolean DEFAULT_PRINT_WITHOUT_ASK = false;
-    private static int DEFAULT_TXT_CHAR_HEIGHT = 10;
-    private static int DEFAULT_TXT_CHAR_WIDTH = 10;
-    private static String DEFAULT_MODE = "PDF";
-    private static String DEFAULT_ZPL_FONT_TYPE = "A";
-    private static int DEFAULT_ZPL_ROW_HEIGHT = 9;
+    private static final boolean DEFAULT_USE_DEFAULT_PRINTER = true;
+    private static final boolean DEFAULT_PRINT_AS_PAID = false;
+    private static final boolean DEFAULT_PRINT_WITHOUT_ASK = false;
+    private static final int DEFAULT_TXT_CHAR_HEIGHT = 10;
+    private static final int DEFAULT_TXT_CHAR_WIDTH = 10;
+    private static final String DEFAULT_MODE = "PDF";
+    private static final String DEFAULT_ZPL_FONT_TYPE = "A";
+    private static final int DEFAULT_ZPL_ROW_HEIGHT = 9;
     
     private static TxtPrinter mySingleData;
 	private Properties p;

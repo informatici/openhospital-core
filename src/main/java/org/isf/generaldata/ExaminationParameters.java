@@ -38,64 +38,64 @@ public class ExaminationParameters {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	public static int HEIGHT_MIN;
-	private static int DEFAULT_HEIGHT_MIN = 0;
+	private static final int DEFAULT_HEIGHT_MIN = 0;
 	
 	public static int HEIGHT_MAX;
-	private static int DEFAULT_HEIGHT_MAX = 250;
+	private static final int DEFAULT_HEIGHT_MAX = 250;
 	
 	public static int HEIGHT_INIT;
-	private static int DEFAULT_HEIGHT_INIT = 170;
+	private static final int DEFAULT_HEIGHT_INIT = 170;
 	
 //	public static String HEIGHT_UNIT;
-//	private static String DEFAULT_HEIGHT_UNIT = "cm";
+//	private final static String DEFAULT_HEIGHT_UNIT = "cm";
 	
 //	public static double HEIGHT_STEP;
-//	private static double DEFAULT_HEIGHT_STEP = 1;
+//	private final static double DEFAULT_HEIGHT_STEP = 1;
 	
 //	public static String WEIGHT_UNIT;
-//	private static String DEFAULT_WEIGHT_UNIT = "Kg";
+//	private final static String DEFAULT_WEIGHT_UNIT = "Kg";
 	
 	public static int WEIGHT_MIN;
-	private static int DEFAULT_WEIGHT_MIN = 0;
+	private static final int DEFAULT_WEIGHT_MIN = 0;
 	
 	public static int WEIGHT_MAX;
-	private static int DEFAULT_WEIGHT_MAX = 400;
+	private static final int DEFAULT_WEIGHT_MAX = 400;
 	
 	public static double WEIGHT_STEP;
-	private static double DEFAULT_WEIGHT_STEP = 0.1;
+	private static final double DEFAULT_WEIGHT_STEP = 0.1;
 	
 	public static int WEIGHT_INIT;
 	private static int DEFAULT_WEIGHT_INIT = 80;
 	
 //	public static String BP_UNIT;
-//	private static String DEFAULT_BP_UNIT = "mmHg";
+//	private final static String DEFAULT_BP_UNIT = "mmHg";
 	
 	public static int AP_MIN_INIT;
-	private static int DEFAULT_AP_MIN_INIT = 80;
+	private static final int DEFAULT_AP_MIN_INIT = 80;
 	
 	public static int AP_MAX_INIT;
-	private static int DEFAULT_AP_MAX_INIT = 120;
+	private static final int DEFAULT_AP_MAX_INIT = 120;
 	
 //	public static String HR_UNIT;
-//	private static String DEFAULT_HR_UNIT = "bpm";
+//	private final static String DEFAULT_HR_UNIT = "bpm";
 	
 	public static int HR_MIN;
-	private static int DEFAULT_HR_MIN = 0;
+	private static final int DEFAULT_HR_MIN = 0;
 	
 	public static int HR_MAX;
-	private static int DEFAULT_HR_MAX = 240;
+	private static final int DEFAULT_HR_MAX = 240;
 	
 	public static int HR_INIT;
-	private static int DEFAULT_HR_INIT = 60;
+	private static final int DEFAULT_HR_INIT = 60;
 	
 	public static int RR_MIN;
-	private static int DEFAULT_RR_MIN = 0;
+	private static final int DEFAULT_RR_MIN = 0;
 	
 	public static int RR_MAX;
-	private static int DEFAULT_RR_MAX = 100;
+	private static final int DEFAULT_RR_MAX = 100;
 	
 	public static int RR_INIT;
-	private static int DEFAULT_RR_INIT = 15;
+	private static final int DEFAULT_RR_INIT = 15;
 
 	public static String AUSCULTATION_INIT = "normal";
 	
@@ -107,53 +107,53 @@ public class ExaminationParameters {
 //	private static String DEFAULT_TEMP_UNIT = "°C";
 	
 	public static int TEMP_MIN;
-	private static int DEFAULT_TEMP_MIN = 0;
+	private static final int DEFAULT_TEMP_MIN = 0;
 	
 	public static int TEMP_MAX;
-	private static int DEFAULT_TEMP_MAX = 50;
+	private static final int DEFAULT_TEMP_MAX = 50;
 	
 	public static int TEMP_INIT;
-	private static int DEFAULT_TEMP_INIT = 36;
+	private static final int DEFAULT_TEMP_INIT = 36;
 	
 	public static Double TEMP_STEP;
-	private static Double DEFAULT_TEMP_STEP = 0.1;
+	private static final Double DEFAULT_TEMP_STEP = 0.1;
 	
 //	public static String SAT_UNIT;
-//	private static String DEFAULT_SAT_UNIT = "%";
+//	private final static String DEFAULT_SAT_UNIT = "%";
 	
 	public static int SAT_MIN;
-	private static int DEFAULT_SAT_MIN = 50;
+	private static final int DEFAULT_SAT_MIN = 50;
 	
 	//deprecated
 	//public static int SAT_MAX;
-	//private static int DEFAULT_SAT_MAX = 100;
+	//private final static int DEFAULT_SAT_MAX = 100;
 	
 	public static int SAT_INIT;
-	private static int DEFAULT_SAT_INIT = 90;
+	private static final int DEFAULT_SAT_INIT = 90;
 	
 	public static double SAT_STEP;
-	private static double DEFAULT_SAT_STEP = 0.1;
+	private static final double DEFAULT_SAT_STEP = 0.1;
 	
 	public static int HGT_MIN;
-	private static int DEFAULT_HGT_MIN = 30;
+	private static final int DEFAULT_HGT_MIN = 30;
 	
 	public static int HGT_MAX;
-	private static int DEFAULT_HGT_MAX = 600;
+	private static final int DEFAULT_HGT_MAX = 600;
 	
 	public static int HGT_INIT;
-	private static int DEFAULT_HGT_INIT = 80;
+	private static final int DEFAULT_HGT_INIT = 80;
 	
 	public static int DIURESIS_MIN;
-	private static int DEFAULT_DIURESIS_MIN = 0;
+	private static final int DEFAULT_DIURESIS_MIN = 0;
 	
 	public static int DIURESIS_MAX;
-	private static int DEFAULT_DIURESIS_MAX = 2500;
+	private static final int DEFAULT_DIURESIS_MAX = 2500;
 	
 	public static int DIURESIS_INIT;
-	private static int DEFAULT_DIURESIS_INIT = 100;
+	private static final int DEFAULT_DIURESIS_INIT = 100;
 	
 	public static int LIST_SIZE;
-	private static int DEFAULT_LIST_SIZE = 4;
+	private static final int DEFAULT_LIST_SIZE = 4;
 	
 	private static ExaminationParameters mySingleData;
 
