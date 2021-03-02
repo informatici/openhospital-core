@@ -147,14 +147,14 @@ public class Patient extends Auditable<String>
 
 	@NotNull
 	@Column(name="PAT_MOTH_NAME")
-	private String mother_name; // mother's name
+	private String motherName; // mother's name
 	
 	@Column(name="PAT_MOTH")
 	private char mother = ' '; // D=dead, A=alive
 
 	@NotNull
 	@Column(name="PAT_FATH_NAME")
-	private String father_name; // father's name
+	private String fatherName; // father's name
 	
 	@Column(name="PAT_FATH")
 	private char father = ' '; // D=dead, A=alive
@@ -210,9 +210,9 @@ public class Patient extends Auditable<String>
 		this.city = "";
 		this.nextKin = ""; 
 		this.telephone = "";
-		this.mother_name = "";
+		this.motherName = "";
 		this.mother = ' ';
-		this.father_name = "";
+		this.fatherName = "";
 		this.father = ' ';
 		this.bloodType = "";
 		this.hasInsurance = ' ';
@@ -235,9 +235,9 @@ public class Patient extends Auditable<String>
 		this.city = opd.getcity();
 		this.nextKin = opd.getnextKin(); 
 		this.telephone = "";
-		this.mother_name = "";
+		this.motherName = "";
 		this.mother = ' ';
-		this.father_name = "";
+		this.fatherName = "";
 		this.father = ' ';
 		this.bloodType = "";
 		this.hasInsurance = ' ';
@@ -248,7 +248,7 @@ public class Patient extends Auditable<String>
 	
 	public Patient(String firstName, String secondName, Date birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone,
-			String mother_name, char mother, String father_name, char father,
+			String motherName, char mother, String fatherName, char father,
 			String bloodType, char economicStatut, char parentTogether, String personalCode, 
 			String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.firstName = firstName;
@@ -262,9 +262,9 @@ public class Patient extends Auditable<String>
 		this.city = city;
 		this.nextKin = nextKin;
 		this.telephone = telephone;
-		this.mother_name = mother_name;
+		this.motherName = motherName;
 		this.mother = mother;
-		this.father_name = father_name;
+		this.fatherName = fatherName;
 		this.father = father;
 		this.hasInsurance = economicStatut;
 		this.bloodType = bloodType;
@@ -276,7 +276,7 @@ public class Patient extends Auditable<String>
 		
 	public Patient(int code, String firstName, String secondName, String name, Date birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone, String note,
-			String mother_name, char mother, String father_name, char father,
+			String motherName, char mother, String fatherName, char father,
 			String bloodType, char economicStatut, char parentTogether, String taxCode,
 			String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.code = code;
@@ -292,9 +292,9 @@ public class Patient extends Auditable<String>
 		this.nextKin = nextKin;
 		this.telephone = telephone;
 		this.note = note;
-		this.mother_name = mother_name;
+		this.motherName = motherName;
 		this.mother = mother;
-		this.father_name = father_name;
+		this.fatherName = fatherName;
 		this.father = father;
 		this.hasInsurance = economicStatut;
 		this.bloodType = bloodType;
@@ -475,20 +475,20 @@ public class Patient extends Auditable<String>
 		return getName();
 	}
 
-	public String getFather_name() {
-		return father_name;
+	public String getFatherName() {
+		return fatherName;
 	}
 
-	public void setFather_name(String father_name) {
-		this.father_name = father_name;
+	public void setFatherName(String father_name) {
+		this.fatherName = father_name;
 	}
 
-	public String getMother_name() {
-		return mother_name;
+	public String getMotherName() {
+		return motherName;
 	}
 
-	public void setMother_name(String mother_name) {
-		this.mother_name = mother_name;
+	public void setMotherName(String mother_name) {
+		this.motherName = mother_name;
 	}
 
 	public String getTaxCode() {

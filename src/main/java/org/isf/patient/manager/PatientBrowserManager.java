@@ -332,14 +332,14 @@ public class PatientBrowserManager {
 		if (StringUtils.isEmpty(mergedPatient.getTelephone()))
 			mergedPatient.setTelephone(patient2.getTelephone());
 
-		if (StringUtils.isEmpty(mergedPatient.getMother_name()))
-			mergedPatient.setMother_name(patient2.getMother_name());
+		if (StringUtils.isEmpty(mergedPatient.getMotherName()))
+			mergedPatient.setMotherName(patient2.getMotherName());
 
 		if (mergedPatient.getMother() == 'U')
 			mergedPatient.setMother(patient2.getMother());
 
-		if (StringUtils.isEmpty(mergedPatient.getFather_name()))
-			mergedPatient.setFather_name(patient2.getFather_name());
+		if (StringUtils.isEmpty(mergedPatient.getFatherName()))
+			mergedPatient.setFatherName(patient2.getFatherName());
 
 		if (mergedPatient.getFather() == 'U')
 			mergedPatient.setFather(patient2.getFather());
