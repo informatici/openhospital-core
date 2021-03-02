@@ -133,7 +133,7 @@ public class SmsManager {
 		smsOperations.delete(smsToDelete);
 	}
 
-	public int getMAX_LENGHT() {
+	public int getMaxLength() {
 		return MAX_LENGHT;
 	}
 
