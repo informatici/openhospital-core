@@ -86,9 +86,9 @@ public class TestPatient {
 		patient.setCity(city);
 		patient.setNextKin(nextKin);
 		patient.setTelephone(telephone);
-		patient.setMother_name(mother_name);
+		patient.setMotherName(mother_name);
 		patient.setMother(mother);
-		patient.setFather_name(father_name);
+		patient.setFatherName(father_name);
 		patient.setFather(father);
 		patient.setBloodType(bloodType);
 		patient.setHasInsurance(hasInsurance);
@@ -109,9 +109,9 @@ public class TestPatient {
 		assertThat(patient.getCity()).isEqualTo(city);
 		assertThat(patient.getNextKin()).isEqualTo(nextKin);
 		assertThat(patient.getTelephone()).isEqualTo(telephone);
-		assertThat(patient.getMother_name()).isEqualTo(mother_name);
+		assertThat(patient.getMotherName()).isEqualTo(mother_name);
 		assertThat(patient.getMother()).isEqualTo(mother);
-		assertThat(patient.getFather_name()).isEqualTo(father_name);
+		assertThat(patient.getFatherName()).isEqualTo(father_name);
 		assertThat(patient.getFather()).isEqualTo(father);
 		assertThat(patient.getBloodType()).isEqualTo(bloodType);
 		assertThat(patient.getHasInsurance()).isEqualTo(hasInsurance);
