@@ -49,8 +49,8 @@ public class Server {
 
 	public void login(String userName, String password) throws XMPPException {
 		XmppData.getXmppData();
-		domain = XmppData.DOMAIN;
-		port = XmppData.PORT;
+		domain = XmppData.domain;
+		port = XmppData.port;
 		user = userName;
 		ConnectionConfiguration config = new ConnectionConfiguration(domain, port);
 		connection = new XMPPConnection(config);

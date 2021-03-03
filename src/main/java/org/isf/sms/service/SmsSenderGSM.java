@@ -50,7 +50,7 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 
 	private static Logger logger = LoggerFactory.getLogger(SmsSenderGSM.class);
 	
-	private final String EOF = "\r";
+	private static final String EOF = "\r";
 	
 	private Enumeration<?> portList;
 	private CommPortIdentifier portId;

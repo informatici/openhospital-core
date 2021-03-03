@@ -34,25 +34,25 @@ import org.slf4j.LoggerFactory;
 public class SkebbyParameters {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private final String FILE_PROPERTIES = "Skebby.properties";
+	private static final String FILE_PROPERTIES = "Skebby.properties";
 
 	public static String URL;
-    private static String DEFAULT_URL = "";
+    private static final String DEFAULT_URL = "";
     
     public static String USR;
-    private static String DEFAULT_USR = "";
+    private static final String DEFAULT_USR = "";
     
     public static String PWD;
-    private static String DEFAULT_PWD = "";
+    private static final String DEFAULT_PWD = "";
     
     public static String TYPE;
-    private static String DEFAULT_TYPE = "send_sms_basic";
+    private static final String DEFAULT_TYPE = "send_sms_basic";
     
     public static String SENDER_NUMBER;
-    private static String DEFAULT_SENDER_NUMBER = "";
+    private static final String DEFAULT_SENDER_NUMBER = "";
     
     public static String SENDER_STRING;
-    private static String DEFAULT_SENDER_STRING = "";
+    private static final String DEFAULT_SENDER_STRING = "";
     
     private static SkebbyParameters mySingleData;
 	private Properties p;

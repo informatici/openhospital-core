@@ -31,22 +31,22 @@ import org.slf4j.LoggerFactory;
 public class GSMParameters {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private final String FILE_PROPERTIES = "GSM.properties";
+	private static final String FILE_PROPERTIES = "GSM.properties";
 
     public static String PORT;
-    private static String DEFAULT_PORT = "";
+    private static final String DEFAULT_PORT = "";
     
     public static String DRIVERNAME;
-    private static String DEFAULT_DRIVERNAME = "com.sun.comm.Win32Driver";
+    private static final String DEFAULT_DRIVERNAME = "com.sun.comm.Win32Driver";
     
     public static String CMGF;
-    private static String DEFAULT_CMGF = "AT+CMGF=1\r";
+    private static final String DEFAULT_CMGF = "AT+CMGF=1\r";
     
     public static String CSMP;
-    private static String DEFAULT_CSMP = "AT+CSMP=17,167,0,0\r";
+    private static final String DEFAULT_CSMP = "AT+CSMP=17,167,0,0\r";
     
     public static String CMGS;
-    private static String DEFAULT_CMGS = "AT+CMGS=\"";
+    private static final String DEFAULT_CMGS = "AT+CMGS=\"";
     
     private static GSMParameters mySingleData;
 	private Properties p;

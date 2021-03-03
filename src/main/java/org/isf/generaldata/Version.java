@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 public class Version {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	private final String FILE_PROPERTIES = "version.properties";
+	private static final String FILE_PROPERTIES = "version.properties";
 
 	public static String VER_MAJOR;
     public static String VER_MINOR;
