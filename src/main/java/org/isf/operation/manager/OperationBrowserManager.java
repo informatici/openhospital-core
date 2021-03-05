@@ -164,15 +164,15 @@ public class OperationBrowserManager {
 	}
 	
 	public String getResultDescriptionKey(String description) {
-		if (resultsListHashMap == null) buildResultHashMap();
-		String key = "";
-		for (String value : resultsListHashMap.keySet()) {
-			if (resultsListHashMap.get(value).equals(description)) {
-				key = value;
-				break;
+		if (resultsListHashMap == null) {
+			buildResultHashMap();
+		}
+		for (String key : resultsListHashMap.keySet()) {
+			if (resultsListHashMap.get(key).equals(description)) {
+				return key;
 			}
 		}
-		return key;
+		return "";
 	}
 	
 	public ArrayList<String> getResultDescriptionList() {

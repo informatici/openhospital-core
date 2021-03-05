@@ -422,16 +422,15 @@ public class LabManager {
 	}
 
 	public String getMaterialKey(String description) {
-		if (materialHashMap == null)
+		if (materialHashMap == null) {
 			buildMaterialHashMap();
-		String key = "undefined";
-		for (String value : materialHashMap.keySet()) {
-			if (materialHashMap.get(value).equals(description)) {
-				key = value;
-				break;
+		}
+		for (String key : materialHashMap.keySet()) {
+			if (materialHashMap.get(key).equals(description)) {
+				return key;
 			}
 		}
-		return key;
+		return "undefined";
 	}
 
 	private void buildMaterialHashMap() {
