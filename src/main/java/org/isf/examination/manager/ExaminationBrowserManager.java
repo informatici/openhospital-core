@@ -114,16 +114,15 @@ public class ExaminationBrowserManager {
 	}
 
 	public String getAuscultationKey(String description) {
-		if (auscultationHashMap == null)
+		if (auscultationHashMap == null) {
 			buildAuscultationHashMap();
-		String key = "";
-		for (String value : auscultationHashMap.keySet()) {
-			if (auscultationHashMap.get(value).equals(description)) {
-				key = value;
-				break;
+		}
+		for (String key : auscultationHashMap.keySet()) {
+			if (auscultationHashMap.get(key).equals(description)) {
+				return key;
 			}
 		}
-		return key;
+		return "";
 	}
 
 	/**
@@ -245,16 +244,15 @@ public class ExaminationBrowserManager {
 	}
 
 	public String getBowelDescriptionKey(String description) {
-		if (bowelDescriptionHashMap == null)
+		if (bowelDescriptionHashMap == null) {
 			buildBowelDescriptionHashMap();
-		String key = "";
-		for (String value : bowelDescriptionHashMap.keySet()) {
-			if (bowelDescriptionHashMap.get(value).equals(description)) {
-				key = value;
-				break;
+		}
+		for (String key : bowelDescriptionHashMap.keySet()) {
+			if (bowelDescriptionHashMap.get(key).equals(description)) {
+				return key;
 			}
 		}
-		return key;
+		return "";
 	}
 
 	public String getDiuresisDescriptionTranslated(String pex_diuresis_desc_key) {
@@ -264,16 +262,15 @@ public class ExaminationBrowserManager {
 	}
 
 	public String getDiuresisDescriptionKey(String description) {
-		if (diuresisDescriptionHashMap == null)
+		if (diuresisDescriptionHashMap == null) {
 			buildDiuresisDescriptionHashMap();
-		String key = "";
-		for (String value : diuresisDescriptionHashMap.keySet()) {
-			if (diuresisDescriptionHashMap.get(value).equals(description)) {
-				key = value;
-				break;
+		}
+		for (String key : diuresisDescriptionHashMap.keySet()) {
+			if (diuresisDescriptionHashMap.get(key).equals(description)) {
+				return key;
 			}
 		}
-		return key;
+		return "";
 	}
 
 	/**

@@ -160,16 +160,15 @@ public class PatientBrowserManager {
 	}
 
 	public String getMaritalKey(String description) {
-		if (maritalHashMap == null)
+		if (maritalHashMap == null) {
 			buildMaritalHashMap();
-		String key = "undefined";
-		for (String value : maritalHashMap.keySet()) {
-			if (maritalHashMap.get(value).equals(description)) {
-				key = value;
-				break;
+		}
+		for (String key : maritalHashMap.keySet()) {
+			if (maritalHashMap.get(key).equals(description)) {
+				return key;
 			}
 		}
-		return key;
+		return "undefined";
 	}
 
 	private void buildProfessionHashMap() {
@@ -204,16 +203,15 @@ public class PatientBrowserManager {
 	}
 
 	public String getProfessionKey(String description) {
-		if (professionHashMap == null)
+		if (professionHashMap == null) {
 			buildProfessionHashMap();
-		String key = "undefined";
-		for (String value : professionHashMap.keySet()) {
-			if (professionHashMap.get(value).equals(description)) {
-				key = value;
-				break;
+		}
+		for (String key : professionHashMap.keySet()) {
+			if (professionHashMap.get(key).equals(description)) {
+				return key;
 			}
 		}
-		return key;
+		return "undefined";
 	}
 
 	protected List<OHExceptionMessage> validateMergePatients(Patient mergedPatient, Patient patient2) throws OHServiceException {
