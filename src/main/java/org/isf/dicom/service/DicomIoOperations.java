@@ -178,8 +178,6 @@ public class DicomIoOperations
 			FileDicom dicom) throws OHServiceException 
 	{
 		repository.save(dicom);
-		
-		return;
 	}
 
 	/**
