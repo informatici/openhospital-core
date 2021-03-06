@@ -21,13 +21,6 @@
  */
 package org.isf.utils.db;
 
-import org.isf.generaldata.MessageBundle;
-import org.isf.utils.exception.OHException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
@@ -43,6 +36,13 @@ import javax.persistence.Query;
 import javax.persistence.QueryTimeoutException;
 import javax.persistence.RollbackException;
 import javax.persistence.TransactionRequiredException;
+
+import org.isf.generaldata.MessageBundle;
+import org.isf.utils.exception.OHException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Class that executes a query using JPA
@@ -90,8 +90,6 @@ public class DbJpaUtil
 			e.printStackTrace();
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
 		}
-		
-		return;
 	}
 	
 	/**
@@ -131,9 +129,7 @@ public class DbJpaUtil
 			e.printStackTrace();
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
 		}
-    	
-  		return;
-    }   
+    }
 
     /**
      * Method to merge an object
@@ -204,9 +200,7 @@ public class DbJpaUtil
 			e.printStackTrace();
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
 		}
-		
-    	return;
-    } 
+    }
     
 	/**
      * Method to start a JPA transaction
@@ -225,9 +219,7 @@ public class DbJpaUtil
 			e.printStackTrace();
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
 		}
-		
-		return;
-    } 
+    }
 		         
 	/**
 	  * Method to create a query
@@ -249,8 +241,6 @@ public class DbJpaUtil
 	  	{
 	  		_createNativeQuery(aQuery, aClass);
 	  	}
-	  	
-	 	return;
 	}
 	
 	/**
@@ -273,9 +263,7 @@ public class DbJpaUtil
 			e.printStackTrace();
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
 		}
-		
-		return;
-    }    
+    }
     
 	/**
      * Method that executes a query and returns a list
@@ -401,9 +389,7 @@ public class DbJpaUtil
 			logger.error("PersistenceException");
 			e.printStackTrace();
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
-		} 
-    	
-    	return;
+		}
 	}
     
   	/**
@@ -424,9 +410,7 @@ public class DbJpaUtil
 			e.printStackTrace();
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
 		}
-		
-		return;
-	} 
+	}
 	
 	/**
      * Method to flush the JPA transactions
@@ -451,9 +435,7 @@ public class DbJpaUtil
 			logger.error("RollbackException");
 			e.printStackTrace();
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
-		}	
-		
-		return;
+		}
     }
 	
     /**
@@ -469,9 +451,7 @@ public class DbJpaUtil
 			e.printStackTrace();
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
 		}
-		
-		return;
-    } 
+    }
     
     /**
      * Method to destroy the factory
@@ -485,10 +465,8 @@ public class DbJpaUtil
 			logger.error("IllegalStateException");
 			e.printStackTrace();
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
-		} 
-		
-		return;
-    } 
+		}
+    }
     
     
     private void _createJPQLQuery(
@@ -508,9 +486,7 @@ public class DbJpaUtil
 			logger.error("IllegalArgumentException");
 			e.printStackTrace();
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
-		} 
-    	
-    	return;
+		}
     }
     
     private void _createNativeQuery(
@@ -526,8 +502,6 @@ public class DbJpaUtil
 		{    			
     		query = entityManager.createNativeQuery(aQuery, aClass); 
 		}
-    	
-    	return;
     }
 
 	   /**
@@ -551,7 +525,5 @@ public class DbJpaUtil
             e.printStackTrace();
             throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
         }
-        
-        return;
     }
 }
