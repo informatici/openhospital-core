@@ -231,7 +231,7 @@ public class TherapyManager {
 			sb.append(" - ").append(note);
 		}
 		if (sb.toString().length() > SmsManager.MAX_LENGHT) {
-			return sb.toString().substring(0, SmsManager.MAX_LENGHT);
+			return sb.substring(0, SmsManager.MAX_LENGHT);
 		}
 		return sb.toString();
 	}
