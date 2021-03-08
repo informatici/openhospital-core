@@ -189,11 +189,6 @@
 			<version>1.4</version>
 		</dependency>
 		<dependency>
-			<groupId>codeanticode.gsvideo</groupId>
-			<artifactId>gsvideo_isf</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.5.3</version>
@@ -229,11 +224,6 @@
 			<artifactId>h2</artifactId>
 			<version>1.4.200</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-		    <groupId>com.sun</groupId>
-		    <artifactId>clibwrapper_jiio</artifactId>
-		    <version>1.1</version>
 		</dependency>
 		<dependency>
 		    <groupId>com.sun.media</groupId>
@@ -423,11 +413,6 @@
 		 </dependency>
 	</dependencies>
 	<repositories>
-		<repository>
-			<id>lib</id>
-			<name>Legacy dependencies Repository</name>
-			<url>file:${project.basedir}/repo</url>
-		</repository>
 		<repository>
 			<id>dcm4che</id>
 			<name>Dcm4Che Repository</name>
