@@ -57,7 +57,7 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		SetupGSM setup = new SetupGSM();
+		new SetupGSM();
 		System.exit(0);
 	}
 	
@@ -93,8 +93,11 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 			        serialPort.notifyOnDataAvailable(true);
 					
 					OutputStream outputStream = serialPort.getOutputStream();
-						if (outputStream != null) System.out.println("Output stream OK");
-							else System.out.println("Output stream not found");
+					if (outputStream != null) {
+						System.out.println("Output stream OK");
+					} else {
+						System.out.println("Output stream not found");
+					}
 					
 					inputStream = serialPort.getInputStream(); 
 					byte[] command = model.getBytes();
@@ -104,11 +107,9 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 			        
 				} catch (PortInUseException e) {
 					System.out.println("Port in use.");
-					continue;
 				} catch (Exception e) {
 					System.out.println("Failed to open port " + portId.getName());
 					e.printStackTrace();
-					continue;
 				} finally {
 					serialPort.close();
 				}
