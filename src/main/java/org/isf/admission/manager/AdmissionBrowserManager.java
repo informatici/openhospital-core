@@ -270,7 +270,7 @@ public class AdmissionBrowserManager {
 		}
 
 		Admission last = null;
-		if (admList.size() > 0) {
+		if (!admList.isEmpty()) {
 			last = admList.get(admList.size() - 1);
 		} else {
 			last = admission;

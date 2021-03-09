@@ -287,7 +287,7 @@ public class LabManager {
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
 	public boolean newLaboratory(List<Laboratory> labList, ArrayList<ArrayList<String>> labRowList) throws OHServiceException {
-		if (labList.size() == 0)
+		if (labList.isEmpty())
 			throw new OHDataValidationException(new OHExceptionMessage("emptyListError",
 					MessageBundle.getMessage("angal.labnew.noexamsinserted"),
 					OHSeverityLevel.ERROR));
