@@ -425,17 +425,17 @@
 	<repositories>
 		<repository>
 			<id>lib</id>
-			<name>Legacy dependencies Repository</name>
-			<url>file:${project.basedir}/repo</url>
+			<name>Legacy Dependencies Repository</name>
+			<url>file:./repo</url>
 		</repository>
-		<repository>
+		<!-- <repository>
 			<id>dcm4che</id>
 			<name>Dcm4Che Repository</name>
 			<url>https://www.dcm4che.org/maven2/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-		</repository>
+		</repository> -->
 		<repository>
 			<id>JFrog</id>
 			<name>Atlassian JFrog></name>
