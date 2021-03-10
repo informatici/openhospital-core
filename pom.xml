@@ -42,7 +42,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/OpenHospital20/rsc</outputDirectory>
+							<outputDirectory>${project.basedir}/target/OpenHospital20/rsc</outputDirectory>
 							<resources>
 								<resource>
 									<directory>src/main/resources</directory>
@@ -57,7 +57,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/OpenHospital20/lib</outputDirectory>
+							<outputDirectory>${project.basedir}/target/OpenHospital20/lib</outputDirectory>
 							<resources>
 								<resource>
 									<directory>lib</directory>
@@ -72,7 +72,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/OpenHospital20/lib/native</outputDirectory>
+							<outputDirectory>${project.basedir}/target/OpenHospital20/lib/native</outputDirectory>
 							<resources>
 								<resource>
 									<directory>lib/native</directory>
@@ -437,7 +437,7 @@
 		<repository>
 			<id>lib</id>
 			<name>Legacy Dependencies Repository</name>
-			<url>file:./repo</url>
+			<url>file:${project.basedir}/repo</url>
 		</repository>
 		<!-- <repository>
 			<id>dcm4che</id>
