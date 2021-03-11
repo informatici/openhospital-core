@@ -190,7 +190,7 @@ public class PatientIoOperations
 	 * @throws OHServiceException
 	 */
 	public boolean isPatientPresentByName(String name) throws OHServiceException {
-		return repository.findByNameAndDeleted(name, NOT_DELETED_STATUS).size() > 0;
+		return !repository.findByNameAndDeleted(name, NOT_DELETED_STATUS).isEmpty();
 	}
 
 	/**

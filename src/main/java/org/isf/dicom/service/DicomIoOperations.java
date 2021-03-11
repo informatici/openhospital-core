@@ -165,7 +165,7 @@ public class DicomIoOperations
 	{
 		List<FileDicom> dicomList = repository.findAllWhereIdAndFileAndUid(dicom.getPatId(), dicom.getDicomSeriesNumber(), dicom.getDicomInstanceUID());
 	
-		return (dicomList.size() > 0);
+		return !dicomList.isEmpty();
 	}
 
 	/**

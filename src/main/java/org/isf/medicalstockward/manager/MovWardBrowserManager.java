@@ -175,7 +175,7 @@ public class MovWardBrowserManager {
 	 */
 	public boolean newMovementWard(ArrayList<MovementWard> newMovements) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		if (newMovements.size() == 0) {
+		if (newMovements.isEmpty()) {
 			errors.add(new OHExceptionMessage(
 					"emptyMovementListError",
 					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug"),

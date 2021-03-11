@@ -77,7 +77,7 @@ public class BillBrowserManager {
 		lastPay.setTime(today.getTime());
 
 		GregorianCalendar billDate = bill.getDate();
-		if (billPayments.size() > 0) {
+		if (!billPayments.isEmpty()) {
 			firstPay = billPayments.get(0).getDate();
 			lastPay = billPayments.get(billPayments.size()-1).getDate(); //most recent payment
 			upDate = lastPay;

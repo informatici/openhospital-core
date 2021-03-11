@@ -615,10 +615,8 @@ public class MedicalStockIoOperations {
 			String refNo) throws OHServiceException 
 	{
 		boolean result = false;
-		
-			
-		if (movRepository.findAllWhereRefNo(refNo).size() > 0)
-		{
+
+		if (!movRepository.findAllWhereRefNo(refNo).isEmpty()) {
 			result = true;
 		}		
 			
