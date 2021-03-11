@@ -430,9 +430,9 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrCodeControl() throws Exception {
+	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestOperation(false);
-		assertThat(operationBrowserManager.codeControl(code)).isTrue();
+		assertThat(operationBrowserManager.isCodePresent(code)).isTrue();
 	}
 
 	@Test

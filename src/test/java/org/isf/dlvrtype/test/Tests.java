@@ -147,7 +147,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestDeliveryType(false);
-		boolean result = deliveryTypeBrowserManager.codeControl(code);
+		boolean result = deliveryTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
@@ -157,7 +157,7 @@ public class Tests extends OHCoreTestCase {
 		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
 		boolean result = deliveryTypeBrowserManager.deleteDeliveryType(foundDeliveryType);
 		assertThat(result).isTrue();
-		result = deliveryTypeBrowserManager.codeControl(code);
+		result = deliveryTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isFalse();
 	}
 

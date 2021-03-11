@@ -150,7 +150,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestDiseaseType(false);
-		boolean result = diseaseTypeBrowserManager.codeControl(code);
+		boolean result = diseaseTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
@@ -159,7 +159,7 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestDiseaseType(false);
 		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getOne(code);
 		boolean result = diseaseTypeBrowserManager.deleteDiseaseType(foundDiseaseType);
-		result = diseaseTypeBrowserManager.codeControl(code);
+		result = diseaseTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isFalse();
 	}
 

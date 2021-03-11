@@ -204,7 +204,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestAdmissionType(false);
-		boolean result = admissionTypeBrowserManager.codeControl(code);
+		boolean result = admissionTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
@@ -214,7 +214,7 @@ public class Tests extends OHCoreTestCase {
 		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findOne(code);
 		boolean result = admissionTypeBrowserManager.deleteAdmissionType(foundAdmissionType);
 		assertThat(result).isTrue();
-		result = admissionTypeBrowserManager.codeControl(code);
+		result = admissionTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isFalse();
 	}
 

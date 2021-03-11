@@ -291,7 +291,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestDisease(false);
-		boolean result = diseaseBrowserManager.codeControl(code);
+		boolean result = diseaseBrowserManager.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 

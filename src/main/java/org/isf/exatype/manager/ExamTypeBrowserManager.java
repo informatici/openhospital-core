@@ -68,7 +68,7 @@ public class ExamTypeBrowserManager {
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
-			if (codeControl(examType.getCode())) {
+			if (isCodePresent(examType.getCode())) {
 				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null,
 						MessageBundle.getMessage("angal.common.codealreadyinuse"),
 						OHSeverityLevel.ERROR));
@@ -121,7 +121,7 @@ public class ExamTypeBrowserManager {
 	 * @return <code>true</code> if the code is present, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean codeControl(String code) throws OHServiceException {
+	public boolean isCodePresent(String code) throws OHServiceException {
 		return ioOperations.isCodePresent(code);
 	}
 

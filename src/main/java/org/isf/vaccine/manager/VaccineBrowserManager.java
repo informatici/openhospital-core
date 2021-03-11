@@ -77,7 +77,7 @@ public class VaccineBrowserManager {
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
-			if (codeControl(vaccine.getCode())) {
+			if (isCodePresent(vaccine.getCode())) {
 				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null,
 						MessageBundle.getMessage("angal.common.codealreadyinuse"),
 						OHSeverityLevel.ERROR));
@@ -145,7 +145,7 @@ public class VaccineBrowserManager {
 	 * @param code - the vaccine code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 */
-	public boolean codeControl(String code) throws OHServiceException {
+	public boolean isCodePresent(String code) throws OHServiceException {
 		return ioOperations.isCodePresent(code);
 	}
 

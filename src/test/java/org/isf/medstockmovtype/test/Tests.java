@@ -152,9 +152,9 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrCodeControl() throws Exception {
+	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestMovementType(false);
-		assertThat(medicaldsrstockmovTypeBrowserManager.codeControl(code)).isTrue();
+		assertThat(medicaldsrstockmovTypeBrowserManager.isCodePresent(code)).isTrue();
 	}
 
 	@Test
@@ -162,7 +162,7 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestMovementType(false);
 		MovementType foundMovementType = medicaldsrstockmovTypeBrowserManager.getMovementType(code);
 		assertThat(medicaldsrstockmovTypeBrowserManager.deleteMedicaldsrstockmovType(foundMovementType)).isTrue();
-		assertThat(medicaldsrstockmovTypeBrowserManager.codeControl(code)).isFalse();
+		assertThat(medicaldsrstockmovTypeBrowserManager.isCodePresent(code)).isFalse();
 	}
 
 	@Test

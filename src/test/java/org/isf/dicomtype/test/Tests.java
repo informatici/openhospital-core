@@ -144,14 +144,14 @@ public class Tests extends OHCoreTestCase {
 		DicomType dicomType = new DicomType("id", "description");
 		assertThat(dicomTypeBrowserManager.newDicomType(dicomType)).isTrue();
 		assertThat(dicomTypeBrowserManager.deleteDicomType(dicomType)).isTrue();
-		assertThat(dicomTypeBrowserManager.codeControl(dicomType.getDicomTypeID())).isFalse();
+		assertThat(dicomTypeBrowserManager.isCodePresent(dicomType.getDicomTypeID())).isFalse();
 	}
 
 	@Test
-	public void testMgrCodeControl() throws Exception {
+	public void testMgrIsCodePresent() throws Exception {
 		DicomType dicomType = new DicomType("id", "description");
 		assertThat(dicomTypeBrowserManager.newDicomType(dicomType)).isTrue();
-		assertThat(dicomTypeBrowserManager.codeControl(dicomType.getDicomTypeID())).isTrue();
+		assertThat(dicomTypeBrowserManager.isCodePresent(dicomType.getDicomTypeID())).isTrue();
 	}
 
 	@Test

@@ -144,8 +144,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestMedicalType(false);
-		assertThat(medicalTypeBrowserManager.codeControl(code)).isTrue();
-		assertThat(medicalTypeBrowserManager.codeControl("isNotThere")).isFalse();
+		assertThat(medicalTypeBrowserManager.isCodePresent(code)).isTrue();
+		assertThat(medicalTypeBrowserManager.isCodePresent("isNotThere")).isFalse();
 	}
 
 	@Test
@@ -153,7 +153,7 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestMedicalType(false);
 		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
 		assertThat(medicalTypeBrowserManager.deleteMedicalType(foundMedicalType)).isTrue();
-		assertThat(medicalTypeBrowserManager.codeControl(code)).isFalse();
+		assertThat(medicalTypeBrowserManager.isCodePresent(code)).isFalse();
 	}
 
 	@Test

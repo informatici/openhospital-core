@@ -88,7 +88,7 @@ public class DeliveryTypeBrowserManager {
 	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean codeControl(String code) throws OHServiceException {
+	public boolean isCodePresent(String code) throws OHServiceException {
 		return ioOperations.isCodePresent(code);
 	}
 
@@ -123,7 +123,7 @@ public class DeliveryTypeBrowserManager {
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
-			if (codeControl(key)) {
+			if (isCodePresent(key)) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.common.codealreadyinuse"),
 						OHSeverityLevel.ERROR));
 			}

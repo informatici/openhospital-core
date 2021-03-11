@@ -136,7 +136,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestDischargeType(false);
-		boolean result = dischargeTypeBrowserManager.codeControl(code);
+		boolean result = dischargeTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
@@ -146,7 +146,7 @@ public class Tests extends OHCoreTestCase {
 		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
 		boolean result = dischargeTypeBrowserManager.deleteDischargeType(foundDischargeType);
 		assertThat(result).isTrue();
-		result = dischargeTypeBrowserManager.codeControl(code);
+		result = dischargeTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isFalse();
 	}
 
