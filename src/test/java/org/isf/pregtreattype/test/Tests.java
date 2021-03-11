@@ -160,9 +160,9 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrCodeControl() throws Exception {
+	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestPregnantTreatmentType(false);
-		assertThat(pregnantTreatmentTypeBrowserManager.codeControl(code)).isTrue();
+		assertThat(pregnantTreatmentTypeBrowserManager.isCodePresent(code)).isTrue();
 	}
 
 	@Test
@@ -170,7 +170,7 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestPregnantTreatmentType(false);
 		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findOne(code);
 		assertThat(pregnantTreatmentTypeBrowserManager.deletePregnantTreatmentType(foundPregnantTreatmentType)).isTrue();
-		assertThat(pregnantTreatmentTypeBrowserManager.codeControl(code)).isFalse();
+		assertThat(pregnantTreatmentTypeBrowserManager.isCodePresent(code)).isFalse();
 	}
 
 	@Test

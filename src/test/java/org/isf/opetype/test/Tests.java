@@ -141,9 +141,9 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrCodeControl() throws Exception {
+	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestOperationType(false);
-		assertThat(operationTypeBrowserManager.codeControl(code)).isTrue();
+		assertThat(operationTypeBrowserManager.isCodePresent(code)).isTrue();
 	}
 
 	@Test
@@ -151,7 +151,7 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestOperationType(false);
 		OperationType foundOperationType = operationTypeIoOperationRepository.findOne(code);
 		assertThat(operationTypeBrowserManager.deleteOperationType(foundOperationType)).isTrue();
-		assertThat(operationTypeBrowserManager.codeControl(code)).isFalse();
+		assertThat(operationTypeBrowserManager.isCodePresent(code)).isFalse();
 	}
 
 	@Test

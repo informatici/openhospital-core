@@ -313,7 +313,7 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestWard(false);
 		Ward ward = wardIoOperationRepository.findOne(code);
 		assertThat(wardBrowserManager.deleteWard(ward)).isTrue();
-		assertThat(wardBrowserManager.codeControl(code)).isFalse();
+		assertThat(wardBrowserManager.isCodePresent(code)).isFalse();
 	}
 
 	@Test
@@ -341,14 +341,14 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrCodeControl() throws Exception {
+	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestWard(false);
-		assertThat(wardBrowserManager.codeControl(code)).isTrue();
+		assertThat(wardBrowserManager.isCodePresent(code)).isTrue();
 	}
 
 	@Test
-	public void testMgrCodeControlFalse() throws Exception {
-		assertThat(wardBrowserManager.codeControl("X")).isFalse();
+	public void testMgrIsCodePresentFalse() throws Exception {
+		assertThat(wardBrowserManager.isCodePresent("X")).isFalse();
 	}
 
 	@Test

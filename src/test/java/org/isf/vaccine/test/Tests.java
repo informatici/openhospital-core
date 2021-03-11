@@ -192,13 +192,13 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestVaccine(false);
 		Vaccine foundVaccine = vaccineBrowserManager.findVaccine(code);
 		assertThat(vaccineBrowserManager.deleteVaccine(foundVaccine)).isTrue();
-		assertThat(vaccineBrowserManager.codeControl(code)).isFalse();
+		assertThat(vaccineBrowserManager.isCodePresent(code)).isFalse();
 	}
 
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestVaccine(false);
-		assertThat(vaccineBrowserManager.codeControl(code)).isTrue();
+		assertThat(vaccineBrowserManager.isCodePresent(code)).isTrue();
 	}
 
 	@Test

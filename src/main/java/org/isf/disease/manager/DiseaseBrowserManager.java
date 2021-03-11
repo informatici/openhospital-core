@@ -212,7 +212,7 @@ public class DiseaseBrowserManager {
 	 * @return <code>true</code> if it is already used, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean codeControl(String code) throws OHServiceException {
+	public boolean isCodePresent(String code) throws OHServiceException {
 		return ioOperations.isCodePresent(code);
 	}
 
@@ -249,7 +249,7 @@ public class DiseaseBrowserManager {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disease.codetoolongmaxchars"),
 						OHSeverityLevel.ERROR));
 			}
-			if (codeControl(key)) {
+			if (isCodePresent(key)) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.common.codealreadyinuse"),
 						OHSeverityLevel.ERROR));
 			}

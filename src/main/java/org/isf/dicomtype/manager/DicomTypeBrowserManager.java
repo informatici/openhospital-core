@@ -92,7 +92,7 @@ public class DicomTypeBrowserManager {
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
-			if (codeControl(dicomType.getDicomTypeID())) {
+			if (isCodePresent(dicomType.getDicomTypeID())) {
 				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null,
 						MessageBundle.getMessage("angal.common.codealreadyinuse"),
 						OHSeverityLevel.ERROR));
@@ -101,7 +101,7 @@ public class DicomTypeBrowserManager {
 		return errors;
 	}
 
-	public boolean codeControl(String code) throws OHServiceException {
+	public boolean isCodePresent(String code) throws OHServiceException {
 		return ioOperations.isCodePresent(code);
 	}
 
