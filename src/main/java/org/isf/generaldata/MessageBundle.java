@@ -78,49 +78,6 @@ public class MessageBundle {
 		return message;
 	}
 
-	public static String getMessagePattern(String key, Object input) {
-		String message = "";
-
-		try {
-			if (resourceBundle != null) {
-				//message = new String(resourceBundle.getString(key).getBytes("ISO-8859-1"), "UTF-8");
-				message = resourceBundle.getString(key);
-			}
-		} catch (MissingResourceException e) {
-			if (GeneralData.DEBUG) {
-				message = key;
-			} else {
-				message = defaultResourceBundle.getString(key);
-			}
-			logger.error(">> key not found: {}", key);
-		}
-		message = message.replace("#", input.toString());
-		return message;
-	}
-
-	public static String getMessagePattern(String key, Object[] inputs) {
-		String message = "";
-
-		try {
-			if (resourceBundle != null) {
-				//message = new String(resourceBundle.getString(key).getBytes("ISO-8859-1"), "UTF-8");
-				message = resourceBundle.getString(key);
-			}
-		} catch (MissingResourceException e) {
-			if (GeneralData.DEBUG) {
-				message = key;
-			} else {
-				message = defaultResourceBundle.getString(key);
-			}
-			logger.error(">> key not found: {}", key);
-		}
-
-		for (Object input : inputs) {
-			message = message.replaceFirst("#", input.toString());
-		}
-		return message;
-	}
-
 	public static ResourceBundle getBundle() {
 		return resourceBundle;
 	}
