@@ -21,6 +21,9 @@
  */
 package org.isf.menu.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.isf.menu.model.GroupMenu;
 import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
@@ -30,9 +33,6 @@ import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -247,7 +247,7 @@ public class MenuIoOperations
 		List<Object[]> menuList = menuRepository.findAllWhereId(aUser.getUserName());
 		
 		
-		menu = new ArrayList<UserMenuItem>();
+		menu = new ArrayList<>();
 		for (Object[] object : menuList) {
 			
 			UserMenuItem umi = new UserMenuItem();
@@ -278,7 +278,7 @@ public class MenuIoOperations
 			UserGroup aGroup) throws OHServiceException 
 	{
 		List<Object[]> menuList = menuRepository.findAllWhereGroupId(aGroup.getCode());
-		ArrayList<UserMenuItem> menu = new ArrayList<UserMenuItem>();
+		ArrayList<UserMenuItem> menu = new ArrayList<>();
 		for (Object[] object : menuList) {
 			boolean active = (Integer) object[9] == 1 ? true : false;
 			UserMenuItem umi = new UserMenuItem();

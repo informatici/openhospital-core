@@ -24,15 +24,15 @@ package org.isf.operation.manager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+
 import org.isf.generaldata.MessageBundle;
 import org.isf.operation.model.Operation;
 import org.isf.operation.service.OperationIoOperations;
 import org.isf.opetype.model.OperationType;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.validator.DefaultSorter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import org.isf.utils.validator.DefaultSorter;
 
 /**
  * Class that provides gui separation from database operations and gives some
@@ -177,7 +177,7 @@ public class OperationBrowserManager {
 	
 	public ArrayList<String> getResultDescriptionList() {
 		if (resultsListHashMap == null) buildResultHashMap();
-		ArrayList<String> resultDescriptionList = new ArrayList<String>(resultsListHashMap.values());
+		ArrayList<String> resultDescriptionList = new ArrayList<>(resultsListHashMap.values());
 		Collections.sort(resultDescriptionList,  new DefaultSorter(MessageBundle.getMessage("angal.operation.result.success")));
 		return resultDescriptionList;
 	}

@@ -73,7 +73,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Opd> query = cb.createQuery(Opd.class);
 		Root<Opd> opd = query.from(Opd.class);
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 
 		query.select(opd);
 		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.opd.alltype")))) {

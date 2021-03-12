@@ -30,7 +30,7 @@ public class PropertyReader {
 
 	private Logger logger;
 
-	private static Map<Class, PropertyExtractor> typePropertyExtractorMap = new HashMap<Class, PropertyExtractor>();
+	private static Map<Class, PropertyExtractor> typePropertyExtractorMap = new HashMap<>();
 
 	public PropertyReader(Map properties, Logger logger) {
 		this.logger = logger;

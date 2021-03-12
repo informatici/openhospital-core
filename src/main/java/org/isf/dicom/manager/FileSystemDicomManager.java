@@ -604,7 +604,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	private FileDicom[] compact(FileDicom[] db) {
-		Vector<FileDicom> rv = new Vector<FileDicom>(0);
+		Vector<FileDicom> rv = new Vector<>(0);
 
 		for (FileDicom fileDicom : db)
 			if (fileDicom != null)

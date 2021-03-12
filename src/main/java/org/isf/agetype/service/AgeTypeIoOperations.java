@@ -49,7 +49,7 @@ public class AgeTypeIoOperations
 	 */
 	public ArrayList<AgeType> getAgeType() throws OHServiceException 
 	{
-		return new ArrayList<AgeType>(repository.findAllByOrderByCodeAsc());
+		return new ArrayList<>(repository.findAllByOrderByCodeAsc());
 	}
 
 	/**

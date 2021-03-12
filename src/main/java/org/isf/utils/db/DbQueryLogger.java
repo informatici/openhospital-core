@@ -264,7 +264,7 @@ public class DbQueryLogger {
      * @return the list sanitized
      */
     private List<?> sanitize(List<?> params) {
-    	List<Object> saneParams = new ArrayList<Object>();
+    	List<Object> saneParams = new ArrayList<>();
     	for (Object param : params) {
     		if (param instanceof String) {
     			saneParams.add(sanitize((String) param));

@@ -453,10 +453,10 @@ public class MedicalStockIoOperations {
 			GregorianCalendar dateTo) throws OHServiceException 
 	{
 		ArrayList<Integer> pMovementCode = null;
-		ArrayList<Movement> pMovement = new ArrayList<Movement>();
+		ArrayList<Movement> pMovement = new ArrayList<>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findMovementWhereDatesAndId(wardId, dateFrom, dateTo));
+		pMovementCode = new ArrayList<>(movRepository.findMovementWhereDatesAndId(wardId, dateFrom, dateTo));
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
 			Integer code = pMovementCode.get(i);
@@ -497,11 +497,11 @@ public class MedicalStockIoOperations {
 			GregorianCalendar lotDueTo) throws OHServiceException 
 	{
 		ArrayList<Integer> pMovementCode = null;
-		ArrayList<Movement> pMovement = new ArrayList<Movement>();
+		ArrayList<Movement> pMovement = new ArrayList<>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findMovementWhereData(
-				medicalCode, medicalType, wardId, movType, 
+		pMovementCode = new ArrayList<>(movRepository.findMovementWhereData(
+				medicalCode, medicalType, wardId, movType,
 				movFrom, movTo, lotPrepFrom, lotPrepTo, lotDueFrom, lotDueTo));			
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
@@ -540,11 +540,11 @@ public class MedicalStockIoOperations {
 	{
 
 		ArrayList<Integer> pMovementCode = null;
-		ArrayList<Movement> pMovement = new ArrayList<Movement>();
+		ArrayList<Movement> pMovement = new ArrayList<>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findMovementForPrint(
-				medicalDescription, medicalTypeCode, wardId, movType, 
+		pMovementCode = new ArrayList<>(movRepository.findMovementForPrint(
+				medicalDescription, medicalTypeCode, wardId, movType,
 				movFrom, movTo, lotCode, order));			
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
@@ -571,7 +571,7 @@ public class MedicalStockIoOperations {
 		List<Lot> lots = lotRepository.findByMovements_MedicalOrderByDueDate(medical.getCode());
 
 		// remove empty lots
-		ArrayList<Lot> emptyLots = new ArrayList<Lot>();
+		ArrayList<Lot> emptyLots = new ArrayList<>();
 		for (Lot aLot : lots) {
 			aLot.setQuantity(aLot.calculateQuantity());
 			if (aLot.getQuantity() == 0)
@@ -579,7 +579,7 @@ public class MedicalStockIoOperations {
 		}
 		lots.removeAll(emptyLots);
 
-		return new ArrayList<Lot>(lots);
+		return new ArrayList<>(lots);
 	}
 
 	// Method is not used anywhere

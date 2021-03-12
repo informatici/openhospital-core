@@ -39,9 +39,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -91,7 +91,7 @@ public class Lot extends Auditable<String>
 	private volatile int hashCode = 0;
 
 	@OneToMany(mappedBy = "lot")
-	private List<Movement> movements = new ArrayList<Movement>();
+	private List<Movement> movements = new ArrayList<>();
 
 	public Lot() {
 	}

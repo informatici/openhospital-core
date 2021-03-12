@@ -112,7 +112,7 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public ArrayList<Laboratory> getLaboratory(String exam,	GregorianCalendar dateFrom,	GregorianCalendar dateTo) throws OHServiceException {
-		return new ArrayList<Laboratory>(exam != null ?
+		return new ArrayList<>(exam != null ?
 				repository.findByExamDateBetweenAndExam_DescriptionOrderByExamDateDescRegistrationDateDesc(dateFrom, dateTo, exam) :
 				repository.findByExamDateBetweenOrderByExamDateDescRegistrationDateDesc(dateFrom, dateTo));
 	}
@@ -168,11 +168,11 @@ public class LabIoOperations {
 	public ArrayList<LaboratoryForPrint> getLaboratoryForPrint(String exam,
 			GregorianCalendar dateFrom,
 			GregorianCalendar dateTo) throws OHServiceException {
-				ArrayList<LaboratoryForPrint> pLaboratory = new ArrayList<LaboratoryForPrint>();
-				ArrayList<Laboratory> laboritories = new ArrayList<Laboratory> (
-					exam != null ?
-						repository.findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam) :
-						repository.findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo)
+				ArrayList<LaboratoryForPrint> pLaboratory = new ArrayList<>();
+				ArrayList<Laboratory> laboritories = new ArrayList<>(
+						exam != null ?
+								repository.findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam) :
+								repository.findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo)
 				);
 
 				for (Laboratory laboratory : laboritories) {

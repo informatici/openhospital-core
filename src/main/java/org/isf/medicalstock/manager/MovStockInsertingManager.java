@@ -246,7 +246,7 @@ public class MovStockInsertingManager {
 	 */
 	public ArrayList<Lot> getLotByMedical(Medical medical) throws OHServiceException {
 		if (medical == null) {
-			return new ArrayList<Lot>();
+			return new ArrayList<>();
 		}
 		return ioOperations.getLotsByMedical(medical);
 	}

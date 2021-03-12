@@ -48,7 +48,7 @@ public class DeliveryResultTypeIoOperation {
 	 */
 	public ArrayList<DeliveryResultType> getDeliveryResultType() throws OHServiceException 
 	{
-		return new ArrayList<DeliveryResultType>(repository.findAllByOrderByDescriptionAsc()); 		
+		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 
 	/**

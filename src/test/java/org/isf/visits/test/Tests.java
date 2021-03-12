@@ -229,7 +229,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewVisitsEmptyList() throws Exception {
-		assertThat(visitManager.newVisits(new ArrayList<Visit>())).isTrue();
+		assertThat(visitManager.newVisits(new ArrayList<>())).isTrue();
 	}
 
 	@Test

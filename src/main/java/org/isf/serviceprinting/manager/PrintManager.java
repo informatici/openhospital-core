@@ -61,7 +61,7 @@ public class PrintManager {
 	
 	public void print(String filename, List<?> toPrint, int action) throws OHServiceException {
 		
-		HashMap<String, Object> parameters = new HashMap<String, Object>();
+		HashMap<String, Object> parameters = new HashMap<>();
 		Hospital hospital = hospitalManager.getHospital();
 		parameters.put("ospedaleNome", hospital.getDescription());
 		parameters.put("ospedaleIndirizzo", hospital.getAddress());

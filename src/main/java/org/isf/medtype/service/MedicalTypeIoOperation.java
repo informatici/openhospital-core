@@ -21,14 +21,14 @@
  */
 package org.isf.medtype.service;
 
+import java.util.ArrayList;
+
 import org.isf.medtype.model.MedicalType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 
 /**
  * Persistence class for the medical type module.
@@ -48,7 +48,7 @@ public class MedicalTypeIoOperation {
 	 */
 	public ArrayList<MedicalType> getMedicalTypes() throws OHServiceException 
 	{
-		return new ArrayList<MedicalType>(repository.findAllByOrderByDescriptionAsc()); 
+		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 
 	/**

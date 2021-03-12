@@ -38,7 +38,7 @@ public class OHServiceException extends Exception {
 	private static final long serialVersionUID = 1L;
 	
 	protected Logger logger = LoggerFactory.getLogger(OHServiceException.class);
-	private List<OHExceptionMessage> messages = new ArrayList<OHExceptionMessage>();
+	private List<OHExceptionMessage> messages = new ArrayList<>();
 	
 	public OHServiceException(Throwable cause, List<OHExceptionMessage> messages) {
 		super(cause);

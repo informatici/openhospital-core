@@ -71,7 +71,7 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
 		Root<Patient> patientRoot = query.from(Patient.class);
 		query.select(patientRoot);
-		List<Predicate> where = new ArrayList<Predicate>();
+		List<Predicate> where = new ArrayList<>();
 
 		for (String word : words) {
 			where.add(wordExistsInOneOfPatientFields(word, cb, patientRoot));

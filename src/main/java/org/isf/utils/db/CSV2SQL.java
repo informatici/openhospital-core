@@ -124,9 +124,9 @@ public class CSV2SQL {
 			output.write("DELETE FROM MEDICALDSR;\n");
 			output.write("DELETE FROM MEDICALDSRTYPE;\n");
 
-			ArrayList<String> medTypeList = new ArrayList<String>();
-			ArrayList<String> medList = new ArrayList<String>();
-			ArrayList<String> lotList = new ArrayList<String>();
+			ArrayList<String> medTypeList = new ArrayList<>();
+			ArrayList<String> medList = new ArrayList<>();
+			ArrayList<String> lotList = new ArrayList<>();
 
 			/*
 			 * Check COLUMN HEADERS

@@ -180,7 +180,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewTherapiesEmpty() throws Exception {
-		assertThat(therapyManager.newTherapies(new ArrayList<TherapyRow>())).isTrue();
+		assertThat(therapyManager.newTherapies(new ArrayList<>())).isTrue();
 	}
 
 	@Test

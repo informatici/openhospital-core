@@ -21,6 +21,10 @@
  */
 package org.isf.medicalstockward.service;
 
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstockward.model.MedicalWard;
@@ -32,10 +36,6 @@ import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 /**
  * @author mwithi
@@ -65,10 +65,10 @@ public class MedicalStockWardIoOperations
 			GregorianCalendar dateTo) throws OHServiceException 
 	{
 		ArrayList<Integer> pMovementWardCode = null;
-		ArrayList<MovementWard> pMovementWard = new ArrayList<MovementWard>(); 
+		ArrayList<MovementWard> pMovementWard = new ArrayList<>();
 		
 		
-		pMovementWardCode = new ArrayList<Integer>(repository.findAllWardMovement(wardId, dateFrom, dateTo));
+		pMovementWardCode = new ArrayList<>(repository.findAllWardMovement(wardId, dateFrom, dateTo));
         for (Integer code : pMovementWardCode) {
             MovementWard movementWard = movementRepository.findOne(code);
 
@@ -277,7 +277,7 @@ public class MedicalStockWardIoOperations
 	public ArrayList<MedicalWard> getMedicalsWard(
 			char wardId, boolean stripeEmpty) throws OHServiceException
 	{
-		ArrayList<MedicalWard> medicalWards = new ArrayList<MedicalWard>(repository.findAllWhereWard(wardId));
+		ArrayList<MedicalWard> medicalWards = new ArrayList<>(repository.findAllWhereWard(wardId));
 		for (int i=0; i<medicalWards.size(); i++)
 
 		{
@@ -316,7 +316,7 @@ public class MedicalStockWardIoOperations
 		String WardID=String.valueOf(wardId);
 		ArrayList<MedicalWard> medicalWards = getMedicalsWard(wardId, true);
 
-		ArrayList<MedicalWard> medicalWardsQty = new ArrayList<MedicalWard>();
+		ArrayList<MedicalWard> medicalWardsQty = new ArrayList<>();
 
 		for (int i=0; i<medicalWards.size(); i++) {
 
