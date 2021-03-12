@@ -228,9 +228,10 @@ public class Tests extends OHCoreTestCase {
 		pregnantTreatmentType.setCode("ZZ");
 		pregnantTreatmentType.setDescription("someDescription");
 
-		assertThat(pregnantTreatmentType).isEqualTo(pregnantTreatmentType);
-		assertThat(pregnantTreatmentType).isNotEqualTo(null);
-		assertThat(pregnantTreatmentType).isNotEqualTo("someString");
+		assertThat(pregnantTreatmentType)
+				.isEqualTo(pregnantTreatmentType)
+				.isNotEqualTo(null)
+				.isNotEqualTo("someString");
 
 		PregnantTreatmentType pregnantTreatmentType2 = new PregnantTreatmentType();
 		pregnantTreatmentType.setCode("XX");

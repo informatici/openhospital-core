@@ -216,8 +216,9 @@ public class Tests extends OHCoreTestCase {
 		PricesOthers pricesOthers = new PricesOthers(-1, "TestCode", "TestDescription", true, false, false, true);
 
 		assertThat(pricesOthers.equals(pricesOthers)).isTrue();
-		assertThat(pricesOthers).isNotEqualTo(null);
-		assertThat(pricesOthers).isNotEqualTo("someString");
+		assertThat(pricesOthers)
+				.isNotEqualTo(null)
+				.isNotEqualTo("someString");
 
 		PricesOthers pricesOthers2 = testPricesOthers.setup(true);
 		pricesOthers2.setId(-99);

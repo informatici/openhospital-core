@@ -858,8 +858,9 @@ public class Tests extends OHCoreTestCase {
 		Opd opd = testOpd.setup(patient, disease, false);
 
 		assertThat(opd.equals(opd)).isTrue();
-		assertThat(opd).isNotEqualTo(null);
-		assertThat(opd).isNotEqualTo("someString");
+		assertThat(opd)
+				.isNotEqualTo(null)
+				.isNotEqualTo("someString");
 	}
 
 	private Patient _setupTestPatient(boolean usingSet) throws Exception {

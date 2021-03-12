@@ -561,14 +561,14 @@ public class Tests extends OHCoreTestCase {
 		Medical medical3 = new Medical(3, medicalType3, "TP3", "TestDescription2", 1, 2, 3, 4, 5);
 
 		assertThat(medical.equals(medical)).isTrue();
-		assertThat(medical.equals(new Integer(1))).isFalse();
-
-		assertThat(medical.equals(medical2)).isFalse();
+		assertThat(medical)
+				.isNotEqualTo("someString")
+				.isNotEqualTo(medical2);
 
 		medical2.setProd_code(null);
 		medical3.setProd_code(null);
-		assertThat(medical2.equals(medical3)).isFalse();
-		assertThat(medical3.equals(medical2)).isFalse();
+		assertThat(medical2).isNotEqualTo(medical3);
+		assertThat(medical3).isNotEqualTo(medical2);
 	}
 
 	@Test

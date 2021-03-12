@@ -1033,8 +1033,9 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestLot(true);
 		Lot lot = lotIoOperationRepository.findOne(code);
 		assertThat(lot.equals(lot)).isTrue();
-		assertThat(lot).isNotEqualTo(null);
-		assertThat(lot).isNotEqualTo("someString");
+		assertThat(lot)
+				.isNotEqualTo(null)
+				.isNotEqualTo("someString");
 
 		Lot lot2 = new Lot(null);
 		assertThat(lot).isNotEqualTo(lot2);
@@ -1091,8 +1092,9 @@ public class Tests extends OHCoreTestCase {
 		int code = _setupTestMovement(false);
 		Movement movement = movementIoOperationRepository.findOne(code);
 		assertThat(movement.equals(movement)).isTrue();
-		assertThat(movement).isNotEqualTo(null);
-		assertThat(movement).isNotEqualTo("someString");
+		assertThat(movement)
+				.isNotEqualTo(null)
+				.isNotEqualTo("someString");
 
 		Movement movement2 = new Movement();
 		movement2.setCode(-99);

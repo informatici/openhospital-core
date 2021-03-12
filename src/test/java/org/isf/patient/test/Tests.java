@@ -680,8 +680,9 @@ public class Tests extends OHCoreTestCase {
 	public void testPatientEquals() throws Exception {
 		Patient patient = testPatient.setup(false);
 		assertThat(patient.equals(patient)).isTrue();
-		assertThat(patient.equals(null)).isFalse();
-		assertThat(patient).isNotEqualTo("someString");
+		assertThat(patient)
+				.isNotEqualTo(null)
+				.isNotEqualTo("someString");
 		Patient patient2 = testPatient.setup(true);
 		patient.setCode(1);
 		patient.setCode(2);
