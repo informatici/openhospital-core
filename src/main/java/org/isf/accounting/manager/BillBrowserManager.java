@@ -21,6 +21,10 @@
  */
 package org.isf.accounting.manager;
 
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
 import org.isf.accounting.model.BillPayments;
@@ -34,10 +38,6 @@ import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 @Component
 public class BillBrowserManager {
@@ -65,7 +65,7 @@ public class BillBrowserManager {
 			ArrayList<BillItems> billItems, 
 			ArrayList<BillPayments> billPayments) throws OHDataValidationException 
 	{
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         
         GregorianCalendar today = new GregorianCalendar();
 		GregorianCalendar upDate = new GregorianCalendar();
@@ -135,7 +135,7 @@ public class BillBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<BillItems> getItems(int billID) throws OHServiceException {
-		if (billID == 0) return new ArrayList<BillItems>();
+		if (billID == 0) return new ArrayList<>();
 		return ioOperations.getItems(billID);
 	}
 
@@ -182,7 +182,7 @@ public class BillBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<BillPayments> getPayments(int billID) throws OHServiceException {
-		if (billID == 0) return new ArrayList<BillPayments>();
+		if (billID == 0) return new ArrayList<>();
 		return ioOperations.getPayments(billID);
 	}
 	
@@ -339,7 +339,7 @@ public class BillBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Bill> getBills(ArrayList<BillPayments> billPayments) throws OHServiceException {
-		if (billPayments.isEmpty()) return new ArrayList<Bill>();
+		if (billPayments.isEmpty()) return new ArrayList<>();
 		return ioOperations.getBills(billPayments);
 	}
 

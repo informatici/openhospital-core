@@ -48,8 +48,8 @@ public class VisitsIoOperations {
 	 */
 	public ArrayList<Visit> getVisits(Integer patID) throws OHServiceException {
 		return patID != 0 ?
-			new ArrayList<Visit>(repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID)) :
-		 	new ArrayList<Visit>(repository.findAllByOrderByPatient_CodeAscDateAsc());
+				new ArrayList<>(repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID)) :
+				new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
 	}
 
 
@@ -59,9 +59,9 @@ public class VisitsIoOperations {
 		ArrayList<Visit> visits = null;
 
 		if (wardId != null)
-			visits = new ArrayList<Visit>(repository.findAllWhereWardByOrderPatientAndDateAsc(wardId));
+			visits = new ArrayList<>(repository.findAllWhereWardByOrderPatientAndDateAsc(wardId));
 		else
-			visits = new ArrayList<Visit>(repository.findAllByOrderByPatient_CodeAscDateAsc());
+			visits = new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
 
 		return visits;
 	}

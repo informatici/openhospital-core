@@ -104,7 +104,7 @@ public class OpdIoOperations {
 			int ageTo,
 			char sex,
 			char newPatient) throws OHServiceException	{
-		return new ArrayList<Opd>(repository.findAllOpdWhereParams(
+		return new ArrayList<>(repository.findAllOpdWhereParams(
 				diseaseTypeCode, diseaseCode, dateFrom, dateTo,
 				ageFrom, ageTo, sex, newPatient));			
 	}
@@ -118,9 +118,9 @@ public class OpdIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Opd> getOpdList(int patID) throws OHServiceException {
-		return  new ArrayList<Opd>(patID == 0 ?
-			repository.findAllOrderByProgYearDesc() :
-			repository.findAllByPatient_CodeOrderByProgYearDesc(patID));
+		return new ArrayList<>(patID == 0 ?
+				repository.findAllOrderByProgYearDesc() :
+				repository.findAllByPatient_CodeOrderByProgYearDesc(patID));
 	}
 		
 	/**

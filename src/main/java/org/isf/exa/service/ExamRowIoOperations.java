@@ -107,7 +107,7 @@ public class ExamRowIoOperations {
 	public ArrayList<ExamRow> getExamsRowByDesc(
 			String description) throws OHServiceException 
 	{ 
-		ArrayList<ExamRow> examrows = new ArrayList<ExamRow>();
+		ArrayList<ExamRow> examrows = new ArrayList<>();
 				
 		
 		if (description != null) 

@@ -71,7 +71,7 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<PatientVaccine> query = cb.createQuery(PatientVaccine.class);
 		Root<PatientVaccine> pvRoot = query.from(PatientVaccine.class);
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 
 		query.select(pvRoot);
 		if (dateFrom != null) {

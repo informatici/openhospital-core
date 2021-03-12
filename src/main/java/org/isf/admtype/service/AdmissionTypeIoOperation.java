@@ -49,7 +49,7 @@ public class AdmissionTypeIoOperation
 	 */
 	public ArrayList<AdmissionType> getAdmissionType() throws OHServiceException 
 	{
-		return new ArrayList<AdmissionType>(repository.findAllByOrderByDescriptionAsc());
+		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 
 	/**

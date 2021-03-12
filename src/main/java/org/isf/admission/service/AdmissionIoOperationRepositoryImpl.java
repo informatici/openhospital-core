@@ -61,7 +61,7 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Admission> query = cb.createQuery(Admission.class);
 		Root<Admission> admissionRoot = query.from(Admission.class);
-		List<Predicate> where = new ArrayList<Predicate>();
+		List<Predicate> where = new ArrayList<>();
 
 		query.select(admissionRoot);
 		where.add(admissionNotDeletedPredicate(cb, admissionRoot));
@@ -79,7 +79,7 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 										 Root<Admission> admissionRoot,
 										 GregorianCalendar[] admissionRange,
 										 GregorianCalendar[] dischargeRange) {
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 
 		if(admissionRange != null) {
 			if (admissionRange.length == 2 && admissionRange[0] != null && admissionRange[1] != null) {

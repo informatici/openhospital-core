@@ -57,7 +57,7 @@ public class WardIoOperations {
 	public int getCurrentOccupation(
 			Ward ward) throws OHServiceException 
 	{		
-		ArrayList<Admission> admissions = new ArrayList<Admission>(admissionRepository.findAllWhereWard(ward.getCode()));
+		ArrayList<Admission> admissions = new ArrayList<>(admissionRepository.findAllWhereWard(ward.getCode()));
 
 		return admissions.size();
 	}
@@ -69,7 +69,7 @@ public class WardIoOperations {
 	 */
 	public ArrayList<Ward> getWardsNoMaternity() throws OHServiceException 
 	{		
-		ArrayList<Ward> wards = new ArrayList<Ward>(repository.findByCodeNot("M"));
+		ArrayList<Ward> wards = new ArrayList<>(repository.findByCodeNot("M"));
 
 		return wards;
 	}
@@ -88,11 +88,11 @@ public class WardIoOperations {
 		
 		if (wardID != null && wardID.trim().length() > 0) 
 		{
-			wards = new ArrayList<Ward>(repository.findByCodeContains(wardID));
+			wards = new ArrayList<>(repository.findByCodeContains(wardID));
 		}	
 		else
 		{
-			wards = new ArrayList<Ward>(repository.findAll());
+			wards = new ArrayList<>(repository.findAll());
 		}
 
 		return wards;

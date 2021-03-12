@@ -92,7 +92,7 @@ public class PatVacIoOperations {
 			char sex,
 			int ageFrom,
 			int ageTo) throws OHServiceException {
-		return new ArrayList<PatientVaccine>(repository.findAllByCodesAndDatesAndSexAndAges(
+		return new ArrayList<>(repository.findAllByCodesAndDatesAndSexAndAges(
 				vaccineTypeCode, vaccineCode, dateFrom, dateTo, sex, ageFrom, ageTo));
 	}
 

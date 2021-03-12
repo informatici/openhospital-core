@@ -83,7 +83,7 @@ public class JasperReportsManager {
     public JasperReportResultDto getExamsListPdf() throws OHServiceException {
 
         try {
-            final Map<String, Object> parameters = new HashMap<String, Object>();
+            final Map<String, Object> parameters = new HashMap<>();
             Hospital hospital = hospitalManager.getHospital();
 
             parameters.put("hospital", hospital.getDescription());
@@ -111,7 +111,7 @@ public class JasperReportsManager {
     public JasperReportResultDto getDiseasesListPdf() throws OHServiceException {
 
         try{
-            HashMap<String, String> parameters = new HashMap<String, String>();
+            HashMap<String, String> parameters = new HashMap<>();
             Hospital hospital = hospitalManager.getHospital();
             parameters.put("hospital", hospital.getDescription());
 
@@ -245,7 +245,7 @@ public class JasperReportsManager {
     public JasperReportResultDto getGenericReportPatientExaminationPdf(Integer patientID, Integer examId, String jasperFileName) throws OHServiceException {
 
         try{
-        	HashMap<String, Object> parameters = new HashMap<String, Object>();
+        	HashMap<String, Object> parameters = new HashMap<>();
             
             parameters.put("examId", examId); 
             String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + patientID +".pdf";
@@ -762,7 +762,7 @@ public class JasperReportsManager {
     }
 
     private HashMap<String,Object> getHospitalParameters() throws OHServiceException {
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
+        HashMap<String, Object> parameters = new HashMap<>();
         Hospital hosp = hospitalManager.getHospital();
 
         parameters.put("Hospital", hosp.getDescription());

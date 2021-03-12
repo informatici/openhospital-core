@@ -129,7 +129,7 @@ public class SkebbyGateway implements SmsSenderInterface {
         paramsBean.setContentCharset(charset);
         paramsBean.setHttpElementCharset(charset);
         
-        List<NameValuePair> formparams = new ArrayList<NameValuePair>();
+        List<NameValuePair> formparams = new ArrayList<>();
         formparams.add(new BasicNameValuePair("method", smsType));
         formparams.add(new BasicNameValuePair("username", username));
         formparams.add(new BasicNameValuePair("password", password));

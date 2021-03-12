@@ -575,7 +575,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewMovementWardError() throws Exception {
-		assertThatThrownBy(() -> movWardBrowserManager.newMovementWard(new ArrayList<MovementWard>()))
+		assertThatThrownBy(() -> movWardBrowserManager.newMovementWard(new ArrayList<>()))
 				.isInstanceOf(OHDataValidationException.class);
 	}
 

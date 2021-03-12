@@ -69,7 +69,7 @@ public class PatientIoOperations
 	 * @throws OHServiceException
 	 */
 	public ArrayList<Patient> getPatients() throws OHServiceException {
-		return new ArrayList<Patient>(repository.findByDeletedOrDeletedIsNull(NOT_DELETED_STATUS));
+		return new ArrayList<>(repository.findByDeletedOrDeletedIsNull(NOT_DELETED_STATUS));
 	}
 	
 	/**
@@ -79,7 +79,7 @@ public class PatientIoOperations
 	 * @throws OHServiceException
 	 */
 	public ArrayList<Patient> getPatients(Pageable pageable) throws OHServiceException {
-		return new ArrayList<Patient>(repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName("N", pageable));
+		return new ArrayList<>(repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName("N", pageable));
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class PatientIoOperations
 	 * @throws OHServiceException
 	 */
 	public ArrayList<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException {
-		return new ArrayList<Patient>(repository.findByFieldsContainingWordsFromLiteral(keyword));
+		return new ArrayList<>(repository.findByFieldsContainingWordsFromLiteral(keyword));
 	}	
 
 	/**

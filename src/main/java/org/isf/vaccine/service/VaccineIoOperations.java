@@ -55,10 +55,10 @@ public class VaccineIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Vaccine> getVaccine(String vaccineTypeCode) throws OHServiceException {
-		return new ArrayList<Vaccine>(
-			vaccineTypeCode != null ?
-				repository.findByVaccineType_CodeOrderByDescriptionAsc(vaccineTypeCode) :
-				repository.findAllByOrderByDescriptionAsc()
+		return new ArrayList<>(
+				vaccineTypeCode != null ?
+						repository.findByVaccineType_CodeOrderByDescriptionAsc(vaccineTypeCode) :
+						repository.findAllByOrderByDescriptionAsc()
 		);
 	}
 

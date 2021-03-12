@@ -59,7 +59,7 @@ public class Interaction{
 
 		Presence presence;
 		Collection<RosterEntry> entries = roster.getEntries();
-		Collection<String> entries_online=new ArrayList<String>();
+		Collection<String> entries_online= new ArrayList<>();
 		for(RosterEntry r:entries)
 		{
 			presence = roster.getPresence(r.getUser());

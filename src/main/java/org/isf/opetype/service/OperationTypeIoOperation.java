@@ -46,7 +46,7 @@ public class OperationTypeIoOperation {
 	 */
 	public ArrayList<OperationType> getOperationType() throws OHServiceException 
 	{
-		return new ArrayList<OperationType>(repository.findAllByOrderByDescriptionAsc()); 
+		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 	
 	/**

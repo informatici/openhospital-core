@@ -57,9 +57,9 @@ public class OperationIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Operation> getOperationByTypeDescription(String typeDescription) throws OHServiceException {
-		return new ArrayList<Operation>(typeDescription == null ?
-			repository.findByOrderByDescriptionAsc() :
-			repository.findAllByType_DescriptionContainsOrderByDescriptionAsc(typeDescription));
+		return new ArrayList<>(typeDescription == null ?
+				repository.findByOrderByDescriptionAsc() :
+				repository.findAllByType_DescriptionContainsOrderByDescriptionAsc(typeDescription));
 	}
 
 	public Operation findByCode(String code) throws OHServiceException{
