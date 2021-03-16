@@ -363,24 +363,24 @@ public class JasperReportsManager {
     
     public JasperReportResultDto getGenericReportPharmaceuticalOrderPdf(String jasperFileName) throws OHServiceException {
 
-        try{
-        	HashMap<String, Object> parameters = getHospitalParameters();
-            addBundleParameter(jasperFileName, parameters);
-            
-        	Date date = new Date();
-            Format formatter;
-            formatter = new SimpleDateFormat("E d, MMMM yyyy");
-            String todayReport = formatter.format(date);
-            formatter = new SimpleDateFormat("yyyyMMdd");
-            String todayFile = formatter.format(date);
-            parameters.put("Date", todayReport);
+		try {
+			HashMap<String, Object> parameters = getHospitalParameters();
+			addBundleParameter(jasperFileName, parameters);
 
-            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + todayFile +".pdf";
+			Date date = new Date();
+			Format formatter;
+			formatter = new SimpleDateFormat("E d, MMMM yyyy");
+			String todayReport = formatter.format(date);
+			formatter = new SimpleDateFormat("yyyyMMdd");
+			String todayFile = formatter.format(date);
+			parameters.put("Date", todayReport);
 
-            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
-            JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
-            return result;
-        } catch(Exception e){
+			String pdfFilename = "rpt/PDF/" + jasperFileName + "_" + todayFile + ".pdf";
+
+			JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
+			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
+			return result;
+		} catch(Exception e){
             //Any exception
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
                     MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
@@ -531,31 +531,31 @@ public class JasperReportsManager {
     
     public JasperReportResultDto getGenericReportPharmaceuticalStockWardPdf(Date date, String jasperFileName, Ward ward) throws OHServiceException {
     	
-    	try{
-    		HashMap<String, Object> parameters = getHospitalParameters();
-            addBundleParameter(jasperFileName, parameters);
-			
-    		if (date == null)
+		try {
+			HashMap<String, Object> parameters = getHospitalParameters();
+			addBundleParameter(jasperFileName, parameters);
+
+			if (date == null)
 				date = new Date();
 			Format formatter;
 			formatter = new SimpleDateFormat("E d, MMMM yyyy");
-		    String dateReport = formatter.format(date);
-		    formatter = new SimpleDateFormat("yyyy-MM-dd");
-		    String dateQuery = formatter.format(date);
-		    formatter = new SimpleDateFormat("yyyyMMdd");
-		    String dateFile = formatter.format(date);
-            
-            parameters.put("Date", dateQuery);
+			String dateReport = formatter.format(date);
+			formatter = new SimpleDateFormat("yyyy-MM-dd");
+			String dateQuery = formatter.format(date);
+			formatter = new SimpleDateFormat("yyyyMMdd");
+			String dateFile = formatter.format(date);
+
+			parameters.put("Date", dateQuery);
 			parameters.put("DateReport", dateReport);
 			parameters.put("Ward", ward.getDescription());
 			parameters.put("WardCode", ward.getCode());
 
-            String pdfFilename = "rpt/PDF/"+jasperFileName + "_" + dateFile +".pdf";
+			String pdfFilename = "rpt/PDF/" + jasperFileName + "_" + dateFile + ".pdf";
 
-            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
-            JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
-            return result;
-    	} catch(Exception e){
+			JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
+			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
+			return result;
+		} catch(Exception e){
             //Any exception
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
                     MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
@@ -798,7 +798,7 @@ public class JasperReportsManager {
     }
     
     private void addBundleParameter(String jasperFileName, HashMap<String, Object> parameters) {
-		parameters.put(JRParameter.REPORT_LOCALE, new Locale(GeneralData.LANGUAGE));
+		parameters.put(JRParameter.REPORT_LOCALE, new Locale(GeneralData.LANGUAGE)); //we need to inform about the Locale used in the application
 		parameters.put("REPORT_RESOURCE_BUNDLE", getReportResourceBundle(jasperFileName, GeneralData.LANGUAGE)); //we need to pass our custom resource bundle
 	}
 	
