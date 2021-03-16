@@ -231,19 +231,19 @@ public class JasperReportsManager {
     
     public JasperReportResultDto getGenericReportBillGroupedPdf(Integer billID, String jasperFileName, Patient patient, ArrayList<Integer> billListId, String dateFrom, String dateTo, boolean show, boolean askForPrint) throws OHServiceException {
 
-        try{
-            HashMap<String, Object> parameters = getHospitalParameters();
-            addBundleParameter(jasperFileName, parameters);
-            
-            parameters.put("billID", String.valueOf(billID)); // real param
+		try {
+			HashMap<String, Object> parameters = getHospitalParameters();
+			addBundleParameter(jasperFileName, parameters);
+
+			parameters.put("billID", String.valueOf(billID)); // real param
 			parameters.put("collectionbillsId", billListId); // real param
 
-            String pdfFilename = "rpt/PDF/" + jasperFileName + "_" + billID + ".pdf";
+			String pdfFilename = "rpt/PDF/" + jasperFileName + "_" + billID + ".pdf";
 
-            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
-            JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
-            return result;
-        } catch(Exception e){
+			JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
+			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
+			return result;
+		} catch(Exception e){
             //Any exception
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
                     MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
@@ -846,17 +846,19 @@ public class JasperReportsManager {
         return parameters;
     }
     
-    private void addBundleParameter(String jasperFileName, HashMap<String, Object> parameters) {
+	private void addBundleParameter(String jasperFileName, HashMap<String, Object> parameters) {
 		/*
-		 * Some reports use pre-formatted dates, that need to be localized as well (days, months, etc...)
-		 * For this reason we pass the same Locale used in the application
-		 * (otherwise it would use the Locale used on the user client machine)
+		 * Some reports use pre-formatted dates, that need to be localized as
+		 * well (days, months, etc...) For this reason we pass the same Locale
+		 * used in the application (otherwise it would use the Locale used on
+		 * the user client machine)
 		 */
-    	parameters.put(JRParameter.REPORT_LOCALE, new Locale(GeneralData.LANGUAGE));
-    	/*
-    	 * Jasper Report seems failing to decode resource bundles in UTF-8 encoding
-    	 * For this reason we pass also the resource for the specific report read with UTF8Control()
-    	 */
+		parameters.put(JRParameter.REPORT_LOCALE, new Locale(GeneralData.LANGUAGE));
+		/*
+		 * Jasper Report seems failing to decode resource bundles in UTF-8
+		 * encoding For this reason we pass also the resource for the specific
+		 * report read with UTF8Control()
+		 */
 		parameters.put("REPORT_RESOURCE_BUNDLE", getReportResourceBundle(jasperFileName, GeneralData.LANGUAGE));
 	}
 	
