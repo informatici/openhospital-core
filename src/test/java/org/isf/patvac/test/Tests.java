@@ -518,7 +518,7 @@ public class Tests extends OHCoreTestCase {
 
 		assertThat(patientVaccine1.equals(patientVaccine1)).isTrue();
 		assertThat(patientVaccine1)
-				.isNotEqualTo(null)
+				.isNotNull()
 				.isNotEqualTo("someString");
 
 		patientVaccine2.setCode(-99);

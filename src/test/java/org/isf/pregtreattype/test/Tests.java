@@ -230,7 +230,7 @@ public class Tests extends OHCoreTestCase {
 
 		assertThat(pregnantTreatmentType)
 				.isEqualTo(pregnantTreatmentType)
-				.isNotEqualTo(null)
+				.isNotNull()
 				.isNotEqualTo("someString");
 
 		PregnantTreatmentType pregnantTreatmentType2 = new PregnantTreatmentType();

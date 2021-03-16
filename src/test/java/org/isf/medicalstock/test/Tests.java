@@ -1034,7 +1034,7 @@ public class Tests extends OHCoreTestCase {
 		Lot lot = lotIoOperationRepository.findOne(code);
 		assertThat(lot.equals(lot)).isTrue();
 		assertThat(lot)
-				.isNotEqualTo(null)
+				.isNotNull()
 				.isNotEqualTo("someString");
 
 		Lot lot2 = new Lot(null);
@@ -1093,7 +1093,7 @@ public class Tests extends OHCoreTestCase {
 		Movement movement = movementIoOperationRepository.findOne(code);
 		assertThat(movement.equals(movement)).isTrue();
 		assertThat(movement)
-				.isNotEqualTo(null)
+				.isNotNull()
 				.isNotEqualTo("someString");
 
 		Movement movement2 = new Movement();

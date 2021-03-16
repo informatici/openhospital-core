@@ -493,7 +493,7 @@ public class Tests extends OHCoreTestCase {
 		Ward ward = testWard.setup(false);
 		assertThat(ward.equals(ward)).isTrue();
 		assertThat(ward)
-				.isNotEqualTo(null)
+				.isNotNull()
 				.isNotEqualTo("someString");
 
 		Ward ward2 = testWard.setup(false);

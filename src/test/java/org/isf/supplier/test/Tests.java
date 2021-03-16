@@ -162,7 +162,7 @@ public class Tests extends OHCoreTestCase {
 
 		assertThat(supplier.equals(supplier)).isTrue();
 		assertThat(supplier)
-				.isNotEqualTo(null)
+				.isNotNull()
 				.isNotEqualTo("someString");
 
 		Supplier supplier2 = new Supplier(2, "TestName", "TestAddress", "TestTax", "TestPhone", "TestFax", "TestEmail", "TestNode");

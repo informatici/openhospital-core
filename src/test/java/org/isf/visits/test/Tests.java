@@ -351,7 +351,7 @@ public class Tests extends OHCoreTestCase {
 
 		assertThat(visit.equals(visit)).isTrue();
 		assertThat(visit)
-				.isNotEqualTo(null)
+				.isNotNull()
 				.isNotEqualTo("someString");
 
 		Visit visit2 = new Visit(-1, null, null, null, false, null, null, null);

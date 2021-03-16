@@ -535,7 +535,7 @@ public class Tests extends OHCoreTestCase {
 		User user = testUser.setup(userGroup, true);
 
 		assertThat(user)
-				.isNotEqualTo(null)
+				.isNotNull()
 				.isNotEqualTo("someString");
 
 		User user1 = testUser.setup(userGroup, false);
@@ -572,7 +572,7 @@ public class Tests extends OHCoreTestCase {
 		UserGroup userGroup = testUserGroup.setup(true);
 
 		assertThat(userGroup)
-				.isNotEqualTo(null)
+				.isNotNull()
 				.isNotEqualTo("someString");
 
 		UserGroup userGroup1 = testUserGroup.setup(false);
@@ -603,7 +603,7 @@ public class Tests extends OHCoreTestCase {
 		UserMenuItem userMenuItem = testUserMenu.setup(true);
 
 		assertThat(userMenuItem)
-				.isNotEqualTo(null)
+				.isNotNull()
 				.isNotEqualTo("someString");
 
 		UserMenuItem userMenuItem1 = testUserMenu.setup(false);

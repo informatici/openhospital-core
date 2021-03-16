@@ -217,7 +217,7 @@ public class Tests extends OHCoreTestCase {
 
 		assertThat(pricesOthers.equals(pricesOthers)).isTrue();
 		assertThat(pricesOthers)
-				.isNotEqualTo(null)
+				.isNotNull()
 				.isNotEqualTo("someString");
 
 		PricesOthers pricesOthers2 = testPricesOthers.setup(true);

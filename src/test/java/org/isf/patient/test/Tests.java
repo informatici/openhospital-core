@@ -681,7 +681,7 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		assertThat(patient.equals(patient)).isTrue();
 		assertThat(patient)
-				.isNotEqualTo(null)
+				.isNotNull()
 				.isNotEqualTo("someString");
 		Patient patient2 = testPatient.setup(true);
 		patient.setCode(1);

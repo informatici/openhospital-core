@@ -287,7 +287,7 @@ public class Tests extends OHCoreTestCase {
 
 		assertThat(vaccine.equals(vaccine)).isTrue();
 		assertThat(vaccine)
-				.isNotEqualTo(null)
+				.isNotNull()
 				.isNotEqualTo("someStringValue");
 
 		VaccineType vaccineType2 = new VaccineType("A", "adescription");

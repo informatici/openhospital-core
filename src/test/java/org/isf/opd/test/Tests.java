@@ -859,7 +859,7 @@ public class Tests extends OHCoreTestCase {
 
 		assertThat(opd.equals(opd)).isTrue();
 		assertThat(opd)
-				.isNotEqualTo(null)
+				.isNotNull()
 				.isNotEqualTo("someString");
 	}
 

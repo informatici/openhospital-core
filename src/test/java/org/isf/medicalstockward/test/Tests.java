@@ -1093,7 +1093,7 @@ public class Tests extends OHCoreTestCase {
 		assertThat(medicalWardId1.equals(medicalWardId1)).isTrue();
 		assertThat(medicalWardId1)
 				.isNotEqualTo("someString")
-				.isNotEqualTo(null);
+				.isNotNull();
 
 		// medical doesn't match
 		assertThat(medicalWardId1).isNotEqualTo(medicalWardId2);
@@ -1308,7 +1308,8 @@ public class Tests extends OHCoreTestCase {
 		MedicalWard medicalWard2 = new MedicalWard(medical2, 10.0D, lot2);
 
 		assertThat(medicalWard1.equals(medicalWard1)).isTrue();
-		assertThat(medicalWard1).isNotEqualTo(null)
+		assertThat(medicalWard1)
+				.isNotNull()
 				.isNotEqualTo("some String")
 				.isNotEqualTo(medicalWard2);
 
