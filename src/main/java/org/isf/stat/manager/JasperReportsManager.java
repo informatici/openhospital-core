@@ -32,10 +32,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
@@ -61,13 +64,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JRChild;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExpressionChunk;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRQuery;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.base.JRBaseSubreport;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 @Component
@@ -161,17 +168,17 @@ public class JasperReportsManager {
 
         try{
             HashMap<String, Object> parameters = getHospitalParameters();
-            addBundleParameter(jasperFileName, parameters);
+            
+            StringBuilder sbTxtFilename = new StringBuilder(jasperFileName).append("Txt");
+            addBundleParameter(sbTxtFilename.toString(), parameters);
             
             parameters.put(JRParameter.IS_IGNORE_PAGINATION, Boolean.TRUE);
-            
             parameters.put("billID", String.valueOf(billID)); // real param
 
             StringBuilder sbFilename = new StringBuilder();
             sbFilename.append("rpt");
             sbFilename.append(File.separator);
-            sbFilename.append(jasperFileName);
-            sbFilename.append("Txt");
+            sbFilename.append(sbTxtFilename);
             sbFilename.append(".jasper");
 
             String txtFilename = "rpt/PDF/" + jasperFileName + "_" + billID + ".txt";
@@ -188,15 +195,15 @@ public class JasperReportsManager {
 
         try{
             HashMap<String, Object> parameters = getHospitalParameters();
-            addBundleParameter(jasperFileName, parameters);
+            StringBuilder sbTxtFilename = new StringBuilder(jasperFileName).append("Txt");
+            addBundleParameter(sbTxtFilename.toString(), parameters);
             
             parameters.put("billID", String.valueOf(billID)); // real param
 
             StringBuilder sbFilename = new StringBuilder();
             sbFilename.append("rpt");
             sbFilename.append(File.separator);
-            sbFilename.append(jasperFileName);
-            sbFilename.append("Txt");
+            sbFilename.append(sbTxtFilename);
             sbFilename.append(".jasper");
 
             String txtFilename = "rpt/PDF/" + jasperFileName + "_" + billID + ".txt";
@@ -254,7 +261,9 @@ public class JasperReportsManager {
 
         try{
             HashMap<String, Object> parameters = getHospitalParameters();
-            addBundleParameter(jasperFileName, parameters);
+            
+            StringBuilder sbTxtFilename = new StringBuilder(jasperFileName).append("Txt");
+            addBundleParameter(sbTxtFilename.toString(), parameters);
             
             parameters.put("billID", String.valueOf(billID)); // real param
             parameters.put("collectionbillsId", billListId); // real param
@@ -262,8 +271,7 @@ public class JasperReportsManager {
             StringBuilder sbFilename = new StringBuilder();
             sbFilename.append("rpt");
             sbFilename.append(File.separator);
-            sbFilename.append(jasperFileName);
-            sbFilename.append("Txt");
+            sbFilename.append(sbTxtFilename);
             sbFilename.append(".jasper");
 
             String txtFilename = "rpt/PDF/" + jasperFileName + "_" + billID + ".txt";
@@ -634,13 +642,14 @@ public class JasperReportsManager {
 
         try{
             HashMap<String, Object> parameters = compileGenericReportUserInDateParameters(fromDate, toDate, aUser);
-            addBundleParameter(jasperFileName, parameters);
+            
+            StringBuilder sbTxtFilename = new StringBuilder(jasperFileName).append("Txt");
+            addBundleParameter(sbTxtFilename.toString(), parameters);
 
             StringBuilder sbFilename = new StringBuilder();
             sbFilename.append("rpt");
             sbFilename.append(File.separator);
-            sbFilename.append(jasperFileName);
-            sbFilename.append("Txt");
+            sbFilename.append(sbTxtFilename);
             sbFilename.append(".jasper");
 
             String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -856,12 +865,63 @@ public class JasperReportsManager {
 		parameters.put(JRParameter.REPORT_LOCALE, new Locale(GeneralData.LANGUAGE));
 		/*
 		 * Jasper Report seems failing to decode resource bundles in UTF-8
-		 * encoding For this reason we pass also the resource for the specific
+		 * encoding. For this reason we pass also the resource for the specific
 		 * report read with UTF8Control()
 		 */
 		parameters.put("REPORT_RESOURCE_BUNDLE", getReportResourceBundle(jasperFileName, GeneralData.LANGUAGE));
+
+		/*
+		 * Jasper Reports may contain subreports and we should pass also those.
+		 * The parent report must contain parameters like:
+		 * 
+		 * SUBREPORT_RESOURCE_BUNDLE_1 
+		 * SUBREPORT_RESOURCE_BUNDLE_2
+		 * SUBREPORT_RESOURCE_BUNDLE_...
+		 * 
+		 * and pass them as REPORT_RESOURCE_BUNDLE to each subreport
+		 */
+		try {
+			addSubReportsBundleParameters(jasperFileName, parameters);
+		} catch (JRException e) {
+			logger.error(">> error loading subreport bundle, default will be used");
+			logger.error(e.getMessage());
+		}
 	}
 	
+	private void addSubReportsBundleParameters(String jasperFileName, HashMap<String, Object> parameters) throws JRException {
+		logger.debug("Search subreports for {}...", jasperFileName);
+		File jasperFile = new File(compileJasperFilename(jasperFileName));
+		final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
+		JRBand[] bands = jasperReport.getAllBands(); // Get all bands
+		for (JRBand band : bands) {
+			List<JRChild> elements = band.getChildren(); // Get all children
+			for (JRChild child : elements) {
+				int index = 1;
+				if (child instanceof JRBaseSubreport) { // This is a subreport
+					JRBaseSubreport subreport = (JRBaseSubreport) child;
+					String expression = ""; // Lets find out the expression used
+					JRExpressionChunk[] chunks = subreport.getExpression().getChunks();
+					for (JRExpressionChunk c : chunks) {
+						expression += c.getText();
+					}
+					logger.debug("...found a subreport: {}", expression);
+					addSubreportParameter(index, expression, parameters);
+				}
+			}
+		}
+	}
+
+	private void addSubreportParameter(int index, String expression, HashMap<String, Object> parameters) {
+		Pattern pattern = Pattern.compile("\"(.*)\"");
+		Matcher matcher = pattern.matcher(expression);
+		if (matcher.find()) {
+			String subreportName = matcher.group(1).split("\\.")[0];
+			parameters.put("SUBREPORT_RESOURCE_BUNDLE_" + index, getReportResourceBundle(subreportName, GeneralData.LANGUAGE));
+		} else {
+			logger.debug(">> unexpected subreport expression {}", expression);
+		}
+	}
+
 	private ResourceBundle getReportResourceBundle(String jasperFileName, String language) {
 		ResourceBundle resourceBundle;
 		try {
