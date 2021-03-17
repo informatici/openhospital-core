@@ -880,7 +880,7 @@ public class JasperReportsManager {
 		 * 
 		 * and pass them as REPORT_RESOURCE_BUNDLE to each related subreport.
 		 * 
-		 * If nothing is passeed, subreports still work, but REPORT_LOCALE will be used 
+		 * If nothing is passed, subreports still work, but REPORT_LOCALE will be used 
 		 * (if passed to the subreport) and corresponding bundle (UTF-8 decoding not available) 
 		 */
 		try {
