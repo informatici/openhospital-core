@@ -621,17 +621,17 @@ public class JasperReportsManager {
 
     public JasperReportResultDto getGenericReportUserInDatePdf(String fromDate, String toDate, String aUser, String jasperFileName) throws OHServiceException {
 
-        try{
-            HashMap<String, Object> parameters = compileGenericReportUserInDateParameters(fromDate, toDate, aUser);
+		try {
+			HashMap<String, Object> parameters = compileGenericReportUserInDateParameters(fromDate, toDate, aUser);
 			addBundleParameter(jasperFileName, parameters);
-            
-            String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
-            String pdfFilename =  "rpt/PDF/" + jasperFileName + "_" + aUser + "_" + date +".pdf";
 
-            JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
-            JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
-            return result;
-        } catch(Exception e){
+			String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+			String pdfFilename = "rpt/PDF/" + jasperFileName + "_" + aUser + "_" + date + ".pdf";
+
+			JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
+			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
+			return result;
+		} catch(Exception e){
             //Any exception
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
                     MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
@@ -933,7 +933,7 @@ public class JasperReportsManager {
 					new Locale(language), 
 					new UTF8Control());
 		} catch (MissingResourceException e) {
-			logger.error(">> no resource bundle for language = {} found for this report.", language);
+			logger.error(">> no resource bundle for language '{}' found for report {}", language, jasperFileName);
 			logger.error(e.getMessage());
 			resourceBundle = ResourceBundle.getBundle(jasperFileName, new Locale("en"));
 		}
