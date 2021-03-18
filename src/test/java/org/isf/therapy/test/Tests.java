@@ -358,8 +358,9 @@ public class Tests extends OHCoreTestCase {
 		TherapyRow therapyRow = therapyIoOperationRepository.findOne(id);
 
 		assertThat(therapyRow.equals(therapyRow)).isTrue();
-		assertThat(therapyRow).isNotEqualTo(null);
-		assertThat(therapyRow).isNotEqualTo("someString");
+		assertThat(therapyRow)
+				.isNotNull()
+				.isNotEqualTo("someString");
 
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
