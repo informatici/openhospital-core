@@ -29,11 +29,15 @@ To test the application against MySQL, you can change [`database.properties`][da
 To run Open Hospital, you'll need a user interface, which is provided in the [GUI][openhospital-gui] and in the [UI][openhospital-ui] projects.  
 Please follow the instructions in the documentation of those repositories.
 
-
 ## How to contribute
 
 You can find the contribution guidelines in the [Open Hospital wiki][contribution-guide].  
 A list of open issues is available on [Jira][jira].
+
+## Community
+
+You can reach out to the community of contributors by joining 
+our [Slack workspace][slack] or by subscribing to our [mailing list][ml].
 
 ## Code style
 
@@ -83,3 +87,5 @@ For Eclipse the process requires loading the formatting style and the import ord
  [contribution-guide]: https://openhospital.atlassian.net/wiki/display/OH/Contribution+Guidelines
  [jira]: https://openhospital.atlassian.net/jira/software/c/projects/OP/issues/
  [database.prop]: https://github.com/informatici/openhospital-core/blob/develop/src/test/resources/database.properties
+ [slack]: https://join.slack.com/t/openhospitalworkspace/shared_invite/enQtOTc1Nzc0MzE2NjQ0LWIyMzRlZTU5NmNlMjE2MDcwM2FhMjRkNmM4YzI0MTAzYTA0YTI3NjZiOTVhMDZlNWUwNWEzMjE5ZDgzNWQ1YzE
+ [ml]: https://sourceforge.net/projects/openhospital/lists/openhospital-devel
