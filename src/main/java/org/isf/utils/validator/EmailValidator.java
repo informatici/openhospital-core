@@ -24,22 +24,25 @@ package org.isf.utils.validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EmailValidator
-{
-	//Java email validation permitted by RFC 5322
-    private static final String EMAIL_REGEX = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
- 
-    private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
- 
-    public static boolean isValid(String email) {
- 
-    	//Empty emails are allowed in the app
-        if (email == null || email.isEmpty()) {
-            return true;
-        }
- 
-        Matcher matcher = EMAIL_PATTERN.matcher(email);
-        return matcher.matches();
-    }
+public class EmailValidator {
+
+	// Java email validation permitted by RFC 5322
+	// Current regex
+	private static final String EMAIL_REGEX = "^[A-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Z0-9.-]+$";
+	// Proposed regex
+	//private static final String EMAIL_REGEX = "^[A-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$";
+
+	private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX, Pattern.CASE_INSENSITIVE);
+
+	public static boolean isValid(String email) {
+
+		// Empty emails are allowed in the app
+		if (email == null || email.isEmpty()) {
+			return true;
+		}
+
+		Matcher matcher = EMAIL_PATTERN.matcher(email);
+		return matcher.matches();
+	}
 
 }
