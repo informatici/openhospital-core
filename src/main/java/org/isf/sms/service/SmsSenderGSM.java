@@ -214,7 +214,6 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 	 * @param args
 	 */
 	public static void main(String[] args) {
-//		PropertyConfigurator.configure(new File("./rsc/log4j.properties").getAbsolutePath());
 		
 		//Get SMS
 		SmsOperations smsOp = new SmsOperations();
