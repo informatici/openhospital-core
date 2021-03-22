@@ -856,6 +856,7 @@ public class JasperReportsManager {
     }
     
 	private void addBundleParameter(String jasperFileName, HashMap<String, Object> parameters) {
+		
 		/*
 		 * Some reports use pre-formatted dates, that need to be localized as
 		 * well (days, months, etc...) For this reason we pass the same Locale
@@ -863,12 +864,13 @@ public class JasperReportsManager {
 		 * the user client machine)
 		 */
 		parameters.put(JRParameter.REPORT_LOCALE, new Locale(GeneralData.LANGUAGE));
+		
 		/*
 		 * Jasper Report seems failing to decode resource bundles in UTF-8
 		 * encoding. For this reason we pass also the resource for the specific
 		 * report read with UTF8Control()
 		 */
-		parameters.put("REPORT_RESOURCE_BUNDLE", getReportResourceBundle(jasperFileName, GeneralData.LANGUAGE));
+		addReportBundleParameter(JRParameter.REPORT_RESOURCE_BUNDLE, jasperFileName, parameters);
 
 		/*
 		 * Jasper Reports may contain subreports and we should pass also those.
@@ -884,15 +886,15 @@ public class JasperReportsManager {
 		 * (if passed to the subreport) and corresponding bundle (UTF-8 decoding not available) 
 		 */
 		try {
+			logger.debug("Search subreports for {}...", jasperFileName);
 			addSubReportsBundleParameters(jasperFileName, parameters);
 		} catch (JRException e) {
 			logger.error(">> error loading subreport bundle, default will be used");
 			logger.error(e.getMessage());
 		}
 	}
-	
+
 	private void addSubReportsBundleParameters(String jasperFileName, HashMap<String, Object> parameters) throws JRException {
-		logger.debug("Search subreports for {}...", jasperFileName);
 		File jasperFile = new File(compileJasperFilename(jasperFileName));
 		final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
 		JRBand[] bands = jasperReport.getAllBands(); // Get all bands
@@ -907,37 +909,38 @@ public class JasperReportsManager {
 					for (JRExpressionChunk c : chunks) {
 						expression += c.getText();
 					}
-					logger.debug("...found a subreport: {}", expression);
-					addSubreportParameter(index, expression, parameters);
+					
+					/*
+					 * add indexed subreport bundle
+					 */
+					Pattern pattern = Pattern.compile("\"(.*)\"");
+					Matcher matcher = pattern.matcher(expression);
+					if (matcher.find()) {
+						String subreportName = matcher.group(1).split("\\.")[0];
+						logger.debug("found a subreport: {}", subreportName);
+						addReportBundleParameter("SUBREPORT_RESOURCE_BUNDLE_" + index, subreportName, parameters);
+					} else {
+						logger.error(">> unexpected subreport expression {}", expression);
+					}
 				}
 			}
 		}
 	}
 
-	private void addSubreportParameter(int index, String expression, HashMap<String, Object> parameters) {
-		Pattern pattern = Pattern.compile("\"(.*)\"");
-		Matcher matcher = pattern.matcher(expression);
-		if (matcher.find()) {
-			String subreportName = matcher.group(1).split("\\.")[0];
-			parameters.put("SUBREPORT_RESOURCE_BUNDLE_" + index, getReportResourceBundle(subreportName, GeneralData.LANGUAGE));
-		} else {
-			logger.debug(">> unexpected subreport expression {}", expression);
-		}
-	}
-
-	private ResourceBundle getReportResourceBundle(String jasperFileName, String language) {
-		ResourceBundle resourceBundle;
+	private void addReportBundleParameter(String jasperParameter, String jasperFileName, HashMap<String, Object> parameters) {
 		try {
-			resourceBundle = ResourceBundle.getBundle(
-					jasperFileName, 
-					new Locale(language), 
-					new UTF8Control());
+			ResourceBundle resourceBundle = ResourceBundle.getBundle(
+						jasperFileName, 
+						new Locale(GeneralData.LANGUAGE), 
+						new UTF8Control());
+			parameters.put(jasperParameter, resourceBundle);
+			
 		} catch (MissingResourceException e) {
-			logger.error(">> no resource bundle for language '{}' found for report {}", language, jasperFileName);
-			logger.error(e.getMessage());
-			resourceBundle = ResourceBundle.getBundle(jasperFileName, new Locale("en"));
+			logger.error(">> no resource bundle for language '{}' found for report {}", GeneralData.LANGUAGE, jasperFileName);
+			logger.info(">> switch to default language '{}'", Locale.getDefault());
+			parameters.put(jasperParameter, ResourceBundle.getBundle(jasperFileName, Locale.getDefault()));
+			parameters.put(JRParameter.REPORT_LOCALE, Locale.getDefault());
 		}
-		return resourceBundle;
 	}
 
     private JasperReportResultDto generateJasperReport(String jasperFilename, String filename, Map parameters) throws JRException, SQLException {
