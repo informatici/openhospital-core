@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -156,6 +157,8 @@ public class GeneralData {
 			p.load(new FileInputStream(path.toFile()));
 			
 			logger.info("File generalData.properties loaded. ");
+			
+			Locale.setDefault(new Locale(GeneralData.DEFAULT_LANGUAGE));
 			LANGUAGE = myGetProperty("LANGUAGE", DEFAULT_LANGUAGE);
 			SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
 			AUTOMATICLOT_IN = myGetProperty("AUTOMATICLOT_IN", DEFAULT_AUTOMATICLOT_IN);
