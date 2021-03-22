@@ -59,7 +59,6 @@ public abstract class ConfigurationProperties {
 	 * Method to retrieve a property
 	 * 
 	 * @param property
-	 * @param defaultValue
 	 * @return
 	 */
 	protected String myGetProperty(String property) {
