@@ -21,7 +21,6 @@
  */
 package org.isf.sms.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -29,7 +28,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.TooManyListenersException;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.isf.sms.model.Sms;
 import org.isf.sms.providers.GSMParameters;
 import org.isf.utils.exception.OHServiceException;
@@ -216,7 +214,7 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		PropertyConfigurator.configure(new File("./rsc/log4j.properties").getAbsolutePath());
+//		PropertyConfigurator.configure(new File("./rsc/log4j.properties").getAbsolutePath());
 		
 		//Get SMS
 		SmsOperations smsOp = new SmsOperations();
