@@ -24,7 +24,6 @@ package org.isf.generaldata;
 public class TxtPrinter extends ConfigurationProperties {
 	
 	private static final String FILE_PROPERTIES = "txtPrinter.properties";
-	private final static boolean EXIT_ON_FAIL = false;
 
 	public static boolean USE_DEFAULT_PRINTER;
 	public static boolean PRINT_AS_PAID;
@@ -47,8 +46,8 @@ public class TxtPrinter extends ConfigurationProperties {
     
     private static TxtPrinter mySingleData;
 
-    private TxtPrinter(String fileProperties, boolean exitOnFail) {
-    	super(fileProperties, exitOnFail);
+    private TxtPrinter(String fileProperties) {
+    	super(fileProperties);
 			
 		USE_DEFAULT_PRINTER = myGetProperty("USE_DEFAULT_PRINTER", DEFAULT_USE_DEFAULT_PRINTER);
 		if (!USE_DEFAULT_PRINTER) PRINTER = myGetProperty("USE_DEFAULT_PRINTER"); 
@@ -64,7 +63,7 @@ public class TxtPrinter extends ConfigurationProperties {
     
     public static TxtPrinter getTxtPrinter() {
         if (mySingleData == null){ 
-        	mySingleData = new TxtPrinter(FILE_PROPERTIES, EXIT_ON_FAIL);        	
+        	mySingleData = new TxtPrinter(FILE_PROPERTIES);        	
         }
         return mySingleData;
     }

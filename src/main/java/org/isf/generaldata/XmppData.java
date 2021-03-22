@@ -24,7 +24,6 @@ package org.isf.generaldata;
 public class XmppData extends ConfigurationProperties {
 	
 	private static final String FILE_PROPERTIES = "xmpp.properties";
-	private final static boolean EXIT_ON_FAIL = false;
 	
 	public static String domain;
 	public static int port;
@@ -33,8 +32,8 @@ public class XmppData extends ConfigurationProperties {
 	private static final String DEFAULT_DOMAIN = "127.0.0.1";
     private static final int DEFAULT_PORT = 5222;
 
-	private XmppData(String fileProperties, boolean exitOnFail) {
-    	super(fileProperties, exitOnFail);
+	private XmppData(String fileProperties) {
+    	super(fileProperties);
     	
 		domain = myGetProperty("DOMAIN", DEFAULT_DOMAIN);
 		port = myGetProperty("PORT", DEFAULT_PORT);
@@ -42,7 +41,7 @@ public class XmppData extends ConfigurationProperties {
 
 	public static XmppData getXmppData() {
 		if (xmppData == null) {
-			xmppData = new XmppData(FILE_PROPERTIES, EXIT_ON_FAIL);
+			xmppData = new XmppData(FILE_PROPERTIES);
 		}
 		return xmppData;
 	}

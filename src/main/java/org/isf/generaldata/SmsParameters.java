@@ -24,7 +24,6 @@ package org.isf.generaldata;
 public class SmsParameters extends ConfigurationProperties {
 	
 	private static final String FILE_PROPERTIES = "sms.properties";
-	private final static boolean EXIT_ON_FAIL = false;
 
 	public static String MODE;
 	private static final String DEFAULT_MODE = "GSM";
@@ -43,8 +42,8 @@ public class SmsParameters extends ConfigurationProperties {
     
     private static SmsParameters mySingleData;
 
-    private SmsParameters(String fileProperties, boolean exitOnFail) {
-    	super(fileProperties, exitOnFail);
+    private SmsParameters(String fileProperties) {
+    	super(fileProperties);
 			
 		MODE = myGetProperty("MODE", DEFAULT_MODE);
 		GATEWAY = myGetProperty("GATEWAY", DEFAULT_GATEWAY);
@@ -56,7 +55,7 @@ public class SmsParameters extends ConfigurationProperties {
     
     public static SmsParameters getSmsParameters() {
         if (mySingleData == null){ 
-        	mySingleData = new SmsParameters(FILE_PROPERTIES, EXIT_ON_FAIL);        	
+        	mySingleData = new SmsParameters(FILE_PROPERTIES);        	
         }
         return mySingleData;
     }

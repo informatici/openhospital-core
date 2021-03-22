@@ -28,7 +28,6 @@ import org.isf.generaldata.ConfigurationProperties;
 public class GSMParameters extends ConfigurationProperties {
 	
 	private static final String FILE_PROPERTIES = "GSM.properties";
-	private final static boolean EXIT_ON_FAIL = false;
 
     public static String PORT;
     private static final String DEFAULT_PORT = "";
@@ -48,8 +47,8 @@ public class GSMParameters extends ConfigurationProperties {
     private static GSMParameters mySingleData;
 	private Properties p;
 
-    private GSMParameters(String fileProperties, boolean exitOnFail) {
-    	super(fileProperties, exitOnFail);
+    private GSMParameters(String fileProperties) {
+    	super(fileProperties);
     	
 		PORT = myGetProperty("PORT", DEFAULT_PORT);
 		DRIVERNAME = myGetProperty("DRIVERNAME", DEFAULT_DRIVERNAME);
@@ -61,7 +60,7 @@ public class GSMParameters extends ConfigurationProperties {
     
     public static GSMParameters getGSMParameters() {
         if (mySingleData == null){ 
-        	mySingleData = new GSMParameters(FILE_PROPERTIES, EXIT_ON_FAIL);        	
+        	mySingleData = new GSMParameters(FILE_PROPERTIES);        	
         }
         return mySingleData;
     }

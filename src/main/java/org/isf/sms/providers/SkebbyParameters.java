@@ -21,8 +21,6 @@
  */
 package org.isf.sms.providers;
 
-import java.util.Properties;
-
 import org.isf.generaldata.ConfigurationProperties;
 
 /**
@@ -31,7 +29,6 @@ import org.isf.generaldata.ConfigurationProperties;
 public class SkebbyParameters extends ConfigurationProperties {
 	
 	private static final String FILE_PROPERTIES = "Skebby.properties";
-	private final static boolean EXIT_ON_FAIL = false;
 
 	public static String URL;
     private static final String DEFAULT_URL = "";
@@ -52,10 +49,9 @@ public class SkebbyParameters extends ConfigurationProperties {
     private static final String DEFAULT_SENDER_STRING = "";
     
     private static SkebbyParameters mySingleData;
-	private Properties p;
 
-    private SkebbyParameters(String fileProperties, boolean exitOnFail) {
-    	super(fileProperties, exitOnFail);
+    private SkebbyParameters(String fileProperties) {
+    	super(fileProperties);
 			
 		URL = myGetProperty("URL", DEFAULT_URL);
 		USR = myGetProperty("USR", DEFAULT_USR);
@@ -68,7 +64,7 @@ public class SkebbyParameters extends ConfigurationProperties {
     
     public static SkebbyParameters getSkebbyParameters() {
         if (mySingleData == null){ 
-        	mySingleData = new SkebbyParameters(FILE_PROPERTIES, EXIT_ON_FAIL);        	
+        	mySingleData = new SkebbyParameters(FILE_PROPERTIES);        	
         }
         return mySingleData;
     }

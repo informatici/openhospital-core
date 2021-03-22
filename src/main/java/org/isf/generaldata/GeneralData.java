@@ -136,8 +136,8 @@ public class GeneralData extends ConfigurationProperties {
 	}
 	
 	
-	private GeneralData(String fileProperties, boolean exitOnFail) {
-		super(fileProperties, exitOnFail);
+	private GeneralData(String fileProperties) {
+		super(fileProperties, EXIT_ON_FAIL);
 
 		LANGUAGE = myGetProperty("LANGUAGE", DEFAULT_LANGUAGE);
 		SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
@@ -187,7 +187,7 @@ public class GeneralData extends ConfigurationProperties {
 
 	public static GeneralData getGeneralData() {
 		if (mySingleData == null) {
-			mySingleData = new GeneralData(FILE_PROPERTIES, EXIT_ON_FAIL);
+			mySingleData = new GeneralData(FILE_PROPERTIES);
 		}
 		return mySingleData;
 	}

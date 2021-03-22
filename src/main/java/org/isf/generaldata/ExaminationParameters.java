@@ -29,7 +29,6 @@ package org.isf.generaldata;
 public class ExaminationParameters extends ConfigurationProperties {
 	
 	private static final String FILE_PROPERTIES = "examination.properties";
-	private final static boolean EXIT_ON_FAIL = false;
 	
 	public static int HEIGHT_MIN;
 	private static final int DEFAULT_HEIGHT_MIN = 0;
@@ -151,8 +150,8 @@ public class ExaminationParameters extends ConfigurationProperties {
 	
 	private static ExaminationParameters mySingleData;
 
-	private ExaminationParameters(String fileProperties, boolean exitOnFail) {
-		super(fileProperties, exitOnFail);
+	private ExaminationParameters(String fileProperties) {
+		super(fileProperties);
 			
 		HEIGHT_MIN = myGetProperty("HEIGHT_MIN", DEFAULT_HEIGHT_MIN);
 		HEIGHT_MAX = myGetProperty("HEIGHT_MAX", DEFAULT_HEIGHT_MAX);
@@ -205,7 +204,7 @@ public class ExaminationParameters extends ConfigurationProperties {
 
     public static ExaminationParameters getExaminationParameters() {
         if (mySingleData == null){ 
-        	mySingleData = new ExaminationParameters(FILE_PROPERTIES, EXIT_ON_FAIL);        	
+        	mySingleData = new ExaminationParameters(FILE_PROPERTIES);        	
         }
         return mySingleData;
     }

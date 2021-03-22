@@ -28,19 +28,55 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Prototype (abstract) class for Open Hospital configuration files (.properties)
+ * 
+ * @author Mwithi
+ *
+ */
 public abstract class ConfigurationProperties {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final boolean EXIT_ON_FAIL = false;
+
 	private Properties prop;
 	
+	/**
+	 * Constructor for standard configuration
+	 * (if missing the application will exit)
+	 * 
+	 * @param fileProperties - the file name (to be available in the classpath)
+	 */
+	protected ConfigurationProperties(String fileProperties) {
+		this.prop = loadPropertiesFile(fileProperties, logger, EXIT_ON_FAIL);
+	}
+	
+	/**
+	 * Constructor for standard configuration
+	 * @param fileProperties - the file name (to be available in the classpath)
+	 * @param exitOnFail - if {@code true} the application will exit if configuration 
+	 * is missing, otherwise default values will be used
+	 */
 	protected ConfigurationProperties(String fileProperties, boolean exitOnFail) {
 		this.prop = loadPropertiesFile(fileProperties, logger, exitOnFail);
 	}
 	
+	/**
+	 * Static configuration loader
+	 * @param fileProperties - the file name (to be available in the classpath)
+	 * @param logger - the {@link Logger} of the concrete class
+	 */
 	public static Properties loadPropertiesFile(String fileProperties, Logger logger) {
 		return loadPropertiesFile(fileProperties, logger, false);
 	}
 
+	/**
+	 * Static configuration loader
+	 * @param fileProperties - the file name (to be available in the classpath)
+	 * @param logger - the {@link Logger} of the concrete class
+	 * @param exitOnFail - if {@code true} the application will exit if configuration 
+	 * is missing, otherwise default values will be used
+	 */
 	private static Properties loadPropertiesFile(String fileProperties, Logger logger, boolean exitOnFail) {
 		Properties prop = new Properties();
 		InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileProperties);
@@ -64,16 +100,16 @@ public abstract class ConfigurationProperties {
 	protected String myGetProperty(String property) {
 		return prop.getProperty(property);
 	}
-	
+
 	/**
-     * Method to retrieve an integer property
-     * 
-     * @param property
-     * @param defaultValue
-     * @return
-     */
+	 * Method to retrieve an integer property
+	 * 
+	 * @param property
+	 * @param defaultValue
+	 * @return
+	 */
 	protected int myGetProperty(String property, int defaultValue) {
-    	int value;
+		int value;
 		try {
 			value = Integer.parseInt(prop.getProperty(property));
 		} catch (Exception e) {
@@ -101,14 +137,14 @@ public abstract class ConfigurationProperties {
 	}
 	
 	/**
-     * Method to retrieve an double property
-     * 
-     * @param property
-     * @param defaultValue
-     * @return
-     */
+	 * Method to retrieve an double property
+	 * 
+	 * @param property
+	 * @param defaultValue
+	 * @return
+	 */
 	protected double myGetProperty(String property, double defaultValue) {
-    	double value;
+		double value;
 		try {
 			value = Double.parseDouble(prop.getProperty(property));
 		} catch (Exception e) {
