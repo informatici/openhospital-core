@@ -21,6 +21,7 @@
  */
 package org.isf.xmpp.service;
 
+import org.isf.generaldata.XmppData;
 import org.jivesoftware.smack.AccountManager;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;

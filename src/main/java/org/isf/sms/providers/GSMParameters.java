@@ -21,17 +21,14 @@
  */
 package org.isf.sms.providers;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.isf.generaldata.ConfigurationProperties;
 
-public class GSMParameters {
+public class GSMParameters extends ConfigurationProperties {
 	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private static final String FILE_PROPERTIES = "GSM.properties";
+	private final static boolean EXIT_ON_FAIL = false;
 
     public static String PORT;
     private static final String DEFAULT_PORT = "";
@@ -51,44 +48,22 @@ public class GSMParameters {
     private static GSMParameters mySingleData;
 	private Properties p;
 
-    private GSMParameters() {
-    	try	{
-			p = new Properties();
-			p.load(new FileInputStream("rsc" + File.separator + "SmsGateway" + File.separator + FILE_PROPERTIES));
-			//logger.info("File " + FILE_PROPERTIES + " loaded. ");
-			PORT = myGetProperty("PORT", DEFAULT_PORT);
-			DRIVERNAME = myGetProperty("DRIVERNAME", DEFAULT_DRIVERNAME);
-			CMGF = myGetProperty("CMGF", DEFAULT_CMGF);
-			CSMP = myGetProperty("CSMP", DEFAULT_CSMP);
-			CMGS = myGetProperty("CMGS", DEFAULT_CMGS);
+    private GSMParameters(String fileProperties, boolean exitOnFail) {
+    	super(fileProperties, exitOnFail);
+    	
+		PORT = myGetProperty("PORT", DEFAULT_PORT);
+		DRIVERNAME = myGetProperty("DRIVERNAME", DEFAULT_DRIVERNAME);
+		CMGF = myGetProperty("CMGF", DEFAULT_CMGF);
+		CSMP = myGetProperty("CSMP", DEFAULT_CSMP);
+		CMGS = myGetProperty("CMGS", DEFAULT_CMGS);
 			
-    	} catch (Exception e) {//no file
-    		logger.error(">> " + FILE_PROPERTIES + " file not found.");
-    		System.exit(1);
-		}
     }
     
     public static GSMParameters getGSMParameters() {
         if (mySingleData == null){ 
-        	mySingleData = new GSMParameters();        	
+        	mySingleData = new GSMParameters(FILE_PROPERTIES, EXIT_ON_FAIL);        	
         }
         return mySingleData;
     }
     
-    /**
-	 * Method to retrieve a string property
-	 * 
-	 * @param property
-	 * @param defaultValue
-	 * @return
-	 */
-	private String myGetProperty(String property, String defaultValue) {
-		String value;
-		value = p.getProperty(property);
-		if (value == null) {
-			logger.warn(">> {} property not found: default is {}", property, defaultValue);
-			return defaultValue;
-		}
-		return value;
-	}
 }

@@ -19,34 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.xmpp.service;
+package org.isf.generaldata;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Properties;
-
-public class XmppData {
+public class XmppData extends ConfigurationProperties {
+	
+	private static final String FILE_PROPERTIES = "xmpp.properties";
+	private final static boolean EXIT_ON_FAIL = false;
+	
 	public static String domain;
 	public static int port;
 	private static XmppData xmppData;
+	
+	private static final String DEFAULT_DOMAIN = "127.0.0.1";
+    private static final int DEFAULT_PORT = 5222;
 
-	private XmppData() {
-		try {
-			Properties p = new Properties();
-			p.load(new FileInputStream("rsc" + File.separator + "xmpp.properties"));
-			domain = p.getProperty("DOMAIN");
-			port = Integer.parseInt(p.getProperty("PORT"));
-
-		} catch (Exception e) {
-			domain = "127.0.0.1";
-			port = 5222;
-		}
-
+	private XmppData(String fileProperties, boolean exitOnFail) {
+    	super(fileProperties, exitOnFail);
+    	
+		domain = myGetProperty("DOMAIN", DEFAULT_DOMAIN);
+		port = myGetProperty("PORT", DEFAULT_PORT);
 	}
 
 	public static XmppData getXmppData() {
 		if (xmppData == null) {
-			xmppData = new XmppData();
+			xmppData = new XmppData(FILE_PROPERTIES, EXIT_ON_FAIL);
 		}
 		return xmppData;
 	}

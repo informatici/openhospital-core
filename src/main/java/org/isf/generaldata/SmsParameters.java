@@ -21,17 +21,10 @@
  */
 package org.isf.generaldata;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public class SmsParameters {
+public class SmsParameters extends ConfigurationProperties {
 	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private static final String FILE_PROPERTIES = "sms.properties";
+	private final static boolean EXIT_ON_FAIL = false;
 
 	public static String MODE;
 	private static final String DEFAULT_MODE = "GSM";
@@ -49,64 +42,22 @@ public class SmsParameters {
     private static final String DEFAULT_ICC = "";
     
     private static SmsParameters mySingleData;
-	private Properties p;
 
-    private SmsParameters() {
-    	try	{
-			p = new Properties();
-			p.load(new FileInputStream("rsc" + File.separator + FILE_PROPERTIES));
-			//logger.info("File " + FILE_PROPERTIES + " loaded. ");
-			MODE = myGetProperty("MODE", DEFAULT_MODE);
-			GATEWAY = myGetProperty("GATEWAY", DEFAULT_GATEWAY);
-			TIMEOUT = myGetProperty("TIMEOUT", DEFAULT_TIMEOUT);
-			LOOP = myGetProperty("LOOP", DEFAULT_LOOP);
-			ICC = myGetProperty("ICC", DEFAULT_ICC);
+    private SmsParameters(String fileProperties, boolean exitOnFail) {
+    	super(fileProperties, exitOnFail);
 			
-    	} catch (Exception e) {//no file
-    		logger.error(">> " + FILE_PROPERTIES + " file not found.");
-    		System.exit(1);
-		}
+		MODE = myGetProperty("MODE", DEFAULT_MODE);
+		GATEWAY = myGetProperty("GATEWAY", DEFAULT_GATEWAY);
+		TIMEOUT = myGetProperty("TIMEOUT", DEFAULT_TIMEOUT);
+		LOOP = myGetProperty("LOOP", DEFAULT_LOOP);
+		ICC = myGetProperty("ICC", DEFAULT_ICC);
+			
     }
     
     public static SmsParameters getSmsParameters() {
         if (mySingleData == null){ 
-        	mySingleData = new SmsParameters();        	
+        	mySingleData = new SmsParameters(FILE_PROPERTIES, EXIT_ON_FAIL);        	
         }
         return mySingleData;
     }
-    
-    /**
-	 * Method to retrieve a string property
-	 * 
-	 * @param property
-	 * @param defaultValue
-	 * @return
-	 */
-	private String myGetProperty(String property, String defaultValue) {
-		String value;
-		value = p.getProperty(property);
-		if (value == null) {
-			logger.warn(">> {} property not found: default is {}", property, defaultValue);
-			return defaultValue;
-		}
-		return value;
-	}
-	
-	/**
-     * Method to retrieve an integer property
-     * 
-     * @param property
-     * @param defaultValue
-     * @return
-     */
-    private int myGetProperty(String property, int defaultValue) {
-    	int value;
-		try {
-			value = Integer.parseInt(p.getProperty(property));
-		} catch (Exception e) {
-			logger.warn(">> {} property not found: default is {}", property, defaultValue);
-			return defaultValue;
-		}
-		return value;
-	}
 }

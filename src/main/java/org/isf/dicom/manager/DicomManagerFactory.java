@@ -21,10 +21,9 @@
  */
 package org.isf.dicom.manager;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.Properties;
 
+import org.isf.generaldata.ConfigurationProperties;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHDicomException;
@@ -32,6 +31,8 @@ import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.file.FileTools;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Factory for instantiate DicomManager
@@ -40,6 +41,8 @@ import org.isf.utils.file.FileTools;
  * @version 1.0.0
  */
 public class DicomManagerFactory {
+
+	private static final String FILE_PROPERTIES = "dicom.properties";
 
 	private static DicomManagerInterface instance = null;
 
@@ -89,21 +92,12 @@ public class DicomManagerFactory {
 	}
 
 	private static void init() throws OHDicomException {
+		Logger logger = LoggerFactory.getLogger("DICOM init");
 		try {
-
-			File f = new File("rsc/dicom.properties");
-
-			if (!f.exists()) {
-				throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-						MessageBundle.getMessage("angal.dicom.nofile") + " rsc/dicom.manager.properties", OHSeverityLevel.ERROR));
-			}
-
-			FileInputStream in = new FileInputStream("rsc/dicom.properties");
-
-			props.load(in);
-
-			in.close();
+			props = ConfigurationProperties.loadPropertiesFile(FILE_PROPERTIES, logger);
+			
 		} catch (Exception exc) {
+			logger.error(">> {} file not found.", FILE_PROPERTIES);
 			throw new OHDicomException(exc, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
 					MessageBundle.getMessage("angal.dicom.manager.err") + " " + exc.getMessage(), OHSeverityLevel.ERROR));
 		}

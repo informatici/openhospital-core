@@ -79,6 +79,9 @@ public class MessageBundle {
 	}
 
 	public static ResourceBundle getBundle() {
+		if (resourceBundle == null) {
+			initialize();
+		}
 		return resourceBundle;
 	}
 }
