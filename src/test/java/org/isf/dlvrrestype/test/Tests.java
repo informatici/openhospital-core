@@ -206,7 +206,7 @@ public class Tests extends OHCoreTestCase {
 		assertThat(deliveryResultType.hashCode()).isPositive();
 
 		DeliveryResultType deliveryResultType2 = new DeliveryResultType("someCode", "someDescription");
-		assertThat(deliveryResultType2.toString()).isEqualTo("someDescription");
+		assertThat(deliveryResultType2).hasToString("someDescription");
 	}
 
 	private String _setupTestDeliveryResultType(boolean usingSet) throws OHException {

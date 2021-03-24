@@ -187,10 +187,11 @@ public class Tests extends OHCoreTestCase {
 		Bill foundBill2 = accountingBillIoOperationRepository.findOne(id2);
 
 		assertThat(bill.equals(bill)).isTrue();
-		assertThat(bill.equals(new GregorianCalendar())).isFalse();
-		assertThat(bill.equals(foundBill)).isTrue();
+		assertThat(bill)
+				.isNotEqualTo(new GregorianCalendar())
+				.isEqualTo(foundBill);
 		foundBill2.setId(-1);
-		assertThat(bill.equals(foundBill2)).isFalse();
+		assertThat(bill).isNotEqualTo(foundBill2);
 		assertThat(bill.compareTo(foundBill2)).isEqualTo(id + 1);   // id - (-1)
 		foundBill.setId(id);
 
@@ -416,12 +417,13 @@ public class Tests extends OHCoreTestCase {
 
 		BillPayments billPayment = payments.get(0);
 		assertThat(foundBillPayment.equals(foundBillPayment)).isTrue();
-		assertThat(foundBillPayment.equals(new GregorianCalendar())).isFalse();
-		assertThat(foundBillPayment.equals(billPayment)).isTrue();
+		assertThat(foundBillPayment)
+				.isNotEqualTo(new GregorianCalendar())
+				.isEqualTo(billPayment);
 		int id2 = _setupTestBillPayments(false);
 		BillPayments foundBillPayment2 = accountingBillPaymentIoOperationRepository.findOne(id2);
 		foundBillPayment2.setId(-1);
-		assertThat(foundBillPayment.equals(foundBillPayment2)).isFalse();
+		assertThat(foundBillPayment).isNotEqualTo(foundBillPayment2);
 		foundBillPayment.setId(id);
 
 		assertThat(billPayment.compareTo(new GregorianCalendar())).isEqualTo(0);
@@ -447,12 +449,13 @@ public class Tests extends OHCoreTestCase {
 
 		BillItems billItem = billItems.get(0);
 		assertThat(foundBillItem.equals(foundBillItem)).isTrue();
-		assertThat(foundBillItem.equals(new GregorianCalendar())).isFalse();
-		assertThat(foundBillItem.equals(billItem)).isTrue();
+		assertThat(foundBillItem)
+				.isNotEqualTo(new GregorianCalendar())
+				.isEqualTo(billItem);
 		int id2 = _setupTestBillItems(false);
 		BillItems foundBillItem2 = accountingBillItemsIoOperationRepository.findOne(id2);
 		foundBillItem2.setId(-1);
-		assertThat(foundBillItem.equals(foundBillItem2)).isFalse();
+		assertThat(foundBillItem).isNotEqualTo(foundBillItem2);
 		foundBillItem.setId(id);
 
 		String itemId = billItem.getItemId();

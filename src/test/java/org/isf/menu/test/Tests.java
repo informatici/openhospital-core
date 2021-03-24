@@ -499,27 +499,28 @@ public class Tests extends OHCoreTestCase {
 		GroupMenu groupMenu = testGroupMenu.setup(true);
 		groupMenu.setCode(1);
 
-		assertThat(groupMenu.equals(null)).isFalse();
-		assertThat(groupMenu.equals("aString")).isFalse();
+		assertThat(groupMenu)
+				.isNotNull()
+				.isNotEqualTo("aString");
 
 		GroupMenu groupMenu1 = testGroupMenu.setup(false);
 		groupMenu1.setCode(-1);
-		assertThat(groupMenu.equals(groupMenu1)).isFalse();
+		assertThat(groupMenu).isNotEqualTo(groupMenu1);
 
 		groupMenu1.setCode(groupMenu.getCode());
 		groupMenu1.setUserGroup("someOtherGroup");
-		assertThat(groupMenu.equals(groupMenu1)).isFalse();
+		assertThat(groupMenu).isNotEqualTo(groupMenu1);
 
 		groupMenu1.setUserGroup(groupMenu.getUserGroup());
 		groupMenu1.setMenuItem("someOtherMenuItem");
-		assertThat(groupMenu.equals(groupMenu1)).isFalse();
+		assertThat(groupMenu).isNotEqualTo(groupMenu1);
 
 		groupMenu1.setMenuItem(groupMenu.getMenuItem());
 		groupMenu1.setActive(-1);
-		assertThat(groupMenu.equals(groupMenu1)).isFalse();
+		assertThat(groupMenu).isNotEqualTo(groupMenu1);
 
 		groupMenu1.setActive(groupMenu.getActive());
-		assertThat(groupMenu.equals(groupMenu1)).isTrue();
+		assertThat(groupMenu).isEqualTo(groupMenu1);
 	}
 
 	@Test
@@ -564,7 +565,7 @@ public class Tests extends OHCoreTestCase {
 	public void testUserGroupToString() throws Exception {
 		UserGroup userGroup = testUserGroup.setup(true);
 		userGroup.setCode("someCode");
-		assertThat(userGroup.toString()).isEqualTo("someCode");
+		assertThat(userGroup).hasToString("someCode");
 	}
 
 	@Test

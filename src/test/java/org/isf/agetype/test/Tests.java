@@ -159,14 +159,15 @@ public class Tests extends OHCoreTestCase {
 		ageType2.setFrom(ageType.getFrom());
 		ageType2.setTo(ageType.getTo());
 		assertThat(ageType.equals(ageType)).isTrue();
-		assertThat(ageType.equals(ageType2)).isTrue();
-		assertThat(ageType.equals("xyzzy")).isFalse();
+		assertThat(ageType)
+				.isEqualTo(ageType2)
+				.isNotEqualTo("xyzzy");
 		ageType2.setCode("xxxx");
-		assertThat(ageType.equals(ageType2)).isFalse();
+		assertThat(ageType).isNotEqualTo(ageType2);
 
 		assertThat(ageType.hashCode()).isPositive();
 
-		assertThat(ageType2.toString()).isEqualTo(ageType.getDescription());
+		assertThat(ageType2).hasToString(ageType.getDescription());
 	}
 
 	@Test

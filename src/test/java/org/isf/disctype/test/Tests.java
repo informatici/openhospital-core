@@ -220,14 +220,15 @@ public class Tests extends OHCoreTestCase {
 		DischargeType dischargeType = dischargeTypeIoOperationRepository.findOne(code);
 		DischargeType dischargeType2 = new DischargeType("someCode", "someDescription");
 		assertThat(dischargeType.equals(dischargeType)).isTrue();
-		assertThat(dischargeType.equals(dischargeType2)).isFalse();
-		assertThat(dischargeType.equals("xyzzy")).isFalse();
+		assertThat(dischargeType)
+				.isNotEqualTo(dischargeType2)
+				.isNotEqualTo("xyzzy");
 		dischargeType2.setCode(code);
-		assertThat(dischargeType.equals(dischargeType2)).isTrue();
+		assertThat(dischargeType).isEqualTo(dischargeType2);
 
 		assertThat(dischargeType.hashCode()).isPositive();
 
-		assertThat(dischargeType2.toString()).isEqualTo("someDescription");
+		assertThat(dischargeType2).hasToString("someDescription");
 	}
 
 	private String _setupTestDischargeType(boolean usingSet) throws OHException {

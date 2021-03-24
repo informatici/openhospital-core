@@ -213,7 +213,7 @@ public class Tests extends OHCoreTestCase {
 
 		assertThat(foundExamType.hashCode()).isPositive();
 
-		assertThat(foundExamType.toString()).isEqualTo(foundExamType.getDescription());
+		assertThat(foundExamType).hasToString(foundExamType.getDescription());
 	}
 
 	private String _setupTestExamType(boolean usingSet) throws OHException {

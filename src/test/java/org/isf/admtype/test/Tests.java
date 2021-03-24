@@ -141,14 +141,15 @@ public class Tests extends OHCoreTestCase {
 		AdmissionType admissionType = admissionTypeIoOperationRepository.findOne(code);
 		AdmissionType admissionType2 = new AdmissionType("someCode", "someDescription");
 		assertThat(admissionType.equals(admissionType)).isTrue();
-		assertThat(admissionType.equals(admissionType2)).isFalse();
-		assertThat(admissionType.equals("xyzzy")).isFalse();
+		assertThat(admissionType)
+				.isNotEqualTo(admissionType2)
+				.isNotEqualTo("xyzzy");
 		admissionType2.setCode(code);
-		assertThat(admissionType.equals(admissionType2)).isTrue();
+		assertThat(admissionType).isEqualTo(admissionType2);
 
 		assertThat(admissionType.hashCode()).isPositive();
 
-		assertThat(admissionType2.toString()).isEqualTo("someDescription");
+		assertThat(admissionType2).hasToString("someDescription");
 	}
 
 	@Test
