@@ -153,7 +153,7 @@ public class Tests extends OHCoreTestCase {
 
 		assertThat(hospital.hashCode()).isPositive();
 
-		assertThat(hospital.toString()).isEqualTo(hospital.getDescription());
+		assertThat(hospital).hasToString(hospital.getDescription());
 	}
 
 	private String _setupTestHospital(boolean usingSet) throws OHException {

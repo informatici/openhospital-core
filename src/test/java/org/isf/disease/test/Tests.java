@@ -310,16 +310,17 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType2 = testDiseaseType.setup(false);
 		Disease disease2 = new Disease("998", "someDescription", diseaseType2);
 		assertThat(disease.equals(disease)).isTrue();
-		assertThat(disease.equals(disease2)).isFalse();
-		assertThat(disease.equals("xyzzy")).isFalse();
+		assertThat(disease)
+				.isNotEqualTo(disease2)
+				.isNotEqualTo("xyzzy");
 		disease2.setCode(disease.getCode());
 		disease2.setType(disease.getType());
 		disease2.setDescription(disease.getDescription());
-		assertThat(disease.equals(disease2)).isTrue();
+		assertThat(disease).isEqualTo(disease2);
 
 		assertThat(disease.hashCode()).isPositive();
 
-		assertThat(disease2.toString()).isEqualTo(disease.getDescription());
+		assertThat(disease2).hasToString(disease.getDescription());
 	}
 
 	@Test

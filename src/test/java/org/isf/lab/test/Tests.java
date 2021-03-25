@@ -894,7 +894,6 @@ public class Tests extends OHCoreTestCase {
 			// laboratory 1, Procedure One
 			ArrayList<String> labRow = new ArrayList<>();
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-			;
 
 			laboratory.setInOutPatient("");
 
@@ -1301,10 +1300,11 @@ public class Tests extends OHCoreTestCase {
 		Laboratory laboratory = labIoOperationRepository.findOne(code);
 		Laboratory laboratory2 = new Laboratory(code + 1, null, new GregorianCalendar(), "result", "note", null, "name");
 		assertThat(laboratory.equals(laboratory)).isTrue();
-		assertThat(laboratory.equals(laboratory2)).isFalse();
-		assertThat(laboratory.equals("xyzzy")).isFalse();
+		assertThat(laboratory)
+				.isNotEqualTo(laboratory2)
+				.isNotEqualTo("xyzzy");
 		laboratory2.setCode(code);
-		assertThat(laboratory.equals(laboratory2)).isTrue();
+		assertThat(laboratory).isEqualTo(laboratory2);
 
 		assertThat(laboratory.hashCode()).isPositive();
 
@@ -1333,16 +1333,17 @@ public class Tests extends OHCoreTestCase {
 		LaboratoryRow laboratoryRow = labRowIoOperationRepository.findOne(code);
 		LaboratoryRow laboratoryRow2 = new LaboratoryRow(code + 1, null, "description");
 		assertThat(laboratoryRow.equals(laboratoryRow)).isTrue();
-		assertThat(laboratoryRow.equals(laboratoryRow2)).isFalse();
-		assertThat(laboratoryRow.equals("xyzzy")).isFalse();
+		assertThat(laboratoryRow)
+				.isNotEqualTo(laboratoryRow2)
+				.isNotEqualTo("xyzzy");
 		laboratoryRow2.setCode(code);
-		assertThat(laboratoryRow.equals(laboratoryRow2)).isTrue();
+		assertThat(laboratoryRow).isEqualTo(laboratoryRow2);
 
 		laboratoryRow.setCode(null);
 		laboratoryRow2.setCode(null);
-		assertThat(laboratoryRow.equals(laboratoryRow2)).isFalse();
+		assertThat(laboratoryRow).isNotEqualTo(laboratoryRow2);
 		laboratoryRow.setDescription("description");
-		assertThat(laboratoryRow.equals(laboratoryRow)).isTrue();
+		assertThat(laboratoryRow).isEqualTo(laboratoryRow);
 
 		assertThat(laboratoryRow.hashCode()).isPositive();
 	}

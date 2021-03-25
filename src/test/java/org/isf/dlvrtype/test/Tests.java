@@ -207,15 +207,16 @@ public class Tests extends OHCoreTestCase {
 		DeliveryType deliveryType = deliveryTypeIoOperationRepository.findOne(code);
 		DeliveryType deliveryType2 = new DeliveryType("someCode", "someDescription");
 		assertThat(deliveryType.equals(deliveryType)).isTrue();
-		assertThat(deliveryType.equals(deliveryType2)).isFalse();
-		assertThat(deliveryType.equals("xyzzy")).isFalse();
+		assertThat(deliveryType)
+				.isNotEqualTo(deliveryType2)
+				.isNotEqualTo("xyzzy");
 		deliveryType2.setCode(code);
 		deliveryType2.setDescription(deliveryType.getDescription());
-		assertThat(deliveryType.equals(deliveryType2)).isTrue();
+		assertThat(deliveryType).isEqualTo(deliveryType2);
 
 		assertThat(deliveryType.hashCode()).isPositive();
 
-		assertThat(deliveryType2.toString()).isEqualTo(deliveryType.getDescription());
+		assertThat(deliveryType2).hasToString(deliveryType.getDescription());
 	}
 
 	private String _setupTestDeliveryType(boolean usingSet) throws OHException {
