@@ -42,8 +42,9 @@ public class GeneralData extends ConfigurationProperties {
 	private static final String FILE_PROPERTIES = "generalData.properties";
 	private static final boolean EXIT_ON_FAIL = true;
 	
+	private final boolean SINGLEUSER;
+	
 	public static String LANGUAGE;
-	public static boolean SINGLEUSER;
 	public static boolean AUTOMATICLOT_IN;
 	public static boolean AUTOMATICLOT_OUT;
 	public static boolean AUTOMATICLOTWARD_TOWARD;
@@ -138,9 +139,8 @@ public class GeneralData extends ConfigurationProperties {
 	
 	private GeneralData(String fileProperties) {
 		super(fileProperties, EXIT_ON_FAIL);
-
-		LANGUAGE = myGetProperty("LANGUAGE", DEFAULT_LANGUAGE);
 		SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
+		LANGUAGE = myGetProperty("LANGUAGE", DEFAULT_LANGUAGE);
 		AUTOMATICLOT_IN = myGetProperty("AUTOMATICLOT_IN", DEFAULT_AUTOMATICLOT_IN);
 		AUTOMATICLOT_OUT = myGetProperty("AUTOMATICLOT_OUT", DEFAULT_AUTOMATICLOT_OUT);
 		AUTOMATICLOTWARD_TOWARD = myGetProperty("AUTOMATICLOTWARD_TOWARD", DEFAULT_AUTOMATICLOTWARD_TOWARD);
@@ -187,9 +187,22 @@ public class GeneralData extends ConfigurationProperties {
 
 	public static GeneralData getGeneralData() {
 		if (mySingleData == null) {
-			mySingleData = new GeneralData(FILE_PROPERTIES);
+			initialize();
 		}
 		return mySingleData;
 	}
+
 	
+	public static void initialize() {
+		mySingleData = new GeneralData(FILE_PROPERTIES);
+	}
+
+
+	/**
+	 * @return the sINGLEUSER
+	 */
+	public boolean getSINGLEUSER() {
+		return SINGLEUSER;
+	}
+
 }

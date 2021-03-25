@@ -43,7 +43,7 @@ public class SupplierOperations {
 	private SupplierIoOperationRepository repository;
 	
 	public SupplierOperations() {
-		ExaminationParameters.getExaminationParameters();
+		ExaminationParameters.initialize();
 	}
 
 	/**

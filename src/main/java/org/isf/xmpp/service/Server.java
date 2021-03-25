@@ -49,7 +49,7 @@ public class Server {
 	}
 
 	public void login(String userName, String password) throws XMPPException {
-		XmppData.getXmppData();
+		XmppData.initialize();
 		domain = XmppData.domain;
 		port = XmppData.port;
 		user = userName;

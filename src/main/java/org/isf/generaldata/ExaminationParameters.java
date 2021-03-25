@@ -204,9 +204,13 @@ public class ExaminationParameters extends ConfigurationProperties {
 
     public static ExaminationParameters getExaminationParameters() {
         if (mySingleData == null){ 
-        	mySingleData = new ExaminationParameters(FILE_PROPERTIES);        	
+        	initialize();
         }
         return mySingleData;
     }
+    
+    public static void initialize() {
+    	mySingleData = new ExaminationParameters(FILE_PROPERTIES);
+	}
     
 }

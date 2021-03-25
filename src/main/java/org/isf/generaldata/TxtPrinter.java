@@ -63,9 +63,13 @@ public class TxtPrinter extends ConfigurationProperties {
     
     public static TxtPrinter getTxtPrinter() {
         if (mySingleData == null){ 
-        	mySingleData = new TxtPrinter(FILE_PROPERTIES);        	
+        	initialize();        	
         }
         return mySingleData;
     }
+
+	public static void initialize() {
+		mySingleData = new TxtPrinter(FILE_PROPERTIES);
+	}
     
 }

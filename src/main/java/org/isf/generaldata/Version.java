@@ -43,9 +43,13 @@ public class Version extends ConfigurationProperties {
     
     public static Version getVersion() {
         if (mySingleData == null){ 
-        	mySingleData = new Version(FILE_PROPERTIES);        	
+        	initialize();
         }
         return mySingleData;
     }
+    
+    public static void initialize() {
+    	mySingleData = new Version(FILE_PROPERTIES);   
+	}
     
 }

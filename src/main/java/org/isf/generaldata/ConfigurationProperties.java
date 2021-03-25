@@ -40,7 +40,7 @@ public abstract class ConfigurationProperties {
 	private static final boolean EXIT_ON_FAIL = false;
 
 	private Properties prop;
-	
+
 	/**
 	 * Constructor for standard configuration
 	 * (if missing the application will exit)

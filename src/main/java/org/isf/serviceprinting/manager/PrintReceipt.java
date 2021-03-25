@@ -68,7 +68,7 @@ public class PrintReceipt {
 	 */
 	public PrintReceipt(JasperPrint jasperPrint, String fileName) {
 				
-		TxtPrinter.getTxtPrinter();
+		TxtPrinter.initialize();
 		
 		try {
 			defaultPrintService = PrintServiceLookup.lookupDefaultPrintService();

@@ -41,9 +41,13 @@ public class XmppData extends ConfigurationProperties {
 
 	public static XmppData getXmppData() {
 		if (xmppData == null) {
-			xmppData = new XmppData(FILE_PROPERTIES);
+			initialize();
 		}
 		return xmppData;
+	}
+	
+	public static void initialize() {
+		xmppData = new XmppData(FILE_PROPERTIES);   
 	}
 
 }

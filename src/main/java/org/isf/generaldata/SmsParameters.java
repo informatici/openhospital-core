@@ -41,7 +41,7 @@ public class SmsParameters extends ConfigurationProperties {
     private static final String DEFAULT_ICC = "";
     
     private static SmsParameters mySingleData;
-
+    
     private SmsParameters(String fileProperties) {
     	super(fileProperties);
 			
@@ -55,8 +55,12 @@ public class SmsParameters extends ConfigurationProperties {
     
     public static SmsParameters getSmsParameters() {
         if (mySingleData == null){ 
-        	mySingleData = new SmsParameters(FILE_PROPERTIES);        	
+        	initialize();        	
         }
         return mySingleData;
+    }
+    
+    public static void initialize() {
+    	new SmsParameters(FILE_PROPERTIES);        	
     }
 }
