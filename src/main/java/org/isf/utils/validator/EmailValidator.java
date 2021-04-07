@@ -27,11 +27,12 @@ import java.util.regex.Pattern;
 public class EmailValidator {
 
 	// Java email validation permitted by RFC 5322
-	// Current regex
-	private static final String EMAIL_REGEX = "^[A-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Z0-9.-]+$";
-	// Proposed regex
-	//private static final String EMAIL_REGEX = "^[A-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$";
-
+	// Found this expression and discussion near the end of https://www.regular-expressions.info/email.html
+	private static final String EMAIL_REGEX = "\\A(?=[A-Z0-9@.!#$%&'*+/=?^_‘{|}~-]{6,254}\\z)"
+			+ "(?=[A-Z0-9.!#$%&'*+/=?^_‘{|}~-]{1,64}@)"
+			+ "[A-Z0-9!#$%&'*+/=?^_‘{|}~-]+(?:\\.[A-Z0-9!#$%&'*+/=?^_‘{|}~-]+)*"
+			+ "@(?:(?=[A-Z0-9-]{1,63}\\.)[A-Z0-9](?:[A-Z0-9-]*[A-Z0-9])?\\.)+"
+			+ "(?=[A-Z0-9-]{1,63}\\z)[A-Z0-9](?:[A-Z0-9-]*[A-Z0-9])?\\z";
 	private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX, Pattern.CASE_INSENSITIVE);
 
 	public static boolean isValid(String email) {

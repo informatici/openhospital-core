@@ -49,13 +49,11 @@ public class TestEmailValidator {
 		assertThat(EmailValidator.isValid("1point@domain.co.in")).isTrue();
 	}
 
-	// With the current regex in the validator these email address are considered valid
-	// Using the proposed alternative regex in the validator thiese email address are not valid
 	@Test
 	public void testQuestionablePatterns() throws Exception {
 		// just numbers (like an IP address)
 		assertThat(EmailValidator.isValid("1.2@3.4")).isTrue();
 		// no domain (.com, .org, .net, etc.)
-		assertThat(EmailValidator.isValid("1point@domain")).isTrue();
+		assertThat(EmailValidator.isValid("1point@domain")).isFalse();
 	}
 }
