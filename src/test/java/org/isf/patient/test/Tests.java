@@ -48,6 +48,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.io.File;
+import java.lang.reflect.Field;
+import java.util.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 public class Tests extends OHCoreTestCase {
 
 	private static TestPatient testPatient;
@@ -214,6 +221,17 @@ public class Tests extends OHCoreTestCase {
 		Patient foundPatient = patientIoOperation.getPatient(code);
 		Patient patient = patientIoOperation.getPatientAll(code);
 		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
+	}
+
+	@Test
+	public void testIoGetPatientsByParams() throws Exception {
+		_setupTestPatient(false);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("firstName", "TestFirstN");
+		params.put("birthDate", new GregorianCalendar(1984, Calendar.AUGUST, 14).getTime());
+		params.put("address", "TestAddress");
+		ArrayList<Patient> patients = patientIoOperation.getPatients(params);
+		assertThat(patients.size() > 0).isTrue();
 	}
 
 	@Test

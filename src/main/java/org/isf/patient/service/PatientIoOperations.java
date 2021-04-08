@@ -21,9 +21,6 @@
  */
 package org.isf.patient.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hibernate.Hibernate;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
@@ -34,6 +31,10 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * ------------------------------------------
@@ -54,7 +55,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
-public class PatientIoOperations 
+public class PatientIoOperations
 {
 	public static final String NOT_DELETED_STATUS = "N";
 	@Autowired
@@ -64,22 +65,37 @@ public class PatientIoOperations
 
 	/**
 	 * Method that returns the full list of Patients not logically deleted
-	 * 
+	 *
 	 * @return the list of patients
 	 * @throws OHServiceException
 	 */
 	public ArrayList<Patient> getPatients() throws OHServiceException {
 		return new ArrayList<>(repository.findByDeletedOrDeletedIsNull(NOT_DELETED_STATUS));
 	}
-	
+
 	/**
 	 * Method that returns the full list of Patients not logically deleted by page
-	 * 
+	 *
 	 * @return the list of patients
 	 * @throws OHServiceException
 	 */
 	public ArrayList<Patient> getPatients(Pageable pageable) throws OHServiceException {
 		return new ArrayList<>(repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName("N", pageable));
+	}
+
+	/**
+	 * Method that returns the full list of Patients by parameters
+	 *
+	 * @param parameters
+	 * @return
+	 * @throws OHServiceException
+	 */
+	public ArrayList<Patient> getPatients(Map<String, Object> parameters) throws OHServiceException {
+
+		ArrayList<Patient> pPatient = null;
+		pPatient = new ArrayList<Patient>(repository.getPatientsByParams(parameters));
+
+		return pPatient;
 	}
 
 	/**
@@ -89,18 +105,18 @@ public class PatientIoOperations
 	 * - secondName<br>
 	 * - taxCode<br>
 	 * - note<br>
-	 *  
+	 *
 	 * @param keyword - String to search, <code>null</code> for full list
 	 * @return the list of Patients (could be empty)
 	 * @throws OHServiceException
 	 */
 	public ArrayList<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException {
 		return new ArrayList<>(repository.findByFieldsContainingWordsFromLiteral(keyword));
-	}	
+	}
 
 	/**
 	 * Method that gets a Patient by his/her name
-	 * 
+	 *
 	 * @param name
 	 * @return the Patient that match specified name
 	 * @throws OHServiceException
@@ -117,7 +133,7 @@ public class PatientIoOperations
 
 	/**
 	 * Method that gets a Patient by his/her ID
-	 * 
+	 *
 	 * @param code
 	 * @return the Patient
 	 * @throws OHServiceException
@@ -134,7 +150,7 @@ public class PatientIoOperations
 
 	/**
 	 * Get a Patient by his/her ID, even if he/her has been logically deleted
-	 * 
+	 *
 	 * @param code
 	 * @return the list of Patients
 	 * @throws OHServiceException
@@ -158,9 +174,9 @@ public class PatientIoOperations
 	}
 
 	/**
-	 * 
+	 *
 	 * Method that updates an existing {@link Patient} in the db
-	 * 
+	 *
 	 * @param patient - the {@link Patient} to update
 	 * @return true - if the existing {@link Patient} has been updated
 	 * @throws OHServiceException
@@ -172,7 +188,7 @@ public class PatientIoOperations
 
 	/**
 	 * Method that logically deletes a Patient (not physically deleted)
-	 * 
+	 *
 	 * @param patient
 	 * @return true - if the Patient has been deleted (logically)
 	 * @throws OHServiceException
@@ -184,7 +200,7 @@ public class PatientIoOperations
 	/**
 	 * Method that check if a Patient is already present in the DB by his/her name
 	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName
-	 * 
+	 *
 	 * @param name
 	 * @return true - if the patient is already present
 	 * @throws OHServiceException
@@ -195,7 +211,7 @@ public class PatientIoOperations
 
 	/**
 	 * Method that get next PAT_ID is going to be used.
-	 * 
+	 *
 	 * @return code
 	 * @throws OHServiceException
 	 */
@@ -205,17 +221,17 @@ public class PatientIoOperations
 
 	/**
 	 * Method that merges all clinic details under the same PAT_ID
-	 * 
+	 *
 	 * @param mergedPatient
 	 * @param obsoletePatient
 	 * @return true - if no OHServiceExceptions occurred
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	@Transactional
 	public boolean mergePatientHistory(Patient mergedPatient, Patient obsoletePatient) throws OHServiceException {
 		repository.updateDeleted(obsoletePatient.getCode());
 		applicationEventPublisher.publishEvent(new PatientMergedEvent(obsoletePatient, mergedPatient));
-		
+
 		return true;
 	}
 
@@ -224,7 +240,7 @@ public class PatientIoOperations
 	 *
 	 * @param code - the patient code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
 		return repository.exists(code);

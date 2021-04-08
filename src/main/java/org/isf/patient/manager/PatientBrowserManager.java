@@ -21,11 +21,6 @@
  */
 package org.isf.patient.manager;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-
 import org.isf.accounting.manager.BillBrowserManager;
 import org.isf.accounting.model.Bill;
 import org.isf.admission.manager.AdmissionBrowserManager;
@@ -40,6 +35,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import java.util.*;
+
 
 @Component
 public class PatientBrowserManager {
@@ -101,6 +99,17 @@ public class PatientBrowserManager {
 	@Deprecated
 	public Patient getPatientByName(String name) throws OHServiceException {
 		return ioOperations.getPatient(name);
+	}
+
+	/**
+	 * method that get a Patient list by his/her name
+	 *
+	 * @param params
+	 * @return the list of Patients that match specified name
+	 * @throws OHServiceException
+	 */
+	public ArrayList<Patient> getPatients(Map<String, Object> params) throws OHServiceException {
+		return ioOperations.getPatients(params);
 	}
 
 	/**
