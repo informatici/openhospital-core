@@ -227,7 +227,7 @@ public class Tests extends OHCoreTestCase {
 		params.put("birthDate", new GregorianCalendar(1984, Calendar.AUGUST, 14).getTime());
 		params.put("address", "TestAddress");
 		ArrayList<Patient> patients = patientIoOperation.getPatients(params);
-		assertThat(patients.size() > 0).isTrue();
+		assertThat(patients.size()).isPositive();
 	}
 
 	@Test
