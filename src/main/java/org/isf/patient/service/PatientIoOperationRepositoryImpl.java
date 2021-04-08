@@ -21,23 +21,27 @@
  */
 package org.isf.patient.service;
 
-import org.isf.patient.model.Patient;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.isf.patient.model.Patient;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepositoryCustom {
 
 	@PersistenceContext
 	private EntityManager entityManager;
-
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -46,7 +50,6 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 				createQuery(buildSearchQuery(literal)).
 				getResultList();
 	}
-
 
 	private CriteriaQuery<Patient> buildSearchQuery(String regex) {
 		String[] words = getWordsToSearchForInPatientsRepository(regex);

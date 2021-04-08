@@ -21,6 +21,10 @@
  */
 package org.isf.patient.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.hibernate.Hibernate;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
@@ -32,10 +36,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 /**
  * ------------------------------------------
  * PatientIoOperations - dB operations for the patient entity
@@ -43,20 +43,20 @@ import java.util.Map;
  * modification history
  * 05/05/2005 - giacomo  - first beta version
  * 03/11/2006 - ross - added toString method. Gestione apici per
- *                     nome, cognome, citta', indirizzo e note
+ * nome, cognome, citta', indirizzo e note
  * 11/08/2008 - alessandro - added father & mother's names
  * 26/08/2008 - claudio    - added birth date
- * 							 modified age
+ * modified age
  * 01/01/2009 - Fabrizio   - changed the calls to PAT_AGE fields to
- *                           return again an int type
+ * return again an int type
  * 03/12/2009 - Alex       - added method for merge two patients history
  * ------------------------------------------
  */
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
-public class PatientIoOperations
-{
+public class PatientIoOperations {
+
 	public static final String NOT_DELETED_STATUS = "N";
 	@Autowired
 	private PatientIoOperationRepository repository;
@@ -124,7 +124,7 @@ public class PatientIoOperations
 	public Patient getPatient(String name) throws OHServiceException {
 		List<Patient> patients = repository.findByNameAndDeletedOrderByName(name, NOT_DELETED_STATUS);
 		if (!patients.isEmpty()) {
-			Patient patient = patients.get(patients.size()-1);
+			Patient patient = patients.get(patients.size() - 1);
 			Hibernate.initialize(patient.getPatientProfilePhoto());
 			return patient;
 		}
@@ -141,7 +141,7 @@ public class PatientIoOperations
 	public Patient getPatient(Integer code) throws OHServiceException {
 		List<Patient> patients = repository.findAllWhereIdAndDeleted(code, NOT_DELETED_STATUS);
 		if (!patients.isEmpty()) {
-			Patient patient = patients.get(patients.size()-1);
+			Patient patient = patients.get(patients.size() - 1);
 			Hibernate.initialize(patient.getPatientProfilePhoto());
 			return patient;
 		}
@@ -174,7 +174,6 @@ public class PatientIoOperations
 	}
 
 	/**
-	 *
 	 * Method that updates an existing {@link Patient} in the db
 	 *
 	 * @param patient - the {@link Patient} to update
