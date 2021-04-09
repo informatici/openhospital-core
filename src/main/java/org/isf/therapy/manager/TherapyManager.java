@@ -262,8 +262,8 @@ public class TherapyManager {
 
 		ArrayList<Medical> medArray = medManager.getMedicals();
 
-		Double neededQty = 0.;
-		Double actualQty = 0.;
+		double neededQty = 0.;
+		double actualQty = 0.;
 
 		for (Therapy th : therapies) {
 

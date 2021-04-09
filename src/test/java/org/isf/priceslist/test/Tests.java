@@ -391,12 +391,13 @@ public class Tests extends OHCoreTestCase {
 		Price price = new Price(priceList, "TG", "TestItem", "TestDescription", 10.10);
 
 		assertThat(price.equals(price)).isTrue();
-		assertThat(price).isNotEqualTo(null);
-		assertThat(price).isNotEqualTo("someString");
+		assertThat(price)
+				.isNotNull()
+				.isNotEqualTo("someString");
 
 		PriceList priceList2 = testPriceList.setup(true);
 		Price price2 = new Price(priceList2, "TG", "TestItem", "TestDescriptionOther", 10.10);
-		assertThat(price.equals(price2)).isTrue();
+		assertThat(price).isEqualTo(price2);
 
 		price2.setDesc("TestDescription");
 		price.setId(-1);
@@ -443,8 +444,9 @@ public class Tests extends OHCoreTestCase {
 		PriceList priceList = testPriceList.setup(true);
 
 		assertThat(priceList.equals(priceList)).isTrue();
-		assertThat(priceList).isNotEqualTo(null);
-		assertThat(priceList).isNotEqualTo("someString");
+		assertThat(priceList)
+				.isNotNull()
+				.isNotEqualTo("someString");
 
 		PriceList priceList2 = testPriceList.setup(true);
 		priceList.setId(-1);

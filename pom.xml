@@ -17,7 +17,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.framework.version>4.3.28.RELEASE</spring.framework.version>
-		<license.maven.plugin.version>4.0.rc2</license.maven.plugin.version>
+		<license.maven.plugin.version>4.0</license.maven.plugin.version>
 	</properties>
 
 	<build>
@@ -187,11 +187,6 @@
 			<groupId>com.googlecode.gstreamer-java</groupId>
 			<artifactId>gstreamer-java</artifactId>
 			<version>1.4</version>
-		</dependency>
-		<dependency>
-			<groupId>codeanticode.gsvideo</groupId>
-			<artifactId>gsvideo_isf</artifactId>
-			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>

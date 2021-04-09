@@ -21,6 +21,7 @@
  */
 package org.isf.xmpp.service;
 
+import org.isf.generaldata.XmppData;
 import org.jivesoftware.smack.AccountManager;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
@@ -48,7 +49,7 @@ public class Server {
 	}
 
 	public void login(String userName, String password) throws XMPPException {
-		XmppData.getXmppData();
+		XmppData.initialize();
 		domain = XmppData.domain;
 		port = XmppData.port;
 		user = userName;

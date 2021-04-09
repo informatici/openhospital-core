@@ -22,8 +22,6 @@
 package org.isf.utils.sms;
 
 import java.awt.HeadlessException;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +31,10 @@ import java.util.Properties;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import org.isf.generaldata.ConfigurationProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
@@ -46,8 +48,10 @@ import gnu.io.SerialPortEventListener;
 public class SetupGSM extends JFrame implements SerialPortEventListener {
 
 	private static final long serialVersionUID = 1L;
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final String FILE_PROPERTIES = "GSM.properties";
 	
-	private Properties props = new Properties();
+	private Properties props;
 	private CommPortIdentifier portId = null;
 	private Enumeration<?> portList = null;
 	private SerialPort serialPort = null;
@@ -63,15 +67,7 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	
 	public SetupGSM() {	
 		
-		FileInputStream in;
-		try {
-			in = new FileInputStream("rsc" + File.separator + "SmsGateway" + File.separator + "GSM.properties");
-			props.load(in);
-			in.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+		props = ConfigurationProperties.loadPropertiesFile(FILE_PROPERTIES, logger);
 		
 		String model = props.getProperty("GMM");
 		
@@ -168,7 +164,7 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 		StringBuilder comment = new StringBuilder(" Configuration file for SMS Sender GSM\n");
 		comment.append(" PORT = COMx (Windows) or /dev/ttyUSBx (Linux)");
 		try {
-			out = new FileOutputStream("rsc" + File.separator + "SmsGateway" + File.separator + "GSM.properties");
+			out = new FileOutputStream("GSM.properties");
 			props.setProperty("PORT", port);
 			props.store(out, comment.toString());
 			out.close();

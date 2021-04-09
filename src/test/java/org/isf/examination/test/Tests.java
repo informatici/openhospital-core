@@ -341,10 +341,11 @@ public class Tests extends OHCoreTestCase {
 		PatientExamination patientExamination2 = testPatientExamination.setup(patient, false);
 		patientExamination2.setPex_ID(-1);
 		assertThat(patientExamination.equals(patientExamination)).isTrue();
-		assertThat(patientExamination.equals(patientExamination2)).isFalse();
-		assertThat(patientExamination.equals("xyzzy")).isFalse();
+		assertThat(patientExamination)
+				.isNotEqualTo(patientExamination2)
+				.isNotEqualTo("xyzzy");
 		patientExamination2.setPex_ID(patientExamination.getPex_ID());
-		assertThat(patientExamination.equals(patientExamination2)).isTrue();
+		assertThat(patientExamination).isEqualTo(patientExamination2);
 		assertThat(patientExamination.compareTo(patientExamination2)).isZero();
 
 		assertThat(patientExamination.hashCode()).isPositive();

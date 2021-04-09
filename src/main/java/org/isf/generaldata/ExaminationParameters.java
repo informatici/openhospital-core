@@ -21,21 +21,14 @@
  */
 package org.isf.generaldata;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Settings for Examination form
  *
  * @author Mwithi
  */
-public class ExaminationParameters {
+public class ExaminationParameters extends ConfigurationProperties {
 	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final String FILE_PROPERTIES = "examination.properties";
 	
 	public static int HEIGHT_MIN;
 	private static final int DEFAULT_HEIGHT_MIN = 0;
@@ -157,106 +150,67 @@ public class ExaminationParameters {
 	
 	private static ExaminationParameters mySingleData;
 
-	private Properties p;
-
-	private ExaminationParameters() {
-		try {
-			p = new Properties();
-			p.load(new FileInputStream("rsc" + File.separator + "examination.properties"));
-			HEIGHT_MIN = myGetProperty("HEIGHT_MIN", DEFAULT_HEIGHT_MIN);
-			HEIGHT_MAX = myGetProperty("HEIGHT_MAX", DEFAULT_HEIGHT_MAX);
-			HEIGHT_INIT = myGetProperty("HEIGHT_INIT", DEFAULT_HEIGHT_INIT);
+	private ExaminationParameters(String fileProperties) {
+		super(fileProperties);
+			
+		HEIGHT_MIN = myGetProperty("HEIGHT_MIN", DEFAULT_HEIGHT_MIN);
+		HEIGHT_MAX = myGetProperty("HEIGHT_MAX", DEFAULT_HEIGHT_MAX);
+		HEIGHT_INIT = myGetProperty("HEIGHT_INIT", DEFAULT_HEIGHT_INIT);
 //			HEIGHT_STEP = myGetProperty("HEIGHT_STEP", DEFAULT_HEIGHT_STEP);
 //			HEIGHT_UNIT = myGetProperty("HEIGHT_UNIT", DEFAULT_HEIGHT_UNIT);
-			
-			WEIGHT_MIN = myGetProperty("WEIGHT_MIN", DEFAULT_WEIGHT_MIN);
-			WEIGHT_MAX = myGetProperty("WEIGHT_MAX", DEFAULT_WEIGHT_MAX);
-			WEIGHT_STEP = myGetProperty("WEIGHT_STEP", DEFAULT_WEIGHT_STEP);
-			WEIGHT_INIT = myGetProperty("WEIGHT_INIT", DEFAULT_WEIGHT_INIT);
+		
+		WEIGHT_MIN = myGetProperty("WEIGHT_MIN", DEFAULT_WEIGHT_MIN);
+		WEIGHT_MAX = myGetProperty("WEIGHT_MAX", DEFAULT_WEIGHT_MAX);
+		WEIGHT_STEP = myGetProperty("WEIGHT_STEP", DEFAULT_WEIGHT_STEP);
+		WEIGHT_INIT = myGetProperty("WEIGHT_INIT", DEFAULT_WEIGHT_INIT);
 //			WEIGHT_UNIT = myGetProperty("WEIGHT_UNIT", DEFAULT_WEIGHT_UNIT);
-			
-			AP_MIN_INIT = myGetProperty("AP_MIN_INIT", DEFAULT_AP_MIN_INIT);
-			AP_MAX_INIT = myGetProperty("AP_MAX_INIT", DEFAULT_AP_MAX_INIT);
+		
+		AP_MIN_INIT = myGetProperty("AP_MIN_INIT", DEFAULT_AP_MIN_INIT);
+		AP_MAX_INIT = myGetProperty("AP_MAX_INIT", DEFAULT_AP_MAX_INIT);
 //			BP_UNIT = myGetProperty("BP_UNIT", DEFAULT_BP_UNIT);
-			
-			HR_MIN = myGetProperty("HR_MIN", DEFAULT_HR_MIN);
-			HR_MAX = myGetProperty("HR_MAX", DEFAULT_HR_MAX);
-			HR_INIT = myGetProperty("HR_INIT", DEFAULT_HR_INIT);
+		
+		HR_MIN = myGetProperty("HR_MIN", DEFAULT_HR_MIN);
+		HR_MAX = myGetProperty("HR_MAX", DEFAULT_HR_MAX);
+		HR_INIT = myGetProperty("HR_INIT", DEFAULT_HR_INIT);
 //			HR_UNIT = myGetProperty("HR_UNIT", DEFAULT_HR_UNIT);
-			
-			TEMP_MIN = myGetProperty("TEMP_MIN", DEFAULT_TEMP_MIN);
-			TEMP_MAX = myGetProperty("TEMP_MAX", DEFAULT_TEMP_MAX);
-			TEMP_INIT = myGetProperty("TEMP_INIT", DEFAULT_TEMP_INIT);
-			TEMP_STEP = myGetProperty("TEMP_STEP", DEFAULT_TEMP_STEP);
+		
+		TEMP_MIN = myGetProperty("TEMP_MIN", DEFAULT_TEMP_MIN);
+		TEMP_MAX = myGetProperty("TEMP_MAX", DEFAULT_TEMP_MAX);
+		TEMP_INIT = myGetProperty("TEMP_INIT", DEFAULT_TEMP_INIT);
+		TEMP_STEP = myGetProperty("TEMP_STEP", DEFAULT_TEMP_STEP);
 //			TEMP_UNIT = myGetProperty("TEMP_UNIT", DEFAULT_TEMP_UNIT);
-			
-			SAT_MIN = myGetProperty("SAT_MIN", DEFAULT_SAT_MIN);
-			//SAT_MAX = myGetProperty("SAT_MAX", DEFAULT_SAT_MAX);
-			SAT_INIT = myGetProperty("SAT_INIT", DEFAULT_SAT_INIT);
-			SAT_STEP = myGetProperty("SAT_STEP", DEFAULT_SAT_STEP);
+		
+		SAT_MIN = myGetProperty("SAT_MIN", DEFAULT_SAT_MIN);
+		//SAT_MAX = myGetProperty("SAT_MAX", DEFAULT_SAT_MAX);
+		SAT_INIT = myGetProperty("SAT_INIT", DEFAULT_SAT_INIT);
+		SAT_STEP = myGetProperty("SAT_STEP", DEFAULT_SAT_STEP);
 //			SAT_UNIT = myGetProperty("SAT_UNIT", DEFAULT_SAT_UNIT);
-			
-			HGT_MIN = myGetProperty("HGT_MIN", DEFAULT_HGT_MIN);
-			HGT_MAX = myGetProperty("HGT_MAX", DEFAULT_HGT_MAX);
-			HGT_INIT = myGetProperty("HGT_INIT", DEFAULT_HGT_INIT);
-			
-			DIURESIS_MIN = myGetProperty("DIURESIS_MIN", DEFAULT_DIURESIS_MIN);
-			DIURESIS_MAX = myGetProperty("DIURESIS_MAX", DEFAULT_DIURESIS_MAX);
-			DIURESIS_INIT = myGetProperty("DIURESIS_INIT", DEFAULT_DIURESIS_INIT);
+		
+		HGT_MIN = myGetProperty("HGT_MIN", DEFAULT_HGT_MIN);
+		HGT_MAX = myGetProperty("HGT_MAX", DEFAULT_HGT_MAX);
+		HGT_INIT = myGetProperty("HGT_INIT", DEFAULT_HGT_INIT);
+		
+		DIURESIS_MIN = myGetProperty("DIURESIS_MIN", DEFAULT_DIURESIS_MIN);
+		DIURESIS_MAX = myGetProperty("DIURESIS_MAX", DEFAULT_DIURESIS_MAX);
+		DIURESIS_INIT = myGetProperty("DIURESIS_INIT", DEFAULT_DIURESIS_INIT);
 
-			RR_MIN = myGetProperty("RR_MIN", DEFAULT_RR_MIN);
-			RR_MAX = myGetProperty("RR_MAX", DEFAULT_RR_MAX);
-			RR_INIT = myGetProperty("RR_INIT", DEFAULT_RR_INIT);
+		RR_MIN = myGetProperty("RR_MIN", DEFAULT_RR_MIN);
+		RR_MAX = myGetProperty("RR_MAX", DEFAULT_RR_MAX);
+		RR_INIT = myGetProperty("RR_INIT", DEFAULT_RR_INIT);
+		
+		LIST_SIZE = myGetProperty("LIST_SIZE", DEFAULT_LIST_SIZE);
 			
-			LIST_SIZE = myGetProperty("LIST_SIZE", DEFAULT_LIST_SIZE);
-			
-		} catch (Exception e) { //no file
-			logger.warn("examination.properties file not found.");
-		}
-		//MessageBundle.initialize();
 	}
 
-	/**
-     * Method to retrieve an integer property
-     * 
-     * @param property
-     * @param defaultValue
-     * @return
-     */
-    private int myGetProperty(String property, int defaultValue) {
-    	int value;
-		try {
-			value = Integer.parseInt(p.getProperty(property));
-		} catch (Exception e) {
-			logger.warn("{} property not found: default is {}", property, defaultValue);
-			return defaultValue;
-		}
-		return value;
-	}
-    
-    /**
-     * Method to retrieve an integer property
-     * 
-     * @param property
-     * @param defaultValue
-     * @return
-     */
-    private double myGetProperty(String property, double defaultValue) {
-    	double value;
-		try {
-			value = Double.parseDouble(p.getProperty(property));
-		} catch (Exception e) {
-			logger.warn("{} property not found: default is {}", property, defaultValue);
-			return defaultValue;
-		}
-		return value;
-	}
-    
     public static ExaminationParameters getExaminationParameters() {
         if (mySingleData == null){ 
-        	mySingleData = new ExaminationParameters();        	
+        	initialize();
         }
         return mySingleData;
     }
+    
+    public static void initialize() {
+    	mySingleData = new ExaminationParameters(FILE_PROPERTIES);
+	}
     
 }

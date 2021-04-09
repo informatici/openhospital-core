@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+-- MySQL dump 10.19  Distrib 10.2.37-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: oh
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	10.2.37-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,79 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `admission`
+--
+
+DROP TABLE IF EXISTS `admission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admission` (
+  `ADM_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ADM_IN` int(11) NOT NULL DEFAULT 0,
+  `ADM_TYPE` char(1) NOT NULL DEFAULT 'N',
+  `ADM_WRD_ID_A` char(1) NOT NULL DEFAULT '',
+  `ADM_YPROG` int(11) NOT NULL DEFAULT 0,
+  `ADM_PAT_ID` int(11) NOT NULL DEFAULT 0,
+  `ADM_DATE_ADM` datetime NOT NULL,
+  `ADM_ADMT_ID_A_ADM` varchar(10) NOT NULL DEFAULT '',
+  `ADM_FHU` varchar(50) DEFAULT NULL,
+  `ADM_IN_DIS_ID_A` varchar(10) DEFAULT NULL,
+  `ADM_OUT_DIS_ID_A` varchar(10) DEFAULT NULL,
+  `ADM_OUT_DIS_ID_A_2` varchar(10) DEFAULT NULL,
+  `ADM_OUT_DIS_ID_A_3` varchar(10) DEFAULT NULL,
+  `ADM_OPE_ID_A` varchar(10) DEFAULT NULL,
+  `ADM_DATE_OP` datetime DEFAULT NULL,
+  `ADM_RESOP` varchar(10) DEFAULT NULL,
+  `ADM_DATE_DIS` datetime DEFAULT NULL,
+  `ADM_DIST_ID_A` varchar(10) DEFAULT NULL,
+  `ADM_NOTE` text DEFAULT NULL,
+  `ADM_TRANS` float DEFAULT 0,
+  `ADM_PRG_DATE_VIS` datetime DEFAULT NULL,
+  `ADM_PRG_PTT_ID_A` varchar(10) DEFAULT NULL,
+  `ADM_PRG_DATE_DEL` datetime DEFAULT NULL,
+  `ADM_PRG_DLT_ID_A` char(1) DEFAULT NULL,
+  `ADM_PRG_DRT_ID_A` char(1) DEFAULT NULL,
+  `ADM_PRG_WEIGHT` float DEFAULT NULL,
+  `ADM_PRG_DATE_CTRL1` datetime DEFAULT NULL,
+  `ADM_PRG_DATE_CTRL2` datetime DEFAULT NULL,
+  `ADM_PRG_DATE_ABORT` datetime DEFAULT NULL,
+  `ADM_USR_ID_A` varchar(50) NOT NULL DEFAULT 'admin',
+  `ADM_LOCK` int(11) NOT NULL DEFAULT 0,
+  `ADM_DELETED` char(1) NOT NULL DEFAULT 'N',
+  `ADM_CREATED_BY` varchar(50) DEFAULT NULL,
+  `ADM_CREATED_DATE` datetime DEFAULT NULL,
+  `ADM_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `ADM_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `ADM_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`ADM_ID`),
+  KEY `FK_ADMISSION_DISCHARGETYPE` (`ADM_DIST_ID_A`),
+  KEY `FK_ADMISSION_DELIVERYTYPE` (`ADM_PRG_DLT_ID_A`),
+  KEY `FK_ADMISSION_DELIVERYRESULTTYPE` (`ADM_PRG_DRT_ID_A`),
+  KEY `FK_ADMISSION_ADMISSIONTYPE` (`ADM_ADMT_ID_A_ADM`),
+  KEY `FK_ADMISSION_OPERATION` (`ADM_OPE_ID_A`),
+  KEY `FK_ADMISSION_WARD` (`ADM_WRD_ID_A`),
+  KEY `FK_ADMISSION_PREGNANTTREATMENTTYPE` (`ADM_PRG_PTT_ID_A`),
+  KEY `FK_ADMISSION_IN_DISEASE` (`ADM_IN_DIS_ID_A`),
+  KEY `FK_ADMISSION_OUT_DISEASE1` (`ADM_OUT_DIS_ID_A`),
+  KEY `FK_ADMISSION_OUT_DISEASE2` (`ADM_OUT_DIS_ID_A_2`),
+  KEY `FK_ADMISSION_OUT_DISEASE3` (`ADM_OUT_DIS_ID_A_3`),
+  KEY `FK_ADMISSION_PATIENT` (`ADM_PAT_ID`),
+  CONSTRAINT `FK_ADMISSION_ADMISSIONTYPE` FOREIGN KEY (`ADM_ADMT_ID_A_ADM`) REFERENCES `admissiontype` (`ADMT_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ADMISSION_DELIVERYRESULTTYPE` FOREIGN KEY (`ADM_PRG_DRT_ID_A`) REFERENCES `deliveryresulttype` (`DRT_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ADMISSION_DELIVERYTYPE` FOREIGN KEY (`ADM_PRG_DLT_ID_A`) REFERENCES `deliverytype` (`DLT_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ADMISSION_DISCHARGETYPE` FOREIGN KEY (`ADM_DIST_ID_A`) REFERENCES `dischargetype` (`DIST_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ADMISSION_IN_DISEASE` FOREIGN KEY (`ADM_IN_DIS_ID_A`) REFERENCES `disease` (`DIS_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ADMISSION_OPERATION` FOREIGN KEY (`ADM_OPE_ID_A`) REFERENCES `operation` (`OPE_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ADMISSION_OUT_DISEASE1` FOREIGN KEY (`ADM_OUT_DIS_ID_A`) REFERENCES `disease` (`DIS_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ADMISSION_OUT_DISEASE2` FOREIGN KEY (`ADM_OUT_DIS_ID_A_2`) REFERENCES `disease` (`DIS_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ADMISSION_OUT_DISEASE3` FOREIGN KEY (`ADM_OUT_DIS_ID_A_3`) REFERENCES `disease` (`DIS_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ADMISSION_PATIENT` FOREIGN KEY (`ADM_PAT_ID`) REFERENCES `patient` (`PAT_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_ADMISSION_PREGNANTTREATMENTTYPE` FOREIGN KEY (`ADM_PRG_PTT_ID_A`) REFERENCES `pregnanttreatmenttype` (`PTT_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_ADMISSION_WARD` FOREIGN KEY (`ADM_WRD_ID_A`) REFERENCES `ward` (`WRD_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=508 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `admission`
@@ -478,6 +551,25 @@ INSERT INTO `admission` VALUES (507,1,'N','I',918,522,'2020-11-22 17:58:14','I',
 UNLOCK TABLES;
 
 --
+-- Table structure for table `admissiontype`
+--
+
+DROP TABLE IF EXISTS `admissiontype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admissiontype` (
+  `ADMT_ID_A` varchar(10) NOT NULL,
+  `ADMT_DESC` varchar(50) NOT NULL,
+  `ADMT_CREATED_BY` varchar(50) DEFAULT NULL,
+  `ADMT_CREATED_DATE` datetime DEFAULT NULL,
+  `ADMT_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `ADMT_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `ADMT_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`ADMT_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `admissiontype`
 --
 
@@ -488,6 +580,27 @@ INSERT INTO `admissiontype` VALUES ('I','SELF',NULL,NULL,NULL,NULL,1);
 INSERT INTO `admissiontype` VALUES ('R','REFERRAL',NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `admissiontype` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `agetype`
+--
+
+DROP TABLE IF EXISTS `agetype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `agetype` (
+  `AT_CODE` varchar(4) NOT NULL DEFAULT '',
+  `AT_FROM` int(11) NOT NULL DEFAULT 0,
+  `AT_TO` int(11) NOT NULL DEFAULT 0,
+  `AT_DESC` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `AT_CREATED_BY` varchar(50) DEFAULT NULL,
+  `AT_CREATED_DATE` datetime DEFAULT NULL,
+  `AT_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `AT_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `AT_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`AT_CODE`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `agetype`
@@ -505,26 +618,37 @@ INSERT INTO `agetype` VALUES ('d5',60,99,'angal.agetype.elderly',NULL,NULL,NULL,
 UNLOCK TABLES;
 
 --
+-- Table structure for table `billitems`
+--
+
+DROP TABLE IF EXISTS `billitems`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `billitems` (
+  `BLI_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `BLI_ID_BILL` int(11) DEFAULT NULL,
+  `BLI_IS_PRICE` tinyint(1) NOT NULL,
+  `BLI_ID_PRICE` varchar(10) DEFAULT NULL,
+  `BLI_ITEM_DESC` varchar(100) DEFAULT NULL,
+  `BLI_ITEM_AMOUNT` double NOT NULL,
+  `BLI_QTY` int(11) NOT NULL,
+  `BLI_CREATED_BY` varchar(50) DEFAULT NULL,
+  `BLI_CREATED_DATE` datetime DEFAULT NULL,
+  `BLI_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `BLI_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `BLI_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`BLI_ID`),
+  KEY `FK_BILLITEMS_BILLS` (`BLI_ID_BILL`),
+  CONSTRAINT `FK_BILLITEMS_BILLS` FOREIGN KEY (`BLI_ID_BILL`) REFERENCES `bills` (`BLL_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `billitems`
 --
 
 LOCK TABLES `billitems` WRITE;
 /*!40000 ALTER TABLE `billitems` DISABLE KEYS */;
-INSERT INTO `billitems` VALUES (27,8,1,'OPE42','Peritonitis',180,1,'admin','2020-11-20 00:38:33','admin','2020-11-23 15:50:13',1);
-INSERT INTO `billitems` VALUES (28,9,1,'MED2','Acetic Acid Glacial 1 ltr',18,2,'admin','2020-11-20 00:44:03','admin','2020-11-23 15:50:09',1);
-INSERT INTO `billitems` VALUES (29,9,1,'EXA03.01','3.1 Blood Slide (Malaria)',10,1,'admin','2020-11-20 00:44:03','admin','2020-11-23 15:50:09',1);
-INSERT INTO `billitems` VALUES (30,9,1,'OTH1','Amount per day',0,2,'admin','2020-11-20 00:44:03','admin','2020-11-20 00:44:03',1);
-INSERT INTO `billitems` VALUES (31,10,1,'MED111','Bendrofluazide 5mg Tab',12,5,'admin','2020-11-20 00:45:06','admin','2020-11-23 19:32:14',1);
-INSERT INTO `billitems` VALUES (32,10,1,'MED19','Xylene 2.5 ltrs',30,2,'admin','2020-11-20 00:45:06','admin','2020-11-23 15:13:49',1);
-INSERT INTO `billitems` VALUES (33,11,1,'OPE31','Hernia (inguinal & femoral)',140,1,'admin','2020-11-20 02:10:15','admin','2020-11-23 15:51:53',1);
-INSERT INTO `billitems` VALUES (34,11,1,'EXA01.02','1.2 WBC Count',10,1,'admin','2020-11-20 02:10:15','admin','2020-11-23 15:51:53',1);
-INSERT INTO `billitems` VALUES (35,11,1,'MED68','Insulin Isophane 40IU/ml 10ml',18,4,'admin','2020-11-20 02:10:15','admin','2020-11-23 15:51:53',1);
-INSERT INTO `billitems` VALUES (36,11,0,'','Special service',2,1,'admin','2020-11-20 02:10:15','admin','2020-11-20 02:10:15',1);
-INSERT INTO `billitems` VALUES (37,12,1,'MED318','Gloves Surgical Sterile 8.5',2,3,'admin','2020-11-20 02:41:23','admin','2020-11-23 15:49:43',1);
-INSERT INTO `billitems` VALUES (38,12,1,'MED61','Hydralazine 20mg Vial',10,3,'admin','2020-11-20 02:41:23','admin','2020-11-23 15:49:43',1);
-INSERT INTO `billitems` VALUES (39,12,1,'EXA03.01','3.1 Blood Slide (Malaria)',10,1,'admin','2020-11-20 02:41:23','admin','2020-11-23 15:49:43',1);
-INSERT INTO `billitems` VALUES (40,12,1,'OTH1','Amount per day',0,2,'admin','2020-11-20 02:41:23','admin','2020-11-20 02:41:23',1);
-INSERT INTO `billitems` VALUES (41,13,1,'MED211','Benzyl Benzoate 25% 100ml',8,2,'admin','2020-11-21 02:04:33','admin','2020-11-23 15:50:04',1);
 INSERT INTO `billitems` VALUES (42,13,1,'MED117','Carbimazole 5mg Tab',2,3,'admin','2020-11-21 02:04:33','admin','2020-11-23 15:50:04',1);
 INSERT INTO `billitems` VALUES (43,13,1,'EXA03.01','3.1 Blood Slide (Malaria)',10,1,'admin','2020-11-21 02:04:33','admin','2020-11-23 15:50:04',1);
 INSERT INTO `billitems` VALUES (44,13,1,'EXAURI','URINALYSIS',10,1,'admin','2020-11-21 02:04:33','admin','2020-11-23 15:50:04',1);
@@ -589,8 +713,65 @@ INSERT INTO `billitems` VALUES (102,25,1,'MED42','Amphotericin B 50mg Vial',0,1,
 INSERT INTO `billitems` VALUES (103,25,1,'MED408','Anti Serum AB 10ml',8,2,'admin','2020-11-23 18:53:45','admin','2020-11-23 18:53:45',1);
 INSERT INTO `billitems` VALUES (104,25,1,'EXA04.01','4.1 CULTURE AND SENSITIVITY (C&S) FOR HAEMOPHILUS INFUENZA TYPE B',18,1,'admin','2020-11-23 18:53:45','admin','2020-11-23 18:53:45',1);
 INSERT INTO `billitems` VALUES (105,23,1,'MED4','Copper 11 Sulphate 500g',21,4,'admin','2020-11-23 19:21:25','admin','2020-11-23 19:23:43',1);
+INSERT INTO `billitems` VALUES (106,27,1,'MED111','Bendrofluazide 5mg Tab',12,2,'admin','2021-03-13 22:44:52','admin','2021-03-13 22:44:52',1);
+INSERT INTO `billitems` VALUES (107,27,1,'EXA05.05','5.5 ZN',20,1,'admin','2021-03-13 22:44:52','admin','2021-03-13 22:44:52',1);
+INSERT INTO `billitems` VALUES (108,28,1,'MED130','Cloxacillin 250mg Tab',0,2,'admin','2021-03-13 22:46:25','admin','2021-03-13 22:46:25',1);
+INSERT INTO `billitems` VALUES (109,28,1,'MED79','Morphine 15mg/ml 1ml Amp',0,1,'admin','2021-03-13 22:46:25','admin','2021-03-13 22:46:25',1);
+INSERT INTO `billitems` VALUES (110,28,1,'EXA07.04.2','7.4.2 UREA',8,1,'admin','2021-03-13 22:46:25','admin','2021-03-13 22:46:25',1);
+INSERT INTO `billitems` VALUES (111,28,0,'','test',1,1,'admin','2021-03-13 22:46:25','admin','2021-03-13 22:46:25',1);
+INSERT INTO `billitems` VALUES (112,29,1,'OPE34','Epigastrical Hernia',100,1,'admin','2021-03-15 00:52:24','admin','2021-03-15 00:52:24',1);
+INSERT INTO `billitems` VALUES (113,29,1,'MED273','Adhesive Tape 2.5cm x 5m',1,4,'admin','2021-03-15 00:52:24','admin','2021-03-15 00:52:24',1);
+INSERT INTO `billitems` VALUES (114,29,1,'MED94','Thiopental Sodium 500mg Vial',0,1,'admin','2021-03-15 00:52:24','admin','2021-03-15 00:52:24',1);
+INSERT INTO `billitems` VALUES (115,30,1,'OPE47','Upper limb',200,1,'admin','2021-03-15 00:53:12','admin','2021-03-15 00:53:12',1);
+INSERT INTO `billitems` VALUES (116,30,1,'MED250','Needles Luer G20 Disposable',0,2,'admin','2021-03-15 00:53:12','admin','2021-03-15 00:53:12',1);
+INSERT INTO `billitems` VALUES (117,30,1,'MED173','Salbutamol 4mg Tab',0,1,'admin','2021-03-15 00:53:12','admin','2021-03-15 00:53:12',1);
+INSERT INTO `billitems` VALUES (118,31,1,'MED96','Sodium Chloride 0.9% IV 500ml',0,1,'admin','2021-03-15 00:54:12','admin','2021-03-15 00:54:12',1);
+INSERT INTO `billitems` VALUES (119,31,1,'MED27','Sodium Carbonate Anhydrous',0,2,'admin','2021-03-15 00:54:12','admin','2021-03-15 00:54:12',1);
+INSERT INTO `billitems` VALUES (120,31,1,'EXA05.03','5.3 INDIA INK',12,1,'admin','2021-03-15 00:54:12','admin','2021-03-15 00:54:12',1);
+INSERT INTO `billitems` VALUES (121,32,1,'MED356','Tablet Counting Tray',0,1,'admin','2021-03-15 01:05:48','admin','2021-03-15 01:05:48',1);
+INSERT INTO `billitems` VALUES (122,32,1,'MED9','Iodin Crystal 100g',0,1,'admin','2021-03-15 01:05:48','admin','2021-03-15 01:05:48',1);
+INSERT INTO `billitems` VALUES (123,32,1,'MED28','Trisodium Citrate',38,2,'admin','2021-03-15 01:05:48','admin','2021-03-15 01:05:48',1);
+INSERT INTO `billitems` VALUES (124,33,1,'MED98','Acetazolamide 250mg Tab',0,4,'admin','2021-03-15 01:07:40','admin','2021-03-15 01:07:40',1);
+INSERT INTO `billitems` VALUES (125,33,1,'MED414','Aciclovir cream',0,2,'admin','2021-03-15 01:07:40','admin','2021-03-15 01:07:40',1);
+INSERT INTO `billitems` VALUES (126,34,1,'EXA04.03','4.3 C&S FOR VIBRO CHOLERA',18,1,'admin','2021-03-15 13:37:08','admin','2021-03-15 13:37:08',1);
+INSERT INTO `billitems` VALUES (127,35,1,'MED47','Benzyl Penicillin 5 MIU Vial',0,2,'admin','2021-03-15 13:38:46','admin','2021-03-15 13:38:46',1);
+INSERT INTO `billitems` VALUES (128,36,1,'OPE15','Peritonitis',180,1,'admin','2021-03-15 14:52:58','admin','2021-03-15 14:52:58',1);
+INSERT INTO `billitems` VALUES (129,37,1,'MED348','Apron Plastic Re-usable',0,1,'admin','2021-03-15 20:05:00','admin','2021-03-15 20:05:00',1);
+INSERT INTO `billitems` VALUES (130,37,1,'MED385','Suture Cutgut Chromic (2/0) RN22230TH',0,2,'admin','2021-03-15 20:05:00','admin','2021-03-15 20:05:00',1);
+INSERT INTO `billitems` VALUES (131,37,1,'MED165','Impramine 25mg Tab',0,2,'admin','2021-03-15 20:05:00','admin','2021-03-15 20:05:00',1);
+INSERT INTO `billitems` VALUES (132,37,1,'MED173','Salbutamol 4mg Tab',0,3,'admin','2021-03-15 20:05:00','admin','2021-03-15 20:05:00',1);
+INSERT INTO `billitems` VALUES (133,38,1,'OPE2','emergency',50,1,'admin','2021-03-15 21:55:39','admin','2021-03-15 21:55:39',1);
+INSERT INTO `billitems` VALUES (134,39,1,'EXA03.01','3.1 Blood Slide (Malaria)',10,1,'admin','2021-03-15 21:56:27','admin','2021-03-15 21:56:27',1);
+INSERT INTO `billitems` VALUES (135,39,1,'MED349','Apron Plastic Re-usable local',0,1,'admin','2021-03-15 21:56:27','admin','2021-03-15 21:56:27',1);
+INSERT INTO `billitems` VALUES (136,40,1,'MED201','Beclamethasone 50mcg Innhaler',0,1,'admin','2021-03-15 22:10:48','admin','2021-03-15 22:10:48',1);
+INSERT INTO `billitems` VALUES (137,40,1,'MED72','Lignocaine 2% 20ml Vial',0,1,'admin','2021-03-15 22:10:48','admin','2021-03-15 22:10:48',1);
+INSERT INTO `billitems` VALUES (138,41,1,'OPE48','Lower limb',100,1,'admin','2021-03-15 22:36:27','admin','2021-03-15 22:36:27',1);
 /*!40000 ALTER TABLE `billitems` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `billpayments`
+--
+
+DROP TABLE IF EXISTS `billpayments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `billpayments` (
+  `BLP_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `BLP_ID_BILL` int(11) DEFAULT NULL,
+  `BLP_DATE` datetime NOT NULL,
+  `BLP_AMOUNT` double NOT NULL,
+  `BLP_USR_ID_A` varchar(50) NOT NULL DEFAULT 'admin',
+  `BLP_CREATED_BY` varchar(50) DEFAULT NULL,
+  `BLP_CREATED_DATE` datetime DEFAULT NULL,
+  `BLP_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `BLP_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `BLP_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`BLP_ID`),
+  KEY `FK_BILLPAYMENTS_BILLS` (`BLP_ID_BILL`),
+  CONSTRAINT `FK_BILLPAYMENTS_BILLS` FOREIGN KEY (`BLP_ID_BILL`) REFERENCES `bills` (`BLL_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=248 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `billpayments`
@@ -634,8 +815,74 @@ INSERT INTO `billpayments` VALUES (187,23,'2020-11-22 17:59:11',250,'admin','adm
 INSERT INTO `billpayments` VALUES (188,24,'2020-11-20 00:26:33',100,'admin','admin','2020-11-23 19:44:56','admin','2020-11-23 19:44:56',1);
 INSERT INTO `billpayments` VALUES (189,24,'2020-11-20 02:11:34',200,'admin','admin','2020-11-23 19:44:56','admin','2020-11-23 19:44:56',1);
 INSERT INTO `billpayments` VALUES (190,24,'2020-11-20 02:13:11',-300,'admin','admin','2020-11-23 19:44:56','admin','2020-11-23 19:44:56',1);
+INSERT INTO `billpayments` VALUES (191,27,'2021-03-13 22:44:45',20,'admin','admin','2021-03-13 22:44:52','admin','2021-03-13 22:44:52',1);
+INSERT INTO `billpayments` VALUES (192,27,'2021-03-13 22:44:50',-30,'admin','admin','2021-03-13 22:44:52','admin','2021-03-13 22:44:52',1);
+INSERT INTO `billpayments` VALUES (193,27,'2021-03-13 22:44:52',54,'admin','admin','2021-03-13 22:44:52','admin','2021-03-13 22:44:52',1);
+INSERT INTO `billpayments` VALUES (194,28,'2021-03-13 22:46:19',80,'admin','admin','2021-03-13 22:46:25','admin','2021-03-13 22:46:25',1);
+INSERT INTO `billpayments` VALUES (195,28,'2021-03-13 22:46:24',-60,'admin','admin','2021-03-13 22:46:25','admin','2021-03-13 22:46:25',1);
+INSERT INTO `billpayments` VALUES (196,29,'2021-03-15 00:52:09',100,'admin','admin','2021-03-15 00:52:24','admin','2021-03-15 00:52:24',1);
+INSERT INTO `billpayments` VALUES (197,29,'2021-03-15 00:52:14',-100,'admin','admin','2021-03-15 00:52:24','admin','2021-03-15 00:52:24',1);
+INSERT INTO `billpayments` VALUES (198,29,'2021-03-15 00:52:23',104,'admin','admin','2021-03-15 00:52:24','admin','2021-03-15 00:52:24',1);
+INSERT INTO `billpayments` VALUES (199,30,'2021-03-15 00:53:08',200,'admin','admin','2021-03-15 00:53:12','admin','2021-03-15 00:53:12',1);
+INSERT INTO `billpayments` VALUES (200,31,'2021-03-15 00:54:10',50,'admin','admin','2021-03-15 00:54:12','admin','2021-03-15 00:54:12',1);
+INSERT INTO `billpayments` VALUES (204,32,'2021-03-15 01:05:25',45,'admin','admin','2021-03-15 01:06:58','admin','2021-03-15 01:06:58',1);
+INSERT INTO `billpayments` VALUES (205,32,'2021-03-15 01:05:43',-50,'admin','admin','2021-03-15 01:06:58','admin','2021-03-15 01:06:58',1);
+INSERT INTO `billpayments` VALUES (206,32,'2021-03-15 01:05:47',81,'admin','admin','2021-03-15 01:06:58','admin','2021-03-15 01:06:58',1);
+INSERT INTO `billpayments` VALUES (227,33,'2021-03-15 01:07:38',25,'admin','admin','2021-03-15 01:09:31','admin','2021-03-15 01:09:31',1);
+INSERT INTO `billpayments` VALUES (228,33,'2021-03-15 01:08:01',-20,'admin','admin','2021-03-15 01:09:31','admin','2021-03-15 01:09:31',1);
+INSERT INTO `billpayments` VALUES (229,33,'2021-03-15 01:08:28',10,'admin','admin','2021-03-15 01:09:31','admin','2021-03-15 01:09:31',1);
+INSERT INTO `billpayments` VALUES (230,33,'2021-03-15 01:08:45',-50,'admin','admin','2021-03-15 01:09:31','admin','2021-03-15 01:09:31',1);
+INSERT INTO `billpayments` VALUES (231,33,'2021-03-15 01:08:59',35,'admin','admin','2021-03-15 01:09:31','admin','2021-03-15 01:09:31',1);
+INSERT INTO `billpayments` VALUES (232,34,'2021-03-15 13:36:51',18,'admin','admin','2021-03-15 13:37:08','admin','2021-03-15 13:37:08',1);
+INSERT INTO `billpayments` VALUES (233,35,'2021-03-15 13:37:57',20,'admin','admin','2021-03-15 13:38:46','admin','2021-03-15 13:38:46',1);
+INSERT INTO `billpayments` VALUES (234,35,'2021-03-15 13:38:37',-20,'admin','admin','2021-03-15 13:38:46','admin','2021-03-15 13:38:46',1);
+INSERT INTO `billpayments` VALUES (235,36,'2021-03-15 14:52:42',180,'admin','admin','2021-03-15 14:52:58','admin','2021-03-15 14:52:58',1);
+INSERT INTO `billpayments` VALUES (238,37,'2021-03-15 20:04:47',85,'admin','admin','2021-03-15 20:05:36','admin','2021-03-15 20:05:36',1);
+INSERT INTO `billpayments` VALUES (239,37,'2021-03-15 20:04:59',-85,'admin','admin','2021-03-15 20:05:36','admin','2021-03-15 20:05:36',1);
+INSERT INTO `billpayments` VALUES (240,38,'2021-03-15 21:55:27',50,'admin','admin','2021-03-15 21:55:39','admin','2021-03-15 21:55:39',1);
+INSERT INTO `billpayments` VALUES (241,38,'2021-03-15 21:55:33',-40,'admin','admin','2021-03-15 21:55:39','admin','2021-03-15 21:55:39',1);
+INSERT INTO `billpayments` VALUES (242,38,'2021-03-15 21:55:38',40,'admin','admin','2021-03-15 21:55:39','admin','2021-03-15 21:55:39',1);
+INSERT INTO `billpayments` VALUES (243,39,'2021-03-15 21:56:23',10,'admin','admin','2021-03-15 21:56:27','admin','2021-03-15 21:56:27',1);
+INSERT INTO `billpayments` VALUES (244,40,'2021-03-15 22:10:23',22,'admin','admin','2021-03-15 22:10:48','admin','2021-03-15 22:10:48',1);
+INSERT INTO `billpayments` VALUES (245,40,'2021-03-15 22:10:44',-20,'admin','admin','2021-03-15 22:10:48','admin','2021-03-15 22:10:48',1);
+INSERT INTO `billpayments` VALUES (246,40,'2021-03-15 22:10:46',-2,'admin','admin','2021-03-15 22:10:48','admin','2021-03-15 22:10:48',1);
+INSERT INTO `billpayments` VALUES (247,41,'2021-03-15 22:36:23',100,'admin','admin','2021-03-15 22:36:27','admin','2021-03-15 22:36:27',1);
 /*!40000 ALTER TABLE `billpayments` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `bills`
+--
+
+DROP TABLE IF EXISTS `bills`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bills` (
+  `BLL_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `BLL_DATE` datetime NOT NULL,
+  `BLL_UPDATE` datetime NOT NULL,
+  `BLL_IS_LST` tinyint(1) NOT NULL,
+  `BLL_ID_LST` int(11) DEFAULT NULL,
+  `BLL_LST_NAME` varchar(50) DEFAULT NULL,
+  `BLL_IS_PAT` tinyint(1) NOT NULL,
+  `BLL_ID_PAT` int(11) DEFAULT NULL,
+  `BLL_PAT_NAME` varchar(100) DEFAULT NULL,
+  `BLL_STATUS` varchar(1) DEFAULT NULL,
+  `BLL_AMOUNT` double DEFAULT NULL,
+  `BLL_BALANCE` double DEFAULT NULL,
+  `BLL_USR_ID_A` varchar(50) NOT NULL DEFAULT 'admin',
+  `BLL_CREATED_BY` varchar(50) DEFAULT NULL,
+  `BLL_CREATED_DATE` datetime DEFAULT NULL,
+  `BLL_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `BLL_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `BLL_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`BLL_ID`),
+  KEY `FK_BILLS_PATIENT` (`BLL_ID_PAT`),
+  KEY `FK_BILLS_PRICELISTS` (`BLL_ID_LST`),
+  CONSTRAINT `FK_BILLS_PATIENT` FOREIGN KEY (`BLL_ID_PAT`) REFERENCES `patient` (`PAT_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_BILLS_PRICELISTS` FOREIGN KEY (`BLL_ID_LST`) REFERENCES `pricelists` (`LST_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `bills`
@@ -669,8 +916,42 @@ INSERT INTO `bills` VALUES (23,'2020-11-22 17:58:46','2020-11-22 17:59:11',1,1,'
 INSERT INTO `bills` VALUES (24,'2020-11-20 00:26:01','2020-11-20 02:13:11',1,1,'Basic',1,151,'Lien Notter','O',136,136,'admin',NULL,NULL,'admin','2020-11-23 19:44:56',1);
 INSERT INTO `bills` VALUES (25,'2020-11-19 01:45:33','2020-11-19 01:46:47',1,1,'Basic',1,217,'Mcsherry Mortimer','O',34,33,'admin',NULL,NULL,'admin','2020-11-23 18:53:45',1);
 INSERT INTO `bills` VALUES (26,'2020-11-19 16:01:16','2020-11-19 16:01:16',1,1,'Basic',1,523,'Quinlan Coors','O',114,114,'admin',NULL,NULL,'admin','2020-11-23 19:17:22',1);
+INSERT INTO `bills` VALUES (27,'2021-03-13 22:44:24','2021-03-13 22:44:52',1,1,'Basic',1,524,'Geremia Dickinson','C',44,0,'admin','admin','2021-03-13 22:44:52','admin','2021-03-13 22:44:52',1);
+INSERT INTO `bills` VALUES (28,'2021-03-13 22:45:47','2021-03-13 22:46:24',1,1,'Basic',1,409,'Anibal Gillon','O',9,-11,'admin','admin','2021-03-13 22:46:25','admin','2021-03-13 22:46:25',1);
+INSERT INTO `bills` VALUES (29,'2021-03-13 00:51:11','2021-03-15 00:52:23',1,1,'Basic',1,179,'Jetter Stanley','C',104,0,'admin','admin','2021-03-15 00:52:24','admin','2021-03-15 00:52:24',1);
+INSERT INTO `bills` VALUES (30,'2021-03-13 00:52:34','2021-03-15 00:53:08',1,1,'Basic',1,236,'Andra Devilbiss','C',200,0,'admin','admin','2021-03-15 00:53:12','admin','2021-03-15 00:53:12',1);
+INSERT INTO `bills` VALUES (31,'2021-03-13 00:53:41','2021-03-15 00:54:10',1,1,'Basic',1,288,'Sowers Yevette','O',12,-38,'admin','admin','2021-03-15 00:54:12','admin','2021-03-15 00:54:12',1);
+INSERT INTO `bills` VALUES (32,'2021-03-13 01:04:48','2021-03-15 01:05:47',1,1,'Basic',1,527,'Marcus Kellop','C',76,0,'admin',NULL,NULL,'admin','2021-03-15 01:06:58',1);
+INSERT INTO `bills` VALUES (33,'2021-03-13 01:07:12','2021-03-15 01:08:59',1,1,'Basic',1,98,'Claris Grund','C',0,0,'admin',NULL,NULL,'admin','2021-03-15 01:09:31',1);
+INSERT INTO `bills` VALUES (34,'2021-03-15 13:36:32','2021-03-15 13:36:51',1,1,'Basic',1,153,'Carie Geissler','C',18,0,'admin','admin','2021-03-15 13:37:07','admin','2021-03-15 13:37:07',1);
+INSERT INTO `bills` VALUES (35,'2021-03-15 13:37:31','2021-03-15 13:38:37',1,1,'Basic',1,205,'Wilmer Stanislawski','O',0,0,'admin','admin','2021-03-15 13:38:46','admin','2021-03-15 13:38:46',1);
+INSERT INTO `bills` VALUES (36,'2021-03-15 14:52:15','2021-03-15 14:52:42',1,1,'Basic',1,150,'Keasler Shakia','C',180,0,'admin','admin','2021-03-15 14:52:58','admin','2021-03-15 14:52:58',1);
+INSERT INTO `bills` VALUES (37,'2021-03-15 20:03:56','2021-03-15 20:04:59',1,1,'Basic',1,198,'Noble Basye','C',0,0,'admin',NULL,NULL,'admin','2021-03-15 20:05:36',1);
+INSERT INTO `bills` VALUES (38,'2021-03-15 21:54:57','2021-03-15 21:55:38',1,1,'Basic',1,158,'Kenneth Waring','C',50,0,'admin','admin','2021-03-15 21:55:39','admin','2021-03-15 21:55:39',1);
+INSERT INTO `bills` VALUES (39,'2021-03-15 21:56:05','2021-03-15 21:56:23',1,1,'Basic',1,165,'Maxwell Lockamy','C',10,0,'admin','admin','2021-03-15 21:56:27','admin','2021-03-15 21:56:27',1);
+INSERT INTO `bills` VALUES (40,'2021-03-15 22:09:47','2021-03-15 22:10:46',1,1,'Basic',1,515,'Alvaro Robertson','C',0,0,'admin','admin','2021-03-15 22:10:48','admin','2021-03-15 22:10:48',1);
+INSERT INTO `bills` VALUES (41,'2021-03-15 22:36:07','2021-03-15 22:36:23',1,1,'Basic',1,305,'Grose Rosalba','C',100,0,'admin','admin','2021-03-15 22:36:27','admin','2021-03-15 22:36:27',1);
 /*!40000 ALTER TABLE `bills` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `deliveryresulttype`
+--
+
+DROP TABLE IF EXISTS `deliveryresulttype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `deliveryresulttype` (
+  `DRT_ID_A` char(1) NOT NULL,
+  `DRT_DESC` varchar(50) NOT NULL,
+  `DRT_CREATED_BY` varchar(50) DEFAULT NULL,
+  `DRT_CREATED_DATE` datetime DEFAULT NULL,
+  `DRT_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `DRT_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `DRT_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`DRT_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `deliveryresulttype`
@@ -687,6 +968,25 @@ INSERT INTO `deliveryresulttype` VALUES ('S','FRESH STILL BIRTH',NULL,NULL,NULL,
 UNLOCK TABLES;
 
 --
+-- Table structure for table `deliverytype`
+--
+
+DROP TABLE IF EXISTS `deliverytype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `deliverytype` (
+  `DLT_ID_A` char(1) NOT NULL,
+  `DLT_DESC` varchar(50) NOT NULL,
+  `DLT_CREATED_BY` varchar(50) DEFAULT NULL,
+  `DLT_CREATED_DATE` datetime DEFAULT NULL,
+  `DLT_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `DLT_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `DLT_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`DLT_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `deliverytype`
 --
 
@@ -699,6 +999,50 @@ INSERT INTO `deliverytype` VALUES ('V','DELIVERY ASSISTED BY VACUUM EXTRACTION',
 UNLOCK TABLES;
 
 --
+-- Table structure for table `dicom`
+--
+
+DROP TABLE IF EXISTS `dicom`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dicom` (
+  `DM_PAT_ID` int(11) NOT NULL,
+  `DM_DATA` longblob DEFAULT NULL,
+  `DM_FILE_ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `DM_FILE_NOME` varchar(255) NOT NULL,
+  `DM_FILE_ACCESSION_NUMBER` varchar(255) DEFAULT NULL,
+  `DM_FILE_INSTITUTION_NAME` varchar(255) DEFAULT NULL,
+  `DM_FILE_PAT_UID` varchar(255) DEFAULT NULL,
+  `DM_FILE_PAT_NAME` varchar(255) DEFAULT NULL,
+  `DM_FILE_PAT_ADDR` varchar(255) DEFAULT NULL,
+  `DM_FILE_PAT_AGE` varchar(255) DEFAULT NULL,
+  `DM_FILE_PAT_SEX` varchar(255) DEFAULT NULL,
+  `DM_FILE_PAT_BIRTHDATE` varchar(255) DEFAULT NULL,
+  `DM_FILE_ST_UID` varchar(255) NOT NULL,
+  `DM_FILE_ST_DATE` datetime DEFAULT NULL,
+  `DM_FILE_ST_DESCR` varchar(255) DEFAULT NULL,
+  `DM_FILE_SER_UID` varchar(255) NOT NULL,
+  `DM_FILE_SER_INST_UID` varchar(255) NOT NULL,
+  `DM_FILE_SER_NUMBER` varchar(255) DEFAULT NULL,
+  `DM_FILE_SER_DESC_COD_SEQ` varchar(255) DEFAULT NULL,
+  `DM_FILE_SER_DATE` datetime DEFAULT NULL,
+  `DM_FILE_SER_DESC` varchar(255) DEFAULT NULL,
+  `DM_FILE_INST_UID` varchar(255) NOT NULL,
+  `DM_FILE_MODALIITY` varchar(255) DEFAULT NULL,
+  `DM_THUMBNAIL` blob DEFAULT NULL,
+  `DM_DCMT_ID` varchar(3) DEFAULT NULL,
+  `DM_CREATED_BY` varchar(50) DEFAULT NULL,
+  `DM_CREATED_DATE` datetime DEFAULT NULL,
+  `DM_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `DM_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `DM_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`DM_FILE_ID`),
+  KEY `FK_DICOM_DICOMTYPE_idx` (`DM_DCMT_ID`),
+  CONSTRAINT `FK_DICOM_DICOMTYPE` FOREIGN KEY (`DM_DCMT_ID`) REFERENCES `dicomtype` (`DCMT_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `dicom`
 --
 
@@ -708,6 +1052,20 @@ LOCK TABLES `dicom` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `dicomtype`
+--
+
+DROP TABLE IF EXISTS `dicomtype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dicomtype` (
+  `DCMT_ID` varchar(3) NOT NULL,
+  `DCMT_DESC` varchar(50) NOT NULL,
+  PRIMARY KEY (`DCMT_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `dicomtype`
 --
 
@@ -715,6 +1073,25 @@ LOCK TABLES `dicomtype` WRITE;
 /*!40000 ALTER TABLE `dicomtype` DISABLE KEYS */;
 /*!40000 ALTER TABLE `dicomtype` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `dischargetype`
+--
+
+DROP TABLE IF EXISTS `dischargetype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dischargetype` (
+  `DIST_ID_A` varchar(10) NOT NULL,
+  `DIST_DESC` varchar(50) NOT NULL,
+  `DIST_CREATED_BY` varchar(50) DEFAULT NULL,
+  `DIST_CREATED_DATE` datetime DEFAULT NULL,
+  `DIST_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `DIST_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `DIST_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`DIST_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `dischargetype`
@@ -728,6 +1105,32 @@ INSERT INTO `dischargetype` VALUES ('EQ','NORMAL DISCHARGE',NULL,NULL,NULL,NULL,
 INSERT INTO `dischargetype` VALUES ('ES','ESCAPE',NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `dischargetype` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `disease`
+--
+
+DROP TABLE IF EXISTS `disease`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `disease` (
+  `DIS_ID_A` varchar(10) NOT NULL,
+  `DIS_DESC` varchar(160) NOT NULL,
+  `DIS_DCL_ID_A` char(2) NOT NULL,
+  `DIS_LOCK` int(11) NOT NULL DEFAULT 0,
+  `DIS_OPD_INCLUDE` int(11) NOT NULL DEFAULT 0,
+  `DIS_IPD_IN_INCLUDE` int(11) NOT NULL DEFAULT 0,
+  `DIS_IPD_OUT_INCLUDE` int(11) NOT NULL DEFAULT 0,
+  `DIS_CREATED_BY` varchar(50) DEFAULT NULL,
+  `DIS_CREATED_DATE` datetime DEFAULT NULL,
+  `DIS_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `DIS_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `DIS_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`DIS_ID_A`),
+  KEY `FK_DISEASE_DISEASETYPE` (`DIS_DCL_ID_A`),
+  CONSTRAINT `FK_DISEASE_DISEASETYPE` FOREIGN KEY (`DIS_DCL_ID_A`) REFERENCES `diseasetype` (`DCL_ID_A`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `disease`
@@ -849,6 +1252,25 @@ INSERT INTO `disease` VALUES ('99','Malignant neoplasm of Haemopoetic tissue','N
 UNLOCK TABLES;
 
 --
+-- Table structure for table `diseasetype`
+--
+
+DROP TABLE IF EXISTS `diseasetype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `diseasetype` (
+  `DCL_ID_A` char(2) NOT NULL,
+  `DCL_DESC` varchar(110) NOT NULL,
+  `DCL_CREATED_BY` varchar(50) DEFAULT NULL,
+  `DCL_CREATED_DATE` datetime DEFAULT NULL,
+  `DCL_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `DCL_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `DCL_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`DCL_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `diseasetype`
 --
 
@@ -861,6 +1283,31 @@ INSERT INTO `diseasetype` VALUES ('ND','1.NOTIFIABLE DISEASES',NULL,NULL,NULL,NU
 INSERT INTO `diseasetype` VALUES ('OC','2.OTHER INFECTIOUS/COMMUNICABLE DISEASES',NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `diseasetype` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `exam`
+--
+
+DROP TABLE IF EXISTS `exam`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `exam` (
+  `EXA_ID_A` varchar(10) NOT NULL,
+  `EXA_DESC` varchar(100) NOT NULL,
+  `EXA_EXC_ID_A` char(2) NOT NULL,
+  `EXA_PROC` int(11) NOT NULL,
+  `EXA_DEFAULT` varchar(50) DEFAULT NULL,
+  `EXA_LOCK` int(11) NOT NULL DEFAULT 0,
+  `EXA_CREATED_BY` varchar(50) DEFAULT NULL,
+  `EXA_CREATED_DATE` datetime DEFAULT NULL,
+  `EXA_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `EXA_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `EXA_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`EXA_ID_A`),
+  KEY `FK_EXAM_EXAMTYPE` (`EXA_EXC_ID_A`),
+  CONSTRAINT `FK_EXAM_EXAMTYPE` FOREIGN KEY (`EXA_EXC_ID_A`) REFERENCES `examtype` (`EXC_ID_A`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `exam`
@@ -919,6 +1366,28 @@ INSERT INTO `exam` VALUES ('08.01','8.1 OCCULT BLOOD','OC',1,'NEGATIVE',1,NULL,N
 INSERT INTO `exam` VALUES ('URI','URINALYSIS','OT',2,'',1,NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `exam` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `examrow`
+--
+
+DROP TABLE IF EXISTS `examrow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `examrow` (
+  `EXR_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `EXR_EXA_ID_A` varchar(10) NOT NULL,
+  `EXR_DESC` varchar(50) NOT NULL,
+  `EXR_CREATED_BY` varchar(50) DEFAULT NULL,
+  `EXR_CREATED_DATE` datetime DEFAULT NULL,
+  `EXR_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `EXR_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `EXR_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`EXR_ID`),
+  KEY `FK_EXAMROW_EXAM` (`EXR_EXA_ID_A`),
+  CONSTRAINT `FK_EXAMROW_EXAM` FOREIGN KEY (`EXR_EXA_ID_A`) REFERENCES `exam` (`EXA_ID_A`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=213 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `examrow`
@@ -1065,6 +1534,25 @@ INSERT INTO `examrow` VALUES (212,'03.03','HYMENOLEPIS NANA',NULL,NULL,NULL,NULL
 UNLOCK TABLES;
 
 --
+-- Table structure for table `examtype`
+--
+
+DROP TABLE IF EXISTS `examtype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `examtype` (
+  `EXC_ID_A` char(2) NOT NULL,
+  `EXC_DESC` varchar(50) NOT NULL,
+  `EXC_CREATED_BY` varchar(50) DEFAULT NULL,
+  `EXC_CREATED_DATE` datetime DEFAULT NULL,
+  `EXC_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `EXC_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `EXC_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`EXC_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `examtype`
 --
 
@@ -1084,6 +1572,26 @@ INSERT INTO `examtype` VALUES ('SP','STOOLPARASITES',NULL,NULL,NULL,NULL,1);
 INSERT INTO `examtype` VALUES ('UR','URINALYSIS',NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `examtype` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `groupmenu`
+--
+
+DROP TABLE IF EXISTS `groupmenu`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `groupmenu` (
+  `GM_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `GM_UG_ID_A` varchar(50) NOT NULL DEFAULT '',
+  `GM_MNI_ID_A` varchar(50) NOT NULL DEFAULT '',
+  `GM_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  `GM_CREATED_BY` varchar(50) DEFAULT NULL,
+  `GM_CREATED_DATE` datetime DEFAULT NULL,
+  `GM_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `GM_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  PRIMARY KEY (`GM_ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=139 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `groupmenu`
@@ -1224,6 +1732,23 @@ INSERT INTO `groupmenu` VALUES (138,'admin','worksheet',1,NULL,NULL,NULL,NULL);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `help`
+--
+
+DROP TABLE IF EXISTS `help`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `help` (
+  `HL_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `HL_MASK` int(11) NOT NULL,
+  `HL_FIELD` int(11) NOT NULL,
+  `HL_LANG` char(2) DEFAULT NULL,
+  `HL_MSG` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`HL_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `help`
 --
 
@@ -1233,14 +1758,87 @@ LOCK TABLES `help` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `hospital`
+--
+
+DROP TABLE IF EXISTS `hospital`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hospital` (
+  `HOS_ID_A` varchar(10) NOT NULL,
+  `HOS_NAME` varchar(255) NOT NULL,
+  `HOS_ADDR` varchar(255) NOT NULL,
+  `HOS_CITY` varchar(255) NOT NULL,
+  `HOS_TELE` varchar(50) DEFAULT NULL,
+  `HOS_FAX` varchar(50) DEFAULT NULL,
+  `HOS_EMAIL` varchar(50) DEFAULT NULL,
+  `HOS_CURR_COD` varchar(3) DEFAULT NULL,
+  `HOS_LOCK` int(11) NOT NULL DEFAULT 0,
+  `HOS_CREATED_BY` varchar(50) DEFAULT NULL,
+  `HOS_CREATED_DATE` datetime DEFAULT NULL,
+  `HOS_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `HOS_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `HOS_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`HOS_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `hospital`
 --
 
 LOCK TABLES `hospital` WRITE;
 /*!40000 ALTER TABLE `hospital` DISABLE KEYS */;
-INSERT INTO `hospital` VALUES ('STLUKE','St. Luke HOSPITAL - Angal','P.O. BOX 85 - NEBBI','ANGAL','+256 0472621076','+256 0','angal@ucmb.ug.co.','',1,NULL,NULL,'admin','2020-11-19 02:08:10',1);
+INSERT INTO `hospital` VALUES ('STLUKE','St. Luke HOSPITAL - Angal','P.O. BOX 85 - NEBBI','ANGAL','+256 0472621076','+256 0','angal@ucmb.ug.co.','UGX',1,NULL,NULL,'admin','2020-11-19 02:08:10',1);
 /*!40000 ALTER TABLE `hospital` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `laboratory`
+--
+
+DROP TABLE IF EXISTS `laboratory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `laboratory` (
+  `LAB_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `LAB_EXA_ID_A` varchar(10) NOT NULL,
+  `LAB_DATE` datetime NOT NULL,
+  `LAB_RES` varchar(50) NOT NULL,
+  `LAB_NOTE` varchar(255) DEFAULT NULL,
+  `LAB_PAT_ID` int(11) DEFAULT NULL,
+  `LAB_PAT_NAME` varchar(100) DEFAULT NULL,
+  `LAB_CROSS1` int(11) DEFAULT NULL,
+  `LAB_CROSS2` int(11) DEFAULT NULL,
+  `LAB_CROSS3` int(11) DEFAULT NULL,
+  `LAB_CROSS4` int(11) DEFAULT NULL,
+  `LAB_CROSS5` int(11) DEFAULT NULL,
+  `LAB_CROSS6` int(11) DEFAULT NULL,
+  `LAB_CROSS7` int(11) DEFAULT NULL,
+  `LAB_CROSS8` int(11) DEFAULT NULL,
+  `LAB_CROSS9` int(11) DEFAULT NULL,
+  `LAB_CROSS10` int(11) DEFAULT NULL,
+  `LAB_CROSS11` int(11) DEFAULT NULL,
+  `LAB_CROSS12` int(11) DEFAULT NULL,
+  `LAB_CROSS13` int(11) DEFAULT NULL,
+  `LAB_LOCK` int(11) NOT NULL DEFAULT 0,
+  `LAB_AGE` int(11) DEFAULT NULL,
+  `LAB_SEX` char(1) DEFAULT NULL,
+  `LAB_MATERIAL` varchar(25) DEFAULT NULL,
+  `LAB_EXAM_DATE` date DEFAULT NULL,
+  `LAB_PAT_INOUT` char(1) DEFAULT NULL,
+  `LAB_CREATED_BY` varchar(50) DEFAULT NULL,
+  `LAB_CREATED_DATE` datetime DEFAULT NULL,
+  `LAB_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `LAB_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `LAB_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`LAB_ID`),
+  KEY `FK_LABORATORY_EXAM` (`LAB_EXA_ID_A`),
+  KEY `FK_LABORATORY_PATIENT` (`LAB_PAT_ID`),
+  CONSTRAINT `FK_LABORATORY_EXAM` FOREIGN KEY (`LAB_EXA_ID_A`) REFERENCES `exam` (`EXA_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_LABORATORY_PATIENT` FOREIGN KEY (`LAB_PAT_ID`) REFERENCES `patient` (`PAT_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=334 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `laboratory`
@@ -1534,8 +2132,48 @@ INSERT INTO `laboratory` VALUES (312,'01.06','2020-11-21 22:40:40','NEGATIVE',NU
 INSERT INTO `laboratory` VALUES (313,'04.01','2020-11-21 22:40:40','POSITIVE',NULL,315,'Hobert Kittelson',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,48,'M','undefined','2020-11-21','O','admin','2020-11-21 22:41:07','admin','2020-11-21 22:41:07',1);
 INSERT INTO `laboratory` VALUES (314,'07.01','2020-11-23 16:02:33','NEGATIVE',NULL,523,'Quinlan Coors',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,6,'M','undefined','2020-11-23','O','admin','2020-11-23 16:02:45','admin','2020-11-23 16:02:45',1);
 INSERT INTO `laboratory` VALUES (315,'07.02','2020-11-23 16:02:33','NORMAL',NULL,523,'Quinlan Coors',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,6,'M','undefined','2020-11-23','O','admin','2020-11-23 16:02:45','admin','2020-11-23 16:02:45',1);
+INSERT INTO `laboratory` VALUES (316,'02.01','2021-03-13 22:47:53','AB RH+',NULL,524,'Geremia Dickinson',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,67,'M','undefined','2021-03-13','O','admin','2021-03-13 22:48:18','admin','2021-03-13 22:48:18',1);
+INSERT INTO `laboratory` VALUES (317,'07.04.1','2021-03-13 22:47:53','< 1.4 (NORMAL)',NULL,524,'Geremia Dickinson',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,67,'M','film','2021-03-13','O','admin','2021-03-13 22:48:18','admin','2021-03-13 22:48:18',1);
+INSERT INTO `laboratory` VALUES (318,'URI','2021-03-13 00:50:42','Multiple results',NULL,525,'Mary Garrington',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,'F','undefined','2021-03-13','O','admin','2021-03-15 00:51:04','admin','2021-03-15 00:51:04',1);
+INSERT INTO `laboratory` VALUES (319,'02.02','2021-03-13 00:54:26','NEGATIVE',NULL,242,'Bumpers Ferdinand',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,6,'M','undefined','2021-03-13','I','admin','2021-03-15 00:54:39','admin','2021-03-15 00:54:39',1);
+INSERT INTO `laboratory` VALUES (320,'03.01','2021-03-13 00:54:26','NEGATIVE',NULL,242,'Bumpers Ferdinand',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,6,'M','undefined','2021-03-13','I','admin','2021-03-15 00:54:39','admin','2021-03-15 00:54:39',1);
+INSERT INTO `laboratory` VALUES (321,'03.01','2021-03-13 01:17:47','NEGATIVE',NULL,528,'Kenty Willis',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,14,'F','undefined','2021-03-13','O','admin','2021-03-15 01:17:57','admin','2021-03-15 01:17:57',1);
+INSERT INTO `laboratory` VALUES (322,'04.06','2021-03-13 01:17:47','NEGATIVE',NULL,528,'Kenty Willis',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,14,'F','undefined','2021-03-13','O','admin','2021-03-15 01:17:57','admin','2021-03-15 01:17:57',1);
+INSERT INTO `laboratory` VALUES (323,'01.05','2021-03-15 12:16:50','NORMAL',NULL,405,'Eddings Carmine',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,14,'M','blood','2021-03-15','O','admin','2021-03-15 12:17:08','admin','2021-03-15 12:17:08',1);
+INSERT INTO `laboratory` VALUES (324,'05.04','2021-03-15 12:32:17','NEGATIVE',NULL,529,'Sara Hucklington',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,'F','undefined','2021-03-15','O','admin','2021-03-15 12:32:40','admin','2021-03-15 12:32:40',1);
+INSERT INTO `laboratory` VALUES (325,'07.04.1','2021-03-15 12:32:17','1.4 - 2.5',NULL,529,'Sara Hucklington',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,'F','undefined','2021-03-15','O','admin','2021-03-15 12:32:40','admin','2021-03-15 12:32:40',1);
+INSERT INTO `laboratory` VALUES (326,'03.01','2021-03-15 14:35:09','NEGATIVE',NULL,116,'Nieves Julietta',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,76,'F','undefined','2021-03-15','I','admin','2021-03-15 14:35:24','admin','2021-03-15 14:35:24',1);
+INSERT INTO `laboratory` VALUES (327,'03.021','2021-03-15 14:35:09','NEGATIVE',NULL,116,'Nieves Julietta',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,76,'F','undefined','2021-03-15','I','admin','2021-03-15 14:35:24','admin','2021-03-15 14:35:24',1);
+INSERT INTO `laboratory` VALUES (328,'03.06','2021-03-15 14:35:09','NEGATIVE',NULL,116,'Nieves Julietta',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,76,'F','undefined','2021-03-15','I','admin','2021-03-15 14:35:24','admin','2021-03-15 14:35:24',1);
+INSERT INTO `laboratory` VALUES (329,'08.01','2021-03-15 14:35:26','NEGATIVE',NULL,140,'Curtis Courson',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,73,'M','blood','2021-03-15','O','admin','2021-03-15 14:35:39','admin','2021-03-15 14:35:39',1);
+INSERT INTO `laboratory` VALUES (330,'07.03.3','2021-03-15 14:35:46','<= 50 (NORMAL)',NULL,313,'Depuy Darrell',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,51,'M','undefined','2021-03-15','O','admin','2021-03-15 14:35:59','admin','2021-03-15 14:35:59',1);
+INSERT INTO `laboratory` VALUES (331,'07.03.4','2021-03-15 14:35:46','> 50',NULL,313,'Depuy Darrell',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,51,'M','undefined','2021-03-15','O','admin','2021-03-15 14:35:59','admin','2021-03-15 14:35:59',1);
+INSERT INTO `laboratory` VALUES (332,'03.01','2021-03-15 19:41:32','NEGATIVE',NULL,233,'Jeffreys Risa',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,'F','blood','2021-03-15','I','admin','2021-03-15 19:42:15','admin','2021-03-15 19:42:15',1);
+INSERT INTO `laboratory` VALUES (333,'03.02','2021-03-15 19:41:32','NEGATIVE',NULL,233,'Jeffreys Risa',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,'F','blood','2021-03-15','I','admin','2021-03-15 19:42:15','admin','2021-03-15 19:42:15',1);
 /*!40000 ALTER TABLE `laboratory` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `laboratoryrow`
+--
+
+DROP TABLE IF EXISTS `laboratoryrow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `laboratoryrow` (
+  `LABR_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `LABR_LAB_ID` int(11) NOT NULL,
+  `LABR_DESC` varchar(50) NOT NULL,
+  `LABR_CREATED_BY` varchar(50) DEFAULT NULL,
+  `LABR_CREATED_DATE` datetime DEFAULT NULL,
+  `LABR_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `LABR_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `LABR_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`LABR_ID`),
+  KEY `FK_LABORATORYROW_LABORATORY` (`LABR_LAB_ID`),
+  CONSTRAINT `FK_LABORATORYROW_LABORATORY` FOREIGN KEY (`LABR_LAB_ID`) REFERENCES `laboratory` (`LAB_ID`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `laboratoryrow`
@@ -1585,8 +2223,29 @@ INSERT INTO `laboratoryrow` VALUES (72,178,'SUGAR','admin','2020-11-21 01:30:39'
 INSERT INTO `laboratoryrow` VALUES (73,233,'SUGAR','admin','2020-11-21 01:31:24','admin','2020-11-21 01:31:24',1);
 INSERT INTO `laboratoryrow` VALUES (74,140,'TAENIA SOLIUM','admin','2020-11-21 01:31:33','admin','2020-11-21 01:31:33',1);
 INSERT INTO `laboratoryrow` VALUES (75,177,'G.LAMBLIA','admin','2020-11-21 01:40:26','admin','2020-11-21 01:40:26',1);
+INSERT INTO `laboratoryrow` VALUES (76,318,'BILIRUBIN','admin','2021-03-15 00:51:04','admin','2021-03-15 00:51:04',1);
+INSERT INTO `laboratoryrow` VALUES (77,318,'SUGAR','admin','2021-03-15 00:51:04','admin','2021-03-15 00:51:04',1);
 /*!40000 ALTER TABLE `laboratoryrow` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `log`
+--
+
+DROP TABLE IF EXISTS `log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `log` (
+  `LOG_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `LOG_TYPE` int(11) NOT NULL,
+  `LOG_CLASS` varchar(100) DEFAULT NULL,
+  `LOG_METHOD` varchar(64) DEFAULT NULL,
+  `LOG_TIME` datetime NOT NULL,
+  `LOG_MESS` varchar(1024) DEFAULT NULL,
+  `LOG_USER` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`LOG_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `log`
@@ -1598,6 +2257,30 @@ LOCK TABLES `log` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `malnutritioncontrol`
+--
+
+DROP TABLE IF EXISTS `malnutritioncontrol`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `malnutritioncontrol` (
+  `MLN_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `MLN_DATE_SUPP` datetime NOT NULL,
+  `MNL_DATE_CONF` datetime DEFAULT NULL,
+  `MLN_ADM_ID` int(11) NOT NULL,
+  `MLN_HEIGHT` float NOT NULL,
+  `MLN_WEIGHT` float NOT NULL,
+  `MLN_LOCK` int(11) NOT NULL DEFAULT 0,
+  `MLN_CREATED_BY` varchar(50) DEFAULT NULL,
+  `MLN_CREATED_DATE` datetime DEFAULT NULL,
+  `MLN_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `MLN_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `MLN_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`MLN_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `malnutritioncontrol`
 --
 
@@ -1605,6 +2288,35 @@ LOCK TABLES `malnutritioncontrol` WRITE;
 /*!40000 ALTER TABLE `malnutritioncontrol` DISABLE KEYS */;
 /*!40000 ALTER TABLE `malnutritioncontrol` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `medicaldsr`
+--
+
+DROP TABLE IF EXISTS `medicaldsr`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `medicaldsr` (
+  `MDSR_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `MDSR_MDSRT_ID_A` char(1) NOT NULL,
+  `MDSR_CODE` varchar(5) NOT NULL,
+  `MDSR_DESC` varchar(100) NOT NULL,
+  `MDSR_MIN_STOCK_QTI` float NOT NULL DEFAULT 0,
+  `MDSR_INI_STOCK_QTI` float NOT NULL DEFAULT 0,
+  `MDSR_PCS_X_PCK` int(11) NOT NULL,
+  `MDSR_IN_QTI` float NOT NULL DEFAULT 0,
+  `MDSR_OUT_QTI` float NOT NULL DEFAULT 0,
+  `MDSR_LOCK` int(11) NOT NULL DEFAULT 0,
+  `MDSR_CREATED_BY` varchar(50) DEFAULT NULL,
+  `MDSR_CREATED_DATE` datetime DEFAULT NULL,
+  `MDSR_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `MDSR_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `MDSR_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`MDSR_ID`),
+  UNIQUE KEY `MDSR_MDSRT_ID_A` (`MDSR_MDSRT_ID_A`,`MDSR_DESC`),
+  CONSTRAINT `FK_MEDICALDSR_MEDICALDSRTYPE` FOREIGN KEY (`MDSR_MDSRT_ID_A`) REFERENCES `medicaldsrtype` (`MDSRT_ID_A`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=419 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `medicaldsr`
@@ -1661,7 +2373,7 @@ INSERT INTO `medicaldsr` VALUES (46,'D','','Benzyl Penicillin 1 MIU Vial',0,0,0,
 INSERT INTO `medicaldsr` VALUES (47,'D','','Benzyl Penicillin 5 MIU Vial',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (48,'D','','Chloramphenicol 1g Vial',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (49,'D','','Chloroquine 40mg Base/ml 5ml Amp',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `medicaldsr` VALUES (50,'D','','Chlorpromazine 25mg/ml/2ml Amp',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsr` VALUES (50,'D','','Chlorpromazine 25mg/ml/2ml Amp',0,0,0,100,40,2,NULL,NULL,'admin','2021-03-15 14:39:20',1);
 INSERT INTO `medicaldsr` VALUES (51,'D','','Cloxacillin 500mg Vial',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (52,'D','','Cyclophosphamide 200mg Vial',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (53,'D','','Cyclophosphamide 500mg Vial',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
@@ -1761,7 +2473,7 @@ INSERT INTO `medicaldsr` VALUES (147,'D','','Erythromycin 250mg Tab',0,0,0,0,0,0
 INSERT INTO `medicaldsr` VALUES (148,'D','','Fansider 500/25mg Tab (50dosesx3)',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (149,'D','','Fansider 500/25mg Tab',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (150,'D','','Ferrous Sulphate 200mg Tab',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `medicaldsr` VALUES (151,'D','','Fluconazole 100mg Tab',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsr` VALUES (151,'D','','Fluconazole 100mg Tab',0,0,0,100,0,1,NULL,NULL,'admin','2021-03-15 01:20:30',1);
 INSERT INTO `medicaldsr` VALUES (152,'D','','Fluconazole 100mg 24 Caps',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (153,'D','','Folic Acid 1mg Tab',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (154,'D','','Folic Acid 5mg Tab',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
@@ -1787,7 +2499,7 @@ INSERT INTO `medicaldsr` VALUES (173,'D','','Salbutamol 4mg Tab',0,0,0,0,0,0,NUL
 INSERT INTO `medicaldsr` VALUES (174,'D','','Spironolactone 25mg Tab',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (175,'D','','Tolbutamide 500mg tab',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (176,'D','','Vitamin A 200.000 IU Caps',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `medicaldsr` VALUES (177,'D','','Vitamin B Complex Tab',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsr` VALUES (177,'D','','Vitamin B Complex Tab',0,0,0,300,0,1,NULL,NULL,'admin','2021-03-15 01:22:26',1);
 INSERT INTO `medicaldsr` VALUES (178,'D','','Oral Rehydration Salt (ORS)',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (179,'D','','Paracetamol 120mg/5ml Syrup',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (180,'D','','Paracetamol 120mg/5ml 100ml',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
@@ -1800,7 +2512,7 @@ INSERT INTO `medicaldsr` VALUES (187,'D','','Iodine Solution 2% 500ml',0,0,0,0,0
 INSERT INTO `medicaldsr` VALUES (188,'D','','Sodium Hypochloride solution 0.75 Ltr',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (189,'D','','liquid detergent 5Ltr Perfumed',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (190,'D','','Soap Blue Bar 550g',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `medicaldsr` VALUES (191,'D','','Liquid detergent 20Ltr',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsr` VALUES (191,'D','','Liquid detergent 20Ltr',0,0,0,10,0,1,NULL,NULL,'admin','2021-03-15 01:23:55',1);
 INSERT INTO `medicaldsr` VALUES (192,'D','','Soap Powder Hand wash 5kg',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (193,'D','','Sodium Hypochlorite solution 5Ltr',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (194,'D','','Betamethasone 0.1% eye/ear/nose drops',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
@@ -1833,7 +2545,7 @@ INSERT INTO `medicaldsr` VALUES (220,'D','','lubricating Jelly 42g',0,0,0,0,0,0,
 INSERT INTO `medicaldsr` VALUES (221,'D','','Nystatin 100,000 IU/g Ointment 30g',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (222,'D','','Ultrasound Gel 800g',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (223,'D','','Ultrasound Gel 5Ltr',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `medicaldsr` VALUES (224,'D','','Whitfield Oinment 200g',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsr` VALUES (224,'D','','Whitfield Oinment 200g',0,0,0,20,0,1,NULL,NULL,'admin','2021-03-15 22:12:41',1);
 INSERT INTO `medicaldsr` VALUES (225,'D','','Whitfield Oinment 25g',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (226,'D','','Amoxycillin 125mg/5ml Powd. Susp 100ml',0,0,0,180,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (227,'D','','Chloramphenicol 125mg/5ml Susp 3Ltr',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
@@ -1882,9 +2594,9 @@ INSERT INTO `medicaldsr` VALUES (269,'S','','Airway Guedel Size 1',0,0,0,0,0,0,N
 INSERT INTO `medicaldsr` VALUES (270,'S','','Airway Guedel Size 2',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (271,'S','','Airway Guedel Size 3',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (272,'S','','Eye Pad Sterile',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `medicaldsr` VALUES (273,'S','','Adhesive Tape 2.5cm x 5m',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsr` VALUES (273,'S','','Adhesive Tape 2.5cm x 5m',0,0,0,20,0,1,NULL,NULL,'admin','2021-03-15 01:23:09',1);
 INSERT INTO `medicaldsr` VALUES (274,'S','','Adhesive Tape 7.5cm x 5m',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `medicaldsr` VALUES (275,'S','','cotton Wool 500G',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsr` VALUES (275,'S','','cotton Wool 500G',0,0,0,100,20,2,NULL,NULL,'admin','2021-03-15 22:14:06',1);
 INSERT INTO `medicaldsr` VALUES (276,'S','','Cotton Wool 200G',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (277,'S','','Elastic Bandage 10cm x 4.5m',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (278,'S','','Elastic Bandage 7.5cm x 4.5m',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
@@ -1923,7 +2635,7 @@ INSERT INTO `medicaldsr` VALUES (310,'S','','Gloves Gynaecological 7.5-8',0,0,0,
 INSERT INTO `medicaldsr` VALUES (311,'S','','Gloves Non Sterile Medium Disposable',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (312,'S','','Gloves Non Sterile Large Disposable',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (313,'S','','Gloves Surgical Sterile 6',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `medicaldsr` VALUES (314,'S','','Gloves Surgical Sterile 6.5',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsr` VALUES (314,'S','','Gloves Surgical Sterile 6.5',0,0,0,1000,0,1,NULL,NULL,'admin','2021-03-15 14:37:57',1);
 INSERT INTO `medicaldsr` VALUES (315,'S','','Gloves Surgical Sterile 7',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (316,'S','','Gloves Surgical Sterile 7.5',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (317,'S','','Gloves Surgical Sterile 8',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
@@ -1977,7 +2689,7 @@ INSERT INTO `medicaldsr` VALUES (364,'S','','Urinal 1Ltr / 2Ltr',0,0,0,0,0,0,NUL
 INSERT INTO `medicaldsr` VALUES (365,'S','','Urine Collecting Bag sterile 2Ltr',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (366,'S','','Insectcide Spray 400g',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (367,'S','','Mosquito Net Impregnated Medium',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `medicaldsr` VALUES (368,'S','','Mosquito Net Impregnated Large',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsr` VALUES (368,'S','','Mosquito Net Impregnated Large',0,0,0,50,20,2,NULL,NULL,'admin','2021-03-15 14:39:58',1);
 INSERT INTO `medicaldsr` VALUES (369,'S','','Mosquito Net Non Impregnated Medium',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (370,'S','','Mosquito Net Non Impregnated Large',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (371,'S','','Mosquito Net Impregnation Tablet',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
@@ -2007,7 +2719,7 @@ INSERT INTO `medicaldsr` VALUES (394,'S','','X-Ray Film 20x40cm',0,0,0,0,0,0,NUL
 INSERT INTO `medicaldsr` VALUES (395,'S','','X-Ray Film 24x30cm',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (396,'S','','X-Ray Film 30x40cm',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (397,'S','','X-Ray Film 35x35cm',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `medicaldsr` VALUES (398,'S','','X-Ray Film 43x35cm',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsr` VALUES (398,'S','','X-Ray Film 43x35cm',0,0,0,10,0,1,NULL,NULL,'admin','2021-03-15 14:36:53',1);
 INSERT INTO `medicaldsr` VALUES (399,'S','','X-Ray Film Cassette  18x24cm with screen',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (400,'S','','X-Ray Film Cassette  24x30cm with screen',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsr` VALUES (401,'S','','X-Ray Film Cassette  30x40cm with screen',0,0,0,0,0,0,NULL,NULL,NULL,NULL,1);
@@ -2031,6 +2743,31 @@ INSERT INTO `medicaldsr` VALUES (418,'D','','Coartem 5-15kg',0,0,0,493,0,0,NULL,
 UNLOCK TABLES;
 
 --
+-- Table structure for table `medicaldsrlot`
+--
+
+DROP TABLE IF EXISTS `medicaldsrlot`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `medicaldsrlot` (
+  `LT_ID_A` varchar(50) NOT NULL,
+  `LT_MDSR_ID` int(11) NOT NULL,
+  `LT_PREP_DATE` datetime NOT NULL,
+  `LT_DUE_DATE` datetime NOT NULL,
+  `LT_COST` double DEFAULT NULL,
+  `LT_LOCK` int(11) NOT NULL DEFAULT 0,
+  `LT_CREATED_BY` varchar(50) DEFAULT NULL,
+  `LT_CREATED_DATE` datetime DEFAULT NULL,
+  `LT_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `LT_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `LT_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`LT_ID_A`),
+  KEY `FK_MEDICALDSRLOT_MEDICALDSR_idx` (`LT_MDSR_ID`),
+  CONSTRAINT `FK_MEDICALDSRLOT_MEDICALDSR` FOREIGN KEY (`LT_MDSR_ID`) REFERENCES `medicaldsr` (`MDSR_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `medicaldsrlot`
 --
 
@@ -2049,11 +2786,21 @@ INSERT INTO `medicaldsrlot` VALUES ('-7660511420907688190',414,'2010-08-01 00:00
 INSERT INTO `medicaldsrlot` VALUES ('-7718978867967166817',40,'2012-04-03 00:00:00','2025-07-01 00:00:00',NULL,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrlot` VALUES ('-8122995274739094851',101,'2010-04-01 00:00:00','2029-03-30 00:00:00',NULL,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrlot` VALUES ('-8771079640543120715',99,'2015-09-01 00:00:00','2029-08-31 00:00:00',NULL,0,NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsrlot` VALUES ('1190755742914533090',314,'2021-03-15 14:37:28','2021-03-15 14:37:28',0.15,0,'admin','2021-03-15 14:37:57','admin','2021-03-15 14:37:57',1);
+INSERT INTO `medicaldsrlot` VALUES ('1352158066768470913',368,'2021-03-15 01:21:17','2024-03-15 01:21:17',30,0,'admin','2021-03-15 01:21:46','admin','2021-03-15 01:21:46',1);
+INSERT INTO `medicaldsrlot` VALUES ('1397761246807649990',151,'2021-03-15 01:20:06','2024-03-15 01:20:06',15,0,'admin','2021-03-15 01:20:30','admin','2021-03-15 01:20:30',1);
 INSERT INTO `medicaldsrlot` VALUES ('2422709406193164023',41,'2014-04-01 00:00:00','2029-05-30 00:00:00',NULL,0,NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsrlot` VALUES ('2525258796098032045',177,'2021-03-15 01:22:08','2021-03-15 01:22:08',2,0,'admin','2021-03-15 01:22:26','admin','2021-03-15 01:22:26',1);
+INSERT INTO `medicaldsrlot` VALUES ('255823000817531744',191,'2021-03-15 01:23:30','2021-03-15 01:23:30',0.5,0,'admin','2021-03-15 01:23:55','admin','2021-03-15 01:23:55',1);
+INSERT INTO `medicaldsrlot` VALUES ('3670580768670707684',273,'2021-03-15 01:22:54','2021-03-15 01:22:54',2,0,'admin','2021-03-15 01:23:09','admin','2021-03-15 01:23:09',1);
 INSERT INTO `medicaldsrlot` VALUES ('5453401403025577763',109,'2015-05-01 00:00:00','2028-04-30 00:00:00',NULL,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrlot` VALUES ('5830690725884682660',418,'2012-08-01 00:00:00','2027-08-30 00:00:00',NULL,0,NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsrlot` VALUES ('5937536366132568535',398,'2021-03-15 14:36:38','2021-03-15 14:36:38',10,0,'admin','2021-03-15 14:36:53','admin','2021-03-15 14:36:53',1);
 INSERT INTO `medicaldsrlot` VALUES ('677685091133639642',98,'2020-09-30 00:00:00','2027-09-30 00:00:00',NULL,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrlot` VALUES ('6814074013396911291',417,'2020-09-01 00:00:00','2027-09-30 00:00:00',NULL,0,NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsrlot` VALUES ('7144453288242750524',275,'2021-03-15 22:13:05','2021-03-15 22:13:05',2,0,'admin','2021-03-15 22:13:19','admin','2021-03-15 22:13:19',1);
+INSERT INTO `medicaldsrlot` VALUES ('7309896240057246824',224,'2021-03-15 22:12:20','2021-03-15 22:12:20',8,0,'admin','2021-03-15 22:12:41','admin','2021-03-15 22:12:41',1);
+INSERT INTO `medicaldsrlot` VALUES ('7460012206646986840',50,'2021-03-15 14:38:25','2021-03-15 14:38:25',2,0,'admin','2021-03-15 14:38:46','admin','2021-03-15 14:38:46',1);
 INSERT INTO `medicaldsrlot` VALUES ('7846903226866365678',108,'2015-07-01 00:00:00','2028-07-01 00:00:00',NULL,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrlot` VALUES ('7951533530148276440',404,'2020-09-18 00:00:00','2027-09-18 00:00:00',NULL,0,NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrlot` VALUES ('8151139553159369735',414,'2020-08-01 00:00:00','2029-07-01 00:00:00',NULL,0,NULL,NULL,NULL,NULL,1);
@@ -2071,6 +2818,39 @@ INSERT INTO `medicaldsrlot` VALUES ('AUTO_I_98',98,'2020-11-12 00:00:00','2025-1
 INSERT INTO `medicaldsrlot` VALUES ('AUTO_M_98',98,'2020-11-12 00:00:00','2025-11-12 00:00:00',NULL,0,NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `medicaldsrlot` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `medicaldsrstockmov`
+--
+
+DROP TABLE IF EXISTS `medicaldsrstockmov`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `medicaldsrstockmov` (
+  `MMV_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `MMV_MDSR_ID` int(11) NOT NULL,
+  `MMV_WRD_ID_A` char(1) DEFAULT NULL,
+  `MMV_MMVT_ID_A` varchar(10) NOT NULL,
+  `MMV_LT_ID_A` varchar(50) DEFAULT NULL,
+  `MMV_DATE` datetime NOT NULL,
+  `MMV_QTY` float NOT NULL DEFAULT 0,
+  `MMV_FROM` int(11) DEFAULT NULL,
+  `MMV_LOCK` int(11) NOT NULL DEFAULT 0,
+  `MMV_REFNO` varchar(50) NOT NULL DEFAULT '',
+  `MMV_CREATED_BY` varchar(50) DEFAULT NULL,
+  `MMV_CREATED_DATE` datetime DEFAULT NULL,
+  `MMV_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `MMV_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `MMV_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`MMV_ID`),
+  KEY `FK_MEDICALDSRSTOCKMOV_MEDICALDSR` (`MMV_MDSR_ID`),
+  KEY `FK_MEDICALDSRSTOCKMOV_MEDICALDSRSTOCKMOVTYPE` (`MMV_MMVT_ID_A`),
+  KEY `FK_MEDICALDSRSTOCKMOV_WARD` (`MMV_WRD_ID_A`),
+  CONSTRAINT `FK_MEDICALDSRSTOCKMOV_MEDICALDSR` FOREIGN KEY (`MMV_MDSR_ID`) REFERENCES `medicaldsr` (`MDSR_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_MEDICALDSRSTOCKMOV_MEDICALDSRSTOCKMOVTYPE` FOREIGN KEY (`MMV_MMVT_ID_A`) REFERENCES `medicaldsrstockmovtype` (`MMVT_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_MEDICALDSRSTOCKMOV_WARD` FOREIGN KEY (`MMV_WRD_ID_A`) REFERENCES `ward` (`WRD_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `medicaldsrstockmov`
@@ -2112,8 +2892,41 @@ INSERT INTO `medicaldsrstockmov` VALUES (33,44,NULL,'charge','-69608830129654283
 INSERT INTO `medicaldsrstockmov` VALUES (34,416,NULL,'charge','9112042438595920595','2020-11-03 00:00:00',252,1,0,'Auto-Refno-charge',NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrstockmov` VALUES (35,417,NULL,'charge','6814074013396911291','2020-11-03 00:00:00',379,1,0,'Auto-Refno-charge',NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrstockmov` VALUES (36,418,NULL,'charge','5830690725884682660','2020-11-03 00:00:00',493,1,0,'Auto-Refno-charge',NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsrstockmov` VALUES (37,151,NULL,'charge','1397761246807649990','2021-03-13 01:19:29',100,1,0,'10','admin','2021-03-15 01:20:30','admin','2021-03-15 01:20:30',1);
+INSERT INTO `medicaldsrstockmov` VALUES (38,368,NULL,'charge','1352158066768470913','2021-03-15 01:20:57',50,2,0,'11','admin','2021-03-15 01:21:46','admin','2021-03-15 01:21:46',1);
+INSERT INTO `medicaldsrstockmov` VALUES (39,177,NULL,'charge','2525258796098032045','2021-03-15 01:21:48',300,1,0,'12','admin','2021-03-15 01:22:26','admin','2021-03-15 01:22:26',1);
+INSERT INTO `medicaldsrstockmov` VALUES (40,273,NULL,'charge','3670580768670707684','2021-03-15 01:22:44',20,2,0,'13','admin','2021-03-15 01:23:09','admin','2021-03-15 01:23:09',1);
+INSERT INTO `medicaldsrstockmov` VALUES (41,191,NULL,'charge','255823000817531744','2021-03-15 01:23:12',10,1,0,'14','admin','2021-03-15 01:23:55','admin','2021-03-15 01:23:55',1);
+INSERT INTO `medicaldsrstockmov` VALUES (42,398,NULL,'charge','5937536366132568535','2021-03-15 14:36:18',10,1,0,'201','admin','2021-03-15 14:36:53','admin','2021-03-15 14:36:53',1);
+INSERT INTO `medicaldsrstockmov` VALUES (43,314,NULL,'charge','1190755742914533090','2021-03-15 14:37:06',1000,1,0,'202','admin','2021-03-15 14:37:57','admin','2021-03-15 14:37:57',1);
+INSERT INTO `medicaldsrstockmov` VALUES (44,50,NULL,'charge','7460012206646986840','2021-03-15 14:38:12',100,1,0,'203','admin','2021-03-15 14:38:46','admin','2021-03-15 14:38:46',1);
+INSERT INTO `medicaldsrstockmov` VALUES (45,50,'I','discharge','7460012206646986840','2021-03-15 14:38:47',40,NULL,0,'204','admin','2021-03-15 14:39:20','admin','2021-03-15 14:39:20',1);
+INSERT INTO `medicaldsrstockmov` VALUES (46,368,'F','discharge','1352158066768470913','2021-03-15 14:39:23',20,NULL,0,'205','admin','2021-03-15 14:39:58','admin','2021-03-15 14:39:58',1);
+INSERT INTO `medicaldsrstockmov` VALUES (47,224,NULL,'charge','7309896240057246824','2021-03-15 22:12:07',20,2,0,'300','admin','2021-03-15 22:12:41','admin','2021-03-15 22:12:41',1);
+INSERT INTO `medicaldsrstockmov` VALUES (48,275,NULL,'charge','7144453288242750524','2021-03-15 22:12:52',100,1,0,'301','admin','2021-03-15 22:13:19','admin','2021-03-15 22:13:19',1);
+INSERT INTO `medicaldsrstockmov` VALUES (49,275,'C','discharge','7144453288242750524','2021-03-15 22:13:20',20,NULL,0,'302','admin','2021-03-15 22:14:06','admin','2021-03-15 22:14:06',1);
 /*!40000 ALTER TABLE `medicaldsrstockmov` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `medicaldsrstockmovtype`
+--
+
+DROP TABLE IF EXISTS `medicaldsrstockmovtype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `medicaldsrstockmovtype` (
+  `MMVT_ID_A` varchar(10) NOT NULL,
+  `MMVT_DESC` varchar(50) NOT NULL,
+  `MMVT_TYPE` char(2) NOT NULL,
+  `MMVT_CREATED_BY` varchar(50) DEFAULT NULL,
+  `MMVT_CREATED_DATE` datetime DEFAULT NULL,
+  `MMVT_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `MMVT_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `MMVT_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`MMVT_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `medicaldsrstockmovtype`
@@ -2127,6 +2940,43 @@ INSERT INTO `medicaldsrstockmovtype` VALUES ('discharge','Discharge','-',NULL,NU
 UNLOCK TABLES;
 
 --
+-- Table structure for table `medicaldsrstockmovward`
+--
+
+DROP TABLE IF EXISTS `medicaldsrstockmovward`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `medicaldsrstockmovward` (
+  `MMVN_ID` int(10) NOT NULL AUTO_INCREMENT,
+  `MMVN_WRD_ID_A` char(1) NOT NULL,
+  `MMVN_DATE` datetime NOT NULL,
+  `MMVN_IS_PATIENT` tinyint(1) NOT NULL,
+  `MMVN_PAT_ID` int(11) DEFAULT NULL,
+  `MMVN_PAT_AGE` smallint(6) DEFAULT NULL,
+  `MMVN_PAT_WEIGHT` float DEFAULT NULL,
+  `MMVN_DESC` varchar(100) NOT NULL,
+  `MMVN_MDSR_ID` varchar(100) NOT NULL,
+  `MMVN_MDSR_QTY` float NOT NULL,
+  `MMVN_MDSR_UNITS` varchar(10) NOT NULL,
+  `MMVN_CREATED_BY` varchar(50) DEFAULT NULL,
+  `MMVN_WRD_ID_A_FROM` varchar(1) DEFAULT NULL,
+  `MMVN_WRD_ID_A_TO` varchar(1) DEFAULT NULL,
+  `MMVN_LT_ID` varchar(50) DEFAULT NULL,
+  `MMVN_CREATED_DATE` datetime DEFAULT NULL,
+  `MMVN_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `MMVN_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `MMVN_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`MMVN_ID`) USING BTREE,
+  KEY `FK_MEDICALDSRSTOCKMOVWARD_WARD_idx` (`MMVN_WRD_ID_A`),
+  KEY `FK_MEDICALDSRSTOCKMOVWARD_PATIENT_idx` (`MMVN_PAT_ID`),
+  KEY `FK_MEDICALDSRSTOCKMOVWARD_LOT_idx` (`MMVN_LT_ID`),
+  CONSTRAINT `FK_MEDICALDSRSTOCKMOVWARD_LOT` FOREIGN KEY (`MMVN_LT_ID`) REFERENCES `medicaldsrlot` (`LT_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_MEDICALDSRSTOCKMOVWARD_PATIENT` FOREIGN KEY (`MMVN_PAT_ID`) REFERENCES `patient` (`PAT_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_MEDICALDSRSTOCKMOVWARD_WARD` FOREIGN KEY (`MMVN_WRD_ID_A`) REFERENCES `ward` (`WRD_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `medicaldsrstockmovward`
 --
 
@@ -2137,6 +2987,25 @@ INSERT INTO `medicaldsrstockmovward` VALUES (2,'I','2020-11-20 00:00:44',1,505,1
 INSERT INTO `medicaldsrstockmovward` VALUES (3,'C','2020-11-20 00:22:26',1,489,2,0,'Mellisa Morning','103',3,'pieces','admin',NULL,NULL,'AUTO_C_103','2020-11-20 00:22:26','admin','2020-11-20 00:22:26',1);
 /*!40000 ALTER TABLE `medicaldsrstockmovward` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `medicaldsrtype`
+--
+
+DROP TABLE IF EXISTS `medicaldsrtype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `medicaldsrtype` (
+  `MDSRT_ID_A` char(1) NOT NULL,
+  `MDSRT_DESC` varchar(30) DEFAULT NULL,
+  `MDSRT_CREATED_BY` varchar(50) DEFAULT NULL,
+  `MDSRT_CREATED_DATE` datetime DEFAULT NULL,
+  `MDSRT_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `MDSRT_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `MDSRT_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`MDSRT_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `medicaldsrtype`
@@ -2152,23 +3021,75 @@ INSERT INTO `medicaldsrtype` VALUES ('S','Surgery',NULL,NULL,NULL,NULL,1);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `medicaldsrward`
+--
+
+DROP TABLE IF EXISTS `medicaldsrward`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `medicaldsrward` (
+  `MDSRWRD_WRD_ID_A` char(1) NOT NULL,
+  `MDSRWRD_MDSR_ID` int(11) NOT NULL,
+  `MDSRWRD_IN_QTI` float DEFAULT 0,
+  `MDSRWRD_OUT_QTI` float DEFAULT 0,
+  `MDSRWRD_LT_ID_A` varchar(50) NOT NULL,
+  `MDSRWRD_CREATED_BY` varchar(50) DEFAULT NULL,
+  `MDSRWRD_CREATED_DATE` datetime DEFAULT NULL,
+  `MDSRWRD_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `MDSRWRD_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `MDSRWRD_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`MDSRWRD_WRD_ID_A`,`MDSRWRD_MDSR_ID`,`MDSRWRD_LT_ID_A`),
+  KEY `FK_MEDICALDSRWARD_WARD_idx` (`MDSRWRD_WRD_ID_A`),
+  KEY `FK_MEDICALDSRWARD_MEDICALDSR_idx` (`MDSRWRD_MDSR_ID`),
+  KEY `FK_MEDICALDSRWARD_MEDICALDSRLOT_idx` (`MDSRWRD_LT_ID_A`),
+  CONSTRAINT `FK_MEDICALDSRWARD_MEDICALDSR` FOREIGN KEY (`MDSRWRD_MDSR_ID`) REFERENCES `medicaldsr` (`MDSR_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_MEDICALDSRWARD_MEDICALDSRLOT` FOREIGN KEY (`MDSRWRD_LT_ID_A`) REFERENCES `medicaldsrlot` (`LT_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_MEDICALDSRWARD_WARD` FOREIGN KEY (`MDSRWRD_WRD_ID_A`) REFERENCES `ward` (`WRD_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `medicaldsrward`
 --
 
 LOCK TABLES `medicaldsrward` WRITE;
 /*!40000 ALTER TABLE `medicaldsrward` DISABLE KEYS */;
 INSERT INTO `medicaldsrward` VALUES ('C',103,100,4,'AUTO_C_103',NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsrward` VALUES ('C',275,20,0,'7144453288242750524',NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrward` VALUES ('F',99,100,0,'AUTO_F_99',NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrward` VALUES ('F',105,1000,0,'AUTO_F_105',NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsrward` VALUES ('F',368,20,0,'1352158066768470913',NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrward` VALUES ('F',404,10,0,'AUTO_F_404',NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrward` VALUES ('F',415,200,0,'AUTO_F_415',NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrward` VALUES ('I',40,100,0,'AUTO_I_40',NULL,NULL,NULL,NULL,1);
+INSERT INTO `medicaldsrward` VALUES ('I',50,40,0,'7460012206646986840',NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrward` VALUES ('I',98,130,10,'AUTO_I_98',NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrward` VALUES ('I',108,1600,0,'AUTO_I_108',NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrward` VALUES ('I',415,1000,0,'AUTO_I_415',NULL,NULL,NULL,NULL,1);
 INSERT INTO `medicaldsrward` VALUES ('M',98,70,0,'AUTO_M_98',NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `medicaldsrward` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `menuitem`
+--
+
+DROP TABLE IF EXISTS `menuitem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `menuitem` (
+  `MNI_ID_A` varchar(50) NOT NULL DEFAULT '',
+  `MNI_BTN_LABEL` varchar(50) NOT NULL DEFAULT '',
+  `MNI_LABEL` varchar(50) NOT NULL DEFAULT '',
+  `MNI_TOOLTIP` varchar(100) DEFAULT NULL,
+  `MNI_SHORTCUT` char(1) DEFAULT NULL,
+  `MNI_SUBMENU` varchar(50) NOT NULL DEFAULT '',
+  `MNI_CLASS` varchar(100) NOT NULL DEFAULT '',
+  `MNI_IS_SUBMENU` char(1) NOT NULL DEFAULT 'N',
+  `MNI_POSITION` int(10) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`MNI_ID_A`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `menuitem`
@@ -2272,6 +3193,48 @@ INSERT INTO `menuitem` VALUES ('btnopdeditoperation','angal.opd.operation','anga
 INSERT INTO `menuitem` VALUES ('worksheet','angal.menu.btn.worksheet','angal.menu.worksheet','x','W','main','org.isf.visits.gui.VisitView','N',8);
 /*!40000 ALTER TABLE `menuitem` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `opd`
+--
+
+DROP TABLE IF EXISTS `opd`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `opd` (
+  `OPD_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `OPD_DATE` datetime NOT NULL,
+  `OPD_NEW_PAT` char(1) NOT NULL DEFAULT 'N',
+  `OPD_DATE_VIS` date NOT NULL,
+  `OPD_PROG_YEAR` int(11) NOT NULL,
+  `OPD_SEX` char(1) NOT NULL,
+  `OPD_AGE` int(11) NOT NULL DEFAULT 0,
+  `OPD_DIS_ID_A` varchar(10) DEFAULT NULL,
+  `OPD_DIS_ID_A_2` varchar(10) DEFAULT NULL,
+  `OPD_DIS_ID_A_3` varchar(10) DEFAULT NULL,
+  `OPD_REFERRAL_FROM` varchar(1) DEFAULT NULL,
+  `OPD_REFERRAL_TO` varchar(1) DEFAULT NULL,
+  `OPD_NOTE` text NOT NULL,
+  `OPD_PAT_ID` int(11) DEFAULT NULL,
+  `OPD_USR_ID_A` varchar(50) NOT NULL DEFAULT 'admin',
+  `OPD_LOCK` int(11) NOT NULL DEFAULT 0,
+  `OPD_CREATED_BY` varchar(50) DEFAULT NULL,
+  `OPD_DATE_NEXT_VIS` datetime DEFAULT NULL,
+  `OPD_CREATED_DATE` datetime DEFAULT NULL,
+  `OPD_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `OPD_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `OPD_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`OPD_ID`),
+  KEY `FK_OPD_DISEASE` (`OPD_DIS_ID_A`),
+  KEY `FK_OPD_DISEASE_2` (`OPD_DIS_ID_A_2`),
+  KEY `FK_OPD_DISEASE_3` (`OPD_DIS_ID_A_3`),
+  KEY `FK_OPD_PATIENT` (`OPD_PAT_ID`),
+  CONSTRAINT `FK_OPD_DISEASE` FOREIGN KEY (`OPD_DIS_ID_A`) REFERENCES `disease` (`DIS_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_OPD_DISEASE_2` FOREIGN KEY (`OPD_DIS_ID_A_2`) REFERENCES `disease` (`DIS_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_OPD_DISEASE_3` FOREIGN KEY (`OPD_DIS_ID_A_3`) REFERENCES `disease` (`DIS_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_OPD_PATIENT` FOREIGN KEY (`OPD_PAT_ID`) REFERENCES `patient` (`PAT_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=401 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `opd`
@@ -2671,6 +3634,31 @@ INSERT INTO `opd` VALUES (400,'2020-11-23 16:00:23','N','2020-11-23',392,'M',44,
 UNLOCK TABLES;
 
 --
+-- Table structure for table `operation`
+--
+
+DROP TABLE IF EXISTS `operation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `operation` (
+  `OPE_ID_A` varchar(10) NOT NULL,
+  `OPE_OCL_ID_A` char(2) NOT NULL,
+  `OPE_DESC` varchar(50) NOT NULL,
+  `OPE_STAT` int(11) NOT NULL DEFAULT 0,
+  `OPE_FOR` char(1) DEFAULT '1' COMMENT '''1'' = OPD/IPD, ''2'' = IPD only, ''3'' = OPD only',
+  `OPE_LOCK` int(11) NOT NULL DEFAULT 0,
+  `OPE_CREATED_BY` varchar(50) DEFAULT NULL,
+  `OPE_CREATED_DATE` datetime DEFAULT NULL,
+  `OPE_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `OPE_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `OPE_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`OPE_ID_A`),
+  KEY `FK_OPERATION_OPERATIONTYPE` (`OPE_OCL_ID_A`),
+  CONSTRAINT `FK_OPERATION_OPERATIONTYPE` FOREIGN KEY (`OPE_OCL_ID_A`) REFERENCES `operationtype` (`OCL_ID_A`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `operation`
 --
 
@@ -2731,27 +3719,60 @@ INSERT INTO `operation` VALUES ('9','OB','Incomplete abortion',1,'1',0,NULL,NULL
 UNLOCK TABLES;
 
 --
+-- Table structure for table `operationrow`
+--
+
+DROP TABLE IF EXISTS `operationrow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `operationrow` (
+  `OPER_ID_A` int(11) NOT NULL AUTO_INCREMENT,
+  `OPER_ID` varchar(11) NOT NULL,
+  `OPER_PRESCRIBER` varchar(150) NOT NULL,
+  `OPER_RESULT` varchar(250) NOT NULL,
+  `OPER_OPDATE` datetime NOT NULL,
+  `OPER_REMARKS` varchar(250) NOT NULL,
+  `OPER_ADMISSION_ID` int(11) DEFAULT 0,
+  `OPER_OPD_ID` int(11) DEFAULT 0,
+  `OPER_BILL_ID` int(11) DEFAULT 0,
+  `OPER_TRANS_UNIT` float DEFAULT 0,
+  `OPER_CREATED_BY` varchar(50) DEFAULT NULL,
+  `OPER_CREATED_DATE` datetime DEFAULT NULL,
+  `OPER_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `OPER_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `OPER_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`OPER_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `operationrow`
 --
 
 LOCK TABLES `operationrow` WRITE;
 /*!40000 ALTER TABLE `operationrow` DISABLE KEYS */;
-INSERT INTO `operationrow` VALUES (1,'1','admin','Unknown','2020-11-03 00:00:00','',349,NULL,NULL,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `operationrow` VALUES (2,'1','admin','Unknown','2020-11-03 00:00:00','',353,NULL,NULL,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `operationrow` VALUES (3,'1','admin','Unknown','2020-11-04 00:00:00','',354,NULL,NULL,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `operationrow` VALUES (4,'1','admin','Unknown','2020-11-04 00:00:00','',357,NULL,NULL,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `operationrow` VALUES (5,'1','admin','Unknown','2020-11-04 00:00:00','',358,NULL,NULL,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `operationrow` VALUES (6,'1','admin','Unknown','2020-11-06 00:00:00','',362,NULL,NULL,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `operationrow` VALUES (7,'1','admin','Unknown','2020-11-07 00:00:00','',363,NULL,NULL,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `operationrow` VALUES (8,'1','admin','Unknown','2020-11-06 00:00:00','',368,NULL,NULL,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `operationrow` VALUES (9,'14','admin','Unknown','2020-11-04 00:00:00','',356,NULL,NULL,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `operationrow` VALUES (10,'20','admin','Success','2020-10-24 00:00:00','',54,NULL,NULL,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `operationrow` VALUES (11,'3','admin','Unknown','2020-10-22 00:00:00','',167,NULL,NULL,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `operationrow` VALUES (12,'3','admin','Unknown','2020-11-06 00:00:00','',345,NULL,NULL,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `operationrow` VALUES (13,'37','admin','Success','2020-10-23 00:00:00','',62,NULL,NULL,0,NULL,NULL,NULL,NULL,1);
-INSERT INTO `operationrow` VALUES (14,'6','admin','Unknown','2020-10-24 00:00:00','',182,NULL,NULL,0,NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `operationrow` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `operationtype`
+--
+
+DROP TABLE IF EXISTS `operationtype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `operationtype` (
+  `OCL_ID_A` char(2) NOT NULL,
+  `OCL_DESC` varchar(50) NOT NULL,
+  `OCL_TYPE` varchar(20) NOT NULL DEFAULT 'MAJOR',
+  `OCL_CREATED_BY` varchar(50) DEFAULT NULL,
+  `OCL_CREATED_DATE` datetime DEFAULT NULL,
+  `OCL_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `OCL_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `OCL_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`OCL_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `operationtype`
@@ -2769,6 +3790,51 @@ INSERT INTO `operationtype` VALUES ('OS','OTHERS: SKIN AND SUBCUTANEOUS','MAJOR'
 UNLOCK TABLES;
 
 --
+-- Table structure for table `patient`
+--
+
+DROP TABLE IF EXISTS `patient`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `patient` (
+  `PAT_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PAT_FNAME` varchar(50) NOT NULL,
+  `PAT_SNAME` varchar(50) NOT NULL,
+  `PAT_NAME` varchar(100) DEFAULT NULL,
+  `PAT_BDATE` date DEFAULT NULL,
+  `PAT_AGE` int(11) NOT NULL DEFAULT 0,
+  `PAT_AGETYPE` varchar(50) NOT NULL DEFAULT '',
+  `PAT_SEX` char(1) NOT NULL,
+  `PAT_ADDR` varchar(50) DEFAULT NULL,
+  `PAT_CITY` varchar(50) NOT NULL,
+  `PAT_NEXT_KIN` varchar(50) DEFAULT NULL,
+  `PAT_TELE` varchar(50) DEFAULT NULL,
+  `PAT_MOTH_NAME` varchar(50) NOT NULL DEFAULT '',
+  `PAT_MOTH` char(1) DEFAULT NULL,
+  `PAT_FATH_NAME` varchar(50) NOT NULL DEFAULT '',
+  `PAT_FATH` char(1) DEFAULT NULL,
+  `PAT_LEDU` char(1) DEFAULT NULL,
+  `PAT_ESTA` char(1) DEFAULT NULL,
+  `PAT_PTOGE` char(1) DEFAULT NULL,
+  `PAT_NOTE` text DEFAULT NULL,
+  `PAT_DELETED` char(1) NOT NULL DEFAULT 'N',
+  `PAT_LOCK` int(11) NOT NULL DEFAULT 0,
+  `PAT_BTYPE` varchar(15) NOT NULL DEFAULT 'Unknown',
+  `PAT_TAXCODE` varchar(30) DEFAULT '',
+  `PAT_TIMESTAMP` timestamp NOT NULL DEFAULT current_timestamp(),
+  `PAT_CREATED_BY` varchar(50) DEFAULT NULL,
+  `PAT_CREATED_DATE` datetime DEFAULT NULL,
+  `PAT_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `PAT_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `PAT_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  `PAT_PROFESSION` varchar(50) NOT NULL DEFAULT 'unknown',
+  `PAT_MAR_STAT` varchar(50) NOT NULL DEFAULT 'unknown',
+  `PROFILE_PHOTO_ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`PAT_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=530 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `patient`
 --
 
@@ -2781,33 +3847,33 @@ INSERT INTO `patient` VALUES (5,'Merrihew','Pamila','Merrihew Pamila','1986-11-1
 INSERT INTO `patient` VALUES (16,'Justin','Fred','Fred Justin','1955-10-06',65,'','M','Kernigan','Long Road - 58','','','','\0','','\0','\0','\0','\0','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (42,'Anthon','Geremy','Geremy Anthon','1967-11-12',53,'','M','Winnipeg','Westerton Road','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (43,'Leavell','Fredericka','Fredericka Leavell','1985-11-12',35,'','M','Hartford','Norwalk','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (44,'Chick','Ossie','Ossie Chick','1962-11-12',58,'','M','Oak','Norwalk','','','','\0','','\0','\0','\0','\0','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (44,'Chick','Ossie','Chick Ossie','1962-11-12',58,'','M','Oak street 5','Norwalk','','+24521666','','U','','U','\0','U','U','','N',3,'A+','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:16:09',1,'unknown','married',NULL);
 INSERT INTO `patient` VALUES (45,'Pickford','Arden','Arden Pickford','1970-11-12',50,'','M','Parkhurst','Norwich','','','','\0','','\0','\0','\0','\0','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (46,'Bardsley','Zenaida','Bardsley Zenaida','1970-11-12',50,'','M','Memorial Road 01','Ramonville','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:05:03',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (47,'Graney','Almeda','Almeda Graney','1948-11-12',72,'','M','Brooksby','Putnam','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (48,'Ackman','Sammy','Sammy Ackman','1985-11-12',35,'','M','Fairhaven','Shelton','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (49,'Doepke','Jeanne','Jeanne Doepke','1988-11-12',32,'','M','William','Southington','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (50,'Delpino','Teena','Teena Delpino','1940-11-12',80,'','M','Worcester','Cutoff','','','','\0','','\0','\0','\0','\0','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (50,'Delpino','Teena','Delpino Teena','1940-11-12',80,'','M','Worcester st. 11','Cutley city','','','','U','','U','\0','U','U','','N',3,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:27:37',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (51,'Abramowitz','Olivia','Olivia Abramowitz','1950-11-12',70,'','M','Timpany','Torrington','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (52,'Hillman','Reagan','Reagan Hillman','1996-11-12',24,'','M','Russell','Road','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (52,'Hillman','Reagan','Hillman Reagan','1996-11-12',24,'','M','Russell road 4','Wellington','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:27:18',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (53,'Navarro','Randee','Randee Navarro','1970-11-12',50,'','M','Plymouth','Waterbury','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (54,'Demaree','Laura','Demaree Laura','2009-11-12',11,'','M','Washington St. 11','Ramonville','','+4178844','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:05:20',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (55,'Eslinger','Julietta','Julietta Eslinger','1991-11-12',29,'','M','Washington','West','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (56,'Pundt','Estell','Estell Pundt','1990-11-12',30,'','M','Soojian','Adamsville','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (57,'Demeter','Celsa','Celsa Demeter','1964-11-12',56,'','M','Jungle','Pkwy','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (57,'Demeter','Celsa','Demeter Celsa','1964-11-12',56,'','M','Jungle way 10','Pkwy','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:27:03',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (58,'Nesmith','Ashlyn','Ashlyn Nesmith','1982-11-12',38,'','M','Massachusetts','West','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (59,'Winkel','Gertha','Gertha Winkel','2005-11-12',15,'','M','Lynnway','Andalusia','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (60,'Berlin','Tracie','Tracie Berlin','1980-11-12',40,'','M','Pleasant','Anniston','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (61,'Dresser','Hugh','Hugh Dresser','1975-11-12',45,'','M','Curran','Mtn','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (61,'Dresser','Hugh','Dresser Hugh','1975-11-12',45,'','M','Curran garden','Matu','','','','U','','U','\0','U','U','','N',1,'A+','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:17:04',1,'unknown','married',NULL);
 INSERT INTO `patient` VALUES (62,'Poch','Jonna','Jonna Poch','2010-11-12',10,'','M','General','House','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (63,'Kinnison','Geneva','Geneva Kinnison','1974-11-12',46,'','M','State','Road','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (64,'Niccum','Ezra','Ezra Niccum','2008-11-12',12,'','M','Main','Street','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (65,'Horwitz','Stuart','Stuart Horwitz','2008-11-12',12,'','M','Main','Bay','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (63,'Kinnison','Geneva','Kinnison Geneva','1974-11-12',46,'','M','State road 66','Laskso','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:15:44',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (64,'Niccum','Ezra','Niccum Ezra','2008-11-12',12,'','M','Main Street 9','Canary Island','','+6522333','','U','','U','\0','U','U','','N',1,'A-','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:26:50',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (65,'Horwitz','Stuart','Horwitz Stuart','2008-11-12',12,'','M','Main Rd 03','Bay','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:27:57',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (66,'Liller','Trudie','Trudie Liller','1975-11-12',45,'','M','Otis','Bessemer','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (67,'Dimaggio','Tobias','Dimaggio Tobias','1992-11-12',28,'','M','North Street 10','Birmingham','','+09765713','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:04:47',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (68,'Cripe','Forrest','Forrest Cripe','1988-11-12',32,'','M','East','Birmingham','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (69,'Sherwood','Arica','Arica Sherwood','1985-11-12',35,'','M','Hubbard','Prospect','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (70,'Ansari','Crista','Crista Ansari','1995-11-12',25,'','M','Colony','Gold','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (70,'Kenny','Anzany','Kenny Anzany','1995-11-12',25,'','M','Colony Place 67','Gold Town','','+5252332','','U','','U','\0','U','U','','N',1,'AB+','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:26:23',1,'unknown','single',NULL);
 INSERT INTO `patient` VALUES (71,'Lant','Lynell','Lynell Lant','1969-11-12',51,'','M','Falls','Boston','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (72,'Doak','Arminda','Arminda Doak','1994-11-12',26,'','M','Paramount','Dixwell','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (73,'Mcnaught','Elton','Elton Mcnaught','1992-11-12',28,'','M','Highland','Flatbush','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
@@ -2815,23 +3881,23 @@ INSERT INTO `patient` VALUES (74,'Stryker','Vivienne','Stryker Vivienne','1994-1
 INSERT INTO `patient` VALUES (75,'Crutcher','Elvera','Elvera Crutcher','1973-11-12',47,'','F','Boston','Buckland','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (76,'Messinger','Debby','Debby Messinger','1990-11-12',30,'','F','Charlton','Boston','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (77,'Hauer','Mana','Mana Hauer','1960-11-12',60,'','F','Swansea','New','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (78,'Swindler','Verla','Verla Swindler','1988-11-12',32,'','F','Main','Foxon','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (78,'Swindler','Verla','Swindler Verla','1988-11-12',32,'','F','Main rd 88','Foxon','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:27:46',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (79,'Veloz','Su','Su Veloz','1942-11-12',78,'','F','Providence','Danbury','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (80,'Dame','Joyce','Joyce Dame','1964-11-12',56,'','F','Palmer','Berlin','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (80,'Dame','Joyce','Dame Joyce','1964-11-12',56,'','F','Palmer way 5','Berlin','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:28:09',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (81,'Tolman','Terresa','Terresa Tolman','1962-11-12',58,'','F','Cranberry','Boston','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (82,'Outlaw','Kerry','Outlaw Kerry','1959-11-12',61,'','F','Furry Rt','Main','','+23123211','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:47:59',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (83,'Ruley','Kacie','Kacie Ruley','1960-11-12',60,'','F','Washington','Connecticut','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (84,'Broeckel','Lynne','Lynne Broeckel','2006-11-12',14,'','F','Cranberry','Salem','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (85,'Threadgill','Mack','Mack Threadgill','1960-11-12',60,'','F','Clifton','Boston','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (86,'Fountaine','Veronique','Veronique Fountaine','1960-11-12',60,'','F','Avenue','School','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (87,'Cypher','Marica','Marica Cypher','1980-11-12',40,'','F','Grant','Town','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (86,'Fountaine','Veronique','Fountaine Veronique','1960-11-12',60,'','F','Old Avenue','Scholton','','','','U','','U','\0','U','U','','N',1,'B-','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:16:28',1,'unknown','widowed',NULL);
+INSERT INTO `patient` VALUES (87,'Cypher','Marica','Cypher Marica','1980-11-12',40,'','F','Grant Rd 1','Town','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:16:45',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (88,'Pohlman','Margot','Margot Pohlman','1973-11-12',47,'','F','Veterans','Bridgeport','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (89,'Orbison','An','Orbison An','1972-11-12',48,'','F','Brockport St 11','Queen','','+67344441','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:04:34',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (90,'Thomas','Shawn','Shawn Thomas','1960-11-12',60,'','F','West','Barnum','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (91,'Cofield','Brynn','Brynn Cofield','1987-11-12',33,'','F','County','Torringford','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (92,'Kendricks','Dewitt','Dewitt Kendricks','2004-11-12',16,'','F','Catskill','Kucwiny','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (93,'Call','Pearle','Pearle Call','2002-11-12',18,'','F','Centereach','NY','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (94,'Wiseman','Lynna','Lynna Wiseman','1998-11-12',22,'','F','East','Commack','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (94,'Wiseman','Lynna','Wiseman Lynna','1998-11-12',22,'','F','East Way 1','Commack','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:34:08',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (95,'Moad','Renee','Renee Moad','1992-11-12',28,'','F','Thruway','NY','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (96,'Holaday','Rodney','Rodney Holaday','2002-11-12',18,'','F','Brewerton','Greenbush','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (97,'Gudger','Fermin','Fermin Gudger','1958-11-12',62,'','F','Transit','Newburgh','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
@@ -2841,24 +3907,24 @@ INSERT INTO `patient` VALUES (100,'Christman','Carletta','Carletta Christman','1
 INSERT INTO `patient` VALUES (101,'Lemmons','Criselda','Criselda Lemmons','1970-11-12',50,'','F','Bristol','Cromwell','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (102,'Doke','Joni','Joni Doke','2000-11-12',20,'','F','Cromwell','Danbury','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (103,'Burris','Ranae','Ranae Burris','1974-11-12',46,'','F','Danbury','Ave','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (104,'Linger','Tarah','Tarah Linger','1986-11-12',34,'','F','Ave','Road','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (105,'Stano','Karolyn','Karolyn Stano','1964-11-12',56,'','F','Road','Hwy','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (106,'Singley','Lola','Lola Singley','1970-11-12',50,'','F','Hwy','Road','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (104,'Linda','Tarah','Linda Tarah','1986-11-12',34,'','F','Avenue Wide Garden 4','Springfield','','+511131','','U','','U','\0','U','U','','N',1,'0-','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:28:59',1,'unknown','married',NULL);
+INSERT INTO `patient` VALUES (105,'Stano','Karolyn','Stano Karolyn','1964-11-12',56,'','F','Road Wy 7','Hwy Town','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:29:13',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (106,'Singley','Lola','Singley Lola','1970-11-12',50,'','F','Highway Road','Junly','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:29:34',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (107,'Rumfelt','Reanna','Reanna Rumfelt','1960-11-12',60,'','F','Road','Hamden','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (108,'Ivery','Hyman','Ivery Hyman','1980-11-12',40,'','F','Hamden Rd 89','Hartford','','+3451231\\234','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:04:03',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (109,'Ingrassia','Malena','Malena Ingrassia','1990-11-12',30,'','F','Hartford','Lisbon','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (110,'Lehmann','Howard','Howard Lehmann','1960-11-12',60,'','F','Lisbon','Nebbi','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (110,'Lena','Howard','Lena Howard','1960-11-12',60,'','F','Gardenia corner','Nebbi','','+2144112','','U','','U','\0','U','U','','N',2,'0-','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:18:23',1,'unknown','divorced',NULL);
 INSERT INTO `patient` VALUES (111,'Roberto','Torie','Torie Roberto','1980-11-12',40,'','F','Uerey','Nebbi','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (112,'Hale','Nichol','Nichol Hale','1960-11-12',60,'','F','Road','koch','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (113,'Monk','Nickolas','Nickolas Monk','1960-11-12',60,'','F','Road','Laju','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (114,'Hoagland','Madelaine','Madelaine Hoagland','1984-11-12',36,'','F','New','Pabego','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (115,'Tussey','Lida','Lida Tussey','1960-11-12',60,'','F','New','Koch Abira','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (112,'Hale','Nichol','Hale Nichol','1960-11-12',60,'','F','New Road 1','koch','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:15:28',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (113,'Monk','Nickolas','Monk Nickolas','1960-11-12',60,'','F','New Road 1','Laju','','+5234111','','U','','U','\0','U','U','','N',1,'A+','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:29:56',1,'unknown','widowed',NULL);
+INSERT INTO `patient` VALUES (114,'Hoagland','Madelaine','Hoagland Madelaine','1984-11-12',36,'','F','New Rd 67','Pabego','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:30:03',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (115,'Tussey','Lida','Tussey Lida','1960-11-12',60,'','F','New Street 8','Koch Abira','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:30:13',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (116,'Nieves','Julietta','Nieves Julietta','1944-11-12',76,'','F','Newington Road 44','Acwala','','+123144','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:06:03',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (117,'Natera','Rickie','Rickie Natera','1996-11-12',24,'','F','Road','Kigwela','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (117,'Natera','Rickie','Natera Rickie','1996-11-12',24,'','F','Wide Road 55','Kigwela','','+212144412','','U','','U','\0','U','U','','N',1,'0-','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:15:42',1,'unknown','single',NULL);
 INSERT INTO `patient` VALUES (118,'Milstead','Elvie','Elvie Milstead','1985-11-12',35,'','F','Norwalk','Keramia','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (119,'Linehan','Jed','Jed Linehan','1971-11-12',49,'','F','Norwalk','Nebbi Town','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (120,'Jenkin','Gaynelle','Gaynelle Jenkin','2007-11-12',13,'','F','Norwich','Nyacara','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (121,'Rathke','Michiko','Michiko Rathke','1960-11-12',60,'','F','Rd','Ocego','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (121,'Rathke','Michiko','Rathke Michiko','1960-11-12',60,'','F','Rd garden n.1','Ocego','','+41241122','','U','','U','\0','U','U','','N',1,'AB-','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:34:35',1,'unknown','widowed',NULL);
 INSERT INTO `patient` VALUES (122,'Ellis','Johnathon','Johnathon Ellis','1984-11-12',36,'','F','Putnam','Pawong','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (123,'Jansson','Yahaira','Jansson Yahaira','1963-11-12',57,'','F','Main Rd 1','Akesi','','+0914411','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:06:16',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (124,'Greenburg','Margery','Margery Greenburg','1975-11-12',45,'','F','Shelton','Akesi','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
@@ -2870,10 +3936,10 @@ INSERT INTO `patient` VALUES (129,'Knupp','Eric','Knupp Eric','1952-11-12',68,''
 INSERT INTO `patient` VALUES (130,'Duer','Otha','Otha Duer','1995-11-12',25,'','F','Connecticut','Anosi','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (131,'Shultz','Ardis','Shultz Ardis','1970-11-12',50,'','F','Salem street','Opano','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:29:58',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (132,'Eckhart','Idalia','Eckhart Idalia','1980-11-12',40,'','M','Boston avenue','Singla','','','','U','','U','\0','U','U','','N',4,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:29:48',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (133,'Eklund','Archie','Archie Eklund','1994-11-12',26,'','M','School','Aluka','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (133,'Eklund','Archie','Eklund Archie','1994-11-12',26,'','M','School Place 7','Aluka','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:30:22',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (134,'Andersen','Tawnya','Tawnya Andersen','1952-11-12',68,'','M','Bridgeport','Nyapii','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (135,'Isreal','Jarred','Isreal Jarred','1971-11-12',49,'','M','Queen','Jupukidi','','+07843314','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:06:23',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (136,'Arriola','Christoper','Christoper Arriola','1995-11-12',25,'','M','Barnum','Mbaro','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (136,'Christoper','Arriola','Christoper Arriola','1995-11-12',25,'','M','Barnum 51','Mbaro','','','','U','','U','\0','U','U','','N',1,'A-','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:18:54',1,'medicine','single',NULL);
 INSERT INTO `patient` VALUES (137,'Sharples','Lenny','Lenny Sharples','1971-11-12',49,'','M','Torringford','Mbaro','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (138,'Temme','Mona','Mona Temme','1975-11-12',45,'','M','No','Munduryema','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (139,'Jerabek','Delsie','Delsie Jerabek','1953-11-12',67,'','M','Wolcott','Angal Lei','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
@@ -2886,7 +3952,7 @@ INSERT INTO `patient` VALUES (145,'Brewer','Simona','Brewer Simona','1975-11-12'
 INSERT INTO `patient` VALUES (146,'Alex','Kala','Kala Alex','1983-11-12',37,'','M','Mcclellan','Pamora Ambere','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (147,'Audia','Norah','Norah Audia','1981-11-12',39,'','M','No','Awera Forest','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (148,'Heard','Elna','Heard Elna','1964-11-12',56,'','M','Welgo Street 789','Olyeko','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:31:03',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (149,'Selley','Glenda','Glenda Selley','1970-11-12',50,'','M','Gilbert','Kyera','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (149,'Selley','Glenda','Selley Glenda','1970-11-12',50,'','M','Gilbert way 4','Kyera','','+424311','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:26:04',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (150,'Keasler','Shakia','Keasler Shakia','1952-11-12',68,'','M','South','Paminya','','+14390955','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:06:29',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (151,'Notter','Lien','Lien Notter','1984-11-12',36,'','M','Mcmeans','Kwio Owaro','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (152,'Eichner','Nikole','Nikole Eichner','1984-11-12',36,'','M','Academy','Mbaro Akanga','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
@@ -2895,13 +3961,13 @@ INSERT INTO `patient` VALUES (154,'Lamer','Warren','Warren Lamer','1963-11-12',5
 INSERT INTO `patient` VALUES (155,'Nagata','Kory','Nagata Kory','2007-11-12',13,'','M','Adams 23','Harrington','','+043124114','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:06:39',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (156,'Chain','Claudio','Chain Claudio','1984-11-12',36,'','M','St.','Homewood','','','','U','','U','\0','U','U','N','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:30:21',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (157,'Fiala','Zack','Fiala Zack','1995-11-12',25,'','M','Garnet road','Umago','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:31:18',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (158,'Waring','Kenneth','Kenneth Waring','1938-11-12',82,'','M','North','Overlook','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (158,'Waring','Kenneth','Waring Kenneth','1938-11-12',82,'','M','North st 6','Overlook','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:19:05',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (159,'Koons','Domingo','Domingo Koons','1966-11-12',54,'','M','South','Sherman','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (160,'Capote','Parker','Capote Parker','1974-11-12',46,'','M','Marsh st. 94','Toryun','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 02:01:20',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (161,'Zell','Lamar','Lamar Zell','1970-11-12',50,'','M','Green','Hill','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (162,'Karsten','Nickolas','Nickolas Karsten','2012-11-12',8,'','F','North','Market','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (161,'Zell','Lamar','Zell Lamar','1970-11-12',50,'','M','Green Street','Upper Hill','','+1412222','','U','','U','\0','U','U','','N',1,'0+','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:35:00',1,'unknown','divorced',NULL);
+INSERT INTO `patient` VALUES (162,'Karsten','Nickolas','Karsten Nickolas','2012-11-12',8,'','F','North way 8','Market','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:30:31',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (163,'Dancy','Gerald','Gerald Dancy','1981-11-12',39,'','F','Trusel','Drive','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (164,'Parcell','Moises','Moises Parcell','1996-11-12',24,'','F','Saffron','Dr.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (164,'Parcell','Moises','Parcell Moises','1996-11-12',24,'','F','Saffron','Durham','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:33:54',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (165,'Lockamy','Maxwell','Maxwell Lockamy','1993-11-12',27,'','F','Parker','Court','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (166,'Nalls','Santiago','Nalls Santiago','2000-11-12',20,'','M','West Road 11','Peninsula','','+54243342','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:03:26',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (167,'Gauldin','Richard','Gauldin Richard','2003-11-12',17,'','F','Delta','St. Louis','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:31:33',1,'unknown','unknown',NULL);
@@ -2909,74 +3975,74 @@ INSERT INTO `patient` VALUES (168,'Muldrow','Rod','Rod Muldrow','2001-11-12',19,
 INSERT INTO `patient` VALUES (169,'Mondy','Darrell','Mondy Darrell','2000-11-12',20,'','F','Polverton street 91','House','','+13007844','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:07:04',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (170,'Shell','Cary','Cary Shell','2002-11-12',18,'','F','Nicolls','Ave.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (171,'Rott','Sterling','Sterling Rott','1994-11-12',26,'','F','Edgewood','Court','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (172,'Rambin','Eddy','Eddy Rambin','1998-11-12',22,'','F','Bath','Dr.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (173,'Dexter','Alexis','Alexis Dexter','2002-11-12',18,'','F','Philmont','Road','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (172,'Rambin','Eddy','Rambin Eddy','1998-11-12',22,'','F','Bath dr.','Durham','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:33:48',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (173,'Dexter','Alexis','Dexter Alexis','2002-11-12',18,'','F','Philmont Rd 1','Roshy','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:19:29',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (174,'Creviston','Maximo','Maximo Creviston','2004-11-12',16,'','F','Kingston','Street','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (175,'Simeone','Johnnie','Johnnie Simeone','1993-11-12',27,'','F','Lookout','St.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (175,'Simeone','Johnnie','Simeone Johnnie','1993-11-12',27,'','F','Lookout st.','St. Joseoh','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:25:48',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (176,'Eyre','Branden','Branden Eyre','1996-11-12',24,'','F','Jersey','Queen','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (177,'Amidon','Brett','Amidon Brett','2000-11-12',20,'','F','Orchard','Ave.','','+45411241','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:03:05',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (178,'Mustard','Brooks','Brooks Mustard','2017-11-12',3,'','F','Sierra','Avenue','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (179,'Jetter','Stanley','Jetter Stanley','1985-11-12',35,'','F','East','College','','+01912313123','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:07:12',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (180,'Boyter','Brock','Brock Boyter','1985-11-12',35,'','F','West','Oakwood','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (181,'Batts','Stuart','Stuart Batts','1944-11-12',76,'','M','Mayfield','Drive','','','','\0','','\0','\0','\0','\0','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (182,'Baldonado','Tod','Tod Baldonado','2007-11-12',13,'','M','Wayne','Dr.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (182,'Baldonado','Tod','Baldonado Tod','2007-11-12',13,'','M','Wayne','Dunston','','+141233','','U','','U','\0','U','U','','N',1,'A-','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:30:49',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (183,'Strawder','Abraham','Strawder Abraham','1953-11-12',67,'','M','Duke 56','Lane','','+095484444','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:03:17',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (187,'Bethel','Booker','Bethel Booker','2010-11-12',10,'','F','Ridge 77','York Wer','mary','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 02:01:05',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (188,'Socha','Marlon','Marlon Socha','1963-11-12',57,'','M','Prospect','Lane','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (189,'Tibbetts','Jake','Jake Tibbetts','1967-11-12',53,'','M','Revolution','Ave.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (190,'Anwar','Sylvester','Sylvester Anwar','1986-11-12',34,'','M','Knight','Lane','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (189,'Jake','Tibbetts','Jake Tibbetts','1967-11-12',53,'','M','Revolution ave.','Arlington','','+4231414','','U','','U','\0','U','U','','N',1,'B+','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:23:21',1,'unknown','married',NULL);
+INSERT INTO `patient` VALUES (190,'Sylvester','Anwar','Sylvester Anwar','1986-11-12',34,'','M','Knight lane','Langley','','+2121244','','U','','U','\0','U','U','','N',1,'AB+','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:24:22',1,'unknown','married',NULL);
 INSERT INTO `patient` VALUES (191,'Badgett','Leonard','Leonard Badgett','1964-11-12',56,'','M','Foster','Windfall','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (192,'Mayhan','Man','Mayhan Man','1964-11-12',56,'','M','East','Marlborough','','+66513611','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:02:58',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (193,'Juarez','Chong','Chong Juarez','1966-11-12',54,'','M','Congress','Avenue','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (194,'Scheff','Benjamin','Scheff Benjamin','2006-11-12',14,'','M','Alderwood rd. 45','Dalton','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:32:00',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (195,'Lafon','Andre','Andre Lafon','1997-11-12',23,'','M','East','Cherry','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (195,'Lafon','Andre','Lafon Andre','1997-11-12',23,'','M','East Suburb 5','Cherry','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:31:01',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (196,'Madere','Dana','Madere Dana','1995-11-12',25,'','M','Sussex st.','Edimburgh','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:32:19',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (197,'Canino','Jacob','Jacob Canino','1955-11-12',65,'','M','Country','Club','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (198,'Basye','Noble','Noble Basye','1999-11-12',21,'','M','Lowland','Street','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (199,'Alexis','Newton','Alexis Newton','1982-11-12',38,'','M','Lake Road East 12','Court','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:07:22',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (200,'Dahm','Son','Son Dahm','1942-11-12',78,'','M','Rawland','Colonial','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (201,'Varien','Kelly','Kelly Varien','1952-11-12',68,'','F','Vasing St.','Looksy','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (202,'Jimenez','Morton','Morton Jimenez','1967-11-12',53,'','F','East','Moon','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (202,'Jimenez','Morton','Jimenez Morton','1967-11-12',53,'','F','East river 7','Moningbourough','','','','U','','U','\0','U','U','','N',2,'AB-','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:19:44',1,'unknown','widowed',NULL);
 INSERT INTO `patient` VALUES (203,'Nagel','Weldon','Weldon Nagel','1952-11-12',68,'','F','Howard','Avenue','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (204,'Nowak','Curt','Nowak Curt','1938-11-12',82,'','F','East Road 12','Parker','','+62542425','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:02:36',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (205,'Stanislawski','Wilmer','Wilmer Stanislawski','1990-11-12',30,'','F','Cactus','St.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (205,'Stanislawski','Wilmer','Stanislawski Wilmer','1990-11-12',30,'','F','Cactus neighbrd','St.Peter','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:31:24',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (206,'Marsden','Fredrick','Fredrick Marsden','1981-11-12',39,'','F','Underwood','Drive','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (208,'Wherry','Jewel','Jewel Wherry','1981-11-12',39,'','F','Broom','Ave.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (208,'Wherry','Jewel','Wherry Jewel','1981-11-12',39,'','F','Broom ave.','Kulry','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:24:43',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (213,'Catalan','Modesto','Modesto Catalan','1987-11-12',33,'','M','Edgemont','Drive','','','','\0','','\0','\0','\0','\0','','Y',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (214,'Wicker','Ken','Ken Wicker','1968-11-12',52,'','M','Fletcher','St.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (214,'Wicker','Ken','Wicker Ken','1968-11-12',52,'','M','Fletcher St 6','St. Francis','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:15:15',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (215,'Farquhar','Mickie','Farquhar Mickie','1981-11-12',39,'','M','Ember 41','Suryn','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 02:00:45',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (216,'Jonny','Ellie','Jonny Ellie','1985-11-12',35,'','M','Ash rd. 4','Springville','','','','U','','U','\0','U','U','','N',3,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:07:41',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (217,'Mcsherry','Mortimer','Mcsherry Mortimer','2008-11-12',12,'','M','Arch','Court','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 01:56:22',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (217,'Mcsherry','Mortimer','Mcsherry Mortimer','2008-11-12',12,'','M','Arch court 5','Courtney','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:24:54',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (218,'Kinlaw','John','Kinlaw John','1976-11-12',44,'','M','Berkshire','Street','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 01:55:48',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (219,'Meares','Jerrie','Jerrie Meares','1944-11-12',76,'','M','Huntersville','Hamilton','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (220,'Espitia','Milton','Milton Espitia','2001-11-12',19,'','M','Hartford','Drive','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (221,'Altom','Mervin','Mervin Altom','1987-11-12',33,'','M','Logan','Lane','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (222,'Judd','Hans','Judd Hans','1987-11-12',33,'','M','West st 11','Peace','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 02:00:36',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (223,'Mcmakin','Syble','Syble Mcmakin','2011-11-12',9,'','M','Lowland','Street','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (224,'Mclendon','Daphon','Mclendon Daphon','1986-11-12',34,'','M','Lake','Court','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 01:56:11',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (224,'Mclendon','Daphon','Mclendon Daphon','1986-11-12',34,'','M','Lake Rd 5a','Court','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:25:32',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (225,'Hayter','Leslee','Hayter Leslee','2019-11-12',1,'','F','Streamwood St. 12','Colonial','','+10545455','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:02:52',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (226,'Hemsley','Chance','Chance Hemsley','2018-11-12',2,'','M','East','Moon','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (226,'Hemsley','Chance','Hemsley Chance','2018-11-12',2,'','M','East Road 1','Moon','','+62431433','','U','','U','\0','U','U','','N',1,'AB+','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:14:28',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (227,'Sargeant','Milda','Milda Sargeant','2019-11-12',1,'','M','Howard','Avenue','','','','\0','','\0','\0','\0','\0','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (228,'Davila','Jaqueline','Jaqueline Davila','2019-11-12',1,'','F','East','Parker','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (228,'Davila','Jaqueline','Davila Jaqueline','2019-11-12',1,'','F','East Street 55','Parker','','+3414313','','U','','U','\0','U','U','','N',1,'B+','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:20:02',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (229,'Latson','Gisele','Latson Gisele','2013-11-12',7,'','M','Cactus','St.Andrews','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:32:32',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (230,'Che','Janis','Janis Che','2017-11-12',3,'','M','Underwood','Drive','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (231,'Maddix','Delta','Maddix Delta','2019-11-12',1,'','F','Broom','Ave.','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:02:07',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (232,'Jaeger','Laureen','Jaeger Laureen','2010-11-12',10,'','F','Edgemont','Drive','','+6562131','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:02:01',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (233,'Jeffreys','Risa','Risa Jeffreys','2019-11-12',1,'','F','Ember','St.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (233,'Jeffreys','Risa','Jeffreys Risa','2019-11-12',1,'','F','Ember','St. John','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:14:40',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (234,'Days','Cristal','Days Cristal','2019-11-12',1,'','F','Ash St. 90','St. Cardinal','','+3432121','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:02:26',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (235,'Lease','Royce','Lease Royce','2020-11-12',0,'','F','Arch 51','Court','','+13445111','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:01:52',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (236,'Devilbiss','Andra','Andra Devilbiss','2019-11-12',1,'','M','Berkshire','Street','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (237,'Ritenour','Aurora','Aurora Ritenour','2019-11-12',1,'','M','Western','Hamilton','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (238,'Criswell','Blanche','Blanche Criswell','2012-11-12',8,'','F','Hartford','Drive','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (239,'Reynold','Marylyn','Reynold Marylyn','2011-11-12',9,'','M','Logan 23','Lane','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 02:00:04',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (240,'Albers','Santo','Santo Albers','2017-11-12',3,'','M','West','Peace','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (241,'Aldrete','Valarie','Valarie Aldrete','2020-11-12',0,'','M','Victoria','Ave.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (240,'Albers','Santo','Albers Santo','2017-11-12',3,'','M','West Lane 5','Peace','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:31:35',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (241,'Aldrete','Valarie','Aldrete Valarie','2020-11-12',0,'','M','Victoria Avenue','Kolly','','','','U','','U','\0','U','U','','N',1,'A-','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:32:01',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (242,'Bumpers','Ferdinand','Bumpers Ferdinand','2014-11-12',6,'','M','Fletcher','Ave.','','+4090138434','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:07:51',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (243,'Moschella','Deangelo','Moschella Deangelo','2011-11-12',9,'','M','Estate','St.Louis','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:01:34',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (244,'Schanz','Emmanuel','Emmanuel Schanz','2020-11-12',0,'','M','Piper','Lane','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (243,'Moschella','Deangelo','Moschella Deangelo','2011-11-12',9,'','M','Estate drive','St.Louis','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:22:42',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (244,'Schanz','Emmanuel','Schanz Emmanuel','2020-11-12',0,'','M','Piper lane 99','Sprins','','+31341341','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:25:20',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (245,'Vanish','Katrina','Vanish Katrina','2019-11-12',1,'','M','Sierra st.','Wegion','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:33:46',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (246,'Fredrickson','Denna','Denna Fredrickson','2009-11-12',11,'','M','Mayfield','Ave.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (247,'Dacruz','Jestine','Dacruz Jestine','2019-11-12',1,'','F','Storm','Ave.','','+07346801015','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:00:46',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (246,'Fredrickson','Denna','Fredrickson Denna','2009-11-12',11,'','M','Mayfield Ave.','Horford','','+5123141','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:32:17',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (247,'Dacruz','Jestine','Dacruz Jestine','2019-11-12',1,'','F','Storm Ave.','Arlington','','+07346801015','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:32:28',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (248,'Eddinger','Serafina','Eddinger Serafina','2012-11-12',8,'','F','Frost St.','Ramondksy','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:33:29',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (249,'Konieczny','Renna','Renna Konieczny','2020-11-12',0,'','M','Virginia','Street','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (250,'Deville','Krystina','Krystina Deville','2020-11-12',0,'','M','Depot','Drive','','','','\0','','\0','\0','\0','\0','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
@@ -2991,12 +4057,12 @@ INSERT INTO `patient` VALUES (258,'Rauch','Carmelina','Carmelina Rauch','2015-11
 INSERT INTO `patient` VALUES (259,'Ascencio','Breann','Ascencio Breann','2019-11-12',1,'','F','W.Ghuil 67','Trenton','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 19:35:20',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (260,'Osgood','Elicia','Elicia Osgood','1996-11-12',24,'','F','Lexington','Street','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (261,'Echols','Maryetta','Echols Maryetta','2020-11-12',0,'','F','North','Anchor','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:27:25',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (262,'Criger','Dean','Dean Criger','2017-11-12',3,'','M','Columbia','St.','','','','\0','','\0','\0','\0','\0','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (263,'Beebe','Artie','Artie Beebe','2012-11-12',8,'','M','Long','Avenue','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (264,'Every','Raquel','Raquel Every','1990-11-12',30,'','F','Beech','St.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (262,'Criger','Dean','Criger Dean','2017-11-12',3,'','M','Columbia st.','Galvon','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:20:54',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (263,'Beebe','Artie','Beebe Artie','2012-11-12',8,'','M','Long Avenue 6','Hambrog','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:20:24',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (264,'Every','Raquel','Every Raquel','1990-11-12',30,'','F','Beech St.','Springfield','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:32:39',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (265,'Keefe','Mable','Keefe Mable','2018-11-12',2,'','F','Penrose','Street','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:00:37',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (266,'Mcnair','Cleo','Cleo Mcnair','2020-11-12',0,'','M','Talbot','Lane','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (267,'Duclos','Deon','Deon Duclos','2020-11-12',0,'','M','Roosevelt','St.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (266,'Mcnair','Cleo','Mcnair Cleo','2020-11-12',0,'','M','Talbot lane 3','Lanuour','','','','U','','U','\0','U','U','','N',1,'A-','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:20:42',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (267,'Duclos','Deon','Duclos Deon','2020-11-12',0,'','M','Roosevelt St.','Fulham','','+12111','','U','','U','\0','U','U','','N',1,'A-','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:33:02',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (268,'Rinke','Alexis','Rinke Alexis','2020-11-12',0,'','F','Plaza  12','Santa Barbara','','+3415555','','U','','U','\0','U','U','','N',3,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:00:31',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (269,'Mincks','Madaline','Madaline Mincks','1970-11-12',50,'','F','Courtland','St.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (270,'Cerny','Belle','Cerny Belle','2020-11-12',0,'','M','Ave. Providence','Aveber','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:59:51',1,'unknown','unknown',NULL);
@@ -3008,42 +4074,42 @@ INSERT INTO `patient` VALUES (275,'Burrell','Zane','Zane Burrell','2020-11-12',0
 INSERT INTO `patient` VALUES (276,'Rankins','Frank','Rankins Frank','2018-11-12',2,'','F','Auburn st.','Northampton','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:34:04',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (277,'Ackerman','Elouise','Ackerman Elouise','2019-11-12',1,'','F','Polygon Drive','Calumet City','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:34:24',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (278,'Louque','Eliana','Louque Eliana','2020-11-12',0,'','M','Wellness','Dr. South Town','','+34234324314','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:58:42',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (279,'Delnero','Vernell','Delnero Vernell','2020-11-12',0,'','F','W.','San','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:59:35',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (279,'Delnero','Vernell','Delnero Vernell','2020-11-12',0,'','F','West county 91','San Josè','','+412521434','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:03:24',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (280,'Zdenek','Alejandra','Zdenek Alejandra','2020-11-12',0,'','M','Orchard','Street','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:58:47',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (281,'Feehan','Tiana','Feehan Tiana','2020-11-12',0,'','F','Parker','Drive town','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:58:56',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (282,'Eckler','Sadye','Eckler Sadye','2020-11-12',0,'','M','Addison','Avenue','','+41446621','','U','','U','\0','U','U','','N',3,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:59:30',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (283,'Eckler','Eli','Eckler Eli','2020-11-12',0,'','F','Autumn','Street','','+14525235','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:59:12',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (284,'Allard','Denita','Allard Denita','2020-11-12',0,'','M','Belmont','Street','','+4225555','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:59:05',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (285,'Tuft','Jeffie','Jeffie Tuft','1975-11-12',45,'','M','Theatre','St.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (286,'Silvernail','Brenna','Brenna Silvernail','2020-11-12',0,'','F','Bath','Dr.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (285,'Tuft','Jeffie','Tuft Jeffie','1975-11-12',45,'','M','Theatre St.','Covington','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:03:46',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (286,'Silvernail','Brenna','Silvernail Brenna','2020-11-12',0,'','F','Bath Dr.','Willygh','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:08:17',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (287,'Ellenburg','Gina','Ellenburg Gina','1960-11-12',60,'','M','North 55','Wehry','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 01:59:02',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (288,'Sowers','Yevette','Sowers Yevette','1947-11-12',73,'','F','Primrose','St.','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 02:20:16',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (288,'Sowers','Yevette','Sowers Yevette','1947-11-12',73,'','F','Primrose St.','Sulley','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:33:11',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (289,'Dewall','Karen','Dewall Karen','1950-11-12',70,'','M','South Avenue 1b','Earl','','+2331541','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 01:59:36',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (290,'Joesph','Kenna','Joesph Kenna','1959-11-12',61,'','M','53rd Street','COuntu west evans','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 02:00:24',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (291,'Benard','Cynthia','Benard Cynthia','1987-11-12',33,'','F','Marine','Ave.','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 02:38:35',1,'unknown','unknown',2);
-INSERT INTO `patient` VALUES (292,'Gelman','Demetrice','Demetrice Gelman','1950-11-12',70,'','M','Glen','Ridge','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (291,'Benard','Cynthia','Benard Cynthia','1987-11-12',33,'','F','Marine ave.','Glossington','','','','U','','U','\0','U','U','','N',3,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:02:53',1,'unknown','unknown',2);
+INSERT INTO `patient` VALUES (292,'Gelman','Demetrice','Gelman Demetrice','1950-11-12',70,'','M','Glen ridge','Springfield','','','','U','','U','\0','U','U','','N',1,'B+','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:14:11',1,'unknown','widowed',NULL);
 INSERT INTO `patient` VALUES (293,'Yanni','Charlena','Yanni Charlena','1960-11-12',60,'','M','W. seyn 2','Galvin','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 01:59:15',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (294,'Keltner','Josefina','Keltner Josefina','1990-11-12',30,'','F','Luna','Ave.','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 02:20:08',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (294,'Keltner','Josefina','Keltner Josefina','1990-11-12',30,'','F','Luna ave.','Springfield','','','','U','','U','\0','U','U','','N',2,'B+','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:09:04',1,'unknown','married',NULL);
 INSERT INTO `patient` VALUES (295,'Kirby','Ai','Kirby Ai','1973-11-12',47,'','M','Lafayette 5','Durban','','+34343\\35','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 01:59:56',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (296,'Cousineau','Keesha','Keesha Cousineau','2011-11-12',9,'','M','Mammoth','Ave.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (297,'Drakeford','Synthia','Synthia Drakeford','2001-11-12',19,'','M','Wellington','Dr.','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (296,'Cousineau','Keesha','Cousineau Keesha','2011-11-12',9,'','M','Mammoth ave.','Springfield','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:09:29',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (297,'Drake','Synthia','Drake Synthia','2001-11-12',19,'','M','Gorny boul. 21','Wellington','','+542241','','U','','U','\0','U','U','','N',1,'0-','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:21:35',1,'unknown','single',NULL);
 INSERT INTO `patient` VALUES (298,'Crystal','Venessa','Crystal Venessa','1961-11-12',59,'','F','Court','Alexandria','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 02:18:54',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (299,'Junior','Annie','Annie Junior','1985-11-12',35,'','M','South','Windsor','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (300,'Andrepont','Golden','Andrepont Golden','2005-11-12',15,'','M','Drive way 62','Maryville','','+343245555','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:58:27',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (301,'Kruse','Noe','Noe Kruse','1981-11-12',39,'','M','Virginia','Beach','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (302,'Scheffer','Terina','Scheffer Terina','1988-11-12',32,'','F','Road','Lewiston','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 02:18:59',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (303,'Vanover','Tuyet','Tuyet Vanover','1981-11-12',39,'','M','Drive','Mount','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (302,'Scheffer','Terina','Scheffer Terina','1988-11-12',32,'','F','Road New 14','Lewiston','','+34235112','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:22:10',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (303,'Vanover','Tuyet','Vanover Tuyet','1981-11-12',39,'','M','Drive road 151','Mount','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:33:32',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (304,'Amo','Natalia','Natalia Amo','1949-11-12',71,'','M','Saint','Charles','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (305,'Grose','Rosalba','Grose Rosalba','1963-11-12',57,'','F','St.','Lenoir','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 02:19:06',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (305,'Grose','Rosalba','Grose Rosalba','1963-11-12',57,'','F','Lendor St.','Lenoir','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:33:23',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (306,'Nantz','Ahmad','Ahmad Nantz','1992-11-12',28,'','M','Pickerington','OH','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (307,'Terranova','Quinn','Terranova Quinn','2009-11-12',11,'','M','Drive Road 35','Old','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:58:15',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (308,'Trantham','Donte','Donte Trantham','1995-11-12',25,'','M','Rd.','Roslindale','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (309,'Necessary','Deangelo','Deangelo Necessary','1973-11-12',47,'','M','Elmhurst','NY','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (310,'Raymo','Kieth','Raymo Kieth','1984-11-12',36,'','M','Wayne Road main','Stillwater','','+034321311','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:08:23',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (311,'Arata','Vincent','Vincent Arata','1938-11-12',82,'','M','Rd.','Fort','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (311,'Arata','Vincent','Arata Vincent','1938-11-12',82,'','M','Fort Rd.','Fort','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:09:48',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (312,'Quiroga','Isreal','Isreal Quiroga','1978-11-12',42,'','M','Teaneck','NJ','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (313,'Depuy','Darrell','Darrell Depuy','1969-11-12',51,'','M','Street','Beloit','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (314,'Dark','Shon','Shon Dark','1979-11-12',41,'','M','Lane','Savage','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (313,'Depuy','Darrell','Depuy Darrell','1969-11-12',51,'','M','Large Street 731','Beloit','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:10:00',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (314,'Dark','Shon','Dark Shon','1979-11-12',41,'','M','Avery Lane 123','Savage','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:10:12',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (315,'Kittelson','Hobert','Kittelson Hobert','1972-11-12',48,'','M','Kent','OH','','+542252111','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:58:07',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (316,'Vitela','Jerrod','Jerrod Vitela','1945-11-12',75,'','M','South','Windsor','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (317,'Isabelle','Isaiah','Isaiah Isabelle','1948-11-12',72,'','M','Cartersville','GA','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
@@ -3053,14 +4119,14 @@ INSERT INTO `patient` VALUES (320,'Hauger','Stacy','Hauger Stacy','1972-11-12',4
 INSERT INTO `patient` VALUES (321,'Jemison','Roscoe','Roscoe Jemison','1954-11-12',66,'','M','Drive','Cottage','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (322,'Iraheta','Jerome','Jerome Iraheta','1981-11-12',39,'','M','Street','Aberdeen','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (323,'Skiba','Millard','Millard Skiba','1971-11-12',49,'','M','Lane','Meadville','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (324,'Salmeron','Tony','Tony Salmeron','1952-11-12',68,'','M','Sun','City','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (324,'Salmeron','Tony','Salmeron Tony','1952-11-12',68,'','M','Sun street 1/b','Sun City','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 22:21:53',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (325,'Saltz','Ramon','Ramon Saltz','1974-11-12',46,'','M','Maplewood','NJ','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (326,'Raborn','Nathanael','Raborn Nathanael','1984-11-12',36,'','M','Red St.','North','','+4512512455','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:58:00',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (327,'Montealegre','Cesar','Montealegre Cesar','1983-11-12',37,'','M','Dalton 1','Gat Husnt','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 02:01:40',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (328,'Teller','King','King Teller','1992-11-12',28,'','M','Ashtabula','OH','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (329,'Rausch','Santo','Santo Rausch','1975-11-12',45,'','M','St.','Canonsburg','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (330,'Noblitt','Kenton','Noblitt Kenton','1992-11-12',28,'','M','Washington','PA','','+18484841','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:08:31',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (331,'Raven','Philip','Philip Raven','1993-11-12',27,'','M','Beverly','MA','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (331,'Raven','Philip','Raven Philip','1993-11-12',27,'','M','Beverly st. 1','Margy','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:10:41',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (332,'Cullen','Minh','Minh Cullen','1989-11-12',31,'','M','Henderson','KY','','','','\0','','\0','\0','\0','\0','','N',3,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (333,'Kimpel','Erik','Erik Kimpel','1998-11-12',22,'','M','Bonita','Springs','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (334,'Starns','Kristopher','Starns Kristopher','2006-11-12',14,'','M','Lowell st 5','Mass Cambrisge','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 02:01:58',1,'unknown','unknown',NULL);
@@ -3068,26 +4134,26 @@ INSERT INTO `patient` VALUES (335,'Provenzano','Branden','Provenzano Branden','1
 INSERT INTO `patient` VALUES (336,'Moreles','Emery','Moreles Emery','1984-11-12',36,'','M','Drive st 66','Des Moines','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:57:37',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (337,'Emberton','John','John Emberton','1981-11-12',39,'','M','Ormond','Beach','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (338,'Koski','Raul','Raul Koski','1987-11-12',33,'','M','Bismarck','ND','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (339,'Jack','Lupe','Lupe Jack','1978-11-12',42,'','M','Fall','River','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (339,'Jack','Lupe','Jack Lupe','1978-11-12',42,'','M','Fall road','River town','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:02:32',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (340,'Lindon','Everart','Everart Lindon','2000-11-12',20,'','M','Opal new','Lurewon','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (341,'Bryden','Keneth','Keneth Bryden','2020-11-12',0,'','M','Drive','North','','','','\0','','\0','\0','\0','\0','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (341,'Bryden','Keneth','Bryden Keneth','2020-11-12',0,'','M','North Drive 23','Desplains','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:02:22',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (342,'Ellard','Hyman','Ellard Hyman','2019-11-12',1,'','M','Leesburg','VA','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:57:48',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (343,'Jenks','Modesto','Jenks Modesto','2020-11-12',0,'','F','Waynesboro','PA','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:57:43',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (344,'Rowse','Manual','Manual Rowse','1977-11-12',43,'','M','Menasha','WI','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (345,'Lamore','Dylan','Lamore Dylan','2001-11-12',19,'','F','Salem County West','Wyring','','+31431341','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 02:02:26',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (346,'Kirton','Winford','Winford Kirton','1983-11-12',37,'','F','Dr.','Parkville','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (346,'Kirton','Winford','Kirton Winford','1983-11-12',37,'','F','Dr. 56','Parkville','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:13:40',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (347,'Hutcheson','Jere','Jere Hutcheson','1980-11-12',40,'','F','Fairport','NY','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (348,'Meche','Carlo','Carlo Meche','1980-11-12',40,'','F','Lane','Fredericksburg','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (349,'Mcguirk','Bennett','Mcguirk Bennett','1980-11-12',40,'','F','Elizabeth','NJ','','+5242421412','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:57:25',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (350,'Deforge','Martin','Martin Deforge','2002-11-12',18,'','F','Niagara','Falls','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (351,'Westbrook','Connie','Connie Westbrook','1992-11-12',28,'','F','Ave.','Mount','','','','\0','','\0','\0','\0','\0','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (352,'Jarvis','Dean','Dean Jarvis','1981-11-12',39,'','F','Royal','Oak','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (353,'Ciancio','Michale','Michale Ciancio','1992-11-12',28,'','F','Harvey','IL','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (353,'Ciancio','Michale','Ciancio Michale','1992-11-12',28,'','F','Harvey Pl. 4','Ilvers','','+141434','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:11:41',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (354,'Beckmann','Kurt','Beckmann Kurt','1982-11-12',38,'','F','Rollen Dr. 134','Orchard','','+0754524245','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:57:18',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (355,'Mallery','Stephan','Stephan Mallery','1994-11-12',26,'','F','Tallahassee','FL','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (356,'Chiesa','Tiana','Tiana Chiesa','1996-11-12',24,'','F','Ridgecrest','CA','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (357,'Debus','Nakesha','Debus Nakesha','1997-11-12',23,'','F','Deland','Fullerton','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 01:58:11',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (358,'Maxton','Tania','Tania Maxton','2004-11-12',16,'','F','St.','Arlington','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (358,'Maxton','Tania','Maxton Tania','2004-11-12',16,'','F','Fuller St.3','Arlington','','+312434314','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:10:58',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (359,'Kruse','Twanda','Kruse Twanda','1993-11-12',27,'','F','Dublin','Gerinia','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 01:58:20',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (360,'Silvester','Riley','Riley Silvester','1990-11-12',30,'','F','Glen','Allen','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (361,'Temblador','Lee','Lee Temblador','1987-11-12',33,'','F','Cartersville','GA','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
@@ -3095,13 +4161,13 @@ INSERT INTO `patient` VALUES (362,'Nuckolls','Adina','Adina Nuckolls','1996-11-1
 INSERT INTO `patient` VALUES (363,'Tichenor','Alita','Tichenor Alita','1988-11-12',32,'','F','Savage','MN','','+4311333','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:08:43',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (364,'Tsuji','Georgette','Georgette Tsuji','2002-11-12',18,'','F','Ave.','Trussville','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (365,'Reardon','Mora','Reardon Mora','1997-11-12',23,'','F','East Rugh 66','Lansing','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 02:02:37',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (366,'Lipton','Luba','Luba Lipton','2001-11-12',19,'','F','Street','Green','','','','\0','','\0','\0','\0','\0','','N',4,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (366,'Lipton','Luba','Lipton Luba','2001-11-12',19,'','F','North Street 1','Green Town','','','','U','','U','\0','U','U','','N',5,'AB+','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:47:02',1,'unknown','single',NULL);
 INSERT INTO `patient` VALUES (367,'Alderson','Katrice','Alderson Katrice','2003-11-12',17,'','F','Key Road 62','West','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:57:01',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (368,'Axtell','Alleen','Alleen Axtell','1985-11-12',35,'','F','Avenue','Morgantown','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (369,'Gwyn','Jazmine','Jazmine Gwyn','1984-11-12',36,'','F','Amityville','NY','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (369,'Gwyn','Jazmine','Gwyn Jazmine','1984-11-12',36,'','F','Amityville','NY','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:13:33',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (370,'Micek','Nia','Nia Micek','1996-11-12',24,'','F','Park','Ridge','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (371,'Lara','Terrilyn','Lara Terrilyn','1990-11-12',30,'','F','Street','Springfield','','+34009831','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:08:50',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (372,'Kissane','Lakeesha','Lakeesha Kissane','1968-11-12',52,'','M','Garner','NC','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (372,'Kissane','Lakeesha','Kissane Lakeesha','1968-11-12',52,'','M','Garner road','NC','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:11:49',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (373,'Albrecht','Eleanora','Eleanora Albrecht','1980-11-12',40,'','F','Tewksbury','MA','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (374,'Janusz','Lavera','Janusz Lavera','1950-11-12',70,'','F','Whitestone','Evanrod','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 01:57:28',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (375,'Nicolai','Adan','Adan Nicolai','1944-11-12',76,'','M','Prattville','AL','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
@@ -3113,19 +4179,19 @@ INSERT INTO `patient` VALUES (380,'Amos','Lady','Amos Lady','2019-11-12',1,'','F
 INSERT INTO `patient` VALUES (381,'Linwood','Marna','Marna Linwood','1998-11-12',22,'','M','Elk','River','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (382,'Spiller','Dann','Dann Spiller','2019-11-12',1,'','M','Margarets','Street','','','','\0','','\0','\0','\0','\0','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (383,'Jacks','Meg','Meg Jacks','1960-11-12',60,'','M','Saint','Cloud','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (384,'Kreiger','Astrid','Astrid Kreiger','2001-11-12',19,'','F','Cape','Coral','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (384,'Kreiger','Astrid','Kreiger Astrid','2001-11-12',19,'','F','Cape District 67','Coral','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:02:01',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (385,'Lauderdale','Judie','Judie Lauderdale','2010-11-12',10,'','M','Charlotte','NC','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (386,'Marmo','Garth','Garth Marmo','2017-11-12',3,'','F','Clinton','Township','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (387,'Denmon','Valeri','Valeri Denmon','1959-11-12',61,'','F','Lane','Palm','','','','\0','','\0','\0','\0','\0','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (387,'Denmon','Valeri','Denmon Valeri','1959-11-12',61,'','F','Foyr Lane 1','Palm','','','','U','','U','\0','U','U','','N',3,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:12:39',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (388,'Merkel','Suellen','Merkel Suellen','2020-11-12',0,'','F','Highland','IN','','+51245245','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:56:21',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (389,'Ali','Norman','Norman Ali','1980-11-12',40,'','M','St.','Fairfield','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (390,'Jonas','August','Jonas August','2020-11-12',0,'','M','Athens','GA','','+653324324','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:56:29',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (391,'Glanton','Malika','Glanton Malika','1995-11-12',25,'','F','Hialeah','FL','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:26:04',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (391,'Glanton','Malika','Glanton Malika','1995-11-12',25,'','F','Hialeah 1','Flock','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:12:02',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (392,'Villanova','Blanca','Blanca Villanova','2018-11-12',2,'','M','Ave.','Miamisburg','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (393,'Saucedo','Hortense','Hortense Saucedo','1979-11-12',41,'','F','Hope','Mills','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (394,'Nazario','Dominic','Dominic Nazario','2004-11-12',16,'','M','Avenue','Ridgefield','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (395,'Mccutchan','Analisa','Mccutchan Analisa','2020-11-12',0,'','F','Avenue','Hummelstown','','+542145425','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:56:13',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (396,'Batman','Camelia','Camelia Batman','2020-11-12',0,'','F','Sewell','NJ','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (396,'Batman','Camelia','Batman Camelia','2020-11-12',0,'','F','Sewell','New Kirt','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:12:20',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (397,'Hassan','Ashlee','Ashlee Hassan','1944-11-12',76,'','F','Saddle','Lane','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (398,'Divito','Marhta','Marhta Divito','2008-11-12',12,'','M','Rd.','Wyandotte','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (399,'Matias','Shannan','Matias Shannan','1953-11-12',67,'','F','Beloit 14','Williamson','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:55:57',1,'unknown','unknown',NULL);
@@ -3133,7 +4199,7 @@ INSERT INTO `patient` VALUES (400,'Allmond','Eura','Eura Allmond','2019-11-12',1
 INSERT INTO `patient` VALUES (401,'Coale','Anneliese','Coale Anneliese','1980-11-12',40,'','F','Glen drive','Ellyn','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:41:49',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (402,'Arana','Trina','Arana Trina','2019-11-12',1,'','M','Oxnard','Caffrey','','+231213123','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:42:18',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (403,'Moua','Faustino','Moua Faustino','1960-11-12',60,'','M','Fullteron Dr. 612','Dearborn','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:42:01',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (404,'Stermer','Genevie','Stermer Genevie','2020-11-12',0,'','F','Indiana','PA','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:55:38',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (404,'Stermer','Genevie','Stermer Genevie','2020-11-12',0,'','F','Indiana avenue 6','Pamaro','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:13:00',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (405,'Eddings','Carmine','Eddings Carmine','2006-11-12',14,'','M','Ave. Gulk','Buffalo','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:55:46',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (406,'Amundsen','Mac','Mac Amundsen','2005-11-12',15,'','F','Rolling','Meadows','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (407,'Tirrell','Stacy','Tirrell Stacy','2020-11-12',0,'','M','Oconomowo','WI','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:56:04',1,'unknown','unknown',NULL);
@@ -3145,7 +4211,7 @@ INSERT INTO `patient` VALUES (412,'Shannon','Jonah','Shannon Jonah','2020-11-12'
 INSERT INTO `patient` VALUES (413,'Abdul','Burton','Abdul Burton','1988-11-12',32,'','M','Hill Road 923','Road Town','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:55:27',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (414,'Aucoin','Bertram','Bertram Aucoin','1946-11-12',74,'','M','Cranston','RI','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (415,'Yonts','Dee','Yonts Dee','2014-11-12',6,'','F','Gurgy Street 11','Oak','','+34-143143','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:47:36',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (416,'Das','Lloyd','Lloyd Das','1988-11-12',32,'','M','Anaheim','CA','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (416,'Das','Lloyd','Das Lloyd','1988-11-12',32,'','M','Anaheim st 5','Calverton','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:46:45',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (417,'Jose','Stephan','Jose Stephan','2020-11-12',0,'','M','Braintree','MA','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:25:43',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (418,'Berta','Basil','Berta Basil','2019-11-12',1,'','F','Huntsville','AL','','+366542235','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:55:05',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (419,'Destefano','Tuan','Tuan Destefano','1956-11-12',64,'','M','East','Northport','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
@@ -3170,7 +4236,7 @@ INSERT INTO `patient` VALUES (438,'Juarbe','Dong','Dong Juarbe','2020-11-12',0,'
 INSERT INTO `patient` VALUES (439,'Denver','Aleta','Denver Aleta','2019-11-12',1,'','M','Huntsville 66','Albreight','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:53:38',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (440,'Deschamp','Shonda','Shonda Deschamp','2016-11-12',4,'','F','Lane','Aberdeen','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (441,'Loveland','Shirley','Loveland Shirley','2020-11-12',0,'','F','Minot 2','New Doppel','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:53:15',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (442,'Valderas','Kenneth','Kenneth Valderas','2016-11-12',4,'','F','Ave.','Minneapolis','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (442,'Valderas','Kenneth','Valderas Kenneth','2016-11-12',4,'','F','Court Ave. 12','Minneapolis','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:01:41',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (443,'Abboud','Jeanene','Abboud Jeanene','2020-11-12',0,'','F','Deer','Park','','+3053424125','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:54:03',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (444,'Slape','Kathrine','Slape Kathrine','2020-11-12',0,'','F','Ave. One 11','Boca','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:53:23',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (445,'Scoggins','Rodolfo','Scoggins Rodolfo','2017-11-12',3,'','M','Bowling','Green','','+23254545','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:53:47',1,'unknown','unknown',NULL);
@@ -3191,10 +4257,10 @@ INSERT INTO `patient` VALUES (459,'Lounsbury','Valda','Lounsbury Valda','2016-11
 INSERT INTO `patient` VALUES (460,'Abramowitz','Heath','Abramowitz Heath','2013-11-12',7,'','M','Vassil Dr.','Navarre','','+34-4-54235','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:39:57',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (461,'Jerabek','Emile','Jerabek Emile','2020-11-12',0,'','M','Lake Road west','Charles','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:51:05',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (462,'Coe','Florinda','Coe Florinda','1990-11-12',30,'','F','Jonesborough','Springville','','+12001010','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:09:18',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (463,'Jorgensen','Anissa','Anissa Jorgensen','1973-11-12',47,'','F','St.','Manchester','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (463,'Jorgensen','Anissa','Jorgensen Anissa','1973-11-12',47,'','F','West St. 5','Manchester','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 14:46:31',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (464,'Vossler','Quintin','Vossler Quintin','1960-11-12',60,'','F','Edison 51','New Jeskey','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:51:28',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (465,'Harrell','Lucy','Harrell Lucy','2009-11-12',11,'','F','Palmetto','Florida town','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:51:39',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (466,'Enders','Tammi','Tammi Enders','2019-11-12',1,'','F','Street','Council','','','','\0','','\0','\0','\0','\0','','N',0,'Unknown','','2020-11-12 16:40:55',NULL,NULL,NULL,NULL,1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (466,'Enders','Tammi','Enders Tammi','2019-11-12',1,'','F','Tyo Street 77','Council','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:13:22',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (467,'Falkner','Ruthison','Falkner Ruthison','2010-11-12',10,'','M','Second street 82','Mishawaka','','','','U','','U','\0','U','U','','N',3,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 01:55:03',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (468,'Albus','Tyree','Albus Tyree','2013-11-12',7,'','M','Halethorpe 45','Medidon','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:35:29',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (469,'Quinley','Arden','Quinley Arden','1974-11-12',46,'','M','Stockbridge 678','Galverson','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-20 14:35:41',1,'unknown','unknown',NULL);
@@ -3218,7 +4284,7 @@ INSERT INTO `patient` VALUES (488,'Isabelle','Glennis','Glennis Isabelle','2014-
 INSERT INTO `patient` VALUES (489,'Morning','Mellisa','Morning Mellisa','2018-11-12',2,'','M','Ave.','Waxhaw','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:45:38',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (490,'Cairo','Tawnya','Cairo Tawnya','2018-11-12',2,'','F','Patchogue 12','NY Westerton','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:48:23',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (491,'Holter','Josette','Holter Josette','2017-11-12',3,'','M','Drive road 55','Villa','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:49:47',1,'unknown','unknown',NULL);
-INSERT INTO `patient` VALUES (492,'Ballantine','Lashawna','Ballantine Lashawna','2020-11-12',0,'','F','Ave.','Upland','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:45:34',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (492,'Ballantine','Lashawna','Ballantine Lashawna','2020-11-12',0,'','F','Lekan Ave.','Upland Town','','','','U','','U','\0','U','U','','N',2,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2021-03-15 12:01:20',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (493,'Musso','Kina','Musso Kina','2020-11-12',0,'','F','South Street 91','Jamison','','+4111112','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 23:09:57',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (494,'James','Veronica','James Veronica','2020-11-12',0,'','F','South street 11','Warady','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:46:15',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (495,'Rodriguez','Oscar','Rodriguez Oscar','2020-11-12',0,'','M','East road','Green land','','','','U','','U','\0','U','U','','N',1,'Unknown','','2020-11-12 16:40:55',NULL,NULL,'admin','2020-11-21 22:46:28',1,'unknown','unknown',NULL);
@@ -3250,8 +4316,28 @@ INSERT INTO `patient` VALUES (520,'Rochester','Lenny','Rochester Lenny','2020-11
 INSERT INTO `patient` VALUES (521,'Betta','Jamison','Betta Jamison','2010-11-03',10,'','F','Kinney Rd. 43','Kensington','','+39','','U','','U',NULL,'U','U','','N',0,'Unknown','','2020-11-22 01:36:53','admin','2020-11-22 02:36:53','admin','2020-11-22 02:36:53',1,'unknown','unknown',NULL);
 INSERT INTO `patient` VALUES (522,'Harry','Colterson','Harry Colterson','1959-02-14',61,'','M','Westeman St. 12','Ottey','','+912314411','','U','','U',NULL,'U','U','','N',0,'A-','','2020-11-22 16:57:57','admin','2020-11-22 17:57:57','admin','2020-11-22 17:57:57',1,'unknown','divorced',NULL);
 INSERT INTO `patient` VALUES (523,'Quinlan','Coors','Quinlan Coors','2014-11-02',6,'','M','Franlkin St 12','Derbyshire','','+416824999','','U','','U',NULL,'U','U','','N',0,'B-','','2020-11-23 14:58:01','admin','2020-11-23 15:58:01','admin','2020-11-23 15:58:01',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (524,'Geremia','Dickinson','Geremia Dickinson','1954-01-01',67,'','M','Springfiled','Kellog','','+39','','U','','U',NULL,'U','U','','N',0,'AB+','','2021-03-13 21:42:59','admin','2021-03-13 22:42:59','admin','2021-03-13 22:42:59',1,'construction','married',NULL);
+INSERT INTO `patient` VALUES (525,'Mary','Garrington','Mary Garrington','2021-02-04',0,'','F','Ganston','Kendring','','+39','','U','','U',NULL,'U','U','','N',0,'0+','','2021-03-14 23:45:47','admin','2021-03-15 00:45:47','admin','2021-03-15 00:45:47',1,'unknown','unknown',NULL);
+INSERT INTO `patient` VALUES (526,'Genina','Justterin','Genina Justterin','1985-03-22',35,'','F','Ghoulam Rd 231','Uribe','','+393452432','','U','','U',NULL,'U','U','','N',0,'B-','','2021-03-14 23:57:26','admin','2021-03-15 00:57:26','admin','2021-03-15 00:57:26',1,'farming','widowed',NULL);
+INSERT INTO `patient` VALUES (527,'Marcus','Kellop','Marcus Kellop','1968-11-25',52,'','M','Fullister Pl. 45/b','Mirly','','+396153134','','U','','U',NULL,'U','U','','N',0,'0-','','2021-03-15 00:04:03','admin','2021-03-15 01:04:03','admin','2021-03-15 01:04:03',1,'unknown','married',NULL);
+INSERT INTO `patient` VALUES (528,'Kenty','Willis','Kenty Willis','2007-03-01',14,'','F','Furja Street 81','Jikney','','+3914413','','U','','U',NULL,'U','U','','N',0,'B-','','2021-03-15 00:15:05','admin','2021-03-15 01:15:05','admin','2021-03-15 01:15:05',1,'unknown','single',NULL);
+INSERT INTO `patient` VALUES (529,'Sara','Hucklington','Sara Hucklington','2020-12-15',0,'','F','Long Road 1','Kulele','','+39','','U','','U',NULL,'U','U','','N',0,'B+','','2021-03-15 11:19:27','admin','2021-03-15 12:19:27','admin','2021-03-15 12:19:27',1,'unknown','unknown',NULL);
 /*!40000 ALTER TABLE `patient` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `patient_profile_photo`
+--
+
+DROP TABLE IF EXISTS `patient_profile_photo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `patient_profile_photo` (
+  `PAT_PROFILE_PHOTO_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PAT_PHOTO` blob DEFAULT NULL,
+  PRIMARY KEY (`PAT_PROFILE_PHOTO_ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `patient_profile_photo`
@@ -3264,6 +4350,42 @@ INSERT INTO `patient_profile_photo` VALUES (2,'����\0JFIF\0\0\0\0\0
 INSERT INTO `patient_profile_photo` VALUES (3,'����\0JFIF\0\0\0\0\0\0��\0C\0		\n\r\Z\Z $.\' \",#(7),01444\'9=82<.342��\0C			\r\r2!!22222222222222222222222222222222222222222222222222��\0\0�\0�\"\0��\0\0\0\0\0\0\0\0\0\0\0	\n��\0�\0\0\0}\0!1AQa\"q2���#B��R��$3br�	\n\Z%&\'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz���������������������������������������������������������������������������\0\0\0\0\0\0\0\0	\n��\0�\0\0w\0!1AQaq\"2�B����	#3R�br�\n$4�%�\Z&\'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz��������������������������������������������������������������������������\0\0\0?\0�I	�4��pM_\n1�SJ)<WSr{8��d��N����c\"����4��k��.r��(5��N9\"�2Ej�К�B��\0�ƍ�:��\0�ӚR�W��IVFkG&qښQ�g��(6����c�R�W\'r�Iy�)n[m[��ZS��8���]����!���:U���.\n�(KAY�D�MHZ�Ú8��4���)~𞴄J;���8�`	ɩM�_ȤQ��7+@�)��0�ݵD�ܸ�7^\rFx8�49*:P��_=�N�V\0sɨ�j@s�&�]�t+:c��h$��	��*S����w�NFM5N*@x�7\085rm;0L���U��unIL\03T��T�T+c��U�QȦ#��.s�ޟ�J��aw����P6@�yY�������@�2��4���M��M97�\'m�sCdHIf��\n�S��P^&��z�O:R|�ȪN{��[Ubrz\n\Z�zb�HQ��1m�M�����H\n�)킽y���95I9u+aWpNh�)��j�9?������p|�n�~�>�\'Q�iF��LU�\rD���\"�X\'#��2h���{P8<�)�������)����\n�;S�qI��2\r_#oF&��*���I��Q�ȣ��ý���-3Z��6=�\\:1_@�&3�E.G4+�i�.;��nw\Z7+SD��2:��N�Z��j%fJ�Z� �ۊVl�h\n��J��	XV Q�3��S�r�Nml�\n�wS���sQ�rE�s�Sˠނ�Ȧ������f���j�[�+uw��a��%`(݁O�&�>h\\�J���;R�JM$4���0\r��ґ\\�O,\n�ޢ/[���sɦ\04��qI�{U�\'�-�{ԃ\n0z�r?\ZW���&���L��8��8�`�\\�t�S�V�!�0��@��܏ƕ���t��a8=�)Po9&���j`�qi�26�j<n���4� (8���ʅ�}M#GZ�8�i���p��)1������:T�j�F��\"�\"���Ne�\"���\Z_A6�L�3�ܜsMj������PɃ�iC$w��ec�g޳i�Q���50����-�1��}��c�jW�Bñ-��J����8�!��.mD�������T����ۆ)�����\\�ȥ$c\0�Ysژs�rՉ��`���0�HK\03C.@�^��	8�Q�i3��P�FOJ��\Z�Q��lҖ�9ɤ��L�ҦWORV��\0s���\Z��Ӊ�6��CNOҚNiۆ)����9�A��R�̍�C\Zj�m��ry�%j�2h �Lv��\ZԺW�L��p3FF9��J�7a�V;�A�GJB���\'�J���p1����)�j���	�}Hy��21FI4Чn��CcY��;��\0\"���x#�S$ں\Zv�cҜ�`�M���woR�O�<����9��*��Г�ST\ZvNޔ�H����=4�A=�O<үZI&�q?!2OZc�����B	\\־ϗQs>��RO&��g\'�q%�&�f����_02E\\��Ad\'��8�!ݺ���½�����jnpy�g�\r+����9 �\Zz7���	<҆��.�6�ÖSFW�O-��\nۨK_\"=��އ�\0y��\n�\n���wh�<b�y�;Q��JϨ]17���ߊq� ��J��8})�֗�&i:n�e��s����t�\0�d})&���rS>��jY]]�p(qV�؍�\"@r8��\r��rqީ���#9d�Jr\ni�r�b�`_#�kdәB����C�Ʌ��O�֗��u��-��.[ܝF��ӷ*y4�#�jZ�����-�@��MNiF=Y\\�7L�F!�G��4��SZ\r$9��i��iK���B���)Yr�����4�i���=3T�PЅ�$�4�����sG�A�M)n����R}����R���Hքhi��7�\'oi�~)��c�zڌn8��at��~8�,�8�jS\0c�,v�i=�8�v+��/�6�b�a�7�y����A%�#֣�9�R}���i��G-�W�\Z�60i���:SL�v���w��\'�8ۜu��89&�+D ��iD�5(�g֜-��鰵g8��A�\0 ���x�VZ	]���');
 /*!40000 ALTER TABLE `patient_profile_photo` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `patientexamination`
+--
+
+DROP TABLE IF EXISTS `patientexamination`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `patientexamination` (
+  `PEX_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PEX_DATE` datetime NOT NULL,
+  `PEX_PAT_ID` int(11) NOT NULL,
+  `PEX_HEIGHT` int(11) DEFAULT NULL COMMENT 'Height in cm',
+  `PEX_WEIGHT` double DEFAULT NULL COMMENT 'Weight in Kg',
+  `PEX_AP_MIN` int(11) DEFAULT NULL COMMENT 'Blood Pressure MIN in mmHg',
+  `PEX_AP_MAX` int(11) DEFAULT NULL COMMENT 'Blood Pressure MAX in mmHg',
+  `PEX_HR` int(11) DEFAULT NULL COMMENT 'Heart Rate in APm',
+  `PEX_TEMP` double DEFAULT NULL COMMENT 'Temperature in °C',
+  `PEX_SAT` double DEFAULT NULL COMMENT 'Saturation in %',
+  `PEX_HGT` int(3) DEFAULT NULL COMMENT 'Hemo Glucose Test',
+  `PEX_DIURESIS` int(11) DEFAULT NULL COMMENT 'Daily Urine Volume in ml',
+  `PEX_DIURESIS_DESC` varchar(45) DEFAULT NULL COMMENT 'Diuresis: physiological, oliguria, anuria, fequent, nocturia, stranguria, hematuria, pyuria',
+  `PEX_BOWEL_DESC` varchar(45) DEFAULT NULL COMMENT 'Bowel Function: regular, irregular, constipation, diarrheal',
+  `PEX_RR` int(11) DEFAULT NULL COMMENT 'Respiratory rate in bpm',
+  `PEX_AUSC` varchar(50) DEFAULT NULL COMMENT 'Auscultation: normal, wheezes, rhonchi, crackles, stridor, bronchial',
+  `PEX_NOTE` varchar(300) DEFAULT NULL,
+  `PEX_CREATED_BY` varchar(50) DEFAULT NULL,
+  `PEX_CREATED_DATE` datetime DEFAULT NULL,
+  `PEX_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `PEX_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `PEX_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`PEX_ID`),
+  KEY `PEX_PAT_ID` (`PEX_PAT_ID`),
+  CONSTRAINT `FK_PATIENTEXAMINATION_PATIENT` FOREIGN KEY (`PEX_PAT_ID`) REFERENCES `patient` (`PAT_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `patientexamination`
@@ -3289,8 +4411,42 @@ INSERT INTO `patientexamination` VALUES (16,'2020-11-21 22:42:51',217,180,75.3,N
 INSERT INTO `patientexamination` VALUES (17,'2020-11-22 02:35:05',520,171,69.9,80,120,60,36,98,80,100,'oliguria','diarrheal',NULL,'crackles','',NULL,NULL,NULL,NULL,1);
 INSERT INTO `patientexamination` VALUES (18,'2020-11-23 15:58:17',523,120,40,NULL,NULL,60,36,98,80,100,'physiological','regular',20,'normal','',NULL,NULL,NULL,NULL,1);
 INSERT INTO `patientexamination` VALUES (19,'2020-11-23 15:59:45',493,0,0,NULL,NULL,NULL,36,NULL,80,100,'physiological',NULL,20,NULL,'',NULL,NULL,NULL,NULL,1);
+INSERT INTO `patientexamination` VALUES (20,'2021-03-13 22:43:23',524,180,88.2,80,120,61,NULL,95.2,NULL,100,'physiological',NULL,20,NULL,'',NULL,NULL,NULL,NULL,1);
+INSERT INTO `patientexamination` VALUES (21,'2021-03-13 22:45:18',409,164,66.7,80,120,60,36,98,80,100,NULL,NULL,20,NULL,'',NULL,NULL,NULL,NULL,1);
+INSERT INTO `patientexamination` VALUES (22,'2021-03-15 00:45:54',525,52,7.5,80,120,60,36,98,80,100,'physiological',NULL,20,NULL,'',NULL,NULL,NULL,NULL,1);
+INSERT INTO `patientexamination` VALUES (23,'2021-03-15 01:01:56',526,153,61.3,80,120,71,36.7,96,80,100,'physiological','regular',25,'normal','',NULL,NULL,NULL,NULL,1);
+INSERT INTO `patientexamination` VALUES (24,'2021-03-15 01:04:04',527,184,87.1,80,120,86,38.2,95.4,80,100,'anuria','regular',30,'bronchial','',NULL,NULL,NULL,NULL,1);
+INSERT INTO `patientexamination` VALUES (25,'2021-03-15 01:16:05',528,145,48.4,80,120,60,36,98,80,NULL,'physiological','irregular',20,'stridor','',NULL,NULL,NULL,NULL,1);
+INSERT INTO `patientexamination` VALUES (26,'2021-03-15 12:19:42',529,50,8,80,120,60,36,95.4,80,100,'anuria','diarrheal',40,'stridor','',NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `patientexamination` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `patientvaccine`
+--
+
+DROP TABLE IF EXISTS `patientvaccine`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `patientvaccine` (
+  `PAV_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PAV_YPROG` int(11) NOT NULL,
+  `PAV_DATE` datetime NOT NULL,
+  `PAV_PAT_ID` int(11) NOT NULL,
+  `PAV_VAC_ID_A` varchar(10) NOT NULL,
+  `PAV_LOCK` int(11) NOT NULL DEFAULT 0,
+  `PAV_CREATED_BY` varchar(50) DEFAULT NULL,
+  `PAV_CREATED_DATE` datetime DEFAULT NULL,
+  `PAV_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `PAV_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `PAV_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`PAV_ID`),
+  KEY `FK_PATIENTVACCINE_PATIENT` (`PAV_PAT_ID`),
+  KEY `FK_PATIENTVACCINE_VACCINE` (`PAV_VAC_ID_A`),
+  CONSTRAINT `FK_PATIENTVACCINE_PATIENT` FOREIGN KEY (`PAV_PAT_ID`) REFERENCES `patient` (`PAT_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_PATIENTVACCINE_VACCINE` FOREIGN KEY (`PAV_VAC_ID_A`) REFERENCES `vaccine` (`VAC_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `patientvaccine`
@@ -3320,8 +4476,31 @@ INSERT INTO `patientvaccine` VALUES (19,19,'2020-11-22 17:59:23',520,'5',0,'admi
 INSERT INTO `patientvaccine` VALUES (20,20,'2020-11-23 16:00:39',65,'9',0,'admin','2020-11-23 16:00:47','admin','2020-11-23 16:00:47',1);
 INSERT INTO `patientvaccine` VALUES (21,21,'2020-11-23 16:00:48',89,'11',0,'admin','2020-11-23 16:00:58','admin','2020-11-23 16:00:58',1);
 INSERT INTO `patientvaccine` VALUES (22,22,'2020-11-23 16:00:59',148,'5',0,'admin','2020-11-23 16:01:05','admin','2020-11-23 16:01:05',1);
+INSERT INTO `patientvaccine` VALUES (23,23,'2021-03-15 01:24:07',527,'13',0,'admin','2021-03-15 01:24:23','admin','2021-03-15 01:24:23',1);
+INSERT INTO `patientvaccine` VALUES (24,24,'2021-03-15 01:24:31',42,'12',0,'admin','2021-03-15 01:24:44','admin','2021-03-15 01:24:44',1);
+INSERT INTO `patientvaccine` VALUES (25,25,'2021-03-15 01:24:45',526,'11',0,'admin','2021-03-15 01:24:59','admin','2021-03-15 01:24:59',1);
+INSERT INTO `patientvaccine` VALUES (26,26,'2021-03-15 14:54:31',499,'3',0,'admin','2021-03-15 14:54:50','admin','2021-03-15 14:54:50',1);
 /*!40000 ALTER TABLE `patientvaccine` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `pregnanttreatmenttype`
+--
+
+DROP TABLE IF EXISTS `pregnanttreatmenttype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pregnanttreatmenttype` (
+  `PTT_ID_A` varchar(10) NOT NULL,
+  `PTT_DESC` varchar(50) NOT NULL,
+  `PTT_CREATED_BY` varchar(50) DEFAULT NULL,
+  `PTT_CREATED_DATE` datetime DEFAULT NULL,
+  `PTT_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `PTT_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `PTT_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`PTT_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `pregnanttreatmenttype`
@@ -3340,6 +4519,28 @@ INSERT INTO `pregnanttreatmenttype` VALUES ('S2','SECOND DOSE WITH SP',NULL,NULL
 UNLOCK TABLES;
 
 --
+-- Table structure for table `pricelists`
+--
+
+DROP TABLE IF EXISTS `pricelists`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pricelists` (
+  `LST_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `LST_CODE` varchar(7) NOT NULL,
+  `LST_NAME` varchar(50) NOT NULL,
+  `LST_DESC` varchar(100) NOT NULL,
+  `LST_CURRENCY` varchar(10) NOT NULL,
+  `LST_CREATED_BY` varchar(50) DEFAULT NULL,
+  `LST_CREATED_DATE` datetime DEFAULT NULL,
+  `LST_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `LST_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `LST_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`LST_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `pricelists`
 --
 
@@ -3348,6 +4549,31 @@ LOCK TABLES `pricelists` WRITE;
 INSERT INTO `pricelists` VALUES (1,'LIST001','Basic','Basic price list','',NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `pricelists` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `prices`
+--
+
+DROP TABLE IF EXISTS `prices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prices` (
+  `PRC_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `PRC_LST_ID` int(11) NOT NULL,
+  `PRC_GRP` char(3) NOT NULL,
+  `PRC_ITEM` varchar(10) NOT NULL,
+  `PRC_DESC` varchar(100) NOT NULL,
+  `PRC_PRICE` double NOT NULL,
+  `PRC_CREATED_BY` varchar(50) DEFAULT NULL,
+  `PRC_CREATED_DATE` datetime DEFAULT NULL,
+  `PRC_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `PRC_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `PRC_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`PRC_ID`),
+  KEY `FK_PRICES_PRICELISTS` (`PRC_LST_ID`),
+  CONSTRAINT `FK_PRICES_PRICELISTS` FOREIGN KEY (`PRC_LST_ID`) REFERENCES `pricelists` (`LST_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=17545 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `prices`
@@ -3875,6 +5101,31 @@ INSERT INTO `prices` VALUES (17544,1,'OTH','1','Amount per day',0,'admin','2020-
 UNLOCK TABLES;
 
 --
+-- Table structure for table `pricesothers`
+--
+
+DROP TABLE IF EXISTS `pricesothers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pricesothers` (
+  `OTH_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `OTH_CODE` varchar(10) NOT NULL,
+  `OTH_DESC` varchar(100) NOT NULL,
+  `OTH_OPD_INCLUDE` int(11) NOT NULL DEFAULT 0,
+  `OTH_IPD_INCLUDE` int(11) NOT NULL DEFAULT 0,
+  `OTH_DAILY` int(11) NOT NULL DEFAULT 0,
+  `OTH_DISCHARGE` int(11) DEFAULT 0,
+  `OTH_UNDEFINED` int(11) DEFAULT 0,
+  `OTH_CREATED_BY` varchar(50) DEFAULT NULL,
+  `OTH_CREATED_DATE` datetime DEFAULT NULL,
+  `OTH_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `OTH_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `OTH_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`OTH_ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `pricesothers`
 --
 
@@ -3885,6 +5136,27 @@ INSERT INTO `pricesothers` VALUES (1,'OTH001','Amount per day',0,1,1,0,0,NULL,NU
 UNLOCK TABLES;
 
 --
+-- Table structure for table `sms`
+--
+
+DROP TABLE IF EXISTS `sms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sms` (
+  `SMS_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `SMS_DATE` timestamp NOT NULL DEFAULT current_timestamp(),
+  `SMS_DATE_SCHED` datetime NOT NULL,
+  `SMS_NUMBER` varchar(45) NOT NULL,
+  `SMS_TEXT` varchar(160) NOT NULL,
+  `SMS_DATE_SENT` datetime DEFAULT NULL,
+  `SMS_USER` varchar(50) NOT NULL DEFAULT 'admin',
+  `SMS_MOD` varchar(45) NOT NULL DEFAULT 'smsmanager',
+  `SMS_MOD_ID` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`SMS_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `sms`
 --
 
@@ -3892,6 +5164,32 @@ LOCK TABLES `sms` WRITE;
 /*!40000 ALTER TABLE `sms` DISABLE KEYS */;
 /*!40000 ALTER TABLE `sms` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `supplier`
+--
+
+DROP TABLE IF EXISTS `supplier`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `supplier` (
+  `SUP_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `SUP_NAME` varchar(100) NOT NULL,
+  `SUP_ADDRESS` varchar(150) DEFAULT NULL,
+  `SUP_TAXCODE` varchar(50) DEFAULT NULL,
+  `SUP_PHONE` varchar(20) DEFAULT NULL,
+  `SUP_FAX` varchar(20) DEFAULT NULL,
+  `SUP_EMAIL` varchar(100) DEFAULT NULL,
+  `SUP_NOTE` varchar(200) DEFAULT NULL,
+  `SUP_DELETED` char(1) DEFAULT 'N',
+  `SUP_CREATED_BY` varchar(50) DEFAULT NULL,
+  `SUP_CREATED_DATE` datetime DEFAULT NULL,
+  `SUP_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `SUP_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `SUP_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`SUP_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `supplier`
@@ -3905,6 +5203,39 @@ INSERT INTO `supplier` VALUES (2,'Enterpise Limited','Sesame Strett - 73149 New 
 UNLOCK TABLES;
 
 --
+-- Table structure for table `therapies`
+--
+
+DROP TABLE IF EXISTS `therapies`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `therapies` (
+  `THR_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `THR_PAT_ID` int(11) NOT NULL,
+  `THR_STARTDATE` datetime NOT NULL,
+  `THR_ENDDATE` datetime NOT NULL,
+  `THR_MDSR_ID` int(11) NOT NULL,
+  `THR_QTY` double NOT NULL,
+  `THR_UNT_ID` int(11) NOT NULL,
+  `THR_FREQINDAY` int(11) NOT NULL,
+  `THR_FREQINPRD` int(11) NOT NULL,
+  `THR_NOTE` text DEFAULT NULL,
+  `THR_NOTIFY` tinyint(1) NOT NULL DEFAULT 0,
+  `THR_SMS` tinyint(1) NOT NULL DEFAULT 0,
+  `THR_CREATED_BY` varchar(50) DEFAULT NULL,
+  `THR_CREATED_DATE` datetime DEFAULT NULL,
+  `THR_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `THR_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `THR_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`THR_ID`),
+  KEY `FK_THERAPIES_PATIENT` (`THR_PAT_ID`),
+  KEY `FK_THERAPIES_MDSR` (`THR_MDSR_ID`),
+  CONSTRAINT `FK_THERAPIES_MDSR` FOREIGN KEY (`THR_MDSR_ID`) REFERENCES `medicaldsr` (`MDSR_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `FK_THERAPIES_PATIENT` FOREIGN KEY (`THR_PAT_ID`) REFERENCES `patient` (`PAT_ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `therapies`
 --
 
@@ -3913,8 +5244,37 @@ LOCK TABLES `therapies` WRITE;
 INSERT INTO `therapies` VALUES (1,471,'2020-11-20 02:31:38','2021-03-04 02:31:38',414,0.5,0,2,2,'',0,0,'admin','2020-11-20 02:31:54','admin','2020-11-20 02:31:54',1);
 INSERT INTO `therapies` VALUES (2,467,'2020-11-20 02:32:13','2021-02-12 02:32:13',114,1,0,1,1,'',0,0,'admin','2020-11-20 02:32:24','admin','2020-11-20 02:32:24',1);
 INSERT INTO `therapies` VALUES (3,161,'2020-11-20 14:27:46','2021-02-12 14:27:46',128,0.5,0,1,3,'',0,0,'admin','2020-11-20 14:27:58','admin','2020-11-20 14:27:58',1);
+INSERT INTO `therapies` VALUES (4,526,'2021-03-15 01:00:06','2021-04-19 01:00:06',103,0.5,0,2,1,'',0,0,'admin','2021-03-15 01:00:23','admin','2021-03-15 01:00:23',1);
+INSERT INTO `therapies` VALUES (5,447,'2021-03-15 01:10:42','2021-06-16 01:10:42',12,1,0,2,1,'',0,0,'admin','2021-03-15 01:11:03','admin','2021-03-15 01:11:03',1);
+INSERT INTO `therapies` VALUES (6,447,'2021-03-15 00:00:00','2021-06-15 00:00:00',21,1,0,2,1,'',0,0,'admin','2021-03-15 01:12:50','admin','2021-03-15 01:13:24',1);
+INSERT INTO `therapies` VALUES (7,447,'2021-03-15 00:00:00','2021-06-14 00:00:00',170,1,0,2,1,'',0,0,'admin','2021-03-15 01:13:02','admin','2021-03-15 01:13:24',1);
+INSERT INTO `therapies` VALUES (8,447,'2021-03-15 00:00:00','2021-05-05 00:00:00',14,1,0,2,1,'',0,0,'admin','2021-03-15 01:13:17','admin','2021-03-15 01:13:24',1);
+INSERT INTO `therapies` VALUES (9,529,'2021-03-15 12:20:53','2021-03-22 12:20:53',113,1,0,1,2,'',0,0,'admin','2021-03-15 12:21:03','admin','2021-03-15 12:21:03',1);
 /*!40000 ALTER TABLE `therapies` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `US_ID_A` varchar(50) NOT NULL DEFAULT '',
+  `US_UG_ID_A` varchar(50) NOT NULL DEFAULT '',
+  `US_PASSWD` varchar(60) NOT NULL DEFAULT '',
+  `US_DESC` varchar(128) DEFAULT NULL,
+  `US_CREATED_BY` varchar(50) DEFAULT NULL,
+  `US_CREATED_DATE` datetime DEFAULT NULL,
+  `US_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `US_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `US_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`US_ID_A`),
+  KEY `FK_USER_USERGROUP` (`US_UG_ID_A`),
+  CONSTRAINT `FK_USER_USERGROUP` FOREIGN KEY (`US_UG_ID_A`) REFERENCES `usergroup` (`UG_ID_A`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `user`
@@ -3928,6 +5288,25 @@ INSERT INTO `user` VALUES ('guest','guest','$2a$10$b0WlANdaNV7Ukn/klFGt3.euZ7PaH
 UNLOCK TABLES;
 
 --
+-- Table structure for table `usergroup`
+--
+
+DROP TABLE IF EXISTS `usergroup`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `usergroup` (
+  `UG_ID_A` varchar(50) NOT NULL DEFAULT '',
+  `UG_DESC` varchar(128) DEFAULT NULL,
+  `UG_CREATED_BY` varchar(50) DEFAULT NULL,
+  `UG_CREATED_DATE` datetime DEFAULT NULL,
+  `UG_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `UG_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `UG_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`UG_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `usergroup`
 --
 
@@ -3937,6 +5316,29 @@ INSERT INTO `usergroup` VALUES ('admin','USER with all the privileges',NULL,NULL
 INSERT INTO `usergroup` VALUES ('guest','Read Only Users',NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `usergroup` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `vaccine`
+--
+
+DROP TABLE IF EXISTS `vaccine`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `vaccine` (
+  `VAC_ID_A` varchar(10) NOT NULL,
+  `VAC_DESC` varchar(50) NOT NULL,
+  `VAC_VACT_ID_A` char(1) NOT NULL,
+  `VAC_LOCK` int(11) NOT NULL DEFAULT 0,
+  `VAC_CREATED_BY` varchar(50) DEFAULT NULL,
+  `VAC_CREATED_DATE` datetime DEFAULT NULL,
+  `VAC_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `VAC_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `VAC_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`VAC_ID_A`),
+  KEY `FK_VACCINE_VACCINETYPE` (`VAC_VACT_ID_A`),
+  CONSTRAINT `FK_VACCINE_VACCINETYPE` FOREIGN KEY (`VAC_VACT_ID_A`) REFERENCES `vaccinetype` (`VACT_ID_A`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `vaccine`
@@ -3966,6 +5368,25 @@ INSERT INTO `vaccine` VALUES ('9','MEASLES','C',0,NULL,NULL,NULL,NULL,0);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `vaccinetype`
+--
+
+DROP TABLE IF EXISTS `vaccinetype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `vaccinetype` (
+  `VACT_ID_A` char(1) NOT NULL,
+  `VACT_DESC` varchar(50) NOT NULL,
+  `VACT_CREATED_BY` varchar(50) DEFAULT NULL,
+  `VACT_CREATED_DATE` datetime DEFAULT NULL,
+  `VACT_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `VACT_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `VACT_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`VACT_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `vaccinetype`
 --
 
@@ -3978,6 +5399,23 @@ INSERT INTO `vaccinetype` VALUES ('P','Pregnant',NULL,NULL,NULL,NULL,0);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `version`
+--
+
+DROP TABLE IF EXISTS `version`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `version` (
+  `VER_MAJOR` int(11) NOT NULL,
+  `VER_MINOR` int(11) NOT NULL,
+  `VER_SOURCE` longblob DEFAULT NULL,
+  `VER_DATE` datetime NOT NULL,
+  `VER_CURRENT` char(1) NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`VER_MAJOR`,`VER_MINOR`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `version`
 --
 
@@ -3985,6 +5423,35 @@ LOCK TABLES `version` WRITE;
 /*!40000 ALTER TABLE `version` DISABLE KEYS */;
 /*!40000 ALTER TABLE `version` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `visits`
+--
+
+DROP TABLE IF EXISTS `visits`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `visits` (
+  `VST_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `VST_PAT_ID` int(11) NOT NULL,
+  `VST_DATE` datetime NOT NULL,
+  `VST_NOTE` text DEFAULT NULL,
+  `VST_SMS` tinyint(1) DEFAULT 0,
+  `VST_CREATED_BY` varchar(50) DEFAULT NULL,
+  `VST_CREATED_DATE` datetime DEFAULT NULL,
+  `VST_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `VST_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `VST_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  `VST_WRD_ID_A` char(1) DEFAULT NULL,
+  `VST_DURATION` int(11) DEFAULT NULL,
+  `VST_SERVICE` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`VST_ID`),
+  KEY `FK_VISITS_PATIENT` (`VST_PAT_ID`),
+  KEY `FK_VISITS_WARD` (`VST_WRD_ID_A`),
+  CONSTRAINT `FK_VISITS_PATIENT` FOREIGN KEY (`VST_PAT_ID`) REFERENCES `patient` (`PAT_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_VISITS_WARD` FOREIGN KEY (`VST_WRD_ID_A`) REFERENCES `ward` (`WRD_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `visits`
@@ -4004,8 +5471,44 @@ INSERT INTO `visits` VALUES (9,299,'2020-11-21 02:04:43',NULL,0,'admin','2020-11
 INSERT INTO `visits` VALUES (10,54,'2020-11-21 02:22:51',NULL,0,'admin','2020-11-21 02:23:14','admin','2020-11-21 02:23:14',1,'C',180,'');
 INSERT INTO `visits` VALUES (11,373,'2020-11-22 22:05:45',NULL,0,'admin','2020-11-21 22:06:13','admin','2020-11-21 22:06:13',1,'F',120,'');
 INSERT INTO `visits` VALUES (12,97,'2020-11-23 02:37:13',NULL,0,'admin','2020-11-22 02:37:30','admin','2020-11-22 02:37:30',1,'F',30,'');
+INSERT INTO `visits` VALUES (13,408,'2021-07-06 11:10:00',NULL,0,'admin','2021-03-15 01:11:44','admin','2021-03-15 01:11:44',1,'F',60,'Visit');
+INSERT INTO `visits` VALUES (14,284,'2021-06-18 14:30:00',NULL,0,'admin','2021-03-15 01:12:20','admin','2021-03-15 01:12:20',1,'I',45,'Visit');
+INSERT INTO `visits` VALUES (15,528,'2021-05-09 18:10:00',NULL,0,'admin','2021-03-15 01:18:32','admin','2021-03-15 01:18:32',1,'F',0,'');
+INSERT INTO `visits` VALUES (16,529,'2021-03-15 12:31:10',NULL,0,'admin','2021-03-15 12:31:17','admin','2021-03-15 12:31:17',1,'F',0,'');
+INSERT INTO `visits` VALUES (17,257,'2021-05-19 10:30:00',NULL,0,'admin','2021-03-15 12:32:07','admin','2021-03-15 12:32:07',1,'F',45,'Visit');
+INSERT INTO `visits` VALUES (18,504,'2021-05-27 12:10:00',NULL,0,'admin','2021-03-15 14:44:07','admin','2021-03-15 14:44:07',1,'M',30,'Control visit');
+INSERT INTO `visits` VALUES (19,114,'2021-07-02 12:40:00',NULL,0,'admin','2021-03-15 14:44:52','admin','2021-03-15 14:44:52',1,'M',40,'Visit');
 /*!40000 ALTER TABLE `visits` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `ward`
+--
+
+DROP TABLE IF EXISTS `ward`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ward` (
+  `WRD_ID_A` char(1) NOT NULL,
+  `WRD_NAME` varchar(50) NOT NULL,
+  `WRD_TELE` varchar(50) DEFAULT NULL,
+  `WRD_FAX` varchar(50) DEFAULT NULL,
+  `WRD_EMAIL` varchar(50) DEFAULT NULL,
+  `WRD_NBEDS` int(11) NOT NULL,
+  `WRD_NQUA_NURS` int(11) NOT NULL,
+  `WRD_NDOC` int(11) NOT NULL,
+  `WRD_IS_PHARMACY` tinyint(1) NOT NULL DEFAULT 1,
+  `WRD_IS_MALE` tinyint(1) NOT NULL DEFAULT 1,
+  `WRD_IS_FEMALE` tinyint(1) NOT NULL DEFAULT 1,
+  `WRD_LOCK` int(11) NOT NULL DEFAULT 0,
+  `WRD_CREATED_BY` varchar(50) DEFAULT NULL,
+  `WRD_CREATED_DATE` datetime DEFAULT NULL,
+  `WRD_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
+  `WRD_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
+  `WRD_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`WRD_ID_A`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `ward`
@@ -4029,4 +5532,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-26 12:14:17
+-- Dump completed on 2021-03-15 22:37:53

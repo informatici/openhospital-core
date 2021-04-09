@@ -1091,23 +1091,24 @@ public class Tests extends OHCoreTestCase {
 		MedicalWardId medicalWardId2 = medicalWard2.getId();
 
 		assertThat(medicalWardId1.equals(medicalWardId1)).isTrue();
-		assertThat(medicalWardId1.equals(new Integer(1))).isFalse();
-		assertThat(medicalWardId1.equals(null)).isFalse();
+		assertThat(medicalWardId1)
+				.isNotEqualTo("someString")
+				.isNotNull();
 
 		// medical doesn't match
-		assertThat(medicalWardId1.equals(medicalWardId2)).isFalse();
+		assertThat(medicalWardId1).isNotEqualTo(medicalWardId2);
 
 		// ward doesn't match
 		medicalWardId2.setMedical(medicalWardId1.getMedical());
-		assertThat(medicalWardId1.equals(medicalWardId2)).isFalse();
+		assertThat(medicalWardId1).isNotEqualTo(medicalWardId2);
 
 		// lot doesn't match
 		medicalWardId2.setWard(medicalWardId1.getWard());
-		assertThat(medicalWardId1.equals(medicalWardId2)).isFalse();
+		assertThat(medicalWardId1).isNotEqualTo(medicalWardId2);
 
 		// everything matches
 		medicalWardId2.setLot(medicalWardId1.getLot());
-		assertThat(medicalWardId1.equals(medicalWardId2)).isTrue();
+		assertThat(medicalWardId1).isEqualTo(medicalWardId2);
 	}
 
 	@Test
@@ -1195,12 +1196,13 @@ public class Tests extends OHCoreTestCase {
 		movementWard2.setCode(-1);
 
 		assertThat(movementWard1.equals(movementWard1)).isTrue();
-		assertThat(movementWard1.equals(new Integer(1))).isFalse();
-		assertThat(movementWard1.equals(movementWard2)).isFalse();
+		assertThat(movementWard1)
+				.isNotEqualTo("someString")
+				.isNotEqualTo(movementWard2);
 
 		// set the codes equal
 		movementWard2.setCode(movementWard1.getCode());
-		assertThat(movementWard1.equals(movementWard2)).isTrue();
+		assertThat(movementWard1).isEqualTo(movementWard2);
 	}
 
 	@Test
@@ -1280,7 +1282,7 @@ public class Tests extends OHCoreTestCase {
 		Ward ward2 = testWard.setup(true);
 		MedicalWard medicalWard2 = new MedicalWard(medical2, 10.0D, lot2);
 
-		assertThat(medicalWard1.compareTo(new Integer(1))).isZero();
+		assertThat(medicalWard1.compareTo(1)).isZero();
 		assertThat(medicalWard1.compareTo(medicalWard2)).isZero();
 
 		medicalWard2.getMedical().setDescription("some new description");
@@ -1306,12 +1308,13 @@ public class Tests extends OHCoreTestCase {
 		MedicalWard medicalWard2 = new MedicalWard(medical2, 10.0D, lot2);
 
 		assertThat(medicalWard1.equals(medicalWard1)).isTrue();
-		assertThat(medicalWard1.equals(null)).isFalse();
-		assertThat(medicalWard1.equals("some String")).isFalse();
-		assertThat(medicalWard1.equals(medicalWard2)).isFalse();
+		assertThat(medicalWard1)
+				.isNotNull()
+				.isNotEqualTo("some String")
+				.isNotEqualTo(medicalWard2);
 
 		medicalWard2.setMedical(medicalWard1.getMedical());
-		assertThat(medicalWard1.equals(medicalWard2)).isTrue();
+		assertThat(medicalWard1).isEqualTo(medicalWard2);
 	}
 
 	@Test

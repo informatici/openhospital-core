@@ -225,8 +225,9 @@ public class Tests extends OHCoreTestCase {
 		OperationType operationType = new OperationType("Z", "description");
 
 		assertThat(operationType.equals(operationType)).isTrue();
-		assertThat(operationType).isNotEqualTo(null);
-		assertThat(operationType).isNotEqualTo("someString");
+		assertThat(operationType)
+				.isNotNull()
+				.isNotEqualTo("someString");
 
 		OperationType operationType1 = new OperationType("Z", "description");
 		assertThat(operationType).isEqualTo(operationType1);

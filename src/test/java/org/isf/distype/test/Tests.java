@@ -220,15 +220,16 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = diseaseTypeIoOperationRepository.getOne(code);
 		DiseaseType diseaseType2 = new DiseaseType("code", "description");
 		assertThat(diseaseType.equals(diseaseType)).isTrue();
-		assertThat(diseaseType.equals(diseaseType2)).isFalse();
-		assertThat(diseaseType.equals("xyzzy")).isFalse();
+		assertThat(diseaseType)
+				.isNotEqualTo(diseaseType2)
+				.isNotEqualTo("xyzzy");
 		diseaseType2.setCode(diseaseType.getCode());
 		diseaseType2.setDescription(diseaseType.getDescription());
-		assertThat(diseaseType.equals(diseaseType2)).isTrue();
+		assertThat(diseaseType).isEqualTo(diseaseType2);
 
 		assertThat(diseaseType.hashCode()).isPositive();
 
-		assertThat(diseaseType.toString()).isEqualTo(diseaseType.getDescription());
+		assertThat(diseaseType).hasToString(diseaseType.getDescription());
 	}
 
 	private String _setupTestDiseaseType(boolean usingSet) throws OHException {

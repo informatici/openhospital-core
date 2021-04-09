@@ -220,7 +220,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMovementTypeToString() throws Exception {
 		MovementType movementType = new MovementType("ZZABCD", "TestDescription", "+");
-		assertThat(movementType.toString()).isEqualTo("TestDescription");
+		assertThat(movementType).hasToString("TestDescription");
 	}
 
 	@Test
@@ -231,10 +231,11 @@ public class Tests extends OHCoreTestCase {
 		MovementType movementType4 = new MovementType("ZZABCD", "TestDescription", "++");
 
 		assertThat(movementType1.equals(movementType1)).isTrue();
-		assertThat(movementType1.equals(new Integer(-1))).isFalse();
-		assertThat(movementType1.equals(movementType2)).isFalse();
-		assertThat(movementType1.equals(movementType3)).isTrue();
-		assertThat(movementType1.equals(movementType4)).isTrue();
+		assertThat(movementType1)
+				.isNotEqualTo("someString")
+				.isNotEqualTo(movementType2)
+				.isEqualTo(movementType3)
+				.isEqualTo(movementType4);
 	}
 
 	@Test

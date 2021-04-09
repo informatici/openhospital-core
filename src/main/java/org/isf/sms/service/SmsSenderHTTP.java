@@ -38,7 +38,7 @@ public class SmsSenderHTTP implements SmsSenderInterface {
 
 	public SmsSenderHTTP() {
 		logger.info("SMS Sender HTTP started...");
-		SmsParameters.getSmsParameters();
+		SmsParameters.initialize();
 	}
 	
 	/**
