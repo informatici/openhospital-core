@@ -21,15 +21,6 @@
  */
 package org.isf.generaldata;
 
-import java.io.FileInputStream;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * ------------------------------------------
  * General Data
@@ -46,13 +37,14 @@ import org.slf4j.LoggerFactory;
  * 29/12/2011 - Nicola   - added XMPPMODULEENABLED to enable/disable communication module
  * -------------------------------------------
  */
-public class GeneralData {
+public class GeneralData extends ConfigurationProperties {
 	
-	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private static final String FILE_PROPERTIES = "generalData.properties";
+	private static final boolean EXIT_ON_FAIL = true;
+	
+	private final boolean SINGLEUSER;
+	
 	public static String LANGUAGE;
-	public static boolean SINGLEUSER;
 	public static boolean AUTOMATICLOT_IN;
 	public static boolean AUTOMATICLOT_OUT;
 	public static boolean AUTOMATICLOTWARD_TOWARD;
@@ -139,116 +131,78 @@ public class GeneralData {
 	private static final boolean DEFAULT_DEBUG = false;
 
 	private static GeneralData mySingleData;
-	private Properties p;
 	
 	public static void reset() {
 		mySingleData  = null;
 	}
 	
 	
-	private GeneralData() {
-		try {
-			p = new Properties();
+	private GeneralData(String fileProperties) {
+		super(fileProperties, EXIT_ON_FAIL);
+		SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
+		LANGUAGE = myGetProperty("LANGUAGE", DEFAULT_LANGUAGE);
+		AUTOMATICLOT_IN = myGetProperty("AUTOMATICLOT_IN", DEFAULT_AUTOMATICLOT_IN);
+		AUTOMATICLOT_OUT = myGetProperty("AUTOMATICLOT_OUT", DEFAULT_AUTOMATICLOT_OUT);
+		AUTOMATICLOTWARD_TOWARD = myGetProperty("AUTOMATICLOTWARD_TOWARD", DEFAULT_AUTOMATICLOTWARD_TOWARD);
+		LOTWITHCOST = myGetProperty("LOTWITHCOST", DEFAULT_LOTWITHCOST);
+		PATIENTSHEET = myGetProperty("PATIENTSHEET", DEFAULT_PATIENTSHEET);
+		VISITSHEET = myGetProperty("VISITSHEET", DEFAULT_VISITSHEET);
+		EXAMINATIONCHART =myGetProperty("EXAMINATIONCHART", DEFAULT_EXAMINATIONCHART);
+		OPDCHART = myGetProperty("OPDCHART", DEFAULT_OPDCHART);
+		ADMCHART = myGetProperty("ADMCHART", DEFAULT_ADMCHART);
+		DISCHART = myGetProperty("DISCHART", DEFAULT_DISCHART);
+		PATIENTBILL = myGetProperty("PATIENTBILL", DEFAULT_PATIENTBILL);
+		BILLSREPORT = myGetProperty("BILLSREPORT", DEFAULT_BILLSREPORT);
+		BILLSREPORTPENDING = myGetProperty("BILLSREPORTPENDING", DEFAULT_BILLSREPORTPENDING);
+		BILLSREPORTMONTHLY = myGetProperty("BILLSREPORTMONTHLY", DEFAULT_BILLSREPORTMONTHLY);
+		PHARMACEUTICALORDER = myGetProperty("PHARMACEUTICALORDER", DEFAULT_PHARMACEUTICALORDER);
+		PHARMACEUTICALSTOCK = myGetProperty("PHARMACEUTICALSTOCK", DEFAULT_PHARMACEUTICALSTOCK);
+		PHARMACEUTICALSTOCKLOT = myGetProperty("PHARMACEUTICALSTOCKLOT", DEFAULT_PHARMACEUTICALSTOCKLOT);
+		PHARMACEUTICALAMC = myGetProperty("PHARMACEUTICALAMC", DEFAULT_PHARMACEUTICALAMC);
+		PATIENTEXTENDED = myGetProperty("PATIENTEXTENDED", DEFAULT_PATIENTEXTENDED);
+		OPDEXTENDED = myGetProperty("OPDEXTENDED", DEFAULT_OPDEXTENDED);
+		MATERNITYRESTARTINJUNE = myGetProperty("MATERNITYRESTARTINJUNE", DEFAULT_MATERNITYRESTARTINJUNE);
+		LABEXTENDED = myGetProperty("LABEXTENDED", DEFAULT_LABEXTENDED);
+		LABMULTIPLEINSERT = myGetProperty("LABMULTIPLEINSERT", DEFAULT_LABMULTIPLEINSERT);
+		INTERNALPHARMACIES = myGetProperty("INTERNALPHARMACIES", DEFAULT_INTERNALPHARMACIES);
+		INTERNALVIEWER = myGetProperty("INTERNALVIEWER", DEFAULT_INTERNALVIEWER);
+		if (!INTERNALVIEWER) VIEWER = myGetProperty("INTERNALVIEWER");
+		MERGEFUNCTION = myGetProperty("MERGEFUNCTION", DEFAULT_MERGEFUNCTION);
+		SMSENABLED = myGetProperty("SMSENABLED", DEFAULT_SMSENABLED);
+		MAINMENUALWAYSONTOP = myGetProperty("MAINMENUALWAYSONTOP", DEFAULT_MAINMENUALWAYSONTOP);
+		RECEIPTPRINTER = myGetProperty("RECEIPTPRINTER", DEFAULT_RECEIPTPRINTER);
+		VIDEOMODULEENABLED = myGetProperty("VIDEOMODULEENABLED", DEFAULT_VIDEOMODULEENABLED);
+		PATIENTVACCINEEXTENDED = myGetProperty("PATIENTVACCINEEXTENDED", DEFAULT_PATIENTVACCINEEXTENDED);
+		ENHANCEDSEARCH = myGetProperty("ENHANCEDSEARCH", DEFAULT_ENHANCEDSEARCH);
+		XMPPMODULEENABLED = myGetProperty("XMPPMODULEENABLED", DEFAULT_XMPPMODULEENABLED);
+		DICOMMODULEENABLED = myGetProperty("DICOMMODULEENABLED", DEFAULT_DICOMMODULEENABLED);
+		DICOMTHUMBNAILS = myGetProperty("DICOMTHUMBNAILS", DEFAULT_DICOMTHUMBNAILS);
+		ALLOWPRINTOPENEDBILL = myGetProperty("ALLOWPRINTOPENEDBILL", DEFAULT_ALLOWPRINTOPENEDBILL);
+		ALLOWMULTIPLEOPENEDBILL = myGetProperty("ALLOWMULTIPLEOPENEDBILL", DEFAULT_ALLOWMULTIPLEOPENEDBILL);
+		PATIENTBILLGROUPED = myGetProperty("PATIENTBILLGROUPED", DEFAULT_PATIENTBILLGROUPED);
+		PATIENTBILLSTATEMENT = myGetProperty("PATIENTBILLSTATEMENT", DEFAULT_PATIENTBILLSTATEMENT);
+		DEBUG = myGetProperty("DEBUG", DEFAULT_DEBUG);
 			
-			ClassLoader classLoader = getClass().getClassLoader();
-			URL url = classLoader.getResource(FILE_PROPERTIES);
-			Path path = Paths.get(url.toURI());
-			p.load(new FileInputStream(path.toFile()));
-			
-			logger.info("File generalData.properties loaded. ");
-			LANGUAGE = myGetProperty("LANGUAGE", DEFAULT_LANGUAGE);
-			SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
-			AUTOMATICLOT_IN = myGetProperty("AUTOMATICLOT_IN", DEFAULT_AUTOMATICLOT_IN);
-			AUTOMATICLOT_OUT = myGetProperty("AUTOMATICLOT_OUT", DEFAULT_AUTOMATICLOT_OUT);
-			AUTOMATICLOTWARD_TOWARD = myGetProperty("AUTOMATICLOTWARD_TOWARD", DEFAULT_AUTOMATICLOTWARD_TOWARD);
-			LOTWITHCOST = myGetProperty("LOTWITHCOST", DEFAULT_LOTWITHCOST);
-			PATIENTSHEET = myGetProperty("PATIENTSHEET", DEFAULT_PATIENTSHEET);
-			VISITSHEET = myGetProperty("VISITSHEET", DEFAULT_VISITSHEET);
-			EXAMINATIONCHART =myGetProperty("EXAMINATIONCHART", DEFAULT_EXAMINATIONCHART);
-			OPDCHART = myGetProperty("OPDCHART", DEFAULT_OPDCHART);
-			ADMCHART = myGetProperty("ADMCHART", DEFAULT_ADMCHART);
-			DISCHART = myGetProperty("DISCHART", DEFAULT_DISCHART);
-			PATIENTBILL = myGetProperty("PATIENTBILL", DEFAULT_PATIENTBILL);
-			BILLSREPORT = myGetProperty("BILLSREPORT", DEFAULT_BILLSREPORT);
-			BILLSREPORTPENDING = myGetProperty("BILLSREPORTPENDING", DEFAULT_BILLSREPORTPENDING);
-			BILLSREPORTMONTHLY = myGetProperty("BILLSREPORTMONTHLY", DEFAULT_BILLSREPORTMONTHLY);
-			PHARMACEUTICALORDER = myGetProperty("PHARMACEUTICALORDER", DEFAULT_PHARMACEUTICALORDER);
-			PHARMACEUTICALSTOCK = myGetProperty("PHARMACEUTICALSTOCK", DEFAULT_PHARMACEUTICALSTOCK);
-			PHARMACEUTICALSTOCKLOT = myGetProperty("PHARMACEUTICALSTOCKLOT", DEFAULT_PHARMACEUTICALSTOCKLOT);
-			PHARMACEUTICALAMC = myGetProperty("PHARMACEUTICALAMC", DEFAULT_PHARMACEUTICALAMC);
-			PATIENTEXTENDED = myGetProperty("PATIENTEXTENDED", DEFAULT_PATIENTEXTENDED);
-			OPDEXTENDED = myGetProperty("OPDEXTENDED", DEFAULT_OPDEXTENDED);
-			MATERNITYRESTARTINJUNE = myGetProperty("MATERNITYRESTARTINJUNE", DEFAULT_MATERNITYRESTARTINJUNE);
-			LABEXTENDED = myGetProperty("LABEXTENDED", DEFAULT_LABEXTENDED);
-			LABMULTIPLEINSERT = myGetProperty("LABMULTIPLEINSERT", DEFAULT_LABMULTIPLEINSERT);
-			INTERNALPHARMACIES = myGetProperty("INTERNALPHARMACIES", DEFAULT_INTERNALPHARMACIES);
-			INTERNALVIEWER = myGetProperty("INTERNALVIEWER", DEFAULT_INTERNALVIEWER);
-			if (!INTERNALVIEWER) VIEWER = p.getProperty("INTERNALVIEWER");
-			MERGEFUNCTION = myGetProperty("MERGEFUNCTION", DEFAULT_MERGEFUNCTION);
-			SMSENABLED = myGetProperty("SMSENABLED", DEFAULT_SMSENABLED);
-			MAINMENUALWAYSONTOP = myGetProperty("MAINMENUALWAYSONTOP", DEFAULT_MAINMENUALWAYSONTOP);
-			RECEIPTPRINTER = myGetProperty("RECEIPTPRINTER", DEFAULT_RECEIPTPRINTER);
-			VIDEOMODULEENABLED = myGetProperty("VIDEOMODULEENABLED", DEFAULT_VIDEOMODULEENABLED);
-			PATIENTVACCINEEXTENDED = myGetProperty("PATIENTVACCINEEXTENDED", DEFAULT_PATIENTVACCINEEXTENDED);
-			ENHANCEDSEARCH = myGetProperty("ENHANCEDSEARCH", DEFAULT_ENHANCEDSEARCH);
-			XMPPMODULEENABLED = myGetProperty("XMPPMODULEENABLED", DEFAULT_XMPPMODULEENABLED);
-			DICOMMODULEENABLED = myGetProperty("DICOMMODULEENABLED", DEFAULT_DICOMMODULEENABLED);
-			DICOMTHUMBNAILS = myGetProperty("DICOMTHUMBNAILS", DEFAULT_DICOMTHUMBNAILS);
-			ALLOWPRINTOPENEDBILL = myGetProperty("ALLOWPRINTOPENEDBILL", DEFAULT_ALLOWPRINTOPENEDBILL);
-			ALLOWMULTIPLEOPENEDBILL = myGetProperty("ALLOWMULTIPLEOPENEDBILL", DEFAULT_ALLOWMULTIPLEOPENEDBILL);
-			PATIENTBILLGROUPED = myGetProperty("PATIENTBILLGROUPED", DEFAULT_PATIENTBILLGROUPED);
-			PATIENTBILLSTATEMENT = myGetProperty("PATIENTBILLSTATEMENT", DEFAULT_PATIENTBILLSTATEMENT);
-			DEBUG = myGetProperty("DEBUG", DEFAULT_DEBUG);
-			
-		} catch (Exception e) { //no file
-			logger.error(">> " + FILE_PROPERTIES + " file not found.");
-			System.exit(1);
-		}
-		
-		MessageBundle.initialize();
-		
-	}
-	
-	/**
-	 * Method to retrieve a boolean property
-	 * 
-	 * @param property
-	 * @param defaultValue
-	 * @return
-	 */
-	private boolean myGetProperty(String property, boolean defaultValue) {
-		boolean value;
-		try {
-			value = p.getProperty(property).equalsIgnoreCase("YES");
-		} catch (Exception e) {
-			logger.warn(">> {} property not found: default is {}", property, defaultValue);
-			return defaultValue;
-		}
-		return value;
-	}
-
-	/**
-	 * Method to retrieve a string property
-	 * 
-	 * @param property
-	 * @param defaultValue
-	 * @return
-	 */
-	private String myGetProperty(String property, String defaultValue) {
-		String value;
-		value = p.getProperty(property);
-		if (value == null) {
-			logger.warn(">> {} property not found: default is {}", property, defaultValue);
-			return defaultValue;
-		}
-		return value;
 	}
 
 	public static GeneralData getGeneralData() {
 		if (mySingleData == null) {
-			mySingleData = new GeneralData();
+			initialize();
 		}
 		return mySingleData;
 	}
+
 	
+	public static void initialize() {
+		mySingleData = new GeneralData(FILE_PROPERTIES);
+	}
+
+
+	/**
+	 * @return the sINGLEUSER
+	 */
+	public boolean getSINGLEUSER() {
+		return SINGLEUSER;
+	}
+
 }

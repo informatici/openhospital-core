@@ -45,7 +45,7 @@ public class SmsSender implements Runnable {
 
 	public SmsSender() {
 		logger.info("SMS Sender started...");
-		SmsParameters.getSmsParameters();
+		SmsParameters.initialize();
 		delay = SmsParameters.LOOP;
 		logger.info("SMS Sender loop set to {} seconds.", delay);
 	}

@@ -21,19 +21,13 @@
  */
 package org.isf.sms.providers;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.isf.generaldata.ConfigurationProperties;
 
 /**
  * @author Mwithi
  */
-public class SkebbyParameters {
+public class SkebbyParameters extends ConfigurationProperties {
 	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private static final String FILE_PROPERTIES = "Skebby.properties";
 
 	public static String URL;
@@ -55,47 +49,24 @@ public class SkebbyParameters {
     private static final String DEFAULT_SENDER_STRING = "";
     
     private static SkebbyParameters mySingleData;
-	private Properties p;
 
-    private SkebbyParameters() {
-    	try	{
-			p = new Properties();
-			p.load(new FileInputStream("rsc" + File.separator + "SmsGateway" + File.separator + FILE_PROPERTIES));
-			//logger.info("File " + FILE_PROPERTIES + " loaded. ");
-			URL = myGetProperty("URL", DEFAULT_URL);
-			USR = myGetProperty("USR", DEFAULT_USR);
-			PWD = myGetProperty("PWD", DEFAULT_PWD);
-			TYPE = myGetProperty("TYPE", DEFAULT_TYPE);
-			SENDER_NUMBER = myGetProperty("SENDER_NUMBER", DEFAULT_SENDER_NUMBER);
-			SENDER_STRING = myGetProperty("SENDER_STRING", DEFAULT_SENDER_STRING);
+    private SkebbyParameters(String fileProperties) {
+    	super(fileProperties);
 			
-    	} catch (Exception e) {//no file
-    		logger.error(">> " + FILE_PROPERTIES + " file not found.");
-    		System.exit(1);
-		}
+		URL = myGetProperty("URL", DEFAULT_URL);
+		USR = myGetProperty("USR", DEFAULT_USR);
+		PWD = myGetProperty("PWD", DEFAULT_PWD);
+		TYPE = myGetProperty("TYPE", DEFAULT_TYPE);
+		SENDER_NUMBER = myGetProperty("SENDER_NUMBER", DEFAULT_SENDER_NUMBER);
+		SENDER_STRING = myGetProperty("SENDER_STRING", DEFAULT_SENDER_STRING);
+			
     }
     
     public static SkebbyParameters getSkebbyParameters() {
         if (mySingleData == null){ 
-        	mySingleData = new SkebbyParameters();        	
+        	mySingleData = new SkebbyParameters(FILE_PROPERTIES);        	
         }
         return mySingleData;
     }
     
-    /**
-	 * Method to retrieve a string property
-	 * 
-	 * @param property
-	 * @param defaultValue
-	 * @return
-	 */
-	private String myGetProperty(String property, String defaultValue) {
-		String value;
-		value = p.getProperty(property);
-		if (value == null) {
-			logger.warn(">> {} property not found: default is {}", property, defaultValue);
-			return defaultValue;
-		}
-		return value;
-	}
 }
