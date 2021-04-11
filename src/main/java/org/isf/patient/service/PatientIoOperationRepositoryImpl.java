@@ -125,7 +125,7 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 				predicates.add(cb.between(keyPath.as(Date.class), birthDateFrom, birthDateTo));
 			} else {
 				if (entry.getValue() instanceof String) {
-					predicates.add(cb.like(keyPath, (String) entry.getValue() + "%"));
+					predicates.add(cb.like(cb.lower(keyPath), like(((String) entry.getValue()).toLowerCase())));
 				}
 			}
 		}
