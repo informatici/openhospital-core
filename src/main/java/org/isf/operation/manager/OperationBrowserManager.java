@@ -22,7 +22,6 @@
 package org.isf.operation.manager;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 
 import org.isf.generaldata.MessageBundle;
@@ -178,7 +177,7 @@ public class OperationBrowserManager {
 	public ArrayList<String> getResultDescriptionList() {
 		if (resultsListHashMap == null) buildResultHashMap();
 		ArrayList<String> resultDescriptionList = new ArrayList<>(resultsListHashMap.values());
-		Collections.sort(resultDescriptionList,  new DefaultSorter(MessageBundle.getMessage("angal.operation.result.success")));
+		resultDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.operation.result.success")));
 		return resultDescriptionList;
 	}
 	

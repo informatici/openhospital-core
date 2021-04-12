@@ -611,7 +611,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 				rv.addElement(fileDicom);
 
 		FileDicom[] ret = new FileDicom[rv.size()];
-		Collections.sort(rv, new DicomDateComparator());
+		rv.sort(new DicomDateComparator());
 		Collections.reverse(rv);
 		rv.copyInto(ret);
 
