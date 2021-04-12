@@ -93,7 +93,7 @@ public class PatientIoOperations {
 	public ArrayList<Patient> getPatients(Map<String, Object> parameters) throws OHServiceException {
 
 		ArrayList<Patient> pPatient = null;
-		pPatient = new ArrayList<Patient>(repository.getPatientsByParams(parameters));
+		pPatient = new ArrayList<>(repository.getPatientsByParams(parameters));
 
 		return pPatient;
 	}
