@@ -222,7 +222,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetPatientsByParams() throws Exception {
 		_setupTestPatient(false);
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		params.put("firstName", "TESTFIRSTN");
 		params.put("birthDate", new GregorianCalendar(1984, Calendar.AUGUST, 14).getTime());
 		params.put("address", "TestAddress");

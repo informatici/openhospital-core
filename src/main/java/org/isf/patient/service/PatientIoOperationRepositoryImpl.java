@@ -114,7 +114,7 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 		Predicate deletedNull = cb.isNull(patient.get("deleted"));
 		Predicate notDeleted = cb.or(deletedN, deletedNull);
 
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 		predicates.add(notDeleted);
 		for (Map.Entry<String, Object> entry : params.entrySet()) {
 			Path<String> keyPath = patient.get(entry.getKey());
