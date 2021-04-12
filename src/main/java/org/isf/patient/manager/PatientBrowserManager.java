@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.isf.accounting.manager.BillBrowserManager;
 import org.isf.accounting.model.Bill;
@@ -101,6 +102,17 @@ public class PatientBrowserManager {
 	@Deprecated
 	public Patient getPatientByName(String name) throws OHServiceException {
 		return ioOperations.getPatient(name);
+	}
+
+	/**
+	 * method that get a Patient list by his/her name
+	 *
+	 * @param params
+	 * @return the list of Patients that match specified name
+	 * @throws OHServiceException
+	 */
+	public ArrayList<Patient> getPatients(Map<String, Object> params) throws OHServiceException {
+		return ioOperations.getPatients(params);
 	}
 
 	/**

@@ -29,6 +29,9 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -214,6 +217,17 @@ public class Tests extends OHCoreTestCase {
 		Patient foundPatient = patientIoOperation.getPatient(code);
 		Patient patient = patientIoOperation.getPatientAll(code);
 		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
+	}
+
+	@Test
+	public void testIoGetPatientsByParams() throws Exception {
+		_setupTestPatient(false);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("firstName", "TESTFIRSTN");
+		params.put("birthDate", new GregorianCalendar(1984, Calendar.AUGUST, 14).getTime());
+		params.put("address", "TestAddress");
+		ArrayList<Patient> patients = patientIoOperation.getPatients(params);
+		assertThat(patients.size()).isPositive();
 	}
 
 	@Test
