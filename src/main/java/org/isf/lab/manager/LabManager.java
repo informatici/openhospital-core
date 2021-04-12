@@ -22,7 +22,6 @@
 package org.isf.lab.manager;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -464,7 +463,7 @@ public class LabManager {
 		if (materialHashMap == null)
 			buildMaterialHashMap();
 		ArrayList<String> materialDescriptionList = new ArrayList<>(materialHashMap.values());
-		Collections.sort(materialDescriptionList, new DefaultSorter(MessageBundle.getMessage("angal.lab.undefined")));
+		materialDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.lab.undefined")));
 		return materialDescriptionList;
 	}
 
