@@ -93,7 +93,7 @@
     <repository>
       <id>dcm4che</id>
       <name>dcm4che Repository</name>
-      <url>http://www.dcm4che.org/maven2</url>
+      <url>https://www.dcm4che.org/maven2</url>
     </repository>
   </repositories>
   <pluginRepositories>
