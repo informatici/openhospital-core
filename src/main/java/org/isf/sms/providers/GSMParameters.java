@@ -21,8 +21,6 @@
  */
 package org.isf.sms.providers;
 
-import java.util.Properties;
-
 import org.isf.generaldata.ConfigurationProperties;
 
 public class GSMParameters extends ConfigurationProperties {
@@ -45,7 +43,6 @@ public class GSMParameters extends ConfigurationProperties {
     private static final String DEFAULT_CMGS = "AT+CMGS=\"";
     
     private static GSMParameters mySingleData;
-	private Properties p;
 
     private GSMParameters(String fileProperties) {
     	super(fileProperties);
