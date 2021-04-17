@@ -21,7 +21,7 @@
  */
 package org.isf.generaldata;
 
-public class SmsParameters extends ConfigurationProperties {
+public final class SmsParameters extends ConfigurationProperties {
 	
 	private static final String FILE_PROPERTIES = "sms.properties";
 

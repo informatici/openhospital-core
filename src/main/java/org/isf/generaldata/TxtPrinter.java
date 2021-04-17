@@ -21,7 +21,7 @@
  */
 package org.isf.generaldata;
 
-public class TxtPrinter extends ConfigurationProperties {
+public final class TxtPrinter extends ConfigurationProperties {
 	
 	private static final String FILE_PROPERTIES = "txtPrinter.properties";
 
