@@ -27,10 +27,14 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.ResourceBundle.Control;
+
+import org.isf.generaldata.GeneralData;
 
 public class UTF8Control extends Control {
     public ResourceBundle newBundle
@@ -64,4 +68,9 @@ public class UTF8Control extends Control {
         }
         return bundle;
     }
+
+	@Override
+	public List<Locale> getCandidateLocales(String baseName, Locale locale) {
+		return Collections.singletonList(new Locale(GeneralData.LANGUAGE));
+	}
 }
