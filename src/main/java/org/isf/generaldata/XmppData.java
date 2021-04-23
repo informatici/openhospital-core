@@ -21,7 +21,7 @@
  */
 package org.isf.generaldata;
 
-public class XmppData extends ConfigurationProperties {
+public final class XmppData extends ConfigurationProperties {
 	
 	private static final String FILE_PROPERTIES = "xmpp.properties";
 	

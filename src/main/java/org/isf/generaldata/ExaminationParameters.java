@@ -26,7 +26,7 @@ package org.isf.generaldata;
  *
  * @author Mwithi
  */
-public class ExaminationParameters extends ConfigurationProperties {
+public final class ExaminationParameters extends ConfigurationProperties {
 	
 	private static final String FILE_PROPERTIES = "examination.properties";
 	

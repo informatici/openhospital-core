@@ -37,7 +37,7 @@ package org.isf.generaldata;
  * 29/12/2011 - Nicola   - added XMPPMODULEENABLED to enable/disable communication module
  * -------------------------------------------
  */
-public class GeneralData extends ConfigurationProperties {
+public final class GeneralData extends ConfigurationProperties {
 	
 	private static final String FILE_PROPERTIES = "generalData.properties";
 	private static final boolean EXIT_ON_FAIL = true;

@@ -21,7 +21,7 @@
  */
 package org.isf.generaldata;
 
-public class Version extends ConfigurationProperties {
+public final class Version extends ConfigurationProperties {
 
 	private static final String FILE_PROPERTIES = "version.properties";
 	private final static boolean EXIT_ON_FAIL = true;
