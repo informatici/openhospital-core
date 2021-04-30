@@ -63,7 +63,7 @@ import org.slf4j.LoggerFactory;
 */
 public class SkebbyGateway implements SmsSenderInterface {
 
-	private static Logger logger = LoggerFactory.getLogger(SkebbyGateway.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SkebbyGateway.class);
 	
 	public static void main(String[] args) throws Exception {
 //      Single dispatch
@@ -95,7 +95,7 @@ public class SkebbyGateway implements SmsSenderInterface {
 		// For eventual errors see http:#www.skebby.com/business/index/send-docs/#errorCodesSection
 		// WARNING: in case of error DON'T retry the sending, since they are blocking errors
 		// ------------------------------------------------------------------	
-		logger.debug("result: {}", result);
+		LOGGER.debug("result: {}", result);
     }
     
     /**
@@ -173,7 +173,7 @@ public class SkebbyGateway implements SmsSenderInterface {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		logger.debug(result);
+		LOGGER.debug(result);
 		return debug || result.contains("status=success");
 	}
 
@@ -182,8 +182,8 @@ public class SkebbyGateway implements SmsSenderInterface {
 		SkebbyParameters.getSkebbyParameters();
 		String url = SkebbyParameters.URL;
 		if (url.equals("")) {
-			logger.error("No HTTP URL has been set for the Gateway: {}", SmsParameters.GATEWAY);
-			logger.error("Please check Skebby.properties file");
+			LOGGER.error("No HTTP URL has been set for the Gateway: {}", SmsParameters.GATEWAY);
+			LOGGER.error("Please check Skebby.properties file");
 			return false;
 		}
 		return Ping.ping(url, SmsParameters.TIMEOUT);

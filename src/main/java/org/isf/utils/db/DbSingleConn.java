@@ -44,7 +44,7 @@ import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
  */
 public class DbSingleConn {
 
-	protected static Logger logger = LoggerFactory.getLogger(DbSingleConn.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DbSingleConn.class);
 
 	private static final int MYSQL_DEFAULT_PORT = 3306;
 
@@ -59,7 +59,7 @@ public class DbSingleConn {
 				pConn = createConnection();
 			} catch (CommunicationsException ce) {
 				String message = MessageBundle.getMessage("angal.utils.dbserverconnectionfailure");
-				logger.error(">> {}", message);
+				LOGGER.error(">> {}", message);
 				JOptionPane.showMessageDialog(null, message);
 				System.exit(1);
 			}

@@ -80,7 +80,7 @@ import net.sf.jasperreports.engine.util.JRLoader;
 @Component
 public class JasperReportsManager {
 
-    private final Logger logger = LoggerFactory.getLogger(JasperReportsManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JasperReportsManager.class);
     
     @Autowired
     private HospitalBrowsingManager hospitalManager;
@@ -323,7 +323,7 @@ public class JasperReportsManager {
             return result;
         } catch(Exception e){
             //Any exception
-        	logger.error("", e);
+        	LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
                     MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
         }
@@ -365,7 +365,7 @@ public class JasperReportsManager {
             throw e;
         } catch(Exception e){
             //Any exception
-            logger.error("", e);
+            LOGGER.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
                     MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
         }
@@ -412,7 +412,7 @@ public class JasperReportsManager {
             throw e;
         } catch(Exception e){
             //Any exception
-            logger.error("", e);
+            LOGGER.error("", e);
             throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
                     MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
         }
@@ -795,7 +795,7 @@ public class JasperReportsManager {
         try {
 			fromDateQuery = TimeTools.parseDate(fromDate, null, false).getTime();
 		} catch (ParseException e) {
-	        logger.error("Error parsing '{}' to a Date using pattern: 'yyyy-MM-dd HH:mm:ss'", fromDate);
+	        LOGGER.error("Error parsing '{}' to a Date using pattern: 'yyyy-MM-dd HH:mm:ss'", fromDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
 					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
 		}
@@ -803,7 +803,7 @@ public class JasperReportsManager {
         try {
         	toDateQuery = TimeTools.parseDate(toDate, null, false).getTime();
 		} catch (ParseException e) {
-	        logger.error("Error parsing '{}' to a Date using pattern: 'yyyy-MM-dd HH:mm:ss'", toDate);
+	        LOGGER.error("Error parsing '{}' to a Date using pattern: 'yyyy-MM-dd HH:mm:ss'", toDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
 					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
 		}
@@ -823,7 +823,7 @@ public class JasperReportsManager {
 		try {
 			fromDateQuery = TimeTools.parseDate(fromDate, "dd/MM/yyyy", false).getTime();
 		} catch (ParseException e) {
-			logger.error("Error parsing '{}' to a Date using pattern: 'dd/MM/yyyy'", fromDate);
+			LOGGER.error("Error parsing '{}' to a Date using pattern: 'dd/MM/yyyy'", fromDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
 					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
 		}
@@ -831,7 +831,7 @@ public class JasperReportsManager {
 		try {
 			toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yyyy", false).getTime();
 		} catch (ParseException e) {
-			logger.error("Error parsing '{}' to a Date using pattern: 'dd/MM/yyyy'", toDate);
+			LOGGER.error("Error parsing '{}' to a Date using pattern: 'dd/MM/yyyy'", toDate);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
 					MessageBundle.getMessage("angal.stat.reporterror"), OHSeverityLevel.ERROR));
 		}
@@ -886,11 +886,11 @@ public class JasperReportsManager {
 		 * (if passed to the subreport) and corresponding bundle (UTF-8 decoding not available) 
 		 */
 		try {
-			logger.debug("Search subreports for {}...", jasperFileName);
+			LOGGER.debug("Search subreports for {}...", jasperFileName);
 			addSubReportsBundleParameters(jasperFileName, parameters);
 		} catch (JRException e) {
-			logger.error(">> error loading subreport bundle, default will be used");
-			logger.error(e.getMessage());
+			LOGGER.error(">> error loading subreport bundle, default will be used");
+			LOGGER.error(e.getMessage());
 		}
 	}
 
@@ -917,10 +917,10 @@ public class JasperReportsManager {
 					Matcher matcher = pattern.matcher(expression);
 					if (matcher.find()) {
 						String subreportName = matcher.group(1).split("\\.")[0];
-						logger.debug("found a subreport: {}", subreportName);
+						LOGGER.debug("found a subreport: {}", subreportName);
 						addReportBundleParameter("SUBREPORT_RESOURCE_BUNDLE_" + index, subreportName, parameters);
 					} else {
-						logger.error(">> unexpected subreport expression {}", expression);
+						LOGGER.error(">> unexpected subreport expression {}", expression);
 					}
 				}
 			}
@@ -936,8 +936,8 @@ public class JasperReportsManager {
 			parameters.put(jasperParameter, resourceBundle);
 			
 		} catch (MissingResourceException e) {
-			logger.error(">> no resource bundle for language '{}' found for report {}", GeneralData.LANGUAGE, jasperFileName);
-			logger.info(">> switch to default language '{}'", Locale.getDefault());
+			LOGGER.error(">> no resource bundle for language '{}' found for report {}", GeneralData.LANGUAGE, jasperFileName);
+			LOGGER.info(">> switch to default language '{}'", Locale.getDefault());
 			parameters.put(jasperParameter, ResourceBundle.getBundle(jasperFileName, Locale.getDefault()));
 			parameters.put(JRParameter.REPORT_LOCALE, Locale.getDefault());
 		}

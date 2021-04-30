@@ -38,21 +38,21 @@ import org.slf4j.LoggerFactory;
  */
 public class SmsSender implements Runnable {
 
-	private static Logger logger = LoggerFactory.getLogger(SmsSender.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SmsSender.class);
 
 	private boolean running = true;
 	private int delay = 10;
 
 	public SmsSender() {
-		logger.info("SMS Sender started...");
+		LOGGER.info("SMS Sender started...");
 		SmsParameters.initialize();
 		delay = SmsParameters.LOOP;
-		logger.info("SMS Sender loop set to {} seconds.", delay);
+		LOGGER.info("SMS Sender loop set to {} seconds.", delay);
 	}
 
 	public void run() {
 		while (running) {
-			logger.info("SMS Sender running...");
+			LOGGER.info("SMS Sender running...");
 			SmsOperations smsOp = Context.getApplicationContext().getBean(SmsOperations.class);
 			List<Sms> smsList = null;
 			try {
@@ -62,7 +62,7 @@ public class SmsSender implements Runnable {
 				e1.printStackTrace();
 			}
 			if (!smsList.isEmpty()) {
-				logger.info("Found {} SMS to send", smsList.size());
+				LOGGER.info("Found {} SMS to send", smsList.size());
 				if (SmsParameters.MODE.equals("GSM")) {
 					
 					SmsSenderGSM sender = new SmsSenderGSM();
@@ -78,16 +78,16 @@ public class SmsSender implements Runnable {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
-									logger.debug("Sent");
+									LOGGER.debug("Sent");
 								} else {
-									logger.error("Not sent");
+									LOGGER.error("Not sent");
 								}
 							}
 						}
 						sender.terminate();
 					} else {
-						logger.error("SMS Sender GSM initialization error");
-						logger.error("Stopping SMS Sender...");
+						LOGGER.error("SMS Sender GSM initialization error");
+						LOGGER.error("Stopping SMS Sender...");
 						setRunning(false);
 					}
 					
@@ -106,20 +106,20 @@ public class SmsSender implements Runnable {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
-									logger.debug("Sent");
+									LOGGER.debug("Sent");
 								} else {
-									logger.error("Not sent");
+									LOGGER.error("Not sent");
 								}
 							}
 						}
 					} else {
-						logger.error("SMS Sender HTTP initialization error");
-						logger.error("Stopping HTTP Sender...");
+						LOGGER.error("SMS Sender HTTP initialization error");
+						LOGGER.error("Stopping HTTP Sender...");
 						setRunning(false);
 					}
 				}
 			} else {
-				logger.debug("No SMS to send.");
+				LOGGER.debug("No SMS to send.");
 			}
 			try {
 				Thread.sleep(delay * 1000);

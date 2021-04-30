@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class ConfigurationProperties {
 	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationProperties.class);
 	private static final boolean EXIT_ON_FAIL = false;
 
 	private Properties prop;
@@ -48,7 +48,7 @@ public abstract class ConfigurationProperties {
 	 * @param fileProperties - the file name (to be available in the classpath)
 	 */
 	protected ConfigurationProperties(String fileProperties) {
-		this.prop = loadPropertiesFile(fileProperties, logger, EXIT_ON_FAIL);
+		this.prop = loadPropertiesFile(fileProperties, LOGGER, EXIT_ON_FAIL);
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public abstract class ConfigurationProperties {
 	 * is missing, otherwise default values will be used
 	 */
 	protected ConfigurationProperties(String fileProperties, boolean exitOnFail) {
-		this.prop = loadPropertiesFile(fileProperties, logger, exitOnFail);
+		this.prop = loadPropertiesFile(fileProperties, LOGGER, exitOnFail);
 	}
 	
 	/**
@@ -113,7 +113,7 @@ public abstract class ConfigurationProperties {
 		try {
 			value = Integer.parseInt(prop.getProperty(property));
 		} catch (Exception e) {
-			logger.warn("{} property not found: default is {}", property, defaultValue);
+			LOGGER.warn("{} property not found: default is {}", property, defaultValue);
 			return defaultValue;
 		}
 		return value;
@@ -148,7 +148,7 @@ public abstract class ConfigurationProperties {
 		try {
 			value = Double.parseDouble(prop.getProperty(property));
 		} catch (Exception e) {
-			logger.warn("{} property not found: default is {}", property, defaultValue);
+			LOGGER.warn("{} property not found: default is {}", property, defaultValue);
 			return defaultValue;
 		}
 		return value;
@@ -165,7 +165,7 @@ public abstract class ConfigurationProperties {
 		String value;
 		value = prop.getProperty(property);
 		if (value == null) {
-			logger.warn(">> {} property not found: default is {}", property, defaultValue);
+			LOGGER.warn(">> {} property not found: default is {}", property, defaultValue);
 			return defaultValue;
 		}
 		return value;

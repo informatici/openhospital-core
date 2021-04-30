@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public class MessageBundle {
 
-	private static final Logger logger = LoggerFactory.getLogger(MessageBundle.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MessageBundle.class);
 
 	private static ResourceBundle resourceBundle = null;
 
@@ -48,7 +48,7 @@ public class MessageBundle {
 			resourceBundle = ResourceBundle.getBundle("language", new Locale(GeneralData.LANGUAGE), new UTF8Control());
 			JOptionPane.setDefaultLocale(new Locale(GeneralData.LANGUAGE));
 		} catch (MissingResourceException e) {
-			logger.error(">> no resource bundle found.");
+			LOGGER.error(">> no resource bundle found.");
 			System.exit(1);
 			//throw new RuntimeException("no resource bundle found.");
 		}
@@ -73,7 +73,7 @@ public class MessageBundle {
 					message = key;
 				}
 			}
-			logger.error(">> key not found: {}", key);
+			LOGGER.error(">> key not found: {}", key);
 		}
 		return message;
 	}

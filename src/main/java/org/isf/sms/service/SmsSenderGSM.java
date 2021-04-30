@@ -46,7 +46,7 @@ import gnu.io.SerialPortEventListener;
  */
 public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener {
 
-	private static Logger logger = LoggerFactory.getLogger(SmsSenderGSM.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SmsSenderGSM.class);
 	
 	private static final String EOF = "\r";
 	
@@ -61,7 +61,7 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 	private boolean sent = true;
 	
 	public SmsSenderGSM() {
-		logger.info("SMS Sender GSM started...");
+		LOGGER.info("SMS Sender GSM started...");
 		GSMParameters.getGSMParameters();
 	}
 	
@@ -77,7 +77,7 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 	 * @return <code>true</code> if the COM port is ready to be used, <code>false</code> otherwise.
 	 */
 	public boolean initialize() {
-		logger.debug("Initialize...");
+		LOGGER.debug("Initialize...");
 		connected = false;
 		portList = CommPortIdentifier.getPortIdentifiers();
 		port = GSMParameters.PORT;
@@ -87,7 +87,7 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 			
 			if (portId.getName().equals(port) && portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
 
-				logger.debug("COM PORT found ({})", port);
+				LOGGER.debug("COM PORT found ({})", port);
 				break;
 				
 			} else portId = null; 
@@ -102,29 +102,29 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 					if (outputStream != null) {
 						inputStream = serialPort.getInputStream();
 
-						logger.debug("Output stream OK");
+						LOGGER.debug("Output stream OK");
 						connected = true;
 
 					} else
-						logger.debug("A problem occured on output stream");
+						LOGGER.debug("A problem occured on output stream");
 
 				} else
-					logger.debug("Not possible to open the stream");
+					LOGGER.debug("Not possible to open the stream");
 
 				try {
 					serialPort.addEventListener(this);
 					serialPort.notifyOnDataAvailable(true);
 				} catch (TooManyListenersException e) {
-					logger.debug("Too many listeners. ({})", e.toString());
+					LOGGER.debug("Too many listeners. ({})", e.toString());
 				}
 
 			} catch (PortInUseException e) {
-				logger.error("Port in use: {}", portId.getCurrentOwner());
+				LOGGER.error("Port in use: {}", portId.getCurrentOwner());
 			} catch (Exception e) {
-				logger.error("Failed to open port {} {}", portId.getName(), e);
+				LOGGER.error("Failed to open port {} {}", portId.getName(), e);
 			}
 		} else {
-			logger.error("COM PORT not found ({})!!!", port);
+			LOGGER.error("COM PORT not found ({})!!!", port);
  		}
 		return connected;
 	}
@@ -132,8 +132,8 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 	@Override
 	public boolean sendSMS(Sms sms, boolean debug) {
 		if (connected) {
-			logger.debug("Sending SMS ({}) to: {}", sms.getSmsId(), sms.getSmsNumber());
-			logger.debug("Sending text: {}", sms.getSmsText());
+			LOGGER.debug("Sending SMS ({}) to: {}", sms.getSmsId(), sms.getSmsNumber());
+			LOGGER.debug("Sending text: {}", sms.getSmsText());
 			
 			StringBuilder build_CMGS = new StringBuilder(GSMParameters.CMGS);
 			build_CMGS.append(sms.getSmsNumber());
@@ -144,7 +144,7 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 			try {
 
 				//SET SMS MODE
-				logger.trace(GSMParameters.CMGF);
+				LOGGER.trace(GSMParameters.CMGF);
 				if (!debug) outputStream.write(GSMParameters.CMGF.getBytes());
 				Thread.sleep(1000);
 				
@@ -154,12 +154,12 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 //				Thread.sleep(1000);
 
 				//SET SMS NUMBER
-				logger.trace(build_CMGS.toString());
+				LOGGER.trace(build_CMGS.toString());
 				if (!debug) outputStream.write(build_CMGS.toString().getBytes());
 				Thread.sleep(1000);
 
 				//SET SMS TEXT
-				logger.trace(text);
+				LOGGER.trace(text);
 				if (!debug) outputStream.write(text.getBytes());
 				Thread.sleep(1000);
 				
@@ -185,7 +185,7 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 			}
 			return true;			
 		} else {
-			logger.error("Device not connected. Please initialize stream first.");
+			LOGGER.error("Device not connected. Please initialize stream first.");
 		}
 		return false;
 	}
@@ -200,9 +200,9 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 			  sb.append(new String(buffer));
 			}
 			String answer = sb.toString();
-			logger.debug(answer);
+			LOGGER.debug(answer);
 			if (answer.contains("ERROR")) {
-				logger.error("ERROR: {}", answer);
+				LOGGER.error("ERROR: {}", answer);
 				sent  = false;
 			}
 		} catch (IOException e) {
@@ -224,7 +224,7 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		logger.debug("Found {} SMS to send", smsList.size());
+		LOGGER.debug("Found {} SMS to send", smsList.size());
 		
 		//Send
 		SmsSenderGSM sender = new SmsSenderGSM();
@@ -232,6 +232,6 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 		if (sender.initialize()) {
 			result = sender.sendSMS(smsList.get(0), true);
 		}
-		logger.debug("{}", result);
+		LOGGER.debug("{}", result);
 	}
 }
