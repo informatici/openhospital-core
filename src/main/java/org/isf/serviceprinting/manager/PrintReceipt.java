@@ -58,9 +58,10 @@ import net.sf.jasperreports.engine.export.JRTextExporterParameter;
  * @author Mwithi
  */
 public class PrintReceipt {
-	
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PrintReceipt.class);
+
 	private PrintService defaultPrintService;
-	private final Logger logger = LoggerFactory.getLogger(PrintReceipt.class);
 
 	/**
 	 * @param jasperPrint
@@ -101,11 +102,11 @@ public class PrintReceipt {
 					}
 
 				} else {
-					logger.debug("invalid MODE");
-					logger.debug("MODE: {}", TxtPrinter.MODE);
+					LOGGER.debug("invalid MODE");
+					LOGGER.debug("MODE: {}", TxtPrinter.MODE);
 				}
 			} else {
-				logger.debug("printer was not found.");
+				LOGGER.debug("printer was not found.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -192,19 +193,19 @@ public class PrintReceipt {
 	 * @param printService
 	 */
 	private void getPrinterDetails(PrintService printService) {
-		logger.debug("Printer: {}", printService.getName());
-		logger.debug("Supported flavors:");
+		LOGGER.debug("Printer: {}", printService.getName());
+		LOGGER.debug("Supported flavors:");
 		DocFlavor[] flavors = printService.getSupportedDocFlavors();
 		if (flavors != null) {
 			for (DocFlavor flavor : flavors) {
-				logger.debug(flavor.toString());
+				LOGGER.debug(flavor.toString());
 			}
 		}
 		//System.out.println("Attributes:");
 		Attribute[] attributes = printService.getAttributes().toArray();
 		if (attributes != null) {
 			for (Attribute attr : attributes) {
-				logger.debug("{}: {}", attr.getName(), (attr.getClass()).toString());
+				LOGGER.debug("{}: {}", attr.getName(), (attr.getClass()).toString());
 			}
 		}
 	}

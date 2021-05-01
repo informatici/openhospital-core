@@ -43,7 +43,7 @@ public class Server {
 	private Roster roster;
 	private String user;
 
-	private final Logger logger = LoggerFactory.getLogger(Server.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
 
 	private Server() {
 	}
@@ -60,10 +60,10 @@ public class Server {
 		try {
 			AccountManager user = new AccountManager(connection);
 			user.createAccount(userName, password);
-			logger.debug("XMPP user created");
+			LOGGER.debug("XMPP user created");
 			connection.login(userName, password);
 		} catch (XMPPException e) {
-			logger.debug("XMPP user existing");
+			LOGGER.debug("XMPP user existing");
 			connection.login(userName, password);
 		}
 	}
@@ -77,10 +77,10 @@ public class Server {
 		Chat chat = null;
 		id = id + "@" + user;
 		if (connection.getChatManager().getThreadChat(id) == null) {
-			logger.debug("Creation chat: {}, id = {}", to, id);
+			LOGGER.debug("Creation chat: {}, id = {}", to, id);
 			chat = connection.getChatManager().createChat(to, id, listener);
 		} else {
-			logger.debug("Existing chat: {}, id = {}", to, id);
+			LOGGER.debug("Existing chat: {}, id = {}", to, id);
 			chat = connection.getChatManager().getThreadChat(id);
 		}
 		return chat;

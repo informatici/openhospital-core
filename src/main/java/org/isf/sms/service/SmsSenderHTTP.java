@@ -33,11 +33,11 @@ import org.slf4j.LoggerFactory;
  */
 public class SmsSenderHTTP implements SmsSenderInterface {
 
-	private static Logger logger = LoggerFactory.getLogger(SmsSenderHTTP.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SmsSenderHTTP.class);
 	private SmsSenderInterface smsSender;
 
 	public SmsSenderHTTP() {
-		logger.info("SMS Sender HTTP started...");
+		LOGGER.info("SMS Sender HTTP started...");
 		SmsParameters.initialize();
 	}
 	
@@ -58,13 +58,13 @@ public class SmsSenderHTTP implements SmsSenderInterface {
 	public boolean initialize() {
 		String gateway = SmsParameters.GATEWAY;
 		if (gateway.equals("")) {
-			logger.error("No HTTP Gateway has been set. Please check sms.properties file");
+			LOGGER.error("No HTTP Gateway has been set. Please check sms.properties file");
 			return false;
 		}
 		if (gateway.equalsIgnoreCase("Skebby")) {
 			smsSender = new SkebbyGateway();
 		} else {
-			logger.error("HTTP Gateway not found. Please check sms.properties file");
+			LOGGER.error("HTTP Gateway not found. Please check sms.properties file");
 			return false;
 		}
 		return smsSender.initialize(); 

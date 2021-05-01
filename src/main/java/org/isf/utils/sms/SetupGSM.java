@@ -48,7 +48,7 @@ import gnu.io.SerialPortEventListener;
 public class SetupGSM extends JFrame implements SerialPortEventListener {
 
 	private static final long serialVersionUID = 1L;
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(SetupGSM.class);
 	private static final String FILE_PROPERTIES = "GSM.properties";
 	
 	private Properties props;
@@ -67,7 +67,7 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	
 	public SetupGSM() {	
 		
-		props = ConfigurationProperties.loadPropertiesFile(FILE_PROPERTIES, logger);
+		props = ConfigurationProperties.loadPropertiesFile(FILE_PROPERTIES, LOGGER);
 		
 		String model = props.getProperty("GMM");
 		

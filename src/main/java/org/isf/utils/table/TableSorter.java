@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 public class TableSorter extends TableMap {
 
 	private static final long serialVersionUID = 1L;
-	private static Logger LOGGER = LoggerFactory.getLogger(TableSorter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TableSorter.class);
 
 	int[] indexes;
 	Vector<Integer> sortingColumns = new Vector<>();
