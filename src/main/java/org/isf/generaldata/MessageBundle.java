@@ -21,6 +21,7 @@
  */
 package org.isf.generaldata;
 
+import java.awt.event.KeyEvent;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -50,7 +51,6 @@ public class MessageBundle {
 		} catch (MissingResourceException e) {
 			LOGGER.error(">> no resource bundle found.");
 			System.exit(1);
-			//throw new RuntimeException("no resource bundle found.");
 		}
 	}
 
@@ -83,5 +83,22 @@ public class MessageBundle {
 			initialize();
 		}
 		return resourceBundle;
+	}
+
+	/**
+	 * Given a KeyEvent string (e.g., "VK_S", "VK_C", etc.) return an int that is used for
+	 * the setMemonic() method associated for example with a Button object.
+	 *
+	 * @param key a MessageBundle key (ending in ".key")
+	 * @return the int value associated with the string as defined by constants in
+	 * @see java.awt.event.KeyEvent
+	 */
+	public static int getMnemonic(String key) {
+		try {
+			return KeyEvent.class.getField(MessageBundle.getMessage(key)).getInt(null);
+		} catch (NoSuchFieldException | IllegalAccessException ex) {
+			LOGGER.error("bundle mnemonic key: {} not found.", key);
+			return 0;
+		}
 	}
 }
