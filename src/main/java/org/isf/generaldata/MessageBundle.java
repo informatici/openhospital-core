@@ -21,7 +21,6 @@
  */
 package org.isf.generaldata;
 
-import java.awt.event.KeyEvent;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -86,19 +85,15 @@ public class MessageBundle {
 	}
 
 	/**
-	 * Given a KeyEvent string (e.g., "VK_S", "VK_C", etc.) return an int that is used for
+	 * Given a single character string (e.g., "S", "C", etc.) return an int that is used for
 	 * the setMemonic() method associated for example with a Button object.
 	 *
+	 * This works because: VK_A thru VK_Z are the same as ASCII 'A' thru 'Z' (0x41 - 0x5A)
+	 *
 	 * @param key a MessageBundle key (ending in ".key")
-	 * @return the int value associated with the string as defined by constants in
-	 * @see java.awt.event.KeyEvent
+	 * @return the int value associated with the string
 	 */
 	public static int getMnemonic(String key) {
-		try {
-			return KeyEvent.class.getField(MessageBundle.getMessage(key)).getInt(null);
-		} catch (NoSuchFieldException | IllegalAccessException ex) {
-			LOGGER.error("bundle mnemonic key: {} not found.", key);
-			return 0;
-		}
+		return getMessage(key).toUpperCase().charAt(0);
 	}
 }
