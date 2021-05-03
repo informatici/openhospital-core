@@ -21,9 +21,12 @@
  */
 package org.isf.generaldata;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
@@ -41,6 +44,9 @@ public class MessageBundle {
 	private static ResourceBundle resourceBundle = null;
 
 	private static ResourceBundle defaultResourceBundle = null;
+
+	private static String formatSpecifier = "%(\\d+\\$)?([-#+ 0,(\\<]*)?(\\d+)?(\\.\\d+)?([tT])?([a-zA-Z%])";
+	private static Pattern pattern = Pattern.compile(formatSpecifier);
 
 	public static void initialize() throws RuntimeException {
 		try {
@@ -95,5 +101,38 @@ public class MessageBundle {
 	 */
 	public static int getMnemonic(String key) {
 		return getMessage(key).toUpperCase().charAt(0);
+	}
+
+	/**
+	 * Given a key to an entry in the resource bundle and a series of objects to place into the
+	 * message, return the formatted or compound message.
+	 *
+	 * For example, given the resource bundle strings:
+	 *    English:   User {0} added new item {1} to group {2}.
+	 *    Italian:   L'utente {0} ha aggiunto un nuovo elemento {1} al gruppo {2}.
+	 *    German:    Das Objekt {1} wurde von Benutzer {0} zur Gruppe {2} hinzugefügt.
+	 *
+	 * Unlike concatenating the various components together which would work for English and Italian,
+	 * it would fail for German (note the ordering of the subsitutable strings).
+	 * Thus the code provides the arguments and the translator is free to order them as dicdated by the language.
+	 *
+	 * @param key a MessageBundle key (that contains ".fmt." in the key name) for a string that contains n-substituables.
+	 * @param args a list of n-arguments that matches the substituables in the message string
+	 * @return the string where @code{args} have been replaces in the original string
+	 */
+	public static String formatMessage(String key, Object... args) {
+		String message = getMessage(key);
+		Matcher matcher = pattern.matcher(message);
+		// Check if message has the same number of placeholders as there are arguments
+		int counter = 0;
+		while (matcher.find()) {
+			counter++;
+		}
+		if (counter != args.length) {
+			LOGGER.error("format message mismatched message and args: msg={}, args='{}'", message, args);
+		}
+		MessageFormat messageFormat = new MessageFormat("");
+		messageFormat.applyPattern(message);
+		return messageFormat.format(args);
 	}
 }
