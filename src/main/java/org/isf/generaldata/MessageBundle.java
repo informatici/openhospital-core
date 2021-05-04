@@ -25,8 +25,6 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
@@ -44,9 +42,6 @@ public class MessageBundle {
 	private static ResourceBundle resourceBundle = null;
 
 	private static ResourceBundle defaultResourceBundle = null;
-
-	private static String formatSpecifier = "%(\\d+\\$)?([-#+ 0,(\\<]*)?(\\d+)?(\\.\\d+)?([tT])?([a-zA-Z%])";
-	private static Pattern pattern = Pattern.compile(formatSpecifier);
 
 	public static void initialize() throws RuntimeException {
 		try {
@@ -122,15 +117,6 @@ public class MessageBundle {
 	 */
 	public static String formatMessage(String key, Object... args) {
 		String message = getMessage(key);
-		Matcher matcher = pattern.matcher(message);
-		// Check if message has the same number of placeholders as there are arguments
-		int counter = 0;
-		while (matcher.find()) {
-			counter++;
-		}
-		if (counter != args.length) {
-			LOGGER.error("format message mismatched message and args: msg={}, args='{}'", message, args);
-		}
 		MessageFormat messageFormat = new MessageFormat("");
 		messageFormat.applyPattern(message);
 		return messageFormat.format(args);
