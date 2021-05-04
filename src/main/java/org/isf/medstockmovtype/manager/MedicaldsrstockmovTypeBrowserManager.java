@@ -152,6 +152,6 @@ public class MedicaldsrstockmovTypeBrowserManager {
 	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
 	 */
 	public MovementType getMovementType(String code) {
-		return ioOperations.getMovementType(code);
+		return ioOperations.findOneByCode(code);
 	}
 }

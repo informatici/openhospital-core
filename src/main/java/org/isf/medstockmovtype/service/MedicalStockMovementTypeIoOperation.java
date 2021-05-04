@@ -128,7 +128,7 @@ public class MedicalStockMovementTypeIoOperation {
 	 * @param code the code to check.
 	 * @return MovementType object whose code is provided as parameter.
 	 */
-	public MovementType getMovementType(String code) {
+	public MovementType findOneByCode(String code) {
             List<MovementType> results = repository.findAllByCode(code);
             if(!results.isEmpty()) {
                 return results.get(0);
