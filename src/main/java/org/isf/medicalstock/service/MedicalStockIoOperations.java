@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.medicals.model.Medical;
@@ -569,17 +570,8 @@ public class MedicalStockIoOperations {
 			Medical medical) throws OHServiceException
 	{
 		List<Lot> lots = lotRepository.findByMovements_MedicalOrderByDueDate(medical.getCode());
-
 		// remove empty lots
-		ArrayList<Lot> emptyLots = new ArrayList<>();
-		for (Lot aLot : lots) {
-			aLot.setQuantity(aLot.calculateQuantity());
-			if (aLot.getQuantity() == 0)
-				emptyLots.add(aLot);
-		}
-		lots.removeAll(emptyLots);
-
-		return new ArrayList<>(lots);
+		return new ArrayList<>(lots.stream().filter(lot -> lot.getQuantity() > 0).collect(Collectors.toList()));
 	}
 
 	// Method is not used anywhere
