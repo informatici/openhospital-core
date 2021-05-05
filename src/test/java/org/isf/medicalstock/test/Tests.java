@@ -31,8 +31,6 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
@@ -98,9 +96,6 @@ public class Tests extends OHCoreTestCase {
 	private static TestMovementType testMovementType;
 	private static TestWard testWard;
 	private static TestSupplier testSupplier;
-
-	@Autowired
-	private EntityManager entityManager;
 
 	@Autowired
 	MedicalStockIoOperations medicalStockIoOperation;
@@ -287,7 +282,6 @@ public class Tests extends OHCoreTestCase {
 		medicalStockIoOperation.newAutomaticDischargingMovement(dischargeMovement);
 		GeneralData.AUTOMATICLOT_OUT = automaticLotMode;
 		
-		List<Movement> movements = movementIoOperationRepository.findAll();
 		ArrayList<Lot> lots = medicalStockIoOperation.getLotsByMedical(medical);
 		assertThat(lots).hasSize(1); // first lot should be 0 quantity and stripped by the list
 	}
