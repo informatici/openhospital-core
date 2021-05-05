@@ -59,14 +59,12 @@ import org.isf.medtype.test.TestMedicalType;
 import org.isf.supplier.model.Supplier;
 import org.isf.supplier.service.SupplierIoOperationRepository;
 import org.isf.supplier.test.TestSupplier;
-import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
 import org.isf.ward.test.TestWard;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -93,7 +91,6 @@ public class Tests extends OHCoreTestCase {
 	@Rule
 	public final SpringMethodRule smr = new SpringMethodRule();
 
-	private static DbJpaUtil jpa;
 	private static TestLot testLot;
 	private static TestMovement testMovement;
 	private static TestMedical testMedical;
@@ -140,7 +137,6 @@ public class Tests extends OHCoreTestCase {
 
 	@BeforeClass
 	public static void setUpClass() {
-		jpa = new DbJpaUtil();
 		testLot = new TestLot();
 		testMovement = new TestMovement();
 		testMedical = new TestMedical();
@@ -153,12 +149,6 @@ public class Tests extends OHCoreTestCase {
 	@Before
 	public void setUp() throws OHException {
 		cleanH2InMemoryDb();
-		jpa.open();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		jpa.close();
 	}
 
 	@AfterClass
