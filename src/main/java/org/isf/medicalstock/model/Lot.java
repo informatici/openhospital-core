@@ -100,7 +100,7 @@ public class Lot extends Auditable<String>
 	 * </i>
 	 */
 	@Transient
-	private Integer mainStoreQuantity;
+	private int mainStoreQuantity;
 	
 	/**
 	 * Automatic calculated field for a lot's quantity stocked in all wards, 
@@ -112,7 +112,7 @@ public class Lot extends Auditable<String>
 	 * </i>
 	 */
 	@Transient
-	private Double wardsTotalQuantity;
+	private double wardsTotalQuantity;
 	
 	/**
 	 * Automatic calculated field for a overall lot's quantity (MedicalStock + MedicalStockWards).<br/>
@@ -123,7 +123,7 @@ public class Lot extends Auditable<String>
 	 * </i>
 	 */
 	@Transient
-	private Double overallQuantity;
+	private double overallQuantity;
 
 	@Transient
 	private volatile int hashCode = 0;

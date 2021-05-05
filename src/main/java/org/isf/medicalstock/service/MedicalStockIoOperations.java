@@ -573,7 +573,7 @@ public class MedicalStockIoOperations {
 		List<Lot> lots = lotRepository.findByMedicalOrderByDueDate(medical.getCode());
 		//retrieve quantities
 		lots.stream().forEach(lot -> {
-			lot.setMainStoreQuantity(lotRepository.getMainStockQuantity(lot));
+			lot.setMainStoreQuantity(lotRepository.getMainStoreQuantity(lot));
 			lot.setWardsTotalQuantity(lotRepository.getWardsTotalQuantity(lot));
 		});
 		// remove empty lots

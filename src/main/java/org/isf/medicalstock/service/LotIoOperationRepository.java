@@ -37,9 +37,9 @@ public interface LotIoOperationRepository extends JpaRepository<Lot, String> {
 	List<Lot> findByMedicalOrderByDueDate(@Param("medical") int medicalCode);
 	
 	@Query("select coalesce(sum(case when m.type.type like '+%' then m.quantity else -m.quantity end), 0) from Movement m where m.lot = :lot")
-	Integer getMainStockQuantity(@Param("lot") Lot lot);
+	Integer getMainStoreQuantity(@Param("lot") Lot lot);
 	
-	@Query("select sum(w.in_quantity - w.out_quantity) FROM MedicalWard w WHERE w.id.lot = :lot")
+	@Query("select coalesce(sum(w.in_quantity - w.out_quantity),0) FROM MedicalWard w WHERE w.id.lot = :lot")
 	Double getWardsTotalQuantity(@Param("lot") Lot lot);
 	
 	@Query("select sum(w.in_quantity - w.out_quantity) FROM MedicalWard w WHERE w.id.lot = :lot and w.id.ward = :ward")

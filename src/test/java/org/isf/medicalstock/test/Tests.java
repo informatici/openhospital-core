@@ -1058,7 +1058,7 @@ public class Tests extends OHCoreTestCase {
 		assertThat(lot2).isNotEqualTo(lot);
 		assertThat(lot).isNotEqualTo(lot2);
 
-		lot2.setMainStoreQuantity(lot.getMainStoreQuantity());
+		lot2.setMainStoreQuantity(lotIoOperationRepository.getMainStoreQuantity(lot));
 		assertThat(lot2).isEqualTo(lot);
 		assertThat(lot).isEqualTo(lot2);
 	}
