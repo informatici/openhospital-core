@@ -36,7 +36,6 @@ import org.isf.medicals.test.TestMedical;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.LotIoOperationRepository;
-import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
 import org.isf.medicalstock.test.TestLot;
 import org.isf.medicalstock.test.TestMovement;
