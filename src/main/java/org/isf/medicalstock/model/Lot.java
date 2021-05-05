@@ -22,9 +22,7 @@
 package org.isf.medicalstock.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -34,13 +32,15 @@ import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Formula;
+import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
+import org.isf.medicalstockward.service.MedicalStockWardIoOperations;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -69,6 +69,7 @@ public class Lot extends Auditable<String>
 	@Column(name="LT_ID_A")
 	private String code;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name="LT_MDSR_ID")
 	private Medical medical;
@@ -84,14 +85,49 @@ public class Lot extends Auditable<String>
 	@Column(name="LT_COST")
 	private BigDecimal cost;
 
+	/**
+	 * Automatic calculated field for a lot's quantity stocked in the main store, 
+	 * taking in account only the main MedicalStock movements (charges and discharges).<br/>
+	 * 
+	 * <i>
+	 * NB: COALESCE is needed for legacy connection to lots migrated from a version prior v1.11.0;
+	 * in theory, there should not exist lots without an initial charge movement
+	 * in the main MedicalStock, but sometimes it could happen if 
+	 * {@link MedicalStockWardIoOperations} are enabled (with {@link GeneralData}<code>.INTERNALPHARMACIES=true</code>) 
+	 * and some lots are registered directly there at the time of the first inventory.
+	 * 
+	 * @see <a href="https://github.com/informatici/openhospital-doc/blob/develop/doc_admin/AdminManual.adoc#5-1-19-internalpharmacies">Admin Manual</a>
+	 * @see <a href="https://github.com/informatici/openhospital-doc/blob/develop/doc_user/UserManual.adoc#63-pharmaceuticals-stock-ward-pharmaceuticals-stock-ward">User Manual</a>
+	 * </i>
+	 */
 	@Transient
-	private int quantity;
+	private int mainStoreQuantity;
+	
+	/**
+	 * Automatic calculated field for a lot's quantity stocked in all wards, 
+	 * taking in account only the wards movements (inventories, discharges and transfers).<br/>
+	 * 
+	 * <i>
+	 * @see <a href="https://github.com/informatici/openhospital-doc/blob/develop/doc_admin/AdminManual.adoc#5-1-19-internalpharmacies">Admin Manual</a>
+	 * @see <a href="https://github.com/informatici/openhospital-doc/blob/develop/doc_user/UserManual.adoc#63-pharmaceuticals-stock-ward-pharmaceuticals-stock-ward">User Manual</a>
+	 * </i>
+	 */
+	@Transient
+	private Integer wardsTotalQuantity;
+	
+	/**
+	 * Automatic calculated field for a overall lot's quantity (MedicalStock + MedicalStockWards).<br/>
+	 * 
+	 * <i>
+	 * @see <a href="https://github.com/informatici/openhospital-doc/blob/develop/doc_admin/AdminManual.adoc#5-1-19-internalpharmacies">Admin Manual</a>
+	 * @see <a href="https://github.com/informatici/openhospital-doc/blob/develop/doc_user/UserManual.adoc#63-pharmaceuticals-stock-ward-pharmaceuticals-stock-ward">User Manual</a>
+	 * </i>
+	 */
+	@Transient
+	private int overallQuantity;
 
 	@Transient
 	private volatile int hashCode = 0;
-
-	@OneToMany(mappedBy = "lot")
-	private List<Movement> movements = new ArrayList<>();
 
 	public Lot() {
 	}
@@ -105,8 +141,9 @@ public class Lot extends Auditable<String>
 		preparationDate=aPreparationDate;
 		dueDate=aDueDate;
 	}
-
-	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate,BigDecimal aCost){
+	
+	public Lot(Medical aMedical, String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate,BigDecimal aCost){
+		medical=aMedical;
 		code=aCode;
 		preparationDate=aPreparationDate;
 		dueDate=aDueDate;
@@ -117,21 +154,21 @@ public class Lot extends Auditable<String>
 		return code;
 	}
 
-	public int getQuantity(){
-		return quantity;
+	public int getMainStoreQuantity(){
+		return mainStoreQuantity;
+	}
+	public Integer getWardsTotalQuantity() {
+		return wardsTotalQuantity;
+	}
+	
+	public int getWardsTotQuantity() {
+		return wardsTotalQuantity;
 	}
 
-	public int calculateQuantity(){ // TODO: this should replace getter logic, for now we are leaving transient field to avoid unnecessary changes in ui
-		int quantity = 0;
-		for (Movement movement: movements) {
-			if (movement.getType().getType().equals("-")) {
-				quantity -= movement.getQuantity();
-			} else if (movement.getType().getType().equals("+")) {
-				quantity += movement.getQuantity();
-			}
-		}
-		return quantity;
+	public int getOverallQuantity() {
+		return mainStoreQuantity + wardsTotalQuantity;
 	}
+
 	public Medical getMedical(){
 			return medical;
 	}
@@ -148,11 +185,14 @@ public class Lot extends Auditable<String>
 	public void setCode(String aCode){
 		code=aCode;
 	}
+	public void setMainStoreQuantity(int aQuantity){
+		mainStoreQuantity=aQuantity;
+	}
+	public void setWardsTotalQuantity(Integer wardsTotalQuantity) {
+		this.wardsTotalQuantity = wardsTotalQuantity;
+	}
 	public void setPreparationDate(GregorianCalendar aPreparationDate){
 		preparationDate=aPreparationDate;
-	}
-	public void setQuantity(int aQuantity){
-		quantity=aQuantity;
 	}
 	public void setMedical(Medical aMedical){
 				medical=aMedical;
@@ -200,7 +240,7 @@ public class Lot extends Auditable<String>
 				return false;
 		} else if (!preparationDate.equals(other.preparationDate))
 			return false;
-		if (quantity != other.quantity)
+		if (mainStoreQuantity != other.mainStoreQuantity)
 			return false;
 		return true;
 	}

@@ -105,14 +105,15 @@ public class MedicalStockIoOperations {
 
 		ArrayList<Lot> lots = getLotsByMedical(movement.getMedical());
 
-		int qty = movement.getQuantity();
+		int qty = movement.getQuantity(); // movement initial quantity
 		for (Lot lot : lots) {
 			Movement splitMovement = new Movement(movement.getMedical(), movement.getType(), movement.getWard(),
 					null, // lot to be set
-					movement.getDate(), qty,
-					null, // quantity to be set
+					movement.getDate(), 
+					qty, // quantity can remain the same or changed if greater than lot quantity
+					null, 
 					movement.getRefNo());
-			int qtLot = lot.getQuantity();
+			int qtLot = lot.getMainStoreQuantity();
 			if (qtLot < qty) {
 				splitMovement.setQuantity(qtLot);
 				result = storeMovement(splitMovement, lot.getCode());
@@ -569,9 +570,14 @@ public class MedicalStockIoOperations {
 	public ArrayList<Lot> getLotsByMedical(
 			Medical medical) throws OHServiceException
 	{
-		List<Lot> lots = lotRepository.findByMovements_MedicalOrderByDueDate(medical.getCode());
+		List<Lot> lots = lotRepository.findByMedicalOrderByDueDate(medical.getCode());
+		//retrieve quantities
+		lots.stream().forEach(lot -> {
+			lot.setMainStoreQuantity(lotRepository.getMainStockQuantity(lot));
+			lot.setWardsTotalQuantity(lotRepository.getWardsTotalQuantity(lot));
+		});
 		// remove empty lots
-		return new ArrayList<>(lots.stream().filter(lot -> lot.getQuantity() > 0).collect(Collectors.toList()));
+		return new ArrayList<>(lots.stream().filter(lot -> lot.getMainStoreQuantity() > 0).collect(Collectors.toList()));
 	}
 
 	// Method is not used anywhere
