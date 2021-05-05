@@ -100,7 +100,7 @@ public class Lot extends Auditable<String>
 	 * </i>
 	 */
 	@Transient
-	private int mainStoreQuantity;
+	private Integer mainStoreQuantity;
 	
 	/**
 	 * Automatic calculated field for a lot's quantity stocked in all wards, 
@@ -112,7 +112,7 @@ public class Lot extends Auditable<String>
 	 * </i>
 	 */
 	@Transient
-	private Integer wardsTotalQuantity;
+	private Double wardsTotalQuantity;
 	
 	/**
 	 * Automatic calculated field for a overall lot's quantity (MedicalStock + MedicalStockWards).<br/>
@@ -123,7 +123,7 @@ public class Lot extends Auditable<String>
 	 * </i>
 	 */
 	@Transient
-	private int overallQuantity;
+	private Double overallQuantity;
 
 	@Transient
 	private volatile int hashCode = 0;
@@ -153,18 +153,15 @@ public class Lot extends Auditable<String>
 		return code;
 	}
 
-	public int getMainStoreQuantity(){
+	public Integer getMainStoreQuantity(){
 		return mainStoreQuantity;
 	}
-	public Integer getWardsTotalQuantity() {
+	
+	public Double getWardsTotalQuantity() {
 		return wardsTotalQuantity;
 	}
 	
-	public int getWardsTotQuantity() {
-		return wardsTotalQuantity;
-	}
-
-	public int getOverallQuantity() {
+	public double getOverallQuantity() {
 		return mainStoreQuantity + wardsTotalQuantity;
 	}
 
@@ -187,7 +184,7 @@ public class Lot extends Auditable<String>
 	public void setMainStoreQuantity(int aQuantity){
 		mainStoreQuantity=aQuantity;
 	}
-	public void setWardsTotalQuantity(Integer wardsTotalQuantity) {
+	public void setWardsTotalQuantity(double wardsTotalQuantity) {
 		this.wardsTotalQuantity = wardsTotalQuantity;
 	}
 	public void setPreparationDate(GregorianCalendar aPreparationDate){

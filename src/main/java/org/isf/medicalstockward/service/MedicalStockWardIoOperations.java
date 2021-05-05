@@ -26,7 +26,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
+import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
 import org.isf.patient.model.Patient;
@@ -50,6 +52,8 @@ public class MedicalStockWardIoOperations
 	private MedicalStockWardIoOperationRepository repository;
 	@Autowired
 	private MovementWardIoOperationRepository movementRepository;
+	@Autowired
+	private LotIoOperationRepository lotRepository;
 	
 	/**
 	 * Get all {@link MovementWard}s with the specified criteria.
@@ -98,13 +102,12 @@ public class MedicalStockWardIoOperations
 	/**
 	 * Gets the current quantity for the specified {@link Medical} and specified {@link Ward}.
 	 * @param ward - if {@code null} the quantity is counted for the whole hospital
-	 * @param medical - the {@link Medical} to check.
 	 * @return the total quantity.
 	 * @throws OHServiceException if an error occurs retrieving the quantity.
 	 */
 	public int getCurrentQuantityInWard(
-			Ward ward, 
-			Medical medical) throws OHServiceException 
+					Ward ward, 
+					Medical medical) throws OHServiceException 
 	{
 		Double mainQuantity = 0.0;
 		
@@ -119,6 +122,29 @@ public class MedicalStockWardIoOperations
 		}	
 
 		return (int) (mainQuantity != null ? mainQuantity : 0.0);	
+	}
+	
+	/**
+	 * Gets the current quantity for the specified {@link Ward} and {@link Lot}.
+	 * @param ward - if {@code null} the quantity is counted for the whole hospital
+	 * @param lot - the {@link code}
+	 * @return the total quantity.
+	 * @throws OHServiceException if an error occurs retrieving the quantity.
+	 */
+	public int getCurrentQuantityInWard(
+			Ward ward, 
+			Lot lot) throws OHServiceException 
+	{
+		Double quantity;
+		if (ward!=null) 
+		{
+			quantity = lotRepository.getQuantityByWard(lot, ward);
+		}
+		else
+		{
+			quantity = repository.findQuantityInWardWhereMedical(lot.getMedical().getCode());
+		}	
+		return (int) (quantity == null ? 0 : quantity.doubleValue());
 	}
 
 	/**
@@ -283,6 +309,7 @@ public class MedicalStockWardIoOperations
 		{
 			double qty = (double) (medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
 			medicalWards.get(i).setQty(qty);
+			
 
 			if (stripeEmpty && qty == 0) {
 				medicalWards.remove(i);
