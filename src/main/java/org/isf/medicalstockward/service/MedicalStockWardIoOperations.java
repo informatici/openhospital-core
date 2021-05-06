@@ -127,7 +127,7 @@ public class MedicalStockWardIoOperations
 	/**
 	 * Gets the current quantity for the specified {@link Ward} and {@link Lot}.
 	 * @param ward - if {@code null} the quantity is counted for the whole hospital
-	 * @param lot - the {@link code}
+	 * @param lot - the {@link Lot} to be counted
 	 * @return the total quantity.
 	 * @throws OHServiceException if an error occurs retrieving the quantity.
 	 */
