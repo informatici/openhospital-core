@@ -73,7 +73,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testIofindOne() throws Exception {
+	public void testIoFindOne() throws Exception {
 		String code = _setupTestMovementType(false);
 		MovementType foundMovementType = medicalStockMovementTypeIoOperation.findOneByCode(code);
 		ArrayList<MovementType> movementTypes = medicalStockMovementTypeIoOperation.getMedicaldsrstockmovType();
@@ -81,7 +81,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testIofindOneNull() throws Exception {
+	public void testIoFindOneNull() throws Exception {
 		assertThat(medicalStockMovementTypeIoOperation.findOneByCode("notThere")).isNull();
 	}
 
