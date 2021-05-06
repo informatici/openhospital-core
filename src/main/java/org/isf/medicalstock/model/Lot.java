@@ -86,7 +86,7 @@ public class Lot extends Auditable<String>
 
 	/**
 	 * Automatic calculated field for a lot's quantity stocked in the main store, 
-	 * taking in account only the main MedicalStock movements (charges and discharges).<br/>
+	 * taking in account only the main MedicalStock movements (charges and discharges).<br>
 	 * 
 	 * <i>
 	 * NB: COALESCE is needed for legacy connection to lots migrated from a version prior v1.11.0;
@@ -104,7 +104,7 @@ public class Lot extends Auditable<String>
 	
 	/**
 	 * Automatic calculated field for a lot's quantity stocked in all wards, 
-	 * taking in account only the wards movements (inventories, discharges and transfers).<br/>
+	 * taking in account only the wards movements (inventories, discharges and transfers).<br>
 	 * 
 	 * <i>
 	 * @see <a href="https://github.com/informatici/openhospital-doc/blob/develop/doc_admin/AdminManual.adoc#5-1-19-internalpharmacies">Admin Manual</a>
@@ -115,7 +115,7 @@ public class Lot extends Auditable<String>
 	private double wardsTotalQuantity;
 	
 	/**
-	 * Automatic calculated field for a overall lot's quantity (MedicalStock + MedicalStockWards).<br/>
+	 * Automatic calculated field for a overall lot's quantity (MedicalStock + MedicalStockWards).<br>
 	 * 
 	 * <i>
 	 * @see <a href="https://github.com/informatici/openhospital-doc/blob/develop/doc_admin/AdminManual.adoc#5-1-19-internalpharmacies">Admin Manual</a>
