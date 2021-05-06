@@ -122,7 +122,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrfindOne() throws Exception {
+	public void testMgrFindOne() throws Exception {
 		String code = _setupTestMovementType(false);
 		MovementType foundMovementType = medicaldsrstockmovTypeBrowserManager.getMovementType(code);
 		ArrayList<MovementType> movementTypes = medicaldsrstockmovTypeBrowserManager.getMedicaldsrstockmovType();
@@ -130,7 +130,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrfindOneNull() throws Exception {
+	public void testMgrFindOneNull() throws Exception {
 		assertThat(medicaldsrstockmovTypeBrowserManager.getMovementType("notThere")).isNull();
 	}
 
