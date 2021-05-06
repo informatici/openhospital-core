@@ -136,14 +136,11 @@ public class MedicalStockWardIoOperations
 			Lot lot) throws OHServiceException 
 	{
 		Double quantity;
-		if (ward!=null) 
-		{
+		if (ward != null) {
 			quantity = lotRepository.getQuantityByWard(lot, ward);
-		}
-		else
-		{
+		} else {
 			quantity = repository.findQuantityInWardWhereMedical(lot.getMedical().getCode());
-		}	
+		}
 		return (int) (quantity == null ? 0 : quantity.doubleValue());
 	}
 
