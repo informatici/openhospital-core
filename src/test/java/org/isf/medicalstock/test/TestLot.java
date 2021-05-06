@@ -27,6 +27,7 @@ import static org.assertj.core.data.Offset.offset;
 import java.math.BigDecimal;
 import java.util.GregorianCalendar;
 
+import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
 import org.isf.utils.exception.OHException;
 
@@ -37,21 +38,22 @@ public class TestLot {
 	private GregorianCalendar dueDate = new GregorianCalendar(2000, 1, 1);
 	private BigDecimal cost = new BigDecimal(10.10);
 
-	public Lot setup(boolean usingSet) throws OHException {
+	public Lot setup(Medical medical, boolean usingSet) throws OHException {
 		Lot lot;
 
 		if (usingSet) {
 			lot = new Lot();
-			_setParameters(lot);
+			_setParameters(medical, lot);
 		} else {
 			// Create Lot with all parameters 
-			lot = new Lot(code, preparationDate, dueDate, cost);
+			lot = new Lot(medical, code, preparationDate, dueDate, cost);
 		}
 
 		return lot;
 	}
 
-	public void _setParameters(Lot lot) {
+	public void _setParameters(Medical medical, Lot lot) {
+		lot.setMedical(medical);
 		lot.setCode(code);
 		lot.setCost(cost);
 		lot.setDueDate(dueDate);

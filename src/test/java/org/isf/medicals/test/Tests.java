@@ -438,15 +438,15 @@ public class Tests extends OHCoreTestCase {
 			MedicalType medicalType = testMedicalType.setup(false);
 			MovementType movementType = testMovementType.setup(false);
 			Ward ward = testWard.setup(false);
-			Lot lot = testLot.setup(false);
+			Lot lot = testLot.setup(medical, false);
 			Supplier supplier = testSupplier.setup(false);
 			Movement movement = testMovement.setup(medical, movementType, ward, lot, supplier, true);
+			supplierIoOperationRepository.saveAndFlush(supplier);
+			wardIoOperationRepository.saveAndFlush(ward);
+			medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
 			medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 			medicalsIoOperationRepository.saveAndFlush(medical);
-			medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
-			wardIoOperationRepository.saveAndFlush(ward);
 			lotIoOperationRepository.saveAndFlush(lot);
-			supplierIoOperationRepository.saveAndFlush(supplier);
 			movementIoOperationRepository.saveAndFlush(movement);
 			medicalBrowsingManager.deleteMedical(medical);
 		})
@@ -621,15 +621,15 @@ public class Tests extends OHCoreTestCase {
 		Medical medical = testMedical.setup(medicalType, false);
 		MovementType movementType = testMovementType.setup(false);
 		Ward ward = testWard.setup(false);
-		Lot lot = testLot.setup(false);
+		Lot lot = testLot.setup(medical, false);
 		Supplier supplier = testSupplier.setup(false);
 		Movement movement = testMovement.setup(medical, movementType, ward, lot, supplier, usingSet);
+		wardIoOperationRepository.saveAndFlush(ward);
+		supplierIoOperationRepository.saveAndFlush(supplier);
+		medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		medicalsIoOperationRepository.saveAndFlush(medical);
-		medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
-		wardIoOperationRepository.saveAndFlush(ward);
 		lotIoOperationRepository.saveAndFlush(lot);
-		supplierIoOperationRepository.saveAndFlush(supplier);
 		movementIoOperationRepository.saveAndFlush(movement);
 		return movement.getCode();
 	}

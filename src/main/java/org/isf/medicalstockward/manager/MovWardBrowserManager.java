@@ -29,6 +29,7 @@ import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
@@ -220,6 +221,18 @@ public class MovWardBrowserManager {
 	 */
 	public int getCurrentQuantityInWard(Ward ward, Medical medical) throws OHServiceException {
 		return ioOperations.getCurrentQuantityInWard(ward, medical);
+	}
+	
+	/**
+	 * Gets the current quantity for the specified {@link Ward} and {@link Lot}.
+	 *
+	 * @param ward - if {@code null} the quantity is counted for the whole hospital
+	 * @param lot - the {@link Lot} to filter
+	 * @return the total quantity.
+	 * @throws OHServiceException if an error occurs retrieving the quantity.
+	 */
+	public int getCurrentQuantityInWard(Ward ward, Lot lot) throws OHServiceException {
+		return ioOperations.getCurrentQuantityInWard(ward, lot);
 	}
 
 	public ArrayList<MovementWardForPrint> convertMovementWardForPrint(ArrayList<MovementWard> wardOutcomes) {

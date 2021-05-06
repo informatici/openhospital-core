@@ -127,7 +127,7 @@ public class MovStockInsertingManager {
 			errors.addAll(validateLot(lot));
 
 			if (movement != null && movement.getType() != null && movement.getType().getType().contains("-") && movement.getQuantity() > lot
-					.getQuantity()) {
+					.getMainStoreQuantity()) {
 				errors.add(new OHExceptionMessage("quantityGreaterThanLotError",
 						MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof"), //$NON-NLS-1$
 						OHSeverityLevel.ERROR));
