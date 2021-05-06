@@ -3108,9 +3108,7 @@ INSERT INTO `menuitem` VALUES ('diseasetype','angal.menu.btn.diseasetype','angal
 INSERT INTO `menuitem` VALUES ('examlist1','angal.menu.btn.examlist1','angal.menu.examlist1','x','E','printing','org.isf.stat.gui.ExamsList1Launcher','N',1);
 INSERT INTO `menuitem` VALUES ('exams','angal.menu.btn.exams','angal.menu.exams','x','E','generaldata','org.isf.exa.gui.ExamBrowser','N',4);
 INSERT INTO `menuitem` VALUES ('examtype','angal.menu.btn.examtype','angal.menu.examtype','x','E','types','org.isf.exatype.gui.ExamTypeBrowser','N',5);
-INSERT INTO `menuitem` VALUES ('exit','angal.menu.btn.exit','angal.menu.exit','x','E','file','none','N',0);
-INSERT INTO `menuitem` VALUES ('file','angal.menu.btn.file','angal.menu.file','x','F','main','none','Y',0);
-INSERT INTO `menuitem` VALUES ('generaldata','angal.menu.btn.generaldata','angal.menu.generaldata','x','G','main','none','Y',1);
+INSERT INTO `menuitem` VALUES ('generaldata','angal.menu.btn.generaldata','angal.menu.generaldata','x','S','main','none','Y',1);
 INSERT INTO `menuitem` VALUES ('groups','angal.menu.btn.groups','angal.menu.groups','x','G','users','org.isf.menu.gui.UserGroupBrowsing','N',1);
 INSERT INTO `menuitem` VALUES ('help','angal.menu.btn.help','angal.menu.help','x','H','main','org.isf.help.HelpViewer','N',11);
 INSERT INTO `menuitem` VALUES ('hospital','angal.menu.btn.hospital','angal.menu.hospital','x','H','generaldata','org.isf.hospital.gui.HospitalBrowser','N',1);
@@ -3127,7 +3125,7 @@ INSERT INTO `menuitem` VALUES ('pretreatmenttype','angal.menu.btn.pretreatmentty
 INSERT INTO `menuitem` VALUES ('printing','angal.menu.btn.printing','angal.menu.printing','x','R','main','none','Y',9);
 INSERT INTO `menuitem` VALUES ('statistics','angal.menu.btn.statistics','angal.menu.statistics','x','T','main','org.isf.stat.reportlauncher.gui.ReportLauncher','N',6);
 INSERT INTO `menuitem` VALUES ('types','angal.menu.btn.types','angal.menu.types','x','T','generaldata','none','Y',0);
-INSERT INTO `menuitem` VALUES ('users','angal.menu.btn.users','angal.menu.users','x','U','file','none','Y',1);
+INSERT INTO `menuitem` VALUES ('users','angal.menu.btn.users','angal.menu.users','x','U','generaldata','none','Y',10);
 INSERT INTO `menuitem` VALUES ('usersusers','angal.menu.btn.usersusers','angal.menu.usersusers','x','U','users','org.isf.menu.gui.UserBrowsing','N',0);
 INSERT INTO `menuitem` VALUES ('vaccine','angal.menu.btn.vaccine','angal.menu.vaccine','x','V','generaldata','org.isf.vaccine.gui.VaccineBrowser','N',6);
 INSERT INTO `menuitem` VALUES ('ward','angal.menu.btn.ward','angal.menu.ward','x','W','generaldata','org.isf.ward.gui.WardBrowser','N',2);
