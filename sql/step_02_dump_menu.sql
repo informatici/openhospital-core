@@ -53,7 +53,7 @@ INSERT INTO MENUITEM (MNI_ID_A,MNI_BTN_LABEL,MNI_LABEL,MNI_TOOLTIP,MNI_SHORTCUT,
  ('printing','Printing','Printing','x','R','main','none','Y',7),
  ('statistics','Statistics','Statistics','x','T','main','org.isf.stat.reportlauncher.gui.ReportLauncher','N',6),
  ('types','Types','Types','x','T','generaldata','none','Y',0),
- ('users','Users & Groups','Users','x','U','main','none','Y',10),
+ ('users','Users & Groups','Users','x','U','generaldata','none','Y',10),
  ('usersusers','Users','Users','x','U','users','org.isf.menu.gui.UserBrowsing','N',0),
  ('vaccine','Vaccine','Vaccine','x','V','generaldata','org.isf.vaccine.gui.VaccineBrowser','N',6),
  ('ward','Ward','Ward','x','W','generaldata','org.isf.ward.gui.WardBrowser','N',2);
