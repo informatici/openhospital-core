@@ -86,12 +86,10 @@ public class UserBrowsingManager {
 	public boolean newUser(User user) throws OHServiceException {
 		String username = user.getUserName();
 		if (ioOperations.isUserNamePresent(username)) {
-			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.menu.theuser") +
-							' ' + username + ' ' + MessageBundle.getMessage("angal.menu.isalreadypresent"), OHSeverityLevel.ERROR));
-		} else {
-			return ioOperations.newUser(user);
+			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.userbrowser.user.exists.fmt.msg", username), OHSeverityLevel.ERROR));
 		}
+		return ioOperations.newUser(user);
 	}
 
 	/**
