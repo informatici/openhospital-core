@@ -30,12 +30,12 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Prototype (abstract) class for Open Hospital configuration files (.properties)
- * 
+ *
  * @author Mwithi
  *
  */
 public abstract class ConfigurationProperties {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationProperties.class);
 	private static final boolean EXIT_ON_FAIL = false;
 
@@ -44,13 +44,13 @@ public abstract class ConfigurationProperties {
 	/**
 	 * Constructor for standard configuration
 	 * (if missing the application will exit)
-	 * 
+	 *
 	 * @param fileProperties - the file name (to be available in the classpath)
 	 */
 	protected ConfigurationProperties(String fileProperties) {
 		this.prop = loadPropertiesFile(fileProperties, LOGGER, EXIT_ON_FAIL);
 	}
-	
+
 	/**
 	 * Constructor for standard configuration
 	 * @param fileProperties - the file name (to be available in the classpath)
@@ -60,7 +60,7 @@ public abstract class ConfigurationProperties {
 	protected ConfigurationProperties(String fileProperties, boolean exitOnFail) {
 		this.prop = loadPropertiesFile(fileProperties, LOGGER, exitOnFail);
 	}
-	
+
 	/**
 	 * Static configuration loader
 	 * @param fileProperties - the file name (to be available in the classpath)
@@ -79,21 +79,27 @@ public abstract class ConfigurationProperties {
 	 */
 	private static final Properties loadPropertiesFile(String fileProperties, Logger logger, boolean exitOnFail) {
 		Properties prop = new Properties();
-		InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileProperties);
-		try {
+		try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileProperties)) {
+			if (null == in) {
+				logger.error(">> '{}' file not found.", fileProperties);
+				if (exitOnFail) {
+					System.exit(1);
+				}
+				return prop;
+			}
 			prop.load(in);
 			logger.info("File {} loaded.", fileProperties);
-			in.close();
 		} catch (IOException e) {
-			logger.error(">> {} file not found.", fileProperties);
-			if (exitOnFail) System.exit(1);
+			logger.error(">> '{}' file not found.", fileProperties);
+			if (exitOnFail)
+				System.exit(1);
 		}
 		return prop;
 	}
-	
+
 	/**
 	 * Method to retrieve a property
-	 * 
+	 *
 	 * @param property
 	 * @return
 	 */
@@ -103,7 +109,7 @@ public abstract class ConfigurationProperties {
 
 	/**
 	 * Method to retrieve an integer property
-	 * 
+	 *
 	 * @param property
 	 * @param defaultValue
 	 * @return
@@ -118,10 +124,10 @@ public abstract class ConfigurationProperties {
 		}
 		return value;
 	}
-	
+
 	/**
 	 * Method to retrieve a boolean property
-	 * 
+	 *
 	 * @param property
 	 * @param defaultValue
 	 * @return
@@ -135,10 +141,10 @@ public abstract class ConfigurationProperties {
 		}
 		return value;
 	}
-	
+
 	/**
 	 * Method to retrieve an double property
-	 * 
+	 *
 	 * @param property
 	 * @param defaultValue
 	 * @return
@@ -153,10 +159,10 @@ public abstract class ConfigurationProperties {
 		}
 		return value;
 	}
-	
+
 	/**
 	 * Method to retrieve a string property
-	 * 
+	 *
 	 * @param property
 	 * @param defaultValue
 	 * @return
