@@ -159,22 +159,20 @@ public class MovWardBrowserManager {
 	 * Persists the specified movement.
 	 *
 	 * @param newMovement the movement to persist.
-	 * @return <code>true</code> if the movement has been persisted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newMovementWard(MovementWard newMovement) throws OHServiceException {
+	public void newMovementWard(MovementWard newMovement) throws OHServiceException {
 		validateMovementWard(newMovement);
-		return ioOperations.newMovementWard(newMovement);
+		ioOperations.newMovementWard(newMovement);
 	}
 
 	/**
 	 * Persists the specified movements.
 	 *
 	 * @param newMovements the movements to persist.
-	 * @return <code>true</code> if the movements have been persisted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newMovementWard(ArrayList<MovementWard> newMovements) throws OHServiceException {
+	public void newMovementWard(ArrayList<MovementWard> newMovements) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (newMovements.isEmpty()) {
 			errors.add(new OHExceptionMessage(
@@ -186,7 +184,7 @@ public class MovWardBrowserManager {
 		for (MovementWard mov : newMovements) {
 			validateMovementWard(mov);
 		}
-		return ioOperations.newMovementWard(newMovements);
+		ioOperations.newMovementWard(newMovements);
 	}
 
 	/**

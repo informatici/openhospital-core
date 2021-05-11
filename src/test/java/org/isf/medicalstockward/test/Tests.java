@@ -207,7 +207,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		assertThat(medicalStockWardIoOperations.newMovementWard(movementWard)).isTrue();
+		medicalStockWardIoOperations.newMovementWard(movementWard);
 		Double quantity = (double) medicalStockWardIoOperations.getCurrentQuantityInWard(wardTo, medical);
 
 		_checkMovementWardIntoDb(movementWard.getCode());
@@ -233,7 +233,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		assertThat(medicalStockWardIoOperations.newMovementWard(movementWard)).isTrue();
+		medicalStockWardIoOperations.newMovementWard(movementWard);
 		Double quantity = (double) medicalStockWardIoOperations.getCurrentQuantityInWard(null, medical);
 
 		_checkMovementWardIntoDb(movementWard.getCode());
@@ -259,7 +259,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		assertThat(medicalStockWardIoOperations.newMovementWard(movementWard)).isTrue();
+		medicalStockWardIoOperations.newMovementWard(movementWard);
 		_checkMovementWardIntoDb(movementWard.getCode());
 	}
 
@@ -288,7 +288,7 @@ public class Tests extends OHCoreTestCase {
 		MedicalWard medicalWardTo = new MedicalWard(wardTo, medical, 10.0F, 15.0F, lot);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWardTo);
 
-		assertThat(medicalStockWardIoOperations.newMovementWard(movementWard)).isTrue();
+		medicalStockWardIoOperations.newMovementWard(movementWard);
 		_checkMovementWardIntoDb(movementWard.getCode());
 	}
 
@@ -317,7 +317,7 @@ public class Tests extends OHCoreTestCase {
 		MedicalWard medicalWardTo = new MedicalWard(wardTo, medical, 10.0F, 15.0F, lot);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWardTo);
 
-		assertThat(medicalStockWardIoOperations.newMovementWard(movementWard)).isTrue();
+		medicalStockWardIoOperations.newMovementWard(movementWard);
 		_checkMovementWardIntoDb(movementWard.getCode());
 	}
 
@@ -344,7 +344,7 @@ public class Tests extends OHCoreTestCase {
 		ArrayList<MovementWard> movementWards = new ArrayList<>();
 		movementWards.add(movementWard);
 
-		assertThat(medicalStockWardIoOperations.newMovementWard(movementWards)).isTrue();
+		medicalStockWardIoOperations.newMovementWard(movementWards);
 
 		Double quantity = (double) medicalStockWardIoOperations.getCurrentQuantityInWard(wardTo, medical);
 		_checkMovementWardIntoDb(movementWard.getCode());
@@ -374,7 +374,7 @@ public class Tests extends OHCoreTestCase {
 		ArrayList<MovementWard> movementWards = new ArrayList<>();
 		movementWards.add(movementWard);
 
-		assertThat(medicalStockWardIoOperations.newMovementWard(movementWards)).isTrue();
+		medicalStockWardIoOperations.newMovementWard(movementWards);
 	}
 
 	@Test
@@ -435,7 +435,7 @@ public class Tests extends OHCoreTestCase {
 
 		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, wardTo, null, lot, false);
 
-		assertThat(medicalStockWardIoOperations.newMovementWard(movementWard)).isTrue();
+		medicalStockWardIoOperations.newMovementWard(movementWard);
 
 		ArrayList<MovementWard> movementWards = medicalStockWardIoOperations.getWardMovementsToPatient(patient.getCode());
 		assertThat(movementWards).hasSize(1);
@@ -462,7 +462,7 @@ public class Tests extends OHCoreTestCase {
 
 		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, wardTo, null, lot, false);
 
-		assertThat(medicalStockWardIoOperations.newMovementWard(movementWard)).isTrue();
+		medicalStockWardIoOperations.newMovementWard(movementWard);
 
 		ArrayList<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWardTotalQuantity('X');
 		assertThat(medicalWards).hasSize(1);
@@ -520,7 +520,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		assertThat(movWardBrowserManager.newMovementWard(movementWard)).isTrue();
+		movWardBrowserManager.newMovementWard(movementWard);
 		Double quantity = (double) medicalStockWardIoOperations.getCurrentQuantityInWard(wardTo, medical);
 
 		_checkMovementWardIntoDb(movementWard.getCode());
@@ -569,7 +569,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		assertThat(movWardBrowserManager.newMovementWard(movementWard)).isTrue();
+		movWardBrowserManager.newMovementWard(movementWard);
 		_checkMovementWardIntoDb(movementWard.getCode());
 	}
 
@@ -602,7 +602,7 @@ public class Tests extends OHCoreTestCase {
 		ArrayList<MovementWard> movementWards = new ArrayList<>();
 		movementWards.add(movementWard);
 
-		assertThat(movWardBrowserManager.newMovementWard(movementWards)).isTrue();
+		movWardBrowserManager.newMovementWard(movementWards);
 
 		Double quantity = (double) movWardBrowserManager.getCurrentQuantityInWard(wardTo, medical);
 		_checkMovementWardIntoDb(movementWard.getCode());
@@ -632,7 +632,7 @@ public class Tests extends OHCoreTestCase {
 		ArrayList<MovementWard> movementWards = new ArrayList<>();
 		movementWards.add(movementWard);
 
-		assertThat(movWardBrowserManager.newMovementWard(movementWards)).isTrue();
+		movWardBrowserManager.newMovementWard(movementWards);
 	}
 
 	@Test
@@ -674,7 +674,7 @@ public class Tests extends OHCoreTestCase {
 
 		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, wardTo, null, lot, false);
 
-		assertThat(movWardBrowserManager.newMovementWard(movementWard)).isTrue();
+		movWardBrowserManager.newMovementWard(movementWard);
 
 		ArrayList<MovementWard> movementWards = movWardBrowserManager.getMovementToPatient(patient);
 		assertThat(movementWards).hasSize(1);
@@ -701,7 +701,7 @@ public class Tests extends OHCoreTestCase {
 
 		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, wardTo, null, lot, false);
 
-		assertThat(movWardBrowserManager.newMovementWard(movementWard)).isTrue();
+		movWardBrowserManager.newMovementWard(movementWard);
 
 		ArrayList<MedicalWard> medicalWards = movWardBrowserManager.getMedicalsWardTotalQuantity('X');
 		assertThat(medicalWards).hasSize(1);
