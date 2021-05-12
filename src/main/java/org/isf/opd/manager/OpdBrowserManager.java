@@ -177,8 +177,8 @@ public class OpdBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public boolean newOpd(Opd opd) throws OHServiceException {
-		validateOpd(opd, true);
 		setPatientConsistency(opd);
+		validateOpd(opd, true);
 		return ioOperations.newOpd(opd);
 	}
 
