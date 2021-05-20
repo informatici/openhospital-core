@@ -92,7 +92,7 @@ public class LabManager {
 		// Check Patient
 		if (GeneralData.LABEXTENDED && laboratory.getPatient() == null) {
 			errors.add(new OHExceptionMessage("patientNullError",
-					MessageBundle.getMessage("angal.lab.pleaseselectapatient"),
+					MessageBundle.getMessage("angal.common.select.patient.msg"),
 					OHSeverityLevel.ERROR));
 		} else if (laboratory.getPatient() == null) {
 			String sex = laboratory.getSex().toUpperCase();

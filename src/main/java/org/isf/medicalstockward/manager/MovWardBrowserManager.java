@@ -63,7 +63,7 @@ public class MovWardBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (description.isEmpty() && mov.isPatient()) {
 			errors.add(new OHExceptionMessage("descriptionPatientEmptyError",
-					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectapatient"),
+					MessageBundle.getMessage("angal.common.select.patient.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (description.isEmpty() && !mov.isPatient()) {

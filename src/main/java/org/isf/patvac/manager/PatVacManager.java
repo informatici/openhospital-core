@@ -156,7 +156,7 @@ public class PatVacManager {
 				|| StringUtils.isEmpty(patientVaccine.getPatName())
 				|| StringUtils.isEmpty(String.valueOf(patientVaccine.getPatSex()))) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.patvac.pleaseselectapatient"),
+					MessageBundle.getMessage("angal.common.select.patient.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {
