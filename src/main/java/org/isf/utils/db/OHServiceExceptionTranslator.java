@@ -50,16 +50,26 @@ public class OHServiceExceptionTranslator {
 		try {
 			return pjp.proceed();
 		} catch (DataIntegrityViolationException e) {
-			throw new OHDataIntegrityViolationException(e, new OHExceptionMessage(null, MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere"), OHSeverityLevel.ERROR));
+			throw new OHDataIntegrityViolationException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere"),
+					OHSeverityLevel.ERROR));
 		} catch (InvalidDataAccessResourceUsageException e) {
-			throw new OHInvalidSQLException(e, new OHExceptionMessage(null, MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), OHSeverityLevel.ERROR));
+			throw new OHInvalidSQLException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"),
+					OHSeverityLevel.ERROR));
 		} catch (CannotCreateTransactionException e) {
-			throw new OHDBConnectionException(e, new OHExceptionMessage(null, MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), OHSeverityLevel.ERROR));
+			throw new OHDBConnectionException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"),
+					OHSeverityLevel.ERROR));
     	} catch (ObjectOptimisticLockingFailureException e) {
-			throw new OHDataLockFailureException(e, new OHExceptionMessage(null, MessageBundle.getMessage("angal.sql.thedatahasbeenupdatedbysomeoneelse"), OHSeverityLevel.ERROR));
+			throw new OHDataLockFailureException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.sql.thedatahasbeenupdatedbysomeoneelse"),
+					OHSeverityLevel.ERROR));
     	} catch (Throwable e) {
     		e.printStackTrace();
-    		throw new OHServiceException(e, new OHExceptionMessage(null, MessageBundle.getMessage("angal.sql.anunexpectederroroccurredpleasecheckthelogs"), OHSeverityLevel.ERROR));
+    		throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+				    MessageBundle.getMessage("angal.sql.anunexpectederroroccurredpleasecheckthelogs"),
+				    OHSeverityLevel.ERROR));
 		}
 	}
 }

@@ -85,50 +85,50 @@ public class LabManager {
 
 		// Check Exam Date
 		if (laboratory.getExamDate() == null) {
-			errors.add(new OHExceptionMessage("noExamDateError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.pleaseinsertavalidexamdate"),
 					OHSeverityLevel.ERROR));
 		}
 		// Check Patient
 		if (GeneralData.LABEXTENDED && laboratory.getPatient() == null) {
-			errors.add(new OHExceptionMessage("patientNullError",
-					MessageBundle.getMessage("angal.lab.pleaseselectapatient"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseselectapatient.msg"),
 					OHSeverityLevel.ERROR));
 		} else if (laboratory.getPatient() == null) {
 			String sex = laboratory.getSex().toUpperCase();
 			if (!(sex.equals("M") || sex.equals("F"))) {
-				errors.add(new OHExceptionMessage("invalidSexError",
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.lab.pleaseinsertmformaleorfforfemale"),
 						OHSeverityLevel.ERROR));
 			}
 			if (laboratory.getAge() < 0) {
-				errors.add(new OHExceptionMessage("invalidAgeError",
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.lab.insertvalidage"),
 						OHSeverityLevel.ERROR));
 			}
 		}
 		if (laboratory.getExam() == null) {
-			errors.add(new OHExceptionMessage("examNullOrEmptyError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.pleaseselectanexam"),
 					OHSeverityLevel.ERROR));
 		}
 		if (laboratory.getResult().isEmpty()) {
-			errors.add(new OHExceptionMessage("labRowNullOrEmptyError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"),
 					OHSeverityLevel.ERROR));
 		}
 		if (laboratory.getMaterial().isEmpty()) {
-			errors.add(new OHExceptionMessage("materialEmptyError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.pleaseselectamaterial"),
 					OHSeverityLevel.ERROR));
 		}
 		if (laboratory.getExamDate() == null) {
-			errors.add(new OHExceptionMessage("examDateNullError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.pleaseinsertexamdate"),
 					OHSeverityLevel.ERROR));
 		}
 		if (laboratory.getInOutPatient().isEmpty()) {
-			errors.add(new OHExceptionMessage("ipdOPDEmptyError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.pleaseinsertiforipdoroforopd"),
 					OHSeverityLevel.ERROR));
 		}
@@ -211,12 +211,12 @@ public class LabManager {
 			return ioOperations.newLabFirstProcedure(laboratory);
 		} else if (laboratory.getExam().getProcedure() == 2) {
 			if (labRow == null || labRow.isEmpty())
-				throw new OHDataValidationException(new OHExceptionMessage("labRowNullOrEmptyError",
+				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"),
 						OHSeverityLevel.ERROR));
 			return ioOperations.newLabSecondProcedure(laboratory, labRow);
 		} else {
-			throw new OHDataValidationException(new OHExceptionMessage("unknownProcedureError",
+			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.unknownprocedure"),
 					OHSeverityLevel.ERROR));
 		}
@@ -237,14 +237,14 @@ public class LabManager {
 			return ioOperations.newLabFirstProcedure(laboratory);
 		} else if (laboratory.getExam().getProcedure() == 2) {
 			if (labRow == null || labRow.isEmpty())
-				throw new OHDataValidationException(new OHExceptionMessage("labRowNullOrEmptyError",
+				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"),
 						OHSeverityLevel.ERROR));
 			return ioOperations.newLabSecondProcedure2(laboratory, labRow);
 		} else if (laboratory.getExam().getProcedure() == 3) {
 			return ioOperations.newLabFirstProcedure(laboratory);
 		} else
-			throw new OHDataValidationException(new OHExceptionMessage("unknownProcedureError",
+			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.unknownprocedure"),
 					OHSeverityLevel.ERROR));
 	}
@@ -263,7 +263,7 @@ public class LabManager {
 			return ioOperations.updateLabFirstProcedure(laboratory);
 		} else if (laboratory.getExam().getProcedure() == 2) {
 			if (labRow == null || labRow.isEmpty())
-				throw new OHDataValidationException(new OHExceptionMessage("labRowNullOrEmptyError",
+				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"),
 						OHSeverityLevel.ERROR));
 			return ioOperations.updateLabSecondProcedure(laboratory, labRow);
@@ -271,7 +271,7 @@ public class LabManager {
 			//TODO: is it enough to call FirstProcedure?
 			return ioOperations.updateLabFirstProcedure(laboratory);
 		} else
-			throw new OHDataValidationException(new OHExceptionMessage("unknownProcedureError",
+			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.unknownprocedure"),
 					OHSeverityLevel.ERROR));
 	}
@@ -287,11 +287,11 @@ public class LabManager {
 	@Transactional(rollbackFor = OHServiceException.class)
 	public boolean newLaboratory(List<Laboratory> labList, ArrayList<ArrayList<String>> labRowList) throws OHServiceException {
 		if (labList.isEmpty())
-			throw new OHDataValidationException(new OHExceptionMessage("emptyListError",
+			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.noexamsinserted"),
 					OHSeverityLevel.ERROR));
 		if (labList.size() != labRowList.size())
-			throw new OHDataValidationException(new OHExceptionMessage("labRowNullOrEmptyError",
+			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"),
 					OHSeverityLevel.ERROR));
 		boolean result = true;
@@ -312,11 +312,11 @@ public class LabManager {
 	@Transactional(rollbackFor = OHServiceException.class)
 	public boolean newLaboratory2(List<Laboratory> labList, ArrayList<ArrayList<LaboratoryRow>> labRowList) throws OHServiceException {
 		if (labList.isEmpty())
-			throw new OHDataValidationException(new OHExceptionMessage("emptyListError",
+			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.noexamsinserted"),
 					OHSeverityLevel.ERROR));
 		if (labList.size() != labRowList.size())
-			throw new OHDataValidationException(new OHExceptionMessage("labRowNullOrEmptyError",
+			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck"),
 					OHSeverityLevel.ERROR));
 		boolean result = true;

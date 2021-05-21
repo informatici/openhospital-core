@@ -101,7 +101,7 @@ public class SmsManager {
 					.append(MAX_LENGHT)
 					.append(" ")
 					.append(MessageBundle.getMessage("angal.sms.chars"));
-			throw new OHDataValidationException(new OHExceptionMessage("testMaxLenghtError",
+			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					message.toString(),
 					OHSeverityLevel.ERROR));
 

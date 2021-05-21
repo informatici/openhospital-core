@@ -235,9 +235,9 @@ public class PatientBrowserManager {
 		else if (admissionManager.getCurrentAdmission(patient2) != null)
 			admitted = true;
 		if (admitted) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.merge"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.admission.cannotmergeadmittedpatients"), OHSeverityLevel.ERROR));
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.merge"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.admission.patientscannothavependingtask"), OHSeverityLevel.INFO));
 		}
 
@@ -252,13 +252,13 @@ public class PatientBrowserManager {
 				billPending = true;
 		}
 		if (billPending) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.merge"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.admission.cannotmergewithpendingbills"), OHSeverityLevel.ERROR));
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.merge"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.admission.patientscannothavependingtask"), OHSeverityLevel.INFO));
 		}
 		if (mergedPatient.getSex() != patient2.getSex()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.merge"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.admission.selectedpatientshavedifferentsex"),
 					OHSeverityLevel.ERROR));
 		}
@@ -387,19 +387,23 @@ public class PatientBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (StringUtils.isEmpty(patient.getFirstName())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.patient.insertfirstname"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.patient.insertfirstname"),
 					OHSeverityLevel.ERROR));
 		}
 		if (StringUtils.isEmpty(patient.getSecondName())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.patient.insertsecondname"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.patient.insertsecondname"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!checkAge(patient)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.patient.insertvalidage"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.patient.insertvalidage"),
 					OHSeverityLevel.ERROR));
 		}
 		if (' ' == patient.getSex()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), "Please select a sex",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					"Please select a sex",
 					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {

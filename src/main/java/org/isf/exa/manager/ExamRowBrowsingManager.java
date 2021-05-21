@@ -50,7 +50,7 @@ public class ExamRowBrowsingManager {
 		String description = examRow.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (description.isEmpty()) {
-			errors.add(new OHExceptionMessage("descriptionEmptyError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.exa.insertdescription"),
 					OHSeverityLevel.ERROR));
 		}

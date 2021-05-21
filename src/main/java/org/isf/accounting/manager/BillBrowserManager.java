@@ -87,27 +87,27 @@ public class BillBrowserManager {
 		bill.setUpdate(upDate);
         
 		if (billDate.after(today)) {
-			errors.add(new OHExceptionMessage("billAfterTodayError", 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 	        		MessageBundle.getMessage("angal.newbill.billsinfuturenotallowed"), 
 	        		OHSeverityLevel.ERROR));
 		}
 		if (lastPay.after(today)) {
-			errors.add(new OHExceptionMessage("paymentAfterTodayError", 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 	        		MessageBundle.getMessage("angal.newbill.payementinthefuturenotallowed"), 
 	        		OHSeverityLevel.ERROR));
 		}
 		if (billDate.after(firstPay)) {
-			errors.add(new OHExceptionMessage("billAfterFirstPaymentError", 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 	        		MessageBundle.getMessage("angal.newbill.billdateafterfirstpayment"), 
 	        		OHSeverityLevel.ERROR));
 		}
 		if (bill.getPatName().isEmpty()) {
-			errors.add(new OHExceptionMessage("patientNameEmptyError", 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 	        		MessageBundle.getMessage("angal.newbill.pleaseinsertanameforthepatient"), 
 	        		OHSeverityLevel.ERROR));
 		}
 		if (bill.getStatus().equals("C") && bill.getBalance() != 0) {
-			errors.add(new OHExceptionMessage("closeWithBalanceError", 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 	        		MessageBundle.getMessage("angal.newbill.youcannotcloseabillwithoutstandingbalance"), 
 	        		OHSeverityLevel.ERROR));
 		}

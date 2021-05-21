@@ -107,25 +107,26 @@ public class OperationTypeBrowserManager {
 		String description = operationType.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (key == null || key.isEmpty()) {
-			errors.add(new OHExceptionMessage("codeEmptyError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.opetype.pleaseinsertacode"),
 					OHSeverityLevel.ERROR));
 		}
 		else {
 			if (key.length() > 2) {
-				errors.add(new OHExceptionMessage("codeTooLongError",
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.opetype.codetoolongmaxchars"),
 						OHSeverityLevel.ERROR));
 			}
 		}
 		if (insert) {
 			if (isCodePresent(key)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.common.codealreadyinuse"),
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.common.codealreadyinuse"),
 						OHSeverityLevel.ERROR));
 			}
 		}
 		if (description == null || description.isEmpty()) {
-			errors.add(new OHExceptionMessage("descriptionEmptyError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.opetype.pleaseinsertavaliddescription"),
 					OHSeverityLevel.ERROR));
 		}

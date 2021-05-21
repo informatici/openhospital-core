@@ -68,7 +68,7 @@ public class ExamBrowsingManager {
 		}
 		if (insert) {
 			if (isKeyPresent(exam)) {
-				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null,
+				throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.exa.changethecodebecauseisalreadyinuse"),
 						OHSeverityLevel.ERROR));
 			}

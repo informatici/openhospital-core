@@ -96,12 +96,12 @@ public class PricesOthersManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (StringUtils.isEmpty(pricesOthers.getCode())) {  //$NON-NLS-1$
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.pricesothers.pleaseinsertacode"),
 					OHSeverityLevel.ERROR));
 		}
 		if (StringUtils.isEmpty(pricesOthers.getDescription())) {  //$NON-NLS-1$
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.pricesothers.pleaseinsertadescription"),
 					OHSeverityLevel.ERROR));
 		}

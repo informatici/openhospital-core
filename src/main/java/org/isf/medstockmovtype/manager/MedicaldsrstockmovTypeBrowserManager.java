@@ -57,28 +57,28 @@ public class MedicaldsrstockmovTypeBrowserManager {
 		String description = movementType.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (key.isEmpty()) {
-			errors.add(new OHExceptionMessage("codeEmptyError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medstockmovtype.pleaseinsertacode"),
 					OHSeverityLevel.ERROR));
 		}
 		if (key.length() > 10) {
-			errors.add(new OHExceptionMessage("codeTooLongError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medstockmovtype.codetoolongmaxchar"),
 					OHSeverityLevel.ERROR));
 		}
 		if (key2.length() > 2) {
-			errors.add(new OHExceptionMessage("codeTypeTooLongError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medstockmovtype.typetoolongmaxchars"),
 					OHSeverityLevel.ERROR));
 		}
 		if (description.isEmpty()) {
-			errors.add(new OHExceptionMessage("descriptionEmptyError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medstockmovtype.pleaseinsertavaliddescription"),
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
 			if (isCodePresent(key)) {
-				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null,
+				throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.common.codealreadyinuse"),
 						OHSeverityLevel.ERROR));
 			}

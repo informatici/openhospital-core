@@ -87,7 +87,8 @@ public class UserBrowsingManager {
 		String username = user.getUserName();
 		if (ioOperations.isUserNamePresent(username)) {
 			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.userbrowser.user.exists.fmt.msg", username), OHSeverityLevel.ERROR));
+					MessageBundle.formatMessage("angal.userbrowser.theuseralreadyexists.fmt.msg", username),
+					OHSeverityLevel.ERROR));
 		}
 		return ioOperations.newUser(user);
 	}
@@ -121,7 +122,8 @@ public class UserBrowsingManager {
 	public boolean deleteUser(User user) throws OHServiceException {
 		if (user.getUserName().equals("admin"))
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.userbrowser.cantdeleteadminuser.msg"), OHSeverityLevel.ERROR));
+					MessageBundle.getMessage("angal.userbrowser.theadminusercannotbedeleted.msg"),
+					OHSeverityLevel.ERROR));
 		return ioOperations.deleteUser(user);
 	}
 
@@ -184,12 +186,14 @@ public class UserBrowsingManager {
 	public boolean deleteGroup(UserGroup aGroup) throws OHServiceException {
 		if (aGroup.getCode().equals("admin")) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.groupsbrowser.cantdeleteadmingroup.msg"), OHSeverityLevel.ERROR));
+					MessageBundle.getMessage("angal.groupsbrowser.theadmingroupcannotbedeleted.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		ArrayList<User> users = getUser(aGroup.getCode());
 		if (users != null && !users.isEmpty()) {
 			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.groupsbrowser.grouphasusers.msg"), OHSeverityLevel.ERROR));
+					MessageBundle.getMessage("angal.groupsbrowser.thisgrouphasusersandcannotbedeleted.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		return ioOperations.deleteGroup(aGroup);
 	}
@@ -204,7 +208,8 @@ public class UserBrowsingManager {
 		String code = aGroup.getCode();
 		if (ioOperations.isGroupNamePresent(code)) {
 			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.groupsbrowser.groupexists.fmt.msg", code), OHSeverityLevel.ERROR));
+					MessageBundle.formatMessage("angal.groupsbrowser.thegroupalreadyexists.fmt.msg", code),
+					OHSeverityLevel.ERROR));
 		} else {
 			return ioOperations.newUserGroup(aGroup);
 		}
