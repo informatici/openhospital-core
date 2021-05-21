@@ -161,22 +161,22 @@ public class PriceListManager {
 		java.util.List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (StringUtils.isEmpty(priceList.getCode())) { //$NON-NLS-1$
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.priceslist.pleaseinsertacode"),
 					OHSeverityLevel.ERROR));
 		}
 		if (StringUtils.isEmpty(priceList.getName())) { //$NON-NLS-1$
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.priceslist.pleaseinsertaname"),
 					OHSeverityLevel.ERROR));
 		}
 		if (StringUtils.isEmpty(priceList.getDescription())) { //$NON-NLS-1$
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.priceslist.pleaseinsertadescription"),
 					OHSeverityLevel.ERROR));
 		}
 		if (StringUtils.isEmpty(priceList.getCurrency())) { //$NON-NLS-1$
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.priceslist.pleaseinsertacurrency"),
 					OHSeverityLevel.ERROR));
 		}

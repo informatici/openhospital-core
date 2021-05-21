@@ -110,23 +110,27 @@ public class DiseaseTypeBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		String key = diseaseType.getCode();
 		if (key.equals("")) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.distype.pleaseinsertacode"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.distype.pleaseinsertacode"),
 					OHSeverityLevel.ERROR));
 		}
 		if (key.length() > 2) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.distype.codetoolongmaxchars"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.distype.codetoolongmaxchars"),
 					OHSeverityLevel.ERROR));
 		}
 
 		if (insert) {
 			if (isCodePresent(key)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.common.codealreadyinuse"),
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.common.codealreadyinuse"),
 						OHSeverityLevel.ERROR));
 			}
 		}
 		if (diseaseType.getDescription().equals("")) {
 			errors.add(
-					new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.distype.pleaseinsertavaliddescription"),
+					new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.distype.pleaseinsertavaliddescription"),
 							OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {

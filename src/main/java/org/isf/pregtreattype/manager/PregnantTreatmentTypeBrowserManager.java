@@ -108,23 +108,24 @@ public class PregnantTreatmentTypeBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		String key = pregnantTreatmentType.getCode();
 		if (StringUtils.isEmpty(key)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.preagtreattype.pleaseinsertacode"),
 					OHSeverityLevel.ERROR));
 		}
 		if (key.length() > 10) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.preagtreattype.codetoolong"),
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
 			if (isCodePresent(key)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.common.codealreadyinuse"),
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.common.codealreadyinuse"),
 						OHSeverityLevel.ERROR));
 			}
 		}
 		if (StringUtils.isEmpty(pregnantTreatmentType.getDescription())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.preagtreattype.pleaseinsertavaliddescription"),
 					OHSeverityLevel.ERROR));
 		}

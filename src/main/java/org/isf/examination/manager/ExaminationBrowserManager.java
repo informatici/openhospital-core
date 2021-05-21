@@ -281,15 +281,15 @@ public class ExaminationBrowserManager {
 	protected List<OHExceptionMessage> validateExamination(PatientExamination patex) {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (patex.getPex_diuresis_desc() != null && !diuresisDescriptionHashMap.containsKey(patex.getPex_diuresis_desc()))
-			errors.add(new OHExceptionMessage("diuresisDescriptionNotAllowed",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.examination.pleaseinsertavaliddiuresisdescription"),
 					OHSeverityLevel.ERROR));
 		if (patex.getPex_bowel_desc() != null && !bowelDescriptionHashMap.containsKey(patex.getPex_bowel_desc()))
-			errors.add(new OHExceptionMessage("bowelDescriptionNotAllowed",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.examination.pleaseinsertavalidboweldescription"),
 					OHSeverityLevel.ERROR));
 		if (patex.getPex_auscultation() != null && !auscultationHashMap.containsKey(patex.getPex_auscultation()))
-			errors.add(new OHExceptionMessage("auscultationDescriptionNotAllowed",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.examination.pleaseinsertavalidauscultationdescription"),
 					OHSeverityLevel.ERROR));
 		return errors;

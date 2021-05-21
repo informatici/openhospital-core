@@ -306,7 +306,8 @@ public class SourceFiles extends Thread {
 
 				imageInputStream.close();
 			} else {
-				throw new OHDicomException(new OHExceptionMessage("", "format not supported", OHSeverityLevel.ERROR));
+				throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						"format not supported", OHSeverityLevel.ERROR));
 			}
 
 			BufferedImage scaled = Scalr.resize(originalImage, 100);

@@ -85,18 +85,18 @@ public class OpdBrowserManager {
 		// Check Patient
 		if (GeneralData.OPDEXTENDED && opd.getPatient() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.common.select.patient.msg"),
+					MessageBundle.getMessage("angal.common.pleaseselectapatient.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		// Check Sex and Age
 		if (opd.getAge() < 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.opd.insertage.msg"),
+					MessageBundle.getMessage("angal.opd.pleaseinsertthepatientsage.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (opd.getSex() == ' ') {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.opd.selectsex.msg"),
+					MessageBundle.getMessage("angal.opd.pleaseselectpatientssex.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		// Check Disease n.1
@@ -108,17 +108,17 @@ public class OpdBrowserManager {
 			// Check double diseases
 			if (disease2 != null && disease.getCode().equals(disease2.getCode())) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.opd.duplicatediseasesnotallowed.msg"),
+						MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg"),
 						OHSeverityLevel.ERROR));
 			}
 			if (disease3 != null && disease.getCode().equals(disease3.getCode())) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.opd.duplicatediseasesnotallowed.msg"),
+						MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg"),
 						OHSeverityLevel.ERROR));
 			}
 			if (disease2 != null && disease3 != null && disease2.getCode().equals(disease3.getCode())) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.opd.duplicatediseasesnotallowed.msg"),
+						MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}

@@ -138,25 +138,25 @@ public class PatVacManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (patientVaccine.getVaccineDate() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.patvac.pleaseinsertvaccinedate"),
 					OHSeverityLevel.ERROR));
 		}
 		if (patientVaccine.getProgr() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.patvac.pleaseinsertavalidprogressive"),
 					OHSeverityLevel.ERROR));
 		}
 		if (patientVaccine.getVaccine() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.patvac.pleaseselectavaccine"),
 					OHSeverityLevel.ERROR));
 		}
 		if (patientVaccine.getPatient() == null
 				|| StringUtils.isEmpty(patientVaccine.getPatName())
 				|| StringUtils.isEmpty(String.valueOf(patientVaccine.getPatSex()))) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.common.select.patient.msg"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseselectapatient.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {

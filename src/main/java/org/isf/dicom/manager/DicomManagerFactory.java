@@ -83,7 +83,7 @@ public class DicomManagerFactory {
 				}
 			} catch (Exception e) {
 				//Any exception
-				throw new OHDicomException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+				throw new OHDicomException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						props.getProperty("dicom.manager.impl") + " " + MessageBundle.getMessage("angal.dicom.manager.noimpl"), OHSeverityLevel.ERROR));
 			}
 		}
@@ -98,7 +98,7 @@ public class DicomManagerFactory {
 			
 		} catch (Exception exc) {
 			logger.error(">> {} file not found.", FILE_PROPERTIES);
-			throw new OHDicomException(exc, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
+			throw new OHDicomException(exc, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.dicom.manager.err") + " " + exc.getMessage(), OHSeverityLevel.ERROR));
 		}
 	}

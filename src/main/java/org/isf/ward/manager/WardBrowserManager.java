@@ -64,43 +64,43 @@ public class WardBrowserManager {
 		String description = ward.getDescription();
         List<OHExceptionMessage> errors = new ArrayList<>();
         if(key.isEmpty() ){
-	        errors.add(new OHExceptionMessage("codeEmptyError", 
+	        errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 	        		MessageBundle.getMessage("angal.ward.pleaseinsertacode"), 
 	        		OHSeverityLevel.ERROR));
         }
         if(key.length()>1){
-	        errors.add(new OHExceptionMessage("codeTooLongError", 
+	        errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 	        		MessageBundle.getMessage("angal.ward.codetoolongmaxchars"), 
 	        		OHSeverityLevel.ERROR));
         }
         if(description.isEmpty() ){
-            errors.add(new OHExceptionMessage("descriptionEmptyError", 
+            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
             		MessageBundle.getMessage("angal.ward.pleaseinsertavaliddescription"), 
             		OHSeverityLevel.ERROR));
         }
         if (ward.getBeds()<0) {
-        	errors.add(new OHExceptionMessage("negativeBedsError", 
+        	errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
             		MessageBundle.getMessage("angal.ward.bedsnumbermustbepositive"), 
             		OHSeverityLevel.ERROR));
 		}
 		if (ward.getNurs()<0) {
-			errors.add(new OHExceptionMessage("negativeNursesError", 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
             		MessageBundle.getMessage("angal.ward.nursesnumbermustbepositive"), 
             		OHSeverityLevel.ERROR));
 		}
 		if (ward.getDocs()<0) {
-			errors.add(new OHExceptionMessage("negativeDoctorsError", 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
             		MessageBundle.getMessage("angal.ward.doctorsnumbermustbepositive"), 
             		OHSeverityLevel.ERROR));
 		}
 		if (!EmailValidator.isValid(ward.getEmail())) {
-			errors.add(new OHExceptionMessage("invalidEmailError", 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.common.emailmustbevalid"), 
             		OHSeverityLevel.ERROR));
 		}
 		if (insert) {
 			if (isCodePresent(ward.getCode())){
-				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null, 
+				throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.common.codealreadyinuse"), 
 						OHSeverityLevel.ERROR));
 			}
@@ -167,19 +167,20 @@ public class WardBrowserManager {
 	 */
 	public boolean deleteWard(Ward ward) throws OHServiceException {
 		if (ward.getCode().equals("M")) {
-			throw new OHOperationNotAllowedException( new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
-					MessageBundle.getMessage("angal.ward.cannotdeletematernityward"), OHSeverityLevel.ERROR));
+			throw new OHOperationNotAllowedException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.ward.cannotdeletematernityward"),
+					OHSeverityLevel.ERROR));
 		}
 		int noPatients = admManager.getUsedWardBed(ward.getCode());
 		
 		if (noPatients > 0) {
 			
 			List<OHExceptionMessage> messages = new ArrayList<>();
-			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
+			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"), 
 					MessageBundle.getMessage("angal.ward.selectedwardhaspatients1") +
 					' ' + noPatients + ' ' +
 					MessageBundle.getMessage("angal.ward.selectedwardhaspatients2"), OHSeverityLevel.INFO));
-			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
+			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"), 
 					MessageBundle.getMessage("angal.ward.pleasecheckinadmissionpatients"), OHSeverityLevel.ERROR));
 			throw new OHOperationNotAllowedException(messages);
 		}

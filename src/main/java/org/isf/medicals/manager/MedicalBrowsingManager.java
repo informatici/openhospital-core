@@ -192,7 +192,7 @@ public class MedicalBrowsingManager {
 		boolean inStockMovement = ioOperations.isMedicalReferencedInStockMovement(medical.getCode());
 
 		if (inStockMovement) {
-			throw new OHDataIntegrityViolationException(new OHExceptionMessage("existingReferencesError",
+			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medicals.therearestockmovementsreferredtothismedical"),
 					OHSeverityLevel.ERROR));
 		}
@@ -209,17 +209,17 @@ public class MedicalBrowsingManager {
 	private List<OHExceptionMessage> checkMedicalCommon(Medical medical) {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (medical.getMinqty() < 0) {
-			errors.add(new OHExceptionMessage("quantityLesserThanZeroError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medicals.minquantitycannotbelessthan0"),
 					OHSeverityLevel.ERROR));
 		}
 		if (medical.getPcsperpck() < 0) {
-			errors.add(new OHExceptionMessage("packagingLesserThanZeroError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medicals.insertavalidpackaging"),
 					OHSeverityLevel.ERROR));
 		}
 		if (medical.getDescription().equalsIgnoreCase("")) {
-			errors.add(new OHExceptionMessage("nullOrEmptyDescriptionError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medicals.inseravaliddescription"),
 					OHSeverityLevel.ERROR));
 		}
@@ -271,14 +271,14 @@ public class MedicalBrowsingManager {
 		ArrayList<Medical> similarMedicals = ioOperations.medicalCheck(medical, update);
 
 		if (productCodeExists) {
-			errors.add(new OHExceptionMessage("productCodeExistsError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medicals.thecodeisalreadyused"),
 					OHSeverityLevel.ERROR));
 		} else if (medicalExists) {
 			StringBuilder message = new StringBuilder(MessageBundle.getMessage("angal.medicals.thepairtypemedicalalreadyexists")).append('\n');
 			message.append('[').append(medical.getType().getDescription()).append("] ");
 			message.append(medical.toString()).append('\n');
-			errors.add(new OHExceptionMessage("pairTypeMedicalExistsError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					message.toString(),
 					OHSeverityLevel.ERROR));
 		} else if (!ignoreSimilar && !similarMedicals.isEmpty()) {
@@ -289,9 +289,9 @@ public class MedicalBrowsingManager {
 					message.append('[').append(med.getProd_code()).append("] ");
 				message.append(med.toString()).append('\n');
 			}
-			errors.add(new OHExceptionMessage("similarsFoundWarning",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					message.toString(),
-					OHSeverityLevel.WARNING));
+					OHSeverityLevel.ERROR));
 		}
 		
 		if (!errors.isEmpty()) {

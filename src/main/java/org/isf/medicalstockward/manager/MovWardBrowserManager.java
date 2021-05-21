@@ -62,17 +62,17 @@ public class MovWardBrowserManager {
 		String description = mov.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (description.isEmpty() && mov.isPatient()) {
-			errors.add(new OHExceptionMessage("descriptionPatientEmptyError",
-					MessageBundle.getMessage("angal.common.select.patient.msg"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseselectapatient.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (description.isEmpty() && !mov.isPatient()) {
-			errors.add(new OHExceptionMessage("descriptionInternalUseEmptyError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseinsertadescriptionfortheinternaluse"),
 					OHSeverityLevel.ERROR));
 		}
 		if (mov.getMedical() == null) {
-			errors.add(new OHExceptionMessage("medicalEmptyError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug"),
 					OHSeverityLevel.ERROR));
 		}
@@ -175,8 +175,7 @@ public class MovWardBrowserManager {
 	public void newMovementWard(ArrayList<MovementWard> newMovements) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (newMovements.isEmpty()) {
-			errors.add(new OHExceptionMessage(
-					"emptyMovementListError",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug"),
 					OHSeverityLevel.ERROR));
 			throw new OHDataValidationException(errors);
