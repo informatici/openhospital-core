@@ -378,7 +378,11 @@ public class AdmissionBrowserManager {
 				} else {
 					limit = admission.getDisDate();
 				}
-
+				if (operationDate.before(dateIn) || operationDate.after(limit)) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.admission.pleaseinsertavalidvisitdate"),
+							OHSeverityLevel.ERROR));
+				}
 			}
 
 			Float f = admission.getWeight();
