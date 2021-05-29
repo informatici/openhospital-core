@@ -32,6 +32,8 @@ import org.isf.utils.exception.OHInvalidSQLException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -44,6 +46,8 @@ import org.springframework.transaction.CannotCreateTransactionException;
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
 @Component
 public class OHServiceExceptionTranslator {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(OHServiceExceptionTranslator.class);
 
 	@Around("within(@org.isf.utils.db.TranslateOHServiceException *)")
 	public Object translateSqlExceptionToOHServiceException(ProceedingJoinPoint pjp) throws OHServiceException {
@@ -65,9 +69,9 @@ public class OHServiceExceptionTranslator {
 			throw new OHDataLockFailureException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.sql.thedatahasbeenupdatedbysomeoneelse"),
 					OHSeverityLevel.ERROR));
-    	} catch (Throwable e) {
-    		e.printStackTrace();
-    		throw new OHServiceException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+    	} catch (Throwable throwable) {
+    		LOGGER.error(throwable.getMessage(), throwable);
+    		throw new OHServiceException(throwable, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 				    MessageBundle.getMessage("angal.sql.anunexpectederroroccurredpleasecheckthelogs"),
 				    OHSeverityLevel.ERROR));
 		}

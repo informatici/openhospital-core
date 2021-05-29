@@ -223,8 +223,8 @@ public class SourceFiles extends Thread {
 
 		} catch (OHDicomException e) {
 			LOGGER.error(e.getMessages().get(0).getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 		return dicomFileDetail;
 	}

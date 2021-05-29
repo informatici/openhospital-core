@@ -57,9 +57,8 @@ public class SmsSender implements Runnable {
 			List<Sms> smsList = null;
 			try {
 				smsList = smsOp.getList();
-			} catch (OHServiceException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			} catch (OHServiceException ohServiceException) {
+				LOGGER.error(ohServiceException.getMessage(), ohServiceException);
 			}
 			if (!smsList.isEmpty()) {
 				LOGGER.info("Found {} SMS to send", smsList.size());
@@ -74,9 +73,8 @@ public class SmsSender implements Runnable {
 									sms.setSmsDateSent(new Date());
 									try {
 										smsOp.saveOrUpdate(sms);
-									} catch (OHServiceException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
+									} catch (OHServiceException ohServiceException) {
+										LOGGER.error(ohServiceException.getMessage(), ohServiceException);
 									}
 									LOGGER.debug("Sent");
 								} else {
@@ -102,9 +100,8 @@ public class SmsSender implements Runnable {
 									sms.setSmsDateSent(new Date());
 									try {
 										smsOp.saveOrUpdate(sms);
-									} catch (OHServiceException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
+									} catch (OHServiceException ohServiceException) {
+										LOGGER.error(ohServiceException.getMessage(), ohServiceException);
 									}
 									LOGGER.debug("Sent");
 								} else {
@@ -123,8 +120,8 @@ public class SmsSender implements Runnable {
 			}
 			try {
 				Thread.sleep(delay * 1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			} catch (InterruptedException interruptedException) {
+				LOGGER.error(interruptedException.getMessage(), interruptedException);
 			}
 		}
 	}

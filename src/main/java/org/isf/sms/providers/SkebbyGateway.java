@@ -170,8 +170,8 @@ public class SkebbyGateway implements SmsSenderInterface {
 		String result = null;
 		try {
 			result = skebbyGatewaySendSMS(username, password, new String[]{internationalNumberFormat}, sms.getSmsText(), SkebbyParameters.TYPE, sender_number, sender_string);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ioException) {
+			LOGGER.error(ioException.getMessage(), ioException);
 		}
 		LOGGER.debug(result);
 		return debug || result.contains("status=success");
