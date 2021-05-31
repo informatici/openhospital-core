@@ -47,8 +47,7 @@ import org.isf.utils.time.TimeTools;
 /**
  * @author Mwithi
  */
-public class
-CSV2SQL {
+public class CSV2SQL {
 
 	/**
 	 * @param args
@@ -289,6 +288,5 @@ CSV2SQL {
 				lineNumber++;
 			}
 		}
-
 	}
 }
