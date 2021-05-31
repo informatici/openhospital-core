@@ -68,7 +68,13 @@
  				<prop key="hibernate.format_sql">${hibernate.format_sql:true}</prop>
  				<prop key="hibernate.dialect">${hibernate.dialect:org.hibernate.dialect.MySQLDialect}</prop>
  				<prop key="hibernate.id.new_generator_mappings">false</prop>
+				<!-- OP-525.  The property hibernate.hbm2ddl.auto validates or exports schema DDL to the
+				     database when the SessionFactory is created.
+				     The valid values are: validate, update, create, and create-drop.
+				     In order that nothing is done, the property is not specified.  If one of the functions is
+				     required uncomment the following and specify the appropriate property value.
 				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto:false}</prop>
+				-->
  			</props>
  		</property>
  	</bean>
