@@ -176,11 +176,11 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 					return false;
 				}
 				
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException ioException) {
+				LOGGER.error(ioException.getMessage(), ioException);
 				return false;
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			} catch (InterruptedException interruptedException) {
+				LOGGER.error(interruptedException.getMessage(), interruptedException);
 				return false;
 			}
 			return true;			
@@ -205,8 +205,8 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 				LOGGER.error("ERROR: {}", answer);
 				sent  = false;
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ioException) {
+			LOGGER.error(ioException.getMessage(), ioException);
 		}
     }
 	
@@ -220,9 +220,8 @@ public class SmsSenderGSM implements SmsSenderInterface, SerialPortEventListener
 		List<Sms> smsList = null;
 		try {
 			smsList = smsOp.getList();
-		} catch (OHServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (OHServiceException ohServiceException) {
+			LOGGER.error(ohServiceException.getMessage(), ohServiceException);
 		}
 		LOGGER.debug("Found {} SMS to send", smsList.size());
 		

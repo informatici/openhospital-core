@@ -108,8 +108,8 @@ public class PrintReceipt {
 			} else {
 				LOGGER.debug("printer was not found.");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
 	
@@ -166,12 +166,12 @@ public class PrintReceipt {
 			brStream.close();
 			frStream.close();
 
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (PrintException e) {
-			e.printStackTrace();
+		} catch (FileNotFoundException fileNotFoundException) {
+			LOGGER.error(fileNotFoundException.getMessage(), fileNotFoundException);
+		} catch (IOException ioException) {
+			LOGGER.error(ioException.getMessage(), ioException);
+		} catch (PrintException printException) {
+			LOGGER.error(printException.getMessage(), printException);
 		}
 	}
 	
@@ -184,8 +184,8 @@ public class PrintReceipt {
 			List pages = jasperPrint.getPages();
 			JasperPrintManager.printPages(jasperPrint, 0, pages.size()-1, !TxtPrinter.USE_DEFAULT_PRINTER);
 			
-		} catch (JRException e) {
-			e.printStackTrace();
+		} catch (JRException jrException) {
+			LOGGER.error(jrException.getMessage(), jrException);
 		}
 	}
 	

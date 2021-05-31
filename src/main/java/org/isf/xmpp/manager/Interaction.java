@@ -80,10 +80,10 @@ public class Interaction {
 
 		try {
 			chat.sendMessage(message);
-		} catch (XMPPException e) {
-			e.printStackTrace();
-		}catch (Exception e) {
-			e.printStackTrace();
+		} catch (XMPPException xmppException) {
+			LOGGER.error(xmppException.getMessage(), xmppException);
+		}catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
 
@@ -109,14 +109,14 @@ public class Interaction {
 		OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(userID);
 		try {
 			transfer.sendFile(file, "msg");
-		} catch (XMPPException e) {
-			e.printStackTrace();
+		} catch (XMPPException xmppException) {
+			LOGGER.error(xmppException.getMessage(), xmppException);
 		}
 		LOGGER.debug("Transfer status: {}, {}", transfer.isDone(), transfer.getStatus());
 
-		if(transfer.isDone())
+		if (transfer.isDone())
 			LOGGER.debug("Transfer successfully completed!");
-		if(transfer.getStatus().equals(Status.error))
+		if (transfer.getStatus().equals(Status.error))
 			LOGGER.debug("Error while transferring: {}", transfer.getError());
 
 	}
