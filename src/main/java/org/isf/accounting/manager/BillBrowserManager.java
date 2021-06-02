@@ -88,27 +88,27 @@ public class BillBrowserManager {
         
 		if (billDate.after(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.newbill.billsinfuturenotallowed"), 
+	        		MessageBundle.getMessage("angal.newbill.billsinthefuturearenotallowed.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (lastPay.after(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.newbill.payementinthefuturenotallowed"), 
+	        		MessageBundle.getMessage("angal.newbill.payementsinthefuturearenotallowed.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (billDate.after(firstPay)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.newbill.billdateafterfirstpayment"), 
+	        		MessageBundle.getMessage("angal.newbill.billdateaisfterthefirstpayment.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (bill.getPatName().isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.newbill.pleaseinsertanameforthepatient"), 
+	        		MessageBundle.getMessage("angal.newbill.pleaseinsertanameforthepatient.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (bill.getStatus().equals("C") && bill.getBalance() != 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.newbill.youcannotcloseabillwithoutstandingbalance"), 
+	        		MessageBundle.getMessage("angal.newbill.abillwithanoutstandingbalancecannotbeclosed.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if(!errors.isEmpty()){

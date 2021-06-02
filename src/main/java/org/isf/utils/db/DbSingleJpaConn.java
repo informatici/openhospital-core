@@ -47,7 +47,7 @@ public class DbSingleJpaConn {
 			try {
 				connection = createConnection();
 			} catch (Exception e){
-				String message = MessageBundle.getMessage("angal.utils.dbserverconnectionfailure");
+				String message = MessageBundle.getMessage("angal.utils.databaseserverstoppedornetworkfailure.msg");
 				LOGGER.error(">> {}", message);
                 throw new OHException(message, e);
 			}

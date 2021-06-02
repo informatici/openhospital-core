@@ -190,7 +190,7 @@ public class TimeTools {
 	 */
 	public static String getFormattedAge(Date birthDate) {
 		GregorianCalendar birthday = new GregorianCalendar();
-		String pattern = MessageBundle.getMessage("angal.common.agepattern");
+		String pattern = MessageBundle.getMessage("angal.agepattern.txt");
 		String age = "";
 		if (birthDate != null) {
 			birthday.setTime(birthDate);
@@ -433,7 +433,7 @@ public class TimeTools {
 	@Deprecated
 	public static String getConvertedString(GregorianCalendar time) {
 		if (time == null) {
-			return MessageBundle.getMessage("angal.malnutrition.nodate");
+			return MessageBundle.getMessage("angal.malnutrition.nodate.msg");
 		}
 		String string = String.valueOf(time.get(Calendar.DAY_OF_MONTH));
 		string += '/' + String.valueOf(time.get(Calendar.MONTH) + 1);

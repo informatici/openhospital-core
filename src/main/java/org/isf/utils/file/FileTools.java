@@ -188,8 +188,7 @@ public class FileTools {
 				throw new NumberFormatException();
 			}
 		} catch (NumberFormatException e) {
-			throw new OHException(MessageBundle.getMessage("angal.dicom.unknownsizeformatpleasesetdicommaxsizeproperty") +
-					" (" + string + ')');
+			throw new OHException(MessageBundle.formatMessage("angal.dicom.unknownsizeformatpleasesetdicommaxsizeproperty.fmt.msg", string));
 		}
 		return size;
 	}

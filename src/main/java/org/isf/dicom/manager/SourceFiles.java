@@ -147,9 +147,9 @@ public class SourceFiles extends Thread {
 		for (File value : files) {
 			if (!value.isDirectory()) {
 				if (!checkSize(value)) {
-					throw new OHDicomException(new OHExceptionMessage("DICOM",
-							MessageBundle.getMessage("angal.dicom.afileinthefolderistoobigpleasesetdicommaxsizeproperty") +
-									" (" + DicomManagerFactory.getMaxDicomSize() + ")",
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.formatMessage("angal.dicom.afileinthefolderistoobigpleasesetdicommaxsizeindicomproperties.fmt.msg",
+									DicomManagerFactory.getMaxDicomSize()),
 							OHSeverityLevel.ERROR));
 				}
 				num++;
@@ -277,11 +277,13 @@ public class SourceFiles extends Thread {
 					}
 
 				} catch (DicomCodingException dce) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"),
-							MessageBundle.getMessage("angal.dicom.load.err") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()),
+									OHSeverityLevel.ERROR));
 				} catch (IndexOutOfBoundsException ioe) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"),
-							MessageBundle.getMessage("angal.dicom.unknownformat") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName()),
+							OHSeverityLevel.ERROR));
 				}
 
 				imageInputStream.close();
@@ -300,14 +302,15 @@ public class SourceFiles extends Thread {
 				try {
 					originalImage = reader.read(0, param);
 				} catch (DicomCodingException | ConfigurationError dce) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"),
-							MessageBundle.getMessage("angal.dicom.load.err") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()),
+							OHSeverityLevel.ERROR));
 				}
-
 				imageInputStream.close();
 			} else {
 				throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						"format not supported", OHSeverityLevel.ERROR));
+						MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName()),
+						OHSeverityLevel.ERROR));
 			}
 
 			BufferedImage scaled = Scalr.resize(originalImage, 100);

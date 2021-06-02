@@ -200,7 +200,9 @@ public class Lot extends Auditable<String>
 		this.cost = cost;
 	}
 	public String toString(){
-		if(code==null)return MessageBundle.getMessage("angal.medicalstock.nolot");
+		if (code==null) {
+			return MessageBundle.getMessage("angal.medicalstock.nolot.txt");
+		}
 		return getCode();
 	}
 

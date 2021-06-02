@@ -99,14 +99,16 @@ public class PrintManager {
 					}
 					break;
 				case 1:
-					JasperExportManager.exportReportToPdfFile(jasperPrint,"rpt/PDF/"+JOptionPane.showInputDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectapathforthepdffile"),filename)+".pdf");
+					JasperExportManager.exportReportToPdfFile(jasperPrint,"rpt/PDF/"+
+							JOptionPane.showInputDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectapathforthepdffile.msg"), filename)
+							+".pdf");
 					break;
 				case 2:JasperPrintManager.printReport(jasperPrint, true);
 					break;
-				default:JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectacorrectaction"));
+				default:JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectacorrectaction.msg"));
 					break;
 				}
-			} else JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.notavalidfile"));
+			} else JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.notavalidfile.msg"));
 		} catch (JRException jrException) {
 			LOGGER.error(jrException.getMessage(), jrException);
 		}

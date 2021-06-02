@@ -63,49 +63,49 @@ public class WardBrowserManager {
 		String key = ward.getCode();
 		String description = ward.getDescription();
         List<OHExceptionMessage> errors = new ArrayList<>();
-        if(key.isEmpty() ){
+        if (key.isEmpty()) {
 	        errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.ward.pleaseinsertacode"), 
+	        		MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 	        		OHSeverityLevel.ERROR));
         }
-        if(key.length()>1){
+        if (key.length() > 1) {
 	        errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.ward.codetoolongmaxchars"), 
+	        		MessageBundle.getMessage("angal.common.thecodeistoolongmax1char.msg"),
 	        		OHSeverityLevel.ERROR));
         }
-        if(description.isEmpty() ){
+        if (description.isEmpty() ) {
             errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-            		MessageBundle.getMessage("angal.ward.pleaseinsertavaliddescription"), 
+            		MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"), 
             		OHSeverityLevel.ERROR));
         }
         if (ward.getBeds()<0) {
         	errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-            		MessageBundle.getMessage("angal.ward.bedsnumbermustbepositive"), 
+            		MessageBundle.getMessage("angal.ward.thenumberofbedsmustbepositive.msg"),
             		OHSeverityLevel.ERROR));
 		}
 		if (ward.getNurs()<0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-            		MessageBundle.getMessage("angal.ward.nursesnumbermustbepositive"), 
+            		MessageBundle.getMessage("angal.ward.thenumberofnursesmustbepositive.msg"),
             		OHSeverityLevel.ERROR));
 		}
 		if (ward.getDocs()<0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-            		MessageBundle.getMessage("angal.ward.doctorsnumbermustbepositive"), 
+            		MessageBundle.getMessage("angal.ward.thenumberofdoctorsmustbepositive.msg"),
             		OHSeverityLevel.ERROR));
 		}
 		if (!EmailValidator.isValid(ward.getEmail())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.common.emailmustbevalid"), 
+					MessageBundle.getMessage("angal.ward.theemailmustbevalid.msg"),
             		OHSeverityLevel.ERROR));
 		}
 		if (insert) {
-			if (isCodePresent(ward.getCode())){
+			if (isCodePresent(ward.getCode())) {
 				throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.common.codealreadyinuse"), 
+						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"), 
 						OHSeverityLevel.ERROR));
 			}
 		}
-		if(!errors.isEmpty()){
+		if (!errors.isEmpty()) {
 	        throw new OHDataValidationException(errors);
 	    }
     }
@@ -119,6 +119,7 @@ public class WardBrowserManager {
 	public ArrayList<Ward> getWards() throws OHServiceException {
 		return ioOperations.getWards(null);
 	}
+
 	public ArrayList<Ward> getWards(Ward ward) throws OHServiceException {
 		return ioOperations.getWards(ward.getCode());
 	}
@@ -176,12 +177,12 @@ public class WardBrowserManager {
 		if (noPatients > 0) {
 			
 			List<OHExceptionMessage> messages = new ArrayList<>();
+			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.info.title"),
+					MessageBundle.formatMessage("angal.ward.theselectedwardhaspatients.fmt.msg",noPatients),
+					OHSeverityLevel.INFO));
 			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"), 
-					MessageBundle.getMessage("angal.ward.selectedwardhaspatients1") +
-					' ' + noPatients + ' ' +
-					MessageBundle.getMessage("angal.ward.selectedwardhaspatients2"), OHSeverityLevel.INFO));
-			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"), 
-					MessageBundle.getMessage("angal.ward.pleasecheckinadmissionpatients"), OHSeverityLevel.ERROR));
+					MessageBundle.getMessage("angal.ward.pleasecheckinadmissionpatients.msg"),
+					OHSeverityLevel.ERROR));
 			throw new OHOperationNotAllowedException(messages);
 		}
 		return ioOperations.deleteWard(ward);
@@ -201,7 +202,7 @@ public class WardBrowserManager {
 	/**
 	 * Create default Maternity {@link Ward} as follow:
 	 * {'code' : "M",
-	 * 'Description' : MessageBundle.getMessage("angal.admission.maternity"),
+	 * 'Description' : MessageBundle.getMessage("angal.ward.maternity.txt"),
 	 * 'Telephone' : "234/52544",
 	 * 'Fax' : "54324/5424",
 	 * 'Mail' :  "maternity@stluke.org",
@@ -219,7 +220,7 @@ public class WardBrowserManager {
 	private Ward getDefaultMaternityWard() {
 		Ward maternity = new Ward(
 				"M",
-				MessageBundle.getMessage("angal.admission.maternity"),
+				MessageBundle.getMessage("angal.ward.maternity.txt").toUpperCase(),
 				"234/52544", //Telephone
 				"54324/5424", //Fax
 				"maternity@stluke.org",

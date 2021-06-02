@@ -68,12 +68,12 @@ public class MovStockInsertingManager {
 		GregorianCalendar lastDate = getLastMovementDate();
 		if (movDate.after(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medicalstock.multiplecharging.futuredatenotallowed"), //$NON-NLS-1$
+					MessageBundle.getMessage("angal.medicalstock.multiplecharging.adateinthefutureisnotallowed.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (lastDate != null && movDate.compareTo(lastDate) < 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medicalstock.multiplecharging.datebeforelastmovement"), //$NON-NLS-1$
+					MessageBundle.getMessage("angal.medicalstock.multiplecharging.datecannotbebeforelastmovementdate.msg"),
 					OHSeverityLevel.ERROR));
 		}
 
@@ -86,7 +86,7 @@ public class MovStockInsertingManager {
 		// Check Movement Type
 		if (movement.getType() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medicalstock.chooseatype"), //$NON-NLS-1$
+					MessageBundle.getMessage("angal.medicalstock.pleasechooseatype.msg"),
 					OHSeverityLevel.ERROR));
 		} else {
 			// Check supplier
@@ -94,14 +94,14 @@ public class MovStockInsertingManager {
 				Object supplier = movement.getSupplier();
 				if (supplier instanceof String) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.medicalstock.multiplecharging.pleaseselectasupplier"), //$NON-NLS-1$
+							MessageBundle.getMessage("angal.medicalstock.multiplecharging.pleaseselectasupplier.msg"),
 							OHSeverityLevel.ERROR));
 				}
 			} else {
 				Object ward = movement.getWard();
 				if (ward instanceof String) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.medicalstock.multipledischarging.pleaseselectaward"), //$NON-NLS-1$
+							MessageBundle.getMessage("angal.medicalstock.multipledischarging.pleaseselectaward.msg"),
 							OHSeverityLevel.ERROR));
 				}
 			}
@@ -110,14 +110,14 @@ public class MovStockInsertingManager {
 		// Check quantity
 		if (movement.getQuantity() == 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medicalstock.thequantitymustnotbezero"), //$NON-NLS-1$
+					MessageBundle.getMessage("angal.medicalstock.thequantitymustnotbezero.msg"),
 					OHSeverityLevel.ERROR));
 		}
 
 		// Check Medical
 		if (movement.getMedical() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medicalstock.chooseamedical"), //$NON-NLS-1$
+					MessageBundle.getMessage("angal.medicalstock.chooseamedical.msg"),
 					OHSeverityLevel.ERROR));
 		}
 
@@ -129,7 +129,7 @@ public class MovStockInsertingManager {
 			if (movement != null && movement.getType() != null && movement.getType().getType().contains("-") && movement.getQuantity() > lot
 					.getMainStoreQuantity()) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof"), //$NON-NLS-1$
+						MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof.msg"),
 						OHSeverityLevel.ERROR));
 			}
 
@@ -137,14 +137,14 @@ public class MovStockInsertingManager {
 			if (movement.getMedical() != null && !(medicalIds.isEmpty() || (medicalIds.size() == 1 && medicalIds.get(0).intValue() == movement
 					.getMedical().getCode().intValue()))) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.medicalstock.thislotreferstoanothermedical"), //$NON-NLS-1$
+						MessageBundle.getMessage("angal.medicalstock.thislotreferstoanothermedical.msg"),
 						OHSeverityLevel.ERROR));
 			}
 			if (GeneralData.LOTWITHCOST) {
 				BigDecimal cost = lot.getCost();
 				if (cost == null || cost.doubleValue() <= 0.) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.medicalstock.multiplecharging.zerocostsnotallowed"), //$NON-NLS-1$
+							MessageBundle.getMessage("angal.medicalstock.multiplecharging.zerocostsarenotallowed.msg"),
 							OHSeverityLevel.ERROR));
 				}
 			}
@@ -168,25 +168,25 @@ public class MovStockInsertingManager {
 
 			if (lot.getCode().length() >= 50) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.medicalstock.changethelotidbecauseitstoolong"), //$NON-NLS-1$
+						MessageBundle.getMessage("angal.medicalstock.thelotidistoolongmax50chars.msg"),
 						OHSeverityLevel.ERROR));
 			}
 
 			if (lot.getDueDate() == null) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.medicalstock.insertavalidduedate"), //$NON-NLS-1$
+						MessageBundle.getMessage("angal.medicalstock.insertavalidduedate.msg"),
 						OHSeverityLevel.ERROR));
 			}
 
 			if (lot.getPreparationDate() == null) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.medicalstock.insertavalidpreparationdate"), //$NON-NLS-1$
+						MessageBundle.getMessage("angal.medicalstock.insertavalidpreparationdate.msg"),
 						OHSeverityLevel.ERROR));
 			}
 
 			if (lot.getPreparationDate() != null && lot.getDueDate() != null && lot.getPreparationDate().compareTo(lot.getDueDate()) > 0) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.medicalstock.preparationdatecannotbelaterthanduedate"), //$NON-NLS-1$
+						MessageBundle.getMessage("angal.medicalstock.thepreparationdatecannotbyaftertheduedate.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}
@@ -202,14 +202,14 @@ public class MovStockInsertingManager {
 	 */
 	protected List<OHExceptionMessage> checkReferenceNumber(String referenceNumber) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		if (referenceNumber == null || referenceNumber.isEmpty()) { //$NON-NLS-1$
+		if (referenceNumber == null || referenceNumber.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medicalstock.multiplecharging.pleaseinsertareferencenumber"), //$NON-NLS-1$
+					MessageBundle.getMessage("angal.medicalstock.multiplecharging.pleaseinsertareferencenumber.msg"),
 					OHSeverityLevel.ERROR));
 		} else {
 			if (refNoExists(referenceNumber)) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.medicalstock.multiplecharging.theinsertedreferencenumberalreadyexists"), //$NON-NLS-1$
+						MessageBundle.getMessage("angal.medicalstock.multiplecharging.theinsertedreferencenumberalreadyexists.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}
@@ -325,7 +325,7 @@ public class MovStockInsertingManager {
 			} catch (OHServiceException e) {
 				List<OHExceptionMessage> errors = e.getMessages();
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						mov.getMedical() != null ? mov.getMedical().getDescription() : "no description",
+						mov.getMedical() != null ? mov.getMedical().getDescription() : MessageBundle.getMessage("angal.medicalstock.nodescription.txt"),
 						OHSeverityLevel.ERROR));
 				throw new OHDataValidationException(errors);
 			}

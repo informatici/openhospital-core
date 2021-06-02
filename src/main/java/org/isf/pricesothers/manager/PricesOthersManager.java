@@ -95,14 +95,14 @@ public class PricesOthersManager {
 	protected void validatePricesOthers(PricesOthers pricesOthers) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
-		if (StringUtils.isEmpty(pricesOthers.getCode())) {  //$NON-NLS-1$
+		if (StringUtils.isEmpty(pricesOthers.getCode())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.pricesothers.pleaseinsertacode"),
+					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (StringUtils.isEmpty(pricesOthers.getDescription())) {  //$NON-NLS-1$
+		if (StringUtils.isEmpty(pricesOthers.getDescription())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.pricesothers.pleaseinsertadescription"),
+					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {

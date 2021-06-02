@@ -243,17 +243,17 @@ public class DiseaseBrowserManager {
 			String key = disease.getCode();
 			if (key.equals("")) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.disease.pleaseinsertacode"),
+						MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 						OHSeverityLevel.ERROR));
 			}
 			if (key.length() > 10) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.disease.codetoolongmaxchars"),
+						MessageBundle.getMessage("angal.common.thecodeistoolongmax10chars.msg"),
 						OHSeverityLevel.ERROR));
 			}
 			if (isCodePresent(key)) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.common.codealreadyinuse"),
+						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}
@@ -261,7 +261,7 @@ public class DiseaseBrowserManager {
 		if (disease.getDescription().equals("")) {
 			errors.add(
 					new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.disease.pleaseinsertavaliddescription"),
+							MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 							OHSeverityLevel.ERROR));
 		}
 
@@ -275,7 +275,7 @@ public class DiseaseBrowserManager {
 		if (lastDescription == null || !lastDescription.equals(disease.getDescription())) {
 			if (descriptionControl(disease.getDescription(), disease.getType().getCode())) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.disease.diseasealreadypresent"),
+						MessageBundle.getMessage("angal.disease.thediseasisealreadypresent.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}

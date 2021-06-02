@@ -114,7 +114,7 @@ public class TestTimeTools {
 		Date dateTime = new Date(121, 10, 3, 23, 59, 59);
 		// If message bundles were accessbile the age would look something like the pattern below
 		//assertThat(TimeTools.getFormattedAge(dateTime)).isEqualTo("{0}y {1}m {2}d");
-		assertThat(TimeTools.getFormattedAge(dateTime)).isEqualTo("angal.common.agepattern");
+		assertThat(TimeTools.getFormattedAge(dateTime)).isEqualTo("angal.agepattern.txt");
 	}
 
 	@Test
