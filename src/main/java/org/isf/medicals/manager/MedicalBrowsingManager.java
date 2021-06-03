@@ -279,7 +279,7 @@ public class MedicalBrowsingManager {
 					MessageBundle.formatMessage("angal.medicals.thepairtypemedicalalreadyexists.fmt.msg", medical.getType().getDescription(), medical.toString()),
 					OHSeverityLevel.ERROR));
 		} else if (!ignoreSimilar && !similarMedicals.isEmpty()) {
-			StringBuilder message = new StringBuilder(MessageBundle.getMessage("angal.medicals.theinsertmedicalisalreadyinuse.msg")).append('\n');
+			StringBuilder message = new StringBuilder(MessageBundle.getMessage("angal.medicals.theinsertedmedicalisalreadyinuse.msg")).append('\n');
 			for (Medical med : similarMedicals) {
 				message.append('[').append(med.getType().getDescription()).append("] ");
 				if (!med.getProd_code().isEmpty())
