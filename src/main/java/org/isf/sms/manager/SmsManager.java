@@ -60,13 +60,13 @@ public class SmsManager {
 		String text = sms.getSmsText();
 
 		if (!number.matches(NUMBER_REGEX)) {
-			errors.add(new OHExceptionMessage("numberError",
-					MessageBundle.getMessage("angal.sms.pleaseinsertavalidtelephonenumber"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.sms.pleaseinsertavalidtelephonenumber.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (text.isEmpty()) {
-			errors.add(new OHExceptionMessage("emptyTextError",
-					MessageBundle.getMessage("angal.sms.pleaseinsertatext"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.sms.pleaseinsertatextmessage.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {
@@ -94,15 +94,8 @@ public class SmsManager {
 		String text = smsToSend.getSmsText();
 		int textLenght = text.length();
 		if (textLenght > MAX_LENGHT && !split) {
-
-			StringBuilder message = new StringBuilder();
-			message.append(MessageBundle.getMessage("angal.sms.themessageislongerthen"))
-					.append(" ")
-					.append(MAX_LENGHT)
-					.append(" ")
-					.append(MessageBundle.getMessage("angal.sms.chars"));
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					message.toString(),
+					MessageBundle.formatMessage("angal.sms.themessageislongerthencharacters.fmt.msg", MAX_LENGHT),
 					OHSeverityLevel.ERROR));
 
 		} else if (textLenght > MAX_LENGHT && split) {

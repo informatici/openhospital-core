@@ -160,24 +160,24 @@ public class PriceListManager {
 	protected void validatePriceList(PriceList priceList) throws OHDataValidationException {
 		java.util.List<OHExceptionMessage> errors = new ArrayList<>();
 
-		if (StringUtils.isEmpty(priceList.getCode())) { //$NON-NLS-1$
+		if (StringUtils.isEmpty(priceList.getCode())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.priceslist.pleaseinsertacode"),
+					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (StringUtils.isEmpty(priceList.getName())) { //$NON-NLS-1$
+		if (StringUtils.isEmpty(priceList.getName())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.priceslist.pleaseinsertaname"),
+					MessageBundle.getMessage("angal.priceslist.pleaseinsertanameforthelist.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (StringUtils.isEmpty(priceList.getDescription())) { //$NON-NLS-1$
+		if (StringUtils.isEmpty(priceList.getDescription())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.priceslist.pleaseinsertadescription"),
+					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (StringUtils.isEmpty(priceList.getCurrency())) { //$NON-NLS-1$
+		if (StringUtils.isEmpty(priceList.getCurrency())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.priceslist.pleaseinsertacurrency"),
+					MessageBundle.getMessage("angal.priceslist.pleaseinsertacurrency.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {

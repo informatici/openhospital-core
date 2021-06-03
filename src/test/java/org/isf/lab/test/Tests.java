@@ -448,7 +448,7 @@ public class Tests extends OHCoreTestCase {
 		Integer id = _setupTestLaboratory(false);
 		Laboratory foundLaboratory = labIoOperationRepository.findOne(id);
 		// TODO: if resource bundles are made available this setResults() needs to change
-		foundLaboratory.setResult("angal.lab.multipleresults");
+		foundLaboratory.setResult("angal.lab.multipleresults.txt");
 		ArrayList<String> labRow = new ArrayList<>();
 		labManager.updateLaboratory(foundLaboratory, labRow);
 		String description = foundLaboratory.getExam().getDescription();
@@ -461,7 +461,7 @@ public class Tests extends OHCoreTestCase {
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 		// TODO: if resource bundles are made available this value needs to change
-		assertThat(laboratories.get(0).getResult()).isEqualTo("angal.lab.allnegative");
+		assertThat(laboratories.get(0).getResult()).isEqualTo("angal.lab.allnegative.txt");
 	}
 
 	@Test
@@ -474,7 +474,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 		// TODO: if resource bundles are made available this setResults() needs to change
-		laboratory.setResult("angal.lab.multipleresults");
+		laboratory.setResult("angal.lab.multipleresults.txt");
 		labIoOperationRepository.saveAndFlush(laboratory);
 		LaboratoryRow laboratoryRow = testLaboratoryRow.setup(laboratory, false);
 		labRowIoOperationRepository.saveAndFlush(laboratoryRow);
@@ -488,7 +488,7 @@ public class Tests extends OHCoreTestCase {
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(laboratory.getCode());
 		// TODO: if resource bundles are made available this value needs to change
-		assertThat(laboratories.get(0).getResult()).isEqualTo("angal.lab.multipleresults,TestDescription");
+		assertThat(laboratories.get(0).getResult()).isEqualTo("angal.lab.multipleresults.txt,TestDescription");
 	}
 
 	@Test
@@ -622,7 +622,7 @@ public class Tests extends OHCoreTestCase {
 		assertThat(result).isTrue();
 		// TODO: if resource bundles are made available this must change
 		Laboratory foundLaboratory = labIoOperationRepository.findOne(laboratory.getCode());
-		assertThat(laboratory.getResult()).isEqualTo("angal.lab.multipleresults");
+		assertThat(laboratory.getResult()).isEqualTo("angal.lab.multipleresults.txt");
 	}
 
 	@Test
@@ -1222,25 +1222,25 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetMaterialKeyFound() {
 		// TODO: if resource bundles are made available this needs to change
-		assertThat(labManager.getMaterialKey("angal.lab.film")).isEqualTo("film");
+		assertThat(labManager.getMaterialKey("angal.lab.film.txt")).isEqualTo("film");
 	}
 
 	@Test
 	public void testMgrGetMaterialTranslatedNotThere() {
 		// TODO: if resource bundles are made available this needs to change
-		assertThat(labManager.getMaterialTranslated("notThere")).isEqualTo("angal.lab.undefined");
+		assertThat(labManager.getMaterialTranslated("notThere")).isEqualTo("angal.lab.undefined.txt");
 	}
 
 	@Test
 	public void testMgrGetMaterialTranslatedNull() {
 		// TODO: if resource bundles are made available this needs to change
-		assertThat(labManager.getMaterialTranslated(null)).isEqualTo("angal.lab.undefined");
+		assertThat(labManager.getMaterialTranslated(null)).isEqualTo("angal.lab.undefined.txt");
 	}
 
 	@Test
 	public void testMgrGetMaterialTranslatedFound() {
 		// TODO: if resource bundles are made available this needs to change
-		assertThat(labManager.getMaterialTranslated("film")).isEqualTo("angal.lab.film");
+		assertThat(labManager.getMaterialTranslated("film")).isEqualTo("angal.lab.film.txt");
 	}
 
 	@Test
@@ -1248,7 +1248,7 @@ public class Tests extends OHCoreTestCase {
 		assertThat(labManager.getMaterialList()).hasSize(9);
 		ArrayList materailList = labManager.getMaterialList();
 		// TODO: if resource bundles are made available this needs to change
-		assertThat(materailList.get(0)).isEqualTo("angal.lab.undefined");
+		assertThat(materailList.get(0)).isEqualTo("angal.lab.undefined.txt");
 		materailList.remove(0);   // Remove the default value that is placed first in the list even if out of order
 		assertThat(materailList).isSorted();
 	}

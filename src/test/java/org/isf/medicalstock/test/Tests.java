@@ -1007,7 +1007,7 @@ public class Tests extends OHCoreTestCase {
 		Lot lot = lotIoOperationRepository.findOne(code);
 		lot.setCode(null);
 		// TODO: if resource bundles are available this string test needs to change
-		assertThat(lot).hasToString("angal.medicalstock.nolot");
+		assertThat(lot).hasToString("angal.medicalstock.nolot.txt");
 		lot.setCode(code);
 		assertThat(lot).hasToString(code);
 	}
@@ -1077,7 +1077,7 @@ public class Tests extends OHCoreTestCase {
 		int code = _setupTestMovement(false);
 		Movement movement = movementIoOperationRepository.findOne(code);
 		// TODO: if resource bundles are available this string test needs to change
-		assertThat(movement).hasToString("angal.medicalstock.medical:TestDescriptionangal.medicalstock.type:TestDescriptionangal.common.quantity:10");
+		assertThat(movement).hasToString("angal.movement.tostring.fmt.txt");
 	}
 
 	@Test

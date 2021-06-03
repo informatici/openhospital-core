@@ -57,23 +57,23 @@ public class DeliveryResultTypeBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (key.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.dlvrrestype.pleaseinsertacode"),
+					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (key.length() > 1) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.dlvrrestype.codetoolongmaxchar"),
+					MessageBundle.getMessage("angal.common.thecodeistoolongmax1char.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (description.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.dlvrrestype.pleaseinsertavaliddescription"),
+					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
 			if (isCodePresent(key)) {
 				throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.common.codealreadyinuse"),
+						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}

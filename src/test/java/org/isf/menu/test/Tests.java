@@ -659,15 +659,6 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testUserMenuItemGetDescription() throws Exception {
-		UserMenuItem userMenuItem = testUserMenu.setup(true);
-		// TODO: this will need to change if resource bundles are made available.
-		assertThat(userMenuItem.getDescription())
-				.isEqualTo("angal.menu.usermenuitemZangal.menu.labelstooltipshortTestButtonLabel-TestAltLabel-TestToolTip-Y...\n" +
-						"angal.menu.submenuTestMySubmenuangal.menu.classTestMyClass...\n angal.menu.issubmenutrueangal.menu.isactivetrueangal.menu.inposition11");
-	}
-
-	@Test
 	public void testUserMenuItemHashCode() throws Exception {
 		UserMenuItem userMenuItem = testUserMenu.setup(false);
 		userMenuItem.setCode("someCode");

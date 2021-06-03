@@ -277,7 +277,7 @@ public class ExcelExporter {
 
 			}
 		} catch (SQLException e) {
-			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
+			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction.msg"), e);
 		}
 		output.close();
 	}
@@ -440,7 +440,7 @@ public class ExcelExporter {
 			fileStream.close();
 
 		} catch (SQLException e) {
-			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
+			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction.msg"), e);
 		}
 
 	}
@@ -613,7 +613,7 @@ public class ExcelExporter {
 			fileStream.close();
 
 		} catch (SQLException e) {
-			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
+			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction.msg"), e);
 		}
 
 	}

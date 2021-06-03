@@ -55,24 +55,24 @@ public class OHServiceExceptionTranslator {
 			return pjp.proceed();
 		} catch (DataIntegrityViolationException e) {
 			throw new OHDataIntegrityViolationException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere"),
+					MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere.msg"),
 					OHSeverityLevel.ERROR));
 		} catch (InvalidDataAccessResourceUsageException e) {
 			throw new OHInvalidSQLException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"),
+					MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"),
 					OHSeverityLevel.ERROR));
 		} catch (CannotCreateTransactionException e) {
 			throw new OHDBConnectionException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"),
+					MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"),
 					OHSeverityLevel.ERROR));
     	} catch (ObjectOptimisticLockingFailureException e) {
 			throw new OHDataLockFailureException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.sql.thedatahasbeenupdatedbysomeoneelse"),
+					MessageBundle.getMessage("angal.sql.thedatahasbeenupdatedbysomeoneelse.msg"),
 					OHSeverityLevel.ERROR));
     	} catch (Throwable throwable) {
     		LOGGER.error(throwable.getMessage(), throwable);
     		throw new OHServiceException(throwable, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-				    MessageBundle.getMessage("angal.sql.anunexpectederroroccurredpleasecheckthelogs"),
+				    MessageBundle.getMessage("angal.sql.anunexpectederroroccurredpleasecheckthelogs.msg"),
 				    OHSeverityLevel.ERROR));
 		}
 	}

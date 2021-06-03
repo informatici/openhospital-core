@@ -108,9 +108,9 @@ public class MovBrowserManager {
 			return getMovements();
 		}
 
-		check(movFrom, movTo, "angal.medicalstock.chooseavalidmovementdate");
-		check(lotPrepFrom, lotPrepTo, "angal.medicalstock.chooseavalidmovementdate");
-		check(lotDueFrom, lotDueTo, "angal.medicalstock.chooseavalidduedate");
+		check(movFrom, movTo, "angal.medicalstock.chooseavalidmovementdate.msg");
+		check(lotPrepFrom, lotPrepTo, "angal.medicalstock.chooseavalidmovementdate.msg");
+		check(lotDueFrom, lotDueTo, "angal.medicalstock.chooseavalidduedate.msg");
 
 		return ioOperations.getMovements(medicalCode, medicalType, wardId, movType, movFrom, movTo, lotPrepFrom, lotPrepTo, lotDueFrom, lotDueTo);
 	}
@@ -120,7 +120,7 @@ public class MovBrowserManager {
 			if (!(from == null && to == null)) {
 				throw new OHDataValidationException(
 						new OHExceptionMessage(
-								MessageBundle.getMessage("angal.hospital"),
+								MessageBundle.getMessage("angal.common.error.title"),
 								MessageBundle.getMessage(errMsgKey),
 								OHSeverityLevel.ERROR
 						)

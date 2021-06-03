@@ -58,28 +58,28 @@ public class MedicaldsrstockmovTypeBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (key.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medstockmovtype.pleaseinsertacode"),
+					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (key.length() > 10) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medstockmovtype.codetoolongmaxchar"),
+					MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 10),
 					OHSeverityLevel.ERROR));
 		}
 		if (key2.length() > 2) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medstockmovtype.typetoolongmaxchars"),
+					MessageBundle.getMessage("angal.medstockmovtype.thetypeistoolongmax2chars.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (description.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medstockmovtype.pleaseinsertavaliddescription"),
+					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
 			if (isCodePresent(key)) {
 				throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.common.codealreadyinuse"),
+						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}

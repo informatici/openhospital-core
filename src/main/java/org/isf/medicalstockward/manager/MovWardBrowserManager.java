@@ -68,12 +68,12 @@ public class MovWardBrowserManager {
 		}
 		if (description.isEmpty() && !mov.isPatient()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseinsertadescriptionfortheinternaluse"),
+					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseinsertadescriptionfortheinternaluse.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (mov.getMedical() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug"),
+					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {
@@ -176,7 +176,7 @@ public class MovWardBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (newMovements.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug"),
+					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug.msg"),
 					OHSeverityLevel.ERROR));
 			throw new OHDataValidationException(errors);
 		}

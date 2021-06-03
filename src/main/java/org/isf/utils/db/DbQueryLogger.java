@@ -65,9 +65,9 @@ public class DbQueryLogger {
         }catch (OHException e){
             throw e;
     	} catch (SQLException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e); //, e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
     	} catch (Exception e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), e); 
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"), e); 
     	}
     }
     
@@ -98,9 +98,9 @@ public class DbQueryLogger {
         }catch (OHException e){
             throw e;
     	} catch (SQLException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
     	} catch (Exception e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), e); 
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"), e); 
     	}
     	return results;
     }
@@ -126,11 +126,11 @@ public class DbQueryLogger {
         }catch (OHException e){
             throw e;
     	} catch (SQLIntegrityConstraintViolationException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere.msg"), e);
     	} catch (SQLException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
     	} catch (Exception e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), e); 
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"), e); 
     	}
     }
     
@@ -161,11 +161,11 @@ public class DbQueryLogger {
         }catch (OHException e){
             throw e;
     	} catch (SQLIntegrityConstraintViolationException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere.msg"), e);
     	} catch (SQLException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
     	} catch (Exception e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), e); 
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"), e); 
     	}
     }
     
@@ -192,9 +192,9 @@ public class DbQueryLogger {
         }catch (OHException e){
             throw e;
     	} catch (SQLException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
     	} catch (Exception e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), e); 
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"), e); 
     	}
     }
     
@@ -226,9 +226,9 @@ public class DbQueryLogger {
         }catch (OHException e){
             throw e;
     	} catch (SQLException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
     	} catch (Exception e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), e); 
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"), e); 
     	}
     }
     
@@ -252,9 +252,9 @@ public class DbQueryLogger {
         }catch (OHException e){
     	    throw e;
     	} catch (SQLException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
     	} catch (Exception e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), e); 
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"), e); 
     	}
     }
     

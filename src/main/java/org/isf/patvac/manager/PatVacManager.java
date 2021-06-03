@@ -139,17 +139,17 @@ public class PatVacManager {
 
 		if (patientVaccine.getVaccineDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.patvac.pleaseinsertvaccinedate"),
+					MessageBundle.getMessage("angal.patvac.pleaseinsertvaccinedate.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (patientVaccine.getProgr() < 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.patvac.pleaseinsertavalidprogressive"),
+					MessageBundle.getMessage("angal.patvac.pleaseinsertavalidprogressive.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (patientVaccine.getVaccine() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.patvac.pleaseselectavaccine"),
+					MessageBundle.getMessage("angal.patvac.pleaseselectavaccine.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (patientVaccine.getPatient() == null

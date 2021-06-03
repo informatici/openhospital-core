@@ -43,11 +43,11 @@ public class OHExceptionTranslator {
 		try {
 			return pjp.proceed();
 		} catch (DataIntegrityViolationException e) {
-			throw new OHException(MessageBundle.getMessage("angal.sql.constraintviolation"), e);
+			throw new OHException(MessageBundle.getMessage("angal.sql.constraintviolation.msg"), e);
 		} catch (InvalidDataAccessResourceUsageException e) {
-			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
+			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
 		} catch (CannotCreateTransactionException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), e); 
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"), e); 
     	} catch (Throwable e) {
 			throw new OHException(e.getMessage(), e);
 		}

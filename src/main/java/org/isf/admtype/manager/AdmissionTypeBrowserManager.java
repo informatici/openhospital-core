@@ -108,25 +108,26 @@ public class AdmissionTypeBrowserManager {
 		String key = admissionType.getCode();
 		if (key.equals("")) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.admtype.pleaseinsertacode"),
+					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (key.length() > 10) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.admtype.codetoolongmaxchars"),
+					MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 10),
 					OHSeverityLevel.ERROR));
 		}
 
 		if (insert) {
 			if (isCodePresent(key)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"), MessageBundle.getMessage("angal.common.codealreadyinuse"),
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}
 		if (admissionType.getDescription().equals("")) {
 			errors.add(
 					new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.admtype.pleaseinsertavaliddescription"),
+							MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 							OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {
