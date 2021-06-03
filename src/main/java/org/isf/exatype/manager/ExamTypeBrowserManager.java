@@ -59,7 +59,7 @@ public class ExamTypeBrowserManager {
 		}
 		if (key.length() > 2) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.common.thecodeistoolongmax2chars.msg"),
+					MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 2),
 					OHSeverityLevel.ERROR));
 		}
 		if (description.isEmpty()) {

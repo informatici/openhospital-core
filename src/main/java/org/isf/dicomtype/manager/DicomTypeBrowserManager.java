@@ -83,7 +83,7 @@ public class DicomTypeBrowserManager {
 		}
 		if (key.length() > 3) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.common.thecodeistoolongmax3chars.msg"),
+					MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 3),
 					OHSeverityLevel.ERROR));
 		}
 		if (description.isEmpty()) {

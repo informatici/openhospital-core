@@ -58,7 +58,7 @@ public class DbSingleConn {
 			try {
 				pConn = createConnection();
 			} catch (CommunicationsException ce) {
-				String message = MessageBundle.getMessage("angal.utils.databaseserverstoppedornetworkfailure.msg");
+				String message = MessageBundle.getMessage("angal.sql.databaseserverstoppedornetworkfailure.msg");
 				LOGGER.error(">> {}", message);
 				JOptionPane.showMessageDialog(null, message);
 				System.exit(1);
