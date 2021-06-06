@@ -1,9 +1,3 @@
-package org.isf.sms.providers.skebby.model;
-
-import java.io.Serializable;
-
-import com.google.gson.annotations.SerializedName;
-
 /*
  * Open Hospital (www.open-hospital.org) Copyright © 2006-2021 Informatici Senza
  * Frontiere (info@informaticisenzafrontiere.org)
@@ -26,6 +20,12 @@ import com.google.gson.annotations.SerializedName;
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package org.isf.sms.providers.skebby.model;
+
+import java.io.Serializable;
+
+import com.google.gson.annotations.SerializedName;
+
 public class SckebbySmsResponse implements Serializable {
 
 	private static final long serialVersionUID = -4382262278493341625L;

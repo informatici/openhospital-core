@@ -1,4 +1,3 @@
-package org.isf.sms.providers.skebby;
 /*
  * Open Hospital (www.open-hospital.org) Copyright © 2006-2021 Informatici Senza
  * Frontiere (info@informaticisenzafrontiere.org)
@@ -21,6 +20,8 @@ package org.isf.sms.providers.skebby;
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package org.isf.sms.providers.skebby;
+
 public class SkebbyGatewayUtil {
 
 	public static String extractUserKey(String userKeyAccessToken) {

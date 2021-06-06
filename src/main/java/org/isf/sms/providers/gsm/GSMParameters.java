@@ -1,5 +1,3 @@
-package org.isf.sms.providers.gsm;
-
 /*
  * Open Hospital (www.open-hospital.org)
  * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
@@ -21,6 +19,7 @@ package org.isf.sms.providers.gsm;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package org.isf.sms.providers.gsm;
 
 import org.isf.generaldata.ConfigurationProperties;
 
