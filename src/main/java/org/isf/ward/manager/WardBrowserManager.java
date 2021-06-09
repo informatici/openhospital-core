@@ -169,7 +169,7 @@ public class WardBrowserManager {
 	public boolean deleteWard(Ward ward) throws OHServiceException {
 		if (ward.getCode().equals("M")) {
 			throw new OHOperationNotAllowedException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.ward.cannotdeletematernityward"),
+					MessageBundle.getMessage("angal.ward.cannotdeletematernityward.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		int noPatients = admManager.getUsedWardBed(ward.getCode());
