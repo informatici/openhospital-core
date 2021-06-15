@@ -368,7 +368,7 @@ public class AdmissionBrowserManager {
 			}
 
 			GregorianCalendar visitDate = admission.getVisitDate();
-			if (admission.getWard().getCode().equalsIgnoreCase("M")) {
+			if (operationDate != null && admission.getWard().getCode().equalsIgnoreCase("M")) {
 				GregorianCalendar limit;
 				if (admission.getDisDate() == null) {
 					limit = today;
