@@ -1,5 +1,3 @@
-package org.isf.sms.service;
-
 /*
  * Open Hospital (www.open-hospital.org) Copyright © 2006-2021 Informatici Senza
  * Frontiere (info@informaticisenzafrontiere.org)
@@ -22,6 +20,8 @@ package org.isf.sms.service;
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package org.isf.sms.service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;

@@ -137,6 +137,10 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 
 	@Override
 	public boolean sendSMS(Sms sms) {
+		return this.sendSMS(sms, false);
+	}
+
+	public boolean sendSMS(Sms sms, boolean debug) {
 		if (connected) {
 			LOGGER.debug("Sending SMS ({}) to: {}", sms.getSmsId(), sms.getSmsNumber());
 			LOGGER.debug("Sending text: {}", sms.getSmsText());
@@ -151,33 +155,46 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 
 				// SET SMS MODE
 				LOGGER.trace(GSMParameters.CMGF);
-				outputStream.write(GSMParameters.CMGF.getBytes());
+				if (!debug)
+					outputStream.write(GSMParameters.CMGF.getBytes());
 				Thread.sleep(1000);
+
+				// SET SMS PARAMETERS
+//				logger.trace(SmsParameters.CSMP);
+//				outputStream.write(SmsParameters.CSMP.getBytes());
+//				Thread.sleep(1000);
 
 				// SET SMS NUMBER
 				LOGGER.trace(build_CMGS.toString());
-				outputStream.write(build_CMGS.toString().getBytes());
+				if (!debug)
+					outputStream.write(build_CMGS.toString().getBytes());
 				Thread.sleep(1000);
 
 				// SET SMS TEXT
 				LOGGER.trace(text);
-				outputStream.write(text.getBytes());
+				if (!debug)
+					outputStream.write(text.getBytes());
 				Thread.sleep(1000);
 
 				// SEND SMS
-				outputStream.write("\u001A".getBytes()); // Ctrl-Z();
+				if (!debug)
+					outputStream.write("\u001A".getBytes()); // Ctrl-Z();
 				Thread.sleep(1000);
+
+				// FLUSH STREAM
+//				if (!debug) outputStream.flush(); // missing callback function on Windows OS
+//				Thread.sleep(1000);
 
 				if (!sent) {
 					sent = true; // for next message but return false (not sent)
 					return false;
 				}
 
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException ioException) {
+				LOGGER.error(ioException.getMessage(), ioException);
 				return false;
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			} catch (InterruptedException interruptedException) {
+				LOGGER.error(interruptedException.getMessage(), interruptedException);
 				return false;
 			}
 			return true;
@@ -217,9 +234,8 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 		List<Sms> smsList = null;
 		try {
 			smsList = smsOp.getList();
-		} catch (OHServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (OHServiceException ohServiceException) {
+			LOGGER.error(ohServiceException.getMessage(), ohServiceException);
 		}
 		LOGGER.debug("Found {} SMS to send", smsList.size());
 
@@ -227,7 +243,7 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 		GSMGatewayService sender = new GSMGatewayService();
 		boolean result = false;
 		if (sender.initialize()) {
-			result = sender.sendSMS(smsList.get(0));
+			result = sender.sendSMS(smsList.get(0), true);
 		}
 		LOGGER.debug("{}", result);
 	}
