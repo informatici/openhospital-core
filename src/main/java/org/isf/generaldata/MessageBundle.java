@@ -21,6 +21,7 @@
  */
 package org.isf.generaldata;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -50,7 +51,6 @@ public class MessageBundle {
 		} catch (MissingResourceException e) {
 			LOGGER.error(">> no resource bundle found.");
 			System.exit(1);
-			//throw new RuntimeException("no resource bundle found.");
 		}
 	}
 
@@ -83,5 +83,42 @@ public class MessageBundle {
 			initialize();
 		}
 		return resourceBundle;
+	}
+
+	/**
+	 * Given a single character string (e.g., "S", "C", etc.) return an int that is used for
+	 * the setMemonic() method associated for example with a Button object.
+	 *
+	 * This works because: VK_A thru VK_Z are the same as ASCII 'A' thru 'Z' (0x41 - 0x5A)
+	 *
+	 * @param key a MessageBundle key (ending in ".key")
+	 * @return the int value associated with the string
+	 */
+	public static int getMnemonic(String key) {
+		return getMessage(key).toUpperCase().charAt(0);
+	}
+
+	/**
+	 * Given a key to an entry in the resource bundle and a series of objects to place into the
+	 * message, return the formatted or compound message.
+	 *
+	 * For example, given the resource bundle strings:
+	 *    English:   User {0} added new item {1} to group {2}.
+	 *    Italian:   L'utente {0} ha aggiunto un nuovo elemento {1} al gruppo {2}.
+	 *    German:    Das Objekt {1} wurde von Benutzer {0} zur Gruppe {2} hinzugefügt.
+	 *
+	 * Unlike concatenating the various components together which would work for English and Italian,
+	 * it would fail for German (note the ordering of the subsitutable strings).
+	 * Thus the code provides the arguments and the translator is free to order them as dicdated by the language.
+	 *
+	 * @param key a MessageBundle key (that contains ".fmt." in the key name) for a string that contains n-substituables.
+	 * @param args a list of n-arguments that matches the substituables in the message string
+	 * @return the string where @code{args} have been replaces in the original string
+	 */
+	public static String formatMessage(String key, Object... args) {
+		String message = getMessage(key);
+		MessageFormat messageFormat = new MessageFormat("");
+		messageFormat.applyPattern(message);
+		return messageFormat.format(args);
 	}
 }

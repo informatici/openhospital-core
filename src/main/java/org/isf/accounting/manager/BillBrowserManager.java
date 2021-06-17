@@ -87,28 +87,28 @@ public class BillBrowserManager {
 		bill.setUpdate(upDate);
         
 		if (billDate.after(today)) {
-			errors.add(new OHExceptionMessage("billAfterTodayError", 
-	        		MessageBundle.getMessage("angal.newbill.billsinfuturenotallowed"), 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+	        		MessageBundle.getMessage("angal.newbill.billsinthefuturearenotallowed.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (lastPay.after(today)) {
-			errors.add(new OHExceptionMessage("paymentAfterTodayError", 
-	        		MessageBundle.getMessage("angal.newbill.payementinthefuturenotallowed"), 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+	        		MessageBundle.getMessage("angal.newbill.payementsinthefuturearenotallowed.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (billDate.after(firstPay)) {
-			errors.add(new OHExceptionMessage("billAfterFirstPaymentError", 
-	        		MessageBundle.getMessage("angal.newbill.billdateafterfirstpayment"), 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+	        		MessageBundle.getMessage("angal.newbill.billdateaisfterthefirstpayment.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (bill.getPatName().isEmpty()) {
-			errors.add(new OHExceptionMessage("patientNameEmptyError", 
-	        		MessageBundle.getMessage("angal.newbill.pleaseinsertanameforthepatient"), 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+	        		MessageBundle.getMessage("angal.newbill.pleaseinsertanameforthepatient.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (bill.getStatus().equals("C") && bill.getBalance() != 0) {
-			errors.add(new OHExceptionMessage("closeWithBalanceError", 
-	        		MessageBundle.getMessage("angal.newbill.youcannotcloseabillwithoutstandingbalance"), 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+	        		MessageBundle.getMessage("angal.newbill.abillwithanoutstandingbalancecannotbeclosed.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if(!errors.isEmpty()){

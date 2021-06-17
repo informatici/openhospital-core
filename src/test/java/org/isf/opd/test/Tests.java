@@ -159,8 +159,8 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 
 		Disease disease = testDisease.setup(diseaseType, false);
-		disease.setCode("angal.opd.alldisease");
-		disease.getType().setCode("angal.opd.alltype");
+		disease.setCode("angal.opd.alldiseases.txt");
+		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Opd opd = testOpd.setup(patient, disease, true);
 		GregorianCalendar now = new GregorianCalendar();
@@ -181,8 +181,8 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 
 		Disease disease = testDisease.setup(diseaseType, false);
-		disease.setCode("angal.opd.alldisease");
-		disease.getType().setCode("angal.opd.alltype");
+		disease.setCode("angal.opd.alldiseases.txt");
+		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Opd opd = testOpd.setup(patient, disease, true);
 		// set date to be today
@@ -219,8 +219,8 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 
 		Disease disease = testDisease.setup(diseaseType, false);
-		disease.setCode("angal.opd.alldisease");
-		disease.getType().setCode("angal.opd.alltype");
+		disease.setCode("angal.opd.alldiseases.txt");
+		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Opd opd = testOpd.setup(patient, disease, true);
 		GregorianCalendar date = new GregorianCalendar();
@@ -398,8 +398,8 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 
 		Disease disease = testDisease.setup(diseaseType, false);
-		disease.setCode("angal.opd.alldisease");
-		disease.getType().setCode("angal.opd.alltype");
+		disease.setCode("angal.opd.alldiseases.txt");
+		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Opd opd = testOpd.setup(patient, disease, true);
 		GregorianCalendar now = new GregorianCalendar();
@@ -420,8 +420,8 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 
 		Disease disease = testDisease.setup(diseaseType, false);
-		disease.setCode("angal.opd.alldisease");
-		disease.getType().setCode("angal.opd.alltype");
+		disease.setCode("angal.opd.alldiseases.txt");
+		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Opd opd = testOpd.setup(patient, disease, true);
 		// set date to be today
@@ -459,8 +459,8 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 
 		Disease disease = testDisease.setup(diseaseType, false);
-		disease.setCode("angal.opd.alldisease");
-		disease.getType().setCode("angal.opd.alltype");
+		disease.setCode("angal.opd.alldiseases.txt");
+		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Opd opd = testOpd.setup(patient, disease, true);
 		GregorianCalendar date = new GregorianCalendar();

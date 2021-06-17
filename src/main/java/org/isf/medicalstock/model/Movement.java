@@ -22,9 +22,9 @@
 package org.isf.medicalstock.model;
 
 import java.util.GregorianCalendar;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -37,11 +37,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.supplier.model.Supplier;
+import org.isf.utils.db.Auditable;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -207,13 +207,7 @@ public class Movement extends Auditable<String>
 //    }
         
 	public String toString(){
-		return MessageBundle.getMessage("angal.medicalstock.medical")+
-				":"+
-				medical.toString()+
-				MessageBundle.getMessage("angal.medicalstock.type")+
-				":"+
-				type.toString()+
-				MessageBundle.getMessage("angal.common.quantity")+":"+quantity;
+		return MessageBundle.formatMessage("angal.movement.tostring.fmt.txt", medical.toString(), type.toString(), quantity);
 	}
 	
 	@Override

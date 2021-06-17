@@ -78,7 +78,7 @@ public class OpdIoOperations {
 		}
 
 
-		return getOpdList(MessageBundle.getMessage("angal.opd.alltype"),MessageBundle.getMessage("angal.opd.alldisease"),dateFrom,dateTo,0,0,'A','A');
+		return getOpdList(MessageBundle.getMessage("angal.common.alltypes.txt"),MessageBundle.getMessage("angal.opd.alldiseases.txt"),dateFrom,dateTo,0,0,'A','A');
 	}
 	
 	/**

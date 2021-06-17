@@ -86,12 +86,11 @@ public class UserBrowsingManager {
 	public boolean newUser(User user) throws OHServiceException {
 		String username = user.getUserName();
 		if (ioOperations.isUserNamePresent(username)) {
-			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.menu.theuser") +
-							' ' + username + ' ' + MessageBundle.getMessage("angal.menu.isalreadypresent"), OHSeverityLevel.ERROR));
-		} else {
-			return ioOperations.newUser(user);
+			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.userbrowser.theuseralreadyexists.fmt.msg", username),
+					OHSeverityLevel.ERROR));
 		}
+		return ioOperations.newUser(user);
 	}
 
 	/**
@@ -122,8 +121,9 @@ public class UserBrowsingManager {
 	 */
 	public boolean deleteUser(User user) throws OHServiceException {
 		if (user.getUserName().equals("admin"))
-			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.menu.youcantdeleteadminuser"), OHSeverityLevel.ERROR));
+			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.userbrowser.theadminusercannotbedeleted.msg"),
+					OHSeverityLevel.ERROR));
 		return ioOperations.deleteUser(user);
 	}
 
@@ -185,14 +185,15 @@ public class UserBrowsingManager {
 	 */
 	public boolean deleteGroup(UserGroup aGroup) throws OHServiceException {
 		if (aGroup.getCode().equals("admin")) {
-			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.menu.youcantdeletegroupadmin"), OHSeverityLevel.WARNING));
+			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.groupsbrowser.theadmingroupcannotbedeleted.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		ArrayList<User> users = getUser(aGroup.getCode());
 		if (users != null && !users.isEmpty()) {
-
-			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.menu.thisgrouphasusers"), OHSeverityLevel.WARNING));
+			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.groupsbrowser.thisgrouphasusersandcannotbedeleted.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		return ioOperations.deleteGroup(aGroup);
 	}
@@ -206,9 +207,9 @@ public class UserBrowsingManager {
 	public boolean newUserGroup(UserGroup aGroup) throws OHServiceException {
 		String code = aGroup.getCode();
 		if (ioOperations.isGroupNamePresent(code)) {
-			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.menu.thegroup") +
-							' ' + code + ' ' + MessageBundle.getMessage("angal.menu.isalreadypresent"), OHSeverityLevel.ERROR));
+			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.groupsbrowser.thegroupalreadyexists.fmt.msg", code),
+					OHSeverityLevel.ERROR));
 		} else {
 			return ioOperations.newUserGroup(aGroup);
 		}

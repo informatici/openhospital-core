@@ -27,6 +27,8 @@ import java.util.HashMap;
 
 import org.isf.utils.db.DbSingleJpaConn;
 import org.isf.utils.exception.OHServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -35,6 +37,9 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 public class PrintLabels {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PrintLabels.class);
+
 	public static final int toDisplay = 0;
 	public static final int toPdf = 1;
 	public static final int toPrint = 2;
@@ -58,8 +63,8 @@ public class PrintLabels {
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
 		JasperPrintManager.printReport(jasperPrint, true);
 
-	} catch (Exception e) {
-		e.printStackTrace();
+	} catch (Exception exception) {
+		LOGGER.error(exception.getMessage(), exception);
 	}
 		
 		

@@ -81,10 +81,10 @@ public class DicomManagerFactory {
 				if (instance instanceof FileSystemDicomManager) {
 					((FileSystemDicomManager) instance).setDir(props);
 				}
-			} catch (Exception e) {
-				//Any exception
-				throw new OHDicomException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-						props.getProperty("dicom.manager.impl") + " " + MessageBundle.getMessage("angal.dicom.manager.noimpl"), OHSeverityLevel.ERROR));
+			} catch (Exception exception) {
+				throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.formatMessage("angal.dicommanager.errorwiththedicomimplmentationclass.fmt.msg", props.getProperty("dicom.manager.impl")),
+						OHSeverityLevel.ERROR));
 			}
 		}
 
@@ -95,12 +95,11 @@ public class DicomManagerFactory {
 		Logger logger = LoggerFactory.getLogger("DICOM init");
 		try {
 			props = ConfigurationProperties.loadPropertiesFile(FILE_PROPERTIES, logger);
-			
-		} catch (Exception exc) {
+		} catch (Exception exception) {
 			logger.error(">> {} file not found.", FILE_PROPERTIES);
-			throw new OHDicomException(exc, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.dicom.manager.err") + " " + exc.getMessage(), OHSeverityLevel.ERROR));
+			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
+					OHSeverityLevel.ERROR));
 		}
 	}
-
 }

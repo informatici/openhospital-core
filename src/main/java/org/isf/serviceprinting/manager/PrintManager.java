@@ -33,6 +33,8 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.hospital.manager.HospitalBrowsingManager;
 import org.isf.hospital.model.Hospital;
 import org.isf.utils.exception.OHServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,6 +50,9 @@ import net.sf.jasperreports.view.JasperViewer;
 
 @Component
 public class PrintManager {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PrintManager.class);
+
 	public static final int toDisplay = 0;
 
 	public static final int toPdf = 1;
@@ -85,25 +90,27 @@ public class PrintManager {
 					else { 
 						String PDFfile = "rpt/PDF/" + filename + ".pdf";
 						JasperExportManager.exportReportToPdfFile(jasperPrint, PDFfile);
-						try{
+						try {
 							Runtime rt = Runtime.getRuntime();
 							rt.exec(GeneralData.VIEWER +" "+ PDFfile);
-						} catch(Exception e){
-							e.printStackTrace();
+						} catch(Exception exception) {
+							LOGGER.error(exception.getMessage(), exception);
 						}
 					}
 					break;
 				case 1:
-					JasperExportManager.exportReportToPdfFile(jasperPrint,"rpt/PDF/"+JOptionPane.showInputDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectapathforthepdffile"),filename)+".pdf");
+					JasperExportManager.exportReportToPdfFile(jasperPrint,"rpt/PDF/"+
+							JOptionPane.showInputDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectapathforthepdffile.msg"), filename)
+							+".pdf");
 					break;
 				case 2:JasperPrintManager.printReport(jasperPrint, true);
 					break;
-				default:JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectacorrectaction"));
+				default:JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectacorrectaction.msg"));
 					break;
 				}
-			}else JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.notavalidfile"));
-		} catch (JRException e) {
-			e.printStackTrace();
+			} else JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.notavalidfile.msg"));
+		} catch (JRException jrException) {
+			LOGGER.error(jrException.getMessage(), jrException);
 		}
 	}
 }

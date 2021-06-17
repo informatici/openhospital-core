@@ -47,6 +47,8 @@ import javax.validation.constraints.NotNull;
 
 import org.isf.dicomtype.model.DicomType;
 import org.isf.utils.db.Auditable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -70,6 +72,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 })
 public class FileDicom extends Auditable<String>
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileDicom.class);
+
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "DM_FILE_ID")
@@ -265,8 +269,8 @@ public class FileDicom extends Auditable<String>
 			Blob blob = new SerialBlob(byteArray);
 			this.dicomData = blob;
 
-		} catch (Exception ecc) {
-			ecc.printStackTrace();
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
 
@@ -631,8 +635,8 @@ public class FileDicom extends Auditable<String>
 			Blob blob = new SerialBlob(byteArray);
 			this.dicomThumbnail = blob;
 
-		} catch (Exception ecc) {
-			ecc.printStackTrace();
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
 
@@ -646,8 +650,8 @@ public class FileDicom extends Auditable<String>
 		BufferedImage bi = null;
 		try {
 			bi = ImageIO.read(dicomThumbnail.getBinaryStream());
-		} catch (Exception ecc) {
-			ecc.printStackTrace();
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 		return bi;
 	}
