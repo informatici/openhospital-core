@@ -52,6 +52,10 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 	private static final String KEY_PASSWORD = "skebby-gateway-service.password";
 	private static final String KEY_USERNAME = "skebby-gateway-service.username";
 	private static final String KEY_MESSAGE_TYPE = "skebby-gateway-service.message-type";
+
+	private static final String KEY_USER_KEY = "skebby-gateway-service.userKey";
+	private static final String KEY_ACCESS_TOKEN = "skebby-gateway-service.accessToken";
+
 	private static final String KEY_SENDER = "skebby-gateway-service.sender";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SkebbyGatewayService.class);
@@ -66,7 +70,7 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 	public boolean sendSMS(Sms sms) {
 		String userKeyAccessToken = loginUserKeySessionKey();
 		String userKey = SkebbyGatewayUtil.extractUserKey(userKeyAccessToken);
-		String sessionKey = SkebbyGatewayUtil.extractSessionKey(userKeyAccessToken);
+		String sessionKeyOrAccessToken = SkebbyGatewayUtil.extractSessionKey(userKeyAccessToken);
 		MessageType messageType = null;
 
 		final String msgType = this.smsProperties.getProperty(KEY_MESSAGE_TYPE);
@@ -82,7 +86,11 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 		System.out.println("Sending...");
 		SckebbySmsResponse result = null;
 		try {
-			result = httpClient.sendSms(userKey, sessionKey, smsSendingRequest).getBody();
+			if (this.isAccessTokenAuthentication()) {
+				result = httpClient.sendSmsWithAccessToken(userKey, sessionKeyOrAccessToken, smsSendingRequest).getBody();
+			} else {
+				result = httpClient.sendSmsWithSessionKey(userKey, sessionKeyOrAccessToken, smsSendingRequest).getBody();
+			}
 		} catch (FeignException fe) {
 			// skebby replies with HTTP 400 when you have not more sms, so that we could have an exception
 			LOGGER.error("Gateway error!");
@@ -99,10 +107,24 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 	}
 
 	private String loginUserKeySessionKey() {
+		// USER_KEY and ACCESS_TOKEN avoids the login call every time we need to send sms
+		final String userKey = this.smsProperties.getProperty(KEY_USER_KEY);
+		final String token = this.smsProperties.getProperty(KEY_ACCESS_TOKEN);
+		if (userKey != null && !userKey.isBlank() && token != null && !token.isBlank()) {
+			return userKey + ";" + token;
+		}
+
 		final String username = this.smsProperties.getProperty(KEY_USERNAME);
 		final String password = this.smsProperties.getProperty(KEY_PASSWORD);
 		SkebbyGatewayRemoteService httpClient = buildHttlClient();
 		return httpClient.loginUserKeySessionKey(username, password).getBody();
+	}
+
+	private boolean isAccessTokenAuthentication() {
+		// if user defined these properties, then it means that we will retrieve data with ACCESS_TOKEN (which does not expires -> SESSION_KEY instead expires)
+		final String userKey = this.smsProperties.getProperty(KEY_USER_KEY);
+		final String token = this.smsProperties.getProperty(KEY_ACCESS_TOKEN);
+		return (userKey != null && !userKey.isBlank() && token != null && !token.isBlank());
 	}
 
 	@Override

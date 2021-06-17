@@ -92,14 +92,13 @@ public class SmsSender implements Runnable {
 			try {
 				Thread.sleep(delay * 1000);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				LOGGER.error(e.getMessage());
 			}
 		}
 	}
 
 	/**
-	 * @param running
-	 *            the running to set
+	 * @param running the running to set
 	 */
 	public void setRunning(boolean running) {
 		this.running = running;

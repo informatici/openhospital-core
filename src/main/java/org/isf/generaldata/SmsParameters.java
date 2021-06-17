@@ -44,12 +44,9 @@ public final class SmsParameters extends ConfigurationProperties {
 
 	private SmsParameters(String fileProperties) {
 		super(fileProperties);
-
 		TIMEOUT = myGetProperty("sms.gateway.thread.timeout", DEFAULT_TIMEOUT);
 		LOOP = myGetProperty("sms.gateway.thread.loop", DEFAULT_LOOP);
 		ICC = myGetProperty("sms.gateway.thread.icc", DEFAULT_ICC);
-		System.err.println(ICC);
-
 	}
 
 	public static SmsParameters getSmsParameters() {
