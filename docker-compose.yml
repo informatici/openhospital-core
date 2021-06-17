@@ -6,4 +6,4 @@
        dockerfile: Dockerfile-ohdb
       image: oh-core_database:latest
       ports:
-      - "3307:3306"
+      - "3306:3306"
