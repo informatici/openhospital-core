@@ -57,7 +57,7 @@ public class SmsSender implements Runnable {
 			try {
 				smsList = smsOp.getList();
 			} catch (OHServiceException e1) {
-				e1.printStackTrace();
+				LOGGER.error("Error list loading");
 			}
 			if (!smsList.isEmpty()) {
 				LOGGER.info("Found {} SMS to send", Integer.valueOf(smsList.size()));
@@ -71,7 +71,7 @@ public class SmsSender implements Runnable {
 								try {
 									smsOp.saveOrUpdate(sms);
 								} catch (OHServiceException e) {
-									e.printStackTrace();
+									LOGGER.error("Failed saving: " + e.getMessage());
 								}
 								LOGGER.debug("Sent");
 							} else {
@@ -98,7 +98,8 @@ public class SmsSender implements Runnable {
 	}
 
 	/**
-	 * @param running the running to set
+	 * @param running
+	 *            the running to set
 	 */
 	public void setRunning(boolean running) {
 		this.running = running;
