@@ -38,7 +38,8 @@ public interface SkebbyGatewayRemoteService {
 
 	public static final String AUTH_TOKEN = "Authorization";
 	public static final String USER_KEY = "user_key";
-	public static final String SESSION_KEY = "session_key";
+	public static final String SESSION_KEY = "Session_key";
+	public static final String ACCESS_TOKEN = "Access_token";
 
 	// @formatter:off
 
@@ -49,7 +50,12 @@ public interface SkebbyGatewayRemoteService {
 	public ResponseEntity<String> loginUserKeyAccessToken(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password);
 
 	@PostMapping(value = "/API/v1.0/REST/sms", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<SckebbySmsResponse> sendSms(@RequestHeader(USER_KEY) String userKey, @RequestHeader(SESSION_KEY) String sessionKey,
+	public ResponseEntity<SckebbySmsResponse> sendSmsWithSessionKey(@RequestHeader(USER_KEY) String userKey, @RequestHeader(SESSION_KEY) String sessionKey,
+					@RequestBody SckebbySmsRequest smsBody);
+	
+	
+	@PostMapping(value = "/API/v1.0/REST/sms", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<SckebbySmsResponse> sendSmsWithAccessToken(@RequestHeader(USER_KEY) String userKey, @RequestHeader(ACCESS_TOKEN) String accessToken,
 					@RequestBody SckebbySmsRequest smsBody);
 
 	// @formatter:on

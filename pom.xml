@@ -19,9 +19,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.framework.version>4.3.28.RELEASE</spring.framework.version>
 		<license.maven.plugin.version>4.1</license.maven.plugin.version>
-		<!-- <spring-cloud-starter-openfeign>2.0.0.RELEASE</spring-cloud-starter-openfeign> -->
 		<spring-cloud-starter-openfeign>1.4.7.RELEASE</spring-cloud-starter-openfeign>
-		<!-- <spring-cloud-starter-netflix-ribbon>2.0.0.RELEASE</spring-cloud-starter-netflix-ribbon> -->
 	</properties>
 
 	<build>
@@ -86,12 +84,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-dependency-plugin</artifactId> 
-				<executions> <execution> <id>copy-dependencies</id> <phase>prepare-package</phase> 
-				<goals> <goal>copy-dependencies</goal> </goals> <configuration> <outputDirectory>${project.build.directory}/OpenHospital20/lib</outputDirectory> 
-				<overWriteReleases>false</overWriteReleases> <overWriteSnapshots>false</overWriteSnapshots> 
-				<overWriteIfNewer>true</overWriteIfNewer> </configuration> </execution> </executions> 
-				</plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -192,7 +184,7 @@
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
-			<version>6.16.0</version>
+			<version>6.17.0</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.lowagie</groupId>
@@ -483,8 +475,6 @@
 			<name>Legacy Dependencies Repository</name>
 			<url>file:${project.basedir}/repo</url>
 		</repository>
-		<!-- <repository> <id>dcm4che</id> <name>Dcm4Che Repository</name> <url>https://www.dcm4che.org/maven2/</url> 
-			<snapshots> <enabled>false</enabled> </snapshots> </repository> -->
 		<repository>
 			<id>JFrog</id>
 			<name>Atlassian JFrog></name>
