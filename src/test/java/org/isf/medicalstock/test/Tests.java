@@ -31,8 +31,6 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
@@ -59,14 +57,12 @@ import org.isf.medtype.test.TestMedicalType;
 import org.isf.supplier.model.Supplier;
 import org.isf.supplier.service.SupplierIoOperationRepository;
 import org.isf.supplier.test.TestSupplier;
-import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
 import org.isf.ward.test.TestWard;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -93,7 +89,6 @@ public class Tests extends OHCoreTestCase {
 	@Rule
 	public final SpringMethodRule smr = new SpringMethodRule();
 
-	private static DbJpaUtil jpa;
 	private static TestLot testLot;
 	private static TestMovement testMovement;
 	private static TestMedical testMedical;
@@ -101,9 +96,6 @@ public class Tests extends OHCoreTestCase {
 	private static TestMovementType testMovementType;
 	private static TestWard testWard;
 	private static TestSupplier testSupplier;
-
-	@Autowired
-	private EntityManager entityManager;
 
 	@Autowired
 	MedicalStockIoOperations medicalStockIoOperation;
@@ -140,7 +132,6 @@ public class Tests extends OHCoreTestCase {
 
 	@BeforeClass
 	public static void setUpClass() {
-		jpa = new DbJpaUtil();
 		testLot = new TestLot();
 		testMovement = new TestMovement();
 		testMedical = new TestMedical();
@@ -153,13 +144,6 @@ public class Tests extends OHCoreTestCase {
 	@Before
 	public void setUp() throws OHException {
 		cleanH2InMemoryDb();
-		jpa.open();
-		testLot.setup(false);
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		jpa.close();
 	}
 
 	@AfterClass
@@ -252,7 +236,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoNewAutomaticDischargingMovementLotQuantityLessMovementQuantity() throws Exception {
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
-		foundMovement.getLot().setQuantity(10);
+		foundMovement.getLot().setMainStoreQuantity(10);
 		foundMovement.setQuantity(100);
 		assertThat(medicalStockIoOperation.newAutomaticDischargingMovement(foundMovement)).isTrue();
 	}
@@ -260,35 +244,44 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoNewAutomaticDischargingMovementDifferentLots() throws Exception {
 		int code = _setupTestMovement(false);
-		Movement foundMovement = (Movement) jpa.find(Movement.class, code);
+		Movement foundMovement = movementIoOperationRepository.findOne(code);
 
 		Medical medical = foundMovement.getMedical();
-		MovementType medicalType = foundMovement.getType();
+		MovementType movementType = foundMovement.getType();
 		Ward ward = foundMovement.getWard();
 		Supplier supplier = foundMovement.getSupplier();
-		Lot lot = foundMovement.getLot(); //we are going to charge same lot
+		Lot lot2 = testLot.setup(medical, false); //we are going to create a second lot
+		lot2.setCode("second");
 		Movement newMovement = new Movement(
 				medical,
-				medicalType,
-				ward,
-				lot,
+				movementType,
+				null,
+				lot2,
 				new GregorianCalendar(),
-				10, // new lot with 10 quantitye
+				7, // new lot with 10 quantity
 				supplier,
 				"newReference");
 		medicalStockIoOperation.newMovement(newMovement);
 
+		MovementType dischargeMovementType = testMovementType.setup(false); //prepare discharge movement
+		dischargeMovementType.setCode("discharge");
+		dischargeMovementType.setType("-");
+		medicalStockMovementTypeIoOperationRepository.saveAndFlush(dischargeMovementType);
+
 		Movement dischargeMovement = new Movement(
 				medical,
-				medicalType,
+				dischargeMovementType,
 				ward,
 				null, // automatic lot selection
 				new GregorianCalendar(),
 				15,    // quantity of 15 should use first lot of 10 + second lot of 5
 				null,
 				"newReference2");
+		boolean automaticLotMode = GeneralData.AUTOMATICLOT_OUT;
+		GeneralData.AUTOMATICLOT_OUT = true;
 		medicalStockIoOperation.newAutomaticDischargingMovement(dischargeMovement);
-
+		GeneralData.AUTOMATICLOT_OUT = automaticLotMode;
+		
 		ArrayList<Lot> lots = medicalStockIoOperation.getLotsByMedical(medical);
 		assertThat(lots).hasSize(1); // first lot should be 0 quantity and stripped by the list
 	}
@@ -1014,7 +1007,7 @@ public class Tests extends OHCoreTestCase {
 		Lot lot = lotIoOperationRepository.findOne(code);
 		lot.setCode(null);
 		// TODO: if resource bundles are available this string test needs to change
-		assertThat(lot).hasToString("angal.medicalstock.nolot");
+		assertThat(lot).hasToString("angal.medicalstock.nolot.txt");
 		lot.setCode(code);
 		assertThat(lot).hasToString(code);
 	}
@@ -1061,11 +1054,11 @@ public class Tests extends OHCoreTestCase {
 		assertThat(lot2).isEqualTo(lot);
 		assertThat(lot).isEqualTo(lot2);
 
-		lot2.setQuantity(1);
+		lot2.setMainStoreQuantity(1);
 		assertThat(lot2).isNotEqualTo(lot);
 		assertThat(lot).isNotEqualTo(lot2);
 
-		lot2.setQuantity(lot.getQuantity());
+		lot2.setMainStoreQuantity(lotIoOperationRepository.getMainStoreQuantity(lot));
 		assertThat(lot2).isEqualTo(lot);
 		assertThat(lot).isEqualTo(lot2);
 	}
@@ -1084,7 +1077,7 @@ public class Tests extends OHCoreTestCase {
 		int code = _setupTestMovement(false);
 		Movement movement = movementIoOperationRepository.findOne(code);
 		// TODO: if resource bundles are available this string test needs to change
-		assertThat(movement).hasToString("angal.medicalstock.medical:TestDescriptionangal.medicalstock.type:TestDescriptionangal.common.quantity:10");
+		assertThat(movement).hasToString("angal.movement.tostring.fmt.txt");
 	}
 
 	@Test
@@ -1121,7 +1114,11 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private String _setupTestLot(boolean usingSet) throws OHException {
-		Lot lot = testLot.setup(usingSet);
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Lot lot = testLot.setup(medical, usingSet);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
 		lotIoOperationRepository.saveAndFlush(lot);
 		return lot.getCode();
 	}
@@ -1136,27 +1133,16 @@ public class Tests extends OHCoreTestCase {
 		Medical medical = testMedical.setup(medicalType, false);
 		MovementType movementType = testMovementType.setup(false);
 		Ward ward = testWard.setup(false);
-		Lot lot = testLot.setup(false);
+		Lot lot = testLot.setup(medical, false);
 		Supplier supplier = testSupplier.setup(false);
 		Movement movement = testMovement.setup(medical, movementType, ward, lot, supplier, usingSet);
-		// TODO: Should not this be the same as the jpa persist statements below?
-		//  It appears not to be
-		//		supplierIoOperationRepository.saveAndFlush(supplier);
-		//		lotIoOperationRepository.saveAndFlush(lot);
-		//		wardIoOperationRepository.saveAndFlush(ward);
-		//		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
-		//		medicalsIoOperationRepository.saveAndFlush(medical);
-		//		medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
-		//		movementIoOperationRepository.saveAndFlush(movement);
-		jpa.beginTransaction();
-		jpa.persist(supplier);
-		jpa.persist(lot);
-		jpa.persist(ward);
-		jpa.persist(medicalType);
-		jpa.persist(medical);
-		jpa.persist(movementType);
-		jpa.persist(movement);
-		jpa.commitTransaction();
+		supplierIoOperationRepository.saveAndFlush(supplier);
+		wardIoOperationRepository.saveAndFlush(ward);
+		medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		lotIoOperationRepository.saveAndFlush(lot);
+		movementIoOperationRepository.saveAndFlush(movement);
 		return movement.getCode();
 	}
 

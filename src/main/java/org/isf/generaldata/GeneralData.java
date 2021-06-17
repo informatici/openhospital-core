@@ -39,7 +39,7 @@ package org.isf.generaldata;
  */
 public final class GeneralData extends ConfigurationProperties {
 	
-	private static final String FILE_PROPERTIES = "generalData.properties";
+	private static final String FILE_PROPERTIES = "settings.properties";
 	private static final boolean EXIT_ON_FAIL = true;
 	
 	private final boolean SINGLEUSER;

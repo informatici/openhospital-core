@@ -103,12 +103,13 @@ public class AgeTypeBrowserManager {
 		for (int i = 1; i < ageTypes.size(); i++) {
 			if (ageTypes.get(i).getFrom() <= ageTypes.get(i - 1).getTo()) {
 				errors.add(
-						new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.agetype.rangesoverlappleasecheck"),
+						new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+								MessageBundle.getMessage("angal.agetype.overlappedrangespleasecheckthevalues.msg"),
 								OHSeverityLevel.ERROR));
 			}
 			if (ageTypes.get(i).getFrom() - ageTypes.get(i - 1).getTo() > 1) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-						MessageBundle.getMessage("angal.agetype.rangesnotdefinedpleasecheck"),
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.agetype.somerangesarenotdefinedpleasecheckthevalues.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}

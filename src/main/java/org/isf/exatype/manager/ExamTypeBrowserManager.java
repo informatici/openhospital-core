@@ -53,24 +53,24 @@ public class ExamTypeBrowserManager {
 		String description = examType.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (key.isEmpty()) {
-			errors.add(new OHExceptionMessage("codeEmptyError",
-					MessageBundle.getMessage("angal.exatype.pleaseinsertacode"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (key.length() > 2) {
-			errors.add(new OHExceptionMessage("codeTooLongError",
-					MessageBundle.getMessage("angal.exatype.codetoolongmaxchar"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 2),
 					OHSeverityLevel.ERROR));
 		}
 		if (description.isEmpty()) {
-			errors.add(new OHExceptionMessage("descriptionEmptyError",
-					MessageBundle.getMessage("angal.exatype.pleaseinsertavaliddescription"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
 			if (isCodePresent(examType.getCode())) {
-				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null,
-						MessageBundle.getMessage("angal.common.codealreadyinuse"),
+				throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}

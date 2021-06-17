@@ -57,29 +57,29 @@ public class MedicaldsrstockmovTypeBrowserManager {
 		String description = movementType.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (key.isEmpty()) {
-			errors.add(new OHExceptionMessage("codeEmptyError",
-					MessageBundle.getMessage("angal.medstockmovtype.pleaseinsertacode"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (key.length() > 10) {
-			errors.add(new OHExceptionMessage("codeTooLongError",
-					MessageBundle.getMessage("angal.medstockmovtype.codetoolongmaxchar"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 10),
 					OHSeverityLevel.ERROR));
 		}
 		if (key2.length() > 2) {
-			errors.add(new OHExceptionMessage("codeTypeTooLongError",
-					MessageBundle.getMessage("angal.medstockmovtype.typetoolongmaxchars"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.medstockmovtype.thetypeistoolongmax2chars.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (description.isEmpty()) {
-			errors.add(new OHExceptionMessage("descriptionEmptyError",
-					MessageBundle.getMessage("angal.medstockmovtype.pleaseinsertavaliddescription"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
 			if (isCodePresent(key)) {
-				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null,
-						MessageBundle.getMessage("angal.common.codealreadyinuse"),
+				throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}
@@ -152,6 +152,6 @@ public class MedicaldsrstockmovTypeBrowserManager {
 	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
 	 */
 	public MovementType getMovementType(String code) {
-		return ioOperations.getMovementType(code);
+		return ioOperations.findOneByCode(code);
 	}
 }

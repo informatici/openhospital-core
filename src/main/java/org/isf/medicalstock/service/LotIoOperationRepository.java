@@ -24,6 +24,7 @@ package org.isf.medicalstock.service;
 import java.util.List;
 
 import org.isf.medicalstock.model.Lot;
+import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,8 +33,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LotIoOperationRepository extends JpaRepository<Lot, String> {
 
-	@Query("select l from Lot l left join l.movements m where m.medical.code = :medical group by l.code order by l.dueDate")
-	List<Lot> findByMovements_MedicalOrderByDueDate(@Param("medical") int medicalCode);
+	@Query("select l from Lot l where l.medical.code = :medical order by l.dueDate")
+	List<Lot> findByMedicalOrderByDueDate(@Param("medical") int medicalCode);
+	
+	@Query("select coalesce(sum(case when m.type.type like '+%' then m.quantity else -m.quantity end), 0) from Movement m where m.lot = :lot")
+	Integer getMainStoreQuantity(@Param("lot") Lot lot);
+	
+	@Query("select coalesce(sum(w.in_quantity - w.out_quantity),0) FROM MedicalWard w WHERE w.id.lot = :lot")
+	Double getWardsTotalQuantity(@Param("lot") Lot lot);
+	
+	@Query("select sum(w.in_quantity - w.out_quantity) FROM MedicalWard w WHERE w.id.lot = :lot and w.id.ward = :ward")
+	Double getQuantityByWard(@Param("lot") Lot lot, @Param("ward") Ward ward);
 
 	@Query(value = "select LT_ID_A,LT_PREP_DATE,LT_DUE_DATE,LT_COST,"
 			+ "SUM(IF(MMVT_TYPE LIKE '%+%',MMV_QTY,-MMV_QTY)) as quantity from "

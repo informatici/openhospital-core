@@ -458,9 +458,9 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMaritalTranslated() throws Exception {
 		resetHashMaps();
 		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
-		assertThat(patientBrowserManager.getMaritalTranslated(null)).isEqualTo("angal.patient.maritalstatusunknown");
-		assertThat(patientBrowserManager.getMaritalTranslated("someKeyNotInTheList")).isEqualTo("angal.patient.maritalstatusunknown");
-		assertThat(patientBrowserManager.getMaritalTranslated("married")).isEqualTo("angal.patient.maritalstatusmarried");
+		assertThat(patientBrowserManager.getMaritalTranslated(null)).isEqualTo("angal.patient.maritalstatusunknown.txt");
+		assertThat(patientBrowserManager.getMaritalTranslated("someKeyNotInTheList")).isEqualTo("angal.patient.maritalstatusunknown.txt");
+		assertThat(patientBrowserManager.getMaritalTranslated("married")).isEqualTo("angal.patient.maritalstatusmarried.txt");
 	}
 
 	@Test
@@ -469,7 +469,7 @@ public class Tests extends OHCoreTestCase {
 		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
 		assertThat(patientBrowserManager.getMaritalKey(null)).isEqualTo("undefined");
 		assertThat(patientBrowserManager.getMaritalKey("someKeyNotInTheList")).isEqualTo("undefined");
-		assertThat(patientBrowserManager.getMaritalKey("angal.patient.maritalstatusmarried")).isEqualTo("married");
+		assertThat(patientBrowserManager.getMaritalKey("angal.patient.maritalstatusmarried.txt")).isEqualTo("married");
 	}
 
 	@Test
@@ -483,9 +483,9 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetProfessionTranslated() throws Exception {
 		resetHashMaps();
 		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
-		assertThat(patientBrowserManager.getProfessionTranslated(null)).isEqualTo("angal.patient.profession.unknown");
-		assertThat(patientBrowserManager.getProfessionTranslated("someKeyNotInTheList")).isEqualTo("angal.patient.profession.unknown");
-		assertThat(patientBrowserManager.getProfessionTranslated("mining")).isEqualTo("angal.patient.profession.mining");
+		assertThat(patientBrowserManager.getProfessionTranslated(null)).isEqualTo("angal.patient.profession.unknown.txt");
+		assertThat(patientBrowserManager.getProfessionTranslated("someKeyNotInTheList")).isEqualTo("angal.patient.profession.unknown.txt");
+		assertThat(patientBrowserManager.getProfessionTranslated("mining")).isEqualTo("angal.patient.profession.mining.txt");
 	}
 
 	@Test
@@ -494,7 +494,7 @@ public class Tests extends OHCoreTestCase {
 		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
 		assertThat(patientBrowserManager.getProfessionKey(null)).isEqualTo("undefined");
 		assertThat(patientBrowserManager.getProfessionKey("someKeyNotInTheList")).isEqualTo("undefined");
-		assertThat(patientBrowserManager.getProfessionKey("angal.patient.profession.mining")).isEqualTo("mining");
+		assertThat(patientBrowserManager.getProfessionKey("angal.patient.profession.mining.txt")).isEqualTo("mining");
 	}
 
 	@Test

@@ -61,15 +61,20 @@ public class ExamBrowsingManager {
 		String key = exam.getCode();
 		String description = exam.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		if (key.isEmpty() || description.isEmpty()) {
-			errors.add(new OHExceptionMessage("codeAndOrDescriptionEmptyError",
-					MessageBundle.getMessage("angal.exa.pleaseinsertcodeoranddescription"),
+		if (key.isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
+					OHSeverityLevel.ERROR));
+		}
+		if (description.isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
 			if (isKeyPresent(exam)) {
-				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null,
-						MessageBundle.getMessage("angal.exa.changethecodebecauseisalreadyinuse"),
+				throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}

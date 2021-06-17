@@ -76,12 +76,12 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		List<Predicate> predicates = new ArrayList<>();
 
 		query.select(opd);
-		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.opd.alltype")))) {
+		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alltypes.txt")))) {
 			predicates.add(
 				cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
 			);
 		}
-		if(!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldisease"))) {
+		if (!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldiseases.txt"))) {
 			predicates.add(
 				cb.equal(opd.join("disease").get("code"), diseaseCode)
 			);

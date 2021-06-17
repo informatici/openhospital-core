@@ -102,10 +102,10 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 			        Thread.sleep(5000);
 			        
 				} catch (PortInUseException e) {
-					System.out.println("Port in use.");
-				} catch (Exception e) {
-					System.out.println("Failed to open port " + portId.getName());
-					e.printStackTrace();
+					LOGGER.error("Port in use.");
+				} catch (Exception exception) {
+					LOGGER.error("Failed to open port '{}'", portId.getName());
+					LOGGER.error(exception.getMessage(), exception);
 				} finally {
 					serialPort.close();
 				}
@@ -130,8 +130,8 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 				save(port);
 				System.exit(0);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ioException) {
+			LOGGER.error(ioException.getMessage(), ioException);
 		}
     }
 
@@ -144,11 +144,14 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	private int confirm(String port, String answer) throws HeadlessException {
 		try {
 			int ok = answer.indexOf("OK");
-			if (ok > 0) answer = answer.substring(2, ok - 3);
-				else return JOptionPane.NO_OPTION;
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("outofbound: '" + answer + "'");
+			if (ok > 0) {
+				answer = answer.substring(2, ok - 3);
+			} else {
+				return JOptionPane.NO_OPTION;
+			}
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
+			LOGGER.error("outofbound: '{}'", answer);
 		}
 		System.out.println(answer.trim());
 		
@@ -168,8 +171,8 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 			props.setProperty("PORT", port);
 			props.store(out, comment.toString());
 			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ioException) {
+			LOGGER.error(ioException.getMessage(), ioException);
 		}
 	}
 }

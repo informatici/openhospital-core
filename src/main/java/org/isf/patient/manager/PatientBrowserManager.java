@@ -149,11 +149,11 @@ public class PatientBrowserManager {
 
 	private void buildMaritalHashMap() {
 		maritalHashMap = new LinkedHashMap<>();
-		maritalHashMap.put("unknown", MessageBundle.getMessage("angal.patient.maritalstatusunknown"));
-		maritalHashMap.put("single", MessageBundle.getMessage("angal.patient.maritalstatussingle"));
-		maritalHashMap.put("married", MessageBundle.getMessage("angal.patient.maritalstatusmarried"));
-		maritalHashMap.put("divorced", MessageBundle.getMessage("angal.patient.maritalstatusdivorced"));
-		maritalHashMap.put("widowed", MessageBundle.getMessage("angal.patient.maritalstatuswidowed"));
+		maritalHashMap.put("unknown", MessageBundle.getMessage("angal.patient.maritalstatusunknown.txt"));
+		maritalHashMap.put("single", MessageBundle.getMessage("angal.patient.maritalstatussingle.txt"));
+		maritalHashMap.put("married", MessageBundle.getMessage("angal.patient.maritalstatusmarried.txt"));
+		maritalHashMap.put("divorced", MessageBundle.getMessage("angal.patient.maritalstatusdivorced.txt"));
+		maritalHashMap.put("widowed", MessageBundle.getMessage("angal.patient.maritalstatuswidowed.txt"));
 	}
 
 	public String[] getMaritalList() {
@@ -167,7 +167,7 @@ public class PatientBrowserManager {
 		if (maritalHashMap == null)
 			buildMaritalHashMap();
 		if (maritalKey == null || !maritalHashMap.containsKey(maritalKey))
-			return MessageBundle.getMessage("angal.patient.maritalstatusunknown");
+			return MessageBundle.getMessage("angal.patient.maritalstatusunknown.txt");
 		return maritalHashMap.get(maritalKey);
 	}
 
@@ -185,18 +185,18 @@ public class PatientBrowserManager {
 
 	private void buildProfessionHashMap() {
 		professionHashMap = new LinkedHashMap<>();
-		professionHashMap.put("unknown", MessageBundle.getMessage("angal.patient.profession.unknown"));
-		professionHashMap.put("other", MessageBundle.getMessage("angal.patient.profession.other"));
-		professionHashMap.put("farming", MessageBundle.getMessage("angal.patient.profession.farming"));
-		professionHashMap.put("construction", MessageBundle.getMessage("angal.patient.profession.construction"));
-		professionHashMap.put("medicine", MessageBundle.getMessage("angal.patient.profession.medicine"));
-		professionHashMap.put("foodhospitality", MessageBundle.getMessage("angal.patient.profession.foodhospitality"));
-		professionHashMap.put("homemaker", MessageBundle.getMessage("angal.patient.profession.homemaker"));
-		professionHashMap.put("mechanic", MessageBundle.getMessage("angal.patient.profession.mechanic"));
-		professionHashMap.put("business", MessageBundle.getMessage("angal.patient.profession.business"));
-		professionHashMap.put("janitorial", MessageBundle.getMessage("angal.patient.profession.janitorial"));
-		professionHashMap.put("mining", MessageBundle.getMessage("angal.patient.profession.mining"));
-		professionHashMap.put("engineering", MessageBundle.getMessage("angal.patient.profession.engineering"));
+		professionHashMap.put("unknown", MessageBundle.getMessage("angal.patient.profession.unknown.txt"));
+		professionHashMap.put("other", MessageBundle.getMessage("angal.patient.profession.other.txt"));
+		professionHashMap.put("farming", MessageBundle.getMessage("angal.patient.profession.farming.txt"));
+		professionHashMap.put("construction", MessageBundle.getMessage("angal.patient.profession.construction.txt"));
+		professionHashMap.put("medicine", MessageBundle.getMessage("angal.patient.profession.medicine.txt"));
+		professionHashMap.put("foodhospitality", MessageBundle.getMessage("angal.patient.profession.foodhospitality.txt"));
+		professionHashMap.put("homemaker", MessageBundle.getMessage("angal.patient.profession.homemaker.txt"));
+		professionHashMap.put("mechanic", MessageBundle.getMessage("angal.patient.profession.mechanic.txt"));
+		professionHashMap.put("business", MessageBundle.getMessage("angal.patient.profession.business.txt"));
+		professionHashMap.put("janitorial", MessageBundle.getMessage("angal.patient.profession.janitorial.txt"));
+		professionHashMap.put("mining", MessageBundle.getMessage("angal.patient.profession.mining.txt"));
+		professionHashMap.put("engineering", MessageBundle.getMessage("angal.patient.profession.engineering.txt"));
 	}
 
 	public String[] getProfessionList() {
@@ -210,7 +210,7 @@ public class PatientBrowserManager {
 		if (professionHashMap == null)
 			buildProfessionHashMap();
 		if (professionKey == null || !professionHashMap.containsKey(professionKey))
-			return MessageBundle.getMessage("angal.patient.profession.unknown");
+			return MessageBundle.getMessage("angal.patient.profession.unknown.txt");
 		return professionHashMap.get(professionKey);
 	}
 
@@ -235,10 +235,12 @@ public class PatientBrowserManager {
 		else if (admissionManager.getCurrentAdmission(patient2) != null)
 			admitted = true;
 		if (admitted) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.merge"),
-					MessageBundle.getMessage("angal.admission.cannotmergeadmittedpatients"), OHSeverityLevel.ERROR));
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.merge"),
-					MessageBundle.getMessage("angal.admission.patientscannothavependingtask"), OHSeverityLevel.INFO));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.admission.cannotmergeadmittedpatients.msg"),
+					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.admission.patientscannothavependingtasks.msg"),
+					OHSeverityLevel.INFO));
 		}
 
 		boolean billPending = false;
@@ -252,14 +254,16 @@ public class PatientBrowserManager {
 				billPending = true;
 		}
 		if (billPending) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.merge"),
-					MessageBundle.getMessage("angal.admission.cannotmergewithpendingbills"), OHSeverityLevel.ERROR));
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.merge"),
-					MessageBundle.getMessage("angal.admission.patientscannothavependingtask"), OHSeverityLevel.INFO));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.admission.cannotmergewithpendingbills.msg"),
+					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.admission.patientscannothavependingtasks.msg"),
+					OHSeverityLevel.INFO));
 		}
 		if (mergedPatient.getSex() != patient2.getSex()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.merge"),
-					MessageBundle.getMessage("angal.admission.selectedpatientshavedifferentsex"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.admission.selectedpatientshavedifferentsex.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		return errors;
@@ -387,19 +391,23 @@ public class PatientBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (StringUtils.isEmpty(patient.getFirstName())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.patient.insertfirstname"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.patient.insertfirstname.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (StringUtils.isEmpty(patient.getSecondName())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.patient.insertsecondname"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.patient.insertsecondname.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!checkAge(patient)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.patient.insertvalidage"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.patient.insertvalidage.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (' ' == patient.getSex()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), "Please select a sex",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.patient.pleaseselectpatientssex.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {

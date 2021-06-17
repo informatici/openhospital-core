@@ -36,6 +36,8 @@ import org.isf.utils.exception.OHException;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Some useful functions for time calculations.
@@ -43,6 +45,8 @@ import org.joda.time.PeriodType;
  * @author Mwithi
  */
 public class TimeTools {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(TimeTools.class);
 
 	public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 
@@ -186,7 +190,7 @@ public class TimeTools {
 	 */
 	public static String getFormattedAge(Date birthDate) {
 		GregorianCalendar birthday = new GregorianCalendar();
-		String pattern = MessageBundle.getMessage("angal.common.agepattern");
+		String pattern = MessageBundle.getMessage("angal.agepattern.txt");
 		String age = "";
 		if (birthDate != null) {
 			birthday.setTime(birthDate);
@@ -413,8 +417,8 @@ public class TimeTools {
 				java.util.Date utilDate = sdf.parse(date);
 				serverDate.setTime(utilDate);
 			}
-		} catch (SQLException | OHException | ParseException e) {
-			e.printStackTrace();
+		} catch (SQLException | OHException | ParseException exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 		return serverDate;
 	}
@@ -429,7 +433,7 @@ public class TimeTools {
 	@Deprecated
 	public static String getConvertedString(GregorianCalendar time) {
 		if (time == null) {
-			return MessageBundle.getMessage("angal.malnutrition.nodate");
+			return MessageBundle.getMessage("angal.malnutrition.nodate.msg");
 		}
 		String string = String.valueOf(time.get(Calendar.DAY_OF_MONTH));
 		string += '/' + String.valueOf(time.get(Calendar.MONTH) + 1);

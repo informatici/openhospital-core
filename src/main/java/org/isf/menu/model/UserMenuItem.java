@@ -202,13 +202,6 @@ public class UserMenuItem
 	public String toString(){
 		return getButtonLabel();
 	}
-	
-	public String getDescription(){
-		return MessageBundle.getMessage("angal.menu.usermenuitem")+getCode()+ MessageBundle.getMessage("angal.menu.labelstooltipshort")+getButtonLabel()+"-"+getAltLabel()+"-"+getTooltip()+
-				"-"+getShortcut()+"...\n"+MessageBundle.getMessage("angal.menu.submenu")+getMySubmenu()+MessageBundle.getMessage("angal.menu.class")+getMyClass()+"...\n "+MessageBundle.getMessage("angal.menu.issubmenu")+isASubMenu()+
-				MessageBundle.getMessage("angal.menu.isactive")+isActive()+MessageBundle.getMessage("angal.menu.inposition")+getPosition();
-				
-	}
 
 	@Override
 	public int hashCode() {
@@ -220,7 +213,6 @@ public class UserMenuItem
 	        
 	        this.hashCode = c;
 	    }
-	  
 	    return this.hashCode;
 	}		
 }

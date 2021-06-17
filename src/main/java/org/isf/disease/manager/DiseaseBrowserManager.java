@@ -242,22 +242,26 @@ public class DiseaseBrowserManager {
 		if (insert) {
 			String key = disease.getCode();
 			if (key.equals("")) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disease.pleaseinsertacode"),
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 						OHSeverityLevel.ERROR));
 			}
 			if (key.length() > 10) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disease.codetoolongmaxchars"),
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 10),
 						OHSeverityLevel.ERROR));
 			}
 			if (isCodePresent(key)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.common.codealreadyinuse"),
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}
 
 		if (disease.getDescription().equals("")) {
 			errors.add(
-					new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disease.pleaseinsertavaliddescription"),
+					new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 							OHSeverityLevel.ERROR));
 		}
 
@@ -269,9 +273,9 @@ public class DiseaseBrowserManager {
 		// if inserting or description has changed on updating
 		// avoid two disease with the same description for the same type
 		if (lastDescription == null || !lastDescription.equals(disease.getDescription())) {
-			if (descriptionControl(disease.getDescription(),
-					disease.getType().getCode())) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disease.diseasealreadypresent"),
+			if (descriptionControl(disease.getDescription(), disease.getType().getCode())) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.disease.thediseasisealreadypresent.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}

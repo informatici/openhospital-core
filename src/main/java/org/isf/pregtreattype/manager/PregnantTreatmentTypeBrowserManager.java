@@ -108,24 +108,25 @@ public class PregnantTreatmentTypeBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		String key = pregnantTreatmentType.getCode();
 		if (StringUtils.isEmpty(key)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.preagtreattype.pleaseinsertacode"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (key.length() > 10) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.preagtreattype.codetoolong"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 10),
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
 			if (isCodePresent(key)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.common.codealreadyinuse"),
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}
 		if (StringUtils.isEmpty(pregnantTreatmentType.getDescription())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.preagtreattype.pleaseinsertavaliddescription"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {

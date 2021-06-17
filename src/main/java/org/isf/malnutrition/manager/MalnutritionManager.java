@@ -52,30 +52,30 @@ public class MalnutritionManager {
 	protected void validateMalnutrition(Malnutrition malnutrition) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (malnutrition.getDateSupp() == null) {
-			errors.add(new OHExceptionMessage("visitDateNullError",
-					MessageBundle.getMessage("angal.malnutrition.pleaseinsertavalidvisitdate"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.malnutrition.pleaseinsertavalidvisitdate.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (malnutrition.getDateConf() == null) {
-			errors.add(new OHExceptionMessage("controlDateNullError",
-					MessageBundle.getMessage("angal.malnutrition.pleaseinsertavalidcontroldate"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.malnutrition.pleaseinsertavalidcontroldate.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (malnutrition.getDateSupp() != null &&
 				malnutrition.getDateConf() != null &&
 				malnutrition.getDateConf().before(malnutrition.getDateSupp())) {
-			errors.add(new OHExceptionMessage("controlBeforeVisitError",
-					MessageBundle.getMessage("angal.malnutrition.controldatemustbeaftervisitdate"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.malnutrition.controldatemustbeaftervisitdate.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (malnutrition.getWeight() == 0) {
-			errors.add(new OHExceptionMessage("zeroWeightError",
-					MessageBundle.getMessage("angal.malnutrition.insertcorrectvalueinweightfield"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.malnutrition.insertcorrectvalueinweightfield.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (malnutrition.getHeight() == 0) {
-			errors.add(new OHExceptionMessage("zeroHeightError",
-					MessageBundle.getMessage("angal.malnutrition.insertcorrectvalueinheightfield"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.malnutrition.insertcorrectvalueinheightfield.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {

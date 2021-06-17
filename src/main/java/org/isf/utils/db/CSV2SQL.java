@@ -288,6 +288,5 @@ public class CSV2SQL {
 				lineNumber++;
 			}
 		}
-
 	}
 }
