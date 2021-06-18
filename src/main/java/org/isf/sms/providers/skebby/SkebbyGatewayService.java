@@ -102,8 +102,9 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 
 	private SkebbyGatewayRemoteService buildHttlClient() {
 		String baseUrl = this.smsProperties.getProperty(this.getRootKey() + ".ribbon.base-url");
+		// For debug remember to update log level to: feign.Logger.Level.FULL. Happy debugging!
 		return Feign.builder().encoder(new CustomCommonEncoder()).decoder(new CustomCommonDecoder()).logger(new Slf4jLogger(SkebbyGatewayRemoteService.class))
-						.logLevel(feign.Logger.Level.FULL).contract(new SpringMvcContract()).target(SkebbyGatewayRemoteService.class, baseUrl);
+						.logLevel(feign.Logger.Level.BASIC).contract(new SpringMvcContract()).target(SkebbyGatewayRemoteService.class, baseUrl);
 	}
 
 	private String loginUserKeySessionKey() {
