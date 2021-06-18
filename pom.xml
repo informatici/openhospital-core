@@ -146,8 +146,7 @@
 						<project.inceptionYear>2006</project.inceptionYear>
 						<project.name>Open Hospital</project.name>
 						<project.url>www.open-hospital.org</project.url>
-						<project.description>Open Hospital is a free and open source
-							software for healthcare data management.</project.description>
+						<project.description>Open Hospital is a free and open source software for healthcare data management.</project.description>
 					</properties>
 				</configuration>
 				<dependencies>
