@@ -110,7 +110,7 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 		// USER_KEY and ACCESS_TOKEN avoids the login call every time we need to send sms
 		final String userKey = this.smsProperties.getProperty(KEY_USER_KEY);
 		final String token = this.smsProperties.getProperty(KEY_ACCESS_TOKEN);
-		if (userKey != null && !userKey.isBlank() && token != null && !token.isBlank()) {
+		if (userKey != null && !userKey.trim().isEmpty() && token != null && !token.trim().isEmpty()) {
 			return userKey + ";" + token;
 		}
 
@@ -124,7 +124,7 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 		// if user defined these properties, then it means that we will retrieve data with ACCESS_TOKEN (which does not expires -> SESSION_KEY instead expires)
 		final String userKey = this.smsProperties.getProperty(KEY_USER_KEY);
 		final String token = this.smsProperties.getProperty(KEY_ACCESS_TOKEN);
-		return (userKey != null && !userKey.isBlank() && token != null && !token.isBlank());
+		return (userKey != null && !userKey.trim().isEmpty() && token != null && !token.trim().isEmpty());
 	}
 
 	@Override
