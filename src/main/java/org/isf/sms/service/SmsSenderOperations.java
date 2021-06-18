@@ -79,7 +79,7 @@ public class SmsSenderOperations {
 		Optional<SmsSenderInterface> smsGatewayOpt = findSmsGatewayService(gateway);
 		if (smsGatewayOpt.isPresent()) {
 			this.preSMSSending(sms);
-			LOGGER.debug("sending sms: " + sms.toString(true, true));
+			LOGGER.debug("sending sms: " + sms.toString());
 			boolean result = smsGatewayOpt.get().sendSMS(sms);
 			LOGGER.debug("sms sending result: " + result);
 			return result;

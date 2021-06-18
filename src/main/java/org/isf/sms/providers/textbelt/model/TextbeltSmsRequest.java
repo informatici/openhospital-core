@@ -61,12 +61,7 @@ public class TextbeltSmsRequest implements Serializable {
 
 	@Override
 	public String toString() {
-		return "TextbeltSmsRequest [phone=" + phone + ", message=" + message + ", key=" + key + "]";
-	}
-
-	public String toString(boolean isHidePhone, boolean isHideMessage, boolean isHideKey) {
-		return "TextbeltSmsRequest [phone=" + this.hide(phone, isHidePhone) + ", message=" + this.hide(phone, isHideMessage) + ", key="
-						+ this.hide(key, isHideKey) + "]";
+		return "TextbeltSmsRequest [phone=***" + ", message=***" + ", key=***" + "]";
 	}
 
 	private String hide(String value, boolean isHidden) {

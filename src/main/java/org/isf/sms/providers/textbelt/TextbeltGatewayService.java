@@ -62,7 +62,7 @@ public class TextbeltGatewayService implements SmsSenderInterface {
 		String sessionKey = retrieveSessionKey();
 		TextbeltSmsRequest smsSendingRequest = this.textbeltGatewayConverter.toServiceDTO(sessionKey, sms);
 		TextbeltGatewayRemoteService httpClient = buildHttlClient();
-		LOGGER.debug("TextBeltRequest: " + smsSendingRequest.toString(true, true, false));
+		LOGGER.debug("TextBeltRequest: " + smsSendingRequest.toString());
 		ResponseEntity<TextbeltSmsResponse> rs = httpClient.sendSMS(smsSendingRequest);
 		TextbeltSmsResponse result = rs.getBody();
 		LOGGER.debug("TextBeltResponse: " + result.toString());

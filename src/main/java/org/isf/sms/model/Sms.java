@@ -203,15 +203,8 @@ public class Sms {
 
 	@Override
 	public String toString() {
-		return "Sms [smsId=" + smsId + ", smsDate=" + smsDate + ", smsDateSched=" + smsDateSched + ", smsNumber=" + smsNumber + ", smsText=" + smsText
-						+ ", smsDateSent=" + smsDateSent + ", smsUser=" + smsUser + ", module=" + module + ", moduleID=" + moduleID + ", hashCode=" + hashCode
-						+ "]";
-	}
-
-	public String toString(boolean isHiddenSmsNumber, boolean isHiddenSmsText) {
-		return "Sms [smsId=" + smsId + ", smsDate=" + smsDate + ", smsDateSched=" + smsDateSched + ", smsNumber=" + this.hide(smsNumber, isHiddenSmsNumber)
-						+ ", smsText=" + this.hide(smsText, isHiddenSmsText) + ", smsDateSent=" + smsDateSent + ", smsUser=" + smsUser + ", module=" + module
-						+ ", moduleID=" + moduleID + ", hashCode=" + hashCode + "]";
+		return "Sms [smsId=" + smsId + ", smsDate=" + smsDate + ", smsDateSched=" + smsDateSched + ", smsNumber=***" + ", smsText=***" + ", smsDateSent="
+						+ smsDateSent + ", smsUser=" + smsUser + ", module=" + module + ", moduleID=" + moduleID + ", hashCode=" + hashCode + "]";
 	}
 
 	private String hide(String value, boolean isHidden) {
