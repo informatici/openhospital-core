@@ -199,7 +199,7 @@ public final class GeneralData extends ConfigurationProperties {
 
 
 	/**
-	 * @return the sINGLEUSER
+	 * @return the SINGLEUSER
 	 */
 	public boolean getSINGLEUSER() {
 		return SINGLEUSER;
