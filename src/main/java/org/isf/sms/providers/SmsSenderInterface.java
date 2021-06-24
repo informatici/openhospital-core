@@ -19,30 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.sms.service;
+package org.isf.sms.providers;
 
 import org.isf.sms.model.Sms;
 
-/**
- * @author Mwithi
- * 03/feb/2014
- */
 public interface SmsSenderInterface {
-	
+
+	boolean initialize();
+
 	/**
 	 * Public method to send one {@link Sms}
-	 * @param sms - the {@link Sms} to send
-	 * @param debug - if <code>true</code> the method should not really send the sms (for debug)
+	 * 
+	 * @param sms
+	 *            - the {@link Sms} to send
 	 * @return <code>true</code> if the SMS has been sent, <code>false</code> otherwise
 	 */
-    boolean sendSMS(Sms sms, boolean debug);
-	
+	boolean sendSMS(Sms sms);
+
 	/**
-	 * Public method to initialize the SmsSender.
-	 * For GSM Sender it could check if the device is ready.
-	 * For HTTP Sender it could check if the URL is reachable
-	 * @return
+	 * 
+	 * @return bean's name
 	 */
-    boolean initialize();
-	
+	String getName();
+
+	/**
+	 * 
+	 * @return root key in configuration file
+	 */
+	String getRootKey();
+
+	boolean terminate();
+
 }
