@@ -3145,8 +3145,8 @@ INSERT INTO `menuitem` VALUES ('btnadmdel','angal.admission.deletepatient','anga
 INSERT INTO `menuitem` VALUES ('btnadmmer','angal.admission.merge','angal.admission.merge','x','L','admission','none','N',2);
 INSERT INTO `menuitem` VALUES ('btndataeditpat','angal.admission.editpatient','angal.admission.editpatient','x','P','data','none','N',0);
 INSERT INTO `menuitem` VALUES ('btndatamalnut','angal.admission.malnutritioncontrol','angal.admission.malnutritioncontrol','x','M','data','none','N',3);
-INSERT INTO `menuitem` VALUES ('btndatadel','angal.common.deletem','angal.common.deletem','x','D','data','none','N',2);
-INSERT INTO `menuitem` VALUES ('btndataedit','angal.common.editm','angal.common.editm','x','E','data','none','N',1);
+INSERT INTO `menuitem` VALUES ('btndatadel','angal.common.delete','angal.common.delete','x','D','data','none','N',2);
+INSERT INTO `menuitem` VALUES ('btndataedit','angal.common.edit','angal.common.edit','x','E','data','none','N',1);
 INSERT INTO `menuitem` VALUES ('btnopddel','angal.common.delete','angal.common.delete','x','D','opd','none','N',2);
 INSERT INTO `menuitem` VALUES ('btnopdedit','angal.common.edit','angal.common.edit','x','E','opd','none','N',1);
 INSERT INTO `menuitem` VALUES ('btnopdnew','angal.common.new','angal.common.new','x','N','opd','none','N',0);

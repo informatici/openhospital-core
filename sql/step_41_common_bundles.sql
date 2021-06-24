@@ -9,6 +9,6 @@ UPDATE MENUITEM SET MNI_BTN_LABEL='angal.common.delete', MNI_LABEL='angal.common
 UPDATE MENUITEM SET MNI_BTN_LABEL='angal.common.delete', MNI_LABEL='angal.common.delete' WHERE MNI_ID_A='btnlaboratorydel';
 UPDATE MENUITEM SET MNI_BTN_LABEL='angal.common.delete', MNI_LABEL='angal.common.delete' WHERE MNI_ID_A='btnpharmaceuticaldel';
 UPDATE MENUITEM SET MNI_BTN_LABEL='angal.common.delete', MNI_LABEL='angal.common.delete' WHERE MNI_ID_A='btnopddel';
-UPDATE MENUITEM SET MNI_BTN_LABEL='angal.common.deletem', MNI_LABEL='angal.common.deletem' WHERE MNI_ID_A='btndatadel';
-UPDATE MENUITEM SET MNI_BTN_LABEL='angal.common.editm', MNI_LABEL='angal.common.editm' WHERE MNI_ID_A='btndataedit';
+UPDATE MENUITEM SET MNI_BTN_LABEL='angal.common.delete', MNI_LABEL='angal.common.deletem' WHERE MNI_ID_A='btndatadel';
+UPDATE MENUITEM SET MNI_BTN_LABEL='angal.common.edit', MNI_LABEL='angal.common.editm' WHERE MNI_ID_A='btndataedit';
 UPDATE MENUITEM SET MNI_BTN_LABEL='angal.common.edit', MNI_LABEL='angal.common.edit' WHERE MNI_ID_A='btnlaboratoryedit';
