@@ -62,18 +62,18 @@ public class TextbeltGatewayService implements SmsSenderInterface {
 		String sessionKey = retrieveSessionKey();
 		TextbeltSmsRequest smsSendingRequest = this.textbeltGatewayConverter.toServiceDTO(sessionKey, sms);
 		TextbeltGatewayRemoteService httpClient = buildHttlClient();
-		LOGGER.debug(smsSendingRequest.toString());
+		LOGGER.debug("TextBeltRequest: " + smsSendingRequest.toString());
 		ResponseEntity<TextbeltSmsResponse> rs = httpClient.sendSMS(smsSendingRequest);
-		LOGGER.debug(rs.toString());
 		TextbeltSmsResponse result = rs.getBody();
-		LOGGER.debug(result.toString());
+		LOGGER.debug("TextBeltResponse: " + result.toString());
 		return result != null && RESPONSE_SUCCESS.equals(result.getSuccess());
 	}
 
 	private TextbeltGatewayRemoteService buildHttlClient() {
 		String baseUrl = this.smsProperties.getProperty(this.getRootKey() + ".ribbon.base-url");
+		// For debug remember to update log level to: feign.Logger.Level.FULL. Happy debugging!
 		return Feign.builder().encoder(new CustomCommonEncoder()).decoder(new CustomCommonDecoder()).logger(new Slf4jLogger(TextbeltGatewayService.class))
-						.logLevel(feign.Logger.Level.FULL).contract(new SpringMvcContract()).target(TextbeltGatewayRemoteService.class, baseUrl);
+						.logLevel(feign.Logger.Level.BASIC).contract(new SpringMvcContract()).target(TextbeltGatewayRemoteService.class, baseUrl);
 	}
 
 	private String retrieveSessionKey() {

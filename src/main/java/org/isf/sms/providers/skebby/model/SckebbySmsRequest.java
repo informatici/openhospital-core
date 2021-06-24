@@ -20,6 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.sms.providers.skebby.model;
+
 import java.io.Serializable;
 /*
  * Open Hospital (www.open-hospital.org) Copyright © 2006-2021 Informatici Senza
@@ -116,6 +117,12 @@ public class SckebbySmsRequest implements Serializable {
 
 	public void setReturnCredits(Boolean returnCredits) {
 		this.returnCredits = returnCredits;
+	}
+
+	@Override
+	public String toString() {
+		return "SckebbySmsRequest [messageType=" + messageType + ", message=***" + ", recipient=***" + ", sender=***" + ", scheduledDeliveryTime="
+						+ scheduledDeliveryTime + ", orderId=" + orderId + ", returnCredits=" + returnCredits + "]";
 	}
 
 }
