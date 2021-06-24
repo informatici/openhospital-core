@@ -89,14 +89,6 @@ public class BCrypt {
 	// Blowfish parameters
 	private static final int BLOWFISH_NUM_ROUNDS = 16;
 
-	/**
-	 * @param args unused
-	 */
-	public static void main(String[] args) {
-		String hashed = BCrypt.hashpw(new String("admin"), BCrypt.gensalt());
-		System.out.println(hashed);
-	}
-	
 	// Initial contents of key schedule
 	private static final int[] P_orig = {
 		0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344,

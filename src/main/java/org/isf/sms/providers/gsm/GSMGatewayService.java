@@ -224,30 +224,6 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 		}
 	}
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-
-		// Get SMS
-		SmsOperations smsOp = new SmsOperations();
-		List<Sms> smsList = null;
-		try {
-			smsList = smsOp.getList();
-		} catch (OHServiceException ohServiceException) {
-			LOGGER.error(ohServiceException.getMessage(), ohServiceException);
-		}
-		LOGGER.debug("Found {} SMS to send", smsList.size());
-
-		// Send
-		GSMGatewayService sender = new GSMGatewayService();
-		boolean result = false;
-		if (sender.initialize()) {
-			result = sender.sendSMS(smsList.get(0), true);
-		}
-		LOGGER.debug("{}", result);
-	}
-
 	@Override
 	public String getName() {
 		return SERVICE_NAME;
