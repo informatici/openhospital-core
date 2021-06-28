@@ -67,7 +67,7 @@ public class UserBrowsingManager {
 	}
 
 	/**
-	 * Returns a {@link User} with the sepecified name.
+	 * Returns a {@link User} with the specified name.
 	 *
 	 * @param userName - user name
 	 * @return {@link User}
