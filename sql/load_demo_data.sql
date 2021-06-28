@@ -3157,7 +3157,7 @@ INSERT INTO `menuitem` VALUES ('btnlaboratorydel','angal.common.delete','angal.c
 INSERT INTO `menuitem` VALUES ('btnlaboratoryedit','angal.common.edit','angal.common.edit','x','E','laboratory','none','N',1);
 INSERT INTO `menuitem` VALUES ('btnlaboratorynew','angal.common.new.btn','angal.common.new.btn','x','N','laboratory','none','N',0);
 INSERT INTO `menuitem` VALUES ('btnadmtherapy','angal.admission.therapy','angal.admission.therapy','x','T','admission','none','N',6);
-INSERT INTO `menuitem` VALUES ('btnbillnew','angal.billbrowser.newbill','angal.billbrowser.newbill','x','N','billsmanager','none','N',0);
+INSERT INTO `menuitem` VALUES ('btnbillnew','angal.billbrowser.newbill.btn','angal.billbrowser.newbill.btn','x','N','billsmanager','none','N',0);
 INSERT INTO `menuitem` VALUES ('btnbilledit','angal.billbrowser.editbill.btn','angal.billbrowser.editbill.btn','x','N','billsmanager','none','N',1);
 INSERT INTO `menuitem` VALUES ('btnbilldelete','angal.billbrowser.deletebill.btn','angal.billbrowser.deletebill.btn','x','N','billsmanager','none','N',2);
 INSERT INTO `menuitem` VALUES ('btnbillreport','angal.billbrowser.report','angal.billbrowser.report','x','N','billsmanager','none','N',3);
