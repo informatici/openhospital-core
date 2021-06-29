@@ -1,0 +1,53 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.springframework:spring-aspects
+    versions:
+    - 5.3.3
+    - 5.3.5
+  - dependency-name: org.springframework:spring-tx
+    versions:
+    - 5.3.3
+    - 5.3.5
+  - dependency-name: org.springframework:spring-test
+    versions:
+    - 5.3.3
+    - 5.3.5
+  - dependency-name: org.springframework:spring-core
+    versions:
+    - 5.3.3
+    - 5.3.5
+  - dependency-name: org.springframework:spring-context
+    versions:
+    - 5.3.3
+    - 5.3.5
+  - dependency-name: org.springframework:spring-beans
+    versions:
+    - 5.3.3
+    - 5.3.5
+  - dependency-name: org.springframework:spring-orm
+    versions:
+    - 5.3.3
+    - 5.3.5
+  - dependency-name: org.hibernate:hibernate-core
+    versions:
+    - 5.4.27.Final
+    - 5.4.28.Final
+    - 5.4.29.Final
+  - dependency-name: org.hibernate:hibernate-entitymanager
+    versions:
+    - 5.4.27.Final
+    - 5.4.28.Final
+    - 5.4.29.Final
+  - dependency-name: joda-time:joda-time
+    versions:
+    - 2.10.9
+  - dependency-name: org.hibernate:hibernate-c3p0
+    versions:
+    - 5.4.27.Final
