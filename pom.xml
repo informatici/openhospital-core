@@ -290,6 +290,11 @@
 			<version>3.17</version>
 		</dependency>
 		<dependency>
+ 			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.31</version>
+		</dependency>
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.31</version>
@@ -404,7 +409,6 @@
 			<version>3.18.1</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- Feign -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
