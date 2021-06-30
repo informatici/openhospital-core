@@ -21,6 +21,12 @@
  */
 package org.isf.admission.service;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.hibernate.Hibernate;
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
@@ -36,12 +42,6 @@ import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * ---------------------------------------------------------
@@ -249,14 +249,14 @@ public class AdmissionIoOperations
 			if (now.get(Calendar.MONTH) < 6) 
 			{
 				first = new GregorianCalendar(now.get(Calendar.YEAR) - 1, Calendar.JULY, 1);
-				last = new GregorianCalendar(now.get(Calendar.YEAR), Calendar.JUNE, 30);
+				last = new GregorianCalendar(now.get(Calendar.YEAR), Calendar.JULY, 1);
 			} 
 			else 
 			{
 				first = new GregorianCalendar(now.get(Calendar.YEAR), Calendar.JULY, 1);
-				last = new GregorianCalendar(now.get(Calendar.YEAR) + 1, Calendar.JUNE, 30);
-			}
+				last = new GregorianCalendar(now.get(Calendar.YEAR) + 1, Calendar.JULY, 1);
 
+			}
 		} 
 		else 
 		{
