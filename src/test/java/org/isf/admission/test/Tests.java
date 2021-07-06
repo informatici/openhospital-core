@@ -529,7 +529,7 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestAdmission(false, true);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		foundAdmission.setYProg(99);
-		foundAdmission.setAdmDate(new GregorianCalendar());
+		foundAdmission.setAdmDate(AdmissionIoOperations.getNow());
 		admissionIoOperation.updateAdmission(foundAdmission);
 		foundAdmission = admissionIoOperation.getAdmission(id);
 
@@ -550,17 +550,12 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestAdmission(false, true);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		foundAdmission.setYProg(99);
-		foundAdmission.setAdmDate(new GregorianCalendar());
+		foundAdmission.setAdmDate(AdmissionIoOperations.getNow());
 		admissionIoOperation.updateAdmission(foundAdmission);
 		foundAdmission = admissionIoOperation.getAdmission(id);
 
 		int next = admissionIoOperation.getNextYProg(foundAdmission.getWard().getCode());
-
-		if (!GeneralData.MATERNITYRESTARTINJUNE) {
-			assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
-		} else {
-			assertThat(next).isEqualTo(1);
-		}
+		assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
 		// reset
 		AdmissionIoOperations.testing = false;
 		AdmissionIoOperations.afterJune = false;
@@ -854,7 +849,7 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestAdmission(false, true);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		foundAdmission.setYProg(99);
-		foundAdmission.setAdmDate(new GregorianCalendar());
+		foundAdmission.setAdmDate(AdmissionIoOperations.getNow());
 		admissionIoOperation.updateAdmission(foundAdmission);
 		foundAdmission = admissionIoOperation.getAdmission(id);
 		int next = admissionBrowserManager.getNextYProg(foundAdmission.getWard().getCode());
@@ -874,16 +869,11 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestAdmission(false, true);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		foundAdmission.setYProg(99);
-		foundAdmission.setAdmDate(new GregorianCalendar());
+		foundAdmission.setAdmDate(AdmissionIoOperations.getNow());
 		admissionIoOperation.updateAdmission(foundAdmission);
 		foundAdmission = admissionIoOperation.getAdmission(id);
 		int next = admissionBrowserManager.getNextYProg(foundAdmission.getWard().getCode());
-
-		if (!GeneralData.MATERNITYRESTARTINJUNE) {
-			assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
-		} else {
-			assertThat(next).isEqualTo(1);
-		}
+		assertThat(next).isEqualTo(foundAdmission.getYProg() + 1);
 		// reset
 		AdmissionIoOperations.testing = false;
 		AdmissionIoOperations.afterJune = false;

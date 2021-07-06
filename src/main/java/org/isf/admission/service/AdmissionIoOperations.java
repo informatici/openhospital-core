@@ -284,17 +284,17 @@ public class AdmissionIoOperations
 	 */
 	public static boolean testing = false;
 	public static boolean afterJune = false;
-	protected GregorianCalendar getNow() {
+	public static GregorianCalendar getNow() {
 		GregorianCalendar now = new GregorianCalendar();
 		if (!testing) {
 			return now;
 		}
 		// testing date June or later
 		if (afterJune) {
-			return new GregorianCalendar(now.get(Calendar.YEAR), 8, 1);
+			return new GregorianCalendar(now.get(Calendar.YEAR), 8, 2);
 		}
 		// testing data before June
-		return new GregorianCalendar(now.get(Calendar.YEAR), 0, 1);
+		return new GregorianCalendar(now.get(Calendar.YEAR), 0, 2);
 	}
 
 	/**
