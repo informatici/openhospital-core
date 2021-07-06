@@ -37,17 +37,14 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Others : represents an other entry for prices
- * @author Alex
- */
- /*------------------------------------------
- * Others : represents an other entry for prices
+ * ------------------------------------------
+ * PricesOthers : represents an other entry for prices
  * -----------------------------------------
  * modification history
- * ? - Alex - first version 
+ * ? - Alex - first version
  * 1/08/2016 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="PRICESOTHERS")
 @EntityListeners(AuditingEntityListener.class)

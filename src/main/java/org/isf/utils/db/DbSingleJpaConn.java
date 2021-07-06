@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DbSingleJpaConn {
 
-	protected static Logger logger = LoggerFactory.getLogger(DbSingleJpaConn.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DbSingleJpaConn.class);
 	private static Connection connection;
 
 	private DbSingleJpaConn() { }
@@ -47,8 +47,8 @@ public class DbSingleJpaConn {
 			try {
 				connection = createConnection();
 			} catch (Exception e){
-				String message = MessageBundle.getMessage("angal.utils.dbserverconnectionfailure");
-				logger.error(">> {}", message);
+				String message = MessageBundle.getMessage("angal.sql.databaseserverstoppedornetworkfailure.msg");
+				LOGGER.error(">> {}", message);
                 throw new OHException(message, e);
 			}
 		}

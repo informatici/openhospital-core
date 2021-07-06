@@ -22,12 +22,14 @@
 package org.isf.operation.manager;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.operation.model.Operation;
 import org.isf.operation.service.OperationIoOperations;
 import org.isf.opetype.model.OperationType;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.validator.DefaultSorter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +44,8 @@ public class OperationBrowserManager {
 
 	@Autowired
 	private OperationIoOperations ioOperations;
+	
+	LinkedHashMap<String, String> resultsListHashMap;
 
 	/**
 	 * Return the list of {@link Operation}s
@@ -125,7 +129,7 @@ public class OperationBrowserManager {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean codeControl(String code) throws OHServiceException {
+	public boolean isCodePresent(String code) throws OHServiceException {
 		return ioOperations.isCodePresent(code);
 	}
 
@@ -146,11 +150,39 @@ public class OperationBrowserManager {
 	 *
 	 * @return the found list
 	 */
-	public ArrayList<String> getResultsList() { //TODO (OP-372): deal with codes instead of translations!!!
-		ArrayList<String> resultsList = new ArrayList<>();
-		resultsList.add(MessageBundle.getMessage("angal.operation.result.sucess"));
-		resultsList.add(MessageBundle.getMessage("angal.operation.result.failure"));
-		resultsList.add(MessageBundle.getMessage("angal.operation.result.undefined"));
-		return resultsList;
+	public LinkedHashMap<String, String> getResultsList() { 
+		if (resultsListHashMap == null) buildResultHashMap();
+		return resultsListHashMap;
+	}
+	
+	private void buildResultHashMap() {
+		resultsListHashMap = new LinkedHashMap<>();
+		resultsListHashMap.put("success", MessageBundle.getMessage("angal.operation.result.success.txt"));
+		resultsListHashMap.put("failure", MessageBundle.getMessage("angal.operation.result.failure.txt"));
+		resultsListHashMap.put("unknown", MessageBundle.getMessage("angal.operation.result.undefined.txt"));
+	}
+	
+	public String getResultDescriptionKey(String description) {
+		if (resultsListHashMap == null) {
+			buildResultHashMap();
+		}
+		for (String key : resultsListHashMap.keySet()) {
+			if (resultsListHashMap.get(key).equals(description)) {
+				return key;
+			}
+		}
+		return "";
+	}
+	
+	public ArrayList<String> getResultDescriptionList() {
+		if (resultsListHashMap == null) buildResultHashMap();
+		ArrayList<String> resultDescriptionList = new ArrayList<>(resultsListHashMap.values());
+		resultDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.operation.result.success.txt")));
+		return resultDescriptionList;
+	}
+	
+	public String getResultDescriptionTranslated(String result_desc_key) {
+		if (resultsListHashMap == null) buildResultHashMap();
+		return resultsListHashMap.get(result_desc_key);
 	}
 }

@@ -31,10 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 /**
  * Persistence class for agetype module.
- *
  */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -51,7 +49,7 @@ public class AgeTypeIoOperations
 	 */
 	public ArrayList<AgeType> getAgeType() throws OHServiceException 
 	{
-		return new ArrayList<AgeType>(repository.findAllByOrderByCodeAsc());
+		return new ArrayList<>(repository.findAllByOrderByCodeAsc());
 	}
 
 	/**

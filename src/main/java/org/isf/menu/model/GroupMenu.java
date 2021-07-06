@@ -35,14 +35,15 @@ import javax.persistence.Transient;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/*------------------------------------------
- * User - model for the user entity
+/**
+ * ------------------------------------------
+ * GroupMenu
  * -----------------------------------------
  * modification history
- * ? - ? - first version 
+ * ? - ? - first version
  * 07/05/2016 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="GROUPMENU")
 @EntityListeners(AuditingEntityListener.class) 
@@ -112,4 +113,4 @@ public class GroupMenu extends Auditable<String>
                   && getActive() == ((GroupMenu) anObject).getActive());
     }
 
-}//class GroupMenu
+}

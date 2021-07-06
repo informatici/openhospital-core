@@ -29,17 +29,6 @@ import java.text.Normalizer;
 public class NormalizeString {
 
 	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		System.out.println("\u00E0\u00E8\u00EC\u00F2\u00F9" + " -> " + normalizeString("\u00E0\u00E8\u00EC\u00F2\u00F9"));
-		System.out.println(normalizeCompareTo("\u00E0\u00E8\u00EC\u00F2\u00F9", "aeiou"));
-		System.out.println(normalizeCompareToIgnorecase("\u00E0\u00E8\u00EC\u00F2\u00F9", "AEIOU"));
-		System.out.println(normalizeContains("\u00E0\u00E8\u00EC\u00F2\u00F9", "aeiou"));
-
-	}
-	
-	/**
 	 * Use java.text.Normalizer to reduce LOCALE strings for comparing 
 	 * @param string - the string to normalize
 	 * @return the string normalized

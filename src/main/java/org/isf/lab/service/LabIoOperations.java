@@ -21,22 +21,6 @@
  */
 package org.isf.lab.service;
 
-/*------------------------------------------
- * lab.service.IoOperations - laboratory exam database io operations
- * -----------------------------------------
- * modification history
- * 02/03/2006 - theo - first beta version
- * 10/11/2006 - ross - added editing capability. 
- * 					   new fields data esame, sex, age, material, inout flag added
- * 21/06/2008 - ross - do not add 1 to toDate!. 
- *                     the selection date switched to exam date, 
- * 04/01/2009 - ross - do not use roll, use add(week,-1)!
- *                     roll does not change the year!
- * 16/11/2012 - mwithi - added logging capability
- * 					   - to do lock management
- * 04/02/2013 - mwithi - lock management done
- *------------------------------------------*/
-
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -50,6 +34,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * ------------------------------------------
+ * lab.service.LabIoOperations - laboratory exam database io operations
+ * -----------------------------------------
+ * modification history
+ * 02/03/2006 - theo - first beta version
+ * 10/11/2006 - ross - added editing capability.
+ * 					   new fields data esame, sex, age, material, inout flag added
+ * 21/06/2008 - ross - do not add 1 to toDate!.
+ *                     the selection date switched to exam date,
+ * 04/01/2009 - ross - do not use roll, use add(week,-1)!
+ *                     roll does not change the year!
+ * 16/11/2012 - mwithi - added logging capability
+ * 					   - to do lock management
+ * 04/02/2013 - mwithi - lock management done
+ * ------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -111,7 +112,7 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public ArrayList<Laboratory> getLaboratory(String exam,	GregorianCalendar dateFrom,	GregorianCalendar dateTo) throws OHServiceException {
-		return new ArrayList<Laboratory>(exam != null ?
+		return new ArrayList<>(exam != null ?
 				repository.findByExamDateBetweenAndExam_DescriptionOrderByExamDateDescRegistrationDateDesc(dateFrom, dateTo, exam) :
 				repository.findByExamDateBetweenOrderByExamDateDescRegistrationDateDesc(dateFrom, dateTo));
 	}
@@ -167,11 +168,11 @@ public class LabIoOperations {
 	public ArrayList<LaboratoryForPrint> getLaboratoryForPrint(String exam,
 			GregorianCalendar dateFrom,
 			GregorianCalendar dateTo) throws OHServiceException {
-				ArrayList<LaboratoryForPrint> pLaboratory = new ArrayList<LaboratoryForPrint>();
-				ArrayList<Laboratory> laboritories = new ArrayList<Laboratory> (
-					exam != null ?
-						repository.findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam) :
-						repository.findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo)
+				ArrayList<LaboratoryForPrint> pLaboratory = new ArrayList<>();
+				ArrayList<Laboratory> laboritories = new ArrayList<>(
+						exam != null ?
+								repository.findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam) :
+								repository.findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo)
 				);
 
 				for (Laboratory laboratory : laboritories) {
@@ -207,9 +208,10 @@ public class LabIoOperations {
 	public boolean newLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
 		return newLaboratory(laboratory) > 0;
 	}
-	
+
 	/**
-	 * Inserts one Laboratory exam {@link Laboratory} with multiple results (Procedure Two) 
+	 * Inserts one Laboratory exam {@link Laboratory} with multiple results (Procedure Two)
+	 *
 	 * @param laboratory - the {@link Laboratory} to insert
 	 * @param labRow - the list of results ({@link String}s)
 	 * @return <code>true</code> if the exam has been inserted with all its results, <code>false</code> otherwise
@@ -234,9 +236,10 @@ public class LabIoOperations {
 		
 		return result;
 	}
-        
-        /**
-	 * Inserts one Laboratory exam {@link Laboratory} with multiple results (Procedure Two) 
+
+	/**
+	 * Inserts one Laboratory exam {@link Laboratory} with multiple results (Procedure Two)
+	 *
 	 * @param laboratory - the {@link Laboratory} to insert
 	 * @param labRow - the list of results ({@link String}s)
 	 * @return <code>true</code> if the exam has been inserted with all its results, <code>false</code> otherwise

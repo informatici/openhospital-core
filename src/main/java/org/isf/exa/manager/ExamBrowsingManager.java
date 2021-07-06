@@ -21,11 +21,6 @@
  */
 package org.isf.exa.manager;
 
-/**
- * 19-dec-2005
- * 14-jan-2006
- */
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +41,8 @@ import org.springframework.stereotype.Component;
  * useful logic manipulations of the dinamic data (memory)
  *
  * @author bob
+ * 19-dec-2005
+ * 14-jan-2006
  */
 @Component
 public class ExamBrowsingManager {
@@ -64,15 +61,20 @@ public class ExamBrowsingManager {
 		String key = exam.getCode();
 		String description = exam.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		if (key.isEmpty() || description.isEmpty()) {
-			errors.add(new OHExceptionMessage("codeAndOrDescriptionEmptyError",
-					MessageBundle.getMessage("angal.exa.pleaseinsertcodeoranddescription"),
+		if (key.isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
+					OHSeverityLevel.ERROR));
+		}
+		if (description.isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
 			if (isKeyPresent(exam)) {
-				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null,
-						MessageBundle.getMessage("angal.exa.changethecodebecauseisalreadyinuse"),
+				throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}
@@ -88,7 +90,7 @@ public class ExamBrowsingManager {
 	 * @throws OHServiceException
 	 */
 	public ArrayList<Exam> getExams() throws OHServiceException {
-		return new ArrayList<Exam>(ioOperations.getExams());
+		return new ArrayList<>(ioOperations.getExams());
 	}
 
 	/**
@@ -111,7 +113,7 @@ public class ExamBrowsingManager {
 	 * @throws OHServiceException
 	 */
 	public ArrayList<Exam> getExams(String description) throws OHServiceException {
-		return new ArrayList<Exam>(ioOperations.getExamsByDesc(description));
+		return new ArrayList<>(ioOperations.getExamsByDesc(description));
 	}
 
 	/**
@@ -122,7 +124,7 @@ public class ExamBrowsingManager {
 	 * @throws OHServiceException
 	 */
 	public ArrayList<Exam> getExamsByTypeDescription(String description) throws OHServiceException {
-		return new ArrayList<Exam>(ioOperations.getExamsByExamTypeDesc(description));
+		return new ArrayList<>(ioOperations.getExamsByExamTypeDesc(description));
 	}
 
 	/**

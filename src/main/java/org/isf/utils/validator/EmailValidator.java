@@ -24,22 +24,26 @@ package org.isf.utils.validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EmailValidator
-{
-	//Java email validation permitted by RFC 5322
-    private static final String EMAIL_REGEX = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
- 
-    private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
- 
-    public static boolean isValid(String email) {
- 
-    	//Empty emails are allowed in the app
-        if (email == null || email.isEmpty()) {
-            return true;
-        }
- 
-        Matcher matcher = EMAIL_PATTERN.matcher(email);
-        return matcher.matches();
-    }
+public class EmailValidator {
+
+	// Java email validation permitted by RFC 5322
+	// Found this expression and discussion near the end of https://www.regular-expressions.info/email.html
+	private static final String EMAIL_REGEX = "\\A(?=[A-Z0-9@.!#$%&'*+/=?^_‘{|}~-]{6,254}\\z)"
+			+ "(?=[A-Z0-9.!#$%&'*+/=?^_‘{|}~-]{1,64}@)"
+			+ "[A-Z0-9!#$%&'*+/=?^_‘{|}~-]+(?:\\.[A-Z0-9!#$%&'*+/=?^_‘{|}~-]+)*"
+			+ "@(?:(?=[A-Z0-9-]{1,63}\\.)[A-Z0-9](?:[A-Z0-9-]*[A-Z0-9])?\\.)+"
+			+ "(?=[A-Z0-9-]{1,63}\\z)[A-Z0-9](?:[A-Z0-9-]*[A-Z0-9])?\\z";
+	private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX, Pattern.CASE_INSENSITIVE);
+
+	public static boolean isValid(String email) {
+
+		// Empty emails are allowed in the app
+		if (email == null || email.isEmpty()) {
+			return true;
+		}
+
+		Matcher matcher = EMAIL_PATTERN.matcher(email);
+		return matcher.matches();
+	}
 
 }

@@ -38,9 +38,6 @@ import org.jivesoftware.smack.packet.Presence;
 
 public class ComplexCellRender extends JLabel implements ListCellRenderer {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
 	Server server;

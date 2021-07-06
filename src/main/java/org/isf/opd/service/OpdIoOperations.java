@@ -22,7 +22,6 @@
 package org.isf.opd.service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -36,8 +35,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/*----------------------------------------------------
- * (org.isf.opd.service)IoOperations - services for opd class
+/**
+ * ----------------------------------------------------
+ * (org.isf.opd.service)OpdIoOperations - services for opd class
  * ---------------------------------------------------
  * modification history
  * 11/12/2005 - Vero, Rick  - first beta version 
@@ -52,8 +52,8 @@ import org.springframework.transaction.annotation.Transactional;
  *                         Modified construction of queries, concatenation is performed with
  *                         StringBuilders instead than operator +. Removed some nested try-catch
  *                         blocks. Modified methods to format dates.                          
- *------------------------------------------*/
-
+ * ------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -63,7 +63,7 @@ public class OpdIoOperations {
 	private OpdIoOperationRepository repository;
 	
 	/**
-	 * return all Opds of today or one week ago
+	 * Return all Opds of today or one week ago
 	 * 
 	 * @param oneWeek - if <code>true</code> return the last week, only today otherwise.
 	 * @return the list of Opds. It could be <code>empty</code>.
@@ -78,12 +78,11 @@ public class OpdIoOperations {
 		}
 
 
-		return getOpdList(MessageBundle.getMessage("angal.opd.alltype"),MessageBundle.getMessage("angal.opd.alldisease"),dateFrom,dateTo,0,0,'A','A');
+		return getOpdList(MessageBundle.getMessage("angal.common.alltypes.txt"),MessageBundle.getMessage("angal.opd.alldiseases.txt"),dateFrom,dateTo,0,0,'A','A');
 	}
 	
 	/**
-	 * 
-	 * return all Opds within specified dates
+	 * Return all {@link Opd}s within specified dates
 	 * 
 	 * @param diseaseTypeCode
 	 * @param diseaseCode
@@ -105,13 +104,13 @@ public class OpdIoOperations {
 			int ageTo,
 			char sex,
 			char newPatient) throws OHServiceException	{
-		return new ArrayList<Opd>(repository.findAllOpdWhereParams(
+		return new ArrayList<>(repository.findAllOpdWhereParams(
 				diseaseTypeCode, diseaseCode, dateFrom, dateTo,
 				ageFrom, ageTo, sex, newPatient));			
 	}
 	
 	/**
-	 * returns all {@link Opd}s associated to specified patient ID
+	 * Return all {@link Opd}s associated to specified patient ID
 	 * 
 	 * @param patID - the patient ID
 	 * @return the list of {@link Opd}s associated to specified patient ID.
@@ -119,9 +118,9 @@ public class OpdIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Opd> getOpdList(int patID) throws OHServiceException {
-		return  new ArrayList<Opd>(patID == 0 ?
-			repository.findAllOrderByProgYearDesc() :
-			repository.findAllByPatient_CodeOrderByProgYearDesc(patID));
+		return new ArrayList<>(patID == 0 ?
+				repository.findAllOrderByProgYearDesc() :
+				repository.findAllByPatient_CodeOrderByProgYearDesc(patID));
 	}
 		
 	/**
@@ -136,7 +135,7 @@ public class OpdIoOperations {
 	}
 	
 	/**
-	 * modify an {@link Opd} in the db
+	 * Modify an {@link Opd} in the db
 	 * 
 	 * @param opd - an {@link Opd}
 	 * @return the updated {@link Opd}.
@@ -174,7 +173,7 @@ public class OpdIoOperations {
 	}
 
 	/**
-	 * return the last Opd in time associated with specified patient ID. 
+	 * Return the last {@link Opd} in time associated with specified patient ID.
 	 * 
 	 * @param patID - the patient ID
 	 * @return last Opd associated with specified patient ID or <code>null</code>
@@ -197,11 +196,11 @@ public class OpdIoOperations {
 	}
 	
 	/**
-	 * Check if the given <param>opdNum<param> does already exist for the give <param>year<param>
+	 * Check if the given {@code opdNum} does already exist for the give {@code year}
 	 * 
 	 * @param opdNum - the OPD progressive in year
 	 * @param year - the year
-	 * @return <code>true<code> if the given number exists in year, <code>false</code> otherwise
+	 * @return <code>true</code> if the given number exists in year, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {

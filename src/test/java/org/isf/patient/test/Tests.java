@@ -22,11 +22,24 @@
 package org.isf.patient.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.io.File;
+import java.lang.reflect.Field;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
+import org.isf.opd.model.Opd;
+import org.isf.opd.test.TestOpd;
+import org.isf.patient.manager.PatientBrowserManager;
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.exception.OHException;
@@ -35,23 +48,29 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 public class Tests extends OHCoreTestCase {
 
 	private static TestPatient testPatient;
+	private static TestOpd testOpd;
 
 	@Autowired
 	PatientIoOperations patientIoOperation;
 	@Autowired
 	PatientIoOperationRepository patientIoOperationRepository;
+	@Autowired
+	PatientBrowserManager patientBrowserManager;
 
 	@BeforeClass
 	public static void setUpClass() {
 		testPatient = new TestPatient();
+		testOpd = new TestOpd();
 	}
 
 	@Before
-	public void setUp() throws OHException {
+	public void setUp() {
 		cleanH2InMemoryDb();
 	}
 
@@ -72,6 +91,17 @@ public class Tests extends OHCoreTestCase {
 		_setupTestPatient(false);
 		ArrayList<Patient> patients = patientIoOperation.getPatients();
 		testPatient.check(patients.get(patients.size() - 1));
+	}
+
+	@Test
+	public void testIoGetPatientsPageable() throws Exception {
+		_setupTestPatient(false);
+		ArrayList<Patient> patients = patientIoOperation.getPatients(createPageRequest());
+		testPatient.check(patients.get(patients.size() - 1));
+	}
+
+	private Pageable createPageRequest() {
+		return new PageRequest(0, 10);   // Page size 10
 	}
 
 	@Test
@@ -150,8 +180,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetPatientsByOneOfFieldsLikeNotExistingStringShouldNotFindAnything() throws Exception {
-		Integer code = _setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code);
+		_setupTestPatient(false);
 		ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike("dupa");
 		assertThat(patients).isEmpty();
 	}
@@ -165,11 +194,21 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	public void testIoGetPatientFromNameDoesNotExist() throws Exception {
+		assertThat(patientIoOperation.getPatient("someUnusualNameThatWillNotBeFound")).isNull();
+	}
+
+	@Test
 	public void testIoGetPatientFromCode() throws Exception {
 		Integer code = _setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
 		Patient patient = patientIoOperation.getPatient(code);
 		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
+	}
+
+	@Test
+	public void testIoGetPatientFromCodeDoesNotExist() throws Exception {
+		assertThat(patientIoOperation.getPatient(-987654321)).isNull();
 	}
 
 	@Test
@@ -181,21 +220,34 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testNewPatient() throws Exception {
+	public void testIoGetPatientsByParams() throws Exception {
+		_setupTestPatient(false);
+		Map<String, Object> params = new HashMap<>();
+		params.put("firstName", "TESTFIRSTN");
+		params.put("birthDate", new GregorianCalendar(1984, Calendar.AUGUST, 14).getTime());
+		params.put("address", "TestAddress");
+		ArrayList<Patient> patients = patientIoOperation.getPatients(params);
+		assertThat(patients.size()).isPositive();
+	}
+
+	@Test
+	public void testIoSaveNewPatient() throws Exception {
 		Patient patient = testPatient.setup(true);
 		assertThat(patientIoOperation.savePatient(patient)).isNotNull();
 	}
 
 	@Test
-	public void testUpdatePatientTrue() throws Exception {
+	public void testIoUpdatePatient() throws Exception {
 		Integer code = _setupTestPatient(false);
 		Patient patient = patientIoOperation.getPatient(code);
-		Patient result = patientIoOperation.savePatient(patient);
-		assertThat(result).isNotNull();
+		patient.setFirstName("someNewFirstName");
+		assertThat(patientIoOperation.updatePatient(patient)).isTrue();
+		Patient updatedPatient = patientIoOperation.getPatient(code);
+		assertThat(updatedPatient.getFirstName()).isEqualTo(patient.getFirstName());
 	}
 
 	@Test
-	public void testDeletePatient() throws Exception {
+	public void testIoDeletePatient() throws Exception {
 		Integer code = _setupTestPatient(false);
 		Patient patient = patientIoOperation.getPatient(code);
 		boolean result = patientIoOperation.deletePatient(patient);
@@ -203,7 +255,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testIsPatientPresent() throws Exception {
+	public void testIoIsPatientPresent() throws Exception {
 		Integer code = _setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
 		boolean result = patientIoOperation.isPatientPresentByName(foundPatient.getName());
@@ -211,10 +263,17 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testGetNextPatientCode() throws Exception {
+	public void testIoGetNextPatientCode() throws Exception {
 		Integer code = _setupTestPatient(false);
 		Integer max = patientIoOperation.getNextPatientCode();
 		assertThat((code + 1)).isEqualTo(max);
+	}
+
+	@Test
+	public void testIoIsCodePresent() throws Exception {
+		Integer code = _setupTestPatient(false);
+		assertThat(patientIoOperation.isCodePresent(code)).isTrue();
+		assertThat(patientIoOperation.isCodePresent(-987)).isFalse();
 	}
 
 	@Test
@@ -230,6 +289,462 @@ public class Tests extends OHCoreTestCase {
 
 		// then:
 		assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(mergedPatient, obsoletePatient);
+	}
+
+	@Test
+	public void testMgrGetPatients() throws Exception {
+		_setupTestPatient(false);
+		ArrayList<Patient> patients = patientBrowserManager.getPatient();
+		testPatient.check(patients.get(patients.size() - 1));
+	}
+
+	@Test
+	public void testMgrGetPatientsPageable() throws Exception {
+		for (int idx = 0; idx < 15; idx++) {
+			_setupTestPatient(false);
+		}
+
+		// First page of 10
+		ArrayList<Patient> patients = patientBrowserManager.getPatient(0, 10);
+		assertThat(patients).hasSize(10);
+		testPatient.check(patients.get(patients.size() - 1));
+
+		// Go get the next page or 10
+		patients = patientBrowserManager.getPatient(1, 10);
+		assertThat(patients).hasSize(5);
+	}
+
+	@Test
+	public void testMgrGetPatientsByOneOfFieldsLike() throws Exception {
+		_setupTestPatient(false);
+		// Pay attention that query return with PAT_ID descendant
+		ArrayList<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(null);
+		testPatient.check(patients.get(0));
+	}
+
+	@Test
+	public void testMgrGetPatientsByOneOfFieldsLikeFirstName() throws Exception {
+		Integer code = _setupTestPatient(false);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+		ArrayList<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getFirstName());
+		testPatient.check(patients.get(0));
+	}
+
+	@Test
+	public void testMgrGetPatientsByOneOfFieldsLikeMiddleOfFirstName() throws Exception {
+		Integer code = _setupTestPatient(false);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+
+		ArrayList<Patient> patients = patientBrowserManager
+				.getPatientsByOneOfFieldsLike(foundPatient.getFirstName().substring(1, foundPatient.getFirstName().length() - 2));
+		testPatient.check(patients.get(0));
+	}
+
+	@Test
+	public void testMgrGetPatientsByOneOfFieldsLikeSecondName() throws Exception {
+		Integer code = _setupTestPatient(false);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+		ArrayList<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
+		testPatient.check(patients.get(0));
+	}
+
+	@Test
+	public void testMgrGetPatientsByOneOfFieldsLikeNote() throws Exception {
+		Integer code = _setupTestPatient(false);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+		ArrayList<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
+		testPatient.check(patients.get(0));
+	}
+
+	@Test
+	public void testMgrGetPatientsByOneOfFieldsLikeTaxCode() throws Exception {
+		Integer code = _setupTestPatient(false);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+		ArrayList<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getTaxCode());
+		testPatient.check(patients.get(0));
+	}
+
+	@Test
+	public void testMgrGetPatientsByOneOfFieldsLikeNotExistingStringShouldNotFindAnything() throws Exception {
+		_setupTestPatient(false);
+		ArrayList<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike("dupa");
+		assertThat(patients).isEmpty();
+	}
+
+	@Test
+	public void testMgrGetPatientByName() throws Exception {
+		Integer code = _setupTestPatient(false);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+		Patient patient = patientBrowserManager.getPatientByName(foundPatient.getName());
+		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
+	}
+
+	@Test
+	public void testMgrGetPatientByNameDoesNotExist() throws Exception {
+		assertThat(patientBrowserManager.getPatientByName("someUnusualNameThatWillNotBeFound")).isNull();
+	}
+
+	@Test
+	public void testMgrGetPatientById() throws Exception {
+		Integer code = _setupTestPatient(false);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+		Patient patient = patientBrowserManager.getPatientById(code);
+		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
+	}
+
+	@Test
+	public void testMgrGetPatienByIdDoesNotExist() throws Exception {
+		assertThat(patientBrowserManager.getPatientById(-987654321)).isNull();
+	}
+
+	@Test
+	public void testMgrGetPatientAll() throws Exception {
+		Integer code = _setupTestPatient(false);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+		Patient patient = patientBrowserManager.getPatientAll(code);
+		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
+	}
+
+	@Test
+	public void testMgrSaveNewPatient() throws Exception {
+		Patient patient = testPatient.setup(true);
+		assertThat(patientBrowserManager.savePatient(patient)).isNotNull();
+	}
+
+	@Test
+	public void testMgrUpdatePatient() throws Exception {
+		Integer code = _setupTestPatient(false);
+		Patient patient = patientIoOperation.getPatient(code);
+		patient.setFirstName("someNewFirstName");
+		Patient updatedPatient = patientBrowserManager.savePatient(patient);
+		assertThat(updatedPatient).isNotNull();
+		assertThat(updatedPatient.getFirstName()).isEqualTo(patient.getFirstName());
+	}
+
+	@Test
+	public void testMgrDeletePatient() throws Exception {
+		Integer code = _setupTestPatient(false);
+		Patient patient = patientIoOperation.getPatient(code);
+		assertThat(patientBrowserManager.deletePatient(patient)).isTrue();
+	}
+
+	@Test
+	public void testMgrIsNamePresent() throws Exception {
+		Integer code = _setupTestPatient(false);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+		assertThat(patientBrowserManager.isNamePresent(foundPatient.getName())).isTrue();
+	}
+
+	@Test
+	public void testMgrIsNamePresentNotFound() throws Exception {
+		assertThat(patientBrowserManager.isNamePresent("someNameWeAreSureDoesNotExist")).isFalse();
+	}
+
+	@Test
+	public void testMgrGetNextPatientCode() throws Exception {
+		Integer code = _setupTestPatient(false);
+		Integer max = patientBrowserManager.getNextPatientCode();
+		assertThat((code + 1)).isEqualTo(max);
+	}
+
+	@Test
+	public void testMgrGetMaritalList() throws Exception {
+		resetHashMaps();
+		String[] maritalDescriptionList = patientBrowserManager.getMaritalList();
+		assertThat(maritalDescriptionList).isNotEmpty();
+	}
+
+	@Test
+	public void testMgrGetMaritalTranslated() throws Exception {
+		resetHashMaps();
+		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
+		assertThat(patientBrowserManager.getMaritalTranslated(null)).isEqualTo("angal.patient.maritalstatusunknown.txt");
+		assertThat(patientBrowserManager.getMaritalTranslated("someKeyNotInTheList")).isEqualTo("angal.patient.maritalstatusunknown.txt");
+		assertThat(patientBrowserManager.getMaritalTranslated("married")).isEqualTo("angal.patient.maritalstatusmarried.txt");
+	}
+
+	@Test
+	public void testMgrGetMaritalKey() throws Exception {
+		resetHashMaps();
+		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
+		assertThat(patientBrowserManager.getMaritalKey(null)).isEqualTo("undefined");
+		assertThat(patientBrowserManager.getMaritalKey("someKeyNotInTheList")).isEqualTo("undefined");
+		assertThat(patientBrowserManager.getMaritalKey("angal.patient.maritalstatusmarried.txt")).isEqualTo("married");
+	}
+
+	@Test
+	public void testMgrGetProfessionList() throws Exception {
+		resetHashMaps();
+		String[] maritalDescriptionList = patientBrowserManager.getProfessionList();
+		assertThat(maritalDescriptionList).isNotEmpty();
+	}
+
+	@Test
+	public void testMgrGetProfessionTranslated() throws Exception {
+		resetHashMaps();
+		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
+		assertThat(patientBrowserManager.getProfessionTranslated(null)).isEqualTo("angal.patient.profession.unknown.txt");
+		assertThat(patientBrowserManager.getProfessionTranslated("someKeyNotInTheList")).isEqualTo("angal.patient.profession.unknown.txt");
+		assertThat(patientBrowserManager.getProfessionTranslated("mining")).isEqualTo("angal.patient.profession.mining.txt");
+	}
+
+	@Test
+	public void testMgrGetProfessionKey() throws Exception {
+		resetHashMaps();
+		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
+		assertThat(patientBrowserManager.getProfessionKey(null)).isEqualTo("undefined");
+		assertThat(patientBrowserManager.getProfessionKey("someKeyNotInTheList")).isEqualTo("undefined");
+		assertThat(patientBrowserManager.getProfessionKey("angal.patient.profession.mining.txt")).isEqualTo("mining");
+	}
+
+	@Test
+	public void testMgrPatientValidationNoFirstName() {
+		assertThatThrownBy(() -> {
+			Patient patient = testPatient.setup(true);
+
+			patient.setFirstName("");
+
+			patientBrowserManager.savePatient(patient);
+		})
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+	}
+
+	@Test
+	public void testMgrPatientValidationNullFirstName() {
+		assertThatThrownBy(() -> {
+			Patient patient = testPatient.setup(true);
+
+			patient.setFirstName(null);
+
+			patientBrowserManager.savePatient(patient);
+		})
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+	}
+
+	@Test
+	public void testMgrPatientValidationNoSecondName() {
+		assertThatThrownBy(() -> {
+			Patient patient = testPatient.setup(true);
+
+			patient.setSecondName("");
+
+			patientBrowserManager.savePatient(patient);
+		})
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+	}
+
+	@Test
+	public void testMgrPatientValidationNullSecondName() {
+		assertThatThrownBy(() -> {
+			Patient patient = testPatient.setup(true);
+
+			patient.setSecondName(null);
+
+			patientBrowserManager.savePatient(patient);
+		})
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+	}
+
+	@Test
+	public void testMgrPatientValidationBirthDateNull() {
+		assertThatThrownBy(() -> {
+			Patient patient = testPatient.setup(true);
+
+			patient.setBirthDate(null);
+
+			patientBrowserManager.savePatient(patient);
+		})
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+	}
+
+	@Test
+	public void testMgrPatientValidationBirthDateTooFarInFuture() {
+		assertThatThrownBy(() -> {
+			Patient patient = testPatient.setup(true);
+
+			Calendar date = Calendar.getInstance();
+			date.set(999, 1, 1);
+			patient.setBirthDate(date.getTime());
+
+			patientBrowserManager.savePatient(patient);
+		})
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+	}
+
+	@Test
+	public void testMgrPatientValidationAgeLessThanZero() {
+		assertThatThrownBy(() -> {
+			Patient patient = testPatient.setup(true);
+
+			patient.setBirthDate(null);
+			patient.setAge(-1);
+
+			patientBrowserManager.savePatient(patient);
+		})
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+	}
+
+	@Test
+	public void testMgrPatientValidationAgeToHigh() {
+		assertThatThrownBy(() -> {
+			Patient patient = testPatient.setup(true);
+
+			patient.setBirthDate(null);
+			patient.setAge(201);
+
+			patientBrowserManager.savePatient(patient);
+		})
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+	}
+
+	@Test
+	public void testMgrPatientValidationSexEmpty() {
+		assertThatThrownBy(() -> {
+			Patient patient = testPatient.setup(true);
+
+			patient.setSex(' ');
+
+			patientBrowserManager.savePatient(patient);
+		})
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+	}
+
+	@Test
+	public void testPatientOpdConstructor() throws Exception {
+		Opd opd = testOpd.setup(null, null, false);
+		Patient patient = new Patient(opd);
+
+		assertThat(patient.getSex()).isEqualTo('F');
+		assertThat(patient.getCode()).isNull();
+		assertThat(patient.getBirthDate()).isNull();
+
+		assertThat(patient.getDeleted()).isEqualTo("N");
+		patient.setDeleted("Y");
+		assertThat(patient.getDeleted()).isEqualTo("Y");
+	}
+
+	@Test
+	public void testPatientConstructor() {
+		Patient patient = new Patient(99, "firstName", "secondName", "name", null, 99, " ", 'F', "address",
+				"city", "nextOfKin", "noPhone", "note", "motherName", ' ', "fatherName", ' ',
+				"bloodType", ' ', ' ', "personalCode", "maritalStatus", "profession");
+
+		assertThat(patient.getCode()).isEqualTo(99);
+		assertThat(patient.getSex()).isEqualTo('F');
+		assertThat(patient.getBirthDate()).isNull();
+
+		assertThat(patient.getLock()).isZero();
+		patient.setLock(99);
+		assertThat(patient.getLock()).isEqualTo(99);
+	}
+
+	@Test
+	public void testPatientGetSearchString() throws Exception {
+		Patient patient = testPatient.setup(false);
+		patient.setCode(1);
+		assertThat(patient.getSearchString()).isEqualTo("1 testfirstname testsecondname testcity testaddress TestTelephone testtaxcode ");
+	}
+
+	@Test
+	public void testPatientGetInformations() throws Exception {
+		Patient patient = testPatient.setup(false);
+		patient.setNote("someNote");
+		assertThat(patient.getInformations()).isEqualTo("TestCity - TestAddress - TestTelephone - someNote - TestTaxCode");
+	}
+
+	@Test
+	public void testPatientGetMonths() throws Exception {
+		Patient patient = testPatient.setup(false);
+		patient.setBirthDate(null);
+		assertThat(patient.getMonths()).isZero();
+		Calendar date = Calendar.getInstance();
+		date.set(84, Calendar.AUGUST, 14);
+		patient.setBirthDate(date.getTime());
+		assertThat(patient.getMonths()).isGreaterThanOrEqualTo(438);
+	}
+
+	@Test
+	public void testPatientEquals() throws Exception {
+		Patient patient = testPatient.setup(false);
+		assertThat(patient.equals(patient)).isTrue();
+		assertThat(patient)
+				.isNotNull()
+				.isNotEqualTo("someString");
+		Patient patient2 = testPatient.setup(true);
+		patient.setCode(1);
+		patient.setCode(2);
+		assertThat(patient).isNotEqualTo(patient2);
+		patient2.setCode(patient.getCode());
+		assertThat(patient).isEqualTo(patient2);
+	}
+
+	@Test
+	public void testPatientHashCode() throws Exception {
+		Patient patient = testPatient.setup(false);
+		patient.setCode(1);
+		// compute
+		int hashCode = patient.hashCode();
+		assertThat(hashCode).isEqualTo(23 * 133 + 1);
+		// check stored value
+		assertThat(patient.hashCode()).isEqualTo(hashCode);
+
+		Patient patent2 = testPatient.setup(true);
+		patent2.setCode(null);
+		assertThat(patent2.hashCode()).isEqualTo(23 * 133);
+	}
+
+	@Test
+	public void testPatientProfilePhoto() throws Exception {
+		Patient patient = testPatient.setup(true);
+		PatientProfilePhoto patientProfilePhoto = new PatientProfilePhoto();
+
+		File file = new File(getClass().getResource("patient.jpg").getFile());
+		byte[] bytes = Files.readAllBytes(file.toPath());
+		patientProfilePhoto.setPhoto(bytes);
+		assertThat(patientProfilePhoto.getPhotoAsImage()).isNotNull();
+
+		patientProfilePhoto.setPhoto(null);
+		assertThat(patientProfilePhoto.getPhoto()).isNull();
+
+		patientProfilePhoto.setPatient(patient);
+		assertThat(patientProfilePhoto.getPatient()).isEqualTo(patient);
+	}
+
+	private void resetHashMaps() throws Exception {
+		Field diuresisDescriptionHashMap = patientBrowserManager.getClass().getDeclaredField("maritalHashMap");
+		diuresisDescriptionHashMap.setAccessible(true);
+		diuresisDescriptionHashMap.set(patientBrowserManager, null);
+
+		Field bowelDescriptionHashMap = patientBrowserManager.getClass().getDeclaredField("professionHashMap");
+		bowelDescriptionHashMap.setAccessible(true);
+		bowelDescriptionHashMap.set(patientBrowserManager, null);
 	}
 
 	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) throws OHException {
@@ -250,4 +765,3 @@ public class Tests extends OHCoreTestCase {
 		testPatient.check(foundPatient);
 	}
 }
-

@@ -141,14 +141,15 @@ public class Tests extends OHCoreTestCase {
 		AdmissionType admissionType = admissionTypeIoOperationRepository.findOne(code);
 		AdmissionType admissionType2 = new AdmissionType("someCode", "someDescription");
 		assertThat(admissionType.equals(admissionType)).isTrue();
-		assertThat(admissionType.equals(admissionType2)).isFalse();
-		assertThat(admissionType.equals(new String("xyzzy"))).isFalse();
+		assertThat(admissionType)
+				.isNotEqualTo(admissionType2)
+				.isNotEqualTo("xyzzy");
 		admissionType2.setCode(code);
-		assertThat(admissionType.equals(admissionType2)).isTrue();
+		assertThat(admissionType).isEqualTo(admissionType2);
 
 		assertThat(admissionType.hashCode()).isPositive();
 
-		assertThat(admissionType2.toString()).isEqualTo("someDescription");
+		assertThat(admissionType2).hasToString("someDescription");
 	}
 
 	@Test
@@ -204,7 +205,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestAdmissionType(false);
-		boolean result = admissionTypeBrowserManager.codeControl(code);
+		boolean result = admissionTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
@@ -214,7 +215,7 @@ public class Tests extends OHCoreTestCase {
 		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findOne(code);
 		boolean result = admissionTypeBrowserManager.deleteAdmissionType(foundAdmissionType);
 		assertThat(result).isTrue();
-		result = admissionTypeBrowserManager.codeControl(code);
+		result = admissionTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isFalse();
 	}
 

@@ -22,7 +22,6 @@
 package org.isf.opd.service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -74,15 +73,15 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Opd> query = cb.createQuery(Opd.class);
 		Root<Opd> opd = query.from(Opd.class);
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 
 		query.select(opd);
-		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.opd.alltype")))) {
+		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alltypes.txt")))) {
 			predicates.add(
 				cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
 			);
 		}
-		if(!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldisease"))) {
+		if (!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldiseases.txt"))) {
 			predicates.add(
 				cb.equal(opd.join("disease").get("code"), diseaseCode)
 			);

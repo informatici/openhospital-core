@@ -21,11 +21,6 @@
  */
 package org.isf.ward.model;
 
-/**
- * @(#) Ward.java
- * 21-jan-2006
- */
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -41,19 +36,14 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Pure Model Ward (Hospital wards): represents a ward
- * 
- * @author bob
- * 
- */
-/*------------------------------------------
- * Bill - model for the bill entity
+ * ------------------------------------------
+ * Ward - model for the ward entity; represents a ward
  * -----------------------------------------
  * modification history
- * ? - bob - first version 
+ * 21-jan-2006 - bob - first version
  * 30/09/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="WARD")
 @EntityListeners(AuditingEntityListener.class)

@@ -21,18 +21,10 @@
  */
 package org.isf.patvac.model;
 
-/*------------------------------------------
-* PatientVaccine - class 
-* -----------------------------------------
-* modification history
-* 25/08/2011 - claudia - first beta version
-* 04/06/2015 - Antonio - ported to JPA
-*------------------------------------------*/
-
 import java.util.GregorianCalendar;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -45,11 +37,20 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.patient.model.Patient;
+import org.isf.utils.db.Auditable;
 import org.isf.vaccine.model.Vaccine;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ * ------------------------------------------
+ * PatientVaccine - class
+ * -----------------------------------------
+ * modification history
+ * 25/08/2011 - claudia - first beta version
+ * 04/06/2015 - Antonio - ported to JPA
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="PATIENTVACCINE")
 @EntityListeners(AuditingEntityListener.class) 
@@ -194,7 +195,6 @@ public class PatientVaccine extends Auditable<String>
 		this.patient.setSex(patSex);
 	}
 
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -203,8 +203,7 @@ public class PatientVaccine extends Auditable<String>
 		hascode = prime * hascode + ((patient == null) ? 0 : patient.hashCode());
 		hascode = prime * hascode + progr;
 		hascode = prime * hascode + ((vaccine == null) ? 0 : vaccine.hashCode());
-		hascode = prime * hascode
-				+ ((vaccineDate == null) ? 0 : vaccineDate.hashCode());
+		hascode = prime * hascode + ((vaccineDate == null) ? 0 : vaccineDate.hashCode());
 		return hascode;
 	}
 
@@ -223,24 +222,19 @@ public class PatientVaccine extends Auditable<String>
 		if (code != other.code) {
 			return false;
 		}
-		if (patient == null && other.patient != null) {
-				return false;
+		if ((patient != null && !patient.equals(other.patient))
+				|| (other.patient != null && !other.patient.equals(patient))) {
+			return false;
 		}
 		if (progr != other.progr) {
 			return false;
 		}
-		if (vaccine == null) {
-			if (other.vaccine != null) {
-				return false;
-			}
-		} else if (!vaccine.equals(other.vaccine)) {
+		if ((vaccine != null && !vaccine.equals(other.vaccine))
+				|| (other.vaccine != null && !other.vaccine.equals(vaccine))) {
 			return false;
 		}
-		if (vaccineDate == null) {
-			if (other.vaccineDate != null) {
-				return false;
-			}
-		} else if (!vaccineDate.equals(other.vaccineDate)) {
+		if ((vaccineDate != null && !vaccineDate.equals(other.vaccineDate))
+				|| (other.vaccineDate != null && !other.vaccineDate.equals(vaccineDate))) {
 			return false;
 		}
 		return true;

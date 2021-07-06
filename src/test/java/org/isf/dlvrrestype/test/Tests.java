@@ -146,7 +146,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestDeliveryResultType(false);
-		boolean result = deliveryResultTypeBrowserManager.codeControl(code);
+		boolean result = deliveryResultTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
@@ -155,7 +155,7 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestDeliveryResultType(false);
 		DeliveryResultType foundDeliveryResultType = deliveryResultIoOperationRepository.findOne(code);
 		boolean result = deliveryResultTypeBrowserManager.deleteDeliveryResultType(foundDeliveryResultType);
-		result = deliveryResultTypeBrowserManager.codeControl(code);
+		result = deliveryResultTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isFalse();
 	}
 
@@ -206,7 +206,7 @@ public class Tests extends OHCoreTestCase {
 		assertThat(deliveryResultType.hashCode()).isPositive();
 
 		DeliveryResultType deliveryResultType2 = new DeliveryResultType("someCode", "someDescription");
-		assertThat(deliveryResultType2.toString()).isEqualTo("someDescription");
+		assertThat(deliveryResultType2).hasToString("someDescription");
 	}
 
 	private String _setupTestDeliveryResultType(boolean usingSet) throws OHException {

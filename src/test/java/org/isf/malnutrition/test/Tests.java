@@ -667,14 +667,15 @@ public class Tests extends OHCoreTestCase {
 		assertThat(malnutrition1.equals(malnutrition1)).isTrue();
 
 		// does not match because wrong class
-		assertThat(malnutrition1.equals(null)).isFalse();
-		assertThat(malnutrition1.equals(new Integer(1))).isFalse();
+		assertThat(malnutrition1)
+				.isNotNull()
+				.isNotEqualTo("xyzzy");
 
 		Malnutrition malnutrition2 = new Malnutrition(0, new GregorianCalendar(11, 1, 1),
 				new GregorianCalendar(11, 10, 11), admission, patient, 1185.47f, 170.70f);
 
 		// does not match because dates do not match
-		assertThat(malnutrition1.equals(malnutrition2)).isFalse();
+		assertThat(malnutrition1).isNotEqualTo(malnutrition2);
 
 		Malnutrition malnutrition3 = new Malnutrition(0, new GregorianCalendar(111, 1, 1),
 				new GregorianCalendar(111, 10, 11), admission, patient, 4185.47f, 470.70f);
@@ -686,13 +687,13 @@ public class Tests extends OHCoreTestCase {
 		malnutrition3.setDateSupp(null);
 
 		// dates are null but the height and weight do not match
-		assertThat(malnutrition2.equals(malnutrition3)).isFalse();
+		assertThat(malnutrition2).isNotEqualTo(malnutrition3);
 
 		Malnutrition malnutrition4 = new Malnutrition(0, new GregorianCalendar(1, 1, 1),
 				new GregorianCalendar(1, 10, 11), admission, patient, 185.47f, 70.70f);
 
 		// matches because all the same values
-		assertThat(malnutrition4.equals(malnutrition1)).isTrue();
+		assertThat(malnutrition4).isEqualTo(malnutrition1);
 	}
 
 	@Test

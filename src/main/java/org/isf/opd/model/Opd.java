@@ -44,7 +44,8 @@ import org.isf.disease.model.Disease;
 import org.isf.patient.model.Patient;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/*------------------------------------------
+/**
+ * ------------------------------------------
  * Opd - model for OPD
  * -----------------------------------------
  * modification history
@@ -58,7 +59,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * 05/09/2008 - alex - added fullname e notefield
  * 09/01/2009 - fabrizio - date field modified to type Date
  * 02/06/2015 - Antonio - ported to JPA
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="OPD")
 @EntityListeners(AuditingEntityListener.class) 
@@ -166,7 +168,7 @@ public class Opd extends Auditable<String>
 	}
 	
 	public String getFullName() {
-		return patient.getName();
+		return patient == null ? "" : patient.getName();
 	}
 
 	public Patient getPatient() {

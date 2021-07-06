@@ -279,13 +279,13 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testGetBMIdescription() throws Exception {
 		// TODO: if message resources are added to the project this code needs to be changed
-		assertThat(examinationBrowserManager.getBMIdescription(0D)).isEqualTo("angal.examination.bmi.severeunderweight");
-		assertThat(examinationBrowserManager.getBMIdescription(17D)).isEqualTo("angal.examination.bmi.underweight");
-		assertThat(examinationBrowserManager.getBMIdescription(20D)).isEqualTo("angal.examination.bmi.normalweight");
-		assertThat(examinationBrowserManager.getBMIdescription(27D)).isEqualTo("angal.examination.bmi.overweight");
-		assertThat(examinationBrowserManager.getBMIdescription(33D)).isEqualTo("angal.examination.bmi.obesityclassilight");
-		assertThat(examinationBrowserManager.getBMIdescription(37D)).isEqualTo("angal.examination.bmi.obesityclassiimedium");
-		assertThat(examinationBrowserManager.getBMIdescription(100D)).isEqualTo("angal.examination.bmi.obesityclassiiisevere");
+		assertThat(examinationBrowserManager.getBMIdescription(0D)).isEqualTo("angal.examination.bmi.severeunderweight.txt");
+		assertThat(examinationBrowserManager.getBMIdescription(17D)).isEqualTo("angal.examination.bmi.underweight.txt");
+		assertThat(examinationBrowserManager.getBMIdescription(20D)).isEqualTo("angal.examination.bmi.normalweight.txt");
+		assertThat(examinationBrowserManager.getBMIdescription(27D)).isEqualTo("angal.examination.bmi.overweight.txt");
+		assertThat(examinationBrowserManager.getBMIdescription(33D)).isEqualTo("angal.examination.bmi.obesityclassilight.txt");
+		assertThat(examinationBrowserManager.getBMIdescription(37D)).isEqualTo("angal.examination.bmi.obesityclassiimedium.txt");
+		assertThat(examinationBrowserManager.getBMIdescription(100D)).isEqualTo("angal.examination.bmi.obesityclassiiisevere.txt");
 	}
 
 	@Test
@@ -341,10 +341,11 @@ public class Tests extends OHCoreTestCase {
 		PatientExamination patientExamination2 = testPatientExamination.setup(patient, false);
 		patientExamination2.setPex_ID(-1);
 		assertThat(patientExamination.equals(patientExamination)).isTrue();
-		assertThat(patientExamination.equals(patientExamination2)).isFalse();
-		assertThat(patientExamination.equals(new String("xyzzy"))).isFalse();
+		assertThat(patientExamination)
+				.isNotEqualTo(patientExamination2)
+				.isNotEqualTo("xyzzy");
 		patientExamination2.setPex_ID(patientExamination.getPex_ID());
-		assertThat(patientExamination.equals(patientExamination2)).isTrue();
+		assertThat(patientExamination).isEqualTo(patientExamination2);
 		assertThat(patientExamination.compareTo(patientExamination2)).isZero();
 
 		assertThat(patientExamination.hashCode()).isPositive();

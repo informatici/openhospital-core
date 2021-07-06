@@ -148,7 +148,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestExamType(false);
-		boolean result = examTypeBrowserManager.codeControl(code);
+		boolean result = examTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
@@ -158,7 +158,7 @@ public class Tests extends OHCoreTestCase {
 		ExamType foundExamType = examTypeIoOperationRepository.findOne(code);
 		boolean result = examTypeBrowserManager.deleteExamType(foundExamType);
 		assertThat(result).isTrue();
-		result = examTypeBrowserManager.codeControl(code);
+		result = examTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isFalse();
 	}
 
@@ -213,7 +213,7 @@ public class Tests extends OHCoreTestCase {
 
 		assertThat(foundExamType.hashCode()).isPositive();
 
-		assertThat(foundExamType.toString()).isEqualTo(foundExamType.getDescription());
+		assertThat(foundExamType).hasToString(foundExamType.getDescription());
 	}
 
 	private String _setupTestExamType(boolean usingSet) throws OHException {

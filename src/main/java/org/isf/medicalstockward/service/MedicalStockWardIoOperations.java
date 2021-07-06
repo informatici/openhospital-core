@@ -21,8 +21,14 @@
  */
 package org.isf.medicalstockward.service;
 
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
+import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
 import org.isf.patient.model.Patient;
@@ -32,10 +38,6 @@ import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 /**
  * @author mwithi
@@ -50,6 +52,8 @@ public class MedicalStockWardIoOperations
 	private MedicalStockWardIoOperationRepository repository;
 	@Autowired
 	private MovementWardIoOperationRepository movementRepository;
+	@Autowired
+	private LotIoOperationRepository lotRepository;
 	
 	/**
 	 * Get all {@link MovementWard}s with the specified criteria.
@@ -65,10 +69,10 @@ public class MedicalStockWardIoOperations
 			GregorianCalendar dateTo) throws OHServiceException 
 	{
 		ArrayList<Integer> pMovementWardCode = null;
-		ArrayList<MovementWard> pMovementWard = new ArrayList<MovementWard>(); 
+		ArrayList<MovementWard> pMovementWard = new ArrayList<>();
 		
 		
-		pMovementWardCode = new ArrayList<Integer>(repository.findAllWardMovement(wardId, dateFrom, dateTo));
+		pMovementWardCode = new ArrayList<>(repository.findAllWardMovement(wardId, dateFrom, dateTo));
         for (Integer code : pMovementWardCode) {
             MovementWard movementWard = movementRepository.findOne(code);
 
@@ -98,13 +102,12 @@ public class MedicalStockWardIoOperations
 	/**
 	 * Gets the current quantity for the specified {@link Medical} and specified {@link Ward}.
 	 * @param ward - if {@code null} the quantity is counted for the whole hospital
-	 * @param medical - the {@link Medical} to check.
 	 * @return the total quantity.
 	 * @throws OHServiceException if an error occurs retrieving the quantity.
 	 */
 	public int getCurrentQuantityInWard(
-			Ward ward, 
-			Medical medical) throws OHServiceException 
+					Ward ward, 
+					Medical medical) throws OHServiceException 
 	{
 		Double mainQuantity = 0.0;
 		
@@ -122,17 +125,32 @@ public class MedicalStockWardIoOperations
 	}
 	
 	/**
-	 * Stores the specified {@link Movement}.
-	 * @param movement the movement to store.
-	 * @return <code>true</code> if has been stored, <code>false</code> otherwise.
-	 * @throws OHServiceException if an error occurs.
-	 */	
-	public boolean newMovementWard(
-			MovementWard movement) throws OHServiceException 
+	 * Gets the current quantity for the specified {@link Ward} and {@link Lot}.
+	 * @param ward - if {@code null} the quantity is counted for the whole hospital
+	 * @param lot - the {@link Lot} to be counted
+	 * @return the total quantity.
+	 * @throws OHServiceException if an error occurs retrieving the quantity.
+	 */
+	public int getCurrentQuantityInWard(
+			Ward ward, 
+			Lot lot) throws OHServiceException 
 	{
-		boolean result = true;
-	
+		Double quantity;
+		if (ward != null) {
+			quantity = lotRepository.getQuantityByWard(lot, ward);
+		} else {
+			quantity = repository.findQuantityInWardWhereMedical(lot.getMedical().getCode());
+		}
+		return (int) (quantity == null ? 0 : quantity.doubleValue());
+	}
 
+	/**
+	 * Stores the specified {@link Movement}.
+	 *
+	 * @param movement the movement to store.
+	 * @throws OHServiceException if an error occurs.
+	 */
+	public void newMovementWard(MovementWard movement) throws OHServiceException {
 		MovementWard savedMovement = movementRepository.save(movement);
 		if (savedMovement.getWardTo() != null) {
 			// We have to register also the income movement for the destination Ward
@@ -147,34 +165,18 @@ public class MedicalStockWardIoOperations
 			destinationWardIncomeMovement.setlot(savedMovement.getLot());
 			movementRepository.save(destinationWardIncomeMovement);
 		}
-		
-		if (savedMovement != null) {
-			updateStockWardQuantity(movement);
-		}
-		result = (savedMovement != null);
-		
-		return result;
+		updateStockWardQuantity(movement);
 	}
 
 	/**
 	 * Stores the specified {@link Movement} list.
 	 * @param movements the movement to store.
-	 * @return <code>true</code> if the movements have been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs.
 	 */
-	public boolean newMovementWard(
-			ArrayList<MovementWard> movements) throws OHServiceException 
-	{
-		for (MovementWard movement:movements) {
-
-			boolean inserted = newMovementWard(movement);
-			if (!inserted) 
-			{
-				return false;
-			}
+	public void newMovementWard(ArrayList<MovementWard> movements) throws OHServiceException {
+		for (MovementWard movement : movements) {
+			newMovementWard(movement);
 		}
-		
-		return true;		
 	}
 
 	/**
@@ -284,12 +286,13 @@ public class MedicalStockWardIoOperations
 	public ArrayList<MedicalWard> getMedicalsWard(
 			char wardId, boolean stripeEmpty) throws OHServiceException
 	{
-		ArrayList<MedicalWard> medicalWards = new ArrayList<MedicalWard>(repository.findAllWhereWard(wardId));
+		ArrayList<MedicalWard> medicalWards = new ArrayList<>(repository.findAllWhereWard(wardId));
 		for (int i=0; i<medicalWards.size(); i++)
 
 		{
-			double qty = Double.valueOf(medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
+			double qty = (double) (medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
 			medicalWards.get(i).setQty(qty);
+			
 
 			if (stripeEmpty && qty == 0) {
 				medicalWards.remove(i);
@@ -323,7 +326,7 @@ public class MedicalStockWardIoOperations
 		String WardID=String.valueOf(wardId);
 		ArrayList<MedicalWard> medicalWards = getMedicalsWard(wardId, true);
 
-		ArrayList<MedicalWard> medicalWardsQty = new ArrayList<MedicalWard>();
+		ArrayList<MedicalWard> medicalWardsQty = new ArrayList<>();
 
 		for (int i=0; i<medicalWards.size(); i++) {
 

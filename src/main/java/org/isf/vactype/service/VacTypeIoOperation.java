@@ -21,23 +21,23 @@
  */
 package org.isf.vactype.service;
 
-/*------------------------------------------
- * IoOperation - methods to interact with DB
- * -----------------------------------------
- * modification history
- * 19/10/2011 - Cla - version is now 1.0
- *------------------------------------------*/
-
 import java.util.ArrayList;
 
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.vaccine.model.Vaccine;
 import org.isf.vactype.model.VaccineType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * ------------------------------------------
+ * VacTypeIoOperation - methods to interact with DB
+ * -----------------------------------------
+ * modification history
+ * 19/10/2011 - Cla - version is now 1.0
+ * ------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -47,13 +47,13 @@ public class VacTypeIoOperation {
 	private VaccineTypeIoOperationRepository repository;
 	
 	/**
-	 * returns all {@link VaccineType}s from DB	
+	 * Returns all {@link VaccineType}s from DB
 	 * 	
 	 * @return the list of {@link VaccineType}s
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<VaccineType> getVaccineType() throws OHServiceException {
-		return new ArrayList<VaccineType>(repository.findAllByOrderByDescriptionAsc()); 
+		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 	
 	/**
@@ -103,14 +103,13 @@ public class VacTypeIoOperation {
 	}
 	
 	/**
-	 * returns the {@link VaccineType} based on code
+	 * Returns the {@link VaccineType} based on code
 	 *
 	 * @param code - the code, must not be {@literal null}
 	 * @return the {@link VaccineType} or {@literal null} if none found
-	 * @throws OHServiceException 
 	 * @throws IllegalArgumentException if {@code code} is {@literal null}
 	 */
-	public VaccineType findVaccineType(String code) throws OHServiceException 
+	public VaccineType findVaccineType(String code)
 	{
 		if (code != null) {
 			return repository.findOne(code);

@@ -73,26 +73,26 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testIoGetMovementType() throws Exception {
+	public void testIoFindOne() throws Exception {
 		String code = _setupTestMovementType(false);
-		MovementType foundMovementType = medicalStockMovementTypeIoOperation.getMovementType(code);
+		MovementType foundMovementType = medicalStockMovementTypeIoOperation.findOneByCode(code);
 		ArrayList<MovementType> movementTypes = medicalStockMovementTypeIoOperation.getMedicaldsrstockmovType();
 		assertThat(movementTypes.get(movementTypes.size() - 1).getDescription()).isEqualTo(foundMovementType.getDescription());
 	}
 
 	@Test
-	public void testIoGetMovementTypeNull() throws Exception {
-		assertThat(medicalStockMovementTypeIoOperation.getMovementType("notThere")).isNull();
+	public void testIoFindOneNull() throws Exception {
+		assertThat(medicalStockMovementTypeIoOperation.findOneByCode("notThere")).isNull();
 	}
 
 	@Test
 	public void testIoUpdateMovementType() throws Exception {
 		String code = _setupTestMovementType(false);
-		MovementType foundMovementType = medicalStockMovementTypeIoOperation.getMovementType(code);
+		MovementType foundMovementType = medicalStockMovementTypeIoOperation.findOneByCode(code);
 		foundMovementType.setDescription("Update");
 		boolean result = medicalStockMovementTypeIoOperation.updateMedicaldsrstockmovType(foundMovementType);
 		assertThat(result).isTrue();
-		MovementType updateMovementType = medicalStockMovementTypeIoOperation.getMovementType(code);
+		MovementType updateMovementType = medicalStockMovementTypeIoOperation.findOneByCode(code);
 		assertThat(updateMovementType.getDescription()).isEqualTo("Update");
 	}
 
@@ -114,7 +114,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoDeleteMovementType() throws Exception {
 		String code = _setupTestMovementType(false);
-		MovementType foundMovementType = medicalStockMovementTypeIoOperation.getMovementType(code);
+		MovementType foundMovementType = medicalStockMovementTypeIoOperation.findOneByCode(code);
 		boolean result = medicalStockMovementTypeIoOperation.deleteMedicaldsrstockmovType(foundMovementType);
 		assertThat(result).isTrue();
 		result = medicalStockMovementTypeIoOperation.isCodePresent(code);
@@ -122,7 +122,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrGetMovementType() throws Exception {
+	public void testMgrFindOne() throws Exception {
 		String code = _setupTestMovementType(false);
 		MovementType foundMovementType = medicaldsrstockmovTypeBrowserManager.getMovementType(code);
 		ArrayList<MovementType> movementTypes = medicaldsrstockmovTypeBrowserManager.getMedicaldsrstockmovType();
@@ -130,7 +130,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrGetMovementTypeNull() throws Exception {
+	public void testMgrFindOneNull() throws Exception {
 		assertThat(medicaldsrstockmovTypeBrowserManager.getMovementType("notThere")).isNull();
 	}
 
@@ -152,9 +152,9 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrCodeControl() throws Exception {
+	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestMovementType(false);
-		assertThat(medicaldsrstockmovTypeBrowserManager.codeControl(code)).isTrue();
+		assertThat(medicaldsrstockmovTypeBrowserManager.isCodePresent(code)).isTrue();
 	}
 
 	@Test
@@ -162,7 +162,7 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestMovementType(false);
 		MovementType foundMovementType = medicaldsrstockmovTypeBrowserManager.getMovementType(code);
 		assertThat(medicaldsrstockmovTypeBrowserManager.deleteMedicaldsrstockmovType(foundMovementType)).isTrue();
-		assertThat(medicaldsrstockmovTypeBrowserManager.codeControl(code)).isFalse();
+		assertThat(medicaldsrstockmovTypeBrowserManager.isCodePresent(code)).isFalse();
 	}
 
 	@Test
@@ -220,7 +220,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMovementTypeToString() throws Exception {
 		MovementType movementType = new MovementType("ZZABCD", "TestDescription", "+");
-		assertThat(movementType.toString()).isEqualTo("TestDescription");
+		assertThat(movementType).hasToString("TestDescription");
 	}
 
 	@Test
@@ -231,10 +231,11 @@ public class Tests extends OHCoreTestCase {
 		MovementType movementType4 = new MovementType("ZZABCD", "TestDescription", "++");
 
 		assertThat(movementType1.equals(movementType1)).isTrue();
-		assertThat(movementType1.equals(new Integer(-1))).isFalse();
-		assertThat(movementType1.equals(movementType2)).isFalse();
-		assertThat(movementType1.equals(movementType3)).isTrue();
-		assertThat(movementType1.equals(movementType4)).isTrue();
+		assertThat(movementType1)
+				.isNotEqualTo("someString")
+				.isNotEqualTo(movementType2)
+				.isEqualTo(movementType3)
+				.isEqualTo(movementType4);
 	}
 
 	@Test
@@ -254,7 +255,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void _checkMovementTypeIntoDb(String code) throws OHException {
-		MovementType foundMovementType = medicalStockMovementTypeIoOperation.getMovementType(code);
+		MovementType foundMovementType = medicalStockMovementTypeIoOperation.findOneByCode(code);
 		testMovementType.check(foundMovementType);
 	}
 }

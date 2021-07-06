@@ -21,6 +21,9 @@
  */
 package org.isf.menu.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.isf.menu.model.GroupMenu;
 import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
@@ -30,9 +33,6 @@ import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -49,7 +49,7 @@ public class MenuIoOperations
 	private GroupMenuIoOperationRepository groupMenuRepository;
 	
 	/**
-	 * returns the list of {@link User}s
+	 * Returns the list of {@link User}s
 	 * 
 	 * @return the list of {@link User}s
 	 * @throws OHServiceException
@@ -63,7 +63,7 @@ public class MenuIoOperations
 	}
 
 	/**
-	 * returns the list of {@link User}s in specified groupID
+	 * Returns the list of {@link User}s in specified groupID
 	 * 
 	 * @param groupID - the group ID
 	 * @return the list of {@link User}s
@@ -79,7 +79,7 @@ public class MenuIoOperations
 	}
 	
 	/**
-	 * returns {@link User} from its username
+	 * Returns {@link User} from its username
 	 * @param userName - the {@link User}'s username
 	 * @return {@link User}
 	 * @throws OHServiceException
@@ -90,7 +90,7 @@ public class MenuIoOperations
 	}
 	
 	/**
-	 * returns {@link User} description from its username
+	 * Returns {@link User} description from its username
 	 * @param userName - the {@link User}'s username
 	 * @return the {@link User}'s description
 	 * @throws OHServiceException
@@ -105,7 +105,7 @@ public class MenuIoOperations
 	}
 	
 	/**
-	 * returns the list of {@link UserGroup}s
+	 * Returns the list of {@link UserGroup}s
 	 * 
 	 * @return the list of {@link UserGroup}s
 	 * @throws OHServiceException
@@ -234,7 +234,7 @@ public class MenuIoOperations
 	}
 	
 	/**
-	 * returns the list of {@link UserMenuItem}s that compose the menu for specified {@link User}
+	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link User}
 	 * 
 	 * @param aUser - the {@link User}
 	 * @return the list of {@link UserMenuItem}s 
@@ -247,7 +247,7 @@ public class MenuIoOperations
 		List<Object[]> menuList = menuRepository.findAllWhereId(aUser.getUserName());
 		
 		
-		menu = new ArrayList<UserMenuItem>();
+		menu = new ArrayList<>();
 		for (Object[] object : menuList) {
 			
 			UserMenuItem umi = new UserMenuItem();
@@ -268,7 +268,7 @@ public class MenuIoOperations
 	}
 
 	/**
-	 * returns the list of {@link UserMenuItem}s that compose the menu for specified {@link UserGroup}
+	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link UserGroup}
 	 * 
 	 * @param aGroup - the {@link UserGroup}
 	 * @return the list of {@link UserMenuItem}s 
@@ -278,7 +278,7 @@ public class MenuIoOperations
 			UserGroup aGroup) throws OHServiceException 
 	{
 		List<Object[]> menuList = menuRepository.findAllWhereGroupId(aGroup.getCode());
-		ArrayList<UserMenuItem> menu = new ArrayList<UserMenuItem>();
+		ArrayList<UserMenuItem> menu = new ArrayList<>();
 		for (Object[] object : menuList) {
 			boolean active = (Integer) object[9] == 1 ? true : false;
 			UserMenuItem umi = new UserMenuItem();
@@ -300,7 +300,7 @@ public class MenuIoOperations
 	}
 
 	/**
-	 * replaces the {@link UserGroup} rights
+	 * Replaces the {@link UserGroup} rights
 	 * 
 	 * @param aGroup - the {@link UserGroup}
 	 * @param menu - the list of {@link UserMenuItem}s

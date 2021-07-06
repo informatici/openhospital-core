@@ -40,7 +40,7 @@ import org.springframework.stereotype.Component;
 public class SmsManager {
 
 	public static final int MAX_LENGHT = 160;
-	private final String NUMBER_REGEX = "^\\+?\\d+$"; //$NON-NLS-1$
+	private static final String NUMBER_REGEX = "^\\+?\\d+$"; //$NON-NLS-1$
 
 	@Autowired
 	private SmsOperations smsOperations;
@@ -55,18 +55,18 @@ public class SmsManager {
 	 * @throws OHDataValidationException
 	 */
 	protected void validateSms(Sms sms) throws OHDataValidationException {
-		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		String number = sms.getSmsNumber();
 		String text = sms.getSmsText();
 
 		if (!number.matches(NUMBER_REGEX)) {
-			errors.add(new OHExceptionMessage("numberError",
-					MessageBundle.getMessage("angal.sms.pleaseinsertavalidtelephonenumber"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.sms.pleaseinsertavalidtelephonenumber.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (text.isEmpty()) {
-			errors.add(new OHExceptionMessage("emptyTextError",
-					MessageBundle.getMessage("angal.sms.pleaseinsertatext"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.sms.pleaseinsertatextmessage.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {
@@ -90,19 +90,12 @@ public class SmsManager {
 	public void saveOrUpdate(Sms smsToSend, boolean split) throws OHServiceException {
 		validateSms(smsToSend);
 
-		List<Sms> smsList = new ArrayList<Sms>();
+		List<Sms> smsList = new ArrayList<>();
 		String text = smsToSend.getSmsText();
 		int textLenght = text.length();
 		if (textLenght > MAX_LENGHT && !split) {
-
-			StringBuilder message = new StringBuilder();
-			message.append(MessageBundle.getMessage("angal.sms.themessageislongerthen"))
-					.append(" ")
-					.append(MAX_LENGHT)
-					.append(" ")
-					.append(MessageBundle.getMessage("angal.sms.chars"));
-			throw new OHDataValidationException(new OHExceptionMessage("testMaxLenghtError",
-					message.toString(),
+			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.sms.themessageislongerthencharacters.fmt.msg", MAX_LENGHT),
 					OHSeverityLevel.ERROR));
 
 		} else if (textLenght > MAX_LENGHT && split) {
@@ -133,7 +126,7 @@ public class SmsManager {
 		smsOperations.delete(smsToDelete);
 	}
 
-	public int getMAX_LENGHT() {
+	public int getMaxLength() {
 		return MAX_LENGHT;
 	}
 

@@ -43,23 +43,23 @@ import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Interaction{
+public class Interaction {
 	
-	private final Logger logger = LoggerFactory.getLogger(Interaction.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Interaction.class);
 
 	private Server server;
 	private Roster roster;
 	
-	public Interaction(){
+	public Interaction() {
 		server = Server.getInstance();
 		roster = server.getRoster(); 
 	}
 	
-	public Collection<String> getContactOnline(){
+	public Collection<String> getContactOnline() {
 
 		Presence presence;
 		Collection<RosterEntry> entries = roster.getEntries();
-		Collection<String> entries_online=new ArrayList<String>();
+		Collection<String> entries_online= new ArrayList<>();
 		for(RosterEntry r:entries)
 		{
 			presence = roster.getPresence(r.getUser());
@@ -80,10 +80,10 @@ public class Interaction{
 
 		try {
 			chat.sendMessage(message);
-		} catch (XMPPException e) {
-			e.printStackTrace();
-		}catch (Exception e) {
-			e.printStackTrace();
+		} catch (XMPPException xmppException) {
+			LOGGER.error(xmppException.getMessage(), xmppException);
+		}catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
 
@@ -97,27 +97,27 @@ public class Interaction{
 
 	
 	public void sendFile(String user,File file,String description){
-		logger.debug("File transfer requested.");
+		LOGGER.debug("File transfer requested.");
 		new ServiceDiscoveryManager(server.getConnection());
 		FileTransferManager manager= new FileTransferManager(server.getConnection());
 		FileTransferNegotiator.setServiceEnabled(server.getConnection(), true);
-		logger.debug("Manager: {}", manager);
+		LOGGER.debug("Manager: {}", manager);
 		String userID = user+server.getUserAddress()+"/Smack";
 		//String userID=getUseradd(user);
-		logger.debug("Recipient: {}", userID);
+		LOGGER.debug("Recipient: {}", userID);
 		//OutgoingFileTransfer.setResponseTimeout(10000);
 		OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(userID);
 		try {
 			transfer.sendFile(file, "msg");
-		} catch (XMPPException e) {
-			e.printStackTrace();
+		} catch (XMPPException xmppException) {
+			LOGGER.error(xmppException.getMessage(), xmppException);
 		}
-		logger.debug("Transfer status: {}, {}", transfer.isDone(), transfer.getStatus());
+		LOGGER.debug("Transfer status: {}, {}", transfer.isDone(), transfer.getStatus());
 
-		if(transfer.isDone())
-			logger.debug("Transfer successfully completed!");
-		if(transfer.getStatus().equals(Status.error))
-			logger.debug("Error while transferring: {}", transfer.getError());
+		if (transfer.isDone())
+			LOGGER.debug("Transfer successfully completed!");
+		if (transfer.getStatus().equals(Status.error))
+			LOGGER.debug("Error while transferring: {}", transfer.getError());
 
 	}
 

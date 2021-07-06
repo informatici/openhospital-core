@@ -499,34 +499,35 @@ public class Tests extends OHCoreTestCase {
 		GroupMenu groupMenu = testGroupMenu.setup(true);
 		groupMenu.setCode(1);
 
-		assertThat(groupMenu.equals(null)).isFalse();
-		assertThat(groupMenu.equals("aString")).isFalse();
+		assertThat(groupMenu)
+				.isNotNull()
+				.isNotEqualTo("aString");
 
 		GroupMenu groupMenu1 = testGroupMenu.setup(false);
 		groupMenu1.setCode(-1);
-		assertThat(groupMenu.equals(groupMenu1)).isFalse();
+		assertThat(groupMenu).isNotEqualTo(groupMenu1);
 
 		groupMenu1.setCode(groupMenu.getCode());
 		groupMenu1.setUserGroup("someOtherGroup");
-		assertThat(groupMenu.equals(groupMenu1)).isFalse();
+		assertThat(groupMenu).isNotEqualTo(groupMenu1);
 
 		groupMenu1.setUserGroup(groupMenu.getUserGroup());
 		groupMenu1.setMenuItem("someOtherMenuItem");
-		assertThat(groupMenu.equals(groupMenu1)).isFalse();
+		assertThat(groupMenu).isNotEqualTo(groupMenu1);
 
 		groupMenu1.setMenuItem(groupMenu.getMenuItem());
 		groupMenu1.setActive(-1);
-		assertThat(groupMenu.equals(groupMenu1)).isFalse();
+		assertThat(groupMenu).isNotEqualTo(groupMenu1);
 
 		groupMenu1.setActive(groupMenu.getActive());
-		assertThat(groupMenu.equals(groupMenu1)).isTrue();
+		assertThat(groupMenu).isEqualTo(groupMenu1);
 	}
 
 	@Test
 	public void testUserToString() throws Exception {
 		UserGroup userGroup = testUserGroup.setup(true);
 		User user = testUser.setup(userGroup, true);
-		assertThat(user.toString()).isEqualTo(user.getUserName());
+		assertThat(user).hasToString(user.getUserName());
 	}
 
 	@Test
@@ -534,19 +535,20 @@ public class Tests extends OHCoreTestCase {
 		UserGroup userGroup = testUserGroup.setup(true);
 		User user = testUser.setup(userGroup, true);
 
-		assertThat(user.equals(null)).isFalse();
-		assertThat(user.equals("someString")).isFalse();
+		assertThat(user)
+				.isNotNull()
+				.isNotEqualTo("someString");
 
 		User user1 = testUser.setup(userGroup, false);
 		user1.setUserName("someOtherName");
-		assertThat(user.equals(user1)).isFalse();
+		assertThat(user).isNotEqualTo(user1);
 
 		user1.setUserName(user.getUserName());
 		user1.setDesc("someOtherDescription");
-		assertThat(user.equals(user1)).isFalse();
+		assertThat(user).isNotEqualTo(user1);
 
 		user1.setDesc(user.getDesc().toLowerCase());
-		assertThat(user.equals(user1)).isTrue();
+		assertThat(user).isEqualTo(user1);
 	}
 
 	@Test
@@ -563,28 +565,29 @@ public class Tests extends OHCoreTestCase {
 	public void testUserGroupToString() throws Exception {
 		UserGroup userGroup = testUserGroup.setup(true);
 		userGroup.setCode("someCode");
-		assertThat(userGroup.toString()).isEqualTo("someCode");
+		assertThat(userGroup).hasToString("someCode");
 	}
 
 	@Test
 	public void testUserGroupEquals() throws Exception {
 		UserGroup userGroup = testUserGroup.setup(true);
 
-		assertThat(userGroup.equals(null)).isFalse();
-		assertThat(userGroup.equals("someString")).isFalse();
+		assertThat(userGroup)
+				.isNotNull()
+				.isNotEqualTo("someString");
 
 		UserGroup userGroup1 = testUserGroup.setup(false);
 
 		userGroup.setCode("code1");
 		userGroup1.setCode("code2");
-		assertThat(userGroup.equals(userGroup1)).isFalse();
+		assertThat(userGroup).isNotEqualTo(userGroup1);
 
 		userGroup1.setCode(userGroup.getCode());
 		userGroup1.setDesc("someOtherDescription");
-		assertThat(userGroup.equals(userGroup1)).isFalse();
+		assertThat(userGroup).isNotEqualTo(userGroup1);
 
 		userGroup1.setDesc(userGroup.getDesc().toLowerCase());
-		assertThat(userGroup.equals(userGroup1)).isTrue();
+		assertThat(userGroup).isEqualTo(userGroup1);
 	}
 
 	@Test
@@ -600,67 +603,59 @@ public class Tests extends OHCoreTestCase {
 	public void testUserMenuItemEquals() throws Exception {
 		UserMenuItem userMenuItem = testUserMenu.setup(true);
 
-		assertThat(userMenuItem.equals(null)).isFalse();
-		assertThat(userMenuItem.equals("someString")).isFalse();
+		assertThat(userMenuItem)
+				.isNotNull()
+				.isNotEqualTo("someString");
 
 		UserMenuItem userMenuItem1 = testUserMenu.setup(false);
 		userMenuItem.setCode("code1");
 		userMenuItem1.setCode("code2");
-		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+		assertThat(userMenuItem).isNotEqualTo(userMenuItem1);
 
 		userMenuItem1.setCode(userMenuItem.getCode());
 		userMenuItem1.setButtonLabel("someOtherButtonLabel");
-		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+		assertThat(userMenuItem).isNotEqualTo(userMenuItem1);
 
 		userMenuItem1.setButtonLabel(userMenuItem.getButtonLabel());
 		userMenuItem1.setAltLabel("someOtherLabel");
-		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+		assertThat(userMenuItem).isNotEqualTo(userMenuItem1);
 
 		userMenuItem1.setAltLabel(userMenuItem.getAltLabel());
 		userMenuItem1.setTooltip("someOtherToolTip");
-		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+		assertThat(userMenuItem).isNotEqualTo(userMenuItem1);
 
 		userMenuItem1.setTooltip(userMenuItem.getTooltip());
 		userMenuItem1.setShortcut('?');
-		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+		assertThat(userMenuItem).isNotEqualTo(userMenuItem1);
 
 		userMenuItem1.setShortcut(userMenuItem.getShortcut());
 		userMenuItem1.setMySubmenu("someOtherSubMenu");
-		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+		assertThat(userMenuItem).isNotEqualTo(userMenuItem1);
 
 		userMenuItem1.setMySubmenu(userMenuItem.getMySubmenu());
 		userMenuItem1.setMyClass("someOtherClass");
-		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+		assertThat(userMenuItem).isNotEqualTo(userMenuItem1);
 
 		userMenuItem1.setMyClass(userMenuItem.getMyClass());
 		userMenuItem1.setASubMenu(!userMenuItem.isASubMenu());
-		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+		assertThat(userMenuItem).isNotEqualTo(userMenuItem1);
 
 		userMenuItem1.setASubMenu(userMenuItem.isASubMenu());
 		userMenuItem1.setPosition(-1);
-		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+		assertThat(userMenuItem).isNotEqualTo(userMenuItem1);
 
 		userMenuItem1.setPosition(userMenuItem.getPosition());
 		userMenuItem1.setActive(!userMenuItem.isActive());
-		assertThat(userMenuItem.equals(userMenuItem1)).isFalse();
+		assertThat(userMenuItem).isNotEqualTo(userMenuItem1);
 
 		userMenuItem1.setActive(userMenuItem.isActive());
-		assertThat(userMenuItem.equals(userMenuItem1)).isTrue();
+		assertThat(userMenuItem).isEqualTo(userMenuItem1);
 	}
 
 	@Test
 	public void testUserMenuItemToString() throws Exception {
 		UserMenuItem userMenuItem = testUserMenu.setup(true);
-		assertThat(userMenuItem.toString()).isEqualTo(userMenuItem.getButtonLabel());
-	}
-
-	@Test
-	public void testUserMenuItemGetDescription() throws Exception {
-		UserMenuItem userMenuItem = testUserMenu.setup(true);
-		// TODO: this will need to change if resource bundles are made available.
-		assertThat(userMenuItem.getDescription())
-				.isEqualTo("angal.menu.usermenuitemZangal.menu.labelstooltipshortTestButtonLabel-TestAltLabel-TestToolTip-Y...\n" +
-						"angal.menu.submenuTestMySubmenuangal.menu.classTestMyClass...\n angal.menu.issubmenutrueangal.menu.isactivetrueangal.menu.inposition11");
+		assertThat(userMenuItem).hasToString(userMenuItem.getButtonLabel());
 	}
 
 	@Test

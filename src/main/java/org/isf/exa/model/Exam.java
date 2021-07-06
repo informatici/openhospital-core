@@ -21,11 +21,6 @@
  */
 package org.isf.exa.model;
 
-/**
- * @(#) Exam.java
- * 20-jan-2006
- */
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -44,18 +39,14 @@ import org.isf.exatype.model.ExamType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Pure Model Exam (laboratory exams): represents an exam
- * 
- * @author bob
+ * -----------------------------------------
+ * Exam - model for the exam (laboratory exams) entity
+ * -----------------------------------------
+ * modification history
+ * 20-jan-2006 - bob - first version
+ * 05/01/2016 - Antonio - ported to JPA
+ * ------------------------------------------
  */
-/*------------------------------------------
-* Disease Type - model for the disease type entity
-* -----------------------------------------
-* modification history
-* ? - bob - first version 
-* 05/01/2016 - Antonio - ported to JPA
-* 
-*------------------------------------------*/
 @Entity
 @Table(name="EXAM")
 @EntityListeners(AuditingEntityListener.class)

@@ -27,22 +27,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/*
- * @version 0.1 2005-11-06
- * @author bob
- * 
- * modified Mwithi - Added method for getting Connection object 
- * 				     (to manage Prepared Statement)
- * 
- */
-
 /**
  * Class that executes a query using the connection DbSingleConn
- * The various methods that open a connection with the 
+ * The various methods that open a connection with the
  * autocommit flag set to false have the responsibility
  * of doing the commit/rollback operation
- * 
- * @deprecated since Open Hospital 1.7.0 replaced by {@link DbQueryLogger}
+ *
+ * @author bob
+ * <p>
+ * modified Mwithi - Added method for getting Connection object
+ * (to manage Prepared Statement)
+ * <p>
+ * @deprecated   Since Open Hospital 1.7.0 replaced by {@link DbQueryLogger}
  */
 @Deprecated
 public class DbQuery {
@@ -114,7 +110,7 @@ public class DbQuery {
      * @throws SQLException
      * @throws IOException
      * 
-     * @Deprecated since Open Hospital 1.7.0 replaced by {@link DbQueryLogger}
+     * @deprecated since Open Hospital 1.7.0 replaced by {@link DbQueryLogger}
      */
     @Deprecated
     public boolean isData(String aQuery) throws SQLException , IOException {

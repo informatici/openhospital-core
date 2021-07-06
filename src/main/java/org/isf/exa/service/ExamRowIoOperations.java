@@ -21,16 +21,6 @@
  */
 package org.isf.exa.service;
 
-/*------------------------------------------
- * IoOperations - provides the io operations for recovering and managing exam records from the database.
- * -----------------------------------------
- * modification history
- * ??/??/2005 - Davide/Theo - first beta version 
- * 07/11/2006 - ross - modified to accept, within the description, the character quote (')
- *                     (to do this, just double every quote. replaceall("'","''") 
- *                     when record locked all data is saved now, not only descritpion
- *------------------------------------------*/
-
 import java.util.ArrayList;
 
 import org.isf.exa.model.ExamRow;
@@ -42,6 +32,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * ------------------------------------------
+ * ExamRowIoOperations - provides the I/OO operations for recovering and managing exam records from the database.
+ * -----------------------------------------
+ * modification history
+ * ??/??/2005 - Davide/Theo - first beta version
+ * 07/11/2006 - ross - modified to accept, within the description, the character quote (')
+ *                     (to do this, just double every quote. replaceall("'","''")
+ *                     when record locked all data is saved now, not only descritpion
+ * ------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -91,18 +92,6 @@ public class ExamRowIoOperations {
 	 * Returns the list of {@link ExamRow}s
 	 * @return the list of {@link ExamRow}s
 	 * @throws OHServiceException
-	 * @deprecated use <code>getExamRows()</code>
-	 */
-	@Deprecated
-	public ArrayList<ExamRow> getExamrows() throws OHServiceException 
-	{
-		return getExamRows();
-	}
-
-	/**
-	 * Returns the list of {@link ExamRow}s
-	 * @return the list of {@link ExamRow}s
-	 * @throws OHServiceException
 	 */
 	public ArrayList<ExamRow> getExamRows() throws OHServiceException
 	{
@@ -118,7 +107,7 @@ public class ExamRowIoOperations {
 	public ArrayList<ExamRow> getExamsRowByDesc(
 			String description) throws OHServiceException 
 	{ 
-		ArrayList<ExamRow> examrows = new ArrayList<ExamRow>();
+		ArrayList<ExamRow> examrows = new ArrayList<>();
 				
 		
 		if (description != null) 
@@ -200,7 +189,7 @@ public class ExamRowIoOperations {
 	 * the parameter; Returns false if the query finds no record, else returns
 	 * true
 	 * 
-	 * @param examrow the {@link Exam}
+	 * @param examrow the {@link ExamRow}
 	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */

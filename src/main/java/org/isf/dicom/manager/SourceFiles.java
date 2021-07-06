@@ -34,6 +34,7 @@ import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
+import org.dcm4che2.data.ConfigurationError;
 import org.dcm4che2.data.DicomObject;
 import org.dcm4che2.data.Tag;
 import org.dcm4che2.imageio.plugins.dcm.DicomImageReadParam;
@@ -48,6 +49,9 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.file.FileTools;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -62,6 +66,8 @@ import com.drew.metadata.exif.ExifIFD0Directory;
  * @version 1.0.0
  */
 public class SourceFiles extends Thread {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(SourceFiles.class);
 
 	private File file = null;
 	private FileDicom fileDicom = null;
@@ -85,8 +91,7 @@ public class SourceFiles extends Thread {
 		try {
 			loadDicomDir(fileDicom, file, patient);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error("loadDicomDir", e);
 		}
 		dicomLoader.setVisible(false);
 		thumbnail.initialize();
@@ -142,9 +147,9 @@ public class SourceFiles extends Thread {
 		for (File value : files) {
 			if (!value.isDirectory()) {
 				if (!checkSize(value)) {
-					throw new OHDicomException(new OHExceptionMessage("DICOM",
-							MessageBundle.getMessage("angal.dicom.afileinthefolderistoobigpleasesetdicommaxsizeproperty") +
-									" (" + DicomManagerFactory.getMaxDicomSize() + ")",
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.formatMessage("angal.dicom.afileinthefolderistoobigpleasesetdicommaxsizeindicomproperties.fmt.msg",
+									DicomManagerFactory.getMaxDicomSize()),
 							OHSeverityLevel.ERROR));
 				}
 				num++;
@@ -175,9 +180,8 @@ public class SourceFiles extends Thread {
 			String fileName = sourceFile.getName();
 			Date seriesDate = null;
 			Date studyDate = null;
-			boolean isJpeg = fileName.toLowerCase().endsWith(".jpg") || fileName.toLowerCase().endsWith(".jpeg");
-			boolean isDicom = fileName.toLowerCase().endsWith(".dcm");
-
+			boolean isJpeg = StringUtils.endsWithIgnoreCase(fileName, ".jpg") || StringUtils.endsWithIgnoreCase(fileName, ".jpeg");
+			boolean isDicom = StringUtils.endsWithIgnoreCase(fileName, ".dcm");
 			ImageReader reader;
 			Iterator<?> iter = null;
 			if (isJpeg) {
@@ -195,15 +199,15 @@ public class SourceFiles extends Thread {
 				try {
 					seriesDate = dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime);
 				} catch (Exception ecc) {
-					System.out.println("DICOM: Unparsable SeriesDate");
+					LOGGER.error("DICOM: Unparsable SeriesDate");
 				}
 				try {
 					studyDate = dicomObject.getDate(Tag.StudyDate, Tag.StudyTime);
 				} catch (Exception ecc) {
-					System.out.println("DICOM: Unparsable StudyDate");
+					LOGGER.error("DICOM: Unparsable StudyDate");
 				}
 				if (dicomObject.getString(Tag.SeriesNumber) == null) {
-					System.out.println("DICOM: Unparsable SeriesNumber");
+					LOGGER.error("DICOM: Unparsable SeriesNumber");
 				}
 				dicomFileDetail.setDicomSeriesNumber(dicomObject.getString(Tag.SeriesNumber));
 			} else {
@@ -218,9 +222,9 @@ public class SourceFiles extends Thread {
 			return dicomFileDetail;
 
 		} catch (OHDicomException e) {
-			System.out.println(e.getMessages().get(0).getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessages().get(0).getMessage());
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 		return dicomFileDetail;
 	}
@@ -237,15 +241,12 @@ public class SourceFiles extends Thread {
 	public static synchronized void loadDicom(FileDicom dicomFileDetail, File sourceFile, int patient) throws Exception {
 		// installLibs();
 
-		//System.out.println("File "+sourceFile.getName());
-
 		if (".DS_Store".equals(sourceFile.getName()))
 			return;
 
 		try {
-			boolean isJpeg = sourceFile.getName().toLowerCase().endsWith(".jpg") ||
-					sourceFile.getName().toLowerCase().endsWith(".jpeg");
-			boolean isDicom = sourceFile.getName().toLowerCase().endsWith(".dcm");
+			boolean isJpeg = StringUtils.endsWithIgnoreCase(sourceFile.getName(), ".jpg") || StringUtils.endsWithIgnoreCase(sourceFile.getName(), ".jpeg");
+			boolean isDicom = StringUtils.endsWithIgnoreCase(sourceFile.getName(), ".dcm");
 
 			ImageReader reader = null;
 			ImageReadParam param;
@@ -269,18 +270,20 @@ public class SourceFiles extends Thread {
 
 					if (orientation != 1) {
 						originalImage = autoRotate(originalImage, orientation);
-						String fileType = sourceFile.getName().toLowerCase().endsWith(".jpg") ? "jpg" : "jpeg";
+						String fileType = StringUtils.endsWithIgnoreCase(sourceFile.getName(), ".jpg") ? "jpg" : "jpeg";
 						File f = File.createTempFile(sourceFile.getName(), "." + fileType);
 						ImageIO.write(originalImage, fileType, f);
 						sourceFile = f;
 					}
 
 				} catch (DicomCodingException dce) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"),
-							MessageBundle.getMessage("angal.dicom.load.err") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()),
+									OHSeverityLevel.ERROR));
 				} catch (IndexOutOfBoundsException ioe) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"),
-							MessageBundle.getMessage("angal.dicom.unknownformat") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName()),
+							OHSeverityLevel.ERROR));
 				}
 
 				imageInputStream.close();
@@ -298,14 +301,16 @@ public class SourceFiles extends Thread {
 
 				try {
 					originalImage = reader.read(0, param);
-				} catch (DicomCodingException dce) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.dicom.err"),
-							MessageBundle.getMessage("angal.dicom.load.err") + " : " + sourceFile.getName(), OHSeverityLevel.ERROR));
+				} catch (DicomCodingException | ConfigurationError dce) {
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()),
+							OHSeverityLevel.ERROR));
 				}
-
 				imageInputStream.close();
 			} else {
-				throw new OHDicomException(new OHExceptionMessage("", "format not supported", OHSeverityLevel.ERROR));
+				throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName()),
+						OHSeverityLevel.ERROR));
 			}
 
 			BufferedImage scaled = Scalr.resize(originalImage, 100);
@@ -346,12 +351,12 @@ public class SourceFiles extends Thread {
 				try {
 					studyDate = studyDate != null ? studyDate : dicomObject.getDate(Tag.StudyDate, Tag.StudyTime);
 				} catch (Exception ecc) {
-					System.out.println("DICOM: Unparsable StudyDate");
+					LOGGER.error("DICOM: Unparsable StudyDate");
 				}
 				try {
 					seriesDate = seriesDate != null ? seriesDate : dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime);
 				} catch (Exception ecc) {
-					System.out.println("DICOM: Unparsable StudyDate");
+					LOGGER.error("DICOM: Unparsable SeriesDate");
 				}
 
 				//set by DICOM properties
@@ -359,11 +364,11 @@ public class SourceFiles extends Thread {
 				patientName = dicomObject.getString(Tag.PatientName) == null ? patientName : dicomObject.getString(Tag.PatientName);
 				patientAddress = dicomObject.getString(Tag.PatientAddress) == null ? patientAddress : dicomObject.getString(Tag.PatientAddress);
 				patientAge = dicomObject.getString(Tag.PatientAge) == null ? patientAge : dicomObject.getString(Tag.PatientAge);
-				String acquisitionsInSeries = dicomObject.getString(Tag.AcquisitionsInSeries);
-				String acquisitionsInStudy = dicomObject.getString(Tag.AcquisitionsInStudy);
-				String applicatorDescription = dicomObject.getString(Tag.ApplicatorDescription);
-				String dicomMediaRetrievalSequence = dicomObject.getString(Tag.DICOMMediaRetrievalSequence);
-				String patientComments = dicomObject.getString(Tag.PatientComments);
+				//String acquisitionsInSeries = dicomObject.getString(Tag.AcquisitionsInSeries);
+				//String acquisitionsInStudy = dicomObject.getString(Tag.AcquisitionsInStudy);
+				//String applicatorDescription = dicomObject.getString(Tag.ApplicatorDescription);
+				//String dicomMediaRetrievalSequence = dicomObject.getString(Tag.DICOMMediaRetrievalSequence);
+				//String patientComments = dicomObject.getString(Tag.PatientComments);
 				try {
 					patientBirthDate = dicomObject.getDate(Tag.PatientBirthDate) == null ?
 							patientBirthDate :
@@ -375,18 +380,18 @@ public class SourceFiles extends Thread {
 				studyUID = dicomObject.getString(Tag.StudyInstanceUID) == null ? studyUID : dicomObject.getString(Tag.StudyInstanceUID);
 				accessionNumber = dicomObject.getString(Tag.AccessionNumber) == null ? accessionNumber : dicomObject.getString(Tag.AccessionNumber);
 				studyDescription = dicomObject.getString(Tag.StudyDescription) == null ? studyDescription : dicomObject.getString(Tag.StudyDescription);
-				String studyComments = dicomObject.getString(Tag.StudyComments);
+				//String studyComments = dicomObject.getString(Tag.StudyComments);
 				seriesUID = dicomObject.getString(Tag.SeriesInstanceUID) == null ? seriesUID : dicomObject.getString(Tag.SeriesInstanceUID);
-				String directoryRecordType = dicomObject.getString(Tag.DirectoryRecordType);
+				//String directoryRecordType = dicomObject.getString(Tag.DirectoryRecordType);
 				seriesInstanceUID = dicomObject.getString(Tag.SeriesInstanceUID) == null ? seriesInstanceUID : dicomObject.getString(Tag.SeriesInstanceUID);
 				seriesNumber = dicomObject.getString(Tag.SeriesNumber) == null ? generateSeriesNumber(patient) : dicomObject.getString(Tag.SeriesNumber);
 				seriesDescriptionCodeSequence = dicomObject.getString(Tag.SeriesDescriptionCodeSequence) == null ?
 						seriesDescriptionCodeSequence :
 						dicomObject.getString(Tag.SeriesDescriptionCodeSequence);
-				String sliceVector = dicomObject.getString(Tag.SliceVector);
-				String sliceLocation = dicomObject.getString(Tag.SliceLocation);
-				String sliceThickness = dicomObject.getString(Tag.SliceThickness);
-				String sliceProgressionDirection = dicomObject.getString(Tag.SliceProgressionDirection);
+				//String sliceVector = dicomObject.getString(Tag.SliceVector);
+				//String sliceLocation = dicomObject.getString(Tag.SliceLocation);
+				//String sliceThickness = dicomObject.getString(Tag.SliceThickness);
+				//String sliceProgressionDirection = dicomObject.getString(Tag.SliceProgressionDirection);
 				institutionName = dicomObject.getString(Tag.InstitutionName) == null ? institutionName : dicomObject.getString(Tag.InstitutionName);
 				instanceUID = dicomObject.getString(Tag.SOPInstanceUID) == null ? instanceUID : dicomObject.getString(Tag.SOPInstanceUID);
 			}
@@ -460,7 +465,7 @@ public class SourceFiles extends Thread {
 		try {
 			orientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
 		} catch (Exception ex) {
-			System.out.println("No EXIF information found for image: " + sourceFile.getName());
+			LOGGER.error("No EXIF information found for image: {}", sourceFile.getName());
 		}
 		return orientation;
 	}
@@ -514,7 +519,7 @@ public class SourceFiles extends Thread {
 			candidateCode = Math.abs(random.nextLong());
 			exists = DicomManagerFactory.getManager().exist(patient, String.valueOf(candidateCode));
 
-		} while (exists != false);
+		} while (exists);
 
 		return String.valueOf(candidateCode);
 	}

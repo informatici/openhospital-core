@@ -31,38 +31,65 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Mwithi
  */
 public class FileTools {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileTools.class);
+
 	private static final String[] BINARY_UNITS = { "B", "M", "G" }; //Byte, Megabyte, Gigabyte 
 
-	protected static final String[][] dateTimeFormats = new String[][] {
-			{ "yyyy-MM-dd", "\\d{4}-\\d{2}-\\d{2}" },
-			{ "dd-MM-yyyy", "\\d{2}-\\d{2}-\\d{4}" },
-			{ "dd-MM-yy", "\\d{2}-\\d{2}-\\d{2}" },
-			{ "dd/MM/yyyy", "\\d{2}/\\d{2}/\\d{4}" },
-			{ "dd/MM/yy", "\\d{2}/\\d{2}/\\d{2}" },
-			{ "yyyy-MM-dd HHmm", "\\d{4}-\\d{2}-\\d{2} \\d{4}" },
-			{ "yyyy-MM-dd HHmmss", "\\d{4}-\\d{2}-\\d{2} \\d{6}" },
-			{ "yyyy-MM-dd_HHmmss", "\\d{4}-\\d{2}-\\d{2}_\\d{6}" },
-			{ "dd-MM-yy_HHmm", "\\d{2}-\\d{2}-\\d{2}_\\d{4}" },
-			{ "yyyy-MM-dd HHmm", "\\d{4}-\\d{2}-\\d{2} \\d{4}" },
-			{ "yyyy-MM-dd_HHmm", "\\d{4}-\\d{2}-\\d{2}_\\d{4}" },
+	// TODO: consider more specific versions of \d that do "some" validation
+	// DAY:   (0[1-9]|[12][0-9]|3[01])
+	// MONTH: (0[1-9]|1[012])
+	// YEAR:  (2\d\d\d)
+
+	// HOUR:  (0[0-9]|1[0-9]|2[0-3])
+	// MIN:   ([0-5][0-9])
+
+	private static final String[][] dateTimeFormats = new String[][] {
+			{ "yyyy-MM-dd_HHmmss", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2}_\\d{6})(?![0-9])" },
+			{ "yyyy-MM-dd HHmmss", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2} \\d{6})(?![0-9])" },
+			{ "yyyy-MM-dd_HHmm", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2}_\\d{4})(?![0-9])" },
+			{ "yyyy-MM-dd HHmm", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2} \\d{4})(?![0-9])" },
+			{ "yyyy-MM-dd", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2})(?![0-9])" },
+
+			{ "yyyyMMdd_HHmmss", "(?<![0-9])(\\d{4}\\d{2}\\d{2}_\\d{6})(?![0-9])" },
+			{ "yyyyMMdd HHmmss", "(?<![0-9])(\\d{4}\\d{2}\\d{2} \\d{6})(?![0-9])" },
+			{ "yyyyMMdd_HHmm", "(?<![0-9])(\\d{4}\\d{2}\\d{2}_\\d{4})(?![0-9])" },
+			{ "yyyyMMdd HHmm", "(?<![0-9])(\\d{4}\\d{2}\\d{2} \\d{4})(?![0-9])" },
+			{ "yyyyMMdd", "(?<![0-9])(\\d{4}\\d{2}\\d{2})(?![0-9])" },
+
+			{ "dd-MM-yyyy_HHmm", "(?<![0-9])(\\d{2}-\\d{2}-\\d{4}_\\d{4})(?![0-9])" },
+			{ "dd-MM-yyyy HHmm", "(?<![0-9])(\\d{2}-\\d{2}-\\d{4} \\d{4})(?![0-9])" },
+			{ "dd-MM-yyyy", "(?<![0-9])(\\d{2}-\\d{2}-\\d{4})(?![0-9])" },
+
+			{ "dd-MM-yy_HHmm", "(?<![0-9])(\\d{2}-\\d{2}-\\d{2}_\\d{4})(?![0-9])" },
+			{ "dd-MM-yy HHmm", "(?<![0-9])(\\d{2}-\\d{2}-\\d{2} \\d{4})(?![0-9])" },
+			{ "dd-MM-yy", "(?<![0-9])(\\d{2}-\\d{2}-\\d{2})(?![0-9])" },
+
+			{ "dd/MM/yyyy_HHmm", "(?<![0-9])(\\d{2}/\\d{2}/\\d{4}_\\d{4})(?![0-9])" },
+			{ "dd/MM/yyyy HHmm", "(?<![0-9])(\\d{2}/\\d{2}/\\d{4} \\d{4})(?![0-9])" },
+			{ "dd/MM/yyyy", "(?<![0-9])(\\d{2}/\\d{2}/\\d{4})(?![0-9])" },
+
+			{ "dd/MM/yy_HHmm", "(?<![0-9])(\\d{2}/\\d{2}/\\d{2}_\\d{4})(?![0-9])" },
+			{ "dd/MM/yy HHmm", "(?<![0-9])(\\d{2}/\\d{2}/\\d{2} \\d{4})(?![0-9])" },
+			{ "dd/MM/yy", "(?<![0-9])(\\d{2}/\\d{2}/\\d{2})(?![0-9])" },
 	};
 
-	/**
-	 *
-	 */
-	public FileTools() {
+	private FileTools() {
 	}
 
 	/**
 	 * Retrieves the last modified date
+	 *
 	 * @param file
 	 * @return
 	 */
@@ -74,6 +101,7 @@ public class FileTools {
 
 	/**
 	 * Retrieve timestamp from filename
+	 *
 	 * @param file
 	 * @return the list of retrieved date or <code>null</code> if nothing is found
 	 */
@@ -83,49 +111,49 @@ public class FileTools {
 
 	/**
 	 * Retrieves the timestamp from formattedString
-	 * using these date and time formats:<br />
+	 * using these date and time formats:<br>
+	 * <p>
+	 * - yyyy-MM-dd -> "2020-02-01"<br>
+	 * - dd-MM-yyyy -> "02-03-2020"<br>
+	 * - dd-MM-yy -> "03-04-20"<br>
+	 * - dd/MM/yyyy -> "04/05/2020"<br>
+	 * - dd/MM/yy -> "05/06/20"<br>
+	 * - yyyy-MM-dd HHmm -> "2020-07-06 0123"<br>
+	 * - yyyy-MM-dd HHmmss -> "2020-08-07 012345"<br>
+	 * - yyyy-MM-dd_HHmmss -> "2020-09-08_012345"<br>
+	 * - dd-MM-yy_HHmm -> "20-10-09_0123"<br>
+	 * - yyyy-MM-dd HHmm -> "2020-10-09 0123"<br>
+	 * - yyyy-MM-dd_HHmm -> "2020-10-09_0123" <br>
 	 *
-	 * - yyyy-MM-dd -> "2020-02-01"<br />
-	 * - dd-MM-yyyy -> "02-03-2020"<br />
-	 * - dd-MM-yy -> "03-04-20"<br />
-	 * - dd/MM/yyyy -> "04/05/2020"<br />
-	 * - dd/MM/yy -> "05/06/20"<br />
-	 * - yyyy-MM-dd HHmm -> "2020-07-06 0123"<br />
-	 * - yyyy-MM-dd HHmmss -> "2020-08-07 012345"<br />
-	 * - yyyy-MM-dd_HHmmss -> "2020-09-08_012345"<br />
-	 * - dd-MM-yy_HHmm -> "20-10-09_0123"<br />
-	 * - yyyy-MM-dd HHmm -> "2020-10-09 0123"<br />
-	 * - yyyy-MM-dd_HHmm -> "2020-10-09_0123" <br />
 	 * @param formattedString
 	 * @return the list of retrieved date (first null)
 	 */
 	public static List<Date> getTimestampFromName(String formattedString) {
-		List<Date> datesFound = new ArrayList<Date>();
+		List<Date> datesFound = new ArrayList<>(1);
 		return getTimestampFromName(formattedString, datesFound);
 	}
 
 	private static List<Date> getTimestampFromName(String formattedString, List<Date> datesFound) {
-		Date date = null;
-
+		if (null == formattedString || StringUtils.isEmpty(formattedString)) {
+			return datesFound;
+		}
 		for (String[] dateTimeFormat : dateTimeFormats) {
 			String format = dateTimeFormat[0];
 			String regex = dateTimeFormat[1];
 
 			SimpleDateFormat sdf = new SimpleDateFormat(format);
-
 			try {
 				Pattern pattern = Pattern.compile(regex);
 				Matcher matcher = pattern.matcher(formattedString);
-
 				if (matcher.find()) {
-					date = sdf.parse(matcher.group());
-					datesFound.add(date);
+					// only return the longest match
+					datesFound.add(sdf.parse(matcher.group(1)));
+					return datesFound;
 				}
 			} catch (ParseException e) {
-				date = null;
+				LOGGER.error("ParseException (no date patterns found) in '{}'", formattedString);
 			}
 		}
-
 		return datesFound;
 	}
 
@@ -138,13 +166,13 @@ public class FileTools {
 		}
 
 		final int exponent = (int) (Math.log(bytes) / Math.log(base));
-		final String unit = BINARY_UNITS[exponent];
+		final String unit = BINARY_UNITS[exponent - 1];
 		return String.format(locale, "%.1f %s", bytes / Math.pow(base, exponent), unit);
 	}
 
 	public static Long humanReadableByteCountParse(String string) throws OHException {
 		final int base = 1024;
-		Long size = null;
+		long size;
 
 		try {
 			if (string.contains(BINARY_UNITS[0])) { // Byte
@@ -160,33 +188,9 @@ public class FileTools {
 				throw new NumberFormatException();
 			}
 		} catch (NumberFormatException e) {
-			throw new OHException(MessageBundle.getMessage("angal.dicom.unknownsizeformatpleasesetdicommaxsizeproperty") +
-					" (" + string + ")");
+			throw new OHException(MessageBundle.formatMessage("angal.dicom.unknownsizeformatpleasesetdicommaxsizeproperty.fmt.msg", string));
 		}
 		return size;
 	}
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		System.out.println("1. 09-03-2020      -> " + FileTools.getTimestampFromName("09-03-2020"));
-		System.out.println("2. 01-04-2020 1238 -> " + FileTools.getTimestampFromName("01-04-2020 1238"));
-		System.out.println("3. 02-05-2020_1122 -> " + FileTools.getTimestampFromName("02-05-2020_1122"));
-		System.out.println("4. 03-06-2020      -> " + FileTools.getTimestampFromName("03-06-2020"));
-		System.out.println("5. 04/03/2020      -> " + FileTools.getTimestampFromName("04/03/2020"));
-		System.out.println("6. 05/05/20        -> " + FileTools.getTimestampFromName("05/05/20"));
-		System.out.println("7. 2021-12-22 1100 -> " + FileTools.getTimestampFromName("2021-12-22 1100"));
-		System.out.println("8. 21-11-21_0922   -> " + FileTools.getTimestampFromName("21-11-21_0922"));
-
-		try {
-			System.out.println("1. 1024B -> " + FileTools.humanReadableByteCountParse("1024B"));
-			System.out.println("2. 4M   -> " + FileTools.humanReadableByteCountParse("4M"));
-			System.out.println("2. 16M   -> " + FileTools.humanReadableByteCountParse("16M"));
-			System.out.println("3. 256M  -> " + FileTools.humanReadableByteCountParse("256M"));
-			System.out.println("4. 1G    -> " + FileTools.humanReadableByteCountParse("1G"));
-		} catch (OHException e) {
-			e.printStackTrace();
-		}
-	}
 }

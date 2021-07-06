@@ -21,11 +21,11 @@
  */
 package org.isf.medicalstock.service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.medicals.model.Medical;
@@ -105,14 +105,15 @@ public class MedicalStockIoOperations {
 
 		ArrayList<Lot> lots = getLotsByMedical(movement.getMedical());
 
-		int qty = movement.getQuantity();
+		int qty = movement.getQuantity(); // movement initial quantity
 		for (Lot lot : lots) {
 			Movement splitMovement = new Movement(movement.getMedical(), movement.getType(), movement.getWard(),
 					null, // lot to be set
-					movement.getDate(), qty,
-					null, // quantity to be set
+					movement.getDate(), 
+					qty, // quantity can remain the same or changed if greater than lot quantity
+					null, 
 					movement.getRefNo());
-			int qtLot = lot.getQuantity();
+			int qtLot = lot.getMainStoreQuantity();
 			if (qtLot < qty) {
 				splitMovement.setQuantity(qtLot);
 				result = storeMovement(splitMovement, lot.getCode());
@@ -454,10 +455,10 @@ public class MedicalStockIoOperations {
 			GregorianCalendar dateTo) throws OHServiceException 
 	{
 		ArrayList<Integer> pMovementCode = null;
-		ArrayList<Movement> pMovement = new ArrayList<Movement>();
+		ArrayList<Movement> pMovement = new ArrayList<>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findMovementWhereDatesAndId(wardId, dateFrom, dateTo));
+		pMovementCode = new ArrayList<>(movRepository.findMovementWhereDatesAndId(wardId, dateFrom, dateTo));
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
 			Integer code = pMovementCode.get(i);
@@ -498,11 +499,11 @@ public class MedicalStockIoOperations {
 			GregorianCalendar lotDueTo) throws OHServiceException 
 	{
 		ArrayList<Integer> pMovementCode = null;
-		ArrayList<Movement> pMovement = new ArrayList<Movement>();
+		ArrayList<Movement> pMovement = new ArrayList<>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findMovementWhereData(
-				medicalCode, medicalType, wardId, movType, 
+		pMovementCode = new ArrayList<>(movRepository.findMovementWhereData(
+				medicalCode, medicalType, wardId, movType,
 				movFrom, movTo, lotPrepFrom, lotPrepTo, lotDueFrom, lotDueTo));			
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
@@ -541,11 +542,11 @@ public class MedicalStockIoOperations {
 	{
 
 		ArrayList<Integer> pMovementCode = null;
-		ArrayList<Movement> pMovement = new ArrayList<Movement>();
+		ArrayList<Movement> pMovement = new ArrayList<>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findMovementForPrint(
-				medicalDescription, medicalTypeCode, wardId, movType, 
+		pMovementCode = new ArrayList<>(movRepository.findMovementForPrint(
+				medicalDescription, medicalTypeCode, wardId, movType,
 				movFrom, movTo, lotCode, order));			
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
@@ -569,18 +570,14 @@ public class MedicalStockIoOperations {
 	public ArrayList<Lot> getLotsByMedical(
 			Medical medical) throws OHServiceException
 	{
-		List<Lot> lots = lotRepository.findByMovements_MedicalOrderByDueDate(medical.getCode());
-
+		List<Lot> lots = lotRepository.findByMedicalOrderByDueDate(medical.getCode());
+		//retrieve quantities
+		lots.stream().forEach(lot -> {
+			lot.setMainStoreQuantity(lotRepository.getMainStoreQuantity(lot));
+			lot.setWardsTotalQuantity(lotRepository.getWardsTotalQuantity(lot));
+		});
 		// remove empty lots
-		ArrayList<Lot> emptyLots = new ArrayList<Lot>();
-		for (Lot aLot : lots) {
-			aLot.setQuantity(aLot.calculateQuantity());
-			if (aLot.getQuantity() == 0)
-				emptyLots.add(aLot);
-		}
-		lots.removeAll(emptyLots);
-
-		return new ArrayList<Lot>(lots);
+		return new ArrayList<>(lots.stream().filter(lot -> lot.getMainStoreQuantity() > 0).collect(Collectors.toList()));
 	}
 
 	// Method is not used anywhere
@@ -598,7 +595,7 @@ public class MedicalStockIoOperations {
 	//	}
 		
 	/**
-	 * returns the date of the last movement
+	 * Returns the date of the last movement
 	 * @return 
 	 * @throws OHServiceException
 	 */
@@ -616,10 +613,8 @@ public class MedicalStockIoOperations {
 			String refNo) throws OHServiceException 
 	{
 		boolean result = false;
-		
-			
-		if (movRepository.findAllWhereRefNo(refNo).size() > 0)
-		{
+
+		if (!movRepository.findAllWhereRefNo(refNo).isEmpty()) {
 			result = true;
 		}		
 			

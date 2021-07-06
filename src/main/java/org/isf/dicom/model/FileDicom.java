@@ -47,23 +47,19 @@ import javax.validation.constraints.NotNull;
 
 import org.isf.dicomtype.model.DicomType;
 import org.isf.utils.db.Auditable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Model for contain Detailed DICOM Data
- * 
- * @author Pietro Castellucci
- * @version 1.0.0
- * 
- */
-/*------------------------------------------
- * Dicom - model for the DICOM entity
+ * ------------------------------------------
+ * Dicom - model for the DICOM entity; contains detailed DICOM Data
  * -----------------------------------------
  * modification history
- * ? -  Pietro Castellucci - first version 
+ * ? -  Pietro Castellucci - first version
  * 29/08/2016 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name = "DICOM")
 @EntityListeners(AuditingEntityListener.class) 
@@ -76,6 +72,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 })
 public class FileDicom extends Auditable<String>
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileDicom.class);
+
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "DM_FILE_ID")
@@ -271,8 +269,8 @@ public class FileDicom extends Auditable<String>
 			Blob blob = new SerialBlob(byteArray);
 			this.dicomData = blob;
 
-		} catch (Exception ecc) {
-			ecc.printStackTrace();
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
 
@@ -637,8 +635,8 @@ public class FileDicom extends Auditable<String>
 			Blob blob = new SerialBlob(byteArray);
 			this.dicomThumbnail = blob;
 
-		} catch (Exception ecc) {
-			ecc.printStackTrace();
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
 
@@ -652,8 +650,8 @@ public class FileDicom extends Auditable<String>
 		BufferedImage bi = null;
 		try {
 			bi = ImageIO.read(dicomThumbnail.getBinaryStream());
-		} catch (Exception ecc) {
-			ecc.printStackTrace();
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 		return bi;
 	}

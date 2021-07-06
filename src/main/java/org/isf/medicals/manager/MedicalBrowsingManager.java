@@ -21,11 +21,6 @@
  */
 package org.isf.medicals.manager;
 
-/**
- * 19-dec-2005
- * 14-jan-2006
- */
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +41,8 @@ import org.springframework.stereotype.Component;
  * useful logic manipulations of the dynamic data (memory)
  *
  * @author bob
+ * 19-dec-2005
+ * 14-jan-2006
  */
 @Component
 public class MedicalBrowsingManager {
@@ -113,7 +110,7 @@ public class MedicalBrowsingManager {
 	 *
 	 * @param type the medical type description.
 	 * @return all the medicals with the specified description.
-	 * @nameSorted if <code>true</code> return the list in alphabetical order, by code otherwise
+	 * @param nameSorted if <code>true</code> return the list in alphabetical order, by code otherwise
 	 */
 	public ArrayList<Medical> getMedicals(String type, boolean nameSorted) throws OHServiceException {
 		return ioOperations.getMedicals(type, nameSorted);
@@ -195,8 +192,8 @@ public class MedicalBrowsingManager {
 		boolean inStockMovement = ioOperations.isMedicalReferencedInStockMovement(medical.getCode());
 
 		if (inStockMovement) {
-			throw new OHDataIntegrityViolationException(new OHExceptionMessage("existingReferencesError",
-					MessageBundle.getMessage("angal.medicals.therearestockmovementsreferredtothismedical"),
+			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.medicals.therearestockmovementsreferredtothismedical.msg"),
 					OHSeverityLevel.ERROR));
 		}
 
@@ -212,18 +209,18 @@ public class MedicalBrowsingManager {
 	private List<OHExceptionMessage> checkMedicalCommon(Medical medical) {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (medical.getMinqty() < 0) {
-			errors.add(new OHExceptionMessage("quantityLesserThanZeroError",
-					MessageBundle.getMessage("angal.medicals.minquantitycannotbelessthan0"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.medicals.minquantitycannotbelessthan0.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (medical.getPcsperpck() < 0) {
-			errors.add(new OHExceptionMessage("packagingLesserThanZeroError",
-					MessageBundle.getMessage("angal.medicals.insertavalidpackaging"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.medicals.insertavalidpackaging.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (medical.getDescription().equalsIgnoreCase("")) {
-			errors.add(new OHExceptionMessage("nullOrEmptyDescriptionError",
-					MessageBundle.getMessage("angal.medicals.inseravaliddescription"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		return errors;
@@ -235,7 +232,6 @@ public class MedicalBrowsingManager {
 	 * @param medical - the {@link Medical} to check
 	 * @param ignoreSimilar - if <code>true</code>, it will not perform a similarity check.
 	 * {@code warning}: same Medical description in the same {@link MedicalType} category is not allowed anyway
-	 * @return <code>true</code> if the {@link Medical} is ok for inserting, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
 	private void checkMedicalForInsert(Medical medical, boolean ignoreSimilar) throws OHServiceException {
@@ -248,7 +244,6 @@ public class MedicalBrowsingManager {
 	 * @param medical - the {@link Medical} to check
 	 * @param ignoreSimilar - if <code>true</code>, it will not perform a similarity check.
 	 * {@code warning}: same Medical description in the same {@link MedicalType} category is not allowed anyway
-	 * @return <code>true</code> if the {@link Medical} is ok for updating, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
 	public void checkMedicalForUpdate(Medical medical, boolean ignoreSimilar) throws OHServiceException {
@@ -262,7 +257,6 @@ public class MedicalBrowsingManager {
 	 * @param ignoreSimilar - if <code>true</code>, it will not perform a similarity check.
 	 * {@code warning}: same Medical description in the same {@link MedicalType} category is not allowed anyway
 	 * @param update - if <code>true</code>, it will not consider the actual {@link Medical}
-	 * @return <code>true</code> if the {@link Medical} is ok for updating, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
 	public void checkMedical(Medical medical, boolean ignoreSimilar, boolean update) throws OHServiceException {
@@ -277,27 +271,24 @@ public class MedicalBrowsingManager {
 		ArrayList<Medical> similarMedicals = ioOperations.medicalCheck(medical, update);
 
 		if (productCodeExists) {
-			errors.add(new OHExceptionMessage("productCodeExistsError",
-					MessageBundle.getMessage("angal.medicals.thecodeisalreadyused"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 					OHSeverityLevel.ERROR));
 		} else if (medicalExists) {
-			StringBuilder message = new StringBuilder(MessageBundle.getMessage("angal.medicals.thepairtypemedicalalreadyexists")).append('\n');
-			message.append('[').append(medical.getType().getDescription()).append("] ");
-			message.append(medical.toString()).append('\n');
-			errors.add(new OHExceptionMessage("pairTypeMedicalExistsError",
-					message.toString(),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.medicals.thepairtypemedicalalreadyexists.fmt.msg", medical.getType().getDescription(), medical.toString()),
 					OHSeverityLevel.ERROR));
 		} else if (!ignoreSimilar && !similarMedicals.isEmpty()) {
-			StringBuilder message = new StringBuilder(MessageBundle.getMessage("angal.medicals.themedicalyouinsertedseemsalreadyinuse")).append('\n');
+			StringBuilder message = new StringBuilder(MessageBundle.getMessage("angal.medicals.theinsertedmedicalisalreadyinuse.msg")).append('\n');
 			for (Medical med : similarMedicals) {
 				message.append('[').append(med.getType().getDescription()).append("] ");
 				if (!med.getProd_code().isEmpty())
 					message.append('[').append(med.getProd_code()).append("] ");
 				message.append(med.toString()).append('\n');
 			}
-			errors.add(new OHExceptionMessage("similarsFoundWarning",
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					message.toString(),
-					OHSeverityLevel.WARNING));
+					OHSeverityLevel.ERROR));
 		}
 		
 		if (!errors.isEmpty()) {

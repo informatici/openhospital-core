@@ -56,24 +56,24 @@ public class MedicalTypeBrowserManager {
 		String description = medicalType.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (key.isEmpty()) {
-			errors.add(new OHExceptionMessage("codeEmptyError",
-					MessageBundle.getMessage("angal.medtype.pleaseinsertacode"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (key.length() > 1) {
-			errors.add(new OHExceptionMessage("codeTooLongError",
-					MessageBundle.getMessage("angal.medtype.codetoolongmaxchars"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.thecodeistoolongmax1char.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (description.isEmpty()) {
-			errors.add(new OHExceptionMessage("descriptionEmptyError",
-					MessageBundle.getMessage("angal.medtype.pleaseinsertavaliddescription"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
-			if (codeControl(medicalType.getCode())) {
-				throw new OHDataIntegrityViolationException(new OHExceptionMessage(null,
-						MessageBundle.getMessage("angal.common.codealreadyinuse"),
+			if (isCodePresent(medicalType.getCode())) {
+				throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}
@@ -123,7 +123,7 @@ public class MedicalTypeBrowserManager {
 	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean codeControl(String code) throws OHServiceException {
+	public boolean isCodePresent(String code) throws OHServiceException {
 		return ioOperations.isCodePresent(code);
 	}
 

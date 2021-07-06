@@ -53,7 +53,7 @@ public class PricesListIoOperations {
 		ArrayList<PriceList> pList = null;
 			
 
-		pList = new ArrayList<PriceList>(repository.findAll());
+		pList = new ArrayList<>(repository.findAll());
 		
 		return pList;
 	}
@@ -68,7 +68,7 @@ public class PricesListIoOperations {
 		ArrayList<Price> pPrice = null;
 						
 
-		pPrice = new ArrayList<Price>(priceRepository.findAllByOrderByDescriptionAsc());
+		pPrice = new ArrayList<>(priceRepository.findAllByOrderByDescriptionAsc());
 		
 		return pPrice;
 	}

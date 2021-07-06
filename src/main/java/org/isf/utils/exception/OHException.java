@@ -25,34 +25,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class OHException extends Exception {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	
-	protected Logger logger = LoggerFactory.getLogger(OHException.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OHException.class);
 	
 	/**
-	 * 
 	 * @param message
 	 * @param cause
 	 */
 	public OHException(String message, Throwable cause) {
 		super(message, cause);
-		if (logger.isErrorEnabled()) {
-			logger.error(">> EXCEPTION: {}", sanitize(message));
-			logger.error(">> {}", cause);
+		if (LOGGER.isErrorEnabled()) {
+			LOGGER.error(">> EXCEPTION: {}", sanitize(message));
+			LOGGER.error(">> ", cause);
 		}
 	}
 	
 	/**
-	 * 
 	 * @param message
 	 */
 	public OHException(String message) {
 		super(message);
-		if (logger.isErrorEnabled()) {
-			logger.error(">> EXCEPTION: {}", sanitize(message));
+		if (LOGGER.isErrorEnabled()) {
+			LOGGER.error(">> EXCEPTION: {}", sanitize(message));
 		}
 	}
 	

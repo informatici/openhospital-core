@@ -111,7 +111,7 @@ public class PriceListManager {
 	}
 
 	/**
-	 * Duplicate specified {@List list}
+	 * Duplicate specified {@link PriceList}
 	 *
 	 * @param list
 	 * @return <code>true</code> if the list has been duplicated, <code>false</code> otherwise
@@ -160,24 +160,24 @@ public class PriceListManager {
 	protected void validatePriceList(PriceList priceList) throws OHDataValidationException {
 		java.util.List<OHExceptionMessage> errors = new ArrayList<>();
 
-		if (StringUtils.isEmpty(priceList.getCode())) { //$NON-NLS-1$
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.priceslist.pleaseinsertacode"),
+		if (StringUtils.isEmpty(priceList.getCode())) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (StringUtils.isEmpty(priceList.getName())) { //$NON-NLS-1$
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.priceslist.pleaseinsertaname"),
+		if (StringUtils.isEmpty(priceList.getName())) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.priceslist.pleaseinsertanameforthelist.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (StringUtils.isEmpty(priceList.getDescription())) { //$NON-NLS-1$
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.priceslist.pleaseinsertadescription"),
+		if (StringUtils.isEmpty(priceList.getDescription())) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (StringUtils.isEmpty(priceList.getCurrency())) { //$NON-NLS-1$
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"),
-					MessageBundle.getMessage("angal.priceslist.pleaseinsertacurrency"),
+		if (StringUtils.isEmpty(priceList.getCurrency())) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.priceslist.pleaseinsertacurrency.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {

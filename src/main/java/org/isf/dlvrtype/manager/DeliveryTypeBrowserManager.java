@@ -88,7 +88,7 @@ public class DeliveryTypeBrowserManager {
 	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean codeControl(String code) throws OHServiceException {
+	public boolean isCodePresent(String code) throws OHServiceException {
 		return ioOperations.isCodePresent(code);
 	}
 
@@ -115,22 +115,26 @@ public class DeliveryTypeBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		String key = deliveryType.getCode();
 		if (key.equals("")) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.dlvrtype.pleaseinsertacode"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (key.length() > 1) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.dlvrtype.codetoolongmaxchars"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.thecodeistoolongmax1char.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
-			if (codeControl(key)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.common.codealreadyinuse"),
+			if (isCodePresent(key)) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}
 		if (deliveryType.getDescription().equals("")) {
 			errors.add(
-					new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.dlvrtype.pleaseinsertavaliddescription"),
+					new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 							OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {

@@ -38,13 +38,14 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/*------------------------------------------
-* Disease Type - model for the disease type entity
-* -----------------------------------------
-* modification history
-* 05/01/2016 - Antonio - ported to JPA
-* 
-*------------------------------------------*/
+/**
+ * ------------------------------------------
+ * ExamRow - model for the exam row entity
+ * -----------------------------------------
+ * modification history
+ * 05/01/2016 - Antonio - ported to JPA
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="EXAMROW")
 @EntityListeners(AuditingEntityListener.class)

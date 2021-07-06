@@ -21,6 +21,13 @@
  */
 package org.isf.accounting.service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
 import org.isf.accounting.model.BillPayments;
@@ -31,13 +38,6 @@ import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * Persistence class for Accounting module.
@@ -65,7 +65,7 @@ public class AccountingIoOperations {
 		if (patID != 0)
 			return new ArrayList<>(billRepository.findByStatusAndBillPatientCodeOrderByDateDesc("O", patID));
 
-		return new ArrayList<Bill>(billRepository.findByStatusOrderByDateDesc("O"));
+		return new ArrayList<>(billRepository.findByStatusOrderByDateDesc("O"));
 	}
 	
 	/**
@@ -74,7 +74,7 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the bills.
 	 */
 	public ArrayList<Bill> getBills() throws OHServiceException {
-		return new ArrayList<Bill>(billRepository.findAllByOrderByDateDesc());
+		return new ArrayList<>(billRepository.findAllByOrderByDateDesc());
 	}
 	
 	/**
@@ -94,7 +94,7 @@ public class AccountingIoOperations {
 	 */
     public ArrayList<String> getUsers() throws OHServiceException {
 
-		return new ArrayList<String>(billPaymentRepository.findUserDistinctByOrderByUserAsc());
+		return new ArrayList<>(billPaymentRepository.findUserDistinctByOrderByUserAsc());
 	}
 
 	/**
@@ -110,11 +110,11 @@ public class AccountingIoOperations {
 		
 		if (billID != 0)
 		{
-			billItems = new ArrayList<BillItems>(billItemsRepository.findByBill_idOrderByIdAsc(billID));
+			billItems = new ArrayList<>(billItemsRepository.findByBill_idOrderByIdAsc(billID));
 		}
 		else
 		{
-			billItems = new ArrayList<BillItems>(billItemsRepository.findAllByOrderByIdAsc());
+			billItems = new ArrayList<>(billItemsRepository.findAllByOrderByIdAsc());
 		}
 
 		return billItems;
@@ -131,8 +131,8 @@ public class AccountingIoOperations {
 		GregorianCalendar dateFrom, 
 		GregorianCalendar dateTo) throws OHServiceException {
 
-		return new ArrayList<BillPayments>(
-			billPaymentRepository.findByDateBetweenOrderByIdAscDateAsc(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo)));
+		return new ArrayList<>(
+				billPaymentRepository.findByDateBetweenOrderByIdAscDateAsc(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo)));
 	}
 
 	/**
@@ -323,7 +323,7 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the bill list.
 	 */
 	public ArrayList<Bill> getBillsBetweenDates(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
-		return new ArrayList<Bill>(billRepository.findByDateBetween(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo)));
+		return new ArrayList<>(billRepository.findByDateBetween(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo)));
 	}
 
 	/**
@@ -333,7 +333,8 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the bill list.
 	 */
 	public ArrayList<Bill> getBills(ArrayList<BillPayments> payments) throws OHServiceException {
-		Set<Bill> bills = new TreeSet<Bill>(new Comparator<Bill>() {
+		Set<Bill> bills = new TreeSet<>(new Comparator<Bill>() {
+
 			@Override
 			public int compare(Bill o1, Bill o2) {
 				return o1.getId() == o2.getId() ? 1 : 0;
@@ -343,7 +344,7 @@ public class AccountingIoOperations {
 			bills.add(bp.getBill());
 		}
 
-		return new ArrayList<Bill>(bills);
+		return new ArrayList<>(bills);
 	}
 
 	/**
@@ -353,7 +354,7 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the payments.
 	 */
 	public ArrayList<BillPayments> getPayments(ArrayList<Bill> bills) throws OHServiceException {
-		return new ArrayList<BillPayments>(billPaymentRepository.findAllByBillIn(bills));
+		return new ArrayList<>(billPaymentRepository.findAllByBillIn(bills));
 	}
 	
 	/**
@@ -445,7 +446,9 @@ public class AccountingIoOperations {
 	
 	/**
 	 * Return the bill list which date between dateFrom and dateTo and containing given billItem
+	 *
 	 * added by u2g
+	 *
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param billItem

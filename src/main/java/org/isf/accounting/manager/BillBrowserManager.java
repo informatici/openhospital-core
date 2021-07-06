@@ -21,6 +21,10 @@
  */
 package org.isf.accounting.manager;
 
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
 import org.isf.accounting.model.BillPayments;
@@ -34,10 +38,6 @@ import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 @Component
 public class BillBrowserManager {
@@ -59,14 +59,13 @@ public class BillBrowserManager {
 	 * @param bill
 	 * @param billItems
 	 * @param billPayments
-	 * @return list of {@link OHExceptionMessage}
-	 * @throws OHDataValidationException 
+	 * @throws OHDataValidationException
 	 */
 	protected void validateBill(Bill bill, 
 			ArrayList<BillItems> billItems, 
 			ArrayList<BillPayments> billPayments) throws OHDataValidationException 
 	{
-        List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+        List<OHExceptionMessage> errors = new ArrayList<>();
         
         GregorianCalendar today = new GregorianCalendar();
 		GregorianCalendar upDate = new GregorianCalendar();
@@ -78,7 +77,7 @@ public class BillBrowserManager {
 		lastPay.setTime(today.getTime());
 
 		GregorianCalendar billDate = bill.getDate();
-		if (billPayments.size() > 0) {
+		if (!billPayments.isEmpty()) {
 			firstPay = billPayments.get(0).getDate();
 			lastPay = billPayments.get(billPayments.size()-1).getDate(); //most recent payment
 			upDate = lastPay;
@@ -88,28 +87,28 @@ public class BillBrowserManager {
 		bill.setUpdate(upDate);
         
 		if (billDate.after(today)) {
-			errors.add(new OHExceptionMessage("billAfterTodayError", 
-	        		MessageBundle.getMessage("angal.newbill.billsinfuturenotallowed"), 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+	        		MessageBundle.getMessage("angal.newbill.billsinthefuturearenotallowed.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (lastPay.after(today)) {
-			errors.add(new OHExceptionMessage("paymentAfterTodayError", 
-	        		MessageBundle.getMessage("angal.newbill.payementinthefuturenotallowed"), 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+	        		MessageBundle.getMessage("angal.newbill.payementsinthefuturearenotallowed.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (billDate.after(firstPay)) {
-			errors.add(new OHExceptionMessage("billAfterFirstPaymentError", 
-	        		MessageBundle.getMessage("angal.newbill.billdateafterfirstpayment"), 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+	        		MessageBundle.getMessage("angal.newbill.billdateaisfterthefirstpayment.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (bill.getPatName().isEmpty()) {
-			errors.add(new OHExceptionMessage("patientNameEmptyError", 
-	        		MessageBundle.getMessage("angal.newbill.pleaseinsertanameforthepatient"), 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+	        		MessageBundle.getMessage("angal.newbill.pleaseinsertanameforthepatient.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (bill.getStatus().equals("C") && bill.getBalance() != 0) {
-			errors.add(new OHExceptionMessage("closeWithBalanceError", 
-	        		MessageBundle.getMessage("angal.newbill.youcannotcloseabillwithoutstandingbalance"), 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+	        		MessageBundle.getMessage("angal.newbill.abillwithanoutstandingbalancecannotbeclosed.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if(!errors.isEmpty()){
@@ -136,7 +135,7 @@ public class BillBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<BillItems> getItems(int billID) throws OHServiceException {
-		if (billID == 0) return new ArrayList<BillItems>();
+		if (billID == 0) return new ArrayList<>();
 		return ioOperations.getItems(billID);
 	}
 
@@ -183,7 +182,7 @@ public class BillBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<BillPayments> getPayments(int billID) throws OHServiceException {
-		if (billID == 0) return new ArrayList<BillPayments>();
+		if (billID == 0) return new ArrayList<>();
 		return ioOperations.getPayments(billID);
 	}
 	
@@ -340,7 +339,7 @@ public class BillBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Bill> getBills(ArrayList<BillPayments> billPayments) throws OHServiceException {
-		if (billPayments.isEmpty()) return new ArrayList<Bill>();
+		if (billPayments.isEmpty()) return new ArrayList<>();
 		return ioOperations.getBills(billPayments);
 	}
 
@@ -386,7 +385,7 @@ public class BillBrowserManager {
 	}
 	
 	/**
-	 * get the bills list with a given billItem
+	 * Get the bills list with a given billItem
 	 * @param dateFrom
 	 * @param dateTo
 	 * @param billItem

@@ -21,11 +21,21 @@
  */
 package org.isf.dicomtype.test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.ArrayList;
+
+import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
+import org.isf.dicomtype.manager.DicomTypeBrowserManager;
 import org.isf.dicomtype.model.DicomType;
 import org.isf.dicomtype.service.DicomTypeIoOperation;
 import org.isf.dicomtype.service.DicomTypeIoOperationRepository;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -39,6 +49,8 @@ public class Tests extends OHCoreTestCase {
 	DicomTypeIoOperation dicomTypeIoOperation;
 	@Autowired
 	DicomTypeIoOperationRepository dicomTypeIoOperationRepository;
+	@Autowired
+	DicomTypeBrowserManager dicomTypeBrowserManager;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -60,6 +72,141 @@ public class Tests extends OHCoreTestCase {
 	public void testDicomTypeSets() throws Exception {
 		String code = _setupTestDicomType(true);
 		_checkDicomTypeIntoDb(code);
+	}
+
+	@Test
+	public void testIoGetDicomType() throws Exception {
+		String typeId = _setupTestDicomType(false);
+		ArrayList<DicomType> dicomTypes = dicomTypeIoOperation.getDicomType();
+		testDicomType.check(dicomTypes.get(0));
+	}
+
+	@Test
+	public void testIoUpdateDicomType() throws Exception {
+		String typeId = _setupTestDicomType(false);
+		DicomType dicomType = dicomTypeIoOperationRepository.findOne(typeId);
+		dicomType.setDicomTypeDescription("newDescription");
+		assertThat(dicomTypeIoOperation.updateDicomType(dicomType)).isTrue();
+		DicomType dicomType2 = dicomTypeIoOperationRepository.findOne(typeId);
+		assertThat(dicomType2.getDicomTypeDescription()).isEqualTo("newDescription");
+	}
+
+	@Test
+	public void testIoNewDicomType() throws Exception {
+		DicomType dicomType = new DicomType("id", "description");
+		assertThat(dicomTypeIoOperation.newDicomType(dicomType)).isTrue();
+		DicomType dicomType2 = dicomTypeIoOperationRepository.findOne(dicomType.getDicomTypeID());
+		assertThat(dicomType2.getDicomTypeDescription()).isEqualTo("description");
+	}
+
+	@Test
+	public void testIoDeleteDicomType() throws Exception {
+		DicomType dicomType = new DicomType("id", "description");
+		assertThat(dicomTypeIoOperation.newDicomType(dicomType)).isTrue();
+		assertThat(dicomTypeIoOperation.deleteDicomType(dicomType)).isTrue();
+		assertThat(dicomTypeIoOperation.isCodePresent(dicomType.getDicomTypeID())).isFalse();
+	}
+
+	@Test
+	public void testIoIsCodePresent() throws Exception {
+		DicomType dicomType = new DicomType("id", "description");
+		assertThat(dicomTypeIoOperation.newDicomType(dicomType)).isTrue();
+		assertThat(dicomTypeIoOperation.isCodePresent(dicomType.getDicomTypeID())).isTrue();
+	}
+
+	@Test
+	public void testMgrGetDicomType() throws Exception {
+		String typeId = _setupTestDicomType(false);
+		ArrayList<DicomType> dicomTypes = dicomTypeBrowserManager.getDicomType();
+		testDicomType.check(dicomTypes.get(0));
+	}
+
+	@Test
+	public void testMgrUpdateDicomType() throws Exception {
+		String typeId = _setupTestDicomType(false);
+		DicomType dicomType = dicomTypeIoOperationRepository.findOne(typeId);
+		dicomType.setDicomTypeDescription("newDescription");
+		assertThat(dicomTypeBrowserManager.updateDicomType(dicomType)).isTrue();
+		DicomType dicomType2 = dicomTypeIoOperationRepository.findOne(typeId);
+		assertThat(dicomType2.getDicomTypeDescription()).isEqualTo("newDescription");
+	}
+
+	@Test
+	public void testMgrNewDicomType() throws Exception {
+		DicomType dicomType = new DicomType("id", "description");
+		assertThat(dicomTypeBrowserManager.newDicomType(dicomType)).isTrue();
+		DicomType dicomType2 = dicomTypeIoOperationRepository.findOne(dicomType.getDicomTypeID());
+		assertThat(dicomType2.getDicomTypeDescription()).isEqualTo("description");
+	}
+
+	@Test
+	public void testMgrDeleteDicomType() throws Exception {
+		DicomType dicomType = new DicomType("id", "description");
+		assertThat(dicomTypeBrowserManager.newDicomType(dicomType)).isTrue();
+		assertThat(dicomTypeBrowserManager.deleteDicomType(dicomType)).isTrue();
+		assertThat(dicomTypeBrowserManager.isCodePresent(dicomType.getDicomTypeID())).isFalse();
+	}
+
+	@Test
+	public void testMgrIsCodePresent() throws Exception {
+		DicomType dicomType = new DicomType("id", "description");
+		assertThat(dicomTypeBrowserManager.newDicomType(dicomType)).isTrue();
+		assertThat(dicomTypeBrowserManager.isCodePresent(dicomType.getDicomTypeID())).isTrue();
+	}
+
+	@Test
+	public void testMgrValidationTypeIdIsEmpty() throws Exception {
+		String typeId = _setupTestDicomType(false);
+		DicomType dicomType = dicomTypeIoOperationRepository.findOne(typeId);
+		dicomType.setDicomTypeID("");
+		assertThatThrownBy(() -> dicomTypeBrowserManager.updateDicomType(dicomType))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+	}
+
+	@Test
+	public void testMgrValidationTypeIdIsTooLong() throws Exception {
+		String typeId = _setupTestDicomType(false);
+		DicomType dicomType = dicomTypeIoOperationRepository.findOne(typeId);
+		dicomType.setDicomTypeID("thisIsAKeyThatIsTooLong");
+		assertThatThrownBy(() -> dicomTypeBrowserManager.updateDicomType(dicomType))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+	}
+
+	@Test
+	public void testMgrValidationDescriptionIsEmpty() throws Exception {
+		DicomType dicomType = new DicomType("id", "");
+		assertThatThrownBy(() -> dicomTypeBrowserManager.newDicomType(dicomType))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+	}
+
+	@Test
+	public void testMgrValidationCodeAlreadyExists() throws Exception {
+		String typeId = _setupTestDicomType(true);
+		DicomType dicomType = dicomTypeIoOperationRepository.findOne(typeId);
+		assertThatThrownBy(() -> dicomTypeBrowserManager.newDicomType(dicomType))
+				.isInstanceOf(OHDataIntegrityViolationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+	}
+
+	@Test
+	public void testDicomTypeToString() throws Exception {
+		DicomType dicomType = new DicomType("id", "someDescription");
+		assertThat(dicomType).hasToString("someDescription");
 	}
 
 	private String _setupTestDicomType(boolean usingSet) throws OHException {

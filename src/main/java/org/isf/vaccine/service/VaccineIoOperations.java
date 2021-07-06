@@ -38,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  * modification history
  * 20/10/2011 - Cla - insert vaccinetype managment
- *
  */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -49,17 +48,17 @@ public class VaccineIoOperations {
 	private VaccineIoOperationRepository repository;
 	
 	/**
-	 * returns the list of {@link Vaccine}s based on vaccine type code
+	 * Returns the list of {@link Vaccine}s based on vaccine type code
 	 *
 	 * @param vaccineTypeCode - the type code. If <code>null</code> returns all {@link Vaccine}s in the DB
 	 * @return the list of {@link Vaccine}s
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Vaccine> getVaccine(String vaccineTypeCode) throws OHServiceException {
-		return new ArrayList<Vaccine>(
-			vaccineTypeCode != null ?
-				repository.findByVaccineType_CodeOrderByDescriptionAsc(vaccineTypeCode) :
-				repository.findAllByOrderByDescriptionAsc()
+		return new ArrayList<>(
+				vaccineTypeCode != null ?
+						repository.findByVaccineType_CodeOrderByDescriptionAsc(vaccineTypeCode) :
+						repository.findAllByOrderByDescriptionAsc()
 		);
 	}
 
@@ -109,14 +108,13 @@ public class VaccineIoOperations {
 	}
 	
 	/**
-	 * returns the {@link Vaccine} based on code
+	 * Returns the {@link Vaccine} based on code
 	 *
 	 * @param code - the code, must not be {@literal null}
 	 * @return the {@link Vaccine} or {@literal null} if none found
-	 * @throws OHServiceException 
 	 * @throws IllegalArgumentException if {@code code} is {@literal null}
 	 */
-	public Vaccine findVaccine(String code) throws OHServiceException 
+	public Vaccine findVaccine(String code)
 	{
 		if (code != null) {
 			return repository.findOne(code);

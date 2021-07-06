@@ -34,27 +34,17 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/*------------------------------------------
- * VaccineType - vaccine type class to model vaccine type
- * -----------------------------------------
- * modification history
- * 19/10/2011 - Cla - version is now 1.0
- * 18/11/2011 - Cla - inserted print method
- *------------------------------------------*/
-
 /**
- * Pure Model vaccineType (type of vaccines)
- * 
- * @author bob
- */
-/*------------------------------------------
+ * ------------------------------------------
  * Vaccine Type - model for the vaccine type entity
  * -----------------------------------------
  * modification history
- * ? - bob - first version 
+ * ? - bob - first version
+ * 19/10/2011 - Cla - version is now 1.0
+ * 18/11/2011 - Cla - inserted print method
  * 18/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="VACCINETYPE")
 @EntityListeners(AuditingEntityListener.class)

@@ -37,19 +37,14 @@ import org.slf4j.LoggerFactory;
 
 import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
 
-/*
- * @version 0.1 2005-11-06
- * @author bob
- *
- */
-
 /**
- * classe singleton che provvede alla connessione con database i parametri: dati
- * connessione,database, user, passwd ecc sono letti da file properties
+ * Singleton class that provides connection with the database
+ *
+ * @author bob 2005-11-06
  */
 public class DbSingleConn {
 
-	protected static Logger logger = LoggerFactory.getLogger(DbSingleConn.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DbSingleConn.class);
 
 	private static final int MYSQL_DEFAULT_PORT = 3306;
 
@@ -63,8 +58,8 @@ public class DbSingleConn {
 			try {
 				pConn = createConnection();
 			} catch (CommunicationsException ce) {
-				String message = MessageBundle.getMessage("angal.utils.dbserverconnectionfailure");
-				logger.error(">> {}", message);
+				String message = MessageBundle.getMessage("angal.sql.databaseserverstoppedornetworkfailure.msg");
+				LOGGER.error(">> {}", message);
 				JOptionPane.showMessageDialog(null, message);
 				System.exit(1);
 			}

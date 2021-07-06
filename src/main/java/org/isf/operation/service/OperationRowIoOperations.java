@@ -56,7 +56,7 @@ public class OperationRowIoOperations {
 		if(opd.isPersisted()) {
 			return repository.findByOpd(opd);
 		} else {
-			return new ArrayList<OperationRow>();
+			return new ArrayList<>();
 		}
     }
 

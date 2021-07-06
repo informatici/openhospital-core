@@ -27,13 +27,13 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.isf.exa.model.Exam;
+import org.isf.generaldata.GeneralData;
 import org.isf.lab.model.Laboratory;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
 
 public class TestLaboratory {
 
-	private Integer code = 0;
 	private String material = "TestMaterial";
 	private GregorianCalendar now = new GregorianCalendar();
 	private GregorianCalendar registrationDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
@@ -80,13 +80,21 @@ public class TestLaboratory {
 	}
 
 	public void check(Laboratory laboratory) {
-		assertThat(laboratory.getAge()).isEqualTo(age);
+		// If GeneralData.LABEXTENDED is true then the age found in the patient record is
+		// copied into the Laboratory record and as the age in the patient record changes
+		// based on when (what day and year) the test is run then a comparison to a fixed
+		// value almost always fails (except for late in 2021 and early in 2022).
+		// Likewise the patient name is copied from the Patient record which does not
+		// match the default in the Laboratory record.
+		if (!GeneralData.LABEXTENDED) {
+			assertThat(laboratory.getAge()).isEqualTo(age);
+			assertThat(laboratory.getPatName()).isEqualTo(patName);
+		}
 		assertThat(laboratory.getDate()).isEqualTo(registrationDate);
 		assertThat(laboratory.getExamDate()).isEqualTo(examDate);
 		assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
 		assertThat(laboratory.getMaterial()).isEqualTo(material);
 		assertThat(laboratory.getNote()).isEqualTo(note);
-		assertThat(laboratory.getPatName()).isEqualTo(patName);
 		assertThat(laboratory.getResult()).isEqualTo(result);
 		assertThat(laboratory.getSex()).isEqualTo(sex);
 	}

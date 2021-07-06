@@ -81,7 +81,7 @@ public class DischargeTypeBrowserManager {
 	 * @return true - if the DischargeType already exists
 	 * @throws OHServiceException
 	 */
-	public boolean codeControl(String code) throws OHServiceException {
+	public boolean isCodePresent(String code) throws OHServiceException {
 		return ioOperations.isCodePresent(code);
 	}
 
@@ -106,7 +106,8 @@ public class DischargeTypeBrowserManager {
 	protected void validateDeleteDischargeType(DischargeType dischargeType) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (dischargeType.getCode().equals("D")) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.youcannotdeletethisrecord"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.disctype.youcannotdeletethisrecord.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {
@@ -125,23 +126,27 @@ public class DischargeTypeBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		String key = dischargeType.getCode();
 		if (key.equals("")) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.pleaseinsertacode"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (key.length() > 10) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.codetoolongmaxchars"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 10),
 					OHSeverityLevel.ERROR));
 		}
 
 		if (insert) {
-			if (codeControl(key)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.common.codealreadyinuse"),
+			if (isCodePresent(key)) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}
 		if (dischargeType.getDescription().equals("")) {
 			errors.add(
-					new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.disctype.pleaseinsertavaliddescription"),
+					new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 							OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {

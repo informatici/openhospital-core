@@ -52,17 +52,16 @@ import net.sf.jasperreports.engine.export.JRTextExporter;
 import net.sf.jasperreports.engine.export.JRTextExporterParameter;
 
 /**
- * 
+ * This class will read generic/text printer parameters and compile and
+ * print given jasper report. A copy will be at given file path
+ *
  * @author Mwithi
- * 
- *         This class will read generic/text printer parameters and compile and
- *         print given jasper report. A copy will be at given file path
- * 
  */
 public class PrintReceipt {
-	
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PrintReceipt.class);
+
 	private PrintService defaultPrintService;
-	private final Logger logger = LoggerFactory.getLogger(PrintReceipt.class);
 
 	/**
 	 * @param jasperPrint
@@ -70,7 +69,7 @@ public class PrintReceipt {
 	 */
 	public PrintReceipt(JasperPrint jasperPrint, String fileName) {
 				
-		TxtPrinter.getTxtPrinter();
+		TxtPrinter.initialize();
 		
 		try {
 			defaultPrintService = PrintServiceLookup.lookupDefaultPrintService();
@@ -103,19 +102,18 @@ public class PrintReceipt {
 					}
 
 				} else {
-					logger.debug("invalid MODE");
-					logger.debug("MODE: {}", TxtPrinter.MODE);
+					LOGGER.debug("invalid MODE");
+					LOGGER.debug("MODE: {}", TxtPrinter.MODE);
 				}
 			} else {
-				logger.debug("printer was not found.");
+				LOGGER.debug("printer was not found.");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
 	
 	/**
-	 * 
 	 * @param file
 	 * @param showDialog
 	 */
@@ -150,9 +148,9 @@ public class PrintReceipt {
 			int i = 0;
 			while (!aLine.equals("")) {
 				//System.out.println(aLine);
-				zpl.append("^FO0," + (i * charH));//line position
-				zpl.append(font + "," + charH);//font size
-				zpl.append("^FD" + aLine + "^FS");//line field
+				zpl.append("^FO0,").append(i * charH);         //line position
+				zpl.append(font).append(",").append(charH);    //font size
+				zpl.append("^FD").append(aLine).append("^FS"); //line field
 				aLine = brStream.readLine();
 				i++;
 			}
@@ -168,17 +166,16 @@ public class PrintReceipt {
 			brStream.close();
 			frStream.close();
 
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (PrintException e) {
-			e.printStackTrace();
+		} catch (FileNotFoundException fileNotFoundException) {
+			LOGGER.error(fileNotFoundException.getMessage(), fileNotFoundException);
+		} catch (IOException ioException) {
+			LOGGER.error(ioException.getMessage(), ioException);
+		} catch (PrintException printException) {
+			LOGGER.error(printException.getMessage(), printException);
 		}
 	}
 	
 	/**
-	 * 
 	 * @param jasperPrint
 	 */
 	private void printReversPages(JasperPrint jasperPrint) {
@@ -187,29 +184,28 @@ public class PrintReceipt {
 			List pages = jasperPrint.getPages();
 			JasperPrintManager.printPages(jasperPrint, 0, pages.size()-1, !TxtPrinter.USE_DEFAULT_PRINTER);
 			
-		} catch (JRException e) {
-			e.printStackTrace();
+		} catch (JRException jrException) {
+			LOGGER.error(jrException.getMessage(), jrException);
 		}
 	}
 	
 	/**
-	 * 
 	 * @param printService
 	 */
 	private void getPrinterDetails(PrintService printService) {
-		logger.debug("Printer: {}", printService.getName());
-		logger.debug("Supported flavors:");
+		LOGGER.debug("Printer: {}", printService.getName());
+		LOGGER.debug("Supported flavors:");
 		DocFlavor[] flavors = printService.getSupportedDocFlavors();
 		if (flavors != null) {
 			for (DocFlavor flavor : flavors) {
-				logger.debug(flavor.toString());
+				LOGGER.debug(flavor.toString());
 			}
 		}
 		//System.out.println("Attributes:");
 		Attribute[] attributes = printService.getAttributes().toArray();
 		if (attributes != null) {
 			for (Attribute attr : attributes) {
-				logger.debug("{}: {}", attr.getName(), (attr.getClass()).toString());
+				LOGGER.debug("{}: {}", attr.getName(), (attr.getClass()).toString());
 			}
 		}
 	}

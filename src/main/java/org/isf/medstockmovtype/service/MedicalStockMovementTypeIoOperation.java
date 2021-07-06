@@ -21,6 +21,9 @@
  */
 package org.isf.medstockmovtype.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -28,12 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Persistence class for the medstockmovtype module.
- *
  */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -50,7 +49,7 @@ public class MedicalStockMovementTypeIoOperation {
 	 */
 	public ArrayList<MovementType> getMedicaldsrstockmovType() throws OHServiceException 
 	{
-		return new ArrayList<MovementType>(repository.findAllByOrderByDescriptionAsc()); 	
+		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 
 	/**
@@ -122,13 +121,14 @@ public class MedicalStockMovementTypeIoOperation {
 		
 		return result;
 	}
-        
-        /**
+
+	/**
 	 * Get an existing movementType.
+	 *
 	 * @param code the code to check.
 	 * @return MovementType object whose code is provided as parameter.
 	 */
-	public MovementType getMovementType(String code) {
+	public MovementType findOneByCode(String code) {
             List<MovementType> results = repository.findAllByCode(code);
             if(!results.isEmpty()) {
                 return results.get(0);

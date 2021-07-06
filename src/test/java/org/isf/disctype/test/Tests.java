@@ -136,7 +136,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestDischargeType(false);
-		boolean result = dischargeTypeBrowserManager.codeControl(code);
+		boolean result = dischargeTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
@@ -146,7 +146,7 @@ public class Tests extends OHCoreTestCase {
 		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
 		boolean result = dischargeTypeBrowserManager.deleteDischargeType(foundDischargeType);
 		assertThat(result).isTrue();
-		result = dischargeTypeBrowserManager.codeControl(code);
+		result = dischargeTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isFalse();
 	}
 
@@ -220,14 +220,15 @@ public class Tests extends OHCoreTestCase {
 		DischargeType dischargeType = dischargeTypeIoOperationRepository.findOne(code);
 		DischargeType dischargeType2 = new DischargeType("someCode", "someDescription");
 		assertThat(dischargeType.equals(dischargeType)).isTrue();
-		assertThat(dischargeType.equals(dischargeType2)).isFalse();
-		assertThat(dischargeType.equals(new String("xyzzy"))).isFalse();
+		assertThat(dischargeType)
+				.isNotEqualTo(dischargeType2)
+				.isNotEqualTo("xyzzy");
 		dischargeType2.setCode(code);
-		assertThat(dischargeType.equals(dischargeType2)).isTrue();
+		assertThat(dischargeType).isEqualTo(dischargeType2);
 
 		assertThat(dischargeType.hashCode()).isPositive();
 
-		assertThat(dischargeType2.toString()).isEqualTo("someDescription");
+		assertThat(dischargeType2).hasToString("someDescription");
 	}
 
 	private String _setupTestDischargeType(boolean usingSet) throws OHException {

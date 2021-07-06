@@ -98,35 +98,36 @@ public class OperationTypeBrowserManager {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean codeControl(String code) throws OHServiceException {
+	public boolean isCodePresent(String code) throws OHServiceException {
 		return ioOperations.isCodePresent(code);
 	}
 
 	protected List<OHExceptionMessage> validateOperationType(OperationType operationType, boolean insert) throws OHServiceException {
 		String key = operationType.getCode();
 		String description = operationType.getDescription();
-		List<OHExceptionMessage> errors = new ArrayList<OHExceptionMessage>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (key == null || key.isEmpty()) {
-			errors.add(new OHExceptionMessage("codeEmptyError",
-					MessageBundle.getMessage("angal.opetype.pleaseinsertacode"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		else {
 			if (key.length() > 2) {
-				errors.add(new OHExceptionMessage("codeTooLongError",
-						MessageBundle.getMessage("angal.opetype.codetoolongmaxchars"),
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 2),
 						OHSeverityLevel.ERROR));
 			}
 		}
 		if (insert) {
-			if (codeControl(key)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), MessageBundle.getMessage("angal.common.codealreadyinuse"),
+			if (isCodePresent(key)) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}
 		if (description == null || description.isEmpty()) {
-			errors.add(new OHExceptionMessage("descriptionEmptyError",
-					MessageBundle.getMessage("angal.opetype.pleaseinsertavaliddescription"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		return errors;

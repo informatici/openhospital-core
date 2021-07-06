@@ -29,6 +29,7 @@ import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
@@ -61,18 +62,18 @@ public class MovWardBrowserManager {
 		String description = mov.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (description.isEmpty() && mov.isPatient()) {
-			errors.add(new OHExceptionMessage("descriptionPatientEmptyError",
-					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectapatient"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseselectapatient.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (description.isEmpty() && !mov.isPatient()) {
-			errors.add(new OHExceptionMessage("descriptionInternalUseEmptyError",
-					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseinsertadescriptionfortheinternaluse"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseinsertadescriptionfortheinternaluse.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (mov.getMedical() == null) {
-			errors.add(new OHExceptionMessage("medicalEmptyError",
-					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug"),
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {
@@ -158,34 +159,31 @@ public class MovWardBrowserManager {
 	 * Persists the specified movement.
 	 *
 	 * @param newMovement the movement to persist.
-	 * @return <code>true</code> if the movement has been persisted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newMovementWard(MovementWard newMovement) throws OHServiceException {
+	public void newMovementWard(MovementWard newMovement) throws OHServiceException {
 		validateMovementWard(newMovement);
-		return ioOperations.newMovementWard(newMovement);
+		ioOperations.newMovementWard(newMovement);
 	}
 
 	/**
 	 * Persists the specified movements.
 	 *
 	 * @param newMovements the movements to persist.
-	 * @return <code>true</code> if the movements have been persisted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newMovementWard(ArrayList<MovementWard> newMovements) throws OHServiceException {
+	public void newMovementWard(ArrayList<MovementWard> newMovements) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		if (newMovements.size() == 0) {
-			errors.add(new OHExceptionMessage(
-					"emptyMovementListError",
-					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug"),
+		if (newMovements.isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug.msg"),
 					OHSeverityLevel.ERROR));
 			throw new OHDataValidationException(errors);
 		}
 		for (MovementWard mov : newMovements) {
 			validateMovementWard(mov);
 		}
-		return ioOperations.newMovementWard(newMovements);
+		ioOperations.newMovementWard(newMovements);
 	}
 
 	/**
@@ -221,13 +219,25 @@ public class MovWardBrowserManager {
 	public int getCurrentQuantityInWard(Ward ward, Medical medical) throws OHServiceException {
 		return ioOperations.getCurrentQuantityInWard(ward, medical);
 	}
+	
+	/**
+	 * Gets the current quantity for the specified {@link Ward} and {@link Lot}.
+	 *
+	 * @param ward - if {@code null} the quantity is counted for the whole hospital
+	 * @param lot - the {@link Lot} to filter
+	 * @return the total quantity.
+	 * @throws OHServiceException if an error occurs retrieving the quantity.
+	 */
+	public int getCurrentQuantityInWard(Ward ward, Lot lot) throws OHServiceException {
+		return ioOperations.getCurrentQuantityInWard(ward, lot);
+	}
 
 	public ArrayList<MovementWardForPrint> convertMovementWardForPrint(ArrayList<MovementWard> wardOutcomes) {
 		ArrayList<MovementWardForPrint> movPrint = new ArrayList<>();
 		for (MovementWard mov : wardOutcomes) {
 			movPrint.add(new MovementWardForPrint(mov));
 		}
-		Collections.sort(movPrint, new ComparatorMovementWardForPrint());
+		movPrint.sort(new ComparatorMovementWardForPrint());
 		return movPrint;
 	}
 
@@ -236,7 +246,7 @@ public class MovWardBrowserManager {
 		for (Movement mov : wardIncomes) {
 			movPrint.add(new MovementForPrint(mov));
 		}
-		Collections.sort(movPrint, new ComparatorMovementForPrint());
+		movPrint.sort(new ComparatorMovementForPrint());
 		return movPrint;
 	}
 

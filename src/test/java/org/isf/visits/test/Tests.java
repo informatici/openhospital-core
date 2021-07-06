@@ -174,7 +174,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrGetVisiNoPatientCode() throws Exception {
+	public void testMgrGetVisitNoPatientCode() throws Exception {
 		int id = _setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findOne(id);
 		ArrayList<Visit> visits = visitManager.getVisits(0);
@@ -200,20 +200,6 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetVisitsEmpty() throws Exception {
 		assertThat(visitManager.getVisits(0)).isEmpty();
-	}
-
-	@Test
-	public void testMgrGetVisitsAll() throws Exception {
-		int id = _setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findOne(id);
-		assertThat(visitManager.getVisits(0)).hasSize(1);
-	}
-
-	@Test
-	public void testMgrGetVisitsbyID() throws Exception {
-		int id = _setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findOne(id);
-		assertThat(visitManager.getVisits(id)).hasSize(1);
 	}
 
 	@Test
@@ -243,7 +229,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewVisitsEmptyList() throws Exception {
-		assertThat(visitManager.newVisits(new ArrayList<Visit>())).isTrue();
+		assertThat(visitManager.newVisits(new ArrayList<>())).isTrue();
 	}
 
 	@Test
@@ -364,8 +350,9 @@ public class Tests extends OHCoreTestCase {
 		Visit visit = visitManager.findVisit(id);
 
 		assertThat(visit.equals(visit)).isTrue();
-		assertThat(visit).isNotEqualTo(null);
-		assertThat(visit).isNotEqualTo("someString");
+		assertThat(visit)
+				.isNotNull()
+				.isNotEqualTo("someString");
 
 		Visit visit2 = new Visit(-1, null, null, null, false, null, null, null);
 		assertThat(visit).isNotEqualTo(visit2);

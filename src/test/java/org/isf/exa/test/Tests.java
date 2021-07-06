@@ -138,7 +138,7 @@ public class Tests extends OHCoreTestCase {
 		ArrayList<ExamRow> examRows = examRowIoOperation.getExamRows();
 		assertThat(examRows.get(examRows.size() - 1).getDescription()).isEqualTo(foundExamRow.getDescription());
 		// deprecated method
-		examRows = examRowIoOperation.getExamrows();
+		examRows = examRowIoOperation.getExamRows();
 		assertThat(examRows.get(examRows.size() - 1).getDescription()).isEqualTo(foundExamRow.getDescription());
 	}
 
@@ -492,16 +492,17 @@ public class Tests extends OHCoreTestCase {
 		ExamType examType = testExamType.setup(false);
 		Exam exam2 = new Exam("XXX", "TestDescription", examType, 1, "TestDefaultResult");
 		assertThat(exam.equals(exam)).isTrue();
-		assertThat(exam.equals(exam2)).isFalse();
-		assertThat(exam.equals(new String("xyzzy"))).isFalse();
+		assertThat(exam)
+				.isNotEqualTo(exam2)
+				.isNotEqualTo("xyzzy");
 		exam2.setCode(exam.getCode());
 		exam2.setDescription(exam.getDescription());
 		exam2.setExamtype(exam.getExamtype());
-		assertThat(exam.equals(exam2)).isTrue();
+		assertThat(exam).isEqualTo(exam2);
 
 		assertThat(exam.hashCode()).isPositive();
 
-		assertThat(exam2.toString()).isEqualTo(exam.getDescription());
+		assertThat(exam2).hasToString(exam.getDescription());
 	}
 
 	@Test
@@ -512,16 +513,17 @@ public class Tests extends OHCoreTestCase {
 		Exam exam2 = new Exam("XXX", "TestDescription", examType, 1, "TestDefaultResult");
 		ExamRow examRow2 = new ExamRow(exam2, "NewDescription");
 		assertThat(examRow.equals(examRow)).isTrue();
-		assertThat(examRow.equals(examRow2)).isFalse();
-		assertThat(examRow.equals(new String("xyzzy"))).isFalse();
+		assertThat(examRow)
+				.isNotEqualTo(examRow2)
+				.isNotEqualTo("xyzzy");
 		examRow2.setCode(examRow.getCode());
 		examRow2.setExamCode(examRow.getExamCode());
 		examRow2.setDescription(examRow.getDescription());
-		assertThat(examRow.equals(examRow2)).isTrue();
+		assertThat(examRow).isEqualTo(examRow2);
 
 		assertThat(examRow.hashCode()).isPositive();
 
-		assertThat(examRow.toString()).isEqualTo(examRow.getDescription());
+		assertThat(examRow).hasToString(examRow.getDescription());
 	}
 
 	@Test

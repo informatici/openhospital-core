@@ -21,11 +21,6 @@
  */
 package org.isf.exatype.model;
 
-/**
- * @(#) ExamType.java
- * 20-jan-2006
- */
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -40,18 +35,14 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Pure Model ExamType (type of exams)
- * 
- * @author bob
- */
-/*------------------------------------------
- * AgeType - model for the age type entity
+ * ------------------------------------------
+ * ExamType - model for the exam type entity
  * -----------------------------------------
  * modification history
- * ? - bob - first version 
+ * 20-jan-2006 - bob - first version
  * 18/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="EXAMTYPE")
 @EntityListeners(AuditingEntityListener.class)

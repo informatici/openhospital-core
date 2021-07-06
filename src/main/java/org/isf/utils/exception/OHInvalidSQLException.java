@@ -25,9 +25,6 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 
 public class OHInvalidSQLException extends OHServiceException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public OHInvalidSQLException(OHExceptionMessage message) {

@@ -40,7 +40,7 @@ public class VisitsIoOperations {
 	private VisitsIoOperationRepository repository;
 	
 	/**
-	 * returns the list of all {@link Visit}s related to a patID
+	 * Returns the list of all {@link Visit}s related to a patID
 	 * 
 	 * @param patID - the {@link Patient} ID. If <code>0</code> return the list of all {@link Visit}s
 	 * @return the list of {@link Visit}s
@@ -48,8 +48,8 @@ public class VisitsIoOperations {
 	 */
 	public ArrayList<Visit> getVisits(Integer patID) throws OHServiceException {
 		return patID != 0 ?
-			new ArrayList<Visit>(repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID)) :
-		 	new ArrayList<Visit>(repository.findAllByOrderByPatient_CodeAscDateAsc());
+				new ArrayList<>(repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID)) :
+				new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
 	}
 
 
@@ -59,19 +59,19 @@ public class VisitsIoOperations {
 		ArrayList<Visit> visits = null;
 
 		if (wardId != null)
-			visits = new ArrayList<Visit>(repository.findAllWhereWardByOrderPatientAndDateAsc(wardId));
+			visits = new ArrayList<>(repository.findAllWhereWardByOrderPatientAndDateAsc(wardId));
 		else
-			visits = new ArrayList<Visit>(repository.findAllByOrderByPatient_CodeAscDateAsc());
+			visits = new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
 
 		return visits;
 	}
 
 
 	/**
-	 * Insert a new {@link Visit} for a patID
+	 * Insert a new {@link Visit} for a specified {@link Visit}
 	 * 
-	 * @param visit - the {@link Visit} related to patID. 
-	 * @return the visitID
+	 * @param visit - the {@link Visit}.
+	 * @return the {@link Visit}
 	 * @throws OHServiceException 
 	 */
 	public Visit newVisit(Visit visit) throws OHServiceException {
@@ -102,9 +102,9 @@ public class VisitsIoOperations {
 	}
 
 	/**
-	 * returns the {@link Visit} based on code
+	 * Returns the {@link Visit} based on the Visit id
 	 *
-	 * @param code - the id
+	 * @param id - the id
 	 * @return the {@link Visit} or {@literal null} if none found
 	 */
 	public Visit findVisit(int id)

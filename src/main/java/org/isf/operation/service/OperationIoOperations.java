@@ -21,14 +21,6 @@
  */
 package org.isf.operation.service;
 
-/*----------------------------------------------------------
- * modification history
- * ====================
- * 13/02/09 - Alex - modified query for ordering resultset
- *                   by description only
- * 13/02/09 - Alex - added Major/Minor control
- -----------------------------------------------------------*/
-
 import java.util.ArrayList;
 
 import org.isf.operation.model.Operation;
@@ -42,8 +34,12 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * This class offers the io operations for recovering and managing
  * operations records from the database
- * 
+ *
  * @author Rick, Vero, pupo
+ * modification history
+ * ====================
+ * 13/02/09 - Alex - modified query for ordering resultset by description only
+ * 13/02/09 - Alex - added Major/Minor control
  */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -54,16 +50,16 @@ public class OperationIoOperations {
 	private OperationIoOperationRepository repository;
 	
 	/**
-	 * return the {@link Operation}s whose type matches specified string
+	 * Return the {@link Operation}s whose type matches specified string
 	 * 
 	 * @param typeDescription - a type description
 	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<Operation> getOperationByTypeDescription(String typeDescription) throws OHServiceException {
-		return new ArrayList<Operation>(typeDescription == null ?
-			repository.findByOrderByDescriptionDesc() :
-			repository.findAllByType_DescriptionContainsOrderByDescriptionDesc(typeDescription));
+		return new ArrayList<>(typeDescription == null ?
+				repository.findByOrderByDescriptionAsc() :
+				repository.findAllByType_DescriptionContainsOrderByDescriptionAsc(typeDescription));
 	}
 
 	public Operation findByCode(String code) throws OHServiceException{

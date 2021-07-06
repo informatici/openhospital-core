@@ -44,19 +44,18 @@ import org.slf4j.LoggerFactory;
  */
 public class DbQueryLogger {
 	
-	protected Logger logger = LoggerFactory.getLogger(DbQueryLogger.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DbQueryLogger.class);
     
 	/**
      * Method that executes a query and returns a resultset
      * @param aQuery
      * @param autocommit
-     * @return "ResultSet"
-     * @throws SQLException
-     * @throws IOException
+     * @return ResultSet
+     * @throws OHException
      */
     public ResultSet getData(String aQuery, boolean autocommit) throws OHException {
-    	if (logger.isDebugEnabled()) {
-		    logger.debug("Query {}", sanitize(aQuery));
+    	if (LOGGER.isDebugEnabled()) {
+		    LOGGER.debug("Query {}", sanitize(aQuery));
 		}
     	try{
 	        Connection conn = DbSingleJpaConn.getConnection();
@@ -66,9 +65,9 @@ public class DbQueryLogger {
         }catch (OHException e){
             throw e;
     	} catch (SQLException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e); //, e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
     	} catch (Exception e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), e); 
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"), e); 
     	}
     }
     
@@ -81,10 +80,10 @@ public class DbQueryLogger {
      * @throws OHException
      */
     public ResultSet getDataWithParams(String aQuery, List<?> params, boolean autocommit) throws OHException {
-    	if (logger.isDebugEnabled()) {
-		    logger.debug("Query {}", sanitize(aQuery));
+    	if (LOGGER.isDebugEnabled()) {
+		    LOGGER.debug("Query {}", sanitize(aQuery));
 			if (!params.isEmpty())
-				logger.trace("	parameters : {}", sanitize(params));
+				LOGGER.trace("	parameters : {}", sanitize(params));
 		}
     	ResultSet results = null;
     	Connection conn = null;
@@ -99,9 +98,9 @@ public class DbQueryLogger {
         }catch (OHException e){
             throw e;
     	} catch (SQLException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
     	} catch (Exception e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), e); 
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"), e); 
     	}
     	return results;
     }
@@ -116,8 +115,8 @@ public class DbQueryLogger {
      * @throws IOException
      */
     public boolean setData(String aQuery, boolean autocommit) throws OHException {
-    	if (logger.isDebugEnabled()) {
-		    logger.debug("Query {}", sanitize(aQuery));
+    	if (LOGGER.isDebugEnabled()) {
+		    LOGGER.debug("Query {}", sanitize(aQuery));
 		}
     	try{
 	        Connection conn = DbSingleJpaConn.getConnection();
@@ -127,11 +126,11 @@ public class DbQueryLogger {
         }catch (OHException e){
             throw e;
     	} catch (SQLIntegrityConstraintViolationException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere.msg"), e);
     	} catch (SQLException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
     	} catch (Exception e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), e); 
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"), e); 
     	}
     }
     
@@ -145,10 +144,10 @@ public class DbQueryLogger {
      * @throws OHException
      */
     public boolean setDataWithParams(String aQuery, List<?> params, boolean autocommit) throws OHException {
-    	if (logger.isDebugEnabled()) {
-		    logger.debug("Query {}", sanitize(aQuery));
+    	if (LOGGER.isDebugEnabled()) {
+		    LOGGER.debug("Query {}", sanitize(aQuery));
 			if (!params.isEmpty())
-				logger.trace("	parameters : {}", sanitize(params));
+				LOGGER.trace("	parameters : {}", sanitize(params));
 		}
     	Connection conn = null;
     	try {
@@ -162,11 +161,11 @@ public class DbQueryLogger {
         }catch (OHException e){
             throw e;
     	} catch (SQLIntegrityConstraintViolationException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere.msg"), e);
     	} catch (SQLException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
     	} catch (Exception e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), e); 
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"), e); 
     	}
     }
     
@@ -181,8 +180,8 @@ public class DbQueryLogger {
      * @throws IOException
      */
     public ResultSet setDataReturnGeneratedKey(String aQuery, boolean autocommit) throws OHException {
-    	if (logger.isDebugEnabled()) {
-		    logger.debug("Query {}", sanitize(aQuery));
+    	if (LOGGER.isDebugEnabled()) {
+		    LOGGER.debug("Query {}", sanitize(aQuery));
 		}
     	try{
 	        Connection conn = DbSingleJpaConn.getConnection();
@@ -193,9 +192,9 @@ public class DbQueryLogger {
         }catch (OHException e){
             throw e;
     	} catch (SQLException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
     	} catch (Exception e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), e); 
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"), e); 
     	}
     }
     
@@ -210,10 +209,10 @@ public class DbQueryLogger {
      * @throws OHException
      */
     public ResultSet setDataReturnGeneratedKeyWithParams(String aQuery, List<?> params, boolean autocommit) throws OHException {
-    	if (logger.isDebugEnabled()) {
-		    logger.debug("Query {}", sanitize(aQuery));
+    	if (LOGGER.isDebugEnabled()) {
+		    LOGGER.debug("Query {}", sanitize(aQuery));
 			if (!params.isEmpty())
-				logger.trace("	parameters : {}", sanitize(params));
+				LOGGER.trace("	parameters : {}", sanitize(params));
 		}
     	try{
 	        Connection conn = DbSingleJpaConn.getConnection();
@@ -227,9 +226,9 @@ public class DbQueryLogger {
         }catch (OHException e){
             throw e;
     	} catch (SQLException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
     	} catch (Exception e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), e); 
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"), e); 
     	}
     }
     
@@ -239,12 +238,11 @@ public class DbQueryLogger {
      * the Recordset
      * @param aQuery
      * @return Boolean True/False
-     * @throws SQLException
-     * @throws IOException
+     * @throws OHException
      */
     public boolean isData(String aQuery) throws OHException {
-    	if (logger.isDebugEnabled()) {
-		    logger.debug("Query {}", sanitize(aQuery));
+    	if (LOGGER.isDebugEnabled()) {
+		    LOGGER.debug("Query {}", sanitize(aQuery));
 		}
     	try {
             Connection conn = DbSingleJpaConn.getConnection();
@@ -254,9 +252,9 @@ public class DbQueryLogger {
         }catch (OHException e){
     	    throw e;
     	} catch (SQLException e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e); // + ": " + aQuery, e);
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
     	} catch (Exception e) {
-    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection"), e); 
+    		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"), e); 
     	}
     }
     
@@ -266,7 +264,7 @@ public class DbQueryLogger {
      * @return the list sanitized
      */
     private List<?> sanitize(List<?> params) {
-    	List<Object> saneParams = new ArrayList<Object>();
+    	List<Object> saneParams = new ArrayList<>();
     	for (Object param : params) {
     		if (param instanceof String) {
     			saneParams.add(sanitize((String) param));

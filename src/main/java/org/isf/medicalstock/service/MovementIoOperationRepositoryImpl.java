@@ -21,14 +21,9 @@
  */
 package org.isf.medicalstock.service;
 
-import org.isf.medicals.model.Medical;
-import org.isf.medicalstock.model.Lot;
-import org.isf.medicalstock.model.Movement;
-import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
-import org.isf.medstockmovtype.model.MovementType;
-import org.isf.medtype.model.MedicalType;
-import org.isf.ward.model.Ward;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -38,10 +33,14 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-
+import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
+import org.isf.medicalstock.model.Movement;
+import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
+import org.isf.medstockmovtype.model.MovementType;
+import org.isf.medtype.model.MedicalType;
+import org.isf.ward.model.Ward;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class MovementIoOperationRepositoryImpl implements MovementIoOperationRepositoryCustom {
@@ -109,7 +108,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
 		Root<Movement> root = query.from(Movement.class);
 		query.select(root.<Integer>get(CODE));
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 
 		if ((dateFrom != null) && (dateTo != null))
 		{
@@ -120,7 +119,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
 		}
 
-		List<Order> orderList = new ArrayList<Order>();
+		List<Order> orderList = new ArrayList<>();
 		orderList.add(builder.desc(root.get(DATE)));
 		orderList.add(builder.desc(root.get(REF_NO)));
 		query.where(predicates.toArray(new Predicate[]{})).orderBy(orderList);
@@ -142,7 +141,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
 		Root<Movement> root = query.from(Movement.class);
 		query.select(root.<Integer>get(CODE));
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 
 		if (medicalCode != null) {
 			predicates.add(builder.equal(root.<Medical>get(MEDICAL).<String>get(CODE), medicalCode));
@@ -166,7 +165,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
 		}
 
-		List<Order> orderList = new ArrayList<Order>();
+		List<Order> orderList = new ArrayList<>();
 		orderList.add(builder.desc(root.get(DATE)));
 		orderList.add(builder.desc(root.get(REF_NO)));
 		query.where(predicates.toArray(new Predicate[]{})).orderBy(orderList);
@@ -186,7 +185,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
 		Root<Movement> root = query.from(Movement.class);
 		query.select(root.<Integer>get(CODE));
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 
 		if (medicalDescription != null) {
 			predicates.add(builder.equal(root.<Medical>get(MEDICAL).<String>get(DESCRIPTION), medicalDescription));
@@ -206,7 +205,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 		if (wardId != null) {
 			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
 		}
-		List<Order> orderList = new ArrayList<Order>();
+		List<Order> orderList = new ArrayList<>();
 		switch (order) {
 			case DATE:
 				orderList.add(builder.desc(root.get(DATE)));

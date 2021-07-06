@@ -21,11 +21,6 @@
  */
 package org.isf.disease.model;
 
-/**
- * @(#) Disease.java
- * 21-jan-2006
- */
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -46,18 +41,14 @@ import org.isf.distype.model.DiseaseType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Pure Model Exam : represents a disease type
- * @author bob
- *
- *
- /*------------------------------------------
- * Bill - model for the bill entity
+ * ------------------------------------------
+ * Disease - model for a disease
  * -----------------------------------------
  * modification history
- * ? - bob - first version 
+ * 21-jan-2006 - bob - first version
  * 03/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="DISEASE")
 @EntityListeners(AuditingEntityListener.class)

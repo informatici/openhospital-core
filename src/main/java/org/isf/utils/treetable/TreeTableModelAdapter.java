@@ -22,8 +22,6 @@
 package org.isf.utils.treetable;
 
 /*
- * %W% %E%
- *
  * Copyright 1997, 1998 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
@@ -71,15 +69,11 @@ import javax.swing.tree.TreePath;
  * This is a wrapper class takes a TreeTableModel and implements 
  * the table model interface. The implementation is trivial, with 
  * all of the event dispatching support provided by the superclass: 
- * the AbstractTableModel. 
- *
- * @version %I% %G%
+ * the AbstractTableModel.
  *
  * @author Philip Milne
  * @author Scott Violet
  */
-
-
 public class TreeTableModelAdapter extends AbstractTableModel
 {
     /**
@@ -140,5 +134,3 @@ public class TreeTableModelAdapter extends AbstractTableModel
 	treeTableModel.setValueAt(value, nodeForRow(row), column);
     }
 }
-
-

@@ -430,9 +430,9 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrCodeControl() throws Exception {
+	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestOperation(false);
-		assertThat(operationBrowserManager.codeControl(code)).isTrue();
+		assertThat(operationBrowserManager.isCodePresent(code)).isTrue();
 	}
 
 	@Test
@@ -850,8 +850,9 @@ public class Tests extends OHCoreTestCase {
 		Operation operation = testOperation.setup(operationType, true);
 
 		assertThat(operation).isEqualTo(operation);
-		assertThat(operation).isNotEqualTo(null);
-		assertThat(operation).isNotEqualTo("a string");
+		assertThat(operation)
+				.isNotNull()
+				.isNotEqualTo("a string");
 
 		OperationType operationType1 = testOperationType.setup(false);
 		Operation operation1 = testOperation.setup(operationType, true);
@@ -938,8 +939,9 @@ public class Tests extends OHCoreTestCase {
 		OperationRow operationRow = testOperationRow.setup(operation, false);
 
 		assertThat(operationRow.equals(operationRow)).isTrue();
-		assertThat(operationRow).isNotEqualTo(null);
-		assertThat(operationRow).isNotEqualTo("some string");
+		assertThat(operationRow)
+				.isNotNull()
+				.isNotEqualTo("some string");
 	}
 
 	@Test

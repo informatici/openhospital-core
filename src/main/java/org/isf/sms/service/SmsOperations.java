@@ -21,8 +21,6 @@
  */
 package org.isf.sms.service;
 
-// Generated 31-gen-2014 15.39.04 by Hibernate Tools 3.4.0.CR1
-
 import java.util.Date;
 import java.util.List;
 
@@ -34,8 +32,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * @see org.isf.sms.model.Sms
  * @author Mwithi
+ * @see org.isf.sms.model.Sms
+ *
+ * Generated 31-gen-2014 15.39.04 by Hibernate Tools 3.4.0.CR1
  */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)

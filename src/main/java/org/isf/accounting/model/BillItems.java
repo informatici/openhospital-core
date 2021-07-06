@@ -39,17 +39,14 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Pure Model BillItems : represents an item in the Bill
- * @author Mwithi
- */
-/*------------------------------------------
- * BillItems - model for the bill entity
+ * ------------------------------------------
+ * BillItems - model an item in the Bill
  * -----------------------------------------
  * modification history
- * ? - Mwithi - first version 
+ * ? - Mwithi - first version
  * 23/08/2051 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="BILLITEMS")
 @EntityListeners(AuditingEntityListener.class)

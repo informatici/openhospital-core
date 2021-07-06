@@ -144,8 +144,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
 		String code = _setupTestMedicalType(false);
-		assertThat(medicalTypeBrowserManager.codeControl(code)).isTrue();
-		assertThat(medicalTypeBrowserManager.codeControl("isNotThere")).isFalse();
+		assertThat(medicalTypeBrowserManager.isCodePresent(code)).isTrue();
+		assertThat(medicalTypeBrowserManager.isCodePresent("isNotThere")).isFalse();
 	}
 
 	@Test
@@ -153,7 +153,7 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestMedicalType(false);
 		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
 		assertThat(medicalTypeBrowserManager.deleteMedicalType(foundMedicalType)).isTrue();
-		assertThat(medicalTypeBrowserManager.codeControl(code)).isFalse();
+		assertThat(medicalTypeBrowserManager.isCodePresent(code)).isFalse();
 	}
 
 	@Test
@@ -202,7 +202,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMedicalTypeToString() throws Exception {
 		String code = _setupTestMedicalType(false);
 		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
-		assertThat(foundMedicalType.toString()).isEqualTo(foundMedicalType.getDescription());
+		assertThat(foundMedicalType).hasToString(foundMedicalType.getDescription());
 	}
 
 	@Test
@@ -212,9 +212,10 @@ public class Tests extends OHCoreTestCase {
 		MedicalType medicalType3 = new MedicalType("Z", "otherDescription");
 
 		assertThat(medicalType1.equals(medicalType1)).isTrue();
-		assertThat(medicalType1.equals(new Integer(1))).isFalse();
-		assertThat(medicalType1.equals(medicalType2)).isFalse();
-		assertThat(medicalType1.equals(medicalType3)).isFalse();
+		assertThat(medicalType1)
+				.isNotEqualTo("someString")
+				.isNotEqualTo(medicalType2)
+				.isNotEqualTo(medicalType3);
 	}
 
 	@Test

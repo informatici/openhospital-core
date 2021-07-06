@@ -53,7 +53,6 @@ public class TestAdmission {
 	private int admitted = 1;
 	private String type = "T";
 	private int yProg = 0;
-	private GregorianCalendar now = new GregorianCalendar();
 	private String FHU = "TestFHU";
 	private String opResult = "Result";
 	private String note = "TestNote";

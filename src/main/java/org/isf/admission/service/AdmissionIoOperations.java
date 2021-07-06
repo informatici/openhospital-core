@@ -21,20 +21,11 @@
  */
 package org.isf.admission.service;
 
-/*----------------------------------------------------------
- * modification history
- * ====================
- * 10/11/06 - ross - removed from the list the deleted patients
- *                   the list is now in alphabetical  order
- * 11/08/08 - alessandro - addedd getFather&Mother Names
- * 26/08/08 - claudio - changed getAge for managing varchar type
- * 					  - added getBirthDate
- * 01/01/09 - Fabrizio - changed the calls to PAT_AGE fields to
- *                       return again an integer type
- * 20/01/09 - Chiara -   restart of progressive number of maternity 
- * 						 ward on 1st July conditioned to parameter 
- * 						 MATERNITYRESTARTINJUNE in generalData.properties                   
- *-----------------------------------------------------------*/
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
 import org.isf.admission.model.Admission;
@@ -52,12 +43,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.stream.Collectors;
-
+/**
+ * ---------------------------------------------------------
+ * modification history
+ * ====================
+ * 10/11/06 - ross - removed from the list the deleted patients
+ *                   the list is now in alphabetical  order
+ * 11/08/08 - alessandro - addedd getFather&Mother Names
+ * 26/08/08 - claudio - changed getAge for managing varchar type
+ * 					  - added getBirthDate
+ * 01/01/09 - Fabrizio - changed the calls to PAT_AGE fields to
+ *                       return again an integer type
+ * 20/01/09 - Chiara -   restart of progressive number of maternity
+ * 						 ward on 1st July conditioned to parameter
+ * 						 MATERNITYRESTARTINJUNE in generalData.properties
+ * -----------------------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -239,7 +240,7 @@ public class AdmissionIoOperations
 			String wardId) throws OHServiceException 
 	{
 		int next = 1;
-		GregorianCalendar now = new GregorianCalendar();
+		GregorianCalendar now = getNow();
 		GregorianCalendar first = null;
 		GregorianCalendar last = null;
 		
@@ -248,14 +249,14 @@ public class AdmissionIoOperations
 			if (now.get(Calendar.MONTH) < 6) 
 			{
 				first = new GregorianCalendar(now.get(Calendar.YEAR) - 1, Calendar.JULY, 1);
-				last = new GregorianCalendar(now.get(Calendar.YEAR), Calendar.JUNE, 30);
+				last = new GregorianCalendar(now.get(Calendar.YEAR), Calendar.JULY, 1);
 			} 
 			else 
 			{
 				first = new GregorianCalendar(now.get(Calendar.YEAR), Calendar.JULY, 1);
-				last = new GregorianCalendar(now.get(Calendar.YEAR) + 1, Calendar.JUNE, 30);
-			}
+				last = new GregorianCalendar(now.get(Calendar.YEAR) + 1, Calendar.JULY, 1);
 
+			}
 		} 
 		else 
 		{
@@ -270,6 +271,30 @@ public class AdmissionIoOperations
 		} 
 		
 		return next;
+	}
+
+	/**
+	 * The variables, {@code testing} and {@code afterJune}, are here only for testing purposes and are **NOT** to be used
+	 * in production code.   
+	 * The default path ({@code testing == false}) ensures that the code performs as it
+	 * always has in the past.
+	 * This code permits the unit testing of maternity wards with dates before and after June.
+	 * TODO: once the GregorianCalendar object is replaced by Java 8+ date/time objects this can be revisited
+	 * as there is more flexibility in modifying the new objects in Java 8+.
+	 */
+	public static boolean testing = false;
+	public static boolean afterJune = false;
+	protected GregorianCalendar getNow() {
+		GregorianCalendar now = new GregorianCalendar();
+		if (!testing) {
+			return now;
+		}
+		// testing date June or later
+		if (afterJune) {
+			return new GregorianCalendar(now.get(Calendar.YEAR), 8, 1);
+		}
+		// testing data before June
+		return new GregorianCalendar(now.get(Calendar.YEAR), 0, 1);
 	}
 
 	/**

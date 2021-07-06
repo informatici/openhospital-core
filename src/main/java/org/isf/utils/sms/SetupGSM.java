@@ -22,8 +22,6 @@
 package org.isf.utils.sms;
 
 import java.awt.HeadlessException;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +31,10 @@ import java.util.Properties;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import org.isf.generaldata.ConfigurationProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
@@ -45,12 +47,11 @@ import gnu.io.SerialPortEventListener;
  */
 public class SetupGSM extends JFrame implements SerialPortEventListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = LoggerFactory.getLogger(SetupGSM.class);
+	private static final String FILE_PROPERTIES = "GSM.properties";
 	
-	private Properties props = new Properties();
+	private Properties props;
 	private CommPortIdentifier portId = null;
 	private Enumeration<?> portList = null;
 	private SerialPort serialPort = null;
@@ -60,21 +61,13 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		SetupGSM setup = new SetupGSM();
+		new SetupGSM();
 		System.exit(0);
 	}
 	
 	public SetupGSM() {	
 		
-		FileInputStream in;
-		try {
-			in = new FileInputStream("rsc" + File.separator + "SmsGateway" + File.separator + "GSM.properties");
-			props.load(in);
-			in.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+		props = ConfigurationProperties.loadPropertiesFile(FILE_PROPERTIES, LOGGER);
 		
 		String model = props.getProperty("GMM");
 		
@@ -96,8 +89,11 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 			        serialPort.notifyOnDataAvailable(true);
 					
 					OutputStream outputStream = serialPort.getOutputStream();
-						if (outputStream != null) System.out.println("Output stream OK");
-							else System.out.println("Output stream not found");
+					if (outputStream != null) {
+						System.out.println("Output stream OK");
+					} else {
+						System.out.println("Output stream not found");
+					}
 					
 					inputStream = serialPort.getInputStream(); 
 					byte[] command = model.getBytes();
@@ -106,12 +102,10 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 			        Thread.sleep(5000);
 			        
 				} catch (PortInUseException e) {
-					System.out.println("Port in use.");
-					continue;
-				} catch (Exception e) {
-					System.out.println("Failed to open port " + portId.getName());
-					e.printStackTrace();
-					continue;
+					LOGGER.error("Port in use.");
+				} catch (Exception exception) {
+					LOGGER.error("Failed to open port '{}'", portId.getName());
+					LOGGER.error(exception.getMessage(), exception);
 				} finally {
 					serialPort.close();
 				}
@@ -136,8 +130,8 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 				save(port);
 				System.exit(0);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ioException) {
+			LOGGER.error(ioException.getMessage(), ioException);
 		}
     }
 
@@ -150,11 +144,14 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	private int confirm(String port, String answer) throws HeadlessException {
 		try {
 			int ok = answer.indexOf("OK");
-			if (ok > 0) answer = answer.substring(2, ok - 3);
-				else return JOptionPane.NO_OPTION;
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("outofbound: '" + answer + "'");
+			if (ok > 0) {
+				answer = answer.substring(2, ok - 3);
+			} else {
+				return JOptionPane.NO_OPTION;
+			}
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
+			LOGGER.error("outofbound: '{}'", answer);
 		}
 		System.out.println(answer.trim());
 		
@@ -170,12 +167,12 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 		StringBuilder comment = new StringBuilder(" Configuration file for SMS Sender GSM\n");
 		comment.append(" PORT = COMx (Windows) or /dev/ttyUSBx (Linux)");
 		try {
-			out = new FileOutputStream("rsc" + File.separator + "SmsGateway" + File.separator + "GSM.properties");
+			out = new FileOutputStream("GSM.properties");
 			props.setProperty("PORT", port);
 			props.store(out, comment.toString());
 			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ioException) {
+			LOGGER.error(ioException.getMessage(), ioException);
 		}
 	}
 }

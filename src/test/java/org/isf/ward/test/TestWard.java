@@ -33,7 +33,7 @@ public class TestWard {
 	private String description = "TestDescription";
 	private String telephone = "TestTelephone";
 	private String fax = "TestFac";
-	private String email = "TestEmail";
+	private String email = "TestEmail@gmail.com";
 	private Integer beds = 100;
 	private Integer nurs = 101;
 	private Integer docs = 102;

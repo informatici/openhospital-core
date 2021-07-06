@@ -31,19 +31,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Manager for hibernate database communication
- * 
- * @author Pietro Castellucci
- * @version 1.0.0
- */
-/*------------------------------------------
- * Dicom - IO operations for the DICOM entity
+ * ------------------------------------------
+ * DicomIoOperations - IO operations for the DICOM entity
  * -----------------------------------------
  * modification history
- * ? -  Pietro Castellucci - first version 
+ * ? -  Pietro Castellucci - first version
  * 29/08/2016 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -170,7 +165,7 @@ public class DicomIoOperations
 	{
 		List<FileDicom> dicomList = repository.findAllWhereIdAndFileAndUid(dicom.getPatId(), dicom.getDicomSeriesNumber(), dicom.getDicomInstanceUID());
 	
-		return (dicomList.size() > 0);
+		return !dicomList.isEmpty();
 	}
 
 	/**
@@ -183,8 +178,6 @@ public class DicomIoOperations
 			FileDicom dicom) throws OHServiceException 
 	{
 		repository.save(dicom);
-		
-		return;
 	}
 
 	/**

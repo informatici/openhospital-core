@@ -22,8 +22,6 @@
 package org.isf.utils.treetable;
 
 /*
- * %W% %E%
- *
  * Copyright 1997, 1998 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
@@ -69,15 +67,12 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.EventListenerList;
 
 /**
- * @version %I% %G% 
- * 
- * A base class for CellEditors, providing default implementations for all 
+ * A base class for CellEditors, providing default implementations for all
  * methods in the CellEditor interface and support for managing a series
- * of listeners. 
+ * of listeners.
  *
  * @author Philip Milne
  */
-
 public class AbstractCellEditor implements CellEditor {
 
     protected EventListenerList listenerList = new EventListenerList();
@@ -130,4 +125,3 @@ public class AbstractCellEditor implements CellEditor {
 	}
     }
 }
-
