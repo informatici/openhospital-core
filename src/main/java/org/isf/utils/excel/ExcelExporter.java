@@ -56,6 +56,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.RichTextString;
@@ -503,7 +504,7 @@ public class ExcelExporter {
 				cell.setCellValue(val);
 			} else if (value instanceof Double) {
 				Double val = (Double) value;
-				cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+				cell.setCellType(CellType.NUMERIC);
 				cell.setCellStyle(doubleStyle);
 				cell.setCellValue(val);
 			} else if (value instanceof Timestamp) {
@@ -516,7 +517,7 @@ public class ExcelExporter {
 				cell.setCellValue(val);
 			} else if (value instanceof BigDecimal) {
 				BigDecimal val = (BigDecimal) value;
-				cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+				cell.setCellType(CellType.NUMERIC);
 				cell.setCellStyle(bigDecimalStyle);
 				cell.setCellValue(val.doubleValue());
 			} else if (value instanceof Long) {
@@ -675,7 +676,7 @@ public class ExcelExporter {
 				cell.setCellValue(val);
 			} else if (value instanceof Double) {
 				Double val = (Double) value;
-				cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+				cell.setCellType(CellType.NUMERIC);
 				cell.setCellStyle(doubleStyle);
 				cell.setCellValue(val);
 			} else if (value instanceof Timestamp) {
@@ -688,7 +689,7 @@ public class ExcelExporter {
 				cell.setCellValue(val);
 			} else if (value instanceof BigDecimal) {
 				BigDecimal val = (BigDecimal) value;
-				cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+				cell.setCellType(CellType.NUMERIC);
 				cell.setCellStyle(bigDecimalStyle);
 				cell.setCellValue(val.doubleValue());
 			} else if (value instanceof Long) {
