@@ -337,7 +337,7 @@ public class AccountingIoOperations {
 
 			@Override
 			public int compare(Bill o1, Bill o2) {
-				return o1.getId() == o2.getId() ? 1 : 0;
+				return o1.getId() == o2.getId() ? 0 : -1;
 			}
 		});
 		for(BillPayments bp : payments) {
