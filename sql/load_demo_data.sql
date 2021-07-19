@@ -3101,7 +3101,7 @@ INSERT INTO `menuitem` VALUES ('admission','angal.menu.btn.admission','angal.men
 INSERT INTO `menuitem` VALUES ('admtype','angal.menu.btn.admtype','angal.menu.admtype','x','A','types','org.isf.admtype.gui.AdmissionTypeBrowser','N',0);
 INSERT INTO `menuitem` VALUES ('deliverytype','angal.menu.btn.deliverytype','angal.menu.deliverytype','x','L','types','org.isf.dlvrtype.gui.DeliveryTypeBrowser','N',3);
 INSERT INTO `menuitem` VALUES ('delresulttype','angal.menu.btn.delresulttype','angal.menu.delresulttype','x','R','types','org.isf.dlvrrestype.gui.DeliveryResultTypeBrowser','N',2);
-INSERT INTO `menuitem` VALUES ('disctype','angal.menu.btn.disctype','angal.menu.disctype','x','D','types','org.isf.disctype.gui.DischargeTypeBrowser','N',1);
+INSERT INTO `menuitem` VALUES ('disctype','angal.menu.btn.disctype','angal.menu.disctype','x','R','types','org.isf.disctype.gui.DischargeTypeBrowser','N',1);
 INSERT INTO `menuitem` VALUES ('disease','angal.menu.btn.disease','angal.menu.disease','x','D','generaldata','org.isf.disease.gui.DiseaseBrowser','N',3);
 INSERT INTO `menuitem` VALUES ('diseaselist','angal.menu.btn.diseaselist','angal.menu.diseaselist','x','D','printing','org.isf.stat.gui.DiseasesListLauncher','N',2);
 INSERT INTO `menuitem` VALUES ('diseasetype','angal.menu.btn.diseasetype','angal.menu.diseasetype','x','D','types','org.isf.distype.gui.DiseaseTypeBrowser','N',4);
@@ -3185,7 +3185,7 @@ INSERT INTO `menuitem` VALUES ('btnpharmstockdischarge','angal.menu.btn.btnpharm
 INSERT INTO `menuitem` VALUES ('btnmedicalswardreport','angal.menu.btn.btnmedicalswardreport','angal.menu.btnmedicalswardreport','x','P','medicalsward','none','N',2);
 INSERT INTO `menuitem` VALUES ('btnmedicalswardexcel','angal.menu.btn.btnmedicalswardexcel','angal.menu.btnmedicalswardexcel','x','E','medicalsward','none','N',3);
 INSERT INTO `menuitem` VALUES ('btnmedicalswardrectify','angal.menu.btn.btnmedicalswardrectify','angal.menu.btnmedicalswardrectify','x','R','medicalsward','none','N',1);
-INSERT INTO `menuitem` VALUES ('dicomtype','angal.menu.btn.dicomtype','angal.menu.dicomtype','x','X','types','org.isf.dicomtype.gui.DicomTypeBrowser','N',13);
+INSERT INTO `menuitem` VALUES ('dicomtype','angal.menu.btn.dicomtype','angal.menu.dicomtype','x','I','types','org.isf.dicomtype.gui.DicomTypeBrowser','N',13);
 INSERT INTO `menuitem` VALUES ('btnopdnewoperation','angal.opd.operation','angal.opd.operation','x','A','btnopdnew','none','N',2);
 INSERT INTO `menuitem` VALUES ('btnopdeditoperation','angal.opd.operation','angal.opd.operation','x','A','btnopdedit','none','N',2);
 INSERT INTO `menuitem` VALUES ('worksheet','angal.menu.btn.worksheet','angal.menu.worksheet','x','W','main','org.isf.visits.gui.VisitView','N',8);
