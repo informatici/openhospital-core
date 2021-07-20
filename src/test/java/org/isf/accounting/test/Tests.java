@@ -426,7 +426,6 @@ public class Tests extends OHCoreTestCase {
 		assertThat(foundBillPayment).isNotEqualTo(foundBillPayment2);
 		foundBillPayment.setId(id);
 
-		assertThat(billPayment.compareTo(new GregorianCalendar())).isEqualTo(0);
 		assertThat(billPayment.compareTo(billPayment)).isEqualTo(0);
 
 		assertThat(billPayment.hashCode()).isPositive();
