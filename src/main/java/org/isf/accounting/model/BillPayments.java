@@ -59,7 +59,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
     @AttributeOverride(name="active", column=@Column(name="BLP_ACTIVE")),
     @AttributeOverride(name="lastModifiedDate", column=@Column(name="BLP_LAST_MODIFIED_DATE"))
 })
-public class BillPayments  extends Auditable<String> implements Comparable<Object>
+public class BillPayments extends Auditable<String> implements Comparable<BillPayments>
 {
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -140,13 +140,9 @@ public class BillPayments  extends Auditable<String> implements Comparable<Objec
 		this.user = user;
 	}
 	
-	public int compareTo(Object anObject) {
-		if (anObject instanceof BillPayments)
-			if (this.date.after(((BillPayments)anObject).getDate()))
-				return 1;
-			else
-				return 0;
-		return 0;
+	@Override
+	public int compareTo(BillPayments anObject) {
+		return this.date.compareTo(((BillPayments)anObject).getDate());
 	}
 
 	@Override
