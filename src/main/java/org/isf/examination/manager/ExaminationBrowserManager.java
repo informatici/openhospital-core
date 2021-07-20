@@ -100,11 +100,9 @@ public class ExaminationBrowserManager {
 	private String formatLastNote(PatientExamination lastPatientExamination) {
 		String note = lastPatientExamination.getPex_note();
 		if (!note.isEmpty()) {
-			StringBuilder sbNote = new StringBuilder();
-			sbNote.append(MessageBundle.getMessage("angal.examination.lastnote")).append(" ");
-			sbNote.append(TimeTools.formatDateTime(lastPatientExamination.getPex_date(), null));
-			sbNote.append(":\n").append(lastPatientExamination.getPex_note()).append("\n\n");
-			return sbNote.toString();
+			return MessageBundle.formatMessage("angal.examination.lastnote.fmt.msg", 
+							TimeTools.formatDateTime(lastPatientExamination.getPex_date(), null), 
+							lastPatientExamination.getPex_note());
 		}
 		return "";
 	}
