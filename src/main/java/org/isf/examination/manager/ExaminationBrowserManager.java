@@ -35,6 +35,7 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.time.TimeTools;
 import org.isf.utils.validator.DefaultSorter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -77,15 +78,35 @@ public class ExaminationBrowserManager {
 	 * Get from last PatientExamination (only height, weight & note)
 	 */
 	public PatientExamination getFromLastPatientExamination(PatientExamination lastPatientExamination) {
-		PatientExamination newPatientExamination = new PatientExamination(new GregorianCalendar(), lastPatientExamination.getPatient(),
+		PatientExamination newPatientExamination = new PatientExamination(new GregorianCalendar(), 
+				lastPatientExamination.getPatient(),
 				lastPatientExamination.getPex_height(),
-				lastPatientExamination.getPex_weight(), lastPatientExamination.getPex_ap_min(), lastPatientExamination.getPex_ap_max(),
+				lastPatientExamination.getPex_weight(), 
+				lastPatientExamination.getPex_ap_min(), 
+				lastPatientExamination.getPex_ap_max(),
 				lastPatientExamination.getPex_hr(),
-				lastPatientExamination.getPex_temp(), lastPatientExamination.getPex_sat(), lastPatientExamination.getPex_hgt(),
-				lastPatientExamination.getPex_diuresis(), lastPatientExamination.getPex_diuresis_desc(), lastPatientExamination.getPex_bowel_desc(),
+				lastPatientExamination.getPex_temp(), 
+				lastPatientExamination.getPex_sat(), 
+				lastPatientExamination.getPex_hgt(),
+				lastPatientExamination.getPex_diuresis(), 
+				lastPatientExamination.getPex_diuresis_desc(), 
+				lastPatientExamination.getPex_bowel_desc(),
 				lastPatientExamination.getPex_rr(),
-				lastPatientExamination.getPex_auscultation(), lastPatientExamination.getPex_note());
+				lastPatientExamination.getPex_auscultation(), 
+				formatLastNote(lastPatientExamination));
 		return newPatientExamination;
+	}
+
+	private String formatLastNote(PatientExamination lastPatientExamination) {
+		String note = lastPatientExamination.getPex_note();
+		if (!note.isEmpty()) {
+			StringBuilder sbNote = new StringBuilder();
+			sbNote.append(MessageBundle.getMessage("angal.examination.lastnote")).append(" ");
+			sbNote.append(TimeTools.formatDateTime(lastPatientExamination.getPex_date(), null));
+			sbNote.append(":\n").append(lastPatientExamination.getPex_note()).append("\n\n");
+			return sbNote.toString();
+		}
+		return "";
 	}
 
 	private void buildAuscultationHashMap() {
