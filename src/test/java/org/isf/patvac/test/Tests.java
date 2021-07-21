@@ -158,11 +158,12 @@ public class Tests extends OHCoreTestCase {
 	public void testIoUpdatePatientVaccine() throws Exception {
 		int code = _setupTestPatientVaccine(false);
 		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findOne(code);
-		foundPatientVaccine.setPatName("Update");
+		GregorianCalendar newDate = new GregorianCalendar();
+		foundPatientVaccine.setVaccineDate(newDate);
 		boolean result = patvacIoOperation.updatePatientVaccine(foundPatientVaccine);
 		assertThat(result).isTrue();
 		PatientVaccine updatePatientVaccine = patVacIoOperationRepository.findOne(code);
-		assertThat(updatePatientVaccine.getPatName()).isEqualTo("Update");
+		assertThat(updatePatientVaccine.getVaccineDate().equals(newDate));
 	}
 
 	@Test
@@ -327,11 +328,12 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrUpdatePatientVaccine() throws Exception {
 		int code = _setupTestPatientVaccine(false);
 		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findOne(code);
-		foundPatientVaccine.setPatName("Update");
+		GregorianCalendar newDate = new GregorianCalendar();
+		foundPatientVaccine.setVaccineDate(newDate);
 		boolean result = patVacManager.updatePatientVaccine(foundPatientVaccine);
 		assertThat(result).isTrue();
 		PatientVaccine updatePatientVaccine = patVacIoOperationRepository.findOne(code);
-		assertThat(updatePatientVaccine.getPatName()).isEqualTo("Update");
+		assertThat(updatePatientVaccine.getVaccineDate().equals(newDate));
 	}
 
 	@Test
@@ -488,33 +490,16 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testPatientVaccineConstuctor() {
-		PatientVaccine patientVaccine = new PatientVaccine(0, 10, new GregorianCalendar(), new Patient(), new Vaccine(), 0,
-				"patName", 21, 'F');
-
-		assertThat(patientVaccine.getPatAge()).isEqualTo(21);
-		patientVaccine.setPatAge(-1);
-		assertThat(patientVaccine.getPatAge()).isEqualTo(-1);
-
-		assertThat(patientVaccine.getPatSex()).isEqualTo('F');
-		patientVaccine.setPatSex(' ');
-		assertThat(patientVaccine.getPatSex()).isEqualTo(' ');
-	}
-
-	@Test
 	public void testPatientVaccineHashCode() {
-		PatientVaccine patientVaccine = new PatientVaccine(0, 0, null, new Patient(), null, 0,
-				"patName", 21, 'F');
+		PatientVaccine patientVaccine = new PatientVaccine(0, 0, null, new Patient(), null, 0);
 		patientVaccine.setPatient(null);
 		assertThat(patientVaccine.hashCode()).isEqualTo(31 * 31 * 31 * 31 * 31);
 	}
 
 	@Test
 	public void testPatientVaccineEquals() {
-		PatientVaccine patientVaccine1 = new PatientVaccine(0, 0, null, new Patient(), null, 0,
-				"patName", 21, 'F');
-		PatientVaccine patientVaccine2 = new PatientVaccine(0, 0, null, new Patient(), null, 0,
-				"patName", 21, 'F');
+		PatientVaccine patientVaccine1 = new PatientVaccine(0, 0, null, new Patient(), null, 0);
+		PatientVaccine patientVaccine2 = new PatientVaccine(0, 0, null, new Patient(), null, 0);
 
 		assertThat(patientVaccine1.equals(patientVaccine1)).isTrue();
 		assertThat(patientVaccine1)

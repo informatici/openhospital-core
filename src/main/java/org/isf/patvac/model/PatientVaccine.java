@@ -107,21 +107,6 @@ public class PatientVaccine extends Auditable<String>
 		this.lock = lockIn ;
 	}
 	
-	public PatientVaccine(int codeIn, int progIn, GregorianCalendar vacDateIn, 
-			Patient patient, Vaccine vacIn, int lockIn,
-                          String patNameIn, int patAgeIn, char patSexIn) {
-		this.code = codeIn;
-		this.progr = progIn;
-		this.vaccineDate = vacDateIn;
-		this.patient = patient;
-		this.vaccine = vacIn;
-		this.lock = lockIn ;
-		patient.setFirstName(patNameIn);
-		patient.setAge(patAgeIn);
-		patient.setSex(patSexIn);
-	}
-	
-	
 	public int getCode() {
 		return code;
 	}
@@ -172,27 +157,15 @@ public class PatientVaccine extends Auditable<String>
 	}
 
 	public String getPatName() {
-		return patient.getFirstName();
-	}
-
-	public void setPatName(String patName) {
-		this.patient.setFirstName(patName);
+		return patient.getName();
 	}
 
 	public int getPatAge() {
 		return patient.getAge();
 	}
 
-	public void setPatAge(int patAge) {
-		this.patient.setAge(patAge);
-	}
-
 	public char getPatSex() {
 		return patient.getSex();
-	}
-
-	public void setPatSex(char patSex) {
-		this.patient.setSex(patSex);
 	}
 
 	@Override
@@ -222,9 +195,19 @@ public class PatientVaccine extends Auditable<String>
 		if (code != other.code) {
 			return false;
 		}
-		if ((patient != null && !patient.equals(other.patient))
-				|| (other.patient != null && !other.patient.equals(patient))) {
+		if ((patient == null && other.patient != null)
+				|| (patient != null && other.patient == null)) {
 			return false;
+		}
+		if (patient != null && other.patient != null) {
+			if ((patient.getCode() == null && other.patient.getCode() != null)
+					|| (patient.getCode() != null && other.patient.getCode() == null)) {
+				return false;
+			}
+			if (patient.getCode() != null && other.patient.getCode() != null
+							&& !patient.equals(other.patient)) {
+				return false;
+			}
 		}
 		if (progr != other.progr) {
 			return false;
