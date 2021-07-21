@@ -147,7 +147,8 @@ public class PatVacManager {
 					MessageBundle.getMessage("angal.patvac.pleaseinsertavalidprogressive.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (patientVaccine.getVaccine() == null) {
+		if (patientVaccine.getVaccine() == null || 
+						patientVaccine.getVaccine().getDescription().equals(MessageBundle.getMessage("angal.patvac.allvaccine"))) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.patvac.pleaseselectavaccine.msg"),
 					OHSeverityLevel.ERROR));
