@@ -59,7 +59,6 @@ public class MessageBundle {
 
 		try {
 			if (resourceBundle != null) {
-				//message = new String(resourceBundle.getString(key).getBytes("ISO-8859-1"), "UTF-8");
 				message = resourceBundle.getString(key);
 			} else
 				return key;
@@ -116,7 +115,7 @@ public class MessageBundle {
 	 * @return the string where @code{args} have been replaces in the original string
 	 */
 	public static String formatMessage(String key, Object... args) {
-		String message = getMessage(key);
+		String message = getMessage(key).replace("'", "''");
 		MessageFormat messageFormat = new MessageFormat("");
 		messageFormat.applyPattern(message);
 		return messageFormat.format(args);
