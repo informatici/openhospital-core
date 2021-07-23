@@ -4,7 +4,6 @@ ENV MYSQL_DATABASE=oh
 ENV MYSQL_ROOT_PASSWORD=root
 ENV MYSQL_USER=isf
 ENV MYSQL_PASSWORD=isf123
-ENV MYSQL_LOWER_CASE_TABLE_NAMES=1
 
 #COPY sql/step_00_create_user.sql /docker-entrypoint-initdb.d/
 COPY sql/step_01_create_structure.sql /docker-entrypoint-initdb.d/
