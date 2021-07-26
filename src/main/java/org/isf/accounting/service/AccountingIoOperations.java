@@ -93,13 +93,7 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the users list.
 	 */
     public ArrayList<String> getUsers() throws OHServiceException {
-    	Set<String> accountingUsers = new TreeSet<>(new Comparator<String>() {
-
-			@Override
-			public int compare(String s1, String s2) {
-				return s1.compareTo(s2);
-			}
-    	});
+    	Set<String> accountingUsers = new TreeSet<>(String::compareTo);
     	accountingUsers.addAll(billRepository.findUserDistinctByOrderByUserAsc());
     	accountingUsers.addAll(billPaymentRepository.findUserDistinctByOrderByUserAsc());
 		return new ArrayList<>(accountingUsers);
