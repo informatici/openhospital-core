@@ -35,18 +35,17 @@ public interface UserMenuItemIoOperationRepository extends JpaRepository<UserMen
     @Query(value = "select menuItem.code, menuItem.buttonLabel, menuItem.altLabel, menuItem.tooltip, menuItem.shortcut, " +
 			"menuItem.mySubmenu, menuItem.myClass, menuItem.isASubMenu, menuItem.position, groupMenu.active " +
 			"from UserMenuItem menuItem, GroupMenu groupMenu, UserGroup  userGroup, User user " +
-			"where (user.userName=:id) " +
+			"where (user.userName=:userId) " +
 			"and (user.userGroupName=userGroup.code) " +
 			"and (userGroup.code=groupMenu.userGroup) " +
 			"and (menuItem.code=groupMenu.menuItem) " +
 			"order by menuItem.position")
-    List<Object[]> findAllWhereId(@Param("id") String id);
+    List<Object[]> findAllWhereUserId(@Param("userId") String userId);
 
     @Query(value = "select menuItem.code, menuItem.buttonLabel, menuItem.altLabel, menuItem.tooltip, menuItem.shortcut, " +
 			"menuItem.mySubmenu, menuItem.myClass, menuItem.isASubMenu, menuItem.position, groupMenu.active " +
-			"from UserMenuItem menuItem, GroupMenu groupMenu, UserGroup  userGroup, User user " +
+			"from UserMenuItem menuItem, GroupMenu groupMenu, UserGroup  userGroup " +
 			"where userGroup.code=:groupId " +
-			"and (user.userGroupName=userGroup.code) " +
 			"and (userGroup.code=groupMenu.userGroup) " +
 			"and (menuItem.code=groupMenu.menuItem) " +
 			"order by menuItem.position")

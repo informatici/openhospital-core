@@ -244,7 +244,7 @@ public class MenuIoOperations
 			User aUser) throws OHServiceException 
 	{
 		ArrayList<UserMenuItem> menu = null;		
-		List<Object[]> menuList = menuRepository.findAllWhereId(aUser.getUserName());
+		List<Object[]> menuList = menuRepository.findAllWhereUserId(aUser.getUserName());
 		
 		
 		menu = new ArrayList<>();
