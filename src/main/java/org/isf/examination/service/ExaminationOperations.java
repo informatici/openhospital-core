@@ -91,8 +91,14 @@ public class ExaminationOperations {
 	}
 
 	public ArrayList<PatientExamination> getLastNByPatID(int patID, int number) throws OHServiceException {
-		return new ArrayList<>(repository
-				.findByPatient_CodeOrderByPexDateDesc(patID, new PageRequest(0, number)).getContent());
+		if (number > 0) {
+			return new ArrayList<>(repository
+							.findByPatient_CodeOrderByPexDateDesc(patID, new PageRequest(0, number)).getContent());
+		} else {
+			return new ArrayList<>(repository
+							.findByPatient_CodeOrderByPexDateDesc(patID));
+		}
+		
 	}
 
 	public ArrayList<PatientExamination> getByPatID(int patID) throws OHServiceException	{
