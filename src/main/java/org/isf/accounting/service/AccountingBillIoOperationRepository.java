@@ -21,16 +21,16 @@
  */
 package org.isf.accounting.service;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 import org.isf.accounting.model.Bill;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
 @Repository
 public interface AccountingBillIoOperationRepository extends JpaRepository<Bill, Integer> {
@@ -65,4 +65,7 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 	 */
 	@Query(value = "select bi.bill from BillItems bi where bi.itemDescription = :desc and bi.bill.date >= :dateFrom and bi.bill.date < :dateTo")
 	List<Bill> findAllWhereDatesAndBillItem(@Param("dateFrom") Calendar dateFrom, @Param("dateTo") Calendar dateTo, @Param("desc") String desc);
+
+	@Query(value = "select distinct b.user FROM Bill b ORDER BY b.user asc")
+	List<String> findUserDistinctByOrderByUserAsc();
 }
