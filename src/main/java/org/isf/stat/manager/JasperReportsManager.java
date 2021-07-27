@@ -377,19 +377,9 @@ public class JasperReportsManager {
             HashMap<String, Object> parameters = getHospitalParameters();
             addBundleParameter(jasperFileName, parameters);
             
-    		Format formatter;
-		    formatter = new SimpleDateFormat("yyyy-MM-dd");
-		    
-		    Calendar c = Calendar.getInstance(); 
-		    c.setTime(date_From); 
-		    c.add(Calendar.DATE, -1);
-		    Date df = c.getTime();
-		    Calendar ct = Calendar.getInstance(); 
-		    ct.setTime(date_To); 
-		    ct.add(Calendar.DATE, 1);
-		    Date dt = ct.getTime();
-		    String dateFromQuery = formatter.format(df);
-		    String dateToQuery = formatter.format(dt);
+    		Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+		    String dateFromQuery = formatter.format(date_From);
+		    String dateToQuery = formatter.format(date_To);
 	
             parameters.put("patientID", String.valueOf(patientID));
             parameters.put("All", parametersString.contains("All"));
