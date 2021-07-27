@@ -44,29 +44,28 @@ public class PrintLabels {
 	public static final int toPdf = 1;
 	public static final int toPrint = 2;
 	
-	public PrintLabels(String filename, Integer labId)throws OHServiceException {
-		try{
-		HashMap<String, Object> parameters = new HashMap<>();
+	public PrintLabels(String filename, Integer patId) throws OHServiceException {
+		try {
+			HashMap<String, Object> parameters = new HashMap<>();
 
-		parameters.put("laboratoryID", String.valueOf(labId == null ? "" : labId));
+			parameters.put("patientID", String.valueOf(patId == null ? "" : patId));
 
-		StringBuilder sbFilename = new StringBuilder();
-		sbFilename.append("rpt");
-		sbFilename.append(File.separator);
-		String jasperFileName = filename;
-	
-		sbFilename.append(jasperFileName);
-		sbFilename.append(".jasper");
-		File jasperFile = new File(sbFilename.toString());
-		Connection conn = DbSingleJpaConn.getConnection();
-		JasperReport jasperReport = (JasperReport)JRLoader.loadObject(jasperFile);
-		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
-		JasperPrintManager.printReport(jasperPrint, true);
+			StringBuilder sbFilename = new StringBuilder();
+			sbFilename.append("rpt");
+			sbFilename.append(File.separator);
+			String jasperFileName = filename;
 
-	} catch (Exception exception) {
-		LOGGER.error(exception.getMessage(), exception);
-	}
-		
-		
+			sbFilename.append(jasperFileName);
+			sbFilename.append(".jasper");
+			File jasperFile = new File(sbFilename.toString());
+			Connection conn = DbSingleJpaConn.getConnection();
+			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
+			JasperPrintManager.printReport(jasperPrint, true);
+
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
+		}
+
 	}
 }
