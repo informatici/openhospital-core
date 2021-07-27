@@ -647,14 +647,6 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrDeleteMovementWard() throws Exception {
-		int code = _setupTestMovementWard(false);
-		MovementWard foundMovementWard = movementWardIoOperationRepository.findOne(code);
-		boolean result = movWardBrowserManager.deleteMovementWard(foundMovementWard);
-		assertThat(result).isTrue();
-	}
-
-	@Test
 	public void testMgrGetMovementToPatient() throws Exception {
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);

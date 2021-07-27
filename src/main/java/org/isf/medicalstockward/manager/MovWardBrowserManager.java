@@ -198,17 +198,6 @@ public class MovWardBrowserManager {
 	}
 
 	/**
-	 * Deletes the specified {@link MovementWard}.
-	 *
-	 * @param movement the movement to delete.
-	 * @return <code>true</code> if the movement has been deleted, <code>false</code> otherwise.
-	 * @throws OHServiceException
-	 */
-	public boolean deleteMovementWard(MovementWard movement) throws OHServiceException {
-		return ioOperations.deleteMovementWard(movement);
-	}
-
-	/**
 	 * Gets the current quantity for the specified {@link Medical} and specified {@link Ward}.
 	 *
 	 * @param ward - if {@code null} the quantity is counted for the whole hospital
