@@ -107,7 +107,6 @@ public class AdmissionIoOperations
 			GregorianCalendar[] dischargeRange) throws OHServiceException {
 		return patientRepository.findByFieldsContainingWordsFromLiteral(searchTerms).stream()
 			.map(patient -> new AdmittedPatient(patient, repository.findOneByPatientAndDateRanges(patient, admissionRange, dischargeRange).orElse(null)))
-			.filter(admittedPatient -> admittedPatient.getPatient()!= null && admittedPatient.getAdmission() != null)
 			.collect(Collectors.toList());
 	}
 
