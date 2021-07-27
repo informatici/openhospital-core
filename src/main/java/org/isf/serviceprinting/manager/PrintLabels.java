@@ -40,10 +40,6 @@ public class PrintLabels {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PrintLabels.class);
 
-	public static final int toDisplay = 0;
-	public static final int toPdf = 1;
-	public static final int toPrint = 2;
-	
 	public PrintLabels(String filename, Integer patId) throws OHServiceException {
 		try {
 			HashMap<String, Object> parameters = new HashMap<>();
