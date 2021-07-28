@@ -84,7 +84,7 @@ public class AdmissionIoOperations
 
 	/**
 	 * Returns all patients with ward in which they are admitted filtering the list using the passed search term.
-	 * @param searchTerms the search terms to use for filter the patient list, <code>null</code> if no filter have to be applied.
+	 * @param searchTerms the search terms to use for filter the patient list, {@code null} if no filter have to be applied.
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
@@ -96,9 +96,9 @@ public class AdmissionIoOperations
 
 	/**
 	 * Returns all patients based on the applied filters.
-	 * @param admissionRange the patient admission range
-	 * @param dischargeRange the patient discharge range
-	 * @param searchTerms the search terms to use for filter the patient list, <code>null</code> if no filter have to be applied.
+	 * @param admissionRange (two-dimensions array) the patient admission dates range, both {@code null} if no filter is to be applied.
+	 * @param dischargeRange (two-dimensions array) the patient discharge dates range, both {@code null} if no filter is to be applied.
+	 * @param searchTerms the search terms to use for filter the patient list, {@code null} if no filter have to be applied.
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
@@ -107,12 +107,17 @@ public class AdmissionIoOperations
 			GregorianCalendar[] dischargeRange) throws OHServiceException {
 		return patientRepository.findByFieldsContainingWordsFromLiteral(searchTerms).stream()
 			.map(patient -> new AdmittedPatient(patient, repository.findOneByPatientAndDateRanges(patient, admissionRange, dischargeRange).orElse(null)))
-			.filter(admittedPatient -> admittedPatient.getPatient()!= null && admittedPatient.getAdmission() != null)
+			.filter(admittedPatient -> (isRangeSet(admissionRange) || isRangeSet(dischargeRange)) ? 
+								(admittedPatient.getPatient() != null && admittedPatient.getAdmission() != null) : true)
 			.collect(Collectors.toList());
 	}
 
+	private boolean isRangeSet(GregorianCalendar[] range) {
+		return range != null && (range[0] != null || range[1] != null);
+	}
+
 	/**
-	 * Load patient together with the profile photo, or <code>null</code> if there is no patient with the given id
+	 * Load patient together with the profile photo, or {@code null} if there is no patient with the given id
 	 */
 	public AdmittedPatient loadAdmittedPatient(final Integer patientId) {
 		final Patient patient = patientRepository.findOne(patientId);
@@ -137,7 +142,7 @@ public class AdmissionIoOperations
 	/**
 	 * Returns the admission with the selected id.
 	 * @param id the admission id.
-	 * @return the admission with the specified id, <code>null</code> otherwise.
+	 * @return the admission with the specified id, {@code null} otherwise.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public Admission getAdmission(int id) throws OHServiceException {

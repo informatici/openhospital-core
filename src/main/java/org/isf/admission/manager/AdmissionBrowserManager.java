@@ -52,7 +52,7 @@ public class AdmissionBrowserManager {
 	/**
 	 * Returns all patients with ward in which they are admitted.
 	 *
-	 * @return the patient list with associated ward or <code>null</code> if the operation fails.
+	 * @return the patient list with associated ward or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
 	public ArrayList<AdmittedPatient> getAdmittedPatients() throws OHServiceException {
@@ -62,8 +62,8 @@ public class AdmissionBrowserManager {
 	/**
 	 * Returns all patients with ward in which they are admitted filtering the list using the passed search term.
 	 *
-	 * @param searchTerms the search terms to use for filter the patient list, <code>null</code> if no filter have to be applied.
-	 * @return the filtered patient list or <code>null</code> if the operation fails.
+	 * @param searchTerms the search terms to use for filter the patient list, {@code null} if no filter have to be applied.
+	 * @return the filtered patient list or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
 	public ArrayList<AdmittedPatient> getAdmittedPatients(String searchTerms) throws OHServiceException {
@@ -73,9 +73,9 @@ public class AdmissionBrowserManager {
 	/**
 	 * Returns all patients based on the applied filters.
 	 *
-	 * @param admissionRange the patient admission range
-	 * @param dischargeRange the patient discharge range
-	 * @param searchTerms the search terms to use for filter the patient list, <code>null</code> if no filter have to be applied.
+	 * @param admissionRange (two-dimensions array) the patient admission dates range, both {@code null} if no filter have to be applied.
+	 * @param dischargeRange (two-dimensions array) the patient admission dates range, both {@code null} if no filter have to be applied.
+	 * @param searchTerms the search terms to use for filter the patient list, {@code null} if no filter have to be applied.
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
@@ -92,7 +92,7 @@ public class AdmissionBrowserManager {
 	 * Returns the admission with the selected id.
 	 *
 	 * @param id the admission id.
-	 * @return the admission with the specified id, <code>null</code> otherwise.
+	 * @return the admission with the specified id, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
 	public Admission getAdmission(int id) throws OHServiceException {
@@ -103,7 +103,7 @@ public class AdmissionBrowserManager {
 	 * Returns the only one admission without adimission date (or null if none) for the specified patient.
 	 *
 	 * @param patient the patient target of the admission.
-	 * @return the patient admission or <code>null</code> if the operation fails.
+	 * @return the patient admission or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
 	public Admission getCurrentAdmission(Patient patient) throws OHServiceException {
@@ -114,7 +114,7 @@ public class AdmissionBrowserManager {
 	 * Returns all the admissions for the specified patient.
 	 *
 	 * @param patient the patient.
-	 * @return the admission list or <code>null</code> if the operation fails.
+	 * @return the admission list or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
 	public ArrayList<Admission> getAdmissions(Patient patient) throws OHServiceException {
@@ -135,7 +135,7 @@ public class AdmissionBrowserManager {
 	/**
 	 * Lists the {@link AdmissionType}s.
 	 *
-	 * @return the admission types  or <code>null</code> if the operation fails.
+	 * @return the admission types  or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
 	public ArrayList<AdmissionType> getAdmissionType() throws OHServiceException {
@@ -145,7 +145,7 @@ public class AdmissionBrowserManager {
 	/**
 	 * Lists the {@link DischargeType}s.
 	 *
-	 * @return the discharge types  or <code>null</code> if the operation fails.
+	 * @return the discharge types  or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
 	public ArrayList<DischargeType> getDischargeType() throws OHServiceException {
@@ -168,7 +168,7 @@ public class AdmissionBrowserManager {
 	 * Inserts a new {@link Admission} and the returns the generated id.
 	 *
 	 * @param admission the admission to insert.
-	 * @return the generated id or <code>null</code> if the operation fails.
+	 * @return the generated id or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
 	public int newAdmissionReturnKey(Admission admission) throws OHServiceException {

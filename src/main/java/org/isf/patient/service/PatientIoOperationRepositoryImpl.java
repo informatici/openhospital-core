@@ -92,8 +92,11 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 	private Predicate wordExistsInOneOfPatientFields(String word, CriteriaBuilder cb, Root<Patient> root) {
 		return cb.or(
 				cb.like(cb.lower(root.get("code").as(String.class)), like(word)),
-				cb.like(cb.lower(root.get("secondName").as(String.class)), like(word)),
 				cb.like(cb.lower(root.get("firstName").as(String.class)), like(word)),
+				cb.like(cb.lower(root.get("secondName").as(String.class)), like(word)),
+				cb.like(cb.lower(root.get("city").as(String.class)), like(word)),
+				cb.like(cb.lower(root.get("address").as(String.class)), like(word)),
+				cb.like(cb.lower(root.get("telephone").as(String.class)), like(word)),
 				cb.like(cb.lower(root.get("note").as(String.class)), like(word)),
 				cb.like(cb.lower(root.get("taxCode").as(String.class)), like(word))
 		);
