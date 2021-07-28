@@ -96,8 +96,8 @@ public class AdmissionIoOperations
 
 	/**
 	 * Returns all patients based on the applied filters.
-	 * @param admissionRange (two-dimensions array) the patient admission dates range, both {@code null} if no filter have to be applied.
-	 * @param dischargeRange (two-dimensions array) the patient discharge dates range, both {@code null} if no filter have to be applied.
+	 * @param admissionRange (two-dimensions array) the patient admission dates range, both {@code null} if no filter is to be applied.
+	 * @param dischargeRange (two-dimensions array) the patient discharge dates range, both {@code null} if no filter is to be applied.
 	 * @param searchTerms the search terms to use for filter the patient list, {@code null} if no filter have to be applied.
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
