@@ -215,7 +215,9 @@ public class LabManager {
 						MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg"),
 						OHSeverityLevel.ERROR));
 			return ioOperations.newLabSecondProcedure(laboratory, labRow);
-		} else {
+		} else if (laboratory.getExam().getProcedure() == 3) {
+			return ioOperations.newLabFirstProcedure(laboratory);
+		}  else {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.unknownprocedure.msg"),
 					OHSeverityLevel.ERROR));
