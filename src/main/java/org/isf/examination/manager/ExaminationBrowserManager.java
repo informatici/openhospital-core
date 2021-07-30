@@ -299,9 +299,9 @@ public class ExaminationBrowserManager {
 	 */
 	protected List<OHExceptionMessage> validateExamination(PatientExamination patex) {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		if (patex.getPex_note().length() > 2000) {
+		if (patex.getPex_note().length() > PatientExamination.PEX_NOTE_LENGHT) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.formatMessage("angal.common.thenoteistoolongmaxchars.fmt.msg", 2000),
+							MessageBundle.formatMessage("angal.common.thenoteistoolongmaxchars.fmt.msg", PatientExamination.PEX_NOTE_LENGHT),
 							OHSeverityLevel.ERROR));
 		}
 		if (patex.getPex_diuresis_desc() != null && !diuresisDescriptionHashMap.containsKey(patex.getPex_diuresis_desc())) {
