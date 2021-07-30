@@ -59,7 +59,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class PatientExamination implements Serializable, Comparable<PatientExamination> {
 
 	private static final long serialVersionUID = 1L;
-	public static final int PEX_NOTE_LENGHT = 2000;
+	public static final int PEX_NOTE_LENGTH = 2000;
 	
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -114,7 +114,7 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	@Column(name="PEX_BOWEL_DESC")
 	private String pex_bowel_desc;
 	
-	@Column(name="PEX_NOTE", length=PEX_NOTE_LENGHT)
+	@Column(name="PEX_NOTE", length=PEX_NOTE_LENGTH)
 	private String pex_note;
 	
 	@Transient
