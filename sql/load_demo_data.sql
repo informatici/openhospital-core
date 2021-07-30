@@ -4378,7 +4378,7 @@ CREATE TABLE `patientexamination` (
   `PEX_BOWEL_DESC` varchar(45) DEFAULT NULL COMMENT 'Bowel Function: regular, irregular, constipation, diarrheal',
   `PEX_RR` int(11) DEFAULT NULL COMMENT 'Respiratory rate in bpm',
   `PEX_AUSC` varchar(50) DEFAULT NULL COMMENT 'Auscultation: normal, wheezes, rhonchi, crackles, stridor, bronchial',
-  `PEX_NOTE` varchar(300) DEFAULT NULL,
+  `PEX_NOTE` varchar(2000) DEFAULT NULL,
   `PEX_CREATED_BY` varchar(50) DEFAULT NULL,
   `PEX_CREATED_DATE` datetime DEFAULT NULL,
   `PEX_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
