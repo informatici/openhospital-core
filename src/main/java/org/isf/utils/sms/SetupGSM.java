@@ -32,7 +32,11 @@ import java.util.Properties;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.isf.generaldata.ConfigurationProperties;
+import org.isf.sms.providers.gsm.GSMGatewayService;
+import org.isf.sms.providers.gsm.GSMParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +53,6 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(SetupGSM.class);
-	private static final String FILE_PROPERTIES = "GSM.properties";
 	
 	private Properties props;
 	private CommPortIdentifier portId = null;
@@ -67,9 +70,9 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	
 	public SetupGSM() {	
 		
-		props = ConfigurationProperties.loadPropertiesFile(FILE_PROPERTIES, LOGGER);
+		props = ConfigurationProperties.loadPropertiesFile(GSMParameters.FILE_PROPERTIES, LOGGER);
 		
-		String model = props.getProperty("GMM");
+		String model = props.getProperty(GSMGatewayService.SERVICE_NAME + ".gmm");
 		
 		portList = CommPortIdentifier.getPortIdentifiers();
 		
@@ -163,16 +166,14 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	 * @param port
 	 */
 	private void save(String port) {
-		FileOutputStream out;
-		StringBuilder comment = new StringBuilder(" Configuration file for SMS Sender GSM\n");
-		comment.append(" PORT = COMx (Windows) or /dev/ttyUSBx (Linux)");
+		PropertiesConfiguration config;
 		try {
-			out = new FileOutputStream("GSM.properties");
-			props.setProperty("PORT", port);
-			props.store(out, comment.toString());
-			out.close();
-		} catch (IOException ioException) {
-			LOGGER.error(ioException.getMessage(), ioException);
+			config = new PropertiesConfiguration(GSMParameters.FILE_PROPERTIES);
+			config.setProperty(GSMGatewayService.SERVICE_NAME + ".port", port);
+			config.save();
+			System.out.println("Port saved in " + GSMParameters.FILE_PROPERTIES);
+		} catch (ConfigurationException ce) {
+			LOGGER.error(ce.getMessage(), ce);
 		}
 	}
 }

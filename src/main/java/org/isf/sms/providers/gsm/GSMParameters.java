@@ -25,7 +25,7 @@ import org.isf.generaldata.ConfigurationProperties;
 
 public class GSMParameters extends ConfigurationProperties {
 
-	private static final String FILE_PROPERTIES = "sms.properties";
+	public static final String FILE_PROPERTIES = "sms.properties";
 
 	public static String PORT;
 	private static final String DEFAULT_PORT = "";
@@ -38,6 +38,9 @@ public class GSMParameters extends ConfigurationProperties {
 
 	public static String CSMP;
 	private static final String DEFAULT_CSMP = "AT+CSMP=17,167,0,0\r";
+	
+	public static String GMM;
+	private static final String DEFAULT_GMM = "AT+GMM\r\n";
 
 	public static String CMGS;
 	private static final String DEFAULT_CMGS = "AT+CMGS=\"";
@@ -51,6 +54,7 @@ public class GSMParameters extends ConfigurationProperties {
 		DRIVERNAME = myGetProperty(GSMGatewayService.SERVICE_NAME + ".driver-name", DEFAULT_DRIVERNAME);
 		CMGF = myGetProperty(GSMGatewayService.SERVICE_NAME + ".cmgf", DEFAULT_CMGF);
 		CSMP = myGetProperty(GSMGatewayService.SERVICE_NAME + ".csmp", DEFAULT_CSMP);
+		GMM = myGetProperty(GSMGatewayService.SERVICE_NAME + ".gmm", DEFAULT_GMM);
 		CMGS = myGetProperty(GSMGatewayService.SERVICE_NAME + ".cmgs", DEFAULT_CMGS);
 
 	}
