@@ -3104,7 +3104,7 @@ INSERT INTO `menuitem` VALUES ('admission','angal.menu.btn.admission','angal.men
 INSERT INTO `menuitem` VALUES ('admtype','angal.menu.btn.admtype','angal.menu.admtype','x','A','types','org.isf.admtype.gui.AdmissionTypeBrowser','N',0);
 INSERT INTO `menuitem` VALUES ('deliverytype','angal.menu.btn.deliverytype','angal.menu.deliverytype','x','L','types','org.isf.dlvrtype.gui.DeliveryTypeBrowser','N',3);
 INSERT INTO `menuitem` VALUES ('delresulttype','angal.menu.btn.delresulttype','angal.menu.delresulttype','x','R','types','org.isf.dlvrrestype.gui.DeliveryResultTypeBrowser','N',2);
-INSERT INTO `menuitem` VALUES ('disctype','angal.menu.btn.disctype','angal.menu.disctype','x','R','types','org.isf.disctype.gui.DischargeTypeBrowser','N',1);
+INSERT INTO `menuitem` VALUES ('disctype','angal.menu.btn.disctype','angal.menu.disctype','x','H','types','org.isf.disctype.gui.DischargeTypeBrowser','N',1);
 INSERT INTO `menuitem` VALUES ('disease','angal.menu.btn.disease','angal.menu.disease','x','D','generaldata','org.isf.disease.gui.DiseaseBrowser','N',3);
 INSERT INTO `menuitem` VALUES ('diseaselist','angal.menu.btn.diseaselist','angal.menu.diseaselist','x','D','printing','org.isf.stat.gui.DiseasesListLauncher','N',2);
 INSERT INTO `menuitem` VALUES ('diseasetype','angal.menu.btn.diseasetype','angal.menu.diseasetype','x','D','types','org.isf.distype.gui.DiseaseTypeBrowser','N',4);

@@ -25,9 +25,9 @@ INSERT INTO USER VALUES("admin","admin","admin","administrator");
 INSERT INTO MENUITEM (MNI_ID_A,MNI_BTN_LABEL,MNI_LABEL,MNI_TOOLTIP,MNI_SHORTCUT,MNI_SUBMENU,MNI_CLASS,MNI_IS_SUBMENU,MNI_POSITION) VALUES 
  ('admission','Admission/Patient','Admission/Patient','x','A','main','org.isf.admission.gui.AdmittedPatientBrowser','N',5),
  ('admtype','Admission Type','AdmissionType','x','A','types','org.isf.admtype.gui.AdmissionTypeBrowser','N',0),
- ('deliverytype','Delivery Type','Delivery','x','T','types','org.isf.dlvrtype.gui.DeliveryTypeBrowser','N',2),
+ ('deliverytype','Delivery Type','Delivery','x','L','types','org.isf.dlvrtype.gui.DeliveryTypeBrowser','N',2),
  ('delresulttype','Delivery Result Type','DeliveryResult','x','R','types','org.isf.dlvrrestype.gui.DeliveryResultTypeBrowser','N',3),
- ('disctype','Discharge Type','DischargeType','x','D','types','org.isf.disctype.gui.DischargeTypeBrowser','N',1),
+ ('disctype','Discharge Type','DischargeType','x','H','types','org.isf.disctype.gui.DischargeTypeBrowser','N',1),
  ('disease','Disease','Disease','x','D','generaldata','org.isf.disease.gui.DiseaseBrowser','N',3),
  ('diseaselist','Disease List','DiseaseList','x','D','printing','org.isf.stat.gui.DiseasesListLauncher','N',2),
  ('diseasetype','Disease Type','Disease','x','D','types','org.isf.distype.gui.DiseaseTypeBrowser','N',4),
