@@ -99,10 +99,10 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		Join<Opd, Disease> diseaseJoin = opd.join(opdEntityType.getSingularAttribute("disease", Disease.class));
 		Join<Disease, DiseaseType> diseaseTypeJoin = diseaseJoin.join(diseaseEntityType.getSingularAttribute("diseaseType", DiseaseType.class));
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.opd.alltype")))) {
+		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alltypes.txt")))) {
 			predicates.add(criteriaBuilder.equal(diseaseTypeJoin.get("code"), diseaseTypeCode));
 		}
-		if (!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldisease"))) {
+		if (!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldiseases.txt"))) {
 			predicates.add(criteriaBuilder.equal(diseaseJoin.get("code"), diseaseCode));
 		}
 		if (ageFrom != 0 || ageTo != 0) {
