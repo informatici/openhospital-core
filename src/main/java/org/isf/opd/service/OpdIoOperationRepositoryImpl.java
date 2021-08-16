@@ -72,14 +72,16 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
             int ageFrom,
             int ageTo,
             char sex,
-			char newPatient, int pageNumber, int pageSize) {
+            char newPatient, 
+			int pageNumber, 
+			int pageSize) {
 		TypedQuery<Opd> opdTypedQuery = getOpdIdQuery(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient);
 		opdTypedQuery.setFirstResult(pageNumber * pageSize);
 		opdTypedQuery.setMaxResults(pageSize);
 		return opdTypedQuery.getResultList();
 	}
 
-    public TypedQuery<Opd> getOpdIdQuery(
+    private TypedQuery<Opd> getOpdIdQuery(
             String diseaseTypeCode,
             String diseaseCode,
             GregorianCalendar dateFrom,
