@@ -23,18 +23,25 @@ package org.isf.opd.service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
+
+import org.isf.disease.model.Disease;
+import org.isf.distype.model.DiseaseType;
+import org.isf.generaldata.MessageBundle;
+import org.isf.opd.model.Opd;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCustom {
