@@ -1,234 +1,217 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.agetype.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 
+import org.assertj.core.api.Condition;
+import org.isf.OHCoreTestCase;
+import org.isf.agetype.manager.AgeTypeBrowserManager;
 import org.isf.agetype.model.AgeType;
+import org.isf.agetype.service.AgeTypeIoOperationRepository;
 import org.isf.agetype.service.AgeTypeIoOperations;
-import org.isf.utils.db.DbJpaUtil;
-import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestAgeType testAgeType;
-	private static TestAgeTypeContext testAgeTypeContext;
 
-    @Autowired
-    AgeTypeIoOperations ageTypeIoOperations;
-    
-	
+	@Autowired
+	AgeTypeIoOperations ageTypeIoOperations;
+	@Autowired
+	AgeTypeIoOperationRepository ageTypeIoOperationRepository;
+	@Autowired
+	AgeTypeBrowserManager ageTypeBrowserManager;
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testAgeType = new TestAgeType();
-    	testAgeTypeContext = new TestAgeTypeContext();
-    	
-        return;
-    }
-
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-		
-		return;
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-                
-        return;
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-    	testAgeType = null;
-    	testAgeTypeContext = null;
-
-    	return;
-    }
-	
-		
-	@Test
-	public void testAgeTypeGets()
-	{
-		String code = "";
-			
-
-		try 
-		{		
-			code = _setupTestAgeType(false);
-			_checkAgeTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-				
-		return;
+	public static void setUpClass() {
+		testAgeType = new TestAgeType();
 	}
-	
-	@Test
-	public void testAgeTypeSets()
-	{
-		String code = "";
-			
 
-		try 
-		{		
-			code = _setupTestAgeType(true);
-			_checkAgeTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-		
-		return;
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
-	
-	@Test
-	public void testIoGetAgeType() 
-	{
-		String code = "";
-		
-		
-		try 
-		{		
-			code = _setupTestAgeType(false);
-			AgeType foundAgeType = (AgeType)jpa.find(AgeType.class, code); 
-			ArrayList<AgeType> ageTypes = ageTypeIoOperations.getAgeType();
-			
-			assertEquals(foundAgeType.getDescription(), ageTypes.get(ageTypes.size()-1).getDescription());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-		
-		return;
-	}
-	
-	@Test
-	public void testIoUpdateAgeType() 
-	{
-		String code = "";
-		boolean result = false;
-		
-		
-		try 
-		{		
-			code = _setupTestAgeType(false);
-			AgeType foundAgeType = (AgeType)jpa.find(AgeType.class, code); 
-			foundAgeType.setFrom(4);
-			foundAgeType.setTo(40);
-			ArrayList<AgeType> ageTypes = new ArrayList<AgeType>();
-			ageTypes.add(foundAgeType);
-			result = ageTypeIoOperations.updateAgeType(ageTypes);
-			AgeType updateAgeType = (AgeType)jpa.find(AgeType.class, code);
 
-			assertTrue(result);
-			assertEquals(4, updateAgeType.getFrom());
-			assertEquals(40, updateAgeType.getTo());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-			fail();
-		}
-		
-		return;
-	}
-	
 	@Test
-	public void testIoGetAgeTypeByCode()
-	{	
-		String code = "";
-		
-		try 
-		{		
-			code = _setupTestAgeType(false);
-			AgeType ageType = (AgeType)jpa.find(AgeType.class, code); 
-			AgeType foundAgeType = ageTypeIoOperations.getAgeTypeByCode(9);
-			
-			assertEquals(ageType.getFrom(), foundAgeType.getFrom());
-			assertEquals(ageType.getTo(), foundAgeType.getTo());
-			assertEquals(ageType.getDescription(), foundAgeType.getDescription());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-		
-		return;
+	public void testAgeTypeGets() throws Exception {
+		String code = _setupTestAgeType(false);
+		_checkAgeTypeIntoDb(code);
 	}
-	
-	
-	private void _saveContext() throws OHException 
-    {	
-		testAgeTypeContext.saveAll(jpa);
-        		
-        return;
-    }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testAgeTypeContext.deleteNews(jpa);
-        
-        return;
-    }
-        
-	private String _setupTestAgeType(
-			boolean usingSet) throws OHException 
-	{
-		AgeType ageType;
-		
 
-    	jpa.beginTransaction();	
-    	ageType = testAgeType.setup(usingSet);
-		jpa.persist(ageType);
-    	jpa.commitTransaction();
-    	
+	@Test
+	public void testAgeTypeSets() throws Exception {
+		String code = _setupTestAgeType(true);
+		_checkAgeTypeIntoDb(code);
+	}
+
+	@Test
+	public void testIoGetAgeType() throws Exception {
+		String code = _setupTestAgeType(false);
+		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
+		ArrayList<AgeType> ageTypes = ageTypeIoOperations.getAgeType();
+
+		assertThat(ageTypes.get(ageTypes.size() - 1).getDescription()).isEqualTo(foundAgeType.getDescription());
+	}
+
+	@Test
+	public void testIoUpdateAgeType() throws Exception {
+		String code = _setupTestAgeType(false);
+		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
+		foundAgeType.setFrom(4);
+		foundAgeType.setTo(40);
+		ArrayList<AgeType> ageTypes = new ArrayList<>();
+		ageTypes.add(foundAgeType);
+		boolean result = ageTypeIoOperations.updateAgeType(ageTypes);
+		AgeType updateAgeType = ageTypeIoOperationRepository.findOneByCode(code);
+		assertThat(result).isTrue();
+		assertThat(updateAgeType.getFrom()).isEqualTo(4);
+		assertThat(updateAgeType.getTo()).isEqualTo(40);
+	}
+
+	@Test
+	public void testIoGetAgeTypeByCode() throws Exception {
+		String code = _setupTestAgeType(false);
+		AgeType ageType = ageTypeIoOperationRepository.findOneByCode(code);
+		AgeType foundAgeType = ageTypeIoOperations.getAgeTypeByCode(9);
+
+		assertThat(foundAgeType.getFrom()).isEqualTo(ageType.getFrom());
+		assertThat(foundAgeType.getTo()).isEqualTo(ageType.getTo());
+		assertThat(foundAgeType.getDescription()).isEqualTo(ageType.getDescription());
+	}
+
+	@Test
+	public void testMgrGetAgeType() throws Exception {
+		String code = _setupTestAgeType(false);
+		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
+		ArrayList<AgeType> ageTypes = ageTypeBrowserManager.getAgeType();
+
+		assertThat(ageTypes.get(ageTypes.size() - 1).getDescription()).isEqualTo(foundAgeType.getDescription());
+	}
+
+	@Test
+	public void testMgrUpdateAgeType() throws Exception {
+		String code = _setupTestAgeType(false);
+		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
+		foundAgeType.setFrom(4);
+		foundAgeType.setTo(40);
+		ArrayList<AgeType> ageTypes = new ArrayList<>();
+		ageTypes.add(foundAgeType);
+		boolean result = ageTypeBrowserManager.updateAgeType(ageTypes);
+		AgeType updateAgeType = ageTypeIoOperationRepository.findOneByCode(code);
+		assertThat(result).isTrue();
+		assertThat(updateAgeType.getFrom()).isEqualTo(4);
+		assertThat(updateAgeType.getTo()).isEqualTo(40);
+	}
+
+	@Test
+	public void testMgrGetTypeByAge() throws Exception {
+		String code = _setupTestAgeType(false);
+		AgeType ageType = ageTypeIoOperationRepository.findOneByCode(code);
+		String foundCode = ageTypeBrowserManager.getTypeByAge(9);
+		assertThat(foundCode).isEqualTo(code);
+
+		assertThat(ageTypeBrowserManager.getTypeByAge(-1)).isNull();
+	}
+
+	@Test
+	public void testMgrGetAgeTypeByCode() throws Exception {
+		String code = _setupTestAgeType(false);
+		AgeType ageType = ageTypeIoOperationRepository.findOneByCode(code);
+		AgeType foundAgeType = ageTypeBrowserManager.getTypeByCode(9);
+
+		assertThat(foundAgeType.getFrom()).isEqualTo(ageType.getFrom());
+		assertThat(foundAgeType.getTo()).isEqualTo(ageType.getTo());
+		assertThat(foundAgeType.getDescription()).isEqualTo(ageType.getDescription());
+	}
+
+	@Test
+	public void testAgeTypeEqualHashToString() throws Exception {
+		String code = _setupTestAgeType(false);
+		AgeType ageType = ageTypeIoOperationRepository.findOneByCode(code);
+		AgeType ageType2 = new AgeType(ageType.getCode(), ageType.getDescription());
+		ageType2.setFrom(ageType.getFrom());
+		ageType2.setTo(ageType.getTo());
+		assertThat(ageType.equals(ageType)).isTrue();
+		assertThat(ageType)
+				.isEqualTo(ageType2)
+				.isNotEqualTo("xyzzy");
+		ageType2.setCode("xxxx");
+		assertThat(ageType).isNotEqualTo(ageType2);
+
+		assertThat(ageType.hashCode()).isPositive();
+
+		assertThat(ageType2).hasToString(ageType.getDescription());
+	}
+
+	@Test
+	public void testMgrAgeTypeValidation() throws Exception {
+		String code = _setupTestAgeType(false);
+		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
+		foundAgeType.setFrom(0);
+		foundAgeType.setTo(1);
+		AgeType foundAgeType2 = ageTypeIoOperationRepository.findOneByCode(code);
+		foundAgeType2.setFrom(0);
+		foundAgeType2.setTo(1);
+		ArrayList<AgeType> ageTypes = new ArrayList<>();
+		ageTypes.add(foundAgeType);
+		ageTypes.add(foundAgeType2);
+
+		// Range overlap
+		assertThatThrownBy(() -> ageTypeBrowserManager.updateAgeType(ageTypes))
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// Age range not defined
+		foundAgeType2.setFrom(90);
+		foundAgeType2.setTo(100);
+		ArrayList<AgeType> ageTypes2 = new ArrayList<>();
+		ageTypes2.add(foundAgeType);
+		ageTypes2.add(foundAgeType2);
+		assertThatThrownBy(() -> ageTypeBrowserManager.updateAgeType(ageTypes2))
+				.isInstanceOf(OHServiceException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+	}
+
+	private String _setupTestAgeType(boolean usingSet) throws Exception {
+		AgeType ageType = testAgeType.setup(usingSet);
+		ageTypeIoOperationRepository.saveAndFlush(ageType);
 		return ageType.getCode();
 	}
-		
-	private void  _checkAgeTypeIntoDb(
-			String code) throws OHException 
-	{
-		AgeType foundAgeType;
-		
 
-		foundAgeType = (AgeType)jpa.find(AgeType.class, code); 
+	private void _checkAgeTypeIntoDb(String code) throws Exception {
+		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
 		testAgeType.check(foundAgeType);
-		
-		return;
-	}	
+	}
 }

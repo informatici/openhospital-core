@@ -1,19 +1,31 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.admission.service;
 
-/*----------------------------------------------------------
- * modification history
- * ====================
- * 10/11/06 - ross - removed from the list the deleted patients
- *                   the list is now in alphabetical  order
- * 11/08/08 - alessandro - addedd getFather&Mother Names
- * 26/08/08 - claudio - changed getAge for managing varchar type
- * 					  - added getBirthDate
- * 01/01/09 - Fabrizio - changed the calls to PAT_AGE fields to
- *                       return again an integer type
- * 20/01/09 - Chiara -   restart of progressive number of maternity 
- * 						 ward on 1st July conditioned to parameter 
- * 						 MATERNITYRESTARTINJUNE in generalData.properties                   
- *-----------------------------------------------------------*/
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
 import org.isf.admission.model.Admission;
@@ -31,11 +43,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-
+/**
+ * ---------------------------------------------------------
+ * modification history
+ * ====================
+ * 10/11/06 - ross - removed from the list the deleted patients
+ *                   the list is now in alphabetical  order
+ * 11/08/08 - alessandro - addedd getFather&Mother Names
+ * 26/08/08 - claudio - changed getAge for managing varchar type
+ * 					  - added getBirthDate
+ * 01/01/09 - Fabrizio - changed the calls to PAT_AGE fields to
+ *                       return again an integer type
+ * 20/01/09 - Chiara -   restart of progressive number of maternity
+ * 						 ward on 1st July conditioned to parameter
+ * 						 MATERNITYRESTARTINJUNE in generalData.properties
+ * -----------------------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -55,55 +78,46 @@ public class AdmissionIoOperations
 	 * @return the patient list with associated ward.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public ArrayList<AdmittedPatient> getAdmittedPatients() throws OHServiceException {
+	public List<AdmittedPatient> getAdmittedPatients() throws OHServiceException {
 		return getAdmittedPatients(null);
 	}
 
 	/**
 	 * Returns all patients with ward in which they are admitted filtering the list using the passed search term.
-	 * @param searchTerms the search terms to use for filter the patient list, <code>null</code> if no filter have to be applied.
+	 * @param searchTerms the search terms to use for filter the patient list, {@code null} if no filter is to be applied.
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public ArrayList<AdmittedPatient> getAdmittedPatients(
-			String searchTerms) throws OHServiceException
-	{
-		final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList = repository.findPatientAndAdmissionId(searchTerms);
-		return loadPatientAndAdmission(admittedPatientsList);
+	public List<AdmittedPatient> getAdmittedPatients(String searchTerms) throws OHServiceException {
+		return patientRepository.findByFieldsContainingWordsFromLiteral(searchTerms).stream()
+			.map(patient -> new AdmittedPatient(patient, repository.findOneWherePatientIn(patient.getCode())))
+			.collect(Collectors.toList());
 	}
 
 	/**
 	 * Returns all patients based on the applied filters.
-	 * @param admissionRange the patient admission range
-	 * @param dischargeRange the patient discharge range
-	 * @param searchTerms the search terms to use for filter the patient list, <code>null</code> if no filter have to be applied.
+	 * @param admissionRange (two-dimensions array) the patient admission dates range, both {@code null} if no filter is to be applied.
+	 * @param dischargeRange (two-dimensions array) the patient discharge dates range, both {@code null} if no filter is to be applied.
+	 * @param searchTerms the search terms to use for filter the patient list, {@code null} if no filter is to be applied.
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public ArrayList<AdmittedPatient> getAdmittedPatients(
+	public List<AdmittedPatient> getAdmittedPatients(
 			String searchTerms, GregorianCalendar[] admissionRange,
-			GregorianCalendar[] dischargeRange) throws OHServiceException
-	{
-		final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList = repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
-		return loadPatientAndAdmission(admittedPatientsList);
+			GregorianCalendar[] dischargeRange) throws OHServiceException {
+		return patientRepository.findByFieldsContainingWordsFromLiteral(searchTerms).stream()
+			.map(patient -> new AdmittedPatient(patient, repository.findOneByPatientAndDateRanges(patient, admissionRange, dischargeRange).orElse(null)))
+			.filter(admittedPatient -> (isRangeSet(admissionRange) || isRangeSet(dischargeRange)) ? 
+								(admittedPatient.getPatient() != null && admittedPatient.getAdmission() != null) : true)
+			.collect(Collectors.toList());
 	}
 
-	private ArrayList<AdmittedPatient> loadPatientAndAdmission(final List<AdmissionIoOperationRepositoryCustom.PatientAdmission> admittedPatientsList) {
-		final ArrayList<AdmittedPatient> result = new ArrayList<AdmittedPatient>();
-		for (final AdmissionIoOperationRepositoryCustom.PatientAdmission patientAdmission : admittedPatientsList) {
-			final Patient patient = patientRepository.findOne(patientAdmission.getPatientId());
-			Admission admission = null;
-			if (patientAdmission.getAdmissionId() != null) {
-				admission = repository.findOne(patientAdmission.getAdmissionId());
-			}
-			AdmittedPatient admittedPatient = new AdmittedPatient(patient, admission);
-			result.add(admittedPatient);
-		}
-		return result;
+	private boolean isRangeSet(GregorianCalendar[] range) {
+		return range != null && (range[0] != null || range[1] != null);
 	}
 
 	/**
-	 * Load patient together with the profile photo, or <code>null</code> if there is no patient with the given id
+	 * Load patient together with the profile photo, or {@code null} if there is no patient with the given id
 	 */
 	public AdmittedPatient loadAdmittedPatient(final Integer patientId) {
 		final Patient patient = patientRepository.findOne(patientId);
@@ -121,28 +135,18 @@ public class AdmissionIoOperations
 	 * @return the patient admission.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public Admission getCurrentAdmission(
-			Patient patient) throws OHServiceException 
-	{ 
-		Admission admission = repository.findOneWherePatientIn(patient.getCode());
-		
-		
-		return admission;
+	public Admission getCurrentAdmission(Patient patient) throws OHServiceException	{
+		return repository.findOneWherePatientIn(patient.getCode());
 	}
 
 	/**
 	 * Returns the admission with the selected id.
 	 * @param id the admission id.
-	 * @return the admission with the specified id, <code>null</code> otherwise.
+	 * @return the admission with the specified id, {@code null} otherwise.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public Admission getAdmission(
-			int id) throws OHServiceException 
-	{
-		Admission admission = repository.findOne(id);
-		
-		
-		return admission;
+	public Admission getAdmission(int id) throws OHServiceException {
+		return repository.findOne(id);
 	}
 
 	/**
@@ -151,13 +155,8 @@ public class AdmissionIoOperations
 	 * @return the admission list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public ArrayList<Admission> getAdmissions(
-			Patient patient) throws OHServiceException 
-	{
-		ArrayList<Admission> padmission = (ArrayList<Admission>) repository.findAllWherePatientByOrderByDate(patient.getCode());
-	
-		
-		return padmission;
+	public ArrayList<Admission> getAdmissions(Patient patient) throws OHServiceException {
+		return  (ArrayList<Admission>) repository.findAllWherePatientByOrderByDate(patient.getCode());
 	}
 	
 	/**
@@ -246,7 +245,7 @@ public class AdmissionIoOperations
 			String wardId) throws OHServiceException 
 	{
 		int next = 1;
-		GregorianCalendar now = new GregorianCalendar();
+		GregorianCalendar now = getNow();
 		GregorianCalendar first = null;
 		GregorianCalendar last = null;
 		
@@ -255,14 +254,14 @@ public class AdmissionIoOperations
 			if (now.get(Calendar.MONTH) < 6) 
 			{
 				first = new GregorianCalendar(now.get(Calendar.YEAR) - 1, Calendar.JULY, 1);
-				last = new GregorianCalendar(now.get(Calendar.YEAR), Calendar.JUNE, 30);
+				last = new GregorianCalendar(now.get(Calendar.YEAR), Calendar.JULY, 1);
 			} 
 			else 
 			{
 				first = new GregorianCalendar(now.get(Calendar.YEAR), Calendar.JULY, 1);
-				last = new GregorianCalendar(now.get(Calendar.YEAR) + 1, Calendar.JUNE, 30);
-			}
+				last = new GregorianCalendar(now.get(Calendar.YEAR) + 1, Calendar.JULY, 1);
 
+			}
 		} 
 		else 
 		{
@@ -277,6 +276,30 @@ public class AdmissionIoOperations
 		} 
 		
 		return next;
+	}
+
+	/**
+	 * The variables, {@code testing} and {@code afterJune}, are here only for testing purposes and are **NOT** to be used
+	 * in production code.   
+	 * The default path ({@code testing == false}) ensures that the code performs as it
+	 * always has in the past.
+	 * This code permits the unit testing of maternity wards with dates before and after June.
+	 * TODO: once the GregorianCalendar object is replaced by Java 8+ date/time objects this can be revisited
+	 * as there is more flexibility in modifying the new objects in Java 8+.
+	 */
+	public static boolean testing = false;
+	public static boolean afterJune = false;
+	public static GregorianCalendar getNow() {
+		GregorianCalendar now = new GregorianCalendar();
+		if (!testing) {
+			return now;
+		}
+		// testing date June or later
+		if (afterJune) {
+			return new GregorianCalendar(now.get(Calendar.YEAR), 8, 2);
+		}
+		// testing data before June
+		return new GregorianCalendar(now.get(Calendar.YEAR), 0, 2);
 	}
 
 	/**

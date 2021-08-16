@@ -1,17 +1,30 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.patvac.model;
 
-/*------------------------------------------
-* PatientVaccine - class 
-* -----------------------------------------
-* modification history
-* 25/08/2011 - claudia - first beta version
-* 04/06/2015 - Antonio - ported to JPA
-*------------------------------------------*/
-
 import java.util.GregorianCalendar;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -24,11 +37,20 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.patient.model.Patient;
+import org.isf.utils.db.Auditable;
 import org.isf.vaccine.model.Vaccine;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ * ------------------------------------------
+ * PatientVaccine - class
+ * -----------------------------------------
+ * modification history
+ * 25/08/2011 - claudia - first beta version
+ * 04/06/2015 - Antonio - ported to JPA
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="PATIENTVACCINE")
 @EntityListeners(AuditingEntityListener.class) 
@@ -85,21 +107,6 @@ public class PatientVaccine extends Auditable<String>
 		this.lock = lockIn ;
 	}
 	
-	public PatientVaccine(int codeIn, int progIn, GregorianCalendar vacDateIn, 
-			Patient patient, Vaccine vacIn, int lockIn,
-                          String patNameIn, int patAgeIn, char patSexIn) {
-		this.code = codeIn;
-		this.progr = progIn;
-		this.vaccineDate = vacDateIn;
-		this.patient = patient;
-		this.vaccine = vacIn;
-		this.lock = lockIn ;
-		patient.setFirstName(patNameIn);
-		patient.setAge(patAgeIn);
-		patient.setSex(patSexIn);
-	}
-	
-	
 	public int getCode() {
 		return code;
 	}
@@ -150,29 +157,16 @@ public class PatientVaccine extends Auditable<String>
 	}
 
 	public String getPatName() {
-		return patient.getFirstName();
-	}
-
-	public void setPatName(String patName) {
-		this.patient.setFirstName(patName);
+		return patient.getName();
 	}
 
 	public int getPatAge() {
 		return patient.getAge();
 	}
 
-	public void setPatAge(int patAge) {
-		this.patient.setAge(patAge);
-	}
-
 	public char getPatSex() {
 		return patient.getSex();
 	}
-
-	public void setPatSex(char patSex) {
-		this.patient.setSex(patSex);
-	}
-
 
 	@Override
 	public int hashCode() {
@@ -182,8 +176,7 @@ public class PatientVaccine extends Auditable<String>
 		hascode = prime * hascode + ((patient == null) ? 0 : patient.hashCode());
 		hascode = prime * hascode + progr;
 		hascode = prime * hascode + ((vaccine == null) ? 0 : vaccine.hashCode());
-		hascode = prime * hascode
-				+ ((vaccineDate == null) ? 0 : vaccineDate.hashCode());
+		hascode = prime * hascode + ((vaccineDate == null) ? 0 : vaccineDate.hashCode());
 		return hascode;
 	}
 
@@ -202,24 +195,29 @@ public class PatientVaccine extends Auditable<String>
 		if (code != other.code) {
 			return false;
 		}
-		if (patient == null && other.patient != null) {
+		if ((patient == null && other.patient != null)
+				|| (patient != null && other.patient == null)) {
+			return false;
+		}
+		if (patient != null && other.patient != null) {
+			if ((patient.getCode() == null && other.patient.getCode() != null)
+					|| (patient.getCode() != null && other.patient.getCode() == null)) {
 				return false;
+			}
+			if (patient.getCode() != null && other.patient.getCode() != null
+							&& !patient.equals(other.patient)) {
+				return false;
+			}
 		}
 		if (progr != other.progr) {
 			return false;
 		}
-		if (vaccine == null) {
-			if (other.vaccine != null) {
-				return false;
-			}
-		} else if (!vaccine.equals(other.vaccine)) {
+		if ((vaccine != null && !vaccine.equals(other.vaccine))
+				|| (other.vaccine != null && !other.vaccine.equals(vaccine))) {
 			return false;
 		}
-		if (vaccineDate == null) {
-			if (other.vaccineDate != null) {
-				return false;
-			}
-		} else if (!vaccineDate.equals(other.vaccineDate)) {
+		if ((vaccineDate != null && !vaccineDate.equals(other.vaccineDate))
+				|| (other.vaccineDate != null && !other.vaccineDate.equals(vaccineDate))) {
 			return false;
 		}
 		return true;

@@ -1,10 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.opd.service;
 
-
-import org.isf.disease.model.Disease;
-import org.isf.distype.model.DiseaseType;
-import org.isf.generaldata.MessageBundle;
-import org.isf.opd.model.Opd;
+import java.util.ArrayList;
 import java.util.Date;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +35,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
-
 
 @Transactional
 public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCustom {
@@ -113,14 +129,18 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Opd> query = cb.createQuery(Opd.class);
 		Root<Opd> opd = query.from(Opd.class);
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 
 		query.select(opd);
-		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.opd.alltype")))) {
-			predicates.add(cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode));
+		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alltypes.txt")))) {
+			predicates.add(
+				cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
+			);
 		}
-		if (!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldisease"))) {
-			predicates.add(cb.equal(opd.join("disease").get("code"), diseaseCode));
+		if (!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldiseases.txt"))) {
+			predicates.add(
+				cb.equal(opd.join("disease").get("code"), diseaseCode)
+			);
 		}
 		if (ageFrom != 0 || ageTo != 0) {
 			predicates.add(cb.between(opd.<Integer> get("age"), ageFrom, ageTo));

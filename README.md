@@ -1,39 +1,43 @@
-# OpenHospital-core
+# Open Hospital - Core
 [![Java CI](https://github.com/informatici/openhospital-core/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/informatici/openhospital-core/actions?query=workflow%3A%22Java+CI+with+Maven%22)
 
-OpenHospital 2.0 (ISF OpenHospital web version) - WIP
+This is the Core component of [Open Hospital][openhospital]: it contains the business logic and the data abstraction layer.  
+The Core component is used by the [Java Swing desktop GUI][openhospital-gui], and by the [web UI][openhospital-ui] (through the [API component][openhospital-api]).
 
-**How to build with Maven:**
+## How to build
 
-    mvn clean install
+After having installed Java JDK 8+ and Maven, to build this project issue:  
+
+    mvn package
+
+To use the Core component in the other projects, you'll need to install it locally with:
+
+    mvn install
     
-To run the JUnit tests simply run:
+To run the tests simply issue:
 
-	mvn test
+    mvn test
 
-**How to launch the software:**
+Tests are run against an in-memory database (H2).  
+To test the application against MySQL, you can change [`database.properties`][database.prop] and run the Docker container in the root folder with:
 
-You need a GUI (Graphic User Interface) in order to use the core:
-
-* clone [OpenHospital-gui](https://github.com/informatici/openhospital-gui) for a Java Swing interface
-* follow the instructions in the related README.md
+    docker-compose up
 
 
-**Rebuild local database:**
-If you want to rebuild local db you should follow these steps:
+## How to run Open Hospital
 
-    docker-compose down --rmi all
-    docker-compose up [-d]*  
-    
-    
-    * -d optional for detach 
+To run Open Hospital, you'll need a user interface, which is provided in the [GUI][openhospital-gui] and in the [UI][openhospital-ui] projects.  
+Please follow the instructions in the documentation of those repositories.
 
+## How to contribute
 
-# How to contribute
+You can find the contribution guidelines in the [Open Hospital wiki][contribution-guide].  
+A list of open issues is available on [Jira][jira].
 
-Please read the OpenHospital [Wiki](https://openhospital.atlassian.net/wiki/display/OH/Contribution+Guidelines)
+## Community
 
-See the Open Issues on [Jira](https://openhospital.atlassian.net/issues/)
+You can reach out to the community of contributors by joining 
+our [Slack workspace][slack] or by subscribing to our [mailing list][ml].
 
 ## Code style
 
@@ -75,3 +79,13 @@ For Eclipse the process requires loading the formatting style and the import ord
 * As with the formatting styles the import order is applicable to all projects.  In order to change it just for this project repeat the same steps as above for *Configure Project Specific Settings...*
  
 </details> 
+
+ [openhospital]: https://www.open-hospital.org/
+ [openhospital-gui]: https://github.com/informatici/openhospital-gui
+ [openhospital-ui]: https://github.com/informatici/openhospital-ui
+ [openhospital-api]: https://github.com/informatici/openhospital-api
+ [contribution-guide]: https://openhospital.atlassian.net/wiki/display/OH/Contribution+Guidelines
+ [jira]: https://openhospital.atlassian.net/jira/software/c/projects/OP/issues/
+ [database.prop]: https://github.com/informatici/openhospital-core/blob/develop/src/test/resources/database.properties
+ [slack]: https://join.slack.com/t/openhospitalworkspace/shared_invite/enQtOTc1Nzc0MzE2NjQ0LWIyMzRlZTU5NmNlMjE2MDcwM2FhMjRkNmM4YzI0MTAzYTA0YTI3NjZiOTVhMDZlNWUwNWEzMjE5ZDgzNWQ1YzE
+ [ml]: https://sourceforge.net/projects/openhospital/lists/openhospital-devel

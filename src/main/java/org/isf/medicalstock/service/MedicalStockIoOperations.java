@@ -1,10 +1,31 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.medicalstock.service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.medicals.model.Medical;
@@ -81,49 +102,37 @@ public class MedicalStockIoOperations {
 			Movement movement) throws OHServiceException 
 	{
 		boolean result = false;
-	
-		try
-		{			
-			ArrayList<Lot> lots = getLotsByMedical(movement.getMedical());
 
-			int qty = movement.getQuantity();			
-			for (Lot lot : lots) 
-			{
-				Movement splitMovement = new Movement(movement.getMedical(), movement.getType(), movement.getWard(),
-						null, // lot to be set
-						movement.getDate(), qty,
-						null, // quantity to be set
-						movement.getRefNo());
-				int qtLot = lot.getQuantity();
-				if (qtLot < qty) 
-				{
-					splitMovement.setQuantity(qtLot);
-					result = storeMovement(splitMovement, lot.getCode());
-					if (result) 
-					{
-						//medical stock movement inserted updates quantity of the medical
-						result = updateStockQuantity(splitMovement);
-					}
-					qty = qty - qtLot;
-				} 
-				else 
-				{
-					splitMovement.setQuantity(qty);
-					result = storeMovement(splitMovement, lot.getCode());
-					if (result) 
-					{
-						//medical stock movement inserted updates quantity of the medical
-						result = updateStockQuantity(splitMovement);
-					}
-					break;
+		ArrayList<Lot> lots = getLotsByMedical(movement.getMedical());
+
+		int qty = movement.getQuantity(); // movement initial quantity
+		for (Lot lot : lots) {
+			Movement splitMovement = new Movement(movement.getMedical(), movement.getType(), movement.getWard(),
+					null, // lot to be set
+					movement.getDate(), 
+					qty, // quantity can remain the same or changed if greater than lot quantity
+					null, 
+					movement.getRefNo());
+			int qtLot = lot.getMainStoreQuantity();
+			if (qtLot < qty) {
+				splitMovement.setQuantity(qtLot);
+				result = storeMovement(splitMovement, lot.getCode());
+				if (result) {
+					//medical stock movement inserted updates quantity of the medical
+					result = updateStockQuantity(splitMovement);
 				}
+				qty = qty - qtLot;
+			} else {
+				splitMovement.setQuantity(qty);
+				result = storeMovement(splitMovement, lot.getCode());
+				if (result) {
+					//medical stock movement inserted updates quantity of the medical
+					result = updateStockQuantity(splitMovement);
+				}
+				break;
 			}
 		}
-		catch (OHServiceException e)
-		{
-			throw e;	
-		}
-		
+
 		return result;
 	}
 		
@@ -137,53 +146,38 @@ public class MedicalStockIoOperations {
 			Movement movement) throws OHServiceException 
 	{
 		String lotCode = null;
-		
-		
-		if (movement.getLot() != null)
-		{
+
+		if (movement.getLot() != null) {
 			lotCode = movement.getLot().getCode();
 		}
 
-		try 
-		{
-			//we have to manage the Lot
-			if (movement.getType().getType().contains("+")) 
-			{
-				//if is in automatic lot mode then we have to generate a new lot code
-				if (isAutomaticLotMode() || lotCode.equals("")) 
-				{
-					lotCode = generateLotCode();
-				}
-
-				boolean lotExists = lotExists(lotCode);
-				if (!lotExists) 
-				{
-					boolean lotStored = storeLot(lotCode, movement.getLot(), movement.getMedical());
-					if (!lotStored) 
-					{
-						return false;
-					}
-				}
+		//we have to manage the Lot
+		if (movement.getType().getType().contains("+")) {
+			//if is in automatic lot mode then we have to generate a new lot code
+			if (isAutomaticLotMode() || lotCode.equals("")) {
+				lotCode = generateLotCode();
 			}
 
-			boolean movementStored = storeMovement(movement, lotCode);
-			if (movementStored) 
-			{
-				//medical stock movement inserted updates quantity of the medical
-				boolean stockQuantityUpdated = updateStockQuantity(movement);
-				if (stockQuantityUpdated) 
-				{
-					return true;
+			boolean lotExists = lotExists(lotCode);
+			if (!lotExists) {
+				boolean lotStored = storeLot(lotCode, movement.getLot(), movement.getMedical());
+				if (!lotStored) {
+					return false;
 				}
 			}
-
-			//something is failed
-			return false;
-		} 
-		finally 
-		{
-			//Nothing to do
 		}
+
+		boolean movementStored = storeMovement(movement, lotCode);
+		if (movementStored) {
+			//medical stock movement inserted updates quantity of the medical
+			boolean stockQuantityUpdated = updateStockQuantity(movement);
+			if (stockQuantityUpdated) {
+				return true;
+			}
+		}
+
+		//something is failed
+		return false;
 	}
 	
 	/**
@@ -461,10 +455,10 @@ public class MedicalStockIoOperations {
 			GregorianCalendar dateTo) throws OHServiceException 
 	{
 		ArrayList<Integer> pMovementCode = null;
-		ArrayList<Movement> pMovement = new ArrayList<Movement>();
+		ArrayList<Movement> pMovement = new ArrayList<>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findMovementWhereDatesAndId(wardId, dateFrom, dateTo));
+		pMovementCode = new ArrayList<>(movRepository.findMovementWhereDatesAndId(wardId, dateFrom, dateTo));
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
 			Integer code = pMovementCode.get(i);
@@ -505,11 +499,11 @@ public class MedicalStockIoOperations {
 			GregorianCalendar lotDueTo) throws OHServiceException 
 	{
 		ArrayList<Integer> pMovementCode = null;
-		ArrayList<Movement> pMovement = new ArrayList<Movement>();
+		ArrayList<Movement> pMovement = new ArrayList<>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findMovementWhereData(
-				medicalCode, medicalType, wardId, movType, 
+		pMovementCode = new ArrayList<>(movRepository.findMovementWhereData(
+				medicalCode, medicalType, wardId, movType,
 				movFrom, movTo, lotPrepFrom, lotPrepTo, lotDueFrom, lotDueTo));			
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
@@ -548,11 +542,11 @@ public class MedicalStockIoOperations {
 	{
 
 		ArrayList<Integer> pMovementCode = null;
-		ArrayList<Movement> pMovement = new ArrayList<Movement>();
+		ArrayList<Movement> pMovement = new ArrayList<>();
 		
 		
-		pMovementCode = new ArrayList<Integer>(movRepository.findMovementForPrint(
-				medicalDescription, medicalTypeCode, wardId, movType, 
+		pMovementCode = new ArrayList<>(movRepository.findMovementForPrint(
+				medicalDescription, medicalTypeCode, wardId, movType,
 				movFrom, movTo, lotCode, order));			
 		for (int i=0; i<pMovementCode.size(); i++)
 		{
@@ -567,7 +561,7 @@ public class MedicalStockIoOperations {
 	}
 
 	/**
-	 * Retrieves lot referred to the specified {@link Medical}.
+	 * Retrieves lot referred to the specified {@link Medical}, expiring first on top
 	 * Lots with zero quantities will be stripped out
 	 * @param medical the medical.
 	 * @return a list of {@link Lot}.
@@ -576,35 +570,32 @@ public class MedicalStockIoOperations {
 	public ArrayList<Lot> getLotsByMedical(
 			Medical medical) throws OHServiceException
 	{
-		List<Lot> lots = lotRepository.findByMovements_MedicalOrderByDueDate(medical.getCode());
-
+		List<Lot> lots = lotRepository.findByMedicalOrderByDueDate(medical.getCode());
+		//retrieve quantities
+		lots.stream().forEach(lot -> {
+			lot.setMainStoreQuantity(lotRepository.getMainStoreQuantity(lot));
+			lot.setWardsTotalQuantity(lotRepository.getWardsTotalQuantity(lot));
+		});
 		// remove empty lots
-		ArrayList<Lot> emptyLots = new ArrayList<Lot>();
-		for (Lot aLot : lots) {
-			aLot.setQuantity(aLot.calculateQuantity());
-			if (aLot.getQuantity() == 0)
-				emptyLots.add(aLot);
-		}
-		lots.removeAll(emptyLots);
-
-		return new ArrayList<Lot>(lots);
+		return new ArrayList<>(lots.stream().filter(lot -> lot.getMainStoreQuantity() > 0).collect(Collectors.toList()));
 	}
 
-	private GregorianCalendar _convertTimestampToCalendar(Timestamp time)
-	{
-		GregorianCalendar calendar = null;
-		
-		if (time != null) 
-		{
-			calendar = new GregorianCalendar();
-			calendar.setTimeInMillis(time.getTime());
-		}
-		
-		return calendar;
-	}
+	// Method is not used anywhere
+	//	private GregorianCalendar _convertTimestampToCalendar(Timestamp time)
+	//	{
+	//		GregorianCalendar calendar = null;
+	//
+	//		if (time != null)
+	//		{
+	//			calendar = new GregorianCalendar();
+	//			calendar.setTimeInMillis(time.getTime());
+	//		}
+	//
+	//		return calendar;
+	//	}
 		
 	/**
-	 * returns the date of the last movement
+	 * Returns the date of the last movement
 	 * @return 
 	 * @throws OHServiceException
 	 */
@@ -614,7 +605,7 @@ public class MedicalStockIoOperations {
 	}
 	
 	/**
-	 * check if the reference number is already used
+	 * Check if the reference number is already used
 	 * @return <code>true</code> if is already used, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
@@ -622,10 +613,8 @@ public class MedicalStockIoOperations {
 			String refNo) throws OHServiceException 
 	{
 		boolean result = false;
-		
-			
-		if (movRepository.findAllWhereRefNo(refNo).size() > 0)
-		{
+
+		if (!movRepository.findAllWhereRefNo(refNo).isEmpty()) {
 			result = true;
 		}		
 			

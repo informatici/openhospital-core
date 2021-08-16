@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.dicom.service;
 
 import java.util.List;
@@ -10,19 +31,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Manager for hibernate database communication
- * 
- * @author Pietro Castellucci
- * @version 1.0.0
- */
-/*------------------------------------------
- * Dicom - IO operations for the DICOM entity
+ * ------------------------------------------
+ * DicomIoOperations - IO operations for the DICOM entity
  * -----------------------------------------
  * modification history
- * ? -  Pietro Castellucci - first version 
+ * ? -  Pietro Castellucci - first version
  * 29/08/2016 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -56,7 +72,7 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * delete series from DB
+	 * Delete series from DB
 	 * 
 	 * @param patientID, the id of patient
 	 * @param seriesNumber, the series number to delete
@@ -76,7 +92,7 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * load the Detail of DICOM
+	 * Load the Detail of DICOM
 	 * 
 	 * @param idFile
 	 * @param patientID
@@ -115,7 +131,7 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * load metadata from DICOM files stored in database fot the patient
+	 * Load metadata from DICOM files stored in database fot the patient
 	 * 
 	 * @param patientID
 	 * @return FileDicom array
@@ -124,7 +140,7 @@ public class DicomIoOperations
 	public FileDicom[] loadPatientFiles(
 			int patientID) throws OHServiceException
 	{
-		List<FileDicom> dicomList = repository.findAllWhereIdGroupByUid(patientID);
+		List<FileDicom> dicomList = repository.findAllWhereIdGroupBySeriesInstanceUIDOrderSerDateDesc(patientID);
 
 		FileDicom[] dicoms = new FileDicom[dicomList.size()];	
 		for (int i=0; i<dicomList.size(); i++)
@@ -138,7 +154,7 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * check if dicom is loaded
+	 * Check if dicom is loaded
 	 *
 	 * @param dicom, the detail od dicom
 	 * @return true if file exist
@@ -149,11 +165,11 @@ public class DicomIoOperations
 	{
 		List<FileDicom> dicomList = repository.findAllWhereIdAndFileAndUid(dicom.getPatId(), dicom.getDicomSeriesNumber(), dicom.getDicomInstanceUID());
 	
-		return (dicomList.size() > 0);
+		return !dicomList.isEmpty();
 	}
 
 	/**
-	 * save the DICOM file and metadata in the database
+	 * Save the DICOM file and metadata in the database
 	 * 
 	 * @param dicom
 	 * @throws OHServiceException 
@@ -162,12 +178,10 @@ public class DicomIoOperations
 			FileDicom dicom) throws OHServiceException 
 	{
 		repository.save(dicom);
-		
-		return;
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the DICOM code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
@@ -185,7 +199,7 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * checks if the series number is already in use
+	 * Checks if the series number is already in use
 	 *
 	 * @param dicomSeriesNumber - the series number to check
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise

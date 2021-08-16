@@ -1,7 +1,23 @@
-/**
- * 11-dec-2005
- * 14-jan-2006
- * author bob
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.medicals.service;
 
@@ -16,7 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
-
 /**
  * This class offers the io operations for recovering and managing
  * medical records from the database
@@ -25,6 +40,8 @@ import java.util.ArrayList;
  * 		   modified by alex:
  * 			- column product code
  * 			- column pieces per packet
+ * 11-dec-2005
+ * 14-jan-2006
  */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -87,7 +104,7 @@ public class MedicalsIoOperations
 	 * Retrieves all stored {@link Medical}s.
 	 * If a description value is provided the medicals are filtered.
 	 * @param type the medical type description.
-	 * @nameSorted if <code>true</code> return the list in alphabetical order, by code otherwise
+	 * @param nameSorted if <code>true</code> return the list in alphabetical order, by code otherwise
 	 * @return the stored medicals.
 	 * @throws OHServiceException if an error occurs retrieving the stored medicals.
 	 */

@@ -1,15 +1,37 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.utils.excel;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -34,6 +56,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.RichTextString;
@@ -57,7 +80,7 @@ public class ExcelExporter {
 	private CreationHelper createHelper;
 
 	public ExcelExporter() {
-		encoder = Charset.forName("UTF-8").newEncoder();
+		encoder = StandardCharsets.UTF_8.newEncoder();
 		encoder.onMalformedInput(CodingErrorAction.REPORT);
 		encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
 		currentLocale = Locale.getDefault();
@@ -68,7 +91,7 @@ public class ExcelExporter {
 		headerStyle = workbook.createCellStyle();
 		Font font = workbook.createFont();
 		font.setFontHeightInPoints((short) 10);
-		font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		font.setBold(true);
 		headerStyle.setFont(font);
 
 		short doubleFormat = workbook.createDataFormat().getFormat("#,##0.00");
@@ -255,7 +278,7 @@ public class ExcelExporter {
 
 			}
 		} catch (SQLException e) {
-			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
+			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction.msg"), e);
 		}
 		output.close();
 	}
@@ -377,7 +400,12 @@ public class ExcelExporter {
 	 * @throws OHException
 	 */
 	public void exportResultsetToExcel(ResultSet resultSet, File exportFile) throws IOException, OHException {
-		FileOutputStream fileStream = new FileOutputStream(exportFile);
+		FileOutputStream fileStream = null;
+		try {
+			fileStream = new FileOutputStream(exportFile);
+		} catch (FileNotFoundException e) {
+			throw new OHException(e.getLocalizedMessage());
+		}
 
 		workbook = new XSSFWorkbook();
 		createHelper = workbook.getCreationHelper();
@@ -413,7 +441,7 @@ public class ExcelExporter {
 			fileStream.close();
 
 		} catch (SQLException e) {
-			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
+			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction.msg"), e);
 		}
 
 	}
@@ -476,7 +504,7 @@ public class ExcelExporter {
 				cell.setCellValue(val);
 			} else if (value instanceof Double) {
 				Double val = (Double) value;
-				cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+				cell.setCellType(CellType.NUMERIC);
 				cell.setCellStyle(doubleStyle);
 				cell.setCellValue(val);
 			} else if (value instanceof Timestamp) {
@@ -489,7 +517,7 @@ public class ExcelExporter {
 				cell.setCellValue(val);
 			} else if (value instanceof BigDecimal) {
 				BigDecimal val = (BigDecimal) value;
-				cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+				cell.setCellType(CellType.NUMERIC);
 				cell.setCellStyle(bigDecimalStyle);
 				cell.setCellValue(val.doubleValue());
 			} else if (value instanceof Long) {
@@ -586,7 +614,7 @@ public class ExcelExporter {
 			fileStream.close();
 
 		} catch (SQLException e) {
-			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction"), e);
+			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlistruction.msg"), e);
 		}
 
 	}
@@ -648,7 +676,7 @@ public class ExcelExporter {
 				cell.setCellValue(val);
 			} else if (value instanceof Double) {
 				Double val = (Double) value;
-				cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+				cell.setCellType(CellType.NUMERIC);
 				cell.setCellStyle(doubleStyle);
 				cell.setCellValue(val);
 			} else if (value instanceof Timestamp) {
@@ -661,7 +689,7 @@ public class ExcelExporter {
 				cell.setCellValue(val);
 			} else if (value instanceof BigDecimal) {
 				BigDecimal val = (BigDecimal) value;
-				cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+				cell.setCellType(CellType.NUMERIC);
 				cell.setCellStyle(bigDecimalStyle);
 				cell.setCellValue(val.doubleValue());
 			} else if (value instanceof Long) {

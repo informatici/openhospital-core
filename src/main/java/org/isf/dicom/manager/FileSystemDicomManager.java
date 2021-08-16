@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.dicom.manager;
 
 import java.io.File;
@@ -25,7 +46,6 @@ import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
 import org.isf.dicom.model.FileDicom;
-import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHServiceException;
@@ -46,7 +66,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 
 	private static final String DICOM_DATE_FORMAT = "EEE MMM dd hh:mm:ss z yyyy";
 
-	private final Logger logger = LoggerFactory.getLogger(FileSystemDicomManager.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemDicomManager.class);
 	
 	public FileSystemDicomManager() {
 	}
@@ -55,7 +75,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * Root dir for data storage
 	 */
 	private File dir = null;
-	private filterSerieDetail dsf = new filterSerieDetail();
+	private FilterSerieDetail dsf = new FilterSerieDetail();
 
 	/**
 	 * Constructor
@@ -64,13 +84,12 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	public FileSystemDicomManager(Properties externalPrp) throws OHDicomException {
 		try {
 			dir = new File(externalPrp.getProperty("dicom.storage.filesystem"));
-
 			recourse(dir);
-		} catch(Exception e){
-			//Any exception
-			logger.error("", e);
-			throw new OHDicomException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
-					"FileSystemDicomManager " + MessageBundle.getMessage("angal.dicom.manager.nodir"), OHSeverityLevel.ERROR));
+		} catch(Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
+			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
+					OHSeverityLevel.ERROR));
 		}
 	}
 	
@@ -119,14 +138,15 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			}
 
 			return _Longs;
-		} catch (Exception exc) {
-			throw new OHDicomException(exc, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
-					MessageBundle.getMessage("angal.dicom.manager.err") + " " + exc.getMessage(), OHSeverityLevel.ERROR));
+		} catch (Exception exception) {
+			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
+					OHSeverityLevel.ERROR));
 		}
 	}
 	
 	/**
-	 * delete series
+	 * Delete series
 	 * 
 	 * @param patientId, the id of patient
 	 * @param seriesNumber, the series number to delete
@@ -150,14 +170,15 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			}
 			return deleted && deleteFolder.delete();
 
-		} catch (Exception exc) {
-			throw new OHDicomException(exc, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
-					MessageBundle.getMessage("angal.dicom.manager.err") + " " + exc.getMessage(), OHSeverityLevel.ERROR));
+		} catch (Exception exception) {
+			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
+					OHSeverityLevel.ERROR));
 		}
 	}
 
 	/**
-	 * load the Detail of DICOM
+	 * Load the Detail of DICOM
 	 * 
 	 * @param idFile
 	 * @return FileDicom
@@ -184,15 +205,15 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	public FileDicom loadDetails(long idFile, int patientId, String seriesNumber) throws OHDicomException {
 		try {
 			return loadData(idFile, patientId, seriesNumber);
-	
-		} catch (Exception exc) {
-			throw new OHDicomException(exc, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
-					MessageBundle.getMessage("angal.dicom.manager.err") + " " + exc.getMessage(), OHSeverityLevel.ERROR));
+		} catch (Exception exception) {
+			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
+					OHSeverityLevel.ERROR));
 		}
 	}
 
 	/**
-	 * load metadata from DICOM files fo the patient
+	 * Load metadata from DICOM files fo the patient
 	 * 
 	 * @param patientId
 	 * @return
@@ -211,15 +232,15 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 
 			db = compact(db);
 			return db;
-
-		} catch (Exception exc) {
-			throw new OHDicomException(exc, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
-					MessageBundle.getMessage("angal.dicom.manager.err") + " " + exc.getMessage(), OHSeverityLevel.ERROR));
+		} catch (Exception exception) {
+			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
+					OHSeverityLevel.ERROR));
 		}
 	}
 
 	/**
-	 * save the DICOM file and metadata
+	 * Save the DICOM file and metadata
 	 * 
 	 * @param dicom
 	 * @throws OHDicomException 
@@ -247,6 +268,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			// so cannot be empty and will be used only for this cycle
 			if (dicomInstanceUID == null || dicomInstanceUID.isEmpty()) {
 				dicomInstanceUID = seriesNumber + "." + idFile;
+				dicom.setDicomInstanceUID(dicomInstanceUID);
 			}
 
 			File df = getSerieDir(patId, seriesNumber, true);
@@ -292,16 +314,16 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			blobLength = (int) blob.length();
 			blobAsBytes = blob.getBytes(1, blobLength);
 			save(thumn, blobAsBytes);
-
-		} catch (Exception exc) {
-			throw new OHDicomException(exc, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
-					MessageBundle.getMessage("angal.dicom.manager.err") + " " + exc.getMessage(), OHSeverityLevel.ERROR));
+		} catch (Exception exception) {
+			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
+					OHSeverityLevel.ERROR));
 		}
 	}
 
 	/*
-	* load DICOM data + Thumbnail
-	*/
+	 * Load DICOM data + Thumbnail
+	 */
 	private FileDicom loadMetadata(long idFile, int patientId, String series) throws SerialException, IOException, SQLException {
 		// Series must exists, so we need to check it and return null in case
 		if (series == null || series.trim().length() == 0 || series.equalsIgnoreCase("null")) 
@@ -316,7 +338,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/*
-	* load DICOM data + Image
+	* Load DICOM data + Image
 	*/
 	private FileDicom loadData(long idFile, int patientId, String series) throws IOException, SerialException, SQLException, OHDicomException  {
 		// Series must exists, so we need to check it and return null in case
@@ -335,12 +357,12 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		try {
 			rv.setIdFile(Long.parseLong(p.getProperty("idFile")));
 		} catch (Exception e) {
-			logger.debug("Unparsable 'idFile': {}", p.getProperty("idFile"));
+			LOGGER.debug("Unparsable 'idFile': {}", p.getProperty("idFile"));
 		}
 		try {
 			rv.setPatId(Integer.parseInt(p.getProperty("patId")));
 		} catch (Exception e) {
-			logger.debug("Unparsable 'patId': {}", p.getProperty("patId"));
+			LOGGER.debug("Unparsable 'patId': {}", p.getProperty("patId"));
 		}
 		rv.setFileName(p.getProperty("fileName"));
 		rv.setDicomAccessionNumber(p.getProperty("dicomAccessionNumber"));
@@ -353,10 +375,10 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		rv.setDicomPatientBirthDate(p.getProperty("dicomPatientBirthDate"));
 		rv.setDicomStudyId(p.getProperty("dicomStudyId"));
 		try {
-			rv.setDicomStudyDate(new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale(GeneralData.LANGUAGE)).parse(p.getProperty("dicomStudyDate")));
+			rv.setDicomStudyDate(new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale("en")).parse(p.getProperty("dicomStudyDate")));
 		} catch (ParseException e) {
-			logger.debug("1. example: {}", new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale(GeneralData.LANGUAGE)).format(new Date()));
-			logger.debug("1. Unparsable 'dicomStudyDate': {}", p.getProperty("dicomStudyDate"));
+			LOGGER.debug("1. example: {}", new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale("en")).format(new Date()));
+			LOGGER.debug("1. Unparsable 'dicomStudyDate': {}", p.getProperty("dicomStudyDate"));
 		}
 		rv.setDicomStudyDescription(p.getProperty("dicomStudyDescription"));
 		rv.setDicomSeriesUID(p.getProperty("dicomSeriesUID"));
@@ -364,10 +386,10 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		rv.setDicomSeriesNumber(p.getProperty("dicomSeriesNumber"));
 		rv.setDicomSeriesDescriptionCodeSequence(p.getProperty("dicomSeriesDescriptionCodeSequence"));
 		try {
-			rv.setDicomSeriesDate(new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale(GeneralData.LANGUAGE)).parse(p.getProperty("dicomSeriesDate")));
+			rv.setDicomSeriesDate(new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale("en")).parse(p.getProperty("dicomSeriesDate")));
 		} catch (ParseException e) {
-			logger.debug("2. example: {}", new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale(GeneralData.LANGUAGE)).format(new Date()));
-			logger.debug("Unparsable 'dicomSeriesDate': {}", p.getProperty("dicomSeriesDate"));
+			LOGGER.debug("2. example: {}", new SimpleDateFormat(DICOM_DATE_FORMAT, new Locale("en")).format(new Date()));
+			LOGGER.debug("Unparsable 'dicomSeriesDate': {}", p.getProperty("dicomSeriesDate"));
 		}
 		rv.setDicomSeriesDescription(p.getProperty("dicomSeriesDescription"));
 		rv.setDicomInstanceUID(p.getProperty("dicomInstanceUID"));
@@ -375,7 +397,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/**
-	 * load image for thumbnail
+	 * Load image for thumbnail
 	 * @throws SQLException 
 	 * @throws SerialException 
 	 */
@@ -391,7 +413,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/**
-	 * load DICOM image
+	 * Load DICOM image
 	 * @throws SQLException 
 	 * @throws SerialException 
 	 */
@@ -417,7 +439,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			String diuid = dicom.getDicomInstanceUID();
 			if (serieNumber == null || serieNumber.trim().length() == 0 || serieNumber.equalsIgnoreCase("null"))
 				return false;
-
+			if (diuid == null || diuid.trim().isEmpty() || diuid.equalsIgnoreCase("null"))
+				return false;
 			File df = getSerieDir(patId, serieNumber, true);
 			File[] files = df.listFiles();
 			int i = 0;
@@ -432,9 +455,10 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 				}
 				i++;
 			}
-		} catch (Exception exc) {
-			throw new OHDicomException(exc, new OHExceptionMessage(MessageBundle.getMessage("angal.hospital"), 
-					MessageBundle.getMessage("angal.dicom.manager.err") + " " + exc.getMessage(), OHSeverityLevel.ERROR));
+		} catch (Exception exception) {
+			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
+					OHSeverityLevel.ERROR));
 		}
 		return rv;
 	}
@@ -528,7 +552,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/**
-	 * Recursive function for create folder structure if missing
+	 * 
+	 * recorsive function for create folder structure if missing
 	 */
 	private void recourse(File f) throws IOException {
 		if (f.exists())
@@ -544,7 +569,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/**
-	 * save content in specified file
+	 * Save content in specified file
 	 * 
 	 * @param outFile - the file to write into
 	 * @param content - byte vector to write
@@ -558,7 +583,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	/**
-	 * return first idFile in the serie
+	 * Return the first idFile in the serie
 	 */
 	private long getFirst(File df) {
 		File[] files = df.listFiles(dsf);
@@ -581,14 +606,14 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	}
 
 	private FileDicom[] compact(FileDicom[] db) {
-		Vector<FileDicom> rv = new Vector<FileDicom>(0);
+		Vector<FileDicom> rv = new Vector<>(0);
 
 		for (FileDicom fileDicom : db)
 			if (fileDicom != null)
 				rv.addElement(fileDicom);
 
 		FileDicom[] ret = new FileDicom[rv.size()];
-		Collections.sort(rv, new DicomDateComparator());
+		rv.sort(new DicomDateComparator());
 		Collections.reverse(rv);
 		rv.copyInto(ret);
 
@@ -633,7 +658,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	/**
 	 * Filter for files .thumn
 	 */
-	class filterSerieDetail implements FilenameFilter {
+	class FilterSerieDetail implements FilenameFilter {
 
 		public boolean accept(File dir, String name) {
 			if (name == null)

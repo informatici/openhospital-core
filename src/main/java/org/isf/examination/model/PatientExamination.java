@@ -1,13 +1,34 @@
-/**
- * 
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.examination.model;
 
 import java.io.Serializable;
 import java.util.GregorianCalendar;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,22 +39,28 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.isf.patient.model.Patient;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * @author Mwithi
- * 
- * the model for Patient Examination
+ * The model for Patient Examination
  *
+ * @author Mwithi
  */
 @Entity
 @Table(name="PATIENTEXAMINATION")
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="PEX_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="PEX_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="PEX_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="PEX_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="PEX_LAST_MODIFIED_DATE"))
+})
 public class PatientExamination implements Serializable, Comparable<PatientExamination> {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = 1L;
+	public static final int PEX_NOTE_LENGTH = 2000;
+	
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="PEX_ID")
@@ -87,15 +114,12 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	@Column(name="PEX_BOWEL_DESC")
 	private String pex_bowel_desc;
 	
-	@Column(name="PEX_NOTE", length=300)
+	@Column(name="PEX_NOTE", length=PEX_NOTE_LENGTH)
 	private String pex_note;
 	
 	@Transient
 	private volatile int hashCode = 0;
-	
-	/**
-	 * 
-	 */
+
 	public PatientExamination() {
 		super();
 	}

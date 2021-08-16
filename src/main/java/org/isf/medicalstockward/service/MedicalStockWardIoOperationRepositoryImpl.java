@@ -1,9 +1,29 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.medicalstockward.service;
 
-
-import org.isf.medicalstockward.model.MovementWard;
-import org.isf.ward.model.Ward;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,10 +33,10 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-
+import org.apache.commons.lang3.StringUtils;
+import org.isf.medicalstockward.model.MovementWard;
+import org.isf.ward.model.Ward;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWardIoOperationRepositoryCustom {
@@ -28,38 +48,30 @@ public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWa
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	@SuppressWarnings("unchecked")	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Integer> findAllWardMovement(
-			String wardId, 
-			GregorianCalendar dateFrom, 
+			String wardId,
+			GregorianCalendar dateFrom,
 			GregorianCalendar dateTo) {
-		return _getWardMovementQuery(wardId, dateFrom, dateTo);
-	}	
-		
 
-	public List<Integer> _getWardMovementQuery(
-			String wardId, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo)
-	{
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
 		Root<MovementWard> root = query.from(MovementWard.class);
 		query.select(root.<Integer>get(CODE));
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 
-		if (wardId != null && !wardId.equals("")) {
+		if (!StringUtils.isEmpty(wardId)) {
 			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
 		}
 		if ((dateFrom != null) && (dateTo != null)) {
 			predicates.add(builder.between(root.<GregorianCalendar>get(DATE), dateFrom, dateTo));
 		}
 
-		List<Order> orderList = new ArrayList<Order>();
+		List<Order> orderList = new ArrayList<>();
 		orderList.add(builder.asc(root.get(DATE)));
 
-		query.where(predicates.toArray(new Predicate[]{})).orderBy(orderList);
+		query.where(predicates.toArray(new Predicate[] {})).orderBy(orderList);
 		return entityManager.createQuery(query).getResultList();
 	}
 }

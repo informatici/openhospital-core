@@ -1,11 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.patient.model;
 
-import org.isf.opd.model.Opd;
-import org.isf.utils.db.Auditable;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import java.util.Date;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -23,30 +39,38 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
-/*------------------------------------------
+import org.apache.commons.lang3.StringUtils;
+import org.isf.opd.model.Opd;
+import org.isf.utils.db.Auditable;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+/**
+ * ------------------------------------------
  * Patient - model for the patient entity
  * -----------------------------------------
  * modification history
- * 05/05/2005 - giacomo  - first beta version 
+ * 05/05/2005 - giacomo  - first beta version
  * 03/11/2006 - ross - added toString method
- * 11/08/2008 - Alessandro - added mother and father names textfield
- * 						   - added birthdate and age check
+ * 11/08/2008 - Alessandro
+ * - added mother and father names textfield
+ * - added birthdate and age check
  * 19/08/2008 - Mex        - substitute EduLevel with BloodType
- * 22/08/2008 - Claudio    - added birth date field
- * 						   - modified age field
- * 01/01/2009 - Fabrizio   - modified age field type back to int
- *                         - removed unuseful super() call in constructor
- *                         - removed unuseful todo comment
- *                         - removed assignment to attribute hasInsurance
- *                           since it had no effect
- * 16/09/2009 - Alessandro - added equals override to support comparing
- * 							 and filtering
+ * 22/08/2008 - Claudio
+ * - added birth date field
+ * - modified age field
+ * 01/01/2009 - Fabrizio
+ * - modified age field type back to int
+ * - removed unuseful super() call in constructor
+ * - removed unuseful todo comment
+ * - removed assignment to attribute hasInsurance since it had no effect
+ * 16/09/2009 - Alessandro - added equals override to support comparing and filtering
  * 17/10/2011 - Alessandro - added height and weight (from malnutritionalcontrol)
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="PATIENT")
 @EntityListeners(AuditingEntityListener.class)
@@ -123,14 +147,14 @@ public class Patient extends Auditable<String>
 
 	@NotNull
 	@Column(name="PAT_MOTH_NAME")
-	private String mother_name; // mother's name
+	private String motherName; // mother's name
 	
 	@Column(name="PAT_MOTH")
 	private char mother = ' '; // D=dead, A=alive
 
 	@NotNull
 	@Column(name="PAT_FATH_NAME")
-	private String father_name; // father's name
+	private String fatherName; // father's name
 	
 	@Column(name="PAT_FATH")
 	private char father = ' '; // D=dead, A=alive
@@ -158,20 +182,13 @@ public class Patient extends Auditable<String>
 	@Column(name="PAT_DELETED")
 	private String deleted = "N";
 
-	@Transient
-	private float height;
-	
-	@Transient
-	private float weight;
-	
 	@Version
 	@Column(name="PAT_LOCK")
 	private int lock;
 	
 	@OneToOne(
 			fetch = FetchType.LAZY,
-			cascade = CascadeType.ALL,
-			optional = false
+			cascade = CascadeType.ALL
 	)
 	@JoinColumn(name = "PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID")
 	private PatientProfilePhoto patientProfilePhoto;
@@ -184,7 +201,7 @@ public class Patient extends Auditable<String>
 		
 		this.firstName = "";
 		this.secondName = ""; 
-		this.name = this.firstName + " " + this.secondName;
+		this.name = this.firstName + ' ' + this.secondName;
 		this.birthDate = null;
 		this.age = 0;
 		this.agetype = "";
@@ -193,16 +210,14 @@ public class Patient extends Auditable<String>
 		this.city = "";
 		this.nextKin = ""; 
 		this.telephone = "";
-		this.mother_name = "";
+		this.motherName = "";
 		this.mother = ' ';
-		this.father_name = "";
+		this.fatherName = "";
 		this.father = ' ';
 		this.bloodType = "";
 		this.hasInsurance = ' ';
 		this.parentTogether = ' ';
 		this.taxCode = "";
-		this.height = 0;
-		this.weight = 0;
 		this.maritalStatus = "";
 		this.profession = "";
 	}
@@ -211,7 +226,7 @@ public class Patient extends Auditable<String>
 		
 		this.firstName = opd.getfirstName();
 		this.secondName = opd.getsecondName(); 
-		this.name = this.firstName + " " + this.secondName;
+		this.name = this.firstName + ' ' + this.secondName;
 		this.birthDate = null;
 		this.age = opd.getAge();
 		this.agetype = "";
@@ -220,9 +235,9 @@ public class Patient extends Auditable<String>
 		this.city = opd.getcity();
 		this.nextKin = opd.getnextKin(); 
 		this.telephone = "";
-		this.mother_name = "";
+		this.motherName = "";
 		this.mother = ' ';
-		this.father_name = "";
+		this.fatherName = "";
 		this.father = ' ';
 		this.bloodType = "";
 		this.hasInsurance = ' ';
@@ -233,12 +248,12 @@ public class Patient extends Auditable<String>
 	
 	public Patient(String firstName, String secondName, Date birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone,
-			String mother_name, char mother, String father_name, char father,
+			String motherName, char mother, String fatherName, char father,
 			String bloodType, char economicStatut, char parentTogether, String personalCode, 
 			String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.firstName = firstName;
 		this.secondName = secondName;
-		this.name = this.firstName + " " + this.secondName;
+		this.name = this.firstName + ' ' + this.secondName;
 		this.birthDate = birthDate;
 		this.age = age;
 		this.agetype = agetype;
@@ -247,25 +262,23 @@ public class Patient extends Auditable<String>
 		this.city = city;
 		this.nextKin = nextKin;
 		this.telephone = telephone;
-		this.mother_name = mother_name;
+		this.motherName = motherName;
 		this.mother = mother;
-		this.father_name = father_name;
+		this.fatherName = fatherName;
 		this.father = father;
 		this.hasInsurance = economicStatut;
 		this.bloodType = bloodType;
 		this.parentTogether = parentTogether;
 		this.taxCode = personalCode;
-		this.height = 0;
-		this.weight = 0;
 		this.maritalStatus = maritalStatus;
 		this.profession = profession;
 	}
 		
 	public Patient(int code, String firstName, String secondName, String name, Date birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone, String note,
-			String mother_name, char mother, String father_name, char father,
+			String motherName, char mother, String fatherName, char father,
 			String bloodType, char economicStatut, char parentTogether, String taxCode,
-			float height, float weight, String maritalStatus, String profession) { //Changed EduLev with bloodType
+			String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.code = code;
 		this.firstName = firstName;
 		this.secondName = secondName;
@@ -279,16 +292,14 @@ public class Patient extends Auditable<String>
 		this.nextKin = nextKin;
 		this.telephone = telephone;
 		this.note = note;
-		this.mother_name = mother_name;
+		this.motherName = motherName;
 		this.mother = mother;
-		this.father_name = father_name;
+		this.fatherName = fatherName;
 		this.father = father;
 		this.hasInsurance = economicStatut;
 		this.bloodType = bloodType;
 		this.parentTogether = parentTogether;
 		this.taxCode = taxCode;
-		this.height = height;
-		this.weight = weight;
 		this.maritalStatus = maritalStatus;
 		this.profession = profession;
 	}
@@ -311,10 +322,8 @@ public class Patient extends Auditable<String>
 
 	public int getAge() {
 		if (this.birthDate != null) {
-			GregorianCalendar birthday = new GregorianCalendar();
-			birthday.setTime(birthDate);
 			DateTime now = new DateTime();
-			DateTime birth = new DateTime(birthday.getTime());
+			DateTime birth = new DateTime(birthDate);
 			Period period = new Period(birth, now, PeriodType.yearMonthDay());
 			age = period.getYears();
 		}
@@ -324,10 +333,8 @@ public class Patient extends Auditable<String>
 	public int getMonths() {
 		int months = 0;
 		if (this.birthDate != null) {
-			GregorianCalendar birthday = new GregorianCalendar();
-			birthday.setTime(birthDate);
 			DateTime now = new DateTime();
-			DateTime birth = new DateTime(birthday.getTime());
+			DateTime birth = new DateTime(birthDate);
 			Period period = new Period(birth, now, PeriodType.months());
 			months = period.getMonths();
 		}
@@ -368,7 +375,7 @@ public class Patient extends Auditable<String>
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
-		this.name = this.firstName + " " + this.secondName;
+		this.name = this.firstName + ' ' + this.secondName;
 	}
 
 	public int getLock() {
@@ -393,7 +400,7 @@ public class Patient extends Auditable<String>
 
 	public void setSecondName(String secondName) {
 		this.secondName = secondName;
-		this.name = this.firstName + " " + this.secondName;
+		this.name = this.firstName + ' ' + this.secondName;
 	}
 
 	public char getSex() {
@@ -468,20 +475,20 @@ public class Patient extends Auditable<String>
 		return getName();
 	}
 
-	public String getFather_name() {
-		return father_name;
+	public String getFatherName() {
+		return fatherName;
 	}
 
-	public void setFather_name(String father_name) {
-		this.father_name = father_name;
+	public void setFatherName(String father_name) {
+		this.fatherName = father_name;
 	}
 
-	public String getMother_name() {
-		return mother_name;
+	public String getMotherName() {
+		return motherName;
 	}
 
-	public void setMother_name(String mother_name) {
-		this.mother_name = mother_name;
+	public void setMotherName(String mother_name) {
+		this.motherName = mother_name;
 	}
 
 	public String getTaxCode() {
@@ -492,22 +499,6 @@ public class Patient extends Auditable<String>
 		this.taxCode = taxCode;
 	}
 	
-	public float getHeight() {
-		return height;
-	}
-
-	public void setHeight(float height) {
-		this.height = height;
-	}
-
-	public float getWeight() {
-		return weight;
-	}
-
-	public void setWeight(float weight) {
-		this.weight = weight;
-	}
-
 	public String getMaritalStatus() {
 		return maritalStatus;
 	}
@@ -578,47 +569,45 @@ public class Patient extends Auditable<String>
 	public String getSearchString() {
 		StringBuffer sbName = new StringBuffer();
 		sbName.append(getCode());
-		sbName.append(" ");
+		sbName.append(' ');
 		sbName.append(getFirstName().toLowerCase());
-		sbName.append(" ");
+		sbName.append(' ');
 		sbName.append(getSecondName().toLowerCase());
-		sbName.append(" ");
+		sbName.append(' ');
 		sbName.append(getCity().toLowerCase());
-		sbName.append(" ");
-		if (getAddress() != null) sbName.append(getAddress().toLowerCase()).append(" ");
-		if (getTelephone() != null) sbName.append(getTelephone()).append(" ");
-		if (getNote() != null) sbName.append(getNote().toLowerCase()).append(" ");
-		if (getTaxCode() != null) sbName.append(getTaxCode().toLowerCase()).append(" ");
+		sbName.append(' ');
+		if (getAddress() != null) sbName.append(getAddress().toLowerCase()).append(' ');
+		if (getTelephone() != null) sbName.append(getTelephone()).append(' ');
+		if (getNote() != null) sbName.append(getNote().toLowerCase()).append(' ');
+		if (getTaxCode() != null) sbName.append(getTaxCode().toLowerCase()).append(' ');
 		return sbName.toString();
 	}
 	
 	public String getInformations() {
 		int i = 0;
 		StringBuffer infoBfr = new StringBuffer();
-		if (city != null && !city.equals("")) {
-			infoBfr.append(i > 0 ? " - " : "");
+		if (StringUtils.isNotEmpty(city)) {
 			infoBfr.append(city);
 			i++;
 		}
-		if (address != null && !address.equals("")) {
+		if (StringUtils.isNotEmpty(address)) {
 			infoBfr.append(i > 0 ? " - " : "");
 			infoBfr.append(address);
 			i++;
 		}
-		if (telephone != null && !telephone.equals("")) {
+		if (StringUtils.isNotEmpty(telephone)) {
 			infoBfr.append(i > 0 ? " - " : "");
 			infoBfr.append(telephone);
 			i++;
 		}
-		if (note != null && !note.equals("")) {
+		if (StringUtils.isNotEmpty(note)) {
 			infoBfr.append(i > 0 ? " - " : "");
 			infoBfr.append(note);
 			i++;
 		}
-		if (taxCode != null && !taxCode.equals("")) {
+		if (StringUtils.isNotEmpty(taxCode)) {
 			infoBfr.append(i > 0 ? " - " : "");
 			infoBfr.append(taxCode);
-			i++;
 		}
 		return infoBfr.toString();
 	}

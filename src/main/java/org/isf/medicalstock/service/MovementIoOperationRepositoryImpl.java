@@ -1,14 +1,29 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.medicalstock.service;
 
-
-import org.isf.medicals.model.Medical;
-import org.isf.medicalstock.model.Lot;
-import org.isf.medicalstock.model.Movement;
-import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
-import org.isf.medstockmovtype.model.MovementType;
-import org.isf.medtype.model.MedicalType;
-import org.isf.ward.model.Ward;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,10 +33,14 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-
+import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
+import org.isf.medicalstock.model.Movement;
+import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
+import org.isf.medstockmovtype.model.MovementType;
+import org.isf.medtype.model.MedicalType;
+import org.isf.ward.model.Ward;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class MovementIoOperationRepositoryImpl implements MovementIoOperationRepositoryCustom {
@@ -89,7 +108,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
 		Root<Movement> root = query.from(Movement.class);
 		query.select(root.<Integer>get(CODE));
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 
 		if ((dateFrom != null) && (dateTo != null))
 		{
@@ -100,7 +119,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
 		}
 
-		List<Order> orderList = new ArrayList<Order>();
+		List<Order> orderList = new ArrayList<>();
 		orderList.add(builder.desc(root.get(DATE)));
 		orderList.add(builder.desc(root.get(REF_NO)));
 		query.where(predicates.toArray(new Predicate[]{})).orderBy(orderList);
@@ -122,7 +141,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
 		Root<Movement> root = query.from(Movement.class);
 		query.select(root.<Integer>get(CODE));
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 
 		if (medicalCode != null) {
 			predicates.add(builder.equal(root.<Medical>get(MEDICAL).<String>get(CODE), medicalCode));
@@ -146,7 +165,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
 		}
 
-		List<Order> orderList = new ArrayList<Order>();
+		List<Order> orderList = new ArrayList<>();
 		orderList.add(builder.desc(root.get(DATE)));
 		orderList.add(builder.desc(root.get(REF_NO)));
 		query.where(predicates.toArray(new Predicate[]{})).orderBy(orderList);
@@ -166,7 +185,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
 		Root<Movement> root = query.from(Movement.class);
 		query.select(root.<Integer>get(CODE));
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 
 		if (medicalDescription != null) {
 			predicates.add(builder.equal(root.<Medical>get(MEDICAL).<String>get(DESCRIPTION), medicalDescription));
@@ -186,7 +205,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 		if (wardId != null) {
 			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
 		}
-		List<Order> orderList = new ArrayList<Order>();
+		List<Order> orderList = new ArrayList<>();
 		switch (order) {
 			case DATE:
 				orderList.add(builder.desc(root.get(DATE)));

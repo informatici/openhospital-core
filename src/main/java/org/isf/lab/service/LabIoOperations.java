@@ -1,21 +1,25 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.lab.service;
-
-/*------------------------------------------
- * lab.service.IoOperations - laboratory exam database io operations
- * -----------------------------------------
- * modification history
- * 02/03/2006 - theo - first beta version
- * 10/11/2006 - ross - added editing capability. 
- * 					   new fields data esame, sex, age, material, inout flag added
- * 21/06/2008 - ross - do not add 1 to toDate!. 
- *                     the selection date switched to exam date, 
- * 04/01/2009 - ross - do not use roll, use add(week,-1)!
- *                     roll does not change the year!
- * 16/11/2012 - mwithi - added logging capability
- * 					   - to do lock management
- * 04/02/2013 - mwithi - lock management done
- *------------------------------------------*/
-
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -30,6 +34,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * ------------------------------------------
+ * lab.service.LabIoOperations - laboratory exam database io operations
+ * -----------------------------------------
+ * modification history
+ * 02/03/2006 - theo - first beta version
+ * 10/11/2006 - ross - added editing capability.
+ * 					   new fields data esame, sex, age, material, inout flag added
+ * 21/06/2008 - ross - do not add 1 to toDate!.
+ *                     the selection date switched to exam date,
+ * 04/01/2009 - ross - do not use roll, use add(week,-1)!
+ *                     roll does not change the year!
+ * 16/11/2012 - mwithi - added logging capability
+ * 					   - to do lock management
+ * 04/02/2013 - mwithi - lock management done
+ * ------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -91,9 +112,9 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public ArrayList<Laboratory> getLaboratory(String exam,	GregorianCalendar dateFrom,	GregorianCalendar dateTo) throws OHServiceException {
-		return new ArrayList<Laboratory>(exam != null ?
-				repository.findByExamDateBetweenAndExam_DescriptionOrderByExamDateDesc(dateFrom, dateTo, exam) :
-				repository.findByExamDateBetweenOrderByExamDateDesc(dateFrom, dateTo));
+		return new ArrayList<>(exam != null ?
+				repository.findByExamDateBetweenAndExam_DescriptionOrderByExamDateDescRegistrationDateDesc(dateFrom, dateTo, exam) :
+				repository.findByExamDateBetweenOrderByExamDateDescRegistrationDateDesc(dateFrom, dateTo));
 	}
 	
 	/**
@@ -147,11 +168,11 @@ public class LabIoOperations {
 	public ArrayList<LaboratoryForPrint> getLaboratoryForPrint(String exam,
 			GregorianCalendar dateFrom,
 			GregorianCalendar dateTo) throws OHServiceException {
-				ArrayList<LaboratoryForPrint> pLaboratory = new ArrayList<LaboratoryForPrint>();
-				ArrayList<Laboratory> laboritories = new ArrayList<Laboratory> (
-					exam != null ?
-						repository.findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam) :
-						repository.findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo)
+				ArrayList<LaboratoryForPrint> pLaboratory = new ArrayList<>();
+				ArrayList<Laboratory> laboritories = new ArrayList<>(
+						exam != null ?
+								repository.findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam) :
+								repository.findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo)
 				);
 
 				for (Laboratory laboratory : laboritories) {
@@ -187,9 +208,10 @@ public class LabIoOperations {
 	public boolean newLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
 		return newLaboratory(laboratory) > 0;
 	}
-	
+
 	/**
-	 * Inserts one Laboratory exam {@link Laboratory} with multiple results (Procedure Two) 
+	 * Inserts one Laboratory exam {@link Laboratory} with multiple results (Procedure Two)
+	 *
 	 * @param laboratory - the {@link Laboratory} to insert
 	 * @param labRow - the list of results ({@link String}s)
 	 * @return <code>true</code> if the exam has been inserted with all its results, <code>false</code> otherwise
@@ -214,9 +236,10 @@ public class LabIoOperations {
 		
 		return result;
 	}
-        
-        /**
-	 * Inserts one Laboratory exam {@link Laboratory} with multiple results (Procedure Two) 
+
+	/**
+	 * Inserts one Laboratory exam {@link Laboratory} with multiple results (Procedure Two)
+	 *
 	 * @param laboratory - the {@link Laboratory} to insert
 	 * @param labRow - the list of results ({@link String}s)
 	 * @return <code>true</code> if the exam has been inserted with all its results, <code>false</code> otherwise
@@ -314,7 +337,7 @@ public class LabIoOperations {
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the laboratory code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise

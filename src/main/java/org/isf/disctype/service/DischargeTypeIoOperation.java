@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.disctype.service;
 
 import java.util.ArrayList;
@@ -18,18 +39,18 @@ public class DischargeTypeIoOperation {
 	private DischargeTypeIoOperationRepository repository;
 	
 	/**
-	 * method that returns all DischargeTypes in a list
+	 * Method that returns all DischargeTypes in a list
 	 * 
 	 * @return the list of all DischargeTypes
 	 * @throws OHServiceException
 	 */
 	public ArrayList<DischargeType> getDischargeType() throws OHServiceException 
 	{
-		return new ArrayList<DischargeType>(repository.findAllByOrderByDescriptionAsc());
+		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 
 	/**
-	 * method that updates an already existing DischargeType
+	 * Method that updates an already existing DischargeType
 	 * 
 	 * @param dischargeType
 	 * @return true - if the existing DischargeType has been updated
@@ -48,7 +69,7 @@ public class DischargeTypeIoOperation {
 	}
 
 	/**
-	 * method that create a new DischargeType
+	 * Method that create a new DischargeType
 	 * 
 	 * @param dischargeType
 	 * @return true - if the new DischargeType has been inserted
@@ -67,7 +88,7 @@ public class DischargeTypeIoOperation {
 	}
 
 	/**
-	 * method that delete a DischargeType
+	 * Method that delete a DischargeType
 	 * 
 	 * @param dischargeType
 	 * @return true - if the DischargeType has been deleted
@@ -85,7 +106,7 @@ public class DischargeTypeIoOperation {
 	}
 
 	/**
-	 * method that check if a DischargeType already exists
+	 * Method that check if a DischargeType already exists
 	 * 
 	 * @param code
 	 * @return true - if the DischargeType already exists

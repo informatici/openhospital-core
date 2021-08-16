@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.serviceprinting.manager;
 
 import java.io.File;
@@ -12,6 +33,8 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.hospital.manager.HospitalBrowsingManager;
 import org.isf.hospital.model.Hospital;
 import org.isf.utils.exception.OHServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +50,9 @@ import net.sf.jasperreports.view.JasperViewer;
 
 @Component
 public class PrintManager {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PrintManager.class);
+
 	public static final int toDisplay = 0;
 
 	public static final int toPdf = 1;
@@ -40,7 +66,7 @@ public class PrintManager {
 	
 	public void print(String filename, List<?> toPrint, int action) throws OHServiceException {
 		
-		HashMap<String, Object> parameters = new HashMap<String, Object>();
+		HashMap<String, Object> parameters = new HashMap<>();
 		Hospital hospital = hospitalManager.getHospital();
 		parameters.put("ospedaleNome", hospital.getDescription());
 		parameters.put("ospedaleIndirizzo", hospital.getAddress());
@@ -64,25 +90,27 @@ public class PrintManager {
 					else { 
 						String PDFfile = "rpt/PDF/" + filename + ".pdf";
 						JasperExportManager.exportReportToPdfFile(jasperPrint, PDFfile);
-						try{
+						try {
 							Runtime rt = Runtime.getRuntime();
 							rt.exec(GeneralData.VIEWER +" "+ PDFfile);
-						} catch(Exception e){
-							e.printStackTrace();
+						} catch(Exception exception) {
+							LOGGER.error(exception.getMessage(), exception);
 						}
 					}
 					break;
 				case 1:
-					JasperExportManager.exportReportToPdfFile(jasperPrint,"rpt/PDF/"+JOptionPane.showInputDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectapathforthepdffile"),filename)+".pdf");
+					JasperExportManager.exportReportToPdfFile(jasperPrint,"rpt/PDF/"+
+							JOptionPane.showInputDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectapathforthepdffile.msg"), filename)
+							+".pdf");
 					break;
 				case 2:JasperPrintManager.printReport(jasperPrint, true);
 					break;
-				default:JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectacorrectaction"));
+				default:JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectacorrectaction.msg"));
 					break;
 				}
-			}else JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.notavalidfile"));
-		} catch (JRException e) {
-			e.printStackTrace();
+			} else JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.notavalidfile.msg"));
+		} catch (JRException jrException) {
+			LOGGER.error(jrException.getMessage(), jrException);
 		}
 	}
 }

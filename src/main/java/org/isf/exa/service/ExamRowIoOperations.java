@@ -1,13 +1,25 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.exa.service;
-/*------------------------------------------
- * IoOperations - provides the io operations for recovering and managing exam records from the database.
- * -----------------------------------------
- * modification history
- * ??/??/2005 - Davide/Theo - first beta version 
- * 07/11/2006 - ross - modified to accept, within the description, the character quote (')
- *                     (to do this, just double every quote. replaceall("'","''") 
- *                     when record locked all data is saved now, not only descritpion
- *------------------------------------------*/
 
 import java.util.ArrayList;
 
@@ -20,6 +32,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * ------------------------------------------
+ * ExamRowIoOperations - provides the I/OO operations for recovering and managing exam records from the database.
+ * -----------------------------------------
+ * modification history
+ * ??/??/2005 - Davide/Theo - first beta version
+ * 07/11/2006 - ross - modified to accept, within the description, the character quote (')
+ *                     (to do this, just double every quote. replaceall("'","''")
+ *                     when record locked all data is saved now, not only descritpion
+ * ------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -70,11 +93,11 @@ public class ExamRowIoOperations {
 	 * @return the list of {@link ExamRow}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamRow> getExamrows() throws OHServiceException 
+	public ArrayList<ExamRow> getExamRows() throws OHServiceException
 	{
 		return getExamsRowByDesc(null);
 	}
-	
+
 	/**
 	 * Returns the list of {@link ExamRow}s that matches passed description
 	 * @param description - the examRow description
@@ -84,7 +107,7 @@ public class ExamRowIoOperations {
 	public ArrayList<ExamRow> getExamsRowByDesc(
 			String description) throws OHServiceException 
 	{ 
-		ArrayList<ExamRow> examrows = new ArrayList<ExamRow>();
+		ArrayList<ExamRow> examrows = new ArrayList<>();
 				
 		
 		if (description != null) 
@@ -166,7 +189,7 @@ public class ExamRowIoOperations {
 	 * the parameter; Returns false if the query finds no record, else returns
 	 * true
 	 * 
-	 * @param examrow the {@link Exam}
+	 * @param examrow the {@link ExamRow}
 	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
@@ -206,7 +229,7 @@ public class ExamRowIoOperations {
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the exam code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
@@ -217,7 +240,7 @@ public class ExamRowIoOperations {
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the exam row code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise

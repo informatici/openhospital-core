@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.dicomtype.service;
 
 import java.util.ArrayList;
@@ -18,18 +39,18 @@ public class DicomTypeIoOperation {
 	private DicomTypeIoOperationRepository repository;
 	
 	/**
-	 * method that returns all DicomTypes in a list
+	 * Method that returns all DicomTypes in a list
 	 * 
 	 * @return the list of all DicomTypes
 	 * @throws OHServiceException
 	 */
 	public ArrayList<DicomType> getDicomType() throws OHServiceException 
 	{
-		return new ArrayList<DicomType>(repository.findAllByOrderByDicomTypeDescriptionAsc());
+		return new ArrayList<>(repository.findAllByOrderByDicomTypeDescriptionAsc());
 	}
 
 	/**
-	 * method that updates an already existing DicomType
+	 * Method that updates an already existing DicomType
 	 * 
 	 * @param DicomType
 	 * @return true - if the existing DicomType has been updated
@@ -48,7 +69,7 @@ public class DicomTypeIoOperation {
 	}
 
 	/**
-	 * method that create a new DicomType
+	 * Method that create a new DicomType
 	 * 
 	 * @param DicomType
 	 * @return true - if the new DicomType has been inserted
@@ -67,7 +88,7 @@ public class DicomTypeIoOperation {
 	}
 
 	/**
-	 * method that delete a DicomType
+	 * Method that delete a DicomType
 	 * 
 	 * @param DicomType
 	 * @return true - if the DicomType has been deleted
@@ -85,7 +106,7 @@ public class DicomTypeIoOperation {
 	}
 
 	/**
-	 * method that check if a DicomType already exists
+	 * Method that check if a DicomType already exists
 	 * 
 	 * @param code
 	 * @return true - if the DicomType already exists

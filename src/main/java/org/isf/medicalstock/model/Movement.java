@@ -1,9 +1,30 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.medicalstock.model;
 
 import java.util.GregorianCalendar;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -16,22 +37,23 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.supplier.model.Supplier;
+import org.isf.utils.db.Auditable;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/*------------------------------------------
- * Medical Stock Movement- model for the medical entity
+/**
+ * ------------------------------------------
+ * Medical Stock Movement - model for the medical stock movement entity
  * -----------------------------------------
  * modification history
  * ? - ?
  * 17/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="MEDICALDSRSTOCKMOV")
 @EntityListeners(AuditingEntityListener.class) 
@@ -185,13 +207,7 @@ public class Movement extends Auditable<String>
 //    }
         
 	public String toString(){
-		return MessageBundle.getMessage("angal.medicalstock.medical")+
-				":"+
-				medical.toString()+
-				MessageBundle.getMessage("angal.medicalstock.type")+
-				":"+
-				type.toString()+
-				MessageBundle.getMessage("angal.common.quantity")+":"+quantity;
+		return MessageBundle.formatMessage("angal.movement.tostring.fmt.txt", medical.toString(), type.toString(), quantity);
 	}
 	
 	@Override

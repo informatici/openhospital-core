@@ -1,9 +1,24 @@
-/**
- * @(#) Farmaco.java
- * 11-dec-2005
- * 14-jan-2006
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.isf.medicals.model;
 
 import javax.persistence.AttributeOverride;
@@ -26,22 +41,18 @@ import org.isf.medtype.model.MedicalType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Pure Model Medical DSR (Drugs Surgery Rest): represents a medical
- * 
- * @author bob
- * 		   modified by alex:
- * 			- product code
- * 			- pieces per packet
- */
-/*------------------------------------------
- * Medical - model for the medical entity
+ * ------------------------------------------
+ * MedicalDSR - model for the Medical DSR (Drugs Surgery Rest): represents a medical
  * -----------------------------------------
  * modification history
- * ? - bob - first version 
+ * 11-dec-2005 - bob - first version
+ * 14-jan-2006
  * ? - modified by alex
+ * 			- product code
+ * 			- pieces per packet
  * 13/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="MEDICALDSR")
 @EntityListeners(AuditingEntityListener.class)
@@ -84,35 +95,35 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 	private String description;
 
 	/**
-	 * initial quantity
+	 * Initial quantity
 	 */
 	@NotNull
 	@Column(name="MDSR_INI_STOCK_QTI")
 	private double initialqty;
 	
 	/**
-	 * pieces per packet
+	 * Pieces per packet
 	 */
 	@NotNull
 	@Column(name="MDSR_PCS_X_PCK")
 	private Integer pcsperpck;
 
 	/**
-	 * input quantity
+	 * Input quantity
 	 */
 	@NotNull
 	@Column(name="MDSR_IN_QTI")
 	private double inqty;
 
 	/**
-	 * out quantity
+	 * Out quantity
 	 */
 	@NotNull
 	@Column(name="MDSR_OUT_QTI")
 	private double outqty;
 	
 	/**
-	 * min quantity
+	 * Minimum quantity
 	 */
 	@NotNull
 	@Column(name="MDSR_MIN_STOCK_QTI")

@@ -1,5 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<name>OpenHospital-core</name>
@@ -12,11 +13,13 @@
 	<groupId>org.isf</groupId>
 	<artifactId>OH-core</artifactId>
 	<packaging>jar</packaging>
-	<version>1.10</version>
+	<version>1.11</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.framework.version>4.3.18.RELEASE</spring.framework.version>
+		<spring.framework.version>4.3.28.RELEASE</spring.framework.version>
+		<license.maven.plugin.version>4.1</license.maven.plugin.version>
+		<spring-cloud-starter-openfeign>1.4.7.RELEASE</spring-cloud-starter-openfeign>
 	</properties>
 
 	<build>
@@ -32,7 +35,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>3.2.0</version>
 				<executions>
 					<execution>
 						<id>copy-resources</id>
@@ -41,7 +44,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/OpenHospital20/rsc</outputDirectory>
+							<outputDirectory>${project.basedir}/target/OpenHospital20/rsc</outputDirectory>
 							<resources>
 								<resource>
 									<directory>src/main/resources</directory>
@@ -56,7 +59,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/OpenHospital20/lib</outputDirectory>
+							<outputDirectory>${project.basedir}/target/OpenHospital20/lib</outputDirectory>
 							<resources>
 								<resource>
 									<directory>lib</directory>
@@ -71,7 +74,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/OpenHospital20/lib/native</outputDirectory>
+							<outputDirectory>${project.basedir}/target/OpenHospital20/lib/native</outputDirectory>
 							<resources>
 								<resource>
 									<directory>lib/native</directory>
@@ -81,29 +84,17 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- <plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/OpenHospital20/lib</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>false</overWriteSnapshots>
-							<overWriteIfNewer>true</overWriteIfNewer>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.6</version>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<archive>
 						<manifest>
@@ -118,42 +109,61 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
+				<groupId>com.mycila</groupId>
 				<artifactId>license-maven-plugin</artifactId>
-				<version>2.0.0</version>
+				<version>${license.maven.plugin.version}</version>
 				<configuration>
-					<verbose>false</verbose>
-					<addSvnKeyWords>true</addSvnKeyWords>
+					<!-- <header>.license-header/license-header.txt</header> -->
+					<licenseSets>
+						<licenseSet>
+							<header>.license-header/license-header.txt</header>
+							<excludes>
+								<exclude>./license-header/**</exclude>
+								<exclude>./ide-settings/eclipse/**</exclude>
+								<exclude>./ide-settings/idea/**</exclude>
+								<exclude>.editorconfig</exclude>
+								<exclude>.springBeans</exclude>
+								<exclude>**/README</exclude>
+								<exclude>doc/**/*.txt</exclude>
+								<exclude>lib/**</exclude>
+								<exclude>sql/**</exclude>
+								<exclude>repo/**</exclude>
+								<exclude>rpt/**</exclude>
+								<exclude>rsc/**</exclude>
+								<exclude>rsc-test/**</exclude>
+								<exclude>src/test/resources/**</exclude>
+								<exclude>src/main/resources/**</exclude>
+								<exclude>**/*.properties</exclude>
+								<exclude>**/*.xml</exclude>
+								<exclude>**/*.yml</exclude>
+								<exclude>**/*.jfd</exclude>
+							</excludes>
+						</licenseSet>
+					</licenseSets>
+					<properties>
+						<owner>Informatici Senza Frontiere</owner>
+						<email>info@informaticisenzafrontiere.org</email>
+						<project.inceptionYear>2006</project.inceptionYear>
+						<project.name>Open Hospital</project.name>
+						<project.url>www.open-hospital.org</project.url>
+						<project.description>Open Hospital is a free and open source software for healthcare data management.</project.description>
+					</properties>
 				</configuration>
-				<executions>
-					<execution>
-						<id>first</id>
-						<goals>
-							<goal>update-file-header</goal>
-						</goals>
-						<phase>process-sources</phase>
-						<configuration>
-							<licenseName>gpl_v3</licenseName>
-							<inceptionYear>2006</inceptionYear>
-							<organizationName>Informatici Senza Frontiere</organizationName>
-							<projectName>OpenHospital</projectName>
-							<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
-							<roots>
-								<root>src/main/java</root>
-								<root>src/test</root>
-							</roots>
-						</configuration>
-					</execution>
-				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>com.mycila</groupId>
+						<artifactId>license-maven-plugin-git</artifactId>
+						<version>${license.maven.plugin.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
-
 	<dependencies>
 		<dependency>
-		  <groupId>com.drewnoakes</groupId>
-		  <artifactId>metadata-extractor</artifactId>
-		  <version>2.10.0</version>
+			<groupId>com.drewnoakes</groupId>
+			<artifactId>metadata-extractor</artifactId>
+			<version>2.16.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.gstreamer-java</groupId>
@@ -161,94 +171,68 @@
 			<version>1.4</version>
 		</dependency>
 		<dependency>
-			<groupId>codeanticode.gsvideo</groupId>
-			<artifactId>gsvideo_isf</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.5.3</version>
+			<version>4.5.13</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>
-			<version>4.4.13</version>
+			<version>4.4.14</version>
 		</dependency>
 		<dependency>
-			<groupId>jasperreports</groupId>
+			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
+			<version>6.17.0</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.lowagie</groupId>
 					<artifactId>itext</artifactId>
 				</exclusion>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
 			</exclusions>
-			<version>3.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.lowagie</groupId>
 			<artifactId>itext</artifactId>
-			<version>1.02b</version>
+			<version>2.1.7</version>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>2.10.6</version>
+			<version>2.10.10</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.13</version>
+			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<!-- in mem db downgrade to java 6 supporting -->
-			<version>1.4.190</version>
+			<version>1.4.200</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>com.sun.media</groupId>
-		    <artifactId>jai_imageio</artifactId>
-		    <version>1.1</version>
-		    <exclusions>
-		    	<exclusion>
-		    		<groupId>javax.media</groupId>
-		    		<artifactId>jai_core</artifactId>
-		    	</exclusion>
-		    </exclusions>
+			<groupId>com.sun</groupId>
+			<artifactId>clibwrapper_jiio</artifactId>
+			<version>1.1</version>
 		</dependency>
 		<dependency>
-		    <groupId>javax.media</groupId>
-		    <artifactId>jai-core</artifactId>
-		    <version>1.1.3</version>
+			<groupId>com.sun.media</groupId>
+			<artifactId>jai_imageio</artifactId>
+			<version>1.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.media</groupId>
+					<artifactId>jai_core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
-		    <groupId>com.sun</groupId>
-		    <artifactId>clibwrapper_jiio</artifactId>
-		    <version>1.1</version>
-		</dependency>
-		<dependency>
-		    <groupId>com.sun.media</groupId>
-		    <artifactId>jai_imageio</artifactId>
-		    <version>1.1</version>
-		    <exclusions>
-		    	<exclusion>
-		    		<groupId>javax.media</groupId>
-		    		<artifactId>jai_core</artifactId>
-		    	</exclusion>
-		    </exclusions>
-		</dependency>
-		<dependency>
-		    <groupId>javax.media</groupId>
-		    <artifactId>jai-core</artifactId>
-		    <version>1.1.3</version>
+			<groupId>javax.media</groupId>
+			<artifactId>jai-core</artifactId>
+			<version>1.1.3</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
@@ -261,28 +245,33 @@
 			<version>2.1.7</version>
 		</dependency>
 		<dependency>
-		    <groupId>javax.xml.bind</groupId>
-		    <artifactId>jaxb-api</artifactId>
-		    <version>2.2.11</version>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.sun.xml.bind</groupId>
-		    <artifactId>jaxb-core</artifactId>
-		    <version>2.3.0.1</version>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-core</artifactId>
+			<version>2.3.0.1</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.sun.xml.bind</groupId>
-		    <artifactId>jaxb-impl</artifactId>
-		    <version>2.3.3</version>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>3.0.1</version>
 		</dependency>
 		<dependency>
-		    <groupId>javax.activation</groupId>
-		    <artifactId>activation</artifactId>
-		    <version>1.1.1</version>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>dcm4che</groupId>
 			<artifactId>dcm4che-core</artifactId>
+			<version>2.0.26</version>
+		</dependency>
+		<dependency>
+			<groupId>dcm4che</groupId>
+			<artifactId>dcm4che-image</artifactId>
 			<version>2.0.26</version>
 		</dependency>
 		<dependency>
@@ -293,22 +282,22 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
-			<version>3.7</version>
+			<version>4.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>3.7</version>
+			<version>4.1.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
+ 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.6.4</version>
+			<version>1.7.31</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.6.4</version>
+			<version>1.7.31</version>
 		</dependency>
 		<dependency>
 			<groupId>org.igniterealtime.smack</groupId>
@@ -318,7 +307,7 @@
 		<dependency>
 			<groupId>org.igniterealtime.smack</groupId>
 			<artifactId>smackx</artifactId>
-			<version>3.2.1</version>
+			<version>3.4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -331,6 +320,11 @@
 			<version>1.0.1.Final</version>
 		</dependency>
 		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.1.6.Final</version>
+		</dependency>
+		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>4.2.5.Final</version>
@@ -339,11 +333,6 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-c3p0</artifactId>
 			<version>4.2.13.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>2.0.1.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.imgscalr</groupId>
@@ -382,62 +371,112 @@
 			<version>${spring.framework.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.springframework.data</groupId>
-		    <artifactId>spring-data-jpa</artifactId>
-		    <version>1.11.23.RELEASE</version>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>1.11.23.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-test</artifactId>
-			<version>1.4.0.RELEASE</version>
+			<version>1.5.22.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
-			<version>1.9.6</version>
+			<version>1.9.7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<version>1.4.0.RELEASE</version>
+			<version>1.5.22.RELEASE</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.assertj</groupId>
+					<artifactId>assertj-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${spring.framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.20.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-             <groupId>org.springframework</groupId>
-             <artifactId>spring-aspects</artifactId>
-             <version>${spring.framework.version}</version>
-         </dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+			<version>${spring-cloud-starter-openfeign}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-classic</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-parent</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>log4j-over-slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework.cloud</groupId>
+					<artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.github.openfeign</groupId>
+			<artifactId>feign-gson</artifactId>
+			<version>9.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.12.3</version>
+		</dependency>
+
 	</dependencies>
+
 	<repositories>
 		<repository>
 			<id>lib</id>
-			<name>Legacy dependencies Repository</name>
+			<name>Legacy Dependencies Repository</name>
 			<url>file:${project.basedir}/repo</url>
 		</repository>
 		<repository>
-			<id>spring-libs-release</id>
-			<name>Spring Releases</name>
-			<url>https://repo.spring.io/libs-release</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>jaspersoft</id>
-			<name>Jasper Soft</name>
-			<url>http://jasperforge.org/maven2/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>dcm4che</id>
-			<name>Dcm4Che Repository</name>
-			<url>http://www.dcm4che.org/maven2/</url>
+			<id>JFrog</id>
+			<name>Atlassian JFrog></name>
+			<url>https://packages.atlassian.com/maven-3rdparty-legacy-local</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>

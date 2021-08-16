@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.priceslist.service;
 
 import java.util.ArrayList;
@@ -23,22 +44,22 @@ public class PricesListIoOperations {
 	private PriceIoOperationRepository priceRepository;
 	
 	/**
-	 * return the list of {@link List}s in the DB
+	 * Return the list of {@link PriceList}s in the DB
 	 * 
-	 * @return the list of {@link List}s
+	 * @return the list of {@link PriceList}s
 	 * @throws OHServiceException 
 	 */
 	public ArrayList<PriceList> getLists() throws OHServiceException {
 		ArrayList<PriceList> pList = null;
 			
 
-		pList = new ArrayList<PriceList>(repository.findAll());
+		pList = new ArrayList<>(repository.findAll());
 		
 		return pList;
 	}
 	
 	/**
-	 * return the list of {@link Price}s in the DB
+	 * Return the list of {@link Price}s in the DB
 	 * 
 	 * @return the list of {@link Price}s
 	 * @throws OHServiceException 
@@ -47,15 +68,15 @@ public class PricesListIoOperations {
 		ArrayList<Price> pPrice = null;
 						
 
-		pPrice = new ArrayList<Price>(priceRepository.findAllByOrderByDescriptionAsc());
+		pPrice = new ArrayList<>(priceRepository.findAllByOrderByDescriptionAsc());
 		
 		return pPrice;
 	}
 
 	/**
-	 * updates all {@link Price}s in the specified {@link List}
+	 * Updates all {@link Price}s in the specified {@link PriceList}
 	 * 
-	 * @param list - the {@link List}
+	 * @param list - the {@link PriceList}
 	 * @param prices - the list of {@link Price}s
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
 	 * @throws OHServiceException 
@@ -89,9 +110,9 @@ public class PricesListIoOperations {
     }
 
 	/**
-	 * insert a new {@link List} in the DB
+	 * Insert a new {@link PriceList} in the DB
 	 * 
-	 * @param list - the {@link List}
+	 * @param list - the {@link PriceList}
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
@@ -100,9 +121,9 @@ public class PricesListIoOperations {
 	}
 	
 	/**
-	 * update a {@link List} in the DB
+	 * Update a {@link PriceList} in the DB
 	 * 
-	 * @param list - the {@link List} to update
+	 * @param list - the {@link PriceList} to update
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
@@ -111,9 +132,9 @@ public class PricesListIoOperations {
 	}
 	
 	/**
-	 * delete a {@link List} in the DB
+	 * Delete a {@link PriceList} in the DB
 	 * 
-	 * @param list - the {@link List} to delete
+	 * @param list - the {@link PriceList} to delete
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
@@ -141,7 +162,7 @@ public class PricesListIoOperations {
     }
 
 	/**
-	 * duplicate {@link PriceList} multiplying by <code>factor</code> and rounding by <code>step</code>
+	 * Duplicate {@link PriceList} multiplying by <code>factor</code> and rounding by <code>step</code>
 	 * 
 	 * @param list - the {@link PriceList} to be duplicated
 	 * @param factor - the multiplying factor

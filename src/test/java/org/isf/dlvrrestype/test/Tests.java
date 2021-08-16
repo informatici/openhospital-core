@@ -1,275 +1,222 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.dlvrrestype.test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import java.util.ArrayList;
 
+import org.assertj.core.api.Condition;
+import org.isf.OHCoreTestCase;
+import org.isf.dlvrrestype.manager.DeliveryResultTypeBrowserManager;
 import org.isf.dlvrrestype.model.DeliveryResultType;
+import org.isf.dlvrrestype.service.DeliveryResultIoOperationRepository;
 import org.isf.dlvrrestype.service.DeliveryResultTypeIoOperation;
-import org.isf.utils.db.DbJpaUtil;
+import org.isf.utils.exception.OHDataIntegrityViolationException;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestDeliveryResultType testDeliveryResultType;
-	private static TestDeliveryResultTypeContext testDeliveryResultTypeContext;
-	
-    @Autowired
-    DeliveryResultTypeIoOperation deliveryResultTypeIoOperation;
-    
-    
+
+	@Autowired
+	DeliveryResultTypeIoOperation deliveryResultTypeIoOperation;
+	@Autowired
+	DeliveryResultIoOperationRepository deliveryResultIoOperationRepository;
+	@Autowired
+	DeliveryResultTypeBrowserManager deliveryResultTypeBrowserManager;
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testDeliveryResultType = new TestDeliveryResultType();
-    	testDeliveryResultTypeContext = new TestDeliveryResultTypeContext();
-    	
-        return;
-    }
-
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-		
-		return;
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-                
-        return;
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-    	testDeliveryResultType = null;
-    	testDeliveryResultTypeContext = null;
-
-    	return;
-    }
-	
-		
-	@Test
-	public void testDeliveryResultTypeGets()
-	{
-		String code = "";
-			
-
-		try 
-		{		
-			code = _setupTestDeliveryResultType(false);
-			_checkDeliveryResultTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-				
-		return;
+	public static void setUpClass() {
+		testDeliveryResultType = new TestDeliveryResultType();
 	}
-	
-	@Test
-	public void testDeliveryResultTypeSets() 
-	{
-		String code = "";
-			
 
-		try 
-		{		
-			code = _setupTestDeliveryResultType(true);
-			_checkDeliveryResultTypeIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-		
-		return;
-	}
-	
-	@Test
-	public void testIoGetDeliveryResultType() 
-	{
-		String code = "";
-		
-		try 
-		{		
-			code = _setupTestDeliveryResultType(false);
-			DeliveryResultType foundDeliveryResultType = (DeliveryResultType)jpa.find(DeliveryResultType.class, code); 
-			
-			assertEquals("TestDescription", foundDeliveryResultType.getDescription());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-		
-		return;
-	}
-	
-	@Test
-	public void testIoUpdateDeliveryResultType() 
-	{
-		String code = "";
-		boolean result = false;
-		
-		
-		try 
-		{		
-			code = _setupTestDeliveryResultType(false);
-			DeliveryResultType foundDeliveryResultType = (DeliveryResultType)jpa.find(DeliveryResultType.class, code); 
-			foundDeliveryResultType.setDescription("Update");
-			result = deliveryResultTypeIoOperation.updateDeliveryResultType(foundDeliveryResultType);
-			DeliveryResultType updateDeliveryResultType = (DeliveryResultType)jpa.find(DeliveryResultType.class, code);
-
-			assertTrue(result);
-			assertEquals("Update", updateDeliveryResultType.getDescription());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-		
-		return;
-	}
-	
-	@Test
-	public void testIoNewDeliveryResultType() 
-	{
-		boolean result = false;
-		
-		
-		try 
-		{		
-			DeliveryResultType deliveryResultType = testDeliveryResultType.setup(true);
-			result = deliveryResultTypeIoOperation.newDeliveryResultType(deliveryResultType);
-
-			assertTrue(result);
-			_checkDeliveryResultTypeIntoDb(deliveryResultType.getCode());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-		
-		return;
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
 
 	@Test
-	public void testIoIsCodePresent() 
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestDeliveryResultType(false);
-			result = deliveryResultTypeIoOperation.isCodePresent(code);
-
-			assertTrue(result);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-		
-		return;
+	public void testDeliveryResultTypeGets() throws Exception {
+		String code = _setupTestDeliveryResultType(false);
+		_checkDeliveryResultTypeIntoDb(code);
 	}
 
 	@Test
-	public void testIoDeleteDeliveryResultType() 
-	{
-		String code = "";
-		boolean result = false;
-		
-
-		try 
-		{		
-			code = _setupTestDeliveryResultType(false);
-			DeliveryResultType foundDeliveryResultType = (DeliveryResultType)jpa.find(DeliveryResultType.class, code); 
-			result = deliveryResultTypeIoOperation.deleteDeliveryResultType(foundDeliveryResultType);
-			
-			result = deliveryResultTypeIoOperation.isCodePresent(code);
-			assertFalse(result);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			fail();
-		}
-		
-		return;
+	public void testDeliveryResultTypeSets() throws Exception {
+		String code = _setupTestDeliveryResultType(true);
+		_checkDeliveryResultTypeIntoDb(code);
 	}
-		
-	
-	private void _saveContext() throws OHException 
-    {	
-		testDeliveryResultTypeContext.saveAll(jpa);
-        		
-        return;
-    }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testDeliveryResultTypeContext.deleteNews(jpa);
-        
-        return;
-    }
-        
-	private String _setupTestDeliveryResultType(
-			boolean usingSet) throws OHException 
-	{
-		DeliveryResultType deliveryResultType;
-		
 
-    	jpa.beginTransaction();	
-    	deliveryResultType = testDeliveryResultType.setup(usingSet);
-		jpa.persist(deliveryResultType);
-    	jpa.commitTransaction();
-    	
+	@Test
+	public void testIoGetDeliveryResultType() throws Exception {
+		String code = _setupTestDeliveryResultType(false);
+		DeliveryResultType foundDeliveryResultType = deliveryResultIoOperationRepository.findOne(code);
+		assertThat(foundDeliveryResultType.getDescription()).isEqualTo("TestDescription");
+	}
+
+	@Test
+	public void testIoUpdateDeliveryResultType() throws Exception {
+		String code = _setupTestDeliveryResultType(false);
+		DeliveryResultType foundDeliveryResultType = deliveryResultIoOperationRepository.findOne(code);
+		foundDeliveryResultType.setDescription("Update");
+		boolean result = deliveryResultTypeIoOperation.updateDeliveryResultType(foundDeliveryResultType);
+		assertThat(result).isTrue();
+		DeliveryResultType updateDeliveryResultType = deliveryResultIoOperationRepository.findOne(code);
+		assertThat(updateDeliveryResultType.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testIoNewDeliveryResultType() throws Exception {
+		DeliveryResultType deliveryResultType = testDeliveryResultType.setup(true);
+		boolean result = deliveryResultTypeIoOperation.newDeliveryResultType(deliveryResultType);
+		assertThat(result).isTrue();
+		_checkDeliveryResultTypeIntoDb(deliveryResultType.getCode());
+	}
+
+	@Test
+	public void testIoIsCodePresent() throws Exception {
+		String code = _setupTestDeliveryResultType(false);
+		boolean result = deliveryResultTypeIoOperation.isCodePresent(code);
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void testIoDeleteDeliveryResultType() throws Exception {
+		String code = _setupTestDeliveryResultType(false);
+		DeliveryResultType foundDeliveryResultType = deliveryResultIoOperationRepository.findOne(code);
+		boolean result = deliveryResultTypeIoOperation.deleteDeliveryResultType(foundDeliveryResultType);
+		result = deliveryResultTypeIoOperation.isCodePresent(code);
+		assertThat(result).isFalse();
+	}
+
+	@Test
+	public void testMgrGetDeliveryResultType() throws Exception {
+		String code = _setupTestDeliveryResultType(false);
+		DeliveryResultType foundDeliveryResultType = deliveryResultIoOperationRepository.findOne(code);
+		ArrayList<DeliveryResultType> foundDeliveryResultTypes = deliveryResultTypeBrowserManager.getDeliveryResultType();
+		assertThat(foundDeliveryResultTypes).contains(foundDeliveryResultType);
+	}
+
+	@Test
+	public void testMgrUpdateDeliveryResultType() throws Exception {
+		String code = _setupTestDeliveryResultType(false);
+		DeliveryResultType foundDeliveryResultType = deliveryResultIoOperationRepository.findOne(code);
+		foundDeliveryResultType.setDescription("Update");
+		boolean result = deliveryResultTypeBrowserManager.updateDeliveryResultType(foundDeliveryResultType);
+		assertThat(result).isTrue();
+		DeliveryResultType updateDeliveryResultType = deliveryResultIoOperationRepository.findOne(code);
+		assertThat(updateDeliveryResultType.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testMgrNewDeliveryResultType() throws Exception {
+		DeliveryResultType deliveryResultType = testDeliveryResultType.setup(true);
+		boolean result = deliveryResultTypeBrowserManager.newDeliveryResultType(deliveryResultType);
+		assertThat(result).isTrue();
+		_checkDeliveryResultTypeIntoDb(deliveryResultType.getCode());
+	}
+
+	@Test
+	public void testMgrIsCodePresent() throws Exception {
+		String code = _setupTestDeliveryResultType(false);
+		boolean result = deliveryResultTypeBrowserManager.isCodePresent(code);
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void testMgrDeleteDeliveryResultType() throws Exception {
+		String code = _setupTestDeliveryResultType(false);
+		DeliveryResultType foundDeliveryResultType = deliveryResultIoOperationRepository.findOne(code);
+		boolean result = deliveryResultTypeBrowserManager.deleteDeliveryResultType(foundDeliveryResultType);
+		result = deliveryResultTypeBrowserManager.isCodePresent(code);
+		assertThat(result).isFalse();
+	}
+
+	@Test
+	public void testMgrDeliveryResultTypeValidate() throws Exception {
+		String code = _setupTestDeliveryResultType(false);
+		DeliveryResultType deliveryResultType = deliveryResultIoOperationRepository.findOne(code);
+		deliveryResultType.setDescription("Update");
+		boolean result = deliveryResultTypeBrowserManager.updateDeliveryResultType(deliveryResultType);
+		// empty string
+		deliveryResultType.setCode("");
+		assertThatThrownBy(() -> deliveryResultTypeBrowserManager.updateDeliveryResultType(deliveryResultType))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// too long
+		deliveryResultType.setCode("123456789ABCDEF");
+		assertThatThrownBy(() -> deliveryResultTypeBrowserManager.updateDeliveryResultType(deliveryResultType))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// key already exists
+		deliveryResultType.setCode(code);
+		assertThatThrownBy(() -> deliveryResultTypeBrowserManager.newDeliveryResultType(deliveryResultType))
+				.isInstanceOf(OHDataIntegrityViolationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// description empty
+		deliveryResultType.setDescription("");
+		assertThatThrownBy(() -> deliveryResultTypeBrowserManager.updateDeliveryResultType(deliveryResultType))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+	}
+
+	@Test
+	public void testDeliveryResultTypeHashToString() throws Exception {
+		String code = _setupTestDeliveryResultType(false);
+		DeliveryResultType deliveryResultType = deliveryResultIoOperationRepository.findOne(code);
+		assertThat(deliveryResultType.hashCode()).isPositive();
+
+		DeliveryResultType deliveryResultType2 = new DeliveryResultType("someCode", "someDescription");
+		assertThat(deliveryResultType2).hasToString("someDescription");
+	}
+
+	private String _setupTestDeliveryResultType(boolean usingSet) throws OHException {
+		DeliveryResultType deliveryResultType = testDeliveryResultType.setup(usingSet);
+		deliveryResultIoOperationRepository.saveAndFlush(deliveryResultType);
 		return deliveryResultType.getCode();
 	}
-		
-	private void  _checkDeliveryResultTypeIntoDb(
-			String code) throws OHException 
-	{
-		DeliveryResultType foundDeliveryResultType;
-		
 
-		foundDeliveryResultType = (DeliveryResultType)jpa.find(DeliveryResultType.class, code); 
+	private void _checkDeliveryResultTypeIntoDb(String code) throws OHException {
+		DeliveryResultType foundDeliveryResultType = deliveryResultIoOperationRepository.findOne(code);
 		testDeliveryResultType.check(foundDeliveryResultType);
-		
-		return;
-	}	
+	}
 }

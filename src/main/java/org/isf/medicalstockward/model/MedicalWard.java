@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.medicalstockward.model;
 
 import javax.persistence.AttributeOverride;
@@ -12,19 +33,18 @@ import javax.persistence.Transient;
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
 import org.isf.utils.db.Auditable;
-import org.isf.utils.db.DbJpaUtil;
 import org.isf.ward.model.Ward;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/*------------------------------------------
- * Medical Ward - model for the medical entity
+/**
+ * ------------------------------------------
+ * Medical Ward - model for the medical ward entity
  * -----------------------------------------
  * modification history
  * ? - ?
  * 17/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="MEDICALDSRWARD")
 @EntityListeners(AuditingEntityListener.class) 
@@ -37,10 +57,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 })
 public class MedicalWard extends Auditable<String> implements Comparable<Object> 
 {	
-	@Autowired
-	@Transient
-	private DbJpaUtil jpa;
-	
 	@EmbeddedId 
 	MedicalWardId id;
 	
