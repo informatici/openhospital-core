@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS TELEMETRY;
+CREATE TABLE  TELEMETRY (
+  # identification
+  TEL_UUID VARCHAR(36) NOT NULL COMMENT 'Software ID',
+  TEL_DBID VARCHAR(36) NOT NULL COMMENT 'DATABASE ID',
+  TEL_HWID VARCHAR(36) NOT NULL COMMENT 'Hardware ID',
+  TEL_OSID VARCHAR(36) NOT NULL COMMENT 'Operative System ID',
+  # settings
+  TEL_ACTIVE TINYINT(1) COMMENT 'true|false|null',
+  TEL_CONSENT TEXT COMMENT 'User consent informations',
+  # history
+  TEL_INFO TEXT COMMENT 'Last collected data',
+  TEL_SENT_TIME DATETIME NOT NULL COMMENT 'Timestamp when it send message',
+  TEL_OPTIN_DATE DATETIME COMMENT 'When user enables telemetry',
+  TEL_OPTOUT_DATE DATETIME COMMENT 'When user disables telemetry',
+  PRIMARY KEY (TEL_UUID,TEL_DBID,TEL_HWID,TEL_OSID)
+) ENGINE=MyISAM;
