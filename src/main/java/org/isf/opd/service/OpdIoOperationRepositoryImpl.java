@@ -101,10 +101,10 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		Join<Opd, Disease> diseaseJoin = opd.join(opdEntityType.getSingularAttribute("disease", Disease.class));
 		Join<Disease, DiseaseType> diseaseTypeJoin = diseaseJoin.join(diseaseEntityType.getSingularAttribute("diseaseType", DiseaseType.class));
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alltypes.txt")))) {
+		if (diseaseTypeCode != null && !(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alltypes.txt")))) {
 			predicates.add(criteriaBuilder.equal(diseaseTypeJoin.get("code"), diseaseTypeCode));
 		}
-		if (!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldiseases.txt"))) {
+		if (diseaseCode != null && !diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldiseases.txt"))) {
 			predicates.add(criteriaBuilder.equal(diseaseJoin.get("code"), diseaseCode));
 		}
 		if (ageFrom != 0 || ageTo != 0) {
@@ -138,10 +138,10 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		List<Predicate> predicates = new ArrayList<>();
 
 		query.select(opd);
-		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alltypes.txt")))) {
+		if (diseaseTypeCode != null && !(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alltypes.txt")))) {
 			predicates.add(cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode));
 		}
-		if (!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldiseases.txt"))) {
+		if (diseaseCode != null && !diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldiseases.txt"))) {
 			predicates.add(cb.equal(opd.join("disease").get("code"), diseaseCode));
 		}
 		if (ageFrom != 0 || ageTo != 0) {
