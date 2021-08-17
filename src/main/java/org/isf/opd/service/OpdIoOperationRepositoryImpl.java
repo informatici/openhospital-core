@@ -46,34 +46,33 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCustom {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
-	
-	@SuppressWarnings("unchecked")	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Opd> findAllOpdWhereParams(
 			String diseaseTypeCode,
-			String diseaseCode, 
+			String diseaseCode,
 			GregorianCalendar dateFrom,
 			GregorianCalendar dateTo,
-			int ageFrom, 
+			int ageFrom,
 			int ageTo,
 			char sex,
 			char newPatient) {
-		return _getOpdQuery(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient).getResultList();
-	}	
+		return getOpdQuery(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient).getResultList();
+	}
 
-    public List<Opd> findAllOpdWhereParamsWithPagination(
-            String diseaseTypeCode,
-            String diseaseCode,
-            GregorianCalendar dateFrom,
-            GregorianCalendar dateTo,
-            int ageFrom,
-            int ageTo,
-            char sex,
-            char newPatient, 
-			int pageNumber, 
+	public List<Opd> findAllOpdWhereParamsWithPagination(
+			String diseaseTypeCode,
+			String diseaseCode,
+			GregorianCalendar dateFrom,
+			GregorianCalendar dateTo,
+			int ageFrom,
+			int ageTo,
+			char sex,
+			char newPatient,
+			int pageNumber,
 			int pageSize) {
 		TypedQuery<Opd> opdTypedQuery = getOpdIdQuery(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient);
 		opdTypedQuery.setFirstResult(pageNumber * pageSize);
@@ -81,14 +80,14 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		return opdTypedQuery.getResultList();
 	}
 
-    private TypedQuery<Opd> getOpdIdQuery(
-            String diseaseTypeCode,
-            String diseaseCode,
-            GregorianCalendar dateFrom,
-            GregorianCalendar dateTo,
-            int ageFrom,
-            int ageTo,
-            char sex,
+	private TypedQuery<Opd> getOpdIdQuery(
+			String diseaseTypeCode,
+			String diseaseCode,
+			GregorianCalendar dateFrom,
+			GregorianCalendar dateTo,
+			int ageFrom,
+			int ageTo,
+			char sex,
 			char newPatient) {
 		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Opd> criteriaQuery = criteriaBuilder.createQuery(Opd.class);
@@ -100,7 +99,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		criteriaQuery.select(opd);
 		Join<Opd, Disease> diseaseJoin = opd.join(opdEntityType.getSingularAttribute("disease", Disease.class));
 		Join<Disease, DiseaseType> diseaseTypeJoin = diseaseJoin.join(diseaseEntityType.getSingularAttribute("diseaseType", DiseaseType.class));
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 		if (diseaseTypeCode != null && !(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alltypes.txt")))) {
 			predicates.add(criteriaBuilder.equal(diseaseTypeJoin.get("code"), diseaseTypeCode));
 		}
@@ -123,15 +122,15 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		return entityManager.createQuery(criteriaQuery);
 	}
 
-    private TypedQuery<Opd> _getOpdQuery(
-    				String diseaseTypeCode,
-    				String diseaseCode, 
-    				GregorianCalendar dateFrom,
-    				GregorianCalendar dateTo,
-    				int ageFrom, 
-    				int ageTo,
-    				char sex,
-					char newPatient) {
+	private TypedQuery<Opd> getOpdQuery(
+			String diseaseTypeCode,
+			String diseaseCode,
+			GregorianCalendar dateFrom,
+			GregorianCalendar dateTo,
+			int ageFrom,
+			int ageTo,
+			char sex,
+			char newPatient) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Opd> query = cb.createQuery(Opd.class);
 		Root<Opd> opd = query.from(Opd.class);
@@ -145,7 +144,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			predicates.add(cb.equal(opd.join("disease").get("code"), diseaseCode));
 		}
 		if (ageFrom != 0 || ageTo != 0) {
-			predicates.add(cb.between(opd.<Integer> get("age"), ageFrom, ageTo));
+			predicates.add(cb.between(opd.<Integer>get("age"), ageFrom, ageTo));
 		}
 		if (sex != 'A') {
 			predicates.add(cb.equal(opd.get("sex"), sex));
@@ -153,7 +152,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		if (newPatient != 'A') {
 			predicates.add(cb.equal(opd.get("newPatient"), newPatient));
 		}
-		predicates.add(cb.between(opd.<Date> get("visitDate"), dateFrom.getTime(), dateTo.getTime()));
+		predicates.add(cb.between(opd.<Date>get("visitDate"), dateFrom.getTime(), dateTo.getTime()));
 		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 
 		return entityManager.createQuery(query);

@@ -157,7 +157,8 @@ public class OpdBrowserManager {
 		return ioOperations.getOpdList(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient);
 	}
 
-	public List<Opd> getOpdPaginated(String diseaseTypeCode, String diseaseCode, GregorianCalendar dateFrom, GregorianCalendar dateTo, int ageFrom, int ageTo, char sex, char newPatient, int pageNumber, int pageSize) {
+	public List<Opd> getOpdPaginated(String diseaseTypeCode, String diseaseCode, GregorianCalendar dateFrom, GregorianCalendar dateTo, int ageFrom, int ageTo,
+			char sex, char newPatient, int pageNumber, int pageSize) {
 		return ioOperations.getOpdListPaginated(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, pageNumber, pageSize);
 	}
 

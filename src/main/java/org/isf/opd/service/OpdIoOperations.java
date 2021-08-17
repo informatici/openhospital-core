@@ -109,7 +109,6 @@ public class OpdIoOperations {
 				ageFrom, ageTo, sex, newPatient));			
 	}
 
-
 	public List<Opd> getOpdListPaginated(
 			String diseaseTypeCode,
 			String diseaseCode,
