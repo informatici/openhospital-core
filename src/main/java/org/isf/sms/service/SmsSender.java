@@ -45,7 +45,7 @@ public class SmsSender implements Runnable {
 		LOGGER.info("SMS Sender started...");
 		SmsParameters.initialize();
 		delay = SmsParameters.LOOP;
-		LOGGER.info("SMS Sender loop set to {} seconds.", Integer.valueOf(delay));
+		LOGGER.info("SMS Sender loop set to {} seconds.", delay);
 	}
 
 	public void run() {
@@ -59,7 +59,7 @@ public class SmsSender implements Runnable {
 				LOGGER.error("Error list loading");
 			}
 			if (!smsList.isEmpty()) {
-				LOGGER.info("Found {} SMS to send", Integer.valueOf(smsList.size()));
+				LOGGER.info("Found {} SMS to send", smsList.size());
 				SmsSenderOperations sender = Context.getApplicationContext().getBean(SmsSenderOperations.class);
 				if (sender.initialize()) {
 					for (Sms sms : smsList) {

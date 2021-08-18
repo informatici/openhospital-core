@@ -141,7 +141,7 @@ public class MedicalStockWardIoOperations
 		} else {
 			quantity = repository.findQuantityInWardWhereMedical(lot.getMedical().getCode());
 		}
-		return (int) (quantity == null ? 0 : quantity.doubleValue());
+		return (int) (quantity == null ? 0 : quantity);
 	}
 
 	/**
