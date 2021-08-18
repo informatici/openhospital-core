@@ -70,7 +70,7 @@ public class SmsSender implements Runnable {
 								try {
 									smsOp.saveOrUpdate(sms);
 								} catch (OHServiceException e) {
-									LOGGER.error("Failed saving: " + e.getMessage());
+									LOGGER.error("Failed saving: {}", e.getMessage());
 								}
 								LOGGER.debug("Sent");
 							} else {
@@ -79,7 +79,7 @@ public class SmsSender implements Runnable {
 						}
 					}
 					boolean terminationResult = sender.terminate();
-					LOGGER.debug("termination result: " + terminationResult);
+					LOGGER.debug("termination result: {}", terminationResult);
 				} else {
 					LOGGER.error("SMS Sender HTTP initialization error");
 					LOGGER.error("Stopping HTTP Sender...");
