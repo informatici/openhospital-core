@@ -187,11 +187,8 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 					return false;
 				}
 
-			} catch (IOException ioException) {
-				LOGGER.error(ioException.getMessage(), ioException);
-				return false;
-			} catch (InterruptedException interruptedException) {
-				LOGGER.error(interruptedException.getMessage(), interruptedException);
+			} catch (IOException | InterruptedException exception) {
+				LOGGER.error(exception.getMessage(), exception);
 				return false;
 			}
 			return true;

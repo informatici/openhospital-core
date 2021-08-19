@@ -51,7 +51,6 @@ import org.isf.stat.dto.JasperReportResultDto;
 import org.isf.utils.db.DbQueryLogger;
 import org.isf.utils.db.UTF8Control;
 import org.isf.utils.excel.ExcelExporter;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHReportException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -713,14 +712,10 @@ public class JasperReportsManager {
 			else
 				xlsExport.exportResultsetToExcel(resultSet, exportFile);
 
-        } catch (OHException e) {
-        	throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+        } catch (Exception exception) {
+        	throw new OHReportException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 			        MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
-    	} catch(Exception e) {
-            //Any exception
-            throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-                    MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
-        }
+    	}
     }
 
     public JasperReportResultDto getGenericReportMYPdf(Integer month, Integer year, String jasperFileName) throws OHServiceException {

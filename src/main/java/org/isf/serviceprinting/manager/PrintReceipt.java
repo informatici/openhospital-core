@@ -22,7 +22,6 @@
 package org.isf.serviceprinting.manager;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
@@ -157,21 +156,16 @@ public class PrintReceipt {
 			zpl.append("^XZ");//end
 			String labelLength = "^LL" + charH * i;
 			header+=labelLength;
-			String label = header+zpl;
-			
-			//System.out.println(label);
+			String label = header + zpl;
+
 			byte[] by = label.getBytes();
 			Doc doc = new SimpleDoc(by, flavor, das);
 			job.print(doc, pras);
 			brStream.close();
 			frStream.close();
 
-		} catch (FileNotFoundException fileNotFoundException) {
-			LOGGER.error(fileNotFoundException.getMessage(), fileNotFoundException);
-		} catch (IOException ioException) {
-			LOGGER.error(ioException.getMessage(), ioException);
-		} catch (PrintException printException) {
-			LOGGER.error(printException.getMessage(), printException);
+		} catch (IOException | PrintException exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
 	
