@@ -44,7 +44,7 @@ public class TestAdmission {
 	private static final GregorianCalendar VISITDATE = new GregorianCalendar(2002, 1, 28);
 	private static final GregorianCalendar OPDATE = new GregorianCalendar(2003, 2, 1);
 	private static final GregorianCalendar ABORTDATE = null;
-	private static final GregorianCalendar DELIVERYDATE = new GregorianCalendar(2004, 12, 1);
+	private static final GregorianCalendar DELIVERYDATE = new GregorianCalendar(2004, 11, 1);
 	private static final GregorianCalendar CTRLDATE1 = new GregorianCalendar(2005, 2, 1);
 	private static final GregorianCalendar CTRLDATE2 = new GregorianCalendar(2005, 2, 2);
 	private static final GregorianCalendar DISDATE = new GregorianCalendar(2006, 11, 1);
