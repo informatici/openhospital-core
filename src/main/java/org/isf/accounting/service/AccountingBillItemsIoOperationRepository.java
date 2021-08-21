@@ -29,6 +29,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
@@ -42,7 +43,7 @@ public interface AccountingBillItemsIoOperationRepository extends JpaRepository<
 	List<BillItems> findAllGroupByDescription();
 
 	@Modifying
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	@Query(value = "delete from BillItems b where b.id = :billId")
 	void deleteWhereId(@Param("billId") Integer billId);
 
