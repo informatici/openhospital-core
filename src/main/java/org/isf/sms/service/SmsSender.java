@@ -48,6 +48,7 @@ public class SmsSender implements Runnable {
 		LOGGER.info("SMS Sender loop set to {} seconds.", delay);
 	}
 
+	@Override
 	public void run() {
 		while (running) {
 			LOGGER.info("SMS Sender running...");

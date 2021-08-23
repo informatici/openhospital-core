@@ -50,6 +50,7 @@ public class SqlDicomManager implements DicomManagerInterface {
 	 * @return
 	 * @throws OHServiceException
 	 */
+	@Override
 	public Long[] getSerieDetail(int patientID, String seriesNumber) throws OHServiceException {
 		return ioOperations.getSerieDetail(patientID, seriesNumber);
 	}
@@ -62,6 +63,7 @@ public class SqlDicomManager implements DicomManagerInterface {
 	 * @return true if success
 	 * @throws OHServiceException
 	 */
+	@Override
 	public boolean deleteSerie(int patientID, String seriesNumber) throws OHServiceException {
 		return ioOperations.deleteSerie(patientID, seriesNumber);
 	}
@@ -73,6 +75,7 @@ public class SqlDicomManager implements DicomManagerInterface {
 	 * @return true if file exist
 	 * @throws OHServiceException
 	 */
+	@Override
 	public boolean exist(FileDicom dicom) throws OHServiceException {
 		return ioOperations.exist(dicom);
 	}
@@ -85,6 +88,7 @@ public class SqlDicomManager implements DicomManagerInterface {
 	 * @return true if file exist
 	 * @throws OHServiceException
 	 */
+	@Override
 	public boolean exist(int patientID, String seriesNumber) throws OHServiceException {
 		return ioOperations.isSeriePresent(seriesNumber);
 	}
@@ -98,6 +102,7 @@ public class SqlDicomManager implements DicomManagerInterface {
 	 * @return FileDicom
 	 * @throws OHServiceException
 	 */
+	@Override
 	public FileDicom loadDetails(Long idFile, int patientID, String seriesNumber) throws OHServiceException {
 		return ioOperations.loadDetails(idFile, patientID, seriesNumber);
 	}
@@ -111,6 +116,7 @@ public class SqlDicomManager implements DicomManagerInterface {
 	 * @return FileDicom
 	 * @throws OHServiceException
 	 */
+	@Override
 	public FileDicom loadDetails(long idFile, int patientID, String seriesNumber) throws OHServiceException {
 		return ioOperations.loadDetails(idFile, patientID, seriesNumber);
 	}
@@ -122,6 +128,7 @@ public class SqlDicomManager implements DicomManagerInterface {
 	 * @return
 	 * @throws OHServiceException
 	 */
+	@Override
 	public FileDicom[] loadPatientFiles(int patientID) throws OHServiceException {
 		return ioOperations.loadPatientFiles(patientID);
 	}
@@ -132,6 +139,7 @@ public class SqlDicomManager implements DicomManagerInterface {
 	 * @param dicom
 	 * @throws OHServiceException
 	 */
+	@Override
 	public void saveFile(FileDicom dicom) throws OHServiceException {
 		ioOperations.saveFile(dicom);
 	}

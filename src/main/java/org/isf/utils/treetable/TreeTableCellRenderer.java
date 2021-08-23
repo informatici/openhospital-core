@@ -43,15 +43,18 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 		this.jTreeTable = jtreetable;
 	}
 
+	@Override
 	public void setBounds(int x, int y, int w, int h) {
 		super.setBounds(x, 0, w, this.jTreeTable.getHeight());
 	}
 
+	@Override
 	public void paint(Graphics g) {
 		g.translate(0, -visibleRow * getRowHeight());
 		super.paint(g);
 	}
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table,
 			Object value,
 			boolean isSelected,

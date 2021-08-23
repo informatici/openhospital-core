@@ -70,6 +70,7 @@ public class MedicalWardForPrint implements Comparable<MedicalWardForPrint> {
 		return packets;
 	}
 
+	@Override
 	public int compareTo(MedicalWardForPrint o) {
 		return medical.getDescription().toUpperCase().compareTo(o.getMedical().getDescription().toUpperCase());
 	}

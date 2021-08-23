@@ -61,6 +61,7 @@ public interface DiseaseIoOperationRepository extends JpaRepository<Disease, Str
 	@Query(value = "select d FROM Disease d where d.diseaseType.code like :code and d.opdInclude=true and d.ipdInInclude=true and d.ipdOutInclude=true order BY d.description")
     List<Disease> findAllByDiseaseTypeCodeAndOpdAndIpdInAndIpdOut(@Param("code") String code);
 
+	@Override
 	@Query(value = "select d FROM Disease d order by d.description")
     List<Disease> findAll();
 
