@@ -82,6 +82,7 @@ public class MovementWardForPrint implements Comparable<MovementWardForPrint>{
 		return patient;
 	}
 
+	@Override
 	public int compareTo(MovementWardForPrint o) {
 		return this.date.compareTo(o.getDate());
 	}

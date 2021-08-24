@@ -262,6 +262,7 @@ public class Tests extends OHCoreTestCase {
 
 	class ThumbnailViewGui extends AbstractThumbnailViewGui {
 
+		@Override
 		public void initialize() {
 
 		}
@@ -273,6 +274,7 @@ public class Tests extends OHCoreTestCase {
 			super(numfiles, owner);
 		}
 
+		@Override
 		public void setLoaded(int loaded) {
 		}
 	}

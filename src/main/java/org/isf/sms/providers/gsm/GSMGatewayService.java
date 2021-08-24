@@ -78,6 +78,7 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 	 * 
 	 * @return <code>true</code> if the COM port is ready to be used, <code>false</code> otherwise.
 	 */
+	@Override
 	public boolean initialize() {
 		LOGGER.debug("Initialize...");
 		connected = false;

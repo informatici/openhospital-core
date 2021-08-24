@@ -22,9 +22,9 @@
 package org.isf.accounting.model;
 
 import java.util.GregorianCalendar;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -37,9 +37,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.patient.model.Patient;
 import org.isf.priceslist.model.PriceList;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -235,6 +235,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 		this.user = user;
 	}
 
+	@Override
 	public int compareTo(Bill obj) {
 		return this.id - obj.getId();
 	}
