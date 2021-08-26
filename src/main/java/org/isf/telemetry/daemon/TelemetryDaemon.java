@@ -22,6 +22,7 @@
 package org.isf.telemetry.daemon;
 
 import org.isf.generaldata.ConfigurationProperties;
+import org.isf.menu.manager.Context;
 import org.isf.telemetry.manager.TelemetryManager;
 import org.isf.telemetry.model.Telemetry;
 import org.isf.telemetry.util.TelemetryUtils;
@@ -38,10 +39,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 	private static final String FILE_PROPERTIES = "telemetry.properties";
 	private static final int DEFAULT_DELAY = 10;
 
-	@Autowired
 	private TelemetryManager telemetryManager;
-
-	@Autowired
 	private TelemetryUtils telemetryUtils;
 
 	private boolean running = true;
@@ -52,6 +50,8 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 		LOGGER.info("Telemetry daemon started...");
 		customDelay = myGetProperty("telemetry.daemon.thread.loop.seconds", DEFAULT_DELAY);
 		LOGGER.info("Telemetry daemon loop set to {} seconds.", Integer.valueOf(customDelay));
+		this.telemetryManager = Context.getApplicationContext().getBean(TelemetryManager.class);
+		this.telemetryUtils = Context.getApplicationContext().getBean(TelemetryUtils.class);
 	}
 
 	public void run() {

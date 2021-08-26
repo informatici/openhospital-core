@@ -10,7 +10,7 @@ CREATE TABLE  TELEMETRY (
   TEL_CONSENT TEXT COMMENT 'User consent informations',
   # history
   TEL_INFO TEXT COMMENT 'Last collected data',
-  TEL_SENT_TIME DATETIME NOT NULL COMMENT 'Timestamp when it send message',
+  TEL_SENT_TIME DATETIME COMMENT 'Timestamp when it send message',
   TEL_OPTIN_DATE DATETIME COMMENT 'When user enables telemetry',
   TEL_OPTOUT_DATE DATETIME COMMENT 'When user disables telemetry',
   PRIMARY KEY (TEL_UUID,TEL_DBID,TEL_HWID,TEL_OSID)

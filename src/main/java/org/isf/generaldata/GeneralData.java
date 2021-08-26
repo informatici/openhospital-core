@@ -22,28 +22,22 @@
 package org.isf.generaldata;
 
 /**
- * ------------------------------------------
- * General Data
+ * ------------------------------------------ General Data
  *
- *    12/2007 - isf bari - added resource bundle for internationalization
- * 19/06/2008 - isf bari - added patientsheet jasper report name
- * 20/12/2008 - isf bari - added patientextended
- * 01/01/2009 - Fabrizio - added OPDEXTENDED
- * 20/01/2009 - Chiara   - added attribute MATERNITYRESTARTINJUNE to reset progressive number of maternity ward
- * 25/02/2011 - Claudia  - added attribute MAINMENUALWAYSONTOP to handle main menu always on Top 
- * 01/05/2011 - Vito 	 - added attribute VIDEOMODULEENABLED to enable/disable video module
- * 10/08/2011 - Claudia  - added PATIENTVACCINEEXTENDED to show patient on Patient Vaccine 
- * 19/10/2011 - Mwithi   - GeneralData 2.0: catching exception on single property and assign DEFAULT value  
- * 29/12/2011 - Nicola   - added XMPPMODULEENABLED to enable/disable communication module
- * -------------------------------------------
+ * 12/2007 - isf bari - added resource bundle for internationalization 19/06/2008 - isf bari - added patientsheet jasper report name 20/12/2008 - isf bari -
+ * added patientextended 01/01/2009 - Fabrizio - added OPDEXTENDED 20/01/2009 - Chiara - added attribute MATERNITYRESTARTINJUNE to reset progressive number of
+ * maternity ward 25/02/2011 - Claudia - added attribute MAINMENUALWAYSONTOP to handle main menu always on Top 01/05/2011 - Vito - added attribute
+ * VIDEOMODULEENABLED to enable/disable video module 10/08/2011 - Claudia - added PATIENTVACCINEEXTENDED to show patient on Patient Vaccine 19/10/2011 - Mwithi
+ * - GeneralData 2.0: catching exception on single property and assign DEFAULT value 29/12/2011 - Nicola - added XMPPMODULEENABLED to enable/disable
+ * communication module -------------------------------------------
  */
 public final class GeneralData extends ConfigurationProperties {
-	
+
 	private static final String FILE_PROPERTIES = "settings.properties";
 	private static final boolean EXIT_ON_FAIL = true;
-	
+
 	private final boolean SINGLEUSER;
-	
+
 	public static String LANGUAGE;
 	public static boolean AUTOMATICLOT_IN;
 	public static boolean AUTOMATICLOT_OUT;
@@ -72,6 +66,7 @@ public final class GeneralData extends ConfigurationProperties {
 	public static boolean INTERNALPHARMACIES;
 	public static boolean MERGEFUNCTION;
 	public static boolean SMSENABLED;
+	public static boolean TELEMETRYENABLED;
 	public static String VIEWER;
 	public static boolean MAINMENUALWAYSONTOP;
 	public static boolean RECEIPTPRINTER;
@@ -105,7 +100,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_BILLSREPORTMONTHLY = "BillsReportMonthly";
 	private static final String DEFAULT_PHARMACEUTICALORDER = "PharmaceuticalOrder";
 	private static final String DEFAULT_PHARMACEUTICALSTOCK = "PharmaceuticalStock_ver4";
-	private static final String DEFAULT_PHARMACEUTICALSTOCKLOT = "PharmaceuticalStock_ver5"; //TODO: verify if really used
+	private static final String DEFAULT_PHARMACEUTICALSTOCKLOT = "PharmaceuticalStock_ver5"; // TODO: verify if really used
 	private static final String DEFAULT_PHARMACEUTICALAMC = "PharmaceuticalAMC";
 	private static final boolean DEFAULT_PATIENTEXTENDED = false;
 	private static final boolean DEFAULT_OPDEXTENDED = false;
@@ -116,6 +111,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final boolean DEFAULT_INTERNALPHARMACIES = false;
 	private static final boolean DEFAULT_MERGEFUNCTION = false;
 	private static final boolean DEFAULT_SMSENABLED = false;
+	private static final boolean DEFAULT_TELEMETRYENABLED = false;
 	private static final boolean DEFAULT_MAINMENUALWAYSONTOP = false;
 	private static final boolean DEFAULT_RECEIPTPRINTER = false;
 	private static final boolean DEFAULT_VIDEOMODULEENABLED = false;
@@ -131,12 +127,11 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final boolean DEFAULT_DEBUG = false;
 
 	private static GeneralData mySingleData;
-	
+
 	public static void reset() {
-		mySingleData  = null;
+		mySingleData = null;
 	}
-	
-	
+
 	private GeneralData(String fileProperties) {
 		super(fileProperties, EXIT_ON_FAIL);
 		SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
@@ -147,7 +142,7 @@ public final class GeneralData extends ConfigurationProperties {
 		LOTWITHCOST = myGetProperty("LOTWITHCOST", DEFAULT_LOTWITHCOST);
 		PATIENTSHEET = myGetProperty("PATIENTSHEET", DEFAULT_PATIENTSHEET);
 		VISITSHEET = myGetProperty("VISITSHEET", DEFAULT_VISITSHEET);
-		EXAMINATIONCHART =myGetProperty("EXAMINATIONCHART", DEFAULT_EXAMINATIONCHART);
+		EXAMINATIONCHART = myGetProperty("EXAMINATIONCHART", DEFAULT_EXAMINATIONCHART);
 		OPDCHART = myGetProperty("OPDCHART", DEFAULT_OPDCHART);
 		ADMCHART = myGetProperty("ADMCHART", DEFAULT_ADMCHART);
 		DISCHART = myGetProperty("DISCHART", DEFAULT_DISCHART);
@@ -166,9 +161,12 @@ public final class GeneralData extends ConfigurationProperties {
 		LABMULTIPLEINSERT = myGetProperty("LABMULTIPLEINSERT", DEFAULT_LABMULTIPLEINSERT);
 		INTERNALPHARMACIES = myGetProperty("INTERNALPHARMACIES", DEFAULT_INTERNALPHARMACIES);
 		INTERNALVIEWER = myGetProperty("INTERNALVIEWER", DEFAULT_INTERNALVIEWER);
-		if (!INTERNALVIEWER) VIEWER = myGetProperty("INTERNALVIEWER");
+		if (!INTERNALVIEWER) {
+			VIEWER = myGetProperty("INTERNALVIEWER");
+		}
 		MERGEFUNCTION = myGetProperty("MERGEFUNCTION", DEFAULT_MERGEFUNCTION);
 		SMSENABLED = myGetProperty("SMSENABLED", DEFAULT_SMSENABLED);
+		TELEMETRYENABLED = myGetProperty("TELEMETRYENABLED", DEFAULT_TELEMETRYENABLED);
 		MAINMENUALWAYSONTOP = myGetProperty("MAINMENUALWAYSONTOP", DEFAULT_MAINMENUALWAYSONTOP);
 		RECEIPTPRINTER = myGetProperty("RECEIPTPRINTER", DEFAULT_RECEIPTPRINTER);
 		VIDEOMODULEENABLED = myGetProperty("VIDEOMODULEENABLED", DEFAULT_VIDEOMODULEENABLED);
@@ -182,7 +180,7 @@ public final class GeneralData extends ConfigurationProperties {
 		PATIENTBILLGROUPED = myGetProperty("PATIENTBILLGROUPED", DEFAULT_PATIENTBILLGROUPED);
 		PATIENTBILLSTATEMENT = myGetProperty("PATIENTBILLSTATEMENT", DEFAULT_PATIENTBILLSTATEMENT);
 		DEBUG = myGetProperty("DEBUG", DEFAULT_DEBUG);
-			
+
 	}
 
 	public static GeneralData getGeneralData() {
@@ -192,11 +190,9 @@ public final class GeneralData extends ConfigurationProperties {
 		return mySingleData;
 	}
 
-	
 	public static void initialize() {
 		mySingleData = new GeneralData(FILE_PROPERTIES);
 	}
-
 
 	/**
 	 * @return the SINGLEUSER
