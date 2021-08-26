@@ -34,14 +34,14 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Mwithi 31/gen/2014
  */
-public class SmsDaemon implements Runnable {
+public class SmsSender implements Runnable {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(SmsDaemon.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SmsSender.class);
 
 	private boolean running = true;
 	private int delay = 10;
 
-	public SmsDaemon() {
+	public SmsSender() {
 		LOGGER.info("SMS Sender started...");
 		SmsParameters.initialize();
 		delay = SmsParameters.LOOP;
