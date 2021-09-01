@@ -23,8 +23,6 @@ package org.isf.envdatacollector;
 
 import java.util.Map;
 
-import org.isf.utils.BooleanUtils;
-
 public abstract class AbstractDataCollector {
 
 	public abstract String getId();
@@ -34,7 +32,7 @@ public abstract class AbstractDataCollector {
 	public abstract Map<String, String> retrieveData();
 
 	public boolean isSelected(Map<String, Boolean> checkboxesStatus) {
-		return getId() != null && checkboxesStatus.containsKey(this.getId()) && BooleanUtils.isTrue(checkboxesStatus.get(this.getId()));
+		return getId() != null && checkboxesStatus.containsKey(this.getId()) && Boolean.TRUE.equals(checkboxesStatus.get(this.getId()));
 	}
 
 }

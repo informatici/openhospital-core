@@ -33,7 +33,7 @@ public class ConsentData {
 	private Boolean location;
 	// ex. number of beds
 	private Boolean hospital;
-	// ex. applciation last used timestamp
+	// ex. application last used timestamp
 	private Boolean time;
 
 	public Boolean getApplication() {

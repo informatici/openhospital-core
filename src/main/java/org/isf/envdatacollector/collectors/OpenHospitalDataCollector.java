@@ -25,6 +25,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.isf.envdatacollector.AbstractDataCollector;
+import org.isf.menu.service.MenuIoOperations;
+import org.isf.patient.service.PatientIoOperations;
+import org.isf.utils.exception.OHServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +39,13 @@ import org.springframework.stereotype.Component;
 public class OpenHospitalDataCollector extends AbstractDataCollector {
 
 	private static final String ID = "FUN_OH";
+	private static final Logger LOGGER = LoggerFactory.getLogger(OpenHospitalDataCollector.class);
+
+	@Autowired
+	private PatientIoOperations patientIoOperations;
+
+	@Autowired
+	private MenuIoOperations menuIoOperations;
 
 	@Override
 	public String getId() {
@@ -45,10 +58,20 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 	}
 
 	@Override
-	public Map<String, String>  retrieveData() {
-		// TODO retrieve all information and make a text message
+	public Map<String, String> retrieveData() {
+		LOGGER.debug("Collecting Open Hospital data...");
 		Map<String, String> result = new HashMap<>();
-		result.put("sample", "This is a sample message from unit called " + ID);
+		try {
+			result.put(CollectorsConst.OH_ACTIVE_PATIENTS, String.valueOf(patientIoOperations.countAllActivePatients()));
+			result.put(CollectorsConst.OH_ACTIVE_USERS, String.valueOf(this.menuIoOperations.countAllActive()));
+			// TODO retrieve number of beds
+			// result.put("oh_beds", );
+			// TODO retrieve number of departments
+			// result.put("oh_departments", );
+		} catch (OHServiceException e) {
+			LOGGER.error(e.toString());
+		}
+
 		return result;
 	}
 

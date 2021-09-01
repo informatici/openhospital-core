@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 import org.isf.envdatacollector.DataCollectorProviderService;
 import org.isf.telemetry.manager.TelemetryManager;
 import org.isf.telemetry.service.remote.TelemetryDataCollectorGatewayService;
-import org.isf.utils.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +50,7 @@ public class TelemetryUtils {
 	private TelemetryManager telemetryManager;
 
 	public Map<String, Map<String, String>> retrieveDataToSend(Map<String, Boolean> consentMap) {
-		List<String> enabledCollectors = consentMap.keySet().stream().filter(key -> BooleanUtils.isTrue(consentMap.get(key))).map(item -> item)
+		List<String> enabledCollectors = consentMap.keySet().stream().filter(key -> Boolean.TRUE.equals(consentMap.get(key))).map(item -> item)
 						.collect(Collectors.toList());
 		return this.dataCollectorProvider.collectData(enabledCollectors);
 	}

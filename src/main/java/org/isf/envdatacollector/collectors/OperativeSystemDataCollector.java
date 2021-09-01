@@ -25,14 +25,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.isf.envdatacollector.AbstractDataCollector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import oshi.SystemInfo;
+import oshi.software.os.OperatingSystem;
 
 @Order(value = 30)
 @Component
 public class OperativeSystemDataCollector extends AbstractDataCollector {
 
 	private static final String ID = "FUN_OS";
+	private static final Logger LOGGER = LoggerFactory.getLogger(OperativeSystemDataCollector.class);
 
 	@Override
 	public String getId() {
@@ -45,10 +51,16 @@ public class OperativeSystemDataCollector extends AbstractDataCollector {
 	}
 
 	@Override
-	public Map<String, String>  retrieveData() {
-		// TODO retrieve all information and make a text message
+	public Map<String, String> retrieveData() {
+		LOGGER.debug("Collecting OS data...");
 		Map<String, String> result = new HashMap<>();
-		result.put("sample", "This is a sample message from unit called " + ID);
+		SystemInfo si = new SystemInfo();
+		OperatingSystem os = si.getOperatingSystem();
+		result.put(CollectorsConst.OS_FAMILY, os.getFamily());
+		result.put(CollectorsConst.OS_VERSION, os.getVersionInfo().getVersion());
+		result.put(CollectorsConst.OS_MANUFACTURER, os.getManufacturer());
+		result.put(CollectorsConst.OS_BITNESS, String.valueOf(os.getBitness()));
+		result.put(CollectorsConst.OS_CODENAME, os.getVersionInfo().getCodeName());
 		return result;
 	}
 

@@ -26,12 +26,10 @@ import org.isf.menu.manager.Context;
 import org.isf.telemetry.manager.TelemetryManager;
 import org.isf.telemetry.model.Telemetry;
 import org.isf.telemetry.util.TelemetryUtils;
-import org.isf.utils.BooleanUtils;
 import org.isf.utils.ExceptionUtils;
 import org.isf.utils.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TelemetryDaemon extends ConfigurationProperties implements Runnable {
 
@@ -60,7 +58,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 			LOGGER.info("Telemetry module running...");
 			Telemetry settings = telemetryManager.retrieveSettings();
 
-			if (BooleanUtils.isTrue(settings.getActive()) && DateUtils.isNotToday(settings.getSentTimestamp())) {
+			if (Boolean.TRUE.equals(Boolean.valueOf(settings.getActive().booleanValue() && DateUtils.isNotToday(settings.getSentTimestamp())))) {
 				try {
 					this.telemetryUtils.sendTelemetryData(settings.getConsentMap());
 				} catch (RuntimeException e) {

@@ -21,27 +21,25 @@
  */
 package org.isf.envdatacollector.collectors;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.isf.envdatacollector.AbstractDataCollector;
-import org.isf.utils.db.DbSingleConn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-@Order(value = 10)
-@Component
-public class ApplicationDataCollector extends AbstractDataCollector {
+import oshi.SystemInfo;
+import oshi.hardware.CentralProcessor;
+import oshi.hardware.HardwareAbstractionLayer;
 
-	private static final String ID = "FUN_APPLICATION";
-	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationDataCollector.class);
+@Order(value = 30)
+@Component
+public class HardwareDataCollector extends AbstractDataCollector {
+
+	private static final String ID = "FUN_HW";
+	private static final Logger LOGGER = LoggerFactory.getLogger(HardwareDataCollector.class);
 
 	@Override
 	public String getId() {
@@ -50,39 +48,25 @@ public class ApplicationDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		return "Application technical information (ex. OH version)";
+		return "Hardware information (ex. CPU Intel)";
 	}
 
 	@Override
 	public Map<String, String> retrieveData() {
-		LOGGER.debug("Collecting application data...");
+		LOGGER.debug("Collecting Hardware data...");
 		Map<String, String> result = new HashMap<>();
-		try {
-			Properties props = loadProperties();
-			String verMajor = props.getProperty("VER_MAJOR");
-			String verMinor = props.getProperty("VER_MINOR");
-			String verRelease = props.getProperty("VER_RELEASE");
-			result.put(CollectorsConst.APP_VER_MAJOR, verMajor);
-			result.put(CollectorsConst.APP_VER_MINOR, verMinor);
-			result.put(CollectorsConst.APP_RELEASE, verRelease);
-		} catch (Exception e) {
-			LOGGER.error(e.toString());
-		}
+		SystemInfo si = new SystemInfo();
+		HardwareAbstractionLayer hard = si.getHardware();
+		CentralProcessor cpu = hard.getProcessor();
+		result.put(CollectorsConst.HW_CPU_NUM_PHYSICAL_PROCESSES, String.valueOf(cpu.getPhysicalProcessorCount()));
+		result.put(CollectorsConst.HW_CPU_NUM_LOGICAL_PROCESSES, String.valueOf(cpu.getLogicalProcessorCount()));
+		result.put(CollectorsConst.HW_CPU_NAME, cpu.getProcessorIdentifier().getName());
+		result.put(CollectorsConst.HW_CPU_IDENTIFIER, cpu.getProcessorIdentifier().getIdentifier());
+		result.put(CollectorsConst.HW_CPU_MODEL, cpu.getProcessorIdentifier().getModel());
+		result.put(CollectorsConst.HW_CPU_ARCHITECTURE, cpu.getProcessorIdentifier().getMicroarchitecture());
+		result.put(CollectorsConst.HW_CPU_VENDOR, cpu.getProcessorIdentifier().getVendor());
+		result.put(CollectorsConst.HW_CPU_CTX_SWITCHES, String.valueOf(cpu.getContextSwitches()));
 		return result;
-	}
-
-	private Properties loadProperties() throws FileNotFoundException, IOException {
-		Properties props = new Properties();
-		InputStream is = DbSingleConn.class.getClassLoader().getResourceAsStream("database.properties");
-		if (is == null) {
-			FileInputStream in = new FileInputStream("rsc/database.properties");
-			props.load(in);
-			in.close();
-		} else {
-			props.load(is);
-			is.close();
-		}
-		return props;
 	}
 
 }

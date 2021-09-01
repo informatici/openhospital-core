@@ -21,10 +21,13 @@
  */
 package org.isf.envdatacollector.collectors;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.isf.envdatacollector.AbstractDataCollector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +36,7 @@ import org.springframework.stereotype.Component;
 public class TimeDataCollector extends AbstractDataCollector {
 
 	private static final String ID = "FUN_TIME";
+	private static final Logger LOGGER = LoggerFactory.getLogger(TimeDataCollector.class);
 
 	@Override
 	public String getId() {
@@ -46,9 +50,9 @@ public class TimeDataCollector extends AbstractDataCollector {
 
 	@Override
 	public Map<String, String> retrieveData() {
-		// TODO retrieve all information and make a text message
+		LOGGER.debug("Collecting Time data...");
 		Map<String, String> result = new HashMap<>();
-		result.put("sample", "This is a sample message from unit called " + ID);
+		result.put(CollectorsConst.TIME_LAST_USED, (new Date()).toString());
 		return result;
 	}
 
