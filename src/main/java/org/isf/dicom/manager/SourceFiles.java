@@ -87,6 +87,7 @@ public class SourceFiles extends Thread {
 		start();
 	}
 
+	@Override
 	public void run() {
 		try {
 			loadDicomDir(fileDicom, file, patient);

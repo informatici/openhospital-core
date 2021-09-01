@@ -61,7 +61,7 @@ public class MovStockInsertingManager {
 	 */
 	protected void validateMovement(Movement movement, boolean checkReference) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-
+		
 		// Check the Date
 		GregorianCalendar today = new GregorianCalendar();
 		GregorianCalendar movDate = movement.getDate();
@@ -84,13 +84,16 @@ public class MovStockInsertingManager {
 		}
 
 		// Check Movement Type
+		boolean chargingType = false;
 		if (movement.getType() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medicalstock.pleasechooseatype.msg"),
 					OHSeverityLevel.ERROR));
 		} else {
+			chargingType = movement.getType().getType().contains("+"); //else discharging
+			
 			// Check supplier
-			if (movement.getType().getType().contains("+")) {
+			if (chargingType) {
 				Object supplier = movement.getSupplier();
 				if (supplier instanceof String) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
@@ -126,8 +129,7 @@ public class MovStockInsertingManager {
 			Lot lot = movement.getLot();
 			errors.addAll(validateLot(lot));
 
-			if (movement != null && movement.getType() != null && movement.getType().getType().contains("-") && movement.getQuantity() > lot
-					.getMainStoreQuantity()) {
+			if (movement.getType() != null && !chargingType && movement.getQuantity() > lot.getMainStoreQuantity()) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof.msg"),
 						OHSeverityLevel.ERROR));
@@ -140,7 +142,7 @@ public class MovStockInsertingManager {
 						MessageBundle.getMessage("angal.medicalstock.thislotreferstoanothermedical.msg"),
 						OHSeverityLevel.ERROR));
 			}
-			if (GeneralData.LOTWITHCOST) {
+			if (GeneralData.LOTWITHCOST && chargingType) {
 				BigDecimal cost = lot.getCost();
 				if (cost == null || cost.doubleValue() <= 0.) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),

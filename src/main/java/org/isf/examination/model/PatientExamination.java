@@ -178,8 +178,6 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 		this.pex_note = pex_note;
 	}
 
-
-
 	/**
 	 * @return the pex_ID
 	 */
@@ -221,20 +219,6 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	public void setPex_date(GregorianCalendar pex_date) {
 		this.pex_date = pex_date;
 	}
-
-//	/**
-//	 * @return the pex_apt_ID
-//	 */
-//	public int getPex_apt_ID() {
-//		return pex_apt_ID;
-//	}
-//
-//	/**
-//	 * @param pex_apt_ID the pex_apt_ID to set
-//	 */
-//	public void setPex_apt_ID(int pex_apt_ID) {
-//		this.pex_apt_ID = pex_apt_ID;
-//	}
 
 	/**
 	 * @return the pex_height
@@ -456,8 +440,8 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 			return false;
 		}
 		
-		PatientExamination price = (PatientExamination)obj;
-		return (pex_ID == price.getPex_ID());
+		PatientExamination patex = (PatientExamination)obj;
+		return (pex_ID == patex.getPex_ID());
 	}
 	
 	@Override

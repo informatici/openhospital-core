@@ -126,6 +126,7 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 		this.qty = qty;
 	}
 	
+	@Override
 	public int compareTo(Object anObject) {
 		
 		Medical medical = id.getMedical();

@@ -122,6 +122,7 @@ public class JTreeTable extends JTable {
 	 * thing to do for an editor. Returning -1 for the editing row in this case,
 	 * ensures the editor is never painted.
 	 */
+	@Override
 	public int getEditingRow() {
 		return (getColumnClass(editingColumn) == TreeTableModel.class) ? -1 : editingRow;
 	}
@@ -136,15 +137,18 @@ public class JTreeTable extends JTable {
 		 */
 		private static final long serialVersionUID = 1L;
 
+		@Override
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int r, int c) {
 			return tree;
 		}
 
+		@Override
 		public Object getCellEditorValue() {
 			return null;
 		}
 	}
 
+	@Override
 	public void setModel(TableModel dataModel) {
 		super.setModel(dataModel);
 	}
