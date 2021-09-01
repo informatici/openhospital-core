@@ -67,7 +67,7 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 			// TODO retrieve number of beds
 			// result.put("oh_beds", );
 			// TODO retrieve number of departments
-			// result.put("oh_departments", );
+			// result.put("oh_departments", ); 
 		} catch (OHServiceException e) {
 			LOGGER.error(e.toString());
 		}

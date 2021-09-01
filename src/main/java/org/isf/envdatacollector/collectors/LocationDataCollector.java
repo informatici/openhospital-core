@@ -52,6 +52,7 @@ public class LocationDataCollector extends AbstractDataCollector {
 		LOGGER.debug("Collecting location data...");
 		Map<String, String> result = new HashMap<>();
 		result.put("sample", "This is a sample message from unit called " + ID);
+		// TODO 
 		return result;
 	}
 
