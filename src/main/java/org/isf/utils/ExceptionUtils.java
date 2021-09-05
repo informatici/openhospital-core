@@ -21,16 +21,17 @@
  */
 package org.isf.utils;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 public class ExceptionUtils {
 
-	// TODO check if it is executed by caller thread
-	public static String extractStackTrace() {
-		StringBuilder sb = new StringBuilder();
-		for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-			sb.append("\t" + ste.toString());
-			sb.append("\n");
-		}
-		return sb.toString();
+	public static String retrieveExceptionStacktrace(Exception e) {
+		StringWriter writer = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(writer);
+		e.printStackTrace(printWriter);
+		printWriter.flush();
+		return writer.toString();
 	}
 
 }

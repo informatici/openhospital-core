@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.envdatacollector.collectors;
+package org.isf.datacollector.collectors;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -33,8 +33,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.isf.envdatacollector.AbstractDataCollector;
+import org.isf.datacollector.AbstractDataCollector;
+import org.isf.datacollector.constants.CollectorsConst;
 import org.isf.utils.db.DbSingleConn;
+import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
@@ -59,7 +61,7 @@ public class DBMSDataCollector extends AbstractDataCollector {
 	}
 
 	@Override
-	public Map<String, String> retrieveData() {
+	public Map<String, String> retrieveData() throws OHException {
 		LOGGER.debug("Collecting DBMS data...");
 		Map<String, String> result = new HashMap<>();
 		Connection con = null;
@@ -98,18 +100,25 @@ public class DBMSDataCollector extends AbstractDataCollector {
 			result.put(CollectorsConst.DBMS_USERNAME, dbmd.getUserName());
 			result.put(CollectorsConst.DBMS_PRODUCT_NAME, dbmd.getDatabaseProductName());
 			result.put(CollectorsConst.DBMS_PRODUCT_VERSION, dbmd.getDatabaseProductVersion());
-			con.close();
+			tryToCloseConnection(con);
+			return result;
 		} catch (Exception e) {
+			LOGGER.error("Something went wrong with " + ID + " (1)");
 			LOGGER.error(e.toString());
+			tryToCloseConnection(con);
+			throw new OHException("Data collector [" + ID + "]", e);
 		}
+	}
+
+	private void tryToCloseConnection(Connection con) {
 		if (con != null) {
 			try {
 				con.close();
-			} catch (SQLException e) {
-				LOGGER.error(e.toString());
+			} catch (SQLException ee) {
+				LOGGER.error("Something went wrong with " + ID + " (2)");
+				LOGGER.error(ee.toString());
 			}
 		}
-		return result;
 	}
 
 	private Properties loadProperties() throws FileNotFoundException, IOException {

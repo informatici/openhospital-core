@@ -19,15 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.envdatacollector.collectors;
+package org.isf.datacollector.collectors;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.isf.envdatacollector.AbstractDataCollector;
+import org.isf.datacollector.AbstractDataCollector;
+import org.isf.datacollector.constants.CollectorsConst;
 import org.isf.menu.service.MenuIoOperations;
 import org.isf.patient.service.PatientIoOperations;
+import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.ward.service.WardIoOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +50,9 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 	@Autowired
 	private MenuIoOperations menuIoOperations;
 
+	@Autowired
+	private WardIoOperations wardIoOperations;
+
 	@Override
 	public String getId() {
 		return ID;
@@ -58,20 +64,19 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 	}
 
 	@Override
-	public Map<String, String> retrieveData() {
+	public Map<String, String> retrieveData() throws OHException {
 		LOGGER.debug("Collecting Open Hospital data...");
 		Map<String, String> result = new HashMap<>();
 		try {
-			result.put(CollectorsConst.OH_ACTIVE_PATIENTS, String.valueOf(patientIoOperations.countAllActivePatients()));
-			result.put(CollectorsConst.OH_ACTIVE_USERS, String.valueOf(this.menuIoOperations.countAllActive()));
-			// TODO retrieve number of beds
-			// result.put("oh_beds", );
-			// TODO retrieve number of departments
-			// result.put("oh_departments", ); 
+			result.put(CollectorsConst.OH_TOTAL_ACTIVE_PATIENTS, String.valueOf(patientIoOperations.countAllActivePatients()));
+			result.put(CollectorsConst.OH_TOTAL_ACTIVE_USERS, String.valueOf(this.menuIoOperations.countAllActive()));
+			result.put(CollectorsConst.OH_TOTAL_ACTIVE_WARDS, String.valueOf(this.wardIoOperations.countAllActiveWards()));
+			result.put(CollectorsConst.OH_TOTAL_ACTIVE_BEDS, String.valueOf(this.wardIoOperations.countAllActiveBeds()));
 		} catch (OHServiceException e) {
+			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());
+			throw new OHException("Data collector [" + ID + "]", e);
 		}
-
 		return result;
 	}
 

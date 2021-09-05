@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.envdatacollector.collectors;
+package org.isf.datacollector.constants;
 
 public interface CollectorsConst {
 
@@ -53,10 +53,22 @@ public interface CollectorsConst {
 	public static final String APP_RELEASE = "app_release";
 
 	// FUN_OH
-	public static final String OH_ACTIVE_PATIENTS = "oh_active_patiens";
-	public static final String OH_ACTIVE_USERS = "oh_active_users";
+	public static final String OH_TOTAL_ACTIVE_PATIENTS = "oh_active_patiens";
+	public static final String OH_TOTAL_ACTIVE_USERS = "oh_active_users";
+	public static final String OH_TOTAL_ACTIVE_WARDS = "oh_active_wards";
+	public static final String OH_TOTAL_ACTIVE_BEDS = "oh_active_beds";
 
 	// FUN_TIME
 	public static final String TIME_LAST_USED = "time_last_used";
+
+	// FUN_LOCATION
+	public static final String LOC_COUNTRY_NAME = "loc_country_name";
+	public static final String LOC_COUNTRY_CODE = "loc_country_code";
+	public static final String LOC_REGION_NAME = "loc_region_name";
+	public static final String LOC_REGION_CODE = "loc_region_code";
+	public static final String LOC_CITY = "loc_city";
+	public static final String LOC_ZIP_CODE = "loc_zip_code";
+	public static final String LOC_TIMEZONE = "loc_timezone";
 	
 }
+

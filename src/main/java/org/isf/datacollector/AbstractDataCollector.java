@@ -19,41 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.envdatacollector.collectors;
+package org.isf.datacollector;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import org.isf.envdatacollector.AbstractDataCollector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
+import org.isf.utils.exception.OHException;
 
-@Order(value = 60)
-@Component
-public class LocationDataCollector extends AbstractDataCollector {
+public abstract class AbstractDataCollector {
 
-	private static final String ID = "FUN_LOCATION";
-	private static final Logger LOGGER = LoggerFactory.getLogger(LocationDataCollector.class);
+	public abstract String getId();
 
-	@Override
-	public String getId() {
-		return ID;
-	}
+	public abstract String getDescription();
 
-	@Override
-	public String getDescription() {
-		return "Location information (ex. Italy)";
-	}
+	public abstract Map<String, String> retrieveData() throws OHException;
 
-	@Override
-	public Map<String, String> retrieveData() {
-		LOGGER.debug("Collecting location data...");
-		Map<String, String> result = new HashMap<>();
-		result.put("sample", "This is a sample message from unit called " + ID);
-		// TODO 
-		return result;
+	public boolean isSelected(Map<String, Boolean> checkboxesStatus) {
+		return getId() != null && checkboxesStatus.containsKey(this.getId()) && Boolean.TRUE.equals(checkboxesStatus.get(this.getId()));
 	}
 
 }

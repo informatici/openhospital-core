@@ -27,6 +27,7 @@ import org.isf.telemetry.manager.TelemetryManager;
 import org.isf.telemetry.model.Telemetry;
 import org.isf.telemetry.util.TelemetryUtils;
 import org.isf.utils.ExceptionUtils;
+import org.isf.utils.exception.OHException;
 import org.isf.utils.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,9 +62,9 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 			if (Boolean.TRUE.equals(Boolean.valueOf(settings.getActive().booleanValue() && DateUtils.isNotToday(settings.getSentTimestamp())))) {
 				try {
 					this.telemetryUtils.sendTelemetryData(settings.getConsentMap());
-				} catch (RuntimeException e) {
+				} catch (RuntimeException | OHException e) {
 					LOGGER.error("Something strange happened");
-					LOGGER.error(ExceptionUtils.extractStackTrace());
+					LOGGER.error(ExceptionUtils.retrieveExceptionStacktrace(e));
 				}
 			} else {
 				LOGGER.debug("Issue traking message already sent");
@@ -73,7 +74,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 				Thread.sleep((long) customDelay * 1000);
 			} catch (InterruptedException e) {
 				LOGGER.error(e.getMessage());
-				LOGGER.error(ExceptionUtils.extractStackTrace());
+				LOGGER.error(ExceptionUtils.retrieveExceptionStacktrace(e));
 			}
 		}
 	}

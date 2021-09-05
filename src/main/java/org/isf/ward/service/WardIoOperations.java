@@ -33,13 +33,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * This class offers the io operations for recovering and managing
- * ward records from the database
+ * This class offers the io operations for recovering and managing ward records from the database
  * 
  * @author Rick
  */
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class WardIoOperations {
 
@@ -47,103 +46,134 @@ public class WardIoOperations {
 	private WardIoOperationRepository repository;
 	@Autowired
 	private AdmissionIoOperationRepository admissionRepository;
-	
+
 	/**
 	 * Retrieves the number of patients currently admitted in the {@link Ward}
-	 * @param ward - the ward
+	 * 
+	 * @param ward
+	 *            - the ward
 	 * @return the number of patients currently admitted
 	 * @throws OHServiceException
 	 */
-	public int getCurrentOccupation(
-			Ward ward) throws OHServiceException 
-	{		
+	public int getCurrentOccupation(Ward ward) throws OHServiceException {
 		ArrayList<Admission> admissions = new ArrayList<>(admissionRepository.findAllWhereWard(ward.getCode()));
 
 		return admissions.size();
 	}
-	
+
+	/**
+	 * Retrieve number of total active wards
+	 * 
+	 * @return number of active wards
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveWards() throws OHServiceException {
+		return repository.countAllActiveWards();
+	}
+
+	/**
+	 * Retrieve number of total active beds
+	 * 
+	 * @return number of active beds
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveBeds() throws OHServiceException {
+		return repository.countAllActiveBeds();
+	}
+
 	/**
 	 * Retrieves all stored {@link Ward}s with flag maternity equals <code>false</code>.
+	 * 
 	 * @return the retrieved wards.
-	 * @throws OHServiceException if an error occurs retrieving the diseases.
+	 * @throws OHServiceException
+	 *             if an error occurs retrieving the diseases.
 	 */
-	public ArrayList<Ward> getWardsNoMaternity() throws OHServiceException 
-	{		
+	public ArrayList<Ward> getWardsNoMaternity() throws OHServiceException {
 		ArrayList<Ward> wards = new ArrayList<>(repository.findByCodeNot("M"));
 
 		return wards;
 	}
-	
+
 	/**
 	 * Retrieves all stored {@link Ward}s with the specified ward ID.
-	 * @param wardID - the ward ID, can be <code>null</code>
+	 * 
+	 * @param wardID
+	 *            - the ward ID, can be <code>null</code>
 	 * @return the retrieved wards.
-	 * @throws OHServiceException if an error occurs retrieving the wards.
+	 * @throws OHServiceException
+	 *             if an error occurs retrieving the wards.
 	 */
-	public ArrayList<Ward> getWards(
-			String wardID) throws OHServiceException 
-	{ 
+	public ArrayList<Ward> getWards(String wardID) throws OHServiceException {
 		ArrayList<Ward> wards = null;
-		
-		
-		if (wardID != null && wardID.trim().length() > 0) 
-		{
+
+		if (wardID != null && wardID.trim().length() > 0) {
 			wards = new ArrayList<>(repository.findByCodeContains(wardID));
-		}	
-		else
-		{
+		} else {
 			wards = new ArrayList<>(repository.findAll());
 		}
 
 		return wards;
 	}
-	
+
 	/**
-	 * Stores the specified {@link Ward}. 
-	 * @param ward the ward to store.
+	 * Stores the specified {@link Ward}.
+	 * 
+	 * @param ward
+	 *            the ward to store.
 	 * @return ward that has been stored.
-	 * @throws OHServiceException if an error occurs storing the ward.
+	 * @throws OHServiceException
+	 *             if an error occurs storing the ward.
 	 */
 	public Ward newWard(Ward ward) throws OHServiceException {
 		return repository.save(ward);
 	}
-	
+
 	/**
 	 * Updates the specified {@link Ward}.
-	 * @param ward the {@link Ward} to update.
+	 * 
+	 * @param ward
+	 *            the {@link Ward} to update.
 	 * @return ward that has been updated.
-	 * @throws OHServiceException if an error occurs during the update.
+	 * @throws OHServiceException
+	 *             if an error occurs during the update.
 	 */
 	public Ward updateWard(Ward ward) throws OHServiceException {
 		return repository.save(ward);
 	}
-	
+
 	/**
 	 * Mark as deleted the specified {@link Ward}.
-	 * @param ward the ward to make delete.
+	 * 
+	 * @param ward
+	 *            the ward to make delete.
 	 * @return <code>true</code> if the ward has been marked, <code>false</code> otherwise.
-	 * @throws OHServiceException if an error occurred during the delete operation.
+	 * @throws OHServiceException
+	 *             if an error occurred during the delete operation.
 	 */
 	public boolean deleteWard(Ward ward) throws OHServiceException {
 		repository.delete(ward);
 		return true;
 	}
-	
+
 	/**
 	 * Check if the specified code is used by other {@link Ward}s.
-	 * @param code the code to check.
+	 * 
+	 * @param code
+	 *            the code to check.
 	 * @return <code>true</code> if it is already used, <code>false</code> otherwise.
-	 * @throws OHServiceException if an error occurs during the check.
+	 * @throws OHServiceException
+	 *             if an error occurs during the check.
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
 		return repository.exists(code);
 	}
-	
-	
+
 	/**
 	 * Check if the maternity ward exists
+	 * 
 	 * @return <code>true</code> if is exist, <code>false</code> otherwise.
-	 * @throws OHServiceException if an error occurs during the check.
+	 * @throws OHServiceException
+	 *             if an error occurs during the check.
 	 */
 	public boolean isMaternityPresent() throws OHServiceException {
 		return isCodePresent("M");
@@ -152,16 +182,17 @@ public class WardIoOperations {
 	/**
 	 * Returns the {@link Ward} based on code
 	 *
-	 * @param code - the code, must not be {@literal null}
+	 * @param code
+	 *            - the code, must not be {@literal null}
 	 * @return the {@link Ward} or {@literal null} if none found
 	 * @throws OHServiceException
-	 * @throws IllegalArgumentException if {@code code} is {@literal null}
+	 * @throws IllegalArgumentException
+	 *             if {@code code} is {@literal null}
 	 */
-	public Ward findWard(String code) throws OHServiceException
-	{
+	public Ward findWard(String code) throws OHServiceException {
 		if (code != null) {
 			return repository.findOne(code);
-		}else
+		} else
 			throw new IllegalArgumentException("code must not be null");
 	}
 }

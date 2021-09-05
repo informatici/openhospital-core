@@ -19,15 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.envdatacollector;
+package org.isf.datacollector;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.isf.utils.ExceptionUtils;
 import org.isf.utils.db.TranslateOHServiceException;
+import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +41,8 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class DataCollectorProviderService {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(DataCollectorProviderService.class);
+
 	@Autowired
 	private List<AbstractDataCollector> dataCollectors;
 
@@ -45,8 +51,9 @@ public class DataCollectorProviderService {
 	 * 
 	 * @param dataCollectorFunction
 	 * @return
+	 * @throws OHException
 	 */
-	public Map<String, String> collectData(String dataCollectorFunction) {
+	public Map<String, String> collectData(String dataCollectorFunction) throws OHException {
 		Optional<AbstractDataCollector> itemOpt = this.dataCollectors.stream().filter(collector -> dataCollectorFunction.equals(collector.getId())).findFirst();
 		if (itemOpt.isPresent()) {
 			return itemOpt.get().retrieveData();
@@ -60,13 +67,25 @@ public class DataCollectorProviderService {
 	 * @param listDataCollectorFunction
 	 * @return
 	 */
-	public Map<String, Map<String, String>> collectData(List<String> listDataCollectorFunction) {
+	public Map<String, Map<String, String>> collectData(List<String> listDataCollectorFunction, boolean ignoreErrors) throws OHException {
 		Map<String, Map<String, String>> result = new HashMap<>();
+		OHException exception[] = { null };
 		this.dataCollectors.stream().forEach(collector -> {
 			if (listDataCollectorFunction.contains((collector.getId()))) {
-				result.put(collector.getId(), collector.retrieveData());
+				try {
+					result.put(collector.getId(), collector.retrieveData());
+				} catch (OHException e) {
+					if (!ignoreErrors) {
+						exception[0] = e;
+						return;
+					}
+					LOGGER.error(ExceptionUtils.retrieveExceptionStacktrace(e));
+				}
 			}
 		});
+		if (exception[0] != null) {
+			throw exception[0];
+		}
 		return result;
 	}
 

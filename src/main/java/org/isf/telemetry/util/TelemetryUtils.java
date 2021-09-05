@@ -25,9 +25,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.isf.envdatacollector.DataCollectorProviderService;
+import org.isf.datacollector.DataCollectorProviderService;
 import org.isf.telemetry.manager.TelemetryManager;
 import org.isf.telemetry.service.remote.TelemetryDataCollectorGatewayService;
+import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,8 @@ public class TelemetryUtils {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TelemetryUtils.class);
 
+	private static final boolean IGNORE_EXCEPTIONS = true;
+
 	@Autowired
 	private DataCollectorProviderService dataCollectorProvider;
 
@@ -49,13 +52,13 @@ public class TelemetryUtils {
 	@Autowired
 	private TelemetryManager telemetryManager;
 
-	public Map<String, Map<String, String>> retrieveDataToSend(Map<String, Boolean> consentMap) {
+	public Map<String, Map<String, String>> retrieveDataToSend(Map<String, Boolean> consentMap) throws OHException {
 		List<String> enabledCollectors = consentMap.keySet().stream().filter(key -> Boolean.TRUE.equals(consentMap.get(key))).map(item -> item)
 						.collect(Collectors.toList());
-		return this.dataCollectorProvider.collectData(enabledCollectors);
+		return this.dataCollectorProvider.collectData(enabledCollectors, IGNORE_EXCEPTIONS);
 	}
 
-	public void sendTelemetryData(Map<String, Boolean> consentMap) {
+	public void sendTelemetryData(Map<String, Boolean> consentMap) throws OHException {
 		Map<String, Map<String, String>> info = this.retrieveDataToSend(consentMap);
 		boolean sent = this.telemetryGatewayService.send(info);
 		if (sent) {

@@ -19,26 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.envdatacollector.collectors;
+package org.isf.datacollector.collectors;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.isf.envdatacollector.AbstractDataCollector;
+import org.isf.datacollector.AbstractDataCollector;
+import org.isf.datacollector.constants.CollectorsConst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import oshi.SystemInfo;
-import oshi.software.os.OperatingSystem;
-
-@Order(value = 30)
+@Order(value = 50)
 @Component
-public class OperativeSystemDataCollector extends AbstractDataCollector {
+public class TimeDataCollector extends AbstractDataCollector {
 
-	private static final String ID = "FUN_OS";
-	private static final Logger LOGGER = LoggerFactory.getLogger(OperativeSystemDataCollector.class);
+	private static final String ID = "FUN_TIME";
+	private static final Logger LOGGER = LoggerFactory.getLogger(TimeDataCollector.class);
 
 	@Override
 	public String getId() {
@@ -47,20 +46,14 @@ public class OperativeSystemDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		return "Operative System information (ex. Ubuntu 12.04)";
+		return "Time information (ex. last used timestamp)";
 	}
 
 	@Override
 	public Map<String, String> retrieveData() {
-		LOGGER.debug("Collecting OS data...");
+		LOGGER.debug("Collecting Time data...");
 		Map<String, String> result = new HashMap<>();
-		SystemInfo si = new SystemInfo();
-		OperatingSystem os = si.getOperatingSystem();
-		result.put(CollectorsConst.OS_FAMILY, os.getFamily());
-		result.put(CollectorsConst.OS_VERSION, os.getVersionInfo().getVersion());
-		result.put(CollectorsConst.OS_MANUFACTURER, os.getManufacturer());
-		result.put(CollectorsConst.OS_BITNESS, String.valueOf(os.getBitness()));
-		result.put(CollectorsConst.OS_CODENAME, os.getVersionInfo().getCodeName());
+		result.put(CollectorsConst.TIME_LAST_USED, (new Date()).toString());
 		return result;
 	}
 
