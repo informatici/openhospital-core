@@ -21,6 +21,8 @@
  */
 package org.isf.telemetry.daemon;
 
+import java.util.Date;
+
 import org.isf.generaldata.ConfigurationProperties;
 import org.isf.menu.manager.Context;
 import org.isf.telemetry.manager.TelemetryManager;
@@ -28,7 +30,7 @@ import org.isf.telemetry.model.Telemetry;
 import org.isf.telemetry.util.TelemetryUtils;
 import org.isf.utils.ExceptionUtils;
 import org.isf.utils.exception.OHException;
-import org.isf.utils.time.DateUtils;
+import org.isf.utils.time.TimeTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +61,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 			LOGGER.info("Telemetry module running...");
 			Telemetry settings = telemetryManager.retrieveSettings();
 
-			if (Boolean.TRUE.equals(Boolean.valueOf(settings.getActive().booleanValue() && DateUtils.isNotToday(settings.getSentTimestamp())))) {
+			if (Boolean.TRUE.equals(Boolean.valueOf(settings.getActive().booleanValue() && !TimeTools.isSameDay(settings.getSentTimestamp(), new Date())))) {
 				try {
 					this.telemetryUtils.sendTelemetryData(settings.getConsentMap());
 				} catch (RuntimeException | OHException e) {

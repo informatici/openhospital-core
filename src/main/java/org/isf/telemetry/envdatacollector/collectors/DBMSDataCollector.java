@@ -19,18 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.datacollector.collectors;
+package org.isf.telemetry.envdatacollector.collectors;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.isf.datacollector.AbstractDataCollector;
-import org.isf.datacollector.constants.CollectorsConst;
+import org.isf.telemetry.envdatacollector.AbstractDataCollector;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
 import org.isf.utils.db.DbSingleConn;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
@@ -38,12 +42,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-@Order(value = 10)
+@Order(value = 20)
 @Component
-public class ApplicationDataCollector extends AbstractDataCollector {
+public class DBMSDataCollector extends AbstractDataCollector {
 
-	private static final String ID = "FUN_APPLICATION";
-	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationDataCollector.class);
+	private static final String ID = "FUN_DBMS";
+	private static final Logger LOGGER = LoggerFactory.getLogger(DBMSDataCollector.class);
 
 	@Override
 	public String getId() {
@@ -52,41 +56,28 @@ public class ApplicationDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		return "Application technical information (ex. OH version)";
+		return "DBMS information (ex. MySQL 5.0)";
 	}
 
 	@Override
 	public Map<String, String> retrieveData() throws OHException {
-		LOGGER.debug("Collecting application data...");
+		LOGGER.debug("Collecting DBMS data...");
 		Map<String, String> result = new HashMap<>();
+		Connection con = null;
 		try {
-			Properties props = loadProperties();
-			String verMajor = props.getProperty("VER_MAJOR");
-			String verMinor = props.getProperty("VER_MINOR");
-			String verRelease = props.getProperty("VER_RELEASE");
-			result.put(CollectorsConst.APP_VER_MAJOR, verMajor);
-			result.put(CollectorsConst.APP_VER_MINOR, verMinor);
-			result.put(CollectorsConst.APP_RELEASE, verRelease);
+			con = DbSingleConn.getConnection();
+			DatabaseMetaData dbmd = con.getMetaData();
+			result.put(CollectorsConst.DBMS_DRIVER_NAME, dbmd.getDriverName());
+			result.put(CollectorsConst.DBMS_DRIVER_VERSION, dbmd.getDriverVersion());
+			result.put(CollectorsConst.DBMS_USERNAME, dbmd.getUserName());
+			result.put(CollectorsConst.DBMS_PRODUCT_NAME, dbmd.getDatabaseProductName());
+			result.put(CollectorsConst.DBMS_PRODUCT_VERSION, dbmd.getDatabaseProductVersion());
 			return result;
 		} catch (Exception e) {
-			LOGGER.error("Something went wrong with " + ID);
+			LOGGER.error("Something went wrong with " + ID + " (1)");
 			LOGGER.error(e.toString());
-			throw new OHException("Data collector [" + ID+"]", e);
+			throw new OHException("Data collector [" + ID + "]", e);
 		}
-	}
-
-	private Properties loadProperties() throws FileNotFoundException, IOException {
-		Properties props = new Properties();
-		InputStream is = DbSingleConn.class.getClassLoader().getResourceAsStream("database.properties");
-		if (is == null) {
-			FileInputStream in = new FileInputStream("rsc/database.properties");
-			props.load(in);
-			in.close();
-		} else {
-			props.load(is);
-			is.close();
-		}
-		return props;
 	}
 
 }

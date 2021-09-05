@@ -22,6 +22,7 @@
 package org.isf.opd.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -79,6 +80,14 @@ public class OpdIoOperations {
 
 
 		return getOpdList(MessageBundle.getMessage("angal.common.alltypes.txt"),MessageBundle.getMessage("angal.opd.alldiseases.txt"),dateFrom,dateTo,0,0,'A','A');
+	}
+	
+	/**
+	 * Retrieves creation date of the last Opd
+	 * @return reation date of the last Opd
+	 */
+	public Date lastOpdCreationDate() {
+		return this.repository.lastOpdCreationDate();
 	}
 	
 	/**

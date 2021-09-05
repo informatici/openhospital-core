@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.isf.datacollector.DataCollectorProviderService;
+import org.isf.telemetry.envdatacollector.DataCollectorProviderService;
 import org.isf.telemetry.manager.TelemetryManager;
 import org.isf.telemetry.service.remote.TelemetryDataCollectorGatewayService;
 import org.isf.utils.exception.OHException;

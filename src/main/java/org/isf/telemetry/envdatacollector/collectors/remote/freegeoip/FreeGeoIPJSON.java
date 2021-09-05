@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.remote.iptools.geoip.freegeoip;
+package org.isf.telemetry.envdatacollector.collectors.remote.freegeoip;
 
 import java.io.Serializable;
 

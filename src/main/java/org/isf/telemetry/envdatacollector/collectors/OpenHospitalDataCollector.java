@@ -19,29 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.datacollector.collectors;
+package org.isf.telemetry.envdatacollector.collectors;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.isf.datacollector.AbstractDataCollector;
-import org.isf.datacollector.constants.CollectorsConst;
+import org.isf.menu.service.MenuIoOperations;
+import org.isf.patient.service.PatientIoOperations;
+import org.isf.telemetry.envdatacollector.AbstractDataCollector;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
+import org.isf.ward.service.WardIoOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import oshi.SystemInfo;
-import oshi.hardware.CentralProcessor;
-import oshi.hardware.HardwareAbstractionLayer;
-
-@Order(value = 30)
+@Order(value = 40)
 @Component
-public class HardwareDataCollector extends AbstractDataCollector {
+public class OpenHospitalDataCollector extends AbstractDataCollector {
 
-	private static final String ID = "FUN_HW";
-	private static final Logger LOGGER = LoggerFactory.getLogger(HardwareDataCollector.class);
+	private static final String ID = "FUN_OH";
+	private static final Logger LOGGER = LoggerFactory.getLogger(OpenHospitalDataCollector.class);
+
+	@Autowired
+	private PatientIoOperations patientIoOperations;
+
+	@Autowired
+	private MenuIoOperations menuIoOperations;
+
+	@Autowired
+	private WardIoOperations wardIoOperations;
 
 	@Override
 	public String getId() {
@@ -50,26 +60,19 @@ public class HardwareDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		return "Hardware information (ex. CPU Intel)";
+		return "Hospital information (ex. 100 beds)";
 	}
 
 	@Override
 	public Map<String, String> retrieveData() throws OHException {
-		LOGGER.debug("Collecting Hardware data...");
+		LOGGER.debug("Collecting Open Hospital data...");
 		Map<String, String> result = new HashMap<>();
 		try {
-			SystemInfo si = new SystemInfo();
-			HardwareAbstractionLayer hard = si.getHardware();
-			CentralProcessor cpu = hard.getProcessor();
-			result.put(CollectorsConst.HW_CPU_NUM_PHYSICAL_PROCESSES, String.valueOf(cpu.getPhysicalProcessorCount()));
-			result.put(CollectorsConst.HW_CPU_NUM_LOGICAL_PROCESSES, String.valueOf(cpu.getLogicalProcessorCount()));
-			result.put(CollectorsConst.HW_CPU_NAME, cpu.getProcessorIdentifier().getName());
-			result.put(CollectorsConst.HW_CPU_IDENTIFIER, cpu.getProcessorIdentifier().getIdentifier());
-			result.put(CollectorsConst.HW_CPU_MODEL, cpu.getProcessorIdentifier().getModel());
-			result.put(CollectorsConst.HW_CPU_ARCHITECTURE, cpu.getProcessorIdentifier().getMicroarchitecture());
-			result.put(CollectorsConst.HW_CPU_VENDOR, cpu.getProcessorIdentifier().getVendor());
-			result.put(CollectorsConst.HW_CPU_CTX_SWITCHES, String.valueOf(cpu.getContextSwitches()));
-		} catch (RuntimeException e) {
+			result.put(CollectorsConst.OH_TOTAL_ACTIVE_PATIENTS, String.valueOf(patientIoOperations.countAllActivePatients()));
+			result.put(CollectorsConst.OH_TOTAL_ACTIVE_USERS, String.valueOf(this.menuIoOperations.countAllActive()));
+			result.put(CollectorsConst.OH_TOTAL_ACTIVE_WARDS, String.valueOf(this.wardIoOperations.countAllActiveWards()));
+			result.put(CollectorsConst.OH_TOTAL_ACTIVE_BEDS, String.valueOf(this.wardIoOperations.countAllActiveBeds()));
+		} catch (OHServiceException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());
 			throw new OHException("Data collector [" + ID + "]", e);

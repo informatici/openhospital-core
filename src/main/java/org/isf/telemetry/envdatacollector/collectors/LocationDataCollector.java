@@ -19,39 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.datacollector.collectors;
+package org.isf.telemetry.envdatacollector.collectors;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.isf.datacollector.AbstractDataCollector;
-import org.isf.datacollector.constants.CollectorsConst;
-import org.isf.menu.service.MenuIoOperations;
-import org.isf.patient.service.PatientIoOperations;
+import org.isf.telemetry.envdatacollector.AbstractDataCollector;
+import org.isf.telemetry.envdatacollector.collectors.remote.freegeoip.FreeGeoIPJSON;
+import org.isf.telemetry.envdatacollector.collectors.remote.freegeoip.FreeGeoIPService;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
 import org.isf.utils.exception.OHException;
-import org.isf.utils.exception.OHServiceException;
-import org.isf.ward.service.WardIoOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-@Order(value = 40)
+@Order(value = 60)
 @Component
-public class OpenHospitalDataCollector extends AbstractDataCollector {
+public class LocationDataCollector extends AbstractDataCollector {
 
-	private static final String ID = "FUN_OH";
-	private static final Logger LOGGER = LoggerFactory.getLogger(OpenHospitalDataCollector.class);
-
-	@Autowired
-	private PatientIoOperations patientIoOperations;
+	private static final String ID = "FUN_LOCATION";
+	private static final Logger LOGGER = LoggerFactory.getLogger(LocationDataCollector.class);
 
 	@Autowired
-	private MenuIoOperations menuIoOperations;
-
-	@Autowired
-	private WardIoOperations wardIoOperations;
+	private FreeGeoIPService freeGeoIpService;
 
 	@Override
 	public String getId() {
@@ -60,19 +52,23 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		return "Hospital information (ex. 100 beds)";
+		return "Location information (ex. Italy)";
 	}
 
 	@Override
 	public Map<String, String> retrieveData() throws OHException {
-		LOGGER.debug("Collecting Open Hospital data...");
+		LOGGER.debug("Collecting location data...");
 		Map<String, String> result = new HashMap<>();
 		try {
-			result.put(CollectorsConst.OH_TOTAL_ACTIVE_PATIENTS, String.valueOf(patientIoOperations.countAllActivePatients()));
-			result.put(CollectorsConst.OH_TOTAL_ACTIVE_USERS, String.valueOf(this.menuIoOperations.countAllActive()));
-			result.put(CollectorsConst.OH_TOTAL_ACTIVE_WARDS, String.valueOf(this.wardIoOperations.countAllActiveWards()));
-			result.put(CollectorsConst.OH_TOTAL_ACTIVE_BEDS, String.valueOf(this.wardIoOperations.countAllActiveBeds()));
-		} catch (OHServiceException e) {
+			FreeGeoIPJSON json = this.freeGeoIpService.retrieveGeoIpInfo();
+			result.put(CollectorsConst.LOC_COUNTRY_NAME, json.getCountryName());
+			result.put(CollectorsConst.LOC_COUNTRY_CODE, json.getCountryCode());
+			result.put(CollectorsConst.LOC_REGION_NAME, json.getRegionName());
+			result.put(CollectorsConst.LOC_REGION_CODE, json.getRegionCode());
+			result.put(CollectorsConst.LOC_CITY, json.getCity());
+			result.put(CollectorsConst.LOC_ZIP_CODE, json.getZipCode());
+			result.put(CollectorsConst.LOC_TIMEZONE, json.getTimeZone());
+		} catch (RuntimeException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());
 			throw new OHException("Data collector [" + ID + "]", e);

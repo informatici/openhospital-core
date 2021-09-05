@@ -19,25 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.datacollector.collectors;
+package org.isf.telemetry.envdatacollector.collectors;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.isf.datacollector.AbstractDataCollector;
-import org.isf.datacollector.constants.CollectorsConst;
+import org.isf.telemetry.envdatacollector.AbstractDataCollector;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
+import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-@Order(value = 50)
-@Component
-public class TimeDataCollector extends AbstractDataCollector {
+import oshi.SystemInfo;
+import oshi.software.os.OperatingSystem;
 
-	private static final String ID = "FUN_TIME";
-	private static final Logger LOGGER = LoggerFactory.getLogger(TimeDataCollector.class);
+@Order(value = 30)
+@Component
+public class OperativeSystemDataCollector extends AbstractDataCollector {
+
+	private static final String ID = "FUN_OS";
+	private static final Logger LOGGER = LoggerFactory.getLogger(OperativeSystemDataCollector.class);
 
 	@Override
 	public String getId() {
@@ -46,14 +49,26 @@ public class TimeDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		return "Time information (ex. last used timestamp)";
+		return "Operative System information (ex. Ubuntu 12.04)";
 	}
 
 	@Override
-	public Map<String, String> retrieveData() {
-		LOGGER.debug("Collecting Time data...");
+	public Map<String, String> retrieveData() throws OHException {
+		LOGGER.debug("Collecting OS data...");
 		Map<String, String> result = new HashMap<>();
-		result.put(CollectorsConst.TIME_LAST_USED, (new Date()).toString());
+		try {
+			SystemInfo si = new SystemInfo();
+			OperatingSystem os = si.getOperatingSystem();
+			result.put(CollectorsConst.OS_FAMILY, os.getFamily());
+			result.put(CollectorsConst.OS_VERSION, os.getVersionInfo().getVersion());
+			result.put(CollectorsConst.OS_MANUFACTURER, os.getManufacturer());
+			result.put(CollectorsConst.OS_BITNESS, String.valueOf(os.getBitness()));
+			result.put(CollectorsConst.OS_CODENAME, os.getVersionInfo().getCodeName());
+		} catch (RuntimeException e) {
+			LOGGER.error("Something went wrong with " + ID);
+			LOGGER.error(e.toString());
+			throw new OHException("Data collector [" + ID + "]", e);
+		}
 		return result;
 	}
 

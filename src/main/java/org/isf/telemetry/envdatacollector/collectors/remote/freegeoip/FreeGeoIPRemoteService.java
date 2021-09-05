@@ -19,22 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.datacollector;
+package org.isf.telemetry.envdatacollector.collectors.remote.freegeoip;
 
-import java.util.Map;
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import org.isf.utils.exception.OHException;
+@FeignClient(name = "freegeoip-remote-service")
+public interface FreeGeoIPRemoteService {
 
-public abstract class AbstractDataCollector {
+	// @formatter:off
 
-	public abstract String getId();
+	@GetMapping(value = "/json", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FreeGeoIPJSON> retrieveGeoIPInfo();
 
-	public abstract String getDescription();
-
-	public abstract Map<String, String> retrieveData() throws OHException;
-
-	public boolean isSelected(Map<String, Boolean> checkboxesStatus) {
-		return getId() != null && checkboxesStatus.containsKey(this.getId()) && Boolean.TRUE.equals(checkboxesStatus.get(this.getId()));
-	}
-
+	// @formatter:on
 }
