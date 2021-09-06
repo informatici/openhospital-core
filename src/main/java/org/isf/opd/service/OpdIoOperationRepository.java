@@ -53,6 +53,6 @@ public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, O
 	List<Opd> findByProgYearAndVisitDateBetween(@Param("prog_year") Integer prog_year, @Param("dateVisitFrom") GregorianCalendar dateVisitFrom,
 					@Param("dateVisitTo") GregorianCalendar dateVisitTo);
 
-	@Query(value = "SELECT createdDate FROM Opd o WHERE active=1 ORDER BY o.code DESC LIMIT 1")
+	@Query(value = "select o.createdDate from Opd o where o.active=1 order by o.code desc limit 1", nativeQuery = true)
 	Date lastOpdCreationDate();
 }

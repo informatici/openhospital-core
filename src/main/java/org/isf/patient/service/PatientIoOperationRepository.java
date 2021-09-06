@@ -58,7 +58,7 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
 
 	List<Patient> getPatientsByParams(Map<String, Object> params);
 
-	@Query("select count(1) from Patient p where pat_active=1 and pat_deleted not like 'Y'")
+	@Query("select count(p) from Patient p where active=1 and deleted not like 'Y'")
 	long countAllActivePatients();
 
 }

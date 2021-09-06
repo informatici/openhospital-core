@@ -51,7 +51,7 @@ public interface UserIoOperationRepository extends JpaRepository<User, String> {
 	@Query(value = "update User set passwd=:password where userName=:id")
 	int updatePassword(@Param("password") String password, @Param("id") String id);
 
-	@Query("select count(1) from User u where us_active=1")
+	@Query("select count(u) from User u where active=1")
 	long countAllActive();
 
 }
