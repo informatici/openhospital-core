@@ -23,42 +23,44 @@ package org.isf.telemetry.envdatacollector.collectors.remote.freegeoip;
 
 import java.io.Serializable;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FreeGeoIPJSON implements Serializable {
 
 	private static final long serialVersionUID = -4751558360322494817L;
 
 	private String ip;
 
-	@SerializedName("country_code")
+	@JsonProperty("country_code")
 	private String countryCode;
 
-	@SerializedName("country_name")
+	@JsonProperty("country_name")
 	private String countryName;
 
-	@SerializedName("region_code")
+	@JsonProperty("region_code")
 	private String regionCode;
 
-	@SerializedName("region_name")
+	@JsonProperty("region_name")
 	private String regionName;
 
-	@SerializedName("city")
+	@JsonProperty("city")
 	private String city;
 
-	@SerializedName("zip_code")
+	@JsonProperty("zip_code")
 	private String zipCode;
 
-	@SerializedName("time_zone")
+	@JsonProperty("time_zone")
 	private String timeZone;
 
-	@SerializedName("latitude")
+	@JsonProperty("latitude")
 	private Double latitude;
 
-	@SerializedName("longitude")
+	@JsonProperty("longitude")
 	private Double longitude;
 
-	@SerializedName("metro_code")
+	@JsonProperty("metro_code")
 	private Integer metro_code;
 
 	public String getIp() {

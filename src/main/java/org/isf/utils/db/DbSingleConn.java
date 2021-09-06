@@ -98,15 +98,15 @@ public class DbSingleConn {
 			is.close();
 		}
 
-		String drivers = props.getProperty("jdbc.drivers");
+		String drivers = props.getProperty("sc.jdbc.drivers");
 		if (drivers != null)
-			System.setProperty("jdbc.drivers", drivers);
-		String url = props.getProperty("jdbc.url");
-		String server = props.getProperty("jdbc.server");
-		String db = props.getProperty("jdbc.db");
-		String username = props.getProperty("jdbc.username");
-		String password = props.getProperty("jdbc.password");
-		String port = props.getProperty("jdbc.port");
+			System.setProperty("sc.jdbc.drivers", drivers);
+		String url = props.getProperty("sc.jdbc.url");
+		String server = props.getProperty("sc.jdbc.server");
+		String db = props.getProperty("sc.jdbc.db");
+		String username = props.getProperty("sc.jdbc.username");
+		String password = props.getProperty("sc.jdbc.password");
+		String port = props.getProperty("sc.jdbc.port");
 		if (port == null) {
 			port = String.valueOf(MYSQL_DEFAULT_PORT);
 		}
