@@ -24,6 +24,7 @@ package org.isf.visits.manager;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.UserBrowsingManager;
@@ -32,7 +33,10 @@ import org.isf.patient.model.Patient;
 import org.isf.sms.manager.SmsManager;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
@@ -56,6 +60,38 @@ public class VisitManager {
 
 	@Autowired
 	private ApplicationContext applicationContext;
+	
+	/**
+	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 *
+	 * @param visit
+	 * @throws OHServiceException
+	 */
+	private void validateVisit(Visit visit) throws OHServiceException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		GregorianCalendar visitDate = visit.getDate();
+		Ward ward = visit.getWard();
+		Patient patient = visit.getPatient();
+		if (visitDate == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.visit.pleasechooseadate.msg"),
+							OHSeverityLevel.ERROR));
+		}
+		if (ward == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.visit.pleasechooseaward.msg"),
+							OHSeverityLevel.ERROR));
+
+		}
+		if (patient == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.visit.pleasechooseapatient.msg"),
+							OHSeverityLevel.ERROR));
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
+	}
 
 	/**
 	 * Returns the list of all {@link Visit}s related to a patID
@@ -76,13 +112,6 @@ public class VisitManager {
 		return ioOperations.getVisitsWard(wardId);
 	}
 
-	public Visit newVisit(int visitID, GregorianCalendar date, Patient patient, String note, boolean sms, Ward ward,
-			String duration, String service) throws OHServiceException {
-
-		Visit vsRow = new Visit(visitID, date, patient, note, sms, ward, duration, service);
-		return newVisit(vsRow);
-	}
-
 	/**
 	 * Insert a new {@link Visit} for related Patient
 	 *
@@ -91,6 +120,7 @@ public class VisitManager {
 	 * @throws OHServiceException
 	 */
 	public Visit newVisit(Visit visit) throws OHServiceException {
+		validateVisit(visit);
 		return ioOperations.newVisit(visit);
 	}
 

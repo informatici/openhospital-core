@@ -203,20 +203,6 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrNewVisitNewVisit() throws Exception {
-		Patient patient = testPatient.setup(false);
-		Ward ward = testWard.setup(false);
-		patientIoOperationRepository.saveAndFlush(patient);
-		wardIoOperationRepository.saveAndFlush(ward);
-		GregorianCalendar date = new GregorianCalendar(10, 9, 8);
-		Visit visit = visitManager.newVisit(2, date, patient, "TestNote", true, ward, "10", "testService");
-		assertThat(visit.getDate()).isEqualTo(date);
-		assertThat(visit.getNote()).isEqualTo("TestNote");
-		assertThat(visit.isSms()).isTrue();
-		assertThat(visit.getWard()).isEqualTo(ward);
-	}
-
-	@Test
 	public void testMgrNewVisit() throws Exception {
 		Patient patient = testPatient.setup(false);
 		Ward ward = testWard.setup(false);
@@ -307,9 +293,9 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestVisit(false);
 		Visit visit = visitManager.findVisit(id);
 
-		assertThat(visit.getDuration()).isEqualTo("10");
-		visit.setDuration("");
-		assertThat(visit.getDuration()).isEmpty();
+		assertThat(visit.getDuration()).isEqualTo(new Integer(10));
+		visit.setDuration(null);
+		assertThat(visit.getDuration()).isNull();
 
 		assertThat(visit.getService()).isEqualTo("testService");
 		visit.setService("");

@@ -89,7 +89,7 @@ public class Visit  extends Auditable<String>
 	private String note;
 	
 	@Column(name="VST_DURATION")	
-	private String duration;
+	private Integer duration;
 	
 	@Column(name="VST_SERVICE")	
 	private String service;
@@ -105,7 +105,7 @@ public class Visit  extends Auditable<String>
 		super();
 	}
 
-	public Visit(int visitID, GregorianCalendar date, Patient patient, String note, boolean sms, Ward ward, String duration, String service) {
+	public Visit(int visitID, GregorianCalendar date, Patient patient, String note, boolean sms, Ward ward, Integer duration, String service) {
 		super();
 		this.visitID = visitID;
 		this.date = date;
@@ -155,11 +155,11 @@ public class Visit  extends Auditable<String>
 		this.ward = ward;
 	}
 
-	public String getDuration() {
+	public Integer getDuration() {
 		return duration;
 	}
 
-	public void setDuration(String duration) {
+	public void setDuration(Integer duration) {
 		this.duration = duration;
 	}
 	
