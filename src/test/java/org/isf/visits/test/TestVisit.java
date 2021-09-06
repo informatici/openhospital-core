@@ -35,7 +35,7 @@ public class TestVisit {
 	private GregorianCalendar date = new GregorianCalendar(10, 9, 8);
 	private String note = "TestNote";
 	private boolean sms = true;
-	private Integer duration = new Integer(10);
+	private Integer duration = 10;
 	private String service = "testService";
 	private Ward ward;
 	private Patient patient;

@@ -293,7 +293,7 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestVisit(false);
 		Visit visit = visitManager.findVisit(id);
 
-		assertThat(visit.getDuration()).isEqualTo(new Integer(10));
+		assertThat(visit.getDuration()).isEqualTo(10);
 		visit.setDuration(null);
 		assertThat(visit.getDuration()).isNull();
 
