@@ -140,6 +140,7 @@ public class VisitManager {
 			smsOp.deleteByModuleModuleID("visit", String.valueOf(patID));
 
 			for (Visit visit : visits) {
+				validateVisit(visit);
 
 				visit.setVisitID(0); //reset ID in order to persist again (otherwise JPA think data is already persisted)
 				int visitID = ioOperations.newVisit(visit).getVisitID();
