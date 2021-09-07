@@ -61,7 +61,8 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 			LOGGER.info("Telemetry module running...");
 			Telemetry settings = telemetryManager.retrieveSettings();
 
-			if (Boolean.TRUE.equals(Boolean.valueOf(settings.getActive().booleanValue() && !TimeTools.isSameDay(settings.getSentTimestamp(), new Date())))) {
+			if (Boolean.TRUE.equals(Boolean.valueOf(settings.getActive().booleanValue()
+							&& (settings.getSentTimestamp() == null || !TimeTools.isSameDay(settings.getSentTimestamp(), new Date()))))) {
 				try {
 					this.telemetryUtils.sendTelemetryData(settings.getConsentMap());
 				} catch (RuntimeException | OHException e) {
@@ -69,7 +70,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 					LOGGER.error(ExceptionUtils.retrieveExceptionStacktrace(e));
 				}
 			} else {
-				LOGGER.debug("Issue traking message already sent");
+				LOGGER.debug("Telemetry module: issue traking message already sent");
 			}
 
 			try {
