@@ -302,6 +302,24 @@ public class TherapyManager {
 		return medOutStock;
 	}
 
+	/**
+	 * Insert a new {@link TherapyRow} (therapy) for related Patient
+	 * 
+	 * @param therapyID
+	 * @param patID
+	 * @param startDate
+	 * @param endDate
+	 * @param medical
+	 * @param qty
+	 * @param unitID
+	 * @param freqInDay
+	 * @param freqInPeriod
+	 * @param note
+	 * @param notify
+	 * @param sms
+	 * @return 
+	 * @throws OHServiceException
+	 */
 	public TherapyRow newTherapy(int therapyID, int patID, GregorianCalendar startDate, GregorianCalendar endDate,
 			Medical medical, Double qty, int unitID, int freqInDay, int freqInPeriod, String note, boolean notify,
 			boolean sms) throws OHServiceException {
@@ -309,6 +327,32 @@ public class TherapyManager {
 		Patient patient = patientManager.getPatientById(patID);
 		TherapyRow thRow = new TherapyRow(therapyID, patient, startDate, endDate, medical, qty, unitID, freqInDay, freqInPeriod, note, notify, sms);
 		return newTherapy(thRow);
+	}
+	
+	/**
+	 * Prepare a {@link TherapyRow} (DB record) object from a {@link Therapy}
+	 *
+	 * @param therapyID
+	 * @param patID
+	 * @param startDate
+	 * @param endDate
+	 * @param medical
+	 * @param qty
+	 * @param unitID
+	 * @param freqInDay
+	 * @param freqInPeriod
+	 * @param note
+	 * @param notify
+	 * @param sms
+	 * @return the {@link TherapyRow}
+	 * @throws OHServiceException
+	 */
+	public TherapyRow getTherapyRow(int therapyID, int patID, GregorianCalendar startDate, GregorianCalendar endDate,
+					Medical medical, Double qty, int unitID, int freqInDay, int freqInPeriod, String note, boolean notify,
+					boolean sms) throws OHServiceException {
+
+		Patient patient = patientManager.getPatientById(patID);
+		return new TherapyRow(therapyID, patient, startDate, endDate, medical, qty, unitID, freqInDay, freqInPeriod, note, notify, sms);
 	}
 
 }
