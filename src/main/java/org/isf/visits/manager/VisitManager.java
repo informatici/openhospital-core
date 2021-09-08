@@ -123,6 +123,16 @@ public class VisitManager {
 		validateVisit(visit);
 		return ioOperations.newVisit(visit);
 	}
+	
+	/**
+	 * Delete the {@link Visit} for related Patient
+	 *
+	 * @param visit - the {@link Visit}
+	 * @return the visitID
+	 */
+	public void deleteVisit(Visit visit) {
+		ioOperations.deleteVisit(visit);
+	}
 
 	/**
 	 * Inserts or replaces all {@link Visit}s related to a patID

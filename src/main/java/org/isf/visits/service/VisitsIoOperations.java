@@ -59,7 +59,7 @@ public class VisitsIoOperations {
 		ArrayList<Visit> visits = null;
 
 		if (wardId != null)
-			visits = new ArrayList<>(repository.findAllWhereWardByOrderPatientAndDateAsc(wardId));
+			visits = new ArrayList<>(repository.findAllWhereWardByOrderDateAsc(wardId));
 		else
 			visits = new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
 
@@ -110,5 +110,14 @@ public class VisitsIoOperations {
 	public Visit findVisit(int id)
 	{
 		return repository.findOne(id);
+	}
+
+	/**
+	 * Delete the {@link Visit} for related Patient
+	 *
+	 * @param visit - the {@link Visit}
+	 */
+	public void deleteVisit(Visit visit) {
+		repository.delete(visit);;
 	}
 }
