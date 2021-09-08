@@ -58,7 +58,11 @@ public class TimeDataCollector extends AbstractDataCollector {
 	public Map<String, String> retrieveData() {
 		LOGGER.debug("Collecting Time data...");
 		Map<String, String> result = new HashMap<>();
-		result.put(CollectorsConst.TIME_LAST_USED, String.valueOf(this.opdIoOperations.lastOpdCreationDate()));
+		Date lastUsedTime = this.opdIoOperations.lastOpdCreationDate();
+		if (lastUsedTime == null) {
+			lastUsedTime = new Date();
+		}
+		result.put(CollectorsConst.TIME_LAST_USED, String.valueOf(lastUsedTime));
 		return result;
 	}
 

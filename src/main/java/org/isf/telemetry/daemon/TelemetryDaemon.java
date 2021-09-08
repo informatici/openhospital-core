@@ -24,6 +24,7 @@ package org.isf.telemetry.daemon;
 import java.util.Date;
 
 import org.isf.generaldata.ConfigurationProperties;
+import org.isf.generaldata.GeneralData;
 import org.isf.menu.manager.Context;
 import org.isf.telemetry.manager.TelemetryManager;
 import org.isf.telemetry.model.Telemetry;
@@ -64,7 +65,8 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 			if (Boolean.TRUE.equals(Boolean.valueOf(settings.getActive().booleanValue()
 							&& (settings.getSentTimestamp() == null || !TimeTools.isSameDay(settings.getSentTimestamp(), new Date()))))) {
 				try {
-					this.telemetryUtils.sendTelemetryData(settings.getConsentMap());
+					GeneralData.initialize();
+					this.telemetryUtils.sendTelemetryData(settings.getConsentMap(), GeneralData.DEBUG);
 				} catch (RuntimeException | OHException e) {
 					LOGGER.error("Something strange happened");
 					LOGGER.error(ExceptionUtils.retrieveExceptionStacktrace(e));

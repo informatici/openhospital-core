@@ -58,12 +58,15 @@ public class TelemetryUtils {
 		return this.dataCollectorProvider.collectData(enabledCollectors, IGNORE_EXCEPTIONS);
 	}
 
-	public void sendTelemetryData(Map<String, Boolean> consentMap) throws OHException {
+	public void sendTelemetryData(Map<String, Boolean> consentMap, boolean isSimulation) throws OHException {
 		Map<String, Map<String, String>> info = this.retrieveDataToSend(consentMap);
-		boolean sent = this.telemetryGatewayService.send(info);
+		boolean sent = true;
+		if (!isSimulation) {
+			sent = this.telemetryGatewayService.send(info);
+		}
 		if (sent) {
 			this.telemetryManager.updateStatusSuccess((new Gson()).toJson(info));
-			LOGGER.debug("Data sent");
+			LOGGER.debug("Data sent: {}", info.toString());
 		} else {
 			this.telemetryManager.updateStatusFail((new Gson()).toJson(info));
 			LOGGER.debug("Something strange happened while trying to send data.");
