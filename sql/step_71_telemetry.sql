@@ -15,3 +15,6 @@ CREATE TABLE  TELEMETRY (
   TEL_OPTOUT_DATE DATETIME COMMENT 'When user disables telemetry',
   PRIMARY KEY (TEL_UUID,TEL_DBID,TEL_HWID,TEL_OSID)
 ) ENGINE=MyISAM;
+
+INSERT INTO MENUITEM VALUES ('telemetry', 'angal.menu.btn.telemetry', 'angal.menu.telemetry', 'x', 'M', 'generaldata', 'org.isf.telemetry.gui.TelemetryGUI','N', 9);
+INSERT INTO GROUPMENU (GM_UG_ID_A, GM_MNI_ID_A, GM_ACTIVE) VALUES ('admin','telemetry',1);
