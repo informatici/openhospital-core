@@ -135,8 +135,11 @@ public class VisitManager {
 	}
 
 	/**
-	 * Inserts or replaces all {@link Visit}s related to a patID
-	 *
+	 * Inserts or replaces all {@link Visit}s related to a patID<br>
+	 * <br>
+	 * TODO: add overall validation on {@code visits} beside single {@link validateVisit} 
+	 * to avoid visits overlapping and patients ubiquity
+	 * 
 	 * @param visits - the list of {@link Visit}s related to patID.
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
 	 * @throws OHServiceException
