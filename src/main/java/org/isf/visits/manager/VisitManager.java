@@ -67,7 +67,7 @@ public class VisitManager {
 	 * @param visit
 	 * @throws OHServiceException
 	 */
-	private void validateVisit(Visit visit) throws OHServiceException {
+	public void validateVisit(Visit visit) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		GregorianCalendar visitDate = visit.getDate();
 		Ward ward = visit.getWard();
