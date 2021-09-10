@@ -35,7 +35,7 @@ public class TestVisit {
 	private GregorianCalendar date = new GregorianCalendar(10, 9, 8);
 	private String note = "TestNote";
 	private boolean sms = true;
-	private String duration = "10";
+	private Integer duration = 10;
 	private String service = "testService";
 	private Ward ward;
 	private Patient patient;
@@ -62,13 +62,17 @@ public class TestVisit {
 		visit.setPatient(patient);
 		visit.setSms(sms);
 		visit.setWard(ward);
+		visit.setDuration(duration);
+		visit.setService(service);
 	}
 
 	public void check(Visit visit) {
 		assertThat(visit.getDate()).isEqualTo(date);
 		assertThat(visit.getNote()).isEqualTo(note);
 		assertThat(visit.isSms()).isEqualTo(sms);
+		assertThat(visit.getDuration()).isEqualTo(duration);
 		assertThat(visit.getWard()).isEqualTo(ward);
 		assertThat(visit.getPatient()).isEqualTo(patient);
+		assertThat(visit.getService()).isEqualTo(service);
 	}
 }
