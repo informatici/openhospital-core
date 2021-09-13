@@ -201,7 +201,7 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 
 	@Override
 	public void serialEvent(SerialPortEvent event) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		byte[] buffer = new byte[1];
 		try {
 			while (inputStream.available() > 0) {

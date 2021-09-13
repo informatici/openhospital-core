@@ -567,7 +567,7 @@ public class Patient extends Auditable<String>
 	}
 	
 	public String getSearchString() {
-		StringBuffer sbName = new StringBuffer();
+		StringBuilder sbName = new StringBuilder();
 		sbName.append(getCode());
 		sbName.append(' ');
 		sbName.append(getFirstName().toLowerCase());
@@ -585,7 +585,7 @@ public class Patient extends Auditable<String>
 	
 	public String getInformations() {
 		int i = 0;
-		StringBuffer infoBfr = new StringBuffer();
+		StringBuilder infoBfr = new StringBuilder();
 		if (StringUtils.isNotEmpty(city)) {
 			infoBfr.append(city);
 			i++;

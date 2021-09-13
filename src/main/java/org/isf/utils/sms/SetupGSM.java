@@ -120,7 +120,7 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
     public void serialEvent(SerialPortEvent event) {
 		SerialPort serialPort = (SerialPort) event.getSource();
 		String port = serialPort.getName();
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
         byte[] buffer = new byte[1];
         try {
 			while(inputStream.available() > 0){
