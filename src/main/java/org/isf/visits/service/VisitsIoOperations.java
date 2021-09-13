@@ -118,6 +118,6 @@ public class VisitsIoOperations {
 	 * @param visit - the {@link Visit}
 	 */
 	public void deleteVisit(Visit visit) {
-		repository.delete(visit);;
+		repository.delete(visit);
 	}
 }
