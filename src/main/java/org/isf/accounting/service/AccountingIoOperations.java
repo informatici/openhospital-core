@@ -22,7 +22,6 @@
 package org.isf.accounting.service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
@@ -335,14 +334,8 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the bill list.
 	 */
 	public ArrayList<Bill> getBills(ArrayList<BillPayments> payments) throws OHServiceException {
-		Set<Bill> bills = new TreeSet<>(new Comparator<Bill>() {
-
-			@Override
-			public int compare(Bill o1, Bill o2) {
-				return o1.getId() == o2.getId() ? 0 : -1;
-			}
-		});
-		for(BillPayments bp : payments) {
+		Set<Bill> bills = new TreeSet<>((o1, o2) -> o1.getId() == o2.getId() ? 0 : -1);
+		for (BillPayments bp : payments) {
 			bills.add(bp.getBill());
 		}
 
