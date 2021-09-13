@@ -818,7 +818,7 @@ public class Tests extends OHCoreTestCase {
 				.isInstanceOf(OHDataValidationException.class)
 				.has(
 						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 2), "Expecting two validation errors")
+								(e -> ((OHServiceException) e).getMessages().size() == 3), "Expecting two validation errors")
 				);
 	}
 
