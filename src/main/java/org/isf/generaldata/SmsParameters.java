@@ -26,10 +26,8 @@ public final class SmsParameters extends ConfigurationProperties {
 	private static final String FILE_PROPERTIES = "sms.properties";
 
 	public static String MODE;
-	private static final String DEFAULT_MODE = "GSM";
 
 	public static String GATEWAY;
-	private static final String DEFAULT_GATEWAY = "";
 
 	public static int TIMEOUT;
 	private static final int DEFAULT_TIMEOUT = 3000;
@@ -40,20 +38,11 @@ public final class SmsParameters extends ConfigurationProperties {
 	public static String ICC;
 	private static final String DEFAULT_ICC = "";
 
-	private static SmsParameters mySingleData;
-
 	private SmsParameters(String fileProperties) {
 		super(fileProperties);
 		TIMEOUT = myGetProperty("sms.gateway.thread.timeout", DEFAULT_TIMEOUT);
 		LOOP = myGetProperty("sms.gateway.thread.loop", DEFAULT_LOOP);
 		ICC = myGetProperty("sms.gateway.thread.icc", DEFAULT_ICC);
-	}
-
-	public static SmsParameters getSmsParameters() {
-		if (mySingleData == null) {
-			initialize();
-		}
-		return mySingleData;
 	}
 
 	public static void initialize() {
