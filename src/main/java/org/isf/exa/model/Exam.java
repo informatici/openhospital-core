@@ -34,8 +34,8 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.exatype.model.ExamType;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -175,7 +175,7 @@ public class Exam extends Auditable<String>
 	}
 	
 	public String getSearchString() {
-		StringBuffer sbNameCode = new StringBuffer();
+		StringBuilder sbNameCode = new StringBuilder();
 		sbNameCode.append(getCode().toLowerCase());
 		sbNameCode.append(getDescription().toLowerCase());
 		return sbNameCode.toString();
