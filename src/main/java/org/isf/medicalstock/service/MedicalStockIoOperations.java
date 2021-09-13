@@ -142,9 +142,7 @@ public class MedicalStockIoOperations {
 	 * @return <code>true</code> if the movement has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
-	public boolean newMovement(
-			Movement movement) throws OHServiceException 
-	{
+	public boolean newMovement(Movement movement) throws OHServiceException {
 		String lotCode = null;
 
 		if (movement.getLot() != null) {
@@ -170,8 +168,7 @@ public class MedicalStockIoOperations {
 		boolean movementStored = storeMovement(movement, lotCode);
 		if (movementStored) {
 			//medical stock movement inserted updates quantity of the medical
-			boolean stockQuantityUpdated = updateStockQuantity(movement);
-			if (stockQuantityUpdated) {
+			if (updateStockQuantity(movement)) {
 				return true;
 			}
 		}
@@ -198,26 +195,19 @@ public class MedicalStockIoOperations {
 	 * @return <code>true</code> if the movement has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
-	public boolean prepareDischargingMovement(
-			Movement movement) throws OHServiceException 
-	{
+	public boolean prepareDischargingMovement(Movement movement) throws OHServiceException {
 		String lotCode = null;
-		
-		
-		if (movement.getLot() != null)
-		{
+
+		if (movement.getLot() != null) {
 			lotCode = movement.getLot().getCode();
 		}
 
 		boolean movementStored = storeMovement(movement, lotCode);
 
 		//medical stock movement inserted
-		if (movementStored) 
-		{
+		if (movementStored) {
 			// updates quantity of the medical
-			boolean stockQuantityUpdated = updateStockQuantity(movement);
-			if (stockQuantityUpdated) 
-			{
+			if (updateStockQuantity(movement)) {
 				return true;
 			}
 		}
