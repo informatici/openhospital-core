@@ -55,7 +55,7 @@ import org.springframework.util.FileSystemUtils;
 
 public class TestFileSystemDicomManager extends OHCoreTestCase {
 
-	public static final Long _4M = 4194304l;
+	public static final Long _4M = 4194304L;
 	private static TestDicom testFileDicom;
 	private static TestDicomType testDicomType;
 
