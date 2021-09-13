@@ -35,7 +35,7 @@ public interface TextbeltGatewayRemoteService {
 	// @formatter:off
 
 	@PostMapping(value = "/text", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TextbeltSmsResponse> sendSMS(@RequestBody TextbeltSmsRequest smsRequest);
+	ResponseEntity<TextbeltSmsResponse> sendSMS(@RequestBody TextbeltSmsRequest smsRequest);
 
 	// @formatter:on
 }
