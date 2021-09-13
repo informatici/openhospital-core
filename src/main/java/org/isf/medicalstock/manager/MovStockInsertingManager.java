@@ -95,14 +95,14 @@ public class MovStockInsertingManager {
 			// Check supplier
 			if (chargingType) {
 				Object supplier = movement.getSupplier();
-				if (supplier instanceof String) {
+				if (null == supplier) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.getMessage("angal.medicalstock.multiplecharging.pleaseselectasupplier.msg"),
 							OHSeverityLevel.ERROR));
 				}
 			} else {
 				Object ward = movement.getWard();
-				if (ward instanceof String) {
+				if (null == ward) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.getMessage("angal.medicalstock.multipledischarging.pleaseselectaward.msg"),
 							OHSeverityLevel.ERROR));
