@@ -21,7 +21,7 @@
  */
 package org.isf.lab.manager;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryRow;
@@ -43,7 +43,7 @@ public class LabRowManager {
 	 * @return the list of {@link LaboratoryRow}s. It could be <code>empty</code>
 	 * @throws OHServiceException
 	 */
-	public ArrayList<LaboratoryRow> getLabRowByLabId(Integer code) throws OHServiceException {
+	public List<LaboratoryRow> getLabRowByLabId(Integer code) throws OHServiceException {
 		return ioOperations.getLabRow(code);
 	}
 }

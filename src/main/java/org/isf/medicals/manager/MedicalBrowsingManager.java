@@ -69,7 +69,7 @@ public class MedicalBrowsingManager {
 	 * @return all the medicals.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Medical> getMedicals() throws OHServiceException {
+	public List<Medical> getMedicals() throws OHServiceException {
 		return ioOperations.getMedicals(null, false);
 	}
 
@@ -79,7 +79,7 @@ public class MedicalBrowsingManager {
 	 *
 	 * @return all the medicals.
 	 */
-	public ArrayList<Medical> getMedicalsSortedByName() throws OHServiceException {
+	public List<Medical> getMedicalsSortedByName() throws OHServiceException {
 		return ioOperations.getMedicals(null, true);
 	}
 
@@ -89,7 +89,7 @@ public class MedicalBrowsingManager {
 	 *
 	 * @return all the medicals.
 	 */
-	public ArrayList<Medical> getMedicalsSortedByCode() throws OHServiceException {
+	public List<Medical> getMedicalsSortedByCode() throws OHServiceException {
 		return ioOperations.getMedicals(null, false);
 	}
 
@@ -100,7 +100,7 @@ public class MedicalBrowsingManager {
 	 * @return all the medicals with the specified description.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Medical> getMedicals(String description) throws OHServiceException {
+	public List<Medical> getMedicals(String description) throws OHServiceException {
 		return ioOperations.getMedicals(description, false);
 	}
 
@@ -112,7 +112,7 @@ public class MedicalBrowsingManager {
 	 * @return all the medicals with the specified description.
 	 * @param nameSorted if <code>true</code> return the list in alphabetical order, by code otherwise
 	 */
-	public ArrayList<Medical> getMedicals(String type, boolean nameSorted) throws OHServiceException {
+	public List<Medical> getMedicals(String type, boolean nameSorted) throws OHServiceException {
 		return ioOperations.getMedicals(type, nameSorted);
 	}
 
@@ -125,7 +125,7 @@ public class MedicalBrowsingManager {
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Medical> getMedicals(String description, String type, boolean critical) throws OHServiceException {
+	public List<Medical> getMedicals(String description, String type, boolean critical) throws OHServiceException {
 		return ioOperations.getMedicals(description, type, critical);
 	}
 
@@ -268,7 +268,7 @@ public class MedicalBrowsingManager {
 		//check existing data
 		boolean productCodeExists = !medical.getProd_code().isEmpty() && ioOperations.productCodeExists(medical, update);
 		boolean medicalExists = ioOperations.medicalExists(medical, update);
-		ArrayList<Medical> similarMedicals = ioOperations.medicalCheck(medical, update);
+		List<Medical> similarMedicals = ioOperations.medicalCheck(medical, update);
 
 		if (productCodeExists) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),

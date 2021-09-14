@@ -21,7 +21,6 @@
  */
 package org.isf.medicals.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.medicals.model.Medical;
@@ -33,11 +32,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MedicalsIoOperationRepository extends JpaRepository<Medical, Integer> {
 	@Query(value = "SELECT m FROM Medical m where m.description like :description order BY m.description")
-	ArrayList<Medical> findAllWhereDescriptionOrderByDescription(@Param("description") String description);
+	List<Medical> findAllWhereDescriptionOrderByDescription(@Param("description") String description);
 	@Query(value = "SELECT m FROM Medical m order BY m.description")
-    ArrayList<Medical> findAllByOrderByDescription();
+	List<Medical> findAllByOrderByDescription();
     @Query(value = "SELECT m FROM Medical m where m.type.description like :type order BY m.description")
-    ArrayList<Medical> findAllWhereTypeOrderByDescription(@Param("type") String type);
+    List<Medical> findAllWhereTypeOrderByDescription(@Param("type") String type);
       
     
     @Query(value = "SELECT m FROM Medical m where (m.description like %:description% OR m.prod_code like %:description%) and (m.type.code=:type) and ((m.initialqty+m.inqty-m.outqty)<m.minqty) order BY m.type.description, m.description")
@@ -72,8 +71,8 @@ public interface MedicalsIoOperationRepository extends JpaRepository<Medical, In
 	
     
     @Query(value = "SELECT m FROM Medical m WHERE m.type.description LIKE %:type% ORDER BY LENGTH(m.prod_code), m.prod_code, m.description")
-    ArrayList<Medical> findAllWhereTypeOrderBySmartCodeAndDescription(@Param("type") String type);
+    List<Medical> findAllWhereTypeOrderBySmartCodeAndDescription(@Param("type") String type);
     @Query(value = "SELECT m FROM Medical m ORDER BY LENGTH(m.prod_code), m.prod_code, m.description")
-    ArrayList<Medical> findAllOrderBySmartCodeAndDescription();
+    List<Medical> findAllOrderBySmartCodeAndDescription();
 	
 }

@@ -24,7 +24,7 @@ package org.isf.opetype.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.OHCoreTestCase;
 import org.isf.opetype.manager.OperationTypeBrowserManager;
@@ -75,7 +75,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetOperationType() throws Exception {
 		String code = _setupTestOperationType(false);
 		OperationType foundOperationType = operationTypeIoOperationRepository.findOne(code);
-		ArrayList<OperationType> operationTypes = operationTypeIoOperation.getOperationType();
+		List<OperationType> operationTypes = operationTypeIoOperation.getOperationType();
 		assertThat(operationTypes.get(operationTypes.size() - 1).getDescription()).isEqualTo(foundOperationType.getDescription());
 	}
 
@@ -119,7 +119,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetOperationType() throws Exception {
 		String code = _setupTestOperationType(false);
 		OperationType foundOperationType = operationTypeIoOperationRepository.findOne(code);
-		ArrayList<OperationType> operationTypes = operationTypeBrowserManager.getOperationType();
+		List<OperationType> operationTypes = operationTypeBrowserManager.getOperationType();
 		assertThat(operationTypes.get(operationTypes.size() - 1).getDescription()).isEqualTo(foundOperationType.getDescription());
 	}
 

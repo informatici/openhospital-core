@@ -57,7 +57,7 @@ public class DiseaseBrowserManager {
 	 * @return the stored diseases with ODP flag true.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Disease> getDiseaseOpd() throws OHServiceException {
+	public List<Disease> getDiseaseOpd() throws OHServiceException {
 		return ioOperations.getDiseases(null, true, false, false);
 	}
 
@@ -68,7 +68,7 @@ public class DiseaseBrowserManager {
 	 * @return the stored diseases.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Disease> getDiseaseAll() throws OHServiceException {
+	public List<Disease> getDiseaseAll() throws OHServiceException {
 		return ioOperations.getDiseases(null, false, false, false);
 	}
 
@@ -80,7 +80,7 @@ public class DiseaseBrowserManager {
 	 * @return the retrieved diseases.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Disease> getDiseaseOpd(String typecode) throws OHServiceException {
+	public List<Disease> getDiseaseOpd(String typecode) throws OHServiceException {
 		return ioOperations.getDiseases(typecode, true, false, false);
 	}
 
@@ -91,7 +91,7 @@ public class DiseaseBrowserManager {
 	 * @return the stored disease with IPD flag <code>true</code>.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Disease> getDiseaseIpdOut() throws OHServiceException {
+	public List<Disease> getDiseaseIpdOut() throws OHServiceException {
 		return ioOperations.getDiseases(null, false, false, true);
 	}
 
@@ -103,7 +103,7 @@ public class DiseaseBrowserManager {
 	 * @return the retrieved diseases.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Disease> getDiseaseIpdOut(String typecode) throws OHServiceException {
+	public List<Disease> getDiseaseIpdOut(String typecode) throws OHServiceException {
 		return ioOperations.getDiseases(typecode, false, false, true);
 	}
 
@@ -114,7 +114,7 @@ public class DiseaseBrowserManager {
 	 * @return the stored disease with IPD flag <code>true</code>.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Disease> getDiseaseIpdIn() throws OHServiceException {
+	public List<Disease> getDiseaseIpdIn() throws OHServiceException {
 		return ioOperations.getDiseases(null, false, true, false);
 	}
 
@@ -126,7 +126,7 @@ public class DiseaseBrowserManager {
 	 * @return the retrieved diseases.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Disease> getDiseaseIpdIn(String typecode) throws OHServiceException {
+	public List<Disease> getDiseaseIpdIn(String typecode) throws OHServiceException {
 		return ioOperations.getDiseases(typecode, false, true, false);
 	}
 
@@ -137,7 +137,7 @@ public class DiseaseBrowserManager {
 	 * @return the stored diseases.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Disease> getDisease() throws OHServiceException {
+	public List<Disease> getDisease() throws OHServiceException {
 		return ioOperations.getDiseases(null, true, true, true);
 	}
 
@@ -149,7 +149,7 @@ public class DiseaseBrowserManager {
 	 * @return all the diseases with the specified typecode.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Disease> getDisease(String typecode) throws OHServiceException {
+	public List<Disease> getDisease(String typecode) throws OHServiceException {
 		return ioOperations.getDiseases(typecode, false, false, false);
 	}
 

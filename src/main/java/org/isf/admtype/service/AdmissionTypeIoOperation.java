@@ -21,7 +21,7 @@
  */
 package org.isf.admtype.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.admtype.model.AdmissionType;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -47,9 +47,8 @@ public class AdmissionTypeIoOperation
 	 * @return a list of admission types.
 	 * @throws OHServiceException if an error occurs.
 	 */
-	public ArrayList<AdmissionType> getAdmissionType() throws OHServiceException 
-	{
-		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
+	public List<AdmissionType> getAdmissionType() throws OHServiceException {
+		return repository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**

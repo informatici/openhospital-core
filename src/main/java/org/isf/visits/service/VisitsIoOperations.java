@@ -22,6 +22,7 @@
 package org.isf.visits.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -52,11 +53,8 @@ public class VisitsIoOperations {
 				new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
 	}
 
-
-	public ArrayList<Visit> getVisitsWard(String wardId
-			) throws OHServiceException
-	{
-		ArrayList<Visit> visits = null;
+	public List<Visit> getVisitsWard(String wardId) throws OHServiceException {
+		List<Visit> visits = null;
 
 		if (wardId != null)
 			visits = new ArrayList<>(repository.findAllWhereWardByOrderDateAsc(wardId));

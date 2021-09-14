@@ -90,7 +90,7 @@ public class MovWardBrowserManager {
 	 * @deprecated
 	 */
 	@Deprecated
-	public ArrayList<MovementWard> getMovementWard() throws OHServiceException {
+	public List<MovementWard> getMovementWard() throws OHServiceException {
 		return ioOperations.getWardMovements(null, null, null);
 	}
 
@@ -102,7 +102,7 @@ public class MovWardBrowserManager {
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<MedicalWard> getMedicalsWard(char wardId, boolean stripeEmpty) throws OHServiceException {
+	public List<MedicalWard> getMedicalsWard(char wardId, boolean stripeEmpty) throws OHServiceException {
 		return ioOperations.getMedicalsWard(wardId, stripeEmpty);
 	}
 
@@ -114,7 +114,7 @@ public class MovWardBrowserManager {
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<MedicalWard> getMedicalsWardTotalQuantity(char wardId) throws OHServiceException {
+	public List<MedicalWard> getMedicalsWardTotalQuantity(char wardId) throws OHServiceException {
 		return ioOperations.getMedicalsWardTotalQuantity(wardId);
 	}
 
@@ -127,7 +127,7 @@ public class MovWardBrowserManager {
 	 * @return all the retrieved movements.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<MovementWard> getMovementWard(String wardId, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<MovementWard> getMovementWard(String wardId, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
 		return ioOperations.getWardMovements(wardId, dateFrom, dateTo);
 	}
 
@@ -140,7 +140,7 @@ public class MovWardBrowserManager {
 	 * @return all the retrieved movements.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<MovementWard> getWardMovementsToWard(String idwardTo, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<MovementWard> getWardMovementsToWard(String idwardTo, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
 		return ioOperations.getWardMovementsToWard(idwardTo, dateFrom, dateTo);
 	}
 
@@ -151,7 +151,7 @@ public class MovWardBrowserManager {
 	 * @return all the retrieved movements.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<MovementWard> getMovementToPatient(Patient patient) throws OHServiceException {
+	public List<MovementWard> getMovementToPatient(Patient patient) throws OHServiceException {
 		return ioOperations.getWardMovementsToPatient(patient.getCode());
 	}
 
@@ -172,7 +172,7 @@ public class MovWardBrowserManager {
 	 * @param newMovements the movements to persist.
 	 * @throws OHServiceException
 	 */
-	public void newMovementWard(ArrayList<MovementWard> newMovements) throws OHServiceException {
+	public void newMovementWard(List<MovementWard> newMovements) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (newMovements.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
@@ -221,8 +221,8 @@ public class MovWardBrowserManager {
 		return ioOperations.getCurrentQuantityInWard(ward, lot);
 	}
 
-	public ArrayList<MovementWardForPrint> convertMovementWardForPrint(ArrayList<MovementWard> wardOutcomes) {
-		ArrayList<MovementWardForPrint> movPrint = new ArrayList<>();
+	public List<MovementWardForPrint> convertMovementWardForPrint(List<MovementWard> wardOutcomes) {
+		List<MovementWardForPrint> movPrint = new ArrayList<>();
 		for (MovementWard mov : wardOutcomes) {
 			movPrint.add(new MovementWardForPrint(mov));
 		}
@@ -230,8 +230,8 @@ public class MovWardBrowserManager {
 		return movPrint;
 	}
 
-	public ArrayList<MovementForPrint> convertMovementForPrint(ArrayList<Movement> wardIncomes) {
-		ArrayList<MovementForPrint> movPrint = new ArrayList<>();
+	public List<MovementForPrint> convertMovementForPrint(List<Movement> wardIncomes) {
+		List<MovementForPrint> movPrint = new ArrayList<>();
 		for (Movement mov : wardIncomes) {
 			movPrint.add(new MovementForPrint(mov));
 		}
@@ -239,8 +239,8 @@ public class MovWardBrowserManager {
 		return movPrint;
 	}
 
-	public ArrayList<MedicalWardForPrint> convertWardDrugs(Ward wardSelected, ArrayList<MedicalWard> wardDrugs) {
-		ArrayList<MedicalWardForPrint> drugPrint = new ArrayList<>();
+	public List<MedicalWardForPrint> convertWardDrugs(Ward wardSelected, List<MedicalWard> wardDrugs) {
+		List<MedicalWardForPrint> drugPrint = new ArrayList<>();
 		for (MedicalWard mov : wardDrugs) {
 			drugPrint.add(new MedicalWardForPrint(mov, wardSelected));
 		}

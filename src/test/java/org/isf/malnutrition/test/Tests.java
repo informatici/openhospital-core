@@ -25,8 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.within;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.isf.OHCoreTestCase;
 import org.isf.admission.model.Admission;
@@ -161,7 +161,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMalnutrition() throws Exception {
 		int code = _setupTestMalnutrition(false);
 		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findOne(code);
-		ArrayList<Malnutrition> malnutritions = malnutritionIoOperation.getMalnutritions(String.valueOf(foundMalnutrition.getAdmission().getId()));
+		List<Malnutrition> malnutritions = malnutritionIoOperation.getMalnutritions(String.valueOf(foundMalnutrition.getAdmission().getId()));
 		assertThat(malnutritions.get(malnutritions.size() - 1).getCode()).isEqualTo(code);
 	}
 
@@ -244,7 +244,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMalnutrition() throws Exception {
 		int code = _setupTestMalnutrition(false);
 		Malnutrition foundMalnutrition = malnutritionIoOperationRepository.findOne(code);
-		ArrayList<Malnutrition> malnutritions = malnutritionManager.getMalnutrition(String.valueOf(foundMalnutrition.getAdmission().getId()));
+		List<Malnutrition> malnutritions = malnutritionManager.getMalnutrition(String.valueOf(foundMalnutrition.getAdmission().getId()));
 		assertThat(malnutritions.get(malnutritions.size() - 1).getCode()).isEqualTo(code);
 	}
 

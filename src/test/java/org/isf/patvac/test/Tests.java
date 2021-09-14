@@ -24,7 +24,6 @@ package org.isf.patvac.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -114,7 +113,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		patVacIoOperationRepository.saveAndFlush(patientVaccine);
 
-		ArrayList<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(false);
+		List<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(false);
 		assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(patientVaccine.getPatName());
 	}
 
@@ -134,7 +133,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		patVacIoOperationRepository.saveAndFlush(patientVaccine);
 
-		ArrayList<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(true);
+		List<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(true);
 		assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(patientVaccine.getPatName());
 	}
 
@@ -142,7 +141,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPatientVaccine() throws Exception {
 		int code = _setupTestPatientVaccine(false);
 		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findOne(code);
-		ArrayList<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(
+		List<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(
 				foundPatientVaccine.getVaccine().getVaccineType().getCode(),
 				foundPatientVaccine.getVaccine().getCode(),
 				foundPatientVaccine.getVaccineDate(),
@@ -256,7 +255,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient2);
 		patVacIoOperationRepository.saveAndFlush(patientVaccine2);
 
-		ArrayList<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(false);
+		List<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(false);
 		assertThat(patientVaccines).hasSize(1);
 		assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(patientVaccine.getPatName());
 	}
@@ -303,7 +302,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient2);
 		patVacIoOperationRepository.saveAndFlush(patientVaccine2);
 
-		ArrayList<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(true);
+		List<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(true);
 		assertThat(patientVaccines).hasSize(1);
 		assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(patientVaccine.getPatName());
 	}
@@ -312,7 +311,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetPatientVaccine() throws Exception {
 		int code = _setupTestPatientVaccine(false);
 		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findOne(code);
-		ArrayList<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(
+		List<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(
 				foundPatientVaccine.getVaccine().getVaccineType().getCode(),
 				foundPatientVaccine.getVaccine().getCode(),
 				foundPatientVaccine.getVaccineDate(),

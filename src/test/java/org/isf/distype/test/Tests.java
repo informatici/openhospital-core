@@ -24,7 +24,7 @@ package org.isf.distype.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -79,7 +79,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetDiseaseType() throws Exception {
 		String code = _setupTestDiseaseType(false);
 		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getOne(code);
-		ArrayList<DiseaseType> diseaseTypes = diseaseTypeIoOperation.getDiseaseTypes();
+		List<DiseaseType> diseaseTypes = diseaseTypeIoOperation.getDiseaseTypes();
 		assertThat(diseaseTypes).contains(foundDiseaseType);
 
 	}
@@ -123,7 +123,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetDiseaseType() throws Exception {
 		String code = _setupTestDiseaseType(false);
 		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getOne(code);
-		ArrayList<DiseaseType> diseaseTypes = diseaseTypeBrowserManager.getDiseaseType();
+		List<DiseaseType> diseaseTypes = diseaseTypeBrowserManager.getDiseaseType();
 		assertThat(diseaseTypes).contains(foundDiseaseType);
 
 	}

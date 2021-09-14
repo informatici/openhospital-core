@@ -21,7 +21,6 @@
  */
 package org.isf.admission.service;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -155,8 +154,8 @@ public class AdmissionIoOperations
 	 * @return the admission list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public ArrayList<Admission> getAdmissions(Patient patient) throws OHServiceException {
-		return  (ArrayList<Admission>) repository.findAllWherePatientByOrderByDate(patient.getCode());
+	public List<Admission> getAdmissions(Patient patient) throws OHServiceException {
+		return repository.findAllWherePatientByOrderByDate(patient.getCode());
 	}
 	
 	/**
@@ -214,12 +213,8 @@ public class AdmissionIoOperations
 	 * @return the admission types.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<AdmissionType> getAdmissionType() throws OHServiceException 
-	{
-		ArrayList<AdmissionType> padmissiontype = (ArrayList<AdmissionType>) typeRepository.findAll();
-
-		
-		return padmissiontype;
+	public List<AdmissionType> getAdmissionType() throws OHServiceException {
+		return typeRepository.findAll();
 	}
 
 	/**
@@ -227,14 +222,10 @@ public class AdmissionIoOperations
 	 * @return the discharge types.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<DischargeType> getDischargeType() throws OHServiceException 
-	{
-		ArrayList<DischargeType> dischargeTypes = (ArrayList<DischargeType>) dischargeRepository.findAll();
-				
-		return dischargeTypes;
+	public List<DischargeType> getDischargeType() throws OHServiceException {
+		return dischargeRepository.findAll();
 	}
 
-    
 	/**
 	 * Returns the next prog in the year for a certain ward.
 	 * @param wardId the ward id.

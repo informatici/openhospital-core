@@ -47,7 +47,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	 * @return the list of {@link PregnantTreatmentType}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<PregnantTreatmentType> getPregnantTreatmentType() throws OHServiceException {
+	public List<PregnantTreatmentType> getPregnantTreatmentType() throws OHServiceException {
 		return ioOperations.getPregnantTreatmentType();
 	}
 

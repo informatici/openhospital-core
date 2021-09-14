@@ -46,7 +46,7 @@ public class DischargeTypeBrowserManager {
 	 * @return the list of all DischargeTypes (could be null)
 	 * @throws OHServiceException
 	 */
-	public ArrayList<DischargeType> getDischargeType() throws OHServiceException {
+	public List<DischargeType> getDischargeType() throws OHServiceException {
 		return ioOperations.getDischargeType();
 	}
 

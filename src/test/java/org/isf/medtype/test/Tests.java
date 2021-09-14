@@ -24,7 +24,7 @@ package org.isf.medtype.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.OHCoreTestCase;
 import org.isf.medtype.manager.MedicalTypeBrowserManager;
@@ -76,7 +76,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicalType() throws Exception {
 		String code = _setupTestMedicalType(false);
 		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
-		ArrayList<MedicalType> medicalTypes = medicalTypeIoOperation.getMedicalTypes();
+		List<MedicalType> medicalTypes = medicalTypeIoOperation.getMedicalTypes();
 		assertThat(medicalTypes.get(medicalTypes.size() - 1).getDescription()).isEqualTo(foundMedicalType.getDescription());
 	}
 
@@ -120,7 +120,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMedicalType() throws Exception {
 		String code = _setupTestMedicalType(false);
 		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
-		ArrayList<MedicalType> medicalTypes = medicalTypeBrowserManager.getMedicalType();
+		List<MedicalType> medicalTypes = medicalTypeBrowserManager.getMedicalType();
 		assertThat(medicalTypes.get(medicalTypes.size() - 1).getDescription()).isEqualTo(foundMedicalType.getDescription());
 	}
 

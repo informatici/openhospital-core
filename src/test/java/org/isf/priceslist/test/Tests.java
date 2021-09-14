@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.within;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -92,7 +93,7 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestPriceList(true);
 
 		// when:
-		ArrayList<PriceList> priceLists = priceListIoOperation.getLists();
+		List<PriceList> priceLists = priceListIoOperation.getLists();
 
 		// then:
 		assertThat(priceLists.get(0).getName()).isEqualTo(priceListIoOperationRepository.findOne(id).getName());
@@ -122,7 +123,7 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestPrice(false);
 
 		// when:
-		ArrayList<Price> prices = priceListIoOperation.getPrices();
+		List<Price> prices = priceListIoOperation.getPrices();
 
 		// then:
 		assertThat(prices.get(0).getPrice()).isEqualTo(priceIoOperationRepository.findOne(id).getPrice());
@@ -223,14 +224,14 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetLists() throws Exception {
 		int id = _setupTestPriceList(true);
-		ArrayList<PriceList> priceLists = priceListManager.getLists();
+		List<PriceList> priceLists = priceListManager.getLists();
 		assertThat(priceLists.get(0).getName()).isEqualTo(priceListIoOperationRepository.findOne(id).getName());
 	}
 
 	@Test
 	public void testMgrGetPrices() throws Exception {
 		int id = _setupTestPrice(false);
-		ArrayList<Price> prices = priceListManager.getPrices();
+		List<Price> prices = priceListManager.getPrices();
 		assertThat(prices.get(0).getPrice()).isEqualTo(priceIoOperationRepository.findOne(id).getPrice());
 	}
 
@@ -311,7 +312,7 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestPrice(true);
 		Price price = priceIoOperationRepository.findOne(id);
 		PriceList priceList = price.getList();
-		ArrayList<PriceForPrint> priceForPrints = priceListManager.convertPrice(priceList, priceListManager.getPrices());
+		List<PriceForPrint> priceForPrints = priceListManager.convertPrice(priceList, priceListManager.getPrices());
 		assertThat(priceForPrints).isNotNull();
 		assertThat(priceForPrints.get(0))
 				.extracting(PriceForPrint::getPrice, PriceForPrint::getCurrency)

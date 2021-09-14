@@ -61,9 +61,9 @@ public class BillBrowserManager {
 	 * @param billPayments
 	 * @throws OHDataValidationException
 	 */
-	protected void validateBill(Bill bill, 
-			ArrayList<BillItems> billItems, 
-			ArrayList<BillPayments> billPayments) throws OHDataValidationException 
+	protected void validateBill(Bill bill,
+			List<BillItems> billItems,
+			List<BillPayments> billPayments) throws OHDataValidationException
 	{
         List<OHExceptionMessage> errors = new ArrayList<>();
         
@@ -124,7 +124,7 @@ public class BillBrowserManager {
 	 * See {@link #getItems(int) getItems} method.
 	 */
 	@Deprecated
-	public ArrayList<BillItems> getItems() throws OHServiceException {
+	public List<BillItems> getItems() throws OHServiceException {
 		return ioOperations.getItems(0);
 	}
 
@@ -134,7 +134,7 @@ public class BillBrowserManager {
 	 * @return a list of {@link BillItems} or <code>null</code> if an error occurred.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<BillItems> getItems(int billID) throws OHServiceException {
+	public List<BillItems> getItems(int billID) throws OHServiceException {
 		if (billID == 0) return new ArrayList<>();
 		return ioOperations.getItems(billID);
 	}
@@ -147,7 +147,7 @@ public class BillBrowserManager {
 	 * @return the bills list
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) throws OHServiceException {
+	public List<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) throws OHServiceException {
 		return ioOperations.getBillsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
 
@@ -159,7 +159,7 @@ public class BillBrowserManager {
 	 * @return the list of payments
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) throws OHServiceException {
+	public List<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) throws OHServiceException {
 		return ioOperations.getPaymentsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
 	
@@ -171,7 +171,7 @@ public class BillBrowserManager {
 	 * See {@link #getPayments(int) getPayments} method.
 	 */
 	@Deprecated
-	public ArrayList<BillPayments> getPayments() throws OHServiceException {
+	public List<BillPayments> getPayments() throws OHServiceException {
 		return ioOperations.getPayments(0);
 	}
 
@@ -181,7 +181,7 @@ public class BillBrowserManager {
 	 * @return a list of {@link BillPayments} or <code>null</code> if an error occurred.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<BillPayments> getPayments(int billID) throws OHServiceException {
+	public List<BillPayments> getPayments(int billID) throws OHServiceException {
 		if (billID == 0) return new ArrayList<>();
 		return ioOperations.getPayments(billID);
 	}
@@ -196,9 +196,9 @@ public class BillBrowserManager {
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean newBill(
-			Bill newBill, 
-			ArrayList<BillItems> billItems, 
-			ArrayList<BillPayments> billPayments) throws OHServiceException 
+			Bill newBill,
+			List<BillItems> billItems,
+			List<BillPayments> billPayments) throws OHServiceException
 	{
 		validateBill(newBill, billItems, billPayments);
 		int billId = newBill(newBill);
@@ -225,7 +225,7 @@ public class BillBrowserManager {
 	 * @return <code>true</code> if the {@link BillItems} have been store, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	private boolean newBillItems(int billID, ArrayList<BillItems> billItems) throws OHServiceException {
+	private boolean newBillItems(int billID, List<BillItems> billItems) throws OHServiceException {
 		return ioOperations.newBillItems(ioOperations.getBill(billID), billItems);
 	}
 	
@@ -236,7 +236,7 @@ public class BillBrowserManager {
 	 * @return <code>true</code> if the payments have been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	private boolean newBillPayments(int billID, ArrayList<BillPayments> payItems) throws OHServiceException {
+	private boolean newBillPayments(int billID, List<BillPayments> payItems) throws OHServiceException {
 		return ioOperations.newBillPayments(ioOperations.getBill(billID), payItems);
 	}
 	
@@ -250,15 +250,14 @@ public class BillBrowserManager {
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	public boolean updateBill(Bill updateBill,
-			ArrayList<BillItems> billItems,
-			ArrayList<BillPayments> billPayments) throws OHServiceException 
-	{
+			List<BillItems> billItems,
+			List<BillPayments> billPayments) throws OHServiceException {
 		validateBill(updateBill, billItems, billPayments);
 		boolean result = updateBill(updateBill);
 		result = result && newBillItems(updateBill.getId(), billItems);
 		result = result && newBillPayments(updateBill.getId(), billPayments);
 		return result;
-		
+
 	}
 
 	/**
@@ -277,7 +276,7 @@ public class BillBrowserManager {
 	 * @return the list of pending bills or <code>null</code> if an error occurred.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Bill> getPendingBills(int patID) throws OHServiceException {
+	public List<Bill> getPendingBills(int patID) throws OHServiceException {
 		return ioOperations.getPendingBills(patID);
 	}
 
@@ -288,7 +287,7 @@ public class BillBrowserManager {
 	 * @deprecated this method should not be called for its potentially huge resultset
 	 */
 	@Deprecated
-	public ArrayList<Bill> getBills() throws OHServiceException {
+	public List<Bill> getBills() throws OHServiceException {
 		return ioOperations.getBills();
 	}
 	
@@ -307,7 +306,7 @@ public class BillBrowserManager {
 	 * @return a list of user id or <code>null</code> if an error occurred.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<String> getUsers() throws OHServiceException {
+	public List<String> getUsers() throws OHServiceException {
 		return ioOperations.getUsers();
 	}
 
@@ -328,7 +327,7 @@ public class BillBrowserManager {
 	 * @return a list of retrieved {@link Bill}s or <code>null</code> if an error occurred.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
 		return ioOperations.getBillsBetweenDates(dateFrom, dateTo);
 	}
 
@@ -338,7 +337,7 @@ public class BillBrowserManager {
 	 * @return a list of {@link Bill} associated to the passed {@link BillPayments} or <code>null</code> if an error occurred.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Bill> getBills(ArrayList<BillPayments> billPayments) throws OHServiceException {
+	public List<Bill> getBills(List<BillPayments> billPayments) throws OHServiceException {
 		if (billPayments.isEmpty()) return new ArrayList<>();
 		return ioOperations.getBills(billPayments);
 	}
@@ -350,7 +349,7 @@ public class BillBrowserManager {
 	 * @return a list of {@link BillPayments} for the specified date range or <code>null</code> if an error occurred.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
 		return ioOperations.getPayments(dateFrom, dateTo);
 	}
 
@@ -360,7 +359,7 @@ public class BillBrowserManager {
 	 * @return a list of {@link BillPayments} associated to the passed bill list or <code>null</code> if an error occurred. 
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<BillPayments> getPayments(ArrayList<Bill> billArray) throws OHServiceException {
+	public List<BillPayments> getPayments(List<Bill> billArray) throws OHServiceException {
 		return ioOperations.getPayments(billArray);
 	}
 
@@ -370,7 +369,7 @@ public class BillBrowserManager {
 	 * @return the list of {@link Bill}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Bill> getPendingBillsAffiliate(int patID) throws OHServiceException {
+	public List<Bill> getPendingBillsAffiliate(int patID) throws OHServiceException {
 		return ioOperations.getPendingBillsAffiliate(patID);
 	}
 
@@ -392,7 +391,7 @@ public class BillBrowserManager {
 	 * @return
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,BillItems billItem) throws OHServiceException {
+	public List<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,BillItems billItem) throws OHServiceException {
 		return ioOperations.getBillsBetweenDatesWhereBillItem(dateFrom, dateTo, billItem);
 	}
 }

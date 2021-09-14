@@ -22,6 +22,7 @@
 package org.isf.exa.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.exa.model.ExamRow;
 import org.isf.exatype.model.ExamType;
@@ -64,28 +65,19 @@ public class ExamRowIoOperations {
 	 * @return the list of {@link ExamRow}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamRow> getExamRow(
-			int aExamCode, 
-			String aDescription) throws OHServiceException 
-	{
-            ArrayList<ExamRow> examrows;
-            
-            if (aExamCode != 0) 
-            {   
-                if (aDescription != null) 
-                {
-                    examrows = (ArrayList<ExamRow>) rowRepository.findAllByCodeAndDescriptionOrderByCodeAscDescriptionAsc(aExamCode, aDescription);
-                }
-                else
-                {
-                    examrows = (ArrayList<ExamRow>) rowRepository.findAllByCodeOrderByDescription(aExamCode);
-                }
-            }
-            else
-            {   
-                examrows = (ArrayList<ExamRow>) rowRepository.findAll();
-            }
-            return examrows;
+	public List<ExamRow> getExamRow(int aExamCode, String aDescription) throws OHServiceException {
+		List<ExamRow> examrows;
+
+		if (aExamCode != 0) {
+			if (aDescription != null) {
+				examrows = (ArrayList<ExamRow>) rowRepository.findAllByCodeAndDescriptionOrderByCodeAscDescriptionAsc(aExamCode, aDescription);
+			} else {
+				examrows = (ArrayList<ExamRow>) rowRepository.findAllByCodeOrderByDescription(aExamCode);
+			}
+		} else {
+			examrows = (ArrayList<ExamRow>) rowRepository.findAll();
+		}
+		return examrows;
 	}
 
 	/**
@@ -93,8 +85,7 @@ public class ExamRowIoOperations {
 	 * @return the list of {@link ExamRow}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamRow> getExamRows() throws OHServiceException
-	{
+	public List<ExamRow> getExamRows() throws OHServiceException {
 		return getExamsRowByDesc(null);
 	}
 
@@ -104,18 +95,12 @@ public class ExamRowIoOperations {
 	 * @return the list of {@link ExamRow}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamRow> getExamsRowByDesc(
-			String description) throws OHServiceException 
-	{ 
-		ArrayList<ExamRow> examrows = new ArrayList<>();
-				
-		
-		if (description != null) 
-		{
+	public List<ExamRow> getExamsRowByDesc(String description) throws OHServiceException {
+		List<ExamRow> examrows = new ArrayList<>();
+
+		if (description != null) {
 			examrows = (ArrayList<ExamRow>) rowRepository.findAllByDescriptionOrderByDescriptionAsc(description);
-		}
-		else
-		{
+		} else {
 			examrows = (ArrayList<ExamRow>) rowRepository.findAll();
 		}
 		return examrows;
@@ -126,12 +111,8 @@ public class ExamRowIoOperations {
 	 * @return the list of {@link ExamType}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamType> getExamType() throws OHServiceException 
-	{
-		ArrayList<ExamType> examTypes = (ArrayList<ExamType>) typeRepository.findAllByOrderByDescriptionAsc();
-				
-	
-		return examTypes;
+	public List<ExamType> getExamType() throws OHServiceException {
+		return typeRepository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
@@ -250,9 +231,8 @@ public class ExamRowIoOperations {
 		return rowRepository.exists(code);
 	}
 
-    public ArrayList<ExamRow> getExamRowByExamCode(String aExamCode)  throws OHServiceException {
-       ArrayList<ExamRow> examrows = (ArrayList<ExamRow>) rowRepository.findAllByExam_CodeOrderByDescription(aExamCode);
-       return examrows;
+    public List<ExamRow> getExamRowByExamCode(String aExamCode)  throws OHServiceException {
+       return rowRepository.findAllByExam_CodeOrderByDescription(aExamCode);
     }
 
 }

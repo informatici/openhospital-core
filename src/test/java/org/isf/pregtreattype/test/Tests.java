@@ -24,7 +24,7 @@ package org.isf.pregtreattype.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.OHCoreTestCase;
 import org.isf.pregtreattype.manager.PregnantTreatmentTypeBrowserManager;
@@ -75,7 +75,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPregnantTreatmentType() throws Exception {
 		String code = _setupTestPregnantTreatmentType(false);
 		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findOne(code);
-		ArrayList<PregnantTreatmentType> pregnantTreatmentTypes = pregnantTreatmentTypeIoOperation.getPregnantTreatmentType();
+		List<PregnantTreatmentType> pregnantTreatmentTypes = pregnantTreatmentTypeIoOperation.getPregnantTreatmentType();
 
 		for (PregnantTreatmentType pregnantTreatmentType : pregnantTreatmentTypes) {
 			if (pregnantTreatmentType.getCode().equals(code)) {
@@ -130,7 +130,7 @@ public class Tests extends OHCoreTestCase {
 		PregnantTreatmentType pregnantTreatmentType3 = new PregnantTreatmentType("BB", "BB description");
 		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregnantTreatmentType3);
 
-		ArrayList<PregnantTreatmentType> pregnantTreatmentTypes = pregnantTreatmentTypeBrowserManager.getPregnantTreatmentType();
+		List<PregnantTreatmentType> pregnantTreatmentTypes = pregnantTreatmentTypeBrowserManager.getPregnantTreatmentType();
 		assertThat(pregnantTreatmentTypes).hasSize(3);
 
 		for (PregnantTreatmentType pregnantTreatmentType : pregnantTreatmentTypes) {

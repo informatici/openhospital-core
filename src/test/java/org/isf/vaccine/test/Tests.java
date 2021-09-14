@@ -24,7 +24,7 @@ package org.isf.vaccine.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -85,7 +85,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetVaccineShouldFindByTypeCode() throws Exception {
 		String code = _setupTestVaccine(false);
 		Vaccine foundVaccine = vaccineIoOperation.findVaccine(code);
-		ArrayList<Vaccine> vaccines = vaccineIoOperation.getVaccine(foundVaccine.getVaccineType().getCode());
+		List<Vaccine> vaccines = vaccineIoOperation.getVaccine(foundVaccine.getVaccineType().getCode());
 		assertThat(vaccines.get(vaccines.size() - 1).getDescription()).isEqualTo(foundVaccine.getDescription());
 	}
 
@@ -95,7 +95,7 @@ public class Tests extends OHCoreTestCase {
 		_setupTestVaccine(false);
 		
 		// when:
-		ArrayList<Vaccine> vaccines = vaccineIoOperation.getVaccine(null);
+		List<Vaccine> vaccines = vaccineIoOperation.getVaccine(null);
 
 		// then:
 		assertThat(vaccines).isNotEmpty();
@@ -157,14 +157,14 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetVaccineShouldFindByTypeCode() throws Exception {
 		String code = _setupTestVaccine(false);
 		Vaccine foundVaccine = vaccineBrowserManager.findVaccine(code);
-		ArrayList<Vaccine> vaccines = vaccineBrowserManager.getVaccine(foundVaccine.getVaccineType().getCode());
+		List<Vaccine> vaccines = vaccineBrowserManager.getVaccine(foundVaccine.getVaccineType().getCode());
 		assertThat(vaccines.get(vaccines.size() - 1).getDescription()).isEqualTo(foundVaccine.getDescription());
 	}
 
 	@Test
 	public void testMgrGetVaccineShouldFindAllVaccinesWhenNoCodeProvided() throws Exception {
 		_setupTestVaccine(false);
-		ArrayList<Vaccine> vaccines = vaccineBrowserManager.getVaccine();
+		List<Vaccine> vaccines = vaccineBrowserManager.getVaccine();
 		assertThat(vaccines).isNotEmpty();
 	}
 

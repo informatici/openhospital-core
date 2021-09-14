@@ -21,7 +21,6 @@
  */
 package org.isf.exa.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.exa.model.Exam;
@@ -95,12 +94,8 @@ public class ExamIoOperations {
 	 * @return the list of {@link ExamType}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamType> getExamType() throws OHServiceException 
-	{
-		ArrayList<ExamType> examTypes = (ArrayList<ExamType>) typeRepository.findAllByOrderByDescriptionAsc();
-				
-	
-		return examTypes;
+	public List<ExamType> getExamType() throws OHServiceException {
+		return typeRepository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**

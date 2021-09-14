@@ -24,12 +24,12 @@ package org.isf.opd.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -133,7 +133,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetOpdList() throws Exception {
 		int code = _setupTestOpd(false);
 		Opd foundOpd = opdIoOperationRepository.findOne(code);
-		ArrayList<Opd> opds = opdIoOperation.getOpdList(
+		List<Opd> opds = opdIoOperation.getOpdList(
 				foundOpd.getDisease().getType().getCode(),
 				foundOpd.getDisease().getCode(),
 				foundOpd.getVisitDate(),
@@ -149,7 +149,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetOpdListPatientId() throws Exception {
 		int code = _setupTestOpd(false);
 		Opd foundOpd = opdIoOperationRepository.findOne(code);
-		ArrayList<Opd> opds = opdIoOperation.getOpdList(foundOpd.getPatient().getCode());
+		List<Opd> opds = opdIoOperation.getOpdList(foundOpd.getPatient().getCode());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
 
@@ -171,7 +171,7 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		opdIoOperationRepository.saveAndFlush(opd);
 
-		ArrayList<Opd> opds = opdIoOperation.getOpdList(0);
+		List<Opd> opds = opdIoOperation.getOpdList(0);
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(opd.getCode());
 	}
 
@@ -208,7 +208,7 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease2);
 		opdIoOperationRepository.saveAndFlush(opd2);
 
-		ArrayList<Opd> opds = opdIoOperation.getOpdList(false);
+		List<Opd> opds = opdIoOperation.getOpdList(false);
 		assertThat(opds).hasSize(1);
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(opd.getCode());
 	}
@@ -249,7 +249,7 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease2);
 		opdIoOperationRepository.saveAndFlush(opd2);
 
-		ArrayList<Opd> opds = opdIoOperation.getOpdList(true);
+		List<Opd> opds = opdIoOperation.getOpdList(true);
 		assertThat(opds).hasSize(1);
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(opd.getCode());
 	}
@@ -372,7 +372,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetOpd() throws Exception {
 		int code = _setupTestOpd(false);
 		Opd foundOpd = opdIoOperationRepository.findOne(code);
-		ArrayList<Opd> opds = opdBrowserManager.getOpd(
+		List<Opd> opds = opdBrowserManager.getOpd(
 				foundOpd.getDisease().getType().getCode(),
 				foundOpd.getDisease().getCode(),
 				foundOpd.getVisitDate(),
@@ -388,7 +388,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetOpdListPatientId() throws Exception {
 		int code = _setupTestOpd(false);
 		Opd foundOpd = opdIoOperationRepository.findOne(code);
-		ArrayList<Opd> opds = opdBrowserManager.getOpdList(foundOpd.getPatient().getCode());
+		List<Opd> opds = opdBrowserManager.getOpdList(foundOpd.getPatient().getCode());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
 
@@ -410,7 +410,7 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		opdIoOperationRepository.saveAndFlush(opd);
 
-		ArrayList<Opd> opds = opdBrowserManager.getOpdList(0);
+		List<Opd> opds = opdBrowserManager.getOpdList(0);
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(opd.getCode());
 	}
 
@@ -448,7 +448,7 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease2);
 		opdIoOperationRepository.saveAndFlush(opd2);
 
-		ArrayList<Opd> opds = opdBrowserManager.getOpd(false);
+		List<Opd> opds = opdBrowserManager.getOpd(false);
 		assertThat(opds).hasSize(1);
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(opd.getCode());
 	}
@@ -489,7 +489,7 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease2);
 		opdIoOperationRepository.saveAndFlush(opd2);
 
-		ArrayList<Opd> opds = opdBrowserManager.getOpd(true);
+		List<Opd> opds = opdBrowserManager.getOpd(true);
 		assertThat(opds).hasSize(1);
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(opd.getCode());
 	}

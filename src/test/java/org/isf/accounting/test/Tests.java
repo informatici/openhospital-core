@@ -147,7 +147,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPendingBills() throws Exception {
 		int id = _setupTestBill(false);
 		Bill foundBill = accountingBillIoOperationRepository.findOne(id);
-		ArrayList<Bill> bills = accountingIoOperation.getPendingBills(0);
+		List<Bill> bills = accountingIoOperation.getPendingBills(0);
 		assertThat(bills).contains(foundBill);
 	}
 
@@ -155,7 +155,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPendingBillsPatId() throws Exception {
 		int id = _setupTestBill(false);
 		Bill foundBill = accountingBillIoOperationRepository.findOne(id);
-		ArrayList<Bill> bills = accountingIoOperation.getPendingBills(foundBill.getBillPatient().getCode());
+		List<Bill> bills = accountingIoOperation.getPendingBills(foundBill.getBillPatient().getCode());
 		assertThat(foundBill.getAmount()).isCloseTo(bills.get(0).getAmount(), offset(0.1));
 	}
 
@@ -163,7 +163,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetBills() throws Exception {
 		int id = _setupTestBill(false);
 		Bill foundBill = accountingBillIoOperationRepository.findOne(id);
-		ArrayList<Bill> bills = accountingIoOperation.getBills();
+		List<Bill> bills = accountingIoOperation.getBills();
 		assertThat(bills).contains(foundBill);
 	}
 
@@ -179,7 +179,7 @@ public class Tests extends OHCoreTestCase {
 	public void ioBillChecks() throws Exception {
 		int id = _setupTestBill(false);
 		Bill foundBill = accountingBillIoOperationRepository.findOne(id);
-		ArrayList<Bill> bills = accountingIoOperation.getBills();
+		List<Bill> bills = accountingIoOperation.getBills();
 		assertThat(bills).hasSize(1);
 		Bill bill = bills.get(0);
 
@@ -202,7 +202,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetUsers() throws Exception {
 		int id = _setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
-		ArrayList<String> userIds = accountingIoOperation.getUsers();
+		List<String> userIds = accountingIoOperation.getUsers();
 		assertThat(userIds).contains(foundBillPayment.getUser());
 	}
 
@@ -210,14 +210,14 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetItems() throws Exception {
 		int billItemID = _setupTestBillItems(false);
 		BillItems foundBillItem = accountingBillItemsIoOperationRepository.findOne(billItemID);
-		ArrayList<BillItems> billItems = accountingIoOperation.getItems(foundBillItem.getBill().getId());
+		List<BillItems> billItems = accountingIoOperation.getItems(foundBillItem.getBill().getId());
 		assertThat(billItems).contains(foundBillItem);
 	}
 
 	@Test
 	public void ioGetAllItems() throws Exception {
 		int billItemID = _setupTestBillItems(false);
-		ArrayList<BillItems> billItems = accountingIoOperation.getItems(0);
+		List<BillItems> billItems = accountingIoOperation.getItems(0);
 		assertThat(billItems).isNotEmpty();
 	}
 
@@ -225,7 +225,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetItemsBillId() throws Exception {
 		int id = _setupTestBillItems(false);
 		BillItems foundBillItem = accountingBillItemsIoOperationRepository.findOne(id);
-		ArrayList<BillItems> billItems = accountingIoOperation.getItems(foundBillItem.getBill().getId());
+		List<BillItems> billItems = accountingIoOperation.getItems(foundBillItem.getBill().getId());
 		assertThat(billItems.get(0).getItemAmount()).isCloseTo(foundBillItem.getItemAmount(), offset(0.1));
 	}
 
@@ -235,7 +235,7 @@ public class Tests extends OHCoreTestCase {
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
 		GregorianCalendar dateFrom = new GregorianCalendar(4, 3, 2);
 		GregorianCalendar dateTo = new GregorianCalendar();
-		ArrayList<BillPayments> billPayments = accountingIoOperation.getPayments(dateFrom, dateTo);
+		List<BillPayments> billPayments = accountingIoOperation.getPayments(dateFrom, dateTo);
 		assertThat(billPayments).contains(foundBillPayment);
 	}
 
@@ -243,7 +243,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPaymentsBillId() throws Exception {
 		int id = _setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
-		ArrayList<BillPayments> billItems = accountingIoOperation.getPayments(foundBillPayment.getBill().getId());
+		List<BillPayments> billItems = accountingIoOperation.getPayments(foundBillPayment.getBill().getId());
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
 	}
 
@@ -253,7 +253,7 @@ public class Tests extends OHCoreTestCase {
 		Bill foundBill = accountingBillIoOperationRepository.findOne(id);
 		GregorianCalendar dateFrom = new GregorianCalendar(1, 3, 2);
 		GregorianCalendar dateTo = new GregorianCalendar();
-		ArrayList<Bill> billItems = accountingIoOperation.getBills(dateFrom, dateTo, foundBill.getBillPatient());
+		List<Bill> billItems = accountingIoOperation.getBills(dateFrom, dateTo, foundBill.getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
 	}
@@ -262,7 +262,7 @@ public class Tests extends OHCoreTestCase {
 	public void ioGetPendingBills() throws Exception {
 		int id = _setupTestBill(false);
 		Bill foundBill = accountingBillIoOperationRepository.findOne(id);
-		ArrayList<Bill> billItems = accountingIoOperation.getPendingBillsAffiliate(foundBill.getBillPatient().getCode());
+		List<Bill> billItems = accountingIoOperation.getPendingBillsAffiliate(foundBill.getBillPatient().getCode());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
 	}
@@ -280,7 +280,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoNewBillItems() throws Exception {
-		ArrayList<BillItems> billItems = new ArrayList<>();
+		List<BillItems> billItems = new ArrayList<>();
 		int deleteId = _setupTestBillItems(false);
 		BillItems deleteBillItem = accountingBillItemsIoOperationRepository.findOne(deleteId);
 
@@ -297,7 +297,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoNewBillPayments() throws Exception {
-		ArrayList<BillPayments> billPayments = new ArrayList<>();
+		List<BillPayments> billPayments = new ArrayList<>();
 		int deleteId = _setupTestBillPayments(false);
 		BillPayments deleteBillPayment = accountingBillPaymentIoOperationRepository.findOne(deleteId);
 
@@ -339,7 +339,7 @@ public class Tests extends OHCoreTestCase {
 		Bill foundBill = accountingBillIoOperationRepository.findOne(id);
 		GregorianCalendar dateFrom = new GregorianCalendar(4, 3, 2);
 		GregorianCalendar dateTo = new GregorianCalendar();
-		ArrayList<Bill> bills = accountingIoOperation.getBills(dateFrom, dateTo);
+		List<Bill> bills = accountingIoOperation.getBills(dateFrom, dateTo);
 
 		assertThat(bills).contains(foundBill);
 	}
@@ -352,7 +352,7 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestBill(false);
 		Bill foundBill = accountingBillIoOperationRepository.findOne(id);
 
-		ArrayList<Bill> bills = accountingIoOperation.getBills(dateFrom, dateTo);
+		List<Bill> bills = accountingIoOperation.getBills(dateFrom, dateTo);
 		assertThat(bills).contains(foundBill);
 
 		bills = accountingIoOperation.getBills(new GregorianCalendar(10, 0, 1), dateFrom);
@@ -380,39 +380,39 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetBillsPayment() throws Exception {
-		ArrayList<BillPayments> payments = new ArrayList<>();
+		List<BillPayments> payments = new ArrayList<>();
 
 		int id = _setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
 
 		payments.add(foundBillPayment);
-		ArrayList<Bill> bills = accountingIoOperation.getBills(payments);
+		List<Bill> bills = accountingIoOperation.getBills(payments);
 
 		assertThat(bills.get(0).getAmount()).isCloseTo(foundBillPayment.getBill().getAmount(), offset(0.1));
 	}
 
 	@Test
 	public void testIoGetPaymentsBill() throws Exception {
-		ArrayList<Bill> bills = new ArrayList<>();
+		List<Bill> bills = new ArrayList<>();
 
 		int id = _setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
 		Bill foundBill = foundBillPayment.getBill();
 
 		bills.add(foundBill);
-		ArrayList<BillPayments> payments = accountingIoOperation.getPayments(bills);
+		List<BillPayments> payments = accountingIoOperation.getPayments(bills);
 
 		assertThat(payments.get(0).getBill().getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
 	}
 
 	@Test
 	public void ioBillPaymentsChecks() throws Exception {
-		ArrayList<Bill> bills = new ArrayList<>();
+		List<Bill> bills = new ArrayList<>();
 		int id = _setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
 		Bill foundBill = foundBillPayment.getBill();
 		bills.add(foundBill);
-		ArrayList<BillPayments> payments = accountingIoOperation.getPayments(bills);
+		List<BillPayments> payments = accountingIoOperation.getPayments(bills);
 		assertThat(payments).hasSize(1);
 
 		BillPayments billPayment = payments.get(0);
@@ -479,7 +479,7 @@ public class Tests extends OHCoreTestCase {
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
 		GregorianCalendar dateFrom = new GregorianCalendar(1, 3, 2);
 		GregorianCalendar dateTo = new GregorianCalendar();
-		ArrayList<BillPayments> billItems = accountingIoOperation.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
+		List<BillPayments> billItems = accountingIoOperation.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
 	}
@@ -492,7 +492,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void mgrBillItemsChecks() throws Exception {
 		int id = _setupTestBillItems(false);
-		ArrayList<BillItems> billItems = billBrowserManager.getItems(0);
+		List<BillItems> billItems = billBrowserManager.getItems(0);
 		assertThat(billItems).isEmpty();
 		billItems = billBrowserManager.getItems(99999);
 		assertThat(billItems).isEmpty();
@@ -506,7 +506,7 @@ public class Tests extends OHCoreTestCase {
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
 		GregorianCalendar dateFrom = new GregorianCalendar(1, 3, 2);
 		GregorianCalendar dateTo = new GregorianCalendar();
-		ArrayList<BillPayments> billItems = billBrowserManager.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
+		List<BillPayments> billItems = billBrowserManager.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
 	}
@@ -515,7 +515,7 @@ public class Tests extends OHCoreTestCase {
 	public void mgrGetAllPayments() throws Exception {
 		int id = _setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
-		ArrayList<BillPayments> billItems = billBrowserManager.getPayments();
+		List<BillPayments> billItems = billBrowserManager.getPayments();
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
 	}
@@ -524,7 +524,7 @@ public class Tests extends OHCoreTestCase {
 	public void mgrGetAllPaymentsWithZero() throws Exception {
 		int id = _setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
-		ArrayList<BillPayments> billItems = billBrowserManager.getPayments(0);
+		List<BillPayments> billItems = billBrowserManager.getPayments(0);
 		assertThat(billItems).isEmpty();
 	}
 
@@ -532,7 +532,7 @@ public class Tests extends OHCoreTestCase {
 	public void mgrGetAllPaymentsWithId() throws Exception {
 		int id = _setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
-		ArrayList<BillPayments> billItems = billBrowserManager.getPayments(foundBillPayment.getBill().getId());
+		List<BillPayments> billItems = billBrowserManager.getPayments(foundBillPayment.getBill().getId());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
 	}
@@ -551,7 +551,7 @@ public class Tests extends OHCoreTestCase {
 		Bill foundBill = accountingBillIoOperationRepository.findOne(id);
 		GregorianCalendar dateFrom = new GregorianCalendar(1, 3, 2);
 		GregorianCalendar dateTo = new GregorianCalendar();
-		ArrayList<Bill> billItems = billBrowserManager.getBills(dateFrom, dateTo, foundBill.getBillPatient());
+		List<Bill> billItems = billBrowserManager.getBills(dateFrom, dateTo, foundBill.getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
 	}
@@ -560,7 +560,7 @@ public class Tests extends OHCoreTestCase {
 	public void mgrGetPendingBillsForPatientId() throws Exception {
 		int id = _setupTestBill(false);
 		Bill foundBill = accountingBillIoOperationRepository.findOne(id);
-		ArrayList<Bill> bills = billBrowserManager.getPendingBills(foundBill.getBillPatient().getCode());
+		List<Bill> bills = billBrowserManager.getPendingBills(foundBill.getBillPatient().getCode());
 		assertThat(bills.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
 	}
 
@@ -589,7 +589,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		Bill bill = testBill.setup(priceList, patient, false);
 		BillItems insertBillItem = testBillItems.setup(null, false);
-		ArrayList<BillItems> billItems = new ArrayList<>();
+		List<BillItems> billItems = new ArrayList<>();
 		billItems.add(insertBillItem);
 		boolean success = billBrowserManager.newBill(
 				bill,
@@ -607,7 +607,7 @@ public class Tests extends OHCoreTestCase {
 		Bill bill = testBill.setup(priceList, patient, false);
 		BillPayments insertBillPayment = testBillPayments.setup(bill, false);
 		insertBillPayment.setDate(new GregorianCalendar());
-		ArrayList<BillPayments> billPayments = new ArrayList<>();
+		List<BillPayments> billPayments = new ArrayList<>();
 		billPayments.add(insertBillPayment);
 		boolean success = billBrowserManager.newBill(
 				bill,
@@ -626,9 +626,9 @@ public class Tests extends OHCoreTestCase {
 		BillItems insertBillItem = testBillItems.setup(bill, false);
 		BillPayments insertBillPayment = testBillPayments.setup(bill, false);
 		insertBillPayment.setDate(new GregorianCalendar());
-		ArrayList<BillItems> billItems = new ArrayList<>();
+		List<BillItems> billItems = new ArrayList<>();
 		billItems.add(insertBillItem);
-		ArrayList<BillPayments> billPayments = new ArrayList<>();
+		List<BillPayments> billPayments = new ArrayList<>();
 		billPayments.add(insertBillPayment);
 		BillPayments payments = testBillPayments.setup(bill, false);
 		boolean success = billBrowserManager.newBill(
@@ -643,10 +643,10 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
 		Bill bill = testBill.setup(priceList, patient, false);
-		ArrayList<BillItems> billItems = new ArrayList<>();
+		List<BillItems> billItems = new ArrayList<>();
 		BillItems insertBillItem = testBillItems.setup(bill, false);
 		billItems.add(insertBillItem);
-		ArrayList<BillPayments> billPayments = new ArrayList<>();
+		List<BillPayments> billPayments = new ArrayList<>();
 		BillPayments payments = testBillPayments.setup(bill, false);
 		billPayments.add(payments);
 
@@ -659,16 +659,16 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
 
-		ArrayList<BillPayments> payments = new ArrayList<>();
+		List<BillPayments> payments = new ArrayList<>();
 		payments.add(foundBillPayment);
-		ArrayList<Bill> bills = billBrowserManager.getBills(payments);
+		List<Bill> bills = billBrowserManager.getBills(payments);
 
 		assertThat(bills.get(0).getAmount()).isCloseTo(foundBillPayment.getBill().getAmount(), offset(0.1));
 	}
 
 	@Test
 	public void mgrGetBillsPaymentEmpty() throws Exception {
-		ArrayList<Bill> bills = billBrowserManager.getBills(new ArrayList<>());
+		List<Bill> bills = billBrowserManager.getBills(new ArrayList<>());
 		assertThat(bills).isEmpty();
 	}
 
@@ -678,7 +678,7 @@ public class Tests extends OHCoreTestCase {
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
 		GregorianCalendar dateFrom = new GregorianCalendar(4, 3, 2);
 		GregorianCalendar dateTo = new GregorianCalendar();
-		ArrayList<BillPayments> billPayments = billBrowserManager.getPayments(dateFrom, dateTo);
+		List<BillPayments> billPayments = billBrowserManager.getPayments(dateFrom, dateTo);
 		assertThat(billPayments).contains(foundBillPayment);
 	}
 
@@ -687,9 +687,9 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
 		Bill foundBill = foundBillPayment.getBill();
-		ArrayList<Bill> bills = new ArrayList<>();
+		List<Bill> bills = new ArrayList<>();
 		bills.add(foundBill);
-		ArrayList<BillPayments> payments = billBrowserManager.getPayments(bills);
+		List<BillPayments> payments = billBrowserManager.getPayments(bills);
 		assertThat(payments.get(0).getBill().getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
 	}
 
@@ -701,7 +701,7 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestBill(false);
 		Bill foundBill = accountingBillIoOperationRepository.findOne(id);
 
-		ArrayList<Bill> bills = billBrowserManager.getBills(dateFrom, dateTo);
+		List<Bill> bills = billBrowserManager.getBills(dateFrom, dateTo);
 		assertThat(bills).contains(foundBill);
 
 		bills = billBrowserManager.getBills(new GregorianCalendar(10, 0, 1), dateFrom);
@@ -742,7 +742,7 @@ public class Tests extends OHCoreTestCase {
 	public void mgrGetPendingBillsAffiliate() throws Exception {
 		int id = _setupTestBill(false);
 		Bill foundBill = accountingBillIoOperationRepository.findOne(id);
-		ArrayList<Bill> billItems = billBrowserManager.getPendingBillsAffiliate(foundBill.getBillPatient().getCode());
+		List<Bill> billItems = billBrowserManager.getPendingBillsAffiliate(foundBill.getBillPatient().getCode());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
 	}
@@ -772,7 +772,7 @@ public class Tests extends OHCoreTestCase {
 	public void mgrGetUsers() throws Exception {
 		int id = _setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
-		ArrayList<String> userIds = billBrowserManager.getUsers();
+		List<String> userIds = billBrowserManager.getUsers();
 		assertThat(userIds).contains(foundBillPayment.getUser());
 	}
 

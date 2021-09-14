@@ -24,6 +24,7 @@ package org.isf.serviceprinting.manager;
 import java.io.File;
 import java.sql.Connection;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.isf.utils.db.DbSingleJpaConn;
 import org.isf.utils.exception.OHServiceException;
@@ -42,7 +43,7 @@ public class PrintLabels {
 
 	public PrintLabels(String filename, Integer patId) throws OHServiceException {
 		try {
-			HashMap<String, Object> parameters = new HashMap<>();
+			Map<String, Object> parameters = new HashMap<>();
 
 			parameters.put("patientID", String.valueOf(patId == null ? "" : patId));
 

@@ -92,7 +92,7 @@ public class MalnutritionManager {
 	 * @return all the retrieved malnutrition or <code>null</code> if the specified admission id is <code>null</code>.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Malnutrition> getMalnutrition(String admissionID) throws OHServiceException {
+	public List<Malnutrition> getMalnutrition(String admissionID) throws OHServiceException {
 		return ioOperation.getMalnutritions(admissionID);
 	}
 

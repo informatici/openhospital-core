@@ -76,7 +76,7 @@ public class PatientBrowserManager {
 	 * @return the list of patients (could be empty)
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatient() throws OHServiceException {
+	public List<Patient> getPatient() throws OHServiceException {
 		return ioOperations.getPatients();
 	}
 
@@ -86,7 +86,7 @@ public class PatientBrowserManager {
 	 * @return the list of patients (could be empty)
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatient(int page, int size) throws OHServiceException {
+	public List<Patient> getPatient(int page, int size) throws OHServiceException {
 		return ioOperations.getPatients(new PageRequest(page, size));
 	}
 
@@ -111,7 +111,7 @@ public class PatientBrowserManager {
 	 * @return the list of Patients that match specified name
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatients(Map<String, Object> params) throws OHServiceException {
+	public List<Patient> getPatients(Map<String, Object> params) throws OHServiceException {
 		return ioOperations.getPatients(params);
 	}
 
@@ -245,7 +245,7 @@ public class PatientBrowserManager {
 
 		boolean billPending = false;
 
-		ArrayList<Bill> bills = billManager.getPendingBills(mergedPatient.getCode());
+		List<Bill> bills = billManager.getPendingBills(mergedPatient.getCode());
 		if (bills != null && !bills.isEmpty())
 			billPending = true;
 		else {
@@ -304,7 +304,7 @@ public class PatientBrowserManager {
 	 * @return the list of Patients (could be empty)
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException {
+	public List<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException {
 		return ioOperations.getPatientsByOneOfFieldsLike(keyword);
 	}
 

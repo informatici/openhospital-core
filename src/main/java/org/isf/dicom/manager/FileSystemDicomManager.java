@@ -414,8 +414,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			byte[] byteArray = new byte[fis.available()];
 			fis.read(byteArray);
 			fis.close();
-			Blob blob = new SerialBlob(byteArray);
-			return blob;
+			return new SerialBlob(byteArray);
 	}
 
 	/**

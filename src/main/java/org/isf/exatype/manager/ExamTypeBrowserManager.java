@@ -85,7 +85,7 @@ public class ExamTypeBrowserManager {
 	 * @return the list of {@link ExamType}s. It could be <code>null</code>
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamType> getExamType() throws OHServiceException {
+	public List<ExamType> getExamType() throws OHServiceException {
 		return ioOperations.getExamType();
 	}
 

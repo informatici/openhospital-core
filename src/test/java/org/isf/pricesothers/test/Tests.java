@@ -24,7 +24,7 @@ package org.isf.pricesothers.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -85,7 +85,7 @@ public class Tests extends OHCoreTestCase {
 		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
 
 		// when:
-		ArrayList<PricesOthers> result = priceOthersIoOperations.getOthers();
+		List<PricesOthers> result = priceOthersIoOperations.getOthers();
 
 		// then:
 		assertThat(result.get(0).getDescription()).isEqualTo(foundPricesOthers.getDescription());
@@ -146,7 +146,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetPricesOthers() throws Exception {
 		int id = _setupTestPricesOthers(false);
 		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
-		ArrayList<PricesOthers> result = pricesOthersManager.getOthers();
+		List<PricesOthers> result = pricesOthersManager.getOthers();
 		assertThat(result.get(0).getDescription()).isEqualTo(foundPricesOthers.getDescription());
 	}
 

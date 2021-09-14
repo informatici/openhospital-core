@@ -21,7 +21,7 @@
  */
 package org.isf.dicomtype.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.dicomtype.model.DicomType;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -44,9 +44,9 @@ public class DicomTypeIoOperation {
 	 * @return the list of all DicomTypes
 	 * @throws OHServiceException
 	 */
-	public ArrayList<DicomType> getDicomType() throws OHServiceException 
+	public List<DicomType> getDicomType() throws OHServiceException
 	{
-		return new ArrayList<>(repository.findAllByOrderByDicomTypeDescriptionAsc());
+		return repository.findAllByOrderByDicomTypeDescriptionAsc();
 	}
 
 	/**

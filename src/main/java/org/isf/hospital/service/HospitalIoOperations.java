@@ -21,7 +21,6 @@
  */
 package org.isf.hospital.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.hospital.model.Hospital;
@@ -52,11 +51,8 @@ public class HospitalIoOperations {
 	 * @return {@link Hospital} object
 	 * @throws OHServiceException 
 	 */
-	public Hospital getHospital() throws OHServiceException 
-	{
-		ArrayList<Hospital> hospitals = (ArrayList<Hospital>) repository.findAll();
-				
-
+	public Hospital getHospital() throws OHServiceException {
+		List<Hospital> hospitals = repository.findAll();
 		return hospitals.get(0);
 	}
 	

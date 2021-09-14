@@ -24,7 +24,7 @@ package org.isf.dlvrrestype.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -120,7 +120,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetDeliveryResultType() throws Exception {
 		String code = _setupTestDeliveryResultType(false);
 		DeliveryResultType foundDeliveryResultType = deliveryResultIoOperationRepository.findOne(code);
-		ArrayList<DeliveryResultType> foundDeliveryResultTypes = deliveryResultTypeBrowserManager.getDeliveryResultType();
+		List<DeliveryResultType> foundDeliveryResultTypes = deliveryResultTypeBrowserManager.getDeliveryResultType();
 		assertThat(foundDeliveryResultTypes).contains(foundDeliveryResultType);
 	}
 

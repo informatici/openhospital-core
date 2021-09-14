@@ -116,11 +116,11 @@ public class WardBrowserManager {
 	 * @return the stored wards.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Ward> getWards() throws OHServiceException {
+	public List<Ward> getWards() throws OHServiceException {
 		return ioOperations.getWards(null);
 	}
 
-	public ArrayList<Ward> getWards(Ward ward) throws OHServiceException {
+	public List<Ward> getWards(Ward ward) throws OHServiceException {
 		return ioOperations.getWards(ward.getCode());
 	}
 	/**
@@ -130,7 +130,7 @@ public class WardBrowserManager {
 	 * @return
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Ward> getWardsNoMaternity() throws OHServiceException {
+	public List<Ward> getWardsNoMaternity() throws OHServiceException {
 		return ioOperations.getWardsNoMaternity();
 	}
 

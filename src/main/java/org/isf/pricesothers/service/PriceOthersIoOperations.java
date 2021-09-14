@@ -21,7 +21,7 @@
  */
 package org.isf.pricesothers.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.pricesothers.model.PricesOthers;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -44,11 +44,8 @@ public class PriceOthersIoOperations {
 	 * @return the list of {@link PricesOthers}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<PricesOthers> getOthers() throws OHServiceException 
-	{		
-		ArrayList<PricesOthers> pricesOthers = (ArrayList<PricesOthers>) repository.findAllByOrderByDescriptionAsc();
-
-		return pricesOthers;
+	public List<PricesOthers> getOthers() throws OHServiceException {
+		return repository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**

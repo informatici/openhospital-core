@@ -24,6 +24,7 @@ package org.isf.therapy.manager;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.manager.MedicalBrowsingManager;
@@ -132,7 +133,7 @@ public class TherapyManager {
 	 * @return the list of {@link Therapy}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Therapy> getTherapies(ArrayList<TherapyRow> thRows) throws OHServiceException {
+	public List<Therapy> getTherapies(List<TherapyRow> thRows) throws OHServiceException {
 
 		if (thRows != null) {
 			ArrayList<Therapy> therapies = new ArrayList<>();
@@ -155,7 +156,7 @@ public class TherapyManager {
 	 * @return the list of {@link TherapyRow}s (therapies)
 	 * @throws OHServiceException
 	 */
-	public ArrayList<TherapyRow> getTherapyRows(int code) throws OHServiceException {
+	public List<TherapyRow> getTherapyRows(int code) throws OHServiceException {
 		return ioOperations.getTherapyRows(code);
 	}
 
@@ -178,7 +179,7 @@ public class TherapyManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public boolean newTherapies(ArrayList<TherapyRow> thRows) throws OHServiceException {
+	public boolean newTherapies(List<TherapyRow> thRows) throws OHServiceException {
 		if (!thRows.isEmpty()) {
 
 			int patID = thRows.get(0).getPatient().getCode();
@@ -257,10 +258,10 @@ public class TherapyManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public ArrayList<Medical> getMedicalsOutOfStock(ArrayList<Therapy> therapies) throws OHServiceException {
+	public List<Medical> getMedicalsOutOfStock(List<Therapy> therapies) throws OHServiceException {
 		ArrayList<Medical> medOutStock = new ArrayList<>();
 
-		ArrayList<Medical> medArray = medManager.getMedicals();
+		List<Medical> medArray = medManager.getMedicals();
 
 		double neededQty = 0.;
 		double actualQty = 0.;

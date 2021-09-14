@@ -59,7 +59,7 @@ public class PatVacIoOperations {
 	 * @return the list of {@link PatientVaccine}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<PatientVaccine> getPatientVaccine(boolean minusOneWeek) throws OHServiceException {
+	public List<PatientVaccine> getPatientVaccine(boolean minusOneWeek) throws OHServiceException {
 		GregorianCalendar timeFrom = TimeTools.getDateToday0();
 		GregorianCalendar timeTo = TimeTools.getDateToday24();
 
@@ -84,7 +84,7 @@ public class PatVacIoOperations {
 	 * @return the list of {@link PatientVaccine}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<PatientVaccine> getPatientVaccine(
+	public List<PatientVaccine> getPatientVaccine(
 			String vaccineTypeCode,
 			String vaccineCode,
 			GregorianCalendar dateFrom,

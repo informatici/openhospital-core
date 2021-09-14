@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.isf.OHCoreTestCase;
 import org.isf.medicals.model.Medical;
@@ -106,7 +107,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetTherapyRow() throws Exception {
 		int id = _setupTestTherapyRow(false);
 		TherapyRow foundTherapyRow = therapyIoOperationRepository.findOne(id);
-		ArrayList<TherapyRow> therapyRows = therapyIoOperation.getTherapyRows(foundTherapyRow.getPatient().getCode());
+		List<TherapyRow> therapyRows = therapyIoOperation.getTherapyRows(foundTherapyRow.getPatient().getCode());
 		assertThat(therapyRows.get(therapyRows.size() - 1).getNote()).isEqualTo(foundTherapyRow.getNote());
 	}
 
@@ -117,7 +118,7 @@ public class Tests extends OHCoreTestCase {
 		TherapyRow foundTherapyRow = therapyIoOperationRepository.findOne(id);
 
 		// when:
-		ArrayList<TherapyRow> therapyRows = therapyIoOperation.getTherapyRows(0);
+		List<TherapyRow> therapyRows = therapyIoOperation.getTherapyRows(0);
 
 		// then:
 		assertThat(therapyRows.get(therapyRows.size() - 1).getNote()).isEqualTo(foundTherapyRow.getNote());
@@ -171,9 +172,9 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetTherapies() throws Exception {
 		int id = _setupTestTherapyRow(false);
 		TherapyRow therapyRow = therapyIoOperationRepository.findOne(id);
-		ArrayList<TherapyRow> therapyRows = new ArrayList<>();
+		List<TherapyRow> therapyRows = new ArrayList<>();
 		therapyRows.add(therapyRow);
-		ArrayList<Therapy> therapies = therapyManager.getTherapies(therapyRows);
+		List<Therapy> therapies = therapyManager.getTherapies(therapyRows);
 		assertThat(therapies).hasSize(1);
 		assertThat(therapies.get(0).getNote()).isEqualTo("TestNote");
 	}
@@ -252,7 +253,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetTherapyRow() throws Exception {
 		int id = _setupTestTherapyRow(false);
 		TherapyRow foundTherapyRow = therapyIoOperationRepository.findOne(id);
-		ArrayList<TherapyRow> therapyRows = therapyIoOperation.getTherapyRows(foundTherapyRow.getPatient().getCode());
+		List<TherapyRow> therapyRows = therapyIoOperation.getTherapyRows(foundTherapyRow.getPatient().getCode());
 		assertThat(therapyRows.get(therapyRows.size() - 1).getNote()).isEqualTo(foundTherapyRow.getNote());
 	}
 
@@ -260,7 +261,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetTherapyRowWithZeroAsIdentifierProvided() throws Exception {
 		int id = _setupTestTherapyRow(false);
 		TherapyRow foundTherapyRow = therapyIoOperationRepository.findOne(id);
-		ArrayList<TherapyRow> therapyRows = therapyManager.getTherapyRows(0);
+		List<TherapyRow> therapyRows = therapyManager.getTherapyRows(0);
 		assertThat(therapyRows.get(therapyRows.size() - 1).getNote()).isEqualTo(foundTherapyRow.getNote());
 	}
 
@@ -299,7 +300,7 @@ public class Tests extends OHCoreTestCase {
 
 		ArrayList<Therapy> therapies = new ArrayList<>();
 		therapies.add(therapy);
-		ArrayList<Medical> medicals = therapyManager.getMedicalsOutOfStock(therapies);
+		List<Medical> medicals = therapyManager.getMedicalsOutOfStock(therapies);
 		assertThat(medicals).hasSize(1);
 	}
 
@@ -320,7 +321,7 @@ public class Tests extends OHCoreTestCase {
 
 		ArrayList<Therapy> therapies = new ArrayList<>();
 		therapies.add(therapy);
-		ArrayList<Medical> medicals = therapyManager.getMedicalsOutOfStock(therapies);
+		List<Medical> medicals = therapyManager.getMedicalsOutOfStock(therapies);
 		assertThat(medicals).isEmpty();
 	}
 
@@ -341,7 +342,7 @@ public class Tests extends OHCoreTestCase {
 
 		ArrayList<Therapy> therapies = new ArrayList<>();
 		therapies.add(therapy);
-		ArrayList<Medical> medicals = therapyManager.getMedicalsOutOfStock(therapies);
+		List<Medical> medicals = therapyManager.getMedicalsOutOfStock(therapies);
 		assertThat(medicals).isEmpty();
 	}
 

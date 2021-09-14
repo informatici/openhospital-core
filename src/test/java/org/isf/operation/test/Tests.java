@@ -23,7 +23,6 @@ package org.isf.operation.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -191,7 +190,7 @@ public class Tests extends OHCoreTestCase {
 		Operation foundOperation = operationIoOperations.findByCode(code);
 
 		// when:
-		ArrayList<Operation> operations = operationIoOperations.getOperationByTypeDescription(foundOperation.getType().getDescription());
+		List<Operation> operations = operationIoOperations.getOperationByTypeDescription(foundOperation.getType().getDescription());
 
 		// then:
 		assertThat(operations).isNotEmpty();
@@ -204,7 +203,7 @@ public class Tests extends OHCoreTestCase {
 		String code = _setupTestOperation(true);
 
 		// when:
-		ArrayList<Operation> operations = operationIoOperations.getOperationByTypeDescription(null);
+		List<Operation> operations = operationIoOperations.getOperationByTypeDescription(null);
 
 		// then:
 		assertThat(operations).isNotEmpty();
@@ -322,7 +321,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetOperationByTypeDescription() throws Exception {
 		String code = _setupTestOperation(false);
 		Operation foundOperation = operationBrowserManager.getOperationByCode(code);
-		ArrayList<Operation> operations = operationBrowserManager.getOperationByTypeDescription(foundOperation.getType().getDescription());
+		List<Operation> operations = operationBrowserManager.getOperationByTypeDescription(foundOperation.getType().getDescription());
 		assertThat(operations).isNotEmpty();
 		assertThat(operations.get(0).getType().getDescription()).isEqualTo(foundOperation.getType().getDescription());
 	}
@@ -330,14 +329,14 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetOperationByTypeDescriptionNull() throws Exception {
 		_setupTestOperation(true);
-		ArrayList<Operation> operations = operationBrowserManager.getOperationByTypeDescription(null);
+		List<Operation> operations = operationBrowserManager.getOperationByTypeDescription(null);
 		assertThat(operations).isNotEmpty();
 	}
 
 	@Test
 	public void testMgrGetOperation() throws Exception {
 		_setupTestOperation(true);
-		ArrayList<Operation> operations = operationBrowserManager.getOperation();
+		List<Operation> operations = operationBrowserManager.getOperation();
 		assertThat(operations).isNotEmpty();
 	}
 
@@ -457,7 +456,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testRowIoGetRowOperation() throws Exception {
 		_setupTestOperationRow(false);
-		ArrayList<OperationRow> operationRows = operationRowIoOperations.getOperationRow();
+		List<OperationRow> operationRows = operationRowIoOperations.getOperationRow();
 		assertThat(operationRows).hasSize(1);
 	}
 

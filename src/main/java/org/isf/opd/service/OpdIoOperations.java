@@ -69,7 +69,7 @@ public class OpdIoOperations {
 	 * @return the list of Opds. It could be <code>empty</code>.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Opd> getOpdList(boolean oneWeek) throws OHServiceException	{
+	public List<Opd> getOpdList(boolean oneWeek) throws OHServiceException	{
 		GregorianCalendar dateFrom = TimeTools.getDateToday0();
 		GregorianCalendar dateTo = TimeTools.getDateToday24();
 
@@ -95,7 +95,7 @@ public class OpdIoOperations {
 	 * @return the list of Opds. It could be <code>empty</code>.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Opd> getOpdList(
+	public List<Opd> getOpdList(
 			String diseaseTypeCode,
 			String diseaseCode, 
 			GregorianCalendar dateFrom,
@@ -117,7 +117,7 @@ public class OpdIoOperations {
 	 * 		   the whole list of {@link Opd}s if <code>0</code> is passed.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Opd> getOpdList(int patID) throws OHServiceException {
+	public List<Opd> getOpdList(int patID) throws OHServiceException {
 		return new ArrayList<>(patID == 0 ?
 				repository.findAllOrderByProgYearDesc() :
 				repository.findAllByPatient_CodeOrderByProgYearDesc(patID));

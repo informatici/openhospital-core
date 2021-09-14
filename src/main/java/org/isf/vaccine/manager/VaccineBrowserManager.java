@@ -93,7 +93,7 @@ public class VaccineBrowserManager {
 	 *
 	 * @return the list of {@link Vaccine}s
 	 */
-	public ArrayList<Vaccine> getVaccine() throws OHServiceException {
+	public List<Vaccine> getVaccine() throws OHServiceException {
 		return getVaccine(null);
 	}
 
@@ -103,7 +103,7 @@ public class VaccineBrowserManager {
 	 * @param vaccineTypeCode - the type code.
 	 * @return the list of {@link Vaccine}s
 	 */
-	public ArrayList<Vaccine> getVaccine(String vaccineTypeCode) throws OHServiceException {
+	public List<Vaccine> getVaccine(String vaccineTypeCode) throws OHServiceException {
 		return ioOperations.getVaccine(vaccineTypeCode);
 	}
 

@@ -21,7 +21,6 @@
  */
 package org.isf.agetype.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.agetype.model.AgeType;
@@ -47,9 +46,8 @@ public class AgeTypeIoOperations
 	 * @return a list of {@link AgeType}.
 	 * @throws OHServiceException if an error occurs retrieving the age types.
 	 */
-	public ArrayList<AgeType> getAgeType() throws OHServiceException 
-	{
-		return new ArrayList<>(repository.findAllByOrderByCodeAsc());
+	public List<AgeType> getAgeType() throws OHServiceException {
+		return repository.findAllByOrderByCodeAsc();
 	}
 
 	/**
@@ -58,16 +56,9 @@ public class AgeTypeIoOperations
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateAgeType(
-			ArrayList<AgeType> ageType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean updateAgeType(List<AgeType> ageType) throws OHServiceException {
 		List<AgeType> savedAgeType = repository.save(ageType);
-		result = (savedAgeType != null);
-		
-		return result;
+		return savedAgeType != null;
 	}
 
 	/**

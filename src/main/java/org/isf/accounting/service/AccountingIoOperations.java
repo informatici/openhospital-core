@@ -60,7 +60,7 @@ public class AccountingIoOperations {
 	 * @return the list of pending bills.
 	 * @throws OHServiceException if an error occurs retrieving the pending bills.
 	 */
-	public ArrayList<Bill> getPendingBills(int patID) throws OHServiceException {
+	public List<Bill> getPendingBills(int patID) throws OHServiceException {
 		if (patID != 0)
 			return new ArrayList<>(billRepository.findByStatusAndBillPatientCodeOrderByDateDesc("O", patID));
 
@@ -72,7 +72,7 @@ public class AccountingIoOperations {
 	 * @return a list of bills.
 	 * @throws OHServiceException if an error occurs retrieving the bills.
 	 */
-	public ArrayList<Bill> getBills() throws OHServiceException {
+	public List<Bill> getBills() throws OHServiceException {
 		return new ArrayList<>(billRepository.findAllByOrderByDateDesc());
 	}
 	
@@ -91,7 +91,7 @@ public class AccountingIoOperations {
 	 * @return a list of user id.
 	 * @throws OHServiceException if an error occurs retrieving the users list.
 	 */
-    public ArrayList<String> getUsers() throws OHServiceException {
+    public List<String> getUsers() throws OHServiceException {
     	Set<String> accountingUsers = new TreeSet<>(String::compareTo);
     	accountingUsers.addAll(billRepository.findUserDistinctByOrderByUserAsc());
     	accountingUsers.addAll(billPaymentRepository.findUserDistinctByOrderByUserAsc());
@@ -105,16 +105,12 @@ public class AccountingIoOperations {
 	 * @return a list of {@link BillItems} associated to the bill id or all the stored bill items.
 	 * @throws OHServiceException if an error occurs retrieving the bill items.
 	 */
-	public ArrayList<BillItems> getItems(int billID) throws OHServiceException {
-		ArrayList<BillItems> billItems = null;
-		
-		
-		if (billID != 0)
-		{
+	public List<BillItems> getItems(int billID) throws OHServiceException {
+		List<BillItems> billItems = null;
+
+		if (billID != 0) {
 			billItems = new ArrayList<>(billItemsRepository.findByBill_idOrderByIdAsc(billID));
-		}
-		else
-		{
+		} else {
 			billItems = new ArrayList<>(billItemsRepository.findAllByOrderByIdAsc());
 		}
 
@@ -128,7 +124,7 @@ public class AccountingIoOperations {
 	 * @return a list of {@link BillPayments} for the specified date range.
 	 * @throws OHServiceException if an error occurs retrieving the bill payments.
 	 */
-	public ArrayList<BillPayments> getPayments(
+	public List<BillPayments> getPayments(
 		GregorianCalendar dateFrom, 
 		GregorianCalendar dateTo) throws OHServiceException {
 
@@ -143,20 +139,16 @@ public class AccountingIoOperations {
 	 * @return the list of bill payments.
 	 * @throws OHServiceException if an error occurs retrieving the bill payments.
 	 */
-	public ArrayList<BillPayments> getPayments(
-			int billID) throws OHServiceException 
-	{ 
-		ArrayList<BillPayments> payments = null;
-				
-		if (billID != 0) 
-		{
+	public List<BillPayments> getPayments(
+			int billID) throws OHServiceException {
+		List<BillPayments> payments = null;
+
+		if (billID != 0) {
 			payments = (ArrayList<BillPayments>) billPaymentRepository.findAllWherBillIdByOrderByBillAndDate(billID);
-		}
-		else
-		{
+		} else {
 			payments = (ArrayList<BillPayments>) billPaymentRepository.findAllByOrderByBillAndDate();
 		}
-		
+
 		return payments;
 	}
 
@@ -180,7 +172,7 @@ public class AccountingIoOperations {
 	 */
 	public boolean newBillItems(
 			Bill bill,
-			ArrayList<BillItems> billItems) throws OHServiceException 
+			List<BillItems> billItems) throws OHServiceException
 	{
 		boolean result = true;
 		
@@ -205,7 +197,7 @@ public class AccountingIoOperations {
 	
 	private boolean _insertNewBillInsideBillItems(
 			Bill bill,
-			ArrayList<BillItems> billItems) throws OHServiceException 
+			List<BillItems> billItems) throws OHServiceException
     {	
 		boolean result = true;
         		
@@ -228,7 +220,7 @@ public class AccountingIoOperations {
 	 */
 	public boolean newBillPayments(
 			Bill bill, 
-			ArrayList<BillPayments> payItems) throws OHServiceException 
+			List<BillPayments> payItems) throws OHServiceException
 	{
 		boolean result = true;
 		
@@ -253,7 +245,7 @@ public class AccountingIoOperations {
 	
 	private boolean _insertNewBillInsideBillPayments(
 			Bill bill,
-			ArrayList<BillPayments> billPayments) throws OHServiceException 
+			List<BillPayments> billPayments) throws OHServiceException
     {	
 
 		boolean result = true;
@@ -312,7 +304,7 @@ public class AccountingIoOperations {
 	 * @deprecated use {@link #getBillsBetweenDates(GregorianCalendar, GregorianCalendar)}
 	 */
 	@Deprecated
-	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
 		return getBillsBetweenDates(dateFrom, dateTo);
 	}
 
@@ -323,7 +315,7 @@ public class AccountingIoOperations {
 	 * @return a list of retrieved {@link Bill}s.
 	 * @throws OHServiceException if an error occurs retrieving the bill list.
 	 */
-	public ArrayList<Bill> getBillsBetweenDates(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<Bill> getBillsBetweenDates(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
 		return new ArrayList<>(billRepository.findByDateBetween(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo)));
 	}
 
@@ -333,7 +325,7 @@ public class AccountingIoOperations {
 	 * @return a list of {@link Bill} associated to the passed {@link BillPayments}.
 	 * @throws OHServiceException if an error occurs retrieving the bill list.
 	 */
-	public ArrayList<Bill> getBills(ArrayList<BillPayments> payments) throws OHServiceException {
+	public List<Bill> getBills(List<BillPayments> payments) throws OHServiceException {
 		Set<Bill> bills = new TreeSet<>((o1, o2) -> o1.getId() == o2.getId() ? 0 : -1);
 		for (BillPayments bp : payments) {
 			bills.add(bp.getBill());
@@ -348,7 +340,7 @@ public class AccountingIoOperations {
 	 * @return a list of {@link BillPayments} associated to the passed bill list.
 	 * @throws OHServiceException if an error occurs retrieving the payments.
 	 */
-	public ArrayList<BillPayments> getPayments(ArrayList<Bill> bills) throws OHServiceException {
+	public List<BillPayments> getPayments(List<Bill> bills) throws OHServiceException {
 		return new ArrayList<>(billPaymentRepository.findAllByBillIn(bills));
 	}
 	
@@ -362,7 +354,7 @@ public class AccountingIoOperations {
 	 * @deprecated use {@link #getPaymentsBetweenDatesWherePatient(GregorianCalendar, GregorianCalendar, Patient)}
 	 */
 	@Deprecated
-	public ArrayList<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient)
+	public List<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient)
 			throws OHServiceException {
 		return getPaymentsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
@@ -375,10 +367,9 @@ public class AccountingIoOperations {
 	 * @return
 	 * @throws OHServiceException
 	 */
-	public ArrayList<BillPayments> getPaymentsBetweenDatesWherePatient(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient)
+	public List<BillPayments> getPaymentsBetweenDatesWherePatient(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient)
 			throws OHServiceException {
-		ArrayList<BillPayments> payments =  billPaymentRepository.findByDateAndPatient(dateFrom, dateTo, patient.getCode());
-		return payments;
+		return billPaymentRepository.findByDateAndPatient(dateFrom, dateTo, patient.getCode());
 	}
 
 	/**
@@ -391,7 +382,7 @@ public class AccountingIoOperations {
 	 * @deprecated use {@link #getBillsBetweenDatesWherePatient(GregorianCalendar, GregorianCalendar, Patient)}
 	 */
 	@Deprecated
-	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient) throws OHServiceException {
+	public List<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient) throws OHServiceException {
 		return getBillsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
 
@@ -403,9 +394,8 @@ public class AccountingIoOperations {
 	 * @return the bill list
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Bill> getBillsBetweenDatesWherePatient(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient) throws OHServiceException {
-		ArrayList<Bill> bills = billRepository.findByDateAndPatient(dateFrom, dateTo, patient.getCode());
-		return bills;
+	public List<Bill> getBillsBetweenDatesWherePatient(GregorianCalendar dateFrom, GregorianCalendar dateTo, Patient patient) throws OHServiceException {
+		return billRepository.findByDateAndPatient(dateFrom, dateTo, patient.getCode());
 	}
 
 	/**
@@ -414,9 +404,8 @@ public class AccountingIoOperations {
 	 * @return
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Bill> getPendingBillsAffiliate(int patID) throws OHServiceException {
-		ArrayList<Bill> pendingBills = billRepository.findAllPendindBillsByBillPatient(patID);
-		return pendingBills;
+	public List<Bill> getPendingBillsAffiliate(int patID) throws OHServiceException {
+		return billRepository.findAllPendindBillsByBillPatient(patID);
 	}
 
 	/**
@@ -452,7 +441,7 @@ public class AccountingIoOperations {
 	 * @deprecated use {@link #getBillsBetweenDatesWhereBillItem(GregorianCalendar, GregorianCalendar, BillItems)}
 	 */
 	@Deprecated
-	public ArrayList<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo, BillItems billItem) throws OHServiceException {
+	public List<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo, BillItems billItem) throws OHServiceException {
 		return getBillsBetweenDatesWhereBillItem(dateFrom, dateTo, billItem);
 	}
 
@@ -465,14 +454,13 @@ public class AccountingIoOperations {
 	 * @return the bill list
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Bill> getBillsBetweenDatesWhereBillItem(GregorianCalendar dateFrom, GregorianCalendar dateTo, BillItems billItem) throws OHServiceException {
-		ArrayList<Bill> bills = null;
+	public List<Bill> getBillsBetweenDatesWhereBillItem(GregorianCalendar dateFrom, GregorianCalendar dateTo, BillItems billItem) throws OHServiceException {
+		List<Bill> bills = null;
 		if(billItem == null) {
 			bills = (ArrayList<Bill>) billRepository.findByDateBetween(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo));
 		}
 		else {
 			bills = (ArrayList<Bill>)billRepository.findAllWhereDatesAndBillItem(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo), billItem.getItemDescription());
-			//for(Bill bill: bills)System.out.println("***************bill****************"+bill.toString());
 		}
 		return bills;
 	}

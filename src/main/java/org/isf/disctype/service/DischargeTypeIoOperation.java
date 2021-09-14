@@ -22,6 +22,7 @@
 package org.isf.disctype.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.disctype.model.DischargeType;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -44,8 +45,7 @@ public class DischargeTypeIoOperation {
 	 * @return the list of all DischargeTypes
 	 * @throws OHServiceException
 	 */
-	public ArrayList<DischargeType> getDischargeType() throws OHServiceException 
-	{
+	public List<DischargeType> getDischargeType() throws OHServiceException {
 		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 

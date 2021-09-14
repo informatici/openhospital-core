@@ -28,6 +28,7 @@ import static org.assertj.core.data.Offset.offset;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.isf.OHCoreTestCase;
 import org.isf.medicals.model.Medical;
@@ -160,7 +161,7 @@ public class Tests extends OHCoreTestCase {
 		DateTime endDate = new DateTime(foundMovement.getDate()).plusDays(1);
 
 		// when:
-		ArrayList<MovementWard> wardMovementsToWard = medicalStockWardIoOperations.getWardMovementsToWard(
+		List<MovementWard> wardMovementsToWard = medicalStockWardIoOperations.getWardMovementsToWard(
 				foundMovement.getWard().getCode(), startDate.toGregorianCalendar(), endDate.toGregorianCalendar());
 
 		// then:
@@ -181,7 +182,7 @@ public class Tests extends OHCoreTestCase {
 		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
 		int code = _setupTestMovementWard(false);
 		MovementWard foundMovement = movementWardIoOperationRepository.findOne(code);
-		ArrayList<MovementWard> movements = medicalStockWardIoOperations.getWardMovements(
+		List<MovementWard> movements = medicalStockWardIoOperations.getWardMovements(
 				foundMovement.getWard().getCode(),
 				fromDate,
 				toDate);
@@ -400,7 +401,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicalsWard() throws Exception {
 		MedicalWardId code = _setupTestMedicalWard(false);
 		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
-		ArrayList<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWard(foundMedicalWard.getWard().getCode().charAt(0), true);
+		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWard(foundMedicalWard.getWard().getCode().charAt(0), true);
 		assertThat(medicalWards.get(0).getQty()).isCloseTo(foundMedicalWard.getInQuantity() - foundMedicalWard.getOutQuantity(), offset(0.1));
 	}
 
@@ -411,7 +412,7 @@ public class Tests extends OHCoreTestCase {
 		medicalWard.setInQuantity(10F);
 		medicalWard.setOutQuantity(10F);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
-		ArrayList<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWard(medicalWard.getWard().getCode().charAt(0), true);
+		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWard(medicalWard.getWard().getCode().charAt(0), true);
 		assertThat(medicalWards).isEmpty();
 	}
 
@@ -437,7 +438,7 @@ public class Tests extends OHCoreTestCase {
 
 		medicalStockWardIoOperations.newMovementWard(movementWard);
 
-		ArrayList<MovementWard> movementWards = medicalStockWardIoOperations.getWardMovementsToPatient(patient.getCode());
+		List<MovementWard> movementWards = medicalStockWardIoOperations.getWardMovementsToPatient(patient.getCode());
 		assertThat(movementWards).hasSize(1);
 		assertThat(movementWards.get(0).getDescription()).isEqualTo(movementWard.getDescription());
 	}
@@ -464,7 +465,7 @@ public class Tests extends OHCoreTestCase {
 
 		medicalStockWardIoOperations.newMovementWard(movementWard);
 
-		ArrayList<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWardTotalQuantity('X');
+		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWardTotalQuantity('X');
 		assertThat(medicalWards).hasSize(1);
 		assertThat(medicalWards.get(0).getWard().getCode()).isEqualTo("X");
 	}
@@ -488,7 +489,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMovementWard() throws Exception {
 		int code = _setupTestMovementWard(false);
 		MovementWard foundMovement = movementWardIoOperationRepository.findOne(code);
-		ArrayList<MovementWard> movements = movWardBrowserManager.getMovementWard();
+		List<MovementWard> movements = movWardBrowserManager.getMovementWard();
 		assertThat(movements).hasSize(1);
 		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 	}
@@ -497,7 +498,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMedicalsWard() throws Exception {
 		MedicalWardId code = _setupTestMedicalWard(false);
 		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
-		ArrayList<MedicalWard> medicalWards = movWardBrowserManager.getMedicalsWard(foundMedicalWard.getWard().getCode().charAt(0), true);
+		List<MedicalWard> medicalWards = movWardBrowserManager.getMedicalsWard(foundMedicalWard.getWard().getCode().charAt(0), true);
 		assertThat(medicalWards.get(0).getQty()).isCloseTo(foundMedicalWard.getInQuantity() - foundMedicalWard.getOutQuantity(), offset(0.1));
 	}
 
@@ -534,7 +535,7 @@ public class Tests extends OHCoreTestCase {
 		GregorianCalendar toDate = new GregorianCalendar(now.get(Calendar.YEAR), 3, 3);
 		int code = _setupTestMovementWard(false);
 		MovementWard foundMovement = movementWardIoOperationRepository.findOne(code);
-		ArrayList<MovementWard> movements = movWardBrowserManager.getMovementWard(foundMovement.getWard().getCode(), fromDate, toDate);
+		List<MovementWard> movements = movWardBrowserManager.getMovementWard(foundMovement.getWard().getCode(), fromDate, toDate);
 		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 	}
 
@@ -544,7 +545,7 @@ public class Tests extends OHCoreTestCase {
 		MovementWard foundMovement = movementWardIoOperationRepository.findOne(code);
 		DateTime startDate = new DateTime(foundMovement.getDate()).minusDays(1);
 		DateTime endDate = new DateTime(foundMovement.getDate()).plusDays(1);
-		ArrayList<MovementWard> wardMovementsToWard = movWardBrowserManager.getWardMovementsToWard(
+		List<MovementWard> wardMovementsToWard = movWardBrowserManager.getWardMovementsToWard(
 				foundMovement.getWard().getCode(), startDate.toGregorianCalendar(), endDate.toGregorianCalendar());
 		assertThat(wardMovementsToWard).hasSize(1);
 		assertThat(wardMovementsToWard.get(0).getCode()).isEqualTo(foundMovement.getCode());
@@ -668,7 +669,7 @@ public class Tests extends OHCoreTestCase {
 
 		movWardBrowserManager.newMovementWard(movementWard);
 
-		ArrayList<MovementWard> movementWards = movWardBrowserManager.getMovementToPatient(patient);
+		List<MovementWard> movementWards = movWardBrowserManager.getMovementToPatient(patient);
 		assertThat(movementWards).hasSize(1);
 		assertThat(movementWards.get(0).getDescription()).isEqualTo(movementWard.getDescription());
 	}
@@ -695,7 +696,7 @@ public class Tests extends OHCoreTestCase {
 
 		movWardBrowserManager.newMovementWard(movementWard);
 
-		ArrayList<MedicalWard> medicalWards = movWardBrowserManager.getMedicalsWardTotalQuantity('X');
+		List<MedicalWard> medicalWards = movWardBrowserManager.getMedicalsWardTotalQuantity('X');
 		assertThat(medicalWards).hasSize(1);
 		assertThat(medicalWards.get(0).getWard().getCode()).isEqualTo("X");
 	}
@@ -738,7 +739,7 @@ public class Tests extends OHCoreTestCase {
 		movementWards.add(movementWard2);
 		movementWards.add(movementWard3);
 
-		ArrayList<MovementWardForPrint> movementWardForPrints = movWardBrowserManager.convertMovementWardForPrint(movementWards);
+		List<MovementWardForPrint> movementWardForPrints = movWardBrowserManager.convertMovementWardForPrint(movementWards);
 		assertThat(movementWardForPrints)
 				.extracting(MovementWardForPrint::getWard)
 				.containsExactly("Ward 3", "Ward 2", "Ward 1");
@@ -786,7 +787,7 @@ public class Tests extends OHCoreTestCase {
 		movementWards.add(movementWard2);
 		movementWards.add(movementWard1);
 
-		ArrayList<MovementWardForPrint> movementWardForPrints = movWardBrowserManager.convertMovementWardForPrint(movementWards);
+		List<MovementWardForPrint> movementWardForPrints = movWardBrowserManager.convertMovementWardForPrint(movementWards);
 		assertThat(movementWardForPrints)
 				.extracting(MovementWardForPrint::getWard)
 				.containsExactly("Ward 1", "Ward 2", "Ward 3");
@@ -855,7 +856,7 @@ public class Tests extends OHCoreTestCase {
 		movements.add(movement1);
 		movements.add(movement3);
 
-		ArrayList<MovementForPrint> movementForPrints = movWardBrowserManager.convertMovementForPrint(movements);
+		List<MovementForPrint> movementForPrints = movWardBrowserManager.convertMovementForPrint(movements);
 		assertThat(movementForPrints)
 				.extracting(MovementForPrint::getWard)
 				.containsExactly("Ward 3", "Ward 2", "Ward 1");
@@ -924,7 +925,7 @@ public class Tests extends OHCoreTestCase {
 		movements.add(movement1);
 		movements.add(movement3);
 
-		ArrayList<MovementForPrint> movementForPrints = movWardBrowserManager.convertMovementForPrint(movements);
+		List<MovementForPrint> movementForPrints = movWardBrowserManager.convertMovementForPrint(movements);
 		assertThat(movementForPrints)
 				.extracting(MovementForPrint::getWard)
 				.containsExactly("Ward 1", "Ward 2", "Ward 3");
@@ -978,7 +979,7 @@ public class Tests extends OHCoreTestCase {
 		medicalWards.add(medicalWard3);
 		medicalWards.add(medicalWard1);
 
-		ArrayList<MedicalWardForPrint> medicalWardForPrints = movWardBrowserManager.convertWardDrugs(ward3, medicalWards);
+		List<MedicalWardForPrint> medicalWardForPrints = movWardBrowserManager.convertWardDrugs(ward3, medicalWards);
 		assertThat(medicalWardForPrints).hasSize(3);
 		assertThat(medicalWardForPrints.get(0).getMedical().getDescription()).isEqualTo("a description");
 		assertThat(medicalWardForPrints.get(1).getMedical().getDescription()).isEqualTo("first description");

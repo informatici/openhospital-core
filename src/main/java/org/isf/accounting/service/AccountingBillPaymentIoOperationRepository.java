@@ -21,7 +21,6 @@
  */
 package org.isf.accounting.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -62,5 +61,5 @@ public interface AccountingBillPaymentIoOperationRepository extends JpaRepositor
 			"BP.bill.billPatient.code = :patientCode and " +
 			"DATE(BP.date) between DATE(:dateFrom) and DATE(:dateTo) " +
 			"ORDER BY BP.bill, BP.date ASC")
-	ArrayList<BillPayments> findByDateAndPatient(@Param("dateFrom") GregorianCalendar dateFrom , @Param("dateTo") GregorianCalendar dateTo, @Param("patientCode") Integer patientCode);
+	List<BillPayments> findByDateAndPatient(@Param("dateFrom") GregorianCalendar dateFrom , @Param("dateTo") GregorianCalendar dateTo, @Param("patientCode") Integer patientCode);
 }

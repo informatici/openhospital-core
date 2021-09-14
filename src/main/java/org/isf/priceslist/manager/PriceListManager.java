@@ -23,6 +23,7 @@ package org.isf.priceslist.manager;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.priceslist.model.Price;
@@ -49,7 +50,7 @@ public class PriceListManager {
 	 * @return the list of {@link PriceList}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<PriceList> getLists() throws OHServiceException {
+	public List<PriceList> getLists() throws OHServiceException {
 		return ioOperations.getLists();
 	}
 
@@ -59,7 +60,7 @@ public class PriceListManager {
 	 * @return the list of {@link Price}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Price> getPrices() throws OHServiceException {
+	public List<Price> getPrices() throws OHServiceException {
 		return ioOperations.getPrices();
 	}
 
@@ -134,7 +135,7 @@ public class PriceListManager {
 		return ioOperations.copyList(list, factor, step);
 	}
 
-	public ArrayList<PriceForPrint> convertPrice(PriceList listSelected, ArrayList<Price> prices) {
+	public List<PriceForPrint> convertPrice(PriceList listSelected, Iterable<Price> prices) {
 		ArrayList<PriceForPrint> pricePrint = new ArrayList<>();
 		for (Price price : prices) {
 			if (price.getList().getId() == listSelected.getId() && price.getPrice() != 0.) {

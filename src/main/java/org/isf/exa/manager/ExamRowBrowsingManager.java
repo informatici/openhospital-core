@@ -65,8 +65,7 @@ public class ExamRowBrowsingManager {
 	 * @return the list of {@link ExamRow}s. It could be <code>null</code>
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamRow> getExamRow() throws OHServiceException {
-
+	public List<ExamRow> getExamRow() throws OHServiceException {
 		return this.getExamRow(0, null);
 	}
 
@@ -77,7 +76,7 @@ public class ExamRowBrowsingManager {
 	 * @return the list of {@link ExamRow}s. It could be <code>null</code>
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamRow> getExamRow(int aExamCode) throws OHServiceException {
+	public List<ExamRow> getExamRow(int aExamCode) throws OHServiceException {
 		return this.getExamRow(aExamCode, null);
 	}
 
@@ -89,7 +88,7 @@ public class ExamRowBrowsingManager {
 	 * @return the list of {@link ExamRow}s. It could be <code>null</code>
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamRow> getExamRow(int aExamRowCode, String aDescription) throws OHServiceException {
+	public List<ExamRow> getExamRow(int aExamRowCode, String aDescription) throws OHServiceException {
 		return ioOperations.getExamRow(aExamRowCode, aDescription);
 	}
 
@@ -123,7 +122,7 @@ public class ExamRowBrowsingManager {
 	 * @return the list of {@link ExamRow}s. It could be <code>null</code>
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamRow> getExamRowByExamCode(String aExamCode) throws OHServiceException {
+	public List<ExamRow> getExamRowByExamCode(String aExamCode) throws OHServiceException {
 		return ioOperations.getExamRowByExamCode(aExamCode);
 	}
 }

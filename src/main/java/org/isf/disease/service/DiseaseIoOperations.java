@@ -22,6 +22,7 @@
 package org.isf.disease.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.disease.model.Disease;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -78,122 +79,71 @@ public class DiseaseIoOperations {
 	 * @return the retrieved diseases.
 	 * @throws OHServiceException if an error occurs retrieving the diseases.
 	 */
-	public ArrayList<Disease> getDiseases(
-			String disTypeCode, 
-			boolean opd, 
-			boolean ipdIn, 
-			boolean ipdOut) throws OHServiceException 
-	{
-		ArrayList<Disease> diseases = null;
-    	
-		
-		if (disTypeCode != null) 
-		{
-			if (opd) 
-			{
-				if (ipdIn) 
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndOpdAndIpdInAndIpdOut(disTypeCode));
-					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndOpdAndIpdIn(disTypeCode));						
-					}
-				}
-				else
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndOpdAndIpdOut(disTypeCode));
-					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndOpd(disTypeCode));						
-					}					
-				}
-			}		
-			else
-			{
+	public List<Disease> getDiseases(String disTypeCode, boolean opd, boolean ipdIn, boolean ipdOut) throws OHServiceException {
+		List<Disease> diseases = null;
 
-				if (ipdIn) 
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndIpdInAndIpdOut(disTypeCode));
-						
+		if (disTypeCode != null) {
+			if (opd) {
+				if (ipdIn) {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCodeAndOpdAndIpdInAndIpdOut(disTypeCode));
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCodeAndOpdAndIpdIn(disTypeCode));
 					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndIpdIn(disTypeCode));						
+				} else {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCodeAndOpdAndIpdOut(disTypeCode));
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCodeAndOpd(disTypeCode));
 					}
 				}
-				else
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndIpdOut(disTypeCode));
+			} else {
+
+				if (ipdIn) {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCodeAndIpdInAndIpdOut(disTypeCode));
+
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCodeAndIpdIn(disTypeCode));
 					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCode(disTypeCode));						
-					}					
+				} else {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCodeAndIpdOut(disTypeCode));
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCode(disTypeCode));
+					}
 				}
 			}
-		}
-		else
-		{
-			if (opd) 
-			{
-				if (ipdIn) 
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByOpdAndIpdInAndIpdOut());
+		} else {
+			if (opd) {
+				if (ipdIn) {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByOpdAndIpdInAndIpdOut());
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAllByOpdAndIpdIn());
 					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByOpdAndIpdIn());						
+				} else {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByOpdAndIpdOut());
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAllByOpd());
 					}
 				}
-				else
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByOpdAndIpdOut());
-					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByOpd());						
-					}					
-				}
-			}		
-			else
-			{
+			} else {
 
-				if (ipdIn) 
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByIpdInAndIpdOut());
-						
+				if (ipdIn) {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByIpdInAndIpdOut());
+
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAllByIpdIn());
 					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByIpdIn());						
+				} else {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByIpdOut());
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAll());
 					}
-				}
-				else
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByIpdOut());
-					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAll());						
-					}					
 				}
 			}
 		}

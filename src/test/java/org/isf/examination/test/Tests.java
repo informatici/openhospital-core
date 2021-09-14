@@ -28,6 +28,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -130,7 +132,7 @@ public class Tests extends OHCoreTestCase {
 		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
 		patientIoOperationRepository.saveAndFlush(patient);
 		examinationIoOperationRepository.saveAndFlush(lastPatientExamination);
-		ArrayList<PatientExamination> foundExamination = examinationOperations.getLastNByPatID(patient.getCode(), 1);
+		List<PatientExamination> foundExamination = examinationOperations.getLastNByPatID(patient.getCode(), 1);
 		_checkPatientExaminationIntoDb(foundExamination.get(0).getPex_ID());
 	}
 
@@ -140,7 +142,7 @@ public class Tests extends OHCoreTestCase {
 		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
 		patientIoOperationRepository.saveAndFlush(patient);
 		examinationIoOperationRepository.saveAndFlush(lastPatientExamination);
-		ArrayList<PatientExamination> foundExamination = examinationOperations.getByPatID(patient.getCode());
+		List<PatientExamination> foundExamination = examinationOperations.getByPatID(patient.getCode());
 		_checkPatientExaminationIntoDb(foundExamination.get(0).getPex_ID());
 	}
 
@@ -148,7 +150,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoRemove() throws Exception {
 		int id = _setupTestPatientExamination(false);
 		PatientExamination patientExamination = examinationBrowserManager.getByID(id);
-		ArrayList<PatientExamination> patexList = new ArrayList<>(1);
+		List<PatientExamination> patexList = new ArrayList<>(1);
 		patexList.add(patientExamination);
 		examinationOperations.remove(patexList);
 		assertThat(examinationIoOperationRepository.findOne(id)).isNull();
@@ -208,7 +210,7 @@ public class Tests extends OHCoreTestCase {
 		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
 		patientIoOperationRepository.saveAndFlush(patient);
 		examinationIoOperationRepository.saveAndFlush(lastPatientExamination);
-		ArrayList<PatientExamination> foundExamination = examinationBrowserManager.getLastNByPatID(patient.getCode(), 1);
+		List<PatientExamination> foundExamination = examinationBrowserManager.getLastNByPatID(patient.getCode(), 1);
 		_checkPatientExaminationIntoDb(foundExamination.get(0).getPex_ID());
 	}
 
@@ -218,7 +220,7 @@ public class Tests extends OHCoreTestCase {
 		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
 		patientIoOperationRepository.saveAndFlush(patient);
 		examinationIoOperationRepository.saveAndFlush(lastPatientExamination);
-		ArrayList<PatientExamination> foundExamination = examinationBrowserManager.getByPatID(patient.getCode());
+		List<PatientExamination> foundExamination = examinationBrowserManager.getByPatID(patient.getCode());
 		_checkPatientExaminationIntoDb(foundExamination.get(0).getPex_ID());
 	}
 
@@ -226,7 +228,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrRemove() throws Exception {
 		int id = _setupTestPatientExamination(false);
 		PatientExamination patientExamination = examinationIoOperationRepository.findOne(id);
-		ArrayList<PatientExamination> patexList = new ArrayList<>(1);
+		List<PatientExamination> patexList = new ArrayList<>(1);
 		patexList.add(patientExamination);
 		examinationBrowserManager.remove(patexList);
 		assertThat(examinationIoOperationRepository.findOne(id)).isNull();
@@ -438,7 +440,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void setKnownKeyValueInHashMaps() throws Exception {
-		HashMap<String, String> knownValues = new HashMap<>(3);
+		Map<String, String> knownValues = new HashMap<>(3);
 		knownValues.put("key1", "value1");
 		knownValues.put("knownKey", "knownValue");
 		knownValues.put("key3", "value3");
@@ -451,7 +453,7 @@ public class Tests extends OHCoreTestCase {
 		bowelDescriptionHashMap.setAccessible(true);
 		bowelDescriptionHashMap.set(examinationBrowserManager, knownValues);
 
-		LinkedHashMap<String, String> linkedKnownValues = new LinkedHashMap<>(3);
+		Map<String, String> linkedKnownValues = new LinkedHashMap<>(3);
 		linkedKnownValues.put("key1", "value1");
 		linkedKnownValues.put("knownKey", "knownValue");
 		linkedKnownValues.put("key3", "value3");

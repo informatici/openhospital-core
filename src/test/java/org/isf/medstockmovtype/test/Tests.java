@@ -24,7 +24,7 @@ package org.isf.medstockmovtype.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.OHCoreTestCase;
 import org.isf.medstockmovtype.manager.MedicaldsrstockmovTypeBrowserManager;
@@ -76,7 +76,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoFindOne() throws Exception {
 		String code = _setupTestMovementType(false);
 		MovementType foundMovementType = medicalStockMovementTypeIoOperation.findOneByCode(code);
-		ArrayList<MovementType> movementTypes = medicalStockMovementTypeIoOperation.getMedicaldsrstockmovType();
+		List<MovementType> movementTypes = medicalStockMovementTypeIoOperation.getMedicaldsrstockmovType();
 		assertThat(movementTypes.get(movementTypes.size() - 1).getDescription()).isEqualTo(foundMovementType.getDescription());
 	}
 
@@ -125,7 +125,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrFindOne() throws Exception {
 		String code = _setupTestMovementType(false);
 		MovementType foundMovementType = medicaldsrstockmovTypeBrowserManager.getMovementType(code);
-		ArrayList<MovementType> movementTypes = medicaldsrstockmovTypeBrowserManager.getMedicaldsrstockmovType();
+		List<MovementType> movementTypes = medicaldsrstockmovTypeBrowserManager.getMedicaldsrstockmovType();
 		assertThat(movementTypes.get(movementTypes.size() - 1).getDescription()).isEqualTo(foundMovementType.getDescription());
 	}
 

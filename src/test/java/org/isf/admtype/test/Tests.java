@@ -24,7 +24,7 @@ package org.isf.admtype.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -75,7 +75,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetAdmissionType() throws Exception {
 		String code = _setupTestAdmissionType(false);
-		ArrayList<AdmissionType> admissionTypes = admissionTypeIoOperation.getAdmissionType();
+		List<AdmissionType> admissionTypes = admissionTypeIoOperation.getAdmissionType();
 		assertThat(admissionTypes).hasSize(1);
 		assertThat(admissionTypes.get(0).getDescription()).isEqualTo("TestDescription");
 	}
@@ -119,7 +119,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetAdmissionType() throws Exception {
 		String code = _setupTestAdmissionType(false);
-		ArrayList<AdmissionType> admissionTypes = admissionTypeBrowserManager.getAdmissionType();
+		List<AdmissionType> admissionTypes = admissionTypeBrowserManager.getAdmissionType();
 		assertThat(admissionTypes).hasSize(1);
 		assertThat(admissionTypes.get(0).getDescription()).isEqualTo("TestDescription");
 	}

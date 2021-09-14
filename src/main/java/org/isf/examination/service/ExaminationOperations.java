@@ -23,6 +23,7 @@ package org.isf.examination.service;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.isf.examination.model.PatientExamination;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -86,11 +87,11 @@ public class ExaminationOperations {
 	}
 
 	public PatientExamination getLastByPatID(int patID) throws OHServiceException	{
-		ArrayList<PatientExamination> patExamination = getByPatID(patID);
+		List<PatientExamination> patExamination = getByPatID(patID);
 		return !patExamination.isEmpty() ? patExamination.get(0) : null;
 	}
 
-	public ArrayList<PatientExamination> getLastNByPatID(int patID, int number) throws OHServiceException {
+	public List<PatientExamination> getLastNByPatID(int patID, int number) throws OHServiceException {
 		if (number > 0) {
 			return new ArrayList<>(repository
 							.findByPatient_CodeOrderByPexDateDesc(patID, new PageRequest(0, number)).getContent());
@@ -101,11 +102,11 @@ public class ExaminationOperations {
 		
 	}
 
-	public ArrayList<PatientExamination> getByPatID(int patID) throws OHServiceException	{
-		return (ArrayList<PatientExamination>)repository.findByPatient_CodeOrderByPexDateDesc(patID);
+	public List<PatientExamination> getByPatID(int patID) throws OHServiceException	{
+		return repository.findByPatient_CodeOrderByPexDateDesc(patID);
 	}
 
-	public void remove(ArrayList<PatientExamination> patexList) throws OHServiceException {
+	public void remove(List<PatientExamination> patexList) throws OHServiceException {
 		repository.delete(patexList);
 	}
 }

@@ -49,13 +49,8 @@ public class PricesListIoOperations {
 	 * @return the list of {@link PriceList}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<PriceList> getLists() throws OHServiceException {
-		ArrayList<PriceList> pList = null;
-			
-
-		pList = new ArrayList<>(repository.findAll());
-		
-		return pList;
+	public List<PriceList> getLists() throws OHServiceException {
+		return repository.findAll();
 	}
 	
 	/**
@@ -64,13 +59,8 @@ public class PricesListIoOperations {
 	 * @return the list of {@link Price}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Price> getPrices() throws OHServiceException {
-		ArrayList<Price> pPrice = null;
-						
-
-		pPrice = new ArrayList<>(priceRepository.findAllByOrderByDescriptionAsc());
-		
-		return pPrice;
+	public List<Price> getPrices() throws OHServiceException {
+		return priceRepository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
@@ -100,7 +90,7 @@ public class PricesListIoOperations {
         return true;
     }
 	
-	private boolean _insertNewPricesInsideList(PriceList list, ArrayList<Price> prices) throws OHServiceException {
+	private boolean _insertNewPricesInsideList(PriceList list, List<Price> prices) throws OHServiceException {
 		for (Price price : prices) {
 			price.setList(list);
 			priceRepository.save(price);

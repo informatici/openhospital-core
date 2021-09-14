@@ -47,7 +47,7 @@ public class PricesOthersManager {
 	 * @return the list of {@link PricesOthers}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<PricesOthers> getOthers() throws OHServiceException {
+	public List<PricesOthers> getOthers() throws OHServiceException {
 		return ioOperations.getOthers();
 	}
 

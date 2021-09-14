@@ -89,7 +89,7 @@ public class ExamBrowsingManager {
 	 * @return the list of {@link Exam}s. It could be <code>null</code>
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Exam> getExams() throws OHServiceException {
+	public List<Exam> getExams() throws OHServiceException {
 		return new ArrayList<>(ioOperations.getExams());
 	}
 
@@ -101,7 +101,7 @@ public class ExamBrowsingManager {
 	 * @deprecated use getExam() instead
 	 */
 	@Deprecated
-	public ArrayList<Exam> getExamsbyDesc() throws OHServiceException {
+	public List<Exam> getExamsbyDesc() throws OHServiceException {
 		return this.getExams();
 	}
 
@@ -112,8 +112,8 @@ public class ExamBrowsingManager {
 	 * @return the list of {@link Exam}s. It could be <code>null</code>
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Exam> getExams(String description) throws OHServiceException {
-		return new ArrayList<>(ioOperations.getExamsByDesc(description));
+	public List<Exam> getExams(String description) throws OHServiceException {
+		return ioOperations.getExamsByDesc(description);
 	}
 
 	/**
@@ -123,8 +123,8 @@ public class ExamBrowsingManager {
 	 * @return the list of {@link Exam}s. It could be <code>null</code>
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Exam> getExamsByTypeDescription(String description) throws OHServiceException {
-		return new ArrayList<>(ioOperations.getExamsByExamTypeDesc(description));
+	public List<Exam> getExamsByTypeDescription(String description) throws OHServiceException {
+		return ioOperations.getExamsByExamTypeDesc(description);
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class ExamBrowsingManager {
 	 * @return the list of {@link ExamType}s. It could be <code>null</code>
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamType> getExamType() throws OHServiceException {
+	public List<ExamType> getExamType() throws OHServiceException {
 		return ioOperations.getExamType();
 	}
 

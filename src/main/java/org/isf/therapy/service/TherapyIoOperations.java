@@ -21,7 +21,7 @@
  */
 package org.isf.therapy.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.patient.model.Patient;
 import org.isf.therapy.model.TherapyRow;
@@ -59,10 +59,10 @@ public class TherapyIoOperations {
 	 * @return the list of {@link TherapyRow}s (therapies)
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<TherapyRow> getTherapyRows(int patID) throws OHServiceException {
+	public List<TherapyRow> getTherapyRows(int patID) throws OHServiceException {
 		return patID != 0 ?
-				new ArrayList<>(repository.findByPatientCodeOrderByPatientCodeAscTherapyIDAsc(patID)) :
-				new ArrayList<>(repository.findAllByOrderByPatientAscTherapyIDAsc());
+				repository.findByPatientCodeOrderByPatientCodeAscTherapyIDAsc(patID) :
+				repository.findAllByOrderByPatientAscTherapyIDAsc();
 	}
 
 	/**

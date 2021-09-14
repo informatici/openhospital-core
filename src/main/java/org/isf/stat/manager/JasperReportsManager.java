@@ -28,7 +28,6 @@ import java.sql.SQLException;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -118,7 +117,7 @@ public class JasperReportsManager {
     public JasperReportResultDto getDiseasesListPdf() throws OHServiceException {
 
         try {
-            HashMap<String, String> parameters = new HashMap<>();
+            Map<String, String> parameters = new HashMap<>();
             Hospital hospital = hospitalManager.getHospital();
             parameters.put("hospital", hospital.getDescription());
 
@@ -233,7 +232,7 @@ public class JasperReportsManager {
         }
     }
     
-    public JasperReportResultDto getGenericReportBillGroupedPdf(Integer billID, String jasperFileName, Patient patient, ArrayList<Integer> billListId, String dateFrom, String dateTo, boolean show, boolean askForPrint) throws OHServiceException {
+    public JasperReportResultDto getGenericReportBillGroupedPdf(Integer billID, String jasperFileName, Patient patient, List<Integer> billListId, String dateFrom, String dateTo, boolean show, boolean askForPrint) throws OHServiceException {
 
 		try {
 			HashMap<String, Object> parameters = getHospitalParameters();
@@ -254,7 +253,7 @@ public class JasperReportsManager {
         }
     }
     
-    public JasperReportResultDto getGenericReportBillGroupedTxt(Integer billID, String jasperFileName, Patient patient, ArrayList<Integer> billListId, String dateFrom, String dateTo, boolean show, boolean askForPrint) throws OHServiceException {
+    public JasperReportResultDto getGenericReportBillGroupedTxt(Integer billID, String jasperFileName, Patient patient, List<Integer> billListId, String dateFrom, String dateTo, boolean show, boolean askForPrint) throws OHServiceException {
 
         try {
             HashMap<String, Object> parameters = getHospitalParameters();
@@ -721,7 +720,7 @@ public class JasperReportsManager {
     public JasperReportResultDto getGenericReportMYPdf(Integer month, Integer year, String jasperFileName) throws OHServiceException {
 
         try {
-            HashMap<String, Object> parameters = compileGenericReportMYParameters(month, year, jasperFileName);
+            Map<String, Object> parameters = compileGenericReportMYParameters(month, year, jasperFileName);
             String pdfFilename = "rpt/PDF/"+jasperFileName+"_"+year+"_"+month+".pdf";
 
             JasperReportResultDto result = generateJasperReport(compileJasperFilename(jasperFileName), pdfFilename, parameters);
@@ -910,7 +909,7 @@ public class JasperReportsManager {
 		}
 	}
 
-	private void addReportBundleParameter(String jasperParameter, String jasperFileName, HashMap<String, Object> parameters) {
+	private void addReportBundleParameter(String jasperParameter, String jasperFileName, Map<String, Object> parameters) {
 		try {
 			ResourceBundle resourceBundle = ResourceBundle.getBundle(
 						jasperFileName, 

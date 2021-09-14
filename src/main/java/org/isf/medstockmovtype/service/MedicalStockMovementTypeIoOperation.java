@@ -47,8 +47,7 @@ public class MedicalStockMovementTypeIoOperation {
 	 * @return all the stored {@link MovementType}s.
 	 * @throws OHServiceException if an error occurs retrieving the medical stock movement types.
 	 */
-	public ArrayList<MovementType> getMedicaldsrstockmovType() throws OHServiceException 
-	{
+	public List<MovementType> getMedicaldsrstockmovType() throws OHServiceException {
 		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 

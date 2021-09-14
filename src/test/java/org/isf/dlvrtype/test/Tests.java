@@ -24,7 +24,7 @@ package org.isf.dlvrtype.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -77,7 +77,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetDeliveryType() throws Exception {
 		String code = _setupTestDeliveryType(false);
 		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
-		ArrayList<DeliveryType> deliveryTypes = deliveryTypeIoOperation.getDeliveryType();
+		List<DeliveryType> deliveryTypes = deliveryTypeIoOperation.getDeliveryType();
 		assertThat(deliveryTypes.get(deliveryTypes.size() - 1).getDescription()).isEqualTo(foundDeliveryType.getDescription());
 	}
 
@@ -121,7 +121,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetDeliveryType() throws Exception {
 		String code = _setupTestDeliveryType(false);
 		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
-		ArrayList<DeliveryType> deliveryTypes = deliveryTypeBrowserManager.getDeliveryType();
+		List<DeliveryType> deliveryTypes = deliveryTypeBrowserManager.getDeliveryType();
 		assertThat(deliveryTypes.get(deliveryTypes.size() - 1).getDescription()).isEqualTo(foundDeliveryType.getDescription());
 	}
 
