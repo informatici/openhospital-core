@@ -436,7 +436,7 @@ public class MedicalStockIoOperations {
 	 * @return the list of retrieved movements.
 	 * @throws OHServiceException if an error occurs retrieving the movements.
 	 */
-	public List<Movement> getMovements(			String wardId,			GregorianCalendar dateFrom,			GregorianCalendar dateTo) throws OHServiceException {
+	public List<Movement> getMovements(String wardId, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
 		ArrayList<Integer> pMovementCode = null;
 		ArrayList<Movement> pMovement = new ArrayList<>();
 

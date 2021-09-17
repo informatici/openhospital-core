@@ -32,19 +32,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class TherapyIoOperations {
 
 	@Autowired
 	private TherapyIoOperationRepository repository;
-	
+
 	/**
 	 * Insert a new {@link TherapyRow} (therapy) in the DB
-	 * 
+	 *
 	 * @param thRow - the {@link TherapyRow} (therapy)
 	 * @return the therapyID
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public TherapyRow newTherapy(TherapyRow thRow) throws OHServiceException {
 		return repository.save(thRow);
@@ -54,15 +54,14 @@ public class TherapyIoOperations {
 	 * Return the list of {@link TherapyRow}s (therapies) for specified Patient ID
 	 * or
 	 * return all {@link TherapyRow}s (therapies) if <code>0</code> is passed
-	 * 
+	 *
 	 * @param patID - the Patient ID
 	 * @return the list of {@link TherapyRow}s (therapies)
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public List<TherapyRow> getTherapyRows(int patID) throws OHServiceException {
-		return patID != 0 ?
-				repository.findByPatientCodeOrderByPatientCodeAscTherapyIDAsc(patID) :
-				repository.findAllByOrderByPatientAscTherapyIDAsc();
+		return patID != 0 ? repository.findByPatientCodeOrderByPatientCodeAscTherapyIDAsc(patID)
+				: repository.findAllByOrderByPatientAscTherapyIDAsc();
 	}
 
 	/**
@@ -82,9 +81,9 @@ public class TherapyIoOperations {
 	 *
 	 * @param code - the therapy code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean isCodePresent(Integer code) throws OHServiceException	{
+	public boolean isCodePresent(Integer code) throws OHServiceException {
 		return repository.exists(code);
 	}
 }
