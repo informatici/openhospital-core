@@ -21,7 +21,7 @@
  */
 package org.isf.vactype.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -52,8 +52,8 @@ public class VacTypeIoOperation {
 	 * @return the list of {@link VaccineType}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<VaccineType> getVaccineType() throws OHServiceException {
-		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
+	public List<VaccineType> getVaccineType() throws OHServiceException {
+		return repository.findAllByOrderByDescriptionAsc();
 	}
 	
 	/**

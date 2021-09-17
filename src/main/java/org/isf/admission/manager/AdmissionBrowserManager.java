@@ -55,7 +55,7 @@ public class AdmissionBrowserManager {
 	 * @return the patient list with associated ward or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<AdmittedPatient> getAdmittedPatients() throws OHServiceException {
+	public List<AdmittedPatient> getAdmittedPatients() throws OHServiceException {
 		return new ArrayList<>(ioOperations.getAdmittedPatients());
 	}
 
@@ -66,7 +66,7 @@ public class AdmissionBrowserManager {
 	 * @return the filtered patient list or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<AdmittedPatient> getAdmittedPatients(String searchTerms) throws OHServiceException {
+	public List<AdmittedPatient> getAdmittedPatients(String searchTerms) throws OHServiceException {
 		return new ArrayList<>(ioOperations.getAdmittedPatients(searchTerms));
 	}
 
@@ -79,7 +79,7 @@ public class AdmissionBrowserManager {
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public ArrayList<AdmittedPatient> getAdmittedPatients(GregorianCalendar[] admissionRange, //
+	public List<AdmittedPatient> getAdmittedPatients(GregorianCalendar[] admissionRange, //
 			GregorianCalendar[] dischargeRange, String searchTerms) throws OHServiceException {
 		return new ArrayList<>(ioOperations.getAdmittedPatients(searchTerms, admissionRange, dischargeRange));
 	}
@@ -117,7 +117,7 @@ public class AdmissionBrowserManager {
 	 * @return the admission list or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Admission> getAdmissions(Patient patient) throws OHServiceException {
+	public List<Admission> getAdmissions(Patient patient) throws OHServiceException {
 		return ioOperations.getAdmissions(patient);
 	}
 
@@ -138,7 +138,7 @@ public class AdmissionBrowserManager {
 	 * @return the admission types  or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<AdmissionType> getAdmissionType() throws OHServiceException {
+	public List<AdmissionType> getAdmissionType() throws OHServiceException {
 		return ioOperations.getAdmissionType();
 	}
 
@@ -148,7 +148,7 @@ public class AdmissionBrowserManager {
 	 * @return the discharge types  or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<DischargeType> getDischargeType() throws OHServiceException {
+	public List<DischargeType> getDischargeType() throws OHServiceException {
 		return ioOperations.getDischargeType();
 	}
 
@@ -235,7 +235,7 @@ public class AdmissionBrowserManager {
 		 * Initialize AdmissionBrowserManager
 		 */
 		Patient patient = admission.getPatient();
-		ArrayList<Admission> admList = getAdmissions(patient);
+		List<Admission> admList = getAdmissions(patient);
 
 		/*
 		 * Today Gregorian Calendar

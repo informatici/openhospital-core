@@ -54,12 +54,8 @@ public class MenuIoOperations
 	 * @return the list of {@link User}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<User> getUser() throws OHServiceException 
-	{
-		ArrayList<User> users = (ArrayList<User>) repository.findAllByOrderByUserNameAsc();
-				
-			
-		return users;
+	public List<User> getUser() throws OHServiceException {
+		return repository.findAllByOrderByUserNameAsc();
 	}
 
 	/**
@@ -69,13 +65,8 @@ public class MenuIoOperations
 	 * @return the list of {@link User}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<User> getUser(
-			String groupID) throws OHServiceException 
-	{
-		ArrayList<User> users = (ArrayList<User>) repository.findAllWhereUserGroupNameByOrderUserNameAsc(groupID);
-				
-			
-		return users;
+	public List<User> getUser(String groupID) throws OHServiceException {
+		return repository.findAllWhereUserGroupNameByOrderUserNameAsc(groupID);
 	}
 	
 	/**
@@ -84,8 +75,7 @@ public class MenuIoOperations
 	 * @return {@link User}
 	 * @throws OHServiceException
 	 */
-	public User getUserByName(String userName) throws OHServiceException 
-	{ 
+	public User getUserByName(String userName) throws OHServiceException {
 		return repository.findByUserName(userName);
 	}
 	
@@ -110,12 +100,8 @@ public class MenuIoOperations
 	 * @return the list of {@link UserGroup}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<UserGroup> getUserGroup() throws OHServiceException 
-	{
-		ArrayList<UserGroup> users = (ArrayList<UserGroup>) groupRepository.findAllByOrderByCodeAsc();
-				
-			
-		return users;
+	public List<UserGroup> getUserGroup() throws OHServiceException {
+		return groupRepository.findAllByOrderByCodeAsc();
 	}
 	
 	/**
@@ -240,13 +226,11 @@ public class MenuIoOperations
 	 * @return the list of {@link UserMenuItem}s 
 	 * @throws OHServiceException
 	 */
-	public ArrayList<UserMenuItem> getMenu(
-			User aUser) throws OHServiceException 
+	public List<UserMenuItem> getMenu(User aUser) throws OHServiceException
 	{
-		ArrayList<UserMenuItem> menu = null;		
+		List<UserMenuItem> menu = null;
 		List<Object[]> menuList = menuRepository.findAllWhereUserId(aUser.getUserName());
-		
-		
+
 		menu = new ArrayList<>();
 		for (Object[] object : menuList) {
 			
@@ -274,11 +258,10 @@ public class MenuIoOperations
 	 * @return the list of {@link UserMenuItem}s 
 	 * @throws OHServiceException
 	 */
-	public ArrayList<UserMenuItem> getGroupMenu(
-			UserGroup aGroup) throws OHServiceException 
+	public List<UserMenuItem> getGroupMenu(UserGroup aGroup) throws OHServiceException
 	{
 		List<Object[]> menuList = menuRepository.findAllWhereGroupId(aGroup.getCode());
-		ArrayList<UserMenuItem> menu = new ArrayList<>();
+		List<UserMenuItem> menu = new ArrayList<>();
 		for (Object[] object : menuList) {
 			boolean active = (Integer) object[9] == 1 ? true : false;
 			UserMenuItem umi = new UserMenuItem();
@@ -308,20 +291,15 @@ public class MenuIoOperations
 	 * @return <code>true</code> if the menu has been replaced, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean setGroupMenu(
-			UserGroup aGroup, 
-			ArrayList<UserMenuItem> menu, 
-			boolean insert) throws OHServiceException 
-	{
+	public boolean setGroupMenu(UserGroup aGroup, List<UserMenuItem> menu, boolean insert) throws OHServiceException {
 		boolean result = true;
 
-	
 		result = _deleteGroupMenu(aGroup);
-		
+
 		for (UserMenuItem item : menu) {
 			result = result && _insertGroupMenu(aGroup, item, insert);
 		}
-		
+
 		return result;
 	}
 	

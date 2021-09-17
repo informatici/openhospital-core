@@ -21,7 +21,8 @@
  */
 package org.isf.operation.service;
 
-import java.util.ArrayList;
+import java.util.List;
+
 import org.isf.admission.model.Admission;
 import org.isf.opd.model.Opd;
 import org.isf.operation.model.OperationRow;
@@ -33,8 +34,12 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface OperationRowIoOperationRepository extends JpaRepository<OperationRow, String> {
-        ArrayList<OperationRow> findByOrderByOpDateDesc();
-        ArrayList<OperationRow> findByAdmission(Admission adm);
-        OperationRow findById(int id);
-        ArrayList<OperationRow> findByOpd(Opd opd);
+
+	List<OperationRow> findByOrderByOpDateDesc();
+
+	List<OperationRow> findByAdmission(Admission adm);
+
+	OperationRow findById(int id);
+
+	List<OperationRow> findByOpd(Opd opd);
 }

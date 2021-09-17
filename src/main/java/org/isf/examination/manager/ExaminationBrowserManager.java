@@ -117,17 +117,19 @@ public class ExaminationBrowserManager {
 		auscultationHashMap.put("bronchial", MessageBundle.getMessage("angal.examination.auscultation.bronchial.txt"));
 	}
 
-	public ArrayList<String> getAuscultationList() {
-		if (auscultationHashMap == null)
+	public List<String> getAuscultationList() {
+		if (auscultationHashMap == null) {
 			buildAuscultationHashMap();
-		ArrayList<String> auscultationDescriptionList = new ArrayList<>(auscultationHashMap.values());
+		}
+		List<String> auscultationDescriptionList = new ArrayList<>(auscultationHashMap.values());
 		auscultationDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.examination.auscultation.normal.txt")));
 		return auscultationDescriptionList;
 	}
 
 	public String getAuscultationTranslated(String auscultationKey) {
-		if (auscultationHashMap == null)
+		if (auscultationHashMap == null) {
 			buildAuscultationHashMap();
+		}
 		return auscultationHashMap.get(auscultationKey);
 	}
 
@@ -160,16 +162,16 @@ public class ExaminationBrowserManager {
 	}
 
 	public PatientExamination getLastByPatID(int patID) throws OHServiceException {
-		ArrayList<PatientExamination> patExamination = getByPatID(patID);
+		List<PatientExamination> patExamination = getByPatID(patID);
 
 		return !patExamination.isEmpty() ? patExamination.get(0) : null;
 	}
 
-	public ArrayList<PatientExamination> getLastNByPatID(int patID, int number) throws OHServiceException {
+	public List<PatientExamination> getLastNByPatID(int patID, int number) throws OHServiceException {
 		return ioOperations.getLastNByPatID(patID, number);
 	}
 
-	public ArrayList<PatientExamination> getByPatID(int patID) throws OHServiceException {
+	public List<PatientExamination> getByPatID(int patID) throws OHServiceException {
 		return ioOperations.getByPatID(patID);
 	}
 
@@ -177,7 +179,7 @@ public class ExaminationBrowserManager {
 	 * @param patexList - the {@link PatientExamination} to delete.
 	 * @throws OHServiceException
 	 */
-	public void remove(ArrayList<PatientExamination> patexList) throws OHServiceException {
+	public void remove(List<PatientExamination> patexList) throws OHServiceException {
 		ioOperations.remove(patexList);
 	}
 
@@ -230,10 +232,11 @@ public class ExaminationBrowserManager {
 	 *
 	 * @return
 	 */
-	public ArrayList<String> getDiuresisDescriptionList() {
-		if (diuresisDescriptionHashMap == null)
+	public List<String> getDiuresisDescriptionList() {
+		if (diuresisDescriptionHashMap == null) {
 			buildDiuresisDescriptionHashMap();
-		ArrayList<String> diuresisDescriptionList = new ArrayList<>(diuresisDescriptionHashMap.values());
+		}
+		List<String> diuresisDescriptionList = new ArrayList<>(diuresisDescriptionHashMap.values());
 		diuresisDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.examination.diuresis.physiological.txt")));
 		return diuresisDescriptionList;
 	}
@@ -247,10 +250,11 @@ public class ExaminationBrowserManager {
 	 *
 	 * @return
 	 */
-	public ArrayList<String> getBowelDescriptionList() {
-		if (bowelDescriptionHashMap == null)
+	public List<String> getBowelDescriptionList() {
+		if (bowelDescriptionHashMap == null) {
 			buildBowelDescriptionHashMap();
-		ArrayList<String> bowelDescriptionList = new ArrayList<>(bowelDescriptionHashMap.values());
+		}
+		List<String> bowelDescriptionList = new ArrayList<>(bowelDescriptionHashMap.values());
 		bowelDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.examination.bowel.regular.txt")));
 		return bowelDescriptionList;
 	}

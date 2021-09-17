@@ -44,7 +44,7 @@ public class OperationRowIoOperations {
     @Autowired
     private OperationRowIoOperationRepository repository;
     
-    public ArrayList<OperationRow> getOperationRow() throws OHServiceException{
+    public List<OperationRow> getOperationRow() throws OHServiceException{
         return repository.findByOrderByOpDateDesc();
     }
 
@@ -52,22 +52,21 @@ public class OperationRowIoOperations {
         return repository.findByAdmission(adm);
     }
 
-    public ArrayList<OperationRow> getOperationRowByOpd(Opd opd) throws OHServiceException {
-		if(opd.isPersisted()) {
+	public List<OperationRow> getOperationRowByOpd(Opd opd) throws OHServiceException {
+		if (opd.isPersisted()) {
 			return repository.findByOpd(opd);
-		} else {
-			return new ArrayList<>();
 		}
-    }
+		return new ArrayList<>();
+	}
 
-    public boolean deleteOperationRow(OperationRow operationRow) throws OHServiceException{
-        OperationRow found = repository.findById(operationRow.getId());
-        if(found != null) {
-            repository.delete(found);
-            return true;
-        }
-        return false;
-    }
+	public boolean deleteOperationRow(OperationRow operationRow) throws OHServiceException {
+		OperationRow found = repository.findById(operationRow.getId());
+		if (found != null) {
+			repository.delete(found);
+			return true;
+		}
+		return false;
+	}
 
     public void updateOperationRow(OperationRow opRow) throws OHServiceException {
         OperationRow found = repository.findById(opRow.getId());

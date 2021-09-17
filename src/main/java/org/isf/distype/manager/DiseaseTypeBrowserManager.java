@@ -49,7 +49,7 @@ public class DiseaseTypeBrowserManager {
 	 * @return a list of disease type, <code>null</code> if the operation is failed.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<DiseaseType> getDiseaseType() throws OHServiceException {
+	public List<DiseaseType> getDiseaseType() throws OHServiceException {
 		return ioOperations.getDiseaseTypes();
 	}
 

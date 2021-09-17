@@ -21,7 +21,7 @@
  */
 package org.isf.pregtreattype.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -45,9 +45,8 @@ public class PregnantTreatmentTypeIoOperation {
 	 * @return the list of {@link PregnantTreatmentType}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<PregnantTreatmentType> getPregnantTreatmentType() throws OHServiceException 
-	{
-		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
+	public List<PregnantTreatmentType> getPregnantTreatmentType() throws OHServiceException {
+		return repository.findAllByOrderByDescriptionAsc();
 	}
 	
 	/**

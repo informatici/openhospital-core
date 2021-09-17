@@ -21,7 +21,6 @@
  */
 package org.isf.patient.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -69,8 +68,8 @@ public class PatientIoOperations {
 	 * @return the list of patients
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatients() throws OHServiceException {
-		return new ArrayList<>(repository.findByDeletedOrDeletedIsNull(NOT_DELETED_STATUS));
+	public List<Patient> getPatients() throws OHServiceException {
+		return repository.findByDeletedOrDeletedIsNull(NOT_DELETED_STATUS);
 	}
 
 	/**
@@ -79,8 +78,8 @@ public class PatientIoOperations {
 	 * @return the list of patients
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatients(Pageable pageable) throws OHServiceException {
-		return new ArrayList<>(repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName("N", pageable));
+	public List<Patient> getPatients(Pageable pageable) throws OHServiceException {
+		return repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName("N", pageable);
 	}
 
 	/**
@@ -90,12 +89,8 @@ public class PatientIoOperations {
 	 * @return
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatients(Map<String, Object> parameters) throws OHServiceException {
-
-		ArrayList<Patient> pPatient = null;
-		pPatient = new ArrayList<>(repository.getPatientsByParams(parameters));
-
-		return pPatient;
+	public List<Patient> getPatients(Map<String, Object> parameters) throws OHServiceException {
+		return repository.getPatientsByParams(parameters);
 	}
 
 	/**
@@ -110,8 +105,8 @@ public class PatientIoOperations {
 	 * @return the list of Patients (could be empty)
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException {
-		return new ArrayList<>(repository.findByFieldsContainingWordsFromLiteral(keyword));
+	public List<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException {
+		return repository.findByFieldsContainingWordsFromLiteral(keyword);
 	}
 
 	/**

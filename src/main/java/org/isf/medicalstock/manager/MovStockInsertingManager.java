@@ -246,7 +246,7 @@ public class MovStockInsertingManager {
 	 * @return the retrieved lots.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Lot> getLotByMedical(Medical medical) throws OHServiceException {
+	public List<Lot> getLotByMedical(Medical medical) throws OHServiceException {
 		if (medical == null) {
 			return new ArrayList<>();
 		}
@@ -310,7 +310,7 @@ public class MovStockInsertingManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public boolean newMultipleChargingMovements(ArrayList<Movement> movements, String referenceNumber) throws OHServiceException {
+	public boolean newMultipleChargingMovements(List<Movement> movements, String referenceNumber) throws OHServiceException {
 
 		boolean ok = true;
 		boolean checkReference = referenceNumber == null; // referenceNumber == null, each movement should have referenceNumber set
@@ -377,7 +377,7 @@ public class MovStockInsertingManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public boolean newMultipleDischargingMovements(ArrayList<Movement> movements, String referenceNumber) throws OHServiceException {
+	public boolean newMultipleDischargingMovements(List<Movement> movements, String referenceNumber) throws OHServiceException {
 
 		boolean ok = true;
 		boolean checkReference = referenceNumber == null; // referenceNumber == null, each movement should have referenceNumber set

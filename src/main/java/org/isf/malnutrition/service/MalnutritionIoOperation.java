@@ -21,14 +21,15 @@
  */
 package org.isf.malnutrition.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.isf.malnutrition.model.Malnutrition;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 
 /**
  * Persistence class for the malnutrition module.
@@ -47,13 +48,8 @@ public class MalnutritionIoOperation {
 	 * @return the retrieved malnutrition.
 	 * @throws OHServiceException if an error occurs retrieving the malnutrition list.
 	 */
-    public ArrayList<Malnutrition> getMalnutritions(
-			String admissionId) throws OHServiceException
-	{
-		ArrayList<Malnutrition> malnutritions = (ArrayList<Malnutrition>) repository.findAllWhereAdmissionByOrderDate(Integer.parseInt(admissionId));
-
-		
-		return malnutritions;
+	public List<Malnutrition> getMalnutritions(String admissionId) throws OHServiceException {
+		return repository.findAllWhereAdmissionByOrderDate(Integer.parseInt(admissionId));
 	}
 
 	/**

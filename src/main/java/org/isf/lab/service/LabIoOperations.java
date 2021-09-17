@@ -23,6 +23,7 @@ package org.isf.lab.service;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryForPrint;
@@ -68,31 +69,16 @@ public class LabIoOperations {
 	 * @return the list of {@link LaboratoryRow}s. It could be <code>empty</code>
 	 * @throws OHServiceException
 	 */
-	public ArrayList<LaboratoryRow> getLabRow(Integer code) throws OHServiceException	{
+	public List<LaboratoryRow> getLabRow(Integer code) throws OHServiceException	{
 		return rowRepository.findByLaboratory_Code(code);
 	}
-
-	/*
-	 * NO LONGER USED
-	 * 
-	 * public ArrayList<Laboratory> getLaboratory(String aCode) {
-		GregorianCalendar time1 = new GregorianCalendar();
-		GregorianCalendar time2 = new GregorianCalendar();
-		// 04/1/2009 ross: no roll, use add!!
-		//time1.roll(GregorianCalendar.WEEK_OF_YEAR, false);
-		time1.add(GregorianCalendar.WEEK_OF_YEAR, -1);
-		// 21/6/2008 ross: no rolling !!
-		//time2.roll(GregorianCalendar.DAY_OF_YEAR, true);
-		return getLaboratory(aCode, time1, time2);
-	}*/
 	
 	/**
 	 * Return the whole list of exams ({@link Laboratory}s) within last year.
 	 * @return the list of {@link Laboratory}s 
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Laboratory> getLaboratory() throws OHServiceException 
-	{
+	public List<Laboratory> getLaboratory() throws OHServiceException {
 		GregorianCalendar time1 = new GregorianCalendar();
 		GregorianCalendar time2 = new GregorianCalendar();
 		// 04/1/2009 ross: no roll, use add!!
@@ -111,7 +97,7 @@ public class LabIoOperations {
 	 * @return the list of {@link Laboratory}s 
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Laboratory> getLaboratory(String exam,	GregorianCalendar dateFrom,	GregorianCalendar dateTo) throws OHServiceException {
+	public List<Laboratory> getLaboratory(String exam,	GregorianCalendar dateFrom,	GregorianCalendar dateTo) throws OHServiceException {
 		return new ArrayList<>(exam != null ?
 				repository.findByExamDateBetweenAndExam_DescriptionOrderByExamDateDescRegistrationDateDesc(dateFrom, dateTo, exam) :
 				repository.findByExamDateBetweenOrderByExamDateDescRegistrationDateDesc(dateFrom, dateTo));
@@ -123,8 +109,8 @@ public class LabIoOperations {
 	 * @return the list of {@link Laboratory}s related to the {@link Patient}.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Laboratory> getLaboratory(Patient aPatient) throws OHServiceException {
-		return (ArrayList<Laboratory>) repository.findByPatient_CodeOrderByRegistrationDate(aPatient.getCode());
+	public List<Laboratory> getLaboratory(Patient aPatient) throws OHServiceException {
+		return repository.findByPatient_CodeOrderByRegistrationDate(aPatient.getCode());
 	}
 	
 	/**
@@ -133,7 +119,7 @@ public class LabIoOperations {
 	 * @return the list of {@link LaboratoryForPrint}s 
 	 * @throws OHServiceException
 	 */
-	public ArrayList<LaboratoryForPrint> getLaboratoryForPrint() throws OHServiceException {
+	public List<LaboratoryForPrint> getLaboratoryForPrint() throws OHServiceException {
 		GregorianCalendar time1 = new GregorianCalendar();
 		GregorianCalendar time2 = new GregorianCalendar();
 		//time1.roll(GregorianCalendar.WEEK_OF_YEAR, false);
@@ -142,19 +128,6 @@ public class LabIoOperations {
 		//time2.roll(GregorianCalendar.DAY_OF_YEAR, true);
 		return getLaboratoryForPrint(null, time1, time2);
 	}
-
-	/*
-	 * NO LONGER USED
-	 * 
-	 * public ArrayList<LaboratoryForPrint> getLaboratoryForPrint(String exam,	String result) {
-		GregorianCalendar time1 = new GregorianCalendar();
-		GregorianCalendar time2 = new GregorianCalendar();
-		//time1.roll(GregorianCalendar.WEEK_OF_YEAR, false);
-		time1.add(GregorianCalendar.WEEK_OF_YEAR, -1);
-		// 21/6/2008 ross: no rolling !!
-		//time2.roll(GregorianCalendar.DAY_OF_YEAR, true);
-		return getLaboratoryForPrint(exam, time1, time2);
-	}*/
 	
 	/**
 	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) 
@@ -165,27 +138,25 @@ public class LabIoOperations {
 	 * @return the list of {@link LaboratoryForPrint}s 
 	 * @throws OHServiceException
 	 */
-	public ArrayList<LaboratoryForPrint> getLaboratoryForPrint(String exam,
-			GregorianCalendar dateFrom,
-			GregorianCalendar dateTo) throws OHServiceException {
-				ArrayList<LaboratoryForPrint> pLaboratory = new ArrayList<>();
-				ArrayList<Laboratory> laboritories = new ArrayList<>(
-						exam != null ?
-								repository.findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam) :
-								repository.findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo)
-				);
+	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
+		Iterable<Laboratory> laboritories = new ArrayList<>(
+				exam != null ?
+						repository.findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam) :
+						repository.findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo)
+		);
 
-				for (Laboratory laboratory : laboritories) {
-					pLaboratory.add(new LaboratoryForPrint(
+		for (Laboratory laboratory : laboritories) {
+			pLaboratory.add(new LaboratoryForPrint(
 							laboratory.getCode(),
 							laboratory.getExam(),
 							laboratory.getDate(),
 							laboratory.getResult()
-						)
-					);
-				}
+					)
+			);
+		}
 
-				return pLaboratory;
+		return pLaboratory;
 	}
 	
 	/**
@@ -217,9 +188,8 @@ public class LabIoOperations {
 	 * @return <code>true</code> if the exam has been inserted with all its results, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newLabSecondProcedure(Laboratory laboratory,	ArrayList<String> labRow) throws OHServiceException {
+	public boolean newLabSecondProcedure(Laboratory laboratory,	List<String> labRow) throws OHServiceException {
 		boolean result = true;
-		
 		
 		int newCode = newLaboratory(laboratory);
 		if (newCode > 0) 
@@ -245,10 +215,8 @@ public class LabIoOperations {
 	 * @return <code>true</code> if the exam has been inserted with all its results, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newLabSecondProcedure2(Laboratory laboratory,
-			ArrayList<LaboratoryRow> labRow) throws OHServiceException {
+	public boolean newLabSecondProcedure2(Laboratory laboratory, List<LaboratoryRow> labRow) throws OHServiceException {
 		boolean result = true;
-		
 		
 		int newCode = newLaboratory(laboratory);
 		if (newCode > 0) 
@@ -299,11 +267,8 @@ public class LabIoOperations {
 	 * @return <code>true</code> if the exam has been updated with all its results, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updateLabSecondProcedure(
-			Laboratory laboratory, 
-			ArrayList<String> labRow) throws OHServiceException {
+	public boolean updateLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		boolean result = updateLabFirstProcedure(laboratory);
-		
 		
 		if (result)	{
 			for (String aLabRow : labRow) {

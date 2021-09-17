@@ -22,6 +22,7 @@
 package org.isf.vaccine.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -54,7 +55,7 @@ public class VaccineIoOperations {
 	 * @return the list of {@link Vaccine}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Vaccine> getVaccine(String vaccineTypeCode) throws OHServiceException {
+	public List<Vaccine> getVaccine(String vaccineTypeCode) throws OHServiceException {
 		return new ArrayList<>(
 				vaccineTypeCode != null ?
 						repository.findByVaccineType_CodeOrderByDescriptionAsc(vaccineTypeCode) :

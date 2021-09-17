@@ -143,7 +143,7 @@ public class LabManager {
 	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Laboratory> getLaboratory() throws OHServiceException {
+	public List<Laboratory> getLaboratory() throws OHServiceException {
 		return ioOperations.getLaboratory();
 	}
 
@@ -154,16 +154,9 @@ public class LabManager {
 	 * @return the list of {@link Laboratory}s related to the {@link Patient}. It could be <code>empty</code>.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Laboratory> getLaboratory(Patient aPatient) throws OHServiceException {
+	public List<Laboratory> getLaboratory(Patient aPatient) throws OHServiceException {
 		return ioOperations.getLaboratory(aPatient);
 	}
-
-	/*
-	 * NO LONGER USED
-	 *
-	 * public ArrayList<Laboratory> getLaboratory(String aCode){ return
-	 * ioOperations.getLaboratory(); }
-	 */
 
 	/**
 	 * Return a list of exams ({@link Laboratory}s) between specified dates and matching passed exam name
@@ -174,7 +167,7 @@ public class LabManager {
 	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Laboratory> getLaboratory(String exam, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<Laboratory> getLaboratory(String exam, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
 		return ioOperations.getLaboratory(exam, dateFrom, dateTo);
 	}
 
@@ -189,8 +182,8 @@ public class LabManager {
 	 * @return the list of {@link LaboratoryForPrint}s . It could be <code>empty</code>.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<LaboratoryForPrint> getLaboratoryForPrint(String exam, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
-		ArrayList<LaboratoryForPrint> labs = ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo);
+	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+		List<LaboratoryForPrint> labs = ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo);
 		setLabMultipleResults(labs);
 
 		return labs;
@@ -204,7 +197,7 @@ public class LabManager {
 	 * @return <code>true</code> if the exam has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newLaboratory(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
+	public boolean newLaboratory(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		validateLaboratory(laboratory);
 		setPatientConsistency(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
@@ -232,7 +225,7 @@ public class LabManager {
 	 * @return <code>true</code> if the exam has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newLaboratory2(Laboratory laboratory, ArrayList<LaboratoryRow> labRow) throws OHServiceException {
+	public boolean newLaboratory2(Laboratory laboratory, List<LaboratoryRow> labRow) throws OHServiceException {
 		validateLaboratory(laboratory);
 		setPatientConsistency(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
@@ -259,7 +252,7 @@ public class LabManager {
 	 * @return <code>true</code> if the exam has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updateLaboratory(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
+	public boolean updateLaboratory(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		validateLaboratory(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.updateLabFirstProcedure(laboratory);
@@ -287,7 +280,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public boolean newLaboratory(List<Laboratory> labList, ArrayList<ArrayList<String>> labRowList) throws OHServiceException {
+	public boolean newLaboratory(List<Laboratory> labList, List<ArrayList<String>> labRowList) throws OHServiceException {
 		if (labList.isEmpty())
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.noexamsinserted.msg"),
@@ -312,7 +305,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public boolean newLaboratory2(List<Laboratory> labList, ArrayList<ArrayList<LaboratoryRow>> labRowList) throws OHServiceException {
+	public boolean newLaboratory2(List<Laboratory> labList, List<ArrayList<LaboratoryRow>> labRowList) throws OHServiceException {
 		if (labList.isEmpty())
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.noexamsinserted.msg"),
@@ -347,7 +340,7 @@ public class LabManager {
 	 * @return <code>true</code> if the exam has been inserted with all its results, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	protected boolean newLabSecondProcedure(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
+	protected boolean newLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		return ioOperations.newLabSecondProcedure(laboratory, labRow);
 	}
 
@@ -375,7 +368,7 @@ public class LabManager {
 	 * @deprecated use updateLaboratory() for all procedures
 	 */
 	@Deprecated
-	protected boolean editLabSecondProcedure(Laboratory laboratory, ArrayList<String> labRow) throws OHServiceException {
+	protected boolean editLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		return ioOperations.updateLabSecondProcedure(laboratory, labRow);
 	}
 
@@ -461,10 +454,11 @@ public class LabManager {
 	 *
 	 * @return
 	 */
-	public ArrayList<String> getMaterialList() {
-		if (materialHashMap == null)
+	public List<String> getMaterialList() {
+		if (materialHashMap == null) {
 			buildMaterialHashMap();
-		ArrayList<String> materialDescriptionList = new ArrayList<>(materialHashMap.values());
+		}
+		List<String> materialDescriptionList = new ArrayList<>(materialHashMap.values());
 		materialDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.lab.undefined.txt")));
 		return materialDescriptionList;
 	}

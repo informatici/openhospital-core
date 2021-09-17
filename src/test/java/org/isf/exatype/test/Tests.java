@@ -24,7 +24,7 @@ package org.isf.exatype.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -78,7 +78,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetExamType() throws Exception {
 		String code = _setupTestExamType(false);
 		ExamType foundExamType = examTypeIoOperationRepository.findOne(code);
-		ArrayList<ExamType> examTypes = examTypeIoOperation.getExamType();
+		List<ExamType> examTypes = examTypeIoOperation.getExamType();
 		assertThat(examTypes).contains(foundExamType);
 	}
 
@@ -122,7 +122,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetExamType() throws Exception {
 		String code = _setupTestExamType(false);
 		ExamType foundExamType = examTypeIoOperationRepository.findOne(code);
-		ArrayList<ExamType> examTypes = examTypeBrowserManager.getExamType();
+		List<ExamType> examTypes = examTypeBrowserManager.getExamType();
 		assertThat(examTypes).contains(foundExamType);
 	}
 

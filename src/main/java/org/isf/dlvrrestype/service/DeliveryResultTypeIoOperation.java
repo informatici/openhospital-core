@@ -22,6 +22,7 @@
 package org.isf.dlvrrestype.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.dlvrrestype.model.DeliveryResultType;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -46,8 +47,7 @@ public class DeliveryResultTypeIoOperation {
 	 * @return the stored {@link DeliveryResultType}s.
 	 * @throws OHServiceException if an error occurs retrieving the stored delivery result types.
 	 */
-	public ArrayList<DeliveryResultType> getDeliveryResultType() throws OHServiceException 
-	{
+	public List<DeliveryResultType> getDeliveryResultType() throws OHServiceException {
 		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 

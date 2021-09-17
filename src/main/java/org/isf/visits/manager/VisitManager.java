@@ -100,15 +100,15 @@ public class VisitManager {
 	 * @return the list of {@link Visit}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Visit> getVisits(int patID) throws OHServiceException {
+	public List<Visit> getVisits(int patID) throws OHServiceException {
 		return ioOperations.getVisits(patID);
 	}
 
-	public ArrayList<Visit> getVisitsWard() throws OHServiceException {
+	public List<Visit> getVisitsWard() throws OHServiceException {
 		return getVisitsWard(null);
 	}
 
-	public ArrayList<Visit> getVisitsWard(String wardId) throws OHServiceException {
+	public List<Visit> getVisitsWard(String wardId) throws OHServiceException {
 		return ioOperations.getVisitsWard(wardId);
 	}
 
@@ -145,7 +145,7 @@ public class VisitManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public boolean newVisits(ArrayList<Visit> visits) throws OHServiceException {
+	public boolean newVisits(List<Visit> visits) throws OHServiceException {
 		if (!visits.isEmpty()) {
 			PatientBrowserManager patMan = this.applicationContext.getBean(PatientBrowserManager.class);
 			int patID = visits.get(0).getPatient().getCode();

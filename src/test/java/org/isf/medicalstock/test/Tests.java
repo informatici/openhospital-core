@@ -281,8 +281,8 @@ public class Tests extends OHCoreTestCase {
 		GeneralData.AUTOMATICLOT_OUT = true;
 		medicalStockIoOperation.newAutomaticDischargingMovement(dischargeMovement);
 		GeneralData.AUTOMATICLOT_OUT = automaticLotMode;
-		
-		ArrayList<Lot> lots = medicalStockIoOperation.getLotsByMedical(medical);
+
+		List<Lot> lots = medicalStockIoOperation.getLotsByMedical(medical);
 		assertThat(lots).hasSize(1); // first lot should be 0 quantity and stripped by the list
 	}
 
@@ -387,7 +387,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMovements() throws Exception {
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
-		ArrayList<Movement> movements = medicalStockIoOperation.getMovements();
+		List<Movement> movements = medicalStockIoOperation.getMovements();
 		assertThat(movements).isNotEmpty();
 		assertThat(foundMovement.getCode()).isEqualTo(movements.get(0).getCode());
 	}
@@ -398,7 +398,7 @@ public class Tests extends OHCoreTestCase {
 		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
-		ArrayList<Movement> movements = medicalStockIoOperation.getMovements(
+		List<Movement> movements = medicalStockIoOperation.getMovements(
 				foundMovement.getWard().getCode(),
 				fromDate,
 				toDate);
@@ -411,7 +411,7 @@ public class Tests extends OHCoreTestCase {
 		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
-		ArrayList<Movement> movements = medicalStockIoOperation.getMovements(
+		List<Movement> movements = medicalStockIoOperation.getMovements(
 				foundMovement.getMedical().getCode(),
 				foundMovement.getMedical().getType().getCode(),
 				foundMovement.getWard().getCode(),
@@ -432,7 +432,7 @@ public class Tests extends OHCoreTestCase {
 		MovementOrder order = MovementOrder.DATE;
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
-		ArrayList<Movement> movements = medicalStockIoOperation.getMovementForPrint(
+		List<Movement> movements = medicalStockIoOperation.getMovementForPrint(
 				foundMovement.getMedical().getDescription(),
 				foundMovement.getMedical().getType().getCode(),
 				foundMovement.getWard().getCode(),
@@ -452,7 +452,7 @@ public class Tests extends OHCoreTestCase {
 		MovementOrder order = MovementOrder.WARD;
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
-		ArrayList<Movement> movements = medicalStockIoOperation.getMovementForPrint(
+		List<Movement> movements = medicalStockIoOperation.getMovementForPrint(
 				foundMovement.getMedical().getDescription(),
 				foundMovement.getMedical().getType().getCode(),
 				foundMovement.getWard().getCode(),
@@ -472,7 +472,7 @@ public class Tests extends OHCoreTestCase {
 		MovementOrder order = MovementOrder.PHARMACEUTICAL_TYPE;
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
-		ArrayList<Movement> movements = medicalStockIoOperation.getMovementForPrint(
+		List<Movement> movements = medicalStockIoOperation.getMovementForPrint(
 				foundMovement.getMedical().getDescription(),
 				foundMovement.getMedical().getType().getCode(),
 				foundMovement.getWard().getCode(),
@@ -492,7 +492,7 @@ public class Tests extends OHCoreTestCase {
 		MovementOrder order = MovementOrder.TYPE;
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
-		ArrayList<Movement> movements = medicalStockIoOperation.getMovementForPrint(
+		List<Movement> movements = medicalStockIoOperation.getMovementForPrint(
 				foundMovement.getMedical().getDescription(),
 				foundMovement.getMedical().getType().getCode(),
 				foundMovement.getWard().getCode(),
@@ -508,7 +508,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetLastMovementDate() throws Exception {
 		_setupTestMovement(false);
-		ArrayList<Movement> movements = medicalStockIoOperation.getMovements();
+		List<Movement> movements = medicalStockIoOperation.getMovements();
 		GregorianCalendar gc = medicalStockIoOperation.getLastMovementDate();
 		assertThat(gc).isEqualTo(movements.get(0).getDate());
 	}
@@ -525,7 +525,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMovementsByReference() throws Exception {
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
-		ArrayList<Movement> movements = medicalStockIoOperation.getMovementsByReference(foundMovement.getRefNo());
+		List<Movement> movements = medicalStockIoOperation.getMovementsByReference(foundMovement.getRefNo());
 		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 	}
 
@@ -533,7 +533,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMovements() throws Exception {
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
-		ArrayList<Movement> movements = movBrowserManager.getMovements();
+		List<Movement> movements = movBrowserManager.getMovements();
 		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 	}
 
@@ -543,7 +543,7 @@ public class Tests extends OHCoreTestCase {
 		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
-		ArrayList<Movement> movements = movBrowserManager.getMovements(foundMovement.getWard().getCode(), fromDate, toDate);
+		List<Movement> movements = movBrowserManager.getMovements(foundMovement.getWard().getCode(), fromDate, toDate);
 		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 	}
 
@@ -551,7 +551,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMovementsByReference() throws Exception {
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
-		ArrayList<Movement> movements = movBrowserManager.getMovementsByReference("notThere");
+		List<Movement> movements = movBrowserManager.getMovementsByReference("notThere");
 		assertThat(movements).isEmpty();
 		movements = movBrowserManager.getMovementsByReference(foundMovement.getRefNo());
 		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
@@ -563,7 +563,7 @@ public class Tests extends OHCoreTestCase {
 		GregorianCalendar toDate = new GregorianCalendar(2000, 3, 3);
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
-		ArrayList<Movement> movements = movBrowserManager.getMovements(foundMovement.getMedical().getCode(), foundMovement.getMedical().getType().getCode(),
+		List<Movement> movements = movBrowserManager.getMovements(foundMovement.getMedical().getCode(), foundMovement.getMedical().getType().getCode(),
 				foundMovement.getWard().getCode(), foundMovement.getType().getCode(), fromDate, toDate, fromDate, toDate, fromDate, toDate);
 		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 	}
@@ -626,7 +626,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMovementsWihAllParametersNull() throws Exception {
 		int code = _setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findOne(code);
-		ArrayList<Movement> movements = movBrowserManager.getMovements(null, null, foundMovement.getWard().getCode(), null,
+		List<Movement> movements = movBrowserManager.getMovements(null, null, foundMovement.getWard().getCode(), null,
 				null, null, null, null, null, null);
 		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 	}
@@ -662,7 +662,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetLastMovementDate() throws Exception {
 		_setupTestMovement(false);
-		ArrayList<Movement> movements = medicalStockIoOperation.getMovements();
+		List<Movement> movements = medicalStockIoOperation.getMovements();
 		GregorianCalendar gregorianCalendar = movStockInsertingManager.getLastMovementDate();
 		assertThat(gregorianCalendar).isEqualTo(movements.get(0).getDate());
 	}

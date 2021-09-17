@@ -21,7 +21,7 @@
  */
 package org.isf.exatype.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.exatype.model.ExamType;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -43,9 +43,8 @@ public class ExamTypeIoOperation {
 	 * @return the list of {@link ExamType}s.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamType> getExamType() throws OHServiceException 
-	{
-		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
+	public List<ExamType> getExamType() throws OHServiceException {
+		return repository.findAllByOrderByDescriptionAsc();
 	}
 	
 	/**

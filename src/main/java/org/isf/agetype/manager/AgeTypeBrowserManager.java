@@ -46,7 +46,7 @@ public class AgeTypeBrowserManager {
 	 * @return a list of {@link AgeType} or <code>null</code> if the operation fails.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<AgeType> getAgeType() throws OHServiceException {
+	public List<AgeType> getAgeType() throws OHServiceException {
 		return ioOperations.getAgeType();
 	}
 
@@ -57,7 +57,7 @@ public class AgeTypeBrowserManager {
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean updateAgeType(ArrayList<AgeType> ageTypes) throws OHServiceException {
+	public boolean updateAgeType(List<AgeType> ageTypes) throws OHServiceException {
 		validateAgeTypes(ageTypes);
 		return ioOperations.updateAgeType(ageTypes);
 	}
@@ -70,7 +70,7 @@ public class AgeTypeBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public String getTypeByAge(int age) throws OHServiceException {
-		ArrayList<AgeType> ageTable = ioOperations.getAgeType();
+		List<AgeType> ageTable = ioOperations.getAgeType();
 
 		for (AgeType ageType : ageTable) {
 
@@ -98,7 +98,7 @@ public class AgeTypeBrowserManager {
 	 * @param ageTypes
 	 * @throws OHDataValidationException
 	 */
-	protected void validateAgeTypes(ArrayList<AgeType> ageTypes) throws OHDataValidationException {
+	protected void validateAgeTypes(List<AgeType> ageTypes) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		for (int i = 1; i < ageTypes.size(); i++) {
 			if (ageTypes.get(i).getFrom() <= ageTypes.get(i - 1).getTo()) {

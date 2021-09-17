@@ -24,7 +24,7 @@ package org.isf.medicals.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.OHCoreTestCase;
 import org.isf.medicals.manager.MedicalBrowsingManager;
@@ -126,7 +126,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicals() throws Exception {
 		int code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalsIoOperations.getMedicals();
+		List<Medical> medicals = medicalsIoOperations.getMedicals();
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo((Integer) code);
 	}
 
@@ -134,7 +134,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicalsWithDescription() throws Exception {
 		int code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalsIoOperations.getMedicals(String.valueOf(foundMedical.getDescription()));
+		List<Medical> medicals = medicalsIoOperations.getMedicals(String.valueOf(foundMedical.getDescription()));
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo((Integer) code);
 	}
 
@@ -142,7 +142,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicalsWithOutDescription() throws Exception {
 		int code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalsIoOperations.getMedicals(null);
+		List<Medical> medicals = medicalsIoOperations.getMedicals(null);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo((Integer) code);
 	}
 
@@ -150,7 +150,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicalsSortedNoDescription() throws Exception {
 		Integer code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalsIoOperations.getMedicals(null, false);
+		List<Medical> medicals = medicalsIoOperations.getMedicals(null, false);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo(code);
 	}
 
@@ -158,7 +158,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicalsSortedWithTypeDescription() throws Exception {
 		Integer code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalsIoOperations.getMedicals(String.valueOf(foundMedical.getDescription()), true);
+		List<Medical> medicals = medicalsIoOperations.getMedicals(String.valueOf(foundMedical.getDescription()), true);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo(code);
 	}
 
@@ -166,7 +166,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicalsNoDescriptionTypeCritical() throws Exception {
 		Integer code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalsIoOperations.getMedicals(null, foundMedical.getType().getCode(), true);
+		List<Medical> medicals = medicalsIoOperations.getMedicals(null, foundMedical.getType().getCode(), true);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo(code);
 	}
 
@@ -174,7 +174,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicalsNoDescriptionTypeNotCritical() throws Exception {
 		Integer code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalsIoOperations.getMedicals(null, foundMedical.getType().getCode(), false);
+		List<Medical> medicals = medicalsIoOperations.getMedicals(null, foundMedical.getType().getCode(), false);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo(code);
 	}
 
@@ -182,7 +182,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicalsNoDescriptionNoTypeCritical() throws Exception {
 		Integer code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalsIoOperations.getMedicals(null, null, true);
+		List<Medical> medicals = medicalsIoOperations.getMedicals(null, null, true);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo(code);
 	}
 
@@ -190,7 +190,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicalsNoDescriptionNoTypeNotCritical() throws Exception {
 		Integer code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalsIoOperations.getMedicals(null, null, false);
+		List<Medical> medicals = medicalsIoOperations.getMedicals(null, null, false);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo(code);
 	}
 
@@ -198,7 +198,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicalsDescriptionTypeCritical() throws Exception {
 		Integer code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalsIoOperations.getMedicals(foundMedical.getDescription(), foundMedical.getType().getCode(), true);
+		List<Medical> medicals = medicalsIoOperations.getMedicals(foundMedical.getDescription(), foundMedical.getType().getCode(), true);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo(code);
 	}
 
@@ -206,7 +206,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicalsDescriptionTypeNotCritical() throws Exception {
 		Integer code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalsIoOperations.getMedicals(foundMedical.getDescription(), foundMedical.getType().getCode(), false);
+		List<Medical> medicals = medicalsIoOperations.getMedicals(foundMedical.getDescription(), foundMedical.getType().getCode(), false);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo(code);
 	}
 
@@ -214,7 +214,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicalsDescriptionNoTypeCritical() throws Exception {
 		Integer code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalsIoOperations.getMedicals(foundMedical.getDescription(), null, true);
+		List<Medical> medicals = medicalsIoOperations.getMedicals(foundMedical.getDescription(), null, true);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo(code);
 	}
 
@@ -222,7 +222,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicalsDescriptionNoTypeNotCritical() throws Exception {
 		Integer code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalsIoOperations.getMedicals(foundMedical.getDescription(), null, false);
+		List<Medical> medicals = medicalsIoOperations.getMedicals(foundMedical.getDescription(), null, false);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo(code);
 	}
 
@@ -230,7 +230,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoMedicalCheckTrue() throws Exception {
 		int code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalsIoOperations.medicalCheck(foundMedical, false);
+		List<Medical> medicals = medicalsIoOperations.medicalCheck(foundMedical, false);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo(code);
 	}
 
@@ -238,7 +238,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoMedicalCheckFalse() throws Exception {
 		int code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalsIoOperations.medicalCheck(foundMedical, false);
+		List<Medical> medicals = medicalsIoOperations.medicalCheck(foundMedical, false);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo(code);
 	}
 
@@ -321,7 +321,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMedicals() throws Exception {
 		int code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalBrowsingManager.getMedicals();
+		List<Medical> medicals = medicalBrowsingManager.getMedicals();
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo((Integer) code);
 	}
 
@@ -329,7 +329,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMedicalsSortedByName() throws Exception {
 		int code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalBrowsingManager.getMedicalsSortedByName();
+		List<Medical> medicals = medicalBrowsingManager.getMedicalsSortedByName();
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo((Integer) code);
 	}
 
@@ -337,7 +337,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMedicalsSortedByCode() throws Exception {
 		int code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalBrowsingManager.getMedicalsSortedByCode();
+		List<Medical> medicals = medicalBrowsingManager.getMedicalsSortedByCode();
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo((Integer) code);
 	}
 
@@ -345,7 +345,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMedicalsWithDescription() throws Exception {
 		int code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalBrowsingManager.getMedicals(foundMedical.getDescription());
+		List<Medical> medicals = medicalBrowsingManager.getMedicals(foundMedical.getDescription());
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo((Integer) code);
 	}
 
@@ -353,7 +353,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMedicalsWithTypeDescriptionNotSorted() throws Exception {
 		int code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalBrowsingManager.getMedicals(foundMedical.getDescription(), false);
+		List<Medical> medicals = medicalBrowsingManager.getMedicals(foundMedical.getDescription(), false);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo((Integer) code);
 	}
 
@@ -361,7 +361,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMedicalsWithTypeDescriptionSorted() throws Exception {
 		int code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalBrowsingManager.getMedicals(foundMedical.getDescription(), true);
+		List<Medical> medicals = medicalBrowsingManager.getMedicals(foundMedical.getDescription(), true);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo((Integer) code);
 	}
 
@@ -369,7 +369,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetMedicalsWithCriteria() throws Exception {
 		int code = _setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findOne(code);
-		ArrayList<Medical> medicals = medicalBrowsingManager.getMedicals(foundMedical.getDescription(), foundMedical.getType().getCode(), true);
+		List<Medical> medicals = medicalBrowsingManager.getMedicals(foundMedical.getDescription(), foundMedical.getType().getCode(), true);
 		assertThat(medicals.get(medicals.size() - 1).getCode()).isEqualTo((Integer) code);
 	}
 

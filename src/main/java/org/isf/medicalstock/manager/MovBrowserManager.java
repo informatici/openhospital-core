@@ -21,8 +21,8 @@
  */
 package org.isf.medicalstock.manager;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicalstock.model.Movement;
@@ -47,7 +47,7 @@ public class MovBrowserManager {
 	 * @return the retrieved movements.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Movement> getMovements() throws OHServiceException {
+	public List<Movement> getMovements() throws OHServiceException {
 		return ioOperations.getMovements();
 	}
 
@@ -60,7 +60,7 @@ public class MovBrowserManager {
 	 * @return the retrieved movements.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Movement> getMovements(String wardId, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<Movement> getMovements(String wardId, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
 		return ioOperations.getMovements(wardId, dateFrom, dateTo);
 	}
 
@@ -71,7 +71,7 @@ public class MovBrowserManager {
 	 * @return the retrieved movements.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Movement> getMovementsByReference(String refNo) throws OHServiceException {
+	public List<Movement> getMovementsByReference(String refNo) throws OHServiceException {
 		return ioOperations.getMovementsByReference(refNo);
 	}
 
@@ -91,7 +91,7 @@ public class MovBrowserManager {
 	 * @return the retrieved movements.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Movement> getMovements(Integer medicalCode, String medicalType,
+	public List<Movement> getMovements(Integer medicalCode, String medicalType,
 			String wardId, String movType, GregorianCalendar movFrom, GregorianCalendar movTo,
 			GregorianCalendar lotPrepFrom, GregorianCalendar lotPrepTo,
 			GregorianCalendar lotDueFrom, GregorianCalendar lotDueTo) throws OHServiceException {

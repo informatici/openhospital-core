@@ -27,10 +27,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.assertj.core.api.Condition;
@@ -89,14 +89,14 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetPatients() throws Exception {
 		_setupTestPatient(false);
-		ArrayList<Patient> patients = patientIoOperation.getPatients();
+		List<Patient> patients = patientIoOperation.getPatients();
 		testPatient.check(patients.get(patients.size() - 1));
 	}
 
 	@Test
 	public void testIoGetPatientsPageable() throws Exception {
 		_setupTestPatient(false);
-		ArrayList<Patient> patients = patientIoOperation.getPatients(createPageRequest());
+		List<Patient> patients = patientIoOperation.getPatients(createPageRequest());
 		testPatient.check(patients.get(patients.size() - 1));
 	}
 
@@ -108,7 +108,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPatientsByOneOfFieldsLike() throws Exception {
 		_setupTestPatient(false);
 		// Pay attention that query return with PAT_ID descendant
-		ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(null);
+		List<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(null);
 		testPatient.check(patients.get(0));
 	}
 
@@ -119,7 +119,7 @@ public class Tests extends OHCoreTestCase {
 		Patient foundPatient = patientIoOperation.getPatient(code);
 
 		// when:
-		ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getFirstName());
+		List<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getFirstName());
 
 		// then:
 		testPatient.check(patients.get(0));
@@ -132,7 +132,7 @@ public class Tests extends OHCoreTestCase {
 		Patient foundPatient = patientIoOperation.getPatient(code);
 
 		// when:
-		ArrayList<Patient> patients = patientIoOperation
+		List<Patient> patients = patientIoOperation
 				.getPatientsByOneOfFieldsLike(foundPatient.getFirstName().substring(1, foundPatient.getFirstName().length() - 2));
 
 		// then:
@@ -146,7 +146,7 @@ public class Tests extends OHCoreTestCase {
 		Patient foundPatient = patientIoOperation.getPatient(code);
 
 		// when:
-		ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
+		List<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
 
 		// then:
 		testPatient.check(patients.get(0));
@@ -159,7 +159,7 @@ public class Tests extends OHCoreTestCase {
 		Patient foundPatient = patientIoOperation.getPatient(code);
 
 		// when:
-		ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
+		List<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
 
 		// then:
 		testPatient.check(patients.get(0));
@@ -172,7 +172,7 @@ public class Tests extends OHCoreTestCase {
 		Patient foundPatient = patientIoOperation.getPatient(code);
 
 		// when:
-		ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getTaxCode());
+		List<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getTaxCode());
 
 		// then:
 		testPatient.check(patients.get(0));
@@ -181,7 +181,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetPatientsByOneOfFieldsLikeNotExistingStringShouldNotFindAnything() throws Exception {
 		_setupTestPatient(false);
-		ArrayList<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike("dupa");
+		List<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike("dupa");
 		assertThat(patients).isEmpty();
 	}
 
@@ -226,7 +226,7 @@ public class Tests extends OHCoreTestCase {
 		params.put("firstName", "TESTFIRSTN");
 		params.put("birthDate", new GregorianCalendar(1984, Calendar.AUGUST, 14).getTime());
 		params.put("address", "TestAddress");
-		ArrayList<Patient> patients = patientIoOperation.getPatients(params);
+		List<Patient> patients = patientIoOperation.getPatients(params);
 		assertThat(patients.size()).isPositive();
 	}
 
@@ -294,7 +294,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetPatients() throws Exception {
 		_setupTestPatient(false);
-		ArrayList<Patient> patients = patientBrowserManager.getPatient();
+		List<Patient> patients = patientBrowserManager.getPatient();
 		testPatient.check(patients.get(patients.size() - 1));
 	}
 
@@ -305,7 +305,7 @@ public class Tests extends OHCoreTestCase {
 		}
 
 		// First page of 10
-		ArrayList<Patient> patients = patientBrowserManager.getPatient(0, 10);
+		List<Patient> patients = patientBrowserManager.getPatient(0, 10);
 		assertThat(patients).hasSize(10);
 		testPatient.check(patients.get(patients.size() - 1));
 
@@ -318,7 +318,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetPatientsByOneOfFieldsLike() throws Exception {
 		_setupTestPatient(false);
 		// Pay attention that query return with PAT_ID descendant
-		ArrayList<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(null);
+		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(null);
 		testPatient.check(patients.get(0));
 	}
 
@@ -326,7 +326,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetPatientsByOneOfFieldsLikeFirstName() throws Exception {
 		Integer code = _setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
-		ArrayList<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getFirstName());
+		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getFirstName());
 		testPatient.check(patients.get(0));
 	}
 
@@ -335,8 +335,7 @@ public class Tests extends OHCoreTestCase {
 		Integer code = _setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
 
-		ArrayList<Patient> patients = patientBrowserManager
-				.getPatientsByOneOfFieldsLike(foundPatient.getFirstName().substring(1, foundPatient.getFirstName().length() - 2));
+		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getFirstName().substring(1, foundPatient.getFirstName().length() - 2));
 		testPatient.check(patients.get(0));
 	}
 
@@ -344,7 +343,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetPatientsByOneOfFieldsLikeSecondName() throws Exception {
 		Integer code = _setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
-		ArrayList<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
+		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
 		testPatient.check(patients.get(0));
 	}
 
@@ -352,7 +351,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetPatientsByOneOfFieldsLikeNote() throws Exception {
 		Integer code = _setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
-		ArrayList<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
+		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
 		testPatient.check(patients.get(0));
 	}
 
@@ -360,14 +359,14 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetPatientsByOneOfFieldsLikeTaxCode() throws Exception {
 		Integer code = _setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
-		ArrayList<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getTaxCode());
+		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getTaxCode());
 		testPatient.check(patients.get(0));
 	}
 
 	@Test
 	public void testMgrGetPatientsByOneOfFieldsLikeNotExistingStringShouldNotFindAnything() throws Exception {
 		_setupTestPatient(false);
-		ArrayList<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike("dupa");
+		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike("dupa");
 		assertThat(patients).isEmpty();
 	}
 

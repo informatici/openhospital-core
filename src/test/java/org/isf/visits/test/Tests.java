@@ -122,7 +122,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetVisitsWardNullWardId() throws Exception {
 		int id = _setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findOne(id);
-		ArrayList<Visit> visits = visitsIoOperation.getVisitsWard(null);
+		List<Visit> visits = visitsIoOperation.getVisitsWard(null);
 		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
 	}
 
@@ -130,7 +130,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetVisitsWardWardId() throws Exception {
 		int id = _setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findOne(id);
-		ArrayList<Visit> visits = visitsIoOperation.getVisitsWard(visit.getWard().getCode());
+		List<Visit> visits = visitsIoOperation.getVisitsWard(visit.getWard().getCode());
 		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
 	}
 
@@ -169,7 +169,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetVisitPatientCode() throws Exception {
 		int id = _setupTestVisit(false);
 		Visit vist = visitsIoOperationRepository.findOne(id);
-		ArrayList<Visit> visits = visitManager.getVisits(vist.getPatient().getCode());
+		List<Visit> visits = visitManager.getVisits(vist.getPatient().getCode());
 		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(vist.getDate());
 	}
 
@@ -177,7 +177,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetVisitNoPatientCode() throws Exception {
 		int id = _setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findOne(id);
-		ArrayList<Visit> visits = visitManager.getVisits(0);
+		List<Visit> visits = visitManager.getVisits(0);
 		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
 	}
 
@@ -185,7 +185,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetVisitsWard() throws Exception {
 		int id = _setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findOne(id);
-		ArrayList<Visit> visits = visitManager.getVisitsWard();
+		List<Visit> visits = visitManager.getVisitsWard();
 		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
 	}
 
@@ -193,7 +193,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetVisitsWardWardId() throws Exception {
 		int id = _setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findOne(id);
-		ArrayList<Visit> visits = visitManager.getVisitsWard(visit.getWard().getCode());
+		List<Visit> visits = visitManager.getVisitsWard(visit.getWard().getCode());
 		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
 	}
 

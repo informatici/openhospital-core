@@ -21,7 +21,6 @@
  */
 package org.isf.accounting.service;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -51,10 +50,10 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 	List<Bill> findByDateBetween(@Param("dateFrom") Calendar dateFrom, @Param("dateTo") Calendar dateTo);
 
 	@Query(value = "select b from Bill b where b.billPatient.id = :patientCode and b.date >= :dateFrom and b.date < :dateTo")
-	ArrayList<Bill> findByDateAndPatient(@Param("dateFrom") Calendar dateFrom, @Param("dateTo") Calendar dateTo, @Param("patientCode")Integer patientCode);
+	List<Bill> findByDateAndPatient(@Param("dateFrom") Calendar dateFrom, @Param("dateTo") Calendar dateTo, @Param("patientCode")Integer patientCode);
 
 	@Query(value = "select b from Bill b where b.status='O' and b.billPatient.id = :patID")
-	ArrayList<Bill> findAllPendindBillsByBillPatient(@Param("patID")int patID);
+	List<Bill> findAllPendindBillsByBillPatient(@Param("patID")int patID);
 
 	/**
 	 * Return the bills for date between dateFrom and dateFrom to dateTo and containing items with description desc

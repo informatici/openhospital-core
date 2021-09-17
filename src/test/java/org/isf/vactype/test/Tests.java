@@ -24,7 +24,7 @@ package org.isf.vactype.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -78,7 +78,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetVaccineType() throws Exception {
 		String code = _setupTestVaccineType(false);
 		VaccineType foundVaccineType = vaccineTypeIoOperation.findVaccineType(code);
-		ArrayList<VaccineType> vaccineTypes = vaccineTypeIoOperation.getVaccineType();
+		List<VaccineType> vaccineTypes = vaccineTypeIoOperation.getVaccineType();
 		assertThat(vaccineTypes.get(vaccineTypes.size() - 1).getDescription()).isEqualTo(foundVaccineType.getDescription());
 	}
 
@@ -130,7 +130,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetVaccineType() throws Exception {
 		String code = _setupTestVaccineType(false);
 		VaccineType foundVaccineType = vaccineTypeBrowserManager.findVaccineType(code);
-		ArrayList<VaccineType> vaccineTypes = vaccineTypeBrowserManager.getVaccineType();
+		List<VaccineType> vaccineTypes = vaccineTypeBrowserManager.getVaccineType();
 		assertThat(vaccineTypes.get(vaccineTypes.size() - 1).getDescription()).isEqualTo(foundVaccineType.getDescription());
 	}
 

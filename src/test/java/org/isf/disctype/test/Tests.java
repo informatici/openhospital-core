@@ -24,7 +24,7 @@ package org.isf.disctype.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -77,7 +77,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetDischargeType() throws Exception {
 		String code = _setupTestDischargeType(false);
 		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
-		ArrayList<DischargeType> dischargeTypes = dischargeTypeIoOperation.getDischargeType();
+		List<DischargeType> dischargeTypes = dischargeTypeIoOperation.getDischargeType();
 		assertThat(dischargeTypes.get(dischargeTypes.size() - 1).getDescription()).isEqualTo(foundDischargeType.getDescription());
 	}
 
@@ -121,7 +121,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetDischargeType() throws Exception {
 		String code = _setupTestDischargeType(false);
 		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
-		ArrayList<DischargeType> dischargeTypes = dischargeTypeBrowserManager.getDischargeType();
+		List<DischargeType> dischargeTypes = dischargeTypeBrowserManager.getDischargeType();
 		assertThat(dischargeTypes.get(dischargeTypes.size() - 1).getDescription()).isEqualTo(foundDischargeType.getDescription());
 	}
 

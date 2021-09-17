@@ -46,7 +46,7 @@ public class AdmissionTypeBrowserManager {
 	 * @return a list of admission types or <code>null</code> if the operation fails.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<AdmissionType> getAdmissionType() throws OHServiceException {
+	public List<AdmissionType> getAdmissionType() throws OHServiceException {
 		return ioOperations.getAdmissionType();
 	}
 

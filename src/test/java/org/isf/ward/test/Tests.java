@@ -24,8 +24,8 @@ package org.isf.ward.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 import org.assertj.core.api.Condition;
@@ -118,7 +118,7 @@ public class Tests extends OHCoreTestCase {
 		Ward foundWard = wardIoOperationRepository.findOne(code);
 
 		// when:
-		ArrayList<Ward> wards = wardIoOperation.getWardsNoMaternity();
+		List<Ward> wards = wardIoOperation.getWardsNoMaternity();
 
 		// then:
 		assertThat(wards.get(wards.size() - 1).getDescription()).isEqualTo(foundWard.getDescription());
@@ -131,7 +131,7 @@ public class Tests extends OHCoreTestCase {
 		Ward foundWard = wardIoOperationRepository.findOne(code);
 
 		// when:
-		ArrayList<Ward> wards = wardIoOperation.getWards(code);
+		List<Ward> wards = wardIoOperation.getWards(code);
 
 		// then:
 		assertThat(wards.get(0).getDescription()).isEqualTo(foundWard.getDescription());
@@ -141,7 +141,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetWardsGetAll() throws Exception {
 		String code = _setupTestWard(false);
 		Ward ward = wardIoOperationRepository.findOne(code);
-		ArrayList<Ward> wards = wardIoOperation.getWards(null);
+		List<Ward> wards = wardIoOperation.getWards(null);
 		assertThat(wards).hasSize(1);
 		assertThat(wards.get(0).getDescription()).isEqualTo(ward.getDescription());
 	}
@@ -260,7 +260,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetWardsNoMaternity() throws Exception {
 		String code = _setupTestWard(false);
 		Ward ward = wardIoOperationRepository.findOne(code);
-		ArrayList<Ward> wards = wardBrowserManager.getWardsNoMaternity();
+		List<Ward> wards = wardBrowserManager.getWardsNoMaternity();
 		assertThat(wards.get(wards.size() - 1).getDescription()).isEqualTo(ward.getDescription());
 	}
 
@@ -268,7 +268,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetWards() throws Exception {
 		String code = _setupTestWard(false);
 		Ward ward = wardIoOperationRepository.findOne(code);
-		ArrayList<Ward> wards = wardBrowserManager.getWards(ward);
+		List<Ward> wards = wardBrowserManager.getWards(ward);
 		assertThat(wards.get(0).getDescription()).isEqualTo(ward.getDescription());
 	}
 
@@ -276,7 +276,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetWardsGetAll() throws Exception {
 		String code = _setupTestWard(false);
 		Ward ward = wardIoOperationRepository.findOne(code);
-		ArrayList<Ward> wards = wardBrowserManager.getWards();
+		List<Ward> wards = wardBrowserManager.getWards();
 		assertThat(wards).hasSize(1);
 		assertThat(wards.get(0).getDescription()).isEqualTo(ward.getDescription());
 	}
@@ -319,7 +319,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrDeleteWardMaternity() throws Exception {
 		wardBrowserManager.maternityControl(true);
-		ArrayList<Ward> wards = wardBrowserManager.getWards();
+		List<Ward> wards = wardBrowserManager.getWards();
 		assertThatThrownBy(() -> wardBrowserManager.deleteWard(wards.get(0)))
 				.isInstanceOf(OHServiceException.class);
 	}

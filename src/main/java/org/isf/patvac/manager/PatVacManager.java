@@ -58,7 +58,7 @@ public class PatVacManager {
 	 * @return the list of {@link PatientVaccine}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<PatientVaccine> getPatientVaccine(boolean minusOneWeek) throws OHServiceException {
+	public List<PatientVaccine> getPatientVaccine(boolean minusOneWeek) throws OHServiceException {
 		return ioOperations.getPatientVaccine(minusOneWeek);
 	}
 
@@ -76,7 +76,7 @@ public class PatVacManager {
 	 * @return the list of {@link PatientVaccine}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<PatientVaccine> getPatientVaccine(String vaccineTypeCode, String vaccineCode,
+	public List<PatientVaccine> getPatientVaccine(String vaccineTypeCode, String vaccineCode,
 			GregorianCalendar dateFrom, GregorianCalendar dateTo,
 			char sex, int ageFrom, int ageTo) throws OHServiceException {
 		return ioOperations.getPatientVaccine(vaccineTypeCode, vaccineCode, dateFrom, dateTo, sex, ageFrom, ageTo);

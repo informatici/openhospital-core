@@ -21,7 +21,7 @@
  */
 package org.isf.medtype.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.medtype.model.MedicalType;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -46,9 +46,8 @@ public class MedicalTypeIoOperation {
 	 * @return the stored medical types.
 	 * @throws OHServiceException if an error occurs retrieving the medical types.
 	 */
-	public ArrayList<MedicalType> getMedicalTypes() throws OHServiceException 
-	{
-		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
+	public List<MedicalType> getMedicalTypes() throws OHServiceException {
+		return repository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**

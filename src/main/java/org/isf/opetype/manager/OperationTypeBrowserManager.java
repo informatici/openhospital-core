@@ -46,7 +46,7 @@ public class OperationTypeBrowserManager {
 	 * @return the list of {@link OperationType}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<OperationType> getOperationType() throws OHServiceException {
+	public List<OperationType> getOperationType() throws OHServiceException {
 		return ioOperations.getOperationType();
 	}
 

@@ -50,7 +50,7 @@ public class DeliveryTypeBrowserManager {
 	 * @return all stored delivery types, <code>null</code> if an error occurred.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<DeliveryType> getDeliveryType() throws OHServiceException {
+	public List<DeliveryType> getDeliveryType() throws OHServiceException {
 		return ioOperations.getDeliveryType();
 	}
 

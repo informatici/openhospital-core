@@ -21,6 +21,9 @@
  */
 package org.isf.medicals.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
@@ -29,8 +32,6 @@ import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 
 /**
  * This class offers the io operations for recovering and managing
@@ -70,8 +71,7 @@ public class MedicalsIoOperations
 	 * @return all the stored medicals.
 	 * @throws OHServiceException if an error occurs retrieving the stored medicals.
 	 */
-	public ArrayList<Medical> getMedicals() throws OHServiceException 
-	{
+	public List<Medical> getMedicals() throws OHServiceException {
 		return getMedicals(null, false);
 	}
 
@@ -82,21 +82,14 @@ public class MedicalsIoOperations
 	 * @return the stored medicals.
 	 * @throws OHServiceException if an error occurs retrieving the stored medicals.
 	 */
-	public ArrayList<Medical> getMedicals(
-			String description) throws OHServiceException 
-	{
-    	ArrayList<Medical> medicals;
-    	
-    	
-    	if (description!=null) 
-    	{
-    		medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionOrderByDescription(description);
+	public List<Medical> getMedicals(String description) throws OHServiceException {
+		List<Medical> medicals;
+
+		if (description != null) {
+			medicals = repository.findAllWhereDescriptionOrderByDescription(description);
+		} else {
+			medicals = repository.findAllByOrderByDescription();
 		}
-		else
-		{
-			medicals = (ArrayList<Medical>)repository.findAllByOrderByDescription();
-		}
-		
 		return medicals;
 	}
 	
@@ -108,14 +101,12 @@ public class MedicalsIoOperations
 	 * @return the stored medicals.
 	 * @throws OHServiceException if an error occurs retrieving the stored medicals.
 	 */
-	public ArrayList<Medical> getMedicals(String type, boolean nameSorted) throws OHServiceException {
-		
+	public List<Medical> getMedicals(String type, boolean nameSorted) throws OHServiceException {
 		if (type != null) {
 			return getMedicalsByType(type, nameSorted);
 		} else {
 			return getMedicals(nameSorted);
 		}
-
 	}
 
 
@@ -127,64 +118,38 @@ public class MedicalsIoOperations
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException if an error occurs retrieving the medicals.
 	 */
-	public ArrayList<Medical> getMedicals(
-			String description, 
-			String type, 
-			boolean critical) throws OHServiceException 
-	{
-		ArrayList<Medical> medicals = null;
-		
-	
-		if (description != null) 
-		{
-			if(type!=null)
-			{
-				if(critical)
-				{
-					medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionAndTypeAndCriticalOrderByTypeAndDescription(description, type);
+	public List<Medical> getMedicals(String description, String type, boolean critical) throws OHServiceException {
+		List<Medical> medicals = null;
+
+		if (description != null) {
+			if (type != null) {
+				if (critical) {
+					medicals = (ArrayList<Medical>) repository.findAllWhereDescriptionAndTypeAndCriticalOrderByTypeAndDescription(description, type);
+				} else {
+					medicals = (ArrayList<Medical>) repository.findAllWhereDescriptionAndTypeOrderByTypeAndDescription(description, type);
 				}
-				else
-				{
-					medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionAndTypeOrderByTypeAndDescription(description, type);
+			} else {
+				if (critical) {
+					medicals = (ArrayList<Medical>) repository.findAllWhereDescriptionAndCriticalOrderByTypeAndDescription(description);
+				} else {
+					medicals = (ArrayList<Medical>) repository.findAllWhereDescriptionOrderByTypeAndDescription(description);
 				}
 			}
-			else
-			{
-				if(critical)
-				{
-					medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionAndCriticalOrderByTypeAndDescription(description);
+		} else {
+			if (type != null) {
+				if (critical) {
+					medicals = (ArrayList<Medical>) repository.findAllWhereTypeAndCriticalOrderByTypeAndDescription(type);
+				} else {
+					medicals = (ArrayList<Medical>) repository.findAllWhereTypeOrderByTypeAndDescription(type);
 				}
-				else
-				{
-					medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionOrderByTypeAndDescription(description);
-				}				
+			} else {
+				if (critical) {
+					medicals = (ArrayList<Medical>) repository.findAllWhereCriticalOrderByTypeAndDescription();
+				} else {
+					medicals = (ArrayList<Medical>) repository.findAllByOrderByTypeAndDescription();
+				}
 			}
 		}
-		else
-		{
-			if(type!=null)
-			{
-				if(critical)
-				{
-					medicals = (ArrayList<Medical>)repository.findAllWhereTypeAndCriticalOrderByTypeAndDescription(type);
-				}
-				else
-				{
-					medicals = (ArrayList<Medical>)repository.findAllWhereTypeOrderByTypeAndDescription(type);
-				}
-			}
-			else
-			{
-				if(critical)
-				{
-					medicals = (ArrayList<Medical>)repository.findAllWhereCriticalOrderByTypeAndDescription();
-				}
-				else
-				{
-					medicals = (ArrayList<Medical>)repository.findAllByOrderByTypeAndDescription();
-				}				
-			}			
-		}  
 
 		return medicals;
 	}
@@ -196,9 +161,9 @@ public class MedicalsIoOperations
 	 * @return all {@link Medical} with similar description
 	 * @throws OHServiceException if an SQL error occurs during the check.
 	 */
-	public ArrayList<Medical> medicalCheck(Medical medical, boolean update) throws OHServiceException
+	public List<Medical> medicalCheck(Medical medical, boolean update) throws OHServiceException
 	{
-		ArrayList<Medical> medicals = null;
+		List<Medical> medicals = null;
 		
 		if (update) {
 			medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionSoundsLike(medical.getDescription(), medical.getCode());
@@ -343,7 +308,7 @@ public class MedicalsIoOperations
 	 * @return sorted List of medicals or empty list if none found.
 	 * @throws OHServiceException
 	 */
-	private ArrayList<Medical> getMedicals(boolean nameSorted) throws OHServiceException {
+	private List<Medical> getMedicals(boolean nameSorted) throws OHServiceException {
 		if (nameSorted) {
 			return getMedicals(null);
 		} else {
@@ -359,7 +324,7 @@ public class MedicalsIoOperations
 	 * @return sorted List of medicals or empty list if none found.
 	 * @throws OHServiceException
 	 */
-	private ArrayList<Medical> getMedicalsByType(String type, boolean nameSorted) {
+	private List<Medical> getMedicalsByType(String type, boolean nameSorted) {
 		if (nameSorted) {
 			return repository.findAllWhereTypeOrderByDescription(type);
 		} else {

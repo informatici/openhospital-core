@@ -22,6 +22,7 @@
 package org.isf.dlvrtype.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -46,8 +47,7 @@ public class DeliveryTypeIoOperation {
 	 * @return all stored delivery types.
 	 * @throws OHServiceException if an error occurs retrieving the delivery types. 
 	 */
-	public ArrayList<DeliveryType> getDeliveryType() throws OHServiceException 
-	{
+	public List<DeliveryType> getDeliveryType() throws OHServiceException {
 		return new ArrayList<>(repository.findAll());
 	}
 

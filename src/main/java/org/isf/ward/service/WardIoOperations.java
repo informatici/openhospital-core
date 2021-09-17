@@ -22,6 +22,7 @@
 package org.isf.ward.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.admission.model.Admission;
 import org.isf.admission.service.AdmissionIoOperationRepository;
@@ -54,11 +55,8 @@ public class WardIoOperations {
 	 * @return the number of patients currently admitted
 	 * @throws OHServiceException
 	 */
-	public int getCurrentOccupation(
-			Ward ward) throws OHServiceException 
-	{		
-		ArrayList<Admission> admissions = new ArrayList<>(admissionRepository.findAllWhereWard(ward.getCode()));
-
+	public int getCurrentOccupation(Ward ward) throws OHServiceException {
+		List<Admission> admissions = new ArrayList<>(admissionRepository.findAllWhereWard(ward.getCode()));
 		return admissions.size();
 	}
 	
@@ -67,11 +65,8 @@ public class WardIoOperations {
 	 * @return the retrieved wards.
 	 * @throws OHServiceException if an error occurs retrieving the diseases.
 	 */
-	public ArrayList<Ward> getWardsNoMaternity() throws OHServiceException 
-	{		
-		ArrayList<Ward> wards = new ArrayList<>(repository.findByCodeNot("M"));
-
-		return wards;
+	public List<Ward> getWardsNoMaternity() throws OHServiceException {
+		return new ArrayList<>(repository.findByCodeNot("M"));
 	}
 	
 	/**
@@ -80,18 +75,12 @@ public class WardIoOperations {
 	 * @return the retrieved wards.
 	 * @throws OHServiceException if an error occurs retrieving the wards.
 	 */
-	public ArrayList<Ward> getWards(
-			String wardID) throws OHServiceException 
-	{ 
-		ArrayList<Ward> wards = null;
-		
-		
-		if (wardID != null && wardID.trim().length() > 0) 
-		{
+	public List<Ward> getWards(String wardID) throws OHServiceException {
+		List<Ward> wards = null;
+
+		if (wardID != null && wardID.trim().length() > 0) {
 			wards = new ArrayList<>(repository.findByCodeContains(wardID));
-		}	
-		else
-		{
+		} else {
 			wards = new ArrayList<>(repository.findAll());
 		}
 

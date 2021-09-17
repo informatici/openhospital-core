@@ -61,7 +61,7 @@ public class DicomTypeBrowserManager {
 		return ioOperations.deleteDicomType(dicomType);
 	}
 
-	public ArrayList<DicomType> getDicomType() throws OHServiceException {
+	public List<DicomType> getDicomType() throws OHServiceException {
 		return ioOperations.getDicomType();
 	}
 

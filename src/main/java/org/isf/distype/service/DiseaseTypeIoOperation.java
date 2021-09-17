@@ -22,6 +22,7 @@
 package org.isf.distype.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.distype.model.DiseaseType;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -46,8 +47,7 @@ public class DiseaseTypeIoOperation {
 	 * @return a list of disease type.
 	 * @throws OHServiceException if an error occurs retrieving the diseases list.
 	 */
-	public ArrayList<DiseaseType> getDiseaseTypes() throws OHServiceException 
-	{
+	public List<DiseaseType> getDiseaseTypes() throws OHServiceException {
 		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
 	}
 

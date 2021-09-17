@@ -89,7 +89,7 @@ public class DeliveryResultTypeBrowserManager {
 	 * @return the stored {@link DeliveryResultType}s, <code>null</code> if an error occurred.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<DeliveryResultType> getDeliveryResultType() throws OHServiceException {
+	public List<DeliveryResultType> getDeliveryResultType() throws OHServiceException {
 		return ioOperations.getDeliveryResultType();
 	}
 

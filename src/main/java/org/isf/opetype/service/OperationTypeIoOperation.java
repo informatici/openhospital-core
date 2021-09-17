@@ -21,7 +21,7 @@
  */
 package org.isf.opetype.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.opetype.model.OperationType;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -44,9 +44,8 @@ public class OperationTypeIoOperation {
 	 * @return the list of {@link OperationType}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<OperationType> getOperationType() throws OHServiceException 
-	{
-		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
+	public List<OperationType> getOperationType() throws OHServiceException {
+		return repository.findAllByOrderByDescriptionAsc();
 	}
 	
 	/**

@@ -24,7 +24,7 @@ package org.isf.dicomtype.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -77,7 +77,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetDicomType() throws Exception {
 		String typeId = _setupTestDicomType(false);
-		ArrayList<DicomType> dicomTypes = dicomTypeIoOperation.getDicomType();
+		List<DicomType> dicomTypes = dicomTypeIoOperation.getDicomType();
 		testDicomType.check(dicomTypes.get(0));
 	}
 
@@ -117,7 +117,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetDicomType() throws Exception {
 		String typeId = _setupTestDicomType(false);
-		ArrayList<DicomType> dicomTypes = dicomTypeBrowserManager.getDicomType();
+		List<DicomType> dicomTypes = dicomTypeBrowserManager.getDicomType();
 		testDicomType.check(dicomTypes.get(0));
 	}
 
