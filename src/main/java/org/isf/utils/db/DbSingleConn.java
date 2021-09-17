@@ -29,8 +29,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import javax.swing.JOptionPane;
-
 import org.isf.generaldata.MessageBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,8 +44,6 @@ public class DbSingleConn {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DbSingleConn.class);
 
-	private static final int MYSQL_DEFAULT_PORT = 3306;
-
 	private static Connection pConn;
 
 	private DbSingleConn() {
@@ -60,8 +56,6 @@ public class DbSingleConn {
 			} catch (CommunicationsException ce) {
 				String message = MessageBundle.getMessage("angal.sql.databaseserverstoppedornetworkfailure.msg");
 				LOGGER.error(">> {}", message);
-				JOptionPane.showMessageDialog(null, message);
-				System.exit(1);
 			}
 
 		}
@@ -99,26 +93,15 @@ public class DbSingleConn {
 		}
 
 		String drivers = props.getProperty("jdbc.drivers");
-		if (drivers != null)
+		if (drivers != null) {
 			System.setProperty("jdbc.drivers", drivers);
+		}
 		String url = props.getProperty("jdbc.url");
-		String server = props.getProperty("jdbc.server");
-		String db = props.getProperty("jdbc.db");
 		String username = props.getProperty("jdbc.username");
 		String password = props.getProperty("jdbc.password");
-		String port = props.getProperty("jdbc.port");
-		if (port == null) {
-			port = String.valueOf(MYSQL_DEFAULT_PORT);
-		}
 
 		StringBuilder sbURL = new StringBuilder();
 		sbURL.append(url);
-		sbURL.append("//");
-		sbURL.append(server);
-		sbURL.append(":");
-		sbURL.append(port);
-		sbURL.append("/");
-		sbURL.append(db);
 		sbURL.append("?useUnicode=true&characterEncoding=UTF-8");
 		sbURL.append("&user=");
 		sbURL.append(username);
