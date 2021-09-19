@@ -40,12 +40,17 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 	private static final Logger LOGGER = LoggerFactory.getLogger(TelemetryDaemon.class);
 	private static final String FILE_PROPERTIES = "telemetry.properties";
 	private static final int DEFAULT_DELAY = 10;
+	// XXX load it from properties? Perhaps it could be better...
+	private static final int RELOAD_SETTINGS_TIME = 30;
 
 	private TelemetryManager telemetryManager;
 	private TelemetryUtils telemetryUtils;
 
+	private Telemetry settings;
+
 	private boolean running = true;
 	private int customDelay = DEFAULT_DELAY;
+	private int updateSettingsCounter;
 
 	public TelemetryDaemon() {
 		super(FILE_PROPERTIES);
@@ -54,29 +59,38 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 		LOGGER.info("Telemetry daemon loop set to {} seconds.", Integer.valueOf(customDelay));
 		this.telemetryManager = Context.getApplicationContext().getBean(TelemetryManager.class);
 		this.telemetryUtils = Context.getApplicationContext().getBean(TelemetryUtils.class);
+		this.settings = telemetryManager.retrieveSettings();
 	}
 
 	public void run() {
 		while (running) {
-
-			LOGGER.info("Telemetry module running...");
-			Telemetry settings = telemetryManager.retrieveSettings();
-
-			if (Boolean.TRUE.equals(Boolean.valueOf(settings.getActive().booleanValue()
-							&& (settings.getSentTimestamp() == null || !TimeTools.isSameDay(settings.getSentTimestamp(), new Date()))))) {
+			LOGGER.info("Telemetry module running ({})...", updateSettingsCounter);
+			boolean isSendingMessageServiceActive = settings.getActive().booleanValue();
+			if (!isSendingMessageServiceActive) {
+				LOGGER.debug("Telemetry module DISABLED (reloading settings in {} seconds)",
+						calculateReloadSettingsTime());
+			} else if (isSendingMessageServiceActive && isTimeToSendMessage()) {
 				try {
 					GeneralData.initialize();
-					this.telemetryUtils.sendTelemetryData(settings.getConsentMap(), GeneralData.DEBUG);
+					this.telemetryUtils.sendTelemetryData(telemetryUtils.retrieveDataToSend(settings.getConsentMap()),
+							GeneralData.DEBUG);
 				} catch (RuntimeException | OHException e) {
 					LOGGER.error("Something strange happened");
 					LOGGER.error(ExceptionUtils.retrieveExceptionStacktrace(e));
 				}
 			} else {
-				LOGGER.debug("Telemetry module: issue traking message already sent");
+				LOGGER.debug("Telemetry module: issue traking message already sent (reloading settings in {} seconds)",
+						calculateReloadSettingsTime());
 			}
 
 			try {
 				Thread.sleep((long) customDelay * 1000);
+				updateSettingsCounter++;
+				if (updateSettingsCounter % RELOAD_SETTINGS_TIME == 0) {
+					LOGGER.debug("Reloading telemetry settings (after {} seconds)...", RELOAD_SETTINGS_TIME);
+					this.settings = telemetryManager.retrieveSettings();
+					LOGGER.debug("settings {}", this.settings);
+				}
 			} catch (InterruptedException e) {
 				LOGGER.error(e.getMessage());
 				LOGGER.error(ExceptionUtils.retrieveExceptionStacktrace(e));
@@ -84,9 +98,16 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 		}
 	}
 
+	private int calculateReloadSettingsTime() {
+		return RELOAD_SETTINGS_TIME - (updateSettingsCounter % RELOAD_SETTINGS_TIME);
+	}
+
+	private boolean isTimeToSendMessage() {
+		return settings.getSentTimestamp() == null || !TimeTools.isSameDay(settings.getSentTimestamp(), new Date());
+	}
+
 	/**
-	 * @param running
-	 *            the running to set
+	 * @param running the running to set
 	 */
 	public void setRunning(boolean running) {
 		this.running = running;

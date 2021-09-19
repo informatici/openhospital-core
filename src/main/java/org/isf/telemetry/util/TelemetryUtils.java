@@ -53,22 +53,22 @@ public class TelemetryUtils {
 	private TelemetryManager telemetryManager;
 
 	public Map<String, Map<String, String>> retrieveDataToSend(Map<String, Boolean> consentMap) throws OHException {
-		List<String> enabledCollectors = consentMap.keySet().stream().filter(key -> Boolean.TRUE.equals(consentMap.get(key))).map(item -> item)
-						.collect(Collectors.toList());
+		List<String> enabledCollectors = consentMap.keySet().stream()
+				.filter(key -> Boolean.TRUE.equals(consentMap.get(key))).map(item -> item).collect(Collectors.toList());
 		return this.dataCollectorProvider.collectData(enabledCollectors, IGNORE_EXCEPTIONS);
 	}
 
-	public void sendTelemetryData(Map<String, Boolean> consentMap, boolean isSimulation) throws OHException {
-		Map<String, Map<String, String>> info = this.retrieveDataToSend(consentMap);
+	public void sendTelemetryData(Map<String, Map<String, String>> dataToSend, boolean isSimulation)
+			throws OHException {
 		boolean sent = true;
 		if (!isSimulation) {
-			sent = this.telemetryGatewayService.send(info);
+			sent = this.telemetryGatewayService.send(dataToSend);
 		}
 		if (sent) {
-			this.telemetryManager.updateStatusSuccess((new Gson()).toJson(info));
-			LOGGER.debug("Data sent: {}", info.toString());
+			this.telemetryManager.updateStatusSuccess((new Gson()).toJson(dataToSend));
+			LOGGER.debug("Data sent: {}", dataToSend.toString());
 		} else {
-			this.telemetryManager.updateStatusFail((new Gson()).toJson(info));
+			this.telemetryManager.updateStatusFail((new Gson()).toJson(dataToSend));
 			LOGGER.debug("Something strange happened while trying to send data.");
 		}
 	}
