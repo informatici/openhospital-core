@@ -63,6 +63,7 @@
  		<property name="maxPoolSize" value="10" />
  		<property name="maxIdleTime" value="300" />
  		<property name="maxStatements" value="0" />
+ 		<property name="checkoutTimeout" value="5000" />
  
  	</bean>
 
