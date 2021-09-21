@@ -443,10 +443,11 @@ public class DbJpaUtil
 		}
 	}
 
-	   /**
-     * Method to rollback a JPA transactions
-       * @throws OHException 
-     */
+	/**
+	 * Method to rollback a JPA transactions
+	 * 
+	 * @throws OHException
+	 */
     public void rollbackTransaction() throws OHException
     {
         try {
