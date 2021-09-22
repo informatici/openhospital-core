@@ -21,14 +21,13 @@
  */
 package org.isf.admission.service;
 
+import java.util.List;
+
 import org.isf.admission.model.Admission;
 import org.isf.patient.model.PatientMergedEvent;
-import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class AdmissionPatientMergedEventListener {
@@ -36,7 +35,7 @@ public class AdmissionPatientMergedEventListener {
 	AdmissionIoOperations admissionIoOperations;
 
 	@EventListener
-	public void handle(PatientMergedEvent patientMergedEvent) throws OHServiceException {
+	public void handle(PatientMergedEvent patientMergedEvent) {
 		List<Admission> admissions = admissionIoOperations.getAdmissions(patientMergedEvent.getObsoletePatient());
 		for (Admission admission : admissions) {
 			admission.setPatient(patientMergedEvent.getMergedPatient());
