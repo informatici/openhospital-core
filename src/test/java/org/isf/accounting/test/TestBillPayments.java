@@ -28,7 +28,6 @@ import java.util.GregorianCalendar;
 
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillPayments;
-import org.isf.utils.exception.OHException;
 
 public class TestBillPayments {
 
@@ -36,7 +35,7 @@ public class TestBillPayments {
 	private static double paymentAmount = 10.10;
 	private static String paymentUser = "TestUser";
 
-	public BillPayments setup(Bill bill, boolean usingSet) throws OHException {
+	public BillPayments setup(Bill bill, boolean usingSet) {
 		BillPayments billPayment;
 
 		if (usingSet) {

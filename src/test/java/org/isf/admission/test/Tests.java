@@ -506,7 +506,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testIoLoadAdmittedPatientNotThere() throws Exception {
+	public void testIoLoadAdmittedPatientNotThere() {
 		assertThat(admissionIoOperation.loadAdmittedPatient(-1)).isNull();
 	}
 
@@ -806,7 +806,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrLoadAdmittedPatientsNotThere() throws Exception {
+	public void testMgrLoadAdmittedPatientsNotThere() {
 		assertThat(admissionBrowserManager.loadAdmittedPatients(-1)).isNull();
 	}
 
@@ -1082,7 +1082,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testIoAdmissionIoOperationRepositoryCustom() throws Exception {
+	public void testIoAdmissionIoOperationRepositoryCustom() {
 		MyAdmissionIoOperationRepositoryCustom myAdmissionIoOperationRepositoryCustom = new MyAdmissionIoOperationRepositoryCustom();
 		AdmissionIoOperationRepositoryCustom.PatientAdmission patientAdmission =
 				new AdmissionIoOperationRepositoryCustom.PatientAdmission(1, 2);
@@ -1102,7 +1102,7 @@ public class Tests extends OHCoreTestCase {
 		return _setupTestAdmission(usingSet, false);
 	}
 
-	private int _setupTestAdmission(boolean usingSet, boolean maternity) throws OHException, InterruptedException {
+	private int _setupTestAdmission(boolean usingSet, boolean maternity) throws OHException {
 		Ward ward = testWard.setup(false, maternity);
 		Patient patient = testPatient.setup(false);
 		AdmissionType admissionType = testAdmissionType.setup(false);
@@ -1143,7 +1143,7 @@ public class Tests extends OHCoreTestCase {
 		return admission.getId();
 	}
 
-	private void _checkAdmissionIntoDb(int id) throws OHServiceException {
+	private void _checkAdmissionIntoDb(int id) {
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		testAdmission.check(foundAdmission);
 	}
