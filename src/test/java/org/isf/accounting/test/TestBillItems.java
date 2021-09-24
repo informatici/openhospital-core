@@ -26,6 +26,7 @@ import static org.assertj.core.data.Offset.offset;
 
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillItems;
+import org.isf.utils.exception.OHException;
 
 public class TestBillItems {
 
@@ -35,7 +36,7 @@ public class TestBillItems {
 	private static double itemAmount = 10.10;
 	private static int itemQuantity = 20;
 
-	public BillItems setup(Bill bill, boolean usingSet) {
+	public BillItems setup(Bill bill, boolean usingSet) throws OHException {
 		BillItems billItem;
 
 		if (usingSet) {

@@ -21,11 +21,12 @@
  */
 package org.isf.admission.service;
 
+import org.isf.admission.model.Admission;
+import org.isf.patient.model.Patient;
+
 import java.util.GregorianCalendar;
 import java.util.Optional;
 
-import org.isf.admission.model.Admission;
-import org.isf.patient.model.Patient;
 
 public interface AdmissionIoOperationRepositoryCustom {
 
@@ -44,7 +45,8 @@ public interface AdmissionIoOperationRepositoryCustom {
 		 */
 		private final Integer admissionId;
 
-		public PatientAdmission(final Integer patientId, final Integer admissionId) {
+		public PatientAdmission(final Integer patientId,
+								final Integer admissionId) {
 			this.patientId = patientId;
 			this.admissionId = admissionId;
 		}

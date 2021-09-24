@@ -667,7 +667,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void mgrGetBillsPaymentEmpty() {
+	public void mgrGetBillsPaymentEmpty() throws Exception {
 		List<Bill> bills = billBrowserManager.getBills(new ArrayList<>());
 		assertThat(bills).isEmpty();
 	}
@@ -786,7 +786,7 @@ public class Tests extends OHCoreTestCase {
 		return bill.getId();
 	}
 
-	private void _checkBillIntoDb(int id) {
+	private void _checkBillIntoDb(int id) throws OHException {
 		Bill foundBill = accountingBillIoOperationRepository.findOne(id);
 		testBill.check(foundBill);
 		testPriceList.check(foundBill.getPriceList());
@@ -805,7 +805,7 @@ public class Tests extends OHCoreTestCase {
 		return billItem.getId();
 	}
 
-	private void _checkBillItemsIntoDb(int id) {
+	private void _checkBillItemsIntoDb(int id) throws OHException {
 		BillItems foundBillItem = accountingBillItemsIoOperationRepository.findOne(id);
 		testBillItems.check(foundBillItem);
 		testBill.check(foundBillItem.getBill());
@@ -825,7 +825,7 @@ public class Tests extends OHCoreTestCase {
 		return billPayment.getId();
 	}
 
-	private void _checkBillPaymentsIntoDb(int id) {
+	private void _checkBillPaymentsIntoDb(int id) throws OHException {
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findOne(id);
 		testBillPayments.check(foundBillPayment);
 		testBill.check(foundBillPayment.getBill());

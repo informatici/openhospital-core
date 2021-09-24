@@ -53,8 +53,9 @@ public class AdmissionBrowserManager {
 	 * Returns all patients with ward in which they are admitted.
 	 *
 	 * @return the patient list with associated ward or {@code null} if the operation fails.
+	 * @throws OHServiceException
 	 */
-	public List<AdmittedPatient> getAdmittedPatients() {
+	public List<AdmittedPatient> getAdmittedPatients() throws OHServiceException {
 		return new ArrayList<>(ioOperations.getAdmittedPatients());
 	}
 
@@ -63,8 +64,9 @@ public class AdmissionBrowserManager {
 	 *
 	 * @param searchTerms the search terms to use for filter the patient list, {@code null} if no filter have to be applied.
 	 * @return the filtered patient list or {@code null} if the operation fails.
+	 * @throws OHServiceException
 	 */
-	public List<AdmittedPatient> getAdmittedPatients(String searchTerms) {
+	public List<AdmittedPatient> getAdmittedPatients(String searchTerms) throws OHServiceException {
 		return new ArrayList<>(ioOperations.getAdmittedPatients(searchTerms));
 	}
 
@@ -75,9 +77,10 @@ public class AdmissionBrowserManager {
 	 * @param dischargeRange (two-dimensions array) the patient admission dates range, both {@code null} if no filter have to be applied.
 	 * @param searchTerms the search terms to use for filter the patient list, {@code null} if no filter have to be applied.
 	 * @return the filtered patient list.
+	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public List<AdmittedPatient> getAdmittedPatients(GregorianCalendar[] admissionRange, //
-			GregorianCalendar[] dischargeRange, String searchTerms) {
+			GregorianCalendar[] dischargeRange, String searchTerms) throws OHServiceException {
 		return new ArrayList<>(ioOperations.getAdmittedPatients(searchTerms, admissionRange, dischargeRange));
 	}
 
@@ -90,8 +93,9 @@ public class AdmissionBrowserManager {
 	 *
 	 * @param id the admission id.
 	 * @return the admission with the specified id, {@code null} otherwise.
+	 * @throws OHServiceException
 	 */
-	public Admission getAdmission(int id) {
+	public Admission getAdmission(int id) throws OHServiceException {
 		return ioOperations.getAdmission(id);
 	}
 
@@ -100,8 +104,9 @@ public class AdmissionBrowserManager {
 	 *
 	 * @param patient the patient target of the admission.
 	 * @return the patient admission or {@code null} if the operation fails.
+	 * @throws OHServiceException
 	 */
-	public Admission getCurrentAdmission(Patient patient) {
+	public Admission getCurrentAdmission(Patient patient) throws OHServiceException {
 		return ioOperations.getCurrentAdmission(patient);
 	}
 
@@ -110,8 +115,9 @@ public class AdmissionBrowserManager {
 	 *
 	 * @param patient the patient.
 	 * @return the admission list or {@code null} if the operation fails.
+	 * @throws OHServiceException
 	 */
-	public List<Admission> getAdmissions(Patient patient) {
+	public List<Admission> getAdmissions(Patient patient) throws OHServiceException {
 		return ioOperations.getAdmissions(patient);
 	}
 
@@ -120,8 +126,9 @@ public class AdmissionBrowserManager {
 	 *
 	 * @param wardId the ward id.
 	 * @return the next prog
+	 * @throws OHServiceException
 	 */
-	public int getNextYProg(String wardId) {
+	public int getNextYProg(String wardId) throws OHServiceException {
 		return ioOperations.getNextYProg(wardId);
 	}
 
@@ -129,8 +136,9 @@ public class AdmissionBrowserManager {
 	 * Lists the {@link AdmissionType}s.
 	 *
 	 * @return the admission types  or {@code null} if the operation fails.
+	 * @throws OHServiceException
 	 */
-	public List<AdmissionType> getAdmissionType() {
+	public List<AdmissionType> getAdmissionType() throws OHServiceException {
 		return ioOperations.getAdmissionType();
 	}
 
@@ -138,8 +146,9 @@ public class AdmissionBrowserManager {
 	 * Lists the {@link DischargeType}s.
 	 *
 	 * @return the discharge types  or {@code null} if the operation fails.
+	 * @throws OHServiceException
 	 */
-	public List<DischargeType> getDischargeType() {
+	public List<DischargeType> getDischargeType() throws OHServiceException {
 		return ioOperations.getDischargeType();
 	}
 
@@ -184,8 +193,9 @@ public class AdmissionBrowserManager {
 	 *
 	 * @param admissionId the admission id.
 	 * @return <code>true</code> if the record has been set to delete.
+	 * @throws OHServiceException
 	 */
-	public boolean setDeleted(int admissionId) {
+	public boolean setDeleted(int admissionId) throws OHServiceException {
 		return ioOperations.setDeleted(admissionId);
 	}
 
@@ -194,8 +204,9 @@ public class AdmissionBrowserManager {
 	 *
 	 * @param wardId the ward id.
 	 * @return the number of used beds.
+	 * @throws OHServiceException
 	 */
-	public int getUsedWardBed(String wardId) {
+	public int getUsedWardBed(String wardId) throws OHServiceException {
 		return ioOperations.getUsedWardBed(wardId);
 	}
 
@@ -204,8 +215,9 @@ public class AdmissionBrowserManager {
 	 *
 	 * @param id the patient id.
 	 * @return <code>true</code> if the photo has been deleted, <code>false</code> otherwise.
+	 * @throws OHServiceException
 	 */
-	public boolean deletePatientPhoto(int id) {
+	public boolean deletePatientPhoto(int id) throws OHServiceException {
 		return ioOperations.deletePatientPhoto(id);
 	}
 
@@ -214,7 +226,7 @@ public class AdmissionBrowserManager {
 	 *
 	 * @param admission
 	 * @param insert <code>true</code> or updated <code>false</code>
-	 * @throws OHServiceException
+	 * @throws OHDataValidationException
 	 */
 	protected void validateAdmission(Admission admission, boolean insert) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
@@ -258,7 +270,7 @@ public class AdmissionBrowserManager {
 			}
 		}
 
-		Admission last;
+		Admission last = null;
 		if (!admList.isEmpty()) {
 			last = admList.get(admList.size() - 1);
 		} else {

@@ -34,6 +34,7 @@ import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.operation.model.Operation;
 import org.isf.patient.model.Patient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
+import org.isf.utils.exception.OHException;
 import org.isf.ward.model.Ward;
 
 public class TestAdmission {
@@ -73,7 +74,7 @@ public class TestAdmission {
 			PregnantTreatmentType pregTreatmentType,
 			DeliveryType deliveryType,
 			DeliveryResultType deliveryResult,
-			boolean usingSet) {
+			boolean usingSet) throws OHException {
 		Admission admission;
 
 		if (usingSet) {

@@ -28,6 +28,7 @@ import java.util.GregorianCalendar;
 import org.isf.accounting.model.Bill;
 import org.isf.patient.model.Patient;
 import org.isf.priceslist.model.PriceList;
+import org.isf.utils.exception.OHException;
 
 public class TestBill {
 
@@ -42,7 +43,7 @@ public class TestBill {
 	private static Double balance = 20.20;
 	private static String user = "TestUser";
 
-	public Bill setup(PriceList priceList, Patient patient, boolean usingSet) {
+	public Bill setup(PriceList priceList, Patient patient, boolean usingSet) throws OHException {
 		Bill bill;
 
 		if (usingSet) {
