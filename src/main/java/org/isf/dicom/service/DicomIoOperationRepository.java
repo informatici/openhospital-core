@@ -33,25 +33,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface DicomIoOperationRepository extends JpaRepository<FileDicom, Long> {
-    List<FileDicom> findAllByOrderByFileNameAsc();
+
+	List<FileDicom> findAllByOrderByFileNameAsc();
 
 	@Query(value = "select f from FileDicom f WHERE f.patId = :id AND f.dicomSeriesNumber = :file order by f.fileName")
 	List<FileDicom> findAllWhereIdAndNumberByOrderNameAsc(@Param("id") int id, @Param("file") String file);
 
 	@Query(value = "select f from FileDicom f WHERE f.patId = :id group by f.dicomSeriesInstanceUID order by f.dicomSeriesDate desc")
-    List<FileDicom> findAllWhereIdGroupBySeriesInstanceUIDOrderSerDateDesc(@Param("id") int id);
+	List<FileDicom> findAllWhereIdGroupBySeriesInstanceUIDOrderSerDateDesc(@Param("id") int id);
 
 	@Query(value = "select f from FileDicom f WHERE f.patId = :id AND f.dicomSeriesNumber = :file AND f.dicomInstanceUID = :uid")
 	List<FileDicom> findAllWhereIdAndFileAndUid(@Param("id") int id, @Param("file") String file, @Param("uid") String uid);
-    
-    @Modifying
+
+	@Modifying
 	@Transactional
 	@Query("delete from FileDicom fd WHERE fd.patId = :id AND fd.dicomSeriesNumber = :file")
 	void deleteByIdAndNumber(@Param("id") int id, @Param("file") String file);
 
-	@Query(value = "SELECT * FROM DICOM WHERE DM_FILE_SER_NUMBER = :dicomSeriesNumber", nativeQuery= true)
+	@Query(value = "SELECT * FROM DICOM WHERE DM_FILE_SER_NUMBER = :dicomSeriesNumber", nativeQuery = true)
 	List<FileDicom> findAllWhereDicomSeriesNumber(@Param("dicomSeriesNumber") String dicomSeriesNumber);
 
-	@Query(value = "SELECT COUNT(*) FROM DICOM WHERE DM_FILE_SER_INST_UID = :dicomSeriesNumberId", nativeQuery=true)
+	@Query(value = "SELECT COUNT(*) FROM DICOM WHERE DM_FILE_SER_INST_UID = :dicomSeriesNumberId", nativeQuery = true)
 	int countFramesinSeries(@Param("dicomSeriesNumberId") String dicomSeriesInstanceUID);
 }

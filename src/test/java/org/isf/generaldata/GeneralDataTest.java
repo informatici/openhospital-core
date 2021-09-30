@@ -23,7 +23,7 @@ package org.isf.generaldata;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class GeneralDataTest {
 
@@ -34,7 +34,6 @@ public class GeneralDataTest {
 		assertThat(generalData).isNotNull();
 		
 		assertThat(GeneralData.LANGUAGE).isEqualTo("es");
-
 	}
 
 }

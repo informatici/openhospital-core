@@ -22,7 +22,6 @@
 package org.isf.menu.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -44,17 +43,15 @@ import org.isf.utils.db.Auditable;
  * ------------------------------------------
  */
 @Entity
-@Table(name="USER")	
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="US_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="US_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="US_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="US_LAST_MODIFIED_DATE")),
-    @AttributeOverride(name="active", column=@Column(name="US_ACTIVE")),
-})
-public class User extends Auditable<String>
-{
-	@Id 
+@Table(name = "USER")
+@AttributeOverride(name = "createdBy", column = @Column(name = "US_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "US_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "US_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "US_LAST_MODIFIED_DATE"))
+@AttributeOverride(name = "active", column = @Column(name = "US_ACTIVE"))
+public class User extends Auditable<String> {
+
+	@Id
 	@Column(name="US_ID_A")		
 	private String userName;
 
@@ -72,12 +69,11 @@ public class User extends Auditable<String>
 	
 	@Transient
 	private volatile int hashCode = 0;
-			
-	
-	public User(){
+
+	public User() {
 	}
-	
-	public User(String aName, UserGroup aGroup, String aPasswd, String aDesc){
+
+	public User(String aName, UserGroup aGroup, String aPasswd, String aDesc) {
 		this.userName = aName;
 		this.userGroupName = aGroup;
 		this.passwd = aPasswd;

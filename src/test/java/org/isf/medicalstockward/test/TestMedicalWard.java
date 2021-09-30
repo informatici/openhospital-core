@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -40,7 +40,7 @@ public class TestMedicalWard {
 
 		if (usingSet) {
 			medicalward = new MedicalWard();
-			_setParameters(medicalward, medical, ward, lot);
+			setParameters(medicalward, medical, ward, lot);
 		} else {
 			// Create MedicalWard with all parameters 
 			medicalward = new MedicalWard(ward, medical, in_quantity, out_quantity, lot);
@@ -49,7 +49,7 @@ public class TestMedicalWard {
 		return medicalward;
 	}
 
-	public void _setParameters(MedicalWard medicalward, Medical medical, Ward ward, Lot lot) {
+	public void setParameters(MedicalWard medicalward, Medical medical, Ward ward, Lot lot) {
 		medicalward.setMedical(medical);
 		medicalward.setWard(ward);
 		medicalward.setInQuantity(in_quantity);

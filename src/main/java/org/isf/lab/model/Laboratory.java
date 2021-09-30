@@ -21,11 +21,10 @@
  */
 package org.isf.lab.model;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -35,8 +34,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
@@ -57,18 +54,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="LABORATORY")
+@Table(name = "LABORATORY")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="LAB_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="LAB_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="LAB_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="LAB_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="LAB_LAST_MODIFIED_DATE"))
-})
-public class Laboratory extends Auditable<String>
-{
-	@Id 
+@AttributeOverride(name = "createdBy", column = @Column(name = "LAB_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "LAB_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "LAB_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "LAB_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "LAB_LAST_MODIFIED_DATE"))
+public class Laboratory extends Auditable<String> {
+
+	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="LAB_ID")
 	private Integer code;
@@ -82,12 +77,11 @@ public class Laboratory extends Auditable<String>
 	private Exam exam;
 
 	@NotNull
-	@Column(name="LAB_DATE")
-	private GregorianCalendar registrationDate;
+	@Column(name="LAB_DATE")		// SQL type: datetime
+	private LocalDateTime registrationDate;
 	
 	@Column(name="LAB_EXAM_DATE")
-	@Temporal(TemporalType.DATE)
-	private Calendar examDate;
+	private LocalDate examDate;	// SQL type: date
 
 	@NotNull
 	@Column(name="LAB_RES")
@@ -120,110 +114,136 @@ public class Laboratory extends Auditable<String>
 	private volatile int hashCode = 0;
 	
 	public Laboratory() { }
-	
-	public Laboratory(Exam aExam,GregorianCalendar aDate,String aResult,
-			String aNote, Patient aPatId, String aPatName){
-		exam=aExam;
-		registrationDate=aDate;
-		result=aResult;
-		note=aNote;
-		patient=aPatId;
-		patName=aPatName;
+
+	public Laboratory(Exam aExam, LocalDateTime aDate, String aResult, String aNote, Patient aPatId, String aPatName) {
+		exam = aExam;
+		registrationDate = aDate;
+		result = aResult;
+		note = aNote;
+		patient = aPatId;
+		patName = aPatName;
 	}
 
-	public Laboratory(Integer aCode,Exam aExam,GregorianCalendar aDate,String aResult,
-			String aNote, Patient aPatId, String aPatName){
-		code=aCode;
-		exam=aExam;
-		registrationDate=aDate;
-		result=aResult;
-		note=aNote;
-		patient=aPatId;
-		patName=aPatName;
+	public Laboratory(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult, String aNote, Patient aPatId, String aPatName) {
+		code = aCode;
+		exam = aExam;
+		registrationDate = aDate;
+		result = aResult;
+		note = aNote;
+		patient = aPatId;
+		patName = aPatName;
 	}
-	public Exam getExam(){
+
+	public Exam getExam() {
 		return exam;
 	}
-	public GregorianCalendar getDate(){
+
+	public LocalDateTime getDate() {
 		return registrationDate;
 	}
-	public String getResult(){
+
+	public String getResult() {
 		return result;
 	}
-	public Integer getCode(){
+
+	public Integer getCode() {
 		return code;
 	}
-	public int getLock(){
+
+	public int getLock() {
 		return lock;
 	}
-	public void setCode(Integer aCode){
-		code=aCode;
+
+	public void setCode(Integer aCode) {
+		code = aCode;
 	}
-	public void setExam(Exam aExam){
-		exam=aExam;
+
+	public void setExam(Exam aExam) {
+		exam = aExam;
 	}
-	public void setLock(int aLock){
-		lock=aLock;
+
+	public void setLock(int aLock) {
+		lock = aLock;
 	}
-	public GregorianCalendar getExamDate() {
-		return (GregorianCalendar) examDate;
+
+	public LocalDate getExamDate() {
+		return examDate;
 	}
-	public void setExamDate(GregorianCalendar exDate) {
+
+	public void setExamDate(LocalDate exDate) {
 		this.examDate = exDate;
-	}	
-	public void setDate(GregorianCalendar aDate){
-		registrationDate=aDate;
 	}
-	public void setResult(String aResult){
-		result=aResult;
+
+	public void setDate(LocalDateTime aDate) {
+		registrationDate = aDate;
 	}
+
+	public void setResult(String aResult) {
+		result = aResult;
+	}
+
 	public String getNote() {
 		return note;
 	}
+
 	public void setNote(String note) {
 		this.note = note;
 	}
+
 	public String getMaterial() {
 		return material;
 	}
+
 	public void setMaterial(String material) {
 		this.material = material;
 	}
+
 	public Patient getPatient() {
 		return patient;
 	}
+
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
+
 	public Integer getAge() {
 		return age;
 	}
+
 	public void setAge(Integer age) {
 		this.age = age;
 	}
+
 	public String getInOutPatient() {
 		return InOutPatient;
 	}
-	public void setInOutPatient(String InOut) {
-		if (InOut==null) InOut="";
-		this.InOutPatient = InOut;
+
+	public void setInOutPatient(String inOut) {
+		if (inOut == null) {
+			inOut = "";
+		}
+		this.InOutPatient = inOut;
 	}
+
 	public String getPatName() {
 		return patName;
 	}
+
 	public void setPatName(String patName) {
 		this.patName = patName;
 	}
+
 	public String getSex() {
 		return sex;
 	}
+
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof Laboratory)) {
+		if (!(obj instanceof Laboratory)) {
 			return false;
 		}
 		

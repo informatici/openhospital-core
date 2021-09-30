@@ -63,26 +63,26 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testPricesOthersGets() throws Exception {
 		// given:
-		int id = _setupTestPricesOthers(false);
+		int id = setupTestPricesOthers(false);
 
 		// then:
-		_checkPricesOthersIntoDb(id);
+		checkPricesOthersIntoDb(id);
 	}
 
 	@Test
 	public void testPricesOthersSets() throws Exception {
 		// given:
-		int id = _setupTestPricesOthers(true);
+		int id = setupTestPricesOthers(true);
 
 		// then:
-		_checkPricesOthersIntoDb(id);
+		checkPricesOthersIntoDb(id);
 	}
 
 	@Test
 	public void testIoGetPricesOthers() throws Exception {
 		// given:
-		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		int id = setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
 
 		// when:
 		List<PricesOthers> result = priceOthersIoOperations.getOthers();
@@ -94,13 +94,13 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoUpdatePricesOthers() throws Exception {
 		// given:
-		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		int id = setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
 		foundPricesOthers.setDescription("Update");
 
 		// when:
 		boolean result = priceOthersIoOperations.updateOther(foundPricesOthers);
-		PricesOthers updatePricesOthers = priceOthersIoOperationRepository.findOne(id);
+		PricesOthers updatePricesOthers = priceOthersIoOperationRepository.findById(id).get();
 
 		// then:
 		assertThat(result).isTrue();
@@ -117,46 +117,46 @@ public class Tests extends OHCoreTestCase {
 
 		// then:
 		assertThat(result).isTrue();
-		_checkPricesOthersIntoDb(pricesOthers.getId());
+		checkPricesOthersIntoDb(pricesOthers.getId());
 	}
 
 	@Test
 	public void testIoDeletePricesOthers() throws Exception {
 		// given:
-		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		int id = setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
 
 		// when:
 		boolean result = priceOthersIoOperations.deleteOthers(foundPricesOthers);
 
 		// then:
 		assertThat(result).isTrue();
-		assertThat(priceOthersIoOperationRepository.exists(id)).isFalse();
+		assertThat(priceOthersIoOperationRepository.existsById(id)).isFalse();
 	}
 
 	@Test
 	public void testIoIsCodePresent() throws Exception {
-		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		int id = setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
 		assertThat(priceOthersIoOperations.isCodePresent(foundPricesOthers.getId())).isTrue();
 		assertThat(priceOthersIoOperations.isCodePresent(-1)).isFalse();
 	}
 
 	@Test
 	public void testMgrGetPricesOthers() throws Exception {
-		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		int id = setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
 		List<PricesOthers> result = pricesOthersManager.getOthers();
 		assertThat(result.get(0).getDescription()).isEqualTo(foundPricesOthers.getDescription());
 	}
 
 	@Test
 	public void testMgrUpdatePricesOthers() throws Exception {
-		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		int id = setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
 		foundPricesOthers.setDescription("Update");
 		assertThat(pricesOthersManager.updateOther(foundPricesOthers)).isTrue();
-		PricesOthers updatePricesOthers = priceOthersIoOperationRepository.findOne(id);
+		PricesOthers updatePricesOthers = priceOthersIoOperationRepository.findById(id).get();
 		assertThat(updatePricesOthers.getDescription()).isEqualTo("Update");
 	}
 
@@ -164,15 +164,15 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewPricesOther() throws Exception {
 		PricesOthers pricesOthers = testPricesOthers.setup(true);
 		assertThat(pricesOthersManager.newOther(pricesOthers)).isTrue();
-		_checkPricesOthersIntoDb(pricesOthers.getId());
+		checkPricesOthersIntoDb(pricesOthers.getId());
 	}
 
 	@Test
 	public void testMgrDeletePricesOther() throws Exception {
-		int id = _setupTestPricesOthers(false);
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		int id = setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
 		assertThat(pricesOthersManager.deleteOther(foundPricesOthers)).isTrue();
-		assertThat(priceOthersIoOperationRepository.exists(id)).isFalse();
+		assertThat(priceOthersIoOperationRepository.existsById(id)).isFalse();
 	}
 
 	@Test
@@ -238,14 +238,14 @@ public class Tests extends OHCoreTestCase {
 		assertThat(pricesOthers.hashCode()).isEqualTo(hashCode);
 	}
 
-	private int _setupTestPricesOthers(boolean usingSet) throws Exception {
+	private int setupTestPricesOthers(boolean usingSet) throws Exception {
 		PricesOthers pricesOthers = testPricesOthers.setup(usingSet);
 		priceOthersIoOperationRepository.saveAndFlush(pricesOthers);
 		return pricesOthers.getId();
 	}
 
-	private void _checkPricesOthersIntoDb(int id) {
-		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+	private void checkPricesOthersIntoDb(int id) {
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
 		testPricesOthers.check(foundPricesOthers);
 	}
 }

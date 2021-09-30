@@ -21,8 +21,8 @@
  */
 package org.isf.admission.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -62,8 +62,8 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 	private EntityManager entityManager;
 
 	@Override
-	public List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(final String searchTerms, final GregorianCalendar[] admissionRange,
-			final GregorianCalendar[] dischargeRange) throws OHServiceException {
+	public List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(final String searchTerms, final LocalDateTime[] admissionRange,
+			final LocalDateTime[] dischargeRange) throws OHServiceException {
 		String[] terms = getTermsToSearch(searchTerms);
 		
 		List<AdmittedPatient> admittedPatients = new ArrayList<>();

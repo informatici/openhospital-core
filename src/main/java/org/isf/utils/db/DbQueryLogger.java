@@ -57,12 +57,12 @@ public class DbQueryLogger {
     	if (LOGGER.isDebugEnabled()) {
 		    LOGGER.debug("Query {}", sanitize(aQuery));
 		}
-    	try{
+    	try {
 	        Connection conn = DbSingleJpaConn.getConnection();
 	        conn.setAutoCommit(autocommit);
 	        Statement stat = conn.createStatement();
 	        return stat.executeQuery(aQuery);
-        }catch (OHException e){
+        } catch (OHException e){
             throw e;
     	} catch (SQLException e) {
     		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
@@ -85,8 +85,8 @@ public class DbQueryLogger {
 			if (!params.isEmpty())
 				LOGGER.trace("	parameters : {}", sanitize(params));
 		}
-    	ResultSet results = null;
-    	Connection conn = null;
+    	ResultSet results;
+    	Connection conn;
     	try {
     		conn = DbSingleJpaConn.getConnection();
     		conn.setAutoCommit(autocommit);
@@ -95,7 +95,7 @@ public class DbQueryLogger {
     			pstmt.setObject(i + 1, params.get(i));
     		}
     		results = pstmt.executeQuery();
-        }catch (OHException e){
+        } catch (OHException e){
             throw e;
     	} catch (SQLException e) {
     		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
@@ -118,12 +118,12 @@ public class DbQueryLogger {
     	if (LOGGER.isDebugEnabled()) {
 		    LOGGER.debug("Query {}", sanitize(aQuery));
 		}
-    	try{
+    	try {
 	        Connection conn = DbSingleJpaConn.getConnection();
 	        conn.setAutoCommit(autocommit);
 	        Statement stat = conn.createStatement();
 	        return stat.executeUpdate(aQuery) > 0;
-        }catch (OHException e){
+        } catch (OHException e){
             throw e;
     	} catch (SQLIntegrityConstraintViolationException e) {
     		throw new OHException(MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere.msg"), e);
@@ -149,7 +149,7 @@ public class DbQueryLogger {
 			if (!params.isEmpty())
 				LOGGER.trace("	parameters : {}", sanitize(params));
 		}
-    	Connection conn = null;
+    	Connection conn;
     	try {
     		conn = DbSingleJpaConn.getConnection();
     		conn.setAutoCommit(autocommit);
@@ -158,7 +158,7 @@ public class DbQueryLogger {
     			pstmt.setObject(i+1, params.get(i));
     		}
     		return pstmt.executeUpdate() > 0;
-        }catch (OHException e){
+        } catch (OHException e){
             throw e;
     	} catch (SQLIntegrityConstraintViolationException e) {
     		throw new OHException(MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere.msg"), e);
@@ -183,13 +183,13 @@ public class DbQueryLogger {
     	if (LOGGER.isDebugEnabled()) {
 		    LOGGER.debug("Query {}", sanitize(aQuery));
 		}
-    	try{
+    	try {
 	        Connection conn = DbSingleJpaConn.getConnection();
 	        conn.setAutoCommit(autocommit);
 	        Statement stat = conn.createStatement();
 	        stat.execute(aQuery,Statement.RETURN_GENERATED_KEYS);
 	        return stat.getGeneratedKeys();
-        }catch (OHException e){
+        } catch (OHException e){
             throw e;
     	} catch (SQLException e) {
     		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
@@ -214,7 +214,7 @@ public class DbQueryLogger {
 			if (!params.isEmpty())
 				LOGGER.trace("	parameters : {}", sanitize(params));
 		}
-    	try{
+    	try {
 	        Connection conn = DbSingleJpaConn.getConnection();
 	        conn.setAutoCommit(autocommit);
 	        PreparedStatement pstmt = conn.prepareStatement(aQuery, Statement.RETURN_GENERATED_KEYS);
@@ -223,7 +223,7 @@ public class DbQueryLogger {
     		}
     		pstmt.execute();
 	        return pstmt.getGeneratedKeys();
-        }catch (OHException e){
+        } catch (OHException e){
             throw e;
     	} catch (SQLException e) {
     		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
@@ -249,7 +249,7 @@ public class DbQueryLogger {
             Statement stat = conn.createStatement();
             ResultSet set = stat.executeQuery(aQuery);
             return set.first();
-        }catch (OHException e){
+        } catch (OHException e){
     	    throw e;
     	} catch (SQLException e) {
     		throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);

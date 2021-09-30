@@ -21,7 +21,7 @@
  */
 package org.isf.sms.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,8 +33,6 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 /**
- * Generated 31-gen-2014 15.39.04 by Hibernate Tools 3.4.0.CR1
- *
  * @author Mwithi
  */
 @Entity
@@ -47,12 +45,12 @@ public class Sms {
 	private int smsId;
 
 	@NotNull
-	@Column(name = "SMS_DATE")
-	private Date smsDate;
+	@Column(name = "SMS_DATE")	        // SQL type: timestamp
+	private LocalDateTime smsDate;
 
 	@NotNull
-	@Column(name = "SMS_DATE_SCHED")
-	private Date smsDateSched;
+	@Column(name = "SMS_DATE_SCHED")    // SQL type: timestamp
+	private LocalDateTime smsDateSched;
 
 	@NotNull
 	@Column(name = "SMS_NUMBER")
@@ -62,8 +60,8 @@ public class Sms {
 	@Column(name = "SMS_TEXT")
 	private String smsText;
 
-	@Column(name = "SMS_DATE_SENT")
-	private Date smsDateSent;
+	@Column(name = "SMS_DATE_SENT")    // SQL type: timestamp
+	private LocalDateTime smsDateSent;
 
 	@NotNull
 	@Column(name = "SMS_USER")
@@ -82,14 +80,15 @@ public class Sms {
 	public Sms() {
 	}
 
-	public Sms(Date smsDateSched, String smsNumber, String smsText, String smsUser) {
+	public Sms(LocalDateTime smsDateSched, String smsNumber, String smsText, String smsUser) {
 		this.smsDateSched = smsDateSched;
 		this.smsNumber = smsNumber;
 		this.smsText = smsText;
 		this.smsUser = smsUser;
 	}
 
-	public Sms(int smsId, Date smsDate, Date smsDateSched, String smsNumber, String smsText, Date smsDateSent, String smsUser, String module, String moduleID) {
+	public Sms(int smsId, LocalDateTime smsDate, LocalDateTime smsDateSched, String smsNumber, String smsText, LocalDateTime smsDateSent, String smsUser,
+			String module, String moduleID) {
 		this.smsId = smsId;
 		this.smsDate = smsDate;
 		this.smsDateSched = smsDateSched;
@@ -109,19 +108,19 @@ public class Sms {
 		this.smsId = smsId;
 	}
 
-	public Date getSmsDate() {
+	public LocalDateTime getSmsDate() {
 		return this.smsDate;
 	}
 
-	public void setSmsDate(Date smsDate) {
+	public void setSmsDate(LocalDateTime smsDate) {
 		this.smsDate = smsDate;
 	}
 
-	public Date getSmsDateSched() {
+	public LocalDateTime getSmsDateSched() {
 		return this.smsDateSched;
 	}
 
-	public void setSmsDateSched(Date smsDateSched) {
+	public void setSmsDateSched(LocalDateTime smsDateSched) {
 		this.smsDateSched = smsDateSched;
 	}
 
@@ -141,11 +140,11 @@ public class Sms {
 		this.smsText = smsText;
 	}
 
-	public Date getSmsDateSent() {
+	public LocalDateTime getSmsDateSent() {
 		return this.smsDateSent;
 	}
 
-	public void setSmsDateSent(Date smsDateSent) {
+	public void setSmsDateSent(LocalDateTime smsDateSent) {
 		this.smsDateSent = smsDateSent;
 	}
 

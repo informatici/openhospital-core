@@ -21,10 +21,9 @@
  */
 package org.isf.medicalstock.model;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -55,18 +54,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="MEDICALDSRSTOCKMOV")
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="MMV_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="MMV_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="MMV_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="MMV_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="MMV_LAST_MODIFIED_DATE"))
-})
-public class Movement extends Auditable<String>
-{
-	@Id 
+@Table(name = "MEDICALDSRSTOCKMOV")
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "MMV_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "MMV_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MMV_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "MMV_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MMV_LAST_MODIFIED_DATE"))
+public class Movement extends Auditable<String> {
+
+	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="MMV_ID")
 	private int code;
@@ -90,8 +87,8 @@ public class Movement extends Auditable<String>
 	private Lot lot;
 
 	@NotNull
-	@Column(name="MMV_DATE")
-	private GregorianCalendar date;
+	@Column(name="MMV_DATE")		// SQL type: datetime
+	private LocalDateTime date;
 
 	@NotNull
 	@Column(name="MMV_QTY")
@@ -104,19 +101,13 @@ public class Movement extends Auditable<String>
 	@NotNull
 	@Column(name="MMV_REFNO")
 	private String refNo;
-        
-//  @NotNull
-//	@ManyToOne
-//	@JoinColumn(name="MMV_WRD_ID_A_TO")	
-//	private Ward wardTo;
-	
+
 	@Transient
 	private volatile int hashCode = 0;
 	
-
 	public Movement() { }
-		
-	public Movement(Medical aMedical,MovementType aType,Ward aWard,Lot aLot,GregorianCalendar aDate,int aQuantity,Supplier aSupplier, String aRefNo){
+
+	public Movement(Medical aMedical, MovementType aType, Ward aWard, Lot aLot, LocalDateTime aDate, int aQuantity, Supplier aSupplier, String aRefNo) {
 		medical = aMedical;
 		type = aType;
 		ward = aWard;
@@ -124,22 +115,9 @@ public class Movement extends Auditable<String>
 		date = aDate;
 		quantity = aQuantity;
 		supplier = aSupplier;
-		refNo=aRefNo;
-                //this.wardTo = null;
+		refNo = aRefNo;
 	}
 
-//        public Movement(Medical aMedical,MovementType aType,Ward aWard,Lot aLot,GregorianCalendar aDate,int aQuantity,Supplier aSupplier, String aRefNo, Ward wardTo){
-//		medical = aMedical;
-//		type = aType;
-//		ward = aWard;
-//		lot = aLot;
-//		date = aDate;
-//		quantity = aQuantity;
-//		supplier = aSupplier;
-//		refNo=aRefNo;
-//		this.wardTo = wardTo;
-//	}
-	
 	public int getCode(){
 		return code;
 	}
@@ -155,7 +133,7 @@ public class Movement extends Auditable<String>
 	public Lot getLot(){
 		return lot;
 	}
-	public GregorianCalendar getDate(){
+	public LocalDateTime getDate(){
 		return date;
 	}
 	public Supplier getSupplier() {
@@ -176,7 +154,7 @@ public class Movement extends Auditable<String>
 	public void setLot(Lot lot) {
 		this.lot = lot;
 	}
-	public void setDate(GregorianCalendar date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 	public void setSupplier(Supplier supplier) {
@@ -198,16 +176,11 @@ public class Movement extends Auditable<String>
 		this.refNo = refNo;
 	}
 
-//    public Ward getWardTo() {
-//        return wardTo;
-//    }
-//
-//    public void setWardTo(Ward wardTo) {
-//        this.wardTo = wardTo;
-//    }
-        
 	public String toString(){
-		return MessageBundle.formatMessage("angal.movement.tostring.fmt.txt", medical.toString(), type.toString(), quantity);
+		return MessageBundle.formatMessage("angal.movement.tostring.fmt.txt",
+				medical != null ? medical.toString() : "NULL",
+				type != null ? type.toString() : "NULL",
+				quantity);
 	}
 	
 	@Override

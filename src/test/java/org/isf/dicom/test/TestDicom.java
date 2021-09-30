@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -26,8 +26,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Random;
 
@@ -39,8 +40,8 @@ import org.isf.utils.exception.OHException;
 
 public class TestDicom {
 
-	SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd hh:mm:ss z yyyy", new Locale("en"));
-	private Blob dicomData = _createRandomBlob(100);
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss z yyyy", new Locale("en"));
+	private Blob dicomData = createRandomBlob(100);
 	private int patId = 0;
 	private String fileName = "TestFileName";
 	private String dicomAccessionNumber = "TestAccessionNumber";
@@ -52,17 +53,17 @@ public class TestDicom {
 	private String dicomPatientSex = "TestPatientSex";
 	private String dicomPatientBirthDate = "TestPatientBirth";
 	private String dicomStudyId = "TestStudyId";
-	private Date dicomStudyDate = formatter.parse("Sat Aug 01 10:02:03 AST 2020");
+	private LocalDateTime dicomStudyDate = LocalDateTime.parse("Sat Aug 01 10:02:03 AST 2020", formatter);
 	private String dicomStudyDescription = "TestStudyDescription";
 	private String dicomSeriesUID = "TestSeriesUid";
 	private String dicomSeriesInstanceUID = "TestSeriesInstanceUid";
 	private String dicomSeriesNumber = "TestSeriesNumber";
 	private String dicomSeriesDescriptionCodeSequence = "TestSeriesDescription";
-	private Date dicomSeriesDate = formatter.parse("Sat Aug 01 10:02:03 AST 2020");
+	private LocalDateTime dicomSeriesDate = LocalDateTime.parse("Sat Aug 01 10:02:03 AST 2020", formatter);
 	private String dicomSeriesDescription = "TestSeriesDescription";
 	private String dicomInstanceUID = "TestInteanceUid";
 	private String modality = "TestModality";
-	private Blob dicomThumbnail = _createRandomBlob(66);
+	private Blob dicomThumbnail = createRandomBlob(66);
 
 	public TestDicom() throws ParseException {
 	}
@@ -72,7 +73,7 @@ public class TestDicom {
 
 		if (usingSet) {
 			dicom = new FileDicom();
-			_setParameters(dicom, dicomType);
+			setParameters(dicom, dicomType);
 		} else {
 			// Create FileDicom with all parameters 
 			dicom = new FileDicom(patId, dicomData, 0, fileName, dicomAccessionNumber, dicomInstitutionName, dicomPatientID,
@@ -81,11 +82,10 @@ public class TestDicom {
 					dicomSeriesNumber, dicomSeriesDescriptionCodeSequence, dicomSeriesDate, dicomSeriesDescription,
 					dicomInstanceUID, modality, dicomThumbnail, dicomType);
 		}
-
 		return dicom;
 	}
 
-	public void _setParameters(FileDicom dicom, DicomType dicomType) {
+	public void setParameters(FileDicom dicom, DicomType dicomType) {
 		dicom.setDicomAccessionNumber(dicomAccessionNumber);
 		dicom.setDicomData(dicomData);
 		dicom.setDicomInstanceUID(dicomInstanceUID);
@@ -122,13 +122,13 @@ public class TestDicom {
 		assertThat(dicom.getDicomPatientID()).isEqualTo(dicomPatientID);
 		assertThat(dicom.getDicomPatientName()).isEqualTo(dicomPatientName);
 		assertThat(dicom.getDicomPatientSex()).isEqualTo(dicomPatientSex);
-		assertThat(formatter.format(dicom.getDicomSeriesDate())).isEqualTo(formatter.format(dicomSeriesDate));
+		assertThat(formatter.format(dicom.getDicomSeriesDate().atZone(ZoneId.systemDefault()))).isEqualTo(formatter.format(dicomSeriesDate.atZone(ZoneId.systemDefault())));
 		assertThat(dicom.getDicomSeriesDescription()).isEqualTo(dicomSeriesDescription);
 		assertThat(dicom.getDicomSeriesDescriptionCodeSequence()).isEqualTo(dicomSeriesDescriptionCodeSequence);
 		assertThat(dicom.getDicomSeriesInstanceUID()).isEqualTo(dicomSeriesInstanceUID);
 		assertThat(dicom.getDicomSeriesNumber()).isEqualTo(dicomSeriesNumber);
 		assertThat(dicom.getDicomSeriesUID()).isEqualTo(dicomSeriesUID);
-		assertThat(formatter.format(dicom.getDicomStudyDate())).isEqualTo(formatter.format(dicomStudyDate));
+		assertThat(formatter.format(dicom.getDicomStudyDate().atZone(ZoneId.systemDefault()))).isEqualTo(formatter.format(dicomStudyDate.atZone(ZoneId.systemDefault())));
 		assertThat(dicom.getDicomStudyDescription()).isEqualTo(dicomStudyDescription);
 		assertThat(dicom.getDicomStudyId()).isEqualTo(dicomStudyId);
 		assertThat(dicom.getFileName()).isEqualTo(fileName);
@@ -136,7 +136,7 @@ public class TestDicom {
 		assertThat(dicom.getModality()).isEqualTo(modality);
 	}
 
-	public Blob _createRandomBlob(int byteCount) {
+	public Blob createRandomBlob(int byteCount) {
 		Blob blob = null;
 		byte[] data;
 

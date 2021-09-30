@@ -22,7 +22,6 @@
 package org.isf.menu.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -45,18 +44,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="GROUPMENU")
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="GM_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="GM_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="GM_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="GM_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="GM_LAST_MODIFIED_DATE"))
-})
-public class GroupMenu extends Auditable<String>
-{
-	@Id 
+@Table(name = "GROUPMENU")
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "GM_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "GM_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "GM_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "GM_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "GM_LAST_MODIFIED_DATE"))
+public class GroupMenu extends Auditable<String> {
+
+	@Id
 	@Column(name="GM_ID")
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer code;
@@ -72,9 +69,8 @@ public class GroupMenu extends Auditable<String>
 	
 	public GroupMenu(){
 	}
-	
-	public GroupMenu(String userGroup, String menuItem)
-	{
+
+	public GroupMenu(String userGroup, String menuItem) {
 		this.userGroup = userGroup;
 		this.menuItem = menuItem;
 	}

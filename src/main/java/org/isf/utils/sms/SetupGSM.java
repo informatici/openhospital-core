@@ -31,16 +31,16 @@ import java.util.Properties;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.ConfigurationException;
 import org.isf.generaldata.ConfigurationProperties;
 import org.isf.sms.providers.gsm.GSMGatewayService;
 import org.isf.sms.providers.gsm.GSMParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.web.server.PortInUseException;
 
 import gnu.io.CommPortIdentifier;
-import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
@@ -55,7 +55,7 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	
 	private Properties props;
 	private CommPortIdentifier portId = null;
-	private Enumeration<?> portList = null;
+	private Enumeration<?> portList;
 	private SerialPort serialPort = null;
 	private InputStream inputStream;
 	
@@ -67,8 +67,7 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 		System.exit(0);
 	}
 	
-	public SetupGSM() {	
-		
+	public SetupGSM() {
 		props = ConfigurationProperties.loadPropertiesFile(GSMParameters.FILE_PROPERTIES, LOGGER);
 		
 		String model = props.getProperty(GSMGatewayService.SERVICE_NAME + ".gmm");
@@ -156,9 +155,8 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 			LOGGER.error("outofbound: '{}'", answer);
 		}
 		System.out.println(answer.trim());
-		
-		int option = JOptionPane.showConfirmDialog(this, "Found modem: "+answer+" on port " + port + "\nConfirm?");
-		return option;
+
+		return JOptionPane.showConfirmDialog(this, "Found modem: "+answer+" on port " + port + "\nConfirm?");
 	}
 
 	/**
@@ -175,4 +173,5 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 			LOGGER.error(ce.getMessage(), ce);
 		}
 	}
+
 }

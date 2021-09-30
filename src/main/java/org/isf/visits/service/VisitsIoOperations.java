@@ -21,7 +21,6 @@
  */
 package org.isf.visits.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.patient.model.Patient;
@@ -47,21 +46,17 @@ public class VisitsIoOperations {
 	 * @return the list of {@link Visit}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Visit> getVisits(Integer patID) throws OHServiceException {
+	public List<Visit> getVisits(Integer patID) throws OHServiceException {
 		return patID != 0 ?
-				new ArrayList<>(repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID)) :
-				new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
+				repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID) :
+				repository.findAllByOrderByPatient_CodeAscDateAsc();
 	}
 
 	public List<Visit> getVisitsWard(String wardId) throws OHServiceException {
-		List<Visit> visits = null;
-
-		if (wardId != null)
-			visits = new ArrayList<>(repository.findAllWhereWardByOrderDateAsc(wardId));
-		else
-			visits = new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
-
-		return visits;
+		if (wardId != null) {
+			return repository.findAllWhereWardByOrderDateAsc(wardId);
+		}
+		return repository.findAllByOrderByPatient_CodeAscDateAsc();
 	}
 
 
@@ -96,7 +91,7 @@ public class VisitsIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 
 	/**
@@ -105,9 +100,8 @@ public class VisitsIoOperations {
 	 * @param id - the id
 	 * @return the {@link Visit} or {@literal null} if none found
 	 */
-	public Visit findVisit(int id)
-	{
-		return repository.findOne(id);
+	public Visit findVisit(int id) {
+		return repository.findById(id).orElse(null);
 	}
 
 	/**

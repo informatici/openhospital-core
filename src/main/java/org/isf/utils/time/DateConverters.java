@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -22,10 +22,13 @@
 package org.isf.utils.time;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Optional;
 
-import org.joda.time.DateTime;
+import org.exolab.castor.types.DateTime;
 
 /**
  * Created by nicosalvato on 2016-08-25.
@@ -38,8 +41,9 @@ public class DateConverters {
      * @return the date in format <code>yyyy-MM-dd HH:mm:ss</code>.
      */
     public static String convertToSQLDate(GregorianCalendar datetime) {
-        if (datetime == null)
-            return null;
+        if (datetime == null) {
+	        return null;
+        }
         return convertToSQLDate(datetime.getTime());
     }
 
@@ -49,8 +53,9 @@ public class DateConverters {
      * @return the date in format <code>yyyy-MM-dd HH:mm:ss</code>.
      */
     public static String convertToSQLDate(Date datetime) {
-        if (datetime == null)
-            return null;
+        if (datetime == null) {
+	        return null;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(datetime);
     }
@@ -61,8 +66,9 @@ public class DateConverters {
      * @return the date in format <code>yyyy-MM-dd</code>.
      */
     public static String convertToSQLDateLimited(GregorianCalendar date) {
-        if (date == null)
-            return null;
+        if (date == null) {
+	        return null;
+        }
         return convertToSQLDateLimited(date.getTime());
     }
 
@@ -72,26 +78,28 @@ public class DateConverters {
      * @return the date in format <code>yyyy-MM-dd</code>.
      */
     public static String convertToSQLDateLimited(Date date) {
-        if (date == null)
-            return null;
+        if (date == null) {
+	        return null;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(date);
     }
 
     /**
-     * Converts a {@link GregorianCalendar} to a {@link Date}.
+     * Converts a {@link LocalDateTime} to a {@link Date}.
      * @param calendar the calendar to convert.
      * @return the converted value or <code>null</code> if the passed value is <code>null</code>.
      */
-    public static Date toDate(GregorianCalendar calendar) {
-        if (calendar == null)
-            return null;
-        return new Date(calendar.getTimeInMillis());
+    public static Date toDate(LocalDateTime localDateTime) {
+	    return Optional.ofNullable(localDateTime)
+			    .map(ldt -> Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant()))
+			    .orElse(null);
     }
     
     public static DateTime toDateTime(GregorianCalendar calendar) {
-        if (calendar == null)
-            return null;
+        if (calendar == null) {
+	        return null;
+        }
         return new DateTime(calendar.getTimeInMillis());
     }
 

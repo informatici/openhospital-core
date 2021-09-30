@@ -21,7 +21,6 @@
  */
 package org.isf.distype.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.distype.model.DiseaseType;
@@ -48,7 +47,7 @@ public class DiseaseTypeIoOperation {
 	 * @throws OHServiceException if an error occurs retrieving the diseases list.
 	 */
 	public List<DiseaseType> getDiseaseTypes() throws OHServiceException {
-		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
+		return repository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
@@ -57,16 +56,8 @@ public class DiseaseTypeIoOperation {
 	 * @return <code>true</code> if the disease type has been updated, false otherwise.
 	 * @throws OHServiceException if an error occurs during the update operation.
 	 */
-	public boolean updateDiseaseType(
-			DiseaseType diseaseType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		DiseaseType savedDiseaseType = repository.save(diseaseType);
-		result = (savedDiseaseType != null);
-		
-		return result;
+	public boolean updateDiseaseType(DiseaseType diseaseType) throws OHServiceException {
+		return repository.save(diseaseType) != null;
 	}
 
 	/**
@@ -75,16 +66,8 @@ public class DiseaseTypeIoOperation {
 	 * @return <code>true</code> if the {@link DiseaseType} has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
-	public boolean newDiseaseType(
-			DiseaseType diseaseType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		DiseaseType savedDiseaseType = repository.save(diseaseType);
-		result = (savedDiseaseType != null);
-		
-		return result;
+	public boolean newDiseaseType(DiseaseType diseaseType) throws OHServiceException {
+		return repository.save(diseaseType) != null;
 	}
 
 	/**
@@ -93,15 +76,9 @@ public class DiseaseTypeIoOperation {
 	 * @return <code>true</code> if the disease has been removed, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the delete procedure.
 	 */
-	public boolean deleteDiseaseType(
-			DiseaseType diseaseType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteDiseaseType(DiseaseType diseaseType) throws OHServiceException {
 		repository.delete(diseaseType);
-		
-		return result;
+		return true;
 	}
 
 	/**
@@ -110,14 +87,7 @@ public class DiseaseTypeIoOperation {
 	 * @return <code>true</code> if the code is used, false otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.existsById(code);
 	}
 }

@@ -131,23 +131,21 @@ public class DbJpaUtil
      * Method to merge an object
      * @throws OHException 
      */
-    public Object merge(
-    		Object entity) throws OHException
-    {   
-    	Object mergedEntity = null;
+    public Object merge(Object entity) throws OHException {
+	    Object mergedEntity;
 
-    	try {
-    		mergedEntity = entityManager.merge(entity);
+	    try {
+		    mergedEntity = entityManager.merge(entity);
 		    LOGGER.debug("Merge: {}", mergedEntity);
-		} catch (IllegalArgumentException illegalArgumentException) {
-			LOGGER.error("IllegalArgumentException", illegalArgumentException);
-			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), illegalArgumentException);
-		} catch (TransactionRequiredException transactionRequiredException) {
-			LOGGER.error("TransactionRequiredException", transactionRequiredException);
-			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), transactionRequiredException);
-		} 
-    	  		      	
-  		return mergedEntity;
+	    } catch (IllegalArgumentException illegalArgumentException) {
+		    LOGGER.error("IllegalArgumentException", illegalArgumentException);
+		    throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), illegalArgumentException);
+	    } catch (TransactionRequiredException transactionRequiredException) {
+		    LOGGER.error("TransactionRequiredException", transactionRequiredException);
+		    throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), transactionRequiredException);
+	    }
+
+	    return mergedEntity;
     }  
     
     /**
@@ -155,20 +153,17 @@ public class DbJpaUtil
      * @return merged entity
      * @throws OHException 
      */
-    public Object find(
-    		Class<?> entityClass, 
-    		Object primaryKey) throws OHException
-    {    
-    	Object entity = null;
+    public Object find(Class<?> entityClass, Object primaryKey) throws OHException {
+	    Object entity;
 
-    	try {
-    		entity = entityManager.find(entityClass, primaryKey);
+	    try {
+		    entity = entityManager.find(entityClass, primaryKey);
 		    LOGGER.debug("Find: {}", entity);
-		} catch (IllegalArgumentException illegalArgumentException) {
-			LOGGER.error("IllegalArgumentException", illegalArgumentException);
-			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), illegalArgumentException);
-		}
-  		return entity;
+	    } catch (IllegalArgumentException illegalArgumentException) {
+		    LOGGER.error("IllegalArgumentException", illegalArgumentException);
+		    throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), illegalArgumentException);
+	    }
+	    return entity;
     }     
 
     /**
@@ -218,7 +213,7 @@ public class DbJpaUtil
 		if (jpql) {
 			_createJPQLQuery(aQuery, aClass);
 		} else {
-			_createNativeQuery(aQuery, aClass);
+			createNativeQuery(aQuery, aClass);
 		}
 	}
 	
@@ -247,13 +242,11 @@ public class DbJpaUtil
      * @return List of objects
      * @throws OHException
      */
-    public List<?> getList() throws OHException 
-    {
-    	List<?> list = null;
-    	
-    	  	
+	public List<?> getList() throws OHException {
+		List<?> list;
+
 		try {
-			list = query.getResultList();			
+			list = query.getResultList();
 		} catch (IllegalStateException illegalStateException) {
 			LOGGER.error("IllegalStateException", illegalStateException);
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), illegalStateException);
@@ -266,7 +259,7 @@ public class DbJpaUtil
 		} catch (PessimisticLockException pessimisticLockException) {
 			LOGGER.error("PessimisticLockException", pessimisticLockException);
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), pessimisticLockException);
-		} catch (LockTimeoutException lockTimeoutException)  {
+		} catch (LockTimeoutException lockTimeoutException) {
 			LOGGER.error("LockTimeoutException", lockTimeoutException);
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), lockTimeoutException);
 		} catch (PersistenceException persistenceException) {
@@ -275,10 +268,9 @@ public class DbJpaUtil
 		} catch (StringIndexOutOfBoundsException stringIndexOutOfBoundsException) {
 			LOGGER.error("StringIndexOutOfBoundsException", stringIndexOutOfBoundsException);
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), stringIndexOutOfBoundsException);
-		} 	
-		
+		}
 		return list;
-    }    
+	}
     
     /**
      * Method that executes a query and return an object
@@ -434,7 +426,7 @@ public class DbJpaUtil
 	    }
     }
 
-	private void _createNativeQuery(String aQuery, Class<?> aClass) {
+	private void createNativeQuery(String aQuery, Class<?> aClass) {
 		// Native SQL query
 		if (aClass == null) {
 			query = entityManager.createNativeQuery(aQuery);
@@ -448,20 +440,19 @@ public class DbJpaUtil
 	 * 
 	 * @throws OHException
 	 */
-    public void rollbackTransaction() throws OHException
-    {
-        try {
-        	EntityTransaction tx = entityManager.getTransaction();
-        	if (tx != null && tx.isActive()) {
-        		entityManager.getTransaction().rollback();
-        	}
-            entityManager.clear();
-        } catch (IllegalStateException illegalStateException) {
-            LOGGER.error("IllegalStateException", illegalStateException);
-            throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), illegalStateException);
-        } catch (RollbackException rollbackException) {
-            LOGGER.error("RollbackException", rollbackException);
-            throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), rollbackException);
-        }
-    }
+	public void rollbackTransaction() throws OHException {
+		try {
+			EntityTransaction tx = entityManager.getTransaction();
+			if (tx != null && tx.isActive()) {
+				entityManager.getTransaction().rollback();
+			}
+			entityManager.clear();
+		} catch (IllegalStateException illegalStateException) {
+			LOGGER.error("IllegalStateException", illegalStateException);
+			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), illegalStateException);
+		} catch (RollbackException rollbackException) {
+			LOGGER.error("RollbackException", rollbackException);
+			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), rollbackException);
+		}
+	}
 }

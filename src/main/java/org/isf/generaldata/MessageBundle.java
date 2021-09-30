@@ -55,8 +55,7 @@ public class MessageBundle {
 	}
 
 	public static String getMessage(String key) {
-		String message = "";
-
+		String message;
 		try {
 			if (resourceBundle != null) {
 				message = resourceBundle.getString(key);

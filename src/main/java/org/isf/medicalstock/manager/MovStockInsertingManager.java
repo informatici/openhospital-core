@@ -22,8 +22,8 @@
 package org.isf.medicalstock.manager;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.generaldata.GeneralData;
@@ -63,10 +63,10 @@ public class MovStockInsertingManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		
 		// Check the Date
-		GregorianCalendar today = new GregorianCalendar();
-		GregorianCalendar movDate = movement.getDate();
-		GregorianCalendar lastDate = getLastMovementDate();
-		if (movDate.after(today)) {
+		LocalDateTime today = LocalDateTime.now();
+		LocalDateTime movDate = movement.getDate();
+		LocalDateTime lastDate = getLastMovementDate();
+		if (movDate.isAfter(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medicalstock.multiplecharging.adateinthefutureisnotallowed.msg"),
 					OHSeverityLevel.ERROR));
@@ -218,19 +218,6 @@ public class MovStockInsertingManager {
 		return errors;
 	}
 
-	// Replaced by getMedical in MedicalBrowsingManager
-	/*
-	 * Gets the current quantity for the specified {@link Medical}.
-	 *
-	 * @param medical the medical to check.
-	 *
-	 * @return the current quantity of medical.
-	 *
-	 * public int getCurrentQuantity(Medical medical){ try { return
-	 * ioOperations.getCurrentQuantity(medical); } catch (OHException e) {
-	 * JOptionPane.showMessageDialog(null, e.getMessage()); return 0; } }
-	 */
-
 	private boolean isAutomaticLot_In() {
 		return GeneralData.AUTOMATICLOT_IN;
 	}
@@ -274,7 +261,7 @@ public class MovStockInsertingManager {
 	 * @return
 	 * @throws OHServiceException
 	 */
-	public GregorianCalendar getLastMovementDate() throws OHServiceException {
+	public LocalDateTime getLastMovementDate() throws OHServiceException {
 		return ioOperations.getLastMovementDate();
 	}
 
@@ -288,17 +275,6 @@ public class MovStockInsertingManager {
 	public boolean refNoExists(String refNo) throws OHServiceException {
 		return ioOperations.refNoExists(refNo);
 	}
-
-	//	/**
-	//	 * Insert a list of {@link Movement}s and related {@link Lot}s
-	//	 *
-	//	 * @param movements - the list of {@link Movement}s
-	//	 * @return
-	//	 * @throws OHServiceException
-	//	 */
-	//	public boolean newMultipleChargingMovements(ArrayList<Movement> movements) throws OHServiceException {
-	//		return newMultipleChargingMovements(movements, null);
-	//	}
 
 	/**
 	 * Insert a list of charging {@link Movement}s and related {@link Lot}s
@@ -351,21 +327,8 @@ public class MovStockInsertingManager {
 	}
 
 	public boolean storeLot(String lotCode, Lot lot, Medical med) throws OHServiceException {
-
 		return ioOperations.storeLot(lotCode, lot, med);
 	}
-
-	//	/**
-	//	 * Insert a list of discharging {@link Movement}s
-	//	 *
-	//	 * @param movements - the list of {@link Movement}s
-	//	 * @return
-	//	 * @throws OHServiceException
-	//	 */
-	//	@Transactional(rollbackFor=OHServiceException.class)
-	//	public boolean newMultipleDischargingMovements(ArrayList<Movement> movements) throws OHServiceException {
-	//		return newMultipleDischargingMovements(movements, null);
-	//	}
 
 	/**
 	 * Insert a list of discharging {@link Movement}s
@@ -415,7 +378,7 @@ public class MovStockInsertingManager {
 		validateMovement(movement, checkReference);
 		if (isAutomaticLot_Out()) {
 			return ioOperations.newAutomaticDischargingMovement(movement);
-		} else
-			return ioOperations.prepareDischargingMovement(movement);
+		}
+		return ioOperations.prepareDischargingMovement(movement);
 	}
 }

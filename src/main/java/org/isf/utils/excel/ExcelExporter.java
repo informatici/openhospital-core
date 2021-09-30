@@ -320,7 +320,7 @@ public class ExcelExporter {
 	}
 
 	private String convertValue(Object value) {
-		String strVal = "";
+		String strVal;
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		if (value != null) {
 			if (value instanceof BigDecimal) {
@@ -400,7 +400,7 @@ public class ExcelExporter {
 	 * @throws OHException
 	 */
 	public void exportResultsetToExcel(ResultSet resultSet, File exportFile) throws IOException, OHException {
-		FileOutputStream fileStream = null;
+		FileOutputStream fileStream;
 		try {
 			fileStream = new FileOutputStream(exportFile);
 		} catch (FileNotFoundException e) {
@@ -540,7 +540,6 @@ public class ExcelExporter {
 	public void exportTableToExcelOLD(JTable jtable, File file) throws IOException {
 		TableModel model = jtable.getModel();
 		FileOutputStream fileStream = new FileOutputStream(file);
-		//BufferedWriter outFile = new BufferedWriter(new OutputStreamWriter(fileStream, encoder));
 
 		workbook = new HSSFWorkbook();
 		HSSFSheet worksheet = (HSSFSheet) workbook.createSheet();

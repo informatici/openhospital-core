@@ -21,8 +21,8 @@
  */
 package org.isf.examination.manager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -54,8 +54,8 @@ public class ExaminationBrowserManager {
 	 * Default PatientExamination
 	 */
 	public PatientExamination getDefaultPatientExamination(Patient patient) {
-		PatientExamination defaultPatient = new PatientExamination(
-				new GregorianCalendar(),
+		return new PatientExamination(
+				LocalDateTime.now(),
 				patient,
 				ExaminationParameters.HEIGHT_INIT,
 				(double) ExaminationParameters.WEIGHT_INIT,
@@ -71,30 +71,28 @@ public class ExaminationBrowserManager {
 				ExaminationParameters.RR_INIT,
 				ExaminationParameters.AUSCULTATION_INIT,
 				"");
-		return defaultPatient;
 	}
 
 	/**
 	 * Get from last PatientExamination (only height, weight & note)
 	 */
 	public PatientExamination getFromLastPatientExamination(PatientExamination lastPatientExamination) {
-		PatientExamination newPatientExamination = new PatientExamination(new GregorianCalendar(), 
+		return new PatientExamination(LocalDateTime.now(),
 				lastPatientExamination.getPatient(),
 				lastPatientExamination.getPex_height(),
-				lastPatientExamination.getPex_weight(), 
-				lastPatientExamination.getPex_ap_min(), 
+				lastPatientExamination.getPex_weight(),
+				lastPatientExamination.getPex_ap_min(),
 				lastPatientExamination.getPex_ap_max(),
 				lastPatientExamination.getPex_hr(),
-				lastPatientExamination.getPex_temp(), 
-				lastPatientExamination.getPex_sat(), 
+				lastPatientExamination.getPex_temp(),
+				lastPatientExamination.getPex_sat(),
 				lastPatientExamination.getPex_hgt(),
-				lastPatientExamination.getPex_diuresis(), 
-				lastPatientExamination.getPex_diuresis_desc(), 
+				lastPatientExamination.getPex_diuresis(),
+				lastPatientExamination.getPex_diuresis_desc(),
 				lastPatientExamination.getPex_bowel_desc(),
 				lastPatientExamination.getPex_rr(),
-				lastPatientExamination.getPex_auscultation(), 
+				lastPatientExamination.getPex_auscultation(),
 				formatLastNote(lastPatientExamination));
-		return newPatientExamination;
 	}
 
 	private String formatLastNote(PatientExamination lastPatientExamination) {
@@ -259,10 +257,10 @@ public class ExaminationBrowserManager {
 		return bowelDescriptionList;
 	}
 
-	public String getBowelDescriptionTranslated(String pex_bowel_desc_key) {
+	public String getBowelDescriptionTranslated(String pexBowelDescKey) {
 		if (bowelDescriptionHashMap == null)
 			buildBowelDescriptionHashMap();
-		return bowelDescriptionHashMap.get(pex_bowel_desc_key);
+		return bowelDescriptionHashMap.get(pexBowelDescKey);
 	}
 
 	public String getBowelDescriptionKey(String description) {
@@ -277,10 +275,10 @@ public class ExaminationBrowserManager {
 		return "";
 	}
 
-	public String getDiuresisDescriptionTranslated(String pex_diuresis_desc_key) {
+	public String getDiuresisDescriptionTranslated(String pexDiuresisDescKey) {
 		if (diuresisDescriptionHashMap == null)
 			buildDiuresisDescriptionHashMap();
-		return diuresisDescriptionHashMap.get(pex_diuresis_desc_key);
+		return diuresisDescriptionHashMap.get(pexDiuresisDescKey);
 	}
 
 	public String getDiuresisDescriptionKey(String description) {

@@ -21,8 +21,11 @@
  */
 package org.isf.admission.service;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
+import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
+
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 
 import org.hibernate.Hibernate;
@@ -87,8 +90,8 @@ public class AdmissionIoOperations
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public List<AdmittedPatient> getAdmittedPatients(String searchTerms) throws OHServiceException {
-		GregorianCalendar[] admissionRange = new GregorianCalendar[2];
-		GregorianCalendar[] dischargeRange = new GregorianCalendar[2];	
+		LocalDateTime[] admissionRange = new LocalDateTime[2];
+		LocalDateTime[] dischargeRange = new LocalDateTime[2];
 		return repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
 	}
 
@@ -100,9 +103,9 @@ public class AdmissionIoOperations
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public List<AdmittedPatient> getAdmittedPatients(String searchTerms, 
-					GregorianCalendar[] admissionRange, 
-					GregorianCalendar[] dischargeRange) throws OHServiceException {
+	public List<AdmittedPatient> getAdmittedPatients(String searchTerms,
+			LocalDateTime[] admissionRange,
+			LocalDateTime[] dischargeRange) throws OHServiceException {
 		return repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
 	}
 
@@ -110,7 +113,7 @@ public class AdmissionIoOperations
 	 * Load patient together with the profile photo, or {@code null} if there is no patient with the given id
 	 */
 	public AdmittedPatient loadAdmittedPatient(final Integer patientId) {
-		final Patient patient = patientRepository.findOne(patientId);
+		final Patient patient = patientRepository.findById(patientId).orElse(null);
 		if (patient == null) {
 			return null;
 		}
@@ -136,7 +139,7 @@ public class AdmissionIoOperations
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public Admission getAdmission(int id) throws OHServiceException {
-		return repository.findOne(id);
+		return repository.findById(id).orElse(null);
 	}
 
 	/**
@@ -155,16 +158,8 @@ public class AdmissionIoOperations
 	 * @return <code>true</code> if the admission has been successfully inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the insertion.
 	 */
-	public boolean newAdmission(
-			Admission admission) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		Admission savedAdmission = repository.save(admission);
-		result = (savedAdmission != null);
-		
-		return result;
+	public boolean newAdmission(Admission admission) throws OHServiceException {
+		return repository.save(admission) != null;
 	}
 
 	/**
@@ -173,11 +168,8 @@ public class AdmissionIoOperations
 	 * @return the generated id.
 	 * @throws OHServiceException if an error occurs during the insertion.
 	 */
-	public int newAdmissionReturnKey(
-			Admission admission) throws OHServiceException 
-	{
+	public int newAdmissionReturnKey(Admission admission) throws OHServiceException {
 		newAdmission(admission);
-		
 		return admission.getId();
 	}
 
@@ -187,16 +179,8 @@ public class AdmissionIoOperations
 	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs.
 	 */
-	public boolean updateAdmission(
-			Admission admission) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		Admission savedAdmission = repository.save(admission);
-		result = (savedAdmission != null);
-		
-		return result;
+	public boolean updateAdmission(Admission admission) throws OHServiceException {
+		return repository.save(admission) != null;
 	}
 
 	/**
@@ -223,40 +207,30 @@ public class AdmissionIoOperations
 	 * @return the next prog.
 	 * @throws OHServiceException if an error occurs retrieving the value.
 	 */
-	public int getNextYProg(
-			String wardId) throws OHServiceException 
-	{
+	public int getNextYProg(String wardId) throws OHServiceException {
 		int next = 1;
-		GregorianCalendar now = getNow();
-		GregorianCalendar first = null;
-		GregorianCalendar last = null;
-		
-		if (wardId.equalsIgnoreCase("M") && GeneralData.MATERNITYRESTARTINJUNE) 
-		{
-			if (now.get(Calendar.MONTH) < 6) 
-			{
-				first = new GregorianCalendar(now.get(Calendar.YEAR) - 1, Calendar.JULY, 1);
-				last = new GregorianCalendar(now.get(Calendar.YEAR), Calendar.JULY, 1);
-			} 
-			else 
-			{
-				first = new GregorianCalendar(now.get(Calendar.YEAR), Calendar.JULY, 1);
-				last = new GregorianCalendar(now.get(Calendar.YEAR) + 1, Calendar.JULY, 1);
+		LocalDateTime now = getNow();
+		LocalDateTime first;
+		LocalDateTime last;
 
+		if (wardId.equalsIgnoreCase("M") && GeneralData.MATERNITYRESTARTINJUNE) {
+			if (now.getMonthValue() < Month.JUNE.getValue())  {
+				first = now.minusYears(1).withMonth(Month.JULY.getValue()).withDayOfMonth(1);
+				last = now.withMonth(Month.JUNE.getValue()).withDayOfMonth(30);
+			} else {
+				first = now.withMonth(Month.JULY.getValue()).withDayOfMonth(1);
+				last = now.plusYears(1).withMonth(Month.JUNE.getValue()).withDayOfMonth(30);
 			}
-		} 
-		else 
-		{
-			first = new GregorianCalendar(now.get(Calendar.YEAR), 0, 1);
-			last = new GregorianCalendar(now.get(Calendar.YEAR), 11, 31);
+		} else {
+			first = now.with(firstDayOfYear());
+			last = now.with(lastDayOfYear());
 		}
-		
+
 		List<Admission> admissions = repository.findAllWhereWardAndDates(wardId, first, last);
-		if (!admissions.isEmpty())
-		{
-			next = admissions.get(0).getYProg() + 1; 		
-		} 
-		
+		if (!admissions.isEmpty()) {
+			next = admissions.get(0).getYProg() + 1;
+		}
+
 		return next;
 	}
 
@@ -266,22 +240,23 @@ public class AdmissionIoOperations
 	 * The default path ({@code testing == false}) ensures that the code performs as it
 	 * always has in the past.
 	 * This code permits the unit testing of maternity wards with dates before and after June.
-	 * TODO: once the GregorianCalendar object is replaced by Java 8+ date/time objects this can be revisited
+	 * TODO: once the LocalDateTime object is replaced by Java 8+ date/time objects this can be revisited
 	 * as there is more flexibility in modifying the new objects in Java 8+.
 	 */
 	public static boolean testing = false;
 	public static boolean afterJune = false;
-	public static GregorianCalendar getNow() {
-		GregorianCalendar now = new GregorianCalendar();
+
+	public static LocalDateTime getNow() {
+		LocalDateTime now = LocalDateTime.now();
 		if (!testing) {
 			return now;
 		}
 		// testing date June or later
 		if (afterJune) {
-			return new GregorianCalendar(now.get(Calendar.YEAR), 8, 2);
+			return LocalDateTime.of(now.getYear(), 8, 2, 0, 0);
 		}
 		// testing data before June
-		return new GregorianCalendar(now.get(Calendar.YEAR), 0, 2);
+		return LocalDateTime.of(now.getYear(), 1, 2, 0, 0);
 	}
 
 	/**
@@ -290,18 +265,11 @@ public class AdmissionIoOperations
 	 * @return <code>true</code> if the record has been set to delete.
 	 * @throws OHServiceException if an error occurs.
 	 */
-	public boolean setDeleted(
-			int admissionId) throws OHServiceException 
-	{
-		boolean result = true;
-		
-		
-		Admission foundAdmission = repository.findOne(admissionId);  
+	public boolean setDeleted(int admissionId) throws OHServiceException {
+		Admission foundAdmission = repository.findById(admissionId).orElse(null);
 		foundAdmission.setDeleted("Y");
 		Admission savedAdmission = repository.save(foundAdmission);
-		result = (savedAdmission != null);    	
-    	
-		return result;
+		return savedAdmission != null;
 	}
 
 	/**
@@ -310,12 +278,8 @@ public class AdmissionIoOperations
 	 * @return the number of used beds.
 	 * @throws OHServiceException if an error occurs retrieving the bed count.
 	 */
-	public int getUsedWardBed(
-			String wardId) throws OHServiceException 
-	{
-    	List<Admission> admissionList = repository.findAllWhereWardIn(wardId);
-		
-
+	public int getUsedWardBed(String wardId) throws OHServiceException {
+		List<Admission> admissionList = repository.findAllWhereWardIn(wardId);
 		return admissionList.size();
 	}
 
@@ -325,19 +289,11 @@ public class AdmissionIoOperations
 	 * @return <code>true</code> if the photo has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs.
 	 */
-	public boolean deletePatientPhoto(
-			int patientId) throws OHServiceException
-	{
-		boolean result = true;
-		
-		
-		Patient foundPatient = patientRepository.findOne(patientId);
+	public boolean deletePatientPhoto(int patientId) throws OHServiceException {
+		Patient foundPatient = patientRepository.findById(patientId).orElse(null);
 		if (foundPatient.getPatientProfilePhoto() != null && foundPatient.getPatientProfilePhoto().getPhoto() != null) {
 			foundPatient.getPatientProfilePhoto().setPhoto(null);
 		}
-        Patient savedPatient = patientRepository.save(foundPatient);
-		result = (savedPatient != null);    
-		
-		return result;
+		return patientRepository.save(foundPatient) != null;
 	}
 }

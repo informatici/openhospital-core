@@ -21,8 +21,9 @@
  */
 package org.isf.lab.manager;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -77,8 +78,9 @@ public class LabManager {
 	 */
 	protected void validateLaboratory(Laboratory laboratory) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		if (laboratory.getDate() == null)
-			laboratory.setDate(new GregorianCalendar());
+		if (laboratory.getDate() == null) {
+			laboratory.setDate(LocalDateTime.now());
+		}
 		if (laboratory.getExam() != null && laboratory.getExam().getProcedure() == 2) {
 			laboratory.setResult(MessageBundle.getMessage("angal.lab.multipleresults.txt"));
 		}
@@ -167,7 +169,7 @@ public class LabManager {
 	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
 	 * @throws OHServiceException
 	 */
-	public List<Laboratory> getLaboratory(String exam, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<Laboratory> getLaboratory(String exam, LocalDate dateFrom, LocalDate dateTo) throws OHServiceException {
 		return ioOperations.getLaboratory(exam, dateFrom, dateTo);
 	}
 
@@ -182,10 +184,9 @@ public class LabManager {
 	 * @return the list of {@link LaboratoryForPrint}s . It could be <code>empty</code>.
 	 * @throws OHServiceException
 	 */
-	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDate dateFrom, LocalDate dateTo) throws OHServiceException {
 		List<LaboratoryForPrint> labs = ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo);
 		setLabMultipleResults(labs);
-
 		return labs;
 	}
 
@@ -280,7 +281,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public boolean newLaboratory(List<Laboratory> labList, List<ArrayList<String>> labRowList) throws OHServiceException {
+	public boolean newLaboratory(List<Laboratory> labList, List<List<String>> labRowList) throws OHServiceException {
 		if (labList.isEmpty())
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.noexamsinserted.msg"),
@@ -305,7 +306,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public boolean newLaboratory2(List<Laboratory> labList, List<ArrayList<LaboratoryRow>> labRowList) throws OHServiceException {
+	public boolean newLaboratory2(List<Laboratory> labList, List<List<LaboratoryRow>> labRowList) throws OHServiceException {
 		if (labList.isEmpty())
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.noexamsinserted.msg"),
@@ -386,7 +387,7 @@ public class LabManager {
 
 	private void setLabMultipleResults(List<LaboratoryForPrint> labs) throws OHServiceException {
 
-		List<LaboratoryRow> rows = null;
+		List<LaboratoryRow> rows;
 
 		for (LaboratoryForPrint lab : labs) {
 			String labResult = lab.getResult();
@@ -478,7 +479,7 @@ public class LabManager {
        return ioOperations.newLabFirstProcedure2(lab); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Laboratory newLabSecondProcedure2(Laboratory lab, ArrayList<LaboratoryRow> laboratoryRows)  throws OHServiceException {
+    public Laboratory newLabSecondProcedure2(Laboratory lab, List<LaboratoryRow> laboratoryRows)  throws OHServiceException {
         return ioOperations.newLabSecondProcedure2(lab, laboratoryRows); //To change body of generated methods, choose Tools | Templates.
     }*/
 }

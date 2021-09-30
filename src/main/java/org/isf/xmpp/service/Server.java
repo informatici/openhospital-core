@@ -74,7 +74,7 @@ public class Server {
 	}
 
 	public Chat getChat(String to, String id, MessageListener listener) {
-		Chat chat = null;
+		Chat chat;
 		id = id + "@" + user;
 		if (connection.getChatManager().getThreadChat(id) == null) {
 			LOGGER.debug("Creation chat: {}, id = {}", to, id);
@@ -96,8 +96,7 @@ public class Server {
 	}
 
 	public FileTransferManager getTransferManager() {
-		FileTransferManager manager = new FileTransferManager(connection);
-		return manager;
+		return new FileTransferManager(connection);
 	}
 
 	public Connection getConnection() {

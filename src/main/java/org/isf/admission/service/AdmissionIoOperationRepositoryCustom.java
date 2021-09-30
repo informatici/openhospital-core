@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,7 +21,7 @@
  */
 package org.isf.admission.service;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.admission.model.Admission;
@@ -31,11 +31,11 @@ import org.isf.utils.exception.OHServiceException;
 
 public interface AdmissionIoOperationRepositoryCustom {
 
-	List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(String searchTerms,
-			GregorianCalendar[] admissionRange,
-			GregorianCalendar[] dischargeRange) throws OHServiceException;
+	List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(String searchTerms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange)
+			throws OHServiceException;
 
 	class PatientAdmission {
+
 		/**
 		 * @see Patient#getCode()
 		 */
@@ -46,8 +46,7 @@ public interface AdmissionIoOperationRepositoryCustom {
 		 */
 		private final Integer admissionId;
 
-		public PatientAdmission(final Integer patientId,
-								final Integer admissionId) {
+		public PatientAdmission(final Integer patientId, final Integer admissionId) {
 			this.patientId = patientId;
 			this.admissionId = admissionId;
 		}
@@ -60,4 +59,5 @@ public interface AdmissionIoOperationRepositoryCustom {
 			return admissionId;
 		}
 	}
+
 }

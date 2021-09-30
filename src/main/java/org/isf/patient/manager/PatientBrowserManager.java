@@ -21,8 +21,8 @@
  */
 package org.isf.patient.manager;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +87,7 @@ public class PatientBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public List<Patient> getPatient(int page, int size) throws OHServiceException {
-		return ioOperations.getPatients(new PageRequest(page, size));
+		return ioOperations.getPatients(PageRequest.of(page, size));
 	}
 
 	/**
@@ -157,17 +157,19 @@ public class PatientBrowserManager {
 	}
 
 	public String[] getMaritalList() {
-		if (maritalHashMap == null)
+		if (maritalHashMap == null) {
 			buildMaritalHashMap();
-		String[] maritalDescriptionList = maritalHashMap.values().toArray(new String[0]);
-		return maritalDescriptionList;
+		}
+		return maritalHashMap.values().toArray(new String[0]);
 	}
 
 	public String getMaritalTranslated(String maritalKey) {
-		if (maritalHashMap == null)
+		if (maritalHashMap == null) {
 			buildMaritalHashMap();
-		if (maritalKey == null || !maritalHashMap.containsKey(maritalKey))
+		}
+		if (maritalKey == null || !maritalHashMap.containsKey(maritalKey)) {
 			return MessageBundle.getMessage("angal.patient.maritalstatusunknown.txt");
+		}
 		return maritalHashMap.get(maritalKey);
 	}
 
@@ -200,17 +202,19 @@ public class PatientBrowserManager {
 	}
 
 	public String[] getProfessionList() {
-		if (professionHashMap == null)
+		if (professionHashMap == null) {
 			buildProfessionHashMap();
-		String[] professionDescriptionList = professionHashMap.values().toArray(new String[0]);
-		return professionDescriptionList;
+		}
+		return professionHashMap.values().toArray(new String[0]);
 	}
 
 	public String getProfessionTranslated(String professionKey) {
-		if (professionHashMap == null)
+		if (professionHashMap == null) {
 			buildProfessionHashMap();
-		if (professionKey == null || !professionHashMap.containsKey(professionKey))
+		}
+		if (professionKey == null || !professionHashMap.containsKey(professionKey)) {
 			return MessageBundle.getMessage("angal.patient.profession.unknown.txt");
+		}
 		return professionHashMap.get(professionKey);
 	}
 
@@ -230,10 +234,12 @@ public class PatientBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		boolean admitted = false;
 
-		if (admissionManager.getCurrentAdmission(mergedPatient) != null)
+		if (admissionManager.getCurrentAdmission(mergedPatient) != null) {
 			admitted = true;
-		else if (admissionManager.getCurrentAdmission(patient2) != null)
+		}
+		else if (admissionManager.getCurrentAdmission(patient2) != null) {
 			admitted = true;
+		}
 		if (admitted) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.admission.cannotmergeadmittedpatients.msg"),
@@ -246,12 +252,14 @@ public class PatientBrowserManager {
 		boolean billPending = false;
 
 		List<Bill> bills = billManager.getPendingBills(mergedPatient.getCode());
-		if (bills != null && !bills.isEmpty())
+		if (bills != null && !bills.isEmpty()) {
 			billPending = true;
+		}
 		else {
 			bills = billManager.getPendingBills(patient2.getCode());
-			if (bills != null && !bills.isEmpty())
+			if (bills != null && !bills.isEmpty()) {
 				billPending = true;
+			}
 		}
 		if (billPending) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
@@ -319,7 +327,7 @@ public class PatientBrowserManager {
 	public boolean mergePatient(Patient mergedPatient, Patient patient2) throws OHServiceException {
 		if (mergedPatient.getBirthDate() != null && StringUtils.isEmpty(mergedPatient.getAgetype())) {
 			//mergedPatient only Age
-			Date bdate2 = patient2.getBirthDate();
+			LocalDate bdate2 = patient2.getBirthDate();
 			int age2 = patient2.getAge();
 			String ageType2 = patient2.getAgetype();
 			if (bdate2 != null) {
@@ -367,8 +375,9 @@ public class PatientBrowserManager {
 		if (mergedPatient.getParentTogether() == 'U')
 			mergedPatient.setParentTogether(patient2.getParentTogether());
 
-		if (StringUtils.isEmpty(mergedPatient.getNote()))
+		if (StringUtils.isEmpty(mergedPatient.getNote())) {
 			mergedPatient.setNote(patient2.getNote());
+		}
 		else {
 			String note = mergedPatient.getNote();
 			mergedPatient.setNote(patient2.getNote() + "\n\n" + note);
@@ -416,13 +425,13 @@ public class PatientBrowserManager {
 	}
 
 	private boolean checkAge(Patient patient) {
-		Date now = new Date();
-		Date birthDate = patient.getBirthDate();
+		LocalDate now = LocalDate.now();
+		LocalDate birthDate = patient.getBirthDate();
 
 		if (patient.getAge() < 0 || patient.getAge() > 200) {
 			return false;
 		}
-		if (birthDate == null || birthDate.after(now)) {
+		if (birthDate == null || birthDate.isAfter(now)) {
 			return false;
 		}
 		return true;

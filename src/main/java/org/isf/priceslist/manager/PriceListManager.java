@@ -72,7 +72,7 @@ public class PriceListManager {
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updatePrices(PriceList list, ArrayList<Price> prices) throws OHServiceException {
+	public boolean updatePrices(PriceList list, List<Price> prices) throws OHServiceException {
 		return ioOperations.updatePrices(list, prices);
 	}
 
@@ -136,7 +136,7 @@ public class PriceListManager {
 	}
 
 	public List<PriceForPrint> convertPrice(PriceList listSelected, Iterable<Price> prices) {
-		ArrayList<PriceForPrint> pricePrint = new ArrayList<>();
+		List<PriceForPrint> pricePrint = new ArrayList<>();
 		for (Price price : prices) {
 			if (price.getList().getId() == listSelected.getId() && price.getPrice() != 0.) {
 				PriceForPrint price4print = new PriceForPrint();

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -44,7 +44,7 @@ public class TestMedical {
 
 		if (usingSet) {
 			medical = new Medical();
-			_setParameters(medical, medicalType);
+			setParameters(medical, medicalType);
 		} else {
 			// Create Medical with all parameters 
 			medical = new Medical(code, medicalType, prod_code, description, initialqty, pcsperpck, minqty, inqty, outqty);
@@ -53,14 +53,14 @@ public class TestMedical {
 		return medical;
 	}
 
-	public void _setParameters(Medical medical, MedicalType medicalType) {
+	public void setParameters(Medical medical, MedicalType medicalType) {
 		medical.setDescription(description);
 		medical.setInitialqty(initialqty);
 		medical.setInqty(inqty);
 		medical.setMinqty(minqty);
 		medical.setOutqty(outqty);
 		medical.setPcsperpck(pcsperpck);
-		medical.setProd_code(prod_code);
+		medical.setProdCode(prod_code);
 		medical.setType(medicalType);
 	}
 
@@ -71,6 +71,6 @@ public class TestMedical {
 		assertThat(medical.getMinqty()).isCloseTo(minqty, offset(0.1));
 		assertThat(medical.getOutqty()).isCloseTo(outqty, offset(0.1));
 		assertThat(medical.getPcsperpck()).isEqualTo(pcsperpck);
-		assertThat(medical.getProd_code()).isEqualTo(prod_code);
+		assertThat(medical.getProdCode()).isEqualTo(prod_code);
 	}
 }

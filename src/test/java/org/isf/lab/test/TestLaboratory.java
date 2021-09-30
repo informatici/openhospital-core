@@ -22,9 +22,11 @@
 package org.isf.lab.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.exa.model.Exam;
 import org.isf.generaldata.GeneralData;
@@ -35,9 +37,8 @@ import org.isf.utils.exception.OHException;
 public class TestLaboratory {
 
 	private String material = "TestMaterial";
-	private GregorianCalendar now = new GregorianCalendar();
-	private GregorianCalendar registrationDate = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-	private GregorianCalendar examDate = new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
+	private LocalDateTime registrationDate = LocalDateTime.now().minusWeeks(5);
+	private LocalDate examDate = LocalDate.now();
 	private String result = "TestResult";
 	private String note = "TestNote";
 	private String patName = "TestPatientName";
@@ -50,7 +51,7 @@ public class TestLaboratory {
 
 		if (usingSet) {
 			laboratory = new Laboratory();
-			_setParameters(laboratory, exam, patient);
+			setParameters(laboratory, exam, patient);
 		} else {
 			// Create Laboratory with all parameters 
 			laboratory = new Laboratory(exam, registrationDate, result, note, patient, patName);
@@ -65,7 +66,7 @@ public class TestLaboratory {
 		return laboratory;
 	}
 
-	public void _setParameters(Laboratory laboratory, Exam exam, Patient patient) {
+	public void setParameters(Laboratory laboratory, Exam exam, Patient patient) {
 		laboratory.setAge(age);
 		laboratory.setDate(registrationDate);
 		laboratory.setExam(exam);
@@ -91,7 +92,7 @@ public class TestLaboratory {
 			assertThat(laboratory.getPatName()).isEqualTo(patName);
 		}
 		assertThat(laboratory.getDate()).isEqualTo(registrationDate);
-		assertThat(laboratory.getExamDate()).isEqualTo(examDate);
+		assertThat(laboratory.getDate()).isCloseTo(registrationDate, within(1, ChronoUnit.SECONDS));
 		assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
 		assertThat(laboratory.getMaterial()).isEqualTo(material);
 		assertThat(laboratory.getNote()).isEqualTo(note);

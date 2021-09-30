@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -40,7 +40,7 @@ public class TestPrice {
 
 		if (usingSet) {
 			price = new Price();
-			_setParameters(list, price);
+			setParameters(list, price);
 		} else {
 			// Create PriceList with all parameters 
 			price = new Price(0, list, group, item, desc, priceValue);
@@ -49,7 +49,7 @@ public class TestPrice {
 		return price;
 	}
 
-	public void _setParameters(PriceList list, Price price) {
+	public void setParameters(PriceList list, Price price) {
 		price.setDesc(desc);
 		price.setEditable(editable);
 		price.setGroup(group);

@@ -59,22 +59,22 @@ public class Interaction {
 
 		Presence presence;
 		Collection<RosterEntry> entries = roster.getEntries();
-		Collection<String> entries_online= new ArrayList<>();
+		Collection<String> entriesOnline= new ArrayList<>();
 		for(RosterEntry r:entries)
 		{
 			presence = roster.getPresence(r.getUser());
 			if(presence.isAvailable())
-				entries_online.add(r.getName());
+				entriesOnline.add(r.getName());
 		}
 
-		return entries_online;
+		return entriesOnline;
 	}
 	
-	public void sendMessage(MessageListener listener, String text_message, String to, final boolean visualize){
+	public void sendMessage(MessageListener listener, String textMessage, String to, final boolean visualize){
 		
 		to = to + server.getUserAddress();
 		Message message = new Message(to);
-		message.setBody(text_message);
+		message.setBody(textMessage);
 		message.setThread(to);
 		Chat chat = server.getChat(to, message.getThread(), listener);
 

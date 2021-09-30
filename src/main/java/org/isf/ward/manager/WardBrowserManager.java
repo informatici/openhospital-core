@@ -218,7 +218,7 @@ public class WardBrowserManager {
 	 * @return maternity ward
 	 */
 	private Ward getDefaultMaternityWard() {
-		Ward maternity = new Ward(
+		return new Ward(
 				"M",
 				MessageBundle.getMessage("angal.ward.maternity.txt").toUpperCase(),
 				"234/52544", //Telephone
@@ -229,8 +229,7 @@ public class WardBrowserManager {
 				2, //Doctors
 				false, //isPharmacy
 				false, //isMale
-				true); //isFemale
-		return maternity;
+				true);
 	}
 	
 	/**

@@ -21,7 +21,7 @@
  */
 package org.isf.sms.service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.generaldata.SmsParameters;
@@ -39,7 +39,7 @@ public class SmsSender implements Runnable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SmsSender.class);
 
 	private boolean running = true;
-	private int delay = 10;
+	private int delay;
 
 	public SmsSender() {
 		LOGGER.info("SMS Sender started...");
@@ -64,10 +64,10 @@ public class SmsSender implements Runnable {
 				SmsSenderOperations sender = Context.getApplicationContext().getBean(SmsSenderOperations.class);
 				if (sender.initialize()) {
 					for (Sms sms : smsList) {
-						if (sms.getSmsDateSched().before(new Date())) {
+						if (sms.getSmsDateSched().isBefore(LocalDateTime.now())) {
 							boolean result = sender.sendSMS(sms);
 							if (result) {
-								sms.setSmsDateSent(new Date());
+								sms.setSmsDateSent(LocalDateTime.now());
 								try {
 									smsOp.saveOrUpdate(sms);
 								} catch (OHServiceException e) {

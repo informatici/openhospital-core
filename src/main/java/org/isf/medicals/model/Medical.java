@@ -22,7 +22,6 @@
 package org.isf.medicals.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -54,15 +53,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="MEDICALDSR")
+@Table(name = "MEDICALDSR")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="MDSR_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="MDSR_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="MDSR_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="MDSR_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="MDSR_LAST_MODIFIED_DATE"))
-})
+@AttributeOverride(name = "createdBy", column = @Column(name = "MDSR_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "MDSR_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MDSR_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "MDSR_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MDSR_LAST_MODIFIED_DATE"))
 public class Medical extends Auditable<String> implements Comparable<Medical>, Cloneable {
 	/**
 	 * Code of the medical
@@ -150,12 +147,12 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 	/**
 	 * Constructor
 	 */
-	public Medical(Integer code, MedicalType type, String prod_code, String description,
+	public Medical(Integer code, MedicalType type, String prodCode, String description,
 			double initialqty, Integer pcsperpck, double minqty, double inqty, double outqty) {
 		super();
 		this.code = code;
 		this.type = type;
-		this.prod_code = prod_code;
+		this.prod_code = prodCode;
 		this.description = description;
 		this.initialqty = initialqty;
 		this.pcsperpck = pcsperpck;
@@ -232,12 +229,12 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 		this.type = type;
 	}
 
-	public String getProd_code() {
+	public String getProdCode() {
 		return prod_code;
 	}
 
-	public void setProd_code(String prod_code) {
-		this.prod_code = prod_code;
+	public void setProdCode(String prodCode) {
+		this.prod_code = prodCode;
 	}
 
 	public Integer getPcsperpck() {
@@ -250,9 +247,9 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 
 	@Override
 	public boolean equals(Object anObject) {
-		if (anObject == null || !(anObject instanceof Medical)) return false;
-		if (getProd_code() == null || ((Medical) anObject).getProd_code() == null) return false;
-		if (getProd_code() != null && ((Medical) anObject).getProd_code() != null && !getProd_code().equals(((Medical) anObject).getProd_code())) return false;
+		if (!(anObject instanceof Medical)) return false;
+		if (getProdCode() == null || ((Medical) anObject).getProdCode() == null) return false;
+		if (getProdCode() != null && ((Medical) anObject).getProdCode() != null && !getProdCode().equals(((Medical) anObject).getProdCode())) return false;
 		return (getCode().equals(((Medical) anObject).getCode())
 						&& getDescription().equalsIgnoreCase(((Medical) anObject).getDescription())
 						&& getType().equals(((Medical) anObject).getType())

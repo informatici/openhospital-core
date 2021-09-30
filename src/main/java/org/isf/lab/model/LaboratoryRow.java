@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -22,7 +22,6 @@
 package org.isf.lab.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -39,18 +38,16 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name="LABORATORYROW")
+@Table(name = "LABORATORYROW")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="LABR_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="LABR_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="LABR_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="LABR_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="LABR_LAST_MODIFIED_DATE"))
-})
-public class LaboratoryRow extends Auditable<String>
-{
-	@Id 
+@AttributeOverride(name = "createdBy", column = @Column(name = "LABR_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "LABR_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "LABR_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "LABR_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "LABR_LAST_MODIFIED_DATE"))
+public class LaboratoryRow extends Auditable<String> {
+
+	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="LABR_ID")
 	private Integer code;

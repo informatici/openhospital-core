@@ -107,8 +107,9 @@ public class UserMenuItem
 	public UserMenuItem() {
 		super();
 	}
-		
-	public UserMenuItem(String code, String buttonLabel, String altLabel, String tooltip, char shortcut, String mySubmenu, String myClass, boolean isASubMenu, int position, boolean isActive) {
+
+	public UserMenuItem(String code, String buttonLabel, String altLabel, String tooltip, char shortcut, String mySubmenu, String myClass, boolean isASubMenu,
+			int position, boolean isActive) {
 		super();
 		this.code = code;
 		this.buttonLabel = buttonLabel;
@@ -121,7 +122,6 @@ public class UserMenuItem
 		this.position = position;
 		this.isActive = isActive;
 	}
-	
 	
 	public String getAltLabel() {
 		return MessageBundle.getMessage(altLabel); 
