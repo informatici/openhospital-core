@@ -229,11 +229,11 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 		this.type = type;
 	}
 
-	public String getProd_code() {
+	public String getProdCode() {
 		return prod_code;
 	}
 
-	public void setProd_code(String prodCode) {
+	public void setProdCode(String prodCode) {
 		this.prod_code = prodCode;
 	}
 
@@ -248,8 +248,8 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 	@Override
 	public boolean equals(Object anObject) {
 		if (!(anObject instanceof Medical)) return false;
-		if (getProd_code() == null || ((Medical) anObject).getProd_code() == null) return false;
-		if (getProd_code() != null && ((Medical) anObject).getProd_code() != null && !getProd_code().equals(((Medical) anObject).getProd_code())) return false;
+		if (getProdCode() == null || ((Medical) anObject).getProdCode() == null) return false;
+		if (getProdCode() != null && ((Medical) anObject).getProdCode() != null && !getProdCode().equals(((Medical) anObject).getProdCode())) return false;
 		return (getCode().equals(((Medical) anObject).getCode())
 						&& getDescription().equalsIgnoreCase(((Medical) anObject).getDescription())
 						&& getType().equals(((Medical) anObject).getType())

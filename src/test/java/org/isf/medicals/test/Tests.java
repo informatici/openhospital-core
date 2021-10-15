@@ -504,7 +504,7 @@ public class Tests extends OHCoreTestCase {
 		{
 			int medicalCode = setupTestMedical(false);
 			Medical medical = medicalsIoOperationRepository.findById(medicalCode).get();
-			medical.setProd_code("");
+			medical.setProdCode("");
 			medicalBrowsingManager.checkMedical(medical, false, false);
 		})
 				.isInstanceOf(OHDataValidationException.class);
@@ -516,7 +516,7 @@ public class Tests extends OHCoreTestCase {
 		{
 			int medicalCode = setupTestMedical(false);
 			Medical medical = medicalsIoOperationRepository.findById(medicalCode).get();
-			medical.setProd_code("");
+			medical.setProdCode("");
 			MedicalType medicalType = new MedicalType("code", "description");
 			medical.setType(medicalType);
 			medicalBrowsingManager.checkMedical(medical, false, false);
@@ -563,8 +563,8 @@ public class Tests extends OHCoreTestCase {
 				.isNotEqualTo("someString")
 				.isNotEqualTo(medical2);
 
-		medical2.setProd_code(null);
-		medical3.setProd_code(null);
+		medical2.setProdCode(null);
+		medical3.setProdCode(null);
 		assertThat(medical2).isNotEqualTo(medical3);
 		assertThat(medical3).isNotEqualTo(medical2);
 	}
