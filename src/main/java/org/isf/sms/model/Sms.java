@@ -206,8 +206,4 @@ public class Sms {
 						+ smsDateSent + ", smsUser=" + smsUser + ", module=" + module + ", moduleID=" + moduleID + ", hashCode=" + hashCode + "]";
 	}
 
-	private String hide(String value, boolean isHidden) {
-		return isHidden ? "***" : value;
-	}
-
 }

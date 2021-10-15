@@ -38,9 +38,6 @@ import org.slf4j.LoggerFactory;
 public class Server {
 	private static Server server;
 	private XMPPConnection connection;
-	private String domain;
-	private int port;
-	private Roster roster;
 	private String user;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
@@ -50,8 +47,8 @@ public class Server {
 
 	public void login(String userName, String password) throws XMPPException {
 		XmppData.initialize();
-		domain = XmppData.domain;
-		port = XmppData.port;
+		String domain = XmppData.domain;
+		int port = XmppData.port;
 		user = userName;
 		ConnectionConfiguration config = new ConnectionConfiguration(domain, port);
 		connection = new XMPPConnection(config);
@@ -69,13 +66,12 @@ public class Server {
 	}
 
 	public Roster getRoster() {
-		roster = connection.getRoster();
-		return roster;
+		return connection.getRoster();
 	}
 
 	public Chat getChat(String to, String id, MessageListener listener) {
 		Chat chat;
-		id = id + "@" + user;
+		id = id + '@' + user;
 		if (connection.getChatManager().getThreadChat(id) == null) {
 			LOGGER.debug("Creation chat: {}, id = {}", to, id);
 			chat = connection.getChatManager().createChat(to, id, listener);
@@ -91,8 +87,7 @@ public class Server {
 	}
 
 	public String getUserAddress() {
-
-		return "@" + connection.getHost();
+		return '@' + connection.getHost();
 	}
 
 	public FileTransferManager getTransferManager() {
@@ -107,7 +102,7 @@ public class Server {
 		if (server == null) {
 			server = new Server();
 		}
-
 		return server;
 	}
+
 }

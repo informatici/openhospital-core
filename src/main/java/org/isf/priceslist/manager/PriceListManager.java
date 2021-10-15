@@ -41,6 +41,8 @@ import org.springframework.util.StringUtils;
 @Component
 public class PriceListManager {
 
+	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
+
 	@Autowired
 	private PricesListIoOperations ioOperations;
 
@@ -162,22 +164,22 @@ public class PriceListManager {
 		java.util.List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (StringUtils.isEmpty(priceList.getCode())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (StringUtils.isEmpty(priceList.getName())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.priceslist.pleaseinsertanameforthelist.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (StringUtils.isEmpty(priceList.getDescription())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (StringUtils.isEmpty(priceList.getCurrency())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.priceslist.pleaseinsertacurrency.msg"),
 					OHSeverityLevel.ERROR));
 		}
@@ -185,4 +187,5 @@ public class PriceListManager {
 			throw new OHDataValidationException(errors);
 		}
 	}
+
 }

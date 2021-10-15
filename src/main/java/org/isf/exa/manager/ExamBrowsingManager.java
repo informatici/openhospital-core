@@ -47,6 +47,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExamBrowsingManager {
 
+	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
+
 	@Autowired
 	private ExamIoOperations ioOperations;
 
@@ -62,18 +64,18 @@ public class ExamBrowsingManager {
 		String description = exam.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (key.isEmpty()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (description.isEmpty()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (insert) {
 			if (isKeyPresent(exam)) {
-				throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+				throw new OHDataIntegrityViolationException(new OHExceptionMessage(COMMON_ERROR_TITLE,
 						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}

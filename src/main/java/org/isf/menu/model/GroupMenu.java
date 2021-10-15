@@ -66,37 +66,44 @@ public class GroupMenu extends Auditable<String> {
 
 	@Transient
 	private volatile int hashCode = 0;
-	
-	public GroupMenu(){
+
+	public GroupMenu() {
 	}
 
 	public GroupMenu(String userGroup, String menuItem) {
 		this.userGroup = userGroup;
 		this.menuItem = menuItem;
 	}
-	
+
 	public Integer getCode() {
 		return code;
 	}
+
 	public void setCode(Integer code) {
 		this.code = code;
 	}
+
 	public String getUserGroup() {
 		return userGroup;
 	}
+
 	public void setUserGroup(String userGroup) {
 		this.userGroup = userGroup;
 	}
+
 	public String getMenuItem() {
 		return menuItem;
 	}
+
 	public void setMenuItem(String menuItem) {
 		this.menuItem = menuItem;
 	}
+
 	@Override
 	public int getActive() {
 		return active;
 	}
+
 	@Override
 	public void setActive(int active) {
 		this.active = active;
@@ -104,11 +111,10 @@ public class GroupMenu extends Auditable<String> {
 	
 	@Override
 	public boolean equals(Object anObject) {
-        return !(anObject instanceof GroupMenu) ? false
-                : (getCode().equals(((GroupMenu) anObject).getCode())
-                  && getUserGroup().equalsIgnoreCase(((GroupMenu) anObject).getUserGroup()) 
-                  && getMenuItem().equals(((GroupMenu) anObject).getMenuItem())
-                  && getActive() == ((GroupMenu) anObject).getActive());
+        return anObject instanceof GroupMenu && (getCode().equals(((GroupMenu) anObject).getCode())
+		        && getUserGroup().equalsIgnoreCase(((GroupMenu) anObject).getUserGroup())
+		        && getMenuItem().equals(((GroupMenu) anObject).getMenuItem())
+		        && getActive() == ((GroupMenu) anObject).getActive());
     }
 
 }

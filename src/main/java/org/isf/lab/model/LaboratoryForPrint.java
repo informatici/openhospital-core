@@ -40,20 +40,20 @@ public class LaboratoryForPrint {
 		this.code = code;
 	}
 
-	public LaboratoryForPrint(Integer aCode, Exam aExam, LocalDateTime aDate,String aResult){
+	public LaboratoryForPrint(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult) {
 		code = aCode;
-		exam=aExam.getDescription();
-		date=getConvertedString(aDate);
-		result=aResult;
+		exam = aExam.getDescription();
+		date = getConvertedString(aDate);
+		result = aResult;
 	}
 
-	private String getConvertedString(LocalDateTime time){
-		String string= "" + time.getDayOfMonth();
-		string+= "/"+ time.getMonthValue();
-		string+= "/"+ time.getYear();
-		string+= "  "+ time.getHour();
-		string+= ":"+ time.getMinute();
-		string+= ":"+ time.getSecond();
+	private String getConvertedString(LocalDateTime time) {
+		String string = "" + time.getDayOfMonth();
+		string += "/" + time.getMonthValue();
+		string += "/" + time.getYear();
+		string += "  " + time.getHour();
+		string += ":" + time.getMinute();
+		string += ":" + time.getSecond();
 		return string;
 	}
 

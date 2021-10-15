@@ -76,10 +76,10 @@ public class ExamRow extends Auditable<String> {
     {
 		super();
     }
-	
-	public ExamRow(Exam aExam, String aDescription){
-		this.description=aDescription;
-		this.exam=aExam;
+
+	public ExamRow(Exam aExam, String aDescription) {
+		this.description = aDescription;
+		this.exam = aExam;
 	}
 
 	public Exam getExamCode() {

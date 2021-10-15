@@ -211,11 +211,8 @@ public class PatientVaccine extends Auditable<String> {
 				|| (other.vaccine != null && !other.vaccine.equals(vaccine))) {
 			return false;
 		}
-		if ((vaccineDate != null && !vaccineDate.equals(other.vaccineDate))
-				|| (other.vaccineDate != null && !other.vaccineDate.equals(vaccineDate))) {
-			return false;
-		}
-		return true;
+		return (vaccineDate == null || vaccineDate.equals(other.vaccineDate))
+				&& (other.vaccineDate == null || other.vaccineDate.equals(vaccineDate));
 	}
 
 }

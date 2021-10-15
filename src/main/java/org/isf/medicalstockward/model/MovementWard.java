@@ -209,23 +209,23 @@ public class MovementWard extends Auditable<String> {
 		this.quantity = quantity;
 		this.units = units;
 	}
-        
-	public int getCode(){
+
+	public int getCode() {
 		return code;
 	}
-	
-	public Medical getMedical() {		
+
+	public Medical getMedical() {
 		return medical;
 	}
-	
-	public LocalDateTime getDate(){
+
+	public LocalDateTime getDate() {
 		return date;
 	}
-	
-	public Double getQuantity(){
+
+	public Double getQuantity() {
 		return quantity;
 	}
-	
+
 	public Ward getWard() {
 		return ward;
 	}
@@ -233,6 +233,7 @@ public class MovementWard extends Auditable<String> {
 	public void setWard(Ward ward) {
 		this.ward = ward;
 	}
+
 	public Lot getLot() {
 		return lot;
 	}
@@ -240,6 +241,7 @@ public class MovementWard extends Auditable<String> {
 	public void setlot(Lot lot) {
 		this.lot = lot;
 	}
+
 	public boolean isPatient() {
 		return isPatient;
 	}
@@ -271,7 +273,7 @@ public class MovementWard extends Auditable<String> {
 	public void setWeight(float weight) {
 		this.weight = weight;
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}
@@ -296,22 +298,22 @@ public class MovementWard extends Auditable<String> {
 		this.quantity = quantity;
 	}
 
-	public void setCode(int aCode){
-		code=aCode;
+	public void setCode(int aCode) {
+		code = aCode;
 	}
-	
-	public void setMedical(Medical aMedical){
-		medical=aMedical;
-	}
-        
-    public Ward getWardTo() {
-        return wardTo;
-    }
 
-    public void setWardTo(Ward wardTo) {
-        this.wardTo = wardTo;
-    }
-    
+	public void setMedical(Medical aMedical) {
+		medical = aMedical;
+	}
+
+	public Ward getWardTo() {
+		return wardTo;
+	}
+
+	public void setWardTo(Ward wardTo) {
+		this.wardTo = wardTo;
+	}
+
 	public Ward getWardFrom() {
 		return wardFrom;
 	}

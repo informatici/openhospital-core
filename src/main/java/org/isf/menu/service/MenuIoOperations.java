@@ -188,7 +188,7 @@ public class MenuIoOperations
 			umi.setMyClass((String) object[6]);
 			umi.setASubMenu((Boolean) object[7]);
 			umi.setPosition((Integer) object[8]);
-			umi.setActive((Integer) object[9] == 1 ? true : false);
+			umi.setActive((Integer) object[9] == 1);
 			menu.add(umi);
 		}
 		return menu;
@@ -205,7 +205,7 @@ public class MenuIoOperations
 		List<Object[]> menuList = menuRepository.findAllWhereGroupId(aGroup.getCode());
 		List<UserMenuItem> menu = new ArrayList<>();
 		for (Object[] object : menuList) {
-			boolean active = (Integer) object[9] == 1 ? true : false;
+			boolean active = (Integer) object[9] == 1;
 			UserMenuItem umi = new UserMenuItem();
 			umi.setCode((String) object[0]);
 			umi.setButtonLabel((String) object[1]);

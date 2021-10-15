@@ -60,27 +60,28 @@ public class LaboratoryRow extends Auditable<String> {
 	@NotNull
 	@Column(name="LABR_DESC")
 	private String description;
-	
+
 	@Transient
 	private volatile int hashCode = 0;
-		
 
-	public LaboratoryRow() { }
-	
-	public LaboratoryRow(Laboratory aLabId, String aDescription){
+	public LaboratoryRow() {
+	}
+
+	public LaboratoryRow(Laboratory aLabId, String aDescription) {
 		laboratory = aLabId;
 		description = aDescription;
 	}
-	
-	public LaboratoryRow(Integer aCode, Laboratory aLabId, String aDescription){
-		code=aCode;
+
+	public LaboratoryRow(Integer aCode, Laboratory aLabId, String aDescription) {
+		code = aCode;
 		laboratory = aLabId;
 		description = aDescription;
 	}
-	
+
 	public Integer getCode() {
 		return code;
 	}
+
 	public void setCode(Integer code) {
 		this.code = code;
 	}

@@ -118,77 +118,95 @@ public class Movement extends Auditable<String> {
 		refNo = aRefNo;
 	}
 
-	public int getCode(){
+	public int getCode() {
 		return code;
 	}
-	public Medical getMedical(){
+
+	public Medical getMedical() {
 		return medical;
 	}
-	public MovementType getType(){
+
+	public MovementType getType() {
 		return type;
 	}
-	public Ward getWard(){
+
+	public Ward getWard() {
 		return ward;
 	}
-	public Lot getLot(){
+
+	public Lot getLot() {
 		return lot;
 	}
-	public LocalDateTime getDate(){
+
+	public LocalDateTime getDate() {
 		return date;
 	}
+
 	public Supplier getSupplier() {
 		return supplier;
 	}
-	public int getQuantity(){
+
+	public int getQuantity() {
 		return quantity;
 	}
+
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public Supplier getOrigin(){
+
+	public Supplier getOrigin() {
 		return supplier;
 	}
+
 	public void setWard(Ward ward) {
 		this.ward = ward;
 	}
+
 	public void setLot(Lot lot) {
 		this.lot = lot;
 	}
+
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
+
 	public void setSupplier(Supplier supplier) {
 		this.supplier = supplier;
 	}
-	public void setCode(int aCode){
-		code=aCode;
+
+	public void setCode(int aCode) {
+		code = aCode;
 	}
-	public void setMedical(Medical aMedical){
-		medical=aMedical;
+
+	public void setMedical(Medical aMedical) {
+		medical = aMedical;
 	}
-	public void setType(MovementType aType){
-		type=aType;
+
+	public void setType(MovementType aType) {
+		type = aType;
 	}
+
 	public String getRefNo() {
 		return refNo;
 	}
+
 	public void setRefNo(String refNo) {
 		this.refNo = refNo;
 	}
 
-	public String toString(){
+	public String toString() {
 		return MessageBundle.formatMessage("angal.movement.tostring.fmt.txt",
 				medical != null ? medical.toString() : "NULL",
 				type != null ? type.toString() : "NULL",
 				quantity);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}
-		
+
 		if (!(obj instanceof Movement)) {
 			return false;
 		}

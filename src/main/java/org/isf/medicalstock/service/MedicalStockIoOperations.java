@@ -162,9 +162,7 @@ public class MedicalStockIoOperations {
 		boolean movementStored = storeMovement(movement, lotCode);
 		if (movementStored) {
 			//medical stock movement inserted updates quantity of the medical
-			if (updateStockQuantity(movement)) {
-				return true;
-			}
+			return updateStockQuantity(movement);
 		}
 
 		//something is failed
@@ -199,9 +197,7 @@ public class MedicalStockIoOperations {
 		//medical stock movement inserted
 		if (movementStored) {
 			// updates quantity of the medical
-			if (updateStockQuantity(movement)) {
-				return true;
-			}
+			return updateStockQuantity(movement);
 		}
 
 		//something is failed
@@ -334,7 +330,7 @@ public class MedicalStockIoOperations {
 		MedicalWard medicalWard = medicalStockRepository.findOneWhereCodeAndMedicalAndLot(ward.getCode(), medical.getCode(), lot.getCode());
 
 		if (medicalWard != null) {
-			medicalWard.setInQuantity(medicalWard.getInQuantity() + quantity);
+			medicalWard.setIn_quantity(medicalWard.getIn_quantity() + quantity);
 			medicalStockRepository.save(medicalWard);
 		} else {
 			medicalWard = new MedicalWard(ward, medical, quantity, 0, lot);
@@ -478,11 +474,7 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException
 	 */
 	public boolean refNoExists(String refNo) throws OHServiceException {
-		boolean result = false;
-		if (!movRepository.findAllWhereRefNo(refNo).isEmpty()) {
-			result = true;
-		}
-		return result;
+		return !movRepository.findAllWhereRefNo(refNo).isEmpty();
 	}
 
 	/**

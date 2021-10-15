@@ -120,21 +120,19 @@ public class Vaccine extends Auditable<String> {
         this.lock = aLock;
     }
 
-    public boolean equals(Object anObject) {
-        return !(anObject instanceof Vaccine) ? false
-                : (getCode().equals(((Vaccine) anObject).getCode())
-                        && getDescription().equalsIgnoreCase(
-                                ((Vaccine) anObject).getDescription())
-                        && getVaccineType().equals(
-                                ((Vaccine) anObject).getVaccineType()));
-    }
+	public boolean equals(Object anObject) {
+		return anObject instanceof Vaccine
+				&& (getCode().equals(((Vaccine) anObject).getCode())
+				&& getDescription().equalsIgnoreCase(((Vaccine) anObject).getDescription())
+				&& getVaccineType().equals(((Vaccine) anObject).getVaccineType()));
+	}
 
-    
-    public String print() {
-        return "Vaccine code =."+getCode()+". description =."+getDescription()+".";
-    }
-    
-    public String toString (){
-       return getDescription();
-    }
+	public String print() {
+		return "Vaccine code =." + getCode() + ". description =." + getDescription() + ".";
+	}
+
+	public String toString() {
+		return getDescription();
+	}
+
 }

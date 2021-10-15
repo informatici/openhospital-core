@@ -299,7 +299,7 @@ public class TimeTools {
 			ResultSet resultSet = dbQuery.getData(query, true);
 			while (resultSet.next()) {
 				String date = resultSet.getString("time");
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS);
 				return LocalDateTime.parse(date, formatter);
 			}
 		} catch (SQLException | OHException | DateTimeParseException exception) {

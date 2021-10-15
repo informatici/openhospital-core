@@ -47,6 +47,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class WardBrowserManager {
 
+	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
+
 	@Autowired
 	private AdmissionBrowserManager admManager;
 	
@@ -64,43 +66,43 @@ public class WardBrowserManager {
 		String description = ward.getDescription();
         List<OHExceptionMessage> errors = new ArrayList<>();
         if (key.isEmpty()) {
-	        errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+	        errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 	        		MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 	        		OHSeverityLevel.ERROR));
         }
         if (key.length() > 1) {
-	        errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+	        errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 	        		MessageBundle.getMessage("angal.common.thecodeistoolongmax1char.msg"),
 	        		OHSeverityLevel.ERROR));
         }
         if (description.isEmpty() ) {
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+            errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
             		MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"), 
             		OHSeverityLevel.ERROR));
         }
         if (ward.getBeds()<0) {
-        	errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+        	errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
             		MessageBundle.getMessage("angal.ward.thenumberofbedsmustbepositive.msg"),
             		OHSeverityLevel.ERROR));
 		}
 		if (ward.getNurs()<0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
             		MessageBundle.getMessage("angal.ward.thenumberofnursesmustbepositive.msg"),
             		OHSeverityLevel.ERROR));
 		}
 		if (ward.getDocs()<0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
             		MessageBundle.getMessage("angal.ward.thenumberofdoctorsmustbepositive.msg"),
             		OHSeverityLevel.ERROR));
 		}
 		if (!EmailValidator.isValid(ward.getEmail())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.ward.theemailmustbevalid.msg"),
             		OHSeverityLevel.ERROR));
 		}
 		if (insert) {
 			if (isCodePresent(ward.getCode())) {
-				throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+				throw new OHDataIntegrityViolationException(new OHExceptionMessage(COMMON_ERROR_TITLE,
 						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"), 
 						OHSeverityLevel.ERROR));
 			}
@@ -168,7 +170,7 @@ public class WardBrowserManager {
 	 */
 	public boolean deleteWard(Ward ward) throws OHServiceException {
 		if (ward.getCode().equals("M")) {
-			throw new OHOperationNotAllowedException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			throw new OHOperationNotAllowedException(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.ward.cannotdeletematernityward.msg"),
 					OHSeverityLevel.ERROR));
 		}
@@ -180,7 +182,7 @@ public class WardBrowserManager {
 			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.info.title"),
 					MessageBundle.formatMessage("angal.ward.theselectedwardhaspatients.fmt.msg",noPatients),
 					OHSeverityLevel.INFO));
-			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"), 
+			messages.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.ward.pleasecheckinadmissionpatients.msg"),
 					OHSeverityLevel.ERROR));
 			throw new OHOperationNotAllowedException(messages);

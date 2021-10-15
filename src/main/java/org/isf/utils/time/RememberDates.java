@@ -40,11 +40,11 @@ import java.time.LocalDateTime;
  */
 public class RememberDates {
 
-	private static LocalDateTime lastOpdVisitDate = null;
-	private static LocalDateTime lastAdmInDate = null;
-	private static LocalDateTime lastLabExamDate = null;
-	private static LocalDateTime lastBillDate = null;
-	private static LocalDateTime lastPatientVaccineDate = null;
+	private static LocalDateTime lastOpdVisitDate;
+	private static LocalDateTime lastAdmInDate;
+	private static LocalDateTime lastLabExamDate;
+	private static LocalDateTime lastBillDate;
+	private static LocalDateTime lastPatientVaccineDate;
 
 	//------------  opd visit -----------------------------
 	public static LocalDateTime getLastOpdVisitDate() {

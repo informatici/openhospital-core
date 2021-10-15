@@ -26,7 +26,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import javax.swing.JOptionPane;
+import javax.swing.JComponent;
 
 import org.isf.utils.db.UTF8Control;
 import org.slf4j.Logger;
@@ -39,15 +39,15 @@ public class MessageBundle {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MessageBundle.class);
 
-	private static ResourceBundle resourceBundle = null;
+	private static ResourceBundle resourceBundle;
 
-	private static ResourceBundle defaultResourceBundle = null;
+	private static ResourceBundle defaultResourceBundle;
 
 	public static void initialize() throws RuntimeException {
 		try {
 			defaultResourceBundle = ResourceBundle.getBundle("language", new Locale("en"));
 			resourceBundle = ResourceBundle.getBundle("language", new Locale(GeneralData.LANGUAGE), new UTF8Control());
-			JOptionPane.setDefaultLocale(new Locale(GeneralData.LANGUAGE));
+			JComponent.setDefaultLocale(new Locale(GeneralData.LANGUAGE));
 		} catch (MissingResourceException e) {
 			LOGGER.error(">> no resource bundle found.");
 			System.exit(1);

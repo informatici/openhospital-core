@@ -40,24 +40,24 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationRepositoryCustom {
 
 	private static String nativeQueryTerms = "SELECT * from patient as p  "
-					+ " left join (select * from admission where ADM_IN = 1 and ( (ADM_DELETED='N') or (ADM_DELETED is null ) ) ) as a on p.PAT_ID = a.ADM_PAT_ID "
-					+ " where ( ( p.PAT_DELETED='N' ) or ( p.PAT_DELETED is null ) )"
-					+ " and ( lower(concat_ws(' ', p.PAT_ID, p.PAT_SNAME, p.PAT_FNAME, p.PAT_NAME, p.PAT_NOTE, p.PAT_TAXCODE, p.PAT_CITY, p.PAT_ADDR, p.PAT_TELE)) like :param0 ) "
-					+ " order by p.PAT_ID desc";
-	
+			+ " left join (select * from admission where ADM_IN = 1 and ( (ADM_DELETED='N') or (ADM_DELETED is null ) ) ) as a on p.PAT_ID = a.ADM_PAT_ID "
+			+ " where ( ( p.PAT_DELETED='N' ) or ( p.PAT_DELETED is null ) )"
+			+ " and ( lower(concat_ws(' ', p.PAT_ID, p.PAT_SNAME, p.PAT_FNAME, p.PAT_NAME, p.PAT_NOTE, p.PAT_TAXCODE, p.PAT_CITY, p.PAT_ADDR, p.PAT_TELE)) like :param0 ) "
+			+ " order by p.PAT_ID desc";
+
 	private static String nativeQueryRanges = "SELECT * from patient as p  "
-					+ " left join (select * from admission where ADM_IN = 1 and ( (ADM_DELETED='N') or (ADM_DELETED is null ) ) ) as a on p.PAT_ID = a.ADM_PAT_ID "
-					+ " where (p.PAT_ID IN (SELECT ADM_PAT_ID from admission where param1))"
-					+ " and ( lower(concat_ws(' ', p.PAT_ID, p.PAT_SNAME, p.PAT_FNAME, p.PAT_NAME, p.PAT_NOTE, p.PAT_TAXCODE, p.PAT_CITY, p.PAT_ADDR, p.PAT_TELE)) like :param0 ) "
-					+ " order by p.PAT_ID desc";
-	
+			+ " left join (select * from admission where ADM_IN = 1 and ( (ADM_DELETED='N') or (ADM_DELETED is null ) ) ) as a on p.PAT_ID = a.ADM_PAT_ID "
+			+ " where (p.PAT_ID IN (SELECT ADM_PAT_ID from admission where param1))"
+			+ " and ( lower(concat_ws(' ', p.PAT_ID, p.PAT_SNAME, p.PAT_FNAME, p.PAT_NAME, p.PAT_NOTE, p.PAT_TAXCODE, p.PAT_CITY, p.PAT_ADDR, p.PAT_TELE)) like :param0 ) "
+			+ " order by p.PAT_ID desc";
+
 	private static String nativeQueryCode = "SELECT * from patient as p  "
-					+ " left join (select * from admission where ADM_IN = 1 and ( (ADM_DELETED='N') or (ADM_DELETED is null ) ) order by ADM_ID desc) as a on p.PAT_ID = a.ADM_PAT_ID "
-					+ " where p.PAT_ID = :param0 "
-					+ " and ( ( p.PAT_DELETED='N' ) or ( p.PAT_DELETED is null ) )";
+			+ " left join (select * from admission where ADM_IN = 1 and ( (ADM_DELETED='N') or (ADM_DELETED is null ) ) order by ADM_ID desc) as a on p.PAT_ID = a.ADM_PAT_ID "
+			+ " where p.PAT_ID = :param0 "
+			+ " and ( ( p.PAT_DELETED='N' ) or ( p.PAT_DELETED is null ) )";
 
 	private static final String YYYY_MM_DD = "yyyy-MM-dd";
-	
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -65,76 +65,76 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 	public List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(final String searchTerms, final LocalDateTime[] admissionRange,
 			final LocalDateTime[] dischargeRange) throws OHServiceException {
 		String[] terms = getTermsToSearch(searchTerms);
-		
+
 		List<AdmittedPatient> admittedPatients = new ArrayList<>();
 
 		if (terms.length == 1) {
-			
+
 			try {
 				int code = Integer.parseInt(terms[0]);
 				Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryCode, "AdmittedPatient");
 				nativeQuery.setParameter("param0", code);
-				
+
 				return parseResultSet(admittedPatients, nativeQuery);
-				
+
 			} catch (NumberFormatException nfe) {
 				// used to see if the search parameter is a patient code (number)
 			}
 		}
 
-		if ((admissionRange != null && (admissionRange[0] != null || admissionRange[1] != null)) || 
-			(dischargeRange != null && (dischargeRange[0] != null || dischargeRange[1] != null))) {
-				StringBuilder rangePredicate = new StringBuilder("( (ADM_DELETED='N') or (ADM_DELETED is null ) )");
-				if (admissionRange != null) {
-					if (admissionRange[0] != null) {
-						rangePredicate.append(" and ").append("DATE(ADM_DATE_ADM) >= '").append(TimeTools.formatDateTime(admissionRange[0], YYYY_MM_DD))
-								.append("'");
-					}
-					if (admissionRange[1] != null) {
-						rangePredicate.append(" and ").append("DATE(ADM_DATE_ADM) <= '").append(TimeTools.formatDateTime(admissionRange[1], YYYY_MM_DD))
-								.append("'");
-					}
+		if ((admissionRange != null && (admissionRange[0] != null || admissionRange[1] != null)) ||
+				(dischargeRange != null && (dischargeRange[0] != null || dischargeRange[1] != null))) {
+			StringBuilder rangePredicate = new StringBuilder("( (ADM_DELETED='N') or (ADM_DELETED is null ) )");
+			if (admissionRange != null) {
+				if (admissionRange[0] != null) {
+					rangePredicate.append(" and ").append("DATE(ADM_DATE_ADM) >= '").append(TimeTools.formatDateTime(admissionRange[0], YYYY_MM_DD))
+							.append("'");
 				}
-				if (dischargeRange != null) {
-					if (dischargeRange[0] != null) {
-						rangePredicate.append(" and ").append("DATE(ADM_DATE_DIS) >= '").append(TimeTools.formatDateTime(dischargeRange[0], YYYY_MM_DD))
-								.append("'");
-					}
-					if (dischargeRange[1] != null) {
-						rangePredicate.append(" and ").append("DATE(ADM_DATE_DIS) <= '").append(TimeTools.formatDateTime(dischargeRange[1], YYYY_MM_DD))
-								.append("'");
-					}
+				if (admissionRange[1] != null) {
+					rangePredicate.append(" and ").append("DATE(ADM_DATE_ADM) <= '").append(TimeTools.formatDateTime(admissionRange[1], YYYY_MM_DD))
+							.append("'");
 				}
-
-				Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryRanges.replace("param1", rangePredicate.toString()), "AdmittedPatient");
-				String paramTerms = like(terms);
-				nativeQuery.setParameter("param0", paramTerms);
-
-				return parseResultSet(admittedPatients, nativeQuery);
-
-			} else {
-				
-				Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryTerms, "AdmittedPatient");
-				String paramTerms = like(terms);
-				nativeQuery.setParameter("param0", paramTerms);
-				
-				return parseResultSet(admittedPatients, nativeQuery);
 			}
+			if (dischargeRange != null) {
+				if (dischargeRange[0] != null) {
+					rangePredicate.append(" and ").append("DATE(ADM_DATE_DIS) >= '").append(TimeTools.formatDateTime(dischargeRange[0], YYYY_MM_DD))
+							.append("'");
+				}
+				if (dischargeRange[1] != null) {
+					rangePredicate.append(" and ").append("DATE(ADM_DATE_DIS) <= '").append(TimeTools.formatDateTime(dischargeRange[1], YYYY_MM_DD))
+							.append("'");
+				}
+			}
+
+			Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryRanges.replace("param1", rangePredicate.toString()), "AdmittedPatient");
+			String paramTerms = like(terms);
+			nativeQuery.setParameter("param0", paramTerms);
+
+			return parseResultSet(admittedPatients, nativeQuery);
+
+		} else {
+
+			Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryTerms, "AdmittedPatient");
+			String paramTerms = like(terms);
+			nativeQuery.setParameter("param0", paramTerms);
+
+			return parseResultSet(admittedPatients, nativeQuery);
+		}
 	}
 
 	private List<AdmittedPatient> parseResultSet(List<AdmittedPatient> admittedPatients, Query nativeQuery) throws OHServiceException {
 		List<Object[]> results = nativeQuery.getResultList();
 		results.stream().forEach(resultRecord -> {
-		    Patient patientRecord = (Patient)resultRecord[0];
-		    Admission admissionRecord = (Admission)resultRecord[1];
-		    admittedPatients.add(new AdmittedPatient(patientRecord, admissionRecord));
+			Patient patientRecord = (Patient) resultRecord[0];
+			Admission admissionRecord = (Admission) resultRecord[1];
+			admittedPatients.add(new AdmittedPatient(patientRecord, admissionRecord));
 		});
 		return admittedPatients;
 	}
 
 	private String like(String[] terms) {
 		StringBuilder sb = new StringBuilder("%");
-		
+
 		// result of type "%term0%term1%...%termN%"
 		for (String term : terms) {
 			sb.append(term).append("%");

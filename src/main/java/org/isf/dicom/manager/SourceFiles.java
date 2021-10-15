@@ -57,6 +57,7 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
+import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
 
 /**
@@ -68,6 +69,7 @@ import com.drew.metadata.exif.ExifIFD0Directory;
 public class SourceFiles extends Thread {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SourceFiles.class);
+	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
 
 	private File file;
 	private FileDicom fileDicom;
@@ -148,7 +150,7 @@ public class SourceFiles extends Thread {
 		for (File value : files) {
 			if (!value.isDirectory()) {
 				if (!checkSize(value)) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					throw new OHDicomException(new OHExceptionMessage(COMMON_ERROR_TITLE,
 							MessageBundle.formatMessage("angal.dicom.afileinthefolderistoobigpleasesetdicommaxsizeindicomproperties.fmt.msg",
 									DicomManagerFactory.getMaxDicomSize()),
 							OHSeverityLevel.ERROR));
@@ -256,7 +258,6 @@ public class SourceFiles extends Thread {
 			if (isJpeg) {
 				iter = ImageIO.getImageReadersByFormatName("jpeg");
 				reader = new com.sun.imageio.plugins.jpeg.JPEGImageReader(null);
-				//JPEGImageReadParam jpgParam = new JPEGImageReadParam();
 
 				ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
 
@@ -265,24 +266,24 @@ public class SourceFiles extends Thread {
 				originalImage = null;
 
 				try {
-					originalImage = reader.read(0); //, jpgParam);
+					originalImage = reader.read(0);
 
 					int orientation = checkOrientation(sourceFile);
 
 					if (orientation != 1) {
 						originalImage = autoRotate(originalImage, orientation);
 						String fileType = StringUtils.endsWithIgnoreCase(sourceFile.getName(), ".jpg") ? "jpg" : "jpeg";
-						File f = File.createTempFile(sourceFile.getName(), "." + fileType);
+						File f = File.createTempFile(sourceFile.getName(), '.' + fileType);
 						ImageIO.write(originalImage, fileType, f);
 						sourceFile = f;
 					}
 
 				} catch (DicomCodingException dce) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					throw new OHDicomException(new OHExceptionMessage(COMMON_ERROR_TITLE,
 							MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()),
 									OHSeverityLevel.ERROR));
 				} catch (IndexOutOfBoundsException ioe) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					throw new OHDicomException(new OHExceptionMessage(COMMON_ERROR_TITLE,
 							MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName()),
 							OHSeverityLevel.ERROR));
 				}
@@ -303,13 +304,13 @@ public class SourceFiles extends Thread {
 				try {
 					originalImage = reader.read(0, param);
 				} catch (DicomCodingException | ConfigurationError dce) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					throw new OHDicomException(new OHExceptionMessage(COMMON_ERROR_TITLE,
 							MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()),
 							OHSeverityLevel.ERROR));
 				}
 				imageInputStream.close();
 			} else {
-				throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+				throw new OHDicomException(new OHExceptionMessage(COMMON_ERROR_TITLE,
 						MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName()),
 						OHSeverityLevel.ERROR));
 			}
@@ -381,18 +382,12 @@ public class SourceFiles extends Thread {
 				studyUID = dicomObject.getString(Tag.StudyInstanceUID) == null ? studyUID : dicomObject.getString(Tag.StudyInstanceUID);
 				accessionNumber = dicomObject.getString(Tag.AccessionNumber) == null ? accessionNumber : dicomObject.getString(Tag.AccessionNumber);
 				studyDescription = dicomObject.getString(Tag.StudyDescription) == null ? studyDescription : dicomObject.getString(Tag.StudyDescription);
-				//String studyComments = dicomObject.getString(Tag.StudyComments);
 				seriesUID = dicomObject.getString(Tag.SeriesInstanceUID) == null ? seriesUID : dicomObject.getString(Tag.SeriesInstanceUID);
-				//String directoryRecordType = dicomObject.getString(Tag.DirectoryRecordType);
 				seriesInstanceUID = dicomObject.getString(Tag.SeriesInstanceUID) == null ? seriesInstanceUID : dicomObject.getString(Tag.SeriesInstanceUID);
 				seriesNumber = dicomObject.getString(Tag.SeriesNumber) == null ? generateSeriesNumber(patient) : dicomObject.getString(Tag.SeriesNumber);
 				seriesDescriptionCodeSequence = dicomObject.getString(Tag.SeriesDescriptionCodeSequence) == null ?
 						seriesDescriptionCodeSequence :
 						dicomObject.getString(Tag.SeriesDescriptionCodeSequence);
-				//String sliceVector = dicomObject.getString(Tag.SliceVector);
-				//String sliceLocation = dicomObject.getString(Tag.SliceLocation);
-				//String sliceThickness = dicomObject.getString(Tag.SliceThickness);
-				//String sliceProgressionDirection = dicomObject.getString(Tag.SliceProgressionDirection);
 				institutionName = dicomObject.getString(Tag.InstitutionName) == null ? institutionName : dicomObject.getString(Tag.InstitutionName);
 				instanceUID = dicomObject.getString(Tag.SOPInstanceUID) == null ? instanceUID : dicomObject.getString(Tag.SOPInstanceUID);
 			}
@@ -464,7 +459,7 @@ public class SourceFiles extends Thread {
 		ExifIFD0Directory exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 		int orientation = 1;
 		try {
-			orientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+			orientation = exifIFD0Directory.getInt(ExifDirectoryBase.TAG_ORIENTATION);
 		} catch (Exception ex) {
 			LOGGER.error("No EXIF information found for image: {}", sourceFile.getName());
 		}

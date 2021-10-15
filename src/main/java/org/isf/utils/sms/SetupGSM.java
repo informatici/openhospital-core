@@ -31,8 +31,8 @@ import java.util.Properties;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.isf.generaldata.ConfigurationProperties;
 import org.isf.sms.providers.gsm.GSMGatewayService;
 import org.isf.sms.providers.gsm.GSMParameters;
@@ -54,9 +54,9 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SetupGSM.class);
 	
 	private Properties props;
-	private CommPortIdentifier portId = null;
+	private CommPortIdentifier portId;
 	private Enumeration<?> portList;
-	private SerialPort serialPort = null;
+	private SerialPort serialPort;
 	private InputStream inputStream;
 	
 	/**
@@ -79,8 +79,7 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 			portId = (CommPortIdentifier) portList.nextElement();
 
 			if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-			//if (portId.getName().equals("COM25")) {
-				
+
 				System.out.println("Port found: " + portId.getName() + " " + (portId.getPortType() == CommPortIdentifier.PORT_SERIAL ? "SERIAL" : "PARALLEL"));
 			
 				try {
@@ -116,15 +115,15 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	}
 
 	@Override
-    public void serialEvent(SerialPortEvent event) {
+	public void serialEvent(SerialPortEvent event) {
 		SerialPort serialPort = (SerialPort) event.getSource();
 		String port = serialPort.getName();
 		StringBuilder sb = new StringBuilder();
-        byte[] buffer = new byte[1];
-        try {
-			while(inputStream.available() > 0){
-			  int len = inputStream.read(buffer);
-			  sb.append(new String(buffer));
+		byte[] buffer = new byte[1];
+		try {
+			while (inputStream.available() > 0) {
+				int len = inputStream.read(buffer);
+				sb.append(new String(buffer));
 			}
 			String answer = sb.toString();
 			if (confirm(port, answer) == JOptionPane.YES_OPTION) {
@@ -134,7 +133,7 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 		} catch (IOException ioException) {
 			LOGGER.error(ioException.getMessage(), ioException);
 		}
-    }
+	}
 
 	/**
 	 * @param port

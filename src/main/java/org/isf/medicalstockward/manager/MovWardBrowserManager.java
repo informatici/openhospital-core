@@ -49,6 +49,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class MovWardBrowserManager {
 
+	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
+
 	@Autowired
 	private MedicalStockWardIoOperations ioOperations;
 
@@ -62,17 +64,17 @@ public class MovWardBrowserManager {
 		String description = mov.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (description.isEmpty() && mov.isPatient()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.common.pleaseselectapatient.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (description.isEmpty() && !mov.isPatient()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseinsertadescriptionfortheinternaluse.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (mov.getMedical() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug.msg"),
 					OHSeverityLevel.ERROR));
 		}
@@ -175,7 +177,7 @@ public class MovWardBrowserManager {
 	public void newMovementWard(List<MovementWard> newMovements) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (newMovements.isEmpty()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug.msg"),
 					OHSeverityLevel.ERROR));
 			throw new OHDataValidationException(errors);

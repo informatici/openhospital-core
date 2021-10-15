@@ -89,7 +89,6 @@ public class TableSorter extends TableMap {
 		 * space and avoid unnecessary heap allocation.
 		 */
 
-		// if (type.getSuperclass() == java.lang.Number.class) { //doesn' work
 		if ((o1 instanceof Integer) && (o2 instanceof Integer)) {
 			Number n1 = (Number) data.getValueAt(row1, column);
 			double d1 = n1.doubleValue();
@@ -103,7 +102,7 @@ public class TableSorter extends TableMap {
 			} else {
 				return 0;
 			}
-		} else // if (type == java.util.Date.class) { //doesn't work
+		} else
 			if ((o1 instanceof String) && (o2 instanceof String)) {
 
 				String str1 = data.getValueAt(row1, column).toString();
@@ -301,7 +300,6 @@ public class TableSorter extends TableMap {
 				int viewColumn = columnModel.getColumnIndexAtX(e.getX());
 				int column = tableView.convertColumnIndexToModel(viewColumn);
 				if (e.getClickCount() == 1 && column != -1) {
-					// System.out.println("Sorting ...");
 					int shiftPressed = e.getModifiers() & InputEvent.SHIFT_MASK;
 					boolean ascending = (shiftPressed == 0);
 					sorter.sortByColumn(column, ascending);

@@ -94,15 +94,13 @@ public class VaccineType extends Auditable<String> {
 
 	@Override
 	public boolean equals(Object anObject) {
-		return !(anObject instanceof VaccineType) ? false
-				: (getCode().equals(((VaccineType) anObject).getCode())
-						&& getDescription().equalsIgnoreCase(
-								((VaccineType) anObject).getDescription()));
+		return anObject instanceof VaccineType
+				&& (getCode().equals(((VaccineType) anObject).getCode())
+				&& getDescription().equalsIgnoreCase(((VaccineType) anObject).getDescription()));
 	}
 
-	
 	public String print() {
-		return "vaccineType code=."+getCode()+". description=."+getDescription()+".";
+		return "vaccineType code=." + getCode() + ". description=." + getDescription() + ".";
 	}
 
 	public String toString() {

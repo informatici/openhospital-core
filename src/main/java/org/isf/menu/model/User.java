@@ -79,43 +79,47 @@ public class User extends Auditable<String> {
 		this.passwd = aPasswd;
 		this.desc = aDesc;
 	}
-	
+
 	public String getDesc() {
 		return desc;
 	}
+
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}
+
 	public String getPasswd() {
 		return passwd;
 	}
+
 	public void setPasswd(String passwd) {
 		this.passwd = passwd;
 	}
+
 	public UserGroup getUserGroupName() {
 		return userGroupName;
 	}
+
 	public void setUserGroupName(UserGroup userGroupName) {
 		this.userGroupName = userGroupName;
 	}
+
 	public String getUserName() {
 		return userName;
 	}
+
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	
-	public String toString(){
-		return getUserName();		
+
+	public String toString() {
+		return getUserName();
 	}
-	
+
 	@Override
 	public boolean equals(Object anObject) {
-		return !(anObject instanceof User) ? false
-				: (getUserName().equalsIgnoreCase(
-						((User) anObject).getUserName()) && getDesc()
-						.equalsIgnoreCase(
-								((User) anObject).getDesc()));
+		return anObject instanceof User && (getUserName().equalsIgnoreCase(((User) anObject).getUserName())
+				&& getDesc().equalsIgnoreCase(((User) anObject).getDesc()));
 	}
 
 	@Override

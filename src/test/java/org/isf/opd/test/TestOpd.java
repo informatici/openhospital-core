@@ -71,7 +71,7 @@ public class TestOpd {
 		opd.setAge(age);
 		opd.setSex(sex);
 		opd.setNote(note);
-		opd.setProgYear(prog_year);
+		opd.setProg_year(prog_year);
 		opd.setNewPatient(newPatient);
 		opd.setReferralFrom(referralFrom);
 		opd.setReferralTo(referralTo);
@@ -91,7 +91,7 @@ public class TestOpd {
 			assertThat(opd.getSex()).isEqualTo(sex);
 		}
 		assertThat(opd.getNote()).isEqualTo(note);
-		assertThat(opd.getProgYear()).isEqualTo(prog_year);
+		assertThat(opd.getProg_year()).isEqualTo(prog_year);
 		assertThat(opd.getNewPatient()).isEqualTo(newPatient);
 		assertThat(opd.getReferralFrom()).isEqualTo(referralFrom);
 		assertThat(opd.getReferralTo()).isEqualTo(referralTo);

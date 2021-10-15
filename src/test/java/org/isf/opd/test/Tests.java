@@ -292,7 +292,7 @@ public class Tests extends OHCoreTestCase {
 		int code = setupTestOpd(false);
 		int progYear = opdIoOperation.getProgYear(0);
 		Opd foundOpd = opdIoOperationRepository.findById(code).get();
-		assertThat(progYear).isEqualTo(foundOpd.getProgYear());
+		assertThat(progYear).isEqualTo(foundOpd.getProg_year());
 	}
 
 	@Test
@@ -300,7 +300,7 @@ public class Tests extends OHCoreTestCase {
 		int code = setupTestOpd(false);
 		Opd opd = opdIoOperationRepository.findById(code).get();
 		int progYear = opdIoOperation.getProgYear(opd.getVisitDate().getYear());
-		assertThat(progYear).isEqualTo(opd.getProgYear());
+		assertThat(progYear).isEqualTo(opd.getProg_year());
 	}
 
 	@Test
@@ -310,7 +310,7 @@ public class Tests extends OHCoreTestCase {
 		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 
 		// when:
-		boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), foundOpd.getVisitDate().getYear());
+		boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProg_year(), foundOpd.getVisitDate().getYear());
 
 		// then:
 		assertThat(result).isTrue();
@@ -323,7 +323,7 @@ public class Tests extends OHCoreTestCase {
 		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 
 		// when:
-		Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 0);
+		Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProg_year(), 0);
 
 		// then:
 		assertThat(result).isTrue();
@@ -336,7 +336,7 @@ public class Tests extends OHCoreTestCase {
 		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 
 		// when:
-		Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 1488);
+		Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProg_year(), 1488);
 
 		// then:
 		assertThat(result).isFalse();
@@ -549,7 +549,7 @@ public class Tests extends OHCoreTestCase {
 		int code = setupTestOpd(false);
 		int progYear = opdBrowserManager.getProgYear(0);
 		Opd foundOpd = opdIoOperationRepository.findById(code).get();
-		assertThat(progYear).isEqualTo(foundOpd.getProgYear());
+		assertThat(progYear).isEqualTo(foundOpd.getProg_year());
 	}
 
 	@Test
@@ -557,28 +557,28 @@ public class Tests extends OHCoreTestCase {
 		int code = setupTestOpd(false);
 		Opd opd = opdIoOperationRepository.findById(code).get();
 		int progYear = opdBrowserManager.getProgYear(opd.getVisitDate().getYear());
-		assertThat(progYear).isEqualTo(opd.getProgYear());
+		assertThat(progYear).isEqualTo(opd.getProg_year());
 	}
 
 	@Test
 	public void testMgrIsExistsOpdNumShouldReturnTrueWhenOpdWithGivenOPDProgressiveYearAndVisitYearExists() throws Exception {
 		int code = setupTestOpd(false);
 		Opd opd = opdIoOperationRepository.findById(code).get();
-		assertThat(opdBrowserManager.isExistOpdNum(opd.getProgYear(), opd.getVisitDate().getYear())).isTrue();
+		assertThat(opdBrowserManager.isExistOpdNum(opd.getProg_year(), opd.getVisitDate().getYear())).isTrue();
 	}
 
 	@Test
 	public void testMgrIsExistsOpdNumShouldReturnTrueWhenOpdNumExistsAndVisitYearIsNotProvided() throws Exception {
 		int code = setupTestOpd(false);
 		Opd opd = opdIoOperationRepository.findById(code).get();
-		assertThat(opdBrowserManager.isExistOpdNum(opd.getProgYear(), 0)).isTrue();
+		assertThat(opdBrowserManager.isExistOpdNum(opd.getProg_year(), 0)).isTrue();
 	}
 
 	@Test
 	public void testMgrIsExistsOpdNumShouldReturnFalseWhenOpdNumExistsAndVisitYearIsIncorrect() throws Exception {
 		int code = setupTestOpd(false);
 		Opd opd = opdIoOperationRepository.findById(code).get();
-		assertThat(opdBrowserManager.isExistOpdNum(opd.getProgYear(), 1488)).isFalse();
+		assertThat(opdBrowserManager.isExistOpdNum(opd.getProg_year(), 1488)).isFalse();
 	}
 
 	@Test

@@ -201,8 +201,8 @@ public class MedicalStockWardIoOperations
 				MedicalWard medicalWard = new MedicalWard();
 				medicalWard.setWard(movement.getWardTo());
 				medicalWard.setMedical(movement.getMedical());
-				medicalWard.setInQuantity((float) Math.abs(qty));
-				medicalWard.setOutQuantity(0.0f);
+				medicalWard.setIn_quantity((float) Math.abs(qty));
+				medicalWard.setOut_quantity(0.0f);
 				medicalWard.setLot(movement.getLot());
 				repository.save(medicalWard);
 			}
@@ -214,8 +214,8 @@ public class MedicalStockWardIoOperations
 			medicalWard = new MedicalWard();
 			medicalWard.setWard(movement.getWard());
 			medicalWard.setMedical(movement.getMedical());
-			medicalWard.setInQuantity((float) -qty);
-			medicalWard.setOutQuantity(0.0f);
+			medicalWard.setIn_quantity((float) -qty);
+			medicalWard.setOut_quantity(0.0f);
 			medicalWard.setLot(movement.getLot());
 			repository.save(medicalWard);
 		} else {
@@ -238,7 +238,7 @@ public class MedicalStockWardIoOperations
 	public List<MedicalWard> getMedicalsWard(char wardId, boolean stripeEmpty) throws OHServiceException {
 		List<MedicalWard> medicalWards = repository.findAllWhereWard(wardId);
 		for (int i = 0; i < medicalWards.size(); i++) {
-			double qty = medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity();
+			double qty = medicalWards.get(i).getIn_quantity() - medicalWards.get(i).getOut_quantity();
 			medicalWards.get(i).setQty(qty);
 
 			if (stripeEmpty && qty == 0) {

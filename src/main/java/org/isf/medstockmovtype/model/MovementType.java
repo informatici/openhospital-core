@@ -66,8 +66,9 @@ public class MovementType extends Auditable<String> {
 
 	@Transient
 	private volatile int hashCode = 0;
-	
-    public MovementType(){}
+
+	public MovementType() {
+	}
     
     /**
      * @param code
@@ -75,9 +76,9 @@ public class MovementType extends Auditable<String> {
      * @param type
      */
     public MovementType(String code, String description, String type) {
-        this.code = code;
-        this.description = description;
-        this.type = type;
+	    this.code = code;
+	    this.description = description;
+	    this.type = type;
     }
     
     public String getCode() {

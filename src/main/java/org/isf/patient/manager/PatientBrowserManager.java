@@ -45,6 +45,8 @@ import org.springframework.util.StringUtils;
 @Component
 public class PatientBrowserManager {
 
+	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
+
 	@Autowired
 	private PatientIoOperations ioOperations;
 
@@ -177,9 +179,9 @@ public class PatientBrowserManager {
 		if (maritalHashMap == null) {
 			buildMaritalHashMap();
 		}
-		for (String key : maritalHashMap.keySet()) {
-			if (maritalHashMap.get(key).equals(description)) {
-				return key;
+		for (Map.Entry<String, String> entry : maritalHashMap.entrySet()) {
+			if (entry.getValue().equals(description)) {
+				return entry.getKey();
 			}
 		}
 		return "undefined";
@@ -222,9 +224,9 @@ public class PatientBrowserManager {
 		if (professionHashMap == null) {
 			buildProfessionHashMap();
 		}
-		for (String key : professionHashMap.keySet()) {
-			if (professionHashMap.get(key).equals(description)) {
-				return key;
+		for (Map.Entry<String, String> entry : professionHashMap.entrySet()) {
+			if (entry.getValue().equals(description)) {
+				return entry.getKey();
 			}
 		}
 		return "undefined";
@@ -241,10 +243,10 @@ public class PatientBrowserManager {
 			admitted = true;
 		}
 		if (admitted) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.admission.cannotmergeadmittedpatients.msg"),
 					OHSeverityLevel.ERROR));
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.admission.patientscannothavependingtasks.msg"),
 					OHSeverityLevel.INFO));
 		}
@@ -262,15 +264,15 @@ public class PatientBrowserManager {
 			}
 		}
 		if (billPending) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.admission.cannotmergewithpendingbills.msg"),
 					OHSeverityLevel.ERROR));
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.admission.patientscannothavependingtasks.msg"),
 					OHSeverityLevel.INFO));
 		}
 		if (mergedPatient.getSex() != patient2.getSex()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.admission.selectedpatientshavedifferentsex.msg"),
 					OHSeverityLevel.ERROR));
 		}
@@ -400,22 +402,22 @@ public class PatientBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (StringUtils.isEmpty(patient.getFirstName())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.patient.insertfirstname.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (StringUtils.isEmpty(patient.getSecondName())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.patient.insertsecondname.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (!checkAge(patient)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.patient.insertvalidage.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (' ' == patient.getSex()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.patient.pleaseselectpatientssex.msg"),
 					OHSeverityLevel.ERROR));
 		}
@@ -431,10 +433,7 @@ public class PatientBrowserManager {
 		if (patient.getAge() < 0 || patient.getAge() > 200) {
 			return false;
 		}
-		if (birthDate == null || birthDate.isAfter(now)) {
-			return false;
-		}
-		return true;
+		return birthDate != null && !birthDate.isAfter(now);
 	}
 
 }

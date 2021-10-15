@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.isf.OHCoreTestCase;
 import org.isf.supplier.manager.SupplierBrowserManager;
@@ -138,9 +139,9 @@ public class Tests extends OHCoreTestCase {
 		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierBrowserManager.getByID(code);
 		// get all (including deleted)
-		HashMap<Integer, String> allSuppliers = supplierBrowserManager.getHashMap(true);
+		Map<Integer, String> allSuppliers = supplierBrowserManager.getHashMap(true);
 		// get all (not including deleted)
-		HashMap<Integer, String> suppliers = supplierBrowserManager.getHashMap(false);
+		Map<Integer, String> suppliers = supplierBrowserManager.getHashMap(false);
 		assertThat(allSuppliers).isEqualTo(suppliers);
 		// "delete" a supplier
 		foundSupplier.setSupDeleted('Y');

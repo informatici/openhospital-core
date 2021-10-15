@@ -42,6 +42,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class BillBrowserManager {
 
+	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
+
 	@Autowired
 	private AccountingIoOperations ioOperations;
 
@@ -50,8 +52,9 @@ public class BillBrowserManager {
 	}
 	
 	public BillBrowserManager(AccountingIoOperations ioOperations) {
-		if (ioOperations != null) 
+		if (ioOperations != null) {
 			this.ioOperations = ioOperations;
+		}
 	}
 
 	/**
@@ -80,34 +83,34 @@ public class BillBrowserManager {
 		bill.setUpdate(upDate);
         
 		if (billDate.isAfter(today)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 	        		MessageBundle.getMessage("angal.newbill.billsinthefuturearenotallowed.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (lastPay.isAfter(today)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 	        		MessageBundle.getMessage("angal.newbill.payementsinthefuturearenotallowed.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (billDate.isAfter(firstPay)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 	        		MessageBundle.getMessage("angal.newbill.billdateaisfterthefirstpayment.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (bill.getPatName().isEmpty()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 	        		MessageBundle.getMessage("angal.newbill.pleaseinsertanameforthepatient.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
 		if (bill.getStatus().equals("C") && bill.getBalance() != 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.newbill.abillwithanoutstandingbalancecannotbeclosed.msg"),
-	        		OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
+					MessageBundle.getMessage("angal.newbill.abillwithanoutstandingbalancecannotbeclosed.msg"),
+					OHSeverityLevel.ERROR));
 		}
-		if(!errors.isEmpty()){
-	        throw new OHDataValidationException(errors);
-	    }
-    }
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
+	}
 	
 	/**
 	 * Returns all the stored {@link BillItems}.

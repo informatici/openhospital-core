@@ -48,6 +48,8 @@ import org.springframework.util.StringUtils;
 @Component
 public class PatVacManager {
 
+	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
+
 	@Autowired
 	private PatVacIoOperations ioOperations;
 
@@ -137,25 +139,25 @@ public class PatVacManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (patientVaccine.getVaccineDate() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.patvac.pleaseinsertvaccinedate.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (patientVaccine.getProgr() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.patvac.pleaseinsertavalidprogressive.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (patientVaccine.getVaccine() == null || 
 						patientVaccine.getVaccine().getDescription().equals(MessageBundle.getMessage("angal.patvac.allvaccine"))) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.patvac.pleaseselectavaccine.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (patientVaccine.getPatient() == null
 				|| StringUtils.isEmpty(patientVaccine.getPatName())
 				|| StringUtils.isEmpty(String.valueOf(patientVaccine.getPatSex()))) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.common.pleaseselectapatient.msg"),
 					OHSeverityLevel.ERROR));
 		}

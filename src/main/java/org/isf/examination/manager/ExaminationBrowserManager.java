@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.isf.examination.model.PatientExamination;
 import org.isf.examination.service.ExaminationOperations;
@@ -42,6 +43,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ExaminationBrowserManager {
+
+	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
 
 	@Autowired
 	private ExaminationOperations ioOperations;
@@ -135,9 +138,9 @@ public class ExaminationBrowserManager {
 		if (auscultationHashMap == null) {
 			buildAuscultationHashMap();
 		}
-		for (String key : auscultationHashMap.keySet()) {
-			if (auscultationHashMap.get(key).equals(description)) {
-				return key;
+		for (Map.Entry<String, String> entry : auscultationHashMap.entrySet()) {
+			if (entry.getValue().equals(description)) {
+				return entry.getKey();
 			}
 		}
 		return "";
@@ -267,9 +270,9 @@ public class ExaminationBrowserManager {
 		if (bowelDescriptionHashMap == null) {
 			buildBowelDescriptionHashMap();
 		}
-		for (String key : bowelDescriptionHashMap.keySet()) {
-			if (bowelDescriptionHashMap.get(key).equals(description)) {
-				return key;
+		for (Map.Entry<String, String> entry : bowelDescriptionHashMap.entrySet()) {
+			if (entry.getValue().equals(description)) {
+				return entry.getKey();
 			}
 		}
 		return "";
@@ -285,9 +288,9 @@ public class ExaminationBrowserManager {
 		if (diuresisDescriptionHashMap == null) {
 			buildDiuresisDescriptionHashMap();
 		}
-		for (String key : diuresisDescriptionHashMap.keySet()) {
-			if (diuresisDescriptionHashMap.get(key).equals(description)) {
-				return key;
+		for (Map.Entry<String, String> entry : diuresisDescriptionHashMap.entrySet()) {
+			if (entry.getValue().equals(description)) {
+				return entry.getKey();
 			}
 		}
 		return "";
@@ -302,22 +305,22 @@ public class ExaminationBrowserManager {
 	protected List<OHExceptionMessage> validateExamination(PatientExamination patex) {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (patex.getPex_note().length() > PatientExamination.PEX_NOTE_LENGTH) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 							MessageBundle.formatMessage("angal.common.thenoteistoolongmaxchars.fmt.msg", PatientExamination.PEX_NOTE_LENGTH),
 							OHSeverityLevel.ERROR));
 		}
 		if (patex.getPex_diuresis_desc() != null && !diuresisDescriptionHashMap.containsKey(patex.getPex_diuresis_desc())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.examination.pleaseinsertavaliddiuresisdescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (patex.getPex_bowel_desc() != null && !bowelDescriptionHashMap.containsKey(patex.getPex_bowel_desc())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.examination.pleaseinsertavalidboweldescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (patex.getPex_auscultation() != null && !auscultationHashMap.containsKey(patex.getPex_auscultation())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.examination.pleaseinsertavalidauscultationdescription.msg"),
 					OHSeverityLevel.ERROR));
 		}

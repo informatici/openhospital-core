@@ -37,6 +37,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class DischargeTypeBrowserManager {
 
+	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
+
 	@Autowired
 	private DischargeTypeIoOperation ioOperations;
 
@@ -106,7 +108,7 @@ public class DischargeTypeBrowserManager {
 	protected void validateDeleteDischargeType(DischargeType dischargeType) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (dischargeType.getCode().equals("D")) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.disctype.youcannotdeletethisrecord.msg"),
 					OHSeverityLevel.ERROR));
 		}
@@ -126,26 +128,26 @@ public class DischargeTypeBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		String key = dischargeType.getCode();
 		if (key.equals("")) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (key.length() > 10) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 10),
 					OHSeverityLevel.ERROR));
 		}
 
 		if (insert) {
 			if (isCodePresent(key)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+				errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}
 		if (dischargeType.getDescription().equals("")) {
 			errors.add(
-					new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					new OHExceptionMessage(COMMON_ERROR_TITLE,
 							MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 							OHSeverityLevel.ERROR));
 		}

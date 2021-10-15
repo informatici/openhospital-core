@@ -45,6 +45,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class OpdBrowserManager {
 
+	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
+
 	@Autowired
 	private OpdIoOperations ioOperations;
 
@@ -79,46 +81,46 @@ public class OpdBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		// Check Visit Date
 		if (opd.getVisitDate() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.opd.pleaseinsertattendancedate.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		// Check Patient
 		if (GeneralData.OPDEXTENDED && opd.getPatient() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.common.pleaseselectapatient.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		// Check Sex and Age
 		if (opd.getAge() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.opd.pleaseinsertthepatientsage.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (opd.getSex() == ' ') {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.opd.pleaseselectpatientssex.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		// Check Disease n.1
 		if (disease == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.opd.pleaseselectadisease.msg"),
 					OHSeverityLevel.ERROR));
 		} else {
 			// Check double diseases
 			if (disease2 != null && disease.getCode().equals(disease2.getCode())) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+				errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 						MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg"),
 						OHSeverityLevel.ERROR));
 			}
 			if (disease3 != null && disease.getCode().equals(disease3.getCode())) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+				errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 						MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg"),
 						OHSeverityLevel.ERROR));
 			}
 			if (disease2 != null && disease3 != null && disease2.getCode().equals(disease3.getCode())) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+				errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 						MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg"),
 						OHSeverityLevel.ERROR));
 			}

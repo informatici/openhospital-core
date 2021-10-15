@@ -92,11 +92,8 @@ public class MedicalType extends Auditable<String> {
 
 	@Override
 	public boolean equals(Object anObject) {
-		return !(anObject instanceof MedicalType) ? false
-				: (getCode().equalsIgnoreCase(
-						((MedicalType) anObject).getCode()) && getDescription()
-						.equalsIgnoreCase(
-								((MedicalType) anObject).getDescription()));
+		return anObject instanceof MedicalType && (getCode().equalsIgnoreCase(((MedicalType) anObject).getCode())
+				&& getDescription().equalsIgnoreCase(((MedicalType) anObject).getDescription()));
 	}
 
 	public String toString() {

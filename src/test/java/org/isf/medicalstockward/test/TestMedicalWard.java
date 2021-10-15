@@ -52,13 +52,13 @@ public class TestMedicalWard {
 	public void setParameters(MedicalWard medicalward, Medical medical, Ward ward, Lot lot) {
 		medicalward.setMedical(medical);
 		medicalward.setWard(ward);
-		medicalward.setInQuantity(in_quantity);
-		medicalward.setOutQuantity(out_quantity);
+		medicalward.setIn_quantity(in_quantity);
+		medicalward.setOut_quantity(out_quantity);
 		medicalward.setLot(lot);
 	}
 
 	public void check(MedicalWard medicalward) {
-		assertThat(medicalward.getInQuantity()).isCloseTo(in_quantity, within(0.1F));
-		assertThat(medicalward.getOutQuantity()).isCloseTo(out_quantity, within(0.1F));
+		assertThat(medicalward.getIn_quantity()).isCloseTo(in_quantity, within(0.1F));
+		assertThat(medicalward.getOut_quantity()).isCloseTo(out_quantity, within(0.1F));
 	}
 }

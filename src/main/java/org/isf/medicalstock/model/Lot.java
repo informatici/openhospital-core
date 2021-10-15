@@ -128,9 +128,8 @@ public class Lot extends Auditable<String> {
 	public Lot() {
 	}
 
-	public Lot(String aCode){
-		code=aCode;
-
+	public Lot(String aCode) {
+		code = aCode;
 	}
 
 	public Lot(String aCode, LocalDateTime aPreparationDate, LocalDateTime aDueDate) {
@@ -147,53 +146,62 @@ public class Lot extends Auditable<String> {
 		cost = aCost;
 	}
 
-	public String getCode(){
+	public String getCode() {
 		return code;
 	}
 
-	public Integer getMainStoreQuantity(){
+	public Integer getMainStoreQuantity() {
 		return mainStoreQuantity;
 	}
-	
+
 	public Double getWardsTotalQuantity() {
 		return wardsTotalQuantity;
 	}
-	
+
 	public double getOverallQuantity() {
 		return mainStoreQuantity + wardsTotalQuantity;
 	}
 
-	public Medical getMedical(){
-			return medical;
+	public Medical getMedical() {
+		return medical;
 	}
 
-	public LocalDateTime getPreparationDate(){
+	public LocalDateTime getPreparationDate() {
 		return preparationDate;
 	}
-	public LocalDateTime getDueDate(){
+
+	public LocalDateTime getDueDate() {
 		return dueDate;
 	}
+
 	public BigDecimal getCost() {
 		return cost;
 	}
-	public void setCode(String aCode){
-		code=aCode;
+
+	public void setCode(String aCode) {
+		code = aCode;
 	}
-	public void setMainStoreQuantity(int aQuantity){
-		mainStoreQuantity=aQuantity;
+
+	public void setMainStoreQuantity(int aQuantity) {
+		mainStoreQuantity = aQuantity;
 	}
+
 	public void setWardsTotalQuantity(double wardsTotalQuantity) {
 		this.wardsTotalQuantity = wardsTotalQuantity;
 	}
-	public void setPreparationDate(LocalDateTime aPreparationDate){
-		preparationDate=aPreparationDate;
+
+	public void setPreparationDate(LocalDateTime aPreparationDate) {
+		preparationDate = aPreparationDate;
 	}
-	public void setMedical(Medical aMedical){
-				medical=aMedical;
+
+	public void setMedical(Medical aMedical) {
+		medical = aMedical;
 	}
-	public void setDueDate(LocalDateTime aDueDate){
-		dueDate=aDueDate;
+
+	public void setDueDate(LocalDateTime aDueDate) {
+		dueDate = aDueDate;
 	}
+
 	public void setCost(BigDecimal cost) {
 		this.cost = cost;
 	}
@@ -205,8 +213,8 @@ public class Lot extends Auditable<String> {
 		return getCode();
 	}
 
-	public boolean isValidLot(){
-		return getCode().length()<=50;
+	public boolean isValidLot() {
+		return getCode().length() <= 50;
 	}
 
 	@Override
@@ -237,9 +245,7 @@ public class Lot extends Auditable<String> {
 				return false;
 		} else if (!preparationDate.equals(other.preparationDate))
 			return false;
-		if (mainStoreQuantity != other.mainStoreQuantity)
-			return false;
-		return true;
+		return mainStoreQuantity == other.mainStoreQuantity;
 	}
 
 	@Override

@@ -51,32 +51,34 @@ public class MovementWardForPrint implements Comparable<MovementWardForPrint>{
 		this.lot=mov.getLot().getCode();
 	}
 
-	public int getCode(){
+	public int getCode() {
 		return code;
 	}
-	
-	public String getMedical(){
+
+	public String getMedical() {
 		return medical;
 	}
-	
-	public LocalDateTime getDate(){
+
+	public LocalDateTime getDate() {
 		return date;
 	}
-	
-	public Double getQuantity(){
+
+	public Double getQuantity() {
 		return quantity;
 	}
-	
+
 	public String getWard() {
 		return ward;
 	}
+
 	public String getLot() {
 		return lot;
 	}
+
 	public String getUnits() {
 		return units;
 	}
-	
+
 	public boolean getPatient() {
 		return patient;
 	}

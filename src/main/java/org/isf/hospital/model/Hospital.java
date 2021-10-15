@@ -87,18 +87,18 @@ public class Hospital extends Auditable<String> {
 
 	@Transient
 	private volatile int hashCode = 0;
-	
-    public Hospital(){
-    	super();
-        this.code = null;
-        this.description = null;
-        this.address = null;
-        this.city = null;
-        this.telephone = null;
-        this.fax = null;
-        this.email = null;
-        this.currencyCod = null;
-    }
+
+	public Hospital() {
+		super();
+		this.code = null;
+		this.description = null;
+		this.address = null;
+		this.city = null;
+		this.telephone = null;
+		this.fax = null;
+		this.email = null;
+		this.currencyCod = null;
+	}
 
 	/**
 	 * @param aCode
@@ -198,15 +198,14 @@ public class Hospital extends Auditable<String> {
 
 	@Override
 	public boolean equals(Object anObject) {
-		return !(anObject instanceof Hospital) ? false
-				: (getCode().equals(((Hospital) anObject).getCode())
-						&& getDescription().equalsIgnoreCase(((Hospital) anObject).getDescription())
-						&& getTelephone().equalsIgnoreCase(((Hospital) anObject).getTelephone())
-						&& getFax().equalsIgnoreCase(((Hospital) anObject).getFax())
-						&& getAddress().equalsIgnoreCase(((Hospital) anObject).getAddress())
-						&& getCity().equalsIgnoreCase(((Hospital) anObject).getCity())
-						&& getEmail().equalsIgnoreCase(((Hospital) anObject).getEmail()) 
-						&& getCurrencyCod().equalsIgnoreCase(((Hospital) anObject).getCurrencyCod()));
+		return anObject instanceof Hospital && (getCode().equals(((Hospital) anObject).getCode())
+				&& getDescription().equalsIgnoreCase(((Hospital) anObject).getDescription())
+				&& getTelephone().equalsIgnoreCase(((Hospital) anObject).getTelephone())
+				&& getFax().equalsIgnoreCase(((Hospital) anObject).getFax())
+				&& getAddress().equalsIgnoreCase(((Hospital) anObject).getAddress())
+				&& getCity().equalsIgnoreCase(((Hospital) anObject).getCity())
+				&& getEmail().equalsIgnoreCase(((Hospital) anObject).getEmail())
+				&& getCurrencyCod().equalsIgnoreCase(((Hospital) anObject).getCurrencyCod()));
 	}
 
 	public String toString() {

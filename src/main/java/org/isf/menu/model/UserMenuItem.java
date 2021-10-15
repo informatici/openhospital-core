@@ -183,36 +183,37 @@ public class UserMenuItem
 	public void setTooltip(String tooltip) {
 		this.tooltip = tooltip;
 	}
-		
+
 	@Override
 	public boolean equals(Object anObject) {
-        return !(anObject instanceof UserMenuItem) ? false
-                : (getCode().equals(((UserMenuItem) anObject).getCode())
-                  && getButtonLabel().equalsIgnoreCase(((UserMenuItem) anObject).getButtonLabel()) 
-                  && getAltLabel().equals(((UserMenuItem) anObject).getAltLabel())
-                  && getTooltip().equals(((UserMenuItem) anObject).getTooltip())
-                  && getShortcut()==((UserMenuItem) anObject).getShortcut()
-                  && getMySubmenu().equals(((UserMenuItem) anObject).getMySubmenu())
-                  && getMyClass().equals(((UserMenuItem) anObject).getMyClass())
-                  && isASubMenu()==((UserMenuItem) anObject).isASubMenu()
-                  && getPosition()==((UserMenuItem) anObject).getPosition()
-                  && (isActive()==((UserMenuItem) anObject).isActive()));
-    }
-	
-	public String toString(){
+		return anObject instanceof UserMenuItem
+				&& (getCode().equals(((UserMenuItem) anObject).getCode())
+				&& getButtonLabel().equalsIgnoreCase(((UserMenuItem) anObject).getButtonLabel())
+				&& getAltLabel().equals(((UserMenuItem) anObject).getAltLabel())
+				&& getTooltip().equals(((UserMenuItem) anObject).getTooltip())
+				&& getShortcut() == ((UserMenuItem) anObject).getShortcut()
+				&& getMySubmenu().equals(((UserMenuItem) anObject).getMySubmenu())
+				&& getMyClass().equals(((UserMenuItem) anObject).getMyClass())
+				&& isASubMenu() == ((UserMenuItem) anObject).isASubMenu()
+				&& getPosition() == ((UserMenuItem) anObject).getPosition()
+				&& (isActive() == ((UserMenuItem) anObject).isActive()));
+	}
+
+	public String toString() {
 		return getButtonLabel();
 	}
 
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + code.hashCode();
-	        
-	        this.hashCode = c;
-	    }
-	    return this.hashCode;
-	}		
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + code.hashCode();
+
+			this.hashCode = c;
+		}
+		return this.hashCode;
+	}
+
 }

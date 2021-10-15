@@ -281,11 +281,11 @@ public class Opd extends Auditable<String> {
 		this.sex = sex;
 	}
 	
-	public int getProgYear() {
+	public int getProg_year() {
 		return prog_year;
 	}
 	
-	public void setProgYear(int progYear) {
+	public void setProg_year(int progYear) {
 		this.prog_year = progYear;
 	}
 

@@ -102,7 +102,7 @@ public class Laboratory extends Auditable<String> {
 	private String patName;
 	
 	@Column(name="LAB_PAT_INOUT")
-	private String InOutPatient;
+	private String inOutPatient;
 	
 	@Column(name="LAB_AGE")
 	private Integer age;
@@ -215,14 +215,14 @@ public class Laboratory extends Auditable<String> {
 	}
 
 	public String getInOutPatient() {
-		return InOutPatient;
+		return inOutPatient;
 	}
 
 	public void setInOutPatient(String inOut) {
 		if (inOut == null) {
 			inOut = "";
 		}
-		this.InOutPatient = inOut;
+		this.inOutPatient = inOut;
 	}
 
 	public String getPatName() {
@@ -271,7 +271,7 @@ public class Laboratory extends Auditable<String> {
 		return "-------------------------------------------\nLaboratory{" + "code=" + code + ", material=" + material
 				+ ", exam=" + exam + ", registrationDate=" + registrationDate + ", examDate=" + examDate + ", result="
 				+ result + ", lock=" + lock + ", note=" + note + ", patient=" + patient + ", patName=" + patName
-				+ ", InOutPatient=" + InOutPatient + ", age=" + age + ", sex=" + sex + ", hashCode=" + hashCode
+				+ ", InOutPatient=" + inOutPatient + ", age=" + age + ", sex=" + sex + ", hashCode=" + hashCode
 				+ "}\n---------------------------------------------";
 	}
         

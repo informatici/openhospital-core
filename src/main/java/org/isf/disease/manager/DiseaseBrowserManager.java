@@ -47,6 +47,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class DiseaseBrowserManager {
 
+	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
+
 	@Autowired
 	private DiseaseIoOperations ioOperations;
 
@@ -242,17 +244,17 @@ public class DiseaseBrowserManager {
 		if (insert) {
 			String key = disease.getCode();
 			if (key.equals("")) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+				errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 						MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 						OHSeverityLevel.ERROR));
 			}
 			if (key.length() > 10) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+				errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 						MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 10),
 						OHSeverityLevel.ERROR));
 			}
 			if (isCodePresent(key)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+				errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
@@ -260,7 +262,7 @@ public class DiseaseBrowserManager {
 
 		if (disease.getDescription().equals("")) {
 			errors.add(
-					new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					new OHExceptionMessage(COMMON_ERROR_TITLE,
 							MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 							OHSeverityLevel.ERROR));
 		}
@@ -274,7 +276,7 @@ public class DiseaseBrowserManager {
 		// avoid two disease with the same description for the same type
 		if (lastDescription == null || !lastDescription.equals(disease.getDescription())) {
 			if (descriptionControl(disease.getDescription(), disease.getType().getCode())) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+				errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 						MessageBundle.getMessage("angal.disease.thediseasisealreadypresent.msg"),
 						OHSeverityLevel.ERROR));
 			}

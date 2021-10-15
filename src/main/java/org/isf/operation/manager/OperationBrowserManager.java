@@ -170,9 +170,9 @@ public class OperationBrowserManager {
 		if (resultsListHashMap == null) {
 			buildResultHashMap();
 		}
-		for (String key : resultsListHashMap.keySet()) {
-			if (resultsListHashMap.get(key).equals(description)) {
-				return key;
+		for (Map.Entry<String, String> entry : resultsListHashMap.entrySet()) {
+			if (entry.getValue().equals(description)) {
+				return entry.getKey();
 			}
 		}
 		return "";

@@ -138,7 +138,7 @@ public class BillPayments extends Auditable<String> implements Comparable<BillPa
 	
 	@Override
 	public int compareTo(BillPayments anObject) {
-		return this.date.compareTo(((BillPayments)anObject).getDate());
+		return this.date.compareTo(anObject.getDate());
 	}
 
 	@Override

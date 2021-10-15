@@ -148,19 +148,19 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 		id.setLot(lot);
 	}
 	
-	public float getInQuantity() {
+	public float getIn_quantity() {
 		return this.in_quantity;
 	}
 	
-	public void setInQuantity(float inQuantity) {
+	public void setIn_quantity(float inQuantity) {
 		this.in_quantity = inQuantity;
 	}
 	
-	public float getOutQuantity() {
+	public float getOut_quantity() {
 		return this.out_quantity;
 	}
 	
-	public void setOutQuantity(float outQuantity) {
+	public void setOut_quantity(float outQuantity) {
 		this.out_quantity = outQuantity;
 	}
 	

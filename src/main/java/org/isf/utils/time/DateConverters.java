@@ -108,11 +108,13 @@ public class DateConverters {
      * @param date the date to convert.
      * @return the converted date.
      */
-    public static GregorianCalendar toCalendar(Date date){
-        if (date == null)
-            return null;
-        GregorianCalendar calendar = new GregorianCalendar();
-        calendar.setTime(date);
-        return calendar;
+    public static GregorianCalendar toCalendar(Date date) {
+	    if (date == null) {
+		    return null;
+	    }
+	    GregorianCalendar calendar = new GregorianCalendar();
+	    calendar.setTime(date);
+	    return calendar;
     }
+
 }

@@ -44,7 +44,7 @@ public class CustomCommonDecoder implements Decoder {
 
 	@Override
 	public Object decode(Response response, java.lang.reflect.Type type) throws IOException, FeignException {
-		HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter(new ObjectMapper());
+		HttpMessageConverter<Object> jacksonConverter = new MappingJackson2HttpMessageConverter(new ObjectMapper());
 		ObjectFactory<HttpMessageConverters> objectFactory = () -> new HttpMessageConverters(jacksonConverter);
 		return new ResponseEntityDecoder(new SpringDecoder(objectFactory)).decode(response, type);
 	}

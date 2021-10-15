@@ -399,15 +399,15 @@ public class Tests extends OHCoreTestCase {
 		MedicalWardId code = setupTestMedicalWard(false);
 		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
 		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWard(foundMedicalWard.getWard().getCode().charAt(0), true);
-		assertThat(medicalWards.get(0).getQty()).isCloseTo(foundMedicalWard.getInQuantity() - foundMedicalWard.getOutQuantity(), offset(0.1));
+		assertThat(medicalWards.get(0).getQty()).isCloseTo(foundMedicalWard.getIn_quantity() - foundMedicalWard.getOut_quantity(), offset(0.1));
 	}
 
 	@Test
 	public void testIoGetMedicalsWardStripEmptyLots() throws Exception {
 		MedicalWardId code = setupTestMedicalWard(false);
 		MedicalWard medicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
-		medicalWard.setInQuantity(10F);
-		medicalWard.setOutQuantity(10F);
+		medicalWard.setIn_quantity(10F);
+		medicalWard.setOut_quantity(10F);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
 		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWard(medicalWard.getWard().getCode().charAt(0), true);
 		assertThat(medicalWards).isEmpty();
@@ -496,7 +496,7 @@ public class Tests extends OHCoreTestCase {
 		MedicalWardId code = setupTestMedicalWard(false);
 		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
 		List<MedicalWard> medicalWards = movWardBrowserManager.getMedicalsWard(foundMedicalWard.getWard().getCode().charAt(0), true);
-		assertThat(medicalWards.get(0).getQty()).isCloseTo(foundMedicalWard.getInQuantity() - foundMedicalWard.getOutQuantity(), offset(0.1));
+		assertThat(medicalWards.get(0).getQty()).isCloseTo(foundMedicalWard.getIn_quantity() - foundMedicalWard.getOut_quantity(), offset(0.1));
 	}
 
 	@Test

@@ -248,21 +248,17 @@ public class Ward extends Auditable<String> {
 
 	@Override
 	public boolean equals(Object anObject) {
-        return !(anObject instanceof Ward) ? false
-                : (getCode().equals(((Ward) anObject).getCode())
-                        && getDescription().equalsIgnoreCase(
-                                ((Ward) anObject).getDescription())
-                        && getTelephone().equalsIgnoreCase(
-                                ((Ward) anObject).getTelephone()) && (getFax()
-                        .equalsIgnoreCase(((Ward) anObject).getFax()) && (getEmail()
-                        .equalsIgnoreCase(((Ward) anObject).getEmail()) && (getBeds()
-                        .equals(((Ward) anObject).getBeds()) && (getNurs()
-                        .equals(((Ward) anObject).getNurs()) && (getDocs()
-                        .equals(((Ward) anObject).getDocs())))))));
-    }
+		return anObject instanceof Ward
+				&& (getCode().equals(((Ward) anObject).getCode())
+				&& getDescription().equalsIgnoreCase(((Ward) anObject).getDescription())
+				&& getTelephone().equalsIgnoreCase(((Ward) anObject).getTelephone())
+				&& (getFax().equalsIgnoreCase(((Ward) anObject).getFax())
+				&& (getEmail().equalsIgnoreCase(((Ward) anObject).getEmail())
+				&& (getBeds().equals(((Ward) anObject).getBeds())
+				&& (getNurs().equals(((Ward) anObject).getNurs())
+				&& (getDocs().equals(((Ward) anObject).getDocs())))))));
+	}
 
-    
-	
 	@Override
 	public String toString() {
 		return getDescription();

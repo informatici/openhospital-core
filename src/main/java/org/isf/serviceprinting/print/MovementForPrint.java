@@ -44,13 +44,15 @@ public class MovementForPrint implements Comparable<MovementForPrint>{
 		this.quantity = mov.getQuantity();
 		this.lot = mov.getLot().getCode();
 	}
-	
+
 	public String getWard() {
 		return ward;
 	}
+
 	public String getLot() {
 		return lot;
 	}
+
 	public LocalDateTime getDate() {
 		return date;
 	}
@@ -63,7 +65,7 @@ public class MovementForPrint implements Comparable<MovementForPrint>{
 		return quantity;
 	}
 
-	public String toString(){
+	public String toString() {
 		return medical;
 	}
 

@@ -47,6 +47,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class MedicalBrowsingManager {
 
+	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
+
 	@Autowired
 	private MedicalsIoOperations ioOperations;
 
@@ -192,7 +194,7 @@ public class MedicalBrowsingManager {
 		boolean inStockMovement = ioOperations.isMedicalReferencedInStockMovement(medical.getCode());
 
 		if (inStockMovement) {
-			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			throw new OHDataIntegrityViolationException(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.medicals.therearestockmovementsreferredtothismedical.msg"),
 					OHSeverityLevel.ERROR));
 		}
@@ -209,17 +211,17 @@ public class MedicalBrowsingManager {
 	private List<OHExceptionMessage> checkMedicalCommon(Medical medical) {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (medical.getMinqty() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.medicals.minquantitycannotbelessthan0.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (medical.getPcsperpck() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.medicals.insertavalidpackaging.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (medical.getDescription().equalsIgnoreCase("")) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
@@ -265,27 +267,27 @@ public class MedicalBrowsingManager {
 		List<OHExceptionMessage> errors = new ArrayList<>(checkMedicalCommon(medical));
 
 		//check existing data
-		boolean productCodeExists = !medical.getProdCode().isEmpty() && ioOperations.productCodeExists(medical, update);
+		boolean productCodeExists = !medical.getProd_code().isEmpty() && ioOperations.productCodeExists(medical, update);
 		boolean medicalExists = ioOperations.medicalExists(medical, update);
 		List<Medical> similarMedicals = ioOperations.medicalCheck(medical, update);
 
 		if (productCodeExists) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 					OHSeverityLevel.ERROR));
 		} else if (medicalExists) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					MessageBundle.formatMessage("angal.medicals.thepairtypemedicalalreadyexists.fmt.msg", medical.getType().getDescription(), medical.toString()),
 					OHSeverityLevel.ERROR));
 		} else if (!ignoreSimilar && !similarMedicals.isEmpty()) {
 			StringBuilder message = new StringBuilder(MessageBundle.getMessage("angal.medicals.theinsertedmedicalisalreadyinuse.msg")).append('\n');
 			for (Medical med : similarMedicals) {
 				message.append('[').append(med.getType().getDescription()).append("] ");
-				if (!med.getProdCode().isEmpty())
-					message.append('[').append(med.getProdCode()).append("] ");
+				if (!med.getProd_code().isEmpty())
+					message.append('[').append(med.getProd_code()).append("] ");
 				message.append(med).append('\n');
 			}
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
 					message.toString(),
 					OHSeverityLevel.ERROR));
 		}

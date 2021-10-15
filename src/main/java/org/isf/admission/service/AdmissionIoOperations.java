@@ -27,6 +27,7 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
 import org.isf.admission.model.Admission;
@@ -49,22 +50,22 @@ import org.springframework.transaction.annotation.Transactional;
  * modification history
  * ====================
  * 10/11/06 - ross - removed from the list the deleted patients
- *                   the list is now in alphabetical  order
+ * the list is now in alphabetical  order
  * 11/08/08 - alessandro - addedd getFather&Mother Names
  * 26/08/08 - claudio - changed getAge for managing varchar type
- * 					  - added getBirthDate
+ * - added getBirthDate
  * 01/01/09 - Fabrizio - changed the calls to PAT_AGE fields to
- *                       return again an integer type
+ * return again an integer type
  * 20/01/09 - Chiara -   restart of progressive number of maternity
- * 						 ward on 1st July conditioned to parameter
- * 						 MATERNITYRESTARTINJUNE in generalData.properties
+ * ward on 1st July conditioned to parameter
+ * MATERNITYRESTARTINJUNE in generalData.properties
  * -----------------------------------------------------------
  */
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
-public class AdmissionIoOperations 
-{
+public class AdmissionIoOperations {
+
 	@Autowired
 	private AdmissionIoOperationRepository repository;
 	@Autowired
@@ -73,9 +74,10 @@ public class AdmissionIoOperations
 	private DischargeTypeIoOperationRepository dischargeRepository;
 	@Autowired
 	private PatientIoOperationRepository patientRepository;
-	
+
 	/**
 	 * Returns all patients with ward in which they are admitted.
+	 *
 	 * @return the patient list with associated ward.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
@@ -85,27 +87,28 @@ public class AdmissionIoOperations
 
 	/**
 	 * Returns all patients with ward in which they are admitted filtering the list using the passed search term.
+	 *
 	 * @param searchTerms the search terms to use for filter the patient list, {@code null} if no filter is to be applied.
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public List<AdmittedPatient> getAdmittedPatients(String searchTerms) throws OHServiceException {
-		LocalDateTime[] admissionRange = new LocalDateTime[2];
-		LocalDateTime[] dischargeRange = new LocalDateTime[2];
-		return repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
+		return patientRepository.findByFieldsContainingWordsFromLiteral(searchTerms).stream()
+				.map(patient -> new AdmittedPatient(patient, repository.findOneWherePatientIn(patient.getCode())))
+				.collect(Collectors.toList());
 	}
 
 	/**
 	 * Returns all patients based on the applied filters.
+	 *
 	 * @param admissionRange (two-dimensions array) the patient admission dates range, both {@code null} if no filter is to be applied.
 	 * @param dischargeRange (two-dimensions array) the patient discharge dates range, both {@code null} if no filter is to be applied.
 	 * @param searchTerms the search terms to use for filter the patient list, {@code null} if no filter is to be applied.
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public List<AdmittedPatient> getAdmittedPatients(String searchTerms,
-			LocalDateTime[] admissionRange,
-			LocalDateTime[] dischargeRange) throws OHServiceException {
+	public List<AdmittedPatient> getAdmittedPatients(String searchTerms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange)
+			throws OHServiceException {
 		return repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
 	}
 
@@ -121,19 +124,21 @@ public class AdmissionIoOperations
 		final Admission admission = repository.findOneWherePatientIn(patientId);
 		return new AdmittedPatient(patient, admission);
 	}
-	
+
 	/**
 	 * Returns the current admission (or null if none) for the specified patient.
+	 *
 	 * @param patient the patient target of the admission.
 	 * @return the patient admission.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public Admission getCurrentAdmission(Patient patient) throws OHServiceException	{
+	public Admission getCurrentAdmission(Patient patient) throws OHServiceException {
 		return repository.findOneWherePatientIn(patient.getCode());
 	}
 
 	/**
 	 * Returns the admission with the selected id.
+	 *
 	 * @param id the admission id.
 	 * @return the admission with the specified id, {@code null} otherwise.
 	 * @throws OHServiceException if an error occurs during database request.
@@ -144,6 +149,7 @@ public class AdmissionIoOperations
 
 	/**
 	 * Returns all the admissions for the specified patient.
+	 *
 	 * @param patient the patient.
 	 * @return the admission list.
 	 * @throws OHServiceException if an error occurs during database request.
@@ -151,9 +157,10 @@ public class AdmissionIoOperations
 	public List<Admission> getAdmissions(Patient patient) throws OHServiceException {
 		return repository.findAllWherePatientByOrderByDate(patient.getCode());
 	}
-	
+
 	/**
 	 * Inserts a new admission.
+	 *
 	 * @param admission the admission to insert.
 	 * @return <code>true</code> if the admission has been successfully inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the insertion.
@@ -164,6 +171,7 @@ public class AdmissionIoOperations
 
 	/**
 	 * Inserts a new {@link Admission} and the returns the generated id.
+	 *
 	 * @param admission the admission to insert.
 	 * @return the generated id.
 	 * @throws OHServiceException if an error occurs during the insertion.
@@ -175,6 +183,7 @@ public class AdmissionIoOperations
 
 	/**
 	 * Updates the specified {@link Admission} object.
+	 *
 	 * @param admission the admission object to update.
 	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs.
@@ -185,8 +194,9 @@ public class AdmissionIoOperations
 
 	/**
 	 * Lists the {@link AdmissionType}s.
+	 *
 	 * @return the admission types.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public List<AdmissionType> getAdmissionType() throws OHServiceException {
 		return typeRepository.findAll();
@@ -194,8 +204,9 @@ public class AdmissionIoOperations
 
 	/**
 	 * Lists the {@link DischargeType}s.
+	 *
 	 * @return the discharge types.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public List<DischargeType> getDischargeType() throws OHServiceException {
 		return dischargeRepository.findAll();
@@ -203,6 +214,7 @@ public class AdmissionIoOperations
 
 	/**
 	 * Returns the next prog in the year for a certain ward.
+	 *
 	 * @param wardId the ward id.
 	 * @return the next prog.
 	 * @throws OHServiceException if an error occurs retrieving the value.
@@ -214,7 +226,7 @@ public class AdmissionIoOperations
 		LocalDateTime last;
 
 		if (wardId.equalsIgnoreCase("M") && GeneralData.MATERNITYRESTARTINJUNE) {
-			if (now.getMonthValue() < Month.JUNE.getValue())  {
+			if (now.getMonthValue() < Month.JUNE.getValue()) {
 				first = now.minusYears(1).withMonth(Month.JULY.getValue()).withDayOfMonth(1);
 				last = now.withMonth(Month.JUNE.getValue()).withDayOfMonth(30);
 			} else {
@@ -236,15 +248,15 @@ public class AdmissionIoOperations
 
 	/**
 	 * The variables, {@code testing} and {@code afterJune}, are here only for testing purposes and are **NOT** to be used
-	 * in production code.   
+	 * in production code.
 	 * The default path ({@code testing == false}) ensures that the code performs as it
 	 * always has in the past.
 	 * This code permits the unit testing of maternity wards with dates before and after June.
 	 * TODO: once the LocalDateTime object is replaced by Java 8+ date/time objects this can be revisited
 	 * as there is more flexibility in modifying the new objects in Java 8+.
 	 */
-	public static boolean testing = false;
-	public static boolean afterJune = false;
+	public static boolean testing;
+	public static boolean afterJune;
 
 	public static LocalDateTime getNow() {
 		LocalDateTime now = LocalDateTime.now();
@@ -261,6 +273,7 @@ public class AdmissionIoOperations
 
 	/**
 	 * Sets an admission record to deleted.
+	 *
 	 * @param admissionId the admission id.
 	 * @return <code>true</code> if the record has been set to delete.
 	 * @throws OHServiceException if an error occurs.
@@ -274,6 +287,7 @@ public class AdmissionIoOperations
 
 	/**
 	 * Counts the number of used bed for the specified ward.
+	 *
 	 * @param wardId the ward id.
 	 * @return the number of used beds.
 	 * @throws OHServiceException if an error occurs retrieving the bed count.
@@ -285,6 +299,7 @@ public class AdmissionIoOperations
 
 	/**
 	 * Deletes the patient photo.
+	 *
 	 * @param patientId the patient id.
 	 * @return <code>true</code> if the photo has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs.

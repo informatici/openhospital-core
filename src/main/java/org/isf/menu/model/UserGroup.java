@@ -63,33 +63,34 @@ public class UserGroup extends Auditable<String> {
 		this.desc = desc;
 	}
 
-	public UserGroup(){
-		this("","");		
+	public UserGroup() {
+		this("", "");
 	}
+
 	public String getCode() {
 		return code;
 	}
+
 	public void setCode(String code) {
 		this.code = code;
 	}
+
 	public String getDesc() {
 		return desc;
 	}
+
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return getCode();
 	}
-	
+
 	@Override
 	public boolean equals(Object anObject) {
-		return !(anObject instanceof UserGroup) ? false
-				: (getCode().equalsIgnoreCase(
-						((UserGroup) anObject).getCode()) && getDesc()
-						.equalsIgnoreCase(
-								((UserGroup) anObject).getDesc()));
+		return anObject instanceof UserGroup && (getCode().equalsIgnoreCase(((UserGroup) anObject).getCode())
+				&& getDesc().equalsIgnoreCase(((UserGroup) anObject).getDesc()));
 	}
 
 	@Override

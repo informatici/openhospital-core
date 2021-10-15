@@ -167,11 +167,11 @@ public class MedicalsIoOperations
 	public boolean productCodeExists(Medical medical, boolean update) throws OHServiceException {
 		Medical foundMedical;
 		if (update) {
-			foundMedical = repository.findOneWhereProductCode(medical.getProdCode(), medical.getCode());
+			foundMedical = repository.findOneWhereProductCode(medical.getProd_code(), medical.getCode());
 		} else {
-			foundMedical = repository.findOneWhereProductCode(medical.getProdCode());
+			foundMedical = repository.findOneWhereProductCode(medical.getProd_code());
 		}
-		return foundMedical != null ? true : false;
+		return foundMedical != null;
 	}
     
 
@@ -189,7 +189,7 @@ public class MedicalsIoOperations
 		} else {
 			foundMedical = repository.findOneWhereDescriptionAndType(medical.getDescription(), medical.getType().getCode());
 		}
-		return foundMedical != null ? true : false;
+		return foundMedical != null;
 	}
 	
 	/**
