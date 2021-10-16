@@ -62,10 +62,8 @@ public class DiseaseIoOperations {
 	 * @return the found disease, <code>null</code> if no disease has found.
 	 * @throws OHServiceException if an error occurred getting the disease.
 	 */
-	public Disease getDiseaseByCode(
-			int code) throws OHServiceException 
-	{
-		return repository.findOneByCode(String.valueOf(code));
+	public Disease getDiseaseByCode(String code) throws OHServiceException {
+		return repository.findOneByCode(code);
 	}
 	
 	/**

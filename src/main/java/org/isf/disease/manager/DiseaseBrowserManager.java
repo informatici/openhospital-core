@@ -161,7 +161,7 @@ public class DiseaseBrowserManager {
 	 * @return the found disease, <code>null</code> if no disease has found.
 	 * @throws OHServiceException
 	 */
-	public Disease getDiseaseByCode(int code) throws OHServiceException {
+	public Disease getDiseaseByCode(String code) throws OHServiceException {
 		return ioOperations.getDiseaseByCode(code);
 	}
 
@@ -267,7 +267,7 @@ public class DiseaseBrowserManager {
 
 		Disease oldDisease = null;
 		if (!insert) {
-			oldDisease = getDiseaseByCode(Integer.parseInt(disease.getCode()));
+			oldDisease = getDiseaseByCode(disease.getCode());
 		}
 		String lastDescription = oldDisease == null ? null : oldDisease.getDescription();
 		// if inserting or description has changed on updating
