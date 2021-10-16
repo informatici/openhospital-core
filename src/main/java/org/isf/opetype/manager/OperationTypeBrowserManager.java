@@ -37,8 +37,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class OperationTypeBrowserManager {
 
-	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
-
 	@Autowired
 	private OperationTypeIoOperation ioOperations;
 
@@ -109,26 +107,26 @@ public class OperationTypeBrowserManager {
 		String description = operationType.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (key == null || key.isEmpty()) {
-			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		else {
 			if (key.length() > 2) {
-				errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 2),
 						OHSeverityLevel.ERROR));
 			}
 		}
 		if (insert) {
 			if (isCodePresent(key)) {
-				errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}
 		if (description == null || description.isEmpty()) {
-			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}

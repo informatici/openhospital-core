@@ -69,7 +69,6 @@ import com.drew.metadata.exif.ExifIFD0Directory;
 public class SourceFiles extends Thread {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SourceFiles.class);
-	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
 
 	private File file;
 	private FileDicom fileDicom;
@@ -150,7 +149,7 @@ public class SourceFiles extends Thread {
 		for (File value : files) {
 			if (!value.isDirectory()) {
 				if (!checkSize(value)) {
-					throw new OHDicomException(new OHExceptionMessage(COMMON_ERROR_TITLE,
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.formatMessage("angal.dicom.afileinthefolderistoobigpleasesetdicommaxsizeindicomproperties.fmt.msg",
 									DicomManagerFactory.getMaxDicomSize()),
 							OHSeverityLevel.ERROR));
@@ -279,11 +278,11 @@ public class SourceFiles extends Thread {
 					}
 
 				} catch (DicomCodingException dce) {
-					throw new OHDicomException(new OHExceptionMessage(COMMON_ERROR_TITLE,
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()),
 									OHSeverityLevel.ERROR));
 				} catch (IndexOutOfBoundsException ioe) {
-					throw new OHDicomException(new OHExceptionMessage(COMMON_ERROR_TITLE,
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName()),
 							OHSeverityLevel.ERROR));
 				}
@@ -304,13 +303,13 @@ public class SourceFiles extends Thread {
 				try {
 					originalImage = reader.read(0, param);
 				} catch (DicomCodingException | ConfigurationError dce) {
-					throw new OHDicomException(new OHExceptionMessage(COMMON_ERROR_TITLE,
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()),
 							OHSeverityLevel.ERROR));
 				}
 				imageInputStream.close();
 			} else {
-				throw new OHDicomException(new OHExceptionMessage(COMMON_ERROR_TITLE,
+				throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName()),
 						OHSeverityLevel.ERROR));
 			}

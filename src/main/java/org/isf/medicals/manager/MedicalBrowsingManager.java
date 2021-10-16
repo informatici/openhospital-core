@@ -47,8 +47,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class MedicalBrowsingManager {
 
-	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
-
 	@Autowired
 	private MedicalsIoOperations ioOperations;
 
@@ -194,7 +192,7 @@ public class MedicalBrowsingManager {
 		boolean inStockMovement = ioOperations.isMedicalReferencedInStockMovement(medical.getCode());
 
 		if (inStockMovement) {
-			throw new OHDataIntegrityViolationException(new OHExceptionMessage(COMMON_ERROR_TITLE,
+			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medicals.therearestockmovementsreferredtothismedical.msg"),
 					OHSeverityLevel.ERROR));
 		}
@@ -211,17 +209,17 @@ public class MedicalBrowsingManager {
 	private List<OHExceptionMessage> checkMedicalCommon(Medical medical) {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (medical.getMinqty() < 0) {
-			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medicals.minquantitycannotbelessthan0.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (medical.getPcsperpck() < 0) {
-			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medicals.insertavalidpackaging.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (medical.getDescription().equalsIgnoreCase("")) {
-			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
@@ -272,11 +270,11 @@ public class MedicalBrowsingManager {
 		List<Medical> similarMedicals = ioOperations.medicalCheck(medical, update);
 
 		if (productCodeExists) {
-			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 					OHSeverityLevel.ERROR));
 		} else if (medicalExists) {
-			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.formatMessage("angal.medicals.thepairtypemedicalalreadyexists.fmt.msg", medical.getType().getDescription(), medical.toString()),
 					OHSeverityLevel.ERROR));
 		} else if (!ignoreSimilar && !similarMedicals.isEmpty()) {
@@ -287,7 +285,7 @@ public class MedicalBrowsingManager {
 					message.append('[').append(med.getProdCode()).append("] ");
 				message.append(med).append('\n');
 			}
-			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					message.toString(),
 					OHSeverityLevel.ERROR));
 		}

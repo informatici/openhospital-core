@@ -40,8 +40,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class DiseaseTypeBrowserManager {
 
-	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
-
 	@Autowired
 	private DiseaseTypeIoOperation ioOperations;
 
@@ -112,26 +110,26 @@ public class DiseaseTypeBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		String key = diseaseType.getCode();
 		if (key.equals("")) {
-			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (key.length() > 2) {
-			errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 2),
 					OHSeverityLevel.ERROR));
 		}
 
 		if (insert) {
 			if (isCodePresent(key)) {
-				errors.add(new OHExceptionMessage(COMMON_ERROR_TITLE,
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
 						OHSeverityLevel.ERROR));
 			}
 		}
 		if (diseaseType.getDescription().equals("")) {
 			errors.add(
-					new OHExceptionMessage(COMMON_ERROR_TITLE,
+					new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 							OHSeverityLevel.ERROR));
 		}

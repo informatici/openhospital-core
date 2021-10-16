@@ -47,8 +47,6 @@ import org.springframework.transaction.CannotCreateTransactionException;
 @Component
 public class OHServiceExceptionTranslator {
 
-	private static final String COMMON_ERROR_TITLE = MessageBundle.getMessage("angal.common.error.title");
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(OHServiceExceptionTranslator.class);
 
 	@Around("within(@org.isf.utils.db.TranslateOHServiceException *)")
@@ -56,19 +54,19 @@ public class OHServiceExceptionTranslator {
 		try {
 			return pjp.proceed();
 		} catch (DataIntegrityViolationException e) {
-			throw new OHDataIntegrityViolationException(e, new OHExceptionMessage(COMMON_ERROR_TITLE,
+			throw new OHDataIntegrityViolationException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere.msg"),
 					OHSeverityLevel.ERROR));
 		} catch (InvalidDataAccessResourceUsageException e) {
-			throw new OHInvalidSQLException(e, new OHExceptionMessage(COMMON_ERROR_TITLE,
+			throw new OHInvalidSQLException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"),
 					OHSeverityLevel.ERROR));
 		} catch (CannotCreateTransactionException e) {
-			throw new OHDBConnectionException(e, new OHExceptionMessage(COMMON_ERROR_TITLE,
+			throw new OHDBConnectionException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"),
 					OHSeverityLevel.ERROR));
     	} catch (ObjectOptimisticLockingFailureException e) {
-			throw new OHDataLockFailureException(e, new OHExceptionMessage(COMMON_ERROR_TITLE,
+			throw new OHDataLockFailureException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.sql.thedatahasbeenupdatedbysomeoneelse.msg"),
 					OHSeverityLevel.ERROR));
     	} catch (OutOfMemoryError oome) {
@@ -78,7 +76,7 @@ public class OHServiceExceptionTranslator {
 					OHSeverityLevel.WARNING));
     	} catch (Throwable throwable) {
     		LOGGER.error(throwable.getMessage(), throwable);
-    		throw new OHServiceException(throwable, new OHExceptionMessage(COMMON_ERROR_TITLE,
+    		throw new OHServiceException(throwable, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 				    MessageBundle.getMessage("angal.sql.anunexpectederroroccurredpleasecheckthelogs.msg"),
 				    OHSeverityLevel.ERROR));
 		}
