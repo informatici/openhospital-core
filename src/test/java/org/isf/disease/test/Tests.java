@@ -84,7 +84,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetDiseaseByCode() throws Exception {
 		String code = setupTestDisease(false);
-		//Disease foundDisease = diseaseIoOperation.getDiseaseByCode(Integer.parseInt(code));
+		//Disease foundDisease = diseaseIoOperation.getDiseaseByCode(code);
 		Disease foundDisease = diseaseIoOperationRepository.findOneByCode(code);
 		testDisease.check(foundDisease);
 	}
