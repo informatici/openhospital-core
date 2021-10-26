@@ -250,6 +250,12 @@ public class AdmissionBrowserManager {
 		}
 
 		GregorianCalendar dateIn = admission.getAdmDate();
+		if (dateIn == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.admission.admissiondatecannotbeempty.msg"),
+							OHSeverityLevel.ERROR));
+			throw new OHDataValidationException(errors);
+		}
 		if (dateIn.after(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.admission.futuredatenotallowed.msg"),
