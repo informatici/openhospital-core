@@ -109,6 +109,7 @@ public class JasperReportsManager {
             return result;
         } catch(Exception e) {
             //Any exception
+        	LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -135,6 +136,7 @@ public class JasperReportsManager {
             return result;
         } catch(Exception e) {
             //Any exception
+        	LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -156,6 +158,7 @@ public class JasperReportsManager {
             return result;
         } catch(Exception e) {
             //Any exception
+        	LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -248,6 +251,7 @@ public class JasperReportsManager {
 			return result;
 		} catch(Exception e) {
             //Any exception
+			LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -275,6 +279,7 @@ public class JasperReportsManager {
             return result;
         } catch(Exception e) {
             //Any exception
+        	LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -299,6 +304,7 @@ public class JasperReportsManager {
             return result;
         } catch(Exception e) {
             //Any exception
+        	LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -339,6 +345,7 @@ public class JasperReportsManager {
             return result;
         } catch(Exception e) {
             //Any exception
+        	LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -425,6 +432,7 @@ public class JasperReportsManager {
 			return result;
 		} catch(Exception e) {
             //Any exception
+			LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -460,6 +468,7 @@ public class JasperReportsManager {
             return result;
     	} catch(Exception e) {
             //Any exception
+    		LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -494,6 +503,7 @@ public class JasperReportsManager {
 
         } catch(Exception e) {
             //Any exception
+        	LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -527,6 +537,7 @@ public class JasperReportsManager {
             return result;
     	} catch(Exception e) {
             //Any exception
+    		LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -567,6 +578,7 @@ public class JasperReportsManager {
 
         } catch(Exception e) {
             //Any exception
+        	LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -600,6 +612,7 @@ public class JasperReportsManager {
 			return result;
 		} catch(Exception e) {
             //Any exception
+			
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -619,6 +632,7 @@ public class JasperReportsManager {
 			return result;
 		} catch(Exception e) {
             //Any exception
+			LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -644,6 +658,7 @@ public class JasperReportsManager {
             return result;
         } catch(Exception e) {
             //Any exception
+        	LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -664,6 +679,7 @@ public class JasperReportsManager {
             return result;
         } catch(Exception e) {
             //Any exception
+        	LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -682,6 +698,7 @@ public class JasperReportsManager {
             return result;
         } catch(Exception e) {
             //Any exception
+        	LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -728,6 +745,7 @@ public class JasperReportsManager {
             return result;
         } catch(Exception e) {
             //Any exception
+        	LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
@@ -755,6 +773,7 @@ public class JasperReportsManager {
 
         } catch(Exception e) {
             //Any exception
+        	LOGGER.error("", e);
             throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
                     MessageBundle.getMessage("angal.stat.reporterror.msg"), OHSeverityLevel.ERROR));
         }
