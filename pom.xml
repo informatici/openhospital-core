@@ -332,7 +332,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-c3p0</artifactId>
-			<version>4.2.13.Final</version>
+			<version>5.6.1.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.imgscalr</groupId>
@@ -475,8 +475,8 @@
 		</repository>
 		<repository>
 			<id>JFrog</id>
-			<name>Atlassian JFrog></name>
-			<url>https://packages.atlassian.com/maven-3rdparty-legacy-local</url>
+			<name>Atlassian JFrog</name>
+			<url>https://packages.atlassian.com/mvn/maven-external</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
