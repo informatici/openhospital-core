@@ -69,7 +69,6 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 		List<AdmittedPatient> admittedPatients = new ArrayList<>();
 
 		if (terms.length == 1) {
-
 			try {
 				int code = Integer.parseInt(terms[0]);
 				Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryCode, "AdmittedPatient");
@@ -105,7 +104,6 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 							.append("'");
 				}
 			}
-
 			Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryRanges.replace("param1", rangePredicate.toString()), "AdmittedPatient");
 			String paramTerms = like(terms);
 			nativeQuery.setParameter("param0", paramTerms);
