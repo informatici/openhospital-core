@@ -80,7 +80,7 @@ public class AdmissionBrowserManager {
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public List<AdmittedPatient> getAdmittedPatients(GregorianCalendar[] admissionRange, //
+	public List<AdmittedPatient> getAdmittedPatients(GregorianCalendar[] admissionRange,
 			GregorianCalendar[] dischargeRange, String searchTerms) throws OHServiceException {
 		return new ArrayList<>(ioOperations.getAdmittedPatients(searchTerms, admissionRange, dischargeRange));
 	}

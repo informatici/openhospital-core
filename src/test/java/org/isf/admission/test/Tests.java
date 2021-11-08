@@ -29,7 +29,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Optional;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -369,7 +368,7 @@ public class Tests extends OHCoreTestCase {
 		};
 
 		// when:
-		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString(), admissionRange, dischargeRange);
+		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(null, admissionRange, dischargeRange);
 
 		// then:
 		assertThat(patients).isEmpty();
@@ -391,7 +390,7 @@ public class Tests extends OHCoreTestCase {
 		};
 
 		// when:
-		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getCode().toString(), admissionRange, dischargeRange);
+		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getName(), admissionRange, dischargeRange);
 
 		// then:
 		assertThat(patients).isEmpty();
@@ -777,7 +776,7 @@ public class Tests extends OHCoreTestCase {
 		};
 
 		// when:
-		List<AdmittedPatient> patients = admissionBrowserManager.getAdmittedPatients(admissionRange, dischargeRange, foundPatient.getCode().toString());
+		List<AdmittedPatient> patients = admissionBrowserManager.getAdmittedPatients(admissionRange, dischargeRange, null);
 
 		// then:
 		assertThat(patients).isEmpty();
@@ -799,7 +798,7 @@ public class Tests extends OHCoreTestCase {
 		};
 
 		// when:
-		List<AdmittedPatient> patients = admissionBrowserManager.getAdmittedPatients(admissionRange, dischargeRange, foundPatient.getCode().toString());
+		List<AdmittedPatient> patients = admissionBrowserManager.getAdmittedPatients(admissionRange, dischargeRange, null);
 
 		// then:
 		assertThat(patients).isEmpty();
@@ -1093,8 +1092,9 @@ public class Tests extends OHCoreTestCase {
 	class MyAdmissionIoOperationRepositoryCustom implements AdmissionIoOperationRepositoryCustom {
 
 		@Override
-		public Optional<Admission> findOneByPatientAndDateRanges(Patient patient, GregorianCalendar[] admissionRange, GregorianCalendar[] dischargeRange) {
-			return Optional.empty();
+		public List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(String searchTerms, GregorianCalendar[] admissionRange,
+				GregorianCalendar[] dischargeRange) {
+			return null;
 		}
 	}
 
