@@ -39,7 +39,10 @@ public class DateConverters {
      * Returns a {@link String} representing the date in format <code>yyyy-MM-dd HH:mm:ss</code>.
      * @param datetime {@link GregorianCalendar} object.
      * @return the date in format <code>yyyy-MM-dd HH:mm:ss</code>.
+     * @deprecated
      */
+	// TODO: remove
+	@Deprecated
     public static String convertToSQLDate(GregorianCalendar datetime) {
         if (datetime == null) {
 	        return null;
@@ -64,7 +67,10 @@ public class DateConverters {
      * Returns a {@link String} representing the date in format <code>yyyy-MM-dd</code>.
      * @param date {@link Date} object.
      * @return the date in format <code>yyyy-MM-dd</code>.
+     * @deprecated
      */
+	// TODO: remove
+	@Deprecated
     public static String convertToSQLDateLimited(GregorianCalendar date) {
         if (date == null) {
 	        return null;
@@ -95,7 +101,9 @@ public class DateConverters {
 			    .map(ldt -> Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant()))
 			    .orElse(null);
     }
-    
+
+	// TODO: remove
+	@Deprecated
     public static DateTime toDateTime(GregorianCalendar calendar) {
         if (calendar == null) {
 	        return null;
@@ -107,7 +115,10 @@ public class DateConverters {
      * Converts the specified {@link java.sql.Date} to a {@link GregorianCalendar}.
      * @param date the date to convert.
      * @return the converted date.
+     * @deprecated
      */
+	// TODO: remove
+	@Deprecated
     public static GregorianCalendar toCalendar(Date date) {
 	    if (date == null) {
 		    return null;

@@ -236,7 +236,7 @@ public class AdmissionBrowserManager {
 		List<Admission> admList = getAdmissions(patient);
 
 		/*
-		 * Today Gregorian Calendar
+		 * Today LocalDateTime
 		 */
 		LocalDateTime today = LocalDateTime.now();
 		// get year prog ( not null)

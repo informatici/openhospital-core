@@ -40,7 +40,7 @@ public class TestTimeTools {
 	}
 
 	@Test
-	public void testGetXBetweenDatesGregorian() {
+	public void testGetXBetweenLocaleDateTime() {
 		LocalDateTime dateFrom = LocalDateTime.of(2014, 10, 3, 0, 0, 0);
 		LocalDateTime dateTo = LocalDateTime.of(2021, 10, 3, 23, 59, 59);
 
@@ -72,7 +72,7 @@ public class TestTimeTools {
 	}
 
 	@Test
-	public void testIsSameDayGregorian() {
+	public void testIsSameDayLocalDateTime() {
 		LocalDateTime day1 = LocalDateTime.of(2014, 10, 3, 0, 0, 0);
 		LocalDateTime day2 = LocalDateTime.of(2014, 10, 3, 10, 10, 0);
 		assertThat(TimeTools.isSameDay(day1, day2)).isTrue();
@@ -82,7 +82,7 @@ public class TestTimeTools {
 	}
 
 	@Test
-	public void testFormatDateTimeGregorian() {
+	public void testFormatLocalDateTime() {
 		LocalDateTime dateTime = LocalDateTime.of(2021, 10, 3, 23, 59, 59);
 		assertThat(TimeTools.formatDateTime(dateTime, null)).isEqualTo("2021-10-03 23:59:59");
 	}
@@ -94,7 +94,7 @@ public class TestTimeTools {
 	}
 
 	@Test
-	public void testFormatDateTimeReportGregorian() {
+	public void testFormatDateTimeReportLocalDateTime() {
 		LocalDateTime dateTime = LocalDateTime.of(2021, 10, 3, 23, 59, 59);
 		assertThat(TimeTools.formatDateTimeReport(dateTime)).isEqualTo("2021-10-03 23:59:59");
 	}
