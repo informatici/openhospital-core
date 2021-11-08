@@ -68,6 +68,7 @@ public final class GeneralData extends ConfigurationProperties {
 	public static boolean MATERNITYRESTARTINJUNE;
 	public static boolean LABEXTENDED;
 	public static boolean INTERNALVIEWER;
+	public static String DOC_DIR;
 	public static boolean LABMULTIPLEINSERT;
 	public static boolean INTERNALPHARMACIES;
 	public static boolean MERGEFUNCTION;
@@ -112,6 +113,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final boolean DEFAULT_MATERNITYRESTARTINJUNE = false;
 	private static final boolean DEFAULT_LABEXTENDED = false;
 	private static final boolean DEFAULT_INTERNALVIEWER = true;
+	private static final String DEFAULT_DOC_DIR = "doc";
 	private static final boolean DEFAULT_LABMULTIPLEINSERT = false;
 	private static final boolean DEFAULT_INTERNALPHARMACIES = false;
 	private static final boolean DEFAULT_MERGEFUNCTION = false;
@@ -167,6 +169,7 @@ public final class GeneralData extends ConfigurationProperties {
 		INTERNALPHARMACIES = myGetProperty("INTERNALPHARMACIES", DEFAULT_INTERNALPHARMACIES);
 		INTERNALVIEWER = myGetProperty("INTERNALVIEWER", DEFAULT_INTERNALVIEWER);
 		if (!INTERNALVIEWER) VIEWER = myGetProperty("INTERNALVIEWER");
+		DOC_DIR = myGetProperty("DOC_DIR", DEFAULT_DOC_DIR);
 		MERGEFUNCTION = myGetProperty("MERGEFUNCTION", DEFAULT_MERGEFUNCTION);
 		SMSENABLED = myGetProperty("SMSENABLED", DEFAULT_SMSENABLED);
 		MAINMENUALWAYSONTOP = myGetProperty("MAINMENUALWAYSONTOP", DEFAULT_MAINMENUALWAYSONTOP);

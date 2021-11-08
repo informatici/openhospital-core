@@ -40,6 +40,7 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -79,7 +80,7 @@ public class AdmissionBrowserManager {
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public List<AdmittedPatient> getAdmittedPatients(GregorianCalendar[] admissionRange, //
+	public List<AdmittedPatient> getAdmittedPatients(GregorianCalendar[] admissionRange,
 			GregorianCalendar[] dischargeRange, String searchTerms) throws OHServiceException {
 		return new ArrayList<>(ioOperations.getAdmittedPatients(searchTerms, admissionRange, dischargeRange));
 	}
@@ -248,8 +249,21 @@ public class AdmissionBrowserManager {
 					MessageBundle.getMessage("angal.admission.pleaseinsertacorrectprogressiveid.msg"),
 					OHSeverityLevel.ERROR));
 		}
-
+		
+		Ward ward = admission.getWard();
+		if (ward == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.admission.admissionwardcannotbeempty.msg"),
+							OHSeverityLevel.ERROR));
+			throw new OHDataValidationException(errors);
+		}
 		GregorianCalendar dateIn = admission.getAdmDate();
+		if (dateIn == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.admission.admissiondatecannotbeempty.msg"),
+							OHSeverityLevel.ERROR));
+			throw new OHDataValidationException(errors);
+		}
 		if (dateIn.after(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.admission.futuredatenotallowed.msg"),
@@ -368,7 +382,7 @@ public class AdmissionBrowserManager {
 			}
 
 			GregorianCalendar visitDate = admission.getVisitDate();
-			if (operationDate != null && admission.getWard().getCode().equalsIgnoreCase("M")) {
+			if (operationDate != null && ward.getCode().equalsIgnoreCase("M")) {
 				GregorianCalendar limit;
 				if (admission.getDisDate() == null) {
 					limit = today;
