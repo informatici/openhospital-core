@@ -125,8 +125,8 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 	private List<AdmittedPatient> parseResultSet(List<AdmittedPatient> admittedPatients, Query nativeQuery) throws OHServiceException {
 		List<Object[]> results = nativeQuery.getResultList();
 		results.stream().forEach(resultRecord -> {
-			Patient patientRecord = (Patient) resultRecord[0];
-			Admission admissionRecord = (Admission) resultRecord[1];
+			Patient patientRecord = (Patient)resultRecord[0];
+			Admission admissionRecord = (Admission)resultRecord[1];
 			admittedPatients.add(new AdmittedPatient(patientRecord, admissionRecord));
 		});
 		return admittedPatients;

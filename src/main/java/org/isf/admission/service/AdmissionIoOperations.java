@@ -27,7 +27,6 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
 import org.isf.admission.model.Admission;
@@ -93,9 +92,9 @@ public class AdmissionIoOperations {
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public List<AdmittedPatient> getAdmittedPatients(String searchTerms) throws OHServiceException {
-		return patientRepository.findByFieldsContainingWordsFromLiteral(searchTerms).stream()
-				.map(patient -> new AdmittedPatient(patient, repository.findOneWherePatientIn(patient.getCode())))
-				.collect(Collectors.toList());
+		LocalDateTime[] admissionRange = new LocalDateTime[2];
+		LocalDateTime[] dischargeRange = new LocalDateTime[2];
+		return repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
 	}
 
 	/**

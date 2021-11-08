@@ -378,7 +378,7 @@ public class Tests extends OHCoreTestCase {
 		};
 
 		// when:
-		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(foundPatient.getName(), admissionRange, dischargeRange);
+		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients(null, admissionRange, dischargeRange);
 
 		// then:
 		assertThat(patients).isEmpty();
@@ -1073,7 +1073,8 @@ public class Tests extends OHCoreTestCase {
 	class MyAdmissionIoOperationRepositoryCustom implements AdmissionIoOperationRepositoryCustom {
 
 		@Override
-		public List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(String searchTerms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange) {
+		public List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(String searchTerms, LocalDateTime[] admissionRange,
+				LocalDateTime[] dischargeRange) throws OHServiceException {
 			return null;
 		}
 	}
@@ -1173,4 +1174,6 @@ public class Tests extends OHCoreTestCase {
 				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
 				deliveryType, deliveryResult, true);
 	}
+
 }
+

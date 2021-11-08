@@ -23,7 +23,6 @@ package org.isf.supplier.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

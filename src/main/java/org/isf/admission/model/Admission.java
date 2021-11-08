@@ -57,11 +57,11 @@ import org.isf.ward.model.Ward;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "ADMISSION")
-@SqlResultSetMapping(name = "AdmittedPatient",
-		entities = {
-				@EntityResult(entityClass = org.isf.patient.model.Patient.class),
-				@EntityResult(entityClass = org.isf.admission.model.Admission.class) }
+@Table(name="ADMISSION")
+@SqlResultSetMapping(name="AdmittedPatient",
+entities={
+		@EntityResult(entityClass=org.isf.patient.model.Patient.class),
+		@EntityResult(entityClass=org.isf.admission.model.Admission.class) }
 )
 //@EntityListeners(AuditingEntityListener.class) 
 public class Admission implements Comparable<Admission>  //extends Auditable<String> implements Comparable<Admission> 
