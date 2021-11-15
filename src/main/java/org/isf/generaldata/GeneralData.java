@@ -113,7 +113,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final boolean DEFAULT_MATERNITYRESTARTINJUNE = false;
 	private static final boolean DEFAULT_LABEXTENDED = false;
 	private static final boolean DEFAULT_INTERNALVIEWER = true;
-	private static final String DEFAULT_DOC_DIR = "doc";
+	private static final String DEFAULT_DOC_DIR = "../doc";
 	private static final boolean DEFAULT_LABMULTIPLEINSERT = false;
 	private static final boolean DEFAULT_INTERNALPHARMACIES = false;
 	private static final boolean DEFAULT_MERGEFUNCTION = false;
