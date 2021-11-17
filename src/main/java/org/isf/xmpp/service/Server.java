@@ -1,5 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.xmpp.service;
 
+import org.isf.generaldata.XmppData;
 import org.jivesoftware.smack.AccountManager;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
@@ -21,15 +43,15 @@ public class Server {
 	private Roster roster;
 	private String user;
 
-	private final Logger logger = LoggerFactory.getLogger(Server.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
 
 	private Server() {
 	}
 
 	public void login(String userName, String password) throws XMPPException {
-		XmppData.getXmppData();
-		domain = XmppData.DOMAIN;
-		port = XmppData.PORT;
+		XmppData.initialize();
+		domain = XmppData.domain;
+		port = XmppData.port;
 		user = userName;
 		ConnectionConfiguration config = new ConnectionConfiguration(domain, port);
 		connection = new XMPPConnection(config);
@@ -38,10 +60,10 @@ public class Server {
 		try {
 			AccountManager user = new AccountManager(connection);
 			user.createAccount(userName, password);
-			logger.debug("XMPP user created");
+			LOGGER.debug("XMPP user created");
 			connection.login(userName, password);
 		} catch (XMPPException e) {
-			logger.debug("XMPP user existing");
+			LOGGER.debug("XMPP user existing");
 			connection.login(userName, password);
 		}
 	}
@@ -51,14 +73,14 @@ public class Server {
 		return roster;
 	}
 
-	public Chat getChat(String to, String id, MessageListener listner) {
+	public Chat getChat(String to, String id, MessageListener listener) {
 		Chat chat = null;
 		id = id + "@" + user;
 		if (connection.getChatManager().getThreadChat(id) == null) {
-			logger.debug("Creation chat: " + to + ", id = " + id);
-			chat = connection.getChatManager().createChat(to, id, listner);
+			LOGGER.debug("Creation chat: {}, id = {}", to, id);
+			chat = connection.getChatManager().createChat(to, id, listener);
 		} else {
-			logger.debug("Existing chat: " + to + ", id = " + id);
+			LOGGER.debug("Existing chat: {}, id = {}", to, id);
 			chat = connection.getChatManager().getThreadChat(id);
 		}
 		return chat;

@@ -1,250 +1,251 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.pricesothers.test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import static org.junit.Assert.assertEquals;
+import java.util.List;
 
-import java.util.ArrayList;
-
+import org.assertj.core.api.Condition;
+import org.isf.OHCoreTestCase;
+import org.isf.pricesothers.manager.PricesOthersManager;
 import org.isf.pricesothers.model.PricesOthers;
+import org.isf.pricesothers.service.PriceOthersIoOperationRepository;
 import org.isf.pricesothers.service.PriceOthersIoOperations;
-import org.isf.utils.db.DbJpaUtil;
-import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
+import org.isf.utils.exception.OHDataValidationException;
+import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestPricesOthers testPricesOthers;
-	private static TestPricesOthersContext testPricesOthersContext;
 
-    @Autowired
-    PriceOthersIoOperations otherIoOperation;
-	
+	@Autowired
+	PriceOthersIoOperations priceOthersIoOperations;
+	@Autowired
+	PriceOthersIoOperationRepository priceOthersIoOperationRepository;
+	@Autowired
+	PricesOthersManager pricesOthersManager;
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testPricesOthers = new TestPricesOthers();
-    	testPricesOthersContext = new TestPricesOthersContext();
-    	
-        return;
-    }
+	public static void setUpClass() {
+		testPricesOthers = new TestPricesOthers();
+	}
 
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-		
-		return;
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-                
-        return;
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-    	return;
-    }
-	
-		
-	@Test
-	public void testPricesOthersGets() 
-	{
-		int id = 0;
-			
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
+	}
 
-		try 
-		{		
-			id = _setupTestPricesOthers(false);
-			_checkPricesOthersIntoDb(id);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-				
-		return;
-	}
-	
 	@Test
-	public void testPricesOthersSets() 
-	{
-		int id = 0;
-			
+	public void testPricesOthersGets() throws Exception {
+		// given:
+		int id = _setupTestPricesOthers(false);
 
-		try 
-		{		
-			id = _setupTestPricesOthers(true);
-			_checkPricesOthersIntoDb(id);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-		
-		return;
+		// then:
+		_checkPricesOthersIntoDb(id);
 	}
-	
+
 	@Test
-	public void testIoGetPricesOthers() 
-	{
-		int id = 0;
-		
-		
-		try 
-		{		
-			id = _setupTestPricesOthers(false);
-			PricesOthers foundPricesOthers = (PricesOthers)jpa.find(PricesOthers.class, id); 
-			ArrayList<PricesOthers> pricesOtherss = otherIoOperation.getOthers();
-			
-			assertEquals(foundPricesOthers.getDescription(), pricesOtherss.get(1).getDescription());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-		
-		return;
+	public void testPricesOthersSets() throws Exception {
+		// given:
+		int id = _setupTestPricesOthers(true);
+
+		// then:
+		_checkPricesOthersIntoDb(id);
 	}
-	
+
 	@Test
-	public void testIoUpdatePricesOthers() 
-	{
-		int id = 0;
-		boolean result = false;
-		
-		
-		try 
-		{		
-			id = _setupTestPricesOthers(false);
-			PricesOthers foundPricesOthers = (PricesOthers)jpa.find(PricesOthers.class, id); 
-			foundPricesOthers.setDescription("Update");
-			result = otherIoOperation.updateOther(foundPricesOthers);
-			PricesOthers updatePricesOthers = (PricesOthers)jpa.find(PricesOthers.class, id); 
-			
-			assertEquals(true, result);
-			assertEquals("Update", updatePricesOthers.getDescription());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-		
-		return;
+	public void testIoGetPricesOthers() throws Exception {
+		// given:
+		int id = _setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+
+		// when:
+		List<PricesOthers> result = priceOthersIoOperations.getOthers();
+
+		// then:
+		assertThat(result.get(0).getDescription()).isEqualTo(foundPricesOthers.getDescription());
 	}
-	
+
 	@Test
-	public void testIoNewPricesOthers() 
-	{
-		boolean result = false;
-		
-		
-		try 
-		{		
+	public void testIoUpdatePricesOthers() throws Exception {
+		// given:
+		int id = _setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		foundPricesOthers.setDescription("Update");
+
+		// when:
+		boolean result = priceOthersIoOperations.updateOther(foundPricesOthers);
+		PricesOthers updatePricesOthers = priceOthersIoOperationRepository.findOne(id);
+
+		// then:
+		assertThat(result).isTrue();
+		assertThat(updatePricesOthers.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testIoNewPricesOthers() throws Exception {
+		// given:
+		PricesOthers pricesOthers = testPricesOthers.setup(true);
+
+		// when:
+		boolean result = priceOthersIoOperations.newOthers(pricesOthers);
+
+		// then:
+		assertThat(result).isTrue();
+		_checkPricesOthersIntoDb(pricesOthers.getId());
+	}
+
+	@Test
+	public void testIoDeletePricesOthers() throws Exception {
+		// given:
+		int id = _setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+
+		// when:
+		boolean result = priceOthersIoOperations.deleteOthers(foundPricesOthers);
+
+		// then:
+		assertThat(result).isTrue();
+		assertThat(priceOthersIoOperationRepository.exists(id)).isFalse();
+	}
+
+	@Test
+	public void testIoIsCodePresent() throws Exception {
+		int id = _setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		assertThat(priceOthersIoOperations.isCodePresent(foundPricesOthers.getId())).isTrue();
+		assertThat(priceOthersIoOperations.isCodePresent(-1)).isFalse();
+	}
+
+	@Test
+	public void testMgrGetPricesOthers() throws Exception {
+		int id = _setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		List<PricesOthers> result = pricesOthersManager.getOthers();
+		assertThat(result.get(0).getDescription()).isEqualTo(foundPricesOthers.getDescription());
+	}
+
+	@Test
+	public void testMgrUpdatePricesOthers() throws Exception {
+		int id = _setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		foundPricesOthers.setDescription("Update");
+		assertThat(pricesOthersManager.updateOther(foundPricesOthers)).isTrue();
+		PricesOthers updatePricesOthers = priceOthersIoOperationRepository.findOne(id);
+		assertThat(updatePricesOthers.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testMgrNewPricesOther() throws Exception {
+		PricesOthers pricesOthers = testPricesOthers.setup(true);
+		assertThat(pricesOthersManager.newOther(pricesOthers)).isTrue();
+		_checkPricesOthersIntoDb(pricesOthers.getId());
+	}
+
+	@Test
+	public void testMgrDeletePricesOther() throws Exception {
+		int id = _setupTestPricesOthers(false);
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
+		assertThat(pricesOthersManager.deleteOther(foundPricesOthers)).isTrue();
+		assertThat(priceOthersIoOperationRepository.exists(id)).isFalse();
+	}
+
+	@Test
+	public void testMgrValidationCodeEmpty() throws Exception {
+		assertThatThrownBy(() ->
+		{
 			PricesOthers pricesOthers = testPricesOthers.setup(true);
-			result = otherIoOperation.newOthers(pricesOthers);
-			
-			assertEquals(true, result);
-			_checkPricesOthersIntoDb(pricesOthers.getId());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-		
-		return;
+			pricesOthers.setCode("");
+			pricesOthersManager.newOther(pricesOthers);
+		})
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
 	}
 
 	@Test
-	public void testIoDeletePricesOthers() 
-	{
-		int id = 0;
-		boolean result = false;
-		
-
-		try 
-		{		
-			id = _setupTestPricesOthers(false);
-			PricesOthers foundPricesOthers = (PricesOthers)jpa.find(PricesOthers.class, id); 
-			result = otherIoOperation.deleteOthers(foundPricesOthers);
-			
-			assertEquals(true, result);
-			result = otherIoOperation.isCodePresent(id);			
-			assertEquals(false, result);
-		} 
-		catch (Exception e) 
+	public void testMgrValidationDescriptionEmpty() throws Exception {
+		assertThatThrownBy(() ->
 		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-		
-		return;
+			PricesOthers pricesOthers = testPricesOthers.setup(true);
+			pricesOthers.setDescription("");
+			pricesOthersManager.newOther(pricesOthers);
+		})
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
 	}
-		
-	
-	private void _saveContext() throws OHException 
-    {	
-		testPricesOthersContext.saveAll(jpa);
-        		
-        return;
-    }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testPricesOthersContext.deleteNews(jpa);
-        
-        return;
-    }
-        
-	private int _setupTestPricesOthers(
-			boolean usingSet) throws OHException 
-	{
-		PricesOthers pricesOthers;
-		
 
-    	jpa.beginTransaction();	
-    	pricesOthers = testPricesOthers.setup(usingSet);
-		jpa.persist(pricesOthers);
-    	jpa.commitTransaction();
-    	
+	@Test
+	public void testPricesOthersToString() throws Exception {
+		PricesOthers pricesOthers = new PricesOthers("TestCode", "TestDescription", true, false, false, true);
+		assertThat(pricesOthers).hasToString("TestDescription");
+	}
+
+	@Test
+	public void testPricesOthersEquals() throws Exception {
+		PricesOthers pricesOthers = new PricesOthers(-1, "TestCode", "TestDescription", true, false, false, true);
+
+		assertThat(pricesOthers.equals(pricesOthers)).isTrue();
+		assertThat(pricesOthers)
+				.isNotNull()
+				.isNotEqualTo("someString");
+
+		PricesOthers pricesOthers2 = testPricesOthers.setup(true);
+		pricesOthers2.setId(-99);
+		assertThat(pricesOthers).isNotEqualTo(pricesOthers2);
+
+		pricesOthers2.setId(-1);
+		assertThat(pricesOthers).isEqualTo(pricesOthers2);
+	}
+
+	@Test
+	public void testPricesOthersHashCode() throws Exception {
+		PricesOthers pricesOthers = testPricesOthers.setup(true);
+		pricesOthers.setId(1);
+		int hashCode = pricesOthers.hashCode();
+		assertThat(hashCode).isEqualTo(23 * 133 + 1);
+		// check computed value
+		assertThat(pricesOthers.hashCode()).isEqualTo(hashCode);
+	}
+
+	private int _setupTestPricesOthers(boolean usingSet) throws Exception {
+		PricesOthers pricesOthers = testPricesOthers.setup(usingSet);
+		priceOthersIoOperationRepository.saveAndFlush(pricesOthers);
 		return pricesOthers.getId();
 	}
-		
-	private void  _checkPricesOthersIntoDb(
-			int id) throws OHException 
-	{
-		PricesOthers foundPricesOthers;
-		
 
-		foundPricesOthers = (PricesOthers)jpa.find(PricesOthers.class, id); 
+	private void _checkPricesOthersIntoDb(int id) {
+		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findOne(id);
 		testPricesOthers.check(foundPricesOthers);
-		
-		return;
-	}	
+	}
 }

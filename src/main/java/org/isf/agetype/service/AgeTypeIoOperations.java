@@ -1,6 +1,26 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.agetype.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.agetype.model.AgeType;
@@ -10,10 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 /**
  * Persistence class for agetype module.
- *
  */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -28,9 +46,8 @@ public class AgeTypeIoOperations
 	 * @return a list of {@link AgeType}.
 	 * @throws OHServiceException if an error occurs retrieving the age types.
 	 */
-	public ArrayList<AgeType> getAgeType() throws OHServiceException 
-	{
-		return new ArrayList<AgeType>(repository.findAllByOrderByCodeAsc());
+	public List<AgeType> getAgeType() throws OHServiceException {
+		return repository.findAllByOrderByCodeAsc();
 	}
 
 	/**
@@ -39,16 +56,9 @@ public class AgeTypeIoOperations
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateAgeType(
-			ArrayList<AgeType> ageType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean updateAgeType(List<AgeType> ageType) throws OHServiceException {
 		List<AgeType> savedAgeType = repository.save(ageType);
-		result = (savedAgeType != null);
-		
-		return result;
+		return savedAgeType != null;
 	}
 
 	/**

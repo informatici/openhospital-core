@@ -1,18 +1,43 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.medicalstockward.service;
 
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
+import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MovementWard;
+import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
 
 /**
  * @author mwithi
@@ -27,6 +52,8 @@ public class MedicalStockWardIoOperations
 	private MedicalStockWardIoOperationRepository repository;
 	@Autowired
 	private MovementWardIoOperationRepository movementRepository;
+	@Autowired
+	private LotIoOperationRepository lotRepository;
 	
 	/**
 	 * Get all {@link MovementWard}s with the specified criteria.
@@ -36,16 +63,15 @@ public class MedicalStockWardIoOperations
 	 * @return the retrieved movements.
 	 * @throws OHServiceException if an error occurs retrieving the movements.
 	 */
-	public ArrayList<MovementWard> getWardMovements(
+	public List<MovementWard> getWardMovements(
 			String wardId, 
 			GregorianCalendar dateFrom, 
 			GregorianCalendar dateTo) throws OHServiceException 
 	{
-		ArrayList<Integer> pMovementWardCode = null;
-		ArrayList<MovementWard> pMovementWard = new ArrayList<MovementWard>(); 
-		
-		
-		pMovementWardCode = new ArrayList<Integer>(repository.findAllWardMovement(wardId, dateFrom, dateTo));
+		List<Integer> pMovementWardCode = null;
+		List<MovementWard> pMovementWard = new ArrayList<>();
+
+		pMovementWardCode = new ArrayList<>(repository.findAllWardMovement(wardId, dateFrom, dateTo));
         for (Integer code : pMovementWardCode) {
             MovementWard movementWard = movementRepository.findOne(code);
 
@@ -64,24 +90,22 @@ public class MedicalStockWardIoOperations
 	 * @return the retrieved movements.
 	 * @throws OHServiceException if an error occurs retrieving the movements.
 	 */
-	public ArrayList<MovementWard> getWardMovementsToWard(
-			String idwardTo, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo) throws OHServiceException 
-	{
-            return movementRepository.findWardMovements(idwardTo, dateFrom, dateTo);
-	}
+    public List<MovementWard> getWardMovementsToWard(
+		    String idwardTo,
+		    GregorianCalendar dateFrom,
+		    GregorianCalendar dateTo) throws OHServiceException {
+	    return movementRepository.findWardMovements(idwardTo, dateFrom, dateTo);
+    }
 
 	/**
 	 * Gets the current quantity for the specified {@link Medical} and specified {@link Ward}.
 	 * @param ward - if {@code null} the quantity is counted for the whole hospital
-	 * @param medical - the {@link Medical} to check.
 	 * @return the total quantity.
 	 * @throws OHServiceException if an error occurs retrieving the quantity.
 	 */
 	public int getCurrentQuantityInWard(
-			Ward ward, 
-			Medical medical) throws OHServiceException 
+					Ward ward, 
+					Medical medical) throws OHServiceException 
 	{
 		Double mainQuantity = 0.0;
 		
@@ -99,17 +123,32 @@ public class MedicalStockWardIoOperations
 	}
 	
 	/**
-	 * Stores the specified {@link Movement}.
-	 * @param movement the movement to store.
-	 * @return <code>true</code> if has been stored, <code>false</code> otherwise.
-	 * @throws OHServiceException if an error occurs.
-	 */	
-	public boolean newMovementWard(
-			MovementWard movement) throws OHServiceException 
+	 * Gets the current quantity for the specified {@link Ward} and {@link Lot}.
+	 * @param ward - if {@code null} the quantity is counted for the whole hospital
+	 * @param lot - the {@link Lot} to be counted
+	 * @return the total quantity.
+	 * @throws OHServiceException if an error occurs retrieving the quantity.
+	 */
+	public int getCurrentQuantityInWard(
+			Ward ward, 
+			Lot lot) throws OHServiceException 
 	{
-		boolean result = true;
-	
+		Double quantity;
+		if (ward != null) {
+			quantity = lotRepository.getQuantityByWard(lot, ward);
+		} else {
+			quantity = repository.findQuantityInWardWhereMedical(lot.getMedical().getCode());
+		}
+		return (int) (quantity == null ? 0 : quantity);
+	}
 
+	/**
+	 * Stores the specified {@link Movement}.
+	 *
+	 * @param movement the movement to store.
+	 * @throws OHServiceException if an error occurs.
+	 */
+	public void newMovementWard(MovementWard movement) throws OHServiceException {
 		MovementWard savedMovement = movementRepository.save(movement);
 		if (savedMovement.getWardTo() != null) {
 			// We have to register also the income movement for the destination Ward
@@ -121,36 +160,21 @@ public class MedicalStockWardIoOperations
 			destinationWardIncomeMovement.setUnits(savedMovement.getUnits());
 			destinationWardIncomeMovement.setWard(savedMovement.getWardTo());
 			destinationWardIncomeMovement.setWardFrom(savedMovement.getWard());
+			destinationWardIncomeMovement.setlot(savedMovement.getLot());
 			movementRepository.save(destinationWardIncomeMovement);
 		}
-		
-		if (savedMovement != null) {
-			updateStockWardQuantity(movement);
-		}
-		result = (savedMovement != null);
-		
-		return result;
+		updateStockWardQuantity(movement);
 	}
 
 	/**
 	 * Stores the specified {@link Movement} list.
 	 * @param movements the movement to store.
-	 * @return <code>true</code> if the movements have been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs.
 	 */
-	public boolean newMovementWard(
-			ArrayList<MovementWard> movements) throws OHServiceException 
-	{
-		for (MovementWard movement:movements) {
-
-			boolean inserted = newMovementWard(movement);
-			if (!inserted) 
-			{
-				return false;
-			}
+	public void newMovementWard(List<MovementWard> movements) throws OHServiceException {
+		for (MovementWard movement : movements) {
+			newMovementWard(movement);
 		}
-		
-		return true;		
 	}
 
 	/**
@@ -199,6 +223,7 @@ public class MedicalStockWardIoOperations
 	{
 		Double qty = movement.getQuantity();
 		String ward = movement.getWard().getCode();
+		String lot = movement.getLot().getCode();
                 String wardTo = null;
                 if (movement.getWardTo() != null) { 
                 	// in case of a mvnt from the ward movement.getWard() to the ward movement.getWardTO()
@@ -209,30 +234,41 @@ public class MedicalStockWardIoOperations
 		
 		
         if(wardTo != null) {
-            MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedical(wardTo, medical);
+            MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedicalAndLot(wardTo, medical, lot);
             if(medicalWardTo != null) {
-                repository.updateInQuantity(Math.abs(qty), wardTo, medical);
+            	repository.updateInQuantity(Math.abs(qty), wardTo, medical, lot);
             } else {
-                repository.insertMedicalWard(wardTo, medical, Math.abs(qty));
+				MedicalWard medicalWard = new MedicalWard();
+				medicalWard.setWard(movement.getWardTo());
+				medicalWard.setMedical(movement.getMedical());
+				medicalWard.setInQuantity((float)Math.abs(qty));
+				medicalWard.setOutQuantity(0.0f);
+				medicalWard.setLot(movement.getLot());
+				repository.save(medicalWard);
             }
-            repository.updateOutQuantity(Math.abs(qty), ward, medical);
             return result;
         }
                 
-		MedicalWard medicalWard = repository.findOneWhereCodeAndMedical(ward, medical);
+		MedicalWard medicalWard = repository.findOneWhereCodeAndMedicalAndLot(ward, medical, lot);
         if (medicalWard == null)
 		{
-            repository.insertMedicalWard(ward, medical, -qty);
+			medicalWard = new MedicalWard();
+			medicalWard.setWard(movement.getWard());
+			medicalWard.setMedical(movement.getMedical());
+			medicalWard.setInQuantity((float) -qty);
+			medicalWard.setOutQuantity(0.0f);
+			medicalWard.setLot(movement.getLot());
+			repository.save(medicalWard);
         }
 		else
 		{
 			if (qty < 0)
 			{
-				repository.updateInQuantity(-qty, ward, medical);
+				repository.updateInQuantity(-qty, ward, medical,lot); // TODO: change to jpa
 			}
 			else
 			{
-                repository.updateOutQuantity(qty, ward, medical);
+				repository.updateOutQuantity(qty, ward, medical,lot); // TODO: change to jpa
             }				
 		}
 		return result;
@@ -241,23 +277,55 @@ public class MedicalStockWardIoOperations
 	/**
 	 * Gets all the {@link Medical}s associated to specified {@link Ward}.
 	 * @param wardId the ward id.
+	 * @param stripeEmpty - if <code>true</code>, stripes the empty lots
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException if an error occurs during the medical retrieving.
 	 */
-	public ArrayList<MedicalWard> getMedicalsWard(
-			char wardId) throws OHServiceException
-	{
-		ArrayList<MedicalWard> medicalWards = new ArrayList<MedicalWard>(repository.findAllWhereWard(wardId));
-		for (int i=0; i<medicalWards.size(); i++)
-		{
+	public List<MedicalWard> getMedicalsWard(char wardId, boolean stripeEmpty) throws OHServiceException {
+		ArrayList<MedicalWard> medicalWards = new ArrayList<>(repository.findAllWhereWard(wardId));
+		for (int i = 0; i < medicalWards.size(); i++) {
 			double qty = (double) (medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
-			if (qty != 0) {
-				medicalWards.get(i).setQty(qty);
-			} else {
+			medicalWards.get(i).setQty(qty);
+
+			if (stripeEmpty && qty == 0) {
 				medicalWards.remove(i);
+				i = i - 1;
 			}
 		}
-		
+
 		return medicalWards;
+	}
+
+	public List<MovementWard> findAllForPatient(Patient patient) {
+		return movementRepository.findByPatient_code(patient.getCode());
+	}
+
+	public List<MovementWard> getWardMovementsToPatient(Integer patId) {
+		return movementRepository.findWardMovementPat(patId);
+	}
+
+
+	/**
+	 * Gets all the {@link MedicalWard}s associated to the specified ward summarized by lot
+	 * (total quantity, regardless the lot)
+	 * @param wardId
+	 * @return the retrieved medicals.
+	 * @throws OHServiceException
+	 */
+	public List<MedicalWard> getMedicalsWardTotalQuantity(char wardId) throws OHServiceException {
+		String WardID = String.valueOf(wardId);
+		List<MedicalWard> medicalWards = getMedicalsWard(wardId, true);
+
+		List<MedicalWard> medicalWardsQty = new ArrayList<>();
+
+		for (MedicalWard medicalWard : medicalWards) {
+
+			if (!medicalWardsQty.contains(medicalWard)) {
+				Double qty = repository.findQuantityInWardWhereMedicalAndWard(medicalWard.getId().getMedical().getCode(), WardID);
+				medicalWard.setQty(qty);
+				medicalWardsQty.add(medicalWard);
+			}
+		}
+		return medicalWardsQty;
 	}
 }

@@ -1,9 +1,26 @@
-/**
- * 
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.supplier.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.generaldata.ExaminationParameters;
@@ -16,7 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Mwithi
- * 
  */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -26,11 +42,8 @@ public class SupplierOperations {
 	@Autowired
 	private SupplierIoOperationRepository repository;
 	
-	/**
-	 * 
-	 */
 	public SupplierOperations() {
-		ExaminationParameters.getExaminationParameters();
+		ExaminationParameters.initialize();
 	}
 
 	/**
@@ -39,16 +52,8 @@ public class SupplierOperations {
 	 * return <code>true</code> if data has been saved, <code>false</code> otherwise. 
 	 * @throws OHServiceException 
 	 */
-	public boolean saveOrUpdate(
-			Supplier supplier) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		Supplier savedSupplier = repository.save(supplier);
-		result = (savedSupplier != null);
-		
-		return result;
+	public boolean saveOrUpdate(Supplier supplier) throws OHServiceException {
+		return repository.save(supplier) != null;
 	}
 
 	/**
@@ -57,12 +62,8 @@ public class SupplierOperations {
 	 * @return supplier - the supplier with specified ID
 	 * @throws OHServiceException 
 	 */
-	public Supplier getByID(
-			int ID) throws OHServiceException 
-	{
-		Supplier foundSupplier = repository.findOne(ID);
-    	
-		return foundSupplier;
+	public Supplier getByID(int ID) throws OHServiceException {
+		return repository.findOne(ID);
 	}
 	
 	/**
@@ -70,11 +71,8 @@ public class SupplierOperations {
 	 * @return supList - the list of {@link Supplier}s
 	 * @throws OHServiceException 
 	 */
-	public List<Supplier> getAll() throws OHServiceException 
-	{
-		ArrayList<Supplier> suppliers = (ArrayList<Supplier>)repository.findAll();
-		
-		return suppliers;
+	public List<Supplier> getAll() throws OHServiceException {
+		return repository.findAll();
 	}
 
 	/**
@@ -82,10 +80,7 @@ public class SupplierOperations {
 	 * @return supList - the list of {@link Supplier}s
 	 * @throws OHServiceException 
 	 */
-	public List<Supplier> getList() throws OHServiceException 
-	{
-		ArrayList<Supplier> suppliers = (ArrayList<Supplier>)repository.findAllWhereNotDeleted();
-		
-		return suppliers;
+	public List<Supplier> getList() throws OHServiceException {
+		return repository.findAllWhereNotDeleted();
 	}
 }

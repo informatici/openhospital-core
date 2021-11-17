@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.vactype.model;
 
 import javax.persistence.AttributeOverride;
@@ -13,27 +34,17 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/*------------------------------------------
- * VaccineType - vaccine type class to model vaccine type
- * -----------------------------------------
- * modification history
- * 19/10/2011 - Cla - version is now 1.0
- * 18/11/2011 - Cla - inserted print method
- *------------------------------------------*/
-
 /**
- * Pure Model vaccineType (type of vaccines)
- * 
- * @author bob
- */
-/*------------------------------------------
+ * ------------------------------------------
  * Vaccine Type - model for the vaccine type entity
  * -----------------------------------------
  * modification history
- * ? - bob - first version 
+ * ? - bob - first version
+ * 19/10/2011 - Cla - version is now 1.0
+ * 18/11/2011 - Cla - inserted print method
  * 18/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="VACCINETYPE")
 @EntityListeners(AuditingEntityListener.class)
@@ -86,7 +97,7 @@ public class VaccineType extends Auditable<String>
 
 	@Override
 	public boolean equals(Object anObject) {
-		return (anObject == null) || !(anObject instanceof VaccineType) ? false
+		return !(anObject instanceof VaccineType) ? false
 				: (getCode().equals(((VaccineType) anObject).getCode())
 						&& getDescription().equalsIgnoreCase(
 								((VaccineType) anObject).getDescription()));

@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.medicalstockward.model;
 
 import java.util.GregorianCalendar;
@@ -18,22 +39,20 @@ import javax.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
 import org.isf.medicals.model.Medical;
+import org.isf.medicalstock.model.Lot;
 import org.isf.patient.model.Patient;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * 		   @author mwithi
- * 
- */
-/*------------------------------------------
- * Medical Ward Movement - model for the medical entity
+ * -----------------------------------------
+ * Medical Ward - model for the medical ward entity
  * -----------------------------------------
  * modification history
- * ? - ?
+ * ? - mwithi
  * 17/01/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="MEDICALDSRSTOCKMOVWARD")
 @EntityListeners(AuditingEntityListener.class) 
@@ -53,8 +72,12 @@ public class MovementWard  extends Auditable<String>
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="MMVN_WRD_ID_A")	
+	@JoinColumn(name="MMVN_WRD_ID_A")
 	private Ward ward;
+	
+	@ManyToOne
+	@JoinColumn(name="MMVN_LT_ID")	
+	private Lot lot;
 
 	@NotNull
 	@Column(name="MMVN_DATE")
@@ -131,6 +154,22 @@ public class MovementWard  extends Auditable<String>
 		this.quantity = quantity;
 		this.units = units;
 	}
+	public MovementWard(Ward ward, GregorianCalendar date, boolean isPatient,
+			Patient patient, int age, float weight, String description, Medical medical,
+			Double quantity, String units,Lot lot) {
+		super();
+		this.ward = ward;
+		this.date = date;
+		this.isPatient = isPatient;
+		this.patient = patient;
+		this.age = age;
+		this.weight = weight;
+		this.description = description;
+		this.medical = medical;
+		this.quantity = quantity;
+		this.units = units;
+		this.lot=lot;
+	}
 
     /**
 	 * 
@@ -149,7 +188,7 @@ public class MovementWard  extends Auditable<String>
 	 */
 	public MovementWard(Ward ward, GregorianCalendar date, boolean isPatient,
 			Patient patient, int age, float weight, String description, Medical medical,
-			Double quantity, String units, Ward wardTo, Ward wardFrom) {
+			Double quantity, String units, Ward wardTo, Ward wardFrom,Lot lot) {
 		super();
 		this.ward = ward;
 		this.date = date;
@@ -163,6 +202,21 @@ public class MovementWard  extends Auditable<String>
 		this.units = units;
 		this.wardTo = wardTo;
 		this.wardFrom = wardFrom;
+		this.lot=lot;
+	}
+	
+	
+	public MovementWard(Ward ward, Lot lot,
+			String description, Medical medical,
+			Double quantity, String units) {
+		super();
+		this.ward = ward;
+		this.lot = lot;
+		this.description = description;
+		this.medical = medical;
+		this.quantity = quantity;
+		this.units = units;
+	
 	}
         
 	public int getCode(){
@@ -188,7 +242,13 @@ public class MovementWard  extends Auditable<String>
 	public void setWard(Ward ward) {
 		this.ward = ward;
 	}
+	public Lot getLot() {
+		return lot;
+	}
 
+	public void setlot(Lot lot) {
+		this.lot = lot;
+	}
 	public boolean isPatient() {
 		return isPatient;
 	}
@@ -279,8 +339,8 @@ public class MovementWard  extends Auditable<String>
 			return false;
 		}
 		
-		MovementWard movment = (MovementWard)obj;
-		return (this.getCode() == movment.getCode());
+		MovementWard movement = (MovementWard)obj;
+		return (this.getCode() == movement.getCode());
 	}
 	
 	@Override

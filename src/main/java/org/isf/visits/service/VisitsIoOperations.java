@@ -1,6 +1,28 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.visits.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -19,42 +41,39 @@ public class VisitsIoOperations {
 	private VisitsIoOperationRepository repository;
 	
 	/**
-	 * returns the list of all {@link Visit}s related to a patID
+	 * Returns the list of all {@link Visit}s related to a patID
 	 * 
 	 * @param patID - the {@link Patient} ID. If <code>0</code> return the list of all {@link Visit}s
 	 * @return the list of {@link Visit}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Visit> getVisits(
-			Integer patID) throws OHServiceException 
-	{
-		ArrayList<Visit> visits = null;
+	public ArrayList<Visit> getVisits(Integer patID) throws OHServiceException {
+		return patID != 0 ?
+				new ArrayList<>(repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID)) :
+				new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
+	}
 
-		
-		if (patID != 0) {
-			visits = new ArrayList<Visit>(repository.findAllWherePatientByOrderPatientAndDateAsc(patID));
-		}
+	public List<Visit> getVisitsWard(String wardId) throws OHServiceException {
+		List<Visit> visits = null;
+
+		if (wardId != null)
+			visits = new ArrayList<>(repository.findAllWhereWardByOrderDateAsc(wardId));
 		else
-		{
-			visits = new ArrayList<Visit>(repository.findAllByOrderPatientAndDateAsc()); 
-		}
-		
+			visits = new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
+
 		return visits;
 	}
 
+
 	/**
-	 * Insert a new {@link Visit} for a patID
+	 * Insert a new {@link Visit} for a specified {@link Visit}
 	 * 
-	 * @param visit - the {@link Visit} related to patID. 
-	 * @return the visitID
+	 * @param visit - the {@link Visit}.
+	 * @return the {@link Visit}
 	 * @throws OHServiceException 
 	 */
-	public int newVisit(
-			Visit visit) throws OHServiceException 
-	{		
-		Visit savedVisit = repository.save(visit);
-		    	
-		return savedVisit.getVisitID();
+	public Visit newVisit(Visit visit) throws OHServiceException {
+		return repository.save(visit);
 	}
 	
 	/**
@@ -64,32 +83,39 @@ public class VisitsIoOperations {
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean deleteAllVisits(
-			int patID) throws OHServiceException 
-	{
-		boolean result = true;
-
-		
-		repository.deleteWherePatient(patID);
-		
-        return result;
+	public boolean deleteAllVisits(int patID) throws OHServiceException {
+		repository.deleteByPatient_Code(patID);
+        return true;
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the visit code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			Integer code) throws OHServiceException
+	public boolean isCodePresent(Integer code) throws OHServiceException {
+		return repository.exists(code);
+	}
+
+	/**
+	 * Returns the {@link Visit} based on the Visit id
+	 *
+	 * @param id - the id
+	 * @return the {@link Visit} or {@literal null} if none found
+	 */
+	public Visit findVisit(int id)
 	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;	
+		return repository.findOne(id);
+	}
+
+	/**
+	 * Delete the {@link Visit} for related Patient
+	 *
+	 * @param visit - the {@link Visit}
+	 */
+	public void deleteVisit(Visit visit) {
+		repository.delete(visit);
 	}
 }

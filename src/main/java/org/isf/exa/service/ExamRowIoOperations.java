@@ -1,17 +1,29 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.exa.service;
-/*------------------------------------------
- * IoOperations - provides the io operations for recovering and managing exam records from the database.
- * -----------------------------------------
- * modification history
- * ??/??/2005 - Davide/Theo - first beta version 
- * 07/11/2006 - ross - modified to accept, within the description, the character quote (')
- *                     (to do this, just double every quote. replaceall("'","''") 
- *                     when record locked all data is saved now, not only descritpion
- *------------------------------------------*/
 
 import java.util.ArrayList;
+import java.util.List;
 
-import org.isf.exa.model.Exam;
 import org.isf.exa.model.ExamRow;
 import org.isf.exatype.model.ExamType;
 import org.isf.exatype.service.ExamTypeIoOperationRepository;
@@ -21,6 +33,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * ------------------------------------------
+ * ExamRowIoOperations - provides the I/OO operations for recovering and managing exam records from the database.
+ * -----------------------------------------
+ * modification history
+ * ??/??/2005 - Davide/Theo - first beta version
+ * 07/11/2006 - ross - modified to accept, within the description, the character quote (')
+ *                     (to do this, just double every quote. replaceall("'","''")
+ *                     when record locked all data is saved now, not only descritpion
+ * ------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -42,28 +65,19 @@ public class ExamRowIoOperations {
 	 * @return the list of {@link ExamRow}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamRow> getExamRow(
-			int aExamCode, 
-			String aDescription) throws OHServiceException 
-	{
-            ArrayList<ExamRow> examrows;
-            
-            if (aExamCode != 0) 
-            {   
-                if (aDescription != null) 
-                {
-                    examrows = (ArrayList<ExamRow>) rowRepository.findAllWhereIdAndDescriptionByOrderIdAndDescriptionAsc(aExamCode, aDescription); 	
-                }
-                else
-                {
-                    examrows = (ArrayList<ExamRow>) rowRepository.findAllWhereIdByOrderIdAndDescriptionAsc(aExamCode); 	
-                }
-            }
-            else
-            {   
-                examrows = (ArrayList<ExamRow>) rowRepository.findAllExamRow();
-            }
-            return examrows;
+	public List<ExamRow> getExamRow(int aExamCode, String aDescription) throws OHServiceException {
+		List<ExamRow> examrows;
+
+		if (aExamCode != 0) {
+			if (aDescription != null) {
+				examrows = (ArrayList<ExamRow>) rowRepository.findAllByCodeAndDescriptionOrderByCodeAscDescriptionAsc(aExamCode, aDescription);
+			} else {
+				examrows = (ArrayList<ExamRow>) rowRepository.findAllByCodeOrderByDescription(aExamCode);
+			}
+		} else {
+			examrows = (ArrayList<ExamRow>) rowRepository.findAll();
+		}
+		return examrows;
 	}
 
 	/**
@@ -71,30 +85,23 @@ public class ExamRowIoOperations {
 	 * @return the list of {@link ExamRow}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamRow> getExamrows() throws OHServiceException 
-	{
+	public List<ExamRow> getExamRows() throws OHServiceException {
 		return getExamsRowByDesc(null);
 	}
-	
+
 	/**
 	 * Returns the list of {@link ExamRow}s that matches passed description
 	 * @param description - the examRow description
 	 * @return the list of {@link ExamRow}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamRow> getExamsRowByDesc(
-			String description) throws OHServiceException 
-	{ 
-		ArrayList<ExamRow> examrows = new ArrayList<ExamRow>();
-				
-		
-		if (description != null) 
-		{
-			examrows = (ArrayList<ExamRow>) rowRepository.findAllWhereDescriptionByOrderDescriptionAsc(description);	
-		}
-		else
-		{
-			examrows = (ArrayList<ExamRow>) rowRepository.findAllExamRow();			
+	public List<ExamRow> getExamsRowByDesc(String description) throws OHServiceException {
+		List<ExamRow> examrows = new ArrayList<>();
+
+		if (description != null) {
+			examrows = (ArrayList<ExamRow>) rowRepository.findAllByDescriptionOrderByDescriptionAsc(description);
+		} else {
+			examrows = (ArrayList<ExamRow>) rowRepository.findAll();
 		}
 		return examrows;
 	}
@@ -104,12 +111,8 @@ public class ExamRowIoOperations {
 	 * @return the list of {@link ExamType}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamType> getExamType() throws OHServiceException 
-	{
-		ArrayList<ExamType> examTypes = (ArrayList<ExamType>) typeRepository.findAllByOrderByDescriptionAsc();
-				
-	
-		return examTypes;
+	public List<ExamType> getExamType() throws OHServiceException {
+		return typeRepository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
@@ -167,7 +170,7 @@ public class ExamRowIoOperations {
 	 * the parameter; Returns false if the query finds no record, else returns
 	 * true
 	 * 
-	 * @param the {@link Exam}
+	 * @param examrow the {@link ExamRow}
 	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
@@ -207,39 +210,29 @@ public class ExamRowIoOperations {
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the exam code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			int code) throws OHServiceException
-	{
-            return rowRepository.exists(code);	
+	public boolean isCodePresent(int code) throws OHServiceException{
+		return rowRepository.exists(code);
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the exam row code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isRowPresent(
-			Integer code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = rowRepository.exists(code);
-		
-		return result;	
+	public boolean isRowPresent(Integer code) throws OHServiceException {
+		return rowRepository.exists(code);
 	}
 
-    public ArrayList<ExamRow> getExamRowByExamCode(String aExamCode)  throws OHServiceException {
-       ArrayList<ExamRow> examrows = (ArrayList<ExamRow>) rowRepository.getExamRowByExamCode(aExamCode);
-       return examrows;
+    public List<ExamRow> getExamRowByExamCode(String aExamCode)  throws OHServiceException {
+       return rowRepository.findAllByExam_CodeOrderByDescription(aExamCode);
     }
 
 }

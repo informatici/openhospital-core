@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.lab.service;
 
 import java.util.GregorianCalendar;
@@ -5,47 +26,27 @@ import java.util.List;
 
 import org.isf.lab.model.Laboratory;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface LabIoOperationRepository extends JpaRepository<Laboratory, Integer> {
 
-    @Query(value = "SELECT * FROM LABORATORY JOIN EXAM ON LAB_EXA_ID_A = EXA_ID_A "
-    		+ "WHERE LAB_EXAM_DATE >= DATE(:dateFrom) AND LAB_EXAM_DATE <= DATE(:dateTo) ORDER BY LAB_EXAM_DATE DESC, LAB_ID DESC", nativeQuery= true)
-    List<Laboratory> findAllWhereDatesByOrderExamDateDesc(
-            @Param("dateFrom") GregorianCalendar dateFrom,
-            @Param("dateTo") GregorianCalendar dateTo);
-    @Query(value = "SELECT * FROM LABORATORY JOIN EXAM ON LAB_EXA_ID_A = EXA_ID_A "
-    		+ "WHERE LAB_EXAM_DATE >= DATE(:dateFrom) AND LAB_EXAM_DATE <= DATE(:dateTo) AND EXA_DESC = :exam ORDER BY LAB_EXAM_DATE DESC, LAB_ID DESC", nativeQuery= true)
-    List<Laboratory> findAllWhereDatesAndExamByOrderExamDateDesc(
-            @Param("dateFrom") GregorianCalendar dateFrom,
-            @Param("dateTo") GregorianCalendar dateTo,
-            @Param("exam") String exam);
-    
-    @Query(value = "SELECT * FROM (LABORATORY JOIN EXAM ON LAB_EXA_ID_A=EXA_ID_A)" +
-    		 " LEFT JOIN LABORATORYROW ON LABR_LAB_ID = LAB_ID WHERE LAB_PAT_ID = :patient " +
-    		 " ORDER BY LAB_DATE, LAB_ID", nativeQuery= true)
-    List<Laboratory> findAllWherePatientByOrderDateAndId(
-            @Param("patient") Integer patient);
-    
-    
-    @Query(value = "SELECT * FROM (LABORATORY JOIN EXAM ON LAB_EXA_ID_A = EXA_ID_A)" +
-		       " JOIN EXAMTYPE ON EXC_ID_A = EXA_EXC_ID_A" +
-			   " WHERE LAB_EXAM_DATE >= DATE(:dateFrom) AND LAB_EXAM_DATE <= DATE(:dateTo) ORDER BY EXC_DESC", nativeQuery= true)
-    List<Laboratory> findAllWhereDatesForPrint(
-            @Param("dateFrom") GregorianCalendar dateFrom,
-            @Param("dateTo") GregorianCalendar dateTo);
-    @Query(value = "SELECT * FROM (LABORATORY JOIN EXAM ON LAB_EXA_ID_A = EXA_ID_A)" +
-		       " JOIN EXAMTYPE ON EXC_ID_A = EXA_EXC_ID_A" +
-			   " WHERE LAB_EXAM_DATE >= DATE(:dateFrom) AND LAB_EXAM_DATE <= DATE(:dateTo) AND EXA_DESC LIKE %:exam% ORDER BY EXC_DESC", nativeQuery= true)
-    List<Laboratory> findAllWhereDatesAndExamForPrint(
-            @Param("dateFrom") GregorianCalendar dateFrom,
-            @Param("dateTo") GregorianCalendar dateTo,
-            @Param("exam") String exam);
-    
-   // @Query(value="SELECT MAX(LAB_MPROG) FROM LABORATORY WHERE YEAR(LAB_DATE) = :year AND MONTH(LAB_DATE ) = :month ", nativeQuery= true)
-   // public int getProgMonth(@Param("month")int month, @Param("year")int year);
-   
+    List<Laboratory> findByExamDateBetweenOrderByExamDateDescRegistrationDateDesc(
+            GregorianCalendar dateFrom,
+            GregorianCalendar dateTo);
+
+    List<Laboratory> findByExamDateBetweenAndExam_DescriptionOrderByExamDateDescRegistrationDateDesc(
+            GregorianCalendar dateFrom,
+            GregorianCalendar dateTo,
+            String exam);
+
+    List<Laboratory> findByPatient_CodeOrderByRegistrationDate(Integer patient);
+
+    List<Laboratory> findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(
+            GregorianCalendar dateFrom,
+            GregorianCalendar dateTo);
+
+    List<Laboratory> findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(
+            GregorianCalendar dateFrom,
+            GregorianCalendar dateTo,
+            String exam);
+
 }

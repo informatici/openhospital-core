@@ -1,9 +1,26 @@
-/**
- * @(#) Vaccine.java
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.vaccine.model;
 
-  
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -20,7 +37,6 @@ import org.isf.utils.db.Auditable;
 import org.isf.vactype.model.VaccineType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
 /**
  * Pure Model Vaccine (Hospital vaccines): represents a vaccine
  *
@@ -30,7 +46,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * 20/10/2011 - Cla - insert vaccinetype managment
  * 18/11/2011 - Cla - inserted print method
  * 04/06/2015 - Antonio - ported to JPA
- *
  */
 @Entity
 @Table(name="VACCINE")
@@ -67,7 +82,7 @@ public class Vaccine extends Auditable<String>
     /**
      * @param aCode
      * @param aDescription
-     * @param avaccineType
+     * @param aVaccineType
      */
     public Vaccine(String aCode, String aDescription, VaccineType aVaccineType) {
         super();
@@ -109,7 +124,7 @@ public class Vaccine extends Auditable<String>
     }
 
     public boolean equals(Object anObject) {
-        return (anObject == null) || !(anObject instanceof Vaccine) ? false
+        return !(anObject instanceof Vaccine) ? false
                 : (getCode().equals(((Vaccine) anObject).getCode())
                         && getDescription().equalsIgnoreCase(
                                 ((Vaccine) anObject).getDescription())

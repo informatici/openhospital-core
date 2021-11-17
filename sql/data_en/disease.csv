@@ -1,0 +1,437 @@
+A01;Typhoid and paratyphoid fevers;AB;0;1;1
+A06;Amebiasis;AB;0;1;1
+A07;Other protozoal intestinal diseases;AB;0;1;1
+A07.1;Giardiasis [lambliasis];AB;0;1;1
+A09;Diarrhea and gastroenteritis of presumed infectious origin;AB;0;1;1
+A09.0;Gastroenteritis and colitis of unspecified origin;AB;0;1;1
+A15;Respiratory tuberculosis, bacteriologically and histologically confirmed;AB;0;1;1
+A16;Respiratory tuberculosis, not confirmed bacteriologically or histologically;AB;0;1;1
+A18;Tuberculosis of other organs;AB;0;1;1
+A19;Miliary tuberculosis;AB;0;1;1
+A20;Plague;AB;0;1;1
+A28;Other zoonotic bacterial diseases, not elsewhere classified;AB;0;1;1
+A30;Leprosy [Hansen disease];AB;0;1;1
+A35;Other tetanus;AB;0;1;1
+A36;Diphtheria;AB;0;1;1
+A37;Whooping cough;AB;0;1;1
+A38;Scarlet fever;AB;0;1;1
+A50;Congenital syphilis;AB;0;1;1
+A51;Early syphilis;AB;0;1;1
+A52;Late syphilis;AB;0;1;1
+A54;Gonococcal infection;AB;0;1;1
+A55;Chlamydial lymphogranuloma (venereum);AB;0;1;1
+A56;Other sexually transmitted chlamydial diseases;AB;0;1;1
+A57;Chancroid;AB;0;1;1
+A59;Trichomoniasis;AB;0;1;1
+A60;Anogenital herpesviral [herpes simplex] infection;AB;0;1;1
+A64;Other predominantly sexually transmitted diseases, not elsewhere classified;AB;0;1;1
+A80;Acute poliomyelitis;AB;0;1;1
+A87;Viral meningitis;AB;0;1;1
+A89;Unspecified viral infection of central nervous system;AB;0;1;1
+A92;Other mosquito-borne viral fevers;AB;0;1;1
+A99;Unspecified viral haemorrhagic fever;AB;0;1;1
+B00;Herpesviral [herpes simplex] infections;AB;0;1;1
+B01;Varicella [chickenpox];AB;0;1;1
+B02;Zoster [herpes zoster];AB;0;1;1
+B05;Measles;AB;0;1;1
+B06;Rubella [German measles];AB;0;1;1
+B07;Viral warts;AB;0;1;1
+B09;Unspecified viral infection characterized by skin and mucous membrane lesions;AB;0;1;1
+B16;Acute hepatitis B;AB;0;1;1
+B17;Other acute viral hepatitis;AB;0;1;1
+B17.1;Acute hepatitis C;AB;0;1;1
+B24;Unspecified human immunodeficiency virus [HIV] disease;AB;0;1;1
+B26;Mumps;AB;0;1;1
+B34;Viral infection of unspecified site;AB;0;1;1
+B37;Candidiasis;AB;0;1;1
+B47;Mycetoma;AB;0;1;1
+B49;Unspecified mycosis;AB;0;1;1
+B53;Other parasitologically confirmed malaria;AB;0;1;1
+B54;Unspecified malaria;AB;0;1;1
+B65;Schistosomiasis [bilharziasis];AB;0;1;1
+B67;Echinococcosis;AB;0;1;1
+B68;Taeniasis;AB;0;1;1
+B69;Cysticercosis;AB;0;1;1
+B73;Onchocerciasis;AB;0;1;1
+B74;Filariasis;AB;0;1;1
+B77;Ascariasis;AB;0;1;1
+B79;Trichuriasis;AB;0;1;1
+B82;Unspecified intestinal parasitism;AB;0;1;1
+B83;Other helminthiases;AB;0;1;1
+B85;Pediculosis and phthiriasis;AB;0;1;1
+B86;Scabies;AB;0;1;1
+B99;Other and unspecified infectious diseases;AB;0;1;1
+C14;Malignant neoplasm of other and ill-defined sites in the lip, oral cavity and pharynx;CD;0;1;1
+C16;Malignant neoplasm of stomach;CD;0;1;1
+C17;Malignant neoplasm of small intestine;CD;0;1;1
+C18;Malignant neoplasm of colon;CD;0;1;1
+C23;Malignant neoplasm of gallbladder;CD;0;1;1
+C26;Malignant neoplasm of other and ill-defined digestive organs;CD;0;1;1
+C43;Malignant melanoma of skin;CD;0;1;1
+C44;Other malignant neoplasms of skin;CD;0;1;1
+C50;Malignant neoplasm of breast;CD;0;1;1
+C53;Malignant neoplasm of cervix uteri;CD;0;1;1
+C54;Malignant neoplasm of corpus uteri;CD;0;1;1
+C56;Malignant neoplasm of ovary;CD;0;1;1
+C62;Malignant neoplasm of testis;CD;0;1;1
+C63;Malignant neoplasm of other and unspecified male genital organs;CD;0;1;1
+C64;Malignant neoplasm of kidney, except renal pelvis;CD;0;1;1
+C66;Malignant neoplasm of ureter;CD;0;1;1
+C73;Malignant neoplasm of thyroid gland;CD;0;1;1
+C80;Malignant neoplasm, without specification of site;CD;0;1;1
+D12;Benign neoplasm of colon, rectum, anus and anal canal;CD;0;1;1
+D18;Haemangioma and lymphangioma, any site;CD;0;1;1
+D22;Melanocytic naevi;CD;0;1;1
+D23;Other benign neoplasms of skin;CD;0;1;1
+D24;Benign neoplasm of breast;CD;0;1;1
+D25;Leiomyoma of uterus;CD;0;1;1
+D27;Benign neoplasm of ovary;CD;0;1;1
+D29;Benign neoplasm of male genital organs;CD;0;1;1
+D34;Benign neoplasm of thyroid gland;CD;0;1;1
+D36;Benign neoplasm of other and unspecified sites;CD;0;1;1
+D53;Other nutritional anaemias;D;0;1;1
+D58;Other hereditary haemolytic anaemias;D;0;1;1
+D62;Acute posthaemorrhagic anaemia;D;0;1;1
+D63;Anaemia in chronic diseases classified elsewhere;D;0;1;1
+D64;Other anaemias;D;0;1;1
+D72;Other disorders of white blood cells;D;0;1;1
+D73;Diseases of spleen;D;0;1;1
+D75;Other diseases of blood and blood-forming organs;D;0;1;1
+E00;Congenital iodine-deficiency syndrome;E;0;1;1
+E03;Other hypothyroidism;E;0;1;1
+E05;Thyrotoxicosis [hyperthyroidism];E;0;1;1
+E07;Other disorders of thyroid;E;0;1;1
+E10;Type 1 diabetes mellitus;E;0;1;1
+E11;Type 2 diabetes mellitus;E;0;1;1
+E15;Nondiabetic hypoglycaemic coma;E;0;1;1
+E27;Other disorders of adrenal gland;E;0;1;1
+E43;Unspecified severe protein-energy malnutrition;E;0;1;1
+E45;Retarded development following protein-energy malnutrition;E;0;1;1
+E46;Unspecified protein-energy malnutrition;E;0;1;1
+E63.9;Nutritional deficiency, unspecified;E;0;1;1
+E68;Sequelae of hyperalimentation;E;0;1;1
+E73;Lactose intolerance;E;0;1;1
+E86;Volume depletion;E;0;1;1
+F03;Unspecified dementia;F;0;1;1
+F10;Mental and behavioural disorders due to use of alcohol;F;0;1;1
+F19;Mental and behavioural disorders due to multiple drug use and use of other psychoactive substances;F;0;1;1
+F20;Schizophrenia;F;0;1;1
+F23;Acute and transient psychotic disorders;F;0;1;1
+F39;Unspecified mood [affective] disorder;F;0;1;1
+F41;Other anxiety disorders;F;0;1;1
+F45;Somatoform disorders;F;0;1;1
+F50;Eating disorders;F;0;1;1
+F52;Sexual dysfunction, not caused by organic disorder or disease;F;0;1;1
+F69;Unspecified disorder of adult personality and behaviour;F;0;1;1
+F79;Unspecified mental retardation;F;0;1;1
+F80;Specific developmental disorders of speech and language;F;0;1;1
+F82;Specific developmental disorder of motor function;F;0;1;1
+F90;Hyperkinetic disorders;F;0;1;1
+F98;Other behavioural and emotional disorders with onset usually occurring in childhood and adolescence;F;0;1;1
+G02;Meningitis in other infectious and parasitic diseases classified elsewhere;G;0;1;1
+G03;Meningitis due to other and unspecified causes;G;0;1;1
+G04;Encephalitis, myelitis and encephalomyelitis;G;0;1;1
+G12;Spinal muscular atrophy and related syndromes;G;0;1;1
+G14;Postpolio syndrome;G;0;1;1
+G20;Parkinson disease;G;0;1;1
+G30;Alzheimer disease;G;0;1;1
+G40;Epilepsy;G;0;1;1
+G41;Status epilepticus;G;0;1;1
+G43;Migraine;G;0;1;1
+G44;Other headache syndromes;G;0;1;1
+G45;Transient cerebral ischaemic attacks and related syndromes;G;0;1;1
+G46;Vascular syndromes of brain in cerebrovascular diseases;G;0;1;1
+G47;Sleep disorders;G;0;1;1
+G53;Cranial nerve disorders in diseases classified elsewhere;G;0;1;1
+G54;Nerve root and plexus disorders;G;0;1;1
+G60;Hereditary and idiopathic neuropathy;G;0;1;1
+G63;Polyneuropathy in diseases classified elsewhere;G;0;1;1
+G71;Primary disorders of muscles;G;0;1;1
+G80;Cerebral palsy;G;0;1;1
+G91;Hydrocephalus;G;0;1;1
+G92;Toxic encephalopathy;G;0;1;1
+H00;Hordeolum and chalazion;H1;0;1;1
+H10;Conjunctivitis;H1;0;1;1
+H17;Corneal scars and opacities;H1;0;1;1
+H25;Senile cataract;H1;0;1;1
+H40;Glaucoma;H1;0;1;1
+H50;Other strabismus;H1;0;1;1
+H53;Visual disturbances;H1;0;1;1
+H54;Visual impairment including blindness (binocular or monocular);H1;0;1;1
+H57;Other disorders of eye and adnexa;H1;0;1;1
+H60;Otitis externa;H2;0;1;1
+H72;Perforation of tympanic membrane;H2;0;1;1
+H74;Other disorders of middle ear and mastoid;H2;0;1;1
+H81;Disorders of vestibular function;H2;0;1;1
+H90;Conductive and sensorineural hearing loss;H2;0;1;1
+H93;Other disorders of ear, not elsewhere classified;H2;0;1;1
+I00;Rheumatic fever without mention of heart involvement;I;0;1;1
+I10;Essential (primary) hypertension;I;0;1;1
+I11;Hypertensive heart disease;I;0;1;1
+I12;Hypertensive renal disease;I;0;1;1
+I15;Secondary hypertension;I;0;1;1
+I20;Angina pectoris;I;0;1;1
+I21;Acute myocardial infarction;I;0;1;1
+I22;Subsequent myocardial infarction;I;0;1;1
+I26;Pulmonary embolism;I;0;1;1
+I27;Other pulmonary heart diseases;I;0;1;1
+I42;Cardiomiopatia;I;0;1;1
+I46;Cardiac arrest;I;0;1;1
+I47;Paroxysmal tachycardia;I;0;1;1
+I49;Other cardiac arrhythmias;I;0;1;1
+I50;Heart failure;I;0;1;1
+I63;Cerebral infarction;I;0;1;1
+I72;Other aneurysm and dissection;I;0;1;1
+I80;Phlebitis and thrombophlebitis;I;0;1;1
+I82;Other venous embolism and thrombosis;I;0;1;1
+I83;Varicose veins of lower extremities;I;0;1;1
+I85;Oesophageal varices;I;0;1;1
+I88;Nonspecific lymphadenitis;I;0;1;1
+I95;Hypotension;I;0;1;1
+J00;Acute nasopharyngitis [common cold];J;0;1;1
+J01;Acute sinusitis;J;0;1;1
+J02;Acute pharyngitis;J;0;1;1
+J03;Acute tonsillitis;J;0;1;1
+J04;Acute laryngitis and tracheitis;J;0;1;1
+J10.0;Influenza with pneumonia, seasonal influenza virus identified;J;0;1;1
+J11;Influenza, virus not identified;J;0;1;1
+J12;Viral pneumonia, not elsewhere classified;J;0;1;1
+J15;Bacterial pneumonia, not elsewhere classified;J;0;1;1
+J16;Pneumonia due to other infectious organisms, not elsewhere classified;J;0;1;1
+J20;Acute bronchitis;J;0;1;1
+J21;Acute bronchiolitis;J;0;1;1
+J30;Vasomotor and allergic rhinitis;J;0;1;1
+J31;Chronic rhinitis, nasopharyngitis and pharyngitis;J;0;1;1
+J32;Chronic sinusitis;J;0;1;1
+J36;Peritonsillar abscess;J;0;1;1
+J39;Other diseases of upper respiratory tract;J;0;1;1
+J43;Emphysema;J;0;1;1
+J45;Asthma;J;0;1;1
+J80;Adult respiratory distress syndrome;J;0;1;1
+J81;Pulmonary oedema;J;0;1;1
+J86;Pyothorax;J;0;1;1
+J90;Pleural effusion, not elsewhere classified;J;0;1;1
+J93;Pneumothorax;J;0;1;1
+J94;Other pleural conditions;J;0;1;1
+J96;Respiratory failure, not elsewhere classified;J;0;1;1
+J98;Other respiratory disorders;J;0;1;1
+K01;Embedded and impacted teeth;K;0;1;1
+K02;Dental caries;K;0;1;1
+K04;Diseases of pulp and periapical tissues;K;0;1;1
+K05;Gingivitis and periodontal diseases;K;0;1;1
+K11;Diseases of salivary glands;K;0;1;1
+K12;Stomatitis and related lesions;K;0;1;1
+K13;Other diseases of lip and oral mucosa;K;0;1;1
+K14;Diseases of tongue;K;0;1;1
+K25;Gastric ulcer;K;0;1;1
+K26;Duodenal ulcer;K;0;1;1
+K29;Gastritis and duodenitis;K;0;1;1
+K35;Acute appendicitis;K;0;1;1
+K40;Inguinal hernia;K;0;1;1
+K42;Umbilical hernia;K;0;1;1
+K43;Ventral hernia;K;0;1;1
+K45;Other abdominal hernia;K;0;1;1
+K51;Ulcerative colitis;K;0;1;1
+K56;Paralytic ileus and intestinal obstruction without hernia;K;0;1;1
+K57;Diverticular disease of intestine;K;0;1;1
+K59;Other functional intestinal disorders;K;0;1;1
+K60;Fissure and fistula of anal and rectal regions;K;0;1;1
+K61;Abscess of anal and rectal regions;K;0;1;1
+K64;Haemorrhoids and perianal venous thrombosis;K;0;1;1
+K65;Peritonitis;K;0;1;1
+K74;Fibrosis and cirrhosis of liver;K;0;1;1
+K75;Other inflammatory liver diseases;K;0;1;1
+K80;Cholelithiasis;K;0;1;1
+K81;Cholecystitis;K;0;1;1
+K90;Intestinal malabsorption;K;0;1;1
+K92;Other diseases of digestive system;K;0;1;1
+L02;Cutaneous abscess, furuncle and carbuncle;L;0;1;1
+L10;Pemphigus;L;0;1;1
+L13;Other bullous disorders;L;0;1;1
+L21;Seborrhoeic dermatitis;L;0;1;1
+L22;Diaper [napkin] dermatitis;L;0;1;1
+L23;Allergic contact dermatitis;L;0;1;1
+L26;Exfoliative dermatitis;L;0;1;1
+L30;Other dermatitis;L;0;1;1
+L44;Other papulosquamous disorders;L;0;1;1
+L50;Urticaria;L;0;1;1
+L53;Other erythematous conditions;L;0;1;1
+L63;Alopecia areata;L;0;1;1
+L70;Acne;L;0;1;1
+L72;Follicular cysts of skin and subcutaneous tissue;L;0;1;1
+L80;Vitiligo;L;0;1;1
+L82;Seborrhoeic keratosis;L;0;1;1
+L89;Decubitus ulcer and pressure area;L;0;1;1
+L91;Hypertrophic disorders of skin;L;0;1;1
+L93;Lupus erythematosus;L;0;1;1
+L97;Ulcer of lower limb, not elsewhere classified;L;0;1;1
+M00;Pyogenic arthritis;M;0;1;1
+M06;Other rheumatoid arthritis;M;0;1;1
+M08;Juvenile arthritis;M;0;1;1
+M10;Gout;M;0;1;1
+M13;Other arthritis;M;0;1;1
+M15;Polyarthrosis;M;0;1;1
+M16;Coxarthrosis [arthrosis of hip];M;0;1;1
+M17;Gonarthrosis [arthrosis of knee];M;0;1;1
+M19;Other arthrosis;M;0;1;1
+M20;Acquired deformities of fingers and toes;M;0;1;1
+M24;Other specific joint derangements;M;0;1;1
+M41;Scoliosis;M;0;1;1
+M45;Ankylosing spondylitis;M;0;1;1
+M54;Dorsalgia;M;0;1;1
+M60;Myositis;M;0;1;1
+M70;Soft tissue disorders related to use, overuse and pressure;M;0;1;1
+M75;Shoulder lesions;M;0;1;1
+M86;Osteomyelitis;M;0;1;1
+M89;Other disorders of bone;M;0;1;1
+M95;Other acquired deformities of musculoskeletal system and connective tissue;M;0;1;1
+N02;Recurrent and persistent haematuria;N;0;1;1
+N04;Nephrotic syndrome;N;0;1;1
+N13;Obstructive and reflux uropathy;N;0;1;1
+N17;Acute renal failure;N;0;1;1
+N18;Chronic kidney disease;N;0;1;1
+N20;Calculus of kidney and ureter;N;0;1;1
+N21;Calculus of lower urinary tract;N;0;1;1
+N28;Other disorders of kidney and ureter, not elsewhere classified;N;0;1;1
+N30;Cystitis;N;0;1;1
+N31;Neuromuscular dysfunction of bladder, not elsewhere classified;N;0;1;1
+N35;Urethral stricture;N;0;1;1
+N36;Other disorders of urethra;N;0;1;1
+N40;Hyperplasia of prostate;N;0;1;1
+N41;Inflammatory diseases of prostate;N;0;1;1
+N43;Hydrocele and spermatocele;N;0;1;1
+N44;Torsion of testis;N;0;1;1
+N45;Orchitis and epididymitis;N;0;1;1
+N46;Male infertility;N;0;1;1
+N47;Redundant prepuce, phimosis and paraphimosis;N;0;1;1
+N49;Inflammatory disorders of male genital organs, not elsewhere classified;N;0;1;1
+N61;Inflammatory disorders of breast;N;0;1;1
+N62;Hypertrophy of breast;N;0;1;1
+N63;Unspecified lump in breast;N;0;1;1
+N64;Other disorders of breast;N;0;1;1
+N70;Salpingitis and oophoritis;N;0;1;1
+N73;Other female pelvic inflammatory diseases;N;0;1;1
+N76;Other inflammation of vagina and vulva;N;0;1;1
+N80;Endometriosis;N;0;1;1
+N81;Female genital prolapse;N;0;1;1
+N82;Fistulae involving female genital tract;N;0;1;1
+N84;Polyp of female genital tract;N;0;1;1
+N85;Other noninflammatory disorders of uterus, except cervix;N;0;1;1
+N91;Absent, scanty and rare menstruation;N;0;1;1
+N92;Excessive, frequent and irregular menstruation;N;0;1;1
+N93;Other abnormal uterine and vaginal bleeding;N;0;1;1
+N96;Habitual aborter;N;0;1;1
+N97;Female infertility;N;0;1;1
+O00;Ectopic pregnancy;O;0;1;1
+O03;Spontaneous abortion;O;0;1;1
+O04;Medical abortion;O;0;1;1
+O07;Failed attempted abortion;O;0;1;1
+O10;Pre-existing hypertension complicating pregnancy, childbirth and the puerperium;O;0;1;1
+O13;Gestational [pregnancy-induced] hypertension;O;0;1;1
+O15;Eclampsia;O;0;1;1
+O16;Unspecified maternal hypertension;O;0;1;1
+O23;Infections of genitourinary tract in pregnancy;O;0;1;1
+O24;Diabetes mellitus in pregnancy;O;0;1;1
+O30;Multiple gestation;O;0;1;1
+O41;Other disorders of amniotic fluid and membranes;O;0;1;1
+O42;Premature rupture of membranes;O;0;1;1
+O44;Placenta praevia;O;0;1;1
+O45;Premature separation of placenta [abruptio placentae];O;0;1;1
+O60;Preterm labour and delivery;O;0;1;1
+O63;Long labour;O;0;1;1
+O67;Labour and delivery complicated by intrapartum haemorrhage, not elsewhere classified;O;0;1;1
+O70;Perineal laceration during delivery;O;0;1;1
+O71;Other obstetric trauma;O;0;1;1
+O72;Postpartum haemorrhage;O;0;1;1
+O73;Retained placenta and membranes, without haemorrhage;O;0;1;1
+O80;Single spontaneous delivery;O;0;1;1
+O82;Single delivery by caesarean section;O;0;1;1
+O84;Multiple delivery;O;0;1;1
+O92;Other disorders of breast and lactation associated with childbirth;O;0;1;1
+O95;Obstetric death of unspecified cause;O;0;1;1
+P02;Fetus and newborn affected by complications of placenta, cord and membranes;P;0;1;1
+P03;Fetus and newborn affected by other complications of labour and delivery;P;0;1;1
+P04;Fetus and newborn affected by noxious influences transmitted via placenta or breast milk;P;0;1;1
+P05;Slow fetal growth and fetal malnutrition;P;0;1;1
+P08;Disorders related to long gestation and high birth weight;P;0;1;1
+P15;Other birth injuries;P;0;1;1
+P21;Birth asphyxia;P;0;1;1
+P22;Respiratory distress of newborn;P;0;1;1
+P36;Bacterial sepsis of newborn;P;0;1;1
+P37;Other congenital infectious and parasitic diseases;P;0;1;1
+P54;Other neonatal haemorrhages;P;0;1;1
+P57;Kernicterus;P;0;1;1
+P59;Neonatal jaundice from other and unspecified causes;P;0;1;1
+P61;Other perinatal haematological disorders;P;0;1;1
+P75;Meconium ileus in cystic fibrosis;P;0;1;1
+P80;Hypothermia of newborn;P;0;1;1
+P95;Fetal death of unspecified cause;P;0;1;1
+Q02;Microcephaly;Q;0;1;1
+Q15;Other congenital malformations of eye;Q;0;1;1
+Q17;Other congenital malformations of ear;Q;0;1;1
+Q18;Other congenital malformations of face and neck;Q;0;1;1
+Q24;Other congenital malformations of heart;Q;0;1;1
+Q27;Other congenital malformations of peripheral vascular system;Q;0;1;1
+Q28;Other congenital malformations of circulatory system;Q;0;1;1
+Q34;Other congenital malformations of respiratory system;Q;0;1;1
+Q36;Cleft lip;Q;0;1;1
+Q38;Other congenital malformations of tongue, mouth and pharynx;Q;0;1;1
+Q43;Other congenital malformations of intestine;Q;0;1;1
+Q45;Other congenital malformations of digestive system;Q;0;1;1
+Q52;Other congenital malformations of female genitalia;Q;0;1;1
+Q53;Undescended testicle;Q;0;1;1
+Q54;Hypospadias;Q;0;1;1
+Q55;Other congenital malformations of male genital organs;Q;0;1;1
+Q63;Other congenital malformations of kidney;Q;0;1;1
+Q64;Other congenital malformations of urinary system;Q;0;1;1
+Q74;Other congenital malformations of limb(s);Q;0;1;1
+Q75;Other congenital malformations of skull and face bones;Q;0;1;1
+Q76;Congenital malformations of spine and bony thorax;Q;0;1;1
+Q89;Other congenital malformations, not elsewhere classified;Q;0;1;1
+Q90;Down syndrome;Q;0;1;1
+R33;Retention of urine;R;0;1;1
+R40;Somnolence, stupor and coma;R;0;1;1
+R50;Fever of other and unknown origin;R;0;1;1
+R51;Headache;R;0;1;1
+S00;Superficial injury of head;ST;0;1;1
+S01;Open wound of head;ST;0;1;1
+S10;Superficial injury of neck;ST;0;1;1
+S19;Other and unspecified injuries of neck;ST;0;1;1
+S20;Superficial injury of thorax;ST;0;1;1
+S21;Open wound of thorax;ST;0;1;1
+S29;Other and unspecified injuries of thorax;ST;0;1;1
+S30;Superficial injury of abdomen, lower back and pelvis;ST;0;1;1
+S31;Open wound of abdomen, lower back and pelvis;ST;0;1;1
+S36;Injury of intra-abdominal organs;ST;0;1;1
+S39;Other and unspecified injuries of abdomen, lower back and pelvis;ST;0;1;1
+S40 ;Superficial injury of shoulder and upper arm;ST;0;1;1
+S49;Other and unspecified injuries of shoulder and upper arm;ST;0;1;1
+S50;Superficial injury of forearm;ST;0;1;1
+S59;Other and unspecified injuries of forearm;ST;0;1;1
+S60;Superficial injury of wrist and hand;ST;0;1;1
+S69;Other and unspecified injuries of wrist and hand;ST;0;1;1
+S70;Superficial injury of hip and thigh;ST;0;1;1
+S79;Other and unspecified injuries of hip and thigh;ST;0;1;1
+S80;Superficial injury of lower leg;ST;0;1;1
+S89;Other and unspecified injuries of lower leg;ST;0;1;1
+S90;Superficial injury of ankle and foot;ST;0;1;1
+S99;Other and unspecified injuries of ankle and foot;ST;0;1;1
+T02;Superficial injuries involving multiple body regions;ST;0;1;1
+T05;Traumatic amputations involving multiple body regions;ST;0;1;1
+T07;Unspecified multiple injuries;ST;0;1;1
+T14;Injury of unspecified body region;ST;0;1;1
+T29;Burns and corrosions of multiple body regions;ST;0;1;1
+T30;Burn and corrosion, body region unspecified;ST;0;1;1
+T50;Poisoning by diuretics and other and unspecified drugs, medicaments and biological substances;ST;0;1;1
+T51;Toxic effect of alcohol;ST;0;1;1
+T65;Toxic effect of other and unspecified substances;ST;0;1;1
+T75;Effects of other external causes;ST;0;1;1
+T78;Adverse effects, not elsewhere classified;ST;0;1;1
+T78.2;Anaphylactic shock, unspecified;ST;0;1;1
+T78.3;Angioneurotic oedema;ST;0;1;1
+W53;Bitten by rat;VY;0;1;1
+W55;Bitten or struck by other mammals;VY;0;1;1
+W56;Contact with marine animal;VY;0;1;1
+W57;Bitten or stung by nonvenomous insect and other nonvenomous arthropods;VY;0;1;1
+Z00;General examination and investigation of persons without complaint and reported diagnosis;Z;0;1;1
+Z04;Examination and observation for other reasons;Z;0;1;1

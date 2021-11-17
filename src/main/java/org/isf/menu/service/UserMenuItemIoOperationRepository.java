@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.menu.service;
 
 import org.isf.menu.model.UserMenuItem;
@@ -11,14 +32,23 @@ import java.util.List;
 @Repository
 public interface UserMenuItemIoOperationRepository extends JpaRepository<UserMenuItem, String> {
 
-    @Query(value = "select mn.*,GROUPMENU.GM_ACTIVE as IS_ACTIVE from USERGROUP inner join USER on US_UG_ID_A=UG_ID_A "
-			+ " inner join GROUPMENU on UG_ID_A=GM_UG_ID_A inner join MENUITEM as mn on "
-			+ " GM_MNI_ID_A=mn.MNI_ID_A where US_ID_A = :id order by MNI_POSITION", nativeQuery= true)
-    List<Object[]> findAllWhereId(@Param("id") String id);
+    @Query(value = "select menuItem.code, menuItem.buttonLabel, menuItem.altLabel, menuItem.tooltip, menuItem.shortcut, " +
+			"menuItem.mySubmenu, menuItem.myClass, menuItem.isASubMenu, menuItem.position, groupMenu.active " +
+			"from UserMenuItem menuItem, GroupMenu groupMenu, UserGroup  userGroup, User user " +
+			"where (user.userName=:userId) " +
+			"and (user.userGroupName=userGroup.code) " +
+			"and (userGroup.code=groupMenu.userGroup) " +
+			"and (menuItem.code=groupMenu.menuItem) " +
+			"order by menuItem.position")
+    List<Object[]> findAllWhereUserId(@Param("userId") String userId);
 
-    @Query(value = "select mn.*,GROUPMENU.GM_ACTIVE from USERGROUP "
-			+ " inner join GROUPMENU on UG_ID_A=GM_UG_ID_A inner join MENUITEM as mn on "
-			+ " GM_MNI_ID_A=mn.MNI_ID_A where UG_ID_A = :groupId order by MNI_POSITION", nativeQuery= true)
-    List<UserMenuItem> findAllWhereGroupId(@Param("groupId") String groupId);
+    @Query(value = "select menuItem.code, menuItem.buttonLabel, menuItem.altLabel, menuItem.tooltip, menuItem.shortcut, " +
+			"menuItem.mySubmenu, menuItem.myClass, menuItem.isASubMenu, menuItem.position, groupMenu.active " +
+			"from UserMenuItem menuItem, GroupMenu groupMenu, UserGroup  userGroup " +
+			"where userGroup.code=:groupId " +
+			"and (userGroup.code=groupMenu.userGroup) " +
+			"and (menuItem.code=groupMenu.menuItem) " +
+			"order by menuItem.position")
+    List<Object[]> findAllWhereGroupId(@Param("groupId") String groupId);
     
 }

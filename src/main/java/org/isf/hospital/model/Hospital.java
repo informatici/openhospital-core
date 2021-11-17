@@ -1,6 +1,23 @@
-/**
- * @(#) Hospital.java
- * 21-jan-2006
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.hospital.model;
 
@@ -18,20 +35,15 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
 /**
- * Pure Model Hospital : represents the Hospital 
- * @author bob
- *
+ * ------------------------------------------
+ * Hospital - model representing the Hospital
+ * -----------------------------------------
+ * modification history
+ * 21-jan-2006 - bob - first version
+ * 06/01/2016 - Antonio - ported to JPA
+ * ------------------------------------------
  */
-/*------------------------------------------
-* Disease Type - model for the disease type entity
-* -----------------------------------------
-* modification history
-* ? - bob - first version 
-* 06/01/2016 - Antonio - ported to JPA
-* 
-*------------------------------------------*/
 @Entity
 @Table(name="HOSPITAL")
 @EntityListeners(AuditingEntityListener.class)
@@ -79,16 +91,6 @@ public class Hospital extends Auditable<String>
 	@Transient
 	private volatile int hashCode = 0;
 	
-    /**
-     * @param aCode
-     * @param aDescription
-     * @param aAddress
-     * @param aCity
-     * @param aTelephone
-     * @param aFax
-     * @param aEmail
-     * @param aCurrencyCod
-     */
     public Hospital(){
     	super();
         this.code = null;
@@ -100,8 +102,18 @@ public class Hospital extends Auditable<String>
         this.email = null;
         this.currencyCod = null;
     }
-    
-    public Hospital(String aCode, String aDescription, String aAddress, 
+
+	/**
+	 * @param aCode
+	 * @param aDescription
+	 * @param aAddress
+	 * @param aCity
+	 * @param aTelephone
+	 * @param aFax
+	 * @param aEmail
+	 * @param aCurrencyCod
+	 */
+	public Hospital(String aCode, String aDescription, String aAddress,
     		String aCity, String aTelephone, String aFax, 
     		String aEmail, String aCurrencyCod) {
         super();
@@ -189,7 +201,7 @@ public class Hospital extends Auditable<String>
 
 	@Override
 	public boolean equals(Object anObject) {
-		return (anObject == null) || !(anObject instanceof Hospital) ? false
+		return !(anObject instanceof Hospital) ? false
 				: (getCode().equals(((Hospital) anObject).getCode())
 						&& getDescription().equalsIgnoreCase(((Hospital) anObject).getDescription())
 						&& getTelephone().equalsIgnoreCase(((Hospital) anObject).getTelephone())
@@ -197,7 +209,7 @@ public class Hospital extends Auditable<String>
 						&& getAddress().equalsIgnoreCase(((Hospital) anObject).getAddress())
 						&& getCity().equalsIgnoreCase(((Hospital) anObject).getCity())
 						&& getEmail().equalsIgnoreCase(((Hospital) anObject).getEmail()) 
-						&& (getCurrencyCod() == ((Hospital) anObject).getCurrencyCod()));
+						&& getCurrencyCod().equalsIgnoreCase(((Hospital) anObject).getCurrencyCod()));
 	}
 
 	public String toString() {

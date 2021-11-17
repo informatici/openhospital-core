@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.dicom.model;
 
 import java.awt.image.BufferedImage;
@@ -26,23 +47,19 @@ import javax.validation.constraints.NotNull;
 
 import org.isf.dicomtype.model.DicomType;
 import org.isf.utils.db.Auditable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Model for contain Detailed DICOM Data
- * 
- * @author Pietro Castellucci
- * @version 1.0.0
- * 
- */
-/*------------------------------------------
- * Dicom - model for the DICOM entity
+ * ------------------------------------------
+ * Dicom - model for the DICOM entity; contains detailed DICOM Data
  * -----------------------------------------
  * modification history
- * ? -  Pietro Castellucci - first version 
+ * ? -  Pietro Castellucci - first version
  * 29/08/2016 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name = "DICOM")
 @EntityListeners(AuditingEntityListener.class) 
@@ -55,6 +72,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 })
 public class FileDicom extends Auditable<String>
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileDicom.class);
+
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "DM_FILE_ID")
@@ -237,7 +256,7 @@ public class FileDicom extends Auditable<String>
 	/**
 	 * Load bytes of DICOM file and store it in a Blob type
 	 * 
-	 * @param dicomData
+	 * @param dicomFile
 	 *            the dicomFile to set
 	 */
 	public void setDicomData(File dicomFile) {
@@ -250,8 +269,8 @@ public class FileDicom extends Auditable<String>
 			Blob blob = new SerialBlob(byteArray);
 			this.dicomData = blob;
 
-		} catch (Exception ecc) {
-			ecc.printStackTrace();
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
 
@@ -602,8 +621,8 @@ public class FileDicom extends Auditable<String>
 	/**
 	 * Load bytes of Image and store it in a Blob type
 	 * 
-	 * @param dicomData
-	 *            the dicomFile to set
+	 * @param dicomThumbnail
+	 *            the dicomThumbnail to set
 	 */
 	public void setDicomThumbnail(BufferedImage dicomThumbnail) {
 		try {
@@ -616,8 +635,8 @@ public class FileDicom extends Auditable<String>
 			Blob blob = new SerialBlob(byteArray);
 			this.dicomThumbnail = blob;
 
-		} catch (Exception ecc) {
-			ecc.printStackTrace();
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
 
@@ -631,8 +650,8 @@ public class FileDicom extends Auditable<String>
 		BufferedImage bi = null;
 		try {
 			bi = ImageIO.read(dicomThumbnail.getBinaryStream());
-		} catch (Exception ecc) {
-			ecc.printStackTrace();
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 		return bi;
 	}

@@ -1,15 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.exa.service;
-/*------------------------------------------
- * IoOperations - provides the io operations for recovering and managing exam records from the database.
- * -----------------------------------------
- * modification history
- * ??/??/2005 - Davide/Theo - first beta version 
- * 07/11/2006 - ross - modified to accept, within the description, the character quote (')
- *                     (to do this, just double every quote. replaceall("'","''") 
- *                     when record locked all data is saved now, not only descritpion
- *------------------------------------------*/
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.exa.model.Exam;
 import org.isf.exa.model.ExamRow;
@@ -21,6 +33,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * ------------------------------------------
+ * ExamIoOperations - provides the I/O operations for recovering and managing exam records from the database.
+ * -----------------------------------------
+ * modification history
+ * ??/??/2005 - Davide/Theo - first beta version
+ * 07/11/2006 - ross - modified to accept, within the description, the character quote (')
+ *                     (to do this, just double every quote. replaceall("'","''")
+ *                     when record locked all data is saved now, not only descritpion
+ * ------------------------------------------
+ */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
@@ -34,47 +57,13 @@ public class ExamIoOperations {
 	
 	@Autowired
 	private ExamTypeIoOperationRepository typeRepository;
-	
-	/**
-	 * Returns a list of {@link ExamRow}s that matches passed exam code and description
-	 * @param aExamCode - the exam code
-	 * @param aDescription - the exam description
-	 * @return the list of {@link ExamRow}s
-	 * @throws OHServiceException
-	 */
-	/*public ArrayList<ExamRow> getExamRow(
-			String aExamCode, 
-			String aDescription) throws OHServiceException 
-	{
-    	ArrayList<ExamRow> examrows = null;
-    	
-    	
-		if (aExamCode != null) 
-		{
-			if (aDescription != null) 
-			{
-				examrows = (ArrayList<ExamRow>) rowRepository.findAllWhereIdAndDescriptionByOrderIdAndDescriptionAsc(aExamCode, aDescription); 	
-			}
-			else
-			{
-				examrows = (ArrayList<ExamRow>) rowRepository.findAllWhereIdByOrderIdAndDescriptionAsc(aExamCode); 	
-			}
-		}
-		else
-		{
-			examrows = (ArrayList<ExamRow>) rowRepository.findAllByOrderIdAndDescriptionAsc(); 	
-		}
-
-		return examrows;
-	}*/
 
 	/**
 	 * Returns the list of {@link Exam}s
 	 * @return the list of {@link Exam}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Exam> getExams() throws OHServiceException 
-	{
+	public List<Exam> getExams() throws OHServiceException {
 		return getExamsByDesc(null);
 	}
 	
@@ -84,32 +73,20 @@ public class ExamIoOperations {
 	 * @return the list of {@link Exam}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Exam> getExamsByDesc(
-			String description) throws OHServiceException 
-	{ 
-		ArrayList<String> examIds = null;
-		ArrayList<Exam> exams = new ArrayList<Exam>();
-				
-		
-		if (description != null) 
-		{
-			examIds = (ArrayList<String>) repository.findAllWhereDescriptionByOrderDescriptionAsc(description);	
-		}
-		else
-		{
-			examIds = (ArrayList<String>) repository.findAllByOrderDescriptionAsc();			
-		}		
-		
-		for (int i=0; i<examIds.size(); i++)
-		{
-			String code = examIds.get(i);
-			Exam exam = repository.findOne(code);
-			
-			
-			exams.add(i, exam);
-		}
+	public List<Exam> getExamsByDesc(String description) throws OHServiceException {
+		return description != null ? repository.findByDescriptionContainingOrderByExamtypeDescriptionAscDescriptionAsc(description) :
+				repository.findByOrderByDescriptionAscDescriptionAsc();
+	}
 	
-		return exams;
+	/**
+	 * Returns the list of {@link Exam}s by {@link ExamType} description
+	 * @param description - the exam description
+	 * @return the list of {@link Exam}s
+	 * @throws OHServiceException
+	 */
+	public List<Exam> getExamsByExamTypeDesc(String description) throws OHServiceException {
+		return description != null ? repository.findByExamtype_DescriptionContainingOrderByExamtypeDescriptionAscDescriptionAsc(description) :
+				repository.findByOrderByDescriptionAscDescriptionAsc();
 	}
 
 	/**
@@ -117,12 +94,8 @@ public class ExamIoOperations {
 	 * @return the list of {@link ExamType}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamType> getExamType() throws OHServiceException 
-	{
-		ArrayList<ExamType> examTypes = (ArrayList<ExamType>) typeRepository.findAllByOrderByDescriptionAsc();
-				
-	
-		return examTypes;
+	public List<ExamType> getExamType() throws OHServiceException {
+		return typeRepository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
@@ -185,13 +158,9 @@ public class ExamIoOperations {
 	 * @return <code>true</code> if the {@link Exam} has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean deleteExam(
-			Exam exam) throws OHServiceException 
-	{
+	public boolean deleteExam(Exam exam) throws OHServiceException {
 		boolean result = true;		
-	
-		
-		rowRepository.deleteExamRowWhereExamCode(exam.getCode());
+		rowRepository.deleteByExam_Code(exam.getCode());
 		repository.delete(exam);
 		
 		return result;	
@@ -219,7 +188,7 @@ public class ExamIoOperations {
 	 * the parameter; Returns false if the query finds no record, else returns
 	 * true
 	 * 
-	 * @param the {@link Exam}
+	 * @param exam the {@link Exam}
 	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
@@ -258,7 +227,7 @@ public class ExamIoOperations {
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the exam code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
@@ -276,7 +245,7 @@ public class ExamIoOperations {
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the exam row code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise

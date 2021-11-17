@@ -1,98 +1,89 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.therapy.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import org.isf.patient.model.Patient;
 import org.isf.therapy.model.TherapyRow;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class TherapyIoOperations {
 
 	@Autowired
 	private TherapyIoOperationRepository repository;
-	
+
 	/**
-	 * insert a new {@link TherapyRow} (therapy) in the DB
-	 * 
+	 * Insert a new {@link TherapyRow} (therapy) in the DB
+	 *
 	 * @param thRow - the {@link TherapyRow} (therapy)
-	 * @param numTherapy - the therapy progressive number for the patient
 	 * @return the therapyID
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public TherapyRow newTherapy(
-			TherapyRow thRow) throws OHServiceException 
-	{
-		TherapyRow savedTherapy = repository.save(thRow);
-		
-		return savedTherapy;
+	public TherapyRow newTherapy(TherapyRow thRow) throws OHServiceException {
+		return repository.save(thRow);
 	}
 
 	/**
-	 * return the list of {@link TherapyRow}s (therapies) for specified Patient ID
+	 * Return the list of {@link TherapyRow}s (therapies) for specified Patient ID
 	 * or
 	 * return all {@link TherapyRow}s (therapies) if <code>0</code> is passed
-	 * 
+	 *
 	 * @param patID - the Patient ID
 	 * @return the list of {@link TherapyRow}s (therapies)
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public ArrayList<TherapyRow> getTherapyRows(
-			int patID) throws OHServiceException 
-	{
-		ArrayList<TherapyRow> therapyList = null;
-
-		
-		if (patID != 0) {
-			therapyList = new ArrayList<TherapyRow>(repository.findAllWherePatientByOrderPatientAndIdAsc(patID));
-		}
-		else
-		{
-			therapyList = new ArrayList<TherapyRow>(repository.findAllByOrderPatientAndIdAsc()); 
-		}
-		
-		return therapyList;
+	public List<TherapyRow> getTherapyRows(int patID) throws OHServiceException {
+		return patID != 0 ? repository.findByPatientCodeOrderByPatientCodeAscTherapyIDAsc(patID)
+				: repository.findAllByOrderByPatientAscTherapyIDAsc();
 	}
-	
+
 	/**
-	 * delete all {@link TherapyRow}s (therapies) for specified Patient ID
-	 * 
-	 * @param patID - the Patient ID
+	 * Delete all {@link TherapyRow}s (therapies) for specified {@link Patient}
+	 *
+	 * @param patient - the {@link Patient}
 	 * @return <code>true</code> if the therapies have been deleted, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean deleteAllTherapies(
-			int patID) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		repository.deleteWherePatient(patID);
-		
-		return result;	
+	public boolean deleteAllTherapies(Patient patient) throws OHServiceException {
+		repository.deleteByPatient(patient);
+		return true;
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the therapy code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean isCodePresent(
-			Integer code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;	
+	public boolean isCodePresent(Integer code) throws OHServiceException {
+		return repository.exists(code);
 	}
 }

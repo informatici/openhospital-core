@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.menu.model;
 
 import javax.persistence.AttributeOverride;
@@ -14,14 +35,15 @@ import javax.persistence.Transient;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/*------------------------------------------
- * User - model for the user entity
+/**
+ * ------------------------------------------
+ * GroupMenu
  * -----------------------------------------
  * modification history
- * ? - ? - first version 
+ * ? - ? - first version
  * 07/05/2016 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="GROUPMENU")
 @EntityListeners(AuditingEntityListener.class) 
@@ -35,8 +57,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class GroupMenu extends Auditable<String>
 {
 	@Id 
+	@Column(name="GM_ID")
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="GM_ID")		
 	private Integer code;
 	
 	@Column(name="GM_UG_ID_A")
@@ -75,20 +97,22 @@ public class GroupMenu extends Auditable<String>
 	public void setMenuItem(String menuItem) {
 		this.menuItem = menuItem;
 	}
+	@Override
 	public int getActive() {
 		return active;
 	}
-	public void setActive(char active) {
+	@Override
+	public void setActive(int active) {
 		this.active = active;
 	}
 	
 	@Override
 	public boolean equals(Object anObject) {
-        return (anObject == null) || !(anObject instanceof GroupMenu) ? false
+        return !(anObject instanceof GroupMenu) ? false
                 : (getCode().equals(((GroupMenu) anObject).getCode())
                   && getUserGroup().equalsIgnoreCase(((GroupMenu) anObject).getUserGroup()) 
                   && getMenuItem().equals(((GroupMenu) anObject).getMenuItem())
                   && getActive() == ((GroupMenu) anObject).getActive());
     }
 
-}//class GroupMenu
+}

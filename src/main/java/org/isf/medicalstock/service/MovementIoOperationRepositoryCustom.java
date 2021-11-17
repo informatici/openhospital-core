@@ -1,5 +1,25 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.medicalstock.service;
-
 
 import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
 import org.springframework.stereotype.Repository;
@@ -10,13 +30,13 @@ import java.util.List;
 @Repository
 public interface MovementIoOperationRepositoryCustom {
 
-	List<Integer> findtMovementWhereDatesAndId(String wardId, GregorianCalendar dateFrom, GregorianCalendar dateTo);
+	List<Integer> findMovementWhereDatesAndId(String wardId, GregorianCalendar dateFrom, GregorianCalendar dateTo);
 
-	List<Integer> findtMovementWhereData(Integer medicalCode, String medicalType, String wardId, String movType,
-			GregorianCalendar movFrom, GregorianCalendar movTo, GregorianCalendar lotPrepFrom,
-			GregorianCalendar lotPrepTo, GregorianCalendar lotDueFrom, GregorianCalendar lotDueTo);
+	List<Integer> findMovementWhereData(Integer medicalCode, String medicalType, String wardId, String movType,
+										GregorianCalendar movFrom, GregorianCalendar movTo, GregorianCalendar lotPrepFrom,
+										GregorianCalendar lotPrepTo, GregorianCalendar lotDueFrom, GregorianCalendar lotDueTo);
 
-	List<Integer> findtMovementForPrint(String medicalDescription, String medicalTypeCode, String wardId,
-			String movType, GregorianCalendar movFrom, GregorianCalendar movTo, String lotCode, MovementOrder order);
+	List<Integer> findMovementForPrint(String medicalDescription, String medicalTypeCode, String wardId,
+									   String movType, GregorianCalendar movFrom, GregorianCalendar movTo, String lotCode, MovementOrder order);
 	
 }

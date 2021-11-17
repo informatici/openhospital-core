@@ -1,15 +1,40 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.patvac.service;
 
-
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
+import org.isf.patvac.model.PatientVaccine;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Transactional
 public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationRepositoryCustom {
@@ -20,7 +45,7 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 	
 	@SuppressWarnings("unchecked")	
 	@Override
-	public List<Integer> findAllByCodesAndDatesAndSexAndAges(
+	public List<PatientVaccine> findAllByCodesAndDatesAndSexAndAges(
 			String vaccineTypeCode, 
 			String vaccineCode, 
 			GregorianCalendar dateFrom, 
@@ -29,72 +54,59 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 			int ageFrom, 
 			int ageTo) {
 		return this.entityManager.
-				createNativeQuery(_getPatientVaccineQuery(
+				createQuery(_getPatientVaccineQuery(
 						vaccineTypeCode, vaccineCode, dateFrom, dateTo,
 						sex, ageFrom, ageTo)).
 					getResultList();
 	}	
 
-	
-	private String _getPatientVaccineQuery(
+	private CriteriaQuery<PatientVaccine> _getPatientVaccineQuery(
 			String vaccineTypeCode, 
 			String vaccineCode, 
 			GregorianCalendar dateFrom, 
 			GregorianCalendar dateTo, 
 			char sex, 
 			int ageFrom, 
-			int ageTo) 
-	{
-		StringBuilder query = new StringBuilder();
-		String clause = " WHERE";
-	
-		
-		query.append("SELECT PAV_ID"
-				+ " FROM PATIENTVACCINE JOIN VACCINE ON PAV_VAC_ID_A=VAC_ID_A"
-				+ " JOIN VACCINETYPE ON VAC_VACT_ID_A = VACT_ID_A"
-				+ " JOIN PATIENT ON PAV_PAT_ID = PAT_ID");
-		if (dateFrom != null || dateTo != null) {
-			if (dateFrom != null) {
-				query.append(clause).append(" DATE_FORMAT(PAV_DATE,'%Y-%m-%d') >= \"" + _convertToSQLDateLimited(dateFrom) + "\"");
-				clause = " AND";
-			}
-			if (dateTo != null) {
-				query.append(clause).append(" DATE_FORMAT(PAV_DATE,'%Y-%m-%d') <= \"" + _convertToSQLDateLimited(dateTo) + "\"");
-				clause = " AND";
-			}
+			int ageTo) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<PatientVaccine> query = cb.createQuery(PatientVaccine.class);
+		Root<PatientVaccine> pvRoot = query.from(PatientVaccine.class);
+		List<Predicate> predicates = new ArrayList<>();
+
+		query.select(pvRoot);
+		if (dateFrom != null) {
+			predicates.add(
+				cb.greaterThanOrEqualTo(pvRoot.<Date> get("vaccineDate"), dateFrom.getTime())
+			);
+		}
+		if (dateTo != null) {
+			predicates.add(
+				cb.lessThanOrEqualTo(pvRoot.<Date> get("vaccineDate"), dateTo.getTime())
+			);
 		}
 		if (vaccineTypeCode != null) {
-			query.append(clause).append(" VACT_ID_A = \"" + vaccineTypeCode + "\"");
-			clause = " AND";
+			predicates.add(
+				cb.equal(pvRoot.join("vaccine").get("code"), vaccineTypeCode)
+			);
 		}
 		if (vaccineCode != null) {
-			query.append(clause).append(" VAC_ID_A = \"" + vaccineCode + "\"");
-			clause = " AND";
+			predicates.add(
+				cb.equal(pvRoot.join("vaccine").get("code"), vaccineCode)
+			);
 		}
 		if (sex != 'A') {
-			query.append(clause).append(" PAT_SEX = \"" + sex + "\"");
-			clause = " AND";
-		}		
+			predicates.add(
+				cb.equal(pvRoot.join("patient").get("sex"), sex)
+			);
+		}
 		if (ageFrom != 0 || ageTo != 0) {
-			query.append(clause).append(" PAT_AGE BETWEEN \"" + ageFrom + "\" AND \"" + ageTo + "\"");
-			clause = " AND";
-		}		
-		query.append(" ORDER BY PAV_DATE DESC, PAV_ID");
-		//System.out.println(query.toString());
+			predicates.add(
+				cb.between(pvRoot.join("patient").<Integer>get("age"), ageFrom, ageTo)
+			);
+		}
+		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+		query.orderBy(cb.desc(pvRoot.get("vaccineDate")), cb.asc(pvRoot.get("code")));
 
-		return query.toString();
-	}
-	
-	/**
-	 * return a String representing the date in format <code>yyyy-MM-dd</code>
-	 * 
-	 * @param date
-	 * @return the date in format <code>yyyy-MM-dd</code>
-	 */
-	private String _convertToSQLDateLimited(GregorianCalendar date) 
-	{
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	
-		return sdf.format(date.getTime());
+		return query;
 	}
 }

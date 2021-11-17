@@ -1,16 +1,42 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.opd.service;
 
-
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.isf.generaldata.MessageBundle;
+import org.isf.opd.model.Opd;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Transactional
 public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCustom {
@@ -18,10 +44,9 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	
 	@SuppressWarnings("unchecked")	
 	@Override
-	public List<Integer> findAllOpdWhereParams(
+	public List<Opd> findAllOpdWhereParams(
 			String diseaseTypeCode,
 			String diseaseCode, 
 			GregorianCalendar dateFrom,
@@ -30,16 +55,13 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			int ageTo,
 			char sex,
 			char newPatient) {
-		return this.entityManager.
-				createNativeQuery(_getOpdQuery(
+		return _getOpdQuery(
 						diseaseTypeCode, diseaseCode, dateFrom, dateTo,
-						ageFrom, ageTo, sex, newPatient)).
+						ageFrom, ageTo, sex, newPatient).
 					getResultList();
 	}	
 
-		
-
-	public String _getOpdQuery(
+	private TypedQuery<Opd> _getOpdQuery(
 			String diseaseTypeCode,
 			String diseaseCode, 
 			GregorianCalendar dateFrom,
@@ -47,39 +69,43 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			int ageFrom, 
 			int ageTo,
 			char sex,
-			char newPatient)
-	{	
-		String query = "SELECT OPD_ID FROM OPD LEFT JOIN PATIENT ON OPD_PAT_ID = PAT_ID LEFT JOIN DISEASE ON OPD_DIS_ID_A = DIS_ID_A LEFT JOIN DISEASETYPE ON DIS_DCL_ID_A = DCL_ID_A WHERE 1";
-		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.opd.alltype")))) {
-			query += " AND DIS_DCL_ID_A = \"" + diseaseTypeCode + "\"";
+			char newPatient) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Opd> query = cb.createQuery(Opd.class);
+		Root<Opd> opd = query.from(Opd.class);
+		List<Predicate> predicates = new ArrayList<>();
+
+		query.select(opd);
+		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alltypes.txt")))) {
+			predicates.add(
+				cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
+			);
 		}
-		if(!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldisease"))) {
-			query += " AND DIS_ID_A = \"" + diseaseCode + "\"";
+		if (!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldiseases.txt"))) {
+			predicates.add(
+				cb.equal(opd.join("disease").get("code"), diseaseCode)
+			);
 		}
 		if (ageFrom != 0 || ageTo != 0) {
-			query += " AND OPD_AGE BETWEEN \"" + ageFrom + "\" AND \"" + ageTo + "\"";
+			predicates.add(
+				cb.between(opd.<Integer>get("age"), ageFrom, ageTo)
+			);
 		}
 		if (sex != 'A') {
-			query += " AND OPD_SEX =  \"" + sex + "\"";
+			predicates.add(
+				cb.equal(opd.get("sex"), sex)
+			);
 		}
 		if (newPatient != 'A') {
-			query += " AND OPD_NEW_PAT =  \"" + newPatient + "\"";
+			predicates.add(
+				cb.equal(opd.get("newPatient"), newPatient)
+			);
 		}
-		query += " AND OPD_DATE_VIS BETWEEN  \"" + _convertToSQLDateLimited(dateFrom) + "\" AND \"" + _convertToSQLDateLimited(dateTo) + "\"";
+		predicates.add(
+			cb.between(opd.<Date>get("visitDate"), dateFrom.getTime(), dateTo.getTime())
+		);
+		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 
-		return query;
-	}
-		
-	/**
-	 * return a String representing the date in format <code>yyyy-MM-dd</code>
-	 * 
-	 * @param date
-	 * @return the date in format <code>yyyy-MM-dd</code>
-	 */
-	private String _convertToSQLDateLimited(GregorianCalendar date) 
-	{
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	
-		return sdf.format(date.getTime());
+		return entityManager.createQuery(query);
 	}
 }

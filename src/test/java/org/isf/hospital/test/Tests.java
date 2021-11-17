@@ -1,179 +1,169 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.hospital.test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 
-import static org.junit.Assert.assertEquals;
+import java.lang.reflect.Method;
 
+import org.isf.OHCoreTestCase;
+import org.isf.hospital.manager.HospitalBrowsingManager;
 import org.isf.hospital.model.Hospital;
+import org.isf.hospital.service.HospitalIoOperationRepository;
 import org.isf.hospital.service.HospitalIoOperations;
-import org.isf.utils.db.DbJpaUtil;
 import org.isf.utils.exception.OHException;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class Tests  
-{
-	private static DbJpaUtil jpa;
+public class Tests extends OHCoreTestCase {
+
 	private static TestHospital testHospital;
-	private static TestHospitalContext testHospitalContext;
 
-    @Autowired
-    HospitalIoOperations hospitalIoOperation;
-	
+	@Autowired
+	HospitalIoOperations hospitalIoOperation;
+	@Autowired
+	HospitalIoOperationRepository hospitalIoOperationRepository;
+	@Autowired
+	HospitalBrowsingManager hospitalBrowsingManager;
+
 	@BeforeClass
-    public static void setUpClass()  
-    {
-    	jpa = new DbJpaUtil();
-    	testHospital = new TestHospital();
-    	testHospitalContext = new TestHospitalContext();
-    	
-        return;
-    }
-
-    @Before
-    public void setUp() throws OHException
-    {
-        jpa.open();
-        
-        _saveContext();
-		
-		return;
-    }
-        
-    @After
-    public void tearDown() throws Exception 
-    {
-        _restoreContext();   
-        
-        jpa.flush();
-        jpa.close();
-                
-        return;
-    }
-    
-    @AfterClass
-    public static void tearDownClass() throws OHException 
-    {
-    	testHospital = null;
-    	testHospitalContext = null;
-
-    	return;
-    }
-	
-	
-	@Test
-	public void testHospitalGets() 
-	{
-		String code = "";
-			
-		
-		try 
-		{		
-			code = _setupTestHospital(false);
-			_checkHospitalIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-				
-		return;
+	public static void setUpClass() {
+		testHospital = new TestHospital();
 	}
-	
-	@Test
-	public void testHospitalSets() 
-	{
-		String code = "";
-			
 
-		try 
-		{		
-			code = _setupTestHospital(true);
-			_checkHospitalIntoDb(code);
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-		
-		return;
+	@Before
+	public void setUp() {
+		cleanH2InMemoryDb();
 	}
-	
+
 	@Test
-	public void testIoUpdateHospital() 
-	{
-		String code = "";
-		boolean result = false;
-		
-		
-		try 
-		{		
-			code = _setupTestHospital(false);
-			Hospital foundHospital = (Hospital)jpa.find(Hospital.class, code);
-			jpa.flush();
-			foundHospital.setDescription("Update");
-			result = hospitalIoOperation.updateHospital(foundHospital);
-			Hospital updateHospital = (Hospital)jpa.find(Hospital.class, code); 
-			
-			assertEquals(true, result);
-			assertEquals("Update", updateHospital.getDescription());
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();		
-			assertEquals(true, false);
-		}
-		
-		return;
+	public void testHospitalGets() throws Exception {
+		String code = _setupTestHospital(false);
+		_checkHospitalIntoDb(code);
 	}
-	
-	private void _saveContext() throws OHException 
-    {	
-		testHospitalContext.saveAll(jpa);
-        		
-        return;
-    }
-	
-    private void _restoreContext() throws OHException 
-    {
-		testHospitalContext.deleteNews(jpa);
-        
-        return;
-    }
-    
-	private String _setupTestHospital(
-			boolean usingSet) throws OHException 
-	{
-		Hospital hospital;
-		
-	
-		jpa.beginTransaction();	
-		hospital = testHospital.setup(usingSet);
-		jpa.persist(hospital);
-		jpa.commitTransaction();
-		
+
+	@Test
+	public void testHospitalSets() throws Exception {
+		String code = _setupTestHospital(true);
+		_checkHospitalIntoDb(code);
+	}
+
+	@Test
+	public void testIoGetHospital() throws Exception {
+		String code = _setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		Hospital getHospital = hospitalIoOperation.getHospital();
+		assertThat(getHospital).isEqualTo(foundHospital);
+	}
+
+	@Test
+	public void testIoUpdateHospital() throws Exception {
+		String code = _setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		foundHospital.setDescription("Update");
+		Hospital updateHospital = hospitalIoOperation.updateHospital(foundHospital);
+		assertThat(updateHospital.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testIoGetHospitalCurrencyCod() throws Exception {
+		String code = _setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		String cod = hospitalIoOperation.getHospitalCurrencyCod();
+		assertThat(foundHospital.getCurrencyCod()).isEqualTo(cod);
+
+		foundHospital.setCurrencyCod(null);
+		Hospital updateHospital = hospitalIoOperation.updateHospital(foundHospital);
+		assertThat(updateHospital.getCurrencyCod()).isNull();
+	}
+
+	@Test
+	public void testIoHospitalSanitize() throws Exception {
+		Method method = hospitalIoOperation.getClass().getDeclaredMethod("sanitize", String.class);
+		method.setAccessible(true);
+		assertThat((String) method.invoke(hospitalIoOperation, "abc'de'f")).isEqualTo("abc''de''f");
+		assertThat((String) method.invoke(hospitalIoOperation, (String) null)).isNull();
+		assertThat((String) method.invoke(hospitalIoOperation, "abcdef")).isEqualTo("abcdef");
+	}
+
+	@Test
+	public void testMgrGetHospital() throws Exception {
+		String code = _setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		Hospital getHospital = hospitalBrowsingManager.getHospital();
+		assertThat(getHospital).isEqualTo(foundHospital);
+	}
+
+	@Test
+	public void testMgrUpdateHospital() throws Exception {
+		String code = _setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		foundHospital.setDescription("Update");
+		Hospital updateHospital = hospitalBrowsingManager.updateHospital(foundHospital);
+		assertThat(updateHospital.getDescription()).isEqualTo("Update");
+	}
+
+	@Test
+	public void testMgrGetHospitalCurrencyCod() throws Exception {
+		String code = _setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		String cod = hospitalBrowsingManager.getHospitalCurrencyCod();
+		assertThat(foundHospital.getCurrencyCod()).isEqualTo(cod);
+
+		foundHospital.setCurrencyCod(null);
+		Hospital updateHospital = hospitalBrowsingManager.updateHospital(foundHospital);
+		assertThat(updateHospital.getCurrencyCod()).isNull();
+	}
+
+	@Test
+	public void testHospitalGetterSetter() throws Exception {
+		String code = _setupTestHospital(false);
+		Hospital hospital = hospitalIoOperationRepository.findOne(code);
+
+		Integer lock = hospital.getLock();
+		hospital.setLock(-1);
+		assertThat(hospital.getLock()).isEqualTo(-1);
+	}
+
+	@Test
+	public void testHospitalHashToString() throws Exception {
+		String code = _setupTestHospital(false);
+		Hospital hospital = hospitalIoOperationRepository.findOne(code);
+
+		assertThat(hospital.hashCode()).isPositive();
+
+		assertThat(hospital).hasToString(hospital.getDescription());
+	}
+
+	private String _setupTestHospital(boolean usingSet) throws OHException {
+		Hospital hospital = testHospital.setup(usingSet);
+		hospitalIoOperationRepository.saveAndFlush(hospital);
 		return hospital.getCode();
 	}
-		
-	private void  _checkHospitalIntoDb(
-			String code) throws OHException 
-	{
-		Hospital foundHospital;
-		
-	
-		foundHospital = (Hospital)jpa.find(Hospital.class, code); 
+
+	private void _checkHospitalIntoDb(String code) throws OHException {
+		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
 		testHospital.check(foundHospital);
-		
-		return;
-	}	
+	}
 }

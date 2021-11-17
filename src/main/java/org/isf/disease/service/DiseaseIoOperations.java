@@ -1,21 +1,28 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.disease.service;
 
-/*------------------------------------------
- * disease.service.IoOperations 
- * 			This class offers the io operations for recovering and managing
- * 			diseases records from the database
- * -----------------------------------------
- * modification history
- * 25/01/2006 - Rick, Vero, Pupo  - first beta version 
- * 08/11/2006 - ross - added support for OPD and IPD flags
- * 09/06/2007 - ross - when updating, now the user can change the "dis type" also
- * 02/09/2008 - alex - added method for getting a Disease by his code
- * 					   added method for getting a DiseaseType by his code
- * 13/02/2009 - alex - modified query for ordering resultset
- *                     by description only	
- *------------------------------------------*/
-
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.disease.model.Disease;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -25,10 +32,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * -----------------------------------------
  * This class offers the io operations for recovering and managing
  * diseases records from the database
  * 
  * @author Rick, Vero
+ *
+ * modification history
+ * 25/01/2006 - Rick, Vero, Pupo  - first beta version
+ * 08/11/2006 - ross - added support for OPD and IPD flags
+ * 09/06/2007 - ross - when updating, now the user can change the "dis type" also
+ * 02/09/2008 - alex - added method for getting a Disease by his code
+ * 					   added method for getting a DiseaseType by his code
+ * 13/02/2009 - alex - modified query for ordering resultset
+ *                     by description only
+ * ------------------------------------------
  */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
@@ -47,7 +65,7 @@ public class DiseaseIoOperations {
 	public Disease getDiseaseByCode(
 			int code) throws OHServiceException 
 	{
-		return repository.findOneByCode(code);
+		return repository.findOneByCode(String.valueOf(code));
 	}
 	
 	/**
@@ -61,122 +79,71 @@ public class DiseaseIoOperations {
 	 * @return the retrieved diseases.
 	 * @throws OHServiceException if an error occurs retrieving the diseases.
 	 */
-	public ArrayList<Disease> getDiseases(
-			String disTypeCode, 
-			boolean opd, 
-			boolean ipdIn, 
-			boolean ipdOut) throws OHServiceException 
-	{
-		ArrayList<Disease> diseases = null;
-    	
-		
-		if (disTypeCode != null) 
-		{
-			if (opd) 
-			{
-				if (ipdIn) 
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndOpdAndIpdInAndIpdOut(disTypeCode));
-					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndOpdAndIpdIn(disTypeCode));						
-					}
-				}
-				else
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndOpdAndIpdOut(disTypeCode));
-					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndOpd(disTypeCode));						
-					}					
-				}
-			}		
-			else
-			{
+	public List<Disease> getDiseases(String disTypeCode, boolean opd, boolean ipdIn, boolean ipdOut) throws OHServiceException {
+		List<Disease> diseases = null;
 
-				if (ipdIn) 
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndIpdInAndIpdOut(disTypeCode));
-						
+		if (disTypeCode != null) {
+			if (opd) {
+				if (ipdIn) {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCodeAndOpdAndIpdInAndIpdOut(disTypeCode));
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCodeAndOpdAndIpdIn(disTypeCode));
 					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndIpdIn(disTypeCode));						
+				} else {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCodeAndOpdAndIpdOut(disTypeCode));
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCodeAndOpd(disTypeCode));
 					}
 				}
-				else
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndIpdOut(disTypeCode));
+			} else {
+
+				if (ipdIn) {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCodeAndIpdInAndIpdOut(disTypeCode));
+
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCodeAndIpdIn(disTypeCode));
 					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCode(disTypeCode));						
-					}					
+				} else {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCodeAndIpdOut(disTypeCode));
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAllByDiseaseTypeCode(disTypeCode));
+					}
 				}
 			}
-		}
-		else
-		{
-			if (opd) 
-			{
-				if (ipdIn) 
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByOpdAndIpdInAndIpdOut());
+		} else {
+			if (opd) {
+				if (ipdIn) {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByOpdAndIpdInAndIpdOut());
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAllByOpdAndIpdIn());
 					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByOpdAndIpdIn());						
+				} else {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByOpdAndIpdOut());
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAllByOpd());
 					}
 				}
-				else
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByOpdAndIpdOut());
-					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByOpd());						
-					}					
-				}
-			}		
-			else
-			{
+			} else {
 
-				if (ipdIn) 
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByIpdInAndIpdOut());
-						
+				if (ipdIn) {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByIpdInAndIpdOut());
+
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAllByIpdIn());
 					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByIpdIn());						
+				} else {
+					if (ipdOut) {
+						diseases = (ArrayList<Disease>) (repository.findAllByIpdOut());
+					} else {
+						diseases = (ArrayList<Disease>) (repository.findAll());
 					}
-				}
-				else
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByIpdOut());
-					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAll());						
-					}					
 				}
 			}
 		}
@@ -187,38 +154,25 @@ public class DiseaseIoOperations {
 	/**
 	 * Stores the specified {@link Disease}. 
 	 * @param disease the disease to store.
-	 * @return <code>true</code> if the disease has been stored, <code>false</code> otherwise.
+	 * @return disease that has been stored
 	 * @throws OHServiceException if an error occurs storing the disease.
 	 */
-	public boolean newDisease(
+	public Disease newDisease(
 			Disease disease) throws OHServiceException
 	{
-		boolean result = true;
-	
-		
-		Disease savedDisease = repository.save(disease);
-		result = (savedDisease != null);
-		
-		return result;
+		return repository.save(disease);
 	}
 
 	/**
 	 * Updates the specified {@link Disease}.
 	 * @param disease the {@link Disease} to update.
-	 * @return <code>true</code> if the disease has been updated, <code>false</code> otherwise.
+	 * @return disease that has been updated
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateDisease(
+	public Disease updateDisease(
 			Disease disease) throws OHServiceException 
 	{
-		boolean result = true;
-	
-		
-		//disease.setLock(disease.getLock() + 1);
-		Disease savedDisease = repository.save(disease);
-		result = (savedDisease != null);
-		
-		return result;
+		return repository.save(disease);
 	}
 
 	/**

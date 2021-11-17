@@ -1,8 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.utils.treetable;
 
 /*
- * %W% %E%
- *
  * Copyright 1997, 1998 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
@@ -52,14 +71,11 @@ import javax.swing.tree.DefaultTreeSelectionModel;
 /**
  * This example shows how to create a simple JTreeTable component, 
  * by using a JTree as a renderer (and editor) for the cells in a 
- * particular column in the JTable.  
- *
- * @version %I% %G%
+ * particular column in the JTable.
  *
  * @author Philip Milne
  * @author Scott Violet
  */
-
 public class JTreeTable extends JTable {
 	/**
 	 * 
@@ -106,6 +122,7 @@ public class JTreeTable extends JTable {
 	 * thing to do for an editor. Returning -1 for the editing row in this case,
 	 * ensures the editor is never painted.
 	 */
+	@Override
 	public int getEditingRow() {
 		return (getColumnClass(editingColumn) == TreeTableModel.class) ? -1 : editingRow;
 	}
@@ -120,15 +137,18 @@ public class JTreeTable extends JTable {
 		 */
 		private static final long serialVersionUID = 1L;
 
+		@Override
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int r, int c) {
 			return tree;
 		}
 
+		@Override
 		public Object getCellEditorValue() {
 			return null;
 		}
 	}
 
+	@Override
 	public void setModel(TableModel dataModel) {
 		super.setModel(dataModel);
 	}

@@ -1,9 +1,30 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.accounting.model;
 
 import java.util.GregorianCalendar;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -16,25 +37,20 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.patient.model.Patient;
 import org.isf.priceslist.model.PriceList;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Pure Model Bill : represents a Bill 
- * @author Mwithi
- *
- */
-/*------------------------------------------
+ * ------------------------------------------
  * Bill - model for the bill entity
  * -----------------------------------------
  * modification history
- * ? - Mwithi - first version 
+ * ? - Mwithi - first version
  * 25/08/2015 - Antonio - ported to JPA
- * 
- *------------------------------------------*/
-
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="BILLS")
 @EntityListeners(AuditingEntityListener.class) 
@@ -77,7 +93,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 	
 	@ManyToOne
 	@JoinColumn(name="BLL_ID_PAT")
-	private Patient patient;
+	private Patient billPatient;
 		
 	@Column(name="BLL_PAT_NAME")
 	private String patName;
@@ -116,7 +132,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 
 	public Bill(int id, GregorianCalendar date, GregorianCalendar update,
 			boolean isList, PriceList list, String listName, boolean isPatient,
-			Patient patient, String patName, String status, Double amount, Double balance, String user) {
+			Patient billPatient, String patName, String status, Double amount, Double balance, String user) {
 		super();
 		this.id = id;
 		this.date = date;
@@ -125,7 +141,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 		this.list = list;
 		this.listName = listName;
 		this.isPatient = isPatient;
-		this.patient = patient;
+		this.billPatient = billPatient;
 		this.patName = patName;
 		this.status = status;
 		this.amount = amount;
@@ -155,13 +171,13 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 	public boolean isList() {
 		return isList;
 	}
-	public void setList(boolean isList) {
+	public void setIsList(boolean isList) {
 		this.isList = isList;
 	}
-	public PriceList getList() {
+	public PriceList getPriceList() {
 		return list;
 	}
-	public void setList(PriceList list) {
+	public void setPriceList(PriceList list) {
 		this.list = list;
 	}
 	public String getListName() {
@@ -173,14 +189,14 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 	public boolean isPatient() {
 		return isPatient;
 	}
-	public void setPatient(boolean isPatient) {
+	public void setIsPatient(boolean isPatient) {
 		this.isPatient = isPatient;
 	}
-	public Patient getPatient() {
-		return patient;
+	public Patient getBillPatient() {
+		return billPatient;
 	}
-	public void setPatient(Patient patient) {
-		this.patient = patient;
+	public void setBillPatient(Patient billPatient) {
+		this.billPatient = billPatient;
 	}
 	public String getPatName() {
 		return patName;
@@ -219,6 +235,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 		this.user = user;
 	}
 
+	@Override
 	public int compareTo(Bill obj) {
 		return this.id - obj.getId();
 	}

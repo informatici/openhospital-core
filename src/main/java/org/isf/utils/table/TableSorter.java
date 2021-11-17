@@ -1,5 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.utils.table;
 
+import java.awt.Component;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -15,13 +37,16 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class TableSorter extends TableMap {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = LoggerFactory.getLogger(TableSorter.class);
+
 	int[] indexes;
-	Vector<Integer> sortingColumns = new Vector<Integer>();
+	Vector<Integer> sortingColumns = new Vector<>();
 	boolean ascending = true;
 	int compares;
 
@@ -33,6 +58,7 @@ public class TableSorter extends TableMap {
 		setModel(model);
 	}
 
+	@Override
 	public void setModel(TableModel model) {
 		super.setModel(model);
 		reallocateIndexes();
@@ -78,81 +104,52 @@ public class TableSorter extends TableMap {
 				return 0;
 			}
 		} else // if (type == java.util.Date.class) { //doesn't work
-		if ((o1 instanceof String) && (o2 instanceof String)) {
+			if ((o1 instanceof String) && (o2 instanceof String)) {
 
-			String str1 = data.getValueAt(row1, column).toString();
-			String str2 = data.getValueAt(row2, column).toString();
+				String str1 = data.getValueAt(row1, column).toString();
+				String str2 = data.getValueAt(row2, column).toString();
 
-			try {
+				try {
 
-				DateFormat myDateFormat = new SimpleDateFormat("dd/MM/yy");
-				Date d1 = myDateFormat.parse(str1);
-				Date d2 = myDateFormat.parse(str2);
-				Long n1 = (Long) d1.getTime();
-				Long n2 = (Long) d2.getTime();
+					DateFormat myDateFormat = new SimpleDateFormat("dd/MM/yy");
+					Date d1 = myDateFormat.parse(str1);
+					Date d2 = myDateFormat.parse(str2);
+					long n1 = d1.getTime();
+					long n2 = d2.getTime();
 
-				if (n1 < n2) {
+					if (n1 < n2) {
+						return -1;
+					} else if (n1 > n2) {
+						return 1;
+					} else {
+						return 0;
+					}
+
+				} catch (NumberFormatException | ParseException e3) {
+					LOGGER.info("Compare ({}) with ({})", str1, str2);
+					return str1.compareTo(str2);
+				}
+			} else {
+				Object v1 = data.getValueAt(row1, column);
+				String s1 = v1.toString();
+				Object v2 = data.getValueAt(row2, column);
+				String s2 = v2.toString();
+				int result = s1.compareTo(s2);
+
+				if (result < 0) {
 					return -1;
-				} else if (n1 > n2) {
+				} else if (result > 0) {
 					return 1;
 				} else {
 					return 0;
 				}
-
-			} catch (NumberFormatException e3) {
-				System.out.println("Compare (" + str1 + ") with (" + str2 + ")");
-				return str1.compareTo(str2);
-			} catch (ParseException p) {
-				System.out.println("Compare (" + str1 + ") with (" + str2 + ")");
-				return str1.compareTo(str2);
 			}
-			// Date d1 = (Date)data.getValueAt(row1, column);
-			// long n1 = d1.getTime();
-			// Date d2 = (Date)data.getValueAt(row2, column);
-			// long n2 = d2.getTime();
-
-			// if (n1 < n2) {
-			// return -1;
-			// } else if (n1 > n2) {
-			// return 1;
-			// } else {
-			// return 0;
-			// }
-
-		} /*
-		 * else if (type == String.class) { String s1 =
-		 * (String)data.getValueAt(row1, column); String s2 =
-		 * (String)data.getValueAt(row2, column); int result = s1.compareTo(s2);
-		 * 
-		 * if (result < 0) { return -1; } else if (result > 0) { return 1; }
-		 * else { return 0; } } else if (type == Boolean.class) { Boolean bool1
-		 * = (Boolean)data.getValueAt(row1, column); boolean b1 =
-		 * bool1.booleanValue(); Boolean bool2 = (Boolean)data.getValueAt(row2,
-		 * column); boolean b2 = bool2.booleanValue();
-		 * 
-		 * if (b1 == b2) { return 0; } else if (b1) { // Define false < true
-		 * return 1; } else { return -1; } }
-		 */else {
-			Object v1 = data.getValueAt(row1, column);
-			String s1 = v1.toString();
-			Object v2 = data.getValueAt(row2, column);
-			String s2 = v2.toString();
-			int result = s1.compareTo(s2);
-
-			if (result < 0) {
-				return -1;
-			} else if (result > 0) {
-				return 1;
-			} else {
-				return 0;
-			}
-		}
 	}
 
 	public int compare(int row1, int row2) {
 		compares++;
 		for (int level = 0; level < sortingColumns.size(); level++) {
-			Integer column = (Integer) sortingColumns.elementAt(level);
+			Integer column = sortingColumns.elementAt(level);
 			int result = compareRowsByColumn(row1, row2, column);
 			if (result != 0) {
 				return ascending ? result : -result;
@@ -174,8 +171,8 @@ public class TableSorter extends TableMap {
 		}
 	}
 
+	@Override
 	public void tableChanged(TableModelEvent e) {
-		// System.out.println("Sorter: tableChanged");
 		reallocateIndexes();
 
 		super.tableChanged(e);
@@ -183,7 +180,7 @@ public class TableSorter extends TableMap {
 
 	public void checkModel() {
 		if (indexes.length != model.getRowCount()) {
-			System.err.println("Sorter not informed of a change in model.");
+			LOGGER.error("Sorter not informed of a change in model.");
 		}
 	}
 
@@ -191,10 +188,8 @@ public class TableSorter extends TableMap {
 		checkModel();
 
 		compares = 0;
-		// n2sort();
-		// qsort(0, indexes.length-1);
-		shuttlesort((int[]) indexes.clone(), indexes, 0, indexes.length);
-		// System.out.println("Compares: "+compares);
+
+		shuttlesort(indexes.clone(), indexes, 0, indexes.length);
 	}
 
 	public void n2sort() {
@@ -210,7 +205,7 @@ public class TableSorter extends TableMap {
 	// This is a home-grown implementation which we have not had time
 	// to research - it may perform poorly in some circumstances. It
 	// requires twice the space of an in-place algorithm and makes
-	// NlogN assigments shuttling the values between the two
+	// NlogN assignments shuttling the values between the two
 	// arrays. The number of compares appears to vary between N-1 and
 	// NlogN depending on the initial order but the main reason for
 	// using it here is that, unlike qsort, it is stable.
@@ -242,9 +237,8 @@ public class TableSorter extends TableMap {
 		 */
 
 		if (high - low >= 4 && compare(from[middle - 1], from[middle]) <= 0) {
-			for (int i = low; i < high; i++) {
-				to[i] = from[i];
-			}
+			if (high - low >= 0)
+				System.arraycopy(from, low, to, low, high - low);
 			return;
 		}
 
@@ -268,11 +262,13 @@ public class TableSorter extends TableMap {
 	// The mapping only affects the contents of the data rows.
 	// Pass all requests to these rows through the mapping array: "indexes".
 
+	@Override
 	public Object getValueAt(int aRow, int aColumn) {
 		checkModel();
 		return model.getValueAt(indexes[aRow], aColumn);
 	}
 
+	@Override
 	public void setValueAt(Object aValue, int aRow, int aColumn) {
 		checkModel();
 		model.setValueAt(aValue, indexes[aRow], aColumn);
@@ -298,6 +294,8 @@ public class TableSorter extends TableMap {
 		final JTable tableView = table;
 		tableView.setColumnSelectionAllowed(false);
 		MouseAdapter listMouseListener = new MouseAdapter() {
+
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				TableColumnModel columnModel = tableView.getColumnModel();
 				int viewColumn = columnModel.getColumnIndexAtX(e.getX());
@@ -313,4 +311,18 @@ public class TableSorter extends TableMap {
 		JTableHeader th = tableView.getTableHeader();
 		th.addMouseListener(listMouseListener);
 	}
+
+	public void updateRowHeights(JTable table) {
+		for (int row = 0; row < table.getRowCount(); row++) {
+			int rowHeight = table.getRowHeight();
+
+			for (int column = 0; column < table.getColumnCount(); column++) {
+				Component comp = table.prepareRenderer(table.getCellRenderer(row, column), row, column);
+				rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
+			}
+
+			table.setRowHeight(row, rowHeight);
+		}
+	}
+
 }

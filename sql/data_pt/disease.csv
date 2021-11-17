@@ -1,0 +1,109 @@
+1;Paralisia flácida aguda;ND;0;1;1
+2;Cólera;ND;0;1;1
+3;Diarréia-disenteria;ND;2;1;1
+4;Verme da Guiné;ND;0;1;1
+5;Sarampo;ND;0;1;1
+6;Meningite;ND;0;1;1
+7;Tétano neonatal (menos a idade de 28 dias);ND;3;1;1
+8;Praga;ND;0;1;1
+9;Raiva;ND;0;1;1
+10;Febre de Haemorragic;ND;0;1;1
+11;Febre amarela;ND;0;1;1
+12;Anemia;NC;0;1;1
+13;Dental doenças e condições;NC;0;1;1
+14;Diabetes Mellitus;NC;0;1;1
+15;Doenças gastro-intestinais (não infecciosas);NC;1;1;1
+16;Hipertensão;NC;0;1;1
+17;Doença mental;NC;0;1;1
+18;Epilepsia;NC;0;1;1
+19;Outras doenças cardio-vasculares;NC;0;1;1
+20;Desnutrição grave (marasmo, kwashiorkor, marasmic-kwash);NC;6;1;0
+22;Violência do trauma-doméstico;NC;0;1;1
+23;Trauma-outros intensional;NC;0;1;1
+24;Acidentes de viação trauma;NC;0;1;1
+25;Trauma outros não intensional;NC;0;1;1
+26;Outras complicações da gravidez;MP;1;0;1
+27;Condições perinatais;MP;0;1;1
+28;Abortos;MP;0;1;1
+29;AIDS/SIDA;OC;0;1;1
+30;Não-diarreia sangrenta;OC;0;1;1
+31;Diarreia persistente;OC;0;1;1
+32;Infecção no ouvido;OC;1;0;1
+33;Infecção ocular;OC;0;1;1
+34;Genital descarga uretral-inf.;OC;1;0;1
+35;INF-corrimento genital;OC;1;0;1
+36;INF-ulcerativa genital;OC;1;0;1
+37;Vermes intestinais;OC;0;1;1
+38;Hanseníase;OC;0;1;1
+39;Malária;OC;0;1;1
+40;Sem pneumonia-resfriado ou tosse;OC;0;1;1
+41;Oncocercose;OC;0;1;1
+42;Pneumonia;OC;0;1;1
+43;Doenças de pele;OC;0;1;1
+44;Tuberculose;OC;2;1;1
+46;Febre tifóide;OC;0;1;1
+47;Infecções do trato urinário (ITU);OC;2;1;1
+48;Others(non specified);OC;1;0;1
+49;Todas as outras doenças;AO;2;1;1
+50;Outras doenças infecciosas emergentes;ND;0;1;1
+56;Morte no OPD;OC;0;1;1
+57;Condições de ENT;OC;0;1;1
+58;Condições do olho;OC;0;1;1
+59;Infecções de transmitida sexualmente (STI);OC;1;1;1
+60;Hepatite;OC;1;0;1
+61;Osteomielite;OC;1;0;1
+62;Peritonite;OC;1;0;1
+63;Pyrexiaof origem desconhecida (PUO);OC;1;0;1
+64;Septicemia;OC;1;0;1
+65;Hipertensão arterial na gravidez;MP;0;1;1
+66;Hemorragia relacionada à gravidez (APH/PPH);MP;0;1;1
+67;Sepse relacionada à gravidez;MP;1;0;1
+68;Asma;NC;0;1;1
+69;Doenças orais e a condição;NC;0;1;1
+70;Desordens endócrinas e metabólicas (outro);NC;0;1;1
+71;Transtornos de ansiedade;NC;0;1;1
+72;Mania;NC;0;1;1
+73;Depressão;NC;0;1;1
+74;Esquizofrenia;NC;0;1;1
+75;Abuso de álcool e drogas;NC;0;1;1
+76;Infância e transtornos mentais;NC;0;1;1
+77;Desnutrição grave (kwashiorkor);NC;2;0;1
+78;Desnutrição grave (marasmo);NC;3;0;1
+79;Desnutrição grave (marasmic-kwash);NC;2;0;1
+80;Baixo peso para a idade;NC;0;1;1
+81;Lesões - (trauma devido a outras causas);NC;0;1;1
+82;Mordida de animal/cobra;NC;0;1;1
+83;Envenenamento por;NC;1;0;1
+84;Cirrose hepática;NC;0;1;1
+85;Carcinoma hepatocelular;NC;0;1;1
+86;S de doença hepática (outro);NC;0;1;1
+87;Hérnias;NC;0;1;1
+88;Doenças do apêndice;NC;0;1;1
+89;Músculo esquelético e conjuntivo tecido doença;NC;0;1;1
+90;Genito urinário doenças (não-infecciosas);NC;0;1;1
+91;Malformações congênitas e anormalidades do cromossomo;ND;1;0;1
+92;Complicação e cuidados cirúrgicos;NC;0;1;1
+93;Do neoplasia bondoso (todo o tipo);NC;16;1;1
+94;Câncer de mama;NC;0;1;1
+95;Cancro da próstata;ND;1;0;1
+96;Neoplasia maligna de órgãos digestivos;NC;0;1;1
+97;Malignos dos pulmões;NC;0;1;1
+98;Kaposis e outros tipos de câncer de pele;NC;0;1;1
+99;Neoplasia maligna do tecido hematopoiético;NC;0;1;1
+100;Outras neoplasias malignas;NC;0;1;1
+101;Úlceras curáveis;NC;0;1;1
+102;Eventos cérebro-vasculares;NC;0;1;1
+103;Parada cardíaca;NC;0;1;1
+104;Sangramento gastro-intestinal;NC;0;1;1
+105;Dificuldade respiratória;NC;0;1;1
+106;Insuficiência renal aguda;NC;1;0;1
+107;Infecção aguda;NC;1;0;1
+108;Esquistossomose;NC;0;1;1
+110;Doenças de inflamatória pélvica (PID);OC;0;1;1
+111;Tétano (idade de mais de 28 dias);OC;1;1;1
+112;Distocia;MP;0;1;1
+113;Outros tipos de meningite;OC;0;1;1
+114;Esquistossomose;OC;0;1;1
+115;Doença do sono;OC;0;1;1
+116;Malária na gravidez;MP;0;1;1
+117;Lesões - (acidente de viação);NC;0;1;1

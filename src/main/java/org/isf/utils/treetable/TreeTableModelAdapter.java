@@ -1,8 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.utils.treetable;
 
 /*
- * %W% %E%
- *
  * Copyright 1997, 1998 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
@@ -50,15 +69,11 @@ import javax.swing.tree.TreePath;
  * This is a wrapper class takes a TreeTableModel and implements 
  * the table model interface. The implementation is trivial, with 
  * all of the event dispatching support provided by the superclass: 
- * the AbstractTableModel. 
- *
- * @version %I% %G%
+ * the AbstractTableModel.
  *
  * @author Philip Milne
  * @author Scott Violet
  */
-
-
 public class TreeTableModelAdapter extends AbstractTableModel
 {
     /**
@@ -75,10 +90,12 @@ public class TreeTableModelAdapter extends AbstractTableModel
 	tree.addTreeExpansionListener(new TreeExpansionListener() {
 	    // Don't use fireTableRowsInserted() here; 
 	    // the selection model would get  updated twice. 
-	    public void treeExpanded(TreeExpansionEvent event) {  
+	    @Override
+	    public void treeExpanded(TreeExpansionEvent event) {
 	      fireTableDataChanged(); 
 	    }
-            public void treeCollapsed(TreeExpansionEvent event) {  
+            @Override
+            public void treeCollapsed(TreeExpansionEvent event) {
 	      fireTableDataChanged(); 
 	    }
 	});
@@ -86,18 +103,22 @@ public class TreeTableModelAdapter extends AbstractTableModel
 
   // Wrappers, implementing TableModel interface. 
 
+    @Override
     public int getColumnCount() {
 	return treeTableModel.getColumnCount();
     }
 
+    @Override
     public String getColumnName(int column) {
 	return treeTableModel.getColumnName(column);
     }
 
+    @Override
     public Class<?> getColumnClass(int column) {
 	return treeTableModel.getColumnClass(column);
     }
 
+    @Override
     public int getRowCount() {
 	return tree.getRowCount();
     }
@@ -107,17 +128,18 @@ public class TreeTableModelAdapter extends AbstractTableModel
 	return treePath.getLastPathComponent();         
     }
 
+    @Override
     public Object getValueAt(int row, int column) {
 	return treeTableModel.getValueAt(nodeForRow(row), column);
     }
 
+    @Override
     public boolean isCellEditable(int row, int column) {
          return treeTableModel.isCellEditable(nodeForRow(row), column); 
     }
 
+    @Override
     public void setValueAt(Object value, int row, int column) {
 	treeTableModel.setValueAt(value, nodeForRow(row), column);
     }
 }
-
-

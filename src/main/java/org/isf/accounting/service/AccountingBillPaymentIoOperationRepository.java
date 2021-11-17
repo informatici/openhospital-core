@@ -1,10 +1,31 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.accounting.service;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillPayments;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,38 +35,31 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface AccountingBillPaymentIoOperationRepository extends JpaRepository<BillPayments, Integer>, AccountingBillPaymentIoOperationRepositoryCustom {
+public interface AccountingBillPaymentIoOperationRepository extends JpaRepository<BillPayments, Integer> {
 
-	@Query(value = "SELECT DISTINCT BLP_USR_ID_A FROM BILLPAYMENTS ORDER BY BLP_USR_ID_A ASC", nativeQuery= true)
+	@Query(value = "select distinct bp.user FROM BillPayments bp ORDER BY bp.user asc")
 	List<String> findUserDistinctByOrderByUserAsc();
 
-	@Query("SELECT BP FROM BillPayments BP WHERE DATE(BLP_DATE) BETWEEN ?1 AND ?2"
-				+ " ORDER BY BLP_ID_BILL, BLP_DATE ASC")
-	List<BillPayments> findByDateBetweenOrderByIdAscDateAsc(Date start, Date end);	
+	@Query(value = "SELECT BP FROM BillPayments BP where BP.date >= :start and BP.date < :end ORDER BY BP.id")
+	List<BillPayments> findByDateBetweenOrderByIdAscDateAsc(@Param("start") GregorianCalendar start, @Param("end") GregorianCalendar end);
 
-	@Query(value = "SELECT * FROM BILLPAYMENTS ORDER BY BLP_ID_BILL, BLP_DATE ASC", nativeQuery= true)
+	List<BillPayments> findAllByBillIn(Collection<Bill> bills);
+
+	@Query(value = "SELECT BP FROM BillPayments BP ORDER BY BP.bill, BP.date ASC")
 	List<BillPayments> findAllByOrderByBillAndDate();
-	
-	@Query(value = "SELECT * FROM BILLPAYMENTS WHERE BLP_ID_BILL = :billId ORDER BY BLP_ID_BILL, BLP_DATE ASC", nativeQuery= true)
+
+	@Query(value = "SELECT BP FROM BillPayments BP WHERE BP.bill.id = :billId ORDER BY BP.bill, BP.date ASC")
 	List<BillPayments> findAllWherBillIdByOrderByBillAndDate(@Param("billId") Integer billId);
 	
 	@Modifying
 	@Transactional
-	@Query(value = "DELETE FROM BILLPAYMENTS WHERE BLP_ID_BILL =  :billId", nativeQuery= true)
+	@Query(value = "DELETE FROM BillPayments BP where BP.bill.id = :billId")
 	void deleteWhereId(@Param("billId") Integer billId);
+
 	
-	@Modifying
-	@Transactional
-	@Query(value = "INSERT INTO BILLPAYMENTS (" +
-			"BLP_ID_BILL, BLP_DATE, BLP_AMOUNT, BLP_USR_ID_A) " +
-			"VALUES (:id,:date,:amount,:user)", nativeQuery= true)
-	void insertBillPayment(
-			@Param("id") Integer id, @Param("date") GregorianCalendar date,
-			@Param("amount") Double amount, @Param("user") String user);
-	
-	@Query(value = "SELECT * FROM BILLPAYMENTS BLP INNER JOIN BILLS BLL ON BLP.BLP_ID_BILL= BLL.BLL_ID "
-			+" WHERE DATE(BLP.BLP_DATE) BETWEEN :dateFrom AND :dateTo "
-			+" AND (BLL.BLL_ID_PAT= :patientCode ) "
-			+" ORDER BY BLP_ID_BILL, BLP_DATE ASC ", nativeQuery= true)
-	ArrayList<BillPayments> findByDateAndPatient(@Param("dateFrom") GregorianCalendar dateFrom , @Param("dateTo") GregorianCalendar dateTo, @Param("patientCode") Integer patientCode);
+	@Query(value = "SELECT BP FROM BillPayments BP WHERE " +
+			"BP.bill.billPatient.code = :patientCode and " +
+			"DATE(BP.date) between DATE(:dateFrom) and DATE(:dateTo) " +
+			"ORDER BY BP.bill, BP.date ASC")
+	List<BillPayments> findByDateAndPatient(@Param("dateFrom") GregorianCalendar dateFrom , @Param("dateTo") GregorianCalendar dateTo, @Param("patientCode") Integer patientCode);
 }

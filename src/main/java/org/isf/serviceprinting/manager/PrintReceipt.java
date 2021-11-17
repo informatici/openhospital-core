@@ -1,7 +1,27 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.serviceprinting.manager;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
@@ -31,26 +51,24 @@ import net.sf.jasperreports.engine.export.JRTextExporter;
 import net.sf.jasperreports.engine.export.JRTextExporterParameter;
 
 /**
- * 
+ * This class will read generic/text printer parameters and compile and
+ * print given jasper report. A copy will be at given file path
+ *
  * @author Mwithi
- * 
- *         This class will read generic/text printer parameters and compile and
- *         print given jasper report. A copy will be at given file path
- * 
  */
 public class PrintReceipt {
-	
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PrintReceipt.class);
+
 	private PrintService defaultPrintService;
-	private final Logger logger = LoggerFactory.getLogger(PrintReceipt.class);
 
 	/**
-	 * @param jasperFileName
-	 * @param parameters
-	 * @param conn
+	 * @param jasperPrint
+	 * @param fileName
 	 */
 	public PrintReceipt(JasperPrint jasperPrint, String fileName) {
 				
-		TxtPrinter.getTxtPrinter();
+		TxtPrinter.initialize();
 		
 		try {
 			defaultPrintService = PrintServiceLookup.lookupDefaultPrintService();
@@ -83,20 +101,18 @@ public class PrintReceipt {
 					}
 
 				} else {
-					logger.debug("invalid MODE");
-					logger.debug("MODE: " + TxtPrinter.MODE);
+					LOGGER.debug("invalid MODE");
+					LOGGER.debug("MODE: {}", TxtPrinter.MODE);
 				}
 			} else {
-				logger.debug("printer was not found.");
-				logger.debug(defaultPrintService.toString());
+				LOGGER.debug("printer was not found.");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
 	
 	/**
-	 * 
 	 * @param file
 	 * @param showDialog
 	 */
@@ -131,36 +147,30 @@ public class PrintReceipt {
 			int i = 0;
 			while (!aLine.equals("")) {
 				//System.out.println(aLine);
-				zpl.append("^FO0," + (i * charH));//line position
-				zpl.append(font + "," + charH);//font size
-				zpl.append("^FD" + aLine + "^FS");//line field
+				zpl.append("^FO0,").append(i * charH);         //line position
+				zpl.append(font).append(",").append(charH);    //font size
+				zpl.append("^FD").append(aLine).append("^FS"); //line field
 				aLine = brStream.readLine();
 				i++;
 			}
 			zpl.append("^XZ");//end
-			String labelLenght = "^LL" + charH * i;
-			header+=labelLenght;
-			String label = header+zpl;
-			
-			//System.out.println(label);
+			String labelLength = "^LL" + charH * i;
+			header+=labelLength;
+			String label = header + zpl;
+
 			byte[] by = label.getBytes();
 			Doc doc = new SimpleDoc(by, flavor, das);
 			job.print(doc, pras);
 			brStream.close();
 			frStream.close();
 
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (PrintException e) {
-			e.printStackTrace();
+		} catch (IOException | PrintException exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 	}
 	
 	/**
-	 * 
-	 * @param file
+	 * @param jasperPrint
 	 */
 	private void printReversPages(JasperPrint jasperPrint) {
 		try {
@@ -168,29 +178,28 @@ public class PrintReceipt {
 			List pages = jasperPrint.getPages();
 			JasperPrintManager.printPages(jasperPrint, 0, pages.size()-1, !TxtPrinter.USE_DEFAULT_PRINTER);
 			
-		} catch (JRException e) {
-			e.printStackTrace();
+		} catch (JRException jrException) {
+			LOGGER.error(jrException.getMessage(), jrException);
 		}
 	}
 	
 	/**
-	 * 
 	 * @param printService
 	 */
 	private void getPrinterDetails(PrintService printService) {
-		logger.debug("Printer: " + printService.getName());
-		logger.debug("Supported flavors:");
+		LOGGER.debug("Printer: {}", printService.getName());
+		LOGGER.debug("Supported flavors:");
 		DocFlavor[] flavors = printService.getSupportedDocFlavors();
 		if (flavors != null) {
 			for (DocFlavor flavor : flavors) {
-				logger.debug(flavor.toString());
+				LOGGER.debug(flavor.toString());
 			}
 		}
 		//System.out.println("Attributes:");
 		Attribute[] attributes = printService.getAttributes().toArray();
 		if (attributes != null) {
 			for (Attribute attr : attributes) {
-				logger.debug(attr.getName() + ": " + (attr.getClass()).toString());
+				LOGGER.debug("{}: {}", attr.getName(), (attr.getClass()).toString());
 			}
 		}
 	}

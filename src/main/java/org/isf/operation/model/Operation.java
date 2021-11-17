@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.operation.model;
 
 import javax.persistence.AttributeOverride;
@@ -17,25 +38,16 @@ import org.isf.utils.db.Auditable;
 import org.isf.opetype.model.OperationType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/*----------------------------------------------------------
- * modification history
- * ====================
- * 13/02/09 - Alex - added Major/Minor control
- -----------------------------------------------------------*/
-
 /**
- * Pure Model Operation : represents a disease
- * 
- * @author Rick, Vero, Pupo
+ * ------------------------------------------
+ * Operation - model for the bill entity
+ * -----------------------------------------
+ * modification history
+ * ? - bob - first version
+ * 13/02/09 - Alex - added Major/Minor control
+ * 007/01/2015 - Antonio - ported to JPA
+ * ------------------------------------------
  */
-/*------------------------------------------
-* Operation - model for the bill entity
-* -----------------------------------------
-* modification history
-* ? - bob - first version 
-* 007/01/2015 - Antonio - ported to JPA
-* 
-*------------------------------------------*/
 @Entity
 @Table(name="OPERATION")
 @EntityListeners(AuditingEntityListener.class)
@@ -65,6 +77,15 @@ public class Operation extends Auditable<String>
 	@Column(name="OPE_STAT")
     private Integer major;
 
+	/*
+	 * //TODO: replace "integers" values with mnemonic ones, CHAR(1) -> VARCHAR(10)
+	 * "1" = OPD / ADMISSION
+	 * "2" = ADMISSION
+	 * "3" = OPD
+	 */
+	@Column(name="OPE_FOR")
+    private String operFor;
+	
 	@Version
 	@Column(name="OPE_LOCK")
     private Integer lock;
@@ -94,11 +115,17 @@ public class Operation extends Auditable<String>
     public String getCode() {
         return this.code;
     }
-    
     public void setCode(String aCode) {
         this.code = aCode;
     }
+    public void setOpeFor(String operFor) {
+        this.operFor = operFor;
+    }
+    public String getOpeFor() {
+        return this.operFor;
+    }
     
+  
     public String getDescription() {
         return this.description;
     }

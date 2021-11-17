@@ -1,373 +1,243 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.patient.service;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
-/*------------------------------------------
- * IoOperations - dB operations for the patient entity
- * -----------------------------------------
- * modification history
- * 05/05/2005 - giacomo  - first beta version 
- * 03/11/2006 - ross - added toString method. Gestione apici per
- *                     nome, cognome, citta', indirizzo e note
- * 11/08/2008 - alessandro - added father & mother's names
- * 26/08/2008 - claudio    - added birth date
- * 							 modififed age
- * 01/01/2009 - Fabrizio   - changed the calls to PAT_AGE fields to
- *                           return again an int type
- * 03/12/2009 - Alex       - added method for merge two patients history
- *------------------------------------------*/
-
-import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
-
+import org.hibernate.Hibernate;
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientMergedEvent;
 import org.isf.utils.db.TranslateOHServiceException;
-import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+/**
+ * ------------------------------------------
+ * PatientIoOperations - dB operations for the patient entity
+ * -----------------------------------------
+ * modification history
+ * 05/05/2005 - giacomo  - first beta version
+ * 03/11/2006 - ross - added toString method. Gestione apici per
+ * nome, cognome, citta', indirizzo e note
+ * 11/08/2008 - alessandro - added father & mother's names
+ * 26/08/2008 - claudio    - added birth date
+ * modified age
+ * 01/01/2009 - Fabrizio   - changed the calls to PAT_AGE fields to
+ * return again an int type
+ * 03/12/2009 - Alex       - added method for merge two patients history
+ * ------------------------------------------
+ */
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
-public class PatientIoOperations 
-{
+public class PatientIoOperations {
+
+	public static final String NOT_DELETED_STATUS = "N";
 	@Autowired
 	private PatientIoOperationRepository repository;
-	
+	@Autowired
+	private ApplicationEventPublisher applicationEventPublisher;
+
 	/**
-	 * method that returns the full list of Patients not logically deleted
-	 * 
+	 * Method that returns the full list of Patients not logically deleted
+	 *
 	 * @return the list of patients
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatients() throws OHServiceException 
-	{
-		ArrayList<Patient> pPatient = null;
-		
-		
-		pPatient = new ArrayList<Patient>(repository.findAllWhereDeleted());			
-					
-		return pPatient;
+	public List<Patient> getPatients() throws OHServiceException {
+		return repository.findByDeletedOrDeletedIsNull(NOT_DELETED_STATUS);
 	}
-	
+
 	/**
-	 * method that returns the full list of Patients not logically deleted by page
-	 * 
+	 * Method that returns the full list of Patients not logically deleted by page
+	 *
 	 * @return the list of patients
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatients(Pageable pageable) throws OHServiceException 
-	{
-		ArrayList<Patient> pPatient = null;
-		
-		
-		pPatient = new ArrayList<Patient>(repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName("N", pageable));
-					
-		return pPatient;
+	public List<Patient> getPatients(Pageable pageable) throws OHServiceException {
+		return repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName("N", pageable);
 	}
 
 	/**
-	 * method that returns the full list of Patients not logically deleted with Height and Weight 
-	 * 
-	 * @param regex
-	 * @return the full list of Patients with Height and Weight
+	 * Method that returns the full list of Patients by parameters
+	 *
+	 * @param parameters
+	 * @return
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Patient> getPatientsWithHeightAndWeight(
-			String regex) throws OHServiceException 
-	{
-		ArrayList<Integer> pPatientCode = null;
-		ArrayList<Patient> pPatient = new ArrayList<Patient>();
-		
-		
-		pPatientCode = new ArrayList<Integer>(repository.findAllByHeightAndWeight(regex));			
-		for (int i=0; i<pPatientCode.size(); i++)
-		{
-			Integer code = pPatientCode.get(i);
-			Patient patient = repository.findOne(code);
-			
-			
-			pPatient.add(i, patient);
-		}
-					
-		return pPatient;
-	}	
+	public List<Patient> getPatients(Map<String, Object> parameters) throws OHServiceException {
+		return repository.getPatientsByParams(parameters);
+	}
 
 	/**
-	 * method that get a Patient by his/her name
-	 * 
+	 * Method that returns the full list of Patients not logically deleted, having the passed String in:<br>
+	 * - code<br>
+	 * - firstName<br>
+	 * - secondName<br>
+	 * - taxCode<br>
+	 * - note<br>
+	 *
+	 * @param keyword - String to search, <code>null</code> for full list
+	 * @return the list of Patients (could be empty)
+	 * @throws OHServiceException
+	 */
+	public List<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException {
+		return repository.findByFieldsContainingWordsFromLiteral(keyword);
+	}
+
+	/**
+	 * Method that gets a Patient by his/her name
+	 *
 	 * @param name
 	 * @return the Patient that match specified name
 	 * @throws OHServiceException
 	 */
-	public Patient getPatient(
-			String name) throws OHServiceException 
-	{
-		ArrayList<Patient> pPatient = null;
-		Patient patient = null;	
-		
-		
-		pPatient = new ArrayList<Patient>(repository.findAllWhereNameAndDeletedOrderedByName(name));
-		if (pPatient.size() > 0)
-		{			
-			patient = pPatient.get(pPatient.size()-1);			
+	public Patient getPatient(String name) throws OHServiceException {
+		List<Patient> patients = repository.findByNameAndDeletedOrderByName(name, NOT_DELETED_STATUS);
+		if (!patients.isEmpty()) {
+			Patient patient = patients.get(patients.size() - 1);
+			Hibernate.initialize(patient.getPatientProfilePhoto());
+			return patient;
 		}
-					
-		return patient;
+		return null;
 	}
 
 	/**
-	 * method that get a Patient by his/her ID
-	 * 
+	 * Method that gets a Patient by his/her ID
+	 *
 	 * @param code
 	 * @return the Patient
 	 * @throws OHServiceException
 	 */
-	public Patient getPatient(
-			Integer code) throws OHServiceException 
-	{
-		ArrayList<Patient> pPatient = null;
-		Patient patient = null;	
-		
-		
-		pPatient = new ArrayList<Patient>(repository.findAllWhereIdAndDeleted(code));
-		if (pPatient.size() > 0)
-		{			
-			patient = pPatient.get(pPatient.size()-1);			
+	public Patient getPatient(Integer code) throws OHServiceException {
+		List<Patient> patients = repository.findAllWhereIdAndDeleted(code, NOT_DELETED_STATUS);
+		if (!patients.isEmpty()) {
+			Patient patient = patients.get(patients.size() - 1);
+			Hibernate.initialize(patient.getPatientProfilePhoto());
+			return patient;
 		}
-					
-		return patient;
+		return null;
 	}
 
 	/**
-	 * get a Patient by his/her ID, even if he/her has been logically deleted
-	 * 
+	 * Get a Patient by his/her ID, even if he/her has been logically deleted
+	 *
 	 * @param code
 	 * @return the list of Patients
 	 * @throws OHServiceException
 	 */
-	public Patient getPatientAll(
-			Integer code) throws OHServiceException 
-	{
-		ArrayList<Patient> pPatient = null;
-		Patient patient = null;	
-		
-		
-		pPatient = new ArrayList<Patient>(repository.findAllWhereId(code));
-		if (pPatient.size() > 0)
-		{			
-			patient = pPatient.get(pPatient.size()-1);			
+	public Patient getPatientAll(Integer code) throws OHServiceException {
+		Patient patient = repository.findOne(code);
+		if (patient != null) {
+			Hibernate.initialize(patient.getPatientProfilePhoto());
 		}
-					
 		return patient;
 	}
 
 	/**
-	 * Method that insert a new Patient in the dB
-	 * 
+	 * Save / update patient
+	 *
 	 * @param patient
-	 * @return true - if the new Patient has been inserted
-	 * @throws OHServiceException
+	 * @return saved / updated patient
 	 */
-	public boolean newPatient(
-			Patient patient) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		Patient patientVaccine = repository.save(patient);
-		result = (patientVaccine != null);
-		
-		return result;
+	public Patient savePatient(Patient patient) {
+		return repository.save(patient);
 	}
-	
+
 	/**
-	 * 
-	 * method that update an existing {@link Patient} in the db
-	 * 
+	 * Method that updates an existing {@link Patient} in the db
+	 *
 	 * @param patient - the {@link Patient} to update
 	 * @return true - if the existing {@link Patient} has been updated
 	 * @throws OHServiceException
 	 */
-	public boolean updatePatient(
-			Patient patient) throws OHServiceException 
-	{
-		int lock = 0;
-		boolean result = false;
-				
-
-		if (repository.updateLockByCode(
-				patient.getFirstName(), patient.getSecondName(), patient.getName(),
-				patient.getBirthDate(), patient.getAge(), patient.getAgetype(), patient.getSex(), patient.getAddress(), patient.getCity(),
-				patient.getNextKin(), patient.getTelephone(), patient.getMother(), patient.getMother_name(),
-				patient.getFather(), patient.getFather_name(), patient.getBloodType(), patient.getHasInsurance(), patient.getParentTogether(),
-				patient.getNote(), patient.getTaxCode(), (lock + 1), _createPatientPhotoInputStream(patient.getPhoto()),
-				patient.getCode()) > 0)
-		{
-			result = true;
-		}
-	
-		return result;
+	public boolean updatePatient(Patient patient) throws OHServiceException {
+		repository.save(patient);
+		return true;
 	}
-	
-	private byte[] _createPatientPhotoInputStream(
-			Image anImage) 
-	{
-		byte[] byteArray = null;
-		
-		try {
-			// Paint the image onto the buffered image
-			BufferedImage bu = new BufferedImage(anImage.getWidth(null), anImage.getHeight(null), BufferedImage.TYPE_INT_RGB);
-			Graphics g = bu.createGraphics();
-			g.drawImage(anImage, 0, 0, null);
-			g.dispose();
-			// Create the ByteArrayOutputStream
-			ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
-			ImageIO.write(bu, "jpg", outStream);
-			
-			if (outStream != null) byteArray = outStream.toByteArray();
-			
-		} catch (IOException ioe) {
-			//TODO: handle exception
-		} catch (Exception ioe) {
-			//TODO: handle exception
-		}
-		
-		return byteArray;
-	}
-	
 	/**
-	 * method that logically delete a Patient (not physically deleted)
-	 * 
-	 * @param aPatient
+	 * Method that logically deletes a Patient (not physically deleted)
+	 *
+	 * @param patient
 	 * @return true - if the Patient has been deleted (logically)
 	 * @throws OHServiceException
 	 */
-	public boolean deletePatient(
-			Patient patient) throws OHServiceException 
-	{
-		boolean result = false;
-		int updates = 0;
-		
-	
-		updates = repository.updateDeleted(patient.getCode());
-		if (updates > 0)
-		{
-			result = true;
-		} 
-		
-		return result;
+	public boolean deletePatient(Patient patient) throws OHServiceException {
+		return repository.updateDeleted(patient.getCode()) > 0;
 	}
 
 	/**
-	 * method that check if a Patient is already present in the DB by his/her name
-	 * 
+	 * Method that check if a Patient is already present in the DB by his/her name
+	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName
+	 *
 	 * @param name
 	 * @return true - if the patient is already present
 	 * @throws OHServiceException
 	 */
-	public boolean isPatientPresent(
-			String name) throws OHServiceException 
-	{
-		boolean result = false;
-		
-		
-		ArrayList<Patient> pPatient = null;
-		
-		
-		pPatient = new ArrayList<Patient>(repository.findAllWhereName(name));
-		if (pPatient.size() > 0)
-		{			
-			result = true;				
-		}
-					
-		return result;
+	public boolean isPatientPresentByName(String name) throws OHServiceException {
+		return !repository.findByNameAndDeleted(name, NOT_DELETED_STATUS).isEmpty();
 	}
 
 	/**
 	 * Method that get next PAT_ID is going to be used.
-	 * 
+	 *
 	 * @return code
 	 * @throws OHServiceException
 	 */
-	public int getNextPatientCode() throws OHServiceException 
-	{
-		Integer code = repository.findMaxCode();
-
-		return (code + 1);
+	public int getNextPatientCode() throws OHServiceException {
+		return repository.findMaxCode() + 1;
 	}
 
 	/**
-	 * method that merge all clinic details under the same PAT_ID
-	 * 
+	 * Method that merges all clinic details under the same PAT_ID
+	 *
 	 * @param mergedPatient
-	 * @param patient2
+	 * @param obsoletePatient
 	 * @return true - if no OHServiceExceptions occurred
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean mergePatientHistory(
-			Patient mergedPatient, 
-			Patient patient2) throws OHServiceException {
-		int mergedID = mergedPatient.getCode();
-		int obsoleteID = patient2.getCode();
-		boolean result = false;
-		int updates = 0;
-		
-		
-		updates = repository.updateAdmission(mergedID, obsoleteID);
-		updates += repository.updateExamination(mergedID, obsoleteID);	    
-		updates += repository.updateLaboratory(mergedID, mergedPatient.getName(), mergedPatient.getAge(), String.valueOf(mergedPatient.getSex()), obsoleteID);
-		updates += repository.updateOpd(mergedID, mergedPatient.getAge(), String.valueOf(mergedPatient.getSex()), obsoleteID);
-		updates += repository.updateBill(mergedID, mergedPatient.getName(), obsoleteID);
-		updates += repository.updateMedicalStock(mergedID, obsoleteID);
-		updates += repository.updateTherapy(mergedID, obsoleteID);
-		updates += repository.updateVisit(mergedID, obsoleteID);
-		updates += repository.updatePatientVaccine(mergedID, obsoleteID);
-		updates += repository.updateDelete(obsoleteID); 	
-		if (updates > 0)
-		{
-			result = true;
-		}
-		
-		
-		return result;
+	@Transactional
+	public boolean mergePatientHistory(Patient mergedPatient, Patient obsoletePatient) throws OHServiceException {
+		repository.updateDeleted(obsoletePatient.getCode());
+		applicationEventPublisher.publishEvent(new PatientMergedEvent(obsoletePatient, mergedPatient));
+
+		return true;
 	}
 
 	/**
-	 * checks if the code is already in use
+	 * Checks if the code is already in use
 	 *
 	 * @param code - the patient code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
-	 * @throws OHServiceException 
-	 */
-	public boolean isCodePresent(
-			Integer code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;	
-	}
-	/**
-	 * Get the patient list filter by head patient
-	 * @return patient list
 	 * @throws OHServiceException
 	 */
-	
-	public ArrayList<Patient> getPatientsHeadWithHeightAndWeight() throws OHServiceException {
-		 ArrayList<Patient> pPatient = repository.getPatientsHeadWithHeightAndWeight();
-		return pPatient;
+	public boolean isCodePresent(Integer code) throws OHServiceException {
+		return repository.exists(code);
 	}
+
 }

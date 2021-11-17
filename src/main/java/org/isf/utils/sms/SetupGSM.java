@@ -1,12 +1,27 @@
-/**
- * Test.java - 30/gen/2014
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.utils.sms;
 
 import java.awt.HeadlessException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,6 +31,14 @@ import java.util.Properties;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.isf.generaldata.ConfigurationProperties;
+import org.isf.sms.providers.gsm.GSMGatewayService;
+import org.isf.sms.providers.gsm.GSMParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
@@ -24,16 +47,13 @@ import gnu.io.SerialPortEventListener;
 
 /**
  * @author Mwithi
- *
  */
 public class SetupGSM extends JFrame implements SerialPortEventListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = LoggerFactory.getLogger(SetupGSM.class);
 	
-	private Properties props = new Properties();
+	private Properties props;
 	private CommPortIdentifier portId = null;
 	private Enumeration<?> portList = null;
 	private SerialPort serialPort = null;
@@ -43,23 +63,15 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		SetupGSM setup = new SetupGSM();
+		new SetupGSM();
 		System.exit(0);
 	}
 	
 	public SetupGSM() {	
 		
-		FileInputStream in;
-		try {
-			in = new FileInputStream("rsc" + File.separator + "SmsGateway" + File.separator + "GSM.properties");
-			props.load(in);
-			in.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+		props = ConfigurationProperties.loadPropertiesFile(GSMParameters.FILE_PROPERTIES, LOGGER);
 		
-		String model = props.getProperty("GMM");
+		String model = props.getProperty(GSMGatewayService.SERVICE_NAME + ".gmm");
 		
 		portList = CommPortIdentifier.getPortIdentifiers();
 		
@@ -79,8 +91,11 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 			        serialPort.notifyOnDataAvailable(true);
 					
 					OutputStream outputStream = serialPort.getOutputStream();
-						if (outputStream != null) System.out.println("Output stream OK");
-							else System.out.println("Output stream not found");
+					if (outputStream != null) {
+						System.out.println("Output stream OK");
+					} else {
+						System.out.println("Output stream not found");
+					}
 					
 					inputStream = serialPort.getInputStream(); 
 					byte[] command = model.getBytes();
@@ -89,12 +104,10 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 			        Thread.sleep(5000);
 			        
 				} catch (PortInUseException e) {
-					System.out.println("Port in use.");
-					continue;
-				} catch (Exception e) {
-					System.out.println("Failed to open port " + portId.getName());
-					e.printStackTrace();
-					continue;
+					LOGGER.error("Port in use.");
+				} catch (Exception exception) {
+					LOGGER.error("Failed to open port '{}'", portId.getName());
+					LOGGER.error(exception.getMessage(), exception);
 				} finally {
 					serialPort.close();
 				}
@@ -107,7 +120,7 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
     public void serialEvent(SerialPortEvent event) {
 		SerialPort serialPort = (SerialPort) event.getSource();
 		String port = serialPort.getName();
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
         byte[] buffer = new byte[1];
         try {
 			while(inputStream.available() > 0){
@@ -119,8 +132,8 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 				save(port);
 				System.exit(0);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException ioException) {
+			LOGGER.error(ioException.getMessage(), ioException);
 		}
     }
 
@@ -133,11 +146,14 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	private int confirm(String port, String answer) throws HeadlessException {
 		try {
 			int ok = answer.indexOf("OK");
-			if (ok > 0) answer = answer.substring(2, ok - 3);
-				else return JOptionPane.NO_OPTION;
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("outofbound: '" + answer + "'");
+			if (ok > 0) {
+				answer = answer.substring(2, ok - 3);
+			} else {
+				return JOptionPane.NO_OPTION;
+			}
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
+			LOGGER.error("outofbound: '{}'", answer);
 		}
 		System.out.println(answer.trim());
 		
@@ -149,16 +165,14 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	 * @param port
 	 */
 	private void save(String port) {
-		FileOutputStream out;
-		StringBuilder comment = new StringBuilder(" Configuration file for SMS Sender GSM\n");
-		comment.append(" PORT = COMx (Windows) or /dev/ttyUSBx (Linux)");
+		PropertiesConfiguration config;
 		try {
-			out = new FileOutputStream("rsc" + File.separator + "SmsGateway" + File.separator + "GSM.properties");
-			props.setProperty("PORT", port);
-			props.store(out, comment.toString());
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+			config = new PropertiesConfiguration(GSMParameters.FILE_PROPERTIES);
+			config.setProperty(GSMGatewayService.SERVICE_NAME + ".port", port);
+			config.save();
+			System.out.println("Port saved in " + GSMParameters.FILE_PROPERTIES);
+		} catch (ConfigurationException ce) {
+			LOGGER.error(ce.getMessage(), ce);
 		}
 	}
 }

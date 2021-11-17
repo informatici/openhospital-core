@@ -1,6 +1,26 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.accounting.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.accounting.model.BillItems;
@@ -17,22 +37,13 @@ public interface AccountingBillItemsIoOperationRepository extends JpaRepository<
 	List<BillItems> findByBill_idOrderByIdAsc(int billId);
 		
 	List<BillItems> findAllByOrderByIdAsc();
-	
+
+	@Query("select b from BillItems b group by b.itemDescription")
+	List<BillItems> findAllGroupByDescription();
+
 	@Modifying
 	@Transactional
-	@Query(value = "DELETE FROM BILLITEMS WHERE BLI_ID_BILL = :billId", nativeQuery= true)
+	@Query(value = "delete from BillItems b where b.id = :billId")
 	void deleteWhereId(@Param("billId") Integer billId);
-	
-	@Modifying
-	@Transactional
-	@Query(value = "INSERT INTO BILLITEMS (" +
-			"BLI_ID_BILL, BLI_IS_PRICE, BLI_ID_PRICE, BLI_ITEM_DESC, BLI_ITEM_AMOUNT, BLI_QTY) "+
-			"VALUES (:id,:isPrice,:price,:description,:amount,:qty)", nativeQuery= true)
-	void insertBillItem(
-			@Param("id") Integer id, @Param("isPrice") Boolean isPrice, @Param("price") String price,
-			@Param("description") String description, @Param("amount") Double amount, @Param("qty") Integer qty);
-	
-	@Query(value = "SELECT * FROM BILLITEMS GROUP BY BLI_ITEM_DESC", nativeQuery = true)
-	ArrayList<BillItems> findAllGroupByDesc();
-	
+
 }

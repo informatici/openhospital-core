@@ -1,3 +1,24 @@
+/*
+ * Open Hospital (www.open-hospital.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ *
+ * Open Hospital is a free and open source software for healthcare data management.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * https://www.gnu.org/licenses/gpl-3.0-standalone.html
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.isf.opd.model;
 
 import java.util.Date;
@@ -23,7 +44,8 @@ import org.isf.disease.model.Disease;
 import org.isf.patient.model.Patient;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/*------------------------------------------
+/**
+ * ------------------------------------------
  * Opd - model for OPD
  * -----------------------------------------
  * modification history
@@ -37,7 +59,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * 05/09/2008 - alex - added fullname e notefield
  * 09/01/2009 - fabrizio - date field modified to type Date
  * 02/06/2015 - Antonio - ported to JPA
- *------------------------------------------*/
+ * ------------------------------------------
+ */
 @Entity
 @Table(name="OPD")
 @EntityListeners(AuditingEntityListener.class) 
@@ -64,7 +87,7 @@ public class Opd extends Auditable<String>
 	private GregorianCalendar visitDate;
         
 	@Column(name="OPD_DATE_NEXT_VIS")
-        private GregorianCalendar nextVisitDate;
+    private GregorianCalendar nextVisitDate;
 
 	@ManyToOne
 	@JoinColumn(name="OPD_PAT_ID")
@@ -124,9 +147,8 @@ public class Opd extends Auditable<String>
 	}
 	
 	/**
-     * @param aYear
+     * @param aProgYear
      * @param aSex
-     * @param aDate
      * @param aAge
      * @param aDisease
      */
@@ -146,7 +168,7 @@ public class Opd extends Auditable<String>
 	}
 	
 	public String getFullName() {
-		return patient.getName();
+		return patient == null ? "" : patient.getName();
 	}
 
 	public Patient getPatient() {
@@ -282,6 +304,10 @@ public class Opd extends Auditable<String>
 
 	public void setNextVisitDate(GregorianCalendar nextVisitDate) {
 		this.nextVisitDate = nextVisitDate;
+	}
+
+	public boolean isPersisted() {
+		return code > 0;
 	}
 
 	@Override
