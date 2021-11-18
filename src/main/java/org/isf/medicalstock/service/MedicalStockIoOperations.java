@@ -334,8 +334,7 @@ public class MedicalStockIoOperations {
 			medicalStockRepository.save(medicalWard);
 		} else {
 			medicalWard = new MedicalWard(ward, medical, quantity, 0, lot);
-			Double quan = (double) quantity;
-			medicalStockRepository.insertMedicalWard(ward.getCode(), medical.getCode(), quan, lot.getCode());
+			medicalStockRepository.insertMedicalWard(ward.getCode(), medical.getCode(), (double)quantity, lot.getCode());
 		}
 		medicalStockRepository.save(medicalWard);
 		return true;
