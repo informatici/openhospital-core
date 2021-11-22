@@ -77,12 +77,14 @@ public class VisitManager {
 							MessageBundle.getMessage("angal.visit.pleasechooseadate.msg"),
 							OHSeverityLevel.ERROR));
 		}
-		if (ward == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.visit.pleasechooseaward.msg"),
-							OHSeverityLevel.ERROR));
-
-		}
+//		OP-700 in OPD we don't have ward... maybe in future.
+//		Shifted check into GUI
+//		if (ward == null) { 
+//			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+//							MessageBundle.getMessage("angal.visit.pleasechooseaward.msg"),
+//							OHSeverityLevel.ERROR));
+//
+//		}
 		if (patient == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.getMessage("angal.visit.pleasechooseapatient.msg"),
@@ -103,11 +105,34 @@ public class VisitManager {
 	public List<Visit> getVisits(int patID) throws OHServiceException {
 		return ioOperations.getVisits(patID);
 	}
+	
+	/**
+	 * Returns the list of all {@link Visit}s related to a patID in OPD (Ward is {@code null}).
+	 *
+	 * @param patID - the {@link Patient} ID. If <code>0</code> return the list of all {@link Visit}s
+	 * @return the list of {@link Visit}s
+	 * @throws OHServiceException
+	 */
+	public List<Visit> getVisitsOPD(int patID) throws OHServiceException {
+		return ioOperations.getVisitsOPD(patID);
+	}
 
+	/**
+	 * Returns the list of all {@link Visit}s related to a wardId
+	 * @param wardId - if {@code null}, returns all visits for all wards
+	 * @return the list of {@link Visit}s
+	 * @throws OHServiceException
+	 */
 	public List<Visit> getVisitsWard() throws OHServiceException {
 		return getVisitsWard(null);
 	}
 
+	/**
+	 * Returns the list of all {@link Visit}s related to a wardId
+	 * @param wardId - if {@code null}, returns all visits for all wards
+	 * @return the list of {@link Visit}s
+	 * @throws OHServiceException
+	 */
 	public List<Visit> getVisitsWard(String wardId) throws OHServiceException {
 		return ioOperations.getVisitsWard(wardId);
 	}

@@ -28,6 +28,7 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.visits.model.Visit;
+import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +53,26 @@ public class VisitsIoOperations {
 				new ArrayList<>(repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID)) :
 				new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
 	}
+	
+	/**
+	 * Returns the list of all {@link Visit}s related to a patID in OPD (Ward is {@code null}).
+	 *
+	 * @param patID - the {@link Patient} ID. If <code>0</code> return the list of all OPD {@link Visit}s
+	 * @return the list of {@link Visit}s
+	 * @throws OHServiceException
+	 */
+	public ArrayList<Visit> getVisitsOPD(Integer patID) throws OHServiceException {
+		return patID != 0 ?
+				new ArrayList<>(repository.findAllByWardIsNullAndPatient_CodeOrderByPatient_CodeAscDateAsc(patID)) :
+				new ArrayList<>(repository.findAllByWardIsNullOrderByPatient_CodeAscDateAsc());
+	}
 
+	/**
+	 * Returns the list of all {@link Visit}s related to a wardId
+	 * @param wardId - if {@code null}, returns all visits for all wards
+	 * @return the list of {@link Visit}s
+	 * @throws OHServiceException
+	 */
 	public List<Visit> getVisitsWard(String wardId) throws OHServiceException {
 		List<Visit> visits = null;
 
