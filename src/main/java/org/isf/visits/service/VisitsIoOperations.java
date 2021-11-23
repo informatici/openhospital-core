@@ -21,14 +21,12 @@
  */
 package org.isf.visits.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.visits.model.Visit;
-import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,10 +46,10 @@ public class VisitsIoOperations {
 	 * @return the list of {@link Visit}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Visit> getVisits(Integer patID) throws OHServiceException {
+	public List<Visit> getVisits(Integer patID) throws OHServiceException {
 		return patID != 0 ?
-				new ArrayList<>(repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID)) :
-				new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
+				repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID) :
+				repository.findAllByOrderByPatient_CodeAscDateAsc();
 	}
 	
 	/**
@@ -61,10 +59,10 @@ public class VisitsIoOperations {
 	 * @return the list of {@link Visit}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Visit> getVisitsOPD(Integer patID) throws OHServiceException {
+	public List<Visit> getVisitsOPD(Integer patID) throws OHServiceException {
 		return patID != 0 ?
-				new ArrayList<>(repository.findAllByWardIsNullAndPatient_CodeOrderByPatient_CodeAscDateAsc(patID)) :
-				new ArrayList<>(repository.findAllByWardIsNullOrderByPatient_CodeAscDateAsc());
+				repository.findAllByWardIsNullAndPatient_CodeOrderByPatient_CodeAscDateAsc(patID) :
+				repository.findAllByWardIsNullOrderByPatient_CodeAscDateAsc();
 	}
 
 	/**
@@ -77,9 +75,9 @@ public class VisitsIoOperations {
 		List<Visit> visits = null;
 
 		if (wardId != null)
-			visits = new ArrayList<>(repository.findAllWhereWardByOrderDateAsc(wardId));
+			visits = repository.findAllWhereWardByOrderDateAsc(wardId);
 		else
-			visits = new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
+			visits = repository.findAllByOrderByPatient_CodeAscDateAsc();
 
 		return visits;
 	}

@@ -100,7 +100,7 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestVisit(false);
 		// when:
 		Visit foundVisit = visitsIoOperationRepository.findOne(id);
-		ArrayList<Visit> visits = visitsIoOperation.getVisits(foundVisit.getPatient().getCode());
+		List<Visit> visits = visitsIoOperation.getVisits(foundVisit.getPatient().getCode());
 		// then:
 		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(foundVisit.getDate());
 	}
@@ -112,7 +112,7 @@ public class Tests extends OHCoreTestCase {
 		Visit foundVisit = visitsIoOperationRepository.findOne(id);
 
 		// when:
-		ArrayList<Visit> visits = visitsIoOperation.getVisits(0);
+		List<Visit> visits = visitsIoOperation.getVisits(0);
 
 		// then:
 		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(foundVisit.getDate());

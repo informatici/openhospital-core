@@ -39,7 +39,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.apache.log4j.AppenderSkeleton;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
