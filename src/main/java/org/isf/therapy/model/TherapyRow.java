@@ -247,7 +247,8 @@ public class TherapyRow extends Auditable<String> {
 	}
 
 	public String toString() {
-		StringBuilder sb = new StringBuilder(medicalId);
+		StringBuilder sb = new StringBuilder();
+		sb.append(medicalId);
 		sb.append(" - ");
 		sb.append(this.unitID);
 		sb.append(" ");
