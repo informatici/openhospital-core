@@ -72,14 +72,14 @@ public abstract class Auditable<U> {
     }
 
     public int getActive() {
-		return active;
-	}
+        return active;
+    }
 
-	public void setActive(int active) {
-		this.active = active;
-	}
+    public void setActive(int active) {
+        this.active = active;
+    }
 
-	public void setCreatedDate(LocalDateTime createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 

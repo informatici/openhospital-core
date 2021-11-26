@@ -247,7 +247,16 @@ public class TherapyRow extends Auditable<String> {
 	}
 
 	public String toString() {
-		return medicalId.toString() + " - " + this.unitID + " " + this.qty + "/" + this.freqInDay + "/" + this.freqInPeriod;
+		StringBuilder sb = new StringBuilder(medicalId);
+		sb.append(" - ");
+		sb.append(this.unitID);
+		sb.append(" ");
+		sb.append(this.qty);
+		sb.append("/");
+		sb.append(freqInDay);
+		sb.append("/");
+		sb.append(this.freqInPeriod);
+		return sb.toString();
 	}
 	
 	@Override
