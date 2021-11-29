@@ -397,40 +397,40 @@ public class ExcelExporter {
 	public void exportResultsetToExcel(ResultSet resultSet, File exportFile) throws IOException, OHException {
 		try (FileOutputStream fileStream = new FileOutputStream(exportFile)) {
 
-		workbook = new XSSFWorkbook();
-		createHelper = workbook.getCreationHelper();
+			workbook = new XSSFWorkbook();
+			createHelper = workbook.getCreationHelper();
 
-		Sheet worksheet = workbook.createSheet();
-		initStyles();
+			Sheet worksheet = workbook.createSheet();
+			initStyles();
 
-		Row headers = worksheet.createRow((short) 0);
-		try {
-			ResultSetMetaData rsmd = resultSet.getMetaData();
+			Row headers = worksheet.createRow((short) 0);
+			try {
+				ResultSetMetaData rsmd = resultSet.getMetaData();
 
-			int colCount = rsmd.getColumnCount();
-			for (int i = 0; i < colCount; i++) {
-				Cell cell = headers.createCell((short) i);
-				RichTextString value = createHelper.createRichTextString(rsmd.getColumnName(i + 1));
-				cell.setCellStyle(headerStyle);
-				cell.setCellValue(value);
-			}
-
-			int index = 1;
-			while (resultSet.next()) {
-				Row row = worksheet.createRow(index);
-
-				for (int j = 0; j < colCount; j++) {
-					Object value = resultSet.getObject(j + 1);
-					Cell cell = row.createCell((short) j);
-					setValueForExcel(cell, value);
+				int colCount = rsmd.getColumnCount();
+				for (int i = 0; i < colCount; i++) {
+					Cell cell = headers.createCell((short) i);
+					RichTextString value = createHelper.createRichTextString(rsmd.getColumnName(i + 1));
+					cell.setCellStyle(headerStyle);
+					cell.setCellValue(value);
 				}
-				index++;
+
+				int index = 1;
+				while (resultSet.next()) {
+					Row row = worksheet.createRow(index);
+
+					for (int j = 0; j < colCount; j++) {
+						Object value = resultSet.getObject(j + 1);
+						Cell cell = row.createCell((short) j);
+						setValueForExcel(cell, value);
+					}
+					index++;
+				}
+				workbook.write(fileStream);
+				fileStream.flush();
+			} catch (FileNotFoundException e) {
+				throw new OHException(e.getLocalizedMessage());
 			}
-			workbook.write(fileStream);
-			fileStream.flush();
-		} catch (FileNotFoundException e) {
-			throw new OHException(e.getLocalizedMessage());
-		}
 		} catch (SQLException e) {
 			throw new OHException(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"), e);
 		}

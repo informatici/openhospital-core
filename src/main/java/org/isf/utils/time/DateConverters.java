@@ -102,30 +102,4 @@ public class DateConverters {
 			    .orElse(null);
     }
 
-	// TODO: remove
-	@Deprecated
-    public static DateTime toDateTime(GregorianCalendar calendar) {
-        if (calendar == null) {
-	        return null;
-        }
-        return new DateTime(calendar.getTimeInMillis());
-    }
-
-    /**
-     * Converts the specified {@link java.sql.Date} to a {@link GregorianCalendar}.
-     * @param date the date to convert.
-     * @return the converted date.
-     * @deprecated
-     */
-	// TODO: remove
-	@Deprecated
-    public static GregorianCalendar toCalendar(Date date) {
-	    if (date == null) {
-		    return null;
-	    }
-	    GregorianCalendar calendar = new GregorianCalendar();
-	    calendar.setTime(date);
-	    return calendar;
-    }
-
 }

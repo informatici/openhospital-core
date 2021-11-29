@@ -82,7 +82,7 @@ public class RememberDates {
 		lastBillDate = billDate;
 	}
 	
-	//------------  PAtient vaccine-----------------------
+	//------------  patient vaccine-----------------------
 	public static LocalDateTime getLastPatientVaccineDate() {
 		return lastPatientVaccineDate;
 	}
@@ -90,4 +90,5 @@ public class RememberDates {
 	public static void setLastPatineVaccineDate(LocalDateTime labDate) {
 		lastPatientVaccineDate = labDate;
 	}
+
 }
