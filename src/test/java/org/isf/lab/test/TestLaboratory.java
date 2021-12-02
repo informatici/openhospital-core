@@ -92,7 +92,7 @@ public class TestLaboratory {
 			assertThat(laboratory.getPatName()).isEqualTo(patName);
 		}
 		assertThat(laboratory.getDate()).isEqualTo(registrationDate);
-		assertThat(laboratory.getDate()).isCloseTo(registrationDate, within(1, ChronoUnit.SECONDS));
+		assertThat(laboratory.getExamDate()).isEqualTo(examDate);
 		assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
 		assertThat(laboratory.getMaterial()).isEqualTo(material);
 		assertThat(laboratory.getNote()).isEqualTo(note);
