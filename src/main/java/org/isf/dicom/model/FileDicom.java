@@ -51,6 +51,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.drew.lang.annotations.Nullable;
+
 /**
  * ------------------------------------------
  * Dicom - model for the DICOM entity; contains detailed DICOM Data
@@ -162,8 +164,8 @@ public class FileDicom extends Auditable<String>
 	@Transient
 	private volatile int hashCode = 0;
 	
-	@ManyToOne
-	@JoinColumn(name="DM_DCMT_ID")
+	@ManyToOne(optional=true) 
+	@JoinColumn(name="DM_DCMT_ID", nullable=true)
 	private DicomType dicomType;
 
 	
@@ -245,7 +247,7 @@ public class FileDicom extends Auditable<String>
 			String dicomPatientName, String dicomPatientAddress, String dicomPatientAge, String dicomPatientSex, String dicomPatientBirthDate, 
 			String dicomStudyId, Date dicomStudyDate, String dicomStudyDescription, String dicomSeriesUID, String dicomSeriesInstanceUID, 
 			String dicomSeriesNumber, String dicomSeriesDescriptionCodeSequence, Date dicomSeriesDate, String dicomSeriesDescription, 
-			String dicomInstanceUID, String modality, Blob dicomThumbnail, DicomType dicomType) 
+			String dicomInstanceUID, String modality, Blob dicomThumbnail, String dicomTypeId, String dicomTypeDesc) 
 	{		
 		super();
 		this.patId = patId;
@@ -271,7 +273,7 @@ public class FileDicom extends Auditable<String>
 		this.dicomInstanceUID = dicomInstanceUID;
 		this.modality = modality;
 		this.dicomThumbnail = dicomThumbnail;
-		this.dicomType = dicomType;
+		this.dicomType = new DicomType(dicomTypeId, dicomTypeDesc);
 	}
 	
 	/**
