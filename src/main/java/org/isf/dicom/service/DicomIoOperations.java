@@ -131,7 +131,7 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * Load metadata from DICOM files stored in database fot the patient
+	 * Load metadata from DICOM files stored in database for the patient
 	 * 
 	 * @param patientID
 	 * @return FileDicom array
@@ -145,7 +145,7 @@ public class DicomIoOperations
 		FileDicom[] dicoms = new FileDicom[dicomList.size()];	
 		for (int i=0; i<dicomList.size(); i++)
 		{
-			int count = repository.countFramesinSeries(dicomList.get(i).getDicomSeriesInstanceUID());
+			int count = repository.countFramesInSeries(dicomList.get(i).getDicomSeriesInstanceUID(), patientID);
 			dicoms[i] = dicomList.get(i);
 			dicoms[i].setFrameCount(count);
 		}
@@ -205,13 +205,12 @@ public class DicomIoOperations
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean isSeriePresent(String dicomSeriesNumber) throws OHServiceException
+	public boolean isSeriesPresent(String dicomSeriesNumber) throws OHServiceException
 	{
-		List<FileDicom> result;
+		int result;
 
+		result = repository.seriesExists(dicomSeriesNumber);
 
-		result = repository.findAllWhereDicomSeriesNumber(dicomSeriesNumber);
-
-		return !result.isEmpty();
+		return result > 0;
 	}
 }
