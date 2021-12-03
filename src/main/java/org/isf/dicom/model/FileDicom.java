@@ -81,7 +81,7 @@ public class FileDicom extends Auditable<String>
 	
 	@Column(name = "DM_DATA")
 	@Lob
-	private Blob dicomData;
+	private Blob dicomData; //TODO: move to a separated entity
 
 	@NotNull
 	@Column(name="DM_PAT_ID")
@@ -213,6 +213,42 @@ public class FileDicom extends Auditable<String>
 		super();
 		this.patId = patId;
 		this.dicomData = dicomData;
+		this.idFile = idFile;
+		this.fileName = fileName;
+		this.dicomAccessionNumber = dicomAccessionNumber;
+		this.dicomInstitutionName = dicomInstitutionName;
+		this.dicomPatientID = dicomPatientID;
+		this.dicomPatientName = dicomPatientName;
+		this.dicomPatientAddress = dicomPatientAddress;
+		this.dicomPatientAge = dicomPatientAge;
+		this.dicomPatientSex = dicomPatientSex;
+		this.dicomPatientBirthDate = dicomPatientBirthDate;
+		this.dicomStudyId = dicomStudyId;
+		this.dicomStudyDate = dicomStudyDate;
+		this.dicomStudyDescription = dicomStudyDescription;
+		this.dicomSeriesUID = dicomSeriesUID;
+		this.dicomSeriesInstanceUID = dicomSeriesInstanceUID;
+		this.dicomSeriesNumber = dicomSeriesNumber;
+		this.dicomSeriesDescriptionCodeSequence = dicomSeriesDescriptionCodeSequence;
+		this.dicomSeriesDate = dicomSeriesDate;
+		this.dicomSeriesDescription = dicomSeriesDescription;
+		this.dicomInstanceUID = dicomInstanceUID;
+		this.modality = modality;
+		this.dicomThumbnail = dicomThumbnail;
+		this.dicomType = dicomType;
+	}
+	
+	/**
+	 * Construct an DICOM Data Model without main data (image) for fast retrieval from DB
+	 */
+	public FileDicom(int patId, long idFile, String fileName, String dicomAccessionNumber, String dicomInstitutionName, String dicomPatientID, 
+			String dicomPatientName, String dicomPatientAddress, String dicomPatientAge, String dicomPatientSex, String dicomPatientBirthDate, 
+			String dicomStudyId, Date dicomStudyDate, String dicomStudyDescription, String dicomSeriesUID, String dicomSeriesInstanceUID, 
+			String dicomSeriesNumber, String dicomSeriesDescriptionCodeSequence, Date dicomSeriesDate, String dicomSeriesDescription, 
+			String dicomInstanceUID, String modality, Blob dicomThumbnail, DicomType dicomType) 
+	{		
+		super();
+		this.patId = patId;
 		this.idFile = idFile;
 		this.fileName = fileName;
 		this.dicomAccessionNumber = dicomAccessionNumber;

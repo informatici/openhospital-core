@@ -143,7 +143,7 @@ public class DicomIoOperations
 		List<FileDicom> dicomList = repository.findAllWhereIdGroupBySeriesInstanceUIDOrderSerDateDesc(patientID);
 
 		FileDicom[] dicoms = new FileDicom[dicomList.size()];	
-		for (int i=0; i<dicomList.size(); i++)
+		for (int i = 0; i < dicomList.size(); i++)
 		{
 			int count = repository.countFramesInSeries(dicomList.get(i).getDicomSeriesInstanceUID(), patientID);
 			dicoms[i] = dicomList.get(i);
