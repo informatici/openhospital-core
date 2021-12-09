@@ -28,6 +28,8 @@ import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.UserBrowsingManager;
+import org.isf.opd.model.Opd;
+import org.isf.opd.service.OpdIoOperationRepository;
 import org.isf.patient.manager.PatientBrowserManager;
 import org.isf.patient.model.Patient;
 import org.isf.sms.manager.SmsManager;
@@ -40,7 +42,6 @@ import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
-import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -57,6 +58,9 @@ public class VisitManager {
 
 	@Autowired
 	private SmsOperations smsOp;
+	
+	@Autowired
+	private OpdIoOperationRepository opdRepository;
 
 	@Autowired
 	private ApplicationContext applicationContext;
@@ -70,7 +74,6 @@ public class VisitManager {
 	public void validateVisit(Visit visit) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		GregorianCalendar visitDate = visit.getDate();
-		Ward ward = visit.getWard();
 		Patient patient = visit.getPatient();
 		if (visitDate == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
@@ -79,6 +82,7 @@ public class VisitManager {
 		}
 //		OP-700 in OPD we don't have ward... maybe in future.
 //		Shifted check into GUI
+//		Ward ward = visit.getWard();
 //		if (ward == null) { 
 //			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 //							MessageBundle.getMessage("angal.visit.pleasechooseaward.msg"),
@@ -156,13 +160,18 @@ public class VisitManager {
 	 * @return the visitID
 	 */
 	public void deleteVisit(Visit visit) {
+		if (visit.getWard() == null) { // Update related OPD
+			Opd opd = opdRepository.findOneByPatientAndNextVisitDate(visit.getPatient(), visit.getDate());
+			opd.setNextVisitDate(null);
+			opdRepository.save(opd);
+		}
 		ioOperations.deleteVisit(visit);
 	}
-
+	
 	/**
 	 * Inserts or replaces all {@link Visit}s related to a patID<br>
 	 * <br>
-	 * TODO: add overall validation on {@code visits} beside single {@link validateVisit} 
+	 * TODO: OP-722 add overall validation on {@code visits} beside single {@link validateVisit} 
 	 * to avoid visits overlapping and patients ubiquity
 	 * 
 	 * @param visits - the list of {@link Visit}s related to patID.
@@ -171,21 +180,38 @@ public class VisitManager {
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
 	public boolean newVisits(List<Visit> visits) throws OHServiceException {
+		return newVisits(visits, new ArrayList<Visit>());
+	}
+	
+	/**
+	 * Inserts or replaces all {@link Visit}s related to a patID<br>
+	 * <br>
+	 * TODO: OP-722 Add overall validation on {@code visits} beside single {@link validateVisit} 
+	 * to avoid visits overlapping and patients ubiquity
+	 * 
+	 * @param visits - the list of {@link Visit}s related to patID.
+	 * @param removedVisits - the list of {@link Visits}s eventually removed
+	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
+	 * @throws OHServiceException
+	 */
+	@Transactional(rollbackFor = OHServiceException.class)
+	public boolean newVisits(List<Visit> visits, List<Visit> removedVisits) throws OHServiceException {
 		if (!visits.isEmpty()) {
 			PatientBrowserManager patMan = this.applicationContext.getBean(PatientBrowserManager.class);
 			int patID = visits.get(0).getPatient().getCode();
-			ioOperations.deleteAllVisits(patID);
+			for (Visit visit : removedVisits) {
+				deleteVisit(visit);
+			}
 			smsOp.deleteByModuleModuleID("visit", String.valueOf(patID));
-
+			
 			for (Visit visit : visits) {
 				validateVisit(visit);
-
-				visit.setVisitID(0); //reset ID in order to persist again (otherwise JPA think data is already persisted)
+				
 				int visitID = ioOperations.newVisit(visit).getVisitID();
 				if (visitID == 0)
 					return false;
-
 				visit.setVisitID(visitID);
+				
 				if (visit.isSms()) {
 					GregorianCalendar date = (GregorianCalendar) visit.getDate().clone();
 					date.add(Calendar.DAY_OF_MONTH, -1);
@@ -216,7 +242,10 @@ public class VisitManager {
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
 	public boolean deleteAllVisits(int patID) throws OHServiceException {
-		ioOperations.deleteAllVisits(patID);
+		List<Visit> visits = ioOperations.getVisits(patID);
+		for (Visit visit : visits) {
+			deleteVisit(visit);
+		}
 		smsOp.deleteByModuleModuleID("visit", String.valueOf(patID));
 		return true;
 	}

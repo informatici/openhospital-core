@@ -99,7 +99,9 @@ public class VisitsIoOperations {
 	 * 
 	 * @param patID - the {@link Patient} ID
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
+	 * @deprecated OP-713 raised the need of a strong link with OPDs so deletions like this one could be done safely.
+	 * 				Before that it is not possible to use this method safely.
 	 */
 	public boolean deleteAllVisits(int patID) throws OHServiceException {
 		repository.deleteByPatient_Code(patID);
