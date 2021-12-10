@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,7 +21,8 @@
  */
 package org.isf.operation.model;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,6 +33,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
 import org.isf.accounting.model.Bill;
 import org.isf.admission.model.Admission;
 import org.isf.opd.model.Opd;
@@ -62,8 +64,8 @@ public class OperationRow {
     private String opResult;
 
     @NotNull
-    @Column(name = "OPER_OPDATE")
-    private GregorianCalendar opDate;
+    @Column(name = "OPER_OPDATE")       // SQL type: datetime
+    private LocalDateTime opDate;
 
     @Column(name = "OPER_REMARKS")
     private String remarks;
@@ -96,7 +98,7 @@ public class OperationRow {
     public OperationRow(Operation operation, 
             String prescriber, 
             String opResult, 
-            GregorianCalendar opDate, 
+            LocalDateTime opDate,
             String remarks, 
             Admission admission, 
             Opd opd, 
@@ -118,7 +120,7 @@ public class OperationRow {
             Operation operation, 
             String prescriber, 
             String opResult, 
-            GregorianCalendar opDate, 
+            LocalDateTime opDate,
             String remarks, 
             Admission admission, 
             Opd opd, 
@@ -161,11 +163,11 @@ public class OperationRow {
         this.opResult = opResult;
     }
 
-    public GregorianCalendar getOpDate() {
+    public LocalDateTime getOpDate() {
         return opDate;
     }
 
-    public void setOpDate(GregorianCalendar opDate) {
+    public void setOpDate(LocalDateTime opDate) {
         this.opDate = opDate;
     }
 

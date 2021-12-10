@@ -90,7 +90,7 @@ public class ExamBrowsingManager {
 	 * @throws OHServiceException
 	 */
 	public List<Exam> getExams() throws OHServiceException {
-		return new ArrayList<>(ioOperations.getExams());
+		return ioOperations.getExams();
 	}
 
 	/**

@@ -23,8 +23,7 @@ package org.isf.opd.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
 
 import org.isf.disease.model.Disease;
 import org.isf.generaldata.GeneralData;
@@ -34,7 +33,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestOpd {
 
-	private GregorianCalendar visitDate = new GregorianCalendar(1984, Calendar.AUGUST, 14);
+	private LocalDate visitDate = LocalDate.of(1984, 8, 14);
 	private int age = 9;
 	private char sex = 'F';
 	private String note = "TestNote";
@@ -49,7 +48,7 @@ public class TestOpd {
 
 		if (usingSet) {
 			opd = new Opd();
-			_setParameters(patient, disease, opd);
+			setParameters(patient, disease, opd);
 		} else {
 			// Create Opd with all parameters 
 			opd = new Opd(prog_year, sex, age, disease);
@@ -67,7 +66,7 @@ public class TestOpd {
 		return opd;
 	}
 
-	public void _setParameters(Patient patient, Disease disease, Opd opd) {
+	public void setParameters(Patient patient, Disease disease, Opd opd) {
 		opd.setVisitDate(visitDate);
 		opd.setAge(age);
 		opd.setSex(sex);

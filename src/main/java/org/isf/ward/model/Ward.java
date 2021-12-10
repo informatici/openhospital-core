@@ -22,7 +22,6 @@
 package org.isf.ward.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -45,17 +44,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="WARD")
+@Table(name = "WARD")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="WRD_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="WRD_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="WRD_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="WRD_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="WRD_LAST_MODIFIED_DATE"))
-})
-public class Ward extends Auditable<String> 
-{	@Id 
+@AttributeOverride(name = "createdBy", column = @Column(name = "WRD_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "WRD_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "WRD_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "WRD_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "WRD_LAST_MODIFIED_DATE"))
+public class Ward extends Auditable<String> {
+
+	@Id
 	@Column(name="WRD_ID_A")	
     private String code;
 
@@ -120,27 +118,24 @@ public class Ward extends Auditable<String>
      * @param isMale
      * @param isFemale
      */
-    public Ward(String code, String description, String telephone, String fax,
-			String email, Integer beds, Integer nurs, Integer docs,
-			boolean isPharmacy, boolean isMale, boolean isFemale) 
-    {
-		super();
-		this.code = code;
-		this.description = description;
-		this.telephone = telephone;
-		this.fax = fax;
-		this.email = email;
-		this.beds = beds;
-		this.nurs = nurs;
-		this.docs = docs;
-		this.isPharmacy = isPharmacy;
-		this.isMale = isMale;
-		this.isFemale = isFemale;
-	}
-    
-    public Ward(String code, String description, String telephone, String fax,
-			String email, Integer beds, Integer nurs, Integer docs, boolean isMale, boolean isFemale) 
-    {
+    public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isPharmacy,
+		    boolean isMale, boolean isFemale) {
+	    super();
+	    this.code = code;
+	    this.description = description;
+	    this.telephone = telephone;
+	    this.fax = fax;
+	    this.email = email;
+	    this.beds = beds;
+	    this.nurs = nurs;
+	    this.docs = docs;
+	    this.isPharmacy = isPharmacy;
+	    this.isMale = isMale;
+	    this.isFemale = isFemale;
+    }
+
+	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isMale,
+			boolean isFemale) {
 		super();
 		this.code = code;
 		this.description = description;
@@ -253,26 +248,22 @@ public class Ward extends Auditable<String>
 
 	@Override
 	public boolean equals(Object anObject) {
-        return !(anObject instanceof Ward) ? false
-                : (getCode().equals(((Ward) anObject).getCode())
-                        && getDescription().equalsIgnoreCase(
-                                ((Ward) anObject).getDescription())
-                        && getTelephone().equalsIgnoreCase(
-                                ((Ward) anObject).getTelephone()) && (getFax()
-                        .equalsIgnoreCase(((Ward) anObject).getFax()) && (getEmail()
-                        .equalsIgnoreCase(((Ward) anObject).getEmail()) && (getBeds()
-                        .equals(((Ward) anObject).getBeds()) && (getNurs()
-                        .equals(((Ward) anObject).getNurs()) && (getDocs()
-                        .equals(((Ward) anObject).getDocs())))))));
-    }
+		return anObject instanceof Ward
+				&& (getCode().equals(((Ward) anObject).getCode())
+				&& getDescription().equalsIgnoreCase(((Ward) anObject).getDescription())
+				&& getTelephone().equalsIgnoreCase(((Ward) anObject).getTelephone())
+				&& (getFax().equalsIgnoreCase(((Ward) anObject).getFax())
+				&& (getEmail().equalsIgnoreCase(((Ward) anObject).getEmail())
+				&& (getBeds().equals(((Ward) anObject).getBeds())
+				&& (getNurs().equals(((Ward) anObject).getNurs())
+				&& (getDocs().equals(((Ward) anObject).getDocs())))))));
+	}
 
-    
-	
 	@Override
 	public String toString() {
-        return getDescription();
-    }
-	
+		return getDescription();
+	}
+
 	public String debug() {
 		return "Ward [code=" + code + ", description=" + description + ", telephone=" + telephone + ", fax=" + fax
 				+ ", email=" + email + ", beds=" + beds + ", nurs=" + nurs + ", docs=" + docs + ", isPharmacy="
@@ -282,15 +273,15 @@ public class Ward extends Auditable<String>
 
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + code.hashCode();
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
-	}	
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + code.hashCode();
+
+			this.hashCode = c;
+		}
+		return this.hashCode;
+	}
+
 }

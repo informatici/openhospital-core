@@ -57,4 +57,5 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
 	Integer findMaxCode();
 
 	List<Patient> getPatientsByParams(Map<String, Object> params);
+
 }

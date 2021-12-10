@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,6 +21,8 @@
  */
 package org.isf.utils.db;
 
+import java.util.Optional;
+
 import org.isf.menu.manager.UserBrowsingManager;
 import org.springframework.data.domain.AuditorAware;
 
@@ -29,8 +31,9 @@ import org.springframework.data.domain.AuditorAware;
  */
 public class AuditorAwareImpl implements AuditorAware<String>{
 
-    @Override
-    public String getCurrentAuditor() {
-        return UserBrowsingManager.getCurrentUser();
-    }
+	@Override
+	public Optional<String> getCurrentAuditor() {
+		return Optional.ofNullable(UserBrowsingManager.getCurrentUser());
+	}
+
 }

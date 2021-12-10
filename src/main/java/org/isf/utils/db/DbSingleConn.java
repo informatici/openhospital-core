@@ -33,10 +33,9 @@ import org.isf.generaldata.MessageBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
-
 /**
- * Singleton class that provides connection with the database
+ * Singleton class to manage database connections.
+ * Connection parameters are read from Properties file.
  *
  * @author bob 2005-11-06
  */
@@ -53,7 +52,7 @@ public class DbSingleConn {
 		if (pConn == null) {
 			try {
 				pConn = createConnection();
-			} catch (CommunicationsException ce) {
+			} catch (Exception ce) {
 				String message = MessageBundle.getMessage("angal.sql.databaseserverstoppedornetworkfailure.msg");
 				LOGGER.error(">> {}", message);
 			}
@@ -82,14 +81,14 @@ public class DbSingleConn {
 	private static Connection createConnection() throws SQLException, IOException {
 
 		Properties props = new Properties();
-		InputStream is = DbSingleConn.class.getClassLoader().getResourceAsStream("database.properties");
-		if (is == null) {
-			FileInputStream in = new FileInputStream("rsc/database.properties");
-			props.load(in);
-			in.close();
-		} else {
-			props.load(is);
-			is.close();
+		try (InputStream is = DbSingleConn.class.getClassLoader().getResourceAsStream("database.properties")) {
+			if (is == null) {
+				try (FileInputStream in = new FileInputStream("rsc/database.properties")) {
+					props.load(in);
+				}
+			} else {
+				props.load(is);
+			}
 		}
 
 		String drivers = props.getProperty("jdbc.drivers");

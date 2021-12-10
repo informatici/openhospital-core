@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,7 +23,7 @@ package org.isf.accounting.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.accounting.model.Bill;
 import org.isf.patient.model.Patient;
@@ -32,8 +32,8 @@ import org.isf.utils.exception.OHException;
 
 public class TestBill {
 
-	private static GregorianCalendar date = new GregorianCalendar(10, 9, 8);
-	private static GregorianCalendar update = new GregorianCalendar(7, 6, 5);
+	private static LocalDateTime date = LocalDateTime.of(10, 9, 8, 0, 0, 0);
+	private static LocalDateTime update = LocalDateTime.of(7, 6, 5, 0, 0, 0);
 	private static boolean isList = false;
 	private static String listName = "TestListName";
 	private static boolean isPatient = true;
@@ -48,7 +48,7 @@ public class TestBill {
 
 		if (usingSet) {
 			bill = new Bill();
-			_setParameters(bill, priceList, patient);
+			setParameters(bill, priceList, patient);
 		} else {
 			// Create Bill with all parameters 
 			bill = new Bill(0, date, update, isList, priceList, listName, isPatient, patient, patName,
@@ -57,7 +57,7 @@ public class TestBill {
 		return bill;
 	}
 
-	public void _setParameters(Bill bill, PriceList priceList, Patient patient) {
+	public void setParameters(Bill bill, PriceList priceList, Patient patient) {
 		bill.setDate(date);
 		bill.setUpdate(update);
 		bill.setIsList(isList);

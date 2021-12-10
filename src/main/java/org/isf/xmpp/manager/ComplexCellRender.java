@@ -44,29 +44,25 @@ public class ComplexCellRender extends JLabel implements ListCellRenderer {
 	ImageIcon online= new ImageIcon("rsc/icons/greenlight_label.png");
 	ImageIcon offline= new ImageIcon("rsc/icons/greylight_label.png");
 
-	public  ComplexCellRender(Server server2){
-		server=server2;
+	public ComplexCellRender(Server server2) {
+		server = server2;
 	}
-	@Override
-	public Component getListCellRendererComponent(JList list, Object value,
-			int index, boolean isSelected, boolean cellHasFocus) {
 
+	@Override
+	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 
 		Color theForeground = null;
 
-
-		JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index,
-				isSelected, cellHasFocus);
-		Roster roster=server.getRoster();
+		JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+		Roster roster = server.getRoster();
 		Presence presence;
-		presence =roster.getPresence(((RosterEntry)value).getUser());
-		if(presence.isAvailable()){
+		presence = roster.getPresence(((RosterEntry) value).getUser());
+		if (presence.isAvailable()) {
 			renderer.setIcon(online);
-			renderer.setFont(new Font("Arial",Font.BOLD,14));
-		}
-		else{
+			renderer.setFont(new Font("Arial", Font.BOLD, 14));
+		} else {
 			renderer.setIcon(offline);
-			renderer.setFont(new Font("Arial",Font.ITALIC,14));
+			renderer.setFont(new Font("Arial", Font.ITALIC, 14));
 			renderer.setForeground(Color.GRAY);
 
 		}
@@ -74,8 +70,7 @@ public class ComplexCellRender extends JLabel implements ListCellRenderer {
 			renderer.setForeground(theForeground);
 		}
 
-
-		renderer.setText(((RosterEntry)value).getName());
+		renderer.setText(((RosterEntry) value).getName());
 		return renderer;
 	}
 

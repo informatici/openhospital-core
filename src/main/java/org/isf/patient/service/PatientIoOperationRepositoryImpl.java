@@ -21,8 +21,8 @@
  */
 package org.isf.patient.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -123,9 +123,9 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 			Path<String> keyPath = patient.get(entry.getKey());
 
 			if (entry.getKey().equals("birthDate")) {
-				Date birthDateFrom = (Date) entry.getValue();
-				Date birthDateTo = new Date(birthDateFrom.getTime() + (1000 * 60 * 60 * 24));
-				predicates.add(cb.between(keyPath.as(Date.class), birthDateFrom, birthDateTo));
+				LocalDateTime birthDateFrom = (LocalDateTime) entry.getValue();
+				LocalDateTime birthDateTo = birthDateFrom.plusDays(1);
+				predicates.add(cb.between(keyPath.as(LocalDateTime.class), birthDateFrom, birthDateTo));
 			} else {
 				if (entry.getValue() instanceof String) {
 					predicates.add(cb.like(cb.lower(keyPath), like(((String) entry.getValue()).toLowerCase())));
@@ -134,8 +134,7 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 		}
 		query.select(patient).where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 
-		return entityManager.createQuery(query)
-				.getResultList();
-
+		return entityManager.createQuery(query).getResultList();
 	}
+
 }

@@ -21,7 +21,7 @@
  */
 package org.isf.medicalstock.manager;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
@@ -60,7 +60,7 @@ public class MovBrowserManager {
 	 * @return the retrieved movements.
 	 * @throws OHServiceException
 	 */
-	public List<Movement> getMovements(String wardId, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<Movement> getMovements(String wardId, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return ioOperations.getMovements(wardId, dateFrom, dateTo);
 	}
 
@@ -92,9 +92,9 @@ public class MovBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public List<Movement> getMovements(Integer medicalCode, String medicalType,
-			String wardId, String movType, GregorianCalendar movFrom, GregorianCalendar movTo,
-			GregorianCalendar lotPrepFrom, GregorianCalendar lotPrepTo,
-			GregorianCalendar lotDueFrom, GregorianCalendar lotDueTo) throws OHServiceException {
+			String wardId, String movType, LocalDateTime movFrom, LocalDateTime movTo,
+			LocalDateTime lotPrepFrom, LocalDateTime lotPrepTo,
+			LocalDateTime lotDueFrom, LocalDateTime lotDueTo) throws OHServiceException {
 
 		if (medicalCode == null &&
 				medicalType == null &&
@@ -115,7 +115,7 @@ public class MovBrowserManager {
 		return ioOperations.getMovements(medicalCode, medicalType, wardId, movType, movFrom, movTo, lotPrepFrom, lotPrepTo, lotDueFrom, lotDueTo);
 	}
 
-	private void check(GregorianCalendar from, GregorianCalendar to, String errMsgKey) throws OHDataValidationException {
+	private void check(LocalDateTime from, LocalDateTime to, String errMsgKey) throws OHDataValidationException {
 		if (from == null || to == null) {
 			if (!(from == null && to == null)) {
 				throw new OHDataValidationException(
