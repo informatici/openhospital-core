@@ -162,8 +162,10 @@ public class VisitManager {
 	public void deleteVisit(Visit visit) {
 		if (visit.getWard() == null) { // Update related OPD
 			Opd opd = opdRepository.findOneByPatientAndNextVisitDate(visit.getPatient(), visit.getDate());
-			opd.setNextVisitDate(null);
-			opdRepository.save(opd);
+			if (opd != null) { // It may have been already updated
+				opd.setNextVisitDate(null);
+				opdRepository.save(opd);
+			}
 		}
 		ioOperations.deleteVisit(visit);
 	}
