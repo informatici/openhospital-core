@@ -22,11 +22,9 @@
 package org.isf.lab.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.within;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 import org.isf.exa.model.Exam;
 import org.isf.generaldata.GeneralData;

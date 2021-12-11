@@ -28,8 +28,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Optional;
 
-import org.exolab.castor.types.DateTime;
-
 /**
  * Created by nicosalvato on 2016-08-25.
  * Contact: nicosalvato@gmail.com
