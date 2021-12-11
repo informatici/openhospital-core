@@ -169,7 +169,7 @@
 		<dependency>
 			<groupId>com.googlecode.gstreamer-java</groupId>
 			<artifactId>gstreamer-java</artifactId>
-			<version>1.4</version>
+			<version>1.6</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-configuration</groupId>
@@ -247,7 +247,7 @@
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>
-			<version>3.0.1</version>
+			<version>3.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.activation</groupId>
@@ -292,7 +292,7 @@
 		<dependency>
 			<groupId>org.igniterealtime.smack</groupId>
 			<artifactId>smack</artifactId>
-			<version>3.2.1</version>
+			<version>3.4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.igniterealtime.smack</groupId>
