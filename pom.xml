@@ -13,7 +13,7 @@
 	<groupId>org.isf</groupId>
 	<artifactId>OH-core</artifactId>
 	<packaging>jar</packaging>
-	<version>1.11.0</version>
+	<version>1.11.1</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -475,8 +475,8 @@
 		</repository>
 		<repository>
 			<id>JFrog</id>
-			<name>Atlassian JFrog></name>
-			<url>https://packages.atlassian.com/maven-3rdparty-legacy-local</url>
+			<name>Atlassian JFrog</name>
+			<url>https://packages.atlassian.com/mvn/maven-external</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>

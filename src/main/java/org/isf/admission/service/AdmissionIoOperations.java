@@ -24,7 +24,6 @@ package org.isf.admission.service;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
 import org.isf.admission.model.Admission;
@@ -88,9 +87,9 @@ public class AdmissionIoOperations
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public List<AdmittedPatient> getAdmittedPatients(String searchTerms) throws OHServiceException {
-		return patientRepository.findByFieldsContainingWordsFromLiteral(searchTerms).stream()
-			.map(patient -> new AdmittedPatient(patient, repository.findOneWherePatientIn(patient.getCode())))
-			.collect(Collectors.toList());
+		GregorianCalendar[] admissionRange = new GregorianCalendar[2];
+		GregorianCalendar[] dischargeRange = new GregorianCalendar[2];	
+		return repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
 	}
 
 	/**
@@ -101,18 +100,10 @@ public class AdmissionIoOperations
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public List<AdmittedPatient> getAdmittedPatients(
-			String searchTerms, GregorianCalendar[] admissionRange,
-			GregorianCalendar[] dischargeRange) throws OHServiceException {
-		return patientRepository.findByFieldsContainingWordsFromLiteral(searchTerms).stream()
-			.map(patient -> new AdmittedPatient(patient, repository.findOneByPatientAndDateRanges(patient, admissionRange, dischargeRange).orElse(null)))
-			.filter(admittedPatient -> (isRangeSet(admissionRange) || isRangeSet(dischargeRange)) ? 
-								(admittedPatient.getPatient() != null && admittedPatient.getAdmission() != null) : true)
-			.collect(Collectors.toList());
-	}
-
-	private boolean isRangeSet(GregorianCalendar[] range) {
-		return range != null && (range[0] != null || range[1] != null);
+	public List<AdmittedPatient> getAdmittedPatients(String searchTerms, 
+					GregorianCalendar[] admissionRange, 
+					GregorianCalendar[] dischargeRange) throws OHServiceException {
+		return repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
 	}
 
 	/**
