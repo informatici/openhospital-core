@@ -249,15 +249,15 @@ public class AdmissionBrowserManager {
 		Ward ward = admission.getWard();
 		if (ward == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.admission.admissionwardcannotbeempty.msg"),
-							OHSeverityLevel.ERROR));
+					MessageBundle.getMessage("angal.admission.admissionwardcannotbeempty.msg"),
+					OHSeverityLevel.ERROR));
 			throw new OHDataValidationException(errors);
 		}
 		LocalDateTime dateIn = admission.getAdmDate();
 		if (dateIn == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.admission.admissiondatecannotbeempty.msg"),
-							OHSeverityLevel.ERROR));
+					MessageBundle.getMessage("angal.admission.admissiondatecannotbeempty.msg"),
+					OHSeverityLevel.ERROR));
 			throw new OHDataValidationException(errors);
 		}
 		if (dateIn.isAfter(today)) {
