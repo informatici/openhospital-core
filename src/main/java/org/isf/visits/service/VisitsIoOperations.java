@@ -51,12 +51,35 @@ public class VisitsIoOperations {
 				repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID) :
 				repository.findAllByOrderByPatient_CodeAscDateAsc();
 	}
+	
+	/**
+	 * Returns the list of all {@link Visit}s related to a patID in OPD (Ward is {@code null}).
+	 *
+	 * @param patID - the {@link Patient} ID. If <code>0</code> return the list of all OPD {@link Visit}s
+	 * @return the list of {@link Visit}s
+	 * @throws OHServiceException
+	 */
+	public List<Visit> getVisitsOPD(Integer patID) throws OHServiceException {
+		return patID != 0 ?
+				repository.findAllByWardIsNullAndPatient_CodeOrderByPatient_CodeAscDateAsc(patID) :
+				repository.findAllByWardIsNullOrderByPatient_CodeAscDateAsc();
+	}
 
+	/**
+	 * Returns the list of all {@link Visit}s related to a wardId
+	 * @param wardId - if {@code null}, returns all visits for all wards
+	 * @return the list of {@link Visit}s
+	 * @throws OHServiceException
+	 */
 	public List<Visit> getVisitsWard(String wardId) throws OHServiceException {
-		if (wardId != null) {
-			return repository.findAllWhereWardByOrderDateAsc(wardId);
-		}
-		return repository.findAllByOrderByPatient_CodeAscDateAsc();
+		List<Visit> visits = null;
+
+		if (wardId != null)
+			visits = repository.findAllWhereWardByOrderDateAsc(wardId);
+		else
+			visits = repository.findAllByOrderByPatient_CodeAscDateAsc();
+
+		return visits;
 	}
 
 
@@ -76,7 +99,9 @@ public class VisitsIoOperations {
 	 * 
 	 * @param patID - the {@link Patient} ID
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
+	 * @deprecated OP-713 raised the need of a strong link with OPDs so deletions like this one could be done safely.
+	 * 				Before that it is not possible to use this method safely.
 	 */
 	public boolean deleteAllVisits(int patID) throws OHServiceException {
 		repository.deleteByPatient_Code(patID);

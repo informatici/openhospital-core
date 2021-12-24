@@ -1063,7 +1063,6 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoAdmissionIoOperationRepositoryCustom() throws Exception {
-		MyAdmissionIoOperationRepositoryCustom myAdmissionIoOperationRepositoryCustom = new MyAdmissionIoOperationRepositoryCustom();
 		AdmissionIoOperationRepositoryCustom.PatientAdmission patientAdmission =
 				new AdmissionIoOperationRepositoryCustom.PatientAdmission(1, 2);
 		assertThat(patientAdmission.getPatientId()).isEqualTo(1);

@@ -50,6 +50,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.drew.lang.annotations.Nullable;
+
 /**
  * ------------------------------------------
  * Dicom - model for the DICOM entity; contains detailed DICOM Data
@@ -78,7 +80,7 @@ public class FileDicom extends Auditable<String> {
 	
 	@Column(name = "DM_DATA")
 	@Lob
-	private Blob dicomData;
+	private Blob dicomData; //TODO: move to a separated entity
 
 	@NotNull
 	@Column(name="DM_PAT_ID")
@@ -159,8 +161,8 @@ public class FileDicom extends Auditable<String> {
 	@Transient
 	private volatile int hashCode = 0;
 	
-	@ManyToOne
-	@JoinColumn(name="DM_DCMT_ID")
+	@ManyToOne(optional=true) 
+	@JoinColumn(name="DM_DCMT_ID", nullable=true)
 	private DicomType dicomType;
 
 	
@@ -233,6 +235,42 @@ public class FileDicom extends Auditable<String> {
 		this.modality = modality;
 		this.dicomThumbnail = dicomThumbnail;
 		this.dicomType = dicomType;
+	}
+	
+	/**
+	 * Construct an DICOM Data Model without main data (image) for fast retrieval from DB
+	 */
+	public FileDicom(int patId, long idFile, String fileName, String dicomAccessionNumber, String dicomInstitutionName, String dicomPatientID, 
+			String dicomPatientName, String dicomPatientAddress, String dicomPatientAge, String dicomPatientSex, String dicomPatientBirthDate, 
+			String dicomStudyId, LocalDateTime dicomStudyDate, String dicomStudyDescription, String dicomSeriesUID, String dicomSeriesInstanceUID, 
+			String dicomSeriesNumber, String dicomSeriesDescriptionCodeSequence, LocalDateTime dicomSeriesDate, String dicomSeriesDescription, 
+			String dicomInstanceUID, String modality, Blob dicomThumbnail, String dicomTypeId, String dicomTypeDesc) 
+	{		
+		super();
+		this.patId = patId;
+		this.idFile = idFile;
+		this.fileName = fileName;
+		this.dicomAccessionNumber = dicomAccessionNumber;
+		this.dicomInstitutionName = dicomInstitutionName;
+		this.dicomPatientID = dicomPatientID;
+		this.dicomPatientName = dicomPatientName;
+		this.dicomPatientAddress = dicomPatientAddress;
+		this.dicomPatientAge = dicomPatientAge;
+		this.dicomPatientSex = dicomPatientSex;
+		this.dicomPatientBirthDate = dicomPatientBirthDate;
+		this.dicomStudyId = dicomStudyId;
+		this.dicomStudyDate = dicomStudyDate;
+		this.dicomStudyDescription = dicomStudyDescription;
+		this.dicomSeriesUID = dicomSeriesUID;
+		this.dicomSeriesInstanceUID = dicomSeriesInstanceUID;
+		this.dicomSeriesNumber = dicomSeriesNumber;
+		this.dicomSeriesDescriptionCodeSequence = dicomSeriesDescriptionCodeSequence;
+		this.dicomSeriesDate = dicomSeriesDate;
+		this.dicomSeriesDescription = dicomSeriesDescription;
+		this.dicomInstanceUID = dicomInstanceUID;
+		this.modality = modality;
+		this.dicomThumbnail = dicomThumbnail;
+		this.dicomType = new DicomType(dicomTypeId, dicomTypeDesc);
 	}
 	
 	/**

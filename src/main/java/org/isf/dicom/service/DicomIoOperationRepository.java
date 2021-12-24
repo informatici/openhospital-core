@@ -39,7 +39,7 @@ public interface DicomIoOperationRepository extends JpaRepository<FileDicom, Lon
 	@Query(value = "select f from FileDicom f WHERE f.patId = :id AND f.dicomSeriesNumber = :file order by f.fileName")
 	List<FileDicom> findAllWhereIdAndNumberByOrderNameAsc(@Param("id") int id, @Param("file") String file);
 
-	@Query(value = "select f from FileDicom f WHERE f.patId = :id group by f.dicomSeriesInstanceUID order by f.dicomSeriesDate desc")
+	@Query(value = "select new org.isf.dicom.model.FileDicom(f.patId, f.idFile, f.fileName, f.dicomAccessionNumber, f.dicomInstitutionName, f.dicomPatientID, f.dicomPatientName, f.dicomPatientAddress, f.dicomPatientAge, f.dicomPatientSex, f.dicomPatientBirthDate, f.dicomStudyId, f.dicomStudyDate, f.dicomStudyDescription, f.dicomSeriesUID, f.dicomSeriesInstanceUID, f.dicomSeriesNumber, f.dicomSeriesDescriptionCodeSequence, f.dicomSeriesDate, f.dicomSeriesDescription, f.dicomInstanceUID, f.modality, f.dicomThumbnail, d.dicomTypeID, d.dicomTypeDescription) FROM FileDicom f LEFT JOIN f.dicomType d WHERE f.patId = :id group by f.dicomSeriesInstanceUID order by f.dicomSeriesDate desc")
 	List<FileDicom> findAllWhereIdGroupBySeriesInstanceUIDOrderSerDateDesc(@Param("id") int id);
 
 	@Query(value = "select f from FileDicom f WHERE f.patId = :id AND f.dicomSeriesNumber = :file AND f.dicomInstanceUID = :uid")
@@ -50,9 +50,9 @@ public interface DicomIoOperationRepository extends JpaRepository<FileDicom, Lon
 	@Query("delete from FileDicom fd WHERE fd.patId = :id AND fd.dicomSeriesNumber = :file")
 	void deleteByIdAndNumber(@Param("id") int id, @Param("file") String file);
 
-	@Query(value = "SELECT * FROM DICOM WHERE DM_FILE_SER_NUMBER = :dicomSeriesNumber", nativeQuery = true)
-	List<FileDicom> findAllWhereDicomSeriesNumber(@Param("dicomSeriesNumber") String dicomSeriesNumber);
+	@Query(value = "SELECT COUNT(DM_FILE_SER_NUMBER) FROM DICOM WHERE DM_FILE_SER_NUMBER = :dicomSeriesNumber", nativeQuery = true)
+	int seriesExists(@Param("dicomSeriesNumber") String dicomSeriesNumber);
 
-	@Query(value = "SELECT COUNT(*) FROM DICOM WHERE DM_FILE_SER_INST_UID = :dicomSeriesNumberId", nativeQuery = true)
-	int countFramesinSeries(@Param("dicomSeriesNumberId") String dicomSeriesInstanceUID);
+	@Query(value = "SELECT COUNT(DM_FILE_SER_INST_UID) FROM DICOM WHERE DM_FILE_SER_INST_UID = :dicomSeriesNumberId AND DM_PAT_ID = :id", nativeQuery = true)
+	int countFramesInSeries(@Param("dicomSeriesNumberId") String dicomSeriesInstanceUID, @Param("id") int id);
 }

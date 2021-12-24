@@ -75,7 +75,6 @@ public class DicomManagerFactory {
 
 			try {
 				init();
-                Object appContext = Context.getApplicationContext();
 				instance = (DicomManagerInterface) Context.getApplicationContext().getBean(
 						Class.forName(props.getProperty("dicom.manager.impl")));
 				if (instance instanceof FileSystemDicomManager) {

@@ -37,6 +37,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
 import org.isf.ward.model.Ward;
@@ -71,7 +72,9 @@ public class Visit extends Auditable<String> {
 	@JoinColumn(name="VST_PAT_ID")
 	private Patient patient;
 	
-	@NotNull
+	/**
+	 * if {@code null} the visit is meant for OPD. 
+	 */
 	@ManyToOne
 	@JoinColumn(name="VST_WRD_ID_A")
 	private Ward ward;
@@ -175,8 +178,6 @@ public class Visit extends Auditable<String> {
 		this.sms = sms;
 	}
 	
-
-	
 	public String toStringSMS() {
 		
 		return formatDateTimeSMS(this.date);
@@ -205,11 +206,22 @@ public class Visit extends Auditable<String> {
 		Visit visit = (Visit)obj;
 		return (visitID == visit.getVisitID());
 	}
-
+	
 	public String toString() {
-		return "" + (ward == null ? "" : ward.getDescription()) + " - " + this.service + " - " + formatDateTime(this.date);
+		StringBuilder sb = new StringBuilder();
+		if (ward != null) {
+			sb.append(ward.getDescription());
+		} else {
+			sb.append(MessageBundle.getMessage("angal.menu.opd"));
+		}
+		if (service != null) {
+			sb.append(" - ").append(service);
+		}
+		sb.append(" - ").append(formatDateTime(this.date));
+		
+		return sb.toString();
 	}
-
+	
 	@Override
 	public int hashCode() {
 	    if (this.hashCode == 0) {

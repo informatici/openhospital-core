@@ -22,14 +22,18 @@
 package org.isf.opd.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.opd.model.Opd;
+import org.isf.patient.model.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, OpdIoOperationRepositoryCustom {
+
+	Opd findOneByPatientAndNextVisitDate(Patient patient, LocalDateTime gregorianCalendar);
 
 	@Query("select o from Opd o order by o.prog_year")
 	List<Opd> findAllOrderByProgYearDesc();
@@ -50,6 +54,6 @@ public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, O
 
 	@Query(value = "select op from Opd op where op.prog_year = :prog_year and op.visitDate >= :dateVisitFrom and op.visitDate < :dateVisitTo")
 	List<Opd> findByProgYearAndVisitDateBetween(@Param("prog_year") Integer prog_year, @Param("dateVisitFrom") LocalDate dateVisitFrom,
-			@Param("dateVisitTo") LocalDate dateVisitTo);
+					@Param("dateVisitTo") LocalDate dateVisitTo);
 
 }

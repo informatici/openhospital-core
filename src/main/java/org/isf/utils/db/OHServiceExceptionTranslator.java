@@ -71,7 +71,7 @@ public class OHServiceExceptionTranslator {
 					OHSeverityLevel.ERROR));
     	} catch (OutOfMemoryError oome) {
     		LOGGER.error(oome.getMessage(), oome);
-    		throw new OHServiceException(oome, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+    		throw new OHServiceException(oome, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"), 
 					MessageBundle.getMessage("angal.sql.pleaseconsiderenablingtheenhancedsearchsettingseeadminmanualformoreinfo.msg"),
 					OHSeverityLevel.WARNING));
     	} catch (Throwable throwable) {

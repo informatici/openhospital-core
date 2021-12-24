@@ -245,6 +245,7 @@ public class AdmissionBrowserManager {
 					MessageBundle.getMessage("angal.admission.pleaseinsertacorrectprogressiveid.msg"),
 					OHSeverityLevel.ERROR));
 		}
+		
 		Ward ward = admission.getWard();
 		if (ward == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),

@@ -83,7 +83,7 @@ public class TableSorter extends TableMap {
 
 		/*
 		 * We copy all returned values from the getValue call in case an
-		 * optimised model is reusing one object to return many values. The
+		 * optimized model is reusing one object to return many values. The
 		 * Number subclasses in the JDK are immutable and so will not be used in
 		 * this way but other subclasses of Number might want to do this to save
 		 * space and avoid unnecessary heap allocation.
@@ -161,7 +161,7 @@ public class TableSorter extends TableMap {
 		// for the new data model.
 		indexes = new int[rowCount];
 
-		// Initialise with the identity mapping.
+		// Initialize with the identity mapping.
 		for (int row = 0; row < rowCount; row++) {
 			indexes[row] = row;
 		}
@@ -205,6 +205,7 @@ public class TableSorter extends TableMap {
 	// arrays. The number of compares appears to vary between N-1 and
 	// NlogN depending on the initial order but the main reason for
 	// using it here is that, unlike qsort, it is stable.
+	// FIXME: sorting {@link Date}s is failing.
 	public void shuttlesort(int[] from, int[] to, int low, int high) {
 		if (high - low < 2) {
 			return;
@@ -221,12 +222,12 @@ public class TableSorter extends TableMap {
 		 * if the elements in this subset are already ordered. If so, no further
 		 * comparisons are needed; the sub-array can just be copied. The array
 		 * must be copied rather than assigned otherwise sister calls in the
-		 * recursion might get out of sinc. When the number of elements is three
+		 * recursion might get out of sync. When the number of elements is three
 		 * they are partitioned so that the first set, [low, mid), has one
 		 * element and and the second, [mid, high), has two. We skip the
-		 * optimisation when the number of elements is three or less as the
+		 * optimization when the number of elements is three or less as the
 		 * first compare in the normal merge will produce the same sequence of
-		 * steps. This optimisation seems to be worthwhile for partially ordered
+		 * steps. This optimization seems to be worthwhile for partially ordered
 		 * lists but some analysis is needed to find out how the performance
 		 * drops to Nlog(N) as the initial order diminishes - it may drop very
 		 * quickly.
