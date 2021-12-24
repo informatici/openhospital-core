@@ -169,8 +169,7 @@ public class DicomIoOperations
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean isSeriesPresent(String dicomSeriesNumber) throws OHServiceException
-	{
+	public boolean isSeriesPresent(String dicomSeriesNumber) throws OHServiceException {
 		int result;
 
 		result = repository.seriesExists(dicomSeriesNumber);
