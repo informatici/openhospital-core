@@ -72,69 +72,69 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testPriceListGets() throws Exception {
 		// given:
-		int id = _setupTestPriceList(false);
+		int id = setupTestPriceList(false);
 
 		// when, then:
-		_checkPriceListIntoDb(id);
+		checkPriceListIntoDb(id);
 	}
 
 	@Test
 	public void testPriceListSets() throws Exception {
 		// given, when:
-		int id = _setupTestPriceList(true);
+		int id = setupTestPriceList(true);
 
 		// then:
-		_checkPriceListIntoDb(id);
+		checkPriceListIntoDb(id);
 	}
 
 	@Test
 	public void testIoGetLists() throws Exception {
 		// given:
-		int id = _setupTestPriceList(true);
+		int id = setupTestPriceList(true);
 
 		// when:
 		List<PriceList> priceLists = priceListIoOperation.getLists();
 
 		// then:
-		assertThat(priceLists.get(0).getName()).isEqualTo(priceListIoOperationRepository.findOne(id).getName());
+		assertThat(priceLists.get(0).getName()).isEqualTo(priceListIoOperationRepository.findById(id).get().getName());
 	}
 
 	@Test
 	public void testPriceGets() throws Exception {
 		// given:
-		int id = _setupTestPrice(false);
+		int id = setupTestPrice(false);
 
 		// when, then:
-		_checkPriceIntoDb(id);
+		checkPriceIntoDb(id);
 	}
 
 	@Test
 	public void testPriceSets() throws Exception {
 		// given, when:
-		int id = _setupTestPrice(false);
+		int id = setupTestPrice(false);
 
 		// then:
-		_checkPriceIntoDb(id);
+		checkPriceIntoDb(id);
 	}
 
 	@Test
 	public void testIoGetPrices() throws Exception {
 		// given:
-		int id = _setupTestPrice(false);
+		int id = setupTestPrice(false);
 
 		// when:
 		List<Price> prices = priceListIoOperation.getPrices();
 
 		// then:
-		assertThat(prices.get(0).getPrice()).isEqualTo(priceIoOperationRepository.findOne(id).getPrice());
+		assertThat(prices.get(0).getPrice()).isEqualTo(priceIoOperationRepository.findById(id).get().getPrice());
 	}
 
 	@Test
 	public void testIoUpdatePrices() throws Exception {
 		// given:
 		ArrayList<Price> prices = new ArrayList<>();
-		int deleteId = _setupTestPrice(false);
-		Price deletePrice = priceIoOperationRepository.findOne(deleteId);
+		int deleteId = setupTestPrice(false);
+		Price deletePrice = priceIoOperationRepository.findById(deleteId).get();
 
 		// when:
 		PriceList priceList = deletePrice.getList();
@@ -144,7 +144,7 @@ public class Tests extends OHCoreTestCase {
 		boolean result = priceListIoOperation.updatePrices(priceList, prices);
 
 		// then:
-		Price foundPrice = priceIoOperationRepository.findOne(insertId);
+		Price foundPrice = priceIoOperationRepository.findById(insertId).get();
 		assertThat(result).isTrue();
 		assertThat(foundPrice.getList().getId()).isEqualTo(priceList.getId());
 	}
@@ -158,15 +158,15 @@ public class Tests extends OHCoreTestCase {
 		priceListIoOperation.newList(pricelist);
 
 		// then:
-		PriceList foundPriceList = priceListIoOperationRepository.findOne(pricelist.getId());
-		_checkPriceListIntoDb(foundPriceList.getId());
+		PriceList foundPriceList = priceListIoOperationRepository.findById(pricelist.getId()).get();
+		checkPriceListIntoDb(foundPriceList.getId());
 	}
 
 	@Test
 	public void testIoUpdateList() throws Exception {
 		// given:
-		int id = _setupTestPriceList(true);
-		PriceList priceList = priceListIoOperationRepository.findOne(id);
+		int id = setupTestPriceList(true);
+		PriceList priceList = priceListIoOperationRepository.findById(id).get();
 		priceList.setName("NewListName");
 
 		// when:
@@ -179,8 +179,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoDeleteList() throws Exception {
 		// given:
-		int id = _setupTestPriceList(true);
-		PriceList priceList = priceListIoOperationRepository.findOne(id);
+		int id = setupTestPriceList(true);
+		PriceList priceList = priceListIoOperationRepository.findById(id).get();
 
 		// when:
 		priceListIoOperation.deleteList(priceList);
@@ -192,8 +192,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoCopyList() throws Exception {
 		// given:
-		int id = _setupTestPrice(true);
-		Price price = priceIoOperationRepository.findOne(id);
+		int id = setupTestPrice(true);
+		Price price = priceIoOperationRepository.findById(id).get();
 		PriceList priceList = price.getList();
 
 		// when:
@@ -208,8 +208,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoCopyListSteps() throws Exception {
 		// given:
-		int id = _setupTestPrice(true);
-		Price price = priceIoOperationRepository.findOne(id);
+		int id = setupTestPrice(true);
+		Price price = priceIoOperationRepository.findById(id).get();
 		PriceList priceList = price.getList();
 
 		// when:
@@ -223,29 +223,29 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetLists() throws Exception {
-		int id = _setupTestPriceList(true);
+		int id = setupTestPriceList(true);
 		List<PriceList> priceLists = priceListManager.getLists();
-		assertThat(priceLists.get(0).getName()).isEqualTo(priceListIoOperationRepository.findOne(id).getName());
+		assertThat(priceLists.get(0).getName()).isEqualTo(priceListIoOperationRepository.findById(id).get().getName());
 	}
 
 	@Test
 	public void testMgrGetPrices() throws Exception {
-		int id = _setupTestPrice(false);
+		int id = setupTestPrice(false);
 		List<Price> prices = priceListManager.getPrices();
-		assertThat(prices.get(0).getPrice()).isEqualTo(priceIoOperationRepository.findOne(id).getPrice());
+		assertThat(prices.get(0).getPrice()).isEqualTo(priceIoOperationRepository.findById(id).get().getPrice());
 	}
 
 	@Test
 	public void testMgrUpdatePrices() throws Exception {
 		ArrayList<Price> prices = new ArrayList<>();
-		int deleteId = _setupTestPrice(false);
-		Price deletePrice = priceIoOperationRepository.findOne(deleteId);
+		int deleteId = setupTestPrice(false);
+		Price deletePrice = priceIoOperationRepository.findById(deleteId).get();
 		PriceList priceList = deletePrice.getList();
 		Price insertPrice = testPrice.setup(null, false);
 		int insertId = deleteId + 1;
 		prices.add(insertPrice);
 		assertThat(priceListManager.updatePrices(priceList, prices)).isTrue();
-		Price foundPrice = priceIoOperationRepository.findOne(insertId);
+		Price foundPrice = priceIoOperationRepository.findById(insertId).get();
 		assertThat(foundPrice.getList().getId()).isEqualTo(priceList.getId());
 	}
 
@@ -253,14 +253,14 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewList() throws Exception {
 		PriceList pricelist = testPriceList.setup(false);
 		priceListManager.newList(pricelist);
-		PriceList foundPriceList = priceListIoOperationRepository.findOne(pricelist.getId());
-		_checkPriceListIntoDb(foundPriceList.getId());
+		PriceList foundPriceList = priceListIoOperationRepository.findById(pricelist.getId()).get();
+		checkPriceListIntoDb(foundPriceList.getId());
 	}
 
 	@Test
 	public void testMgrUpdateList() throws Exception {
-		int id = _setupTestPriceList(true);
-		PriceList priceList = priceListIoOperationRepository.findOne(id);
+		int id = setupTestPriceList(true);
+		PriceList priceList = priceListIoOperationRepository.findById(id).get();
 		priceList.setName("NewListName");
 		priceListManager.updateList(priceList);
 		assertThat(priceList.getName()).isEqualTo("NewListName");
@@ -268,16 +268,16 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrDeleteList() throws Exception {
-		int id = _setupTestPriceList(true);
-		PriceList priceList = priceListIoOperationRepository.findOne(id);
+		int id = setupTestPriceList(true);
+		PriceList priceList = priceListIoOperationRepository.findById(id).get();
 		priceListManager.deleteList(priceList);
 		assertThat(priceListIoOperationRepository.count()).isZero();
 	}
 
 	@Test
 	public void testMgrCopyListStep0() throws Exception {
-		int id = _setupTestPrice(true);
-		Price price = priceIoOperationRepository.findOne(id);
+		int id = setupTestPrice(true);
+		Price price = priceIoOperationRepository.findById(id).get();
 		PriceList priceList = price.getList();
 		priceListManager.copyList(priceList, 2, 0);
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
@@ -287,8 +287,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrCopyListSteps3() throws Exception {
-		int id = _setupTestPrice(true);
-		Price price = priceIoOperationRepository.findOne(id);
+		int id = setupTestPrice(true);
+		Price price = priceIoOperationRepository.findById(id).get();
 		PriceList priceList = price.getList();
 		priceListManager.copyList(priceList, 2, 3);
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
@@ -298,8 +298,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrCopyList() throws Exception {
-		int id = _setupTestPrice(true);
-		Price price = priceIoOperationRepository.findOne(id);
+		int id = setupTestPrice(true);
+		Price price = priceIoOperationRepository.findById(id).get();
 		PriceList priceList = price.getList();
 		priceListManager.copyList(priceList);
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
@@ -309,8 +309,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testConvertPrice() throws Exception {
-		int id = _setupTestPrice(true);
-		Price price = priceIoOperationRepository.findOne(id);
+		int id = setupTestPrice(true);
+		Price price = priceIoOperationRepository.findById(id).get();
 		PriceList priceList = price.getList();
 		List<PriceForPrint> priceForPrints = priceListManager.convertPrice(priceList, priceListManager.getPrices());
 		assertThat(priceForPrints).isNotNull();
@@ -468,19 +468,19 @@ public class Tests extends OHCoreTestCase {
 		assertThat(priceList.hashCode()).isEqualTo(hashCode);
 	}
 
-	private int _setupTestPriceList(boolean usingSet) throws Exception {
+	private int setupTestPriceList(boolean usingSet) throws Exception {
 		PriceList priceList = testPriceList.setup(usingSet);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		return priceList.getId();
 	}
 
-	private void _checkPriceListIntoDb(int id) throws Exception {
+	private void checkPriceListIntoDb(int id) throws Exception {
 		PriceList foundPriceList;
-		foundPriceList = priceListIoOperationRepository.findOne(id);
+		foundPriceList = priceListIoOperationRepository.findById(id).get();
 		testPriceList.check(foundPriceList);
 	}
 
-	private int _setupTestPrice(boolean usingSet) throws Exception {
+	private int setupTestPrice(boolean usingSet) throws Exception {
 		PriceList priceList = testPriceList.setup(true);
 		Price price = testPrice.setup(priceList, usingSet);
 		priceListIoOperationRepository.saveAndFlush(priceList);
@@ -488,8 +488,8 @@ public class Tests extends OHCoreTestCase {
 		return price.getId();
 	}
 
-	private void _checkPriceIntoDb(int id) throws Exception {
-		Price foundPrice = priceIoOperationRepository.findOne(id);
+	private void checkPriceIntoDb(int id) throws Exception {
+		Price foundPrice = priceIoOperationRepository.findById(id).get();
 		testPrice.check(foundPrice);
 		testPriceList.check(foundPrice.getList());
 	}

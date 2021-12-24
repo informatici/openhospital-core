@@ -89,7 +89,6 @@ public class TableSorter extends TableMap {
 		 * space and avoid unnecessary heap allocation.
 		 */
 
-		// if (type.getSuperclass() == java.lang.Number.class) { //doesn' work
 		if ((o1 instanceof Integer) && (o2 instanceof Integer)) {
 			Number n1 = (Number) data.getValueAt(row1, column);
 			double d1 = n1.doubleValue();
@@ -103,47 +102,44 @@ public class TableSorter extends TableMap {
 			} else {
 				return 0;
 			}
-		} else // if (type == java.util.Date.class) { //doesn't work
-			if ((o1 instanceof String) && (o2 instanceof String)) {
+		} else if ((o1 instanceof String) && (o2 instanceof String)) {
 
-				String str1 = data.getValueAt(row1, column).toString();
-				String str2 = data.getValueAt(row2, column).toString();
+			String str1 = data.getValueAt(row1, column).toString();
+			String str2 = data.getValueAt(row2, column).toString();
 
-				try {
+			try {
+				DateFormat myDateFormat = new SimpleDateFormat("dd/MM/yy");
+				Date d1 = myDateFormat.parse(str1);
+				Date d2 = myDateFormat.parse(str2);
+				long n1 = d1.getTime();
+				long n2 = d2.getTime();
 
-					DateFormat myDateFormat = new SimpleDateFormat("dd/MM/yy");
-					Date d1 = myDateFormat.parse(str1);
-					Date d2 = myDateFormat.parse(str2);
-					long n1 = d1.getTime();
-					long n2 = d2.getTime();
-
-					if (n1 < n2) {
-						return -1;
-					} else if (n1 > n2) {
-						return 1;
-					} else {
-						return 0;
-					}
-
-				} catch (NumberFormatException | ParseException e3) {
-					LOGGER.info("Compare ({}) with ({})", str1, str2);
-					return str1.compareTo(str2);
-				}
-			} else {
-				Object v1 = data.getValueAt(row1, column);
-				String s1 = v1.toString();
-				Object v2 = data.getValueAt(row2, column);
-				String s2 = v2.toString();
-				int result = s1.compareTo(s2);
-
-				if (result < 0) {
+				if (n1 < n2) {
 					return -1;
-				} else if (result > 0) {
+				} else if (n1 > n2) {
 					return 1;
 				} else {
 					return 0;
 				}
+			} catch (NumberFormatException | ParseException e3) {
+				LOGGER.info("Compare ({}) with ({})", str1, str2);
+				return str1.compareTo(str2);
 			}
+		} else {
+			Object v1 = data.getValueAt(row1, column);
+			String s1 = v1.toString();
+			Object v2 = data.getValueAt(row2, column);
+			String s2 = v2.toString();
+			int result = s1.compareTo(s2);
+
+			if (result < 0) {
+				return -1;
+			} else if (result > 0) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
 	}
 
 	public int compare(int row1, int row2) {
@@ -302,7 +298,6 @@ public class TableSorter extends TableMap {
 				int viewColumn = columnModel.getColumnIndexAtX(e.getX());
 				int column = tableView.convertColumnIndexToModel(viewColumn);
 				if (e.getClickCount() == 1 && column != -1) {
-					// System.out.println("Sorting ...");
 					int shiftPressed = e.getModifiers() & InputEvent.SHIFT_MASK;
 					boolean ascending = (shiftPressed == 0);
 					sorter.sortByColumn(column, ascending);

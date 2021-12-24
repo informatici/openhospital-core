@@ -23,13 +23,8 @@ package org.isf.visits.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
@@ -84,22 +79,22 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testVisitGets() throws Exception {
-		int id = _setupTestVisit(false);
-		_checkVisitIntoDb(id);
+		int id = setupTestVisit(false);
+		checkVisitIntoDb(id);
 	}
 
 	@Test
 	public void testVisitSets() throws Exception {
-		int id = _setupTestVisit(true);
-		_checkVisitIntoDb(id);
+		int id = setupTestVisit(true);
+		checkVisitIntoDb(id);
 	}
 
 	@Test
 	public void testIoGetVisitShouldReturnVisitWhenPatientCodeProvided() throws Exception {
 		// given:
-		int id = _setupTestVisit(false);
+		int id = setupTestVisit(false);
 		// when:
-		Visit foundVisit = visitsIoOperationRepository.findOne(id);
+		Visit foundVisit = visitsIoOperationRepository.findById(id).get();
 		List<Visit> visits = visitsIoOperation.getVisits(foundVisit.getPatient().getCode());
 		// then:
 		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(foundVisit.getDate());
@@ -108,8 +103,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetVisitShouldReturnAllVisitsWhenZeroPatientCodeProvided() throws Exception {
 		// given:
-		int id = _setupTestVisit(false);
-		Visit foundVisit = visitsIoOperationRepository.findOne(id);
+		int id = setupTestVisit(false);
+		Visit foundVisit = visitsIoOperationRepository.findById(id).get();
 
 		// when:
 		List<Visit> visits = visitsIoOperation.getVisits(0);
@@ -120,16 +115,16 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetVisitsWardNullWardId() throws Exception {
-		int id = _setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findOne(id);
+		int id = setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findById(id).get();
 		List<Visit> visits = visitsIoOperation.getVisitsWard(null);
 		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
 	}
 
 	@Test
 	public void testIoGetVisitsWardWardId() throws Exception {
-		int id = _setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findOne(id);
+		int id = setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findById(id).get();
 		List<Visit> visits = visitsIoOperation.getVisitsWard(visit.getWard().getCode());
 		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
 	}
@@ -142,12 +137,12 @@ public class Tests extends OHCoreTestCase {
 		wardIoOperationRepository.saveAndFlush(ward);
 		Visit visit = testVisit.setup(patient, true, ward);
 		int id = visitsIoOperation.newVisit(visit).getVisitID();
-		_checkVisitIntoDb(id);
+		checkVisitIntoDb(id);
 	}
 
 	@Test
 	public void testIoDeleteVisit() throws Exception {
-		int id = _setupTestVisit(false);
+		int id = setupTestVisit(false);
 		Visit foundVisit = visitsIoOperation.findVisit(id);
 		boolean result = visitsIoOperation.deleteAllVisits(foundVisit.getPatient().getCode());
 
@@ -158,7 +153,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoFindVisit() throws Exception {
-		int id = _setupTestVisit(false);
+		int id = setupTestVisit(false);
 		Visit result = visitsIoOperation.findVisit(id);
 
 		assertThat(result).isNotNull();
@@ -167,32 +162,32 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetVisitPatientCode() throws Exception {
-		int id = _setupTestVisit(false);
-		Visit vist = visitsIoOperationRepository.findOne(id);
+		int id = setupTestVisit(false);
+		Visit vist = visitsIoOperationRepository.findById(id).get();
 		List<Visit> visits = visitManager.getVisits(vist.getPatient().getCode());
 		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(vist.getDate());
 	}
 
 	@Test
 	public void testMgrGetVisitNoPatientCode() throws Exception {
-		int id = _setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findOne(id);
+		int id = setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findById(id).get();
 		List<Visit> visits = visitManager.getVisits(0);
 		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
 	}
 
 	@Test
 	public void testMgrGetVisitsWard() throws Exception {
-		int id = _setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findOne(id);
+		int id = setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findById(id).get();
 		List<Visit> visits = visitManager.getVisitsWard();
 		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
 	}
 
 	@Test
 	public void testMgrGetVisitsWardWardId() throws Exception {
-		int id = _setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findOne(id);
+		int id = setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findById(id).get();
 		List<Visit> visits = visitManager.getVisitsWard(visit.getWard().getCode());
 		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
 	}
@@ -210,7 +205,7 @@ public class Tests extends OHCoreTestCase {
 		wardIoOperationRepository.saveAndFlush(ward);
 		Visit visit = testVisit.setup(patient, true, ward);
 		int id = visitManager.newVisit(visit).getVisitID();
-		_checkVisitIntoDb(id);
+		checkVisitIntoDb(id);
 	}
 
 	@Test
@@ -220,9 +215,9 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewVisitsSMSFalse() throws Exception {
-		ArrayList<Visit> visits = new ArrayList<>();
-		int id = _setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findOne(id);
+		List<Visit> visits = new ArrayList<>();
+		int id = setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findById(id).get();
 		visit.setSms(false);
 		visits.add(visit);
 		assertThat(visitManager.newVisits(visits)).isTrue();
@@ -230,51 +225,46 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewVisitsSMSTrueDatePassed() throws Exception {
-		ArrayList<Visit> visits = new ArrayList<>();
-		int id = _setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findOne(id);
+		List<Visit> visits = new ArrayList<>();
+		int id = setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findById(id).get();
 		visits.add(visit);
 		assertThat(visitManager.newVisits(visits)).isTrue();
 	}
 
 	@Test
 	public void testMgrNewVisitsSMSTrueDateFuture() throws Exception {
-		ArrayList<Visit> visits = new ArrayList<>();
-		int id = _setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findOne(id);
-		LocalDate localDate = LocalDate.now().plusMonths(1);
-		Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-		visit.setDate(date);
+		List<Visit> visits = new ArrayList<>();
+		int id = setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findById(id).get();
+		visit.setDate(LocalDateTime.now().plusMonths(1));
 		visits.add(visit);
 		assertThat(visitManager.newVisits(visits)).isTrue();
 
-		List<Sms> sms = smsOperations.getAll(new Date(), date);
+		List<Sms> sms = smsOperations.getAll(LocalDateTime.now(), LocalDateTime.now().plusMonths(1));
 		assertThat(sms).hasSize(1);
-		GregorianCalendar scheduledDate = (GregorianCalendar) visit.getDate().clone();
-		scheduledDate.add(Calendar.DAY_OF_MONTH, -1);
-		assertThat(sms.get(0).getSmsDateSched()).isEqualTo(new Timestamp(scheduledDate.getTimeInMillis()));
+		LocalDateTime scheduledDate = visit.getDate().minusDays(1);
+		assertThat(sms.get(0).getSmsDateSched()).isEqualTo(scheduledDate);
 	}
 
 	@Test
 	public void testMgrNewVisitsSMSTrueMessageTooLong() throws Exception {
-		ArrayList<Visit> visits = new ArrayList<>();
-		int id = _setupTestVisit(false);
-		Visit visit = visitsIoOperationRepository.findOne(id);
+		List<Visit> visits = new ArrayList<>();
+		int id = setupTestVisit(false);
+		Visit visit = visitsIoOperationRepository.findById(id).get();
 		String longText = "This is a very long note that should cause the SMS code to truncate the entire message to 160 characters.";
 		visit.setNote(longText + ' ' + longText);
-		LocalDate localDate = LocalDate.now().plusMonths(1);
-		Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-		visit.setDate(date);
+		visit.setDate(LocalDateTime.now().plusMonths(1));
 		visits.add(visit);
 		assertThat(visitManager.newVisits(visits)).isTrue();
 
-		List<Sms> sms = smsOperations.getAll(new Date(), date);
+		List<Sms> sms = smsOperations.getAll(LocalDateTime.now(), LocalDateTime.now().plusMonths(1));
 		assertThat(sms).hasSize(1);
 	}
 
 	@Test
 	public void testMgrDeleteVisit() throws Exception {
-		int id = _setupTestVisit(false);
+		int id = setupTestVisit(false);
 		Visit foundVisit = visitManager.findVisit(id);
 		assertThat(visitManager.deleteAllVisits(foundVisit.getPatient().getCode())).isTrue();
 		assertThat(visitsIoOperation.isCodePresent(id)).isFalse();
@@ -282,7 +272,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrFindVisit() throws Exception {
-		int id = _setupTestVisit(false);
+		int id = setupTestVisit(false);
 		Visit result = visitManager.findVisit(id);
 		assertThat(result).isNotNull();
 		assertThat(result.getVisitID()).isEqualTo(id);
@@ -290,7 +280,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testVisitGetSet() throws Exception {
-		int id = _setupTestVisit(false);
+		int id = setupTestVisit(false);
 		Visit visit = visitManager.findVisit(id);
 
 		assertThat(visit.getDuration()).isEqualTo(10);
@@ -304,35 +294,35 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testVisitToStringSMS() throws Exception {
-		int id = _setupTestVisit(false);
+		int id = setupTestVisit(false);
 		Visit visit = visitManager.findVisit(id);
-		assertThat(visit.toStringSMS()).isEqualTo("08/10/10 00:00");
+		assertThat(visit.toStringSMS()).isEqualTo("08/09/10 00:00");
 	}
 
 	@Test
 	public void testVisitToString() throws Exception {
-		int id = _setupTestVisit(false);
+		int id = setupTestVisit(false);
 		Visit visit = visitManager.findVisit(id);
-		assertThat(visit).hasToString("TestDescription - testService - 08/10/10 - 00:00:00");
+		assertThat(visit).hasToString("TestDescription - testService - 08/09/10 - 00:00:00");
 	}
 
 	@Test
 	public void testVisitFormatDateTime() throws Exception {
-		int id = _setupTestVisit(false);
+		int id = setupTestVisit(false);
 		Visit visit = visitManager.findVisit(id);
-		assertThat(visit.formatDateTime(visit.getDate())).isEqualTo("08/10/10 - 00:00:00");
+		assertThat(visit.formatDateTime(visit.getDate())).isEqualTo("08/09/10 - 00:00:00");
 	}
 
 	@Test
 	public void testVisitFormatDateTimeSMS() throws Exception {
-		int id = _setupTestVisit(false);
+		int id = setupTestVisit(false);
 		Visit visit = visitManager.findVisit(id);
-		assertThat(visit.formatDateTimeSMS(visit.getDate())).isEqualTo("08/10/10 00:00");
+		assertThat(visit.formatDateTimeSMS(visit.getDate())).isEqualTo("08/09/10 00:00");
 	}
 
 	@Test
 	public void testVisitEquals() throws Exception {
-		int id = _setupTestVisit(false);
+		int id = setupTestVisit(false);
 		Visit visit = visitManager.findVisit(id);
 
 		assertThat(visit.equals(visit)).isTrue();
@@ -349,7 +339,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testVisitHashCode() throws Exception {
-		int id = _setupTestVisit(true);
+		int id = setupTestVisit(true);
 		Visit visit = visitManager.findVisit(id);
 		int hashCode = visit.hashCode();
 		assertThat(hashCode).isEqualTo(23 * 133 + visit.getVisitID());
@@ -357,7 +347,7 @@ public class Tests extends OHCoreTestCase {
 		assertThat(visit.hashCode()).isEqualTo(hashCode);
 	}
 
-	private int _setupTestVisit(boolean usingSet) throws OHException {
+	private int setupTestVisit(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(false);
 		Ward ward = testWard.setup(false);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -367,7 +357,7 @@ public class Tests extends OHCoreTestCase {
 		return visit.getVisitID();
 	}
 
-	private void _checkVisitIntoDb(int id) throws OHException {
+	private void checkVisitIntoDb(int id) throws OHException {
 		Visit foundVisit = visitsIoOperation.findVisit(id);
 		testVisit.check(foundVisit);
 	}

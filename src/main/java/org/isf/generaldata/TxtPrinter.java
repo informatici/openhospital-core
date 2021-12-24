@@ -57,19 +57,18 @@ public final class TxtPrinter extends ConfigurationProperties {
 		TXT_CHAR_WIDTH = myGetProperty("TXT_CHAR_WIDTH", DEFAULT_TXT_CHAR_WIDTH);
 		MODE = myGetProperty("MODE", DEFAULT_MODE);
 		ZPL_FONT_TYPE = myGetProperty("ZPL_FONT_TYPE", DEFAULT_ZPL_FONT_TYPE);
-		ZPL_ROW_HEIGHT = myGetProperty("ZPL_ROW_HEIGHT", DEFAULT_ZPL_ROW_HEIGHT);
-			
+	    ZPL_ROW_HEIGHT = myGetProperty("ZPL_ROW_HEIGHT", DEFAULT_ZPL_ROW_HEIGHT);
     }
-    
-    public static TxtPrinter getTxtPrinter() {
-        if (mySingleData == null){ 
-        	initialize();        	
-        }
-        return mySingleData;
-    }
+
+	public static TxtPrinter getTxtPrinter() {
+		if (mySingleData == null) {
+			initialize();
+		}
+		return mySingleData;
+	}
 
 	public static void initialize() {
 		mySingleData = new TxtPrinter(FILE_PROPERTIES);
 	}
-    
+
 }

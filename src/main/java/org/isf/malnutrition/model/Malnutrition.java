@@ -21,10 +21,9 @@
  */
 package org.isf.malnutrition.model;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -52,18 +51,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="MALNUTRITIONCONTROL")
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="MLN_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="MLN_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="MLN_LAST_MODIFIED_BY")),
-     @AttributeOverride(name="active", column=@Column(name="MLN_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="MLN_LAST_MODIFIED_DATE"))
-})
-public class Malnutrition extends Auditable<String>
-{
-	@Id 
+@Table(name = "MALNUTRITIONCONTROL")
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "MLN_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "MLN_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MLN_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "MLN_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MLN_LAST_MODIFIED_DATE"))
+public class Malnutrition extends Auditable<String> {
+
+	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="MLN_ID")
 	private int code;
@@ -72,14 +69,14 @@ public class Malnutrition extends Auditable<String>
 	 * Date of this control
 	 */
 	@NotNull
-	@Column(name="MLN_DATE_SUPP")
-	private GregorianCalendar dateSupp;
+	@Column(name="MLN_DATE_SUPP")		// SQL type: datetime
+	private LocalDateTime dateSupp;
 
 	/*
 	 * Date of next control
 	 */
-	@Column(name="MNL_DATE_CONF")
-	private GregorianCalendar dateConf;
+	@Column(name="MNL_DATE_CONF")		// SQL type: datetime. NB: possible typo in column name ("MNL")
+	private LocalDateTime dateConf;
 
 	@ManyToOne
 	@JoinColumn(name="MLN_ADM_ID")
@@ -102,10 +99,8 @@ public class Malnutrition extends Auditable<String>
 	
 
 	public Malnutrition() { }
-	
-	public Malnutrition(int aCode, GregorianCalendar aDateSupp,
-			GregorianCalendar aDateConf, Admission anAdmission, float aHeight,
-			float aWeight) {
+
+	public Malnutrition(int aCode, LocalDateTime aDateSupp, LocalDateTime aDateConf, Admission anAdmission, float aHeight, float aWeight) {
 		code = aCode;
 		dateSupp = aDateSupp;
 		dateConf = aDateConf;
@@ -113,10 +108,8 @@ public class Malnutrition extends Auditable<String>
 		height = aHeight;
 		weight = aWeight;
 	}
-	
-	public Malnutrition(int aCode, GregorianCalendar aDateSupp,
-			GregorianCalendar aDateConf, Admission anAdmission, Patient aPatient, float aHeight,
-			float aWeight) {
+
+	public Malnutrition(int aCode, LocalDateTime aDateSupp, LocalDateTime aDateConf, Admission anAdmission, Patient aPatient, float aHeight, float aWeight) {
 		code = aCode;
 		dateSupp = aDateSupp;
 		dateConf = aDateConf;
@@ -149,11 +142,11 @@ public class Malnutrition extends Auditable<String>
 		this.admission = admission;
 	}
 
-	public void setDateSupp(GregorianCalendar aDateSupp) {
+	public void setDateSupp(LocalDateTime aDateSupp) {
 		dateSupp = aDateSupp;
 	}
 
-	public void setDateConf(GregorianCalendar aDateConf) {
+	public void setDateConf(LocalDateTime aDateConf) {
 		dateConf = aDateConf;
 	}
 	
@@ -165,11 +158,11 @@ public class Malnutrition extends Auditable<String>
 		weight = aWeight;
 	}
 
-	public GregorianCalendar getDateSupp() {
+	public LocalDateTime getDateSupp() {
 		return dateSupp;
 	}
 
-	public GregorianCalendar getDateConf() {
+	public LocalDateTime getDateConf() {
 		return dateConf;
 	}
 
@@ -184,30 +177,34 @@ public class Malnutrition extends Auditable<String>
 	@Override
 	public boolean equals(Object other) {
 		boolean result = false;
-		if ((other == null) || (!(other instanceof Malnutrition)))
+		if ((!(other instanceof Malnutrition))) {
 			return false;
-		if ((getDateConf() == null)
-				&& (((Malnutrition) other).getDateConf() == null))
-			result = true;
-		if ((getDateSupp() == null)
-				&& (((Malnutrition) other).getDateSupp() == null))
-			result = true;
-		if (!result){
-				if((getDateConf()==null)||(((Malnutrition)other).getDateConf()==null))return false;
-				if((getDateSupp()==null)||(((Malnutrition)other).getDateSupp()==null))return false;
-				if((getDateConf().equals(((Malnutrition) other).getDateConf()))
-				&& (getDateSupp().equals(((Malnutrition) other).getDateSupp())))
+		}
+		if ((getDateConf() == null) && (((Malnutrition) other).getDateConf() == null)) {
 			result = true;
 		}
-		if (result) {
-			if (getAdmission() == (((Malnutrition) other).getAdmission())
-					&& getHeight() == (((Malnutrition) other).getHeight())
-					&& getWeight() == (((Malnutrition) other).getWeight())) {
-				return true;
-			} else
+		if ((getDateSupp() == null) && (((Malnutrition) other).getDateSupp() == null)) {
+			result = true;
+		}
+		if (!result) {
+			if ((getDateConf() == null) || (((Malnutrition) other).getDateConf() == null)) {
 				return false;
-		} else
+			}
+			if ((getDateSupp() == null) || (((Malnutrition) other).getDateSupp() == null)) {
+				return false;
+			}
+			if ((getDateConf().equals(((Malnutrition) other).getDateConf())) && (getDateSupp().equals(((Malnutrition) other).getDateSupp()))) {
+				result = true;
+			}
+		}
+		if (result) {
+			return (getAdmission() == (((Malnutrition) other).getAdmission())
+					&& getHeight() == (((Malnutrition) other).getHeight())
+					&& getWeight() == (((Malnutrition) other).getWeight()));
+			}
+		else {
 			return false;
+		}
 	}
 
 	@Override

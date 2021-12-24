@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -38,7 +38,7 @@ public class TestAgeType {
 
 		if (usingSet) {
 			ageType = new AgeType();
-			_setParameters(ageType);
+			setParameters(ageType);
 		} else {
 			// Create AgeType with all parameters 
 			ageType = new AgeType(code, from, to, description);
@@ -47,7 +47,7 @@ public class TestAgeType {
 		return ageType;
 	}
 
-	public void _setParameters(AgeType ageType) {
+	public void setParameters(AgeType ageType) {
 		ageType.setCode(code);
 		ageType.setFrom(from);
 		ageType.setTo(to);

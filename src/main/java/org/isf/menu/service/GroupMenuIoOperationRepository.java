@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -31,9 +31,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface GroupMenuIoOperationRepository extends JpaRepository<GroupMenu, Integer> {
-    @Modifying
-    @Transactional
-    @Query(value = "delete from GroupMenu where userGroup=:id")
-    void deleteWhereUserGroup(@Param("id") String id);
-       
+
+	@Modifying
+	@Transactional
+	@Query(value = "delete from GroupMenu where userGroup=:id")
+	void deleteWhereUserGroup(@Param("id") String id);
+
 }

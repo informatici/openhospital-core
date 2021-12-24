@@ -21,11 +21,9 @@
  */
 package org.isf.medicals.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.medicals.model.Medical;
-import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -60,10 +58,8 @@ public class MedicalsIoOperations
 	 * @return the stored medical.
 	 * @throws OHServiceException if an error occurs retrieving the stored medical.
 	 */
-	public Medical getMedical(
-			int code) throws OHServiceException 
-	{
-		return repository.findOne(code);
+	public Medical getMedical(int code) throws OHServiceException {
+		return repository.findById(code).orElse(null);
 	}
 
 	/**
@@ -83,14 +79,10 @@ public class MedicalsIoOperations
 	 * @throws OHServiceException if an error occurs retrieving the stored medicals.
 	 */
 	public List<Medical> getMedicals(String description) throws OHServiceException {
-		List<Medical> medicals;
-
 		if (description != null) {
-			medicals = repository.findAllWhereDescriptionOrderByDescription(description);
-		} else {
-			medicals = repository.findAllByOrderByDescription();
+			return repository.findAllWhereDescriptionOrderByDescription(description);
 		}
-		return medicals;
+		return repository.findAllByOrderByDescription();
 	}
 	
 	/**
@@ -104,11 +96,9 @@ public class MedicalsIoOperations
 	public List<Medical> getMedicals(String type, boolean nameSorted) throws OHServiceException {
 		if (type != null) {
 			return getMedicalsByType(type, nameSorted);
-		} else {
-			return getMedicals(nameSorted);
 		}
+		return getMedicals(nameSorted);
 	}
-
 
 	/**
 	 * Retrieves the stored {@link Medical}s based on the specified filter criteria.
@@ -119,38 +109,37 @@ public class MedicalsIoOperations
 	 * @throws OHServiceException if an error occurs retrieving the medicals.
 	 */
 	public List<Medical> getMedicals(String description, String type, boolean critical) throws OHServiceException {
-		List<Medical> medicals = null;
+		List<Medical> medicals;
 
 		if (description != null) {
 			if (type != null) {
 				if (critical) {
-					medicals = (ArrayList<Medical>) repository.findAllWhereDescriptionAndTypeAndCriticalOrderByTypeAndDescription(description, type);
+					medicals = repository.findAllWhereDescriptionAndTypeAndCriticalOrderByTypeAndDescription(description, type);
 				} else {
-					medicals = (ArrayList<Medical>) repository.findAllWhereDescriptionAndTypeOrderByTypeAndDescription(description, type);
+					medicals = repository.findAllWhereDescriptionAndTypeOrderByTypeAndDescription(description, type);
 				}
 			} else {
 				if (critical) {
-					medicals = (ArrayList<Medical>) repository.findAllWhereDescriptionAndCriticalOrderByTypeAndDescription(description);
+					medicals = repository.findAllWhereDescriptionAndCriticalOrderByTypeAndDescription(description);
 				} else {
-					medicals = (ArrayList<Medical>) repository.findAllWhereDescriptionOrderByTypeAndDescription(description);
+					medicals = repository.findAllWhereDescriptionOrderByTypeAndDescription(description);
 				}
 			}
 		} else {
 			if (type != null) {
 				if (critical) {
-					medicals = (ArrayList<Medical>) repository.findAllWhereTypeAndCriticalOrderByTypeAndDescription(type);
+					medicals = repository.findAllWhereTypeAndCriticalOrderByTypeAndDescription(type);
 				} else {
-					medicals = (ArrayList<Medical>) repository.findAllWhereTypeOrderByTypeAndDescription(type);
+					medicals = repository.findAllWhereTypeOrderByTypeAndDescription(type);
 				}
 			} else {
 				if (critical) {
-					medicals = (ArrayList<Medical>) repository.findAllWhereCriticalOrderByTypeAndDescription();
+					medicals = repository.findAllWhereCriticalOrderByTypeAndDescription();
 				} else {
-					medicals = (ArrayList<Medical>) repository.findAllByOrderByTypeAndDescription();
+					medicals = repository.findAllByOrderByTypeAndDescription();
 				}
 			}
 		}
-
 		return medicals;
 	}
 	
@@ -161,17 +150,11 @@ public class MedicalsIoOperations
 	 * @return all {@link Medical} with similar description
 	 * @throws OHServiceException if an SQL error occurs during the check.
 	 */
-	public List<Medical> medicalCheck(Medical medical, boolean update) throws OHServiceException
-	{
-		List<Medical> medicals = null;
-		
+	public List<Medical> medicalCheck(Medical medical, boolean update) throws OHServiceException {
 		if (update) {
-			medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionSoundsLike(medical.getDescription(), medical.getCode());
-		} else {
-			medicals = (ArrayList<Medical>)repository.findAllWhereDescriptionSoundsLike(medical.getDescription()); 
+			return repository.findAllWhereDescriptionSoundsLike(medical.getDescription(), medical.getCode());
 		}
-
-		return medicals;
+		return repository.findAllWhereDescriptionSoundsLike(medical.getDescription());
 	}
 	
 	/**
@@ -181,24 +164,14 @@ public class MedicalsIoOperations
 	 * @return <code>true</code> if exists, <code>false</code> otherwise.
 	 * @throws OHServiceException if an SQL error occurs during the check.
 	 */
-	public boolean productCodeExists(Medical medical, boolean update) throws OHServiceException
-	{
-		boolean result = false;
-
-		
-		Medical foundMedical = null;
-		
+	public boolean productCodeExists(Medical medical, boolean update) throws OHServiceException {
+		Medical foundMedical;
 		if (update) {
-			foundMedical = repository.findOneWhereProductCode(medical.getProd_code(), medical.getCode());
+			foundMedical = repository.findOneWhereProductCode(medical.getProdCode(), medical.getCode());
 		} else {
-			foundMedical = repository.findOneWhereProductCode(medical.getProd_code()); 
+			foundMedical = repository.findOneWhereProductCode(medical.getProdCode());
 		}
-		if (foundMedical != null) 
-		{
-			result = true;
-		}
-		
-		return result;
+		return foundMedical != null;
 	}
     
 
@@ -209,24 +182,14 @@ public class MedicalsIoOperations
 	 * @return <code>true</code> if exists <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean medicalExists(Medical medical, boolean update) throws OHServiceException 
-	{
-		boolean result = false;
-
-		
-		Medical foundMedical = null;
-		
+	public boolean medicalExists(Medical medical, boolean update) throws OHServiceException {
+		Medical foundMedical;
 		if (update) {
 			foundMedical = repository.findOneWhereDescriptionAndType(medical.getDescription(), medical.getType().getCode(), medical.getCode());
 		} else {
-			foundMedical = repository.findOneWhereDescriptionAndType(medical.getDescription(), medical.getType().getCode()); 
+			foundMedical = repository.findOneWhereDescriptionAndType(medical.getDescription(), medical.getType().getCode());
 		}
-		if (foundMedical != null) 
-		{
-			result = true;
-		}
-		
-		return result;
+		return foundMedical != null;
 	}
 	
 	/**
@@ -235,15 +198,8 @@ public class MedicalsIoOperations
 	 * @return <code>true</code> if the medical has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs storing the medical.
 	 */
-	public boolean newMedical(Medical medical) throws OHServiceException 
-	{
-		boolean result = true;
-		
-
-		Medical savedMedical = repository.save(medical);
-		result = (savedMedical != null);
-
-		return result;
+	public boolean newMedical(Medical medical) throws OHServiceException {
+		return repository.save(medical) != null;
 	}
 
 	/**
@@ -252,15 +208,8 @@ public class MedicalsIoOperations
 	 * @return <code>true</code> if the medical has been updated <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateMedical(Medical medical) throws OHServiceException 
-	{
-		boolean result = true;
-		
-
-		Medical savedMedical = repository.save(medical);
-		result = (savedMedical != null);
-
-		return result;
+	public boolean updateMedical(Medical medical) throws OHServiceException {
+		return repository.save(medical) != null;
 	}
 
 	/**
@@ -269,19 +218,8 @@ public class MedicalsIoOperations
 	 * @return <code>true</code> if the medical is referenced, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean isMedicalReferencedInStockMovement(
-			int code) throws OHServiceException 
-	{
-		boolean result = false;
-
-		
-		Movement foundMovement = moveRepository.findAllByMedicalCode(code);
-		if (foundMovement != null) 
-		{
-			result = true;
-		}
-		
-		return result;
+	public boolean isMedicalReferencedInStockMovement(int code) throws OHServiceException {
+		return moveRepository.findAllByMedicalCode(code) != null;
 	}
 
 	/**
@@ -290,15 +228,9 @@ public class MedicalsIoOperations
 	 * @return <code>true</code> if the medical has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the medical deletion.
 	 */
-	public boolean deleteMedical(
-			Medical medical) throws OHServiceException
-	{
-		boolean result = true;
-		
-		
+	public boolean deleteMedical(Medical medical) throws OHServiceException {
 		repository.delete(medical);
-
-		return result;
+		return true;
 	}
 
 	/**
@@ -311,9 +243,8 @@ public class MedicalsIoOperations
 	private List<Medical> getMedicals(boolean nameSorted) throws OHServiceException {
 		if (nameSorted) {
 			return getMedicals(null);
-		} else {
-			return repository.findAllOrderBySmartCodeAndDescription();
 		}
+		return repository.findAllOrderBySmartCodeAndDescription();
 	}
 
 	/**
@@ -327,9 +258,8 @@ public class MedicalsIoOperations
 	private List<Medical> getMedicalsByType(String type, boolean nameSorted) {
 		if (nameSorted) {
 			return repository.findAllWhereTypeOrderByDescription(type);
-		} else {
-			return repository.findAllWhereTypeOrderBySmartCodeAndDescription(type);
 		}
+		return repository.findAllWhereTypeOrderBySmartCodeAndDescription(type);
 	}
 
 }

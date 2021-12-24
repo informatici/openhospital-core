@@ -33,7 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface DicomIoOperationRepository extends JpaRepository<FileDicom, Long> {
-    List<FileDicom> findAllByOrderByFileNameAsc();
+
+	List<FileDicom> findAllByOrderByFileNameAsc();
 
 	@Query(value = "select f from FileDicom f WHERE f.patId = :id AND f.dicomSeriesNumber = :file order by f.fileName")
 	List<FileDicom> findAllWhereIdAndNumberByOrderNameAsc(@Param("id") int id, @Param("file") String file);
@@ -43,8 +44,8 @@ public interface DicomIoOperationRepository extends JpaRepository<FileDicom, Lon
 
 	@Query(value = "select f from FileDicom f WHERE f.patId = :id AND f.dicomSeriesNumber = :file AND f.dicomInstanceUID = :uid")
 	List<FileDicom> findAllWhereIdAndFileAndUid(@Param("id") int id, @Param("file") String file, @Param("uid") String uid);
-    
-    @Modifying
+
+	@Modifying
 	@Transactional
 	@Query("delete from FileDicom fd WHERE fd.patId = :id AND fd.dicomSeriesNumber = :file")
 	void deleteByIdAndNumber(@Param("id") int id, @Param("file") String file);
