@@ -181,7 +181,7 @@ public class VisitManager {
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
 	public boolean newVisits(List<Visit> visits) throws OHServiceException {
-		return newVisits(visits, new ArrayList<Visit>());
+		return newVisits(visits, new ArrayList<>());
 	}
 	
 	/**
