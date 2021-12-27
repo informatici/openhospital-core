@@ -30,7 +30,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface PriceListIoOperationRepository extends JpaRepository<PriceList, Integer> {
+public interface PricesListIoOperationRepository extends JpaRepository<PriceList, Integer> {
 
 	@Override
 	@Modifying

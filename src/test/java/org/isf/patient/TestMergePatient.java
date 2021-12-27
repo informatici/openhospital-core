@@ -53,7 +53,7 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.patient.test.TestPatient;
 import org.isf.priceslist.model.PriceList;
-import org.isf.priceslist.service.PriceListIoOperationRepository;
+import org.isf.priceslist.service.PricesListIoOperationRepository;
 import org.isf.priceslist.test.TestPriceList;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
@@ -95,7 +95,7 @@ public class TestMergePatient extends OHCoreTestCase {
 	@Autowired
 	TestPatientMergedEventListener testPatientMergedEventListener;
 	@Autowired
-	PriceListIoOperationRepository priceListIoOperationRepository;
+	PricesListIoOperationRepository priceListIoOperationRepository;
 	@Autowired
 	AccountingBillIoOperationRepository accountingBillIoOperationRepository;
 	@Autowired
