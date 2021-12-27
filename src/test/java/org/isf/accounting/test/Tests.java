@@ -43,7 +43,7 @@ import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.test.TestPatient;
 import org.isf.priceslist.model.PriceList;
-import org.isf.priceslist.service.PriceListIoOperationRepository;
+import org.isf.priceslist.service.PricesListIoOperationRepository;
 import org.isf.priceslist.test.TestPriceList;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
@@ -73,7 +73,7 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	AccountingBillPaymentIoOperationRepository accountingBillPaymentIoOperationRepository;
 	@Autowired
-	PriceListIoOperationRepository priceListIoOperationRepository;
+	PricesListIoOperationRepository priceListIoOperationRepository;
 	@Autowired
 	PatientIoOperationRepository patientIoOperationRepository;
 

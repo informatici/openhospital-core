@@ -37,10 +37,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class PricesListIoOperations {
 
 	@Autowired
-	private PriceListIoOperationRepository repository;
+	private PricesListIoOperationRepository pricesListIoOperationRepository;
 	
 	@Autowired
-	private PriceIoOperationRepository priceRepository;
+	private PriceIoOperationRepository priceIoOperationRepository;
 	
 	/**
 	 * Return the list of {@link PriceList}s in the DB
@@ -49,7 +49,7 @@ public class PricesListIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public List<PriceList> getLists() throws OHServiceException {
-		return repository.findAll();
+		return pricesListIoOperationRepository.findAll();
 	}
 	
 	/**
@@ -59,7 +59,7 @@ public class PricesListIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public List<Price> getPrices() throws OHServiceException {
-		return priceRepository.findAllByOrderByDescriptionAsc();
+		return priceIoOperationRepository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
@@ -71,10 +71,10 @@ public class PricesListIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean updatePrices(PriceList list, List<Price> prices) throws OHServiceException {
-		priceRepository.deleteByListId(list.getId());
+		priceIoOperationRepository.deleteByListId(list.getId());
 		for (Price price : prices) {
 			price.setList(list);
-			priceRepository.save(price);
+			priceIoOperationRepository.save(price);
 		}
 		return true;
 	}
@@ -87,7 +87,7 @@ public class PricesListIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean newList(PriceList list) throws OHServiceException {
-		return repository.save(list) != null;
+		return pricesListIoOperationRepository.save(list) != null;
 	}
 	
 	/**
@@ -98,7 +98,7 @@ public class PricesListIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean updateList(PriceList list) throws OHServiceException {
-		return repository.save(list) != null;
+		return pricesListIoOperationRepository.save(list) != null;
 	}
 	
 	/**
@@ -109,8 +109,8 @@ public class PricesListIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean deleteList(PriceList list) throws OHServiceException {
-		priceRepository.deleteByListId(list.getId());
-		repository.deleteById(list.getId());
+		priceIoOperationRepository.deleteByListId(list.getId());
+		pricesListIoOperationRepository.deleteById(list.getId());
 		return true;
 	}
 
@@ -125,7 +125,7 @@ public class PricesListIoOperations {
 	 */
 	public boolean copyList(PriceList list, double factor, double step) throws OHServiceException {
 		PriceList newList = insertNewPriceList(list);
-		List<Price> prices = priceRepository.findByList_id(list.getId());
+		List<Price> prices = priceIoOperationRepository.findByList_id(list.getId());
 		for (Price price : prices) {
 			Price newPrice = new Price();
 			newPrice.setList(newList);
@@ -137,7 +137,7 @@ public class PricesListIoOperations {
 				newPrice.setPrice(price.getPrice() * factor);
 			}
 			newPrice.setItem(price.getItem());
-			priceRepository.save(newPrice);
+			priceIoOperationRepository.save(newPrice);
 		}
 		return true;
 	}
@@ -148,7 +148,7 @@ public class PricesListIoOperations {
 		newList.setName(list.getName());
 		newList.setDescription(list.getDescription());
 		newList.setCurrency(list.getCurrency());
-		repository.save(newList);
+		pricesListIoOperationRepository.save(newList);
 		return newList;
 	}
 
