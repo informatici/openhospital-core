@@ -1,6 +1,6 @@
 # Remove "exit" and "file"
-DELETE FROM MENUITEM WHERE MNI_ID_A = 'exit';
-DELETE FROM MENUITEM WHERE MNI_ID_A = 'file';
+DELETE FROM MENUITEM WHERE MNI_ID_A IN ('exit', 'file');
+DELETE FROM GROUPMENU WHERE GM_MNI_ID_A IN ('exit', 'file');
 
 # "General Data" is now "Settings" so change shortcut key
 # Note: the label is set in the properties file
