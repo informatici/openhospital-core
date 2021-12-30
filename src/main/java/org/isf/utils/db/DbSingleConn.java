@@ -33,7 +33,7 @@ import org.isf.generaldata.MessageBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
+import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 
 /**
  * Singleton class that provides connection with the database
