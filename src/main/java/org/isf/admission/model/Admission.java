@@ -62,7 +62,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="ADMISSION")
+@Table(name="OH_ADMISSION")
 @SqlResultSetMapping(name="AdmittedPatient",
 entities={
 		@EntityResult(entityClass=org.isf.patient.model.Patient.class),

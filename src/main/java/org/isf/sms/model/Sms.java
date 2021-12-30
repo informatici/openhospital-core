@@ -36,7 +36,7 @@ import javax.validation.constraints.NotNull;
  * @author Mwithi
  */
 @Entity
-@Table(name = "SMS")
+@Table(name="OH_SMS")
 public class Sms {
 
 	@Id

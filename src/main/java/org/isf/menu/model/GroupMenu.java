@@ -44,7 +44,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "GROUPMENU")
+@Table(name="OH_GROUPMENU")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "GM_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "GM_CREATED_DATE"))

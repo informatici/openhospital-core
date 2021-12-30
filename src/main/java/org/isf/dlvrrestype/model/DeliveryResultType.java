@@ -38,7 +38,7 @@ import javax.validation.constraints.NotNull;
  * ------------------------------------------
  */
 @Entity
-@Table(name="DELIVERYRESULTTYPE")
+@Table(name="OH_DELIVERYRESULTTYPE")
 public class DeliveryResultType 
 {
 	@Id 
