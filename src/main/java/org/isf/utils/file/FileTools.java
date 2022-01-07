@@ -57,7 +57,7 @@ public class FileTools {
 	// HOUR:  (0[0-9]|1[0-9]|2[0-3])
 	// MIN:   ([0-5][0-9])
 
-	private static final String[][] dateTimeFormats = new String[][] {
+	private static final String[][] dateTimeFormats = {
 			{ "yyyy-MM-dd_HHmmss", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2}_\\d{6})(?![0-9])" },
 			{ "yyyy-MM-dd HHmmss", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2} \\d{6})(?![0-9])" },
 			{ "yyyy-MM-dd_HHmm", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2}_\\d{4})(?![0-9])" },
