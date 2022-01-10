@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -24,7 +24,7 @@ package org.isf.accounting.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.data.Offset.offset;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillPayments;
@@ -32,7 +32,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestBillPayments {
 
-	private GregorianCalendar paymentDate = new GregorianCalendar(4, 3, 2);
+	public LocalDateTime paymentDate = LocalDateTime.of(4, 3, 2, 0, 0, 0);
 	private static double paymentAmount = 10.10;
 	private static String paymentUser = "TestUser";
 
@@ -41,7 +41,7 @@ public class TestBillPayments {
 
 		if (usingSet) {
 			billPayment = new BillPayments();
-			_setParameters(billPayment, bill);
+			setParameters(billPayment, bill);
 		} else {
 			// Create bill payment with all parameters 
 			billPayment = new BillPayments(0, bill, paymentDate, paymentAmount, paymentUser);
@@ -50,7 +50,7 @@ public class TestBillPayments {
 		return billPayment;
 	}
 
-	public void _setParameters(BillPayments billPayment, Bill bill) {
+	public void setParameters(BillPayments billPayment, Bill bill) {
 		billPayment.setBill(bill);
 		billPayment.setDate(paymentDate);
 		billPayment.setAmount(paymentAmount);

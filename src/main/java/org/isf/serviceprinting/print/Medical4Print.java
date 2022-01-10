@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -30,14 +30,17 @@ public class Medical4Print {
 	private double minQty;
 	private double curQty;
 	private String expiring;
-	
-	public Medical4Print(Medical medical){
-		medicalDescription=medical.getDescription();
-		medicalType=medical.getType().getDescription();
-		minQty=medical.getMinqty();
-		curQty=medical.getInitialqty()+medical.getInqty()-medical.getOutqty();
-		if(curQty<minQty)expiring="Yes";
-		else expiring="No";
+
+	public Medical4Print(Medical medical) {
+		medicalDescription = medical.getDescription();
+		medicalType = medical.getType().getDescription();
+		minQty = medical.getMinqty();
+		curQty = medical.getInitialqty() + medical.getInqty() - medical.getOutqty();
+		if (curQty < minQty) {
+			expiring = "Yes";
+		} else {
+			expiring = "No";
+		}
 	}
 
 	public double getCurQty() {

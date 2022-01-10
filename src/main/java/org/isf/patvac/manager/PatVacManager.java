@@ -21,8 +21,8 @@
  */
 package org.isf.patvac.manager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
@@ -76,9 +76,8 @@ public class PatVacManager {
 	 * @return the list of {@link PatientVaccine}s
 	 * @throws OHServiceException
 	 */
-	public List<PatientVaccine> getPatientVaccine(String vaccineTypeCode, String vaccineCode,
-			GregorianCalendar dateFrom, GregorianCalendar dateTo,
-			char sex, int ageFrom, int ageTo) throws OHServiceException {
+	public List<PatientVaccine> getPatientVaccine(String vaccineTypeCode, String vaccineCode, LocalDateTime dateFrom, LocalDateTime dateTo, char sex,
+			int ageFrom, int ageTo) throws OHServiceException {
 		return ioOperations.getPatientVaccine(vaccineTypeCode, vaccineCode, dateFrom, dateTo, sex, ageFrom, ageTo);
 	}
 

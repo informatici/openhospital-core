@@ -170,9 +170,9 @@ public class OperationBrowserManager {
 		if (resultsListHashMap == null) {
 			buildResultHashMap();
 		}
-		for (String key : resultsListHashMap.keySet()) {
-			if (resultsListHashMap.get(key).equals(description)) {
-				return key;
+		for (Map.Entry<String, String> entry : resultsListHashMap.entrySet()) {
+			if (entry.getValue().equals(description)) {
+				return entry.getKey();
 			}
 		}
 		return "";
@@ -182,13 +182,15 @@ public class OperationBrowserManager {
 		if (resultsListHashMap == null) {
 			buildResultHashMap();
 		}
-		ArrayList<String> resultDescriptionList = new ArrayList<>(resultsListHashMap.values());
+		List<String> resultDescriptionList = new ArrayList<>(resultsListHashMap.values());
 		resultDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.operation.result.success.txt")));
 		return resultDescriptionList;
 	}
-	
-	public String getResultDescriptionTranslated(String result_desc_key) {
-		if (resultsListHashMap == null) buildResultHashMap();
-		return resultsListHashMap.get(result_desc_key);
+
+	public String getResultDescriptionTranslated(String resultDescKey) {
+		if (resultsListHashMap == null) {
+			buildResultHashMap();
+		}
+		return resultsListHashMap.get(resultDescKey);
 	}
 }

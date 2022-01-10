@@ -50,7 +50,7 @@ public class TestWard {
 
 		if (usingSet) {
 			ward = new Ward();
-			_setParameters(ward, maternity);
+			setParameters(ward, maternity);
 		} else {
 			// Create Ward with all parameters 
 			ward = new Ward(code, description, telephone, fax, email, beds, nurs, docs,
@@ -62,7 +62,7 @@ public class TestWard {
 		return ward;
 	}
 
-	public void _setParameters(Ward ward, boolean maternity) {
+	public void setParameters(Ward ward, boolean maternity) {
 		ward.setCode(code);
 		if (maternity) {
 			ward.setCode(maternityCode);

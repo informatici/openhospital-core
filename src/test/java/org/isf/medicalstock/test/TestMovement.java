@@ -23,7 +23,7 @@ package org.isf.medicalstock.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
@@ -35,7 +35,7 @@ import org.isf.ward.model.Ward;
 
 public class TestMovement {
 
-	private GregorianCalendar date = new GregorianCalendar(2000, 2, 2);
+	private LocalDateTime date = LocalDateTime.of(2000, 2, 2, 0, 0, 0);
 	private int quantity = 10;
 	private String refNo = "TestRef";
 
@@ -50,7 +50,7 @@ public class TestMovement {
 
 		if (usingSet) {
 			movement = new Movement();
-			_setParameters(movement, medical, movementType, ward, lot, supplier);
+			setParameters(movement, medical, movementType, ward, lot, supplier);
 		} else {
 			// Create Movement with all parameters 
 			movement = new Movement(medical, movementType, ward, lot, date, quantity, supplier, refNo);
@@ -59,7 +59,7 @@ public class TestMovement {
 		return movement;
 	}
 
-	public void _setParameters(
+	public void setParameters(
 			Movement movement,
 			Medical medical,
 			MovementType movementType,
