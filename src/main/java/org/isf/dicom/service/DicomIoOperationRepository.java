@@ -49,9 +49,6 @@ public interface DicomIoOperationRepository extends JpaRepository<FileDicom, Lon
 	@Transactional
 	@Query("delete from FileDicom fd WHERE fd.patId = :id AND fd.dicomSeriesNumber = :file")
 	void deleteByIdAndNumber(@Param("id") int id, @Param("file") String file);
-    
-    @Query(value = "SELECT COUNT(DM_FILE_SER_NUMBER) FROM DICOM WHERE DM_FILE_SER_NUMBER = :dicomSeriesNumber", nativeQuery= true)
-	int seriesExists(@Param("dicomSeriesNumber") String dicomSeriesNumber);
 
 	@Query(value = "SELECT COUNT(DM_FILE_SER_NUMBER) FROM DICOM WHERE DM_FILE_SER_NUMBER = :dicomSeriesNumber", nativeQuery = true)
 	int seriesExists(@Param("dicomSeriesNumber") String dicomSeriesNumber);

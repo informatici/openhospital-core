@@ -260,6 +260,7 @@ public class AdmissionBrowserManager {
 							OHSeverityLevel.ERROR));
 			throw new OHDataValidationException(errors);
 		}
+		if (dateIn.isAfter(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.admission.futuredatenotallowed.msg"),
 					OHSeverityLevel.ERROR));
