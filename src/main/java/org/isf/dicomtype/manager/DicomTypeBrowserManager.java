@@ -42,7 +42,7 @@ public class DicomTypeBrowserManager {
 	private DicomTypeIoOperation ioOperations;
 
 	public boolean newDicomType(DicomType dicomType) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateVaccineType(dicomType, true);
+		List<OHExceptionMessage> errors = validateDicomType(dicomType, true);
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
@@ -50,7 +50,7 @@ public class DicomTypeBrowserManager {
 	}
 
 	public boolean updateDicomType(DicomType dicomType) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateVaccineType(dicomType, false);
+		List<OHExceptionMessage> errors = validateDicomType(dicomType, false);
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
@@ -72,7 +72,7 @@ public class DicomTypeBrowserManager {
 	 * @param insert <code>true</code> or updated <code>false</code>
 	 * @throws OHServiceException
 	 */
-	protected List<OHExceptionMessage> validateVaccineType(DicomType dicomType, boolean insert) throws OHServiceException {
+	protected List<OHExceptionMessage> validateDicomType(DicomType dicomType, boolean insert) throws OHServiceException {
 		String key = dicomType.getDicomTypeID();
 		String description = dicomType.getDicomTypeDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
