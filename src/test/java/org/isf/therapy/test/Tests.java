@@ -294,7 +294,7 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		LocalDateTime[] dates = new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now() };
+		LocalDateTime[] dates = { LocalDateTime.now(), LocalDateTime.now() };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 10.0, "", 1, "TestNote", true, true);
 
 		ArrayList<Therapy> therapies = new ArrayList<>();
@@ -315,7 +315,7 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		LocalDateTime[] dates = new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now() };
+		LocalDateTime[] dates = { LocalDateTime.now(), LocalDateTime.now() };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 1.0, "", 1, "TestNote", true, true);
 
 		ArrayList<Therapy> therapies = new ArrayList<>();
@@ -335,7 +335,7 @@ public class Tests extends OHCoreTestCase {
 
 		LocalDateTime yesterday = TimeTools.getDateToday0().minusDays(1);
 
-		LocalDateTime[] dates = new LocalDateTime[] { yesterday, yesterday };
+		LocalDateTime[] dates = { yesterday, yesterday };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 10.0, "", 1, "TestNote", true, true);
 
 		ArrayList<Therapy> therapies = new ArrayList<>();
@@ -392,7 +392,7 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		LocalDateTime[] dates = new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now() };
+		LocalDateTime[] dates = { LocalDateTime.now(), LocalDateTime.now() };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 10.0, "", 1, "TestNote", true, true);
 
 		assertThat(therapy.getTherapyID()).isEqualTo(1);
@@ -402,7 +402,7 @@ public class Tests extends OHCoreTestCase {
 		assertThat(therapy.getDates()).isNotNull();
 		LocalDateTime yesterday = TimeTools.getDateToday0();
 		yesterday.minusDays(1);
-		LocalDateTime[] newDates = new LocalDateTime[] { yesterday, yesterday };
+		LocalDateTime[] newDates = { yesterday, yesterday };
 		therapy.setDates(newDates);
 		assertThat(therapy.getDates()).isEqualTo(newDates);
 
@@ -455,7 +455,7 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		LocalDateTime[] dates = new LocalDateTime[] { LocalDateTime.now(), LocalDateTime.now() };
+		LocalDateTime[] dates = { LocalDateTime.now(), LocalDateTime.now() };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 10.0, "", 1, "TestNote", true, true);
 		assertThat(therapy).hasToString("10.0 of TestDescription - 1 per day");
 	}

@@ -119,7 +119,7 @@ public class ExcelExporter {
 	 * @throws IOException
 	 */
 	private void writeBOM(FileOutputStream fileStream) throws IOException {
-		byte[] bom = new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF };
+		byte[] bom = { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF };
 		fileStream.write(bom);
 	}
 
