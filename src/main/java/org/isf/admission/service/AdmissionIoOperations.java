@@ -25,6 +25,7 @@ import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.List;
 
@@ -226,15 +227,15 @@ public class AdmissionIoOperations {
 
 		if (wardId.equalsIgnoreCase("M") && GeneralData.MATERNITYRESTARTINJUNE) {
 			if (now.getMonthValue() < Month.JUNE.getValue()) {
-				first = now.minusYears(1).withMonth(Month.JULY.getValue()).withDayOfMonth(1);
-				last = now.withMonth(Month.JUNE.getValue()).withDayOfMonth(30);
+				first = now.minusYears(1).withMonth(Month.JULY.getValue()).withDayOfMonth(1).with(LocalTime.MIN);
+				last = now.withMonth(Month.JUNE.getValue()).withDayOfMonth(30).with(LocalTime.MAX);
 			} else {
-				first = now.withMonth(Month.JULY.getValue()).withDayOfMonth(1);
-				last = now.plusYears(1).withMonth(Month.JUNE.getValue()).withDayOfMonth(30);
+				first = now.withMonth(Month.JULY.getValue()).withDayOfMonth(1).with(LocalTime.MIN);
+				last = now.plusYears(1).withMonth(Month.JUNE.getValue()).withDayOfMonth(30).with(LocalTime.MAX);
 			}
 		} else {
-			first = now.with(firstDayOfYear());
-			last = now.with(lastDayOfYear());
+			first = now.with(firstDayOfYear()).with(LocalTime.MIN);
+			last = now.with(lastDayOfYear()).with(LocalTime.MAX);
 		}
 
 		List<Admission> admissions = repository.findAllWhereWardAndDates(wardId, first, last);
