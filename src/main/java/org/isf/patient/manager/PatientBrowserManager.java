@@ -66,7 +66,7 @@ public class PatientBrowserManager {
 	 * @throws OHServiceException when validation failed
 	 */
 	public Patient savePatient(Patient patient) throws OHServiceException {
-		validate(patient);
+		validatePatient(patient);
 		return ioOperations.savePatient(patient);
 	}
 
@@ -396,7 +396,7 @@ public class PatientBrowserManager {
 	 * @param patient
 	 * @throws OHDataValidationException
 	 */
-	protected void validate(Patient patient) throws OHDataValidationException {
+	protected void validatePatient(Patient patient) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (StringUtils.isEmpty(patient.getFirstName())) {
