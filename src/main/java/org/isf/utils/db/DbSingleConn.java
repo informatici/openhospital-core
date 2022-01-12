@@ -33,6 +33,8 @@ import org.isf.generaldata.MessageBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mysql.cj.jdbc.exceptions.CommunicationsException;
+
 /**
  * Singleton class to manage database connections.
  * Connection parameters are read from Properties file.
@@ -52,7 +54,7 @@ public class DbSingleConn {
 		if (pConn == null) {
 			try {
 				pConn = createConnection();
-			} catch (Exception ce) {
+			} catch (CommunicationsException ce) {
 				String message = MessageBundle.getMessage("angal.sql.databaseserverstoppedornetworkfailure.msg");
 				LOGGER.error(">> {}", message);
 			}
