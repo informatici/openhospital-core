@@ -33,6 +33,7 @@ import org.isf.examination.service.ExaminationOperations;
 import org.isf.generaldata.ExaminationParameters;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
@@ -149,10 +150,7 @@ public class ExaminationBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public void saveOrUpdate(PatientExamination patex) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateExamination(patex);
-		if (!errors.isEmpty()) {
-			throw new OHServiceException(errors);
-		}
+		validateExamination(patex);
 		ioOperations.saveOrUpdate(patex);
 	}
 
@@ -298,9 +296,9 @@ public class ExaminationBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param patex
-	 * @return list of {@link OHExceptionMessage}
+	 * @throws OHDataValidationException
 	 */
-	protected List<OHExceptionMessage> validateExamination(PatientExamination patex) {
+	protected void validateExamination(PatientExamination patex)  throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (patex.getPex_note().length() > PatientExamination.PEX_NOTE_LENGTH) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
@@ -322,6 +320,8 @@ public class ExaminationBrowserManager {
 					MessageBundle.getMessage("angal.examination.pleaseinsertavalidauscultationdescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		return errors;
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
 	}
 }
