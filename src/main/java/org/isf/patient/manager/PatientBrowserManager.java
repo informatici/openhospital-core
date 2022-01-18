@@ -230,7 +230,7 @@ public class PatientBrowserManager {
 		return "undefined";
 	}
 
-	protected List<OHExceptionMessage> validateMergePatients(Patient mergedPatient, Patient patient2) throws OHServiceException {
+	protected void validateMergePatients(Patient mergedPatient, Patient patient2) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		boolean admitted = false;
 
@@ -274,7 +274,9 @@ public class PatientBrowserManager {
 					MessageBundle.getMessage("angal.admission.selectedpatientshavedifferentsex.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		return errors;
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
 	}
 
 	/**
@@ -383,10 +385,7 @@ public class PatientBrowserManager {
 			mergedPatient.setNote(patient2.getNote() + "\n\n" + note);
 		}
 
-		List<OHExceptionMessage> errors = validateMergePatients(mergedPatient, patient2);
-		if (!errors.isEmpty()) {
-			throw new OHDataValidationException(errors);
-		}
+		validateMergePatients(mergedPatient, patient2);
 		return ioOperations.mergePatientHistory(mergedPatient, patient2);
 	}
 

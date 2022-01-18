@@ -127,7 +127,32 @@ public class MovStockInsertingManager {
 		// Check Lot
 		if (!isAutomaticLotOut()) {
 			Lot lot = movement.getLot();
-			errors.addAll(validateLot(lot));
+			if (lot != null) {
+
+				if (lot.getCode().length() >= 50) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.medicalstock.thelotidistoolongmax50chars.msg"),
+							OHSeverityLevel.ERROR));
+				}
+
+				if (lot.getDueDate() == null) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.medicalstock.insertavalidduedate.msg"),
+							OHSeverityLevel.ERROR));
+				}
+
+				if (lot.getPreparationDate() == null) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.medicalstock.insertavalidpreparationdate.msg"),
+							OHSeverityLevel.ERROR));
+				}
+
+				if (lot.getPreparationDate() != null && lot.getDueDate() != null && lot.getPreparationDate().compareTo(lot.getDueDate()) > 0) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.medicalstock.thepreparationdatecannotbyaftertheduedate.msg"),
+							OHSeverityLevel.ERROR));
+				}
+			}
 
 			if (movement.getType() != null && !chargingType && movement.getQuantity() > lot.getMainStoreQuantity()) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
@@ -155,44 +180,6 @@ public class MovStockInsertingManager {
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
-	}
-
-	/**
-	 * Verify if the object is valid for CRUD and return a list of errors, if any
-	 *
-	 * @param lot - the lot to validate
-	 * @return list of {@link OHExceptionMessage}
-	 */
-	protected List<OHExceptionMessage> validateLot(Lot lot) {
-		List<OHExceptionMessage> errors = new ArrayList<>();
-
-		if (lot != null) {
-
-			if (lot.getCode().length() >= 50) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.medicalstock.thelotidistoolongmax50chars.msg"),
-						OHSeverityLevel.ERROR));
-			}
-
-			if (lot.getDueDate() == null) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.medicalstock.insertavalidduedate.msg"),
-						OHSeverityLevel.ERROR));
-			}
-
-			if (lot.getPreparationDate() == null) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.medicalstock.insertavalidpreparationdate.msg"),
-						OHSeverityLevel.ERROR));
-			}
-
-			if (lot.getPreparationDate() != null && lot.getDueDate() != null && lot.getPreparationDate().compareTo(lot.getDueDate()) > 0) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.medicalstock.thepreparationdatecannotbyaftertheduedate.msg"),
-						OHSeverityLevel.ERROR));
-			}
-		}
-		return errors;
 	}
 
 	/**
