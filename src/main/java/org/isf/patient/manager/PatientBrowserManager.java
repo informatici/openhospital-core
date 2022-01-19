@@ -232,21 +232,11 @@ public class PatientBrowserManager {
 
 	protected void validateMergePatients(Patient mergedPatient, Patient patient2) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		boolean admitted = false;
 
-		if (admissionManager.getCurrentAdmission(mergedPatient) != null) {
-			admitted = true;
-		}
-		else if (admissionManager.getCurrentAdmission(patient2) != null) {
-			admitted = true;
-		}
-		if (admitted) {
+		if (admissionManager.getCurrentAdmission(mergedPatient) != null || admissionManager.getCurrentAdmission(patient2) != null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.admission.cannotmergeadmittedpatients.msg"),
 					OHSeverityLevel.ERROR));
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.admission.patientscannothavependingtasks.msg"),
-					OHSeverityLevel.INFO));
 		}
 
 		boolean billPending = false;
@@ -265,9 +255,6 @@ public class PatientBrowserManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.admission.cannotmergewithpendingbills.msg"),
 					OHSeverityLevel.ERROR));
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.admission.patientscannothavependingtasks.msg"),
-					OHSeverityLevel.INFO));
 		}
 		if (mergedPatient.getSex() != patient2.getSex()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),

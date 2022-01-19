@@ -337,7 +337,7 @@ public class TestMergePatient extends OHCoreTestCase {
 				.isInstanceOf(OHServiceException.class)
 				.has(
 						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 2), "Expecting two validation error messages"));
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting two validation error messages"));
 	}
 
 	@Test
@@ -358,7 +358,7 @@ public class TestMergePatient extends OHCoreTestCase {
 				.isInstanceOf(OHServiceException.class)
 				.has(
 						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 2), "Expecting two validation error messages"));
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting two validation error messages"));
 	}
 
 	@Test
@@ -390,7 +390,7 @@ public class TestMergePatient extends OHCoreTestCase {
 				.isInstanceOf(OHServiceException.class)
 				.has(
 						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 2), "Expecting two validation error messages"));
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting two validation error messages"));
 	}
 
 	@Test
@@ -422,7 +422,7 @@ public class TestMergePatient extends OHCoreTestCase {
 				.isInstanceOf(OHServiceException.class)
 				.has(
 						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 2), "Expecting two validation error messages"));
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting two validation error messages"));
 	}
 
 	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) {
