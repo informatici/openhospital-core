@@ -18,7 +18,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.framework.version>5.3.15</spring.framework.version>
-		<spring.boot.version>2.6.2</spring.boot.version>
+		<spring.boot.version>2.6.3</spring.boot.version>
 		<license.maven.plugin.version>4.1</license.maven.plugin.version>
 		<spring-cloud-starter-openfeign>3.1.0</spring-cloud-starter-openfeign>
 	</properties>
@@ -318,17 +318,17 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-agroal</artifactId>
-			<version>5.6.3.Final</version>
+			<version>5.6.4.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>5.6.3.Final</version>
+			<version>5.6.4.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-c3p0</artifactId>
-			<version>5.6.3.Final</version>
+			<version>5.6.4.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.validation</groupId>
