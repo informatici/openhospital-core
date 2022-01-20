@@ -209,12 +209,13 @@ public class TimeTools {
 	 *
 	 * @param string - a String object to be passed
 	 * @param pattern - the pattern. If <code>null</code> "yyyy-MM-dd HH:mm:ss" will be used
-	 * @param noTime - if <code>True</code> the time will be 00:00:00, actual time otherwise.
+	 * @param noTime - if <code>true</code> the time will be 00:00:00, actual time otherwise.
 	 * @return the String representation of the LocalDateTime
 	 */
 	public static LocalDateTime parseDate(String string, String pattern, boolean noTime) {
 		if (pattern == null) {
 			pattern = YYYY_MM_DD_HH_MM_SS;
+			noTime = false;
 		}
 		DateTimeFormatter format = DateTimeFormatter.ofPattern(pattern);
 		LocalDateTime dateTime;
@@ -223,7 +224,8 @@ public class TimeTools {
 			 * regarding to https://stackoverflow.com/questions/27454025/unable-to-obtain-localdatetime-from-temporalaccessor-when-parsing-localdatetime
 			 * Java does not accept a bare Date value as DateTime
 			 */
-			dateTime = LocalDate.parse(string, format).atStartOfDay();
+			LocalDate date = LocalDate.parse(string, format);
+			dateTime = date.atTime(LocalTime.MIN);
 		} else {
 			dateTime = LocalDateTime.parse(string, format);
 		}

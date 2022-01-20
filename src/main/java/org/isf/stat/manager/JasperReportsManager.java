@@ -826,8 +826,8 @@ public class JasperReportsManager {
 		LocalDateTime fromDateQuery = TimeTools.parseDate(fromDate, null, false);
 		LocalDateTime toDateQuery = TimeTools.parseDate(toDate, null, false);
 
-		parameters.put("fromdate", fromDateQuery); // real param
-		parameters.put("todate", toDateQuery); // real param
+		parameters.put("fromdate", convertToLegacyFormatForLibWithoutJavaTimeSupport(fromDateQuery)); // real param
+		parameters.put("todate", convertToLegacyFormatForLibWithoutJavaTimeSupport(toDateQuery)); // real param
 		parameters.put("user", aUser + ""); // real param
 		return parameters;
 	}
@@ -835,11 +835,11 @@ public class JasperReportsManager {
     private HashMap<String,Object> compileGenericReportFromDateToDateParameters(String fromDate, String toDate) throws OHServiceException {
         HashMap<String, Object> parameters = getHospitalParameters();
 
-	    LocalDateTime fromDateQuery = TimeTools.parseDate(fromDate, "dd/MM/yyyy", false);
-	    LocalDateTime toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yyyy", false);
+	    LocalDateTime fromDateQuery = TimeTools.parseDate(fromDate, "dd/MM/yy", true);
+	    LocalDateTime toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yy", true);
 
-        parameters.put("fromdate", fromDateQuery); // real param
-        parameters.put("todate", toDateQuery); // real param
+        parameters.put("fromdate", convertToLegacyFormatForLibWithoutJavaTimeSupport(fromDateQuery)); // real param
+        parameters.put("todate", convertToLegacyFormatForLibWithoutJavaTimeSupport(toDateQuery)); // real param
         return parameters;
     }
 
