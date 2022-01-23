@@ -19,26 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.menu.service;
-
-import org.isf.menu.model.UserGroup;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+package org.isf.permissions.service;
 
 import java.util.List;
 
+import org.isf.permissions.model.GroupPermission;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 @Repository
-public interface UserGroupIoOperationRepository extends JpaRepository<UserGroup, String> {
-    List<UserGroup> findAllByOrderByCodeAsc();
+public interface GroupPermissionIoOperationRepository extends JpaRepository<GroupPermission, Integer> {
 
-    @Modifying
-    @Transactional
-    @Query(value =  "update UserGroup ug set ug.desc=:description where ug.code=:id")
-    int updateDescription(@Param("description") String description, @Param("id") String id);
+	List<GroupPermission> findByIdIn(List<Integer> ids);
 
-	List<UserGroup> findByCodeIn(List<String> userGroupIds);
+	List<GroupPermission> findByUserGroup_codeInAndPermission_id(List<String> userGroupCodes, int id);
+
+	List<GroupPermission> findByPermission_IdAndUserGroup_CodeIn(Integer permissionId, List<String> userGroupCodes);
+
+	List<GroupPermission> findByPermission_id(int id);
+
 }

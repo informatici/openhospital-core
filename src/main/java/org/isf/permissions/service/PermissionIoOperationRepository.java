@@ -19,26 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.menu.service;
-
-import org.isf.menu.model.UserGroup;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+package org.isf.permissions.service;
 
 import java.util.List;
 
+import org.isf.permissions.model.Permission;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
 @Repository
-public interface UserGroupIoOperationRepository extends JpaRepository<UserGroup, String> {
-    List<UserGroup> findAllByOrderByCodeAsc();
+public interface PermissionIoOperationRepository extends JpaRepository<Permission, Integer> {
 
-    @Modifying
-    @Transactional
-    @Query(value =  "update UserGroup ug set ug.desc=:description where ug.code=:id")
-    int updateDescription(@Param("description") String description, @Param("id") String id);
+	@Query(value = "FROM Permission p WHERE p.active=1 and p.id in (select permission.id from GroupPermission where active=1 and userGroup.code like :userGroupCode)")
+	List<Permission> findAllByUserGroupCode(@Param("userGroupCode") String userGroupCode);
 
-	List<UserGroup> findByCodeIn(List<String> userGroupIds);
+	@Query(value = "FROM Permission p WHERE p.active=1 and p.id in (select permission.id from GroupPermission where active=1 and userGroup.code in (select userGroupName from User where active=1 and userName like :currentUserName))")
+	List<Permission> retrievePermissionsByCurrentLoggedInUser(@Param("currentUserName") String currentUserName);
+
+	Permission findByName(String name);
+
 }
