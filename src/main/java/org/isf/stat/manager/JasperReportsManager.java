@@ -835,8 +835,8 @@ public class JasperReportsManager {
     private HashMap<String,Object> compileGenericReportFromDateToDateParameters(String fromDate, String toDate) throws OHServiceException {
         HashMap<String, Object> parameters = getHospitalParameters();
 
-	    LocalDateTime fromDateQuery = TimeTools.parseDate(fromDate, "dd/MM/yy", true);
-	    LocalDateTime toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yy", true);
+	    LocalDateTime fromDateQuery = TimeTools.parseDate(fromDate, "dd/MM/yyyy", true);
+	    LocalDateTime toDateQuery = TimeTools.parseDate(toDate, "dd/MM/yyyy", true);
 
         parameters.put("fromdate", convertToLegacyFormatForLibWithoutJavaTimeSupport(fromDateQuery)); // real param
         parameters.put("todate", convertToLegacyFormatForLibWithoutJavaTimeSupport(toDateQuery)); // real param
