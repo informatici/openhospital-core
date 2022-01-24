@@ -58,7 +58,7 @@ public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWa
 		query.select(root.<Integer>get(CODE));
 		List<Predicate> predicates = new ArrayList<>();
 
-		if (!StringUtils.isEmpty(wardId)) {
+		if (StringUtils.isNotEmpty(wardId)) {
 			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
 		}
 		if ((dateFrom != null) && (dateTo != null)) {
