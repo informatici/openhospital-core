@@ -118,7 +118,7 @@ public class TestTimeTools {
 	public void testParseDate() throws Exception {
 		assertThat(TimeTools.parseDate("2021-11-03 23:59:59", "yyyy-MM-dd HH:mm:ss", false))
 				.isEqualTo(LocalDateTime.of(2021, 11, 3, 23, 59, 59));
-		assertThat(TimeTools.parseDate("2021-11-03 23:59:59", "yyyy-MM-dd HH:mm:ss", true))
+		assertThat(TimeTools.parseDate("2021-11-03", "yyyy-MM-dd", true))
 				.isEqualTo(LocalDateTime.of(2021, 11, 3, 0, 0, 0));
 	}
 }
