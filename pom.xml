@@ -288,22 +288,22 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
-			<version>5.1.0</version>
+			<version>5.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>5.1.0</version>
+			<version>5.2.0</version>
 		</dependency>
 		<dependency>
  			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.33</version>
+			<version>1.7.35</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.33</version>
+			<version>1.7.35</version>
 		</dependency>
 		<dependency>
 			<groupId>org.igniterealtime.smack</groupId>
@@ -318,17 +318,17 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-agroal</artifactId>
-			<version>5.6.4.Final</version>
+			<version>5.6.5.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>5.6.4.Final</version>
+			<version>5.6.5.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-c3p0</artifactId>
-			<version>5.6.4.Final</version>
+			<version>5.6.5.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.validation</groupId>
