@@ -27,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.isf.accounting.manager.BillBrowserManager;
 import org.isf.accounting.model.Bill;
 import org.isf.admission.manager.AdmissionBrowserManager;
@@ -40,7 +41,6 @@ import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 @Component
 public class PatientBrowserManager {
@@ -324,7 +324,7 @@ public class PatientBrowserManager {
 				mergedPatient.setAge(age2);
 				mergedPatient.setBirthDate(bdate2);
 			}
-			if (bdate2 != null && !StringUtils.isEmpty(ageType2)) {
+			if (bdate2 != null && StringUtils.isNotEmpty(ageType2)) {
 				//patient2 has AgeType
 				mergedPatient.setAge(age2);
 				mergedPatient.setAgetype(ageType2);
