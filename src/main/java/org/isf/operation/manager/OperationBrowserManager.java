@@ -65,7 +65,7 @@ public class OperationBrowserManager {
 	}
 
 	public List<Operation> getOperation() throws OHServiceException {
-		return ioOperations.getOperationByTypeDescription(null);
+		return ioOperations.getOperation();
 	}
 
 	/**

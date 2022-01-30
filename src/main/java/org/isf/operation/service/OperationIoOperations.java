@@ -74,6 +74,10 @@ public class OperationIoOperations {
 		return repository.findAllWithoutDescriptionAdm();
 	}
 
+	public List<Operation> getOperation() throws OHServiceException {
+		return repository.findAllWithoutDescription();
+	}
+
 	/**
 	 * Insert an {@link Operation} in the DBs
 	 * 

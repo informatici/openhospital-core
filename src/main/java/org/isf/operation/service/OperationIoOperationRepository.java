@@ -37,6 +37,9 @@ public interface OperationIoOperationRepository extends JpaRepository<Operation,
 
 	Operation findByCode(String code);
 
+	@Query(value = "SELECT * FROM OPERATION JOIN OPERATIONTYPE ON OPE_OCL_ID_A = OCL_ID_A WHERE OPE_FOR LIKE 1 OR OPE_FOR LIKE 2 OR  OPE_FOR LIKE 3  ORDER BY OPE_DESC", nativeQuery = true)
+	List<Operation> findAllWithoutDescription();
+
 	@Query(value = "SELECT * FROM OPERATION JOIN OPERATIONTYPE ON OPE_OCL_ID_A = OCL_ID_A WHERE OPE_FOR LIKE 1 OR  OPE_FOR LIKE 3  ORDER BY OPE_DESC", nativeQuery = true)
 	List<Operation> findAllWithoutDescriptionOpd();
 
