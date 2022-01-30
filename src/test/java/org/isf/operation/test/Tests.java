@@ -337,7 +337,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetOperation() throws Exception {
 		setupTestOperation(true);
 		List<Operation> operations = operationBrowserManager.getOperation();
-		assertThat(operations).isNotEmpty();
+		assertThat(operations).isEmpty();
 	}
 
 	@Test
