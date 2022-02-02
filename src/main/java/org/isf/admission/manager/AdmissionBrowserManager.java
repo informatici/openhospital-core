@@ -40,6 +40,7 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -241,7 +242,7 @@ public class AdmissionBrowserManager {
 		/*
 		 * Today Gregorian Calendar
 		 */
-		GregorianCalendar today = new GregorianCalendar();
+		GregorianCalendar today = TimeTools.getDateToday24();
 		DateFormat currentDateFormat = DateFormat.getDateInstance(DateFormat.SHORT, new Locale(GeneralData.LANGUAGE));
 		// get year prog ( not null)
 		if (admission.getYProg() < 0) {
@@ -382,14 +383,14 @@ public class AdmissionBrowserManager {
 			}
 
 			GregorianCalendar visitDate = admission.getVisitDate();
-			if (operationDate != null && ward.getCode().equalsIgnoreCase("M")) {
+			if (visitDate != null && ward.getCode().equalsIgnoreCase("M")) {
 				GregorianCalendar limit;
 				if (admission.getDisDate() == null) {
 					limit = today;
 				} else {
 					limit = admission.getDisDate();
 				}
-				if (operationDate.before(dateIn) || operationDate.after(limit)) {
+				if (visitDate.before(dateIn) || visitDate.after(limit)) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.getMessage("angal.admission.pleaseinsertavalidvisitdate.msg"),
 							OHSeverityLevel.ERROR));
