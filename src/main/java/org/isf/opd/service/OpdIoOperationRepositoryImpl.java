@@ -102,7 +102,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			);
 		}
 		predicates.add(
-			cb.between(opd.<Date>get("visitDate"), dateFrom.getTime(), dateTo.getTime())
+			cb.between(opd.<Date>get("date"), dateFrom.getTime(), dateTo.getTime())
 		);
 		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 
