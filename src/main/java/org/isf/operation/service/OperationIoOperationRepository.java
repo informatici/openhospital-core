@@ -39,6 +39,6 @@ public interface OperationIoOperationRepository extends JpaRepository<Operation,
 	ArrayList<Operation> findAllWithoutDescriptionOpd();
 	@Query(value = "SELECT * FROM OPERATION JOIN OPERATIONTYPE ON OPE_OCL_ID_A = OCL_ID_A WHERE OPE_FOR LIKE 1 OR  OPE_FOR LIKE 2  ORDER BY OPE_DESC", nativeQuery= true)
 	ArrayList<Operation> findAllWithoutDescriptionAdm();
-	@Query(value = "SELECT * FROM OPERATION JOIN OPERATIONTYPE ON OPE_OCL_ID_A = OCL_ID_A WHERE OPE_DESC LIKE :desc AND (OPE_FOR LIKE 1 OR OPE_FOR LIKE 2 OR OPE_FOR LIKE 3) ORDER BY OPE_DESC", nativeQuery= true)
+	@Query(value = "SELECT * FROM OPERATION JOIN OPERATIONTYPE ON OPE_OCL_ID_A = OCL_ID_A WHERE OCL_DESC LIKE :desc AND (OPE_FOR LIKE 1 OR OPE_FOR LIKE 2 OR OPE_FOR LIKE 3) ORDER BY OPE_DESC", nativeQuery= true)
 	List<Operation> findAllByType_DescriptionContainsOrderByDescriptionAsc(@Param("desc") String typeDescription);
 }
