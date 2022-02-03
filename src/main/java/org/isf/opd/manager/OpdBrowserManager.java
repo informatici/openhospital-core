@@ -22,7 +22,6 @@
 package org.isf.opd.manager;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
