@@ -348,7 +348,7 @@ public class Tests extends OHCoreTestCase {
 	public void testTherapyRowToString() throws Exception {
 		int id = setupTestTherapyRow(false);
 		TherapyRow therapyRow = therapyIoOperationRepository.findById(id).get();
-		assertThat(therapyRow).hasToString("2 - 10 9.9/11/12");
+		assertThat(therapyRow).hasToString("1 - 10 9.9/11/12");
 	}
 
 	@Test
