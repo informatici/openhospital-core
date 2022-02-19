@@ -22,7 +22,6 @@
 package org.isf.opd.manager;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -70,14 +69,12 @@ public class OpdBrowserManager {
 		Disease disease = opd.getDisease();
 		Disease disease2 = opd.getDisease2();
 		Disease disease3 = opd.getDisease3();
-		if (opd.getDate() == null)
-			opd.setDate(new Date());
 		if (opd.getUserID() == null)
 			opd.setUserID(UserBrowsingManager.getCurrentUser());
 
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		// Check Visit Date
-		if (opd.getVisitDate() == null) {
+		if (opd.getDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.opd.pleaseinsertattendancedate.msg"),
 					OHSeverityLevel.ERROR));
