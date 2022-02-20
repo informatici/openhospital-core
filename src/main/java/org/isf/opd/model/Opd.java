@@ -267,7 +267,7 @@ public class Opd extends Auditable<String>
 	}
 	
 	/**
-	 * use <code>getDate()</code> instead
+	 * use <code>getCreatedDate()</code> instead
 	 */
 	@Deprecated
 	public GregorianCalendar getVisitDate() {
@@ -275,7 +275,7 @@ public class Opd extends Auditable<String>
 	}
 
 	/**
-	 * use <code>setDate()</code> instead
+	 * the field has been replaced by <code>createdDate()</code> and it's not meant to be managed by the user (Spring managed)
 	 */
 	@Deprecated
 	public void setVisitDate(GregorianCalendar visDate) {

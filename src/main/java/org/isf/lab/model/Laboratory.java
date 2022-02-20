@@ -66,13 +66,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
     @AttributeOverride(name="active", column=@Column(name="LAB_ACTIVE")),
     @AttributeOverride(name="lastModifiedDate", column=@Column(name="LAB_LAST_MODIFIED_DATE"))
 })
-public class Laboratory extends Auditable<String>
-{
-	@Id 
+public class Laboratory extends Auditable<String> {
+
+	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="LAB_ID")
 	private Integer code;
-	
+
 	@Column(name="LAB_MATERIAL")
 	private String material;
 
@@ -83,10 +83,11 @@ public class Laboratory extends Auditable<String>
 
 	@NotNull
 	@Column(name="LAB_DATE")
-	private GregorianCalendar registrationDate;
-	
+	private GregorianCalendar labDate;
+
 	@Column(name="LAB_EXAM_DATE")
 	@Temporal(TemporalType.DATE)
+	@Deprecated
 	private Calendar examDate;
 
 	@NotNull
@@ -96,86 +97,94 @@ public class Laboratory extends Auditable<String>
 	@Version
 	@Column(name="LAB_LOCK")
 	private int lock;
-	
+
 	@Column(name="LAB_NOTE")
 	private String note;
 
 	@ManyToOne
 	@JoinColumn(name="LAB_PAT_ID")
 	private Patient patient;
-	
+
 	@Column(name="LAB_PAT_NAME")
 	private String patName;
-	
+
 	@Column(name="LAB_PAT_INOUT")
 	private String InOutPatient;
-	
+
 	@Column(name="LAB_AGE")
 	private Integer age;
-	
+
 	@Column(name="LAB_SEX")
 	private String sex;
-	
+
 	@Transient
 	private volatile int hashCode = 0;
-	
-	public Laboratory() { }
-	
-	public Laboratory(Exam aExam,GregorianCalendar aDate,String aResult,
-			String aNote, Patient aPatId, String aPatName){
-		exam=aExam;
-		registrationDate=aDate;
-		result=aResult;
-		note=aNote;
-		patient=aPatId;
-		patName=aPatName;
+
+	public Laboratory() {
 	}
 
-	public Laboratory(Integer aCode,Exam aExam,GregorianCalendar aDate,String aResult,
-			String aNote, Patient aPatId, String aPatName){
-		code=aCode;
-		exam=aExam;
-		registrationDate=aDate;
-		result=aResult;
-		note=aNote;
-		patient=aPatId;
-		patName=aPatName;
+	public Laboratory(Exam aExam, GregorianCalendar aDate, String aResult, String aNote, Patient aPatId, String aPatName) {
+		exam = aExam;
+		labDate = aDate;
+		result = aResult;
+		note = aNote;
+		patient = aPatId;
+		patName = aPatName;
 	}
-	public Exam getExam(){
+
+	public Laboratory(Integer aCode, Exam aExam, GregorianCalendar aDate, String aResult, String aNote, Patient aPatId, String aPatName) {
+		code = aCode;
+		exam = aExam;
+		labDate = aDate;
+		result = aResult;
+		note = aNote;
+		patient = aPatId;
+		patName = aPatName;
+	}
+
+	public Exam getExam() {
 		return exam;
 	}
-	public GregorianCalendar getDate(){
-		return registrationDate;
+	public GregorianCalendar getDate() {
+		return labDate;
 	}
-	public String getResult(){
+	public String getResult() {
 		return result;
 	}
-	public Integer getCode(){
+	public Integer getCode() {
 		return code;
 	}
-	public int getLock(){
+	public int getLock() {
 		return lock;
 	}
-	public void setCode(Integer aCode){
-		code=aCode;
+	public void setCode(Integer aCode) {
+		code = aCode;
 	}
-	public void setExam(Exam aExam){
-		exam=aExam;
+	public void setExam(Exam aExam) {
+		exam = aExam;
 	}
-	public void setLock(int aLock){
-		lock=aLock;
+	public void setLock(int aLock) {
+		lock = aLock;
 	}
+	/**
+	 * use <code>getCreatedDate()</code> instead
+	 */
+	@Deprecated
 	public GregorianCalendar getExamDate() {
 		return (GregorianCalendar) examDate;
 	}
+	/**
+	 * the field has been replaced by <code>createdDate()</code> and it's not meant to be managed by the user (Spring managed)
+	 */
+	@Deprecated
 	public void setExamDate(GregorianCalendar exDate) {
 		this.examDate = exDate;
-	}	
-	public void setDate(GregorianCalendar aDate){
-		registrationDate=aDate;
 	}
-	public void setResult(String aResult){
-		result=aResult;
+	public void setDate(GregorianCalendar aDate) {
+		labDate = aDate;
+	}
+	public void setResult(String aResult) {
+		result = aResult;
 	}
 	public String getNote() {
 		return note;
@@ -205,7 +214,8 @@ public class Laboratory extends Auditable<String>
 		return InOutPatient;
 	}
 	public void setInOutPatient(String InOut) {
-		if (InOut==null) InOut="";
+		if (InOut == null)
+			InOut = "";
 		this.InOutPatient = InOut;
 	}
 	public String getPatName() {
@@ -220,40 +230,39 @@ public class Laboratory extends Auditable<String>
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null || !(obj instanceof Laboratory)) {
 			return false;
 		}
-		
-		Laboratory laboratory = (Laboratory)obj;
+
+		Laboratory laboratory = (Laboratory) obj;
 		return (this.getCode().equals(laboratory.getCode()));
 
 	}
-	
+
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + (code == null ? 0 : code);
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + (code == null ? 0 : code);
+
+			this.hashCode = c;
+		}
+
+		return this.hashCode;
 	}
 
-    @Override
+	@Override
 	public String toString() {
 		return "-------------------------------------------\nLaboratory{" + "code=" + code + ", material=" + material
-				+ ", exam=" + exam + ", registrationDate=" + registrationDate + ", examDate=" + examDate + ", result="
+				+ ", exam=" + exam + ", registrationDate=" + labDate + ", examDate=" + examDate + ", result="
 				+ result + ", lock=" + lock + ", note=" + note + ", patient=" + patient + ", patName=" + patName
 				+ ", InOutPatient=" + InOutPatient + ", age=" + age + ", sex=" + sex + ", hashCode=" + hashCode
 				+ "}\n---------------------------------------------";
 	}
-        
-}
 
+}
