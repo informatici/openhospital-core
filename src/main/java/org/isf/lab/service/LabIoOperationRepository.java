@@ -29,22 +29,22 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LabIoOperationRepository extends JpaRepository<Laboratory, Integer> {
 
-    List<Laboratory> findByExamDateBetweenOrderByExamDateDescRegistrationDateDesc(
+    List<Laboratory> findByExamDateBetweenOrderByLabDateDesc(
             GregorianCalendar dateFrom,
             GregorianCalendar dateTo);
 
-    List<Laboratory> findByExamDateBetweenAndExam_DescriptionOrderByExamDateDescRegistrationDateDesc(
+    List<Laboratory> findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(
             GregorianCalendar dateFrom,
             GregorianCalendar dateTo,
             String exam);
 
-    List<Laboratory> findByPatient_CodeOrderByRegistrationDate(Integer patient);
+    List<Laboratory> findByPatient_CodeOrderByLabDate(Integer patient);
 
-    List<Laboratory> findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(
+    List<Laboratory> findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(
             GregorianCalendar dateFrom,
             GregorianCalendar dateTo);
 
-    List<Laboratory> findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(
+    List<Laboratory> findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(
             GregorianCalendar dateFrom,
             GregorianCalendar dateTo,
             String exam);

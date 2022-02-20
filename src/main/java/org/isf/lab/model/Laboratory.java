@@ -83,10 +83,11 @@ public class Laboratory extends Auditable<String>
 
 	@NotNull
 	@Column(name="LAB_DATE")
-	private GregorianCalendar registrationDate;
+	private GregorianCalendar labDate;
 	
 	@Column(name="LAB_EXAM_DATE")
 	@Temporal(TemporalType.DATE)
+	@Deprecated
 	private Calendar examDate;
 
 	@NotNull
@@ -124,7 +125,7 @@ public class Laboratory extends Auditable<String>
 	public Laboratory(Exam aExam,GregorianCalendar aDate,String aResult,
 			String aNote, Patient aPatId, String aPatName){
 		exam=aExam;
-		registrationDate=aDate;
+		labDate=aDate;
 		result=aResult;
 		note=aNote;
 		patient=aPatId;
@@ -135,7 +136,7 @@ public class Laboratory extends Auditable<String>
 			String aNote, Patient aPatId, String aPatName){
 		code=aCode;
 		exam=aExam;
-		registrationDate=aDate;
+		labDate=aDate;
 		result=aResult;
 		note=aNote;
 		patient=aPatId;
@@ -145,7 +146,7 @@ public class Laboratory extends Auditable<String>
 		return exam;
 	}
 	public GregorianCalendar getDate(){
-		return registrationDate;
+		return labDate;
 	}
 	public String getResult(){
 		return result;
@@ -165,14 +166,22 @@ public class Laboratory extends Auditable<String>
 	public void setLock(int aLock){
 		lock=aLock;
 	}
+	/**
+	 * use <code>getCreatedDate()</code> instead
+	 */
+	@Deprecated
 	public GregorianCalendar getExamDate() {
 		return (GregorianCalendar) examDate;
 	}
+	/**
+	 * the field has been replaced by <code>createdDate()</code> and it's not meant to be managed by the user (Spring managed)
+	 */
+	@Deprecated
 	public void setExamDate(GregorianCalendar exDate) {
 		this.examDate = exDate;
 	}	
 	public void setDate(GregorianCalendar aDate){
-		registrationDate=aDate;
+		labDate=aDate;
 	}
 	public void setResult(String aResult){
 		result=aResult;
@@ -249,7 +258,7 @@ public class Laboratory extends Auditable<String>
     @Override
 	public String toString() {
 		return "-------------------------------------------\nLaboratory{" + "code=" + code + ", material=" + material
-				+ ", exam=" + exam + ", registrationDate=" + registrationDate + ", examDate=" + examDate + ", result="
+				+ ", exam=" + exam + ", registrationDate=" + labDate + ", examDate=" + examDate + ", result="
 				+ result + ", lock=" + lock + ", note=" + note + ", patient=" + patient + ", patName=" + patName
 				+ ", InOutPatient=" + InOutPatient + ", age=" + age + ", sex=" + sex + ", hashCode=" + hashCode
 				+ "}\n---------------------------------------------";

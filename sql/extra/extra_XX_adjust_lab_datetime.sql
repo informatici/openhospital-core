@@ -1,0 +1,3 @@
+UPDATE LABORATORY SET LAB_DATE = CAST(CONCAT(LAB_EXAM_DATE, ' ', TIME(LAB_DATE)) AS DATETIME);
+
+-- now we could drop LAB_EXAM_DATE field for next release
