@@ -86,7 +86,7 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 		}
 		if (vaccineTypeCode != null) {
 			predicates.add(
-				cb.equal(pvRoot.join("vaccine").get("code"), vaccineTypeCode)
+				cb.equal(pvRoot.join("vaccine").get("vaccineType").get("code"), vaccineTypeCode)
 			);
 		}
 		if (vaccineCode != null) {
