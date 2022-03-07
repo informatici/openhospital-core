@@ -87,6 +87,10 @@ public final class GeneralData extends ConfigurationProperties {
 	public static String PATIENTBILLGROUPED;
 	public static String PATIENTBILLSTATEMENT;
 	public static boolean DEBUG;
+	public static int VISITDURATION;
+	public static int VISITSTARTHOUR;
+	public static int VISITENDHOUR;
+	public static int VISITINCREMENT;
 
 	private static final String DEFAULT_LANGUAGE = "en";
 	private static final boolean DEFAULT_SINGLEUSER = false;
@@ -131,6 +135,10 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_PATIENTBILLGROUPED = "PatientBillGrouped";
 	private static final String DEFAULT_PATIENTBILLSTATEMENT = "PatientBillStatement";
 	private static final boolean DEFAULT_DEBUG = false;
+	public static int DEFAULT_VISITDURATION = 30;
+	public static int DEFAULT_VISITSTARTHOUR = 5;
+	public static int DEFAULT_VISITENDHOUR = 20;
+	public static int DEFAULT_VISITINCREMENT = 15;
 
 	private static GeneralData mySingleData;
 	
@@ -185,7 +193,10 @@ public final class GeneralData extends ConfigurationProperties {
 		PATIENTBILLGROUPED = myGetProperty("PATIENTBILLGROUPED", DEFAULT_PATIENTBILLGROUPED);
 		PATIENTBILLSTATEMENT = myGetProperty("PATIENTBILLSTATEMENT", DEFAULT_PATIENTBILLSTATEMENT);
 		DEBUG = myGetProperty("DEBUG", DEFAULT_DEBUG);
-			
+		VISITDURATION = myGetProperty("VISITDURATION", DEFAULT_VISITDURATION);
+		VISITSTARTHOUR = myGetProperty("VISITSTARTHOUR", DEFAULT_VISITSTARTHOUR);
+		VISITENDHOUR = myGetProperty("VISITENDHOUR", DEFAULT_VISITENDHOUR);
+		VISITINCREMENT = myGetProperty("VISITINCREMENT", DEFAULT_VISITINCREMENT);
 	}
 
 	public static GeneralData getGeneralData() {
