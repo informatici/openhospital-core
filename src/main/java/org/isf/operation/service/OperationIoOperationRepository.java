@@ -24,11 +24,13 @@ package org.isf.operation.service;
 import org.isf.operation.model.Operation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public interface OperationIoOperationRepository extends JpaRepository<Operation, String> {
+	@Query(value = "SELECT * FROM OPERATION JOIN OPERATIONTYPE ON OPE_OCL_ID_A = OCL_ID_A WHERE OPE_FOR LIKE 1 OR OPE_FOR LIKE 3 OR OPE_FOR LIKE 2 ORDER BY OPE_DESC", nativeQuery= true)
     List<Operation> findByOrderByDescriptionAsc();
 	List<Operation> findAllByDescriptionContainsOrderByDescriptionDesc(String description);
     Operation findOneByDescriptionAndType_Code(String description, String type);
@@ -37,5 +39,6 @@ public interface OperationIoOperationRepository extends JpaRepository<Operation,
 	ArrayList<Operation> findAllWithoutDescriptionOpd();
 	@Query(value = "SELECT * FROM OPERATION JOIN OPERATIONTYPE ON OPE_OCL_ID_A = OCL_ID_A WHERE OPE_FOR LIKE 1 OR  OPE_FOR LIKE 2  ORDER BY OPE_DESC", nativeQuery= true)
 	ArrayList<Operation> findAllWithoutDescriptionAdm();
-	List<Operation> findAllByType_DescriptionContainsOrderByDescriptionAsc(String typeDescription);
+	@Query(value = "SELECT * FROM OPERATION JOIN OPERATIONTYPE ON OPE_OCL_ID_A = OCL_ID_A WHERE OCL_DESC LIKE :desc AND (OPE_FOR LIKE 1 OR OPE_FOR LIKE 2 OR OPE_FOR LIKE 3) ORDER BY OPE_DESC", nativeQuery= true)
+	List<Operation> findAllByType_DescriptionContainsOrderByDescriptionAsc(@Param("desc") String typeDescription);
 }

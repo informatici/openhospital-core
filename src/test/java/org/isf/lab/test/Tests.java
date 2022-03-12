@@ -172,7 +172,7 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestLaboratory(false);
 		Laboratory foundLaboratory = labIoOperationRepository.findOne(id);
 		List<Laboratory> laboratories = labIoOperation
-				.getLaboratory(foundLaboratory.getExam().getDescription(), foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
+				.getLaboratory(foundLaboratory.getExam().getDescription(), foundLaboratory.getDate(), foundLaboratory.getDate());
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
 
@@ -183,7 +183,7 @@ public class Tests extends OHCoreTestCase {
 		Laboratory foundLaboratory = labIoOperationRepository.findOne(id);
 
 		// when:
-		List<Laboratory> laboratories = labIoOperation.getLaboratory(null, foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
+		List<Laboratory> laboratories = labIoOperation.getLaboratory(null, foundLaboratory.getDate(), foundLaboratory.getDate());
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -210,7 +210,7 @@ public class Tests extends OHCoreTestCase {
 		Integer id = _setupTestLaboratory(false);
 		Laboratory foundLaboratory = labIoOperationRepository.findOne(id);
 		List<LaboratoryForPrint> laboratories = labIoOperation
-				.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
+				.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getDate(), foundLaboratory.getDate());
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
 
@@ -224,7 +224,7 @@ public class Tests extends OHCoreTestCase {
 
 		// when:
 		List<LaboratoryForPrint> laboratories = labIoOperation
-				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
+				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getDate(), foundLaboratory.getDate());
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -237,7 +237,7 @@ public class Tests extends OHCoreTestCase {
 		Laboratory foundLaboratory = labIoOperationRepository.findOne(id);
 
 		// when:
-		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint(null, foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
+		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint(null, foundLaboratory.getDate(), foundLaboratory.getDate());
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -387,7 +387,7 @@ public class Tests extends OHCoreTestCase {
 		int id = _setupTestLaboratory(false);
 		Laboratory foundLaboratory = labIoOperationRepository.findOne(id);
 		List<Laboratory> laboratories = labManager
-				.getLaboratory(foundLaboratory.getExam().getDescription(), foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
+				.getLaboratory(foundLaboratory.getExam().getDescription(), foundLaboratory.getDate(), foundLaboratory.getDate());
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
 
@@ -398,7 +398,7 @@ public class Tests extends OHCoreTestCase {
 		Laboratory foundLaboratory = labIoOperationRepository.findOne(id);
 
 		// when:
-		List<Laboratory> laboratories = labManager.getLaboratory(null, foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
+		List<Laboratory> laboratories = labManager.getLaboratory(null, foundLaboratory.getDate(), foundLaboratory.getDate());
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -409,7 +409,7 @@ public class Tests extends OHCoreTestCase {
 		Integer id = _setupTestLaboratory(false);
 		Laboratory foundLaboratory = labIoOperationRepository.findOne(id);
 		List<LaboratoryForPrint> laboratories = labManager
-				.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
+				.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getDate(), foundLaboratory.getDate());
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
 
@@ -423,7 +423,7 @@ public class Tests extends OHCoreTestCase {
 
 		// when:
 		List<LaboratoryForPrint> laboratories = labManager
-				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
+				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getDate(), foundLaboratory.getDate());
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -436,7 +436,7 @@ public class Tests extends OHCoreTestCase {
 		Laboratory foundLaboratory = labIoOperationRepository.findOne(id);
 
 		// when:
-		List<LaboratoryForPrint> laboratories = labManager.getLaboratoryForPrint(null, foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
+		List<LaboratoryForPrint> laboratories = labManager.getLaboratoryForPrint(null, foundLaboratory.getDate(), foundLaboratory.getDate());
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -456,7 +456,7 @@ public class Tests extends OHCoreTestCase {
 
 		// when:
 		List<LaboratoryForPrint> laboratories = labManager
-				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getExamDate(), foundLaboratory.getExamDate());
+				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getDate(), foundLaboratory.getDate());
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -483,7 +483,7 @@ public class Tests extends OHCoreTestCase {
 
 		// when:
 		List<LaboratoryForPrint> laboratories = labManager
-				.getLaboratoryForPrint(firstCharsOfDescription, laboratory.getExamDate(), laboratory.getExamDate());
+				.getLaboratoryForPrint(firstCharsOfDescription, laboratory.getDate(), laboratory.getDate());
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(laboratory.getCode());
@@ -686,7 +686,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrValidationMissingDate() throws Exception {
+	public void testMgrValidationMissingExamDate() throws Exception {
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 1, false);
 		Patient patient = testPatient.setup(false);
@@ -696,13 +696,13 @@ public class Tests extends OHCoreTestCase {
 
 		ArrayList<String> labRow = new ArrayList<>();
 		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-		laboratory.setDate(null);
+		laboratory.setExamDate(null);
 
 		assertThat(labManager.newLaboratory(laboratory, labRow)).isTrue();
 	}
 
 	@Test
-	public void testMgrValidationMissingExamDate() {
+	public void testMgrValidationMissingLabDate() {
 		assertThatThrownBy(() ->
 		{
 			ExamType examType = testExamType.setup(false);
@@ -715,7 +715,7 @@ public class Tests extends OHCoreTestCase {
 			ArrayList<String> labRow = new ArrayList<>();
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 
-			laboratory.setExamDate(null);
+			laboratory.setDate(null);
 
 			labManager.newLaboratory(laboratory, labRow);
 		})
@@ -1351,7 +1351,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testLaboratoryForPrintGetterSetter() throws Exception {
 		Integer id = _setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findOne(id);
+		
 		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint();
 
 		LaboratoryForPrint laboratoryForPrint = laboratories.get(0);

@@ -975,6 +975,7 @@ public class Tests extends OHCoreTestCase {
 	private String _setupTestOperation(boolean usingSet) throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, usingSet);
+		operation.setOpeFor("1");
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		return operation.getCode();

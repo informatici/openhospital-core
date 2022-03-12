@@ -21,11 +21,10 @@
  */
 package org.isf.opd.model;
 
-import java.util.Date;
 import java.util.GregorianCalendar;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -39,9 +38,9 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.disease.model.Disease;
 import org.isf.patient.model.Patient;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -68,8 +67,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
     @AttributeOverride(name="createdBy", column=@Column(name="OPD_CREATED_BY")),
     @AttributeOverride(name="createdDate", column=@Column(name="OPD_CREATED_DATE")),
     @AttributeOverride(name="lastModifiedBy", column=@Column(name="OPD_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="OPD_LAST_MODIFIED_DATE")),
     @AttributeOverride(name="active", column=@Column(name="OPD_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="OPD_LAST_MODIFIED_DATE"))
 })
 public class Opd extends Auditable<String>
 {
@@ -80,10 +79,11 @@ public class Opd extends Auditable<String>
 
 	@NotNull
 	@Column(name="OPD_DATE")
-	private Date date;
+	private GregorianCalendar date;
 
 	@NotNull
 	@Column(name="OPD_DATE_VIS")
+	@Deprecated
 	private GregorianCalendar visitDate;
         
 	@Column(name="OPD_DATE_NEXT_VIS")
@@ -103,7 +103,7 @@ public class Opd extends Auditable<String>
 
 	@NotNull
 	@Column(name="OPD_NOTE")
-	private String note; //ADDED: Alex
+	private String note;
 
 	@NotNull
 	@Column(name="OPD_PROG_YEAR")	
@@ -259,17 +259,25 @@ public class Opd extends Auditable<String>
 	public void setLock(int lock) {
 		this.lock = lock;
 	}
-	public Date getDate() {
+	public GregorianCalendar getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(GregorianCalendar date) {
 		this.date = date;
 	}
 	
+	/**
+	 * use <code>getCreatedDate()</code> instead
+	 */
+	@Deprecated
 	public GregorianCalendar getVisitDate() {
 		return visitDate;
 	}
 
+	/**
+	 * the field has been replaced by <code>createdDate()</code> and it's not meant to be managed by the user (Spring managed)
+	 */
+	@Deprecated
 	public void setVisitDate(GregorianCalendar visDate) {
 		this.visitDate = visDate;
 	}	

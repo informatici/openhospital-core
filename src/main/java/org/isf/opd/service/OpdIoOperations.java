@@ -206,7 +206,7 @@ public class OpdIoOperations {
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
 		List<Opd> opds = year == 0 ?
 			repository.findByProgYear(opdNum) :
-			repository.findByProgYearAndVisitDateBetween(opdNum, getBeginningOfYear(year), getBeginningOfYear(year + 1));
+			repository.findByProgYearAndDateBetween(opdNum, getBeginningOfYear(year), getBeginningOfYear(year + 1));
 
 		return !opds.isEmpty();
 	}
