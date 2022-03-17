@@ -43,7 +43,12 @@ public class TestOpd {
 	private String referralFrom = "R";
 	private String referralTo = "R";
 	private String userID = "TestUser";
-
+	private String reason = "reason";
+	private String anamnesis = "anamnesis";
+	private String allergies = "allergies";
+	private String therapies = "therapies";
+	private String prescription = "prescription";
+	
 	public Opd setup(Patient patient, Disease disease, boolean usingSet) throws OHException {
 		Opd opd;
 
@@ -54,7 +59,11 @@ public class TestOpd {
 			// Create Opd with all parameters 
 			opd = new Opd(prog_year, sex, age, disease);
 			opd.setVisitDate(visitDate);
-			opd.setNote(note);
+			opd.setReason(reason);
+			opd.setAnamnesis(anamnesis);
+			opd.setTherapies(therapies);
+			opd.setAllergies(allergies);
+			opd.setPrescription(prescription);
 			opd.setNewPatient(newPatient);
 			opd.setReferralFrom(referralFrom);
 			opd.setReferralTo(referralTo);
@@ -71,7 +80,11 @@ public class TestOpd {
 		opd.setVisitDate(visitDate);
 		opd.setAge(age);
 		opd.setSex(sex);
-		opd.setNote(note);
+		opd.setReason(reason);
+		opd.setAnamnesis(anamnesis);
+		opd.setTherapies(therapies);
+		opd.setAllergies(allergies);
+		opd.setPrescription(prescription);
 		opd.setProgYear(prog_year);
 		opd.setNewPatient(newPatient);
 		opd.setReferralFrom(referralFrom);
@@ -91,7 +104,11 @@ public class TestOpd {
 			assertThat(opd.getAge()).isEqualTo(age);
 			assertThat(opd.getSex()).isEqualTo(sex);
 		}
-		assertThat(opd.getNote()).isEqualTo(note);
+		assertThat(opd.getReason()).isEqualTo(reason);
+		assertThat(opd.getAnamnesis()).isEqualTo(anamnesis);
+		assertThat(opd.getTherapies()).isEqualTo(therapies);
+		assertThat(opd.getAllergies()).isEqualTo(allergies);
+		assertThat(opd.getPrescription()).isEqualTo(prescription);
 		assertThat(opd.getProgYear()).isEqualTo(prog_year);
 		assertThat(opd.getNewPatient()).isEqualTo(newPatient);
 		assertThat(opd.getReferralFrom()).isEqualTo(referralFrom);
