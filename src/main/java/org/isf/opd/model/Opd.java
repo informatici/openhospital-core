@@ -317,9 +317,9 @@ public class Opd extends Auditable<String>
 		return reason;
 	}
 
-	public void setReason(String reason) {
-		this.reason = reason;
-	}
+        public void setReason(String reason) {
+    		this.reason = reason;
+    }
 
 	public String getAnamnesis() {
 		return anamnesis;
