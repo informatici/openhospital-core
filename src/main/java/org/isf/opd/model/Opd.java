@@ -21,10 +21,10 @@
  */
 package org.isf.opd.model;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -61,33 +61,30 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="OPD")
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="OPD_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="OPD_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="OPD_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="OPD_LAST_MODIFIED_DATE")),
-    @AttributeOverride(name="active", column=@Column(name="OPD_ACTIVE")),
-})
-public class Opd extends Auditable<String>
-{
+@Table(name = "OPD")
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "OPD_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "OPD_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "OPD_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "OPD_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "OPD_LAST_MODIFIED_DATE"))
+public class Opd extends Auditable<String> {
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="OPD_ID") 
 	private int code;
 
 	@NotNull
-	@Column(name="OPD_DATE")
-	private GregorianCalendar date;
+	@Column(name="OPD_DATE") // SQL type: datetime
+	private LocalDateTime date;
 
 	@NotNull
-	@Column(name="OPD_DATE_VIS")
-	@Deprecated
-	private GregorianCalendar visitDate;
-        
-	@Column(name="OPD_DATE_NEXT_VIS")
-    private GregorianCalendar nextVisitDate;
+	@Column(name="OPD_DATE_VIS") // SQL type: date
+	private LocalDate visitDate;
+
+	@Column(name="OPD_DATE_NEXT_VIS") // SQL type: datetime
+    private LocalDateTime nextVisitDate;
 
 	@ManyToOne
 	@JoinColumn(name="OPD_PAT_ID")
@@ -152,11 +149,11 @@ public class Opd extends Auditable<String>
      * @param aAge
      * @param aDisease
      */
-	public Opd(int aProgYear,char aSex,int aAge,Disease aDisease) {
-		prog_year=aProgYear;
-		sex=aSex;
-		age=aAge;
-		disease=aDisease;
+	public Opd(int aProgYear, char aSex, int aAge, Disease aDisease) {
+		prog_year = aProgYear;
+		sex = aSex;
+		age = aAge;
+		disease = aDisease;
 	}
 	
 	public String getNote() {
@@ -174,6 +171,7 @@ public class Opd extends Auditable<String>
 	public Patient getPatient() {
 		return patient;
 	}
+
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
@@ -181,6 +179,7 @@ public class Opd extends Auditable<String>
 	public int getAge() {
 		return age;
 	}
+
 	public void setAge(int age) {
 		this.age = age;
 	}
@@ -259,26 +258,29 @@ public class Opd extends Auditable<String>
 	public void setLock(int lock) {
 		this.lock = lock;
 	}
-	public GregorianCalendar getDate() {
+
+	public LocalDateTime getDate() {
 		return date;
 	}
-	public void setDate(GregorianCalendar date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
-	
+
 	/**
 	 * use <code>getCreatedDate()</code> instead
+	 * @deprecated
 	 */
 	@Deprecated
-	public GregorianCalendar getVisitDate() {
+	public LocalDate getVisitDate() {
 		return visitDate;
 	}
 
 	/**
 	 * the field has been replaced by <code>createdDate()</code> and it's not meant to be managed by the user (Spring managed)
+	 * @deprecated
 	 */
 	@Deprecated
-	public void setVisitDate(GregorianCalendar visDate) {
+	public void setVisitDate(LocalDate visDate) {
 		this.visitDate = visDate;
 	}	
 	
@@ -294,8 +296,8 @@ public class Opd extends Auditable<String>
 		return prog_year;
 	}
 	
-	public void setProgYear(int prog_year) {
-		this.prog_year = prog_year;
+	public void setProgYear(int progYear) {
+		this.prog_year = progYear;
 	}
 
 	public String getUserID() {
@@ -305,12 +307,12 @@ public class Opd extends Auditable<String>
 	public void setUserID(String userID) {
 		this.userID = userID;
 	}
-        
-        public GregorianCalendar getNextVisitDate() {
+
+	public LocalDateTime getNextVisitDate() {
 		return nextVisitDate;
 	}
 
-	public void setNextVisitDate(GregorianCalendar nextVisitDate) {
+	public void setNextVisitDate(LocalDateTime nextVisitDate) {
 		this.nextVisitDate = nextVisitDate;
 	}
 

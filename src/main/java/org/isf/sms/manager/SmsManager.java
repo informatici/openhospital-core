@@ -21,8 +21,8 @@
  */
 package org.isf.sms.manager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
@@ -74,7 +74,7 @@ public class SmsManager {
 		}
 	}
 
-	public List<Sms> getAll(Date from, Date to) throws OHServiceException {
+	public List<Sms> getAll(LocalDateTime from, LocalDateTime to) throws OHServiceException {
 		return smsOperations.getAll(from, to);
 	}
 
@@ -97,12 +97,12 @@ public class SmsManager {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.formatMessage("angal.sms.themessageislongerthencharacters.fmt.msg", MAX_LENGHT),
 					OHSeverityLevel.ERROR));
-
-		} else if (textLenght > MAX_LENGHT && split) {
+		}
+		else if (textLenght > MAX_LENGHT && split) {
 
 			String[] parts = split(text);
 			String number = smsToSend.getSmsNumber();
-			Date schedDate = smsToSend.getSmsDateSched();
+			LocalDateTime schedDate = smsToSend.getSmsDateSched();
 
 			for (String part : parts) {
 				Sms sms = new Sms();
@@ -137,8 +137,7 @@ public class SmsManager {
 	private String[] split(String text) {
 		int len = text.length();
 		if (len <= MAX_LENGHT) {
-			String[] messages = { text };
-			return messages;
+			return new String[] { text };
 		}
 
 		// Number of parts
@@ -155,4 +154,5 @@ public class SmsManager {
 		}
 		return parts;
 	}
+
 }

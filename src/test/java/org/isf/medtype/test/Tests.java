@@ -62,32 +62,32 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMedicalTypeGets() throws Exception {
-		String code = _setupTestMedicalType(false);
-		_checkMedicalTypeIntoDb(code);
+		String code = setupTestMedicalType(false);
+		checkMedicalTypeIntoDb(code);
 	}
 
 	@Test
 	public void testMedicalTypeSets() throws Exception {
-		String code = _setupTestMedicalType(true);
-		_checkMedicalTypeIntoDb(code);
+		String code = setupTestMedicalType(true);
+		checkMedicalTypeIntoDb(code);
 	}
 
 	@Test
 	public void testIoGetMedicalType() throws Exception {
-		String code = _setupTestMedicalType(false);
-		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		String code = setupTestMedicalType(false);
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		List<MedicalType> medicalTypes = medicalTypeIoOperation.getMedicalTypes();
 		assertThat(medicalTypes.get(medicalTypes.size() - 1).getDescription()).isEqualTo(foundMedicalType.getDescription());
 	}
 
 	@Test
 	public void testIoUpdateMedicalType() throws Exception {
-		String code = _setupTestMedicalType(false);
-		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		String code = setupTestMedicalType(false);
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		foundMedicalType.setDescription("Update");
 		boolean result = medicalTypeIoOperation.updateMedicalType(foundMedicalType);
 		assertThat(result).isTrue();
-		MedicalType updateMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		MedicalType updateMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		assertThat(updateMedicalType.getDescription()).isEqualTo("Update");
 	}
 
@@ -96,20 +96,20 @@ public class Tests extends OHCoreTestCase {
 		MedicalType medicalType = testMedicalType.setup(true);
 		boolean result = medicalTypeIoOperation.newMedicalType(medicalType);
 		assertThat(result).isTrue();
-		_checkMedicalTypeIntoDb(medicalType.getCode());
+		checkMedicalTypeIntoDb(medicalType.getCode());
 	}
 
 	@Test
 	public void testIoIsCodePresent() throws Exception {
-		String code = _setupTestMedicalType(false);
+		String code = setupTestMedicalType(false);
 		boolean result = medicalTypeIoOperation.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
 	public void testIoDeleteMedicalType() throws Exception {
-		String code = _setupTestMedicalType(false);
-		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		String code = setupTestMedicalType(false);
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		boolean result = medicalTypeIoOperation.deleteMedicalType(foundMedicalType);
 		assertThat(result).isTrue();
 		result = medicalTypeIoOperation.isCodePresent(code);
@@ -118,19 +118,19 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetMedicalType() throws Exception {
-		String code = _setupTestMedicalType(false);
-		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		String code = setupTestMedicalType(false);
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		List<MedicalType> medicalTypes = medicalTypeBrowserManager.getMedicalType();
 		assertThat(medicalTypes.get(medicalTypes.size() - 1).getDescription()).isEqualTo(foundMedicalType.getDescription());
 	}
 
 	@Test
 	public void testMgrUpdateMedicalType() throws Exception {
-		String code = _setupTestMedicalType(false);
-		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		String code = setupTestMedicalType(false);
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		foundMedicalType.setDescription("Update");
 		assertThat(medicalTypeBrowserManager.updateMedicalType(foundMedicalType)).isTrue();
-		MedicalType updateMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		MedicalType updateMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		assertThat(updateMedicalType.getDescription()).isEqualTo("Update");
 	}
 
@@ -138,20 +138,20 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewMedicalType() throws Exception {
 		MedicalType medicalType = testMedicalType.setup(true);
 		assertThat(medicalTypeBrowserManager.newMedicalType(medicalType)).isTrue();
-		_checkMedicalTypeIntoDb(medicalType.getCode());
+		checkMedicalTypeIntoDb(medicalType.getCode());
 	}
 
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
-		String code = _setupTestMedicalType(false);
+		String code = setupTestMedicalType(false);
 		assertThat(medicalTypeBrowserManager.isCodePresent(code)).isTrue();
 		assertThat(medicalTypeBrowserManager.isCodePresent("isNotThere")).isFalse();
 	}
 
 	@Test
 	public void testMgrDeleteMedicalType() throws Exception {
-		String code = _setupTestMedicalType(false);
-		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		String code = setupTestMedicalType(false);
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		assertThat(medicalTypeBrowserManager.deleteMedicalType(foundMedicalType)).isTrue();
 		assertThat(medicalTypeBrowserManager.isCodePresent(code)).isFalse();
 	}
@@ -190,8 +190,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrValidateMedicalTypeCodeAlreadyExists() throws Exception {
 		assertThatThrownBy(() ->
 		{
-			String code = _setupTestMedicalType(false);
-			MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+			String code = setupTestMedicalType(false);
+			MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 			MedicalType medicalType = new MedicalType(foundMedicalType.getCode(), foundMedicalType.getDescription());
 			medicalTypeBrowserManager.newMedicalType(medicalType);
 		})
@@ -200,8 +200,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMedicalTypeToString() throws Exception {
-		String code = _setupTestMedicalType(false);
-		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+		String code = setupTestMedicalType(false);
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		assertThat(foundMedicalType).hasToString(foundMedicalType.getDescription());
 	}
 
@@ -228,14 +228,14 @@ public class Tests extends OHCoreTestCase {
 		assertThat(medicalType.hashCode()).isEqualTo(hashCode);
 	}
 
-	private String _setupTestMedicalType(boolean usingSet) throws OHException {
+	private String setupTestMedicalType(boolean usingSet) throws OHException {
 		MedicalType medicalType = testMedicalType.setup(usingSet);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		return medicalType.getCode();
 	}
 
-	private void _checkMedicalTypeIntoDb(String code) throws OHException {
-		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findOne(code);
+	private void checkMedicalTypeIntoDb(String code) throws OHException {
+		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		testMedicalType.check(foundMedicalType);
 	}
 }

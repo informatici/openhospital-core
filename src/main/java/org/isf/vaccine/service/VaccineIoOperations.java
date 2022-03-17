@@ -21,7 +21,6 @@
  */
 package org.isf.vaccine.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.utils.db.TranslateOHServiceException;
@@ -56,11 +55,9 @@ public class VaccineIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public List<Vaccine> getVaccine(String vaccineTypeCode) throws OHServiceException {
-		return new ArrayList<>(
-				vaccineTypeCode != null ?
-						repository.findByVaccineType_CodeOrderByDescriptionAsc(vaccineTypeCode) :
-						repository.findAllByOrderByDescriptionAsc()
-		);
+		return vaccineTypeCode != null ?
+				repository.findByVaccineType_CodeOrderByDescriptionAsc(vaccineTypeCode) :
+				repository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
@@ -105,7 +102,7 @@ public class VaccineIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 	
 	/**
@@ -115,13 +112,11 @@ public class VaccineIoOperations {
 	 * @return the {@link Vaccine} or {@literal null} if none found
 	 * @throws IllegalArgumentException if {@code code} is {@literal null}
 	 */
-	public Vaccine findVaccine(String code)
-	{
+	public Vaccine findVaccine(String code) {
 		if (code != null) {
-			return repository.findOne(code);
-		}else
-			throw new IllegalArgumentException("code must not be null");
-	} 
+			return repository.findById(code).orElse(null);
+		}
+		throw new IllegalArgumentException("code must not be null");
+	}
+
 }
-
-

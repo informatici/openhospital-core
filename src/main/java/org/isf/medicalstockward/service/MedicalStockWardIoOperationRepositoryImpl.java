@@ -21,8 +21,8 @@
  */
 package org.isf.medicalstockward.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -50,10 +50,7 @@ public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWa
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Integer> findAllWardMovement(
-			String wardId,
-			GregorianCalendar dateFrom,
-			GregorianCalendar dateTo) {
+	public List<Integer> findAllWardMovement(String wardId, LocalDateTime dateFrom, LocalDateTime dateTo) {
 
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
@@ -61,11 +58,11 @@ public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWa
 		query.select(root.<Integer>get(CODE));
 		List<Predicate> predicates = new ArrayList<>();
 
-		if (!StringUtils.isEmpty(wardId)) {
+		if (StringUtils.isNotEmpty(wardId)) {
 			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
 		}
 		if ((dateFrom != null) && (dateTo != null)) {
-			predicates.add(builder.between(root.<GregorianCalendar>get(DATE), dateFrom, dateTo));
+			predicates.add(builder.between(root.<LocalDateTime>get(DATE), dateFrom, dateTo));
 		}
 
 		List<Order> orderList = new ArrayList<>();
@@ -74,4 +71,5 @@ public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWa
 		query.where(predicates.toArray(new Predicate[] {})).orderBy(orderList);
 		return entityManager.createQuery(query).getResultList();
 	}
+
 }

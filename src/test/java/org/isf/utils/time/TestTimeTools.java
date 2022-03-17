@@ -23,29 +23,26 @@ package org.isf.utils.time;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestTimeTools {
 
 	@Test
 	public void testGetDaysBetweenDatesDate() {
-		Date dateFrom = new Date(114, 10, 3, 0, 0, 0);
-		Date dateTo = new Date(121, 10, 3, 23, 59, 59);
+		LocalDate dateFrom = LocalDate.of(114, 10, 3);
+		LocalDate dateTo = LocalDate.of(121, 10, 3);
 
 		assertThat(TimeTools.getDaysBetweenDates(dateFrom, dateTo, true)).isEqualTo(2557);
 		assertThat(TimeTools.getDaysBetweenDates(dateFrom, dateTo, false)).isEqualTo(2557);
-
-		assertThat(TimeTools.getDaysBetweenDates(dateFrom, dateTo)).isEqualTo(2557);
-		assertThat(TimeTools.getDaysBetweenDates(dateFrom, dateTo)).isEqualTo(2557);
 	}
 
 	@Test
-	public void testGetXBetweenDatesGregorian() {
-		GregorianCalendar dateFrom = new GregorianCalendar(2014, 10, 3, 0, 0, 0);
-		GregorianCalendar dateTo = new GregorianCalendar(2021, 10, 3, 23, 59, 59);
+	public void testGetXBetweenLocaleDateTime() {
+		LocalDateTime dateFrom = LocalDateTime.of(2014, 10, 3, 0, 0, 0);
+		LocalDateTime dateTo = LocalDateTime.of(2021, 10, 3, 23, 59, 59);
 
 		assertThat(TimeTools.getDaysBetweenDates(dateFrom, dateTo, true)).isEqualTo(2557);
 		assertThat(TimeTools.getWeeksBetweenDates(dateFrom, dateTo, true)).isEqualTo(365);
@@ -66,52 +63,52 @@ public class TestTimeTools {
 
 	@Test
 	public void testIsSameDayDate() {
-		Date day1 = new Date(114, 10, 3, 0, 0, 0);
-		Date day2 = new Date(114, 10, 3, 10, 10, 0);
+		LocalDate day1 = LocalDate.of(114, 10, 3);
+		LocalDate day2 = LocalDate.of(114, 10, 3);
 		assertThat(TimeTools.isSameDay(day1, day2)).isTrue();
 
-		Date day3 = new Date(121, 10, 3, 23, 59, 59);
+		LocalDate day3 = LocalDate.of(121, 10, 4);
 		assertThat(TimeTools.isSameDay(day1, day3)).isFalse();
 	}
 
 	@Test
-	public void testIsSameDayGregorian() {
-		GregorianCalendar day1 = new GregorianCalendar(2014, 10, 3, 0, 0, 0);
-		GregorianCalendar day2 = new GregorianCalendar(2014, 10, 3, 10, 10, 0);
+	public void testIsSameDayLocalDateTime() {
+		LocalDateTime day1 = LocalDateTime.of(2014, 10, 3, 0, 0, 0);
+		LocalDateTime day2 = LocalDateTime.of(2014, 10, 3, 10, 10, 0);
 		assertThat(TimeTools.isSameDay(day1, day2)).isTrue();
 
-		GregorianCalendar day3 = new GregorianCalendar(2021, 10, 3, 23, 59, 59);
+		LocalDateTime day3 = LocalDateTime.of(2021, 10, 3, 23, 59, 59);
 		assertThat(TimeTools.isSameDay(day1, day3)).isFalse();
 	}
 
 	@Test
-	public void testFormatDateTimeGregorian() {
-		GregorianCalendar dateTime = new GregorianCalendar(2021, 10, 3, 23, 59, 59);
-		assertThat(TimeTools.formatDateTime(dateTime, null)).isEqualTo("2021-11-03 23:59:59");
+	public void testFormatLocalDateTime() {
+		LocalDateTime dateTime = LocalDateTime.of(2021, 10, 3, 23, 59, 59);
+		assertThat(TimeTools.formatDateTime(dateTime, null)).isEqualTo("2021-10-03 23:59:59");
 	}
 
 	@Test
 	public void testFormatDateTimeDate() {
-		Date dateTime = new Date(121, 10, 3, 23, 59, 59);
-		assertThat(TimeTools.formatDateTime(dateTime, null)).isEqualTo("2021-11-03 23:59:59");
+		LocalDateTime dateTime = LocalDateTime.of(121, 10, 3, 23, 59, 59);
+		assertThat(TimeTools.formatDateTime(dateTime, null)).isEqualTo("0121-10-03 23:59:59");
 	}
 
 	@Test
-	public void testFormatDateTimeReportGregorian() {
-		GregorianCalendar dateTime = new GregorianCalendar(2021, 10, 3, 23, 59, 59);
-		assertThat(TimeTools.formatDateTimeReport(dateTime)).isEqualTo("2021-11-03 23:59:59");
+	public void testFormatDateTimeReportLocalDateTime() {
+		LocalDateTime dateTime = LocalDateTime.of(2021, 10, 3, 23, 59, 59);
+		assertThat(TimeTools.formatDateTimeReport(dateTime)).isEqualTo("2021-10-03 23:59:59");
 	}
 
 	@Test
 	public void testFormatDateTimeReportDate() {
-		Date dateTime = new Date(121, 10, 3, 23, 59, 59);
-		assertThat(TimeTools.formatDateTimeReport(dateTime)).isEqualTo("2021-11-03 23:59:59");
+		LocalDate date = LocalDate.of(121, 10, 3);
+		assertThat(TimeTools.formatDateTimeReport(date)).isEqualTo("0121-10-03 00:00:00");
 	}
 
 	@Test
 	public void testFormatAge() {
 		assertThat(TimeTools.getFormattedAge(null)).isEmpty();
-		Date dateTime = new Date(121, 10, 3, 23, 59, 59);
+		LocalDate dateTime = LocalDate.of(121, 10, 3);
 		// If message bundles were accessbile the age would look something like the pattern below
 		//assertThat(TimeTools.getFormattedAge(dateTime)).isEqualTo("{0}y {1}m {2}d");
 		assertThat(TimeTools.getFormattedAge(dateTime)).isEqualTo("angal.agepattern.txt");
@@ -120,8 +117,8 @@ public class TestTimeTools {
 	@Test
 	public void testParseDate() throws Exception {
 		assertThat(TimeTools.parseDate("2021-11-03 23:59:59", "yyyy-MM-dd HH:mm:ss", false))
-				.isEqualTo(new GregorianCalendar(2021, 10, 3, 23, 59, 59));
-		assertThat(TimeTools.parseDate("2021-11-03 23:59:59", "yyyy-MM-dd HH:mm:ss", true))
-				.isEqualTo(new GregorianCalendar(2021, 10, 3));
+				.isEqualTo(LocalDateTime.of(2021, 11, 3, 23, 59, 59));
+		assertThat(TimeTools.parseDate("2021-11-03", "yyyy-MM-dd", true))
+				.isEqualTo(LocalDateTime.of(2021, 11, 3, 0, 0, 0));
 	}
 }

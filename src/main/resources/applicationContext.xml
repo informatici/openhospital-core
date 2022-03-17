@@ -52,7 +52,7 @@
 
  	<bean id="springDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
  		destroy-method="close">
- 		<property name="driverClass" value="${jdbc.class:com.mysql.jdbc.Driver}" />
+ 		<property name="driverClass" value="${jdbc.class:com.mysql.cj.jdbc.Driver}" />
  		<property name="jdbcUrl" value="${jdbc.url}" />
  		<property name="user" value="${jdbc.username}" />
  		<property name="password" value="${jdbc.password}" />
@@ -81,7 +81,7 @@
 				<prop key="hibernate.format_sql">${hibernate.format_sql:true}</prop>
 				<prop key="hibernate.dialect">${hibernate.dialect:org.hibernate.dialect.MySQLDialect}</prop>
 				<prop key="hibernate.id.new_generator_mappings">false</prop>
-				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto:false}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto:none}</prop>
 			</props>
 		</property>
 	</bean>

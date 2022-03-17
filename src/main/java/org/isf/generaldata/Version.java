@@ -33,23 +33,22 @@ public final class Version extends ConfigurationProperties {
     private static Version mySingleData;
 
 	private Version(String fileProperties) {
-    	super(fileProperties, EXIT_ON_FAIL);
+		super(fileProperties, EXIT_ON_FAIL);
 
 		VER_MAJOR = myGetProperty("VER_MAJOR", "");
 		VER_MINOR = myGetProperty("VER_MINOR", "");
 		VER_RELEASE = myGetProperty("VER_RELEASE", "");
-			
-    }
-    
-    public static Version getVersion() {
-        if (mySingleData == null){ 
-        	initialize();
-        }
-        return mySingleData;
-    }
-    
-    public static void initialize() {
-    	mySingleData = new Version(FILE_PROPERTIES);   
 	}
-    
+
+	public static Version getVersion() {
+		if (mySingleData == null) {
+			initialize();
+		}
+		return mySingleData;
+	}
+
+	public static void initialize() {
+		mySingleData = new Version(FILE_PROPERTIES);
+	}
+
 }

@@ -21,10 +21,10 @@
  */
 package org.isf.medicalstockward.manager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
@@ -127,7 +127,7 @@ public class MovWardBrowserManager {
 	 * @return all the retrieved movements.
 	 * @throws OHServiceException
 	 */
-	public List<MovementWard> getMovementWard(String wardId, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<MovementWard> getMovementWard(String wardId, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return ioOperations.getWardMovements(wardId, dateFrom, dateTo);
 	}
 
@@ -140,7 +140,7 @@ public class MovWardBrowserManager {
 	 * @return all the retrieved movements.
 	 * @throws OHServiceException
 	 */
-	public List<MovementWard> getWardMovementsToWard(String idwardTo, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<MovementWard> getWardMovementsToWard(String idwardTo, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return ioOperations.getWardMovementsToWard(idwardTo, dateFrom, dateTo);
 	}
 

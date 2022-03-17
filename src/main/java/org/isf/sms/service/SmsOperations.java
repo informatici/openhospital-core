@@ -21,7 +21,7 @@
  */
 package org.isf.sms.service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.sms.model.Sms;
@@ -64,7 +64,7 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean saveOrUpdate(List<Sms> smsList) throws OHServiceException {
-		return repository.save(smsList) != null;
+		return repository.saveAll(smsList) != null;
 	}
 	
 	/**
@@ -73,8 +73,8 @@ public class SmsOperations {
 	 * @return sms - the sms with specified ID
 	 * @throws OHServiceException 
 	 */
-	public Sms getByID(int ID) throws OHServiceException {
-		return repository.findOne(ID);
+	public Sms getByID(int id) throws OHServiceException {
+		return repository.findById(id).orElse(null);
 	}
 	
 	/**
@@ -82,7 +82,7 @@ public class SmsOperations {
 	 * @return smsList - the list of {@link Sms}s
 	 * @throws OHServiceException 
 	 */
-	public List<Sms> getAll(Date dateFrom, Date dateTo) throws OHServiceException {
+	public List<Sms> getAll(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return repository.findBySmsDateSchedBetweenOrderBySmsDateSchedAsc(dateFrom, dateTo);
 	}
 	
@@ -91,7 +91,7 @@ public class SmsOperations {
 	 * @return smsList - the list of {@link Sms}s
 	 * @throws OHServiceException 
 	 */
-	public List<Sms> getList(Date dateFrom,	Date dateTo) throws OHServiceException {
+	public List<Sms> getList(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return repository.findBySmsDateSchedBetweenAndSmsDateSentIsNullOrderBySmsDateSchedAsc(dateFrom, dateTo);
 	}
 	
@@ -119,7 +119,7 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public void delete(List<Sms> smsList) throws OHServiceException	{
-		repository.delete(smsList);
+		repository.deleteAll(smsList);
 	}
 
 	/**
@@ -140,6 +140,7 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
+
 }

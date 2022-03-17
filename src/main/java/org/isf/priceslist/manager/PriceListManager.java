@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.isf.generaldata.MessageBundle;
 import org.isf.priceslist.model.Price;
 import org.isf.priceslist.model.PriceList;
@@ -36,7 +37,6 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 @Component
 public class PriceListManager {
@@ -72,7 +72,7 @@ public class PriceListManager {
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updatePrices(PriceList list, ArrayList<Price> prices) throws OHServiceException {
+	public boolean updatePrices(PriceList list, List<Price> prices) throws OHServiceException {
 		return ioOperations.updatePrices(list, prices);
 	}
 
@@ -136,7 +136,7 @@ public class PriceListManager {
 	}
 
 	public List<PriceForPrint> convertPrice(PriceList listSelected, Iterable<Price> prices) {
-		ArrayList<PriceForPrint> pricePrint = new ArrayList<>();
+		List<PriceForPrint> pricePrint = new ArrayList<>();
 		for (Price price : prices) {
 			if (price.getList().getId() == listSelected.getId() && price.getPrice() != 0.) {
 				PriceForPrint price4print = new PriceForPrint();
@@ -185,4 +185,5 @@ public class PriceListManager {
 			throw new OHDataValidationException(errors);
 		}
 	}
+
 }
