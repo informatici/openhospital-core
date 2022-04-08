@@ -31,7 +31,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DiseaseIoOperationRepository extends JpaRepository<Disease, String> {
-
+	
+	@Query(value = "select d FROM Disease d WHERE  d.code = :code")    // d.diseaseType.code = :code
     Disease findOneByCode(@Param("code") String code);
 
 	@Query(value = "select d FROM Disease d WHERE d.description = :description AND d.diseaseType.code = :code")

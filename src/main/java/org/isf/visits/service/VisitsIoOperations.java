@@ -52,6 +52,10 @@ public class VisitsIoOperations {
 				new ArrayList<>(repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID)) :
 				new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
 	}
+	public Visit getVisit(int visitID) throws OHServiceException {
+		return repository.findAllByVisitID(visitID);
+				
+	}
 
 	public List<Visit> getVisitsWard(String wardId) throws OHServiceException {
 		List<Visit> visits = null;
@@ -117,5 +121,10 @@ public class VisitsIoOperations {
 	 */
 	public void deleteVisit(Visit visit) {
 		repository.delete(visit);
+	}
+
+	public Visit updateVisit(Visit updateVisit) {
+		// TODO Auto-generated method stub
+		return repository.save(updateVisit);
 	}
 }

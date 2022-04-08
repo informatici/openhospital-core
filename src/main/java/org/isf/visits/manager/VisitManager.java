@@ -229,4 +229,19 @@ public class VisitManager {
 	public Visit findVisit(int id) throws OHServiceException {
 		return ioOperations.findVisit(id);
 	}
+	
+	/**
+	 * Returns the {@link Visit} based on visit
+	 *
+	 * @param id - the  {@link Visit} visit.
+	 * @return the {@link Visit}
+	 */
+	public Visit updateVisit(Visit updateVisit) throws OHServiceException {
+		validateVisit(updateVisit);
+		return ioOperations.updateVisit(updateVisit);
+	}
+	
+	public Visit getVisit(int visitID) throws OHServiceException {
+		return ioOperations.getVisit(visitID);
+	}
 }
