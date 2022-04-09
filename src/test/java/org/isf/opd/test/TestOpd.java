@@ -53,6 +53,7 @@ public class TestOpd {
 			// Create Opd with all parameters 
 			opd = new Opd(prog_year, sex, age, disease);
 			opd.setVisitDate(visitDate);
+			opd.setDate(visitDate.atStartOfDay());
 			opd.setNote(note);
 			opd.setNewPatient(newPatient);
 			opd.setReferralFrom(referralFrom);
@@ -68,6 +69,7 @@ public class TestOpd {
 
 	public void setParameters(Patient patient, Disease disease, Opd opd) {
 		opd.setVisitDate(visitDate);
+		opd.setDate(visitDate.atStartOfDay());
 		opd.setAge(age);
 		opd.setSex(sex);
 		opd.setNote(note);
@@ -83,7 +85,7 @@ public class TestOpd {
 	}
 
 	public void check(Opd opd) {
-		assertThat(opd.getVisitDate()).isEqualTo(visitDate);
+		assertThat(opd.getDate().toLocalDate()).isEqualTo(visitDate);
 		if (!(GeneralData.OPDEXTENDED && opd.getPatient() != null)) {
 			// skip checks as OpdBrowserManager sets values from patient
 			// thus only do checks when not OPDEXTENDED and patient == null

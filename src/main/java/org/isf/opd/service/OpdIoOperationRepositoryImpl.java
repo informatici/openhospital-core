@@ -22,6 +22,7 @@
 package org.isf.opd.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,7 +99,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			);
 		}
 		predicates.add(
-				cb.between(opd.<LocalDate>get("visitDate"), dateFrom, dateTo)
+				cb.between(opd.<LocalDateTime>get("date"), dateFrom.atStartOfDay(), dateTo.atStartOfDay())
 		);
 		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 

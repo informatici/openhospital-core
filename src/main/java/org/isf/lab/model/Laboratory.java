@@ -67,7 +67,7 @@ public class Laboratory extends Auditable<String> {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="LAB_ID")
 	private Integer code;
-	
+
 	@Column(name="LAB_MATERIAL")
 	private String material;
 
@@ -78,9 +78,10 @@ public class Laboratory extends Auditable<String> {
 
 	@NotNull
 	@Column(name="LAB_DATE")		// SQL type: datetime
-	private LocalDateTime registrationDate;
+	private LocalDateTime labDate;
 	
 	@Column(name="LAB_EXAM_DATE")
+	@Deprecated
 	private LocalDate examDate;	// SQL type: date
 
 	@NotNull
@@ -90,34 +91,34 @@ public class Laboratory extends Auditable<String> {
 	@Version
 	@Column(name="LAB_LOCK")
 	private int lock;
-	
+
 	@Column(name="LAB_NOTE")
 	private String note;
 
 	@ManyToOne
 	@JoinColumn(name="LAB_PAT_ID")
 	private Patient patient;
-	
+
 	@Column(name="LAB_PAT_NAME")
 	private String patName;
-	
+
 	@Column(name="LAB_PAT_INOUT")
 	private String inOutPatient;
-	
+
 	@Column(name="LAB_AGE")
 	private Integer age;
-	
+
 	@Column(name="LAB_SEX")
 	private String sex;
-	
+
 	@Transient
 	private volatile int hashCode = 0;
-	
+
 	public Laboratory() { }
 
 	public Laboratory(Exam aExam, LocalDateTime aDate, String aResult, String aNote, Patient aPatId, String aPatName) {
 		exam = aExam;
-		registrationDate = aDate;
+		labDate = aDate;
 		result = aResult;
 		note = aNote;
 		patient = aPatId;
@@ -127,7 +128,7 @@ public class Laboratory extends Auditable<String> {
 	public Laboratory(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult, String aNote, Patient aPatId, String aPatName) {
 		code = aCode;
 		exam = aExam;
-		registrationDate = aDate;
+		labDate = aDate;
 		result = aResult;
 		note = aNote;
 		patient = aPatId;
@@ -137,47 +138,46 @@ public class Laboratory extends Auditable<String> {
 	public Exam getExam() {
 		return exam;
 	}
-
 	public LocalDateTime getDate() {
-		return registrationDate;
+		return labDate;
 	}
-
 	public String getResult() {
 		return result;
 	}
-
 	public Integer getCode() {
 		return code;
 	}
-
 	public int getLock() {
 		return lock;
 	}
-
 	public void setCode(Integer aCode) {
 		code = aCode;
 	}
-
 	public void setExam(Exam aExam) {
 		exam = aExam;
 	}
-
 	public void setLock(int aLock) {
 		lock = aLock;
 	}
-
+	/**
+	 * use <code>getCreatedDate()</code> instead
+	 * @deprecated 
+	 */
+	@Deprecated
 	public LocalDate getExamDate() {
 		return examDate;
 	}
-
+	/**
+	 * the field has been replaced by <code>createdDate()</code> and it's not meant to be managed by the user (Spring managed)
+	 * @deprecated 
+	 */
+	@Deprecated
 	public void setExamDate(LocalDate exDate) {
 		this.examDate = exDate;
 	}
-
 	public void setDate(LocalDateTime aDate) {
-		registrationDate = aDate;
+		labDate = aDate;
 	}
-
 	public void setResult(String aResult) {
 		result = aResult;
 	}
@@ -240,40 +240,39 @@ public class Laboratory extends Auditable<String> {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Laboratory)) {
 			return false;
 		}
-		
-		Laboratory laboratory = (Laboratory)obj;
+
+		Laboratory laboratory = (Laboratory) obj;
 		return (this.getCode().equals(laboratory.getCode()));
 
 	}
-	
+
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + (code == null ? 0 : code);
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + (code == null ? 0 : code);
+
+			this.hashCode = c;
+		}
+
+		return this.hashCode;
 	}
 
-    @Override
+	@Override
 	public String toString() {
 		return "-------------------------------------------\nLaboratory{" + "code=" + code + ", material=" + material
-				+ ", exam=" + exam + ", registrationDate=" + registrationDate + ", examDate=" + examDate + ", result="
+				+ ", exam=" + exam + ", registrationDate=" + labDate + ", examDate=" + examDate + ", result="
 				+ result + ", lock=" + lock + ", note=" + note + ", patient=" + patient + ", patName=" + patName
 				+ ", InOutPatient=" + inOutPatient + ", age=" + age + ", sex=" + sex + ", hashCode=" + hashCode
 				+ "}\n---------------------------------------------";
 	}
-        
-}
 
+}

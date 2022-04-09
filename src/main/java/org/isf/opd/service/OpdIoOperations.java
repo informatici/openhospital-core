@@ -22,6 +22,7 @@
 package org.isf.opd.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
@@ -157,7 +158,7 @@ public class OpdIoOperations {
 	public int getProgYear(int year) throws OHServiceException {
 		Integer progYear = year == 0 ?
 			repository.findMaxProgYear() :
-			repository.findMaxProgYearWhereDateBetween(LocalDate.of(year, 1, 1), LocalDate.of(year + 1, 1, 1));
+			repository.findMaxProgYearWhereDateBetween(LocalDateTime.of(year, 1, 1, 0, 0), LocalDateTime.of(year + 1, 1, 1, 0, 0));
 		return progYear == null ? 0 : progYear;
 	}
 
@@ -195,7 +196,7 @@ public class OpdIoOperations {
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
 		List<Opd> opds = year == 0 ?
 			repository.findByProgYear(opdNum) :
-			repository.findByProgYearAndVisitDateBetween(opdNum, LocalDate.of(year, 1, 1), LocalDate.of(year + 1, 1, 1));
+			repository.findByProgYearAndDateBetween(opdNum, LocalDateTime.of(year, 1, 1, 0, 0), LocalDateTime.of(year + 1, 1, 1, 0, 0));
 		return !opds.isEmpty();
 	}
 

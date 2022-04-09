@@ -35,8 +35,8 @@ import org.isf.utils.exception.OHException;
 public class TestLaboratory {
 
 	private String material = "TestMaterial";
-	private LocalDateTime registrationDate = LocalDateTime.now().minusWeeks(5);
-	private LocalDate examDate = LocalDate.now();
+	private LocalDateTime labDate = LocalDateTime.now();
+	private LocalDate examDate = labDate.toLocalDate();
 	private String result = "TestResult";
 	private String note = "TestNote";
 	private String patName = "TestPatientName";
@@ -52,8 +52,9 @@ public class TestLaboratory {
 			setParameters(laboratory, exam, patient);
 		} else {
 			// Create Laboratory with all parameters 
-			laboratory = new Laboratory(exam, registrationDate, result, note, patient, patName);
+			laboratory = new Laboratory(exam, labDate, result, note, patient, patName);
 			laboratory.setAge(age);
+			laboratory.setDate(labDate);
 			laboratory.setExamDate(examDate);
 			laboratory.setInOutPatient(InOutPatient);
 			laboratory.setMaterial(material);
@@ -66,7 +67,7 @@ public class TestLaboratory {
 
 	public void setParameters(Laboratory laboratory, Exam exam, Patient patient) {
 		laboratory.setAge(age);
-		laboratory.setDate(registrationDate);
+		laboratory.setDate(labDate);
 		laboratory.setExam(exam);
 		laboratory.setExamDate(examDate);
 		laboratory.setInOutPatient(InOutPatient);
@@ -89,7 +90,7 @@ public class TestLaboratory {
 			assertThat(laboratory.getAge()).isEqualTo(age);
 			assertThat(laboratory.getPatName()).isEqualTo(patName);
 		}
-		assertThat(laboratory.getDate()).isEqualTo(registrationDate);
+		assertThat(laboratory.getDate()).isEqualTo(labDate);
 		assertThat(laboratory.getExamDate()).isEqualTo(examDate);
 		assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
 		assertThat(laboratory.getMaterial()).isEqualTo(material);

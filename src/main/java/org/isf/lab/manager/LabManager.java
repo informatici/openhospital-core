@@ -79,15 +79,15 @@ public class LabManager {
 	 */
 	protected void validateLaboratory(Laboratory laboratory) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		if (laboratory.getDate() == null) {
-			laboratory.setDate(LocalDateTime.now());
+		if (laboratory.getExamDate() == null) {
+			laboratory.setExamDate(LocalDate.now());
 		}
 		if (laboratory.getExam() != null && laboratory.getExam().getProcedure() == 2) {
 			laboratory.setResult(MessageBundle.getMessage("angal.lab.multipleresults.txt"));
 		}
 
 		// Check Exam Date
-		if (laboratory.getExamDate() == null) {
+		if (laboratory.getDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.pleaseinsertavalidexamdate.msg"),
 					OHSeverityLevel.ERROR));
@@ -125,7 +125,7 @@ public class LabManager {
 					MessageBundle.getMessage("angal.lab.pleaseselectamaterial.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (laboratory.getExamDate() == null) {
+		if (laboratory.getDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.pleaseinsertanexamdate.msg"),
 					OHSeverityLevel.ERROR));
@@ -170,7 +170,7 @@ public class LabManager {
 	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
 	 * @throws OHServiceException
 	 */
-	public List<Laboratory> getLaboratory(String exam, LocalDate dateFrom, LocalDate dateTo) throws OHServiceException {
+	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return ioOperations.getLaboratory(exam, dateFrom, dateTo);
 	}
 
@@ -185,7 +185,7 @@ public class LabManager {
 	 * @return the list of {@link LaboratoryForPrint}s . It could be <code>empty</code>.
 	 * @throws OHServiceException
 	 */
-	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDate dateFrom, LocalDate dateTo) throws OHServiceException {
+	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		List<LaboratoryForPrint> labs = ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo);
 		setLabMultipleResults(labs);
 		return labs;

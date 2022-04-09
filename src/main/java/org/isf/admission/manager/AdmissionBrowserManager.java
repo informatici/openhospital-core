@@ -37,6 +37,7 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -238,7 +239,7 @@ public class AdmissionBrowserManager {
 		/*
 		 * Today LocalDateTime
 		 */
-		LocalDateTime today = LocalDateTime.now();
+		LocalDateTime today = TimeTools.getDateToday24();
 		// get year prog ( not null)
 		if (admission.getYProg() < 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
@@ -377,14 +378,14 @@ public class AdmissionBrowserManager {
 			}
 
 			LocalDateTime visitDate = admission.getVisitDate();
-			if (operationDate != null && ward.getCode().equalsIgnoreCase("M")) {
+			if (visitDate != null && ward.getCode().equalsIgnoreCase("M")) {
 				LocalDateTime limit;
 				if (admission.getDisDate() == null) {
 					limit = today;
 				} else {
 					limit = admission.getDisDate();
 				}
-				if (operationDate.isBefore(dateIn) || operationDate.isAfter(limit)) {
+				if (visitDate.isBefore(dateIn) || visitDate.isAfter(limit)) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.getMessage("angal.admission.pleaseinsertavalidvisitdate.msg"),
 							OHSeverityLevel.ERROR));

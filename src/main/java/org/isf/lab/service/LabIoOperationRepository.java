@@ -22,6 +22,7 @@
 package org.isf.lab.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.lab.model.Laboratory;
@@ -29,14 +30,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LabIoOperationRepository extends JpaRepository<Laboratory, Integer> {
 
-	List<Laboratory> findByExamDateBetweenOrderByExamDateDescRegistrationDateDesc(LocalDate dateFrom, LocalDate dateTo);
+	List<Laboratory> findByExamDateBetweenOrderByLabDateDesc(LocalDate dateFrom, LocalDate dateTo);
 
-	List<Laboratory> findByExamDateBetweenAndExam_DescriptionOrderByExamDateDescRegistrationDateDesc(LocalDate dateFrom, LocalDate dateTo, String exam);
+	List<Laboratory> findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(LocalDateTime dateFrom, LocalDateTime dateTo, String exam);
 
-	List<Laboratory> findByPatient_CodeOrderByRegistrationDate(Integer patient);
+	List<Laboratory> findByPatient_CodeOrderByLabDate(Integer patient);
 
-	List<Laboratory> findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(LocalDate dateFrom, LocalDate dateTo);
+	List<Laboratory> findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(LocalDateTime dateFrom, LocalDateTime dateTo);
 
-	List<Laboratory> findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(LocalDate dateFrom, LocalDate dateTo, String exam);
+	List<Laboratory> findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(LocalDateTime dateFrom, LocalDateTime dateTo, String exam);
 
 }

@@ -21,7 +21,7 @@
  */
 package org.isf.lab.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,8 +79,8 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Laboratory> getLaboratory() throws OHServiceException {
-		LocalDate time1 = LocalDate.now().minusWeeks(1);
-		LocalDate time2 = LocalDate.now();
+		LocalDateTime time2 = LocalDateTime.now();
+		LocalDateTime time1 = time2.minusWeeks(1);
 		return getLaboratory(null, time1, time2);
 	}
 
@@ -92,10 +92,10 @@ public class LabIoOperations {
 	 * @return the list of {@link Laboratory}s 
 	 * @throws OHServiceException
 	 */
-	public List<Laboratory> getLaboratory(String exam, LocalDate dateFrom, LocalDate dateTo) throws OHServiceException {
+	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return exam != null ?
-				repository.findByExamDateBetweenAndExam_DescriptionOrderByExamDateDescRegistrationDateDesc(dateFrom, dateTo, exam) :
-				repository.findByExamDateBetweenOrderByExamDateDescRegistrationDateDesc(dateFrom, dateTo);
+				repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam) :
+				repository.findByExamDateBetweenOrderByLabDateDesc(dateFrom.toLocalDate(), dateTo.toLocalDate());
 	}
 	
 	/**
@@ -105,7 +105,7 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Laboratory> getLaboratory(Patient aPatient) throws OHServiceException {
-		return repository.findByPatient_CodeOrderByRegistrationDate(aPatient.getCode());
+		return repository.findByPatient_CodeOrderByLabDate(aPatient.getCode());
 	}
 	
 	/**
@@ -115,8 +115,8 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<LaboratoryForPrint> getLaboratoryForPrint() throws OHServiceException {
-		LocalDate time1 = LocalDate.now().minusWeeks(1);
-		LocalDate time2 = LocalDate.now();
+		LocalDateTime time2 = LocalDateTime.now();
+		LocalDateTime time1 = time2.minusWeeks(1);
 		return getLaboratoryForPrint(null, time1, time2);
 	}
 	
@@ -129,11 +129,11 @@ public class LabIoOperations {
 	 * @return the list of {@link LaboratoryForPrint}s 
 	 * @throws OHServiceException
 	 */
-	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDate dateFrom, LocalDate dateTo) throws OHServiceException {
+	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
 		Iterable<Laboratory> laboritories = exam != null
-				? repository.findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam)
-				: repository.findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo);
+				? repository.findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam)
+				: repository.findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo);
 
 		for (Laboratory laboratory : laboritories) {
 			pLaboratory.add(new LaboratoryForPrint(

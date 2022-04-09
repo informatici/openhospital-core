@@ -23,8 +23,11 @@ package org.isf.admission.model;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EntityResult;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -45,7 +48,9 @@ import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.operation.model.Operation;
 import org.isf.patient.model.Patient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
+import org.isf.utils.db.Auditable;
 import org.isf.ward.model.Ward;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * ------------------------------------------
@@ -63,8 +68,15 @@ entities={
 		@EntityResult(entityClass=org.isf.patient.model.Patient.class),
 		@EntityResult(entityClass=org.isf.admission.model.Admission.class)}
 )
-//@EntityListeners(AuditingEntityListener.class) 
-public class Admission implements Comparable<Admission>  //extends Auditable<String> implements Comparable<Admission> 
+@EntityListeners(AuditingEntityListener.class) 
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="ADM_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="ADM_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="ADM_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="ADM_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="ADM_LAST_MODIFIED_DATE"))
+})
+public class Admission extends Auditable<String> implements Comparable<Admission> 
 {
 
 	@Id

@@ -82,7 +82,7 @@ public class Opd extends Auditable<String> {
 	@NotNull
 	@Column(name="OPD_DATE_VIS") // SQL type: date
 	private LocalDate visitDate;
-        
+
 	@Column(name="OPD_DATE_NEXT_VIS") // SQL type: datetime
     private LocalDateTime nextVisitDate;
 
@@ -100,7 +100,7 @@ public class Opd extends Auditable<String> {
 
 	@NotNull
 	@Column(name="OPD_NOTE")
-	private String note; //ADDED: Alex
+	private String note;
 
 	@NotNull
 	@Column(name="OPD_PROG_YEAR")	
@@ -258,17 +258,28 @@ public class Opd extends Auditable<String> {
 	public void setLock(int lock) {
 		this.lock = lock;
 	}
+
 	public LocalDateTime getDate() {
 		return date;
 	}
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
-	
+
+	/**
+	 * use <code>getCreatedDate()</code> instead
+	 * @deprecated
+	 */
+	@Deprecated
 	public LocalDate getVisitDate() {
 		return visitDate;
 	}
 
+	/**
+	 * the field has been replaced by <code>createdDate()</code> and it's not meant to be managed by the user (Spring managed)
+	 * @deprecated
+	 */
+	@Deprecated
 	public void setVisitDate(LocalDate visDate) {
 		this.visitDate = visDate;
 	}	

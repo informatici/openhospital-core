@@ -29,7 +29,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestOperation {
 
-	private String code = "999";
+	private String code = "ZZ";
 	private String description = "TestDescription";
 	private Integer major = 99;
 

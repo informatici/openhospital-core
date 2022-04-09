@@ -135,8 +135,8 @@ public class Tests extends OHCoreTestCase {
 		List<Opd> opds = opdIoOperation.getOpdList(
 				foundOpd.getDisease().getType().getCode(),
 				foundOpd.getDisease().getCode(),
-				foundOpd.getVisitDate(),
-				foundOpd.getVisitDate(),
+				foundOpd.getDate().toLocalDate(),
+				foundOpd.getDate().toLocalDate(),
 				foundOpd.getAge() - 1,
 				foundOpd.getAge() + 1,
 				foundOpd.getSex(),
@@ -164,6 +164,7 @@ public class Tests extends OHCoreTestCase {
 		Opd opd = testOpd.setup(patient, disease, true);
 		LocalDate now = LocalDate.now();
 		opd.setVisitDate(now);
+		opd.setDate(now.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
@@ -185,7 +186,9 @@ public class Tests extends OHCoreTestCase {
 
 		Opd opd = testOpd.setup(patient, disease, true);
 		// set date to be today
-		opd.setVisitDate(LocalDate.now());
+		LocalDate today = LocalDate.now();
+		opd.setVisitDate(today);
+		opd.setDate(today.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
@@ -197,9 +200,8 @@ public class Tests extends OHCoreTestCase {
 		Disease disease2 = testDisease.setup(diseaseType2, false);
 
 		Opd opd2 = testOpd.setup(patient2, disease2, true);
-		LocalDate now = LocalDate.now();
 		// set date to be 14 days ago (not within the TODAY test)
-		opd2.setVisitDate(now.minusDays(14));
+		opd2.setDate(today.minusDays(14).atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient2);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
@@ -225,6 +227,7 @@ public class Tests extends OHCoreTestCase {
 		// set date to be 3 days ago (within last week)
 		date.minusDays(3);
 		opd.setVisitDate(date);
+		opd.setDate(date.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
@@ -239,7 +242,9 @@ public class Tests extends OHCoreTestCase {
 		Opd opd2 = testOpd.setup(patient2, disease2, true);
 		LocalDate date2 = LocalDate.now();
 		// set date to be 13 days aga (not within last week)
-		opd2.setVisitDate(date2.minusDays(13));
+		date2 = date2.minusDays(13);
+		opd2.setVisitDate(date2);
+		opd2.setDate(date2.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient2);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
@@ -260,7 +265,6 @@ public class Tests extends OHCoreTestCase {
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		Opd opd = testOpd.setup(patient, disease, false);
-		opd.setDate(LocalDateTime.now());
 		boolean result = opdIoOperation.newOpd(opd);
 		assertThat(result).isTrue();
 		checkOpdIntoDb(opd.getCode());
@@ -299,7 +303,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetProgYear() throws Exception {
 		int code = setupTestOpd(false);
 		Opd opd = opdIoOperationRepository.findById(code).get();
-		int progYear = opdIoOperation.getProgYear(opd.getVisitDate().getYear());
+		int progYear = opdIoOperation.getProgYear(opd.getDate().getYear());
 		assertThat(progYear).isEqualTo(opd.getProgYear());
 	}
 
@@ -310,7 +314,7 @@ public class Tests extends OHCoreTestCase {
 		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 
 		// when:
-		boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), foundOpd.getVisitDate().getYear());
+		boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), foundOpd.getDate().getYear());
 
 		// then:
 		assertThat(result).isTrue();
@@ -372,8 +376,8 @@ public class Tests extends OHCoreTestCase {
 		List<Opd> opds = opdBrowserManager.getOpd(
 				foundOpd.getDisease().getType().getCode(),
 				foundOpd.getDisease().getCode(),
-				foundOpd.getVisitDate(),
-				foundOpd.getVisitDate(),
+				foundOpd.getDate().toLocalDate(),
+				foundOpd.getDate().toLocalDate(),
 				foundOpd.getAge() - 1,
 				foundOpd.getAge() + 1,
 				foundOpd.getSex(),
@@ -401,6 +405,7 @@ public class Tests extends OHCoreTestCase {
 		Opd opd = testOpd.setup(patient, disease, true);
 		LocalDate now = LocalDate.now();
 		opd.setVisitDate(now);
+		opd.setDate(now.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
@@ -422,7 +427,9 @@ public class Tests extends OHCoreTestCase {
 
 		Opd opd = testOpd.setup(patient, disease, true);
 		// set date to be today
-		opd.setVisitDate(LocalDate.now());
+		LocalDate today = LocalDate.now();
+		opd.setVisitDate(today);
+		opd.setDate(today.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
@@ -437,7 +444,9 @@ public class Tests extends OHCoreTestCase {
 		Opd opd2 = testOpd.setup(patient2, disease2, true);
 		LocalDate now = LocalDate.now();
 		// set date to be 14 days ago (not within the TODAY test)
-		opd2.setVisitDate(now.minusDays(14));
+		now = now.minusDays(14);
+		opd2.setVisitDate(now);
+		opd2.setDate(now.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient2);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
@@ -461,8 +470,9 @@ public class Tests extends OHCoreTestCase {
 		Opd opd = testOpd.setup(patient, disease, true);
 		LocalDate date = LocalDate.now();
 		// set date to be 3 days ago (within last week)
-		date.minusDays(3);
+		date = date.minusDays(3);
 		opd.setVisitDate(date);
+		opd.setDate(date.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
@@ -477,7 +487,9 @@ public class Tests extends OHCoreTestCase {
 		Opd opd2 = testOpd.setup(patient2, disease2, true);
 		LocalDate date2 = LocalDate.now();
 		// set date to be 13 days ago (not within last week)
-		opd2.setVisitDate(date2.minusDays(13));
+		date2 = date2.minusDays(13);
+		opd2.setVisitDate(date2);
+		opd2.setDate(date2.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient2);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
@@ -505,7 +517,6 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease3);
 		opd.setDisease2(disease2);
 		opd.setDisease3(disease3);
-		opd.setDate(LocalDateTime.now());
 		assertThat(opdBrowserManager.newOpd(opd)).isTrue();
 		checkOpdIntoDb(opd.getCode());
 	}
@@ -556,7 +567,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetProgYear() throws Exception {
 		int code = setupTestOpd(false);
 		Opd opd = opdIoOperationRepository.findById(code).get();
-		int progYear = opdBrowserManager.getProgYear(opd.getVisitDate().getYear());
+		int progYear = opdBrowserManager.getProgYear(opd.getDate().getYear());
 		assertThat(progYear).isEqualTo(opd.getProgYear());
 	}
 
@@ -564,7 +575,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrIsExistsOpdNumShouldReturnTrueWhenOpdWithGivenOPDProgressiveYearAndVisitYearExists() throws Exception {
 		int code = setupTestOpd(false);
 		Opd opd = opdIoOperationRepository.findById(code).get();
-		assertThat(opdBrowserManager.isExistOpdNum(opd.getProgYear(), opd.getVisitDate().getYear())).isTrue();
+		assertThat(opdBrowserManager.isExistOpdNum(opd.getProgYear(), opd.getDate().getYear())).isTrue();
 	}
 
 	@Test
@@ -605,6 +616,7 @@ public class Tests extends OHCoreTestCase {
 			opd.setUserID(null);
 
 			opd.setVisitDate(null);
+			opd.setDate(null);
 			opdBrowserManager.newOpd(opd);
 		})
 				.isInstanceOf(OHDataValidationException.class)
@@ -870,7 +882,6 @@ public class Tests extends OHCoreTestCase {
 		Disease disease = testDisease.setup(diseaseType, false);
 
 		Opd opd = testOpd.setup(patient, disease, usingSet);
-		opd.setDate(LocalDateTime.now());
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
