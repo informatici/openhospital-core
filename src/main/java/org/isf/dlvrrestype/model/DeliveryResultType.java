@@ -85,10 +85,8 @@ public class DeliveryResultType
 
 	@Override
     public boolean equals(Object anObject) {
-        return !(anObject instanceof DeliveryResultType) ? false
-                : (getCode().equals(((DeliveryResultType) anObject).getCode())
-                        && getDescription().equalsIgnoreCase(
-                                ((DeliveryResultType) anObject).getDescription()));
+        return anObject instanceof DeliveryResultType && (getCode().equals(((DeliveryResultType) anObject).getCode())
+		        && getDescription().equalsIgnoreCase(((DeliveryResultType) anObject).getDescription()));
     }
 
     public String toString() {

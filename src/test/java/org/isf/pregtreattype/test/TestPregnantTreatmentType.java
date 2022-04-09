@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -36,7 +36,7 @@ public class TestPregnantTreatmentType {
 
 		if (usingSet) {
 			pregnantTreatmentType = new PregnantTreatmentType();
-			_setParameters(pregnantTreatmentType);
+			setParameters(pregnantTreatmentType);
 		} else {
 			// Create PregnantTreatmentType with all parameters 
 			pregnantTreatmentType = new PregnantTreatmentType(code, description);
@@ -45,7 +45,7 @@ public class TestPregnantTreatmentType {
 		return pregnantTreatmentType;
 	}
 
-	public void _setParameters(PregnantTreatmentType pregnantTreatmentType) {
+	public void setParameters(PregnantTreatmentType pregnantTreatmentType) {
 		pregnantTreatmentType.setCode(code);
 		pregnantTreatmentType.setDescription(description);
 	}

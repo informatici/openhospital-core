@@ -68,23 +68,24 @@ public class OperationRowIoOperations {
 		return false;
 	}
 
-    public void updateOperationRow(OperationRow opRow) throws OHServiceException {
-        OperationRow found = repository.findById(opRow.getId());
-        if(found != null) {
-            found.setAdmission(opRow.getAdmission());
-            found.setBill(opRow.getBill());
-            found.setOpDate(opRow.getOpDate());
-            found.setOpResult(opRow.getOpResult());
-            found.setOpd(opRow.getOpd());
-            found.setOperation(opRow.getOperation());
-            found.setPrescriber(opRow.getPrescriber());
-            found.setRemarks(opRow.getRemarks());
-            found.setTransUnit(opRow.getTransUnit());
-            repository.save(found);
-        }
-    }
+	public void updateOperationRow(OperationRow opRow) throws OHServiceException {
+		OperationRow found = repository.findById(opRow.getId());
+		if (found != null) {
+			found.setAdmission(opRow.getAdmission());
+			found.setBill(opRow.getBill());
+			found.setOpDate(opRow.getOpDate());
+			found.setOpResult(opRow.getOpResult());
+			found.setOpd(opRow.getOpd());
+			found.setOperation(opRow.getOperation());
+			found.setPrescriber(opRow.getPrescriber());
+			found.setRemarks(opRow.getRemarks());
+			found.setTransUnit(opRow.getTransUnit());
+			repository.save(found);
+		}
+	}
 
     public void newOperationRow(OperationRow opRow) throws OHServiceException {
         repository.save(opRow);
     }
+
 }

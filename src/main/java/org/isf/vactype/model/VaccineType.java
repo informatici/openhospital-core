@@ -22,7 +22,6 @@
 package org.isf.vactype.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -46,18 +45,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="VACCINETYPE")
+@Table(name = "VACCINETYPE")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="VACT_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="VACT_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="VACT_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="VACT_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="VACT_LAST_MODIFIED_DATE"))
-})
-public class VaccineType extends Auditable<String> 
-{
-	@Id 
+@AttributeOverride(name = "createdBy", column = @Column(name = "VACT_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "VACT_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "VACT_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "VACT_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "VACT_LAST_MODIFIED_DATE"))
+public class VaccineType extends Auditable<String> {
+
+	@Id
 	@Column(name="VACT_ID_A")	
 	private String code;
 
@@ -97,15 +94,13 @@ public class VaccineType extends Auditable<String>
 
 	@Override
 	public boolean equals(Object anObject) {
-		return !(anObject instanceof VaccineType) ? false
-				: (getCode().equals(((VaccineType) anObject).getCode())
-						&& getDescription().equalsIgnoreCase(
-								((VaccineType) anObject).getDescription()));
+		return anObject instanceof VaccineType
+				&& (getCode().equals(((VaccineType) anObject).getCode())
+				&& getDescription().equalsIgnoreCase(((VaccineType) anObject).getDescription()));
 	}
 
-	
 	public String print() {
-		return "vaccineType code=."+getCode()+". description=."+getDescription()+".";
+		return "vaccineType code=." + getCode() + ". description=." + getDescription() + ".";
 	}
 
 	public String toString() {

@@ -54,27 +54,24 @@ public class Interaction {
 		server = Server.getInstance();
 		roster = server.getRoster(); 
 	}
-	
+
 	public Collection<String> getContactOnline() {
 
 		Presence presence;
 		Collection<RosterEntry> entries = roster.getEntries();
-		Collection<String> entries_online= new ArrayList<>();
-		for(RosterEntry r:entries)
-		{
-			presence = roster.getPresence(r.getUser());
-			if(presence.isAvailable())
-				entries_online.add(r.getName());
+		Collection<String> entriesOnline = new ArrayList<>();
+		for (RosterEntry rosterEntry : entries) {
+			presence = roster.getPresence(rosterEntry.getUser());
+			if (presence.isAvailable())
+				entriesOnline.add(rosterEntry.getName());
 		}
-
-		return entries_online;
+		return entriesOnline;
 	}
-	
-	public void sendMessage(MessageListener listener, String text_message, String to, final boolean visualize){
-		
+
+	public void sendMessage(MessageListener listener, String textMessage, String to, final boolean visualize) {
 		to = to + server.getUserAddress();
 		Message message = new Message(to);
-		message.setBody(text_message);
+		message.setBody(textMessage);
 		message.setThread(to);
 		Chat chat = server.getChat(to, message.getThread(), listener);
 
@@ -85,25 +82,20 @@ public class Interaction {
 		}
 	}
 
-
-	public String userFromAddress(String address)
-	{
+	public String userFromAddress(String address) {
 		int index;
-		index= address.indexOf("@");
-		return address.substring(0,index);
+		index = address.indexOf("@");
+		return address.substring(0, index);
 	}
 
-	
-	public void sendFile(String user,File file,String description){
+	public void sendFile(String user, File file, String description) {
 		LOGGER.debug("File transfer requested.");
 		new ServiceDiscoveryManager(server.getConnection());
-		FileTransferManager manager= new FileTransferManager(server.getConnection());
+		FileTransferManager manager = new FileTransferManager(server.getConnection());
 		FileTransferNegotiator.setServiceEnabled(server.getConnection(), true);
 		LOGGER.debug("Manager: {}", manager);
-		String userID = user+server.getUserAddress()+"/Smack";
-		//String userID=getUseradd(user);
+		String userID = user + server.getUserAddress() + "/Smack";
 		LOGGER.debug("Recipient: {}", userID);
-		//OutgoingFileTransfer.setResponseTimeout(10000);
 		OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(userID);
 		try {
 			transfer.sendFile(file, "msg");
@@ -112,31 +104,28 @@ public class Interaction {
 		}
 		LOGGER.debug("Transfer status: {}, {}", transfer.isDone(), transfer.getStatus());
 
-		if (transfer.isDone())
+		if (transfer.isDone()) {
 			LOGGER.debug("Transfer successfully completed!");
-		if (transfer.getStatus().equals(Status.error))
+		}
+		if (transfer.getStatus().equals(Status.error)) {
 			LOGGER.debug("Error while transferring: {}", transfer.getError());
-
+		}
 	}
 
-	
-	public ChatManager getChatManager(){
+	public ChatManager getChatManager() {
 		return server.getChatManager();
 	}
-	public Connection getConnection(){
+
+	public Connection getConnection() {
 		return server.getConnection();
 	}
 
-	public Roster getRoster()
-	{
+	public Roster getRoster() {
 		return server.getRoster();
 	}
-	
-	public Server getServer()
-	{
+
+	public Server getServer() {
 		return server;
 	}
-
-
 
 }

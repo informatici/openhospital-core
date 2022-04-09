@@ -23,7 +23,7 @@ package org.isf.admission.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.admission.model.Admission;
 import org.isf.admtype.model.AdmissionType;
@@ -40,14 +40,14 @@ import org.isf.ward.model.Ward;
 public class TestAdmission {
 
 	// set dates in reasonable order to pass any validatation tests
-	private static final GregorianCalendar ADMINDATE = new GregorianCalendar(2001, 0, 28);
-	private static final GregorianCalendar VISITDATE = new GregorianCalendar(2002, 1, 28);
-	private static final GregorianCalendar OPDATE = new GregorianCalendar(2003, 2, 1);
-	private static final GregorianCalendar ABORTDATE = null;
-	private static final GregorianCalendar DELIVERYDATE = new GregorianCalendar(2004, 11, 1);
-	private static final GregorianCalendar CTRLDATE1 = new GregorianCalendar(2005, 2, 1);
-	private static final GregorianCalendar CTRLDATE2 = new GregorianCalendar(2005, 2, 2);
-	private static final GregorianCalendar DISDATE = new GregorianCalendar(2006, 11, 1);
+	private static final LocalDateTime ADMINDATE = LocalDateTime.of(2001, 1, 28, 0, 0);
+	private static final LocalDateTime VISITDATE = LocalDateTime.of(2002, 2, 28, 0, 0);
+	private static final LocalDateTime OPDATE = LocalDateTime.of(2003, 3, 1, 0, 0);
+	private static final LocalDateTime ABORTDATE = null;
+	private static final LocalDateTime DELIVERYDATE = LocalDateTime.of(2004, 12, 1, 0, 0);
+	private static final LocalDateTime CTRLDATE1 = LocalDateTime.of(2005, 3, 1, 0, 0);
+	private static final LocalDateTime CTRLDATE2 = LocalDateTime.of(2005, 3, 2, 0, 0);
+	private static final LocalDateTime DISDATE =  LocalDateTime.of(2006, 12, 1, 0, 0);
 
 	private int id = 0;
 	private int admitted = 1;
@@ -79,7 +79,7 @@ public class TestAdmission {
 
 		if (usingSet) {
 			admission = new Admission();
-			_setParameters(admission, ward, patient, admissionType, diseaseIn, diseaseOut1, diseaseOut2,
+			setParameters(admission, ward, patient, admissionType, diseaseIn, diseaseOut1, diseaseOut2,
 					diseaseOut3, operation, dischargeType, pregTreatmentType, deliveryType, deliveryResult);
 		} else {
 			// Create Admission with all parameters 
@@ -92,7 +92,7 @@ public class TestAdmission {
 		return admission;
 	}
 
-	public void _setParameters(
+	public void setParameters(
 			Admission admission,
 			Ward ward,
 			Patient patient,

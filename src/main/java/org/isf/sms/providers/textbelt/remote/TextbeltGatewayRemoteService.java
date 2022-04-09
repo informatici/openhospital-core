@@ -23,7 +23,7 @@ package org.isf.sms.providers.textbelt.remote;
 
 import org.isf.sms.providers.textbelt.model.TextbeltSmsRequest;
 import org.isf.sms.providers.textbelt.model.TextbeltSmsResponse;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

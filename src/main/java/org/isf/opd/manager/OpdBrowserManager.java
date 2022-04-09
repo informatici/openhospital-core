@@ -21,8 +21,8 @@
  */
 package org.isf.opd.manager;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.disease.model.Disease;
@@ -69,9 +69,9 @@ public class OpdBrowserManager {
 		Disease disease = opd.getDisease();
 		Disease disease2 = opd.getDisease2();
 		Disease disease3 = opd.getDisease3();
-		if (opd.getUserID() == null)
+		if (opd.getUserID() == null) {
 			opd.setUserID(UserBrowsingManager.getCurrentUser());
-
+		}
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		// Check Visit Date
 		if (opd.getDate() == null) {
@@ -149,8 +149,8 @@ public class OpdBrowserManager {
 	 * @return the list of Opds. It could be <code>null</code>.
 	 * @throws OHServiceException
 	 */
-	public List<Opd> getOpd(String diseaseTypeCode, String diseaseCode, GregorianCalendar dateFrom, GregorianCalendar dateTo, int ageFrom, int ageTo,
-			char sex, char newPatient) throws OHServiceException {
+	public List<Opd> getOpd(String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient)
+			throws OHServiceException {
 		return ioOperations.getOpdList(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient);
 	}
 

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,8 +23,7 @@ package org.isf.sms.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
@@ -59,14 +58,14 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testSmsGets() throws Exception {
-		int code = _setupTestSms(false);
-		_checksmsIntoDb(code);
+		int code = setupTestSms(false);
+		checksmsIntoDb(code);
 	}
 
 	@Test
 	public void testSmsSets() throws Exception {
-		int code = _setupTestSms(true);
-		_checksmsIntoDb(code);
+		int code = setupTestSms(true);
+		checksmsIntoDb(code);
 	}
 
 	@Test
@@ -74,21 +73,21 @@ public class Tests extends OHCoreTestCase {
 		Sms sms = testSms.setup(true);
 		boolean result = smsIoOperation.saveOrUpdate(sms);
 		assertThat(result).isTrue();
-		_checksmsIntoDb(sms.getSmsId());
+		checksmsIntoDb(sms.getSmsId());
 	}
 
 	@Test
 	public void testSmsGetByID() throws Exception {
-		int code = _setupTestSms(false);
+		int code = setupTestSms(false);
 		Sms foundSms = smsIoOperation.getByID(code);
-		_checksmsIntoDb(foundSms.getSmsId());
+		checksmsIntoDb(foundSms.getSmsId());
 	}
 
 	@Test
 	public void testSmsGetAll() throws Exception {
-		Date smsDateStart = new GregorianCalendar(2011, 9, 6).getTime();
-		Date smsDateEnd = new GregorianCalendar(2011, 9, 9).getTime();
-		int code = _setupTestSms(false);
+		LocalDateTime smsDateStart = LocalDateTime.of(2011, 9, 6, 0, 0, 0);
+		LocalDateTime smsDateEnd = LocalDateTime.of(2011, 9, 9, 0, 0, 0);
+		int code = setupTestSms(false);
 		Sms foundSms = smsIoOperation.getByID(code);
 		List<Sms> sms = smsIoOperation.getAll(smsDateStart, smsDateEnd);
 		assertThat(sms.get(0).getSmsText()).isEqualTo(foundSms.getSmsText());
@@ -96,7 +95,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testSmsGetList() throws Exception {
-		int code = _setupTestSms(false);
+		int code = setupTestSms(false);
 		Sms foundSms = smsIoOperation.getByID(code);
 		List<Sms> sms = smsIoOperation.getList();
 		assertThat(sms.get(0).getSmsText()).isEqualTo(foundSms.getSmsText());
@@ -104,7 +103,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoDeleteSms() throws Exception {
-		int code = _setupTestSms(false);
+		int code = setupTestSms(false);
 		Sms foundSms = smsIoOperation.getByID(code);
 		smsIoOperation.delete(foundSms);
 		boolean result = smsIoOperation.isCodePresent(code);
@@ -113,7 +112,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoDeleteByModuleModuleID() throws Exception {
-		int code = _setupTestSms(false);
+		int code = setupTestSms(false);
 		Sms foundSms = smsIoOperation.getByID(code);
 		smsIoOperation.deleteByModuleModuleID(foundSms.getModule(), foundSms.getModuleID());
 
@@ -121,13 +120,13 @@ public class Tests extends OHCoreTestCase {
 		assertThat(result).isFalse();
 	}
 
-	private int _setupTestSms(boolean usingSet) throws OHException {
+	private int setupTestSms(boolean usingSet) throws OHException {
 		Sms sms = testSms.setup(usingSet);
 		smsIoOperationRepository.saveAndFlush(sms);
 		return sms.getSmsId();
 	}
 
-	private void _checksmsIntoDb(int code) throws OHServiceException {
+	private void checksmsIntoDb(int code) throws OHServiceException {
 		Sms foundSms = smsIoOperation.getByID(code);
 		testSms.check(foundSms);
 	}

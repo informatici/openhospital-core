@@ -61,4 +61,5 @@ public class OperationRowBrowserManager {
 		ioOperations.newOperationRow(opRow);
 		return true;
 	}
+
 }

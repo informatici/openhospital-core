@@ -21,8 +21,7 @@
  */
 package org.isf.serviceprinting.print;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.medicalstock.model.Movement;
 
@@ -32,13 +31,12 @@ import org.isf.medicalstock.model.Movement;
 public class MovementForPrint implements Comparable<MovementForPrint>{
 
 	private String ward;
-	private Date date;
+	private LocalDateTime date;
 	private String medical;
 	private double quantity;
 	private String lot;
 	
 	public MovementForPrint(Movement mov) {
-		
 		super();
 		this.ward = mov.getWard().getDescription();
 		this.date = removeTime(mov.getDate());
@@ -46,14 +44,16 @@ public class MovementForPrint implements Comparable<MovementForPrint>{
 		this.quantity = mov.getQuantity();
 		this.lot = mov.getLot().getCode();
 	}
-	
+
 	public String getWard() {
 		return ward;
 	}
+
 	public String getLot() {
 		return lot;
 	}
-	public Date getDate() {
+
+	public LocalDateTime getDate() {
 		return date;
 	}
 
@@ -65,7 +65,7 @@ public class MovementForPrint implements Comparable<MovementForPrint>{
 		return quantity;
 	}
 
-	public String toString(){
+	public String toString() {
 		return medical;
 	}
 
@@ -73,12 +73,9 @@ public class MovementForPrint implements Comparable<MovementForPrint>{
 	public int compareTo(MovementForPrint o) {
 		return this.date.compareTo(o.getDate());
 	}
-	
-	private Date removeTime(GregorianCalendar date) {
-		GregorianCalendar newDate = date;
-		date.set(GregorianCalendar.HOUR_OF_DAY, 0);
-		date.set(GregorianCalendar.MINUTE, 0);
-		date.set(GregorianCalendar.SECOND, 0);
-		return newDate.getTime();
+
+	private LocalDateTime removeTime(LocalDateTime date) {
+		return date.withHour(0).withMinute(0).withSecond(0);
 	}
+
 }

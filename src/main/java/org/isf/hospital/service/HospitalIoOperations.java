@@ -72,8 +72,7 @@ public class HospitalIoOperations {
 	 * @return <code>true</code> if the hospital informations have been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public Hospital updateHospital(Hospital hospital) throws OHServiceException
-	{
+	public Hospital updateHospital(Hospital hospital) throws OHServiceException {
 		return repository.save(hospital);
 	}
 	
@@ -83,16 +82,10 @@ public class HospitalIoOperations {
 	 * @param value the value to sanitize.
 	 * @return the sanitized value or <code>null</code> if the passed value is <code>null</code>.
 	 */
-	protected String sanitize(String value)
-	{
-		String result = null;
-		
-		
-		if (value != null) 
-		{
-			result = value.trim().replaceAll("'", "''");
+	protected String sanitize(String value) {
+		if (value == null) {
+			return null;
 		}
-		
-		return result;
+		return value.trim().replace("'", "''");
 	}
 }

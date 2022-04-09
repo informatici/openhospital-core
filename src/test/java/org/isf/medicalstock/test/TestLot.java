@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.data.Offset.offset;
 
 import java.math.BigDecimal;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
@@ -34,8 +34,8 @@ import org.isf.utils.exception.OHException;
 public class TestLot {
 
 	private String code = "123456";
-	private GregorianCalendar preparationDate = new GregorianCalendar(2000, 1, 1);
-	private GregorianCalendar dueDate = new GregorianCalendar(2000, 1, 1);
+	private LocalDateTime preparationDate = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
+	private LocalDateTime dueDate = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
 	private BigDecimal cost = new BigDecimal(10.10);
 
 	public Lot setup(Medical medical, boolean usingSet) throws OHException {
@@ -43,7 +43,7 @@ public class TestLot {
 
 		if (usingSet) {
 			lot = new Lot();
-			_setParameters(medical, lot);
+			setParameters(medical, lot);
 		} else {
 			// Create Lot with all parameters 
 			lot = new Lot(medical, code, preparationDate, dueDate, cost);
@@ -52,7 +52,7 @@ public class TestLot {
 		return lot;
 	}
 
-	public void _setParameters(Medical medical, Lot lot) {
+	public void setParameters(Medical medical, Lot lot) {
 		lot.setMedical(medical);
 		lot.setCode(code);
 		lot.setCost(cost);

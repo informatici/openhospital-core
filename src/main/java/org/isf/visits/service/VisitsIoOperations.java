@@ -116,7 +116,7 @@ public class VisitsIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 
 	/**
@@ -125,9 +125,8 @@ public class VisitsIoOperations {
 	 * @param id - the id
 	 * @return the {@link Visit} or {@literal null} if none found
 	 */
-	public Visit findVisit(int id)
-	{
-		return repository.findOne(id);
+	public Visit findVisit(int id) {
+		return repository.findById(id).orElse(null);
 	}
 
 	/**

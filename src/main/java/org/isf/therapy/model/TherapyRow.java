@@ -21,10 +21,9 @@
  */
 package org.isf.therapy.model;
 
-import java.util.GregorianCalendar;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
+import java.time.LocalDateTime;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -37,9 +36,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.medicals.model.Medical;
 import org.isf.patient.model.Patient;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -52,17 +51,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="THERAPIES")
+@Table(name = "THERAPIES")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="THR_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="THR_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="THR_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="THR_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="THR_LAST_MODIFIED_DATE"))
-})
-public class TherapyRow  extends Auditable<String>
-{	
+@AttributeOverride(name = "createdBy", column = @Column(name = "THR_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "THR_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "THR_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "THR_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "THR_LAST_MODIFIED_DATE"))
+public class TherapyRow extends Auditable<String> {
+
 	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="THR_ID")	
@@ -75,11 +72,11 @@ public class TherapyRow  extends Auditable<String>
 
 	@NotNull
 	@Column(name="THR_STARTDATE")	
-	private GregorianCalendar startDate;
+	private LocalDateTime startDate;
 
 	@NotNull
 	@Column(name="THR_ENDDATE")	
-	private GregorianCalendar endDate;
+	private LocalDateTime endDate;
 
 	@NotNull
 	@Column(name="THR_MDSR_ID")	
@@ -135,7 +132,7 @@ public class TherapyRow  extends Auditable<String>
 	 * @param sms
 	 */
 	public TherapyRow(int therapyID, Patient patient,
-			GregorianCalendar startDate, GregorianCalendar endDate,
+			LocalDateTime startDate, LocalDateTime endDate,
 			Medical medical, Double qty, int unitID, int freqInDay,
 			int freqInPeriod, String note, boolean notify, boolean sms) {
 		super();
@@ -169,19 +166,19 @@ public class TherapyRow  extends Auditable<String>
 		this.patient = patient;
 	}
 
-	public GregorianCalendar getStartDate() {
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(GregorianCalendar startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
 
-	public GregorianCalendar getEndDate() {
+	public LocalDateTime getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(GregorianCalendar endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
 
@@ -250,8 +247,17 @@ public class TherapyRow  extends Auditable<String>
 	}
 
 	public String toString() {
-		String string = medicalId.toString() + " - " + this.unitID + " " + this.qty + "/" + this.freqInDay + "/" + this.freqInPeriod;
-		return string;
+		StringBuilder sb = new StringBuilder();
+		sb.append(medicalId);
+		sb.append(" - ");
+		sb.append(this.unitID);
+		sb.append(" ");
+		sb.append(this.qty);
+		sb.append("/");
+		sb.append(freqInDay);
+		sb.append("/");
+		sb.append(this.freqInPeriod);
+		return sb.toString();
 	}
 	
 	@Override

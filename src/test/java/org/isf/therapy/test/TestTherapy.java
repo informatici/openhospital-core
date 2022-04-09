@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,7 +23,7 @@ package org.isf.therapy.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.medicals.model.Medical;
 import org.isf.patient.model.Patient;
@@ -32,8 +32,8 @@ import org.isf.utils.exception.OHException;
 
 public class TestTherapy {
 
-	private GregorianCalendar startDate = new GregorianCalendar(10, 9, 8);
-	private GregorianCalendar endDate = new GregorianCalendar(11, 10, 9);
+	private LocalDateTime startDate = LocalDateTime.of(10, 9, 8, 0, 0, 0);
+	private LocalDateTime endDate = LocalDateTime.of(11, 10, 9, 0, 0, 0);
 	private Double qty = 9.9;
 	private int unitID = 10;
 	private int freqInDay = 11;
@@ -47,7 +47,7 @@ public class TestTherapy {
 
 		if (usingSet) {
 			therapyRow = new TherapyRow();
-			_setParameters(patient, medical, therapyRow);
+			setParameters(patient, medical, therapyRow);
 		} else {
 			// Create TherapyRow with all parameters 
 			therapyRow = new TherapyRow(0, patient, startDate, endDate,
@@ -57,7 +57,7 @@ public class TestTherapy {
 		return therapyRow;
 	}
 
-	public void _setParameters(Patient patient, Medical medical, TherapyRow therapyRow) {
+	public void setParameters(Patient patient, Medical medical, TherapyRow therapyRow) {
 		therapyRow.setEndDate(endDate);
 		therapyRow.setFreqInDay(freqInDay);
 		therapyRow.setFreqInPeriod(freqInPeriod);

@@ -76,7 +76,7 @@ public class DicomManagerFactory {
 			try {
 				init();
 				instance = (DicomManagerInterface) Context.getApplicationContext().getBean(
-						Class.forName(props.getProperty("dicom.manager.impl"))); //.getConstructor(Class.forName("java.util.Properties")).newInstance(props);
+						Class.forName(props.getProperty("dicom.manager.impl")));
 				if (instance instanceof FileSystemDicomManager) {
 					((FileSystemDicomManager) instance).setDir(props);
 				}

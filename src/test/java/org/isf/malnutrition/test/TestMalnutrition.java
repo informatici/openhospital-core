@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -24,8 +24,8 @@ package org.isf.malnutrition.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.admission.model.Admission;
 import org.isf.malnutrition.model.Malnutrition;
@@ -34,9 +34,9 @@ import org.isf.utils.exception.OHException;
 public class TestMalnutrition {
 
 	private int code = 0;
-	private GregorianCalendar now = new GregorianCalendar();
-	private GregorianCalendar dateSupp = new GregorianCalendar(now.get(Calendar.YEAR), 1, 1);
-	private GregorianCalendar dateConf = new GregorianCalendar(now.get(Calendar.YEAR), 10, 11);
+	private LocalDateTime now = LocalDateTime.now();
+	private LocalDateTime dateSupp = now.withMonth(1).withDayOfMonth(1);
+	private LocalDateTime dateConf = now.withMonth(10).withDayOfMonth(11);
 	private float height = (float) 185.47;
 	private float weight = (float) 70.70;
 
@@ -45,7 +45,7 @@ public class TestMalnutrition {
 
 		if (usingSet) {
 			malnutrition = new Malnutrition();
-			_setParameters(admission, malnutrition);
+			setParameters(admission, malnutrition);
 		} else {
 			// Create Malnutrition with all parameters 
 			malnutrition = new Malnutrition(code, dateSupp, dateConf, admission, height, weight);
@@ -54,7 +54,7 @@ public class TestMalnutrition {
 		return malnutrition;
 	}
 
-	public void _setParameters(Admission admission, Malnutrition malnutrition) {
+	public void setParameters(Admission admission, Malnutrition malnutrition) {
 		malnutrition.setAdmission(admission);
 		malnutrition.setDateConf(dateConf);
 		malnutrition.setDateSupp(dateSupp);
@@ -63,8 +63,8 @@ public class TestMalnutrition {
 	}
 
 	public void check(Malnutrition malnutrition) {
-		assertThat(malnutrition.getDateConf()).isEqualTo(dateConf);
-		assertThat(malnutrition.getDateSupp()).isEqualTo(dateSupp);
+		assertThat(malnutrition.getDateConf()).isCloseTo(dateConf, within(1, ChronoUnit.SECONDS));
+		assertThat(malnutrition.getDateSupp()).isCloseTo(dateSupp, within(1, ChronoUnit.SECONDS));
 		assertThat(malnutrition.getHeight()).isCloseTo(height, within(0.1F));
 		assertThat(malnutrition.getWeight()).isCloseTo(weight, within(0.1F));
 	}

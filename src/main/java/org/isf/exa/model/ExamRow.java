@@ -22,7 +22,6 @@
 package org.isf.exa.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -47,17 +46,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="EXAMROW")
+@Table(name = "EXAMROW")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="EXR_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="EXR_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="EXR_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="EXR_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="EXR_LAST_MODIFIED_DATE"))
-})
-public class ExamRow extends Auditable<String>
-{
+@AttributeOverride(name = "createdBy", column = @Column(name = "EXR_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "EXR_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "EXR_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "EXR_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "EXR_LAST_MODIFIED_DATE"))
+public class ExamRow extends Auditable<String> {
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="EXR_ID")	
@@ -79,10 +76,10 @@ public class ExamRow extends Auditable<String>
     {
 		super();
     }
-	
-	public ExamRow(Exam aExam, String aDescription){
-		this.description=aDescription;
-		this.exam=aExam;
+
+	public ExamRow(Exam aExam, String aDescription) {
+		this.description = aDescription;
+		this.exam = aExam;
 	}
 
 	public Exam getExamCode() {
@@ -111,12 +108,8 @@ public class ExamRow extends Auditable<String>
 	
 	@Override
 	public boolean equals(Object anObject) {
-		return !(anObject instanceof ExamRow) ? false
-				: (getCode() == ((ExamRow) anObject).getCode()
-						&& getDescription().equalsIgnoreCase(
-								((ExamRow) anObject).getDescription())
-						&& getExamCode()
-								.equals(((ExamRow) anObject).getExamCode()));
+		return anObject instanceof ExamRow && (getCode() == ((ExamRow) anObject).getCode()
+				&& getDescription().equalsIgnoreCase(((ExamRow) anObject).getDescription()) && getExamCode().equals(((ExamRow) anObject).getExamCode()));
 	}
 
 	public String toString() {
