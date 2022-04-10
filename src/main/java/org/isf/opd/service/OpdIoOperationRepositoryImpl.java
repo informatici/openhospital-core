@@ -99,7 +99,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			);
 		}
 		predicates.add(
-				cb.between(opd.<LocalDateTime>get("date"), dateFrom.atStartOfDay(), dateTo.atStartOfDay())
+				cb.between(opd.<LocalDateTime>get("date"), dateFrom.atStartOfDay(), dateTo.plusDays(1).atStartOfDay())
 		);
 		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 

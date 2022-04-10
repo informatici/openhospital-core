@@ -163,7 +163,6 @@ public class Tests extends OHCoreTestCase {
 
 		Opd opd = testOpd.setup(patient, disease, true);
 		LocalDate now = LocalDate.now();
-		opd.setVisitDate(now);
 		opd.setDate(now.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -187,7 +186,6 @@ public class Tests extends OHCoreTestCase {
 		Opd opd = testOpd.setup(patient, disease, true);
 		// set date to be today
 		LocalDate today = LocalDate.now();
-		opd.setVisitDate(today);
 		opd.setDate(today.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -226,7 +224,6 @@ public class Tests extends OHCoreTestCase {
 		LocalDate date = LocalDate.now();
 		// set date to be 3 days ago (within last week)
 		date.minusDays(3);
-		opd.setVisitDate(date);
 		opd.setDate(date.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -243,7 +240,6 @@ public class Tests extends OHCoreTestCase {
 		LocalDate date2 = LocalDate.now();
 		// set date to be 13 days aga (not within last week)
 		date2 = date2.minusDays(13);
-		opd2.setVisitDate(date2);
 		opd2.setDate(date2.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient2);
@@ -404,7 +400,6 @@ public class Tests extends OHCoreTestCase {
 
 		Opd opd = testOpd.setup(patient, disease, true);
 		LocalDate now = LocalDate.now();
-		opd.setVisitDate(now);
 		opd.setDate(now.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -428,7 +423,6 @@ public class Tests extends OHCoreTestCase {
 		Opd opd = testOpd.setup(patient, disease, true);
 		// set date to be today
 		LocalDate today = LocalDate.now();
-		opd.setVisitDate(today);
 		opd.setDate(today.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -445,7 +439,6 @@ public class Tests extends OHCoreTestCase {
 		LocalDate now = LocalDate.now();
 		// set date to be 14 days ago (not within the TODAY test)
 		now = now.minusDays(14);
-		opd2.setVisitDate(now);
 		opd2.setDate(now.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient2);
@@ -471,7 +464,6 @@ public class Tests extends OHCoreTestCase {
 		LocalDate date = LocalDate.now();
 		// set date to be 3 days ago (within last week)
 		date = date.minusDays(3);
-		opd.setVisitDate(date);
 		opd.setDate(date.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -488,7 +480,6 @@ public class Tests extends OHCoreTestCase {
 		LocalDate date2 = LocalDate.now();
 		// set date to be 13 days ago (not within last week)
 		date2 = date2.minusDays(13);
-		opd2.setVisitDate(date2);
 		opd2.setDate(date2.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient2);
@@ -615,7 +606,6 @@ public class Tests extends OHCoreTestCase {
 			// also let validation set userID
 			opd.setUserID(null);
 
-			opd.setVisitDate(null);
 			opd.setDate(null);
 			opdBrowserManager.newOpd(opd);
 		})
