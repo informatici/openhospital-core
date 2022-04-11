@@ -23,7 +23,7 @@ package org.isf.opd.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.isf.disease.model.Disease;
 import org.isf.generaldata.GeneralData;
@@ -33,7 +33,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestOpd {
 
-	private LocalDate visitDate = LocalDate.of(1984, 8, 14);
+	private LocalDateTime date = LocalDateTime.of(1984, 8, 14, 8, 0, 0);
 	private int age = 9;
 	private char sex = 'F';
 	private String note = "TestNote";
@@ -52,8 +52,7 @@ public class TestOpd {
 		} else {
 			// Create Opd with all parameters 
 			opd = new Opd(prog_year, sex, age, disease);
-			opd.setVisitDate(visitDate);
-			opd.setDate(visitDate.atStartOfDay());
+			opd.setDate(date);
 			opd.setNote(note);
 			opd.setNewPatient(newPatient);
 			opd.setReferralFrom(referralFrom);
@@ -68,8 +67,7 @@ public class TestOpd {
 	}
 
 	public void setParameters(Patient patient, Disease disease, Opd opd) {
-		opd.setVisitDate(visitDate);
-		opd.setDate(visitDate.atStartOfDay());
+		opd.setDate(date);
 		opd.setAge(age);
 		opd.setSex(sex);
 		opd.setNote(note);
@@ -85,7 +83,7 @@ public class TestOpd {
 	}
 
 	public void check(Opd opd) {
-		assertThat(opd.getDate().toLocalDate()).isEqualTo(visitDate);
+		assertThat(opd.getDate()).isEqualTo(date);
 		if (!(GeneralData.OPDEXTENDED && opd.getPatient() != null)) {
 			// skip checks as OpdBrowserManager sets values from patient
 			// thus only do checks when not OPDEXTENDED and patient == null
