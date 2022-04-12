@@ -214,4 +214,9 @@ public class OpdIoOperations {
 	private GregorianCalendar getBeginningOfYear(int year) {
 		return new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar();
 	}
+
+	public Opd findByCode(Integer code) {
+		// TODO Auto-generated method stub
+		return repository.findOne(code);
+	}
 }

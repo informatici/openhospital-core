@@ -184,7 +184,6 @@ public class AdmissionBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public boolean updateAdmission(Admission admission) throws OHServiceException {
-		validateAdmission(admission, false);
 		return ioOperations.updateAdmission(admission);
 	}
 

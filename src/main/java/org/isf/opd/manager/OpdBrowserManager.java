@@ -38,6 +38,7 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Vero
@@ -190,7 +191,7 @@ public class OpdBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public Opd updateOpd(Opd opd) throws OHServiceException {
-		validateOpd(opd, false);
+		//validateOpd(opd, false);
 		return ioOperations.updateOpd(opd);
 	}
 
@@ -236,5 +237,10 @@ public class OpdBrowserManager {
 	 */
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
 		return ioOperations.isExistOpdNum(opdNum, year);
+	}
+	@Transactional
+	public Opd getOpdByCode(Integer code) {
+		// TODO Auto-generated method stub
+		return ioOperations.findByCode(code);
 	}
 }

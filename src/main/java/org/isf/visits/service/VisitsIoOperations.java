@@ -77,6 +77,18 @@ public class VisitsIoOperations {
 	}
 	
 	/**
+	 * update {@link Visit} for a specified {@link Visit}
+	 * 
+	 * @param visit - the {@link Visit}.
+	 * @return the {@link Visit}
+	 * @throws OHServiceException 
+	 */
+	@Transactional
+	public Visit updateVisit(Visit visit) throws OHServiceException {
+		return repository.save(visit);
+	}
+	
+	/**
 	 * Deletes all {@link Visit}s related to a patID
 	 * 
 	 * @param patID - the {@link Patient} ID
