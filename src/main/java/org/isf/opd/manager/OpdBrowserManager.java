@@ -179,7 +179,7 @@ public class OpdBrowserManager {
 	 */
 	public boolean newOpd(Opd opd) throws OHServiceException {
 		setPatientConsistency(opd);
-		validateOpd(opd, true);
+		//validateOpd(opd, true);
 		return ioOperations.newOpd(opd);
 	}
 
@@ -191,7 +191,7 @@ public class OpdBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public Opd updateOpd(Opd opd) throws OHServiceException {
-		//validateOpd(opd, false);
+		validateOpd(opd, false);
 		return ioOperations.updateOpd(opd);
 	}
 

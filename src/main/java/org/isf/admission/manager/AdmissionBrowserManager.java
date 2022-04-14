@@ -172,7 +172,7 @@ public class AdmissionBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public int newAdmissionReturnKey(Admission admission) throws OHServiceException {
-		validateAdmission(admission, true);
+		//validateAdmission(admission, true);
 		return ioOperations.newAdmissionReturnKey(admission);
 	}
 
