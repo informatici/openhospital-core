@@ -494,7 +494,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoLoadAdmittedPatientNotThere() throws Exception {
-		assertThat(admissionIoOperation.loadAdmittedPatient(-1)).isNull();
+		assertThat(admissionIoOperation.loadAdmittedPatient(-1, true)).isNull();
 	}
 
 	@Ignore
@@ -504,7 +504,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestAdmission(false);
 		Admission admission = admissionIoOperation.getAdmission(id);
 		assertThat(admission).isNotNull();
-		assertThat(admissionIoOperation.loadAdmittedPatient(id)).isNotNull();
+		assertThat(admissionIoOperation.loadAdmittedPatient(id, true)).isNotNull();
 	}
 
 	@Test
