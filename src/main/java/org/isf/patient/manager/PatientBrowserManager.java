@@ -74,15 +74,15 @@ public class PatientBrowserManager {
 	 */
 	public Patient savePatient(Patient patient) throws OHServiceException {
 		validatePatient(patient);
-		PatientProfilePhoto ppp = null;
-		ppp = patient.getPatientProfilePhoto();
-		patient.setPatientProfilePhoto(new PatientProfilePhoto());
-		patient = ioOperations.savePatient(patient);
 		if (!isLoadProfilePhotoFromDB() && isProfilesPhotoPathDefined()) {
-			this.fileSystemPatientPhotoManager.save(GeneralData.PATIENTPHOTO, patient.getCode(),
-					ppp.getPhoto());
+			PatientProfilePhoto ppp = patient.getPatientProfilePhoto();
+			patient.setPatientProfilePhoto(new PatientProfilePhoto());
+			patient = ioOperations.savePatient(patient);
+			this.fileSystemPatientPhotoManager.save(GeneralData.PATIENTPHOTO, patient.getCode(), ppp.getPhoto());
+			patient.setPatientProfilePhoto(ppp);
+		} else {
+			patient = ioOperations.savePatient(patient);
 		}
-		patient.setPatientProfilePhoto(ppp);
 		return patient;
 	}
 
@@ -147,9 +147,10 @@ public class PatientBrowserManager {
 	}
 
 	private boolean isLoadProfilePhotoFromDB() {
-		return (PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO));
+		return (StringUtils.isEmpty(GeneralData.PATIENTPHOTO)
+				|| PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO));
 	}
-	
+
 	private boolean isProfilesPhotoPathDefined() {
 		return !StringUtils.isEmpty(GeneralData.PATIENTPHOTO);
 	}
