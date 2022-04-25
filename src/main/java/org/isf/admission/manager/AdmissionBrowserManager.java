@@ -26,12 +26,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
 import org.isf.admission.service.AdmissionIoOperations;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.disctype.model.DischargeType;
+import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
+import org.isf.patient.manager.FileSystemPatientPhotoManager;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
@@ -39,6 +42,8 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,10 +53,19 @@ public class AdmissionBrowserManager {
 	@Autowired
 	private AdmissionIoOperations ioOperations;
 
+	@Autowired
+	private FileSystemPatientPhotoManager fileSystemPatientPhotoManager;
+
+	private static final String PATIENT_PHOTO_FROM_DATABASE = "DB";
+	
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AdmissionBrowserManager.class);
+
 	/**
 	 * Returns all patients with ward in which they are admitted.
 	 *
-	 * @return the patient list with associated ward or {@code null} if the operation fails.
+	 * @return the patient list with associated ward or {@code null} if the
+	 *         operation fails.
 	 * @throws OHServiceException
 	 */
 	public List<AdmittedPatient> getAdmittedPatients() throws OHServiceException {
@@ -59,9 +73,11 @@ public class AdmissionBrowserManager {
 	}
 
 	/**
-	 * Returns all patients with ward in which they are admitted filtering the list using the passed search term.
+	 * Returns all patients with ward in which they are admitted filtering the list
+	 * using the passed search term.
 	 *
-	 * @param searchTerms the search terms to use for filter the patient list, {@code null} if no filter have to be applied.
+	 * @param searchTerms the search terms to use for filter the patient list,
+	 *                    {@code null} if no filter have to be applied.
 	 * @return the filtered patient list or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
@@ -72,19 +88,40 @@ public class AdmissionBrowserManager {
 	/**
 	 * Returns all patients based on the applied filters.
 	 *
-	 * @param admissionRange (two-dimensions array) the patient admission dates range, both {@code null} if no filter have to be applied.
-	 * @param dischargeRange (two-dimensions array) the patient admission dates range, both {@code null} if no filter have to be applied.
-	 * @param searchTerms the search terms to use for filter the patient list, {@code null} if no filter have to be applied.
+	 * @param admissionRange (two-dimensions array) the patient admission dates
+	 *                       range, both {@code null} if no filter have to be
+	 *                       applied.
+	 * @param dischargeRange (two-dimensions array) the patient admission dates
+	 *                       range, both {@code null} if no filter have to be
+	 *                       applied.
+	 * @param searchTerms    the search terms to use for filter the patient list,
+	 *                       {@code null} if no filter have to be applied.
 	 * @return the filtered patient list.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public List<AdmittedPatient> getAdmittedPatients(LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange, String searchTerms)
-			throws OHServiceException {
+	public List<AdmittedPatient> getAdmittedPatients(LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange,
+			String searchTerms) throws OHServiceException {
 		return ioOperations.getAdmittedPatients(searchTerms, admissionRange, dischargeRange);
 	}
 
 	public AdmittedPatient loadAdmittedPatients(Integer patientId) {
-		return ioOperations.loadAdmittedPatient(patientId);
+		AdmittedPatient patient = ioOperations.loadAdmittedPatient(patientId, this.isLoadProfilePhotoFromDB());
+		if (!isLoadProfilePhotoFromDB() && isProfilesPhotoPathDefined()) {
+			try {
+				this.fileSystemPatientPhotoManager.loadInPatient(patient.getPatient(), GeneralData.PATIENTPHOTO);
+			} catch (OHServiceException e) {
+				LOGGER.error(e.getMessage(), e);
+			}
+		}
+		return patient;
+	}
+
+	private boolean isLoadProfilePhotoFromDB() {
+		return (StringUtils.isEmpty(GeneralData.PATIENTPHOTO) || PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO));
+	}
+
+	private boolean isProfilesPhotoPathDefined() {
+		return !StringUtils.isEmpty(GeneralData.PATIENTPHOTO);
 	}
 
 	/**
@@ -99,7 +136,8 @@ public class AdmissionBrowserManager {
 	}
 
 	/**
-	 * Returns the only one admission without adimission date (or null if none) for the specified patient.
+	 * Returns the only one admission without adimission date (or null if none) for
+	 * the specified patient.
 	 *
 	 * @param patient the patient target of the admission.
 	 * @return the patient admission or {@code null} if the operation fails.
@@ -134,7 +172,7 @@ public class AdmissionBrowserManager {
 	/**
 	 * Lists the {@link AdmissionType}s.
 	 *
-	 * @return the admission types  or {@code null} if the operation fails.
+	 * @return the admission types or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
 	public List<AdmissionType> getAdmissionType() throws OHServiceException {
@@ -144,7 +182,7 @@ public class AdmissionBrowserManager {
 	/**
 	 * Lists the {@link DischargeType}s.
 	 *
-	 * @return the discharge types  or {@code null} if the operation fails.
+	 * @return the discharge types or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
 	public List<DischargeType> getDischargeType() throws OHServiceException {
@@ -155,7 +193,8 @@ public class AdmissionBrowserManager {
 	 * Inserts a new admission.
 	 *
 	 * @param admission the admission to insert.
-	 * @return <code>true</code> if the admission has been successfully inserted, <code>false</code> otherwise.
+	 * @return <code>true</code> if the admission has been successfully inserted,
+	 *         <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean newAdmission(Admission admission) throws OHServiceException {
@@ -213,7 +252,8 @@ public class AdmissionBrowserManager {
 	 * Deletes the patient photo.
 	 *
 	 * @param id the patient id.
-	 * @return <code>true</code> if the photo has been deleted, <code>false</code> otherwise.
+	 * @return <code>true</code> if the photo has been deleted, <code>false</code>
+	 *         otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean deletePatientPhoto(int id) throws OHServiceException {
@@ -224,7 +264,7 @@ public class AdmissionBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param admission
-	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @param insert    <code>true</code> or updated <code>false</code>
 	 * @throws OHDataValidationException
 	 */
 	protected void validateAdmission(Admission admission, boolean insert) throws OHServiceException {
@@ -246,25 +286,22 @@ public class AdmissionBrowserManager {
 					MessageBundle.getMessage("angal.admission.pleaseinsertacorrectprogressiveid.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		
+
 		Ward ward = admission.getWard();
 		if (ward == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.admission.admissionwardcannotbeempty.msg"),
-							OHSeverityLevel.ERROR));
+					MessageBundle.getMessage("angal.admission.admissionwardcannotbeempty.msg"), OHSeverityLevel.ERROR));
 			throw new OHDataValidationException(errors);
 		}
 		LocalDateTime dateIn = admission.getAdmDate();
 		if (dateIn == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.admission.admissiondatecannotbeempty.msg"),
-							OHSeverityLevel.ERROR));
+					MessageBundle.getMessage("angal.admission.admissiondatecannotbeempty.msg"), OHSeverityLevel.ERROR));
 			throw new OHDataValidationException(errors);
 		}
 		if (dateIn.isAfter(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.admission.futuredatenotallowed.msg"),
-					OHSeverityLevel.ERROR));
+					MessageBundle.getMessage("angal.admission.futuredatenotallowed.msg"), OHSeverityLevel.ERROR));
 		}
 		if (dateIn.isBefore(today)) {
 			// check for invalid date
@@ -302,8 +339,7 @@ public class AdmissionBrowserManager {
 			}
 			if (dateOut.isAfter(today)) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.admission.futuredatenotallowed.msg"),
-						OHSeverityLevel.ERROR));
+						MessageBundle.getMessage("angal.admission.futuredatenotallowed.msg"), OHSeverityLevel.ERROR));
 			} else {
 				// check for invalid date
 				boolean invalidDate = false;
@@ -321,7 +357,8 @@ public class AdmissionBrowserManager {
 							;// ok
 						else {
 							errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-									MessageBundle.getMessage("angal.admission.intheselecteddatepatientwasadmittedagain.msg"),
+									MessageBundle
+											.getMessage("angal.admission.intheselecteddatepatientwasadmittedagain.msg"),
 									OHSeverityLevel.ERROR));
 						}
 					}
@@ -474,7 +511,8 @@ public class AdmissionBrowserManager {
 				} else {
 					limit = admission.getDisDate();
 				}
-				if (ctrl2Date != null && abortDate.isBefore(ctrl2Date) || ctrl1Date != null && abortDate.isBefore(ctrl1Date) || abortDate.isBefore(visitDate)
+				if (ctrl2Date != null && abortDate.isBefore(ctrl2Date)
+						|| ctrl1Date != null && abortDate.isBefore(ctrl1Date) || abortDate.isBefore(visitDate)
 						|| abortDate.isAfter(limit)) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.getMessage("angal.admission.pleaseinsertavalidabortdate.msg"),
