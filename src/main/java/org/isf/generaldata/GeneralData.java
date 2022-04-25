@@ -88,7 +88,8 @@ public final class GeneralData extends ConfigurationProperties {
 	public static String PATIENTBILLSTATEMENT;
 	public static boolean DEBUG;
 	public static String PATIENTPHOTO;
-
+	public static String PATIENTPHOTOPATH;
+	
 	private static final String DEFAULT_LANGUAGE = "en";
 	private static final boolean DEFAULT_SINGLEUSER = false;
 	private static final boolean DEFAULT_AUTOMATICLOT_IN = true;
@@ -134,7 +135,8 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_PATIENTBILLSTATEMENT = "PatientBillStatement";
 	private static final boolean DEFAULT_DEBUG = false;
 	private static final String DEFAULT_PATIENTPHOTO = "DB";
-
+	private static final String DEFAULT_PATIENTPHOTOPATH = null;
+	
 	private static GeneralData mySingleData;
 
 	public static void reset() {
@@ -189,7 +191,7 @@ public final class GeneralData extends ConfigurationProperties {
 		PATIENTBILLSTATEMENT = myGetProperty("PATIENTBILLSTATEMENT", DEFAULT_PATIENTBILLSTATEMENT);
 		DEBUG = myGetProperty("DEBUG", DEFAULT_DEBUG);
 		PATIENTPHOTO = myGetProperty("PATIENTPHOTO", DEFAULT_PATIENTPHOTO);
-
+		PATIENTPHOTOPATH = myGetProperty("PATIENTPHOTOPATH", DEFAULT_PATIENTPHOTOPATH);
 	}
 
 	public static GeneralData getGeneralData() {

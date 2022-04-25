@@ -64,7 +64,8 @@ public class PatientBrowserManager {
 	protected LinkedHashMap<String, String> professionHashMap;
 
 	private static final String PATIENT_PHOTO_FROM_DATABASE = "DB";
-
+	private static final String PATIENT_PHOTO_FROM_FILE = "FILE";
+	
 	/**
 	 * Method that inserts a new Patient in the db
 	 *
@@ -74,13 +75,13 @@ public class PatientBrowserManager {
 	 */
 	public Patient savePatient(Patient patient) throws OHServiceException {
 		validatePatient(patient);
-		if (!isLoadProfilePhotoFromDB() && isProfilesPhotoPathDefined()) {
+		if (isLoadProfilePhotoFromFile() && isProfilesPhotoPathDefined()) {
 			PatientProfilePhoto ppp = patient.getPatientProfilePhoto();
 			patient.setPatientProfilePhoto(new PatientProfilePhoto());
 			patient = ioOperations.savePatient(patient);
-			this.fileSystemPatientPhotoManager.save(GeneralData.PATIENTPHOTO, patient.getCode(), ppp.getPhoto());
+			this.fileSystemPatientPhotoManager.save(GeneralData.PATIENTPHOTOPATH, patient.getCode(), ppp.getPhoto());
 			patient.setPatientProfilePhoto(ppp);
-		} else {
+		} else if (isLoadProfilePhotoFromDB()){
 			patient = ioOperations.savePatient(patient);
 		}
 		return patient;
@@ -141,7 +142,7 @@ public class PatientBrowserManager {
 	public Patient getPatientById(Integer code) throws OHServiceException {
 		Patient patient = ioOperations.getPatient(code, this.isLoadProfilePhotoFromDB());
 		if (!isLoadProfilePhotoFromDB() && isProfilesPhotoPathDefined()) {
-			this.fileSystemPatientPhotoManager.loadInPatient(patient, GeneralData.PATIENTPHOTO);
+			this.fileSystemPatientPhotoManager.loadInPatient(patient, GeneralData.PATIENTPHOTOPATH);
 		}
 		return patient;
 	}
@@ -150,9 +151,14 @@ public class PatientBrowserManager {
 		return (StringUtils.isEmpty(GeneralData.PATIENTPHOTO)
 				|| PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO));
 	}
+	
+	private boolean isLoadProfilePhotoFromFile() {
+		return (!StringUtils.isEmpty(GeneralData.PATIENTPHOTO)
+				&& PATIENT_PHOTO_FROM_FILE.equals(GeneralData.PATIENTPHOTO));
+	}
 
 	private boolean isProfilesPhotoPathDefined() {
-		return !StringUtils.isEmpty(GeneralData.PATIENTPHOTO);
+		return !StringUtils.isEmpty(GeneralData.PATIENTPHOTOPATH);
 	}
 
 	/**
