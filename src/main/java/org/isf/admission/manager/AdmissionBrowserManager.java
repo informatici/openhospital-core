@@ -36,6 +36,7 @@ import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.manager.FileSystemPatientPhotoManager;
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -57,7 +58,7 @@ public class AdmissionBrowserManager {
 	private FileSystemPatientPhotoManager fileSystemPatientPhotoManager;
 
 	private static final String PATIENT_PHOTO_FROM_DATABASE = "DB";
-	
+	private static final String PATIENT_PHOTO_FROM_FILE = "FILE";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdmissionBrowserManager.class);
 
@@ -106,22 +107,31 @@ public class AdmissionBrowserManager {
 
 	public AdmittedPatient loadAdmittedPatients(Integer patientId) {
 		AdmittedPatient patient = ioOperations.loadAdmittedPatient(patientId, this.isLoadProfilePhotoFromDB());
-		if (!isLoadProfilePhotoFromDB() && isProfilesPhotoPathDefined()) {
+		if (isLoadProfilePhotoFromFile() && isProfilesPhotoPathDefined()) {
 			try {
-				this.fileSystemPatientPhotoManager.loadInPatient(patient.getPatient(), GeneralData.PATIENTPHOTO);
+				this.fileSystemPatientPhotoManager.loadInPatient(patient.getPatient(), GeneralData.PATIENTPHOTOPATH);
 			} catch (OHServiceException e) {
 				LOGGER.error(e.getMessage(), e);
 			}
+		}
+		if (!this.isLoadProfilePhotoFromDB() && !this.isLoadProfilePhotoFromFile()) {
+			patient.getPatient().setPatientProfilePhoto(new PatientProfilePhoto());
 		}
 		return patient;
 	}
 
 	private boolean isLoadProfilePhotoFromDB() {
-		return (StringUtils.isEmpty(GeneralData.PATIENTPHOTO) || PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO));
+		return (StringUtils.isEmpty(GeneralData.PATIENTPHOTO)
+				|| PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO));
+	}
+
+	private boolean isLoadProfilePhotoFromFile() {
+		return (!StringUtils.isEmpty(GeneralData.PATIENTPHOTO)
+				&& PATIENT_PHOTO_FROM_FILE.equals(GeneralData.PATIENTPHOTO));
 	}
 
 	private boolean isProfilesPhotoPathDefined() {
-		return !StringUtils.isEmpty(GeneralData.PATIENTPHOTO);
+		return !StringUtils.isEmpty(GeneralData.PATIENTPHOTOPATH);
 	}
 
 	/**
