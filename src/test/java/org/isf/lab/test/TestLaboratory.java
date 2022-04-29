@@ -67,7 +67,7 @@ public class TestLaboratory {
 
 	public void _setParameters(Laboratory laboratory, Exam exam, Patient patient) {
 		laboratory.setAge(age);
-		laboratory.setDate(registrationDate);
+		laboratory.setRegistrationDate(registrationDate);
 		laboratory.setExam(exam);
 		laboratory.setExamDate(examDate);
 		laboratory.setInOutPatient(InOutPatient);
@@ -90,7 +90,7 @@ public class TestLaboratory {
 			assertThat(laboratory.getAge()).isEqualTo(age);
 			assertThat(laboratory.getPatName()).isEqualTo(patName);
 		}
-		assertThat(laboratory.getDate()).isEqualTo(registrationDate);
+		assertThat(laboratory.getRegistrationDate()).isEqualTo(registrationDate);
 		assertThat(laboratory.getExamDate()).isEqualTo(examDate);
 		assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
 		assertThat(laboratory.getMaterial()).isEqualTo(material);

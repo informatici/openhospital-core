@@ -77,8 +77,8 @@ public class LabManager {
 	 */
 	protected void validateLaboratory(Laboratory laboratory) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		if (laboratory.getDate() == null)
-			laboratory.setDate(new GregorianCalendar());
+		if (laboratory.getRegistrationDate() == null)
+			laboratory.setRegistrationDate(new GregorianCalendar());
 		if (laboratory.getExam() != null && laboratory.getExam().getProcedure() == 2) {
 			laboratory.setResult(MessageBundle.getMessage("angal.lab.multipleresults.txt"));
 		}
