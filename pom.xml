@@ -13,10 +13,10 @@
 	<groupId>org.isf</groupId>
 	<artifactId>OH-core</artifactId>
 	<packaging>jar</packaging>
-	<version>1.11.3</version>
+	<version>1.12.0-SNAPSHOT</version>
 
 	<properties>
-		<oh.version>1.11.3</oh.version>
+		<oh.version>1.12.0-SNAPSHOT</oh.version>
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.framework.version>5.3.19</spring.framework.version>
