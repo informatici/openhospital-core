@@ -198,7 +198,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	public boolean newLaboratory(Laboratory laboratory, List<String> labRow) throws OHServiceException {
-		validateLaboratory(laboratory);
+		//validateLaboratory(laboratory);
 		setPatientConsistency(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.newLabFirstProcedure(laboratory);
