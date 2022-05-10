@@ -273,11 +273,19 @@ public class Tests extends OHCoreTestCase {
 	public void testIoUpdateOpd() throws Exception {
 		int code = _setupTestOpd(false);
 		Opd foundOpd = opdIoOperationRepository.findOne(code);
-		foundOpd.setNote("Update");
+		foundOpd.setReason("update reason");
+		foundOpd.setAnamnesis("update anamnesis");
+		foundOpd.setTherapies("update therapie");
+		foundOpd.setAllergies("update allergies");
+		foundOpd.setPrescription("update presciption");
 		Opd result = opdIoOperation.updateOpd(foundOpd);
 		Opd updateOpd = opdIoOperationRepository.findOne(code);
 		assertThat(result).isNotNull();
-		assertThat(updateOpd.getNote()).isEqualTo("Update");
+		assertThat(updateOpd.getReason()).isEqualTo("update reason");
+		assertThat(updateOpd.getAnamnesis()).isEqualTo("update anamnesis");
+		assertThat(updateOpd.getTherapies()).isEqualTo("update therapies");
+		assertThat(updateOpd.getAllergies()).isEqualTo("update allergies");
+		assertThat(updateOpd.getPrescription()).isEqualTo("update prescription");
 	}
 
 	@Test
@@ -533,10 +541,18 @@ public class Tests extends OHCoreTestCase {
 		opd.setDisease3(disease3);
 		opd.setDate(new Date());
 		assertThat(opdBrowserManager.newOpd(opd)).isTrue();
-		opd.setNote("Update");
+		opd.setReason("update reason");
+		opd.setAnamnesis("update anamnesis");
+		opd.setTherapies("update therapie");
+		opd.setAllergies("update allergies");
+		opd.setPrescription("update presciption");
 		assertThat(opdBrowserManager.updateOpd(opd)).isNotNull();
 		Opd updateOpd = opdIoOperationRepository.findOne(opd.getCode());
-		assertThat(updateOpd.getNote()).isEqualTo("Update");
+		assertThat(updateOpd.getReason()).isEqualTo("update reason");
+		assertThat(updateOpd.getAnamnesis()).isEqualTo("update anamnesis");
+		assertThat(updateOpd.getTherapies()).isEqualTo("update therapies");
+		assertThat(updateOpd.getAllergies()).isEqualTo("update allergies");
+		assertThat(updateOpd.getPrescription()).isEqualTo("update prescription");
 	}
 
 	@Test

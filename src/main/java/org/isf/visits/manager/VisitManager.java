@@ -234,5 +234,4 @@ public class VisitManager {
 		// TODO Auto-generated method stub
 		return ioOperations.updateVisit(visit);
 	}
-	
 }
