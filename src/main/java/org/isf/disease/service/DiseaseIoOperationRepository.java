@@ -32,7 +32,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DiseaseIoOperationRepository extends JpaRepository<Disease, String> {
 
-  Disease findOneByCode(@Param("code") String code);
+	Disease findOneByCode(@Param("code") String code);
 
 	@Query(value = "select d FROM Disease d WHERE d.description = :description AND d.diseaseType.code = :code")
 	Disease findOneByDescriptionAndTypeCode(@Param("description") String description, @Param("code") String code);
