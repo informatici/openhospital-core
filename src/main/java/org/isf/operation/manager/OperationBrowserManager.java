@@ -28,11 +28,13 @@ import java.util.Map;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.operation.model.Operation;
+import org.isf.operation.model.OperationRow;
 import org.isf.operation.service.OperationIoOperations;
 import org.isf.opetype.model.OperationType;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.validator.DefaultSorter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 
 /**
@@ -193,4 +195,5 @@ public class OperationBrowserManager {
 		}
 		return resultsListHashMap.get(resultDescKey);
 	}
+
 }

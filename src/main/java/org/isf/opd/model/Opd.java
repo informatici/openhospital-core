@@ -94,9 +94,10 @@ public class Opd extends Auditable<String> {
 	@Column(name="OPD_SEX")
 	private char sex;
 
-	@NotNull
+	/*@NotNull
 	@Column(name="OPD_NOTE")
 	private String note;
+	private String note; //ADDED: Alex*/
 
 	@NotNull
 	@Column(name="OPD_PROG_YEAR")	
@@ -132,6 +133,21 @@ public class Opd extends Auditable<String> {
 	@Column(name="OPD_LOCK")
 	private int lock;
 	
+	@Column(name="OPD_REASON")
+    private String reason; // ADDED: Arnaud
+
+	@Column(name="OPD_ANAMNESIS")
+    private String anamnesis; // ADDED: Arnaud
+    
+	@Column(name="OPD_ALLERGIES")
+    private String allergies; // ADDED: Arnaud
+    
+	@Column(name="OPD_THERAPIES")
+    private String therapies; // ADDED: Arnaud
+    
+	@Column(name="OPD_PRESCRIPTION")
+    private String prescription; // ADDED: Arnaud
+	
 	@Transient
 	private volatile int hashCode = 0;
 
@@ -152,13 +168,13 @@ public class Opd extends Auditable<String> {
 		disease = aDisease;
 	}
 	
-	public String getNote() {
+	/*public String getNote() {
 		return note;
 	}
 
 	public void setNote(String note) {
 		this.note = note;
-	}
+	}*/
 	
 	public String getFullName() {
 		return patient == null ? "" : patient.getName();
@@ -285,8 +301,48 @@ public class Opd extends Auditable<String> {
 	public void setUserID(String userID) {
 		this.userID = userID;
 	}
+        
+  public String getReason() {
+		return reason;
+	}
 
-	public LocalDateTime getNextVisitDate() {
+  public void setReason(String reason) {
+      this.reason = reason;
+  }
+
+	public String getAnamnesis() {
+		return anamnesis;
+	}
+
+	public void setAnamnesis(String anamnesis) {
+		this.anamnesis = anamnesis;
+	}
+
+	public String getAllergies() {
+		return allergies;
+	}
+
+	public void setAllergies(String allergies) {
+		this.allergies = allergies;
+	}
+
+	public String getTherapies() {
+		return therapies;
+	}
+
+	public void setTherapies(String therapies) {
+		this.therapies = therapies;
+	}
+
+	public String getPrescription() {
+		return prescription;
+	}
+
+	public void setPrescription(String prescription) {
+		this.prescription = prescription;
+	}
+
+		public LocalDateTime getNextVisitDate() {
 		return nextVisitDate;
 	}
 

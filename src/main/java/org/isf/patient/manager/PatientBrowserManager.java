@@ -58,6 +58,14 @@ public class PatientBrowserManager {
 
 	protected LinkedHashMap<String, String> professionHashMap;
 
+	public PatientIoOperations getIoOperations() {
+		return ioOperations;
+	}
+
+	public void setIoOperations(PatientIoOperations ioOperations) {
+		this.ioOperations = ioOperations;
+	}
+
 	/**
 	 * Method that inserts a new Patient in the db
 	 *

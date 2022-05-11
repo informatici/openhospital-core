@@ -200,4 +200,16 @@ public class OpdIoOperations {
 		return !opds.isEmpty();
 	}
 
+	/**
+   * @deprecated GregorianCalendar is no longer used, consider adding method in org.isf.utils.time.TimeTools.java
+   */
+  @Deprecated
+  private GregorianCalendar getBeginningOfYear(int year) {
+		return new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar();
+	}
+
+	public Opd findByCode(Integer code) {
+		// TODO Auto-generated method stub
+		return repository.findOne(code);
+	}
 }

@@ -283,4 +283,9 @@ public class VisitManager {
 	public Visit findVisit(int id) throws OHServiceException {
 		return ioOperations.findVisit(id);
 	}
+
+	public Visit updateVisit(Visit visit) throws OHServiceException {
+		// TODO Auto-generated method stub
+		return ioOperations.updateVisit(visit);
+	}
 }

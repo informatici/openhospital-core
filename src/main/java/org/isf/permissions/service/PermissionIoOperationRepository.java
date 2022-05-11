@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,28 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.operation.service;
+package org.isf.permissions.service;
 
 import java.util.List;
 
-import org.isf.admission.model.Admission;
-import org.isf.opd.model.Opd;
-import org.isf.operation.model.OperationRow;
+import org.isf.permissions.model.Permission;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-/**
- * @author hp
- */
 @Repository
-public interface OperationRowIoOperationRepository extends JpaRepository<OperationRow, String> {
+public interface PermissionIoOperationRepository extends JpaRepository<Permission, Integer> {
 
-	List<OperationRow> findByOrderByOpDateDesc();
+	@Query(value = "FROM Permission p WHERE p.active=1 and p.id in (select permission.id from GroupPermission where active=1 and userGroup.code like :userGroupCode)")
+	List<Permission> findAllByUserGroupCode(@Param("userGroupCode") String userGroupCode);
 
-	List<OperationRow> findByAdmission(Admission adm);
+	@Query(value = "FROM Permission p WHERE p.active=1 and p.id in (select permission.id from GroupPermission where active=1 and userGroup.code in (select userGroupName from User where active=1 and userName like :currentUserName))")
+	List<Permission> retrievePermissionsByCurrentLoggedInUser(@Param("currentUserName") String currentUserName);
 
-	OperationRow findById(int id);
+	Permission findByName(String name);
 
-	List<OperationRow> findByOpd(Opd opd);
 }

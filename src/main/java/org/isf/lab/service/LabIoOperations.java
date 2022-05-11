@@ -139,7 +139,7 @@ public class LabIoOperations {
 			pLaboratory.add(new LaboratoryForPrint(
 							laboratory.getCode(),
 							laboratory.getExam(),
-							laboratory.getDate(),
+							laboratory.getRegistrationDate(),
 							laboratory.getResult()
 					)
 			);

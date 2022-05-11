@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,28 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.operation.service;
+package org.isf.menu.manager;
 
 import java.util.List;
 
-import org.isf.admission.model.Admission;
-import org.isf.opd.model.Opd;
-import org.isf.operation.model.OperationRow;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
+import org.isf.menu.model.UserGroup;
+import org.isf.menu.service.UserGroupIoOperationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-/**
- * @author hp
- */
-@Repository
-public interface OperationRowIoOperationRepository extends JpaRepository<OperationRow, String> {
+@Component
+public class UserGroupManager {
 
-	List<OperationRow> findByOrderByOpDateDesc();
+	@Autowired
+	private UserGroupIoOperationRepository userGroupIoOperationRepository;
 
-	List<OperationRow> findByAdmission(Admission adm);
+	public List<UserGroup> findByIdIn(List<String> userGroupIds) {
+		return this.userGroupIoOperationRepository.findByCodeIn(userGroupIds);
+	}
 
-	OperationRow findById(int id);
-
-	List<OperationRow> findByOpd(Opd opd);
 }
