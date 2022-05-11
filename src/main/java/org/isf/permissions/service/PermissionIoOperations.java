@@ -52,7 +52,7 @@ public class PermissionIoOperations {
 	}
 
 	public Permission retrievePermissionById(Integer id) {
-		return this.repository.findOne(id);
+		return this.repository.findById(id);
 	}
 
 	public Permission retrievePermissionByName(String name) {
