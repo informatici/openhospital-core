@@ -212,6 +212,6 @@ public class OpdIoOperations {
 
 	public Opd findByCode(Integer code) {
 		// TODO Auto-generated method stub
-		return repository.findOne(code);
+		return repository.findById(code);
 	}
 }
