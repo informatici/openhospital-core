@@ -80,7 +80,7 @@ public class Opd extends Auditable<String> {
 	private LocalDateTime date;
 
 	@Column(name="OPD_DATE_NEXT_VIS") // SQL type: datetime
-    private LocalDateTime nextVisitDate;
+    	private LocalDateTime nextVisitDate;
 
 	@ManyToOne
 	@JoinColumn(name="OPD_PAT_ID")
@@ -134,19 +134,19 @@ public class Opd extends Auditable<String> {
 	private int lock;
 	
 	@Column(name="OPD_REASON")
-    private String reason; // ADDED: Arnaud
+   	private String reason; // ADDED: Arnaud
 
 	@Column(name="OPD_ANAMNESIS")
-    private String anamnesis; // ADDED: Arnaud
+    	private String anamnesis; // ADDED: Arnaud
     
 	@Column(name="OPD_ALLERGIES")
-    private String allergies; // ADDED: Arnaud
+    	private String allergies; // ADDED: Arnaud
     
 	@Column(name="OPD_THERAPIES")
-    private String therapies; // ADDED: Arnaud
+    	private String therapies; // ADDED: Arnaud
     
 	@Column(name="OPD_PRESCRIPTION")
-    private String prescription; // ADDED: Arnaud
+    	private String prescription; // ADDED: Arnaud
 	
 	@Transient
 	private volatile int hashCode = 0;
@@ -156,11 +156,11 @@ public class Opd extends Auditable<String> {
 	}
 	
 	/**
-     * @param aProgYear
-     * @param aSex
-     * @param aAge
-     * @param aDisease
-     */
+     	 * @param aProgYear
+     	 * @param aSex
+     	 * @param aAge
+     	 * @param aDisease
+     	 */
 	public Opd(int aProgYear, char aSex, int aAge, Disease aDisease) {
 		prog_year = aProgYear;
 		sex = aSex;
@@ -302,13 +302,13 @@ public class Opd extends Auditable<String> {
 		this.userID = userID;
 	}
         
-  public String getReason() {
+	public String getReason() {
 		return reason;
 	}
-
-  public void setReason(String reason) {
-      this.reason = reason;
-  }
+	
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 
 	public String getAnamnesis() {
 		return anamnesis;
