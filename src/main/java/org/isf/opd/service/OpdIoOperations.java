@@ -23,6 +23,7 @@ package org.isf.opd.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
@@ -201,10 +202,10 @@ public class OpdIoOperations {
 	}
 
 	/**
-   * @deprecated GregorianCalendar is no longer used, consider adding method in org.isf.utils.time.TimeTools.java
-   */
-  @Deprecated
-  private GregorianCalendar getBeginningOfYear(int year) {
+	* @deprecated GregorianCalendar is no longer used, consider adding method in org.isf.utils.time.TimeTools.java
+	*/	
+	@Deprecated
+	private GregorianCalendar getBeginningOfYear(int year) {
 		return new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar();
 	}
 
