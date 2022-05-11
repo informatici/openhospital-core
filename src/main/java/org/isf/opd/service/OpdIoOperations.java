@@ -203,7 +203,7 @@ public class OpdIoOperations {
 	}
 
 	/**
-	* @deprecated GregorianCalendar is no longer used, consider adding method in org.isf.utils.time.TimeTools.java
+	* @deprecated GregorianCalendar and JodaTime are no longer used, consider adding a method in {@link org.isf.utils.time.TimeTools] using java.time only 
 	*/	
 	@Deprecated
 	private GregorianCalendar getBeginningOfYear(int year) {
