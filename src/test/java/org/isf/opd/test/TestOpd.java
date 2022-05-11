@@ -57,7 +57,6 @@ public class TestOpd {
 			// Create Opd with all parameters 
 			opd = new Opd(prog_year, sex, age, disease);
 			opd.setDate(date);
-			opd.setNote(note);
 			opd.setReason(reason);
 			opd.setAnamnesis(anamnesis);
 			opd.setTherapies(therapies);
