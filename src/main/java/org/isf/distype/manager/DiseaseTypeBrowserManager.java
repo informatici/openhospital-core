@@ -137,4 +137,5 @@ public class DiseaseTypeBrowserManager {
 			throw new OHDataValidationException(errors);
 		}
 	}
+
 }

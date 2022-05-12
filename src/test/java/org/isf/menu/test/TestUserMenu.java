@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -43,7 +43,7 @@ public class TestUserMenu {
 
 		if (usingSet) {
 			userMenuItem = new UserMenuItem();
-			_setParameters(userMenuItem);
+			setParameters(userMenuItem);
 		} else {
 			// Create UserMenuItem with all parameters 
 			userMenuItem = new UserMenuItem(code, buttonLabel, altLabel, tooltip, shortcut, mySubmenu, myClass, isASubMenu, position, true);
@@ -52,7 +52,7 @@ public class TestUserMenu {
 		return userMenuItem;
 	}
 
-	public void _setParameters(UserMenuItem userMenuItem) {
+	public void setParameters(UserMenuItem userMenuItem) {
 		userMenuItem.setCode(code);
 		userMenuItem.setAltLabel(altLabel);
 		userMenuItem.setButtonLabel(buttonLabel);

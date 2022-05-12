@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -29,7 +29,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestOperation {
 
-	private String code = "999";
+	private String code = "ZZ";
 	private String description = "TestDescription";
 	private Integer major = 99;
 
@@ -39,7 +39,7 @@ public class TestOperation {
 
 		if (usingSet) {
 			operation = new Operation();
-			_setParameters(operation, operationType);
+			setParameters(operation, operationType);
 		} else {
 			// Create Operation with all parameters 
 			operation = new Operation(code, description, operationType, major);
@@ -48,7 +48,7 @@ public class TestOperation {
 		return operation;
 	}
 
-	public void _setParameters(Operation operation,
+	public void setParameters(Operation operation,
 			OperationType operationType) {
 		operation.setCode(code);
 		operation.setDescription(description);

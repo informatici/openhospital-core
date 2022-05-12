@@ -64,30 +64,30 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testDicomTypeGets() throws Exception {
-		String code = _setupTestDicomType(false);
-		_checkDicomTypeIntoDb(code);
+		String code = setupTestDicomType(false);
+		checkDicomTypeIntoDb(code);
 	}
 
 	@Test
 	public void testDicomTypeSets() throws Exception {
-		String code = _setupTestDicomType(true);
-		_checkDicomTypeIntoDb(code);
+		String code = setupTestDicomType(true);
+		checkDicomTypeIntoDb(code);
 	}
 
 	@Test
 	public void testIoGetDicomType() throws Exception {
-		String typeId = _setupTestDicomType(false);
+		String typeId = setupTestDicomType(false);
 		List<DicomType> dicomTypes = dicomTypeIoOperation.getDicomType();
 		testDicomType.check(dicomTypes.get(0));
 	}
 
 	@Test
 	public void testIoUpdateDicomType() throws Exception {
-		String typeId = _setupTestDicomType(false);
-		DicomType dicomType = dicomTypeIoOperationRepository.findOne(typeId);
+		String typeId = setupTestDicomType(false);
+		DicomType dicomType = dicomTypeIoOperationRepository.findById(typeId).get();
 		dicomType.setDicomTypeDescription("newDescription");
 		assertThat(dicomTypeIoOperation.updateDicomType(dicomType)).isTrue();
-		DicomType dicomType2 = dicomTypeIoOperationRepository.findOne(typeId);
+		DicomType dicomType2 = dicomTypeIoOperationRepository.findById(typeId).get();
 		assertThat(dicomType2.getDicomTypeDescription()).isEqualTo("newDescription");
 	}
 
@@ -95,7 +95,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoNewDicomType() throws Exception {
 		DicomType dicomType = new DicomType("id", "description");
 		assertThat(dicomTypeIoOperation.newDicomType(dicomType)).isTrue();
-		DicomType dicomType2 = dicomTypeIoOperationRepository.findOne(dicomType.getDicomTypeID());
+		DicomType dicomType2 = dicomTypeIoOperationRepository.findById(dicomType.getDicomTypeID()).get();
 		assertThat(dicomType2.getDicomTypeDescription()).isEqualTo("description");
 	}
 
@@ -116,18 +116,18 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetDicomType() throws Exception {
-		String typeId = _setupTestDicomType(false);
+		String typeId = setupTestDicomType(false);
 		List<DicomType> dicomTypes = dicomTypeBrowserManager.getDicomType();
 		testDicomType.check(dicomTypes.get(0));
 	}
 
 	@Test
 	public void testMgrUpdateDicomType() throws Exception {
-		String typeId = _setupTestDicomType(false);
-		DicomType dicomType = dicomTypeIoOperationRepository.findOne(typeId);
+		String typeId = setupTestDicomType(false);
+		DicomType dicomType = dicomTypeIoOperationRepository.findById(typeId).get();
 		dicomType.setDicomTypeDescription("newDescription");
 		assertThat(dicomTypeBrowserManager.updateDicomType(dicomType)).isTrue();
-		DicomType dicomType2 = dicomTypeIoOperationRepository.findOne(typeId);
+		DicomType dicomType2 = dicomTypeIoOperationRepository.findById(typeId).get();
 		assertThat(dicomType2.getDicomTypeDescription()).isEqualTo("newDescription");
 	}
 
@@ -135,7 +135,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewDicomType() throws Exception {
 		DicomType dicomType = new DicomType("id", "description");
 		assertThat(dicomTypeBrowserManager.newDicomType(dicomType)).isTrue();
-		DicomType dicomType2 = dicomTypeIoOperationRepository.findOne(dicomType.getDicomTypeID());
+		DicomType dicomType2 = dicomTypeIoOperationRepository.findById(dicomType.getDicomTypeID()).get();
 		assertThat(dicomType2.getDicomTypeDescription()).isEqualTo("description");
 	}
 
@@ -156,8 +156,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrValidationTypeIdIsEmpty() throws Exception {
-		String typeId = _setupTestDicomType(false);
-		DicomType dicomType = dicomTypeIoOperationRepository.findOne(typeId);
+		String typeId = setupTestDicomType(false);
+		DicomType dicomType = dicomTypeIoOperationRepository.findById(typeId).get();
 		dicomType.setDicomTypeID("");
 		assertThatThrownBy(() -> dicomTypeBrowserManager.updateDicomType(dicomType))
 				.isInstanceOf(OHDataValidationException.class)
@@ -169,8 +169,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrValidationTypeIdIsTooLong() throws Exception {
-		String typeId = _setupTestDicomType(false);
-		DicomType dicomType = dicomTypeIoOperationRepository.findOne(typeId);
+		String typeId = setupTestDicomType(false);
+		DicomType dicomType = dicomTypeIoOperationRepository.findById(typeId).get();
 		dicomType.setDicomTypeID("thisIsAKeyThatIsTooLong");
 		assertThatThrownBy(() -> dicomTypeBrowserManager.updateDicomType(dicomType))
 				.isInstanceOf(OHDataValidationException.class)
@@ -193,8 +193,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrValidationCodeAlreadyExists() throws Exception {
-		String typeId = _setupTestDicomType(true);
-		DicomType dicomType = dicomTypeIoOperationRepository.findOne(typeId);
+		String typeId = setupTestDicomType(true);
+		DicomType dicomType = dicomTypeIoOperationRepository.findById(typeId).get();
 		assertThatThrownBy(() -> dicomTypeBrowserManager.newDicomType(dicomType))
 				.isInstanceOf(OHDataIntegrityViolationException.class)
 				.has(
@@ -209,14 +209,14 @@ public class Tests extends OHCoreTestCase {
 		assertThat(dicomType).hasToString("someDescription");
 	}
 
-	private String _setupTestDicomType(boolean usingSet) throws OHException {
+	private String setupTestDicomType(boolean usingSet) throws OHException {
 		DicomType dicomType = testDicomType.setup(usingSet);
 		dicomTypeIoOperationRepository.saveAndFlush(dicomType);
 		return dicomType.getDicomTypeID();
 	}
 
-	private void _checkDicomTypeIntoDb(String code) throws OHException {
-		DicomType foundDicomType = dicomTypeIoOperationRepository.findOne(code);
+	private void checkDicomTypeIntoDb(String code) throws OHException {
+		DicomType foundDicomType = dicomTypeIoOperationRepository.findById(code).get();
 		testDicomType.check(foundDicomType);
 	}
 }

@@ -21,16 +21,16 @@
  */
 package org.isf.opd.service;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.GregorianCalendar;
 import java.util.List;
+import org.joda.time.DateTime;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.time.TimeTools;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,16 +69,11 @@ public class OpdIoOperations {
 	 * @return the list of Opds. It could be <code>empty</code>.
 	 * @throws OHServiceException 
 	 */
-	public List<Opd> getOpdList(boolean oneWeek) throws OHServiceException	{
-		GregorianCalendar dateFrom = TimeTools.getDateToday0();
-		GregorianCalendar dateTo = TimeTools.getDateToday24();
-
-		if (oneWeek) {
-			dateFrom.add(GregorianCalendar.WEEK_OF_YEAR,-1);
-		}
-
-
-		return getOpdList(MessageBundle.getMessage("angal.common.alltypes.txt"),MessageBundle.getMessage("angal.opd.alldiseases.txt"),dateFrom,dateTo,0,0,'A','A');
+	public List<Opd> getOpdList(boolean oneWeek) throws OHServiceException {
+		LocalDate dateTo = LocalDate.now();
+		LocalDate dateFrom = dateTo.minusWeeks(1);
+		return getOpdList(MessageBundle.getMessage("angal.common.alltypes.txt"), MessageBundle.getMessage("angal.opd.alldiseases.txt"), dateFrom, dateTo, 0, 0,
+				'A', 'A');
 	}
 	
 	/**
@@ -97,16 +92,14 @@ public class OpdIoOperations {
 	 */
 	public List<Opd> getOpdList(
 			String diseaseTypeCode,
-			String diseaseCode, 
-			GregorianCalendar dateFrom,
-			GregorianCalendar dateTo,
-			int ageFrom, 
+			String diseaseCode,
+			LocalDate dateFrom,
+			LocalDate dateTo,
+			int ageFrom,
 			int ageTo,
 			char sex,
-			char newPatient) throws OHServiceException	{
-		return new ArrayList<>(repository.findAllOpdWhereParams(
-				diseaseTypeCode, diseaseCode, dateFrom, dateTo,
-				ageFrom, ageTo, sex, newPatient));			
+			char newPatient) throws OHServiceException {
+		return repository.findAllOpdWhereParams(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient);
 	}
 	
 	/**
@@ -118,9 +111,9 @@ public class OpdIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public List<Opd> getOpdList(int patID) throws OHServiceException {
-		return new ArrayList<>(patID == 0 ?
+		return patID == 0 ?
 				repository.findAllOrderByProgYearDesc() :
-				repository.findAllByPatient_CodeOrderByProgYearDesc(patID));
+				repository.findAllByPatient_CodeOrderByProgYearDesc(patID);
 	}
 		
 	/**
@@ -167,8 +160,7 @@ public class OpdIoOperations {
 	public int getProgYear(int year) throws OHServiceException {
 		Integer progYear = year == 0 ?
 			repository.findMaxProgYear() :
-			repository.findMaxProgYearWhereDateBetween(getBeginningOfYear(year), getBeginningOfYear(year + 1));
-
+			repository.findMaxProgYearWhereDateBetween(LocalDateTime.of(year, 1, 1, 0, 0), LocalDateTime.of(year + 1, 1, 1, 0, 0));
 		return progYear == null ? 0 : progYear;
 	}
 
@@ -192,7 +184,7 @@ public class OpdIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 	
 	/**
@@ -206,17 +198,20 @@ public class OpdIoOperations {
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
 		List<Opd> opds = year == 0 ?
 			repository.findByProgYear(opdNum) :
-			repository.findByProgYearAndVisitDateBetween(opdNum, getBeginningOfYear(year), getBeginningOfYear(year + 1));
-
+			repository.findByProgYearAndDateBetween(opdNum, LocalDateTime.of(year, 1, 1, 0, 0), LocalDateTime.of(year + 1, 1, 1, 0, 0));
 		return !opds.isEmpty();
 	}
 
+	/**
+	* @deprecated GregorianCalendar and JodaTime are no longer used, consider adding a method in {@link org.isf.utils.time.TimeTools] using java.time only 
+	*/	
+	@Deprecated
 	private GregorianCalendar getBeginningOfYear(int year) {
 		return new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar();
 	}
 
 	public Opd findByCode(Integer code) {
 		// TODO Auto-generated method stub
-		return repository.findOne(code);
+		return repository.findById(code).orElse(null);
 	}
 }

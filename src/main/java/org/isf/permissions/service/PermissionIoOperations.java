@@ -52,7 +52,7 @@ public class PermissionIoOperations {
 	}
 
 	public Permission retrievePermissionById(Integer id) {
-		return this.repository.findOne(id);
+		return this.repository.findById(id).orElse(null);
 	}
 
 	public Permission retrievePermissionByName(String name) {
@@ -87,7 +87,7 @@ public class PermissionIoOperations {
 
 		// delete obsolete relations
 		List<GroupPermission> groupPermissionToDelete = this.groupPermissionRepository.findByUserGroup_codeInAndPermission_id(allUserGroupCodesToDelete, permission.getId());
-		this.groupPermissionRepository.delete(groupPermissionToDelete);
+		this.groupPermissionRepository.deleteAll(groupPermissionToDelete);
 
 		// store new relations
 		gp.forEach(item -> {
@@ -100,7 +100,7 @@ public class PermissionIoOperations {
 	}
 
 	public Boolean deletePermission(Integer id) {
-		this.repository.delete(id);
+		this.repository.deleteById(id);
 		return Boolean.TRUE;
 	}
 
@@ -109,7 +109,7 @@ public class PermissionIoOperations {
 	}
 
 	public boolean exists(int id) {
-		return this.repository.exists(id);
+		return this.repository.existsById(id);
 	}
 
 }

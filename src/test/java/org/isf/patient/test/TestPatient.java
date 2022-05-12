@@ -23,9 +23,8 @@ package org.isf.patient.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientProfilePhoto;
@@ -35,7 +34,7 @@ public class TestPatient {
 
 	private static String firstName = "TestFirstName";
 	private static String secondName = "TestSecondName";
-	private static Date birthDate = new GregorianCalendar(1984, Calendar.AUGUST, 14).getTime();
+	private static LocalDate birthDate = LocalDate.of(1984, Calendar.AUGUST, 14);
 	private static int age = 31; //IT WILL CHANGE WITH TIME
 	private static String agetype = "Date";
 	private static char sex = 'F';
@@ -62,7 +61,7 @@ public class TestPatient {
 		if (usingSet) {
 			patient = new Patient();
 			patient.setPatientProfilePhoto(new PatientProfilePhoto());
-			_setParameters(patient);
+			setParameters(patient);
 		} else {
 			// Create Patient with all parameters 
 			patient = new Patient(firstName, secondName, birthDate, age, agetype, sex,
@@ -75,7 +74,7 @@ public class TestPatient {
 		return patient;
 	}
 
-	public void _setParameters(Patient patient) {
+	public void setParameters(Patient patient) {
 		patient.setFirstName(firstName);
 		patient.setSecondName(secondName);
 		patient.setBirthDate(birthDate);
@@ -101,7 +100,7 @@ public class TestPatient {
 	public void check(Patient patient) {
 		assertThat(patient.getFirstName()).isEqualTo(firstName);
 		assertThat(patient.getSecondName()).isEqualTo(secondName);
-		assertThat(patient.getBirthDate()).hasSameTimeAs(birthDate);
+		assertThat(patient.getBirthDate()).isEqualTo(birthDate);
 		//assertThat(patient.getAge()).isEqualTo(age);
 		assertThat(patient.getAgetype()).isEqualTo(agetype);
 		assertThat(patient.getSex()).isEqualTo(sex);

@@ -151,7 +151,7 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public Patient getPatientAll(Integer code) throws OHServiceException {
-		Patient patient = repository.findOne(code);
+		Patient patient = repository.findById(code).orElse(null);
 		if (patient != null) {
 			Hibernate.initialize(patient.getPatientProfilePhoto());
 		}
@@ -225,7 +225,6 @@ public class PatientIoOperations {
 	public boolean mergePatientHistory(Patient mergedPatient, Patient obsoletePatient) throws OHServiceException {
 		repository.updateDeleted(obsoletePatient.getCode());
 		applicationEventPublisher.publishEvent(new PatientMergedEvent(obsoletePatient, mergedPatient));
-
 		return true;
 	}
 
@@ -237,7 +236,7 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 
 }

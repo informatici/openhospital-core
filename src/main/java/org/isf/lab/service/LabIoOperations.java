@@ -21,8 +21,8 @@
  */
 package org.isf.lab.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.lab.model.Laboratory;
@@ -79,13 +79,8 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Laboratory> getLaboratory() throws OHServiceException {
-		GregorianCalendar time1 = new GregorianCalendar();
-		GregorianCalendar time2 = new GregorianCalendar();
-		// 04/1/2009 ross: no roll, use add!!
-		//time1.roll(GregorianCalendar.WEEK_OF_YEAR, false);
-		time1.add(GregorianCalendar.WEEK_OF_YEAR, -1);
-		// 21/6/2008 ross: no rolling !!
-		//time2.roll(GregorianCalendar.DAY_OF_YEAR, true);
+		LocalDateTime time2 = LocalDateTime.now();
+		LocalDateTime time1 = time2.minusWeeks(1);
 		return getLaboratory(null, time1, time2);
 	}
 
@@ -97,10 +92,10 @@ public class LabIoOperations {
 	 * @return the list of {@link Laboratory}s 
 	 * @throws OHServiceException
 	 */
-	public List<Laboratory> getLaboratory(String exam,	GregorianCalendar dateFrom,	GregorianCalendar dateTo) throws OHServiceException {
-		return new ArrayList<>(exam != null ?
-				repository.findByExamDateBetweenAndExam_DescriptionOrderByExamDateDescRegistrationDateDesc(dateFrom, dateTo, exam) :
-				repository.findByExamDateBetweenOrderByExamDateDescRegistrationDateDesc(dateFrom, dateTo));
+	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+		return exam != null ?
+				repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam) :
+				repository.findByExamDateBetweenOrderByLabDateDesc(dateFrom.toLocalDate(), dateTo.toLocalDate());
 	}
 	
 	/**
@@ -110,7 +105,7 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Laboratory> getLaboratory(Patient aPatient) throws OHServiceException {
-		return repository.findByPatient_CodeOrderByRegistrationDate(aPatient.getCode());
+		return repository.findByPatient_CodeOrderByLabDate(aPatient.getCode());
 	}
 	
 	/**
@@ -120,12 +115,8 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<LaboratoryForPrint> getLaboratoryForPrint() throws OHServiceException {
-		GregorianCalendar time1 = new GregorianCalendar();
-		GregorianCalendar time2 = new GregorianCalendar();
-		//time1.roll(GregorianCalendar.WEEK_OF_YEAR, false);
-		time1.add(GregorianCalendar.WEEK_OF_YEAR, -1);
-		// 21/6/2008 ross: no rolling !!
-		//time2.roll(GregorianCalendar.DAY_OF_YEAR, true);
+		LocalDateTime time2 = LocalDateTime.now();
+		LocalDateTime time1 = time2.minusWeeks(1);
 		return getLaboratoryForPrint(null, time1, time2);
 	}
 	
@@ -138,24 +129,21 @@ public class LabIoOperations {
 	 * @return the list of {@link LaboratoryForPrint}s 
 	 * @throws OHServiceException
 	 */
-	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
-		Iterable<Laboratory> laboritories = new ArrayList<>(
-				exam != null ?
-						repository.findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam) :
-						repository.findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo)
-		);
+		Iterable<Laboratory> laboritories = exam != null
+				? repository.findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam)
+				: repository.findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo);
 
 		for (Laboratory laboratory : laboritories) {
 			pLaboratory.add(new LaboratoryForPrint(
 							laboratory.getCode(),
 							laboratory.getExam(),
-							laboratory.getRegistrationDate(),
+							laboratory.getDate(),
 							laboratory.getResult()
 					)
 			);
 		}
-
 		return pLaboratory;
 	}
 	
@@ -188,22 +176,20 @@ public class LabIoOperations {
 	 * @return <code>true</code> if the exam has been inserted with all its results, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newLabSecondProcedure(Laboratory laboratory,	List<String> labRow) throws OHServiceException {
+	public boolean newLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		boolean result = true;
-		
+
 		int newCode = newLaboratory(laboratory);
-		if (newCode > 0) 
-		{
+		if (newCode > 0) {
 			for (String aLabRow : labRow) {
 				LaboratoryRow laboratoryRow = new LaboratoryRow();
 				laboratoryRow.setLabId(laboratory);
-				laboratoryRow.setDescription(aLabRow);	
+				laboratoryRow.setDescription(aLabRow);
 
 				LaboratoryRow savedLaboratoryRow = rowRepository.save(laboratoryRow);
 				result = result && (savedLaboratoryRow != null);
 			}
 		}
-		
 		return result;
 	}
 
@@ -217,20 +203,16 @@ public class LabIoOperations {
 	 */
 	public boolean newLabSecondProcedure2(Laboratory laboratory, List<LaboratoryRow> labRow) throws OHServiceException {
 		boolean result = true;
-		
+
 		int newCode = newLaboratory(laboratory);
-		if (newCode > 0) 
-		{
-			laboratory = repository.getOne(newCode);
+		if (newCode > 0) {
+			laboratory = repository.findById(newCode).orElse(null);
 			for (LaboratoryRow aLabRow : labRow) {
 				aLabRow.setLabId(laboratory);
-				//laboratoryRow.setDescription(aLabRow);	
-
 				LaboratoryRow savedLaboratoryRow = rowRepository.save(aLabRow);
 				result = result && (savedLaboratoryRow != null);
 			}
 		}
-		
 		return result;
 	}
 	
@@ -242,8 +224,7 @@ public class LabIoOperations {
 	 */
 	private boolean updateLaboratory(Laboratory laboratory) throws OHServiceException	{
 		Laboratory savedLaboratory = repository.save(laboratory);
-
-		return (savedLaboratory != null);
+		return savedLaboratory != null;
 	}
 
 	/**
@@ -256,7 +237,6 @@ public class LabIoOperations {
 	public boolean updateLabFirstProcedure(Laboratory laboratory) throws OHServiceException	{
 		boolean result = updateLaboratory(laboratory);
 		rowRepository.deleteByLaboratory_Code(laboratory.getCode());
-		
 		return result;
 	}
 
@@ -269,7 +249,6 @@ public class LabIoOperations {
 	 */
 	public boolean updateLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		boolean result = updateLabFirstProcedure(laboratory);
-		
 		if (result)	{
 			for (String aLabRow : labRow) {
 				LaboratoryRow laboratoryRow = new LaboratoryRow();
@@ -278,7 +257,6 @@ public class LabIoOperations {
 				rowRepository.save(laboratoryRow);
 			}
 		}
-		
 		return result;
 	}
 
@@ -290,15 +268,12 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public boolean deleteLaboratory(Laboratory aLaboratory) throws OHServiceException {
-		boolean result = true;
-		Laboratory objToRemove = repository.findOne(aLaboratory.getCode());
-		
+		Laboratory objToRemove = repository.findById(aLaboratory.getCode()).orElse(null);
 		if (objToRemove.getExam().getProcedure() == 2) {
 			rowRepository.deleteByLaboratory_Code(objToRemove.getCode());
 		}
-		repository.delete(objToRemove.getCode());
-		
-		return result;
+		repository.deleteById(objToRemove.getCode());
+		return true;
 	}
 
 	/**
@@ -309,23 +284,7 @@ public class LabIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 
-
-  /*  public Integer newLabFirstProcedure2(Laboratory lab)throws OHServiceException {
-        System.out.println("ioOperations  nullllllllllllllllllllllllllllllll?");
-        System.out.println(repository == null);
-        return this.newLaboratory(lab);
-    }
-
-    public Laboratory newLabSecondProcedure2(Laboratory lab, ArrayList<LaboratoryRow> laboratoryRows) throws OHServiceException{
-        Laboratory labo = repository.save(lab);
-        laboratoryRows.get(0).setLabId(labo);
-        for (LaboratoryRow laboratoryRow : laboratoryRows) {
-            laboratoryRow.setLabId(labo);
-            rowRepository.save(laboratoryRow);
-        }
-        return labo;
-    }*/
 }

@@ -90,7 +90,7 @@ public class SqlDicomManager implements DicomManagerInterface {
 	 */
 	@Override
 	public boolean exist(int patientID, String seriesNumber) throws OHServiceException {
-		return ioOperations.isSeriePresent(seriesNumber);
+		return ioOperations.isSeriesPresent(seriesNumber);
 	}
 
 	/**

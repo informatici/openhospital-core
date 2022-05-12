@@ -26,11 +26,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Blob;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.imageio.ImageIO;
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -62,16 +61,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @Entity
 @Table(name = "DICOM")
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="DM_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="DM_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="DM_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="DM_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="DM_LAST_MODIFIED_DATE"))
-})
-public class FileDicom extends Auditable<String>
-{
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "DM_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "DM_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "DM_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "DM_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "DM_LAST_MODIFIED_DATE"))
+public class FileDicom extends Auditable<String> {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileDicom.class);
 
 	@Id 
@@ -81,7 +78,7 @@ public class FileDicom extends Auditable<String>
 	
 	@Column(name = "DM_DATA")
 	@Lob
-	private Blob dicomData;
+	private Blob dicomData; //TODO: move to a separated entity
 
 	@NotNull
 	@Column(name="DM_PAT_ID")
@@ -119,8 +116,8 @@ public class FileDicom extends Auditable<String>
 	@Column(name = "DM_FILE_ST_UID")
 	private String dicomStudyId = "";
 
-	@Column(name = "DM_FILE_ST_DATE")
-	private Date dicomStudyDate = null;
+	@Column(name = "DM_FILE_ST_DATE")	// SQL type: datetime
+	private LocalDateTime dicomStudyDate = null;
 
 	@Column(name = "DM_FILE_ST_DESCR")
 	private String dicomStudyDescription = "";
@@ -139,8 +136,8 @@ public class FileDicom extends Auditable<String>
 	@Column(name = "DM_FILE_SER_DESC_COD_SEQ")
 	private String dicomSeriesDescriptionCodeSequence = "";
 
-	@Column(name = "DM_FILE_SER_DATE")
-	private Date dicomSeriesDate = null;
+	@Column(name = "DM_FILE_SER_DATE")	// SQL type: datetime
+	private LocalDateTime dicomSeriesDate = null;
 
 	@Column(name = "DM_FILE_SER_DESC")
 	private String dicomSeriesDescription = "";
@@ -162,8 +159,8 @@ public class FileDicom extends Auditable<String>
 	@Transient
 	private volatile int hashCode = 0;
 	
-	@ManyToOne
-	@JoinColumn(name="DM_DCMT_ID")
+	@ManyToOne(optional=true) 
+	@JoinColumn(name="DM_DCMT_ID", nullable=true)
 	private DicomType dicomType;
 
 	
@@ -206,8 +203,8 @@ public class FileDicom extends Auditable<String>
 
 	public FileDicom(int patId, Blob dicomData, long idFile, String fileName, String dicomAccessionNumber, String dicomInstitutionName, String dicomPatientID, 
 			String dicomPatientName, String dicomPatientAddress, String dicomPatientAge, String dicomPatientSex, String dicomPatientBirthDate, 
-			String dicomStudyId, Date dicomStudyDate, String dicomStudyDescription, String dicomSeriesUID, String dicomSeriesInstanceUID, 
-			String dicomSeriesNumber, String dicomSeriesDescriptionCodeSequence, Date dicomSeriesDate, String dicomSeriesDescription, 
+			String dicomStudyId, LocalDateTime dicomStudyDate, String dicomStudyDescription, String dicomSeriesUID, String dicomSeriesInstanceUID,
+			String dicomSeriesNumber, String dicomSeriesDescriptionCodeSequence, LocalDateTime dicomSeriesDate, String dicomSeriesDescription,
 			String dicomInstanceUID, String modality, Blob dicomThumbnail, DicomType dicomType) 
 	{		
 		super();
@@ -239,6 +236,42 @@ public class FileDicom extends Auditable<String>
 	}
 	
 	/**
+	 * Construct an DICOM Data Model without main data (image) for fast retrieval from DB
+	 */
+	public FileDicom(int patId, long idFile, String fileName, String dicomAccessionNumber, String dicomInstitutionName, String dicomPatientID, 
+			String dicomPatientName, String dicomPatientAddress, String dicomPatientAge, String dicomPatientSex, String dicomPatientBirthDate,
+			String dicomStudyId, LocalDateTime dicomStudyDate, String dicomStudyDescription, String dicomSeriesUID, String dicomSeriesInstanceUID, 
+			String dicomSeriesNumber, String dicomSeriesDescriptionCodeSequence, LocalDateTime dicomSeriesDate, String dicomSeriesDescription,
+			String dicomInstanceUID, String modality, Blob dicomThumbnail, String dicomTypeId, String dicomTypeDesc) 
+	{		
+		super();
+		this.patId = patId;
+		this.idFile = idFile;
+		this.fileName = fileName;
+		this.dicomAccessionNumber = dicomAccessionNumber;
+		this.dicomInstitutionName = dicomInstitutionName;
+		this.dicomPatientID = dicomPatientID;
+		this.dicomPatientName = dicomPatientName;
+		this.dicomPatientAddress = dicomPatientAddress;
+		this.dicomPatientAge = dicomPatientAge;
+		this.dicomPatientSex = dicomPatientSex;
+		this.dicomPatientBirthDate = dicomPatientBirthDate;
+		this.dicomStudyId = dicomStudyId;
+		this.dicomStudyDate = dicomStudyDate;
+		this.dicomStudyDescription = dicomStudyDescription;
+		this.dicomSeriesUID = dicomSeriesUID;
+		this.dicomSeriesInstanceUID = dicomSeriesInstanceUID;
+		this.dicomSeriesNumber = dicomSeriesNumber;
+		this.dicomSeriesDescriptionCodeSequence = dicomSeriesDescriptionCodeSequence;
+		this.dicomSeriesDate = dicomSeriesDate;
+		this.dicomSeriesDescription = dicomSeriesDescription;
+		this.dicomInstanceUID = dicomInstanceUID;
+		this.modality = modality;
+		this.dicomThumbnail = dicomThumbnail;
+		this.dicomType = new DicomType(dicomTypeId, dicomTypeDesc);
+	}
+	
+	/**
 	 * @return the dicomData
 	 */
 	public Blob getDicomData() {
@@ -260,15 +293,10 @@ public class FileDicom extends Auditable<String>
 	 *            the dicomFile to set
 	 */
 	public void setDicomData(File dicomFile) {
-		try {
-
-			FileInputStream fis = new FileInputStream(dicomFile);
+		try (FileInputStream fis = new FileInputStream(dicomFile)) {
 			byte[] byteArray = new byte[fis.available()];
 			fis.read(byteArray);
-			fis.close();
-			Blob blob = new SerialBlob(byteArray);
-			this.dicomData = blob;
-
+			this.dicomData = new SerialBlob(byteArray);
 		} catch (Exception exception) {
 			LOGGER.error(exception.getMessage(), exception);
 		}
@@ -427,7 +455,7 @@ public class FileDicom extends Auditable<String>
 	/**
 	 * @return the dicomStudyDate
 	 */
-	public Date getDicomStudyDate() {
+	public LocalDateTime getDicomStudyDate() {
 		return dicomStudyDate;
 	}
 
@@ -435,7 +463,7 @@ public class FileDicom extends Auditable<String>
 	 * @param dicomStudyDate
 	 *            the dicomStudyDate to set
 	 */
-	public void setDicomStudyDate(Date dicomStudyDate) {
+	public void setDicomStudyDate(LocalDateTime dicomStudyDate) {
 		this.dicomStudyDate = dicomStudyDate;
 	}
 
@@ -517,7 +545,7 @@ public class FileDicom extends Auditable<String>
 	/**
 	 * @return the dicomSeriesDate
 	 */
-	public Date getDicomSeriesDate() {
+	public LocalDateTime getDicomSeriesDate() {
 		return dicomSeriesDate;
 	}
 
@@ -525,7 +553,7 @@ public class FileDicom extends Auditable<String>
 	 * @param dicomSeriesDate
 	 *            the dicomSeriesDate to set
 	 */
-	public void setDicomSeriesDate(Date dicomSeriesDate) {
+	public void setDicomSeriesDate(LocalDateTime dicomSeriesDate) {
 		this.dicomSeriesDate = dicomSeriesDate;
 	}
 
@@ -632,8 +660,7 @@ public class FileDicom extends Auditable<String>
 			if (ImageIO.write(dicomThumbnail, "JPEG", baos)) {
 				byteArray = baos.toByteArray();
 			}
-			Blob blob = new SerialBlob(byteArray);
-			this.dicomThumbnail = blob;
+			this.dicomThumbnail = new SerialBlob(byteArray);
 
 		} catch (Exception exception) {
 			LOGGER.error(exception.getMessage(), exception);

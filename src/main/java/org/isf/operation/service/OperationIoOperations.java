@@ -21,7 +21,6 @@
  */
 package org.isf.operation.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.operation.model.Operation;
@@ -61,9 +60,9 @@ public class OperationIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public List<Operation> getOperationByTypeDescription(String typeDescription) throws OHServiceException {
-		return new ArrayList<>(typeDescription == null ?
+		return typeDescription == null ?
 				repository.findByOrderByDescriptionAsc() :
-				repository.findAllByType_DescriptionContainsOrderByDescriptionAsc(typeDescription));
+				repository.findAllByType_DescriptionContainsOrderByDescriptionAsc("%" + typeDescription + "%");
 	}
 
 	public Operation findByCode(String code) throws OHServiceException{
@@ -118,7 +117,7 @@ public class OperationIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 	
 	/**

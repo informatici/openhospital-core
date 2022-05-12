@@ -25,7 +25,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -37,7 +38,6 @@ import javax.imageio.stream.ImageInputStream;
 import org.dcm4che2.data.ConfigurationError;
 import org.dcm4che2.data.DicomObject;
 import org.dcm4che2.data.Tag;
-import org.dcm4che2.imageio.plugins.dcm.DicomImageReadParam;
 import org.dcm4che2.imageio.plugins.dcm.DicomStreamMetaData;
 import org.dcm4che2.io.DicomCodingException;
 import org.imgscalr.Scalr;
@@ -57,6 +57,7 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
+import com.drew.metadata.exif.ExifDirectoryBase;
 import com.drew.metadata.exif.ExifIFD0Directory;
 
 /**
@@ -69,13 +70,13 @@ public class SourceFiles extends Thread {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SourceFiles.class);
 
-	private File file = null;
-	private FileDicom fileDicom = null;
-	private int patient = 0;
-	private int filesCount = 0;
+	private File file;
+	private FileDicom fileDicom;
+	private int patient;
+	private int filesCount;
 	private int filesLoaded = 0;
-	private AbstractDicomLoader dicomLoader = null;
-	private AbstractThumbnailViewGui thumbnail = null;
+	private AbstractDicomLoader dicomLoader;
+	private AbstractThumbnailViewGui thumbnail;
 
 	public SourceFiles(FileDicom fileDicom, File sourceFile, int patient, int filesCount, AbstractThumbnailViewGui thumbnail, AbstractDicomLoader frame) {
 		this.patient = patient;
@@ -179,12 +180,12 @@ public class SourceFiles extends Thread {
 		FileDicom dicomFileDetail = new FileDicom();
 		try {
 			String fileName = sourceFile.getName();
-			Date seriesDate = null;
-			Date studyDate = null;
+			LocalDateTime seriesDate = null;
+			LocalDateTime studyDate = null;
 			boolean isJpeg = StringUtils.endsWithIgnoreCase(fileName, ".jpg") || StringUtils.endsWithIgnoreCase(fileName, ".jpeg");
 			boolean isDicom = StringUtils.endsWithIgnoreCase(fileName, ".dcm");
 			ImageReader reader;
-			Iterator<?> iter = null;
+			Iterator<?> iter;
 			if (isJpeg) {
 				studyDate = FileTools.getTimestamp(sourceFile); //get last modified date (creation date)
 			} else if (isDicom) {
@@ -198,12 +199,12 @@ public class SourceFiles extends Thread {
 				DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
 				DicomObject dicomObject = dicomStreamMetaData.getDicomObject();
 				try {
-					seriesDate = dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime);
+					seriesDate = LocalDateTime.ofInstant(dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime).toInstant(), ZoneId.systemDefault());
 				} catch (Exception ecc) {
 					LOGGER.error("DICOM: Unparsable SeriesDate");
 				}
 				try {
-					studyDate = dicomObject.getDate(Tag.StudyDate, Tag.StudyTime);
+					studyDate = LocalDateTime.ofInstant(dicomObject.getDate(Tag.StudyDate, Tag.StudyTime).toInstant(), ZoneId.systemDefault());
 				} catch (Exception ecc) {
 					LOGGER.error("DICOM: Unparsable StudyDate");
 				}
@@ -249,14 +250,13 @@ public class SourceFiles extends Thread {
 			boolean isJpeg = StringUtils.endsWithIgnoreCase(sourceFile.getName(), ".jpg") || StringUtils.endsWithIgnoreCase(sourceFile.getName(), ".jpeg");
 			boolean isDicom = StringUtils.endsWithIgnoreCase(sourceFile.getName(), ".dcm");
 
-			ImageReader reader = null;
+			ImageReader reader;
 			ImageReadParam param;
 			BufferedImage originalImage;
-			Iterator<?> iter = null;
+			Iterator<?> iter;
 			if (isJpeg) {
 				iter = ImageIO.getImageReadersByFormatName("jpeg");
-				reader = (ImageReader) new com.sun.imageio.plugins.jpeg.JPEGImageReader(null);
-				//JPEGImageReadParam jpgParam = new JPEGImageReadParam();
+				reader = new com.sun.imageio.plugins.jpeg.JPEGImageReader(null);
 
 				ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
 
@@ -265,14 +265,14 @@ public class SourceFiles extends Thread {
 				originalImage = null;
 
 				try {
-					originalImage = reader.read(0); //, jpgParam);
+					originalImage = reader.read(0);
 
 					int orientation = checkOrientation(sourceFile);
 
 					if (orientation != 1) {
 						originalImage = autoRotate(originalImage, orientation);
 						String fileType = StringUtils.endsWithIgnoreCase(sourceFile.getName(), ".jpg") ? "jpg" : "jpeg";
-						File f = File.createTempFile(sourceFile.getName(), "." + fileType);
+						File f = File.createTempFile(sourceFile.getName(), '.' + fileType);
 						ImageIO.write(originalImage, fileType, f);
 						sourceFile = f;
 					}
@@ -292,7 +292,7 @@ public class SourceFiles extends Thread {
 				iter = ImageIO.getImageReadersByFormatName("DICOM");
 				reader = (ImageReader) iter.next();
 
-				param = (DicomImageReadParam) reader.getDefaultReadParam();
+				param = reader.getDefaultReadParam();
 
 				ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
 
@@ -325,13 +325,13 @@ public class SourceFiles extends Thread {
 			String patientID = String.valueOf(patient);
 			String patientName = dicomFileDetail.getDicomPatientName();
 			String patientSex = dicomFileDetail.getDicomPatientSex();
-			Date seriesDate = dicomFileDetail.getDicomSeriesDate();
+			LocalDateTime seriesDate = dicomFileDetail.getDicomSeriesDate();
 			String seriesDescription = dicomFileDetail.getDicomSeriesDescription();
 			String seriesDescriptionCodeSequence = dicomFileDetail.getDicomSeriesDescriptionCodeSequence();
 			String seriesNumber = dicomFileDetail.getDicomSeriesNumber();
 			String seriesInstanceUID = dicomFileDetail.getDicomSeriesInstanceUID();
 			String seriesUID = dicomFileDetail.getDicomSeriesUID();
-			Date studyDate = dicomFileDetail.getDicomStudyDate();
+			LocalDateTime studyDate = dicomFileDetail.getDicomStudyDate();
 			String studyDescription = dicomFileDetail.getDicomStudyDescription();
 			String studyUID = dicomFileDetail.getDicomStudyId();
 			String modality = dicomFileDetail.getModality();
@@ -350,12 +350,12 @@ public class SourceFiles extends Thread {
 				//overridden by the user
 				seriesDescription = seriesDescription != null ? seriesDescription : dicomObject.getString(Tag.SeriesDescription);
 				try {
-					studyDate = studyDate != null ? studyDate : dicomObject.getDate(Tag.StudyDate, Tag.StudyTime);
+					studyDate = studyDate != null ? studyDate : LocalDateTime.ofInstant(dicomObject.getDate(Tag.StudyDate, Tag.StudyTime).toInstant(), ZoneId.systemDefault());
 				} catch (Exception ecc) {
 					LOGGER.error("DICOM: Unparsable StudyDate");
 				}
 				try {
-					seriesDate = seriesDate != null ? seriesDate : dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime);
+					seriesDate = seriesDate != null ? seriesDate : LocalDateTime.ofInstant(dicomObject.getDate(Tag.SeriesDate, Tag.SeriesTime).toInstant(), ZoneId.systemDefault());
 				} catch (Exception ecc) {
 					LOGGER.error("DICOM: Unparsable SeriesDate");
 				}
@@ -381,18 +381,12 @@ public class SourceFiles extends Thread {
 				studyUID = dicomObject.getString(Tag.StudyInstanceUID) == null ? studyUID : dicomObject.getString(Tag.StudyInstanceUID);
 				accessionNumber = dicomObject.getString(Tag.AccessionNumber) == null ? accessionNumber : dicomObject.getString(Tag.AccessionNumber);
 				studyDescription = dicomObject.getString(Tag.StudyDescription) == null ? studyDescription : dicomObject.getString(Tag.StudyDescription);
-				//String studyComments = dicomObject.getString(Tag.StudyComments);
 				seriesUID = dicomObject.getString(Tag.SeriesInstanceUID) == null ? seriesUID : dicomObject.getString(Tag.SeriesInstanceUID);
-				//String directoryRecordType = dicomObject.getString(Tag.DirectoryRecordType);
 				seriesInstanceUID = dicomObject.getString(Tag.SeriesInstanceUID) == null ? seriesInstanceUID : dicomObject.getString(Tag.SeriesInstanceUID);
 				seriesNumber = dicomObject.getString(Tag.SeriesNumber) == null ? generateSeriesNumber(patient) : dicomObject.getString(Tag.SeriesNumber);
 				seriesDescriptionCodeSequence = dicomObject.getString(Tag.SeriesDescriptionCodeSequence) == null ?
 						seriesDescriptionCodeSequence :
 						dicomObject.getString(Tag.SeriesDescriptionCodeSequence);
-				//String sliceVector = dicomObject.getString(Tag.SliceVector);
-				//String sliceLocation = dicomObject.getString(Tag.SliceLocation);
-				//String sliceThickness = dicomObject.getString(Tag.SliceThickness);
-				//String sliceProgressionDirection = dicomObject.getString(Tag.SliceProgressionDirection);
 				institutionName = dicomObject.getString(Tag.InstitutionName) == null ? institutionName : dicomObject.getString(Tag.InstitutionName);
 				instanceUID = dicomObject.getString(Tag.SOPInstanceUID) == null ? instanceUID : dicomObject.getString(Tag.SOPInstanceUID);
 			}
@@ -464,7 +458,7 @@ public class SourceFiles extends Thread {
 		ExifIFD0Directory exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 		int orientation = 1;
 		try {
-			orientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+			orientation = exifIFD0Directory.getInt(ExifDirectoryBase.TAG_ORIENTATION);
 		} catch (Exception ex) {
 			LOGGER.error("No EXIF information found for image: {}", sourceFile.getName());
 		}
@@ -514,8 +508,8 @@ public class SourceFiles extends Thread {
 	 */
 	public static String generateSeriesNumber(int patient) throws OHServiceException {
 		Random random = new Random();
-		long candidateCode = 0;
-		boolean exists = false;
+		long candidateCode;
+		boolean exists;
 		do {
 			candidateCode = Math.abs(random.nextLong());
 			exists = DicomManagerFactory.getManager().exist(patient, String.valueOf(candidateCode));

@@ -89,11 +89,11 @@ public class PrintManager {
 					if (GeneralData.INTERNALVIEWER)
 						JasperViewer.viewReport(jasperPrint,false, new Locale(GeneralData.LANGUAGE));
 					else { 
-						String PDFfile = "rpt/PDF/" + filename + ".pdf";
-						JasperExportManager.exportReportToPdfFile(jasperPrint, PDFfile);
+						String pdfFile = "rpt/PDF/" + filename + ".pdf";
+						JasperExportManager.exportReportToPdfFile(jasperPrint, pdfFile);
 						try {
 							Runtime rt = Runtime.getRuntime();
-							rt.exec(GeneralData.VIEWER +" "+ PDFfile);
+							rt.exec(GeneralData.VIEWER +" "+ pdfFile);
 						} catch(Exception exception) {
 							LOGGER.error(exception.getMessage(), exception);
 						}

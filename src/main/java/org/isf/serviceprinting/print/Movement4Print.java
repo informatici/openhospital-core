@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,41 +21,44 @@
  */
 package org.isf.serviceprinting.print;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.medicalstock.model.Movement;
 
 public class Movement4Print {
-	private GregorianCalendar date;
+	private LocalDateTime date;
 	private String pharmaceuticalName;
 	private String pharmaceuticalType;
 	private String movementType;
 	private String ward;
 	private int quantity;
 	private String lot;
-	
-	public Movement4Print(Movement movement){
-		date=movement.getDate();
-		pharmaceuticalName=movement.getMedical().getDescription();
-		pharmaceuticalType=movement.getMedical().getType().getDescription();
-		movementType=movement.getType().getType();
-		if (movement.getWard() != null)
-			ward=movement.getWard().getDescription();
-		quantity=movement.getQuantity();
-		lot=movement.getLot().getCode();
+
+	public Movement4Print(Movement movement) {
+		date = movement.getDate();
+		pharmaceuticalName = movement.getMedical().getDescription();
+		pharmaceuticalType = movement.getMedical().getType().getDescription();
+		movementType = movement.getType().getType();
+		if (movement.getWard() != null) {
+			ward = movement.getWard().getDescription();
+		}
+		quantity = movement.getQuantity();
+		lot = movement.getLot().getCode();
 	}
 
 	public String getDate() {
 		return getConvertedString(date);
 	}
 
-	public void setDate(GregorianCalendar date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
 	public String getLot() {
-		if(lot!=null)return lot;
-		else return "No Lot";
+		if (lot != null) {
+			return lot;
+		}
+		return "No Lot";
 	}
 
 	public void setLot(String lot) {
@@ -95,22 +98,25 @@ public class Movement4Print {
 	}
 
 	public String getWard() {
-		if(ward==null)return "No Ward";
+		if (ward == null) {
+			return "No Ward";
+		}
 		return ward;
 	}
 
 	public void setWard(String ward) {
 		this.ward = ward;
 	}
-	private String getConvertedString(GregorianCalendar time) {
-		if (time == null)
+
+	private String getConvertedString(LocalDateTime time) {
+		if (time == null) {
 			return "No Date";
-		String string = String
-				.valueOf(time.get(GregorianCalendar.DAY_OF_MONTH));
-		string += "/" + (time.get(GregorianCalendar.MONTH) + 1);
-		String year = String.valueOf(time.get(GregorianCalendar.YEAR));
-		year = year.substring(2, year.length());
-		string += "/" + year;
+		}
+		String string = time.getDayOfMonth() + "/" + time.getMonthValue();
+		String year = String.valueOf(time.getYear());
+		year = year.substring(2);
+		string += '/' + year;
 		return string;
 	}
+
 }
