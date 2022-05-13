@@ -100,7 +100,7 @@ public class GroupMenu extends Auditable<String> {
 	}
 
 	@Override
-	public int getActive() {
+	public Integer getActive() {
 		return active;
 	}
 
