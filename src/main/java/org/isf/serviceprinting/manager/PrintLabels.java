@@ -50,9 +50,8 @@ public class PrintLabels {
 			StringBuilder sbFilename = new StringBuilder();
 			sbFilename.append("rpt");
 			sbFilename.append(File.separator);
-			String jasperFileName = filename;
 
-			sbFilename.append(jasperFileName);
+			sbFilename.append(filename);
 			sbFilename.append(".jasper");
 			File jasperFile = new File(sbFilename.toString());
 			Connection conn = DbSingleJpaConn.getConnection();

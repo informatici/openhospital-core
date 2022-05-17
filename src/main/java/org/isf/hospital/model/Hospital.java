@@ -22,7 +22,6 @@
 package org.isf.hospital.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -45,18 +44,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="HOSPITAL")
+@Table(name = "HOSPITAL")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="HOS_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="HOS_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="HOS_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="HOS_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="HOS_LAST_MODIFIED_DATE"))
-})
-public class Hospital extends Auditable<String> 
-{
-	@Id 
+@AttributeOverride(name = "createdBy", column = @Column(name = "HOS_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "HOS_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "HOS_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "HOS_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "HOS_LAST_MODIFIED_DATE"))
+public class Hospital extends Auditable<String> {
+
+	@Id
 	@Column(name="HOS_ID_A")
     private String code;
 
@@ -90,18 +87,18 @@ public class Hospital extends Auditable<String>
 
 	@Transient
 	private volatile int hashCode = 0;
-	
-    public Hospital(){
-    	super();
-        this.code = null;
-        this.description = null;
-        this.address = null;
-        this.city = null;
-        this.telephone = null;
-        this.fax = null;
-        this.email = null;
-        this.currencyCod = null;
-    }
+
+	public Hospital() {
+		super();
+		this.code = null;
+		this.description = null;
+		this.address = null;
+		this.city = null;
+		this.telephone = null;
+		this.fax = null;
+		this.email = null;
+		this.currencyCod = null;
+	}
 
 	/**
 	 * @param aCode
@@ -201,15 +198,14 @@ public class Hospital extends Auditable<String>
 
 	@Override
 	public boolean equals(Object anObject) {
-		return !(anObject instanceof Hospital) ? false
-				: (getCode().equals(((Hospital) anObject).getCode())
-						&& getDescription().equalsIgnoreCase(((Hospital) anObject).getDescription())
-						&& getTelephone().equalsIgnoreCase(((Hospital) anObject).getTelephone())
-						&& getFax().equalsIgnoreCase(((Hospital) anObject).getFax())
-						&& getAddress().equalsIgnoreCase(((Hospital) anObject).getAddress())
-						&& getCity().equalsIgnoreCase(((Hospital) anObject).getCity())
-						&& getEmail().equalsIgnoreCase(((Hospital) anObject).getEmail()) 
-						&& getCurrencyCod().equalsIgnoreCase(((Hospital) anObject).getCurrencyCod()));
+		return anObject instanceof Hospital && (getCode().equals(((Hospital) anObject).getCode())
+				&& getDescription().equalsIgnoreCase(((Hospital) anObject).getDescription())
+				&& getTelephone().equalsIgnoreCase(((Hospital) anObject).getTelephone())
+				&& getFax().equalsIgnoreCase(((Hospital) anObject).getFax())
+				&& getAddress().equalsIgnoreCase(((Hospital) anObject).getAddress())
+				&& getCity().equalsIgnoreCase(((Hospital) anObject).getCity())
+				&& getEmail().equalsIgnoreCase(((Hospital) anObject).getEmail())
+				&& getCurrencyCod().equalsIgnoreCase(((Hospital) anObject).getCurrencyCod()));
 	}
 
 	public String toString() {

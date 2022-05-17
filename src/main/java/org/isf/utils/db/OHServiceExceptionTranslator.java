@@ -69,6 +69,11 @@ public class OHServiceExceptionTranslator {
 			throw new OHDataLockFailureException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.sql.thedatahasbeenupdatedbysomeoneelse.msg"),
 					OHSeverityLevel.ERROR));
+    	} catch (OutOfMemoryError oome) {
+    		LOGGER.error(oome.getMessage(), oome);
+    		throw new OHServiceException(oome, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"), 
+					MessageBundle.getMessage("angal.sql.pleaseconsiderenablingtheenhancedsearchsettingseeadminmanualformoreinfo.msg"),
+					OHSeverityLevel.WARNING));
     	} catch (Throwable throwable) {
     		LOGGER.error(throwable.getMessage(), throwable);
     		throw new OHServiceException(throwable, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
@@ -76,4 +81,5 @@ public class OHServiceExceptionTranslator {
 				    OHSeverityLevel.ERROR));
 		}
 	}
+
 }

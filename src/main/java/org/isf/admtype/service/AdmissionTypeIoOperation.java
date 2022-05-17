@@ -57,16 +57,8 @@ public class AdmissionTypeIoOperation
 	 * @return <code>true</code> if the admission type has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateAdmissionType(
-			AdmissionType admissionType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		AdmissionType savedAdmissionType = repository.save(admissionType);
-		result = (savedAdmissionType != null);
-		
-		return result;
+	public boolean updateAdmissionType(AdmissionType admissionType) throws OHServiceException {
+		return repository.save(admissionType) != null;
 	}
 
 	/**
@@ -75,16 +67,8 @@ public class AdmissionTypeIoOperation
 	 * @return <code>true</code> if the admission type has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the storing operation.
 	 */
-	public boolean newAdmissionType(
-			AdmissionType admissionType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		AdmissionType savedAdmissionType = repository.save(admissionType);
-		result = (savedAdmissionType != null);
-		
-		return result;
+	public boolean newAdmissionType(AdmissionType admissionType) throws OHServiceException {
+		return repository.save(admissionType) != null;
 	}
 
 	/**
@@ -93,15 +77,9 @@ public class AdmissionTypeIoOperation
 	 * @return <code>true</code> if the admission type has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the delete operation.
 	 */
-	public boolean deleteAdmissionType(
-			AdmissionType admissionType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteAdmissionType(AdmissionType admissionType) throws OHServiceException {
 		repository.delete(admissionType);
-		
-		return result;	
+		return true;
 	}
 
 	/**
@@ -110,14 +88,7 @@ public class AdmissionTypeIoOperation
 	 * @return <code>true</code> if the code is already used, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.existsById(code);
 	}
 }

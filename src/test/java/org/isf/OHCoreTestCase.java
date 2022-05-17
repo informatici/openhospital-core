@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -41,8 +41,8 @@ public abstract class OHCoreTestCase {
 	public void cleanH2InMemoryDb() {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
-		List<Object[]> show_tables = entityManager.createNativeQuery("SHOW TABLES").getResultList();
-		show_tables
+		List<Object[]> showTables = entityManager.createNativeQuery("SHOW TABLES").getResultList();
+		showTables
 				.stream()
 				.map(result -> (String) result[0])
 				.forEach(s -> truncateTable(s, entityManager));

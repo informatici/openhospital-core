@@ -21,10 +21,10 @@
  */
 package org.isf.accounting.model;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -52,35 +52,33 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="BILLS")
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="BLL_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="BLL_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="BLL_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="BLL_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="BLL_LAST_MODIFIED_DATE"))
-})
-public class Bill extends Auditable<String> implements Comparable<Bill> 
-{	
-	@Id 
+@Table(name = "BILLS")
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "BLL_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "BLL_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "BLL_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "BLL_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "BLL_LAST_MODIFIED_DATE"))
+public class Bill extends Auditable<String> implements Comparable<Bill> {
+
+	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="BLL_ID")
 	private int id;
 	
 	@NotNull
-	@Column(name="BLL_DATE")
-	private GregorianCalendar date;
+	@Column(name="BLL_DATE")		// SQL type: datetime
+	private LocalDateTime date;
 
 	@NotNull
-	@Column(name="BLL_UPDATE")
-	private GregorianCalendar update;
+	@Column(name="BLL_UPDATE")		// SQL type: datetime
+	private LocalDateTime update;
 
 	@NotNull
 	@Column(name="BLL_IS_LST")
 	private boolean isList;
 	
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.MERGE})
 	@JoinColumn(name="BLL_ID_LST")
 	private PriceList list;
 	
@@ -91,7 +89,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 	@Column(name="BLL_IS_PAT")
 	private boolean isPatient;
 	
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.MERGE})
 	@JoinColumn(name="BLL_ID_PAT")
 	private Patient billPatient;
 		
@@ -118,8 +116,8 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 	public Bill() {
 		super();
 		this.id = 0;
-		this.date = new GregorianCalendar();
-		this.update = new GregorianCalendar();
+		this.date = LocalDateTime.now();
+		this.update = LocalDateTime.now();
 		this.isList = true;
 		this.listName = "";
 		this.isPatient = false;
@@ -130,7 +128,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 		this.user = "admin";
 	}
 
-	public Bill(int id, GregorianCalendar date, GregorianCalendar update,
+	public Bill(int id, LocalDateTime  date, LocalDateTime  update,
 			boolean isList, PriceList list, String listName, boolean isPatient,
 			Patient billPatient, String patName, String status, Double amount, Double balance, String user) {
 		super();
@@ -156,16 +154,16 @@ public class Bill extends Auditable<String> implements Comparable<Bill>
 	public void setId(int id) {
 		this.id = id;
 	}
-	public GregorianCalendar getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
-	public void setDate(GregorianCalendar date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
-	public GregorianCalendar getUpdate() {
+	public LocalDateTime getUpdate() {
 		return update;
 	}
-	public void setUpdate(GregorianCalendar update) {
+	public void setUpdate(LocalDateTime update) {
 		this.update = update;
 	}
 	public boolean isList() {

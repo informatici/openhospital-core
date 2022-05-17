@@ -21,12 +21,10 @@
  */
 package org.isf.visits.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -39,6 +37,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
 import org.isf.ward.model.Ward;
@@ -54,21 +53,18 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="VISITS")
+@Table(name = "VISITS")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="VST_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="VST_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="VST_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="VST_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="VST_LAST_MODIFIED_DATE"))
-})
-public class Visit  extends Auditable<String>
-{
-	
-	@Id 
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="VST_ID")
+@AttributeOverride(name = "createdBy", column = @Column(name = "VST_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "VST_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "VST_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "VST_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "VST_LAST_MODIFIED_DATE"))
+public class Visit extends Auditable<String> {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "VST_ID")
 	private int visitID;
 
 	@NotNull
@@ -76,14 +72,16 @@ public class Visit  extends Auditable<String>
 	@JoinColumn(name="VST_PAT_ID")
 	private Patient patient;
 	
-	@NotNull
+	/**
+	 * if {@code null} the visit is meant for OPD. 
+	 */
 	@ManyToOne
 	@JoinColumn(name="VST_WRD_ID_A")
 	private Ward ward;
 
 	@NotNull
-	@Column(name="VST_DATE")
-	private GregorianCalendar date;
+	@Column(name="VST_DATE") 		// SQL type: datetime
+	private LocalDateTime date;
 	
 	@Column(name="VST_NOTE")	
 	private String note;
@@ -105,7 +103,7 @@ public class Visit  extends Auditable<String>
 		super();
 	}
 
-	public Visit(int visitID, GregorianCalendar date, Patient patient, String note, boolean sms, Ward ward, Integer duration, String service) {
+	public Visit(int visitID, LocalDateTime date, Patient patient, String note, boolean sms, Ward ward, Integer duration, String service) {
 		super();
 		this.visitID = visitID;
 		this.date = date;
@@ -117,18 +115,12 @@ public class Visit  extends Auditable<String>
 		this.service = service;
 	}
 	
-	public GregorianCalendar getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(GregorianCalendar date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
-	}
-	
-	public void setDate(Date date) {
-		GregorianCalendar gregorian = new GregorianCalendar();
-		gregorian.setTime(date);
-		setDate(gregorian);
 	}
 
 	public int getVisitID() {
@@ -186,21 +178,19 @@ public class Visit  extends Auditable<String>
 		this.sms = sms;
 	}
 	
-
-	
 	public String toStringSMS() {
 		
 		return formatDateTimeSMS(this.date);
 	}
 
-	public String formatDateTime(GregorianCalendar time) {
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy - HH:mm:ss"); //$NON-NLS-1$
-		return format.format(time.getTime());
+	public String formatDateTime(LocalDateTime time) {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yy - HH:mm:ss");
+		return time.format(dtf);
 	}
 	
-	public String formatDateTimeSMS(GregorianCalendar time) {
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm"); //$NON-NLS-1$
-		return format.format(time.getTime());
+	public String formatDateTimeSMS(LocalDateTime time) {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
+		return time.format(dtf);
 	}
 	
 	@Override
@@ -216,11 +206,22 @@ public class Visit  extends Auditable<String>
 		Visit visit = (Visit)obj;
 		return (visitID == visit.getVisitID());
 	}
+	
 	public String toString() {
-		String desc = ""+ (ward == null ? "" : ward.getDescription()) + " - "+ this.service + " - " + formatDateTime(this.date);
+		StringBuilder sb = new StringBuilder();
+		if (ward != null) {
+			sb.append(ward.getDescription());
+		} else {
+			sb.append(MessageBundle.getMessage("angal.menu.opd"));
+		}
+		if (service != null) {
+			sb.append(" - ").append(service);
+		}
+		sb.append(" - ").append(formatDateTime(this.date));
 		
-		return desc;
+		return sb.toString();
 	}
+	
 	@Override
 	public int hashCode() {
 	    if (this.hashCode == 0) {
@@ -231,7 +232,7 @@ public class Visit  extends Auditable<String>
 	        
 	        this.hashCode = c;
 	    }
-	  
 	    return this.hashCode;
 	}
+
 }

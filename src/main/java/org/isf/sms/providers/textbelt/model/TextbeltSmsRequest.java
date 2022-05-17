@@ -63,8 +63,4 @@ public class TextbeltSmsRequest implements Serializable {
 		return "TextbeltSmsRequest [phone=***" + ", message=***" + ", key=***" + "]";
 	}
 
-	private String hide(String value, boolean isHidden) {
-		return isHidden ? "***" : value;
-	}
-
 }

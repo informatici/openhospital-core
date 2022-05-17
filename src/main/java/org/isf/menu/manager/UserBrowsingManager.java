@@ -120,10 +120,11 @@ public class UserBrowsingManager {
 	 * @return <code>true</code> if the user has been deleted, <code>false</code> otherwise.
 	 */
 	public boolean deleteUser(User user) throws OHServiceException {
-		if (user.getUserName().equals("admin"))
+		if (user.getUserName().equals("admin")) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.userbrowser.theadminusercannotbedeleted.msg"),
 					OHSeverityLevel.ERROR));
+		}
 		return ioOperations.deleteUser(user);
 	}
 
@@ -210,9 +211,8 @@ public class UserBrowsingManager {
 			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.formatMessage("angal.groupsbrowser.thegroupalreadyexists.fmt.msg", code),
 					OHSeverityLevel.ERROR));
-		} else {
-			return ioOperations.newUserGroup(aGroup);
 		}
+		return ioOperations.newUserGroup(aGroup);
 	}
 
 	/**

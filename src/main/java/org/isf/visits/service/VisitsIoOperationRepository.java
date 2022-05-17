@@ -38,7 +38,11 @@ public interface VisitsIoOperationRepository extends JpaRepository<Visit, Intege
 	Visit findAllByVisitID(@Param("visitID") int visitID);
 
 	List<Visit> findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(@Param("patient") Integer patient);
+	
+	List<Visit> findAllByWardIsNullOrderByPatient_CodeAscDateAsc();
 
+	List<Visit> findAllByWardIsNullAndPatient_CodeOrderByPatient_CodeAscDateAsc(@Param("patient") Integer patient);
+	
 	@Modifying
 	void deleteByPatient_Code(@Param("patient") Integer patient);
 

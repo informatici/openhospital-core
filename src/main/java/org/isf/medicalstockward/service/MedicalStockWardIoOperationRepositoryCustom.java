@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,14 +21,14 @@
  */
 package org.isf.medicalstockward.service;
 
-import org.springframework.stereotype.Repository;
-
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MedicalStockWardIoOperationRepositoryCustom {
 
-	List<Integer> findAllWardMovement(String wardId, GregorianCalendar dateFrom, GregorianCalendar dateTo);
-	
+	List<Integer> findAllWardMovement(String wardId, LocalDateTime dateFrom, LocalDateTime dateTo);
+
 }

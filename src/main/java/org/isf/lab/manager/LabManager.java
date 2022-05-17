@@ -21,10 +21,12 @@
  */
 package org.isf.lab.manager;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
@@ -77,14 +79,15 @@ public class LabManager {
 	 */
 	protected void validateLaboratory(Laboratory laboratory) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		if (laboratory.getRegistrationDate() == null)
-			laboratory.setRegistrationDate(new GregorianCalendar());
+		if (laboratory.getExamDate() == null) {
+			laboratory.setExamDate(LocalDate.now());
+		}
 		if (laboratory.getExam() != null && laboratory.getExam().getProcedure() == 2) {
 			laboratory.setResult(MessageBundle.getMessage("angal.lab.multipleresults.txt"));
 		}
 
 		// Check Exam Date
-		if (laboratory.getExamDate() == null) {
+		if (laboratory.getDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.pleaseinsertavalidexamdate.msg"),
 					OHSeverityLevel.ERROR));
@@ -122,7 +125,7 @@ public class LabManager {
 					MessageBundle.getMessage("angal.lab.pleaseselectamaterial.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (laboratory.getExamDate() == null) {
+		if (laboratory.getDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.pleaseinsertanexamdate.msg"),
 					OHSeverityLevel.ERROR));
@@ -167,7 +170,7 @@ public class LabManager {
 	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
 	 * @throws OHServiceException
 	 */
-	public List<Laboratory> getLaboratory(String exam, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return ioOperations.getLaboratory(exam, dateFrom, dateTo);
 	}
 
@@ -182,10 +185,9 @@ public class LabManager {
 	 * @return the list of {@link LaboratoryForPrint}s . It could be <code>empty</code>.
 	 * @throws OHServiceException
 	 */
-	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		List<LaboratoryForPrint> labs = ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo);
 		setLabMultipleResults(labs);
-
 		return labs;
 	}
 
@@ -280,7 +282,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public boolean newLaboratory(List<Laboratory> labList, List<ArrayList<String>> labRowList) throws OHServiceException {
+	public boolean newLaboratory(List<Laboratory> labList, List<List<String>> labRowList) throws OHServiceException {
 		if (labList.isEmpty())
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.noexamsinserted.msg"),
@@ -305,7 +307,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public boolean newLaboratory2(List<Laboratory> labList, List<ArrayList<LaboratoryRow>> labRowList) throws OHServiceException {
+	public boolean newLaboratory2(List<Laboratory> labList, List<List<LaboratoryRow>> labRowList) throws OHServiceException {
 		if (labList.isEmpty())
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.noexamsinserted.msg"),
@@ -386,7 +388,7 @@ public class LabManager {
 
 	private void setLabMultipleResults(List<LaboratoryForPrint> labs) throws OHServiceException {
 
-		List<LaboratoryRow> rows = null;
+		List<LaboratoryRow> rows;
 
 		for (LaboratoryForPrint lab : labs) {
 			String labResult = lab.getResult();
@@ -398,7 +400,7 @@ public class LabManager {
 				} else {
 					lab.setResult(MessageBundle.getMessage("angal.lab.positive.txt") + " : " + rows.get(0).getDescription());
 					for (LaboratoryRow row : rows) {
-						labResult += ("," + row.getDescription());
+						labResult += (',' + row.getDescription());
 					}
 					lab.setResult(labResult);
 				}
@@ -419,9 +421,9 @@ public class LabManager {
 		if (materialHashMap == null) {
 			buildMaterialHashMap();
 		}
-		for (String key : materialHashMap.keySet()) {
-			if (materialHashMap.get(key).equals(description)) {
-				return key;
+		for (Map.Entry<String, String> entry : materialHashMap.entrySet()) {
+			if (entry.getValue().equals(description)) {
+				return entry.getKey();
 			}
 		}
 		return "undefined";
@@ -462,7 +464,7 @@ public class LabManager {
 		materialDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.lab.undefined.txt")));
 		return materialDescriptionList;
 	}
-     public Laboratory getLaboratory(int code)  throws OHServiceException {
+   public Laboratory getLaboratory(int code)  throws OHServiceException {
 	        return ioOperations.getLaboratory(code);
 	}
 	  
@@ -486,4 +488,5 @@ public class LabManager {
     }*/
 	
 	
+
 }

@@ -21,8 +21,7 @@
  */
 package org.isf.examination.service;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.examination.model.PatientExamination;
@@ -50,10 +49,8 @@ public class ExaminationOperations {
 	/**
 	 * Get from last PatientExamination (only height, weight & note)
 	 */
-	public PatientExamination getFromLastPatientExamination(
-			PatientExamination lastPatientExamination)
-	{
-		PatientExamination newPatientExamination = new PatientExamination(new GregorianCalendar(),
+	public PatientExamination getFromLastPatientExamination(PatientExamination lastPatientExamination) {
+		return new PatientExamination(LocalDateTime.now(),
 				lastPatientExamination.getPatient(),
 				lastPatientExamination.getPex_height(),
 				lastPatientExamination.getPex_weight(),
@@ -69,7 +66,6 @@ public class ExaminationOperations {
 				lastPatientExamination.getPex_rr(),
 				lastPatientExamination.getPex_auscultation(),
 				lastPatientExamination.getPex_note());
-		return newPatientExamination;
 	}
 
 	/**
@@ -82,8 +78,8 @@ public class ExaminationOperations {
 		repository.save(patex);
 	}
 
-	public PatientExamination getByID(int ID) throws OHServiceException {
-		return repository.findOne(ID);
+	public PatientExamination getByID(int id) throws OHServiceException {
+		return repository.findById(id).orElse(null);
 	}
 
 	public PatientExamination getLastByPatID(int patID) throws OHServiceException	{
@@ -93,13 +89,9 @@ public class ExaminationOperations {
 
 	public List<PatientExamination> getLastNByPatID(int patID, int number) throws OHServiceException {
 		if (number > 0) {
-			return new ArrayList<>(repository
-							.findByPatient_CodeOrderByPexDateDesc(patID, new PageRequest(0, number)).getContent());
-		} else {
-			return new ArrayList<>(repository
-							.findByPatient_CodeOrderByPexDateDesc(patID));
+			return repository.findByPatient_CodeOrderByPexDateDesc(patID, PageRequest.of(0, number)).getContent();
 		}
-		
+		return repository.findByPatient_CodeOrderByPexDateDesc(patID);
 	}
 
 	public List<PatientExamination> getByPatID(int patID) throws OHServiceException	{
@@ -107,6 +99,6 @@ public class ExaminationOperations {
 	}
 
 	public void remove(List<PatientExamination> patexList) throws OHServiceException {
-		repository.delete(patexList);
+		repository.deleteAll(patexList);
 	}
 }

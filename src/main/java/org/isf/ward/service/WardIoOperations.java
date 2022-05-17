@@ -76,15 +76,10 @@ public class WardIoOperations {
 	 * @throws OHServiceException if an error occurs retrieving the wards.
 	 */
 	public List<Ward> getWards(String wardID) throws OHServiceException {
-		List<Ward> wards = null;
-
 		if (wardID != null && wardID.trim().length() > 0) {
-			wards = new ArrayList<>(repository.findByCodeContains(wardID));
-		} else {
-			wards = new ArrayList<>(repository.findAll());
+			return repository.findByCodeContains(wardID);
 		}
-
-		return wards;
+		return repository.findAll();
 	}
 	
 	/**
@@ -125,9 +120,8 @@ public class WardIoOperations {
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
-	
 	
 	/**
 	 * Check if the maternity ward exists
@@ -146,11 +140,11 @@ public class WardIoOperations {
 	 * @throws OHServiceException
 	 * @throws IllegalArgumentException if {@code code} is {@literal null}
 	 */
-	public Ward findWard(String code) throws OHServiceException
-	{
+	public Ward findWard(String code) throws OHServiceException {
 		if (code != null) {
-			return repository.findOne(code);
-		}else
-			throw new IllegalArgumentException("code must not be null");
+			return repository.findById(code).orElse(null);
+		}
+		throw new IllegalArgumentException("code must not be null");
 	}
+
 }

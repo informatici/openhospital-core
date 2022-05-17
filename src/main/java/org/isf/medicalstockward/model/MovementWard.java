@@ -21,10 +21,9 @@
  */
 package org.isf.medicalstockward.model;
 
-import java.util.GregorianCalendar;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
+import java.time.LocalDateTime;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -37,10 +36,10 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
 import org.isf.patient.model.Patient;
+import org.isf.utils.db.Auditable;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -54,18 +53,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="MEDICALDSRSTOCKMOVWARD")
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="MMVN_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="MMVN_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="MMVN_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="MMVN_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="MMVN_LAST_MODIFIED_DATE"))
-})
-public class MovementWard  extends Auditable<String>
-{
-	@Id 
+@Table(name = "MEDICALDSRSTOCKMOVWARD")
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "MMVN_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "MMVN_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MMVN_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "MMVN_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MMVN_LAST_MODIFIED_DATE"))
+public class MovementWard extends Auditable<String> {
+
+	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="MMVN_ID")
 	private int code;
@@ -80,8 +77,8 @@ public class MovementWard  extends Auditable<String>
 	private Lot lot;
 
 	@NotNull
-	@Column(name="MMVN_DATE")
-	private GregorianCalendar date;
+	@Column(name="MMVN_DATE")		// SQL type: datetime
+	private LocalDateTime date;
 
 	@NotNull
 	@Column(name="MMVN_IS_PATIENT")
@@ -139,8 +136,7 @@ public class MovementWard  extends Auditable<String>
 	 * @param quantity
 	 * @param units
 	 */
-	public MovementWard(Ward ward, GregorianCalendar date, boolean isPatient,
-			Patient patient, int age, float weight, String description, Medical medical,
+	public MovementWard(Ward ward, LocalDateTime date, boolean isPatient, Patient patient, int age, float weight, String description, Medical medical,
 			Double quantity, String units) {
 		super();
 		this.ward = ward;
@@ -154,9 +150,9 @@ public class MovementWard  extends Auditable<String>
 		this.quantity = quantity;
 		this.units = units;
 	}
-	public MovementWard(Ward ward, GregorianCalendar date, boolean isPatient,
-			Patient patient, int age, float weight, String description, Medical medical,
-			Double quantity, String units,Lot lot) {
+
+	public MovementWard(Ward ward, LocalDateTime date, boolean isPatient, Patient patient, int age, float weight, String description, Medical medical,
+			Double quantity, String units, Lot lot) {
 		super();
 		this.ward = ward;
 		this.date = date;
@@ -168,7 +164,7 @@ public class MovementWard  extends Auditable<String>
 		this.medical = medical;
 		this.quantity = quantity;
 		this.units = units;
-		this.lot=lot;
+		this.lot = lot;
 	}
 
     /**
@@ -186,29 +182,25 @@ public class MovementWard  extends Auditable<String>
      * @param wardTo
      * @param wardFrom
 	 */
-	public MovementWard(Ward ward, GregorianCalendar date, boolean isPatient,
-			Patient patient, int age, float weight, String description, Medical medical,
-			Double quantity, String units, Ward wardTo, Ward wardFrom,Lot lot) {
-		super();
-		this.ward = ward;
-		this.date = date;
-		this.isPatient = isPatient;
-		this.patient = patient;
-		this.age = age;
-		this.weight = weight;
-		this.description = description;
-		this.medical = medical;
-		this.quantity = quantity;
-		this.units = units;
-		this.wardTo = wardTo;
-		this.wardFrom = wardFrom;
-		this.lot=lot;
-	}
-	
-	
-	public MovementWard(Ward ward, Lot lot,
-			String description, Medical medical,
-			Double quantity, String units) {
+    public MovementWard(Ward ward, LocalDateTime date, boolean isPatient, Patient patient, int age, float weight, String description, Medical medical,
+		    Double quantity, String units, Ward wardTo, Ward wardFrom, Lot lot) {
+	    super();
+	    this.ward = ward;
+	    this.date = date;
+	    this.isPatient = isPatient;
+	    this.patient = patient;
+	    this.age = age;
+	    this.weight = weight;
+	    this.description = description;
+	    this.medical = medical;
+	    this.quantity = quantity;
+	    this.units = units;
+	    this.wardTo = wardTo;
+	    this.wardFrom = wardFrom;
+	    this.lot = lot;
+    }
+
+	public MovementWard(Ward ward, Lot lot, String description, Medical medical, Double quantity, String units) {
 		super();
 		this.ward = ward;
 		this.lot = lot;
@@ -216,25 +208,24 @@ public class MovementWard  extends Auditable<String>
 		this.medical = medical;
 		this.quantity = quantity;
 		this.units = units;
-	
 	}
-        
-	public int getCode(){
+
+	public int getCode() {
 		return code;
 	}
-	
-	public Medical getMedical() {		
+
+	public Medical getMedical() {
 		return medical;
 	}
-	
-	public GregorianCalendar getDate(){
+
+	public LocalDateTime getDate() {
 		return date;
 	}
-	
-	public Double getQuantity(){
+
+	public Double getQuantity() {
 		return quantity;
 	}
-	
+
 	public Ward getWard() {
 		return ward;
 	}
@@ -242,6 +233,7 @@ public class MovementWard  extends Auditable<String>
 	public void setWard(Ward ward) {
 		this.ward = ward;
 	}
+
 	public Lot getLot() {
 		return lot;
 	}
@@ -249,6 +241,7 @@ public class MovementWard  extends Auditable<String>
 	public void setlot(Lot lot) {
 		this.lot = lot;
 	}
+
 	public boolean isPatient() {
 		return isPatient;
 	}
@@ -280,7 +273,7 @@ public class MovementWard  extends Auditable<String>
 	public void setWeight(float weight) {
 		this.weight = weight;
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}
@@ -297,7 +290,7 @@ public class MovementWard  extends Auditable<String>
 		this.units = units;
 	}
 
-	public void setDate(GregorianCalendar date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
@@ -305,22 +298,22 @@ public class MovementWard  extends Auditable<String>
 		this.quantity = quantity;
 	}
 
-	public void setCode(int aCode){
-		code=aCode;
+	public void setCode(int aCode) {
+		code = aCode;
 	}
-	
-	public void setMedical(Medical aMedical){
-		medical=aMedical;
-	}
-        
-    public Ward getWardTo() {
-        return wardTo;
-    }
 
-    public void setWardTo(Ward wardTo) {
-        this.wardTo = wardTo;
-    }
-    
+	public void setMedical(Medical aMedical) {
+		medical = aMedical;
+	}
+
+	public Ward getWardTo() {
+		return wardTo;
+	}
+
+	public void setWardTo(Ward wardTo) {
+		this.wardTo = wardTo;
+	}
+
 	public Ward getWardFrom() {
 		return wardFrom;
 	}
@@ -334,11 +327,9 @@ public class MovementWard  extends Auditable<String>
 		if (this == obj) {
 			return true;
 		}
-		
 		if (!(obj instanceof MovementWard)) {
 			return false;
 		}
-		
 		MovementWard movement = (MovementWard)obj;
 		return (this.getCode() == movement.getCode());
 	}
@@ -353,7 +344,6 @@ public class MovementWard  extends Auditable<String>
 	        
 	        this.hashCode = c;
 	    }
-	  
 	    return this.hashCode;
 	}	
 }

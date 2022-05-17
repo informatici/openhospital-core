@@ -21,11 +21,10 @@
  */
 package org.isf.opd.model;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -39,9 +38,9 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.disease.model.Disease;
 import org.isf.patient.model.Patient;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -62,32 +61,26 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="OPD")
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="OPD_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="OPD_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="OPD_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="OPD_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="OPD_LAST_MODIFIED_DATE"))
-})
-public class Opd extends Auditable<String>
-{
+@Table(name = "OPD")
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "OPD_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "OPD_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "OPD_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "OPD_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "OPD_LAST_MODIFIED_DATE"))
+public class Opd extends Auditable<String> {
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="OPD_ID") 
 	private int code;
 
 	@NotNull
-	@Column(name="OPD_DATE")
-	private Date date;
+	@Column(name="OPD_DATE") // SQL type: datetime
+	private LocalDateTime date;
 
-	@NotNull
-	@Column(name="OPD_DATE_VIS")
-	private GregorianCalendar visitDate;
-        
-	@Column(name="OPD_DATE_NEXT_VIS")
-    private GregorianCalendar nextVisitDate;
+	@Column(name="OPD_DATE_NEXT_VIS") // SQL type: datetime
+    	private LocalDateTime nextVisitDate;
 
 	@ManyToOne
 	@JoinColumn(name="OPD_PAT_ID")
@@ -103,6 +96,7 @@ public class Opd extends Auditable<String>
 
 	/*@NotNull
 	@Column(name="OPD_NOTE")
+	private String note;
 	private String note; //ADDED: Alex*/
 
 	@NotNull
@@ -140,19 +134,19 @@ public class Opd extends Auditable<String>
 	private int lock;
 	
 	@Column(name="OPD_REASON")
-    private String reason; // ADDED: Arnaud
+   	private String reason; // ADDED: Arnaud
 
 	@Column(name="OPD_ANAMNESIS")
-    private String anamnesis; // ADDED: Arnaud
+    	private String anamnesis; // ADDED: Arnaud
     
 	@Column(name="OPD_ALLERGIES")
-    private String allergies; // ADDED: Arnaud
+    	private String allergies; // ADDED: Arnaud
     
 	@Column(name="OPD_THERAPIES")
-    private String therapies; // ADDED: Arnaud
+    	private String therapies; // ADDED: Arnaud
     
 	@Column(name="OPD_PRESCRIPTION")
-    private String prescription; // ADDED: Arnaud
+    	private String prescription; // ADDED: Arnaud
 	
 	@Transient
 	private volatile int hashCode = 0;
@@ -162,16 +156,16 @@ public class Opd extends Auditable<String>
 	}
 	
 	/**
-     * @param aProgYear
-     * @param aSex
-     * @param aAge
-     * @param aDisease
-     */
-	public Opd(int aProgYear,char aSex,int aAge,Disease aDisease) {
-		prog_year=aProgYear;
-		sex=aSex;
-		age=aAge;
-		disease=aDisease;
+     	 * @param aProgYear
+     	 * @param aSex
+     	 * @param aAge
+     	 * @param aDisease
+     	 */
+	public Opd(int aProgYear, char aSex, int aAge, Disease aDisease) {
+		prog_year = aProgYear;
+		sex = aSex;
+		age = aAge;
+		disease = aDisease;
 	}
 	
 	/*public String getNote() {
@@ -189,6 +183,7 @@ public class Opd extends Auditable<String>
 	public Patient getPatient() {
 		return patient;
 	}
+
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
@@ -196,6 +191,7 @@ public class Opd extends Auditable<String>
 	public int getAge() {
 		return age;
 	}
+
 	public void setAge(int age) {
 		this.age = age;
 	}
@@ -274,21 +270,14 @@ public class Opd extends Auditable<String>
 	public void setLock(int lock) {
 		this.lock = lock;
 	}
-	public Date getDate() {
+
+	public LocalDateTime getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
-	
-	public GregorianCalendar getVisitDate() {
-		return visitDate;
-	}
 
-	public void setVisitDate(GregorianCalendar visDate) {
-		this.visitDate = visDate;
-	}	
-	
 	public char getSex() {
 		return sex;
 	}
@@ -301,8 +290,8 @@ public class Opd extends Auditable<String>
 		return prog_year;
 	}
 	
-	public void setProgYear(int prog_year) {
-		this.prog_year = prog_year;
+	public void setProgYear(int progYear) {
+		this.prog_year = progYear;
 	}
 
 	public String getUserID() {
@@ -313,13 +302,13 @@ public class Opd extends Auditable<String>
 		this.userID = userID;
 	}
         
-        public String getReason() {
+	public String getReason() {
 		return reason;
 	}
-
-        public void setReason(String reason) {
-    		this.reason = reason;
-    }
+	
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 
 	public String getAnamnesis() {
 		return anamnesis;
@@ -353,11 +342,11 @@ public class Opd extends Auditable<String>
 		this.prescription = prescription;
 	}
 
-		public GregorianCalendar getNextVisitDate() {
+		public LocalDateTime getNextVisitDate() {
 		return nextVisitDate;
 	}
 
-	public void setNextVisitDate(GregorianCalendar nextVisitDate) {
+	public void setNextVisitDate(LocalDateTime nextVisitDate) {
 		this.nextVisitDate = nextVisitDate;
 	}
 

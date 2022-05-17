@@ -58,12 +58,12 @@ public class SupplierOperations {
 
 	/**
 	 * Returns a {@link Supplier} with specified ID
-	 * @param ID - supplier ID
+	 * @param id - supplier ID
 	 * @return supplier - the supplier with specified ID
 	 * @throws OHServiceException 
 	 */
-	public Supplier getByID(int ID) throws OHServiceException {
-		return repository.findOne(ID);
+	public Supplier getByID(int id) throws OHServiceException {
+		return repository.findById(id).orElse(null);
 	}
 	
 	/**

@@ -21,9 +21,9 @@
  */
 package org.isf.opd.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -48,24 +48,21 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 	@Override
 	public List<Opd> findAllOpdWhereParams(
 			String diseaseTypeCode,
-			String diseaseCode, 
-			GregorianCalendar dateFrom,
-			GregorianCalendar dateTo,
-			int ageFrom, 
+			String diseaseCode,
+			LocalDate dateFrom,
+			LocalDate dateTo,
+			int ageFrom,
 			int ageTo,
 			char sex,
 			char newPatient) {
-		return _getOpdQuery(
-						diseaseTypeCode, diseaseCode, dateFrom, dateTo,
-						ageFrom, ageTo, sex, newPatient).
-					getResultList();
+		return getOpdQuery(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient).getResultList();
 	}	
 
-	private TypedQuery<Opd> _getOpdQuery(
+	private TypedQuery<Opd> getOpdQuery(
 			String diseaseTypeCode,
-			String diseaseCode, 
-			GregorianCalendar dateFrom,
-			GregorianCalendar dateTo,
+			String diseaseCode,
+			LocalDate dateFrom,
+			LocalDate dateTo,
 			int ageFrom, 
 			int ageTo,
 			char sex,
@@ -78,34 +75,35 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		query.select(opd);
 		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alltypes.txt")))) {
 			predicates.add(
-				cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
+					cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
 			);
 		}
 		if (!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldiseases.txt"))) {
 			predicates.add(
-				cb.equal(opd.join("disease").get("code"), diseaseCode)
+					cb.equal(opd.join("disease").get("code"), diseaseCode)
 			);
 		}
 		if (ageFrom != 0 || ageTo != 0) {
 			predicates.add(
-				cb.between(opd.<Integer>get("age"), ageFrom, ageTo)
+					cb.between(opd.<Integer>get("age"), ageFrom, ageTo)
 			);
 		}
 		if (sex != 'A') {
 			predicates.add(
-				cb.equal(opd.get("sex"), sex)
+					cb.equal(opd.get("sex"), sex)
 			);
 		}
 		if (newPatient != 'A') {
 			predicates.add(
-				cb.equal(opd.get("newPatient"), newPatient)
+					cb.equal(opd.get("newPatient"), newPatient)
 			);
 		}
 		predicates.add(
-			cb.between(opd.<Date>get("visitDate"), dateFrom.getTime(), dateTo.getTime())
+				cb.between(opd.<LocalDateTime>get("date"), dateFrom.atStartOfDay(), dateTo.plusDays(1).atStartOfDay())
 		);
 		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 
 		return entityManager.createQuery(query);
 	}
+
 }
