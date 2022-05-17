@@ -36,6 +36,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.isf.medstockmovtype.model.MovementType;
@@ -61,6 +63,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MMV_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "MMV_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MMV_LAST_MODIFIED_DATE"))
+@SQLDelete(sql = "UPDATE MEDICALDSRSTOCKMOV SET MMV_ACTIVE = 0 WHERE MMV_ID = ? AND -1 != ?")
+@Where(clause = "MMV_ACTIVE = 1")
 public class Movement extends Auditable<String> {
 
 	@Id

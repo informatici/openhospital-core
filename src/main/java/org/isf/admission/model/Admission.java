@@ -40,6 +40,7 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.disctype.model.DischargeType;
@@ -54,150 +55,140 @@ import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * ------------------------------------------
- * Admission - model for a patient admission
- * -----------------------------------------
- * modification history
- * ? - ? - first version
- * 30/09/2015 - Antonio - ported to JPA
+ * ------------------------------------------ Admission - model for a patient
+ * admission ----------------------------------------- modification history ? -
+ * ? - first version 30/09/2015 - Antonio - ported to JPA
  * ------------------------------------------
  */
 @Entity
-@Table(name="ADMISSION")
-@SqlResultSetMapping(name="AdmittedPatient",
-entities={
-		@EntityResult(entityClass=org.isf.patient.model.Patient.class),
-		@EntityResult(entityClass=org.isf.admission.model.Admission.class)}
-)
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="ADM_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="ADM_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="ADM_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="ADM_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="ADM_LAST_MODIFIED_DATE"))
-})
-public class Admission extends Auditable<String> implements Comparable<Admission> 
-{
+@Table(name = "ADMISSION")
+@SqlResultSetMapping(name = "AdmittedPatient", entities = {
+		@EntityResult(entityClass = org.isf.patient.model.Patient.class),
+		@EntityResult(entityClass = org.isf.admission.model.Admission.class) })
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverrides({ @AttributeOverride(name = "createdBy", column = @Column(name = "ADM_CREATED_BY")),
+		@AttributeOverride(name = "createdDate", column = @Column(name = "ADM_CREATED_DATE")),
+		@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "ADM_LAST_MODIFIED_BY")),
+		@AttributeOverride(name = "active", column = @Column(name = "ADM_ACTIVE")),
+		@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "ADM_LAST_MODIFIED_DATE")) })
+@SQLDelete(sql = "UPDATE ADMISSION SET ADM_ACTIVE = 0 WHERE ADM_ID = ? AND -1 != ?")
+@Where(clause = "ADM_ACTIVE = 1")
+public class Admission extends Auditable<String> implements Comparable<Admission> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ADM_ID")
-	private int id;                            // admission key
+	private int id; // admission key
 
 	@NotNull
 	@Column(name = "ADM_IN")
-	private int admitted;                    // values are 0 or 1, default 0 (not admitted)
+	private int admitted; // values are 0 or 1, default 0 (not admitted)
 
 	@NotNull
 	@Column(name = "ADM_TYPE")
-	private String type;                    // values are 'N'(normal)  or 'M' (malnutrition)  default 'N'
+	private String type; // values are 'N'(normal) or 'M' (malnutrition) default 'N'
 
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "ADM_WRD_ID_A")
-	private Ward ward;                        // ward key
+	private Ward ward; // ward key
 
 	@NotNull
 	@Column(name = "ADM_YPROG")
-	private int yProg;                        // a progr. in year for each ward
+	private int yProg; // a progr. in year for each ward
 
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "ADM_PAT_ID")
-	private Patient patient;                // patient key
+	private Patient patient; // patient key
 
 	@NotNull
-	@Column(name = "ADM_DATE_ADM")        // SQL type: datetime
-	private LocalDateTime admDate;        // admission date
+	@Column(name = "ADM_DATE_ADM") // SQL type: datetime
+	private LocalDateTime admDate; // admission date
 
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "ADM_ADMT_ID_A_ADM")
-	private AdmissionType admissionType;    // admissionType key
+	private AdmissionType admissionType; // admissionType key
 
 	@Column(name = "ADM_FHU")
-	private String fHU;                        // FromHealthUnit (null)
+	private String fHU; // FromHealthUnit (null)
 
 	@ManyToOne
 	@JoinColumn(name = "ADM_IN_DIS_ID_A")
-	private Disease diseaseIn;                // disease in key  (null)
+	private Disease diseaseIn; // disease in key (null)
 
 	@ManyToOne
 	@JoinColumn(name = "ADM_OUT_DIS_ID_A")
-	private Disease diseaseOut1;            // disease out key  (null)
+	private Disease diseaseOut1; // disease out key (null)
 
 	@ManyToOne
 	@JoinColumn(name = "ADM_OUT_DIS_ID_A_2")
-	private Disease diseaseOut2;            // disease out key (null)
+	private Disease diseaseOut2; // disease out key (null)
 
 	@ManyToOne
 	@JoinColumn(name = "ADM_OUT_DIS_ID_A_3")
-	private Disease diseaseOut3;            // disease out key (null)
+	private Disease diseaseOut3; // disease out key (null)
 
 	@ManyToOne
 	@JoinColumn(name = "ADM_OPE_ID_A")
-	private Operation operation;                // operation key (null)
+	private Operation operation; // operation key (null)
 
-	@Column(name = "ADM_DATE_OP")        // SQL type: datetime
-	private LocalDateTime opDate;        // operation date (null)
+	@Column(name = "ADM_DATE_OP") // SQL type: datetime
+	private LocalDateTime opDate; // operation date (null)
 
 	@Column(name = "ADM_RESOP")
-	private String opResult;                // value is 'P' or 'N' (null)
+	private String opResult; // value is 'P' or 'N' (null)
 
-	@Column(name = "ADM_DATE_DIS")        // SQL type: datetime
-	private LocalDateTime disDate;        // discharge date (null)
+	@Column(name = "ADM_DATE_DIS") // SQL type: datetime
+	private LocalDateTime disDate; // discharge date (null)
 
 	@ManyToOne
 	@JoinColumn(name = "ADM_DIST_ID_A")
-	private DischargeType disType;            // disChargeType key (null)
+	private DischargeType disType; // disChargeType key (null)
 
 	@Column(name = "ADM_NOTE")
-	private String note;                    // free notes (null)
+	private String note; // free notes (null)
 
 	@Column(name = "ADM_TRANS")
-	private Float transUnit;                // transfusional unit
+	private Float transUnit; // transfusional unit
 
-	@Column(name = "ADM_PRG_DATE_VIS")        // SQL type: datetime
-	private LocalDateTime visitDate;    // ADM_PRG_DATE_VIS
+	@Column(name = "ADM_PRG_DATE_VIS") // SQL type: datetime
+	private LocalDateTime visitDate; // ADM_PRG_DATE_VIS
 
 	@ManyToOne
 	@JoinColumn(name = "ADM_PRG_PTT_ID_A")
-	private PregnantTreatmentType pregTreatmentType;        // ADM_PRG_PTT_ID_A treatmentType key
+	private PregnantTreatmentType pregTreatmentType; // ADM_PRG_PTT_ID_A treatmentType key
 
-	@Column(name = "ADM_PRG_DATE_DEL")        // SQL type: datetime
-	private LocalDateTime deliveryDate;    // ADM_PRG_DATE_DEL delivery date
+	@Column(name = "ADM_PRG_DATE_DEL") // SQL type: datetime
+	private LocalDateTime deliveryDate; // ADM_PRG_DATE_DEL delivery date
 
 	@ManyToOne
 	@JoinColumn(name = "ADM_PRG_DLT_ID_A")
-	private DeliveryType deliveryType;        // ADM_PRG_DLT_ID_A delivery type key
+	private DeliveryType deliveryType; // ADM_PRG_DLT_ID_A delivery type key
 
 	@ManyToOne
 	@JoinColumn(name = "ADM_PRG_DRT_ID_A")
-	private DeliveryResultType deliveryResult;        // ADM_PRG_DRT_ID_A	delivery res. key
+	private DeliveryResultType deliveryResult; // ADM_PRG_DRT_ID_A delivery res. key
 
 	@Column(name = "ADM_PRG_WEIGHT")
-	private Float weight;                    // ADM_PRG_WEIGHT	weight
+	private Float weight; // ADM_PRG_WEIGHT weight
 
-	@Column(name = "ADM_PRG_DATE_CTRL1")        // SQL type: datetime
-	private LocalDateTime ctrlDate1;    // ADM_PRG_DATE_CTRL1
+	@Column(name = "ADM_PRG_DATE_CTRL1") // SQL type: datetime
+	private LocalDateTime ctrlDate1; // ADM_PRG_DATE_CTRL1
 
-	@Column(name = "ADM_PRG_DATE_CTRL2")        // SQL type: datetime
-	private LocalDateTime ctrlDate2;    // ADM_PRG_DATE_CTRL2
+	@Column(name = "ADM_PRG_DATE_CTRL2") // SQL type: datetime
+	private LocalDateTime ctrlDate2; // ADM_PRG_DATE_CTRL2
 
-	@Column(name = "ADM_PRG_DATE_ABORT")        // SQL type: datetime
-	private LocalDateTime abortDate;    // ADM_PRG_DATE_ABORT
+	@Column(name = "ADM_PRG_DATE_ABORT") // SQL type: datetime
+	private LocalDateTime abortDate; // ADM_PRG_DATE_ABORT
 
 	@Column(name = "ADM_USR_ID_A")
-	private String userID;                    // the user ID
+	private String userID; // the user ID
 
 	@Version
 	@Column(name = "ADM_LOCK")
-	private int lock;                        // default 0
-
-	@NotNull
-	@Column(name = "ADM_DELETED")
-	private String deleted;                    // flag record deleted ; values are 'Y' OR 'N' default is 'N'
+	private int lock; // default 0
 
 	@Transient
 	private volatile int hashCode = 0;
@@ -239,12 +230,12 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	 * @param userID
 	 * @param deleted
 	 */
-	public Admission(int id, int admitted, String type, Ward ward, int prog, Patient patient, LocalDateTime admDate, AdmissionType admType, String fhu,
-			Disease diseaseIn, Disease diseaseOut1, Disease diseaseOut2, Disease diseaseOut3,
-			Operation operation, String opResult, LocalDateTime opDate, LocalDateTime disDate, DischargeType disType, String note, Float transUnit,
-			LocalDateTime visitDate,
-			PregnantTreatmentType pregTreatmentType, LocalDateTime deliveryDate, DeliveryType deliveryType, DeliveryResultType deliveryResult, Float weight,
-			LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
+	public Admission(int id, int admitted, String type, Ward ward, int prog, Patient patient, LocalDateTime admDate,
+			AdmissionType admType, String fhu, Disease diseaseIn, Disease diseaseOut1, Disease diseaseOut2,
+			Disease diseaseOut3, Operation operation, String opResult, LocalDateTime opDate, LocalDateTime disDate,
+			DischargeType disType, String note, Float transUnit, LocalDateTime visitDate,
+			PregnantTreatmentType pregTreatmentType, LocalDateTime deliveryDate, DeliveryType deliveryType,
+			DeliveryResultType deliveryResult, Float weight, LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
 			LocalDateTime abortDate, String userID, String deleted) {
 		super();
 		this.id = id;
@@ -277,7 +268,6 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.ctrlDate2 = ctrlDate2;
 		this.abortDate = abortDate;
 		this.userID = userID;
-		this.deleted = deleted;
 	}
 
 	public LocalDateTime getOpDate() {
@@ -350,14 +340,6 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 	public void setCtrlDate2(LocalDateTime ctrlDate2) {
 		this.ctrlDate2 = ctrlDate2;
-	}
-
-	public String getDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(String deleted) {
-		this.deleted = deleted;
 	}
 
 	public LocalDateTime getDeliveryDate() {

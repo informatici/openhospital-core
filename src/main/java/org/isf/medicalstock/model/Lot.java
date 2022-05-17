@@ -35,6 +35,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
@@ -59,6 +61,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "LT_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "LT_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "LT_LAST_MODIFIED_DATE"))
+@SQLDelete(sql = "UPDATE MEDICALDSRLOT SET LT_ACTIVE = 0 WHERE LT_ID = ? AND -1 != ?")
+@Where(clause = "LT_ACTIVE = 1")
 public class Lot extends Auditable<String> {
 
 	@Id

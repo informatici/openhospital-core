@@ -64,3 +64,6 @@ source step_67_add_patient_photo_table.sql;
 source step_68_update_main_menu.sql;
 source step_69_disclose_accounting_admin_features.sql;
 source step_70_increase_examination_note_field.sql;
+source step_71_drop_opd_date_vis_field.sql;
+source step_72_drop_pat_deleted.sql;
+source step_73_drop_adm_deleted.sql;

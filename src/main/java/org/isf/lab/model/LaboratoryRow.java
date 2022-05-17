@@ -34,6 +34,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -45,6 +47,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "LABR_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "LABR_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "LABR_LAST_MODIFIED_DATE"))
+@SQLDelete(sql = "UPDATE LABORATORYROW SET LABR_ACTIVE = 0 WHERE LABR_ID = ? AND -1 != ?")
+@Where(clause = "LABR_ACTIVE = 1")
 public class LaboratoryRow extends Auditable<String> {
 
 	@Id
