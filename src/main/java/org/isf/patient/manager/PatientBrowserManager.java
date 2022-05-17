@@ -31,8 +31,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.isf.accounting.manager.BillBrowserManager;
 import org.isf.accounting.model.Bill;
 import org.isf.admission.manager.AdmissionBrowserManager;
+import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
@@ -54,10 +56,16 @@ public class PatientBrowserManager {
 	@Autowired
 	private BillBrowserManager billManager;
 
+	@Autowired
+	private FileSystemPatientPhotoManager fileSystemPatientPhotoManager;
+
 	protected LinkedHashMap<String, String> maritalHashMap;
 
 	protected LinkedHashMap<String, String> professionHashMap;
 
+	private static final String PATIENT_PHOTO_FROM_DATABASE = "DB";
+	private static final String PATIENT_PHOTO_FROM_FILE = "FILE";
+	
 	/**
 	 * Method that inserts a new Patient in the db
 	 *
@@ -67,7 +75,16 @@ public class PatientBrowserManager {
 	 */
 	public Patient savePatient(Patient patient) throws OHServiceException {
 		validatePatient(patient);
-		return ioOperations.savePatient(patient);
+		if (isLoadProfilePhotoFromFile() && isProfilesPhotoPathDefined()) {
+			PatientProfilePhoto ppp = patient.getPatientProfilePhoto();
+			patient.setPatientProfilePhoto(new PatientProfilePhoto());
+			patient = ioOperations.savePatient(patient);
+			this.fileSystemPatientPhotoManager.save(GeneralData.PATIENTPHOTOPATH, patient.getCode(), ppp.getPhoto());
+			patient.setPatientProfilePhoto(ppp);
+		} else if (isLoadProfilePhotoFromDB()){
+			patient = ioOperations.savePatient(patient);
+		}
+		return patient;
 	}
 
 	/**
@@ -97,7 +114,7 @@ public class PatientBrowserManager {
 	 * @return the Patient that match specified name (could be null)
 	 * @throws OHServiceException
 	 * @deprecated use getPatient(Integer code) for one patient or
-	 * getPatientsByOneOfFieldsLike(String regex) for a list
+	 *             getPatientsByOneOfFieldsLike(String regex) for a list
 	 */
 	@Deprecated
 	public Patient getPatientByName(String name) throws OHServiceException {
@@ -123,7 +140,25 @@ public class PatientBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public Patient getPatientById(Integer code) throws OHServiceException {
-		return ioOperations.getPatient(code);
+		Patient patient = ioOperations.getPatient(code, this.isLoadProfilePhotoFromDB());
+		if (!isLoadProfilePhotoFromDB() && isProfilesPhotoPathDefined()) {
+			this.fileSystemPatientPhotoManager.loadInPatient(patient, GeneralData.PATIENTPHOTOPATH);
+		}
+		return patient;
+	}
+
+	private boolean isLoadProfilePhotoFromDB() {
+		return (StringUtils.isEmpty(GeneralData.PATIENTPHOTO)
+				|| PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO));
+	}
+	
+	private boolean isLoadProfilePhotoFromFile() {
+		return (!StringUtils.isEmpty(GeneralData.PATIENTPHOTO)
+				&& PATIENT_PHOTO_FROM_FILE.equals(GeneralData.PATIENTPHOTO));
+	}
+
+	private boolean isProfilesPhotoPathDefined() {
+		return !StringUtils.isEmpty(GeneralData.PATIENTPHOTOPATH);
 	}
 
 	/**
@@ -192,7 +227,8 @@ public class PatientBrowserManager {
 		professionHashMap.put("farming", MessageBundle.getMessage("angal.patient.profession.farming.txt"));
 		professionHashMap.put("construction", MessageBundle.getMessage("angal.patient.profession.construction.txt"));
 		professionHashMap.put("medicine", MessageBundle.getMessage("angal.patient.profession.medicine.txt"));
-		professionHashMap.put("foodhospitality", MessageBundle.getMessage("angal.patient.profession.foodhospitality.txt"));
+		professionHashMap.put("foodhospitality",
+				MessageBundle.getMessage("angal.patient.profession.foodhospitality.txt"));
 		professionHashMap.put("homemaker", MessageBundle.getMessage("angal.patient.profession.homemaker.txt"));
 		professionHashMap.put("mechanic", MessageBundle.getMessage("angal.patient.profession.mechanic.txt"));
 		professionHashMap.put("business", MessageBundle.getMessage("angal.patient.profession.business.txt"));
@@ -233,7 +269,8 @@ public class PatientBrowserManager {
 	protected void validateMergePatients(Patient mergedPatient, Patient patient2) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
-		if (admissionManager.getCurrentAdmission(mergedPatient) != null || admissionManager.getCurrentAdmission(patient2) != null) {
+		if (admissionManager.getCurrentAdmission(mergedPatient) != null
+				|| admissionManager.getCurrentAdmission(patient2) != null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.admission.cannotmergeadmittedpatients.msg"),
 					OHSeverityLevel.ERROR));
@@ -244,8 +281,7 @@ public class PatientBrowserManager {
 		List<Bill> bills = billManager.getPendingBills(mergedPatient.getCode());
 		if (bills != null && !bills.isEmpty()) {
 			billPending = true;
-		}
-		else {
+		} else {
 			bills = billManager.getPendingBills(patient2.getCode());
 			if (bills != null && !bills.isEmpty()) {
 				billPending = true;
@@ -278,8 +314,9 @@ public class PatientBrowserManager {
 	}
 
 	/**
-	 * Method that checks if the patient's name is already present in the DB
-	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName)
+	 * Method that checks if the patient's name is already present in the DB (the
+	 * passed string 'name' should be a concatenation of firstName + " " +
+	 * secondName)
 	 *
 	 * @param name - name of the patient
 	 * @return true - if the patient is already present
@@ -290,7 +327,8 @@ public class PatientBrowserManager {
 	}
 
 	/**
-	 * Method that returns the full list of Patients not logically deleted, having the passed String in:<br>
+	 * Method that returns the full list of Patients not logically deleted, having
+	 * the passed String in:<br>
 	 * - code<br>
 	 * - firstName<br>
 	 * - secondName<br>
@@ -315,17 +353,17 @@ public class PatientBrowserManager {
 	 */
 	public boolean mergePatient(Patient mergedPatient, Patient patient2) throws OHServiceException {
 		if (mergedPatient.getBirthDate() != null && StringUtils.isEmpty(mergedPatient.getAgetype())) {
-			//mergedPatient only Age
+			// mergedPatient only Age
 			LocalDate bdate2 = patient2.getBirthDate();
 			int age2 = patient2.getAge();
 			String ageType2 = patient2.getAgetype();
 			if (bdate2 != null) {
-				//patient2 has BirthDate
+				// patient2 has BirthDate
 				mergedPatient.setAge(age2);
 				mergedPatient.setBirthDate(bdate2);
 			}
 			if (bdate2 != null && StringUtils.isNotEmpty(ageType2)) {
-				//patient2 has AgeType
+				// patient2 has AgeType
 				mergedPatient.setAge(age2);
 				mergedPatient.setAgetype(ageType2);
 			}
@@ -366,8 +404,7 @@ public class PatientBrowserManager {
 
 		if (StringUtils.isEmpty(mergedPatient.getNote())) {
 			mergedPatient.setNote(patient2.getNote());
-		}
-		else {
+		} else {
 			String note = mergedPatient.getNote();
 			mergedPatient.setNote(patient2.getNote() + "\n\n" + note);
 		}
@@ -387,23 +424,19 @@ public class PatientBrowserManager {
 
 		if (StringUtils.isEmpty(patient.getFirstName())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.patient.insertfirstname.msg"),
-					OHSeverityLevel.ERROR));
+					MessageBundle.getMessage("angal.patient.insertfirstname.msg"), OHSeverityLevel.ERROR));
 		}
 		if (StringUtils.isEmpty(patient.getSecondName())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.patient.insertsecondname.msg"),
-					OHSeverityLevel.ERROR));
+					MessageBundle.getMessage("angal.patient.insertsecondname.msg"), OHSeverityLevel.ERROR));
 		}
 		if (!checkAge(patient)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.patient.insertvalidage.msg"),
-					OHSeverityLevel.ERROR));
+					MessageBundle.getMessage("angal.patient.insertvalidage.msg"), OHSeverityLevel.ERROR));
 		}
 		if (' ' == patient.getSex()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.patient.pleaseselectpatientssex.msg"),
-					OHSeverityLevel.ERROR));
+					MessageBundle.getMessage("angal.patient.pleaseselectpatientssex.msg"), OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);

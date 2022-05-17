@@ -129,11 +129,14 @@ public class PatientIoOperations {
 	 * @return the Patient
 	 * @throws OHServiceException
 	 */
+
 	public Patient getPatient(Integer code) throws OHServiceException {
 		List<Patient> patients = repository.findAllWhereId(code);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
-			Hibernate.initialize(patient.getPatientProfilePhoto());
+			if (isLoadFromDB) {
+				Hibernate.initialize(patient.getPatientProfilePhoto());
+			}
 			return patient;
 		}
 		return null;
