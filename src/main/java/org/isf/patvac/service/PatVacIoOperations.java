@@ -160,6 +160,9 @@ public class PatVacIoOperations {
 		return repository.exists(code);
 	}
 
+	public PatientVaccine getPatientVaccine(int code) throws OHServiceException {
+		return repository.findOne(code);
+	}
 	private GregorianCalendar getBeginningOfYear(int year) {
 		return new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar();
 	}

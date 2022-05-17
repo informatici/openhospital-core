@@ -462,7 +462,10 @@ public class LabManager {
 		materialDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.lab.undefined.txt")));
 		return materialDescriptionList;
 	}
-
+     public Laboratory getLaboratory(int code)  throws OHServiceException {
+	        return ioOperations.getLaboratory(code);
+	}
+	  
 	//	/**
 	//	 * Returns the max progressive number within specified month of specified year.
 	//	 *
@@ -481,4 +484,6 @@ public class LabManager {
     public Laboratory newLabSecondProcedure2(Laboratory lab, ArrayList<LaboratoryRow> laboratoryRows)  throws OHServiceException {
         return ioOperations.newLabSecondProcedure2(lab, laboratoryRows); //To change body of generated methods, choose Tools | Templates.
     }*/
+	
+	
 }

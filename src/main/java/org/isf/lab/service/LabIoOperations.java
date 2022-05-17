@@ -311,6 +311,10 @@ public class LabIoOperations {
 	public boolean isCodePresent(Integer code) throws OHServiceException {
 		return repository.exists(code);
 	}
+	
+	public Laboratory getLaboratory(int code) throws OHServiceException {
+		return repository.findOne(code);
+	}
 
 
   /*  public Integer newLabFirstProcedure2(Laboratory lab)throws OHServiceException {

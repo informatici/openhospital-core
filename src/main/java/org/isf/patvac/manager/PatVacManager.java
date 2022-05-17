@@ -127,6 +127,10 @@ public class PatVacManager {
 	public int getProgYear(int year) throws OHServiceException {
 		return ioOperations.getProgYear(year);
 	}
+	
+	public PatientVaccine getPatientVaccine(int code) throws OHServiceException {
+		return ioOperations.getPatientVaccine(code);
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
