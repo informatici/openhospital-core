@@ -24,6 +24,7 @@ package org.isf.patvac.manager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.isf.generaldata.MessageBundle;
@@ -127,7 +128,7 @@ public class PatVacManager {
 		return ioOperations.getProgYear(year);
 	}
 	
-	public PatientVaccine getPatientVaccine(int code) throws OHServiceException {
+	public Optional<PatientVaccine> getPatientVaccine(int code) throws OHServiceException {
 		return ioOperations.getPatientVaccine(code);
 	}
 

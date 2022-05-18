@@ -24,6 +24,7 @@ package org.isf.lab.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryForPrint;
@@ -287,8 +288,8 @@ public class LabIoOperations {
 		return repository.existsById(code);
 	}
 	
-	public Laboratory getLaboratory(int code) throws OHServiceException {
-		return repository.findOne(code);
+	public Optional<Laboratory> getLaboratory(int code) throws OHServiceException {
+		return repository.findById(code);
 	}
 
 }

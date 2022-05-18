@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
@@ -464,7 +465,7 @@ public class LabManager {
 		materialDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.lab.undefined.txt")));
 		return materialDescriptionList;
 	}
-   public Laboratory getLaboratory(int code)  throws OHServiceException {
+   public Optional<Laboratory> getLaboratory(int code)  throws OHServiceException {
 	        return ioOperations.getLaboratory(code);
 	}
 	  

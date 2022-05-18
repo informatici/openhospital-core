@@ -32,7 +32,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface PriceIoOperationRepository extends JpaRepository<Price, Integer> {
+public interface PriceIoListOperationRepository extends JpaRepository<Price, Integer> {
 
 	List<Price> findAllByOrderByDescriptionAsc();
 
