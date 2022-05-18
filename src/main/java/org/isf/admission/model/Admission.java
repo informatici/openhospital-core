@@ -55,9 +55,12 @@ import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * ------------------------------------------ Admission - model for a patient
- * admission ----------------------------------------- modification history ? -
- * ? - first version 30/09/2015 - Antonio - ported to JPA
+ * ------------------------------------------
+ * Admission - model for a patient admission
+ * -----------------------------------------
+ * modification history
+ * ? - ? - first version
+ * 30/09/2015 - Antonio - ported to JPA
  * ------------------------------------------
  */
 @Entity
