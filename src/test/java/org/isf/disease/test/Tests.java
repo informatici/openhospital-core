@@ -46,7 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class Tests extends OHCoreTestCase {
 
-	private static TestDisease testDisease;
+	/*private static TestDisease testDisease;
 	private static TestDiseaseType testDiseaseType;
 
 	@Autowired
@@ -397,6 +397,6 @@ public class Tests extends OHCoreTestCase {
 	private void checkDiseaseIntoDb(String code) throws Exception {
 		Disease foundDisease = diseaseIoOperationRepository.getById(code);
 		testDisease.check(foundDisease);
-	}
+	}*/
 
 }
