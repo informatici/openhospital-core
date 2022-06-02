@@ -53,7 +53,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "WRD_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "WRD_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "WRD_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE WARD SET WRD_ACTIVE = 0 WHERE WRD_ID = ? AND -1 != ?")
+@SQLDelete(sql = "UPDATE WARD SET WRD_ACTIVE = 0 WHERE WRD_ID_A = ? AND WRD_LOCK = ?")
 @Where(clause = "WRD_ACTIVE = 1")
 public class Ward extends Auditable<String> {
 

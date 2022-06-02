@@ -54,7 +54,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "OTH_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "OTH_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "OTH_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE PRICESOTHERS SET OTH_ACTIVE = 0 WHERE OTH_ID = ? AND -1 != ?")
+@SQLDelete(sql = "UPDATE PRICESOTHERS SET OTH_ACTIVE = 0 WHERE OTH_ID = ?")
 @Where(clause = "OTH_ACTIVE = 1")
 public class PricesOthers extends Auditable<String> {
 

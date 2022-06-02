@@ -78,7 +78,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PAT_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "PAT_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PAT_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE PATIENT SET PAT_ACTIVE = 0 WHERE PAT_ID = ? AND -1 != ?")
+@SQLDelete(sql = "UPDATE PATIENT SET PAT_ACTIVE = 0 WHERE PAT_ID = ? AND PAT_LOCK = ?")
 @Where(clause = "PAT_ACTIVE = 1")
 public class Patient extends Auditable<String> {
 	/*
@@ -180,7 +180,7 @@ public class Patient extends Auditable<String> {
 	@Column(name = "PAT_LOCK")
 	private int lock;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID")
 	private PatientProfilePhoto patientProfilePhoto;
 

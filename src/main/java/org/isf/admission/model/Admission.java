@@ -40,6 +40,7 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.isf.admtype.model.AdmissionType;
@@ -74,7 +75,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 		@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "ADM_LAST_MODIFIED_BY")),
 		@AttributeOverride(name = "active", column = @Column(name = "ADM_ACTIVE")),
 		@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "ADM_LAST_MODIFIED_DATE")) })
-@SQLDelete(sql = "UPDATE ADMISSION SET ADM_ACTIVE = 0 WHERE ADM_ID = ? AND -1 != ?")
+@SQLDelete(sql = "UPDATE ADMISSION SET ADM_ACTIVE = 0 WHERE ADM_ID = ? AND ADM_LOCK", check = ResultCheckStyle.COUNT)
 @Where(clause = "ADM_ACTIVE = 1")
 public class Admission extends Auditable<String> implements Comparable<Admission> {
 

@@ -51,7 +51,7 @@ import org.isf.utils.db.Auditable;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "US_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "US_LAST_MODIFIED_DATE"))
 @AttributeOverride(name = "active", column = @Column(name = "US_ACTIVE"))
-@SQLDelete(sql = "UPDATE USER SET US_ACTIVE = 0 WHERE US_ID = ? AND -1 != ?")
+@SQLDelete(sql = "UPDATE USER SET US_ACTIVE = 0 WHERE US_ID_A = ?")
 @Where(clause = "US_ACTIVE = 1")
 public class User extends Auditable<String> {
 
