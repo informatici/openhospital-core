@@ -180,7 +180,7 @@ public class Patient extends Auditable<String> {
 	@Column(name = "PAT_LOCK")
 	private int lock;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name = "PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID")
 	private PatientProfilePhoto patientProfilePhoto;
 
