@@ -22,19 +22,19 @@
 package org.isf.generaldata;
 
 /**
- * ------------------------------------------
- * General Data
+ * ------------------------------------------ General Data
  *
- *    12/2007 - isf bari - added resource bundle for internationalization
- * 19/06/2008 - isf bari - added patientsheet jasper report name
- * 20/12/2008 - isf bari - added patientextended
- * 01/01/2009 - Fabrizio - added OPDEXTENDED
- * 20/01/2009 - Chiara   - added attribute MATERNITYRESTARTINJUNE to reset progressive number of maternity ward
- * 25/02/2011 - Claudia  - added attribute MAINMENUALWAYSONTOP to handle main menu always on Top 
- * 01/05/2011 - Vito 	 - added attribute VIDEOMODULEENABLED to enable/disable video module
- * 10/08/2011 - Claudia  - added PATIENTVACCINEEXTENDED to show patient on Patient Vaccine 
- * 19/10/2011 - Mwithi   - GeneralData 2.0: catching exception on single property and assign DEFAULT value  
- * 29/12/2011 - Nicola   - added XMPPMODULEENABLED to enable/disable communication module
+ * 12/2007 - isf bari - added resource bundle for internationalization
+ * 19/06/2008 - isf bari - added patientsheet jasper report name 20/12/2008 -
+ * isf bari - added patientextended 01/01/2009 - Fabrizio - added OPDEXTENDED
+ * 20/01/2009 - Chiara - added attribute MATERNITYRESTARTINJUNE to reset
+ * progressive number of maternity ward 25/02/2011 - Claudia - added attribute
+ * MAINMENUALWAYSONTOP to handle main menu always on Top 01/05/2011 - Vito -
+ * added attribute VIDEOMODULEENABLED to enable/disable video module 10/08/2011
+ * - Claudia - added PATIENTVACCINEEXTENDED to show patient on Patient Vaccine
+ * 19/10/2011 - Mwithi - GeneralData 2.0: catching exception on single property
+ * and assign DEFAULT value 29/12/2011 - Nicola - added XMPPMODULEENABLED to
+ * enable/disable communication module
  * -------------------------------------------
  */
 public final class GeneralData extends ConfigurationProperties {
@@ -87,9 +87,8 @@ public final class GeneralData extends ConfigurationProperties {
 	public static String PATIENTBILLGROUPED;
 	public static String PATIENTBILLSTATEMENT;
 	public static boolean DEBUG;
-	public static String PATIENTPHOTO;
-	public static String PATIENTPHOTOPATH;
-	
+	public static Integer MAXPROFPICFILESIZEBYTES;
+
 	private static final String DEFAULT_LANGUAGE = "en";
 	private static final boolean DEFAULT_SINGLEUSER = false;
 	private static final boolean DEFAULT_AUTOMATICLOT_IN = true;
@@ -134,9 +133,8 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_PATIENTBILLGROUPED = "PatientBillGrouped";
 	private static final String DEFAULT_PATIENTBILLSTATEMENT = "PatientBillStatement";
 	private static final boolean DEFAULT_DEBUG = false;
-	private static final String DEFAULT_PATIENTPHOTO = "DB";
-	private static final String DEFAULT_PATIENTPHOTOPATH = null;
-	
+	private static Integer DEFAULT_MAXPROFPICFILESIZEBYTES = 4096;
+
 	private static GeneralData mySingleData;
 
 	public static void reset() {
@@ -190,8 +188,8 @@ public final class GeneralData extends ConfigurationProperties {
 		PATIENTBILLGROUPED = myGetProperty("PATIENTBILLGROUPED", DEFAULT_PATIENTBILLGROUPED);
 		PATIENTBILLSTATEMENT = myGetProperty("PATIENTBILLSTATEMENT", DEFAULT_PATIENTBILLSTATEMENT);
 		DEBUG = myGetProperty("DEBUG", DEFAULT_DEBUG);
-		PATIENTPHOTO = myGetProperty("PATIENTPHOTO", DEFAULT_PATIENTPHOTO);
-		PATIENTPHOTOPATH = myGetProperty("PATIENTPHOTOPATH", DEFAULT_PATIENTPHOTOPATH);
+		MAXPROFPICFILESIZEBYTES = myGetProperty("MAXPROFPICFILESIZEBYTES", DEFAULT_MAXPROFPICFILESIZEBYTES);
+
 	}
 
 	public static GeneralData getGeneralData() {
@@ -201,11 +199,9 @@ public final class GeneralData extends ConfigurationProperties {
 		return mySingleData;
 	}
 
-	
 	public static void initialize() {
 		mySingleData = new GeneralData(FILE_PROPERTIES);
 	}
-
 
 	/**
 	 * @return the SINGLEUSER
