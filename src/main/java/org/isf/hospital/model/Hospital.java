@@ -21,6 +21,8 @@
  */
 package org.isf.hospital.model;
 
+import java.sql.Time;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,6 +55,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "HOS_LAST_MODIFIED_DATE"))
 public class Hospital extends Auditable<String> {
 
+	public static final String VISIT_START_TIME = "06:30:00";
+	public static final String VISIT_END_TIME = "20:00:00";
+
 	@Id
 	@Column(name="HOS_ID_A")
     private String code;
@@ -82,12 +87,12 @@ public class Hospital extends Auditable<String> {
     private String currencyCod;
 
 	@NotNull
-	@Column(name="HOS_START_HOUR")
-	private int startHour;
+	@Column(name="HOS_VISITS_START")
+	private Time visitStartTime;
 
 	@NotNull
-	@Column(name="HOS_END_HOUR")
-	private int endHour;
+	@Column(name="HOS_VISITS_END")
+	private Time visitEndTime;
 
 	@Version
 	@Column(name="HOS_LOCK")
@@ -106,8 +111,8 @@ public class Hospital extends Auditable<String> {
 		this.fax = null;
 		this.email = null;
 		this.currencyCod = null;
-		this.startHour = 6;
-		this.endHour = 20;
+		this.visitStartTime = Time.valueOf(VISIT_START_TIME);
+		this.visitEndTime = Time.valueOf(VISIT_END_TIME);
 	}
 
 	/**
@@ -132,14 +137,14 @@ public class Hospital extends Auditable<String> {
         this.fax = aFax;
         this.email = aEmail;
         this.currencyCod = aCurrencyCod;
-		this.startHour = 6;
-		this.endHour = 20;
+		this.visitStartTime = Time.valueOf(VISIT_START_TIME);
+		this.visitEndTime = Time.valueOf(VISIT_END_TIME);
     }
 
 	public Hospital(String aCode, String aDescription, String aAddress,
 			String aCity, String aTelephone, String aFax,
 			String aEmail, String aCurrencyCod,
-			int startHour, int endHour) {
+			Time visitStartTime, Time visitEndTime) {
 		super();
 		this.code = aCode;
 		this.description = aDescription;
@@ -149,8 +154,8 @@ public class Hospital extends Auditable<String> {
 		this.fax = aFax;
 		this.email = aEmail;
 		this.currencyCod = aCurrencyCod;
-		this.startHour = 6;
-		this.endHour = 20;
+		this.visitStartTime = visitStartTime;
+		this.visitEndTime = visitEndTime;
 	}
 
     public String getAddress() {
@@ -225,26 +230,20 @@ public class Hospital extends Auditable<String> {
         this.currencyCod = aCurrencyCod;
     }
 
-	public int getStartHour() {
-		return startHour;
+	public Time getVisitStartTime() {
+		return visitStartTime;
 	}
 
-	public void setStartHour(int startHour) {
-		this.startHour = startHour;
-	}
-	public void setStartHour(String startHour) {
-		this.startHour = Integer.parseInt(startHour);
+	public void setVisitStartTime(Time startTime) {
+		this.visitStartTime = startTime;
 	}
 
-	public int getEndHour() {
-		return endHour;
+	public Time getVisitEndTime() {
+		return visitEndTime;
 	}
 
-	public void setEndHour(int endHour) {
-		this.endHour = endHour;
-	}
-	public void setEndHour(String endHour) {
-		this.endHour = Integer.parseInt(endHour);
+	public void setVisitEndTime(Time endTime) {
+		this.visitEndTime = endTime;
 	}
 
 	@Override
@@ -257,8 +256,8 @@ public class Hospital extends Auditable<String> {
 				&& getCity().equalsIgnoreCase(((Hospital) anObject).getCity())
 				&& getEmail().equalsIgnoreCase(((Hospital) anObject).getEmail())
 				&& getCurrencyCod().equalsIgnoreCase(((Hospital) anObject).getCurrencyCod())
-				&& getStartHour() == ((Hospital)anObject).getStartHour()
-				&& getEndHour() == ((Hospital)anObject).getEndHour());
+				&& getVisitStartTime().equals(((Hospital)anObject).getVisitStartTime())
+				&& getVisitEndTime().equals(((Hospital)anObject).getVisitEndTime()));
 	}
 
 	public String toString() {
