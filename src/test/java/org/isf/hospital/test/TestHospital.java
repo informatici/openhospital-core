@@ -36,6 +36,8 @@ public class TestHospital {
 	private String fax = "TestFax";
 	private String email = "TestEmail";
 	private String currencyCod = "Cod";
+	private int startHour = 6;
+	private int endHour = 20;
 
 	public Hospital setup(boolean usingSet) throws OHException {
 		Hospital hospital;
@@ -60,6 +62,8 @@ public class TestHospital {
 		hospital.setEmail(email);
 		hospital.setFax(fax);
 		hospital.setCurrencyCod(currencyCod);
+		hospital.setStartHour(startHour);
+		hospital.setEndHour(endHour);
 	}
 
 	public void check(Hospital hospital) {
@@ -71,5 +75,7 @@ public class TestHospital {
 		assertThat(hospital.getEmail()).isEqualTo(email);
 		assertThat(hospital.getFax()).isEqualTo(fax);
 		assertThat(hospital.getCurrencyCod()).isEqualTo(currencyCod);
+		assertThat(hospital.getStartHour()).isEqualTo(startHour);
+		assertThat(hospital.getEndHour()).isEqualTo(endHour);
 	}
 }

@@ -81,6 +81,14 @@ public class Hospital extends Auditable<String> {
 	@Column(name="HOS_CURR_COD")
     private String currencyCod;
 
+	@NotNull
+	@Column(name="HOS_START_HOUR")
+	private int startHour;
+
+	@NotNull
+	@Column(name="HOS_END_HOUR")
+	private int endHour;
+
 	@Version
 	@Column(name="HOS_LOCK")
     private Integer lock;
@@ -98,6 +106,8 @@ public class Hospital extends Auditable<String> {
 		this.fax = null;
 		this.email = null;
 		this.currencyCod = null;
+		this.startHour = 6;
+		this.endHour = 20;
 	}
 
 	/**
@@ -122,8 +132,27 @@ public class Hospital extends Auditable<String> {
         this.fax = aFax;
         this.email = aEmail;
         this.currencyCod = aCurrencyCod;
+		this.startHour = 6;
+		this.endHour = 20;
     }
-    
+
+	public Hospital(String aCode, String aDescription, String aAddress,
+			String aCity, String aTelephone, String aFax,
+			String aEmail, String aCurrencyCod,
+			int startHour, int endHour) {
+		super();
+		this.code = aCode;
+		this.description = aDescription;
+		this.address = aAddress;
+		this.city = aCity;
+		this.telephone = aTelephone;
+		this.fax = aFax;
+		this.email = aEmail;
+		this.currencyCod = aCurrencyCod;
+		this.startHour = 6;
+		this.endHour = 20;
+	}
+
     public String getAddress() {
         return this.address;
     }
@@ -196,6 +225,28 @@ public class Hospital extends Auditable<String> {
         this.currencyCod = aCurrencyCod;
     }
 
+	public int getStartHour() {
+		return startHour;
+	}
+
+	public void setStartHour(int startHour) {
+		this.startHour = startHour;
+	}
+	public void setStartHour(String startHour) {
+		this.startHour = Integer.parseInt(startHour);
+	}
+
+	public int getEndHour() {
+		return endHour;
+	}
+
+	public void setEndHour(int endHour) {
+		this.endHour = endHour;
+	}
+	public void setEndHour(String endHour) {
+		this.endHour = Integer.parseInt(endHour);
+	}
+
 	@Override
 	public boolean equals(Object anObject) {
 		return anObject instanceof Hospital && (getCode().equals(((Hospital) anObject).getCode())
@@ -205,24 +256,26 @@ public class Hospital extends Auditable<String> {
 				&& getAddress().equalsIgnoreCase(((Hospital) anObject).getAddress())
 				&& getCity().equalsIgnoreCase(((Hospital) anObject).getCity())
 				&& getEmail().equalsIgnoreCase(((Hospital) anObject).getEmail())
-				&& getCurrencyCod().equalsIgnoreCase(((Hospital) anObject).getCurrencyCod()));
+				&& getCurrencyCod().equalsIgnoreCase(((Hospital) anObject).getCurrencyCod())
+				&& getStartHour() == ((Hospital)anObject).getStartHour()
+				&& getEndHour() == ((Hospital)anObject).getEndHour());
 	}
 
 	public String toString() {
 		return getDescription();
-	}	
+	}
 
 	@Override
 	public int hashCode() {
 	    if (this.hashCode == 0) {
 	        final int m = 23;
 	        int c = 133;
-	        
+
 	        c = m * c + code.hashCode();
-	        
+
 	        this.hashCode = c;
 	    }
-	  
+
 	    return this.hashCode;
 	}
 }
