@@ -169,7 +169,7 @@ public class ExamBrowsingManager {
 	 * @return <code>true</code> if the existing {@link Exam} has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updateExam(Exam exam) throws OHServiceException {
+	public Exam updateExam(Exam exam) throws OHServiceException {
 		validateExam(exam, false);
 		return ioOperations.updateExam(exam);
 	}

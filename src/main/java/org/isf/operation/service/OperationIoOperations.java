@@ -84,8 +84,8 @@ public class OperationIoOperations {
 	 * @return <code>true</code> if the operation has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean newOperation(Operation operation) throws OHServiceException {
-		return repository.save(operation) != null;
+	public Operation newOperation(Operation operation) throws OHServiceException {
+		return repository.save(operation);
 	}
 	
 	/** 
@@ -95,8 +95,8 @@ public class OperationIoOperations {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean updateOperation(Operation operation) throws OHServiceException {
-		return repository.save(operation) != null;
+	public Operation updateOperation(Operation operation) throws OHServiceException {
+		return repository.save(operation);
 	}
 	
 	/** 

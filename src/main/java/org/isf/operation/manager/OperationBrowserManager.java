@@ -99,7 +99,7 @@ public class OperationBrowserManager {
 	 * @return <code>true</code> if the operation has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newOperation(Operation operation) throws OHServiceException {
+	public Operation newOperation(Operation operation) throws OHServiceException {
 		return ioOperations.newOperation(operation);
 	}
 
@@ -110,7 +110,7 @@ public class OperationBrowserManager {
 	 * @return <code>true</code> if the item has been updated. <code>false</code> other
 	 * @throws OHServiceException
 	 */
-	public boolean updateOperation(Operation operation) throws OHServiceException {
+	public Operation updateOperation(Operation operation) throws OHServiceException {
 		// the user has confirmed he wants to overwrite the record
 		return ioOperations.updateOperation(operation);
 	}

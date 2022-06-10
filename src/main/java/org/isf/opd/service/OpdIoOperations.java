@@ -123,8 +123,8 @@ public class OpdIoOperations {
 	 * @return <code>true</code> if the item has been inserted
 	 * @throws OHServiceException 
 	 */
-	public boolean newOpd(Opd opd) throws OHServiceException {
-		return repository.save(opd) != null;
+	public Opd newOpd(Opd opd) throws OHServiceException {
+		return repository.save(opd);
 	}
 	
 	/**

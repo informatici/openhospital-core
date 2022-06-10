@@ -56,8 +56,8 @@ public class MedicalStockMovementTypeIoOperation {
 	 * @return <code>true</code> if the specified stock movement type has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
-		return repository.save(medicaldsrstockmovType) != null;
+	public MovementType updateMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
+		return repository.save(medicaldsrstockmovType);
 	}
 
 	/**
@@ -66,8 +66,8 @@ public class MedicalStockMovementTypeIoOperation {
 	 * @return <code>true</code> if the medical movement type has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
-	public boolean newMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
-		return repository.save(medicaldsrstockmovType) != null;
+	public MovementType newMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
+		return repository.save(medicaldsrstockmovType);
 	}
 
 	/**

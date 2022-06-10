@@ -165,8 +165,8 @@ public class AdmissionIoOperations {
 	 * @return <code>true</code> if the admission has been successfully inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the insertion.
 	 */
-	public boolean newAdmission(Admission admission) throws OHServiceException {
-		return repository.save(admission) != null;
+	public Admission newAdmission(Admission admission) throws OHServiceException {
+		return repository.save(admission);
 	}
 
 	/**
@@ -176,9 +176,9 @@ public class AdmissionIoOperations {
 	 * @return the generated id.
 	 * @throws OHServiceException if an error occurs during the insertion.
 	 */
-	public int newAdmissionReturnKey(Admission admission) throws OHServiceException {
+	public Admission newAdmissionReturnKey(Admission admission) throws OHServiceException {
 		newAdmission(admission);
-		return admission.getId();
+		return admission;
 	}
 
 	/**
@@ -188,8 +188,8 @@ public class AdmissionIoOperations {
 	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs.
 	 */
-	public boolean updateAdmission(Admission admission) throws OHServiceException {
-		return repository.save(admission) != null;
+	public Admission updateAdmission(Admission admission) throws OHServiceException {
+		return repository.save(admission);
 	}
 
 	/**

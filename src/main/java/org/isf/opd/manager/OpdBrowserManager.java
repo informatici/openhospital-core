@@ -174,7 +174,7 @@ public class OpdBrowserManager {
 	 * @return <code>true</code> if the item has been inserted
 	 * @throws OHServiceException
 	 */
-	public boolean newOpd(Opd opd) throws OHServiceException {
+	public Opd newOpd(Opd opd) throws OHServiceException {
 		setPatientConsistency(opd);
 		validateOpd(opd, true);
 		return ioOperations.newOpd(opd);

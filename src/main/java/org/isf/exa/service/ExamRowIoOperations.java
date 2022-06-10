@@ -114,8 +114,8 @@ public class ExamRowIoOperations {
 	 * @return <code>true</code> if the {@link ExamRow} has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newExamRow(ExamRow examRow) throws OHServiceException {
-		return rowRepository.save(examRow) != null;
+	public ExamRow newExamRow(ExamRow examRow) throws OHServiceException {
+		return rowRepository.save(examRow);
 	}
 
 	/**
@@ -124,8 +124,8 @@ public class ExamRowIoOperations {
 	 * @return <code>true</code> if the {@link ExamRow} has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updateExamRow(ExamRow examRow) throws OHServiceException {
-		return rowRepository.save(examRow) != null;
+	public ExamRow updateExamRow(ExamRow examRow) throws OHServiceException {
+		return rowRepository.save(examRow);
 	}
 
 	/**

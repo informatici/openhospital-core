@@ -83,7 +83,7 @@ public class PriceListManager {
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newList(PriceList list) throws OHServiceException {
+	public PriceList newList(PriceList list) throws OHServiceException {
 		validatePriceList(list);
 		return ioOperations.newList(list);
 	}
@@ -95,7 +95,7 @@ public class PriceListManager {
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updateList(PriceList updateList) throws OHServiceException {
+	public PriceList updateList(PriceList updateList) throws OHServiceException {
 		validatePriceList(updateList);
 		return ioOperations.updateList(updateList);
 	}

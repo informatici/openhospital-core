@@ -158,7 +158,7 @@ public class AdmissionBrowserManager {
 	 * @return <code>true</code> if the admission has been successfully inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newAdmission(Admission admission) throws OHServiceException {
+	public Admission newAdmission(Admission admission) throws OHServiceException {
 		validateAdmission(admission, true);
 		return ioOperations.newAdmission(admission);
 	}
@@ -172,7 +172,7 @@ public class AdmissionBrowserManager {
 	 */
 	public int newAdmissionReturnKey(Admission admission) throws OHServiceException {
 		validateAdmission(admission, true);
-		return ioOperations.newAdmissionReturnKey(admission);
+		return ioOperations.newAdmission(admission).getId();
 	}
 
 	/**
@@ -182,8 +182,8 @@ public class AdmissionBrowserManager {
 	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean updateAdmission(Admission admission) throws OHServiceException {
-		//validateAdmission(admission, false);
+	public Admission updateAdmission(Admission admission) throws OHServiceException {
+		validateAdmission(admission, false);
 		return ioOperations.updateAdmission(admission);
 	}
 

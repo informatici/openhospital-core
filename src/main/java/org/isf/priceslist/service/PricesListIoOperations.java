@@ -106,8 +106,8 @@ public class PricesListIoOperations {
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newList(PriceList list) throws OHServiceException {
-		return repository.save(list) != null;
+	public PriceList newList(PriceList list) throws OHServiceException {
+		return repository.save(list);
 	}
 	
 	/**
@@ -117,8 +117,8 @@ public class PricesListIoOperations {
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean updateList(PriceList list) throws OHServiceException {
-		return repository.save(list) != null;
+	public PriceList updateList(PriceList list) throws OHServiceException {
+		return repository.save(list);
 	}
 	
 	/**

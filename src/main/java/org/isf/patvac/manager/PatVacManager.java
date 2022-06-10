@@ -89,7 +89,7 @@ public class PatVacManager {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newPatientVaccine(PatientVaccine patVac) throws OHServiceException {
+	public PatientVaccine newPatientVaccine(PatientVaccine patVac) throws OHServiceException {
 		validatePatientVaccine(patVac);
 		return ioOperations.newPatientVaccine(patVac);
 	}
@@ -101,7 +101,7 @@ public class PatVacManager {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updatePatientVaccine(PatientVaccine patVac) throws OHServiceException {
+	public PatientVaccine updatePatientVaccine(PatientVaccine patVac) throws OHServiceException {
 		validatePatientVaccine(patVac);
 		return ioOperations.updatePatientVaccine(patVac);
 	}

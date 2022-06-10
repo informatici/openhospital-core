@@ -126,9 +126,9 @@ public class ExamIoOperations {
 	 * @return <code>true</code> if the {@link Exam} has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updateExam(Exam exam) throws OHServiceException {
-		repository.save(exam);
-		return true;
+	public Exam updateExam(Exam exam) throws OHServiceException {
+		
+		return repository.save(exam);
 	}
 
 	/**
