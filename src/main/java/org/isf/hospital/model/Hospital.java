@@ -21,6 +21,8 @@
  */
 package org.isf.hospital.model;
 
+import java.sql.Time;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,6 +55,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "HOS_LAST_MODIFIED_DATE"))
 public class Hospital extends Auditable<String> {
 
+	public static final String VISIT_START_TIME = "06:30:00";
+	public static final String VISIT_END_TIME = "20:00:00";
+	public static final int VISIT_INCREMENT = 15;
+
 	@Id
 	@Column(name="HOS_ID_A")
     private String code;
@@ -81,6 +87,18 @@ public class Hospital extends Auditable<String> {
 	@Column(name="HOS_CURR_COD")
     private String currencyCod;
 
+	@NotNull
+	@Column(name="HOS_VISITS_START")
+	private Time visitStartTime;
+
+	@NotNull
+	@Column(name="HOS_VISITS_END")
+	private Time visitEndTime;
+
+	@NotNull
+	@Column(name="HOS_VISIT_INCREMENT")
+	private int visitIncrement;
+
 	@Version
 	@Column(name="HOS_LOCK")
     private Integer lock;
@@ -98,6 +116,9 @@ public class Hospital extends Auditable<String> {
 		this.fax = null;
 		this.email = null;
 		this.currencyCod = null;
+		this.visitStartTime = Time.valueOf(VISIT_START_TIME);
+		this.visitEndTime = Time.valueOf(VISIT_END_TIME);
+		this.visitIncrement = VISIT_INCREMENT;
 	}
 
 	/**
@@ -122,8 +143,29 @@ public class Hospital extends Auditable<String> {
         this.fax = aFax;
         this.email = aEmail;
         this.currencyCod = aCurrencyCod;
+		this.visitStartTime = Time.valueOf(VISIT_START_TIME);
+		this.visitEndTime = Time.valueOf(VISIT_END_TIME);
+		this.visitIncrement = VISIT_INCREMENT;
     }
-    
+
+	public Hospital(String aCode, String aDescription, String aAddress,
+			String aCity, String aTelephone, String aFax,
+			String aEmail, String aCurrencyCod,
+			Time visitStartTime, Time visitEndTime, int visitIncrement) {
+		super();
+		this.code = aCode;
+		this.description = aDescription;
+		this.address = aAddress;
+		this.city = aCity;
+		this.telephone = aTelephone;
+		this.fax = aFax;
+		this.email = aEmail;
+		this.currencyCod = aCurrencyCod;
+		this.visitStartTime = visitStartTime;
+		this.visitEndTime = visitEndTime;
+		this.visitIncrement = visitIncrement;
+	}
+
     public String getAddress() {
         return this.address;
     }
@@ -196,6 +238,30 @@ public class Hospital extends Auditable<String> {
         this.currencyCod = aCurrencyCod;
     }
 
+	public Time getVisitStartTime() {
+		return visitStartTime;
+	}
+
+	public void setVisitStartTime(Time startTime) {
+		this.visitStartTime = startTime;
+	}
+
+	public Time getVisitEndTime() {
+		return visitEndTime;
+	}
+
+	public void setVisitEndTime(Time endTime) {
+		this.visitEndTime = endTime;
+	}
+
+	public int getVisitIncrement() {
+		return visitIncrement;
+	}
+
+	public void setVisitIncrement(int visitIncrement) {
+		this.visitIncrement = visitIncrement;
+	}
+
 	@Override
 	public boolean equals(Object anObject) {
 		return anObject instanceof Hospital && (getCode().equals(((Hospital) anObject).getCode())
@@ -205,24 +271,27 @@ public class Hospital extends Auditable<String> {
 				&& getAddress().equalsIgnoreCase(((Hospital) anObject).getAddress())
 				&& getCity().equalsIgnoreCase(((Hospital) anObject).getCity())
 				&& getEmail().equalsIgnoreCase(((Hospital) anObject).getEmail())
-				&& getCurrencyCod().equalsIgnoreCase(((Hospital) anObject).getCurrencyCod()));
+				&& getCurrencyCod().equalsIgnoreCase(((Hospital) anObject).getCurrencyCod())
+				&& getVisitStartTime().equals(((Hospital)anObject).getVisitStartTime())
+				&& getVisitEndTime().equals(((Hospital)anObject).getVisitEndTime())
+				&& getVisitIncrement() == ((Hospital)anObject).getVisitIncrement());
 	}
 
 	public String toString() {
 		return getDescription();
-	}	
+	}
 
 	@Override
 	public int hashCode() {
 	    if (this.hashCode == 0) {
 	        final int m = 23;
 	        int c = 133;
-	        
+
 	        c = m * c + code.hashCode();
-	        
+
 	        this.hashCode = c;
 	    }
-	  
+
 	    return this.hashCode;
 	}
 }
