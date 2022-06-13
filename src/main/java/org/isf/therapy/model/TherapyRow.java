@@ -65,7 +65,7 @@ public class TherapyRow extends Auditable<String> {
 	@Column(name="THR_ID")	
 	private int therapyID;
 
-	@NotNull
+    @NotNull
 	@ManyToOne
 	@JoinColumn(name = "THR_PAT_ID")
 	Patient patient;
@@ -82,30 +82,30 @@ public class TherapyRow extends Auditable<String> {
 	@Column(name="THR_MDSR_ID")	
 	private Integer medicalId;
 
-	@NotNull
+	//@NotNull
 	@Column(name="THR_QTY")	
 	private Double qty;
 
-	@NotNull
+	//@NotNull
 	@Column(name="THR_UNT_ID")	
 	private int unitID;
 
-	@NotNull
+	//@NotNull
 	@Column(name="THR_FREQINDAY")	
 	private int freqInDay;
 
-	@NotNull
+	//@NotNull
 	@Column(name="THR_FREQINPRD")	
 	private int freqInPeriod;
 	
 	@Column(name="THR_NOTE")	
 	private String note;
 
-	@NotNull
+	//@NotNull
 	@Column(name="THR_NOTIFY")	
 	private int notifyInt;
 
-	@NotNull
+	//@NotNull
 	@Column(name="THR_SMS")	
 	private int smsInt;
 
@@ -244,6 +244,30 @@ public class TherapyRow extends Auditable<String> {
 
 	public void setSms(boolean sms) {
 		this.smsInt = sms ? 1 : 0;
+	}
+
+	public Integer getMedicalId() {
+		return medicalId;
+	}
+
+	public void setMedicalId(Integer medicalId) {
+		this.medicalId = medicalId;
+	}
+
+	public int getNotifyInt() {
+		return notifyInt;
+	}
+
+	public void setNotifyInt(int notifyInt) {
+		this.notifyInt = notifyInt;
+	}
+
+	public int getSmsInt() {
+		return smsInt;
+	}
+
+	public void setSmsInt(int smsInt) {
+		this.smsInt = smsInt;
 	}
 
 	public String toString() {
