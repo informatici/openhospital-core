@@ -108,7 +108,12 @@ public class Ward extends Auditable<String> {
 	public Ward() {
 		super();
 	}
-	
+
+	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isPharmacy,
+			boolean isMale, boolean isFemale) {
+		this(code, description, telephone, fax, email, beds, nurs, docs, isPharmacy, isMale, isFemale, 30);
+	}
+
     /**
      * @param code
 	 * @param description
@@ -121,6 +126,7 @@ public class Ward extends Auditable<String> {
      * @param isPharmacy
      * @param isMale
      * @param isFemale
+     * @param visitDuration
      */
     public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isPharmacy,
 		    boolean isMale, boolean isFemale, int visitDuration) {
@@ -138,6 +144,11 @@ public class Ward extends Auditable<String> {
 	    this.isFemale = isFemale;
 	    this.visitDuration = visitDuration;
     }
+
+	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isMale,
+			boolean isFemale) {
+		this(code, description, telephone, fax, email, beds, nurs, docs, isMale, isFemale, 30);
+	}
 
 	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isMale,
 			boolean isFemale, int visitDuration) {

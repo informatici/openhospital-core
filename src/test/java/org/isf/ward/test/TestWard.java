@@ -55,7 +55,7 @@ public class TestWard {
 		} else {
 			// Create Ward with all parameters 
 			ward = new Ward(code, description, telephone, fax, email, beds, nurs, docs,
-					isPharmacy, isMale, isFemale, 30);
+					isPharmacy, isMale, isFemale);
 		}
 		if (maternity) {
 			ward.setCode(maternityCode);
