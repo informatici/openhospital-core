@@ -229,7 +229,8 @@ public class WardBrowserManager {
 				2, //Doctors
 				false, //isPharmacy
 				false, //isMale
-				true);
+				true,
+				30);
 	}
 	
 	/**

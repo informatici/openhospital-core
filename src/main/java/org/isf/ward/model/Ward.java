@@ -94,6 +94,10 @@ public class Ward extends Auditable<String> {
 	@Column(name="WRD_IS_FEMALE")    
     private boolean isFemale;
 
+	@NotNull
+	@Column(name="WRD_VISIT_DURATION")
+	private int visitDuration;
+
 	@Version
 	@Column(name="WRD_LOCK")
     private Integer lock;
@@ -119,7 +123,7 @@ public class Ward extends Auditable<String> {
      * @param isFemale
      */
     public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isPharmacy,
-		    boolean isMale, boolean isFemale) {
+		    boolean isMale, boolean isFemale, int visitDuration) {
 	    super();
 	    this.code = code;
 	    this.description = description;
@@ -132,10 +136,11 @@ public class Ward extends Auditable<String> {
 	    this.isPharmacy = isPharmacy;
 	    this.isMale = isMale;
 	    this.isFemale = isFemale;
+	    this.visitDuration = visitDuration;
     }
 
 	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isMale,
-			boolean isFemale) {
+			boolean isFemale, int visitDuration) {
 		super();
 		this.code = code;
 		this.description = description;
@@ -148,6 +153,7 @@ public class Ward extends Auditable<String> {
 		this.isPharmacy = false;
 		this.isMale = isMale;
 		this.isFemale = isFemale;
+		this.visitDuration = visitDuration;
 	}
 
     public Integer getBeds() {
@@ -246,17 +252,26 @@ public class Ward extends Auditable<String> {
 		this.isFemale = isFemale;
 	}
 
+	public int getVisitDuration() {
+		return visitDuration;
+	}
+
+	public void setVisitDuration(int visitDuration) {
+		this.visitDuration = visitDuration;
+	}
+
 	@Override
 	public boolean equals(Object anObject) {
 		return anObject instanceof Ward
-				&& (getCode().equals(((Ward) anObject).getCode())
+				&& (getCode().equals(((Ward) anObject).getCode()))
 				&& getDescription().equalsIgnoreCase(((Ward) anObject).getDescription())
 				&& getTelephone().equalsIgnoreCase(((Ward) anObject).getTelephone())
-				&& (getFax().equalsIgnoreCase(((Ward) anObject).getFax())
-				&& (getEmail().equalsIgnoreCase(((Ward) anObject).getEmail())
-				&& (getBeds().equals(((Ward) anObject).getBeds())
-				&& (getNurs().equals(((Ward) anObject).getNurs())
-				&& (getDocs().equals(((Ward) anObject).getDocs())))))));
+				&& (getFax().equalsIgnoreCase(((Ward) anObject).getFax()))
+				&& (getEmail().equalsIgnoreCase(((Ward) anObject).getEmail()))
+				&& (getBeds().equals(((Ward) anObject).getBeds()))
+				&& (getNurs().equals(((Ward) anObject).getNurs()))
+				&& (getDocs().equals(((Ward) anObject).getDocs()))
+				&& (getVisitDuration() == ((Ward) anObject).getVisitDuration());
 	}
 
 	@Override

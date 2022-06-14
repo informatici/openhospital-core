@@ -482,7 +482,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testWardConstructor() throws Exception {
-		Ward ward = new Ward("Z", null, null, null, "TestEmail@gmail.com", 1, 1, 1, false, true);
+		Ward ward = new Ward("Z", null, null, null, "TestEmail@gmail.com", 1, 1, 1, false, true, 30);
 		assertThat(ward.getLock()).isNull();
 		ward.setLock(-1);
 		assertThat(ward.getLock()).isEqualTo(-1);
@@ -534,7 +534,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testWardToString() throws Exception {
-		Ward ward = new Ward("Z", "someDescription", null, null, "TestEmail@gmail.com", 1, 1, 1, false, true);
+		Ward ward = new Ward("Z", "someDescription", null, null, "TestEmail@gmail.com", 1, 1, 1, false, true, 30);
 		assertThat(ward).hasToString("someDescription");
 	}
 
