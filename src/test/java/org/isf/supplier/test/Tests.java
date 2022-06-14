@@ -74,9 +74,9 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoSupplierSaveOrUpdate() throws Exception {
 		Supplier supplier = testSupplier.setup(true);
-		boolean result = supplierIoOperation.saveOrUpdate(supplier);
+		Supplier result = supplierIoOperation.saveOrUpdate(supplier);
 
-		assertThat(result).isTrue();
+		assertThat(result);
 		checkSupplierIntoDb(supplier.getSupId());
 	}
 
@@ -106,7 +106,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrSupplierSaveOrUpdate() throws Exception {
 		Supplier supplier = testSupplier.setup(true);
-		assertThat(supplierBrowserManager.saveOrUpdate(supplier)).isTrue();
+		assertThat(supplierBrowserManager.saveOrUpdate(supplier));
 		checkSupplierIntoDb(supplier.getSupId());
 	}
 

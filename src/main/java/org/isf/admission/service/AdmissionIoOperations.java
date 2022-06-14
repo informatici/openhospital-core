@@ -176,9 +176,9 @@ public class AdmissionIoOperations {
 	 * @return the generated id.
 	 * @throws OHServiceException if an error occurs during the insertion.
 	 */
-	public Admission newAdmissionReturnKey(Admission admission) throws OHServiceException {
+	public int newAdmissionReturnKey(Admission admission) throws OHServiceException {
 		newAdmission(admission);
-		return admission;
+		return admission.getId();
 	}
 
 	/**

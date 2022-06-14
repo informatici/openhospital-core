@@ -87,8 +87,8 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestVaccineType(false);
 		VaccineType foundVaccineType = vaccineTypeIoOperation.findVaccineType(code);
 		foundVaccineType.setDescription("Update");
-		boolean result = vaccineTypeIoOperation.updateVaccineType(foundVaccineType);
-		assertThat(result).isTrue();
+		VaccineType result = vaccineTypeIoOperation.updateVaccineType(foundVaccineType);
+		assertThat(result);
 		VaccineType updateVaccineType = vaccineTypeIoOperation.findVaccineType(code);
 		assertThat(updateVaccineType.getDescription()).isEqualTo("Update");
 	}
@@ -96,8 +96,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoNewVaccineType() throws Exception {
 		VaccineType vaccineType = testVaccineType.setup(true);
-		boolean result = vaccineTypeIoOperation.newVaccineType(vaccineType);
-		assertThat(result).isTrue();
+		VaccineType result = vaccineTypeIoOperation.newVaccineType(vaccineType);
+		assertThat(result);
 		checkVaccineTypeIntoDb(vaccineType.getCode());
 	}
 
@@ -139,7 +139,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestVaccineType(false);
 		VaccineType foundVaccineType = vaccineTypeBrowserManager.findVaccineType(code);
 		foundVaccineType.setDescription("Update");
-		assertThat(vaccineTypeBrowserManager.updateVaccineType(foundVaccineType)).isTrue();
+		assertThat(vaccineTypeBrowserManager.updateVaccineType(foundVaccineType));
 		VaccineType updateVaccineType = vaccineTypeBrowserManager.findVaccineType(code);
 		assertThat(updateVaccineType.getDescription()).isEqualTo("Update");
 	}
@@ -147,7 +147,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrNewVaccineType() throws Exception {
 		VaccineType vaccineType = testVaccineType.setup(true);
-		assertThat(vaccineTypeBrowserManager.newVaccineType(vaccineType)).isTrue();
+		assertThat(vaccineTypeBrowserManager.newVaccineType(vaccineType));
 		checkVaccineTypeIntoDb(vaccineType.getCode());
 	}
 

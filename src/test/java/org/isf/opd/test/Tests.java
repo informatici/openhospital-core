@@ -261,8 +261,8 @@ public class Tests extends OHCoreTestCase {
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		Opd opd = testOpd.setup(patient, disease, false);
-		boolean result = opdIoOperation.newOpd(opd);
-		assertThat(result).isTrue();
+		Opd result = opdIoOperation.newOpd(opd);
+		assertThat(result);
 		checkOpdIntoDb(opd.getCode());
 	}
 
@@ -516,7 +516,7 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease3);
 		opd.setDisease2(disease2);
 		opd.setDisease3(disease3);
-		assertThat(opdBrowserManager.newOpd(opd)).isTrue();
+		assertThat(opdBrowserManager.newOpd(opd));
 		checkOpdIntoDb(opd.getCode());
 	}
 
@@ -537,7 +537,7 @@ public class Tests extends OHCoreTestCase {
 		opd.setDisease2(disease2);
 		opd.setDisease3(disease3);
 		opd.setDate(LocalDateTime.now());
-		assertThat(opdBrowserManager.newOpd(opd)).isTrue();
+		assertThat(opdBrowserManager.newOpd(opd));
 		opd.setReason("update reason");
 		opd.setAnamnesis("update anamnesis");
 		opd.setTherapies("update therapie");

@@ -412,8 +412,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoNewAdmission() throws Exception {
 		Admission admission = buildNewAdmission();
-		boolean result = admissionIoOperation.newAdmission(admission);
-		assertThat(result).isTrue();
+		Admission result = admissionIoOperation.newAdmission(admission);
+		assertThat(result);
 		admission = admissionBrowserManager.getAdmission(admission.getId());
 		testAdmission.check(admission);
 	}
@@ -430,10 +430,10 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		foundAdmission.setNote("Update");
-		boolean result = admissionIoOperation.updateAdmission(foundAdmission);
+		Admission result = admissionIoOperation.updateAdmission(foundAdmission);
 		Admission updateAdmission = admissionIoOperation.getAdmission(id);
 
-		assertThat(result).isTrue();
+		assertThat(result);
 		assertThat(updateAdmission.getNote()).isEqualTo("Update");
 	}
 
@@ -879,8 +879,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrNewAdmission() throws Exception {
 		Admission admission = buildNewAdmission();
-		boolean result = admissionBrowserManager.newAdmission(admission);
-		assertThat(result).isTrue();
+		Admission result = admissionBrowserManager.newAdmission(admission);
+		assertThat(result);
 		admission = admissionBrowserManager.getAdmission(admission.getId());
 		testAdmission.check(admission);
 	}
@@ -900,8 +900,8 @@ public class Tests extends OHCoreTestCase {
 		admissionBrowserManager.newAdmission(admission);
 		int id = admission.getId();
 		admission.setNote("Update");
-		boolean result = admissionBrowserManager.updateAdmission(admission);
-		assertThat(result).isTrue();
+		Admission result = admissionBrowserManager.updateAdmission(admission);
+		assertThat(result);
 		Admission updateAdmission = admissionBrowserManager.getAdmission(id);
 		assertThat(updateAdmission.getNote()).isEqualTo("Update");
 	}

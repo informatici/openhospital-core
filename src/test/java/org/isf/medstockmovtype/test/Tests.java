@@ -90,8 +90,8 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestMovementType(false);
 		MovementType foundMovementType = medicalStockMovementTypeIoOperation.findOneByCode(code);
 		foundMovementType.setDescription("Update");
-		boolean result = medicalStockMovementTypeIoOperation.updateMedicaldsrstockmovType(foundMovementType);
-		assertThat(result).isTrue();
+		MovementType result = medicalStockMovementTypeIoOperation.updateMedicaldsrstockmovType(foundMovementType);
+		assertThat(result);
 		MovementType updateMovementType = medicalStockMovementTypeIoOperation.findOneByCode(code);
 		assertThat(updateMovementType.getDescription()).isEqualTo("Update");
 	}
@@ -99,8 +99,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoNewMovementType() throws Exception {
 		MovementType movementType = testMovementType.setup(true);
-		boolean result = medicalStockMovementTypeIoOperation.newMedicaldsrstockmovType(movementType);
-		assertThat(result).isTrue();
+		MovementType result = medicalStockMovementTypeIoOperation.newMedicaldsrstockmovType(movementType);
+		assertThat(result);
 		checkMovementTypeIntoDb(movementType.getCode());
 	}
 
@@ -139,7 +139,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestMovementType(false);
 		MovementType foundMovementType = medicaldsrstockmovTypeBrowserManager.getMovementType(code);
 		foundMovementType.setDescription("Update");
-		assertThat(medicaldsrstockmovTypeBrowserManager.updateMedicaldsrstockmovType(foundMovementType)).isTrue();
+		assertThat(medicaldsrstockmovTypeBrowserManager.updateMedicaldsrstockmovType(foundMovementType));
 		MovementType updateMovementType = medicaldsrstockmovTypeBrowserManager.getMovementType(code);
 		assertThat(updateMovementType.getDescription()).isEqualTo("Update");
 	}
@@ -147,7 +147,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrNewMovementType() throws Exception {
 		MovementType movementType = testMovementType.setup(true);
-		assertThat(medicaldsrstockmovTypeBrowserManager.newMedicaldsrstockmovType(movementType)).isTrue();
+		assertThat(medicaldsrstockmovTypeBrowserManager.newMedicaldsrstockmovType(movementType));
 		checkMovementTypeIntoDb(movementType.getCode());
 	}
 
