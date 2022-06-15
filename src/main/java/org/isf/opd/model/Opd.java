@@ -94,15 +94,14 @@ public class Opd extends Auditable<String> {
 	@Column(name="OPD_SEX")
 	private char sex;
 
-	/*@NotNull
+	@NotNull
 	@Column(name="OPD_NOTE")
-	private String note;
-	private String note; //ADDED: Alex*/
+	private String note; //ADDED: Alex
 
 	@NotNull
 	@Column(name="OPD_PROG_YEAR")	
 	private int prog_year;
-		
+
 	@ManyToOne
 	@JoinColumn(name="OPD_DIS_ID_A")
 	private Disease disease;
@@ -187,7 +186,13 @@ public class Opd extends Auditable<String> {
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
+	public String getNote() {
+		return note;
+	}
 
+	public void setNote(String note) {
+		this.note = note;
+	}
 	public int getAge() {
 		return age;
 	}
