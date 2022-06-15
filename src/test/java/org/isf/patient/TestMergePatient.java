@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -83,31 +83,31 @@ public class TestMergePatient extends OHCoreTestCase {
 	private static TestWard testWard;
 
 	@Autowired
-	PatientIoOperations patientIoOperation;
+	private PatientIoOperations patientIoOperation;
 	@Autowired
-	PatientIoOperationRepository patientIoOperationRepository;
+	private PatientIoOperationRepository patientIoOperationRepository;
 	@Autowired
-	PatientBrowserManager patientBrowserManager;
+	private PatientBrowserManager patientBrowserManager;
 	@Autowired
-	ExaminationIoOperationRepository examinationIoOperationRepository;
+	private ExaminationIoOperationRepository examinationIoOperationRepository;
 	@Autowired
-	VisitsIoOperationRepository visitsIoOperationRepository;
+	private VisitsIoOperationRepository visitsIoOperationRepository;
 	@Autowired
-	TestPatientMergedEventListener testPatientMergedEventListener;
+	private TestPatientMergedEventListener testPatientMergedEventListener;
 	@Autowired
-	PricesListIoOperationRepository priceListIoOperationRepository;
+	private PricesListIoOperationRepository priceListIoOperationRepository;
 	@Autowired
-	AccountingBillIoOperationRepository accountingBillIoOperationRepository;
+	private AccountingBillIoOperationRepository accountingBillIoOperationRepository;
 	@Autowired
-	AdmissionTypeIoOperationRepository admissionTypeIoOperationRepository;
+	private AdmissionTypeIoOperationRepository admissionTypeIoOperationRepository;
 	@Autowired
-	DiseaseTypeIoOperationRepository diseaseTypeIoOperationRepository;
+	private DiseaseTypeIoOperationRepository diseaseTypeIoOperationRepository;
 	@Autowired
-	DiseaseIoOperationRepository diseaseIoOperationRepository;
+	private DiseaseIoOperationRepository diseaseIoOperationRepository;
 	@Autowired
-	AdmissionIoOperationRepository admissionIoOperationRepository;
+	private AdmissionIoOperationRepository admissionIoOperationRepository;
 	@Autowired
-	WardIoOperationRepository wardIoOperationRepository;
+	private WardIoOperationRepository wardIoOperationRepository;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -432,27 +432,27 @@ public class TestMergePatient extends OHCoreTestCase {
 		assertThat(mergedPatientResult.getDeleted()).isEqualTo("N");
 	}
 
-	private void assertThatObsoletePatientWasNotDeletedAndIsTheActiveOne(Patient obsoletePatient) throws OHException {
+	private void assertThatObsoletePatientWasNotDeletedAndIsTheActiveOne(Patient obsoletePatient) {
 		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).get();
 		assertThat(obsoletePatientResult.getDeleted()).isEqualTo("N");
 	}
 
-	private void assertThatVisitWasMovedFromObsoleteToMergedPatient(Visit visit, Patient mergedPatient) throws OHException {
+	private void assertThatVisitWasMovedFromObsoleteToMergedPatient(Visit visit, Patient mergedPatient) {
 		Visit visitResult = visitsIoOperationRepository.findById(visit.getVisitID()).get();
 		assertThat(visitResult.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 	}
 
-	private void assertThatVisitIsStillAssignedToObsoletePatient(Visit visit, Patient obsoletePatient) throws OHException {
+	private void assertThatVisitIsStillAssignedToObsoletePatient(Visit visit, Patient obsoletePatient) {
 		Visit visitResult = visitsIoOperationRepository.findById(visit.getVisitID()).get();
 		assertThat(visitResult.getPatient().getCode()).isEqualTo(obsoletePatient.getCode());
 	}
 
-	private void assertThatExaminationWasMovedFromObsoleteToMergedPatient(PatientExamination examination, Patient mergedPatient) throws OHException {
+	private void assertThatExaminationWasMovedFromObsoleteToMergedPatient(PatientExamination examination, Patient mergedPatient) {
 		PatientExamination patientResult = examinationIoOperationRepository.findById(examination.getPex_ID()).get();
 		assertThat(patientResult.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 	}
 
-	private void assertThatExaminationIsStillAssignedToObsoletePatient(PatientExamination patientExamination, Patient obsoletePatient) throws OHException {
+	private void assertThatExaminationIsStillAssignedToObsoletePatient(PatientExamination patientExamination, Patient obsoletePatient) {
 		PatientExamination patientResult = examinationIoOperationRepository.findById(patientExamination.getPex_ID()).get();
 		assertThat(patientResult.getPatient().getCode()).isEqualTo(obsoletePatient.getCode());
 	}
