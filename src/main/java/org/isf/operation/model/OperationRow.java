@@ -55,27 +55,27 @@ public class OperationRow {
     @JoinColumn(name = "OPER_ID")
     private Operation operation;
 
-    @NotNull
+   // @NotNull
     @Column(name = "OPER_PRESCRIBER")
     private String prescriber;
 
-    @NotNull
+    //@NotNull
     @Column(name = "OPER_RESULT")
     private String opResult;
 
-    @NotNull
+    //@NotNull
     @Column(name = "OPER_OPDATE")       // SQL type: datetime
     private LocalDateTime opDate;
 
     @Column(name = "OPER_REMARKS")
     private String remarks;
 
-    @NotNull
+    //@NotNull
     @ManyToOne
     @JoinColumn(name = "OPER_ADMISSION_ID")
     private Admission admission;
 
-    @NotNull
+    //@NotNull
     @ManyToOne
     @JoinColumn(name = "OPER_OPD_ID")
     private Opd opd;
@@ -84,7 +84,7 @@ public class OperationRow {
     @JoinColumn(name = "OPER_BILL_ID")
     private Bill bill;
 
-    @NotNull
+    //@NotNull
     @Column(name = "OPER_TRANS_UNIT")
     private Float transUnit;
     

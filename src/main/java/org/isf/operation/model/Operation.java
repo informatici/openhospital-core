@@ -21,6 +21,8 @@
  */
 package org.isf.operation.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -83,6 +85,7 @@ public class Operation extends Auditable<String> {
 	@Column(name="OPE_FOR")
     private String operFor;
 	
+	
 	@Version
 	@Column(name="OPE_LOCK")
     private Integer lock;
@@ -95,8 +98,8 @@ public class Operation extends Auditable<String> {
     {
 		super();
     }
-	
-    /**
+
+	/**
      * @param aCode
      * @param aDescription
      * @param aType
