@@ -60,7 +60,7 @@ public class PatientBrowserManager {
 	@Autowired
 	private FileSystemPatientPhotoManager fileSystemPatientPhotoManager;
 	
-	private static final String PATIENT_PHOTO_FROM_DATABASE = "DB";
+	public static final String PATIENT_PHOTO_FROM_DATABASE = "DB";
 
 	protected LinkedHashMap<String, String> maritalHashMap;
 

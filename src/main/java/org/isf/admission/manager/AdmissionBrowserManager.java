@@ -34,8 +34,8 @@ import org.isf.disctype.model.DischargeType;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.manager.FileSystemPatientPhotoManager;
+import org.isf.patient.manager.PatientBrowserManager;
 import org.isf.patient.model.Patient;
-import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -58,8 +58,6 @@ public class AdmissionBrowserManager {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdmissionBrowserManager.class);
 	
-	private static final String PATIENT_PHOTO_FROM_DATABASE = "DB";
-
 	/**
 	 * Returns all patients with ward in which they are admitted.
 	 *
@@ -111,7 +109,7 @@ public class AdmissionBrowserManager {
 	}
 
 	private boolean isLoadProfilePhotoFromDB() {
-		return PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO);
+		return PatientBrowserManager.PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO);
 	}
 
 	/**

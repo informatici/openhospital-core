@@ -116,6 +116,17 @@ public class PatientIoOperations {
 	 * @return the Patient that match specified name
 	 * @throws OHServiceException
 	 */
+	public Patient getPatient(Integer code) throws OHServiceException {
+	     return this.getPatient(code, true);
+	}
+	
+	/**
+	 * Method that gets a Patient by his/her name
+	 * @param name
+	 * @param isLoadProfilePhotoFromDb
+	 * @return
+	 * @throws OHServiceException
+	 */
 	public Patient getPatient(String name, boolean isLoadProfilePhotoFromDb) throws OHServiceException {
 		List<Patient> patients = repository.findByNameAndDeletedOrderByName(name, NOT_DELETED_STATUS);
 		if (!patients.isEmpty()) {
