@@ -43,6 +43,10 @@ import org.springframework.stereotype.Component;
 @Component("fileSystemPatientPhotoManager")
 public class FileSystemPatientPhotoManager {
 
+	private static final String KEY_ERROR_TITLE = "angal.patient.patientphoto.error.title";
+
+	private static final String KEY_FILE_NOT_FOUND = "angal.patient.patientphoto.error.filenotfound.msg";
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemPatientPhotoManager.class);
 
 	private static final String IMAGE_FORMAT = ".jpg";
@@ -68,8 +72,8 @@ public class FileSystemPatientPhotoManager {
 		} catch (SQLException e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new OHServiceException(
-					new OHExceptionMessage(MessageBundle.getMessage("angal.patient.patientphoto.error.title"),
-							MessageBundle.formatMessage("angal.patient.patientphoto.error.filenotfound.msg"),
+					new OHExceptionMessage(MessageBundle.getMessage(KEY_ERROR_TITLE),
+							MessageBundle.formatMessage(KEY_FILE_NOT_FOUND),
 							OHSeverityLevel.ERROR));
 		}
 
@@ -101,8 +105,8 @@ public class FileSystemPatientPhotoManager {
 		} catch (IOException | SQLException e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new OHServiceException(
-					new OHExceptionMessage(MessageBundle.getMessage("angal.patient.patientphoto.error.title"),
-							MessageBundle.formatMessage("angal.patient.patientphoto.error.filenotfound.msg"),
+					new OHExceptionMessage(MessageBundle.getMessage(KEY_ERROR_TITLE),
+							MessageBundle.formatMessage(KEY_FILE_NOT_FOUND),
 							OHSeverityLevel.ERROR));
 		}
 	}
