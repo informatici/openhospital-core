@@ -58,6 +58,7 @@ public class Hospital extends Auditable<String> {
 	public static final String VISIT_START_TIME = "06:30:00";
 	public static final String VISIT_END_TIME = "20:00:00";
 	public static final int VISIT_INCREMENT = 15;
+	public static final int VISIT_DURATION = 30;
 
 	@Id
 	@Column(name="HOS_ID_A")
@@ -88,16 +89,20 @@ public class Hospital extends Auditable<String> {
     private String currencyCod;
 
 	@NotNull
-	@Column(name="HOS_VISITS_START")
+	@Column(name="HOS_VISIT_START")
 	private Time visitStartTime;
 
 	@NotNull
-	@Column(name="HOS_VISITS_END")
+	@Column(name="HOS_VISIT_END")
 	private Time visitEndTime;
 
 	@NotNull
 	@Column(name="HOS_VISIT_INCREMENT")
 	private int visitIncrement;
+
+	@NotNull
+	@Column(name="HOS_VISIT_DURATION")
+	private int visitDuration;
 
 	@Version
 	@Column(name="HOS_LOCK")
@@ -119,6 +124,7 @@ public class Hospital extends Auditable<String> {
 		this.visitStartTime = Time.valueOf(VISIT_START_TIME);
 		this.visitEndTime = Time.valueOf(VISIT_END_TIME);
 		this.visitIncrement = VISIT_INCREMENT;
+		this.visitDuration = VISIT_DURATION;
 	}
 
 	/**
@@ -146,12 +152,13 @@ public class Hospital extends Auditable<String> {
 		this.visitStartTime = Time.valueOf(VISIT_START_TIME);
 		this.visitEndTime = Time.valueOf(VISIT_END_TIME);
 		this.visitIncrement = VISIT_INCREMENT;
+		this.visitDuration = VISIT_DURATION;
     }
 
 	public Hospital(String aCode, String aDescription, String aAddress,
 			String aCity, String aTelephone, String aFax,
 			String aEmail, String aCurrencyCod,
-			Time visitStartTime, Time visitEndTime, int visitIncrement) {
+			Time visitStartTime, Time visitEndTime, int visitIncrement, int visitDuration) {
 		super();
 		this.code = aCode;
 		this.description = aDescription;
@@ -164,6 +171,7 @@ public class Hospital extends Auditable<String> {
 		this.visitStartTime = visitStartTime;
 		this.visitEndTime = visitEndTime;
 		this.visitIncrement = visitIncrement;
+		this.visitDuration = visitDuration;
 	}
 
     public String getAddress() {
@@ -262,6 +270,14 @@ public class Hospital extends Auditable<String> {
 		this.visitIncrement = visitIncrement;
 	}
 
+	public int getVisitDuration() {
+		return visitDuration;
+	}
+
+	public void setVisitDuration(int visitDuration) {
+		this.visitDuration = visitDuration;
+	}
+
 	@Override
 	public boolean equals(Object anObject) {
 		return anObject instanceof Hospital && (getCode().equals(((Hospital) anObject).getCode())
@@ -274,7 +290,8 @@ public class Hospital extends Auditable<String> {
 				&& getCurrencyCod().equalsIgnoreCase(((Hospital) anObject).getCurrencyCod())
 				&& getVisitStartTime().equals(((Hospital)anObject).getVisitStartTime())
 				&& getVisitEndTime().equals(((Hospital)anObject).getVisitEndTime())
-				&& getVisitIncrement() == ((Hospital)anObject).getVisitIncrement());
+				&& getVisitIncrement() == ((Hospital)anObject).getVisitIncrement()
+				&& getVisitDuration() == ((Hospital)anObject).getVisitDuration());
 	}
 
 	public String toString() {
