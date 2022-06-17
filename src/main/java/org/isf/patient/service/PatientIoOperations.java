@@ -116,11 +116,13 @@ public class PatientIoOperations {
 	 * @return the Patient that match specified name
 	 * @throws OHServiceException
 	 */
-	public Patient getPatient(String name) throws OHServiceException {
+	public Patient getPatient(String name, boolean isLoadProfilePhotoFromDb) throws OHServiceException {
 		List<Patient> patients = repository.findByNameAndDeletedOrderByName(name, NOT_DELETED_STATUS);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
-			Hibernate.initialize(patient.getPatientProfilePhoto());
+			if (isLoadProfilePhotoFromDb) {
+				Hibernate.initialize(patient.getPatientProfilePhoto());
+			}
 			return patient;
 		}
 		return null;
@@ -133,11 +135,13 @@ public class PatientIoOperations {
 	 * @return the Patient
 	 * @throws OHServiceException
 	 */
-	public Patient getPatient(Integer code) throws OHServiceException {
+	public Patient getPatient(Integer code, boolean isLoadProfilePhotoFromDb) throws OHServiceException {
 		List<Patient> patients = repository.findAllWhereIdAndDeleted(code, NOT_DELETED_STATUS);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
-			Hibernate.initialize(patient.getPatientProfilePhoto());
+			if (isLoadProfilePhotoFromDb) {
+				Hibernate.initialize(patient.getPatientProfilePhoto());
+			}
 			return patient;
 		}
 		return null;
@@ -150,9 +154,9 @@ public class PatientIoOperations {
 	 * @return the list of Patients
 	 * @throws OHServiceException
 	 */
-	public Patient getPatientAll(Integer code) throws OHServiceException {
+	public Patient getPatientAll(Integer code, boolean isLoadProfilePhotoFromDb) throws OHServiceException {
 		Patient patient = repository.findById(code).orElse(null);
-		if (patient != null) {
+		if (patient != null && isLoadProfilePhotoFromDb) {
 			Hibernate.initialize(patient.getPatientProfilePhoto());
 		}
 		return patient;

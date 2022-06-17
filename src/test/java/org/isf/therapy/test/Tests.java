@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
+import org.isf.generaldata.GeneralData;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperationRepository;
 import org.isf.medicals.test.TestMedical;
@@ -195,6 +196,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewTherapiesWithSMSDateAfterToday() throws Exception {
+		GeneralData.PATIENTPHOTO = "DB";
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
 		Patient patient = testPatient.setup(false);
@@ -213,6 +215,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewTherapiesWithSMSDateAfterTodayTruncateMessage() throws Exception {
+		GeneralData.PATIENTPHOTO = "DB";
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
 		Patient patient = testPatient.setup(false);
@@ -279,6 +282,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrDeleteTherapyRow() throws Exception {
+		GeneralData.PATIENTPHOTO = "DB";
 		int id = setupTestTherapyRow(false);
 		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).get();
 		assertThat(therapyManager.deleteAllTherapies(foundTherapyRow.getPatient().getCode())).isTrue();

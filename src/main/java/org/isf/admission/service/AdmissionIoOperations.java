@@ -115,12 +115,14 @@ public class AdmissionIoOperations {
 	/**
 	 * Load patient together with the profile photo, or {@code null} if there is no patient with the given id
 	 */
-	public AdmittedPatient loadAdmittedPatient(final Integer patientId) {
+	public AdmittedPatient loadAdmittedPatient(final Integer patientId, boolean isLoadPatientProfilePhotoFromDb) {
 		final Patient patient = patientRepository.findById(patientId).orElse(null);
 		if (patient == null) {
 			return null;
 		}
-		Hibernate.initialize(patient.getPatientProfilePhoto());
+		if (isLoadPatientProfilePhotoFromDb) {
+			Hibernate.initialize(patient.getPatientProfilePhoto());
+		}
 		final Admission admission = repository.findOneWherePatientIn(patientId);
 		return new AdmittedPatient(patient, admission);
 	}

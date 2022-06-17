@@ -31,8 +31,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.isf.accounting.manager.BillBrowserManager;
 import org.isf.accounting.model.Bill;
 import org.isf.admission.manager.AdmissionBrowserManager;
+import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
@@ -53,6 +55,12 @@ public class PatientBrowserManager {
 
 	@Autowired
 	private BillBrowserManager billManager;
+	
+
+	@Autowired
+	private FileSystemPatientPhotoManager fileSystemPatientPhotoManager;
+	
+	private static final String PATIENT_PHOTO_FROM_DATABASE = "DB";
 
 	protected LinkedHashMap<String, String> maritalHashMap;
 
@@ -67,7 +75,20 @@ public class PatientBrowserManager {
 	 */
 	public Patient savePatient(Patient patient) throws OHServiceException {
 		validatePatient(patient);
-		return ioOperations.savePatient(patient);
+		if (!isLoadPatientPhotoFromDb()) {
+			PatientProfilePhoto patientProfilePhoto = patient.getPatientProfilePhoto();
+			patient.setPatientProfilePhoto(new PatientProfilePhoto());
+			patient = ioOperations.savePatient(patient);
+			this.fileSystemPatientPhotoManager.save(GeneralData.PATIENTPHOTO, patient.getCode(), patientProfilePhoto.getPhoto());
+			patient.setPatientProfilePhoto(patientProfilePhoto);
+		} else if (isLoadPatientPhotoFromDb()){
+			patient = ioOperations.savePatient(patient);
+		}
+		return patient;
+	}
+
+	private boolean isLoadPatientPhotoFromDb() {
+		return PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO);
 	}
 
 	/**
@@ -101,7 +122,11 @@ public class PatientBrowserManager {
 	 */
 	@Deprecated
 	public Patient getPatientByName(String name) throws OHServiceException {
-		return ioOperations.getPatient(name);
+		Patient patient = ioOperations.getPatient(name, isLoadPatientPhotoFromDb());
+		if (!isLoadPatientPhotoFromDb()) {
+			this.fileSystemPatientPhotoManager.loadInPatient(patient, GeneralData.PATIENTPHOTO);
+		}
+		return patient;
 	}
 
 	/**
@@ -123,7 +148,11 @@ public class PatientBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public Patient getPatientById(Integer code) throws OHServiceException {
-		return ioOperations.getPatient(code);
+		Patient patient = ioOperations.getPatient(code, isLoadPatientPhotoFromDb());
+		if (!isLoadPatientPhotoFromDb()) {
+			this.fileSystemPatientPhotoManager.loadInPatient(patient, GeneralData.PATIENTPHOTO);
+		}
+		return patient;
 	}
 
 	/**
@@ -134,7 +163,11 @@ public class PatientBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public Patient getPatientAll(Integer code) throws OHServiceException {
-		return ioOperations.getPatientAll(code);
+		Patient patient =  ioOperations.getPatientAll(code, isLoadPatientPhotoFromDb());
+		if (!isLoadPatientPhotoFromDb()) {
+			this.fileSystemPatientPhotoManager.loadInPatient(patient, GeneralData.PATIENTPHOTO);
+		}
+		return patient;
 	}
 
 	/**
