@@ -165,6 +165,17 @@ public class PatientIoOperations {
 	 * @return the list of Patients
 	 * @throws OHServiceException
 	 */
+	public Patient getPatientAll(Integer code) throws OHServiceException {
+		return this.getPatientAll(code, true);
+	}
+	
+	/**
+	 *  et a Patient by his/her ID, even if he/her has been logically deleted
+	 * @param code
+	 * @param isLoadProfilePhotoFromDb
+	 * @return
+	 * @throws OHServiceException
+	 */
 	public Patient getPatientAll(Integer code, boolean isLoadProfilePhotoFromDb) throws OHServiceException {
 		Patient patient = repository.findById(code).orElse(null);
 		if (patient != null && isLoadProfilePhotoFromDb) {

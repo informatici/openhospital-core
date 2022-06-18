@@ -118,7 +118,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPatientsByOneOfFieldsLikeFirstName() throws Exception {
 		// given:
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 
 		// when:
 		List<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getFirstName());
@@ -131,7 +131,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPatientsByOneOfFieldsLikeMiddleOfFirstName() throws Exception {
 		// given:
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 
 		// when:
 		List<Patient> patients = patientIoOperation
@@ -145,7 +145,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPatientsByOneOfFieldsLikeSecondName() throws Exception {
 		// given:
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 
 		// when:
 		List<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
@@ -158,7 +158,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPatientsByOneOfFieldsLikeNote() throws Exception {
 		// given:
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 
 		// when:
 		List<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
@@ -171,7 +171,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPatientsByOneOfFieldsLikeTaxCode() throws Exception {
 		// given:
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 
 		// when:
 		List<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(foundPatient.getTaxCode());
@@ -190,7 +190,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetPatientFromName() throws Exception {
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 		Patient patient = patientIoOperation.getPatient(foundPatient.getName(), true);
 		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
 	}
@@ -204,20 +204,20 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPatientFromCode() throws Exception {
 		Integer code = setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code, true);
-		Patient patient = patientIoOperation.getPatient(code, true);
+		Patient patient = patientIoOperation.getPatient(code);
 		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
 	}
 
 	@Test
 	public void testIoGetPatientFromCodeDoesNotExist() throws Exception {
-		assertThat(patientIoOperation.getPatient(-987654321, true)).isNull();
+		assertThat(patientIoOperation.getPatient(-987654321)).isNull();
 	}
 
 	@Test
 	public void testIoGetPatientAll() throws Exception {
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
-		Patient patient = patientIoOperation.getPatientAll(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+		Patient patient = patientIoOperation.getPatientAll(code);
 		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
 	}
 
@@ -241,7 +241,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoUpdatePatient() throws Exception {
 		Integer code = setupTestPatient(false);
-		Patient patient = patientIoOperation.getPatient(code, true);
+		Patient patient = patientIoOperation.getPatient(code);
 		patient.setFirstName("someNewFirstName");
 		assertThat(patientIoOperation.updatePatient(patient)).isTrue();
 		Patient updatedPatient = patientIoOperation.getPatient(code, true);
@@ -259,7 +259,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoIsPatientPresent() throws Exception {
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 		boolean result = patientIoOperation.isPatientPresentByName(foundPatient.getName());
 		assertThat(result).isTrue();
 	}
@@ -327,7 +327,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetPatientsByOneOfFieldsLikeFirstName() throws Exception {
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getFirstName());
 		testPatient.check(patients.get(0));
 	}
@@ -335,7 +335,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetPatientsByOneOfFieldsLikeMiddleOfFirstName() throws Exception {
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 
 		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getFirstName().substring(1, foundPatient.getFirstName().length() - 2));
 		testPatient.check(patients.get(0));
@@ -344,7 +344,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetPatientsByOneOfFieldsLikeSecondName() throws Exception {
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
 		testPatient.check(patients.get(0));
 	}
@@ -352,7 +352,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetPatientsByOneOfFieldsLikeNote() throws Exception {
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getSecondName());
 		testPatient.check(patients.get(0));
 	}
@@ -360,7 +360,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetPatientsByOneOfFieldsLikeTaxCode() throws Exception {
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getTaxCode());
 		testPatient.check(patients.get(0));
 	}
@@ -376,7 +376,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetPatientByName() throws Exception {
 		GeneralData.PATIENTPHOTO = "DB";
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 		Patient patient = patientBrowserManager.getPatientByName(foundPatient.getName());
 		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
 	}
@@ -391,7 +391,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetPatientById() throws Exception {
 		GeneralData.PATIENTPHOTO = "DB";
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 		Patient patient = patientBrowserManager.getPatientById(code);
 		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
 	}
@@ -406,7 +406,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetPatientAll() throws Exception {
 		GeneralData.PATIENTPHOTO = "DB";
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 		Patient patient = patientBrowserManager.getPatientAll(code);
 		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
 	}
@@ -422,7 +422,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrUpdatePatient() throws Exception {
 		GeneralData.PATIENTPHOTO = "DB";
 		Integer code = setupTestPatient(false);
-		Patient patient = patientIoOperation.getPatient(code, true);
+		Patient patient = patientIoOperation.getPatient(code);
 		patient.setFirstName("someNewFirstName");
 		Patient updatedPatient = patientBrowserManager.savePatient(patient);
 		assertThat(updatedPatient).isNotNull();
@@ -432,14 +432,14 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrDeletePatient() throws Exception {
 		Integer code = setupTestPatient(false);
-		Patient patient = patientIoOperation.getPatient(code, true);
+		Patient patient = patientIoOperation.getPatient(code);
 		assertThat(patientBrowserManager.deletePatient(patient)).isTrue();
 	}
 
 	@Test
 	public void testMgrIsNamePresent() throws Exception {
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 		assertThat(patientBrowserManager.isNamePresent(foundPatient.getName())).isTrue();
 	}
 
@@ -756,7 +756,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkPatientIntoDb(Integer code) throws OHServiceException {
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 		testPatient.check(foundPatient);
 	}
 }
