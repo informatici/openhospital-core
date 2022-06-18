@@ -218,7 +218,7 @@ public class VisitManager {
 				if (visit.isSms()) {
 					LocalDateTime date = visit.getDate().minusDays(1);
 					if (visit.getDate().isAfter(TimeTools.getDateToday24())) {
-						Patient pat = patMan.getPatientById(visit.getPatient().getCode(), PatientBrowserManager.PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO));
+						Patient pat = patMan.getPatientById(visit.getPatient().getCode(), GeneralData.PATIENTPHOTO);
 						Sms sms = new Sms();
 						sms.setSmsDateSched(date);
 						sms.setSmsNumber(pat.getTelephone());

@@ -31,7 +31,6 @@ import org.isf.admission.model.AdmittedPatient;
 import org.isf.admission.service.AdmissionIoOperations;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.disctype.model.DischargeType;
-import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.manager.FileSystemPatientPhotoManager;
 import org.isf.patient.manager.PatientBrowserManager;
@@ -96,15 +95,15 @@ public class AdmissionBrowserManager {
 
 	
 	public AdmittedPatient loadAdmittedPatients(Integer patientId) {
-		return this.loadAdmittedPatients(patientId, true);	
+		return this.loadAdmittedPatients(patientId, PatientBrowserManager.PATIENT_PHOTO_FROM_DATABASE);	
 	}
 	
 	
-	public AdmittedPatient loadAdmittedPatients(Integer patientId, boolean isLoadFromDb) {
-		AdmittedPatient patient = ioOperations.loadAdmittedPatient(patientId, isLoadFromDb);
-		if (!isLoadFromDb ) {
+	public AdmittedPatient loadAdmittedPatients(Integer patientId, String pathOrDb) {
+		AdmittedPatient patient = ioOperations.loadAdmittedPatient(patientId, PatientBrowserManager.PATIENT_PHOTO_FROM_DATABASE.equals(pathOrDb));
+		if (!PatientBrowserManager.PATIENT_PHOTO_FROM_DATABASE.equals(pathOrDb) ) {
 			try {
-				this.fileSystemPatientPhotoManager.loadInPatient(patient.getPatient(), GeneralData.PATIENTPHOTO);
+				this.fileSystemPatientPhotoManager.loadInPatient(patient.getPatient(), pathOrDb);
 			} catch (OHServiceException e) {
 				LOGGER.error(e.getMessage(), e);
 			}
@@ -112,9 +111,6 @@ public class AdmissionBrowserManager {
 		return patient;
 	}
 
-	private boolean isLoadProfilePhotoFromDB() {
-		return PatientBrowserManager.PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO);
-	}
 
 	/**
 	 * Returns the admission with the selected id.
