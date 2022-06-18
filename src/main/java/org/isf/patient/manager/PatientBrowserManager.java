@@ -74,21 +74,28 @@ public class PatientBrowserManager {
 	 * @throws OHServiceException when validation failed
 	 */
 	public Patient savePatient(Patient patient) throws OHServiceException {
+		return this.savePatient(patient, true);		
+	}
+	
+	/**
+	 * Method that inserts a new Patient in the db
+	 *
+	 * @param patient
+	 * @return saved / updated patient
+	 * @throws OHServiceException when validation failed
+	 */
+	public Patient savePatient(Patient patient, boolean isLoadPatientPhotoFromDb) throws OHServiceException {
 		validatePatient(patient);
-		if (!isLoadPatientPhotoFromDb()) {
+		if (!isLoadPatientPhotoFromDb) {
 			PatientProfilePhoto patientProfilePhoto = patient.getPatientProfilePhoto();
 			patient.setPatientProfilePhoto(new PatientProfilePhoto());
 			patient = ioOperations.savePatient(patient);
 			this.fileSystemPatientPhotoManager.save(GeneralData.PATIENTPHOTO, patient.getCode(), patientProfilePhoto.getPhoto());
 			patient.setPatientProfilePhoto(patientProfilePhoto);
-		} else if (isLoadPatientPhotoFromDb()){
+		} else if (isLoadPatientPhotoFromDb){
 			patient = ioOperations.savePatient(patient);
 		}
 		return patient;
-	}
-
-	private boolean isLoadPatientPhotoFromDb() {
-		return PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO);
 	}
 
 	/**
@@ -111,6 +118,7 @@ public class PatientBrowserManager {
 		return ioOperations.getPatients(PageRequest.of(page, size));
 	}
 
+
 	/**
 	 * Method that gets a Patient by his/her name
 	 *
@@ -122,8 +130,22 @@ public class PatientBrowserManager {
 	 */
 	@Deprecated
 	public Patient getPatientByName(String name) throws OHServiceException {
-		Patient patient = ioOperations.getPatient(name, isLoadPatientPhotoFromDb());
-		if (!isLoadPatientPhotoFromDb()) {
+		return this.getPatientByName(name, true);
+	}
+	
+	/**
+	 * Method that gets a Patient by his/her name
+	 *
+	 * @param name
+	 * @return the Patient that match specified name (could be null)
+	 * @throws OHServiceException
+	 * @deprecated use getPatient(Integer code) for one patient or
+	 * getPatientsByOneOfFieldsLike(String regex) for a list
+	 */
+	@Deprecated
+	public Patient getPatientByName(String name, boolean isLoadPatientPhotoFromDb) throws OHServiceException {
+		Patient patient = ioOperations.getPatient(name, isLoadPatientPhotoFromDb);
+		if (!isLoadPatientPhotoFromDb) {
 			this.fileSystemPatientPhotoManager.loadInPatient(patient, GeneralData.PATIENTPHOTO);
 		}
 		return patient;
@@ -140,6 +162,7 @@ public class PatientBrowserManager {
 		return ioOperations.getPatients(params);
 	}
 
+
 	/**
 	 * Method that gets a Patient by his/her ID
 	 *
@@ -148,12 +171,24 @@ public class PatientBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public Patient getPatientById(Integer code) throws OHServiceException {
-		Patient patient = ioOperations.getPatient(code, isLoadPatientPhotoFromDb());
-		if (!isLoadPatientPhotoFromDb()) {
+		return getPatientById(code, true);
+	}
+	
+	/**
+	 * Method that gets a Patient by his/her ID
+	 *
+	 * @param code
+	 * @return the Patient (could be null)
+	 * @throws OHServiceException
+	 */
+	public Patient getPatientById(Integer code, boolean isLoadPatientPhotoFromDb) throws OHServiceException {
+		Patient patient = ioOperations.getPatient(code, isLoadPatientPhotoFromDb);
+		if (!isLoadPatientPhotoFromDb) {
 			this.fileSystemPatientPhotoManager.loadInPatient(patient, GeneralData.PATIENTPHOTO);
 		}
 		return patient;
 	}
+
 
 	/**
 	 * Get a Patient by his/her ID, even if he/her has been logically deleted
@@ -163,8 +198,18 @@ public class PatientBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public Patient getPatientAll(Integer code) throws OHServiceException {
-		Patient patient =  ioOperations.getPatientAll(code, isLoadPatientPhotoFromDb());
-		if (!isLoadPatientPhotoFromDb()) {
+		return this.getPatientAll(code, true);
+	}
+	/**
+	 * Get a Patient by his/her ID, even if he/her has been logically deleted
+	 *
+	 * @param code
+	 * @return the list of Patients (could be null)
+	 * @throws OHServiceException
+	 */
+	public Patient getPatientAll(Integer code, boolean isLoadPatientPhotoFromDb) throws OHServiceException {
+		Patient patient =  ioOperations.getPatientAll(code, isLoadPatientPhotoFromDb);
+		if (!isLoadPatientPhotoFromDb) {
 			this.fileSystemPatientPhotoManager.loadInPatient(patient, GeneralData.PATIENTPHOTO);
 		}
 		return patient;

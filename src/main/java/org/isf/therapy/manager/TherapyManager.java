@@ -26,6 +26,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.manager.MedicalBrowsingManager;
 import org.isf.medicals.model.Medical;
@@ -183,7 +184,7 @@ public class TherapyManager {
 					for (LocalDateTime date : dates) {
 						date = date.withHour(8);
 						if (date.isAfter(TimeTools.getDateToday24())) {
-							Patient pat = patientManager.getPatientById(patID);
+							Patient pat = patientManager.getPatientById(patID, PatientBrowserManager.PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO));
 
 							Sms sms = new Sms();
 							sms.setSmsDateSched(date);
@@ -235,7 +236,7 @@ public class TherapyManager {
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
 	public boolean deleteAllTherapies(Integer code) throws OHServiceException {
-		Patient patient = patientManager.getPatientById(code);
+		Patient patient = patientManager.getPatientById(code, PatientBrowserManager.PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO) );
 		return ioOperations.deleteAllTherapies(patient);
 	}
 
@@ -307,7 +308,7 @@ public class TherapyManager {
 	 */
 	public TherapyRow newTherapy(int therapyID, int patID, LocalDateTime startDate, LocalDateTime endDate, Medical medical, Double qty, int unitID,
 			int freqInDay, int freqInPeriod, String note, boolean notify, boolean sms) throws OHServiceException {
-		Patient patient = patientManager.getPatientById(patID);
+		Patient patient = patientManager.getPatientById(patID, PatientBrowserManager.PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO));
 		TherapyRow thRow = new TherapyRow(therapyID, patient, startDate, endDate, medical, qty, unitID, freqInDay, freqInPeriod, note, notify, sms);
 		return newTherapy(thRow);
 	}
@@ -332,7 +333,7 @@ public class TherapyManager {
 	 */
 	public TherapyRow getTherapyRow(int therapyID, int patID, LocalDateTime startDate, LocalDateTime endDate, Medical medical, Double qty, int unitID,
 			int freqInDay, int freqInPeriod, String note, boolean notify, boolean sms) throws OHServiceException {
-		Patient patient = patientManager.getPatientById(patID);
+		Patient patient = patientManager.getPatientById(patID, PatientBrowserManager.PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO));
 		return new TherapyRow(therapyID, patient, startDate, endDate, medical, qty, unitID, freqInDay, freqInPeriod, note, notify, sms);
 	}
 

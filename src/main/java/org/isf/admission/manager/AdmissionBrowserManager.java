@@ -96,7 +96,11 @@ public class AdmissionBrowserManager {
 
 	
 	public AdmittedPatient loadAdmittedPatients(Integer patientId) {
-		final boolean isLoadFromDb = this.isLoadProfilePhotoFromDB();
+		return this.loadAdmittedPatients(patientId, true);	
+	}
+	
+	
+	public AdmittedPatient loadAdmittedPatients(Integer patientId, boolean isLoadFromDb) {
 		AdmittedPatient patient = ioOperations.loadAdmittedPatient(patientId, isLoadFromDb);
 		if (!isLoadFromDb ) {
 			try {

@@ -788,7 +788,6 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrLoadAdmittedPatientsNotThere() throws Exception {
-		GeneralData.PATIENTPHOTO = "DB";
 		assertThat(admissionBrowserManager.loadAdmittedPatients(-1)).isNull();
 	}
 

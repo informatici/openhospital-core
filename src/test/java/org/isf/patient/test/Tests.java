@@ -36,7 +36,6 @@ import java.util.Map;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
-import org.isf.generaldata.GeneralData;
 import org.isf.opd.model.Opd;
 import org.isf.opd.test.TestOpd;
 import org.isf.patient.manager.PatientBrowserManager;
@@ -374,7 +373,6 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetPatientByName() throws Exception {
-		GeneralData.PATIENTPHOTO = "DB";
 		Integer code = setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
 		Patient patient = patientBrowserManager.getPatientByName(foundPatient.getName());
@@ -383,13 +381,11 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetPatientByNameDoesNotExist() throws Exception {
-		GeneralData.PATIENTPHOTO = "DB";
 		assertThat(patientBrowserManager.getPatientByName("someUnusualNameThatWillNotBeFound")).isNull();
 	}
 
 	@Test
 	public void testMgrGetPatientById() throws Exception {
-		GeneralData.PATIENTPHOTO = "DB";
 		Integer code = setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
 		Patient patient = patientBrowserManager.getPatientById(code);
@@ -398,13 +394,11 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetPatienByIdDoesNotExist() throws Exception {
-		GeneralData.PATIENTPHOTO = "DB";
 		assertThat(patientBrowserManager.getPatientById(-987654321)).isNull();
 	}
 
 	@Test
 	public void testMgrGetPatientAll() throws Exception {
-		GeneralData.PATIENTPHOTO = "DB";
 		Integer code = setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
 		Patient patient = patientBrowserManager.getPatientAll(code);
@@ -413,14 +407,12 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrSaveNewPatient() throws Exception {
-		GeneralData.PATIENTPHOTO = "DB";
 		Patient patient = testPatient.setup(true);
 		assertThat(patientBrowserManager.savePatient(patient)).isNotNull();
 	}
 
 	@Test
 	public void testMgrUpdatePatient() throws Exception {
-		GeneralData.PATIENTPHOTO = "DB";
 		Integer code = setupTestPatient(false);
 		Patient patient = patientIoOperation.getPatient(code);
 		patient.setFirstName("someNewFirstName");

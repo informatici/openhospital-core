@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.opd.model.Opd;
@@ -217,7 +218,7 @@ public class VisitManager {
 				if (visit.isSms()) {
 					LocalDateTime date = visit.getDate().minusDays(1);
 					if (visit.getDate().isAfter(TimeTools.getDateToday24())) {
-						Patient pat = patMan.getPatientById(visit.getPatient().getCode());
+						Patient pat = patMan.getPatientById(visit.getPatient().getCode(), PatientBrowserManager.PATIENT_PHOTO_FROM_DATABASE.equals(GeneralData.PATIENTPHOTO));
 						Sms sms = new Sms();
 						sms.setSmsDateSched(date);
 						sms.setSmsNumber(pat.getTelephone());
