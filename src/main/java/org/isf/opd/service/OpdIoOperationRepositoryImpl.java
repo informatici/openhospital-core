@@ -54,8 +54,9 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			int ageFrom,
 			int ageTo,
 			char sex,
-			char newPatient) {
-		return getOpdQuery(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient).getResultList();
+			char newPatient,
+			int patientCode) {
+		return getOpdQuery(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, patientCode).getResultList();
 	}	
 
 	private TypedQuery<Opd> getOpdQuery(
@@ -66,7 +67,8 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			int ageFrom, 
 			int ageTo,
 			char sex,
-			char newPatient) {
+			char newPatient,
+			int patientCode) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Opd> query = cb.createQuery(Opd.class);
 		Root<Opd> opd = query.from(Opd.class);
@@ -96,6 +98,11 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		if (newPatient != 'A') {
 			predicates.add(
 					cb.equal(opd.get("newPatient"), newPatient)
+			);
+		}
+		if (patientCode != 0) {
+			predicates.add(
+					cb.equal(opd.join("patient").get("code"), patientCode)
 			);
 		}
 		predicates.add(
