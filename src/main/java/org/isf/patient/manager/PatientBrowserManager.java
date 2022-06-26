@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.isf.accounting.manager.BillBrowserManager;
 import org.isf.accounting.model.Bill;
 import org.isf.admission.manager.AdmissionBrowserManager;
+import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientProfilePhoto;
@@ -73,7 +74,7 @@ public class PatientBrowserManager {
 	 * @throws OHServiceException when validation failed
 	 */
 	public Patient savePatient(Patient patient) throws OHServiceException {
-		return this.savePatient(patient, PATIENT_PHOTO_FROM_DATABASE);		
+		return this.savePatient(patient, GeneralData.PATIENTPHOTO);		
 	}
 	
 	/**
@@ -129,7 +130,7 @@ public class PatientBrowserManager {
 	 */
 	@Deprecated
 	public Patient getPatientByName(String name) throws OHServiceException {
-		return this.getPatientByName(name, PATIENT_PHOTO_FROM_DATABASE);
+		return this.getPatientByName(name, GeneralData.PATIENTPHOTO);
 	}
 	
 	/**
@@ -170,7 +171,7 @@ public class PatientBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public Patient getPatientById(Integer code) throws OHServiceException {
-		return getPatientById(code, PATIENT_PHOTO_FROM_DATABASE);
+		return getPatientById(code, GeneralData.PATIENTPHOTO);
 	}
 	
 	/**

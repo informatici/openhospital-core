@@ -31,6 +31,7 @@ import org.isf.admission.model.AdmittedPatient;
 import org.isf.admission.service.AdmissionIoOperations;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.disctype.model.DischargeType;
+import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.manager.FileSystemPatientPhotoManager;
 import org.isf.patient.manager.PatientBrowserManager;
@@ -95,7 +96,7 @@ public class AdmissionBrowserManager {
 
 	
 	public AdmittedPatient loadAdmittedPatients(Integer patientId) {
-		return this.loadAdmittedPatients(patientId, PatientBrowserManager.PATIENT_PHOTO_FROM_DATABASE);	
+		return this.loadAdmittedPatients(patientId, GeneralData.PATIENTPHOTO);	
 	}
 	
 	
