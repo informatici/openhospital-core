@@ -66,3 +66,4 @@ source step_69_disclose_accounting_admin_features.sql;
 source step_70_increase_examination_note_field.sql;
 source step_71_drop_opd_date_vis_field.sql;
 source step_72_hospital_changes.sql;
+source step_73_ward_visit_duration.sql;
