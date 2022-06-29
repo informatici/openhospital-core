@@ -3163,6 +3163,7 @@ INSERT INTO `menuitem` VALUES ('medicalstype','angal.menu.btn.medicalstype','ang
 INSERT INTO `menuitem` VALUES ('medstockmovtype','angal.menu.btn.medstockmovtype','angal.menu.medstockmovtype','x','S','types','org.isf.medstockmovtype.gui.MedicaldsrstockmovTypeBrowser','N',6);
 INSERT INTO `menuitem` VALUES ('opd','angal.menu.btn.opd','angal.menu.opd','x','O','main','org.isf.opd.gui.OpdBrowser','N',1);
 INSERT INTO `menuitem` VALUES ('operation','angal.menu.btn.operation','angal.menu.operation','x','O','generaldata','org.isf.operation.gui.OperationBrowser','N',5);
+INSERT INTO `menuitem` VALUES ('operationlist','angal.menu.btn.operationlist','angal.menu.operationlist','x','O','printing','org.isf.stat.gui.OperationsListLauncher','N',3);
 INSERT INTO `menuitem` VALUES ('operationtype','angal.menu.btn.operationtype','angal.menu.operationtype','x','O','types','org.isf.opetype.gui.OperationTypeBrowser','N',8);
 INSERT INTO `menuitem` VALUES ('pharmacy','angal.menu.btn.pharmacy','angal.menu.pharmacy','x','P','main','none','Y',2);
 INSERT INTO `menuitem` VALUES ('pretreatmenttype','angal.menu.btn.pretreatmenttype','angal.menu.pretreatmenttype','x','P','types','org.isf.pregtreattype.gui.PregnantTreatmentTypeBrowser','N',9);
