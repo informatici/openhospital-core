@@ -141,7 +141,8 @@ public class LabIoOperations {
 							laboratory.getCode(),
 							laboratory.getExam(),
 							laboratory.getDate(),
-							laboratory.getResult()
+							laboratory.getResult(),
+							laboratory.getPatName()
 					)
 			);
 		}

@@ -32,6 +32,7 @@ public class LaboratoryForPrint {
 	private String date;
 	private String result;
 	private Integer code;
+	private String patName;
 
 	public Integer getCode() {
 		return code;
@@ -41,11 +42,12 @@ public class LaboratoryForPrint {
 		this.code = code;
 	}
 
-	public LaboratoryForPrint(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult) {
+	public LaboratoryForPrint(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult, String patientName) {
 		code = aCode;
 		exam = aExam.getDescription();
 		date = getConvertedString(aDate);
 		result = aResult;
+		patName = patientName;
 	}
 
 	private String getConvertedString(LocalDateTime time) {
@@ -76,6 +78,14 @@ public class LaboratoryForPrint {
     public void setResult(String aResult) {
         this.result = aResult;
     }
+
+	public String getPatName() {
+		return patName;
+	}
+
+	public void setPatName(String patName) {
+		this.patName = patName;
+	}
 
 
 }
