@@ -184,7 +184,7 @@ public class TherapyManager {
 					for (LocalDateTime date : dates) {
 						date = date.withHour(8);
 						if (date.isAfter(TimeTools.getDateToday24())) {
-							Patient pat = patientManager.getPatientById(patID, GeneralData.PATIENTPHOTO);
+							Patient pat = patientManager.getPatientById(patID);
 
 							Sms sms = new Sms();
 							sms.setSmsDateSched(date);
@@ -236,7 +236,7 @@ public class TherapyManager {
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
 	public boolean deleteAllTherapies(Integer code) throws OHServiceException {
-		Patient patient = patientManager.getPatientById(code, GeneralData.PATIENTPHOTO );
+		Patient patient = patientManager.getPatientById(code );
 		return ioOperations.deleteAllTherapies(patient);
 	}
 
@@ -308,7 +308,7 @@ public class TherapyManager {
 	 */
 	public TherapyRow newTherapy(int therapyID, int patID, LocalDateTime startDate, LocalDateTime endDate, Medical medical, Double qty, int unitID,
 			int freqInDay, int freqInPeriod, String note, boolean notify, boolean sms) throws OHServiceException {
-		Patient patient = patientManager.getPatientById(patID, GeneralData.PATIENTPHOTO);
+		Patient patient = patientManager.getPatientById(patID);
 		TherapyRow thRow = new TherapyRow(therapyID, patient, startDate, endDate, medical, qty, unitID, freqInDay, freqInPeriod, note, notify, sms);
 		return newTherapy(thRow);
 	}
@@ -333,7 +333,7 @@ public class TherapyManager {
 	 */
 	public TherapyRow getTherapyRow(int therapyID, int patID, LocalDateTime startDate, LocalDateTime endDate, Medical medical, Double qty, int unitID,
 			int freqInDay, int freqInPeriod, String note, boolean notify, boolean sms) throws OHServiceException {
-		Patient patient = patientManager.getPatientById(patID, GeneralData.PATIENTPHOTO);
+		Patient patient = patientManager.getPatientById(patID);
 		return new TherapyRow(therapyID, patient, startDate, endDate, medical, qty, unitID, freqInDay, freqInPeriod, note, notify, sms);
 	}
 

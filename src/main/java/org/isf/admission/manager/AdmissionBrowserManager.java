@@ -31,10 +31,7 @@ import org.isf.admission.model.AdmittedPatient;
 import org.isf.admission.service.AdmissionIoOperations;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.disctype.model.DischargeType;
-import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
-import org.isf.patient.manager.FileSystemPatientPhotoManager;
-import org.isf.patient.manager.PatientBrowserManager;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
@@ -42,8 +39,6 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -52,12 +47,7 @@ public class AdmissionBrowserManager {
 
 	@Autowired
 	private AdmissionIoOperations ioOperations;
-	
-	@Autowired
-	private FileSystemPatientPhotoManager fileSystemPatientPhotoManager;
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(AdmissionBrowserManager.class);
-	
+
 	/**
 	 * Returns all patients with ward in which they are admitted.
 	 *
@@ -93,25 +83,9 @@ public class AdmissionBrowserManager {
 		return ioOperations.getAdmittedPatients(searchTerms, admissionRange, dischargeRange);
 	}
 
-
-	
 	public AdmittedPatient loadAdmittedPatients(Integer patientId) {
-		return this.loadAdmittedPatients(patientId, GeneralData.PATIENTPHOTO);	
+		return ioOperations.loadAdmittedPatient(patientId);
 	}
-	
-	
-	public AdmittedPatient loadAdmittedPatients(Integer patientId, String pathOrDb) {
-		AdmittedPatient patient = ioOperations.loadAdmittedPatient(patientId, PatientBrowserManager.PATIENT_PHOTO_FROM_DATABASE.equals(pathOrDb));
-		if (!PatientBrowserManager.PATIENT_PHOTO_FROM_DATABASE.equals(pathOrDb) ) {
-			try {
-				this.fileSystemPatientPhotoManager.loadInPatient(patient.getPatient(), pathOrDb);
-			} catch (OHServiceException e) {
-				LOGGER.error(e.getMessage(), e);
-			}
-		}
-		return patient;
-	}
-
 
 	/**
 	 * Returns the admission with the selected id.

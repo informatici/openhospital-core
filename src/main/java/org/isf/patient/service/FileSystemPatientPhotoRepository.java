@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.patient.manager;
+package org.isf.patient.service;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,13 +41,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component("fileSystemPatientPhotoManager")
-public class FileSystemPatientPhotoManager {
+public class FileSystemPatientPhotoRepository {
 
 	private static final String KEY_ERROR_TITLE = "angal.patient.patientphoto.error.title";
 
 	private static final String KEY_FILE_NOT_FOUND = "angal.patient.patientphoto.error.filenotfound.msg";
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemPatientPhotoManager.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemPatientPhotoRepository.class);
 
 	private static final String IMAGE_FORMAT = ".jpg";
 
@@ -91,6 +91,12 @@ public class FileSystemPatientPhotoManager {
 					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg"), OHSeverityLevel.ERROR));
 		}
 	}
+	
+	public void delete(String path, int patientId) {
+		File patientIdFolder = new File(path);
+		File fdc = new File(patientIdFolder, patientId + IMAGE_FORMAT);
+		fdc.delete();
+	}
 
 	private Blob load(Integer patientId, String path) throws OHServiceException {
 		try {
@@ -110,7 +116,7 @@ public class FileSystemPatientPhotoManager {
 							OHSeverityLevel.ERROR));
 		}
 	}
-
+	
 	private void recourse(File f) throws IOException {
 		if (f.exists()) {
 			return;

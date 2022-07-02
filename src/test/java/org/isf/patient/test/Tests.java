@@ -36,6 +36,7 @@ import java.util.Map;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
+import org.isf.generaldata.GeneralData;
 import org.isf.opd.model.Opd;
 import org.isf.opd.test.TestOpd;
 import org.isf.patient.manager.PatientBrowserManager;
@@ -64,8 +65,11 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	PatientBrowserManager patientBrowserManager;
 
+	
+	
 	@BeforeClass
 	public static void setUpClass() {
+		GeneralData.PATIENTPHOTO = "DB";
 		testPatient = new TestPatient();
 		testOpd = new TestOpd();
 	}
@@ -190,19 +194,19 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPatientFromName() throws Exception {
 		Integer code = setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
-		Patient patient = patientIoOperation.getPatient(foundPatient.getName(), true);
+		Patient patient = patientIoOperation.getPatient(foundPatient.getName());
 		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
 	}
 
 	@Test
 	public void testIoGetPatientFromNameDoesNotExist() throws Exception {
-		assertThat(patientIoOperation.getPatient("someUnusualNameThatWillNotBeFound", true)).isNull();
+		assertThat(patientIoOperation.getPatient("someUnusualNameThatWillNotBeFound")).isNull();
 	}
 
 	@Test
 	public void testIoGetPatientFromCode() throws Exception {
 		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code, true);
+		Patient foundPatient = patientIoOperation.getPatient(code);
 		Patient patient = patientIoOperation.getPatient(code);
 		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
 	}
@@ -243,14 +247,14 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = patientIoOperation.getPatient(code);
 		patient.setFirstName("someNewFirstName");
 		assertThat(patientIoOperation.updatePatient(patient)).isTrue();
-		Patient updatedPatient = patientIoOperation.getPatient(code, true);
+		Patient updatedPatient = patientIoOperation.getPatient(code);
 		assertThat(updatedPatient.getFirstName()).isEqualTo(patient.getFirstName());
 	}
 
 	@Test
 	public void testIoDeletePatient() throws Exception {
 		Integer code = setupTestPatient(false);
-		Patient patient = patientIoOperation.getPatient(code, true);
+		Patient patient = patientIoOperation.getPatient(code);
 		boolean result = patientIoOperation.deletePatient(patient);
 		assertThat(result).isTrue();
 	}
@@ -706,13 +710,6 @@ public class Tests extends OHCoreTestCase {
 
 		patientProfilePhoto.setPatient(patient);
 		assertThat(patientProfilePhoto.getPatient()).isEqualTo(patient);
-	}
-
-	@Test
-	public void testPatientProfilePhotoSaveFilesystem() throws OHServiceException, OHException {
-		int code = setupTestPatient(false);
-		Patient patient = this.patientBrowserManager.getPatientById(code, "./");
-		assertThat(patient.getPatientProfilePhoto().getPhotoAsImage()).isNotNull();
 	}
 
 	private void resetHashMaps() throws Exception {
