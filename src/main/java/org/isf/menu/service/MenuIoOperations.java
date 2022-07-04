@@ -70,8 +70,7 @@ public class MenuIoOperations {
 	/**
 	 * Returns the list of {@link User}s in specified groupID
 	 * 
-	 * @param groupID
-	 *            - the group ID
+	 * @param groupID - the group ID
 	 * @return the list of {@link User}s
 	 * @throws OHServiceException
 	 */
@@ -82,8 +81,7 @@ public class MenuIoOperations {
 	/**
 	 * Returns {@link User} from its username
 	 * 
-	 * @param userName
-	 *            - the {@link User}'s username
+	 * @param userName - the {@link User}'s username
 	 * @return {@link User}
 	 * @throws OHServiceException
 	 */
@@ -94,8 +92,7 @@ public class MenuIoOperations {
 	/**
 	 * Returns {@link User} description from its username
 	 * 
-	 * @param userName
-	 *            - the {@link User}'s username
+	 * @param userName - the {@link User}'s username
 	 * @return the {@link User}'s description
 	 * @throws OHServiceException
 	 */
@@ -117,11 +114,9 @@ public class MenuIoOperations {
 	/**
 	 * Checks if the specified {@link User} code is already present.
 	 * 
-	 * @param userName
-	 *            - the {@link User} code to check.
+	 * @param userName - the {@link User} code to check.
 	 * @return <code>true</code> if the medical code is already stored, <code>false</code> otherwise.
-	 * @throws OHServiceException
-	 *             if an error occurs during the check.
+	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isUserNamePresent(String userName) throws OHServiceException {
 		return repository.existsById(userName);
@@ -130,11 +125,9 @@ public class MenuIoOperations {
 	/**
 	 * Checks if the specified {@link UserGroup} code is already present.
 	 * 
-	 * @param groupName
-	 *            - the {@link UserGroup} code to check.
+	 * @param groupName - the {@link UserGroup} code to check.
 	 * @return <code>true</code> if the medical code is already stored, <code>false</code> otherwise.
-	 * @throws OHServiceException
-	 *             if an error occurs during the check.
+	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isGroupNamePresent(String groupName) throws OHServiceException {
 		return groupRepository.existsById(groupName);
@@ -143,8 +136,7 @@ public class MenuIoOperations {
 	/**
 	 * Inserts a new {@link User} in the DB
 	 * 
-	 * @param user
-	 *            - the {@link User} to insert
+	 * @param user - the {@link User} to insert
 	 * @return <code>true</code> if the user has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
@@ -155,8 +147,7 @@ public class MenuIoOperations {
 	/**
 	 * Updates an existing {@link User} in the DB
 	 * 
-	 * @param user
-	 *            - the {@link User} to update
+	 * @param user - the {@link User} to update
 	 * @return <code>true</code> if the user has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
@@ -167,8 +158,7 @@ public class MenuIoOperations {
 	/**
 	 * Updates the password of an existing {@link User} in the DB
 	 * 
-	 * @param user
-	 *            - the {@link User} to update
+	 * @param user - the {@link User} to update
 	 * @return <code>true</code> if the user has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
@@ -179,8 +169,7 @@ public class MenuIoOperations {
 	/**
 	 * Deletes an existing {@link User}
 	 * 
-	 * @param user
-	 *            - the {@link User} to delete
+	 * @param user - the {@link User} to delete
 	 * @return <code>true</code> if the user has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
@@ -192,8 +181,7 @@ public class MenuIoOperations {
 	/**
 	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link User}
 	 * 
-	 * @param aUser
-	 *            - the {@link User}
+	 * @param aUser - the {@link User}
 	 * @return the list of {@link UserMenuItem}s
 	 * @throws OHServiceException
 	 */
@@ -220,8 +208,7 @@ public class MenuIoOperations {
 	/**
 	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link UserGroup}
 	 * 
-	 * @param aGroup
-	 *            - the {@link UserGroup}
+	 * @param aGroup - the {@link UserGroup}
 	 * @return the list of {@link UserMenuItem}s
 	 * @throws OHServiceException
 	 */
@@ -249,12 +236,9 @@ public class MenuIoOperations {
 	/**
 	 * Replaces the {@link UserGroup} rights
 	 * 
-	 * @param aGroup
-	 *            - the {@link UserGroup}
-	 * @param menu
-	 *            - the list of {@link UserMenuItem}s
-	 * @param insert
-	 *            - specify if is an insert or an update
+	 * @param aGroup - the {@link UserGroup}
+	 * @param menu - the list of {@link UserMenuItem}s
+	 * @param insert - specify if is an insert or an update
 	 * @return <code>true</code> if the menu has been replaced, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
@@ -284,8 +268,7 @@ public class MenuIoOperations {
 	/**
 	 * Deletes a {@link UserGroup}
 	 * 
-	 * @param aGroup
-	 *            - the {@link UserGroup} to delete
+	 * @param aGroup - the {@link UserGroup} to delete
 	 * @return <code>true</code> if the group has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
@@ -298,8 +281,7 @@ public class MenuIoOperations {
 	/**
 	 * Insert a new {@link UserGroup} with a minimum set of rights
 	 * 
-	 * @param aGroup
-	 *            - the {@link UserGroup} to insert
+	 * @param aGroup - the {@link UserGroup} to insert
 	 * @return <code>true</code> if the group has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
@@ -310,8 +292,7 @@ public class MenuIoOperations {
 	/**
 	 * Updates an existing {@link UserGroup} in the DB
 	 * 
-	 * @param aGroup
-	 *            - the {@link UserGroup} to update
+	 * @param aGroup - the {@link UserGroup} to update
 	 * @return <code>true</code> if the group has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
