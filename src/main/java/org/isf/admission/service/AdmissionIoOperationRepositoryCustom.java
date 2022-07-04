@@ -21,18 +21,18 @@
  */
 package org.isf.admission.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.isf.admission.model.Admission;
+import org.isf.admission.model.AdmittedPatient;
 import org.isf.patient.model.Patient;
-
-import java.util.GregorianCalendar;
-import java.util.Optional;
-
+import org.isf.utils.exception.OHServiceException;
 
 public interface AdmissionIoOperationRepositoryCustom {
 
-	Optional<Admission> findOneByPatientAndDateRanges(Patient patient, GregorianCalendar[] admissionRange,
-													  GregorianCalendar[] dischargeRange);
-
+	List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(String searchTerms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange)
+			throws OHServiceException;
 
 	class PatientAdmission {
 		/**
@@ -45,8 +45,7 @@ public interface AdmissionIoOperationRepositoryCustom {
 		 */
 		private final Integer admissionId;
 
-		public PatientAdmission(final Integer patientId,
-								final Integer admissionId) {
+		public PatientAdmission(final Integer patientId, final Integer admissionId) {
 			this.patientId = patientId;
 			this.admissionId = admissionId;
 		}
@@ -59,4 +58,5 @@ public interface AdmissionIoOperationRepositoryCustom {
 			return admissionId;
 		}
 	}
+
 }

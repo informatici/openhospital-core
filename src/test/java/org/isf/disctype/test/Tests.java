@@ -24,7 +24,7 @@ package org.isf.disctype.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -63,21 +63,21 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testDischargeTypeGets() throws Exception {
-		String code = _setupTestDischargeType(false);
-		_checkDischargeTypeIntoDb(code);
+		String code = setupTestDischargeType(false);
+		checkDischargeTypeIntoDb(code);
 	}
 
 	@Test
 	public void testDischargeTypeSets() throws Exception {
-		String code = _setupTestDischargeType(true);
-		_checkDischargeTypeIntoDb(code);
+		String code = setupTestDischargeType(true);
+		checkDischargeTypeIntoDb(code);
 	}
 
 	@Test
 	public void testIoGetDischargeType() throws Exception {
-		String code = _setupTestDischargeType(false);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
-		ArrayList<DischargeType> dischargeTypes = dischargeTypeIoOperation.getDischargeType();
+		String code = setupTestDischargeType(false);
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
+		List<DischargeType> dischargeTypes = dischargeTypeIoOperation.getDischargeType();
 		assertThat(dischargeTypes.get(dischargeTypes.size() - 1).getDescription()).isEqualTo(foundDischargeType.getDescription());
 	}
 
@@ -86,20 +86,20 @@ public class Tests extends OHCoreTestCase {
 		DischargeType dischargeType = testDischargeType.setup(true);
 		boolean result = dischargeTypeIoOperation.newDischargeType(dischargeType);
 		assertThat(result).isTrue();
-		_checkDischargeTypeIntoDb(dischargeType.getCode());
+		checkDischargeTypeIntoDb(dischargeType.getCode());
 	}
 
 	@Test
 	public void testIoIsCodePresent() throws Exception {
-		String code = _setupTestDischargeType(false);
+		String code = setupTestDischargeType(false);
 		boolean result = dischargeTypeIoOperation.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
 	public void testIoDeleteDischargeType() throws Exception {
-		String code = _setupTestDischargeType(false);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		String code = setupTestDischargeType(false);
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
 		boolean result = dischargeTypeIoOperation.deleteDischargeType(foundDischargeType);
 		assertThat(result).isTrue();
 		result = dischargeTypeIoOperation.isCodePresent(code);
@@ -108,20 +108,20 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoUpdateDischargeType() throws Exception {
-		String code = _setupTestDischargeType(false);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		String code = setupTestDischargeType(false);
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
 		foundDischargeType.setDescription("Update");
 		boolean result = dischargeTypeIoOperation.updateDischargeType(foundDischargeType);
 		assertThat(result).isTrue();
-		DischargeType updateDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		DischargeType updateDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
 		assertThat(updateDischargeType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrGetDischargeType() throws Exception {
-		String code = _setupTestDischargeType(false);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
-		ArrayList<DischargeType> dischargeTypes = dischargeTypeBrowserManager.getDischargeType();
+		String code = setupTestDischargeType(false);
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
+		List<DischargeType> dischargeTypes = dischargeTypeBrowserManager.getDischargeType();
 		assertThat(dischargeTypes.get(dischargeTypes.size() - 1).getDescription()).isEqualTo(foundDischargeType.getDescription());
 	}
 
@@ -130,20 +130,20 @@ public class Tests extends OHCoreTestCase {
 		DischargeType dischargeType = testDischargeType.setup(true);
 		boolean result = dischargeTypeBrowserManager.newDischargeType(dischargeType);
 		assertThat(result).isTrue();
-		_checkDischargeTypeIntoDb(dischargeType.getCode());
+		checkDischargeTypeIntoDb(dischargeType.getCode());
 	}
 
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
-		String code = _setupTestDischargeType(false);
+		String code = setupTestDischargeType(false);
 		boolean result = dischargeTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
 	public void testMgrDeleteDischargeType() throws Exception {
-		String code = _setupTestDischargeType(false);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		String code = setupTestDischargeType(false);
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
 		boolean result = dischargeTypeBrowserManager.deleteDischargeType(foundDischargeType);
 		assertThat(result).isTrue();
 		result = dischargeTypeBrowserManager.isCodePresent(code);
@@ -152,12 +152,12 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrUpdateDischargeType() throws Exception {
-		String code = _setupTestDischargeType(false);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		String code = setupTestDischargeType(false);
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
 		foundDischargeType.setDescription("Update");
 		boolean result = dischargeTypeBrowserManager.updateDischargeType(foundDischargeType);
 		assertThat(result).isTrue();
-		DischargeType updateDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		DischargeType updateDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
 		assertThat(updateDischargeType.getDescription()).isEqualTo("Update");
 	}
 
@@ -165,7 +165,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrValidateDeleteDischargeType() throws Exception {
 		DischargeType dischargeType = new DischargeType("D", "TestDescription");
 		dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(dischargeType.getCode());
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(dischargeType.getCode()).get();
 		assertThatThrownBy(() -> dischargeTypeBrowserManager.deleteDischargeType(foundDischargeType))
 				.isInstanceOf(OHDataValidationException.class)
 				.has(
@@ -176,8 +176,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrValidateDischargeType() throws Exception {
-		String code = _setupTestDischargeType(false);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		String code = setupTestDischargeType(false);
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
 		foundDischargeType.setDescription("Update");
 		boolean result = dischargeTypeBrowserManager.updateDischargeType(foundDischargeType);
 		// empty string
@@ -216,8 +216,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testDischargeTypeEqualHashToString() throws Exception {
-		String code = _setupTestDischargeType(false);
-		DischargeType dischargeType = dischargeTypeIoOperationRepository.findOne(code);
+		String code = setupTestDischargeType(false);
+		DischargeType dischargeType = dischargeTypeIoOperationRepository.findById(code).get();
 		DischargeType dischargeType2 = new DischargeType("someCode", "someDescription");
 		assertThat(dischargeType.equals(dischargeType)).isTrue();
 		assertThat(dischargeType)
@@ -231,14 +231,14 @@ public class Tests extends OHCoreTestCase {
 		assertThat(dischargeType2).hasToString("someDescription");
 	}
 
-	private String _setupTestDischargeType(boolean usingSet) throws OHException {
+	private String setupTestDischargeType(boolean usingSet) throws OHException {
 		DischargeType dischargeType = testDischargeType.setup(usingSet);
 		dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
 		return dischargeType.getCode();
 	}
 
-	private void _checkDischargeTypeIntoDb(String code) throws OHException {
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findOne(code);
+	private void checkDischargeTypeIntoDb(String code) throws OHException {
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
 		testDischargeType.check(foundDischargeType);
 	}
 }

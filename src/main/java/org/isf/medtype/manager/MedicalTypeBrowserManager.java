@@ -88,7 +88,7 @@ public class MedicalTypeBrowserManager {
 	 * @return all the medical types.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<MedicalType> getMedicalType() throws OHServiceException {
+	public List<MedicalType> getMedicalType() throws OHServiceException {
 		return ioOperations.getMedicalTypes();
 	}
 

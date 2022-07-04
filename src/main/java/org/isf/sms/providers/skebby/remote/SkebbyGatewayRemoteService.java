@@ -23,7 +23,7 @@ package org.isf.sms.providers.skebby.remote;
 
 import org.isf.sms.providers.skebby.model.SckebbySmsRequest;
 import org.isf.sms.providers.skebby.model.SckebbySmsResponse;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,27 +35,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "skebby-gateway-service")
 public interface SkebbyGatewayRemoteService {
 
-	public static final String AUTH_TOKEN = "Authorization";
-	public static final String USER_KEY = "user_key";
-	public static final String SESSION_KEY = "Session_key";
-	public static final String ACCESS_TOKEN = "Access_token";
+	String AUTH_TOKEN = "Authorization";
+	String USER_KEY = "user_key";
+	String SESSION_KEY = "Session_key";
+	String ACCESS_TOKEN = "Access_token";
 
 	// @formatter:off
 
 	@GetMapping(value = "/API/v1.0/REST/login")
-	public ResponseEntity<String> loginUserKeySessionKey(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password);
+	ResponseEntity<String> loginUserKeySessionKey(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password);
 
 	@GetMapping(value = "/API/v1.0/REST/token")
-	public ResponseEntity<String> loginUserKeyAccessToken(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password);
+	ResponseEntity<String> loginUserKeyAccessToken(@RequestParam(value = "username") String username, @RequestParam(value = "password") String password);
 
 	@PostMapping(value = "/API/v1.0/REST/sms", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<SckebbySmsResponse> sendSmsWithSessionKey(@RequestHeader(USER_KEY) String userKey, @RequestHeader(SESSION_KEY) String sessionKey,
-					@RequestBody SckebbySmsRequest smsBody);
+	ResponseEntity<SckebbySmsResponse> sendSmsWithSessionKey(@RequestHeader(USER_KEY) String userKey, @RequestHeader(SESSION_KEY) String sessionKey,
+			@RequestBody SckebbySmsRequest smsBody);
 	
 	
 	@PostMapping(value = "/API/v1.0/REST/sms", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<SckebbySmsResponse> sendSmsWithAccessToken(@RequestHeader(USER_KEY) String userKey, @RequestHeader(ACCESS_TOKEN) String accessToken,
-					@RequestBody SckebbySmsRequest smsBody);
+	ResponseEntity<SckebbySmsResponse> sendSmsWithAccessToken(@RequestHeader(USER_KEY) String userKey, @RequestHeader(ACCESS_TOKEN) String accessToken,
+			@RequestBody SckebbySmsRequest smsBody);
 
 	// @formatter:on
 }

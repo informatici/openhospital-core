@@ -55,7 +55,7 @@ import org.springframework.util.FileSystemUtils;
 
 public class TestFileSystemDicomManager extends OHCoreTestCase {
 
-	public static final Long _4M = 4194304l;
+	public static final Long _4M = 4194304L;
 	private static TestDicom testFileDicom;
 	private static TestDicomType testDicomType;
 
@@ -80,7 +80,7 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 	public void setUp() throws OHException, OHDicomException {
 		cleanH2InMemoryDb();
 		Context.setApplicationContext(applicationContext);
-		fileSystemDicomManager = new FileSystemDicomManager(_getDicomProperties());
+		fileSystemDicomManager = new FileSystemDicomManager(getDicomProperties());
 	}
 
 	@After
@@ -88,7 +88,7 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 		fileSystemDicomManager = null;
 	}
 
-	private Properties _getDicomProperties() {
+	private Properties getDicomProperties() {
 		Properties properties = new Properties();
 		properties.setProperty("dicom.manager.impl", "FileSystemDicomManager");
 		properties.setProperty("dicom.storage.filesystem", "rsc-test/dicom");
@@ -171,7 +171,7 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 		assertThat(dicomFileDir.listFiles()).hasSize(3);
 		assertThat(dicomProperties.getProperty("dicomInstanceUID")).isEqualTo("TestInteanceUid");
 
-		_cleanupDicomFiles(dicomFile.getPatId());
+		cleanupDicomFiles(dicomFile.getPatId());
 	}
 
 	@Test
@@ -182,7 +182,7 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 
 		FileDicom[] fileDicoms = fileSystemDicomManager.loadPatientFiles(0);
 		assertThat(fileDicoms).hasSize(1);
-		_cleanupDicomFiles(dicomFile.getPatId());
+		cleanupDicomFiles(dicomFile.getPatId());
 	}
 
 	@Test
@@ -209,7 +209,7 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 
 	@Test
 	public void testLoadDetailsLongObjectIdFileNull() throws Exception {
-		assertThat(fileSystemDicomManager.loadDetails((Long) null, 1, "TestSeriesNumber")).isNull();
+		assertThat(fileSystemDicomManager.loadDetails(null, 1, "TestSeriesNumber")).isNull();
 	}
 
 	@Test
@@ -247,7 +247,7 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 		boolean exists = fileSystemDicomManager.exist(dicomFile);
 		assertThat(exists).isTrue();
 
-		_cleanupDicomFiles(dicomFile.getPatId());
+		cleanupDicomFiles(dicomFile.getPatId());
 	}
 
 	@Test
@@ -267,7 +267,7 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 		boolean serieDeleted = fileSystemDicomManager.deleteSerie(2, "SeriesNumber");
 		assertThat(serieDeleted).isTrue();
 
-		_cleanupDicomFiles(dicomFile.getPatId());
+		cleanupDicomFiles(dicomFile.getPatId());
 	}
 
 	@Test
@@ -285,7 +285,7 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 		assertThat(fileSystemDicomManager.deleteSerie(1, "nuLL")).isFalse();
 	}
 
-	private static void _cleanupDicomFiles(int patientId) {
+	private static void cleanupDicomFiles(int patientId) {
 		FileSystemUtils.deleteRecursively(new File("rsc-test/dicom/" + patientId));
 		FileUtil.deleteContents(new File("rsc-test/dicom/dicom.storage"));
 	}

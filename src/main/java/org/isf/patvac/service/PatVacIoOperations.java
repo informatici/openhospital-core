@@ -21,15 +21,14 @@
  */
 package org.isf.patvac.service;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
 import java.util.List;
 
 import org.isf.patvac.model.PatientVaccine;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.time.TimeTools;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,12 +58,12 @@ public class PatVacIoOperations {
 	 * @return the list of {@link PatientVaccine}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<PatientVaccine> getPatientVaccine(boolean minusOneWeek) throws OHServiceException {
-		GregorianCalendar timeFrom = TimeTools.getDateToday0();
-		GregorianCalendar timeTo = TimeTools.getDateToday24();
+	public List<PatientVaccine> getPatientVaccine(boolean minusOneWeek) throws OHServiceException {
+		LocalDateTime timeTo = LocalDateTime.now().with(LocalTime.MAX);
+		LocalDateTime timeFrom = LocalDateTime.now().with(LocalTime.MIN);
 
 		if (minusOneWeek) {
-			timeFrom.add(GregorianCalendar.WEEK_OF_YEAR, -1);
+			timeFrom = timeFrom.minusWeeks(1);
 		}
 
 		return getPatientVaccine(null, null, timeFrom, timeTo, 'A', 0, 0);
@@ -84,16 +83,15 @@ public class PatVacIoOperations {
 	 * @return the list of {@link PatientVaccine}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<PatientVaccine> getPatientVaccine(
+	public List<PatientVaccine> getPatientVaccine(
 			String vaccineTypeCode,
 			String vaccineCode,
-			GregorianCalendar dateFrom,
-			GregorianCalendar dateTo,
+			LocalDateTime dateFrom,
+			LocalDateTime dateTo,
 			char sex,
 			int ageFrom,
 			int ageTo) throws OHServiceException {
-		return new ArrayList<>(repository.findAllByCodesAndDatesAndSexAndAges(
-				vaccineTypeCode, vaccineCode, dateFrom, dateTo, sex, ageFrom, ageTo));
+		return repository.findAllByCodesAndDatesAndSexAndAges(vaccineTypeCode, vaccineCode, dateFrom, dateTo, sex, ageFrom, ageTo);
 	}
 
 	public List<PatientVaccine> findForPatient(int patientCode) {
@@ -157,10 +155,10 @@ public class PatVacIoOperations {
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 
-	private GregorianCalendar getBeginningOfYear(int year) {
-		return new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar();
+	private LocalDateTime getBeginningOfYear(int year) {
+		return LocalDateTime.of(year, Month.JANUARY, 1, 0, 0, 0);
 	}
 }

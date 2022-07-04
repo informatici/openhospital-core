@@ -22,7 +22,6 @@
 package org.isf.menu.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -41,17 +40,15 @@ import org.isf.utils.db.Auditable;
  * ------------------------------------------
  */
 @Entity
-@Table(name="USERGROUP")
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="UG_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="UG_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="UG_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="UG_LAST_MODIFIED_DATE")),
-    @AttributeOverride(name="active", column=@Column(name="UG_ACTIVE")),
-})
-public class UserGroup extends Auditable<String>
-{
-	@Id 
+@Table(name = "USERGROUP")
+@AttributeOverride(name = "createdBy", column = @Column(name = "UG_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "UG_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "UG_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "UG_LAST_MODIFIED_DATE"))
+@AttributeOverride(name = "active", column = @Column(name = "UG_ACTIVE"))
+public class UserGroup extends Auditable<String> {
+
+	@Id
 	@Column(name="UG_ID_A")
 	private String code;
 	
@@ -60,39 +57,40 @@ public class UserGroup extends Auditable<String>
 	
 	@Transient
 	private volatile int hashCode = 0;
-	
-	
-	public UserGroup(String code, String desc){
-		this.code=code;
-		this.desc=desc;		
+
+	public UserGroup(String code, String desc) {
+		this.code = code;
+		this.desc = desc;
 	}
-	public UserGroup(){
-		this("","");		
+
+	public UserGroup() {
+		this("", "");
 	}
+
 	public String getCode() {
 		return code;
 	}
+
 	public void setCode(String code) {
 		this.code = code;
 	}
+
 	public String getDesc() {
 		return desc;
 	}
+
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return getCode();
 	}
-	
+
 	@Override
 	public boolean equals(Object anObject) {
-		return !(anObject instanceof UserGroup) ? false
-				: (getCode().equalsIgnoreCase(
-						((UserGroup) anObject).getCode()) && getDesc()
-						.equalsIgnoreCase(
-								((UserGroup) anObject).getDesc()));
+		return anObject instanceof UserGroup && (getCode().equalsIgnoreCase(((UserGroup) anObject).getCode())
+				&& getDesc().equalsIgnoreCase(((UserGroup) anObject).getDesc()));
 	}
 
 	@Override

@@ -23,7 +23,7 @@ package org.isf.operation.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.accounting.model.Bill;
 import org.isf.admission.model.Admission;
@@ -36,7 +36,7 @@ public class TestOperationRow {
 
 	private String prescriber = "prescriber";
 	private String opResult = "opResult";
-	private GregorianCalendar opDate = new GregorianCalendar(2020, 1, 1);
+	private LocalDateTime opDate = LocalDateTime.of(2020, 1, 1, 0, 0);
 	private String remarks = "remarks";
 	private Admission admission;
 	private Opd opd;
@@ -48,7 +48,7 @@ public class TestOperationRow {
 
 		if (usingSet) {
 			operationRow = new OperationRow();
-			_setParameters(operationRow, operation);
+			setParameters(operationRow, operation);
 		} else {
 			// Create OperationRow with all parameters
 			operationRow = new OperationRow(operation, prescriber, opResult, opDate, remarks, admission, opd, bill, transUnit);
@@ -57,7 +57,7 @@ public class TestOperationRow {
 		return operationRow;
 	}
 
-	public void _setParameters(OperationRow operationRow, Operation operation) {
+	public void setParameters(OperationRow operationRow, Operation operation) {
 		operationRow.setOperation(operation);
 		operationRow.setPrescriber(prescriber);
 		operationRow.setOpResult(opResult);

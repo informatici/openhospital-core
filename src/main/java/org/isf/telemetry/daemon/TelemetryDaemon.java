@@ -21,7 +21,7 @@
  */
 package org.isf.telemetry.daemon;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.isf.generaldata.ConfigurationProperties;
 import org.isf.generaldata.GeneralData;
@@ -103,7 +103,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 	}
 
 	private boolean isTimeToSendMessage() {
-		return settings.getSentTimestamp() == null || !TimeTools.isSameDay(settings.getSentTimestamp(), new Date());
+		return settings.getSentTimestamp() == null || !TimeTools.isSameDay(settings.getSentTimestamp(), LocalDateTime.now());
 	}
 
 	/**

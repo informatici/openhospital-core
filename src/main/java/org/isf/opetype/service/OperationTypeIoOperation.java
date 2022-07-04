@@ -21,7 +21,7 @@
  */
 package org.isf.opetype.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.opetype.model.OperationType;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -44,9 +44,8 @@ public class OperationTypeIoOperation {
 	 * @return the list of {@link OperationType}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<OperationType> getOperationType() throws OHServiceException 
-	{
-		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
+	public List<OperationType> getOperationType() throws OHServiceException {
+		return repository.findAllByOrderByDescriptionAsc();
 	}
 	
 	/**
@@ -56,16 +55,8 @@ public class OperationTypeIoOperation {
 	 * @return <code>true</code> if the {@link OperationType} has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean newOperationType(
-			OperationType operationType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		OperationType savedOperationType = repository.save(operationType);
-		result = (savedOperationType != null);
-		
-		return result;
+	public boolean newOperationType(OperationType operationType) throws OHServiceException {
+		return repository.save(operationType) != null;
 	}
 	
 	/**
@@ -75,16 +66,8 @@ public class OperationTypeIoOperation {
 	 * @return <code>true</code> if the {@link OperationType} has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean updateOperationType(
-			OperationType operationType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		OperationType savedOperationType = repository.save(operationType);
-		result = (savedOperationType != null);
-		
-		return result;
+	public boolean updateOperationType(OperationType operationType) throws OHServiceException {
+		return repository.save(operationType) != null;
 	}
 	
 	/**
@@ -94,15 +77,9 @@ public class OperationTypeIoOperation {
 	 * @return <code>true</code> if the {@link OperationType} has been delete, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean deleteOperationType(
-			OperationType operationType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteOperationType(OperationType operationType) throws OHServiceException {
 		repository.delete(operationType);
-		
-		return result;
+		return true;
 	}
 	
 	/**
@@ -111,14 +88,8 @@ public class OperationTypeIoOperation {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.existsById(code);
 	}
+
 }

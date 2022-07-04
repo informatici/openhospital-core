@@ -116,11 +116,11 @@ public class WardBrowserManager {
 	 * @return the stored wards.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Ward> getWards() throws OHServiceException {
+	public List<Ward> getWards() throws OHServiceException {
 		return ioOperations.getWards(null);
 	}
 
-	public ArrayList<Ward> getWards(Ward ward) throws OHServiceException {
+	public List<Ward> getWards(Ward ward) throws OHServiceException {
 		return ioOperations.getWards(ward.getCode());
 	}
 	/**
@@ -130,7 +130,7 @@ public class WardBrowserManager {
 	 * @return
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Ward> getWardsNoMaternity() throws OHServiceException {
+	public List<Ward> getWardsNoMaternity() throws OHServiceException {
 		return ioOperations.getWardsNoMaternity();
 	}
 
@@ -180,7 +180,7 @@ public class WardBrowserManager {
 			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.info.title"),
 					MessageBundle.formatMessage("angal.ward.theselectedwardhaspatients.fmt.msg",noPatients),
 					OHSeverityLevel.INFO));
-			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"), 
+			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.ward.pleasecheckinadmissionpatients.msg"),
 					OHSeverityLevel.ERROR));
 			throw new OHOperationNotAllowedException(messages);
@@ -218,7 +218,7 @@ public class WardBrowserManager {
 	 * @return maternity ward
 	 */
 	private Ward getDefaultMaternityWard() {
-		Ward maternity = new Ward(
+		return new Ward(
 				"M",
 				MessageBundle.getMessage("angal.ward.maternity.txt").toUpperCase(),
 				"234/52544", //Telephone
@@ -229,8 +229,7 @@ public class WardBrowserManager {
 				2, //Doctors
 				false, //isPharmacy
 				false, //isMale
-				true); //isFemale
-		return maternity;
+				true);
 	}
 	
 	/**

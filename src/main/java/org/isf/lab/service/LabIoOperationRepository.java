@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,7 +21,8 @@
  */
 package org.isf.lab.service;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.lab.model.Laboratory;
@@ -29,24 +30,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LabIoOperationRepository extends JpaRepository<Laboratory, Integer> {
 
-    List<Laboratory> findByExamDateBetweenOrderByExamDateDescRegistrationDateDesc(
-            GregorianCalendar dateFrom,
-            GregorianCalendar dateTo);
+	List<Laboratory> findByExamDateBetweenOrderByLabDateDesc(LocalDate dateFrom, LocalDate dateTo);
 
-    List<Laboratory> findByExamDateBetweenAndExam_DescriptionOrderByExamDateDescRegistrationDateDesc(
-            GregorianCalendar dateFrom,
-            GregorianCalendar dateTo,
-            String exam);
+	List<Laboratory> findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(LocalDateTime dateFrom, LocalDateTime dateTo, String exam);
 
-    List<Laboratory> findByPatient_CodeOrderByRegistrationDate(Integer patient);
+	List<Laboratory> findByPatient_CodeOrderByLabDate(Integer patient);
 
-    List<Laboratory> findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(
-            GregorianCalendar dateFrom,
-            GregorianCalendar dateTo);
+	List<Laboratory> findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(LocalDateTime dateFrom, LocalDateTime dateTo);
 
-    List<Laboratory> findByExamDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(
-            GregorianCalendar dateFrom,
-            GregorianCalendar dateTo,
-            String exam);
+	List<Laboratory> findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(LocalDateTime dateFrom, LocalDateTime dateTo, String exam);
 
 }

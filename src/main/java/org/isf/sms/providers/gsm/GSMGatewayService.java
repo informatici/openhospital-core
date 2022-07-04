@@ -143,9 +143,9 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 			LOGGER.debug("Sending SMS ({}) to: {}", sms.getSmsId(), sms.getSmsNumber());
 			LOGGER.debug("Sending text: {}", sms.getSmsText());
 
-			StringBuilder build_CMGS = new StringBuilder(GSMParameters.CMGS);
-			build_CMGS.append(sms.getSmsNumber());
-			build_CMGS.append("\"\r");
+			StringBuilder buildCMGS = new StringBuilder(GSMParameters.CMGS);
+			buildCMGS.append(sms.getSmsNumber());
+			buildCMGS.append("\"\r");
 
 			String text = sms.getSmsText() + EOF;
 
@@ -163,9 +163,9 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 //				Thread.sleep(1000);
 
 				// SET SMS NUMBER
-				LOGGER.trace(build_CMGS.toString());
+				LOGGER.trace(buildCMGS.toString());
 				if (!debug)
-					outputStream.write(build_CMGS.toString().getBytes());
+					outputStream.write(buildCMGS.toString().getBytes());
 				Thread.sleep(1000);
 
 				// SET SMS TEXT
@@ -201,7 +201,7 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 
 	@Override
 	public void serialEvent(SerialPortEvent event) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		byte[] buffer = new byte[1];
 		try {
 			while (inputStream.available() > 0) {

@@ -21,7 +21,7 @@
  */
 package org.isf.medtype.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.medtype.model.MedicalType;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -46,9 +46,8 @@ public class MedicalTypeIoOperation {
 	 * @return the stored medical types.
 	 * @throws OHServiceException if an error occurs retrieving the medical types.
 	 */
-	public ArrayList<MedicalType> getMedicalTypes() throws OHServiceException 
-	{
-		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
+	public List<MedicalType> getMedicalTypes() throws OHServiceException {
+		return repository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
@@ -57,16 +56,8 @@ public class MedicalTypeIoOperation {
 	 * @return <code>true</code> if the medical type has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs updating the medical type.
 	 */
-	public boolean updateMedicalType(
-			MedicalType medicalType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		MedicalType savedMedicalType = repository.save(medicalType);
-		result = (savedMedicalType != null);
-		
-		return result;
+	public boolean updateMedicalType(MedicalType medicalType) throws OHServiceException {
+		return repository.save(medicalType) != null;
 	}
 
 	/**
@@ -75,16 +66,8 @@ public class MedicalTypeIoOperation {
 	 * @return <code>true</code> if the medical type has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs storing the new medical type.
 	 */
-	public boolean newMedicalType(
-			MedicalType medicalType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		MedicalType savedMedicalType = repository.save(medicalType);
-		result = (savedMedicalType != null);
-		
-		return result;
+	public boolean newMedicalType(MedicalType medicalType) throws OHServiceException {
+		return repository.save(medicalType) != null;
 	}
 
 	/**
@@ -93,15 +76,9 @@ public class MedicalTypeIoOperation {
 	 * @return <code>true</code> if the medical type has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs deleting the medical type.
 	 */
-	public boolean deleteMedicalType(
-			MedicalType medicalType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteMedicalType(MedicalType medicalType) throws OHServiceException {
 		repository.delete(medicalType);
-		
-		return result;
+		return true;
 	}
 
 	/**
@@ -110,14 +87,8 @@ public class MedicalTypeIoOperation {
 	 * @return <code>true</code> if the medical code is already stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.existsById(code);
 	}
+
 }

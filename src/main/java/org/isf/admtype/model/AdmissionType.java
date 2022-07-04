@@ -22,7 +22,6 @@
 package org.isf.admtype.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -44,18 +43,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="ADMISSIONTYPE")
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="ADMT_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="ADMT_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="ADMT_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="ADMT_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="ADMT_LAST_MODIFIED_DATE"))
-})
-public class AdmissionType extends Auditable<String>
-{
-	@Id 
+@Table(name = "ADMISSIONTYPE")
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "ADMT_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "ADMT_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "ADMT_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "ADMT_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "ADMT_LAST_MODIFIED_DATE"))
+public class AdmissionType extends Auditable<String> {
+
+	@Id
 	@Column(name="ADMT_ID_A")	
     private String code;
 
@@ -75,10 +72,9 @@ public class AdmissionType extends Auditable<String>
      * @param aCode
      * @param aDescription
      */
-    public AdmissionType(String aCode, String aDescription) 
-    {
-        this.code = aCode;
-        this.description = aDescription;
+    public AdmissionType(String aCode, String aDescription) {
+	    this.code = aCode;
+	    this.description = aDescription;
     }
     
     public String getCode() 

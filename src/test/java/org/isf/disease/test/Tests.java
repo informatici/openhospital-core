@@ -24,7 +24,7 @@ package org.isf.disease.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -71,30 +71,30 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testDiseaseGets() throws Exception {
-		String code = _setupTestDisease(false);
-		_checkDiseaseIntoDb(code);
+		String code = setupTestDisease(false);
+		checkDiseaseIntoDb(code);
 	}
 
 	@Test
 	public void testDiseaseSets() throws Exception {
-		String code = _setupTestDisease(true);
-		_checkDiseaseIntoDb(code);
+		String code = setupTestDisease(true);
+		checkDiseaseIntoDb(code);
 	}
 
 	@Test
 	public void testIoGetDiseaseByCode() throws Exception {
-		String code = _setupTestDisease(false);
-		//Disease foundDisease = diseaseIoOperation.getDiseaseByCode(Integer.parseInt(code));
+		String code = setupTestDisease(false);
+		//Disease foundDisease = diseaseIoOperation.getDiseaseByCode(code);
 		Disease foundDisease = diseaseIoOperationRepository.findOneByCode(code);
 		testDisease.check(foundDisease);
 	}
 
 	@Test
 	public void testIoGetDiseases() throws Exception {
-		String code = _setupTestDisease(false);
-		Disease foundDisease = diseaseIoOperation.getDiseaseByCode(Integer.parseInt(code));
+		String code = setupTestDisease(false);
+		Disease foundDisease = diseaseIoOperation.getDiseaseByCode(code);
 
-		ArrayList<Disease> diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), false, false, false);
+		List<Disease> diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), false, false, false);
 		assertThat(diseases).contains(foundDisease);
 
 		diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), true, false, false);
@@ -104,7 +104,7 @@ public class Tests extends OHCoreTestCase {
 		diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), true, false, false);
 		assertThat(diseases).contains(foundDisease);
 
-		foundDisease = diseaseIoOperation.getDiseaseByCode(Integer.parseInt(code));
+		foundDisease = diseaseIoOperation.getDiseaseByCode(code);
 		diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), true, true, false);
 		assertThat(diseases).doesNotContain(foundDisease);
 		foundDisease.setOpdInclude(true);
@@ -113,7 +113,7 @@ public class Tests extends OHCoreTestCase {
 		diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), true, true, false);
 		assertThat(diseases).contains(foundDisease);
 
-		foundDisease = diseaseIoOperation.getDiseaseByCode(Integer.parseInt(code));
+		foundDisease = diseaseIoOperation.getDiseaseByCode(code);
 		diseases = diseaseIoOperation.getDiseases(foundDisease.getType().getCode(), true, true, true);
 		assertThat(diseases).doesNotContain(foundDisease);
 		foundDisease.setOpdInclude(true);
@@ -139,16 +139,16 @@ public class Tests extends OHCoreTestCase {
 		Disease disease = testDisease.setup(diseaseType, true);
 		Disease result = diseaseIoOperation.newDisease(disease);
 		assertThat(result.getCode()).isEqualTo("999");
-		_checkDiseaseIntoDb(disease.getCode());
+		checkDiseaseIntoDb(disease.getCode());
 	}
 
 	@Test
 	public void testIoUpdateDisease() throws Exception {
-		String code = _setupTestDisease(false);
-		Disease foundDisease = diseaseIoOperation.getDiseaseByCode(Integer.parseInt(code));
+		String code = setupTestDisease(false);
+		Disease foundDisease = diseaseIoOperation.getDiseaseByCode(code);
 		foundDisease.setDescription("Update");
 		Disease result = diseaseIoOperation.updateDisease(foundDisease);
-		Disease updateDisease = diseaseIoOperation.getDiseaseByCode(Integer.parseInt(code));
+		Disease updateDisease = diseaseIoOperation.getDiseaseByCode(code);
 
 		assertThat(result.getDescription()).isEqualTo("Update");
 		assertThat(updateDisease.getDescription()).isEqualTo("Update");
@@ -156,8 +156,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoHasDiseaseModified() throws Exception {
-		String code = _setupTestDisease(false);
-		Disease foundDisease = diseaseIoOperation.getDiseaseByCode(Integer.parseInt(code));
+		String code = setupTestDisease(false);
+		Disease foundDisease = diseaseIoOperation.getDiseaseByCode(code);
 		boolean result = diseaseIoOperation.deleteDisease(foundDisease);
 		assertThat(result).isTrue();
 		assertThat(foundDisease.getIpdInInclude()).isFalse();
@@ -166,8 +166,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoDeleteDisease() throws Exception {
-		String code = _setupTestDisease(false);
-		Disease foundDisease = diseaseIoOperation.getDiseaseByCode(Integer.parseInt(code));
+		String code = setupTestDisease(false);
+		Disease foundDisease = diseaseIoOperation.getDiseaseByCode(code);
 		boolean result = diseaseIoOperation.deleteDisease(foundDisease);
 		assertThat(result).isTrue();
 		assertThat(foundDisease.getIpdInInclude()).isFalse();
@@ -177,32 +177,32 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoIsCodePresent() throws Exception {
-		String code = _setupTestDisease(false);
+		String code = setupTestDisease(false);
 		boolean result = diseaseIoOperation.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
 	public void testIoIsDescriptionPresent() throws Exception {
-		String code = _setupTestDisease(false);
-		Disease foundDisease = diseaseIoOperation.getDiseaseByCode(Integer.parseInt(code));
+		String code = setupTestDisease(false);
+		Disease foundDisease = diseaseIoOperation.getDiseaseByCode(code);
 		boolean result = diseaseIoOperation.isDescriptionPresent(foundDisease.getDescription(), foundDisease.getType().getCode());
 		assertThat(result).isTrue();
 	}
 
 	@Test
 	public void testMgrGetDiseaseByCode() throws Exception {
-		String code = _setupTestDisease(false);
-		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.parseInt(code));
+		String code = setupTestDisease(false);
+		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(code);
 		testDisease.check(foundDisease);
 	}
 
 	@Test
 	public void testMgrGetDiseases() throws Exception {
-		String code = _setupTestDisease(false);
-		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.parseInt(code));
+		String code = setupTestDisease(false);
+		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(code);
 
-		ArrayList<Disease> diseases = diseaseBrowserManager.getDisease(foundDisease.getType().getCode());
+		List<Disease> diseases = diseaseBrowserManager.getDisease(foundDisease.getType().getCode());
 		assertThat(diseases).contains(foundDisease);
 
 		diseases = diseaseBrowserManager.getDiseaseOpd(foundDisease.getType().getCode());
@@ -212,7 +212,7 @@ public class Tests extends OHCoreTestCase {
 		diseases = diseaseBrowserManager.getDiseaseOpd(foundDisease.getType().getCode());
 		assertThat(diseases).contains(foundDisease);
 
-		foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.parseInt(code));
+		foundDisease = diseaseBrowserManager.getDiseaseByCode(code);
 		diseases = diseaseBrowserManager.getDiseaseIpdIn();
 		assertThat(diseases).doesNotContain(foundDisease);
 		foundDisease.setOpdInclude(true);
@@ -221,7 +221,7 @@ public class Tests extends OHCoreTestCase {
 		diseases = diseaseBrowserManager.getDiseaseOpd();
 		assertThat(diseases).contains(foundDisease);
 
-		foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.parseInt(code));
+		foundDisease = diseaseBrowserManager.getDiseaseByCode(code);
 		diseases = diseaseBrowserManager.getDiseaseIpdOut(foundDisease.getType().getCode());
 		assertThat(diseases).doesNotContain(foundDisease);
 		foundDisease.setOpdInclude(true);
@@ -253,24 +253,24 @@ public class Tests extends OHCoreTestCase {
 		Disease disease = testDisease.setup(diseaseType, true);
 		Disease result = diseaseBrowserManager.newDisease(disease);
 		assertThat(result.getCode()).isEqualTo("999");
-		_checkDiseaseIntoDb(disease.getCode());
+		checkDiseaseIntoDb(disease.getCode());
 	}
 
 	@Test
 	public void testMgrUpdateDisease() throws Exception {
-		String code = _setupTestDisease(false);
-		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.parseInt(code));
+		String code = setupTestDisease(false);
+		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(code);
 		foundDisease.setDescription("Update");
 		Disease result = diseaseBrowserManager.updateDisease(foundDisease);
 		assertThat(result.getDescription()).isEqualTo("Update");
-		Disease updateDisease = diseaseBrowserManager.getDiseaseByCode(Integer.parseInt(code));
+		Disease updateDisease = diseaseBrowserManager.getDiseaseByCode(code);
 		assertThat(updateDisease.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrHasDiseaseModified() throws Exception {
-		String code = _setupTestDisease(false);
-		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.parseInt(code));
+		String code = setupTestDisease(false);
+		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(code);
 		boolean result = diseaseBrowserManager.deleteDisease(foundDisease);
 		assertThat(result).isTrue();
 		assertThat(foundDisease.getIpdInInclude()).isFalse();
@@ -279,8 +279,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrDeleteDisease() throws Exception {
-		String code = _setupTestDisease(false);
-		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.parseInt(code));
+		String code = setupTestDisease(false);
+		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(code);
 		boolean result = diseaseBrowserManager.deleteDisease(foundDisease);
 		assertThat(result).isTrue();
 		assertThat(foundDisease.getIpdInInclude()).isFalse();
@@ -290,23 +290,23 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
-		String code = _setupTestDisease(false);
+		String code = setupTestDisease(false);
 		boolean result = diseaseBrowserManager.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
 	public void testMgrIsDescriptionPresent() throws Exception {
-		String code = _setupTestDisease(false);
-		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(Integer.parseInt(code));
+		String code = setupTestDisease(false);
+		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(code);
 		boolean result = diseaseBrowserManager.descriptionControl(foundDisease.getDescription(), foundDisease.getType().getCode());
 		assertThat(result).isTrue();
 	}
 
 	@Test
 	public void testDiseaseEqualHashToString() throws Exception {
-		String code = _setupTestDisease(false);
-		Disease disease = diseaseBrowserManager.getDiseaseByCode(Integer.parseInt(code));
+		String code = setupTestDisease(false);
+		Disease disease = diseaseBrowserManager.getDiseaseByCode(code);
 		DiseaseType diseaseType2 = testDiseaseType.setup(false);
 		Disease disease2 = new Disease("998", "someDescription", diseaseType2);
 		assertThat(disease.equals(disease)).isTrue();
@@ -325,8 +325,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testDiseaseGetterSetter() throws Exception {
-		String code = _setupTestDisease(false);
-		Disease disease = diseaseBrowserManager.getDiseaseByCode(Integer.parseInt(code));
+		String code = setupTestDisease(false);
+		Disease disease = diseaseBrowserManager.getDiseaseByCode(code);
 		disease.setLock(-99);
 		assertThat(disease.getLock()).isEqualTo(-99);
 	}
@@ -372,8 +372,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrValidationInsert() throws Exception {
-		String code = _setupTestDisease(false);
-		Disease disease = diseaseBrowserManager.getDiseaseByCode(Integer.parseInt(code));
+		String code = setupTestDisease(false);
+		Disease disease = diseaseBrowserManager.getDiseaseByCode(code);
 		// code already exists and same description used
 		DiseaseType diseaseType = new DiseaseType("ZZ", "TestDescription");
 		Disease disease2 = testDisease.setup(diseaseType, false);
@@ -386,7 +386,7 @@ public class Tests extends OHCoreTestCase {
 				);
 	}
 
-	private String _setupTestDisease(boolean usingSet) throws Exception {
+	private String setupTestDisease(boolean usingSet) throws Exception {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, usingSet);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
@@ -394,8 +394,9 @@ public class Tests extends OHCoreTestCase {
 		return disease.getCode();
 	}
 
-	private void _checkDiseaseIntoDb(String code) throws Exception {
-		Disease foundDisease = diseaseIoOperationRepository.getOne(code);
+	private void checkDiseaseIntoDb(String code) throws Exception {
+		Disease foundDisease = diseaseIoOperationRepository.getById(code);
 		testDisease.check(foundDisease);
 	}
+
 }

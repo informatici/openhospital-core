@@ -22,6 +22,7 @@
 package org.isf.telemetry.model;
 
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 
@@ -56,7 +57,7 @@ public class Telemetry {
 	private String info;
 
 	@Column(name = "TEL_SENT_TIME")
-	private Date sentTimestamp;
+	private LocalDateTime sentTimestamp;
 
 	@Column(name = "TEL_OPTIN_DATE")
 	private Date optinDate;
@@ -70,11 +71,11 @@ public class Telemetry {
 	public Telemetry() {
 	}
 
-	public Date getSentTimestamp() {
+	public LocalDateTime getSentTimestamp() {
 		return sentTimestamp;
 	}
 
-	public void setSentTimestamp(Date sentTimestamp) {
+	public void setSentTimestamp(LocalDateTime sentTimestamp) {
 		this.sentTimestamp = sentTimestamp;
 	}
 

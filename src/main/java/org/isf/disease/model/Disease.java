@@ -22,7 +22,6 @@
 package org.isf.disease.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -36,8 +35,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-import org.isf.utils.db.Auditable;
 import org.isf.distype.model.DiseaseType;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -50,18 +49,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="DISEASE")
+@Table(name = "DISEASE")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="DIS_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="DIS_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="DIS_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="DIS_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="DIS_LAST_MODIFIED_DATE"))
-})
-public class Disease extends Auditable<String> 
-{
-	@Id 
+@AttributeOverride(name = "createdBy", column = @Column(name = "DIS_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "DIS_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "DIS_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "DIS_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "DIS_LAST_MODIFIED_DATE"))
+public class Disease extends Auditable<String> {
+
+	@Id
 	@Column(name="DIS_ID_A")	    
     private String code;
 
@@ -169,12 +166,9 @@ public class Disease extends Auditable<String>
 
 	@Override
 	public boolean equals(Object anObject) {
-        return !(anObject instanceof Disease) ? false
-                : (getCode().equals(((Disease) anObject).getCode())
-                        && getDescription().equalsIgnoreCase(
-                                ((Disease) anObject).getDescription()) && getType()
-                        .equals(((Disease) anObject).getType()));
-    }
+		return anObject instanceof Disease && (getCode().equals(((Disease) anObject).getCode())
+				&& getDescription().equalsIgnoreCase(((Disease) anObject).getDescription()) && getType().equals(((Disease) anObject).getType()));
+	}
 
     public String toString() {
         return getDescription();

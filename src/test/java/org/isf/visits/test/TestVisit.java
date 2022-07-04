@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,7 +23,7 @@ package org.isf.visits.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
@@ -32,10 +32,10 @@ import org.isf.ward.model.Ward;
 
 public class TestVisit {
 
-	private GregorianCalendar date = new GregorianCalendar(10, 9, 8);
+	private LocalDateTime date = LocalDateTime.of(10, 9, 8, 0, 0, 0);
 	private String note = "TestNote";
 	private boolean sms = true;
-	private String duration = "10";
+	private Integer duration = 10;
 	private String service = "testService";
 	private Ward ward;
 	private Patient patient;
@@ -47,7 +47,7 @@ public class TestVisit {
 
 		if (usingSet) {
 			visit = new Visit();
-			_setParameters(patient, visit, ward);
+			setParameters(patient, visit, ward);
 		} else {
 			// Create Visit with all parameters 
 			visit = new Visit(0, date, patient, note, sms, ward, duration, service);
@@ -56,19 +56,23 @@ public class TestVisit {
 		return visit;
 	}
 
-	public void _setParameters(Patient patient, Visit visit, Ward ward) {
+	public void setParameters(Patient patient, Visit visit, Ward ward) {
 		visit.setDate(date);
 		visit.setNote(note);
 		visit.setPatient(patient);
 		visit.setSms(sms);
 		visit.setWard(ward);
+		visit.setDuration(duration);
+		visit.setService(service);
 	}
 
 	public void check(Visit visit) {
 		assertThat(visit.getDate()).isEqualTo(date);
 		assertThat(visit.getNote()).isEqualTo(note);
 		assertThat(visit.isSms()).isEqualTo(sms);
+		assertThat(visit.getDuration()).isEqualTo(duration);
 		assertThat(visit.getWard()).isEqualTo(ward);
 		assertThat(visit.getPatient()).isEqualTo(patient);
+		assertThat(visit.getService()).isEqualTo(service);
 	}
 }

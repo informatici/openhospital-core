@@ -24,7 +24,7 @@ package org.isf.dlvrtype.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -63,31 +63,31 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testDeliveryTypeGets() throws Exception {
-		String code = _setupTestDeliveryType(false);
-		_checkDeliveryTypeIntoDb(code);
+		String code = setupTestDeliveryType(false);
+		checkDeliveryTypeIntoDb(code);
 	}
 
 	@Test
 	public void testDeliveryTypeSets() throws Exception {
-		String code = _setupTestDeliveryType(true);
-		_checkDeliveryTypeIntoDb(code);
+		String code = setupTestDeliveryType(true);
+		checkDeliveryTypeIntoDb(code);
 	}
 
 	@Test
 	public void testIoGetDeliveryType() throws Exception {
-		String code = _setupTestDeliveryType(false);
-		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
-		ArrayList<DeliveryType> deliveryTypes = deliveryTypeIoOperation.getDeliveryType();
+		String code = setupTestDeliveryType(false);
+		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findById(code).get();
+		List<DeliveryType> deliveryTypes = deliveryTypeIoOperation.getDeliveryType();
 		assertThat(deliveryTypes.get(deliveryTypes.size() - 1).getDescription()).isEqualTo(foundDeliveryType.getDescription());
 	}
 
 	@Test
 	public void testIoUpdateDeliveryType() throws Exception {
-		String code = _setupTestDeliveryType(false);
-		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
+		String code = setupTestDeliveryType(false);
+		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findById(code).get();
 		foundDeliveryType.setDescription("Update");
 		boolean result = deliveryTypeIoOperation.updateDeliveryType(foundDeliveryType);
-		DeliveryType updateDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
+		DeliveryType updateDeliveryType = deliveryTypeIoOperationRepository.findById(code).get();
 		assertThat(result).isTrue();
 		assertThat(updateDeliveryType.getDescription()).isEqualTo("Update");
 	}
@@ -97,20 +97,20 @@ public class Tests extends OHCoreTestCase {
 		DeliveryType deliveryType = testDeliveryType.setup(true);
 		boolean result = deliveryTypeIoOperation.newDeliveryType(deliveryType);
 		assertThat(result).isTrue();
-		_checkDeliveryTypeIntoDb(deliveryType.getCode());
+		checkDeliveryTypeIntoDb(deliveryType.getCode());
 	}
 
 	@Test
 	public void testIoIsCodePresent() throws Exception {
-		String code = _setupTestDeliveryType(false);
+		String code = setupTestDeliveryType(false);
 		boolean result = deliveryTypeIoOperation.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
 	public void testIoDeleteDeliveryType() throws Exception {
-		String code = _setupTestDeliveryType(false);
-		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
+		String code = setupTestDeliveryType(false);
+		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findById(code).get();
 		boolean result = deliveryTypeIoOperation.deleteDeliveryType(foundDeliveryType);
 		assertThat(result).isTrue();
 		result = deliveryTypeIoOperation.isCodePresent(code);
@@ -119,19 +119,19 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetDeliveryType() throws Exception {
-		String code = _setupTestDeliveryType(false);
-		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
-		ArrayList<DeliveryType> deliveryTypes = deliveryTypeBrowserManager.getDeliveryType();
+		String code = setupTestDeliveryType(false);
+		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findById(code).get();
+		List<DeliveryType> deliveryTypes = deliveryTypeBrowserManager.getDeliveryType();
 		assertThat(deliveryTypes.get(deliveryTypes.size() - 1).getDescription()).isEqualTo(foundDeliveryType.getDescription());
 	}
 
 	@Test
 	public void testMgrUpdateDeliveryType() throws Exception {
-		String code = _setupTestDeliveryType(false);
-		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
+		String code = setupTestDeliveryType(false);
+		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findById(code).get();
 		foundDeliveryType.setDescription("Update");
 		boolean result = deliveryTypeBrowserManager.updateDeliveryType(foundDeliveryType);
-		DeliveryType updateDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
+		DeliveryType updateDeliveryType = deliveryTypeIoOperationRepository.findById(code).get();
 		assertThat(result).isTrue();
 		assertThat(updateDeliveryType.getDescription()).isEqualTo("Update");
 	}
@@ -141,20 +141,20 @@ public class Tests extends OHCoreTestCase {
 		DeliveryType deliveryType = testDeliveryType.setup(true);
 		boolean result = deliveryTypeBrowserManager.newDeliveryType(deliveryType);
 		assertThat(result).isTrue();
-		_checkDeliveryTypeIntoDb(deliveryType.getCode());
+		checkDeliveryTypeIntoDb(deliveryType.getCode());
 	}
 
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
-		String code = _setupTestDeliveryType(false);
+		String code = setupTestDeliveryType(false);
 		boolean result = deliveryTypeBrowserManager.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
 	public void testMgrDeleteDeliveryType() throws Exception {
-		String code = _setupTestDeliveryType(false);
-		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
+		String code = setupTestDeliveryType(false);
+		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findById(code).get();
 		boolean result = deliveryTypeBrowserManager.deleteDeliveryType(foundDeliveryType);
 		assertThat(result).isTrue();
 		result = deliveryTypeBrowserManager.isCodePresent(code);
@@ -163,8 +163,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrDeliveryTypeValidate() throws Exception {
-		String code = _setupTestDeliveryType(false);
-		DeliveryType deliveryType = deliveryTypeIoOperationRepository.findOne(code);
+		String code = setupTestDeliveryType(false);
+		DeliveryType deliveryType = deliveryTypeIoOperationRepository.findById(code).get();
 		deliveryType.setDescription("Update");
 		boolean result = deliveryTypeBrowserManager.updateDeliveryType(deliveryType);
 		// empty string
@@ -203,8 +203,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testDeliveryTypeEqualHashToString() throws Exception {
-		String code = _setupTestDeliveryType(false);
-		DeliveryType deliveryType = deliveryTypeIoOperationRepository.findOne(code);
+		String code = setupTestDeliveryType(false);
+		DeliveryType deliveryType = deliveryTypeIoOperationRepository.findById(code).get();
 		DeliveryType deliveryType2 = new DeliveryType("someCode", "someDescription");
 		assertThat(deliveryType.equals(deliveryType)).isTrue();
 		assertThat(deliveryType)
@@ -219,14 +219,14 @@ public class Tests extends OHCoreTestCase {
 		assertThat(deliveryType2).hasToString(deliveryType.getDescription());
 	}
 
-	private String _setupTestDeliveryType(boolean usingSet) throws OHException {
+	private String setupTestDeliveryType(boolean usingSet) throws OHException {
 		DeliveryType deliveryType = testDeliveryType.setup(usingSet);
 		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
 		return deliveryType.getCode();
 	}
 
-	private void _checkDeliveryTypeIntoDb(String code) throws OHException {
-		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findOne(code);
+	private void checkDeliveryTypeIntoDb(String code) throws OHException {
+		DeliveryType foundDeliveryType = deliveryTypeIoOperationRepository.findById(code).get();
 		testDeliveryType.check(foundDeliveryType);
 	}
 }

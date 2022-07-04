@@ -21,6 +21,7 @@
  */
 package org.isf.telemetry.manager;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +88,7 @@ public class TelemetryManager {
 
 	private Telemetry updateStatusCommon(String info) {
 		Telemetry telemetry = retrieveOrBuildNewTelemetry();
-		telemetry.setSentTimestamp(new Date());
+		telemetry.setSentTimestamp(LocalDateTime.now());
 		telemetry.setInfo(info);
 		return this.telemetryRepository.save(telemetry);
 	}

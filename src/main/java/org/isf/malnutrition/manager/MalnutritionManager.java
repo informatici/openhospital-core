@@ -63,7 +63,7 @@ public class MalnutritionManager {
 		}
 		if (malnutrition.getDateSupp() != null &&
 				malnutrition.getDateConf() != null &&
-				malnutrition.getDateConf().before(malnutrition.getDateSupp())) {
+				malnutrition.getDateConf().isBefore(malnutrition.getDateSupp())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.malnutrition.controldatemustbeaftervisitdate.msg"),
 					OHSeverityLevel.ERROR));
@@ -92,7 +92,7 @@ public class MalnutritionManager {
 	 * @return all the retrieved malnutrition or <code>null</code> if the specified admission id is <code>null</code>.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Malnutrition> getMalnutrition(String admissionID) throws OHServiceException {
+	public List<Malnutrition> getMalnutrition(String admissionID) throws OHServiceException {
 		return ioOperation.getMalnutritions(admissionID);
 	}
 

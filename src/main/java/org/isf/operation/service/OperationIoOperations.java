@@ -21,7 +21,7 @@
  */
 package org.isf.operation.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.operation.model.Operation;
 import org.isf.opetype.model.OperationType;
@@ -56,42 +56,23 @@ public class OperationIoOperations {
 	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Operation> getOperationByTypeDescription(String typeDescription) throws OHServiceException {
-		return new ArrayList<>(typeDescription == null ?
+	public List<Operation> getOperationByTypeDescription(String typeDescription) throws OHServiceException {
+		return typeDescription == null ?
 				repository.findByOrderByDescriptionAsc() :
-				repository.findAllByType_DescriptionContainsOrderByDescriptionAsc(typeDescription));
+				repository.findAllByType_DescriptionContainsOrderByDescriptionAsc("%" + typeDescription + "%");
 	}
 
 	public Operation findByCode(String code) throws OHServiceException{
     	return repository.findByCode(code);
 	}
 
-	public ArrayList<Operation> getOperationOpd(
-			) throws OHServiceException {
-
-    	ArrayList<Operation> operations = null;
-
-
-			operations = repository.findAllWithoutDescriptionOpd();
-
-
-
-		return operations;
+	public List<Operation> getOperationOpd() throws OHServiceException {
+		return repository.findAllWithoutDescriptionOpd();
 	}
 
-	public ArrayList<Operation> getOperationAdm(
-			) throws OHServiceException {
-
-    	ArrayList<Operation> operations = null;
-
-
-			operations = repository.findAllWithoutDescriptionAdm();
-
-
-
-		return operations;
+	public List<Operation> getOperationAdm() throws OHServiceException {
+		return repository.findAllWithoutDescriptionAdm();
 	}
-
 
 	/**
 	 * Insert an {@link Operation} in the DBs
@@ -133,7 +114,7 @@ public class OperationIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 	
 	/**

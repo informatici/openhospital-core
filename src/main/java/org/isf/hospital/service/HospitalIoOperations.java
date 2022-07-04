@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,7 +21,6 @@
  */
 package org.isf.hospital.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.hospital.model.Hospital;
@@ -52,11 +51,8 @@ public class HospitalIoOperations {
 	 * @return {@link Hospital} object
 	 * @throws OHServiceException 
 	 */
-	public Hospital getHospital() throws OHServiceException 
-	{
-		ArrayList<Hospital> hospitals = (ArrayList<Hospital>) repository.findAll();
-				
-
+	public Hospital getHospital() throws OHServiceException {
+		List<Hospital> hospitals = repository.findAll();
 		return hospitals.get(0);
 	}
 	
@@ -76,8 +72,7 @@ public class HospitalIoOperations {
 	 * @return <code>true</code> if the hospital informations have been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public Hospital updateHospital(Hospital hospital) throws OHServiceException
-	{
+	public Hospital updateHospital(Hospital hospital) throws OHServiceException {
 		return repository.save(hospital);
 	}
 	
@@ -87,16 +82,10 @@ public class HospitalIoOperations {
 	 * @param value the value to sanitize.
 	 * @return the sanitized value or <code>null</code> if the passed value is <code>null</code>.
 	 */
-	protected String sanitize(String value)
-	{
-		String result = null;
-		
-		
-		if (value != null) 
-		{
-			result = value.trim().replaceAll("'", "''");
+	protected String sanitize(String value) {
+		if (value == null) {
+			return null;
 		}
-		
-		return result;
+		return value.trim().replace("'", "''");
 	}
 }

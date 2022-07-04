@@ -21,7 +21,7 @@
  */
 package org.isf.menu.manager;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.model.User;
@@ -52,7 +52,7 @@ public class UserBrowsingManager {
 	 *
 	 * @return the list of {@link User}s
 	 */
-	public ArrayList<User> getUser() throws OHServiceException {
+	public List<User> getUser() throws OHServiceException {
 		return ioOperations.getUser();
 	}
 
@@ -62,7 +62,7 @@ public class UserBrowsingManager {
 	 * @param groupID - the group ID
 	 * @return the list of {@link User}s
 	 */
-	public ArrayList<User> getUser(String groupID) throws OHServiceException {
+	public List<User> getUser(String groupID) throws OHServiceException {
 		return ioOperations.getUser(groupID);
 	}
 
@@ -120,10 +120,11 @@ public class UserBrowsingManager {
 	 * @return <code>true</code> if the user has been deleted, <code>false</code> otherwise.
 	 */
 	public boolean deleteUser(User user) throws OHServiceException {
-		if (user.getUserName().equals("admin"))
+		if (user.getUserName().equals("admin")) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.userbrowser.theadminusercannotbedeleted.msg"),
 					OHSeverityLevel.ERROR));
+		}
 		return ioOperations.deleteUser(user);
 	}
 
@@ -132,7 +133,7 @@ public class UserBrowsingManager {
 	 *
 	 * @return the list of {@link UserGroup}s
 	 */
-	public ArrayList<UserGroup> getUserGroup() throws OHServiceException {
+	public List<UserGroup> getUserGroup() throws OHServiceException {
 		return ioOperations.getUserGroup();
 	}
 
@@ -142,7 +143,7 @@ public class UserBrowsingManager {
 	 * @param aUser - the {@link User}
 	 * @return the list of {@link UserMenuItem}s
 	 */
-	public ArrayList<UserMenuItem> getMenu(User aUser) throws OHServiceException {
+	public List<UserMenuItem> getMenu(User aUser) throws OHServiceException {
 		return ioOperations.getMenu(aUser);
 	}
 
@@ -152,7 +153,7 @@ public class UserBrowsingManager {
 	 * @param aGroup - the {@link UserGroup}
 	 * @return the list of {@link UserMenuItem}s
 	 */
-	public ArrayList<UserMenuItem> getGroupMenu(UserGroup aGroup) throws OHServiceException {
+	public List<UserMenuItem> getGroupMenu(UserGroup aGroup) throws OHServiceException {
 		return ioOperations.getGroupMenu(aGroup);
 	}
 
@@ -163,7 +164,7 @@ public class UserBrowsingManager {
 	 * @param menu - the list of {@link UserMenuItem}s
 	 * @return <code>true</code> if the menu has been replaced, <code>false</code> otherwise.
 	 */
-	public boolean setGroupMenu(UserGroup aGroup, ArrayList<UserMenuItem> menu) throws OHServiceException {
+	public boolean setGroupMenu(UserGroup aGroup, List<UserMenuItem> menu) throws OHServiceException {
 		return ioOperations.setGroupMenu(aGroup, menu, false);
 	}
 
@@ -189,7 +190,7 @@ public class UserBrowsingManager {
 					MessageBundle.getMessage("angal.groupsbrowser.theadmingroupcannotbedeleted.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		ArrayList<User> users = getUser(aGroup.getCode());
+		List<User> users = getUser(aGroup.getCode());
 		if (users != null && !users.isEmpty()) {
 			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.groupsbrowser.thisgrouphasusersandcannotbedeleted.msg"),
@@ -210,9 +211,8 @@ public class UserBrowsingManager {
 			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.formatMessage("angal.groupsbrowser.thegroupalreadyexists.fmt.msg", code),
 					OHSeverityLevel.ERROR));
-		} else {
-			return ioOperations.newUserGroup(aGroup);
 		}
+		return ioOperations.newUserGroup(aGroup);
 	}
 
 	/**

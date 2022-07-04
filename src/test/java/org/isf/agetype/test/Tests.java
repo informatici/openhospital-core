@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -61,32 +62,32 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testAgeTypeGets() throws Exception {
-		String code = _setupTestAgeType(false);
-		_checkAgeTypeIntoDb(code);
+		String code = setupTestAgeType(false);
+		checkAgeTypeIntoDb(code);
 	}
 
 	@Test
 	public void testAgeTypeSets() throws Exception {
-		String code = _setupTestAgeType(true);
-		_checkAgeTypeIntoDb(code);
+		String code = setupTestAgeType(true);
+		checkAgeTypeIntoDb(code);
 	}
 
 	@Test
 	public void testIoGetAgeType() throws Exception {
-		String code = _setupTestAgeType(false);
+		String code = setupTestAgeType(false);
 		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
-		ArrayList<AgeType> ageTypes = ageTypeIoOperations.getAgeType();
+		List<AgeType> ageTypes = ageTypeIoOperations.getAgeType();
 
 		assertThat(ageTypes.get(ageTypes.size() - 1).getDescription()).isEqualTo(foundAgeType.getDescription());
 	}
 
 	@Test
 	public void testIoUpdateAgeType() throws Exception {
-		String code = _setupTestAgeType(false);
+		String code = setupTestAgeType(false);
 		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
 		foundAgeType.setFrom(4);
 		foundAgeType.setTo(40);
-		ArrayList<AgeType> ageTypes = new ArrayList<>();
+		List<AgeType> ageTypes = new ArrayList<>();
 		ageTypes.add(foundAgeType);
 		boolean result = ageTypeIoOperations.updateAgeType(ageTypes);
 		AgeType updateAgeType = ageTypeIoOperationRepository.findOneByCode(code);
@@ -97,7 +98,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetAgeTypeByCode() throws Exception {
-		String code = _setupTestAgeType(false);
+		String code = setupTestAgeType(false);
 		AgeType ageType = ageTypeIoOperationRepository.findOneByCode(code);
 		AgeType foundAgeType = ageTypeIoOperations.getAgeTypeByCode(9);
 
@@ -108,20 +109,20 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetAgeType() throws Exception {
-		String code = _setupTestAgeType(false);
+		String code = setupTestAgeType(false);
 		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
-		ArrayList<AgeType> ageTypes = ageTypeBrowserManager.getAgeType();
+		List<AgeType> ageTypes = ageTypeBrowserManager.getAgeType();
 
 		assertThat(ageTypes.get(ageTypes.size() - 1).getDescription()).isEqualTo(foundAgeType.getDescription());
 	}
 
 	@Test
 	public void testMgrUpdateAgeType() throws Exception {
-		String code = _setupTestAgeType(false);
+		String code = setupTestAgeType(false);
 		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
 		foundAgeType.setFrom(4);
 		foundAgeType.setTo(40);
-		ArrayList<AgeType> ageTypes = new ArrayList<>();
+		List<AgeType> ageTypes = new ArrayList<>();
 		ageTypes.add(foundAgeType);
 		boolean result = ageTypeBrowserManager.updateAgeType(ageTypes);
 		AgeType updateAgeType = ageTypeIoOperationRepository.findOneByCode(code);
@@ -132,7 +133,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetTypeByAge() throws Exception {
-		String code = _setupTestAgeType(false);
+		String code = setupTestAgeType(false);
 		AgeType ageType = ageTypeIoOperationRepository.findOneByCode(code);
 		String foundCode = ageTypeBrowserManager.getTypeByAge(9);
 		assertThat(foundCode).isEqualTo(code);
@@ -142,7 +143,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetAgeTypeByCode() throws Exception {
-		String code = _setupTestAgeType(false);
+		String code = setupTestAgeType(false);
 		AgeType ageType = ageTypeIoOperationRepository.findOneByCode(code);
 		AgeType foundAgeType = ageTypeBrowserManager.getTypeByCode(9);
 
@@ -153,7 +154,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testAgeTypeEqualHashToString() throws Exception {
-		String code = _setupTestAgeType(false);
+		String code = setupTestAgeType(false);
 		AgeType ageType = ageTypeIoOperationRepository.findOneByCode(code);
 		AgeType ageType2 = new AgeType(ageType.getCode(), ageType.getDescription());
 		ageType2.setFrom(ageType.getFrom());
@@ -172,14 +173,14 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrAgeTypeValidation() throws Exception {
-		String code = _setupTestAgeType(false);
+		String code = setupTestAgeType(false);
 		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
 		foundAgeType.setFrom(0);
 		foundAgeType.setTo(1);
 		AgeType foundAgeType2 = ageTypeIoOperationRepository.findOneByCode(code);
 		foundAgeType2.setFrom(0);
 		foundAgeType2.setTo(1);
-		ArrayList<AgeType> ageTypes = new ArrayList<>();
+		List<AgeType> ageTypes = new ArrayList<>();
 		ageTypes.add(foundAgeType);
 		ageTypes.add(foundAgeType2);
 
@@ -193,7 +194,7 @@ public class Tests extends OHCoreTestCase {
 		// Age range not defined
 		foundAgeType2.setFrom(90);
 		foundAgeType2.setTo(100);
-		ArrayList<AgeType> ageTypes2 = new ArrayList<>();
+		List<AgeType> ageTypes2 = new ArrayList<>();
 		ageTypes2.add(foundAgeType);
 		ageTypes2.add(foundAgeType2);
 		assertThatThrownBy(() -> ageTypeBrowserManager.updateAgeType(ageTypes2))
@@ -204,13 +205,13 @@ public class Tests extends OHCoreTestCase {
 				);
 	}
 
-	private String _setupTestAgeType(boolean usingSet) throws Exception {
+	private String setupTestAgeType(boolean usingSet) throws Exception {
 		AgeType ageType = testAgeType.setup(usingSet);
 		ageTypeIoOperationRepository.saveAndFlush(ageType);
 		return ageType.getCode();
 	}
 
-	private void _checkAgeTypeIntoDb(String code) throws Exception {
+	private void checkAgeTypeIntoDb(String code) throws Exception {
 		AgeType foundAgeType = ageTypeIoOperationRepository.findOneByCode(code);
 		testAgeType.check(foundAgeType);
 	}

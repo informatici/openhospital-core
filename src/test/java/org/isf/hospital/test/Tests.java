@@ -59,28 +59,28 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testHospitalGets() throws Exception {
-		String code = _setupTestHospital(false);
-		_checkHospitalIntoDb(code);
+		String code = setupTestHospital(false);
+		checkHospitalIntoDb(code);
 	}
 
 	@Test
 	public void testHospitalSets() throws Exception {
-		String code = _setupTestHospital(true);
-		_checkHospitalIntoDb(code);
+		String code = setupTestHospital(true);
+		checkHospitalIntoDb(code);
 	}
 
 	@Test
 	public void testIoGetHospital() throws Exception {
-		String code = _setupTestHospital(false);
-		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		String code = setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findById(code).get();
 		Hospital getHospital = hospitalIoOperation.getHospital();
 		assertThat(getHospital).isEqualTo(foundHospital);
 	}
 
 	@Test
 	public void testIoUpdateHospital() throws Exception {
-		String code = _setupTestHospital(false);
-		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		String code = setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findById(code).get();
 		foundHospital.setDescription("Update");
 		Hospital updateHospital = hospitalIoOperation.updateHospital(foundHospital);
 		assertThat(updateHospital.getDescription()).isEqualTo("Update");
@@ -88,8 +88,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetHospitalCurrencyCod() throws Exception {
-		String code = _setupTestHospital(false);
-		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		String code = setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findById(code).get();
 		String cod = hospitalIoOperation.getHospitalCurrencyCod();
 		assertThat(foundHospital.getCurrencyCod()).isEqualTo(cod);
 
@@ -109,16 +109,16 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetHospital() throws Exception {
-		String code = _setupTestHospital(false);
-		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		String code = setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findById(code).get();
 		Hospital getHospital = hospitalBrowsingManager.getHospital();
 		assertThat(getHospital).isEqualTo(foundHospital);
 	}
 
 	@Test
 	public void testMgrUpdateHospital() throws Exception {
-		String code = _setupTestHospital(false);
-		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		String code = setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findById(code).get();
 		foundHospital.setDescription("Update");
 		Hospital updateHospital = hospitalBrowsingManager.updateHospital(foundHospital);
 		assertThat(updateHospital.getDescription()).isEqualTo("Update");
@@ -126,8 +126,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetHospitalCurrencyCod() throws Exception {
-		String code = _setupTestHospital(false);
-		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+		String code = setupTestHospital(false);
+		Hospital foundHospital = hospitalIoOperationRepository.findById(code).get();
 		String cod = hospitalBrowsingManager.getHospitalCurrencyCod();
 		assertThat(foundHospital.getCurrencyCod()).isEqualTo(cod);
 
@@ -138,8 +138,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testHospitalGetterSetter() throws Exception {
-		String code = _setupTestHospital(false);
-		Hospital hospital = hospitalIoOperationRepository.findOne(code);
+		String code = setupTestHospital(false);
+		Hospital hospital = hospitalIoOperationRepository.findById(code).get();
 
 		Integer lock = hospital.getLock();
 		hospital.setLock(-1);
@@ -148,22 +148,22 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testHospitalHashToString() throws Exception {
-		String code = _setupTestHospital(false);
-		Hospital hospital = hospitalIoOperationRepository.findOne(code);
+		String code = setupTestHospital(false);
+		Hospital hospital = hospitalIoOperationRepository.findById(code).get();
 
 		assertThat(hospital.hashCode()).isPositive();
 
 		assertThat(hospital).hasToString(hospital.getDescription());
 	}
 
-	private String _setupTestHospital(boolean usingSet) throws OHException {
+	private String setupTestHospital(boolean usingSet) throws OHException {
 		Hospital hospital = testHospital.setup(usingSet);
 		hospitalIoOperationRepository.saveAndFlush(hospital);
 		return hospital.getCode();
 	}
 
-	private void _checkHospitalIntoDb(String code) throws OHException {
-		Hospital foundHospital = hospitalIoOperationRepository.findOne(code);
+	private void checkHospitalIntoDb(String code) throws OHException {
+		Hospital foundHospital = hospitalIoOperationRepository.findById(code).get();
 		testHospital.check(foundHospital);
 	}
 }

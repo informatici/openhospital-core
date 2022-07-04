@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.OHCoreTestCase;
 import org.isf.menu.manager.UserBrowsingManager;
@@ -80,101 +81,101 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testUserGroupGets() throws Exception {
-		String code = _setupTestUserGroup(false);
-		_checkUserGroupIntoDb(code);
+		String code = setupTestUserGroup(false);
+		checkUserGroupIntoDb(code);
 	}
 
 	@Test
 	public void testUserGroupSets() throws Exception {
-		String code = _setupTestUserGroup(true);
-		_checkUserGroupIntoDb(code);
+		String code = setupTestUserGroup(true);
+		checkUserGroupIntoDb(code);
 	}
 
 	@Test
 	public void testUserGets() throws Exception {
-		String userName = _setupTestUser(false);
-		_checkUserIntoDb(userName);
+		String userName = setupTestUser(false);
+		checkUserIntoDb(userName);
 	}
 
 	@Test
 	public void testUserSets() throws Exception {
-		String userName = _setupTestUser(true);
-		_checkUserIntoDb(userName);
+		String userName = setupTestUser(true);
+		checkUserIntoDb(userName);
 	}
 
 	@Test
 	public void testUserMenuGets() throws Exception {
-		String code = _setupTestUserMenu(false);
-		_checkUserMenuIntoDb(code);
+		String code = setupTestUserMenu(false);
+		checkUserMenuIntoDb(code);
 	}
 
 	@Test
 	public void testUserMenuSets() throws Exception {
-		String code = _setupTestUserMenu(true);
-		_checkUserMenuIntoDb(code);
+		String code = setupTestUserMenu(true);
+		checkUserMenuIntoDb(code);
 	}
 
 	@Test
 	public void testGroupMenuGets() throws Exception {
-		Integer code = _setupTestGroupMenu(false);
-		_checkGroupMenuIntoDb(code);
+		Integer code = setupTestGroupMenu(false);
+		checkGroupMenuIntoDb(code);
 	}
 
 	@Test
 	public void testGroupMenuSets() throws Exception {
-		Integer code = _setupTestGroupMenu(true);
-		_checkGroupMenuIntoDb(code);
+		Integer code = setupTestGroupMenu(true);
+		checkGroupMenuIntoDb(code);
 	}
 
 	@Test
 	public void testIoGetUser() throws Exception {
-		String userName = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(userName);
-		ArrayList<User> users = menuIoOperation.getUser();
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).get();
+		List<User> users = menuIoOperation.getUser();
 		assertThat(users.get(users.size() - 1).getDesc()).isEqualTo(foundUser.getDesc());
 	}
 
 	@Test
 	public void testIoGetUsersFromGroupId() throws Exception {
-		String userName = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(userName);
-		ArrayList<User> users = menuIoOperation.getUser(foundUser.getUserGroupName().getCode());
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).get();
+		List<User> users = menuIoOperation.getUser(foundUser.getUserGroupName().getCode());
 		assertThat(users.get(users.size() - 1).getDesc()).isEqualTo(foundUser.getDesc());
 	}
 
 	@Test
 	public void testIoGetUserByName() throws Exception {
-		String userName = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(userName);
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).get();
 		User user = menuIoOperation.getUserByName(userName);
 		assertThat(user.getDesc()).isEqualTo(foundUser.getDesc());
 	}
 
 	@Test
 	public void testIoGetUserInfo() throws Exception {
-		String userName = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(userName);
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).get();
 		String description = menuIoOperation.getUsrInfo(userName);
 		assertThat(description).isEqualTo(foundUser.getDesc());
 	}
 
 	@Test
 	public void testIoGetUserGroup() throws Exception {
-		String code = _setupTestUserGroup(false);
-		UserGroup foundUserGroup = userGroupIoOperationRepository.findOne(code);
-		ArrayList<UserGroup> userGroups = menuIoOperation.getUserGroup();
+		String code = setupTestUserGroup(false);
+		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).get();
+		List<UserGroup> userGroups = menuIoOperation.getUserGroup();
 		assertThat(userGroups.get(userGroups.size() - 1).getDesc()).isEqualTo(foundUserGroup.getDesc());
 	}
 
 	@Test
 	public void testIoIsUserNamePresent() throws Exception {
-		String userName = _setupTestUser(false);
+		String userName = setupTestUser(false);
 		assertThat(menuIoOperation.isUserNamePresent(userName)).isTrue();
 	}
 
 	@Test
 	public void testIoIsGroupNamePresent() throws Exception {
-		String code = _setupTestUserGroup(false);
+		String code = setupTestUserGroup(false);
 		assertThat(menuIoOperation.isGroupNamePresent(code)).isTrue();
 	}
 
@@ -186,35 +187,35 @@ public class Tests extends OHCoreTestCase {
 		userIoOperationRepository.saveAndFlush(user);
 		// TODO: this illustrates that if the user exists the newUser() method still succeeds; probably not what is expected
 		assertThat(menuIoOperation.newUser(user)).isTrue();
-		_checkUserIntoDb(user.getUserName());
+		checkUserIntoDb(user.getUserName());
 	}
 
 	@Test
 	public void testIoUpdateUser() throws Exception {
-		String userName = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(userName);
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).get();
 		foundUser.setDesc("Update");
 		assertThat(menuIoOperation.updateUser(foundUser)).isTrue();
-		User updateUser = userIoOperationRepository.findOne(userName);
+		User updateUser = userIoOperationRepository.findById(userName).get();
 		assertThat(updateUser.getDesc()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testIoUpdatePassword() throws Exception {
-		String userName = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(userName);
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).get();
 		foundUser.setPasswd("Update");
 		assertThat(menuIoOperation.updatePassword(foundUser)).isTrue();
-		User updateDisease = userIoOperationRepository.findOne(userName);
+		User updateDisease = userIoOperationRepository.findById(userName).get();
 		assertThat(updateDisease.getPasswd()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testIoDeleteUser() throws Exception {
-		String userName = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(userName);
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).get();
 		assertThat(menuIoOperation.deleteUser(foundUser)).isTrue();
-		ArrayList<User> users = menuIoOperation.getUser(userName);
+		List<User> users = menuIoOperation.getUser(userName);
 		assertThat(users).isEmpty();
 	}
 
@@ -228,7 +229,7 @@ public class Tests extends OHCoreTestCase {
 		userIoOperationRepository.saveAndFlush(user);
 		userMenuItemIoOperationRepository.saveAndFlush(menuItem);
 		groupMenuIoOperationRepository.saveAndFlush(groupMenu);
-		ArrayList<UserMenuItem> menus = menuIoOperation.getMenu(user);
+		List<UserMenuItem> menus = menuIoOperation.getMenu(user);
 		assertThat(menus.get(menus.size() - 1).getCode()).isEqualTo(menuItem.getCode());
 	}
 
@@ -242,7 +243,7 @@ public class Tests extends OHCoreTestCase {
 		userIoOperationRepository.saveAndFlush(user);
 		userMenuItemIoOperationRepository.saveAndFlush(menuItem);
 		groupMenuIoOperationRepository.saveAndFlush(groupMenu);
-		ArrayList<UserMenuItem> menus = menuIoOperation.getGroupMenu(userGroup);
+		List<UserMenuItem> menus = menuIoOperation.getGroupMenu(userGroup);
 		assertThat(menus.get(menus.size() - 1).getCode()).isEqualTo(menuItem.getCode());
 	}
 
@@ -257,8 +258,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoDeleteGroup() throws Exception {
-		String code = _setupTestUserGroup(false);
-		UserGroup foundUserGroup = userGroupIoOperationRepository.findOne(code);
+		String code = setupTestUserGroup(false);
+		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).get();
 		assertThat(menuIoOperation.deleteGroup(foundUserGroup)).isTrue();
 		assertThat(menuIoOperation.isGroupNamePresent(foundUserGroup.getCode())).isFalse();
 	}
@@ -267,55 +268,55 @@ public class Tests extends OHCoreTestCase {
 	public void testIoNewUserGroup() throws Exception {
 		UserGroup userGroup = testUserGroup.setup(false);
 		assertThat(menuIoOperation.newUserGroup(userGroup)).isTrue();
-		_checkUserGroupIntoDb(userGroup.getCode());
+		checkUserGroupIntoDb(userGroup.getCode());
 	}
 
 	@Test
 	public void testIoUpdateUserGroup() throws Exception {
-		String code = _setupTestUserGroup(false);
-		UserGroup foundUserGroup = userGroupIoOperationRepository.findOne(code);
+		String code = setupTestUserGroup(false);
+		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).get();
 		foundUserGroup.setDesc("Update");
 		assertThat(menuIoOperation.updateUserGroup(foundUserGroup)).isTrue();
-		UserGroup updateUserGroup = userGroupIoOperationRepository.findOne(code);
+		UserGroup updateUserGroup = userGroupIoOperationRepository.findById(code).get();
 		assertThat(updateUserGroup.getDesc()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrGetUser() throws Exception {
-		String userName = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(userName);
-		ArrayList<User> users = userBrowsingManager.getUser();
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).get();
+		List<User> users = userBrowsingManager.getUser();
 		assertThat(users.get(users.size() - 1).getDesc()).isEqualTo(foundUser.getDesc());
 	}
 
 	@Test
 	public void testMgrGetUsersFromGroupId() throws Exception {
-		String userName = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(userName);
-		ArrayList<User> users = userBrowsingManager.getUser(foundUser.getUserGroupName().getCode());
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).get();
+		List<User> users = userBrowsingManager.getUser(foundUser.getUserGroupName().getCode());
 		assertThat(users.get(users.size() - 1).getDesc()).isEqualTo(foundUser.getDesc());
 	}
 
 	@Test
 	public void testMgrGetUserByName() throws Exception {
-		String userName = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(userName);
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).get();
 		User user = userBrowsingManager.getUserByName(userName);
 		assertThat(user.getDesc()).isEqualTo(foundUser.getDesc());
 	}
 
 	@Test
 	public void testMgrGetUserInfo() throws Exception {
-		String userName = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(userName);
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).get();
 		String description = userBrowsingManager.getUsrInfo(userName);
 		assertThat(description).isEqualTo(foundUser.getDesc());
 	}
 
 	@Test
 	public void testMgrDeleteGroup() throws Exception {
-		String code = _setupTestUserGroup(false);
-		UserGroup foundUserGroup = userGroupIoOperationRepository.findOne(code);
+		String code = setupTestUserGroup(false);
+		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).get();
 		assertThat(userBrowsingManager.deleteGroup(foundUserGroup)).isTrue();
 		assertThat(menuIoOperation.isGroupNamePresent(foundUserGroup.getCode())).isFalse();
 	}
@@ -336,8 +337,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrDeleteGroupHasUsers() throws Exception {
 		assertThatThrownBy(() ->
 		{
-			String userName = _setupTestUser(true);
-			User user = userIoOperationRepository.findOne(userName);
+			String userName = setupTestUser(true);
+			User user = userIoOperationRepository.findById(userName).get();
 			userBrowsingManager.deleteGroup(user.getUserGroupName());
 		})
 				.isInstanceOf(OHDataIntegrityViolationException.class);
@@ -345,9 +346,9 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetUserGroup() throws Exception {
-		String code = _setupTestUserGroup(false);
-		UserGroup foundUserGroup = userGroupIoOperationRepository.findOne(code);
-		ArrayList<UserGroup> userGroups = userBrowsingManager.getUserGroup();
+		String code = setupTestUserGroup(false);
+		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).get();
+		List<UserGroup> userGroups = userBrowsingManager.getUserGroup();
 		assertThat(userGroups.get(userGroups.size() - 1).getDesc()).isEqualTo(foundUserGroup.getDesc());
 	}
 
@@ -357,7 +358,7 @@ public class Tests extends OHCoreTestCase {
 		User user = testUser.setup(userGroup, false);
 		userGroupIoOperationRepository.saveAndFlush(userGroup);
 		assertThat(userBrowsingManager.newUser(user)).isTrue();
-		_checkUserIntoDb(user.getUserName());
+		checkUserIntoDb(user.getUserName());
 	}
 
 	@Test
@@ -375,30 +376,30 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrUpdateUser() throws Exception {
-		String userName = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(userName);
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).get();
 		foundUser.setDesc("Update");
 		assertThat(userBrowsingManager.updateUser(foundUser)).isTrue();
-		User updateUser = userIoOperationRepository.findOne(userName);
+		User updateUser = userIoOperationRepository.findById(userName).get();
 		assertThat(updateUser.getDesc()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrUpdatePassword() throws Exception {
-		String userName = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(userName);
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).get();
 		foundUser.setPasswd("Update");
 		assertThat(userBrowsingManager.updatePassword(foundUser)).isTrue();
-		User updateDisease = userIoOperationRepository.findOne(userName);
+		User updateDisease = userIoOperationRepository.findById(userName).get();
 		assertThat(updateDisease.getPasswd()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrDeleteUser() throws Exception {
-		String userName = _setupTestUser(false);
-		User foundUser = userIoOperationRepository.findOne(userName);
+		String userName = setupTestUser(false);
+		User foundUser = userIoOperationRepository.findById(userName).get();
 		assertThat(userBrowsingManager.deleteUser(foundUser)).isTrue();
-		ArrayList<User> users = userBrowsingManager.getUser(userName);
+		List<User> users = userBrowsingManager.getUser(userName);
 		assertThat(users).isEmpty();
 	}
 
@@ -406,8 +407,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrDeleteAdminUser() throws Exception {
 		assertThatThrownBy(() ->
 		{
-			String userName = _setupTestUser(false);
-			User foundUser = userIoOperationRepository.findOne(userName);
+			String userName = setupTestUser(false);
+			User foundUser = userIoOperationRepository.findById(userName).get();
 			foundUser.setUserName("admin");
 			userBrowsingManager.deleteUser(foundUser);
 		})
@@ -424,7 +425,7 @@ public class Tests extends OHCoreTestCase {
 		userIoOperationRepository.saveAndFlush(user);
 		userMenuItemIoOperationRepository.saveAndFlush(menuItem);
 		groupMenuIoOperationRepository.saveAndFlush(groupMenu);
-		ArrayList<UserMenuItem> menus = userBrowsingManager.getMenu(user);
+		List<UserMenuItem> menus = userBrowsingManager.getMenu(user);
 		assertThat(menus.get(menus.size() - 1).getCode()).isEqualTo(menuItem.getCode());
 	}
 
@@ -438,7 +439,7 @@ public class Tests extends OHCoreTestCase {
 		userIoOperationRepository.saveAndFlush(user);
 		userMenuItemIoOperationRepository.saveAndFlush(menuItem);
 		groupMenuIoOperationRepository.saveAndFlush(groupMenu);
-		ArrayList<UserMenuItem> menus = userBrowsingManager.getGroupMenu(userGroup);
+		List<UserMenuItem> menus = userBrowsingManager.getGroupMenu(userGroup);
 		assertThat(menus.get(menus.size() - 1).getCode()).isEqualTo(menuItem.getCode());
 	}
 
@@ -455,15 +456,15 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewUserGroup() throws Exception {
 		UserGroup userGroup = testUserGroup.setup(false);
 		assertThat(userBrowsingManager.newUserGroup(userGroup)).isTrue();
-		_checkUserGroupIntoDb(userGroup.getCode());
+		checkUserGroupIntoDb(userGroup.getCode());
 	}
 
 	@Test
 	public void testMgrNewUserGroupAlreadyExists() throws Exception {
 		assertThatThrownBy(() ->
 		{
-			String code = _setupTestUserGroup(true);
-			UserGroup foundUserGroup = userGroupIoOperationRepository.findOne(code);
+			String code = setupTestUserGroup(true);
+			UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).get();
 			userBrowsingManager.newUserGroup(foundUserGroup);
 		})
 				.isInstanceOf(OHDataIntegrityViolationException.class);
@@ -471,11 +472,11 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrUpdateUserGroup() throws Exception {
-		String code = _setupTestUserGroup(false);
-		UserGroup foundUserGroup = userGroupIoOperationRepository.findOne(code);
+		String code = setupTestUserGroup(false);
+		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).get();
 		foundUserGroup.setDesc("Update");
 		assertThat(userBrowsingManager.updateUserGroup(foundUserGroup)).isTrue();
-		UserGroup updateUserGroup = userGroupIoOperationRepository.findOne(code);
+		UserGroup updateUserGroup = userGroupIoOperationRepository.findById(code).get();
 		assertThat(updateUserGroup.getDesc()).isEqualTo("Update");
 	}
 
@@ -668,18 +669,18 @@ public class Tests extends OHCoreTestCase {
 		assertThat(userMenuItem.hashCode()).isEqualTo(hashCode);
 	}
 
-	private String _setupTestUserGroup(boolean usingSet) throws OHException {
+	private String setupTestUserGroup(boolean usingSet) throws OHException {
 		UserGroup userGroup = testUserGroup.setup(usingSet);
 		userGroupIoOperationRepository.saveAndFlush(userGroup);
 		return userGroup.getCode();
 	}
 
-	private void _checkUserGroupIntoDb(String code) throws OHException {
-		UserGroup foundUserGroup = userGroupIoOperationRepository.findOne(code);
+	private void checkUserGroupIntoDb(String code) throws OHException {
+		UserGroup foundUserGroup = userGroupIoOperationRepository.findById(code).get();
 		testUserGroup.check(foundUserGroup);
 	}
 
-	private String _setupTestUser(boolean usingSet) throws OHException {
+	private String setupTestUser(boolean usingSet) throws OHException {
 		UserGroup userGroup = testUserGroup.setup(usingSet);
 		User user = testUser.setup(userGroup, usingSet);
 		userGroupIoOperationRepository.saveAndFlush(userGroup);
@@ -687,30 +688,30 @@ public class Tests extends OHCoreTestCase {
 		return user.getUserName();
 	}
 
-	private void _checkUserIntoDb(String code) throws OHException {
-		User foundUser = userIoOperationRepository.findOne(code);
+	private void checkUserIntoDb(String code) throws OHException {
+		User foundUser = userIoOperationRepository.findById(code).get();
 		testUser.check(foundUser);
 	}
 
-	private String _setupTestUserMenu(boolean usingSet) throws OHException {
+	private String setupTestUserMenu(boolean usingSet) throws OHException {
 		UserMenuItem userMenu = testUserMenu.setup(usingSet);
 		userMenuItemIoOperationRepository.saveAndFlush(userMenu);
 		return userMenu.getCode();
 	}
 
-	private void _checkUserMenuIntoDb(String code) throws OHException {
-		UserMenuItem foundUserMenu = userMenuItemIoOperationRepository.findOne(code);
+	private void checkUserMenuIntoDb(String code) throws OHException {
+		UserMenuItem foundUserMenu = userMenuItemIoOperationRepository.findById(code).get();
 		testUserMenu.check(foundUserMenu);
 	}
 
-	private Integer _setupTestGroupMenu(boolean usingSet) throws OHException {
+	private Integer setupTestGroupMenu(boolean usingSet) throws OHException {
 		GroupMenu groupMenu = testGroupMenu.setup(usingSet);
 		groupMenuIoOperationRepository.saveAndFlush(groupMenu);
 		return groupMenu.getCode();
 	}
 
-	private void _checkGroupMenuIntoDb(Integer code) throws OHException {
-		GroupMenu foundGroupMenu = groupMenuIoOperationRepository.findOne(code);
+	private void checkGroupMenuIntoDb(Integer code) throws OHException {
+		GroupMenu foundGroupMenu = groupMenuIoOperationRepository.findById(code).get();
 		testGroupMenu.check(foundGroupMenu);
 	}
 }

@@ -21,7 +21,7 @@
  */
 package org.isf.dlvrrestype.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.dlvrrestype.model.DeliveryResultType;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -46,9 +46,8 @@ public class DeliveryResultTypeIoOperation {
 	 * @return the stored {@link DeliveryResultType}s.
 	 * @throws OHServiceException if an error occurs retrieving the stored delivery result types.
 	 */
-	public ArrayList<DeliveryResultType> getDeliveryResultType() throws OHServiceException 
-	{
-		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
+	public List<DeliveryResultType> getDeliveryResultType() throws OHServiceException {
+		return repository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
@@ -57,16 +56,8 @@ public class DeliveryResultTypeIoOperation {
 	 * @return <code>true</code> if the delivery result type has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateDeliveryResultType(
-			DeliveryResultType deliveryResultType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		DeliveryResultType savedDeliveryResultType = repository.save(deliveryResultType);
-		result = (savedDeliveryResultType != null);
-		
-		return result;
+	public boolean updateDeliveryResultType(DeliveryResultType deliveryResultType) throws OHServiceException {
+		return repository.save(deliveryResultType) != null;
 	}
 
 	/**
@@ -75,16 +66,8 @@ public class DeliveryResultTypeIoOperation {
 	 * @return <code>true</code> if the delivery result type has been stored. 
 	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
-	public boolean newDeliveryResultType(
-			DeliveryResultType deliveryResultType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		DeliveryResultType savedDeliveryResultType = repository.save(deliveryResultType);
-		result = (savedDeliveryResultType != null);
-		
-		return result;
+	public boolean newDeliveryResultType(DeliveryResultType deliveryResultType) throws OHServiceException {
+		return repository.save(deliveryResultType) != null;
 	}
 
 	/**
@@ -93,15 +76,9 @@ public class DeliveryResultTypeIoOperation {
 	 * @return <code>true</code> if the delivery result type has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the delete operation.
 	 */
-	public boolean deleteDeliveryResultType(
-			DeliveryResultType deliveryResultType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteDeliveryResultType(DeliveryResultType deliveryResultType) throws OHServiceException {
 		repository.delete(deliveryResultType);
-		
-		return result;
+		return true;
 	}
 
 	/**
@@ -110,14 +87,7 @@ public class DeliveryResultTypeIoOperation {
 	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.existsById(code);
 	}
 }

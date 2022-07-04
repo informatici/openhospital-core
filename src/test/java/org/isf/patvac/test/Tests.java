@@ -24,9 +24,7 @@ package org.isf.patvac.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.assertj.core.api.Condition;
@@ -90,14 +88,14 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testPatientVaccineGets() throws Exception {
-		int code = _setupTestPatientVaccine(false);
-		_checkPatientVaccineIntoDb(code);
+		int code = setupTestPatientVaccine(false);
+		checkPatientVaccineIntoDb(code);
 	}
 
 	@Test
 	public void testPatientVaccineSets() throws Exception {
-		int code = _setupTestPatientVaccine(true);
-		_checkPatientVaccineIntoDb(code);
+		int code = setupTestPatientVaccine(true);
+		checkPatientVaccineIntoDb(code);
 	}
 
 	@Test
@@ -107,14 +105,14 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 
-		patientVaccine.setVaccineDate(new GregorianCalendar());
+		patientVaccine.setVaccineDate(LocalDateTime.now());
 
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
 		vaccineIoOperationRepository.saveAndFlush(vaccine);
 		patientIoOperationRepository.saveAndFlush(patient);
 		patVacIoOperationRepository.saveAndFlush(patientVaccine);
 
-		ArrayList<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(false);
+		List<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(false);
 		assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(patientVaccine.getPatName());
 	}
 
@@ -125,8 +123,7 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 
-		GregorianCalendar date = new GregorianCalendar();
-		date.add(Calendar.DAY_OF_MONTH, -3);
+		LocalDateTime date = LocalDateTime.now().minusDays(3);
 		patientVaccine.setVaccineDate(date);
 
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
@@ -134,15 +131,15 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		patVacIoOperationRepository.saveAndFlush(patientVaccine);
 
-		ArrayList<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(true);
+		List<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(true);
 		assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(patientVaccine.getPatName());
 	}
 
 	@Test
 	public void testIoGetPatientVaccine() throws Exception {
-		int code = _setupTestPatientVaccine(false);
-		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findOne(code);
-		ArrayList<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(
+		int code = setupTestPatientVaccine(false);
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
+		List<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(
 				foundPatientVaccine.getVaccine().getVaccineType().getCode(),
 				foundPatientVaccine.getVaccine().getCode(),
 				foundPatientVaccine.getVaccineDate(),
@@ -156,13 +153,13 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	@Transactional // requires active session because of lazy loading patient
 	public void testIoUpdatePatientVaccine() throws Exception {
-		int code = _setupTestPatientVaccine(false);
-		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findOne(code);
-		GregorianCalendar newDate = new GregorianCalendar();
+		int code = setupTestPatientVaccine(false);
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
+		LocalDateTime newDate = LocalDateTime.now();
 		foundPatientVaccine.setVaccineDate(newDate);
 		boolean result = patvacIoOperation.updatePatientVaccine(foundPatientVaccine);
 		assertThat(result).isTrue();
-		PatientVaccine updatePatientVaccine = patVacIoOperationRepository.findOne(code);
+		PatientVaccine updatePatientVaccine = patVacIoOperationRepository.findById(code).get();
 		assertThat(updatePatientVaccine.getVaccineDate().equals(newDate));
 	}
 
@@ -177,13 +174,13 @@ public class Tests extends OHCoreTestCase {
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 		boolean result = patvacIoOperation.newPatientVaccine(patientVaccine);
 		assertThat(result).isTrue();
-		_checkPatientVaccineIntoDb(patientVaccine.getCode());
+		checkPatientVaccineIntoDb(patientVaccine.getCode());
 	}
 
 	@Test
 	public void testIoDeletePatientVaccine() throws Exception {
-		int code = _setupTestPatientVaccine(false);
-		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findOne(code);
+		int code = setupTestPatientVaccine(false);
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
 		boolean result = patvacIoOperation.deletePatientVaccine(foundPatientVaccine);
 		assertThat(result).isTrue();
 		result = patvacIoOperation.isCodePresent(code);
@@ -192,33 +189,33 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetProgYear() throws Exception {
-		int prog_year = 0;
-		int found_prog_year = 0;
-		_setupTestPatientVaccine(true);
+		int progYear;
+		int foundProgYear = 0;
+		setupTestPatientVaccine(true);
 		List<PatientVaccine> patientVaccineList = patvacIoOperation.getPatientVaccine(null, null, null, null, 'A', 0, 0);
 		for (PatientVaccine patVac : patientVaccineList) {
-			if (patVac.getProgr() > found_prog_year)
-				found_prog_year = patVac.getProgr();
+			if (patVac.getProgr() > foundProgYear)
+				foundProgYear = patVac.getProgr();
 		}
-		prog_year = patvacIoOperation.getProgYear(0);
-		assertThat(prog_year).isEqualTo(found_prog_year);
+		progYear = patvacIoOperation.getProgYear(0);
+		assertThat(progYear).isEqualTo(foundProgYear);
 
-		prog_year = patvacIoOperation.getProgYear(1984); //TestPatientVaccine's year
-		assertThat(prog_year).isEqualTo(10);
+		progYear = patvacIoOperation.getProgYear(1984); //TestPatientVaccine's year
+		assertThat(progYear).isEqualTo(10);
 	}
 
 	@Test
 	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() throws Exception {
 		// given:
-		int id = _setupTestPatientVaccine(false);
-		PatientVaccine found = patVacIoOperationRepository.findOne(id);
-		Patient mergedPatient = _setupTestPatient(false);
+		int id = setupTestPatientVaccine(false);
+		PatientVaccine found = patVacIoOperationRepository.findById(id).get();
+		Patient mergedPatient = setupTestPatient(false);
 
 		// when:
 		applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
 
 		// then:
-		PatientVaccine result = patVacIoOperationRepository.findOne(id);
+		PatientVaccine result = patVacIoOperationRepository.findById(id).get();
 		assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 	}
 
@@ -232,7 +229,7 @@ public class Tests extends OHCoreTestCase {
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 
 		// Today
-		GregorianCalendar now = new GregorianCalendar();
+		LocalDateTime now = LocalDateTime.now();
 		patientVaccine.setVaccineDate(now);
 
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
@@ -248,15 +245,14 @@ public class Tests extends OHCoreTestCase {
 		PatientVaccine patientVaccine2 = testPatientVaccine.setup(patient2, vaccine2, true);
 
 		// 8 days ago
-		now.add(Calendar.DATE, -8);
-		patientVaccine2.setVaccineDate(now);
+		patientVaccine2.setVaccineDate(now.minusDays(8));
 
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType2);
 		vaccineIoOperationRepository.saveAndFlush(vaccine2);
 		patientIoOperationRepository.saveAndFlush(patient2);
 		patVacIoOperationRepository.saveAndFlush(patientVaccine2);
 
-		ArrayList<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(false);
+		List<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(false);
 		assertThat(patientVaccines).hasSize(1);
 		assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(patientVaccine.getPatName());
 	}
@@ -274,9 +270,8 @@ public class Tests extends OHCoreTestCase {
 		patient.setSecondName("secondName1");
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 
-		GregorianCalendar now = new GregorianCalendar();
-		now.add(Calendar.DAY_OF_MONTH, -3);
-		patientVaccine.setVaccineDate(now);
+		LocalDateTime now = LocalDateTime.now();
+		patientVaccine.setVaccineDate(now.minusDays(3));
 
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
 		vaccineIoOperationRepository.saveAndFlush(vaccine);
@@ -295,24 +290,23 @@ public class Tests extends OHCoreTestCase {
 		PatientVaccine patientVaccine2 = testPatientVaccine.setup(patient2, vaccine2, true);
 
 		// 8 days ago
-		now.add(Calendar.DATE, -8);
-		patientVaccine2.setVaccineDate(now);
+		patientVaccine2.setVaccineDate(now.minusDays(8));
 
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType2);
 		vaccineIoOperationRepository.saveAndFlush(vaccine2);
 		patientIoOperationRepository.saveAndFlush(patient2);
 		patVacIoOperationRepository.saveAndFlush(patientVaccine2);
 
-		ArrayList<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(true);
+		List<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(true);
 		assertThat(patientVaccines).hasSize(1);
 		assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(patientVaccine.getPatName());
 	}
 
 	@Test
 	public void testMgrGetPatientVaccine() throws Exception {
-		int code = _setupTestPatientVaccine(false);
-		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findOne(code);
-		ArrayList<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(
+		int code = setupTestPatientVaccine(false);
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
+		List<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(
 				foundPatientVaccine.getVaccine().getVaccineType().getCode(),
 				foundPatientVaccine.getVaccine().getCode(),
 				foundPatientVaccine.getVaccineDate(),
@@ -326,13 +320,13 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	@Transactional // requires active session because of lazy loading patient
 	public void testMgrUpdatePatientVaccine() throws Exception {
-		int code = _setupTestPatientVaccine(false);
-		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findOne(code);
-		GregorianCalendar newDate = new GregorianCalendar();
+		int code = setupTestPatientVaccine(false);
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
+		LocalDateTime newDate = LocalDateTime.now();
 		foundPatientVaccine.setVaccineDate(newDate);
 		boolean result = patVacManager.updatePatientVaccine(foundPatientVaccine);
 		assertThat(result).isTrue();
-		PatientVaccine updatePatientVaccine = patVacIoOperationRepository.findOne(code);
+		PatientVaccine updatePatientVaccine = patVacIoOperationRepository.findById(code).get();
 		assertThat(updatePatientVaccine.getVaccineDate().equals(newDate));
 	}
 
@@ -347,32 +341,32 @@ public class Tests extends OHCoreTestCase {
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 		boolean result = patVacManager.newPatientVaccine(patientVaccine);
 		assertThat(result).isTrue();
-		_checkPatientVaccineIntoDb(patientVaccine.getCode());
+		checkPatientVaccineIntoDb(patientVaccine.getCode());
 	}
 
 	@Test
 	public void testMgrDeletePatientVaccine() throws Exception {
-		int code = _setupTestPatientVaccine(true);
-		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findOne(code);
+		int code = setupTestPatientVaccine(true);
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
 		assertThat(patVacManager.deletePatientVaccine(foundPatientVaccine)).isTrue();
 		assertThat(patvacIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
 	public void testMgrGetProgYear() throws Exception {
-		int prog_year = 0;
-		int found_prog_year = 0;
-		_setupTestPatientVaccine(true);
+		int progYear;
+		int foundProgYear = 0;
+		setupTestPatientVaccine(true);
 		List<PatientVaccine> patientVaccineList = patVacManager.getPatientVaccine(null, null, null, null, 'A', 0, 0);
 		for (PatientVaccine patVac : patientVaccineList) {
-			if (patVac.getProgr() > found_prog_year)
-				found_prog_year = patVac.getProgr();
+			if (patVac.getProgr() > foundProgYear)
+				foundProgYear = patVac.getProgr();
 		}
-		prog_year = patVacManager.getProgYear(0);
-		assertThat(prog_year).isEqualTo(found_prog_year);
+		progYear = patVacManager.getProgYear(0);
+		assertThat(progYear).isEqualTo(foundProgYear);
 
-		prog_year = patVacManager.getProgYear(1984); //TestPatientVaccine's year
-		assertThat(prog_year).isEqualTo(10);
+		progYear = patVacManager.getProgYear(1984); //TestPatientVaccine's year
+		assertThat(progYear).isEqualTo(10);
 	}
 
 	@Test
@@ -542,7 +536,7 @@ public class Tests extends OHCoreTestCase {
 		patientVaccine1.getVaccine().getVaccineType().setDescription("description");
 		assertThat(patientVaccine1).isEqualTo(patientVaccine2);
 
-		patientVaccine1.setVaccineDate(new GregorianCalendar());
+		patientVaccine1.setVaccineDate(LocalDateTime.now());
 		patientVaccine2.setVaccineDate(null);
 		assertThat(patientVaccine1).isNotEqualTo(patientVaccine2);
 
@@ -554,13 +548,13 @@ public class Tests extends OHCoreTestCase {
 		assertThat(patientVaccine1).isEqualTo(patientVaccine2);
 	}
 
-	private Patient _setupTestPatient(boolean usingSet) throws Exception {
+	private Patient setupTestPatient(boolean usingSet) throws Exception {
 		Patient patient = testPatient.setup(usingSet);
 		patientIoOperationRepository.saveAndFlush(patient);
 		return patient;
 	}
 
-	private int _setupTestPatientVaccine(boolean usingSet) throws Exception {
+	private int setupTestPatientVaccine(boolean usingSet) throws Exception {
 		VaccineType vaccineType = testVaccineType.setup(false);
 		Vaccine vaccine = testVaccine.setup(vaccineType, false);
 		Patient patient = testPatient.setup(false);
@@ -572,8 +566,8 @@ public class Tests extends OHCoreTestCase {
 		return patientVaccine.getCode();
 	}
 
-	private void _checkPatientVaccineIntoDb(int code) {
-		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findOne(code);
+	private void checkPatientVaccineIntoDb(int code) {
+		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
 		testPatientVaccine.check(foundPatientVaccine);
 	}
 }

@@ -93,7 +93,7 @@ public class VaccineTypeBrowserManager {
 	 * @return the list of {@link VaccineType}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<VaccineType> getVaccineType() throws OHServiceException {
+	public List<VaccineType> getVaccineType() throws OHServiceException {
 		return ioOperations.getVaccineType();
 	}
 

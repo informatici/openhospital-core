@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,16 +21,18 @@
  */
 package org.isf.opd.service;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.opd.model.Opd;
+import org.isf.patient.model.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, OpdIoOperationRepositoryCustom {
+
+	Opd findOneByPatientAndNextVisitDate(Patient patient, LocalDateTime visitDate);
 
 	@Query("select o from Opd o order by o.prog_year")
 	List<Opd> findAllOrderByProgYearDesc();
@@ -41,18 +43,19 @@ public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, O
 	@Query("select max(o.prog_year) from Opd o")
 	Integer findMaxProgYear();
 
-	@Query(value = "select max(o.prog_year) from Opd o where o.visitDate >= :dateFrom and o.visitDate < :dateTo")
-	Integer findMaxProgYearWhereDateBetween(@Param("dateFrom") GregorianCalendar dateFrom, @Param("dateTo") GregorianCalendar dateTo);
+	@Query(value = "select max(o.prog_year) from Opd o where o.date >= :dateFrom and o.date < :dateTo")
+	Integer findMaxProgYearWhereDateBetween(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
 
 	List<Opd> findTop1ByPatient_CodeOrderByDateDesc(Integer code);
 
 	@Query("select o from Opd o where o.prog_year = :prog_year")
 	List<Opd> findByProgYear(@Param("prog_year") Integer prog_year);
 
-	@Query(value = "select op from Opd op where op.prog_year = :prog_year and op.visitDate >= :dateVisitFrom and op.visitDate < :dateVisitTo")
-	List<Opd> findByProgYearAndVisitDateBetween(@Param("prog_year") Integer prog_year, @Param("dateVisitFrom") GregorianCalendar dateVisitFrom,
-					@Param("dateVisitTo") GregorianCalendar dateVisitTo);
+	@Query(value = "select op from Opd op where op.prog_year = :prog_year and op.date >= :dateVisitFrom and op.date < :dateVisitTo")
+	List<Opd> findByProgYearAndDateBetween(@Param("prog_year") Integer prog_year, @Param("dateVisitFrom") LocalDateTime dateVisitFrom,
+			@Param("dateVisitTo") LocalDateTime dateVisitTo);
 
 	@Query(value = "select OPD_CREATED_DATE from Opd o where OPD_ACTIVE=1 order by OPD_ID desc limit 1", nativeQuery = true)
-	Date lastOpdCreationDate();
+	LocalDateTime lastOpdCreationDate();
+
 }

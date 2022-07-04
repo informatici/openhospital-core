@@ -21,7 +21,6 @@
  */
 package org.isf.operation.manager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.admission.model.Admission;
@@ -45,7 +44,7 @@ public class OperationRowBrowserManager {
 		return ioOperations.getOperationRowByAdmission(adm);
 	}
 
-	public ArrayList<OperationRow> getOperationRowByOpd(Opd opd) throws OHServiceException {
+	public List<OperationRow> getOperationRowByOpd(Opd opd) throws OHServiceException {
 		return ioOperations.getOperationRowByOpd(opd);
 	}
 
@@ -62,4 +61,5 @@ public class OperationRowBrowserManager {
 		ioOperations.newOperationRow(opRow);
 		return true;
 	}
+
 }

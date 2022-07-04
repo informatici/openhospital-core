@@ -21,7 +21,6 @@
  */
 package org.isf.agetype.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.agetype.model.AgeType;
@@ -47,9 +46,8 @@ public class AgeTypeIoOperations
 	 * @return a list of {@link AgeType}.
 	 * @throws OHServiceException if an error occurs retrieving the age types.
 	 */
-	public ArrayList<AgeType> getAgeType() throws OHServiceException 
-	{
-		return new ArrayList<>(repository.findAllByOrderByCodeAsc());
+	public List<AgeType> getAgeType() throws OHServiceException {
+		return repository.findAllByOrderByCodeAsc();
 	}
 
 	/**
@@ -58,16 +56,8 @@ public class AgeTypeIoOperations
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateAgeType(
-			ArrayList<AgeType> ageType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		List<AgeType> savedAgeType = repository.save(ageType);
-		result = (savedAgeType != null);
-		
-		return result;
+	public boolean updateAgeType(List<AgeType> ageType) throws OHServiceException {
+		return repository.saveAll(ageType) != null;
 	}
 
 	/**
@@ -76,16 +66,8 @@ public class AgeTypeIoOperations
 	 * @return the retrieved element, <code>null</code> otherwise.
 	 * @throws OHServiceException if an error occurs retrieving the item.
 	 */
-	public AgeType getAgeTypeByCode(
-			int index) throws OHServiceException 
-	{	
-		String code = "";
-		AgeType ageType = null;
-				
-		
-		code = "d" + (index - 1);
-		ageType = repository.findOneByCode(code); 
-
-		return ageType;
+	public AgeType getAgeTypeByCode(int index) throws OHServiceException {
+		String code = "d" + (index - 1);
+		return repository.findOneByCode(code);
 	}
 }

@@ -29,7 +29,7 @@ import org.isf.sms.providers.common.CustomCommonDecoder;
 import org.isf.sms.providers.common.CustomCommonEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cloud.netflix.feign.support.SpringMvcContract;
+import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 

@@ -21,7 +21,7 @@
  */
 package org.isf.dlvrtype.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -46,9 +46,8 @@ public class DeliveryTypeIoOperation {
 	 * @return all stored delivery types.
 	 * @throws OHServiceException if an error occurs retrieving the delivery types. 
 	 */
-	public ArrayList<DeliveryType> getDeliveryType() throws OHServiceException 
-	{
-		return new ArrayList<>(repository.findAll());
+	public List<DeliveryType> getDeliveryType() throws OHServiceException {
+		return repository.findAll();
 	}
 
 	/**
@@ -57,16 +56,8 @@ public class DeliveryTypeIoOperation {
 	 * @return <code>true</code> if the delivery type has been update.
 	 * @throws OHServiceException if an error occurs during the update operation.
 	 */
-	public boolean updateDeliveryType(
-			DeliveryType deliveryType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		DeliveryType savedDeliveryType = repository.save(deliveryType);
-		result = (savedDeliveryType != null);
-		
-		return result;
+	public boolean updateDeliveryType(DeliveryType deliveryType) throws OHServiceException {
+		return repository.save(deliveryType) != null;
 	}
 
 	/**
@@ -75,16 +66,8 @@ public class DeliveryTypeIoOperation {
 	 * @return <code>true</code> if the delivery type has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurred during the store operation.
 	 */
-	public boolean newDeliveryType(
-			DeliveryType deliveryType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		DeliveryType savedDeliveryType = repository.save(deliveryType);
-		result = (savedDeliveryType != null);
-		
-		return result;
+	public boolean newDeliveryType(DeliveryType deliveryType) throws OHServiceException {
+		return repository.save(deliveryType) != null;
 	}
 
 	/**
@@ -93,15 +76,9 @@ public class DeliveryTypeIoOperation {
 	 * @return <code>true</code> if the delivery type has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurred during the delete operation.
 	 */
-	public boolean deleteDeliveryType(
-			DeliveryType deliveryType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteDeliveryType(DeliveryType deliveryType) throws OHServiceException {
 		repository.delete(deliveryType);
-		
-		return result;
+		return true;
 	}
 
 	/**
@@ -110,14 +87,7 @@ public class DeliveryTypeIoOperation {
 	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.existsById(code);
 	}
 }

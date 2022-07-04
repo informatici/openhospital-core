@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,7 +21,7 @@
  */
 package org.isf.admission.service;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.admission.model.Admission;
@@ -34,20 +34,19 @@ import org.springframework.stereotype.Repository;
 public interface AdmissionIoOperationRepository extends JpaRepository<Admission, Integer>, AdmissionIoOperationRepositoryCustom {
 
 	@Query(value = "select a FROM Admission a WHERE a.admitted = 1 AND a.ward.code = :ward")
-    List<Admission> findAllWhereWard(@Param("ward") String ward);
+	List<Admission> findAllWhereWard(@Param("ward") String ward);
 
 	@Query(value = "select a FROM Admission a WHERE a.patient.code = :patient and a.deleted='N' and a.admitted = 1")
-    Admission findOneWherePatientIn(@Param("patient") Integer patient);
+	Admission findOneWherePatientIn(@Param("patient") Integer patient);
 
 	@Query(value = "select a FROM Admission a WHERE a.patient.code =:patient and a.deleted='N' order by a.admDate asc")
-    List<Admission> findAllWherePatientByOrderByDate(@Param("patient") Integer patient);
+	List<Admission> findAllWherePatientByOrderByDate(@Param("patient") Integer patient);
 
 	@Query(value = "select a FROM Admission a " +
 			"WHERE a.ward.code =:ward AND a.admDate >= :dateFrom AND a.admDate <= :dateTo AND a.deleted ='N' " +
 			"ORDER BY a.yProg desc ")
-    List<Admission> findAllWhereWardAndDates(
-            @Param("ward") String ward, @Param("dateFrom") GregorianCalendar dateFrom,
-            @Param("dateTo") GregorianCalendar dateTo);
+	List<Admission> findAllWhereWardAndDates(
+			@Param("ward") String ward, @Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
 
 	@Query(value = "select a FROM Admission a WHERE a.admitted =1 and a.ward.code = :ward and a.deleted = 'N'")
 	List<Admission> findAllWhereWardIn(@Param("ward") String ward);

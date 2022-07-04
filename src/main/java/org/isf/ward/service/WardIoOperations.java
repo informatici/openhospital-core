@@ -22,6 +22,7 @@
 package org.isf.ward.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.admission.model.Admission;
 import org.isf.admission.service.AdmissionIoOperationRepository;
@@ -56,8 +57,7 @@ public class WardIoOperations {
 	 * @throws OHServiceException
 	 */
 	public int getCurrentOccupation(Ward ward) throws OHServiceException {
-		ArrayList<Admission> admissions = new ArrayList<>(admissionRepository.findAllWhereWard(ward.getCode()));
-
+		List<Admission> admissions = new ArrayList<>(admissionRepository.findAllWhereWard(ward.getCode()));
 		return admissions.size();
 	}
 
@@ -88,10 +88,8 @@ public class WardIoOperations {
 	 * @throws OHServiceException
 	 *             if an error occurs retrieving the diseases.
 	 */
-	public ArrayList<Ward> getWardsNoMaternity() throws OHServiceException {
-		ArrayList<Ward> wards = new ArrayList<>(repository.findByCodeNot("M"));
-
-		return wards;
+	public List<Ward> getWardsNoMaternity() throws OHServiceException {
+		return new ArrayList<>(repository.findByCodeNot("M"));
 	}
 
 	/**
@@ -103,16 +101,11 @@ public class WardIoOperations {
 	 * @throws OHServiceException
 	 *             if an error occurs retrieving the wards.
 	 */
-	public ArrayList<Ward> getWards(String wardID) throws OHServiceException {
-		ArrayList<Ward> wards = null;
-
+	public List<Ward> getWards(String wardID) throws OHServiceException {
 		if (wardID != null && wardID.trim().length() > 0) {
-			wards = new ArrayList<>(repository.findByCodeContains(wardID));
-		} else {
-			wards = new ArrayList<>(repository.findAll());
+			return repository.findByCodeContains(wardID);
 		}
-
-		return wards;
+		return repository.findAll();
 	}
 
 	/**
@@ -165,9 +158,9 @@ public class WardIoOperations {
 	 *             if an error occurs during the check.
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
-
+	
 	/**
 	 * Check if the maternity ward exists
 	 * 
@@ -191,8 +184,9 @@ public class WardIoOperations {
 	 */
 	public Ward findWard(String code) throws OHServiceException {
 		if (code != null) {
-			return repository.findOne(code);
-		} else
-			throw new IllegalArgumentException("code must not be null");
+			return repository.findById(code).orElse(null);
+		}
+		throw new IllegalArgumentException("code must not be null");
 	}
+
 }

@@ -21,7 +21,7 @@
  */
 package org.isf.exa.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.exa.model.ExamRow;
 import org.isf.exatype.model.ExamType;
@@ -48,9 +48,6 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class ExamRowIoOperations {
 
-	//@Autowired
-	//private ExamIoOperationRepository repository;
-	
 	@Autowired
 	private ExamRowIoOperationRepository rowRepository;
 	
@@ -64,28 +61,19 @@ public class ExamRowIoOperations {
 	 * @return the list of {@link ExamRow}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamRow> getExamRow(
-			int aExamCode, 
-			String aDescription) throws OHServiceException 
-	{
-            ArrayList<ExamRow> examrows;
-            
-            if (aExamCode != 0) 
-            {   
-                if (aDescription != null) 
-                {
-                    examrows = (ArrayList<ExamRow>) rowRepository.findAllByCodeAndDescriptionOrderByCodeAscDescriptionAsc(aExamCode, aDescription);
-                }
-                else
-                {
-                    examrows = (ArrayList<ExamRow>) rowRepository.findAllByCodeOrderByDescription(aExamCode);
-                }
-            }
-            else
-            {   
-                examrows = (ArrayList<ExamRow>) rowRepository.findAll();
-            }
-            return examrows;
+	public List<ExamRow> getExamRow(int aExamCode, String aDescription) throws OHServiceException {
+		List<ExamRow> examrows;
+
+		if (aExamCode != 0) {
+			if (aDescription != null) {
+				examrows = rowRepository.findAllByCodeAndDescriptionOrderByCodeAscDescriptionAsc(aExamCode, aDescription);
+			} else {
+				examrows = rowRepository.findAllByCodeOrderByDescription(aExamCode);
+			}
+		} else {
+			examrows = rowRepository.findAll();
+		}
+		return examrows;
 	}
 
 	/**
@@ -93,8 +81,7 @@ public class ExamRowIoOperations {
 	 * @return the list of {@link ExamRow}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamRow> getExamRows() throws OHServiceException
-	{
+	public List<ExamRow> getExamRows() throws OHServiceException {
 		return getExamsRowByDesc(null);
 	}
 
@@ -104,21 +91,11 @@ public class ExamRowIoOperations {
 	 * @return the list of {@link ExamRow}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamRow> getExamsRowByDesc(
-			String description) throws OHServiceException 
-	{ 
-		ArrayList<ExamRow> examrows = new ArrayList<>();
-				
-		
-		if (description != null) 
-		{
-			examrows = (ArrayList<ExamRow>) rowRepository.findAllByDescriptionOrderByDescriptionAsc(description);
+	public List<ExamRow> getExamsRowByDesc(String description) throws OHServiceException {
+		if (description != null) {
+			return rowRepository.findAllByDescriptionOrderByDescriptionAsc(description);
 		}
-		else
-		{
-			examrows = (ArrayList<ExamRow>) rowRepository.findAll();
-		}
-		return examrows;
+		return rowRepository.findAll();
 	}
 
 	/**
@@ -126,12 +103,8 @@ public class ExamRowIoOperations {
 	 * @return the list of {@link ExamType}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamType> getExamType() throws OHServiceException 
-	{
-		ArrayList<ExamType> examTypes = (ArrayList<ExamType>) typeRepository.findAllByOrderByDescriptionAsc();
-				
-	
-		return examTypes;
+	public List<ExamType> getExamType() throws OHServiceException {
+		return typeRepository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
@@ -141,16 +114,8 @@ public class ExamRowIoOperations {
 	 * @return <code>true</code> if the {@link ExamRow} has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newExamRow(
-			ExamRow examRow) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		ExamRow savedExam = rowRepository.save(examRow);
-		result = (savedExam != null);
-		
-		return result;
+	public boolean newExamRow(ExamRow examRow) throws OHServiceException {
+		return rowRepository.save(examRow) != null;
 	}
 
 	/**
@@ -159,14 +124,8 @@ public class ExamRowIoOperations {
 	 * @return <code>true</code> if the {@link ExamRow} has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updateExamRow(
-			ExamRow examRow) throws OHServiceException 
-	{
-		boolean result = true;
-		
-		rowRepository.save(examRow);
-    	
-		return result;	
+	public boolean updateExamRow(ExamRow examRow) throws OHServiceException {
+		return rowRepository.save(examRow) != null;
 	}
 
 	/**
@@ -175,12 +134,9 @@ public class ExamRowIoOperations {
 	 * @return <code>true</code> if the {@link ExamRow} has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean deleteExamRow(
-                    ExamRow examRow) throws OHServiceException 
-        {
-            boolean result = true;
-            rowRepository.delete(examRow.getCode());
-            return result;	
+	public boolean deleteExamRow(ExamRow examRow) throws OHServiceException {
+		rowRepository.deleteById(examRow.getCode());
+		return true;
 	}
 
 	
@@ -193,19 +149,8 @@ public class ExamRowIoOperations {
 	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isKeyPresent(
-			ExamRow examrow) throws OHServiceException 
-	{
-		boolean result = false;
-		ExamRow foundExam = rowRepository.findOne(examrow.getCode());
-		
-		
-		if (foundExam != null)
-		{
-			result = true;
-		}
-		
-		return result;
+	public boolean isKeyPresent(ExamRow examrow) throws OHServiceException {
+		return rowRepository.findById(examrow.getCode()).orElse(null) != null;
 	}
 	
 	/**
@@ -214,18 +159,11 @@ public class ExamRowIoOperations {
 	 * @param value the value to sanitize.
 	 * @return the sanitized value or <code>null</code> if the passed value is <code>null</code>.
 	 */
-	protected String sanitize(
-			String value)
-	{
-		String result = null;
-		
-		
-		if (value != null) 
-		{
-			result = value.trim().replaceAll("'", "''");
+	protected String sanitize(String value) {
+		if (value == null) {
+			return null;
 		}
-		
-		return result;
+		return value.trim().replace("'", "''");
 	}
 
 	/**
@@ -236,7 +174,7 @@ public class ExamRowIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(int code) throws OHServiceException{
-		return rowRepository.exists(code);
+		return rowRepository.existsById(code);
 	}
 
 	/**
@@ -247,12 +185,11 @@ public class ExamRowIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isRowPresent(Integer code) throws OHServiceException {
-		return rowRepository.exists(code);
+		return rowRepository.existsById(code);
 	}
 
-    public ArrayList<ExamRow> getExamRowByExamCode(String aExamCode)  throws OHServiceException {
-       ArrayList<ExamRow> examrows = (ArrayList<ExamRow>) rowRepository.findAllByExam_CodeOrderByDescription(aExamCode);
-       return examrows;
+	public List<ExamRow> getExamRowByExamCode(String aExamCode) throws OHServiceException {
+		return rowRepository.findAllByExam_CodeOrderByDescription(aExamCode);
     }
 
 }

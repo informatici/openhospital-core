@@ -21,7 +21,7 @@
  */
 package org.isf.disease.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.isf.disease.model.Disease;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -61,10 +61,8 @@ public class DiseaseIoOperations {
 	 * @return the found disease, <code>null</code> if no disease has found.
 	 * @throws OHServiceException if an error occurred getting the disease.
 	 */
-	public Disease getDiseaseByCode(
-			int code) throws OHServiceException 
-	{
-		return repository.findOneByCode(String.valueOf(code));
+	public Disease getDiseaseByCode(String code) throws OHServiceException {
+		return repository.findOneByCode(code);
 	}
 	
 	/**
@@ -78,126 +76,73 @@ public class DiseaseIoOperations {
 	 * @return the retrieved diseases.
 	 * @throws OHServiceException if an error occurs retrieving the diseases.
 	 */
-	public ArrayList<Disease> getDiseases(
-			String disTypeCode, 
-			boolean opd, 
-			boolean ipdIn, 
-			boolean ipdOut) throws OHServiceException 
-	{
-		ArrayList<Disease> diseases = null;
-    	
-		
-		if (disTypeCode != null) 
-		{
-			if (opd) 
-			{
-				if (ipdIn) 
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndOpdAndIpdInAndIpdOut(disTypeCode));
-					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndOpdAndIpdIn(disTypeCode));						
-					}
-				}
-				else
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndOpdAndIpdOut(disTypeCode));
-					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndOpd(disTypeCode));						
-					}					
-				}
-			}		
-			else
-			{
+	public List<Disease> getDiseases(String disTypeCode, boolean opd, boolean ipdIn, boolean ipdOut) throws OHServiceException {
+		List<Disease> diseases;
 
-				if (ipdIn) 
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndIpdInAndIpdOut(disTypeCode));
-						
+		if (disTypeCode != null) {
+			if (opd) {
+				if (ipdIn) {
+					if (ipdOut) {
+						diseases = repository.findAllByDiseaseTypeCodeAndOpdAndIpdInAndIpdOut(disTypeCode);
+					} else {
+						diseases = repository.findAllByDiseaseTypeCodeAndOpdAndIpdIn(disTypeCode);
 					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndIpdIn(disTypeCode));						
+				} else {
+					if (ipdOut) {
+						diseases = repository.findAllByDiseaseTypeCodeAndOpdAndIpdOut(disTypeCode);
+					} else {
+						diseases = repository.findAllByDiseaseTypeCodeAndOpd(disTypeCode);
 					}
 				}
-				else
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCodeAndIpdOut(disTypeCode));
+			} else {
+
+				if (ipdIn) {
+					if (ipdOut) {
+						diseases = repository.findAllByDiseaseTypeCodeAndIpdInAndIpdOut(disTypeCode);
+
+					} else {
+						diseases = repository.findAllByDiseaseTypeCodeAndIpdIn(disTypeCode);
 					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByDiseaseTypeCode(disTypeCode));						
-					}					
+				} else {
+					if (ipdOut) {
+						diseases = repository.findAllByDiseaseTypeCodeAndIpdOut(disTypeCode);
+					} else {
+						diseases = repository.findAllByDiseaseTypeCode(disTypeCode);
+					}
+				}
+			}
+		} else {
+			if (opd) {
+				if (ipdIn) {
+					if (ipdOut) {
+						diseases = repository.findAllByOpdAndIpdInAndIpdOut();
+					} else {
+						diseases = repository.findAllByOpdAndIpdIn();
+					}
+				} else {
+					if (ipdOut) {
+						diseases = repository.findAllByOpdAndIpdOut();
+					} else {
+						diseases = repository.findAllByOpd();
+					}
+				}
+			} else {
+
+				if (ipdIn) {
+					if (ipdOut) {
+						diseases = repository.findAllByIpdInAndIpdOut();
+					} else {
+						diseases = repository.findAllByIpdIn();
+					}
+				} else {
+					if (ipdOut) {
+						diseases = repository.findAllByIpdOut();
+					} else {
+						diseases = repository.findAll();
+					}
 				}
 			}
 		}
-		else
-		{
-			if (opd) 
-			{
-				if (ipdIn) 
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByOpdAndIpdInAndIpdOut());
-					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByOpdAndIpdIn());						
-					}
-				}
-				else
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByOpdAndIpdOut());
-					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByOpd());						
-					}					
-				}
-			}		
-			else
-			{
-
-				if (ipdIn) 
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByIpdInAndIpdOut());
-						
-					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByIpdIn());						
-					}
-				}
-				else
-				{
-					if (ipdOut)
-					{
-						diseases = (ArrayList<Disease>)(repository.findAllByIpdOut());
-					}
-					else
-					{
-						diseases = (ArrayList<Disease>)(repository.findAll());						
-					}					
-				}
-			}
-		}
-
 		return diseases;
 	}
 	
@@ -207,9 +152,7 @@ public class DiseaseIoOperations {
 	 * @return disease that has been stored
 	 * @throws OHServiceException if an error occurs storing the disease.
 	 */
-	public Disease newDisease(
-			Disease disease) throws OHServiceException
-	{
+	public Disease newDisease(Disease disease) throws OHServiceException {
 		return repository.save(disease);
 	}
 
@@ -219,9 +162,7 @@ public class DiseaseIoOperations {
 	 * @return disease that has been updated
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public Disease updateDisease(
-			Disease disease) throws OHServiceException 
-	{
+	public Disease updateDisease(Disease disease) throws OHServiceException {
 		return repository.save(disease);
 	}
 
@@ -231,18 +172,12 @@ public class DiseaseIoOperations {
 	 * @return <code>true</code> if the disease has been marked, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurred during the delete operation.
 	 */
-	public boolean deleteDisease(
-			Disease disease) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteDisease(Disease disease) throws OHServiceException {
 		disease.setOpdInclude(false);
 		disease.setIpdInInclude(false);
 		disease.setIpdOutInclude(false);
 		repository.save(disease);
-		
-		return result;
+		return true;
 	}
 
 	/**
@@ -251,15 +186,8 @@ public class DiseaseIoOperations {
 	 * @return <code>true</code> if it is already used, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.existsById(code);
 	}
 
 	/**
@@ -269,19 +197,8 @@ public class DiseaseIoOperations {
 	 * @return <code>true</code> if is used, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean isDescriptionPresent(
-			String description, 
-			String typeCode) throws OHServiceException
-	{
-		boolean present = false;
-		
-		
-		Disease foundDisease = repository.findOneByDescriptionAndTypeCode(description, typeCode);			
-		if (foundDisease != null && foundDisease.getDescription().compareTo(description) == 0)
-		{
-			present = true;
-		}
-		
-		return present;
+	public boolean isDescriptionPresent(String description, String typeCode) throws OHServiceException {
+		Disease foundDisease = repository.findOneByDescriptionAndTypeCode(description, typeCode);
+		return (foundDisease != null && foundDisease.getDescription().compareTo(description) == 0);
 	}
 }

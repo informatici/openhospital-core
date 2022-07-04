@@ -29,16 +29,15 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import javax.swing.JOptionPane;
-
 import org.isf.generaldata.MessageBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
+import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 
 /**
- * Singleton class that provides connection with the database
+ * Singleton class to manage database connections.
+ * Connection parameters are read from Properties file.
  *
  * @author bob 2005-11-06
  */
@@ -58,8 +57,6 @@ public class DbSingleConn {
 			} catch (CommunicationsException ce) {
 				String message = MessageBundle.getMessage("angal.sql.databaseserverstoppedornetworkfailure.msg");
 				LOGGER.error(">> {}", message);
-				JOptionPane.showMessageDialog(null, message);
-				System.exit(1);
 			}
 
 		}
@@ -86,20 +83,29 @@ public class DbSingleConn {
 	private static Connection createConnection() throws SQLException, IOException {
 
 		Properties props = new Properties();
-		InputStream is = DbSingleConn.class.getClassLoader().getResourceAsStream("database.properties");
-		if (is == null) {
-			FileInputStream in = new FileInputStream("rsc/database.properties");
-			props.load(in);
-			in.close();
-		} else {
-			props.load(is);
-			is.close();
+		try (InputStream is = DbSingleConn.class.getClassLoader().getResourceAsStream("database.properties")) {
+			if (is == null) {
+				try (FileInputStream in = new FileInputStream("rsc/database.properties")) {
+					props.load(in);
+				}
+			} else {
+				props.load(is);
+			}
 		}
 
+		String drivers = props.getProperty("jdbc.drivers");
+		if (drivers != null) {
+			System.setProperty("jdbc.drivers", drivers);
+		}
+		String url = props.getProperty("jdbc.url");
+		String username = props.getProperty("jdbc.username");
+		String password = props.getProperty("jdbc.password");
+
 		StringBuilder sbURL = new StringBuilder();
-		sbURL.append(props.getProperty("jdbc.url"));
-		sbURL.append("?user=");
-		sbURL.append(props.getProperty("jdbc.username"));
+		sbURL.append(url);
+		sbURL.append("?useUnicode=true&characterEncoding=UTF-8");
+		sbURL.append("&user=");
+		sbURL.append(username);
 		sbURL.append("&password=");
 		sbURL.append(props.getProperty("jdbc.password"));
 

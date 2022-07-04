@@ -21,7 +21,7 @@
  */
 package org.isf.telemetry.envdatacollector.collectors;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,9 +58,9 @@ public class TimeDataCollector extends AbstractDataCollector {
 	public Map<String, String> retrieveData() {
 		LOGGER.debug("Collecting Time data...");
 		Map<String, String> result = new HashMap<>();
-		Date lastUsedTime = this.opdIoOperations.lastOpdCreationDate();
+		LocalDateTime lastUsedTime = this.opdIoOperations.lastOpdCreationDate();
 		if (lastUsedTime == null) {
-			lastUsedTime = new Date();
+			lastUsedTime = LocalDateTime.now();
 		}
 		result.put(CollectorsConst.TIME_LAST_USED, String.valueOf(lastUsedTime));
 		return result;

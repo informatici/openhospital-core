@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -30,10 +30,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ExamRowIoOperationRepository extends JpaRepository<ExamRow, Integer> {
-    List<ExamRow> findAllByCodeOrderByDescription(int code);
-    List<ExamRow> findAllByDescriptionOrderByDescriptionAsc(String description);
-    List<ExamRow> findAllByCodeAndDescriptionOrderByCodeAscDescriptionAsc(int code, String description);
-    @Modifying
-    void deleteByExam_Code(String code);
-    List<ExamRow> findAllByExam_CodeOrderByDescription(String examCode);
+
+	List<ExamRow> findAllByCodeOrderByDescription(int code);
+
+	List<ExamRow> findAllByDescriptionOrderByDescriptionAsc(String description);
+
+	List<ExamRow> findAllByCodeAndDescriptionOrderByCodeAscDescriptionAsc(int code, String description);
+
+	@Modifying
+	void deleteByExam_Code(String code);
+
+	List<ExamRow> findAllByExam_CodeOrderByDescription(String examCode);
 }

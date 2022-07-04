@@ -24,7 +24,7 @@ package org.isf.sms.providers.skebby;
 public class SkebbyGatewayUtil {
 
 	public static String extractUserKey(String userKeyAccessToken) {
-		if (userKeyAccessToken == null || userKeyAccessToken.indexOf(";") == -1) {
+		if (userKeyAccessToken == null || !userKeyAccessToken.contains(";")) {
 			return null;
 		}
 		return userKeyAccessToken.split(";")[0];
@@ -39,7 +39,7 @@ public class SkebbyGatewayUtil {
 	}
 
 	private static String commonKeyExtractor(String userKeyAccessToken) {
-		if (userKeyAccessToken == null || userKeyAccessToken.indexOf(";") == -1) {
+		if (userKeyAccessToken == null || !userKeyAccessToken.contains(";")) {
 			return null;
 		}
 		return userKeyAccessToken.split(";")[1];

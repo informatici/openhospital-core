@@ -24,6 +24,7 @@ package org.isf.pricesothers.manager;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.isf.generaldata.MessageBundle;
 import org.isf.pricesothers.model.PricesOthers;
 import org.isf.pricesothers.service.PriceOthersIoOperations;
@@ -33,7 +34,6 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 @Component
 public class PricesOthersManager {
@@ -47,7 +47,7 @@ public class PricesOthersManager {
 	 * @return the list of {@link PricesOthers}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<PricesOthers> getOthers() throws OHServiceException {
+	public List<PricesOthers> getOthers() throws OHServiceException {
 		return ioOperations.getOthers();
 	}
 

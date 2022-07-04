@@ -21,10 +21,10 @@
  */
 package org.isf.patient.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.Period;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,9 +43,6 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.StringUtils;
 import org.isf.opd.model.Opd;
 import org.isf.utils.db.Auditable;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -72,17 +69,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="PATIENT")
+@Table(name = "PATIENT")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="PAT_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="PAT_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="PAT_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="PAT_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="PAT_LAST_MODIFIED_DATE"))
-})
-public class Patient extends Auditable<String>
-{
+@AttributeOverride(name = "createdBy", column = @Column(name = "PAT_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "PAT_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PAT_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "PAT_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PAT_LAST_MODIFIED_DATE"))
+
+public class Patient extends Auditable<String> {
 	/*
 	 * PAT_ID int NOT NULL AUTO_INCREMENT , PAT_FNAME varchar (50) NOT NULL ,
 	 * --first name (nome) PAT_SNAME varchar (50) NOT NULL , --second name
@@ -114,8 +109,8 @@ public class Patient extends Auditable<String>
 	@Column(name="PAT_NAME")
 	private String name;
 	
-	@Column(name="PAT_BDATE")
-	private Date birthDate;
+	@Column(name="PAT_BDATE")	// SQL type: date
+	private LocalDate birthDate;
 
 	@NotNull
 	@Column(name="PAT_AGE")
@@ -198,7 +193,6 @@ public class Patient extends Auditable<String>
 	
 
 	public Patient() {
-		
 		this.firstName = "";
 		this.secondName = ""; 
 		this.name = this.firstName + ' ' + this.secondName;
@@ -223,7 +217,6 @@ public class Patient extends Auditable<String>
 	}
 	
 	public Patient(Opd opd) {
-		
 		this.firstName = opd.getfirstName();
 		this.secondName = opd.getsecondName(); 
 		this.name = this.firstName + ' ' + this.secondName;
@@ -246,7 +239,7 @@ public class Patient extends Auditable<String>
 		this.profession = "";
 	}
 	
-	public Patient(String firstName, String secondName, Date birthDate, int age, String agetype, char sex,
+	public Patient(String firstName, String secondName, LocalDate birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone,
 			String motherName, char mother, String fatherName, char father,
 			String bloodType, char economicStatut, char parentTogether, String personalCode, 
@@ -274,7 +267,7 @@ public class Patient extends Auditable<String>
 		this.profession = profession;
 	}
 		
-	public Patient(int code, String firstName, String secondName, String name, Date birthDate, int age, String agetype, char sex,
+	public Patient(int code, String firstName, String secondName, String name, LocalDate birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone, String note,
 			String motherName, char mother, String fatherName, char father,
 			String bloodType, char economicStatut, char parentTogether, String taxCode,
@@ -312,35 +305,22 @@ public class Patient extends Auditable<String>
 		this.address = address;
 	}
 	
-	public Date getBirthDate() {
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 
 	public int getAge() {
 		if (this.birthDate != null) {
-			DateTime now = new DateTime();
-			DateTime birth = new DateTime(birthDate);
-			Period period = new Period(birth, now, PeriodType.yearMonthDay());
-			age = period.getYears();
+			Period periodAge = Period.between(birthDate, LocalDate.now());
+			age = periodAge.getYears();
 		}
 		return age;
 	}
 	
-	public int getMonths() {
-		int months = 0;
-		if (this.birthDate != null) {
-			DateTime now = new DateTime();
-			DateTime birth = new DateTime(birthDate);
-			Period period = new Period(birth, now, PeriodType.months());
-			months = period.getMonths();
-		}
-		return months;
-	}
-
 	public void setAge(int age) {
 		this.age = age;
 	}
@@ -479,16 +459,16 @@ public class Patient extends Auditable<String>
 		return fatherName;
 	}
 
-	public void setFatherName(String father_name) {
-		this.fatherName = father_name;
+	public void setFatherName(String fatherName) {
+		this.fatherName = fatherName;
 	}
 
 	public String getMotherName() {
 		return motherName;
 	}
 
-	public void setMotherName(String mother_name) {
-		this.motherName = mother_name;
+	public void setMotherName(String motherName) {
+		this.motherName = motherName;
 	}
 
 	public String getTaxCode() {
@@ -567,7 +547,7 @@ public class Patient extends Auditable<String>
 	}
 	
 	public String getSearchString() {
-		StringBuffer sbName = new StringBuffer();
+		StringBuilder sbName = new StringBuilder();
 		sbName.append(getCode());
 		sbName.append(' ');
 		sbName.append(getFirstName().toLowerCase());
@@ -585,7 +565,7 @@ public class Patient extends Auditable<String>
 	
 	public String getInformations() {
 		int i = 0;
-		StringBuffer infoBfr = new StringBuffer();
+		StringBuilder infoBfr = new StringBuilder();
 		if (StringUtils.isNotEmpty(city)) {
 			infoBfr.append(city);
 			i++;

@@ -94,7 +94,7 @@ public class MedicaldsrstockmovTypeBrowserManager {
 	 * @return all the medical stock movement types.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<MovementType> getMedicaldsrstockmovType() throws OHServiceException {
+	public List<MovementType> getMedicaldsrstockmovType() throws OHServiceException {
 		return ioOperations.getMedicaldsrstockmovType();
 	}
 

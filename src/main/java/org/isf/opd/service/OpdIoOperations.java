@@ -21,17 +21,14 @@
  */
 package org.isf.opd.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.time.TimeTools;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,23 +67,18 @@ public class OpdIoOperations {
 	 * @return the list of Opds. It could be <code>empty</code>.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Opd> getOpdList(boolean oneWeek) throws OHServiceException	{
-		GregorianCalendar dateFrom = TimeTools.getDateToday0();
-		GregorianCalendar dateTo = TimeTools.getDateToday24();
-
-		if (oneWeek) {
-			dateFrom.add(GregorianCalendar.WEEK_OF_YEAR,-1);
-		}
-
-
-		return getOpdList(MessageBundle.getMessage("angal.common.alltypes.txt"),MessageBundle.getMessage("angal.opd.alldiseases.txt"),dateFrom,dateTo,0,0,'A','A');
+	public List<Opd> getOpdList(boolean oneWeek) throws OHServiceException {
+		LocalDate dateTo = LocalDate.now();
+		LocalDate dateFrom = dateTo.minusWeeks(1);
+		return getOpdList(MessageBundle.getMessage("angal.common.alltypes.txt"), MessageBundle.getMessage("angal.opd.alldiseases.txt"), dateFrom, dateTo, 0, 0,
+				'A', 'A');
 	}
 	
 	/**
 	 * Retrieves creation date of the last Opd
-	 * @return reation date of the last Opd
+	 * @return creation date of the last Opd
 	 */
-	public Date lastOpdCreationDate() {
+	public LocalDateTime lastOpdCreationDate() {
 		return this.repository.lastOpdCreationDate();
 	}
 	
@@ -104,18 +96,16 @@ public class OpdIoOperations {
 	 * @return the list of Opds. It could be <code>empty</code>.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Opd> getOpdList(
+	public List<Opd> getOpdList(
 			String diseaseTypeCode,
-			String diseaseCode, 
-			GregorianCalendar dateFrom,
-			GregorianCalendar dateTo,
-			int ageFrom, 
+			String diseaseCode,
+			LocalDate dateFrom,
+			LocalDate dateTo,
+			int ageFrom,
 			int ageTo,
 			char sex,
-			char newPatient) throws OHServiceException	{
-		return new ArrayList<>(repository.findAllOpdWhereParams(
-				diseaseTypeCode, diseaseCode, dateFrom, dateTo,
-				ageFrom, ageTo, sex, newPatient));			
+			char newPatient) throws OHServiceException {
+		return repository.findAllOpdWhereParams(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient);
 	}
 	
 	/**
@@ -126,10 +116,10 @@ public class OpdIoOperations {
 	 * 		   the whole list of {@link Opd}s if <code>0</code> is passed.
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Opd> getOpdList(int patID) throws OHServiceException {
-		return new ArrayList<>(patID == 0 ?
+	public List<Opd> getOpdList(int patID) throws OHServiceException {
+		return patID == 0 ?
 				repository.findAllOrderByProgYearDesc() :
-				repository.findAllByPatient_CodeOrderByProgYearDesc(patID));
+				repository.findAllByPatient_CodeOrderByProgYearDesc(patID);
 	}
 		
 	/**
@@ -176,8 +166,7 @@ public class OpdIoOperations {
 	public int getProgYear(int year) throws OHServiceException {
 		Integer progYear = year == 0 ?
 			repository.findMaxProgYear() :
-			repository.findMaxProgYearWhereDateBetween(getBeginningOfYear(year), getBeginningOfYear(year + 1));
-
+			repository.findMaxProgYearWhereDateBetween(LocalDateTime.of(year, 1, 1, 0, 0), LocalDateTime.of(year + 1, 1, 1, 0, 0));
 		return progYear == null ? 0 : progYear;
 	}
 
@@ -201,7 +190,7 @@ public class OpdIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 	
 	/**
@@ -215,12 +204,8 @@ public class OpdIoOperations {
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
 		List<Opd> opds = year == 0 ?
 			repository.findByProgYear(opdNum) :
-			repository.findByProgYearAndVisitDateBetween(opdNum, getBeginningOfYear(year), getBeginningOfYear(year + 1));
-
+			repository.findByProgYearAndDateBetween(opdNum, LocalDateTime.of(year, 1, 1, 0, 0), LocalDateTime.of(year + 1, 1, 1, 0, 0));
 		return !opds.isEmpty();
 	}
 
-	private GregorianCalendar getBeginningOfYear(int year) {
-		return new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar();
-	}
 }

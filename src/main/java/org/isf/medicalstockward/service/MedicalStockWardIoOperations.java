@@ -21,8 +21,8 @@
  */
 package org.isf.medicalstockward.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.medicals.model.Medical;
@@ -63,23 +63,14 @@ public class MedicalStockWardIoOperations
 	 * @return the retrieved movements.
 	 * @throws OHServiceException if an error occurs retrieving the movements.
 	 */
-	public ArrayList<MovementWard> getWardMovements(
-			String wardId, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo) throws OHServiceException 
-	{
-		ArrayList<Integer> pMovementWardCode = null;
-		ArrayList<MovementWard> pMovementWard = new ArrayList<>();
-		
-		
-		pMovementWardCode = new ArrayList<>(repository.findAllWardMovement(wardId, dateFrom, dateTo));
-        for (Integer code : pMovementWardCode) {
-            MovementWard movementWard = movementRepository.findOne(code);
+	public List<MovementWard> getWardMovements(String wardId, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+		List<MovementWard> pMovementWard = new ArrayList<>();
 
-
-            pMovementWard.add(movementWard);
-        }
-		
+		List<Integer> pMovementWardCode = new ArrayList<>(repository.findAllWardMovement(wardId, dateFrom, dateTo));
+		for (Integer code : pMovementWardCode) {
+			MovementWard movementWard = movementRepository.findById(code).orElse(null);
+			pMovementWard.add(movementWard);
+		}
 		return pMovementWard;
 	}
         
@@ -91,13 +82,9 @@ public class MedicalStockWardIoOperations
 	 * @return the retrieved movements.
 	 * @throws OHServiceException if an error occurs retrieving the movements.
 	 */
-	public ArrayList<MovementWard> getWardMovementsToWard(
-			String idwardTo, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo) throws OHServiceException 
-	{
-            return movementRepository.findWardMovements(idwardTo, dateFrom, dateTo);
-	}
+    public List<MovementWard> getWardMovementsToWard(String idwardTo, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+	    return movementRepository.findWardMovements(idwardTo, dateFrom, dateTo);
+    }
 
 	/**
 	 * Gets the current quantity for the specified {@link Medical} and specified {@link Ward}.
@@ -105,23 +92,14 @@ public class MedicalStockWardIoOperations
 	 * @return the total quantity.
 	 * @throws OHServiceException if an error occurs retrieving the quantity.
 	 */
-	public int getCurrentQuantityInWard(
-					Ward ward, 
-					Medical medical) throws OHServiceException 
-	{
-		Double mainQuantity = 0.0;
-		
-
-		if (ward!=null) 
-		{
+	public int getCurrentQuantityInWard(Ward ward, Medical medical) throws OHServiceException {
+		Double mainQuantity;
+		if (ward != null) {
 			mainQuantity = repository.findQuantityInWardWhereMedicalAndWard(medical.getCode(), ward.getCode());
-		}
-		else
-		{
+		} else {
 			mainQuantity = repository.findQuantityInWardWhereMedical(medical.getCode());
-		}	
-
-		return (int) (mainQuantity != null ? mainQuantity : 0.0);	
+		}
+		return (int) (mainQuantity != null ? mainQuantity : 0.0);
 	}
 	
 	/**
@@ -131,10 +109,7 @@ public class MedicalStockWardIoOperations
 	 * @return the total quantity.
 	 * @throws OHServiceException if an error occurs retrieving the quantity.
 	 */
-	public int getCurrentQuantityInWard(
-			Ward ward, 
-			Lot lot) throws OHServiceException 
-	{
+	public int getCurrentQuantityInWard(Ward ward, Lot lot) throws OHServiceException {
 		Double quantity;
 		if (ward != null) {
 			quantity = lotRepository.getQuantityByWard(lot, ward);
@@ -173,7 +148,7 @@ public class MedicalStockWardIoOperations
 	 * @param movements the movement to store.
 	 * @throws OHServiceException if an error occurs.
 	 */
-	public void newMovementWard(ArrayList<MovementWard> movements) throws OHServiceException {
+	public void newMovementWard(List<MovementWard> movements) throws OHServiceException {
 		for (MovementWard movement : movements) {
 			newMovementWard(movement);
 		}
@@ -185,16 +160,8 @@ public class MedicalStockWardIoOperations
 	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateMovementWard(
-			MovementWard movement) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		MovementWard savedMovement = movementRepository.save(movement);
-		result = (savedMovement != null);
-		
-		return result;
+	public boolean updateMovementWard(MovementWard movement) throws OHServiceException {
+		return movementRepository.save(movement) != null;
 	}
 
 	/**
@@ -203,15 +170,9 @@ public class MedicalStockWardIoOperations
 	 * @return <code>true</code> if the movement has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the delete.
 	 */
-	public boolean deleteMovementWard(
-			MovementWard movement) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteMovementWard(MovementWard movement) throws OHServiceException {
 		movementRepository.delete(movement);
-		
-		return result;
+		return true;
 	}
 
 	/**
@@ -220,58 +181,49 @@ public class MedicalStockWardIoOperations
 	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	protected boolean updateStockWardQuantity(
-			MovementWard movement) throws OHServiceException 
-	{
+	protected boolean updateStockWardQuantity(MovementWard movement) throws OHServiceException {
 		Double qty = movement.getQuantity();
 		String ward = movement.getWard().getCode();
 		String lot = movement.getLot().getCode();
-                String wardTo = null;
-                if (movement.getWardTo() != null) { 
-                	// in case of a mvnt from the ward movement.getWard() to the ward movement.getWardTO()
-                    wardTo = movement.getWardTo().getCode();
-                }
-		Integer medical = movement.getMedical().getCode();		
+		String wardTo = null;
+		if (movement.getWardTo() != null) {
+			// in case of a mvnt from the ward movement.getWard() to the ward movement.getWardTO()
+			wardTo = movement.getWardTo().getCode();
+		}
+		Integer medical = movement.getMedical().getCode();
 		boolean result = true;
-		
-		
-        if(wardTo != null) {
-            MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedicalAndLot(wardTo, medical, lot);
-            if(medicalWardTo != null) {
-            	repository.updateInQuantity(Math.abs(qty), wardTo, medical, lot);
-            } else {
+
+		if (wardTo != null) {
+			MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedicalAndLot(wardTo, medical, lot);
+			if (medicalWardTo != null) {
+				repository.updateInQuantity(Math.abs(qty), wardTo, medical, lot);
+			} else {
 				MedicalWard medicalWard = new MedicalWard();
 				medicalWard.setWard(movement.getWardTo());
 				medicalWard.setMedical(movement.getMedical());
-				medicalWard.setInQuantity((float)Math.abs(qty));
-				medicalWard.setOutQuantity(0.0f);
+				medicalWard.setIn_quantity((float) Math.abs(qty));
+				medicalWard.setOut_quantity(0.0f);
 				medicalWard.setLot(movement.getLot());
 				repository.save(medicalWard);
-            }
-            return result;
-        }
-                
+			}
+			return result;
+		}
+
 		MedicalWard medicalWard = repository.findOneWhereCodeAndMedicalAndLot(ward, medical, lot);
-        if (medicalWard == null)
-		{
+		if (medicalWard == null) {
 			medicalWard = new MedicalWard();
 			medicalWard.setWard(movement.getWard());
 			medicalWard.setMedical(movement.getMedical());
-			medicalWard.setInQuantity((float) -qty);
-			medicalWard.setOutQuantity(0.0f);
+			medicalWard.setIn_quantity((float) -qty);
+			medicalWard.setOut_quantity(0.0f);
 			medicalWard.setLot(movement.getLot());
 			repository.save(medicalWard);
-        }
-		else
-		{
-			if (qty < 0)
-			{
-				repository.updateInQuantity(-qty, ward, medical,lot); // TODO: change to jpa
+		} else {
+			if (qty < 0) {
+				repository.updateInQuantity(-qty, ward, medical, lot); // TODO: change to jpa
+			} else {
+				repository.updateOutQuantity(qty, ward, medical, lot); // TODO: change to jpa
 			}
-			else
-			{
-				repository.updateOutQuantity(qty, ward, medical,lot); // TODO: change to jpa
-            }				
 		}
 		return result;
 	}
@@ -283,23 +235,18 @@ public class MedicalStockWardIoOperations
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException if an error occurs during the medical retrieving.
 	 */
-	public ArrayList<MedicalWard> getMedicalsWard(
-			char wardId, boolean stripeEmpty) throws OHServiceException
-	{
-		ArrayList<MedicalWard> medicalWards = new ArrayList<>(repository.findAllWhereWard(wardId));
-		for (int i=0; i<medicalWards.size(); i++)
-
-		{
-			double qty = (double) (medicalWards.get(i).getInQuantity() - medicalWards.get(i).getOutQuantity());
+	public List<MedicalWard> getMedicalsWard(char wardId, boolean stripeEmpty) throws OHServiceException {
+		List<MedicalWard> medicalWards = repository.findAllWhereWard(wardId);
+		for (int i = 0; i < medicalWards.size(); i++) {
+			double qty = medicalWards.get(i).getIn_quantity() - medicalWards.get(i).getOut_quantity();
 			medicalWards.get(i).setQty(qty);
-			
 
 			if (stripeEmpty && qty == 0) {
 				medicalWards.remove(i);
 				i = i - 1;
 			}
 		}
-		
+
 		return medicalWards;
 	}
 
@@ -307,8 +254,7 @@ public class MedicalStockWardIoOperations
 		return movementRepository.findByPatient_code(patient.getCode());
 	}
 
-	public ArrayList<MovementWard> getWardMovementsToPatient(Integer patId) {
-
+	public List<MovementWard> getWardMovementsToPatient(Integer patId) {
 		return movementRepository.findWardMovementPat(patId);
 	}
 
@@ -320,21 +266,19 @@ public class MedicalStockWardIoOperations
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<MedicalWard> getMedicalsWardTotalQuantity(
-			char wardId) throws OHServiceException
-	{
-		String WardID=String.valueOf(wardId);
-		ArrayList<MedicalWard> medicalWards = getMedicalsWard(wardId, true);
+	public List<MedicalWard> getMedicalsWardTotalQuantity(char wardId) throws OHServiceException {
+		String wardID = String.valueOf(wardId);
+		List<MedicalWard> medicalWards = getMedicalsWard(wardId, true);
 
-		ArrayList<MedicalWard> medicalWardsQty = new ArrayList<>();
+		List<MedicalWard> medicalWardsQty = new ArrayList<>();
 
-		for (int i=0; i<medicalWards.size(); i++) {
+		for (MedicalWard medicalWard : medicalWards) {
 
-			 if (!medicalWardsQty.contains(medicalWards.get(i))) {
-				 Double qty = repository.findQuantityInWardWhereMedicalAndWard(medicalWards.get(i).getId().getMedical().getCode(),WardID);
-				 medicalWards.get(i).setQty(qty);
-				 medicalWardsQty.add(medicalWards.get(i));
-			 }
+			if (!medicalWardsQty.contains(medicalWard)) {
+				Double qty = repository.findQuantityInWardWhereMedicalAndWard(medicalWard.getId().getMedical().getCode(), wardID);
+				medicalWard.setQty(qty);
+				medicalWardsQty.add(medicalWard);
+			}
 		}
 		return medicalWardsQty;
 	}

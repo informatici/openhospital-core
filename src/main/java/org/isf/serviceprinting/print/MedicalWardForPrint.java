@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -42,7 +42,7 @@ public class MedicalWardForPrint implements Comparable<MedicalWardForPrint> {
 		this.medical = null;
 		this.medical = med.getMedical();
 		this.qty = med.getQty();
-		this.code = medical.getProd_code();
+		this.code = medical.getProdCode();
 		this.packets = 0;
 		int pcsPerPck = medical.getPcsperpck();
 		if (pcsPerPck > 1) { 

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,14 +21,16 @@
  */
 package org.isf.lab.service;
 
+import java.util.List;
+
 import org.isf.lab.model.LaboratoryRow;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 
-import java.util.ArrayList;
-
 public interface LabRowIoOperationRepository extends JpaRepository<LaboratoryRow, Integer> {
+
 	@Modifying
-  void deleteByLaboratory_Code(Integer code);
-  ArrayList<LaboratoryRow> findByLaboratory_Code(Integer id);
+	void deleteByLaboratory_Code(Integer code);
+
+	List<LaboratoryRow> findByLaboratory_Code(Integer id);
 }

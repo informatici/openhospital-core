@@ -21,9 +21,8 @@
  */
 package org.isf.opd.manager;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.disease.model.Disease;
@@ -70,14 +69,12 @@ public class OpdBrowserManager {
 		Disease disease = opd.getDisease();
 		Disease disease2 = opd.getDisease2();
 		Disease disease3 = opd.getDisease3();
-		if (opd.getDate() == null)
-			opd.setDate(new Date());
-		if (opd.getUserID() == null)
+		if (opd.getUserID() == null) {
 			opd.setUserID(UserBrowsingManager.getCurrentUser());
-
+		}
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		// Check Visit Date
-		if (opd.getVisitDate() == null) {
+		if (opd.getDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.opd.pleaseinsertattendancedate.msg"),
 					OHSeverityLevel.ERROR));
@@ -134,7 +131,7 @@ public class OpdBrowserManager {
 	 * @return the list of Opds. It could be <code>null</code>.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Opd> getOpd(boolean oneWeek) throws OHServiceException {
+	public List<Opd> getOpd(boolean oneWeek) throws OHServiceException {
 		return ioOperations.getOpdList(oneWeek);
 	}
 
@@ -152,8 +149,8 @@ public class OpdBrowserManager {
 	 * @return the list of Opds. It could be <code>null</code>.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Opd> getOpd(String diseaseTypeCode, String diseaseCode, GregorianCalendar dateFrom, GregorianCalendar dateTo, int ageFrom, int ageTo,
-			char sex, char newPatient) throws OHServiceException {
+	public List<Opd> getOpd(String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient)
+			throws OHServiceException {
 		return ioOperations.getOpdList(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient);
 	}
 
@@ -165,7 +162,7 @@ public class OpdBrowserManager {
 	 * the whole list of {@link Opd}s if <code>0</code> is passed.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Opd> getOpdList(int patientcode) throws OHServiceException {
+	public List<Opd> getOpdList(int patientcode) throws OHServiceException {
 		return ioOperations.getOpdList(patientcode);
 	}
 

@@ -23,6 +23,8 @@ package org.isf.operation.manager;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.operation.model.Operation;
@@ -54,15 +56,15 @@ public class OperationBrowserManager {
 	 * @throws OHServiceException
 	 */
 	//TODO: Evaluate the use of a parameter in one method only
-	public ArrayList<Operation> getOperationOpd() throws OHServiceException {
+	public List<Operation> getOperationOpd() throws OHServiceException {
 		return ioOperations.getOperationOpd();
 	}
 
-	public ArrayList<Operation> getOperationAdm() throws OHServiceException {
+	public List<Operation> getOperationAdm() throws OHServiceException {
 		return ioOperations.getOperationAdm();
 	}
 
-	public ArrayList<Operation> getOperation() throws OHServiceException {
+	public List<Operation> getOperation() throws OHServiceException {
 		return ioOperations.getOperationByTypeDescription(null);
 	}
 
@@ -84,7 +86,7 @@ public class OperationBrowserManager {
 	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<Operation> getOperationByTypeDescription(String typecode) throws OHServiceException {
+	public List<Operation> getOperationByTypeDescription(String typecode) throws OHServiceException {
 		return ioOperations.getOperationByTypeDescription(typecode);
 	}
 
@@ -150,8 +152,10 @@ public class OperationBrowserManager {
 	 *
 	 * @return the found list
 	 */
-	public LinkedHashMap<String, String> getResultsList() { 
-		if (resultsListHashMap == null) buildResultHashMap();
+	public Map<String, String> getResultsList() {
+		if (resultsListHashMap == null) {
+			buildResultHashMap();
+		}
 		return resultsListHashMap;
 	}
 	
@@ -166,23 +170,27 @@ public class OperationBrowserManager {
 		if (resultsListHashMap == null) {
 			buildResultHashMap();
 		}
-		for (String key : resultsListHashMap.keySet()) {
-			if (resultsListHashMap.get(key).equals(description)) {
-				return key;
+		for (Map.Entry<String, String> entry : resultsListHashMap.entrySet()) {
+			if (entry.getValue().equals(description)) {
+				return entry.getKey();
 			}
 		}
 		return "";
 	}
-	
-	public ArrayList<String> getResultDescriptionList() {
-		if (resultsListHashMap == null) buildResultHashMap();
-		ArrayList<String> resultDescriptionList = new ArrayList<>(resultsListHashMap.values());
+
+	public List<String> getResultDescriptionList() {
+		if (resultsListHashMap == null) {
+			buildResultHashMap();
+		}
+		List<String> resultDescriptionList = new ArrayList<>(resultsListHashMap.values());
 		resultDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.operation.result.success.txt")));
 		return resultDescriptionList;
 	}
-	
-	public String getResultDescriptionTranslated(String result_desc_key) {
-		if (resultsListHashMap == null) buildResultHashMap();
-		return resultsListHashMap.get(result_desc_key);
+
+	public String getResultDescriptionTranslated(String resultDescKey) {
+		if (resultsListHashMap == null) {
+			buildResultHashMap();
+		}
+		return resultsListHashMap.get(resultDescKey);
 	}
 }

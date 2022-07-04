@@ -46,7 +46,7 @@ public class OperationTypeBrowserManager {
 	 * @return the list of {@link OperationType}s. It could be <code>empty</code> or <code>null</code>.
 	 * @throws OHServiceException
 	 */
-	public ArrayList<OperationType> getOperationType() throws OHServiceException {
+	public List<OperationType> getOperationType() throws OHServiceException {
 		return ioOperations.getOperationType();
 	}
 
@@ -58,10 +58,7 @@ public class OperationTypeBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public boolean newOperationType(OperationType operationType) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateOperationType(operationType, true);
-		if (!errors.isEmpty()) {
-			throw new OHDataValidationException(errors);
-		}
+		validateOperationType(operationType, true);
 		return ioOperations.newOperationType(operationType);
 	}
 
@@ -73,10 +70,7 @@ public class OperationTypeBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public boolean updateOperationType(OperationType operationType) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateOperationType(operationType, false);
-		if (!errors.isEmpty()) {
-			throw new OHDataValidationException(errors);
-		}
+		validateOperationType(operationType, false);
 		return ioOperations.updateOperationType(operationType);
 	}
 
@@ -102,7 +96,7 @@ public class OperationTypeBrowserManager {
 		return ioOperations.isCodePresent(code);
 	}
 
-	protected List<OHExceptionMessage> validateOperationType(OperationType operationType, boolean insert) throws OHServiceException {
+	protected void validateOperationType(OperationType operationType, boolean insert) throws OHServiceException {
 		String key = operationType.getCode();
 		String description = operationType.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
@@ -130,6 +124,9 @@ public class OperationTypeBrowserManager {
 					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		return errors;
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
 	}
+
 }

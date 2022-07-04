@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,6 +21,8 @@
  */
 package org.isf.examination.service;
 
+import java.util.List;
+
 import org.isf.examination.model.PatientExamination;
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.utils.exception.OHServiceException;
@@ -29,10 +31,9 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Component
 public class ExaminationPatientMergedEventListener {
+
 	@Autowired
 	private ExaminationOperations examinationOperations;
 

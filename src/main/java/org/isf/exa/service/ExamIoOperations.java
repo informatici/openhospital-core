@@ -21,7 +21,6 @@
  */
 package org.isf.exa.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.exa.model.Exam;
@@ -95,12 +94,8 @@ public class ExamIoOperations {
 	 * @return the list of {@link ExamType}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<ExamType> getExamType() throws OHServiceException 
-	{
-		ArrayList<ExamType> examTypes = (ArrayList<ExamType>) typeRepository.findAllByOrderByDescriptionAsc();
-				
-	
-		return examTypes;
+	public List<ExamType> getExamType() throws OHServiceException {
+		return typeRepository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
@@ -110,16 +105,8 @@ public class ExamIoOperations {
 	 * @return <code>true</code> if the {@link Exam} has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newExam(
-			Exam exam) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		Exam savedExam = repository.save(exam);
-		result = (savedExam != null);
-		
-		return result;
+	public boolean newExam(Exam exam) throws OHServiceException {
+		return repository.save(exam) != null;
 	}
 
 	/**
@@ -129,16 +116,8 @@ public class ExamIoOperations {
 	 * @return <code>true</code> if the {@link ExamRow} has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newExamRow(
-			ExamRow examRow) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		ExamRow savedExamRow = rowRepository.save(examRow);
-		result = (savedExamRow != null);
-		
-		return result;
+	public boolean newExamRow(ExamRow examRow) throws OHServiceException {
+		return rowRepository.save(examRow) != null;
 	}
 
 	/**
@@ -147,14 +126,9 @@ public class ExamIoOperations {
 	 * @return <code>true</code> if the {@link Exam} has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updateExam(
-			Exam exam) throws OHServiceException 
-	{
-		boolean result = true;
-		
+	public boolean updateExam(Exam exam) throws OHServiceException {
 		repository.save(exam);
-    	
-		return result;	
+		return true;
 	}
 
 	/**
@@ -164,11 +138,9 @@ public class ExamIoOperations {
 	 * @throws OHServiceException
 	 */
 	public boolean deleteExam(Exam exam) throws OHServiceException {
-		boolean result = true;		
 		rowRepository.deleteByExam_Code(exam.getCode());
 		repository.delete(exam);
-		
-		return result;	
+		return true;
 	}
 
 	/**
@@ -177,15 +149,9 @@ public class ExamIoOperations {
 	 * @return <code>true</code> if the {@link ExamRow} has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean deleteExamRow(
-			ExamRow examRow) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteExamRow(ExamRow examRow) throws OHServiceException {
 		rowRepository.delete(examRow);
-		
-		return result;	
+		return true;
 	}
 
 	/**
@@ -197,18 +163,8 @@ public class ExamIoOperations {
 	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isKeyPresent(
-			Exam exam) throws OHServiceException 
-	{
-		boolean result = false;
-		Exam foundExam = repository.findOne(exam.getCode());
-		
-		if (foundExam != null)
-		{
-			result = true;
-		}
-		
-		return result;
+	public boolean isKeyPresent(Exam exam) throws OHServiceException {
+		return repository.findById(exam.getCode()).orElse(null) != null;
 	}
 	
 	/**
@@ -217,18 +173,11 @@ public class ExamIoOperations {
 	 * @param value the value to sanitize.
 	 * @return the sanitized value or <code>null</code> if the passed value is <code>null</code>.
 	 */
-	protected String sanitize(
-			String value)
-	{
-		String result = null;
-		
-		
-		if (value != null) 
-		{
-			result = value.trim().replaceAll("'", "''");
+	protected String sanitize(String value) {
+		if (value == null) {
+			return null;
 		}
-		
-		return result;
+		return value.trim().replace("'", "''");
 	}
 
 	/**
@@ -238,15 +187,8 @@ public class ExamIoOperations {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;	
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.existsById(code);
 	}
 
 	/**
@@ -256,14 +198,7 @@ public class ExamIoOperations {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isRowPresent(
-			Integer code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = rowRepository.exists(code);
-		
-		return result;	
+	public boolean isRowPresent(Integer code) throws OHServiceException {
+		return rowRepository.existsById(code);
 	}
 }
