@@ -107,7 +107,7 @@ public class DbSingleConn {
 		sbURL.append("&user=");
 		sbURL.append(username);
 		sbURL.append("&password=");
-		sbURL.append(password);
+		sbURL.append(props.getProperty("jdbc.password"));
 
 		return DriverManager.getConnection(sbURL.toString());
 	}

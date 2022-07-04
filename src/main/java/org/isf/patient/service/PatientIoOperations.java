@@ -238,5 +238,16 @@ public class PatientIoOperations {
 	public boolean isCodePresent(Integer code) throws OHServiceException {
 		return repository.existsById(code);
 	}
+	
+	
+	/**
+	 * Count all active patients
+	 * 
+	 * @return
+	 * @throws OHServiceException
+	 */
+	public long countAllActivePatients() throws OHServiceException {
+		return repository.countAllActivePatients();
+	}
 
 }

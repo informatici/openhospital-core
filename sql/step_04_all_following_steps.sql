@@ -69,3 +69,4 @@ source step_72_hospital_changes.sql;
 source step_73_ward_visit_duration.sql;
 source step_74_operation_report_button.sql;
 source step_75_add_prefix_to_table_names.sql;
+source step_XX_telemetry.sql;

@@ -22,8 +22,10 @@
 package org.isf.accounting.model;
 
 import java.time.LocalDateTime;
+import java.util.GregorianCalendar;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,25 +55,27 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @Entity
 @Table(name="OH_BILLS")
-@EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "BLL_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "BLL_CREATED_DATE"))
-@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "BLL_LAST_MODIFIED_BY"))
-@AttributeOverride(name = "active", column = @Column(name = "BLL_ACTIVE"))
-@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "BLL_LAST_MODIFIED_DATE"))
-public class Bill extends Auditable<String> implements Comparable<Bill> {
-
-	@Id
+@EntityListeners(AuditingEntityListener.class) 
+@AttributeOverrides({
+    @AttributeOverride(name="createdBy", column=@Column(name="BLL_CREATED_BY")),
+    @AttributeOverride(name="createdDate", column=@Column(name="BLL_CREATED_DATE")),
+    @AttributeOverride(name="lastModifiedBy", column=@Column(name="BLL_LAST_MODIFIED_BY")),
+    @AttributeOverride(name="active", column=@Column(name="BLL_ACTIVE")),
+    @AttributeOverride(name="lastModifiedDate", column=@Column(name="BLL_LAST_MODIFIED_DATE"))
+})
+public class Bill extends Auditable<String> implements Comparable<Bill> 
+{	
+	@Id 
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="BLL_ID")
 	private int id;
 	
 	@NotNull
-	@Column(name="BLL_DATE")		// SQL type: datetime
+	@Column(name="BLL_DATE")
 	private LocalDateTime date;
 
 	@NotNull
-	@Column(name="BLL_UPDATE")		// SQL type: datetime
+	@Column(name="BLL_UPDATE")
 	private LocalDateTime update;
 
 	@NotNull
@@ -89,7 +93,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 	@Column(name="BLL_IS_PAT")
 	private boolean isPatient;
 	
-	@ManyToOne(cascade = {CascadeType.MERGE})
+	@ManyToOne(cascade = { CascadeType.MERGE})
 	@JoinColumn(name="BLL_ID_PAT")
 	private Patient billPatient;
 		
@@ -128,7 +132,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 		this.user = "admin";
 	}
 
-	public Bill(int id, LocalDateTime  date, LocalDateTime  update,
+	public Bill(int id, LocalDateTime date, LocalDateTime update,
 			boolean isList, PriceList list, String listName, boolean isPatient,
 			Patient billPatient, String patName, String status, Double amount, Double balance, String user) {
 		super();

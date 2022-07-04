@@ -39,10 +39,10 @@ package org.isf.generaldata;
  * -------------------------------------------
  */
 public final class GeneralData extends ConfigurationProperties {
-	
+
 	private static final String FILE_PROPERTIES = "settings.properties";
 	private static final boolean EXIT_ON_FAIL = true;
-	
+
 	private final boolean SINGLEUSER;
 	private final boolean USERSLISTLOGIN;
 	
@@ -75,6 +75,7 @@ public final class GeneralData extends ConfigurationProperties {
 	public static boolean INTERNALPHARMACIES;
 	public static boolean MERGEFUNCTION;
 	public static boolean SMSENABLED;
+	public static boolean TELEMETRYENABLED;
 	public static String VIEWER;
 	public static boolean MAINMENUALWAYSONTOP;
 	public static boolean RECEIPTPRINTER;
@@ -112,7 +113,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_BILLSREPORTMONTHLY = "BillsReportMonthly";
 	private static final String DEFAULT_PHARMACEUTICALORDER = "PharmaceuticalOrder";
 	private static final String DEFAULT_PHARMACEUTICALSTOCK = "PharmaceuticalStock_ver4";
-	private static final String DEFAULT_PHARMACEUTICALSTOCKLOT = "PharmaceuticalStock_ver5"; //TODO: verify if really used
+	private static final String DEFAULT_PHARMACEUTICALSTOCKLOT = "PharmaceuticalStock_ver5"; // TODO: verify if really used
 	private static final String DEFAULT_PHARMACEUTICALAMC = "PharmaceuticalAMC";
 	private static final boolean DEFAULT_PATIENTEXTENDED = false;
 	private static final boolean DEFAULT_OPDEXTENDED = false;
@@ -124,6 +125,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final boolean DEFAULT_INTERNALPHARMACIES = false;
 	private static final boolean DEFAULT_MERGEFUNCTION = false;
 	private static final boolean DEFAULT_SMSENABLED = false;
+	private static final boolean DEFAULT_TELEMETRYENABLED = false;
 	private static final boolean DEFAULT_MAINMENUALWAYSONTOP = false;
 	private static final boolean DEFAULT_RECEIPTPRINTER = false;
 	private static final boolean DEFAULT_VIDEOMODULEENABLED = false;
@@ -142,12 +144,11 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final boolean DEFAULT_STRONGPASSWORD = true;
 
 	private static GeneralData mySingleData;
-	
+
 	public static void reset() {
-		mySingleData  = null;
+		mySingleData = null;
 	}
-	
-	
+
 	private GeneralData(String fileProperties) {
 		super(fileProperties, EXIT_ON_FAIL);
 		SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
@@ -184,6 +185,7 @@ public final class GeneralData extends ConfigurationProperties {
 		DOC_DIR = myGetProperty("DOC_DIR", DEFAULT_DOC_DIR);
 		MERGEFUNCTION = myGetProperty("MERGEFUNCTION", DEFAULT_MERGEFUNCTION);
 		SMSENABLED = myGetProperty("SMSENABLED", DEFAULT_SMSENABLED);
+		TELEMETRYENABLED = myGetProperty("TELEMETRYENABLED", DEFAULT_TELEMETRYENABLED);
 		MAINMENUALWAYSONTOP = myGetProperty("MAINMENUALWAYSONTOP", DEFAULT_MAINMENUALWAYSONTOP);
 		RECEIPTPRINTER = myGetProperty("RECEIPTPRINTER", DEFAULT_RECEIPTPRINTER);
 		VIDEOMODULEENABLED = myGetProperty("VIDEOMODULEENABLED", DEFAULT_VIDEOMODULEENABLED);
@@ -213,11 +215,9 @@ public final class GeneralData extends ConfigurationProperties {
 		return mySingleData;
 	}
 
-	
 	public static void initialize() {
 		mySingleData = new GeneralData(FILE_PROPERTIES);
 	}
-
 
 	/**
 	 * @return the SINGLEUSER

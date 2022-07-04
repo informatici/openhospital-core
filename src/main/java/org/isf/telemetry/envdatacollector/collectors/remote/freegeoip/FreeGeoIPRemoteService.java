@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,26 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.ward.service;
+package org.isf.telemetry.envdatacollector.collectors.remote.freegeoip;
 
-import java.util.List;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import org.isf.ward.model.Ward;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
+@FeignClient(name = "freegeoip-remote-service")
+public interface FreeGeoIPRemoteService {
 
-@Repository
-public interface WardIoOperationRepository extends JpaRepository<Ward, String> {
+	// @formatter:off
 
-	List<Ward> findAllByOrderByDescriptionAsc();
-	List<Ward> findByCodeNot(String code);
-	List<Ward> findByCodeContains(String id);
+	@GetMapping(value = "/json", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<FreeGeoIPJSON> retrieveGeoIPInfo();
 
-	@Query("select count(w) from Ward w where active=1")
-	long countAllActiveWards();
-
-	@Query("select sum(w.beds) from Ward w where active=1")
-	long countAllActiveBeds();
-
+	// @formatter:on
 }

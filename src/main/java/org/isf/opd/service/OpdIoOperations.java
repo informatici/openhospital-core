@@ -75,6 +75,14 @@ public class OpdIoOperations {
 	}
 	
 	/**
+	 * Retrieves creation date of the last Opd
+	 * @return reation date of the last Opd
+	 */
+	public LocalDateTime lastOpdCreationDate() {
+		return this.repository.lastOpdCreationDate();
+	}
+	
+	/**
 	 * Return all {@link Opd}s within specified dates
 	 * 
 	 * @param diseaseTypeCode
