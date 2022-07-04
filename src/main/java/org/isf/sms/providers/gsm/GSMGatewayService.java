@@ -78,6 +78,7 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 	 * 
 	 * @return <code>true</code> if the COM port is ready to be used, <code>false</code> otherwise.
 	 */
+	@Override
 	public boolean initialize() {
 		LOGGER.debug("Initialize...");
 		connected = false;
@@ -187,11 +188,8 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 					return false;
 				}
 
-			} catch (IOException ioException) {
-				LOGGER.error(ioException.getMessage(), ioException);
-				return false;
-			} catch (InterruptedException interruptedException) {
-				LOGGER.error(interruptedException.getMessage(), interruptedException);
+			} catch (IOException | InterruptedException exception) {
+				LOGGER.error(exception.getMessage(), exception);
 				return false;
 			}
 			return true;

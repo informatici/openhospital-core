@@ -22,7 +22,6 @@
 package org.isf.utils.sms;
 
 import java.awt.HeadlessException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

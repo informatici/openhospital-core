@@ -25,11 +25,20 @@ import java.util.List;
 
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WardIoOperationRepository extends JpaRepository<Ward, String> {
-    List<Ward> findAllByOrderByDescriptionAsc();
-    List<Ward> findByCodeNot(String code);
-    List<Ward> findByCodeContains(String id);
+
+	List<Ward> findAllByOrderByDescriptionAsc();
+	List<Ward> findByCodeNot(String code);
+	List<Ward> findByCodeContains(String id);
+
+	@Query("select count(w) from Ward w where active=1")
+	long countAllActiveWards();
+
+	@Query("select sum(w.beds) from Ward w where active=1")
+	long countAllActiveBeds();
+
 }

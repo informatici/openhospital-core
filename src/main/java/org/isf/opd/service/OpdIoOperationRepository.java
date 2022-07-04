@@ -21,6 +21,7 @@
  */
 package org.isf.opd.service;
 
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -30,24 +31,28 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, OpdIoOperationRepositoryCustom {
-	
-    @Query("select o from Opd o order by o.prog_year")
+
+	@Query("select o from Opd o order by o.prog_year")
 	List<Opd> findAllOrderByProgYearDesc();
-	
+
 	@Query("select o from Opd o where o.patient.code = :code order by o.prog_year")
 	List<Opd> findAllByPatient_CodeOrderByProgYearDesc(@Param("code") Integer code);
-	
+
 	@Query("select max(o.prog_year) from Opd o")
-    Integer findMaxProgYear();
+	Integer findMaxProgYear();
 
 	@Query(value = "select max(o.prog_year) from Opd o where o.visitDate >= :dateFrom and o.visitDate < :dateTo")
-    Integer findMaxProgYearWhereDateBetween(@Param("dateFrom") GregorianCalendar dateFrom, @Param("dateTo") GregorianCalendar dateTo);
+	Integer findMaxProgYearWhereDateBetween(@Param("dateFrom") GregorianCalendar dateFrom, @Param("dateTo") GregorianCalendar dateTo);
 
-    List<Opd> findTop1ByPatient_CodeOrderByDateDesc(Integer code);
-	
+	List<Opd> findTop1ByPatient_CodeOrderByDateDesc(Integer code);
+
 	@Query("select o from Opd o where o.prog_year = :prog_year")
-    List<Opd> findByProgYear(@Param("prog_year") Integer prog_year);
-	
+	List<Opd> findByProgYear(@Param("prog_year") Integer prog_year);
+
 	@Query(value = "select op from Opd op where op.prog_year = :prog_year and op.visitDate >= :dateVisitFrom and op.visitDate < :dateVisitTo")
-    List<Opd> findByProgYearAndVisitDateBetween(@Param("prog_year") Integer prog_year, @Param("dateVisitFrom") GregorianCalendar dateVisitFrom, @Param("dateVisitTo") GregorianCalendar dateVisitTo);
+	List<Opd> findByProgYearAndVisitDateBetween(@Param("prog_year") Integer prog_year, @Param("dateVisitFrom") GregorianCalendar dateVisitFrom,
+					@Param("dateVisitTo") GregorianCalendar dateVisitTo);
+
+	@Query(value = "select OPD_CREATED_DATE from Opd o where OPD_ACTIVE=1 order by OPD_ID desc limit 1", nativeQuery = true)
+	Date lastOpdCreationDate();
 }

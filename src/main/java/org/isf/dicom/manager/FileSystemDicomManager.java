@@ -108,6 +108,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * @return
 	 * @throws OHDicomException 
 	 */
+	@Override
 	public Long[] getSerieDetail(int patientID, String seriesNumber) throws OHDicomException {
 		try {
 
@@ -153,6 +154,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * @return true if success
 	 * @throws OHDicomException 
 	 */
+	@Override
 	public boolean deleteSerie(int patientId, String seriesNumber) throws OHDicomException {
 		try {
 			// seriesNumber cannot be null, so it must return false
@@ -184,6 +186,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * @return FileDicom
 	 * @throws OHDicomException 
 	 */
+	@Override
 	public FileDicom loadDetails(Long idFile, int patientId, String seriesNumber) throws OHDicomException {
 		// seriesNumber cannot be null, so it must return null
 		if (seriesNumber == null || seriesNumber.trim().length() == 0 || seriesNumber.equalsIgnoreCase("null"))
@@ -202,6 +205,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * @return details
 	 * @throws OHDicomException 
 	 */
+	@Override
 	public FileDicom loadDetails(long idFile, int patientId, String seriesNumber) throws OHDicomException {
 		try {
 			return loadData(idFile, patientId, seriesNumber);
@@ -219,6 +223,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * @return
 	 * @throws OHDicomException 
 	 */
+	@Override
 	public FileDicom[] loadPatientFiles(int patientId) throws OHDicomException {
 		try {
 			File df = getPatientDir(patientId);
@@ -245,6 +250,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * @param dicom
 	 * @throws OHDicomException 
 	 */
+	@Override
 	public void saveFile(FileDicom dicom) throws OHDicomException {
 		if (exist(dicom))
 			return;
@@ -428,6 +434,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			return blob;
 	}
 
+	@Override
 	public boolean exist(FileDicom dicom) throws OHDicomException {
 		// System.out.println("exists "+dicom.getPatId()+" - "+dicom.getDicomSeriesNumber()+" - "+
 		// dicom.getDicomSeriesInstanceUID());
@@ -660,6 +667,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 */
 	class FilterSerieDetail implements FilenameFilter {
 
+		@Override
 		public boolean accept(File dir, String name) {
 			if (name == null)
 				return false;

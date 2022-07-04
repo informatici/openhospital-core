@@ -36,8 +36,8 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.medtype.model.MedicalType;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -265,6 +265,7 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 		return getDescription();
 	}
 
+	@Override
 	public int compareTo(Medical o) {
 		return this.description.compareTo(o.getDescription());
 	}

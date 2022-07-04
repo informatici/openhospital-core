@@ -80,9 +80,7 @@ public class Interaction {
 
 		try {
 			chat.sendMessage(message);
-		} catch (XMPPException xmppException) {
-			LOGGER.error(xmppException.getMessage(), xmppException);
-		}catch (Exception exception) {
+		} catch (Exception exception) {
 			LOGGER.error(exception.getMessage(), exception);
 		}
 	}

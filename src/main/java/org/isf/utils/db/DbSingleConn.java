@@ -46,8 +46,6 @@ public class DbSingleConn {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DbSingleConn.class);
 
-	private static final int MYSQL_DEFAULT_PORT = 3306;
-
 	private static Connection pConn;
 
 	private DbSingleConn() {
@@ -98,32 +96,12 @@ public class DbSingleConn {
 			is.close();
 		}
 
-		String drivers = props.getProperty("jdbc.drivers");
-		if (drivers != null)
-			System.setProperty("jdbc.drivers", drivers);
-		String url = props.getProperty("jdbc.url");
-		String server = props.getProperty("jdbc.server");
-		String db = props.getProperty("jdbc.db");
-		String username = props.getProperty("jdbc.username");
-		String password = props.getProperty("jdbc.password");
-		String port = props.getProperty("jdbc.port");
-		if (port == null) {
-			port = String.valueOf(MYSQL_DEFAULT_PORT);
-		}
-
 		StringBuilder sbURL = new StringBuilder();
-		sbURL.append(url);
-		sbURL.append("//");
-		sbURL.append(server);
-		sbURL.append(":");
-		sbURL.append(port);
-		sbURL.append("/");
-		sbURL.append(db);
-		sbURL.append("?useUnicode=true&characterEncoding=UTF-8");
-		sbURL.append("&user=");
-		sbURL.append(username);
+		sbURL.append(props.getProperty("jdbc.url"));
+		sbURL.append("?user=");
+		sbURL.append(props.getProperty("jdbc.username"));
 		sbURL.append("&password=");
-		sbURL.append(password);
+		sbURL.append(props.getProperty("jdbc.password"));
 
 		return DriverManager.getConnection(sbURL.toString());
 	}

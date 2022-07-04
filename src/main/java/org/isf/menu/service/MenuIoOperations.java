@@ -35,10 +35,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
-public class MenuIoOperations 
-{
+public class MenuIoOperations {
+
 	@Autowired
 	private UserIoOperationRepository repository;
 	@Autowired
@@ -47,209 +47,198 @@ public class MenuIoOperations
 	private UserMenuItemIoOperationRepository menuRepository;
 	@Autowired
 	private GroupMenuIoOperationRepository groupMenuRepository;
-	
+
 	/**
 	 * Returns the list of {@link User}s
 	 * 
 	 * @return the list of {@link User}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<User> getUser() throws OHServiceException 
-	{
+	public ArrayList<User> getUser() throws OHServiceException {
 		ArrayList<User> users = (ArrayList<User>) repository.findAllByOrderByUserNameAsc();
-				
-			
+
 		return users;
+	}
+
+	/**
+	 * Count all active users
+	 * 
+	 * @return
+	 */
+	public long countAllActive() {
+		return this.repository.countAllActive();
 	}
 
 	/**
 	 * Returns the list of {@link User}s in specified groupID
 	 * 
-	 * @param groupID - the group ID
+	 * @param groupID
+	 *            - the group ID
 	 * @return the list of {@link User}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<User> getUser(
-			String groupID) throws OHServiceException 
-	{
+	public ArrayList<User> getUser(String groupID) throws OHServiceException {
 		ArrayList<User> users = (ArrayList<User>) repository.findAllWhereUserGroupNameByOrderUserNameAsc(groupID);
-				
-			
+
 		return users;
 	}
-	
+
 	/**
 	 * Returns {@link User} from its username
-	 * @param userName - the {@link User}'s username
+	 * 
+	 * @param userName
+	 *            - the {@link User}'s username
 	 * @return {@link User}
 	 * @throws OHServiceException
 	 */
-	public User getUserByName(String userName) throws OHServiceException 
-	{ 
+	public User getUserByName(String userName) throws OHServiceException {
 		return repository.findByUserName(userName);
 	}
-	
+
 	/**
 	 * Returns {@link User} description from its username
-	 * @param userName - the {@link User}'s username
+	 * 
+	 * @param userName
+	 *            - the {@link User}'s username
 	 * @return the {@link User}'s description
 	 * @throws OHServiceException
 	 */
-	public String getUsrInfo(
-			String userName) throws OHServiceException 
-	{ 
-		User user = (User)repository.findOne(userName); 
-		
-		
+	public String getUsrInfo(String userName) throws OHServiceException {
+		User user = (User) repository.findOne(userName);
+
 		return user.getDesc();
 	}
-	
+
 	/**
 	 * Returns the list of {@link UserGroup}s
 	 * 
 	 * @return the list of {@link UserGroup}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<UserGroup> getUserGroup() throws OHServiceException 
-	{
+	public ArrayList<UserGroup> getUserGroup() throws OHServiceException {
 		ArrayList<UserGroup> users = (ArrayList<UserGroup>) groupRepository.findAllByOrderByCodeAsc();
-				
-			
+
 		return users;
 	}
-	
+
 	/**
 	 * Checks if the specified {@link User} code is already present.
 	 * 
-	 * @param userName - the {@link User} code to check.
+	 * @param userName
+	 *            - the {@link User} code to check.
 	 * @return <code>true</code> if the medical code is already stored, <code>false</code> otherwise.
-	 * @throws OHServiceException if an error occurs during the check.
+	 * @throws OHServiceException
+	 *             if an error occurs during the check.
 	 */
-	public boolean isUserNamePresent(
-			String userName) throws OHServiceException 
-	{
+	public boolean isUserNamePresent(String userName) throws OHServiceException {
 		boolean result = true;
-	
-		
+
 		result = repository.exists(userName);
-		
-		return result;	
+
+		return result;
 	}
-	
+
 	/**
 	 * Checks if the specified {@link UserGroup} code is already present.
 	 * 
-	 * @param groupName - the {@link UserGroup} code to check.
+	 * @param groupName
+	 *            - the {@link UserGroup} code to check.
 	 * @return <code>true</code> if the medical code is already stored, <code>false</code> otherwise.
-	 * @throws OHServiceException if an error occurs during the check.
+	 * @throws OHServiceException
+	 *             if an error occurs during the check.
 	 */
-	public boolean isGroupNamePresent(
-			String groupName) throws OHServiceException 
-	{
+	public boolean isGroupNamePresent(String groupName) throws OHServiceException {
 		boolean result = true;
-	
-		
+
 		result = groupRepository.exists(groupName);
-		
-		return result;	
+
+		return result;
 	}
-	
+
 	/**
 	 * Inserts a new {@link User} in the DB
 	 * 
-	 * @param user - the {@link User} to insert
+	 * @param user
+	 *            - the {@link User} to insert
 	 * @return <code>true</code> if the user has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newUser(
-			User user) throws OHServiceException 
-	{
+	public boolean newUser(User user) throws OHServiceException {
 		boolean result = true;
-	
 
 		User savedUser = repository.save(user);
 		result = (savedUser != null);
-		
+
 		return result;
 	}
-		
+
 	/**
 	 * Updates an existing {@link User} in the DB
 	 * 
-	 * @param user - the {@link User} to update
+	 * @param user
+	 *            - the {@link User} to update
 	 * @return <code>true</code> if the user has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean updateUser(
-			User user) throws OHServiceException 
-	{
+	public boolean updateUser(User user) throws OHServiceException {
 		boolean result = false;
-		
-				
-		if (repository.updateDescription(user.getDesc(), user.getUserName()) > 0)
-		{
+
+		if (repository.updateDescription(user.getDesc(), user.getUserName()) > 0) {
 			result = true;
 		}
-    	
+
 		return result;
 	}
-	
+
 	/**
 	 * Updates the password of an existing {@link User} in the DB
 	 * 
-	 * @param user - the {@link User} to update
+	 * @param user
+	 *            - the {@link User} to update
 	 * @return <code>true</code> if the user has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean updatePassword(
-			User user) throws OHServiceException 
-	{
+	public boolean updatePassword(User user) throws OHServiceException {
 		boolean result = false;
-		
-				
-		if (repository.updatePassword(user.getPasswd(), user.getUserName()) > 0)
-		{
+
+		if (repository.updatePassword(user.getPasswd(), user.getUserName()) > 0) {
 			result = true;
 		}
-		
+
 		return result;
 	}
 
 	/**
 	 * Deletes an existing {@link User}
 	 * 
-	 * @param user - the {@link User} to delete
+	 * @param user
+	 *            - the {@link User} to delete
 	 * @return <code>true</code> if the user has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteUser(
-			User user) throws OHServiceException 
-	{
+	public boolean deleteUser(User user) throws OHServiceException {
 		boolean result = true;
-	
-		
+
 		repository.delete(user);
-		
-		return result;	
+
+		return result;
 	}
-	
+
 	/**
 	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link User}
 	 * 
-	 * @param aUser - the {@link User}
-	 * @return the list of {@link UserMenuItem}s 
+	 * @param aUser
+	 *            - the {@link User}
+	 * @return the list of {@link UserMenuItem}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<UserMenuItem> getMenu(
-			User aUser) throws OHServiceException 
-	{
-		ArrayList<UserMenuItem> menu = null;		
+	public ArrayList<UserMenuItem> getMenu(User aUser) throws OHServiceException {
+		ArrayList<UserMenuItem> menu = null;
 		List<Object[]> menuList = menuRepository.findAllWhereUserId(aUser.getUserName());
-		
-		
+
 		menu = new ArrayList<>();
 		for (Object[] object : menuList) {
-			
+
 			UserMenuItem umi = new UserMenuItem();
 			umi.setCode((String) object[0]);
 			umi.setButtonLabel((String) object[1]);
@@ -263,20 +252,19 @@ public class MenuIoOperations
 			umi.setActive((Integer) object[9] == 1 ? true : false);
 			menu.add(umi);
 		}
-		
+
 		return menu;
 	}
 
 	/**
 	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link UserGroup}
 	 * 
-	 * @param aGroup - the {@link UserGroup}
-	 * @return the list of {@link UserMenuItem}s 
+	 * @param aGroup
+	 *            - the {@link UserGroup}
+	 * @return the list of {@link UserMenuItem}s
 	 * @throws OHServiceException
 	 */
-	public ArrayList<UserMenuItem> getGroupMenu(
-			UserGroup aGroup) throws OHServiceException 
-	{
+	public ArrayList<UserMenuItem> getGroupMenu(UserGroup aGroup) throws OHServiceException {
 		List<Object[]> menuList = menuRepository.findAllWhereGroupId(aGroup.getCode());
 		ArrayList<UserMenuItem> menu = new ArrayList<>();
 		for (Object[] object : menuList) {
@@ -295,119 +283,102 @@ public class MenuIoOperations
 			umi.setActive(active);
 			menu.add(umi);
 		}
-		
+
 		return menu;
 	}
 
 	/**
 	 * Replaces the {@link UserGroup} rights
 	 * 
-	 * @param aGroup - the {@link UserGroup}
-	 * @param menu - the list of {@link UserMenuItem}s
-	 * @param insert - specify if is an insert or an update
+	 * @param aGroup
+	 *            - the {@link UserGroup}
+	 * @param menu
+	 *            - the list of {@link UserMenuItem}s
+	 * @param insert
+	 *            - specify if is an insert or an update
 	 * @return <code>true</code> if the menu has been replaced, <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean setGroupMenu(
-			UserGroup aGroup, 
-			ArrayList<UserMenuItem> menu, 
-			boolean insert) throws OHServiceException 
-	{
+	public boolean setGroupMenu(UserGroup aGroup, ArrayList<UserMenuItem> menu, boolean insert) throws OHServiceException {
 		boolean result = true;
 
-	
 		result = _deleteGroupMenu(aGroup);
-		
+
 		for (UserMenuItem item : menu) {
 			result = result && _insertGroupMenu(aGroup, item, insert);
 		}
-		
+
 		return result;
 	}
-	
-	public boolean _deleteGroupMenu(
-			UserGroup aGroup) throws OHServiceException 
-	{
+
+	public boolean _deleteGroupMenu(UserGroup aGroup) throws OHServiceException {
 		boolean result = true;
-				
 
 		groupMenuRepository.deleteWhereUserGroup(aGroup.getCode());
-		
+
 		return result;
 	}
-	
-	public boolean _insertGroupMenu(
-			UserGroup aGroup,
-			UserMenuItem item, 
-			boolean insert) throws OHServiceException 
-	{
+
+	public boolean _insertGroupMenu(UserGroup aGroup, UserMenuItem item, boolean insert) throws OHServiceException {
 		boolean result = true;
 		GroupMenu groupMenu = new GroupMenu();
 		groupMenu.setUserGroup(aGroup.getCode());
 		groupMenu.setMenuItem(item.getCode());
 		groupMenu.setActive((item.isActive() ? 1 : 0));
 		groupMenuRepository.save(groupMenu);
-				
+
 		return result;
 	}
-	
+
 	/**
 	 * Deletes a {@link UserGroup}
 	 * 
-	 * @param aGroup - the {@link UserGroup} to delete
+	 * @param aGroup
+	 *            - the {@link UserGroup} to delete
 	 * @return <code>true</code> if the group has been deleted, <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean deleteGroup(
-			UserGroup aGroup) throws OHServiceException 
-	{
+	public boolean deleteGroup(UserGroup aGroup) throws OHServiceException {
 		boolean result = true;
-		
-		
 
 		groupMenuRepository.deleteWhereUserGroup(aGroup.getCode());
 		groupRepository.delete(aGroup);
-		    	
+
 		return result;
 	}
 
 	/**
 	 * Insert a new {@link UserGroup} with a minimum set of rights
 	 * 
-	 * @param aGroup - the {@link UserGroup} to insert
+	 * @param aGroup
+	 *            - the {@link UserGroup} to insert
 	 * @return <code>true</code> if the group has been inserted, <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean newUserGroup(
-			UserGroup aGroup) throws OHServiceException 
-	{
+	public boolean newUserGroup(UserGroup aGroup) throws OHServiceException {
 		boolean result = true;
-	
 
 		UserGroup savedUser = groupRepository.save(aGroup);
-		result = (savedUser != null); 
-		
+		result = (savedUser != null);
+
 		return result;
 	}
 
 	/**
 	 * Updates an existing {@link UserGroup} in the DB
 	 * 
-	 * @param aGroup - the {@link UserGroup} to update
+	 * @param aGroup
+	 *            - the {@link UserGroup} to update
 	 * @return <code>true</code> if the group has been updated, <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean updateUserGroup(
-			UserGroup aGroup) throws OHServiceException 
-	{
+	public boolean updateUserGroup(UserGroup aGroup) throws OHServiceException {
 		boolean result = false;
-		
-				
-		if (groupRepository.updateDescription(aGroup.getDesc(), aGroup.getCode()) > 0)
-		{
+
+		if (groupRepository.updateDescription(aGroup.getDesc(), aGroup.getCode()) > 0) {
 			result = true;
 		}
-    			
+
 		return result;
 	}
 }

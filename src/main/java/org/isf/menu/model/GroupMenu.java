@@ -97,9 +97,11 @@ public class GroupMenu extends Auditable<String>
 	public void setMenuItem(String menuItem) {
 		this.menuItem = menuItem;
 	}
+	@Override
 	public int getActive() {
 		return active;
 	}
+	@Override
 	public void setActive(int active) {
 		this.active = active;
 	}

@@ -45,9 +45,10 @@ public class SmsSender implements Runnable {
 		LOGGER.info("SMS Sender started...");
 		SmsParameters.initialize();
 		delay = SmsParameters.LOOP;
-		LOGGER.info("SMS Sender loop set to {} seconds.", Integer.valueOf(delay));
+		LOGGER.info("SMS Sender loop set to {} seconds.", delay);
 	}
 
+	@Override
 	public void run() {
 		while (running) {
 			LOGGER.info("SMS Sender running...");
@@ -59,7 +60,7 @@ public class SmsSender implements Runnable {
 				LOGGER.error("Error list loading");
 			}
 			if (!smsList.isEmpty()) {
-				LOGGER.info("Found {} SMS to send", Integer.valueOf(smsList.size()));
+				LOGGER.info("Found {} SMS to send", smsList.size());
 				SmsSenderOperations sender = Context.getApplicationContext().getBean(SmsSenderOperations.class);
 				if (sender.initialize()) {
 					for (Sms sms : smsList) {
@@ -70,7 +71,7 @@ public class SmsSender implements Runnable {
 								try {
 									smsOp.saveOrUpdate(sms);
 								} catch (OHServiceException e) {
-									LOGGER.error("Failed saving: " + e.getMessage());
+									LOGGER.error("Failed saving: {}", e.getMessage());
 								}
 								LOGGER.debug("Sent");
 							} else {
@@ -79,7 +80,7 @@ public class SmsSender implements Runnable {
 						}
 					}
 					boolean terminationResult = sender.terminate();
-					LOGGER.debug("termination result: " + terminationResult);
+					LOGGER.debug("termination result: {}", terminationResult);
 				} else {
 					LOGGER.error("SMS Sender HTTP initialization error");
 					LOGGER.error("Stopping HTTP Sender...");
