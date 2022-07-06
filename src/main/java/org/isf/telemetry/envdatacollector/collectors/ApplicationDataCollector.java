@@ -21,18 +21,12 @@
  */
 package org.isf.telemetry.envdatacollector.collectors;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.isf.generaldata.Version;
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
-import org.isf.utils.db.DbSingleConn;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
