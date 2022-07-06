@@ -26,7 +26,6 @@ public interface CollectorsConst {
 	// FUN_DBMS
 	public static final String DBMS_DRIVER_NAME = "dbms_driver_name";
 	public static final String DBMS_DRIVER_VERSION = "dbms_driver_version";
-	public static final String DBMS_USERNAME = "dbms_username";
 	public static final String DBMS_PRODUCT_NAME = "dbms_product_name";
 	public static final String DBMS_PRODUCT_VERSION = "dbms_product_version";
 

@@ -21,17 +21,10 @@
  */
 package org.isf.telemetry.envdatacollector.collectors;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
@@ -69,7 +62,6 @@ public class DBMSDataCollector extends AbstractDataCollector {
 			DatabaseMetaData dbmd = con.getMetaData();
 			result.put(CollectorsConst.DBMS_DRIVER_NAME, dbmd.getDriverName());
 			result.put(CollectorsConst.DBMS_DRIVER_VERSION, dbmd.getDriverVersion());
-			result.put(CollectorsConst.DBMS_USERNAME, dbmd.getUserName());
 			result.put(CollectorsConst.DBMS_PRODUCT_NAME, dbmd.getDatabaseProductName());
 			result.put(CollectorsConst.DBMS_PRODUCT_VERSION, dbmd.getDatabaseProductVersion());
 			return result;
