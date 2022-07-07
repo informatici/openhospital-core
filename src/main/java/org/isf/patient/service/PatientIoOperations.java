@@ -189,8 +189,12 @@ public class PatientIoOperations {
 			PatientProfilePhoto photo = patient.getPatientProfilePhoto();
 			patient.setPatientProfilePhoto(null);
 			Patient patientSaved = repository.save(patient);
-			fileSystemPatientPhotoRepository.save(GeneralData.PATIENTPHOTO, patient.getCode(), photo.getPhoto());
-			patientSaved.setPatientProfilePhoto(photo);
+			if (photo != null && photo.getPhoto() != null) {
+				fileSystemPatientPhotoRepository.save(GeneralData.PATIENTPHOTO, patient.getCode(), photo.getPhoto());
+			} else if (this.fileSystemPatientPhotoRepository.exist(GeneralData.PATIENTPHOTO, patient.getCode())) {
+				this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTO, patient.getCode());
+			}
+				
 			return patientSaved;
 		} catch (OHServiceException e) {
 			e.printStackTrace();
@@ -218,7 +222,12 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public boolean deletePatient(Patient patient) throws OHServiceException {
-		return  repository.updateDeleted(patient.getCode()) > 0;
+		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTO);
+		if (isLoadProfilePhotoFromDb) {
+			return  repository.updateDeleted(patient.getCode()) > 0;
+		}
+		this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTO, patient.getCode());		
+		return true;	
 	}
 
 	/**

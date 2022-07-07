@@ -49,7 +49,7 @@ public class FileSystemPatientPhotoRepository {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemPatientPhotoRepository.class);
 
-	private static final String IMAGE_FORMAT = ".jpg";
+	private static final String IMAGE_FORMAT = ".png";
 
 	public boolean exist(String path, Integer patientId) {
 		File patientIdFolder = new File(path);
