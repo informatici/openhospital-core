@@ -134,14 +134,12 @@ public class LabIoOperations {
 		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
 		Iterable<Laboratory> laboritories = null;
 			if(!exam.equals("") && patient != null) {
-				System.out.println("1");
 				laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCode(dateFrom, dateTo, exam, patient.getCode());
 			}
 			if(!exam.equals("") && patient == null ) {
 				laboritories = repository.findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam);
 			}
 			if(patient != null && exam.equals("")) {
-				System.out.println("3");
 				laboritories = repository.findByLabDateBetweenAndPatientCode(dateFrom, dateTo, patient.getCode());
 			}
 			if(laboritories == null)
