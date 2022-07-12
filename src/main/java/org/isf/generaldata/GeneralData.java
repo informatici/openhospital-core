@@ -51,6 +51,7 @@ public final class GeneralData extends ConfigurationProperties {
 	public static boolean AUTOMATICLOTWARD_TOWARD;
 	public static boolean LOTWITHCOST;
 	public static String PATIENTSHEET;
+	public static boolean USERSLISTLOGIN;
 	public static String VISITSHEET;
 	public static String EXAMINATIONCHART;
 	public static String OPDCHART;
