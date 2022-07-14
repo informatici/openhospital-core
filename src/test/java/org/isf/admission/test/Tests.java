@@ -144,7 +144,7 @@ public class Tests extends OHCoreTestCase {
 
 	@BeforeClass
 	public static void setUpClass() {
-		GeneralData.PATIENTPHOTO = "DB";
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		testAdmission = new TestAdmission();
 		testWard = new TestWard();
 		testPatient = new TestPatient();

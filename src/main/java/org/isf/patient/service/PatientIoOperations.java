@@ -119,14 +119,14 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public Patient getPatient(Integer code) throws OHServiceException {
-		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTO);
+		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		List<Patient> patients = repository.findAllWhereIdAndDeleted(code, NOT_DELETED_STATUS);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
 			if (isLoadProfilePhotoFromDb) {
 				Hibernate.initialize(patient.getPatientProfilePhoto());
 			} else {
-				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTO);
+				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
 			}
 			return patient;
 		}
@@ -142,14 +142,14 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public Patient getPatient(String name) throws OHServiceException {
-		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTO);
+		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		List<Patient> patients = repository.findByNameAndDeletedOrderByName(name, NOT_DELETED_STATUS);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
 			if (isLoadProfilePhotoFromDb) {
 				Hibernate.initialize(patient.getPatientProfilePhoto());
 			} else {
-				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTO);
+				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
 			}
 			return patient;
 		}
@@ -164,12 +164,12 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public Patient getPatientAll(Integer code) throws OHServiceException {
-		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTO);
+		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		Patient patient = repository.findById(code).orElse(null);
 		if (isLoadProfilePhotoFromDb) {
 			Hibernate.initialize(patient.getPatientProfilePhoto());
 		} else {
-			fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTO);
+			fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
 		}
 		return patient;
 	}
@@ -181,7 +181,7 @@ public class PatientIoOperations {
 	 * @return saved / updated patient
 	 */
 	public Patient savePatient(Patient patient) {
-		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTO);
+		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		if (isLoadProfilePhotoFromDb) {
 			return repository.save(patient);
 		}
@@ -190,9 +190,9 @@ public class PatientIoOperations {
 			patient.setPatientProfilePhoto(null);
 			Patient patientSaved = repository.save(patient);
 			if (photo != null && photo.getPhoto() != null) {
-				fileSystemPatientPhotoRepository.save(GeneralData.PATIENTPHOTO, patient.getCode(), photo.getPhoto());
-			} else if (this.fileSystemPatientPhotoRepository.exist(GeneralData.PATIENTPHOTO, patient.getCode())) {
-				this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTO, patient.getCode());
+				fileSystemPatientPhotoRepository.save(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode(), photo.getPhoto());
+			} else if (this.fileSystemPatientPhotoRepository.exist(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode())) {
+				this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());
 			}
 				
 			return patientSaved;
@@ -222,11 +222,11 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public boolean deletePatient(Patient patient) throws OHServiceException {
-		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTO);
+		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		if (isLoadProfilePhotoFromDb) {
 			return  repository.updateDeleted(patient.getCode()) > 0;
 		}
-		this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTO, patient.getCode());		
+		this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());		
 		return true;	
 	}
 
@@ -281,13 +281,13 @@ public class PatientIoOperations {
 	}
 
 	public PatientProfilePhoto retrievePatientProfilePhoto(Patient patient) {
-		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTO);
+		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		if (isLoadProfilePhotoFromDb) {
 			Hibernate.initialize(patient.getPatientProfilePhoto());
 			return patient.getPatientProfilePhoto();
 		} else {
 			try {
-				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTO);
+				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
 				return patient.getPatientProfilePhoto();
 			} catch (OHServiceException e) {
 				// TODO Auto-generated catch block

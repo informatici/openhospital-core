@@ -87,7 +87,7 @@ public final class GeneralData extends ConfigurationProperties {
 	public static String PATIENTBILLGROUPED;
 	public static String PATIENTBILLSTATEMENT;
 	public static boolean DEBUG;
-	public static String PATIENTPHOTO;
+	public static String PATIENTPHOTOSTORAGE;
 
 	private static final String DEFAULT_LANGUAGE = "en";
 	private static final boolean DEFAULT_SINGLEUSER = false;
@@ -187,7 +187,7 @@ public final class GeneralData extends ConfigurationProperties {
 		PATIENTBILLGROUPED = myGetProperty("PATIENTBILLGROUPED", DEFAULT_PATIENTBILLGROUPED);
 		PATIENTBILLSTATEMENT = myGetProperty("PATIENTBILLSTATEMENT", DEFAULT_PATIENTBILLSTATEMENT);
 		DEBUG = myGetProperty("DEBUG", DEFAULT_DEBUG);
-		PATIENTPHOTO = myGetProperty("PATIENTPHOTO", DEFAULT_PATIENTPHOTO);
+		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTO);
 			
 	}
 

@@ -69,7 +69,7 @@ public class Tests extends OHCoreTestCase {
 	
 	@BeforeClass
 	public static void setUpClass() {
-		GeneralData.PATIENTPHOTO = "DB";
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		testPatient = new TestPatient();
 		testOpd = new TestOpd();
 	}

@@ -235,7 +235,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewVisitsSMSTrueDateFuture() throws Exception {
-		GeneralData.PATIENTPHOTO = "DB";
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findById(id).get();
@@ -251,7 +251,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewVisitsSMSTrueMessageTooLong() throws Exception {
-		GeneralData.PATIENTPHOTO = "DB";
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findById(id).get();

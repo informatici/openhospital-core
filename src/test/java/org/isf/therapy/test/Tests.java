@@ -196,7 +196,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewTherapiesWithSMSDateAfterToday() throws Exception {
-		GeneralData.PATIENTPHOTO = "DB";
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
 		Patient patient = testPatient.setup(false);
@@ -215,7 +215,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewTherapiesWithSMSDateAfterTodayTruncateMessage() throws Exception {
-		GeneralData.PATIENTPHOTO = "DB";
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
 		Patient patient = testPatient.setup(false);
@@ -282,7 +282,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrDeleteTherapyRow() throws Exception {
-		GeneralData.PATIENTPHOTO = "DB";
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		int id = setupTestTherapyRow(false);
 		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).get();
 		assertThat(therapyManager.deleteAllTherapies(foundTherapyRow.getPatient().getCode())).isTrue();
