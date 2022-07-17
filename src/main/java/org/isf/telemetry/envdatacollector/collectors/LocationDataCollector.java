@@ -25,8 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
-import org.isf.telemetry.envdatacollector.collectors.remote.freegeoip.FreeGeoIPJSON;
-import org.isf.telemetry.envdatacollector.collectors.remote.freegeoip.FreeGeoIPService;
+import org.isf.telemetry.envdatacollector.collectors.remote.geoiplookup.GeoIpLookup;
+import org.isf.telemetry.envdatacollector.collectors.remote.geoiplookup.GeoIpLookupService;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ public class LocationDataCollector extends AbstractDataCollector {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LocationDataCollector.class);
 
 	@Autowired
-	private FreeGeoIPService freeGeoIpService;
+	private GeoIpLookupService geoIpLookupService;
 
 	@Override
 	public String getId() {
@@ -60,14 +60,15 @@ public class LocationDataCollector extends AbstractDataCollector {
 		LOGGER.debug("Collecting location data...");
 		Map<String, String> result = new HashMap<>();
 		try {
-			FreeGeoIPJSON json = this.freeGeoIpService.retrieveGeoIpInfo();
+			GeoIpLookup json = this.geoIpLookupService.retrieveGeoIpInfo();
 			result.put(CollectorsConst.LOC_COUNTRY_NAME, json.getCountryName());
 			result.put(CollectorsConst.LOC_COUNTRY_CODE, json.getCountryCode());
 			result.put(CollectorsConst.LOC_REGION_NAME, json.getRegionName());
-			result.put(CollectorsConst.LOC_REGION_CODE, json.getRegionCode());
 			result.put(CollectorsConst.LOC_CITY, json.getCity());
-			result.put(CollectorsConst.LOC_ZIP_CODE, json.getZipCode());
+			result.put(CollectorsConst.LOC_ZIP_CODE, json.getPostalCode());
 			result.put(CollectorsConst.LOC_TIMEZONE, json.getTimeZone());
+			result.put(CollectorsConst.LOC_CURRENCY_CODE, json.getCurrencyCode());
+			result.put(CollectorsConst.LOC_CURRENCY_NAME, json.getCurrencyName());
 		} catch (RuntimeException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());
