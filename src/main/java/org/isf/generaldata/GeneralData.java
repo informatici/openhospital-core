@@ -35,6 +35,7 @@ package org.isf.generaldata;
  * 10/08/2011 - Claudia  - added PATIENTVACCINEEXTENDED to show patient on Patient Vaccine 
  * 19/10/2011 - Mwithi   - GeneralData 2.0: catching exception on single property and assign DEFAULT value  
  * 29/12/2011 - Nicola   - added XMPPMODULEENABLED to enable/disable communication module
+ * 06/07/2022 - Nicole   - added USERSLISTLOGIN to login by typing the username in a textbox (no) or selecting the user from a list (yes)
  * -------------------------------------------
  */
 public final class GeneralData extends ConfigurationProperties {
@@ -50,6 +51,7 @@ public final class GeneralData extends ConfigurationProperties {
 	public static boolean AUTOMATICLOTWARD_TOWARD;
 	public static boolean LOTWITHCOST;
 	public static String PATIENTSHEET;
+	public static boolean USERSLISTLOGIN;
 	public static String VISITSHEET;
 	public static String EXAMINATIONCHART;
 	public static String OPDCHART;
@@ -91,6 +93,7 @@ public final class GeneralData extends ConfigurationProperties {
 
 	private static final String DEFAULT_LANGUAGE = "en";
 	private static final boolean DEFAULT_SINGLEUSER = false;
+	private static final boolean DEFAULT_USERSLISTLOGIN = false;
 	private static final boolean DEFAULT_AUTOMATICLOT_IN = true;
 	private static final boolean DEFAULT_AUTOMATICLOT_OUT = true;
 	private static final boolean DEFAULT_AUTOMATICLOTWARD_TOWARD = true;
@@ -107,7 +110,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_BILLSREPORTMONTHLY = "BillsReportMonthly";
 	private static final String DEFAULT_PHARMACEUTICALORDER = "PharmaceuticalOrder";
 	private static final String DEFAULT_PHARMACEUTICALSTOCK = "PharmaceuticalStock_ver4";
-	private static final String DEFAULT_PHARMACEUTICALSTOCKLOT = "PharmaceuticalStock_ver5"; // TODO: verify if really used
+	private static final String DEFAULT_PHARMACEUTICALSTOCKLOT = "PharmaceuticalStock_ver5"; //TODO: verify if really used
 	private static final String DEFAULT_PHARMACEUTICALAMC = "PharmaceuticalAMC";
 	private static final boolean DEFAULT_PATIENTEXTENDED = false;
 	private static final boolean DEFAULT_OPDEXTENDED = false;
@@ -143,6 +146,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private GeneralData(String fileProperties) {
 		super(fileProperties, EXIT_ON_FAIL);
 		SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
+		USERSLISTLOGIN = myGetProperty("USERSLISTLOGIN", DEFAULT_USERSLISTLOGIN);
 		LANGUAGE = myGetProperty("LANGUAGE", DEFAULT_LANGUAGE);
 		AUTOMATICLOT_IN = myGetProperty("AUTOMATICLOT_IN", DEFAULT_AUTOMATICLOT_IN);
 		AUTOMATICLOT_OUT = myGetProperty("AUTOMATICLOT_OUT", DEFAULT_AUTOMATICLOT_OUT);
@@ -150,7 +154,7 @@ public final class GeneralData extends ConfigurationProperties {
 		LOTWITHCOST = myGetProperty("LOTWITHCOST", DEFAULT_LOTWITHCOST);
 		PATIENTSHEET = myGetProperty("PATIENTSHEET", DEFAULT_PATIENTSHEET);
 		VISITSHEET = myGetProperty("VISITSHEET", DEFAULT_VISITSHEET);
-		EXAMINATIONCHART = myGetProperty("EXAMINATIONCHART", DEFAULT_EXAMINATIONCHART);
+		EXAMINATIONCHART =myGetProperty("EXAMINATIONCHART", DEFAULT_EXAMINATIONCHART);
 		OPDCHART = myGetProperty("OPDCHART", DEFAULT_OPDCHART);
 		ADMCHART = myGetProperty("ADMCHART", DEFAULT_ADMCHART);
 		DISCHART = myGetProperty("DISCHART", DEFAULT_DISCHART);
@@ -207,5 +211,12 @@ public final class GeneralData extends ConfigurationProperties {
 	public boolean getSINGLEUSER() {
 		return SINGLEUSER;
 	}
-
+	
+	
+	/**
+	 * @return the USERSLISTLOGIN
+	 */
+	public boolean getUSERSLISTLOGIN() {
+		return USERSLISTLOGIN;
+	}
 }
