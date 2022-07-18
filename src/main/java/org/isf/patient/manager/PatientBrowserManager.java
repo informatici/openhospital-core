@@ -427,5 +427,13 @@ public class PatientBrowserManager {
 		}
 		return birthDate != null && !birthDate.isAfter(now);
 	}
-
+	
+	/**
+	 * Method that returns the full list of Cities of the patient not logically deleted: <br>
+	 * @return the list of Cities (could be empty)
+	 * @throws OHServiceException
+	 */
+	public List<String> getCities() throws OHServiceException {
+		return ioOperations.getCities();
+	}
 }

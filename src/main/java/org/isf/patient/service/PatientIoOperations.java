@@ -238,5 +238,15 @@ public class PatientIoOperations {
 	public boolean isCodePresent(Integer code) throws OHServiceException {
 		return repository.existsById(code);
 	}
+	
+	/**
+	 * Method that get cities is going to be used.
+	 *
+	 * @return list of Cities
+	 * @throws OHServiceException
+	 */
+	public List<String> getCities() throws OHServiceException {
+		return repository.findCities();
+	}
 
 }
