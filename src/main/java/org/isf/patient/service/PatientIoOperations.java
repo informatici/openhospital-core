@@ -36,15 +36,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * ------------------------------------------ PatientIoOperations - dB
- * operations for the patient entity -----------------------------------------
- * modification history 05/05/2005 - giacomo - first beta version 03/11/2006 -
- * ross - added toString method. Gestione apici per nome, cognome, citta',
- * indirizzo e note 11/08/2008 - alessandro - added father & mother's names
- * 26/08/2008 - claudio - added birth date modified age 01/01/2009 - Fabrizio -
- * changed the calls to PAT_AGE fields to return again an int type 03/12/2009 -
- * Alex - added method for merge two patients history
  * ------------------------------------------
+ * PatientIoOperations - dB operations for the patient entity
+ * -----------------------------------------
+ * modification history
+ * 05/05/2005 - giacomo  - first beta version
+ * 03/11/2006 - ross - added toString method. Gestione apici per
+ * nome, cognome, citta', indirizzo e note
+ * 11/08/2008 - alessandro - added father & mother's names
+ * 26/08/2008 - claudio    - added birth date
+ * modified age
+ * 01/01/2009 - Fabrizio   - changed the calls to PAT_AGE fields to
+ * return again an int type
+ * 03/12/2009 - Alex       - added method for merge two patients history
  */
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
@@ -89,8 +93,7 @@ public class PatientIoOperations {
 	}
 
 	/**
-	 * Method that returns the full list of Patients not logically deleted, having
-	 * the passed String in:<br>
+	 * Method that returns the full list of Patients not logically deleted, having the passed String in:<br>
 	 * - code<br>
 	 * - firstName<br>
 	 * - secondName<br>
@@ -190,8 +193,7 @@ public class PatientIoOperations {
 
 	/**
 	 * Method that check if a Patient is already present in the DB by his/her name
-	 * (the passed string 'name' should be a concatenation of firstName + " " +
-	 * secondName
+	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName
 	 *
 	 * @param name
 	 * @return true - if the patient is already present
@@ -222,6 +224,7 @@ public class PatientIoOperations {
 	@Transactional
 	public boolean mergePatientHistory(Patient mergedPatient, Patient obsoletePatient) throws OHServiceException {
 		applicationEventPublisher.publishEvent(new PatientMergedEvent(obsoletePatient, mergedPatient));
+		repository.delete(obsoletePatient);
 		return true;
 	}
 
@@ -229,8 +232,7 @@ public class PatientIoOperations {
 	 * Checks if the code is already in use
 	 *
 	 * @param code - the patient code
-	 * @return <code>true</code> if the code is already in use, <code>false</code>
-	 *         otherwise
+	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {

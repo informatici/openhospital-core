@@ -48,8 +48,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "SUP_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "SUP_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "SUP_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE SUPPLIER SET SUP_ACTIVE = 0 WHERE SUP_ID = ? AND SUP_LOCK = ?")
-@Where(clause = "SUP_ACTIVE = 1")
+@SQLDelete(sql = "UPDATE SUPPLIER SET SUP_ACTIVE=0 WHERE SUP_ID=?")
+@Where(clause = "SUP_ACTIVE=1")
 public class Supplier extends Auditable<String> implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
