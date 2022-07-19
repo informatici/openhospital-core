@@ -52,7 +52,7 @@ public interface CollectorsConst {
 	public static final String APP_RELEASE = "app_release";
 
 	// FUN_OH
-	public static final String OH_TOTAL_ACTIVE_PATIENTS = "oh_active_patiens";
+	public static final String OH_TOTAL_ACTIVE_PATIENTS = "oh_active_patients";
 	public static final String OH_TOTAL_ACTIVE_USERS = "oh_active_users";
 	public static final String OH_TOTAL_ACTIVE_WARDS = "oh_active_wards";
 	public static final String OH_TOTAL_ACTIVE_BEDS = "oh_active_beds";
