@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.telemetry.envdatacollector.collectors.remote.freegeoip;
+package org.isf.telemetry.envdatacollector.collectors.remote.geoiplookup;
 
 import java.util.Properties;
 
@@ -37,28 +37,28 @@ import feign.Feign;
 import feign.slf4j.Slf4jLogger;
 
 @Component
-public class FreeGeoIPService {
+public class GeoIpLookupService {
 
-	private static final String SERVICE_NAME = "freegeoip-remote-service";
-	private static final Logger LOGGER = LoggerFactory.getLogger(FreeGeoIPService.class);
+	private static final String SERVICE_NAME = "geoiplookup-remote-service";
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeoIpLookupService.class);
 
 	@Resource(name = "ipinfoProperties")
 	private Properties properties;
 
-	public FreeGeoIPJSON retrieveGeoIpInfo() {
-		FreeGeoIPRemoteService httpClient = buildHttlClient();
-		LOGGER.debug("FreeGeoIP request start");
-		ResponseEntity<FreeGeoIPJSON> rs = httpClient.retrieveGeoIPInfo();
-		FreeGeoIPJSON result = rs.getBody();
-		LOGGER.debug("FreeGeoIP response: {}", result);
+	public GeoIpLookup retrieveGeoIpInfo() {
+		GeoIpLookupRemoteService httpClient = buildHttlClient();
+		LOGGER.debug("GeoIpLookup request start");
+		ResponseEntity<GeoIpLookup> rs = httpClient.retrieveGeoIPInfo();
+		GeoIpLookup result = rs.getBody();
+		LOGGER.debug("GeoIpLookup response: {}", result);
 		return result;
 	}
 
-	private FreeGeoIPRemoteService buildHttlClient() {
+	private GeoIpLookupRemoteService buildHttlClient() {
 		String baseUrl = this.properties.getProperty(SERVICE_NAME + ".ribbon.base-url");
 		// For debug remember to update log level to: feign.Logger.Level.FULL. Happy debugging!
-		return Feign.builder().encoder(new CustomCommonEncoder()).decoder(new CustomCommonDecoder()).logger(new Slf4jLogger(FreeGeoIPService.class))
-						.logLevel(feign.Logger.Level.BASIC).contract(new SpringMvcContract()).target(FreeGeoIPRemoteService.class, baseUrl);
+		return Feign.builder().encoder(new CustomCommonEncoder()).decoder(new CustomCommonDecoder()).logger(new Slf4jLogger(GeoIpLookupService.class))
+						.logLevel(feign.Logger.Level.BASIC).contract(new SpringMvcContract()).target(GeoIpLookupRemoteService.class, baseUrl);
 	}
 
 }

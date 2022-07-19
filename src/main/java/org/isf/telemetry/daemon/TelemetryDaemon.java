@@ -65,7 +65,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 	public void run() {
 		while (running) {
 			LOGGER.info("Telemetry module running ({})...", updateSettingsCounter);
-			boolean isSendingMessageServiceActive = settings.getActive().booleanValue();
+			boolean isSendingMessageServiceActive = settings != null && settings.getActive() != null ? settings.getActive().booleanValue() : false;
 			if (!isSendingMessageServiceActive) {
 				LOGGER.debug("Telemetry module DISABLED (reloading settings in {} seconds)",
 						calculateReloadSettingsTime());

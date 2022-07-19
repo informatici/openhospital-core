@@ -19,15 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.telemetry.envdatacollector.collectors.remote.freegeoip;
+package org.isf.telemetry.envdatacollector.collectors.remote.geoiplookup;
 
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * @author andrei
+ *
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FreeGeoIPJSON implements Serializable {
+public class GeoIpLookup implements Serializable {
 
 	private static final long serialVersionUID = -4751558360322494817L;
 
@@ -39,19 +43,16 @@ public class FreeGeoIPJSON implements Serializable {
 	@JsonProperty("country_name")
 	private String countryName;
 
-	@JsonProperty("region_code")
-	private String regionCode;
-
-	@JsonProperty("region_name")
+	@JsonProperty("region")
 	private String regionName;
 
 	@JsonProperty("city")
 	private String city;
 
-	@JsonProperty("zip_code")
-	private String zipCode;
+	@JsonProperty("postal_code")
+	private String postalCode;
 
-	@JsonProperty("time_zone")
+	@JsonProperty("timezone_name")
 	private String timeZone;
 
 	@JsonProperty("latitude")
@@ -59,9 +60,13 @@ public class FreeGeoIPJSON implements Serializable {
 
 	@JsonProperty("longitude")
 	private Double longitude;
-
-	@JsonProperty("metro_code")
-	private Integer metro_code;
+	
+	@JsonProperty("currency_code")
+	private String currencyCode;
+	
+	@JsonProperty("currency_name")
+	private String currencyName;
+	
 
 	public String getIp() {
 		return ip;
@@ -87,12 +92,30 @@ public class FreeGeoIPJSON implements Serializable {
 		this.countryName = countryName;
 	}
 
-	public String getRegionCode() {
-		return regionCode;
+
+
+	public String getPostalCode() {
+		return postalCode;
 	}
 
-	public void setRegionCode(String regionCode) {
-		this.regionCode = regionCode;
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
+	}
+
+	public String getCurrencyCode() {
+		return currencyCode;
+	}
+
+	public void setCurrencyCode(String currencyCode) {
+		this.currencyCode = currencyCode;
+	}
+
+	public String getCurrencyName() {
+		return currencyName;
+	}
+
+	public void setCurrencyName(String currencyName) {
+		this.currencyName = currencyName;
 	}
 
 	public String getRegionName() {
@@ -111,13 +134,6 @@ public class FreeGeoIPJSON implements Serializable {
 		this.city = city;
 	}
 
-	public String getZipCode() {
-		return zipCode;
-	}
-
-	public void setZipCode(String zipCode) {
-		this.zipCode = zipCode;
-	}
 
 	public String getTimeZone() {
 		return timeZone;
@@ -141,14 +157,6 @@ public class FreeGeoIPJSON implements Serializable {
 
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
-	}
-
-	public Integer getMetro_code() {
-		return metro_code;
-	}
-
-	public void setMetro_code(Integer metro_code) {
-		this.metro_code = metro_code;
 	}
 
 }

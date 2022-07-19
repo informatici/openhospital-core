@@ -19,20 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.telemetry.envdatacollector.collectors.remote.freegeoip;
+package org.isf.telemetry.envdatacollector.collectors.remote.geoiplookup;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@FeignClient(name = "freegeoip-remote-service")
-public interface FreeGeoIPRemoteService {
+@FeignClient(name = "geoiplookup-remote-service")
+public interface GeoIpLookupRemoteService {
 
 	// @formatter:off
 
-	@GetMapping(value = "/json", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<FreeGeoIPJSON> retrieveGeoIPInfo();
+	@GetMapping(value = "/8.8.8.8", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GeoIpLookup> retrieveGeoIPInfo();
 
 	// @formatter:on
 }
