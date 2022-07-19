@@ -40,6 +40,7 @@ public class TestWard {
 	private boolean isPharmacy = true;
 	private boolean isFemale = false;
 	private boolean isMale = true;
+	private int visitDuration = 30;
 
 	public Ward setup(boolean usingSet) throws OHException {
 		return setup(usingSet, false);
@@ -77,6 +78,7 @@ public class TestWard {
 		ward.setNurs(nurs);
 		ward.setPharmacy(isPharmacy);
 		ward.setTelephone(telephone);
+		ward.setVisitDuration(visitDuration);
 	}
 
 	public void check(Ward ward) {
@@ -91,5 +93,6 @@ public class TestWard {
 		assertThat(ward.getNurs()).isEqualTo(nurs);
 		assertThat(ward.isPharmacy()).isEqualTo(isPharmacy);
 		assertThat(ward.getTelephone()).isEqualTo(telephone);
+		assertThat(ward.getVisitDuration()).isEqualTo(visitDuration);
 	}
 }

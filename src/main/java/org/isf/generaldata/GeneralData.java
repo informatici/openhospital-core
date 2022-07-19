@@ -35,6 +35,7 @@ package org.isf.generaldata;
  * 10/08/2011 - Claudia  - added PATIENTVACCINEEXTENDED to show patient on Patient Vaccine 
  * 19/10/2011 - Mwithi   - GeneralData 2.0: catching exception on single property and assign DEFAULT value  
  * 29/12/2011 - Nicola   - added XMPPMODULEENABLED to enable/disable communication module
+ * 06/07/2022 - Nicole   - added USERSLISTLOGIN to login by typing the username in a textbox (no) or selecting the user from a list (yes)
  * -------------------------------------------
  */
 public final class GeneralData extends ConfigurationProperties {
@@ -43,6 +44,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final boolean EXIT_ON_FAIL = true;
 	
 	private final boolean SINGLEUSER;
+	private final boolean USERSLISTLOGIN;
 	
 	public static String LANGUAGE;
 	public static boolean AUTOMATICLOT_IN;
@@ -90,6 +92,7 @@ public final class GeneralData extends ConfigurationProperties {
 
 	private static final String DEFAULT_LANGUAGE = "en";
 	private static final boolean DEFAULT_SINGLEUSER = false;
+	private static final boolean DEFAULT_USERSLISTLOGIN = false;
 	private static final boolean DEFAULT_AUTOMATICLOT_IN = true;
 	private static final boolean DEFAULT_AUTOMATICLOT_OUT = true;
 	private static final boolean DEFAULT_AUTOMATICLOTWARD_TOWARD = true;
@@ -142,6 +145,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private GeneralData(String fileProperties) {
 		super(fileProperties, EXIT_ON_FAIL);
 		SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
+		USERSLISTLOGIN = myGetProperty("USERSLISTLOGIN", DEFAULT_USERSLISTLOGIN);
 		LANGUAGE = myGetProperty("LANGUAGE", DEFAULT_LANGUAGE);
 		AUTOMATICLOT_IN = myGetProperty("AUTOMATICLOT_IN", DEFAULT_AUTOMATICLOT_IN);
 		AUTOMATICLOT_OUT = myGetProperty("AUTOMATICLOT_OUT", DEFAULT_AUTOMATICLOT_OUT);
@@ -207,5 +211,12 @@ public final class GeneralData extends ConfigurationProperties {
 	public boolean getSINGLEUSER() {
 		return SINGLEUSER;
 	}
-
+	
+	
+	/**
+	 * @return the USERSLISTLOGIN
+	 */
+	public boolean getUSERSLISTLOGIN() {
+		return USERSLISTLOGIN;
+	}
 }

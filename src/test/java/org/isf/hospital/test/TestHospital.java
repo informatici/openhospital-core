@@ -23,6 +23,8 @@ package org.isf.hospital.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.sql.Time;
+
 import org.isf.hospital.model.Hospital;
 import org.isf.utils.exception.OHException;
 
@@ -36,6 +38,10 @@ public class TestHospital {
 	private String fax = "TestFax";
 	private String email = "TestEmail";
 	private String currencyCod = "Cod";
+	private Time startHour = Time.valueOf(Hospital.VISIT_START_TIME);
+	private Time endHour = Time.valueOf(Hospital.VISIT_END_TIME);
+	private int visitIncreemnt = Hospital.VISIT_INCREMENT;
+	private int visitDuration = Hospital.VISIT_DURATION;
 
 	public Hospital setup(boolean usingSet) throws OHException {
 		Hospital hospital;
@@ -45,7 +51,7 @@ public class TestHospital {
 			setParameters(hospital);
 		} else {
 			// Create Hospital with all parameters 
-			hospital = new Hospital(code, description, address, city, telephone, fax, email, currencyCod);
+			hospital = new Hospital(code, description, address, city, telephone, fax, email, currencyCod, startHour, endHour, visitIncreemnt, visitDuration);
 		}
 
 		return hospital;
@@ -60,6 +66,10 @@ public class TestHospital {
 		hospital.setEmail(email);
 		hospital.setFax(fax);
 		hospital.setCurrencyCod(currencyCod);
+		hospital.setVisitStartTime(startHour);
+		hospital.setVisitEndTime(endHour);
+		hospital.setVisitIncrement(visitIncreemnt);
+		hospital.setVisitDuration(visitDuration);
 	}
 
 	public void check(Hospital hospital) {
@@ -71,5 +81,10 @@ public class TestHospital {
 		assertThat(hospital.getEmail()).isEqualTo(email);
 		assertThat(hospital.getFax()).isEqualTo(fax);
 		assertThat(hospital.getCurrencyCod()).isEqualTo(currencyCod);
+		assertThat(hospital.getVisitStartTime()).isEqualTo(startHour);
+		assertThat(hospital.getVisitEndTime()).isEqualTo(endHour);
+		assertThat(hospital.getVisitIncrement()).isEqualTo(visitIncreemnt);
+		assertThat(hospital.getVisitDuration()).isEqualTo(visitDuration);
 	}
+
 }
