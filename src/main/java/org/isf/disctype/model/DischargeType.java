@@ -52,8 +52,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "DIST_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "DIST_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "DIST_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE DISCHARGETYPE SET DIST_ACTIVE = 0 WHERE DIST_ID_A = ?")
-@Where(clause = "DIST_ACTIVE = 1")
+@SQLDelete(sql = "UPDATE DISCHARGETYPE SET DIST_ACTIVE=0 WHERE DIST_ID_A=?")
+@Where(clause = "DIST_ACTIVE=1")
 public class DischargeType extends Auditable<String> {
 	@Id 
 	@Column(name="DIST_ID_A")	    

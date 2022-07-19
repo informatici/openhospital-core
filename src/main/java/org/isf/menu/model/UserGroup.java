@@ -48,8 +48,8 @@ import org.isf.utils.db.Auditable;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "UG_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "UG_LAST_MODIFIED_DATE"))
 @AttributeOverride(name = "active", column = @Column(name = "UG_ACTIVE"))
-@SQLDelete(sql = "UPDATE USERGROUP SET UG_ACTIVE = 0 WHERE UG_ID_A = ?")
-@Where(clause = "UG_ACTIVE = 1")
+@SQLDelete(sql = "UPDATE USERGROUP SET UG_ACTIVE=0 WHERE UG_ID_A=?")
+@Where(clause = "UG_ACTIVE=1")
 public class UserGroup extends Auditable<String> {
 
 	@Id
