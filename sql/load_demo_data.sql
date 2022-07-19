@@ -3183,7 +3183,7 @@ INSERT INTO `menuitem` VALUES ('btnpatfoldadmrpt','angal.menu.btn.admchart','ang
 INSERT INTO `menuitem` VALUES ('btnpatfoldpatrpt','angal.menu.btn.patreport','angal.menu.patreport','x','R','btnadmpatientfolder','none','N',3);
 INSERT INTO `menuitem` VALUES ('btnpatfolddicom','angal.menu.btn.dicom','angal.menu.dicom','x','D','btnadmpatientfolder','none','N',4);
 INSERT INTO `menuitem` VALUES ('smsmanager','angal.menu.btn.smsmanager','angal.menu.smsmanager','x','M','generaldata','org.isf.sms.gui.SmsBrowser','N',9);
-INSERT INTO 'menuitem' VALUES ('telemetry', 'angal.menu.btn.telemetry', 'angal.menu.telemetry', 'x', 'M', 'generaldata', 'org.isf.telemetry.gui.TelemetryGUI','N', 9);
+INSERT INTO 'menuitem' VALUES ('telemetry', 'angal.menu.btn.telemetry', 'angal.menu.telemetry', 'x', 'M', 'generaldata', 'org.isf.telemetry.gui.TelemetryEdit','N', 9);
 INSERT INTO `menuitem` VALUES ('btnpharmstockcharge','angal.menu.btn.btnpharmstockcharge','angal.menu.btnpharmstockcharge','x','C','medicalstock','none','N',1);
 INSERT INTO `menuitem` VALUES ('btnpharmstockdischarge','angal.menu.btn.btnpharmstockdischarge','angal.menu.btnpharmstockdischarge','x','D','medicalstock','none','N',2);
 INSERT INTO `menuitem` VALUES ('btnmedicalswardreport','angal.menu.btn.btnmedicalswardreport','angal.menu.btnmedicalswardreport','x','P','medicalsward','none','N',2);
