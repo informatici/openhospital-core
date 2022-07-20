@@ -84,11 +84,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class Patient extends Auditable<String> {
 	/*
 	 * PAT_ID int NOT NULL AUTO_INCREMENT , PAT_FNAME varchar (50) NOT NULL ,
-	 * --first name (nome) PAT_SNAME varchar (50) NOT NULL , --second name (cognome)
+	 * --first name PAT_SNAME varchar (50) NOT NULL , --second name
 	 * PAT_AGE int NOT NULL , --age PAT_SEX char (1) NOT NULL , --sex : M or F
-	 * PAT_ADDR varchar (50) NULL , --address (via , n.) PAT_CITY varchar (50) NOT
-	 * NULL , --city PAT_NEXT_KIN varchar (50) NULL , --next kin (parente prossimo,
-	 * figlio di..) PAT_TELE varchar (50) NULL , --telephone number PAT_MOTH char
+	 * PAT_ADDR varchar (50) NULL , --address  PAT_CITY varchar (50) NOT
+	 * NULL , --city PAT_NEXT_KIN varchar (50) NULL , --next kin 
+	 * PAT_TELE varchar (50) NULL , --telephone number PAT_MOTH char
 	 * (1) NULL , --mother: D=dead, A=alive PAT_FATH char (1) NULL , --father:
 	 * D=dead, A=alive PAT_LEDU char (1) NULL , --level of education: 1 or 2 or 3 or
 	 * 4 PAT_ESTA char (1) NULL , --economic status: R=rich, P=poor PAT_PTOGE char
