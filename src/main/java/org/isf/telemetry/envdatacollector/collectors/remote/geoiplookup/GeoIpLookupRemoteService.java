@@ -31,7 +31,7 @@ public interface GeoIpLookupRemoteService {
 
 	// @formatter:off
 
-	@GetMapping(value = "/8.8.8.8", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<GeoIpLookup> retrieveGeoIPInfo();
 
 	// @formatter:on
