@@ -22,11 +22,16 @@
 package org.isf.telemetry.envdatacollector.collectors;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+
+import javax.annotation.Resource;
 
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
-import org.isf.telemetry.envdatacollector.collectors.remote.geoiplookup.GeoIpLookup;
-import org.isf.telemetry.envdatacollector.collectors.remote.geoiplookup.GeoIpLookupService;
+import org.isf.telemetry.envdatacollector.collectors.remote.common.CommonGeoIpInfoService;
+import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoBean;
+import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoSettings;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
@@ -43,7 +48,10 @@ public class LocationDataCollector extends AbstractDataCollector {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LocationDataCollector.class);
 
 	@Autowired
-	private GeoIpLookupService geoIpLookupService;
+	private GeoIpInfoSettings settings;
+
+	@Autowired
+	List<CommonGeoIpInfoService> geoIpServices;
 
 	@Override
 	public String getId() {
@@ -60,15 +68,23 @@ public class LocationDataCollector extends AbstractDataCollector {
 		LOGGER.debug("Collecting location data...");
 		Map<String, String> result = new HashMap<>();
 		try {
-			GeoIpLookup json = this.geoIpLookupService.retrieveGeoIpInfo();
-			result.put(CollectorsConst.LOC_COUNTRY_NAME, json.getCountryName());
-			result.put(CollectorsConst.LOC_COUNTRY_CODE, json.getCountryCode());
-			result.put(CollectorsConst.LOC_REGION_NAME, json.getRegionName());
-			result.put(CollectorsConst.LOC_CITY, json.getCity());
-			result.put(CollectorsConst.LOC_ZIP_CODE, json.getPostalCode());
-			result.put(CollectorsConst.LOC_TIMEZONE, json.getTimeZone());
-			result.put(CollectorsConst.LOC_CURRENCY_CODE, json.getCurrencyCode());
-			result.put(CollectorsConst.LOC_CURRENCY_NAME, json.getCurrencyName());
+
+			String geoIpServiceName = this.settings.get("telemetry.enabled.geo.ip.lookup.service");
+			System.out.println(geoIpServiceName + " - " + geoIpServices.size());
+			this.geoIpServices.forEach(service -> {
+				if (service.getServiceName().equals(geoIpServiceName)) {
+					GeoIpInfoBean json = service.retrieveIpInfo();
+					System.out.println(json);
+					result.put(CollectorsConst.LOC_COUNTRY_NAME, json.getCountryName());
+					result.put(CollectorsConst.LOC_COUNTRY_CODE, json.getCountryCode());
+					result.put(CollectorsConst.LOC_REGION_NAME, json.getRegionName());
+					result.put(CollectorsConst.LOC_CITY, json.getCity());
+					result.put(CollectorsConst.LOC_ZIP_CODE, json.getPostalCode());
+					result.put(CollectorsConst.LOC_TIMEZONE, json.getTimeZone());
+					result.put(CollectorsConst.LOC_CURRENCY_CODE, json.getCurrencyCode());
+					return;
+				}
+			});
 		} catch (RuntimeException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());
