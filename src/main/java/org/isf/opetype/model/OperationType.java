@@ -30,6 +30,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.isf.utils.db.Auditable;
@@ -52,7 +53,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "OCL_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "OCL_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "OCL_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE OPERATIONTYPE SET OCL_ACTIVE=0 WHERE OCL_ID_A=?")
+@SQLDelete(sql = "UPDATE OPERATIONTYPE SET OCL_ACTIVE=0 WHERE OCL_ID_A=?", check = ResultCheckStyle.COUNT)
 @Where(clause = "OCL_ACTIVE=1")
 public class OperationType extends Auditable<String> {
 

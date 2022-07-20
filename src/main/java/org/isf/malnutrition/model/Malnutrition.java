@@ -37,6 +37,7 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.isf.admission.model.Admission;
@@ -60,7 +61,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MLN_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "MLN_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MLN_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE MALNUTRITIONCONTROL SET MLN_ACTIVE=0 WHERE MLN_ID=? AND MLN_LOCK=?")
+@SQLDelete(sql = "UPDATE MALNUTRITIONCONTROL SET MLN_ACTIVE=0 WHERE MLN_ID=? AND MLN_LOCK=?", check = ResultCheckStyle.COUNT)
 @Where(clause = "MLN_ACTIVE=1")
 public class Malnutrition extends Auditable<String> {
 

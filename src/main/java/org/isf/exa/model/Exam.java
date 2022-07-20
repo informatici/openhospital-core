@@ -33,6 +33,7 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.isf.exatype.model.ExamType;
@@ -56,7 +57,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "EXA_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "EXA_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "EXA_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE EXAM SET EXA_ACTIVE=0 WHERE EXA_ID_A=? AND EXA_LOCK=?")
+@SQLDelete(sql = "UPDATE EXAM SET EXA_ACTIVE=0 WHERE EXA_ID_A=? AND EXA_LOCK=?", check = ResultCheckStyle.COUNT)
 @Where(clause = "EXA_ACTIVE=1")
 public class Exam extends Auditable<String> {
 

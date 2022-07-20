@@ -28,6 +28,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.isf.utils.db.Auditable;
@@ -48,7 +49,7 @@ import org.isf.utils.db.Auditable;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "UG_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "UG_LAST_MODIFIED_DATE"))
 @AttributeOverride(name = "active", column = @Column(name = "UG_ACTIVE"))
-@SQLDelete(sql = "UPDATE USERGROUP SET UG_ACTIVE=0 WHERE UG_ID_A=?")
+@SQLDelete(sql = "UPDATE USERGROUP SET UG_ACTIVE=0 WHERE UG_ID_A=?", check = ResultCheckStyle.COUNT)
 @Where(clause = "UG_ACTIVE=1")
 public class UserGroup extends Auditable<String> {
 
