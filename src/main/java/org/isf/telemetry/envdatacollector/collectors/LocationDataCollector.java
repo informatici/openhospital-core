@@ -29,7 +29,7 @@ import java.util.Properties;
 import javax.annotation.Resource;
 
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
-import org.isf.telemetry.envdatacollector.collectors.remote.common.CommonGeoIpInfoService;
+import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoCommonService;
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoBean;
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoSettings;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
@@ -51,7 +51,7 @@ public class LocationDataCollector extends AbstractDataCollector {
 	private GeoIpInfoSettings settings;
 
 	@Autowired
-	List<CommonGeoIpInfoService> geoIpServices;
+	List<GeoIpInfoCommonService> geoIpServices;
 
 	@Override
 	public String getId() {

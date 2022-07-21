@@ -21,7 +21,7 @@
  */
 package org.isf.telemetry.envdatacollector.collectors.remote.ipapi;
 
-import org.isf.telemetry.envdatacollector.collectors.remote.common.CommonGeoIpInfoService;
+import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoCommonService;
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class IpApiService extends CommonGeoIpInfoService{
+public class IpApiService extends GeoIpInfoCommonService{
 
 	private static final String SERVICE_NAME = "ipapi-remote-service";
 	private static final Logger LOGGER = LoggerFactory.getLogger(IpApiService.class);
