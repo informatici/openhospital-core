@@ -29,7 +29,10 @@ import org.isf.sms.providers.common.CustomCommonDecoder;
 import org.isf.sms.providers.common.CustomCommonEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -37,13 +40,14 @@ import feign.Feign;
 import feign.slf4j.Slf4jLogger;
 
 @Component
+@PropertySource("classpath:telemetry.properties")
 public class GeoIpLookupService {
+	
+	@Autowired
+	private Environment env;
 
 	private static final String SERVICE_NAME = "geoiplookup-remote-service";
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoIpLookupService.class);
-
-	@Resource(name = "ipinfoProperties")
-	private Properties properties;
 
 	public GeoIpLookup retrieveGeoIpInfo() {
 		GeoIpLookupRemoteService httpClient = buildHttlClient();
@@ -55,7 +59,7 @@ public class GeoIpLookupService {
 	}
 
 	private GeoIpLookupRemoteService buildHttlClient() {
-		String baseUrl = this.properties.getProperty(SERVICE_NAME + ".ribbon.base-url");
+		String baseUrl = this.env.getProperty(SERVICE_NAME  + ".ribbon.base-url");
 		// For debug remember to update log level to: feign.Logger.Level.FULL. Happy debugging!
 		return Feign.builder().encoder(new CustomCommonEncoder()).decoder(new CustomCommonDecoder()).logger(new Slf4jLogger(GeoIpLookupService.class))
 						.logLevel(feign.Logger.Level.BASIC).contract(new SpringMvcContract()).target(GeoIpLookupRemoteService.class, baseUrl);
