@@ -21,7 +21,9 @@
  */
 package org.isf.serviceprinting.print;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import org.isf.medicalstockward.model.MovementWard;
 
@@ -32,7 +34,7 @@ public class MovementWardForPrint implements Comparable<MovementWardForPrint>{
 
 	private int code;
 	private String ward;
-	private LocalDateTime date;
+	private Date date;
 	private String medical;
 	private Double quantity;
 	private String units;
@@ -48,7 +50,7 @@ public class MovementWardForPrint implements Comparable<MovementWardForPrint>{
 		this.quantity = mov.getQuantity();
 		this.units = mov.getUnits();
 		this.patient = mov.isPatient() || mov.getWardTo() == null || mov.getWardFrom() == null;
-		this.lot=mov.getLot().getCode();
+		this.lot = mov.getLot().getCode();
 	}
 
 	public int getCode() {
@@ -59,7 +61,7 @@ public class MovementWardForPrint implements Comparable<MovementWardForPrint>{
 		return medical;
 	}
 
-	public LocalDateTime getDate() {
+	public Date getDate() {
 		return date;
 	}
 
@@ -88,8 +90,8 @@ public class MovementWardForPrint implements Comparable<MovementWardForPrint>{
 		return this.date.compareTo(o.getDate());
 	}
 
-	private LocalDateTime removeTime(LocalDateTime date) {
-		return date.withHour(0).withMinute(0).withSecond(0);
+	private Date removeTime(LocalDateTime date) {
+		return Timestamp.valueOf(date);
 	}
 
 }

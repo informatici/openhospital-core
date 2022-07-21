@@ -21,7 +21,9 @@
  */
 package org.isf.serviceprinting.print;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import org.isf.medicalstock.model.Movement;
 
@@ -31,7 +33,7 @@ import org.isf.medicalstock.model.Movement;
 public class MovementForPrint implements Comparable<MovementForPrint>{
 
 	private String ward;
-	private LocalDateTime date;
+	private Date date;
 	private String medical;
 	private double quantity;
 	private String lot;
@@ -53,7 +55,7 @@ public class MovementForPrint implements Comparable<MovementForPrint>{
 		return lot;
 	}
 
-	public LocalDateTime getDate() {
+	public Date getDate() {
 		return date;
 	}
 
@@ -74,8 +76,8 @@ public class MovementForPrint implements Comparable<MovementForPrint>{
 		return this.date.compareTo(o.getDate());
 	}
 
-	private LocalDateTime removeTime(LocalDateTime date) {
-		return date.withHour(0).withMinute(0).withSecond(0);
+	private Date removeTime(LocalDateTime date) {
+		return Timestamp.valueOf(date);
 	}
 
 }
