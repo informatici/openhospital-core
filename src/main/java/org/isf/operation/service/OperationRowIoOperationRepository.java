@@ -28,8 +28,6 @@ import org.isf.opd.model.Opd;
 import org.isf.operation.model.OperationRow;
 import org.isf.patient.model.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -45,7 +43,6 @@ public interface OperationRowIoOperationRepository extends JpaRepository<Operati
 	OperationRow findById(int id);
 
 	List<OperationRow> findByOpd(Opd opd);
-	
-	//@Query(value = "select o from OperationRow where o.opd.patient.code =: patientCode or o.admission.patient.code=: patientCode")
+	 
 	List<OperationRow> findByAdmissionPatientOrOpdPatient(Patient patient,Patient patient1);
 }
