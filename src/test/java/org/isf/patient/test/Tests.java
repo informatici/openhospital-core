@@ -66,8 +66,6 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	PatientBrowserManager patientBrowserManager;
 
-	
-	
 	@BeforeClass
 	public static void setUpClass() {
 		GeneralData.PATIENTPHOTOSTORAGE = "DB";
