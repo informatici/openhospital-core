@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -426,15 +427,15 @@ public class TestMergePatient extends OHCoreTestCase {
 	}
 
 	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) {
-		Patient mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode()).get();
-		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).get();
-		assertThat(obsoletePatientResult.getActive()).isEqualTo(Integer.valueOf(1));
-		assertThat(mergedPatientResult.getActive()).isEqualTo(Integer.valueOf(0));
+		Optional<Patient> mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode());
+		Optional<Patient> obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode());
+		assertThat(obsoletePatientResult.isEmpty()).isTrue();
+		assertThat(mergedPatientResult.isPresent()).isTrue();
 	}
 
 	private void assertThatObsoletePatientWasNotDeletedAndIsTheActiveOne(Patient obsoletePatient) throws OHException {
-		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).get();
-		assertThat(obsoletePatientResult.getActive()).isEqualTo(Integer.valueOf(0));
+		Optional<Patient> obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode());
+		assertThat(obsoletePatientResult.isPresent()).isTrue();
 	}
 
 	private void assertThatVisitWasMovedFromObsoleteToMergedPatient(Visit visit, Patient mergedPatient) throws OHException {

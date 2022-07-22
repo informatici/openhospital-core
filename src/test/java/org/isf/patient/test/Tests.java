@@ -33,6 +33,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -64,6 +65,8 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	PatientBrowserManager patientBrowserManager;
 
+	
+	
 	@BeforeClass
 	public static void setUpClass() {
 		testPatient = new TestPatient();
@@ -102,7 +105,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private Pageable createPageRequest() {
-		return PageRequest.of(0, 10);   // Page size 10
+		return PageRequest.of(0, 10); // Page size 10
 	}
 
 	@Test
@@ -133,8 +136,8 @@ public class Tests extends OHCoreTestCase {
 		Patient foundPatient = patientIoOperation.getPatient(code);
 
 		// when:
-		List<Patient> patients = patientIoOperation
-				.getPatientsByOneOfFieldsLike(foundPatient.getFirstName().substring(1, foundPatient.getFirstName().length() - 2));
+		List<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(
+				foundPatient.getFirstName().substring(1, foundPatient.getFirstName().length() - 2));
 
 		// then:
 		testPatient.check(patients.get(0));
@@ -336,7 +339,8 @@ public class Tests extends OHCoreTestCase {
 		Integer code = setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
 
-		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getFirstName().substring(1, foundPatient.getFirstName().length() - 2));
+		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(
+				foundPatient.getFirstName().substring(1, foundPatient.getFirstName().length() - 2));
 		testPatient.check(patients.get(0));
 	}
 
@@ -457,16 +461,21 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetMaritalTranslated() throws Exception {
 		resetHashMaps();
-		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
-		assertThat(patientBrowserManager.getMaritalTranslated(null)).isEqualTo("angal.patient.maritalstatusunknown.txt");
-		assertThat(patientBrowserManager.getMaritalTranslated("someKeyNotInTheList")).isEqualTo("angal.patient.maritalstatusunknown.txt");
-		assertThat(patientBrowserManager.getMaritalTranslated("married")).isEqualTo("angal.patient.maritalstatusmarried.txt");
+		// TODO: if resource bundles are made avaiable in core then the values being
+		// compared will need to change
+		assertThat(patientBrowserManager.getMaritalTranslated(null))
+				.isEqualTo("angal.patient.maritalstatusunknown.txt");
+		assertThat(patientBrowserManager.getMaritalTranslated("someKeyNotInTheList"))
+				.isEqualTo("angal.patient.maritalstatusunknown.txt");
+		assertThat(patientBrowserManager.getMaritalTranslated("married"))
+				.isEqualTo("angal.patient.maritalstatusmarried.txt");
 	}
 
 	@Test
 	public void testMgrGetMaritalKey() throws Exception {
 		resetHashMaps();
-		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
+		// TODO: if resource bundles are made avaiable in core then the values being
+		// compared will need to change
 		assertThat(patientBrowserManager.getMaritalKey(null)).isEqualTo("undefined");
 		assertThat(patientBrowserManager.getMaritalKey("someKeyNotInTheList")).isEqualTo("undefined");
 		assertThat(patientBrowserManager.getMaritalKey("angal.patient.maritalstatusmarried.txt")).isEqualTo("married");
@@ -482,16 +491,21 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetProfessionTranslated() throws Exception {
 		resetHashMaps();
-		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
-		assertThat(patientBrowserManager.getProfessionTranslated(null)).isEqualTo("angal.patient.profession.unknown.txt");
-		assertThat(patientBrowserManager.getProfessionTranslated("someKeyNotInTheList")).isEqualTo("angal.patient.profession.unknown.txt");
-		assertThat(patientBrowserManager.getProfessionTranslated("mining")).isEqualTo("angal.patient.profession.mining.txt");
+		// TODO: if resource bundles are made avaiable in core then the values being
+		// compared will need to change
+		assertThat(patientBrowserManager.getProfessionTranslated(null))
+				.isEqualTo("angal.patient.profession.unknown.txt");
+		assertThat(patientBrowserManager.getProfessionTranslated("someKeyNotInTheList"))
+				.isEqualTo("angal.patient.profession.unknown.txt");
+		assertThat(patientBrowserManager.getProfessionTranslated("mining"))
+				.isEqualTo("angal.patient.profession.mining.txt");
 	}
 
 	@Test
 	public void testMgrGetProfessionKey() throws Exception {
 		resetHashMaps();
-		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
+		// TODO: if resource bundles are made avaiable in core then the values being
+		// compared will need to change
 		assertThat(patientBrowserManager.getProfessionKey(null)).isEqualTo("undefined");
 		assertThat(patientBrowserManager.getProfessionKey("someKeyNotInTheList")).isEqualTo("undefined");
 		assertThat(patientBrowserManager.getProfessionKey("angal.patient.profession.mining.txt")).isEqualTo("mining");
@@ -505,11 +519,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setFirstName("");
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -520,11 +531,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setFirstName(null);
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -535,11 +543,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setSecondName("");
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -550,11 +555,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setSecondName(null);
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -565,11 +567,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setBirthDate(null);
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -580,11 +579,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setBirthDate(LocalDate.of(999, 1, 1));
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -596,11 +592,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setAge(-1);
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -612,11 +605,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setAge(201);
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -627,11 +617,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setSex(' ');
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -643,14 +630,13 @@ public class Tests extends OHCoreTestCase {
 		assertThat(patient.getCode()).isNull();
 		assertThat(patient.getBirthDate()).isNull();
 
-		assertThat(patient.getActive()).isEqualTo(1);
 	}
 
 	@Test
 	public void testPatientConstructor() {
-		Patient patient = new Patient(99, "firstName", "secondName", "name", null, 99, " ", 'F', "address",
-				"city", "nextOfKin", "noPhone", "note", "motherName", ' ', "fatherName", ' ',
-				"bloodType", ' ', ' ', "personalCode", "maritalStatus", "profession");
+		Patient patient = new Patient(99, "firstName", "secondName", "name", null, 99, " ", 'F', "address", "city",
+				"nextOfKin", "noPhone", "note", "motherName", ' ', "fatherName", ' ', "bloodType", ' ', ' ',
+				"personalCode", "maritalStatus", "profession");
 
 		assertThat(patient.getCode()).isEqualTo(99);
 		assertThat(patient.getSex()).isEqualTo('F');
@@ -665,23 +651,23 @@ public class Tests extends OHCoreTestCase {
 	public void testPatientGetSearchString() throws Exception {
 		Patient patient = testPatient.setup(false);
 		patient.setCode(1);
-		assertThat(patient.getSearchString()).isEqualTo("1 testfirstname testsecondname testcity testaddress TestTelephone testtaxcode ");
+		assertThat(patient.getSearchString())
+				.isEqualTo("1 testfirstname testsecondname testcity testaddress TestTelephone testtaxcode ");
 	}
 
 	@Test
 	public void testPatientGetInformations() throws Exception {
 		Patient patient = testPatient.setup(false);
 		patient.setNote("someNote");
-		assertThat(patient.getInformations()).isEqualTo("TestCity - TestAddress - TestTelephone - someNote - TestTaxCode");
+		assertThat(patient.getInformations())
+				.isEqualTo("TestCity - TestAddress - TestTelephone - someNote - TestTaxCode");
 	}
 
 	@Test
 	public void testPatientEquals() throws Exception {
 		Patient patient = testPatient.setup(false);
 		assertThat(patient.equals(patient)).isTrue();
-		assertThat(patient)
-				.isNotNull()
-				.isNotEqualTo("someString");
+		assertThat(patient).isNotNull().isNotEqualTo("someString");
 		Patient patient2 = testPatient.setup(true);
 		patient.setCode(1);
 		patient.setCode(2);
@@ -732,11 +718,12 @@ public class Tests extends OHCoreTestCase {
 		bowelDescriptionHashMap.set(patientBrowserManager, null);
 	}
 
-	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) throws OHException {
-		Patient mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode()).get();
-		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).get();
-		assertThat(obsoletePatientResult.getActive()).isEqualTo(0);
-		assertThat(mergedPatientResult.getActive()).isEqualTo(1);
+	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient,
+			Patient obsoletePatient) throws OHException {
+		Optional<Patient> mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode());
+		Optional<Patient> obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode());
+		assertThat(obsoletePatientResult.isEmpty());
+		assertThat(mergedPatientResult.isPresent());
 	}
 
 	private Integer setupTestPatient(boolean usingSet) throws OHException {

@@ -58,7 +58,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "OPE_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "OPE_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "OPE_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE OPERATION SET OPE_ACTIVE=0 WHERE OPE_ID_A=?", check = ResultCheckStyle.COUNT)
+@SQLDelete(sql = "UPDATE OPERATION SET OPE_ACTIVE=0 WHERE OPE_ID_A=? AND OPE_LOCK=?", check = ResultCheckStyle.COUNT)
 @Where(clause = "OPE_ACTIVE=1")
 public class Operation extends Auditable<String> {
 

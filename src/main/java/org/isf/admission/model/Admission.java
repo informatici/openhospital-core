@@ -240,7 +240,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 			DischargeType disType, String note, Float transUnit, LocalDateTime visitDate,
 			PregnantTreatmentType pregTreatmentType, LocalDateTime deliveryDate, DeliveryType deliveryType,
 			DeliveryResultType deliveryResult, Float weight, LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
-			LocalDateTime abortDate, String userID, String deleted) {
+			LocalDateTime abortDate, String userID) {
 		super();
 		this.id = id;
 		this.admitted = admitted;

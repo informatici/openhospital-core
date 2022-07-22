@@ -100,11 +100,11 @@ public class Tests extends OHCoreTestCase {
 		Admission admission1 = new Admission(0, 1, "N", ward, 0, null, admDate, admissionType,
 				"TestFHU", null, null, null, null, null, "Result1", null, null, null, "TestNote1",
 				10.10F, null, null, null, null, null, null, null, null, null,
-				"TestUserId", "N");
+				"TestUserId");
 		Admission admission2 = new Admission(0, 1, "N", ward, 0, null, admDate, admissionType,
 				"TestFHU", null, null, null, null, null, "Result2", null, null, null, "TestNote2",
 				10.10F, null, null, null, null, null, null, null, null, null,
-				"TestUserId", "N");
+				"TestUserId");
 		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
 		admissionIoOperationRepository.saveAndFlush(admission1);
 		admissionIoOperationRepository.saveAndFlush(admission2);
@@ -247,10 +247,10 @@ public class Tests extends OHCoreTestCase {
 		Ward ward = wardIoOperationRepository.findById(code).get();
 		Admission admission1 = new Admission(1, 1, null, ward, 1, null, null, null, null, null,
 				null, null, null, null, null, null, null, null, null, null,
-				null, null, null, null, null, null, null, null, null, null, null);
+				null, null, null, null, null, null, null, null, null, null);
 		Admission admission2 = new Admission(2, 1, null, ward, 1, null, null, null, null, null,
 				null, null, null, null, null, null, null, null, null, null,
-				null, null, null, null, null, null, null, null, null, null, null);
+				null, null, null, null, null, null, null, null, null, null);
 		admissionIoOperationRepository.saveAndFlush(admission1);
 		admissionIoOperationRepository.saveAndFlush(admission2);
 		assertThat(wardBrowserManager.getCurrentOccupation(ward)).isEqualTo(2);
@@ -330,10 +330,10 @@ public class Tests extends OHCoreTestCase {
 		Ward ward = wardIoOperationRepository.findById(code).get();
 		Admission admission1 = new Admission(1, 1, null, ward, 1, null, null, null, null, null,
 				null, null, null, null, null, null, null, null, null, null,
-				null, null, null, null, null, null, null, null, null, null, "N");
+				null, null, null, null, null, null, null, null, null, null);
 		Admission admission2 = new Admission(2, 1, null, ward, 1, null, null, null, null, null,
 				null, null, null, null, null, null, null, null, null, null,
-				null, null, null, null, null, null, null, null, null, null, "N");
+				null, null, null, null, null, null, null, null, null, null);
 		admissionIoOperationRepository.saveAndFlush(admission1);
 		admissionIoOperationRepository.saveAndFlush(admission2);
 		assertThatThrownBy(() -> wardBrowserManager.deleteWard(ward))
