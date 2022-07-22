@@ -35,9 +35,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface MedicalStockWardIoOperationRepository extends JpaRepository<MedicalWard, String>, MedicalStockWardIoOperationRepositoryCustom {
 
-	@Query(value = "SELECT * FROM MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot", nativeQuery = true)
+	@Query(value = "SELECT * FROM MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot AND MDSRWRD_ACTIVE=1", nativeQuery = true)
 	MedicalWard findOneWhereCodeAndMedicalAndLot(@Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
 
+	@Query(value = "SELECT * FROM MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot AND MDSRWRD_ACTIVE=0", nativeQuery = true)
+	MedicalWard findOneWhereCodeAndMedicalAndLotAndNotActive(@Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
+
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE MEDICALDSRWARD SET MDSRWRD_ACTIVE = 1, MDSRWRD_IN_QTI=:quantity, MDSRWRD_OUT_QTI=0 WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot AND MDSRWRD_ACTIVE=0", nativeQuery = true)
+	void findAndUpdateOneWhereCodeAndMedicalAndLotAndNotActive(@Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot, @Param("quantity") Double quantity);
+
+	
 	@Query(value = "select medWard from MedicalWard medWard where medWard.id.ward.code=:ward " +
 			"and medWard.id.medical.code=:medical")
 	MedicalWard findOneWhereCodeAndMedical(@Param("ward") String ward, @Param("medical") int medical);
