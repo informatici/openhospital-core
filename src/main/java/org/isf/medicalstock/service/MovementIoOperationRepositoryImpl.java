@@ -146,7 +146,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			predicates.add(builder.between(root.<Lot>get(LOT).<LocalDateTime>get("preparationDate"), lotPrepFrom, lotPrepTo));
 		}
 		if ((lotDueFrom != null) && (lotDueTo != null)) {
-			predicates.add(builder.between(root.<Lot>get(LOT).<LocalDateTime>get("dueDate"), lotPrepFrom, lotPrepTo));
+			predicates.add(builder.between(root.<Lot>get(LOT).<LocalDateTime>get("dueDate"), lotDueFrom, lotDueTo));
 		}
 		if (movType != null) {
 			predicates.add(builder.equal(root.<MedicalType>get(TYPE).<String>get(CODE), movType));
