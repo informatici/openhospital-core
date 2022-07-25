@@ -82,7 +82,7 @@ public class Laboratory extends Auditable<String> {
 	
 	@Column(name="LAB_EXAM_DATE")
 	@Deprecated
-	private LocalDate examDate;	// SQL type: date
+	private LocalDateTime examDate;	// SQL type: date
 
 	@NotNull
 	@Column(name="LAB_RES")
@@ -164,7 +164,7 @@ public class Laboratory extends Auditable<String> {
 	 * @deprecated 
 	 */
 	@Deprecated
-	public LocalDate getExamDate() {
+	public LocalDateTime getExamDate() {
 		return examDate;
 	}
 	/**
@@ -172,7 +172,7 @@ public class Laboratory extends Auditable<String> {
 	 * @deprecated 
 	 */
 	@Deprecated
-	public void setExamDate(LocalDate exDate) {
+	public void setExamDate(LocalDateTime exDate) {
 		this.examDate = exDate;
 	}
 	public void setDate(LocalDateTime aDate) {

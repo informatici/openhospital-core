@@ -81,7 +81,7 @@ public class LabManager {
 	protected void validateLaboratory(Laboratory laboratory) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (laboratory.getExamDate() == null) {
-			laboratory.setExamDate(LocalDate.now());
+			laboratory.setExamDate(LocalDateTime.now());
 		}
 		if (laboratory.getExam() != null && laboratory.getExam().getProcedure() == 2) {
 			laboratory.setResult(MessageBundle.getMessage("angal.lab.multipleresults.txt"));
@@ -488,6 +488,14 @@ public class LabManager {
         return ioOperations.newLabSecondProcedure2(lab, laboratoryRows); //To change body of generated methods, choose Tools | Templates.
     }*/
 	
-	
+   /**
+	 * Return the whole list of exams ({@link Laboratory}s) within last year.
+	 *
+	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
+	 * @throws OHServiceException
+	 */
+	public Optional<Laboratory> getLaboratory(Integer code) throws OHServiceException {
+		return ioOperations.getLaboratory(code);
+	}	
 
 }
