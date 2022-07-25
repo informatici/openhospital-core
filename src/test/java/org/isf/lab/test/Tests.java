@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 import java.lang.reflect.Method;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1357,7 +1358,9 @@ public class Tests extends OHCoreTestCase {
 
 		laboratoryForPrint.setCode(-1);
 		assertThat(laboratoryForPrint.getCode()).isEqualTo(-1);
-		laboratoryForPrint.setDate("dateString");
+		LocalDate localDate = LocalDate.parse("2019-01-04");
+		LocalDateTime labDate = localDate.atStartOfDay();
+		laboratoryForPrint.setDate(labDate);
 		assertThat(laboratoryForPrint.getDate()).isEqualTo("dateString");
 		laboratoryForPrint.setExam("examString");
 		assertThat(laboratoryForPrint.getExam()).isEqualTo("examString");

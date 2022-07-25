@@ -29,7 +29,7 @@ import org.isf.exa.model.Exam;
 public class LaboratoryForPrint {
 	
 	private String exam;
-	private String date;
+	private LocalDateTime date;
 	private String result;
 	private Integer code;
 	private String patName;
@@ -46,7 +46,7 @@ public class LaboratoryForPrint {
 	public LaboratoryForPrint(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult, String patientName, Integer patCode) {
 		code = aCode;
 		exam = aExam.getDescription();
-		date = getConvertedString(aDate);
+		date = aDate;
 		result = aResult;
 		patName = patientName;
 		patientCode= patCode;
@@ -57,15 +57,16 @@ public class LaboratoryForPrint {
 		return time.format(formatter);
 	}
 
-    public String getDate() {
-        return this.date;
-    }
 
-    public void setDate(String aDate) {
-        this.date = aDate;
-    }
+    public LocalDateTime getDate() {
+		return date;
+	}
 
-    public String getExam() {
+	public void setDate(LocalDateTime date) {
+		this.date = date;
+	}
+
+	public String getExam() {
         return this.exam;
     }
 
