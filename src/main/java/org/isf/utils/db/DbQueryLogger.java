@@ -154,7 +154,7 @@ public class DbQueryLogger {
 		    conn.setAutoCommit(autocommit);
 		    PreparedStatement pstmt = conn.prepareStatement(aQuery);
 		    for (int i = 0; i < params.size(); i++) {
-			    pstmt.setObject(i+1, params.get(i));
+			    pstmt.setObject(i + 1, params.get(i));
 		    }
 		    return pstmt.executeUpdate() > 0;
 	    } catch (OHException e) {
