@@ -37,9 +37,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Class that executes a query using the connection DbSingleJpaConn
- * The various methods that open a connection with the 
- * autocommit flag set to false have the responsibility
+ * Class that executes a query using the connection defined in DbSingleJpaConn; thus a single connection is reused for all queries.
+ * The various methods that open a connection with the autocommit flag set to false have the responsibility
  * of doing the commit/rollback operation
  */
 public class DbQueryLogger {
@@ -57,8 +56,10 @@ public class DbQueryLogger {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Query {}", sanitize(aQuery));
 		}
-		try (Connection conn = DbSingleJpaConn.getConnection(); Statement stat = conn.createStatement()) {
+		try {
+			Connection conn = DbSingleJpaConn.getConnection();
 			conn.setAutoCommit(autocommit);
+			Statement stat = conn.createStatement();
 			return stat.executeQuery(aQuery);
 		} catch (OHException e) {
 			throw e;
@@ -84,8 +85,11 @@ public class DbQueryLogger {
 			    LOGGER.trace("  parameters : {}", sanitize(params));
 	    }
 	    ResultSet results;
-	    try (Connection conn = DbSingleJpaConn.getConnection(); PreparedStatement pstmt = conn.prepareStatement(aQuery)) {
+	    Connection conn = null;
+	    try {
+		    conn = DbSingleJpaConn.getConnection();
 		    conn.setAutoCommit(autocommit);
+		    PreparedStatement pstmt = conn.prepareStatement(aQuery);
 		    for (int i = 0; i < params.size(); i++) {
 			    pstmt.setObject(i + 1, params.get(i));
 		    }
@@ -113,8 +117,10 @@ public class DbQueryLogger {
 	    if (LOGGER.isDebugEnabled()) {
 		    LOGGER.debug("Query {}", sanitize(aQuery));
 	    }
-	    try (Connection conn = DbSingleJpaConn.getConnection(); Statement stat = conn.createStatement()) {
+	    try {
+		    Connection conn = DbSingleJpaConn.getConnection();
 		    conn.setAutoCommit(autocommit);
+		    Statement stat = conn.createStatement();
 		    return stat.executeUpdate(aQuery) > 0;
 	    } catch (OHException e) {
 		    throw e;
@@ -142,9 +148,11 @@ public class DbQueryLogger {
 		    if (!params.isEmpty())
 			    LOGGER.trace("  parameters : {}", sanitize(params));
 	    }
-
-	    try (Connection conn = DbSingleJpaConn.getConnection(); PreparedStatement pstmt = conn.prepareStatement(aQuery)) {
+	    Connection conn = null;
+	    try {
+		    conn = DbSingleJpaConn.getConnection();
 		    conn.setAutoCommit(autocommit);
+		    PreparedStatement pstmt = conn.prepareStatement(aQuery);
 		    for (int i = 0; i < params.size(); i++) {
 			    pstmt.setObject(i + 1, params.get(i));
 		    }
@@ -174,9 +182,11 @@ public class DbQueryLogger {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Query {}", sanitize(aQuery));
 		}
-		try (Connection conn = DbSingleJpaConn.getConnection(); Statement stat = conn.createStatement()) {
+		try {
+			Connection conn = DbSingleJpaConn.getConnection();
 			conn.setAutoCommit(autocommit);
-			stat.execute(aQuery, Statement.RETURN_GENERATED_KEYS);
+			Statement stat = conn.createStatement();
+			stat.execute(aQuery,Statement.RETURN_GENERATED_KEYS);
 			return stat.getGeneratedKeys();
 		} catch (OHException e) {
 			throw e;
@@ -204,8 +214,10 @@ public class DbQueryLogger {
 			    LOGGER.trace("  parameters : {}", sanitize(params));
 		    }
 	    }
-	    try (Connection conn = DbSingleJpaConn.getConnection(); PreparedStatement pstmt = conn.prepareStatement(aQuery, Statement.RETURN_GENERATED_KEYS)) {
+	    try {
+		    Connection conn = DbSingleJpaConn.getConnection();
 		    conn.setAutoCommit(autocommit);
+		    PreparedStatement pstmt = conn.prepareStatement(aQuery, Statement.RETURN_GENERATED_KEYS);
 		    for (int i = 0; i < params.size(); i++) {
 			    pstmt.setObject(i + 1, params.get(i));
 		    }
@@ -232,7 +244,9 @@ public class DbQueryLogger {
 	    if (LOGGER.isDebugEnabled()) {
 		    LOGGER.debug("Query {}", sanitize(aQuery));
 	    }
-	    try (Connection conn = DbSingleJpaConn.getConnection(); Statement stat = conn.createStatement()) {
+	    try {
+		    Connection conn = DbSingleJpaConn.getConnection();
+		    Statement stat = conn.createStatement();
 		    ResultSet set = stat.executeQuery(aQuery);
 		    return set.first();
 	    } catch (OHException e) {
