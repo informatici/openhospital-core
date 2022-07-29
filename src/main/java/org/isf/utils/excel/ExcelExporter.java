@@ -169,7 +169,7 @@ public class ExcelExporter {
 				if (objVal != null) {
 					if (objVal instanceof Integer) {
 						Integer val = (Integer) objVal;
-						NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+						NumberFormat format = NumberFormat.getInstance(currentLocale);
 						strVal = format.format(val);
 
 					} else if (objVal instanceof Double) {
@@ -233,7 +233,7 @@ public class ExcelExporter {
 
 		BufferedWriter output = new BufferedWriter(new OutputStreamWriter(fileStream, encoder));
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		NumberFormat numFormat = NumberFormat.getInstance(Locale.getDefault());
+		NumberFormat numFormat = NumberFormat.getInstance(currentLocale);
 
 		try {
 			ResultSetMetaData rsmd = resultSet.getMetaData();
@@ -326,14 +326,12 @@ public class ExcelExporter {
 			if (value instanceof BigDecimal) {
 
 				BigDecimal val = (BigDecimal) value;
-				NumberFormat format = NumberFormat.getInstance(Locale
-						.getDefault());
+				NumberFormat format = NumberFormat.getInstance(currentLocale);
 				strVal = format.format(val);
 			} else if (value instanceof Double) {
 
 				Double val = (Double) value;
-				NumberFormat format = NumberFormat.getInstance(Locale
-						.getDefault());
+				NumberFormat format = NumberFormat.getInstance(currentLocale);
 				strVal = format.format(val);
 			} else if (value instanceof Timestamp) {
 
