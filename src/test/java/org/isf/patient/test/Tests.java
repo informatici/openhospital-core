@@ -184,7 +184,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPatientsByOneOfFieldsLikeNotExistingStringShouldNotFindAnything() throws Exception {
 		setupTestPatient(false);
 		List<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike("dupa");
-		assertThat(patients).isEmpty();
+		assertThat(patients).isNull();
 	}
 
 	@Test
