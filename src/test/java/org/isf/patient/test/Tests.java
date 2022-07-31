@@ -184,7 +184,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetPatientsByOneOfFieldsLikeNotExistingStringShouldNotFindAnything() throws Exception {
 		setupTestPatient(false);
 		List<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike("dupa");
-		assertThat(patients).isNull();
+		assertThat(patients).isEmpty();
 	}
 
 	@Test
@@ -720,7 +720,7 @@ public class Tests extends OHCoreTestCase {
 			Patient obsoletePatient) throws OHException {
 		Optional<Patient> mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode());
 		Optional<Patient> obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode());
-		assertThat(obsoletePatientResult.isEmpty());
+		assertThat(obsoletePatientResult).isNull();
 		assertThat(mergedPatientResult.isPresent());
 	}
 

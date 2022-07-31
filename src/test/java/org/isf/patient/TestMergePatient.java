@@ -429,7 +429,7 @@ public class TestMergePatient extends OHCoreTestCase {
 	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) {
 		Optional<Patient> mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode());
 		Optional<Patient> obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode());
-		assertThat(obsoletePatientResult.isEmpty()).isTrue();
+		assertThat(obsoletePatientResult).isNull();
 		assertThat(mergedPatientResult.isPresent()).isTrue();
 	}
 
