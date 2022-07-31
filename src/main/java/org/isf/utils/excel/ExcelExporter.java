@@ -170,7 +170,7 @@ public class ExcelExporter {
 					if (objVal != null) {
 						if (objVal instanceof Integer) {
 							Integer val = (Integer) objVal;
-							NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+							NumberFormat format = NumberFormat.getInstance(currentLocale);
 							strVal = format.format(val);
 						} else if (objVal instanceof Double) {
 							Double val = (Double) objVal;
@@ -228,7 +228,7 @@ public class ExcelExporter {
 
 		try (BufferedWriter output = new BufferedWriter(new OutputStreamWriter(fileStream, encoder))) {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-			NumberFormat numFormat = NumberFormat.getInstance(Locale.getDefault());
+			NumberFormat numFormat = NumberFormat.getInstance(currentLocale);
 
 			try {
 				ResultSetMetaData rsmd = resultSet.getMetaData();
@@ -321,14 +321,12 @@ public class ExcelExporter {
 			if (value instanceof BigDecimal) {
 
 				BigDecimal val = (BigDecimal) value;
-				NumberFormat format = NumberFormat.getInstance(Locale
-						.getDefault());
+				NumberFormat format = NumberFormat.getInstance(currentLocale);
 				strVal = format.format(val);
 			} else if (value instanceof Double) {
 
 				Double val = (Double) value;
-				NumberFormat format = NumberFormat.getInstance(Locale
-						.getDefault());
+				NumberFormat format = NumberFormat.getInstance(currentLocale);
 				strVal = format.format(val);
 			} else if (value instanceof Timestamp) {
 
@@ -349,9 +347,14 @@ public class ExcelExporter {
 	 *
 	 * @param jtable
 	 * @param file
+	 * @param columnCount (optional) if not specified or -1 then get the column count from the table model; if specified use that number for the column count
 	 * @throws IOException
 	 */
 	public void exportTableToExcel(JTable jtable, File file) throws IOException {
+		exportTableToExcel(jtable, file, -1);
+	}
+
+	public void exportTableToExcel(JTable jtable, File file, int columnCount) throws IOException {
 		TableModel model = jtable.getModel();
 		FileOutputStream fileStream = new FileOutputStream(file);
 
@@ -362,7 +365,12 @@ public class ExcelExporter {
 		initStyles();
 
 		Row headers = worksheet.createRow((short) 0);
-		int colCount = model.getColumnCount();
+		int colCount;
+		if (columnCount == -1) {
+			colCount = model.getColumnCount();
+		} else {
+			colCount = columnCount;
+		}
 		for (int i = 0; i < colCount; i++) {
 			Cell cell = headers.createCell((short) i);
 			RichTextString value = createHelper.createRichTextString(model.getColumnName(i));
