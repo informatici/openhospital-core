@@ -72,3 +72,4 @@ source step_75_add_prefix_to_table_names.sql;
 source step_76_dicom_button_in_admission_patient.sql;
 source step_77_laboratory_button_in_admission_patient.sql;
 source step_78_drop_lab_exam_date.sql;
+source step_79_nullable_pat_photo_fk.sql;

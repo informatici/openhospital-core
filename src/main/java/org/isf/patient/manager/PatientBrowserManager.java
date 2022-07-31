@@ -33,6 +33,7 @@ import org.isf.accounting.model.Bill;
 import org.isf.admission.manager.AdmissionBrowserManager;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
@@ -304,6 +305,12 @@ public class PatientBrowserManager {
 	public List<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException {
 		return ioOperations.getPatientsByOneOfFieldsLike(keyword);
 	}
+	
+	
+	public PatientProfilePhoto retrievePatientProfilePhoto(Patient patient) {
+		return ioOperations.retrievePatientProfilePhoto(patient);
+	}
+	
 
 	/**
 	 * Method that merges patients and all clinic details under the same PAT_ID
