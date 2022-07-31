@@ -89,11 +89,6 @@ public class VisitManager {
 //							OHSeverityLevel.ERROR));
 //
 //		}
-		if (visit.getWard().getBeds() <= 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.visit.thewardhasnobedsavailable.msgg"),
-					OHSeverityLevel.ERROR));
-		}
 		if (patient == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.getMessage("angal.visit.pleasechooseapatient.msg"),
