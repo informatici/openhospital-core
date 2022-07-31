@@ -542,7 +542,7 @@ public class Tests extends OHCoreTestCase {
 	public void testWardDebug() throws Exception {
 		Ward ward = testWard.setup(true);
 		assertThat(ward.debug()).isEqualTo(
-				"Ward [code=Z, description=TestDescription, telephone=TestTelephone, fax=TestFac, email=TestEmail@gmail.com, beds=100, nurs=101, docs=102, isPharmacy=true, isMale=true, isFemale=false, lock=null, hashCode=0]");
+				"Ward [code=Z, description=TestDescription, telephone=TestTelephone, fax=TestFac, email=TestEmail@gmail.com, beds=100, nurs=101, docs=102, isPharmacy=true, isMale=false, isFemale=true, lock=null, hashCode=0]");
 	}
 
 	@Test
