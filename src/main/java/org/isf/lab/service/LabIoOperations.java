@@ -96,7 +96,7 @@ public class LabIoOperations {
 	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return exam != null ?
 				repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam) :
-				repository.findByExamDateBetweenOrderByLabDateDesc(dateFrom.toLocalDate(), dateTo.toLocalDate());
+				repository.findByExamDateBetweenOrderByLabDateDesc(dateFrom, dateTo);
 	}
 	
 	/**
@@ -248,7 +248,6 @@ public class LabIoOperations {
 	 */
 	public boolean updateLabFirstProcedure(Laboratory laboratory) throws OHServiceException	{
 		boolean result = updateLaboratory(laboratory);
-		rowRepository.deleteByLaboratory_Code(laboratory.getCode());
 		return result;
 	}
 

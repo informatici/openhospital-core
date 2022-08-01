@@ -31,7 +31,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LabIoOperationRepository extends JpaRepository<Laboratory, Integer> {
 
-	List<Laboratory> findByExamDateBetweenOrderByLabDateDesc(LocalDate dateFrom, LocalDate dateTo);
+	List<Laboratory> findByExamDateBetweenOrderByLabDateDesc(LocalDateTime dateFrom, LocalDateTime dateTo);
 
 	List<Laboratory> findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(LocalDateTime dateFrom, LocalDateTime dateTo, String exam);
 

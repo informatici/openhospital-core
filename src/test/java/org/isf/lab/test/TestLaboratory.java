@@ -36,7 +36,7 @@ public class TestLaboratory {
 
 	private String material = "TestMaterial";
 	private LocalDateTime labDate = LocalDateTime.now();
-	private LocalDate examDate = labDate.toLocalDate();
+	private LocalDateTime examDate =LocalDateTime.now();
 	private String result = "TestResult";
 	private String note = "TestNote";
 	private String patName = "TestPatientName";
