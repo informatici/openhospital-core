@@ -19,20 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.telemetry.envdatacollector.collectors.remote.geoiplookup;
+package org.isf.telemetry.envdatacollector.collectors.remote.ipapi;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@FeignClient(name = "geoiplookup-remote-service")
-public interface GeoIpLookupRemoteService {
+@FeignClient(name = "ipapi-remote-service")
+public interface IpApiRemoteservice {
 
 	// @formatter:off
 
-	@GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GeoIpLookup> retrieveIpInfo();
+	@GetMapping(value = "/?fields=country,countryCode,region,regionName,city,district,zip,lat,lon,timezone,currency,query,status,message", 
+			    produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<IpApi> retrieveIpInfo();
 
 	// @formatter:on
 }

@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.telemetry.envdatacollector.collectors.remote.geoiplookup;
+package org.isf.telemetry.envdatacollector.collectors.remote.ipapi;
 
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoCommonService;
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoSettings;
@@ -30,25 +30,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GeoIpLookupService extends GeoIpInfoCommonService {
+public class IpApiService extends GeoIpInfoCommonService{
 
-	private static final String SERVICE_NAME = "geoiplookup-remote-service";
-	private static final Logger LOGGER = LoggerFactory.getLogger(GeoIpLookupService.class);
+	private static final String SERVICE_NAME = "ipapi-remote-service";
+	private static final Logger LOGGER = LoggerFactory.getLogger(IpApiService.class);
 
 	@Autowired
 	private GeoIpInfoSettings settings;
+
 	
-	public GeoIpLookup retrieveIpInfo() {
-		GeoIpLookupRemoteService httpClient = super.buildHttlClient(this.settings.retrieveBaseUrl(this.getServiceName()), GeoIpLookupRemoteService.class, GeoIpLookupService.class);
-		LOGGER.debug("GeoIpLookup request start");
-		ResponseEntity<GeoIpLookup> rs = httpClient.retrieveIpInfo();
-		GeoIpLookup result = rs.getBody();
-		LOGGER.debug("GeoIpLookup response: {}", result);
+	public IpApi retrieveIpInfo() {
+		IpApiRemoteservice httpClient = buildHttlClient(this.settings.retrieveBaseUrl(this.getServiceName()),IpApiRemoteservice.class, IpApiService.class);
+		LOGGER.debug("IpApi request start");
+		ResponseEntity<IpApi> rs = httpClient.retrieveIpInfo();
+		IpApi result = rs.getBody();
+		LOGGER.debug("IpApi response: {}", result);
 		return result;
 	}
-	
+
 	public String getServiceName() {
 		return SERVICE_NAME;
 	}
+
 
 }

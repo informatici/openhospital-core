@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.telemetry.envdatacollector.collectors.remote.geoiplookup;
+package org.isf.telemetry.envdatacollector.collectors.remote.ipapi;
 
 import java.io.Serializable;
 
@@ -29,50 +29,38 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GeoIpLookup extends GeoIpInfoBean implements Serializable {
+public class IpApi extends GeoIpInfoBean implements Serializable {
 
 	private static final long serialVersionUID = -4751558360322494817L;
 
-	@JsonProperty("ip")
+	@JsonProperty("query")
 	private String ip;
-	
-	@JsonProperty("country_code")
+
+	@JsonProperty("countryCode")
 	private String countryCode;
 
-	@JsonProperty("country_name")
+	@JsonProperty("country")
 	private String countryName;
 
-	@JsonProperty("region")
+	@JsonProperty("regionName")
 	private String regionName;
 
 	@JsonProperty("city")
 	private String city;
 
-	@JsonProperty("postal_code")
+	@JsonProperty("zip")
 	private String postalCode;
 
-	@JsonProperty("timezone_name")
+	@JsonProperty("timezone")
 	private String timeZone;
 
-	@JsonProperty("latitude")
+	@JsonProperty("lat")
 	private Double latitude;
 
-	@JsonProperty("longitude")
+	@JsonProperty("lon")
 	private Double longitude;
-
-	@JsonProperty("currency_code")
+	
+	@JsonProperty("currency")
 	private String currencyCode;
-
-	@JsonProperty("currency_name")
-	private String currencyName;
-
-	public String getCurrencyName() {
-		return currencyName;
-	}
-
-	public void setCurrencyName(String currencyName) {
-		this.currencyName = currencyName;
-	}
-
 	
 }
