@@ -716,7 +716,7 @@ public class Tests extends OHCoreTestCase {
 			ArrayList<String> labRow = new ArrayList<>();
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 
-			laboratory.setDate(null);
+			laboratory.setLabDate(null);
 
 			labManager.newLaboratory(laboratory, labRow);
 		})

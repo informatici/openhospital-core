@@ -166,7 +166,9 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	private Integer newLaboratory(Laboratory laboratory) throws OHServiceException {
+		System.out.println("oups");
 		Laboratory savedLaboratory = repository.save(laboratory);
+		System.out.println("youti");
 		return savedLaboratory.getCode();
 	}
 	

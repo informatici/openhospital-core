@@ -112,11 +112,11 @@ public class Patient extends Auditable<String> {
 	@Column(name="PAT_BDATE")	// SQL type: date
 	private LocalDate birthDate;
 
-	@NotNull
+	
 	@Column(name="PAT_AGE")
 	private int age;
 
-	@NotNull
+	
 	@Column(name="PAT_AGETYPE")
 	private String agetype;
 

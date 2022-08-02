@@ -31,6 +31,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.isf.accounting.manager.BillBrowserManager;
 import org.isf.accounting.model.Bill;
 import org.isf.admission.manager.AdmissionBrowserManager;
+import org.isf.agetype.manager.AgeTypeBrowserManager;
+import org.isf.agetype.model.AgeType;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperations;
@@ -53,6 +55,9 @@ public class PatientBrowserManager {
 
 	@Autowired
 	private BillBrowserManager billManager;
+	
+	@Autowired
+	private AgeTypeBrowserManager ageTypeManager;
 
 	protected LinkedHashMap<String, String> maritalHashMap;
 
@@ -388,9 +393,9 @@ public class PatientBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param patient
-	 * @throws OHDataValidationException
+	 * @throws OHServiceException 
 	 */
-	protected void validatePatient(Patient patient) throws OHDataValidationException {
+	protected void validatePatient(Patient patient) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (StringUtils.isEmpty(patient.getFirstName())) {
@@ -418,14 +423,31 @@ public class PatientBrowserManager {
 		}
 	}
 
-	private boolean checkAge(Patient patient) {
+	private boolean checkAge(Patient patient) throws OHServiceException {
 		LocalDate now = LocalDate.now();
 		LocalDate birthDate = patient.getBirthDate();
-
+		List<AgeType> ageTypes = ageTypeManager.getAgeType();
+		if(patient.getBirthDate()!= null && ageTypes != null) {
+			for(AgeType age :ageTypes) {
+				if(age.getFrom() < patient.getAge() && patient.getAge()  < age.getTo()) {
+					patient.setAgetype(age.getCode());
+				}
+			}
+		}
+		if(patient.getAge() > 0 & ageTypes != null) {
+			for(AgeType age :ageTypes) {
+				if(age.getFrom() < patient.getAge() && patient.getAge()  < age.getTo()) {
+					patient.setAgetype(age.getCode());
+				}
+			}
+		}
 		if (patient.getAge() < 0 || patient.getAge() > 200) {
 			return false;
 		}
-		return birthDate != null && !birthDate.isAfter(now);
+		if(patient.getBirthDate()!= null) {
+			return birthDate != null && !birthDate.isAfter(now);
+		}
+		return true;
 	}
 	
 	/**

@@ -91,6 +91,17 @@ public class AgeTypeBrowserManager {
 	public AgeType getTypeByCode(int index) throws OHServiceException {
 		return ioOperations.getAgeTypeByCode(index);
 	}
+	
+	/**
+	 * Gets the {@link AgeType} from the code.
+	 *
+	 * @param code of agetype.
+	 * @return the retrieved element, <code>null</code> otherwise.
+	 * @throws OHServiceException
+	 */
+	public AgeType getTypeByCode(String code) throws OHServiceException {
+		return ioOperations.getAgeTypeByCode(code);
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any

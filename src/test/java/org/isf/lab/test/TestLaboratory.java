@@ -54,7 +54,7 @@ public class TestLaboratory {
 			// Create Laboratory with all parameters 
 			laboratory = new Laboratory(exam, labDate, result, note, patient, patName);
 			laboratory.setAge(age);
-			laboratory.setDate(labDate);
+			laboratory.setLabDate(labDate);
 			laboratory.setExamDate(examDate);
 			laboratory.setInOutPatient(InOutPatient);
 			laboratory.setMaterial(material);
@@ -67,7 +67,7 @@ public class TestLaboratory {
 
 	public void setParameters(Laboratory laboratory, Exam exam, Patient patient) {
 		laboratory.setAge(age);
-		laboratory.setDate(labDate);
+		laboratory.setLabDate(labDate);
 		laboratory.setExam(exam);
 		laboratory.setExamDate(examDate);
 		laboratory.setInOutPatient(InOutPatient);
