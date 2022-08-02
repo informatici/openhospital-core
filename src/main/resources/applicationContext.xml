@@ -48,16 +48,6 @@
 		<property name="ignoreResourceNotFound" value="true" />
 	</bean>
 	
-	
-	<bean id="ipinfoProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-		<property name="locations">
-			<list>
-				<value>classpath:ipinfo.properties</value>
-			</list>
-		</property>
-		<property name="ignoreResourceNotFound" value="true" />
-	</bean>
-
 	<bean id="smsProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="locations">
 			<list>
