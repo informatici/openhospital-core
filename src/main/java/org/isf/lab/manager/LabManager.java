@@ -251,10 +251,8 @@ public class LabManager {
 	public boolean updateLaboratory(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		validateLaboratory(laboratory);
 		if (laboratory.getExam().getProcedure() == 1) {
-			System.out.println("cas 1");
 			return ioOperations.updateLabFirstProcedure(laboratory);
 		} else if (laboratory.getExam().getProcedure() == 2) {
-			System.out.println("cas 2");
 			if (labRow == null || labRow.isEmpty())
 				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg"),
@@ -262,7 +260,6 @@ public class LabManager {
 			return ioOperations.updateLabSecondProcedure(laboratory, labRow);
 		} else if (laboratory.getExam().getProcedure() == 3) {
 			//TODO: is it enough to call FirstProcedure?
-			System.out.println("cas 3");
 			return ioOperations.updateLabFirstProcedure(laboratory);
 		} else
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
@@ -493,5 +490,15 @@ public class LabManager {
 	public Optional<Laboratory> getLaboratory(Integer code) throws OHServiceException {
 		return ioOperations.getLaboratory(code);
 	}	
+	
+	/**
+	  * Return the whole list of ({@link LaboratoryRow}s).
+	  *
+	  * @return the list of {@link LaboratoryRow}s. It could not be <code>empty</code>.
+	  * @throws OHServiceException
+	  */
+	public List<LaboratoryRow> getLaboratoryRowList(Integer code) throws OHServiceException {
+			return ioOperations.getLabRow(code);
+	}
 
 }
