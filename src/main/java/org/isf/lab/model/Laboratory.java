@@ -81,7 +81,7 @@ public class Laboratory extends Auditable<String> {
 	
 	@NotNull
 	@Column(name="LAB_EXAM_DATE")
-	//@Deprecated
+	@Deprecated
 	private LocalDateTime examDate;	// SQL type: date
 
 	@NotNull
@@ -161,17 +161,17 @@ public class Laboratory extends Auditable<String> {
 	}
 	/**
 	 * use <code>getCreatedDate()</code> instead
-	 * @deprecated 
+	 * 
 	 */
-	//@Deprecated
+	@Deprecated
 	public LocalDateTime getExamDate() {
 		return examDate;
 	}
 	/**
 	 * the field has been replaced by <code>createdDate()</code> and it's not meant to be managed by the user (Spring managed)
-	 * @deprecated 
+	 *
 	 */
-	//@Deprecated
+	@Deprecated
 	public void setExamDate(LocalDateTime exDate) {
 		this.examDate = exDate;
 	}
