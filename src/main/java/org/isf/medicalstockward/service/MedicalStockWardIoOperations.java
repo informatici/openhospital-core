@@ -206,6 +206,7 @@ public class MedicalStockWardIoOperations
 				medicalWard.setLot(movement.getLot());
 				repository.save(medicalWard);
 			}
+			repository.updateOutQuantity(Math.abs(qty), ward, medical, lot);
 			return result;
 		}
 
