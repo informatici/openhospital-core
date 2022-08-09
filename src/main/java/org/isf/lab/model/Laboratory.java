@@ -21,6 +21,7 @@
  */
 package org.isf.lab.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
@@ -81,7 +82,7 @@ public class Laboratory extends Auditable<String> {
 	
 	@NotNull
 	@Column(name="LAB_EXAM_DATE")
-	@Deprecated
+	//@Deprecated
 	private LocalDateTime examDate;	// SQL type: date
 
 	@NotNull
@@ -163,7 +164,7 @@ public class Laboratory extends Auditable<String> {
 	 * use <code>getCreatedDate()</code> instead
 	 * 
 	 */
-	@Deprecated
+	//@Deprecated
 	public LocalDateTime getExamDate() {
 		return examDate;
 	}
@@ -171,7 +172,7 @@ public class Laboratory extends Auditable<String> {
 	 * the field has been replaced by <code>createdDate()</code> and it's not meant to be managed by the user (Spring managed)
 	 *
 	 */
-	@Deprecated
+	//@Deprecated
 	public void setExamDate(LocalDateTime exDate) {
 		this.examDate = exDate;
 	}

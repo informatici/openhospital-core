@@ -39,7 +39,7 @@ public interface LabIoOperationRepository extends JpaRepository<Laboratory, Inte
 
 	List<Laboratory> findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(LocalDateTime dateFrom, LocalDateTime dateTo);
 
-	List<Laboratory> findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(LocalDateTime dateFrom, LocalDateTime dateTo, String exam);
+	List<Laboratory> findByLabDateBetweenAndExam_Description(LocalDateTime dateFrom, LocalDateTime dateTo, String exam);
 	//List<Laboratory> findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionAndPatient(LocalDateTime dateFrom, LocalDateTime dateTo, String exam, Patient patient);
 	List<Laboratory> findByLabDateBetweenAndPatientCode(LocalDateTime dateFrom, LocalDateTime dateTo, Integer patientCode);
 	List<Laboratory> findByLabDateBetweenAndExamDescriptionAndPatientCode(LocalDateTime dateFrom, LocalDateTime dateTo, String exam, Integer patient);
