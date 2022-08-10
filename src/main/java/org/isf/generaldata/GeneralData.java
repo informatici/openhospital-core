@@ -90,6 +90,8 @@ public final class GeneralData extends ConfigurationProperties {
 	public static String PATIENTBILLSTATEMENT;
 	public static boolean DEBUG;
 
+	public static boolean STRONGPASSWORD;
+
 	private static final String DEFAULT_LANGUAGE = "en";
 	private static final boolean DEFAULT_SINGLEUSER = false;
 	private static final boolean DEFAULT_USERSLISTLOGIN = false;
@@ -134,6 +136,8 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_PATIENTBILLGROUPED = "PatientBillGrouped";
 	private static final String DEFAULT_PATIENTBILLSTATEMENT = "PatientBillStatement";
 	private static final boolean DEFAULT_DEBUG = false;
+
+	private static final boolean DEFAULT_STRONGPASSWORD = false;
 
 	private static GeneralData mySingleData;
 	
@@ -189,7 +193,8 @@ public final class GeneralData extends ConfigurationProperties {
 		PATIENTBILLGROUPED = myGetProperty("PATIENTBILLGROUPED", DEFAULT_PATIENTBILLGROUPED);
 		PATIENTBILLSTATEMENT = myGetProperty("PATIENTBILLSTATEMENT", DEFAULT_PATIENTBILLSTATEMENT);
 		DEBUG = myGetProperty("DEBUG", DEFAULT_DEBUG);
-			
+
+		STRONGPASSWORD = myGetProperty("STRONGPASSWORD", DEFAULT_STRONGPASSWORD);
 	}
 
 	public static GeneralData getGeneralData() {
