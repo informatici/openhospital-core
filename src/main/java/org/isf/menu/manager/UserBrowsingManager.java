@@ -244,7 +244,7 @@ public class UserBrowsingManager {
 		String regex = "^(?=.*[0-9])"        // a digit must occur at least once
 				+ "(?=.*[a-zA-Z])"           // a lower case or upper case alphabetic must occur at least once
 				+ "(?=.*[@#$%^&+=])"         // a special character that must occur at least once
-				+ "(?=\\S+$).+$";             // white spaces not allowed
+				+ "(?=\\S+$).+$";            // white spaces not allowed
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(password);
 		return matcher.matches();
