@@ -95,8 +95,8 @@ public class LabIoOperations {
 	 */
 	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return exam != null ?
-				repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam) :
-				repository.findByExamDateBetweenOrderByLabDateDesc(dateFrom, dateTo);
+				repository.findByExamDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam) :
+				repository.findByExamDateBetweenOrderByExamDateDesc(dateFrom, dateTo);
 	}
 	
 	/**
@@ -106,7 +106,7 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Laboratory> getLaboratory(Patient aPatient) throws OHServiceException {
-		return repository.findByPatient_CodeOrderByLabDate(aPatient.getCode());
+		return repository.findByPatient_CodeOrderByExamDate(aPatient.getCode());
 	}
 	
 	/**
@@ -132,26 +132,25 @@ public class LabIoOperations {
 	 */
 	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
 		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
-		Iterable<Laboratory> laboritories = null;
+		List<Laboratory> laboritories = new ArrayList<>();
 			if(!exam.equals("") && patient != null) {
 				System.out.println("ici "+1);
-				laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCode(dateFrom, dateTo, exam, patient.getCode());
+				laboritories = repository.findByExamDateBetweenAndExamDescriptionAndPatientCode(dateFrom, dateTo, exam, patient.getCode());
 			}
 			if(!exam.equals("") && patient == null ) {
 				System.out.println("ici "+2);
-				laboritories = repository.findByLabDateBetweenAndExam_Description(dateFrom, dateTo, exam);
+				laboritories = repository.findByExamDateBetweenAndExam_Description(dateFrom, dateTo, exam);
 			}
 			if(patient != null && exam.equals("")) {
 				System.out.println("ici "+3);
-				laboritories = repository.findByLabDateBetweenAndPatientCode(dateFrom, dateTo, patient.getCode());
+				laboritories = repository.findByExamDateBetweenAndPatientCode(dateFrom, dateTo, patient.getCode());
 			}
-			if(laboritories == null) {
-				System.out.println("ici "+3);
-				laboritories= repository.findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo);
+			if(patient == null && exam.equals("")) {
+				System.out.println("ici "+4);
+				laboritories= repository.findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo);
 			}
-				
-
 		for (Laboratory laboratory : laboritories) {
+			
 			pLaboratory.add(new LaboratoryForPrint(
 							laboratory.getCode(),
 							laboratory.getExam(),

@@ -31,16 +31,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LabIoOperationRepository extends JpaRepository<Laboratory, Integer> {
 
-	List<Laboratory> findByExamDateBetweenOrderByLabDateDesc(LocalDateTime dateFrom, LocalDateTime dateTo);
+	List<Laboratory> findByExamDateBetweenOrderByExamDateDesc(LocalDateTime dateFrom, LocalDateTime dateTo);
 
-	List<Laboratory> findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(LocalDateTime dateFrom, LocalDateTime dateTo, String exam);
+	List<Laboratory> findByExamDateBetweenAndExam_DescriptionOrderByLabDateDesc(LocalDateTime dateFrom, LocalDateTime dateTo, String exam);
 
-	List<Laboratory> findByPatient_CodeOrderByLabDate(Integer patient);
+	List<Laboratory> findByPatient_CodeOrderByExamDate(Integer patient);
 
-	List<Laboratory> findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(LocalDateTime dateFrom, LocalDateTime dateTo);
+	List<Laboratory> findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(LocalDateTime dateFrom, LocalDateTime dateTo);
 
-	List<Laboratory> findByLabDateBetweenAndExam_Description(LocalDateTime dateFrom, LocalDateTime dateTo, String exam);
+	List<Laboratory> findByExamDateBetweenAndExam_Description(LocalDateTime dateFrom, LocalDateTime dateTo, String exam);
 	//List<Laboratory> findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionAndPatient(LocalDateTime dateFrom, LocalDateTime dateTo, String exam, Patient patient);
-	List<Laboratory> findByLabDateBetweenAndPatientCode(LocalDateTime dateFrom, LocalDateTime dateTo, Integer patientCode);
-	List<Laboratory> findByLabDateBetweenAndExamDescriptionAndPatientCode(LocalDateTime dateFrom, LocalDateTime dateTo, String exam, Integer patient);
+	List<Laboratory> findByExamDateBetweenAndPatientCode(LocalDateTime dateFrom, LocalDateTime dateTo, Integer patientCode);
+	List<Laboratory> findByExamDateBetweenAndExamDescriptionAndPatientCode(LocalDateTime dateFrom, LocalDateTime dateTo, String exam, Integer patient);
 }

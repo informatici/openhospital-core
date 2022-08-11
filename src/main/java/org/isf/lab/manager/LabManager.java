@@ -181,7 +181,7 @@ public class LabManager {
 	 */
 	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
 		List<LaboratoryForPrint> labs = ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo, patient);
-		setLabMultipleResults(labs);
+		//setLabMultipleResults(labs);
 		return labs;
 	}
 
@@ -385,6 +385,7 @@ public class LabManager {
 		List<LaboratoryRow> rows;
 
 		for (LaboratoryForPrint lab : labs) {
+			System.out.println("result "+lab.getResult());
 			String labResult = lab.getResult();
 			if (labResult.equalsIgnoreCase(MessageBundle.getMessage("angal.lab.multipleresults.txt"))) {
 				rows = ioOperations.getLabRow(lab.getCode());
