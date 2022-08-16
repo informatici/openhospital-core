@@ -137,7 +137,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_PATIENTBILLSTATEMENT = "PatientBillStatement";
 	private static final boolean DEFAULT_DEBUG = false;
 
-	private static final boolean DEFAULT_STRONGPASSWORD = false;
+	private static final boolean DEFAULT_STRONGPASSWORD = true;
 
 	private static GeneralData mySingleData;
 	
