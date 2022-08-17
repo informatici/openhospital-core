@@ -22,7 +22,10 @@
 package org.isf.menu.manager;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
@@ -223,5 +226,28 @@ public class UserBrowsingManager {
 	 */
 	public boolean updateUserGroup(UserGroup aGroup) throws OHServiceException {
 		return ioOperations.updateUserGroup(aGroup);
+	}
+
+	/**
+	 * Tests whether a password meets the requirment for various characters being present
+	 *
+	 * @param password
+	 * @return <code>true</code> if password is meets the minimum requirements, <code>false</code> otherwise.
+	 */
+	public boolean isPasswordStrong(String password) {
+		if (password == null) {
+			return false;
+		}
+		if (!GeneralData.STRONGPASSWORD) {
+			return true;
+		}
+
+		String regex = "^(?=.*[0-9])"        // a digit must occur at least once
+				+ "(?=.*[a-zA-Z])"           // a lower case or upper case alphabetic must occur at least once
+				+ "(?=.*[\\\\_$&+,:;=\\\\?@#|/'<>.^*()%!-])" // a special character that must occur at least once
+				+ "(?=\\S+$).+$";            // white spaces not allowed
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(password);
+		return matcher.matches();
 	}
 }
