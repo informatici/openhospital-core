@@ -134,19 +134,15 @@ public class LabIoOperations {
 		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
 		List<Laboratory> laboritories = new ArrayList<>();
 			if(!exam.equals("") && patient != null) {
-				System.out.println("ici "+1);
 				laboritories = repository.findByExamDateBetweenAndExamDescriptionAndPatientCode(dateFrom, dateTo, exam, patient.getCode());
 			}
 			if(!exam.equals("") && patient == null ) {
-				System.out.println("ici "+2);
 				laboritories = repository.findByExamDateBetweenAndExam_Description(dateFrom, dateTo, exam);
 			}
 			if(patient != null && exam.equals("")) {
-				System.out.println("ici "+3);
 				laboritories = repository.findByExamDateBetweenAndPatientCode(dateFrom, dateTo, patient.getCode());
 			}
 			if(patient == null && exam.equals("")) {
-				System.out.println("ici "+4);
 				laboritories= repository.findByExamDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo);
 			}
 		for (Laboratory laboratory : laboritories) {
@@ -171,9 +167,7 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	private Integer newLaboratory(Laboratory laboratory) throws OHServiceException {
-		System.out.println("oups");
 		Laboratory savedLaboratory = repository.save(laboratory);
-		System.out.println("youti");
 		return savedLaboratory.getCode();
 	}
 	
