@@ -447,6 +447,10 @@ public class PatientBrowserManager {
 		if(patient.getBirthDate()!= null) {
 			return birthDate != null && !birthDate.isAfter(now);
 		}
+		if(patient.getAge() > 0 || patient.getAge() < 200) {
+			LocalDate date = now.minusYears(patient.getAge());
+			patient.setBirthDate(date);
+		}
 		return true;
 	}
 	
