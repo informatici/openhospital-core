@@ -29,7 +29,6 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import java.util.Random;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -40,7 +39,9 @@ import org.isf.utils.exception.OHException;
 
 public class TestDicom {
 
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss z yyyy", new Locale("en"));
+	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss z yyyy");
+	private static final String DATE_TIME_STRING = "Sat Aug 01 10:02:03 EDT 2020";
+
 	private Blob dicomData = createRandomBlob(100);
 	private int patId = 0;
 	private String fileName = "TestFileName";
@@ -53,13 +54,13 @@ public class TestDicom {
 	private String dicomPatientSex = "TestPatientSex";
 	private String dicomPatientBirthDate = "TestPatientBirth";
 	private String dicomStudyId = "TestStudyId";
-	private LocalDateTime dicomStudyDate = LocalDateTime.parse("Sat Aug 01 10:02:03 AST 2020", formatter);
+	private LocalDateTime dicomStudyDate = LocalDateTime.parse(DATE_TIME_STRING, DATE_TIME_FORMATTER);
 	private String dicomStudyDescription = "TestStudyDescription";
 	private String dicomSeriesUID = "TestSeriesUid";
 	private String dicomSeriesInstanceUID = "TestSeriesInstanceUid";
 	private String dicomSeriesNumber = "TestSeriesNumber";
 	private String dicomSeriesDescriptionCodeSequence = "TestSeriesDescription";
-	private LocalDateTime dicomSeriesDate = LocalDateTime.parse("Sat Aug 01 10:02:03 AST 2020", formatter);
+	private LocalDateTime dicomSeriesDate = LocalDateTime.parse(DATE_TIME_STRING, DATE_TIME_FORMATTER);
 	private String dicomSeriesDescription = "TestSeriesDescription";
 	private String dicomInstanceUID = "TestInteanceUid";
 	private String modality = "TestModality";
@@ -122,13 +123,13 @@ public class TestDicom {
 		assertThat(dicom.getDicomPatientID()).isEqualTo(dicomPatientID);
 		assertThat(dicom.getDicomPatientName()).isEqualTo(dicomPatientName);
 		assertThat(dicom.getDicomPatientSex()).isEqualTo(dicomPatientSex);
-		assertThat(formatter.format(dicom.getDicomSeriesDate().atZone(ZoneId.systemDefault()))).isEqualTo(formatter.format(dicomSeriesDate.atZone(ZoneId.systemDefault())));
+		assertThat(dicom.getDicomSeriesDate().atZone(ZoneId.systemDefault()).format(DATE_TIME_FORMATTER)).isEqualTo(DATE_TIME_STRING);
 		assertThat(dicom.getDicomSeriesDescription()).isEqualTo(dicomSeriesDescription);
 		assertThat(dicom.getDicomSeriesDescriptionCodeSequence()).isEqualTo(dicomSeriesDescriptionCodeSequence);
 		assertThat(dicom.getDicomSeriesInstanceUID()).isEqualTo(dicomSeriesInstanceUID);
 		assertThat(dicom.getDicomSeriesNumber()).isEqualTo(dicomSeriesNumber);
 		assertThat(dicom.getDicomSeriesUID()).isEqualTo(dicomSeriesUID);
-		assertThat(formatter.format(dicom.getDicomStudyDate().atZone(ZoneId.systemDefault()))).isEqualTo(formatter.format(dicomStudyDate.atZone(ZoneId.systemDefault())));
+		assertThat(dicom.getDicomStudyDate().atZone(ZoneId.systemDefault()).format(DATE_TIME_FORMATTER)).isEqualTo(DATE_TIME_STRING);
 		assertThat(dicom.getDicomStudyDescription()).isEqualTo(dicomStudyDescription);
 		assertThat(dicom.getDicomStudyId()).isEqualTo(dicomStudyId);
 		assertThat(dicom.getFileName()).isEqualTo(fileName);
