@@ -82,30 +82,30 @@ public class TherapyRow extends Auditable<String> {
 	@Column(name="THR_MDSR_ID")	
 	private Integer medicalId;
 
-	//@NotNull
+	@NotNull
 	@Column(name="THR_QTY")	
 	private Double qty;
 
-	//@NotNull
+	@NotNull
 	@Column(name="THR_UNT_ID")	
 	private int unitID;
 
-	//@NotNull
+	@NotNull
 	@Column(name="THR_FREQINDAY")	
 	private int freqInDay;
 
-	//@NotNull
+	@NotNull
 	@Column(name="THR_FREQINPRD")	
 	private int freqInPeriod;
 	
 	@Column(name="THR_NOTE")	
 	private String note;
 
-	//@NotNull
+	@NotNull
 	@Column(name="THR_NOTIFY")	
 	private int notifyInt;
 
-	//@NotNull
+	@NotNull
 	@Column(name="THR_SMS")	
 	private int smsInt;
 
