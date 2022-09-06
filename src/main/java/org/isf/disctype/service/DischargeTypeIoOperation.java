@@ -21,7 +21,6 @@
  */
 package org.isf.disctype.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.disctype.model.DischargeType;
@@ -46,7 +45,7 @@ public class DischargeTypeIoOperation {
 	 * @throws OHServiceException
 	 */
 	public List<DischargeType> getDischargeType() throws OHServiceException {
-		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
+		return repository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
@@ -56,16 +55,8 @@ public class DischargeTypeIoOperation {
 	 * @return true - if the existing DischargeType has been updated
 	 * @throws OHServiceException
 	 */
-	public boolean updateDischargeType(
-			DischargeType dischargeType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		DischargeType savedDischargeType = repository.save(dischargeType);
-		result = (savedDischargeType != null);
-		
-		return result;
+	public boolean updateDischargeType(DischargeType dischargeType) throws OHServiceException {
+		return repository.save(dischargeType) != null;
 	}
 
 	/**
@@ -75,16 +66,8 @@ public class DischargeTypeIoOperation {
 	 * @return true - if the new DischargeType has been inserted
 	 * @throws OHServiceException
 	 */
-	public boolean newDischargeType(
-			DischargeType dischargeType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		DischargeType savedDischargeType = repository.save(dischargeType);
-		result = (savedDischargeType != null);
-		
-		return result;
+	public boolean newDischargeType(DischargeType dischargeType) throws OHServiceException {
+		return repository.save(dischargeType) != null;
 	}
 
 	/**
@@ -94,15 +77,9 @@ public class DischargeTypeIoOperation {
 	 * @return true - if the DischargeType has been deleted
 	 * @throws OHServiceException
 	 */
-	public boolean deleteDischargeType(
-			DischargeType dischargeType) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteDischargeType(DischargeType dischargeType) throws OHServiceException {
 		repository.delete(dischargeType);
-		
-		return result;
+		return true;
 	}
 
 	/**
@@ -112,14 +89,7 @@ public class DischargeTypeIoOperation {
 	 * @return true - if the DischargeType already exists
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.existsById(code);
 	}
 }

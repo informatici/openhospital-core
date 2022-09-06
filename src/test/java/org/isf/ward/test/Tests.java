@@ -24,7 +24,7 @@ package org.isf.ward.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 
@@ -74,28 +74,28 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testWardGets() throws Exception {
-		String code = _setupTestWard(false);
-		_checkWardIntoDb(code);
+		String code = setupTestWard(false);
+		checkWardIntoDb(code);
 	}
 
 	@Test
 	public void testWardSets() throws Exception {
-		String code = _setupTestWard(true);
-		_checkWardIntoDb(code);
+		String code = setupTestWard(true);
+		checkWardIntoDb(code);
 	}
 
 	@Test
 	public void testIoGetCurrentOccupationNoAdmissions() throws Exception {
-		String code = _setupTestWard(false);
-		Ward ward = wardIoOperationRepository.findOne(code);
+		String code = setupTestWard(false);
+		Ward ward = wardIoOperationRepository.findById(code).get();
 		assertThat(wardIoOperation.getCurrentOccupation(ward)).isZero();
 	}
 
 	@Test
 	public void testIoGetCurrentOccupation() throws Exception {
-		String code = _setupTestWard(false);
-		Ward ward = wardIoOperationRepository.findOne(code);
-		GregorianCalendar admDate = new GregorianCalendar();
+		String code = setupTestWard(false);
+		Ward ward = wardIoOperationRepository.findById(code).get();
+		LocalDateTime admDate = LocalDateTime.now();
 		AdmissionType admissionType = new AdmissionType("ZZ", "TestDescription");
 		Admission admission1 = new Admission(0, 1, "N", ward, 0, null, admDate, admissionType,
 				"TestFHU", null, null, null, null, null, "Result1", null, null, null, "TestNote1",
@@ -114,8 +114,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetWardsNoMaternity() throws Exception {
 		// given:
-		String code = _setupTestWard(false);
-		Ward foundWard = wardIoOperationRepository.findOne(code);
+		String code = setupTestWard(false);
+		Ward foundWard = wardIoOperationRepository.findById(code).get();
 
 		// when:
 		List<Ward> wards = wardIoOperation.getWardsNoMaternity();
@@ -127,8 +127,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetWards() throws Exception {
 		// given:
-		String code = _setupTestWard(false);
-		Ward foundWard = wardIoOperationRepository.findOne(code);
+		String code = setupTestWard(false);
+		Ward foundWard = wardIoOperationRepository.findById(code).get();
 
 		// when:
 		List<Ward> wards = wardIoOperation.getWards(code);
@@ -139,8 +139,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetWardsGetAll() throws Exception {
-		String code = _setupTestWard(false);
-		Ward ward = wardIoOperationRepository.findOne(code);
+		String code = setupTestWard(false);
+		Ward ward = wardIoOperationRepository.findById(code).get();
 		List<Ward> wards = wardIoOperation.getWards(null);
 		assertThat(wards).hasSize(1);
 		assertThat(wards.get(0).getDescription()).isEqualTo(ward.getDescription());
@@ -152,19 +152,19 @@ public class Tests extends OHCoreTestCase {
 		Ward newWard = wardIoOperation.newWard(ward);
 
 		assertThat(newWard.getDescription()).isEqualTo("TestDescription");
-		_checkWardIntoDb(ward.getCode());
+		checkWardIntoDb(ward.getCode());
 	}
 
 	@Test
 	public void testIoUpdateWard() throws Exception {
 		// given:
-		String code = _setupTestWard(false);
-		Ward foundWard = wardIoOperationRepository.findOne(code);
+		String code = setupTestWard(false);
+		Ward foundWard = wardIoOperationRepository.findById(code).get();
 		foundWard.setDescription("Update");
 
 		// when:
 		wardIoOperation.updateWard(foundWard);
-		Ward updateWard = wardIoOperationRepository.findOne(code);
+		Ward updateWard = wardIoOperationRepository.findById(code).get();
 
 		// then:
 		assertThat(updateWard.getDescription()).isEqualTo("Update");
@@ -181,8 +181,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoDeleteWard() throws Exception {
 		// given:
-		String code = _setupTestWard(false);
-		Ward foundWard = wardIoOperationRepository.findOne(code);
+		String code = setupTestWard(false);
+		Ward foundWard = wardIoOperationRepository.findById(code).get();
 
 		// when:
 		boolean result = wardIoOperation.deleteWard(foundWard);
@@ -195,7 +195,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoIsCodePresent() throws Exception {
-		String code = _setupTestWard(false);
+		String code = setupTestWard(false);
 		boolean result = wardIoOperation.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
@@ -222,7 +222,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoFindWard() throws Exception {
-		String code = _setupTestWard(false);
+		String code = setupTestWard(false);
 		Ward result = wardIoOperation.findWard(code);
 		assertThat(result).isNotNull();
 		assertThat(result.getCode()).isEqualTo(code);
@@ -236,15 +236,15 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetCurrentOccupationNoAdmissions() throws Exception {
-		String code = _setupTestWard(false);
-		Ward ward = wardIoOperationRepository.findOne(code);
+		String code = setupTestWard(false);
+		Ward ward = wardIoOperationRepository.findById(code).get();
 		assertThat(wardBrowserManager.getCurrentOccupation(ward)).isZero();
 	}
 
 	@Test
 	public void testMgrGetCurrentOccupation() throws Exception {
-		String code = _setupTestWard(false);
-		Ward ward = wardIoOperationRepository.findOne(code);
+		String code = setupTestWard(false);
+		Ward ward = wardIoOperationRepository.findById(code).get();
 		Admission admission1 = new Admission(1, 1, null, ward, 1, null, null, null, null, null,
 				null, null, null, null, null, null, null, null, null, null,
 				null, null, null, null, null, null, null, null, null, null, null);
@@ -258,24 +258,24 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetWardsNoMaternity() throws Exception {
-		String code = _setupTestWard(false);
-		Ward ward = wardIoOperationRepository.findOne(code);
+		String code = setupTestWard(false);
+		Ward ward = wardIoOperationRepository.findById(code).get();
 		List<Ward> wards = wardBrowserManager.getWardsNoMaternity();
 		assertThat(wards.get(wards.size() - 1).getDescription()).isEqualTo(ward.getDescription());
 	}
 
 	@Test
 	public void testMgrGetWards() throws Exception {
-		String code = _setupTestWard(false);
-		Ward ward = wardIoOperationRepository.findOne(code);
+		String code = setupTestWard(false);
+		Ward ward = wardIoOperationRepository.findById(code).get();
 		List<Ward> wards = wardBrowserManager.getWards(ward);
 		assertThat(wards.get(0).getDescription()).isEqualTo(ward.getDescription());
 	}
 
 	@Test
 	public void testMgrGetWardsGetAll() throws Exception {
-		String code = _setupTestWard(false);
-		Ward ward = wardIoOperationRepository.findOne(code);
+		String code = setupTestWard(false);
+		Ward ward = wardIoOperationRepository.findById(code).get();
 		List<Ward> wards = wardBrowserManager.getWards();
 		assertThat(wards).hasSize(1);
 		assertThat(wards.get(0).getDescription()).isEqualTo(ward.getDescription());
@@ -287,16 +287,16 @@ public class Tests extends OHCoreTestCase {
 		Ward newWard = wardBrowserManager.newWard(ward);
 
 		assertThat(newWard.getDescription()).isEqualTo("TestDescription");
-		_checkWardIntoDb(ward.getCode());
+		checkWardIntoDb(ward.getCode());
 	}
 
 	@Test
 	public void testMgrUpdateWard() throws Exception {
-		String code = _setupTestWard(false);
-		Ward ward = wardIoOperationRepository.findOne(code);
+		String code = setupTestWard(false);
+		Ward ward = wardIoOperationRepository.findById(code).get();
 		ward.setDescription("Update");
 		wardBrowserManager.updateWard(ward);
-		Ward updateWard = wardIoOperationRepository.findOne(code);
+		Ward updateWard = wardIoOperationRepository.findById(code).get();
 		assertThat(updateWard.getDescription()).isEqualTo("Update");
 	}
 
@@ -310,8 +310,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrDeleteWardNoPatients() throws Exception {
-		String code = _setupTestWard(false);
-		Ward ward = wardIoOperationRepository.findOne(code);
+		String code = setupTestWard(false);
+		Ward ward = wardIoOperationRepository.findById(code).get();
 		assertThat(wardBrowserManager.deleteWard(ward)).isTrue();
 		assertThat(wardBrowserManager.isCodePresent(code)).isFalse();
 	}
@@ -326,8 +326,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrDeleteWardWithPatients() throws Exception {
-		String code = _setupTestWard(false);
-		Ward ward = wardIoOperationRepository.findOne(code);
+		String code = setupTestWard(false);
+		Ward ward = wardIoOperationRepository.findById(code).get();
 		Admission admission1 = new Admission(1, 1, null, ward, 1, null, null, null, null, null,
 				null, null, null, null, null, null, null, null, null, null,
 				null, null, null, null, null, null, null, null, null, null, "N");
@@ -342,7 +342,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
-		String code = _setupTestWard(false);
+		String code = setupTestWard(false);
 		assertThat(wardBrowserManager.isCodePresent(code)).isTrue();
 	}
 
@@ -372,7 +372,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrFindWard() throws Exception {
-		String code = _setupTestWard(false);
+		String code = setupTestWard(false);
 		Ward result = wardBrowserManager.findWard(code);
 		assertThat(result).isNotNull();
 		assertThat(result.getCode()).isEqualTo(code);
@@ -554,14 +554,14 @@ public class Tests extends OHCoreTestCase {
 		assertThat(ward.hashCode()).isEqualTo(hashCode);
 	}
 
-	private String _setupTestWard(boolean usingSet) throws OHException {
+	private String setupTestWard(boolean usingSet) throws OHException {
 		Ward ward = testWard.setup(usingSet);
 		wardIoOperationRepository.saveAndFlush(ward);
 		return ward.getCode();
 	}
 
-	private void _checkWardIntoDb(String code) throws OHException {
-		Ward foundWard = wardIoOperationRepository.findOne(code);
+	private void checkWardIntoDb(String code) throws OHException {
+		Ward foundWard = wardIoOperationRepository.findById(code).get();
 		testWard.check(foundWard);
 	}
 }

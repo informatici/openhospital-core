@@ -36,7 +36,7 @@ import org.isf.sms.providers.skebby.remote.SkebbyGatewayRemoteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.netflix.feign.support.SpringMvcContract;
+import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.stereotype.Component;
 
 import feign.Feign;
@@ -83,7 +83,7 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 
 		SkebbyGatewayRemoteService httpClient = buildHttlClient();
 		System.out.println("Sending...");
-		SckebbySmsResponse result = null;
+		SckebbySmsResponse result;
 		try {
 			if (this.isAccessTokenAuthentication()) {
 				result = httpClient.sendSmsWithAccessToken(userKey, sessionKeyOrAccessToken, smsSendingRequest).getBody();

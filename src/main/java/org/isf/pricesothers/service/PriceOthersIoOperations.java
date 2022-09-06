@@ -55,16 +55,8 @@ public class PriceOthersIoOperations {
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newOthers(
-			PricesOthers other) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		PricesOthers savedOther = repository.save(other);
-		result = (savedOther != null);
-		    	
-		return result;
+	public boolean newOthers(PricesOthers other) throws OHServiceException {
+		return repository.save(other) != null;
 	}
 
 	/**
@@ -74,15 +66,9 @@ public class PriceOthersIoOperations {
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean deleteOthers(
-			PricesOthers other) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteOthers(PricesOthers other) throws OHServiceException {
 		repository.delete(other);
-		
-		return result;
+		return true;
 	}
 
 	/**
@@ -92,16 +78,8 @@ public class PriceOthersIoOperations {
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean updateOther(
-			PricesOthers other) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		PricesOthers savedOther = repository.save(other);
-		result = (savedOther != null);
-		    	
-		return result;
+	public boolean updateOther(PricesOthers other) throws OHServiceException {
+		return repository.save(other) != null;
 	}
 
 	/**
@@ -111,14 +89,8 @@ public class PriceOthersIoOperations {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			Integer id) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(id);
-		
-		return result;	
+	public boolean isCodePresent(Integer id) throws OHServiceException {
+		return repository.existsById(id);
 	}
+
 }

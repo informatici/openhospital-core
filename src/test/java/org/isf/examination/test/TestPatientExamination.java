@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,7 +23,7 @@ package org.isf.examination.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import org.isf.examination.model.PatientExamination;
 import org.isf.patient.model.Patient;
@@ -31,7 +31,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestPatientExamination {
 
-	private GregorianCalendar pex_date = new GregorianCalendar(2020, 1, 10);
+	private LocalDateTime pex_date = LocalDateTime.of(2020, 1, 10, 0, 0, 0);
 	private Integer pex_height = 170;
 	private Double pex_weight = 60.;
 	private Integer pex_ap_min = 80;
@@ -52,7 +52,7 @@ public class TestPatientExamination {
 
 		if (usingSet) {
 			patientExamination = new PatientExamination();
-			_setParameters(patientExamination, patient);
+			setParameters(patientExamination, patient);
 		} else {
 			// Create Patient Examination with all parameters 
 			patientExamination = new PatientExamination(pex_date, patient, pex_height, pex_weight,
@@ -63,7 +63,7 @@ public class TestPatientExamination {
 		return patientExamination;
 	}
 
-	private void _setParameters(PatientExamination patientExamination, Patient patient) {
+	private void setParameters(PatientExamination patientExamination, Patient patient) {
 		patientExamination.setPatient(patient);
 		patientExamination.setPex_date(pex_date);
 		patientExamination.setPex_hr(pex_hr);

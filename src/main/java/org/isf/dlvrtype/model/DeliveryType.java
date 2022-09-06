@@ -22,7 +22,6 @@
 package org.isf.dlvrtype.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -44,18 +43,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="DELIVERYTYPE")
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="DLT_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="DLT_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="DLT_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="DLT_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="DLT_LAST_MODIFIED_DATE"))
-})
-public class DeliveryType  extends Auditable<String>
-{
-	@Id 
+@Table(name = "DELIVERYTYPE")
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "DLT_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "DLT_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "DLT_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "DLT_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "DLT_LAST_MODIFIED_DATE"))
+public class DeliveryType extends Auditable<String> {
+
+	@Id
 	@Column(name="DLT_ID_A")	    
     private String code;
 
@@ -99,10 +96,8 @@ public class DeliveryType  extends Auditable<String>
 
 	@Override
     public boolean equals(Object anObject) {
-        return !(anObject instanceof DeliveryType) ? false
-                : (getCode().equals(((DeliveryType) anObject).getCode())
-                        && getDescription().equalsIgnoreCase(
-                                ((DeliveryType) anObject).getDescription()));
+        return anObject instanceof DeliveryType && (getCode().equals(((DeliveryType) anObject).getCode())
+		        && getDescription().equalsIgnoreCase(((DeliveryType) anObject).getDescription()));
     }
 
     public String toString() {

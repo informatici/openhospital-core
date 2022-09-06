@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -36,7 +36,7 @@ public class TestVaccineType {
 
 		if (usingSet) {
 			vaccineType = new VaccineType();
-			_setParameters(vaccineType);
+			setParameters(vaccineType);
 		} else {
 			// Create VaccineType with all parameters 
 			vaccineType = new VaccineType(code, description);
@@ -45,7 +45,7 @@ public class TestVaccineType {
 		return vaccineType;
 	}
 
-	public void _setParameters(VaccineType vaccineType) {
+	public void setParameters(VaccineType vaccineType) {
 		vaccineType.setCode(code);
 		vaccineType.setDescription(description);
 	}

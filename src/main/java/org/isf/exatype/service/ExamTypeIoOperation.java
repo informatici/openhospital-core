@@ -53,16 +53,8 @@ public class ExamTypeIoOperation {
 	 * @return <code>true</code> if the examType has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean updateExamType(
-			ExamType examType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		ExamType savedExamType = repository.save(examType);
-		result = (savedExamType != null);
-		
-		return result;
+	public boolean updateExamType(ExamType examType) throws OHServiceException {
+		return repository.save(examType) != null;
 	}
 	
 	/**
@@ -71,15 +63,8 @@ public class ExamTypeIoOperation {
 	 * @return <code>true</code> if the examType has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newExamType(
-			ExamType examType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		repository.save(examType);
-		
-		return result;
+	public boolean newExamType(ExamType examType) throws OHServiceException {
+		return repository.save(examType) != null;
 	}
 	
 	/**
@@ -88,15 +73,9 @@ public class ExamTypeIoOperation {
 	 * @return <code>true</code> if the examType has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteExamType(
-			ExamType examType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteExamType(ExamType examType) throws OHServiceException {
 		repository.delete(examType);
-		
-		return result;
+		return true;
 	}
 	
 	/**
@@ -106,14 +85,7 @@ public class ExamTypeIoOperation {
 	 * @return <code>true</code> if the code is present, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.existsById(code);
 	}
 }

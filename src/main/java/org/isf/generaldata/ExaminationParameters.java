@@ -31,22 +31,13 @@ public final class ExaminationParameters extends ConfigurationProperties {
 	private static final String FILE_PROPERTIES = "examination.properties";
 	
 	public static int HEIGHT_MIN;
-	private static final int DEFAULT_HEIGHT_MIN = 0;
-	
+	private static int DEFAULT_HEIGHT_MIN = 0;
+
 	public static int HEIGHT_MAX;
 	private static final int DEFAULT_HEIGHT_MAX = 250;
 	
 	public static int HEIGHT_INIT;
 	private static final int DEFAULT_HEIGHT_INIT = 170;
-	
-//	public static String HEIGHT_UNIT;
-//	private final static String DEFAULT_HEIGHT_UNIT = "cm";
-	
-//	public static double HEIGHT_STEP;
-//	private final static double DEFAULT_HEIGHT_STEP = 1;
-	
-//	public static String WEIGHT_UNIT;
-//	private final static String DEFAULT_WEIGHT_UNIT = "Kg";
 	
 	public static int WEIGHT_MIN;
 	private static final int DEFAULT_WEIGHT_MIN = 0;
@@ -60,17 +51,11 @@ public final class ExaminationParameters extends ConfigurationProperties {
 	public static int WEIGHT_INIT;
 	private static int DEFAULT_WEIGHT_INIT = 80;
 	
-//	public static String BP_UNIT;
-//	private final static String DEFAULT_BP_UNIT = "mmHg";
-	
 	public static int AP_MIN_INIT;
 	private static final int DEFAULT_AP_MIN_INIT = 80;
 	
 	public static int AP_MAX_INIT;
 	private static final int DEFAULT_AP_MAX_INIT = 120;
-	
-//	public static String HR_UNIT;
-//	private final static String DEFAULT_HR_UNIT = "bpm";
 	
 	public static int HR_MIN;
 	private static final int DEFAULT_HR_MIN = 0;
@@ -96,9 +81,6 @@ public final class ExaminationParameters extends ConfigurationProperties {
 	
 	public static String BOWEL_DESC_INIT = "regular";
 	
-//	public static String TEMP_UNIT;
-//	private static String DEFAULT_TEMP_UNIT = "°C";
-	
 	public static int TEMP_MIN;
 	private static final int DEFAULT_TEMP_MIN = 0;
 	
@@ -111,16 +93,9 @@ public final class ExaminationParameters extends ConfigurationProperties {
 	public static Double TEMP_STEP;
 	private static final Double DEFAULT_TEMP_STEP = 0.1;
 	
-//	public static String SAT_UNIT;
-//	private final static String DEFAULT_SAT_UNIT = "%";
-	
 	public static int SAT_MIN;
 	private static final int DEFAULT_SAT_MIN = 50;
-	
-	//deprecated
-	//public static int SAT_MAX;
-	//private final static int DEFAULT_SAT_MAX = 100;
-	
+
 	public static int SAT_INIT;
 	private static final int DEFAULT_SAT_INIT = 90;
 	
@@ -156,35 +131,27 @@ public final class ExaminationParameters extends ConfigurationProperties {
 		HEIGHT_MIN = myGetProperty("HEIGHT_MIN", DEFAULT_HEIGHT_MIN);
 		HEIGHT_MAX = myGetProperty("HEIGHT_MAX", DEFAULT_HEIGHT_MAX);
 		HEIGHT_INIT = myGetProperty("HEIGHT_INIT", DEFAULT_HEIGHT_INIT);
-//			HEIGHT_STEP = myGetProperty("HEIGHT_STEP", DEFAULT_HEIGHT_STEP);
-//			HEIGHT_UNIT = myGetProperty("HEIGHT_UNIT", DEFAULT_HEIGHT_UNIT);
 		
 		WEIGHT_MIN = myGetProperty("WEIGHT_MIN", DEFAULT_WEIGHT_MIN);
 		WEIGHT_MAX = myGetProperty("WEIGHT_MAX", DEFAULT_WEIGHT_MAX);
 		WEIGHT_STEP = myGetProperty("WEIGHT_STEP", DEFAULT_WEIGHT_STEP);
 		WEIGHT_INIT = myGetProperty("WEIGHT_INIT", DEFAULT_WEIGHT_INIT);
-//			WEIGHT_UNIT = myGetProperty("WEIGHT_UNIT", DEFAULT_WEIGHT_UNIT);
 		
 		AP_MIN_INIT = myGetProperty("AP_MIN_INIT", DEFAULT_AP_MIN_INIT);
 		AP_MAX_INIT = myGetProperty("AP_MAX_INIT", DEFAULT_AP_MAX_INIT);
-//			BP_UNIT = myGetProperty("BP_UNIT", DEFAULT_BP_UNIT);
 		
 		HR_MIN = myGetProperty("HR_MIN", DEFAULT_HR_MIN);
 		HR_MAX = myGetProperty("HR_MAX", DEFAULT_HR_MAX);
 		HR_INIT = myGetProperty("HR_INIT", DEFAULT_HR_INIT);
-//			HR_UNIT = myGetProperty("HR_UNIT", DEFAULT_HR_UNIT);
 		
 		TEMP_MIN = myGetProperty("TEMP_MIN", DEFAULT_TEMP_MIN);
 		TEMP_MAX = myGetProperty("TEMP_MAX", DEFAULT_TEMP_MAX);
 		TEMP_INIT = myGetProperty("TEMP_INIT", DEFAULT_TEMP_INIT);
 		TEMP_STEP = myGetProperty("TEMP_STEP", DEFAULT_TEMP_STEP);
-//			TEMP_UNIT = myGetProperty("TEMP_UNIT", DEFAULT_TEMP_UNIT);
-		
+
 		SAT_MIN = myGetProperty("SAT_MIN", DEFAULT_SAT_MIN);
-		//SAT_MAX = myGetProperty("SAT_MAX", DEFAULT_SAT_MAX);
 		SAT_INIT = myGetProperty("SAT_INIT", DEFAULT_SAT_INIT);
 		SAT_STEP = myGetProperty("SAT_STEP", DEFAULT_SAT_STEP);
-//			SAT_UNIT = myGetProperty("SAT_UNIT", DEFAULT_SAT_UNIT);
 		
 		HGT_MIN = myGetProperty("HGT_MIN", DEFAULT_HGT_MIN);
 		HGT_MAX = myGetProperty("HGT_MAX", DEFAULT_HGT_MAX);
@@ -197,20 +164,19 @@ public final class ExaminationParameters extends ConfigurationProperties {
 		RR_MIN = myGetProperty("RR_MIN", DEFAULT_RR_MIN);
 		RR_MAX = myGetProperty("RR_MAX", DEFAULT_RR_MAX);
 		RR_INIT = myGetProperty("RR_INIT", DEFAULT_RR_INIT);
-		
+
 		LIST_SIZE = myGetProperty("LIST_SIZE", DEFAULT_LIST_SIZE);
-			
 	}
 
-    public static ExaminationParameters getExaminationParameters() {
-        if (mySingleData == null){ 
-        	initialize();
-        }
-        return mySingleData;
-    }
-    
-    public static void initialize() {
-    	mySingleData = new ExaminationParameters(FILE_PROPERTIES);
+	public static ExaminationParameters getExaminationParameters() {
+		if (mySingleData == null) {
+			initialize();
+		}
+		return mySingleData;
 	}
-    
+
+	public static void initialize() {
+		mySingleData = new ExaminationParameters(FILE_PROPERTIES);
+	}
+
 }

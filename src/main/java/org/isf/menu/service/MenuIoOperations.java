@@ -85,12 +85,8 @@ public class MenuIoOperations
 	 * @return the {@link User}'s description
 	 * @throws OHServiceException
 	 */
-	public String getUsrInfo(
-			String userName) throws OHServiceException 
-	{ 
-		User user = (User)repository.findOne(userName); 
-		
-		
+	public String getUsrInfo(String userName) throws OHServiceException {
+		User user = repository.findById(userName).orElse(null);
 		return user.getDesc();
 	}
 	
@@ -111,15 +107,8 @@ public class MenuIoOperations
 	 * @return <code>true</code> if the medical code is already stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean isUserNamePresent(
-			String userName) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(userName);
-		
-		return result;	
+	public boolean isUserNamePresent(String userName) throws OHServiceException {
+		return repository.existsById(userName);
 	}
 	
 	/**
@@ -129,15 +118,8 @@ public class MenuIoOperations
 	 * @return <code>true</code> if the medical code is already stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean isGroupNamePresent(
-			String groupName) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		result = groupRepository.exists(groupName);
-		
-		return result;	
+	public boolean isGroupNamePresent(String groupName) throws OHServiceException {
+		return groupRepository.existsById(groupName);
 	}
 	
 	/**
@@ -147,16 +129,8 @@ public class MenuIoOperations
 	 * @return <code>true</code> if the user has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newUser(
-			User user) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		User savedUser = repository.save(user);
-		result = (savedUser != null);
-		
-		return result;
+	public boolean newUser(User user) throws OHServiceException {
+		return repository.save(user) != null;
 	}
 		
 	/**
@@ -166,18 +140,8 @@ public class MenuIoOperations
 	 * @return <code>true</code> if the user has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean updateUser(
-			User user) throws OHServiceException 
-	{
-		boolean result = false;
-		
-				
-		if (repository.updateDescription(user.getDesc(), user.getUserName()) > 0)
-		{
-			result = true;
-		}
-    	
-		return result;
+	public boolean updateUser(User user) throws OHServiceException {
+		return repository.updateDescription(user.getDesc(), user.getUserName()) > 0;
 	}
 	
 	/**
@@ -187,18 +151,8 @@ public class MenuIoOperations
 	 * @return <code>true</code> if the user has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean updatePassword(
-			User user) throws OHServiceException 
-	{
-		boolean result = false;
-		
-				
-		if (repository.updatePassword(user.getPasswd(), user.getUserName()) > 0)
-		{
-			result = true;
-		}
-		
-		return result;
+	public boolean updatePassword(User user) throws OHServiceException {
+		return repository.updatePassword(user.getPasswd(), user.getUserName()) > 0;
 	}
 
 	/**
@@ -208,15 +162,9 @@ public class MenuIoOperations
 	 * @return <code>true</code> if the user has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteUser(
-			User user) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteUser(User user) throws OHServiceException {
 		repository.delete(user);
-		
-		return result;	
+		return true;
 	}
 	
 	/**
@@ -226,14 +174,10 @@ public class MenuIoOperations
 	 * @return the list of {@link UserMenuItem}s 
 	 * @throws OHServiceException
 	 */
-	public List<UserMenuItem> getMenu(User aUser) throws OHServiceException
-	{
-		List<UserMenuItem> menu = null;
+	public List<UserMenuItem> getMenu(User aUser) throws OHServiceException {
 		List<Object[]> menuList = menuRepository.findAllWhereUserId(aUser.getUserName());
-
-		menu = new ArrayList<>();
+		List<UserMenuItem> menu = new ArrayList<>();
 		for (Object[] object : menuList) {
-			
 			UserMenuItem umi = new UserMenuItem();
 			umi.setCode((String) object[0]);
 			umi.setButtonLabel((String) object[1]);
@@ -244,10 +188,9 @@ public class MenuIoOperations
 			umi.setMyClass((String) object[6]);
 			umi.setASubMenu((Boolean) object[7]);
 			umi.setPosition((Integer) object[8]);
-			umi.setActive((Integer) object[9] == 1 ? true : false);
+			umi.setActive((Integer) object[9] == 1);
 			menu.add(umi);
 		}
-		
 		return menu;
 	}
 
@@ -258,14 +201,12 @@ public class MenuIoOperations
 	 * @return the list of {@link UserMenuItem}s 
 	 * @throws OHServiceException
 	 */
-	public List<UserMenuItem> getGroupMenu(UserGroup aGroup) throws OHServiceException
-	{
+	public List<UserMenuItem> getGroupMenu(UserGroup aGroup) throws OHServiceException {
 		List<Object[]> menuList = menuRepository.findAllWhereGroupId(aGroup.getCode());
 		List<UserMenuItem> menu = new ArrayList<>();
 		for (Object[] object : menuList) {
-			boolean active = (Integer) object[9] == 1 ? true : false;
+			boolean active = (Integer) object[9] == 1;
 			UserMenuItem umi = new UserMenuItem();
-
 			umi.setCode((String) object[0]);
 			umi.setButtonLabel((String) object[1]);
 			umi.setAltLabel((String) object[2]);
@@ -278,7 +219,6 @@ public class MenuIoOperations
 			umi.setActive(active);
 			menu.add(umi);
 		}
-		
 		return menu;
 	}
 
@@ -293,40 +233,25 @@ public class MenuIoOperations
 	 */
 	public boolean setGroupMenu(UserGroup aGroup, List<UserMenuItem> menu, boolean insert) throws OHServiceException {
 		boolean result = true;
-
-		result = _deleteGroupMenu(aGroup);
-
+		result = deleteGroupMenu(aGroup);
 		for (UserMenuItem item : menu) {
-			result = result && _insertGroupMenu(aGroup, item, insert);
+			result = result && insertGroupMenu(aGroup, item, insert);
 		}
-
 		return result;
 	}
-	
-	public boolean _deleteGroupMenu(
-			UserGroup aGroup) throws OHServiceException 
-	{
-		boolean result = true;
-				
 
+	private boolean deleteGroupMenu(UserGroup aGroup) throws OHServiceException {
 		groupMenuRepository.deleteWhereUserGroup(aGroup.getCode());
-		
-		return result;
+		return true;
 	}
-	
-	public boolean _insertGroupMenu(
-			UserGroup aGroup,
-			UserMenuItem item, 
-			boolean insert) throws OHServiceException 
-	{
-		boolean result = true;
+
+	private boolean insertGroupMenu(UserGroup aGroup, UserMenuItem item, boolean insert) throws OHServiceException {
 		GroupMenu groupMenu = new GroupMenu();
 		groupMenu.setUserGroup(aGroup.getCode());
 		groupMenu.setMenuItem(item.getCode());
 		groupMenu.setActive((item.isActive() ? 1 : 0));
 		groupMenuRepository.save(groupMenu);
-				
-		return result;
+		return true;
 	}
 	
 	/**
@@ -336,17 +261,10 @@ public class MenuIoOperations
 	 * @return <code>true</code> if the group has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean deleteGroup(
-			UserGroup aGroup) throws OHServiceException 
-	{
-		boolean result = true;
-		
-		
-
+	public boolean deleteGroup(UserGroup aGroup) throws OHServiceException {
 		groupMenuRepository.deleteWhereUserGroup(aGroup.getCode());
 		groupRepository.delete(aGroup);
-		    	
-		return result;
+		return true;
 	}
 
 	/**
@@ -356,16 +274,8 @@ public class MenuIoOperations
 	 * @return <code>true</code> if the group has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean newUserGroup(
-			UserGroup aGroup) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		UserGroup savedUser = groupRepository.save(aGroup);
-		result = (savedUser != null); 
-		
-		return result;
+	public boolean newUserGroup(UserGroup aGroup) throws OHServiceException {
+		return groupRepository.save(aGroup) != null;
 	}
 
 	/**
@@ -375,17 +285,8 @@ public class MenuIoOperations
 	 * @return <code>true</code> if the group has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean updateUserGroup(
-			UserGroup aGroup) throws OHServiceException 
-	{
-		boolean result = false;
-		
-				
-		if (groupRepository.updateDescription(aGroup.getDesc(), aGroup.getCode()) > 0)
-		{
-			result = true;
-		}
-    			
-		return result;
+	public boolean updateUserGroup(UserGroup aGroup) throws OHServiceException {
+		return groupRepository.updateDescription(aGroup.getDesc(), aGroup.getCode()) > 0;
 	}
+
 }

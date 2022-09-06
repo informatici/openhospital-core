@@ -21,9 +21,8 @@
  */
 package org.isf.visits.manager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
@@ -74,7 +73,7 @@ public class VisitManager {
 	 */
 	public void validateVisit(Visit visit) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		GregorianCalendar visitDate = visit.getDate();
+		LocalDateTime visitDate = visit.getDate();
 		Patient patient = visit.getPatient();
 		if (visitDate == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
@@ -98,7 +97,7 @@ public class VisitManager {
 			String sex = String.valueOf(patient.getSex());
 			Ward ward = visit.getWard();
 			if ((sex.equalsIgnoreCase("F") && !ward.isFemale())
-					|| (sex.equalsIgnoreCase("M") && !ward.isMale())) {
+				|| (sex.equalsIgnoreCase("M") && !ward.isMale())) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.visit.thepatientssexandwarddonotagree.msg"),
 						OHSeverityLevel.ERROR));
@@ -220,18 +219,17 @@ public class VisitManager {
 				validateVisit(visit);
 				
 				int visitID = ioOperations.newVisit(visit).getVisitID();
-				if (visitID == 0)
+				if (visitID == 0) {
 					return false;
+				}
 				visit.setVisitID(visitID);
 				
 				if (visit.isSms()) {
-					GregorianCalendar date = (GregorianCalendar) visit.getDate().clone();
-					date.add(Calendar.DAY_OF_MONTH, -1);
-					if (visit.getDate().after(TimeTools.getDateToday24())) {
+					LocalDateTime date = visit.getDate().minusDays(1);
+					if (visit.getDate().isAfter(TimeTools.getDateToday24())) {
 						Patient pat = patMan.getPatientById(visit.getPatient().getCode());
-
 						Sms sms = new Sms();
-						sms.setSmsDateSched(date.getTime());
+						sms.setSmsDateSched(date);
 						sms.setSmsNumber(pat.getTelephone());
 						sms.setSmsText(prepareSmsFromVisit(visit));
 						sms.setSmsUser(UserBrowsingManager.getCurrentUser());

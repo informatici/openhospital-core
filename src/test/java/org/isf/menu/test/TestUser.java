@@ -38,7 +38,7 @@ public class TestUser {
 
 		if (usingSet) {
 			user = new User();
-			_setParameters(user, userGroupName);
+			setParameters(user, userGroupName);
 		} else {
 			// Create User with all parameters 
 			user = new User(name, userGroupName, passwd, desc);
@@ -47,7 +47,7 @@ public class TestUser {
 		return user;
 	}
 
-	public void _setParameters(User user, UserGroup userGroupName) {
+	public void setParameters(User user, UserGroup userGroupName) {
 		user.setUserName(name);
 		user.setDesc(desc);
 		user.setUserGroupName(userGroupName);
