@@ -231,27 +231,26 @@ public class MedicalStockWardIoOperations
                 }
 		Integer medical = movement.getMedical().getCode();		
 		boolean result = true;
-		
-		
-        if(wardTo != null) {
-            MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedicalAndLot(wardTo, medical, lot);
-            if(medicalWardTo != null) {
-            	repository.updateInQuantity(Math.abs(qty), wardTo, medical, lot);
-            } else {
+
+		if (wardTo != null) {
+			MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedicalAndLot(wardTo, medical, lot);
+			if (medicalWardTo != null) {
+				repository.updateInQuantity(Math.abs(qty), wardTo, medical, lot);
+			} else {
 				MedicalWard medicalWard = new MedicalWard();
 				medicalWard.setWard(movement.getWardTo());
 				medicalWard.setMedical(movement.getMedical());
-				medicalWard.setInQuantity((float)Math.abs(qty));
+				medicalWard.setInQuantity((float) Math.abs(qty));
 				medicalWard.setOutQuantity(0.0f);
 				medicalWard.setLot(movement.getLot());
 				repository.save(medicalWard);
-            }
-            return result;
-        }
-                
+			}
+			repository.updateOutQuantity(Math.abs(qty), ward, medical, lot);
+			return result;
+		}
+
 		MedicalWard medicalWard = repository.findOneWhereCodeAndMedicalAndLot(ward, medical, lot);
-        if (medicalWard == null)
-		{
+		if (medicalWard == null) {
 			medicalWard = new MedicalWard();
 			medicalWard.setWard(movement.getWard());
 			medicalWard.setMedical(movement.getMedical());
@@ -259,17 +258,12 @@ public class MedicalStockWardIoOperations
 			medicalWard.setOutQuantity(0.0f);
 			medicalWard.setLot(movement.getLot());
 			repository.save(medicalWard);
-        }
-		else
-		{
-			if (qty < 0)
-			{
-				repository.updateInQuantity(-qty, ward, medical,lot); // TODO: change to jpa
+		} else {
+			if (qty < 0) {
+				repository.updateInQuantity(-qty, ward, medical, lot); // TODO: change to jpa
+			} else {
+				repository.updateOutQuantity(qty, ward, medical, lot); // TODO: change to jpa
 			}
-			else
-			{
-				repository.updateOutQuantity(qty, ward, medical,lot); // TODO: change to jpa
-            }				
 		}
 		return result;
 	}

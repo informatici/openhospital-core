@@ -354,9 +354,14 @@ public class ExcelExporter {
 	 *
 	 * @param jtable
 	 * @param file
+	 * @param columnCount (optional) if not specified or -1 then get the column count from the table model; if specified use that number for the column count
 	 * @throws IOException
 	 */
 	public void exportTableToExcel(JTable jtable, File file) throws IOException {
+		exportTableToExcel(jtable, file, -1);
+	}
+
+	public void exportTableToExcel(JTable jtable, File file, int columnCount) throws IOException {
 		TableModel model = jtable.getModel();
 		FileOutputStream fileStream = new FileOutputStream(file);
 
@@ -367,7 +372,12 @@ public class ExcelExporter {
 		initStyles();
 
 		Row headers = worksheet.createRow((short) 0);
-		int colCount = model.getColumnCount();
+		int colCount;
+		if (columnCount == -1) {
+			colCount = model.getColumnCount();
+		} else {
+			colCount = columnCount;
+		}
 		for (int i = 0; i < colCount; i++) {
 			Cell cell = headers.createCell((short) i);
 			RichTextString value = createHelper.createRichTextString(model.getColumnName(i));
@@ -535,19 +545,28 @@ public class ExcelExporter {
 	 *
 	 * @param jtable
 	 * @param file
+	 * @param columnCount (optional) if not specified or -1 then get the column count from the table model; if specified use that number for the column count
 	 * @throws IOException
 	 */
 	public void exportTableToExcelOLD(JTable jtable, File file) throws IOException {
+		exportTableToExcelOLD(jtable, file, -1);
+	}
+
+	public void exportTableToExcelOLD(JTable jtable, File file, int columnCount) throws IOException {
 		TableModel model = jtable.getModel();
 		FileOutputStream fileStream = new FileOutputStream(file);
-		//BufferedWriter outFile = new BufferedWriter(new OutputStreamWriter(fileStream, encoder));
 
 		workbook = new HSSFWorkbook();
 		HSSFSheet worksheet = (HSSFSheet) workbook.createSheet();
 		initStyles();
 
 		HSSFRow headers = worksheet.createRow((short) 0);
-		int colCount = model.getColumnCount();
+		int colCount;
+		if (columnCount == -1) {
+			colCount = model.getColumnCount();
+		} else {
+			colCount = columnCount;
+		}
 		for (int i = 0; i < colCount; i++) {
 			HSSFCell cell = headers.createCell((short) i);
 			HSSFRichTextString value = new HSSFRichTextString(model.getColumnName(i));
