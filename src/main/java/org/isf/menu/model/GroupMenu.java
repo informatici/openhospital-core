@@ -28,6 +28,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -71,6 +72,11 @@ public class GroupMenu extends Auditable<String> {
 
 	@Transient
 	private volatile int hashCode = 0;
+	
+	@PreRemove
+	public void preRemove() {
+		this.active = 0;
+	}
 
 	public GroupMenu() {
 	}

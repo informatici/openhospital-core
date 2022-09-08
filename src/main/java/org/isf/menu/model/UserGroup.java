@@ -25,6 +25,7 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -62,6 +63,11 @@ public class UserGroup extends Auditable<String> {
 	
 	@Transient
 	private volatile int hashCode = 0;
+	
+	@PreRemove
+	public void preRemove() {
+		this.active = 0;
+	}
 
 	public UserGroup(String code, String desc) {
 		this.code = code;

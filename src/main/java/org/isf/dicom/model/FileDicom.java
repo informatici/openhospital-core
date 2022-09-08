@@ -39,6 +39,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.sql.rowset.serial.SerialBlob;
@@ -167,6 +168,11 @@ public class FileDicom extends Auditable<String> {
 	@ManyToOne(optional=true) 
 	@JoinColumn(name="DM_DCMT_ID", nullable=true)
 	private DicomType dicomType;
+	
+	@PreRemove
+	public void preRemove() {
+		this.active = 0;
+	}
 
 	
 	/**

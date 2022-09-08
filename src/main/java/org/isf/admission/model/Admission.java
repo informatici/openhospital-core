@@ -34,6 +34,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -196,6 +197,11 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 	@Transient
 	private volatile int hashCode = 0;
+	
+	@PreRemove
+	public void preRemove() {
+		this.active = 0;
+	}
 
 	public Admission() {
 		super();
