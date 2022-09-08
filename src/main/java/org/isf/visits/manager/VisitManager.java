@@ -41,6 +41,7 @@ import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
+import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -92,6 +93,15 @@ public class VisitManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.getMessage("angal.visit.pleasechooseapatient.msg"),
 							OHSeverityLevel.ERROR));
+		} else {
+			String sex = String.valueOf(patient.getSex());
+			Ward ward = visit.getWard();
+			if ((sex.equalsIgnoreCase("F") && !ward.isFemale())
+				|| (sex.equalsIgnoreCase("M") && !ward.isMale())) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.visit.thepatientssexandwarddonotagree.msg"),
+						OHSeverityLevel.ERROR));
+			}
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
