@@ -61,7 +61,7 @@ public interface MedicalStockWardIoOperationRepository extends JpaRepository<Med
 
 	@Modifying
 	@Transactional
-	@Query(value = "UPDATE MEDICALDSRWARD SET MDSRWRD_IN_QTI = MDSRWRD_IN_QTI + :quantity WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot", nativeQuery = true)
+	@Query(value = "UPDATE MEDICALDSRWARD SET MDSRWRD_IN_QTI = MDSRWRD_IN_QTI + :quantity WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot AND MDSRWRD_ACTIVE=1", nativeQuery = true)
 	void updateInQuantity(@Param("quantity") Double quantity, @Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
 
 	@Query(value = "update MedicalWard set in_quantity=in_quantity+:quantity where id.ward.code=:ward and id.medical.code=:medical")
@@ -69,7 +69,7 @@ public interface MedicalStockWardIoOperationRepository extends JpaRepository<Med
 
 	@Modifying
 	@Transactional
-	@Query(value = "UPDATE MEDICALDSRWARD SET MDSRWRD_OUT_QTI = MDSRWRD_OUT_QTI + :quantity WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot ", nativeQuery = true)
+	@Query(value = "UPDATE MEDICALDSRWARD SET MDSRWRD_OUT_QTI = MDSRWRD_OUT_QTI + :quantity WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot MDSRWRD_ACTIVE=1", nativeQuery = true)
 	void updateOutQuantity(@Param("quantity") Double quantity, @Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
 
 	@Modifying
@@ -78,7 +78,7 @@ public interface MedicalStockWardIoOperationRepository extends JpaRepository<Med
 			"VALUES (?, ?, ?, '0', ?)", nativeQuery = true)
 	void insertMedicalWard(@Param("ward") String ward, @Param("medical") int medical, @Param("quantity") Double quantity, @Param("lot") String lot);
 
-	@Query(value = "SELECT * FROM MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward", nativeQuery = true)
+	@Query(value = "SELECT * FROM MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_ACTIVE=1", nativeQuery = true)
 	List<MedicalWard> findAllWhereWard(@Param("ward") char wardId);
 
 	@Query(value = "update MedicalWard set out_quantity=out_quantity+:quantity where id.ward.code=:ward and id.medical.code=:medical")
