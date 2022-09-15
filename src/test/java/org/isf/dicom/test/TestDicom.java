@@ -28,6 +28,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Random;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -38,7 +39,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestDicom {
 
-	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss yyyy");
+	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss yyyy").withLocale(Locale.forLanguageTag( "en-EN" ));
 	private static final String DATE_TIME_STRING = "Sat Aug 01 10:02:03 2020";
 
 	private Blob dicomData = createRandomBlob(100);
