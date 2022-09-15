@@ -31,7 +31,7 @@ import javax.validation.constraints.NotNull;
  * @author Mwithi
  */
 @Entity
-@Table(name = "DICOMTYPE")
+@Table(name="OH_DICOMTYPE")
 public class DicomType {
 	
 	@Id 

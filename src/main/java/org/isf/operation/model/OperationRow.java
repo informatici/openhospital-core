@@ -42,7 +42,7 @@ import org.isf.opd.model.Opd;
  * @author xavier
  */
 @Entity
-@Table(name = "OPERATIONROW")
+@Table(name="OH_OPERATIONROW")
 public class OperationRow {
 
     @Id

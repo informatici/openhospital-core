@@ -39,20 +39,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationRepositoryCustom {
 
-	private static String nativeQueryTerms = "SELECT * from patient as p  "
-			+ " left join (select * from admission where ADM_IN = 1 and ( (ADM_DELETED='N') or (ADM_DELETED is null ) ) ) as a on p.PAT_ID = a.ADM_PAT_ID "
+	private static String nativeQueryTerms = "SELECT * from OH_patient as p  "
+			+ " left join (select * from OH_admission where ADM_IN = 1 and ( (ADM_DELETED='N') or (ADM_DELETED is null ) ) ) as a on p.PAT_ID = a.ADM_PAT_ID "
 			+ " where ( ( p.PAT_DELETED='N' ) or ( p.PAT_DELETED is null ) )"
 			+ " and ( lower(concat_ws(' ', p.PAT_ID, p.PAT_SNAME, p.PAT_FNAME, p.PAT_NAME, p.PAT_NOTE, p.PAT_TAXCODE, p.PAT_CITY, p.PAT_ADDR, p.PAT_TELE)) like :param0 ) "
 			+ " order by p.PAT_ID desc";
 
-	private static String nativeQueryRanges = "SELECT * from patient as p  "
-			+ " left join (select * from admission where ADM_IN = 1 and ( (ADM_DELETED='N') or (ADM_DELETED is null ) ) ) as a on p.PAT_ID = a.ADM_PAT_ID "
-			+ " where (p.PAT_ID IN (SELECT ADM_PAT_ID from admission where param1))"
+	private static String nativeQueryRanges = "SELECT * from OH_patient as p  "
+			+ " left join (select * from OH_admission where ADM_IN = 1 and ( (ADM_DELETED='N') or (ADM_DELETED is null ) ) ) as a on p.PAT_ID = a.ADM_PAT_ID "
+			+ " where (p.PAT_ID IN (SELECT ADM_PAT_ID from OH_admission where param1))"
 			+ " and ( lower(concat_ws(' ', p.PAT_ID, p.PAT_SNAME, p.PAT_FNAME, p.PAT_NAME, p.PAT_NOTE, p.PAT_TAXCODE, p.PAT_CITY, p.PAT_ADDR, p.PAT_TELE)) like :param0 ) "
 			+ " order by p.PAT_ID desc";
 
-	private static String nativeQueryCode = "SELECT * from patient as p  "
-			+ " left join (select * from admission where ADM_IN = 1 and ( (ADM_DELETED='N') or (ADM_DELETED is null ) ) order by ADM_ID desc) as a on p.PAT_ID = a.ADM_PAT_ID "
+	private static String nativeQueryCode = "SELECT * from OH_patient as p  "
+			+ " left join (select * from OH_admission where ADM_IN = 1 and ( (ADM_DELETED='N') or (ADM_DELETED is null ) ) order by ADM_ID desc) as a on p.PAT_ID = a.ADM_PAT_ID "
 			+ " where p.PAT_ID = :param0 "
 			+ " and ( ( p.PAT_DELETED='N' ) or ( p.PAT_DELETED is null ) )";
 
