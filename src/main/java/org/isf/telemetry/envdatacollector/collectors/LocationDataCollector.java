@@ -24,13 +24,10 @@ package org.isf.telemetry.envdatacollector.collectors;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-
-import javax.annotation.Resource;
 
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
-import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoCommonService;
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoBean;
+import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoCommonService;
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoSettings;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
 import org.isf.utils.exception.OHException;

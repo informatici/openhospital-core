@@ -23,7 +23,6 @@ package org.isf.telemetry.model;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Map;
 
 import javax.persistence.Column;

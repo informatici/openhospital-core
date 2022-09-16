@@ -22,7 +22,6 @@
 package org.isf.telemetry.envdatacollector.collectors;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
