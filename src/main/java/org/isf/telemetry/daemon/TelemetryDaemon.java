@@ -77,6 +77,8 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 				} catch (RuntimeException | OHException e) {
 					LOGGER.error("Something strange happened");
 					LOGGER.error(ExceptionUtils.retrieveExceptionStacktrace(e));
+					LOGGER.error("Stopping Telemetry Daemon...");
+					setRunning(false);
 				}
 			} else {
 				LOGGER.debug("Telemetry module: issue traking message already sent (reloading settings in {} seconds)",
@@ -94,6 +96,8 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 			} catch (InterruptedException e) {
 				LOGGER.error(e.getMessage());
 				LOGGER.error(ExceptionUtils.retrieveExceptionStacktrace(e));
+				LOGGER.error("Stopping Telemetry Daemon...");
+				setRunning(false);
 			}
 		}
 	}
