@@ -57,7 +57,7 @@ public class TelemetryDataCollectorGatewayService {
 	}
 
 	private TelemetryGatewayRemoteService buildHttlClient() {
-		String baseUrl = this.properties.getProperty(SERVICE_NAME + ".base-url");
+		String baseUrl = this.properties.getProperty(SERVICE_NAME + ".base-url").trim();
 		// For debug remember to update log level to: feign.Logger.Level.FULL. Happy debugging!
 		return Feign.builder().encoder(new CustomCommonEncoder()).decoder(new CustomCommonDecoder())
 						.logger(new Slf4jLogger(TelemetryGatewayRemoteService.class)).logLevel(feign.Logger.Level.BASIC).contract(new SpringMvcContract())
