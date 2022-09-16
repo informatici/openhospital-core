@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -28,7 +28,6 @@ import java.util.Calendar;
 
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientProfilePhoto;
-import org.isf.utils.exception.OHException;
 
 public class TestPatient {
 
@@ -55,7 +54,7 @@ public class TestPatient {
 	//private static Blob photo;	
 	//private static Image photoImage;
 
-	public Patient setup(boolean usingSet) throws OHException {
+	public Patient setup(boolean usingSet) {
 		Patient patient;
 
 		if (usingSet) {
