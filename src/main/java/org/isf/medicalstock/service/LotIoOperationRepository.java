@@ -33,16 +33,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LotIoOperationRepository extends JpaRepository<Lot, String> {
 
-	@Query("select l from Lot l where l.medical.code = :medical order by l.dueDate")
+	@Query("select l from OH_Lot l where l.medical.code = :medical order by l.dueDate")
 	List<Lot> findByMedicalOrderByDueDate(@Param("medical") int medicalCode);
 
-	@Query("select coalesce(sum(case when m.type.type like '+%' then m.quantity else -m.quantity end), 0) from Movement m where m.lot = :lot")
+	@Query("select coalesce(sum(case when m.type.type like '+%' then m.quantity else -m.quantity end), 0) from OH_Movement m where m.lot = :lot")
 	Integer getMainStoreQuantity(@Param("lot") Lot lot);
 
-	@Query("select coalesce(sum(w.in_quantity - w.out_quantity),0) FROM MedicalWard w WHERE w.id.lot = :lot")
+	@Query("select coalesce(sum(w.in_quantity - w.out_quantity),0) FROM OH_MedicalWard w WHERE w.id.lot = :lot")
 	Double getWardsTotalQuantity(@Param("lot") Lot lot);
 
-	@Query("select sum(w.in_quantity - w.out_quantity) FROM MedicalWard w WHERE w.id.lot = :lot and w.id.ward = :ward")
+	@Query("select sum(w.in_quantity - w.out_quantity) FROM OH_MedicalWard w WHERE w.id.lot = :lot and w.id.ward = :ward")
 	Double getQuantityByWard(@Param("lot") Lot lot, @Param("ward") Ward ward);
 
 	@Query(value = "select LT_ID_A,LT_PREP_DATE,LT_DUE_DATE,LT_COST,"

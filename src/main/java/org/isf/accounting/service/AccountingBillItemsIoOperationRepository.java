@@ -38,12 +38,12 @@ public interface AccountingBillItemsIoOperationRepository extends JpaRepository<
 
 	List<BillItems> findAllByOrderByIdAsc();
 
-	@Query("select b from BillItems b group by b.itemDescription")
+	@Query("select b from OH_BillItems b group by b.itemDescription")
 	List<BillItems> findAllGroupByDescription();
 
 	@Modifying
 	@Transactional
-	@Query(value = "delete from BillItems b where b.id = :billId")
+	@Query(value = "delete from OH_BillItems b where b.id = :billId")
 	void deleteWhereId(@Param("billId") Integer billId);
 
 }

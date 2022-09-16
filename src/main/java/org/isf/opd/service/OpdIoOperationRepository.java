@@ -34,24 +34,24 @@ public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, O
 
 	Opd findOneByPatientAndNextVisitDate(Patient patient, LocalDateTime visitDate);
 
-	@Query("select o from Opd o order by o.prog_year")
+	@Query("select o from OH_Opd o order by o.prog_year")
 	List<Opd> findAllOrderByProgYearDesc();
 
-	@Query("select o from Opd o where o.patient.code = :code order by o.prog_year")
+	@Query("select o from OH_Opd o where o.patient.code = :code order by o.prog_year")
 	List<Opd> findAllByPatient_CodeOrderByProgYearDesc(@Param("code") Integer code);
 
-	@Query("select max(o.prog_year) from Opd o")
+	@Query("select max(o.prog_year) from OH_Opd o")
 	Integer findMaxProgYear();
 
-	@Query(value = "select max(o.prog_year) from Opd o where o.date >= :dateFrom and o.date < :dateTo")
+	@Query(value = "select max(o.prog_year) from OH_Opd o where o.date >= :dateFrom and o.date < :dateTo")
 	Integer findMaxProgYearWhereDateBetween(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
 
 	List<Opd> findTop1ByPatient_CodeOrderByDateDesc(Integer code);
 
-	@Query("select o from Opd o where o.prog_year = :prog_year")
+	@Query("select o from OH_Opd o where o.prog_year = :prog_year")
 	List<Opd> findByProgYear(@Param("prog_year") Integer prog_year);
 
-	@Query(value = "select op from Opd op where op.prog_year = :prog_year and op.date >= :dateVisitFrom and op.date < :dateVisitTo")
+	@Query(value = "select op from OH_Opd op where op.prog_year = :prog_year and op.date >= :dateVisitFrom and op.date < :dateVisitTo")
 	List<Opd> findByProgYearAndDateBetween(@Param("prog_year") Integer prog_year, @Param("dateVisitFrom") LocalDateTime dateVisitFrom,
 			@Param("dateVisitTo") LocalDateTime dateVisitTo);
 

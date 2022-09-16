@@ -33,10 +33,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PatVacIoOperationRepository extends JpaRepository<PatientVaccine, Integer>, PatVacIoOperationRepositoryCustom {
 
-	@Query("select max(pv.progr) from PatientVaccine pv")
+	@Query("select max(pv.progr) from OH_PatientVaccine pv")
 	Integer findMaxCode();
 
-	@Query("select max(pv.progr) from PatientVaccine pv where pv.vaccineDate >= :yearStart and pv.vaccineDate < :yearEnd")
+	@Query("select max(pv.progr) from OH_PatientVaccine pv where pv.vaccineDate >= :yearStart and pv.vaccineDate < :yearEnd")
 	Integer findMaxCodeWhereVaccineDate(@Param("yearStart") LocalDateTime yearStart, @Param("yearEnd") LocalDateTime yearEnd);
 
 	List<PatientVaccine> findByPatient_code(int patientId);

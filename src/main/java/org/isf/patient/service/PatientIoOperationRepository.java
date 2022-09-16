@@ -40,20 +40,20 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
 
 	List<Patient> findAllByDeletedIsNullOrDeletedEqualsOrderByName(String patDeleted, Pageable pageable);
 
-	@Query("select p from Patient p where p.name = :name and (p.deleted = :deletedStatus or p.deleted is null) order by p.secondName, p.firstName")
+	@Query("select p from OH_Patient p where p.name = :name and (p.deleted = :deletedStatus or p.deleted is null) order by p.secondName, p.firstName")
 	List<Patient> findByNameAndDeletedOrderByName(@Param("name") String name, @Param("deletedStatus") String deletedStatus);
 
-	@Query("select p from Patient p where p.code = :id and (p.deleted = :deletedStatus or p.deleted is null)")
+	@Query("select p from OH_Patient p where p.code = :id and (p.deleted = :deletedStatus or p.deleted is null)")
 	List<Patient> findAllWhereIdAndDeleted(@Param("id") Integer id, @Param("deletedStatus") String deletedStatus);
 
 	@Modifying
 	@Transactional
-	@Query(value = "update Patient p set p.deleted = 'Y' where p.code = :id")
+	@Query(value = "update OH_Patient p set p.deleted = 'Y' where p.code = :id")
 	int updateDeleted(@Param("id") Integer id);
 
 	List<Patient> findByNameAndDeleted(String name, String deletedStatus);
 
-	@Query(value = "select max(p.code) from Patient p")
+	@Query(value = "select max(p.code) from OH_Patient p")
 	Integer findMaxCode();
 
 	List<Patient> getPatientsByParams(Map<String, Object> params);

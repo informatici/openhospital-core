@@ -34,7 +34,7 @@ public interface UserMenuItemIoOperationRepository extends JpaRepository<UserMen
 
 	@Query(value = "select menuItem.code, menuItem.buttonLabel, menuItem.altLabel, menuItem.tooltip, menuItem.shortcut, " +
 			"menuItem.mySubmenu, menuItem.myClass, menuItem.isASubMenu, menuItem.position, groupMenu.active " +
-			"from UserMenuItem menuItem, GroupMenu groupMenu, UserGroup  userGroup, User user " +
+			"from OH_UserMenuItem menuItem, OH_GroupMenu groupMenu, OH_UserGroup  userGroup, OH_User user " +
 			"where (user.userName=:userId) " +
 			"and (user.userGroupName=userGroup.code) " +
 			"and (userGroup.code=groupMenu.userGroup) " +
@@ -44,7 +44,7 @@ public interface UserMenuItemIoOperationRepository extends JpaRepository<UserMen
 
 	@Query(value = "select menuItem.code, menuItem.buttonLabel, menuItem.altLabel, menuItem.tooltip, menuItem.shortcut, " +
 			"menuItem.mySubmenu, menuItem.myClass, menuItem.isASubMenu, menuItem.position, groupMenu.active " +
-			"from UserMenuItem menuItem, GroupMenu groupMenu, UserGroup  userGroup " +
+			"from OH_UserMenuItem menuItem, OH_GroupMenu groupMenu, OH_UserGroup  userGroup " +
 			"where userGroup.code=:groupId " +
 			"and (userGroup.code=groupMenu.userGroup) " +
 			"and (menuItem.code=groupMenu.menuItem) " +

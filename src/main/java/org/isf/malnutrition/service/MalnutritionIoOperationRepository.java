@@ -32,10 +32,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MalnutritionIoOperationRepository extends JpaRepository<Malnutrition, Integer> {
 
-	@Query(value = "SELECT m FROM Malnutrition m WHERE m.admission.id = :id ORDER BY m.dateSupp")
+	@Query(value = "SELECT m FROM OH_Malnutrition m WHERE m.admission.id = :id ORDER BY m.dateSupp")
 	List<Malnutrition> findAllWhereAdmissionByOrderDate(@Param("id") int admissionID);
 
-	@Query(value = "SELECT m FROM Malnutrition m WHERE m.admission.id = :id ORDER BY m.dateSupp")
+	@Query(value = "SELECT m FROM OH_Malnutrition m WHERE m.admission.id = :id ORDER BY m.dateSupp")
 	List<Malnutrition> findAllWhereAdmissionByOrderDateDesc(@Param("id") int admissionID);
 
 }

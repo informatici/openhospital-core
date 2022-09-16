@@ -33,7 +33,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MovementWardIoOperationRepository extends JpaRepository<MovementWard, Integer> {
 
-	@Query(value = "select movWard from MovementWard movWard where movWard.wardTo.code=:idWardTo and (movWard.date>= :dateFrom and movWard.date < :dateTo)")
+	@Query(value = "select movWard from OH_MovementWard movWard where movWard.wardTo.code=:idWardTo and (movWard.date>= :dateFrom and movWard.date < :dateTo)")
 	List<MovementWard> findWardMovements(@Param("idWardTo") String idWardTo,
 			@Param("dateFrom") LocalDateTime dateFrom,
 			@Param("dateTo") LocalDateTime dateTo);

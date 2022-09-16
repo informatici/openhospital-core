@@ -38,17 +38,17 @@ public interface UserIoOperationRepository extends JpaRepository<User, String> {
 
 	User findByUserName(String userName);
 
-	@Query(value = "select user from User user where user.userGroupName.code=:groupId order by user.userName")
+	@Query(value = "select user from OH_User user where user.userGroupName.code=:groupId order by user.userName")
 	List<User> findAllWhereUserGroupNameByOrderUserNameAsc(@Param("groupId") String groupId);
 
 	@Modifying
 	@Transactional
-	@Query(value = "update User user set user.desc=:description where user.userName=:id")
+	@Query(value = "update OH_User user set user.desc=:description where user.userName=:id")
 	int updateDescription(@Param("description") String description, @Param("id") String id);
 
 	@Modifying
 	@Transactional
-	@Query(value = "update User set passwd=:password where userName=:id")
+	@Query(value = "update OH_User set passwd=:password where userName=:id")
 	int updatePassword(@Param("password") String password, @Param("id") String id);
 
 }

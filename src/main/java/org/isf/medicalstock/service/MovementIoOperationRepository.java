@@ -34,20 +34,20 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MovementIoOperationRepository extends JpaRepository<Movement, Integer>, MovementIoOperationRepositoryCustom {
 
-	@Query(value = "select m from Movement m join m.medical med where med.code = :code")
+	@Query(value = "select m from OH_Movement m join m.medical med where med.code = :code")
 	Movement findAllByMedicalCode(@Param("code") Integer code);
 
-	@Query(value = "select m from Movement m join m.medical med where med.code = :code")
+	@Query(value = "select m from OH_Movement m join m.medical med where med.code = :code")
 	Movement findAllByMedicalCodeOrderByLot_(@Param("code") Integer code);
 
-	@Query(value = "select distinct med.code from Movement mov " +
+	@Query(value = "select distinct med.code from OH_Movement mov " +
 			"join mov.medical med " +
 			"join mov.type movtype " +
 			"join mov.lot lot " +
 			"where lot.code=:lot")
 	List<Integer> findAllByLot(@Param("lot") String lot);
 
-	@Query(value = "select mov from Movement mov " +
+	@Query(value = "select mov from OH_Movement mov " +
 			"join mov.type movtype " +
 			"left join mov.lot lot " +
 			"left join mov.ward ward " +
@@ -56,9 +56,9 @@ public interface MovementIoOperationRepository extends JpaRepository<Movement, I
 
 	List<Movement> findByLot(Lot lot);
 
-	@Query(value = "select max(mov.date) from Movement mov")
+	@Query(value = "select max(mov.date) from OH_Movement mov")
 	LocalDateTime findMaxDate();
 
-	@Query(value = "select mov.refNo from Movement mov where mov.refNo like :refNo")
+	@Query(value = "select mov.refNo from OH_Movement mov where mov.refNo like :refNo")
 	List<String> findAllWhereRefNo(@Param("refNo") String refNo);
 }

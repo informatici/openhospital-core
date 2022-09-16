@@ -31,6 +31,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SupplierIoOperationRepository extends JpaRepository<Supplier, Integer> {
     
-    @Query(value = "select s from Supplier s where s.supDeleted = 'N'")
+    @Query(value = "select s from OH_Supplier s where s.supDeleted = 'N'")
     List<Supplier> findAllWhereNotDeleted();
 }

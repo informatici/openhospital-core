@@ -29,6 +29,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface HospitalIoOperationRepository extends JpaRepository<Hospital, String> {
 
-	@Query(value = "select h.currencyCod from Hospital h")
+	@Query(value = "select h.currencyCod from OH_Hospital h")
 	List<String> findAllHospitalCurrencyCode();
 }

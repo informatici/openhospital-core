@@ -34,7 +34,7 @@ public interface GroupMenuIoOperationRepository extends JpaRepository<GroupMenu,
 
 	@Modifying
 	@Transactional
-	@Query(value = "delete from GroupMenu where userGroup=:id")
+	@Query(value = "delete from OH_GroupMenu where userGroup=:id")
 	void deleteWhereUserGroup(@Param("id") String id);
 
 }

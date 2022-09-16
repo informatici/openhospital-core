@@ -38,7 +38,7 @@ public interface UserGroupIoOperationRepository extends JpaRepository<UserGroup,
 
 	@Modifying
 	@Transactional
-	@Query(value = "update UserGroup ug set ug.desc=:description where ug.code=:id")
+	@Query(value = "update OH_UserGroup ug set ug.desc=:description where ug.code=:id")
 	int updateDescription(@Param("description") String description, @Param("id") String id);
 
 }

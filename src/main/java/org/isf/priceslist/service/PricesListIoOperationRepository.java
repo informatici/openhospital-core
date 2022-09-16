@@ -35,7 +35,7 @@ public interface PricesListIoOperationRepository extends JpaRepository<PriceList
 	@Override
 	@Modifying
 	@Transactional
-	@Query(value = "DELETE FROM PriceList p WHERE p.id = :id")
+	@Query(value = "DELETE FROM OH_PriceList p WHERE p.id = :id")
 	void deleteById(@Param("id") Integer id);
 
 }

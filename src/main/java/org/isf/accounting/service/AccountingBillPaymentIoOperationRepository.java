@@ -37,26 +37,26 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface AccountingBillPaymentIoOperationRepository extends JpaRepository<BillPayments, Integer> {
 
-	@Query(value = "select distinct bp.user FROM BillPayments bp ORDER BY bp.user asc")
+	@Query(value = "select distinct bp.user FROM OH_BillPayments bp ORDER BY bp.user asc")
 	List<String> findUserDistinctByOrderByUserAsc();
 
-	@Query(value = "SELECT BP FROM BillPayments BP where BP.date >= :start and BP.date < :end ORDER BY BP.id")
+	@Query(value = "SELECT BP FROM OH_BillPayments BP where BP.date >= :start and BP.date < :end ORDER BY BP.id")
 	List<BillPayments> findByDateBetweenOrderByIdAscDateAsc(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
 	List<BillPayments> findAllByBillIn(Collection<Bill> bills);
 
-	@Query(value = "SELECT BP FROM BillPayments BP ORDER BY BP.bill, BP.date ASC")
+	@Query(value = "SELECT BP FROM OH_BillPayments BP ORDER BY BP.bill, BP.date ASC")
 	List<BillPayments> findAllByOrderByBillAndDate();
 
-	@Query(value = "SELECT BP FROM BillPayments BP WHERE BP.bill.id = :billId ORDER BY BP.bill, BP.date ASC")
+	@Query(value = "SELECT BP FROM OH_BillPayments BP WHERE BP.bill.id = :billId ORDER BY BP.bill, BP.date ASC")
 	List<BillPayments> findAllWherBillIdByOrderByBillAndDate(@Param("billId") Integer billId);
 
 	@Modifying
 	@Transactional
-	@Query(value = "DELETE FROM BillPayments BP where BP.bill.id = :billId")
+	@Query(value = "DELETE FROM OH_BillPayments BP where BP.bill.id = :billId")
 	void deleteWhereId(@Param("billId") Integer billId);
 
-	@Query(value = "SELECT BP FROM BillPayments BP WHERE " +
+	@Query(value = "SELECT BP FROM OH_BillPayments BP WHERE " +
 			"BP.bill.billPatient.code = :patientCode and " +
 			"DATE(BP.date) between DATE(:dateFrom) and DATE(:dateTo) " +
 			"ORDER BY BP.bill, BP.date ASC")
