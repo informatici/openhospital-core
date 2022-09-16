@@ -136,35 +136,33 @@ public class PrintReceipt {
 			PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
 			DocAttributeSet das = new HashDocAttributeSet();
 			
-			FileReader frStream = new FileReader(file);
-			BufferedReader brStream = new BufferedReader(frStream);
-			
-			int charH = TxtPrinter.ZPL_ROW_HEIGHT;
-			String font = "^A" + TxtPrinter.ZPL_FONT_TYPE;
-			String aLine = brStream.readLine();
-			String header = "^XA^LH0,30" + aLine;//starting point
-			
-			StringBuilder zpl = new StringBuilder();
-			int i = 0;
-			while (!aLine.equals("")) {
-				//System.out.println(aLine);
-				zpl.append("^FO0,").append(i * charH);         //line position
-				zpl.append(font).append(",").append(charH);    //font size
-				zpl.append("^FD").append(aLine).append("^FS"); //line field
-				aLine = brStream.readLine();
-				i++;
+			try (FileReader frStream = new FileReader(file)) {
+				try (BufferedReader brStream = new BufferedReader(frStream)) {
+
+					int charH = TxtPrinter.ZPL_ROW_HEIGHT;
+					String font = "^A" + TxtPrinter.ZPL_FONT_TYPE;
+					String aLine = brStream.readLine();
+					String header = "^XA^LH0,30" + aLine;//starting point
+
+					StringBuilder zpl = new StringBuilder();
+					int i = 0;
+					while (!aLine.equals("")) {
+						zpl.append("^FO0,").append(i * charH);         //line position
+						zpl.append(font).append(",").append(charH);    //font size
+						zpl.append("^FD").append(aLine).append("^FS"); //line field
+						aLine = brStream.readLine();
+						i++;
+					}
+					zpl.append("^XZ");//end
+					String labelLength = "^LL" + charH * i;
+					header += labelLength;
+					String label = header + zpl;
+
+					byte[] by = label.getBytes();
+					Doc doc = new SimpleDoc(by, flavor, das);
+					job.print(doc, pras);
+				}
 			}
-			zpl.append("^XZ");//end
-			String labelLength = "^LL" + charH * i;
-			header+=labelLength;
-			String label = header + zpl;
-
-			byte[] by = label.getBytes();
-			Doc doc = new SimpleDoc(by, flavor, das);
-			job.print(doc, pras);
-			brStream.close();
-			frStream.close();
-
 		} catch (IOException | PrintException exception) {
 			LOGGER.error(exception.getMessage(), exception);
 		}

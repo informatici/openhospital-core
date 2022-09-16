@@ -144,11 +144,12 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final boolean DEFAULT_STRONGPASSWORD = true;
 
 	private static GeneralData mySingleData;
-
+	
 	public static void reset() {
 		mySingleData = null;
 	}
-
+	
+	
 	private GeneralData(String fileProperties) {
 		super(fileProperties, EXIT_ON_FAIL);
 		SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);

@@ -34,12 +34,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * This class offers the io operations for recovering and managing ward records from the database
+ * This class offers the io operations for recovering and managing
+ * ward records from the database
  * 
  * @author Rick
  */
 @Service
-@Transactional(rollbackFor = OHServiceException.class)
+@Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
 public class WardIoOperations {
 
@@ -47,7 +48,7 @@ public class WardIoOperations {
 	private WardIoOperationRepository repository;
 	@Autowired
 	private AdmissionIoOperationRepository admissionRepository;
-
+	
 	/**
 	 * Retrieves the number of patients currently admitted in the {@link Ward}
 	 * 
@@ -82,14 +83,13 @@ public class WardIoOperations {
 
 	/**
 	 * Retrieves all stored {@link Ward}s with flag maternity equals <code>false</code>.
-	 * 
 	 * @return the retrieved wards.
 	 * @throws OHServiceException if an error occurs retrieving the diseases.
 	 */
 	public List<Ward> getWardsNoMaternity() throws OHServiceException {
 		return new ArrayList<>(repository.findByCodeNot("M"));
 	}
-
+	
 	/**
 	 * Retrieves all stored {@link Ward}s with the specified ward ID.
 	 * 
@@ -103,7 +103,7 @@ public class WardIoOperations {
 		}
 		return repository.findAll();
 	}
-
+	
 	/**
 	 * Stores the specified {@link Ward}.
 	 * 
@@ -114,7 +114,7 @@ public class WardIoOperations {
 	public Ward newWard(Ward ward) throws OHServiceException {
 		return repository.save(ward);
 	}
-
+	
 	/**
 	 * Updates the specified {@link Ward}.
 	 * 
@@ -125,7 +125,7 @@ public class WardIoOperations {
 	public Ward updateWard(Ward ward) throws OHServiceException {
 		return repository.save(ward);
 	}
-
+	
 	/**
 	 * Mark as deleted the specified {@link Ward}.
 	 * 
@@ -137,7 +137,7 @@ public class WardIoOperations {
 		repository.delete(ward);
 		return true;
 	}
-
+	
 	/**
 	 * Check if the specified code is used by other {@link Ward}s.
 	 * 
@@ -148,7 +148,7 @@ public class WardIoOperations {
 	public boolean isCodePresent(String code) throws OHServiceException {
 		return repository.existsById(code);
 	}
-
+	
 	/**
 	 * Check if the maternity ward exists
 	 * 

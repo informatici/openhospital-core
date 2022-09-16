@@ -31,7 +31,8 @@
 	<!-- could be used in place of @TranslateOHException ? -->
 	<!-- <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/> -->
 
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">
 			<value>classpath:database.properties</value>
 		</property>
@@ -57,22 +58,25 @@
 		<property name="ignoreResourceNotFound" value="true" />
 	</bean>
 
-	<bean id="springDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-		<property name="driverClass" value="${jdbc.class:com.mysql.jdbc.Driver}" />
-		<property name="jdbcUrl" value="${jdbc.url:jdbc:mysql://localhost:3306/oh}" />
-		<property name="user" value="${jdbc.username:isf}" />
-		<property name="password" value="${jdbc.password:isf123}" />
+ 	<bean id="springDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+ 		destroy-method="close">
+ 		<property name="driverClass" value="${jdbc.class:com.mysql.cj.jdbc.Driver}" />
+ 		<property name="jdbcUrl" value="${jdbc.url}" />
+ 		<property name="user" value="${jdbc.username}" />
+ 		<property name="password" value="${jdbc.password}" />
+ 
+ 		<!-- these are C3P0 properties -->
+ 		<property name="acquireIncrement" value="1" />
+ 		<property name="minPoolSize" value="0" />
+ 		<property name="maxPoolSize" value="10" />
+ 		<property name="maxIdleTime" value="300" />
+ 		<property name="maxStatements" value="0" />
+ 		<property name="checkoutTimeout" value="5000" />
+ 
+ 	</bean>
 
-		<!-- these are C3P0 properties -->
-		<property name="acquireIncrement" value="1" />
-		<property name="minPoolSize" value="0" />
-		<property name="maxPoolSize" value="10" />
-		<property name="maxIdleTime" value="300" />
-		<property name="maxStatements" value="0" />
-
-	</bean>
-
-	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="springDataSource" />
 		<property name="packagesToScan" value="org.isf" />
 		<property name="jpaVendorAdapter">
@@ -85,13 +89,14 @@
 				<prop key="hibernate.format_sql">${hibernate.format_sql:true}</prop>
 				<prop key="hibernate.dialect">${hibernate.dialect:org.hibernate.dialect.MySQLDialect}</prop>
 				<prop key="hibernate.id.new_generator_mappings">false</prop>
-				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto:false}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto:none}</prop>
 			</props>
 		</property>
 	</bean>
 
 	<tx:annotation-driven />
-	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+	<bean id="transactionManager"
+		class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 

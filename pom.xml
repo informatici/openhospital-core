@@ -170,7 +170,6 @@
 			<version>2.18.0</version>
 		</dependency>
 		<dependency>
-			<!-- maybe no longer needed -->
 			<groupId>com.googlecode.gstreamer-java</groupId>
 			<artifactId>gstreamer-java</artifactId>
 			<version>1.6</version>
