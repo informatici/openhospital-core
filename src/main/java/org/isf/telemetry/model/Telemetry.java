@@ -35,11 +35,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 /**
- * @author j
+ * @author Andrei
  *
  */
 @Entity
-@Table(name = "TELEMETRY")
+@Table(name = "OH_TELEMETRY")
 public class Telemetry {
 
 	@EmbeddedId
