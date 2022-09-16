@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS TELEMETRY;
-CREATE TABLE  TELEMETRY (
+DROP TABLE IF EXISTS OH_TELEMETRY;
+CREATE TABLE OH_TELEMETRY (
   # identification
   TEL_UUID VARCHAR(36) NOT NULL COMMENT 'Software ID',
   TEL_DBID VARCHAR(36) NOT NULL COMMENT 'DATABASE ID',
@@ -16,5 +16,5 @@ CREATE TABLE  TELEMETRY (
   PRIMARY KEY (TEL_UUID,TEL_DBID,TEL_HWID,TEL_OSID)
 ) ENGINE=MyISAM;
 
-INSERT INTO MENUITEM VALUES ('telemetry', 'angal.menu.btn.telemetry', 'angal.menu.telemetry', 'x', 'M', 'generaldata', 'org.isf.telemetry.gui.TelemetryEdit','N', 9);
-INSERT INTO GROUPMENU (GM_UG_ID_A, GM_MNI_ID_A, GM_ACTIVE) VALUES ('admin','telemetry',1);
+INSERT INTO OH_MENUITEM VALUES ('telemetry', 'angal.menu.btn.telemetry', 'angal.menu.telemetry', 'x', 'M', 'generaldata', 'org.isf.telemetry.gui.TelemetryEdit','N', 9);
+INSERT INTO OH_GROUPMENU (GM_UG_ID_A, GM_MNI_ID_A, GM_ACTIVE) VALUES ('admin','telemetry',1);
