@@ -67,11 +67,11 @@ public class LocationDataCollector extends AbstractDataCollector {
 		try {
 
 			String geoIpServiceName = this.settings.get("telemetry.enabled.geo.ip.lookup.service");
-			System.out.println(geoIpServiceName + " - " + geoIpServices.size());
+			LOGGER.debug(geoIpServiceName + " - " + geoIpServices.size());
 			this.geoIpServices.forEach(service -> {
 				if (service.getServiceName().equals(geoIpServiceName)) {
 					GeoIpInfoBean json = service.retrieveIpInfo();
-					System.out.println(json);
+					LOGGER.debug(json.toString());
 					result.put(CollectorsConst.LOC_COUNTRY_NAME, json.getCountryName());
 					result.put(CollectorsConst.LOC_COUNTRY_CODE, json.getCountryCode());
 					result.put(CollectorsConst.LOC_REGION_NAME, json.getRegionName());
