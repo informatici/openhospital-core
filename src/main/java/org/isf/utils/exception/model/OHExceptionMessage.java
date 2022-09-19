@@ -32,8 +32,10 @@ public class OHExceptionMessage implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private String title;
+	private ErrorDescription description;
 	private String message;
 	private OHSeverityLevel level;
+	
 
 	public OHExceptionMessage(String title, String message, OHSeverityLevel level) {
 		super();
@@ -41,7 +43,13 @@ public class OHExceptionMessage implements Serializable{
 		this.message = message;
 		this.level = level;
 	}
-	
+	public OHExceptionMessage(String title, ErrorDescription description,String message, OHSeverityLevel level) {
+		super();
+		this.title = title;
+		this.description = ErrorDescription.PASSWORD_TOO_SHORT;
+		this.message = message;
+		this.level = level;
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -59,6 +67,12 @@ public class OHExceptionMessage implements Serializable{
 	}
 	public void setLevel(OHSeverityLevel level) {
 		this.level = level;
+	}
+	public ErrorDescription getDescription() {
+		return description;
+	}
+	public void setDescription(ErrorDescription description) {
+		this.description = description;
 	}
 	
 

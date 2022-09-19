@@ -429,14 +429,14 @@ public class PatientBrowserManager {
 		List<AgeType> ageTypes = ageTypeManager.getAgeType();
 		if(patient.getBirthDate()!= null && ageTypes != null) {
 			for(AgeType age :ageTypes) {
-				if(age.getFrom() < patient.getAge() && patient.getAge()  < age.getTo()) {
+				if(age.getFrom() <= patient.getAge() && patient.getAge()  <= age.getTo()) {
 					patient.setAgetype(age.getCode());
 				}
 			}
 		}
-		if(patient.getAge() > 0 & ageTypes != null) {
+		if(patient.getAge() > 0 && ageTypes != null) {
 			for(AgeType age :ageTypes) {
-				if(age.getFrom() < patient.getAge() && patient.getAge()  < age.getTo()) {
+				if(age.getFrom() <= patient.getAge() && patient.getAge()  <= age.getTo()) {
 					patient.setAgetype(age.getCode());
 				}
 			}
