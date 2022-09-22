@@ -33,11 +33,13 @@ import java.io.PrintStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -64,7 +66,8 @@ import org.springframework.stereotype.Component;
 public class FileSystemDicomManager implements DicomManagerInterface {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemDicomManager.class);
-	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss yyyy");
+	private static String DICOM_DATE_FORMAT_ZONED = "EEE MMM dd HH:mm:ss z yyyy";
+	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DICOM_DATE_FORMAT_ZONED, new Locale("en"));
 
 	public FileSystemDicomManager() {
 	}
@@ -286,13 +289,13 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 				ps.println("dicomPatientSex =" + dicom.getDicomPatientSex());
 				ps.println("dicomPatientBirthDate =" + dicom.getDicomPatientBirthDate());
 				ps.println("dicomStudyId =" + dicom.getDicomStudyId());
-				ps.println("dicomStudyDate =" + dicom.getDicomStudyDate().format(DATE_TIME_FORMATTER));
+				ps.println("dicomStudyDate =" + dicom.getDicomStudyDate().atZone(ZoneId.systemDefault()).format(DATE_TIME_FORMATTER));
 				ps.println("dicomStudyDescription =" + dicom.getDicomStudyDescription());
 				ps.println("dicomSeriesUID =" + dicom.getDicomSeriesUID());
 				ps.println("dicomSeriesInstanceUID =" + dicom.getDicomSeriesInstanceUID());
 				ps.println("dicomSeriesNumber =" + dicom.getDicomSeriesNumber());
 				ps.println("dicomSeriesDescriptionCodeSequence =" + dicom.getDicomSeriesDescriptionCodeSequence());
-				ps.println("dicomSeriesDate =" + dicom.getDicomSeriesDate().format(DATE_TIME_FORMATTER));
+				ps.println("dicomSeriesDate =" + dicom.getDicomSeriesDate().atZone(ZoneId.systemDefault()).format(DATE_TIME_FORMATTER));
 				ps.println("dicomSeriesDescription =" + dicom.getDicomSeriesDescription());
 				// dicomInstanceUID is used to identify a unique file in the series
 				// so cannot be empty and will be used only for this cycle
