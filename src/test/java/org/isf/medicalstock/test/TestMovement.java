@@ -37,7 +37,7 @@ import org.isf.ward.model.Ward;
 
 public class TestMovement {
 
-	private LocalDateTime date = LocalDateTime.of(2000, 2, 2, 0, 0, 0);
+	private LocalDateTime date = LocalDateTime.of(2000, 2, 2, 0, 0, 0, 0);
 	private int quantity = 10;
 	private String refNo = "TestRef";
 
