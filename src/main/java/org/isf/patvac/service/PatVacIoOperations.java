@@ -24,6 +24,7 @@ package org.isf.patvac.service;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.isf.patvac.model.PatientVaccine;
@@ -59,8 +60,9 @@ public class PatVacIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<PatientVaccine> getPatientVaccine(boolean minusOneWeek) throws OHServiceException {
-		LocalDateTime timeTo = LocalDateTime.now().with(LocalTime.MAX);
-		LocalDateTime timeFrom = LocalDateTime.now().with(LocalTime.MIN);
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime timeTo = now.with(LocalTime.MAX).truncatedTo(ChronoUnit.SECONDS);
+		LocalDateTime timeFrom = now.with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
 
 		if (minusOneWeek) {
 			timeFrom = timeFrom.minusWeeks(1);

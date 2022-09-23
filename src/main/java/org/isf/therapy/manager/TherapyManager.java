@@ -23,6 +23,7 @@ package org.isf.therapy.manager;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -259,7 +260,7 @@ public class TherapyManager {
 			// CALCULATING NEEDINGS
 			Double qty = th.getQty();
 			int freq = th.getFreqInDay();
-			LocalDateTime todayDate = LocalDateTime.now().with(LocalTime.MIN);
+			LocalDateTime todayDate = LocalDateTime.now().with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
 
 			int dayCount = 0;
 			for (LocalDateTime date : th.getDates()) {

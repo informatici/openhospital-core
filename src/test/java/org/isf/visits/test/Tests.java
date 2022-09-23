@@ -238,12 +238,13 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewVisitsSMSTrueDateFuture() throws Exception {
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
+		LocalDateTime date = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 		Visit visit = visitsIoOperationRepository.findById(id).get();
-		visit.setDate(LocalDateTime.now().plusMonths(1));
+		visit.setDate(date.plusMonths(1));
 		visits.add(visit);
 		assertThat(visitManager.newVisits(visits)).isTrue();
 
-		List<Sms> sms = smsOperations.getAll(LocalDateTime.now(), LocalDateTime.now().plusMonths(1));
+		List<Sms> sms = smsOperations.getAll(date, date.plusMonths(1));
 		assertThat(sms).hasSize(1);
 		LocalDateTime scheduledDate = visit.getDate().minusDays(1);
 		assertThat(sms.get(0).getSmsDateSched()).isEqualTo(scheduledDate);
@@ -256,11 +257,12 @@ public class Tests extends OHCoreTestCase {
 		Visit visit = visitsIoOperationRepository.findById(id).get();
 		String longText = "This is a very long note that should cause the SMS code to truncate the entire message to 160 characters.";
 		visit.setNote(longText + ' ' + longText);
-		visit.setDate(LocalDateTime.now().plusMonths(1));
+		visit.setDate(LocalDateTime.now().plusMonths(1).truncatedTo(ChronoUnit.SECONDS));
 		visits.add(visit);
 		assertThat(visitManager.newVisits(visits)).isTrue();
 
-		List<Sms> sms = smsOperations.getAll(LocalDateTime.now(), LocalDateTime.now().plusMonths(1));
+		LocalDateTime dateFrom = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+		List<Sms> sms = smsOperations.getAll(dateFrom, dateFrom.plusMonths(1));
 		assertThat(sms).hasSize(1);
 	}
 

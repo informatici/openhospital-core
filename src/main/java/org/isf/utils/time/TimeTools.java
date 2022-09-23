@@ -192,7 +192,7 @@ public class TimeTools {
 	 * @return
 	 */
 	public static LocalDateTime getDateToday0() {
-		return LocalDateTime.now().with(LocalTime.MIN);
+		return LocalDateTime.now().with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class TimeTools {
 	 * @return
 	 */
 	public static LocalDateTime getDateToday24() {
-		return LocalDateTime.now().with(LocalTime.MAX);
+		return LocalDateTime.now().with(LocalTime.MAX).truncatedTo(ChronoUnit.SECONDS);
 	}
 
 	/**

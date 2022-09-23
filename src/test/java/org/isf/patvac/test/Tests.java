@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.assertj.core.api.Condition;
@@ -123,7 +124,7 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 
-		LocalDateTime date = LocalDateTime.now().minusDays(3);
+		LocalDateTime date = LocalDateTime.now().minusDays(3).truncatedTo(ChronoUnit.SECONDS);
 		patientVaccine.setVaccineDate(date);
 
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);

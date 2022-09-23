@@ -772,7 +772,7 @@ public class Tests extends OHCoreTestCase {
 		{
 			int code = setupTestMovement(false);
 			Movement movement = movementIoOperationRepository.findById(code).get();
-			LocalDateTime todayPlusAYear = LocalDateTime.of(LocalDateTime.now().getYear() + 2, 2, 2, 0, 0, 0, 0);//LocalDateTime.now().plusYears(1);
+			LocalDateTime todayPlusAYear = LocalDateTime.of(LocalDateTime.now().getYear() + 2, 2, 2, 0, 0, 0, 0);
 			movement.setDate(todayPlusAYear);
 			ArrayList<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
