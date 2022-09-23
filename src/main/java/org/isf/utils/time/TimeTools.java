@@ -21,6 +21,8 @@
  */
 package org.isf.utils.time;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,6 +33,10 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 
 import org.isf.generaldata.MessageBundle;
+import org.isf.utils.db.DbQueryLogger;
+import org.isf.utils.exception.OHException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Some useful functions for time calculations.
@@ -38,6 +44,8 @@ import org.isf.generaldata.MessageBundle;
  * @author Mwithi
  */
 public class TimeTools {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(TimeTools.class);
 
 	public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 
@@ -183,7 +191,7 @@ public class TimeTools {
 	 * @return LocalDateTime without nanoseconds
 	 */
 	public static LocalDateTime getNow() {
-		return LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);//SECONDS);
+		return LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 	}
 
 	/**
@@ -284,6 +292,28 @@ public class TimeTools {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 				return LocalDateTime.parse(strDate, formatter);
 			}
+		}
+		return null;
+	}
+
+	/**
+	 * Return the date and time of the server
+	 *
+	 * @return DateTime
+	 * @author hadesthanos
+	 */
+	public static LocalDateTime getServerDateTime() {
+		String query = " SELECT NOW( ) as time ";
+		DbQueryLogger dbQuery = new DbQueryLogger();
+		try {
+			ResultSet resultSet = dbQuery.getData(query, true);
+			while (resultSet.next()) {
+				String date = resultSet.getString("time");
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS);
+				return LocalDateTime.parse(date, formatter);
+			}
+		} catch (SQLException | OHException | DateTimeParseException exception) {
+			LOGGER.error(exception.getMessage(), exception);
 		}
 		return null;
 	}
