@@ -21,7 +21,7 @@
  */
 package org.isf.telemetry.envdatacollector;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -68,7 +68,7 @@ public class DataCollectorProviderService {
 	 * @return
 	 */
 	public Map<String, Map<String, String>> collectData(List<String> listDataCollectorFunction, boolean ignoreErrors) throws OHException {
-		Map<String, Map<String, String>> result = new HashMap<>();
+		Map<String, Map<String, String>> result = new LinkedHashMap<>();
 		OHException exception[] = { null };
 		this.dataCollectors.stream().forEach(collector -> {
 			if (listDataCollectorFunction.contains((collector.getId()))) {

@@ -37,22 +37,19 @@ import org.springframework.stereotype.Component;
 
 @Order(value = 20)
 @Component
-public class DBMSDataCollector extends AbstractDataCollector {
+public class _DBMSDataCollector {
 
 	private static final String ID = "FUN_DBMS";
-	private static final Logger LOGGER = LoggerFactory.getLogger(DBMSDataCollector.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(_DBMSDataCollector.class);
 
-	@Override
 	public String getId() {
 		return ID;
 	}
 
-	@Override
 	public String getDescription() {
 		return "DBMS information (ex. MySQL 5.0)";
 	}
 
-	@Override
 	public Map<String, String> retrieveData() throws OHException {
 		LOGGER.debug("Collecting DBMS data...");
 		Map<String, String> result = new HashMap<>();

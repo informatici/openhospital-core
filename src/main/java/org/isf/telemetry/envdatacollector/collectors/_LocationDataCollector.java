@@ -21,58 +21,64 @@
  */
 package org.isf.telemetry.envdatacollector.collectors;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
+import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoBean;
+import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoCommonService;
+import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoSettings;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import oshi.SystemInfo;
-import oshi.hardware.CentralProcessor;
-import oshi.hardware.GlobalMemory;
-import oshi.hardware.HardwareAbstractionLayer;
-import oshi.util.FormatUtil;
-
-@Order(value = 10)
+@Order(value = 60)
 @Component
-public class HardwareDataCollector extends AbstractDataCollector {
+public class _LocationDataCollector {
 
-	private static final String ID = "FUN_HW";
-	private static final Logger LOGGER = LoggerFactory.getLogger(HardwareDataCollector.class);
+	private static final String ID = "FUN_LOCATION";
+	private static final Logger LOGGER = LoggerFactory.getLogger(_LocationDataCollector.class);
 
-	@Override
+	@Autowired
+	private GeoIpInfoSettings settings;
+
+	@Autowired
+	List<GeoIpInfoCommonService> geoIpServices;
+
 	public String getId() {
 		return ID;
 	}
 
-	@Override
 	public String getDescription() {
-		return "Hardware information (ex. CPU Intel, RAM, etc.)";
+		return "Location information (ex. Italy)";
 	}
 
-	@Override
 	public Map<String, String> retrieveData() throws OHException {
-		LOGGER.debug("Collecting Hardware data...");
-		Map<String, String> result = new LinkedHashMap<>();
+		LOGGER.debug("Collecting location data...");
+		Map<String, String> result = new HashMap<>();
 		try {
-			SystemInfo si = new SystemInfo();
-			HardwareAbstractionLayer hard = si.getHardware();
-			CentralProcessor cpu = hard.getProcessor();
-			GlobalMemory mem = hard.getMemory();
-			result.put(CollectorsConst.HW_CPU_NUM_PHYSICAL_PROCESSES, String.valueOf(cpu.getPhysicalProcessorCount()));
-			result.put(CollectorsConst.HW_CPU_NUM_LOGICAL_PROCESSES, String.valueOf(cpu.getLogicalProcessorCount()));
-			result.put(CollectorsConst.HW_CPU_NAME, cpu.getProcessorIdentifier().getName());
-			result.put(CollectorsConst.HW_CPU_IDENTIFIER, cpu.getProcessorIdentifier().getIdentifier());
-			result.put(CollectorsConst.HW_CPU_MODEL, cpu.getProcessorIdentifier().getModel());
-			result.put(CollectorsConst.HW_CPU_ARCHITECTURE, cpu.getProcessorIdentifier().getMicroarchitecture());
-			result.put(CollectorsConst.HW_CPU_VENDOR, cpu.getProcessorIdentifier().getVendor());
-			result.put(CollectorsConst.HW_CPU_CTX_SWITCHES, String.valueOf(cpu.getContextSwitches()));
-			result.put(CollectorsConst.HW_MEM_TOTAL, FormatUtil.formatBytes(mem.getTotal()));
+
+			String geoIpServiceName = this.settings.get("telemetry.enabled.geo.ip.lookup.service");
+			LOGGER.debug(geoIpServiceName + " - " + geoIpServices.size());
+			this.geoIpServices.forEach(service -> {
+				if (service.getServiceName().equals(geoIpServiceName)) {
+					GeoIpInfoBean json = service.retrieveIpInfo();
+					LOGGER.debug(json.toString());
+					result.put(CollectorsConst.LOC_COUNTRY_NAME, json.getCountryName());
+					result.put(CollectorsConst.LOC_COUNTRY_CODE, json.getCountryCode());
+					result.put(CollectorsConst.LOC_REGION_NAME, json.getRegionName());
+					result.put(CollectorsConst.LOC_CITY, json.getCity());
+					result.put(CollectorsConst.LOC_ZIP_CODE, json.getPostalCode());
+					result.put(CollectorsConst.LOC_TIMEZONE, json.getTimeZone());
+					result.put(CollectorsConst.LOC_CURRENCY_CODE, json.getCurrencyCode());
+					return;
+				}
+			});
 		} catch (RuntimeException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());

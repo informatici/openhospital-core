@@ -24,7 +24,6 @@ package org.isf.telemetry.envdatacollector.collectors;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.isf.generaldata.Version;
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
 import org.isf.utils.exception.OHException;
@@ -33,38 +32,41 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-@Order(value = 10)
+import oshi.SystemInfo;
+import oshi.software.os.OperatingSystem;
+
+@Order(value = 30)
 @Component
-public class ApplicationDataCollector extends AbstractDataCollector {
+public class _OperativeSystemDataCollector {
 
-	private static final String ID = "FUN_APPLICATION";
-	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationDataCollector.class);
+	private static final String ID = "FUN_OS";
+	private static final Logger LOGGER = LoggerFactory.getLogger(_OperativeSystemDataCollector.class);
 
-	@Override
 	public String getId() {
 		return ID;
 	}
 
-	@Override
 	public String getDescription() {
-		return "Application technical information (ex. OH version)";
+		return "Operative System information (ex. Ubuntu 12.04)";
 	}
 
-	@Override
 	public Map<String, String> retrieveData() throws OHException {
-		LOGGER.debug("Collecting application data...");
+		LOGGER.debug("Collecting OS data...");
 		Map<String, String> result = new HashMap<>();
 		try {
-			Version.initialize();
-			result.put(CollectorsConst.APP_VER_MAJOR, Version.VER_MAJOR);
-			result.put(CollectorsConst.APP_VER_MINOR, Version.VER_MINOR);
-			result.put(CollectorsConst.APP_RELEASE, Version.VER_RELEASE);
-			return result;
-		} catch (Exception e) {
+			SystemInfo si = new SystemInfo();
+			OperatingSystem os = si.getOperatingSystem();
+			result.put(CollectorsConst.OS_FAMILY, os.getFamily());
+			result.put(CollectorsConst.OS_VERSION, os.getVersionInfo().getVersion());
+			result.put(CollectorsConst.OS_MANUFACTURER, os.getManufacturer());
+			result.put(CollectorsConst.OS_BITNESS, String.valueOf(os.getBitness()));
+			result.put(CollectorsConst.OS_CODENAME, os.getVersionInfo().getCodeName());
+		} catch (RuntimeException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());
 			throw new OHException("Data collector [" + ID + "]", e);
 		}
+		return result;
 	}
 
 }

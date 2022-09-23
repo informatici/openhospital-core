@@ -21,49 +21,47 @@
  */
 package org.isf.telemetry.envdatacollector.collectors;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.isf.opd.service.OpdIoOperations;
+import org.isf.generaldata.Version;
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
+import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-@Order(value = 50)
+@Order(value = 10)
 @Component
-public class TimeDataCollector extends AbstractDataCollector {
+public class _ApplicationDataCollector {
 
-	private static final String ID = "FUN_TIME";
-	private static final Logger LOGGER = LoggerFactory.getLogger(TimeDataCollector.class);
+	private static final String ID = "FUN_APPLICATION";
+	private static final Logger LOGGER = LoggerFactory.getLogger(_ApplicationDataCollector.class);
 
-	@Autowired
-	private OpdIoOperations opdIoOperations;
-
-	@Override
 	public String getId() {
 		return ID;
 	}
 
-	@Override
 	public String getDescription() {
-		return "Time information (ex. last used timestamp)";
+		return "Application technical information (ex. OH version)";
 	}
 
-	@Override
-	public Map<String, String> retrieveData() {
-		LOGGER.debug("Collecting Time data...");
+	public Map<String, String> retrieveData() throws OHException {
+		LOGGER.debug("Collecting application data...");
 		Map<String, String> result = new HashMap<>();
-		LocalDateTime lastUsedTime = this.opdIoOperations.lastOpdCreationDate();
-		if (lastUsedTime == null) {
-			lastUsedTime = LocalDateTime.now();
+		try {
+			Version.initialize();
+			result.put(CollectorsConst.APP_VER_MAJOR, Version.VER_MAJOR);
+			result.put(CollectorsConst.APP_VER_MINOR, Version.VER_MINOR);
+			result.put(CollectorsConst.APP_RELEASE, Version.VER_RELEASE);
+			return result;
+		} catch (Exception e) {
+			LOGGER.error("Something went wrong with " + ID);
+			LOGGER.error(e.toString());
+			throw new OHException("Data collector [" + ID + "]", e);
 		}
-		result.put(CollectorsConst.TIME_LAST_USED, String.valueOf(lastUsedTime));
-		return result;
 	}
 
 }

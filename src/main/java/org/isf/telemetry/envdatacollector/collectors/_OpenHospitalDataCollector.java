@@ -24,47 +24,52 @@ package org.isf.telemetry.envdatacollector.collectors;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.isf.menu.service.MenuIoOperations;
+import org.isf.patient.service.PatientIoOperations;
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
+import org.isf.ward.service.WardIoOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import oshi.SystemInfo;
-import oshi.software.os.OperatingSystem;
-
-@Order(value = 30)
+@Order(value = 40)
 @Component
-public class OperativeSystemDataCollector extends AbstractDataCollector {
+public class _OpenHospitalDataCollector {
 
-	private static final String ID = "FUN_OS";
-	private static final Logger LOGGER = LoggerFactory.getLogger(OperativeSystemDataCollector.class);
+	private static final String ID = "FUN_OH";
+	private static final Logger LOGGER = LoggerFactory.getLogger(_OpenHospitalDataCollector.class);
 
-	@Override
+	@Autowired
+	private PatientIoOperations patientIoOperations;
+
+	@Autowired
+	private MenuIoOperations menuIoOperations;
+
+	@Autowired
+	private WardIoOperations wardIoOperations;
+
 	public String getId() {
 		return ID;
 	}
 
-	@Override
 	public String getDescription() {
-		return "Operative System information (ex. Ubuntu 12.04)";
+		return "Hospital information (ex. 100 beds)";
 	}
 
-	@Override
 	public Map<String, String> retrieveData() throws OHException {
-		LOGGER.debug("Collecting OS data...");
+		LOGGER.debug("Collecting Open Hospital data...");
 		Map<String, String> result = new HashMap<>();
 		try {
-			SystemInfo si = new SystemInfo();
-			OperatingSystem os = si.getOperatingSystem();
-			result.put(CollectorsConst.OS_FAMILY, os.getFamily());
-			result.put(CollectorsConst.OS_VERSION, os.getVersionInfo().getVersion());
-			result.put(CollectorsConst.OS_MANUFACTURER, os.getManufacturer());
-			result.put(CollectorsConst.OS_BITNESS, String.valueOf(os.getBitness()));
-			result.put(CollectorsConst.OS_CODENAME, os.getVersionInfo().getCodeName());
-		} catch (RuntimeException e) {
+			result.put(CollectorsConst.OH_TOTAL_ACTIVE_PATIENTS, String.valueOf(patientIoOperations.countAllActivePatients()));
+			result.put(CollectorsConst.OH_TOTAL_ACTIVE_USERS, String.valueOf(this.menuIoOperations.countAllActive()));
+			result.put(CollectorsConst.OH_TOTAL_ACTIVE_WARDS, String.valueOf(this.wardIoOperations.countAllActiveWards()));
+			result.put(CollectorsConst.OH_TOTAL_ACTIVE_BEDS, String.valueOf(this.wardIoOperations.countAllActiveBeds()));
+		} catch (OHServiceException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());
 			throw new OHException("Data collector [" + ID + "]", e);

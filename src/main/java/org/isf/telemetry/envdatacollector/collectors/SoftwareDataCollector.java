@@ -21,11 +21,17 @@
  */
 package org.isf.telemetry.envdatacollector.collectors;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.isf.generaldata.Version;
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
+import org.isf.utils.db.DbSingleConn;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,17 +39,14 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import oshi.SystemInfo;
-import oshi.hardware.CentralProcessor;
-import oshi.hardware.GlobalMemory;
-import oshi.hardware.HardwareAbstractionLayer;
-import oshi.util.FormatUtil;
+import oshi.software.os.OperatingSystem;
 
-@Order(value = 10)
+@Order(value = 20)
 @Component
-public class HardwareDataCollector extends AbstractDataCollector {
+public class SoftwareDataCollector extends AbstractDataCollector {
 
-	private static final String ID = "FUN_HW";
-	private static final Logger LOGGER = LoggerFactory.getLogger(HardwareDataCollector.class);
+	private static final String ID = "FUN_SW";
+	private static final Logger LOGGER = LoggerFactory.getLogger(SoftwareDataCollector.class);
 
 	@Override
 	public String getId() {
@@ -52,28 +55,30 @@ public class HardwareDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		return "Hardware information (ex. CPU Intel, RAM, etc.)";
+		return "Software information (ex. Ubuntu 12.04, MySQL 5.7.36, etc.)";
 	}
 
 	@Override
 	public Map<String, String> retrieveData() throws OHException {
-		LOGGER.debug("Collecting Hardware data...");
+		LOGGER.debug("Collecting Software data...");
 		Map<String, String> result = new LinkedHashMap<>();
 		try {
 			SystemInfo si = new SystemInfo();
-			HardwareAbstractionLayer hard = si.getHardware();
-			CentralProcessor cpu = hard.getProcessor();
-			GlobalMemory mem = hard.getMemory();
-			result.put(CollectorsConst.HW_CPU_NUM_PHYSICAL_PROCESSES, String.valueOf(cpu.getPhysicalProcessorCount()));
-			result.put(CollectorsConst.HW_CPU_NUM_LOGICAL_PROCESSES, String.valueOf(cpu.getLogicalProcessorCount()));
-			result.put(CollectorsConst.HW_CPU_NAME, cpu.getProcessorIdentifier().getName());
-			result.put(CollectorsConst.HW_CPU_IDENTIFIER, cpu.getProcessorIdentifier().getIdentifier());
-			result.put(CollectorsConst.HW_CPU_MODEL, cpu.getProcessorIdentifier().getModel());
-			result.put(CollectorsConst.HW_CPU_ARCHITECTURE, cpu.getProcessorIdentifier().getMicroarchitecture());
-			result.put(CollectorsConst.HW_CPU_VENDOR, cpu.getProcessorIdentifier().getVendor());
-			result.put(CollectorsConst.HW_CPU_CTX_SWITCHES, String.valueOf(cpu.getContextSwitches()));
-			result.put(CollectorsConst.HW_MEM_TOTAL, FormatUtil.formatBytes(mem.getTotal()));
-		} catch (RuntimeException e) {
+			OperatingSystem os = si.getOperatingSystem();
+			result.put(CollectorsConst.OS_FAMILY, os.getFamily());
+			result.put(CollectorsConst.OS_VERSION, os.getVersionInfo().getVersion());
+			result.put(CollectorsConst.OS_MANUFACTURER, os.getManufacturer());
+			result.put(CollectorsConst.OS_BITNESS, String.valueOf(os.getBitness()));
+			result.put(CollectorsConst.OS_CODENAME, os.getVersionInfo().getCodeName());
+			
+			Connection con = DbSingleConn.getConnection();
+			DatabaseMetaData dbmd = con.getMetaData();
+			result.put(CollectorsConst.DBMS_DRIVER_NAME, dbmd.getDriverName());
+			result.put(CollectorsConst.DBMS_DRIVER_VERSION, dbmd.getDriverVersion());
+			result.put(CollectorsConst.DBMS_PRODUCT_NAME, dbmd.getDatabaseProductName());
+			result.put(CollectorsConst.DBMS_PRODUCT_VERSION, dbmd.getDatabaseProductVersion());
+			
+		} catch (RuntimeException | SQLException | IOException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());
 			throw new OHException("Data collector [" + ID + "]", e);
