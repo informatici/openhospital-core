@@ -187,6 +187,15 @@ public class TimeTools {
 	}
 
 	/**
+	 * Return the current date time
+	 *
+	 * @return LocalDateTime without nanoseconds
+	 */
+	public static LocalDateTime getNow() {
+		return LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);//SECONDS);
+	}
+
+	/**
 	 * Return the first instance of the current date
 	 *
 	 * @return

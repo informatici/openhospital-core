@@ -30,6 +30,7 @@ import java.util.List;
 import org.isf.patvac.model.PatientVaccine;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,7 +61,7 @@ public class PatVacIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<PatientVaccine> getPatientVaccine(boolean minusOneWeek) throws OHServiceException {
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = TimeTools.getNow();
 		LocalDateTime timeTo = now.with(LocalTime.MAX).truncatedTo(ChronoUnit.SECONDS);
 		LocalDateTime timeFrom = now.with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
 

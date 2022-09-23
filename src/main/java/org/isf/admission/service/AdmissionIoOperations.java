@@ -41,6 +41,7 @@ import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -259,7 +260,7 @@ public class AdmissionIoOperations {
 	public static boolean afterJune;
 
 	public static LocalDateTime getNow() {
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = TimeTools.getNow();
 		if (!testing) {
 			return now;
 		}

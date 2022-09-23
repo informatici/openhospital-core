@@ -36,6 +36,7 @@ import org.isf.patient.test.TestPatient;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.time.TimeTools;
 import org.isf.visits.manager.VisitManager;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperationRepository;
@@ -238,7 +239,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewVisitsSMSTrueDateFuture() throws Exception {
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
-		LocalDateTime date = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+		LocalDateTime date = TimeTools.getNow();
 		Visit visit = visitsIoOperationRepository.findById(id).get();
 		visit.setDate(date.plusMonths(1));
 		visits.add(visit);
@@ -257,11 +258,11 @@ public class Tests extends OHCoreTestCase {
 		Visit visit = visitsIoOperationRepository.findById(id).get();
 		String longText = "This is a very long note that should cause the SMS code to truncate the entire message to 160 characters.";
 		visit.setNote(longText + ' ' + longText);
-		visit.setDate(LocalDateTime.now().plusMonths(1).truncatedTo(ChronoUnit.SECONDS));
+		visit.setDate(TimeTools.getNow().plusMonths(1));
 		visits.add(visit);
 		assertThat(visitManager.newVisits(visits)).isTrue();
 
-		LocalDateTime dateFrom = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+		LocalDateTime dateFrom = TimeTools.getNow();
 		List<Sms> sms = smsOperations.getAll(dateFrom, dateFrom.plusMonths(1));
 		assertThat(sms).hasSize(1);
 	}

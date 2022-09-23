@@ -33,11 +33,12 @@ import org.isf.generaldata.GeneralData;
 import org.isf.lab.model.Laboratory;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.time.TimeTools;
 
 public class TestLaboratory {
 
 	private String material = "TestMaterial";
-	private LocalDateTime labDate = LocalDateTime.now();
+	private LocalDateTime labDate = TimeTools.getNow();
 	private LocalDate examDate = labDate.toLocalDate();
 	private String result = "TestResult";
 	private String note = "TestNote";
