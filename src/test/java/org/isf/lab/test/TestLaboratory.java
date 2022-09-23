@@ -22,9 +22,11 @@
 package org.isf.lab.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.exa.model.Exam;
 import org.isf.generaldata.GeneralData;
@@ -90,7 +92,7 @@ public class TestLaboratory {
 			assertThat(laboratory.getAge()).isEqualTo(age);
 			assertThat(laboratory.getPatName()).isEqualTo(patName);
 		}
-		assertThat(laboratory.getDate()).isEqualTo(labDate);
+		assertThat(laboratory.getDate()).isCloseTo(labDate, within(1, ChronoUnit.SECONDS));
 		assertThat(laboratory.getExamDate()).isEqualTo(examDate);
 		assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
 		assertThat(laboratory.getMaterial()).isEqualTo(material);

@@ -22,8 +22,10 @@
 package org.isf.accounting.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.accounting.model.Bill;
 import org.isf.patient.model.Patient;
@@ -73,8 +75,8 @@ public class TestBill {
 	}
 
 	public void check(Bill bill) {
-		assertThat(bill.getDate()).isEqualTo(date);
-		assertThat(bill.getUpdate()).isEqualTo(update);
+		assertThat(bill.getDate()).isCloseTo(date, within(1, ChronoUnit.SECONDS));
+		assertThat(bill.getUpdate()).isCloseTo(update, within(1, ChronoUnit.SECONDS));
 		assertThat(bill.isList()).isEqualTo(isList);
 		assertThat(bill.getListName()).isEqualTo(listName);
 		assertThat(bill.isPatient()).isEqualTo(isPatient);

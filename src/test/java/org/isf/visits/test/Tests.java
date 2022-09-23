@@ -22,8 +22,10 @@
 package org.isf.visits.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,7 +99,7 @@ public class Tests extends OHCoreTestCase {
 		Visit foundVisit = visitsIoOperationRepository.findById(id).get();
 		List<Visit> visits = visitsIoOperation.getVisits(foundVisit.getPatient().getCode());
 		// then:
-		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(foundVisit.getDate());
+		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(foundVisit.getDate(), within(1, ChronoUnit.SECONDS));
 	}
 
 	@Test
@@ -110,7 +112,7 @@ public class Tests extends OHCoreTestCase {
 		List<Visit> visits = visitsIoOperation.getVisits(0);
 
 		// then:
-		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(foundVisit.getDate());
+		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(foundVisit.getDate(), within(1, ChronoUnit.SECONDS));
 	}
 
 	@Test
@@ -118,7 +120,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findById(id).get();
 		List<Visit> visits = visitsIoOperation.getVisitsWard(null);
-		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
+		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
 	}
 
 	@Test
@@ -126,7 +128,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findById(id).get();
 		List<Visit> visits = visitsIoOperation.getVisitsWard(visit.getWard().getCode());
-		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
+		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
 	}
 
 	@Test
@@ -163,9 +165,9 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetVisitPatientCode() throws Exception {
 		int id = setupTestVisit(false);
-		Visit vist = visitsIoOperationRepository.findById(id).get();
-		List<Visit> visits = visitManager.getVisits(vist.getPatient().getCode());
-		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(vist.getDate());
+		Visit visit = visitsIoOperationRepository.findById(id).get();
+		List<Visit> visits = visitManager.getVisits(visit.getPatient().getCode());
+		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
 	}
 
 	@Test
@@ -173,7 +175,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findById(id).get();
 		List<Visit> visits = visitManager.getVisits(0);
-		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
+		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
 	}
 
 	@Test
@@ -181,7 +183,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findById(id).get();
 		List<Visit> visits = visitManager.getVisitsWard();
-		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
+		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
 	}
 
 	@Test
@@ -189,7 +191,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findById(id).get();
 		List<Visit> visits = visitManager.getVisitsWard(visit.getWard().getCode());
-		assertThat(visits.get(visits.size() - 1).getDate()).isEqualTo(visit.getDate());
+		assertThat(visits.get(visits.size() - 1).getDate()).isCloseTo(visit.getDate(), within(1, ChronoUnit.SECONDS));
 	}
 
 	@Test
