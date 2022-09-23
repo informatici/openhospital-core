@@ -35,6 +35,7 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +66,7 @@ public class BillBrowserManager {
 	protected void validateBill(Bill bill, List<BillItems> billItems, List<BillPayments> billPayments) throws OHDataValidationException {
         List<OHExceptionMessage> errors = new ArrayList<>();
 
-		LocalDateTime today = LocalDateTime.now();
+		LocalDateTime today = TimeTools.getNow();
 		LocalDateTime upDate;
 		LocalDateTime firstPay = LocalDateTime.from(today);
 		LocalDateTime lastPay = LocalDateTime.from(today);

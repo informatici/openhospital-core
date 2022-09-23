@@ -24,7 +24,6 @@ package org.isf.utils.time;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -187,12 +186,21 @@ public class TimeTools {
 	}
 
 	/**
+	 * Return the current date time
+	 *
+	 * @return LocalDateTime without nanoseconds
+	 */
+	public static LocalDateTime getNow() {
+		return LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+	}
+
+	/**
 	 * Return the first instance of the current date
 	 *
 	 * @return
 	 */
 	public static LocalDateTime getDateToday0() {
-		return LocalDateTime.now().with(LocalTime.MIN);
+		return LocalDateTime.now().with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
 	}
 
 	/**
@@ -201,7 +209,7 @@ public class TimeTools {
 	 * @return
 	 */
 	public static LocalDateTime getDateToday24() {
-		return LocalDateTime.now().with(LocalTime.MAX);
+		return LocalDateTime.now().with(LocalTime.MAX).truncatedTo(ChronoUnit.SECONDS);
 	}
 
 	/**
@@ -240,8 +248,6 @@ public class TimeTools {
 		return date.plusDays(1).with(LocalTime.MIN);
 	}
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	/**
 	 * Returns the difference in days between two dates
 	 *
@@ -275,7 +281,7 @@ public class TimeTools {
 		return (int) ChronoUnit.MONTHS.between(from, to);
 	}
 
-	public static LocalDateTime getDate(String strDate, String format) throws ParseException {
+	public static LocalDateTime getDate(String strDate, String format) {
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
 			return LocalDateTime.parse(strDate, formatter);
@@ -308,39 +314,5 @@ public class TimeTools {
 			LOGGER.error(exception.getMessage(), exception);
 		}
 		return null;
-	}
-
-	/**
-	 * Convert LocalDateTime -> String using format "dd/MM/yy"
-	 *
-	 * @param time - a Calendar datetime
-	 * @return a String representing the Calendar in the format "dd/MM/yy"
-	 * @deprecated use formatDateTime(LocalDateTime dateTime, String pattern) instead
-	 */
-	@Deprecated
-	public static String getConvertedString(LocalDateTime time) {
-		if (time == null) {
-			return MessageBundle.getMessage("angal.malnutrition.nodate.msg");
-		}
-		LocalDate date = time.toLocalDate();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
-		return date.format(formatter);
-	}
-
-	/**
-	 * Convert String -> Date using pattern "ddMMyy" and the server time
-	 * ( SELECT NOW() as time )
-	 *
-	 * @param string - a date in the form ddMMyy
-	 * @return a Calendar datetime
-	 * @throws ParseException
-	 * @deprecated use getDate(String strDate, String format) instead
-	 */
-	@Deprecated
-	public static LocalDateTime convertToDate(String string) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyy");
-		LocalDateTime date = LocalDateTime.parse(string, formatter);
-		LocalDateTime serverDateTime = TimeTools.getServerDateTime();
-		return date.with(serverDateTime.toLocalTime());
 	}
 }

@@ -31,6 +31,7 @@ import org.isf.lab.model.LaboratoryRow;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,7 +80,7 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Laboratory> getLaboratory() throws OHServiceException {
-		LocalDateTime time2 = LocalDateTime.now();
+		LocalDateTime time2 = TimeTools.getNow();
 		LocalDateTime time1 = time2.minusWeeks(1);
 		return getLaboratory(null, time1, time2);
 	}
@@ -115,7 +116,7 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<LaboratoryForPrint> getLaboratoryForPrint() throws OHServiceException {
-		LocalDateTime time2 = LocalDateTime.now();
+		LocalDateTime time2 = TimeTools.getNow();
 		LocalDateTime time1 = time2.minusWeeks(1);
 		return getLaboratoryForPrint(null, time1, time2);
 	}

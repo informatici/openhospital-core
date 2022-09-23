@@ -52,6 +52,7 @@ import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.time.TimeTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -376,7 +377,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		try {
 			rv.setDicomStudyDate(LocalDateTime.parse(p.getProperty("dicomStudyDate"), DATE_TIME_FORMATTER));
 		} catch (DateTimeParseException dateTimeParseException) {
-			LOGGER.debug("1. example: {}", LocalDateTime.now().format(DATE_TIME_FORMATTER));
+			LOGGER.debug("1. example: {}", TimeTools.getNow().format(DATE_TIME_FORMATTER));
 			LOGGER.debug("1. Unparsable 'dicomStudyDate': {}", p.getProperty("dicomStudyDate"));
 		}
 		rv.setDicomStudyDescription(p.getProperty("dicomStudyDescription"));
@@ -387,7 +388,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		try {
 			rv.setDicomSeriesDate(LocalDateTime.parse(p.getProperty("dicomSeriesDate"), DATE_TIME_FORMATTER));
 		} catch (DateTimeParseException dateTimeParseException) {
-			LOGGER.debug("1. example: {}", LocalDateTime.now().format(DATE_TIME_FORMATTER));
+			LOGGER.debug("1. example: {}", TimeTools.getNow().format(DATE_TIME_FORMATTER));
 			LOGGER.debug("2. Unparsable 'dicomSeriesDate': {}", p.getProperty("dicomSeriesDate"));
 		}
 		rv.setDicomSeriesDescription(p.getProperty("dicomSeriesDescription"));

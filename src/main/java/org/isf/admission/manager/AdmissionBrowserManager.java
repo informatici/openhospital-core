@@ -307,8 +307,8 @@ public class AdmissionBrowserManager {
 			} else {
 				// check for invalid date
 				boolean invalidDate = false;
-				LocalDateTime invalidStart = LocalDateTime.now();
-				LocalDateTime invalidEnd = LocalDateTime.now();
+				LocalDateTime invalidStart = TimeTools.getNow();
+				LocalDateTime invalidEnd = TimeTools.getNow();
 				for (Admission ad : admList) {
 					// case current admission : let it be
 					if (!insert && ad.getId() == admission.getId()) {

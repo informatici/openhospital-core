@@ -50,6 +50,7 @@ import org.isf.patient.test.TestPatient;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -528,7 +529,7 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease3);
 		opd.setDisease2(disease2);
 		opd.setDisease3(disease3);
-		opd.setDate(LocalDateTime.now());
+		opd.setDate(TimeTools.getNow());
 		assertThat(opdBrowserManager.newOpd(opd)).isTrue();
 		opd.setNote("Update");
 		assertThat(opdBrowserManager.updateOpd(opd)).isNotNull();

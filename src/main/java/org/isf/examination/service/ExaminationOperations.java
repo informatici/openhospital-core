@@ -21,12 +21,12 @@
  */
 package org.isf.examination.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.examination.model.PatientExamination;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -50,22 +50,22 @@ public class ExaminationOperations {
 	 * Get from last PatientExamination (only height, weight & note)
 	 */
 	public PatientExamination getFromLastPatientExamination(PatientExamination lastPatientExamination) {
-		return new PatientExamination(LocalDateTime.now(),
-				lastPatientExamination.getPatient(),
-				lastPatientExamination.getPex_height(),
-				lastPatientExamination.getPex_weight(),
-				lastPatientExamination.getPex_ap_min(),
-				lastPatientExamination.getPex_ap_max(),
-				lastPatientExamination.getPex_hr(),
-				lastPatientExamination.getPex_temp(),
-				lastPatientExamination.getPex_sat(),
-				lastPatientExamination.getPex_hgt(),
-				lastPatientExamination.getPex_diuresis(),
-				lastPatientExamination.getPex_diuresis_desc(),
-				lastPatientExamination.getPex_bowel_desc(),
-				lastPatientExamination.getPex_rr(),
-				lastPatientExamination.getPex_auscultation(),
-				lastPatientExamination.getPex_note());
+		return new PatientExamination(TimeTools.getNow(),
+		                              lastPatientExamination.getPatient(),
+		                              lastPatientExamination.getPex_height(),
+		                              lastPatientExamination.getPex_weight(),
+		                              lastPatientExamination.getPex_ap_min(),
+		                              lastPatientExamination.getPex_ap_max(),
+		                              lastPatientExamination.getPex_hr(),
+		                              lastPatientExamination.getPex_temp(),
+		                              lastPatientExamination.getPex_sat(),
+		                              lastPatientExamination.getPex_hgt(),
+		                              lastPatientExamination.getPex_diuresis(),
+		                              lastPatientExamination.getPex_diuresis_desc(),
+		                              lastPatientExamination.getPex_bowel_desc(),
+		                              lastPatientExamination.getPex_rr(),
+		                              lastPatientExamination.getPex_auscultation(),
+		                              lastPatientExamination.getPex_note());
 	}
 
 	/**

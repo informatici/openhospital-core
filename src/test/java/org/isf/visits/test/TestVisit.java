@@ -22,8 +22,10 @@
 package org.isf.visits.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
@@ -67,7 +69,7 @@ public class TestVisit {
 	}
 
 	public void check(Visit visit) {
-		assertThat(visit.getDate()).isEqualTo(date);
+		assertThat(visit.getDate()).isCloseTo(date, within(1, ChronoUnit.SECONDS));
 		assertThat(visit.getNote()).isEqualTo(note);
 		assertThat(visit.isSms()).isEqualTo(sms);
 		assertThat(visit.getDuration()).isEqualTo(duration);

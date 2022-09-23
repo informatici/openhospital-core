@@ -47,6 +47,7 @@ import org.isf.priceslist.service.PricesListIoOperationRepository;
 import org.isf.priceslist.test.TestPriceList;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.time.TimeTools;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -188,7 +189,7 @@ public class Tests extends OHCoreTestCase {
 
 		assertThat(bill.equals(bill)).isTrue();
 		assertThat(bill)
-				.isNotEqualTo(LocalDateTime.now())
+				.isNotEqualTo(TimeTools.getNow())
 				.isEqualTo(foundBill);
 		foundBill2.setId(-1);
 		assertThat(bill).isNotEqualTo(foundBill2);
@@ -234,7 +235,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findById(id).get();
 		LocalDateTime dateFrom = foundBillPayment.getDate().minusYears(1);
-		LocalDateTime dateTo = LocalDateTime.now();
+		LocalDateTime dateTo = TimeTools.getNow();
 		List<BillPayments> billPayments = accountingIoOperation.getPayments(dateFrom, dateTo);
 		assertThat(billPayments).contains(foundBillPayment);
 	}
@@ -252,7 +253,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestBill(false);
 		Bill foundBill = accountingBillIoOperationRepository.findById(id).get();
 		LocalDateTime dateFrom = foundBill.getDate().minusYears(1);
-		LocalDateTime dateTo = LocalDateTime.now();
+		LocalDateTime dateTo = TimeTools.getNow();
 		List<Bill> billItems = accountingIoOperation.getBills(dateFrom, dateTo, foundBill.getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
@@ -338,7 +339,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestBill(false);
 		Bill foundBill = accountingBillIoOperationRepository.findById(id).get();
 		LocalDateTime dateFrom = foundBill.getDate().minusYears(1);
-		LocalDateTime dateTo = LocalDateTime.now();
+		LocalDateTime dateTo = TimeTools.getNow();
 		List<Bill> bills = accountingIoOperation.getBills(dateFrom, dateTo);
 
 		assertThat(bills).contains(foundBill);
@@ -418,7 +419,7 @@ public class Tests extends OHCoreTestCase {
 		BillPayments billPayment = payments.get(0);
 		assertThat(foundBillPayment.equals(foundBillPayment)).isTrue();
 		assertThat(foundBillPayment)
-				.isNotEqualTo(LocalDateTime.now())
+				.isNotEqualTo(TimeTools.getNow())
 				.isEqualTo(billPayment);
 		int id2 = setupTestBillPayments(false);
 		BillPayments foundBillPayment2 = accountingBillPaymentIoOperationRepository.findById(id2).get();
@@ -449,7 +450,7 @@ public class Tests extends OHCoreTestCase {
 		BillItems billItem = billItems.get(0);
 		assertThat(foundBillItem.equals(foundBillItem)).isTrue();
 		assertThat(foundBillItem)
-				.isNotEqualTo(LocalDateTime.now())
+				.isNotEqualTo(TimeTools.getNow())
 				.isEqualTo(billItem);
 		int id2 = setupTestBillItems(false);
 		BillItems foundBillItem2 = accountingBillItemsIoOperationRepository.findById(id2).get();
@@ -477,8 +478,8 @@ public class Tests extends OHCoreTestCase {
 	public void ioGetPaymentsByDateForPatient() throws Exception {
 		int id = setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findById(id).get();
-		LocalDateTime dateFrom = LocalDateTime.of(1, 3, 2, 0, 0, 0);
-		LocalDateTime dateTo = LocalDateTime.now();
+		LocalDateTime dateFrom = LocalDateTime.of(1, 3, 2, 0, 0, 0, 0);
+		LocalDateTime dateTo = TimeTools.getNow();
 		List<BillPayments> billItems = accountingIoOperation.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
@@ -504,8 +505,8 @@ public class Tests extends OHCoreTestCase {
 	public void mgrGetPaymentsByDateForPatient() throws Exception {
 		int id = setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findById(id).get();
-		LocalDateTime dateFrom = LocalDateTime.of(1, 3, 2, 0, 0, 0);
-		LocalDateTime dateTo = LocalDateTime.now();
+		LocalDateTime dateFrom = LocalDateTime.of(1, 3, 2, 0, 0, 0, 0);
+		LocalDateTime dateTo = TimeTools.getNow();
 		List<BillPayments> billItems = billBrowserManager.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
@@ -549,8 +550,8 @@ public class Tests extends OHCoreTestCase {
 	public void mgrGetBillsBetweenDatesWherePatient() throws Exception {
 		int id = setupTestBill(false);
 		Bill foundBill = accountingBillIoOperationRepository.findById(id).get();
-		LocalDateTime dateFrom = LocalDateTime.of(1, 3, 2, 0, 0, 0);
-		LocalDateTime dateTo = LocalDateTime.now();
+		LocalDateTime dateFrom = LocalDateTime.of(1, 3, 2, 0, 0, 0, 0);
+		LocalDateTime dateTo = TimeTools.getNow();
 		List<Bill> billItems = billBrowserManager.getBills(dateFrom, dateTo, foundBill.getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
@@ -606,7 +607,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		Bill bill = testBill.setup(priceList, patient, false);
 		BillPayments insertBillPayment = testBillPayments.setup(bill, false);
-		insertBillPayment.setDate(LocalDateTime.now());
+		insertBillPayment.setDate(TimeTools.getNow());
 		List<BillPayments> billPayments = new ArrayList<>();
 		billPayments.add(insertBillPayment);
 		boolean success = billBrowserManager.newBill(
@@ -625,7 +626,7 @@ public class Tests extends OHCoreTestCase {
 		Bill bill = testBill.setup(priceList, patient, false);
 		BillItems insertBillItem = testBillItems.setup(bill, false);
 		BillPayments insertBillPayment = testBillPayments.setup(bill, false);
-		insertBillPayment.setDate(LocalDateTime.now());
+		insertBillPayment.setDate(TimeTools.getNow());
 		List<BillItems> billItems = new ArrayList<>();
 		billItems.add(insertBillItem);
 		List<BillPayments> billPayments = new ArrayList<>();
@@ -677,7 +678,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findById(id).get();
 		LocalDateTime dateFrom = foundBillPayment.getDate().minusYears(1);
-		LocalDateTime dateTo = LocalDateTime.now();
+		LocalDateTime dateTo = TimeTools.getNow();
 		List<BillPayments> billPayments = billBrowserManager.getPayments(dateFrom, dateTo);
 		assertThat(billPayments).contains(foundBillPayment);
 	}

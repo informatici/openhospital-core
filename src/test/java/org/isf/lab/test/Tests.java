@@ -26,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 import java.lang.reflect.Method;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -54,6 +53,7 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.test.TestPatient;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.time.TimeTools;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -1280,7 +1280,7 @@ public class Tests extends OHCoreTestCase {
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 1, false);
 		Patient patient = testPatient.setup(false);
-		Laboratory laboratory = new Laboratory(code, exam, LocalDateTime.now(), result, note, patient, patient.getName());
+		Laboratory laboratory = new Laboratory(code, exam, TimeTools.getNow(), result, note, patient, patient.getName());
 		assertThat(laboratory).isNotNull();
 		assertThat(laboratory.getCode()).isEqualTo(code);
 		assertThat(laboratory.getExam()).isEqualTo(exam);
@@ -1298,7 +1298,7 @@ public class Tests extends OHCoreTestCase {
 	public void testLaboratoryEqualsHashToString() throws Exception {
 		int code = setupTestLaboratory(false);
 		Laboratory laboratory = labIoOperationRepository.findById(code).get();
-		Laboratory laboratory2 = new Laboratory(code + 1, null, LocalDateTime.now(), "result", "note", null, "name");
+		Laboratory laboratory2 = new Laboratory(code + 1, null, TimeTools.getNow(), "result", "note", null, "name");
 		assertThat(laboratory.equals(laboratory)).isTrue();
 		assertThat(laboratory)
 				.isNotEqualTo(laboratory2)
@@ -1319,7 +1319,7 @@ public class Tests extends OHCoreTestCase {
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 1, false);
 		Patient patient = testPatient.setup(false);
-		Laboratory laboratory = new Laboratory(code, exam, LocalDateTime.now(), result, note, patient, patient.getName());
+		Laboratory laboratory = new Laboratory(code, exam, TimeTools.getNow(), result, note, patient, patient.getName());
 		LaboratoryRow laboratoryRow = new LaboratoryRow(code, laboratory, "description");
 		assertThat(laboratoryRow).isNotNull();
 

@@ -30,11 +30,12 @@ import java.time.temporal.ChronoUnit;
 import org.isf.admission.model.Admission;
 import org.isf.malnutrition.model.Malnutrition;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.time.TimeTools;
 
 public class TestMalnutrition {
 
 	private int code = 0;
-	private LocalDateTime now = LocalDateTime.now();
+	private LocalDateTime now = TimeTools.getNow();
 	private LocalDateTime dateSupp = now.withMonth(1).withDayOfMonth(1);
 	private LocalDateTime dateConf = now.withMonth(10).withDayOfMonth(11);
 	private float height = (float) 185.47;

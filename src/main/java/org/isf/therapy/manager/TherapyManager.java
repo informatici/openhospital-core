@@ -22,7 +22,6 @@
 package org.isf.therapy.manager;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -259,7 +258,7 @@ public class TherapyManager {
 			// CALCULATING NEEDINGS
 			Double qty = th.getQty();
 			int freq = th.getFreqInDay();
-			LocalDateTime todayDate = LocalDateTime.now().with(LocalTime.MIN);
+			LocalDateTime todayDate = TimeTools.getDateToday0();
 
 			int dayCount = 0;
 			for (LocalDateTime date : th.getDates()) {

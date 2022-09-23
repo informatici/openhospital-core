@@ -37,6 +37,7 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,7 +64,7 @@ public class MovStockInsertingManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		
 		// Check the Date
-		LocalDateTime today = LocalDateTime.now();
+		LocalDateTime today = TimeTools.getNow();
 		LocalDateTime movDate = movement.getDate();
 		LocalDateTime lastDate = getLastMovementDate();
 		if (movDate.isAfter(today)) {

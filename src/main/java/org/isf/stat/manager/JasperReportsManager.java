@@ -457,7 +457,7 @@ public class JasperReportsManager {
           HashMap<String, Object> parameters = getHospitalParameters();
           addBundleParameter(jasperFileName, parameters);
 
-          LocalDateTime date = LocalDateTime.now();
+          LocalDateTime date = TimeTools.getNow();
           DateTimeFormatter formatter = DateTimeFormatter.ofPattern(E_D_MMMM_YYYY);
           String todayReport = formatter.format(date);
           formatter = DateTimeFormatter.ofPattern(YYYY_M_MDD);
@@ -485,7 +485,7 @@ public class JasperReportsManager {
 			addBundleParameter(jasperFileName, parameters);
 
 			if (date == null) {
-				date = LocalDateTime.now();
+				date = TimeTools.getNow();
 			}
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(E_D_MMMM_YYYY);
 			String dateReport = formatter.format(date);
@@ -524,7 +524,7 @@ public class JasperReportsManager {
 
 		try {
 			if (date == null) {
-				date = LocalDateTime.now();
+				date = TimeTools.getNow();
 			}
 			String dateQuery = TimeTools.formatDateTime(date, YYYY_MM_DD);
 			File jasperFile = new File(compileJasperFilename(jasperFileName));
@@ -563,10 +563,10 @@ public class JasperReportsManager {
 
     	try {
     		if (dateFrom == null) {
-    			dateFrom = LocalDateTime.now();
+    			dateFrom = TimeTools.getNow();
     		}
     		if (dateTo == null) {
-    			dateTo = LocalDateTime.now();
+    			dateTo = TimeTools.getNow();
     		}
 
 			HashMap<String, Object> parameters = getHospitalParameters();
@@ -600,10 +600,10 @@ public class JasperReportsManager {
 
 		try {
 			if (dateFrom == null) {
-				dateFrom = LocalDateTime.now();
+				dateFrom = TimeTools.getNow();
 			}
 			if (dateTo == null) {
-				dateTo = LocalDateTime.now();
+				dateTo = TimeTools.getNow();
 			}
 			String dateFromQuery = TimeTools.formatDateTime(dateFrom, YYYY_MM_DD);
 			String dateToQuery = TimeTools.formatDateTime(dateTo, YYYY_MM_DD);
@@ -649,7 +649,7 @@ public class JasperReportsManager {
 			addBundleParameter(jasperFileName, parameters);
 
 			if (date == null) {
-				date = LocalDateTime.now();
+				date = TimeTools.getNow();
 			}
 			String dateReport = date.format(DateTimeFormatter.ofPattern(E_D_MMMM_YYYY));
 			String dateQuery = date.format(DateTimeFormatter.ofPattern(YYYY_MM_DD));

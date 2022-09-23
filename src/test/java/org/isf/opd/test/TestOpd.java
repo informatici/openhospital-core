@@ -22,8 +22,10 @@
 package org.isf.opd.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.disease.model.Disease;
 import org.isf.generaldata.GeneralData;
@@ -83,7 +85,7 @@ public class TestOpd {
 	}
 
 	public void check(Opd opd) {
-		assertThat(opd.getDate()).isEqualTo(date);
+		assertThat(opd.getDate()).isCloseTo(date, within(1, ChronoUnit.SECONDS));
 		if (!(GeneralData.OPDEXTENDED && opd.getPatient() != null)) {
 			// skip checks as OpdBrowserManager sets values from patient
 			// thus only do checks when not OPDEXTENDED and patient == null

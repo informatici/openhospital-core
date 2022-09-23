@@ -64,6 +64,7 @@ import org.isf.supplier.service.SupplierIoOperationRepository;
 import org.isf.supplier.test.TestSupplier;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
 import org.isf.ward.test.TestWard;
@@ -174,7 +175,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetWardMovements() throws Exception {
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = TimeTools.getNow();
 		LocalDateTime fromDate = now.withMonth(1).withDayOfMonth(1);
 		LocalDateTime toDate = now.withMonth(3).withDayOfMonth(3);
 		int code = setupTestMovementWard(false);
@@ -527,9 +528,9 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetMovementWardWithQualifiers() throws Exception {
-		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime fromDate = LocalDateTime.of(now.getYear(), 1, 1, 0, 0, 0);
-		LocalDateTime toDate = LocalDateTime.of(now.getYear(), 3, 3, 0, 0, 0);
+		LocalDateTime now = TimeTools.getNow();
+		LocalDateTime fromDate = LocalDateTime.of(now.getYear(), 1, 1, 0, 0, 0, 0);
+		LocalDateTime toDate = LocalDateTime.of(now.getYear(), 3, 3, 0, 0, 0, 0);
 		int code = setupTestMovementWard(false);
 		MovementWard foundMovement = movementWardIoOperationRepository.findById(code).get();
 		List<MovementWard> movements = movWardBrowserManager.getMovementWard(foundMovement.getWard().getCode(), fromDate, toDate);
