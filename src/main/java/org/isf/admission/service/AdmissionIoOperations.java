@@ -27,6 +27,7 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.hibernate.Hibernate;
@@ -228,15 +229,15 @@ public class AdmissionIoOperations {
 
 		if (wardId.equalsIgnoreCase("M") && GeneralData.MATERNITYRESTARTINJUNE) {
 			if (now.getMonthValue() < Month.JUNE.getValue()) {
-				first = now.minusYears(1).withMonth(Month.JULY.getValue()).withDayOfMonth(1).with(LocalTime.MIN);
-				last = now.withMonth(Month.JUNE.getValue()).withDayOfMonth(30).with(LocalTime.MAX);
+				first = now.minusYears(1).withMonth(Month.JULY.getValue()).withDayOfMonth(1).with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
+				last = now.withMonth(Month.JUNE.getValue()).withDayOfMonth(30).with(LocalTime.MAX).truncatedTo(ChronoUnit.SECONDS);
 			} else {
-				first = now.withMonth(Month.JULY.getValue()).withDayOfMonth(1).with(LocalTime.MIN);
-				last = now.plusYears(1).withMonth(Month.JUNE.getValue()).withDayOfMonth(30).with(LocalTime.MAX);
+				first = now.withMonth(Month.JULY.getValue()).withDayOfMonth(1).with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
+				last = now.plusYears(1).withMonth(Month.JUNE.getValue()).withDayOfMonth(30).with(LocalTime.MAX).truncatedTo(ChronoUnit.SECONDS);
 			}
 		} else {
-			first = now.with(firstDayOfYear()).with(LocalTime.MIN);
-			last = now.with(lastDayOfYear()).with(LocalTime.MAX);
+			first = now.with(firstDayOfYear()).with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
+			last = now.with(lastDayOfYear()).with(LocalTime.MAX).truncatedTo(ChronoUnit.SECONDS);
 		}
 
 		List<Admission> admissions = repository.findAllWhereWardAndDates(wardId, first, last);

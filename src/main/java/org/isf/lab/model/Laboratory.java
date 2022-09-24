@@ -41,6 +41,7 @@ import javax.validation.constraints.NotNull;
 import org.isf.exa.model.Exam;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -118,7 +119,7 @@ public class Laboratory extends Auditable<String> {
 
 	public Laboratory(Exam aExam, LocalDateTime aDate, String aResult, String aNote, Patient aPatId, String aPatName) {
 		exam = aExam;
-		labDate = aDate;
+		labDate = TimeTools.truncateToSeconds(aDate);
 		result = aResult;
 		note = aNote;
 		patient = aPatId;
@@ -128,7 +129,7 @@ public class Laboratory extends Auditable<String> {
 	public Laboratory(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult, String aNote, Patient aPatId, String aPatName) {
 		code = aCode;
 		exam = aExam;
-		labDate = aDate;
+		labDate = TimeTools.truncateToSeconds(aDate);
 		result = aResult;
 		note = aNote;
 		patient = aPatId;
@@ -176,7 +177,7 @@ public class Laboratory extends Auditable<String> {
 		this.examDate = exDate;
 	}
 	public void setDate(LocalDateTime aDate) {
-		labDate = aDate;
+		labDate = TimeTools.truncateToSeconds(aDate);
 	}
 	public void setResult(String aResult) {
 		result = aResult;
