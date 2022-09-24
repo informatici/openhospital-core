@@ -210,7 +210,7 @@ public class AccountingIoOperations {
 	 */
 	@Deprecated
 	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
-		return getBillsBetweenDates(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo));
+		return getBillsBetweenDates(dateFrom, dateTo);
 	}
 
 	/**
@@ -260,7 +260,7 @@ public class AccountingIoOperations {
 	@Deprecated
 	public List<BillPayments> getPayments(LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient)
 			throws OHServiceException {
-		return getPaymentsBetweenDatesWherePatient(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo), patient);
+		return getPaymentsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
 
 	/**
@@ -287,7 +287,7 @@ public class AccountingIoOperations {
 	 */
 	@Deprecated
 	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
-		return getBillsBetweenDatesWherePatient(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo), patient);
+		return getBillsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
 
 	/**
@@ -346,7 +346,7 @@ public class AccountingIoOperations {
 	 */
 	@Deprecated
 	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo, BillItems billItem) throws OHServiceException {
-		return getBillsBetweenDatesWhereBillItem(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo), billItem);
+		return getBillsBetweenDatesWhereBillItem(dateFrom, dateTo, billItem);
 	}
 
 	/**
