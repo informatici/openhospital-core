@@ -210,7 +210,7 @@ public class AccountingIoOperations {
 	 */
 	@Deprecated
 	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
-		return getBillsBetweenDates(dateFrom, dateTo);
+		return getBillsBetweenDates(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo));
 	}
 
 	/**
@@ -260,7 +260,7 @@ public class AccountingIoOperations {
 	@Deprecated
 	public List<BillPayments> getPayments(LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient)
 			throws OHServiceException {
-		return getPaymentsBetweenDatesWherePatient(dateFrom, dateTo, patient);
+		return getPaymentsBetweenDatesWherePatient(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo), patient);
 	}
 
 	/**
@@ -273,7 +273,7 @@ public class AccountingIoOperations {
 	 */
 	public List<BillPayments> getPaymentsBetweenDatesWherePatient(LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient)
 			throws OHServiceException {
-		return billPaymentRepository.findByDateAndPatient(dateFrom, dateTo, patient.getCode());
+		return billPaymentRepository.findByDateAndPatient(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo), patient.getCode());
 	}
 
 	/**
@@ -287,7 +287,7 @@ public class AccountingIoOperations {
 	 */
 	@Deprecated
 	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
-		return getBillsBetweenDatesWherePatient(dateFrom, dateTo, patient);
+		return getBillsBetweenDatesWherePatient(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo), patient);
 	}
 
 	/**
@@ -299,7 +299,7 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Bill> getBillsBetweenDatesWherePatient(LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
-		return billRepository.findByDateAndPatient(dateFrom, dateTo, patient.getCode());
+		return billRepository.findByDateAndPatient(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo), patient.getCode());
 	}
 
 	/**
@@ -346,7 +346,7 @@ public class AccountingIoOperations {
 	 */
 	@Deprecated
 	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo, BillItems billItem) throws OHServiceException {
-		return getBillsBetweenDatesWhereBillItem(dateFrom, dateTo, billItem);
+		return getBillsBetweenDatesWhereBillItem(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo), billItem);
 	}
 
 	/**
