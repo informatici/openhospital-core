@@ -327,15 +327,18 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
 	@SuppressWarnings("unchecked")
-	protected boolean updateMedicalWardQuantity(Ward ward, Medical medical, int quantity, Lot lot) throws OHServiceException {
+	protected boolean updateMedicalWardQuantity(Ward ward, Medical medical, int quantity, Lot lot)
+			throws OHServiceException {
 		MedicalWard medicalWard = medicalStockRepository.findOneWhereCodeAndMedicalAndLot(ward.getCode(), medical.getCode(), lot.getCode());
 
 		if (medicalWard != null) {
 			medicalWard.setIn_quantity(medicalWard.getIn_quantity() + quantity);
 			medicalStockRepository.save(medicalWard);
 		} else {
+			MedicalWard tmp = medicalStockRepository.findOneWhereCodeAndMedicalAndLotAndNotActive(ward.getCode(), medical.getCode(), lot.getCode());
+
 			medicalWard = new MedicalWard(ward, medical, quantity, 0, lot);
-			medicalStockRepository.insertMedicalWard(ward.getCode(), medical.getCode(), (double)quantity, lot.getCode());
+			medicalStockRepository.findAndUpdateOneWhereCodeAndMedicalAndLotAndNotActive(ward.getCode(), medical.getCode(), lot.getCode(), (double) quantity);
 		}
 		medicalStockRepository.save(medicalWard);
 		return true;

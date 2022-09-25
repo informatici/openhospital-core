@@ -28,6 +28,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
@@ -94,6 +95,11 @@ public class Operation extends Auditable<String> {
 
 	@Transient
     private volatile int hashCode = 0;
+	
+	@PreRemove
+	public void preRemove() {
+		this.active = 0;
+	}
     
     
 	public Operation() 

@@ -28,6 +28,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
@@ -77,6 +78,11 @@ public class Vaccine extends Auditable<String> {
 	@Version
 	@Column(name="VAC_LOCK")
     private Integer lock;
+	
+	@PreRemove
+	public void preRemove() {
+		this.active = 0;
+	}
 
 	 public Vaccine() {
 	        super();

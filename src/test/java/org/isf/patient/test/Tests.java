@@ -66,8 +66,6 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	PatientBrowserManager patientBrowserManager;
 
-	
-	
 	@BeforeClass
 	public static void setUpClass() {
 		GeneralData.PATIENTPHOTOSTORAGE = "DB";
@@ -724,7 +722,7 @@ public class Tests extends OHCoreTestCase {
 			Patient obsoletePatient) throws OHException {
 		Optional<Patient> mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode());
 		Optional<Patient> obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode());
-		assertThat(obsoletePatientResult.isEmpty());
+		assertThat(obsoletePatientResult).isEmpty();
 		assertThat(mergedPatientResult.isPresent());
 	}
 

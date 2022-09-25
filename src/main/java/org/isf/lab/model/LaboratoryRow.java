@@ -30,6 +30,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -68,6 +69,11 @@ public class LaboratoryRow extends Auditable<String> {
 
 	@Transient
 	private volatile int hashCode = 0;
+	
+	@PreRemove
+	public void preRemove() {
+		this.active = 0;
+	}
 
 	public LaboratoryRow() {
 	}
