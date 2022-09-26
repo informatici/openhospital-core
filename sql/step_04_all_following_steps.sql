@@ -70,3 +70,4 @@ source step_73_ward_visit_duration.sql;
 source step_74_operation_report_button.sql;
 source step_75_add_prefix_to_table_names.sql;
 source step_76_dicom_button_in_admission_patient.sql;
+source step_77_laboratory_button_in_admission_patient.sql;
