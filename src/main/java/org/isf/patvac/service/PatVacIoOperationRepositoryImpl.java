@@ -33,6 +33,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.isf.patvac.model.PatientVaccine;
+import org.isf.utils.time.TimeTools;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -53,7 +54,8 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 			int ageFrom,
 			int ageTo) {
 		return this.entityManager.
-				createQuery(getPatientVaccineQuery(vaccineTypeCode, vaccineCode, dateFrom, dateTo, sex, ageFrom, ageTo)).getResultList();
+				createQuery(getPatientVaccineQuery(vaccineTypeCode, vaccineCode, TimeTools.truncateToSeconds(dateFrom),
+				                                   TimeTools.truncateToSeconds(dateTo), sex, ageFrom, ageTo)).getResultList();
 	}	
 
 	private CriteriaQuery<PatientVaccine> getPatientVaccineQuery(
@@ -72,12 +74,12 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 		query.select(pvRoot);
 		if (dateFrom != null) {
 			predicates.add(
-					cb.greaterThanOrEqualTo(pvRoot.<LocalDateTime> get("vaccineDate"), dateFrom)
+					cb.greaterThanOrEqualTo(pvRoot.<LocalDateTime> get("vaccineDate"), TimeTools.truncateToSeconds(dateFrom))
 			);
 		}
 		if (dateTo != null) {
 			predicates.add(
-					cb.lessThanOrEqualTo(pvRoot.<LocalDateTime> get("vaccineDate"), dateTo)
+					cb.lessThanOrEqualTo(pvRoot.<LocalDateTime> get("vaccineDate"), TimeTools.truncateToSeconds(dateTo))
 			);
 		}
 		if (vaccineTypeCode != null) {

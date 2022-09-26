@@ -40,6 +40,7 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperations;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -134,15 +135,15 @@ public class Lot extends Auditable<String> {
 
 	public Lot(String aCode, LocalDateTime aPreparationDate, LocalDateTime aDueDate) {
 		code = aCode;
-		preparationDate = aPreparationDate;
-		dueDate = aDueDate;
+		preparationDate = TimeTools.truncateToSeconds(aPreparationDate);
+		dueDate = TimeTools.truncateToSeconds(aDueDate);
 	}
 
 	public Lot(Medical aMedical, String aCode, LocalDateTime aPreparationDate, LocalDateTime aDueDate, BigDecimal aCost) {
 		medical = aMedical;
 		code = aCode;
-		preparationDate = aPreparationDate;
-		dueDate = aDueDate;
+		preparationDate = TimeTools.truncateToSeconds(aPreparationDate);
+		dueDate = TimeTools.truncateToSeconds(aDueDate);
 		cost = aCost;
 	}
 
@@ -191,7 +192,7 @@ public class Lot extends Auditable<String> {
 	}
 
 	public void setPreparationDate(LocalDateTime aPreparationDate) {
-		preparationDate = aPreparationDate;
+		preparationDate = TimeTools.truncateToSeconds(aPreparationDate);
 	}
 
 	public void setMedical(Medical aMedical) {
@@ -199,7 +200,7 @@ public class Lot extends Auditable<String> {
 	}
 
 	public void setDueDate(LocalDateTime aDueDate) {
-		dueDate = aDueDate;
+		dueDate = TimeTools.truncateToSeconds(aDueDate);
 	}
 
 	public void setCost(BigDecimal cost) {

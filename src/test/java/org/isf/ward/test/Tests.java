@@ -38,6 +38,7 @@ import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.manager.WardBrowserManager;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
@@ -95,7 +96,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetCurrentOccupation() throws Exception {
 		String code = setupTestWard(false);
 		Ward ward = wardIoOperationRepository.findById(code).get();
-		LocalDateTime admDate = LocalDateTime.now();
+		LocalDateTime admDate = TimeTools.getNow();
 		AdmissionType admissionType = new AdmissionType("ZZ", "TestDescription");
 		Admission admission1 = new Admission(0, 1, "N", ward, 0, null, admDate, admissionType,
 				"TestFHU", null, null, null, null, null, "Result1", null, null, null, "TestNote1",

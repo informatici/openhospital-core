@@ -52,7 +52,7 @@ public class RememberDates {
 	}
 
 	public static void setLastOpdVisitDate(LocalDateTime visitDate) {
-		lastOpdVisitDate = visitDate;
+		lastOpdVisitDate = TimeTools.truncateToSeconds(visitDate);
 	}
 
 	//------------  laboratory exam -----------------------
@@ -61,7 +61,7 @@ public class RememberDates {
 	}
 
 	public static void setLastLabExamDate(LocalDateTime labDate) {
-		lastLabExamDate = labDate;
+		lastLabExamDate = TimeTools.truncateToSeconds(labDate);
 	}
 
 	//------------  admission date -----------------------
@@ -70,7 +70,7 @@ public class RememberDates {
 	}
 
 	public static void setLastAdmInDate(LocalDateTime inDate) {
-		lastAdmInDate = inDate;
+		lastAdmInDate = TimeTools.truncateToSeconds(inDate);
 	}
 	
 	//------------ bill date -----------------------
@@ -79,7 +79,7 @@ public class RememberDates {
 	}
 
 	public static void setLastBillDate(LocalDateTime billDate) {
-		lastBillDate = billDate;
+		lastBillDate = TimeTools.truncateToSeconds(billDate);
 	}
 	
 	//------------  patient vaccine-----------------------
@@ -87,8 +87,8 @@ public class RememberDates {
 		return lastPatientVaccineDate;
 	}
 
-	public static void setLastPatineVaccineDate(LocalDateTime labDate) {
-		lastPatientVaccineDate = labDate;
+	public static void setLastPatineVaccineDate(LocalDateTime vaccineDate) {
+		lastPatientVaccineDate = TimeTools.truncateToSeconds(vaccineDate);
 	}
 
 }

@@ -28,6 +28,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Random;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -38,8 +39,9 @@ import org.isf.utils.exception.OHException;
 
 public class TestDicom {
 
-	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss yyyy");
-	private static final String DATE_TIME_STRING = "Sat Aug 01 10:02:03 2020";
+	private static String DICOM_DATE_FORMAT_ZONED = "EEE MMM dd HH:mm:ss z yyyy";
+	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DICOM_DATE_FORMAT_ZONED, new Locale("en"));
+	private static final String DATE_TIME_STRING = "Sat Aug 01 10:02:03 AST 2020";
 
 	private Blob dicomData = createRandomBlob(100);
 	private int patId = 0;
@@ -122,13 +124,13 @@ public class TestDicom {
 		assertThat(dicom.getDicomPatientID()).isEqualTo(dicomPatientID);
 		assertThat(dicom.getDicomPatientName()).isEqualTo(dicomPatientName);
 		assertThat(dicom.getDicomPatientSex()).isEqualTo(dicomPatientSex);
-		assertThat(dicom.getDicomSeriesDate().format(DATE_TIME_FORMATTER)).isEqualTo(DATE_TIME_STRING);
+		assertThat(dicom.getDicomSeriesDate()).isEqualTo(dicomSeriesDate);
 		assertThat(dicom.getDicomSeriesDescription()).isEqualTo(dicomSeriesDescription);
 		assertThat(dicom.getDicomSeriesDescriptionCodeSequence()).isEqualTo(dicomSeriesDescriptionCodeSequence);
 		assertThat(dicom.getDicomSeriesInstanceUID()).isEqualTo(dicomSeriesInstanceUID);
 		assertThat(dicom.getDicomSeriesNumber()).isEqualTo(dicomSeriesNumber);
 		assertThat(dicom.getDicomSeriesUID()).isEqualTo(dicomSeriesUID);
-		assertThat(dicom.getDicomStudyDate().format(DATE_TIME_FORMATTER)).isEqualTo(DATE_TIME_STRING);
+		assertThat(dicom.getDicomStudyDate()).isEqualTo(dicomStudyDate);
 		assertThat(dicom.getDicomStudyDescription()).isEqualTo(dicomStudyDescription);
 		assertThat(dicom.getDicomStudyId()).isEqualTo(dicomStudyId);
 		assertThat(dicom.getFileName()).isEqualTo(fileName);

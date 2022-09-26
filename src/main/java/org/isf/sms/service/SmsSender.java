@@ -21,13 +21,13 @@
  */
 package org.isf.sms.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.generaldata.SmsParameters;
 import org.isf.menu.manager.Context;
 import org.isf.sms.model.Sms;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,10 +64,10 @@ public class SmsSender implements Runnable {
 				SmsSenderOperations sender = Context.getApplicationContext().getBean(SmsSenderOperations.class);
 				if (sender.initialize()) {
 					for (Sms sms : smsList) {
-						if (sms.getSmsDateSched().isBefore(LocalDateTime.now())) {
+						if (sms.getSmsDateSched().isBefore(TimeTools.getNow())) {
 							boolean result = sender.sendSMS(sms);
 							if (result) {
-								sms.setSmsDateSent(LocalDateTime.now());
+								sms.setSmsDateSent(TimeTools.getNow());
 								try {
 									smsOp.saveOrUpdate(sms);
 								} catch (OHServiceException e) {

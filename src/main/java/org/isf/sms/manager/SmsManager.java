@@ -33,6 +33,7 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -75,7 +76,7 @@ public class SmsManager {
 	}
 
 	public List<Sms> getAll(LocalDateTime from, LocalDateTime to) throws OHServiceException {
-		return smsOperations.getAll(from, to);
+		return smsOperations.getAll(TimeTools.truncateToSeconds(from), TimeTools.truncateToSeconds(to));
 	}
 
 	/**

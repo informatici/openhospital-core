@@ -27,6 +27,7 @@ import java.util.List;
 import org.isf.sms.model.Sms;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,7 +84,7 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public List<Sms> getAll(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
-		return repository.findBySmsDateSchedBetweenOrderBySmsDateSchedAsc(dateFrom, dateTo);
+		return repository.findBySmsDateSchedBetweenOrderBySmsDateSchedAsc(TimeTools.truncateToSeconds(dateFrom), TimeTools.truncateToSeconds(dateTo));
 	}
 	
 	/**
@@ -92,7 +93,8 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public List<Sms> getList(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
-		return repository.findBySmsDateSchedBetweenAndSmsDateSentIsNullOrderBySmsDateSchedAsc(dateFrom, dateTo);
+		return repository.findBySmsDateSchedBetweenAndSmsDateSentIsNullOrderBySmsDateSchedAsc(TimeTools.truncateToSeconds(dateFrom),
+		                                                                                      TimeTools.truncateToSeconds(dateTo));
 	}
 	
 	/**

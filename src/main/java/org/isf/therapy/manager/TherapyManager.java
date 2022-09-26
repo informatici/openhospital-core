@@ -22,7 +22,6 @@
 package org.isf.therapy.manager;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,8 +97,10 @@ public class TherapyManager {
 
 		List<LocalDateTime> datesArray = new ArrayList<>();
 
-		LocalDateTime stepDate = startDate;
-		datesArray.add(startDate);
+		LocalDateTime stepDate = TimeTools.truncateToSeconds(startDate);
+		datesArray.add(stepDate);
+
+		endDate = TimeTools.truncateToSeconds(endDate);
 
 		while (stepDate.isBefore(endDate)) {
 			LocalDateTime newDate = stepDate.plusDays(freqInPeriod);
@@ -259,7 +260,7 @@ public class TherapyManager {
 			// CALCULATING NEEDINGS
 			Double qty = th.getQty();
 			int freq = th.getFreqInDay();
-			LocalDateTime todayDate = LocalDateTime.now().with(LocalTime.MIN);
+			LocalDateTime todayDate = TimeTools.getDateToday0();
 
 			int dayCount = 0;
 			for (LocalDateTime date : th.getDates()) {

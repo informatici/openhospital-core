@@ -22,13 +22,13 @@
 package org.isf.patvac.service;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.Month;
 import java.util.List;
 
 import org.isf.patvac.model.PatientVaccine;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,8 +59,9 @@ public class PatVacIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<PatientVaccine> getPatientVaccine(boolean minusOneWeek) throws OHServiceException {
-		LocalDateTime timeTo = LocalDateTime.now().with(LocalTime.MAX);
-		LocalDateTime timeFrom = LocalDateTime.now().with(LocalTime.MIN);
+		LocalDateTime now = TimeTools.getNow();
+		LocalDateTime timeTo = TimeTools.getDateToday24();
+		LocalDateTime timeFrom = TimeTools.getDateToday0();
 
 		if (minusOneWeek) {
 			timeFrom = timeFrom.minusWeeks(1);
@@ -91,7 +92,8 @@ public class PatVacIoOperations {
 			char sex,
 			int ageFrom,
 			int ageTo) throws OHServiceException {
-		return repository.findAllByCodesAndDatesAndSexAndAges(vaccineTypeCode, vaccineCode, dateFrom, dateTo, sex, ageFrom, ageTo);
+		return repository.findAllByCodesAndDatesAndSexAndAges(vaccineTypeCode, vaccineCode, TimeTools.truncateToSeconds(dateFrom),
+		                                                      TimeTools.truncateToSeconds(dateTo), sex, ageFrom, ageTo);
 	}
 
 	public List<PatientVaccine> findForPatient(int patientCode) {

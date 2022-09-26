@@ -40,6 +40,7 @@ import javax.validation.constraints.NotNull;
 import org.isf.patient.model.Patient;
 import org.isf.priceslist.model.PriceList;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -116,8 +117,8 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 	public Bill() {
 		super();
 		this.id = 0;
-		this.date = LocalDateTime.now();
-		this.update = LocalDateTime.now();
+		this.date = TimeTools.getNow();
+		this.update = TimeTools.getNow();
 		this.isList = true;
 		this.listName = "";
 		this.isPatient = false;
@@ -133,8 +134,8 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 			Patient billPatient, String patName, String status, Double amount, Double balance, String user) {
 		super();
 		this.id = id;
-		this.date = date;
-		this.update = update;
+		this.date = TimeTools.truncateToSeconds(date);
+		this.update = TimeTools.truncateToSeconds(update);
 		this.isList = isList;
 		this.list = list;
 		this.listName = listName;
@@ -158,13 +159,13 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 		return date;
 	}
 	public void setDate(LocalDateTime date) {
-		this.date = date;
+		this.date = TimeTools.truncateToSeconds(date);
 	}
 	public LocalDateTime getUpdate() {
 		return update;
 	}
 	public void setUpdate(LocalDateTime update) {
-		this.update = update;
+		this.update = TimeTools.truncateToSeconds(update);
 	}
 	public boolean isList() {
 		return isList;

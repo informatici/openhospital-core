@@ -71,6 +71,7 @@ import org.isf.pregtreattype.test.TestPregnantTreatmentType;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
 import org.isf.ward.test.TestWard;
@@ -458,7 +459,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		foundAdmission.setYProg(99);
-		foundAdmission.setAdmDate(LocalDateTime.now());
+		foundAdmission.setAdmDate(TimeTools.getNow());
 		admissionIoOperation.updateAdmission(foundAdmission);
 		foundAdmission = admissionIoOperation.getAdmission(id);
 		int next = admissionIoOperation.getNextYProg(foundAdmission.getWard().getCode());
@@ -813,7 +814,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		foundAdmission.setYProg(99);
-		foundAdmission.setAdmDate(LocalDateTime.now());
+		foundAdmission.setAdmDate(TimeTools.getNow());
 		admissionIoOperation.updateAdmission(foundAdmission);
 		foundAdmission = admissionIoOperation.getAdmission(id);
 		int next = admissionBrowserManager.getNextYProg(foundAdmission.getWard().getCode());

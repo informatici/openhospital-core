@@ -22,20 +22,23 @@
 package org.isf.lab.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.exa.model.Exam;
 import org.isf.generaldata.GeneralData;
 import org.isf.lab.model.Laboratory;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.time.TimeTools;
 
 public class TestLaboratory {
 
 	private String material = "TestMaterial";
-	private LocalDateTime labDate = LocalDateTime.now();
+	private LocalDateTime labDate = TimeTools.getNow();
 	private LocalDate examDate = labDate.toLocalDate();
 	private String result = "TestResult";
 	private String note = "TestNote";
@@ -90,7 +93,7 @@ public class TestLaboratory {
 			assertThat(laboratory.getAge()).isEqualTo(age);
 			assertThat(laboratory.getPatName()).isEqualTo(patName);
 		}
-		assertThat(laboratory.getDate()).isEqualTo(labDate);
+		assertThat(laboratory.getDate()).isCloseTo(labDate, within(1, ChronoUnit.SECONDS));
 		assertThat(laboratory.getExamDate()).isEqualTo(examDate);
 		assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
 		assertThat(laboratory.getMaterial()).isEqualTo(material);

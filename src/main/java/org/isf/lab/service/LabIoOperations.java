@@ -31,6 +31,7 @@ import org.isf.lab.model.LaboratoryRow;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,7 +80,7 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Laboratory> getLaboratory() throws OHServiceException {
-		LocalDateTime time2 = LocalDateTime.now();
+		LocalDateTime time2 = TimeTools.getNow();
 		LocalDateTime time1 = time2.minusWeeks(1);
 		return getLaboratory(null, time1, time2);
 	}
@@ -94,7 +95,9 @@ public class LabIoOperations {
 	 */
 	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return exam != null ?
-				repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam) :
+				repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(TimeTools.truncateToSeconds(dateFrom),
+				                                                                     TimeTools.truncateToSeconds(dateTo),
+				                                                                     exam) :
 				repository.findByExamDateBetweenOrderByLabDateDesc(dateFrom.toLocalDate(), dateTo.toLocalDate());
 	}
 	
@@ -115,7 +118,7 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<LaboratoryForPrint> getLaboratoryForPrint() throws OHServiceException {
-		LocalDateTime time2 = LocalDateTime.now();
+		LocalDateTime time2 = TimeTools.getNow();
 		LocalDateTime time1 = time2.minusWeeks(1);
 		return getLaboratoryForPrint(null, time1, time2);
 	}
@@ -132,8 +135,11 @@ public class LabIoOperations {
 	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
 		Iterable<Laboratory> laboritories = exam != null
-				? repository.findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam)
-				: repository.findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo);
+				? repository.findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(TimeTools.truncateToSeconds(dateFrom),
+				                                                                                                   TimeTools.truncateToSeconds(dateTo),
+				                                                                                                   exam)
+				: repository.findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(TimeTools.truncateToSeconds(dateFrom),
+				                                                                      TimeTools.truncateToSeconds(dateTo));
 
 		for (Laboratory laboratory : laboritories) {
 			pLaboratory.add(new LaboratoryForPrint(

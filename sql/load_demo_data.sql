@@ -1768,6 +1768,7 @@ INSERT INTO `oh_groupmenu` VALUES (137,'admin','btnopdeditoperation',1,NULL,NULL
 INSERT INTO `oh_groupmenu` VALUES (138,'admin','worksheet',1,NULL,NULL,NULL,NULL);
 INSERT INTO `oh_groupmenu` VALUES (139,'admin','cashiersfilter',1,NULL,NULL,NULL,NULL);
 INSERT INTO `oh_groupmenu` VALUES (140,'admin','editclosedbills',1,NULL,NULL,NULL,NULL);
+INSERT INTO `oh_groupmenu` VALUES (141,'admin','btnadmdicom',1,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `oh_groupmenu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3236,6 +3237,7 @@ INSERT INTO `oh_menuitem` VALUES ('btnopdeditoperation','angal.opd.operation','a
 INSERT INTO `oh_menuitem` VALUES ('worksheet','angal.menu.btn.worksheet','angal.menu.worksheet','x','W','main','org.isf.visits.gui.VisitView','N',8);
 INSERT INTO `oh_menuitem` VALUES ('cashiersfilter','angal.menu.accounting.cashiersfilter','angal.menu.accounting.cashiersfilter','x','X','billsmanager','none','N',0);
 INSERT INTO `oh_menuitem` VALUES ('editclosedbills','angal.menu.accounting.editclosedbills','angal.menu.accounting.editclosedbills','x','E','billsmanager','none','N',3);
+INSERT INTO `oh_menuitem` VALUES ('btnadmdicom','angal.menu.btn.dicom','angal.menu.dicom','x','L','admission','none','N',4);
 INSERT INTO 'oh_menuitem' VALUES ('telemetry', 'angal.menu.btn.telemetry', 'angal.menu.telemetry', 'x', 'M', 'generaldata', 'org.isf.telemetry.gui.TelemetryEdit','N', 9);
 /*!40000 ALTER TABLE `oh_menuitem` ENABLE KEYS */;
 UNLOCK TABLES;

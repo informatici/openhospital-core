@@ -273,7 +273,7 @@ public class AccountingIoOperations {
 	 */
 	public List<BillPayments> getPaymentsBetweenDatesWherePatient(LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient)
 			throws OHServiceException {
-		return billPaymentRepository.findByDateAndPatient(dateFrom, dateTo, patient.getCode());
+		return billPaymentRepository.findByDateAndPatient(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo), patient.getCode());
 	}
 
 	/**
@@ -299,7 +299,7 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Bill> getBillsBetweenDatesWherePatient(LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
-		return billRepository.findByDateAndPatient(dateFrom, dateTo, patient.getCode());
+		return billRepository.findByDateAndPatient(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo), patient.getCode());
 	}
 
 	/**

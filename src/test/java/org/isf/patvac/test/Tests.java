@@ -38,6 +38,7 @@ import org.isf.patvac.model.PatientVaccine;
 import org.isf.patvac.service.PatVacIoOperationRepository;
 import org.isf.patvac.service.PatVacIoOperations;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.isf.vaccine.model.Vaccine;
 import org.isf.vaccine.service.VaccineIoOperationRepository;
 import org.isf.vaccine.test.TestVaccine;
@@ -105,7 +106,7 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 
-		patientVaccine.setVaccineDate(LocalDateTime.now());
+		patientVaccine.setVaccineDate(TimeTools.getNow());
 
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
 		vaccineIoOperationRepository.saveAndFlush(vaccine);
@@ -123,7 +124,7 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 
-		LocalDateTime date = LocalDateTime.now().minusDays(3);
+		LocalDateTime date = TimeTools.getNow().minusDays(3);
 		patientVaccine.setVaccineDate(date);
 
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
@@ -155,7 +156,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoUpdatePatientVaccine() throws Exception {
 		int code = setupTestPatientVaccine(false);
 		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
-		LocalDateTime newDate = LocalDateTime.now();
+		LocalDateTime newDate = TimeTools.getNow();
 		foundPatientVaccine.setVaccineDate(newDate);
 		boolean result = patvacIoOperation.updatePatientVaccine(foundPatientVaccine);
 		assertThat(result).isTrue();
@@ -229,7 +230,7 @@ public class Tests extends OHCoreTestCase {
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 
 		// Today
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = TimeTools.getNow();
 		patientVaccine.setVaccineDate(now);
 
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
@@ -270,7 +271,7 @@ public class Tests extends OHCoreTestCase {
 		patient.setSecondName("secondName1");
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = TimeTools.getNow();
 		patientVaccine.setVaccineDate(now.minusDays(3));
 
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
@@ -322,7 +323,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrUpdatePatientVaccine() throws Exception {
 		int code = setupTestPatientVaccine(false);
 		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
-		LocalDateTime newDate = LocalDateTime.now();
+		LocalDateTime newDate = TimeTools.getNow();
 		foundPatientVaccine.setVaccineDate(newDate);
 		boolean result = patVacManager.updatePatientVaccine(foundPatientVaccine);
 		assertThat(result).isTrue();
@@ -536,7 +537,7 @@ public class Tests extends OHCoreTestCase {
 		patientVaccine1.getVaccine().getVaccineType().setDescription("description");
 		assertThat(patientVaccine1).isEqualTo(patientVaccine2);
 
-		patientVaccine1.setVaccineDate(LocalDateTime.now());
+		patientVaccine1.setVaccineDate(TimeTools.getNow());
 		patientVaccine2.setVaccineDate(null);
 		assertThat(patientVaccine1).isNotEqualTo(patientVaccine2);
 
