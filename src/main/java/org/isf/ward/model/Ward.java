@@ -81,6 +81,10 @@ public class Ward extends Auditable<String> {
 	@NotNull
 	@Column(name="WRD_NDOC")
     private Integer docs;
+	
+	@NotNull
+	@Column(name="WRD_IS_OPD")    
+    private boolean isOpd;
 
 	@NotNull
 	@Column(name="WRD_IS_PHARMACY")    
@@ -109,9 +113,9 @@ public class Ward extends Auditable<String> {
 		super();
 	}
 
-	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isPharmacy,
+	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isOpd, boolean isPharmacy,
 			boolean isMale, boolean isFemale) {
-		this(code, description, telephone, fax, email, beds, nurs, docs, isPharmacy, isMale, isFemale, 30);
+		this(code, description, telephone, fax, email, beds, nurs, docs, isOpd, isPharmacy, isMale, isFemale, 30);
 	}
 
     /**
@@ -128,7 +132,7 @@ public class Ward extends Auditable<String> {
      * @param isFemale
      * @param visitDuration
      */
-    public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isPharmacy,
+    public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isOpd, boolean isPharmacy,
 		    boolean isMale, boolean isFemale, int visitDuration) {
 	    super();
 	    this.code = code;
@@ -139,12 +143,14 @@ public class Ward extends Auditable<String> {
 	    this.beds = beds;
 	    this.nurs = nurs;
 	    this.docs = docs;
+	    this.isOpd = isOpd;
 	    this.isPharmacy = isPharmacy;
 	    this.isMale = isMale;
 	    this.isFemale = isFemale;
 	    this.visitDuration = visitDuration;
     }
 
+    //TODO: to reduce number of constructors
 	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isMale,
 			boolean isFemale) {
 		this(code, description, telephone, fax, email, beds, nurs, docs, isMale, isFemale, 30);
@@ -161,6 +167,7 @@ public class Ward extends Auditable<String> {
 		this.beds = beds;
 		this.nurs = nurs;
 		this.docs = docs;
+		this.isOpd = false;
 		this.isPharmacy = false;
 		this.isMale = isMale;
 		this.isFemale = isFemale;
@@ -238,8 +245,16 @@ public class Ward extends Auditable<String> {
     public void setLock(Integer aLock) {
         this.lock = aLock;
     }
-
-    public boolean isPharmacy() {
+    
+	public boolean isOpd() {
+		return isOpd;
+	}
+	
+	public void setOpd(boolean isOPD) {
+		this.isOpd = isOPD;
+	}
+	
+	public boolean isPharmacy() {
 		return isPharmacy;
 	}
 

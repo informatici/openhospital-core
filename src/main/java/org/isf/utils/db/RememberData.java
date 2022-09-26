@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -19,22 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.ward.service;
-
-import java.util.List;
+package org.isf.utils.db;
 
 import org.isf.ward.model.Ward;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface WardIoOperationRepository extends JpaRepository<Ward, String> {
-	
-    List<Ward> findAllByOrderByDescriptionAsc();
-    
-    List<Ward> findByCodeNot(String code);
-    
-    List<Ward> findByCodeContains(String id);
-    
-    List<Ward> findByIsOpdIsTrue();
+/**
+ * -------------------------------------------------------------------
+ * Static class RememberDates: useful class in order to remember the last data inserted when
+ * are performed recursive inserting. The aim of the class is to avoid the user
+ * to manually select the field in a window
+ * -------------------------------------------------------------------
+ */
+public class RememberData {
+
+	private static Ward lastOpdWard;
+
+	public static Ward getLastOpdWard() {
+		return lastOpdWard;
+	}
+
+	public static void setLastOpdWard(Ward ward) {
+		lastOpdWard = ward;
+	}
+
 }

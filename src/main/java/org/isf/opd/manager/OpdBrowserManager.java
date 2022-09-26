@@ -35,6 +35,7 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -69,6 +70,7 @@ public class OpdBrowserManager {
 		Disease disease = opd.getDisease();
 		Disease disease2 = opd.getDisease2();
 		Disease disease3 = opd.getDisease3();
+		Ward ward = opd.getWard();
 		if (opd.getUserID() == null) {
 			opd.setUserID(UserBrowsingManager.getCurrentUser());
 		}
@@ -84,6 +86,18 @@ public class OpdBrowserManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.common.pleaseselectapatient.msg"),
 					OHSeverityLevel.ERROR));
+		}
+		// Check Patient
+		if (ward == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseselectaward.msg"),
+					OHSeverityLevel.ERROR));
+		} else {
+			if (!ward.isOpd()) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.opd.specifiedwardisnotenabledforopdservice.msg"),
+					OHSeverityLevel.ERROR));
+			}
 		}
 		// Check Sex and Age
 		if (opd.getAge() < 0) {
