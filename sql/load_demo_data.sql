@@ -1769,6 +1769,7 @@ INSERT INTO `oh_groupmenu` VALUES (138,'admin','worksheet',1,NULL,NULL,NULL,NULL
 INSERT INTO `oh_groupmenu` VALUES (139,'admin','cashiersfilter',1,NULL,NULL,NULL,NULL);
 INSERT INTO `oh_groupmenu` VALUES (140,'admin','editclosedbills',1,NULL,NULL,NULL,NULL);
 INSERT INTO `oh_groupmenu` VALUES (141,'admin','btnadmdicom',1,NULL,NULL,NULL,NULL);
+INSERT INTO `oh_groupmenu` VALUES (142,'admin','btnadmlab',1,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `oh_groupmenu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3238,6 +3239,7 @@ INSERT INTO `oh_menuitem` VALUES ('worksheet','angal.menu.btn.worksheet','angal.
 INSERT INTO `oh_menuitem` VALUES ('cashiersfilter','angal.menu.accounting.cashiersfilter','angal.menu.accounting.cashiersfilter','x','X','billsmanager','none','N',0);
 INSERT INTO `oh_menuitem` VALUES ('editclosedbills','angal.menu.accounting.editclosedbills','angal.menu.accounting.editclosedbills','x','E','billsmanager','none','N',3);
 INSERT INTO `oh_menuitem` VALUES ('btnadmdicom','angal.menu.btn.dicom','angal.menu.dicom','x','L','admission','none','N',4);
+INSERT INTO `oh_menuitem` VALUES ('btnadmlab','angal.menu.btn.laboratory','angal.menu.laboratory','x','L','admission','none','N',3);
 /*!40000 ALTER TABLE `oh_menuitem` ENABLE KEYS */;
 UNLOCK TABLES;
 
