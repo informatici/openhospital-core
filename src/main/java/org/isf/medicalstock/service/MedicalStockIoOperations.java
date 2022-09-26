@@ -36,6 +36,7 @@ import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -360,7 +361,8 @@ public class MedicalStockIoOperations {
 	public List<Movement> getMovements(String wardId, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		List<Movement> pMovement = new ArrayList<>();
 
-		List<Integer> pMovementCode = movRepository.findMovementWhereDatesAndId(wardId, dateFrom, dateTo);
+		List<Integer> pMovementCode = movRepository.findMovementWhereDatesAndId(wardId, TimeTools.truncateToSeconds(dateFrom),
+		                                                                        TimeTools.truncateToSeconds(dateTo));
 		for (int i = 0; i < pMovementCode.size(); i++) {
 			Integer code = pMovementCode.get(i);
 			Movement movement = movRepository.findById(code).orElse(null);
@@ -397,8 +399,13 @@ public class MedicalStockIoOperations {
 			LocalDateTime lotDueTo) throws OHServiceException {
 		List<Movement> pMovement = new ArrayList<>();
 
-		List<Integer> pMovementCode = movRepository.findMovementWhereData(medicalCode, medicalType, wardId, movType, movFrom, movTo, lotPrepFrom, lotPrepTo, lotDueFrom,
-				lotDueTo);
+		List<Integer> pMovementCode = movRepository.findMovementWhereData(medicalCode, medicalType, wardId, movType,
+		                                                                  TimeTools.truncateToSeconds(movFrom),
+		                                                                  TimeTools.truncateToSeconds(movTo),
+		                                                                  TimeTools.truncateToSeconds(lotPrepFrom),
+		                                                                  TimeTools.truncateToSeconds(lotPrepTo),
+		                                                                  TimeTools.truncateToSeconds(lotDueFrom),
+		                                                                  TimeTools.truncateToSeconds(lotDueTo));
 		for (int i = 0; i < pMovementCode.size(); i++) {
 			Integer code = pMovementCode.get(i);
 			Movement movement = movRepository.findById(code).orElse(null);

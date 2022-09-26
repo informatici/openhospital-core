@@ -97,8 +97,10 @@ public class TherapyManager {
 
 		List<LocalDateTime> datesArray = new ArrayList<>();
 
-		LocalDateTime stepDate = startDate;
-		datesArray.add(startDate);
+		LocalDateTime stepDate = TimeTools.truncateToSeconds(startDate);
+		datesArray.add(stepDate);
+
+		endDate = TimeTools.truncateToSeconds(endDate);
 
 		while (stepDate.isBefore(endDate)) {
 			LocalDateTime newDate = stepDate.plusDays(freqInPeriod);

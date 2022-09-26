@@ -40,6 +40,7 @@ import javax.validation.constraints.NotNull;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -106,7 +107,7 @@ public class Visit extends Auditable<String> {
 	public Visit(int visitID, LocalDateTime date, Patient patient, String note, boolean sms, Ward ward, Integer duration, String service) {
 		super();
 		this.visitID = visitID;
-		this.date = date;
+		this.date = TimeTools.truncateToSeconds(date);
 		this.patient = patient;
 		this.note = note;
 		this.sms = sms;		
@@ -120,7 +121,7 @@ public class Visit extends Auditable<String> {
 	}
 
 	public void setDate(LocalDateTime date) {
-		this.date = date;
+		this.date = TimeTools.truncateToSeconds(date);
 	}
 
 	public int getVisitID() {

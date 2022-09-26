@@ -22,9 +22,7 @@
 package org.isf.patvac.service;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.Month;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.isf.patvac.model.PatientVaccine;
@@ -62,8 +60,8 @@ public class PatVacIoOperations {
 	 */
 	public List<PatientVaccine> getPatientVaccine(boolean minusOneWeek) throws OHServiceException {
 		LocalDateTime now = TimeTools.getNow();
-		LocalDateTime timeTo = now.with(LocalTime.MAX).truncatedTo(ChronoUnit.SECONDS);
-		LocalDateTime timeFrom = now.with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
+		LocalDateTime timeTo = TimeTools.getDateToday24();
+		LocalDateTime timeFrom = TimeTools.getDateToday0();
 
 		if (minusOneWeek) {
 			timeFrom = timeFrom.minusWeeks(1);
@@ -94,7 +92,8 @@ public class PatVacIoOperations {
 			char sex,
 			int ageFrom,
 			int ageTo) throws OHServiceException {
-		return repository.findAllByCodesAndDatesAndSexAndAges(vaccineTypeCode, vaccineCode, dateFrom, dateTo, sex, ageFrom, ageTo);
+		return repository.findAllByCodesAndDatesAndSexAndAges(vaccineTypeCode, vaccineCode, TimeTools.truncateToSeconds(dateFrom),
+		                                                      TimeTools.truncateToSeconds(dateTo), sex, ageFrom, ageTo);
 	}
 
 	public List<PatientVaccine> findForPatient(int patientCode) {

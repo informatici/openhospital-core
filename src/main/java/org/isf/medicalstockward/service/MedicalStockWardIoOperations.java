@@ -34,6 +34,7 @@ import org.isf.medicalstockward.model.MovementWard;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,7 +67,8 @@ public class MedicalStockWardIoOperations
 	public List<MovementWard> getWardMovements(String wardId, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		List<MovementWard> pMovementWard = new ArrayList<>();
 
-		List<Integer> pMovementWardCode = new ArrayList<>(repository.findAllWardMovement(wardId, dateFrom, dateTo));
+		List<Integer> pMovementWardCode = new ArrayList<>(repository.findAllWardMovement(wardId, TimeTools.truncateToSeconds(dateFrom),
+		                                                                                 TimeTools.truncateToSeconds(dateTo)));
 		for (Integer code : pMovementWardCode) {
 			MovementWard movementWard = movementRepository.findById(code).orElse(null);
 			pMovementWard.add(movementWard);
@@ -83,7 +85,7 @@ public class MedicalStockWardIoOperations
 	 * @throws OHServiceException if an error occurs retrieving the movements.
 	 */
     public List<MovementWard> getWardMovementsToWard(String idwardTo, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
-	    return movementRepository.findWardMovements(idwardTo, dateFrom, dateTo);
+	    return movementRepository.findWardMovements(idwardTo, TimeTools.truncateToSeconds(dateFrom), TimeTools.truncateToSeconds(dateTo));
     }
 
 	/**

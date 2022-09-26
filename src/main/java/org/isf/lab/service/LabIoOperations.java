@@ -95,7 +95,9 @@ public class LabIoOperations {
 	 */
 	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return exam != null ?
-				repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam) :
+				repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(TimeTools.truncateToSeconds(dateFrom),
+				                                                                     TimeTools.truncateToSeconds(dateTo),
+				                                                                     exam) :
 				repository.findByExamDateBetweenOrderByLabDateDesc(dateFrom.toLocalDate(), dateTo.toLocalDate());
 	}
 	
@@ -133,8 +135,11 @@ public class LabIoOperations {
 	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
 		Iterable<Laboratory> laboritories = exam != null
-				? repository.findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo, exam)
-				: repository.findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(dateFrom, dateTo);
+				? repository.findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(TimeTools.truncateToSeconds(dateFrom),
+				                                                                                                   TimeTools.truncateToSeconds(dateTo),
+				                                                                                                   exam)
+				: repository.findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(TimeTools.truncateToSeconds(dateFrom),
+				                                                                      TimeTools.truncateToSeconds(dateTo));
 
 		for (Laboratory laboratory : laboritories) {
 			pLaboratory.add(new LaboratoryForPrint(

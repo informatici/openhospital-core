@@ -186,6 +186,15 @@ public class TimeTools {
 	}
 
 	/**
+	 * Truncate date time to SECONDS only if value is non-null
+	 * @param dateTime
+	 * @return LocaleDateTime turncated to seconds
+	 */
+	public static LocalDateTime truncateToSeconds(LocalDateTime dateTime) {
+		return dateTime == null ? null : dateTime.truncatedTo(ChronoUnit.SECONDS);
+	}
+
+	/**
 	 * Return the current date time
 	 *
 	 * @return LocalDateTime without nanoseconds
@@ -233,7 +242,7 @@ public class TimeTools {
 			 * Java does not accept a bare Date value as DateTime
 			 */
 			LocalDate date = LocalDate.parse(string, format);
-			dateTime = date.atTime(LocalTime.MIN);
+			dateTime = date.atTime(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
 		} else {
 			dateTime = LocalDateTime.parse(string, format);
 		}
@@ -241,11 +250,11 @@ public class TimeTools {
 	}
 
 	public static LocalDateTime getBeginningOfDay(LocalDateTime date) {
-		return date.with(LocalTime.MIN);
+		return date.with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
 	}
 
 	public static LocalDateTime getBeginningOfNextDay(LocalDateTime date) {
-		return date.plusDays(1).with(LocalTime.MIN);
+		return date.plusDays(1).with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
 	}
 
 	/**

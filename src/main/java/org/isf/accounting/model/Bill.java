@@ -134,8 +134,8 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 			Patient billPatient, String patName, String status, Double amount, Double balance, String user) {
 		super();
 		this.id = id;
-		this.date = date;
-		this.update = update;
+		this.date = TimeTools.truncateToSeconds(date);
+		this.update = TimeTools.truncateToSeconds(update);
 		this.isList = isList;
 		this.list = list;
 		this.listName = listName;
@@ -159,13 +159,13 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 		return date;
 	}
 	public void setDate(LocalDateTime date) {
-		this.date = date;
+		this.date = TimeTools.truncateToSeconds(date);
 	}
 	public LocalDateTime getUpdate() {
 		return update;
 	}
 	public void setUpdate(LocalDateTime update) {
-		this.update = update;
+		this.update = TimeTools.truncateToSeconds(update);
 	}
 	public boolean isList() {
 		return isList;
