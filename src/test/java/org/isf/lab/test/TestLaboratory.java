@@ -57,7 +57,6 @@ public class TestLaboratory {
 			laboratory = new Laboratory(exam, labDate, result, note, patient, patName);
 			laboratory.setAge(age);
 			laboratory.setDate(labDate);
-			laboratory.setCreatedDate(examDate);
 			laboratory.setInOutPatient(InOutPatient);
 			laboratory.setMaterial(material);
 			laboratory.setResult(result);
@@ -71,7 +70,6 @@ public class TestLaboratory {
 		laboratory.setAge(age);
 		laboratory.setDate(labDate);
 		laboratory.setExam(exam);
-		laboratory.setCreatedDate(examDate);
 		laboratory.setInOutPatient(InOutPatient);
 		laboratory.setMaterial(material);
 		laboratory.setNote(note);
