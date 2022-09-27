@@ -114,11 +114,11 @@ public class LabManager {
 					MessageBundle.getMessage("angal.lab.pleaseselectanexam.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (laboratory.getResult().isEmpty()) {
+		/*if (laboratory.getResult().isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg"),
 					OHSeverityLevel.ERROR));
-		}
+		}*/
 		if (laboratory.getMaterial().isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.pleaseselectamaterial.msg"),

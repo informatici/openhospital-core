@@ -43,6 +43,8 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.drew.lang.annotations.Nullable;
+
 /**
  * ------------------------------------------
  * Opd - model for OPD
@@ -79,8 +81,12 @@ public class Opd extends Auditable<String> {
 	@Column(name="OPD_DATE") // SQL type: datetime
 	private LocalDateTime date;
 
+	@Nullable
 	@Column(name="OPD_DATE_NEXT_VIS") // SQL type: datetime
-    	private LocalDateTime nextVisitDate;
+    private LocalDateTime nextVisitDate;
+	
+	@Column(name="OPD_DATE_VIS ") // SQL type: datetime
+	private LocalDateTime VisitDate;
 
 	@ManyToOne
 	@JoinColumn(name="OPD_PAT_ID")
@@ -350,6 +356,14 @@ public class Opd extends Auditable<String> {
 		public LocalDateTime getNextVisitDate() {
 		return nextVisitDate;
 	}
+
+	public LocalDateTime getVisitDate() {
+			return VisitDate;
+		}
+
+		public void setVisitDate(LocalDateTime visitDate) {
+			VisitDate = visitDate;
+		}
 
 	public void setNextVisitDate(LocalDateTime nextVisitDate) {
 		this.nextVisitDate = nextVisitDate;
