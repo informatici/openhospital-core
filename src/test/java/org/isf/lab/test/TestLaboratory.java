@@ -24,7 +24,6 @@ package org.isf.lab.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -39,7 +38,7 @@ public class TestLaboratory {
 
 	private String material = "TestMaterial";
 	private LocalDateTime labDate = TimeTools.getNow();
-	private LocalDate examDate = labDate.toLocalDate();
+	private LocalDateTime examDate = labDate;
 	private String result = "TestResult";
 	private String note = "TestNote";
 	private String patName = "TestPatientName";
@@ -58,7 +57,7 @@ public class TestLaboratory {
 			laboratory = new Laboratory(exam, labDate, result, note, patient, patName);
 			laboratory.setAge(age);
 			laboratory.setDate(labDate);
-			laboratory.setExamDate(examDate);
+			laboratory.setCreatedDate(examDate);
 			laboratory.setInOutPatient(InOutPatient);
 			laboratory.setMaterial(material);
 			laboratory.setResult(result);
@@ -72,7 +71,7 @@ public class TestLaboratory {
 		laboratory.setAge(age);
 		laboratory.setDate(labDate);
 		laboratory.setExam(exam);
-		laboratory.setExamDate(examDate);
+		laboratory.setCreatedDate(examDate);
 		laboratory.setInOutPatient(InOutPatient);
 		laboratory.setMaterial(material);
 		laboratory.setNote(note);
@@ -94,7 +93,9 @@ public class TestLaboratory {
 			assertThat(laboratory.getPatName()).isEqualTo(patName);
 		}
 		assertThat(laboratory.getDate()).isCloseTo(labDate, within(1, ChronoUnit.SECONDS));
-		assertThat(laboratory.getExamDate()).isEqualTo(examDate);
+		// because CreatedDate is set by the auditable class when the datbase is updated the value will differ from
+		// the static examDate value set above.
+		assertThat(laboratory.getCreatedDate()).isCloseTo(examDate, within(25, ChronoUnit.SECONDS));
 		assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
 		assertThat(laboratory.getMaterial()).isEqualTo(material);
 		assertThat(laboratory.getNote()).isEqualTo(note);

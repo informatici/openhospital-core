@@ -27,6 +27,7 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 
+import org.isf.utils.time.TimeTools;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -68,7 +69,7 @@ public abstract class Auditable<U> {
     }
 
     public LocalDateTime getCreatedDate() {
-        return createdDate;
+        return TimeTools.truncateToSeconds(createdDate);
     }
 
     public int getActive() {
