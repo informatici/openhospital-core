@@ -78,6 +78,7 @@ public class TestWard {
 		ward.setMale(isMale);
 		ward.setNurs(nurs);
 		ward.setOpd(isOpd);
+		ward.setPharmacy(isPharmacy);
 		ward.setTelephone(telephone);
 		ward.setVisitDuration(visitDuration);
 	}
