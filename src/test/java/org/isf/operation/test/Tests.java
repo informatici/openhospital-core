@@ -70,6 +70,9 @@ import org.isf.patient.test.TestPatient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperationRepository;
 import org.isf.pregtreattype.test.TestPregnantTreatmentType;
+import org.isf.visits.model.Visit;
+import org.isf.visits.service.VisitsIoOperationRepository;
+import org.isf.visits.test.TestVisit;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
 import org.isf.ward.test.TestWard;
@@ -94,6 +97,7 @@ public class Tests extends OHCoreTestCase {
 	private static TestDeliveryType testDeliveryType;
 	private static TestDeliveryResultType testDeliveryResultType;
 	private static TestOpd testOpd;
+	private static TestVisit testVisit;
 
 	@Autowired
 	OperationIoOperations operationIoOperations;
@@ -117,6 +121,8 @@ public class Tests extends OHCoreTestCase {
 	AdmissionBrowserManager admissionBrowserManager;
 	@Autowired
 	WardIoOperationRepository wardIoOperationRepository;
+	@Autowired
+	VisitsIoOperationRepository visitsIoOperationRepository;
 	@Autowired
 	PatientIoOperationRepository patientIoOperationRepository;
 	@Autowired
@@ -152,6 +158,7 @@ public class Tests extends OHCoreTestCase {
 		testDeliveryType = new TestDeliveryType();
 		testDeliveryResultType = new TestDeliveryResultType();
 		testOpd = new TestOpd();
+		testVisit = new TestVisit();
 	}
 
 	@Before
@@ -565,7 +572,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testRowIoGetOperationRowByOpdNotPersisted() throws Exception {
 		setupTestOperationRow(true);
-		Opd opd = testOpd.setup(new Patient(), new Disease(), false);
+		Opd opd = testOpd.setup(new Patient(), new Disease(), new Ward(), new Visit(), new Visit(), false);
 		assertThat(operationRowIoOperations.getOperationRowByOpd(opd)).isEmpty();
 	}
 
@@ -577,12 +584,18 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
-		Opd opd = testOpd.setup(patient, disease, false);
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, true, ward);
+		Visit scheduledVisit = testVisit.setup(patient, true, ward);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, scheduledVisit, false);
 		operationRow.setOpd(opd);
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
+		visitsIoOperationRepository.saveAndFlush(scheduledVisit);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		opdIoOperationRepository.saveAndFlush(opd);
@@ -750,7 +763,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrRowGetOperationRowByOpdNotPersisted() throws Exception {
 		setupTestOperationRow(true);
-		Opd opd = testOpd.setup(new Patient(), new Disease(), false);
+		Opd opd = testOpd.setup(new Patient(), new Disease(), new Ward(), new Visit(), new Visit(), false);
 		assertThat(operationRowBrowserManager.getOperationRowByOpd(opd)).isEmpty();
 	}
 
@@ -762,12 +775,18 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
-		Opd opd = testOpd.setup(patient, disease, false);
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, true, ward);
+		Visit scheduledVisit = testVisit.setup(patient, true, ward);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, scheduledVisit, false);
 		operationRow.setOpd(opd);
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
+		visitsIoOperationRepository.saveAndFlush(scheduledVisit);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		opdIoOperationRepository.saveAndFlush(opd);
