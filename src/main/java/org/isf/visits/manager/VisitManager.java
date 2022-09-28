@@ -83,7 +83,7 @@ public class VisitManager {
 		Ward ward = visit.getWard();
 		if (ward == null) { 
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.visit.pleasechooseawardforthenextvisit.msg"),
+							MessageBundle.getMessage("angal.visit.pleasechooseaward.msg"),
 							OHSeverityLevel.ERROR));
 
 		}
@@ -93,7 +93,6 @@ public class VisitManager {
 							OHSeverityLevel.ERROR));
 		}
 		if (errors.isEmpty()) {
-			visit.setDuration(ward.getVisitDuration());
 			String sex = String.valueOf(patient.getSex());
 			if ((sex.equalsIgnoreCase("F") && !ward.isFemale())
 				|| (sex.equalsIgnoreCase("M") && !ward.isMale())) {
