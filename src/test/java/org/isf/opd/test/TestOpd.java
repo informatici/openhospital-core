@@ -47,12 +47,12 @@ public class TestOpd {
 	private String referralTo = "R";
 	private String userID = "TestUser";
 
-	public Opd setup(Patient patient, Disease disease, Ward ward, Visit nextVisit, Visit schedVisit, boolean usingSet) throws OHException {
+	public Opd setup(Patient patient, Disease disease, Ward ward, Visit nextVisit, boolean usingSet) throws OHException {
 		Opd opd;
 
 		if (usingSet) {
 			opd = new Opd();
-			setParameters(patient, disease, ward, nextVisit, schedVisit, opd);
+			setParameters(patient, disease, ward, nextVisit, opd);
 		} else {
 			// Create Opd with all parameters 
 			opd = new Opd(prog_year, sex, age, disease);
@@ -67,13 +67,12 @@ public class TestOpd {
 			opd.setDisease3(disease);
 			opd.setWard(ward);
 			opd.setNextVisit(nextVisit);
-			opd.setScheduledVisit(schedVisit);
 		}
 
 		return opd;
 	}
 
-	public void setParameters(Patient patient, Disease disease, Ward ward, Visit nextVisit, Visit schedVisit, Opd opd) {
+	public void setParameters(Patient patient, Disease disease, Ward ward, Visit nextVisit, Opd opd) {
 		opd.setDate(date);
 		opd.setAge(age);
 		opd.setSex(sex);
@@ -89,7 +88,6 @@ public class TestOpd {
 		opd.setDisease3(disease);
 		opd.setWard(ward);
 		opd.setNextVisit(nextVisit);
-		opd.setScheduledVisit(schedVisit);
 	}
 
 	public void check(Opd opd) {

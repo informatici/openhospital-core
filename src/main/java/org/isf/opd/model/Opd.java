@@ -136,10 +136,6 @@ public class Opd extends Auditable<String> {
 	@JoinColumn(name = "OPD_NEXT_VISIT_ID")
 	private Visit nextVisit;
 
-	@ManyToOne
-	@JoinColumn(name = "OPD_SCHEDULED_VISIT_ID")
-	private Visit scheduledVisit;
-	
 	@Version
 	@Column(name="OPD_LOCK")
 	private int lock;
@@ -324,14 +320,6 @@ public class Opd extends Auditable<String> {
 		this.nextVisit = nextVisit;
 	}
 	
-	public Visit getScheduledVisit() {
-		return scheduledVisit;
-	}
-	
-	public void setScheduledVisit(Visit scheduledVisit) {
-		this.scheduledVisit = scheduledVisit;
-	}
-
 	public boolean isPersisted() {
 		return code > 0;
 	}
