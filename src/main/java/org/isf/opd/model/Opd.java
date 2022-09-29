@@ -100,7 +100,7 @@ public class Opd extends Auditable<String> {
 	@Column(name="OPD_SEX")
 	private char sex;
 
-	@NotNull
+	@Nullable
 	@Column(name="OPD_NOTE")
 	private String note; //ADDED: Alex
 
@@ -148,10 +148,10 @@ public class Opd extends Auditable<String> {
     	private String allergies; // ADDED: Arnaud
     
 	@Column(name="OPD_THERAPIES")
-    	private String therapies; // ADDED: Arnaud
-    
+    	private String therapies; // ADDED: Arnaud*/
+    @Nullable
 	@Column(name="OPD_PRESCRIPTION")
-    	private String prescription; // ADDED: Arnaud*/
+    	private String prescription; // ADDED: Arnaud
 	
 	@Transient
 	private volatile int hashCode = 0;
@@ -183,6 +183,14 @@ public class Opd extends Auditable<String> {
 	
 	public String getFullName() {
 		return patient == null ? "" : patient.getName();
+	}
+
+	public String getPrescription() {
+		return prescription;
+	}
+
+	public void setPrescription(String prescription) {
+		this.prescription = prescription;
 	}
 
 	public Patient getPatient() {
