@@ -27,7 +27,6 @@ import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.UserBrowsingManager;
-import org.isf.opd.model.Opd;
 import org.isf.opd.service.OpdIoOperationRepository;
 import org.isf.patient.manager.PatientBrowserManager;
 import org.isf.patient.model.Patient;
