@@ -178,7 +178,7 @@ public class VisitManager {
 	 * @param visit - the {@link Visit}
 	 * @return the visitID
 	 */
-	public void deleteVisit(Visit visit) {
+	public void deleteVisit(Visit visit) throws OHServiceException {
 		ioOperations.deleteVisit(visit);
 	}
 	
