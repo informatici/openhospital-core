@@ -38,7 +38,6 @@ public class TestLaboratory {
 
 	private String material = "TestMaterial";
 	private LocalDateTime labDate = TimeTools.getNow();
-	private LocalDateTime examDate = labDate;
 	private String result = "TestResult";
 	private String note = "TestNote";
 	private String patName = "TestPatientName";
@@ -91,9 +90,6 @@ public class TestLaboratory {
 			assertThat(laboratory.getPatName()).isEqualTo(patName);
 		}
 		assertThat(laboratory.getDate()).isCloseTo(labDate, within(1, ChronoUnit.SECONDS));
-		// because CreatedDate is set by the auditable class when the datbase is updated the value will differ from
-		// the static examDate value set above.
-		assertThat(laboratory.getCreatedDate()).isCloseTo(examDate, within(25, ChronoUnit.SECONDS));
 		assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
 		assertThat(laboratory.getMaterial()).isEqualTo(material);
 		assertThat(laboratory.getNote()).isEqualTo(note);
