@@ -29,6 +29,7 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,13 +71,14 @@ public class OpdIoOperations {
 	public List<Opd> getOpdList(boolean oneWeek) throws OHServiceException {
 		LocalDate dateTo = LocalDate.now();
 		LocalDate dateFrom = dateTo.minusWeeks(1);
-		return getOpdList(MessageBundle.getMessage("angal.common.alltypes.txt"), MessageBundle.getMessage("angal.opd.alldiseases.txt"), dateFrom, dateTo, 0, 0,
+		return getOpdList(null, MessageBundle.getMessage("angal.common.alltypes.txt"), MessageBundle.getMessage("angal.opd.alldiseases.txt"), dateFrom, dateTo, 0, 0,
 				'A', 'A');
 	}
 	
 	/**
-	 * Return all {@link Opd}s within specified dates
+	 * Return all {@link Opd}s within specified dates and parameters
 	 * 
+	 * @param ward 
 	 * @param diseaseTypeCode
 	 * @param diseaseCode
 	 * @param dateFrom
@@ -89,7 +91,7 @@ public class OpdIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public List<Opd> getOpdList(
-			String diseaseTypeCode,
+			Ward ward, String diseaseTypeCode,
 			String diseaseCode,
 			LocalDate dateFrom,
 			LocalDate dateTo,
@@ -97,7 +99,7 @@ public class OpdIoOperations {
 			int ageTo,
 			char sex,
 			char newPatient) throws OHServiceException {
-		return repository.findAllOpdWhereParams(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient);
+		return repository.findAllOpdWhereParams(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient);
 	}
 	
 	/**

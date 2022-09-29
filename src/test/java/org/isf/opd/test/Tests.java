@@ -147,6 +147,7 @@ public class Tests extends OHCoreTestCase {
 		int code = setupTestOpd(false);
 		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 		List<Opd> opds = opdIoOperation.getOpdList(
+				foundOpd.getWard(),
 				foundOpd.getDisease().getType().getCode(),
 				foundOpd.getDisease().getCode(),
 				foundOpd.getDate().toLocalDate(),
@@ -424,6 +425,7 @@ public class Tests extends OHCoreTestCase {
 		int code = setupTestOpd(false);
 		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 		List<Opd> opds = opdBrowserManager.getOpd(
+				foundOpd.getWard(),
 				foundOpd.getDisease().getType().getCode(),
 				foundOpd.getDisease().getCode(),
 				foundOpd.getDate().toLocalDate(),
