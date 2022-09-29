@@ -85,6 +85,14 @@ public class WardIoOperations {
 	}
 	
 	/**
+	 * Retrieves all store {@link Ward}s with beds > {@code 0}
+	 * @return
+	 */
+	public List<Ward> getIpdWards() {
+		return repository.findByBedsGreaterThanZero();
+	}
+	
+	/**
 	 * Retrieves all store {@link Ward}s with isOpd = {@code true}
 	 * @return
 	 */

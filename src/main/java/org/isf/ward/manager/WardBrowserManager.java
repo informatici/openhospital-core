@@ -126,6 +126,14 @@ public class WardBrowserManager {
 	}
 	
 	/**
+	 * Retrieves all store {@link Ward}s with beds > {@code 0}
+	 * @return the list of wards
+	 */
+	public List<Ward> getIpdWards() {
+		return ioOperations.getIpdWards();
+	}
+	
+	/**
 	 * Retrieves all store {@link Ward}s with isOpd = {@code true}
 	 * @return the list of wards
 	 */
