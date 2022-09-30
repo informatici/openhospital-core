@@ -21,7 +21,6 @@
  */
 package org.isf.lab.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,7 +29,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LabIoOperationRepository extends JpaRepository<Laboratory, Integer> {
 
-	List<Laboratory> findByExamDateBetweenOrderByLabDateDesc(LocalDate dateFrom, LocalDate dateTo);
+	List<Laboratory> findByCreatedDateBetweenOrderByLabDateDesc(LocalDateTime dateFrom, LocalDateTime dateTo);
 
 	List<Laboratory> findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(LocalDateTime dateFrom, LocalDateTime dateTo, String exam);
 

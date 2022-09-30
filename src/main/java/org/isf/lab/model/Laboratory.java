@@ -21,7 +21,6 @@
  */
 package org.isf.lab.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
@@ -80,10 +79,6 @@ public class Laboratory extends Auditable<String> {
 	@NotNull
 	@Column(name="LAB_DATE")		// SQL type: datetime
 	private LocalDateTime labDate;
-	
-	@Column(name="LAB_EXAM_DATE")
-	@Deprecated
-	private LocalDate examDate;	// SQL type: date
 
 	@NotNull
 	@Column(name="LAB_RES")
@@ -159,22 +154,6 @@ public class Laboratory extends Auditable<String> {
 	}
 	public void setLock(int aLock) {
 		lock = aLock;
-	}
-	/**
-	 * use <code>getCreatedDate()</code> instead
-	 * @deprecated 
-	 */
-	@Deprecated
-	public LocalDate getExamDate() {
-		return examDate;
-	}
-	/**
-	 * the field has been replaced by <code>createdDate()</code> and it's not meant to be managed by the user (Spring managed)
-	 * @deprecated 
-	 */
-	@Deprecated
-	public void setExamDate(LocalDate exDate) {
-		this.examDate = exDate;
 	}
 	public void setDate(LocalDateTime aDate) {
 		labDate = TimeTools.truncateToSeconds(aDate);
@@ -270,7 +249,7 @@ public class Laboratory extends Auditable<String> {
 	@Override
 	public String toString() {
 		return "-------------------------------------------\nLaboratory{" + "code=" + code + ", material=" + material
-				+ ", exam=" + exam + ", registrationDate=" + labDate + ", examDate=" + examDate + ", result="
+				+ ", exam=" + exam + ", registrationDate=" + createdDate + ", examDate=" + labDate + ", result="
 				+ result + ", lock=" + lock + ", note=" + note + ", patient=" + patient + ", patName=" + patName
 				+ ", InOutPatient=" + inOutPatient + ", age=" + age + ", sex=" + sex + ", hashCode=" + hashCode
 				+ "}\n---------------------------------------------";

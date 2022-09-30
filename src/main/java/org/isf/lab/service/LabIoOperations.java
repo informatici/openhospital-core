@@ -22,6 +22,7 @@
 package org.isf.lab.service;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +81,7 @@ public class LabIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Laboratory> getLaboratory() throws OHServiceException {
-		LocalDateTime time2 = TimeTools.getNow();
+		LocalDateTime time2 = TimeTools.getDateToday24();
 		LocalDateTime time1 = time2.minusWeeks(1);
 		return getLaboratory(null, time1, time2);
 	}
@@ -98,7 +99,8 @@ public class LabIoOperations {
 				repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(TimeTools.truncateToSeconds(dateFrom),
 				                                                                     TimeTools.truncateToSeconds(dateTo),
 				                                                                     exam) :
-				repository.findByExamDateBetweenOrderByLabDateDesc(dateFrom.toLocalDate(), dateTo.toLocalDate());
+				repository.findByCreatedDateBetweenOrderByLabDateDesc(TimeTools.truncateToSeconds(dateFrom.with(LocalTime.MIN)),
+				                                                      TimeTools.truncateToSeconds(dateTo.with(LocalTime.MAX)));
 	}
 	
 	/**

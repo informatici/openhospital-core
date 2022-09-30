@@ -21,7 +21,6 @@
  */
 package org.isf.lab.manager;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,9 +78,6 @@ public class LabManager {
 	 */
 	protected void validateLaboratory(Laboratory laboratory) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		if (laboratory.getExamDate() == null) {
-			laboratory.setExamDate(LocalDate.now());
-		}
 		if (laboratory.getExam() != null && laboratory.getExam().getProcedure() == 2) {
 			laboratory.setResult(MessageBundle.getMessage("angal.lab.multipleresults.txt"));
 		}
@@ -123,11 +119,6 @@ public class LabManager {
 		if (laboratory.getMaterial().isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.pleaseselectamaterial.msg"),
-					OHSeverityLevel.ERROR));
-		}
-		if (laboratory.getDate() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.lab.pleaseinsertanexamdate.msg"),
 					OHSeverityLevel.ERROR));
 		}
 		if (laboratory.getInOutPatient().isEmpty()) {
