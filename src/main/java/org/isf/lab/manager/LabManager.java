@@ -121,11 +121,6 @@ public class LabManager {
 					MessageBundle.getMessage("angal.lab.pleaseselectamaterial.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (laboratory.getDate() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.lab.pleaseinsertanexamdate.msg"),
-					OHSeverityLevel.ERROR));
-		}
 		if (laboratory.getInOutPatient().isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.pleaseinsertiforipdoroforopd.msg"),
