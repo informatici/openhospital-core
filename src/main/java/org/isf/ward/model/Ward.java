@@ -55,48 +55,48 @@ public class Ward extends Auditable<String> {
 
 	@Id
 	@Column(name="WRD_ID_A")	
-    private String code;
+	private String code;
 
 	@NotNull
 	@Column(name="WRD_NAME")
-    private String description;
+	private String description;
 	
 	@Column(name="WRD_TELE")
-    private String telephone;
+	private String telephone;
 	
 	@Column(name="WRD_FAX")
-    private String fax;
+	private String fax;
 	
 	@Column(name="WRD_EMAIL")
-    private String email;
+	private String email;
 
 	@NotNull
 	@Column(name="WRD_NBEDS")
-    private Integer beds;
+	private Integer beds;
 
 	@NotNull
 	@Column(name="WRD_NQUA_NURS")
-    private Integer nurs;
+	private Integer nurs;
 
 	@NotNull
 	@Column(name="WRD_NDOC")
 	private Integer docs;
 	
 	@NotNull
-	@Column(name="WRD_IS_OPD")    
+	@Column(name="WRD_IS_OPD")	
 	private boolean isOpd;
 
 	@NotNull
-	@Column(name="WRD_IS_PHARMACY")    
-    private boolean isPharmacy;
+	@Column(name="WRD_IS_PHARMACY")	
+	private boolean isPharmacy;
 
 	@NotNull
 	@Column(name="WRD_IS_MALE")   
-    private boolean isMale;
+	private boolean isMale;
 
 	@NotNull
-	@Column(name="WRD_IS_FEMALE")    
-    private boolean isFemale;
+	@Column(name="WRD_IS_FEMALE")	
+	private boolean isFemale;
 
 	@NotNull
 	@Column(name="WRD_VISIT_DURATION")
@@ -104,8 +104,8 @@ public class Ward extends Auditable<String> {
 
 	@Version
 	@Column(name="WRD_LOCK")
-    private Integer lock;
-    
+	private Integer lock;
+	
 	@Transient
 	private volatile int hashCode = 0;
 	
@@ -118,39 +118,39 @@ public class Ward extends Auditable<String> {
 		this(code, description, telephone, fax, email, beds, nurs, docs, isOpd, isPharmacy, isMale, isFemale, 30);
 	}
 
-    /**
-     * @param code
+	/**
+	 * @param code
 	 * @param description
-     * @param telephone
-     * @param fax
-     * @param email
-     * @param beds
-     * @param nurs
-     * @param docs
-     * @param isPharmacy
-     * @param isMale
-     * @param isFemale
-     * @param visitDuration
-     */
-    public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isOpd, boolean isPharmacy,
-		    boolean isMale, boolean isFemale, int visitDuration) {
-	    super();
-	    this.code = code;
-	    this.description = description;
-	    this.telephone = telephone;
-	    this.fax = fax;
-	    this.email = email;
-	    this.beds = beds;
-	    this.nurs = nurs;
-	    this.docs = docs;
-	    this.isOpd = isOpd;
-	    this.isPharmacy = isPharmacy;
-	    this.isMale = isMale;
-	    this.isFemale = isFemale;
-	    this.visitDuration = visitDuration;
-    }
+	 * @param telephone
+	 * @param fax
+	 * @param email
+	 * @param beds
+	 * @param nurs
+	 * @param docs
+	 * @param isPharmacy
+	 * @param isMale
+	 * @param isFemale
+	 * @param visitDuration
+	 */
+	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isOpd, boolean isPharmacy,
+			boolean isMale, boolean isFemale, int visitDuration) {
+		super();
+		this.code = code;
+		this.description = description;
+		this.telephone = telephone;
+		this.fax = fax;
+		this.email = email;
+		this.beds = beds;
+		this.nurs = nurs;
+		this.docs = docs;
+		this.isOpd = isOpd;
+		this.isPharmacy = isPharmacy;
+		this.isMale = isMale;
+		this.isFemale = isFemale;
+		this.visitDuration = visitDuration;
+	}
 
-    //TODO: to reduce number of constructors
+	//TODO: to reduce number of constructors
 	public Ward(String code, String description, String telephone, String fax, String email, Integer beds, Integer nurs, Integer docs, boolean isMale,
 			boolean isFemale) {
 		this(code, description, telephone, fax, email, beds, nurs, docs, isMale, isFemale, 30);
@@ -174,78 +174,78 @@ public class Ward extends Auditable<String> {
 		this.visitDuration = visitDuration;
 	}
 
-    public Integer getBeds() {
-        return this.beds;
-    }
+	public Integer getBeds() {
+		return this.beds;
+	}
 
 	public void setBeds(Integer aBeds) {
-        this.beds = aBeds;
-    }
+		this.beds = aBeds;
+	}
 
-    public String getCode() {
-        return this.code;
-    }
+	public String getCode() {
+		return this.code;
+	}
 
-    public void setCode(String aCode) {
-        this.code = aCode;
-    }
+	public void setCode(String aCode) {
+		this.code = aCode;
+	}
 
-    public Integer getDocs() {
-        return this.docs;
-    }
+	public Integer getDocs() {
+		return this.docs;
+	}
 
-    public void setDocs(Integer aDocs) {
-        this.docs = aDocs;
-    }
+	public void setDocs(Integer aDocs) {
+		this.docs = aDocs;
+	}
 
-    public String getEmail() {
-        return this.email;
-    }
+	public String getEmail() {
+		return this.email;
+	}
 
-    public void setEmail(String aEmail) {
-        this.email = aEmail;
-    }
+	public void setEmail(String aEmail) {
+		this.email = aEmail;
+	}
 
-    public String getFax() {
-        return this.fax;
-    }
+	public String getFax() {
+		return this.fax;
+	}
 
-    public void setFax(String aFax) {
-        this.fax = aFax;
-    }
+	public void setFax(String aFax) {
+		this.fax = aFax;
+	}
 
-    public String getDescription() {
-        return this.description;
-    }
+	public String getDescription() {
+		return this.description;
+	}
 
-    public void setDescription(String aDescription) {
-        this.description = aDescription;
-    }
+	public void setDescription(String aDescription) {
+		this.description = aDescription;
+	}
 
-    public Integer getNurs() {
-        return this.nurs;
-    }
+	public Integer getNurs() {
+		return this.nurs;
+	}
 
-    public void setNurs(Integer aNurs) {
-        this.nurs = aNurs;
-    }
+	public void setNurs(Integer aNurs) {
+		this.nurs = aNurs;
+	}
 
-    public String getTelephone() {
-        return this.telephone;
-    }
+	public String getTelephone() {
+		return this.telephone;
+	}
 
-    public void setTelephone(String aTelephone) {
-        this.telephone = aTelephone;
-    }
+	public void setTelephone(String aTelephone) {
+		this.telephone = aTelephone;
+	}
 
-    public Integer getLock() {
-        return this.lock;
-    }
+	public Integer getLock() {
+		return this.lock;
+	}
 
-    public void setLock(Integer aLock) {
-        this.lock = aLock;
-    }
-    
+	public void setLock(Integer aLock) {
+		this.lock = aLock;
+	}
+	
 	public boolean isOpd() {
 		return isOpd;
 	}
