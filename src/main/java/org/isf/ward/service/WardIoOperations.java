@@ -155,7 +155,7 @@ public class WardIoOperations {
 	 * @return <code>true</code> if is exist, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean isOPDPresent() throws OHServiceException {
+	public boolean isOpdPresent() throws OHServiceException {
 		return isCodePresent("OPD");
 	}
 

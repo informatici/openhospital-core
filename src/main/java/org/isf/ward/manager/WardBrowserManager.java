@@ -320,7 +320,7 @@ public class WardBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public boolean opdControl(boolean createIfNotExists) throws OHServiceException {
-		boolean exists = ioOperations.isMaternityPresent();
+		boolean exists = ioOperations.isOpdPresent();
 		if (!exists && createIfNotExists) {
 			Ward opd = getDefaultOPDWard();
 			newWard(opd);
