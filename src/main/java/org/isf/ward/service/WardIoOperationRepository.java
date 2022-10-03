@@ -31,14 +31,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WardIoOperationRepository extends JpaRepository<Ward, String> {
 	
-    List<Ward> findAllByOrderByDescriptionAsc();
-    
-    List<Ward> findByCodeNot(String code);
-    
-    List<Ward> findByCodeContains(String id);
-    
-    List<Ward> findByIsOpdIsTrue();
+	List<Ward> findAllByOrderByDescriptionAsc();
 
-    @Query(value = "SELECT w FROM Ward w WHERE WRD_NBEDS > 0 ORDER BY WRD_NAME")
+	List<Ward> findByCodeNot(String code);
+
+	List<Ward> findByCodeContains(String id);
+
+	List<Ward> findByIsOpdIsTrue();
+
+	@Query(value = "SELECT w FROM Ward w WHERE WRD_NBEDS > 0 ORDER BY WRD_NAME")
 	List<Ward> findByBedsGreaterThanZero();
 }
