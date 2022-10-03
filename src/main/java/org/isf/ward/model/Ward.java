@@ -80,11 +80,11 @@ public class Ward extends Auditable<String> {
 
 	@NotNull
 	@Column(name="WRD_NDOC")
-    private Integer docs;
+	private Integer docs;
 	
 	@NotNull
 	@Column(name="WRD_IS_OPD")    
-    private boolean isOpd;
+	private boolean isOpd;
 
 	@NotNull
 	@Column(name="WRD_IS_PHARMACY")    
