@@ -25,7 +25,7 @@ import org.isf.ward.model.Ward;
 
 /**
  * -------------------------------------------------------------------
- * Static class RememberDates: useful class in order to remember the last data inserted when
+ * Static class RememberData: useful class in order to remember the last data inserted when
  * are performed recursive inserting. The aim of the class is to avoid the user
  * to manually select the field in a window
  * -------------------------------------------------------------------
