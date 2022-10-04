@@ -56,13 +56,14 @@ import org.springframework.context.ApplicationEventPublisher;
 
 public class Tests extends OHCoreTestCase {
 
-	private static BillBrowserManager billBrowserManager;
 	private static TestBill testBill;
 	private static TestBillItems testBillItems;
 	private static TestBillPayments testBillPayments;
 	private static TestPatient testPatient;
 	private static TestPriceList testPriceList;
 
+	@Autowired
+	BillBrowserManager billBrowserManager;
 	@Autowired
 	AccountingIoOperations accountingIoOperation;
 	@Autowired
@@ -90,7 +91,6 @@ public class Tests extends OHCoreTestCase {
 	@Before
 	public void setUp() {
 		cleanH2InMemoryDb();
-		billBrowserManager = new BillBrowserManager(accountingIoOperation);
 	}
 
 	@Test
@@ -483,11 +483,6 @@ public class Tests extends OHCoreTestCase {
 		List<BillPayments> billItems = accountingIoOperation.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
-	}
-
-	@Test
-	public void mgrInitManager() {
-		assertThat(new BillBrowserManager(accountingIoOperation)).isNotNull();
 	}
 
 	@Test
