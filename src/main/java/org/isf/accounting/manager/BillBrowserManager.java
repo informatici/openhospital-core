@@ -46,16 +46,6 @@ public class BillBrowserManager {
 	@Autowired
 	private AccountingIoOperations ioOperations;
 
-	public BillBrowserManager() {
-		
-	}
-	
-	public BillBrowserManager(AccountingIoOperations ioOperations) {
-		if (ioOperations != null) {
-			this.ioOperations = ioOperations;
-		}
-	}
-
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param bill
