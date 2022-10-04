@@ -221,7 +221,6 @@ public class PatientIoOperations {
 	 * @return true - if no OHServiceExceptions occurred
 	 * @throws OHServiceException
 	 */
-	@Transactional
 	public boolean mergePatientHistory(Patient mergedPatient, Patient obsoletePatient) throws OHServiceException {
 		repository.updateDeleted(obsoletePatient.getCode());
 		applicationEventPublisher.publishEvent(new PatientMergedEvent(obsoletePatient, mergedPatient));
