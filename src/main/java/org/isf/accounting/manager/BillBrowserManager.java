@@ -31,6 +31,7 @@ import org.isf.accounting.model.BillPayments;
 import org.isf.accounting.service.AccountingIoOperations;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
+import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -45,16 +46,6 @@ public class BillBrowserManager {
 
 	@Autowired
 	private AccountingIoOperations ioOperations;
-
-	public BillBrowserManager() {
-		
-	}
-	
-	public BillBrowserManager(AccountingIoOperations ioOperations) {
-		if (ioOperations != null) {
-			this.ioOperations = ioOperations;
-		}
-	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
@@ -190,6 +181,7 @@ public class BillBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean newBill(
 			Bill newBill,
 			List<BillItems> billItems,
@@ -244,6 +236,7 @@ public class BillBrowserManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean updateBill(Bill updateBill,
 			List<BillItems> billItems,
 			List<BillPayments> billPayments) throws OHServiceException {

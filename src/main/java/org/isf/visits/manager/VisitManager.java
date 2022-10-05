@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.UserBrowsingManager;
 import org.isf.opd.service.OpdIoOperationRepository;
@@ -33,6 +34,7 @@ import org.isf.patient.model.Patient;
 import org.isf.sms.manager.SmsManager;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
+import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -192,6 +194,7 @@ public class VisitManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean newVisits(List<Visit> visits) throws OHServiceException {
 		return newVisits(visits, new ArrayList<>());
 	}
@@ -208,6 +211,7 @@ public class VisitManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean newVisits(List<Visit> visits, List<Visit> removedVisits) throws OHServiceException {
 		if (!visits.isEmpty()) {
 			PatientBrowserManager patMan = this.applicationContext.getBean(PatientBrowserManager.class);
@@ -253,6 +257,7 @@ public class VisitManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean deleteAllVisits(int patID) throws OHServiceException {
 		List<Visit> visits = ioOperations.getVisits(patID);
 		for (Visit visit : visits) {

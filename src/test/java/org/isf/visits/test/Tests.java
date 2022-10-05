@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
+import org.isf.generaldata.GeneralData;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.test.TestPatient;
@@ -253,6 +254,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewVisitsSMSTrueDateFuture() throws Exception {
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
 		LocalDateTime date = TimeTools.getNow();
@@ -269,6 +271,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewVisitsSMSTrueMessageTooLong() throws Exception {
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findById(id).get();
