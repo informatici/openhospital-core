@@ -241,7 +241,7 @@ public class Patient extends Auditable<String> {
 	public Patient(String firstName, String secondName, LocalDate birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone, String motherName, char mother,
 			String fatherName, char father, String bloodType, char economicStatut, char parentTogether,
-			String personalCode, String maritalStatus, String profession) { // Changed EduLev with bloodType
+			String personalCode, String maritalStatus, String profession) { 
 		this.firstName = firstName;
 		this.secondName = secondName;
 		this.name = this.firstName + ' ' + this.secondName;
@@ -546,14 +546,10 @@ public class Patient extends Auditable<String> {
 		sbName.append(' ');
 		sbName.append(getCity().toLowerCase());
 		sbName.append(' ');
-		if (getAddress() != null)
-			sbName.append(getAddress().toLowerCase()).append(' ');
-		if (getTelephone() != null)
-			sbName.append(getTelephone()).append(' ');
-		if (getNote() != null)
-			sbName.append(getNote().toLowerCase()).append(' ');
-		if (getTaxCode() != null)
-			sbName.append(getTaxCode().toLowerCase()).append(' ');
+		if (getAddress() != null) sbName.append(getAddress().toLowerCase()).append(' ');
+		if (getTelephone() != null) sbName.append(getTelephone()).append(' ');
+		if (getNote() != null) sbName.append(getNote().toLowerCase()).append(' ');
+		if (getTaxCode() != null) sbName.append(getTaxCode().toLowerCase()).append(' ');
 		return sbName.toString();
 	}
 

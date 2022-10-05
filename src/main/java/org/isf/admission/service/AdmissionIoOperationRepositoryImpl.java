@@ -40,21 +40,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationRepositoryCustom {
 
 	private static String nativeQueryTerms = "SELECT * from patient as p  "
-					+ " left join (select * from admission where ADM_IN = 1 and ( ADM_ACTIVE=1 ) ) as a on p.PAT_ID = a.ADM_PAT_ID "
-					+ " where p.PAT_ACTIVE = 1 "
+					+ " left join (select * from admission where ADM_IN=1 and ( ADM_ACTIVE=1 ) ) as a on p.PAT_ID=a.ADM_PAT_ID "
+					+ " where p.PAT_ACTIVE=1 "
 					+ " and ( lower(concat_ws(' ', p.PAT_ID, p.PAT_SNAME, p.PAT_FNAME, p.PAT_NAME, p.PAT_NOTE, p.PAT_TAXCODE, p.PAT_CITY, p.PAT_ADDR, p.PAT_TELE)) like :param0 ) "
 					+ " order by p.PAT_ID desc";
 
 			private static String nativeQueryRanges = "SELECT * from patient as p  "
-					+ " left join (select * from admission where ADM_IN = 1 and ( ADM_ACTIVE=1 ) ) as a on p.PAT_ID = a.ADM_PAT_ID "
-					+ " where (p.PAT_ID IN (SELECT ADM_PAT_ID from admission where param1)) and p.PAT_ACTIVE = 1 "
+					+ " left join (select * from admission where ADM_IN=1 and ( ADM_ACTIVE=1 ) ) as a on p.PAT_ID=a.ADM_PAT_ID "
+					+ " where (p.PAT_ID IN (SELECT ADM_PAT_ID from admission where param1)) and p.PAT_ACTIVE=1 "
 					+ " and ( lower(concat_ws(' ', p.PAT_ID, p.PAT_SNAME, p.PAT_FNAME, p.PAT_NAME, p.PAT_NOTE, p.PAT_TAXCODE, p.PAT_CITY, p.PAT_ADDR, p.PAT_TELE)) like :param0 ) "
 					+ " order by p.PAT_ID desc";
 
 			private static String nativeQueryCode = "SELECT * from patient as p  "
-					+ " left join (select * from admission where ADM_IN = 1 and ( ADM_ACTIVE=1 ) order by ADM_ID desc) as a on p.PAT_ID = a.ADM_PAT_ID "
-					+ " where p.PAT_ID = :param0 "
-					+ " and p.PAT_ACTIVE = 1 ";
+					+ " left join (select * from admission where ADM_IN=1 and ( ADM_ACTIVE=1 ) order by ADM_ID desc) as a on p.PAT_ID=a.ADM_PAT_ID "
+					+ " where p.PAT_ID=:param0 "
+					+ " and p.PAT_ACTIVE=1 ";
 			
 	private static final String YYYY_MM_DD = "yyyy-MM-dd";
 
