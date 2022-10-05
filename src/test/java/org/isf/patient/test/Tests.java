@@ -719,15 +719,13 @@ public class Tests extends OHCoreTestCase {
 		bowelDescriptionHashMap.set(patientBrowserManager, null);
 	}
 
-
 	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient,
-			Patient obsoletePatient) throws OHException {
-		Optional<Patient> mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode());
-		Optional<Patient> obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode());
-		assertThat(obsoletePatientResult.isEmpty());
-		assertThat(mergedPatientResult.isPresent());
-	}
-
+					Patient obsoletePatient) throws OHException {
+				Optional<Patient> mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode());
+				Optional<Patient> obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode());
+				assertThat(obsoletePatientResult.isEmpty());
+				assertThat(mergedPatientResult.isPresent());
+			}
 	private Integer setupTestPatient(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(usingSet);
 		patientIoOperationRepository.saveAndFlush(patient);
