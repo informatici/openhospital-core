@@ -56,6 +56,7 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 					+ " where p.PAT_ID = :param0 "
 					+ " and ( ( p.PAT_DELETED='N' ) or ( p.PAT_DELETED is null ) ) and p.PAT_ACTIVE = 1 ";
 
+			
 			private static final String YYYY_MM_DD = "yyyy-MM-dd";
 
 	@PersistenceContext
