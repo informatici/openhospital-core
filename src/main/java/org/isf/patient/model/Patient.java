@@ -191,6 +191,7 @@ public class Patient extends Auditable<String> {
 	@PreRemove
 	public void preRemove() {
 		this.active = 0;
+		this.setPatientProfilePhoto(null);
 	}
 
 	public Patient() {
