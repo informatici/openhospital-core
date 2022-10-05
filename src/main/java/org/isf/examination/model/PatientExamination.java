@@ -41,6 +41,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.isf.patient.model.Patient;
 import org.isf.utils.time.TimeTools;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -56,9 +57,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PEX_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "PEX_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PEX_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE PATIENTEXAMINATION SET PEX_ACTIVE = 0 WHERE PEX_ID = ? AND -1 != ?")
+@SQLDelete(sql = "UPDATE PATIENTEXAMINATION SET PEX_ACTIVE = 0 WHERE PEX_ID = ?")
 @Where(clause = "PEX_ACTIVE = 1")
-public class PatientExamination implements Serializable, Comparable<PatientExamination> {
+public class PatientExamination extends Auditable<String> implements Serializable, Comparable<PatientExamination>  {
 
 	private static final long serialVersionUID = 1L;
 	public static final int PEX_NOTE_LENGTH = 2000;

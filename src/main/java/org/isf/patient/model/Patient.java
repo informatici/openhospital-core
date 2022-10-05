@@ -77,7 +77,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PAT_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "PAT_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PAT_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE PATIENT SET PAT_ACTIVE = 0 WHERE PAT_ID = ? AND -1 != ?")
+@SQLDelete(sql = "UPDATE PATIENT SET PAT_ACTIVE = 0 WHERE PAT_ID = ? AND PAT_LOCK = ?")
 @Where(clause = "PAT_ACTIVE = 1")
 public class Patient extends Auditable<String> {
 	/*
@@ -178,8 +178,13 @@ public class Patient extends Auditable<String> {
 	@Version
 	@Column(name = "PAT_LOCK")
 	private int lock;
+<<<<<<< Upstream, based on origin/develop
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+=======
+
+	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST})
+>>>>>>> 04bb8ff # This is a combination of 4 commits. # The first commit's message is: rebase 3 # This is the 2nd commit message: class comment restored # This is the 3rd commit message: fixed photo first saving and updating # This is the 4th commit message: fixed cascate type for patient
 	@JoinColumn(name = "PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID")
 	private PatientProfilePhoto patientProfilePhoto;
 
