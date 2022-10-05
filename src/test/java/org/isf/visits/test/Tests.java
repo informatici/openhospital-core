@@ -211,6 +211,22 @@ public class Tests extends OHCoreTestCase {
 		int id = visitManager.newVisit(visit).getVisitID();
 		checkVisitIntoDb(id);
 	}
+	
+	@Test
+	public void testMgrUpdateVisit() throws Exception {
+		Patient patient = testPatient.setup(false);
+		Ward ward = testWard.setup(false);
+		patientIoOperationRepository.saveAndFlush(patient);
+		wardIoOperationRepository.saveAndFlush(ward);
+		Visit visit = testVisit.setup(patient, true, ward);
+		int id = visitManager.newVisit(visit).getVisitID();
+		Visit foundVisit = visitsIoOperation.findVisit(id);
+		foundVisit.setNote("Update");
+		Visit result = visitManager.updateVisit(foundVisit);
+		assertThat(result.getNote()).isEqualTo("Update");
+		Visit updateVisit = visitsIoOperation.findVisit(id);
+		assertThat(updateVisit.getNote()).isEqualTo("Update");
+	}
 
 	@Test
 	public void testMgrNewVisitsEmptyList() throws Exception {

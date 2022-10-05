@@ -137,7 +137,53 @@ public class Tests extends OHCoreTestCase {
 		// then:
 		assertThat(wards.get(0).getDescription()).isEqualTo(foundWard.getDescription());
 	}
+	
+	@Test
+	public void testIoGetIpdWards() throws Exception {
+		// given:
+		String code = setupTestWard(false);
+		Ward foundWard = wardIoOperationRepository.findById(code).get();
+		
+		// when:
+		List<Ward> wards = wardIoOperation.getIpdWards();
+		
+		// then:
+		assertThat(wards.size() == 1);
+		
+		// given:
+		foundWard.setBeds(0);
+		wardIoOperationRepository.saveAndFlush(foundWard);
+		
+		// when:
+		wards = wardIoOperation.getIpdWards();
+		
+		// then:
+		assertThat(wards.size() == 0);
+	}
 
+	@Test
+	public void testIoGetOpdWards() throws Exception {
+		// given:
+		String code = setupTestWard(false);
+		Ward foundWard = wardIoOperationRepository.findById(code).get();
+		
+		// when:
+		List<Ward> wards = wardIoOperation.getOpdWards();
+		
+		// then:
+		assertThat(wards.size() == 0);
+		
+		// given:
+		foundWard.setBeds(0);
+		wardIoOperationRepository.saveAndFlush(foundWard);
+		
+		// when:
+		wards = wardIoOperation.getOpdWards();
+		
+		// then:
+		assertThat(wards.size() == 1);
+	}
+	
 	@Test
 	public void testIoGetWardsGetAll() throws Exception {
 		String code = setupTestWard(false);
@@ -222,6 +268,20 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	public void testIoIsMaternityOpdPresent() throws Exception {
+		boolean result = wardIoOperation.isOpdPresent();
+
+		if (!result) {
+			Ward ward = testWard.setup(false);
+			ward.setCode("OPD");
+			wardIoOperationRepository.saveAndFlush(ward);
+			result = wardIoOperation.isOpdPresent();
+		}
+
+		assertThat(result).isTrue();
+	}
+	
+	@Test
 	public void testIoFindWard() throws Exception {
 		String code = setupTestWard(false);
 		Ward result = wardIoOperation.findWard(code);
@@ -271,6 +331,28 @@ public class Tests extends OHCoreTestCase {
 		Ward ward = wardIoOperationRepository.findById(code).get();
 		List<Ward> wards = wardBrowserManager.getWards(ward);
 		assertThat(wards.get(0).getDescription()).isEqualTo(ward.getDescription());
+	}
+	
+	@Test
+	public void testMgrGetIpdWards() throws Exception {
+		String code = setupTestWard(false);
+		Ward opdWard = wardBrowserManager.findWard(code);
+		opdWard.setBeds(0);
+		wardIoOperationRepository.saveAndFlush(opdWard);
+		
+		List<Ward> wards = wardBrowserManager.getIpdWards();
+		assertThat(wards.size() == 0);
+	}
+	
+	@Test
+	public void testMgrGetOpdWards() throws Exception {
+		String code = setupTestWard(false);
+		Ward opdWard = wardBrowserManager.findWard(code);
+		opdWard.setBeds(0);
+		wardIoOperationRepository.saveAndFlush(opdWard);
+		
+		List<Ward> wards = wardBrowserManager.getOpdWards();
+		assertThat(wards.size() == 1);
 	}
 
 	@Test
@@ -369,6 +451,25 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrMaternityControlCreate() throws Exception {
 		assertThat(wardBrowserManager.maternityControl(true)).isTrue();
+	}
+
+	@Test
+	public void testMgrOpdControlDoNotCreate() throws Exception {
+		boolean result = wardBrowserManager.opdControl(false);
+
+		if (!result) {
+			Ward ward = testWard.setup(false);
+			ward.setCode("OPD");
+			wardIoOperationRepository.saveAndFlush(ward);
+			result = wardBrowserManager.opdControl(false);
+		}
+
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void testMgrOpdControlCreate() throws Exception {
+		assertThat(wardBrowserManager.opdControl(true)).isTrue();
 	}
 
 	@Test

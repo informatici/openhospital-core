@@ -41,6 +41,8 @@ import org.isf.disease.model.Disease;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
+import org.isf.visits.model.Visit;
+import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -74,13 +76,15 @@ public class Opd extends Auditable<String> {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="OPD_ID") 
 	private int code;
+	
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "OPD_WRD_ID_A")
+	private Ward ward;
 
 	@NotNull
 	@Column(name="OPD_DATE") // SQL type: datetime
 	private LocalDateTime date;
-
-	@Column(name="OPD_DATE_NEXT_VIS") // SQL type: datetime
-    private LocalDateTime nextVisitDate;
 
 	@ManyToOne
 	@JoinColumn(name="OPD_PAT_ID")
@@ -128,6 +132,10 @@ public class Opd extends Auditable<String> {
 	@Column(name="OPD_USR_ID_A")
 	private String userID;
 	
+	@ManyToOne
+	@JoinColumn(name = "OPD_NEXT_VISIT_ID")
+	private Visit nextVisit;
+
 	@Version
 	@Column(name="OPD_LOCK")
 	private int lock;
@@ -224,33 +232,50 @@ public class Opd extends Auditable<String> {
 		this.referralFrom = referralFrom;
 	}
 	
+	public Ward getWard() {
+		return ward;
+	}
+	
+	public void setWard(Ward ward) {
+		this.ward = ward;
+	}
+
 	public int getCode() {
 		return code;
 	}
+
 	public void setCode(int code) {
 		this.code = code;
 	}
+	
 	public Disease getDisease() {
 		return disease;
 	}
+	
 	public Disease getDisease2() {
 		return disease2;
 	}
+	
 	public Disease getDisease3() {
 		return disease3;
 	}
+	
 	public void setDisease(Disease disease) {
 		this.disease = disease;
 	}
+	
 	public void setDisease2(Disease disease) {
 		this.disease2 = disease;
 	}
+	
 	public void setDisease3(Disease disease) {
 		this.disease3 = disease;
 	}
+	
 	public int getLock() {
 		return lock;
 	}
+	
 	public void setLock(int lock) {
 		this.lock = lock;
 	}
@@ -258,6 +283,7 @@ public class Opd extends Auditable<String> {
 	public LocalDateTime getDate() {
 		return date;
 	}
+	
 	public void setDate(LocalDateTime date) {
 		this.date = TimeTools.truncateToSeconds(date);
 	}
@@ -285,15 +311,15 @@ public class Opd extends Auditable<String> {
 	public void setUserID(String userID) {
 		this.userID = userID;
 	}
-
-	public LocalDateTime getNextVisitDate() {
-		return nextVisitDate;
+	
+	public Visit getNextVisit() {
+		return nextVisit;
 	}
-
-	public void setNextVisitDate(LocalDateTime nextVisitDate) {
-		this.nextVisitDate = TimeTools.truncateToSeconds(nextVisitDate);
+	
+	public void setNextVisit(Visit nextVisit) {
+		this.nextVisit = nextVisit;
 	}
-
+	
 	public boolean isPersisted() {
 		return code > 0;
 	}

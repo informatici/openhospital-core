@@ -36,6 +36,7 @@ import javax.persistence.criteria.Root;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
+import org.isf.ward.model.Ward;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -47,6 +48,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 	@SuppressWarnings("unchecked")	
 	@Override
 	public List<Opd> findAllOpdWhereParams(
+			Ward ward,
 			String diseaseTypeCode,
 			String diseaseCode,
 			LocalDate dateFrom,
@@ -55,10 +57,11 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			int ageTo,
 			char sex,
 			char newPatient) {
-		return getOpdQuery(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient).getResultList();
+		return getOpdQuery(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient).getResultList();
 	}	
 
 	private TypedQuery<Opd> getOpdQuery(
+			Ward ward, 
 			String diseaseTypeCode,
 			String diseaseCode,
 			LocalDate dateFrom,
@@ -73,6 +76,11 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		List<Predicate> predicates = new ArrayList<>();
 
 		query.select(opd);
+		if (ward != null) {
+			predicates.add(
+					cb.equal(opd.join("ward").get("code"), ward.getCode())
+			);
+		}
 		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alltypes.txt")))) {
 			predicates.add(
 					cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)

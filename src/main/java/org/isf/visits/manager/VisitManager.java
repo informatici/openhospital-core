@@ -28,7 +28,6 @@ import java.util.List;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.UserBrowsingManager;
-import org.isf.opd.model.Opd;
 import org.isf.opd.service.OpdIoOperationRepository;
 import org.isf.patient.manager.PatientBrowserManager;
 import org.isf.patient.model.Patient;
@@ -82,22 +81,20 @@ public class VisitManager {
 							MessageBundle.getMessage("angal.visit.pleasechooseadate.msg"),
 							OHSeverityLevel.ERROR));
 		}
-//		OP-700 in OPD we don't have ward... maybe in future.
-//		Shifted check into GUI
-//		Ward ward = visit.getWard();
-//		if (ward == null) { 
-//			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-//							MessageBundle.getMessage("angal.visit.pleasechooseaward.msg"),
-//							OHSeverityLevel.ERROR));
-//
-//		}
+		Ward ward = visit.getWard();
+		if (ward == null) { 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.visit.pleasechooseaward.msg"),
+							OHSeverityLevel.ERROR));
+
+		}
 		if (patient == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.getMessage("angal.visit.pleasechooseapatient.msg"),
 							OHSeverityLevel.ERROR));
-		} else {
+		}
+		if (errors.isEmpty()) {
 			String sex = String.valueOf(patient.getSex());
-			Ward ward = visit.getWard();
 			if ((sex.equalsIgnoreCase("F") && !ward.isFemale())
 				|| (sex.equalsIgnoreCase("M") && !ward.isMale())) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
@@ -156,10 +153,22 @@ public class VisitManager {
 	 * Insert a new {@link Visit} for related Patient
 	 *
 	 * @param visit - the {@link Visit}
-	 * @return the visitID
+	 * @return the persisted Visit
 	 * @throws OHServiceException
 	 */
 	public Visit newVisit(Visit visit) throws OHServiceException {
+		validateVisit(visit);
+		return ioOperations.newVisit(visit);
+	}
+	
+	/**
+	 * Update a new {@link Visit} for related Patient
+	 *
+	 * @param visit - the {@link Visit}
+	 * @return the updated Visit
+	 * @throws OHServiceException
+	 */
+	public Visit updateVisit(Visit visit) throws OHServiceException {
 		validateVisit(visit);
 		return ioOperations.newVisit(visit);
 	}
@@ -170,14 +179,7 @@ public class VisitManager {
 	 * @param visit - the {@link Visit}
 	 * @return the visitID
 	 */
-	public void deleteVisit(Visit visit) {
-		if (visit.getWard() == null) { // Update related OPD
-			Opd opd = opdRepository.findOneByPatientAndNextVisitDate(visit.getPatient(), visit.getDate());
-			if (opd != null) { // It may have been already updated
-				opd.setNextVisitDate(null);
-				opdRepository.save(opd);
-			}
-		}
+	public void deleteVisit(Visit visit) throws OHServiceException {
 		ioOperations.deleteVisit(visit);
 	}
 	
