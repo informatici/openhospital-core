@@ -113,7 +113,6 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 
 		// Only not deleted patient
 		Predicate notActive = cb.equal(patient.get("active"), Integer.valueOf(1));
-
 		List<Predicate> predicates = new ArrayList<>();
 		predicates.add(notActive);
 		for (Map.Entry<String, Object> entry : params.entrySet()) {
