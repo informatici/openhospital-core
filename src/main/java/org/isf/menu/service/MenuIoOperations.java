@@ -141,7 +141,7 @@ public class MenuIoOperations
 	 * @throws OHServiceException
 	 */
 	public boolean updateUser(User user) throws OHServiceException {
-		return repository.updateDescription(user.getDesc(), user.getUserName()) > 0;
+		return repository.updateUser(user.getDesc(), user.getUserGroupName(), user.getUserName()) > 0;
 	}
 	
 	/**
