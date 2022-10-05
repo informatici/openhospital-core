@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 
 import org.isf.utils.time.TimeTools;
 import org.springframework.data.annotation.CreatedBy;
@@ -57,8 +58,9 @@ public abstract class Auditable<U> {
     @Column(name="LAST_MODIFIED_DATE")
     protected LocalDateTime lastModifiedDate;
    
+	@NotNull
     @Column(name="ACTIVE")
-    protected Integer active = 1;
+    protected Integer active = Integer.valueOf(1);
 
     public U getCreatedBy() {
         return createdBy;
@@ -72,7 +74,7 @@ public abstract class Auditable<U> {
         return TimeTools.truncateToSeconds(createdDate);
     }
 
-    public int getActive() {
+    public Integer getActive() {
         return active;
     }
 

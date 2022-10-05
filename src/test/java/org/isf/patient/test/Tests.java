@@ -619,9 +619,9 @@ public class Tests extends OHCoreTestCase {
 		assertThat(patient.getCode()).isNull();
 		assertThat(patient.getBirthDate()).isNull();
 
-		assertThat(patient.getDeleted()).isEqualTo("N");
-		patient.setDeleted("Y");
-		assertThat(patient.getDeleted()).isEqualTo("Y");
+		assertThat(patient.getActive()).isEqualTo(Integer.valueOf(0));
+		patient.setActive(Integer.valueOf(1));
+		assertThat(patient.getActive()).isEqualTo(Integer.valueOf(1));
 	}
 
 	@Test
@@ -713,8 +713,8 @@ public class Tests extends OHCoreTestCase {
 	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) throws OHException {
 		Patient mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode()).get();
 		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).get();
-		assertThat(obsoletePatientResult.getDeleted()).isEqualTo("Y");
-		assertThat(mergedPatientResult.getDeleted()).isEqualTo("N");
+		assertThat(obsoletePatientResult.getActive()).isEqualTo(Integer.valueOf(1));
+		assertThat(mergedPatientResult.getActive()).isEqualTo(Integer.valueOf(0));
 	}
 
 	private Integer setupTestPatient(boolean usingSet) throws OHException {

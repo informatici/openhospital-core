@@ -38,17 +38,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * ------------------------------------------<br />
- * PatientIoOperations - dB operations for the patient entity<br />
- * -----------------------------------------<br />
- * modification history<br />
- * 05/05/2005 - giacomo  - first beta version.<br />
- * 03/11/2006 - ross - added toString method.<br />
- * 11/08/2008 - alessandro - added father & mother's names.<br />
- * 26/08/2008 - claudio - added birth date modified age.<br />
- * 01/01/2009 - Fabrizio - changed the calls to PAT_AGE fields to return again an int type.<br />
- * 03/12/2009 - Alex - added method for merge two patients history.<br />
- * ------------------------------------------
+ * ------------------------------------------ PatientIoOperations - dB
+ * operations for the patient entity -----------------------------------------
+ * modification history 05/05/2005 - giacomo - first beta version 03/11/2006 -
+ * ross - added toString method. Gestione apici per nome, cognome, citta',
+ * indirizzo e note 11/08/2008 - alessandro - added father & mother's names
+ * 26/08/2008 - claudio - added birth date modified age 01/01/2009 - Fabrizio -
+ * changed the calls to PAT_AGE fields to return again an int type 03/12/2009 -
+ * Alex - added method for merge two patients history
+ *  ------------------------------------------
  */
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
@@ -72,7 +70,7 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Patient> getPatients() throws OHServiceException {
-		return repository.findByDeletedOrDeletedIsNull(NOT_DELETED_STATUS);
+		return repository.findAll();
 	}
 
 	/**
@@ -82,7 +80,7 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Patient> getPatients(Pageable pageable) throws OHServiceException {
-		return repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName("N", pageable);
+		return repository.findAllOrderByName(pageable);
 	}
 
 	/**
@@ -120,9 +118,8 @@ public class PatientIoOperations {
 	 * @return the Patient that match specified ID
 	 * @throws OHServiceException
 	 */
-	public Patient getPatient(Integer code) throws OHServiceException {
-		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
-		List<Patient> patients = repository.findAllWhereIdAndDeleted(code, NOT_DELETED_STATUS);
+	public Patient getPatient(String name) throws OHServiceException {
+		List<Patient> patients = repository.findByNameOrderByName(name);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
 			if (isLoadProfilePhotoFromDb) {
@@ -143,9 +140,8 @@ public class PatientIoOperations {
 	 * @return
 	 * @throws OHServiceException
 	 */
-	public Patient getPatient(String name) throws OHServiceException {
-		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
-		List<Patient> patients = repository.findByNameAndDeletedOrderByName(name, NOT_DELETED_STATUS);
+	public Patient getPatient(Integer code) throws OHServiceException {
+		List<Patient> patients = repository.findAllWhereId(code);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
 			if (isLoadProfilePhotoFromDb) {
@@ -226,24 +222,21 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public boolean deletePatient(Patient patient) throws OHServiceException {
-		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
-		if (isLoadProfilePhotoFromDb) {
-			return  repository.updateDeleted(patient.getCode()) > 0;
-		}
-		this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());		
-		return true;	
+		repository.delete(patient);
+		return true;
 	}
 
 	/**
 	 * Method that check if a Patient is already present in the DB by his/her name
-	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName
+	 * (the passed string 'name' should be a concatenation of firstName + " " +
+	 * secondName
 	 *
 	 * @param name
 	 * @return true - if the patient is already present
 	 * @throws OHServiceException
 	 */
 	public boolean isPatientPresentByName(String name) throws OHServiceException {
-		return !repository.findByNameAndDeleted(name, NOT_DELETED_STATUS).isEmpty();
+		return !repository.findByName(name).isEmpty();
 	}
 
 	/**
@@ -265,7 +258,6 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public boolean mergePatientHistory(Patient mergedPatient, Patient obsoletePatient) throws OHServiceException {
-		repository.updateDeleted(obsoletePatient.getCode());
 		applicationEventPublisher.publishEvent(new PatientMergedEvent(obsoletePatient, mergedPatient));
 		return true;
 	}
@@ -274,7 +266,8 @@ public class PatientIoOperations {
 	 * Checks if the code is already in use
 	 *
 	 * @param code - the patient code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return <code>true</code> if the code is already in use, <code>false</code>
+	 *         otherwise
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
