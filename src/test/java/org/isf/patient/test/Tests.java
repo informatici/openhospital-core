@@ -630,6 +630,10 @@ public class Tests extends OHCoreTestCase {
 		assertThat(patient.getCode()).isNull();
 		assertThat(patient.getBirthDate()).isNull();
 
+
+		assertThat(patient.getActive()).isEqualTo(Integer.valueOf(0));
+		patient.setActive(Integer.valueOf(1));
+		assertThat(patient.getActive()).isEqualTo(Integer.valueOf(1));
 	}
 
 	@Test
@@ -718,12 +722,12 @@ public class Tests extends OHCoreTestCase {
 		bowelDescriptionHashMap.set(patientBrowserManager, null);
 	}
 
-	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient,
-			Patient obsoletePatient) throws OHException {
-		Optional<Patient> mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode());
-		Optional<Patient> obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode());
-		assertThat(obsoletePatientResult).isEmpty();
-		assertThat(mergedPatientResult.isPresent());
+
+	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) throws OHException {
+		Patient mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode()).get();
+		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).get();
+		assertThat(obsoletePatientResult.getActive()).isEqualTo(Integer.valueOf(1));
+		assertThat(mergedPatientResult.getActive()).isEqualTo(Integer.valueOf(0));
 	}
 
 	private Integer setupTestPatient(boolean usingSet) throws OHException {

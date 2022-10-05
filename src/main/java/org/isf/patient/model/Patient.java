@@ -49,27 +49,18 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * ------------------------------------------
- * Patient - model for the patient entity
- * -----------------------------------------
- * modification history
- * 05/05/2005 - giacomo  - first beta version
- * 03/11/2006 - ross - added toString method
- * 11/08/2008 - Alessandro
- * - added mother and father names textfield
- * - added birthdate and age check
- * 19/08/2008 - Mex        - substitute EduLevel with BloodType
- * 22/08/2008 - Claudio
- * - added birth date field
- * - modified age field
- * 01/01/2009 - Fabrizio
- * - modified age field type back to int
- * - removed unuseful super() call in constructor
- * - removed unuseful todo comment
- * - removed assignment to attribute hasInsurance since it had no effect
- * 16/09/2009 - Alessandro - added equals override to support comparing and filtering
- * 17/10/2011 - Alessandro - added height and weight (from malnutritionalcontrol)
- * ------------------------------------------
+ * ------------------------------------------ Patient - model for the patient
+ * entity ----------------------------------------- modification history
+ * 05/05/2005 - giacomo - first beta version 03/11/2006 - ross - added toString
+ * method 11/08/2008 - Alessandro - added mother and father names textfield -
+ * added birthdate and age check 19/08/2008 - Mex - substitute EduLevel with
+ * BloodType 22/08/2008 - Claudio - added birth date field - modified age field
+ * 01/01/2009 - Fabrizio - modified age field type back to int - removed
+ * unuseful super() call in constructor - removed unuseful todo comment -
+ * removed assignment to attribute hasInsurance since it had no effect
+ * 16/09/2009 - Alessandro - added equals override to support comparing and
+ * filtering 17/10/2011 - Alessandro - added height and weight (from
+ * malnutritionalcontrol) ------------------------------------------
  */
 @Entity
 @Table(name="OH_PATIENT")
@@ -79,16 +70,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PAT_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "PAT_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PAT_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE PATIENT SET PAT_ACTIVE=0 WHERE PAT_ID=? AND PAT_LOCK=?", check = ResultCheckStyle.COUNT)
-@Where(clause = "PAT_ACTIVE=1")
+@SQLDelete(sql = "UPDATE PATIENT SET PAT_ACTIVE=0 WHERE PAT_ID = ? AND PAT_LOCK=?", check = ResultCheckStyle.COUNT)
+@Where(clause = "PAT_ACTIVE = 1")
 public class Patient extends Auditable<String> {
 	/*
 	 * PAT_ID int NOT NULL AUTO_INCREMENT , PAT_FNAME varchar (50) NOT NULL ,
-	 * --first name PAT_SNAME varchar (50) NOT NULL , --second name
+	 * --first name (nome) PAT_SNAME varchar (50) NOT NULL , --second name (cognome)
 	 * PAT_AGE int NOT NULL , --age PAT_SEX char (1) NOT NULL , --sex : M or F
-	 * PAT_ADDR varchar (50) NULL , --address  PAT_CITY varchar (50) NOT
-	 * NULL , --city PAT_NEXT_KIN varchar (50) NULL , --next kin 
-	 * PAT_TELE varchar (50) NULL , --telephone number PAT_MOTH char
+	 * PAT_ADDR varchar (50) NULL , --address (via , n.) PAT_CITY varchar (50) NOT
+	 * NULL , --city PAT_NEXT_KIN varchar (50) NULL , --next kin (parente prossimo,
+	 * figlio di..) PAT_TELE varchar (50) NULL , --telephone number PAT_MOTH char
 	 * (1) NULL , --mother: D=dead, A=alive PAT_FATH char (1) NULL , --father:
 	 * D=dead, A=alive PAT_LEDU char (1) NULL , --level of education: 1 or 2 or 3 or
 	 * 4 PAT_ESTA char (1) NULL , --economic status: R=rich, P=poor PAT_PTOGE char
@@ -180,13 +171,8 @@ public class Patient extends Auditable<String> {
 	@Version
 	@Column(name = "PAT_LOCK")
 	private int lock;
-<<<<<<< Upstream, based on origin/develop
-	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-=======
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST})
->>>>>>> 04bb8ff # This is a combination of 4 commits. # The first commit's message is: rebase 3 # This is the 2nd commit message: class comment restored # This is the 3rd commit message: fixed photo first saving and updating # This is the 4th commit message: fixed cascate type for patient
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID")
 	private PatientProfilePhoto patientProfilePhoto;
 
@@ -246,10 +232,10 @@ public class Patient extends Auditable<String> {
 	}
 
 	public Patient(String firstName, String secondName, LocalDate birthDate, int age, String agetype, char sex,
-			String address, String city, String nextKin, String telephone, String motherName, char mother,
-			String fatherName, char father, String bloodType, char economicStatut, char parentTogether,
-			String personalCode, String maritalStatus, String profession) { 
-		this.firstName = firstName;
+					String address, String city, String nextKin, String telephone, String motherName, char mother,
+					String fatherName, char father, String bloodType, char economicStatut, char parentTogether,
+					String personalCode, String maritalStatus, String profession) { // Changed EduLev with bloodType
+				this.firstName = firstName;
 		this.secondName = secondName;
 		this.name = this.firstName + ' ' + this.secondName;
 		this.birthDate = birthDate;
@@ -553,10 +539,14 @@ public class Patient extends Auditable<String> {
 		sbName.append(' ');
 		sbName.append(getCity().toLowerCase());
 		sbName.append(' ');
-		if (getAddress() != null) sbName.append(getAddress().toLowerCase()).append(' ');
-		if (getTelephone() != null) sbName.append(getTelephone()).append(' ');
-		if (getNote() != null) sbName.append(getNote().toLowerCase()).append(' ');
-		if (getTaxCode() != null) sbName.append(getTaxCode().toLowerCase()).append(' ');
+		if (getAddress() != null)
+			sbName.append(getAddress().toLowerCase()).append(' ');
+		if (getTelephone() != null)
+			sbName.append(getTelephone()).append(' ');
+		if (getNote() != null)
+			sbName.append(getNote().toLowerCase()).append(' ');
+		if (getTaxCode() != null)
+			sbName.append(getTaxCode().toLowerCase()).append(' ');
 		return sbName.toString();
 	}
 

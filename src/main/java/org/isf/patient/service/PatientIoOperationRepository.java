@@ -45,7 +45,7 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
 	@Query("select p from Patient p where p.code = :id")
 	List<Patient> findAllWhereId(@Param("id") Integer id);
 
-List<Patient> findByName(String name);
+	List<Patient> findByName(String name);
 
 	@Query(value = "select max(p.code) from Patient p")
 	Integer findMaxCode();
