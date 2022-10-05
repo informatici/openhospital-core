@@ -73,4 +73,4 @@ source step_76_dicom_button_in_admission_patient.sql;
 source step_77_laboratory_button_in_admission_patient.sql;
 source step_78_drop_lab_exam_date.sql;
 source step_79_rename_pat_phtoto_field.sql;
-source step_XX_add_ward_opd.sql;
+source step_80_add_ward_opd.sql;
