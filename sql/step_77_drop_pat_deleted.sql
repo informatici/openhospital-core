@@ -1,0 +1,1 @@
+ALTER TABLE oh_patient DROP COLUMN pat_deleted;
