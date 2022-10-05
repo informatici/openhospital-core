@@ -27,7 +27,6 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.hibernate.Hibernate;
@@ -40,10 +39,8 @@ import org.isf.disctype.service.DischargeTypeIoOperationRepository;
 import org.isf.generaldata.GeneralData;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
-import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -119,14 +116,11 @@ public class AdmissionIoOperations {
 	 * Load patient together with the profile photo, or {@code null} if there is no patient with the given id
 	 */
 	public AdmittedPatient loadAdmittedPatient(final Integer patientId) {
-		 boolean isLoadPatientProfilePhotoFromDb = PatientIoOperations.LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		final Patient patient = patientRepository.findById(patientId).orElse(null);
 		if (patient == null) {
 			return null;
 		}
-		if (isLoadPatientProfilePhotoFromDb) {
-			Hibernate.initialize(patient.getPatientProfilePhoto());
-		}
+		Hibernate.initialize(patient.getPatientProfilePhoto());
 		final Admission admission = repository.findOneWherePatientIn(patientId);
 		return new AdmittedPatient(patient, admission);
 	}
@@ -232,15 +226,15 @@ public class AdmissionIoOperations {
 
 		if (wardId.equalsIgnoreCase("M") && GeneralData.MATERNITYRESTARTINJUNE) {
 			if (now.getMonthValue() < Month.JUNE.getValue()) {
-				first = now.minusYears(1).withMonth(Month.JULY.getValue()).withDayOfMonth(1).with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
-				last = now.withMonth(Month.JUNE.getValue()).withDayOfMonth(30).with(LocalTime.MAX).truncatedTo(ChronoUnit.SECONDS);
+				first = now.minusYears(1).withMonth(Month.JULY.getValue()).withDayOfMonth(1).with(LocalTime.MIN);
+				last = now.withMonth(Month.JUNE.getValue()).withDayOfMonth(30).with(LocalTime.MAX);
 			} else {
-				first = now.withMonth(Month.JULY.getValue()).withDayOfMonth(1).with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
-				last = now.plusYears(1).withMonth(Month.JUNE.getValue()).withDayOfMonth(30).with(LocalTime.MAX).truncatedTo(ChronoUnit.SECONDS);
+				first = now.withMonth(Month.JULY.getValue()).withDayOfMonth(1).with(LocalTime.MIN);
+				last = now.plusYears(1).withMonth(Month.JUNE.getValue()).withDayOfMonth(30).with(LocalTime.MAX);
 			}
 		} else {
-			first = now.with(firstDayOfYear()).with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
-			last = now.with(lastDayOfYear()).with(LocalTime.MAX).truncatedTo(ChronoUnit.SECONDS);
+			first = now.with(firstDayOfYear()).with(LocalTime.MIN);
+			last = now.with(lastDayOfYear()).with(LocalTime.MAX);
 		}
 
 		List<Admission> admissions = repository.findAllWhereWardAndDates(wardId, first, last);
@@ -264,7 +258,7 @@ public class AdmissionIoOperations {
 	public static boolean afterJune;
 
 	public static LocalDateTime getNow() {
-		LocalDateTime now = TimeTools.getNow();
+		LocalDateTime now = LocalDateTime.now();
 		if (!testing) {
 			return now;
 		}
@@ -285,7 +279,7 @@ public class AdmissionIoOperations {
 	 */
 	public boolean setDeleted(int admissionId) throws OHServiceException {
 		Admission foundAdmission = repository.findById(admissionId).orElse(null);
-		foundAdmission.setActive(0);
+		foundAdmission.setActive(Integer.valueOf(1));
 		Admission savedAdmission = repository.save(foundAdmission);
 		return savedAdmission != null;
 	}
