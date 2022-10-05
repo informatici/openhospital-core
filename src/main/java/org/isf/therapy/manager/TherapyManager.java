@@ -25,7 +25,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.manager.MedicalBrowsingManager;
 import org.isf.medicals.model.Medical;
@@ -237,7 +236,7 @@ public class TherapyManager {
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
 	public boolean deleteAllTherapies(Integer code) throws OHServiceException {
-		Patient patient = patientManager.getPatientById(code );
+		Patient patient = patientManager.getPatientById(code);
 		return ioOperations.deleteAllTherapies(patient);
 	}
 

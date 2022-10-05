@@ -307,7 +307,7 @@ public class PatientBrowserManager {
 	}
 	
 	
-	public PatientProfilePhoto retrievePatientProfilePhoto(Patient patient) {
+	public PatientProfilePhoto retrievePatientProfilePhoto(Patient patient) throws OHServiceException {
 		return ioOperations.retrievePatientProfilePhoto(patient);
 	}
 	

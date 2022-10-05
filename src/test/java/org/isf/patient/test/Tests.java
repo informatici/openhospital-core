@@ -65,8 +65,6 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	PatientBrowserManager patientBrowserManager;
 
-	
-	
 	@BeforeClass
 	public static void setUpClass() {
 		GeneralData.PATIENTPHOTOSTORAGE = "DB";
@@ -462,21 +460,16 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetMaritalTranslated() throws Exception {
 		resetHashMaps();
-		// TODO: if resource bundles are made avaiable in core then the values being
-		// compared will need to change
-		assertThat(patientBrowserManager.getMaritalTranslated(null))
-				.isEqualTo("angal.patient.maritalstatusunknown.txt");
-		assertThat(patientBrowserManager.getMaritalTranslated("someKeyNotInTheList"))
-				.isEqualTo("angal.patient.maritalstatusunknown.txt");
-		assertThat(patientBrowserManager.getMaritalTranslated("married"))
-				.isEqualTo("angal.patient.maritalstatusmarried.txt");
+		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
+		assertThat(patientBrowserManager.getMaritalTranslated(null)).isEqualTo("angal.patient.maritalstatusunknown.txt");
+		assertThat(patientBrowserManager.getMaritalTranslated("someKeyNotInTheList")).isEqualTo("angal.patient.maritalstatusunknown.txt");
+		assertThat(patientBrowserManager.getMaritalTranslated("married")).isEqualTo("angal.patient.maritalstatusmarried.txt");
 	}
 
 	@Test
 	public void testMgrGetMaritalKey() throws Exception {
 		resetHashMaps();
-		// TODO: if resource bundles are made avaiable in core then the values being
-		// compared will need to change
+		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
 		assertThat(patientBrowserManager.getMaritalKey(null)).isEqualTo("undefined");
 		assertThat(patientBrowserManager.getMaritalKey("someKeyNotInTheList")).isEqualTo("undefined");
 		assertThat(patientBrowserManager.getMaritalKey("angal.patient.maritalstatusmarried.txt")).isEqualTo("married");
@@ -492,21 +485,16 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetProfessionTranslated() throws Exception {
 		resetHashMaps();
-		// TODO: if resource bundles are made avaiable in core then the values being
-		// compared will need to change
-		assertThat(patientBrowserManager.getProfessionTranslated(null))
-				.isEqualTo("angal.patient.profession.unknown.txt");
-		assertThat(patientBrowserManager.getProfessionTranslated("someKeyNotInTheList"))
-				.isEqualTo("angal.patient.profession.unknown.txt");
-		assertThat(patientBrowserManager.getProfessionTranslated("mining"))
-				.isEqualTo("angal.patient.profession.mining.txt");
+		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
+		assertThat(patientBrowserManager.getProfessionTranslated(null)).isEqualTo("angal.patient.profession.unknown.txt");
+		assertThat(patientBrowserManager.getProfessionTranslated("someKeyNotInTheList")).isEqualTo("angal.patient.profession.unknown.txt");
+		assertThat(patientBrowserManager.getProfessionTranslated("mining")).isEqualTo("angal.patient.profession.mining.txt");
 	}
 
 	@Test
 	public void testMgrGetProfessionKey() throws Exception {
 		resetHashMaps();
-		// TODO: if resource bundles are made avaiable in core then the values being
-		// compared will need to change
+		// TODO: if resource bundles are made avaiable in core then the values being compared will need to change
 		assertThat(patientBrowserManager.getProfessionKey(null)).isEqualTo("undefined");
 		assertThat(patientBrowserManager.getProfessionKey("someKeyNotInTheList")).isEqualTo("undefined");
 		assertThat(patientBrowserManager.getProfessionKey("angal.patient.profession.mining.txt")).isEqualTo("mining");
@@ -638,9 +626,9 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testPatientConstructor() {
-		Patient patient = new Patient(99, "firstName", "secondName", "name", null, 99, " ", 'F', "address", "city",
-				"nextOfKin", "noPhone", "note", "motherName", ' ', "fatherName", ' ', "bloodType", ' ', ' ',
-				"personalCode", "maritalStatus", "profession");
+		Patient patient = new Patient(99, "firstName", "secondName", "name", null, 99, " ", 'F', "address",
+				"city", "nextOfKin", "noPhone", "note", "motherName", ' ', "fatherName", ' ',
+				"bloodType", ' ', ' ', "personalCode", "maritalStatus", "profession");
 
 		assertThat(patient.getCode()).isEqualTo(99);
 		assertThat(patient.getSex()).isEqualTo('F');
@@ -655,23 +643,23 @@ public class Tests extends OHCoreTestCase {
 	public void testPatientGetSearchString() throws Exception {
 		Patient patient = testPatient.setup(false);
 		patient.setCode(1);
-		assertThat(patient.getSearchString())
-				.isEqualTo("1 testfirstname testsecondname testcity testaddress TestTelephone testtaxcode ");
+		assertThat(patient.getSearchString()).isEqualTo("1 testfirstname testsecondname testcity testaddress TestTelephone testtaxcode ");
 	}
 
 	@Test
 	public void testPatientGetInformations() throws Exception {
 		Patient patient = testPatient.setup(false);
 		patient.setNote("someNote");
-		assertThat(patient.getInformations())
-				.isEqualTo("TestCity - TestAddress - TestTelephone - someNote - TestTaxCode");
+		assertThat(patient.getInformations()).isEqualTo("TestCity - TestAddress - TestTelephone - someNote - TestTaxCode");
 	}
 
 	@Test
 	public void testPatientEquals() throws Exception {
 		Patient patient = testPatient.setup(false);
 		assertThat(patient.equals(patient)).isTrue();
-		assertThat(patient).isNotNull().isNotEqualTo("someString");
+		assertThat(patient)
+				.isNotNull()
+				.isNotEqualTo("someString");
 		Patient patient2 = testPatient.setup(true);
 		patient.setCode(1);
 		patient.setCode(2);
@@ -722,8 +710,7 @@ public class Tests extends OHCoreTestCase {
 		bowelDescriptionHashMap.set(patientBrowserManager, null);
 	}
 
-	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient,
-			Patient obsoletePatient) throws OHException {
+	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) throws OHException {
 		Patient mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode()).get();
 		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).get();
 		assertThat(obsoletePatientResult.getDeleted()).isEqualTo("Y");

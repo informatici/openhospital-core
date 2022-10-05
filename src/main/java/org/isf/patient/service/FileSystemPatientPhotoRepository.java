@@ -40,7 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-@Component("fileSystemPatientPhotoManager")
+@Component
 public class FileSystemPatientPhotoRepository {
 
 	private static final String KEY_ERROR_TITLE = "angal.patient.patientphoto.error.title";
@@ -64,9 +64,7 @@ public class FileSystemPatientPhotoRepository {
 			patientProfilePhoto.setPatient(patient);
 			if (exist(path, patient.getCode())) {
 				Blob blob = this.load(patient.getCode(), path);
-				int blobLength;
-				blobLength = (int) blob.length();
-				byte[] blobAsBytes = blob.getBytes(1, blobLength);
+				byte[] blobAsBytes = blob.getBytes(1, (int) blob.length());
 				patientProfilePhoto.setPhoto(blobAsBytes);
 			}
 		} catch (SQLException e) {
@@ -82,7 +80,7 @@ public class FileSystemPatientPhotoRepository {
 	public void save(String path, Integer patId, byte[] blob) throws OHServiceException {
 		try {
 			File patientIdFolder = new File(path);
-			this.recourse(patientIdFolder);
+			this.recurse(patientIdFolder);
 			File data = new File(patientIdFolder, patId + IMAGE_FORMAT);
 			save(data, blob);
 		} catch (Exception exception) {
@@ -117,14 +115,14 @@ public class FileSystemPatientPhotoRepository {
 		}
 	}
 	
-	private void recourse(File f) throws IOException {
+	private void recurse(File f) throws IOException {
 		if (f.exists()) {
 			return;
 		}
 		File fp = f.getParentFile();
 
 		if (fp != null) {
-			recourse(fp);
+			recurse(fp);
 		}
 
 		if (!f.exists()) {

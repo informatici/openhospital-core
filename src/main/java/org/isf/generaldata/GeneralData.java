@@ -140,7 +140,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final boolean DEFAULT_DEBUG = false;
 	private static final int DEFAULT_STRONGLENGTH = 10;
 	private static final boolean DEFAULT_STRONGPASSWORD = true;
-	public static String DEFAULT_PATIENTPHOTO="DB";
+	private static final String DEFAULT_PATIENTPHOTO = "DB";
 	
 	private static GeneralData mySingleData;
 	

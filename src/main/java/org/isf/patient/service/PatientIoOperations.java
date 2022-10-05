@@ -168,10 +168,12 @@ public class PatientIoOperations {
 	public Patient getPatientAll(Integer code) throws OHServiceException {
 		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		Patient patient = repository.findById(code).orElse(null);
-		if (isLoadProfilePhotoFromDb) {
-			Hibernate.initialize(patient.getPatientProfilePhoto());
-		} else {
-			fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
+		if (patient != null) {
+			if (isLoadProfilePhotoFromDb) {
+				Hibernate.initialize(patient.getPatientProfilePhoto());
+			} else {
+				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
+			}
 		}
 		return patient;
 	}
@@ -280,21 +282,15 @@ public class PatientIoOperations {
 		return repository.existsById(code);
 	}
 
-	public PatientProfilePhoto retrievePatientProfilePhoto(Patient patient) {
+	public PatientProfilePhoto retrievePatientProfilePhoto(Patient patient) throws OHServiceException {
 		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		if (isLoadProfilePhotoFromDb) {
 			Hibernate.initialize(patient.getPatientProfilePhoto());
 			return patient.getPatientProfilePhoto();
 		} else {
-			try {
-				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
-				return patient.getPatientProfilePhoto();
-			} catch (OHServiceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
+			return patient.getPatientProfilePhoto();
 		}
-		return null;
 	}
 
 }
