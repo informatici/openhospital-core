@@ -3880,7 +3880,7 @@ CREATE TABLE `oh_patient` (
   `PAT_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
   `PAT_PROFESSION` varchar(50) NOT NULL DEFAULT 'unknown',
   `PAT_MAR_STAT` varchar(50) NOT NULL DEFAULT 'unknown',
-  `PROFILE_PHOTO_ID` int(11) DEFAULT NULL,
+  `PAT_PROFILE_PHOTO_ID` int(11) DEFAULT NULL,
   PRIMARY KEY (`PAT_ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=543 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

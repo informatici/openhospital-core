@@ -89,6 +89,7 @@ public final class GeneralData extends ConfigurationProperties {
 	public static String PATIENTBILLGROUPED;
 	public static String PATIENTBILLSTATEMENT;
 	public static boolean DEBUG;
+	public static String PATIENTPHOTOSTORAGE;
 
 	public static boolean STRONGPASSWORD;
 	public static int STRONGLENGTH;
@@ -138,9 +139,9 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_PATIENTBILLSTATEMENT = "PatientBillStatement";
 	private static final boolean DEFAULT_DEBUG = false;
 	private static final int DEFAULT_STRONGLENGTH = 10;
-
 	private static final boolean DEFAULT_STRONGPASSWORD = true;
-
+	private static final String DEFAULT_PATIENTPHOTO = "DB";
+	
 	private static GeneralData mySingleData;
 	
 	public static void reset() {
@@ -197,13 +198,13 @@ public final class GeneralData extends ConfigurationProperties {
 		PATIENTBILLGROUPED = myGetProperty("PATIENTBILLGROUPED", DEFAULT_PATIENTBILLGROUPED);
 		PATIENTBILLSTATEMENT = myGetProperty("PATIENTBILLSTATEMENT", DEFAULT_PATIENTBILLSTATEMENT);
 		DEBUG = myGetProperty("DEBUG", DEFAULT_DEBUG);
-
 		STRONGPASSWORD = myGetProperty("STRONGPASSWORD", DEFAULT_STRONGPASSWORD);
 		STRONGLENGTH = myGetProperty("STRONGLENGTH", DEFAULT_STRONGLENGTH);
 		// set same reasonable minimum and ensure it isn't negative
 		if (STRONGLENGTH < 6) {
 			STRONGLENGTH = 6;
 		}
+		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTO);
 	}
 
 	public static GeneralData getGeneralData() {
