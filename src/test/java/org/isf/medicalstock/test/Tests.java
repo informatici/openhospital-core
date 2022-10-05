@@ -247,16 +247,11 @@ public class Tests extends OHCoreTestCase {
 	public void testIoNewAutomaticDischargingMovementDifferentLots() throws Exception {
 		int code = setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findById(code).get();
-System.out.println("ZZZ");
-System.out.println("1");
 		Medical medical = foundMovement.getMedical();
-		System.out.println("2");
 		MovementType movementType = foundMovement.getType();
 		Ward ward = foundMovement.getWard();
 		Supplier supplier = foundMovement.getSupplier();
-		System.out.println("3");
 		Lot lot2 = testLot.setup(medical, false); //we are going to create a second lot
-		System.out.println("4");
 		lot2.setCode("second");
 		Movement newMovement = new Movement(
 				medical,
@@ -267,15 +262,11 @@ System.out.println("1");
 				7, // new lot with 10 quantity
 				supplier,
 				"newReference");
-		System.out.println("5");
 		medicalStockIoOperation.newMovement(newMovement);
-		System.out.println("6");
 		MovementType dischargeMovementType = testMovementType.setup(false); //prepare discharge movement
-		System.out.println("7");
 		dischargeMovementType.setCode("discharge");
 		dischargeMovementType.setType("-");
 		medicalStockMovementTypeIoOperationRepository.saveAndFlush(dischargeMovementType);
-		System.out.println("8");
 		Movement dischargeMovement = new Movement(
 				medical,
 				dischargeMovementType,
@@ -287,12 +278,9 @@ System.out.println("1");
 				"newReference2");
 		boolean automaticLotMode = GeneralData.AUTOMATICLOT_OUT;
 		GeneralData.AUTOMATICLOT_OUT = true;
-		System.out.println("9");
 		medicalStockIoOperation.newAutomaticDischargingMovement(dischargeMovement);
 		GeneralData.AUTOMATICLOT_OUT = automaticLotMode;
-		System.out.println("10");
 		List<Lot> lots = medicalStockIoOperation.getLotsByMedical(medical);
-		System.out.println("11");
 		assertThat(lots).hasSize(1); // first lot should be 0 quantity and stripped by the list
 	}
 

@@ -112,10 +112,10 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 		Root<Patient> patient = query.from(Patient.class);
 
 		// Only not deleted patient
-		Predicate deletedN = cb.equal(patient.get("active"), Integer.valueOf(1));
+		Predicate notActive = cb.equal(patient.get("active"), Integer.valueOf(1));
 
 		List<Predicate> predicates = new ArrayList<>();
-		predicates.add(deletedN);
+		predicates.add(notActive);
 		for (Map.Entry<String, Object> entry : params.entrySet()) {
 			Path<String> keyPath = patient.get(entry.getKey());
 
