@@ -66,6 +66,8 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	PatientBrowserManager patientBrowserManager;
 
+	
+	
 	@BeforeClass
 	public static void setUpClass() {
 		GeneralData.PATIENTPHOTOSTORAGE = "DB";
@@ -629,12 +631,7 @@ public class Tests extends OHCoreTestCase {
 		assertThat(patient.getSex()).isEqualTo('F');
 		assertThat(patient.getCode()).isNull();
 		assertThat(patient.getBirthDate()).isNull();
-
-
-		assertThat(patient.getActive()).isEqualTo(Integer.valueOf(0));
-		patient.setActive(Integer.valueOf(1));
-		assertThat(patient.getActive()).isEqualTo(Integer.valueOf(1));
-	}
+}
 
 	@Test
 	public void testPatientConstructor() {
@@ -723,12 +720,13 @@ public class Tests extends OHCoreTestCase {
 	}
 
 
-	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) throws OHException {
-		Patient mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode()).get();
-		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).get();
-		assertThat(obsoletePatientResult.getActive()).isEqualTo(Integer.valueOf(1));
-		assertThat(mergedPatientResult.getActive()).isEqualTo(Integer.valueOf(0));
-	}
+	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient,
+					Patient obsoletePatient) throws OHException {
+				Optional<Patient> mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode());
+				Optional<Patient> obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode());
+				assertThat(obsoletePatientResult.isEmpty());
+				assertThat(mergedPatientResult.isPresent());
+			}
 
 	private Integer setupTestPatient(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(usingSet);
