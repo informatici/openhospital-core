@@ -122,6 +122,7 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public Patient getPatient(String name) throws OHServiceException {
+		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		List<Patient> patients = repository.findByNameOrderByName(name);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
@@ -144,6 +145,7 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public Patient getPatient(Integer code) throws OHServiceException {
+		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		List<Patient> patients = repository.findAllWhereId(code);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
