@@ -55,7 +55,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "GM_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "GM_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "GM_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE GROUPMENU SET GM_ACTIVE=0 WHERE GM_ID=?", check = ResultCheckStyle.COUNT)
+@SQLDelete(sql = "UPDATE OH_GROUPMENU SET GM_ACTIVE=0 WHERE GM_ID=?", check = ResultCheckStyle.COUNT)
 @Where(clause = "GM_ACTIVE=1")
 public class GroupMenu extends Auditable<String> {
 

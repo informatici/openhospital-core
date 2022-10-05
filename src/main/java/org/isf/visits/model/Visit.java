@@ -65,7 +65,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "VST_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "VST_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "VST_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE VISITS SET VST_ACTIVE=0 WHERE VST_ID=?", check = ResultCheckStyle.COUNT)
+@SQLDelete(sql = "UPDATE OH_VISITS SET VST_ACTIVE=0 WHERE VST_ID=?", check = ResultCheckStyle.COUNT)
 @Where(clause = "VST_ACTIVE=1")
 public class Visit extends Auditable<String> {
 

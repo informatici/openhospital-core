@@ -64,7 +64,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MDSR_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "MDSR_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MDSR_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE MEDICALDSR SET MDSR_ACTIVE=0 WHERE MDSR_ID=? AND MDSR_LOCK=?", check = ResultCheckStyle.COUNT)
+@SQLDelete(sql = "UPDATE OH_MEDICALDSR SET MDSR_ACTIVE=0 WHERE MDSR_ID=? AND MDSR_LOCK=?", check = ResultCheckStyle.COUNT)
 @Where(clause = "MDSR_ACTIVE=1")
 public class Medical extends Auditable<String> implements Comparable<Medical>, Cloneable {
 	/**

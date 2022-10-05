@@ -54,7 +54,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "DLT_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "DLT_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "DLT_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE DELIVERYTYPE SET DLT_ACTIVE=0 WHERE DLT_ID_A=?", check = ResultCheckStyle.COUNT)
+@SQLDelete(sql = "UPDATE OH_DELIVERYTYPE SET DLT_ACTIVE=0 WHERE DLT_ID_A=?", check = ResultCheckStyle.COUNT)
 @Where(clause = "DLT_ACTIVE=1")
 public class DeliveryType extends Auditable<String> {
 

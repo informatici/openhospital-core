@@ -34,15 +34,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MedicalStockWardIoOperationRepository extends JpaRepository<MedicalWard, String>, MedicalStockWardIoOperationRepositoryCustom {
 
-	@Query(value = "SELECT * FROM MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot AND MDSRWRD_ACTIVE=1", nativeQuery = true)
+	@Query(value = "SELECT * FROM OH_MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot AND MDSRWRD_ACTIVE=1", nativeQuery = true)
 	MedicalWard findOneWhereCodeAndMedicalAndLot(@Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
 
-	@Query(value = "SELECT * FROM MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot AND MDSRWRD_ACTIVE=0", nativeQuery = true)
+	@Query(value = "SELECT * FROM OH_MEDICALDSRWARD WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot AND MDSRWRD_ACTIVE=0", nativeQuery = true)
 	MedicalWard findOneWhereCodeAndMedicalAndLotAndNotActive(@Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot);
 
 	@Modifying
 	@Transactional
-	@Query(value = "UPDATE MEDICALDSRWARD SET MDSRWRD_ACTIVE = 1, MDSRWRD_IN_QTI=:quantity, MDSRWRD_OUT_QTI=0 WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot AND MDSRWRD_ACTIVE=0", nativeQuery = true)
+	@Query(value = "UPDATE OH_MEDICALDSRWARD SET MDSRWRD_ACTIVE = 1, MDSRWRD_IN_QTI=:quantity, MDSRWRD_OUT_QTI=0 WHERE MDSRWRD_WRD_ID_A = :ward AND MDSRWRD_MDSR_ID = :medical AND MDSRWRD_LT_ID_A = :lot AND MDSRWRD_ACTIVE=0", nativeQuery = true)
 	void findAndUpdateOneWhereCodeAndMedicalAndLotAndNotActive(@Param("ward") String ward, @Param("medical") int medical, @Param("lot") String lot, @Param("quantity") Double quantity);
 
 	

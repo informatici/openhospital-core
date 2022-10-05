@@ -63,7 +63,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PAV_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "PAV_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PAV_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE PATIENTVACCINE SET PAV_ACTIVE=0 WHERE PAV_ID=?", check = ResultCheckStyle.COUNT)
+@SQLDelete(sql = "UPDATE OH_PATIENTVACCINE SET PAV_ACTIVE=0 WHERE PAV_ID=?", check = ResultCheckStyle.COUNT)
 @Where(clause = "PAV_ACTIVE=1")
 public class PatientVaccine extends Auditable<String> {
 
