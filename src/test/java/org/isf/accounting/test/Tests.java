@@ -272,7 +272,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoNewBill() throws Exception {
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
-		Bill bill = testBill.setup(priceList, patient, false);
+		Bill bill = testBill.setup(priceList, patient, null, false);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
 		int id = accountingIoOperation.newBill(bill);
@@ -562,14 +562,11 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void mgrNewBillNoItemsNoPayments() throws Exception {
-		int billId = setupTestBill(false);
-		int billItemsId = setupTestBillItems(false);
-
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
-		Bill bill = testBill.setup(priceList, patient, false);
+		Bill bill = testBill.setup(priceList, patient, null, false);
 		boolean success = billBrowserManager.newBill(
 				bill,
 				new ArrayList<>(),
@@ -583,7 +580,7 @@ public class Tests extends OHCoreTestCase {
 		PriceList priceList = testPriceList.setup(false);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
-		Bill bill = testBill.setup(priceList, patient, false);
+		Bill bill = testBill.setup(priceList, patient, null, false);
 		BillItems insertBillItem = testBillItems.setup(null, false);
 		List<BillItems> billItems = new ArrayList<>();
 		billItems.add(insertBillItem);
@@ -600,7 +597,7 @@ public class Tests extends OHCoreTestCase {
 		PriceList priceList = testPriceList.setup(false);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
-		Bill bill = testBill.setup(priceList, patient, false);
+		Bill bill = testBill.setup(priceList, patient, null, false);
 		BillPayments insertBillPayment = testBillPayments.setup(bill, false);
 		insertBillPayment.setDate(TimeTools.getNow());
 		List<BillPayments> billPayments = new ArrayList<>();
@@ -618,7 +615,7 @@ public class Tests extends OHCoreTestCase {
 		PriceList priceList = testPriceList.setup(false);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
-		Bill bill = testBill.setup(priceList, patient, false);
+		Bill bill = testBill.setup(priceList, patient, null, false);
 		BillItems insertBillItem = testBillItems.setup(bill, false);
 		BillPayments insertBillPayment = testBillPayments.setup(bill, false);
 		insertBillPayment.setDate(TimeTools.getNow());
@@ -626,7 +623,6 @@ public class Tests extends OHCoreTestCase {
 		billItems.add(insertBillItem);
 		List<BillPayments> billPayments = new ArrayList<>();
 		billPayments.add(insertBillPayment);
-		BillPayments payments = testBillPayments.setup(bill, false);
 		boolean success = billBrowserManager.newBill(
 				bill,
 				billItems,
@@ -638,7 +634,7 @@ public class Tests extends OHCoreTestCase {
 	public void mgrNewBillFailValidation() throws Exception {
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
-		Bill bill = testBill.setup(priceList, patient, false);
+		Bill bill = testBill.setup(priceList, patient, null, false);
 		List<BillItems> billItems = new ArrayList<>();
 		BillItems insertBillItem = testBillItems.setup(bill, false);
 		billItems.add(insertBillItem);
@@ -775,7 +771,7 @@ public class Tests extends OHCoreTestCase {
 	private int setupTestBill(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
-		Bill bill = testBill.setup(priceList, patient, usingSet);
+		Bill bill = testBill.setup(priceList, patient, null, usingSet);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
 		accountingBillIoOperationRepository.saveAndFlush(bill);
@@ -792,7 +788,7 @@ public class Tests extends OHCoreTestCase {
 	private int setupTestBillItems(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
-		Bill bill = testBill.setup(priceList, patient, false);
+		Bill bill = testBill.setup(priceList, patient, null, usingSet);
 		BillItems billItem = testBillItems.setup(bill, usingSet);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -800,7 +796,7 @@ public class Tests extends OHCoreTestCase {
 		accountingBillItemsIoOperationRepository.saveAndFlush(billItem);
 		return billItem.getId();
 	}
-
+	
 	private void checkBillItemsIntoDb(int id) throws OHException {
 		BillItems foundBillItem = accountingBillItemsIoOperationRepository.findById(id).get();
 		testBillItems.check(foundBillItem);
@@ -812,7 +808,7 @@ public class Tests extends OHCoreTestCase {
 	private int setupTestBillPayments(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
-		Bill bill = testBill.setup(priceList, patient, false);
+		Bill bill = testBill.setup(priceList, patient, null, usingSet);
 		BillPayments billPayment = testBillPayments.setup(bill, usingSet);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
