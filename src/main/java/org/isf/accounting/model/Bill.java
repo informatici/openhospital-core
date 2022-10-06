@@ -37,6 +37,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.isf.admission.model.Admission;
 import org.isf.patient.model.Patient;
 import org.isf.priceslist.model.PriceList;
 import org.isf.utils.db.Auditable;
@@ -109,6 +110,10 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 	@NotNull
 	@Column(name="BLL_USR_ID_A")
 	private String user;
+	
+	@ManyToOne(cascade = { CascadeType.MERGE})
+	@JoinColumn(name="BLL_ADM_ID")
+	private Admission admission;
 
 	@Transient
 	private volatile int hashCode = 0;
@@ -131,7 +136,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 
 	public Bill(int id, LocalDateTime  date, LocalDateTime  update,
 			boolean isList, PriceList list, String listName, boolean isPatient,
-			Patient billPatient, String patName, String status, Double amount, Double balance, String user) {
+			Patient billPatient, String patName, String status, Double amount, Double balance, String user, Admission admission) {
 		super();
 		this.id = id;
 		this.date = TimeTools.truncateToSeconds(date);
@@ -146,6 +151,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 		this.amount = amount;
 		this.balance = balance;
 		this.user = user;
+		this.admission = admission;
 	}
 
 	public int getId() {
@@ -232,6 +238,14 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 
 	public void setUser(String user) {
 		this.user = user;
+	}
+	
+	public Admission getAdmission() {
+		return admission;
+	}
+	
+	public void setAdmission(Admission admission) {
+		this.admission = admission;
 	}
 
 	@Override
