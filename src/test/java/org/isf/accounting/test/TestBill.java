@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import org.isf.accounting.model.Bill;
+import org.isf.admission.model.Admission;
 import org.isf.patient.model.Patient;
 import org.isf.priceslist.model.PriceList;
 import org.isf.utils.exception.OHException;
@@ -45,21 +46,21 @@ public class TestBill {
 	private static Double balance = 20.20;
 	private static String user = "TestUser";
 
-	public Bill setup(PriceList priceList, Patient patient, boolean usingSet) throws OHException {
+	public Bill setup(PriceList priceList, Patient patient, Admission admission, boolean usingSet) throws OHException {
 		Bill bill;
 
 		if (usingSet) {
 			bill = new Bill();
-			setParameters(bill, priceList, patient);
+			setParameters(bill, priceList, patient, admission);
 		} else {
 			// Create Bill with all parameters 
 			bill = new Bill(0, date, update, isList, priceList, listName, isPatient, patient, patName,
-					status, amount, balance, user);
+					status, amount, balance, user, admission);
 		}
 		return bill;
 	}
 
-	public void setParameters(Bill bill, PriceList priceList, Patient patient) {
+	public void setParameters(Bill bill, PriceList priceList, Patient patient, Admission admission) {
 		bill.setDate(date);
 		bill.setUpdate(update);
 		bill.setIsList(isList);
@@ -72,6 +73,7 @@ public class TestBill {
 		bill.setAmount(amount);
 		bill.setBalance(balance);
 		bill.setUser(user);
+		bill.setAdmission(admission);
 	}
 
 	public void check(Bill bill) {
