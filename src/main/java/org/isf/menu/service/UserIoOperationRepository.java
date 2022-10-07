@@ -24,6 +24,7 @@ package org.isf.menu.service;
 import java.util.List;
 
 import org.isf.menu.model.User;
+import org.isf.menu.model.UserGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -41,8 +42,8 @@ public interface UserIoOperationRepository extends JpaRepository<User, String> {
 	List<User> findAllWhereUserGroupNameByOrderUserNameAsc(@Param("groupId") String groupId);
 
 	@Modifying
-	@Query(value = "update User user set user.desc=:description where user.userName=:id")
-	int updateDescription(@Param("description") String description, @Param("id") String id);
+	@Query(value = "update User user set user.desc=:description, user.userGroupName=:groupName where user.userName=:id")
+	int updateUser(@Param("description") String description, @Param("groupName") UserGroup groupName, @Param("id") String id);
 
 	@Modifying
 	@Query(value = "update User set passwd=:password where userName=:id")
