@@ -723,7 +723,7 @@ public class Tests extends OHCoreTestCase {
 					Patient obsoletePatient) throws OHException {
 				Optional<Patient> mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode());
 				Optional<Patient> obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode());
-				assertThat(obsoletePatientResult.isEmpty());
+				assertThat(!obsoletePatientResult.isPresent());
 				assertThat(mergedPatientResult.isPresent());
 			}
 	private Integer setupTestPatient(boolean usingSet) throws OHException {
