@@ -36,7 +36,7 @@ public class TestSupplier {
 	private String supFax = "TestFax";
 	private String supEmail = "TestEmail";
 	private String supNote = "TestNote";
-	private Character supDeleted = 'N';
+	private int active = 1;
 
 	public Supplier setup(boolean usingSet) throws OHException {
 		Supplier supplier;
@@ -46,7 +46,7 @@ public class TestSupplier {
 			setParameters(supplier);
 		} else {
 			// Create Supplier with all parameters 
-			supplier = new Supplier(supId, supName, supAddress, supTaxcode, supPhone, supFax, supEmail, supNote, supDeleted);
+			supplier = new Supplier(supId, supName, supAddress, supTaxcode, supPhone, supFax, supEmail, supNote, active);
 		}
 
 		return supplier;
@@ -54,7 +54,7 @@ public class TestSupplier {
 
 	public void setParameters(Supplier supplier) {
 		supplier.setSupAddress(supAddress);
-		supplier.setSupDeleted(supDeleted);
+		supplier.setActive(active);
 		supplier.setSupEmail(supEmail);
 		supplier.setSupFax(supFax);
 		supplier.setSupName(supName);
@@ -65,7 +65,7 @@ public class TestSupplier {
 
 	public void check(Supplier supplier) {
 		assertThat(supplier.getSupAddress()).isEqualTo(supAddress);
-		assertThat(supplier.getSupDeleted()).isEqualTo(supDeleted);
+		assertThat(supplier.getActive()).isEqualTo(active);
 		assertThat(supplier.getSupEmail()).isEqualTo(supEmail);
 		assertThat(supplier.getSupFax()).isEqualTo(supFax);
 		assertThat(supplier.getSupName()).isEqualTo(supName);
