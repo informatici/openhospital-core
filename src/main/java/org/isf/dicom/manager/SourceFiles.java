@@ -30,6 +30,7 @@ import java.time.ZoneId;
 import java.util.Iterator;
 import java.util.Random;
 
+import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
@@ -256,8 +257,11 @@ public class SourceFiles extends Thread {
 			Iterator<?> iter;
 			if (isJpeg) {
 				iter = ImageIO.getImageReadersByFormatName("jpeg");
-				reader = new com.sun.imageio.plugins.jpeg.JPEGImageReader(null);
-
+				if (!iter.hasNext()) {
+					LOGGER.error("Could not instantiate JPEGImageReader");
+					throw new IIOException("Could not instantiate JPEGImageReader");
+				}
+				reader = (ImageReader) iter.next();
 				ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
 
 				reader.setInput(imageInputStream, false);
