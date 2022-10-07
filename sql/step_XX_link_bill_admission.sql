@@ -1,6 +1,6 @@
 ALTER TABLE oh_bills ADD COLUMN BLL_ADM_ID INT(11) NULL DEFAULT NULL AFTER BLL_USR_ID_A;
 
--- Link previouses bills related admissions (using admission and discharge date)
+-- Link previous bills related admissions (using admission and discharge date)
 DROP PROCEDURE IF EXISTS link_bill_admission;
 DELIMITER //
   CREATE PROCEDURE link_bill_admission()
