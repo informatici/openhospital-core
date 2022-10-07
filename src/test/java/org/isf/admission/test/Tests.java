@@ -953,7 +953,79 @@ public class Tests extends OHCoreTestCase {
 		admission.setYProg(0);
 		admission.setDisDate(disDate);
 
-		// Admin date future date
+		// Admission date future date
+		LocalDateTime admDate = admission.getAdmDate();
+		disDate = admission.getDisDate();
+		admission.setAdmDate(LocalDateTime.of(9999, 1, 1, 0, 0, 0));
+		admission.setDisDate(null);
+		assertThatThrownBy(() -> admissionBrowserManager.newAdmission(admission))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+
+		admission.setAdmDate(admDate);
+		admission.setDisDate(disDate);
+
+		// Discharge date is after today
+		disDate = admission.getDisDate();
+		admission.setDisDate(LocalDateTime.of(9999, 1, 1, 0, 0, 0));
+		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// is null
+		admission.setDisDate(null);
+		assertThatThrownBy(() -> admissionBrowserManager.newAdmission(admission))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		admission.setDisDate(disDate);
+
+		// DiseaseOut1() == null && DisDate() != null
+		Disease disease = admission.getDiseaseOut1();
+		admission.setDiseaseOut1(null);
+		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
+				.isInstanceOf(OHDataValidationException.class);
+		admission.setDiseaseOut1(disease);
+
+		// DiseaseOut1() != null && DisDate() == null
+		admDate = admission.getDisDate();
+		admission.setDisDate(null);
+		assertThatThrownBy(() -> admissionBrowserManager.newAdmission(admission))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		admission.setDisDate(admDate);
+	}
+	
+	@Test
+	public void testMgrValidateMaternity() throws Exception {
+		int id = setupTestAdmission(false, true);
+		Admission admission = admissionBrowserManager.getAdmission(id);
+		GeneralData.LANGUAGE = "en";
+
+		// Bad progressive id
+		admission.setYProg(-1);
+		LocalDateTime disDate = admission.getDisDate();
+		admission.setDisDate(null);
+		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		admission.setYProg(0);
+		admission.setDisDate(disDate);
+
+		// Admission date future date
 		LocalDateTime admDate = admission.getAdmDate();
 		disDate = admission.getDisDate();
 		admission.setAdmDate(LocalDateTime.of(9999, 1, 1, 0, 0, 0));
