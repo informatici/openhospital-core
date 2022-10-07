@@ -136,9 +136,8 @@ public class AdmissionIoOperations {
 	 *
 	 * @param patient the patient target of the admission.
 	 * @return the patient admission.
-	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public Admission getCurrentAdmission(Patient patient) throws OHServiceException {
+	public Admission getCurrentAdmission(Patient patient) {
 		return repository.findOneWherePatientIn(patient.getCode());
 	}
 
