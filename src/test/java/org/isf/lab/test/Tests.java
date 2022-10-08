@@ -645,20 +645,6 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrNewLaboratory2ProcedureEquals2EmptyLabRows() {
-		assertThatThrownBy(() ->
-		{
-			ArrayList<LaboratoryRow> labRow = new ArrayList<>();
-			ExamType examType = testExamType.setup(false);
-			Exam exam = testExam.setup(examType, 2, false);
-			Patient patient = testPatient.setup(false);
-			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-			labManager.newLaboratory2(laboratory, labRow);
-		})
-				.isInstanceOf(OHDataValidationException.class);
-	}
-
-	@Test
 	public void testMgrNewLaboratory2ProcedureEquals2NullLabRows() {
 		assertThatThrownBy(() ->
 		{
