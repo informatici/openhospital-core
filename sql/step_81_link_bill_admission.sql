@@ -1,4 +1,13 @@
 ALTER TABLE oh_bills ADD COLUMN BLL_ADM_ID INT(11) NULL DEFAULT NULL AFTER BLL_USR_ID_A;
+ALTER TABLE oh_bills
+ADD INDEX FK_BILLS_ADMISSION_idx (BLL_ADM_ID ASC);
+ALTER TABLE oh_bills
+ADD CONSTRAINT FK_BILLS_ADMISSION
+  FOREIGN KEY (BLL_ADM_ID)
+  REFERENCES oh_admission (ADM_ID)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
 
 -- Link previous bills related admissions (using admission and discharge date)
 DROP PROCEDURE IF EXISTS link_bill_admission;
