@@ -61,7 +61,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "BLL_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "BLL_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "BLL_LAST_MODIFIED_DATE"))
-public class Bill extends Auditable<String> implements Comparable<Bill> {
+public class Bill extends Auditable<String> implements Cloneable, Comparable<Bill> {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -279,5 +279,10 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 	    }
 	  
 	    return this.hashCode;
-	}	
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 }
