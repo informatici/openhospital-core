@@ -119,7 +119,7 @@ public class AdmissionIoOperations {
 	 * Load patient together with the profile photo, or {@code null} if there is no patient with the given id
 	 */
 	public AdmittedPatient loadAdmittedPatient(final Integer patientId) {
-		 boolean isLoadPatientProfilePhotoFromDb = PatientIoOperations.LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
+		boolean isLoadPatientProfilePhotoFromDb = PatientIoOperations.LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		final Patient patient = patientRepository.findById(patientId).orElse(null);
 		if (patient == null) {
 			return null;
