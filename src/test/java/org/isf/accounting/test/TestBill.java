@@ -55,7 +55,7 @@ public class TestBill {
 		} else {
 			// Create Bill with all parameters 
 			bill = new Bill(0, date, update, isList, priceList, listName, isPatient, patient, patName,
-					status, amount, balance, user, admission);
+					status, amount, balance, user);
 		}
 		return bill;
 	}
@@ -73,7 +73,6 @@ public class TestBill {
 		bill.setAmount(amount);
 		bill.setBalance(balance);
 		bill.setUser(user);
-		bill.setAdmission(admission);
 	}
 
 	public void check(Bill bill) {

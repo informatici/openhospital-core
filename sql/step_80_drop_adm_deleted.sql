@@ -1,1 +1,0 @@
-ALTER TABLE oh_admission DROP COLUMN pat_deleted;
