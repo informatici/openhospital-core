@@ -208,7 +208,7 @@ public final class GeneralData extends ConfigurationProperties {
 		}
 		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTO);
 		SESSIONTIMEOUT = myGetProperty("SESSIONTIMEOUT", DEFAULT_SESSIONTIMEOUT);
-	}
+}
 
 	public static GeneralData getGeneralData() {
 		if (mySingleData == null) {
