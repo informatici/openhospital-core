@@ -89,8 +89,12 @@ public final class GeneralData extends ConfigurationProperties {
 	public static String PATIENTBILLGROUPED;
 	public static String PATIENTBILLSTATEMENT;
 	public static boolean DEBUG;
+<<<<<<< Upstream, based on informatici/develop
 	public static String PATIENTPHOTOSTORAGE;
 	public static Integer SESSIONTIMEOUT;
+=======
+	public static int SESSIONTIMEOUT;
+>>>>>>> e98ca49 fix: code review
 
 	public static boolean STRONGPASSWORD;
 	public static int STRONGLENGTH;
@@ -140,7 +144,12 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_PATIENTBILLSTATEMENT = "PatientBillStatement";
 	private static final boolean DEFAULT_DEBUG = false;
 	private static final int DEFAULT_STRONGLENGTH = 10;
+<<<<<<< Upstream, based on informatici/develop
 	private static final int DEFAULT_SESSIONTIMEOUT=300000;
+=======
+	private static final int DEFAULT_SESSIONTIMEOUT = 5;
+
+>>>>>>> e98ca49 fix: code review
 	private static final boolean DEFAULT_STRONGPASSWORD = true;
 	private static final String DEFAULT_PATIENTPHOTO = "DB";
 	
