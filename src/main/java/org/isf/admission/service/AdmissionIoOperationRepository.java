@@ -43,7 +43,7 @@ public interface AdmissionIoOperationRepository extends JpaRepository<Admission,
 	List<Admission> findAllWherePatientByOrderByDate(@Param("patient") Integer patient);
 
 	@Query(value = "select a FROM Admission a " +
-			"WHERE a.ward.code =:ward AND a.admDate>=:dateFrom AND a.admDate<=:dateTo AND a.active=1 and a.active = 1" +
+			"WHERE a.ward.code =:ward AND a.admDate>=:dateFrom AND a.admDate<=:dateTo AND a.active=1 " +
 			"ORDER BY a.yProg desc ")
 	List<Admission> findAllWhereWardAndDates(
 			@Param("ward") String ward, @Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
