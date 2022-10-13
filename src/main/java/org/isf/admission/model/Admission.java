@@ -67,21 +67,17 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @Entity
 @Table(name="OH_ADMISSION")
-@SqlResultSetMapping(name="AdmittedPatient",
-entities={
-		@EntityResult(entityClass=org.isf.patient.model.Patient.class),
-		@EntityResult(entityClass=org.isf.admission.model.Admission.class)}
-)
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="ADM_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="ADM_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="ADM_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="ADM_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="ADM_LAST_MODIFIED_DATE"))
-})
-@SQLDelete(sql = "UPDATE ADMISSION SET ADM_ACTIVE = 0 WHERE ADM_ID = ? AND ADM_LOCK=?", check = ResultCheckStyle.COUNT)
-@Where(clause = "ADM_ACTIVE = 1")
+@SqlResultSetMapping(name = "AdmittedPatient", entities = {
+		@EntityResult(entityClass = org.isf.patient.model.Patient.class),
+		@EntityResult(entityClass = org.isf.admission.model.Admission.class) })
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverrides({ @AttributeOverride(name = "createdBy", column = @Column(name = "ADM_CREATED_BY")),
+		@AttributeOverride(name = "createdDate", column = @Column(name = "ADM_CREATED_DATE")),
+		@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "ADM_LAST_MODIFIED_BY")),
+		@AttributeOverride(name = "active", column = @Column(name = "ADM_ACTIVE")),
+		@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "ADM_LAST_MODIFIED_DATE")) })
+@SQLDelete(sql = "UPDATE ADMISSION SET ADM_ACTIVE=0 WHERE ADM_ID=? AND ADM_LOCK=?", check = ResultCheckStyle.COUNT)
+@Where(clause = "ADM_ACTIVE=1")
 public class Admission extends Auditable<String> implements Comparable<Admission> 
 {
 
@@ -246,7 +242,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 			DischargeType disType, String note, Float transUnit, LocalDateTime visitDate,
 			PregnantTreatmentType pregTreatmentType, LocalDateTime deliveryDate, DeliveryType deliveryType,
 			DeliveryResultType deliveryResult, Float weight, LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
-			LocalDateTime abortDate, String userID, String deleted) {
+			LocalDateTime abortDate, String userID) {
 		super();
 		this.id = id;
 		this.admitted = admitted;

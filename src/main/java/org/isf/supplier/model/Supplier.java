@@ -32,6 +32,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.isf.utils.db.Auditable;
@@ -48,7 +49,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "SUP_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "SUP_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "SUP_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE SUPPLIER SET SUP_ACTIVE=0 WHERE SUP_ID=?")
+@SQLDelete(sql = "UPDATE SUPPLIER SET SUP_ACTIVE=0 WHERE SUP_ID=?", check = ResultCheckStyle.COUNT)
 @Where(clause = "SUP_ACTIVE=1")
 public class Supplier extends Auditable<String> implements java.io.Serializable {
 

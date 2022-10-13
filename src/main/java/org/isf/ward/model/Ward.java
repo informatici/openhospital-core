@@ -31,6 +31,7 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.isf.utils.db.Auditable;
@@ -53,8 +54,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "WRD_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "WRD_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "WRD_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE WARD SET WRD_ACTIVE = 0 WHERE WRD_ID_A = ? AND WRD_LOCK = ?")
-@Where(clause = "WRD_ACTIVE = 1")
+@SQLDelete(sql = "UPDATE WARD SET WRD_ACTIVE=0 WHERE WRD_ID_A=? AND WRD_LOCK=?", check = ResultCheckStyle.COUNT)
+@Where(clause = "WRD_ACTIVE=1")
 public class Ward extends Auditable<String> {
 
 	@Id

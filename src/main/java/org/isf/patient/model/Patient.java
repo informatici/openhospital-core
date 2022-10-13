@@ -40,6 +40,7 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.isf.opd.model.Opd;
@@ -77,16 +78,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PAT_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "PAT_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PAT_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE PATIENT SET PAT_ACTIVE = 0 WHERE PAT_ID = ? AND PAT_LOCK = ?")
-@Where(clause = "PAT_ACTIVE = 1")
+@SQLDelete(sql = "UPDATE PATIENT SET PAT_ACTIVE=0 WHERE PAT_ID=? AND PAT_LOCK=?", check = ResultCheckStyle.COUNT)
+@Where(clause = "PAT_ACTIVE=1")
 public class Patient extends Auditable<String> {
 	/*
 	 * PAT_ID int NOT NULL AUTO_INCREMENT , PAT_FNAME varchar (50) NOT NULL ,
-	 * --first name (nome) PAT_SNAME varchar (50) NOT NULL , --second name (cognome)
+	 * --first name PAT_SNAME varchar (50) NOT NULL , --second name
 	 * PAT_AGE int NOT NULL , --age PAT_SEX char (1) NOT NULL , --sex : M or F
-	 * PAT_ADDR varchar (50) NULL , --address (via , n.) PAT_CITY varchar (50) NOT
-	 * NULL , --city PAT_NEXT_KIN varchar (50) NULL , --next kin (parente prossimo,
-	 * figlio di..) PAT_TELE varchar (50) NULL , --telephone number PAT_MOTH char
+	 * PAT_ADDR varchar (50) NULL , --address  PAT_CITY varchar (50) NOT
+	 * NULL , --city PAT_NEXT_KIN varchar (50) NULL , --next kin 
+	 * PAT_TELE varchar (50) NULL , --telephone number PAT_MOTH char
 	 * (1) NULL , --mother: D=dead, A=alive PAT_FATH char (1) NULL , --father:
 	 * D=dead, A=alive PAT_LEDU char (1) NULL , --level of education: 1 or 2 or 3 or
 	 * 4 PAT_ESTA char (1) NULL , --economic status: R=rich, P=poor PAT_PTOGE char

@@ -37,7 +37,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.isf.admission.model.Admission;
+import org.hibernate.annotations.ResultCheckStyle;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.isf.patient.model.Patient;
 import org.isf.priceslist.model.PriceList;
 import org.isf.utils.db.Auditable;
@@ -61,7 +63,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "BLL_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "BLL_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "BLL_LAST_MODIFIED_DATE"))
-public class Bill extends Auditable<String> implements Cloneable, Comparable<Bill> {
+@SQLDelete(sql = "UPDATE BILLS SET BLL_ACTIVE=0 WHERE BLL_ID=?", check = ResultCheckStyle.COUNT)
+@Where(clause = "BLL_ACTIVE=1")
+public class Bill extends Auditable<String> implements Comparable<Bill> {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -110,10 +114,6 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	@NotNull
 	@Column(name="BLL_USR_ID_A")
 	private String user;
-	
-	@ManyToOne(cascade = { CascadeType.MERGE})
-	@JoinColumn(name="BLL_ADM_ID")
-	private Admission admission;
 
 	@Transient
 	private volatile int hashCode = 0;
@@ -136,7 +136,7 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 
 	public Bill(int id, LocalDateTime  date, LocalDateTime  update,
 			boolean isList, PriceList list, String listName, boolean isPatient,
-			Patient billPatient, String patName, String status, Double amount, Double balance, String user, Admission admission) {
+			Patient billPatient, String patName, String status, Double amount, Double balance, String user) {
 		super();
 		this.id = id;
 		this.date = TimeTools.truncateToSeconds(date);
@@ -151,7 +151,6 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 		this.amount = amount;
 		this.balance = balance;
 		this.user = user;
-		this.admission = admission;
 	}
 
 	public int getId() {
@@ -239,14 +238,6 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	public void setUser(String user) {
 		this.user = user;
 	}
-	
-	public Admission getAdmission() {
-		return admission;
-	}
-	
-	public void setAdmission(Admission admission) {
-		this.admission = admission;
-	}
 
 	@Override
 	public int compareTo(Bill obj) {
@@ -279,10 +270,5 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	    }
 	  
 	    return this.hashCode;
-	}
-	
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+	}	
 }

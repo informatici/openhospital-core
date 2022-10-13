@@ -44,6 +44,7 @@ import javax.persistence.Transient;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.isf.dicomtype.model.DicomType;
@@ -70,8 +71,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "DM_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "DM_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "DM_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE DICOM SET DM_ACTIVE = 0 WHERE DM_ID = ?")
-@Where(clause = "DM_ACTIVE = 1")
+@SQLDelete(sql = "UPDATE DICOM SET DM_ACTIVE=0 WHERE DM_ID=?", check = ResultCheckStyle.COUNT)
+@Where(clause = "DM_ACTIVE=1")
 public class FileDicom extends Auditable<String> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileDicom.class);

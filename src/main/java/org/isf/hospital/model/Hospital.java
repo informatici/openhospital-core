@@ -33,6 +33,7 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.isf.utils.db.Auditable;
@@ -55,8 +56,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "HOS_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "HOS_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "HOS_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE HOSPITAL SET HOS_ACTIVE = 0 WHERE HOS_ID = ? AND HOS_LOCK = ?")
-@Where(clause = "HOS_ACTIVE = 1")
+@SQLDelete(sql = "UPDATE HOSPITAL SET HOS_ACTIVE=0 WHERE HOS_ID=? AND HOS_LOCK=?", check = ResultCheckStyle.COUNT)
+@Where(clause = "HOS_ACTIVE=1")
 public class Hospital extends Auditable<String> {
 
 	public static final String VISIT_START_TIME = "06:30:00";

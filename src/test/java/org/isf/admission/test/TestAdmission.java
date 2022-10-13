@@ -86,7 +86,7 @@ public class TestAdmission {
 			admission = new Admission(id, admitted, type, ward, yProg, patient, ADMINDATE, admissionType, FHU, diseaseIn,
 					diseaseOut1, diseaseOut2, diseaseOut3, operation, opResult, OPDATE, DISDATE, dischargeType, note,
 					transUnit, VISITDATE, pregTreatmentType, DELIVERYDATE, deliveryType, deliveryResult, weight,
-					CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted);
+					CTRLDATE1, CTRLDATE2, ABORTDATE, userID);
 		}
 
 		return admission;
