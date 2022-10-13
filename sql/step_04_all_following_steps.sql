@@ -77,3 +77,5 @@ source step_78_drop_lab_exam_date.sql;
 source step_79_rename_pat_photo_field.sql;
 source step_80_add_ward_opd.sql;
 source step_81_link_bill_admission.sql;
+source step_80_drop_adm_deleted.sql;
+source step_81_drop_pat_deleted.sql;

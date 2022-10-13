@@ -1,1 +1,0 @@
-ALTER TABLE oh_supplier DROP COLUMN sup_deleted;
