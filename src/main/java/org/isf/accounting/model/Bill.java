@@ -24,7 +24,6 @@ package org.isf.accounting.model;
 import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -80,7 +79,7 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	@Column(name="BLL_IS_LST")
 	private boolean isList;
 	
-	@ManyToOne(cascade = { CascadeType.MERGE})
+	@ManyToOne
 	@JoinColumn(name="BLL_ID_LST")
 	private PriceList list;
 	
@@ -91,7 +90,7 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	@Column(name="BLL_IS_PAT")
 	private boolean isPatient;
 	
-	@ManyToOne(cascade = {CascadeType.MERGE})
+	@ManyToOne
 	@JoinColumn(name="BLL_ID_PAT")
 	private Patient billPatient;
 		
@@ -111,7 +110,7 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	@Column(name="BLL_USR_ID_A")
 	private String user;
 	
-	@ManyToOne(cascade = { CascadeType.MERGE})
+	@ManyToOne
 	@JoinColumn(name="BLL_ADM_ID")
 	private Admission admission;
 
