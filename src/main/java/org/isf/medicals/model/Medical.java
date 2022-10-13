@@ -35,6 +35,8 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.isf.medtype.model.MedicalType;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -60,6 +62,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MDSR_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "MDSR_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MDSR_LAST_MODIFIED_DATE"))
+@SQLDelete(sql = "UPDATE MEDICALDSR SET MDSR_ACTIVE = 0 WHERE MDSR_ID = ? AND -1 != ?")
+@Where(clause = "MDSR_ACTIVE = 1")
 public class Medical extends Auditable<String> implements Comparable<Medical>, Cloneable {
 	/**
 	 * Code of the medical

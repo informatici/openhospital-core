@@ -30,16 +30,15 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * ------------------------------------------
- * MovementType - model for the movement type
- * -----------------------------------------
- * modification history
- * ? - bob - first version
- * 18/01/2015 - Antonio - ported to JPA
+ * ------------------------------------------ MovementType - model for the
+ * movement type ----------------------------------------- modification history
+ * ? - bob - first version 18/01/2015 - Antonio - ported to JPA
  * ------------------------------------------
  */
 @Entity
@@ -50,90 +49,92 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MMVT_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "MMVT_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MMVT_LAST_MODIFIED_DATE"))
+@SQLDelete(sql = "UPDATE MEDICALDSRSTOCKMOVTYPE SET MMVT_ACTIVE = 0 WHERE MMVT_ID = ? AND -1 != ?")
+@Where(clause = "MMVT_ACTIVE = 1")
 public class MovementType extends Auditable<String> {
 
 	@Id
-	@Column(name="MMVT_ID_A")	   
-    private String code;
+	@Column(name = "MMVT_ID_A")
+	private String code;
 
 	@NotNull
-	@Column(name="MMVT_DESC")	
-    private String description;
+	@Column(name = "MMVT_DESC")
+	private String description;
 
 	@NotNull
-	@Column(name="MMVT_TYPE")	
-    private String type;
+	@Column(name = "MMVT_TYPE")
+	private String type;
 
 	@Transient
 	private volatile int hashCode = 0;
 
 	public MovementType() {
 	}
-    
-    /**
-     * @param code
-     * @param description
-     * @param type
-     */
-    public MovementType(String code, String description, String type) {
-	    this.code = code;
-	    this.description = description;
-	    this.type = type;
-    }
-    
-    public String getCode() {
-        return this.code;
-    }
-    
-    public void setCode(String code) {
-        this.code = code;
-    }
-    
-    public String getDescription() {
-        return this.description;
-    }
-    
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
+
+	/**
+	 * @param code
+	 * @param description
+	 * @param type
+	 */
+	public MovementType(String code, String description, String type) {
+		this.code = code;
+		this.description = description;
+		this.type = type;
+	}
+
+	public String getCode() {
+		return this.code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getDescription() {
+		return this.description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public String getType() {
 		return type;
 	}
-	
+
 	public void setType(String type) {
 		this.type = type;
 	}
-	
-    public String toString() {
-        return getDescription();
-    }
-    
-    @Override
+
+	public String toString() {
+		return getDescription();
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}
-		
+
 		if (!(obj instanceof MovementType)) {
 			return false;
 		}
-		
-		MovementType movementType = (MovementType)obj;
+
+		MovementType movementType = (MovementType) obj;
 		return (this.getCode().equals(movementType.getCode()));
 	}
-	
+
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + code.hashCode();
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
-	}	
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + code.hashCode();
+
+			this.hashCode = c;
+		}
+
+		return this.hashCode;
+	}
 }

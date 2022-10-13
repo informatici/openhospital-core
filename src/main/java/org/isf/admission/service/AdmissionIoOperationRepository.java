@@ -36,18 +36,18 @@ public interface AdmissionIoOperationRepository extends JpaRepository<Admission,
 	@Query(value = "select a FROM Admission a WHERE a.admitted = 1 AND a.ward.code = :ward")
 	List<Admission> findAllWhereWard(@Param("ward") String ward);
 
-	@Query(value = "select a FROM Admission a WHERE a.patient.code = :patient and a.deleted='N' and a.admitted = 1")
+	@Query(value = "select a FROM Admission a WHERE a.patient.code = :patient and a.active=1 and a.admitted = 1")
 	Admission findOneWherePatientIn(@Param("patient") Integer patient);
 
-	@Query(value = "select a FROM Admission a WHERE a.patient.code =:patient and a.deleted='N' order by a.admDate asc")
+	@Query(value = "select a FROM Admission a WHERE a.patient.code =:patient and a.active=1 order by a.admDate asc")
 	List<Admission> findAllWherePatientByOrderByDate(@Param("patient") Integer patient);
 
 	@Query(value = "select a FROM Admission a " +
-			"WHERE a.ward.code =:ward AND a.admDate >= :dateFrom AND a.admDate <= :dateTo AND a.deleted ='N' " +
+			"WHERE a.ward.code =:ward AND a.admDate >= :dateFrom AND a.admDate <= :dateTo AND a.active=1 " +
 			"ORDER BY a.yProg desc ")
 	List<Admission> findAllWhereWardAndDates(
 			@Param("ward") String ward, @Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);
 
-	@Query(value = "select a FROM Admission a WHERE a.admitted =1 and a.ward.code = :ward and a.deleted = 'N'")
+	@Query(value = "select a FROM Admission a WHERE a.admitted =1 and a.ward.code = :ward and a.active=1")
 	List<Admission> findAllWhereWardIn(@Param("ward") String ward);
 }

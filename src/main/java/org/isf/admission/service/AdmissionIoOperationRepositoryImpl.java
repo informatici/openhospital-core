@@ -40,22 +40,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationRepositoryCustom {
 
 	private static String nativeQueryTerms = "SELECT * from patient as p  "
-					+ " left join (select * from admission where ADM_IN = 1 and ( (ADM_DELETED='N') or (ADM_DELETED is null ) ) ) as a on p.PAT_ID = a.ADM_PAT_ID "
-					+ " where ( ( p.PAT_DELETED='N' ) or ( p.PAT_DELETED is null ) ) and p.PAT_ACTIVE = 1 "
+					+ " left join (select * from admission where ADM_IN = 1 and ( ADM_ACTIVE=1 ) ) as a on p.PAT_ID = a.ADM_PAT_ID "
+					+ " where p.PAT_ACTIVE = 1 "
 					+ " and ( lower(concat_ws(' ', p.PAT_ID, p.PAT_SNAME, p.PAT_FNAME, p.PAT_NAME, p.PAT_NOTE, p.PAT_TAXCODE, p.PAT_CITY, p.PAT_ADDR, p.PAT_TELE)) like :param0 ) "
 					+ " order by p.PAT_ID desc";
 
-	private static String nativeQueryRanges = "SELECT * from patient as p  "
-					+ " left join (select * from admission where ADM_IN = 1 and ( (ADM_DELETED='N') or (ADM_DELETED is null ) ) ) as a on p.PAT_ID = a.ADM_PAT_ID "
+			private static String nativeQueryRanges = "SELECT * from patient as p  "
+					+ " left join (select * from admission where ADM_IN = 1 and ( ADM_ACTIVE=1 ) ) as a on p.PAT_ID = a.ADM_PAT_ID "
 					+ " where (p.PAT_ID IN (SELECT ADM_PAT_ID from admission where param1)) and p.PAT_ACTIVE = 1 "
 					+ " and ( lower(concat_ws(' ', p.PAT_ID, p.PAT_SNAME, p.PAT_FNAME, p.PAT_NAME, p.PAT_NOTE, p.PAT_TAXCODE, p.PAT_CITY, p.PAT_ADDR, p.PAT_TELE)) like :param0 ) "
 					+ " order by p.PAT_ID desc";
 
-	private static String nativeQueryCode = "SELECT * from OH_patient as p  "
-			+ " left join (select * from OH_admission where ADM_IN = 1 and ( (ADM_DELETED='N') or (ADM_DELETED is null ) ) order by ADM_ID desc) as a on p.PAT_ID = a.ADM_PAT_ID "
-			+ " where p.PAT_ID = :param0 "
-			+ " and ( ( p.PAT_DELETED='N' ) or ( p.PAT_DELETED is null ) ) and p.PAT_ACTIVE = 1 ";
-
+			private static String nativeQueryCode = "SELECT * from patient as p  "
+					+ " left join (select * from admission where ADM_IN = 1 and ( ADM_ACTIVE=1 ) order by ADM_ID desc) as a on p.PAT_ID = a.ADM_PAT_ID "
+					+ " where p.PAT_ID = :param0 "
+					+ " and p.PAT_ACTIVE = 1 ";
+			
 	private static final String YYYY_MM_DD = "yyyy-MM-dd";
 
 	@PersistenceContext
@@ -83,7 +83,7 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 
 		if ((admissionRange != null && (admissionRange[0] != null || admissionRange[1] != null)) ||
 				(dischargeRange != null && (dischargeRange[0] != null || dischargeRange[1] != null))) {
-			StringBuilder rangePredicate = new StringBuilder("( (ADM_DELETED='N') or (ADM_DELETED is null ) )");
+			StringBuilder rangePredicate = new StringBuilder("( ADM_ACTIVE=1 )");
 			if (admissionRange != null) {
 				if (admissionRange[0] != null) {
 					rangePredicate.append(" and ").append("DATE(ADM_DATE_ADM) >= '").append(TimeTools.formatDateTime(admissionRange[0], YYYY_MM_DD))
