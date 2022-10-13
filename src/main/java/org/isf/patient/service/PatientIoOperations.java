@@ -24,7 +24,10 @@ package org.isf.patient.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+
 import org.hibernate.Hibernate;
+import org.hibernate.Session;
 import org.isf.generaldata.GeneralData;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
@@ -58,13 +61,18 @@ public class PatientIoOperations {
 	public static final String LOAD_FROM_DB = "DB";
 
 	public static final String NOT_DELETED_STATUS = "N";
+	
 	@Autowired
 	private PatientIoOperationRepository repository;
+	
 	@Autowired
 	private ApplicationEventPublisher applicationEventPublisher;
+ 
 	@Autowired
 	private FileSystemPatientPhotoRepository fileSystemPatientPhotoRepository;
 
+	@Autowired
+	private EntityManager entityManager;
 	/**
 	 * Method that returns the full list of Patients not logically deleted
 	 *
@@ -128,6 +136,7 @@ public class PatientIoOperations {
 			if (isLoadProfilePhotoFromDb) {
 				Hibernate.initialize(patient.getPatientProfilePhoto());
 			} else {
+				((Session) this.entityManager.getDelegate()).evict(patient);
 				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
 			}
 			return patient;
@@ -151,6 +160,7 @@ public class PatientIoOperations {
 			if (isLoadProfilePhotoFromDb) {
 				Hibernate.initialize(patient.getPatientProfilePhoto());
 			} else {
+				((Session) this.entityManager.getDelegate()).evict(patient);
 				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
 			}
 			return patient;
@@ -172,6 +182,7 @@ public class PatientIoOperations {
 			if (isLoadProfilePhotoFromDb) {
 				Hibernate.initialize(patient.getPatientProfilePhoto());
 			} else {
+				((Session) this.entityManager.getDelegate()).evict(patient);
 				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
 			}
 		}
@@ -193,6 +204,7 @@ public class PatientIoOperations {
 			PatientProfilePhoto photo = patient.getPatientProfilePhoto();
 			patient.setPatientProfilePhoto(null);
 			Patient patientSaved = repository.save(patient);
+			((Session) this.entityManager.getDelegate()).evict(patient);
 			if (photo != null && photo.getPhoto() != null) {
 				fileSystemPatientPhotoRepository.save(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode(), photo.getPhoto());
 			} else if (this.fileSystemPatientPhotoRepository.exist(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode())) {
@@ -287,6 +299,7 @@ public class PatientIoOperations {
 			Hibernate.initialize(patient.getPatientProfilePhoto());
 			return patient.getPatientProfilePhoto();
 		} else {
+			((Session) this.entityManager.getDelegate()).evict(patient);
 			fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
 			return patient.getPatientProfilePhoto();
 		}
