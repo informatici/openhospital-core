@@ -24,6 +24,7 @@ package org.isf.accounting.model;
 import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -32,14 +33,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.ResultCheckStyle;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 import org.isf.admission.model.Admission;
 import org.isf.patient.model.Patient;
 import org.isf.priceslist.model.PriceList;
@@ -64,9 +61,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "BLL_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "BLL_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "BLL_LAST_MODIFIED_DATE"))
-@SQLDelete(sql = "UPDATE BILLS SET BLL_ACTIVE = 0 WHERE BLL_ID=?", check = ResultCheckStyle.COUNT)
-@Where(clause = "BLL_ACTIVE = 1")
-public class Bill extends Auditable<String> implements Comparable<Bill> {
+public class Bill extends Auditable<String> implements Cloneable, Comparable<Bill> {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -85,7 +80,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 	@Column(name="BLL_IS_LST")
 	private boolean isList;
 	
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.MERGE})
 	@JoinColumn(name="BLL_ID_LST")
 	private PriceList list;
 	
@@ -96,7 +91,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 	@Column(name="BLL_IS_PAT")
 	private boolean isPatient;
 	
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.MERGE})
 	@JoinColumn(name="BLL_ID_PAT")
 	private Patient billPatient;
 		
@@ -116,17 +111,12 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 	@Column(name="BLL_USR_ID_A")
 	private String user;
 	
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.MERGE})
 	@JoinColumn(name="BLL_ADM_ID")
 	private Admission admission;
 
 	@Transient
 	private volatile int hashCode = 0;
-	
-	@PreRemove
-	public void preRemove() {
-		this.active = 0;
-	}
 	
 	
 	public Bill() {
@@ -146,7 +136,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 
 	public Bill(int id, LocalDateTime  date, LocalDateTime  update,
 			boolean isList, PriceList list, String listName, boolean isPatient,
-			Patient billPatient, String patName, String status, Double amount, Double balance, String user) {
+			Patient billPatient, String patName, String status, Double amount, Double balance, String user, Admission admission) {
 		super();
 		this.id = id;
 		this.date = TimeTools.truncateToSeconds(date);
@@ -161,6 +151,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 		this.amount = amount;
 		this.balance = balance;
 		this.user = user;
+		this.admission = admission;
 	}
 
 	public int getId() {
@@ -248,6 +239,14 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 	public void setUser(String user) {
 		this.user = user;
 	}
+	
+	public Admission getAdmission() {
+		return admission;
+	}
+	
+	public void setAdmission(Admission admission) {
+		this.admission = admission;
+	}
 
 	@Override
 	public int compareTo(Bill obj) {
@@ -280,5 +279,10 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 	    }
 	  
 	    return this.hashCode;
-	}	
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 }
