@@ -308,17 +308,17 @@ public class ExaminationBrowserManager {
 							MessageBundle.formatMessage("angal.common.thenoteistoolongmaxchars.fmt.msg", PatientExamination.PEX_NOTE_LENGTH),
 							OHSeverityLevel.ERROR));
 		}
-		if (patex.getPex_diuresis_desc() != null && !diuresisDescriptionHashMap.containsKey(patex.getPex_diuresis_desc())) {
+		if (!patex.getPex_diuresis_desc().equals("") && !diuresisDescriptionHashMap.containsKey(patex.getPex_diuresis_desc())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.examination.pleaseinsertavaliddiuresisdescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (patex.getPex_bowel_desc() != null && !bowelDescriptionHashMap.containsKey(patex.getPex_bowel_desc())) {
+		if (!patex.getPex_bowel_desc().equals("") && !bowelDescriptionHashMap.containsKey(patex.getPex_bowel_desc())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.examination.pleaseinsertavalidboweldescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (patex.getPex_auscultation() != null && !auscultationHashMap.containsKey(patex.getPex_auscultation())) {
+		if (!patex.getPex_auscultation().equals("") && !auscultationHashMap.containsKey(patex.getPex_auscultation())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.examination.pleaseinsertavalidauscultationdescription.msg"),
 					OHSeverityLevel.ERROR));

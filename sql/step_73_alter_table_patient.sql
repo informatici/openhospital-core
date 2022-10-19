@@ -1,0 +1,5 @@
+UNLOCK TABLES;
+
+ALTER TABLE patient
+	ADD COLUMN allergies VARCHAR(255),
+	ADD COLUMN anamnesis VARCHAR(255);

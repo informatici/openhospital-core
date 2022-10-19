@@ -21,7 +21,6 @@
  */
 package org.isf.opd.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
@@ -85,6 +84,7 @@ public class Opd extends Auditable<String> {
 	@Column(name="OPD_DATE_NEXT_VIS") // SQL type: datetime
     private LocalDateTime nextVisitDate;
 	
+	@Nullable
 	@Column(name="OPD_DATE_VIS ") // SQL type: datetime
 	private LocalDateTime VisitDate;
 
