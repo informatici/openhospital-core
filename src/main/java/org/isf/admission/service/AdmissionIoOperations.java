@@ -27,6 +27,7 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.hibernate.Hibernate;
@@ -39,9 +40,9 @@ import org.isf.disctype.service.DischargeTypeIoOperationRepository;
 import org.isf.generaldata.GeneralData;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
-import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -234,8 +235,8 @@ public class AdmissionIoOperations {
 				last = now.plusYears(1).withMonth(Month.JUNE.getValue()).withDayOfMonth(30).with(LocalTime.MAX);
 			}
 		} else {
-			first = now.with(firstDayOfYear()).with(LocalTime.MIN);
-			last = now.with(lastDayOfYear()).with(LocalTime.MAX);
+			first = now.with(firstDayOfYear()).with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
+			last = now.with(lastDayOfYear()).with(LocalTime.MAX).truncatedTo(ChronoUnit.SECONDS);
 		}
 
 		List<Admission> admissions = repository.findAllWhereWardAndDates(wardId, first, last);
@@ -259,7 +260,7 @@ public class AdmissionIoOperations {
 	public static boolean afterJune;
 
 	public static LocalDateTime getNow() {
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = TimeTools.getNow();
 		if (!testing) {
 			return now;
 		}
