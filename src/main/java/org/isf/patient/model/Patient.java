@@ -181,7 +181,7 @@ public class Patient extends Auditable<String> {
 	
 	@Nullable
 	@Column(name="PAT_ANAMNESIS")
-	private String anamnesis; 
+	private String anamnesis; // ADDED: Arnaud
 
 	@NotNull
 	@Column(name="PAT_DELETED")

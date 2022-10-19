@@ -151,7 +151,7 @@ public class Opd extends Auditable<String> {
     	private String therapies; // ADDED: Arnaud*/
     @Nullable
 	@Column(name="OPD_PRESCRIPTION")
-    	private String prescription; // ADDED: Arnaud
+    private String prescription; // ADDED: Arnaud
 	
 	@Transient
 	private volatile int hashCode = 0;
