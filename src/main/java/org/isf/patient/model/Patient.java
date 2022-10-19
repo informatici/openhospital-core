@@ -45,6 +45,8 @@ import org.isf.opd.model.Opd;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.drew.lang.annotations.Nullable;
+
 /**
  * ------------------------------------------
  * Patient - model for the patient entity
@@ -172,6 +174,14 @@ public class Patient extends Auditable<String> {
 
 	@Column(name="PAT_PROFESSION")
 	private String profession;
+	
+	@Nullable
+	@Column(name="PAT_ALLERGIES")
+	private String allergies; // ADDED: Arnaud
+	
+	@Nullable
+	@Column(name="PAT_ANAMNESIS")
+	private String anamnesis; 
 
 	@NotNull
 	@Column(name="PAT_DELETED")
@@ -295,6 +305,22 @@ public class Patient extends Auditable<String> {
 		this.taxCode = taxCode;
 		this.maritalStatus = maritalStatus;
 		this.profession = profession;
+	}
+
+	public String getAllergies() {
+		return allergies;
+	}
+
+	public void setAllergies(String allergies) {
+		this.allergies = allergies;
+	}
+
+	public String getAnamnesis() {
+		return anamnesis;
+	}
+
+	public void setAnamnesis(String anamnesis) {
+		this.anamnesis = anamnesis;
 	}
 
 	public String getAddress() {
