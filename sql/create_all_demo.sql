@@ -6,5 +6,3 @@ source step_04_all_following_steps.sql;
 source step_03_dump_vaccine_data_en.sql;
 source delete_all_data.sql;
 source load_demo_data.sql;
-source step_72_alter_table_patient.sql;
-source step_73_oh_update_table_disease.sql;
