@@ -40,6 +40,7 @@ import org.isf.disctype.service.DischargeTypeIoOperationRepository;
 import org.isf.generaldata.GeneralData;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
+import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
@@ -123,7 +124,9 @@ public class AdmissionIoOperations {
 		if (patient == null) {
 			return null;
 		}
-		Hibernate.initialize(patient.getPatientProfilePhoto());
+		if (isLoadPatientProfilePhotoFromDb) {
+			Hibernate.initialize(patient.getPatientProfilePhoto());
+		}
 		final Admission admission = repository.findOneWherePatientIn(patientId);
 		return new AdmittedPatient(patient, admission);
 	}
