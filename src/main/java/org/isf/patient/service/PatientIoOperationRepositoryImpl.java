@@ -79,8 +79,7 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 		}
 
 		where.add(cb.or(
-				cb.equal(patientRoot.get("deleted"), "N"),
-				cb.isNull(patientRoot.get("deleted"))
+				cb.equal(patientRoot.get("active"), "1")
 		));
 
 		query.where(cb.and(where.toArray(new Predicate[where.size()])));
@@ -113,12 +112,9 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 		Root<Patient> patient = query.from(Patient.class);
 
 		// Only not deleted patient
-		Predicate deletedN = cb.equal(patient.get("deleted"), "N");
-		Predicate deletedNull = cb.isNull(patient.get("deleted"));
-		Predicate notDeleted = cb.or(deletedN, deletedNull);
-
+		Predicate notActive = cb.equal(patient.get("active"), Integer.valueOf(1));
 		List<Predicate> predicates = new ArrayList<>();
-		predicates.add(notDeleted);
+		predicates.add(notActive);
 		for (Map.Entry<String, Object> entry : params.entrySet()) {
 			Path<String> keyPath = patient.get(entry.getKey());
 

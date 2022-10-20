@@ -143,7 +143,7 @@ public class Tests extends OHCoreTestCase {
 		Map<Integer, String> suppliers = supplierBrowserManager.getHashMap(false);
 		assertThat(allSuppliers).isEqualTo(suppliers);
 		// "delete" a supplier
-		foundSupplier.setSupDeleted('Y');
+		foundSupplier.setActive(0);
 		supplierBrowserManager.saveOrUpdate(foundSupplier);
 		// get all (not including delete)
 		suppliers = supplierBrowserManager.getHashMap(false);

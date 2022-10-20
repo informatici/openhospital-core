@@ -27,10 +27,14 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ResultCheckStyle;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.isf.utils.db.Auditable;
 
 /**
@@ -49,6 +53,8 @@ import org.isf.utils.db.Auditable;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "US_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "US_LAST_MODIFIED_DATE"))
 @AttributeOverride(name = "active", column = @Column(name = "US_ACTIVE"))
+@SQLDelete(sql = "UPDATE OH_USER SET US_ACTIVE=0 WHERE US_ID_A=?", check = ResultCheckStyle.COUNT)
+@Where(clause = "US_ACTIVE=1")
 public class User extends Auditable<String> {
 
 	@Id
@@ -69,6 +75,11 @@ public class User extends Auditable<String> {
 	
 	@Transient
 	private volatile int hashCode = 0;
+	
+	@PreRemove
+	public void preRemove() {
+		this.active = 0;
+	}
 
 	public User() {
 	}

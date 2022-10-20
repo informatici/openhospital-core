@@ -68,6 +68,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -246,7 +247,6 @@ public class Tests extends OHCoreTestCase {
 	public void testIoNewAutomaticDischargingMovementDifferentLots() throws Exception {
 		int code = setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findById(code).get();
-
 		Medical medical = foundMovement.getMedical();
 		MovementType movementType = foundMovement.getType();
 		Ward ward = foundMovement.getWard();
@@ -263,12 +263,10 @@ public class Tests extends OHCoreTestCase {
 				supplier,
 				"newReference");
 		medicalStockIoOperation.newMovement(newMovement);
-
 		MovementType dischargeMovementType = testMovementType.setup(false); //prepare discharge movement
 		dischargeMovementType.setCode("discharge");
 		dischargeMovementType.setType("-");
 		medicalStockMovementTypeIoOperationRepository.saveAndFlush(dischargeMovementType);
-
 		Movement dischargeMovement = new Movement(
 				medical,
 				dischargeMovementType,
@@ -282,7 +280,6 @@ public class Tests extends OHCoreTestCase {
 		GeneralData.AUTOMATICLOT_OUT = true;
 		medicalStockIoOperation.newAutomaticDischargingMovement(dischargeMovement);
 		GeneralData.AUTOMATICLOT_OUT = automaticLotMode;
-
 		List<Lot> lots = medicalStockIoOperation.getLotsByMedical(medical);
 		assertThat(lots).hasSize(1); // first lot should be 0 quantity and stripped by the list
 	}
@@ -347,6 +344,7 @@ public class Tests extends OHCoreTestCase {
 		assertThat(medicalStockIoOperation.newMovement(foundMovement)).isTrue();
 		GeneralData.AUTOMATICLOT_IN = automaticLotMode;
 	}
+
 
 	@Test
 	public void testIoNewMovementUpdateMedicalWardQuantityMedicalWardFound() throws Exception {

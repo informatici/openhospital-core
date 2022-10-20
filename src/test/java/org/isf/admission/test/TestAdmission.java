@@ -86,7 +86,7 @@ public class TestAdmission {
 			admission = new Admission(id, admitted, type, ward, yProg, patient, ADMINDATE, admissionType, FHU, diseaseIn,
 					diseaseOut1, diseaseOut2, diseaseOut3, operation, opResult, OPDATE, DISDATE, dischargeType, note,
 					transUnit, VISITDATE, pregTreatmentType, DELIVERYDATE, deliveryType, deliveryResult, weight,
-					CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted);
+					CTRLDATE1, CTRLDATE2, ABORTDATE, userID);
 		}
 
 		return admission;
@@ -112,7 +112,6 @@ public class TestAdmission {
 		admission.setAdmType(admissionType);
 		admission.setCtrlDate1(CTRLDATE1);
 		admission.setCtrlDate2(CTRLDATE2);
-		admission.setDeleted(deleted);
 		admission.setDeliveryDate(DELIVERYDATE);
 		admission.setDeliveryResult(deliveryResult);
 		admission.setDeliveryType(deliveryType);
@@ -144,7 +143,6 @@ public class TestAdmission {
 		assertThat(admission.getAdmitted()).isEqualTo(admitted);
 		assertThat(admission.getCtrlDate1()).isEqualTo(CTRLDATE1);
 		assertThat(admission.getCtrlDate2()).isEqualTo(CTRLDATE2);
-		assertThat(admission.getDeleted()).isEqualTo(deleted);
 		assertThat(admission.getDeliveryDate()).isEqualTo(DELIVERYDATE);
 		assertThat(admission.getDisDate()).isEqualTo(DISDATE);
 		assertThat(admission.getFHU()).isEqualTo(FHU);

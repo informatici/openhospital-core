@@ -39,11 +39,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ResultCheckStyle;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.isf.dicomtype.model.DicomType;
 import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
@@ -68,6 +72,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "DM_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "DM_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "DM_LAST_MODIFIED_DATE"))
+@SQLDelete(sql = "UPDATE OH_DICOM SET DM_ACTIVE=0 WHERE DM_ID=?", check = ResultCheckStyle.COUNT)
+@Where(clause = "DM_ACTIVE=1")
 public class FileDicom extends Auditable<String> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileDicom.class);
@@ -163,6 +169,11 @@ public class FileDicom extends Auditable<String> {
 	@ManyToOne(optional=true) 
 	@JoinColumn(name="DM_DCMT_ID", nullable=true)
 	private DicomType dicomType;
+	
+	@PreRemove
+	public void preRemove() {
+		this.active = 0;
+	}
 
 	
 	/**

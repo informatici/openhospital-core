@@ -33,12 +33,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ResultCheckStyle;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.isf.patient.model.Patient;
 import org.isf.utils.time.TimeTools;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -54,7 +59,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PEX_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "PEX_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PEX_LAST_MODIFIED_DATE"))
-public class PatientExamination implements Serializable, Comparable<PatientExamination> {
+@SQLDelete(sql = "UPDATE OH_PATIENTEXAMINATION SET PEX_ACTIVE=0 WHERE PEX_ID=?", check = ResultCheckStyle.COUNT)
+@Where(clause = "PEX_ACTIVE=1")
+public class PatientExamination extends Auditable<String> implements Serializable, Comparable<PatientExamination>  {
 
 	private static final long serialVersionUID = 1L;
 	public static final int PEX_NOTE_LENGTH = 2000;
@@ -117,6 +124,11 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	
 	@Transient
 	private volatile int hashCode = 0;
+	
+	@PreRemove
+	public void preRemove() {
+		this.active = 0;
+	}
 
 	public PatientExamination() {
 		super();

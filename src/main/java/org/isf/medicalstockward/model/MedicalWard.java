@@ -26,9 +26,13 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.ResultCheckStyle;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
 import org.isf.utils.db.Auditable;
@@ -52,6 +56,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MDSRWRD_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "MDSRWRD_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MDSRWRD_LAST_MODIFIED_DATE"))
+@SQLDelete(sql = "UPDATE OH_MEDICALDSRWARD SET MDSRWRD_ACTIVE=0 WHERE MDSRWRD_ID=?", check = ResultCheckStyle.COUNT)
+@Where(clause = "MDSRWRD_ACTIVE=1")
 public class MedicalWard extends Auditable<String> implements Comparable<Object> {
 
 	@EmbeddedId 
@@ -68,6 +74,11 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	
 	@Transient
 	private volatile int hashCode = 0;
+	
+	@PreRemove
+	public void preRemove() {
+		this.active = 0;
+	}
 	
 	public MedicalWard() {
 		super();

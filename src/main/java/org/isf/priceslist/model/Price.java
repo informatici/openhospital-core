@@ -30,10 +30,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ResultCheckStyle;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -54,6 +58,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PRC_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "PRC_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PRC_LAST_MODIFIED_DATE"))
+@SQLDelete(sql = "UPDATE OH_PRICES SET PRC_ACTIVE=0 WHERE PRC_ID=?", check = ResultCheckStyle.COUNT)
+@Where(clause = "PRC_ACTIVE=1")
 public class Price extends Auditable<String> {
 
 	@Id
@@ -87,6 +93,11 @@ public class Price extends Auditable<String> {
 	
 	@Transient
 	private volatile int hashCode = 0;
+	
+	@PreRemove
+	public void preRemove() {
+		this.active = 0;
+	}
     
     public Price() {
 		super();

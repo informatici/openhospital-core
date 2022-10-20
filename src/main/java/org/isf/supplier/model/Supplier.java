@@ -28,10 +28,14 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ResultCheckStyle;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -46,6 +50,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "SUP_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "SUP_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "SUP_LAST_MODIFIED_DATE"))
+@SQLDelete(sql = "UPDATE OH_SUPPLIER SET SUP_ACTIVE = 0 WHERE SUP_ID = ?", check = ResultCheckStyle.COUNT)
+@Where(clause = "SUP_ACTIVE = 1")
 public class Supplier extends Auditable<String> implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -77,11 +83,13 @@ public class Supplier extends Auditable<String> implements java.io.Serializable 
 	@Column(name="SUP_NOTE")
 	private String supNote;
 	
-	@Column(name="SUP_DELETED")
-	private Character supDeleted;
-	
 	@Transient
 	private volatile int hashCode = 0;
+	
+	@PreRemove
+	public void preRemove() {
+		this.active = 0;
+	}
 
 	public Supplier() {
 		super();
@@ -106,7 +114,7 @@ public class Supplier extends Auditable<String> implements java.io.Serializable 
 		this.supFax = supFax;
 		this.supEmail = supEmail;
 		this.supNote = supNote;
-		this.supDeleted = 'N';
+		this.active = 1;
 	}
 	
 	/**
@@ -118,9 +126,9 @@ public class Supplier extends Auditable<String> implements java.io.Serializable 
 	 * @param supFax
 	 * @param supEmail
 	 * @param supNote
-	 * @param supDeleted
+	 * @param active
 	 */
-	public Supplier(Integer supID, String supName, String supAddress, String supTaxcode, String supPhone, String supFax, String supEmail, String supNote, Character supDeleted) {
+	public Supplier(Integer supID, String supName, String supAddress, String supTaxcode, String supPhone, String supFax, String supEmail, String supNote, int active) {
 		this.supId = supID;
 		this.supName = supName;
 		this.supAddress = supAddress;
@@ -129,7 +137,7 @@ public class Supplier extends Auditable<String> implements java.io.Serializable 
 		this.supFax = supFax;
 		this.supEmail = supEmail;
 		this.supNote = supNote;
-		this.supDeleted = supDeleted;
+		this.active = active;
 	}
 	
 	public Integer getSupId() {
@@ -196,17 +204,12 @@ public class Supplier extends Auditable<String> implements java.io.Serializable 
 		this.supNote = supNote;
 	}
 
-	public Character getSupDeleted() {
-		return this.supDeleted;
-	}
-
-	public void setSupDeleted(Character supDeleted) {
-		this.supDeleted = supDeleted;
-	}
 
 	public String toString() {
 		return this.supName;
 	}
+	
+	
 	
 	@Override
 	public boolean equals(Object obj) {
