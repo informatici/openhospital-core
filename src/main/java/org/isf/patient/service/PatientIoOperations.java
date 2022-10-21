@@ -55,7 +55,7 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class PatientIoOperations {
 
-	public final static String LOAD_FROM_DB = "DB";
+	public static final String LOAD_FROM_DB = "DB";
 
 	public static final String NOT_DELETED_STATUS = "N";
 	@Autowired
