@@ -20,7 +20,7 @@
 		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.framework.version>5.3.23</spring.framework.version>
-		<spring.boot.version>2.7.4</spring.boot.version>
+		<spring.boot.version>2.7.5</spring.boot.version>
 		<jasperreports.version>6.20.0</jasperreports.version>
 		<spring.cloud.starter.openfeign.version>3.1.4</spring.cloud.starter.openfeign.version>
 		<license.maven.plugin.version>4.1</license.maven.plugin.version>
@@ -381,7 +381,7 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
-			<version>2.7.3</version>
+			<version>2.7.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
