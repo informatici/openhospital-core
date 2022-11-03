@@ -68,6 +68,10 @@ public class AdmissionIoOperations {
 
 	@Autowired
 	private AdmissionIoOperationRepository repository;
+	
+	@Autowired
+	private AdmissionIoOperationRepositoryImpl repositoryImp;
+
 	@Autowired
 	private AdmissionTypeIoOperationRepository typeRepository;
 	@Autowired
@@ -109,7 +113,11 @@ public class AdmissionIoOperations {
 	 */
 	public List<AdmittedPatient> getAdmittedPatients(String searchTerms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange)
 			throws OHServiceException {
-		return repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
+		return repositoryImp.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
+	}
+	public List<AdmittedPatient> getAdmittedPatients2(String searchTerms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange)
+			throws OHServiceException {
+		return repositoryImp.findPatientAdmissionsBySearchAndDateRanges2(searchTerms, admissionRange, dischargeRange);
 	}
 
 	/**

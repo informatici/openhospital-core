@@ -82,6 +82,10 @@ public class AdmissionBrowserManager {
 			throws OHServiceException {
 		return ioOperations.getAdmittedPatients(searchTerms, admissionRange, dischargeRange);
 	}
+	public List<AdmittedPatient> getAdmittedPatients2(LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange, String searchTerms)
+			throws OHServiceException {
+		return ioOperations.getAdmittedPatients2(searchTerms, admissionRange, dischargeRange);
+	}
 
 	public AdmittedPatient loadAdmittedPatients(Integer patientId) {
 		return ioOperations.loadAdmittedPatient(patientId);

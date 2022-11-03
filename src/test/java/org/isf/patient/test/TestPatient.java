@@ -52,6 +52,8 @@ public class TestPatient {
 	private static String taxCode = "TestTaxCode";
 	private static String maritalStatus = "divorced";
 	private static String profession = "business";
+	private String anamnesis = "anamnesis";
+	private String allergies = "allergies";
 	//private static Blob photo;	
 	//private static Image photoImage;
 
@@ -69,6 +71,9 @@ public class TestPatient {
 					bloodType, hasInsurance, parentTogether, taxCode, maritalStatus, profession);
 			patient.setAge(patient.getAge()); //IT WILL CHANGE WITH TIME
 			patient.setPatientProfilePhoto(new PatientProfilePhoto());
+			patient.setAllergies(allergies);
+			patient.setAnamnesis(anamnesis);
+			
 		}
 
 		return patient;
@@ -95,6 +100,8 @@ public class TestPatient {
 		patient.setTaxCode(taxCode);
 		patient.setMaritalStatus(maritalStatus);
 		patient.setProfession(profession);
+		patient.setAllergies(allergies);
+		patient.setAnamnesis(anamnesis);
 	}
 
 	public void check(Patient patient) {
@@ -118,5 +125,7 @@ public class TestPatient {
 		assertThat(patient.getTaxCode()).isEqualTo(taxCode);
 		assertThat(patient.getMaritalStatus()).isEqualTo(maritalStatus);
 		assertThat(patient.getProfession()).isEqualTo(profession);
+		assertThat(patient.getAllergies()).isEqualTo(allergies);
+		assertThat(patient.getAnamnesis()).isEqualTo(anamnesis);
 	}
 }

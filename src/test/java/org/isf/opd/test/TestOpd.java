@@ -42,8 +42,6 @@ public class TestOpd {
 	private String referralTo = "R";
 	private String userID = "TestUser";
 	private String reason = "reason";
-	private String anamnesis = "anamnesis";
-	private String allergies = "allergies";
 	private String therapies = "therapies";
 	private String prescription = "prescription";
 	
@@ -60,8 +58,8 @@ public class TestOpd {
 			/*opd.setReason(reason);
 			opd.setAnamnesis(anamnesis);
 			opd.setTherapies(therapies);
-			opd.setAllergies(allergies);
-			opd.setPrescription(prescription);*/
+			opd.setAllergies(allergies);*/
+			opd.setPrescription(prescription);
 			opd.setNewPatient(newPatient);
 			opd.setReferralFrom(referralFrom);
 			opd.setReferralTo(referralTo);
