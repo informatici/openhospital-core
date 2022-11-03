@@ -295,7 +295,7 @@ public class SourceFiles extends Thread {
 
 				try {
 					originalImage = reader.read(0, param);
-				} catch (IOException ioException) {
+				} catch (IOException | RuntimeException exception) {
 					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()),
 							OHSeverityLevel.ERROR));
