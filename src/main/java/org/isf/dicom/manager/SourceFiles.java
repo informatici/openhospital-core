@@ -195,16 +195,8 @@ public class SourceFiles extends Thread {
 					                                                  OHSeverityLevel.ERROR));
 				}
 				Attributes attributes = dicomInputStream.readDataset();
-				if (attributes.contains(Tag.SeriesDate)) {
-					seriesDate = LocalDateTime.ofInstant(attributes.getDate(Tag.SeriesDateAndTime).toInstant(), ZoneId.systemDefault());
-				} else {
-					LOGGER.error("DICOM: Unparsable SeriesDate");
-				}
-				if (attributes.contains(Tag.StudyDate)) {
-					studyDate = LocalDateTime.ofInstant(attributes.getDate(Tag.StudyDateAndTime).toInstant(), ZoneId.systemDefault());
-				} else {
-					LOGGER.error("DICOM: Unparsable StudyDate");
-				}
+				seriesDate = getSeriesDateTime(attributes);
+				studyDate = getStudyDateTime(attributes);
 				if (attributes.contains(Tag.SeriesNumber)) {
 					dicomFileDetail.setDicomSeriesNumber(attributes.getString(Tag.SeriesNumber));
 				} else {
@@ -229,6 +221,22 @@ public class SourceFiles extends Thread {
 			LOGGER.error(exception.getMessage(), exception);
 		}
 		return dicomFileDetail;
+	}
+
+	private static LocalDateTime getSeriesDateTime(Attributes attributes) {
+		if (attributes.contains(Tag.SeriesDate) && attributes.getString(Tag.SeriesDate) != null) {
+			return LocalDateTime.ofInstant(attributes.getDate(Tag.SeriesDateAndTime).toInstant(), ZoneId.systemDefault());
+		}
+		LOGGER.error("DICOM: Unparsable SeriesDate: date=" + attributes.getString(Tag.SeriesDate) + "  time=" + attributes.getString(Tag.SeriesTime));
+        return null;
+	}
+
+	public static LocalDateTime getStudyDateTime(Attributes attributes) {
+		if (attributes.contains(Tag.StudyDate) && attributes.getString(Tag.StudyDate) != null) {
+			return LocalDateTime.ofInstant(attributes.getDate(Tag.StudyDateAndTime).toInstant(), ZoneId.systemDefault());
+		}
+		LOGGER.error("DICOM: Unparsable StudyDate: date=" + attributes.getString(Tag.StudyDate) + "  time=" + attributes.getString(Tag.StudyTime));
+		return null;
 	}
 
 	/**
@@ -350,16 +358,8 @@ public class SourceFiles extends Thread {
 
 				//overridden by the user
 				seriesDescription = seriesDescription != null ? seriesDescription : attributes.getString(Tag.SeriesDescription);
-				try {
-					studyDate = studyDate != null ? studyDate : LocalDateTime.ofInstant(attributes.getDate(Tag.StudyDate, Tag.StudyTime).toInstant(), ZoneId.systemDefault());
-				} catch (Exception ecc) {
-					LOGGER.error("DICOM: Unparsable StudyDate");
-				}
-				try {
-					seriesDate = seriesDate != null ? seriesDate : LocalDateTime.ofInstant(attributes.getDate(Tag.SeriesDate, Tag.SeriesTime).toInstant(), ZoneId.systemDefault());
-				} catch (Exception ecc) {
-					LOGGER.error("DICOM: Unparsable SeriesDate");
-				}
+				studyDate = studyDate != null ? studyDate : getStudyDateTime(attributes);
+				seriesDate = seriesDate != null ? seriesDate : getSeriesDateTime(attributes);
 
 				//set by DICOM properties
 				patientID = attributes.getString(Tag.PatientID) == null ? patientID : attributes.getString(Tag.PatientID);
