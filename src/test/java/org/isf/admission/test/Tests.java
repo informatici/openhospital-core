@@ -1076,6 +1076,13 @@ public class Tests extends OHCoreTestCase {
 				LocalDateTime[] dischargeRange) throws OHServiceException {
 			return null;
 		}
+
+		@Override
+		public List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges2(String searchTerms,
+				LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange) throws OHServiceException {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
 	private int setupTestAdmission(boolean usingSet) throws OHException, InterruptedException {
