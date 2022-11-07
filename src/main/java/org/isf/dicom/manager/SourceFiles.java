@@ -22,8 +22,11 @@
 package org.isf.dicom.manager;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -297,18 +300,20 @@ public class SourceFiles extends Thread {
 				iter = ImageIO.getImageReadersByFormatName("DICOM");
 				reader = (ImageReader) iter.next();
 				param = reader.getDefaultReadParam();
-				ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
-				reader.setInput(imageInputStream, false);
-				originalImage = null;
-
+				DicomInputStream dicomStream = null;
 				try {
+					byte[] data = Files.readAllBytes(Paths.get(sourceFile.getAbsolutePath()));
+					ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
+					dicomStream = new DicomInputStream(byteArrayInputStream);
+					reader.setInput(dicomStream);
 					originalImage = reader.read(0, param);
 				} catch (IOException | RuntimeException exception) {
 					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()),
-							OHSeverityLevel.ERROR));
+							MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()), OHSeverityLevel.ERROR));
 				}
-				imageInputStream.close();
+				finally {
+					dicomStream.close();
+				}
 			} else {
 				throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName()),

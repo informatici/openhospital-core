@@ -348,6 +348,8 @@ public class Tests extends OHCoreTestCase {
 		assertThat(fileDicom.getDicomType()).isEqualTo(dicomType);
 	}
 
+	// This test requires access to the opencv native libraries
+	@Ignore
 	@Test
 	public void testFileDicomGetThumbnailasImage() throws Exception {
 		DicomType dicomType = testDicomType.setup(false);
