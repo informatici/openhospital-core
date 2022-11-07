@@ -29,6 +29,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -180,7 +181,11 @@ public class Patient extends Auditable<String> {
 	@Column(name="PAT_LOCK")
 	private int lock;
 	
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(
+					fetch = FetchType.LAZY, 
+					cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, 
+					orphanRemoval = true
+	)
 	@JoinColumn(name = "PAT_PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID", nullable = true)
 	private PatientProfilePhoto patientProfilePhoto; // nullable because user can choose to save on file system
 	
