@@ -84,7 +84,6 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 		String[] terms = getTermsToSearch(searchTerms);
 
 		List<AdmittedPatient> admittedPatients = new ArrayList<>();
-
 		if (terms.length == 1) {
 			try {
 				int code = Integer.parseInt(terms[0]);
@@ -143,7 +142,7 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 		String[] terms = getTermsToSearch(searchTerms);
 
 		List<AdmittedPatient> admittedPatients = new ArrayList<>();
-
+		System.out.println(terms.length);
 		if (terms.length == 1) {
 			try {
 				int code = Integer.parseInt(terms[0]);
