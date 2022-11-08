@@ -290,7 +290,7 @@ public class SourceFiles extends Thread {
 						ImageIO.write(originalImage, fileType, f);
 						sourceFile = f;
 					}
-				} catch (IIOException iioException) {
+				} catch (IIOException | RuntimeException exception) {
 					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName()),
 							OHSeverityLevel.ERROR));
