@@ -43,6 +43,7 @@ import org.dcm4che3.data.Attributes;
 import org.dcm4che3.data.Tag;
 import org.dcm4che3.io.DicomInputStream;
 import org.dcm4che3.io.DicomStreamException;
+import org.dcm4che3.util.SafeClose;
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Rotation;
 import org.isf.dicom.model.FileDicom;
@@ -301,9 +302,10 @@ public class SourceFiles extends Thread {
 				reader = (ImageReader) iter.next();
 				param = reader.getDefaultReadParam();
 				DicomInputStream dicomStream = null;
+				ByteArrayInputStream byteArrayInputStream = null;
 				try {
 					byte[] data = Files.readAllBytes(Paths.get(sourceFile.getAbsolutePath()));
-					ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
+					byteArrayInputStream = new ByteArrayInputStream(data);
 					dicomStream = new DicomInputStream(byteArrayInputStream);
 					reader.setInput(dicomStream);
 					originalImage = reader.read(0, param);
@@ -312,7 +314,8 @@ public class SourceFiles extends Thread {
 							MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()), OHSeverityLevel.ERROR));
 				}
 				finally {
-					dicomStream.close();
+					SafeClose.close(dicomStream);
+					SafeClose.close(byteArrayInputStream);
 				}
 			} else {
 				throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
