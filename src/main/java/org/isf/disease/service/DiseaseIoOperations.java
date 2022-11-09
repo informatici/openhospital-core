@@ -36,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
  * diseases records from the database
  * 
  * @author Rick, Vero
- *
+ * <p>
  * modification history
  * 25/01/2006 - Rick, Vero, Pupo  - first beta version
  * 08/11/2006 - ross - added support for OPD and IPD flags
