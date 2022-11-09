@@ -227,27 +227,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.sun</groupId>
-			<artifactId>clibwrapper_jiio</artifactId>
-			<version>1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.media</groupId>
-			<artifactId>jai_imageio</artifactId>
-			<version>1.1</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.media</groupId>
-					<artifactId>jai_core</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>javax.media</groupId>
-			<artifactId>jai-core</artifactId>
-			<version>1.1.3</version>
-		</dependency>
-		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
 			<version>8.0.31</version>
@@ -278,19 +257,24 @@
 			<version>1.1.1</version>
 		</dependency>
 		<dependency>
-			<groupId>dcm4che</groupId>
+			<groupId>org.dcm4che</groupId>
 			<artifactId>dcm4che-core</artifactId>
-			<version>2.0.26</version>
+			<version>5.29.0</version>
 		</dependency>
 		<dependency>
-			<groupId>dcm4che</groupId>
+			<groupId>org.dcm4che</groupId>
 			<artifactId>dcm4che-image</artifactId>
-			<version>2.0.26</version>
+			<version>5.29.0</version>
 		</dependency>
 		<dependency>
-			<groupId>dcm4che</groupId>
+			<groupId>org.dcm4che</groupId>
 			<artifactId>dcm4che-imageio</artifactId>
-			<version>2.0.26</version>
+			<version>5.29.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.dcm4che</groupId>
+			<artifactId>dcm4che-imageio-opencv</artifactId>
+			<version>5.29.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -523,9 +507,12 @@
 
 	<repositories>
 		<repository>
-			<id>lib</id>
-			<name>Legacy Dependencies Repository</name>
-			<url>file:${project.basedir}/repo</url>
+			<id>dcm4che</id>
+			<name>Dcm4che repository</name>
+			<url>https://www.dcm4che.org/maven2/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 		<repository>
 			<id>JFrog</id>
