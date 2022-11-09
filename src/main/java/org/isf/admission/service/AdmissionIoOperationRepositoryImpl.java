@@ -163,12 +163,10 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 			Query nativeQuery=null;
 			if (admissionRange != null) {
 				if (admissionRange[0] != null) {
-					System.out.println("admissionRange "+admissionRange[0]);
 					rangePredicate.append(" and ").append("DATE(ADM_DATE_ADM) between '").append(TimeTools.formatDateTime(admissionRange[0], YYYY_MM_DD))
 							.append("'");
 				}
 				if (admissionRange[1] != null) {
-					System.out.println("admissionRange "+admissionRange[1]);
 					rangePredicate.append(" and '").append(TimeTools.formatDateTime(admissionRange[1], YYYY_MM_DD))
 							.append("'");
 					nativeQuery=null;
@@ -178,12 +176,10 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 			}
 			if (dischargeRange != null) {
 				if (dischargeRange[0] != null) {
-					System.out.println("discharge"+dischargeRange[0]);
 					rangePredicate.append(" and ").append("DATE(ADM_DATE_DIS) between '").append(TimeTools.formatDateTime(dischargeRange[0], YYYY_MM_DD))
 							.append("'");
 				}
 				if (dischargeRange[1] != null) {
-					System.out.println("discharge"+dischargeRange[1]);
 					rangePredicate.append(" and '").append(TimeTools.formatDateTime(dischargeRange[1], YYYY_MM_DD))
 							.append("'");
 					nativeQuery=null;
@@ -197,7 +193,6 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 			return parseResultSet(admittedPatients, nativeQuery);
 
 		} else {
-			System.out.println("melange");
 			Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryTerms2, "AdmittedPatient");
 			String paramTerms = like(terms);
 			nativeQuery.setParameter("param0", paramTerms);
