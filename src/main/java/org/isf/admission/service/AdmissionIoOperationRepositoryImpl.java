@@ -145,7 +145,6 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 
 		List<AdmittedPatient> admittedPatients = new ArrayList<>();
 		if (terms.length == 1 && admissionRange[0] == null && dischargeRange[0] == null ) {
-			System.out.println("code");
 			try {
 				int code = Integer.parseInt(terms[0]);
 				Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryCode2, "AdmittedPatient");
