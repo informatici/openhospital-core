@@ -134,15 +134,19 @@ public class PatientIoOperations {
 		List<Patient> patients = repository.findAllWhereIdAndDeleted(code, NOT_DELETED_STATUS);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
-			if (IS_LOAD_PROFILE_PHOTO_FROM_DB) {
-				Hibernate.initialize(patient.getPatientProfilePhoto());
-			} else {
-				((Session) this.entityManager.getDelegate()).evict(patient);
-				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
-			}
+			retrieveProfilePhoto(patient);
 			return patient;
 		}
 		return null;
+	}
+
+	private void retrieveProfilePhoto(Patient patient) throws OHServiceException {
+		if (IS_LOAD_PROFILE_PHOTO_FROM_DB) {
+			Hibernate.initialize(patient.getPatientProfilePhoto());
+		} else {
+			((Session) this.entityManager.getDelegate()).evict(patient);
+			fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
+		}
 	}
 
 	/**
@@ -157,12 +161,7 @@ public class PatientIoOperations {
 		List<Patient> patients = repository.findByNameAndDeletedOrderByName(name, NOT_DELETED_STATUS);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
-			if (IS_LOAD_PROFILE_PHOTO_FROM_DB) {
-				Hibernate.initialize(patient.getPatientProfilePhoto());
-			} else {
-				((Session) this.entityManager.getDelegate()).evict(patient);
-				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
-			}
+			retrieveProfilePhoto(patient);
 			return patient;
 		}
 		return null;
@@ -178,12 +177,7 @@ public class PatientIoOperations {
 	public Patient getPatientAll(Integer code) throws OHServiceException {
 		Patient patient = repository.findById(code).orElse(null);
 		if (patient != null) {
-			if (IS_LOAD_PROFILE_PHOTO_FROM_DB) {
-				Hibernate.initialize(patient.getPatientProfilePhoto());
-			} else {
-				((Session) this.entityManager.getDelegate()).evict(patient);
-				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
-			}
+			retrieveProfilePhoto(patient);
 		}
 		return patient;
 	}
