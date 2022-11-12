@@ -153,7 +153,6 @@ public class PatientIoOperations {
 	 * Method that gets a Patient by his/her name
 	 * 
 	 * @param name
-	 * @param IS_LOAD_PROFILE_PHOTO_FROM_DB
 	 * @return
 	 * @throws OHServiceException
 	 */
