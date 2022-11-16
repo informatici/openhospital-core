@@ -74,4 +74,3 @@ source step_77_laboratory_button_in_admission_patient.sql;
 source step_79_rename_pat_photo_field.sql;
 source step_80_add_ward_opd.sql;
 source step_81_link_bill_admission.sql;
-source step_82_logout_menu_item.sql;
