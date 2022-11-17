@@ -1112,6 +1112,11 @@ CREATE TABLE `oh_dicomtype` (
 
 LOCK TABLES `oh_dicomtype` WRITE;
 /*!40000 ALTER TABLE `oh_dicomtype` DISABLE KEYS */;
+INSERT INTO `oh_dicomtype` VALUES ('CTS','CT-Scan');
+INSERT INTO `oh_dicomtype` VALUES ('DEF','Default');
+INSERT INTO `oh_dicomtype` VALUES ('GEN','General');
+INSERT INTO `oh_dicomtype` VALUES ('NRM','NM Resonance');
+INSERT INTO `oh_dicomtype` VALUES ('XRA','X-Ray');
 /*!40000 ALTER TABLE `oh_dicomtype` ENABLE KEYS */;
 UNLOCK TABLES;
 
