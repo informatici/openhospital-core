@@ -450,6 +450,24 @@ public class PatientBrowserManager {
 		if(patient.getAge() > 0 || patient.getAge() < 200) {
 			LocalDate date = now.minusYears(patient.getAge());
 			patient.setBirthDate(date);
+			if(patient.getAge() == 0 ) {
+				patient.setAgetype("d0");
+			}
+			if(patient.getAge() > 0 && patient.getAge() <= 5) {
+				patient.setAgetype("d1");
+			}
+			if(patient.getAge() > 5 && patient.getAge() <= 12) {
+				patient.setAgetype("d2");
+			}
+			if(patient.getAge() > 12 && patient.getAge() <= 24) {
+				patient.setAgetype("d3");
+			}
+			if(patient.getAge() > 24 && patient.getAge() <= 59) {
+				patient.setAgetype("d4");
+			}
+			if(patient.getAge() > 59 && patient.getAge() < 200) {
+				patient.setAgetype("d5");
+			}
 		}
 		return true;
 	}
