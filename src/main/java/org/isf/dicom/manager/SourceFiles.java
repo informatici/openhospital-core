@@ -231,7 +231,7 @@ public class SourceFiles extends Thread {
 		if (attributes.contains(Tag.SeriesDate) && attributes.getString(Tag.SeriesDate) != null) {
 			return LocalDateTime.ofInstant(attributes.getDate(Tag.SeriesDateAndTime).toInstant(), ZoneId.systemDefault());
 		}
-		LOGGER.error("DICOM: Unparsable SeriesDate: date=" + attributes.getString(Tag.SeriesDate) + "  time=" + attributes.getString(Tag.SeriesTime));
+		LOGGER.error("DICOM: Unparsable SeriesDate: date={}  time={}", attributes.getString(Tag.SeriesDate), attributes.getString(Tag.SeriesTime));
         return null;
 	}
 
@@ -239,7 +239,7 @@ public class SourceFiles extends Thread {
 		if (attributes.contains(Tag.StudyDate) && attributes.getString(Tag.StudyDate) != null) {
 			return LocalDateTime.ofInstant(attributes.getDate(Tag.StudyDateAndTime).toInstant(), ZoneId.systemDefault());
 		}
-		LOGGER.error("DICOM: Unparsable StudyDate: date=" + attributes.getString(Tag.StudyDate) + "  time=" + attributes.getString(Tag.StudyTime));
+		LOGGER.error("DICOM: Unparsable StudyDate: date={}  time={}", attributes.getString(Tag.StudyDate), attributes.getString(Tag.StudyTime));
 		return null;
 	}
 
