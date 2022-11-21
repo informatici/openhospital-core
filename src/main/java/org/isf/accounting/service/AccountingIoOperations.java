@@ -334,7 +334,7 @@ public class AccountingIoOperations {
 	
 	/**
 	 * Return the bill list which date between dateFrom and dateTo and containing given billItem
-	 *
+	 * <p>
 	 * added by u2g
 	 *
 	 * @param dateFrom

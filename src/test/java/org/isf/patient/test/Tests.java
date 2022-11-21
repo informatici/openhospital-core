@@ -49,6 +49,7 @@ import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -692,6 +693,8 @@ public class Tests extends OHCoreTestCase {
 		assertThat(patent2.hashCode()).isEqualTo(23 * 133);
 	}
 
+	// This test requires access to the opencv java native library
+	@Ignore
 	@Test
 	public void testPatientProfilePhoto() throws Exception {
 		Patient patient = testPatient.setup(true);

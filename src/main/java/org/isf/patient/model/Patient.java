@@ -181,11 +181,15 @@ public class Patient extends Auditable<String> {
 	@Version
 	@Column(name = "PAT_LOCK")
 	private int lock;
-
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "PAT_PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID")
-	private PatientProfilePhoto patientProfilePhoto;
-
+	
+	@OneToOne(
+			fetch = FetchType.LAZY, 
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, 
+			orphanRemoval = true
+	)
+	@JoinColumn(name = "PAT_PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID", nullable = true)
+	private PatientProfilePhoto patientProfilePhoto; // nullable because user can choose to save on file system
+	
 	@Transient
 	private volatile int hashCode = 0;
 	

@@ -24,7 +24,7 @@ package org.isf.generaldata;
 /**
  * ------------------------------------------
  * General Data
- *
+ * <p>
  *    12/2007 - isf bari - added resource bundle for internationalization
  * 19/06/2008 - isf bari - added patientsheet jasper report name
  * 20/12/2008 - isf bari - added patientextended
@@ -90,6 +90,7 @@ public final class GeneralData extends ConfigurationProperties {
 	public static String PATIENTBILLSTATEMENT;
 	public static boolean DEBUG;
 	public static String PATIENTPHOTOSTORAGE;
+	public static Integer SESSIONTIMEOUT;
 
 	public static boolean STRONGPASSWORD;
 	public static int STRONGLENGTH;
@@ -139,6 +140,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_PATIENTBILLSTATEMENT = "PatientBillStatement";
 	private static final boolean DEFAULT_DEBUG = false;
 	private static final int DEFAULT_STRONGLENGTH = 10;
+	private static final int DEFAULT_SESSIONTIMEOUT = 5;
 	private static final boolean DEFAULT_STRONGPASSWORD = true;
 	private static final String DEFAULT_PATIENTPHOTO = "DB";
 	
@@ -205,7 +207,8 @@ public final class GeneralData extends ConfigurationProperties {
 			STRONGLENGTH = 6;
 		}
 		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTO);
-	}
+		SESSIONTIMEOUT = myGetProperty("SESSIONTIMEOUT", DEFAULT_SESSIONTIMEOUT);
+}
 
 	public static GeneralData getGeneralData() {
 		if (mySingleData == null) {
