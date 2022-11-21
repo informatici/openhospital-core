@@ -272,8 +272,7 @@ public class Patient extends Auditable<String> {
 	public Patient(int code, String firstName, String secondName, String name, LocalDate birthDate, int age,
 			String agetype, char sex, String address, String city, String nextKin, String telephone, String note,
 			String motherName, char mother, String fatherName, char father, String bloodType, char economicStatut,
-			char parentTogether, String taxCode, String maritalStatus, String profession) { // Changed EduLev with
-																							// bloodType
+			char parentTogether, String taxCode, String maritalStatus, String profession) { // Changed EduLev with bloodType
 		this.code = code;
 		this.firstName = firstName;
 		this.secondName = secondName;
@@ -550,14 +549,18 @@ public class Patient extends Auditable<String> {
 		sbName.append(' ');
 		sbName.append(getCity().toLowerCase());
 		sbName.append(' ');
-		if (getAddress() != null)
+		if (getAddress() != null) {
 			sbName.append(getAddress().toLowerCase()).append(' ');
-		if (getTelephone() != null)
+		} 
+		if (getTelephone() != null) {
 			sbName.append(getTelephone()).append(' ');
-		if (getNote() != null)
+		}
+		if (getNote() != null) {
 			sbName.append(getNote().toLowerCase()).append(' ');
-		if (getTaxCode() != null)
+		}
+		if (getTaxCode() != null) {
 			sbName.append(getTaxCode().toLowerCase()).append(' ');
+		}
 		return sbName.toString();
 	}
 
