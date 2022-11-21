@@ -113,35 +113,12 @@ public class PatientIoOperations {
 	public List<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException {
 		return repository.findByFieldsContainingWordsFromLiteral(keyword);
 	}
-
+	
 	/**
 	 * Method that gets a Patient by his/her ID
 	 *
 	 * @param code
 	 * @return the Patient that match specified ID
-	 * @throws OHServiceException
-	 */
-	public Patient getPatient(String name) throws OHServiceException {
-		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
-		List<Patient> patients = repository.findByNameOrderByName(name);
-		if (!patients.isEmpty()) {
-			Patient patient = patients.get(patients.size() - 1);
-			if (isLoadProfilePhotoFromDb) {
-				Hibernate.initialize(patient.getPatientProfilePhoto());
-			} else {
-				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
-			}
-			return patient;
-		}
-		return null;
-	}
-
-	/**
-	 * Method that gets a Patient by his/her name
-	 * 
-	 * @param name
-	 * @param isLoadProfilePhotoFromDb
-	 * @return
 	 * @throws OHServiceException
 	 */
 	public Patient getPatient(Integer code) throws OHServiceException {
@@ -158,6 +135,29 @@ public class PatientIoOperations {
 		}
 		return null;
 	}
+
+	/**
+	 * Method that gets a Patient by his/her name
+	 * 
+	 * @param name
+	 * @return
+	 * @throws OHServiceException
+	 */
+	public Patient getPatient(String name) throws OHServiceException {
+		boolean isLoadProfilePhotoFromDb = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
+		List<Patient> patients = repository.findByNameOrderByName(name);
+		if (!patients.isEmpty()) {
+			Patient patient = patients.get(patients.size() - 1);
+			if (isLoadProfilePhotoFromDb) {
+				Hibernate.initialize(patient.getPatientProfilePhoto());
+			} else {
+				fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
+			}
+			return patient;
+		}
+		return null;
+	}
+	
 
 	/**
 	 * Get a Patient by his/her ID, even if he/her has been logically deleted
