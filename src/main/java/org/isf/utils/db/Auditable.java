@@ -59,7 +59,7 @@ public abstract class Auditable<U> {
    
 	@NotNull
     @Column(name="ACTIVE")
-    protected Integer active = Integer.valueOf(1);
+    protected int active = 1;
 
     public U getCreatedBy() {
         return createdBy;
