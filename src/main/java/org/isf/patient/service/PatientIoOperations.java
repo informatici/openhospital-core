@@ -62,8 +62,6 @@ public class PatientIoOperations {
 
 	public static final String LOAD_FROM_DB = "DB";
 
-	public static final String NOT_DELETED_STATUS = "N";
-	
 	public static boolean IS_LOAD_PROFILE_PHOTO_FROM_DB = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 	
 	@Autowired
@@ -132,7 +130,7 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public Patient getPatient(Integer code) throws OHServiceException {
-		List<Patient> patients = repository.findAllWhereIdAndDeleted(code, NOT_DELETED_STATUS);
+		List<Patient> patients = repository.findAllWhereId(code);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
 			retrieveProfilePhoto(patient);
@@ -158,7 +156,7 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public Patient getPatient(String name) throws OHServiceException {
-		List<Patient> patients = repository.findByNameAndDeletedOrderByName(name, NOT_DELETED_STATUS);
+		List<Patient> patients = repository.findByNameOrderByName(name);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
 			retrieveProfilePhoto(patient);
