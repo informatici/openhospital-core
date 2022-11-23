@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
+import org.isf.generaldata.GeneralData;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperationRepository;
 import org.isf.medicals.test.TestMedical;
@@ -195,6 +196,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewTherapiesWithSMSDateAfterToday() throws Exception {
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
 		Patient patient = testPatient.setup(false);
@@ -202,7 +204,7 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 		TherapyRow therapyRow = testTherapyRow.setup(patient, medical, true);
-		therapyRow.setStartDate(LocalDateTime.now());
+		therapyRow.setStartDate(TimeTools.getNow());
 		therapyRow.setEndDate(TimeTools.getBeginningOfNextDay(therapyRow.getStartDate()));
 		therapyIoOperationRepository.saveAndFlush(therapyRow);
 		ArrayList<TherapyRow> therapyRows = new ArrayList<>();
@@ -213,6 +215,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewTherapiesWithSMSDateAfterTodayTruncateMessage() throws Exception {
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
 		Patient patient = testPatient.setup(false);
@@ -220,8 +223,8 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 		String longText = "This is a very long note that should cause the SMS code to truncate the entire message to 160 characters.";
-		TherapyRow therapyRow = therapyManager.newTherapy(1, patient.getCode(), LocalDateTime.now(),
-				TimeTools.getBeginningOfNextDay(LocalDateTime.now()), medical, 10.0, 1, 1, 1,
+		TherapyRow therapyRow = therapyManager.newTherapy(1, patient.getCode(), TimeTools.getNow(),
+				TimeTools.getBeginningOfNextDay(TimeTools.getNow()), medical, 10.0, 1, 1, 1,
 				longText + ' ' + longText, true, true);
 		therapyIoOperationRepository.saveAndFlush(therapyRow);
 		ArrayList<TherapyRow> therapyRows = new ArrayList<>();
@@ -279,6 +282,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrDeleteTherapyRow() throws Exception {
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		int id = setupTestTherapyRow(false);
 		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).get();
 		assertThat(therapyManager.deleteAllTherapies(foundTherapyRow.getPatient().getCode())).isTrue();
@@ -294,7 +298,7 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		LocalDateTime[] dates = { LocalDateTime.now(), LocalDateTime.now() };
+		LocalDateTime[] dates = { TimeTools.getNow(), TimeTools.getNow() };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 10.0, "", 1, "TestNote", true, true);
 
 		ArrayList<Therapy> therapies = new ArrayList<>();
@@ -315,7 +319,7 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		LocalDateTime[] dates = { LocalDateTime.now(), LocalDateTime.now() };
+		LocalDateTime[] dates = { TimeTools.getNow(), TimeTools.getNow() };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 1.0, "", 1, "TestNote", true, true);
 
 		ArrayList<Therapy> therapies = new ArrayList<>();
@@ -392,7 +396,7 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		LocalDateTime[] dates = { LocalDateTime.now(), LocalDateTime.now() };
+		LocalDateTime[] dates = { TimeTools.getNow(), TimeTools.getNow() };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 10.0, "", 1, "TestNote", true, true);
 
 		assertThat(therapy.getTherapyID()).isEqualTo(1);
@@ -455,7 +459,7 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		LocalDateTime[] dates = { LocalDateTime.now(), LocalDateTime.now() };
+		LocalDateTime[] dates = { TimeTools.getNow(), TimeTools.getNow() };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 10.0, "", 1, "TestNote", true, true);
 		assertThat(therapy).hasToString("10.0 of TestDescription - 1 per day");
 	}

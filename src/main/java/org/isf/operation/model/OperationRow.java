@@ -37,12 +37,13 @@ import javax.validation.constraints.NotNull;
 import org.isf.accounting.model.Bill;
 import org.isf.admission.model.Admission;
 import org.isf.opd.model.Opd;
+import org.isf.utils.time.TimeTools;
 
 /**
  * @author xavier
  */
 @Entity
-@Table(name = "OPERATIONROW")
+@Table(name="OH_OPERATIONROW")
 public class OperationRow {
 
     @Id
@@ -108,7 +109,7 @@ public class OperationRow {
         this.operation = operation;
         this.prescriber = prescriber;
         this.opResult = opResult;
-        this.opDate = opDate;
+        this.opDate = TimeTools.truncateToSeconds(opDate);
         this.remarks = remarks;
         this.admission = admission;
         this.opd = opd;
@@ -168,7 +169,7 @@ public class OperationRow {
     }
 
     public void setOpDate(LocalDateTime opDate) {
-        this.opDate = opDate;
+        this.opDate = TimeTools.truncateToSeconds(opDate);
     }
 
     public String getRemarks() {

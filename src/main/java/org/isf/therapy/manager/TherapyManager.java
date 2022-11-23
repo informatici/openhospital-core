@@ -22,7 +22,6 @@
 package org.isf.therapy.manager;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +38,7 @@ import org.isf.sms.service.SmsOperations;
 import org.isf.therapy.model.Therapy;
 import org.isf.therapy.model.TherapyRow;
 import org.isf.therapy.service.TherapyIoOperations;
+import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,8 +98,10 @@ public class TherapyManager {
 
 		List<LocalDateTime> datesArray = new ArrayList<>();
 
-		LocalDateTime stepDate = startDate;
-		datesArray.add(startDate);
+		LocalDateTime stepDate = TimeTools.truncateToSeconds(startDate);
+		datesArray.add(stepDate);
+
+		endDate = TimeTools.truncateToSeconds(endDate);
 
 		while (stepDate.isBefore(endDate)) {
 			LocalDateTime newDate = stepDate.plusDays(freqInPeriod);
@@ -168,6 +170,7 @@ public class TherapyManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean newTherapies(List<TherapyRow> thRows) throws OHServiceException {
 		if (!thRows.isEmpty()) {
 
@@ -234,6 +237,7 @@ public class TherapyManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean deleteAllTherapies(Integer code) throws OHServiceException {
 		Patient patient = patientManager.getPatientById(code);
 		return ioOperations.deleteAllTherapies(patient);
@@ -247,6 +251,7 @@ public class TherapyManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
+	@TranslateOHServiceException
 	public List<Medical> getMedicalsOutOfStock(List<Therapy> therapies) throws OHServiceException {
 		List<Medical> medOutStock = new ArrayList<>();
 		List<Medical> medArray = medManager.getMedicals();
@@ -259,7 +264,7 @@ public class TherapyManager {
 			// CALCULATING NEEDINGS
 			Double qty = th.getQty();
 			int freq = th.getFreqInDay();
-			LocalDateTime todayDate = LocalDateTime.now().with(LocalTime.MIN);
+			LocalDateTime todayDate = TimeTools.getDateToday0();
 
 			int dayCount = 0;
 			for (LocalDateTime date : th.getDates()) {

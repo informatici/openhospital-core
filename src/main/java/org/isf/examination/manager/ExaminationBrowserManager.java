@@ -21,7 +21,6 @@
  */
 package org.isf.examination.manager;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -57,7 +56,7 @@ public class ExaminationBrowserManager {
 	 */
 	public PatientExamination getDefaultPatientExamination(Patient patient) {
 		return new PatientExamination(
-				LocalDateTime.now(),
+				TimeTools.getNow(),
 				patient,
 				ExaminationParameters.HEIGHT_INIT,
 				(double) ExaminationParameters.WEIGHT_INIT,
@@ -79,7 +78,7 @@ public class ExaminationBrowserManager {
 	 * Get from last PatientExamination (only height, weight & note)
 	 */
 	public PatientExamination getFromLastPatientExamination(PatientExamination lastPatientExamination) {
-		return new PatientExamination(LocalDateTime.now(),
+		return new PatientExamination(TimeTools.getNow(),
 				lastPatientExamination.getPatient(),
 				lastPatientExamination.getPex_height(),
 				lastPatientExamination.getPex_weight(),

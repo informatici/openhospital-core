@@ -55,6 +55,7 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.test.TestPatient;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.time.TimeTools;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -646,20 +647,6 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrNewLaboratory2ProcedureEquals2EmptyLabRows() {
-		assertThatThrownBy(() ->
-		{
-			ArrayList<LaboratoryRow> labRow = new ArrayList<>();
-			ExamType examType = testExamType.setup(false);
-			Exam exam = testExam.setup(examType, 2, false);
-			Patient patient = testPatient.setup(false);
-			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-			labManager.newLaboratory2(laboratory, labRow);
-		})
-				.isInstanceOf(OHDataValidationException.class);
-	}
-
-	@Test
 	public void testMgrNewLaboratory2ProcedureEquals2NullLabRows() {
 		assertThatThrownBy(() ->
 		{
@@ -697,7 +684,6 @@ public class Tests extends OHCoreTestCase {
 
 		ArrayList<String> labRow = new ArrayList<>();
 		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-		laboratory.setExamDate(null);
 
 		assertThat(labManager.newLaboratory(laboratory, labRow)).isTrue();
 	}
@@ -1281,7 +1267,7 @@ public class Tests extends OHCoreTestCase {
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 1, false);
 		Patient patient = testPatient.setup(false);
-		Laboratory laboratory = new Laboratory(code, exam, LocalDateTime.now(), result, note, patient, patient.getName());
+		Laboratory laboratory = new Laboratory(code, exam, TimeTools.getNow(), result, note, patient, patient.getName());
 		assertThat(laboratory).isNotNull();
 		assertThat(laboratory.getCode()).isEqualTo(code);
 		assertThat(laboratory.getExam()).isEqualTo(exam);
@@ -1299,7 +1285,7 @@ public class Tests extends OHCoreTestCase {
 	public void testLaboratoryEqualsHashToString() throws Exception {
 		int code = setupTestLaboratory(false);
 		Laboratory laboratory = labIoOperationRepository.findById(code).get();
-		Laboratory laboratory2 = new Laboratory(code + 1, null, LocalDateTime.now(), "result", "note", null, "name");
+		Laboratory laboratory2 = new Laboratory(code + 1, null, TimeTools.getNow(), "result", "note", null, "name");
 		assertThat(laboratory.equals(laboratory)).isTrue();
 		assertThat(laboratory)
 				.isNotEqualTo(laboratory2)
@@ -1320,7 +1306,7 @@ public class Tests extends OHCoreTestCase {
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 1, false);
 		Patient patient = testPatient.setup(false);
-		Laboratory laboratory = new Laboratory(code, exam, LocalDateTime.now(), result, note, patient, patient.getName());
+		Laboratory laboratory = new Laboratory(code, exam, TimeTools.getNow(), result, note, patient, patient.getName());
 		LaboratoryRow laboratoryRow = new LaboratoryRow(code, laboratory, "description");
 		assertThat(laboratoryRow).isNotNull();
 

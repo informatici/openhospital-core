@@ -22,14 +22,18 @@
 package org.isf.opd.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.disease.model.Disease;
 import org.isf.generaldata.GeneralData;
 import org.isf.opd.model.Opd;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
+import org.isf.visits.model.Visit;
+import org.isf.ward.model.Ward;
 
 public class TestOpd {
 
@@ -41,16 +45,15 @@ public class TestOpd {
 	private String referralFrom = "R";
 	private String referralTo = "R";
 	private String userID = "TestUser";
-	private String reason = "reason";
-	private String therapies = "therapies";
 	private String prescription = "prescription";
-	
-	public Opd setup(Patient patient, Disease disease, boolean usingSet) throws OHException {
+
+	public Opd setup(Patient patient, Disease disease, Ward ward, Visit nextVisit, boolean usingSet) throws OHException {
+
 		Opd opd;
 
 		if (usingSet) {
 			opd = new Opd();
-			setParameters(patient, disease, opd);
+			setParameters(patient, disease, ward, nextVisit, opd);
 		} else {
 			// Create Opd with all parameters 
 			opd = new Opd(prog_year, sex, age, disease);
@@ -67,12 +70,14 @@ public class TestOpd {
 			opd.setPatient(patient);
 			opd.setDisease2(disease);
 			opd.setDisease3(disease);
+			opd.setWard(ward);
+			opd.setNextVisit(nextVisit);
 		}
 
 		return opd;
 	}
 
-	public void setParameters(Patient patient, Disease disease, Opd opd) {
+	public void setParameters(Patient patient, Disease disease, Ward ward, Visit nextVisit, Opd opd) {
 		opd.setDate(date);
 		opd.setAge(age);
 		opd.setSex(sex);
@@ -90,10 +95,12 @@ public class TestOpd {
 		opd.setDisease(disease);
 		opd.setDisease2(disease);
 		opd.setDisease3(disease);
+		opd.setWard(ward);
+		opd.setNextVisit(nextVisit);
 	}
 
 	public void check(Opd opd) {
-		assertThat(opd.getDate()).isEqualTo(date);
+		assertThat(opd.getDate()).isCloseTo(date, within(1, ChronoUnit.SECONDS));
 		if (!(GeneralData.OPDEXTENDED && opd.getPatient() != null)) {
 			// skip checks as OpdBrowserManager sets values from patient
 			// thus only do checks when not OPDEXTENDED and patient == null

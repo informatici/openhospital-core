@@ -150,7 +150,7 @@ public class VisitsIoOperations {
 	 *
 	 * @param visit - the {@link Visit}
 	 */
-	public void deleteVisit(Visit visit) {
+	public void deleteVisit(Visit visit) throws OHServiceException {
 		repository.delete(visit);
 	}
 }

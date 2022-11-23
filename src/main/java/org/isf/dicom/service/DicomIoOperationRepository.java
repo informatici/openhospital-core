@@ -29,7 +29,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface DicomIoOperationRepository extends JpaRepository<FileDicom, Long> {
@@ -46,14 +45,13 @@ public interface DicomIoOperationRepository extends JpaRepository<FileDicom, Lon
 	List<FileDicom> findAllWhereIdAndFileAndUid(@Param("id") int id, @Param("file") String file, @Param("uid") String uid);
 
 	@Modifying
-	@Transactional
 	@Query("delete from FileDicom fd WHERE fd.patId = :id AND fd.dicomSeriesNumber = :file")
 	void deleteByIdAndNumber(@Param("id") int id, @Param("file") String file);
 
-	@Query(value = "SELECT COUNT(DM_FILE_SER_NUMBER) FROM DICOM WHERE DM_FILE_SER_NUMBER = :dicomSeriesNumber", nativeQuery = true)
+	@Query(value = "SELECT COUNT(DM_FILE_SER_NUMBER) FROM OH_DICOM WHERE DM_FILE_SER_NUMBER = :dicomSeriesNumber", nativeQuery = true)
 	int seriesExists(@Param("dicomSeriesNumber") String dicomSeriesNumber);
 
-	@Query(value = "SELECT COUNT(DM_FILE_SER_INST_UID) FROM DICOM WHERE DM_FILE_SER_INST_UID = :dicomSeriesNumberId AND DM_PAT_ID = :id", nativeQuery = true)
+	@Query(value = "SELECT COUNT(DM_FILE_SER_INST_UID) FROM OH_DICOM WHERE DM_FILE_SER_INST_UID = :dicomSeriesNumberId AND DM_PAT_ID = :id", nativeQuery = true)
 	int countFramesInSeries(@Param("dicomSeriesNumberId") String dicomSeriesInstanceUID, @Param("id") int id);
 
 }

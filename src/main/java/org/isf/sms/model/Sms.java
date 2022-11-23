@@ -32,11 +32,13 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.isf.utils.time.TimeTools;
+
 /**
  * @author Mwithi
  */
 @Entity
-@Table(name = "SMS")
+@Table(name="OH_SMS")
 public class Sms {
 
 	@Id
@@ -81,7 +83,7 @@ public class Sms {
 	}
 
 	public Sms(LocalDateTime smsDateSched, String smsNumber, String smsText, String smsUser) {
-		this.smsDateSched = smsDateSched;
+		this.smsDateSched = TimeTools.truncateToSeconds(smsDateSched);
 		this.smsNumber = smsNumber;
 		this.smsText = smsText;
 		this.smsUser = smsUser;
@@ -90,11 +92,11 @@ public class Sms {
 	public Sms(int smsId, LocalDateTime smsDate, LocalDateTime smsDateSched, String smsNumber, String smsText, LocalDateTime smsDateSent, String smsUser,
 			String module, String moduleID) {
 		this.smsId = smsId;
-		this.smsDate = smsDate;
-		this.smsDateSched = smsDateSched;
+		this.smsDate = TimeTools.truncateToSeconds(smsDate);
+		this.smsDateSched = TimeTools.truncateToSeconds(smsDateSched);
 		this.smsNumber = smsNumber;
 		this.smsText = smsText;
-		this.smsDateSent = smsDateSent;
+		this.smsDateSent = TimeTools.truncateToSeconds(smsDateSent);
 		this.smsUser = smsUser;
 		this.module = module;
 		this.moduleID = moduleID;
@@ -113,7 +115,7 @@ public class Sms {
 	}
 
 	public void setSmsDate(LocalDateTime smsDate) {
-		this.smsDate = smsDate;
+		this.smsDate = TimeTools.truncateToSeconds(smsDate);
 	}
 
 	public LocalDateTime getSmsDateSched() {
@@ -121,7 +123,7 @@ public class Sms {
 	}
 
 	public void setSmsDateSched(LocalDateTime smsDateSched) {
-		this.smsDateSched = smsDateSched;
+		this.smsDateSched = TimeTools.truncateToSeconds(smsDateSched);
 	}
 
 	public String getSmsNumber() {
@@ -145,7 +147,7 @@ public class Sms {
 	}
 
 	public void setSmsDateSent(LocalDateTime smsDateSent) {
-		this.smsDateSent = smsDateSent;
+		this.smsDateSent = TimeTools.truncateToSeconds(smsDateSent);
 	}
 
 	public String getSmsUser() {

@@ -22,8 +22,10 @@
 package org.isf.medicalstock.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
@@ -35,7 +37,7 @@ import org.isf.ward.model.Ward;
 
 public class TestMovement {
 
-	private LocalDateTime date = LocalDateTime.of(2000, 2, 2, 0, 0, 0);
+	private LocalDateTime date = LocalDateTime.of(2000, 2, 2, 0, 0, 0, 0);
 	private int quantity = 10;
 	private String refNo = "TestRef";
 
@@ -77,7 +79,7 @@ public class TestMovement {
 	}
 
 	public void check(Movement movement) {
-		assertThat(movement.getDate()).isEqualTo(date);
+		assertThat(movement.getDate()).isCloseTo(date, within(1, ChronoUnit.SECONDS));
 		assertThat(movement.getQuantity()).isEqualTo(quantity);
 		assertThat(movement.getRefNo()).isEqualTo(refNo);
 	}

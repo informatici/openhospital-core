@@ -40,7 +40,7 @@ import javax.persistence.Table;
  * Photo related to a single {@link Patient}
  */
 @Entity
-@Table(name = "PATIENT_PROFILE_PHOTO")
+@Table(name="OH_PATIENT_PROFILE_PHOTO")
 public class PatientProfilePhoto implements Serializable {
 
 	@Id

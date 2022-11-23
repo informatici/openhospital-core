@@ -21,7 +21,6 @@
  */
 package org.isf.lab.manager;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +35,7 @@ import org.isf.lab.model.LaboratoryForPrint;
 import org.isf.lab.model.LaboratoryRow;
 import org.isf.lab.service.LabIoOperations;
 import org.isf.patient.model.Patient;
+import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -80,7 +80,7 @@ public class LabManager {
 	 */
 	protected void validateLaboratory(Laboratory laboratory) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-		
+
 		if (laboratory.getExam() != null && laboratory.getExam().getProcedure() == 2) {
 			laboratory.setResult(MessageBundle.getMessage("angal.lab.multipleresults.txt"));
 		}
@@ -227,10 +227,6 @@ public class LabManager {
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.newLabFirstProcedure(laboratory);
 		} else if (laboratory.getExam().getProcedure() == 2) {
-			if (labRow == null || labRow.isEmpty())
-				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg"),
-						OHSeverityLevel.ERROR));
 			return ioOperations.newLabSecondProcedure2(laboratory, labRow);
 		} else if (laboratory.getExam().getProcedure() == 3) {
 			return ioOperations.newLabFirstProcedure(laboratory);
@@ -276,6 +272,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean newLaboratory(List<Laboratory> labList, List<List<String>> labRowList) throws OHServiceException {
 		if (labList.isEmpty())
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
@@ -301,6 +298,7 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean newLaboratory2(List<Laboratory> labList, List<List<LaboratoryRow>> labRowList) throws OHServiceException {
 		if (labList.isEmpty())
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),

@@ -38,6 +38,7 @@ import javax.validation.constraints.NotNull;
 
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.isf.vaccine.model.Vaccine;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -51,7 +52,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "PATIENTVACCINE")
+@Table(name="OH_PATIENTVACCINE")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "PAV_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "PAV_CREATED_DATE"))
@@ -97,7 +98,7 @@ public class PatientVaccine extends Auditable<String> {
 	public PatientVaccine(int codeIn, int progIn, LocalDateTime vacDateIn, Patient patient, Vaccine vacIn, int lockIn) {
 		this.code = codeIn;
 		this.progr = progIn;
-		this.vaccineDate = vacDateIn;
+		this.vaccineDate = TimeTools.truncateToSeconds(vacDateIn);
 		this.patient = patient;
 		this.vaccine = vacIn;
 		this.lock = lockIn;
@@ -124,7 +125,7 @@ public class PatientVaccine extends Auditable<String> {
 	}
 
 	public void setVaccineDate(LocalDateTime vaccineDate) {
-		this.vaccineDate = vaccineDate;
+		this.vaccineDate = TimeTools.truncateToSeconds(vaccineDate);
 	}
 
 	public Patient getPatient() {

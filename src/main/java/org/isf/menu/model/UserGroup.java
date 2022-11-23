@@ -40,7 +40,7 @@ import org.isf.utils.db.Auditable;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "USERGROUP")
+@Table(name="OH_USERGROUP")
 @AttributeOverride(name = "createdBy", column = @Column(name = "UG_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "UG_CREATED_DATE"))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "UG_LAST_MODIFIED_BY"))

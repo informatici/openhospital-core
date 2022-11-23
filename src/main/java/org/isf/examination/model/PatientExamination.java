@@ -38,6 +38,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.isf.patient.model.Patient;
+import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -46,7 +47,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @author Mwithi
  */
 @Entity
-@Table(name = "PATIENTEXAMINATION")
+@Table(name="OH_PATIENTEXAMINATION")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "PEX_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "PEX_CREATED_DATE"))
@@ -157,7 +158,7 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 			String pex_ausc,
 			String pex_note) {
 		super();
-		this.pex_date = pex_date;
+		this.pex_date = TimeTools.truncateToSeconds(pex_date);
 		this.patient = patient;
 		this.pex_height = pex_height;
 		this.pex_weight = pex_weight;
@@ -214,7 +215,7 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	 * @param pex_date the pex_date to set
 	 */
 	public void setPex_date(LocalDateTime pex_date) {
-		this.pex_date = pex_date;
+		this.pex_date = TimeTools.truncateToSeconds(pex_date);
 	}
 
 	/**

@@ -40,6 +40,7 @@ import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -53,7 +54,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "MEDICALDSRSTOCKMOVWARD")
+@Table(name="OH_MEDICALDSRSTOCKMOVWARD")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "MMVN_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "MMVN_CREATED_DATE"))
@@ -140,7 +141,7 @@ public class MovementWard extends Auditable<String> {
 			Double quantity, String units) {
 		super();
 		this.ward = ward;
-		this.date = date;
+		this.date = TimeTools.truncateToSeconds(date);
 		this.isPatient = isPatient;
 		this.patient = patient;
 		this.age = age;
@@ -155,7 +156,7 @@ public class MovementWard extends Auditable<String> {
 			Double quantity, String units, Lot lot) {
 		super();
 		this.ward = ward;
-		this.date = date;
+		this.date = TimeTools.truncateToSeconds(date);
 		this.isPatient = isPatient;
 		this.patient = patient;
 		this.age = age;
@@ -186,7 +187,7 @@ public class MovementWard extends Auditable<String> {
 		    Double quantity, String units, Ward wardTo, Ward wardFrom, Lot lot) {
 	    super();
 	    this.ward = ward;
-	    this.date = date;
+	    this.date = TimeTools.truncateToSeconds(date);
 	    this.isPatient = isPatient;
 	    this.patient = patient;
 	    this.age = age;
@@ -291,7 +292,7 @@ public class MovementWard extends Auditable<String> {
 	}
 
 	public void setDate(LocalDateTime date) {
-		this.date = date;
+		this.date = TimeTools.truncateToSeconds(date);
 	}
 
 	public void setQuantity(Double quantity) {

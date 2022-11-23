@@ -31,7 +31,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface PatientIoOperationRepository extends JpaRepository<Patient, Integer>, PatientIoOperationRepositoryCustom {
@@ -47,7 +46,6 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
 	List<Patient> findAllWhereIdAndDeleted(@Param("id") Integer id, @Param("deletedStatus") String deletedStatus);
 
 	@Modifying
-	@Transactional
 	@Query(value = "update Patient p set p.deleted = 'Y' where p.code = :id")
 	int updateDeleted(@Param("id") Integer id);
 

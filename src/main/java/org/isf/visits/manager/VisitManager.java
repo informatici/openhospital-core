@@ -27,13 +27,13 @@ import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.UserBrowsingManager;
-import org.isf.opd.model.Opd;
 import org.isf.opd.service.OpdIoOperationRepository;
 import org.isf.patient.manager.PatientBrowserManager;
 import org.isf.patient.model.Patient;
 import org.isf.sms.manager.SmsManager;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
+import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
@@ -41,6 +41,7 @@ import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
+import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -79,19 +80,26 @@ public class VisitManager {
 							MessageBundle.getMessage("angal.visit.pleasechooseadate.msg"),
 							OHSeverityLevel.ERROR));
 		}
-//		OP-700 in OPD we don't have ward... maybe in future.
-//		Shifted check into GUI
-//		Ward ward = visit.getWard();
-//		if (ward == null) { 
-//			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-//							MessageBundle.getMessage("angal.visit.pleasechooseaward.msg"),
-//							OHSeverityLevel.ERROR));
-//
-//		}
+		Ward ward = visit.getWard();
+		if (ward == null) { 
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.visit.pleasechooseaward.msg"),
+							OHSeverityLevel.ERROR));
+
+		}
 		if (patient == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.getMessage("angal.visit.pleasechooseapatient.msg"),
 							OHSeverityLevel.ERROR));
+		}
+		if (errors.isEmpty()) {
+			String sex = String.valueOf(patient.getSex());
+			if ((sex.equalsIgnoreCase("F") && !ward.isFemale())
+				|| (sex.equalsIgnoreCase("M") && !ward.isMale())) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.visit.thepatientssexandwarddonotagree.msg"),
+						OHSeverityLevel.ERROR));
+			}
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
@@ -144,10 +152,22 @@ public class VisitManager {
 	 * Insert a new {@link Visit} for related Patient
 	 *
 	 * @param visit - the {@link Visit}
-	 * @return the visitID
+	 * @return the persisted Visit
 	 * @throws OHServiceException
 	 */
 	public Visit newVisit(Visit visit) throws OHServiceException {
+		validateVisit(visit);
+		return ioOperations.newVisit(visit);
+	}
+	
+	/**
+	 * Update a new {@link Visit} for related Patient
+	 *
+	 * @param visit - the {@link Visit}
+	 * @return the updated Visit
+	 * @throws OHServiceException
+	 */
+	public Visit updateVisit(Visit visit) throws OHServiceException {
 		validateVisit(visit);
 		return ioOperations.newVisit(visit);
 	}
@@ -158,14 +178,7 @@ public class VisitManager {
 	 * @param visit - the {@link Visit}
 	 * @return the visitID
 	 */
-	public void deleteVisit(Visit visit) {
-		if (visit.getWard() == null) { // Update related OPD
-			Opd opd = opdRepository.findOneByPatientAndNextVisitDate(visit.getPatient(), visit.getDate());
-			if (opd != null) { // It may have been already updated
-				opd.setNextVisitDate(null);
-				opdRepository.save(opd);
-			}
-		}
+	public void deleteVisit(Visit visit) throws OHServiceException {
 		ioOperations.deleteVisit(visit);
 	}
 	
@@ -180,6 +193,7 @@ public class VisitManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean newVisits(List<Visit> visits) throws OHServiceException {
 		return newVisits(visits, new ArrayList<>());
 	}
@@ -196,6 +210,7 @@ public class VisitManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean newVisits(List<Visit> visits, List<Visit> removedVisits) throws OHServiceException {
 		if (!visits.isEmpty()) {
 			PatientBrowserManager patMan = this.applicationContext.getBean(PatientBrowserManager.class);
@@ -241,6 +256,7 @@ public class VisitManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean deleteAllVisits(int patID) throws OHServiceException {
 		List<Visit> visits = ioOperations.getVisits(patID);
 		for (Visit visit : visits) {
@@ -282,10 +298,5 @@ public class VisitManager {
 	 */
 	public Visit findVisit(int id) throws OHServiceException {
 		return ioOperations.findVisit(id);
-	}
-
-	public Visit updateVisit(Visit visit) throws OHServiceException {
-		// TODO Auto-generated method stub
-		return ioOperations.updateVisit(visit);
 	}
 }

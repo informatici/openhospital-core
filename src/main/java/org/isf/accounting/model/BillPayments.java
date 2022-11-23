@@ -37,6 +37,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -49,7 +50,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "BILLPAYMENTS")
+@Table(name="OH_BILLPAYMENTS")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "BLP_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "BLP_CREATED_DATE"))
@@ -91,7 +92,7 @@ public class BillPayments extends Auditable<String> implements Comparable<BillPa
 		super();
 		this.id = id;
 		this.bill = bill;
-		this.date = date;
+		this.date = TimeTools.truncateToSeconds(date);
 		this.amount = amount;
 		this.user = user;
 	}
@@ -117,7 +118,7 @@ public class BillPayments extends Auditable<String> implements Comparable<BillPa
 	}
 
 	public void setDate(LocalDateTime date) {
-		this.date = date;
+		this.date = TimeTools.truncateToSeconds(date);
 	}
 
 	public double getAmount() {

@@ -49,6 +49,7 @@ import org.isf.operation.model.Operation;
 import org.isf.patient.model.Patient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -62,7 +63,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="ADMISSION")
+@Table(name="OH_ADMISSION")
 @SqlResultSetMapping(name="AdmittedPatient",
 entities={
 		@EntityResult(entityClass=org.isf.patient.model.Patient.class),
@@ -252,7 +253,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.ward = ward;
 		this.yProg = prog;
 		this.patient = patient;
-		this.admDate = admDate;
+		this.admDate = TimeTools.truncateToSeconds(admDate);
 		this.admissionType = admType;
 		this.fHU = fhu;
 		this.diseaseIn = diseaseIn;
@@ -261,20 +262,20 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.diseaseOut3 = diseaseOut3;
 		this.operation = operation;
 		this.opResult = opResult;
-		this.opDate = opDate;
-		this.disDate = disDate;
+		this.opDate = TimeTools.truncateToSeconds(opDate);
+		this.disDate = TimeTools.truncateToSeconds(disDate);
 		this.disType = disType;
 		this.note = note;
 		this.transUnit = transUnit;
-		this.visitDate = visitDate;
+		this.visitDate = TimeTools.truncateToSeconds(visitDate);
 		this.pregTreatmentType = pregTreatmentType;
-		this.deliveryDate = deliveryDate;
+		this.deliveryDate = TimeTools.truncateToSeconds(deliveryDate);
 		this.deliveryType = deliveryType;
 		this.deliveryResult = deliveryResult;
 		this.weight = weight;
-		this.ctrlDate1 = ctrlDate1;
-		this.ctrlDate2 = ctrlDate2;
-		this.abortDate = abortDate;
+		this.ctrlDate1 = TimeTools.truncateToSeconds(ctrlDate1);
+		this.ctrlDate2 = TimeTools.truncateToSeconds(ctrlDate2);
+		this.abortDate = TimeTools.truncateToSeconds(abortDate);
 		this.userID = userID;
 		this.deleted = deleted;
 	}
@@ -284,7 +285,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	}
 
 	public void setOpDate(LocalDateTime opDate) {
-		this.opDate = opDate;
+		this.opDate = TimeTools.truncateToSeconds(opDate);
 	}
 
 	public Float getTransUnit() {
@@ -308,7 +309,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	}
 
 	public void setAbortDate(LocalDateTime abortDate) {
-		this.abortDate = abortDate;
+		this.abortDate = TimeTools.truncateToSeconds(abortDate);
 	}
 
 	public LocalDateTime getAdmDate() {
@@ -316,7 +317,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	}
 
 	public void setAdmDate(LocalDateTime admDate) {
-		this.admDate = admDate;
+		this.admDate = TimeTools.truncateToSeconds(admDate);
 	}
 
 	public int getAdmitted() {
@@ -340,7 +341,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	}
 
 	public void setCtrlDate1(LocalDateTime ctrlDate1) {
-		this.ctrlDate1 = ctrlDate1;
+		this.ctrlDate1 = TimeTools.truncateToSeconds(ctrlDate1);
 	}
 
 	public LocalDateTime getCtrlDate2() {
@@ -348,7 +349,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	}
 
 	public void setCtrlDate2(LocalDateTime ctrlDate2) {
-		this.ctrlDate2 = ctrlDate2;
+		this.ctrlDate2 = TimeTools.truncateToSeconds(ctrlDate2);
 	}
 
 	public String getDeleted() {
@@ -364,7 +365,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	}
 
 	public void setDeliveryDate(LocalDateTime deliveryDate) {
-		this.deliveryDate = deliveryDate;
+		this.deliveryDate = TimeTools.truncateToSeconds(deliveryDate);
 	}
 
 	public DeliveryResultType getDeliveryResult() {
@@ -388,7 +389,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	}
 
 	public void setDisDate(LocalDateTime disDate) {
-		this.disDate = disDate;
+		this.disDate = TimeTools.truncateToSeconds(disDate);
 	}
 
 	public Disease getDiseaseIn() {
@@ -508,7 +509,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	}
 
 	public void setVisitDate(LocalDateTime visitDate) {
-		this.visitDate = visitDate;
+		this.visitDate = TimeTools.truncateToSeconds(visitDate);
 	}
 
 	public Ward getWard() {

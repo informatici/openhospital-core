@@ -40,6 +40,7 @@ import javax.validation.constraints.NotNull;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -53,7 +54,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "VISITS")
+@Table(name="OH_VISITS")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "VST_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "VST_CREATED_DATE"))
@@ -106,7 +107,7 @@ public class Visit extends Auditable<String> {
 	public Visit(int visitID, LocalDateTime date, Patient patient, String note, boolean sms, Ward ward, Integer duration, String service) {
 		super();
 		this.visitID = visitID;
-		this.date = date;
+		this.date = TimeTools.truncateToSeconds(date);
 		this.patient = patient;
 		this.note = note;
 		this.sms = sms;		
@@ -120,7 +121,7 @@ public class Visit extends Auditable<String> {
 	}
 
 	public void setDate(LocalDateTime date) {
-		this.date = date;
+		this.date = TimeTools.truncateToSeconds(date);
 	}
 
 	public int getVisitID() {

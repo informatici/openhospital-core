@@ -35,6 +35,7 @@ import org.isf.agetype.manager.AgeTypeBrowserManager;
 import org.isf.agetype.model.AgeType;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
+import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
@@ -317,6 +318,12 @@ public class PatientBrowserManager {
 	public List<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException {
 		return ioOperations.getPatientsByOneOfFieldsLike(keyword);
 	}
+	
+	
+	public PatientProfilePhoto retrievePatientProfilePhoto(Patient patient) throws OHServiceException {
+		return ioOperations.retrievePatientProfilePhoto(patient);
+	}
+	
 
 	/**
 	 * Method that merges patients and all clinic details under the same PAT_ID

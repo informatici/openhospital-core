@@ -32,7 +32,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface AccountingBillPaymentIoOperationRepository extends JpaRepository<BillPayments, Integer> {
@@ -52,7 +51,6 @@ public interface AccountingBillPaymentIoOperationRepository extends JpaRepositor
 	List<BillPayments> findAllWherBillIdByOrderByBillAndDate(@Param("billId") Integer billId);
 
 	@Modifying
-	@Transactional
 	@Query(value = "DELETE FROM BillPayments BP where BP.bill.id = :billId")
 	void deleteWhereId(@Param("billId") Integer billId);
 

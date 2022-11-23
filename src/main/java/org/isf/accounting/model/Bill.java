@@ -24,7 +24,6 @@ package org.isf.accounting.model;
 import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -37,9 +36,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.isf.admission.model.Admission;
 import org.isf.patient.model.Patient;
 import org.isf.priceslist.model.PriceList;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -52,14 +53,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "BILLS")
+@Table(name="OH_BILLS")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "BLL_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "BLL_CREATED_DATE"))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "BLL_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "BLL_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "BLL_LAST_MODIFIED_DATE"))
-public class Bill extends Auditable<String> implements Comparable<Bill> {
+public class Bill extends Auditable<String> implements Cloneable, Comparable<Bill> {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -78,7 +79,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 	@Column(name="BLL_IS_LST")
 	private boolean isList;
 	
-	@ManyToOne(cascade = { CascadeType.MERGE})
+	@ManyToOne
 	@JoinColumn(name="BLL_ID_LST")
 	private PriceList list;
 	
@@ -89,7 +90,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 	@Column(name="BLL_IS_PAT")
 	private boolean isPatient;
 	
-	@ManyToOne(cascade = {CascadeType.MERGE})
+	@ManyToOne
 	@JoinColumn(name="BLL_ID_PAT")
 	private Patient billPatient;
 		
@@ -108,6 +109,10 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 	@NotNull
 	@Column(name="BLL_USR_ID_A")
 	private String user;
+	
+	@ManyToOne
+	@JoinColumn(name="BLL_ADM_ID")
+	private Admission admission;
 
 	@Transient
 	private volatile int hashCode = 0;
@@ -116,8 +121,8 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 	public Bill() {
 		super();
 		this.id = 0;
-		this.date = LocalDateTime.now();
-		this.update = LocalDateTime.now();
+		this.date = TimeTools.getNow();
+		this.update = TimeTools.getNow();
 		this.isList = true;
 		this.listName = "";
 		this.isPatient = false;
@@ -130,11 +135,11 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 
 	public Bill(int id, LocalDateTime  date, LocalDateTime  update,
 			boolean isList, PriceList list, String listName, boolean isPatient,
-			Patient billPatient, String patName, String status, Double amount, Double balance, String user) {
+			Patient billPatient, String patName, String status, Double amount, Double balance, String user, Admission admission) {
 		super();
 		this.id = id;
-		this.date = date;
-		this.update = update;
+		this.date = TimeTools.truncateToSeconds(date);
+		this.update = TimeTools.truncateToSeconds(update);
 		this.isList = isList;
 		this.list = list;
 		this.listName = listName;
@@ -145,6 +150,7 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 		this.amount = amount;
 		this.balance = balance;
 		this.user = user;
+		this.admission = admission;
 	}
 
 	public int getId() {
@@ -158,13 +164,13 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 		return date;
 	}
 	public void setDate(LocalDateTime date) {
-		this.date = date;
+		this.date = TimeTools.truncateToSeconds(date);
 	}
 	public LocalDateTime getUpdate() {
 		return update;
 	}
 	public void setUpdate(LocalDateTime update) {
-		this.update = update;
+		this.update = TimeTools.truncateToSeconds(update);
 	}
 	public boolean isList() {
 		return isList;
@@ -232,6 +238,14 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 	public void setUser(String user) {
 		this.user = user;
 	}
+	
+	public Admission getAdmission() {
+		return admission;
+	}
+	
+	public void setAdmission(Admission admission) {
+		this.admission = admission;
+	}
 
 	@Override
 	public int compareTo(Bill obj) {
@@ -264,5 +278,10 @@ public class Bill extends Auditable<String> implements Comparable<Bill> {
 	    }
 	  
 	    return this.hashCode;
-	}	
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 }

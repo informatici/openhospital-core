@@ -45,7 +45,7 @@ import org.isf.generaldata.MessageBundle;
  * ------------------------------------------
  */
 @Entity
-@Table(name="MENUITEM")
+@Table(name="OH_MENUITEM")
 @SqlResultSetMapping(name="UserMenuItemWithStatus",
 	entities={
 	    @EntityResult(entityClass=org.isf.menu.model.UserMenuItem.class, fields={

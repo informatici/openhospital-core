@@ -38,7 +38,7 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "LABORATORYROW")
+@Table(name="OH_LABORATORYROW")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "LABR_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "LABR_CREATED_DATE"))

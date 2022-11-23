@@ -74,12 +74,30 @@ public class WardIoOperations {
 	 * @param wardID - the ward ID, can be <code>null</code>
 	 * @return the retrieved wards.
 	 * @throws OHServiceException if an error occurs retrieving the wards.
+	 * 
+	 * TODO: remove this method, findWard(String code) should be enough
 	 */
 	public List<Ward> getWards(String wardID) throws OHServiceException {
 		if (wardID != null && wardID.trim().length() > 0) {
 			return repository.findByCodeContains(wardID);
 		}
 		return repository.findAll();
+	}
+	
+	/**
+	 * Retrieves all store {@link Ward}s with beds > {@code 0}
+	 * @return
+	 */
+	public List<Ward> getIpdWards() {
+		return repository.findByBedsGreaterThanZero();
+	}
+	
+	/**
+	 * Retrieves all store {@link Ward}s with isOpd = {@code true}
+	 * @return
+	 */
+	public List<Ward> getOpdWards() {
+		return repository.findByIsOpdIsTrue();
 	}
 	
 	/**
@@ -130,6 +148,15 @@ public class WardIoOperations {
 	 */
 	public boolean isMaternityPresent() throws OHServiceException {
 		return isCodePresent("M");
+	}
+	
+	/**
+	 * Check if the OPD ward exists
+	 * @return <code>true</code> if is exist, <code>false</code> otherwise.
+	 * @throws OHServiceException if an error occurs during the check.
+	 */
+	public boolean isOpdPresent() throws OHServiceException {
+		return isCodePresent("OPD");
 	}
 
 	/**

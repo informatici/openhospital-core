@@ -22,21 +22,23 @@
 package org.isf.lab.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.exa.model.Exam;
 import org.isf.generaldata.GeneralData;
 import org.isf.lab.model.Laboratory;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.time.TimeTools;
 
 public class TestLaboratory {
 
 	private String material = "TestMaterial";
-	private LocalDateTime labDate = LocalDateTime.now();
-	private LocalDateTime examDate =LocalDateTime.now();
+	private LocalDateTime labDate = TimeTools.getNow();
+
 	private String result = "TestResult";
 	private String note = "TestNote";
 	private String patName = "TestPatientName";
@@ -55,7 +57,6 @@ public class TestLaboratory {
 			laboratory = new Laboratory(exam, labDate, result, note, patient, patName);
 			laboratory.setAge(age);
 			laboratory.setLabDate(labDate);
-			laboratory.setExamDate(examDate);
 			laboratory.setInOutPatient(InOutPatient);
 			laboratory.setMaterial(material);
 			laboratory.setResult(result);
@@ -69,7 +70,6 @@ public class TestLaboratory {
 		laboratory.setAge(age);
 		laboratory.setLabDate(labDate);
 		laboratory.setExam(exam);
-		laboratory.setExamDate(examDate);
 		laboratory.setInOutPatient(InOutPatient);
 		laboratory.setMaterial(material);
 		laboratory.setNote(note);
@@ -90,8 +90,7 @@ public class TestLaboratory {
 			assertThat(laboratory.getAge()).isEqualTo(age);
 			assertThat(laboratory.getPatName()).isEqualTo(patName);
 		}
-		assertThat(laboratory.getDate()).isEqualTo(labDate);
-		assertThat(laboratory.getExamDate()).isEqualTo(examDate);
+		assertThat(laboratory.getDate()).isCloseTo(labDate, within(1, ChronoUnit.SECONDS));
 		assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
 		assertThat(laboratory.getMaterial()).isEqualTo(material);
 		assertThat(laboratory.getNote()).isEqualTo(note);

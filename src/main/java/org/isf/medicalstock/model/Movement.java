@@ -41,6 +41,7 @@ import org.isf.medicals.model.Medical;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.supplier.model.Supplier;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -54,7 +55,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "MEDICALDSRSTOCKMOV")
+@Table(name="OH_MEDICALDSRSTOCKMOV")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "MMV_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "MMV_CREATED_DATE"))
@@ -112,7 +113,7 @@ public class Movement extends Auditable<String> {
 		type = aType;
 		ward = aWard;
 		lot = aLot;
-		date = aDate;
+		date = TimeTools.truncateToSeconds(aDate);
 		quantity = aQuantity;
 		supplier = aSupplier;
 		refNo = aRefNo;
@@ -167,7 +168,7 @@ public class Movement extends Auditable<String> {
 	}
 
 	public void setDate(LocalDateTime date) {
-		this.date = date;
+		this.date = TimeTools.truncateToSeconds(date);
 	}
 
 	public void setSupplier(Supplier supplier) {

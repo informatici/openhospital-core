@@ -47,7 +47,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "BILLITEMS")
+@Table(name="OH_BILLITEMS")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "BLI_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "BLI_CREATED_DATE"))

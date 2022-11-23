@@ -40,6 +40,7 @@ import javax.validation.constraints.NotNull;
 import org.isf.admission.model.Admission;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -51,7 +52,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "MALNUTRITIONCONTROL")
+@Table(name="OH_MALNUTRITIONCONTROL")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "MLN_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "MLN_CREATED_DATE"))
@@ -102,8 +103,8 @@ public class Malnutrition extends Auditable<String> {
 
 	public Malnutrition(int aCode, LocalDateTime aDateSupp, LocalDateTime aDateConf, Admission anAdmission, float aHeight, float aWeight) {
 		code = aCode;
-		dateSupp = aDateSupp;
-		dateConf = aDateConf;
+		dateSupp = TimeTools.truncateToSeconds(aDateSupp);
+		dateConf = TimeTools.truncateToSeconds(aDateConf);
 		admission = anAdmission;
 		height = aHeight;
 		weight = aWeight;
@@ -111,8 +112,8 @@ public class Malnutrition extends Auditable<String> {
 
 	public Malnutrition(int aCode, LocalDateTime aDateSupp, LocalDateTime aDateConf, Admission anAdmission, Patient aPatient, float aHeight, float aWeight) {
 		code = aCode;
-		dateSupp = aDateSupp;
-		dateConf = aDateConf;
+		dateSupp = TimeTools.truncateToSeconds(aDateSupp);
+		dateConf = TimeTools.truncateToSeconds(aDateConf);
 		admission = anAdmission;
 		height = aHeight;
 		weight = aWeight;
@@ -143,11 +144,11 @@ public class Malnutrition extends Auditable<String> {
 	}
 
 	public void setDateSupp(LocalDateTime aDateSupp) {
-		dateSupp = aDateSupp;
+		dateSupp = TimeTools.truncateToSeconds(aDateSupp);
 	}
 
 	public void setDateConf(LocalDateTime aDateConf) {
-		dateConf = aDateConf;
+		dateConf = TimeTools.truncateToSeconds(aDateConf);
 	}
 	
 	public void setHeight(float aHeight) {

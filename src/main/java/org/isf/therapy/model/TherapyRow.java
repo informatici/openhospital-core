@@ -39,6 +39,7 @@ import javax.validation.constraints.NotNull;
 import org.isf.medicals.model.Medical;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -51,7 +52,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "THERAPIES")
+@Table(name="OH_THERAPIES")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "THR_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "THR_CREATED_DATE"))
@@ -138,8 +139,8 @@ public class TherapyRow extends Auditable<String> {
 		super();
 		this.therapyID = therapyID;
 		this.patient = patient;
-		this.startDate = startDate;
-		this.endDate = endDate;
+		this.startDate = TimeTools.truncateToSeconds(startDate);
+		this.endDate = TimeTools.truncateToSeconds(endDate);
 		this.medicalId = medical.getCode();
 		this.qty = qty;
 		this.unitID = unitID;
@@ -171,7 +172,7 @@ public class TherapyRow extends Auditable<String> {
 	}
 
 	public void setStartDate(LocalDateTime startDate) {
-		this.startDate = startDate;
+		this.startDate = TimeTools.truncateToSeconds(startDate);
 	}
 
 	public LocalDateTime getEndDate() {
@@ -179,7 +180,7 @@ public class TherapyRow extends Auditable<String> {
 	}
 
 	public void setEndDate(LocalDateTime endDate) {
-		this.endDate = endDate;
+		this.endDate = TimeTools.truncateToSeconds(endDate);
 	}
 
 	public Integer getMedical() {

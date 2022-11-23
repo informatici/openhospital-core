@@ -21,12 +21,10 @@
  */
 package org.isf.lab.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.lab.model.Laboratory;
-import org.isf.patient.model.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LabIoOperationRepository extends JpaRepository<Laboratory, Integer> {

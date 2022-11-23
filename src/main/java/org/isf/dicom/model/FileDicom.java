@@ -46,6 +46,7 @@ import javax.validation.constraints.NotNull;
 
 import org.isf.dicomtype.model.DicomType;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -60,7 +61,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "DICOM")
+@Table(name="OH_DICOM")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "DM_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "DM_CREATED_DATE"))
@@ -221,13 +222,13 @@ public class FileDicom extends Auditable<String> {
 		this.dicomPatientSex = dicomPatientSex;
 		this.dicomPatientBirthDate = dicomPatientBirthDate;
 		this.dicomStudyId = dicomStudyId;
-		this.dicomStudyDate = dicomStudyDate;
+		this.dicomStudyDate = TimeTools.truncateToSeconds(dicomStudyDate);
 		this.dicomStudyDescription = dicomStudyDescription;
 		this.dicomSeriesUID = dicomSeriesUID;
 		this.dicomSeriesInstanceUID = dicomSeriesInstanceUID;
 		this.dicomSeriesNumber = dicomSeriesNumber;
 		this.dicomSeriesDescriptionCodeSequence = dicomSeriesDescriptionCodeSequence;
-		this.dicomSeriesDate = dicomSeriesDate;
+		this.dicomSeriesDate = TimeTools.truncateToSeconds(dicomSeriesDate);
 		this.dicomSeriesDescription = dicomSeriesDescription;
 		this.dicomInstanceUID = dicomInstanceUID;
 		this.modality = modality;
@@ -257,13 +258,13 @@ public class FileDicom extends Auditable<String> {
 		this.dicomPatientSex = dicomPatientSex;
 		this.dicomPatientBirthDate = dicomPatientBirthDate;
 		this.dicomStudyId = dicomStudyId;
-		this.dicomStudyDate = dicomStudyDate;
+		this.dicomStudyDate = TimeTools.truncateToSeconds(dicomStudyDate);
 		this.dicomStudyDescription = dicomStudyDescription;
 		this.dicomSeriesUID = dicomSeriesUID;
 		this.dicomSeriesInstanceUID = dicomSeriesInstanceUID;
 		this.dicomSeriesNumber = dicomSeriesNumber;
 		this.dicomSeriesDescriptionCodeSequence = dicomSeriesDescriptionCodeSequence;
-		this.dicomSeriesDate = dicomSeriesDate;
+		this.dicomSeriesDate = TimeTools.truncateToSeconds(dicomSeriesDate);
 		this.dicomSeriesDescription = dicomSeriesDescription;
 		this.dicomInstanceUID = dicomInstanceUID;
 		this.modality = modality;
@@ -464,7 +465,7 @@ public class FileDicom extends Auditable<String> {
 	 *            the dicomStudyDate to set
 	 */
 	public void setDicomStudyDate(LocalDateTime dicomStudyDate) {
-		this.dicomStudyDate = dicomStudyDate;
+		this.dicomStudyDate = TimeTools.truncateToSeconds(dicomStudyDate);
 	}
 
 	/**
@@ -554,7 +555,7 @@ public class FileDicom extends Auditable<String> {
 	 *            the dicomSeriesDate to set
 	 */
 	public void setDicomSeriesDate(LocalDateTime dicomSeriesDate) {
-		this.dicomSeriesDate = dicomSeriesDate;
+		this.dicomSeriesDate = TimeTools.truncateToSeconds(dicomSeriesDate);
 	}
 
 	/**

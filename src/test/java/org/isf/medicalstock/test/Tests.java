@@ -60,6 +60,7 @@ import org.isf.supplier.test.TestSupplier;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
 import org.isf.ward.test.TestWard;
@@ -257,7 +258,7 @@ public class Tests extends OHCoreTestCase {
 				movementType,
 				null,
 				lot2,
-				LocalDateTime.now(),
+				TimeTools.getNow(),
 				7, // new lot with 10 quantity
 				supplier,
 				"newReference");
@@ -273,7 +274,7 @@ public class Tests extends OHCoreTestCase {
 				dischargeMovementType,
 				ward,
 				null, // automatic lot selection
-				LocalDateTime.now(),
+				TimeTools.getNow(),
 				15,    // quantity of 15 should use first lot of 10 + second lot of 5
 				null,
 				"newReference2");
@@ -301,7 +302,7 @@ public class Tests extends OHCoreTestCase {
 				medicalType,
 				ward,
 				lot,
-				LocalDateTime.now(),
+				TimeTools.getNow(),
 				10, // new lot with 10 quantitye
 				supplier,
 				"newReference");
@@ -322,7 +323,7 @@ public class Tests extends OHCoreTestCase {
 				medicalType,
 				null,
 				lot,
-				LocalDateTime.now(),
+				TimeTools.getNow(),
 				10, // new lot with 10 quantitye
 				supplier,
 				"newReference");
@@ -356,7 +357,7 @@ public class Tests extends OHCoreTestCase {
 		MedicalWard medicalWard = new MedicalWard(movement.getWard(), movement.getMedical(), 0, 0, movement.getLot());
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
 		Movement newMovement = new Movement(movement.getMedical(), medicalType, movement.getWard(), movement.getLot(),
-				LocalDateTime.now(), 10, movement.getSupplier(), "newReference");
+		                                    TimeTools.getNow(), 10, movement.getSupplier(), "newReference");
 		assertThat(medicalStockIoOperation.newMovement(newMovement)).isTrue();
 	}
 
@@ -772,7 +773,7 @@ public class Tests extends OHCoreTestCase {
 		{
 			int code = setupTestMovement(false);
 			Movement movement = movementIoOperationRepository.findById(code).get();
-			LocalDateTime todayPlusAYear = LocalDateTime.now().plusYears(1);
+			LocalDateTime todayPlusAYear = LocalDateTime.of(TimeTools.getNow().getYear() + 2, 2, 2, 0, 0, 0, 0);
 			movement.setDate(todayPlusAYear);
 			ArrayList<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
@@ -1064,7 +1065,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testLotHashCode() {
-		Lot lot = new Lot("aCode", LocalDateTime.now(), LocalDateTime.now());
+		Lot lot = new Lot("aCode", TimeTools.getNow(), TimeTools.getNow());
 		int hashCode = lot.hashCode();
 		assertThat(hashCode).isPositive();
 		// use computed value

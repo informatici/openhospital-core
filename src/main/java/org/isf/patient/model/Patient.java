@@ -71,7 +71,7 @@ import com.drew.lang.annotations.Nullable;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "PATIENT")
+@Table(name="OH_PATIENT")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "PAT_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "PAT_CREATED_DATE"))
@@ -192,11 +192,12 @@ public class Patient extends Auditable<String> {
 	private int lock;
 	
 	@OneToOne(
-			fetch = FetchType.LAZY,
-			cascade = CascadeType.ALL
+			fetch = FetchType.LAZY, 
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, 
+			orphanRemoval = true
 	)
-	@JoinColumn(name = "PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID")
-	private PatientProfilePhoto patientProfilePhoto;
+	@JoinColumn(name = "PAT_PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID", nullable = true)
+	private PatientProfilePhoto patientProfilePhoto; // nullable because user can choose to save on file system
 	
 	@Transient
 	private volatile int hashCode = 0;

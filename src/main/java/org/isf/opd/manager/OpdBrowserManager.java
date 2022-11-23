@@ -35,6 +35,7 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,6 +71,7 @@ public class OpdBrowserManager {
 		Disease disease = opd.getDisease();
 		Disease disease2 = opd.getDisease2();
 		Disease disease3 = opd.getDisease3();
+		Ward ward = opd.getWard();
 		if (opd.getUserID() == null) {
 			opd.setUserID(UserBrowsingManager.getCurrentUser());
 		}
@@ -85,6 +87,18 @@ public class OpdBrowserManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.common.pleaseselectapatient.msg"),
 					OHSeverityLevel.ERROR));
+		}
+		// Check Patient
+		if (ward == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseselectaward.msg"),
+					OHSeverityLevel.ERROR));
+		} else {
+			if (!ward.isOpd()) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.opd.specifiedwardisnotenabledforopdservice.msg"),
+					OHSeverityLevel.ERROR));
+			}
 		}
 		// Check Sex and Age
 		if (opd.getAge() < 0) {
@@ -137,8 +151,9 @@ public class OpdBrowserManager {
 	}
 
 	/**
-	 * Return all Opds within specified dates
-	 *
+	 * Return all Opds within specified dates and parameters
+	 * 
+	 * @param ward 
 	 * @param diseaseTypeCode
 	 * @param diseaseCode
 	 * @param dateFrom
@@ -150,9 +165,9 @@ public class OpdBrowserManager {
 	 * @return the list of Opds. It could be <code>null</code>.
 	 * @throws OHServiceException
 	 */
-	public List<Opd> getOpd(String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, int patientCode)
+	public List<Opd> getOpd(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, int patientCode)
 			throws OHServiceException {
-		return ioOperations.getOpdList(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, patientCode);
+		return ioOperations.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, patientCode);
 	}
 
 	/**

@@ -33,10 +33,12 @@ import org.isf.medicals.service.MedicalsIoOperations;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
+import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,7 +65,7 @@ public class MovStockInsertingManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		
 		// Check the Date
-		LocalDateTime today = LocalDateTime.now();
+		LocalDateTime today = TimeTools.getNow();
 		LocalDateTime movDate = movement.getDate();
 		LocalDateTime lastDate = getLastMovementDate();
 		if (movDate.isAfter(today)) {
@@ -273,6 +275,7 @@ public class MovStockInsertingManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean newMultipleChargingMovements(List<Movement> movements, String referenceNumber) throws OHServiceException {
 
 		boolean ok = true;

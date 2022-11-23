@@ -32,11 +32,12 @@ import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstockward.model.MovementWard;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 
 public class TestMovementWard {
 
-	private LocalDateTime now = LocalDateTime.now();
+	private LocalDateTime now = TimeTools.getNow();
 	private LocalDateTime date = now.withMonth(2).withDayOfMonth(2);
 	private boolean isPatient = false;
 	private int age = 10;
