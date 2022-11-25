@@ -142,7 +142,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final int DEFAULT_STRONGLENGTH = 10;
 	private static final int DEFAULT_SESSIONTIMEOUT = 5;
 	private static final boolean DEFAULT_STRONGPASSWORD = true;
-	private static final String DEFAULT_PATIENTPHOTO = "DB";
+	private static final String DEFAULT_PATIENTPHOTOSTORAGE = "DB";
 	
 	private static GeneralData mySingleData;
 	
@@ -206,7 +206,7 @@ public final class GeneralData extends ConfigurationProperties {
 		if (STRONGLENGTH < 6) {
 			STRONGLENGTH = 6;
 		}
-		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTO);
+		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTOSTORAGE);
 		SESSIONTIMEOUT = myGetProperty("SESSIONTIMEOUT", DEFAULT_SESSIONTIMEOUT);
 }
 
