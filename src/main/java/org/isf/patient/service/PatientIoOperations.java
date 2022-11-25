@@ -229,11 +229,10 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public boolean deletePatient(Patient patient) throws OHServiceException {
-		if (IS_LOAD_PROFILE_PHOTO_FROM_DB) {
-			return  repository.updateDeleted(patient.getCode()) > 0;
+		if (!IS_LOAD_PROFILE_PHOTO_FROM_DB) {
+			this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());
 		}
-		this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());		
-		return true;	
+		return repository.updateDeleted(patient.getCode()) > 0;
 	}
 
 	/**
