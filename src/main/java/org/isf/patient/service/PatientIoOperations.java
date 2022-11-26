@@ -45,14 +45,11 @@ import org.springframework.transaction.annotation.Transactional;
  * PatientIoOperations - dB operations for the patient entity
  * -----------------------------------------
  * modification history
- * 05/05/2005 - giacomo  - first beta version
- * 03/11/2006 - ross - added toString method. Gestione apici per
- * nome, cognome, citta', indirizzo e note
+ * 05/05/2005 - giacomo    - first beta version
+ * 03/11/2006 - ross       - added toString method. Gestione apici per nome, cognome, citta', indirizzo e note
  * 11/08/2008 - alessandro - added father & mother's names
- * 26/08/2008 - claudio    - added birth date
- * modified age
- * 01/01/2009 - Fabrizio   - changed the calls to PAT_AGE fields to
- * return again an int type
+ * 26/08/2008 - claudio    - added birth date modified age
+ * 01/01/2009 - Fabrizio   - changed the calls to PAT_AGE fields to return again an int type
  * 03/12/2009 - Alex       - added method for merge two patients history
  */
 @Service
@@ -62,8 +59,6 @@ public class PatientIoOperations {
 
 	public static final String LOAD_FROM_DB = "DB";
 
-	public static boolean IS_LOAD_PROFILE_PHOTO_FROM_DB = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
-	
 	@Autowired
 	private PatientIoOperationRepository repository;
 	
@@ -121,7 +116,7 @@ public class PatientIoOperations {
 	public List<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException {
 		return repository.findByFieldsContainingWordsFromLiteral(keyword);
 	}
-	
+
 	/**
 	 * Method that gets a Patient by his/her ID
 	 *
@@ -133,19 +128,10 @@ public class PatientIoOperations {
 		List<Patient> patients = repository.findAllWhereId(code);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
-			retrieveProfilePhoto(patient);
+			retrievePatientProfilePhoto(patient);
 			return patient;
 		}
 		return null;
-	}
-
-	private void retrieveProfilePhoto(Patient patient) throws OHServiceException {
-		if (IS_LOAD_PROFILE_PHOTO_FROM_DB) {
-			Hibernate.initialize(patient.getPatientProfilePhoto());
-		} else {
-			((Session) this.entityManager.getDelegate()).evict(patient);
-			fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
-		}
 	}
 
 	/**
@@ -159,7 +145,7 @@ public class PatientIoOperations {
 		List<Patient> patients = repository.findByNameOrderByName(name);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
-			retrieveProfilePhoto(patient);
+			retrievePatientProfilePhoto(patient);
 			return patient;
 		}
 		return null;
@@ -176,7 +162,7 @@ public class PatientIoOperations {
 	public Patient getPatientAll(Integer code) throws OHServiceException {
 		Patient patient = repository.findById(code).orElse(null);
 		if (patient != null) {
-			retrieveProfilePhoto(patient);
+			retrievePatientProfilePhoto(patient);
 		}
 		return patient;
 	}
@@ -188,7 +174,8 @@ public class PatientIoOperations {
 	 * @return saved / updated patient
 	 */
 	public Patient savePatient(Patient patient) {
-		if (IS_LOAD_PROFILE_PHOTO_FROM_DB) {
+		boolean isLoadPictureFromDB = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
+		if (isLoadPictureFromDB) {
 			return repository.save(patient);
 		}
 		try {
@@ -229,10 +216,8 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public boolean deletePatient(Patient patient) throws OHServiceException {
-		if (!IS_LOAD_PROFILE_PHOTO_FROM_DB) {
-			this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());
-		}
-		return repository.updateDeleted(patient.getCode()) > 0;
+		repository.delete(patient);
+		return true;
 	}
 
 	/**
@@ -283,7 +268,8 @@ public class PatientIoOperations {
 	}
 
 	public PatientProfilePhoto retrievePatientProfilePhoto(Patient patient) throws OHServiceException {
-		if (IS_LOAD_PROFILE_PHOTO_FROM_DB) {
+		boolean isLoadPictureFromDB = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
+		if (isLoadPictureFromDB) {
 			Hibernate.initialize(patient.getPatientProfilePhoto());
 			return patient.getPatientProfilePhoto();
 		} else {
@@ -292,5 +278,5 @@ public class PatientIoOperations {
 			return patient.getPatientProfilePhoto();
 		}
 	}
-
+	
 }
