@@ -40,6 +40,7 @@ import javax.validation.constraints.NotNull;
 import org.isf.exa.model.Exam;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -53,7 +54,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "LABORATORY")
+@Table(name="OH_LABORATORY")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "LAB_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "LAB_CREATED_DATE"))
@@ -75,14 +76,9 @@ public class Laboratory extends Auditable<String> {
 	@JoinColumn(name="LAB_EXA_ID_A")
 	private Exam exam;
 
-	
+	@NotNull
 	@Column(name="LAB_DATE")		// SQL type: datetime
 	private LocalDateTime labDate;
-	
-	@NotNull
-	@Column(name="LAB_EXAM_DATE")
-	//@Deprecated
-	private LocalDateTime examDate;	// SQL type: date
 
 	@NotNull
 	@Column(name="LAB_RES")
@@ -118,7 +114,7 @@ public class Laboratory extends Auditable<String> {
 
 	public Laboratory(Exam aExam, LocalDateTime aDate, String aResult, String aNote, Patient aPatId, String aPatName) {
 		exam = aExam;
-		labDate = aDate;
+		labDate = TimeTools.truncateToSeconds(aDate);
 		result = aResult;
 		note = aNote;
 		patient = aPatId;
@@ -128,7 +124,7 @@ public class Laboratory extends Auditable<String> {
 	public Laboratory(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult, String aNote, Patient aPatId, String aPatName) {
 		code = aCode;
 		exam = aExam;
-		labDate = aDate;
+		labDate = TimeTools.truncateToSeconds(aDate);
 		result = aResult;
 		note = aNote;
 		patient = aPatId;
@@ -159,28 +155,8 @@ public class Laboratory extends Auditable<String> {
 	public void setLock(int aLock) {
 		lock = aLock;
 	}
-	/**
-	 * use <code>getCreatedDate()</code> instead
-	 * 
-	 */
-	//@Deprecated
-	public LocalDateTime getExamDate() {
-		return examDate;
-	}
-	/**
-	 * the field has been replaced by <code>createdDate()</code> and it's not meant to be managed by the user (Spring managed)
-	 *
-	 */
-	//@Deprecated
-	public void setExamDate(LocalDateTime exDate) {
-		this.examDate = exDate;
-	}
-	public LocalDateTime getLabDate() {
-		return labDate;
-	}
-
-	public void setLabDate(LocalDateTime labDate) {
-		this.labDate = labDate;
+	public void setDate(LocalDateTime aDate) {
+		labDate = TimeTools.truncateToSeconds(aDate);
 	}
 	public void setResult(String aResult) {
 		result = aResult;
@@ -273,7 +249,7 @@ public class Laboratory extends Auditable<String> {
 	@Override
 	public String toString() {
 		return "-------------------------------------------\nLaboratory{" + "code=" + code + ", material=" + material
-				+ ", exam=" + exam + ", registrationDate=" + labDate + ", examDate=" + examDate + ", result="
+				+ ", exam=" + exam + ", registrationDate=" + createdDate + ", examDate=" + labDate + ", result="
 				+ result + ", lock=" + lock + ", note=" + note + ", patient=" + patient + ", patName=" + patName
 				+ ", InOutPatient=" + inOutPatient + ", age=" + age + ", sex=" + sex + ", hashCode=" + hashCode
 				+ "}\n---------------------------------------------";

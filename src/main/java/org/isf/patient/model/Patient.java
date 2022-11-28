@@ -45,8 +45,6 @@ import org.isf.opd.model.Opd;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.drew.lang.annotations.Nullable;
-
 /**
  * ------------------------------------------
  * Patient - model for the patient entity
@@ -114,11 +112,11 @@ public class Patient extends Auditable<String> {
 	@Column(name="PAT_BDATE")	// SQL type: date
 	private LocalDate birthDate;
 
-	
+	@NotNull
 	@Column(name="PAT_AGE")
 	private int age;
 
-	
+	@NotNull
 	@Column(name="PAT_AGETYPE")
 	private String agetype;
 
@@ -174,19 +172,17 @@ public class Patient extends Auditable<String> {
 
 	@Column(name="PAT_PROFESSION")
 	private String profession;
-	
-	@Nullable
-	@Column(name="PAT_ALLERGIES")
-	private String allergies; // ADDED: Arnaud
-	
-	@Nullable
-	@Column(name="PAT_ANAMNESIS")
-	private String anamnesis; // ADDED: Arnaud
 
 	@NotNull
 	@Column(name="PAT_DELETED")
 	private String deleted = "N";
-
+	
+	@Column(name="PAT_ANAMNESIS")
+	private String anamnesis; // ADDED: Arnaud
+	
+	@Column(name="PAT_ALLERGIES")
+	private String allergies; // ADDED: Arnaud
+	
 	@Version
 	@Column(name="PAT_LOCK")
 	private int lock;
@@ -306,22 +302,6 @@ public class Patient extends Auditable<String> {
 		this.taxCode = taxCode;
 		this.maritalStatus = maritalStatus;
 		this.profession = profession;
-	}
-
-	public String getAllergies() {
-		return allergies;
-	}
-
-	public void setAllergies(String allergies) {
-		this.allergies = allergies;
-	}
-
-	public String getAnamnesis() {
-		return anamnesis;
-	}
-
-	public void setAnamnesis(String anamnesis) {
-		this.anamnesis = anamnesis;
 	}
 
 	public String getAddress() {
@@ -532,6 +512,26 @@ public class Patient extends Auditable<String> {
 
 	public PatientProfilePhoto getPatientProfilePhoto() {
 		return patientProfilePhoto;
+	}	
+
+	public String getAnamnesis() {
+		return anamnesis;
+	}
+
+	public void setAnamnesis(String anamnesis) {
+		this.anamnesis = anamnesis;
+	}
+
+	public String getAllergies() {
+		return allergies;
+	}
+
+	public void setAllergies(String allergies) {
+		this.allergies = allergies;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public void setPatientProfilePhoto(final PatientProfilePhoto patientProfilePhoto) {

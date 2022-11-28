@@ -118,10 +118,6 @@ public class AdmissionIoOperations {
 			throws OHServiceException {
 		return repositoryImp.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
 	}
-	public List<AdmittedPatient> getAdmittedPatients2(String searchTerms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange)
-			throws OHServiceException {
-		return repositoryImp.findPatientAdmissionsBySearchAndDateRanges2(searchTerms, admissionRange, dischargeRange);
-	}
 
 	/**
 	 * Load patient together with the profile photo, or {@code null} if there is no patient with the given id

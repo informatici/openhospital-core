@@ -33,6 +33,7 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryForPrint;
 import org.isf.lab.model.LaboratoryRow;
+import org.isf.lab.service.LabIoOperationRepository;
 import org.isf.lab.service.LabIoOperations;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -80,13 +81,12 @@ public class LabManager {
 	 */
 	protected void validateLaboratory(Laboratory laboratory) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-
 		if (laboratory.getExam() != null && laboratory.getExam().getProcedure() == 2) {
 			laboratory.setResult(MessageBundle.getMessage("angal.lab.multipleresults.txt"));
 		}
 
 		// Check Exam Date
-		if (laboratory.getExamDate() == null) {
+		if (laboratory.getDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.pleaseinsertavalidexamdate.msg"),
 					OHSeverityLevel.ERROR));
@@ -114,11 +114,11 @@ public class LabManager {
 					MessageBundle.getMessage("angal.lab.pleaseselectanexam.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		/*if (laboratory.getResult().isEmpty()) {
+		if (laboratory.getResult().isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg"),
 					OHSeverityLevel.ERROR));
-		}*/
+		}
 		if (laboratory.getMaterial().isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.pleaseselectamaterial.msg"),
@@ -180,9 +180,8 @@ public class LabManager {
 	 * @throws OHServiceException
 	 */
 	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
-		List<LaboratoryForPrint> labs = ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo, patient);
-		//setLabMultipleResults(labs);
-		return labs;
+		return ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo, patient);
+		
 	}
 
 	/**
@@ -383,7 +382,6 @@ public class LabManager {
 		List<LaboratoryRow> rows;
 
 		for (LaboratoryForPrint lab : labs) {
-			System.out.println("result "+lab.getResult());
 			String labResult = lab.getResult();
 			if (labResult.equalsIgnoreCase(MessageBundle.getMessage("angal.lab.multipleresults.txt"))) {
 				rows = ioOperations.getLabRow(lab.getCode());
@@ -457,47 +455,25 @@ public class LabManager {
 		materialDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.lab.undefined.txt")));
 		return materialDescriptionList;
 	}
-   public Optional<Laboratory> getLaboratory(int code)  throws OHServiceException {
-	        return ioOperations.getLaboratory(code);
-	}
-	  
-	//	/**
-	//	 * Returns the max progressive number within specified month of specified year.
-	//	 *
-	//	 * @param lab
-	//	 * @return <code>int</code> - the progressive number in the month
-	//	 * @throws org.isf.utils.exception.OHServiceException
-	//	 */
-   /*public int getProgMonth(int month, int year)  throws OHServiceException {
-        return ioOperations.getProgMonth(month, year);
-   }*/
-
-  /*  public Integer newLabFirstProcedure2(Laboratory lab)  throws OHServiceException {
-       return ioOperations.newLabFirstProcedure2(lab); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Laboratory newLabSecondProcedure2(Laboratory lab, ArrayList<LaboratoryRow> laboratoryRows)  throws OHServiceException {
-        return ioOperations.newLabSecondProcedure2(lab, laboratoryRows); //To change body of generated methods, choose Tools | Templates.
-    }*/
 	
-   /**
-	 * Return the whole list of exams ({@link Laboratory}s) within last year.
-	 *
-	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
-	 * @throws OHServiceException
-	 */
-	public Optional<Laboratory> getLaboratory(Integer code) throws OHServiceException {
-		return ioOperations.getLaboratory(code);
-	}	
-	
-	/**
-	  * Return the whole list of ({@link LaboratoryRow}s).
-	  *
-	  * @return the list of {@link LaboratoryRow}s. It could not be <code>empty</code>.
-	  * @throws OHServiceException
-	  */
-	public List<LaboratoryRow> getLaboratoryRowList(Integer code) throws OHServiceException {
-			return ioOperations.getLabRow(code);
-	}
+	 /**
+		 * Return the whole list of exams ({@link Laboratory}s) within last year.
+		 *
+		 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
+		 * @throws OHServiceException
+		 */
+		public Optional<Laboratory> getLaboratory(Integer code) throws OHServiceException {
+			return ioOperations.getLaboratory(code);
+		}	
+		
+		/**
+		  * Return the whole list of ({@link LaboratoryRow}s).
+		  *
+		  * @return the list of {@link LaboratoryRow}s. It could not be <code>empty</code>.
+		  * @throws OHServiceException
+		  */
+		public List<LaboratoryRow> getLaboratoryRowList(Integer code) throws OHServiceException {
+				return ioOperations.getLabRow(code);
+		}
 
 }

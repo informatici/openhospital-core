@@ -44,7 +44,7 @@ import org.isf.utils.db.Auditable;
  * 
  *------------------------------------------*/
 @Entity
-@Table(name = "PERMISSIONS")
+@Table(name = "OH_PERMISSIONS")
 @AttributeOverrides({ 
 		@AttributeOverride(name = "createdBy", column = @Column(name = "P_CREATED_BY")), 
 		@AttributeOverride(name = "createdDate", column = @Column(name = "P_CREATED_DATE")), 

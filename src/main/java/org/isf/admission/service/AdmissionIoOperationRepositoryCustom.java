@@ -33,8 +33,6 @@ public interface AdmissionIoOperationRepositoryCustom {
 
 	List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(String searchTerms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange)
 			throws OHServiceException;
-	List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges2(String searchTerms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange) 
-			throws OHServiceException;
 
 	class PatientAdmission {
 		/**

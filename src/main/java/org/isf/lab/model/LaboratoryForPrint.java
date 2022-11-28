@@ -34,7 +34,6 @@ public class LaboratoryForPrint {
 	private Integer code;
 	private String patName;
 	private Integer patientCode;
-
 	public Integer getCode() {
 		return code;
 	}
@@ -42,7 +41,7 @@ public class LaboratoryForPrint {
 	public void setCode(Integer code) {
 		this.code = code;
 	}
-
+	
 	public LaboratoryForPrint(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult, String patientName, Integer patCode) {
 		code = aCode;
 		exam = aExam.getDescription();
@@ -57,16 +56,15 @@ public class LaboratoryForPrint {
 		return time.format(formatter);
 	}
 
-
     public LocalDateTime getDate() {
-		return date;
-	}
+        return this.date;
+    }
 
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
+    public void setDate(LocalDateTime aDate) {
+        this.date = aDate;
+    }
 
-	public String getExam() {
+    public String getExam() {
         return this.exam;
     }
 
@@ -97,7 +95,6 @@ public class LaboratoryForPrint {
 	public void setPatientCode(Integer patientCode) {
 		this.patientCode = patientCode;
 	}
-	
 
 
 }

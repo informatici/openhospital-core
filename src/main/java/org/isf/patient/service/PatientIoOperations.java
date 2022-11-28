@@ -134,7 +134,7 @@ public class PatientIoOperations {
 		List<Patient> patients = repository.findAllWhereIdAndDeleted(code, NOT_DELETED_STATUS);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
-			retrieveProfilePhoto(patient);
+			Hibernate.initialize(patient.getPatientProfilePhoto());
 			return patient;
 		}
 		return null;
@@ -207,6 +207,15 @@ public class PatientIoOperations {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	/**
+	 * Save / update patient
+	 * intesys use this version now
+	 * @param patient
+	 * @return saved / updated patient
+	 */
+	public Patient savePatients(Patient patient) throws OHServiceException {
+		return repository.save(patient);
 	}
 
 	/**

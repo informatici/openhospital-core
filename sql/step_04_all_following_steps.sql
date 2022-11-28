@@ -64,9 +64,7 @@ source step_67_add_patient_photo_table.sql;
 source step_68_update_main_menu.sql;
 source step_69_disclose_accounting_admin_features.sql;
 source step_70_increase_examination_note_field.sql;
-<<<<<<< HEAD
 source step_71_permissions_and_grouppermission.sql;
-=======
 source step_71_drop_opd_date_vis_field.sql;
 source step_72_hospital_changes.sql;
 source step_73_ward_visit_duration.sql;
@@ -78,4 +76,3 @@ source step_78_drop_lab_exam_date.sql;
 source step_79_rename_pat_photo_field.sql;
 source step_80_add_ward_opd.sql;
 source step_81_link_bill_admission.sql;
->>>>>>> upstream/develop
