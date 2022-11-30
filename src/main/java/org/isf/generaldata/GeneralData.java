@@ -144,6 +144,9 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final boolean DEFAULT_STRONGPASSWORD = true;
 	private static final String DEFAULT_PATIENTPHOTOSTORAGE = "DB";
 	
+	public static final Integer IMAGE_THUMBNAIL_MAX_WIDTH = 140;
+	public static final int MAXPROFPICFILESIZEBYTES = 32768;
+	
 	private static GeneralData mySingleData;
 	
 	public static void reset() {
