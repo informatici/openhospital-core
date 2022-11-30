@@ -145,7 +145,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_PATIENTPHOTOSTORAGE = "DB";
 	
 	public static final Integer IMAGE_THUMBNAIL_MAX_WIDTH = 140;
-	public static final int MAXPROFPICFILESIZEBYTES = 32768;
+	public static final int MAX_PROFILE_IMAGE_FILE_SIZE_BYTES = 32768;
 	
 	private static GeneralData mySingleData;
 	
