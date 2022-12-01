@@ -221,10 +221,11 @@ public class PatientIoOperations {
 	public boolean deletePatient(Patient patient) throws OHServiceException {
 		boolean isLoadProfilePhotoFromDB = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		if (isLoadProfilePhotoFromDB) {
-			return  repository.updateDeleted(patient.getCode()) > 0;
+			repository.findById(patient.getCode()).get().setPatientProfilePhoto(null);
+		} else {
+			this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());		
 		}
-		this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());		
-		return true;	
+		return  repository.updateDeleted(patient.getCode()) > 0;
 	}
 
 	/**
