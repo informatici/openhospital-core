@@ -83,18 +83,6 @@ public class PatientBrowserManager {
 		validatePatient(patient);
 		return ioOperations.savePatients(patient);
 	}
-	
-	/**
-	 * Method that inserts a new Patient in the db
-	 *
-	 * @param patient
-	 * @return saved / updated patient
-	 * @throws OHServiceException when validation failed
-	 */
-	public Patient savePatients(Patient patient) throws OHServiceException {
-		validatePatient(patient);
-		return ioOperations.savePatients(patient);
-	}
 
 	/**
 	 * Method that returns the full list of Patients not logically deleted

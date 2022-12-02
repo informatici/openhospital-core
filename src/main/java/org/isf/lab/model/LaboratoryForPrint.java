@@ -50,6 +50,13 @@ public class LaboratoryForPrint {
 		patName = patientName;
 		patientCode= patCode;
 	}
+	
+	public LaboratoryForPrint(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult) {
+		code = aCode;
+		exam = aExam.getDescription();
+		date = aDate;
+		result = aResult;
+	}
 
 	private String getConvertedString(LocalDateTime time) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy  HH:mm:ss");

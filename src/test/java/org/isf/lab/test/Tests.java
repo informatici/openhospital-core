@@ -26,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assumptions.assumeThat;
 
 import java.lang.reflect.Method;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -136,7 +135,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testLaboratorySets() throws Exception {
-		int code = setupTestLaboratory(true);
+		Integer code = setupTestLaboratory(true);
 		checkLaboratoryIntoDb(code);
 	}
 
@@ -200,7 +199,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetLaboratoryForPrint() throws Exception {
-		Integer id = setupTestLaboratory(false);
+		Integer id = setupTestLaboratory(true);
 		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
 		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint();
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -211,7 +210,7 @@ public class Tests extends OHCoreTestCase {
 		Integer id = setupTestLaboratory(false);
 		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
 		List<LaboratoryForPrint> laboratories = labIoOperation
-				.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getDate(), foundLaboratory.getDate(), new Patient());
+				.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getDate(), foundLaboratory.getDate());
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
 
@@ -225,7 +224,7 @@ public class Tests extends OHCoreTestCase {
 
 		// when:
 		List<LaboratoryForPrint> laboratories = labIoOperation
-				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getDate(), foundLaboratory.getDate(), new Patient());
+				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getDate(), foundLaboratory.getDate());
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -238,7 +237,7 @@ public class Tests extends OHCoreTestCase {
 		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
 
 		// when:
-		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint(null, foundLaboratory.getDate(), foundLaboratory.getDate(), new Patient());
+		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint(null, foundLaboratory.getDate(), foundLaboratory.getDate());
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -410,7 +409,7 @@ public class Tests extends OHCoreTestCase {
 		Integer id = setupTestLaboratory(false);
 		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
 		List<LaboratoryForPrint> laboratories = labManager
-				.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getDate(), foundLaboratory.getDate(), new Patient());
+				.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getDate(), foundLaboratory.getDate());
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
 
@@ -424,7 +423,7 @@ public class Tests extends OHCoreTestCase {
 
 		// when:
 		List<LaboratoryForPrint> laboratories = labManager
-				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getDate(), foundLaboratory.getDate(), new Patient());
+				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getDate(), foundLaboratory.getDate());
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -437,7 +436,7 @@ public class Tests extends OHCoreTestCase {
 		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
 
 		// when:
-		List<LaboratoryForPrint> laboratories = labManager.getLaboratoryForPrint(null, foundLaboratory.getDate(), foundLaboratory.getDate(), new Patient());
+		List<LaboratoryForPrint> laboratories = labManager.getLaboratoryForPrint(null, foundLaboratory.getDate(), foundLaboratory.getDate());
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -457,7 +456,7 @@ public class Tests extends OHCoreTestCase {
 
 		// when:
 		List<LaboratoryForPrint> laboratories = labManager
-				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getDate(), foundLaboratory.getDate(), new Patient());
+				.getLaboratoryForPrint(firstCharsOfDescription, foundLaboratory.getDate(), foundLaboratory.getDate());
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -484,7 +483,7 @@ public class Tests extends OHCoreTestCase {
 
 		// when:
 		List<LaboratoryForPrint> laboratories = labManager
-				.getLaboratoryForPrint(firstCharsOfDescription, laboratory.getDate(), laboratory.getDate(), new Patient());
+				.getLaboratoryForPrint(firstCharsOfDescription, laboratory.getDate(), laboratory.getDate());
 
 		// then:
 		assertThat(laboratories.get(0).getCode()).isEqualTo(laboratory.getCode());
@@ -1343,8 +1342,8 @@ public class Tests extends OHCoreTestCase {
 
 		laboratoryForPrint.setCode(-1);
 		assertThat(laboratoryForPrint.getCode()).isEqualTo(-1);
-		laboratoryForPrint.setDate(LocalDateTime.now());
-		assertThat(laboratoryForPrint.getDate()).isEqualTo("dateString");
+		laboratoryForPrint.setDate(laboratoryForPrint.getDate());
+		assertThat(laboratoryForPrint.getDate()).isEqualTo(laboratoryForPrint.getDate());
 		laboratoryForPrint.setExam("examString");
 		assertThat(laboratoryForPrint.getExam()).isEqualTo("examString");
 		laboratoryForPrint.setResult("resultString");
