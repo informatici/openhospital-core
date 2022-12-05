@@ -415,7 +415,7 @@ public class PatientBrowserManager {
 					MessageBundle.getMessage("angal.patient.insertsecondname.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (!checkAges(patient)) {
+		if (!checkAge(patient)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.patient.insertvalidage.msg"),
 					OHSeverityLevel.ERROR));
