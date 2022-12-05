@@ -549,7 +549,7 @@ public class Tests extends OHCoreTestCase {
 				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
-	/*@Test
+	@Test
 	public void testMgrPatientValidationBirthDateNull() {
 		assertThatThrownBy(() -> {
 			Patient patient = testPatient.setup(true);
@@ -559,7 +559,7 @@ public class Tests extends OHCoreTestCase {
 			patientBrowserManager.savePatient(patient);
 		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
 				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
-	}*/
+	}
 
 	@Test
 	public void testMgrPatientValidationBirthDateTooFarInFuture() {

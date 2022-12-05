@@ -415,7 +415,7 @@ public class PatientBrowserManager {
 					MessageBundle.getMessage("angal.patient.insertsecondname.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (!checkAge(patient)) {
+		if (!checkAges(patient)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.patient.insertvalidage.msg"),
 					OHSeverityLevel.ERROR));
@@ -429,8 +429,8 @@ public class PatientBrowserManager {
 			throw new OHDataValidationException(errors);
 		}
 	}
-
-	private boolean checkAge(Patient patient) throws OHServiceException {
+// intesys version
+	private boolean checkAges(Patient patient) throws OHServiceException {
 		LocalDate now = LocalDate.now();
 		LocalDate birthDate = patient.getBirthDate();
 		List<AgeType> ageTypes = ageTypeManager.getAgeType();
@@ -479,6 +479,16 @@ public class PatientBrowserManager {
 		return true;
 	}
 	
+	// informatici version
+	private boolean checkAge(Patient patient) {
+		LocalDate now = LocalDate.now();
+		LocalDate birthDate = patient.getBirthDate();
+
+		if (patient.getAge() < 0 || patient.getAge() > 200) {
+			return false;
+		}
+		return birthDate != null && !birthDate.isAfter(now);
+	}
 	/**
 	 * Method that returns the full list of Cities of the patient not logically deleted: <br>
 	 * @return the list of Cities (could be empty)
