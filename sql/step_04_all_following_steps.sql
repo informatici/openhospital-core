@@ -75,3 +75,6 @@ source step_78_drop_lab_exam_date.sql;
 source step_79_rename_pat_photo_field.sql;
 source step_80_add_ward_opd.sql;
 source step_81_link_bill_admission.sql;
+source step_92_anamnesis_patienthistory.sql;
+source step_93_anamnesis_integrazione_anamnesis.sql;
+source step_94_anamnesis_stp_table.sql;
