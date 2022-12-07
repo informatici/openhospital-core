@@ -188,6 +188,7 @@ public class PatientIoOperations {
 	 * @return saved / updated patient
 	 */
 	public Patient savePatient(Patient patient) {
+		System.out.println(IS_LOAD_PROFILE_PHOTO_FROM_DB);
 		if (IS_LOAD_PROFILE_PHOTO_FROM_DB) {
 			return repository.save(patient);
 		}

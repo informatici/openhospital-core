@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.isf.accounting.manager.BillBrowserManager;
@@ -56,9 +57,6 @@ public class PatientBrowserManager {
 
 	@Autowired
 	private BillBrowserManager billManager;
-	
-	@Autowired
-	private AgeTypeBrowserManager ageTypeManager;
 
 	protected LinkedHashMap<String, String> maritalHashMap;
 
@@ -386,8 +384,7 @@ public class PatientBrowserManager {
 
 		if (StringUtils.isEmpty(mergedPatient.getNote())) {
 			mergedPatient.setNote(patient2.getNote());
-		}
-		else {
+		} else {
 			String note = mergedPatient.getNote();
 			mergedPatient.setNote(patient2.getNote() + "\n\n" + note);
 		}
@@ -404,7 +401,7 @@ public class PatientBrowserManager {
 	 */
 	protected void validatePatient(Patient patient) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-
+		
 		if (StringUtils.isEmpty(patient.getFirstName())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.patient.insertfirstname.msg"),
@@ -429,61 +426,10 @@ public class PatientBrowserManager {
 			throw new OHDataValidationException(errors);
 		}
 	}
-// intesys version
-	private boolean checkAges(Patient patient) throws OHServiceException {
-		LocalDate now = LocalDate.now();
-		LocalDate birthDate = patient.getBirthDate();
-		List<AgeType> ageTypes = ageTypeManager.getAgeType();
-		if(patient.getBirthDate()!= null && ageTypes != null) {
-			for(AgeType age :ageTypes) {
-				if(age.getFrom() <= patient.getAge() && patient.getAge()  <= age.getTo()) {
-					patient.setAgetype(age.getCode());
-				}
-			}
-		}
-		if(patient.getAge() > 0 && ageTypes != null) {
-			for(AgeType age :ageTypes) {
-				if(age.getFrom() <= patient.getAge() && patient.getAge()  <= age.getTo()) {
-					patient.setAgetype(age.getCode());
-				}
-			}
-		}
-		if (patient.getAge() < 0 || patient.getAge() > 200) {
-			return false;
-		}
-		if(patient.getBirthDate()!= null) {
-			return birthDate != null && !birthDate.isAfter(now);
-		}
-		if(patient.getAge() > 0 || patient.getAge() < 200) {
-			LocalDate date = now.minusYears(patient.getAge());
-			patient.setBirthDate(date);
-			if(patient.getAge() == 0 ) {
-				patient.setAgetype("d0");
-			}
-			if(patient.getAge() > 0 && patient.getAge() <= 5) {
-				patient.setAgetype("d1");
-			}
-			if(patient.getAge() > 5 && patient.getAge() <= 12) {
-				patient.setAgetype("d2");
-			}
-			if(patient.getAge() > 12 && patient.getAge() <= 24) {
-				patient.setAgetype("d3");
-			}
-			if(patient.getAge() > 24 && patient.getAge() <= 59) {
-				patient.setAgetype("d4");
-			}
-			if(patient.getAge() > 59 && patient.getAge() < 200) {
-				patient.setAgetype("d5");
-			}
-		}
-		return true;
-	}
 	
-	// informatici version
-	private boolean checkAge(Patient patient) {
+	private boolean checkAge(Patient patient) throws OHServiceException {
 		LocalDate now = LocalDate.now();
 		LocalDate birthDate = patient.getBirthDate();
-
 		if (patient.getAge() < 0 || patient.getAge() > 200) {
 			return false;
 		}

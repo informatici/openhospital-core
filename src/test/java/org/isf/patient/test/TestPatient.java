@@ -36,7 +36,7 @@ public class TestPatient {
 	private static String secondName = "TestSecondName";
 	private static LocalDate birthDate = LocalDate.of(1984, Calendar.AUGUST, 14);
 	private static int age = 31; //IT WILL CHANGE WITH TIME
-	private static String agetype = "Date";
+	private static String agetype = "d1";
 	private static char sex = 'F';
 	private static String address = "TestAddress";
 	private static String city = "TestCity";
