@@ -27,5 +27,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PatientHistoryIoOperationRepository extends JpaRepository<PatientHistory, Integer> {
+	
+	PatientHistory findByPatientId(int patientId);
 
 }
