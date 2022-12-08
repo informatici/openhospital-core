@@ -32,8 +32,8 @@ public class PatientHistoryManager {
 	@Autowired
 	private PatientHistoryIoOperations ioOperations;
 
-	public PatientHistory getById(int patId) {
-		return this.ioOperations.getById(patId);
+	public PatientHistory getByPatientId(int patientId) {
+		return this.ioOperations.getByPatientId(patientId);
 
 	}
 

@@ -37,8 +37,8 @@ public class PatientHistoryIoOperations {
 	@Autowired
 	private PatientHistoryIoOperationRepository repository;
 
-	public PatientHistory getById(int patId) {
-		return this.repository.findById(patId).get();
+	public PatientHistory getByPatientId(int patId) {
+		return this.repository.findByPatientId(patId);
 
 	}
 
