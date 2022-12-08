@@ -14,13 +14,6 @@
 #   to force names to be converted to lowercase.
 #   lower_case_table_names = 1   
 
-
-drop database if exists oh;
-create database oh CHARACTER SET utf8;
-
-use oh;
-
-
 --
 -- creazione TABELLE
 --
