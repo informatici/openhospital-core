@@ -51,11 +51,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 })
 public class PatientHistory extends Auditable<String> implements Comparable<PatientHistory>
 {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "PAH_PAT_ID")
+	@Column(name = "PAH_ID")
 	private int id;
+
+	@Column(name = "PAH_PAT_ID")
+	private int patientId;
 
 	@Column(name="PAH_FAM_NOTHING")
 	private boolean familyNothing;
@@ -241,6 +244,20 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 	public int compareTo(PatientHistory obj) {
 		return this.id - obj.getId();
 	}
+	
+	public int getPatientId() {
+		return patientId;
+	}
+
+
+
+
+	
+	public void setPatientId(int patientId) {
+		this.patientId = patientId;
+	}
+
+
 
 
 	public int getId() {
