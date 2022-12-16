@@ -127,6 +127,41 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 	@Column(name = "PAH_PAT_CLO_NOTE")
 	private String patClosedNote;
 
+	@Column(name = "PAH_PAT_OPN_NOTHING")
+	private boolean patOpenNothing;
+
+	@Column(name = "PAH_PAT_OPN_HYPER")
+	private boolean patOpenHypertension;
+
+	@Column(name = "PAH_PAT_OPN_DRUGADD")
+	private boolean patOpenDrugaddiction;
+
+	@Column(name = "PAH_PAT_OPN_CARDIO")
+	private boolean patOpenCardiovascular;
+
+	@Column(name = "PAH_PAT_OPN_INFECT")
+	private boolean patOpenInfective;
+
+	@Column(name = "PAH_PAT_OPN_ENDO")
+	private boolean patOpenEndocrinometabol;
+
+	@Column(name = "PAH_PAT_OPN_RESP")
+	private boolean patOpenRespiratory;
+
+	@Column(name = "PAH_PAT_OPN_CANCER")
+	private boolean patOpenCancer;
+
+	@Column(name = "PAH_PAT_OPN_ORTO")
+	private boolean patOpenOrto;
+
+	@Column(name = "PAH_PAT_OPN_GYNO")
+	private boolean patOpenGyno;
+
+	@Column(name = "PAH_PAT_OPN_OTHER")
+	private boolean patOpenOther;
+
+	@Column(name = "PAH_PAT_OPN_NOTE")
+	private String patOpenNote;
 
 	@Column(name = "PAH_PAT_SURGERY")
 	private String patSurgery;
@@ -604,5 +639,127 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 	public void setPhyPregnancyAbort(int phyPregnancyAbort) {
 		this.phyPregnancyAbort = phyPregnancyAbort;
 	}
+
+
+	public boolean isPatOpenNothing() {
+		return patOpenNothing;
+	}
+
+
+	public void setPatOpenNothing(boolean patOpenNothing) {
+		this.patOpenNothing = patOpenNothing;
+	}
+
+
+	public boolean isPatOpenHypertension() {
+		return patOpenHypertension;
+	}
+
+
+	public void setPatOpenHypertension(boolean patOpenHypertension) {
+		this.patOpenHypertension = patOpenHypertension;
+	}
+
+
+	public boolean isPatOpenDrugaddiction() {
+		return patOpenDrugaddiction;
+	}
+
+
+	public void setPatOpenDrugaddiction(boolean patOpenDrugaddiction) {
+		this.patOpenDrugaddiction = patOpenDrugaddiction;
+	}
+
+
+	public boolean isPatOpenCardiovascular() {
+		return patOpenCardiovascular;
+	}
+
+
+	public void setPatOpenCardiovascular(boolean patOpenCardiovascular) {
+		this.patOpenCardiovascular = patOpenCardiovascular;
+	}
+
+
+	public boolean isPatOpenInfective() {
+		return patOpenInfective;
+	}
+
+
+	public void setPatOpenInfective(boolean patOpenInfective) {
+		this.patOpenInfective = patOpenInfective;
+	}
+
+
+	public boolean isPatOpenEndocrinometabol() {
+		return patOpenEndocrinometabol;
+	}
+
+
+	public void setPatOpenEndocrinometabol(boolean patOpenEndocrinometabol) {
+		this.patOpenEndocrinometabol = patOpenEndocrinometabol;
+	}
+
+
+	public boolean isPatOpenRespiratory() {
+		return patOpenRespiratory;
+	}
+
+
+	public void setPatOpenRespiratory(boolean patOpenRespiratory) {
+		this.patOpenRespiratory = patOpenRespiratory;
+	}
+
+
+	public boolean isPatOpenCancer() {
+		return patOpenCancer;
+	}
+
+
+	public void setPatOpenCancer(boolean patOpenCancer) {
+		this.patOpenCancer = patOpenCancer;
+	}
+
+
+	public boolean isPatOpenOrto() {
+		return patOpenOrto;
+	}
+
+
+	public void setPatOpenOrto(boolean patOpenOrto) {
+		this.patOpenOrto = patOpenOrto;
+	}
+
+
+	public boolean isPatOpenGyno() {
+		return patOpenGyno;
+	}
+
+
+	public void setPatOpenGyno(boolean patOpenGyno) {
+		this.patOpenGyno = patOpenGyno;
+	}
+
+
+	public boolean isPatOpenOther() {
+		return patOpenOther;
+	}
+
+
+	public void setPatOpenOther(boolean patOpenOther) {
+		this.patOpenOther = patOpenOther;
+	}
+
+
+	public String getPatOpenNote() {
+		return patOpenNote;
+	}
+
+
+	public void setPatOpenNote(String patOpenNote) {
+		this.patOpenNote = patOpenNote;
+	}
+
+
 
 }
