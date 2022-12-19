@@ -82,6 +82,7 @@ public class TestPatient {
 	public void setParameters(Patient patient) {
 		patient.setFirstName(firstName);
 		patient.setSecondName(secondName);
+		patient.setName(firstName + ' ' + secondName);
 		patient.setBirthDate(birthDate);
 		patient.setAge(age);
 		patient.setAgetype(agetype);
@@ -108,7 +109,6 @@ public class TestPatient {
 		assertThat(patient.getFirstName()).isEqualTo(firstName);
 		assertThat(patient.getSecondName()).isEqualTo(secondName);
 		assertThat(patient.getBirthDate()).isEqualTo(birthDate);
-		//assertThat(patient.getAge()).isEqualTo(age);
 		assertThat(patient.getAgetype()).isEqualTo(agetype);
 		assertThat(patient.getSex()).isEqualTo(sex);
 		assertThat(patient.getAddress()).isEqualTo(address);

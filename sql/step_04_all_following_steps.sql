@@ -76,3 +76,8 @@ source step_78_drop_lab_exam_date.sql;
 source step_79_rename_pat_photo_field.sql;
 source step_80_add_ward_opd.sql;
 source step_81_link_bill_admission.sql;
+source step_82_permissions_and_grouppermission.sql;
+source step_83_alter_table_patient.sql;
+source step_84_alter_table_opd.sql;
+source step_85_update_pwd_admin.sql;
+
