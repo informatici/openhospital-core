@@ -211,7 +211,6 @@ public class PatientIoOperations {
 	}
 	/**
 	 * Save / update patient
-	 * intesys use this version now
 	 * @param patient
 	 * @return saved / updated patient
 	 */

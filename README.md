@@ -3,7 +3,7 @@
 |:---------------------------|
 
 # Open Hospital - Core
-[![Java CI](https://github.com/intesys/openhospital-core/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/intesys/openhospital-core/actions?query=workflow%3A%22Java+CI+with+Maven%22)
+[![Java CI](https://github.com/informatici/openhospital-core/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/informatici/openhospital-core/actions?query=workflow%3A%22Java+CI+with+Maven%22)
 
 This is the Core component of [Open Hospital][openhospital]: it contains the business logic and the data abstraction layer.  
 The Core component is used by the [Java Swing desktop GUI][openhospital-gui], and by the [web UI][openhospital-ui] (through the [API component][openhospital-api]).
