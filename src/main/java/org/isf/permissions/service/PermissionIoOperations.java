@@ -96,7 +96,7 @@ public class PermissionIoOperations {
 				this.groupPermissionRepository.save(item);
 			}
 		});
-		return this.repository.getOne(permissionUpdated.getId());
+		return this.repository.getReferenceById(permissionUpdated.getId());
 	}
 
 	public Boolean deletePermission(Integer id) {

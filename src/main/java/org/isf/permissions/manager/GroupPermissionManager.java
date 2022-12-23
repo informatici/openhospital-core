@@ -1,7 +1,6 @@
 package org.isf.permissions.manager;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.isf.menu.model.UserGroup;
 import org.isf.permissions.model.GroupPermission;
