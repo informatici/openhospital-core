@@ -179,19 +179,19 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 	private String patNote;
 
 	@Column(name = "PAH_PHY_NUTR_NOR")
-	private boolean phyNutritionNormal;
+	private boolean phyNutritionNormal = true;
 
 	@Column(name = "PAH_PHY_NUTR_ABN")
 	private String phyNutritionAbnormal;
 
 	@Column(name = "PAH_PHY_ALVO_NOR")
-	private boolean phyAlvoNormal;
+	private boolean phyAlvoNormal = true;
 
 	@Column(name = "PAH_PHY_ALVO_ABN")
 	private String phyAlvoAbnormal;
 
 	@Column(name = "PAH_PHY_DIURE_NOR")
-	private boolean phyDiuresisNormal;
+	private boolean phyDiuresisNormal = true;
 
 	@Column(name = "PAH_PHY_DIURE_ABN")
 	private String phyDiuresisAbnormal;
@@ -206,7 +206,7 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 	private boolean phyDrug;
 
 	@Column(name = "PAH_PHY_PERIOD_NOR")
-	private boolean phyPeriodNormal;
+	private boolean phyPeriodNormal = true;
 
 	@Column(name = "PAH_PHY_PERIOD_ABN")
 	private String phyPeriodAbnormal;
@@ -218,7 +218,7 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 	private int phyMenopauseYears;
 
 	@Column(name = "PAH_PHY_HRT_NOR")
-	private boolean phyHrtNormal;
+	private boolean phyHrtNormal = true;
 
 	@Column(name = "PAH_PHY_HRT_ABN")
 	private String phyHrtAbnormal;
