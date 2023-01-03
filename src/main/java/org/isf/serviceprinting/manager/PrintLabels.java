@@ -48,7 +48,7 @@ public class PrintLabels {
 			parameters.put("patientID", String.valueOf(patId == null ? "" : patId));
 
 			StringBuilder sbFilename = new StringBuilder();
-			sbFilename.append("rpt");
+			sbFilename.append("rpt_base");
 			sbFilename.append(File.separator);
 
 			sbFilename.append(filename);
