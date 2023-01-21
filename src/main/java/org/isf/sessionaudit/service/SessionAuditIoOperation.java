@@ -48,8 +48,8 @@ public class SessionAuditIoOperation {
 	 *            the user id
 	 * @return the {@link SessionAudit}
 	 */
-	public Optional<SessionAudit> getSessionAudit(int userCode) {
-		return this.repository.findByUserCode(userCode);
+	public Optional<SessionAudit> getSessionAuditById(int sessionAuditId) {
+		return this.repository.findById(sessionAuditId);
 	}
 
 	/**
@@ -59,8 +59,8 @@ public class SessionAuditIoOperation {
 	 *            the new session audit
 	 * @return true if it was saved
 	 */
-	public boolean saveSessionAudit(SessionAudit sessionAudit) {
-		return this.repository.save(sessionAudit) != null;
+	public int saveSessionAudit(SessionAudit sessionAudit) {
+		return this.repository.save(sessionAudit).getCode();
 	}
 
 	/**

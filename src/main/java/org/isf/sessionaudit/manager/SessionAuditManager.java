@@ -46,8 +46,8 @@ public class SessionAuditManager {
 	 * @return the users {@link SessionAudit}
 	 * @throws OHServiceException
 	 */
-	public Optional<SessionAudit> getMalnutrition(int userCode) throws OHServiceException {
-		return ioOperation.getSessionAudit(userCode);
+	public Optional<SessionAudit> getSessionAudit(int sessionAuditId) throws OHServiceException {
+		return ioOperation.getSessionAuditById(sessionAuditId);
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class SessionAuditManager {
 	 * @return the result of saving operation
 	 * @throws OHServiceException
 	 */
-	public boolean newSessionAudit(SessionAudit sessionAudit) throws OHServiceException {
+	public int newSessionAudit(SessionAudit sessionAudit) throws OHServiceException {
 		return ioOperation.saveSessionAudit(sessionAudit);
 	}
 
@@ -68,7 +68,7 @@ public class SessionAuditManager {
 	 * @return the updated {@link SessionAudit}
 	 * @throws OHServiceException
 	 */
-	public boolean updateMalnutrition(SessionAudit sessionAudit) throws OHServiceException {
+	public boolean updateSessionAudit(SessionAudit sessionAudit) throws OHServiceException {
 		return ioOperation.updateSessionAudit(sessionAudit);
 	}
 

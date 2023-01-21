@@ -30,6 +30,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SessionAuditIoOperationRepository extends JpaRepository<SessionAudit, Integer> {
 
-	Optional<SessionAudit> findByUserCode(int userCode);
+	Optional<SessionAudit> findByUserName(String userName);
 
 }

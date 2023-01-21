@@ -38,49 +38,50 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
 @Entity
-@Table(name="OH_SESSION_AUDIT")
+@Table(name = "OH_SESSION_AUDIT")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "MLN_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "MLN_CREATED_DATE"))
-@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MLN_LAST_MODIFIED_BY"))
-@AttributeOverride(name = "active", column = @Column(name = "MLN_ACTIVE"))
-@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MLN_LAST_MODIFIED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "SEA_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "SEA_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "SEA_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "SEA_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "SEA_LAST_MODIFIED_DATE"))
 public class SessionAudit extends Auditable<String> {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="SEA_ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "SEA_ID")
 	private int code;
-	
-	
 
-	@Column(name="SEA_US_ID_A")
-	private int userCode;
+	@Column(name = "SEA_US_ID_A")
+	private String userName;
 
 	/*
 	 * Date of this control
 	 */
 	@NotNull
-	@Column(name="SEA_LOGIN")	
+	@Column(name = "SEA_LOGIN")
 	private LocalDateTime loginDate;
 
 	/*
 	 * Date of next control
 	 */
-	@Column(name="SEA_LOGOUT")	
+	@Column(name = "SEA_LOGOUT")
 	private LocalDateTime logoutDate;
-
-
 
 	@Transient
 	private volatile int hashCode = 0;
-	
 
-	public SessionAudit() { }
+	public SessionAudit() {
+		super();
+	}
 
-	
+	public SessionAudit(String userName, @NotNull LocalDateTime loginDate, LocalDateTime logoutDate) {
+		super();
+		this.userName = userName;
+		this.loginDate = loginDate;
+		this.logoutDate = logoutDate;
+	}
 
 	public void setCode(int aCode) {
 		code = aCode;
@@ -90,54 +91,34 @@ public class SessionAudit extends Auditable<String> {
 		return code;
 	}
 
-	
-	public int getUserCode() {
-		return userCode;
+	public String getUserName() {
+		return userName;
 	}
 
-
-
-	
-	public void setUserCode(int userCode) {
-		this.userCode = userCode;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
-
-
-	
 	public LocalDateTime getLoginDate() {
 		return loginDate;
 	}
 
-
-
-	
 	public void setLoginDate(LocalDateTime loginDate) {
 		this.loginDate = loginDate;
 	}
 
-
-
-	
 	public LocalDateTime getLogoutDate() {
 		return logoutDate;
 	}
 
-
-
-	
 	public void setLogoutDate(LocalDateTime logoutDate) {
 		this.logoutDate = logoutDate;
 	}
 
-
-
 	@Override
 	public int hashCode() {
-		return Objects.hash(code, hashCode, loginDate, logoutDate, userCode);
+		return Objects.hash(code, hashCode, loginDate, logoutDate, userName);
 	}
-
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -149,8 +130,9 @@ public class SessionAudit extends Auditable<String> {
 			return false;
 		SessionAudit other = (SessionAudit) obj;
 		return code == other.code && hashCode == other.hashCode && Objects.equals(loginDate, other.loginDate) && Objects.equals(logoutDate, other.logoutDate)
-						&& userCode == other.userCode;
+						&& Objects.equals(userName, other.userName);
 	}
+
 
 
 }
