@@ -214,6 +214,7 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 
 	@Column(name = "PAH_PHY_NUTR_NOR")
 	@ColumnDefault("true")
+
 	private boolean phyNutritionNormal = true;
 
 	@Column(name = "PAH_PHY_NUTR_ABN")
