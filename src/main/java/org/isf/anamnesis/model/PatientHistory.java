@@ -31,6 +31,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -56,108 +57,141 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 	private int patientId;
 
 	@Column(name = "PAH_FAM_NOTHING")
+	@ColumnDefault("false")
 	private boolean familyNothing;
 
 	@Column(name = "PAH_FAM_HYPER")
+	@ColumnDefault("false")
 	private boolean familyHypertension;
 
 	@Column(name = "PAH_FAM_DRUGADD")
+	@ColumnDefault("false")
 	private boolean familyDrugAddiction;
 
 	@Column(name = "PAH_FAM_CARDIO")
+	@ColumnDefault("false")
 	private boolean familyCardiovascular;
 
 	@Column(name = "PAH_FAM_INFECT")
+	@ColumnDefault("false")
 	private boolean familyInfective;
 
 	@Column(name = "PAH_FAM_ENDO")
+	@ColumnDefault("false")
 	private boolean familyEndocrinometabol;
 
 	@Column(name = "PAH_FAM_RESP")
+	@ColumnDefault("false")
 	private boolean familyRespiratory;
 
 	@Column(name = "PAH_FAM_CANCER")
+	@ColumnDefault("false")
 	private boolean familyCancer;
 
 	@Column(name = "PAH_FAM_ORTO")
+	@ColumnDefault("false")
 	private boolean familyOrto;
 
 	@Column(name = "PAH_FAM_GYNO")
+	@ColumnDefault("false")
 	private boolean familyGyno;
 
 	@Column(name = "PAH_FAM_OTHER")
+	@ColumnDefault("false")
 	private boolean familyOther;
 
 	@Column(name = "PAH_FAM_NOTE")
 	private String familyNote;
 
 	@Column(name = "PAH_PAT_CLO_NOTHING")
+	@ColumnDefault("false")
 	private boolean patClosedNothing;
 
 	@Column(name = "PAH_PAT_CLO_HYPER")
+	@ColumnDefault("false")
 	private boolean patClosedHypertension;
 
 	@Column(name = "PAH_PAT_CLO_DRUGADD")
+	@ColumnDefault("false")
 	private boolean patClosedDrugaddiction;
 
 	@Column(name = "PAH_PAT_CLO_CARDIO")
+	@ColumnDefault("false")
 	private boolean patClosedCardiovascular;
 
 	@Column(name = "PAH_PAT_CLO_INFECT")
+	@ColumnDefault("false")
 	private boolean patClosedInfective;
 
 	@Column(name = "PAH_PAT_CLO_ENDO")
+	@ColumnDefault("false")
 	private boolean patClosedEndocrinometabol;
 
 	@Column(name = "PAH_PAT_CLO_RESP")
+	@ColumnDefault("false")
 	private boolean patClosedRespiratory;
 
 	@Column(name = "PAH_PAT_CLO_CANCER")
+	@ColumnDefault("false")
 	private boolean patClosedCancer;
 
 	@Column(name = "PAH_PAT_CLO_ORTO")
+	@ColumnDefault("false")
 	private boolean patClosedOrto;
 
 	@Column(name = "PAH_PAT_CLO_GYNO")
+	@ColumnDefault("false")
 	private boolean patClosedGyno;
 
 	@Column(name = "PAH_PAT_CLO_OTHER")
+	@ColumnDefault("false")
 	private boolean patClosedOther;
 
 	@Column(name = "PAH_PAT_CLO_NOTE")
 	private String patClosedNote;
 
 	@Column(name = "PAH_PAT_OPN_NOTHING")
+	@ColumnDefault("false")
 	private boolean patOpenNothing;
 
 	@Column(name = "PAH_PAT_OPN_HYPER")
+	@ColumnDefault("false")
 	private boolean patOpenHypertension;
 
 	@Column(name = "PAH_PAT_OPN_DRUGADD")
+	@ColumnDefault("false")
 	private boolean patOpenDrugaddiction;
 
 	@Column(name = "PAH_PAT_OPN_CARDIO")
+	@ColumnDefault("false")
 	private boolean patOpenCardiovascular;
 
 	@Column(name = "PAH_PAT_OPN_INFECT")
+	@ColumnDefault("false")
 	private boolean patOpenInfective;
 
 	@Column(name = "PAH_PAT_OPN_ENDO")
+	@ColumnDefault("false")
 	private boolean patOpenEndocrinometabol;
 
 	@Column(name = "PAH_PAT_OPN_RESP")
+	@ColumnDefault("false")
 	private boolean patOpenRespiratory;
 
 	@Column(name = "PAH_PAT_OPN_CANCER")
+	@ColumnDefault("false")
 	private boolean patOpenCancer;
 
 	@Column(name = "PAH_PAT_OPN_ORTO")
+	@ColumnDefault("false")
 	private boolean patOpenOrto;
 
 	@Column(name = "PAH_PAT_OPN_GYNO")
+	@ColumnDefault("false")
 	private boolean patOpenGyno;
 
 	@Column(name = "PAH_PAT_OPN_OTHER")
+	@ColumnDefault("false")
 	private boolean patOpenOther;
 
 	@Column(name = "PAH_PAT_OPN_NOTE")
@@ -179,51 +213,62 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 	private String patNote;
 
 	@Column(name = "PAH_PHY_NUTR_NOR")
+	@ColumnDefault("true")
+
 	private boolean phyNutritionNormal = true;
 
 	@Column(name = "PAH_PHY_NUTR_ABN")
 	private String phyNutritionAbnormal;
 
 	@Column(name = "PAH_PHY_ALVO_NOR")
+	@ColumnDefault("true")
 	private boolean phyAlvoNormal = true;
 
 	@Column(name = "PAH_PHY_ALVO_ABN")
 	private String phyAlvoAbnormal;
 
 	@Column(name = "PAH_PHY_DIURE_NOR")
+	@ColumnDefault("true")
 	private boolean phyDiuresisNormal = true;
 
 	@Column(name = "PAH_PHY_DIURE_ABN")
 	private String phyDiuresisAbnormal;
 
 	@Column(name = "PAH_PHY_ALCOOL")
+	@ColumnDefault("false")
 	private boolean phyAlcool;
 
 	@Column(name = "PAH_PHY_SMOKE")
+	@ColumnDefault("false")
 	private boolean phySmoke;
 
 	@Column(name = "PAH_PHY_DRUG")
+	@ColumnDefault("false")
 	private boolean phyDrug;
 
 	@Column(name = "PAH_PHY_PERIOD_NOR")
+	@ColumnDefault("true")
 	private boolean phyPeriodNormal = true;
 
 	@Column(name = "PAH_PHY_PERIOD_ABN")
 	private String phyPeriodAbnormal;
 
 	@Column(name = "PAH_PHY_MENOP")
+	@ColumnDefault("false")
 	private boolean phyMenopause;
 
 	@Column(name = "PAH_PHY_MENOP_Y")
 	private int phyMenopauseYears;
 
 	@Column(name = "PAH_PHY_HRT_NOR")
+	@ColumnDefault("true")
 	private boolean phyHrtNormal = true;
 
 	@Column(name = "PAH_PHY_HRT_ABN")
 	private String phyHrtAbnormal;
 
 	@Column(name = "PAH_PHY_PREG")
+	@ColumnDefault("false")
 	private boolean phyPregnancy;
 
 	@Column(name = "PAH_PHY_PREG_N")
@@ -640,126 +685,101 @@ public class PatientHistory extends Auditable<String> implements Comparable<Pati
 		this.phyPregnancyAbort = phyPregnancyAbort;
 	}
 
-
 	public boolean isPatOpenNothing() {
 		return patOpenNothing;
 	}
-
 
 	public void setPatOpenNothing(boolean patOpenNothing) {
 		this.patOpenNothing = patOpenNothing;
 	}
 
-
 	public boolean isPatOpenHypertension() {
 		return patOpenHypertension;
 	}
-
 
 	public void setPatOpenHypertension(boolean patOpenHypertension) {
 		this.patOpenHypertension = patOpenHypertension;
 	}
 
-
 	public boolean isPatOpenDrugaddiction() {
 		return patOpenDrugaddiction;
 	}
-
 
 	public void setPatOpenDrugaddiction(boolean patOpenDrugaddiction) {
 		this.patOpenDrugaddiction = patOpenDrugaddiction;
 	}
 
-
 	public boolean isPatOpenCardiovascular() {
 		return patOpenCardiovascular;
 	}
-
 
 	public void setPatOpenCardiovascular(boolean patOpenCardiovascular) {
 		this.patOpenCardiovascular = patOpenCardiovascular;
 	}
 
-
 	public boolean isPatOpenInfective() {
 		return patOpenInfective;
 	}
-
 
 	public void setPatOpenInfective(boolean patOpenInfective) {
 		this.patOpenInfective = patOpenInfective;
 	}
 
-
 	public boolean isPatOpenEndocrinometabol() {
 		return patOpenEndocrinometabol;
 	}
-
 
 	public void setPatOpenEndocrinometabol(boolean patOpenEndocrinometabol) {
 		this.patOpenEndocrinometabol = patOpenEndocrinometabol;
 	}
 
-
 	public boolean isPatOpenRespiratory() {
 		return patOpenRespiratory;
 	}
-
 
 	public void setPatOpenRespiratory(boolean patOpenRespiratory) {
 		this.patOpenRespiratory = patOpenRespiratory;
 	}
 
-
 	public boolean isPatOpenCancer() {
 		return patOpenCancer;
 	}
-
 
 	public void setPatOpenCancer(boolean patOpenCancer) {
 		this.patOpenCancer = patOpenCancer;
 	}
 
-
 	public boolean isPatOpenOrto() {
 		return patOpenOrto;
 	}
-
 
 	public void setPatOpenOrto(boolean patOpenOrto) {
 		this.patOpenOrto = patOpenOrto;
 	}
 
-
 	public boolean isPatOpenGyno() {
 		return patOpenGyno;
 	}
-
 
 	public void setPatOpenGyno(boolean patOpenGyno) {
 		this.patOpenGyno = patOpenGyno;
 	}
 
-
 	public boolean isPatOpenOther() {
 		return patOpenOther;
 	}
-
 
 	public void setPatOpenOther(boolean patOpenOther) {
 		this.patOpenOther = patOpenOther;
 	}
 
-
 	public String getPatOpenNote() {
 		return patOpenNote;
 	}
 
-
 	public void setPatOpenNote(String patOpenNote) {
 		this.patOpenNote = patOpenNote;
 	}
-
 
 
 }
