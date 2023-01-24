@@ -123,8 +123,7 @@ public class SourceFiles extends Thread {
 
 			try {
 				Thread.sleep(10);
-			} catch (Exception e) {
-			}
+			} catch (Exception e) {}
 
 			if (!value.isDirectory()) {
 				try {
