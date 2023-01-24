@@ -76,3 +76,4 @@ source step_79_rename_pat_photo_field.sql;
 source step_80_add_ward_opd.sql;
 source step_81_link_bill_admission.sql;
 source step_82_anamnesis_patienthistory.sql;
+source step_83_fix_operationrow_column_names.sql;
