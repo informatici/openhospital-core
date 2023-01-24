@@ -314,7 +314,6 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			blobLength = (int) blob.length();
 			blobAsBytes = blob.getBytes(1, blobLength);
 			save(thumn, blobAsBytes);
-			dicom.setDicomInstanceUID(""); // reset to generate a new id if dicomInstanceUID is missing in the file
 		} catch (Exception exception) {
 			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),

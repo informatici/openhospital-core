@@ -355,6 +355,9 @@ public class SourceFiles extends Thread {
 				//set by the system
 				seriesNumber = !seriesNumber.isEmpty() ? seriesNumber : generateSeriesNumber(patient);
 				seriesInstanceUID = !seriesInstanceUID.isEmpty() ? seriesInstanceUID : "<org_root>." + seriesNumber;
+				
+				//in loadDicomDir loop this is generated because is missing in JPG/JPEG files, reset to avoid duplicates
+				studyUID = ""; 
 			} else if (isDicom) {
 
 				DicomInputStream dicomInputStream;
