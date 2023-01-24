@@ -129,7 +129,11 @@ public class SourceFiles extends Thread {
 				try {
 					loadDicom(fileDicom, value, patient);
 				} catch (Exception e) {
-					throw e;
+					if (e instanceof OHDicomException) {
+						LOGGER.error("loadDicomDir: {}", ((OHDicomException) e).getMessages().get(0).getMessage());
+					} else {
+						throw e;
+					}
 				}
 				filesLoaded++;
 				dicomLoader.setLoaded(filesLoaded);
@@ -468,7 +472,7 @@ public class SourceFiles extends Thread {
 		try {
 			orientation = exifIFD0Directory.getInt(ExifDirectoryBase.TAG_ORIENTATION);
 		} catch (Exception ex) {
-			LOGGER.error("No EXIF information found for image: {}", sourceFile.getName());
+			LOGGER.debug("No EXIF information found for image: {}", sourceFile.getName());
 		}
 		return orientation;
 	}
