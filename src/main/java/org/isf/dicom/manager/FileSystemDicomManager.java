@@ -314,6 +314,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			blobLength = (int) blob.length();
 			blobAsBytes = blob.getBytes(1, blobLength);
 			save(thumn, blobAsBytes);
+			dicom.setDicomInstanceUID(""); // reset to generate a new id if dicomInstanceUID is missing in the file
 		} catch (Exception exception) {
 			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
@@ -433,10 +434,12 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			int patId = dicom.getPatId();
 			String serieNumber = dicom.getDicomSeriesNumber();
 			String diuid = dicom.getDicomInstanceUID();
-			if (serieNumber == null || serieNumber.trim().length() == 0 || serieNumber.equalsIgnoreCase("null"))
+			if (serieNumber == null || serieNumber.trim().length() == 0 || serieNumber.equalsIgnoreCase("null")) {
 				return false;
-			if (diuid == null || diuid.trim().isEmpty() || diuid.equalsIgnoreCase("null"))
+			}
+			if (diuid == null || diuid.trim().isEmpty() || diuid.equalsIgnoreCase("null")) {
 				return false;
+			}
 			File df = getSerieDir(patId, serieNumber, true);
 			File[] files = df.listFiles();
 			int i = 0;
