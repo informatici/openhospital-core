@@ -105,6 +105,33 @@ public class LabIoOperations {
 	}
 	
 	/**
+	 * Return a list of exams ({@link Laboratory}s) between specified dates and matching passed exam name
+	 * @param exam - the exam name as <code>String</code>
+	 * @param dateFrom - the lower date for the range
+	 * @param dateTo - the highest date for the range
+	 * @param patient - the object of patient 
+	 * @return the list of {@link Laboratory}s 
+	 * @throws OHServiceException
+	 */
+	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
+		List<Laboratory> laboritories = new ArrayList<>();
+		
+		if(exam.equals("") && patient != null) {
+			laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCode(dateFrom, dateTo, exam, patient.getCode());
+		}
+		if( exam.equals("") && patient == null ) {
+			laboritories = repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam);
+		}
+		if(patient != null && exam.equals("")) {
+			laboritories = repository.findByLabDateBetweenAndPatientCode(dateFrom, dateTo, patient.getCode());
+		}
+		if(patient == null && exam.equals("")) {
+			laboritories= repository.findByCreatedDateBetweenOrderByLabDateDesc(dateFrom, dateTo);
+		}
+		return laboritories;
+	}
+	
+	/**
 	 * Return a list of exams ({@link Laboratory}s) related to a {@link Patient}.
 	 * @param aPatient - the {@link Patient}.
 	 * @return the list of {@link Laboratory}s related to the {@link Patient}.
