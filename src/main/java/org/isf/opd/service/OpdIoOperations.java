@@ -70,7 +70,10 @@ public class OpdIoOperations {
 	 */
 	public List<Opd> getOpdList(boolean oneWeek) throws OHServiceException {
 		LocalDate dateTo = LocalDate.now();
-		LocalDate dateFrom = dateTo.minusWeeks(1);
+		LocalDate dateFrom = LocalDate.now();
+		if (oneWeek) {
+			dateFrom = LocalDate.now().minusWeeks(1);
+		}
 		return getOpdList(null, MessageBundle.getMessage("angal.common.alltypes.txt"), MessageBundle.getMessage("angal.opd.alldiseases.txt"), dateFrom, dateTo, 0, 0,
 				'A', 'A');
 	}
