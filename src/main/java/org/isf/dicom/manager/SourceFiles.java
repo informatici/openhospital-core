@@ -123,14 +123,17 @@ public class SourceFiles extends Thread {
 
 			try {
 				Thread.sleep(10);
-			} catch (Exception e) {
-			}
+			} catch (Exception e) {}
 
 			if (!value.isDirectory()) {
 				try {
 					loadDicom(fileDicom, value, patient);
 				} catch (Exception e) {
-					throw e;
+					if (e instanceof OHDicomException) {
+						LOGGER.error("loadDicomDir: {}", ((OHDicomException) e).getMessages().get(0).getMessage());
+					} else {
+						throw e;
+					}
 				}
 				filesLoaded++;
 				dicomLoader.setLoaded(filesLoaded);
@@ -352,6 +355,9 @@ public class SourceFiles extends Thread {
 				//set by the system
 				seriesNumber = !seriesNumber.isEmpty() ? seriesNumber : generateSeriesNumber(patient);
 				seriesInstanceUID = !seriesInstanceUID.isEmpty() ? seriesInstanceUID : "<org_root>." + seriesNumber;
+				
+				//in loadDicomDir loop this is generated because is missing in JPG/JPEG files, reset to avoid duplicates
+				studyUID = ""; 
 			} else if (isDicom) {
 
 				DicomInputStream dicomInputStream;
@@ -469,7 +475,7 @@ public class SourceFiles extends Thread {
 		try {
 			orientation = exifIFD0Directory.getInt(ExifDirectoryBase.TAG_ORIENTATION);
 		} catch (Exception ex) {
-			LOGGER.error("No EXIF information found for image: {}", sourceFile.getName());
+			LOGGER.debug("No EXIF information found for image: {}", sourceFile.getName());
 		}
 		return orientation;
 	}
