@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -48,12 +48,12 @@ public class OperationRow {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "OPER_ID_A")
+    @Column(name = "OPER_ID")
     private int id;
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "OPER_ID")
+    @JoinColumn(name = "OPER_OPE_ID_A")
     private Operation operation;
 
     @NotNull

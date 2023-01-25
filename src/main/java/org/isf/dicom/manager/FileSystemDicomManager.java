@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -433,10 +433,12 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			int patId = dicom.getPatId();
 			String serieNumber = dicom.getDicomSeriesNumber();
 			String diuid = dicom.getDicomInstanceUID();
-			if (serieNumber == null || serieNumber.trim().length() == 0 || serieNumber.equalsIgnoreCase("null"))
+			if (serieNumber == null || serieNumber.trim().length() == 0 || serieNumber.equalsIgnoreCase("null")) {
 				return false;
-			if (diuid == null || diuid.trim().isEmpty() || diuid.equalsIgnoreCase("null"))
+			}
+			if (diuid == null || diuid.trim().isEmpty() || diuid.equalsIgnoreCase("null")) {
 				return false;
+			}
 			File df = getSerieDir(patId, serieNumber, true);
 			File[] files = df.listFiles();
 			int i = 0;
