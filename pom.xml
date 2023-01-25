@@ -131,7 +131,9 @@
 								<exclude>lib/**</exclude>
 								<exclude>sql/**</exclude>
 								<exclude>repo/**</exclude>
-								<exclude>rpt/**</exclude>
+								<exclude>rpt_base/**</exclude>
+								<exclude>rpt_extra/**</exclude>
+								<exclude>rpt_stat/**</exclude>
 								<exclude>rsc/**</exclude>
 								<exclude>rsc-test/**</exclude>
 								<exclude>src/test/resources/**</exclude>
