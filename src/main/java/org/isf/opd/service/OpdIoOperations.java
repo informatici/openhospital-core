@@ -25,7 +25,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.GregorianCalendar;
 import java.util.List;
-import org.joda.time.DateTime;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
@@ -204,14 +203,6 @@ public class OpdIoOperations {
 			repository.findByProgYear(opdNum) :
 			repository.findByProgYearAndDateBetween(opdNum, LocalDateTime.of(year, 1, 1, 0, 0), LocalDateTime.of(year + 1, 1, 1, 0, 0));
 		return !opds.isEmpty();
-	}
-
-	/**
-	* @deprecated GregorianCalendar and JodaTime are no longer used, consider adding a method in {@link org.isf.utils.time.TimeTools] using java.time only 
-	*/	
-	@Deprecated
-	private GregorianCalendar getBeginningOfYear(int year) {
-		return new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar();
 	}
 
 	public Opd findByCode(Integer code) {
