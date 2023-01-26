@@ -24,6 +24,7 @@ package org.isf.opd.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
@@ -203,6 +204,24 @@ public class OpdIoOperations {
 			repository.findByProgYear(opdNum) :
 			repository.findByProgYearAndDateBetween(opdNum, LocalDateTime.of(year, 1, 1, 0, 0), LocalDateTime.of(year + 1, 1, 1, 0, 0));
 		return !opds.isEmpty();
+	}
+
+	/**
+	 * Get an OPD by its code
+	 * @param code - the OPD code
+	 * @return an OPD or {@code null}
+	 */
+	public Optional<Opd> getOpdById(Integer code) {
+		return repository.findById(code);
+	}
+
+	/**
+	 * Get a list of OPD with specified Progressive in Year number
+	 * @param code - the OPD code
+	 * @return a list of OPD or an empty list
+	 */
+	public List<Opd> getOpdByProgYear(Integer code) {
+		return repository.findByProgYear(code);
 	}
 
 }

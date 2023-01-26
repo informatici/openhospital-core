@@ -24,6 +24,7 @@ package org.isf.opd.manager;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.disease.model.Disease;
 import org.isf.generaldata.GeneralData;
@@ -248,5 +249,23 @@ public class OpdBrowserManager {
 	 */
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
 		return ioOperations.isExistOpdNum(opdNum, year);
+	}
+
+	/**
+	 * Get an OPD by its code
+	 * @param code - the OPD code
+	 * @return an OPD or {@code null}
+	 */
+	public Optional<Opd> getOpdById(Integer code) {
+		return ioOperations.getOpdById(code);
+	}
+
+	/**
+	 * Get a list of OPD with specified Progressive in Year number
+	 * @param code - the OPD code
+	 * @return a list of OPD or an empty list
+	 */
+	public List<Opd> getOpdByProgYear(Integer code) {
+		return ioOperations.getOpdByProgYear(code);
 	}
 }
