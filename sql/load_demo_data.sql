@@ -5367,14 +5367,11 @@ CREATE TABLE `oh_user` (
 -- Dumping data for table `oh_user`
 --
 
-
-
 LOCK TABLES `oh_user` WRITE;
 /*!40000 ALTER TABLE `oh_user` DISABLE KEYS */;
 INSERT INTO `oh_user` VALUES ('admin','admin','$2a$10$FI/PMO0oSHHosF2PX8l3QuB0DJepVfnynbLZ9Zm2711bF2ch8db2S','administrator',NULL,NULL,NULL,NULL,1);
 INSERT INTO `oh_user` VALUES ('guest','guest','$2a$10$b0WlANdaNV7Ukn/klFGt3.euZ7PaHuJI6TtBSM2vdxkavvkUDbpo2','guest',NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `oh_user` ENABLE KEYS */;
-
 UNLOCK TABLES;
 
 --
