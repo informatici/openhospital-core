@@ -21,8 +21,6 @@
  */
 package org.isf.operation.model;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
