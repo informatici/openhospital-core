@@ -76,7 +76,7 @@ public class OpdIoOperations {
 			dateFrom = LocalDate.now().minusWeeks(1);
 		}
 		return getOpdList(null, MessageBundle.getMessage("angal.common.alltypes.txt"), MessageBundle.getMessage("angal.opd.alldiseases.txt"), dateFrom, dateTo, 0, 0,
-				'A', 'A');
+				'A', 'A', null);
 	}
 	
 	/**
@@ -102,8 +102,9 @@ public class OpdIoOperations {
 			int ageFrom,
 			int ageTo,
 			char sex,
-			char newPatient) throws OHServiceException {
-		return repository.findAllOpdWhereParams(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient);
+			char newPatient,
+			String user) throws OHServiceException {
+		return repository.findAllOpdWhereParams(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user);
 	}
 	
 	/**
