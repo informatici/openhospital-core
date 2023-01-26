@@ -149,7 +149,7 @@ public class OpdBrowserManager {
 	public List<Opd> getOpd(boolean oneWeek) throws OHServiceException {
 		return ioOperations.getOpdList(oneWeek);
 	}
-
+	
 	/**
 	 * Return all Opds within specified dates and parameters
 	 * 
@@ -165,10 +165,32 @@ public class OpdBrowserManager {
 	 * @return the list of Opds. It could be <code>null</code>.
 	 * @throws OHServiceException
 	 */
+	public List<Opd> getOpd(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient)
+			throws OHServiceException {
+		return ioOperations.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, null);
+	}
+
+	/**
+	 * Return all Opds within specified dates and parameters
+	 * 
+	 * @param ward 
+	 * @param diseaseTypeCode
+	 * @param diseaseCode
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param ageFrom
+	 * @param ageTo
+	 * @param sex
+	 * @param newPatient
+	 * @param user
+	 * @return the list of Opds. It could be <code>null</code>.
+	 * @throws OHServiceException
+	 */
 	public List<Opd> getOpd(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, String user)
 			throws OHServiceException {
 		return ioOperations.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user);
 	}
+	
 
 	/**
 	 * Returns all {@link Opd}s associated to specified patient ID
@@ -268,4 +290,5 @@ public class OpdBrowserManager {
 	public List<Opd> getOpdByProgYear(Integer code) {
 		return ioOperations.getOpdByProgYear(code);
 	}
+
 }
