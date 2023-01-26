@@ -99,12 +99,12 @@ public class AdmissionBrowserManager {
 	}
 
 	/**
-	 * Returns the only one admission without adimission date (or null if none) for the specified patient.
+	 * Returns the only one admission without admission date (or null if none) for the specified patient.
 	 *
 	 * @param patient the patient target of the admission.
 	 * @return the patient admission or {@code null} if the operation fails.
 	 */
-	public Admission getCurrentAdmission(Patient patient) throws OHServiceException {
+	public Admission getCurrentAdmission(Patient patient) {
 		return ioOperations.getCurrentAdmission(patient);
 	}
 
