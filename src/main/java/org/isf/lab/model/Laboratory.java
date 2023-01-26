@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -134,6 +134,12 @@ public class Laboratory extends Auditable<String> {
 	public Exam getExam() {
 		return exam;
 	}
+	public LocalDateTime getLabDate() {
+		return labDate;
+	}
+	/*
+	 * @deprecated use getLabDate()
+	 */
 	public LocalDateTime getDate() {
 		return labDate;
 	}
@@ -155,6 +161,12 @@ public class Laboratory extends Auditable<String> {
 	public void setLock(int aLock) {
 		lock = aLock;
 	}
+	public void setLabDate(LocalDateTime aDate) {
+		labDate = TimeTools.truncateToSeconds(aDate);
+	}
+	/*
+	 * @deprecated use setLabDate()
+	 */
 	public void setDate(LocalDateTime aDate) {
 		labDate = TimeTools.truncateToSeconds(aDate);
 	}

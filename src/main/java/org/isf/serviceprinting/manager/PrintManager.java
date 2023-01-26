@@ -77,7 +77,7 @@ public class PrintManager {
 		parameters.put("ospedaleMail", hospital.getEmail());
 
 		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(toPrint);
-		File jasperFile = new File("rpt/" + filename + ".jasper");
+		File jasperFile = new File("rpt_base/" + filename + ".jasper");
 		try {
 			if (jasperFile.isFile()) {
 				JasperReport jasperReport = (JasperReport) JRLoader
@@ -89,7 +89,7 @@ public class PrintManager {
 					if (GeneralData.INTERNALVIEWER)
 						JasperViewer.viewReport(jasperPrint,false, new Locale(GeneralData.LANGUAGE));
 					else { 
-						String pdfFile = "rpt/PDF/" + filename + ".pdf";
+						String pdfFile = "rpt_base/PDF/" + filename + ".pdf";
 						JasperExportManager.exportReportToPdfFile(jasperPrint, pdfFile);
 						try {
 							Runtime rt = Runtime.getRuntime();
@@ -100,7 +100,7 @@ public class PrintManager {
 					}
 					break;
 				case 1:
-					JasperExportManager.exportReportToPdfFile(jasperPrint,"rpt/PDF/"+
+					JasperExportManager.exportReportToPdfFile(jasperPrint,"rpt_base/PDF/"+
 							JOptionPane.showInputDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectapathforthepdffile.msg"), filename)
 							+".pdf");
 					break;
