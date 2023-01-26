@@ -78,5 +78,3 @@ source step_81_link_bill_admission.sql;
 source step_82_permissions_and_grouppermission.sql;
 source step_83_alter_table_patient.sql;
 source step_84_alter_table_opd.sql;
-source step_85_update_pwd_admin.sql;
-
