@@ -169,6 +169,19 @@ public class LabManager {
 	}
 	
 	/**
+	 * Return a list of exams ({@link Laboratory}s) between specified dates and matching passed exam name
+	 *
+	 * @param exam - the exam name as <code>String</code>
+	 * @param dateFrom - the lower date for the range
+	 * @param dateTo - the highest date for the range
+	 * @param patient - the object patient
+	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
+	 * @throws OHServiceException
+	 */
+	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
+		return ioOperations.getLaboratory(exam, dateFrom, dateTo, patient);
+	}
+	/**
 	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s)
 	 * between specified dates and matching passed exam name. If a lab has multiple
 	 * results, these are concatenated and added to the result string
