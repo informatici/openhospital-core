@@ -40,6 +40,7 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.disctype.model.DischargeType;
 import org.isf.disease.model.Disease;
@@ -196,8 +197,8 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	private int lock;                        // default 0
 
 	@NotNull
-	@Column(name = "ADM_DELETED")
-	private char deleted;                    // flag record deleted ; values are 'Y' OR 'N' default is 'N'
+	@Column(name = "ADM_DELETED", columnDefinition = "char(1) default 'N'")
+	private Character deleted = 'N';                // flag record deleted ; values are 'Y' OR 'N' default is 'N'
 
 	@Transient
 	private volatile int hashCode = 0;
