@@ -285,7 +285,7 @@ public class AdmissionIoOperations {
 	 */
 	public boolean setDeleted(int admissionId) throws OHServiceException {
 		Admission foundAdmission = repository.findById(admissionId).orElse(null);
-		foundAdmission.setDeleted("Y");
+		foundAdmission.setDeleted('Y');
 		Admission savedAdmission = repository.save(foundAdmission);
 		return savedAdmission != null;
 	}

@@ -197,7 +197,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 	@NotNull
 	@Column(name = "ADM_DELETED")
-	private String deleted;                    // flag record deleted ; values are 'Y' OR 'N' default is 'N'
+	private char deleted;                    // flag record deleted ; values are 'Y' OR 'N' default is 'N'
 
 	@Transient
 	private volatile int hashCode = 0;
@@ -245,7 +245,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 			LocalDateTime visitDate,
 			PregnantTreatmentType pregTreatmentType, LocalDateTime deliveryDate, DeliveryType deliveryType, DeliveryResultType deliveryResult, Float weight,
 			LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
-			LocalDateTime abortDate, String userID, String deleted) {
+			LocalDateTime abortDate, String userID, char deleted) {
 		super();
 		this.id = id;
 		this.admitted = admitted;
@@ -352,11 +352,11 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.ctrlDate2 = TimeTools.truncateToSeconds(ctrlDate2);
 	}
 
-	public String getDeleted() {
+	public char getDeleted() {
 		return deleted;
 	}
 
-	public void setDeleted(String deleted) {
+	public void setDeleted(char deleted) {
 		this.deleted = deleted;
 	}
 
