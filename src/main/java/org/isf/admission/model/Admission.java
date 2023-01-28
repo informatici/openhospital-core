@@ -198,7 +198,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 	@NotNull
 	@Column(name = "ADM_DELETED", columnDefinition = "char(1) default 'N'")
-	private Character deleted = 'N';                // flag record deleted ; values are 'Y' OR 'N' default is 'N'
+	private char deleted = 'N';                // flag record deleted ; values are 'Y' OR 'N' default is 'N'
 
 	@Transient
 	private volatile int hashCode = 0;

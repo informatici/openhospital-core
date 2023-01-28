@@ -175,7 +175,7 @@ public class Patient extends Auditable<String> {
 
 	@NotNull
 	@Column(name="PAT_DELETED", columnDefinition = "char(1) default 'N'")
-	private Character deleted = 'N';
+	private char deleted = 'N';
 
 	@Version
 	@Column(name="PAT_LOCK")
