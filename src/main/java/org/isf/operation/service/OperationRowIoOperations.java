@@ -85,11 +85,11 @@ public class OperationRowIoOperations {
 		}
 	}
 
-    public void newOperationRow(OperationRow opRow) throws OHServiceException {
-        repository.save(opRow);
-    }
-    public List<OperationRow> getOperationRowByPatient(Patient patient) throws OHServiceException {
-		
-			return repository.findByAdmissionPatientOrOpdPatient(patient, patient);
+	public void newOperationRow(OperationRow opRow) throws OHServiceException {
+		repository.save(opRow);
+	}
+
+	public List<OperationRow> getOperationRowByPatient(Patient patient) throws OHServiceException {
+		return repository.findByAdmissionPatientOrOpdPatient(patient, patient);
 	}
 }
