@@ -350,22 +350,6 @@ public class AdmissionBrowserManager {
 				}
 			}
 
-			LocalDateTime operationDate = admission.getOpDate();
-			if (operationDate != null) {
-				LocalDateTime limit;
-				if (admission.getDisDate() == null) {
-					limit = today;
-				} else {
-					limit = admission.getDisDate();
-				}
-
-				if (operationDate.isBefore(dateIn) || operationDate.isAfter(limit)) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.admission.pleaseinsertavalidvisitdate.msg"),
-							OHSeverityLevel.ERROR));
-				}
-			}
-
 			if (admission.getDiseaseOut1() == null && admission.getDisDate() != null) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.admission.pleaseselectatleastfirstdiagnosisout.msg"),

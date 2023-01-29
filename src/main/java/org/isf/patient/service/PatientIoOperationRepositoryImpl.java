@@ -79,7 +79,7 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 		}
 
 		where.add(cb.or(
-				cb.equal(patientRoot.get("deleted"), "N"),
+				cb.equal(patientRoot.get("deleted"), 'N'),
 				cb.isNull(patientRoot.get("deleted"))
 		));
 
@@ -113,7 +113,7 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 		Root<Patient> patient = query.from(Patient.class);
 
 		// Only not deleted patient
-		Predicate deletedN = cb.equal(patient.get("deleted"), "N");
+		Predicate deletedN = cb.equal(patient.get("deleted"), 'N');
 		Predicate deletedNull = cb.isNull(patient.get("deleted"));
 		Predicate notDeleted = cb.or(deletedN, deletedNull);
 

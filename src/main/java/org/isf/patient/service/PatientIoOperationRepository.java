@@ -35,21 +35,21 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PatientIoOperationRepository extends JpaRepository<Patient, Integer>, PatientIoOperationRepositoryCustom {
 
-	List<Patient> findByDeletedOrDeletedIsNull(String deletionStatus);
+	List<Patient> findByDeletedOrDeletedIsNull(char deletionStatus);
 
-	List<Patient> findAllByDeletedIsNullOrDeletedEqualsOrderByName(String patDeleted, Pageable pageable);
+	List<Patient> findAllByDeletedIsNullOrDeletedEqualsOrderByName(char patDeleted, Pageable pageable);
 
 	@Query("select p from Patient p where p.name = :name and (p.deleted = :deletedStatus or p.deleted is null) order by p.secondName, p.firstName")
-	List<Patient> findByNameAndDeletedOrderByName(@Param("name") String name, @Param("deletedStatus") String deletedStatus);
+	List<Patient> findByNameAndDeletedOrderByName(@Param("name") String name, @Param("deletedStatus") char deletedStatus);
 
 	@Query("select p from Patient p where p.code = :id and (p.deleted = :deletedStatus or p.deleted is null)")
-	List<Patient> findAllWhereIdAndDeleted(@Param("id") Integer id, @Param("deletedStatus") String deletedStatus);
+	List<Patient> findAllWhereIdAndDeleted(@Param("id") Integer id, @Param("deletedStatus") char deletedStatus);
 
 	@Modifying
 	@Query(value = "update Patient p set p.deleted = 'Y' where p.code = :id")
 	int updateDeleted(@Param("id") Integer id);
 
-	List<Patient> findByNameAndDeleted(String name, String deletedStatus);
+	List<Patient> findByNameAndDeleted(String name, char deletedStatus);
 
 	@Query(value = "select max(p.code) from Patient p")
 	Integer findMaxCode();

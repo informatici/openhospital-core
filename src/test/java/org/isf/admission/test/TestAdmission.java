@@ -39,10 +39,9 @@ import org.isf.ward.model.Ward;
 
 public class TestAdmission {
 
-	// set dates in reasonable order to pass any validatation tests
+	// set dates in reasonable order to pass any validation tests
 	private static final LocalDateTime ADMINDATE = LocalDateTime.of(2001, 1, 28, 0, 0);
 	private static final LocalDateTime VISITDATE = LocalDateTime.of(2002, 2, 28, 0, 0);
-	private static final LocalDateTime OPDATE = LocalDateTime.of(2003, 3, 1, 0, 0);
 	private static final LocalDateTime ABORTDATE = null;
 	private static final LocalDateTime DELIVERYDATE = LocalDateTime.of(2004, 12, 1, 0, 0);
 	private static final LocalDateTime CTRLDATE1 = LocalDateTime.of(2005, 3, 1, 0, 0);
@@ -54,12 +53,11 @@ public class TestAdmission {
 	private String type = "T";
 	private int yProg = 0;
 	private String FHU = "TestFHU";
-	private String opResult = "Result";
 	private String note = "TestNote";
 	private Float transUnit = (float) 10.10;
 	private Float weight = (float) 20.20;
 	private String userID = "TestUserId";
-	private String deleted = "N";
+	private char deleted = 'N';
 
 	public Admission setup(
 			Ward ward,
@@ -84,7 +82,7 @@ public class TestAdmission {
 		} else {
 			// Create Admission with all parameters 
 			admission = new Admission(id, admitted, type, ward, yProg, patient, ADMINDATE, admissionType, FHU, diseaseIn,
-					diseaseOut1, diseaseOut2, diseaseOut3, operation, opResult, OPDATE, DISDATE, dischargeType, note,
+					diseaseOut1, diseaseOut2, diseaseOut3, DISDATE, dischargeType, note,
 					transUnit, VISITDATE, pregTreatmentType, DELIVERYDATE, deliveryType, deliveryResult, weight,
 					CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted);
 		}
@@ -124,9 +122,6 @@ public class TestAdmission {
 		admission.setDisType(dischargeType);
 		admission.setFHU(FHU);
 		admission.setNote(note);
-		admission.setOpDate(OPDATE);
-		admission.setOperation(operation);
-		admission.setOpResult(opResult);
 		admission.setPatient(patient);
 		admission.setPregTreatmentType(pregTreatmentType);
 		admission.setTransUnit(transUnit);
@@ -149,8 +144,6 @@ public class TestAdmission {
 		assertThat(admission.getDisDate()).isEqualTo(DISDATE);
 		assertThat(admission.getFHU()).isEqualTo(FHU);
 		assertThat(admission.getNote()).isEqualTo(note);
-		assertThat(admission.getOpDate()).isEqualTo(OPDATE);
-		assertThat(admission.getOpResult()).isEqualTo(opResult);
 		assertThat(admission.getTransUnit()).isEqualTo(transUnit);
 		assertThat(admission.getType()).isEqualTo(type);
 		assertThat(admission.getUserID()).isEqualTo(userID);
