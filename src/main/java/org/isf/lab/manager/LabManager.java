@@ -210,7 +210,6 @@ public class LabManager {
 	 */
 	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
 		return ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo, patient);
-		
 	}
 
 	/**
