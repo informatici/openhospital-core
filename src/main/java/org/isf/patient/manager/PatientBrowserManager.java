@@ -76,7 +76,7 @@ public class PatientBrowserManager {
 	 */
 	public Patient savePatient(Patient patient) throws OHServiceException {
 		validatePatient(patient);
-		return ioOperations.savePatients(patient);
+		return ioOperations.savePatient(patient);
 	}
 
 	/**

@@ -198,14 +198,6 @@ public class PatientIoOperations {
 		}
 		return null;
 	}
-	/**
-	 * Save / update patient
-	 * @param patient
-	 * @return saved / updated patient
-	 */
-	public Patient savePatients(Patient patient) throws OHServiceException {
-		return repository.save(patient);
-	}
 
 	/**
 	 * Method that updates an existing {@link Patient} in the db
