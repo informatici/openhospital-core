@@ -388,7 +388,7 @@ public class PatientBrowserManager {
 	 * @param patient
 	 * @throws OHServiceException 
 	 */
-	protected void validatePatient(Patient patient) throws OHServiceException {
+	protected void validatePatient(Patient patient) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		
 		if (StringUtils.isEmpty(patient.getFirstName())) {
@@ -416,7 +416,7 @@ public class PatientBrowserManager {
 		}
 	}
 	
-	private boolean checkAge(Patient patient) throws OHServiceException {
+	private boolean checkAge(Patient patient) {
 		LocalDate now = LocalDate.now();
 		LocalDate birthDate = patient.getBirthDate();
 		if (patient.getAge() < 0 || patient.getAge() > 200) {
@@ -424,6 +424,7 @@ public class PatientBrowserManager {
 		}
 		return birthDate != null && !birthDate.isAfter(now);
 	}
+	
 	/**
 	 * Method that returns the full list of Cities of the patient not logically deleted: <br>
 	 * @return the list of Cities (could be empty)
