@@ -250,6 +250,7 @@ public class OpdBrowserManager {
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
 		return ioOperations.isExistOpdNum(opdNum, year);
 	}
+	
 	@Transactional
 	public Opd getOpdByCode(Integer code) {
 		// TODO Auto-generated method stub
