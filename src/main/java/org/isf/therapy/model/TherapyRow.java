@@ -66,7 +66,7 @@ public class TherapyRow extends Auditable<String> {
 	@Column(name="THR_ID")	
 	private int therapyID;
 
-    @NotNull
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "THR_PAT_ID")
 	Patient patient;
