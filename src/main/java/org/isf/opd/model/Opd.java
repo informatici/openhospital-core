@@ -145,12 +145,6 @@ public class Opd extends Auditable<String> {
 	/*@Column(name="OPD_REASON")
    	private String reason; // ADDED: Arnaud
 
-	@Column(name="OPD_ANAMNESIS")
-    private String anamnesis; // ADDED: Arnaud
-    
-	@Column(name="OPD_ALLERGIES")
-    private String allergies; // ADDED: Arnaud
-    
 	@Column(name="OPD_THERAPIES")
 	private String therapies; // ADDED: Arnaud*/
 	
@@ -342,22 +336,6 @@ public class Opd extends Auditable<String> {
 	
 	public void setReason(String reason) {
 		this.reason = reason;
-	}
-
-	public String getAnamnesis() {
-		return anamnesis;
-	}
-
-	public void setAnamnesis(String anamnesis) {
-		this.anamnesis = anamnesis;
-	}
-
-	public String getAllergies() {
-		return allergies;
-	}
-
-	public void setAllergies(String allergies) {
-		this.allergies = allergies;
 	}
 
 	public String getTherapies() {
