@@ -200,6 +200,7 @@ public class Opd extends Auditable<String> {
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
+	
 	public String getNote() {
 		return note;
 	}
@@ -207,6 +208,7 @@ public class Opd extends Auditable<String> {
 	public void setNote(String note) {
 		this.note = note;
 	}
+	
 	public int getAge() {
 		return age;
 	}
