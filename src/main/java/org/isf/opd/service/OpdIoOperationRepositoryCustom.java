@@ -29,7 +29,6 @@ import org.isf.ward.model.Ward;
 
 public interface OpdIoOperationRepositoryCustom {
 
-
 	List<Opd> findAllOpdWhereParams(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex,
 			char newPatient, int patientCode);
 
