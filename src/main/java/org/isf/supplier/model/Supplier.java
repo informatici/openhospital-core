@@ -78,7 +78,7 @@ public class Supplier extends Auditable<String> implements java.io.Serializable 
 	private String supNote;
 	
 	@Column(name="SUP_DELETED", columnDefinition = "char(1) default 'N'")
-	private Character supDeleted;
+	private char supDeleted;
 	
 	@Transient
 	private volatile int hashCode = 0;
