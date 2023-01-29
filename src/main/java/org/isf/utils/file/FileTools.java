@@ -118,7 +118,7 @@ public class FileTools {
 	 * using these date and time formats:<br>
 	 * <p>
 	 * - yyyy-MM-dd -> "2020-02-01"<br>
-	 * - dd-MM-yyyy -> "02-03-2020"<br>
+	 * - dd-MM-yyyy -> "02-03-2023"<br>
 	 * - dd-MM-yy -> "03-04-20"<br>
 	 * - dd/MM/yyyy -> "04/05/2020"<br>
 	 * - dd/MM/yy -> "05/06/20"<br>
