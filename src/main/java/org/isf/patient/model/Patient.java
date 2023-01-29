@@ -177,11 +177,19 @@ public class Patient extends Auditable<String> {
 	@Column(name="PAT_DELETED", columnDefinition = "char(1) default 'N'")
 	private char deleted = 'N';
 	
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
 	@Column(name="PAT_ANAMNESIS")
-	private String anamnesis; // ADDED: Arnaud
+	private String anamnesis;
 	
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
 	@Column(name="PAT_ALLERGIES")
-	private String allergies; // ADDED: Arnaud
+	private String allergies;
 	
 	@Version
 	@Column(name="PAT_LOCK")
@@ -514,18 +522,34 @@ public class Patient extends Auditable<String> {
 		return patientProfilePhoto;
 	}	
 
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
 	public String getAnamnesis() {
 		return anamnesis;
 	}
 
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
 	public void setAnamnesis(String anamnesis) {
 		this.anamnesis = anamnesis;
 	}
 
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
 	public String getAllergies() {
 		return allergies;
 	}
 
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
 	public void setAllergies(String allergies) {
 		this.allergies = allergies;
 	}
