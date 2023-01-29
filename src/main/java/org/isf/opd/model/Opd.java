@@ -148,6 +148,9 @@ public class Opd extends Auditable<String> {
 	@Column(name="OPD_THERAPIES")
 	private String therapies; // ADDED: Arnaud*/
 	
+	/**
+	 * Field for "ui"
+	 */
 	@Nullable
 	@Column(name="OPD_PRESCRIPTION")
 	private String prescription; // ADDED: Arnaud
@@ -176,10 +179,16 @@ public class Opd extends Auditable<String> {
 		return patient == null ? "" : patient.getName();
 	}
 
+	/**
+	 * Field for "ui"
+	 */
 	public String getPrescription() {
 		return prescription;
 	}
 
+	/**
+	 * Field for "ui"
+	 */
 	public void setPrescription(String prescription) {
 		this.prescription = prescription;
 	}
