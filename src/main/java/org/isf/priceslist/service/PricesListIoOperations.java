@@ -71,7 +71,7 @@ public class PricesListIoOperations {
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean updatePrices(PriceList list,	ArrayList<Price> prices) throws OHServiceException {
+	public boolean updatePrices(PriceList list, List<Price> prices) throws OHServiceException {
 		boolean result = true;
 
 
