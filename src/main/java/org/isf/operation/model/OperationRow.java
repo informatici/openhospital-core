@@ -56,7 +56,7 @@ public class OperationRow {
     @JoinColumn(name = "OPER_OPE_ID_A")
     private Operation operation;
 
-   // @NotNull
+    //@NotNull
     @Column(name = "OPER_PRESCRIBER")
     private String prescriber;
 
