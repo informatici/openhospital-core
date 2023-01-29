@@ -59,8 +59,8 @@ public class TestOpd {
 			opd = new Opd(prog_year, sex, age, disease);
 			opd.setDate(date);
 			/*opd.setReason(reason);
-			opd.setTherapies(therapies);
-			opd.setPrescription(prescription);*/
+			opd.setTherapies(therapies);*/
+			opd.setPrescription(prescription);
 			opd.setNewPatient(newPatient);
 			opd.setReferralFrom(referralFrom);
 			opd.setReferralTo(referralTo);
@@ -80,8 +80,8 @@ public class TestOpd {
 		opd.setAge(age);
 		opd.setSex(sex);
 		/*opd.setReason(reason);
-		opd.setTherapies(therapies);
-		opd.setPrescription(prescription);*/
+		opd.setTherapies(therapies);*/
+		opd.setPrescription(prescription);
 		opd.setProgYear(prog_year);
 		opd.setNewPatient(newPatient);
 		opd.setReferralFrom(referralFrom);
@@ -104,8 +104,8 @@ public class TestOpd {
 			assertThat(opd.getSex()).isEqualTo(sex);
 		}
 		/*assertThat(opd.getReason()).isEqualTo(reason);
-		assertThat(opd.getTherapies()).isEqualTo(therapies);
-		assertThat(opd.getPrescription()).isEqualTo(prescription);*/
+		assertThat(opd.getTherapies()).isEqualTo(therapies);*/
+		assertThat(opd.getPrescription()).isEqualTo(prescription);
 		assertThat(opd.getProgYear()).isEqualTo(prog_year);
 		assertThat(opd.getNewPatient()).isEqualTo(newPatient);
 		assertThat(opd.getReferralFrom()).isEqualTo(referralFrom);
