@@ -59,10 +59,8 @@ public class TestOpd {
 			opd = new Opd(prog_year, sex, age, disease);
 			opd.setDate(date);
 			/*opd.setReason(reason);
-			opd.setAnamnesis(anamnesis);
 			opd.setTherapies(therapies);
-			opd.setAllergies(allergies);*/
-			opd.setPrescription(prescription);
+			opd.setPrescription(prescription);*/
 			opd.setNewPatient(newPatient);
 			opd.setReferralFrom(referralFrom);
 			opd.setReferralTo(referralTo);
@@ -82,9 +80,7 @@ public class TestOpd {
 		opd.setAge(age);
 		opd.setSex(sex);
 		/*opd.setReason(reason);
-		opd.setAnamnesis(anamnesis);
 		opd.setTherapies(therapies);
-		opd.setAllergies(allergies);
 		opd.setPrescription(prescription);*/
 		opd.setProgYear(prog_year);
 		opd.setNewPatient(newPatient);
@@ -108,9 +104,7 @@ public class TestOpd {
 			assertThat(opd.getSex()).isEqualTo(sex);
 		}
 		/*assertThat(opd.getReason()).isEqualTo(reason);
-		assertThat(opd.getAnamnesis()).isEqualTo(anamnesis);
 		assertThat(opd.getTherapies()).isEqualTo(therapies);
-		assertThat(opd.getAllergies()).isEqualTo(allergies);
 		assertThat(opd.getPrescription()).isEqualTo(prescription);*/
 		assertThat(opd.getProgYear()).isEqualTo(prog_year);
 		assertThat(opd.getNewPatient()).isEqualTo(newPatient);
