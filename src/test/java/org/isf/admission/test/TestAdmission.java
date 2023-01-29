@@ -57,7 +57,7 @@ public class TestAdmission {
 	private Float transUnit = (float) 10.10;
 	private Float weight = (float) 20.20;
 	private String userID = "TestUserId";
-	private String deleted = "N";
+	private char deleted = 'N';
 
 	public Admission setup(
 			Ward ward,
