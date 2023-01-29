@@ -43,7 +43,7 @@ public class OHExceptionMessage implements Serializable{
 		this.message = message;
 		this.level = level;
 	}
-	public OHExceptionMessage(String title, ErrorDescription description,String message, OHSeverityLevel level) {
+	public OHExceptionMessage(String title, ErrorDescription description, String message, OHSeverityLevel level) {
 		super();
 		this.title = title;
 		this.description = ErrorDescription.PASSWORD_TOO_SHORT;

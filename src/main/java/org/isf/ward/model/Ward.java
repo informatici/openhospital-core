@@ -82,7 +82,6 @@ public class Ward extends Auditable<String> {
 	@Column(name="WRD_NDOC")
 	private Integer docs;
 	
-	
 	@Column(name="WRD_IS_OPD")	
 	private boolean isOpd;
 
