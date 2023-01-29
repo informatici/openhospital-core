@@ -262,16 +262,16 @@ public class TestFileTools {
 		calendar.set(2020, 2, 9, 11, 22, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
 
-		Date timestampFromName = getTimestampFromName("09-03-2023_1122");
+		Date timestampFromName = getTimestampFromName("09-03-2020_1122");
 		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		timestampFromName = getTimestampFromName("some-Text_09-03-2023_1122");
+		timestampFromName = getTimestampFromName("some-Text_09-03-2020_1122");
 		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		timestampFromName = getTimestampFromName("some-Text_09-03-2023_1122_text.txt");
+		timestampFromName = getTimestampFromName("some-Text_09-03-2020_1122_text.txt");
 		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		timestampFromName = getTimestampFromName("09-03-2023_1122_text.txt");
+		timestampFromName = getTimestampFromName("09-03-2020_1122_text.txt");
 		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 	}
 
@@ -283,16 +283,16 @@ public class TestFileTools {
 		calendar.set(2020, 2, 9, 11, 22, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
 
-		Date timestampFromName = getTimestampFromName("09-03-2023 1122");
+		Date timestampFromName = getTimestampFromName("09-03-2020 1122");
 		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		timestampFromName = getTimestampFromName("some-Text_09-03-2023 1122");
+		timestampFromName = getTimestampFromName("some-Text_09-03-2020 1122");
 		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		timestampFromName = getTimestampFromName("some-Text_09-03-2023 1122_text.txt");
+		timestampFromName = getTimestampFromName("some-Text_09-03-2020 1122_text.txt");
 		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		timestampFromName = getTimestampFromName("09-03-2023_1122 text.txt");
+		timestampFromName = getTimestampFromName("09-03-2020_1122 text.txt");
 		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 	}
 
@@ -304,16 +304,16 @@ public class TestFileTools {
 		calendar.set(2020, 2, 9, 0, 0, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
 
-		Date timestampFromName = getTimestampFromName("09-03-2023");
+		Date timestampFromName = getTimestampFromName("09-03-2020");
 		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		timestampFromName = getTimestampFromName("some-Text_09-03-2023");
+		timestampFromName = getTimestampFromName("some-Text_09-03-2020");
 		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		timestampFromName = getTimestampFromName("some-Text_09-03-2023_text.txt");
+		timestampFromName = getTimestampFromName("some-Text_09-03-2020_text.txt");
 		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 
-		timestampFromName = getTimestampFromName("09-03-2023text.txt");
+		timestampFromName = getTimestampFromName("09-03-2020text.txt");
 		assertThat(timestampFromName).isEqualTo(calendar.getTime());
 	}
 
