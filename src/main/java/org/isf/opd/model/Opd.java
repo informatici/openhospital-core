@@ -178,14 +178,6 @@ public class Opd extends Auditable<String> {
 		disease = aDisease;
 	}
 	
-	/*public String getNote() {
-		return note;
-	}
-
-	public void setNote(String note) {
-		this.note = note;
-	}*/
-	
 	public String getFullName() {
 		return patient == null ? "" : patient.getName();
 	}
