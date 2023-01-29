@@ -91,17 +91,4 @@ public class LaboratoryForPrint {
 		return patName;
 	}
 
-	public void setPatName(String patName) {
-		this.patName = patName;
-	}
-
-	public Integer getPatientCode() {
-		return patientCode;
-	}
-
-	public void setPatientCode(Integer patientCode) {
-		this.patientCode = patientCode;
-	}
-
-
 }
