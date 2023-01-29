@@ -102,7 +102,7 @@ public class Opd extends Auditable<String> {
 
 	@Nullable
 	@Column(name="OPD_NOTE")
-	private String note; //ADDED: Alex
+	private String note;
 
 	@NotNull
 	@Column(name="OPD_PROG_YEAR")	
