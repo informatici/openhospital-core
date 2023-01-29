@@ -27,13 +27,14 @@ import java.time.format.DateTimeFormatter;
 import org.isf.exa.model.Exam;
 
 public class LaboratoryForPrint {
-	
+
 	private String exam;
 	private LocalDateTime date;
 	private String result;
 	private Integer code;
 	private String patName;
 	private Integer patientCode;
+
 	public Integer getCode() {
 		return code;
 	}
@@ -41,16 +42,16 @@ public class LaboratoryForPrint {
 	public void setCode(Integer code) {
 		this.code = code;
 	}
-	
+
 	public LaboratoryForPrint(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult, String patientName, Integer patCode) {
 		code = aCode;
 		exam = aExam.getDescription();
 		date = aDate;
 		result = aResult;
 		patName = patientName;
-		patientCode= patCode;
+		patientCode = patCode;
 	}
-	
+
 	public LaboratoryForPrint(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult) {
 		code = aCode;
 		exam = aExam.getDescription();
@@ -63,29 +64,29 @@ public class LaboratoryForPrint {
 		return time.format(formatter);
 	}
 
-    public LocalDateTime getDate() {
-        return this.date;
-    }
+	public LocalDateTime getDate() {
+		return this.date;
+	}
 
-    public void setDate(LocalDateTime aDate) {
-        this.date = aDate;
-    }
+	public void setDate(LocalDateTime aDate) {
+		this.date = aDate;
+	}
 
-    public String getExam() {
-        return this.exam;
-    }
+	public String getExam() {
+		return this.exam;
+	}
 
-    public void setExam(String aExam) {
-        this.exam = aExam;
-    }
+	public void setExam(String aExam) {
+		this.exam = aExam;
+	}
 
-    public String getResult() {
-        return this.result;
-    }
+	public String getResult() {
+		return this.result;
+	}
 
-    public void setResult(String aResult) {
-        this.result = aResult;
-    }
+	public void setResult(String aResult) {
+		this.result = aResult;
+	}
 
 	public String getPatName() {
 		return patName;
