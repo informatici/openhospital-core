@@ -485,24 +485,24 @@ public class LabManager {
 		return materialDescriptionList;
 	}
 	
-	 /**
-		 * Return the whole list of exams ({@link Laboratory}s) within last year.
-		 *
-		 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
-		 * @throws OHServiceException
-		 */
-		public Optional<Laboratory> getLaboratory(Integer code) throws OHServiceException {
-			return ioOperations.getLaboratory(code);
-		}	
-		
-		/**
-		  * Return the whole list of ({@link LaboratoryRow}s).
-		  *
-		  * @return the list of {@link LaboratoryRow}s. It could not be <code>empty</code>.
-		  * @throws OHServiceException
-		  */
-		public List<LaboratoryRow> getLaboratoryRowList(Integer code) throws OHServiceException {
-				return ioOperations.getLabRow(code);
-		}
+	/**
+	 * Return the whole list of exams ({@link Laboratory}s) within last year.
+	 *
+	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
+	 * @throws OHServiceException
+	 */
+	public Optional<Laboratory> getLaboratory(Integer code) throws OHServiceException {
+		return ioOperations.getLaboratory(code);
+	}
+
+	/**
+	 * Return the whole list of ({@link LaboratoryRow}s).
+	 *
+	 * @return the list of {@link LaboratoryRow}s. It could not be <code>empty</code>.
+	 * @throws OHServiceException
+	 */
+	public List<LaboratoryRow> getLaboratoryRowList(Integer code) throws OHServiceException {
+		return ioOperations.getLabRow(code);
+	}
 
 }
