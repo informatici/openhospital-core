@@ -78,4 +78,4 @@ source step_81_link_bill_admission.sql;
 source step_82_anamnesis_patienthistory.sql;
 source step_83_fix_operationrow_column_names.sql;
 source step_84_session_table.sql;
-source step_XX_remove_old_admission_fields;
+source step_85_remove_old_admission_fields;
