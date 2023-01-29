@@ -31,7 +31,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PriceIoListOperationRepository extends JpaRepository<Price, Integer> {
+public interface PriceIoOperationRepository extends JpaRepository<Price, Integer> {
 
 	List<Price> findAllByOrderByDescriptionAsc();
 

@@ -40,7 +40,7 @@ public class PricesListIoOperations {
 	private PricesListIoOperationRepository repository;
 	
 	@Autowired
-	private PriceIoListOperationRepository priceRepository;
+	private PriceIoOperationRepository priceRepository;
 	
 	/**
 	 * Return the list of {@link PriceList}s in the DB
