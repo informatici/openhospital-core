@@ -142,20 +142,21 @@ public class Opd extends Auditable<String> {
 	@Column(name="OPD_LOCK")
 	private int lock;
 	
-/*	@Column(name="OPD_REASON")
+	/*@Column(name="OPD_REASON")
    	private String reason; // ADDED: Arnaud
 
 	@Column(name="OPD_ANAMNESIS")
-    	private String anamnesis; // ADDED: Arnaud
+    private String anamnesis; // ADDED: Arnaud
     
 	@Column(name="OPD_ALLERGIES")
-    	private String allergies; // ADDED: Arnaud
+    private String allergies; // ADDED: Arnaud
     
 	@Column(name="OPD_THERAPIES")
-    	private String therapies; // ADDED: Arnaud*/
-    @Nullable
+	private String therapies; // ADDED: Arnaud*/
+	
+	@Nullable
 	@Column(name="OPD_PRESCRIPTION")
-    private String prescription; // ADDED: Arnaud
+	private String prescription; // ADDED: Arnaud
 	
 	@Transient
 	private volatile int hashCode = 0;
