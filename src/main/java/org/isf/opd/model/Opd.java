@@ -163,11 +163,11 @@ public class Opd extends Auditable<String> {
 	}
 	
 	/**
-     	 * @param aProgYear
-     	 * @param aSex
-     	 * @param aAge
-     	 * @param aDisease
-     	 */
+ 	 * @param aProgYear
+ 	 * @param aSex
+ 	 * @param aAge
+ 	 * @param aDisease
+ 	 */
 	public Opd(int aProgYear, char aSex, int aAge, Disease aDisease) {
 		prog_year = aProgYear;
 		sex = aSex;
