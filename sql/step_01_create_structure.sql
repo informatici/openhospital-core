@@ -15,7 +15,7 @@
 #   lower_case_table_names = 1   
 
 --
--- creazione TABELLE
+-- TABLES creation
 --
 CREATE TABLE ADMISSION  (
 	ADM_ID  int NOT NULL auto_increment,
