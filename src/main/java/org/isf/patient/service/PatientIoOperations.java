@@ -60,7 +60,7 @@ public class PatientIoOperations {
 
 	public static final String LOAD_FROM_DB = "DB";
 
-	public static final String NOT_DELETED_STATUS = "N";
+	public static final char NOT_DELETED_STATUS = 'N';
 	
 	@Autowired
 	private PatientIoOperationRepository repository;
@@ -90,7 +90,7 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Patient> getPatients(Pageable pageable) throws OHServiceException {
-		return repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName("N", pageable);
+		return repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName('N', pageable);
 	}
 
 	/**

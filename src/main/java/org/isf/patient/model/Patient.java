@@ -174,8 +174,8 @@ public class Patient extends Auditable<String> {
 	private String profession;
 
 	@NotNull
-	@Column(name="PAT_DELETED")
-	private String deleted = "N";
+	@Column(name="PAT_DELETED", columnDefinition = "char(1) default 'N'")
+	private char deleted = 'N';
 
 	@Version
 	@Column(name="PAT_LOCK")
@@ -496,11 +496,11 @@ public class Patient extends Auditable<String> {
 		this.profession = profession;
 	}
 	
-    public String getDeleted() {
+    public char getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(String deleted) {
+    public void setDeleted(char deleted) {
         this.deleted = deleted;
     }
 

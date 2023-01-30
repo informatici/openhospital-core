@@ -21,8 +21,8 @@
  */
 package org.isf.utils.db;
 
-import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
 
 import java.lang.annotation.Target;
 
