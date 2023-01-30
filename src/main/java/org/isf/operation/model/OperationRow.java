@@ -34,10 +34,12 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.isf.accounting.model.Bill;
 import org.isf.admission.model.Admission;
 import org.isf.opd.model.Opd;
 import org.isf.utils.time.TimeTools;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 /**
  * @author xavier
@@ -56,27 +58,26 @@ public class OperationRow {
     @JoinColumn(name = "OPER_OPE_ID_A")
     private Operation operation;
 
-    //@NotNull
+    @NotNull
     @Column(name = "OPER_PRESCRIBER")
     private String prescriber;
 
-    //@NotNull
+    @NotNull
     @Column(name = "OPER_RESULT")
     private String opResult;
 
-    //@NotNull
+    @NotNull
     @Column(name = "OPER_OPDATE")       // SQL type: datetime
     private LocalDateTime opDate;
 
+    @NotNull
     @Column(name = "OPER_REMARKS")
     private String remarks;
 
-    //@NotNull
     @ManyToOne
     @JoinColumn(name = "OPER_ADMISSION_ID")
     private Admission admission;
 
-    //@NotNull
     @ManyToOne
     @JoinColumn(name = "OPER_OPD_ID")
     private Opd opd;
@@ -85,9 +86,9 @@ public class OperationRow {
     @JoinColumn(name = "OPER_BILL_ID")
     private Bill bill;
 
-    //@NotNull
-    @Column(name = "OPER_TRANS_UNIT")
-    private Float transUnit;
+    @Column(name = "OPER_TRANS_UNIT", columnDefinition = "float default 0")
+    @ColumnDefault("0f")
+    private Float transUnit = 0f;
     
     @Transient
     private volatile int hashCode = 0;
