@@ -278,7 +278,7 @@ public class OpdBrowserManager {
 	 * @param code - the OPD code
 	 * @return an OPD or {@code null}
 	 */
-	public Optional<Opd> getOpdById(Integer code) {
+	public Optional<Opd> getOpdById(int code) {
 		return ioOperations.getOpdById(code);
 	}
 
@@ -287,7 +287,7 @@ public class OpdBrowserManager {
 	 * @param code - the OPD code
 	 * @return a list of OPD or an empty list
 	 */
-	public List<Opd> getOpdByProgYear(Integer code) {
+	public List<Opd> getOpdByProgYear(int code) {
 		return ioOperations.getOpdByProgYear(code);
 	}
 
