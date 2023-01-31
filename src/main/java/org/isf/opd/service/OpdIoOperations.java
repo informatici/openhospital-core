@@ -24,6 +24,7 @@ package org.isf.opd.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
@@ -70,9 +71,12 @@ public class OpdIoOperations {
 	 */
 	public List<Opd> getOpdList(boolean oneWeek) throws OHServiceException {
 		LocalDate dateTo = LocalDate.now();
-		LocalDate dateFrom = dateTo.minusWeeks(1);
+		LocalDate dateFrom = LocalDate.now();
+		if (oneWeek) {
+			dateFrom = LocalDate.now().minusWeeks(1);
+		}
 		return getOpdList(null, MessageBundle.getMessage("angal.common.alltypes.txt"), MessageBundle.getMessage("angal.opd.alldiseases.txt"), dateFrom, dateTo, 0, 0,
-				'A', 'A');
+				'A', 'A', null);
 	}
 	
 	/**
@@ -98,8 +102,9 @@ public class OpdIoOperations {
 			int ageFrom,
 			int ageTo,
 			char sex,
-			char newPatient) throws OHServiceException {
-		return repository.findAllOpdWhereParams(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient);
+			char newPatient,
+			String user) throws OHServiceException {
+		return repository.findAllOpdWhereParams(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user);
 	}
 	
 	/**
@@ -200,6 +205,24 @@ public class OpdIoOperations {
 			repository.findByProgYear(opdNum) :
 			repository.findByProgYearAndDateBetween(opdNum, LocalDateTime.of(year, 1, 1, 0, 0), LocalDateTime.of(year + 1, 1, 1, 0, 0));
 		return !opds.isEmpty();
+	}
+
+	/**
+	 * Get an OPD by its code
+	 * @param code - the OPD code
+	 * @return an OPD or {@code null}
+	 */
+	public Optional<Opd> getOpdById(Integer code) {
+		return repository.findById(code);
+	}
+
+	/**
+	 * Get a list of OPD with specified Progressive in Year number
+	 * @param code - the OPD code
+	 * @return a list of OPD or an empty list
+	 */
+	public List<Opd> getOpdByProgYear(Integer code) {
+		return repository.findByProgYear(code);
 	}
 
 }
