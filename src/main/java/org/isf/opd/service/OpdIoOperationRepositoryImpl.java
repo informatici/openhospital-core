@@ -57,8 +57,8 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			int ageTo,
 			char sex,
 			char newPatient,
-			int patientCode) {
-		return getOpdQuery(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, patientCode).getResultList();
+			String user) {
+		return getOpdQuery(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user).getResultList();
 	}	
 
 	private TypedQuery<Opd> getOpdQuery(
@@ -71,7 +71,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			int ageTo,
 			char sex,
 			char newPatient,
-			int patientCode) {
+			String user) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Opd> query = cb.createQuery(Opd.class);
 		Root<Opd> opd = query.from(Opd.class);
@@ -83,7 +83,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 					cb.equal(opd.join("ward").get("code"), ward.getCode())
 			);
 		}
-		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alltypes.txt")))) {
+		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alldiseasetypes.txt")))) {
 			predicates.add(
 					cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
 			);
@@ -108,9 +108,9 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 					cb.equal(opd.get("newPatient"), newPatient)
 			);
 		}
-		if (patientCode != 0) {
+		if (user != null) {
 			predicates.add(
-					cb.equal(opd.join("patient").get("code"), patientCode)
+					cb.equal(opd.get("userID"), user)
 			);
 		}
 		predicates.add(

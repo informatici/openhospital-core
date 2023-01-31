@@ -156,7 +156,7 @@ public class Tests extends OHCoreTestCase {
 				foundOpd.getAge() + 1,
 				foundOpd.getSex(),
 				foundOpd.getNewPatient(),
-				foundOpd.getPatient().getCode());
+				foundOpd.getUserID());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
 
@@ -443,7 +443,7 @@ public class Tests extends OHCoreTestCase {
 				foundOpd.getAge() + 1,
 				foundOpd.getSex(),
 				foundOpd.getNewPatient(),
-				foundOpd.getPatient().getCode());
+				foundOpd.getUserID());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
 

@@ -24,6 +24,7 @@ package org.isf.opd.manager;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.disease.model.Disease;
 import org.isf.generaldata.GeneralData;
@@ -38,7 +39,6 @@ import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Vero
@@ -149,7 +149,7 @@ public class OpdBrowserManager {
 	public List<Opd> getOpd(boolean oneWeek) throws OHServiceException {
 		return ioOperations.getOpdList(oneWeek);
 	}
-
+	
 	/**
 	 * Return all Opds within specified dates and parameters
 	 * 
@@ -167,8 +167,30 @@ public class OpdBrowserManager {
 	 */
 	public List<Opd> getOpd(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, int patientCode)
 			throws OHServiceException {
-		return ioOperations.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, patientCode);
+		return ioOperations.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, null);
 	}
+
+	/**
+	 * Return all Opds within specified dates and parameters
+	 * 
+	 * @param ward 
+	 * @param diseaseTypeCode
+	 * @param diseaseCode
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param ageFrom
+	 * @param ageTo
+	 * @param sex
+	 * @param newPatient
+	 * @param user
+	 * @return the list of Opds. It could be <code>null</code>.
+	 * @throws OHServiceException
+	 */
+	public List<Opd> getOpd(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, String user)
+			throws OHServiceException {
+		return ioOperations.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user);
+	}
+	
 
 	/**
 	 * Returns all {@link Opd}s associated to specified patient ID
@@ -251,9 +273,21 @@ public class OpdBrowserManager {
 		return ioOperations.isExistOpdNum(opdNum, year);
 	}
 	
-	@Transactional
-	public Opd getOpdByCode(Integer code) {
-		// TODO Auto-generated method stub
-		return ioOperations.findByCode(code);
+	/**
+	 * Get an OPD by its code
+	 * @param code - the OPD code
+	 * @return an OPD or {@code null}
+	 */
+	public Optional<Opd> getOpdById(int code) {
+		return ioOperations.getOpdById(code);
+	}
+
+	/**
+	 * Get a list of OPD with specified Progressive in Year number
+	 * @param code - the OPD code
+	 * @return a list of OPD or an empty list
+	 */
+	public List<Opd> getOpdByProgYear(int code) {
+		return ioOperations.getOpdByProgYear(code);
 	}
 }
