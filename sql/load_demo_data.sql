@@ -3849,8 +3849,8 @@ DROP TABLE IF EXISTS `oh_operationrow`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `oh_operationrow` (
-  `OPER_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `OPER_OPE_ID_A` varchar(11) NOT NULL,
+  `OPER_ID_A` int(11) NOT NULL AUTO_INCREMENT,
+  `OPER_OPE_ID_A` varchar(10) NOT NULL,
   `OPER_PRESCRIBER` varchar(150) NOT NULL,
   `OPER_RESULT` varchar(250) NOT NULL,
   `OPER_OPDATE` datetime NOT NULL,
@@ -3864,7 +3864,7 @@ CREATE TABLE `oh_operationrow` (
   `OPER_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
   `OPER_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
   `OPER_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`OPER_ID`),
+  PRIMARY KEY (`OPER_ID_A`),
   KEY `FK_OPERATIONROW_OPERATION_idx` (`OPER_OPE_ID_A`),
   CONSTRAINT `FK_OPERATIONROW_OPERATION` FOREIGN KEY (`OPER_OPE_ID_A`) REFERENCES `oh_operation` (`OPE_ID_A`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
@@ -3876,7 +3876,7 @@ CREATE TABLE `oh_operationrow` (
 
 LOCK TABLES `oh_operationrow` WRITE;
 /*!40000 ALTER TABLE `oh_operationrow` DISABLE KEYS */;
-INSERT INTO `oh_operationrow` VALUES (1,'38','admin','','2021-11-09 17:12:39','',NULL,403,NULL,0,NULL,NULL,NULL,NULL,1);
+INSERT INTO `oh_operationrow` VALUES (1,'38','admin','success','2021-11-09 17:12:39','',NULL,403,NULL,0,NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `oh_operationrow` ENABLE KEYS */;
 UNLOCK TABLES;
 
