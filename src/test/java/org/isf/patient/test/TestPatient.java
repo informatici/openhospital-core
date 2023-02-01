@@ -82,7 +82,6 @@ public class TestPatient {
 	public void setParameters(Patient patient) {
 		patient.setFirstName(firstName);
 		patient.setSecondName(secondName);
-		patient.setName(firstName + ' ' + secondName);
 		patient.setBirthDate(birthDate);
 		patient.setAge(age);
 		patient.setAgetype(agetype);
