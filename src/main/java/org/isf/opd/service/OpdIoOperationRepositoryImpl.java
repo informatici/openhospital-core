@@ -83,12 +83,12 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 					cb.equal(opd.join("ward").get("code"), ward.getCode())
 			);
 		}
-		if (!diseaseTypeCode.equals("angal.common.alldiseasetypes.txt") && !diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alldiseasetypes.txt"))) {
+		if (diseaseTypeCode != null) {
 			predicates.add(
 					cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
 			);
 		}
-		if (!diseaseCode.equals("angal.opd.alldiseases.txt") && !diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldiseases.txt"))) {
+		if (diseaseCode != null) {
 			predicates.add(
 					cb.equal(opd.join("disease").get("code"), diseaseCode)
 			);
