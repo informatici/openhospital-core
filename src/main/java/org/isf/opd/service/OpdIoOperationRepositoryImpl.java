@@ -51,8 +51,8 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			Ward ward,
 			String diseaseTypeCode,
 			String diseaseCode,
-			LocalDate dateFrom,
-			LocalDate dateTo,
+			LocalDateTime dateFrom,
+			LocalDateTime dateTo,
 			int ageFrom,
 			int ageTo,
 			char sex,
@@ -65,8 +65,8 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			Ward ward, 
 			String diseaseTypeCode,
 			String diseaseCode,
-			LocalDate dateFrom,
-			LocalDate dateTo,
+			LocalDateTime dateFrom,
+			LocalDateTime dateTo,
 			int ageFrom, 
 			int ageTo,
 			char sex,
@@ -114,7 +114,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			);
 		}
 		predicates.add(
-				cb.between(opd.<LocalDateTime>get("date"), dateFrom.atStartOfDay(), dateTo.plusDays(1).atStartOfDay())
+				cb.between(opd.<LocalDateTime>get("date"), dateFrom, dateTo.plusDays(1))
 		);
 		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 

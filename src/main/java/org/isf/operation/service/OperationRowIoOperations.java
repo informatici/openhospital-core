@@ -84,9 +84,28 @@ public class OperationRowIoOperations {
 			repository.save(found);
 		}
 	}
+	
+	public OperationRow updateOperationRow2(OperationRow opRow) throws OHServiceException {
+		OperationRow found = repository.findById(opRow.getId());
+		if (found != null) {
+			found.setAdmission(opRow.getAdmission());
+			found.setBill(opRow.getBill());
+			found.setOpDate(opRow.getOpDate());
+			found.setOpResult(opRow.getOpResult());
+			found.setOpd(opRow.getOpd());
+			found.setOperation(opRow.getOperation());
+			found.setPrescriber(opRow.getPrescriber());
+			found.setRemarks(opRow.getRemarks());
+			found.setTransUnit(opRow.getTransUnit());
+		}
+		return repository.save(found);
+	}
 
     public void newOperationRow(OperationRow opRow) throws OHServiceException {
         repository.save(opRow);
+    }
+    public OperationRow newOperationRow2(OperationRow opRow) throws OHServiceException {
+        return repository.save(opRow);
     }
     public List<OperationRow> getOperationRowByPatient(Patient patient) throws OHServiceException {
 		

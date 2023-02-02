@@ -57,12 +57,18 @@ public class OperationRowBrowserManager {
 		ioOperations.updateOperationRow(opRow);
 		return true;
 	}
+	
+	public OperationRow updateOperationRow2(OperationRow opRow) throws OHServiceException {
+		return ioOperations.updateOperationRow2(opRow);
+	}
 
 	public boolean newOperationRow(OperationRow opRow) throws OHServiceException {
 		ioOperations.newOperationRow(opRow);
 		return true;
 	}
-	
+	public OperationRow newOperationRow2(OperationRow opRow) throws OHServiceException {
+		return ioOperations.newOperationRow2(opRow);
+	}
 	public List<OperationRow> getOperationRowByPatientCode(Patient patient) throws OHServiceException {
 		return ioOperations.getOperationRowByPatient(patient);
 	}

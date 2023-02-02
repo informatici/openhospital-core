@@ -71,8 +71,8 @@ public class OpdIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public List<Opd> getOpdList(boolean oneWeek) throws OHServiceException {
-		LocalDate dateTo = LocalDate.now();
-		LocalDate dateFrom = dateTo.minusWeeks(1);
+		LocalDateTime dateTo = LocalDateTime.now();
+		LocalDateTime dateFrom = dateTo.minusWeeks(1);
 		return getOpdList(null, MessageBundle.getMessage("angal.common.alltypes.txt"), MessageBundle.getMessage("angal.opd.alldiseases.txt"), dateFrom, dateTo, 0, 0,
 				'A', 'A', 0);
 
@@ -96,8 +96,8 @@ public class OpdIoOperations {
 	public List<Opd> getOpdList(
 			Ward ward, String diseaseTypeCode,
 			String diseaseCode,
-			LocalDate dateFrom,
-			LocalDate dateTo,
+			LocalDateTime dateFrom,
+			LocalDateTime dateTo,
 			int ageFrom,
 			int ageTo,
 			char sex,
