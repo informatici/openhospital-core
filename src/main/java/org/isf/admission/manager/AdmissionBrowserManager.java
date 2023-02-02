@@ -40,6 +40,7 @@ import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -117,6 +118,28 @@ public class AdmissionBrowserManager {
 	 */
 	public List<Admission> getAdmissions(Patient patient) throws OHServiceException {
 		return ioOperations.getAdmissions(patient);
+	}
+	
+	/**
+	 * Method that returns the list of Admission not logically deleted
+	 * within the specified dates range, divided by pages
+	 *
+	 * @return the list of Admission (could be empty)
+	 * @throws OHServiceException
+	 */
+	public List<Admission> getAdmissions(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
+		return ioOperations.getAdmissionsByAdmissionDate(dateFrom, dateTo, PageRequest.of(page, size));
+	}
+	
+	/**
+	 * Method that returns the list of completed Admissions (Discharges) not logically deleted
+	 * within the specified dates range, divided by pages
+	 *
+	 * @return the list of completed Admission (could be empty)
+	 * @throws OHServiceException
+	 */
+	public List<Admission> getDischarges(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
+		return ioOperations.getAdmissionsByDischargeDate(dateFrom, dateTo, PageRequest.of(page, size));
 	}
 
 	/**

@@ -45,6 +45,7 @@ import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -318,5 +319,13 @@ public class AdmissionIoOperations {
 			foundPatient.getPatientProfilePhoto().setPhoto(null);
 		}
 		return patientRepository.save(foundPatient) != null;
+	}
+
+	public List<Admission> getAdmissionsByAdmissionDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		return repository.findAllWhereAdmissionDate(dateFrom, dateTo, pageable);
+	}
+	
+	public List<Admission> getAdmissionsByDischargeDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		return repository.findAllWhereDischargeDate(dateFrom, dateTo, pageable);
 	}
 }
