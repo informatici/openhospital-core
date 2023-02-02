@@ -116,10 +116,10 @@ public class LabIoOperations {
 	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
 		List<Laboratory> laboritories = new ArrayList<>();
 		
-		if (exam.equals("") && patient != null) {
+		if (!exam.equals("") && patient != null) {
 			laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCode(dateFrom, dateTo, exam, patient.getCode());
 		}
-		if (exam.equals("") && patient == null ) {
+		if (!exam.equals("") && patient == null ) {
 			laboritories = repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam);
 		}
 		if (patient != null && exam.equals("")) {
