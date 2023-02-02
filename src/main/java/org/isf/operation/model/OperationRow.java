@@ -58,7 +58,7 @@ public class OperationRow extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "OPER_ID")
+    @Column(name = "OPER_ID_A")
     private int id;
 
     @NotNull
