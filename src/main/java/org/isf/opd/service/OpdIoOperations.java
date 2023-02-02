@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,9 +23,8 @@ package org.isf.opd.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.GregorianCalendar;
 import java.util.List;
-import org.joda.time.DateTime;
+import java.util.Optional;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
@@ -71,11 +70,13 @@ public class OpdIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public List<Opd> getOpdList(boolean oneWeek) throws OHServiceException {
-		LocalDateTime dateTo = LocalDateTime.now();
-		LocalDateTime dateFrom = dateTo.minusWeeks(1);
-		return getOpdList(null, MessageBundle.getMessage("angal.common.alltypes.txt"), MessageBundle.getMessage("angal.opd.alldiseases.txt"), dateFrom, dateTo, 0, 0,
-				'A', 'A', 0);
-
+		LocalDate dateTo = LocalDate.now();
+		LocalDate dateFrom = LocalDate.now();
+		if (oneWeek) {
+			dateFrom = LocalDate.now().minusWeeks(1);
+		}
+		return getOpdList(null, MessageBundle.getMessage("angal.common.alltypes.txt"), MessageBundle.getMessage("angal.opd.alldiseases.txt"), dateFrom, dateTo,
+						0, 0, 'A', 'A', null);
 	}
 	
 	/**
@@ -90,11 +91,60 @@ public class OpdIoOperations {
 	 * @param ageTo
 	 * @param sex
 	 * @param newPatient
+	 * @param user
 	 * @return the list of Opds. It could be <code>empty</code>.
 	 * @throws OHServiceException 
 	 */
 	public List<Opd> getOpdList(
-			Ward ward, String diseaseTypeCode,
+			Ward ward, 
+			String diseaseTypeCode,
+			String diseaseCode,
+			LocalDate dateFrom,
+			LocalDate dateTo,
+			int ageFrom,
+			int ageTo,
+			char sex,
+			char newPatient,
+			String user) throws OHServiceException {
+		return repository.findAllOpdWhereParams(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user);
+	}
+	
+	/**
+	 * Return all Opds of today or one week ago
+	 * 
+	 * @param oneWeek - if <code>true</code> return the last week, only today otherwise.
+	 * @return the list of Opds. It could be <code>empty</code>.
+	 * @throws OHServiceException 
+	 */
+	public List<Opd> getOpdList2(boolean oneWeek) throws OHServiceException {
+		LocalDateTime dateTo = LocalDateTime.now();
+		LocalDateTime dateFrom = LocalDateTime.now();
+		if (oneWeek) {
+			dateFrom = LocalDateTime.now().minusWeeks(1);
+		}
+		return getOpdList2(null, MessageBundle.getMessage("angal.common.alltypes.txt"), MessageBundle.getMessage("angal.opd.alldiseases.txt"), dateFrom, dateTo,
+						0, 0, 'A', 'A',0);
+	}
+
+	/**
+	 * Return all {@link Opd}s within specified dates and parameters
+	 * 
+	 * @param ward 
+	 * @param diseaseTypeCode
+	 * @param diseaseCode
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param ageFrom
+	 * @param ageTo
+	 * @param sex
+	 * @param newPatient
+	 * @param patienCode
+	 * @return the list of Opds. It could be <code>empty</code>.
+	 * @throws OHServiceException 
+	 */
+	public List<Opd> getOpdList2(
+			Ward ward, 
+			String diseaseTypeCode,
 			String diseaseCode,
 			LocalDateTime dateFrom,
 			LocalDateTime dateTo,
@@ -103,9 +153,8 @@ public class OpdIoOperations {
 			char sex,
 			char newPatient,
 			int patientCode) throws OHServiceException {
-		return repository.findAllOpdWhereParams(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, patientCode);
+		return repository.findAllOpdWhereParams2(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient,patientCode);
 	}
-	
 	/**
 	 * Return all {@link Opd}s associated to specified patient ID
 	 * 
@@ -207,15 +256,20 @@ public class OpdIoOperations {
 	}
 
 	/**
-	* @deprecated GregorianCalendar and JodaTime are no longer used, consider adding a method in {@link org.isf.utils.time.TimeTools] using java.time only 
-	*/	
-	@Deprecated
-	private GregorianCalendar getBeginningOfYear(int year) {
-		return new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar();
+	 * Get an OPD by its code
+	 * @param code - the OPD code
+	 * @return an OPD or {@code null}
+	 */
+	public Optional<Opd> getOpdById(Integer code) {
+		return repository.findById(code);
 	}
 
-	public Opd findByCode(Integer code) {
-		// TODO Auto-generated method stub
-		return repository.findById(code).orElse(null);
+	/**
+	 * Get a list of OPD with specified Progressive in Year number
+	 * @param code - the OPD code
+	 * @return a list of OPD or an empty list
+	 */
+	public List<Opd> getOpdByProgYear(Integer code) {
+		return repository.findByProgYear(code);
 	}
 }

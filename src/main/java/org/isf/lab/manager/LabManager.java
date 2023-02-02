@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -33,7 +33,6 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryForPrint;
 import org.isf.lab.model.LaboratoryRow;
-import org.isf.lab.service.LabIoOperationRepository;
 import org.isf.lab.service.LabIoOperations;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -211,7 +210,6 @@ public class LabManager {
 	 */
 	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
 		return ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo, patient);
-		
 	}
 
 	/**
@@ -486,24 +484,24 @@ public class LabManager {
 		return materialDescriptionList;
 	}
 	
-	 /**
-		 * Return the whole list of exams ({@link Laboratory}s) within last year.
-		 *
-		 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
-		 * @throws OHServiceException
-		 */
-		public Optional<Laboratory> getLaboratory(Integer code) throws OHServiceException {
-			return ioOperations.getLaboratory(code);
-		}	
-		
-		/**
-		  * Return the whole list of ({@link LaboratoryRow}s).
-		  *
-		  * @return the list of {@link LaboratoryRow}s. It could not be <code>empty</code>.
-		  * @throws OHServiceException
-		  */
-		public List<LaboratoryRow> getLaboratoryRowList(Integer code) throws OHServiceException {
-				return ioOperations.getLabRow(code);
-		}
+	/**
+	 * Return the whole list of exams ({@link Laboratory}s) within last year.
+	 *
+	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
+	 * @throws OHServiceException
+	 */
+	public Optional<Laboratory> getLaboratory(Integer code) throws OHServiceException {
+		return ioOperations.getLaboratory(code);
+	}
+
+	/**
+	 * Return the whole list of ({@link LaboratoryRow}s).
+	 *
+	 * @return the list of {@link LaboratoryRow}s. It could not be <code>empty</code>.
+	 * @throws OHServiceException
+	 */
+	public List<LaboratoryRow> getLaboratoryRowList(Integer code) throws OHServiceException {
+		return ioOperations.getLabRow(code);
+	}
 
 }

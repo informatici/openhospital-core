@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -26,14 +26,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.isf.accounting.manager.BillBrowserManager;
 import org.isf.accounting.model.Bill;
 import org.isf.admission.manager.AdmissionBrowserManager;
-import org.isf.agetype.manager.AgeTypeBrowserManager;
-import org.isf.agetype.model.AgeType;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientProfilePhoto;
@@ -62,14 +59,6 @@ public class PatientBrowserManager {
 
 	protected LinkedHashMap<String, String> professionHashMap;
 
-	public PatientIoOperations getIoOperations() {
-		return ioOperations;
-	}
-
-	public void setIoOperations(PatientIoOperations ioOperations) {
-		this.ioOperations = ioOperations;
-	}
-
 	/**
 	 * Method that inserts a new Patient in the db
 	 *
@@ -79,7 +68,7 @@ public class PatientBrowserManager {
 	 */
 	public Patient savePatient(Patient patient) throws OHServiceException {
 		validatePatient(patient);
-		return ioOperations.savePatients(patient);
+		return ioOperations.savePatient(patient);
 	}
 
 	/**
@@ -397,9 +386,9 @@ public class PatientBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param patient
-	 * @throws OHServiceException 
+	 * @throws OHDataValidationException 
 	 */
-	protected void validatePatient(Patient patient) throws OHServiceException {
+	protected void validatePatient(Patient patient) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		
 		if (StringUtils.isEmpty(patient.getFirstName())) {
@@ -427,7 +416,7 @@ public class PatientBrowserManager {
 		}
 	}
 	
-	private boolean checkAge(Patient patient) throws OHServiceException {
+	private boolean checkAge(Patient patient) {
 		LocalDate now = LocalDate.now();
 		LocalDate birthDate = patient.getBirthDate();
 		if (patient.getAge() < 0 || patient.getAge() > 200) {
@@ -435,6 +424,7 @@ public class PatientBrowserManager {
 		}
 		return birthDate != null && !birthDate.isAfter(now);
 	}
+	
 	/**
 	 * Method that returns the full list of Cities of the patient not logically deleted: <br>
 	 * @return the list of Cities (could be empty)

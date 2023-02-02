@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -150,13 +150,13 @@ public class Tests extends OHCoreTestCase {
 				foundOpd.getWard(),
 				foundOpd.getDisease().getType().getCode(),
 				foundOpd.getDisease().getCode(),
-				foundOpd.getDate(),
-				foundOpd.getDate(),
+				foundOpd.getDate().toLocalDate(),
+				foundOpd.getDate().toLocalDate(),
 				foundOpd.getAge() - 1,
 				foundOpd.getAge() + 1,
 				foundOpd.getSex(),
 				foundOpd.getNewPatient(),
-				foundOpd.getPatient().getCode());
+				foundOpd.getUserID());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
 
@@ -437,13 +437,13 @@ public class Tests extends OHCoreTestCase {
 				foundOpd.getWard(),
 				foundOpd.getDisease().getType().getCode(),
 				foundOpd.getDisease().getCode(),
-				foundOpd.getDate(),
-				foundOpd.getDate(),
+				foundOpd.getDate().toLocalDate(),
+				foundOpd.getDate().toLocalDate(),
 				foundOpd.getAge() - 1,
 				foundOpd.getAge() + 1,
 				foundOpd.getSex(),
 				foundOpd.getNewPatient(),
-				foundOpd.getPatient().getCode());
+				foundOpd.getUserID());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
 

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -116,16 +116,16 @@ public class LabIoOperations {
 	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
 		List<Laboratory> laboritories = new ArrayList<>();
 		
-		if(exam.equals("") && patient != null) {
+		if (!exam.equals("") && patient != null) {
 			laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCode(dateFrom, dateTo, exam, patient.getCode());
 		}
-		if( exam.equals("") && patient == null ) {
+		if (!exam.equals("") && patient == null ) {
 			laboritories = repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam);
 		}
-		if(patient != null && exam.equals("")) {
+		if (patient != null && exam.equals("")) {
 			laboritories = repository.findByLabDateBetweenAndPatientCode(dateFrom, dateTo, patient.getCode());
 		}
-		if(patient == null && exam.equals("")) {
+		if (patient == null && exam.equals("")) {
 			laboritories= repository.findByCreatedDateBetweenOrderByLabDateDesc(dateFrom, dateTo);
 		}
 		return laboritories;
@@ -165,16 +165,16 @@ public class LabIoOperations {
 	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
 		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
 		List<Laboratory> laboritories = new ArrayList<>();
-			if(exam != null && patient != null) {
+			if (exam != null && patient != null) {
 				laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCode(dateFrom, dateTo, exam, patient.getCode());
 			}
-			if( exam != null && patient == null ) {
+			if (exam != null && patient == null ) {
 				laboritories = repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam);
 			}
-			if(patient != null && exam == null) {
+			if (patient != null && exam == null) {
 				laboritories = repository.findByLabDateBetweenAndPatientCode(dateFrom, dateTo, patient.getCode());
 			}
-			if(patient == null && exam == null) {
+			if (patient == null && exam == null) {
 				laboritories= repository.findByCreatedDateBetweenOrderByLabDateDesc(dateFrom, dateTo);
 			}
 		for (Laboratory laboratory : laboritories) {

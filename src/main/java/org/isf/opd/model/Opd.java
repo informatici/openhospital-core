@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -102,7 +102,7 @@ public class Opd extends Auditable<String> {
 
 	@Nullable
 	@Column(name="OPD_NOTE")
-	private String note; //ADDED: Alex
+	private String note;
 
 	@NotNull
 	@Column(name="OPD_PROG_YEAR")	
@@ -142,20 +142,18 @@ public class Opd extends Auditable<String> {
 	@Column(name="OPD_LOCK")
 	private int lock;
 	
-/*	@Column(name="OPD_REASON")
+	/*@Column(name="OPD_REASON")
    	private String reason; // ADDED: Arnaud
 
-	@Column(name="OPD_ANAMNESIS")
-    	private String anamnesis; // ADDED: Arnaud
-    
-	@Column(name="OPD_ALLERGIES")
-    	private String allergies; // ADDED: Arnaud
-    
 	@Column(name="OPD_THERAPIES")
-    	private String therapies; // ADDED: Arnaud*/
-    @Nullable
+	private String therapies; // ADDED: Arnaud*/
+	
+	/**
+	 * Field for "ui"
+	 */
+	@Nullable
 	@Column(name="OPD_PRESCRIPTION")
-    private String prescription; // ADDED: Arnaud
+	private String prescription; // ADDED: Arnaud
 	
 	@Transient
 	private volatile int hashCode = 0;
@@ -165,11 +163,11 @@ public class Opd extends Auditable<String> {
 	}
 	
 	/**
-     	 * @param aProgYear
-     	 * @param aSex
-     	 * @param aAge
-     	 * @param aDisease
-     	 */
+ 	 * @param aProgYear
+ 	 * @param aSex
+ 	 * @param aAge
+ 	 * @param aDisease
+ 	 */
 	public Opd(int aProgYear, char aSex, int aAge, Disease aDisease) {
 		prog_year = aProgYear;
 		sex = aSex;
@@ -177,22 +175,20 @@ public class Opd extends Auditable<String> {
 		disease = aDisease;
 	}
 	
-	/*public String getNote() {
-		return note;
-	}
-
-	public void setNote(String note) {
-		this.note = note;
-	}*/
-	
 	public String getFullName() {
 		return patient == null ? "" : patient.getName();
 	}
 
+	/**
+	 * Field for "ui"
+	 */
 	public String getPrescription() {
 		return prescription;
 	}
 
+	/**
+	 * Field for "ui"
+	 */
 	public void setPrescription(String prescription) {
 		this.prescription = prescription;
 	}
@@ -204,6 +200,7 @@ public class Opd extends Auditable<String> {
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
+	
 	public String getNote() {
 		return note;
 	}
@@ -211,6 +208,7 @@ public class Opd extends Auditable<String> {
 	public void setNote(String note) {
 		this.note = note;
 	}
+	
 	public int getAge() {
 		return age;
 	}
@@ -349,22 +347,6 @@ public class Opd extends Auditable<String> {
 	
 	public void setReason(String reason) {
 		this.reason = reason;
-	}
-
-	public String getAnamnesis() {
-		return anamnesis;
-	}
-
-	public void setAnamnesis(String anamnesis) {
-		this.anamnesis = anamnesis;
-	}
-
-	public String getAllergies() {
-		return allergies;
-	}
-
-	public void setAllergies(String allergies) {
-		this.allergies = allergies;
 	}
 
 	public String getTherapies() {

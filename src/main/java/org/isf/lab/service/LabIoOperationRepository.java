@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -26,8 +26,6 @@ import java.util.List;
 
 import org.isf.lab.model.Laboratory;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface LabIoOperationRepository extends JpaRepository<Laboratory, Integer> {
 	List<Laboratory> findByCreatedDateBetweenOrderByLabDateDesc(LocalDateTime dateFrom, LocalDateTime dateTo);

@@ -33,7 +33,7 @@ import org.isf.OHCoreTestCase;
 import org.isf.priceslist.manager.PriceListManager;
 import org.isf.priceslist.model.Price;
 import org.isf.priceslist.model.PriceList;
-import org.isf.priceslist.service.PriceIoListOperationRepository;
+import org.isf.priceslist.service.PriceIoOperationRepository;
 import org.isf.priceslist.service.PricesListIoOperationRepository;
 import org.isf.priceslist.service.PricesListIoOperations;
 import org.isf.serviceprinting.print.PriceForPrint;
@@ -54,7 +54,7 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	PricesListIoOperationRepository priceListIoOperationRepository;
 	@Autowired
-	PriceIoListOperationRepository priceIoOperationRepository;
+	PriceIoOperationRepository priceIoOperationRepository;
 	@Autowired
 	PriceListManager priceListManager;
 

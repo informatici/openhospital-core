@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -73,12 +73,11 @@ public class AdmissionIoOperations {
 	private AdmissionIoOperationRepository repository;
 	
 	@Autowired
-	private AdmissionIoOperationRepositoryImpl repositoryImp;
-
-	@Autowired
 	private AdmissionTypeIoOperationRepository typeRepository;
+	
 	@Autowired
 	private DischargeTypeIoOperationRepository dischargeRepository;
+	
 	@Autowired
 	private PatientIoOperationRepository patientRepository;
 
@@ -116,7 +115,7 @@ public class AdmissionIoOperations {
 	 */
 	public List<AdmittedPatient> getAdmittedPatients(String searchTerms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange)
 			throws OHServiceException {
-		return repositoryImp.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
+		return repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
 	}
 
 	/**
@@ -289,7 +288,7 @@ public class AdmissionIoOperations {
 	 */
 	public boolean setDeleted(int admissionId) throws OHServiceException {
 		Admission foundAdmission = repository.findById(admissionId).orElse(null);
-		foundAdmission.setDeleted("Y");
+		foundAdmission.setDeleted('Y');
 		Admission savedAdmission = repository.save(foundAdmission);
 		return savedAdmission != null;
 	}

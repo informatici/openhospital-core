@@ -19,26 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.priceslist.service;
+package org.isf.sessionaudit.service;
 
-import java.util.List;
+import java.util.Optional;
 
-import org.isf.priceslist.model.Price;
+import org.isf.sessionaudit.model.SessionAudit;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PriceIoListOperationRepository extends JpaRepository<Price, Integer> {
+public interface SessionAuditIoOperationRepository extends JpaRepository<SessionAudit, Integer> {
 
-	List<Price> findAllByOrderByDescriptionAsc();
-
-	List<Price> findByList_id(Integer id);
-
-	@Modifying
-	@Query("delete from Price p where p.list.id = :listId")
-	void deleteByListId(@Param("listId") Integer listId);
+	Optional<SessionAudit> findByUserName(String userName);
 
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -72,7 +72,7 @@ public class PriceListManager {
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updatePrices(PriceList list, ArrayList<Price> prices) throws OHServiceException {
+	public boolean updatePrices(PriceList list, List<Price> prices) throws OHServiceException {
 		return ioOperations.updatePrices(list, prices);
 	}
 

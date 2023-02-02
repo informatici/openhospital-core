@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -174,14 +174,22 @@ public class Patient extends Auditable<String> {
 	private String profession;
 
 	@NotNull
-	@Column(name="PAT_DELETED")
-	private String deleted = "N";
+	@Column(name="PAT_DELETED", columnDefinition = "char(1) default 'N'")
+	private char deleted = 'N';
 	
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
 	@Column(name="PAT_ANAMNESIS")
-	private String anamnesis; // ADDED: Arnaud
+	private String anamnesis;
 	
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
 	@Column(name="PAT_ALLERGIES")
-	private String allergies; // ADDED: Arnaud
+	private String allergies;
 	
 	@Version
 	@Column(name="PAT_LOCK")
@@ -502,11 +510,11 @@ public class Patient extends Auditable<String> {
 		this.profession = profession;
 	}
 	
-    public String getDeleted() {
+    public char getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(String deleted) {
+    public void setDeleted(char deleted) {
         this.deleted = deleted;
     }
 
@@ -514,24 +522,48 @@ public class Patient extends Auditable<String> {
 		return patientProfilePhoto;
 	}	
 
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
 	public String getAnamnesis() {
 		return anamnesis;
 	}
 
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
 	public void setAnamnesis(String anamnesis) {
 		this.anamnesis = anamnesis;
 	}
 
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
 	public String getAllergies() {
 		return allergies;
 	}
 
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
 	public void setAllergies(String allergies) {
 		this.allergies = allergies;
 	}
 
+	/**
+	 * Method kept as POJO standard, but it ignores {@code name} param
+	 * and uses {@link firstName} and {@link secondName} to set
+	 * the field (as {@link setFirstName} and {@link setSecondName}
+	 * methods do as well).
+	 * 
+	 * @param name (ignored, used {@code firstName} and {@code secondName} instead
+	 */
 	public void setName(String name) {
-		this.name = name;
+		this.name = this.firstName + ' ' + this.secondName;
 	}
 
 	public void setPatientProfilePhoto(final PatientProfilePhoto patientProfilePhoto) {

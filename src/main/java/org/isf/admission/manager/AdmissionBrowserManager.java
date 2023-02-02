@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -99,12 +99,12 @@ public class AdmissionBrowserManager {
 	}
 
 	/**
-	 * Returns the only one admission without adimission date (or null if none) for the specified patient.
+	 * Returns the only one admission without admission date (or null if none) for the specified patient.
 	 *
 	 * @param patient the patient target of the admission.
 	 * @return the patient admission or {@code null} if the operation fails.
 	 */
-	public Admission getCurrentAdmission(Patient patient) throws OHServiceException {
+	public Admission getCurrentAdmission(Patient patient) {
 		return ioOperations.getCurrentAdmission(patient);
 	}
 
@@ -346,22 +346,6 @@ public class AdmissionBrowserManager {
 							MessageBundle.formatMessage("angal.admission.invalidadmissionperiod.fmt.msg",
 									DateTimeFormatter.ISO_LOCAL_DATE.format(invalidStart),
 									DateTimeFormatter.ISO_LOCAL_DATE.format(invalidEnd)),
-							OHSeverityLevel.ERROR));
-				}
-			}
-
-			LocalDateTime operationDate = admission.getOpDate();
-			if (operationDate != null) {
-				LocalDateTime limit;
-				if (admission.getDisDate() == null) {
-					limit = today;
-				} else {
-					limit = admission.getDisDate();
-				}
-
-				if (operationDate.isBefore(dateIn) || operationDate.isAfter(limit)) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.admission.pleaseinsertavalidvisitdate.msg"),
 							OHSeverityLevel.ERROR));
 				}
 			}

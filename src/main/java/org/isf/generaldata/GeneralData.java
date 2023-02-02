@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -142,7 +142,10 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final int DEFAULT_STRONGLENGTH = 10;
 	private static final int DEFAULT_SESSIONTIMEOUT = 5;
 	private static final boolean DEFAULT_STRONGPASSWORD = true;
-	private static final String DEFAULT_PATIENTPHOTO = "DB";
+	private static final String DEFAULT_PATIENTPHOTOSTORAGE = "DB";
+	
+	public static final int IMAGE_THUMBNAIL_MAX_WIDTH = 140;
+	public static final int MAX_PROFILE_IMAGE_FILE_SIZE_BYTES = 32768;
 	
 	private static GeneralData mySingleData;
 	
@@ -206,7 +209,7 @@ public final class GeneralData extends ConfigurationProperties {
 		if (STRONGLENGTH < 6) {
 			STRONGLENGTH = 6;
 		}
-		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTO);
+		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTOSTORAGE);
 		SESSIONTIMEOUT = myGetProperty("SESSIONTIMEOUT", DEFAULT_SESSIONTIMEOUT);
 }
 

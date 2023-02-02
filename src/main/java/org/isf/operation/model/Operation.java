@@ -21,8 +21,6 @@
  */
 package org.isf.operation.model;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -93,24 +91,22 @@ public class Operation extends Auditable<String> {
 	@Transient
     private volatile int hashCode = 0;
     
-    
-	public Operation() 
-    {
+	public Operation() {
 		super();
-    }
+	}
 
 	/**
-     * @param aCode
-     * @param aDescription
-     * @param aType
-     */
-    public Operation(String aCode, String aDescription, OperationType aType, Integer major) {
-        super();
-        this.code = aCode;
-        this.description = aDescription;
-        this.type = aType;
-        this.major = major;
-    }
+	 * @param aCode
+	 * @param aDescription
+	 * @param aType
+	 */
+	public Operation(String aCode, String aDescription, OperationType aType, Integer major) {
+		super();
+		this.code = aCode;
+		this.description = aDescription;
+		this.type = aType;
+		this.major = major;
+	}
     
     public String getCode() {
         return this.code;

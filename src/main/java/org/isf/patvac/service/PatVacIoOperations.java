@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -164,8 +164,7 @@ public class PatVacIoOperations {
 	public Optional<PatientVaccine> getPatientVaccine(Integer code) throws OHServiceException {
 		return repository.findById(code);
 	}
-	/*private GregorianCalendar getBeginningOfYear(int year) {
-		return new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar();*/
+	
 	private LocalDateTime getBeginningOfYear(int year) {
 		return LocalDateTime.of(year, Month.JANUARY, 1, 0, 0, 0);
 	}
