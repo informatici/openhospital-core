@@ -34,7 +34,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
 import org.isf.ward.model.Ward;
 import org.springframework.transaction.annotation.Transactional;
