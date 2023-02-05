@@ -27,6 +27,7 @@ import org.isf.admission.model.Admission;
 import org.isf.opd.model.Opd;
 import org.isf.operation.model.OperationRow;
 import org.isf.operation.service.OperationRowIoOperations;
+import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,7 +44,7 @@ public class OperationRowBrowserManager {
 	public List<OperationRow> getOperationRowByAdmission(Admission adm) throws OHServiceException {
 		return ioOperations.getOperationRowByAdmission(adm);
 	}
-
+	
 	public List<OperationRow> getOperationRowByOpd(Opd opd) throws OHServiceException {
 		return ioOperations.getOperationRowByOpd(opd);
 	}
@@ -60,6 +61,10 @@ public class OperationRowBrowserManager {
 	public boolean newOperationRow(OperationRow opRow) throws OHServiceException {
 		ioOperations.newOperationRow(opRow);
 		return true;
+	}
+	
+	public List<OperationRow> getOperationRowByPatientCode(Patient patient) throws OHServiceException {
+		return ioOperations.getOperationRowByPatient(patient);
 	}
 
 }

@@ -38,12 +38,14 @@ public class TestLaboratory {
 
 	private String material = "TestMaterial";
 	private LocalDateTime labDate = TimeTools.getNow();
+
 	private String result = "TestResult";
 	private String note = "TestNote";
 	private String patName = "TestPatientName";
 	private String InOutPatient = "O";
 	private Integer age = 37;
 	private String sex = "F";
+	private Integer code = 2;
 
 	public Laboratory setup(Exam exam, Patient patient, boolean usingSet) throws OHException {
 		Laboratory laboratory;

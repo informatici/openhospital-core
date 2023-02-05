@@ -99,7 +99,7 @@ public class ExamRowBrowsingManager {
 	 * @return <code>true</code> if the {@link ExamRow} has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newExamRow(ExamRow examRow) throws OHServiceException {
+	public ExamRow newExamRow(ExamRow examRow) throws OHServiceException {
 		validateExamRow(examRow);
 		return ioOperations.newExamRow(examRow);
 	}

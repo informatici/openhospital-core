@@ -114,7 +114,7 @@ public class MalnutritionManager {
 	 * @return <code>true</code> if the malnutrition has been stored
 	 * @throws OHServiceException
 	 */
-	public boolean newMalnutrition(Malnutrition malnutrition) throws OHServiceException {
+	public Malnutrition newMalnutrition(Malnutrition malnutrition) throws OHServiceException {
 		validateMalnutrition(malnutrition);
 		return ioOperation.newMalnutrition(malnutrition);
 	}

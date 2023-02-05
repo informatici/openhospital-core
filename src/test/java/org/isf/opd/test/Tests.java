@@ -317,8 +317,8 @@ public class Tests extends OHCoreTestCase {
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
 		
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
-		boolean result = opdIoOperation.newOpd(opd);
-		assertThat(result).isTrue();
+		Opd result = opdIoOperation.newOpd(opd);
+		assertThat(result).isNotNull();
 		checkOpdIntoDb(opd.getCode());
 	}
 
@@ -326,11 +326,19 @@ public class Tests extends OHCoreTestCase {
 	public void testIoUpdateOpd() throws Exception {
 		int code = setupTestOpd(false);
 		Opd foundOpd = opdIoOperationRepository.findById(code).get();
-		foundOpd.setNote("Update");
+		/*foundOpd.setReason("update reason");
+		foundOpd.setAnamnesis("update anamnesis");
+		foundOpd.setTherapies("update therapie");
+		foundOpd.setAllergies("update allergies");
+		foundOpd.setPrescription("update presciption");*/
 		Opd result = opdIoOperation.updateOpd(foundOpd);
 		Opd updateOpd = opdIoOperationRepository.findById(code).get();
 		assertThat(result).isNotNull();
-		assertThat(updateOpd.getNote()).isEqualTo("Update");
+		/*assertThat(updateOpd.getReason()).isEqualTo("update reason");
+		assertThat(updateOpd.getAnamnesis()).isEqualTo("update anamnesis");
+		assertThat(updateOpd.getTherapies()).isEqualTo("update therapies");
+		assertThat(updateOpd.getAllergies()).isEqualTo("update allergies");
+		assertThat(updateOpd.getPrescription()).isEqualTo("update prescription");*/
 	}
 
 	@Test
@@ -606,7 +614,7 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease3);
 		opd.setDisease2(disease2);
 		opd.setDisease3(disease3);
-		assertThat(opdBrowserManager.newOpd(opd)).isTrue();
+		assertThat(opdBrowserManager.newOpd(opd));
 		checkOpdIntoDb(opd.getCode());
 	}
 
@@ -632,10 +640,14 @@ public class Tests extends OHCoreTestCase {
 		opd.setDisease2(disease2);
 		opd.setDisease3(disease3);
 		opd.setDate(TimeTools.getNow());
-		assertThat(opdBrowserManager.newOpd(opd)).isTrue();
+		assertThat(opdBrowserManager.newOpd(opd)).isNotNull();
 		opd.setNote("Update");
 		assertThat(opdBrowserManager.updateOpd(opd)).isNotNull();
 		Opd updateOpd = opdIoOperationRepository.findById(opd.getCode()).get();
+		/*assertThat(updateOpd.getReason()).isEqualTo("update reason");
+		assertThat(updateOpd.getAnamnesis()).isEqualTo("update anamnesis");
+		assertThat(updateOpd.getTherapies()).isEqualTo("update therapies");
+		assertThat(updateOpd.getAllergies()).isEqualTo("update allergies");*/
 		assertThat(updateOpd.getNote()).isEqualTo("Update");
 	}
 

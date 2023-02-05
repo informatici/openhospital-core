@@ -34,6 +34,8 @@ import org.springframework.stereotype.Repository;
 public interface VisitsIoOperationRepository extends JpaRepository<Visit, Integer> {
 
 	List<Visit> findAllByOrderByPatient_CodeAscDateAsc();
+	
+	Visit findAllByVisitID(@Param("visitID") int visitID);
 
 	List<Visit> findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(@Param("patient") Integer patient);
 	

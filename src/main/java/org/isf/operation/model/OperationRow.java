@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,8 +23,10 @@ package org.isf.operation.model;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,18 +39,26 @@ import javax.validation.constraints.NotNull;
 import org.isf.accounting.model.Bill;
 import org.isf.admission.model.Admission;
 import org.isf.opd.model.Opd;
+import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * @author xavier
  */
 @Entity
 @Table(name="OH_OPERATIONROW")
-public class OperationRow {
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "OPER_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "OPER_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "OPER_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "OPER_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "OPER_LAST_MODIFIED_DATE"))
+public class OperationRow extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "OPER_ID")
+    @Column(name = "OPER_ID_A")
     private int id;
 
     @NotNull
@@ -68,15 +78,14 @@ public class OperationRow {
     @Column(name = "OPER_OPDATE")       // SQL type: datetime
     private LocalDateTime opDate;
 
+    @NotNull
     @Column(name = "OPER_REMARKS")
     private String remarks;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "OPER_ADMISSION_ID")
     private Admission admission;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "OPER_OPD_ID")
     private Opd opd;
@@ -85,16 +94,15 @@ public class OperationRow {
     @JoinColumn(name = "OPER_BILL_ID")
     private Bill bill;
 
-    @NotNull
-    @Column(name = "OPER_TRANS_UNIT")
-    private Float transUnit;
+    @Column(name = "OPER_TRANS_UNIT", columnDefinition = "float default 0")
+    private Float transUnit = 0f;
     
     @Transient
     private volatile int hashCode = 0;
 
-    public OperationRow() {
-	super();
-    }
+	public OperationRow() {
+		super();
+	}
     
     public OperationRow(Operation operation, 
             String prescriber, 

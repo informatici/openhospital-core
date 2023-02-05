@@ -137,7 +137,7 @@ public class MedicalBrowsingManager {
 	 * @return <code>true</code> if the medical has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newMedical(Medical medical) throws OHServiceException {
+	public Medical newMedical(Medical medical) throws OHServiceException {
 		return newMedical(medical, false);
 	}
 
@@ -150,7 +150,7 @@ public class MedicalBrowsingManager {
 	 * @return <code>true</code> if the medical has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
+	public Medical newMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
 		checkMedicalForInsert(medical, ignoreSimilar);
 		return ioOperations.newMedical(medical);
 	}
@@ -163,7 +163,7 @@ public class MedicalBrowsingManager {
 	 * Otherwise throws an OHServiceException
 	 * @throws OHServiceException
 	 */
-	public boolean updateMedical(Medical medical) throws OHServiceException {
+	public Medical updateMedical(Medical medical) throws OHServiceException {
 		return updateMedical(medical, false);
 	}
 
@@ -176,7 +176,7 @@ public class MedicalBrowsingManager {
 	 * Otherwise throws an OHServiceException
 	 * @throws OHServiceException
 	 */
-	public boolean updateMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
+	public Medical updateMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
 		checkMedicalForUpdate(medical, ignoreSimilar);
 		return ioOperations.updateMedical(medical);
 	}

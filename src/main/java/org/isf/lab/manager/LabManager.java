@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
@@ -165,7 +166,20 @@ public class LabManager {
 	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return ioOperations.getLaboratory(exam, dateFrom, dateTo);
 	}
-
+	
+	/**
+	 * Return a list of exams ({@link Laboratory}s) between specified dates and matching passed exam name
+	 *
+	 * @param exam - the exam name as <code>String</code>
+	 * @param dateFrom - the lower date for the range
+	 * @param dateTo - the highest date for the range
+	 * @param patient - the object patient
+	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
+	 * @throws OHServiceException
+	 */
+	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
+		return ioOperations.getLaboratory(exam, dateFrom, dateTo, patient);
+	}
 	/**
 	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s)
 	 * between specified dates and matching passed exam name. If a lab has multiple
@@ -181,6 +195,21 @@ public class LabManager {
 		List<LaboratoryForPrint> labs = ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo);
 		setLabMultipleResults(labs);
 		return labs;
+	}
+
+	/**
+	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s)
+	 * between specified dates and matching passed exam name. If a lab has multiple
+	 * results, these are concatenated and added to the result string
+	 *
+	 * @param exam - the exam name as <code>String</code>
+	 * @param dateFrom - the lower date for the range
+	 * @param dateTo - the highest date for the range
+	 * @return the list of {@link LaboratoryForPrint}s . It could be <code>empty</code>.
+	 * @throws OHServiceException
+	 */
+	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
+		return ioOperations.getLaboratoryForPrint(exam, dateFrom, dateTo, patient);
 	}
 
 	/**
@@ -453,6 +482,26 @@ public class LabManager {
 		List<String> materialDescriptionList = new ArrayList<>(materialHashMap.values());
 		materialDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.lab.undefined.txt")));
 		return materialDescriptionList;
+	}
+	
+	/**
+	 * Return the whole list of exams ({@link Laboratory}s) within last year.
+	 *
+	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
+	 * @throws OHServiceException
+	 */
+	public Optional<Laboratory> getLaboratory(Integer code) throws OHServiceException {
+		return ioOperations.getLaboratory(code);
+	}
+
+	/**
+	 * Return the whole list of ({@link LaboratoryRow}s).
+	 *
+	 * @return the list of {@link LaboratoryRow}s. It could not be <code>empty</code>.
+	 * @throws OHServiceException
+	 */
+	public List<LaboratoryRow> getLaboratoryRowList(Integer code) throws OHServiceException {
+		return ioOperations.getLabRow(code);
 	}
 
 }

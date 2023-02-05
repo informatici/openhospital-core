@@ -57,7 +57,7 @@ public class OperationTypeBrowserManager {
 	 * @return <code>true</code> if the {@link OperationType} has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newOperationType(OperationType operationType) throws OHServiceException {
+	public OperationType newOperationType(OperationType operationType) throws OHServiceException {
 		validateOperationType(operationType, true);
 		return ioOperations.newOperationType(operationType);
 	}
@@ -69,7 +69,7 @@ public class OperationTypeBrowserManager {
 	 * @return <code>true</code> if the {@link OperationType} has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean updateOperationType(OperationType operationType) throws OHServiceException {
+	public OperationType updateOperationType(OperationType operationType) throws OHServiceException {
 		validateOperationType(operationType, false);
 		return ioOperations.updateOperationType(operationType);
 	}

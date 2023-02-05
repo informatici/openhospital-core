@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryForPrint;
@@ -104,6 +105,33 @@ public class LabIoOperations {
 	}
 	
 	/**
+	 * Return a list of exams ({@link Laboratory}s) between specified dates and matching passed exam name
+	 * @param exam - the exam name as <code>String</code>
+	 * @param dateFrom - the lower date for the range
+	 * @param dateTo - the highest date for the range
+	 * @param patient - the object of patient 
+	 * @return the list of {@link Laboratory}s 
+	 * @throws OHServiceException
+	 */
+	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
+		List<Laboratory> laboritories = new ArrayList<>();
+		
+		if (!exam.equals("") && patient != null) {
+			laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCode(dateFrom, dateTo, exam, patient.getCode());
+		}
+		if (!exam.equals("") && patient == null ) {
+			laboritories = repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam);
+		}
+		if (patient != null && exam.equals("")) {
+			laboritories = repository.findByLabDateBetweenAndPatientCode(dateFrom, dateTo, patient.getCode());
+		}
+		if (patient == null && exam.equals("")) {
+			laboritories= repository.findByCreatedDateBetweenOrderByLabDateDesc(dateFrom, dateTo);
+		}
+		return laboritories;
+	}
+	
+	/**
 	 * Return a list of exams ({@link Laboratory}s) related to a {@link Patient}.
 	 * @param aPatient - the {@link Patient}.
 	 * @return the list of {@link Laboratory}s related to the {@link Patient}.
@@ -134,21 +162,30 @@ public class LabIoOperations {
 	 * @return the list of {@link LaboratoryForPrint}s 
 	 * @throws OHServiceException
 	 */
-	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
 		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
-		Iterable<Laboratory> laboritories = exam != null
-				? repository.findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(TimeTools.truncateToSeconds(dateFrom),
-				                                                                                                   TimeTools.truncateToSeconds(dateTo),
-				                                                                                                   exam)
-				: repository.findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(TimeTools.truncateToSeconds(dateFrom),
-				                                                                      TimeTools.truncateToSeconds(dateTo));
-
+		List<Laboratory> laboritories = new ArrayList<>();
+			if (exam != null && patient != null) {
+				laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCode(dateFrom, dateTo, exam, patient.getCode());
+			}
+			if (exam != null && patient == null ) {
+				laboritories = repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam);
+			}
+			if (patient != null && exam == null) {
+				laboritories = repository.findByLabDateBetweenAndPatientCode(dateFrom, dateTo, patient.getCode());
+			}
+			if (patient == null && exam == null) {
+				laboritories= repository.findByCreatedDateBetweenOrderByLabDateDesc(dateFrom, dateTo);
+			}
 		for (Laboratory laboratory : laboritories) {
+			
 			pLaboratory.add(new LaboratoryForPrint(
 							laboratory.getCode(),
 							laboratory.getExam(),
 							laboratory.getDate(),
-							laboratory.getResult()
+							laboratory.getResult(),
+							laboratory.getPatName(),
+							laboratory.getPatient().getCode()
 					)
 			);
 		}
@@ -200,7 +237,47 @@ public class LabIoOperations {
 		}
 		return result;
 	}
+	/**
+	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) 
+	 * within last year
+	 * @return the list of {@link LaboratoryForPrint}s 
+	 * @throws OHServiceException
+	 */
+	public List<LaboratoryForPrint> getLaboratoryForPrints() throws OHServiceException {
+		LocalDateTime time2 = TimeTools.getNow();
+		LocalDateTime time1 = time2.minusWeeks(1);
+		return getLaboratoryForPrint(null, time1, time2);
+	}
+	
+	/**
+	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) 
+	 * between specified dates and matching passed exam name
+	 * @param exam - the exam name as <code>String</code>
+	 * @param dateFrom - the lower date for the range
+	 * @param dateTo - the highest date for the range
+	 * @return the list of {@link LaboratoryForPrint}s 
+	 * @throws OHServiceException
+	 */
+	public List<LaboratoryForPrint> getLaboratoryForPrint(String exam, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+		List<LaboratoryForPrint> pLaboratory = new ArrayList<>();
+		Iterable<Laboratory> laboritories = exam != null
+				? repository.findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(TimeTools.truncateToSeconds(dateFrom),
+				                                                                                                   TimeTools.truncateToSeconds(dateTo),
+				                                                                                                   exam)
+				: repository.findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(TimeTools.truncateToSeconds(dateFrom),
+				                                                                      TimeTools.truncateToSeconds(dateTo));
 
+		for (Laboratory laboratory : laboritories) {
+			pLaboratory.add(new LaboratoryForPrint(
+							laboratory.getCode(),
+							laboratory.getExam(),
+							laboratory.getDate(),
+							laboratory.getResult()
+					)
+			);
+		}
+		return pLaboratory;
+	}
 	/**
 	 * Inserts one Laboratory exam {@link Laboratory} with multiple results (Procedure Two)
 	 *
@@ -293,6 +370,10 @@ public class LabIoOperations {
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
 		return repository.existsById(code);
+	}
+	
+	public Optional<Laboratory> getLaboratory(int code) throws OHServiceException {
+		return repository.findById(code);
 	}
 
 }

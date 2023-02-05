@@ -99,7 +99,7 @@ public class AdmissionBrowserManager {
 	}
 
 	/**
-	 * Returns the only one admission without adimission date (or null if none) for the specified patient.
+	 * Returns the only one admission without admission date (or null if none) for the specified patient.
 	 *
 	 * @param patient the patient target of the admission.
 	 * @return the patient admission or {@code null} if the operation fails.
@@ -157,7 +157,7 @@ public class AdmissionBrowserManager {
 	 * @return <code>true</code> if the admission has been successfully inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newAdmission(Admission admission) throws OHServiceException {
+	public Admission newAdmission(Admission admission) throws OHServiceException {
 		validateAdmission(admission, true);
 		return ioOperations.newAdmission(admission);
 	}
@@ -171,7 +171,7 @@ public class AdmissionBrowserManager {
 	 */
 	public int newAdmissionReturnKey(Admission admission) throws OHServiceException {
 		validateAdmission(admission, true);
-		return ioOperations.newAdmissionReturnKey(admission);
+		return ioOperations.newAdmission(admission).getId();
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class AdmissionBrowserManager {
 	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean updateAdmission(Admission admission) throws OHServiceException {
+	public Admission updateAdmission(Admission admission) throws OHServiceException {
 		validateAdmission(admission, false);
 		return ioOperations.updateAdmission(admission);
 	}

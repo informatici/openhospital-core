@@ -56,8 +56,8 @@ public class PregnantTreatmentTypeIoOperation {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newPregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
-		return repository.save(pregnantTreatmentType) != null;
+	public PregnantTreatmentType newPregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
+		return repository.save(pregnantTreatmentType);
 	}
 	
 	/**
@@ -67,8 +67,8 @@ public class PregnantTreatmentTypeIoOperation {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean updatePregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
-		return repository.save(pregnantTreatmentType) != null;
+	public PregnantTreatmentType updatePregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
+		return repository.save(pregnantTreatmentType);
 	}
 	
 	/**

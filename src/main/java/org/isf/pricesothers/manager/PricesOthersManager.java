@@ -58,7 +58,7 @@ public class PricesOthersManager {
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newOther(PricesOthers other) throws OHServiceException {
+	public PricesOthers newOther(PricesOthers other) throws OHServiceException {
 		validatePricesOthers(other);
 		return ioOperations.newOthers(other);
 	}
@@ -81,7 +81,7 @@ public class PricesOthersManager {
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updateOther(PricesOthers other) throws OHServiceException {
+	public PricesOthers updateOther(PricesOthers other) throws OHServiceException {
 		validatePricesOthers(other);
 		return ioOperations.updateOther(other);
 	}

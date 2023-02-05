@@ -99,7 +99,7 @@ public class MedicalTypeBrowserManager {
 	 * @return <code>true</code> if the medical type has been saved, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newMedicalType(MedicalType medicalType) throws OHServiceException {
+	public MedicalType newMedicalType(MedicalType medicalType) throws OHServiceException {
 		validateMedicalType(medicalType, true);
 		return ioOperations.newMedicalType(medicalType);
 	}
@@ -111,7 +111,7 @@ public class MedicalTypeBrowserManager {
 	 * @return <code>true</code> if the medical type has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean updateMedicalType(MedicalType medicalType) throws OHServiceException {
+	public MedicalType updateMedicalType(MedicalType medicalType) throws OHServiceException {
 		validateMedicalType(medicalType, false);
 		return ioOperations.updateMedicalType(medicalType);
 	}

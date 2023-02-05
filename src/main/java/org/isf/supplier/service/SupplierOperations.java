@@ -52,8 +52,8 @@ public class SupplierOperations {
 	 * return <code>true</code> if data has been saved, <code>false</code> otherwise. 
 	 * @throws OHServiceException 
 	 */
-	public boolean saveOrUpdate(Supplier supplier) throws OHServiceException {
-		return repository.save(supplier) != null;
+	public Supplier saveOrUpdate(Supplier supplier) throws OHServiceException {
+		return repository.save(supplier);
 	}
 
 	/**

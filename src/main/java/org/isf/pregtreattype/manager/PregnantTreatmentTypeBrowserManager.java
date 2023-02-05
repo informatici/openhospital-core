@@ -58,7 +58,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newPregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
+	public PregnantTreatmentType newPregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
 		validatePregnantTreatmentType(pregnantTreatmentType, true);
 		return ioOperations.newPregnantTreatmentType(pregnantTreatmentType);
 	}
@@ -70,7 +70,7 @@ public class PregnantTreatmentTypeBrowserManager {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updatePregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
+	public PregnantTreatmentType updatePregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
 		validatePregnantTreatmentType(pregnantTreatmentType, false);
 		return ioOperations.updatePregnantTreatmentType(pregnantTreatmentType);
 	}

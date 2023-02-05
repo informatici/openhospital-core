@@ -55,8 +55,8 @@ public class PriceOthersIoOperations {
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newOthers(PricesOthers other) throws OHServiceException {
-		return repository.save(other) != null;
+	public PricesOthers newOthers(PricesOthers other) throws OHServiceException {
+		return repository.save(other);
 	}
 
 	/**
@@ -78,8 +78,8 @@ public class PriceOthersIoOperations {
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean updateOther(PricesOthers other) throws OHServiceException {
-		return repository.save(other) != null;
+	public PricesOthers updateOther(PricesOthers other) throws OHServiceException {
+		return repository.save(other);
 	}
 
 	/**

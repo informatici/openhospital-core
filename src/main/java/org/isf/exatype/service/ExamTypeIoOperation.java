@@ -53,8 +53,8 @@ public class ExamTypeIoOperation {
 	 * @return <code>true</code> if the examType has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean updateExamType(ExamType examType) throws OHServiceException {
-		return repository.save(examType) != null;
+	public ExamType updateExamType(ExamType examType) throws OHServiceException {
+		return repository.save(examType);
 	}
 	
 	/**
@@ -63,8 +63,8 @@ public class ExamTypeIoOperation {
 	 * @return <code>true</code> if the examType has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newExamType(ExamType examType) throws OHServiceException {
-		return repository.save(examType) != null;
+	public ExamType newExamType(ExamType examType) throws OHServiceException {
+		return repository.save(examType);
 	}
 	
 	/**

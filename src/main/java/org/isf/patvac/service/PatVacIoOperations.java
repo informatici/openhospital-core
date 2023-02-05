@@ -24,6 +24,7 @@ package org.isf.patvac.service;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.patvac.model.PatientVaccine;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -107,8 +108,8 @@ public class PatVacIoOperations {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newPatientVaccine(PatientVaccine patVac) throws OHServiceException {
-		return repository.save(patVac) != null;
+	public PatientVaccine newPatientVaccine(PatientVaccine patVac) throws OHServiceException {
+		return repository.save(patVac);
 	}
 
 	/**
@@ -118,8 +119,8 @@ public class PatVacIoOperations {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updatePatientVaccine(PatientVaccine patVac) throws OHServiceException {
-		return repository.save(patVac) != null;
+	public PatientVaccine updatePatientVaccine(PatientVaccine patVac) throws OHServiceException {
+		return repository.save(patVac);
 	}
 
 	/**
@@ -160,6 +161,10 @@ public class PatVacIoOperations {
 		return repository.existsById(code);
 	}
 
+	public Optional<PatientVaccine> getPatientVaccine(Integer code) throws OHServiceException {
+		return repository.findById(code);
+	}
+	
 	private LocalDateTime getBeginningOfYear(int year) {
 		return LocalDateTime.of(year, Month.JANUARY, 1, 0, 0, 0);
 	}

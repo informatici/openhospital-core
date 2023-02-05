@@ -158,8 +158,8 @@ public class Tests extends OHCoreTestCase {
 		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
 		LocalDateTime newDate = TimeTools.getNow();
 		foundPatientVaccine.setVaccineDate(newDate);
-		boolean result = patvacIoOperation.updatePatientVaccine(foundPatientVaccine);
-		assertThat(result).isTrue();
+		PatientVaccine result = patvacIoOperation.updatePatientVaccine(foundPatientVaccine);
+		assertThat(result);
 		PatientVaccine updatePatientVaccine = patVacIoOperationRepository.findById(code).get();
 		assertThat(updatePatientVaccine.getVaccineDate().equals(newDate));
 	}
@@ -173,8 +173,8 @@ public class Tests extends OHCoreTestCase {
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
 		vaccineIoOperationRepository.saveAndFlush(vaccine);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
-		boolean result = patvacIoOperation.newPatientVaccine(patientVaccine);
-		assertThat(result).isTrue();
+		PatientVaccine result = patvacIoOperation.newPatientVaccine(patientVaccine);
+		assertThat(result);
 		checkPatientVaccineIntoDb(patientVaccine.getCode());
 	}
 
@@ -325,8 +325,8 @@ public class Tests extends OHCoreTestCase {
 		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
 		LocalDateTime newDate = TimeTools.getNow();
 		foundPatientVaccine.setVaccineDate(newDate);
-		boolean result = patVacManager.updatePatientVaccine(foundPatientVaccine);
-		assertThat(result).isTrue();
+		PatientVaccine result = patVacManager.updatePatientVaccine(foundPatientVaccine);
+		assertThat(result);
 		PatientVaccine updatePatientVaccine = patVacIoOperationRepository.findById(code).get();
 		assertThat(updatePatientVaccine.getVaccineDate().equals(newDate));
 	}
@@ -340,8 +340,8 @@ public class Tests extends OHCoreTestCase {
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
 		vaccineIoOperationRepository.saveAndFlush(vaccine);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
-		boolean result = patVacManager.newPatientVaccine(patientVaccine);
-		assertThat(result).isTrue();
+		PatientVaccine result = patVacManager.newPatientVaccine(patientVaccine);
+		assertThat(result);
 		checkPatientVaccineIntoDb(patientVaccine.getCode());
 	}
 

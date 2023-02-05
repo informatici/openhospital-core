@@ -45,6 +45,8 @@ import org.isf.visits.model.Visit;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.drew.lang.annotations.Nullable;
+
 /**
  * ------------------------------------------
  * Opd - model for OPD
@@ -98,14 +100,14 @@ public class Opd extends Auditable<String> {
 	@Column(name="OPD_SEX")
 	private char sex;
 
-	@NotNull
+	@Nullable
 	@Column(name="OPD_NOTE")
 	private String note;
 
 	@NotNull
 	@Column(name="OPD_PROG_YEAR")	
 	private int prog_year;
-		
+
 	@ManyToOne
 	@JoinColumn(name="OPD_DIS_ID_A")
 	private Disease disease;
@@ -140,6 +142,19 @@ public class Opd extends Auditable<String> {
 	@Column(name="OPD_LOCK")
 	private int lock;
 	
+	/*@Column(name="OPD_REASON")
+   	private String reason; // ADDED: Arnaud
+
+	@Column(name="OPD_THERAPIES")
+	private String therapies; // ADDED: Arnaud*/
+	
+	/**
+	 * Field for "ui"
+	 */
+	@Nullable
+	@Column(name="OPD_PRESCRIPTION")
+	private String prescription; // ADDED: Arnaud
+	
 	@Transient
 	private volatile int hashCode = 0;
 
@@ -148,16 +163,42 @@ public class Opd extends Auditable<String> {
 	}
 	
 	/**
-     * @param aProgYear
-     * @param aSex
-     * @param aAge
-     * @param aDisease
-     */
+ 	 * @param aProgYear
+ 	 * @param aSex
+ 	 * @param aAge
+ 	 * @param aDisease
+ 	 */
 	public Opd(int aProgYear, char aSex, int aAge, Disease aDisease) {
 		prog_year = aProgYear;
 		sex = aSex;
 		age = aAge;
 		disease = aDisease;
+	}
+	
+	public String getFullName() {
+		return patient == null ? "" : patient.getName();
+	}
+
+	/**
+	 * Field for "ui"
+	 */
+	public String getPrescription() {
+		return prescription;
+	}
+
+	/**
+	 * Field for "ui"
+	 */
+	public void setPrescription(String prescription) {
+		this.prescription = prescription;
+	}
+
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
 	
 	public String getNote() {
@@ -168,18 +209,6 @@ public class Opd extends Auditable<String> {
 		this.note = note;
 	}
 	
-	public String getFullName() {
-		return patient == null ? "" : patient.getName();
-	}
-
-	public Patient getPatient() {
-		return patient;
-	}
-
-	public void setPatient(Patient patient) {
-		this.patient = patient;
-	}
-
 	public int getAge() {
 		return age;
 	}
@@ -311,6 +340,30 @@ public class Opd extends Auditable<String> {
 	public void setUserID(String userID) {
 		this.userID = userID;
 	}
+        
+	/*public String getReason() {
+		return reason;
+	}
+	
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
+	public String getTherapies() {
+		return therapies;
+	}
+
+	public void setTherapies(String therapies) {
+		this.therapies = therapies;
+	}
+
+	public String getPrescription() {
+		return prescription;
+	}
+
+	public void setPrescription(String prescription) {
+		this.prescription = prescription;
+	}*/
 	
 	public Visit getNextVisit() {
 		return nextVisit;

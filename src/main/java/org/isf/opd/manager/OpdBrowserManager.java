@@ -162,26 +162,6 @@ public class OpdBrowserManager {
 	 * @param ageTo
 	 * @param sex
 	 * @param newPatient
-	 * @return the list of Opds. It could be <code>null</code>.
-	 * @throws OHServiceException
-	 */
-	public List<Opd> getOpd(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient)
-			throws OHServiceException {
-		return ioOperations.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, null);
-	}
-
-	/**
-	 * Return all Opds within specified dates and parameters
-	 * 
-	 * @param ward 
-	 * @param diseaseTypeCode
-	 * @param diseaseCode
-	 * @param dateFrom
-	 * @param dateTo
-	 * @param ageFrom
-	 * @param ageTo
-	 * @param sex
-	 * @param newPatient
 	 * @param user
 	 * @return the list of Opds. It could be <code>null</code>.
 	 * @throws OHServiceException
@@ -211,7 +191,7 @@ public class OpdBrowserManager {
 	 * @return <code>true</code> if the item has been inserted
 	 * @throws OHServiceException
 	 */
-	public boolean newOpd(Opd opd) throws OHServiceException {
+	public Opd newOpd(Opd opd) throws OHServiceException {
 		setPatientConsistency(opd);
 		validateOpd(opd, true);
 		return ioOperations.newOpd(opd);
@@ -272,7 +252,7 @@ public class OpdBrowserManager {
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
 		return ioOperations.isExistOpdNum(opdNum, year);
 	}
-
+	
 	/**
 	 * Get an OPD by its code
 	 * @param code - the OPD code
@@ -290,5 +270,4 @@ public class OpdBrowserManager {
 	public List<Opd> getOpdByProgYear(int code) {
 		return ioOperations.getOpdByProgYear(code);
 	}
-
 }

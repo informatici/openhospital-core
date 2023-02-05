@@ -373,8 +373,7 @@ public class PatientBrowserManager {
 
 		if (StringUtils.isEmpty(mergedPatient.getNote())) {
 			mergedPatient.setNote(patient2.getNote());
-		}
-		else {
+		} else {
 			String note = mergedPatient.getNote();
 			mergedPatient.setNote(patient2.getNote() + "\n\n" + note);
 		}
@@ -387,11 +386,11 @@ public class PatientBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param patient
-	 * @throws OHDataValidationException
+	 * @throws OHDataValidationException 
 	 */
 	protected void validatePatient(Patient patient) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-
+		
 		if (StringUtils.isEmpty(patient.getFirstName())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.patient.insertfirstname.msg"),
@@ -416,15 +415,22 @@ public class PatientBrowserManager {
 			throw new OHDataValidationException(errors);
 		}
 	}
-
+	
 	private boolean checkAge(Patient patient) {
 		LocalDate now = LocalDate.now();
 		LocalDate birthDate = patient.getBirthDate();
-
 		if (patient.getAge() < 0 || patient.getAge() > 200) {
 			return false;
 		}
 		return birthDate != null && !birthDate.isAfter(now);
 	}
-
+	
+	/**
+	 * Method that returns the full list of Cities of the patient not logically deleted: <br>
+	 * @return the list of Cities (could be empty)
+	 * @throws OHServiceException
+	 */
+	public List<String> getCities() throws OHServiceException {
+		return ioOperations.getCities();
+	}
 }

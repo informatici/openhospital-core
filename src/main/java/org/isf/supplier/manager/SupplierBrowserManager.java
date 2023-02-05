@@ -37,7 +37,7 @@ public class SupplierBrowserManager {
 	@Autowired
 	private SupplierOperations ioOperations;
 
-	public boolean saveOrUpdate(Supplier supplier) throws OHServiceException {
+	public Supplier saveOrUpdate(Supplier supplier) throws OHServiceException {
 		return ioOperations.saveOrUpdate(supplier);
 	}
 

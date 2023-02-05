@@ -198,8 +198,8 @@ public class MedicalsIoOperations
 	 * @return <code>true</code> if the medical has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs storing the medical.
 	 */
-	public boolean newMedical(Medical medical) throws OHServiceException {
-		return repository.save(medical) != null;
+	public Medical newMedical(Medical medical) throws OHServiceException {
+		return repository.save(medical);
 	}
 
 	/**
@@ -208,8 +208,8 @@ public class MedicalsIoOperations
 	 * @return <code>true</code> if the medical has been updated <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateMedical(Medical medical) throws OHServiceException {
-		return repository.save(medical) != null;
+	public Medical updateMedical(Medical medical) throws OHServiceException {
+		return repository.save(medical);
 	}
 
 	/**
