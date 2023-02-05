@@ -57,8 +57,8 @@ public class MalnutritionIoOperation {
 	 * @return <code>true</code> if the malnutrition has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs storing the malnutrition.
 	 */
-	public boolean newMalnutrition(Malnutrition malnutrition) throws OHServiceException {
-		return repository.save(malnutrition) != null;
+	public Malnutrition newMalnutrition(Malnutrition malnutrition) throws OHServiceException {
+		return repository.save(malnutrition);
 	}
 
 	/**

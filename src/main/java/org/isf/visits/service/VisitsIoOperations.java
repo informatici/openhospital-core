@@ -64,6 +64,10 @@ public class VisitsIoOperations {
 				repository.findAllByWardIsNullAndPatient_CodeOrderByPatient_CodeAscDateAsc(patID) :
 				repository.findAllByWardIsNullOrderByPatient_CodeAscDateAsc();
 	}
+	public Visit getVisit(int visitID) throws OHServiceException {
+		return repository.findAllByVisitID(visitID);
+				
+	}
 
 	/**
 	 * Returns the list of all {@link Visit}s related to a wardId
@@ -91,6 +95,18 @@ public class VisitsIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public Visit newVisit(Visit visit) throws OHServiceException {
+		return repository.save(visit);
+	}
+	
+	/**
+	 * update {@link Visit} for a specified {@link Visit}
+	 * 
+	 * @param visit - the {@link Visit}.
+	 * @return the {@link Visit}
+	 * @throws OHServiceException 
+	 */
+	@Transactional
+	public Visit updateVisit(Visit visit) throws OHServiceException {
 		return repository.save(visit);
 	}
 	

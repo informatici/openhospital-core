@@ -275,8 +275,8 @@ public class Tests extends OHCoreTestCase {
 		MedicalType medicalType = testMedicalType.setup(false);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		Medical medical = testMedical.setup(medicalType, true);
-		boolean result = medicalsIoOperations.newMedical(medical);
-		assertThat(result).isTrue();
+		Medical result = medicalsIoOperations.newMedical(medical);
+		assertThat(result);
 		checkMedicalIntoDb(medical.getCode());
 	}
 
@@ -285,8 +285,8 @@ public class Tests extends OHCoreTestCase {
 		int code = setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findById(code).get();
 		foundMedical.setDescription("Update");
-		boolean result = medicalsIoOperations.updateMedical(foundMedical);
-		assertThat(result).isTrue();
+		Medical result = medicalsIoOperations.updateMedical(foundMedical);
+		assertThat(result);
 		Medical updateMedical = medicalsIoOperationRepository.findById(code).get();
 		assertThat(updateMedical.getDescription()).isEqualTo("Update");
 	}
@@ -376,7 +376,7 @@ public class Tests extends OHCoreTestCase {
 		MedicalType medicalType = testMedicalType.setup(false);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		Medical medical = testMedical.setup(medicalType, true);
-		assertThat(medicalBrowsingManager.newMedical(medical)).isTrue();
+		assertThat(medicalBrowsingManager.newMedical(medical));
 		checkMedicalIntoDb(medical.getCode());
 	}
 
@@ -385,7 +385,7 @@ public class Tests extends OHCoreTestCase {
 		MedicalType medicalType = testMedicalType.setup(false);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		Medical medical = testMedical.setup(medicalType, true);
-		assertThat(medicalBrowsingManager.newMedical(medical, false)).isTrue();
+		assertThat(medicalBrowsingManager.newMedical(medical, false));
 		checkMedicalIntoDb(medical.getCode());
 	}
 
@@ -394,7 +394,7 @@ public class Tests extends OHCoreTestCase {
 		int code = setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findById(code).get();
 		foundMedical.setDescription("Update");
-		assertThat(medicalBrowsingManager.updateMedical(foundMedical)).isTrue();
+		assertThat(medicalBrowsingManager.updateMedical(foundMedical));
 		Medical updateMedical = medicalsIoOperationRepository.findById(code).get();
 		assertThat(updateMedical.getDescription()).isEqualTo("Update");
 	}
@@ -404,7 +404,7 @@ public class Tests extends OHCoreTestCase {
 		int code = setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findById(code).get();
 		foundMedical.setDescription("Update");
-		assertThat(medicalBrowsingManager.updateMedical(foundMedical, true)).isTrue();
+		assertThat(medicalBrowsingManager.updateMedical(foundMedical, true));
 		Medical updateMedical = medicalsIoOperationRepository.findById(code).get();
 		assertThat(updateMedical.getDescription()).isEqualTo("Update");
 	}
@@ -414,7 +414,7 @@ public class Tests extends OHCoreTestCase {
 		int code = setupTestMedical(false);
 		Medical foundMedical = medicalsIoOperationRepository.findById(code).get();
 		foundMedical.setDescription("Update");
-		assertThat(medicalBrowsingManager.updateMedical(foundMedical, false)).isTrue();
+		assertThat(medicalBrowsingManager.updateMedical(foundMedical, false));
 		Medical updateMedical = medicalsIoOperationRepository.findById(code).get();
 		assertThat(updateMedical.getDescription()).isEqualTo("Update");
 	}

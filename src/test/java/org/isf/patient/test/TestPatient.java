@@ -36,7 +36,7 @@ public class TestPatient {
 	private static String secondName = "TestSecondName";
 	private static LocalDate birthDate = LocalDate.of(1984, Calendar.AUGUST, 14);
 	private static int age = 31; //IT WILL CHANGE WITH TIME
-	private static String agetype = "Date";
+	private static String agetype = "d1";
 	private static char sex = 'F';
 	private static String address = "TestAddress";
 	private static String city = "TestCity";
@@ -52,6 +52,8 @@ public class TestPatient {
 	private static String taxCode = "TestTaxCode";
 	private static String maritalStatus = "divorced";
 	private static String profession = "business";
+	private String anamnesis = "anamnesis";
+	private String allergies = "allergies";
 	//private static Blob photo;	
 	//private static Image photoImage;
 
@@ -69,6 +71,9 @@ public class TestPatient {
 					bloodType, hasInsurance, parentTogether, taxCode, maritalStatus, profession);
 			patient.setAge(patient.getAge()); //IT WILL CHANGE WITH TIME
 			patient.setPatientProfilePhoto(new PatientProfilePhoto());
+			patient.setAllergies(allergies);
+			patient.setAnamnesis(anamnesis);
+			
 		}
 
 		return patient;
@@ -95,13 +100,14 @@ public class TestPatient {
 		patient.setTaxCode(taxCode);
 		patient.setMaritalStatus(maritalStatus);
 		patient.setProfession(profession);
+		patient.setAllergies(allergies);
+		patient.setAnamnesis(anamnesis);
 	}
 
 	public void check(Patient patient) {
 		assertThat(patient.getFirstName()).isEqualTo(firstName);
 		assertThat(patient.getSecondName()).isEqualTo(secondName);
 		assertThat(patient.getBirthDate()).isEqualTo(birthDate);
-		//assertThat(patient.getAge()).isEqualTo(age);
 		assertThat(patient.getAgetype()).isEqualTo(agetype);
 		assertThat(patient.getSex()).isEqualTo(sex);
 		assertThat(patient.getAddress()).isEqualTo(address);
@@ -118,5 +124,7 @@ public class TestPatient {
 		assertThat(patient.getTaxCode()).isEqualTo(taxCode);
 		assertThat(patient.getMaritalStatus()).isEqualTo(maritalStatus);
 		assertThat(patient.getProfession()).isEqualTo(profession);
+		assertThat(patient.getAllergies()).isEqualTo(allergies);
+		assertThat(patient.getAnamnesis()).isEqualTo(anamnesis);
 	}
 }

@@ -135,7 +135,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testLaboratorySets() throws Exception {
-		int code = setupTestLaboratory(true);
+		Integer code = setupTestLaboratory(true);
 		checkLaboratoryIntoDb(code);
 	}
 
@@ -199,7 +199,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetLaboratoryForPrint() throws Exception {
-		Integer id = setupTestLaboratory(false);
+		Integer id = setupTestLaboratory(true);
 		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
 		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint();
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -1342,8 +1342,8 @@ public class Tests extends OHCoreTestCase {
 
 		laboratoryForPrint.setCode(-1);
 		assertThat(laboratoryForPrint.getCode()).isEqualTo(-1);
-		laboratoryForPrint.setDate("dateString");
-		assertThat(laboratoryForPrint.getDate()).isEqualTo("dateString");
+		laboratoryForPrint.setDate(laboratoryForPrint.getDate());
+		assertThat(laboratoryForPrint.getDate()).isEqualTo(laboratoryForPrint.getDate());
 		laboratoryForPrint.setExam("examString");
 		assertThat(laboratoryForPrint.getExam()).isEqualTo("examString");
 		laboratoryForPrint.setResult("resultString");

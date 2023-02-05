@@ -224,8 +224,8 @@ public class Tests extends OHCoreTestCase {
 		admissionIoOperationRepository.saveAndFlush(admission);
 
 		Malnutrition malnutrition = testMalnutrition.setup(admission, true);
-		boolean result = malnutritionIoOperation.newMalnutrition(malnutrition);
-		assertThat(result).isTrue();
+		Malnutrition result = malnutritionIoOperation.newMalnutrition(malnutrition);
+		assertThat(result);
 		checkMalnutritionIntoDb(malnutrition.getCode());
 	}
 
@@ -307,8 +307,8 @@ public class Tests extends OHCoreTestCase {
 		admissionIoOperationRepository.saveAndFlush(admission);
 
 		Malnutrition malnutrition = testMalnutrition.setup(admission, true);
-		boolean result = malnutritionManager.newMalnutrition(malnutrition);
-		assertThat(result).isTrue();
+		Malnutrition result = malnutritionManager.newMalnutrition(malnutrition);
+		assertThat(result);
 		checkMalnutritionIntoDb(malnutrition.getCode());
 	}
 

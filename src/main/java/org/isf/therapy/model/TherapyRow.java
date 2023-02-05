@@ -247,6 +247,30 @@ public class TherapyRow extends Auditable<String> {
 		this.smsInt = sms ? 1 : 0;
 	}
 
+	public Integer getMedicalId() {
+		return medicalId;
+	}
+
+	public void setMedicalId(Integer medicalId) {
+		this.medicalId = medicalId;
+	}
+
+	public int getNotifyInt() {
+		return notifyInt;
+	}
+
+	public void setNotifyInt(int notifyInt) {
+		this.notifyInt = notifyInt;
+	}
+
+	public int getSmsInt() {
+		return smsInt;
+	}
+
+	public void setSmsInt(int smsInt) {
+		this.smsInt = smsInt;
+	}
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(medicalId);

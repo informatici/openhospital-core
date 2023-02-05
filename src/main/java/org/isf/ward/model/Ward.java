@@ -82,7 +82,6 @@ public class Ward extends Auditable<String> {
 	@Column(name="WRD_NDOC")
 	private Integer docs;
 	
-	@NotNull
 	@Column(name="WRD_IS_OPD")	
 	private boolean isOpd;
 
@@ -324,5 +323,7 @@ public class Ward extends Auditable<String> {
 		}
 		return this.hashCode;
 	}
+	
+	
 
 }

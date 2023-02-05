@@ -53,6 +53,9 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
 
 	@Query(value = "select max(p.code) from Patient p")
 	Integer findMaxCode();
+	
+	@Query(value = "select distinct p.city from Patient p")
+	List<String> findCities();
 
 	List<Patient> getPatientsByParams(Map<String, Object> params);
 

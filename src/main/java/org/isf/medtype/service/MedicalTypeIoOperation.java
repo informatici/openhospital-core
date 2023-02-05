@@ -56,8 +56,8 @@ public class MedicalTypeIoOperation {
 	 * @return <code>true</code> if the medical type has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs updating the medical type.
 	 */
-	public boolean updateMedicalType(MedicalType medicalType) throws OHServiceException {
-		return repository.save(medicalType) != null;
+	public MedicalType updateMedicalType(MedicalType medicalType) throws OHServiceException {
+		return repository.save(medicalType);
 	}
 
 	/**
@@ -66,8 +66,8 @@ public class MedicalTypeIoOperation {
 	 * @return <code>true</code> if the medical type has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs storing the new medical type.
 	 */
-	public boolean newMedicalType(MedicalType medicalType) throws OHServiceException {
-		return repository.save(medicalType) != null;
+	public MedicalType newMedicalType(MedicalType medicalType) throws OHServiceException {
+		return repository.save(medicalType);
 	}
 
 	/**

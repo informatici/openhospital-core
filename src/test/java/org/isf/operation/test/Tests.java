@@ -281,7 +281,7 @@ public class Tests extends OHCoreTestCase {
 		OperationType operationType = testOperationType.setup(false);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		Operation operation = testOperation.setup(operationType, true);
-		assertThat(operationIoOperations.newOperation(operation)).isTrue();
+		assertThat(operationIoOperations.newOperation(operation));
 		checkOperationIntoDb(operation.getCode());
 	}
 
@@ -291,7 +291,7 @@ public class Tests extends OHCoreTestCase {
 		Operation foundOperation = operationIoOperations.findByCode(code);
 		int lock = foundOperation.getLock();
 		foundOperation.setDescription("Update");
-		assertThat(operationIoOperations.updateOperation(foundOperation)).isTrue();
+		assertThat(operationIoOperations.updateOperation(foundOperation));
 		Operation updateOperation = operationIoOperations.findByCode(code);
 		assertThat(updateOperation.getDescription()).isEqualTo("Update");
 		assertThat(updateOperation.getLock().intValue()).isEqualTo(lock + 1);
@@ -412,7 +412,7 @@ public class Tests extends OHCoreTestCase {
 		OperationType operationType = testOperationType.setup(false);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		Operation operation = testOperation.setup(operationType, true);
-		assertThat(operationBrowserManager.newOperation(operation)).isTrue();
+		assertThat(operationBrowserManager.newOperation(operation));
 		checkOperationIntoDb(operation.getCode());
 	}
 
@@ -422,7 +422,7 @@ public class Tests extends OHCoreTestCase {
 		Operation foundOperation = operationBrowserManager.getOperationByCode(code);
 		int lock = foundOperation.getLock();
 		foundOperation.setDescription("Update");
-		assertThat(operationBrowserManager.updateOperation(foundOperation)).isTrue();
+		assertThat(operationBrowserManager.updateOperation(foundOperation));
 		Operation updateOperation = operationBrowserManager.getOperationByCode(code);
 		assertThat(updateOperation.getDescription()).isEqualTo("Update");
 		assertThat(updateOperation.getLock().intValue()).isEqualTo(lock + 1);

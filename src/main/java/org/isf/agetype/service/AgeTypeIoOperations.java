@@ -70,4 +70,15 @@ public class AgeTypeIoOperations
 		String code = "d" + (index - 1);
 		return repository.findOneByCode(code);
 	}
+	
+	/**
+	 * Gets the {@link AgeType} from the code index.
+	 * @param code of agetype.
+	 * @return the retrieved element, <code>null</code> otherwise.
+	 * @throws OHServiceException if an error occurs retrieving the item.
+	 */
+	public AgeType getAgeTypeByCode(String code) throws OHServiceException {
+
+		return repository.findOneByCode(code);
+	}
 }

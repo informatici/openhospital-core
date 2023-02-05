@@ -84,8 +84,8 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestOperationType(false);
 		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
 		foundOperationType.setDescription("Update");
-		boolean result = operationTypeIoOperation.updateOperationType(foundOperationType);
-		assertThat(result).isTrue();
+		OperationType result = operationTypeIoOperation.updateOperationType(foundOperationType);
+		assertThat(result);
 		OperationType updateOperationType = operationTypeIoOperationRepository.findById(code).get();
 		assertThat(updateOperationType.getDescription()).isEqualTo("Update");
 	}
@@ -93,8 +93,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoNewOperationType() throws Exception {
 		OperationType operationType = testOperationType.setup(true);
-		boolean result = operationTypeIoOperation.newOperationType(operationType);
-		assertThat(result).isTrue();
+		OperationType result = operationTypeIoOperation.newOperationType(operationType);
+		assertThat(result);
 		checkOperationTypeIntoDb(operationType.getCode());
 	}
 
@@ -128,7 +128,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestOperationType(false);
 		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
 		foundOperationType.setDescription("Update");
-		assertThat(operationTypeBrowserManager.updateOperationType(foundOperationType)).isTrue();
+		assertThat(operationTypeBrowserManager.updateOperationType(foundOperationType));
 		OperationType updateOperationType = operationTypeIoOperationRepository.findById(code).get();
 		assertThat(updateOperationType.getDescription()).isEqualTo("Update");
 	}
@@ -136,7 +136,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrNewOperationType() throws Exception {
 		OperationType operationType = testOperationType.setup(true);
-		assertThat(operationTypeBrowserManager.newOperationType(operationType)).isTrue();
+		assertThat(operationTypeBrowserManager.newOperationType(operationType));
 		checkOperationTypeIntoDb(operationType.getCode());
 	}
 

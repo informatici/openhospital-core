@@ -105,7 +105,7 @@ public class MedicaldsrstockmovTypeBrowserManager {
 	 * @return <code>true</code> if the medical stock movement type has been saved, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
+	public MovementType newMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
 		validateMovementType(medicaldsrstockmovType, true);
 		return ioOperations.newMedicaldsrstockmovType(medicaldsrstockmovType);
 	}
@@ -117,7 +117,7 @@ public class MedicaldsrstockmovTypeBrowserManager {
 	 * @return <code>true</code> if the medical stock movement type has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean updateMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
+	public MovementType updateMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
 		validateMovementType(medicaldsrstockmovType, false);
 		return ioOperations.updateMedicaldsrstockmovType(medicaldsrstockmovType);
 	}

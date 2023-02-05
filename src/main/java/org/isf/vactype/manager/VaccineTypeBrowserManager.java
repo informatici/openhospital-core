@@ -104,7 +104,7 @@ public class VaccineTypeBrowserManager {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newVaccineType(VaccineType vaccineType) throws OHServiceException {
+	public VaccineType newVaccineType(VaccineType vaccineType) throws OHServiceException {
 		validateVaccineType(vaccineType, true);
 		return ioOperations.newVaccineType(vaccineType);
 	}
@@ -116,7 +116,7 @@ public class VaccineTypeBrowserManager {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updateVaccineType(VaccineType vaccineType) throws OHServiceException {
+	public VaccineType updateVaccineType(VaccineType vaccineType) throws OHServiceException {
 		validateVaccineType(vaccineType, false);
 		return ioOperations.updateVaccineType(vaccineType);
 	}

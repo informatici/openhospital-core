@@ -109,6 +109,7 @@ public class Patient extends Auditable<String> {
 	@Column(name="PAT_NAME")
 	private String name;
 	
+	@NotNull
 	@Column(name="PAT_BDATE")	// SQL type: date
 	private LocalDate birthDate;
 
@@ -116,7 +117,6 @@ public class Patient extends Auditable<String> {
 	@Column(name="PAT_AGE")
 	private int age;
 
-	@NotNull
 	@Column(name="PAT_AGETYPE")
 	private String agetype;
 
@@ -176,7 +176,21 @@ public class Patient extends Auditable<String> {
 	@NotNull
 	@Column(name="PAT_DELETED", columnDefinition = "char(1) default 'N'")
 	private char deleted = 'N';
-
+	
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	@Column(name="PAT_ANAMNESIS")
+	private String anamnesis;
+	
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	@Column(name="PAT_ALLERGIES")
+	private String allergies;
+	
 	@Version
 	@Column(name="PAT_LOCK")
 	private int lock;
@@ -506,6 +520,50 @@ public class Patient extends Auditable<String> {
 
 	public PatientProfilePhoto getPatientProfilePhoto() {
 		return patientProfilePhoto;
+	}	
+
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	public String getAnamnesis() {
+		return anamnesis;
+	}
+
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	public void setAnamnesis(String anamnesis) {
+		this.anamnesis = anamnesis;
+	}
+
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	public String getAllergies() {
+		return allergies;
+	}
+
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	public void setAllergies(String allergies) {
+		this.allergies = allergies;
+	}
+
+	/**
+	 * Method kept as POJO standard, but it ignores {@code name} param
+	 * and uses {@link firstName} and {@link secondName} to set
+	 * the field (as {@link setFirstName} and {@link setSecondName}
+	 * methods do as well).
+	 * 
+	 * @param name (ignored, used {@code firstName} and {@code secondName} instead
+	 */
+	public void setName(String name) {
+		this.name = this.firstName + ' ' + this.secondName;
 	}
 
 	public void setPatientProfilePhoto(final PatientProfilePhoto patientProfilePhoto) {

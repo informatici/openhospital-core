@@ -24,6 +24,7 @@ package org.isf.patvac.manager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.isf.generaldata.MessageBundle;
@@ -88,7 +89,7 @@ public class PatVacManager {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newPatientVaccine(PatientVaccine patVac) throws OHServiceException {
+	public PatientVaccine newPatientVaccine(PatientVaccine patVac) throws OHServiceException {
 		validatePatientVaccine(patVac);
 		return ioOperations.newPatientVaccine(patVac);
 	}
@@ -100,7 +101,7 @@ public class PatVacManager {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updatePatientVaccine(PatientVaccine patVac) throws OHServiceException {
+	public PatientVaccine updatePatientVaccine(PatientVaccine patVac) throws OHServiceException {
 		validatePatientVaccine(patVac);
 		return ioOperations.updatePatientVaccine(patVac);
 	}
@@ -125,6 +126,10 @@ public class PatVacManager {
 	 */
 	public int getProgYear(int year) throws OHServiceException {
 		return ioOperations.getProgYear(year);
+	}
+	
+	public Optional<PatientVaccine> getPatientVaccine(int code) throws OHServiceException {
+		return ioOperations.getPatientVaccine(code);
 	}
 
 	/**

@@ -71,10 +71,13 @@ public class AdmissionIoOperations {
 
 	@Autowired
 	private AdmissionIoOperationRepository repository;
+	
 	@Autowired
 	private AdmissionTypeIoOperationRepository typeRepository;
+	
 	@Autowired
 	private DischargeTypeIoOperationRepository dischargeRepository;
+	
 	@Autowired
 	private PatientIoOperationRepository patientRepository;
 
@@ -170,8 +173,8 @@ public class AdmissionIoOperations {
 	 * @return <code>true</code> if the admission has been successfully inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the insertion.
 	 */
-	public boolean newAdmission(Admission admission) throws OHServiceException {
-		return repository.save(admission) != null;
+	public Admission newAdmission(Admission admission) throws OHServiceException {
+		return repository.save(admission);
 	}
 
 	/**
@@ -193,8 +196,8 @@ public class AdmissionIoOperations {
 	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs.
 	 */
-	public boolean updateAdmission(Admission admission) throws OHServiceException {
-		return repository.save(admission) != null;
+	public Admission updateAdmission(Admission admission) throws OHServiceException {
+		return repository.save(admission);
 	}
 
 	/**

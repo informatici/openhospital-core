@@ -75,8 +75,8 @@ public class OpdIoOperations {
 		if (oneWeek) {
 			dateFrom = LocalDate.now().minusWeeks(1);
 		}
-		return getOpdList(null, MessageBundle.getMessage("angal.common.alltypes.txt"), MessageBundle.getMessage("angal.opd.alldiseases.txt"), dateFrom, dateTo, 0, 0,
-				'A', 'A', null);
+		return getOpdList(null, MessageBundle.getMessage("angal.common.alltypes.txt"), MessageBundle.getMessage("angal.opd.alldiseases.txt"), dateFrom, dateTo,
+						0, 0, 'A', 'A', null);
 	}
 	
 	/**
@@ -91,11 +91,13 @@ public class OpdIoOperations {
 	 * @param ageTo
 	 * @param sex
 	 * @param newPatient
+	 * @param user
 	 * @return the list of Opds. It could be <code>empty</code>.
 	 * @throws OHServiceException 
 	 */
 	public List<Opd> getOpdList(
-			Ward ward, String diseaseTypeCode,
+			Ward ward, 
+			String diseaseTypeCode,
 			String diseaseCode,
 			LocalDate dateFrom,
 			LocalDate dateTo,
@@ -128,8 +130,8 @@ public class OpdIoOperations {
 	 * @return <code>true</code> if the item has been inserted
 	 * @throws OHServiceException 
 	 */
-	public boolean newOpd(Opd opd) throws OHServiceException {
-		return repository.save(opd) != null;
+	public Opd newOpd(Opd opd) throws OHServiceException {
+		return repository.save(opd);
 	}
 	
 	/**
@@ -224,5 +226,4 @@ public class OpdIoOperations {
 	public List<Opd> getOpdByProgYear(Integer code) {
 		return repository.findByProgYear(code);
 	}
-
 }
