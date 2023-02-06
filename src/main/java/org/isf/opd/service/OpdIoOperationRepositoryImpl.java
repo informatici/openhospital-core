@@ -34,7 +34,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
 import org.isf.ward.model.Ward;
 import org.springframework.transaction.annotation.Transactional;
@@ -159,12 +158,12 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 					cb.equal(opd.join("ward").get("code"), ward.getCode())
 			);
 		}
-		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alldiseasetypes.txt")))) {
+		if (diseaseTypeCode != null) {
 			predicates.add(
 					cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
 			);
 		}
-		if (!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldiseases.txt"))) {
+		if (diseaseCode != null) {
 			predicates.add(
 					cb.equal(opd.join("disease").get("code"), diseaseCode)
 			);

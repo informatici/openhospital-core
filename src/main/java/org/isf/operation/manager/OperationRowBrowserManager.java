@@ -69,6 +69,7 @@ public class OperationRowBrowserManager {
 	public OperationRow newOperationRow2(OperationRow opRow) throws OHServiceException {
 		return ioOperations.newOperationRow2(opRow);
 	}
+	
 	public List<OperationRow> getOperationRowByPatientCode(Patient patient) throws OHServiceException {
 		return ioOperations.getOperationRowByPatient(patient);
 	}
