@@ -158,4 +158,5 @@ public class VaccineBrowserManager {
 	public Vaccine findVaccine(String code) {
 		return ioOperations.findVaccine(code);
 	}
+
 }

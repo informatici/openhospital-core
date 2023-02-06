@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -37,9 +37,11 @@ public class TestWard {
 	private Integer beds = 100;
 	private Integer nurs = 101;
 	private Integer docs = 102;
+	private boolean isOpd = true;
 	private boolean isPharmacy = true;
-	private boolean isFemale = false;
-	private boolean isMale = true;
+	private boolean isFemale = true;
+	private boolean isMale = false;
+	private int visitDuration = 30;
 
 	public Ward setup(boolean usingSet) throws OHException {
 		return setup(usingSet, false);
@@ -50,11 +52,11 @@ public class TestWard {
 
 		if (usingSet) {
 			ward = new Ward();
-			_setParameters(ward, maternity);
+			setParameters(ward, maternity);
 		} else {
 			// Create Ward with all parameters 
 			ward = new Ward(code, description, telephone, fax, email, beds, nurs, docs,
-					isPharmacy, isMale, isFemale);
+					isOpd, isPharmacy, isMale, isFemale);
 		}
 		if (maternity) {
 			ward.setCode(maternityCode);
@@ -62,7 +64,7 @@ public class TestWard {
 		return ward;
 	}
 
-	public void _setParameters(Ward ward, boolean maternity) {
+	public void setParameters(Ward ward, boolean maternity) {
 		ward.setCode(code);
 		if (maternity) {
 			ward.setCode(maternityCode);
@@ -75,8 +77,10 @@ public class TestWard {
 		ward.setFemale(isFemale);
 		ward.setMale(isMale);
 		ward.setNurs(nurs);
+		ward.setOpd(isOpd);
 		ward.setPharmacy(isPharmacy);
 		ward.setTelephone(telephone);
+		ward.setVisitDuration(visitDuration);
 	}
 
 	public void check(Ward ward) {
@@ -89,7 +93,9 @@ public class TestWard {
 		assertThat(ward.isFemale()).isEqualTo(isFemale);
 		assertThat(ward.isMale()).isEqualTo(isMale);
 		assertThat(ward.getNurs()).isEqualTo(nurs);
+		assertThat(ward.isOpd()).isEqualTo(isOpd);
 		assertThat(ward.isPharmacy()).isEqualTo(isPharmacy);
 		assertThat(ward.getTelephone()).isEqualTo(telephone);
+		assertThat(ward.getVisitDuration()).isEqualTo(visitDuration);
 	}
 }

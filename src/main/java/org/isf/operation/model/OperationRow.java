@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,9 +21,12 @@
  */
 package org.isf.operation.model;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,16 +35,26 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
 import org.isf.accounting.model.Bill;
 import org.isf.admission.model.Admission;
 import org.isf.opd.model.Opd;
+import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * @author xavier
  */
 @Entity
-@Table(name = "OPERATIONROW")
-public class OperationRow {
+@Table(name="OH_OPERATIONROW")
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "OPER_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "OPER_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "OPER_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "OPER_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "OPER_LAST_MODIFIED_DATE"))
+public class OperationRow extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -50,7 +63,7 @@ public class OperationRow {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "OPER_ID")
+    @JoinColumn(name = "OPER_OPE_ID_A")
     private Operation operation;
 
     @NotNull
@@ -62,18 +75,17 @@ public class OperationRow {
     private String opResult;
 
     @NotNull
-    @Column(name = "OPER_OPDATE")
-    private GregorianCalendar opDate;
+    @Column(name = "OPER_OPDATE")       // SQL type: datetime
+    private LocalDateTime opDate;
 
+    @NotNull
     @Column(name = "OPER_REMARKS")
     private String remarks;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "OPER_ADMISSION_ID")
     private Admission admission;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "OPER_OPD_ID")
     private Opd opd;
@@ -82,21 +94,20 @@ public class OperationRow {
     @JoinColumn(name = "OPER_BILL_ID")
     private Bill bill;
 
-    @NotNull
-    @Column(name = "OPER_TRANS_UNIT")
-    private Float transUnit;
+    @Column(name = "OPER_TRANS_UNIT", columnDefinition = "float default 0")
+    private Float transUnit = 0f;
     
     @Transient
     private volatile int hashCode = 0;
 
-    public OperationRow() {
-	super();
-    }
+	public OperationRow() {
+		super();
+	}
     
     public OperationRow(Operation operation, 
             String prescriber, 
             String opResult, 
-            GregorianCalendar opDate, 
+            LocalDateTime opDate,
             String remarks, 
             Admission admission, 
             Opd opd, 
@@ -106,7 +117,7 @@ public class OperationRow {
         this.operation = operation;
         this.prescriber = prescriber;
         this.opResult = opResult;
-        this.opDate = opDate;
+        this.opDate = TimeTools.truncateToSeconds(opDate);
         this.remarks = remarks;
         this.admission = admission;
         this.opd = opd;
@@ -118,7 +129,7 @@ public class OperationRow {
             Operation operation, 
             String prescriber, 
             String opResult, 
-            GregorianCalendar opDate, 
+            LocalDateTime opDate,
             String remarks, 
             Admission admission, 
             Opd opd, 
@@ -161,12 +172,12 @@ public class OperationRow {
         this.opResult = opResult;
     }
 
-    public GregorianCalendar getOpDate() {
+    public LocalDateTime getOpDate() {
         return opDate;
     }
 
-    public void setOpDate(GregorianCalendar opDate) {
-        this.opDate = opDate;
+    public void setOpDate(LocalDateTime opDate) {
+        this.opDate = TimeTools.truncateToSeconds(opDate);
     }
 
     public String getRemarks() {

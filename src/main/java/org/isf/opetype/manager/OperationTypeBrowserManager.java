@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -57,11 +57,8 @@ public class OperationTypeBrowserManager {
 	 * @return <code>true</code> if the {@link OperationType} has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newOperationType(OperationType operationType) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateOperationType(operationType, true);
-		if (!errors.isEmpty()) {
-			throw new OHDataValidationException(errors);
-		}
+	public OperationType newOperationType(OperationType operationType) throws OHServiceException {
+		validateOperationType(operationType, true);
 		return ioOperations.newOperationType(operationType);
 	}
 
@@ -72,11 +69,8 @@ public class OperationTypeBrowserManager {
 	 * @return <code>true</code> if the {@link OperationType} has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean updateOperationType(OperationType operationType) throws OHServiceException {
-		List<OHExceptionMessage> errors = validateOperationType(operationType, false);
-		if (!errors.isEmpty()) {
-			throw new OHDataValidationException(errors);
-		}
+	public OperationType updateOperationType(OperationType operationType) throws OHServiceException {
+		validateOperationType(operationType, false);
 		return ioOperations.updateOperationType(operationType);
 	}
 
@@ -102,7 +96,7 @@ public class OperationTypeBrowserManager {
 		return ioOperations.isCodePresent(code);
 	}
 
-	protected List<OHExceptionMessage> validateOperationType(OperationType operationType, boolean insert) throws OHServiceException {
+	protected void validateOperationType(OperationType operationType, boolean insert) throws OHServiceException {
 		String key = operationType.getCode();
 		String description = operationType.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
@@ -130,6 +124,9 @@ public class OperationTypeBrowserManager {
 					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		return errors;
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
 	}
+
 }

@@ -1,4 +1,4 @@
-FROM mariadb:10.2.40
+FROM mariadb:10.6.11
 
 ENV MYSQL_DATABASE=oh
 ENV MYSQL_ROOT_PASSWORD=root
@@ -21,6 +21,7 @@ COPY sql/step_4* /docker-entrypoint-initdb.d/
 COPY sql/step_5* /docker-entrypoint-initdb.d/
 COPY sql/step_6* /docker-entrypoint-initdb.d/
 COPY sql/step_7* /docker-entrypoint-initdb.d/
+COPY sql/step_8* /docker-entrypoint-initdb.d/
 COPY sql/data_en/* data_en/
 #COPY sql/data_es/* data_es/
 #COPY sql/data_it/* data_it/

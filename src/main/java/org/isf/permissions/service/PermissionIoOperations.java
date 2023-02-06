@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -52,7 +52,7 @@ public class PermissionIoOperations {
 	}
 
 	public Permission retrievePermissionById(Integer id) {
-		return this.repository.findOne(id);
+		return this.repository.findById(id).orElse(null);
 	}
 
 	public Permission retrievePermissionByName(String name) {
@@ -87,7 +87,7 @@ public class PermissionIoOperations {
 
 		// delete obsolete relations
 		List<GroupPermission> groupPermissionToDelete = this.groupPermissionRepository.findByUserGroup_codeInAndPermission_id(allUserGroupCodesToDelete, permission.getId());
-		this.groupPermissionRepository.delete(groupPermissionToDelete);
+		this.groupPermissionRepository.deleteAll(groupPermissionToDelete);
 
 		// store new relations
 		gp.forEach(item -> {
@@ -96,11 +96,11 @@ public class PermissionIoOperations {
 				this.groupPermissionRepository.save(item);
 			}
 		});
-		return this.repository.getOne(permissionUpdated.getId());
+		return this.repository.getReferenceById(permissionUpdated.getId());
 	}
 
 	public Boolean deletePermission(Integer id) {
-		this.repository.delete(id);
+		this.repository.deleteById(id);
 		return Boolean.TRUE;
 	}
 
@@ -109,7 +109,7 @@ public class PermissionIoOperations {
 	}
 
 	public boolean exists(int id) {
-		return this.repository.exists(id);
+		return this.repository.existsById(id);
 	}
 
 }

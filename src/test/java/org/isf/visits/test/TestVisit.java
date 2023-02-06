@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -22,8 +22,10 @@
 package org.isf.visits.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
@@ -32,7 +34,7 @@ import org.isf.ward.model.Ward;
 
 public class TestVisit {
 
-	private GregorianCalendar date = new GregorianCalendar(10, 9, 8);
+	private LocalDateTime date = LocalDateTime.of(10, 9, 8, 0, 0, 0);
 	private String note = "TestNote";
 	private boolean sms = true;
 	private Integer duration = 10;
@@ -47,7 +49,7 @@ public class TestVisit {
 
 		if (usingSet) {
 			visit = new Visit();
-			_setParameters(patient, visit, ward);
+			setParameters(patient, visit, ward);
 		} else {
 			// Create Visit with all parameters 
 			visit = new Visit(0, date, patient, note, sms, ward, duration, service);
@@ -56,7 +58,7 @@ public class TestVisit {
 		return visit;
 	}
 
-	public void _setParameters(Patient patient, Visit visit, Ward ward) {
+	public void setParameters(Patient patient, Visit visit, Ward ward) {
 		visit.setDate(date);
 		visit.setNote(note);
 		visit.setPatient(patient);
@@ -67,7 +69,7 @@ public class TestVisit {
 	}
 
 	public void check(Visit visit) {
-		assertThat(visit.getDate()).isEqualTo(date);
+		assertThat(visit.getDate()).isCloseTo(date, within(1, ChronoUnit.SECONDS));
 		assertThat(visit.getNote()).isEqualTo(note);
 		assertThat(visit.isSms()).isEqualTo(sms);
 		assertThat(visit.getDuration()).isEqualTo(duration);

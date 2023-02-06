@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * OH service layer exception. Can encapsulate messages to show in UI.
@@ -37,7 +35,6 @@ public class OHServiceException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(OHServiceException.class);
 	private List<OHExceptionMessage> messages = new ArrayList<>();
 	
 	public OHServiceException(Throwable cause, List<OHExceptionMessage> messages) {

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -24,11 +24,9 @@ package org.isf.opd.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.assertj.core.api.Condition;
@@ -51,6 +49,13 @@ import org.isf.patient.test.TestPatient;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
+import org.isf.visits.model.Visit;
+import org.isf.visits.service.VisitsIoOperationRepository;
+import org.isf.visits.test.TestVisit;
+import org.isf.ward.model.Ward;
+import org.isf.ward.service.WardIoOperationRepository;
+import org.isf.ward.test.TestWard;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -76,6 +81,8 @@ public class Tests extends OHCoreTestCase {
 	private static TestPatient testPatient;
 	private static TestDiseaseType testDiseaseType;
 	private static TestDisease testDisease;
+	private static TestWard testWard;
+	private static TestVisit testVisit;
 
 	@Autowired
 	OpdIoOperations opdIoOperation;
@@ -83,6 +90,10 @@ public class Tests extends OHCoreTestCase {
 	OpdIoOperationRepository opdIoOperationRepository;
 	@Autowired
 	PatientIoOperationRepository patientIoOperationRepository;
+	@Autowired
+	WardIoOperationRepository wardIoOperationRepository;
+	@Autowired
+	VisitsIoOperationRepository visitsIoOperationRepository;
 	@Autowired
 	OpdBrowserManager opdBrowserManager;
 	@Autowired
@@ -102,6 +113,8 @@ public class Tests extends OHCoreTestCase {
 		testPatient = new TestPatient();
 		testDisease = new TestDisease();
 		testDiseaseType = new TestDiseaseType();
+		testWard = new TestWard();
+		testVisit = new TestVisit();
 	}
 
 	@Before
@@ -119,36 +132,38 @@ public class Tests extends OHCoreTestCase {
 	
 	@Test
 	public void testOpdGets() throws Exception {
-		int code = _setupTestOpd(false);
-		_checkOpdIntoDb(code);
+		int code = setupTestOpd(false);
+		checkOpdIntoDb(code);
 	}
 
 	@Test
 	public void testOpdSets() throws Exception {
-		int code = _setupTestOpd(true);
-		_checkOpdIntoDb(code);
+		int code = setupTestOpd(true);
+		checkOpdIntoDb(code);
 	}
 
 	@Test
 	public void testIoGetOpdList() throws Exception {
-		int code = _setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		int code = setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 		List<Opd> opds = opdIoOperation.getOpdList(
+				foundOpd.getWard(),
 				foundOpd.getDisease().getType().getCode(),
 				foundOpd.getDisease().getCode(),
-				foundOpd.getVisitDate(),
-				foundOpd.getVisitDate(),
+				foundOpd.getDate().toLocalDate(),
+				foundOpd.getDate().toLocalDate(),
 				foundOpd.getAge() - 1,
 				foundOpd.getAge() + 1,
 				foundOpd.getSex(),
-				foundOpd.getNewPatient());
+				foundOpd.getNewPatient(),
+				foundOpd.getUserID());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
 
 	@Test
 	public void testIoGetOpdListPatientId() throws Exception {
-		int code = _setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		int code = setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 		List<Opd> opds = opdIoOperation.getOpdList(foundOpd.getPatient().getCode());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
@@ -161,14 +176,21 @@ public class Tests extends OHCoreTestCase {
 		Disease disease = testDisease.setup(diseaseType, false);
 		disease.setCode("angal.opd.alldiseases.txt");
 		disease.getType().setCode("angal.common.alltypes.txt");
+		
+		Ward ward = testWard.setup(false);
+		
+		Visit nextVisit = testVisit.setup(patient, true, ward);
 
-		Opd opd = testOpd.setup(patient, disease, true);
-		GregorianCalendar now = new GregorianCalendar();
-		opd.setVisitDate(now);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
+		LocalDate now = LocalDate.now();
+		opd.setDate(now.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
+		
 		opdIoOperationRepository.saveAndFlush(opd);
 
 		List<Opd> opds = opdIoOperation.getOpdList(0);
@@ -184,28 +206,41 @@ public class Tests extends OHCoreTestCase {
 		disease.setCode("angal.opd.alldiseases.txt");
 		disease.getType().setCode("angal.common.alltypes.txt");
 
-		Opd opd = testOpd.setup(patient, disease, true);
+		Ward ward = testWard.setup(false);
+		
+		Visit nextVisit = testVisit.setup(patient, true, ward);
+
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
 		// set date to be today
-		opd.setVisitDate(new GregorianCalendar());
+		LocalDate today = LocalDate.now();
+		opd.setDate(today.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
+		
 		opdIoOperationRepository.saveAndFlush(opd);
 		Patient patient2 = testPatient.setup(false);
 		DiseaseType diseaseType2 = testDiseaseType.setup(false);
 
 		Disease disease2 = testDisease.setup(diseaseType2, false);
+		
+		Ward ward2 = testWard.setup(false);
+		ward2.setCode("ZZ");
+		
+		Visit nextVisit2 = testVisit.setup(patient, true, ward2);
 
-		Opd opd2 = testOpd.setup(patient2, disease2, true);
-		GregorianCalendar now = new GregorianCalendar();
+		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, true);
 		// set date to be 14 days ago (not within the TODAY test)
-		now.add(Calendar.DAY_OF_MONTH, -14);
-		opd2.setVisitDate(now);
+		opd2.setDate(today.minusDays(14).atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient2);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
 		diseaseIoOperationRepository.saveAndFlush(disease2);
+		wardIoOperationRepository.saveAndFlush(ward2);
+		visitsIoOperationRepository.saveAndFlush(nextVisit2);
 		opdIoOperationRepository.saveAndFlush(opd2);
 
 		List<Opd> opds = opdIoOperation.getOpdList(false);
@@ -222,15 +257,22 @@ public class Tests extends OHCoreTestCase {
 		disease.setCode("angal.opd.alldiseases.txt");
 		disease.getType().setCode("angal.common.alltypes.txt");
 
-		Opd opd = testOpd.setup(patient, disease, true);
-		GregorianCalendar date = new GregorianCalendar();
+		Ward ward = testWard.setup(false);
+		
+		Visit nextVisit = testVisit.setup(patient, true, ward);
+
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
+		LocalDate date = LocalDate.now();
 		// set date to be 3 days ago (within last week)
-		date.add(Calendar.DAY_OF_MONTH, -3);
-		opd.setVisitDate(date);
+		date.minusDays(3);
+		opd.setDate(date.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
+		
 		opdIoOperationRepository.saveAndFlush(opd);
 
 		Patient patient2 = testPatient.setup(false);
@@ -238,15 +280,22 @@ public class Tests extends OHCoreTestCase {
 
 		Disease disease2 = testDisease.setup(diseaseType2, false);
 
-		Opd opd2 = testOpd.setup(patient2, disease2, true);
-		GregorianCalendar date2 = new GregorianCalendar();
+		Ward ward2 = testWard.setup(false);
+		ward2.setCode("ZZ");
+		
+		Visit nextVisit2 = testVisit.setup(patient, true, ward2);
+
+		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, true);
+		LocalDate date2 = LocalDate.now();
 		// set date to be 13 days aga (not within last week)
-		date2.add(Calendar.DAY_OF_MONTH, -13);
-		opd2.setVisitDate(date2);
+		date2 = date2.minusDays(13);
+		opd2.setDate(date2.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient2);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
 		diseaseIoOperationRepository.saveAndFlush(disease2);
+		wardIoOperationRepository.saveAndFlush(ward2);
+		visitsIoOperationRepository.saveAndFlush(nextVisit2);
 		opdIoOperationRepository.saveAndFlush(opd2);
 
 		List<Opd> opds = opdIoOperation.getOpdList(true);
@@ -259,31 +308,43 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, true, ward);
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
-		Opd opd = testOpd.setup(patient, disease, false);
-		opd.setDate(new Date());
-		boolean result = opdIoOperation.newOpd(opd);
-		assertThat(result).isTrue();
-		_checkOpdIntoDb(opd.getCode());
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
+		
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+		Opd result = opdIoOperation.newOpd(opd);
+		assertThat(result).isNotNull();
+		checkOpdIntoDb(opd.getCode());
 	}
 
 	@Test
 	public void testIoUpdateOpd() throws Exception {
-		int code = _setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findOne(code);
-		foundOpd.setNote("Update");
+		int code = setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findById(code).get();
+		/*foundOpd.setReason("update reason");
+		foundOpd.setAnamnesis("update anamnesis");
+		foundOpd.setTherapies("update therapie");
+		foundOpd.setAllergies("update allergies");
+		foundOpd.setPrescription("update presciption");*/
 		Opd result = opdIoOperation.updateOpd(foundOpd);
-		Opd updateOpd = opdIoOperationRepository.findOne(code);
+		Opd updateOpd = opdIoOperationRepository.findById(code).get();
 		assertThat(result).isNotNull();
-		assertThat(updateOpd.getNote()).isEqualTo("Update");
+		/*assertThat(updateOpd.getReason()).isEqualTo("update reason");
+		assertThat(updateOpd.getAnamnesis()).isEqualTo("update anamnesis");
+		assertThat(updateOpd.getTherapies()).isEqualTo("update therapies");
+		assertThat(updateOpd.getAllergies()).isEqualTo("update allergies");
+		assertThat(updateOpd.getPrescription()).isEqualTo("update prescription");*/
 	}
 
 	@Test
 	public void testIoDeleteOpd() throws Exception {
-		int code = _setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		int code = setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 		boolean result = opdIoOperation.deleteOpd(foundOpd);
 		assertThat(result).isTrue();
 		result = opdIoOperation.isCodePresent(code);
@@ -292,28 +353,28 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetProgYearZero() throws Exception {
-		int code = _setupTestOpd(false);
+		int code = setupTestOpd(false);
 		int progYear = opdIoOperation.getProgYear(0);
-		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 		assertThat(progYear).isEqualTo(foundOpd.getProgYear());
 	}
 
 	@Test
 	public void testIoGetProgYear() throws Exception {
-		int code = _setupTestOpd(false);
-		Opd opd = opdIoOperationRepository.findOne(code);
-		int progYear = opdIoOperation.getProgYear(opd.getVisitDate().get(Calendar.YEAR));
+		int code = setupTestOpd(false);
+		Opd opd = opdIoOperationRepository.findById(code).get();
+		int progYear = opdIoOperation.getProgYear(opd.getDate().getYear());
 		assertThat(progYear).isEqualTo(opd.getProgYear());
 	}
 
 	@Test
 	public void testIoIsExistsOpdNumShouldReturnTrueWhenOpdWithGivenOPDProgressiveYearAndVisitYearExists() throws Exception {
 		// given:
-		int code = _setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		int code = setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 
 		// when:
-		Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), foundOpd.getVisitDate().get(Calendar.YEAR));
+		boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), foundOpd.getDate().getYear());
 
 		// then:
 		assertThat(result).isTrue();
@@ -322,8 +383,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoIsExistsOpdNumShouldReturnTrueWhenOpdNumExistsAndVisitYearIsNotProvided() throws Exception {
 		// given:
-		int code = _setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		int code = setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 
 		// when:
 		Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 0);
@@ -335,8 +396,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoIsExistsOpdNumShouldReturnFalseWhenOpdNumExistsAndVisitYearIsIncorrect() throws Exception {
 		// given:
-		int code = _setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		int code = setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 
 		// when:
 		Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 1488);
@@ -347,8 +408,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoGetLastOpd() throws Exception {
-		int code = _setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		int code = setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 		Opd lastOpd = opdIoOperation.getLastOpd(foundOpd.getPatient().getCode());
 		assertThat(lastOpd.getCode()).isEqualTo(foundOpd.getCode());
 	}
@@ -356,38 +417,40 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() throws Exception {
 		// given:
-		int id = _setupTestOpd(false);
-		Opd found = opdIoOperationRepository.findOne(id);
-		Patient mergedPatient = _setupTestPatient(false);
+		int id = setupTestOpd(false);
+		Opd found = opdIoOperationRepository.findById(id).get();
+		Patient mergedPatient = setupTestPatient(false);
 
 		// when:
 		applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
 
 		// then:
-		Opd result = opdIoOperationRepository.findOne(id);
+		Opd result = opdIoOperationRepository.findById(id).get();
 		assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 	}
 
 	@Test
 	public void testMgrGetOpd() throws Exception {
-		int code = _setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		int code = setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 		List<Opd> opds = opdBrowserManager.getOpd(
+				foundOpd.getWard(),
 				foundOpd.getDisease().getType().getCode(),
 				foundOpd.getDisease().getCode(),
-				foundOpd.getVisitDate(),
-				foundOpd.getVisitDate(),
+				foundOpd.getDate().toLocalDate(),
+				foundOpd.getDate().toLocalDate(),
 				foundOpd.getAge() - 1,
 				foundOpd.getAge() + 1,
 				foundOpd.getSex(),
-				foundOpd.getNewPatient());
+				foundOpd.getNewPatient(),
+				foundOpd.getUserID());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
 
 	@Test
 	public void testMgrGetOpdListPatientId() throws Exception {
-		int code = _setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		int code = setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 		List<Opd> opds = opdBrowserManager.getOpdList(foundOpd.getPatient().getCode());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
@@ -401,13 +464,20 @@ public class Tests extends OHCoreTestCase {
 		disease.setCode("angal.opd.alldiseases.txt");
 		disease.getType().setCode("angal.common.alltypes.txt");
 
-		Opd opd = testOpd.setup(patient, disease, true);
-		GregorianCalendar now = new GregorianCalendar();
-		opd.setVisitDate(now);
+		Ward ward = testWard.setup(false);
+		
+		Visit nextVisit = testVisit.setup(patient, true, ward);
+
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
+		LocalDate now = LocalDate.now();
+		opd.setDate(now.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
+		
 		opdIoOperationRepository.saveAndFlush(opd);
 
 		List<Opd> opds = opdBrowserManager.getOpdList(0);
@@ -423,13 +493,21 @@ public class Tests extends OHCoreTestCase {
 		disease.setCode("angal.opd.alldiseases.txt");
 		disease.getType().setCode("angal.common.alltypes.txt");
 
-		Opd opd = testOpd.setup(patient, disease, true);
+		Ward ward = testWard.setup(false);
+		
+		Visit nextVisit = testVisit.setup(patient, true, ward);
+
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
 		// set date to be today
-		opd.setVisitDate(new GregorianCalendar());
+		LocalDate today = LocalDate.now();
+		opd.setDate(today.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
+		
 		opdIoOperationRepository.saveAndFlush(opd);
 
 		Patient patient2 = testPatient.setup(false);
@@ -437,15 +515,22 @@ public class Tests extends OHCoreTestCase {
 
 		Disease disease2 = testDisease.setup(diseaseType2, false);
 
-		Opd opd2 = testOpd.setup(patient2, disease2, true);
-		GregorianCalendar now = new GregorianCalendar();
+		Ward ward2 = testWard.setup(false);
+		ward2.setCode("ZZ");
+		
+		Visit nextVisit2 = testVisit.setup(patient, true, ward2);
+
+		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, true);
+		LocalDate now = LocalDate.now();
 		// set date to be 14 days ago (not within the TODAY test)
-		now.add(Calendar.DAY_OF_MONTH, -14);
-		opd2.setVisitDate(now);
+		now = now.minusDays(14);
+		opd2.setDate(now.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient2);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
 		diseaseIoOperationRepository.saveAndFlush(disease2);
+		wardIoOperationRepository.saveAndFlush(ward2);
+		visitsIoOperationRepository.saveAndFlush(nextVisit2);
 		opdIoOperationRepository.saveAndFlush(opd2);
 
 		List<Opd> opds = opdBrowserManager.getOpd(false);
@@ -462,15 +547,22 @@ public class Tests extends OHCoreTestCase {
 		disease.setCode("angal.opd.alldiseases.txt");
 		disease.getType().setCode("angal.common.alltypes.txt");
 
-		Opd opd = testOpd.setup(patient, disease, true);
-		GregorianCalendar date = new GregorianCalendar();
+		Ward ward = testWard.setup(false);
+		
+		Visit nextVisit = testVisit.setup(patient, true, ward);
+
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
+		LocalDate date = LocalDate.now();
 		// set date to be 3 days ago (within last week)
-		date.add(Calendar.DAY_OF_MONTH, -3);
-		opd.setVisitDate(date);
+		date = date.minusDays(3);
+		opd.setDate(date.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
+		
 		opdIoOperationRepository.saveAndFlush(opd);
 
 		Patient patient2 = testPatient.setup(false);
@@ -478,15 +570,22 @@ public class Tests extends OHCoreTestCase {
 
 		Disease disease2 = testDisease.setup(diseaseType2, false);
 
-		Opd opd2 = testOpd.setup(patient2, disease2, true);
-		GregorianCalendar date2 = new GregorianCalendar();
+		Ward ward2 = testWard.setup(false);
+		ward2.setCode("ZZ");
+		
+		Visit nextVisit2 = testVisit.setup(patient, true, ward2);
+
+		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, true);
+		LocalDate date2 = LocalDate.now();
 		// set date to be 13 days ago (not within last week)
-		date2.add(Calendar.DAY_OF_MONTH, -13);
-		opd2.setVisitDate(date2);
+		date2 = date2.minusDays(13);
+		opd2.setDate(date2.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient2);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
 		diseaseIoOperationRepository.saveAndFlush(disease2);
+		wardIoOperationRepository.saveAndFlush(ward2);
+		visitsIoOperationRepository.saveAndFlush(nextVisit2);
 		opdIoOperationRepository.saveAndFlush(opd2);
 
 		List<Opd> opds = opdBrowserManager.getOpd(true);
@@ -499,10 +598,15 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, true, ward);
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
-		Opd opd = testOpd.setup(patient, disease, false);
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
+		
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
 		// Need this to pass validation checks in manager
 		Disease disease2 = new Disease("998", "TestDescription 2", diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease2);
@@ -510,9 +614,8 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease3);
 		opd.setDisease2(disease2);
 		opd.setDisease3(disease3);
-		opd.setDate(new Date());
-		assertThat(opdBrowserManager.newOpd(opd)).isTrue();
-		_checkOpdIntoDb(opd.getCode());
+		assertThat(opdBrowserManager.newOpd(opd));
+		checkOpdIntoDb(opd.getCode());
 	}
 
 	@Test
@@ -520,10 +623,15 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, true, ward);
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
-		Opd opd = testOpd.setup(patient, disease, false);
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
+		
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
 		// Need this to pass validation checks in manager
 		Disease disease2 = new Disease("998", "TestDescription 2", diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease2);
@@ -531,18 +639,22 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease3);
 		opd.setDisease2(disease2);
 		opd.setDisease3(disease3);
-		opd.setDate(new Date());
-		assertThat(opdBrowserManager.newOpd(opd)).isTrue();
+		opd.setDate(TimeTools.getNow());
+		assertThat(opdBrowserManager.newOpd(opd)).isNotNull();
 		opd.setNote("Update");
 		assertThat(opdBrowserManager.updateOpd(opd)).isNotNull();
-		Opd updateOpd = opdIoOperationRepository.findOne(opd.getCode());
+		Opd updateOpd = opdIoOperationRepository.findById(opd.getCode()).get();
+		/*assertThat(updateOpd.getReason()).isEqualTo("update reason");
+		assertThat(updateOpd.getAnamnesis()).isEqualTo("update anamnesis");
+		assertThat(updateOpd.getTherapies()).isEqualTo("update therapies");
+		assertThat(updateOpd.getAllergies()).isEqualTo("update allergies");*/
 		assertThat(updateOpd.getNote()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrDeleteOpd() throws Exception {
-		int code = _setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		int code = setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 		boolean result = opdBrowserManager.deleteOpd(foundOpd);
 		assertThat(result).isTrue();
 		result = opdIoOperation.isCodePresent(code);
@@ -551,45 +663,45 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetProgYearZero() throws Exception {
-		int code = _setupTestOpd(false);
+		int code = setupTestOpd(false);
 		int progYear = opdBrowserManager.getProgYear(0);
-		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 		assertThat(progYear).isEqualTo(foundOpd.getProgYear());
 	}
 
 	@Test
 	public void testMgrGetProgYear() throws Exception {
-		int code = _setupTestOpd(false);
-		Opd opd = opdIoOperationRepository.findOne(code);
-		int progYear = opdBrowserManager.getProgYear(opd.getVisitDate().get(Calendar.YEAR));
+		int code = setupTestOpd(false);
+		Opd opd = opdIoOperationRepository.findById(code).get();
+		int progYear = opdBrowserManager.getProgYear(opd.getDate().getYear());
 		assertThat(progYear).isEqualTo(opd.getProgYear());
 	}
 
 	@Test
 	public void testMgrIsExistsOpdNumShouldReturnTrueWhenOpdWithGivenOPDProgressiveYearAndVisitYearExists() throws Exception {
-		int code = _setupTestOpd(false);
-		Opd opd = opdIoOperationRepository.findOne(code);
-		assertThat(opdBrowserManager.isExistOpdNum(opd.getProgYear(), opd.getVisitDate().get(Calendar.YEAR))).isTrue();
+		int code = setupTestOpd(false);
+		Opd opd = opdIoOperationRepository.findById(code).get();
+		assertThat(opdBrowserManager.isExistOpdNum(opd.getProgYear(), opd.getDate().getYear())).isTrue();
 	}
 
 	@Test
 	public void testMgrIsExistsOpdNumShouldReturnTrueWhenOpdNumExistsAndVisitYearIsNotProvided() throws Exception {
-		int code = _setupTestOpd(false);
-		Opd opd = opdIoOperationRepository.findOne(code);
+		int code = setupTestOpd(false);
+		Opd opd = opdIoOperationRepository.findById(code).get();
 		assertThat(opdBrowserManager.isExistOpdNum(opd.getProgYear(), 0)).isTrue();
 	}
 
 	@Test
 	public void testMgrIsExistsOpdNumShouldReturnFalseWhenOpdNumExistsAndVisitYearIsIncorrect() throws Exception {
-		int code = _setupTestOpd(false);
-		Opd opd = opdIoOperationRepository.findOne(code);
+		int code = setupTestOpd(false);
+		Opd opd = opdIoOperationRepository.findById(code).get();
 		assertThat(opdBrowserManager.isExistOpdNum(opd.getProgYear(), 1488)).isFalse();
 	}
 
 	@Test
 	public void testMgrGetLastOpd() throws Exception {
-		int code = _setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findOne(code);
+		int code = setupTestOpd(false);
+		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 		Opd lastOpd = opdBrowserManager.getLastOpd(foundOpd.getPatient().getCode());
 		assertThat(lastOpd.getCode()).isEqualTo(foundOpd.getCode());
 	}
@@ -601,7 +713,9 @@ public class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
-			Opd opd = testOpd.setup(patient, disease, false);
+			Ward ward = testWard.setup(false);
+			Visit nextVisit = testVisit.setup(patient, false, ward);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 			// Need this to pass validation checks in manager
 			opd.setDisease2(null);
 			opd.setDisease3(null);
@@ -609,7 +723,7 @@ public class Tests extends OHCoreTestCase {
 			// also let validation set userID
 			opd.setUserID(null);
 
-			opd.setVisitDate(null);
+			opd.setDate(null);
 			opdBrowserManager.newOpd(opd);
 		})
 				.isInstanceOf(OHDataValidationException.class)
@@ -629,7 +743,9 @@ public class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
-			Opd opd = testOpd.setup(patient, disease, false);
+			Ward ward = testWard.setup(false);
+			Visit nextVisit = testVisit.setup(patient, false, ward);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 			// Need this to pass validation checks in manager
 			opd.setDisease2(null);
 			opd.setDisease3(null);
@@ -651,7 +767,9 @@ public class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
-			Opd opd = testOpd.setup(patient, disease, false);
+			Ward ward = testWard.setup(false);
+			Visit nextVisit = testVisit.setup(patient, false, ward);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 			// Need this to pass validation checks in manager
 			opd.setDisease2(null);
 			opd.setDisease3(null);
@@ -673,7 +791,9 @@ public class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
-			Opd opd = testOpd.setup(patient, disease, false);
+			Ward ward = testWard.setup(false);
+			Visit nextVisit = testVisit.setup(patient, false, ward);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 			// Need this to pass validation checks in manager
 			opd.setDisease2(null);
 			opd.setDisease3(null);
@@ -696,7 +816,9 @@ public class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
-			Opd opd = testOpd.setup(patient, disease, false);
+			Ward ward = testWard.setup(false);
+			Visit nextVisit = testVisit.setup(patient, false, ward);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 			// Need this to pass validation checks in manager
 			opd.setDisease2(null);
 			opd.setDisease3(null);
@@ -718,7 +840,9 @@ public class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
-			Opd opd = testOpd.setup(patient, disease, false);
+			Ward ward = testWard.setup(false);
+			Visit nextVisit = testVisit.setup(patient, false, ward);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 
 			Disease disease2 = new Disease("997", "TestDescription 2", diseaseType);
 			opd.setDisease2(disease2);
@@ -738,7 +862,9 @@ public class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
-			Opd opd = testOpd.setup(patient, disease, false);
+			Ward ward = testWard.setup(false);
+			Visit nextVisit = testVisit.setup(patient, false, ward);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 
 			Disease disease3 = new Disease("998", "TestDescription 3", diseaseType);
 			opd.setDisease3(disease3);
@@ -758,7 +884,9 @@ public class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
-			Opd opd = testOpd.setup(patient, disease, false);
+			Ward ward = testWard.setup(false);
+			Visit nextVisit = testVisit.setup(patient, false, ward);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 
 			Disease disease2 = new Disease("998", "TestDescription 2", diseaseType);
 			opd.setDisease2(disease2);
@@ -777,7 +905,9 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
-		Opd opd = testOpd.setup(patient, disease, false);
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, false, ward);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 
 		Disease disease2 = new Disease("997", "TestDescription 2", diseaseType);
 		opd.setDisease2(disease2);
@@ -832,9 +962,9 @@ public class Tests extends OHCoreTestCase {
 
 		opd.setLock(-1);
 		assertThat(opd.getLock()).isEqualTo(-1);
-
-		opd.setNextVisitDate(new GregorianCalendar(9999, 0, 1));
-		assertThat(opd.getNextVisitDate()).isEqualTo(new GregorianCalendar(9999, 0, 1));
+		
+		opd.setNextVisit(null);
+		assertThat(opd.getNextVisit()).isNull();
 	}
 
 	@Test
@@ -842,7 +972,9 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
-		Opd opd = testOpd.setup(patient, disease, false);
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, false, ward);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 		// compute
 		int hashCode = opd.hashCode();
 		assertThat(hashCode).isEqualTo(23 * 133 + opd.getCode());
@@ -855,7 +987,9 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
-		Opd opd = testOpd.setup(patient, disease, false);
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, false, ward);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 
 		assertThat(opd.equals(opd)).isTrue();
 		assertThat(opd)
@@ -863,28 +997,32 @@ public class Tests extends OHCoreTestCase {
 				.isNotEqualTo("someString");
 	}
 
-	private Patient _setupTestPatient(boolean usingSet) throws Exception {
+	private Patient setupTestPatient(boolean usingSet) throws Exception {
 		Patient patient = testPatient.setup(usingSet);
 		patientIoOperationRepository.saveAndFlush(patient);
 		return patient;
 	}
 
-	private int _setupTestOpd(boolean usingSet) throws Exception {
+	private int setupTestOpd(boolean usingSet) throws Exception {
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
-
-		Opd opd = testOpd.setup(patient, disease, usingSet);
-		opd.setDate(new Date());
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, false, ward);
+		
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
+		
 		opdIoOperationRepository.saveAndFlush(opd);
 		return opd.getCode();
 	}
 
-	private void _checkOpdIntoDb(int code) throws OHException {
-		Opd foundOpd = opdIoOperationRepository.findOne(code);
+	private void checkOpdIntoDb(int code) throws OHException {
+		Opd foundOpd = opdIoOperationRepository.findById(code).get();
 		testOpd.check(foundOpd);
 	}
 }

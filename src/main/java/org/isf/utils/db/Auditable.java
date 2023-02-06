@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,19 +21,18 @@
  */
 package org.isf.utils.db;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
 
+import org.isf.utils.time.TimeTools;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import static javax.persistence.TemporalType.TIMESTAMP;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * @author uni2grow
@@ -47,18 +46,16 @@ public abstract class Auditable<U> {
     protected U createdBy;
      
     @CreatedDate
-    @Temporal(TIMESTAMP)
     @Column(name="CREATED_DATE")
-    protected Date createdDate;
+    protected LocalDateTime createdDate;
     
     @LastModifiedBy
     @Column(name="LAST_MODIFIED_BY")
     protected U lastModifiedBy;
     
     @LastModifiedDate
-    @Temporal(TIMESTAMP)
     @Column(name="LAST_MODIFIED_DATE")
-    protected Date lastModifiedDate;
+    protected LocalDateTime lastModifiedDate;
    
     @Column(name="ACTIVE")
     protected Integer active = 1;
@@ -71,19 +68,19 @@ public abstract class Auditable<U> {
         this.createdBy = createdBy;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public LocalDateTime getCreatedDate() {
+        return TimeTools.truncateToSeconds(createdDate);
     }
 
     public int getActive() {
-		return active;
-	}
+        return active;
+    }
 
-	public void setActive(int active) {
-		this.active = active;
-	}
+    public void setActive(int active) {
+        this.active = active;
+    }
 
-	public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -95,11 +92,11 @@ public abstract class Auditable<U> {
         this.lastModifiedBy = lastModifiedBy;
     }
 
-    public Date getLastModifiedDate() {
+    public LocalDateTime getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(Date lastModifiedDate) {
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
     

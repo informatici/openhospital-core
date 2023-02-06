@@ -21,7 +21,6 @@
  */
 package org.isf.medstockmovtype.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.medstockmovtype.model.MovementType;
@@ -48,7 +47,7 @@ public class MedicalStockMovementTypeIoOperation {
 	 * @throws OHServiceException if an error occurs retrieving the medical stock movement types.
 	 */
 	public List<MovementType> getMedicaldsrstockmovType() throws OHServiceException {
-		return new ArrayList<>(repository.findAllByOrderByDescriptionAsc());
+		return repository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
@@ -57,16 +56,8 @@ public class MedicalStockMovementTypeIoOperation {
 	 * @return <code>true</code> if the specified stock movement type has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateMedicaldsrstockmovType(
-			MovementType medicaldsrstockmovType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		MovementType savedMedicaldsrstockmovType = repository.save(medicaldsrstockmovType);
-		result = (savedMedicaldsrstockmovType != null);
-		
-		return result;
+	public MovementType updateMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
+		return repository.save(medicaldsrstockmovType);
 	}
 
 	/**
@@ -75,16 +66,8 @@ public class MedicalStockMovementTypeIoOperation {
 	 * @return <code>true</code> if the medical movement type has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
-	public boolean newMedicaldsrstockmovType(
-			MovementType medicaldsrstockmovType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		MovementType savedMedicaldsrstockmovType = repository.save(medicaldsrstockmovType);
-		result = (savedMedicaldsrstockmovType != null);
-		
-		return result;
+	public MovementType newMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
+		return repository.save(medicaldsrstockmovType);
 	}
 
 	/**
@@ -93,15 +76,9 @@ public class MedicalStockMovementTypeIoOperation {
 	 * @return <code>true</code> if the medical stock movement type has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the delete operation.
 	 */
-	public boolean deleteMedicaldsrstockmovType(
-			MovementType medicaldsrstockmovType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
 		repository.delete(medicaldsrstockmovType);
-		
-		return result;	
+		return true;
 	}
 
 	/**
@@ -110,15 +87,8 @@ public class MedicalStockMovementTypeIoOperation {
 	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.existsById(code);
 	}
 
 	/**
@@ -128,10 +98,11 @@ public class MedicalStockMovementTypeIoOperation {
 	 * @return MovementType object whose code is provided as parameter.
 	 */
 	public MovementType findOneByCode(String code) {
-            List<MovementType> results = repository.findAllByCode(code);
-            if(!results.isEmpty()) {
-                return results.get(0);
-            }
-            return null;
+		List<MovementType> results = repository.findAllByCode(code);
+		if (!results.isEmpty()) {
+			return results.get(0);
+		}
+		return null;
 	}
+
 }

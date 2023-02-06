@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,7 +21,6 @@
  */
 package org.isf.operation.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.operation.model.Operation;
@@ -58,9 +57,9 @@ public class OperationIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public List<Operation> getOperationByTypeDescription(String typeDescription) throws OHServiceException {
-		return new ArrayList<>(typeDescription == null ?
+		return typeDescription == null ?
 				repository.findByOrderByDescriptionAsc() :
-				repository.findAllByType_DescriptionContainsOrderByDescriptionAsc(typeDescription));
+				repository.findAllByType_DescriptionContainsOrderByDescriptionAsc("%" + typeDescription + "%");
 	}
 
 	public Operation findByCode(String code) throws OHServiceException{
@@ -82,8 +81,8 @@ public class OperationIoOperations {
 	 * @return <code>true</code> if the operation has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean newOperation(Operation operation) throws OHServiceException {
-		return repository.save(operation) != null;
+	public Operation newOperation(Operation operation) throws OHServiceException {
+		return repository.save(operation);
 	}
 	
 	/** 
@@ -93,8 +92,8 @@ public class OperationIoOperations {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean updateOperation(Operation operation) throws OHServiceException {
-		return repository.save(operation) != null;
+	public Operation updateOperation(Operation operation) throws OHServiceException {
+		return repository.save(operation);
 	}
 	
 	/** 
@@ -115,7 +114,7 @@ public class OperationIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 	
 	/**

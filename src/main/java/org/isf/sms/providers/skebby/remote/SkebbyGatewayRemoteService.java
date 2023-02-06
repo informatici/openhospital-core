@@ -23,7 +23,7 @@ package org.isf.sms.providers.skebby.remote;
 
 import org.isf.sms.providers.skebby.model.SckebbySmsRequest;
 import org.isf.sms.providers.skebby.model.SckebbySmsResponse;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,7 +23,7 @@ package org.isf.operation.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
@@ -70,6 +70,9 @@ import org.isf.patient.test.TestPatient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperationRepository;
 import org.isf.pregtreattype.test.TestPregnantTreatmentType;
+import org.isf.visits.model.Visit;
+import org.isf.visits.service.VisitsIoOperationRepository;
+import org.isf.visits.test.TestVisit;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
 import org.isf.ward.test.TestWard;
@@ -94,6 +97,7 @@ public class Tests extends OHCoreTestCase {
 	private static TestDeliveryType testDeliveryType;
 	private static TestDeliveryResultType testDeliveryResultType;
 	private static TestOpd testOpd;
+	private static TestVisit testVisit;
 
 	@Autowired
 	OperationIoOperations operationIoOperations;
@@ -117,6 +121,8 @@ public class Tests extends OHCoreTestCase {
 	AdmissionBrowserManager admissionBrowserManager;
 	@Autowired
 	WardIoOperationRepository wardIoOperationRepository;
+	@Autowired
+	VisitsIoOperationRepository visitsIoOperationRepository;
 	@Autowired
 	PatientIoOperationRepository patientIoOperationRepository;
 	@Autowired
@@ -152,6 +158,7 @@ public class Tests extends OHCoreTestCase {
 		testDeliveryType = new TestDeliveryType();
 		testDeliveryResultType = new TestDeliveryResultType();
 		testOpd = new TestOpd();
+		testVisit = new TestVisit();
 	}
 
 	@Before
@@ -161,32 +168,32 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testOperationGets() throws Exception {
-		String code = _setupTestOperation(false);
-		_checkOperationIntoDb(code);
+		String code = setupTestOperation(false);
+		checkOperationIntoDb(code);
 	}
 
 	@Test
 	public void testOperationSets() throws Exception {
-		String code = _setupTestOperation(true);
-		_checkOperationIntoDb(code);
+		String code = setupTestOperation(true);
+		checkOperationIntoDb(code);
 	}
 
 	@Test
 	public void testOperationRowGets() throws Exception {
-		int id = _setupTestOperationRow(false);
-		_checkOperationRowIntoDb(id);
+		int id = setupTestOperationRow(false);
+		checkOperationRowIntoDb(id);
 	}
 
 	@Test
 	public void testOperationRowSets() throws Exception {
-		int id = _setupTestOperationRow(true);
-		_checkOperationRowIntoDb(id);
+		int id = setupTestOperationRow(true);
+		checkOperationRowIntoDb(id);
 	}
 
 	@Test
 	public void testIoGetOperationByTypeDescription() throws Exception {
 		// given:
-		String code = _setupTestOperation(false);
+		String code = setupTestOperation(false);
 		Operation foundOperation = operationIoOperations.findByCode(code);
 
 		// when:
@@ -200,7 +207,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetOperationByTypeDescriptionNull() throws Exception {
 		// given:
-		String code = _setupTestOperation(true);
+		String code = setupTestOperation(true);
 
 		// when:
 		List<Operation> operations = operationIoOperations.getOperationByTypeDescription(null);
@@ -274,17 +281,17 @@ public class Tests extends OHCoreTestCase {
 		OperationType operationType = testOperationType.setup(false);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		Operation operation = testOperation.setup(operationType, true);
-		assertThat(operationIoOperations.newOperation(operation)).isTrue();
-		_checkOperationIntoDb(operation.getCode());
+		assertThat(operationIoOperations.newOperation(operation));
+		checkOperationIntoDb(operation.getCode());
 	}
 
 	@Test
 	public void testIoUpdateOperation() throws Exception {
-		String code = _setupTestOperation(false);
+		String code = setupTestOperation(false);
 		Operation foundOperation = operationIoOperations.findByCode(code);
 		int lock = foundOperation.getLock();
 		foundOperation.setDescription("Update");
-		assertThat(operationIoOperations.updateOperation(foundOperation)).isTrue();
+		assertThat(operationIoOperations.updateOperation(foundOperation));
 		Operation updateOperation = operationIoOperations.findByCode(code);
 		assertThat(updateOperation.getDescription()).isEqualTo("Update");
 		assertThat(updateOperation.getLock().intValue()).isEqualTo(lock + 1);
@@ -292,34 +299,34 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoDeleteOperation() throws Exception {
-		String code = _setupTestOperation(false);
+		String code = setupTestOperation(false);
 		Operation foundOperation = operationIoOperations.findByCode(code);
 		assertThat(operationIoOperations.deleteOperation(foundOperation)).isTrue();
 	}
 
 	@Test
 	public void testIoIsCodePresent() throws Exception {
-		String code = _setupTestOperation(false);
+		String code = setupTestOperation(false);
 		assertThat(operationIoOperations.isCodePresent(code)).isTrue();
 	}
 
 	@Test
 	public void testIoIsDescriptionPresent() throws Exception {
-		String code = _setupTestOperation(false);
+		String code = setupTestOperation(false);
 		Operation foundOperation = operationIoOperations.findByCode(code);
 		assertThat(operationIoOperations.isDescriptionPresent(foundOperation.getDescription(), foundOperation.getType().getCode())).isTrue();
 	}
 
 	@Test
 	public void testIoIsDescriptionPresentNotFound() throws Exception {
-		String code = _setupTestOperation(false);
+		String code = setupTestOperation(false);
 		Operation foundOperation = operationIoOperations.findByCode(code);
 		assertThat(operationIoOperations.isDescriptionPresent("someOtherDescription", foundOperation.getType().getCode())).isFalse();
 	}
 
 	@Test
 	public void testMgrGetOperationByTypeDescription() throws Exception {
-		String code = _setupTestOperation(false);
+		String code = setupTestOperation(false);
 		Operation foundOperation = operationBrowserManager.getOperationByCode(code);
 		List<Operation> operations = operationBrowserManager.getOperationByTypeDescription(foundOperation.getType().getDescription());
 		assertThat(operations).isNotEmpty();
@@ -328,14 +335,14 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetOperationByTypeDescriptionNull() throws Exception {
-		_setupTestOperation(true);
+		setupTestOperation(true);
 		List<Operation> operations = operationBrowserManager.getOperationByTypeDescription(null);
 		assertThat(operations).isNotEmpty();
 	}
 
 	@Test
 	public void testMgrGetOperation() throws Exception {
-		_setupTestOperation(true);
+		setupTestOperation(true);
 		List<Operation> operations = operationBrowserManager.getOperation();
 		assertThat(operations).isNotEmpty();
 	}
@@ -405,17 +412,17 @@ public class Tests extends OHCoreTestCase {
 		OperationType operationType = testOperationType.setup(false);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		Operation operation = testOperation.setup(operationType, true);
-		assertThat(operationBrowserManager.newOperation(operation)).isTrue();
-		_checkOperationIntoDb(operation.getCode());
+		assertThat(operationBrowserManager.newOperation(operation));
+		checkOperationIntoDb(operation.getCode());
 	}
 
 	@Test
 	public void testMgrUpdateOperation() throws Exception {
-		String code = _setupTestOperation(false);
+		String code = setupTestOperation(false);
 		Operation foundOperation = operationBrowserManager.getOperationByCode(code);
 		int lock = foundOperation.getLock();
 		foundOperation.setDescription("Update");
-		assertThat(operationBrowserManager.updateOperation(foundOperation)).isTrue();
+		assertThat(operationBrowserManager.updateOperation(foundOperation));
 		Operation updateOperation = operationBrowserManager.getOperationByCode(code);
 		assertThat(updateOperation.getDescription()).isEqualTo("Update");
 		assertThat(updateOperation.getLock().intValue()).isEqualTo(lock + 1);
@@ -423,27 +430,27 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrDeleteOperation() throws Exception {
-		String code = _setupTestOperation(false);
+		String code = setupTestOperation(false);
 		Operation foundOperation = operationBrowserManager.getOperationByCode(code);
 		assertThat(operationBrowserManager.deleteOperation(foundOperation)).isTrue();
 	}
 
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
-		String code = _setupTestOperation(false);
+		String code = setupTestOperation(false);
 		assertThat(operationBrowserManager.isCodePresent(code)).isTrue();
 	}
 
 	@Test
 	public void testMgrDescriptionControl() throws Exception {
-		String code = _setupTestOperation(false);
+		String code = setupTestOperation(false);
 		Operation foundOperation = operationBrowserManager.getOperationByCode(code);
 		assertThat(operationBrowserManager.descriptionControl(foundOperation.getDescription(), foundOperation.getType().getCode())).isTrue();
 	}
 
 	@Test
 	public void testMgrDescriptionControlNotFound() throws Exception {
-		String code = _setupTestOperation(false);
+		String code = setupTestOperation(false);
 		Operation foundOperation = operationBrowserManager.getOperationByCode(code);
 		assertThat(operationBrowserManager.descriptionControl("someOtherDescription", foundOperation.getType().getCode())).isFalse();
 	}
@@ -455,7 +462,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testRowIoGetRowOperation() throws Exception {
-		_setupTestOperationRow(false);
+		setupTestOperationRow(false);
 		List<OperationRow> operationRows = operationRowIoOperations.getOperationRow();
 		assertThat(operationRows).hasSize(1);
 	}
@@ -564,8 +571,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testRowIoGetOperationRowByOpdNotPersisted() throws Exception {
-		_setupTestOperationRow(true);
-		Opd opd = testOpd.setup(new Patient(), new Disease(), false);
+		setupTestOperationRow(true);
+		Opd opd = testOpd.setup(new Patient(), new Disease(), new Ward(), new Visit(), false);
 		assertThat(operationRowIoOperations.getOperationRowByOpd(opd)).isEmpty();
 	}
 
@@ -577,12 +584,16 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
-		Opd opd = testOpd.setup(patient, disease, false);
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, true, ward);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 		operationRow.setOpd(opd);
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		opdIoOperationRepository.saveAndFlush(opd);
@@ -604,7 +615,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testRowIoDeleteOperationRow() throws Exception {
-		int id = _setupTestOperationRow(false);
+		int id = setupTestOperationRow(false);
 		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
 		assertThat(operationRowIoOperations.deleteOperationRow(operationRow)).isTrue();
 		assertThat(operationRowIoOperationRepository.findById(id)).isNull();
@@ -623,7 +634,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testRowIoUpdateOperationRow() throws Exception {
-		int id = _setupTestOperationRow(false);
+		int id = setupTestOperationRow(false);
 		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
 		assertThat(operationRow.getRemarks()).isNotEqualTo("someNewRemarks");
 		operationRow.setRemarks("someNewRemarks");
@@ -749,8 +760,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrRowGetOperationRowByOpdNotPersisted() throws Exception {
-		_setupTestOperationRow(true);
-		Opd opd = testOpd.setup(new Patient(), new Disease(), false);
+		setupTestOperationRow(true);
+		Opd opd = testOpd.setup(new Patient(), new Disease(), new Ward(), new Visit(), false);
 		assertThat(operationRowBrowserManager.getOperationRowByOpd(opd)).isEmpty();
 	}
 
@@ -762,12 +773,16 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
-		Opd opd = testOpd.setup(patient, disease, false);
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, true, ward);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 		operationRow.setOpd(opd);
 
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
+		wardIoOperationRepository.saveAndFlush(ward);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		opdIoOperationRepository.saveAndFlush(opd);
@@ -789,7 +804,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrRowDeleteOperationRow() throws Exception {
-		int id = _setupTestOperationRow(false);
+		int id = setupTestOperationRow(false);
 		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
 		assertThat(operationRowBrowserManager.deleteOperationRow(operationRow)).isTrue();
 		assertThat(operationRowIoOperationRepository.findById(id)).isNull();
@@ -806,7 +821,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrRowUpdateOperationRow() throws Exception {
-		int id = _setupTestOperationRow(false);
+		int id = setupTestOperationRow(false);
 		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
 		assertThat(operationRow.getRemarks()).isNotEqualTo("someNewRemarks");
 		operationRow.setRemarks("someNewRemarks");
@@ -921,10 +936,10 @@ public class Tests extends OHCoreTestCase {
 				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
 				deliveryType, deliveryResult, false);
 
-		OperationRow operationRow1 = new OperationRow(operation, "prescriber", "opResult", new GregorianCalendar(2021, 1, 1), "remarks", admission, new Opd(),
+		OperationRow operationRow1 = new OperationRow(operation, "prescriber", "opResult", LocalDateTime.of(2021, 1, 1, 0, 0, 0), "remarks", admission, new Opd(),
 				null, 10.0F);
 
-		OperationRow operationRow2 = new OperationRow(1, operation, "prescriber", "opResult", new GregorianCalendar(2021, 1, 1), "remarks", admission,
+		OperationRow operationRow2 = new OperationRow(1, operation, "prescriber", "opResult", LocalDateTime.of(2021, 1, 1, 0, 0, 0), "remarks", admission,
 				new Opd(), null, 10.0F);
 
 		operationRow1.setId(1);
@@ -972,20 +987,21 @@ public class Tests extends OHCoreTestCase {
 		assertThat(operationRow).hasToString("aDescription UserID");
 	}
 
-	private String _setupTestOperation(boolean usingSet) throws Exception {
+	private String setupTestOperation(boolean usingSet) throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, usingSet);
+		operation.setOpeFor("1");
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		return operation.getCode();
 	}
 
-	private void _checkOperationIntoDb(String code) throws Exception {
+	private void checkOperationIntoDb(String code) throws Exception {
 		Operation foundOperation = operationIoOperations.findByCode(code);
 		testOperation.check(foundOperation);
 	}
 
-	private int _setupTestOperationRow(boolean usingSet) throws Exception {
+	private int setupTestOperationRow(boolean usingSet) throws Exception {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, usingSet);
 		OperationRow operationRow = testOperationRow.setup(operation, true);
@@ -995,7 +1011,7 @@ public class Tests extends OHCoreTestCase {
 		return operationRow.getId();
 	}
 
-	private void _checkOperationRowIntoDb(int id) throws Exception {
+	private void checkOperationRowIntoDb(int id) throws Exception {
 		OperationRow foundOperationRow = operationRowIoOperationRepository.findById(id);
 		testOperationRow.check(foundOperationRow);
 	}

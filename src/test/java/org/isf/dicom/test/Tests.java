@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -22,21 +22,22 @@
 package org.isf.dicom.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.within;
 
 import java.io.File;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.Iterator;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 import javax.swing.JFrame;
 
 import org.aspectj.util.FileUtil;
-import org.dcm4che2.data.DicomObject;
-import org.dcm4che2.data.Tag;
-import org.dcm4che2.imageio.plugins.dcm.DicomStreamMetaData;
+import org.dcm4che3.data.Attributes;
+import org.dcm4che3.data.Tag;
+import org.dcm4che3.io.DicomInputStream;
+import org.dcm4che3.io.DicomStreamException;
 import org.isf.OHCoreTestCase;
 import org.isf.dicom.manager.AbstractDicomLoader;
 import org.isf.dicom.manager.AbstractThumbnailViewGui;
@@ -51,6 +52,7 @@ import org.isf.dicomtype.model.DicomType;
 import org.isf.dicomtype.service.DicomTypeIoOperationRepository;
 import org.isf.dicomtype.test.TestDicomType;
 import org.isf.menu.manager.Context;
+import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHException;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -90,28 +92,28 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testFileDicomGets() throws Exception {
-		long code = _setupTestFileDicom(false);
-		_checkFileDicomIntoDb(code);
+		long code = setupTestFileDicom(false);
+		checkFileDicomIntoDb(code);
 	}
 
 	@Test
 	public void testFileDicomSets() throws Exception {
-		long code = _setupTestFileDicom(true);
-		_checkFileDicomIntoDb(code);
+		long code = setupTestFileDicom(true);
+		checkFileDicomIntoDb(code);
 	}
 
 	@Test
 	public void testIoGetSerieDetail() throws Exception {
-		long code = _setupTestFileDicom(false);
-		FileDicom foundFileDicom = dicomIoOperationRepository.findOne(code);
+		long code = setupTestFileDicom(false);
+		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
 		Long[] dicoms = dicomIoOperation.getSerieDetail(foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
 		assertThat(dicoms).hasSize(1);
 	}
 
 	@Test
 	public void testIoDeleteSerie() throws Exception {
-		long code = _setupTestFileDicom(false);
-		FileDicom foundFileDicom = dicomIoOperationRepository.findOne(code);
+		long code = setupTestFileDicom(false);
+		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
 		boolean result = dicomIoOperation.deleteSerie(foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
 
 		assertThat(result).isTrue();
@@ -121,8 +123,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoLoadDetails() throws Exception {
-		long code = _setupTestFileDicom(false);
-		FileDicom foundFileDicom = dicomIoOperationRepository.findOne(code);
+		long code = setupTestFileDicom(false);
+		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
 		FileDicom dicom = dicomIoOperation.loadDetails(foundFileDicom.getIdFile(), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
 		FileDicom dicom2 = dicomIoOperation.loadDetails(new Long(foundFileDicom.getIdFile()), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
 		assertThat(dicom2.getDicomInstanceUID()).isEqualTo(dicom.getDicomInstanceUID());
@@ -136,27 +138,27 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoLoadPatientFiles() throws Exception {
-		long code = _setupTestFileDicom(false);
-		FileDicom foundFileDicom = dicomIoOperationRepository.findOne(code);
+		long code = setupTestFileDicom(false);
+		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
 		FileDicom[] dicoms = dicomIoOperation.loadPatientFiles(foundFileDicom.getPatId());
 		assertThat(dicoms[0].getDicomSeriesDescription()).isEqualTo(foundFileDicom.getDicomSeriesDescription());
 	}
 
 	@Test
 	public void testIoExist() throws Exception {
-		long code = _setupTestFileDicom(false);
-		FileDicom foundFileDicom = dicomIoOperationRepository.findOne(code);
+		long code = setupTestFileDicom(false);
+		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
 		boolean result = dicomIoOperation.exist(foundFileDicom);
 		assertThat(result).isTrue();
 	}
 
 	@Test
 	public void testIoSaveFileUpate() throws Exception {
-		long code = _setupTestFileDicom(false);
-		FileDicom foundFileDicom = dicomIoOperationRepository.findOne(code);
+		long code = setupTestFileDicom(false);
+		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
 		foundFileDicom.setDicomSeriesDescription("Update");
 		dicomIoOperation.saveFile(foundFileDicom);
-		FileDicom updateFileDicom = dicomIoOperationRepository.findOne(code);
+		FileDicom updateFileDicom = dicomIoOperationRepository.findById(code).get();
 		assertThat(updateFileDicom.getDicomSeriesDescription()).isEqualTo("Update");
 	}
 
@@ -186,7 +188,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testSourceFilesLoadDicom() throws Exception {
-		File file = _getFile("case3c_002.dcm");
+		File file = getFile("case3c_002.dcm");
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 		SourceFiles.loadDicom(dicomFile, file, PATIENT_ID);
@@ -194,49 +196,80 @@ public class Tests extends OHCoreTestCase {
 		assertThat(dicomFile.getDicomInstitutionName()).isEqualTo("Anonymized Hospital");
 		assertThat(dicomFile.getDicomStudyDescription()).isEqualTo("MRT Oberbauch");
 
-		_cleanupDicomFiles(dicomFile.getPatId());
+		cleanupDicomFiles(dicomFile.getPatId());
 	}
 
 	@Test
-	public void testSourceFilesLoadDicomWhenImageFormatIsJpeg() throws Exception {
-		File file = _getFile("image.0007.jpg");
+	public void testSourceFilesLoadDicomWhenImageFormatIsJpg() throws Exception {
+		File file = getFile("image.0007.jpg");
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 		SourceFiles.loadDicom(dicomFile, file, PATIENT_ID);
 		String fileName = dicomFile.getFileName();
 		assertThat(fileName).isEqualTo("image.0007.jpg");
 
-		_cleanupDicomFiles(dicomFile.getPatId());
+		cleanupDicomFiles(dicomFile.getPatId());
+	}
+
+	@Test
+	public void testSourceFilesLoadDicomWhenImageFormatIsBadJpg() throws Exception {
+		File file = getFile("BadJPGFile.jpg");
+		DicomType dicomType = testDicomType.setup(true);
+		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
+		assertThatThrownBy(() -> SourceFiles.loadDicom(dicomFile, file, PATIENT_ID))
+				.isInstanceOf(OHDicomException.class);
 	}
 
 	@Test
 	public void testSourceFilesPreloadDicom() throws Exception {
-		File file = _getFile("case3c_002.dcm");
-		Date expectedStudyDate = _getDicomObject(file).getDate(Tag.StudyDate, Tag.StudyTime);
-		Date expectedSeriesDate = _getDicomObject(file).getDate(Tag.SeriesDate, Tag.SeriesTime);
+		File file = getFile("case3c_002.dcm");
+		DicomInputStream dicomInputStream = new DicomInputStream(file);
+		Attributes attributes = dicomInputStream.readDataset();
+		LocalDateTime expectedSeriesDate = LocalDateTime.ofInstant(attributes.getDate(Tag.SeriesDateAndTime).toInstant(), ZoneId.systemDefault());
+		LocalDateTime expectedStudyDate = LocalDateTime.ofInstant(attributes.getDate(Tag.StudyDateAndTime).toInstant(), ZoneId.systemDefault());
 		FileDicom dicomFile = SourceFiles.preLoadDicom(file, 1);
 		assertThat(dicomFile.getFileName()).isEqualTo("case3c_002.dcm");
 		assertThat(dicomFile.getFrameCount()).isEqualTo(1);
-		assertThat(_areDatesEquals(expectedStudyDate, dicomFile.getDicomStudyDate())).isTrue();
-		assertThat(_areDatesEquals(expectedSeriesDate, dicomFile.getDicomSeriesDate())).isTrue();
+		assertThat(expectedStudyDate).isCloseTo(dicomFile.getDicomStudyDate(), within(1, ChronoUnit.SECONDS));
+		assertThat(expectedSeriesDate).isCloseTo(dicomFile.getDicomSeriesDate(), within(1, ChronoUnit.SECONDS));
 	}
 
-	private DicomObject _getDicomObject(File sourceFile) throws Exception {
-		Iterator<ImageReader> iter = ImageIO.getImageReadersByFormatName("DICOM");
-		ImageReader reader = iter.next();
-		ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
-		reader.setInput(imageInputStream, false);
-		DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
-		return dicomStreamMetaData.getDicomObject();
+	@Test
+	public void testSourceFilesPreloadDicomTest9() throws Exception {
+		// has studydate but not seriesdate
+		File file = getFile("test9signed.dcm");
+		DicomInputStream dicomInputStream = new DicomInputStream(file);
+		Attributes attributes = dicomInputStream.readDataset();
+		LocalDateTime expectedStudyDate = LocalDateTime.ofInstant(attributes.getDate(Tag.StudyDateAndTime).toInstant(), ZoneId.systemDefault());
+		FileDicom dicomFile = SourceFiles.preLoadDicom(file, 1);
+		assertThat(dicomFile.getFileName()).isEqualTo("test9signed.dcm");
+		assertThat(dicomFile.getFrameCount()).isEqualTo(1);
+		assertThat(expectedStudyDate).isCloseTo(dicomFile.getDicomStudyDate(), within(1, ChronoUnit.SECONDS));
 	}
 
-	private boolean _areDatesEquals(Date date, Date date2) {
-		return date.compareTo(date2) == 0;
+	@Test
+	public void testSourceFilesPreloadDicomTest16() throws Exception {
+		// has studydate but not seriesdate
+		File file = getFile("test16unsigned.dcm");
+		DicomInputStream dicomInputStream = new DicomInputStream(file);
+		Attributes attributes = dicomInputStream.readDataset();
+		LocalDateTime expectedStudyDate = LocalDateTime.ofInstant(attributes.getDate(Tag.StudyDateAndTime).toInstant(), ZoneId.systemDefault());
+		FileDicom dicomFile = SourceFiles.preLoadDicom(file, 1);
+		assertThat(dicomFile.getFileName()).isEqualTo("test16unsigned.dcm");
+		assertThat(dicomFile.getFrameCount()).isEqualTo(1);
+		assertThat(expectedStudyDate).isCloseTo(dicomFile.getDicomStudyDate(), within(1, ChronoUnit.SECONDS));
+	}
+
+	@Test
+	public void testSourceFilesPreloadBadDicomFormat() throws Exception {
+		File file = getFile("BadDicomFile.dcm");
+		assertThatThrownBy(() -> new DicomInputStream(file))
+				.isInstanceOf(DicomStreamException.class);
 	}
 
 	@Test
 	public void testSourceFilesCountFiles() throws Exception {
-		File file = _getFile("dicomdir");
+		File file = getFile("dicomdir");
 		int count = SourceFiles.countFiles(file, 1);
 		assertThat(count).isPositive();
 	}
@@ -257,7 +290,7 @@ public class Tests extends OHCoreTestCase {
 			Thread.sleep(2000);
 		}
 		assertThat(sourceFiles.getLoaded()).isEqualTo(1);
-		_cleanupDicomFiles(2);
+		cleanupDicomFiles(2);
 	}
 
 	class ThumbnailViewGui extends AbstractThumbnailViewGui {
@@ -315,6 +348,8 @@ public class Tests extends OHCoreTestCase {
 		assertThat(fileDicom.getDicomType()).isEqualTo(dicomType);
 	}
 
+	// This test requires access to the opencv native libraries
+	@Ignore
 	@Test
 	public void testFileDicomGetThumbnailasImage() throws Exception {
 		DicomType dicomType = testDicomType.setup(false);
@@ -322,16 +357,16 @@ public class Tests extends OHCoreTestCase {
 		assertThat(fileDicom.getDicomThumbnailAsImage()).isNull();
 	}
 
-	private static void _cleanupDicomFiles(int patientId) {
+	private static void cleanupDicomFiles(int patientId) {
 		FileSystemUtils.deleteRecursively(new File("rsc-test/dicom/" + patientId));
 		FileUtil.deleteContents(new File("rsc-test/dicom/dicom.storage"));
 	}
 
-	private File _getFile(String fileName) {
+	private File getFile(String fileName) {
 		return new File(getClass().getResource(fileName).getFile());
 	}
 
-	private long _setupTestFileDicom(boolean usingSet) throws OHException {
+	private long setupTestFileDicom(boolean usingSet) throws OHException {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicom = testFileDicom.setup(dicomType, usingSet);
 		dicomTypeIoOperationRepository.saveAndFlush(dicomType);
@@ -339,8 +374,8 @@ public class Tests extends OHCoreTestCase {
 		return dicom.getIdFile();
 	}
 
-	private void _checkFileDicomIntoDb(long code) throws Exception {
-		FileDicom foundFileDicom = dicomIoOperationRepository.findOne(code);
+	private void checkFileDicomIntoDb(long code) throws Exception {
+		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
 		testFileDicom.check(foundFileDicom);
 	}
 }

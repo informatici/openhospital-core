@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -22,10 +22,9 @@
 package org.isf.examination.model;
 
 import java.io.Serializable;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -39,6 +38,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.isf.patient.model.Patient;
+import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -47,15 +47,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @author Mwithi
  */
 @Entity
-@Table(name="PATIENTEXAMINATION")
+@Table(name="OH_PATIENTEXAMINATION")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="PEX_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="PEX_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="PEX_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="PEX_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="PEX_LAST_MODIFIED_DATE"))
-})
+@AttributeOverride(name = "createdBy", column = @Column(name = "PEX_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "PEX_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PEX_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "PEX_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PEX_LAST_MODIFIED_DATE"))
 public class PatientExamination implements Serializable, Comparable<PatientExamination> {
 
 	private static final long serialVersionUID = 1L;
@@ -67,8 +65,8 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	private int pex_ID;
 
 	@NotNull
-	@Column(name="PEX_DATE")
-	private GregorianCalendar pex_date;
+	@Column(name="PEX_DATE")		// SQL type: datetime
+	private LocalDateTime pex_date;
 
 	@NotNull
 	@ManyToOne
@@ -143,7 +141,7 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	 * @param pex_note
 	 */
 	public PatientExamination(
-			GregorianCalendar pex_date, 
+			LocalDateTime pex_date, 
 			Patient patient, 
 			Integer pex_height, 
 			Double pex_weight, 
@@ -160,7 +158,7 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 			String pex_ausc,
 			String pex_note) {
 		super();
-		this.pex_date = pex_date;
+		this.pex_date = TimeTools.truncateToSeconds(pex_date);
 		this.patient = patient;
 		this.pex_height = pex_height;
 		this.pex_weight = pex_weight;
@@ -209,15 +207,15 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	/**
 	 * @return the pex_date
 	 */
-	public GregorianCalendar getPex_date() {
+	public LocalDateTime getPex_date() {
 		return pex_date;
 	}
 
 	/**
 	 * @param pex_date the pex_date to set
 	 */
-	public void setPex_date(GregorianCalendar pex_date) {
-		this.pex_date = pex_date;
+	public void setPex_date(LocalDateTime pex_date) {
+		this.pex_date = TimeTools.truncateToSeconds(pex_date);
 	}
 
 	/**

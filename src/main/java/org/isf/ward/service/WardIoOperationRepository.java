@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -25,11 +25,20 @@ import java.util.List;
 
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WardIoOperationRepository extends JpaRepository<Ward, String> {
-    List<Ward> findAllByOrderByDescriptionAsc();
-    List<Ward> findByCodeNot(String code);
-    List<Ward> findByCodeContains(String id);
+	
+	List<Ward> findAllByOrderByDescriptionAsc();
+
+	List<Ward> findByCodeNot(String code);
+
+	List<Ward> findByCodeContains(String id);
+
+	List<Ward> findByIsOpdIsTrue();
+
+	@Query(value = "SELECT w FROM Ward w WHERE WRD_NBEDS > 0 ORDER BY WRD_NAME")
+	List<Ward> findByBedsGreaterThanZero();
 }

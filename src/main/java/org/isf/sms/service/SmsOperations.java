@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,12 +21,13 @@
  */
 package org.isf.sms.service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.sms.model.Sms;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,7 +65,7 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean saveOrUpdate(List<Sms> smsList) throws OHServiceException {
-		return repository.save(smsList) != null;
+		return repository.saveAll(smsList) != null;
 	}
 	
 	/**
@@ -73,8 +74,8 @@ public class SmsOperations {
 	 * @return sms - the sms with specified ID
 	 * @throws OHServiceException 
 	 */
-	public Sms getByID(int ID) throws OHServiceException {
-		return repository.findOne(ID);
+	public Sms getByID(int id) throws OHServiceException {
+		return repository.findById(id).orElse(null);
 	}
 	
 	/**
@@ -82,8 +83,8 @@ public class SmsOperations {
 	 * @return smsList - the list of {@link Sms}s
 	 * @throws OHServiceException 
 	 */
-	public List<Sms> getAll(Date dateFrom, Date dateTo) throws OHServiceException {
-		return repository.findBySmsDateSchedBetweenOrderBySmsDateSchedAsc(dateFrom, dateTo);
+	public List<Sms> getAll(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+		return repository.findBySmsDateSchedBetweenOrderBySmsDateSchedAsc(TimeTools.truncateToSeconds(dateFrom), TimeTools.truncateToSeconds(dateTo));
 	}
 	
 	/**
@@ -91,8 +92,9 @@ public class SmsOperations {
 	 * @return smsList - the list of {@link Sms}s
 	 * @throws OHServiceException 
 	 */
-	public List<Sms> getList(Date dateFrom,	Date dateTo) throws OHServiceException {
-		return repository.findBySmsDateSchedBetweenAndSmsDateSentIsNullOrderBySmsDateSchedAsc(dateFrom, dateTo);
+	public List<Sms> getList(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+		return repository.findBySmsDateSchedBetweenAndSmsDateSentIsNullOrderBySmsDateSchedAsc(TimeTools.truncateToSeconds(dateFrom),
+		                                                                                      TimeTools.truncateToSeconds(dateTo));
 	}
 	
 	/**
@@ -119,7 +121,7 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public void delete(List<Sms> smsList) throws OHServiceException	{
-		repository.delete(smsList);
+		repository.deleteAll(smsList);
 	}
 
 	/**
@@ -140,6 +142,7 @@ public class SmsOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
+
 }

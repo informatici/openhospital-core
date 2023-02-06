@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,7 +21,6 @@
  */
 package org.isf.visits.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.patient.model.Patient;
@@ -47,19 +46,42 @@ public class VisitsIoOperations {
 	 * @return the list of {@link Visit}s
 	 * @throws OHServiceException 
 	 */
-	public ArrayList<Visit> getVisits(Integer patID) throws OHServiceException {
+	public List<Visit> getVisits(Integer patID) throws OHServiceException {
 		return patID != 0 ?
-				new ArrayList<>(repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID)) :
-				new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
+				repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID) :
+				repository.findAllByOrderByPatient_CodeAscDateAsc();
+	}
+	
+	/**
+	 * Returns the list of all {@link Visit}s related to a patID in OPD (Ward is {@code null}).
+	 *
+	 * @param patID - the {@link Patient} ID. If <code>0</code> return the list of all OPD {@link Visit}s
+	 * @return the list of {@link Visit}s
+	 * @throws OHServiceException
+	 */
+	public List<Visit> getVisitsOPD(Integer patID) throws OHServiceException {
+		return patID != 0 ?
+				repository.findAllByWardIsNullAndPatient_CodeOrderByPatient_CodeAscDateAsc(patID) :
+				repository.findAllByWardIsNullOrderByPatient_CodeAscDateAsc();
+	}
+	public Visit getVisit(int visitID) throws OHServiceException {
+		return repository.findAllByVisitID(visitID);
+				
 	}
 
+	/**
+	 * Returns the list of all {@link Visit}s related to a wardId
+	 * @param wardId - if {@code null}, returns all visits for all wards
+	 * @return the list of {@link Visit}s
+	 * @throws OHServiceException
+	 */
 	public List<Visit> getVisitsWard(String wardId) throws OHServiceException {
 		List<Visit> visits = null;
 
 		if (wardId != null)
-			visits = new ArrayList<>(repository.findAllWhereWardByOrderDateAsc(wardId));
+			visits = repository.findAllWhereWardByOrderDateAsc(wardId);
 		else
-			visits = new ArrayList<>(repository.findAllByOrderByPatient_CodeAscDateAsc());
+			visits = repository.findAllByOrderByPatient_CodeAscDateAsc();
 
 		return visits;
 	}
@@ -77,11 +99,25 @@ public class VisitsIoOperations {
 	}
 	
 	/**
+	 * update {@link Visit} for a specified {@link Visit}
+	 * 
+	 * @param visit - the {@link Visit}.
+	 * @return the {@link Visit}
+	 * @throws OHServiceException 
+	 */
+	@Transactional
+	public Visit updateVisit(Visit visit) throws OHServiceException {
+		return repository.save(visit);
+	}
+	
+	/**
 	 * Deletes all {@link Visit}s related to a patID
 	 * 
 	 * @param patID - the {@link Patient} ID
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
+	 * @deprecated OP-713 raised the need of a strong link with OPDs so deletions like this one could be done safely.
+	 * 				Before that it is not possible to use this method safely.
 	 */
 	public boolean deleteAllVisits(int patID) throws OHServiceException {
 		repository.deleteByPatient_Code(patID);
@@ -96,7 +132,7 @@ public class VisitsIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 
 	/**
@@ -105,9 +141,8 @@ public class VisitsIoOperations {
 	 * @param id - the id
 	 * @return the {@link Visit} or {@literal null} if none found
 	 */
-	public Visit findVisit(int id)
-	{
-		return repository.findOne(id);
+	public Visit findVisit(int id) {
+		return repository.findById(id).orElse(null);
 	}
 
 	/**
@@ -115,7 +150,7 @@ public class VisitsIoOperations {
 	 *
 	 * @param visit - the {@link Visit}
 	 */
-	public void deleteVisit(Visit visit) {
+	public void deleteVisit(Visit visit) throws OHServiceException {
 		repository.delete(visit);
 	}
 }

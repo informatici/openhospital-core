@@ -83,13 +83,12 @@ public class TableSorter extends TableMap {
 
 		/*
 		 * We copy all returned values from the getValue call in case an
-		 * optimised model is reusing one object to return many values. The
+		 * optimized model is reusing one object to return many values. The
 		 * Number subclasses in the JDK are immutable and so will not be used in
 		 * this way but other subclasses of Number might want to do this to save
 		 * space and avoid unnecessary heap allocation.
 		 */
 
-		// if (type.getSuperclass() == java.lang.Number.class) { //doesn' work
 		if ((o1 instanceof Integer) && (o2 instanceof Integer)) {
 			Number n1 = (Number) data.getValueAt(row1, column);
 			double d1 = n1.doubleValue();
@@ -103,47 +102,44 @@ public class TableSorter extends TableMap {
 			} else {
 				return 0;
 			}
-		} else // if (type == java.util.Date.class) { //doesn't work
-			if ((o1 instanceof String) && (o2 instanceof String)) {
+		} else if ((o1 instanceof String) && (o2 instanceof String)) {
 
-				String str1 = data.getValueAt(row1, column).toString();
-				String str2 = data.getValueAt(row2, column).toString();
+			String str1 = data.getValueAt(row1, column).toString();
+			String str2 = data.getValueAt(row2, column).toString();
 
-				try {
+			try {
+				DateFormat myDateFormat = new SimpleDateFormat("dd/MM/yy");
+				Date d1 = myDateFormat.parse(str1);
+				Date d2 = myDateFormat.parse(str2);
+				long n1 = d1.getTime();
+				long n2 = d2.getTime();
 
-					DateFormat myDateFormat = new SimpleDateFormat("dd/MM/yy");
-					Date d1 = myDateFormat.parse(str1);
-					Date d2 = myDateFormat.parse(str2);
-					long n1 = d1.getTime();
-					long n2 = d2.getTime();
-
-					if (n1 < n2) {
-						return -1;
-					} else if (n1 > n2) {
-						return 1;
-					} else {
-						return 0;
-					}
-
-				} catch (NumberFormatException | ParseException e3) {
-					LOGGER.info("Compare ({}) with ({})", str1, str2);
-					return str1.compareTo(str2);
-				}
-			} else {
-				Object v1 = data.getValueAt(row1, column);
-				String s1 = v1.toString();
-				Object v2 = data.getValueAt(row2, column);
-				String s2 = v2.toString();
-				int result = s1.compareTo(s2);
-
-				if (result < 0) {
+				if (n1 < n2) {
 					return -1;
-				} else if (result > 0) {
+				} else if (n1 > n2) {
 					return 1;
 				} else {
 					return 0;
 				}
+			} catch (NumberFormatException | ParseException e3) {
+				LOGGER.info("Compare ({}) with ({})", str1, str2);
+				return str1.compareTo(str2);
 			}
+		} else {
+			Object v1 = data.getValueAt(row1, column);
+			String s1 = v1.toString();
+			Object v2 = data.getValueAt(row2, column);
+			String s2 = v2.toString();
+			int result = s1.compareTo(s2);
+
+			if (result < 0) {
+				return -1;
+			} else if (result > 0) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
 	}
 
 	public int compare(int row1, int row2) {
@@ -165,7 +161,7 @@ public class TableSorter extends TableMap {
 		// for the new data model.
 		indexes = new int[rowCount];
 
-		// Initialise with the identity mapping.
+		// Initialize with the identity mapping.
 		for (int row = 0; row < rowCount; row++) {
 			indexes[row] = row;
 		}
@@ -209,6 +205,7 @@ public class TableSorter extends TableMap {
 	// arrays. The number of compares appears to vary between N-1 and
 	// NlogN depending on the initial order but the main reason for
 	// using it here is that, unlike qsort, it is stable.
+	// FIXME: sorting {@link Date}s is failing.
 	public void shuttlesort(int[] from, int[] to, int low, int high) {
 		if (high - low < 2) {
 			return;
@@ -225,12 +222,12 @@ public class TableSorter extends TableMap {
 		 * if the elements in this subset are already ordered. If so, no further
 		 * comparisons are needed; the sub-array can just be copied. The array
 		 * must be copied rather than assigned otherwise sister calls in the
-		 * recursion might get out of sinc. When the number of elements is three
+		 * recursion might get out of sync. When the number of elements is three
 		 * they are partitioned so that the first set, [low, mid), has one
 		 * element and and the second, [mid, high), has two. We skip the
-		 * optimisation when the number of elements is three or less as the
+		 * optimization when the number of elements is three or less as the
 		 * first compare in the normal merge will produce the same sequence of
-		 * steps. This optimisation seems to be worthwhile for partially ordered
+		 * steps. This optimization seems to be worthwhile for partially ordered
 		 * lists but some analysis is needed to find out how the performance
 		 * drops to Nlog(N) as the initial order diminishes - it may drop very
 		 * quickly.
@@ -301,7 +298,6 @@ public class TableSorter extends TableMap {
 				int viewColumn = columnModel.getColumnIndexAtX(e.getX());
 				int column = tableView.convertColumnIndexToModel(viewColumn);
 				if (e.getClickCount() == 1 && column != -1) {
-					// System.out.println("Sorting ...");
 					int shiftPressed = e.getModifiers() & InputEvent.SHIFT_MASK;
 					boolean ascending = (shiftPressed == 0);
 					sorter.sortByColumn(column, ascending);

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,7 +21,7 @@
  */
 package org.isf.utils.time;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 /**
  * -------------------------------------------------------------------
@@ -40,117 +40,55 @@ import java.util.GregorianCalendar;
  */
 public class RememberDates {
 
-	private static GregorianCalendar lastOpdVisitDate=null;
-	private static GregorianCalendar lastAdmInDate=null;
-	private static GregorianCalendar lastLabExamDate=null;
-	private static GregorianCalendar lastBillDate=null;
-	private static GregorianCalendar lastPatientVaccineDate=null;
+	private static LocalDateTime lastOpdVisitDate;
+	private static LocalDateTime lastAdmInDate;
+	private static LocalDateTime lastLabExamDate;
+	private static LocalDateTime lastBillDate;
+	private static LocalDateTime lastPatientVaccineDate;
 
-	//passare da Date a gregorian
-	//visitDate.setTime(resultSet.getDate("OPD_DATE_VIS"));
-	
-	//passare da gregorian a date
-	//java.sql.Date visitDate 	= (opd.getVisitDate()==null?null:new java.sql.Date(opd.getVisitDate().getTimeInMillis()));
-	//GregorianCalendar time=new GregorianCalendar();//gets the current time
-
-	
-	//------------  opd attendance date -----------------------
-//	public static GregorianCalendar getLastOpdVisitDate() 	{
-//		return lastOpdVisitDate;
-//	}
-	public static GregorianCalendar getLastOpdVisitDateGregorian() 	{
-		GregorianCalendar gc = new GregorianCalendar();
-		if (lastOpdVisitDate != null) {
-			gc.set(lastOpdVisitDate.get(GregorianCalendar.YEAR), 
-					lastOpdVisitDate.get(GregorianCalendar.MONTH),
-					lastOpdVisitDate.get(GregorianCalendar.DAY_OF_MONTH));
-		} 
-		return gc;
+	//------------  opd visit -----------------------------
+	public static LocalDateTime getLastOpdVisitDate() {
+		return lastOpdVisitDate;
 	}
-//	public static void setLastOpdVisitDate(Date visitDate) 	{
-//		lastOpdVisitDate.setTime(visitDate);
-//	}
-	public static void setLastOpdVisitDate(GregorianCalendar visitDate) 	{
-		lastOpdVisitDate=visitDate;
+
+	public static void setLastOpdVisitDate(LocalDateTime visitDate) {
+		lastOpdVisitDate = TimeTools.truncateToSeconds(visitDate);
 	}
 
 	//------------  laboratory exam -----------------------
-//	public static Date getLastLabExamDate() 	{
-//		return lastLabExamDate == null ? new Date() : lastLabExamDate;
-//	}
-	public static GregorianCalendar getLastLabExamDateGregorian() 	{
-		GregorianCalendar gc = new GregorianCalendar();
-		if (lastLabExamDate != null) {
-			gc.set(lastLabExamDate.get(GregorianCalendar.YEAR), 
-					lastLabExamDate.get(GregorianCalendar.MONTH),
-					lastLabExamDate.get(GregorianCalendar.DAY_OF_MONTH));
-		}
-		return gc;
+	public static LocalDateTime getLastLabExamDate() {
+		return lastLabExamDate;
 	}
-//	public static void setLastLabExamDate(Date labDate) 	{
-//		lastLabExamDate=labDate;
-//	}
-	public static void setLastLabExamDate(GregorianCalendar labDate) 	{
-		lastLabExamDate=labDate;
+
+	public static void setLastLabExamDate(LocalDateTime labDate) {
+		lastLabExamDate = TimeTools.truncateToSeconds(labDate);
 	}
 
 	//------------  admission date -----------------------
-//	public static Date getLastAdmInDate() 	{
-//		return lastAdmInDate;
-//	}
-	public static GregorianCalendar getLastAdmInDateGregorian() 	{
-		GregorianCalendar gc = new GregorianCalendar();
-		if (lastAdmInDate != null) {
-			gc.set(lastAdmInDate.get(GregorianCalendar.YEAR), 
-					lastAdmInDate.get(GregorianCalendar.MONTH),
-					lastAdmInDate.get(GregorianCalendar.DAY_OF_MONTH));
-		}
-		return gc;
+	public static LocalDateTime getLastAdmInDate() {
+		return lastAdmInDate;
 	}
-//	public static void setLastAdmInDate(Date inDate) 	{
-//		lastAdmInDate=inDate;
-//	}
-	public static void setLastAdmInDate(GregorianCalendar inDate) 	{
-		lastAdmInDate=inDate;
+
+	public static void setLastAdmInDate(LocalDateTime inDate) {
+		lastAdmInDate = TimeTools.truncateToSeconds(inDate);
 	}
 	
 	//------------ bill date -----------------------
-//	public static Date getLastBillDate() 	{
-//		return lastBillDate == null ? new Date() : lastBillDate;
-//	}
-	public static GregorianCalendar getLastBillDateGregorian() 	{
-		GregorianCalendar gc = new GregorianCalendar();
-		if (lastBillDate != null) {
-			gc.set(lastBillDate.get(GregorianCalendar.YEAR), 
-					lastBillDate.get(GregorianCalendar.MONTH),
-					lastBillDate.get(GregorianCalendar.DAY_OF_MONTH));
-		}
-		return gc;
+	public static LocalDateTime getLastBillDate() {
+		return lastBillDate;
 	}
-//	public static void setLastBillDate(Date inDate) 	{
-//		lastBillDate=inDate;
-//	}
-	public static void setLastBillDate(GregorianCalendar billDate) 	{
-		lastBillDate=billDate;
+
+	public static void setLastBillDate(LocalDateTime billDate) {
+		lastBillDate = TimeTools.truncateToSeconds(billDate);
 	}
 	
-	//------------  PAtient vaccine-----------------------
-//	public static Date getLastPatientVaccineDate() 	{
-//		return lastPatientVaccineDate == null ? new Date() : lastPatientVaccineDate;
-//	}
-	public static GregorianCalendar getLastPatientVaccineDateGregorian() 	{
-		GregorianCalendar gc = new GregorianCalendar();
-		if (lastPatientVaccineDate != null) {
-			gc.set(lastPatientVaccineDate.get(GregorianCalendar.YEAR), 
-					lastPatientVaccineDate.get(GregorianCalendar.MONTH),
-					lastPatientVaccineDate.get(GregorianCalendar.DAY_OF_MONTH));
-		}
-		return gc;
+	//------------  patient vaccine-----------------------
+	public static LocalDateTime getLastPatientVaccineDate() {
+		return lastPatientVaccineDate;
 	}
-//	public static void setLastPatientVaccineDate(Date patVacDate) 	{
-//		lastPatientVaccineDate=patVacDate;
-//	}
-	public static void setLastPatineVaccineDate(GregorianCalendar labDate) 	{
-		lastPatientVaccineDate=labDate;
+
+	public static void setLastPatineVaccineDate(LocalDateTime vaccineDate) {
+		lastPatientVaccineDate = TimeTools.truncateToSeconds(vaccineDate);
 	}
+
 }

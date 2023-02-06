@@ -89,21 +89,21 @@ public class TestSqlDicomManager extends OHCoreTestCase {
 
 	@Test
 	public void testLoadDetails() throws Exception {
-		long id = _setupTestFileDicom(true);
+		long id = setupTestFileDicom(true);
 		FileDicom fileDicom = sqlDicomManager.loadDetails(id, 0, "TestSeriesNumber");
 		testFileDicom.check(fileDicom);
 	}
 
 	@Test
 	public void testLoadDetailsLongObject() throws Exception {
-		long id = _setupTestFileDicom(true);
+		long id = setupTestFileDicom(true);
 		FileDicom fileDicom = sqlDicomManager.loadDetails(new Long(id), 0, "TestSeriesNumber");
 		testFileDicom.check(fileDicom);
 	}
 
 	@Test
 	public void testGetSerieDetail() throws Exception {
-		long id = _setupTestFileDicom(true);
+		long id = setupTestFileDicom(true);
 		Long[] result = sqlDicomManager.getSerieDetail(0, "TestSeriesNumber");
 		assertThat(result).isNotEmpty();
 	}
@@ -128,14 +128,14 @@ public class TestSqlDicomManager extends OHCoreTestCase {
 
 	@Test
 	public void testExistSeriesNumber() throws Exception {
-		long id = _setupTestFileDicom(true);
+		long id = setupTestFileDicom(true);
 		boolean exists = sqlDicomManager.exist(0, "TestSeriesNumber");
 		assertThat(exists).isTrue();
 	}
 
 	@Test
 	public void testExistSeriesNumberDoesNotExist() throws Exception {
-		long id = _setupTestFileDicom(true);
+		long id = setupTestFileDicom(true);
 		boolean exists = sqlDicomManager.exist(0, "SomeOtherTestSeriesNumberThatIsNotThere");
 		assertThat(exists).isFalse();
 	}
@@ -152,7 +152,7 @@ public class TestSqlDicomManager extends OHCoreTestCase {
 		assertThat(serieDeleted).isTrue();
 	}
 
-	private long _setupTestFileDicom(boolean usingSet) throws OHException {
+	private long setupTestFileDicom(boolean usingSet) throws OHException {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicom = testFileDicom.setup(dicomType, usingSet);
 		dicomTypeIoOperationRepository.saveAndFlush(dicomType);

@@ -22,7 +22,6 @@
 package org.isf.priceslist.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -48,18 +47,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="PRICES")
+@Table(name="OH_PRICES")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="PRC_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="PRC_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="PRC_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="PRC_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="PRC_LAST_MODIFIED_DATE"))
-})
-public class Price extends Auditable<String>
-{
-	@Id 
+@AttributeOverride(name = "createdBy", column = @Column(name = "PRC_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "PRC_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PRC_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "PRC_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PRC_LAST_MODIFIED_DATE"))
+public class Price extends Auditable<String> {
+
+	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="PRC_ID")
 	private int id;
@@ -103,16 +100,15 @@ public class Price extends Auditable<String>
      * @param price
      * @param editable
      */
-    public Price(PriceList list, String group, String item, String desc,
-			Double price, boolean editable) {
-		super();
-		this.list = list;
-		this.group = group;
-		this.item = item;
-		this.description = desc;
-		this.price = price;
-		this.editable = editable;
-	}
+    public Price(PriceList list, String group, String item, String desc, Double price, boolean editable) {
+	    super();
+	    this.list = list;
+	    this.group = group;
+	    this.item = item;
+	    this.description = desc;
+	    this.price = price;
+	    this.editable = editable;
+    }
     
     /**
      * 
@@ -123,17 +119,16 @@ public class Price extends Auditable<String>
      * @param desc
      * @param price
      */
-	public Price(int id, PriceList list, String group, String item, String desc,
-			Double price) {
-		super();
-		this.id = id;
-		this.list = list;
-		this.group = group;
-		this.item = item;
-		this.description = desc;
-		this.price = price;
-		this.editable = true;
-	}
+    public Price(int id, PriceList list, String group, String item, String desc, Double price) {
+	    super();
+	    this.id = id;
+	    this.list = list;
+	    this.group = group;
+	    this.item = item;
+	    this.description = desc;
+	    this.price = price;
+	    this.editable = true;
+    }
 
 	/**
 	 * 
@@ -144,7 +139,6 @@ public class Price extends Auditable<String>
 	 * @param price
 	 */
 	public Price(PriceList list, String group, String item, String desc, Double price) {
-		
 		this.list = list;
 		this.group = group;
 		this.item = item;

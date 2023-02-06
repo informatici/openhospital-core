@@ -23,6 +23,7 @@ package org.isf.supplier.manager;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.isf.supplier.model.Supplier;
 import org.isf.supplier.service.SupplierOperations;
@@ -36,7 +37,7 @@ public class SupplierBrowserManager {
 	@Autowired
 	private SupplierOperations ioOperations;
 
-	public boolean saveOrUpdate(Supplier supplier) throws OHServiceException {
+	public Supplier saveOrUpdate(Supplier supplier) throws OHServiceException {
 		return ioOperations.saveOrUpdate(supplier);
 	}
 
@@ -59,14 +60,14 @@ public class SupplierBrowserManager {
 	 * @return the {@link HashMap} of all {@link Supplier}s
 	 * @throws OHServiceException
 	 */
-	public HashMap<Integer, String> getHashMap(boolean all) throws OHServiceException {
+	public Map<Integer, String> getHashMap(boolean all) throws OHServiceException {
 		List<Supplier> supList;
 		if (all) {
 			supList = ioOperations.getAll();
 		} else {
 			supList = ioOperations.getList();
 		}
-		HashMap<Integer, String> supMap = new HashMap<>();
+		Map<Integer, String> supMap = new HashMap<>();
 		for (Supplier sup : supList) {
 			supMap.put(sup.getSupId(), sup.getSupName());
 		}

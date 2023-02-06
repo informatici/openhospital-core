@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -42,7 +42,7 @@ public class TestDicomType {
 
 		if (usingSet) {
 			dicomType = new DicomType();
-			_setParameters(dicomType);
+			setParameters(dicomType);
 		} else {
 			// Create FileDicom with all parameters 
 			dicomType = new DicomType(dicomTypeId, dicomTypeDescription);
@@ -51,7 +51,7 @@ public class TestDicomType {
 		return dicomType;
 	}
 
-	public void _setParameters(DicomType dicomType) {
+	public void setParameters(DicomType dicomType) {
 		dicomType.setDicomTypeID(dicomTypeId);
 		dicomType.setDicomTypeDescription(dicomTypeDescription);
 	}
@@ -61,7 +61,7 @@ public class TestDicomType {
 		assertThat(dicomType.getDicomTypeDescription()).isEqualTo(dicomTypeDescription);
 	}
 
-	public Blob _createRandomBlob(int byteCount) {
+	public Blob createRandomBlob(int byteCount) {
 		Blob blob = null;
 		byte[] data;
 

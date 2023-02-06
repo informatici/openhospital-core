@@ -1,6 +1,10 @@
 /*
  * Open Hospital (www.open-hospital.org)
+<<<<<<< HEAD
  * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+=======
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+>>>>>>> 2adacb561550c37e230459abb8801dad97229899
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *

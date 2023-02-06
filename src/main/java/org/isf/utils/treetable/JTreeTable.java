@@ -65,7 +65,6 @@ import java.awt.Dimension;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultTreeSelectionModel;
 
 /**
@@ -148,33 +147,26 @@ public class JTreeTable extends JTable {
 		}
 	}
 
-	@Override
-	public void setModel(TableModel dataModel) {
-		super.setModel(dataModel);
-	}
-	
 	public void setModel(TreeTableModel treeTableModel) {
-		tree = new TreeTableCellRenderer(treeTableModel, this); 
+		tree = new TreeTableCellRenderer(treeTableModel, this);
 
 		// Install a tableModel representing the visible rows in the tree. 
 		super.setModel(new TreeTableModelAdapter(treeTableModel, tree));
-		tree.setSelectionModel(new DefaultTreeSelectionModel() { 
-		    /**
-			 * 
-			 */
+		tree.setSelectionModel(new DefaultTreeSelectionModel() {
+
 			private static final long serialVersionUID = 1L;
 
-		// Extend the implementation of the constructor, as if: 
-		 /* public this() */ {
-			setSelectionModel(listSelectionModel); 
-		    } 
-		}); 
+			// Extend the implementation of the constructor, as if:
+			/* public this() */ {
+				setSelectionModel(listSelectionModel);
+			}
+		});
 		// Make the tree and table row heights the same. 
 		tree.setRowHeight(getRowHeight());
 
 		// Install the tree editor renderer and editor. 
-		setDefaultRenderer(TreeTableModel.class, tree); 
-		setDefaultEditor(TreeTableModel.class, new TreeTableCellEditor());  
+		setDefaultRenderer(TreeTableModel.class, tree);
+		setDefaultEditor(TreeTableModel.class, new TreeTableCellEditor());
 
 		setShowGrid(false);
 		setIntercellSpacing(new Dimension(0, 0));
@@ -183,5 +175,5 @@ public class JTreeTable extends JTable {
 	public TreeTableCellRenderer getTree() {
 		return tree;
 	}
-}
 
+}

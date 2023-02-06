@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -29,20 +29,18 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface AccountingBillItemsIoOperationRepository extends JpaRepository<BillItems, Integer> {
-	
+
 	List<BillItems> findByBill_idOrderByIdAsc(int billId);
-		
+
 	List<BillItems> findAllByOrderByIdAsc();
 
 	@Query("select b from BillItems b group by b.itemDescription")
 	List<BillItems> findAllGroupByDescription();
 
 	@Modifying
-	@Transactional
 	@Query(value = "delete from BillItems b where b.id = :billId")
 	void deleteWhereId(@Param("billId") Integer billId);
 

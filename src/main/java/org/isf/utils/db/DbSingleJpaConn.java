@@ -45,10 +45,10 @@ public class DbSingleJpaConn {
 		if (connection == null) {
 			try {
 				connection = createConnection();
-			} catch (Exception e){
+			} catch (Exception e) {
 				String message = MessageBundle.getMessage("angal.sql.databaseserverstoppedornetworkfailure.msg");
 				LOGGER.error(">> {}", message);
-                throw new OHException(message, e);
+				throw new OHException(message, e);
 			}
 		}
 		return connection;

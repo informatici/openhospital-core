@@ -63,8 +63,8 @@ public class VacTypeIoOperation {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newVaccineType(VaccineType vaccineType) throws OHServiceException {
-		return repository.save(vaccineType) != null;
+	public VaccineType newVaccineType(VaccineType vaccineType) throws OHServiceException {
+		return repository.save(vaccineType);
 	}
 	
 	/**
@@ -74,8 +74,8 @@ public class VacTypeIoOperation {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean updateVaccineType(VaccineType vaccineType) throws OHServiceException	{
-		return repository.save(vaccineType) != null;
+	public VaccineType updateVaccineType(VaccineType vaccineType) throws OHServiceException	{
+		return repository.save(vaccineType);
 	}
 	
 	/**
@@ -99,7 +99,7 @@ public class VacTypeIoOperation {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 	
 	/**
@@ -109,11 +109,11 @@ public class VacTypeIoOperation {
 	 * @return the {@link VaccineType} or {@literal null} if none found
 	 * @throws IllegalArgumentException if {@code code} is {@literal null}
 	 */
-	public VaccineType findVaccineType(String code)
-	{
+	public VaccineType findVaccineType(String code) {
 		if (code != null) {
-			return repository.findOne(code);
-		}else
-			throw new IllegalArgumentException("code must not be null");
-	} 
+			return repository.findById(code).orElse(null);
+		}
+		throw new IllegalArgumentException("code must not be null");
+	}
+
 }

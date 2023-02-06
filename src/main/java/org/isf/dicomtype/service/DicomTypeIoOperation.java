@@ -44,8 +44,7 @@ public class DicomTypeIoOperation {
 	 * @return the list of all DicomTypes
 	 * @throws OHServiceException
 	 */
-	public List<DicomType> getDicomType() throws OHServiceException
-	{
+	public List<DicomType> getDicomType() throws OHServiceException {
 		return repository.findAllByOrderByDicomTypeDescriptionAsc();
 	}
 
@@ -56,16 +55,8 @@ public class DicomTypeIoOperation {
 	 * @return true - if the existing DicomType has been updated
 	 * @throws OHServiceException
 	 */
-	public boolean updateDicomType(
-			DicomType DicomType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		DicomType savedDicomType = repository.save(DicomType);
-		result = (savedDicomType != null);
-		
-		return result;
+	public boolean updateDicomType(DicomType dicomType) throws OHServiceException {
+		return repository.save(dicomType) != null;
 	}
 
 	/**
@@ -75,16 +66,8 @@ public class DicomTypeIoOperation {
 	 * @return true - if the new DicomType has been inserted
 	 * @throws OHServiceException
 	 */
-	public boolean newDicomType(
-			DicomType DicomType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		DicomType savedDicomType = repository.save(DicomType);
-		result = (savedDicomType != null);
-		
-		return result;
+	public boolean newDicomType(DicomType dicomType) throws OHServiceException {
+		return repository.save(dicomType) != null;
 	}
 
 	/**
@@ -94,15 +77,9 @@ public class DicomTypeIoOperation {
 	 * @return true - if the DicomType has been deleted
 	 * @throws OHServiceException
 	 */
-	public boolean deleteDicomType(
-			DicomType DicomType) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		repository.delete(DicomType);
-		
-		return result;
+	public boolean deleteDicomType(DicomType dicomType) throws OHServiceException {
+		repository.delete(dicomType);
+		return true;
 	}
 
 	/**
@@ -112,14 +89,7 @@ public class DicomTypeIoOperation {
 	 * @return true - if the DicomType already exists
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.existsById(code);
 	}
 }

@@ -22,7 +22,6 @@
 package org.isf.accounting.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -48,20 +47,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="BILLITEMS")
+@Table(name="OH_BILLITEMS")
 @EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "BLI_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "BLI_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "BLI_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "BLI_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "BLI_LAST_MODIFIED_DATE"))
+public class BillItems extends Auditable<String> {
 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="BLI_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="BLI_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="BLI_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="BLI_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="BLI_LAST_MODIFIED_DATE"))
-})
-
-public class BillItems extends Auditable<String>
-{
-	@Id 
+	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="BLI_ID")
 	private int id;
@@ -193,13 +188,15 @@ public class BillItems extends Auditable<String>
 		BillItems billItem = (BillItems)obj;
 		return (id == billItem.getId());
 	}
-/**
- *get the item ID
- * @return
- */
+
+	/**
+	 * get the item ID
+	 *
+	 * @return
+	 */
 	public String getItemDisplayCode() {
-		if(itemDisplayCode==null || itemDisplayCode.equals("")){
-			itemDisplayCode=itemId;
+		if (itemDisplayCode == null || itemDisplayCode.isEmpty()) {
+			itemDisplayCode = itemId;
 		}
 		return itemDisplayCode;
 	}

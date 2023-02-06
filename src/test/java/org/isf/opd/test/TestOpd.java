@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -22,39 +22,45 @@
 package org.isf.opd.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.isf.disease.model.Disease;
 import org.isf.generaldata.GeneralData;
 import org.isf.opd.model.Opd;
 import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHException;
+import org.isf.visits.model.Visit;
+import org.isf.ward.model.Ward;
 
 public class TestOpd {
 
-	private GregorianCalendar visitDate = new GregorianCalendar(1984, Calendar.AUGUST, 14);
+	private LocalDateTime date = LocalDateTime.of(1984, 8, 14, 8, 0, 0);
 	private int age = 9;
 	private char sex = 'F';
-	private String note = "TestNote";
 	private int prog_year = 2008;
 	private char newPatient = 'N';
 	private String referralFrom = "R";
 	private String referralTo = "R";
 	private String userID = "TestUser";
+	private String prescription = "prescription";
 
-	public Opd setup(Patient patient, Disease disease, boolean usingSet) throws OHException {
+	public Opd setup(Patient patient, Disease disease, Ward ward, Visit nextVisit, boolean usingSet) throws OHException {
+
 		Opd opd;
 
 		if (usingSet) {
 			opd = new Opd();
-			_setParameters(patient, disease, opd);
+			setParameters(patient, disease, ward, nextVisit, opd);
 		} else {
 			// Create Opd with all parameters 
 			opd = new Opd(prog_year, sex, age, disease);
-			opd.setVisitDate(visitDate);
-			opd.setNote(note);
+			opd.setDate(date);
+			/*opd.setReason(reason);
+			opd.setTherapies(therapies);*/
+			opd.setPrescription(prescription);
 			opd.setNewPatient(newPatient);
 			opd.setReferralFrom(referralFrom);
 			opd.setReferralTo(referralTo);
@@ -62,16 +68,20 @@ public class TestOpd {
 			opd.setPatient(patient);
 			opd.setDisease2(disease);
 			opd.setDisease3(disease);
+			opd.setWard(ward);
+			opd.setNextVisit(nextVisit);
 		}
 
 		return opd;
 	}
 
-	public void _setParameters(Patient patient, Disease disease, Opd opd) {
-		opd.setVisitDate(visitDate);
+	public void setParameters(Patient patient, Disease disease, Ward ward, Visit nextVisit, Opd opd) {
+		opd.setDate(date);
 		opd.setAge(age);
 		opd.setSex(sex);
-		opd.setNote(note);
+		/*opd.setReason(reason);
+		opd.setTherapies(therapies);*/
+		opd.setPrescription(prescription);
 		opd.setProgYear(prog_year);
 		opd.setNewPatient(newPatient);
 		opd.setReferralFrom(referralFrom);
@@ -81,17 +91,21 @@ public class TestOpd {
 		opd.setDisease(disease);
 		opd.setDisease2(disease);
 		opd.setDisease3(disease);
+		opd.setWard(ward);
+		opd.setNextVisit(nextVisit);
 	}
 
 	public void check(Opd opd) {
-		assertThat(opd.getVisitDate()).isEqualTo(visitDate);
+		assertThat(opd.getDate()).isCloseTo(date, within(1, ChronoUnit.SECONDS));
 		if (!(GeneralData.OPDEXTENDED && opd.getPatient() != null)) {
 			// skip checks as OpdBrowserManager sets values from patient
 			// thus only do checks when not OPDEXTENDED and patient == null
 			assertThat(opd.getAge()).isEqualTo(age);
 			assertThat(opd.getSex()).isEqualTo(sex);
 		}
-		assertThat(opd.getNote()).isEqualTo(note);
+		/*assertThat(opd.getReason()).isEqualTo(reason);
+		assertThat(opd.getTherapies()).isEqualTo(therapies);*/
+		assertThat(opd.getPrescription()).isEqualTo(prescription);
 		assertThat(opd.getProgYear()).isEqualTo(prog_year);
 		assertThat(opd.getNewPatient()).isEqualTo(newPatient);
 		assertThat(opd.getReferralFrom()).isEqualTo(referralFrom);

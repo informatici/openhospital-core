@@ -55,16 +55,8 @@ public class OperationTypeIoOperation {
 	 * @return <code>true</code> if the {@link OperationType} has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean newOperationType(
-			OperationType operationType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		OperationType savedOperationType = repository.save(operationType);
-		result = (savedOperationType != null);
-		
-		return result;
+	public OperationType newOperationType(OperationType operationType) throws OHServiceException {
+		return repository.save(operationType);
 	}
 	
 	/**
@@ -74,16 +66,8 @@ public class OperationTypeIoOperation {
 	 * @return <code>true</code> if the {@link OperationType} has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean updateOperationType(
-			OperationType operationType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		OperationType savedOperationType = repository.save(operationType);
-		result = (savedOperationType != null);
-		
-		return result;
+	public OperationType updateOperationType(OperationType operationType) throws OHServiceException {
+		return repository.save(operationType);
 	}
 	
 	/**
@@ -93,15 +77,9 @@ public class OperationTypeIoOperation {
 	 * @return <code>true</code> if the {@link OperationType} has been delete, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean deleteOperationType(
-			OperationType operationType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteOperationType(OperationType operationType) throws OHServiceException {
 		repository.delete(operationType);
-		
-		return result;
+		return true;
 	}
 	
 	/**
@@ -110,14 +88,8 @@ public class OperationTypeIoOperation {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.existsById(code);
 	}
+
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2022 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -49,7 +49,7 @@ public class OHServiceExceptionTranslator {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(OHServiceExceptionTranslator.class);
 
-	@Around("within(@org.isf.utils.db.TranslateOHServiceException *)")
+	@Around("within(@org.isf.utils.db.TranslateOHServiceException *) || @annotation(org.isf.utils.db.TranslateOHServiceException)")
 	public Object translateSqlExceptionToOHServiceException(ProceedingJoinPoint pjp) throws OHServiceException {
 		try {
 			return pjp.proceed();
@@ -69,6 +69,14 @@ public class OHServiceExceptionTranslator {
 			throw new OHDataLockFailureException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.sql.thedatahasbeenupdatedbysomeoneelse.msg"),
 					OHSeverityLevel.ERROR));
+    	} catch (OutOfMemoryError oome) {
+    		LOGGER.error(oome.getMessage(), oome);
+    		throw new OHServiceException(oome, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"), 
+					MessageBundle.getMessage("angal.sql.pleaseconsiderenablingtheenhancedsearchsettingseeadminmanualformoreinfo.msg"),
+					OHSeverityLevel.WARNING));
+    	} catch (OHServiceException e) {
+    		LOGGER.warn("Nested translation for {}", e.getMessage());
+    		throw e; // for nested translators
     	} catch (Throwable throwable) {
     		LOGGER.error(throwable.getMessage(), throwable);
     		throw new OHServiceException(throwable, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
@@ -76,4 +84,5 @@ public class OHServiceExceptionTranslator {
 				    OHSeverityLevel.ERROR));
 		}
 	}
+
 }

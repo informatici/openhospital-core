@@ -21,7 +21,6 @@
  */
 package org.isf.priceslist.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.priceslist.model.Price;
@@ -38,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PricesListIoOperations {
 
 	@Autowired
-	private PriceListIoOperationRepository repository;
+	private PricesListIoOperationRepository repository;
 	
 	@Autowired
 	private PriceIoOperationRepository priceRepository;
@@ -53,7 +52,7 @@ public class PricesListIoOperations {
 		return repository.findAll();
 	}
 	
-	/**
+	/**	
 	 * Return the list of {@link Price}s in the DB
 	 * 
 	 * @return the list of {@link Price}s
@@ -71,33 +70,30 @@ public class PricesListIoOperations {
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean updatePrices(PriceList list,	ArrayList<Price> prices) throws OHServiceException {
+	public boolean updatePrices(PriceList list, List<Price> prices) throws OHServiceException {
 		boolean result = true;
 
-
 		result = _deletePricesInsideList(list.getId());
-		
+
 		result &= _insertNewPricesInsideList(list, prices);
 
 		return result;
 	}
 	
-	private boolean _deletePricesInsideList(
-			int id) throws OHServiceException 
-    {
+	private boolean _deletePricesInsideList(int id) throws OHServiceException {
 		priceRepository.deleteByListId(id);
-        				
-        return true;
-    }
+
+		return true;
+	}
 	
 	private boolean _insertNewPricesInsideList(PriceList list, List<Price> prices) throws OHServiceException {
 		for (Price price : prices) {
 			price.setList(list);
 			priceRepository.save(price);
 		}
-		
-        return true;
-    }
+
+		return true;
+	}
 
 	/**
 	 * Insert a new {@link PriceList} in the DB
@@ -106,8 +102,8 @@ public class PricesListIoOperations {
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newList(PriceList list) throws OHServiceException {
-		return repository.save(list) != null;
+	public PriceList newList(PriceList list) throws OHServiceException {
+		return repository.save(list);
 	}
 	
 	/**
@@ -117,8 +113,8 @@ public class PricesListIoOperations {
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean updateList(PriceList list) throws OHServiceException {
-		return repository.save(list) != null;
+	public PriceList updateList(PriceList list) throws OHServiceException {
+		return repository.save(list);
 	}
 	
 	/**
@@ -128,28 +124,23 @@ public class PricesListIoOperations {
 	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean deleteList(
-			PriceList list) throws OHServiceException {
+	public boolean deleteList(PriceList list) throws OHServiceException {
 		boolean result = true;
 
-		
 		result = _deletePricesInsideList(list.getId());
 
 		result &= _deletePriceList(list.getId());
-				
+
 		return result;
-	}	
+	}
 	
-	private boolean _deletePriceList(
-			int id) throws OHServiceException 
-    {	
+	private boolean _deletePriceList(int id) throws OHServiceException {
 		boolean result = true;
-		
-		
+
 		repository.deleteById(id);
-		
-        return result;
-    }
+
+		return result;
+	}
 
 	/**
 	 * Duplicate {@link PriceList} multiplying by <code>factor</code> and rounding by <code>step</code>
@@ -160,51 +151,38 @@ public class PricesListIoOperations {
 	 * @return <code>true</code> if the list has been duplicated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean copyList(
-			PriceList list, 
-			double factor, 
-			double step) throws OHServiceException 
-	{
-    	PriceList newList = _insertNewPriceList(list);
-		boolean result = true; 			
+	public boolean copyList(PriceList list, double factor, double step) throws OHServiceException {
+		PriceList newList = insertNewPriceList(list);
+		boolean result = true;
 
-		
-		List<Price> Prices = (List<Price>)priceRepository.findByList_id(list.getId());
-		for (Price price: Prices) 
-		{    
+		List<Price> Prices = (List<Price>) priceRepository.findByList_id(list.getId());
+		for (Price price : Prices) {
 			Price newPrice = new Price();
-			
-			
+
 			newPrice.setList(newList);
 			newPrice.setGroup(price.getGroup());
 			newPrice.setDesc(price.getDesc());
-			if (step > 0) 
-			{
+			if (step > 0) {
 				newPrice.setPrice(Math.round((price.getPrice() * factor) / step) * step);
+			} else {
+				newPrice.setPrice(price.getPrice() * factor);
 			}
-			else
-			{
-				newPrice.setPrice(price.getPrice() * factor);				
-			}
-			newPrice.setItem(price.getItem());			
+			newPrice.setItem(price.getItem());
 			priceRepository.save(newPrice);
-	    }        			
-		
-        return result;
-    }
+		}
 
-	private PriceList _insertNewPriceList(
-			PriceList list) throws OHServiceException 
-    {					
+		return result;
+	}
+
+	private PriceList insertNewPriceList(PriceList list) throws OHServiceException {
 		PriceList newList = new PriceList();
-		
-		
+
 		newList.setCode(list.getCode());
 		newList.setName(list.getName());
 		newList.setDescription(list.getDescription());
-		newList.setCurrency(list.getCurrency());		
+		newList.setCurrency(list.getCurrency());
 		repository.save(newList);
-		
-        return newList;
-    }
+
+		return newList;
+	}
 }
