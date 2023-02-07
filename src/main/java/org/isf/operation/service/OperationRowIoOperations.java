@@ -100,15 +100,14 @@ public class OperationRowIoOperations {
 		}
 		return repository.save(found);
 	}
-
+	
     public void newOperationRow(OperationRow opRow) throws OHServiceException {
         repository.save(opRow);
     }
     public OperationRow newOperationRow2(OperationRow opRow) throws OHServiceException {
         return repository.save(opRow);
     }
-    public List<OperationRow> getOperationRowByPatient(Patient patient) throws OHServiceException {
-		
+    public List<OperationRow> getOperationRowByPatient(Patient patient) throws OHServiceException {	
 			return repository.findByAdmissionPatientOrOpdPatient(patient, patient);
 	}
 }
