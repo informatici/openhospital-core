@@ -108,53 +108,6 @@ public class OpdIoOperations {
 			String user) throws OHServiceException {
 		return repository.findAllOpdWhereParams(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user);
 	}
-	
-	/**
-	 * Return all Opds of today or one week ago
-	 * 
-	 * @param oneWeek - if <code>true</code> return the last week, only today otherwise.
-	 * @return the list of Opds. It could be <code>empty</code>.
-	 * @throws OHServiceException 
-	 */
-	public List<Opd> getOpdList2(boolean oneWeek) throws OHServiceException {
-		LocalDateTime dateTo = LocalDateTime.now();
-		LocalDateTime dateFrom = LocalDateTime.now();
-		if (oneWeek) {
-			dateFrom = LocalDateTime.now().minusWeeks(1);
-		}
-		return getOpdList2(null, MessageBundle.getMessage("angal.common.alltypes.txt"), MessageBundle.getMessage("angal.opd.alldiseases.txt"), dateFrom, dateTo,
-						0, 0, 'A', 'A',0);
-	}
-
-	/**
-	 * Return all {@link Opd}s within specified dates and parameters
-	 * 
-	 * @param ward 
-	 * @param diseaseTypeCode
-	 * @param diseaseCode
-	 * @param dateFrom
-	 * @param dateTo
-	 * @param ageFrom
-	 * @param ageTo
-	 * @param sex
-	 * @param newPatient
-	 * @param patienCode
-	 * @return the list of Opds. It could be <code>empty</code>.
-	 * @throws OHServiceException 
-	 */
-	public List<Opd> getOpdList2(
-			Ward ward, 
-			String diseaseTypeCode,
-			String diseaseCode,
-			LocalDateTime dateFrom,
-			LocalDateTime dateTo,
-			int ageFrom,
-			int ageTo,
-			char sex,
-			char newPatient,
-			int patientCode) throws OHServiceException {
-		return repository.findAllOpdWhereParams2(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient,patientCode);
-	}
 	/**
 	 * Return all {@link Opd}s associated to specified patient ID
 	 * 

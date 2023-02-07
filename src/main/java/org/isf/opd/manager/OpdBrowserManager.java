@@ -150,27 +150,6 @@ public class OpdBrowserManager {
 	public List<Opd> getOpd(boolean oneWeek) throws OHServiceException {
 		return ioOperations.getOpdList(oneWeek);
 	}
-	
-	/**
-	 * Return all Opds within specified dates and parameters
-	 * 
-	 * @param ward 
-	 * @param diseaseTypeCode
-	 * @param diseaseCode
-	 * @param dateFrom
-	 * @param dateTo
-	 * @param ageFrom
-	 * @param ageTo
-	 * @param sex
-	 * @param newPatient
-	 * @param patientCode
-	 * @return the list of Opds. It could be <code>null</code>.
-	 * @throws OHServiceException
-	 */
-	public List<Opd> getOpd(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDateTime dateFrom, LocalDateTime dateTo, int ageFrom, int ageTo, char sex, char newPatient, int patientCode)
-			throws OHServiceException {
-		return ioOperations.getOpdList2(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, patientCode);
-	}
 
 	/**
 	 * Return all Opds within specified dates and parameters

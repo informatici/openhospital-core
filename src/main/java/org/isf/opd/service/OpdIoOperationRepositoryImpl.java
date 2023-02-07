@@ -22,7 +22,6 @@
 package org.isf.opd.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,82 +113,6 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		}
 		predicates.add(
 				cb.between(opd.<LocalDate>get("date"), dateFrom, dateTo.plusDays(1))
-		);
-		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
-
-		return entityManager.createQuery(query);
-	}
-
-	@SuppressWarnings("unchecked")	
-	@Override
-	public List<Opd> findAllOpdWhereParams2(
-			Ward ward,
-			String diseaseTypeCode,
-			String diseaseCode,
-			LocalDateTime dateFrom,
-			LocalDateTime dateTo,
-			int ageFrom,
-			int ageTo,
-			char sex,
-			char newPatient,
-			int  patientCode) {
-		return getOpdQuery2(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, patientCode).getResultList();
-	}	
-
-	private TypedQuery<Opd> getOpdQuery2(
-			Ward ward, 
-			String diseaseTypeCode,
-			String diseaseCode,
-			LocalDateTime dateFrom,
-			LocalDateTime dateTo,
-			int ageFrom, 
-			int ageTo,
-			char sex,
-			char newPatient,
-			int  patientCode) {
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Opd> query = cb.createQuery(Opd.class);
-		Root<Opd> opd = query.from(Opd.class);
-		List<Predicate> predicates = new ArrayList<>();
-
-		query.select(opd);
-		if (ward != null) {
-			predicates.add(
-					cb.equal(opd.join("ward").get("code"), ward.getCode())
-			);
-		}
-		if (diseaseTypeCode != null) {
-			predicates.add(
-					cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
-			);
-		}
-		if (diseaseCode != null) {
-			predicates.add(
-					cb.equal(opd.join("disease").get("code"), diseaseCode)
-			);
-		}
-		if (ageFrom != 0 || ageTo != 0) {
-			predicates.add(
-					cb.between(opd.<Integer>get("age"), ageFrom, ageTo)
-			);
-		}
-		if (sex != 'A') {
-			predicates.add(
-					cb.equal(opd.get("sex"), sex)
-			);
-		}
-		if (newPatient != 'A') {
-			predicates.add(
-					cb.equal(opd.get("newPatient"), newPatient)
-			);
-		}
-		if (patientCode == 0) {
-			predicates.add(
-					cb.equal(opd.get("userID"), patientCode)
-			);
-		}
-		predicates.add(
-				cb.between(opd.<LocalDateTime>get("date"), dateFrom, dateTo.plusDays(1))
 		);
 		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 
