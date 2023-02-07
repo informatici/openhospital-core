@@ -45,7 +45,7 @@ import org.isf.generaldata.MessageBundle;
  * ------------------------------------------
  */
 @Entity
-@Table(name="MENUITEM")
+@Table(name="OH_MENUITEM")
 @SqlResultSetMapping(name="UserMenuItemWithStatus",
 	entities={
 	    @EntityResult(entityClass=org.isf.menu.model.UserMenuItem.class, fields={
@@ -107,8 +107,9 @@ public class UserMenuItem
 	public UserMenuItem() {
 		super();
 	}
-		
-	public UserMenuItem(String code, String buttonLabel, String altLabel, String tooltip, char shortcut, String mySubmenu, String myClass, boolean isASubMenu, int position, boolean isActive) {
+
+	public UserMenuItem(String code, String buttonLabel, String altLabel, String tooltip, char shortcut, String mySubmenu, String myClass, boolean isASubMenu,
+			int position, boolean isActive) {
 		super();
 		this.code = code;
 		this.buttonLabel = buttonLabel;
@@ -121,7 +122,6 @@ public class UserMenuItem
 		this.position = position;
 		this.isActive = isActive;
 	}
-	
 	
 	public String getAltLabel() {
 		return MessageBundle.getMessage(altLabel); 
@@ -183,36 +183,37 @@ public class UserMenuItem
 	public void setTooltip(String tooltip) {
 		this.tooltip = tooltip;
 	}
-		
+
 	@Override
 	public boolean equals(Object anObject) {
-        return !(anObject instanceof UserMenuItem) ? false
-                : (getCode().equals(((UserMenuItem) anObject).getCode())
-                  && getButtonLabel().equalsIgnoreCase(((UserMenuItem) anObject).getButtonLabel()) 
-                  && getAltLabel().equals(((UserMenuItem) anObject).getAltLabel())
-                  && getTooltip().equals(((UserMenuItem) anObject).getTooltip())
-                  && getShortcut()==((UserMenuItem) anObject).getShortcut()
-                  && getMySubmenu().equals(((UserMenuItem) anObject).getMySubmenu())
-                  && getMyClass().equals(((UserMenuItem) anObject).getMyClass())
-                  && isASubMenu()==((UserMenuItem) anObject).isASubMenu()
-                  && getPosition()==((UserMenuItem) anObject).getPosition()
-                  && (isActive()==((UserMenuItem) anObject).isActive()));
-    }
-	
-	public String toString(){
+		return anObject instanceof UserMenuItem
+				&& (getCode().equals(((UserMenuItem) anObject).getCode())
+				&& getButtonLabel().equalsIgnoreCase(((UserMenuItem) anObject).getButtonLabel())
+				&& getAltLabel().equals(((UserMenuItem) anObject).getAltLabel())
+				&& getTooltip().equals(((UserMenuItem) anObject).getTooltip())
+				&& getShortcut() == ((UserMenuItem) anObject).getShortcut()
+				&& getMySubmenu().equals(((UserMenuItem) anObject).getMySubmenu())
+				&& getMyClass().equals(((UserMenuItem) anObject).getMyClass())
+				&& isASubMenu() == ((UserMenuItem) anObject).isASubMenu()
+				&& getPosition() == ((UserMenuItem) anObject).getPosition()
+				&& (isActive() == ((UserMenuItem) anObject).isActive()));
+	}
+
+	public String toString() {
 		return getButtonLabel();
 	}
 
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + code.hashCode();
-	        
-	        this.hashCode = c;
-	    }
-	    return this.hashCode;
-	}		
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + code.hashCode();
+
+			this.hashCode = c;
+		}
+		return this.hashCode;
+	}
+
 }

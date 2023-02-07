@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,10 +21,9 @@
  */
 package org.isf.accounting.model;
 
-import java.util.GregorianCalendar;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
+import java.time.LocalDateTime;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -38,6 +37,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -50,18 +50,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="BILLPAYMENTS")
+@Table(name="OH_BILLPAYMENTS")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="BLP_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="BLP_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="BLP_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="BLP_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="BLP_LAST_MODIFIED_DATE"))
-})
-public class BillPayments extends Auditable<String> implements Comparable<BillPayments>
-{
-	@Id 
+@AttributeOverride(name = "createdBy", column = @Column(name = "BLP_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "BLP_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "BLP_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "BLP_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "BLP_LAST_MODIFIED_DATE"))
+public class BillPayments extends Auditable<String> implements Comparable<BillPayments> {
+
+	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="BLP_ID")
 	private int id;
@@ -71,8 +69,8 @@ public class BillPayments extends Auditable<String> implements Comparable<BillPa
 	private Bill bill;
 
 	@NotNull
-	@Column(name="BLP_DATE")
-	private GregorianCalendar date;
+	@Column(name="BLP_DATE")		// SQL type: datetime
+	private LocalDateTime date;
 
 	@NotNull
 	@Column(name="BLP_AMOUNT")
@@ -90,12 +88,11 @@ public class BillPayments extends Auditable<String> implements Comparable<BillPa
 		super();
 	}
 	
-	public BillPayments(int id, Bill bill, GregorianCalendar date,
-			double amount, String user) {
+	public BillPayments(int id, Bill bill, LocalDateTime date, double amount, String user) {
 		super();
 		this.id = id;
 		this.bill = bill;
-		this.date = date;
+		this.date = TimeTools.truncateToSeconds(date);
 		this.amount = amount;
 		this.user = user;
 	}
@@ -116,12 +113,12 @@ public class BillPayments extends Auditable<String> implements Comparable<BillPa
 		this.bill = bill;
 	}
 
-	public GregorianCalendar getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(GregorianCalendar date) {
-		this.date = date;
+	public void setDate(LocalDateTime date) {
+		this.date = TimeTools.truncateToSeconds(date);
 	}
 
 	public double getAmount() {
@@ -142,7 +139,7 @@ public class BillPayments extends Auditable<String> implements Comparable<BillPa
 	
 	@Override
 	public int compareTo(BillPayments anObject) {
-		return this.date.compareTo(((BillPayments)anObject).getDate());
+		return this.date.compareTo(anObject.getDate());
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -56,16 +56,8 @@ public class PregnantTreatmentTypeIoOperation {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newPregnantTreatmentType(
-			PregnantTreatmentType pregnantTreatmentType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		PregnantTreatmentType savedPregnantTreatmentType = repository.save(pregnantTreatmentType);
-		result = (savedPregnantTreatmentType != null);
-		
-		return result;
+	public PregnantTreatmentType newPregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
+		return repository.save(pregnantTreatmentType);
 	}
 	
 	/**
@@ -75,16 +67,8 @@ public class PregnantTreatmentTypeIoOperation {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean updatePregnantTreatmentType(
-			PregnantTreatmentType pregnantTreatmentType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		PregnantTreatmentType savedPregnantTreatmentType = repository.save(pregnantTreatmentType);
-		result = (savedPregnantTreatmentType != null);
-		
-		return result;
+	public PregnantTreatmentType updatePregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
+		return repository.save(pregnantTreatmentType);
 	}
 	
 	/**
@@ -94,15 +78,9 @@ public class PregnantTreatmentTypeIoOperation {
 	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean deletePregnantTreatmentType(
-			PregnantTreatmentType pregnantTreatmentType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deletePregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
 		repository.delete(pregnantTreatmentType);
-		
-		return result;
+		return true;
 	}
 	
 	/**
@@ -112,14 +90,8 @@ public class PregnantTreatmentTypeIoOperation {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.existsById(code);
 	}
+
 }

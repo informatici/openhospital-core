@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,8 +23,8 @@ package org.isf.patvac.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+import java.time.Month;
 
 import org.isf.patient.model.Patient;
 import org.isf.patvac.model.PatientVaccine;
@@ -35,7 +35,7 @@ public class TestPatientVaccine {
 
 	private int code = 0;
 	private int progr = 10;
-	private GregorianCalendar vaccineDate = new GregorianCalendar(1984, Calendar.AUGUST, 14);
+	private LocalDateTime vaccineDate = LocalDateTime.of(1984, Month.AUGUST, 14, 9, 0, 0);
 	private int lock = 0;
 
 	public PatientVaccine setup(Patient patient, Vaccine vaccine, boolean usingSet) throws OHException {
@@ -43,7 +43,7 @@ public class TestPatientVaccine {
 
 		if (usingSet) {
 			patientVaccine = new PatientVaccine();
-			_setParameters(patient, vaccine, patientVaccine);
+			setParameters(patient, vaccine, patientVaccine);
 		} else {
 			// Create PatientVaccine with all parameters 
 			patientVaccine = new PatientVaccine(code, progr, vaccineDate, patient, vaccine, lock);
@@ -52,7 +52,7 @@ public class TestPatientVaccine {
 		return patientVaccine;
 	}
 
-	public void _setParameters(Patient patient, Vaccine vaccine, PatientVaccine patientVaccine) {
+	public void setParameters(Patient patient, Vaccine vaccine, PatientVaccine patientVaccine) {
 		patientVaccine.setCode(code);
 		patientVaccine.setProgr(progr);
 		patientVaccine.setVaccineDate(vaccineDate);

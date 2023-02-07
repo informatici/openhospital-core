@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -22,7 +22,6 @@
 package org.isf.operation.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -34,8 +33,8 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
-import org.isf.utils.db.Auditable;
 import org.isf.opetype.model.OperationType;
+import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -49,18 +48,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="OPERATION")
+@Table(name="OH_OPERATION")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="OPE_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="OPE_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="OPE_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="OPE_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="OPE_LAST_MODIFIED_DATE"))
-})
-public class Operation extends Auditable<String>
-{
-	@Id 
+@AttributeOverride(name = "createdBy", column = @Column(name = "OPE_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "OPE_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "OPE_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "OPE_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "OPE_LAST_MODIFIED_DATE"))
+public class Operation extends Auditable<String> {
+
+	@Id
 	@Column(name="OPE_ID_A")	    
     private String code;
 
@@ -86,6 +83,7 @@ public class Operation extends Auditable<String>
 	@Column(name="OPE_FOR")
     private String operFor;
 	
+	
 	@Version
 	@Column(name="OPE_LOCK")
     private Integer lock;
@@ -93,24 +91,22 @@ public class Operation extends Auditable<String>
 	@Transient
     private volatile int hashCode = 0;
     
-    
-	public Operation() 
-    {
+	public Operation() {
 		super();
-    }
-	
-    /**
-     * @param aCode
-     * @param aDescription
-     * @param aType
-     */
-    public Operation(String aCode, String aDescription, OperationType aType, Integer major) {
-        super();
-        this.code = aCode;
-        this.description = aDescription;
-        this.type = aType;
-        this.major = major;
-    }
+	}
+
+	/**
+	 * @param aCode
+	 * @param aDescription
+	 * @param aType
+	 */
+	public Operation(String aCode, String aDescription, OperationType aType, Integer major) {
+		super();
+		this.code = aCode;
+		this.description = aDescription;
+		this.type = aType;
+		this.major = major;
+	}
     
     public String getCode() {
         return this.code;
@@ -189,7 +185,6 @@ public class Operation extends Auditable<String>
 	        
 	        this.hashCode = c;
 	    }
-	  
 	    return this.hashCode;
 	}
 
@@ -197,4 +192,3 @@ public class Operation extends Auditable<String>
         return this.description;
     }
 }
-

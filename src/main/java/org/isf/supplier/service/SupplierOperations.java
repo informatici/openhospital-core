@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -52,18 +52,18 @@ public class SupplierOperations {
 	 * return <code>true</code> if data has been saved, <code>false</code> otherwise. 
 	 * @throws OHServiceException 
 	 */
-	public boolean saveOrUpdate(Supplier supplier) throws OHServiceException {
-		return repository.save(supplier) != null;
+	public Supplier saveOrUpdate(Supplier supplier) throws OHServiceException {
+		return repository.save(supplier);
 	}
 
 	/**
 	 * Returns a {@link Supplier} with specified ID
-	 * @param ID - supplier ID
+	 * @param id - supplier ID
 	 * @return supplier - the supplier with specified ID
 	 * @throws OHServiceException 
 	 */
-	public Supplier getByID(int ID) throws OHServiceException {
-		return repository.findOne(ID);
+	public Supplier getByID(int id) throws OHServiceException {
+		return repository.findById(id).orElse(null);
 	}
 	
 	/**

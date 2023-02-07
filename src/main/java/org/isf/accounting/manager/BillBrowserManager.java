@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,8 +21,8 @@
  */
 package org.isf.accounting.manager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.accounting.model.Bill;
@@ -31,10 +31,12 @@ import org.isf.accounting.model.BillPayments;
 import org.isf.accounting.service.AccountingIoOperations;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
+import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,15 +47,6 @@ public class BillBrowserManager {
 	@Autowired
 	private AccountingIoOperations ioOperations;
 
-	public BillBrowserManager() {
-		
-	}
-	
-	public BillBrowserManager(AccountingIoOperations ioOperations) {
-		if (ioOperations != null) 
-			this.ioOperations = ioOperations;
-	}
-
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 * @param bill
@@ -61,22 +54,15 @@ public class BillBrowserManager {
 	 * @param billPayments
 	 * @throws OHDataValidationException
 	 */
-	protected void validateBill(Bill bill,
-			List<BillItems> billItems,
-			List<BillPayments> billPayments) throws OHDataValidationException
-	{
+	protected void validateBill(Bill bill, List<BillItems> billItems, List<BillPayments> billPayments) throws OHDataValidationException {
         List<OHExceptionMessage> errors = new ArrayList<>();
-        
-        GregorianCalendar today = new GregorianCalendar();
-		GregorianCalendar upDate = new GregorianCalendar();
-		GregorianCalendar firstPay = new GregorianCalendar();
-		GregorianCalendar lastPay = new GregorianCalendar();
-		// ensure all the times are exactly the same in case constructor generates different value
-		upDate.setTime(today.getTime());
-		firstPay.setTime(today.getTime());
-		lastPay.setTime(today.getTime());
 
-		GregorianCalendar billDate = bill.getDate();
+		LocalDateTime today = TimeTools.getNow();
+		LocalDateTime upDate;
+		LocalDateTime firstPay = LocalDateTime.from(today);
+		LocalDateTime lastPay = LocalDateTime.from(today);
+
+		LocalDateTime billDate = bill.getDate();
 		if (!billPayments.isEmpty()) {
 			firstPay = billPayments.get(0).getDate();
 			lastPay = billPayments.get(billPayments.size()-1).getDate(); //most recent payment
@@ -86,17 +72,17 @@ public class BillBrowserManager {
 		}
 		bill.setUpdate(upDate);
         
-		if (billDate.after(today)) {
+		if (billDate.isAfter(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 	        		MessageBundle.getMessage("angal.newbill.billsinthefuturearenotallowed.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
-		if (lastPay.after(today)) {
+		if (lastPay.isAfter(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 	        		MessageBundle.getMessage("angal.newbill.payementsinthefuturearenotallowed.msg"),
 	        		OHSeverityLevel.ERROR));
 		}
-		if (billDate.after(firstPay)) {
+		if (billDate.isAfter(firstPay)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 	        		MessageBundle.getMessage("angal.newbill.billdateaisfterthefirstpayment.msg"),
 	        		OHSeverityLevel.ERROR));
@@ -108,13 +94,13 @@ public class BillBrowserManager {
 		}
 		if (bill.getStatus().equals("C") && bill.getBalance() != 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.newbill.abillwithanoutstandingbalancecannotbeclosed.msg"),
-	        		OHSeverityLevel.ERROR));
+					MessageBundle.getMessage("angal.newbill.abillwithanoutstandingbalancecannotbeclosed.msg"),
+					OHSeverityLevel.ERROR));
 		}
-		if(!errors.isEmpty()){
-	        throw new OHDataValidationException(errors);
-	    }
-    }
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
+	}
 	
 	/**
 	 * Returns all the stored {@link BillItems}.
@@ -147,7 +133,7 @@ public class BillBrowserManager {
 	 * @return the bills list
 	 * @throws OHServiceException 
 	 */
-	public List<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) throws OHServiceException {
+	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo,Patient patient) throws OHServiceException {
 		return ioOperations.getBillsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
 
@@ -159,7 +145,7 @@ public class BillBrowserManager {
 	 * @return the list of payments
 	 * @throws OHServiceException 
 	 */
-	public List<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo,Patient patient) throws OHServiceException {
+	public List<BillPayments> getPayments(LocalDateTime dateFrom, LocalDateTime dateTo,Patient patient) throws OHServiceException {
 		return ioOperations.getPaymentsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
 	
@@ -195,6 +181,7 @@ public class BillBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean newBill(
 			Bill newBill,
 			List<BillItems> billItems,
@@ -249,6 +236,7 @@ public class BillBrowserManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean updateBill(Bill updateBill,
 			List<BillItems> billItems,
 			List<BillPayments> billPayments) throws OHServiceException {
@@ -327,7 +315,7 @@ public class BillBrowserManager {
 	 * @return a list of retrieved {@link Bill}s or <code>null</code> if an error occurred.
 	 * @throws OHServiceException 
 	 */
-	public List<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return ioOperations.getBillsBetweenDates(dateFrom, dateTo);
 	}
 
@@ -349,7 +337,7 @@ public class BillBrowserManager {
 	 * @return a list of {@link BillPayments} for the specified date range or <code>null</code> if an error occurred.
 	 * @throws OHServiceException 
 	 */
-	public List<BillPayments> getPayments(GregorianCalendar dateFrom, GregorianCalendar dateTo) throws OHServiceException {
+	public List<BillPayments> getPayments(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return ioOperations.getPayments(dateFrom, dateTo);
 	}
 
@@ -391,7 +379,7 @@ public class BillBrowserManager {
 	 * @return
 	 * @throws OHServiceException 
 	 */
-	public List<Bill> getBills(GregorianCalendar dateFrom, GregorianCalendar dateTo,BillItems billItem) throws OHServiceException {
+	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo,BillItems billItem) throws OHServiceException {
 		return ioOperations.getBillsBetweenDatesWhereBillItem(dateFrom, dateTo, billItem);
 	}
 }

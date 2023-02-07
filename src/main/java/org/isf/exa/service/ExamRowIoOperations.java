@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,7 +21,6 @@
  */
 package org.isf.exa.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.exa.model.ExamRow;
@@ -49,9 +48,6 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class ExamRowIoOperations {
 
-	//@Autowired
-	//private ExamIoOperationRepository repository;
-	
 	@Autowired
 	private ExamRowIoOperationRepository rowRepository;
 	
@@ -70,12 +66,12 @@ public class ExamRowIoOperations {
 
 		if (aExamCode != 0) {
 			if (aDescription != null) {
-				examrows = (ArrayList<ExamRow>) rowRepository.findAllByCodeAndDescriptionOrderByCodeAscDescriptionAsc(aExamCode, aDescription);
+				examrows = rowRepository.findAllByCodeAndDescriptionOrderByCodeAscDescriptionAsc(aExamCode, aDescription);
 			} else {
-				examrows = (ArrayList<ExamRow>) rowRepository.findAllByCodeOrderByDescription(aExamCode);
+				examrows = rowRepository.findAllByCodeOrderByDescription(aExamCode);
 			}
 		} else {
-			examrows = (ArrayList<ExamRow>) rowRepository.findAll();
+			examrows = rowRepository.findAll();
 		}
 		return examrows;
 	}
@@ -96,14 +92,10 @@ public class ExamRowIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<ExamRow> getExamsRowByDesc(String description) throws OHServiceException {
-		List<ExamRow> examrows = new ArrayList<>();
-
 		if (description != null) {
-			examrows = (ArrayList<ExamRow>) rowRepository.findAllByDescriptionOrderByDescriptionAsc(description);
-		} else {
-			examrows = (ArrayList<ExamRow>) rowRepository.findAll();
+			return rowRepository.findAllByDescriptionOrderByDescriptionAsc(description);
 		}
-		return examrows;
+		return rowRepository.findAll();
 	}
 
 	/**
@@ -122,16 +114,8 @@ public class ExamRowIoOperations {
 	 * @return <code>true</code> if the {@link ExamRow} has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newExamRow(
-			ExamRow examRow) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		ExamRow savedExam = rowRepository.save(examRow);
-		result = (savedExam != null);
-		
-		return result;
+	public ExamRow newExamRow(ExamRow examRow) throws OHServiceException {
+		return rowRepository.save(examRow);
 	}
 
 	/**
@@ -140,14 +124,8 @@ public class ExamRowIoOperations {
 	 * @return <code>true</code> if the {@link ExamRow} has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updateExamRow(
-			ExamRow examRow) throws OHServiceException 
-	{
-		boolean result = true;
-		
-		rowRepository.save(examRow);
-    	
-		return result;	
+	public ExamRow updateExamRow(ExamRow examRow) throws OHServiceException {
+		return rowRepository.save(examRow);
 	}
 
 	/**
@@ -156,12 +134,9 @@ public class ExamRowIoOperations {
 	 * @return <code>true</code> if the {@link ExamRow} has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean deleteExamRow(
-                    ExamRow examRow) throws OHServiceException 
-        {
-            boolean result = true;
-            rowRepository.delete(examRow.getCode());
-            return result;	
+	public boolean deleteExamRow(ExamRow examRow) throws OHServiceException {
+		rowRepository.deleteById(examRow.getCode());
+		return true;
 	}
 
 	
@@ -174,19 +149,8 @@ public class ExamRowIoOperations {
 	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isKeyPresent(
-			ExamRow examrow) throws OHServiceException 
-	{
-		boolean result = false;
-		ExamRow foundExam = rowRepository.findOne(examrow.getCode());
-		
-		
-		if (foundExam != null)
-		{
-			result = true;
-		}
-		
-		return result;
+	public boolean isKeyPresent(ExamRow examrow) throws OHServiceException {
+		return rowRepository.findById(examrow.getCode()).orElse(null) != null;
 	}
 	
 	/**
@@ -195,18 +159,11 @@ public class ExamRowIoOperations {
 	 * @param value the value to sanitize.
 	 * @return the sanitized value or <code>null</code> if the passed value is <code>null</code>.
 	 */
-	protected String sanitize(
-			String value)
-	{
-		String result = null;
-		
-		
-		if (value != null) 
-		{
-			result = value.trim().replaceAll("'", "''");
+	protected String sanitize(String value) {
+		if (value == null) {
+			return null;
 		}
-		
-		return result;
+		return value.trim().replace("'", "''");
 	}
 
 	/**
@@ -217,7 +174,7 @@ public class ExamRowIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(int code) throws OHServiceException{
-		return rowRepository.exists(code);
+		return rowRepository.existsById(code);
 	}
 
 	/**
@@ -228,11 +185,11 @@ public class ExamRowIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isRowPresent(Integer code) throws OHServiceException {
-		return rowRepository.exists(code);
+		return rowRepository.existsById(code);
 	}
 
-    public List<ExamRow> getExamRowByExamCode(String aExamCode)  throws OHServiceException {
-       return rowRepository.findAllByExam_CodeOrderByDescription(aExamCode);
+	public List<ExamRow> getExamRowByExamCode(String aExamCode) throws OHServiceException {
+		return rowRepository.findAllByExam_CodeOrderByDescription(aExamCode);
     }
 
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -74,17 +74,30 @@ public class WardIoOperations {
 	 * @param wardID - the ward ID, can be <code>null</code>
 	 * @return the retrieved wards.
 	 * @throws OHServiceException if an error occurs retrieving the wards.
+	 * 
+	 * TODO: remove this method, findWard(String code) should be enough
 	 */
 	public List<Ward> getWards(String wardID) throws OHServiceException {
-		List<Ward> wards = null;
-
 		if (wardID != null && wardID.trim().length() > 0) {
-			wards = new ArrayList<>(repository.findByCodeContains(wardID));
-		} else {
-			wards = new ArrayList<>(repository.findAll());
+			return repository.findByCodeContains(wardID);
 		}
-
-		return wards;
+		return repository.findAll();
+	}
+	
+	/**
+	 * Retrieves all store {@link Ward}s with beds > {@code 0}
+	 * @return
+	 */
+	public List<Ward> getIpdWards() {
+		return repository.findByBedsGreaterThanZero();
+	}
+	
+	/**
+	 * Retrieves all store {@link Ward}s with isOpd = {@code true}
+	 * @return
+	 */
+	public List<Ward> getOpdWards() {
+		return repository.findByIsOpdIsTrue();
 	}
 	
 	/**
@@ -125,9 +138,8 @@ public class WardIoOperations {
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
-	
 	
 	/**
 	 * Check if the maternity ward exists
@@ -136,6 +148,15 @@ public class WardIoOperations {
 	 */
 	public boolean isMaternityPresent() throws OHServiceException {
 		return isCodePresent("M");
+	}
+	
+	/**
+	 * Check if the OPD ward exists
+	 * @return <code>true</code> if is exist, <code>false</code> otherwise.
+	 * @throws OHServiceException if an error occurs during the check.
+	 */
+	public boolean isOpdPresent() throws OHServiceException {
+		return isCodePresent("OPD");
 	}
 
 	/**
@@ -146,11 +167,11 @@ public class WardIoOperations {
 	 * @throws OHServiceException
 	 * @throws IllegalArgumentException if {@code code} is {@literal null}
 	 */
-	public Ward findWard(String code) throws OHServiceException
-	{
+	public Ward findWard(String code) throws OHServiceException {
 		if (code != null) {
-			return repository.findOne(code);
-		}else
-			throw new IllegalArgumentException("code must not be null");
+			return repository.findById(code).orElse(null);
+		}
+		throw new IllegalArgumentException("code must not be null");
 	}
+
 }

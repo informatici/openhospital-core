@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -97,7 +97,7 @@ public class OperationBrowserManager {
 	 * @return <code>true</code> if the operation has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newOperation(Operation operation) throws OHServiceException {
+	public Operation newOperation(Operation operation) throws OHServiceException {
 		return ioOperations.newOperation(operation);
 	}
 
@@ -108,7 +108,7 @@ public class OperationBrowserManager {
 	 * @return <code>true</code> if the item has been updated. <code>false</code> other
 	 * @throws OHServiceException
 	 */
-	public boolean updateOperation(Operation operation) throws OHServiceException {
+	public Operation updateOperation(Operation operation) throws OHServiceException {
 		// the user has confirmed he wants to overwrite the record
 		return ioOperations.updateOperation(operation);
 	}
@@ -170,9 +170,9 @@ public class OperationBrowserManager {
 		if (resultsListHashMap == null) {
 			buildResultHashMap();
 		}
-		for (String key : resultsListHashMap.keySet()) {
-			if (resultsListHashMap.get(key).equals(description)) {
-				return key;
+		for (Map.Entry<String, String> entry : resultsListHashMap.entrySet()) {
+			if (entry.getValue().equals(description)) {
+				return entry.getKey();
 			}
 		}
 		return "";
@@ -182,13 +182,16 @@ public class OperationBrowserManager {
 		if (resultsListHashMap == null) {
 			buildResultHashMap();
 		}
-		ArrayList<String> resultDescriptionList = new ArrayList<>(resultsListHashMap.values());
+		List<String> resultDescriptionList = new ArrayList<>(resultsListHashMap.values());
 		resultDescriptionList.sort(new DefaultSorter(MessageBundle.getMessage("angal.operation.result.success.txt")));
 		return resultDescriptionList;
 	}
-	
-	public String getResultDescriptionTranslated(String result_desc_key) {
-		if (resultsListHashMap == null) buildResultHashMap();
-		return resultsListHashMap.get(result_desc_key);
+
+	public String getResultDescriptionTranslated(String resultDescKey) {
+		if (resultsListHashMap == null) {
+			buildResultHashMap();
+		}
+		return resultsListHashMap.get(resultDescKey);
 	}
+
 }

@@ -36,7 +36,7 @@ public class TestLaboratoryRow {
 
 		if (usingSet) {
 			laboratoryRow = new LaboratoryRow();
-			_setParameters(laboratoryRow, laboratory);
+			setParameters(laboratoryRow, laboratory);
 		} else {
 			// Create LaboratoryRow with all parameters 
 			laboratoryRow = new LaboratoryRow(laboratory, description);
@@ -45,7 +45,7 @@ public class TestLaboratoryRow {
 		return laboratoryRow;
 	}
 
-	public void _setParameters(LaboratoryRow laboratoryRow, Laboratory laboratory) {
+	public void setParameters(LaboratoryRow laboratoryRow, Laboratory laboratory) {
 		laboratoryRow.setDescription(description);
 		laboratoryRow.setLabId(laboratory);
 	}

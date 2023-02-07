@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -40,7 +40,7 @@ import javax.persistence.Table;
  * Photo related to a single {@link Patient}
  */
 @Entity
-@Table(name = "PATIENT_PROFILE_PHOTO")
+@Table(name="OH_PATIENT_PROFILE_PHOTO")
 public class PatientProfilePhoto implements Serializable {
 
 	@Id

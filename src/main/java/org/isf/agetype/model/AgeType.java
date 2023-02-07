@@ -22,7 +22,6 @@
 package org.isf.agetype.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -44,17 +43,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="AGETYPE")
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="AT_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="AT_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="AT_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="AT_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="AT_LAST_MODIFIED_DATE"))
-})
-public class AgeType extends Auditable<String>
-{
+@Table(name="OH_AGETYPE")
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "AT_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "AT_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "AT_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "AT_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "AT_LAST_MODIFIED_DATE"))
+public class AgeType extends Auditable<String> {
+
 	@Id 
 	@Column(name="AT_CODE") 
     private String code;
@@ -84,18 +81,20 @@ public class AgeType extends Auditable<String>
      * @param aDescription
      */
     public AgeType(String aCode, String aDescription) {
-        super();
-        this.code = aCode;
-        this.description = aDescription;
+	    super();
+	    this.code = aCode;
+	    this.description = aDescription;
     }
-    public AgeType(String aCode, int from, int to, String aDescription) {
-        super();
-        this.code = aCode;
-        this.from = from;
-        this.to = to;
-        this.description = aDescription;
-    }
-    public String getCode() {
+
+	public AgeType(String aCode, int from, int to, String aDescription) {
+		super();
+		this.code = aCode;
+		this.from = from;
+		this.to = to;
+		this.description = aDescription;
+	}
+
+	public String getCode() {
         return this.code;
     }
     public void setCode(String aCode) {

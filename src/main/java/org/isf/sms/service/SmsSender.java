@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,13 +21,13 @@
  */
 package org.isf.sms.service;
 
-import java.util.Date;
 import java.util.List;
 
 import org.isf.generaldata.SmsParameters;
 import org.isf.menu.manager.Context;
 import org.isf.sms.model.Sms;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.time.TimeTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +39,7 @@ public class SmsSender implements Runnable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SmsSender.class);
 
 	private boolean running = true;
-	private int delay = 10;
+	private int delay;
 
 	public SmsSender() {
 		LOGGER.info("SMS Sender started...");
@@ -64,10 +64,10 @@ public class SmsSender implements Runnable {
 				SmsSenderOperations sender = Context.getApplicationContext().getBean(SmsSenderOperations.class);
 				if (sender.initialize()) {
 					for (Sms sms : smsList) {
-						if (sms.getSmsDateSched().before(new Date())) {
+						if (sms.getSmsDateSched().isBefore(TimeTools.getNow())) {
 							boolean result = sender.sendSMS(sms);
 							if (result) {
-								sms.setSmsDateSent(new Date());
+								sms.setSmsDateSent(TimeTools.getNow());
 								try {
 									smsOp.saveOrUpdate(sms);
 								} catch (OHServiceException e) {

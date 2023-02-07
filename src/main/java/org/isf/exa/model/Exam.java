@@ -22,7 +22,6 @@
 package org.isf.exa.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -48,18 +47,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="EXAM")
+@Table(name="OH_EXAM")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="EXA_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="EXA_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="EXA_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="EXA_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="EXA_LAST_MODIFIED_DATE"))
-})
-public class Exam extends Auditable<String> 
-{
-	@Id 
+@AttributeOverride(name = "createdBy", column = @Column(name = "EXA_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "EXA_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "EXA_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "EXA_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "EXA_LAST_MODIFIED_DATE"))
+public class Exam extends Auditable<String> {
+
+	@Id
 	@Column(name="EXA_ID_A")	
 	private String code;
 
@@ -151,12 +148,8 @@ public class Exam extends Auditable<String>
 
 	@Override
 	public boolean equals(Object anObject) {
-		return !(anObject instanceof Exam) ? false
-				: (getCode().equals(((Exam) anObject).getCode())
-						&& getDescription().equalsIgnoreCase(
-								((Exam) anObject).getDescription())
-						&& getExamtype()
-								.equals(((Exam) anObject).getExamtype()));
+		return anObject instanceof Exam && (getCode().equals(((Exam) anObject).getCode())
+				&& getDescription().equalsIgnoreCase(((Exam) anObject).getDescription()) && getExamtype().equals(((Exam) anObject).getExamtype()));
 	}
 
 	public String toString() {

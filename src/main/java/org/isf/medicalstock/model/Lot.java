@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -22,10 +22,9 @@
 package org.isf.medicalstock.model;
 
 import java.math.BigDecimal;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -41,6 +40,7 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperations;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -53,18 +53,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="MEDICALDSRLOT")
+@Table(name="OH_MEDICALDSRLOT")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="LT_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="LT_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="LT_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="LT_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="LT_LAST_MODIFIED_DATE"))
-})
-public class Lot extends Auditable<String>
-{
-	@Id 
+@AttributeOverride(name = "createdBy", column = @Column(name = "LT_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "LT_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "LT_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "LT_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "LT_LAST_MODIFIED_DATE"))
+public class Lot extends Auditable<String> {
+
+	@Id
 	@Column(name="LT_ID_A")
 	private String code;
 
@@ -74,12 +72,12 @@ public class Lot extends Auditable<String>
 	private Medical medical;
 
 	@NotNull
-	@Column(name="LT_PREP_DATE")
-	private GregorianCalendar preparationDate;
+	@Column(name="LT_PREP_DATE")		// SQL type: datetime
+	private LocalDateTime preparationDate;
 
 	@NotNull
-	@Column(name="LT_DUE_DATE")
-	private GregorianCalendar dueDate;
+	@Column(name="LT_DUE_DATE")		   // SQL type: datetime
+	private LocalDateTime dueDate;
 
 	@Column(name="LT_COST")
 	private BigDecimal cost;
@@ -131,83 +129,93 @@ public class Lot extends Auditable<String>
 	public Lot() {
 	}
 
-	public Lot(String aCode){
-		code=aCode;
-
-	}
-	public Lot(String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate){
-		code=aCode;
-		preparationDate=aPreparationDate;
-		dueDate=aDueDate;
-	}
-	
-	public Lot(Medical aMedical, String aCode,GregorianCalendar aPreparationDate,GregorianCalendar aDueDate,BigDecimal aCost){
-		medical=aMedical;
-		code=aCode;
-		preparationDate=aPreparationDate;
-		dueDate=aDueDate;
-		cost=aCost;
+	public Lot(String aCode) {
+		code = aCode;
 	}
 
-	public String getCode(){
+	public Lot(String aCode, LocalDateTime aPreparationDate, LocalDateTime aDueDate) {
+		code = aCode;
+		preparationDate = TimeTools.truncateToSeconds(aPreparationDate);
+		dueDate = TimeTools.truncateToSeconds(aDueDate);
+	}
+
+	public Lot(Medical aMedical, String aCode, LocalDateTime aPreparationDate, LocalDateTime aDueDate, BigDecimal aCost) {
+		medical = aMedical;
+		code = aCode;
+		preparationDate = TimeTools.truncateToSeconds(aPreparationDate);
+		dueDate = TimeTools.truncateToSeconds(aDueDate);
+		cost = aCost;
+	}
+
+	public String getCode() {
 		return code;
 	}
 
-	public Integer getMainStoreQuantity(){
+	public Integer getMainStoreQuantity() {
 		return mainStoreQuantity;
 	}
-	
+
 	public Double getWardsTotalQuantity() {
 		return wardsTotalQuantity;
 	}
-	
+
 	public double getOverallQuantity() {
 		return mainStoreQuantity + wardsTotalQuantity;
 	}
 
-	public Medical getMedical(){
-			return medical;
+	public Medical getMedical() {
+		return medical;
 	}
 
-	public GregorianCalendar getPreparationDate(){
+	public LocalDateTime getPreparationDate() {
 		return preparationDate;
 	}
-	public GregorianCalendar getDueDate(){
+
+	public LocalDateTime getDueDate() {
 		return dueDate;
 	}
+
 	public BigDecimal getCost() {
 		return cost;
 	}
-	public void setCode(String aCode){
-		code=aCode;
+
+	public void setCode(String aCode) {
+		code = aCode;
 	}
-	public void setMainStoreQuantity(int aQuantity){
-		mainStoreQuantity=aQuantity;
+
+	public void setMainStoreQuantity(int aQuantity) {
+		mainStoreQuantity = aQuantity;
 	}
+
 	public void setWardsTotalQuantity(double wardsTotalQuantity) {
 		this.wardsTotalQuantity = wardsTotalQuantity;
 	}
-	public void setPreparationDate(GregorianCalendar aPreparationDate){
-		preparationDate=aPreparationDate;
+
+	public void setPreparationDate(LocalDateTime aPreparationDate) {
+		preparationDate = TimeTools.truncateToSeconds(aPreparationDate);
 	}
-	public void setMedical(Medical aMedical){
-				medical=aMedical;
+
+	public void setMedical(Medical aMedical) {
+		medical = aMedical;
 	}
-	public void setDueDate(GregorianCalendar aDueDate){
-		dueDate=aDueDate;
+
+	public void setDueDate(LocalDateTime aDueDate) {
+		dueDate = TimeTools.truncateToSeconds(aDueDate);
 	}
+
 	public void setCost(BigDecimal cost) {
 		this.cost = cost;
 	}
-	public String toString(){
-		if (code==null) {
+
+	public String toString() {
+		if (code == null) {
 			return MessageBundle.getMessage("angal.medicalstock.nolot.txt");
 		}
 		return getCode();
 	}
 
-	public boolean isValidLot(){
-		return getCode().length()<=50;
+	public boolean isValidLot() {
+		return getCode().length() <= 50;
 	}
 
 	@Override
@@ -238,9 +246,7 @@ public class Lot extends Auditable<String>
 				return false;
 		} else if (!preparationDate.equals(other.preparationDate))
 			return false;
-		if (mainStoreQuantity != other.mainStoreQuantity)
-			return false;
-		return true;
+		return mainStoreQuantity == other.mainStoreQuantity;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -96,7 +96,7 @@ public class ExamTypeBrowserManager {
 	 * @return <code>true</code> if the examType has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newExamType(ExamType examType) throws OHServiceException {
+	public ExamType newExamType(ExamType examType) throws OHServiceException {
 		validateExamType(examType, true);
 		return ioOperations.newExamType(examType);
 	}
@@ -108,7 +108,7 @@ public class ExamTypeBrowserManager {
 	 * @return <code>true</code> if the examType has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean updateExamType(ExamType examType) throws OHServiceException {
+	public ExamType updateExamType(ExamType examType) throws OHServiceException {
 		validateExamType(examType, false);
 		return ioOperations.updateExamType(examType);
 	}

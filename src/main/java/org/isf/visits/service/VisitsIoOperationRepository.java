@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -34,6 +34,8 @@ import org.springframework.stereotype.Repository;
 public interface VisitsIoOperationRepository extends JpaRepository<Visit, Integer> {
 
 	List<Visit> findAllByOrderByPatient_CodeAscDateAsc();
+	
+	Visit findAllByVisitID(@Param("visitID") int visitID);
 
 	List<Visit> findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(@Param("patient") Integer patient);
 	
@@ -44,10 +46,10 @@ public interface VisitsIoOperationRepository extends JpaRepository<Visit, Intege
 	@Modifying
 	void deleteByPatient_Code(@Param("patient") Integer patient);
 
-	@Query(value = "SELECT * FROM VISITS WHERE VST_WRD_ID_A = :ward ORDER BY VST_DATE", nativeQuery = true)
+	@Query(value = "SELECT * FROM OH_VISITS WHERE VST_WRD_ID_A = :ward ORDER BY VST_DATE", nativeQuery = true)
 	List<Visit> findAllWhereWardByOrderDateAsc(@Param("ward") String ward);
 
-	@Query(value = "SELECT * FROM VISITS WHERE VST_PAT_ID = :patient ORDER BY VST_PAT_ID, VST_DATE", nativeQuery = true)
+	@Query(value = "SELECT * FROM OH_VISITS WHERE VST_PAT_ID = :patient ORDER BY VST_PAT_ID, VST_DATE", nativeQuery = true)
 	List<Visit> findAllWherePatientByOrderPatientAndDateAsc(@Param("patient") Integer patient);
 
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -57,8 +57,7 @@ public class AgeTypeIoOperations
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
 	public boolean updateAgeType(List<AgeType> ageType) throws OHServiceException {
-		List<AgeType> savedAgeType = repository.save(ageType);
-		return savedAgeType != null;
+		return repository.saveAll(ageType) != null;
 	}
 
 	/**
@@ -67,16 +66,19 @@ public class AgeTypeIoOperations
 	 * @return the retrieved element, <code>null</code> otherwise.
 	 * @throws OHServiceException if an error occurs retrieving the item.
 	 */
-	public AgeType getAgeTypeByCode(
-			int index) throws OHServiceException 
-	{	
-		String code = "";
-		AgeType ageType = null;
-				
-		
-		code = "d" + (index - 1);
-		ageType = repository.findOneByCode(code); 
+	public AgeType getAgeTypeByCode(int index) throws OHServiceException {
+		String code = "d" + (index - 1);
+		return repository.findOneByCode(code);
+	}
+	
+	/**
+	 * Gets the {@link AgeType} from the code index.
+	 * @param code of agetype.
+	 * @return the retrieved element, <code>null</code> otherwise.
+	 * @throws OHServiceException if an error occurs retrieving the item.
+	 */
+	public AgeType getAgeTypeByCode(String code) throws OHServiceException {
 
-		return ageType;
+		return repository.findOneByCode(code);
 	}
 }

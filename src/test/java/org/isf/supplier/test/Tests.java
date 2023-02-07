@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,8 +23,8 @@ package org.isf.supplier.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.isf.OHCoreTestCase;
 import org.isf.supplier.manager.SupplierBrowserManager;
@@ -61,35 +61,35 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testSupplierGets() throws Exception {
-		int code = _setupTestSupplier(false);
-		_checkSupplierIntoDb(code);
+		int code = setupTestSupplier(false);
+		checkSupplierIntoDb(code);
 	}
 
 	@Test
 	public void testSupplierSets() throws Exception {
-		int code = _setupTestSupplier(true);
-		_checkSupplierIntoDb(code);
+		int code = setupTestSupplier(true);
+		checkSupplierIntoDb(code);
 	}
 
 	@Test
 	public void testIoSupplierSaveOrUpdate() throws Exception {
 		Supplier supplier = testSupplier.setup(true);
-		boolean result = supplierIoOperation.saveOrUpdate(supplier);
+		Supplier result = supplierIoOperation.saveOrUpdate(supplier);
 
-		assertThat(result).isTrue();
-		_checkSupplierIntoDb(supplier.getSupId());
+		assertThat(result);
+		checkSupplierIntoDb(supplier.getSupId());
 	}
 
 	@Test
 	public void testIoSupplierGetByID() throws Exception {
-		int code = _setupTestSupplier(false);
+		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierIoOperation.getByID(code);
-		_checkSupplierIntoDb(foundSupplier.getSupId());
+		checkSupplierIntoDb(foundSupplier.getSupId());
 	}
 
 	@Test
 	public void testIoSupplierGetAll() throws Exception {
-		int code = _setupTestSupplier(false);
+		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierIoOperation.getByID(code);
 		List<Supplier> suppliers = supplierBrowserManager.getAll();
 		assertThat(suppliers).contains(foundSupplier);
@@ -97,7 +97,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoSupplierGetList() throws Exception {
-		int code = _setupTestSupplier(false);
+		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierIoOperation.getByID(code);
 		List<Supplier> suppliers = supplierBrowserManager.getList();
 		assertThat(suppliers).contains(foundSupplier);
@@ -106,20 +106,20 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrSupplierSaveOrUpdate() throws Exception {
 		Supplier supplier = testSupplier.setup(true);
-		assertThat(supplierBrowserManager.saveOrUpdate(supplier)).isTrue();
-		_checkSupplierIntoDb(supplier.getSupId());
+		assertThat(supplierBrowserManager.saveOrUpdate(supplier));
+		checkSupplierIntoDb(supplier.getSupId());
 	}
 
 	@Test
 	public void testMgrSupplierGetByID() throws Exception {
-		int code = _setupTestSupplier(false);
+		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierBrowserManager.getByID(code);
-		_checkSupplierIntoDb(foundSupplier.getSupId());
+		checkSupplierIntoDb(foundSupplier.getSupId());
 	}
 
 	@Test
 	public void testMgrSupplierGetAll() throws Exception {
-		int code = _setupTestSupplier(false);
+		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierBrowserManager.getByID(code);
 		List<Supplier> suppliers = supplierBrowserManager.getAll();
 		assertThat(suppliers).contains(foundSupplier);
@@ -127,7 +127,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrSupplierGetList() throws Exception {
-		int code = _setupTestSupplier(false);
+		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierBrowserManager.getByID(code);
 		List<Supplier> suppliers = supplierBrowserManager.getList();
 		assertThat(suppliers).contains(foundSupplier);
@@ -135,12 +135,12 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetHashMap() throws Exception {
-		int code = _setupTestSupplier(false);
+		int code = setupTestSupplier(false);
 		Supplier foundSupplier = supplierBrowserManager.getByID(code);
 		// get all (including deleted)
-		HashMap<Integer, String> allSuppliers = supplierBrowserManager.getHashMap(true);
+		Map<Integer, String> allSuppliers = supplierBrowserManager.getHashMap(true);
 		// get all (not including deleted)
-		HashMap<Integer, String> suppliers = supplierBrowserManager.getHashMap(false);
+		Map<Integer, String> suppliers = supplierBrowserManager.getHashMap(false);
 		assertThat(allSuppliers).isEqualTo(suppliers);
 		// "delete" a supplier
 		foundSupplier.setSupDeleted('Y');
@@ -174,7 +174,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testSupplierHashCode() throws Exception {
-		int code = _setupTestSupplier(false);
+		int code = setupTestSupplier(false);
 		Supplier supplier = supplierBrowserManager.getByID(code);
 		// compute value
 		int hashCode = supplier.hashCode();
@@ -182,13 +182,13 @@ public class Tests extends OHCoreTestCase {
 		assertThat(supplier.hashCode()).isEqualTo(hashCode);
 	}
 
-	private int _setupTestSupplier(boolean usingSet) throws OHException {
+	private int setupTestSupplier(boolean usingSet) throws OHException {
 		Supplier supplier = testSupplier.setup(usingSet);
 		supplierIoOperationRepository.saveAndFlush(supplier);
 		return supplier.getSupId();
 	}
 
-	private void _checkSupplierIntoDb(int code) throws OHServiceException {
+	private void checkSupplierIntoDb(int code) throws OHServiceException {
 		Supplier foundSupplier = supplierIoOperation.getByID(code);
 		testSupplier.check(foundSupplier);
 	}

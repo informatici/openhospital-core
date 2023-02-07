@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -64,6 +64,10 @@ public class VisitsIoOperations {
 				repository.findAllByWardIsNullAndPatient_CodeOrderByPatient_CodeAscDateAsc(patID) :
 				repository.findAllByWardIsNullOrderByPatient_CodeAscDateAsc();
 	}
+	public Visit getVisit(int visitID) throws OHServiceException {
+		return repository.findAllByVisitID(visitID);
+				
+	}
 
 	/**
 	 * Returns the list of all {@link Visit}s related to a wardId
@@ -95,6 +99,18 @@ public class VisitsIoOperations {
 	}
 	
 	/**
+	 * update {@link Visit} for a specified {@link Visit}
+	 * 
+	 * @param visit - the {@link Visit}.
+	 * @return the {@link Visit}
+	 * @throws OHServiceException 
+	 */
+	@Transactional
+	public Visit updateVisit(Visit visit) throws OHServiceException {
+		return repository.save(visit);
+	}
+	
+	/**
 	 * Deletes all {@link Visit}s related to a patID
 	 * 
 	 * @param patID - the {@link Patient} ID
@@ -116,7 +132,7 @@ public class VisitsIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 
 	/**
@@ -125,9 +141,8 @@ public class VisitsIoOperations {
 	 * @param id - the id
 	 * @return the {@link Visit} or {@literal null} if none found
 	 */
-	public Visit findVisit(int id)
-	{
-		return repository.findOne(id);
+	public Visit findVisit(int id) {
+		return repository.findById(id).orElse(null);
 	}
 
 	/**
@@ -135,7 +150,7 @@ public class VisitsIoOperations {
 	 *
 	 * @param visit - the {@link Visit}
 	 */
-	public void deleteVisit(Visit visit) {
+	public void deleteVisit(Visit visit) throws OHServiceException {
 		repository.delete(visit);
 	}
 }

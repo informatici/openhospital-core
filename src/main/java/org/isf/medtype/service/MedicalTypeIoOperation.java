@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -56,16 +56,8 @@ public class MedicalTypeIoOperation {
 	 * @return <code>true</code> if the medical type has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs updating the medical type.
 	 */
-	public boolean updateMedicalType(
-			MedicalType medicalType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		MedicalType savedMedicalType = repository.save(medicalType);
-		result = (savedMedicalType != null);
-		
-		return result;
+	public MedicalType updateMedicalType(MedicalType medicalType) throws OHServiceException {
+		return repository.save(medicalType);
 	}
 
 	/**
@@ -74,16 +66,8 @@ public class MedicalTypeIoOperation {
 	 * @return <code>true</code> if the medical type has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs storing the new medical type.
 	 */
-	public boolean newMedicalType(
-			MedicalType medicalType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-
-		MedicalType savedMedicalType = repository.save(medicalType);
-		result = (savedMedicalType != null);
-		
-		return result;
+	public MedicalType newMedicalType(MedicalType medicalType) throws OHServiceException {
+		return repository.save(medicalType);
 	}
 
 	/**
@@ -92,15 +76,9 @@ public class MedicalTypeIoOperation {
 	 * @return <code>true</code> if the medical type has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs deleting the medical type.
 	 */
-	public boolean deleteMedicalType(
-			MedicalType medicalType) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
+	public boolean deleteMedicalType(MedicalType medicalType) throws OHServiceException {
 		repository.delete(medicalType);
-		
-		return result;
+		return true;
 	}
 
 	/**
@@ -109,14 +87,8 @@ public class MedicalTypeIoOperation {
 	 * @return <code>true</code> if the medical code is already stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
-	public boolean isCodePresent(
-			String code) throws OHServiceException 
-	{
-		boolean result = true;
-	
-		
-		result = repository.exists(code);
-		
-		return result;
+	public boolean isCodePresent(String code) throws OHServiceException {
+		return repository.existsById(code);
 	}
+
 }

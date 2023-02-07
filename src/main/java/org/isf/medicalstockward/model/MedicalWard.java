@@ -22,7 +22,6 @@
 package org.isf.medicalstockward.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -46,17 +45,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="MEDICALDSRWARD")
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="MDSRWRD_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="MDSRWRD_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="MDSRWRD_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="MDSRWRD_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="MDSRWRD_LAST_MODIFIED_DATE"))
-})
-public class MedicalWard extends Auditable<String> implements Comparable<Object> 
-{	
+@Table(name="OH_MEDICALDSRWARD")
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "MDSRWRD_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "MDSRWRD_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MDSRWRD_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "MDSRWRD_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MDSRWRD_LAST_MODIFIED_DATE"))
+public class MedicalWard extends Auditable<String> implements Comparable<Object> {
+
 	@EmbeddedId 
 	MedicalWardId id;
 	
@@ -74,8 +71,7 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	
 	public MedicalWard() {
 		super();
-		this.id = new MedicalWardId(); 
-		
+		this.id = new MedicalWardId();
 	}
 	
 	public MedicalWard(Medical medical, Double qty) {
@@ -85,11 +81,11 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 		this.qty = qty;
 	}
 	
-	public MedicalWard(Ward ward, Medical medical, float in_quantity, float out_quantity, Lot lot) {
+	public MedicalWard(Ward ward, Medical medical, float inQuantity, float outQuantity, Lot lot) {
 		super();
 		this.id = new MedicalWardId(ward, medical, lot);  
-		this.in_quantity = in_quantity;
-		this.out_quantity = out_quantity;
+		this.in_quantity = inQuantity;
+		this.out_quantity = outQuantity;
 		
 	}
 	
@@ -128,12 +124,12 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	
 	@Override
 	public int compareTo(Object anObject) {
-		
 		Medical medical = id.getMedical();
-		if (anObject instanceof MedicalWard)
+		if (anObject instanceof MedicalWard) {
 			return (medical.getDescription().toUpperCase().compareTo(
-					((MedicalWard)anObject).getMedical().getDescription().toUpperCase()));
-		else return 0;		
+					((MedicalWard) anObject).getMedical().getDescription().toUpperCase()));
+		}
+		return 0;
 	}
 
 	public Ward getWard() {
@@ -152,20 +148,20 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 		id.setLot(lot);
 	}
 	
-	public float getInQuantity() {
+	public float getIn_quantity() {
 		return this.in_quantity;
 	}
 	
-	public void setInQuantity(float in_quantity) {
-		this.in_quantity = in_quantity;
+	public void setIn_quantity(float inQuantity) {
+		this.in_quantity = inQuantity;
 	}
 	
-	public float getOutQuantity() {
+	public float getOut_quantity() {
 		return this.out_quantity;
 	}
 	
-	public void setOutQuantity(float out_quantity) {
-		this.out_quantity = out_quantity;
+	public void setOut_quantity(float outQuantity) {
+		this.out_quantity = outQuantity;
 	}
 	
 	@Override

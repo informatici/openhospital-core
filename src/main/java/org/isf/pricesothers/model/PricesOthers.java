@@ -22,7 +22,6 @@
 package org.isf.pricesothers.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -46,18 +45,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="PRICESOTHERS")
+@Table(name="OH_PRICESOTHERS")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="OTH_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="OTH_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="OTH_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="OTH_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="OTH_LAST_MODIFIED_DATE"))
-})
-public class PricesOthers extends Auditable<String>
-{
-	@Id 
+@AttributeOverride(name = "createdBy", column = @Column(name = "OTH_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "OTH_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "OTH_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "OTH_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "OTH_LAST_MODIFIED_DATE"))
+public class PricesOthers extends Auditable<String> {
+
+	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="OTH_ID")
     private int id;
@@ -94,9 +91,8 @@ public class PricesOthers extends Auditable<String>
 	public PricesOthers() {
 		super();
 	}
-	
-    public PricesOthers(String code, String desc, boolean opdInclude,
-			boolean ipdInclude, boolean discharge, boolean undefined) {
+
+	public PricesOthers(String code, String desc, boolean opdInclude, boolean ipdInclude, boolean discharge, boolean undefined) {
 		super();
 		this.code = code;
 		this.description = desc;
@@ -106,8 +102,7 @@ public class PricesOthers extends Auditable<String>
 		this.undefined = undefined;
 	}
 
-	public PricesOthers(int id, String code, String desc, boolean opdInclude,
-			boolean ipdInclude, boolean discharge, boolean undefined) {
+	public PricesOthers(int id, String code, String desc, boolean opdInclude, boolean ipdInclude, boolean discharge, boolean undefined) {
 		super();
 		this.id = id;
 		this.code = code;
@@ -118,8 +113,7 @@ public class PricesOthers extends Auditable<String>
 		this.undefined = undefined;
 	}
 
-	public PricesOthers(int id, String code, String description,
-			boolean opdInclude, boolean ipdInclude, boolean daily, boolean discharge, boolean undefined) {
+	public PricesOthers(int id, String code, String description, boolean opdInclude, boolean ipdInclude, boolean daily, boolean discharge, boolean undefined) {
 		super();
 		this.id = id;
 		this.code = code;
@@ -227,4 +221,5 @@ public class PricesOthers extends Auditable<String>
 	  
 	    return this.hashCode;
 	}
+
 }

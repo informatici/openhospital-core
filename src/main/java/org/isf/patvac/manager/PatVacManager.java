@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,10 +21,12 @@
  */
 package org.isf.patvac.manager;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patvac.model.PatientVaccine;
 import org.isf.patvac.service.PatVacIoOperations;
@@ -34,7 +36,6 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 /**
  * ------------------------------------------
@@ -76,9 +77,8 @@ public class PatVacManager {
 	 * @return the list of {@link PatientVaccine}s
 	 * @throws OHServiceException
 	 */
-	public List<PatientVaccine> getPatientVaccine(String vaccineTypeCode, String vaccineCode,
-			GregorianCalendar dateFrom, GregorianCalendar dateTo,
-			char sex, int ageFrom, int ageTo) throws OHServiceException {
+	public List<PatientVaccine> getPatientVaccine(String vaccineTypeCode, String vaccineCode, LocalDateTime dateFrom, LocalDateTime dateTo, char sex,
+			int ageFrom, int ageTo) throws OHServiceException {
 		return ioOperations.getPatientVaccine(vaccineTypeCode, vaccineCode, dateFrom, dateTo, sex, ageFrom, ageTo);
 	}
 
@@ -89,7 +89,7 @@ public class PatVacManager {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newPatientVaccine(PatientVaccine patVac) throws OHServiceException {
+	public PatientVaccine newPatientVaccine(PatientVaccine patVac) throws OHServiceException {
 		validatePatientVaccine(patVac);
 		return ioOperations.newPatientVaccine(patVac);
 	}
@@ -101,7 +101,7 @@ public class PatVacManager {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updatePatientVaccine(PatientVaccine patVac) throws OHServiceException {
+	public PatientVaccine updatePatientVaccine(PatientVaccine patVac) throws OHServiceException {
 		validatePatientVaccine(patVac);
 		return ioOperations.updatePatientVaccine(patVac);
 	}
@@ -126,6 +126,10 @@ public class PatVacManager {
 	 */
 	public int getProgYear(int year) throws OHServiceException {
 		return ioOperations.getProgYear(year);
+	}
+	
+	public Optional<PatientVaccine> getPatientVaccine(int code) throws OHServiceException {
+		return ioOperations.getPatientVaccine(code);
 	}
 
 	/**

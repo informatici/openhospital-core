@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,9 +21,8 @@
  */
 package org.isf.patvac.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -34,6 +33,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.isf.patvac.model.PatientVaccine;
+import org.isf.utils.time.TimeTools;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -46,25 +46,23 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 	@SuppressWarnings("unchecked")	
 	@Override
 	public List<PatientVaccine> findAllByCodesAndDatesAndSexAndAges(
-			String vaccineTypeCode, 
-			String vaccineCode, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo, 
-			char sex, 
-			int ageFrom, 
+			String vaccineTypeCode,
+			String vaccineCode,
+			LocalDateTime dateFrom,
+			LocalDateTime dateTo,
+			char sex,
+			int ageFrom,
 			int ageTo) {
 		return this.entityManager.
-				createQuery(_getPatientVaccineQuery(
-						vaccineTypeCode, vaccineCode, dateFrom, dateTo,
-						sex, ageFrom, ageTo)).
-					getResultList();
+				createQuery(getPatientVaccineQuery(vaccineTypeCode, vaccineCode, TimeTools.truncateToSeconds(dateFrom),
+				                                   TimeTools.truncateToSeconds(dateTo), sex, ageFrom, ageTo)).getResultList();
 	}	
 
-	private CriteriaQuery<PatientVaccine> _getPatientVaccineQuery(
+	private CriteriaQuery<PatientVaccine> getPatientVaccineQuery(
 			String vaccineTypeCode, 
 			String vaccineCode, 
-			GregorianCalendar dateFrom, 
-			GregorianCalendar dateTo, 
+			LocalDateTime dateFrom, 
+			LocalDateTime dateTo, 
 			char sex, 
 			int ageFrom, 
 			int ageTo) {
@@ -76,12 +74,12 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 		query.select(pvRoot);
 		if (dateFrom != null) {
 			predicates.add(
-				cb.greaterThanOrEqualTo(pvRoot.<Date> get("vaccineDate"), dateFrom.getTime())
+					cb.greaterThanOrEqualTo(pvRoot.<LocalDateTime> get("vaccineDate"), TimeTools.truncateToSeconds(dateFrom))
 			);
 		}
 		if (dateTo != null) {
 			predicates.add(
-				cb.lessThanOrEqualTo(pvRoot.<Date> get("vaccineDate"), dateTo.getTime())
+					cb.lessThanOrEqualTo(pvRoot.<LocalDateTime> get("vaccineDate"), TimeTools.truncateToSeconds(dateTo))
 			);
 		}
 		if (vaccineTypeCode != null) {
@@ -109,4 +107,5 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 
 		return query;
 	}
+
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,11 +21,9 @@
  */
 package org.isf.lab.model;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -35,8 +33,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
@@ -44,6 +40,7 @@ import javax.validation.constraints.NotNull;
 import org.isf.exa.model.Exam;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -57,15 +54,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="LABORATORY")
+@Table(name="OH_LABORATORY")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="LAB_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="LAB_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="LAB_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="LAB_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="LAB_LAST_MODIFIED_DATE"))
-})
+@AttributeOverride(name = "createdBy", column = @Column(name = "LAB_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "LAB_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "LAB_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "LAB_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "LAB_LAST_MODIFIED_DATE"))
 public class Laboratory extends Auditable<String> {
 
 	@Id
@@ -82,13 +77,8 @@ public class Laboratory extends Auditable<String> {
 	private Exam exam;
 
 	@NotNull
-	@Column(name="LAB_DATE")
-	private GregorianCalendar labDate;
-
-	@Column(name="LAB_EXAM_DATE")
-	@Temporal(TemporalType.DATE)
-	@Deprecated
-	private Calendar examDate;
+	@Column(name="LAB_DATE")		// SQL type: datetime
+	private LocalDateTime labDate;
 
 	@NotNull
 	@Column(name="LAB_RES")
@@ -109,7 +99,7 @@ public class Laboratory extends Auditable<String> {
 	private String patName;
 
 	@Column(name="LAB_PAT_INOUT")
-	private String InOutPatient;
+	private String inOutPatient;
 
 	@Column(name="LAB_AGE")
 	private Integer age;
@@ -120,22 +110,21 @@ public class Laboratory extends Auditable<String> {
 	@Transient
 	private volatile int hashCode = 0;
 
-	public Laboratory() {
-	}
+	public Laboratory() { }
 
-	public Laboratory(Exam aExam, GregorianCalendar aDate, String aResult, String aNote, Patient aPatId, String aPatName) {
+	public Laboratory(Exam aExam, LocalDateTime aDate, String aResult, String aNote, Patient aPatId, String aPatName) {
 		exam = aExam;
-		labDate = aDate;
+		labDate = TimeTools.truncateToSeconds(aDate);
 		result = aResult;
 		note = aNote;
 		patient = aPatId;
 		patName = aPatName;
 	}
 
-	public Laboratory(Integer aCode, Exam aExam, GregorianCalendar aDate, String aResult, String aNote, Patient aPatId, String aPatName) {
+	public Laboratory(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult, String aNote, Patient aPatId, String aPatName) {
 		code = aCode;
 		exam = aExam;
-		labDate = aDate;
+		labDate = TimeTools.truncateToSeconds(aDate);
 		result = aResult;
 		note = aNote;
 		patient = aPatId;
@@ -145,7 +134,13 @@ public class Laboratory extends Auditable<String> {
 	public Exam getExam() {
 		return exam;
 	}
-	public GregorianCalendar getDate() {
+	public LocalDateTime getLabDate() {
+		return labDate;
+	}
+	/*
+	 * @deprecated use getLabDate()
+	 */
+	public LocalDateTime getDate() {
 		return labDate;
 	}
 	public String getResult() {
@@ -166,74 +161,81 @@ public class Laboratory extends Auditable<String> {
 	public void setLock(int aLock) {
 		lock = aLock;
 	}
-	/**
-	 * use <code>getCreatedDate()</code> instead
-	 */
-	@Deprecated
-	public GregorianCalendar getExamDate() {
-		return (GregorianCalendar) examDate;
+	public void setLabDate(LocalDateTime aDate) {
+		labDate = TimeTools.truncateToSeconds(aDate);
 	}
-	/**
-	 * the field has been replaced by <code>createdDate()</code> and it's not meant to be managed by the user (Spring managed)
+	/*
+	 * @deprecated use setLabDate()
 	 */
-	@Deprecated
-	public void setExamDate(GregorianCalendar exDate) {
-		this.examDate = exDate;
-	}
-	public void setDate(GregorianCalendar aDate) {
-		labDate = aDate;
+	public void setDate(LocalDateTime aDate) {
+		labDate = TimeTools.truncateToSeconds(aDate);
 	}
 	public void setResult(String aResult) {
 		result = aResult;
 	}
+
 	public String getNote() {
 		return note;
 	}
+
 	public void setNote(String note) {
 		this.note = note;
 	}
+
 	public String getMaterial() {
 		return material;
 	}
+
 	public void setMaterial(String material) {
 		this.material = material;
 	}
+
 	public Patient getPatient() {
 		return patient;
 	}
+
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
+
 	public Integer getAge() {
 		return age;
 	}
+
 	public void setAge(Integer age) {
 		this.age = age;
 	}
+
 	public String getInOutPatient() {
-		return InOutPatient;
+		return inOutPatient;
 	}
-	public void setInOutPatient(String InOut) {
-		if (InOut == null)
-			InOut = "";
-		this.InOutPatient = InOut;
+
+	public void setInOutPatient(String inOut) {
+		if (inOut == null) {
+			inOut = "";
+		}
+		this.inOutPatient = inOut;
 	}
+
 	public String getPatName() {
 		return patName;
 	}
+
 	public void setPatName(String patName) {
 		this.patName = patName;
 	}
+
 	public String getSex() {
 		return sex;
 	}
+
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof Laboratory)) {
+		if (!(obj instanceof Laboratory)) {
 			return false;
 		}
 
@@ -259,9 +261,9 @@ public class Laboratory extends Auditable<String> {
 	@Override
 	public String toString() {
 		return "-------------------------------------------\nLaboratory{" + "code=" + code + ", material=" + material
-				+ ", exam=" + exam + ", registrationDate=" + labDate + ", examDate=" + examDate + ", result="
+				+ ", exam=" + exam + ", registrationDate=" + createdDate + ", examDate=" + labDate + ", result="
 				+ result + ", lock=" + lock + ", note=" + note + ", patient=" + patient + ", patName=" + patName
-				+ ", InOutPatient=" + InOutPatient + ", age=" + age + ", sex=" + sex + ", hashCode=" + hashCode
+				+ ", InOutPatient=" + inOutPatient + ", age=" + age + ", sex=" + sex + ", hashCode=" + hashCode
 				+ "}\n---------------------------------------------";
 	}
 

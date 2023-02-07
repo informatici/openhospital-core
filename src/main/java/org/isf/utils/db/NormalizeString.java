@@ -34,10 +34,8 @@ public class NormalizeString {
 	 * @return the string normalized
 	 */
 	public static String normalizeString(String string) {
-		
 		String normalizedString = Normalizer.normalize(string, Normalizer.Form.NFD);
-		String newString = normalizedString.replaceAll("[^\\p{ASCII}]", "");
-		return newString;
+		return normalizedString.replaceAll("[^\\p{ASCII}]", "");
 	}
 	
 	/**
@@ -47,10 +45,8 @@ public class NormalizeString {
 	 * @return 
 	 */
 	public static int normalizeCompareTo(String first, String second) {
-		
 		String newFirst = normalizeString(first);
 		String newSecond = normalizeString(second);
-		
 		return newFirst.compareTo(newSecond);
 	}
 	
@@ -61,10 +57,8 @@ public class NormalizeString {
 	 * @return
 	 */
 	public static int normalizeCompareToIgnorecase(String first, String second) {
-		
 		String newFirst = normalizeString(first);
 		String newSecond = normalizeString(second);
-		
 		return newFirst.compareToIgnoreCase(newSecond);
 	}
 	
@@ -75,13 +69,9 @@ public class NormalizeString {
 	 * @return
 	 */
 	public static boolean normalizeContains(String string, String token) {
-		
 		String containingString = normalizeString(string);
 		String tokenString = normalizeString(token);
-		
-		boolean result = containingString.contains(tokenString);
-		
-		return result;
+		return containingString.contains(tokenString);
 	}
 
 }

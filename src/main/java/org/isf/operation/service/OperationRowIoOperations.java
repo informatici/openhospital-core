@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -27,6 +27,7 @@ import java.util.List;
 import org.isf.admission.model.Admission;
 import org.isf.opd.model.Opd;
 import org.isf.operation.model.OperationRow;
+import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,23 +69,27 @@ public class OperationRowIoOperations {
 		return false;
 	}
 
-    public void updateOperationRow(OperationRow opRow) throws OHServiceException {
-        OperationRow found = repository.findById(opRow.getId());
-        if(found != null) {
-            found.setAdmission(opRow.getAdmission());
-            found.setBill(opRow.getBill());
-            found.setOpDate(opRow.getOpDate());
-            found.setOpResult(opRow.getOpResult());
-            found.setOpd(opRow.getOpd());
-            found.setOperation(opRow.getOperation());
-            found.setPrescriber(opRow.getPrescriber());
-            found.setRemarks(opRow.getRemarks());
-            found.setTransUnit(opRow.getTransUnit());
-            repository.save(found);
-        }
-    }
+	public void updateOperationRow(OperationRow opRow) throws OHServiceException {
+		OperationRow found = repository.findById(opRow.getId());
+		if (found != null) {
+			found.setAdmission(opRow.getAdmission());
+			found.setBill(opRow.getBill());
+			found.setOpDate(opRow.getOpDate());
+			found.setOpResult(opRow.getOpResult());
+			found.setOpd(opRow.getOpd());
+			found.setOperation(opRow.getOperation());
+			found.setPrescriber(opRow.getPrescriber());
+			found.setRemarks(opRow.getRemarks());
+			found.setTransUnit(opRow.getTransUnit());
+			repository.save(found);
+		}
+	}
 
-    public void newOperationRow(OperationRow opRow) throws OHServiceException {
-        repository.save(opRow);
-    }
+	public void newOperationRow(OperationRow opRow) throws OHServiceException {
+		repository.save(opRow);
+	}
+
+	public List<OperationRow> getOperationRowByPatient(Patient patient) throws OHServiceException {
+		return repository.findByAdmissionPatientOrOpdPatient(patient, patient);
+	}
 }

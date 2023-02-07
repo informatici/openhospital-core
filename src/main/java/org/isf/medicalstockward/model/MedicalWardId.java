@@ -59,13 +59,11 @@ public class MedicalWardId implements Serializable
 	@ManyToOne
 	@JoinColumn(name="MDSRWRD_LT_ID_A")
 	private Lot lot;
-	
-	public MedicalWardId() 
-	{
+
+	public MedicalWardId() {
 	}
-	
-	public MedicalWardId(Ward ward, Medical medical, Lot lot) 
-	{
+
+	public MedicalWardId(Ward ward, Medical medical, Lot lot) {
 		this.ward = ward;
 		this.medical = medical;
 		this.lot = lot;
@@ -121,9 +119,6 @@ public class MedicalWardId implements Serializable
 		if (ward != other.ward) {
 			return false;
 		}
-		if (lot != other.lot) {
-			return false;
-		}
-		return true;
+		return lot == other.lot;
 	}
 }

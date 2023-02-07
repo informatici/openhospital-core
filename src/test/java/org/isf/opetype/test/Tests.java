@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -61,54 +61,54 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testOperationTypeGets() throws Exception {
-		String code = _setupTestOperationType(false);
-		_checkOperationTypeIntoDb(code);
+		String code = setupTestOperationType(false);
+		checkOperationTypeIntoDb(code);
 	}
 
 	@Test
 	public void testOperationTypeSets() throws Exception {
-		String code = _setupTestOperationType(true);
-		_checkOperationTypeIntoDb(code);
+		String code = setupTestOperationType(true);
+		checkOperationTypeIntoDb(code);
 	}
 
 	@Test
 	public void testIoGetOperationType() throws Exception {
-		String code = _setupTestOperationType(false);
-		OperationType foundOperationType = operationTypeIoOperationRepository.findOne(code);
+		String code = setupTestOperationType(false);
+		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
 		List<OperationType> operationTypes = operationTypeIoOperation.getOperationType();
 		assertThat(operationTypes.get(operationTypes.size() - 1).getDescription()).isEqualTo(foundOperationType.getDescription());
 	}
 
 	@Test
 	public void testIoUpdateOperationType() throws Exception {
-		String code = _setupTestOperationType(false);
-		OperationType foundOperationType = operationTypeIoOperationRepository.findOne(code);
+		String code = setupTestOperationType(false);
+		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
 		foundOperationType.setDescription("Update");
-		boolean result = operationTypeIoOperation.updateOperationType(foundOperationType);
-		assertThat(result).isTrue();
-		OperationType updateOperationType = operationTypeIoOperationRepository.findOne(code);
+		OperationType result = operationTypeIoOperation.updateOperationType(foundOperationType);
+		assertThat(result);
+		OperationType updateOperationType = operationTypeIoOperationRepository.findById(code).get();
 		assertThat(updateOperationType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testIoNewOperationType() throws Exception {
 		OperationType operationType = testOperationType.setup(true);
-		boolean result = operationTypeIoOperation.newOperationType(operationType);
-		assertThat(result).isTrue();
-		_checkOperationTypeIntoDb(operationType.getCode());
+		OperationType result = operationTypeIoOperation.newOperationType(operationType);
+		assertThat(result);
+		checkOperationTypeIntoDb(operationType.getCode());
 	}
 
 	@Test
 	public void testIoIsCodePresent() throws Exception {
-		String code = _setupTestOperationType(false);
+		String code = setupTestOperationType(false);
 		boolean result = operationTypeIoOperation.isCodePresent(code);
 		assertThat(result).isTrue();
 	}
 
 	@Test
 	public void testIoDeleteOperationType() throws Exception {
-		String code = _setupTestOperationType(false);
-		OperationType foundOperationType = operationTypeIoOperationRepository.findOne(code);
+		String code = setupTestOperationType(false);
+		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
 		boolean result = operationTypeIoOperation.deleteOperationType(foundOperationType);
 		assertThat(result).isTrue();
 		result = operationTypeIoOperation.isCodePresent(code);
@@ -117,39 +117,39 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetOperationType() throws Exception {
-		String code = _setupTestOperationType(false);
-		OperationType foundOperationType = operationTypeIoOperationRepository.findOne(code);
+		String code = setupTestOperationType(false);
+		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
 		List<OperationType> operationTypes = operationTypeBrowserManager.getOperationType();
 		assertThat(operationTypes.get(operationTypes.size() - 1).getDescription()).isEqualTo(foundOperationType.getDescription());
 	}
 
 	@Test
 	public void testMgrUpdateOperationType() throws Exception {
-		String code = _setupTestOperationType(false);
-		OperationType foundOperationType = operationTypeIoOperationRepository.findOne(code);
+		String code = setupTestOperationType(false);
+		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
 		foundOperationType.setDescription("Update");
-		assertThat(operationTypeBrowserManager.updateOperationType(foundOperationType)).isTrue();
-		OperationType updateOperationType = operationTypeIoOperationRepository.findOne(code);
+		assertThat(operationTypeBrowserManager.updateOperationType(foundOperationType));
+		OperationType updateOperationType = operationTypeIoOperationRepository.findById(code).get();
 		assertThat(updateOperationType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrNewOperationType() throws Exception {
 		OperationType operationType = testOperationType.setup(true);
-		assertThat(operationTypeBrowserManager.newOperationType(operationType)).isTrue();
-		_checkOperationTypeIntoDb(operationType.getCode());
+		assertThat(operationTypeBrowserManager.newOperationType(operationType));
+		checkOperationTypeIntoDb(operationType.getCode());
 	}
 
 	@Test
 	public void testMgrIsCodePresent() throws Exception {
-		String code = _setupTestOperationType(false);
+		String code = setupTestOperationType(false);
 		assertThat(operationTypeBrowserManager.isCodePresent(code)).isTrue();
 	}
 
 	@Test
 	public void testMgrDeleteOperationType() throws Exception {
-		String code = _setupTestOperationType(false);
-		OperationType foundOperationType = operationTypeIoOperationRepository.findOne(code);
+		String code = setupTestOperationType(false);
+		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
 		assertThat(operationTypeBrowserManager.deleteOperationType(foundOperationType)).isTrue();
 		assertThat(operationTypeBrowserManager.isCodePresent(code)).isFalse();
 	}
@@ -254,14 +254,14 @@ public class Tests extends OHCoreTestCase {
 		assertThat(operationType).hasToString("description");
 	}
 
-	private String _setupTestOperationType(boolean usingSet) throws OHException {
+	private String setupTestOperationType(boolean usingSet) throws OHException {
 		OperationType operationType = testOperationType.setup(usingSet);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		return operationType.getCode();
 	}
 
-	private void _checkOperationTypeIntoDb(String code) throws OHException {
-		OperationType foundOperationType = operationTypeIoOperationRepository.findOne(code);
+	private void checkOperationTypeIntoDb(String code) throws OHException {
+		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
 		testOperationType.check(foundOperationType);
 	}
 }

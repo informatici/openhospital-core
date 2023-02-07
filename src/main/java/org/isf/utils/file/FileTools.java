@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -24,10 +24,13 @@ package org.isf.utils.file;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -54,7 +57,7 @@ public class FileTools {
 	// HOUR:  (0[0-9]|1[0-9]|2[0-3])
 	// MIN:   ([0-5][0-9])
 
-	private static final String[][] dateTimeFormats = new String[][] {
+	private static final String[][] dateTimeFormats = {
 			{ "yyyy-MM-dd_HHmmss", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2}_\\d{6})(?![0-9])" },
 			{ "yyyy-MM-dd HHmmss", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2} \\d{6})(?![0-9])" },
 			{ "yyyy-MM-dd_HHmm", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2}_\\d{4})(?![0-9])" },
@@ -93,10 +96,11 @@ public class FileTools {
 	 * @param file
 	 * @return
 	 */
-	public static Date getTimestamp(File file) {
-		if (file == null)
+	public static LocalDateTime getTimestamp(File file) {
+		if (file == null) {
 			return null;
-		return new Date(file.lastModified());
+		}
+		return LocalDateTime.ofInstant(Instant.ofEpochMilli(file.lastModified()), TimeZone.getDefault().toZoneId());
 	}
 
 	/**

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -137,7 +137,7 @@ public class MedicalBrowsingManager {
 	 * @return <code>true</code> if the medical has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newMedical(Medical medical) throws OHServiceException {
+	public Medical newMedical(Medical medical) throws OHServiceException {
 		return newMedical(medical, false);
 	}
 
@@ -150,7 +150,7 @@ public class MedicalBrowsingManager {
 	 * @return <code>true</code> if the medical has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
+	public Medical newMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
 		checkMedicalForInsert(medical, ignoreSimilar);
 		return ioOperations.newMedical(medical);
 	}
@@ -163,7 +163,7 @@ public class MedicalBrowsingManager {
 	 * Otherwise throws an OHServiceException
 	 * @throws OHServiceException
 	 */
-	public boolean updateMedical(Medical medical) throws OHServiceException {
+	public Medical updateMedical(Medical medical) throws OHServiceException {
 		return updateMedical(medical, false);
 	}
 
@@ -176,7 +176,7 @@ public class MedicalBrowsingManager {
 	 * Otherwise throws an OHServiceException
 	 * @throws OHServiceException
 	 */
-	public boolean updateMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
+	public Medical updateMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
 		checkMedicalForUpdate(medical, ignoreSimilar);
 		return ioOperations.updateMedical(medical);
 	}
@@ -260,13 +260,12 @@ public class MedicalBrowsingManager {
 	 * @throws OHServiceException
 	 */
 	public void checkMedical(Medical medical, boolean ignoreSimilar, boolean update) throws OHServiceException {
-		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		//check commons
-		errors.addAll(checkMedicalCommon(medical));
+		List<OHExceptionMessage> errors = new ArrayList<>(checkMedicalCommon(medical));
 
 		//check existing data
-		boolean productCodeExists = !medical.getProd_code().isEmpty() && ioOperations.productCodeExists(medical, update);
+		boolean productCodeExists = !medical.getProdCode().isEmpty() && ioOperations.productCodeExists(medical, update);
 		boolean medicalExists = ioOperations.medicalExists(medical, update);
 		List<Medical> similarMedicals = ioOperations.medicalCheck(medical, update);
 
@@ -282,9 +281,9 @@ public class MedicalBrowsingManager {
 			StringBuilder message = new StringBuilder(MessageBundle.getMessage("angal.medicals.theinsertedmedicalisalreadyinuse.msg")).append('\n');
 			for (Medical med : similarMedicals) {
 				message.append('[').append(med.getType().getDescription()).append("] ");
-				if (!med.getProd_code().isEmpty())
-					message.append('[').append(med.getProd_code()).append("] ");
-				message.append(med.toString()).append('\n');
+				if (!med.getProdCode().isEmpty())
+					message.append('[').append(med.getProdCode()).append("] ");
+				message.append(med).append('\n');
 			}
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					message.toString(),

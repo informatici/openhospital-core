@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,10 +21,9 @@
  */
 package org.isf.patvac.model;
 
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -39,6 +38,7 @@ import javax.validation.constraints.NotNull;
 
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
+import org.isf.utils.time.TimeTools;
 import org.isf.vaccine.model.Vaccine;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -52,18 +52,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="PATIENTVACCINE")
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="PAV_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="PAV_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="PAV_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="PAV_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="PAV_LAST_MODIFIED_DATE"))
-})
-public class PatientVaccine extends Auditable<String>
-{
-	@Id 
+@Table(name="OH_PATIENTVACCINE")
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "PAV_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "PAV_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PAV_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "PAV_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PAV_LAST_MODIFIED_DATE"))
+public class PatientVaccine extends Auditable<String> {
+
+	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="PAV_ID")
 	private int code;
@@ -73,8 +71,8 @@ public class PatientVaccine extends Auditable<String>
 	private int progr;
 
 	@NotNull
-	@Column(name="PAV_DATE")
-	private GregorianCalendar vaccineDate;
+	@Column(name="PAV_DATE")		// SQL type: datetime
+	private LocalDateTime vaccineDate;
 
 	@NotNull
 	@ManyToOne
@@ -96,15 +94,14 @@ public class PatientVaccine extends Auditable<String>
 	public PatientVaccine()
 	{		
 	}
-	
-	public PatientVaccine(int codeIn, int progIn, GregorianCalendar vacDateIn, 
-			Patient patient, Vaccine vacIn, int lockIn) {
+
+	public PatientVaccine(int codeIn, int progIn, LocalDateTime vacDateIn, Patient patient, Vaccine vacIn, int lockIn) {
 		this.code = codeIn;
 		this.progr = progIn;
-		this.vaccineDate = vacDateIn;
+		this.vaccineDate = TimeTools.truncateToSeconds(vacDateIn);
 		this.patient = patient;
 		this.vaccine = vacIn;
-		this.lock = lockIn ;
+		this.lock = lockIn;
 	}
 	
 	public int getCode() {
@@ -123,12 +120,12 @@ public class PatientVaccine extends Auditable<String>
 		this.progr = progr;
 	}
 
-	public GregorianCalendar getVaccineDate() {
+	public LocalDateTime getVaccineDate() {
 		return vaccineDate;
 	}
 
-	public void setVaccineDate(GregorianCalendar vaccineDate) {
-		this.vaccineDate = vaccineDate;
+	public void setVaccineDate(LocalDateTime vaccineDate) {
+		this.vaccineDate = TimeTools.truncateToSeconds(vaccineDate);
 	}
 
 	public Patient getPatient() {
@@ -146,7 +143,6 @@ public class PatientVaccine extends Auditable<String>
 	public void setVaccine(Vaccine vaccine) {
 		this.vaccine = vaccine;
 	}
-	
 
 	public int getLock() {
 		return lock;
@@ -216,11 +212,8 @@ public class PatientVaccine extends Auditable<String>
 				|| (other.vaccine != null && !other.vaccine.equals(vaccine))) {
 			return false;
 		}
-		if ((vaccineDate != null && !vaccineDate.equals(other.vaccineDate))
-				|| (other.vaccineDate != null && !other.vaccineDate.equals(vaccineDate))) {
-			return false;
-		}
-		return true;
+		return (vaccineDate == null || vaccineDate.equals(other.vaccineDate))
+				&& (other.vaccineDate == null || other.vaccineDate.equals(vaccineDate));
 	}
 
 }

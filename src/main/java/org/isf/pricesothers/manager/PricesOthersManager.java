@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -24,6 +24,7 @@ package org.isf.pricesothers.manager;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.isf.generaldata.MessageBundle;
 import org.isf.pricesothers.model.PricesOthers;
 import org.isf.pricesothers.service.PriceOthersIoOperations;
@@ -33,7 +34,6 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 @Component
 public class PricesOthersManager {
@@ -58,7 +58,7 @@ public class PricesOthersManager {
 	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newOther(PricesOthers other) throws OHServiceException {
+	public PricesOthers newOther(PricesOthers other) throws OHServiceException {
 		validatePricesOthers(other);
 		return ioOperations.newOthers(other);
 	}
@@ -81,7 +81,7 @@ public class PricesOthersManager {
 	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updateOther(PricesOthers other) throws OHServiceException {
+	public PricesOthers updateOther(PricesOthers other) throws OHServiceException {
 		validatePricesOthers(other);
 		return ioOperations.updateOther(other);
 	}

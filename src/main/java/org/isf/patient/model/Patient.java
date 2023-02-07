@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,10 +21,10 @@
  */
 package org.isf.patient.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.Period;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,9 +43,6 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.StringUtils;
 import org.isf.opd.model.Opd;
 import org.isf.utils.db.Auditable;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -72,17 +69,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="PATIENT")
+@Table(name="OH_PATIENT")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="PAT_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="PAT_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="PAT_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="PAT_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="PAT_LAST_MODIFIED_DATE"))
-})
-public class Patient extends Auditable<String>
-{
+@AttributeOverride(name = "createdBy", column = @Column(name = "PAT_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "PAT_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PAT_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "PAT_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PAT_LAST_MODIFIED_DATE"))
+
+public class Patient extends Auditable<String> {
 	/*
 	 * PAT_ID int NOT NULL AUTO_INCREMENT , PAT_FNAME varchar (50) NOT NULL ,
 	 * --first name (nome) PAT_SNAME varchar (50) NOT NULL , --second name
@@ -114,14 +109,14 @@ public class Patient extends Auditable<String>
 	@Column(name="PAT_NAME")
 	private String name;
 	
-	@Column(name="PAT_BDATE")
-	private Date birthDate;
+	@NotNull
+	@Column(name="PAT_BDATE")	// SQL type: date
+	private LocalDate birthDate;
 
 	@NotNull
 	@Column(name="PAT_AGE")
 	private int age;
 
-	@NotNull
 	@Column(name="PAT_AGETYPE")
 	private String agetype;
 
@@ -179,26 +174,40 @@ public class Patient extends Auditable<String>
 	private String profession;
 
 	@NotNull
-	@Column(name="PAT_DELETED")
-	private String deleted = "N";
-
+	@Column(name="PAT_DELETED", columnDefinition = "char(1) default 'N'")
+	private char deleted = 'N';
+	
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	@Column(name="PAT_ANAMNESIS")
+	private String anamnesis;
+	
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	@Column(name="PAT_ALLERGIES")
+	private String allergies;
+	
 	@Version
 	@Column(name="PAT_LOCK")
 	private int lock;
 	
 	@OneToOne(
-			fetch = FetchType.LAZY,
-			cascade = CascadeType.ALL
+			fetch = FetchType.LAZY, 
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, 
+			orphanRemoval = true
 	)
-	@JoinColumn(name = "PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID")
-	private PatientProfilePhoto patientProfilePhoto;
+	@JoinColumn(name = "PAT_PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID", nullable = true)
+	private PatientProfilePhoto patientProfilePhoto; // nullable because user can choose to save on file system
 	
 	@Transient
 	private volatile int hashCode = 0;
 	
 
 	public Patient() {
-		
 		this.firstName = "";
 		this.secondName = ""; 
 		this.name = this.firstName + ' ' + this.secondName;
@@ -223,7 +232,6 @@ public class Patient extends Auditable<String>
 	}
 	
 	public Patient(Opd opd) {
-		
 		this.firstName = opd.getfirstName();
 		this.secondName = opd.getsecondName(); 
 		this.name = this.firstName + ' ' + this.secondName;
@@ -246,7 +254,7 @@ public class Patient extends Auditable<String>
 		this.profession = "";
 	}
 	
-	public Patient(String firstName, String secondName, Date birthDate, int age, String agetype, char sex,
+	public Patient(String firstName, String secondName, LocalDate birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone,
 			String motherName, char mother, String fatherName, char father,
 			String bloodType, char economicStatut, char parentTogether, String personalCode, 
@@ -274,7 +282,7 @@ public class Patient extends Auditable<String>
 		this.profession = profession;
 	}
 		
-	public Patient(int code, String firstName, String secondName, String name, Date birthDate, int age, String agetype, char sex,
+	public Patient(int code, String firstName, String secondName, String name, LocalDate birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone, String note,
 			String motherName, char mother, String fatherName, char father,
 			String bloodType, char economicStatut, char parentTogether, String taxCode,
@@ -312,35 +320,22 @@ public class Patient extends Auditable<String>
 		this.address = address;
 	}
 	
-	public Date getBirthDate() {
+	public LocalDate getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
 
 	public int getAge() {
 		if (this.birthDate != null) {
-			DateTime now = new DateTime();
-			DateTime birth = new DateTime(birthDate);
-			Period period = new Period(birth, now, PeriodType.yearMonthDay());
-			age = period.getYears();
+			Period periodAge = Period.between(birthDate, LocalDate.now());
+			age = periodAge.getYears();
 		}
 		return age;
 	}
 	
-	public int getMonths() {
-		int months = 0;
-		if (this.birthDate != null) {
-			DateTime now = new DateTime();
-			DateTime birth = new DateTime(birthDate);
-			Period period = new Period(birth, now, PeriodType.months());
-			months = period.getMonths();
-		}
-		return months;
-	}
-
 	public void setAge(int age) {
 		this.age = age;
 	}
@@ -479,16 +474,16 @@ public class Patient extends Auditable<String>
 		return fatherName;
 	}
 
-	public void setFatherName(String father_name) {
-		this.fatherName = father_name;
+	public void setFatherName(String fatherName) {
+		this.fatherName = fatherName;
 	}
 
 	public String getMotherName() {
 		return motherName;
 	}
 
-	public void setMotherName(String mother_name) {
-		this.motherName = mother_name;
+	public void setMotherName(String motherName) {
+		this.motherName = motherName;
 	}
 
 	public String getTaxCode() {
@@ -515,16 +510,60 @@ public class Patient extends Auditable<String>
 		this.profession = profession;
 	}
 	
-    public String getDeleted() {
+    public char getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(String deleted) {
+    public void setDeleted(char deleted) {
         this.deleted = deleted;
     }
 
 	public PatientProfilePhoto getPatientProfilePhoto() {
 		return patientProfilePhoto;
+	}	
+
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	public String getAnamnesis() {
+		return anamnesis;
+	}
+
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	public void setAnamnesis(String anamnesis) {
+		this.anamnesis = anamnesis;
+	}
+
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	public String getAllergies() {
+		return allergies;
+	}
+
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	public void setAllergies(String allergies) {
+		this.allergies = allergies;
+	}
+
+	/**
+	 * Method kept as POJO standard, but it ignores {@code name} param
+	 * and uses {@link firstName} and {@link secondName} to set
+	 * the field (as {@link setFirstName} and {@link setSecondName}
+	 * methods do as well).
+	 * 
+	 * @param name (ignored, used {@code firstName} and {@code secondName} instead
+	 */
+	public void setName(String name) {
+		this.name = this.firstName + ' ' + this.secondName;
 	}
 
 	public void setPatientProfilePhoto(final PatientProfilePhoto patientProfilePhoto) {

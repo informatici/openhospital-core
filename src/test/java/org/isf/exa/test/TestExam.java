@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2020 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -38,7 +38,7 @@ public class TestExam {
 
 		if (usingSet) {
 			exam = new Exam();
-			_setParameters(exam, procedure, examtype);
+			setParameters(exam, procedure, examtype);
 		} else {
 			// Create Exam with all parameters 
 			exam = new Exam(code, description, examtype, procedure, defaultResult);
@@ -47,7 +47,7 @@ public class TestExam {
 		return exam;
 	}
 
-	public void _setParameters(Exam exam, int procedure, ExamType examtype) {
+	public void setParameters(Exam exam, int procedure, ExamType examtype) {
 		exam.setCode(code);
 		exam.setDescription(description);
 		exam.setExamtype(examtype);

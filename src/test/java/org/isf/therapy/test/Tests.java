@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,12 +23,12 @@ package org.isf.therapy.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
+import org.isf.generaldata.GeneralData;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperationRepository;
 import org.isf.medicals.test.TestMedical;
@@ -93,20 +93,20 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testTherapyRowGets() throws Exception {
-		int id = _setupTestTherapyRow(false);
-		_checkTherapyRowIntoDb(id);
+		int id = setupTestTherapyRow(false);
+		checkTherapyRowIntoDb(id);
 	}
 
 	@Test
 	public void testTherapyRowSets() throws Exception {
-		int id = _setupTestTherapyRow(true);
-		_checkTherapyRowIntoDb(id);
+		int id = setupTestTherapyRow(true);
+		checkTherapyRowIntoDb(id);
 	}
 
 	@Test
 	public void testIoGetTherapyRow() throws Exception {
-		int id = _setupTestTherapyRow(false);
-		TherapyRow foundTherapyRow = therapyIoOperationRepository.findOne(id);
+		int id = setupTestTherapyRow(false);
+		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).get();
 		List<TherapyRow> therapyRows = therapyIoOperation.getTherapyRows(foundTherapyRow.getPatient().getCode());
 		assertThat(therapyRows.get(therapyRows.size() - 1).getNote()).isEqualTo(foundTherapyRow.getNote());
 	}
@@ -114,8 +114,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetTherapyRowWithZeroAsIdentifierProvided() throws Exception {
 		// given:
-		int id = _setupTestTherapyRow(false);
-		TherapyRow foundTherapyRow = therapyIoOperationRepository.findOne(id);
+		int id = setupTestTherapyRow(false);
+		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).get();
 
 		// when:
 		List<TherapyRow> therapyRows = therapyIoOperation.getTherapyRows(0);
@@ -134,13 +134,13 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		TherapyRow therapyRow = testTherapyRow.setup(patient, medical, true);
 		therapyIoOperation.newTherapy(therapyRow);
-		_checkTherapyRowIntoDb(therapyRow.getTherapyID());
+		checkTherapyRowIntoDb(therapyRow.getTherapyID());
 	}
 
 	@Test
 	public void testIoDeleteTherapyRow() throws Exception {
-		int id = _setupTestTherapyRow(false);
-		TherapyRow foundTherapyRow = therapyIoOperationRepository.findOne(id);
+		int id = setupTestTherapyRow(false);
+		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).get();
 		boolean result = therapyIoOperation.deleteAllTherapies(foundTherapyRow.getPatient());
 		assertThat(result).isTrue();
 		result = therapyIoOperation.isCodePresent(id);
@@ -150,16 +150,16 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() throws Exception {
 		// given:
-		int id = _setupTestTherapyRow(false);
-		TherapyRow found = therapyIoOperationRepository.findOne(id);
+		int id = setupTestTherapyRow(false);
+		TherapyRow found = therapyIoOperationRepository.findById(id).get();
 		Patient obsoletePatient = found.getPatient();
-		Patient mergedPatient = _setupTestPatient(false);
+		Patient mergedPatient = setupTestPatient(false);
 
 		// when:
 		applicationEventPublisher.publishEvent(new PatientMergedEvent(obsoletePatient, mergedPatient));
 
 		// then:
-		TherapyRow result = therapyIoOperationRepository.findOne(id);
+		TherapyRow result = therapyIoOperationRepository.findById(id).get();
 		assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 	}
 
@@ -170,8 +170,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetTherapies() throws Exception {
-		int id = _setupTestTherapyRow(false);
-		TherapyRow therapyRow = therapyIoOperationRepository.findOne(id);
+		int id = setupTestTherapyRow(false);
+		TherapyRow therapyRow = therapyIoOperationRepository.findById(id).get();
 		List<TherapyRow> therapyRows = new ArrayList<>();
 		therapyRows.add(therapyRow);
 		List<Therapy> therapies = therapyManager.getTherapies(therapyRows);
@@ -186,8 +186,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewTherapiesWithSMSDateBeforeToday() throws Exception {
-		int id = _setupTestTherapyRow(false);
-		TherapyRow therapyRow = therapyIoOperationRepository.findOne(id);
+		int id = setupTestTherapyRow(false);
+		TherapyRow therapyRow = therapyIoOperationRepository.findById(id).get();
 		ArrayList<TherapyRow> therapyRows = new ArrayList<>();
 		therapyRows.add(therapyRow);
 		assertThat(therapyManager.newTherapies(therapyRows)).isTrue();
@@ -196,6 +196,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewTherapiesWithSMSDateAfterToday() throws Exception {
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
 		Patient patient = testPatient.setup(false);
@@ -203,7 +204,7 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 		TherapyRow therapyRow = testTherapyRow.setup(patient, medical, true);
-		therapyRow.setStartDate(new GregorianCalendar());
+		therapyRow.setStartDate(TimeTools.getNow());
 		therapyRow.setEndDate(TimeTools.getBeginningOfNextDay(therapyRow.getStartDate()));
 		therapyIoOperationRepository.saveAndFlush(therapyRow);
 		ArrayList<TherapyRow> therapyRows = new ArrayList<>();
@@ -214,6 +215,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewTherapiesWithSMSDateAfterTodayTruncateMessage() throws Exception {
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
 		Patient patient = testPatient.setup(false);
@@ -221,8 +223,8 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 		String longText = "This is a very long note that should cause the SMS code to truncate the entire message to 160 characters.";
-		TherapyRow therapyRow = therapyManager.newTherapy(1, patient.getCode(), new GregorianCalendar(),
-				TimeTools.getBeginningOfNextDay(new GregorianCalendar()), medical, 10.0, 1, 1, 1,
+		TherapyRow therapyRow = therapyManager.newTherapy(1, patient.getCode(), TimeTools.getNow(),
+				TimeTools.getBeginningOfNextDay(TimeTools.getNow()), medical, 10.0, 1, 1, 1,
 				longText + ' ' + longText, true, true);
 		therapyIoOperationRepository.saveAndFlush(therapyRow);
 		ArrayList<TherapyRow> therapyRows = new ArrayList<>();
@@ -251,16 +253,16 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrGetTherapyRow() throws Exception {
-		int id = _setupTestTherapyRow(false);
-		TherapyRow foundTherapyRow = therapyIoOperationRepository.findOne(id);
+		int id = setupTestTherapyRow(false);
+		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).get();
 		List<TherapyRow> therapyRows = therapyIoOperation.getTherapyRows(foundTherapyRow.getPatient().getCode());
 		assertThat(therapyRows.get(therapyRows.size() - 1).getNote()).isEqualTo(foundTherapyRow.getNote());
 	}
 
 	@Test
 	public void testMgrGetTherapyRowWithZeroAsIdentifierProvided() throws Exception {
-		int id = _setupTestTherapyRow(false);
-		TherapyRow foundTherapyRow = therapyIoOperationRepository.findOne(id);
+		int id = setupTestTherapyRow(false);
+		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).get();
 		List<TherapyRow> therapyRows = therapyManager.getTherapyRows(0);
 		assertThat(therapyRows.get(therapyRows.size() - 1).getNote()).isEqualTo(foundTherapyRow.getNote());
 	}
@@ -275,13 +277,14 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		TherapyRow therapyRow = testTherapyRow.setup(patient, medical, true);
 		therapyManager.newTherapy(therapyRow);
-		_checkTherapyRowIntoDb(therapyRow.getTherapyID());
+		checkTherapyRowIntoDb(therapyRow.getTherapyID());
 	}
 
 	@Test
 	public void testMgrDeleteTherapyRow() throws Exception {
-		int id = _setupTestTherapyRow(false);
-		TherapyRow foundTherapyRow = therapyIoOperationRepository.findOne(id);
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
+		int id = setupTestTherapyRow(false);
+		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).get();
 		assertThat(therapyManager.deleteAllTherapies(foundTherapyRow.getPatient().getCode())).isTrue();
 		assertThat(therapyIoOperation.isCodePresent(id)).isFalse();
 	}
@@ -295,7 +298,7 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		GregorianCalendar[] dates = new GregorianCalendar[] { new GregorianCalendar(), new GregorianCalendar() };
+		LocalDateTime[] dates = { TimeTools.getNow(), TimeTools.getNow() };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 10.0, "", 1, "TestNote", true, true);
 
 		ArrayList<Therapy> therapies = new ArrayList<>();
@@ -316,7 +319,7 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		GregorianCalendar[] dates = new GregorianCalendar[] { new GregorianCalendar(), new GregorianCalendar() };
+		LocalDateTime[] dates = { TimeTools.getNow(), TimeTools.getNow() };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 1.0, "", 1, "TestNote", true, true);
 
 		ArrayList<Therapy> therapies = new ArrayList<>();
@@ -334,10 +337,9 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		GregorianCalendar yesterday = TimeTools.getDateToday0();
-		yesterday.set(Calendar.DATE, -1);
+		LocalDateTime yesterday = TimeTools.getDateToday0().minusDays(1);
 
-		GregorianCalendar[] dates = new GregorianCalendar[] { yesterday, yesterday };
+		LocalDateTime[] dates = { yesterday, yesterday };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 10.0, "", 1, "TestNote", true, true);
 
 		ArrayList<Therapy> therapies = new ArrayList<>();
@@ -348,15 +350,15 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testTherapyRowToString() throws Exception {
-		int id = _setupTestTherapyRow(false);
-		TherapyRow therapyRow = therapyIoOperationRepository.findOne(id);
-		assertThat(therapyRow).hasToString("2 - 10 9.9/11/12");
+		int id = setupTestTherapyRow(false);
+		TherapyRow therapyRow = therapyIoOperationRepository.findById(id).get();
+		assertThat(therapyRow).hasToString("1 - 10 9.9/11/12");
 	}
 
 	@Test
 	public void testTherapyRowEquals() throws Exception {
-		int id = _setupTestTherapyRow(true);
-		TherapyRow therapyRow = therapyIoOperationRepository.findOne(id);
+		int id = setupTestTherapyRow(true);
+		TherapyRow therapyRow = therapyIoOperationRepository.findById(id).get();
 
 		assertThat(therapyRow.equals(therapyRow)).isTrue();
 		assertThat(therapyRow)
@@ -375,8 +377,8 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testTherapyRowHashCode() throws Exception {
-		int id = _setupTestTherapyRow(true);
-		TherapyRow therapyRow = therapyIoOperationRepository.findOne(id);
+		int id = setupTestTherapyRow(true);
+		TherapyRow therapyRow = therapyIoOperationRepository.findById(id).get();
 		therapyRow.setTherapyID(99);
 		// compute
 		int hashCode = therapyRow.hashCode();
@@ -394,7 +396,7 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		GregorianCalendar[] dates = new GregorianCalendar[] { new GregorianCalendar(), new GregorianCalendar() };
+		LocalDateTime[] dates = { TimeTools.getNow(), TimeTools.getNow() };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 10.0, "", 1, "TestNote", true, true);
 
 		assertThat(therapy.getTherapyID()).isEqualTo(1);
@@ -402,9 +404,9 @@ public class Tests extends OHCoreTestCase {
 		assertThat(therapy.getTherapyID()).isEqualTo(-99);
 
 		assertThat(therapy.getDates()).isNotNull();
-		GregorianCalendar yesterday = TimeTools.getDateToday0();
-		yesterday.set(Calendar.DATE, -1);
-		GregorianCalendar[] newDates = new GregorianCalendar[] { yesterday, yesterday };
+		LocalDateTime yesterday = TimeTools.getDateToday0();
+		yesterday.minusDays(1);
+		LocalDateTime[] newDates = { yesterday, yesterday };
 		therapy.setDates(newDates);
 		assertThat(therapy.getDates()).isEqualTo(newDates);
 
@@ -457,18 +459,18 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		GregorianCalendar[] dates = new GregorianCalendar[] { new GregorianCalendar(), new GregorianCalendar() };
+		LocalDateTime[] dates = { TimeTools.getNow(), TimeTools.getNow() };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 10.0, "", 1, "TestNote", true, true);
 		assertThat(therapy).hasToString("10.0 of TestDescription - 1 per day");
 	}
 
-	private Patient _setupTestPatient(boolean usingSet) throws OHException {
+	private Patient setupTestPatient(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(usingSet);
 		patientIoOperationRepository.saveAndFlush(patient);
 		return patient;
 	}
 
-	private int _setupTestTherapyRow(boolean usingSet) throws OHException {
+	private int setupTestTherapyRow(boolean usingSet) throws OHException {
 		TherapyRow therapyRow;
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
@@ -481,8 +483,8 @@ public class Tests extends OHCoreTestCase {
 		return therapyRow.getTherapyID();
 	}
 
-	private void _checkTherapyRowIntoDb(int id) throws OHException {
-		TherapyRow foundTherapyRow = therapyIoOperationRepository.findOne(id);
+	private void checkTherapyRowIntoDb(int id) throws OHException {
+		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).get();
 		testTherapyRow.check(foundTherapyRow);
 	}
 }

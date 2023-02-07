@@ -22,7 +22,6 @@
 package org.isf.disctype.model;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -44,17 +43,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name="DISCHARGETYPE")
-@EntityListeners(AuditingEntityListener.class) 
-@AttributeOverrides({
-    @AttributeOverride(name="createdBy", column=@Column(name="DIST_CREATED_BY")),
-    @AttributeOverride(name="createdDate", column=@Column(name="DIST_CREATED_DATE")),
-    @AttributeOverride(name="lastModifiedBy", column=@Column(name="DIST_LAST_MODIFIED_BY")),
-    @AttributeOverride(name="active", column=@Column(name="DIST_ACTIVE")),
-    @AttributeOverride(name="lastModifiedDate", column=@Column(name="DIST_LAST_MODIFIED_DATE"))
-})
-public class DischargeType extends Auditable<String>
-{
+@Table(name="OH_DISCHARGETYPE")
+@EntityListeners(AuditingEntityListener.class)
+@AttributeOverride(name = "createdBy", column = @Column(name = "DIST_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "DIST_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "DIST_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "active", column = @Column(name = "DIST_ACTIVE"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "DIST_LAST_MODIFIED_DATE"))
+public class DischargeType extends Auditable<String> {
 	@Id 
 	@Column(name="DIST_ID_A")	    
     private String code;

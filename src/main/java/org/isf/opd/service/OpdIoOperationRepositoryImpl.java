@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,9 +21,9 @@
  */
 package org.isf.opd.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -34,8 +34,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
+import org.isf.ward.model.Ward;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -47,65 +47,77 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 	@SuppressWarnings("unchecked")	
 	@Override
 	public List<Opd> findAllOpdWhereParams(
+			Ward ward,
 			String diseaseTypeCode,
-			String diseaseCode, 
-			GregorianCalendar dateFrom,
-			GregorianCalendar dateTo,
-			int ageFrom, 
+			String diseaseCode,
+			LocalDate dateFrom,
+			LocalDate dateTo,
+			int ageFrom,
 			int ageTo,
 			char sex,
-			char newPatient) {
-		return _getOpdQuery(
-						diseaseTypeCode, diseaseCode, dateFrom, dateTo,
-						ageFrom, ageTo, sex, newPatient).
-					getResultList();
+			char newPatient,
+			String user) {
+		return getOpdQuery(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user).getResultList();
 	}	
 
-	private TypedQuery<Opd> _getOpdQuery(
+	private TypedQuery<Opd> getOpdQuery(
+			Ward ward, 
 			String diseaseTypeCode,
-			String diseaseCode, 
-			GregorianCalendar dateFrom,
-			GregorianCalendar dateTo,
+			String diseaseCode,
+			LocalDate dateFrom,
+			LocalDate dateTo,
 			int ageFrom, 
 			int ageTo,
 			char sex,
-			char newPatient) {
+			char newPatient,
+			String user) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Opd> query = cb.createQuery(Opd.class);
 		Root<Opd> opd = query.from(Opd.class);
 		List<Predicate> predicates = new ArrayList<>();
 
 		query.select(opd);
-		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alltypes.txt")))) {
+		if (ward != null) {
 			predicates.add(
-				cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
+					cb.equal(opd.join("ward").get("code"), ward.getCode())
 			);
 		}
-		if (!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldiseases.txt"))) {
+		if (diseaseTypeCode != null) {
 			predicates.add(
-				cb.equal(opd.join("disease").get("code"), diseaseCode)
+					cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
+			);
+		}
+		if (diseaseCode != null) {
+			predicates.add(
+					cb.equal(opd.join("disease").get("code"), diseaseCode)
 			);
 		}
 		if (ageFrom != 0 || ageTo != 0) {
 			predicates.add(
-				cb.between(opd.<Integer>get("age"), ageFrom, ageTo)
+					cb.between(opd.<Integer>get("age"), ageFrom, ageTo)
 			);
 		}
 		if (sex != 'A') {
 			predicates.add(
-				cb.equal(opd.get("sex"), sex)
+					cb.equal(opd.get("sex"), sex)
 			);
 		}
 		if (newPatient != 'A') {
 			predicates.add(
-				cb.equal(opd.get("newPatient"), newPatient)
+					cb.equal(opd.get("newPatient"), newPatient)
+			);
+		}
+		if (user != null) {
+			predicates.add(
+					cb.equal(opd.get("userID"), user)
 			);
 		}
 		predicates.add(
-			cb.between(opd.<Date>get("date"), dateFrom.getTime(), dateTo.getTime())
+				cb.between(opd.<LocalDateTime>get("date"), dateFrom.atStartOfDay(), dateTo.plusDays(1).atStartOfDay())
 		);
 		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 
 		return entityManager.createQuery(query);
 	}
+
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -21,15 +21,15 @@
  */
 package org.isf.patvac.service;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.patvac.model.PatientVaccine;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,11 +60,12 @@ public class PatVacIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<PatientVaccine> getPatientVaccine(boolean minusOneWeek) throws OHServiceException {
-		GregorianCalendar timeFrom = TimeTools.getDateToday0();
-		GregorianCalendar timeTo = TimeTools.getDateToday24();
+		LocalDateTime now = TimeTools.getNow();
+		LocalDateTime timeTo = TimeTools.getDateToday24();
+		LocalDateTime timeFrom = TimeTools.getDateToday0();
 
 		if (minusOneWeek) {
-			timeFrom.add(GregorianCalendar.WEEK_OF_YEAR, -1);
+			timeFrom = timeFrom.minusWeeks(1);
 		}
 
 		return getPatientVaccine(null, null, timeFrom, timeTo, 'A', 0, 0);
@@ -87,13 +88,13 @@ public class PatVacIoOperations {
 	public List<PatientVaccine> getPatientVaccine(
 			String vaccineTypeCode,
 			String vaccineCode,
-			GregorianCalendar dateFrom,
-			GregorianCalendar dateTo,
+			LocalDateTime dateFrom,
+			LocalDateTime dateTo,
 			char sex,
 			int ageFrom,
 			int ageTo) throws OHServiceException {
-		return new ArrayList<>(repository.findAllByCodesAndDatesAndSexAndAges(
-				vaccineTypeCode, vaccineCode, dateFrom, dateTo, sex, ageFrom, ageTo));
+		return repository.findAllByCodesAndDatesAndSexAndAges(vaccineTypeCode, vaccineCode, TimeTools.truncateToSeconds(dateFrom),
+		                                                      TimeTools.truncateToSeconds(dateTo), sex, ageFrom, ageTo);
 	}
 
 	public List<PatientVaccine> findForPatient(int patientCode) {
@@ -107,8 +108,8 @@ public class PatVacIoOperations {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newPatientVaccine(PatientVaccine patVac) throws OHServiceException {
-		return repository.save(patVac) != null;
+	public PatientVaccine newPatientVaccine(PatientVaccine patVac) throws OHServiceException {
+		return repository.save(patVac);
 	}
 
 	/**
@@ -118,8 +119,8 @@ public class PatVacIoOperations {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updatePatientVaccine(PatientVaccine patVac) throws OHServiceException {
-		return repository.save(patVac) != null;
+	public PatientVaccine updatePatientVaccine(PatientVaccine patVac) throws OHServiceException {
+		return repository.save(patVac);
 	}
 
 	/**
@@ -157,10 +158,14 @@ public class PatVacIoOperations {
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
-		return repository.exists(code);
+		return repository.existsById(code);
 	}
 
-	private GregorianCalendar getBeginningOfYear(int year) {
-		return new DateTime().withYear(year).dayOfYear().withMinimumValue().withTimeAtStartOfDay().toGregorianCalendar();
+	public Optional<PatientVaccine> getPatientVaccine(Integer code) throws OHServiceException {
+		return repository.findById(code);
+	}
+	
+	private LocalDateTime getBeginningOfYear(int year) {
+		return LocalDateTime.of(year, Month.JANUARY, 1, 0, 0, 0);
 	}
 }
