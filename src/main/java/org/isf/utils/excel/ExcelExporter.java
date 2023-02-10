@@ -185,10 +185,11 @@ public class ExcelExporter {
 					} else {
 						strVal = " ";
 					}
-					if (j == colCount - 1)
+					if (j == colCount - 1) {
 						outFile.write(strVal);
-					else
+					} else {
 						outFile.write(strVal + separator);
+					}
 				}
 				outFile.write("\n");
 			}
@@ -235,10 +236,11 @@ public class ExcelExporter {
 
 				int colCount = rsmd.getColumnCount();
 				for (int i = 1; i <= colCount; i++) {
-					if (i == colCount - 1)
+					if (i == colCount - 1) {
 						output.write(rsmd.getColumnName(i));
-					else
+					} else {
 						output.write(rsmd.getColumnName(i) + separator);
+					}
 				}
 				output.write("\n");
 
@@ -263,10 +265,11 @@ public class ExcelExporter {
 						} else {
 							strVal = " ";
 						}
-						if (i == colCount - 1)
+						if (i == colCount - 1) {
 							output.write(strVal);
-						else
+						} else {
 							output.write(strVal + separator);
+						}
 
 					}
 					output.write("\n");

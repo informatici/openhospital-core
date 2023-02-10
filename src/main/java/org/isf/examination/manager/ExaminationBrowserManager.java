@@ -180,18 +180,24 @@ public class ExaminationBrowserManager {
 	}
 
 	public String getBMIdescription(double bmi) {
-		if (bmi < 16.5)
+		if (bmi < 16.5) {
 			return MessageBundle.getMessage("angal.examination.bmi.severeunderweight.txt");
-		if (bmi >= 16.5 && bmi < 18.5)
+		}
+		if (bmi >= 16.5 && bmi < 18.5) {
 			return MessageBundle.getMessage("angal.examination.bmi.underweight.txt");
-		if (bmi >= 18.5 && bmi < 24.5)
+		}
+		if (bmi >= 18.5 && bmi < 24.5) {
 			return MessageBundle.getMessage("angal.examination.bmi.normalweight.txt");
-		if (bmi >= 24.5 && bmi < 30)
+		}
+		if (bmi >= 24.5 && bmi < 30) {
 			return MessageBundle.getMessage("angal.examination.bmi.overweight.txt");
-		if (bmi >= 30 && bmi < 35)
+		}
+		if (bmi >= 30 && bmi < 35) {
 			return MessageBundle.getMessage("angal.examination.bmi.obesityclassilight.txt");
-		if (bmi >= 35 && bmi < 40)
+		}
+		if (bmi >= 35 && bmi < 40) {
 			return MessageBundle.getMessage("angal.examination.bmi.obesityclassiimedium.txt");
+		}
 		return MessageBundle.getMessage("angal.examination.bmi.obesityclassiiisevere.txt");
 	}
 
@@ -256,8 +262,9 @@ public class ExaminationBrowserManager {
 	}
 
 	public String getBowelDescriptionTranslated(String pexBowelDescKey) {
-		if (bowelDescriptionHashMap == null)
+		if (bowelDescriptionHashMap == null) {
 			buildBowelDescriptionHashMap();
+		}
 		return bowelDescriptionHashMap.get(pexBowelDescKey);
 	}
 
@@ -274,8 +281,9 @@ public class ExaminationBrowserManager {
 	}
 
 	public String getDiuresisDescriptionTranslated(String pexDiuresisDescKey) {
-		if (diuresisDescriptionHashMap == null)
+		if (diuresisDescriptionHashMap == null) {
 			buildDiuresisDescriptionHashMap();
+		}
 		return diuresisDescriptionHashMap.get(pexDiuresisDescKey);
 	}
 

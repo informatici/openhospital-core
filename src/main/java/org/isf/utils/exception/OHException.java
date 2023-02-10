@@ -60,7 +60,9 @@ public class OHException extends Exception {
 	 */
 	protected String sanitize(String value)
 	{
-		if (value == null) return null;
+		if (value == null) {
+			return null;
+		}
 		return value.trim().replaceAll("'", "''");
 	}
 }

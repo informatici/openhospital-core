@@ -129,7 +129,9 @@ public class PrintReceipt {
 			} else {
 				printService = defaultPrintService;
 			}
-			if (printService == null) return;
+			if (printService == null) {
+				return;
+			}
 			getPrinterDetails(printService);
 			DocPrintJob job = printService.createPrintJob();
 			DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;

@@ -78,10 +78,11 @@ public class VisitsIoOperations {
 	public List<Visit> getVisitsWard(String wardId) throws OHServiceException {
 		List<Visit> visits = null;
 
-		if (wardId != null)
+		if (wardId != null) {
 			visits = repository.findAllWhereWardByOrderDateAsc(wardId);
-		else
+		} else {
 			visits = repository.findAllByOrderByPatient_CodeAscDateAsc();
+		}
 
 		return visits;
 	}
