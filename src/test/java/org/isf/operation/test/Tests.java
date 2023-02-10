@@ -816,7 +816,7 @@ public class Tests extends OHCoreTestCase {
 		Operation operation = testOperation.setup(operationType, true);
 		OperationRow operationRow = testOperationRow.setup(operation, true);
 
-		assertThat(operationRowBrowserManager.updateOperationRow(operationRow)).isTrue();
+		assertThat(operationRowBrowserManager.updateOperationRow(operationRow));
 	}
 
 	@Test
@@ -825,7 +825,7 @@ public class Tests extends OHCoreTestCase {
 		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
 		assertThat(operationRow.getRemarks()).isNotEqualTo("someNewRemarks");
 		operationRow.setRemarks("someNewRemarks");
-		assertThat(operationRowBrowserManager.updateOperationRow(operationRow)).isTrue();
+		assertThat(operationRowBrowserManager.updateOperationRow(operationRow));
 		operationRow = operationRowIoOperationRepository.findById(id);
 		assertThat(operationRow.getRemarks()).isEqualTo("someNewRemarks");
 	}
@@ -839,7 +839,7 @@ public class Tests extends OHCoreTestCase {
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 
-		assertThat(operationRowBrowserManager.newOperationRow(operationRow)).isTrue();
+		assertThat(operationRowBrowserManager.newOperationRow(operationRow));
 		assertThat(operationRowIoOperationRepository.findById(operationRow.getId())).isNotNull();
 	}
 
