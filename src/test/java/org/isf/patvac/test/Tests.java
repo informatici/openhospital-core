@@ -195,8 +195,9 @@ public class Tests extends OHCoreTestCase {
 		setupTestPatientVaccine(true);
 		List<PatientVaccine> patientVaccineList = patvacIoOperation.getPatientVaccine(null, null, null, null, 'A', 0, 0);
 		for (PatientVaccine patVac : patientVaccineList) {
-			if (patVac.getProgr() > foundProgYear)
+			if (patVac.getProgr() > foundProgYear) {
 				foundProgYear = patVac.getProgr();
+			}
 		}
 		progYear = patvacIoOperation.getProgYear(0);
 		assertThat(progYear).isEqualTo(foundProgYear);
@@ -360,8 +361,9 @@ public class Tests extends OHCoreTestCase {
 		setupTestPatientVaccine(true);
 		List<PatientVaccine> patientVaccineList = patVacManager.getPatientVaccine(null, null, null, null, 'A', 0, 0);
 		for (PatientVaccine patVac : patientVaccineList) {
-			if (patVac.getProgr() > foundProgYear)
+			if (patVac.getProgr() > foundProgYear) {
 				foundProgYear = patVac.getProgr();
+			}
 		}
 		progYear = patVacManager.getProgYear(0);
 		assertThat(progYear).isEqualTo(foundProgYear);

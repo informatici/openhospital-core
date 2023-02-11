@@ -615,10 +615,18 @@ public class Patient extends Auditable<String> {
 		sbName.append(' ');
 		sbName.append(getCity().toLowerCase());
 		sbName.append(' ');
-		if (getAddress() != null) sbName.append(getAddress().toLowerCase()).append(' ');
-		if (getTelephone() != null) sbName.append(getTelephone()).append(' ');
-		if (getNote() != null) sbName.append(getNote().toLowerCase()).append(' ');
-		if (getTaxCode() != null) sbName.append(getTaxCode().toLowerCase()).append(' ');
+		if (getAddress() != null) {
+			sbName.append(getAddress().toLowerCase()).append(' ');
+		}
+		if (getTelephone() != null) {
+			sbName.append(getTelephone()).append(' ');
+		}
+		if (getNote() != null) {
+			sbName.append(getNote().toLowerCase()).append(' ');
+		}
+		if (getTaxCode() != null) {
+			sbName.append(getTaxCode().toLowerCase()).append(' ');
+		}
 		return sbName.toString();
 	}
 	

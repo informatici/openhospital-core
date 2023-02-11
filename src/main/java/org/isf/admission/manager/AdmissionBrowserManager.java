@@ -316,9 +316,9 @@ public class AdmissionBrowserManager {
 					// found an open admission
 					// only if i close my own first of it
 					if (ad.getDisDate() == null) {
-						if (!dateOut.isAfter(ad.getAdmDate()))
-							;// ok
-						else {
+						if (!dateOut.isAfter(ad.getAdmDate())) {
+							// ok
+						} else {
 							errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 									MessageBundle.getMessage("angal.admission.intheselecteddatepatientwasadmittedagain.msg"),
 									OHSeverityLevel.ERROR));
