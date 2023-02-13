@@ -122,12 +122,15 @@ public class SessionAudit extends Auditable<String> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		SessionAudit other = (SessionAudit) obj;
 		return code == other.code && hashCode == other.hashCode && Objects.equals(loginDate, other.loginDate) && Objects.equals(logoutDate, other.logoutDate)
 						&& Objects.equals(userName, other.userName);

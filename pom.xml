@@ -326,7 +326,7 @@
 		<dependency>
 			<groupId>org.igniterealtime.smack</groupId>
 			<artifactId>smackx</artifactId>
-			<version>3.2.1</version>
+			<version>3.4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>

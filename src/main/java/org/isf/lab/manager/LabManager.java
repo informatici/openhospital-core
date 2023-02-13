@@ -226,10 +226,11 @@ public class LabManager {
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.newLabFirstProcedure(laboratory);
 		} else if (laboratory.getExam().getProcedure() == 2) {
-			if (labRow == null || labRow.isEmpty())
+			if (labRow == null || labRow.isEmpty()) {
 				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg"),
 						OHSeverityLevel.ERROR));
+			}
 			return ioOperations.newLabSecondProcedure(laboratory, labRow);
 		} else if (laboratory.getExam().getProcedure() == 3) {
 			return ioOperations.newLabFirstProcedure(laboratory);
@@ -257,10 +258,11 @@ public class LabManager {
 			return ioOperations.newLabSecondProcedure2(laboratory, labRow);
 		} else if (laboratory.getExam().getProcedure() == 3) {
 			return ioOperations.newLabFirstProcedure(laboratory);
-		} else
+		} else {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.unknownprocedure.msg"),
 					OHSeverityLevel.ERROR));
+		}
 	}
 
 	/**
@@ -276,18 +278,20 @@ public class LabManager {
 		if (laboratory.getExam().getProcedure() == 1) {
 			return ioOperations.updateLabFirstProcedure(laboratory);
 		} else if (laboratory.getExam().getProcedure() == 2) {
-			if (labRow == null || labRow.isEmpty())
+			if (labRow == null || labRow.isEmpty()) {
 				throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 						MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg"),
 						OHSeverityLevel.ERROR));
+			}
 			return ioOperations.updateLabSecondProcedure(laboratory, labRow);
 		} else if (laboratory.getExam().getProcedure() == 3) {
 			//TODO: is it enough to call FirstProcedure?
 			return ioOperations.updateLabFirstProcedure(laboratory);
-		} else
+		} else {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.lab.unknownprocedure.msg"),
 					OHSeverityLevel.ERROR));
+		}
 	}
 
 	/**
@@ -301,14 +305,16 @@ public class LabManager {
 	@Transactional(rollbackFor = OHServiceException.class)
 	@TranslateOHServiceException
 	public boolean newLaboratory(List<Laboratory> labList, List<List<String>> labRowList) throws OHServiceException {
-		if (labList.isEmpty())
+		if (labList.isEmpty()) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.noexamsinserted.msg"),
 					OHSeverityLevel.ERROR));
-		if (labList.size() != labRowList.size())
+		}
+		if (labList.size() != labRowList.size()) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg"),
 					OHSeverityLevel.ERROR));
+		}
 		boolean result = true;
 		for (int i = 0; i < labList.size(); i++) {
 			result = result && newLaboratory(labList.get(i), labRowList.get(i));
@@ -327,14 +333,16 @@ public class LabManager {
 	@Transactional(rollbackFor = OHServiceException.class)
 	@TranslateOHServiceException
 	public boolean newLaboratory2(List<Laboratory> labList, List<List<LaboratoryRow>> labRowList) throws OHServiceException {
-		if (labList.isEmpty())
+		if (labList.isEmpty()) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.noexamsinserted.msg"),
 					OHSeverityLevel.ERROR));
-		if (labList.size() != labRowList.size())
+		}
+		if (labList.size() != labRowList.size()) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg"),
 					OHSeverityLevel.ERROR));
+		}
 		boolean result = true;
 		for (int i = 0; i < labList.size(); i++) {
 			result = result && newLaboratory2(labList.get(i), labRowList.get(i));
@@ -428,12 +436,14 @@ public class LabManager {
 	}
 
 	public String getMaterialTranslated(String materialKey) {
-		if (materialHashMap == null)
+		if (materialHashMap == null) {
 			buildMaterialHashMap();
-		if (materialKey == null || !materialHashMap.containsKey(materialKey))
+		}
+		if (materialKey == null || !materialHashMap.containsKey(materialKey)) {
 			return MessageBundle.getMessage("angal.lab.undefined.txt");
-		else
+		} else {
 			return materialHashMap.get(materialKey);
+		}
 	}
 
 	public String getMaterialKey(String description) {

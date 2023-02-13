@@ -346,38 +346,49 @@ public class PatientBrowserManager {
 			}
 		}
 
-		if (StringUtils.isEmpty(mergedPatient.getAddress()))
+		if (StringUtils.isEmpty(mergedPatient.getAddress())) {
 			mergedPatient.setAddress(patient2.getAddress());
+		}
 
-		if (StringUtils.isEmpty(mergedPatient.getCity()))
+		if (StringUtils.isEmpty(mergedPatient.getCity())) {
 			mergedPatient.setCity(patient2.getCity());
+		}
 
-		if (StringUtils.isEmpty(mergedPatient.getNextKin()))
+		if (StringUtils.isEmpty(mergedPatient.getNextKin())) {
 			mergedPatient.setNextKin(patient2.getNextKin());
+		}
 
-		if (StringUtils.isEmpty(mergedPatient.getTelephone()))
+		if (StringUtils.isEmpty(mergedPatient.getTelephone())) {
 			mergedPatient.setTelephone(patient2.getTelephone());
+		}
 
-		if (StringUtils.isEmpty(mergedPatient.getMotherName()))
+		if (StringUtils.isEmpty(mergedPatient.getMotherName())) {
 			mergedPatient.setMotherName(patient2.getMotherName());
+		}
 
-		if (mergedPatient.getMother() == 'U')
+		if (mergedPatient.getMother() == 'U') {
 			mergedPatient.setMother(patient2.getMother());
+		}
 
-		if (StringUtils.isEmpty(mergedPatient.getFatherName()))
+		if (StringUtils.isEmpty(mergedPatient.getFatherName())) {
 			mergedPatient.setFatherName(patient2.getFatherName());
+		}
 
-		if (mergedPatient.getFather() == 'U')
+		if (mergedPatient.getFather() == 'U') {
 			mergedPatient.setFather(patient2.getFather());
+		}
 
-		if (StringUtils.isEmpty(mergedPatient.getBloodType()))
+		if (StringUtils.isEmpty(mergedPatient.getBloodType())) {
 			mergedPatient.setBloodType(patient2.getBloodType());
+		}
 
-		if (mergedPatient.getHasInsurance() == 'U')
+		if (mergedPatient.getHasInsurance() == 'U') {
 			mergedPatient.setHasInsurance(patient2.getHasInsurance());
+		}
 
-		if (mergedPatient.getParentTogether() == 'U')
+		if (mergedPatient.getParentTogether() == 'U') {
 			mergedPatient.setParentTogether(patient2.getParentTogether());
+		}
 
 		if (StringUtils.isEmpty(mergedPatient.getNote())) {
 			mergedPatient.setNote(patient2.getNote());

@@ -247,9 +247,15 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 
 	@Override
 	public boolean equals(Object anObject) {
-		if (!(anObject instanceof Medical)) return false;
-		if (getProdCode() == null || ((Medical) anObject).getProdCode() == null) return false;
-		if (getProdCode() != null && ((Medical) anObject).getProdCode() != null && !getProdCode().equals(((Medical) anObject).getProdCode())) return false;
+		if (!(anObject instanceof Medical)) {
+			return false;
+		}
+		if (getProdCode() == null || ((Medical) anObject).getProdCode() == null) {
+			return false;
+		}
+		if (getProdCode() != null && ((Medical) anObject).getProdCode() != null && !getProdCode().equals(((Medical) anObject).getProdCode())) {
+			return false;
+		}
 		return (getCode().equals(((Medical) anObject).getCode())
 						&& getDescription().equalsIgnoreCase(((Medical) anObject).getDescription())
 						&& getType().equals(((Medical) anObject).getType())
