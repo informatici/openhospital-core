@@ -81,9 +81,9 @@ public class OperationRowIoOperations {
 			found.setPrescriber(opRow.getPrescriber());
 			found.setRemarks(opRow.getRemarks());
 			found.setTransUnit(opRow.getTransUnit());
-			
+			return repository.save(found);
 		}
-		return repository.save(found);
+		return null;
 	}
 
 	public OperationRow newOperationRow(OperationRow opRow) throws OHServiceException {
