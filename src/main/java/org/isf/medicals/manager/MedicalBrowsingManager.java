@@ -281,8 +281,9 @@ public class MedicalBrowsingManager {
 			StringBuilder message = new StringBuilder(MessageBundle.getMessage("angal.medicals.theinsertedmedicalisalreadyinuse.msg")).append('\n');
 			for (Medical med : similarMedicals) {
 				message.append('[').append(med.getType().getDescription()).append("] ");
-				if (!med.getProdCode().isEmpty())
+				if (!med.getProdCode().isEmpty()) {
 					message.append('[').append(med.getProdCode()).append("] ");
+				}
 				message.append(med).append('\n');
 			}
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),

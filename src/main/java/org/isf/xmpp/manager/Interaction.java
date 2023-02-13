@@ -62,8 +62,9 @@ public class Interaction {
 		Collection<String> entriesOnline = new ArrayList<>();
 		for (RosterEntry rosterEntry : entries) {
 			presence = roster.getPresence(rosterEntry.getUser());
-			if (presence.isAvailable())
+			if (presence.isAvailable()) {
 				entriesOnline.add(rosterEntry.getName());
+			}
 		}
 		return entriesOnline;
 	}

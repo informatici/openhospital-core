@@ -493,22 +493,26 @@ public class JasperReportsManager {
 
 			String queryString = query.getText();
 			queryString = queryString.replace("$P{todate}", "'" + dateQuery + "'");
-			if (groupBy != null)
+			if (groupBy != null) {
 				queryString = queryString.replace("$P{groupBy}", "'" + groupBy + "'");
-			if (sortBy != null)
+			}
+			if (sortBy != null) {
 				queryString = queryString.replace("$P!{sortBy}", "'" + sortBy + "'");
-			if (filter != null)
+			}
+			if (filter != null) {
 				queryString = queryString.replace("$P{filter}", "'" + filter + "'");
+			}
 
 			DbQueryLogger dbQuery = new DbQueryLogger();
 			ResultSet resultSet = dbQuery.getData(queryString, true);
 
 			File exportFile = new File(exportFilename);
 			ExcelExporter xlsExport = new ExcelExporter();
-			if (exportFile.getName().endsWith(".xls"))
+			if (exportFile.getName().endsWith(".xls")) {
 				xlsExport.exportResultsetToExcelOLD(resultSet, exportFile);
-			else
+			} else {
 				xlsExport.exportResultsetToExcel(resultSet, exportFile);
+			}
 		} catch (Exception e) {
 			LOGGER.error("", e);
 			throw new OHReportException(e, new OHExceptionMessage(MessageBundle.getMessage(COMMON_ERROR_TITLE), MessageBundle.getMessage(STAT_REPORTERROR_MSG),

@@ -50,7 +50,9 @@ public final class TxtPrinter extends ConfigurationProperties {
     	super(fileProperties);
 			
 		USE_DEFAULT_PRINTER = myGetProperty("USE_DEFAULT_PRINTER", DEFAULT_USE_DEFAULT_PRINTER);
-		if (!USE_DEFAULT_PRINTER) PRINTER = myGetProperty("USE_DEFAULT_PRINTER"); 
+		if (!USE_DEFAULT_PRINTER) {
+			PRINTER = myGetProperty("USE_DEFAULT_PRINTER");
+		}
 		PRINT_AS_PAID = myGetProperty("PRINT_AS_PAID", DEFAULT_PRINT_AS_PAID);
 		PRINT_WITHOUT_ASK = myGetProperty("PRINT_WITHOUT_ASK", DEFAULT_PRINT_WITHOUT_ASK);
 		TXT_CHAR_HEIGHT = myGetProperty("TXT_CHAR_HEIGHT", DEFAULT_TXT_CHAR_HEIGHT);
