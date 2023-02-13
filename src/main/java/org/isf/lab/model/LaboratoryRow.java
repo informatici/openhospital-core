@@ -109,8 +109,9 @@ public class LaboratoryRow extends Auditable<String> {
 		}
 		
 		LaboratoryRow laboratoryRow = (LaboratoryRow)obj;
-		if (this.getCode() != null && laboratoryRow.getCode() != null)
+		if (this.getCode() != null && laboratoryRow.getCode() != null) {
 			return (this.getCode().equals(laboratoryRow.getCode()) );
+		}
 		return (this.getDescription().equals(laboratoryRow.getDescription()));
 	}
 	

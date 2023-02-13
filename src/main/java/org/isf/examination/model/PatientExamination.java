@@ -425,7 +425,9 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 			double height = pex_height * (1. / 100); // convert to m
 			double weight = pex_weight; // Kg
 			return Math.round(weight / Math.pow(height, 2) * temp) / temp ; //getting Kg/m2
-		} else return 0;
+		} else {
+			return 0;
+		}
 	}
 	
 	@Override

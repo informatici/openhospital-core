@@ -86,9 +86,9 @@ public class PrintManager {
 						jasperReport, parameters, dataSource);
 				switch (action) {
 				case 0:
-					if (GeneralData.INTERNALVIEWER)
+					if (GeneralData.INTERNALVIEWER) {
 						JasperViewer.viewReport(jasperPrint,false, new Locale(GeneralData.LANGUAGE));
-					else { 
+					} else {
 						String pdfFile = "rpt_base/PDF/" + filename + ".pdf";
 						JasperExportManager.exportReportToPdfFile(jasperPrint, pdfFile);
 						try {
@@ -109,7 +109,9 @@ public class PrintManager {
 				default:JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectacorrectaction.msg"));
 					break;
 				}
-			} else JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.notavalidfile.msg"));
+			} else {
+				JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.notavalidfile.msg"));
+			}
 		} catch (JRException jrException) {
 			LOGGER.error(jrException.getMessage(), jrException);
 		}

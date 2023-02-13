@@ -137,8 +137,9 @@ public class SourceFiles extends Thread {
 				}
 				filesLoaded++;
 				dicomLoader.setLoaded(filesLoaded);
-			} else if (!".".equals(value.getName()) && !"..".equals(value.getName()))
+			} else if (!".".equals(value.getName()) && !"..".equals(value.getName())) {
 				loadDicomDir(fileDicom, value, patient);
+			}
 		}
 	}
 
@@ -161,8 +162,9 @@ public class SourceFiles extends Thread {
 							OHSeverityLevel.ERROR));
 				}
 				num++;
-			} else if (!".".equals(value.getName()) && !"..".equals(value.getName()))
+			} else if (!".".equals(value.getName()) && !"..".equals(value.getName())) {
 				num = num + countFiles(value, patient);
+			}
 		}
 		return num;
 	}
@@ -258,8 +260,9 @@ public class SourceFiles extends Thread {
 	public static synchronized void loadDicom(FileDicom dicomFileDetail, File sourceFile, int patient) throws Exception {
 		// installLibs();
 
-		if (".DS_Store".equals(sourceFile.getName()))
+		if (".DS_Store".equals(sourceFile.getName())) {
 			return;
+		}
 
 		try {
 			boolean isJpeg = StringUtils.endsWithIgnoreCase(sourceFile.getName(), ".jpg") || StringUtils.endsWithIgnoreCase(sourceFile.getName(), ".jpeg");
@@ -407,52 +410,75 @@ public class SourceFiles extends Thread {
 			}
 
 			// Loaded... Update dicomFileDetail
-			if (sourceFile != null)
+			if (sourceFile != null) {
 				dicomFileDetail.setDicomData(sourceFile);
-			if (sourceFile.getName() != null)
+			}
+			if (sourceFile.getName() != null) {
 				dicomFileDetail.setFileName(sourceFile.getName());
-			if (accessionNumber != null)
+			}
+			if (accessionNumber != null) {
 				dicomFileDetail.setDicomAccessionNumber(accessionNumber);
-			if (instanceUID != null)
+			}
+			if (instanceUID != null) {
 				dicomFileDetail.setDicomInstanceUID(instanceUID);
-			if (institutionName != null)
+			}
+			if (institutionName != null) {
 				dicomFileDetail.setDicomInstitutionName(institutionName);
-			if (patientAddress != null)
+			}
+			if (patientAddress != null) {
 				dicomFileDetail.setDicomPatientAddress(patientAddress);
-			if (patientAge != null)
+			}
+			if (patientAge != null) {
 				dicomFileDetail.setDicomPatientAge(patientAge);
-			if (patientBirthDate != null)
+			}
+			if (patientBirthDate != null) {
 				dicomFileDetail.setDicomPatientBirthDate(patientBirthDate);
-			if (patientID != null)
+			}
+			if (patientID != null) {
 				dicomFileDetail.setDicomPatientID(patientID);
-			if (patientName != null)
+			}
+			if (patientName != null) {
 				dicomFileDetail.setDicomPatientName(patientName);
-			if (patientSex != null)
+			}
+			if (patientSex != null) {
 				dicomFileDetail.setDicomPatientSex(patientSex);
-			if (seriesDate != null)
+			}
+			if (seriesDate != null) {
 				dicomFileDetail.setDicomSeriesDate(seriesDate);
-			if (seriesDescription != null)
+			}
+			if (seriesDescription != null) {
 				dicomFileDetail.setDicomSeriesDescription(seriesDescription);
-			if (seriesDescriptionCodeSequence != null)
+			}
+			if (seriesDescriptionCodeSequence != null) {
 				dicomFileDetail.setDicomSeriesDescriptionCodeSequence(seriesDescriptionCodeSequence);
-			if (seriesInstanceUID != null)
+			}
+			if (seriesInstanceUID != null) {
 				dicomFileDetail.setDicomSeriesInstanceUID(seriesInstanceUID);
-			if (seriesNumber != null)
+			}
+			if (seriesNumber != null) {
 				dicomFileDetail.setDicomSeriesNumber(seriesNumber);
-			if (seriesUID != null)
+			}
+			if (seriesUID != null) {
 				dicomFileDetail.setDicomSeriesUID(seriesUID);
-			if (studyDate != null)
+			}
+			if (studyDate != null) {
 				dicomFileDetail.setDicomStudyDate(studyDate);
-			if (studyDescription != null)
+			}
+			if (studyDescription != null) {
 				dicomFileDetail.setDicomStudyDescription(studyDescription);
-			if (studyUID != null)
+			}
+			if (studyUID != null) {
 				dicomFileDetail.setDicomStudyId(studyUID);
-			if (patient != 0)
+			}
+			if (patient != 0) {
 				dicomFileDetail.setPatId(patient);
-			if (scaled != null)
+			}
+			if (scaled != null) {
 				dicomFileDetail.setDicomThumbnail(scaled);
-			if (modality != null)
+			}
+			if (modality != null) {
 				dicomFileDetail.setModality(modality);
+			}
 			dicomFileDetail.setIdFile(0); //it trigger the DB save with SqlDicomManager
 			try {
 				DicomManagerFactory.getManager().saveFile(dicomFileDetail);

@@ -551,11 +551,13 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		}
 		File fp = f.getParentFile();
 
-		if (fp != null)
+		if (fp != null) {
 			recourse(fp);
+		}
 
-		if (!f.exists())
+		if (!f.exists()) {
 			f.mkdir();
+		}
 	}
 
 	/**
