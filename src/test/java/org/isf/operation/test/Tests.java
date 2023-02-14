@@ -812,20 +812,20 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrRowUpdateOperationRowNotFound() throws Exception {
-		OperationType operationType = testOperationType.setup(false);
-		Operation operation = testOperation.setup(operationType, true);
-		OperationRow operationRow = testOperationRow.setup(operation, true);
-
-		assertThat(operationRowBrowserManager.updateOperationRow(operationRow));
+		int id = setupTestOperationRowWithAdmission(false);
+		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
+		operationRow.setId(-9999);
+		assertThat(operationRowBrowserManager.updateOperationRow(operationRow)).isNull();
 	}
 
 	@Test
 	public void testMgrRowUpdateOperationRow() throws Exception {
-		int id = setupTestOperationRow(false);
+		int id = setupTestOperationRowWithAdmission(false);
 		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
 		assertThat(operationRow.getRemarks()).isNotEqualTo("someNewRemarks");
 		operationRow.setRemarks("someNewRemarks");
-		assertThat(operationRowBrowserManager.updateOperationRow(operationRow));
+		assertThat(operationRowBrowserManager.updateOperationRow(operationRow).getOperation().getDescription()).isEqualTo("TestDescription");
+		assertThat(operationRowBrowserManager.updateOperationRow(operationRow).getAdmission().getUserID()).isEqualTo("TestUserId");
 		operationRow = operationRowIoOperationRepository.findById(id);
 		assertThat(operationRow.getRemarks()).isEqualTo("someNewRemarks");
 	}
@@ -836,10 +836,47 @@ public class Tests extends OHCoreTestCase {
 		Operation operation = testOperation.setup(operationType, true);
 		OperationRow operationRow = testOperationRow.setup(operation, true);
 
+		Ward ward = testWard.setup(false, false);
+		Patient patient = testPatient.setup(false);
+		AdmissionType admissionType = testAdmissionType.setup(false);
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+		Disease diseaseIn = testDisease.setup(diseaseType, false);
+		Disease diseaseOut1 = testDisease.setup(diseaseType, false);
+		diseaseOut1.setCode("888");
+		Disease diseaseOut2 = testDisease.setup(diseaseType, false);
+		diseaseOut2.setCode("777");
+		Disease diseaseOut3 = testDisease.setup(diseaseType, false);
+		diseaseOut3.setCode("666");
+		DischargeType dischargeType = testDischargeType.setup(false);
+		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
+		DeliveryType deliveryType = testDeliveryType.setup(false);
+		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+
+		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
+		                                          diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+		                                          deliveryType, deliveryResult, false);
+		operationRow.setAdmission(admission);
+
+		wardIoOperationRepository.saveAndFlush(ward);
+		patientIoOperationRepository.saveAndFlush(patient);
+		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+		diseaseIoOperationRepository.saveAndFlush(diseaseIn);
+		diseaseIoOperationRepository.saveAndFlush(diseaseOut1);
+		diseaseIoOperationRepository.saveAndFlush(diseaseOut2);
+		diseaseIoOperationRepository.saveAndFlush(diseaseOut3);
+		operationTypeIoOperationRepository.saveAndFlush(operationType);
+		operationIoOperationRepository.saveAndFlush(operation);
+		dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
+		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
+		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
+		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+		admissionIoOperationRepository.saveAndFlush(admission);
+
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 
-		assertThat(operationRowBrowserManager.newOperationRow(operationRow));
+		assertThat(operationRowBrowserManager.newOperationRow(operationRow)).isEqualTo(operationRow);
 		assertThat(operationRowIoOperationRepository.findById(operationRow.getId())).isNotNull();
 	}
 
@@ -1005,6 +1042,54 @@ public class Tests extends OHCoreTestCase {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, usingSet);
 		OperationRow operationRow = testOperationRow.setup(operation, true);
+		operationTypeIoOperationRepository.saveAndFlush(operationType);
+		operationIoOperationRepository.saveAndFlush(operation);
+		operationRowIoOperationRepository.saveAndFlush(operationRow);
+		return operationRow.getId();
+	}
+
+	private int setupTestOperationRowWithAdmission(boolean usingSet) throws Exception {
+		OperationType operationType = testOperationType.setup(false);
+		Operation operation = testOperation.setup(operationType, true);
+		OperationRow operationRow = testOperationRow.setup(operation, true);
+
+		Ward ward = testWard.setup(false, false);
+		Patient patient = testPatient.setup(false);
+		AdmissionType admissionType = testAdmissionType.setup(false);
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+		Disease diseaseIn = testDisease.setup(diseaseType, false);
+		Disease diseaseOut1 = testDisease.setup(diseaseType, false);
+		diseaseOut1.setCode("888");
+		Disease diseaseOut2 = testDisease.setup(diseaseType, false);
+		diseaseOut2.setCode("777");
+		Disease diseaseOut3 = testDisease.setup(diseaseType, false);
+		diseaseOut3.setCode("666");
+		DischargeType dischargeType = testDischargeType.setup(false);
+		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
+		DeliveryType deliveryType = testDeliveryType.setup(false);
+		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+
+		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
+		                                          diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+		                                          deliveryType, deliveryResult, false);
+		operationRow.setAdmission(admission);
+
+		wardIoOperationRepository.saveAndFlush(ward);
+		patientIoOperationRepository.saveAndFlush(patient);
+		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+		diseaseIoOperationRepository.saveAndFlush(diseaseIn);
+		diseaseIoOperationRepository.saveAndFlush(diseaseOut1);
+		diseaseIoOperationRepository.saveAndFlush(diseaseOut2);
+		diseaseIoOperationRepository.saveAndFlush(diseaseOut3);
+		operationTypeIoOperationRepository.saveAndFlush(operationType);
+		operationIoOperationRepository.saveAndFlush(operation);
+		dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
+		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
+		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
+		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+		admissionIoOperationRepository.saveAndFlush(admission);
+
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		operationIoOperationRepository.saveAndFlush(operation);
 		operationRowIoOperationRepository.saveAndFlush(operationRow);
