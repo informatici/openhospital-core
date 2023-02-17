@@ -268,8 +268,7 @@ public class LabManager {
 	/**
 	 * Inserts one Laboratory exam {@link Laboratory} (All Procedures)
 	 *
-	 * @param laboratory - the laboratory with its result (Procedure 1)
-	 * @param labRow - the list of results (Procedure 2) - it can be <code>null</code>
+	 * @param laboratory - the laboratory without result
 	 * @return <code>true</code> if the exam has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
