@@ -132,7 +132,9 @@ public class PatientIoOperations {
 		List<Patient> patients = repository.findAllWhereIdAndDeleted(code, NOT_DELETED_STATUS);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
-			retrievePatientProfilePhoto(patient);
+			if (patient.getPatientProfilePhoto() != null) {
+				retrievePatientProfilePhoto(patient);
+			}
 			return patient;
 		}
 		return null;
