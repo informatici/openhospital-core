@@ -106,7 +106,7 @@ public class PatientBrowserManager {
 	}
 
 	/**
-	 * method that get a Patient list by his/her name
+	 * Method that get a Patient list by his/her name
 	 *
 	 * @param params
 	 * @return the list of Patients that match specified name
