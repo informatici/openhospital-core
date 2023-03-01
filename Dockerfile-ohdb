@@ -22,6 +22,7 @@ COPY sql/step_5* /docker-entrypoint-initdb.d/
 COPY sql/step_6* /docker-entrypoint-initdb.d/
 COPY sql/step_7* /docker-entrypoint-initdb.d/
 COPY sql/step_8* /docker-entrypoint-initdb.d/
+COPY sql/step_9* /docker-entrypoint-initdb.d/
 COPY sql/data_en/* data_en/
 #COPY sql/data_es/* data_es/
 #COPY sql/data_it/* data_it/

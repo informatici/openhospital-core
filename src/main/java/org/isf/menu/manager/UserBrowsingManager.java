@@ -21,6 +21,7 @@
  */
 package org.isf.menu.manager;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,6 +37,7 @@ import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.time.TimeTools;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -129,6 +131,35 @@ public class UserBrowsingManager {
 					OHSeverityLevel.ERROR));
 		}
 		return ioOperations.deleteUser(user);
+	}
+
+
+	public void increaseFailedAttempts(User user) {
+		int newFailAttempts = user.getFailedAttempts() + 1;
+		ioOperations.updateFailedAttempts(user.getUserName(), newFailAttempts);
+	}
+
+	public void resetFailedAttempts(User user) {
+		ioOperations.updateFailedAttempts(user.getUserName(), 0);
+	}
+
+	public void lockUser(User user) throws OHServiceException {
+		user.setAccountLocked(true);
+		user.setLockedTime(TimeTools.getNow());
+		ioOperations.updateUserLocked(user.getUserName(), true, user.getLockedTime());
+	}
+
+	public boolean unlockWhenTimeExpired(User user) throws OHServiceException {
+		LocalDateTime lockedTime = user.getLockedTime();
+		if (lockedTime.plusMinutes(GeneralData.PASSWORDLOCKTIME).isBefore(TimeTools.getNow())) {
+			user.setAccountLocked(false);
+			user.setLockedTime(null);
+			user.setFailedAttempts(0);
+			ioOperations.updateFailedAttempts(user.getUserName(), 0);
+			ioOperations.updateUserLocked(user.getUserName(), false,null);
+			return true;
+		}
+		return false;
 	}
 
 	/**

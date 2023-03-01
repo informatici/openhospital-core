@@ -21,6 +21,8 @@
  */
 package org.isf.menu.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -65,7 +67,16 @@ public class User extends Auditable<String> {
 	private String passwd;
 
 	@Column(name="US_DESC")
-	private String desc;	
+	private String desc;
+
+	@Column(name="US_FAILED_ATTEMPTS")
+	private int failedAttempts;
+
+	@Column(name="US_ACCOUNT_LOCKED")
+	private boolean isAccountLocked;
+
+	@Column(name="US_LOCK_TIME")
+	private LocalDateTime lockedTime;
 	
 	@Transient
 	private volatile int hashCode = 0;
@@ -78,6 +89,8 @@ public class User extends Auditable<String> {
 		this.userGroupName = aGroup;
 		this.passwd = aPasswd;
 		this.desc = aDesc;
+		this.failedAttempts = 0;
+		this.isAccountLocked = false;
 	}
 
 	public String getDesc() {
@@ -110,6 +123,30 @@ public class User extends Auditable<String> {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public int getFailedAttempts() {
+		return failedAttempts;
+	}
+
+	public void setFailedAttempts(int failedAttempts) {
+		this.failedAttempts = failedAttempts;
+	}
+
+	public boolean isAccountLocked() {
+		return isAccountLocked;
+	}
+
+	public void setAccountLocked(boolean accountLocked) {
+		isAccountLocked = accountLocked;
+	}
+
+	public LocalDateTime getLockedTime() {
+		return lockedTime;
+	}
+
+	public void setLockedTime(LocalDateTime lockedTime) {
+		this.lockedTime = lockedTime;
 	}
 
 	public String toString() {
