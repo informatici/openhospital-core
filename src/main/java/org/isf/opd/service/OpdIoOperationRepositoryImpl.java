@@ -92,7 +92,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 					cb.equal(opd.join("disease").get("code"), diseaseCode)
 			);
 		}
-		if (ageFrom != 0 || ageTo != 0 ) {
+		if (ageFrom != 0 || ageTo != 0) {
 			predicates.add(
 					cb.between(opd.<Integer>get("age"), ageFrom, ageTo)
 			);
