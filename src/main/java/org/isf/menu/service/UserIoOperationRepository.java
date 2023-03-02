@@ -21,6 +21,7 @@
  */
 package org.isf.menu.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.menu.model.User;
@@ -48,5 +49,13 @@ public interface UserIoOperationRepository extends JpaRepository<User, String> {
 	@Modifying
 	@Query(value = "update User set passwd=:password where userName=:id")
 	int updatePassword(@Param("password") String password, @Param("id") String id);
+
+	@Modifying
+	@Query(value = "update User set failedAttempts=:attempts where userName=:id")
+	void updateFailedAttempts(@Param("attempts") int failAttempts, @Param("id") String id);
+
+	@Modifying
+	@Query(value = "update User set isAccountLocked=:isLocked, lockedTime=:lockTime where userName=:id")
+	void updateUserLocked(@Param("isLocked") boolean isLocked, @Param("lockTime") LocalDateTime lockTime, @Param("id") String id);
 
 }

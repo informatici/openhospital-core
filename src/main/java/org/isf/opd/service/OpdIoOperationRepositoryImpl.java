@@ -82,12 +82,12 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 					cb.equal(opd.join("ward").get("code"), ward.getCode())
 			);
 		}
-		if (diseaseTypeCode != null) {
+		if (diseaseTypeCode != null && !diseaseTypeCode.equals("")) {
 			predicates.add(
 					cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
 			);
 		}
-		if (diseaseCode != null) {
+		if (diseaseCode != null && !diseaseCode.equals("")) {
 			predicates.add(
 					cb.equal(opd.join("disease").get("code"), diseaseCode)
 			);
