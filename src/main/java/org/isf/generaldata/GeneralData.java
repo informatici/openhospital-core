@@ -94,6 +94,8 @@ public final class GeneralData extends ConfigurationProperties {
 
 	public static boolean STRONGPASSWORD;
 	public static int STRONGLENGTH;
+	public static int PASSWORDTRIES;
+	public static int PASSWORDLOCKTIME;
 
 	private static final String DEFAULT_LANGUAGE = "en";
 	private static final boolean DEFAULT_SINGLEUSER = false;
@@ -142,8 +144,9 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final int DEFAULT_STRONGLENGTH = 10;
 	private static final int DEFAULT_SESSIONTIMEOUT = 5;
 	private static final boolean DEFAULT_STRONGPASSWORD = true;
+	private static final int DEFAULT_PASSWORDTRIES = 5;
+	private static final int DEFAULT_PASSWORDLOCKTIME = 60; // minutes
 	private static final String DEFAULT_PATIENTPHOTOSTORAGE = "DB";
-	
 	public static final int IMAGE_THUMBNAIL_MAX_WIDTH = 140;
 	public static final int MAX_PROFILE_IMAGE_FILE_SIZE_BYTES = 32768;
 	
@@ -208,6 +211,16 @@ public final class GeneralData extends ConfigurationProperties {
 		// set same reasonable minimum and ensure it isn't negative
 		if (STRONGLENGTH < 6) {
 			STRONGLENGTH = 6;
+		}
+		PASSWORDTRIES = myGetProperty("PASSWORDTRIES", DEFAULT_PASSWORDTRIES);
+		// ensure reasonable non-negative value
+		if (PASSWORDTRIES < DEFAULT_PASSWORDTRIES) {
+			PASSWORDTRIES = DEFAULT_PASSWORDTRIES;
+		}
+		PASSWORDLOCKTIME = myGetProperty("PASSWORDLOCKTIME", DEFAULT_PASSWORDLOCKTIME);
+		// ensure reasonable non-negative value
+		if (PASSWORDLOCKTIME < DEFAULT_PASSWORDLOCKTIME) {
+			PASSWORDLOCKTIME = DEFAULT_PASSWORDLOCKTIME;
 		}
 		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTOSTORAGE);
 		SESSIONTIMEOUT = myGetProperty("SESSIONTIMEOUT", DEFAULT_SESSIONTIMEOUT);

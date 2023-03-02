@@ -21,6 +21,7 @@
  */
 package org.isf.menu.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,7 +167,15 @@ public class MenuIoOperations
 		repository.delete(user);
 		return true;
 	}
-	
+
+	public void updateFailedAttempts(String userName, int newFailAttempts) {
+		repository.updateFailedAttempts(newFailAttempts, userName);
+	}
+
+	public void updateUserLocked(String userName, boolean isLocked, LocalDateTime time) {
+		repository.updateUserLocked(isLocked, time, userName);
+	}
+
 	/**
 	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link User}
 	 * 
