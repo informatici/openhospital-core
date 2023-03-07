@@ -39,6 +39,7 @@ import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.medtype.model.MedicalType;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,7 +104,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 		List<Predicate> predicates = new ArrayList<>();
 
 		if ((dateFrom != null) && (dateTo != null)) {
-			predicates.add(builder.between(root.<LocalDateTime>get(DATE), dateFrom, dateTo));
+			predicates.add(builder.between(root.<LocalDateTime>get(DATE), TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo)));
 		}
 		if (wardId != null && !wardId.equals("")) {
 			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
@@ -140,13 +141,15 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			predicates.add(builder.equal(root.<Medical>get(MEDICAL).<MedicalType>get(TYPE).<String>get(CODE), medicalType));
 		}
 		if ((movFrom != null) && (movTo != null)) {
-			predicates.add(builder.between(root.<LocalDateTime>get(DATE), movFrom, movTo));
+			predicates.add(builder.between(root.<LocalDateTime>get(DATE), TimeTools.getBeginningOfDay(movFrom), TimeTools.getBeginningOfNextDay(movTo)));
 		}
 		if ((lotPrepFrom != null) && (lotPrepTo != null)) {
-			predicates.add(builder.between(root.<Lot>get(LOT).<LocalDateTime>get("preparationDate"), lotPrepFrom, lotPrepTo));
+			predicates.add(builder.between(root.<Lot>get(LOT).<LocalDateTime>get("preparationDate"), TimeTools.getBeginningOfDay(lotPrepFrom),
+			                               TimeTools.getBeginningOfNextDay(lotPrepTo)));
 		}
 		if ((lotDueFrom != null) && (lotDueTo != null)) {
-			predicates.add(builder.between(root.<Lot>get(LOT).<LocalDateTime>get("dueDate"), lotDueFrom, lotDueTo));
+			predicates.add(builder.between(root.<Lot>get(LOT).<LocalDateTime>get("dueDate"), TimeTools.getBeginningOfDay(lotDueFrom),
+			                               TimeTools.getBeginningOfNextDay(lotDueTo)));
 		}
 		if (movType != null) {
 			predicates.add(builder.equal(root.<MedicalType>get(TYPE).<String>get(CODE), movType));
@@ -187,7 +190,7 @@ public class MovementIoOperationRepositoryImpl implements MovementIoOperationRep
 			predicates.add(builder.equal(root.<Ward>get(LOT).<String>get(CODE), lotCode));
 		}
 		if ((movFrom != null) && (movTo != null)) {
-			predicates.add(builder.between(root.<LocalDateTime>get(DATE), movFrom, movTo));
+			predicates.add(builder.between(root.<LocalDateTime>get(DATE), TimeTools.getBeginningOfDay(movFrom), TimeTools.getBeginningOfNextDay(movTo)));
 		}
 		if (movType != null) {
 			predicates.add(builder.equal(root.<MedicalType>get(TYPE).<String>get(CODE), movType));
