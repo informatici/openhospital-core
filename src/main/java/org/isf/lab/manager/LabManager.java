@@ -272,7 +272,7 @@ public class LabManager {
 	 * @return <code>true</code> if the exam has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean newLaboratory3(Laboratory laboratory) throws OHServiceException {
+	public boolean newExamRequest(Laboratory laboratory) throws OHServiceException {
 		setPatientConsistency(laboratory);
 		return ioOperations.newLabFirstProcedure(laboratory);
 	}
