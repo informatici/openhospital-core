@@ -278,6 +278,16 @@ public class LabManager {
 	}
 	
 	/**
+	 * update one Laboratory exam {@link Laboratory} (All Procedures)
+	 *
+	 * @param laboratory - the laboratory without result
+	 * @return <code>true</code> if the exam has been update, <code>false</code> otherwise
+	 * @throws OHServiceException
+	 */
+	public boolean updateExamRequest(Laboratory laboratory) throws OHServiceException {
+		return ioOperations.updateLabFirstProcedure(laboratory);
+	}
+	/**
 	 * Inserts one Laboratory exam {@link Laboratory} (All Procedures)
 	 *
 	 * @param laboratory - the laboratory with its result (Procedure 1)

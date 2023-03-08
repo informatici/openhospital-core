@@ -106,9 +106,20 @@ public class Laboratory extends Auditable<String> {
 
 	@Column(name="LAB_SEX")
 	private String sex;
+	
+	@Column(name="LAB_STATUS")
+	private String status;
 
 	@Transient
 	private volatile int hashCode = 0;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	public Laboratory() { }
 
