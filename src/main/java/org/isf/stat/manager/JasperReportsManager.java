@@ -905,7 +905,7 @@ public class JasperReportsManager {
 		 * Jasper Report seems failing to decode resource bundles in UTF-8 encoding. For this reason we pass also the resource for the specific report read with
 		 * UTF8Control()
 		 */
-		addReportBundleParameter(JRParameter.REPORT_RESOURCE_BUNDLE, jasperFileFolder, jasperFileName, parameters);
+		addReportBundleParameter(JRParameter.REPORT_RESOURCE_BUNDLE, jasperFileName, parameters);
 
 		/*
 		 * Jasper Reports may contain subreports and we should pass also those. The parent report must contain parameters like:
@@ -950,7 +950,7 @@ public class JasperReportsManager {
 					if (matcher.find()) {
 						String subreportName = matcher.group(1).split("\\.")[0];
 						LOGGER.debug("found a subreport: {}", subreportName);
-						addReportBundleParameter("SUBREPORT_RESOURCE_BUNDLE_" + index, jasperFileFolder, subreportName, parameters);
+						addReportBundleParameter("SUBREPORT_RESOURCE_BUNDLE_" + index, subreportName, parameters);
 					} else {
 						LOGGER.error(">> unexpected subreport expression {}", expression);
 					}
@@ -959,10 +959,9 @@ public class JasperReportsManager {
 		}
 	}
 
-	private void addReportBundleParameter(String jasperParameter, String jasperFileFolder, String jasperFileName, Map<String, Object> parameters) {
+	private void addReportBundleParameter(String jasperParameter, String jasperFileName, Map<String, Object> parameters) {
 		try {
-			ResourceBundle resourceBundle = ResourceBundle.getBundle(jasperFileFolder + File.separator + jasperFileName, new Locale(GeneralData.LANGUAGE),
-							new UTF8Control());
+			ResourceBundle resourceBundle = ResourceBundle.getBundle(jasperFileName, new Locale(GeneralData.LANGUAGE), new UTF8Control());
 			parameters.put(jasperParameter, resourceBundle);
 
 		} catch (MissingResourceException e) {
@@ -989,22 +988,6 @@ public class JasperReportsManager {
 		sbFilename.append(File.separator);
 		sbFilename.append(jasperFileName);
 		sbFilename.append(".jasper");
-		return sbFilename.toString();
-	}
-
-	private String compileFilename(String folderName, String jasperFileName, List<String> params, String ext) {
-		StringBuilder sbFilename = new StringBuilder();
-		sbFilename.append(folderName);
-		sbFilename.append(File.separator);
-		sbFilename.append(jasperFileName);
-		if (params != null) {
-			params.forEach(p -> {
-				sbFilename.append("_");
-				sbFilename.append(p);
-			});
-		}
-		sbFilename.append(".");
-		sbFilename.append(ext);
 		return sbFilename.toString();
 	}
 
