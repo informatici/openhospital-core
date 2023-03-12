@@ -91,13 +91,15 @@ public class JasperReportsManager {
 	private static final String STAT_REPORTERROR_MSG = "angal.stat.reporterror.msg";
 
 	private static final String RPT_BASE = "rpt_base";
-
+	
+	
 	@Autowired
 	private HospitalBrowsingManager hospitalManager;
 
 	@Autowired
 	private DataSource dataSource;
 
+	
 	public JasperReportResultDto getExamsListPdf() throws OHServiceException {
 
 		try {
@@ -892,14 +894,14 @@ public class JasperReportsManager {
 		parameters.put("Currency", hosp.getCurrencyCod());
 		return parameters;
 	}
-
+	
 	private void addBundleParameter(String jasperFileFolder, String jasperFileName, HashMap<String, Object> parameters) {
 
 		/*
 		 * Some reports use pre-formatted dates, that need to be localized as well (days, months, etc...) For this reason we pass the same Locale used in the
 		 * application (otherwise it would use the Locale used on the user client machine)
 		 */
-		parameters.put(JRParameter.REPORT_LOCALE, new Locale(GeneralData.LANGUAGE));
+		parameters.put(JRParameter.REPORT_LOCALE, Locale.getDefault());
 
 		/*
 		 * Jasper Report seems failing to decode resource bundles in UTF-8 encoding. For this reason we pass also the resource for the specific report read with
@@ -961,7 +963,7 @@ public class JasperReportsManager {
 
 	private void addReportBundleParameter(String jasperParameter, String jasperFileName, Map<String, Object> parameters) {
 		try {
-			ResourceBundle resourceBundle = ResourceBundle.getBundle(jasperFileName, new Locale(GeneralData.LANGUAGE), new UTF8Control());
+			ResourceBundle resourceBundle = ResourceBundle.getBundle(jasperFileName, Locale.getDefault(), new UTF8Control());
 			parameters.put(jasperParameter, resourceBundle);
 
 		} catch (MissingResourceException e) {
