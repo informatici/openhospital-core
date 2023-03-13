@@ -5690,10 +5690,6 @@ INSERT INTO `oh_user` VALUES ('guest','guest','$2a$10$b0WlANdaNV7Ukn/klFGt3.euZ7
 UNLOCK TABLES;
 
 --
-/*!40000 ALTER TABLE `oh_user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `oh_usergroup`
 --
 
