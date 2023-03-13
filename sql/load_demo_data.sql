@@ -1,8 +1,8 @@
--- MariaDB dump 10.19  Distrib 10.6.11-MariaDB, for linux-systemd (x86_64)
+-- MariaDB dump 10.19  Distrib 10.6.12-MariaDB, for linux-systemd (x86_64)
 --
 -- Host: localhost    Database: ohdemo
 -- ------------------------------------------------------
--- Server version	10.6.11-MariaDB
+-- Server version	10.6.12-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -3799,7 +3799,7 @@ CREATE TABLE `oh_operation` (
   `OPE_OCL_ID_A` char(2) NOT NULL,
   `OPE_DESC` varchar(50) NOT NULL,
   `OPE_STAT` int(11) NOT NULL DEFAULT 0,
-  `OPE_FOR` char(1) DEFAULT 1 COMMENT '''1'' = OPD/IPD, ''2'' = IPD only, ''3'' = OPD only',
+  `OPE_FOR` char(1) DEFAULT '1' COMMENT '''1'' = OPD/IPD, ''2'' = IPD only, ''3'' = OPD only',
   `OPE_LOCK` int(11) NOT NULL DEFAULT 0,
   `OPE_CREATED_BY` varchar(50) DEFAULT NULL,
   `OPE_CREATED_DATE` datetime DEFAULT NULL,
@@ -5669,6 +5669,9 @@ CREATE TABLE `oh_user` (
   `US_LAST_MODIFIED_BY` varchar(50) DEFAULT NULL,
   `US_LAST_MODIFIED_DATE` datetime DEFAULT NULL,
   `US_ACTIVE` tinyint(1) NOT NULL DEFAULT 1,
+  `US_FAILED_ATTEMPTS` int(11) DEFAULT 0,
+  `US_ACCOUNT_LOCKED` tinyint(1) NOT NULL DEFAULT 0,
+  `US_LOCK_TIME` datetime DEFAULT NULL,
   PRIMARY KEY (`US_ID_A`),
   KEY `FK_USER_USERGROUP` (`US_UG_ID_A`),
   CONSTRAINT `FK_USER_USERGROUP` FOREIGN KEY (`US_UG_ID_A`) REFERENCES `oh_usergroup` (`UG_ID_A`) ON DELETE NO ACTION ON UPDATE CASCADE
@@ -5681,8 +5684,12 @@ CREATE TABLE `oh_user` (
 
 LOCK TABLES `oh_user` WRITE;
 /*!40000 ALTER TABLE `oh_user` DISABLE KEYS */;
-INSERT INTO `oh_user` VALUES ('admin','admin','$2a$10$FI/PMO0oSHHosF2PX8l3QuB0DJepVfnynbLZ9Zm2711bF2ch8db2S','administrator',NULL,NULL,NULL,NULL,1);
-INSERT INTO `oh_user` VALUES ('guest','guest','$2a$10$b0WlANdaNV7Ukn/klFGt3.euZ7PaHuJI6TtBSM2vdxkavvkUDbpo2','guest',NULL,NULL,NULL,NULL,1);
+INSERT INTO `oh_user` VALUES ('admin','admin','$2a$10$FI/PMO0oSHHosF2PX8l3QuB0DJepVfnynbLZ9Zm2711bF2ch8db2S','administrator',NULL,NULL,NULL,NULL,1,0,0,NULL);
+INSERT INTO `oh_user` VALUES ('guest','guest','$2a$10$b0WlANdaNV7Ukn/klFGt3.euZ7PaHuJI6TtBSM2vdxkavvkUDbpo2','guest',NULL,NULL,NULL,NULL,1,0,0,NULL);
+/*!40000 ALTER TABLE `oh_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 /*!40000 ALTER TABLE `oh_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -5943,4 +5950,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-04  2:32:46
+-- Dump completed on 2023-03-13 22:24:30
