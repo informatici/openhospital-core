@@ -22,14 +22,19 @@
 package org.isf.patconsensus.model;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -61,6 +66,11 @@ public class PatientConsensus extends Auditable<String> {
 
 	@Column(name="PTC_SERVICE")
 	private boolean serviceFlag;
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "PTC_PAT_ID", referencedColumnName = "PAT_ID")
+    private Patient patient;
 
 
 	@Transient
@@ -119,6 +129,18 @@ public class PatientConsensus extends Auditable<String> {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+
+
+	public Patient getPatient() {
+		return patient;
+	}
+
+
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
 
 
