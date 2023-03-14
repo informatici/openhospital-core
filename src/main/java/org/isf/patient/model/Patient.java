@@ -41,7 +41,6 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
-import org.isf.anamnesis.model.PatientHistory;
 import org.isf.opd.model.Opd;
 import org.isf.patconsensus.model.PatientConsensus;
 import org.isf.utils.db.Auditable;
@@ -179,16 +178,15 @@ public class Patient extends Auditable<String> {
 	@Column(name="PAT_DELETED", columnDefinition = "char(1) default 'N'")
 	private char deleted = 'N';
 
-	@OneToOne(mappedBy = "patient")
-	private PatientConsensus patientConsensus;
-
-
 	/**
 	 * field for "ui"
 	 * NOTE: to be replaced with {@link PatientHistory}
 	 */
 	@Column(name="PAT_ANAMNESIS")
 	private String anamnesis;
+
+	@OneToOne(mappedBy = "patient")
+	private PatientConsensus patientConsensus;
 
 	/**
 	 * field for "ui"
@@ -316,6 +314,15 @@ public class Patient extends Auditable<String> {
 		this.taxCode = taxCode;
 		this.maritalStatus = maritalStatus;
 		this.profession = profession;
+	}
+
+	public PatientConsensus getPatientConsensus() {
+		return patientConsensus;
+	}
+
+
+	public void setPatientConsensus(PatientConsensus patientConsensus) {
+		this.patientConsensus = patientConsensus;
 	}
 
 	public String getAddress() {
@@ -526,15 +533,6 @@ public class Patient extends Auditable<String> {
 
 	public PatientProfilePhoto getPatientProfilePhoto() {
 		return patientProfilePhoto;
-	}
-
-	public PatientConsensus getPatientConsensus() {
-		return patientConsensus;
-	}
-
-
-	public void setPatientConsensus(PatientConsensus patientConsensus) {
-		this.patientConsensus = patientConsensus;
 	}
 
 	/**
