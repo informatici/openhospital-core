@@ -74,8 +74,8 @@ public class PatientConsensusBrowserManager {
 	 * @return <code>true</code> if the {@link PatientConsensus} has been delete, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deletePatientConsensus(PatientConsensus patientConsensus) throws OHServiceException {
-		return ioOperations.deletePatientConsensus(patientConsensus);
+	public void deletePatientConsensus(PatientConsensus patientConsensus) throws OHServiceException {
+		ioOperations.deletePatientConsensus(patientConsensus);
 	}
 
 	/**
