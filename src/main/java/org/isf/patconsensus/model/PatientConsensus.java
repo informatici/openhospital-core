@@ -118,19 +118,6 @@ public class PatientConsensus extends Auditable<String> {
 	}
 
 
-
-	public String getUserName() {
-		return userName;
-	}
-
-
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-
-
 	public Patient getPatient() {
 		return patient;
 	}
