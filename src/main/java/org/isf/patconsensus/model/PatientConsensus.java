@@ -48,7 +48,7 @@ public class PatientConsensus extends Auditable<String> {
 	@Column(name = "PTC_ID")
 	private int code;
 
-	@Column(name = "SEA_US_ID_A")
+	@Column(name = "PTC_US_ID_A")
 	private String userName;
 
 	@Column(name="PTC_CONSENSUNS")
