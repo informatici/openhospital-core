@@ -35,6 +35,7 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
 import org.isf.medicalstockward.model.MovementWard;
+import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,7 +63,7 @@ public class MedicalStockWardIoOperationRepositoryImpl implements MedicalStockWa
 			predicates.add(builder.equal(root.<Ward>get(WARD).<String>get(CODE), wardId));
 		}
 		if ((dateFrom != null) && (dateTo != null)) {
-			predicates.add(builder.between(root.<LocalDateTime>get(DATE), dateFrom, dateTo));
+			predicates.add(builder.between(root.<LocalDateTime>get(DATE), TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo)));
 		}
 
 		List<Order> orderList = new ArrayList<>();
