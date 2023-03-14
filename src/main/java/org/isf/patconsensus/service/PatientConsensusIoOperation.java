@@ -78,8 +78,9 @@ public class PatientConsensusIoOperation {
 	 * @return <code>true</code> if the {@link PatientConsensus} has been delete, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public void deletePatientConsensus(PatientConsensus patientConsensus) throws OHServiceException {
+	public boolean deletePatientConsensus(PatientConsensus patientConsensus) throws OHServiceException {
 		repository.delete(patientConsensus);
+		return true;
 	}
 
 	/**
