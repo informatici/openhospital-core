@@ -25,6 +25,7 @@ import java.util.Optional;
 
 import org.isf.opetype.model.OperationType;
 import org.isf.patconsensus.model.PatientConsensus;
+import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +33,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class PatientConsensusIoOperation {
 
 	@Autowired
 	private PatientConmsensusIoOperationRepository repository;
+
+	@Autowired
+	private PatientIoOperationRepository patientRepository;
 
 	/**
 	 * Return the PatientConsensus if exists {@link PatientConsensus}s
@@ -52,18 +56,23 @@ public class PatientConsensusIoOperation {
 	/**
 	 * Insert an {@link PatientConsensus} in the DB
 	 *
-	 * @param patientConsensus - the {@link PatientConsensus} to insert
+	 * @param patientConsensus
+	 *            - the {@link PatientConsensus} to insert
 	 * @return <code>PatientConsensus</code> inserted.
 	 * @throws OHServiceException
 	 */
 	public PatientConsensus newPatientConsensus(PatientConsensus patientConsensus) throws OHServiceException {
+		patientConsensus.setPatient(this.patientRepository.findById(patientConsensus.getPatient().getCode()).get());
+
+		
 		return repository.save(patientConsensus);
 	}
 
 	/**
 	 * Update an {@link PatientConsensus}
 	 *
-	 * @param patientConsensus - the {@link PatientConsensus} to update
+	 * @param patientConsensus
+	 *            - the {@link PatientConsensus} to update
 	 * @return <code>PatientConsensus</code>.
 	 * @throws OHServiceException
 	 */
@@ -74,7 +83,8 @@ public class PatientConsensusIoOperation {
 	/**
 	 * Delete an {@link PatientConsensus}
 	 *
-	 * @param patientConsensus - the {@link PatientConsensus} to delete
+	 * @param patientConsensus
+	 *            - the {@link PatientConsensus} to delete
 	 * @return <code>true</code> if the {@link PatientConsensus} has been delete, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
@@ -84,7 +94,9 @@ public class PatientConsensusIoOperation {
 
 	/**
 	 * Checks if an {@link OperationType} code has already been used
-	 * @param code - the code
+	 *
+	 * @param code
+	 *            - the code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */

@@ -71,9 +71,6 @@ public class PatientConsensus extends Auditable<String> {
     private Patient patient;
 
 
-	@Transient
-	private volatile int hashCode = 0;
-
 	public PatientConsensus() {
 		super();
 	}
