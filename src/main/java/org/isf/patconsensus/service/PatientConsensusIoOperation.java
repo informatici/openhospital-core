@@ -45,8 +45,8 @@ public class PatientConsensusIoOperation {
 	 * @return the {@link PatientConsensus}s. It could be <code>empty</code>.
 	 * @throws OHServiceException
 	 */
-	public Optional<PatientConsensus> getPatientConsensusByUserId(String userName) throws OHServiceException {
-		return repository.findByUserName(userName);
+	public Optional<PatientConsensus> getPatientConsensusByUserId(Integer patientId) throws OHServiceException {
+		return repository.findByPatient_Code(patientId);
 	}
 
 	/**
@@ -88,8 +88,8 @@ public class PatientConsensusIoOperation {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean existsByUserName(String userName) throws OHServiceException {
-		return repository.existsByUserName(userName);
+	public boolean existsByPatientCode(Integer code) throws OHServiceException {
+		return repository.existsByPatient_Code(code);
 	}
 
 }

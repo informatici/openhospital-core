@@ -30,8 +30,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PatientConmsensusIoOperationRepository extends JpaRepository<PatientConsensus, Integer> {
 
-	Optional<PatientConsensus> findByUserName(String username);
+	Optional<PatientConsensus> findByPatient_Code(Integer patientId);
 
-	boolean existsByUserName(String userName);
+	boolean existsByPatient_Code(Integer code);
 
 }

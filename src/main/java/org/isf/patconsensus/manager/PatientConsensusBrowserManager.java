@@ -41,8 +41,8 @@ public class PatientConsensusBrowserManager {
 	 * @return the {@link PatientConsensus}s. It could be <code>empty</code>qq.
 	 * @throws OHServiceException
 	 */
-	public Optional<PatientConsensus> getPatientConsensusByUserId(String userName) throws OHServiceException {
-		return ioOperations.getPatientConsensusByUserId(userName);
+	public Optional<PatientConsensus> getPatientConsensusByUserId(Integer userId) throws OHServiceException {
+		return ioOperations.getPatientConsensusByUserId(userId);
 	}
 
 	/**
@@ -85,8 +85,8 @@ public class PatientConsensusBrowserManager {
 	 * @return <code>true</code> if the username has a PatientConsensus, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean existsByUserName(String username) throws OHServiceException {
-		return ioOperations.existsByUserName(username);
+	public boolean existsByPatientCode(Integer code) throws OHServiceException {
+		return ioOperations.existsByPatientCode(code);
 	}
 
 
