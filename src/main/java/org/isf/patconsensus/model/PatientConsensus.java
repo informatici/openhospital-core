@@ -52,23 +52,18 @@ public class PatientConsensus extends Auditable<String> {
 	@Column(name = "PTC_ID")
 	private int id;
 
-
-	@Column(name="PTC_CONSENSUNS")
+	@Column(name = "PTC_CONSENSUNS")
 	private boolean consensusFlag;
 
-
-	@Column(name="PTC_ADMINISTRATIVE")
+	@Column(name = "PTC_ADMINISTRATIVE")
 	private boolean administrativeFlag;
 
-
-	@Column(name="PTC_SERVICE")
+	@Column(name = "PTC_SERVICE")
 	private boolean serviceFlag;
 
-
-    @OneToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "PTC_PAT_ID", referencedColumnName = "PAT_ID")
-    private Patient patient;
-
+	@OneToOne(cascade = CascadeType.DETACH)
+	@JoinColumn(name = "PTC_PAT_ID", referencedColumnName = "PAT_ID")
+	private Patient patient;
 
 	public PatientConsensus() {
 		super();
@@ -86,45 +81,32 @@ public class PatientConsensus extends Auditable<String> {
 		return consensusFlag;
 	}
 
-
 	public void setConsensusFlag(boolean consensusFlag) {
 		this.consensusFlag = consensusFlag;
 	}
-
 
 	public boolean isAdministrativeFlag() {
 		return administrativeFlag;
 	}
 
-
 	public void setAdministrativeFlag(boolean administrativeFlag) {
 		this.administrativeFlag = administrativeFlag;
 	}
-
 
 	public boolean isServiceFlag() {
 		return serviceFlag;
 	}
 
-
 	public void setServiceFlag(boolean serviceFlag) {
 		this.serviceFlag = serviceFlag;
 	}
-
 
 	public Patient getPatient() {
 		return patient;
 	}
 
-
-
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
-
-
-
-
-
 
 }
