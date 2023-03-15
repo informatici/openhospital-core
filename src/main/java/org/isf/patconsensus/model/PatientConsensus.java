@@ -32,7 +32,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
@@ -51,7 +50,7 @@ public class PatientConsensus extends Auditable<String> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "PTC_ID")
-	private int code;
+	private int id;
 
 
 	@Column(name="PTC_CONSENSUNS")
@@ -66,7 +65,7 @@ public class PatientConsensus extends Auditable<String> {
 	private boolean serviceFlag;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "PTC_PAT_ID", referencedColumnName = "PAT_ID")
     private Patient patient;
 
@@ -75,15 +74,13 @@ public class PatientConsensus extends Auditable<String> {
 		super();
 	}
 
-
-	public void setCode(int aCode) {
-		code = aCode;
+	public int getId() {
+		return id;
 	}
 
-	public int getCode() {
-		return code;
+	public void setId(int id) {
+		this.id = id;
 	}
-
 
 	public boolean isConsensusFlag() {
 		return consensusFlag;

@@ -63,8 +63,6 @@ public class PatientConsensusIoOperation {
 	 */
 	public PatientConsensus newPatientConsensus(PatientConsensus patientConsensus) throws OHServiceException {
 		patientConsensus.setPatient(this.patientRepository.findById(patientConsensus.getPatient().getCode()).get());
-
-		
 		return repository.save(patientConsensus);
 	}
 
@@ -76,8 +74,9 @@ public class PatientConsensusIoOperation {
 	 * @return <code>PatientConsensus</code>.
 	 * @throws OHServiceException
 	 */
-	public PatientConsensus updatePatientConsensus(PatientConsensus operationType) throws OHServiceException {
-		return repository.save(operationType);
+	public PatientConsensus updatePatientConsensus(PatientConsensus patientConsensus) throws OHServiceException {
+		patientConsensus.setPatient(this.patientRepository.findById(patientConsensus.getPatient().getCode()).get());
+		return repository.save(patientConsensus);
 	}
 
 	/**
