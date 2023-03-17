@@ -22,13 +22,17 @@
 package org.isf.visits.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.assertj.core.api.Assertions.within;
+import static org.assertj.core.api.BDDAssertions.then;
+import static org.assertj.core.api.BDDAssertions.thenNoException;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
 import org.isf.patient.model.Patient;
@@ -36,7 +40,10 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.test.TestPatient;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.isf.visits.manager.VisitManager;
 import org.isf.visits.model.Visit;
@@ -211,7 +218,7 @@ public class Tests extends OHCoreTestCase {
 		int id = visitManager.newVisit(visit).getVisitID();
 		checkVisitIntoDb(id);
 	}
-	
+
 	@Test
 	public void testMgrUpdateVisit() throws Exception {
 		Patient patient = testPatient.setup(false);
@@ -303,6 +310,255 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	public void testMgrValidateNoPatientOverlappingVisitsInDifferentWards() throws Exception {
+		// test data common setup
+		Patient patient = testPatient.setup(false);
+		patientIoOperationRepository.saveAndFlush(patient);
+		Ward ward1 = testWard.setup(false);
+		ward1.setCode("ward1");
+		wardIoOperationRepository.saveAndFlush(ward1);
+		// existing visit
+		LocalDateTime existingVisitDateTime = LocalDateTime.of(2023, 3, 15, 14, 30, 0);
+		int existingVisitDuration = 60;
+		Visit existingVisit = testVisit.setup(patient, true, ward1);
+		existingVisit.setDate(existingVisitDateTime);
+		existingVisit.setDuration(existingVisitDuration);
+		visitsIoOperationRepository.saveAndFlush(existingVisit);
+		// different ward for the other visits
+		Ward ward2 = testWard.setup(false);
+		ward2.setCode("ward2");
+
+		// test param: visit datetime, visit duration (will be better as a JUnit 5 parameterized test)
+		List<Pair<LocalDateTime, Integer>> invalidVisitsParams = List.of(
+				Pair.of(existingVisitDateTime, existingVisitDuration), // exactly same visit time
+				Pair.of(existingVisitDateTime.plusMinutes(existingVisitDuration - 1), existingVisitDuration), // overlaps the end
+				Pair.of(existingVisitDateTime.minusMinutes(existingVisitDuration - 1), existingVisitDuration), // overlaps the start
+				Pair.of(existingVisitDateTime.plusMinutes(existingVisitDuration / 2), existingVisitDuration / 4), // inside existing visit time
+				Pair.of(existingVisitDateTime.minusMinutes(5), existingVisitDuration + 10) // encompassing existing visit time
+		);
+		for (Pair<LocalDateTime, Integer> invalidVisitParams : invalidVisitsParams) {
+			// given
+			Visit invalidVisit = testVisit.setup(patient, true, ward2); // different ward from existingVisit
+			invalidVisit.setDate(invalidVisitParams.getLeft());
+			invalidVisit.setDuration(invalidVisitParams.getRight());
+			// when
+			OHDataValidationException ohDataValidationException = catchThrowableOfType(() -> visitManager.validateVisit(invalidVisit),
+					OHDataValidationException.class);
+			// then
+			then(ohDataValidationException)
+					.as("should have detected an invalid visit at %s lasting %s minutes", invalidVisit.getDate(), invalidVisit.getDuration())
+					.isNotNull();
+			then(ohDataValidationException.getMessages()).hasSize(1);
+			OHExceptionMessage ohExceptionMessage = ohDataValidationException.getMessages().get(0);
+			then(ohExceptionMessage.getTitle()).isEqualTo("angal.common.error.title");
+			then(ohExceptionMessage.getMessage()).isEqualTo("angal.visit.overlappingpatientvisitsindifferentwards.msg");
+			then(ohExceptionMessage.getLevel()).isEqualTo(OHSeverityLevel.ERROR);
+		}
+	}
+
+	@Test
+	public void testMgrValidateNoPatientMultipleOverlappingVisitsInDifferentWards() throws Exception {
+		// given
+		Patient patient = testPatient.setup(false);
+		patientIoOperationRepository.saveAndFlush(patient);
+		// first existing visit: 14h00 -> 14h45 in ward1
+		Ward ward1 = testWard.setup(false);
+		ward1.setCode("ward1");
+		wardIoOperationRepository.saveAndFlush(ward1);
+		Visit existingVisit1 = testVisit.setup(patient, true, ward1);
+		existingVisit1.setDate(LocalDateTime.of(2023, 3, 30, 14, 0, 0));
+		existingVisit1.setDuration(45);
+		visitsIoOperationRepository.saveAndFlush(existingVisit1);
+		// second existing visit: 15h00 -> 15h30 in ward2
+		Ward ward2 = testWard.setup(false);
+		ward2.setCode("ward2");
+		wardIoOperationRepository.saveAndFlush(ward2);
+		Visit existingVisit2 = testVisit.setup(patient, true, ward2);
+		existingVisit2.setDate(LocalDateTime.of(2023, 3, 30, 15, 0, 0));
+		existingVisit2.setDuration(30);
+		visitsIoOperationRepository.saveAndFlush(existingVisit2);
+		// new visit: 14h15 -> 15h15 in ward3, overlaps visit 1 and visit 2
+		Ward ward3 = testWard.setup(false);
+		ward3.setCode("ward3");
+		Visit invalidVisit = testVisit.setup(patient, true, ward3);
+		invalidVisit.setDate(LocalDateTime.of(2023, 3, 30, 14, 15, 0));
+		invalidVisit.setDuration(60);
+
+		// when
+		OHDataValidationException ohDataValidationException = catchThrowableOfType(() -> visitManager.validateVisit(invalidVisit),
+				OHDataValidationException.class);
+
+		// then
+		then(ohDataValidationException)
+				.as("should have detected an invalid visit %s lasting %s minutes", invalidVisit, invalidVisit.getDuration())
+				.isNotNull();
+		then(ohDataValidationException.getMessages()).hasSize(1);
+		OHExceptionMessage ohExceptionMessage = ohDataValidationException.getMessages().get(0);
+		then(ohExceptionMessage.getTitle()).isEqualTo("angal.common.error.title");
+		then(ohExceptionMessage.getMessage()).isEqualTo("angal.visit.manyoverlappingpatientvisitsindifferentwards.msg");
+		then(ohExceptionMessage.getLevel()).isEqualTo(OHSeverityLevel.ERROR);
+	}
+
+	@Test
+	public void testMgrValidateVisitNotOverlappingAnyVisitsInSameWard() throws Exception {
+		// setup two patients
+		Patient patient1 = testPatient.setup(false);
+		patient1.setName("patient1");
+		patientIoOperationRepository.saveAndFlush(patient1);
+		Patient patient2 = testPatient.setup(false);
+		patient2.setName("patient2");
+		patientIoOperationRepository.saveAndFlush(patient2);
+		Ward ward = testWard.setup(false);
+		ward.setCode("ward");
+		wardIoOperationRepository.saveAndFlush(ward);
+		// existing visit
+		LocalDateTime existingVisitDateTime = LocalDateTime.of(2023, 3, 15, 14, 30, 0);
+		int existingVisitDuration = 60;
+		Visit existingVisit = testVisit.setup(patient1, true, ward);
+		existingVisit.setDate(existingVisitDateTime);
+		existingVisit.setDuration(existingVisitDuration);
+		visitsIoOperationRepository.saveAndFlush(existingVisit);
+
+		// test param: visit datetime, visit duration (will be better as a JUnit 5 parameterized test)
+		List<Pair<LocalDateTime, Integer>> invalidVisitsParams = List.of(
+				Pair.of(existingVisitDateTime, existingVisitDuration), // exactly same visit time
+				Pair.of(existingVisitDateTime.plusMinutes(existingVisitDuration - 1), existingVisitDuration), // overlaps the end
+				Pair.of(existingVisitDateTime.minusMinutes(existingVisitDuration - 1), existingVisitDuration), // overlaps the start
+				Pair.of(existingVisitDateTime.plusMinutes(existingVisitDuration / 2), existingVisitDuration / 4), // inside existing visit time
+				Pair.of(existingVisitDateTime.minusMinutes(5), existingVisitDuration + 10) // encompassing existing visit time
+		);
+		for (Pair<LocalDateTime, Integer> invalidVisitParams : invalidVisitsParams) {
+			// given
+			Visit invalidVisit = testVisit.setup(patient2, true, ward);
+			invalidVisit.setDate(invalidVisitParams.getLeft());
+			invalidVisit.setDuration(invalidVisitParams.getRight());
+			// when
+			OHDataValidationException ohDataValidationException = catchThrowableOfType(() -> visitManager.validateVisit(invalidVisit),
+					OHDataValidationException.class);
+			// then
+			then(ohDataValidationException)
+					.as("should have detected an invalid visit at %s lasting %s minutes", invalidVisit.getDate(), invalidVisit.getDuration())
+					.isNotNull();
+			then(ohDataValidationException.getMessages()).hasSize(1);
+			OHExceptionMessage ohExceptionMessage = ohDataValidationException.getMessages().get(0);
+			then(ohExceptionMessage.getTitle()).isEqualTo("angal.common.error.title");
+			then(ohExceptionMessage.getMessage()).isEqualTo("angal.visit.overlappingvisitinward.msg");
+			then(ohExceptionMessage.getLevel()).isEqualTo(OHSeverityLevel.ERROR);
+		}
+	}
+
+	@Test
+	public void testMgrValidateVisitNotOverlappingManyVisitsInSameWard() throws Exception {
+		Ward ward = testWard.setup(false);
+		ward.setCode("ward");
+		wardIoOperationRepository.saveAndFlush(ward);
+		// patient1 visit: 14h30 -> 15h15
+		Patient patient1 = testPatient.setup(false);
+		patient1.setName("patient1");
+		patientIoOperationRepository.saveAndFlush(patient1);
+		Visit patient1Visit = testVisit.setup(patient1, true, ward);
+		patient1Visit.setDate(LocalDateTime.of(2023, 3, 28, 14, 30, 0));
+		patient1Visit.setDuration(45);
+		visitsIoOperationRepository.saveAndFlush(patient1Visit);
+		// patient2 visit: 15h30 -> 16h30
+		Patient patient2 = testPatient.setup(false);
+		patient2.setName("patient2");
+		patientIoOperationRepository.saveAndFlush(patient2);
+		Visit patient2Visit = testVisit.setup(patient2, true, ward);
+		patient2Visit.setDate(LocalDateTime.of(2023, 3, 28, 15, 30, 0));
+		patient2Visit.setDuration(60);
+		visitsIoOperationRepository.saveAndFlush(patient2Visit);
+
+		// given patient3 visit 15h00 -> 16h00 overlapping both patient1 and patient2 visits
+		Patient patient3 = testPatient.setup(false);
+		patient3.setName("patient3");
+		patientIoOperationRepository.saveAndFlush(patient3);
+		Visit invalidVisit = testVisit.setup(patient3, true, ward);
+		invalidVisit.setDate(LocalDateTime.of(2023, 3, 28, 15, 0, 0));
+		invalidVisit.setDuration(60);
+
+		// when
+		OHDataValidationException ohDataValidationException = catchThrowableOfType(() -> visitManager.validateVisit(invalidVisit),
+				OHDataValidationException.class);
+
+		// then
+		then(ohDataValidationException)
+				.as("should have detected an invalid visit at %s lasting %s minutes", invalidVisit.getDate(), invalidVisit.getDuration())
+				.isNotNull();
+		then(ohDataValidationException.getMessages()).hasSize(1);
+		OHExceptionMessage ohExceptionMessage = ohDataValidationException.getMessages().get(0);
+		then(ohExceptionMessage.getTitle()).isEqualTo("angal.common.error.title");
+		then(ohExceptionMessage.getMessage()).isEqualTo("angal.visit.overlappingmanyvisitsinward.msg");
+		then(ohExceptionMessage.getLevel()).isEqualTo(OHSeverityLevel.ERROR);
+	}
+
+	@Test
+	public void testMgrValidateShouldAcceptValidVisits() throws Exception {
+		// test data common setup
+		LocalDateTime existingVisitDateTime = LocalDateTime.of(2023, 3, 15, 14, 30, 0);
+		int existingVisitDuration = 60;
+		Patient patient = testPatient.setup(false);
+		patientIoOperationRepository.saveAndFlush(patient);
+		// existing visit
+		Ward ward1 = testWard.setup(false);
+		ward1.setCode("ward1");
+		wardIoOperationRepository.saveAndFlush(ward1);
+		Visit existingVisit = testVisit.setup(patient, true, ward1);
+		existingVisit.setDate(existingVisitDateTime);
+		existingVisit.setDuration(existingVisitDuration);
+		visitsIoOperationRepository.saveAndFlush(existingVisit);
+		Ward ward2 = testWard.setup(false);
+		ward2.setCode("ward2");
+
+		// test param: visit datetime, visit duration
+		List<Pair<LocalDateTime, Integer>> validVisitsParams = List.of(
+				Pair.of(existingVisitDateTime.plusMinutes(existingVisitDuration), 20), // starts after existing visit time
+				Pair.of(existingVisitDateTime.minusMinutes(existingVisitDuration + 30), 20) // ends before existing visit time
+		);
+		for (Pair<LocalDateTime, Integer> validVisitParams : validVisitsParams) {
+			// given
+			Visit validVisit = testVisit.setup(patient, true, ward2);
+			validVisit.setDate(validVisitParams.getLeft());
+			validVisit.setDuration(validVisitParams.getRight());
+			// then
+			thenNoException().isThrownBy(() -> visitManager.validateVisit(validVisit));
+		}
+	}
+
+	@Test
+	public void testMgrValidateVisitDurationIsPositive() throws OHException {
+		// given
+		Patient patient = testPatient.setup(false);
+		Ward ward = testWard.setup(false);
+		patientIoOperationRepository.saveAndFlush(patient);
+		wardIoOperationRepository.saveAndFlush(ward);
+		Visit invalidVisit = testVisit.setup(patient, true, ward);
+		invalidVisit.setDuration(0);
+		// when
+		OHDataValidationException ohDataValidationException = catchThrowableOfType(() -> visitManager.validateVisit(invalidVisit),
+				OHDataValidationException.class);
+		// then
+		then(ohDataValidationException).as("should have detected an invalid visit").isNotNull();
+		then(ohDataValidationException.getMessages()).hasSize(1);
+		OHExceptionMessage ohExceptionMessage = ohDataValidationException.getMessages().get(0);
+		then(ohExceptionMessage.getTitle()).isEqualTo("angal.common.error.title");
+		then(ohExceptionMessage.getMessage()).isEqualTo("angal.visit.invalidvisitduration.msg");
+		then(ohExceptionMessage.getLevel()).isEqualTo(OHSeverityLevel.ERROR);
+	}
+
+	@Test
+	public void testVisitGetEnd() {
+		// given
+		Visit visit = new Visit();
+		visit.setDate(LocalDateTime.of(2023, 3, 15, 14, 30, 0));
+		visit.setDuration(90);
+		// when
+		LocalDateTime visitEnd = visit.getEnd();
+		// then
+		then(visitEnd).isEqualTo(LocalDateTime.of(2023, 3, 15, 16, 0, 0));
+	}
+
+	@Test
 	public void testVisitGetSet() throws Exception {
 		int id = setupTestVisit(false);
 		Visit visit = visitManager.findVisit(id);
@@ -381,7 +637,7 @@ public class Tests extends OHCoreTestCase {
 		return visit.getVisitID();
 	}
 
-	private void checkVisitIntoDb(int id) throws OHException {
+	private void checkVisitIntoDb(int id) {
 		Visit foundVisit = visitsIoOperation.findVisit(id);
 		testVisit.check(foundVisit);
 	}
