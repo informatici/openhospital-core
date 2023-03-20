@@ -848,7 +848,7 @@ public class JasperReportsManager {
 
 		parameters.put("fromdate", toDate(fromDateQuery)); // real param
 		parameters.put("todate", toDate(toDateQuery)); // real param
-		parameters.put("user", aUser + ""); // real param
+		parameters.put("user", aUser); // real param
 		return parameters;
 	}
 

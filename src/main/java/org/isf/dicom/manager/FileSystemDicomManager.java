@@ -536,7 +536,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * retrieve patient folder
 	 */
 	private File getPatientDir(int patId) throws IOException {
-		File f = new File(dir, "" + patId);
+		File f = new File(dir, String.valueOf(patId));
 		recourse(f);
 		return f;
 	}
