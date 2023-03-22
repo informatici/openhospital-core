@@ -1284,7 +1284,7 @@ public class Tests extends OHCoreTestCase {
 		int code = setupTestLaboratory(false);
 		Laboratory laboratory = labIoOperationRepository.findById(code).get();
 		Laboratory laboratory2 = new Laboratory(code + 1, null, TimeTools.getNow(), "result", "note", null, "name");
-		assertThat(laboratory.equals(laboratory)).isTrue();
+		assertThat(laboratory).isEqualTo(laboratory);
 		assertThat(laboratory)
 				.isNotEqualTo(laboratory2)
 				.isNotEqualTo("xyzzy");
@@ -1317,7 +1317,7 @@ public class Tests extends OHCoreTestCase {
 		int code = setupTestLaboratoryRow(false);
 		LaboratoryRow laboratoryRow = labRowIoOperationRepository.findById(code).get();
 		LaboratoryRow laboratoryRow2 = new LaboratoryRow(code + 1, null, "description");
-		assertThat(laboratoryRow.equals(laboratoryRow)).isTrue();
+		assertThat(laboratoryRow).isEqualTo(laboratoryRow);
 		assertThat(laboratoryRow)
 				.isNotEqualTo(laboratoryRow2)
 				.isNotEqualTo("xyzzy");

@@ -1123,7 +1123,7 @@ public class Tests extends OHCoreTestCase {
 		Admission admission = admissionBrowserManager.getAdmission(id);
 		Admission admission2 = buildNewAdmission();
 		admission2.setId(id);   // no really legal but needed for these tests
-		assertThat(admission.equals(admission)).isTrue();
+		assertThat(admission).isEqualTo(admission);
 		assertThat(admission)
 				.isEqualTo(admission2)
 				.isNotEqualTo("xyzzy");

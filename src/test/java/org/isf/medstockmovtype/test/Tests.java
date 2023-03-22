@@ -230,7 +230,7 @@ public class Tests extends OHCoreTestCase {
 		MovementType movementType3 = new MovementType("ZZABCD", "AnotherDescription", "+");
 		MovementType movementType4 = new MovementType("ZZABCD", "TestDescription", "++");
 
-		assertThat(movementType1.equals(movementType1)).isTrue();
+		assertThat(movementType1).isEqualTo(movementType1);
 		assertThat(movementType1)
 				.isNotEqualTo("someString")
 				.isNotEqualTo(movementType2)
