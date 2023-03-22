@@ -657,7 +657,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testPatientEquals() throws Exception {
 		Patient patient = testPatient.setup(false);
-		assertThat(patient.equals(patient)).isTrue();
+		assertThat(patient).isEqualTo(patient);
 		assertThat(patient)
 				.isNotNull()
 				.isNotEqualTo("someString");

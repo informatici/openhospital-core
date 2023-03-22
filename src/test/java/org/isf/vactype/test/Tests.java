@@ -248,7 +248,7 @@ public class Tests extends OHCoreTestCase {
 	public void testVaccineEquals() throws Exception {
 		VaccineType vaccineType = testVaccineType.setup(true);
 
-		assertThat(vaccineType.equals(vaccineType)).isTrue();
+		assertThat(vaccineType).isEqualTo(vaccineType);
 		assertThat(vaccineType)
 				.isNotNull()
 				.isNotEqualTo("someStringValue");

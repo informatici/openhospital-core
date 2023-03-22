@@ -219,7 +219,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestDiseaseType(false);
 		DiseaseType diseaseType = diseaseTypeIoOperationRepository.getById(code);
 		DiseaseType diseaseType2 = new DiseaseType("code", "description");
-		assertThat(diseaseType.equals(diseaseType)).isTrue();
+		assertThat(diseaseType).isEqualTo(diseaseType);
 		assertThat(diseaseType)
 				.isNotEqualTo(diseaseType2)
 				.isNotEqualTo("xyzzy");

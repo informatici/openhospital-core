@@ -211,7 +211,7 @@ public class Tests extends OHCoreTestCase {
 		MedicalType medicalType2 = new MedicalType("A", "description");
 		MedicalType medicalType3 = new MedicalType("Z", "otherDescription");
 
-		assertThat(medicalType1.equals(medicalType1)).isTrue();
+		assertThat(medicalType1).isEqualTo(medicalType1);
 		assertThat(medicalType1)
 				.isNotEqualTo("someString")
 				.isNotEqualTo(medicalType2)

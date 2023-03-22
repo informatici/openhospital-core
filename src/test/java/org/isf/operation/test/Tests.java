@@ -989,7 +989,7 @@ public class Tests extends OHCoreTestCase {
 		Operation operation = testOperation.setup(operationType, true);
 		OperationRow operationRow = testOperationRow.setup(operation, false);
 
-		assertThat(operationRow.equals(operationRow)).isTrue();
+		assertThat(operationRow).isEqualTo(operationRow);
 		assertThat(operationRow)
 				.isNotNull()
 				.isNotEqualTo("some string");
