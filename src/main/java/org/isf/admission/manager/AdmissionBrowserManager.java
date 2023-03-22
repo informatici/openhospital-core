@@ -121,10 +121,10 @@ public class AdmissionBrowserManager {
 	}
 
 	/**
-	 * Method that returns the list of Admission not logically deleted
-	 * within the specified dates range, divided by pages
+	 * Method that returns the list of Admissions not logically deleted
+	 * within the specified date range, divided by pages
 	 *
-	 * @return the list of Admission (could be empty)
+	 * @return the list of Admissions (could be empty)
 	 * @throws OHServiceException
 	 */
 	public List<Admission> getAdmissions(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
@@ -133,9 +133,9 @@ public class AdmissionBrowserManager {
 
 	/**
 	 * Method that returns the list of completed Admissions (Discharges) not logically deleted
-	 * within the specified dates range, divided by pages
+	 * within the specified date range, divided by pages
 	 *
-	 * @return the list of completed Admission (could be empty)
+	 * @return the list of completed Admissions (could be empty)
 	 * @throws OHServiceException
 	 */
 	public List<Admission> getDischarges(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
