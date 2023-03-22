@@ -664,7 +664,7 @@ public class Tests extends OHCoreTestCase {
 				LocalDateTime.of(1, 10, 11, 0, 0, 0), admission, patient, 185.47f, 70.70f);
 
 		// matches itself
-		assertThat(malnutrition1.equals(malnutrition1)).isTrue();
+		assertThat(malnutrition1).isEqualTo(malnutrition1);
 
 		// does not match because wrong class
 		assertThat(malnutrition1)
