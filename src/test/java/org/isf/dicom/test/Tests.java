@@ -317,7 +317,7 @@ public class Tests extends OHCoreTestCase {
 		DicomType dicomType = testDicomType.setup(false);
 		FileDicom fileDicom = testFileDicom.setup(dicomType, true);
 
-		assertThat(fileDicom.equals(fileDicom)).isTrue();
+		assertThat(fileDicom).isEqualTo(fileDicom);
 		assertThat(fileDicom)
 				.isNotNull()
 				.isNotEqualTo("someString");

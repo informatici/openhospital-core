@@ -1098,7 +1098,7 @@ public class Tests extends OHCoreTestCase {
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard2);
 		MedicalWardId medicalWardId2 = medicalWard2.getId();
 
-		assertThat(medicalWardId1.equals(medicalWardId1)).isTrue();
+		assertThat(medicalWardId1).isEqualTo(medicalWardId1);
 		assertThat(medicalWardId1)
 				.isNotEqualTo("someString")
 				.isNotNull();
@@ -1203,7 +1203,7 @@ public class Tests extends OHCoreTestCase {
 		MovementWard movementWard2 = new MovementWard(ward, lot, "description", medical, 100D, "kilo");
 		movementWard2.setCode(-1);
 
-		assertThat(movementWard1.equals(movementWard1)).isTrue();
+		assertThat(movementWard1).isEqualTo(movementWard1);
 		assertThat(movementWard1)
 				.isNotEqualTo("someString")
 				.isNotEqualTo(movementWard2);
@@ -1317,7 +1317,7 @@ public class Tests extends OHCoreTestCase {
 		Ward ward2 = testWard.setup(true);
 		MedicalWard medicalWard2 = new MedicalWard(medical2, 10.0D, lot2);
 
-		assertThat(medicalWard1.equals(medicalWard1)).isTrue();
+		assertThat(medicalWard1).isEqualTo(medicalWard1);
 		assertThat(medicalWard1)
 				.isNotNull()
 				.isNotEqualTo("some String")

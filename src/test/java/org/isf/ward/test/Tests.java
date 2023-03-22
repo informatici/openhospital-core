@@ -591,7 +591,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testWardEquals() throws Exception {
 		Ward ward = testWard.setup(false);
-		assertThat(ward.equals(ward)).isTrue();
+		assertThat(ward).isEqualTo(ward);
 		assertThat(ward)
 				.isNotNull()
 				.isNotEqualTo("someString");
