@@ -53,7 +53,7 @@ public class PatientConsensus extends Auditable<String> {
 	private int id;
 
 	@Column(name = "PTC_CONSENSUNS")
-	private boolean consensusFlag;
+	private boolean consensusFlag = true;
 
 	@Column(name = "PTC_ADMINISTRATIVE")
 	private boolean administrativeFlag;
