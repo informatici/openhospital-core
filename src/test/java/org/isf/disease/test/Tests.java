@@ -309,7 +309,7 @@ public class Tests extends OHCoreTestCase {
 		Disease disease = diseaseBrowserManager.getDiseaseByCode(code);
 		DiseaseType diseaseType2 = testDiseaseType.setup(false);
 		Disease disease2 = new Disease("998", "someDescription", diseaseType2);
-		assertThat(disease.equals(disease)).isTrue();
+		assertThat(disease).isEqualTo(disease);
 		assertThat(disease)
 				.isNotEqualTo(disease2)
 				.isNotEqualTo("xyzzy");

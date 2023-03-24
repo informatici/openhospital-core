@@ -219,7 +219,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestDischargeType(false);
 		DischargeType dischargeType = dischargeTypeIoOperationRepository.findById(code).get();
 		DischargeType dischargeType2 = new DischargeType("someCode", "someDescription");
-		assertThat(dischargeType.equals(dischargeType)).isTrue();
+		assertThat(dischargeType).isEqualTo(dischargeType);
 		assertThat(dischargeType)
 				.isNotEqualTo(dischargeType2)
 				.isNotEqualTo("xyzzy");
