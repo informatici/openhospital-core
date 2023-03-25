@@ -25,7 +25,6 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +42,6 @@ import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
@@ -81,25 +79,25 @@ public class VisitManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		LocalDateTime visitDate = visit.getDate();
 		if (visitDate == null) {
-			errors.add(newOHExceptionMessage(MessageBundle.getMessage("angal.visit.pleasechooseadate.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.visit.pleasechooseadate.msg")));
 		}
 		Integer visitDuration = visit.getDuration();
 		if (visitDuration == null || visitDuration <= 0) {
-			errors.add(newOHExceptionMessage(MessageBundle.getMessage("angal.visit.invalidvisitduration.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.visit.invalidvisitduration.msg")));
 		}
 		Ward ward = visit.getWard();
 		if (ward == null) {
-			errors.add(newOHExceptionMessage(MessageBundle.getMessage("angal.visit.pleasechooseaward.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.visit.pleasechooseaward.msg")));
 		}
 		Patient patient = visit.getPatient();
 		if (patient == null) {
-			errors.add(newOHExceptionMessage(MessageBundle.getMessage("angal.visit.pleasechooseapatient.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.visit.pleasechooseapatient.msg")));
 		}
 		if (errors.isEmpty()) {
 			String sex = String.valueOf(patient.getSex());
 			if ((sex.equalsIgnoreCase("F") && !ward.isFemale())
 					|| (sex.equalsIgnoreCase("M") && !ward.isMale())) {
-				errors.add(newOHExceptionMessage(MessageBundle.getMessage("angal.visit.thepatientssexandwarddonotagree.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.visit.thepatientssexandwarddonotagree.msg")));
 			}
 		}
 		validateNoOverlappingPatientVisitsInDifferentWards(visit).ifPresent(errors::add);
@@ -126,11 +124,10 @@ public class VisitManager {
 			return Optional.empty();
 		}
 		if (overlappingVisits.size() == 1) {
-			return Optional.of(newOHExceptionMessage(MessageBundle.formatMessage("angal.visit.overlappingvisitinward.msg", overlappingVisits.get(0))));
+			return Optional.of(new OHExceptionMessage(MessageBundle.formatMessage("angal.visit.overlappingvisitinward.msg", overlappingVisits.get(0))));
 		}
-		// TODO add the message in the GUI bundle
 		String visitsDescription = overlappingVisits.stream().map(Visit::toString).collect(Collectors.joining(", ", "", ""));
-		return Optional.of(newOHExceptionMessage(MessageBundle.formatMessage("angal.visit.overlappingmanyvisitsinward.msg", visitsDescription)));
+		return Optional.of(new OHExceptionMessage(MessageBundle.formatMessage("angal.visit.overlappingmanyvisitsinward.msg", visitsDescription)));
 	}
 
 	private Optional<OHExceptionMessage> validateNoOverlappingPatientVisitsInDifferentWards(Visit visit) throws OHServiceException {
@@ -152,13 +149,11 @@ public class VisitManager {
 			return Optional.empty();
 		}
 		if (overlappingPatientVisitsInDifferentWards.size() == 1) {
-			// TODO add the message in the GUI bundle + test
-			return Optional.of(newOHExceptionMessage(MessageBundle.formatMessage("angal.visit.overlappingpatientvisitsindifferentwards.msg",
+			return Optional.of(new OHExceptionMessage(MessageBundle.formatMessage("angal.visit.overlappingpatientvisitsindifferentwards.msg",
 					overlappingPatientVisitsInDifferentWards.get(0).toString())));
 		}
-		// TODO add the message in the GUI bundle
 		String visitsDescription = overlappingPatientVisitsInDifferentWards.stream().map(Visit::toString).collect(Collectors.joining(", ", "", ""));
-		return Optional.of(newOHExceptionMessage(MessageBundle.formatMessage("angal.visit.manyoverlappingpatientvisitsindifferentwards.msg",
+		return Optional.of(new OHExceptionMessage(MessageBundle.formatMessage("angal.visit.manyoverlappingpatientvisitsindifferentwards.msg",
 				visitsDescription)));
 	}
 
@@ -357,10 +352,5 @@ public class VisitManager {
 	 */
 	public Visit findVisit(int id) throws OHServiceException {
 		return ioOperations.findVisit(id);
-	}
-
-	// helper method, TODO could be moved to org.isf.utils.exception.model if the dependency to org.isf.generaldata is ok
-	private static OHExceptionMessage newOHExceptionMessage(String message) {
-		return new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"), message, OHSeverityLevel.ERROR);
 	}
 }
