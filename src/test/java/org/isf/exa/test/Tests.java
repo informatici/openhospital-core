@@ -490,7 +490,7 @@ public class Tests extends OHCoreTestCase {
 		Exam exam = examIoOperationRepository.findById(code).get();
 		ExamType examType = testExamType.setup(false);
 		Exam exam2 = new Exam("XXX", "TestDescription", examType, 1, "TestDefaultResult");
-		assertThat(exam.equals(exam)).isTrue();
+		assertThat(exam).isEqualTo(exam);
 		assertThat(exam)
 				.isNotEqualTo(exam2)
 				.isNotEqualTo("xyzzy");
@@ -511,7 +511,7 @@ public class Tests extends OHCoreTestCase {
 		ExamType examType = testExamType.setup(false);
 		Exam exam2 = new Exam("XXX", "TestDescription", examType, 1, "TestDefaultResult");
 		ExamRow examRow2 = new ExamRow(exam2, "NewDescription");
-		assertThat(examRow.equals(examRow)).isTrue();
+		assertThat(examRow).isEqualTo(examRow);
 		assertThat(examRow)
 				.isNotEqualTo(examRow2)
 				.isNotEqualTo("xyzzy");

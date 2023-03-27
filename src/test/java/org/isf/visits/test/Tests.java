@@ -349,7 +349,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestVisit(false);
 		Visit visit = visitManager.findVisit(id);
 
-		assertThat(visit.equals(visit)).isTrue();
+		assertThat(visit).isEqualTo(visit);
 		assertThat(visit)
 				.isNotNull()
 				.isNotEqualTo("someString");

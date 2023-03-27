@@ -360,7 +360,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestTherapyRow(true);
 		TherapyRow therapyRow = therapyIoOperationRepository.findById(id).get();
 
-		assertThat(therapyRow.equals(therapyRow)).isTrue();
+		assertThat(therapyRow).isEqualTo(therapyRow);
 		assertThat(therapyRow)
 				.isNotNull()
 				.isNotEqualTo("someString");

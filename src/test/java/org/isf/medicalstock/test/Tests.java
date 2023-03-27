@@ -1025,7 +1025,7 @@ public class Tests extends OHCoreTestCase {
 	public void testLotEquals() throws Exception {
 		String code = setupTestLot(true);
 		Lot lot = lotIoOperationRepository.findById(code).get();
-		assertThat(lot.equals(lot)).isTrue();
+		assertThat(lot).isEqualTo(lot);
 		assertThat(lot)
 				.isNotNull()
 				.isNotEqualTo("someString");
@@ -1084,7 +1084,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMovementEquals() throws Exception {
 		int code = setupTestMovement(false);
 		Movement movement = movementIoOperationRepository.findById(code).get();
-		assertThat(movement.equals(movement)).isTrue();
+		assertThat(movement).isEqualTo(movement);
 		assertThat(movement)
 				.isNotNull()
 				.isNotEqualTo("someString");

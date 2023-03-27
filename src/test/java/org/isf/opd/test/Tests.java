@@ -991,7 +991,7 @@ public class Tests extends OHCoreTestCase {
 		Visit nextVisit = testVisit.setup(patient, false, ward);
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 
-		assertThat(opd.equals(opd)).isTrue();
+		assertThat(opd).isEqualTo(opd);
 		assertThat(opd)
 				.isNotNull()
 				.isNotEqualTo("someString");

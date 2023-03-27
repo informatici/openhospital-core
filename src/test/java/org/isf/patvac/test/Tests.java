@@ -498,7 +498,7 @@ public class Tests extends OHCoreTestCase {
 		PatientVaccine patientVaccine1 = new PatientVaccine(0, 0, null, new Patient(), null, 0);
 		PatientVaccine patientVaccine2 = new PatientVaccine(0, 0, null, new Patient(), null, 0);
 
-		assertThat(patientVaccine1.equals(patientVaccine1)).isTrue();
+		assertThat(patientVaccine1).isEqualTo(patientVaccine1);
 		assertThat(patientVaccine1)
 				.isNotNull()
 				.isNotEqualTo("someString");

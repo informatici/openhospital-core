@@ -160,7 +160,7 @@ public class Tests extends OHCoreTestCase {
 	public void testSupplierEquals() throws Exception {
 		Supplier supplier = new Supplier(1, "TestName", "TestAddress", "TestTax", "TestPhone", "TestFax", "TestEmail", "TestNode");
 
-		assertThat(supplier.equals(supplier)).isTrue();
+		assertThat(supplier).isEqualTo(supplier);
 		assertThat(supplier)
 				.isNotNull()
 				.isNotEqualTo("someString");

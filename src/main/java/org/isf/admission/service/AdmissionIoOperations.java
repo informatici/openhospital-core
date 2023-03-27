@@ -45,6 +45,7 @@ import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,13 +72,13 @@ public class AdmissionIoOperations {
 
 	@Autowired
 	private AdmissionIoOperationRepository repository;
-	
+
 	@Autowired
 	private AdmissionTypeIoOperationRepository typeRepository;
-	
+
 	@Autowired
 	private DischargeTypeIoOperationRepository dischargeRepository;
-	
+
 	@Autowired
 	private PatientIoOperationRepository patientRepository;
 
@@ -114,14 +115,14 @@ public class AdmissionIoOperations {
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public List<AdmittedPatient> getAdmittedPatients(String searchTerms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange)
-			throws OHServiceException {
+					throws OHServiceException {
 		return repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
 	}
 
 	/**
 	 * Load patient together with the profile photo, or {@code null} if there is no patient with the given id
 	 */
-	public AdmittedPatient loadAdmittedPatient(final Integer patientId) {
+	public AdmittedPatient loadAdmittedPatient(final int patientId) {
 		boolean isLoadPatientProfilePhotoFromDb = PatientIoOperations.LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		final Patient patient = patientRepository.findById(patientId).orElse(null);
 		if (patient == null) {
@@ -318,5 +319,13 @@ public class AdmissionIoOperations {
 			foundPatient.getPatientProfilePhoto().setPhoto(null);
 		}
 		return patientRepository.save(foundPatient) != null;
+	}
+
+	public List<Admission> getAdmissionsByAdmissionDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		return repository.findAllWhereAdmissionDate(dateFrom, dateTo, pageable);
+	}
+
+	public List<Admission> getAdmissionsByDischargeDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		return repository.findAllWhereDischargeDate(dateFrom, dateTo, pageable);
 	}
 }

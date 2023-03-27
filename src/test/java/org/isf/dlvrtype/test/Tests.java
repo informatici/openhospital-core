@@ -206,7 +206,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestDeliveryType(false);
 		DeliveryType deliveryType = deliveryTypeIoOperationRepository.findById(code).get();
 		DeliveryType deliveryType2 = new DeliveryType("someCode", "someDescription");
-		assertThat(deliveryType.equals(deliveryType)).isTrue();
+		assertThat(deliveryType).isEqualTo(deliveryType);
 		assertThat(deliveryType)
 				.isNotEqualTo(deliveryType2)
 				.isNotEqualTo("xyzzy");
