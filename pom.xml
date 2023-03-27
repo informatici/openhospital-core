@@ -23,7 +23,7 @@
 		<spring.boot.version>2.7.10</spring.boot.version>
 		<jasperreports.version>6.20.1</jasperreports.version>
 		<spring.cloud.starter.openfeign.version>3.1.6</spring.cloud.starter.openfeign.version>
-		<license.maven.plugin.version>4.1</license.maven.plugin.version>
+		<license.maven.plugin.version>4.2</license.maven.plugin.version>
 	</properties>
 
 	<build>
