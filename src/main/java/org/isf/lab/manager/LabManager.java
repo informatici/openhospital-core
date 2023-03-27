@@ -289,7 +289,7 @@ public class LabManager {
 	 */
 	public boolean updateExamRequest(int code, LaboratoryStatus status) throws OHServiceException {
 		Optional<Laboratory> laboratory = ioOperations.getLaboratory(code);
-		if(laboratory.isPresent()) {
+		if (laboratory.isPresent()) {
 			Laboratory lab = laboratory.get();
 			lab.setStatus(status.toString());
 			return ioOperations.updateLabFirstProcedure(lab);
