@@ -267,7 +267,7 @@ public class LabManager {
 	}
 
 	/**
-	 * Inserts one Laboratory exam {@link Laboratory} (All Procedures)
+	 * Inserts one Laboratory request {@link Laboratory} (All Procedures)
 	 *
 	 * @param laboratory - the laboratory without result
 	 * @return <code>true</code> if the exam has been inserted, <code>false</code> otherwise
