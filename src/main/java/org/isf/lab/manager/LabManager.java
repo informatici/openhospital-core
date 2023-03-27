@@ -281,7 +281,7 @@ public class LabManager {
 	}
 	
 	/**
-	 * update one Laboratory exam {@link Laboratory} (All Procedures)
+	 * update one Laboratory request {@link Laboratory} (All Procedures)
 	 *
 	 * @param laboratory - the laboratory without result
 	 * @return <code>true</code> if the exam has been update, <code>false</code> otherwise
