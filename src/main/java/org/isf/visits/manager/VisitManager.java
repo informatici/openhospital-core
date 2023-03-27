@@ -21,7 +21,6 @@
  */
 package org.isf.visits.manager;
 
-import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
 
 import java.time.LocalDateTime;
