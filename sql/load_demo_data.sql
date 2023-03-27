@@ -4904,7 +4904,7 @@ CREATE TABLE `oh_pricelists` (
 
 LOCK TABLES `oh_pricelists` WRITE;
 /*!40000 ALTER TABLE `oh_pricelists` DISABLE KEYS */;
-INSERT INTO `oh_pricelists` VALUES (1,'LIST001','Basic','Basic price list','',NULL,NULL,NULL,NULL,1);
+INSERT INTO `oh_pricelists` VALUES (1,'LIST001','Basic','Basic price list','UGX',NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `oh_pricelists` ENABLE KEYS */;
 UNLOCK TABLES;
 
