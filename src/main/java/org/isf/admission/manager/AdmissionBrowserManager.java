@@ -302,6 +302,11 @@ public class AdmissionBrowserManager {
 				}
 			}
 		}
+		if (admission.getDiseaseIn() == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.admission.diagnosisincannotbeempty.msg"),
+							OHSeverityLevel.ERROR));
+		}
 
 		Admission last;
 		if (!admList.isEmpty()) {
