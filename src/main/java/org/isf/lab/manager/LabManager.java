@@ -275,7 +275,8 @@ public class LabManager {
 	 */
 	public boolean newExamRequest(Laboratory laboratory) throws OHServiceException {
 		setPatientConsistency(laboratory);
-		laboratory.setStatus(LaboratoryStatus.draft.toString());
+		LaboratoryStatus laboratoryStatus = LaboratoryStatus.DRAFT;
+		laboratory.setStatus(laboratoryStatus.toString());
 		laboratory.setResult("");
 		return ioOperations.newLabFirstProcedure(laboratory);
 	}

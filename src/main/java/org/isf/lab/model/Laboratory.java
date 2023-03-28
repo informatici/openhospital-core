@@ -113,14 +113,6 @@ public class Laboratory extends Auditable<String> {
 	@Transient
 	private volatile int hashCode = 0;
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
 	public Laboratory() { }
 
 	public Laboratory(Exam aExam, LocalDateTime aDate, String aResult, String aNote, Patient aPatId, String aPatName) {
@@ -242,6 +234,14 @@ public class Laboratory extends Auditable<String> {
 
 	public void setSex(String sex) {
 		this.sex = sex;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	@Override
