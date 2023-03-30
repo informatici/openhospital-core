@@ -84,3 +84,4 @@ source step_87_alter_table_opd.sql;
 source step_88_alter_table_patient.sql;
 source step_89_alter_tables_innodb.sql;
 source step_90_login_retries.sql;
+source step_91_alter_laboratory_with_status.sql;
