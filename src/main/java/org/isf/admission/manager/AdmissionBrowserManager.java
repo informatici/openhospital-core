@@ -294,7 +294,7 @@ public class AdmissionBrowserManager {
 				if (!insert && ad.getId() == admission.getId()) {
 					continue;
 				}
-				if ((ad.getAdmDate().isBefore(dateIn) || ad.getAdmDate().compareTo(dateIn) == 0)
+				if ((ad.getAdmDate().isBefore(dateIn) || ad.getAdmDate().isEqual(dateIn))
 								&& (ad.getDisDate() != null && ad.getDisDate().isAfter(dateIn))) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 									MessageBundle.getMessage("angal.admission.ininserteddatepatientwasalreadyadmitted.msg"),
