@@ -34,6 +34,8 @@ import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
@@ -57,6 +59,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class PatientIoOperations {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PatientIoOperations.class);
 
 	public static final String LOAD_FROM_DB = "DB";
 
@@ -194,7 +198,7 @@ public class PatientIoOperations {
 				
 			return patientSaved;
 		} catch (OHServiceException e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in savePatient method.", e);
 		}
 		return null;
 	}
