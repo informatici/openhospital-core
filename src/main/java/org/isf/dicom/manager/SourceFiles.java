@@ -137,11 +137,25 @@ public class SourceFiles extends Thread {
 				}
 				filesLoaded++;
 				dicomLoader.setLoaded(filesLoaded);
-			} else if (!".".equals(value.getName()) && !"..".equals(value.getName())) {
+			} else if (isValidDirectoryName(value.getName())) {
 				loadDicomDir(fileDicom, value, patient);
 			}
 		}
 	}
+
+	private static boolean isValidDirectoryName(String directoryName) {
+		return !isCurrentDirectory(directoryName) && !isParentDirectory(directoryName);
+	}
+
+	private static boolean isCurrentDirectory(String directoryName) {
+		return ".".equals(directoryName);
+	}
+
+	private static boolean isParentDirectory(String directoryName) {
+		return "..".equals(directoryName);
+	}
+
+
 
 	public static boolean checkSize(File sourceFile) throws OHDicomException {
 
@@ -162,7 +176,7 @@ public class SourceFiles extends Thread {
 							OHSeverityLevel.ERROR));
 				}
 				num++;
-			} else if (!".".equals(value.getName()) && !"..".equals(value.getName())) {
+			} else if (isValidDirectoryName(value.getName())) {
 				num = num + countFiles(value, patient);
 			}
 		}
