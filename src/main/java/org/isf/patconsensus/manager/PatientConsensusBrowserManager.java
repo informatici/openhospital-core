@@ -67,16 +67,6 @@ public class PatientConsensusBrowserManager {
 		return ioOperations.updatePatientConsensus(patientConsensus);
 	}
 
-	/**
-	 * Delete an {@link PatientConsensus}
-	 *
-	 * @param PatientConsensus - the {@link PatientConsensus} to delete
-	 * @return <code>true</code> if the {@link PatientConsensus} has been delete, <code>false</code> otherwise.
-	 * @throws OHServiceException
-	 */
-	public void deletePatientConsensus(PatientConsensus patientConsensus) throws OHServiceException {
-		ioOperations.deletePatientConsensus(patientConsensus);
-	}
 
 	/**
 	 * Checks if an <code>username</code> has a {@link PatientConsensus}
