@@ -79,17 +79,6 @@ public class PatientConsensusIoOperation {
 		return repository.save(patientConsensus);
 	}
 
-	/**
-	 * Delete an {@link PatientConsensus}
-	 *
-	 * @param patientConsensus
-	 *            - the {@link PatientConsensus} to delete
-	 * @return <code>true</code> if the {@link PatientConsensus} has been delete, <code>false</code> otherwise.
-	 * @throws OHServiceException
-	 */
-	public void deletePatientConsensus(PatientConsensus patientConsensus) throws OHServiceException {
-		repository.delete(patientConsensus);
-	}
 
 	/**
 	 * Checks if an {@link OperationType} code has already been used
