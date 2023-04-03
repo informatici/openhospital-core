@@ -222,7 +222,7 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 				sent = false;
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in serialEvent method.", e);
 		}
 	}
 
