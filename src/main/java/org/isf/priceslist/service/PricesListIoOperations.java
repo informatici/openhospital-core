@@ -155,7 +155,7 @@ public class PricesListIoOperations {
 		PriceList newList = insertNewPriceList(list);
 		boolean result = true;
 
-		List<Price> Prices = (List<Price>) priceRepository.findByList_id(list.getId());
+		List<Price> Prices = priceRepository.findByList_id(list.getId());
 		for (Price price : Prices) {
 			Price newPrice = new Price();
 
