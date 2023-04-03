@@ -149,6 +149,7 @@ public class User extends Auditable<String> {
 		this.lockedTime = lockedTime;
 	}
 
+	@Override
 	public String toString() {
 		return getUserName();
 	}

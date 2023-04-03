@@ -195,6 +195,7 @@ public class Movement extends Auditable<String> {
 		this.refNo = refNo;
 	}
 
+	@Override
 	public String toString() {
 		return MessageBundle.formatMessage("angal.movement.tostring.fmt.txt",
 				medical != null ? medical.toString() : "NULL",

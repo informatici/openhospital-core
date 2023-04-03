@@ -83,6 +83,7 @@ public class UserGroup extends Auditable<String> {
 		this.desc = desc;
 	}
 
+	@Override
 	public String toString() {
 		return getCode();
 	}

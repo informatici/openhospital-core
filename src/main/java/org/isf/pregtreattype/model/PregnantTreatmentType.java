@@ -100,6 +100,7 @@ public class PregnantTreatmentType extends Auditable<String> {
 		        && getDescription().equalsIgnoreCase(((PregnantTreatmentType) anObject).getDescription()));
     }
 
+    @Override
     public String toString() {
         return getDescription();
     }

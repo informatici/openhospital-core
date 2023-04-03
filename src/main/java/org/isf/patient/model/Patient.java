@@ -466,6 +466,7 @@ public class Patient extends Auditable<String> {
 		this.note = note;
 	}
 
+	@Override
 	public String toString() {
 		return getName();
 	}

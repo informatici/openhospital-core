@@ -105,6 +105,7 @@ public class MovementType extends Auditable<String> {
 		this.type = type;
 	}
 	
+    @Override
     public String toString() {
         return getDescription();
     }
