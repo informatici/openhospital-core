@@ -294,6 +294,7 @@ public class Hospital extends Auditable<String> {
 				&& getVisitDuration() == ((Hospital)anObject).getVisitDuration());
 	}
 
+	@Override
 	public String toString() {
 		return getDescription();
 	}

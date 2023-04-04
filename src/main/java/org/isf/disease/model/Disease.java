@@ -170,6 +170,7 @@ public class Disease extends Auditable<String> {
 				&& getDescription().equalsIgnoreCase(((Disease) anObject).getDescription()) && getType().equals(((Disease) anObject).getType()));
 	}
 
+    @Override
     public String toString() {
         return getDescription();
     }

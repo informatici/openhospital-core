@@ -100,6 +100,7 @@ public class DeliveryType extends Auditable<String> {
 		        && getDescription().equalsIgnoreCase(((DeliveryType) anObject).getDescription()));
     }
 
+    @Override
     public String toString() {
         return getDescription();
     }

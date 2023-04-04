@@ -271,6 +271,7 @@ public class TherapyRow extends Auditable<String> {
 		this.smsInt = smsInt;
 	}
 
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(medicalId);

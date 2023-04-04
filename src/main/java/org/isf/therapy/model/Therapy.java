@@ -155,6 +155,7 @@ public class Therapy {
 		this.sms = sms;
 	}
 	
+	@Override
 	public String toString() {
 		return qty + this.units + " of " + medical.toString() + " - " + this.freqInDay + " per day";
 	}

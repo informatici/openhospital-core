@@ -256,6 +256,7 @@ public class OperationRow extends Auditable<String> {
         return this.hashCode;
     }
 
+    @Override
     public String toString() {
         return this.operation.getDescription() + " " + this.admission.getUserID();
     }

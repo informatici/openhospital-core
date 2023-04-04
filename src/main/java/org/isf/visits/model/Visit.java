@@ -214,6 +214,7 @@ public class Visit extends Auditable<String> {
 		return (visitID == visit.getVisitID());
 	}
 
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		if (ward != null) {

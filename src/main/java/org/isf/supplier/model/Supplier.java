@@ -204,6 +204,7 @@ public class Supplier extends Auditable<String> implements java.io.Serializable 
 		this.supDeleted = supDeleted;
 	}
 
+	@Override
 	public String toString() {
 		return this.supName;
 	}

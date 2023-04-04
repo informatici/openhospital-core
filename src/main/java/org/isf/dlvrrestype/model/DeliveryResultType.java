@@ -89,6 +89,7 @@ public class DeliveryResultType
 		        && getDescription().equalsIgnoreCase(((DeliveryResultType) anObject).getDescription()));
     }
 
+    @Override
     public String toString() {
         return getDescription();
     }

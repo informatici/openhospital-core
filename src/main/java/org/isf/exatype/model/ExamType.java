@@ -96,6 +96,7 @@ public class ExamType extends Auditable<String> {
 				&& getDescription().equalsIgnoreCase(((ExamType) anObject).getDescription()));
 	}
 
+	@Override
 	public String toString() {
 		return getDescription();
 	}

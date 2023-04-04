@@ -96,6 +96,7 @@ public class MedicalType extends Auditable<String> {
 				&& getDescription().equalsIgnoreCase(((MedicalType) anObject).getDescription()));
 	}
 
+	@Override
 	public String toString() {
 		return getDescription();
 	}

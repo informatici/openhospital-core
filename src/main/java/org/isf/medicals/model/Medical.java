@@ -264,6 +264,7 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 						&& getOutqty()==(((Medical) anObject).getOutqty()));
 	}
 
+	@Override
 	public String toString() {
 		return getDescription();
 	}
