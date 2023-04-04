@@ -116,7 +116,7 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	private String pex_note;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public PatientExamination() {
 		super();

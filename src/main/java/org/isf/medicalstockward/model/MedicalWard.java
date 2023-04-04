@@ -67,7 +67,7 @@ public class MedicalWard extends Auditable<String> implements Comparable<Object>
 	private Double qty = 0.0;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	public MedicalWard() {
 		super();

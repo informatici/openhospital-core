@@ -44,7 +44,7 @@ public class TestDicom {
 	private static final String DATE_TIME_STRING = "Sat Aug 01 10:02:03 AST 2020";
 
 	private Blob dicomData = createRandomBlob(100);
-	private int patId = 0;
+	private int patId;
 	private String fileName = "TestFileName";
 	private String dicomAccessionNumber = "TestAccessionNumber";
 	private String dicomInstitutionName = "TestInsitutionName";

@@ -102,7 +102,7 @@ public class UserMenuItem
 	private boolean isActive;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	public UserMenuItem() {
 		super();

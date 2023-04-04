@@ -100,7 +100,7 @@ public class Visit extends Auditable<String> {
 	private boolean sms;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public Visit() {
 		super();

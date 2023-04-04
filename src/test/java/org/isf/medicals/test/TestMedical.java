@@ -30,7 +30,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestMedical {
 
-	private Integer code = null;
+	private Integer code;
 	private String prod_code = "TP1";
 	private String description = "TestDescription";
 	private double initialqty = 10.10;
