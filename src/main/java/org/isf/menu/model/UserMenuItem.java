@@ -199,6 +199,7 @@ public class UserMenuItem
 				&& (isActive() == ((UserMenuItem) anObject).isActive()));
 	}
 
+	@Override
 	public String toString() {
 		return getButtonLabel();
 	}

@@ -67,6 +67,7 @@ public class MovementForPrint implements Comparable<MovementForPrint>{
 		return quantity;
 	}
 
+	@Override
 	public String toString() {
 		return medical;
 	}

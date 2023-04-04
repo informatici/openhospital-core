@@ -95,6 +95,7 @@ public class AdmissionType extends Auditable<String> {
         this.description = aDescription;
     }    
     
+    @Override
     public String toString() {
         return getDescription();
     }

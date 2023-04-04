@@ -172,8 +172,8 @@ public class JasperReportsManager {
 
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(patID)), "pdf");
 
-			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename.toString(), parameters);
-			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename.toString());
+			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
+			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
 			return result;
 		} catch (Exception e) {
 			LOGGER.error("", e);

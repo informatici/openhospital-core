@@ -73,7 +73,7 @@ public class MovStockInsertingManager {
 					MessageBundle.getMessage("angal.medicalstock.multiplecharging.adateinthefutureisnotallowed.msg"),
 					OHSeverityLevel.ERROR));
 		}
-		if (lastDate != null && movDate.compareTo(lastDate) < 0) {
+		if (lastDate != null && movDate.isBefore(lastDate)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 					MessageBundle.getMessage("angal.medicalstock.multiplecharging.datecannotbebeforelastmovementdate.msg"),
 					OHSeverityLevel.ERROR));
@@ -149,7 +149,7 @@ public class MovStockInsertingManager {
 							OHSeverityLevel.ERROR));
 				}
 
-				if (lot.getPreparationDate() != null && lot.getDueDate() != null && lot.getPreparationDate().compareTo(lot.getDueDate()) > 0) {
+				if (lot.getPreparationDate() != null && lot.getDueDate() != null && lot.getPreparationDate().isAfter(lot.getDueDate())) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.getMessage("angal.medicalstock.thepreparationdatecannotbyaftertheduedate.msg"),
 							OHSeverityLevel.ERROR));

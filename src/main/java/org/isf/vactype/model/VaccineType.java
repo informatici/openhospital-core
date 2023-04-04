@@ -103,6 +103,7 @@ public class VaccineType extends Auditable<String> {
 		return "vaccineType code=." + getCode() + ". description=." + getDescription() + ".";
 	}
 
+	@Override
 	public String toString() {
 		return getDescription();
 	}
