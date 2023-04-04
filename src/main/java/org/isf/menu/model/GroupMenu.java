@@ -65,7 +65,7 @@ public class GroupMenu extends Auditable<String> {
 	private String menuItem;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public GroupMenu() {
 	}

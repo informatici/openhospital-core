@@ -77,7 +77,7 @@ public class Sms {
 	private String moduleID;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public Sms() {
 	}

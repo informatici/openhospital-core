@@ -109,7 +109,7 @@ public class Hospital extends Auditable<String> {
     private Integer lock;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public Hospital() {
 		super();

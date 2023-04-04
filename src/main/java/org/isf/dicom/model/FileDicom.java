@@ -125,7 +125,7 @@ public class FileDicom extends Auditable<String> {
 	private String dicomStudyId = "";
 
 	@Column(name = "DM_FILE_ST_DATE")	// SQL type: datetime
-	private LocalDateTime dicomStudyDate = null;
+	private LocalDateTime dicomStudyDate;
 
 	@Column(name = "DM_FILE_ST_DESCR")
 	private String dicomStudyDescription = "";
@@ -145,7 +145,7 @@ public class FileDicom extends Auditable<String> {
 	private String dicomSeriesDescriptionCodeSequence = "";
 
 	@Column(name = "DM_FILE_SER_DATE")	// SQL type: datetime
-	private LocalDateTime dicomSeriesDate = null;
+	private LocalDateTime dicomSeriesDate;
 
 	@Column(name = "DM_FILE_SER_DESC")
 	private String dicomSeriesDescription = "";
@@ -165,7 +165,7 @@ public class FileDicom extends Auditable<String> {
 	private int frameCount = -1;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	@ManyToOne(optional=true) 
 	@JoinColumn(name="DM_DCMT_ID", nullable=true)

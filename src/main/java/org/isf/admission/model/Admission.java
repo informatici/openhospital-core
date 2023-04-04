@@ -189,7 +189,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	private char deleted = 'N';                // flag record deleted ; values are 'Y' OR 'N' default is 'N'
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public Admission() {
 		super();

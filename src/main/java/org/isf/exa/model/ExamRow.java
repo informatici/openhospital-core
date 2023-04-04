@@ -70,7 +70,7 @@ public class ExamRow extends Auditable<String> {
 	private Exam exam;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public ExamRow() 
     {

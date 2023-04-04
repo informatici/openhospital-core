@@ -32,12 +32,12 @@ import org.isf.utils.exception.OHException;
 
 public class TestSms {
 
-	private int smsId = 0;
+	private int smsId;
 	private LocalDateTime smsDate = LocalDateTime.of(2010, 9, 8, 0, 0, 0);
 	private LocalDateTime smsDateSched = LocalDateTime.of(2011, 9, 8, 0, 0, 0);
 	private String smsNumber = "TestNumber";
 	private String smsText = "TestText";
-	private LocalDateTime smsDateSent = null;
+	private LocalDateTime smsDateSent;
 	private String smsUser = "TestUser";
 	private String module = "TestModule";
 	private String moduleID = "TestModId";

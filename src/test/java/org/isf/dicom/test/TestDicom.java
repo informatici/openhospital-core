@@ -46,7 +46,7 @@ public class TestDicom {
 
 	private Blob data = createRandomBlob(100);
 	private DicomData dicomData;
-	private int patId = 0;
+	private int patId;
 	private String fileName = "TestFileName";
 	private String dicomAccessionNumber = "TestAccessionNumber";
 	private String dicomInstitutionName = "TestInsitutionName";

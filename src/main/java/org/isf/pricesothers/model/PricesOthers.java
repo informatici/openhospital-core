@@ -86,7 +86,7 @@ public class PricesOthers extends Auditable<String> {
 	private boolean undefined;
     
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	public PricesOthers() {
 		super();

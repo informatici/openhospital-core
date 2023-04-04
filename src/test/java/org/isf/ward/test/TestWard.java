@@ -40,7 +40,7 @@ public class TestWard {
 	private boolean isOpd = true;
 	private boolean isPharmacy = true;
 	private boolean isFemale = true;
-	private boolean isMale = false;
+	private boolean isMale;
 	private int visitDuration = 30;
 
 	public Ward setup(boolean usingSet) throws OHException {

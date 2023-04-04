@@ -44,7 +44,7 @@ public class DicomManagerFactory {
 
 	private static final String FILE_PROPERTIES = "dicom.properties";
 
-	private static DicomManagerInterface instance = null;
+	private static DicomManagerInterface instance;
 
 	private static Properties props = new Properties();
 

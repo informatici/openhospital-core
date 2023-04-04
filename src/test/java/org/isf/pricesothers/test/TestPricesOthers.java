@@ -31,9 +31,9 @@ public class TestPricesOthers {
 	private String Code = "TestCode";
 	private String Description = "TestDescription";
 	private boolean opdInclude = true;
-	private boolean ipdInclude = false;
+	private boolean ipdInclude;
 	private boolean daily = true;
-	private boolean discharge = false;
+	private boolean discharge;
 	private boolean undefined = true;
 
 	public PricesOthers setup(boolean usingSet) throws OHException {

@@ -39,7 +39,7 @@ public class TestMovementWard {
 
 	private LocalDateTime now = TimeTools.getNow();
 	private LocalDateTime date = now.withMonth(2).withDayOfMonth(2);
-	private boolean isPatient = false;
+	private boolean isPatient;
 	private int age = 10;
 	private float weight = 78;
 	private String description = "TestDescriptionm";

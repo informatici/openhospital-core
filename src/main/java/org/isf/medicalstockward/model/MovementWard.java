@@ -112,7 +112,7 @@ public class MovementWard extends Auditable<String> {
 	private String units;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	@ManyToOne
 	@JoinColumn(name="MMVN_WRD_ID_A_TO")	

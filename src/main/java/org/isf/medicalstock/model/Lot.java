@@ -124,7 +124,7 @@ public class Lot extends Auditable<String> {
 	private double overallQuantity;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public Lot() {
 	}
