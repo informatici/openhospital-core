@@ -47,14 +47,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
-public class ExamIoOperations {
+public class ExamIoOperations extends CommonExamIOOperations {
 
 	@Autowired
 	private ExamIoOperationRepository repository;
-	
+
 	@Autowired
 	private ExamRowIoOperationRepository rowRepository;
-	
+
 	@Autowired
 	private ExamTypeIoOperationRepository typeRepository;
 
@@ -66,7 +66,7 @@ public class ExamIoOperations {
 	public List<Exam> getExams() throws OHServiceException {
 		return getExamsByDesc(null);
 	}
-	
+
 	/**
 	 * Returns the list of {@link Exam}s that matches passed description
 	 * @param description - the exam description
@@ -77,7 +77,7 @@ public class ExamIoOperations {
 		return description != null ? repository.findByDescriptionContainingOrderByExamtypeDescriptionAscDescriptionAsc(description) :
 				repository.findByOrderByDescriptionAscDescriptionAsc();
 	}
-	
+
 	/**
 	 * Returns the list of {@link Exam}s by {@link ExamType} description
 	 * @param description - the exam description
@@ -89,21 +89,13 @@ public class ExamIoOperations {
 				repository.findByOrderByDescriptionAscDescriptionAsc();
 	}
 
-	/**
-	 * Returns the list of {@link ExamType}s
-	 * @return the list of {@link ExamType}s
-	 * @throws OHServiceException
-	 */
-	public List<ExamType> getExamType() throws OHServiceException {
-		return typeRepository.findAllByOrderByDescriptionAsc();
-	}
 
 	/**
 	 * Insert a new {@link Exam} in the DB.
-	 * 
+	 *
 	 * @param exam - the {@link Exam} to insert
 	 * @return <code>true</code> if the {@link Exam} has been inserted, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean newExam(Exam exam) throws OHServiceException {
 		return repository.save(exam) != null;
@@ -111,7 +103,7 @@ public class ExamIoOperations {
 
 	/**
 	 * Insert a new {@link ExamRow} in the DB.
-	 * 
+	 *
 	 * @param examRow - the {@link ExamRow} to insert
 	 * @return <code>true</code> if the {@link ExamRow} has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException
@@ -127,7 +119,7 @@ public class ExamIoOperations {
 	 * @throws OHServiceException
 	 */
 	public Exam updateExam(Exam exam) throws OHServiceException {
-		
+
 		return repository.save(exam);
 	}
 
@@ -144,31 +136,20 @@ public class ExamIoOperations {
 	}
 
 	/**
-	 * Delete an {@link ExamRow}.
-	 * @param examRow - the {@link ExamRow} to delete
-	 * @return <code>true</code> if the {@link ExamRow} has been deleted, <code>false</code> otherwise
-	 * @throws OHServiceException
-	 */
-	public boolean deleteExamRow(ExamRow examRow) throws OHServiceException {
-		rowRepository.delete(examRow);
-		return true;
-	}
-
-	/**
 	 * This function controls the presence of a record with the same key as in
 	 * the parameter; Returns false if the query finds no record, else returns
 	 * true
-	 * 
+	 *
 	 * @param exam the {@link Exam}
 	 * @return <code>true</code> if the Exam code has already been used, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean isKeyPresent(Exam exam) throws OHServiceException {
 		return repository.findById(exam.getCode()).orElse(null) != null;
 	}
-	
+
 	/**
-	 * Sanitize the given {@link String} value. 
+	 * Sanitize the given {@link String} value.
 	 * This method is maintained only for backward compatibility.
 	 * @param value the value to sanitize.
 	 * @return the sanitized value or <code>null</code> if the passed value is <code>null</code>.
@@ -185,20 +166,10 @@ public class ExamIoOperations {
 	 *
 	 * @param code - the exam code
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
 		return repository.existsById(code);
 	}
 
-	/**
-	 * Checks if the code is already in use
-	 *
-	 * @param code - the exam row code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
-	 * @throws OHServiceException 
-	 */
-	public boolean isRowPresent(Integer code) throws OHServiceException {
-		return rowRepository.existsById(code);
-	}
 }
