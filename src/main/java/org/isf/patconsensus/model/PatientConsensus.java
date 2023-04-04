@@ -69,6 +69,18 @@ public class PatientConsensus extends Auditable<String> {
 		super();
 	}
 
+
+
+	public PatientConsensus(boolean consensusFlag, boolean administrativeFlag, boolean serviceFlag, Patient patient) {
+		super();
+		this.consensusFlag = consensusFlag;
+		this.administrativeFlag = administrativeFlag;
+		this.serviceFlag = serviceFlag;
+		this.patient = patient;
+	}
+
+
+
 	public int getId() {
 		return id;
 	}
