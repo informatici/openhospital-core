@@ -85,4 +85,3 @@ source step_88_alter_table_patient.sql;
 source step_89_alter_tables_innodb.sql;
 source step_90_login_retries.sql;
 source step_91_patient_consensuns_table.sql;
-source step_92_consensus_old_records.sql;
