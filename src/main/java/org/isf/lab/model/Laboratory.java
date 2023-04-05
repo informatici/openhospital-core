@@ -111,7 +111,7 @@ public class Laboratory extends Auditable<String> {
 	private String status;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public Laboratory() { }
 

@@ -60,7 +60,7 @@ public class DiseaseType extends Auditable<String> {
     private String description;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	public DiseaseType() 
     {
@@ -107,7 +107,8 @@ public class DiseaseType extends Auditable<String> {
 		return (this.getCode().equals(diseaseType.getCode()));
 	}
 
-    public String toString() 
+    @Override
+    public String toString()
     {
         return getDescription();
     }

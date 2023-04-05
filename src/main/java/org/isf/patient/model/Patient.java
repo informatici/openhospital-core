@@ -204,7 +204,7 @@ public class Patient extends Auditable<String> {
 	private PatientProfilePhoto patientProfilePhoto; // nullable because user can choose to save on file system
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 
 	public Patient() {
@@ -466,6 +466,7 @@ public class Patient extends Auditable<String> {
 		this.note = note;
 	}
 
+	@Override
 	public String toString() {
 		return getName();
 	}

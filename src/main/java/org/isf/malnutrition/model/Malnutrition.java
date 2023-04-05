@@ -96,7 +96,7 @@ public class Malnutrition extends Auditable<String> {
 	private int lock;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 
 	public Malnutrition() { }

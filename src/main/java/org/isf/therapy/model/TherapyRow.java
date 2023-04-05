@@ -111,7 +111,7 @@ public class TherapyRow extends Auditable<String> {
 	private int smsInt;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	
 	public TherapyRow() {
@@ -271,6 +271,7 @@ public class TherapyRow extends Auditable<String> {
 		this.smsInt = smsInt;
 	}
 
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(medicalId);

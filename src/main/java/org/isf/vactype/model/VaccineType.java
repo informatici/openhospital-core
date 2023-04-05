@@ -63,7 +63,7 @@ public class VaccineType extends Auditable<String> {
 	private String description;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	public VaccineType() 
     {
@@ -103,6 +103,7 @@ public class VaccineType extends Auditable<String> {
 		return "vaccineType code=." + getCode() + ". description=." + getDescription() + ".";
 	}
 
+	@Override
 	public String toString() {
 		return getDescription();
 	}

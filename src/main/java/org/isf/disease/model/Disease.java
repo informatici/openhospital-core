@@ -89,7 +89,7 @@ public class Disease extends Auditable<String> {
 	private boolean ipdOutInclude;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public Disease() 
     {
@@ -170,6 +170,7 @@ public class Disease extends Auditable<String> {
 				&& getDescription().equalsIgnoreCase(((Disease) anObject).getDescription()) && getType().equals(((Disease) anObject).getType()));
 	}
 
+    @Override
     public String toString() {
         return getDescription();
     }

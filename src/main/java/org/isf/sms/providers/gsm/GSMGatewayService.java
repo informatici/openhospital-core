@@ -128,7 +128,7 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 			} catch (PortInUseException e) {
 				LOGGER.error("Port in use: {}", portId.getCurrentOwner());
 			} catch (Exception e) {
-				LOGGER.error("Failed to open port {} {}", portId.getName(), e);
+				LOGGER.error("Failed to open port {}", portId.getName(), e);
 			}
 		} else {
 			LOGGER.error("COM PORT not found ({})!!!", port);
@@ -222,7 +222,7 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 				sent = false;
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in serialEvent method.", e);
 		}
 	}
 

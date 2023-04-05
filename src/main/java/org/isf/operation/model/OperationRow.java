@@ -98,7 +98,7 @@ public class OperationRow extends Auditable<String> {
     private Float transUnit = 0f;
     
     @Transient
-    private volatile int hashCode = 0;
+    private volatile int hashCode;
 
 	public OperationRow() {
 		super();
@@ -256,6 +256,7 @@ public class OperationRow extends Auditable<String> {
         return this.hashCode;
     }
 
+    @Override
     public String toString() {
         return this.operation.getDescription() + " " + this.admission.getUserID();
     }

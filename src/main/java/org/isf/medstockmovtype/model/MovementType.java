@@ -65,7 +65,7 @@ public class MovementType extends Auditable<String> {
     private String type;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public MovementType() {
 	}
@@ -105,6 +105,7 @@ public class MovementType extends Auditable<String> {
 		this.type = type;
 	}
 	
+    @Override
     public String toString() {
         return getDescription();
     }

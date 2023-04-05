@@ -61,7 +61,7 @@ public class OperationType extends Auditable<String> {
     private String description;
     
 	@Transient
-    private volatile int hashCode = 0;
+    private volatile int hashCode;
     
 
 	public OperationType() 
@@ -125,6 +125,7 @@ public class OperationType extends Auditable<String> {
 	    return this.hashCode;
 	}
 
+    @Override
     public String toString() {
         return this.description;
     }

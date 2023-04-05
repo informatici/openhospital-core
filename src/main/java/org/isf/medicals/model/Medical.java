@@ -134,7 +134,7 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 	private Integer lock;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 		
 
 	public Medical() { }
@@ -264,6 +264,7 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 						&& getOutqty()==(((Medical) anObject).getOutqty()));
 	}
 
+	@Override
 	public String toString() {
 		return getDescription();
 	}

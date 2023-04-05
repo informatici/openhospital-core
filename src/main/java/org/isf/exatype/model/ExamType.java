@@ -61,7 +61,7 @@ public class ExamType extends Auditable<String> {
 	private String description;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public ExamType() 
     {
@@ -96,6 +96,7 @@ public class ExamType extends Auditable<String> {
 				&& getDescription().equalsIgnoreCase(((ExamType) anObject).getDescription()));
 	}
 
+	@Override
 	public String toString() {
 		return getDescription();
 	}

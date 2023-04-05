@@ -76,7 +76,7 @@ public class PriceList extends Auditable<String> {
     private String currency;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	
 	public PriceList() {

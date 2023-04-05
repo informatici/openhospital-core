@@ -30,7 +30,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestBillItems {
 
-	private static boolean isPrice = false;
+	private static boolean isPrice;
 	private static String priceID = "TestPId";
 	private static String itemDescription = "TestItemDescription";
 	private static double itemAmount = 10.10;

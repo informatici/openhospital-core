@@ -50,7 +50,7 @@ public class DeliveryResultType
     private String description;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	public DeliveryResultType() 
     {
@@ -89,6 +89,7 @@ public class DeliveryResultType
 		        && getDescription().equalsIgnoreCase(((DeliveryResultType) anObject).getDescription()));
     }
 
+    @Override
     public String toString() {
         return getDescription();
     }

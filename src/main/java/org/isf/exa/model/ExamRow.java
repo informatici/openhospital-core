@@ -70,7 +70,7 @@ public class ExamRow extends Auditable<String> {
 	private Exam exam;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public ExamRow() 
     {
@@ -112,6 +112,7 @@ public class ExamRow extends Auditable<String> {
 				&& getDescription().equalsIgnoreCase(((ExamRow) anObject).getDescription()) && getExamCode().equals(((ExamRow) anObject).getExamCode()));
 	}
 
+	@Override
 	public String toString() {
 		return getDescription();
 	}	

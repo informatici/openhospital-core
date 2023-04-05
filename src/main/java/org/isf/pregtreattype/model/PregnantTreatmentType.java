@@ -61,7 +61,7 @@ public class PregnantTreatmentType extends Auditable<String> {
     private String description;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	public PregnantTreatmentType() 
     {
@@ -100,6 +100,7 @@ public class PregnantTreatmentType extends Auditable<String> {
 		        && getDescription().equalsIgnoreCase(((PregnantTreatmentType) anObject).getDescription()));
     }
 
+    @Override
     public String toString() {
         return getDescription();
     }

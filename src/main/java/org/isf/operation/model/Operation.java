@@ -89,7 +89,7 @@ public class Operation extends Auditable<String> {
     private Integer lock;
 
 	@Transient
-    private volatile int hashCode = 0;
+    private volatile int hashCode;
     
 	public Operation() {
 		super();
@@ -188,6 +188,7 @@ public class Operation extends Auditable<String> {
 	    return this.hashCode;
 	}
 
+    @Override
     public String toString() {
         return this.description;
     }

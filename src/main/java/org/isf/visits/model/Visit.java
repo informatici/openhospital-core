@@ -100,7 +100,7 @@ public class Visit extends Auditable<String> {
 	private boolean sms;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public Visit() {
 		super();
@@ -214,6 +214,7 @@ public class Visit extends Auditable<String> {
 		return (visitID == visit.getVisitID());
 	}
 
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		if (ward != null) {

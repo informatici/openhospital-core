@@ -31,7 +31,7 @@ public final class ExaminationParameters extends ConfigurationProperties {
 	private static final String FILE_PROPERTIES = "examination.properties";
 	
 	public static int HEIGHT_MIN;
-	private static int DEFAULT_HEIGHT_MIN = 0;
+	private static int DEFAULT_HEIGHT_MIN;
 
 	public static int HEIGHT_MAX;
 	private static final int DEFAULT_HEIGHT_MAX = 250;

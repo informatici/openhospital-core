@@ -69,7 +69,7 @@ public class AgeType extends Auditable<String> {
     private int to;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	public AgeType() 
     {
@@ -118,6 +118,7 @@ public class AgeType extends Auditable<String> {
 	public int getTo() {
 		return to;
 	}
+	@Override
 	public String toString() {
         return getDescription();
     }

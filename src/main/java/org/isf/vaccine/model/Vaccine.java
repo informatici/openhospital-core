@@ -120,6 +120,7 @@ public class Vaccine extends Auditable<String> {
         this.lock = aLock;
     }
 
+	@Override
 	public boolean equals(Object anObject) {
 		return anObject instanceof Vaccine
 				&& (getCode().equals(((Vaccine) anObject).getCode())
@@ -131,6 +132,7 @@ public class Vaccine extends Auditable<String> {
 		return "Vaccine code =." + getCode() + ". description =." + getDescription() + ".";
 	}
 
+	@Override
 	public String toString() {
 		return getDescription();
 	}

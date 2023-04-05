@@ -61,7 +61,7 @@ public class AdmissionType extends Auditable<String> {
     private String description;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	public AdmissionType() 
     {
@@ -95,6 +95,7 @@ public class AdmissionType extends Auditable<String> {
         this.description = aDescription;
     }    
     
+    @Override
     public String toString() {
         return getDescription();
     }

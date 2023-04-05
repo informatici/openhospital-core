@@ -81,7 +81,7 @@ public class Supplier extends Auditable<String> implements java.io.Serializable 
 	private char supDeleted;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public Supplier() {
 		super();
@@ -204,6 +204,7 @@ public class Supplier extends Auditable<String> implements java.io.Serializable 
 		this.supDeleted = supDeleted;
 	}
 
+	@Override
 	public String toString() {
 		return this.supName;
 	}

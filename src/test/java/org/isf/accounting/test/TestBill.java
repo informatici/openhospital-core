@@ -37,7 +37,7 @@ public class TestBill {
 
 	private static LocalDateTime date = LocalDateTime.of(10, 9, 8, 0, 0, 0);
 	private static LocalDateTime update = LocalDateTime.of(7, 6, 5, 0, 0, 0);
-	private static boolean isList = false;
+	private static boolean isList;
 	private static String listName = "TestListName";
 	private static boolean isPatient = true;
 	private static String patName = "TestPatName";

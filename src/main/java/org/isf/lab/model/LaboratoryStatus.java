@@ -30,6 +30,7 @@ public enum LaboratoryStatus {
 		status = s;
 	}
 
+	@Override
 	public String toString() {
 		return this.status;
 	}

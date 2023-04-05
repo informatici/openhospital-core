@@ -39,7 +39,7 @@ public class TestTherapy {
 	private int freqInDay = 11;
 	private int freqInPeriod = 12;
 	private String note = "TestNote";
-	private boolean notify = false;
+	private boolean notify;
 	private boolean sms = true;
 
 	public TherapyRow setup(Patient patient, Medical medical, boolean usingSet) throws OHException {

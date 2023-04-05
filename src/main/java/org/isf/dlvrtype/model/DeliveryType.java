@@ -61,7 +61,7 @@ public class DeliveryType extends Auditable<String> {
     private String description;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	public DeliveryType() 
     {
@@ -100,6 +100,7 @@ public class DeliveryType extends Auditable<String> {
 		        && getDescription().equalsIgnoreCase(((DeliveryType) anObject).getDescription()));
     }
 
+    @Override
     public String toString() {
         return getDescription();
     }

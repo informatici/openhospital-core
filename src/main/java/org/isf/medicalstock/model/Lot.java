@@ -124,7 +124,7 @@ public class Lot extends Auditable<String> {
 	private double overallQuantity;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public Lot() {
 	}
@@ -207,6 +207,7 @@ public class Lot extends Auditable<String> {
 		this.cost = cost;
 	}
 
+	@Override
 	public String toString() {
 		if (code == null) {
 			return MessageBundle.getMessage("angal.medicalstock.nolot.txt");

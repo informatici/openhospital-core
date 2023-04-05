@@ -30,15 +30,18 @@ import java.time.LocalDateTime;
 
 import javax.imageio.ImageIO;
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.sql.rowset.serial.SerialBlob;
@@ -76,10 +79,14 @@ public class FileDicom extends Auditable<String> {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "DM_FILE_ID")
 	private long idFile;
-	
-	@Column(name = "DM_DATA")
-	@Lob
-	private Blob dicomData; //TODO: move to a separated entity
+
+	@OneToOne(
+			mappedBy = "fileDicom",
+			fetch = FetchType.EAGER,
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE },
+			orphanRemoval = true
+	)
+	private DicomData dicomData;
 
 	@NotNull
 	@Column(name="DM_PAT_ID")
@@ -118,7 +125,7 @@ public class FileDicom extends Auditable<String> {
 	private String dicomStudyId = "";
 
 	@Column(name = "DM_FILE_ST_DATE")	// SQL type: datetime
-	private LocalDateTime dicomStudyDate = null;
+	private LocalDateTime dicomStudyDate;
 
 	@Column(name = "DM_FILE_ST_DESCR")
 	private String dicomStudyDescription = "";
@@ -138,7 +145,7 @@ public class FileDicom extends Auditable<String> {
 	private String dicomSeriesDescriptionCodeSequence = "";
 
 	@Column(name = "DM_FILE_SER_DATE")	// SQL type: datetime
-	private LocalDateTime dicomSeriesDate = null;
+	private LocalDateTime dicomSeriesDate;
 
 	@Column(name = "DM_FILE_SER_DESC")
 	private String dicomSeriesDescription = "";
@@ -158,7 +165,7 @@ public class FileDicom extends Auditable<String> {
 	private int frameCount = -1;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	@ManyToOne(optional=true) 
 	@JoinColumn(name="DM_DCMT_ID", nullable=true)
@@ -199,10 +206,9 @@ public class FileDicom extends Auditable<String> {
 	}
 
 	/**
-	 * Construct an Detailed DICOM Data Model
+	 * Construct a Detailed DICOM Data Model
 	 */
-
-	public FileDicom(int patId, Blob dicomData, long idFile, String fileName, String dicomAccessionNumber, String dicomInstitutionName, String dicomPatientID, 
+	public FileDicom(int patId, DicomData dicomData, long idFile, String fileName, String dicomAccessionNumber, String dicomInstitutionName, String dicomPatientID,
 			String dicomPatientName, String dicomPatientAddress, String dicomPatientAge, String dicomPatientSex, String dicomPatientBirthDate, 
 			String dicomStudyId, LocalDateTime dicomStudyDate, String dicomStudyDescription, String dicomSeriesUID, String dicomSeriesInstanceUID,
 			String dicomSeriesNumber, String dicomSeriesDescriptionCodeSequence, LocalDateTime dicomSeriesDate, String dicomSeriesDescription,
@@ -275,7 +281,7 @@ public class FileDicom extends Auditable<String> {
 	/**
 	 * @return the dicomData
 	 */
-	public Blob getDicomData() {
+	public DicomData getDicomData() {
 		return dicomData;
 	}
 
@@ -283,7 +289,7 @@ public class FileDicom extends Auditable<String> {
 	 * @param dicomData
 	 *            the dicomData to set
 	 */
-	public void setDicomData(Blob dicomData) {
+	public void setDicomData(DicomData dicomData) {
 		this.dicomData = dicomData;
 	}
 
@@ -294,13 +300,10 @@ public class FileDicom extends Auditable<String> {
 	 *            the dicomFile to set
 	 */
 	public void setDicomData(File dicomFile) {
-		try (FileInputStream fis = new FileInputStream(dicomFile)) {
-			byte[] byteArray = new byte[fis.available()];
-			fis.read(byteArray);
-			this.dicomData = new SerialBlob(byteArray);
-		} catch (Exception exception) {
-			LOGGER.error(exception.getMessage(), exception);
-		}
+		DicomData dicomData = new DicomData();
+		dicomData.setData(dicomFile);
+		dicomData.setFileDicom(this);
+		this.dicomData = dicomData;
 	}
 
 	/**

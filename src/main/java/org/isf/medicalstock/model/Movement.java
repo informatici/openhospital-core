@@ -104,7 +104,7 @@ public class Movement extends Auditable<String> {
 	private String refNo;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	public Movement() { }
 
@@ -195,6 +195,7 @@ public class Movement extends Auditable<String> {
 		this.refNo = refNo;
 	}
 
+	@Override
 	public String toString() {
 		return MessageBundle.formatMessage("angal.movement.tostring.fmt.txt",
 				medical != null ? medical.toString() : "NULL",

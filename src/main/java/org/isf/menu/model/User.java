@@ -79,7 +79,7 @@ public class User extends Auditable<String> {
 	private LocalDateTime lockedTime;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public User() {
 	}
@@ -149,6 +149,7 @@ public class User extends Auditable<String> {
 		this.lockedTime = lockedTime;
 	}
 
+	@Override
 	public String toString() {
 		return getUserName();
 	}
