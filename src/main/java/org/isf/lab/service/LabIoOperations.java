@@ -99,7 +99,7 @@ public class LabIoOperations {
 		return exam != null ? repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(TimeTools.truncateToSeconds(dateFrom),
 						TimeTools.truncateToSeconds(dateTo),
 						exam)
-						: repository.findByCreatedDateBetweenOrderByLabDateDesc(TimeTools.truncateToSeconds(dateFrom.with(LocalTime.MIN)),
+						: repository.findByLabDateBetweenOrderByLabDateDesc(TimeTools.truncateToSeconds(dateFrom.with(LocalTime.MIN)),
 										TimeTools.truncateToSeconds(dateTo.with(LocalTime.MAX)));
 	}
 
@@ -125,7 +125,7 @@ public class LabIoOperations {
 			laboritories = repository.findByLabDateBetweenAndPatientCode(dateFrom, dateTo, patient.getCode());
 		}
 		if (patient == null && exam.equals("")) {
-			laboritories = repository.findByCreatedDateBetweenOrderByLabDateDesc(dateFrom, dateTo);
+			laboritories = repository.findByLabDateBetweenOrderByLabDateDesc(dateFrom, dateTo);
 		}
 		return laboritories;
 	}
@@ -175,7 +175,7 @@ public class LabIoOperations {
 			laboritories = repository.findByLabDateBetweenAndPatientCode(dateFrom, dateTo, patient.getCode());
 		}
 		if (patient == null && exam == null) {
-			laboritories = repository.findByCreatedDateBetweenOrderByLabDateDesc(dateFrom, dateTo);
+			laboritories = repository.findByLabDateBetweenOrderByLabDateDesc(dateFrom, dateTo);
 		}
 		for (Laboratory laboratory : laboritories) {
 
