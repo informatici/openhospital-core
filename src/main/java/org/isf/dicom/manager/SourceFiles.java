@@ -51,7 +51,6 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.file.FileTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -156,10 +155,9 @@ public class SourceFiles extends Thread {
 		for (File value : files) {
 			if (!value.isDirectory()) {
 				if (!checkSize(value)) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					throw new OHDicomException(new OHExceptionMessage(
 							MessageBundle.formatMessage("angal.dicom.afileinthefolderistoobigpleasesetdicommaxsizeindicomproperties.fmt.msg",
-									DicomManagerFactory.getMaxDicomSize()),
-							OHSeverityLevel.ERROR));
+							                            DicomManagerFactory.getMaxDicomSize())));
 				}
 				num++;
 			} else if (!".".equals(value.getName()) && !"..".equals(value.getName())) {
@@ -197,11 +195,10 @@ public class SourceFiles extends Thread {
 			} else if (isDicom) {
 				DicomInputStream dicomInputStream;
 				try {
-			        dicomInputStream = new DicomInputStream(sourceFile);
-				} catch(DicomStreamException dicomStreamException) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					                                                  MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", fileName),
-					                                                  OHSeverityLevel.ERROR));
+					dicomInputStream = new DicomInputStream(sourceFile);
+				} catch (DicomStreamException dicomStreamException) {
+					throw new OHDicomException(new OHExceptionMessage(
+							MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", fileName)));
 				}
 				Attributes attributes = dicomInputStream.readDataset();
 				seriesDate = getSeriesDateTime(attributes);
@@ -212,9 +209,7 @@ public class SourceFiles extends Thread {
 					LOGGER.error("DICOM: Unparsable SeriesNumber");
 				}
 			} else {
-				throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-				                                                  MessageBundle.formatMessage("angal.dicom.dicomformatnotsupported.fmt.msg", fileName),
-				                                                  OHSeverityLevel.ERROR));
+				throw new OHDicomException(new OHExceptionMessage(MessageBundle.formatMessage("angal.dicom.dicomformatnotsupported.fmt.msg", fileName)));
 			}
 			dicomFileDetail.setFrameCount(numfiles);
 			dicomFileDetail.setDicomData(sourceFile);
@@ -298,9 +293,8 @@ public class SourceFiles extends Thread {
 						sourceFile = f;
 					}
 				} catch (IIOException | RuntimeException exception) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName()),
-							OHSeverityLevel.ERROR));
+					throw new OHDicomException(
+							new OHExceptionMessage(MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName())));
 				}
 				imageInputStream.close();
 			} else if (isDicom) {
@@ -316,17 +310,16 @@ public class SourceFiles extends Thread {
 					reader.setInput(dicomStream);
 					originalImage = reader.read(0, param);
 				} catch (IOException | RuntimeException exception) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()), OHSeverityLevel.ERROR));
+					throw new OHDicomException(
+							new OHExceptionMessage(MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName())));
 				}
 				finally {
 					SafeClose.close(dicomStream);
 					SafeClose.close(byteArrayInputStream);
 				}
 			} else {
-				throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName()),
-						OHSeverityLevel.ERROR));
+				throw new OHDicomException(
+						new OHExceptionMessage(MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName())));
 			}
 
 			BufferedImage scaled = Scalr.resize(originalImage, 100);
@@ -366,10 +359,9 @@ public class SourceFiles extends Thread {
 				DicomInputStream dicomInputStream;
 				try {
 					dicomInputStream = new DicomInputStream(sourceFile);
-				} catch(DicomStreamException dicomStreamException) {
-					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-																	  MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()),
-																	  OHSeverityLevel.ERROR));
+				} catch (DicomStreamException dicomStreamException) {
+					throw new OHDicomException(
+							new OHExceptionMessage(MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName())));
 				}
 				Attributes attributes = dicomInputStream.readDataset();
 
