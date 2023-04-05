@@ -156,7 +156,7 @@ public class Opd extends Auditable<String> {
 	private String prescription; // ADDED: Arnaud
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 
 	public Opd() {

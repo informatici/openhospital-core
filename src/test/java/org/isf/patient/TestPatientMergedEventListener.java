@@ -30,7 +30,7 @@ public class TestPatientMergedEventListener {
 
 	private PatientMergedEvent patientMergedEvent;
 
-	private boolean shouldFail = false;
+	private boolean shouldFail;
 
 	@EventListener
 	public void handle(PatientMergedEvent patientMergedEvent) {

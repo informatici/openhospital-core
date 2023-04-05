@@ -30,7 +30,6 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -107,28 +106,20 @@ public class AdmissionTypeBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		String key = admissionType.getCode();
 		if (key.equals("")) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertacode.msg")));
 		}
 		if (key.length() > 10) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 10),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 10)));
 		}
 
 		if (insert) {
 			if (isCodePresent(key)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
-						OHSeverityLevel.ERROR));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
 			}
 		}
 		if (admissionType.getDescription().equals("")) {
 			errors.add(
-					new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
-							OHSeverityLevel.ERROR));
+					new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);

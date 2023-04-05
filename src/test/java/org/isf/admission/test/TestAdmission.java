@@ -48,10 +48,10 @@ public class TestAdmission {
 	private static final LocalDateTime CTRLDATE2 = LocalDateTime.of(2005, 3, 2, 0, 0);
 	private static final LocalDateTime DISDATE =  LocalDateTime.of(2006, 12, 1, 0, 0);
 
-	private int id = 0;
+	private int id;
 	private int admitted = 1;
 	private String type = "T";
-	private int yProg = 0;
+	private int yProg;
 	private String FHU = "TestFHU";
 	private String note = "TestNote";
 	private Float transUnit = (float) 10.10;

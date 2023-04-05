@@ -28,7 +28,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestSupplier {
 
-	private Integer supId = null;
+	private Integer supId;
 	private String supName = "TestName";
 	private String supAddress = "TestAddress";
 	private String supTaxcode = "TestTax";

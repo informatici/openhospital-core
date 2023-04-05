@@ -81,7 +81,7 @@ public class BillPayments extends Auditable<String> implements Comparable<BillPa
 	private String user;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	
 	public BillPayments() {

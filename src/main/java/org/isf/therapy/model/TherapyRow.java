@@ -111,7 +111,7 @@ public class TherapyRow extends Auditable<String> {
 	private int smsInt;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	
 	public TherapyRow() {

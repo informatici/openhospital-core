@@ -84,7 +84,7 @@ public class BillItems extends Auditable<String> {
 	private int itemQuantity;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	/**
 	 * Store  the code of the item that is used for search purpose.

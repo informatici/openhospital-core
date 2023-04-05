@@ -46,6 +46,7 @@ import java.util.Vector;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
+import org.isf.dicom.model.DicomData;
 import org.isf.dicom.model.FileDicom;
 import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDicomException;
@@ -305,7 +306,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 				ps.flush();
 			}
 			File data = new File(df, idFile + ".data");
-			Blob blob = dicom.getDicomData();
+			Blob blob = dicom.getDicomData().getData();
 			int blobLength = (int) blob.length();
 			byte[] blobAsBytes = blob.getBytes(1, blobLength);
 			save(data, blobAsBytes);
@@ -325,7 +326,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	 * Load DICOM data + Thumbnail
 	 */
 	private FileDicom loadMetadata(long idFile, int patientId, String series) throws IOException, SQLException {
-		// Series must exists, so we need to check it and return null in case
+		// Series must exist, so we need to check it and return null in case
 		if (series == null || series.trim().length() == 0 || series.equalsIgnoreCase("null")) {
 			return null;
 		}
@@ -341,14 +342,16 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 	* Load DICOM data + Image
 	*/
 	private FileDicom loadData(long idFile, int patientId, String series) throws IOException, SQLException, OHDicomException  {
-		// Series must exists, so we need to check it and return null in case
+		// Series must exist, so we need to check it and return null in case
 		if (series == null || series.trim().length() == 0 || series.equalsIgnoreCase("null")) {
 			return null;
 		}
 		FileDicom rv = new FileDicom();
 		File sd = getSerieDir(patientId, series, false);
 		parseDicomProperties(idFile, rv, sd);
-		rv.setDicomData(loadDicomData(sd, idFile));
+		DicomData dicomData = new DicomData(loadDicomData(sd, idFile));
+		rv.setDicomData(dicomData);
+		dicomData.setFileDicom(rv);
 		return rv;
 	}
 

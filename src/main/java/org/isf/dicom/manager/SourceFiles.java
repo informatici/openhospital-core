@@ -78,7 +78,7 @@ public class SourceFiles extends Thread {
 	private FileDicom fileDicom;
 	private int patient;
 	private int filesCount;
-	private int filesLoaded = 0;
+	private int filesLoaded;
 	private AbstractDicomLoader dicomLoader;
 	private AbstractThumbnailViewGui thumbnail;
 

@@ -115,7 +115,7 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	private Admission admission;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	
 	public Bill() {

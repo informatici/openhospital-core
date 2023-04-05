@@ -30,7 +30,6 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -115,15 +114,10 @@ public class AgeTypeBrowserManager {
 			boolean isOverlapping = ageTypes.get(i).getFrom() <= ageTypes.get(i - 1).getTo();
 			boolean isGapLargerThanOne = ageTypes.get(i).getFrom() - ageTypes.get(i - 1).getTo() > 1;
 			if (isOverlapping) {
-				errors.add(
-						new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-								MessageBundle.getMessage("angal.agetype.overlappedrangespleasecheckthevalues.msg"),
-								OHSeverityLevel.ERROR));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.agetype.overlappedrangespleasecheckthevalues.msg")));
 			}
 			if (isGapLargerThanOne) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.agetype.somerangesarenotdefinedpleasecheckthevalues.msg"),
-						OHSeverityLevel.ERROR));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.agetype.somerangesarenotdefinedpleasecheckthevalues.msg")));
 			}
 		}
 		if (!errors.isEmpty()) {

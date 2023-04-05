@@ -70,7 +70,7 @@ public class SessionAudit extends Auditable<String> {
 	private LocalDateTime logoutDate;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public SessionAudit() {
 		super();

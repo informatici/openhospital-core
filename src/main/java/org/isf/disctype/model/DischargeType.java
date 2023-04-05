@@ -60,7 +60,7 @@ public class DischargeType extends Auditable<String> {
     private String description;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	public DischargeType() 
     {

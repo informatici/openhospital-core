@@ -106,7 +106,7 @@ public class Ward extends Auditable<String> {
 	private Integer lock;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 	
 	public Ward() {
 		super();
