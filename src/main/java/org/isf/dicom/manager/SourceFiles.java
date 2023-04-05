@@ -144,17 +144,8 @@ public class SourceFiles extends Thread {
 	}
 
 	private static boolean isValidDirectoryName(String directoryName) {
-		return !isCurrentDirectory(directoryName) && !isParentDirectory(directoryName);
+		return ".".equals(directoryName) && "..".equals(directoryName);
 	}
-
-	private static boolean isCurrentDirectory(String directoryName) {
-		return ".".equals(directoryName);
-	}
-
-	private static boolean isParentDirectory(String directoryName) {
-		return "..".equals(directoryName);
-	}
-
 
 
 	public static boolean checkSize(File sourceFile) throws OHDicomException {

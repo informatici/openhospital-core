@@ -112,8 +112,8 @@ public class AgeTypeBrowserManager {
 	protected void validateAgeTypes(List<AgeType> ageTypes) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		for (int i = 1; i < ageTypes.size(); i++) {
-			Boolean isOverlapping = ageTypes.get(i).getFrom() <= ageTypes.get(i - 1).getTo();
-			Boolean isGapLargerThanOne = ageTypes.get(i).getFrom() - ageTypes.get(i - 1).getTo() > 1;
+			boolean isOverlapping = ageTypes.get(i).getFrom() <= ageTypes.get(i - 1).getTo();
+			boolean isGapLargerThanOne = ageTypes.get(i).getFrom() - ageTypes.get(i - 1).getTo() > 1;
 			if (isOverlapping) {
 				errors.add(
 						new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
