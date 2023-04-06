@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.dicom.manager;
 
@@ -52,7 +52,6 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,11 +87,10 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		try {
 			dir = new File(externalPrp.getProperty("dicom.storage.filesystem"));
 			recourse(dir);
-		} catch(Exception exception) {
+		} catch (Exception exception) {
 			LOGGER.error(exception.getMessage(), exception);
-			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
-					OHSeverityLevel.ERROR));
+			throw new OHDicomException(exception,
+			                           new OHExceptionMessage(MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage())));
 		}
 	}
 	
@@ -142,9 +140,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 
 			return _Longs;
 		} catch (Exception exception) {
-			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
-					OHSeverityLevel.ERROR));
+			throw new OHDicomException(exception,
+			                           new OHExceptionMessage(MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage())));
 		}
 	}
 	
@@ -173,9 +170,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			return deleted && deleteFolder.delete();
 
 		} catch (Exception exception) {
-			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
-					OHSeverityLevel.ERROR));
+			throw new OHDicomException(exception,
+			                           new OHExceptionMessage(MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage())));
 		}
 	}
 
@@ -210,9 +206,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 		try {
 			return loadData(idFile, patientId, seriesNumber);
 		} catch (Exception exception) {
-			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
-					OHSeverityLevel.ERROR));
+			throw new OHDicomException(exception,
+			                           new OHExceptionMessage(MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage())));
 		}
 	}
 
@@ -238,9 +233,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			db = compact(db);
 			return db;
 		} catch (Exception exception) {
-			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
-					OHSeverityLevel.ERROR));
+			throw new OHDicomException(exception,
+			                           new OHExceptionMessage(MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage())));
 		}
 	}
 
@@ -316,9 +310,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			blobAsBytes = blob.getBytes(1, blobLength);
 			save(thumn, blobAsBytes);
 		} catch (Exception exception) {
-			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
-					OHSeverityLevel.ERROR));
+			throw new OHDicomException(exception,
+			                           new OHExceptionMessage(MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage())));
 		}
 	}
 
@@ -455,9 +448,8 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 				i++;
 			}
 		} catch (Exception exception) {
-			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
-					OHSeverityLevel.ERROR));
+			throw new OHDicomException(exception,
+			                           new OHExceptionMessage(MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage())));
 		}
 		return rv;
 	}

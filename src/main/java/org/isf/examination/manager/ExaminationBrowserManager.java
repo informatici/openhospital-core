@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.examination.manager;
 
@@ -35,7 +35,6 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.isf.utils.validator.DefaultSorter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -311,24 +310,17 @@ public class ExaminationBrowserManager {
 		buildDiuresisDescriptionHashMap();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (patex.getPex_note() != null && patex.getPex_note().length() > PatientExamination.PEX_NOTE_LENGTH) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.formatMessage("angal.common.thenoteistoolongmaxchars.fmt.msg", PatientExamination.PEX_NOTE_LENGTH),
-							OHSeverityLevel.ERROR));
+			errors.add(
+					new OHExceptionMessage(MessageBundle.formatMessage("angal.common.thenoteistoolongmaxchars.fmt.msg", PatientExamination.PEX_NOTE_LENGTH)));
 		}
 		if (patex.getPex_diuresis_desc() != null && !diuresisDescriptionHashMap.containsKey(patex.getPex_diuresis_desc())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.examination.pleaseinsertavaliddiuresisdescription.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.examination.pleaseinsertavaliddiuresisdescription.msg")));
 		}
 		if (patex.getPex_bowel_desc() != null && !bowelDescriptionHashMap.containsKey(patex.getPex_bowel_desc())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.examination.pleaseinsertavalidboweldescription.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.examination.pleaseinsertavalidboweldescription.msg")));
 		}
 		if (patex.getPex_auscultation() != null && !auscultationHashMap.containsKey(patex.getPex_auscultation())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.examination.pleaseinsertavalidauscultationdescription.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.examination.pleaseinsertavalidauscultationdescription.msg")));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.sms.manager;
 
@@ -32,7 +32,6 @@ import org.isf.sms.service.SmsOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -61,14 +60,10 @@ public class SmsManager {
 		String text = sms.getSmsText();
 
 		if (!number.matches(NUMBER_REGEX)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.sms.pleaseinsertavalidtelephonenumber.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.sms.pleaseinsertavalidtelephonenumber.msg")));
 		}
 		if (text.isEmpty()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.sms.pleaseinsertatextmessage.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.sms.pleaseinsertatextmessage.msg")));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
@@ -95,9 +90,8 @@ public class SmsManager {
 		String text = smsToSend.getSmsText();
 		int textLenght = text.length();
 		if (textLenght > MAX_LENGHT && !split) {
-			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.sms.themessageislongerthencharacters.fmt.msg", MAX_LENGHT),
-					OHSeverityLevel.ERROR));
+			throw new OHDataValidationException(
+					new OHExceptionMessage(MessageBundle.formatMessage("angal.sms.themessageislongerthencharacters.fmt.msg", MAX_LENGHT)));
 		}
 		else if (textLenght > MAX_LENGHT && split) {
 
