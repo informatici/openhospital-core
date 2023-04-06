@@ -35,7 +35,6 @@ import org.isf.opd.service.OpdIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -78,60 +77,40 @@ public class OpdBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		// Check Visit Date
 		if (opd.getDate() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.opd.pleaseinsertattendancedate.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.pleaseinsertattendancedate.msg")));
 		}
 		// Check Patient
 		if (GeneralData.OPDEXTENDED && opd.getPatient() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.common.pleaseselectapatient.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseselectapatient.msg")));
 		}
 		// Check Patient
 		if (ward == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.common.pleaseselectaward.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseselectaward.msg")));
 		} else {
 			if (!ward.isOpd()) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.opd.specifiedwardisnotenabledforopdservice.msg"),
-					OHSeverityLevel.ERROR));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifiedwardisnotenabledforopdservice.msg")));
 			}
 		}
 		// Check Sex and Age
 		if (opd.getAge() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.opd.pleaseinsertthepatientsage.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.pleaseinsertthepatientsage.msg")));
 		}
 		if (opd.getSex() == ' ') {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.opd.pleaseselectpatientssex.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.pleaseselectpatientssex.msg")));
 		}
 		// Check Disease n.1
 		if (disease == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.opd.pleaseselectadisease.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.pleaseselectadisease.msg")));
 		} else {
 			// Check double diseases
 			if (disease2 != null && disease.getCode().equals(disease2.getCode())) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg"),
-						OHSeverityLevel.ERROR));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
 			}
 			if (disease3 != null && disease.getCode().equals(disease3.getCode())) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg"),
-						OHSeverityLevel.ERROR));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
 			}
 			if (disease2 != null && disease3 != null && disease2.getCode().equals(disease3.getCode())) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg"),
-						OHSeverityLevel.ERROR));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
 			}
 		}
 		if (!errors.isEmpty()) {
