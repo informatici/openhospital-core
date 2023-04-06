@@ -62,58 +62,38 @@ public class WardBrowserManager {
 	protected void validateWard(Ward ward, boolean insert) throws OHServiceException {
 		String key = ward.getCode();
 		String description = ward.getDescription();
-        List<OHExceptionMessage> errors = new ArrayList<>();
-        if (key.isEmpty()) {
-	        errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
-	        		OHSeverityLevel.ERROR));
-        }
-        if (key.equals("OPD") && !ward.isOpd()) {
-        	errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"), 
-        			MessageBundle.getMessage("angal.ward.opdwardmusthaveopdservicechecked.msg"), 
-        			OHSeverityLevel.ERROR));
-        }
-        if (key.length() > 3) {
-	        errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.common.thecodeistoolongmax1char.msg"),
-	        		OHSeverityLevel.ERROR));
-        }
-        if (description.isEmpty() ) {
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-            		MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"), 
-            		OHSeverityLevel.ERROR));
-        }
-        if (ward.getBeds()<0) {
-        	errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-            		MessageBundle.getMessage("angal.ward.thenumberofbedsmustbepositive.msg"),
-            		OHSeverityLevel.ERROR));
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		if (key.isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertacode.msg")));
 		}
-		if (ward.getNurs()<0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-            		MessageBundle.getMessage("angal.ward.thenumberofnursesmustbepositive.msg"),
-            		OHSeverityLevel.ERROR));
+		if (key.equals("OPD") && !ward.isOpd()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.opdwardmusthaveopdservicechecked.msg")));
 		}
-		if (ward.getDocs()<0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-            		MessageBundle.getMessage("angal.ward.thenumberofdoctorsmustbepositive.msg"),
-            		OHSeverityLevel.ERROR));
+		if (key.length() > 3) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeistoolongmax1char.msg")));
+		}
+		if (description.isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
+		}
+		if (ward.getBeds() < 0) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.thenumberofbedsmustbepositive.msg")));
+		}
+		if (ward.getNurs() < 0) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.thenumberofnursesmustbepositive.msg")));
+		}
+		if (ward.getDocs() < 0) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.thenumberofdoctorsmustbepositive.msg")));
 		}
 		if (!EmailValidator.isValid(ward.getEmail())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.ward.theemailmustbevalid.msg"),
-            		OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.theemailmustbevalid.msg")));
 		}
-		if (insert) {
-			if (isCodePresent(ward.getCode())) {
-				throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"), 
-						OHSeverityLevel.ERROR));
-			}
+		if (insert && isCodePresent(ward.getCode())) {
+			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
 		}
 		if (!errors.isEmpty()) {
-	        throw new OHDataValidationException(errors);
-	    }
-    }
+			throw new OHDataValidationException(errors);
+		}
+	}
 	
 	/**
 	 * Returns all stored wards.
@@ -190,26 +170,20 @@ public class WardBrowserManager {
 	 */
 	public boolean deleteWard(Ward ward) throws OHServiceException {
 		if (ward.getCode().equals("M")) {
-			throw new OHOperationNotAllowedException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.ward.cannotdeletematernityward.msg"),
-					OHSeverityLevel.ERROR));
+			throw new OHOperationNotAllowedException(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.cannotdeletematernityward.msg")));
 		}
 		if (ward.getCode().equals("OPD")) {
-			throw new OHOperationNotAllowedException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.ward.cannotdeleteopdward.msg"),
-					OHSeverityLevel.ERROR));
+			throw new OHOperationNotAllowedException(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.cannotdeleteopdward.msg")));
 		}
 		int noPatients = admManager.getUsedWardBed(ward.getCode());
-		
+
 		if (noPatients > 0) {
-			
+
 			List<OHExceptionMessage> messages = new ArrayList<>();
 			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.info.title"),
-					MessageBundle.formatMessage("angal.ward.theselectedwardhaspatients.fmt.msg",noPatients),
-					OHSeverityLevel.INFO));
-			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.ward.pleasecheckinadmissionpatients.msg"),
-					OHSeverityLevel.ERROR));
+			                                    MessageBundle.formatMessage("angal.ward.theselectedwardhaspatients.fmt.msg", noPatients),
+			                                    OHSeverityLevel.INFO));
+			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.pleasecheckinadmissionpatients.msg")));
 			throw new OHOperationNotAllowedException(messages);
 		}
 		return ioOperations.deleteWard(ward);
