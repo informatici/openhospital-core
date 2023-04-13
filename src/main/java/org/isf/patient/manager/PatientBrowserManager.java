@@ -297,12 +297,12 @@ public class PatientBrowserManager {
 	public List<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException {
 		return ioOperations.getPatientsByOneOfFieldsLike(keyword);
 	}
-	
-	
+
+
 	public PatientProfilePhoto retrievePatientProfilePhoto(Patient patient) throws OHServiceException {
 		return ioOperations.retrievePatientProfilePhoto(patient);
 	}
-	
+
 
 	/**
 	 * Method that merges patients and all clinic details under the same PAT_ID
@@ -389,7 +389,7 @@ public class PatientBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param patient
-	 * @throws OHDataValidationException 
+	 * @throws OHDataValidationException
 	 */
 	protected void validatePatient(Patient patient) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
@@ -406,11 +406,14 @@ public class PatientBrowserManager {
 		if (' ' == patient.getSex()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patient.pleaseselectpatientssex.msg")));
 		}
+		if (!patient.getPatientConsensus().isConsensusFlag()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patient.consensus.consensus.mandatory.msg")));
+		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
 	}
-	
+
 	private boolean checkAge(Patient patient) {
 		LocalDate now = LocalDate.now();
 		LocalDate birthDate = patient.getBirthDate();
@@ -419,7 +422,7 @@ public class PatientBrowserManager {
 		}
 		return birthDate != null && !birthDate.isAfter(now);
 	}
-	
+
 	/**
 	 * Method that returns the full list of Cities of the patient not logically deleted: <br>
 	 * @return the list of Cities (could be empty)
