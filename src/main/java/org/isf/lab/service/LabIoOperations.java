@@ -35,6 +35,9 @@ import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,6 +79,27 @@ public class LabIoOperations {
 		return rowRepository.findByLaboratory_Code(code);
 	}
 
+	/**
+	 * Return the list of exams ({@link Laboratory}s) divided by pages.
+	 * 
+	 * @param oneWeek
+	 * @param pageNo
+	 * @param pageSize
+	 * @return the list of {@link Laboratory}s (could be empty)
+	 * @throws OHServiceException
+	 */
+	public List<Laboratory> getLaboratory(boolean onWeek, int pageNo, int pageSize) throws OHServiceException {
+		LocalDateTime time2 = TimeTools.getDateToday24();
+		LocalDateTime time1 = time2.minusWeeks(1);
+		Pageable pageable = PageRequest.of(pageNo, pageSize);
+		if (onWeek) {
+			List<Laboratory> pagedResult = repository.findByLabDateBetweenOrderByLabDateDesc(time1, time2, pageable);
+			return pagedResult;
+		}
+		Page<Laboratory> pagedResult = repository.findAll(pageable);
+		return pagedResult.toList();
+	}
+	
 	/**
 	 * Return the whole list of exams ({@link Laboratory}s) within last week.
 	 * @return the list of {@link Laboratory}s 
