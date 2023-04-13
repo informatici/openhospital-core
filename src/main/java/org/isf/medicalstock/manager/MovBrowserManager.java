@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.medicalstock.manager;
 
@@ -30,7 +30,6 @@ import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -119,12 +118,7 @@ public class MovBrowserManager {
 		if (from == null || to == null) {
 			if (!(from == null && to == null)) {
 				throw new OHDataValidationException(
-						new OHExceptionMessage(
-								MessageBundle.getMessage("angal.common.error.title"),
-								MessageBundle.getMessage(errMsgKey),
-								OHSeverityLevel.ERROR
-						)
-				);
+						new OHExceptionMessage(MessageBundle.getMessage(errMsgKey)));
 			}
 		}
 	}

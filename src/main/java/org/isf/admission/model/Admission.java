@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.admission.model;
 
@@ -189,7 +189,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	private char deleted = 'N';                // flag record deleted ; values are 'Y' OR 'N' default is 'N'
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public Admission() {
 		super();

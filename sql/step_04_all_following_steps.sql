@@ -85,4 +85,5 @@ source step_88_alter_table_patient.sql;
 source step_89_alter_tables_innodb.sql;
 source step_90_login_retries.sql;
 source step_91_patient_consensuns_table.sql;
-source step_92_alter_laboratory_with_status.sql;
+source step_92_add_dicom_data_table.sql;
+source step_93_alter_laboratory_with_status.sql;

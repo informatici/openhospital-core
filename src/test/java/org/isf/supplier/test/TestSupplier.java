@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.supplier.test;
 
@@ -28,7 +28,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestSupplier {
 
-	private Integer supId = null;
+	private Integer supId;
 	private String supName = "TestName";
 	private String supAddress = "TestAddress";
 	private String supTaxcode = "TestTax";

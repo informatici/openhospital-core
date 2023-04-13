@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.examination.model;
 
@@ -116,7 +116,7 @@ public class PatientExamination implements Serializable, Comparable<PatientExami
 	private String pex_note;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public PatientExamination() {
 		super();

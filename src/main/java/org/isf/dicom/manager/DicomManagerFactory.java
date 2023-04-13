@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.dicom.manager;
 
@@ -44,7 +44,7 @@ public class DicomManagerFactory {
 
 	private static final String FILE_PROPERTIES = "dicom.properties";
 
-	private static DicomManagerInterface instance = null;
+	private static DicomManagerInterface instance;
 
 	private static Properties props = new Properties();
 
@@ -81,9 +81,9 @@ public class DicomManagerFactory {
 					((FileSystemDicomManager) instance).setDir(props);
 				}
 			} catch (Exception exception) {
-				throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.formatMessage("angal.dicommanager.errorwiththedicomimplmentationclass.fmt.msg", props.getProperty("dicom.manager.impl")),
-						OHSeverityLevel.ERROR));
+				throw new OHDicomException(exception, new OHExceptionMessage(
+						MessageBundle.formatMessage("angal.dicommanager.errorwiththedicomimplmentationclass.fmt.msg",
+						                            props.getProperty("dicom.manager.impl"))));
 			}
 		}
 
@@ -96,9 +96,8 @@ public class DicomManagerFactory {
 			props = ConfigurationProperties.loadPropertiesFile(FILE_PROPERTIES, logger);
 		} catch (Exception exception) {
 			logger.error(">> {} file not found.", FILE_PROPERTIES);
-			throw new OHDicomException(exception, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage()),
-					OHSeverityLevel.ERROR));
+			throw new OHDicomException(exception,
+			                           new OHExceptionMessage(MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg", exception.getMessage())));
 		}
 	}
 }

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.patient.model;
 
@@ -206,7 +206,7 @@ public class Patient extends Auditable<String> {
 	private PatientProfilePhoto patientProfilePhoto; // nullable because user can choose to save on file system
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	@OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
 	private PatientConsensus patientConsensus;

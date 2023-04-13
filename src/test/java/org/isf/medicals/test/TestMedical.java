@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.medicals.test;
 
@@ -30,7 +30,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestMedical {
 
-	private Integer code = null;
+	private Integer code;
 	private String prod_code = "TP1";
 	private String description = "TestDescription";
 	private double initialqty = 10.10;

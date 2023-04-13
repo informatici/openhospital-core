@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.dicom.test;
 
@@ -33,6 +33,7 @@ import java.util.Random;
 
 import javax.sql.rowset.serial.SerialBlob;
 
+import org.isf.dicom.model.DicomData;
 import org.isf.dicom.model.FileDicom;
 import org.isf.dicomtype.model.DicomType;
 import org.isf.utils.exception.OHException;
@@ -43,8 +44,9 @@ public class TestDicom {
 	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DICOM_DATE_FORMAT_ZONED, new Locale("en"));
 	private static final String DATE_TIME_STRING = "Sat Aug 01 10:02:03 AST 2020";
 
-	private Blob dicomData = createRandomBlob(100);
-	private int patId = 0;
+	private Blob data = createRandomBlob(100);
+	private DicomData dicomData;
+	private int patId;
 	private String fileName = "TestFileName";
 	private String dicomAccessionNumber = "TestAccessionNumber";
 	private String dicomInstitutionName = "TestInsitutionName";
@@ -73,6 +75,7 @@ public class TestDicom {
 	public FileDicom setup(DicomType dicomType, boolean usingSet) throws OHException {
 		FileDicom dicom;
 
+		dicomData = new DicomData(data);
 		if (usingSet) {
 			dicom = new FileDicom();
 			setParameters(dicom, dicomType);
