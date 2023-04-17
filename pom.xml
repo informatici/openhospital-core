@@ -23,7 +23,7 @@
 		<spring.boot.version>2.7.10</spring.boot.version>
 		<jasperreports.version>6.20.1</jasperreports.version>
 		<spring.cloud.starter.openfeign.version>3.1.6</spring.cloud.starter.openfeign.version>
-		<license.maven.plugin.version>4.1</license.maven.plugin.version>
+		<license.maven.plugin.version>4.2</license.maven.plugin.version>
 	</properties>
 
 	<build>
@@ -58,7 +58,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.3.1</version>
 				<executions>
 					<execution>
 						<id>copy-resources</id>
@@ -506,7 +506,7 @@
 		<dependency>
 			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-gson</artifactId>
-			<version>12.2</version>
+			<version>12.3</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.annotation</groupId>
