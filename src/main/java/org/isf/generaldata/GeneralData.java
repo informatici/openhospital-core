@@ -208,8 +208,8 @@ public final class GeneralData extends ConfigurationProperties {
 		DEBUG = myGetProperty("DEBUG", DEFAULT_DEBUG);
 		STRONGPASSWORD = myGetProperty("STRONGPASSWORD", DEFAULT_STRONGPASSWORD);
 		STRONGLENGTH = myGetProperty("STRONGLENGTH", DEFAULT_STRONGLENGTH);
-		// set same reasonable minimum and ensure it isn't negative
-		if (STRONGLENGTH < 6) {
+		// set same reasonable minimum and ensure it isn't negative; zero is used to skip length test
+		if (STRONGLENGTH != 0 && STRONGLENGTH < 6) {
 			STRONGLENGTH = 6;
 		}
 		PASSWORDTRIES = myGetProperty("PASSWORDTRIES", DEFAULT_PASSWORDTRIES);
