@@ -82,17 +82,18 @@ public class LabIoOperations {
 	/**
 	 * Return the list of exams ({@link Laboratory}s) divided by pages.
 	 * 
-	 * @param oneWeek
+	 * @param onWeek
 	 * @param pageNo
 	 * @param pageSize
 	 * @return the list of {@link Laboratory}s (could be empty)
 	 * @throws OHServiceException
 	 */
 	public List<Laboratory> getLaboratory(boolean onWeek, int pageNo, int pageSize) throws OHServiceException {
-		LocalDateTime time2 = TimeTools.getDateToday24();
-		LocalDateTime time1 = time2.minusWeeks(1);
+		
 		Pageable pageable = PageRequest.of(pageNo, pageSize);
 		if (onWeek) {
+			LocalDateTime time2 = TimeTools.getDateToday24();
+			LocalDateTime time1 = time2.minusWeeks(1);
 			List<Laboratory> pagedResult = repository.findByLabDateBetweenOrderByLabDateDesc(time1, time2, pageable);
 			return pagedResult;
 		}
