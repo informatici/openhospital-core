@@ -350,8 +350,8 @@ public class AdmissionBrowserManager {
 				}
 				if (invalidDate) {
 					errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.admission.invalidadmissionperiod.fmt.msg",
-					                                                              DateTimeFormatter.ISO_LOCAL_DATE.format(invalidStart),
-					                                                              DateTimeFormatter.ISO_LOCAL_DATE.format(invalidEnd))));
+									DateTimeFormatter.ISO_LOCAL_DATE.format(invalidStart),
+									DateTimeFormatter.ISO_LOCAL_DATE.format(invalidEnd))));
 				}
 			}
 
