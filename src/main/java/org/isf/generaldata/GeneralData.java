@@ -209,17 +209,17 @@ public final class GeneralData extends ConfigurationProperties {
 		STRONGPASSWORD = myGetProperty("STRONGPASSWORD", DEFAULT_STRONGPASSWORD);
 		STRONGLENGTH = myGetProperty("STRONGLENGTH", DEFAULT_STRONGLENGTH);
 		// set same reasonable minimum and ensure it isn't negative; zero is used to skip length test
-		if (STRONGLENGTH != 0 && STRONGLENGTH < 6) {
-			STRONGLENGTH = 6;
+		if (STRONGLENGTH != 0 && STRONGLENGTH < 0) {
+			STRONGLENGTH = DEFAULT_STRONGLENGTH;
 		}
 		PASSWORDTRIES = myGetProperty("PASSWORDTRIES", DEFAULT_PASSWORDTRIES);
-		// ensure reasonable non-negative value
-		if (PASSWORDTRIES < DEFAULT_PASSWORDTRIES) {
+		// ensure reasonable non-negative value; zero is used to skip the password retries test
+		if (PASSWORDTRIES != 0 && PASSWORDTRIES < DEFAULT_PASSWORDTRIES) {
 			PASSWORDTRIES = DEFAULT_PASSWORDTRIES;
 		}
 		PASSWORDLOCKTIME = myGetProperty("PASSWORDLOCKTIME", DEFAULT_PASSWORDLOCKTIME);
-		// ensure reasonable non-negative value
-		if (PASSWORDLOCKTIME < DEFAULT_PASSWORDLOCKTIME) {
+		// ensure reasonable non-negative value; is password retries is disabled then lock time isn't used
+		if (PASSWORDTRIES != 0 && PASSWORDLOCKTIME < DEFAULT_PASSWORDLOCKTIME) {
 			PASSWORDLOCKTIME = DEFAULT_PASSWORDLOCKTIME;
 		}
 		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTOSTORAGE);
