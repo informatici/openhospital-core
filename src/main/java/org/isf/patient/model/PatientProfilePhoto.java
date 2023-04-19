@@ -36,6 +36,8 @@ import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 /**
  * Photo related to a single {@link Patient}
  */
@@ -53,17 +55,17 @@ public class PatientProfilePhoto implements Serializable {
 
 	@Column(name="PAT_PHOTO")
 	@Lob
-	private byte[] photo;
+	private Byte[] photo;
 
 
-	public byte[] getPhoto() {
+	public Byte[] getPhoto() {
 		return photo;
 	}
 
 	public Image getPhotoAsImage() {
 		try {
 			if (photo != null && photo.length > 0) {
-				BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(photo));
+				BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(ArrayUtils.toPrimitive(photo)));
 				return ImageIO.read(is);
 			}
 			return null;
@@ -72,7 +74,7 @@ public class PatientProfilePhoto implements Serializable {
 		}
 	}
 
-	public void setPhoto(byte[] photo) {
+	public void setPhoto(Byte[] photo) {
 		this.photo = photo;
 	}
 

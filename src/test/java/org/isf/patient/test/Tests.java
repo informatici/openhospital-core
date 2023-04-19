@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
@@ -692,7 +693,7 @@ public class Tests extends OHCoreTestCase {
 		PatientProfilePhoto patientProfilePhoto = new PatientProfilePhoto();
 
 		File file = new File(getClass().getResource("patient.jpg").getFile());
-		byte[] bytes = Files.readAllBytes(file.toPath());
+		Byte[] bytes = ArrayUtils.toObject( Files.readAllBytes(file.toPath()));
 		patientProfilePhoto.setPhoto(bytes);
 		assertThat(patientProfilePhoto.getPhotoAsImage()).isNotNull();
 

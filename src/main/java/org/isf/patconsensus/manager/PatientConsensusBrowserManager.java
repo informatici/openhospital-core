@@ -21,11 +21,16 @@
  */
 package org.isf.patconsensus.manager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import org.isf.generaldata.MessageBundle;
 import org.isf.patconsensus.model.PatientConsensus;
 import org.isf.patconsensus.service.PatientConsensusIoOperation;
+import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,16 +50,6 @@ public class PatientConsensusBrowserManager {
 		return ioOperations.getPatientConsensusByUserId(userId);
 	}
 
-	/**
-	 * Insert an {@link PatientConsensus} in the DB
-	 *
-	 * @param PatientConsensus - the {@link PatientConsensus} to insert
-	 * @return the {@link PatientConsensus}.
-	 * @throws OHServiceException
-	 */
-	public PatientConsensus newPatientConsensus(PatientConsensus patientConsensus) throws OHServiceException {
-		return ioOperations.newPatientConsensus(patientConsensus);
-	}
 
 	/**
 	 * Update an {@link PatientConsensus}
@@ -64,7 +59,20 @@ public class PatientConsensusBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public PatientConsensus updatePatientConsensus(PatientConsensus patientConsensus) throws OHServiceException {
+		validate(patientConsensus);
 		return ioOperations.updatePatientConsensus(patientConsensus);
+	}
+
+
+	private void validate(PatientConsensus patientConsensus) throws OHDataValidationException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		if (!patientConsensus.isConsensusFlag()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patient.consensus.consensus.mandatory.msg")));
+		}
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
+
 	}
 
 

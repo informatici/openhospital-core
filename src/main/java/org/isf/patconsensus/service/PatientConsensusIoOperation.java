@@ -53,18 +53,6 @@ public class PatientConsensusIoOperation {
 		return repository.findByPatient_Code(patientId);
 	}
 
-	/**
-	 * Insert an {@link PatientConsensus} in the DB
-	 *
-	 * @param patientConsensus
-	 *            - the {@link PatientConsensus} to insert
-	 * @return <code>PatientConsensus</code> inserted.
-	 * @throws OHServiceException
-	 */
-	public PatientConsensus newPatientConsensus(PatientConsensus patientConsensus) throws OHServiceException {
-		patientConsensus.setPatient(this.patientRepository.findById(patientConsensus.getPatient().getCode()).get());
-		return repository.save(patientConsensus);
-	}
 
 	/**
 	 * Update an {@link PatientConsensus}
