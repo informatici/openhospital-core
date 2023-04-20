@@ -125,7 +125,7 @@ public class Patient extends Auditable<String> {
 	@NotNull
 	@Column(name="PAT_SEX")
 	private char sex;
-	
+
 	@Column(name="PAT_ADDR")
 	private String address;
 

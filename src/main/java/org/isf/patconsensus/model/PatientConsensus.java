@@ -68,7 +68,7 @@ public class PatientConsensus extends Auditable<String> {
 	public PatientConsensus() {
 		super();
 	}
-	
+
 	public PatientConsensus(boolean consensusFlag, boolean administrativeFlag, boolean serviceFlag, Patient patient) {
 		super();
 		this.consensusFlag = consensusFlag;
@@ -76,7 +76,7 @@ public class PatientConsensus extends Auditable<String> {
 		this.serviceFlag = serviceFlag;
 		this.patient = patient;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -116,5 +116,14 @@ public class PatientConsensus extends Auditable<String> {
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
+
+	@Override
+	public String toString() {
+		return "PatientConsensus [id=" + id + ", consensusFlag=" + consensusFlag + ", administrativeFlag=" + administrativeFlag + ", serviceFlag=" + serviceFlag
+						+ ", patient=" + patient + "]";
+	}
+
+
+
 
 }
