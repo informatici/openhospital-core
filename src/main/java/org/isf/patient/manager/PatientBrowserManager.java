@@ -407,9 +407,6 @@ public class PatientBrowserManager {
 		if (' ' == patient.getSex()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patient.pleaseselectpatientssex.msg")));
 		}
-		if (patient.getPatientConsensus() != null && !patient.getPatientConsensus().isConsensusFlag()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patient.consensus.consensus.mandatory.msg")));
-		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
