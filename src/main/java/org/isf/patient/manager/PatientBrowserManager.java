@@ -63,7 +63,8 @@ public class PatientBrowserManager {
 	 *
 	 * @param patient
 	 * @return saved / updated patient
-	 * @throws OHServiceException when validation failed
+	 * @throws OHServiceException
+	 *             when validation failed
 	 */
 	public Patient savePatient(Patient patient) throws OHServiceException {
 		validatePatient(patient);
@@ -96,8 +97,7 @@ public class PatientBrowserManager {
 	 * @param name
 	 * @return the Patient that match specified name (could be null)
 	 * @throws OHServiceException
-	 * @deprecated use getPatient(Integer code) for one patient or
-	 * getPatientsByOneOfFieldsLike(String regex) for a list
+	 * @deprecated use getPatient(Integer code) for one patient or getPatientsByOneOfFieldsLike(String regex) for a list
 	 */
 	@Deprecated
 	public Patient getPatientByName(String name) throws OHServiceException {
@@ -262,7 +262,8 @@ public class PatientBrowserManager {
 	/**
 	 * Method that logically delete a Patient (not physically deleted)
 	 *
-	 * @param patient - the {@link Patient} to be deleted
+	 * @param patient
+	 *            - the {@link Patient} to be deleted
 	 * @return true - if the Patient has been deleted (logically)
 	 * @throws OHServiceException
 	 */
@@ -271,10 +272,11 @@ public class PatientBrowserManager {
 	}
 
 	/**
-	 * Method that checks if the patient's name is already present in the DB
-	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName)
+	 * Method that checks if the patient's name is already present in the DB (the passed string 'name' should be a concatenation of firstName + " " +
+	 * secondName)
 	 *
-	 * @param name - name of the patient
+	 * @param name
+	 *            - name of the patient
 	 * @return true - if the patient is already present
 	 * @throws OHServiceException
 	 */
@@ -290,7 +292,8 @@ public class PatientBrowserManager {
 	 * - taxCode<br>
 	 * - note<br>
 	 *
-	 * @param keyword - String to search, <code>null</code> for full list
+	 * @param keyword
+	 *            - String to search, <code>null</code> for full list
 	 * @return the list of Patients (could be empty)
 	 * @throws OHServiceException
 	 */
@@ -298,11 +301,9 @@ public class PatientBrowserManager {
 		return ioOperations.getPatientsByOneOfFieldsLike(keyword);
 	}
 
-
 	public PatientProfilePhoto retrievePatientProfilePhoto(Patient patient) throws OHServiceException {
 		return ioOperations.retrievePatientProfilePhoto(patient);
 	}
-
 
 	/**
 	 * Method that merges patients and all clinic details under the same PAT_ID
@@ -314,17 +315,17 @@ public class PatientBrowserManager {
 	 */
 	public boolean mergePatient(Patient mergedPatient, Patient patient2) throws OHServiceException {
 		if (mergedPatient.getBirthDate() != null && StringUtils.isEmpty(mergedPatient.getAgetype())) {
-			//mergedPatient only Age
+			// mergedPatient only Age
 			LocalDate bdate2 = patient2.getBirthDate();
 			int age2 = patient2.getAge();
 			String ageType2 = patient2.getAgetype();
 			if (bdate2 != null) {
-				//patient2 has BirthDate
+				// patient2 has BirthDate
 				mergedPatient.setAge(age2);
 				mergedPatient.setBirthDate(bdate2);
 			}
 			if (bdate2 != null && StringUtils.isNotEmpty(ageType2)) {
-				//patient2 has AgeType
+				// patient2 has AgeType
 				mergedPatient.setAge(age2);
 				mergedPatient.setAgetype(ageType2);
 			}
@@ -406,7 +407,7 @@ public class PatientBrowserManager {
 		if (' ' == patient.getSex()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patient.pleaseselectpatientssex.msg")));
 		}
-		if (!patient.getPatientConsensus().isConsensusFlag()) {
+		if (patient.getPatientConsensus() != null && !patient.getPatientConsensus().isConsensusFlag()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patient.consensus.consensus.mandatory.msg")));
 		}
 		if (!errors.isEmpty()) {
@@ -425,6 +426,7 @@ public class PatientBrowserManager {
 
 	/**
 	 * Method that returns the full list of Cities of the patient not logically deleted: <br>
+	 * 
 	 * @return the list of Cities (could be empty)
 	 * @throws OHServiceException
 	 */
