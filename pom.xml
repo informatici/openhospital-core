@@ -21,7 +21,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.framework.version>5.3.27</spring.framework.version>
 		<spring.boot.version>2.7.11</spring.boot.version>
-		<jasperreports.version>6.20.1</jasperreports.version>
+		<jasperreports.version>6.20.3</jasperreports.version>
 		<spring.cloud.starter.openfeign.version>3.1.6</spring.cloud.starter.openfeign.version>
 		<license.maven.plugin.version>4.2</license.maven.plugin.version>
 	</properties>
