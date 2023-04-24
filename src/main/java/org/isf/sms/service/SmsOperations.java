@@ -70,7 +70,7 @@ public class SmsOperations {
 	
 	/**
 	 * Returns a {@link Sms} with specified ID
-	 * @param ID - sms ID
+	 * @param id- sms ID
 	 * @return sms - the sms with specified ID
 	 * @throws OHServiceException 
 	 */

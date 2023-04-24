@@ -158,8 +158,7 @@ public class MedicalBrowsingManager {
 	 * Updates the specified medical.
 	 *
 	 * @param medical - the medical to update.
-	 * @return <code>true</code> if update is successful, false if abortIfLocked == true and the record is locked.
-	 * Otherwise throws an OHServiceException
+	 * @return {@code Medical}
 	 * @throws OHServiceException
 	 */
 	public Medical updateMedical(Medical medical) throws OHServiceException {
@@ -171,8 +170,7 @@ public class MedicalBrowsingManager {
 	 *
 	 * @param medical - the medical to update.
 	 * @param ignoreSimilar - if <code>true</code>, it ignore the warning "similarsFoundWarning".
-	 * @return <code>true</code> if update is successful, false if abortIfLocked == true and the record is locked.
-	 * Otherwise throws an OHServiceException
+	 * @return {@code Medical}
 	 * @throws OHServiceException
 	 */
 	public Medical updateMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {

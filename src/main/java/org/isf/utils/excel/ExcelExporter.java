@@ -350,13 +350,20 @@ public class ExcelExporter {
 	 *
 	 * @param jtable
 	 * @param file
-	 * @param columnCount (optional) if not specified or -1 then get the column count from the table model; if specified use that number for the column count
 	 * @throws IOException
 	 */
 	public void exportTableToExcel(JTable jtable, File file) throws IOException {
 		exportTableToExcel(jtable, file, -1);
 	}
 
+	/**
+	 * Export a {@link JTable} to Excel using Apache POI library
+	 *
+	 * @param jtable
+	 * @param file
+	 * @param columnCount if -1 then get the column count from the table model; if specified use that number for the column count
+	 * @throws IOException
+	 */
 	public void exportTableToExcel(JTable jtable, File file, int columnCount) throws IOException {
 		TableModel model = jtable.getModel();
 		FileOutputStream fileStream = new FileOutputStream(file);
@@ -536,13 +543,20 @@ public class ExcelExporter {
 	 *
 	 * @param jtable
 	 * @param file
-	 * @param columnCount (optional) if not specified or -1 then get the column count from the table model; if specified use that number for the column count
 	 * @throws IOException
 	 */
 	public void exportTableToExcelOLD(JTable jtable, File file) throws IOException {
 		exportTableToExcelOLD(jtable, file, -1);
 	}
 
+	/**
+	 * Export a {@link JTable} to Excel 97-2003 using Apache POI library
+	 *
+	 * @param jtable
+	 * @param file
+	 * @param columnCount if -1 then get the column count from the table model; othereise use the specfied number for the column count
+	 * @throws IOException
+	 */
 	public void exportTableToExcelOLD(JTable jtable, File file, int columnCount) throws IOException {
 		TableModel model = jtable.getModel();
 		FileOutputStream fileStream = new FileOutputStream(file);

@@ -991,8 +991,8 @@ public class JasperReportsManager {
 	/**
 	 * Converts a {@link LocalDateTime} to a {@link Date}.
 	 * 
-	 * @param calendar
-	 *            the calendar to convert.
+	 * @param localDateTime
+	 *            the localDateTime to convert.
 	 * @return the converted value or <code>null</code> if the passed value is <code>null</code>.
 	 */
 	private static Date toDate(LocalDateTime localDateTime) {
