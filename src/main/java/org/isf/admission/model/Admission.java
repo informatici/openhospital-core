@@ -209,9 +209,6 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	 * @param diseaseOut1
 	 * @param diseaseOut2
 	 * @param diseaseOut3
-	 * @param operation
-	 * @param opResult
-	 * @param opDate
 	 * @param disDate
 	 * @param disType
 	 * @param note
