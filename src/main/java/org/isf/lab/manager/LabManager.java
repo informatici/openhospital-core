@@ -118,6 +118,19 @@ public class LabManager {
 	}
 
 	/**
+	 * Return the list of exams ({@link Laboratory}s) divided by pages.
+	 * 
+	 * @param onWeek
+	 * @param pageNo
+	 * @param pageSize
+	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
+	 * @throws OHServiceException
+	 */
+	public List<Laboratory> getLaboratory(boolean onWeek, int pageNo, int pageSize) throws OHServiceException {
+		return ioOperations.getLaboratory(onWeek, pageNo, pageSize);
+	}
+
+	/**
 	 * Return the whole list of exams ({@link Laboratory}s) within last week.
 	 *
 	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
@@ -126,7 +139,7 @@ public class LabManager {
 	public List<Laboratory> getLaboratory() throws OHServiceException {
 		return ioOperations.getLaboratory();
 	}
-
+	
 	/**
 	 * Return a list of exams ({@link Laboratory}s) related to a {@link Patient}.
 	 *
@@ -262,7 +275,8 @@ public class LabManager {
 	/**
 	 * Update one Laboratory request {@link Laboratory} (All Procedures)
 	 *
-	 * @param laboratory - the laboratory without result
+	 * @param code - the code of the laboratory
+	 * @param status - the LaboratoryStatus to set
 	 * @return <code>true</code> if the request has been update, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
