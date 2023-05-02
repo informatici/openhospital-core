@@ -57,7 +57,7 @@ public class SessionAuditIoOperation {
 	 * 
 	 * @param sessionAudit
 	 *            the new session audit
-	 * @return {@code} the audit session code
+	 * @return the audit session code
 	 */
 	public int saveSessionAudit(SessionAudit sessionAudit) {
 		return this.repository.save(sessionAudit).getCode();
