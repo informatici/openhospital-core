@@ -44,8 +44,8 @@ public class SessionAuditIoOperation {
 	/**
 	 * Return the {@link SessionAudit} from the DB
 	 * 
-	 * @param userCode
-	 *            the user id
+	 * @param sessionAuditId
+	 *            the session audit id
 	 * @return the {@link SessionAudit}
 	 */
 	public Optional<SessionAudit> getSessionAuditById(int sessionAuditId) {
@@ -57,7 +57,7 @@ public class SessionAuditIoOperation {
 	 * 
 	 * @param sessionAudit
 	 *            the new session audit
-	 * @return true if it was saved
+	 * @return the audit session code
 	 */
 	public int saveSessionAudit(SessionAudit sessionAudit) {
 		return this.repository.save(sessionAudit).getCode();

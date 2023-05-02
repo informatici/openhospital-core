@@ -275,7 +275,8 @@ public class LabManager {
 	/**
 	 * Update one Laboratory request {@link Laboratory} (All Procedures)
 	 *
-	 * @param laboratory - the laboratory without result
+	 * @param code - the code of the laboratory
+	 * @param status - the LaboratoryStatus to set
 	 * @return <code>true</code> if the request has been update, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
