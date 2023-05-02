@@ -64,7 +64,7 @@ public class FileSystemPatientPhotoRepository {
 			patientProfilePhoto.setPatient(patient);
 			if (exist(path, patient.getCode())) {
 				Blob blob = this.load(patient.getCode(), path);
-				Byte[] blobAsBytes =  ArrayUtils.toObject(blob.getBytes(1, (int) blob.length()));
+				byte[] blobAsBytes =  blob.getBytes(1, (int) blob.length());
 				patientProfilePhoto.setPhoto(blobAsBytes);
 			}
 		} catch (SQLException e) {
@@ -74,7 +74,7 @@ public class FileSystemPatientPhotoRepository {
 
 	}
 
-	public void save(String path, Integer patId, Byte[] blob) throws OHServiceException {
+	public void save(String path, Integer patId, byte[] blob) throws OHServiceException {
 		try {
 			File patientIdFolder = new File(path);
 			this.recurse(patientIdFolder);
@@ -123,9 +123,9 @@ public class FileSystemPatientPhotoRepository {
 		}
 	}
 
-	private void save(File outFile, Byte[] content) throws IOException {
+	private void save(File outFile, byte[] content) throws IOException {
 		try (FileOutputStream fos = new FileOutputStream(outFile)) {
-			fos.write(ArrayUtils.toPrimitive(content));
+			fos.write(content);
 			fos.flush();
 		}
 	}

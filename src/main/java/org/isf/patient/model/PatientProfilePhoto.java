@@ -55,17 +55,14 @@ public class PatientProfilePhoto implements Serializable {
 
 	@Column(name="PAT_PHOTO")
 	@Lob
-	private Byte[] photo;
+	private byte[] photo;
 
 
-	public Byte[] getPhoto() {
-		return photo;
-	}
 
 	public Image getPhotoAsImage() {
 		try {
 			if (photo != null && photo.length > 0) {
-				BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(ArrayUtils.toPrimitive(photo)));
+				BufferedInputStream is = new BufferedInputStream(new ByteArrayInputStream(photo));
 				return ImageIO.read(is);
 			}
 			return null;
@@ -74,9 +71,6 @@ public class PatientProfilePhoto implements Serializable {
 		}
 	}
 
-	public void setPhoto(Byte[] photo) {
-		this.photo = photo;
-	}
 
 	public Patient getPatient() {
 		return patient;
@@ -85,4 +79,18 @@ public class PatientProfilePhoto implements Serializable {
 	public void setPatient(final Patient patient) {
 		this.patient = patient;
 	}
+
+
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+
 }

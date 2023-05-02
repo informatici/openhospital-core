@@ -693,7 +693,7 @@ public class Tests extends OHCoreTestCase {
 		PatientProfilePhoto patientProfilePhoto = new PatientProfilePhoto();
 
 		File file = new File(getClass().getResource("patient.jpg").getFile());
-		Byte[] bytes = ArrayUtils.toObject( Files.readAllBytes(file.toPath()));
+		byte[] bytes = Files.readAllBytes(file.toPath());
 		patientProfilePhoto.setPhoto(bytes);
 		assertThat(patientProfilePhoto.getPhotoAsImage()).isNotNull();
 
