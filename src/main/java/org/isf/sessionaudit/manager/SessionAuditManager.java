@@ -42,7 +42,7 @@ public class SessionAuditManager {
 	/**
 	 * Retrieves the {@link SessionAudit} associated to the given user id.
 	 *
-	 * @param userCode the user id.
+	 * @param sessionAuditId the session audit id.
 	 * @return the users {@link SessionAudit}
 	 * @throws OHServiceException
 	 */
@@ -64,7 +64,7 @@ public class SessionAuditManager {
 	/**
 	 * Updates the specified {@link SessionAudit}.
 	 *
-	 * @param malnutrition the {@link SessionAudit} to update
+	 * @param sessionAudit the {@link SessionAudit} to update
 	 * @return the updated {@link SessionAudit}
 	 * @throws OHServiceException
 	 */

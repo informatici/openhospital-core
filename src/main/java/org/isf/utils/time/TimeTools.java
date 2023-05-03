@@ -237,7 +237,7 @@ public class TimeTools {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern(pattern);
 		LocalDateTime dateTime;
 		if (noTime) {
-			/**
+			/*
 			 * regarding to https://stackoverflow.com/questions/27454025/unable-to-obtain-localdatetime-from-temporalaccessor-when-parsing-localdatetime
 			 * Java does not accept a bare Date value as DateTime
 			 */

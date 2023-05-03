@@ -570,11 +570,11 @@ public class Patient extends Auditable<String> {
 
 	/**
 	 * Method kept as POJO standard, but it ignores {@code name} param
-	 * and uses {@link firstName} and {@link secondName} to set
-	 * the field (as {@link setFirstName} and {@link setSecondName}
+	 * and uses {@link #firstName} and {@link #secondName} to set
+	 * the field (as {@link #setFirstName} and {@link #setSecondName}
 	 * methods do as well).
-	 *
-	 * @param name (ignored, used {@code firstName} and {@code secondName} instead
+	 * 
+	 * @param name (ignored, uses {@code firstName} and {@code secondName} instead
 	 */
 	public void setName(String name) {
 		this.name = this.firstName + ' ' + this.secondName;
