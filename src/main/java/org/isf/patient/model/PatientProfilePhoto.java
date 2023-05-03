@@ -36,6 +36,8 @@ import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 /**
  * Photo related to a single {@link Patient}
  */
@@ -56,9 +58,6 @@ public class PatientProfilePhoto implements Serializable {
 	private byte[] photo;
 
 
-	public byte[] getPhoto() {
-		return photo;
-	}
 
 	public Image getPhotoAsImage() {
 		try {
@@ -72,9 +71,6 @@ public class PatientProfilePhoto implements Serializable {
 		}
 	}
 
-	public void setPhoto(byte[] photo) {
-		this.photo = photo;
-	}
 
 	public Patient getPatient() {
 		return patient;
@@ -83,4 +79,18 @@ public class PatientProfilePhoto implements Serializable {
 	public void setPatient(final Patient patient) {
 		this.patient = patient;
 	}
+
+
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+
 }

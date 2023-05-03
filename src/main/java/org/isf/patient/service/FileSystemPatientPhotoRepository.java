@@ -30,6 +30,7 @@ import java.sql.SQLException;
 
 import javax.sql.rowset.serial.SerialBlob;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientProfilePhoto;
@@ -63,7 +64,7 @@ public class FileSystemPatientPhotoRepository {
 			patientProfilePhoto.setPatient(patient);
 			if (exist(path, patient.getCode())) {
 				Blob blob = this.load(patient.getCode(), path);
-				byte[] blobAsBytes = blob.getBytes(1, (int) blob.length());
+				byte[] blobAsBytes =  blob.getBytes(1, (int) blob.length());
 				patientProfilePhoto.setPhoto(blobAsBytes);
 			}
 		} catch (SQLException e) {
@@ -84,7 +85,7 @@ public class FileSystemPatientPhotoRepository {
 			throw new OHServiceException(new OHExceptionMessage(MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg")));
 		}
 	}
-	
+
 	public void delete(String path, int patientId) {
 		File patientIdFolder = new File(path);
 		File fdc = new File(patientIdFolder, patientId + IMAGE_FORMAT);
@@ -106,7 +107,7 @@ public class FileSystemPatientPhotoRepository {
 			throw new OHServiceException(new OHExceptionMessage(MessageBundle.formatMessage(KEY_FILE_NOT_FOUND)));
 		}
 	}
-	
+
 	private void recurse(File f) throws IOException {
 		if (f.exists()) {
 			return;
