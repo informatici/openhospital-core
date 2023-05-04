@@ -36,8 +36,6 @@ import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 /**
  * Photo related to a single {@link Patient}
  */
