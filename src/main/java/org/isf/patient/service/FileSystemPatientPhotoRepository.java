@@ -30,7 +30,6 @@ import java.sql.SQLException;
 
 import javax.sql.rowset.serial.SerialBlob;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.isf.generaldata.MessageBundle;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientProfilePhoto;
