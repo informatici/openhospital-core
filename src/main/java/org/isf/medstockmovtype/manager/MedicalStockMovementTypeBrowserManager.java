@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
  * Manager class for the medical stock movement type.
  */
 @Component
-public class MedicaldsrstockmovTypeBrowserManager {
+public class MedicalStockMovementTypeBrowserManager {
 
 	@Autowired
 	private MedicalStockMovementTypeIoOperation ioOperations;
@@ -47,7 +47,8 @@ public class MedicaldsrstockmovTypeBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param movementType
-	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @param insert
+	 *            <code>true</code> or updated <code>false</code>
 	 * @throws OHServiceException
 	 */
 	protected void validateMovementType(MovementType movementType, boolean insert) throws OHServiceException {
@@ -88,7 +89,8 @@ public class MedicaldsrstockmovTypeBrowserManager {
 	/**
 	 * Save the specified {@link MovementType}.
 	 *
-	 * @param medicaldsrstockmovType the medical stock movement type to save.
+	 * @param medicaldsrstockmovType
+	 *            the medical stock movement type to save.
 	 * @return <code>true</code> if the medical stock movement type has been saved, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
@@ -100,7 +102,8 @@ public class MedicaldsrstockmovTypeBrowserManager {
 	/**
 	 * Updates the specified {@link MovementType}.
 	 *
-	 * @param medicaldsrstockmovType the medical stock movement type to update.
+	 * @param medicaldsrstockmovType
+	 *            the medical stock movement type to update.
 	 * @return <code>true</code> if the medical stock movement type has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
@@ -112,7 +115,8 @@ public class MedicaldsrstockmovTypeBrowserManager {
 	/**
 	 * Checks if the specified {@link MovementType} code is already used.
 	 *
-	 * @param code the code to check.
+	 * @param code
+	 *            the code to check.
 	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
@@ -123,7 +127,8 @@ public class MedicaldsrstockmovTypeBrowserManager {
 	/**
 	 * Deletes the specified {@link MovementType}.
 	 *
-	 * @param medicaldsrstockmovType the medical stock movement type to delete.
+	 * @param medicaldsrstockmovType
+	 *            the medical stock movement type to delete.
 	 * @return <code>true</code> if the medical stock movement type has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
@@ -132,10 +137,10 @@ public class MedicaldsrstockmovTypeBrowserManager {
 	}
 
 	/**
-	 * Get the  {@link MovementType} code.
-	 * In case of error a message error is shown and a <code>false</code> value is returned.
+	 * Get the {@link MovementType} code. In case of error a message error is shown and a <code>false</code> value is returned.
 	 *
-	 * @param code the code to check.
+	 * @param code
+	 *            the code to check.
 	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
 	 */
 	public MovementType getMovementType(String code) {
