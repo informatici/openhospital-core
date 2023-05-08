@@ -46,7 +46,6 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.pagination.PagedResponse;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
