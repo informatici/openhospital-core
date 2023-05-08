@@ -351,7 +351,7 @@ public class AdmissionIoOperations {
 		pageInfo.setNbOfElements(pages.getNumberOfElements());
 		pageInfo.setTotalCount(pages.getTotalElements());
 		pageInfo.setHasPreviousPage(pages.hasPrevious());
-		pageInfo.setHanstNextPage(pages.hasNext());
+		pageInfo.setHasNextPage(pages.hasNext());
 		data.setPageInfo(pageInfo);
 		return data;
 	}

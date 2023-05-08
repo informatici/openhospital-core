@@ -27,7 +27,7 @@ public class PageInfo {
 	int nbOfElements;
 	long totalCount;
 	boolean hasPreviousPage;
-	boolean hanstNextPage;
+	boolean hasNextPage;
 	
 	public PageInfo() {
 		super();
@@ -63,10 +63,10 @@ public class PageInfo {
 	public void setHasPreviousPage(boolean hasPreviousPage) {
 		this.hasPreviousPage = hasPreviousPage;
 	}
-	public boolean isHanstNextPage() {
-		return hanstNextPage;
+	public boolean isHasNextPage() {
+		return hasNextPage;
 	}
-	public void setHanstNextPage(boolean hanstNextPage) {
-		this.hanstNextPage = hanstNextPage;
+	public void setHasNextPage(boolean hasNextPage) {
+		this.hasNextPage = hasNextPage;
 	}
 }
