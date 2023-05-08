@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.admission.model.Admission;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -53,8 +54,8 @@ public interface AdmissionIoOperationRepository extends JpaRepository<Admission,
 	List<Admission> findAllWhereWardIn(@Param("ward") String ward);
 
 	@Query(value = "select a FROM Admission a WHERE a.admDate >= :dateFrom AND a.admDate <= :dateTo and a.deleted = 'N'")
-	List<Admission> findAllWhereAdmissionDate(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
+	Page<Admission> findAllWhereAdmissionDate(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
 
 	@Query(value = "select a FROM Admission a WHERE a.disDate >= :dateFrom AND a.disDate <= :dateTo and a.deleted = 'N'")
-	List<Admission> findAllWhereDischargeDate(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
+	Page<Admission> findAllWhereDischargeDate(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
 }

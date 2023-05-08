@@ -43,8 +43,11 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PageInfo;
+import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -321,11 +324,27 @@ public class AdmissionIoOperations {
 		return patientRepository.save(foundPatient) != null;
 	}
 
-	public List<Admission> getAdmissionsByAdmissionDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
-		return repository.findAllWhereAdmissionDate(dateFrom, dateTo, pageable);
+	public PagedResponse<Admission> getAdmissionsByAdmissionDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		Page<Admission> pagedResult = repository.findAllWhereAdmissionDate(dateFrom, dateTo, pageable);
+		return setPaginationData(pagedResult);
 	}
 
-	public List<Admission> getAdmissionsByDischargeDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
-		return repository.findAllWhereDischargeDate(dateFrom, dateTo, pageable);
+	public PagedResponse<Admission> getAdmissionsByDischargeDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		Page<Admission> pagedResult = repository.findAllWhereDischargeDate(dateFrom, dateTo, pageable);
+		return setPaginationData(pagedResult);
+	}
+	
+	public PagedResponse<Admission> setPaginationData(Page<Admission> pages){
+		PagedResponse<Admission> data = new PagedResponse<Admission>();
+		data.setData(pages.getContent());
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setSize(pages.getPageable().getPageSize());
+		pageInfo.setPage(pages.getPageable().getPageNumber());
+		pageInfo.setNbOfElements(pages.getNumberOfElements());
+		pageInfo.setTotalCount(pages.getTotalElements());
+		pageInfo.setHasPreviousPage(pages.hasPrevious());
+		pageInfo.setHanstNextPage(pages.hasNext());
+		data.setPageInfo(pageInfo);
+		return data;
 	}
 }

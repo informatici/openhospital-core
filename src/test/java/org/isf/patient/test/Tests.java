@@ -46,6 +46,7 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PagedResponse;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -100,8 +101,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetPatientsPageable() throws Exception {
 		setupTestPatient(false);
-		List<Patient> patients = patientIoOperation.getPatients(createPageRequest());
-		testPatient.check(patients.get(patients.size() - 1));
+		PagedResponse<Patient> patients = patientIoOperation.getPatients(createPageRequest());
+		testPatient.check(patients.getData().get(patients.getData().size() - 1));
 	}
 
 	private Pageable createPageRequest() {
@@ -309,13 +310,13 @@ public class Tests extends OHCoreTestCase {
 		}
 
 		// First page of 10
-		List<Patient> patients = patientBrowserManager.getPatient(0, 10);
-		assertThat(patients).hasSize(10);
-		testPatient.check(patients.get(patients.size() - 1));
+		PagedResponse<Patient> patients = patientBrowserManager.getPatient(0, 10);
+		assertThat(patients.getData()).hasSize(10);
+		testPatient.check(patients.getData().get(patients.getData().size() - 1));
 
 		// Go get the next page or 10
 		patients = patientBrowserManager.getPatient(1, 10);
-		assertThat(patients).hasSize(5);
+		assertThat(patients.getData()).hasSize(5);
 	}
 
 	@Test

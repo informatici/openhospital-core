@@ -33,6 +33,8 @@ import org.isf.lab.model.LaboratoryRow;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PageInfo;
+import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -88,17 +90,16 @@ public class LabIoOperations {
 	 * @return the list of {@link Laboratory}s (could be empty)
 	 * @throws OHServiceException
 	 */
-	public List<Laboratory> getLaboratory(boolean onWeek, int pageNo, int pageSize) throws OHServiceException {
-		
+	public PagedResponse<Laboratory> getLaboratory(boolean onWeek, int pageNo, int pageSize) throws OHServiceException {
 		Pageable pageable = PageRequest.of(pageNo, pageSize);
 		if (onWeek) {
 			LocalDateTime time2 = TimeTools.getDateToday24();
 			LocalDateTime time1 = time2.minusWeeks(1);
-			List<Laboratory> pagedResult = repository.findByLabDateBetweenOrderByLabDateDesc(time1, time2, pageable);
-			return pagedResult;
+			Page<Laboratory> pagedResult = repository.findByLabDateBetweenOrderByLabDateDesc(time1, time2, pageable);
+			return setPaginationData(pagedResult);
 		}
 		Page<Laboratory> pagedResult = repository.findAll(pageable);
-		return pagedResult.toList();
+		return setPaginationData(pagedResult);
 	}
 	
 	/**
@@ -397,5 +398,18 @@ public class LabIoOperations {
 	public Optional<Laboratory> getLaboratory(int code) throws OHServiceException {
 		return repository.findById(code);
 	}
-
+	
+	public PagedResponse<Laboratory> setPaginationData(Page<Laboratory> pages){
+		PagedResponse<Laboratory> data = new PagedResponse<Laboratory>();
+		data.setData(pages.getContent());
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setSize(pages.getPageable().getPageSize());
+		pageInfo.setPage(pages.getPageable().getPageNumber());
+		pageInfo.setNbOfElements(pages.getNumberOfElements());
+		pageInfo.setTotalCount(pages.getTotalElements());
+		pageInfo.setHasPreviousPage(pages.hasPrevious());
+		pageInfo.setHanstNextPage(pages.hasNext());
+		data.setPageInfo(pageInfo);
+		return data;
+	}
 }

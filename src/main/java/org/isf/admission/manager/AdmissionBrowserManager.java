@@ -36,6 +36,7 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,7 +127,7 @@ public class AdmissionBrowserManager {
 	 * @return the list of Admissions (could be empty)
 	 * @throws OHServiceException
 	 */
-	public List<Admission> getAdmissions(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
+	public PagedResponse<Admission> getAdmissions(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
 		return ioOperations.getAdmissionsByAdmissionDate(dateFrom, dateTo, PageRequest.of(page, size));
 	}
 
@@ -137,7 +138,7 @@ public class AdmissionBrowserManager {
 	 * @return the list of completed Admissions (could be empty)
 	 * @throws OHServiceException
 	 */
-	public List<Admission> getDischarges(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
+	public PagedResponse<Admission> getDischarges(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
 		return ioOperations.getAdmissionsByDischargeDate(dateFrom, dateTo, PageRequest.of(page, size));
 	}
 
