@@ -312,9 +312,6 @@ public class Tests extends OHCoreTestCase {
 		List<Exam> exams = examBrowsingManager.getExams();
 		assertThat(exams.get(exams.size() - 1).getDescription()).isEqualTo(foundExam.getDescription());
 
-		exams = examBrowsingManager.getExamsbyDesc();
-		assertThat(exams.get(exams.size() - 1).getDescription()).isEqualTo(foundExam.getDescription());
-
 		exams = examBrowsingManager.getExamsByTypeDescription("xxxx");
 		assertThat(exams).isEmpty();
 
