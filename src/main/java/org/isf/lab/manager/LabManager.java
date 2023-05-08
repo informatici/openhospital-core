@@ -127,8 +127,12 @@ public class LabManager {
 	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
 	 * @throws OHServiceException
 	 */
-	public PagedResponse<Laboratory> getLaboratory(boolean onWeek, int pageNo, int pageSize) throws OHServiceException {
+	public List<Laboratory> getLaboratory(boolean onWeek, int pageNo, int pageSize) throws OHServiceException {
 		return ioOperations.getLaboratory(onWeek, pageNo, pageSize);
+	}
+	
+	public PagedResponse<Laboratory> getLaboratoryPageable(boolean onWeek, int pageNo, int pageSize) throws OHServiceException {
+		return ioOperations.getLaboratoryPageable(onWeek, pageNo, pageSize);
 	}
 
 	/**

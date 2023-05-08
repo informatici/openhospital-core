@@ -90,7 +90,18 @@ public class LabIoOperations {
 	 * @return the list of {@link Laboratory}s (could be empty)
 	 * @throws OHServiceException
 	 */
-	public PagedResponse<Laboratory> getLaboratory(boolean onWeek, int pageNo, int pageSize) throws OHServiceException {
+	public List<Laboratory> getLaboratory(boolean onWeek, int pageNo, int pageSize) throws OHServiceException {
+		Pageable pageable = PageRequest.of(pageNo, pageSize);
+		if (onWeek) {
+			LocalDateTime time2 = TimeTools.getDateToday24();
+			LocalDateTime time1 = time2.minusWeeks(1);
+			return repository.findByLabDateBetweenOrderByLabDateDesc(time1, time2, pageable).getContent();
+
+		}
+		return repository.findAll(pageable).getContent();
+	}
+	
+	public PagedResponse<Laboratory> getLaboratoryPageable(boolean onWeek, int pageNo, int pageSize) throws OHServiceException {
 		Pageable pageable = PageRequest.of(pageNo, pageSize);
 		if (onWeek) {
 			LocalDateTime time2 = TimeTools.getDateToday24();
