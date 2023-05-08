@@ -90,8 +90,15 @@ public class ExaminationOperations {
 		return !patExamination.isEmpty() ? patExamination.get(0) : null;
 	}
 
-	public PagedResponse<PatientExamination> getLastNByPatID(int patID, int number) throws OHServiceException {	
-		Page<PatientExamination> pagedResult = repository.findByPatient_CodeOrderByPexDateDesc(patID, PageRequest.of(0, number));
+	public List<PatientExamination> getLastNByPatID(int patID, int number) throws OHServiceException {
+		if (number > 0) {
+			return repository.findByPatient_CodeOrderByPexDateDesc(patID, PageRequest.of(0, number));
+		}
+		return repository.findByPatient_CodeOrderByPexDateDesc(patID);
+	}
+	
+	public PagedResponse<PatientExamination> getLastNByPatIDPageable(int patID, int number) throws OHServiceException {	
+		Page<PatientExamination> pagedResult = repository.findByPatient_CodeOrderByPexDateDescs(patID, PageRequest.of(0, number));
 		return setPaginationData(pagedResult);
 	}
 

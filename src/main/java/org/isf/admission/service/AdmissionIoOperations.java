@@ -323,14 +323,22 @@ public class AdmissionIoOperations {
 		}
 		return patientRepository.save(foundPatient) != null;
 	}
+	
+	public List<Admission> getAdmissionsByAdmissionDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		return repository.findAllWhereAdmissionDate(dateFrom, dateTo, pageable);
+	}
 
-	public PagedResponse<Admission> getAdmissionsByAdmissionDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
-		Page<Admission> pagedResult = repository.findAllWhereAdmissionDate(dateFrom, dateTo, pageable);
+	public List<Admission> getAdmissionsByDischargeDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		return repository.findAllWhereDischargeDate(dateFrom, dateTo, pageable);
+	}
+
+	public PagedResponse<Admission> getAdmissionsByAdmissionDates(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		Page<Admission> pagedResult = repository.findAllWhereAdmissionDates(dateFrom, dateTo, pageable);
 		return setPaginationData(pagedResult);
 	}
 
-	public PagedResponse<Admission> getAdmissionsByDischargeDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
-		Page<Admission> pagedResult = repository.findAllWhereDischargeDate(dateFrom, dateTo, pageable);
+	public PagedResponse<Admission> getAdmissionsByDischargeDates(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		Page<Admission> pagedResult = repository.findAllWhereDischargeDates(dateFrom, dateTo, pageable);
 		return setPaginationData(pagedResult);
 	}
 	

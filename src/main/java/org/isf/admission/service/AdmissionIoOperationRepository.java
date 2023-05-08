@@ -52,10 +52,16 @@ public interface AdmissionIoOperationRepository extends JpaRepository<Admission,
 
 	@Query(value = "select a FROM Admission a WHERE a.admitted =1 and a.ward.code = :ward and a.deleted = 'N'")
 	List<Admission> findAllWhereWardIn(@Param("ward") String ward);
-
+	
 	@Query(value = "select a FROM Admission a WHERE a.admDate >= :dateFrom AND a.admDate <= :dateTo and a.deleted = 'N'")
-	Page<Admission> findAllWhereAdmissionDate(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
+	List<Admission> findAllWhereAdmissionDate(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
 
 	@Query(value = "select a FROM Admission a WHERE a.disDate >= :dateFrom AND a.disDate <= :dateTo and a.deleted = 'N'")
-	Page<Admission> findAllWhereDischargeDate(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
+	List<Admission> findAllWhereDischargeDate(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
+	
+	@Query(value = "select a FROM Admission a WHERE a.admDate >= :dateFrom AND a.admDate <= :dateTo and a.deleted = 'N'")
+	Page<Admission> findAllWhereAdmissionDates(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
+
+	@Query(value = "select a FROM Admission a WHERE a.disDate >= :dateFrom AND a.disDate <= :dateTo and a.deleted = 'N'")
+	Page<Admission> findAllWhereDischargeDates(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
 }

@@ -163,8 +163,12 @@ public class ExaminationBrowserManager {
 		return !patExamination.isEmpty() ? patExamination.get(0) : null;
 	}
 
-	public PagedResponse<PatientExamination> getLastNByPatID(int patID, int number) throws OHServiceException {
+	public List<PatientExamination> getLastNByPatID(int patID, int number) throws OHServiceException {
 		return ioOperations.getLastNByPatID(patID, number);
+	}
+	
+	public PagedResponse<PatientExamination> getLastNByPatIDPageable(int patID, int number) throws OHServiceException {
+		return ioOperations.getLastNByPatIDPageable(patID, number);
 	}
 
 	public List<PatientExamination> getByPatID(int patID) throws OHServiceException {

@@ -87,8 +87,12 @@ public class PatientBrowserManager {
 	 * @return the list of patients (could be empty)
 	 * @throws OHServiceException
 	 */
-	public PagedResponse<Patient> getPatient(int page, int size) throws OHServiceException {
+	public List<Patient> getPatient(int page, int size) throws OHServiceException {
 		return ioOperations.getPatients(PageRequest.of(page, size));
+	}
+	
+	public PagedResponse<Patient> getPatientsPageable(int page, int size) throws OHServiceException {
+		return ioOperations.getPatientsPageable(PageRequest.of(page, size));
 	}
 
 	/**

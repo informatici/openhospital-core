@@ -96,7 +96,11 @@ public class PatientIoOperations {
 	 * @return the list of patients
 	 * @throws OHServiceException
 	 */
-	public PagedResponse<Patient> getPatients(Pageable pageable) throws OHServiceException {
+	public List<Patient> getPatients(Pageable pageable) throws OHServiceException {
+		return repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName('N', pageable).getContent();
+	}
+	
+	public PagedResponse<Patient> getPatientsPageable(Pageable pageable) throws OHServiceException {
 		Page<Patient> pagedResult = repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName('N', pageable);
 		return setPaginationData(pagedResult);
 	}
