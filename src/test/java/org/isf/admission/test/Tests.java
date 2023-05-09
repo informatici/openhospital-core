@@ -283,7 +283,6 @@ public class Tests extends OHCoreTestCase {
 		String str2 = "2023-05-05T10:11:30";
 		LocalDateTime dateFrom = LocalDateTime.parse(str);
 		LocalDateTime dateTo =  LocalDateTime.parse(str2);
-		System.out.println(dateFrom+" "+dateTo);
 		int page = 0;
 		int size = 10;
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
