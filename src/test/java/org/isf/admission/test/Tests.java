@@ -71,6 +71,7 @@ import org.isf.pregtreattype.test.TestPregnantTreatmentType;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
@@ -84,6 +85,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 import org.springframework.transaction.annotation.Transactional;
@@ -271,6 +273,44 @@ public class Tests extends OHCoreTestCase {
 
 		// then:
 		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
+	}
+	
+	@Test
+	public void testIoGetAdmittionsByDatePageable() throws Exception {
+		// given:
+		int id = setupTestAdmission(false);
+		String str = "2000-01-01T10:11:30";
+		String str2 = "2023-05-05T10:11:30";
+		LocalDateTime dateFrom = LocalDateTime.parse(str);
+		LocalDateTime dateTo =  LocalDateTime.parse(str2);
+		System.out.println(dateFrom+" "+dateTo);
+		int page = 0;
+		int size = 10;
+		Admission foundAdmission = admissionIoOperation.getAdmission(id);
+		// when:
+		PagedResponse<Admission> patients = admissionIoOperation.getAdmissionsByAdmissionDates(dateFrom, dateTo, PageRequest.of(page, size));
+
+		// then:
+		assertThat(patients.getData().get(0).getId()).isEqualTo(foundAdmission.getId());
+	}
+	
+	@Test
+	public void testIoGetDischargesByDatePageable() throws Exception {
+		// given:
+		int id = setupTestAdmission(false);
+		String str = "2000-01-01T10:11:30";
+		String str2 = "2023-05-05T10:11:30";
+		LocalDateTime dateFrom = LocalDateTime.parse(str);
+		LocalDateTime dateTo =  LocalDateTime.parse(str2);
+		int page = 0;
+		int size = 10;
+		Admission foundAdmission = admissionIoOperation.getAdmission(id);
+		// when:
+		PagedResponse<Admission> patients = admissionIoOperation.getAdmissionsByDischargeDates(dateFrom, dateTo, PageRequest.of(page, size));
+
+		// then:
+		
+		assertThat(patients.getData().get(0).getId()).isEqualTo(foundAdmission.getId());
 	}
 
 	@Test

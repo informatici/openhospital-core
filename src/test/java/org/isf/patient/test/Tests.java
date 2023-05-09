@@ -46,6 +46,7 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PagedResponse;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -103,7 +104,14 @@ public class Tests extends OHCoreTestCase {
 		List<Patient> patients = patientIoOperation.getPatients(createPageRequest());
 		testPatient.check(patients.get(patients.size() - 1));
 	}
-
+	
+	@Test 
+	public void testIoGetPatientsPageable2() throws Exception {
+	  setupTestPatient(false); PagedResponse<Patient> patients =
+	  patientIoOperation.getPatientsPageable(createPageRequest());
+	  testPatient.check(patients.getData().get(patients.getData().size() - 1)); 
+	}
+	 
 	private Pageable createPageRequest() {
 		return PageRequest.of(0, 10); // Page size 10
 	}
