@@ -200,12 +200,7 @@ public class MedicalStockWardIoOperations
 			if (medicalWardTo != null) {
 				repository.updateInQuantity(Math.abs(qty), wardTo, medical, lot);
 			} else {
-				MedicalWard medicalWard = new MedicalWard();
-				medicalWard.setWard(movement.getWardTo());
-				medicalWard.setMedical(movement.getMedical());
-				medicalWard.setIn_quantity((float) Math.abs(qty));
-				medicalWard.setOut_quantity(0.0f);
-				medicalWard.setLot(movement.getLot());
+				MedicalWard medicalWard = createMedicalWard(movement, (float) Math.abs(qty));
 				repository.save(medicalWard);
 			}
 			repository.updateOutQuantity(Math.abs(qty), ward, medical, lot);
@@ -214,12 +209,7 @@ public class MedicalStockWardIoOperations
 
 		MedicalWard medicalWard = repository.findOneWhereCodeAndMedicalAndLot(ward, medical, lot);
 		if (medicalWard == null) {
-			medicalWard = new MedicalWard();
-			medicalWard.setWard(movement.getWard());
-			medicalWard.setMedical(movement.getMedical());
-			medicalWard.setIn_quantity((float) -qty);
-			medicalWard.setOut_quantity(0.0f);
-			medicalWard.setLot(movement.getLot());
+			medicalWard = createMedicalWard(movement, (float) -qty);
 			repository.save(medicalWard);
 		} else {
 			if (qty < 0) {
@@ -230,6 +220,28 @@ public class MedicalStockWardIoOperations
 		}
 		return result;
 	}
+
+	/**
+	 * Creates a new {@link MedicalWard} from the specified {@link MovementWard}.
+	 * @param movement the movement ward.
+	 * @param qty the quantity.
+	 * @return the created medical ward.
+	 */
+	private MedicalWard createMedicalWard(MovementWard movement, float qty) {
+		MedicalWard medicalWard = new MedicalWard();
+		medicalWard.setMedical(movement.getMedical());
+		medicalWard.setLot(movement.getLot());
+		medicalWard.setOut_quantity(0.0f);
+		if (qty < 0) {
+			medicalWard.setWard(movement.getWard());
+			medicalWard.setIn_quantity((float) -qty);
+		} else {
+			medicalWard.setWard(movement.getWardTo());
+			medicalWard.setIn_quantity((float) Math.abs(qty));
+		}
+		return medicalWard;
+	}
+
 
 	/**
 	 * Gets all the {@link Medical}s associated to specified {@link Ward}.

@@ -46,7 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
-public class ExamRowIoOperations {
+public class ExamRowIoOperations extends CommonExamIOOperations {
 
 	@Autowired
 	private ExamRowIoOperationRepository rowRepository;
@@ -98,14 +98,6 @@ public class ExamRowIoOperations {
 		return rowRepository.findAll();
 	}
 
-	/**
-	 * Returns the list of {@link ExamType}s
-	 * @return the list of {@link ExamType}s
-	 * @throws OHServiceException
-	 */
-	public List<ExamType> getExamType() throws OHServiceException {
-		return typeRepository.findAllByOrderByDescriptionAsc();
-	}
 
 	/**
 	 * Insert a new {@link ExamRow} in the DB.
@@ -128,16 +120,6 @@ public class ExamRowIoOperations {
 		return rowRepository.save(examRow);
 	}
 
-	/**
-	 * Delete an {@link ExamRow}
-	 * @param examRow - the {@link ExamRow} to delete
-	 * @return <code>true</code> if the {@link ExamRow} has been deleted, <code>false</code> otherwise
-	 * @throws OHServiceException
-	 */
-	public boolean deleteExamRow(ExamRow examRow) throws OHServiceException {
-		rowRepository.deleteById(examRow.getCode());
-		return true;
-	}
 
 	
 	/**
@@ -173,21 +155,10 @@ public class ExamRowIoOperations {
 	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean isCodePresent(int code) throws OHServiceException{
+	public boolean isCodePresent(Integer code) throws OHServiceException{
 		return rowRepository.existsById(code);
 	}
-
-	/**
-	 * Checks if the code is already in use
-	 *
-	 * @param code - the exam row code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
-	 * @throws OHServiceException 
-	 */
-	public boolean isRowPresent(Integer code) throws OHServiceException {
-		return rowRepository.existsById(code);
-	}
-
+	
 	public List<ExamRow> getExamRowByExamCode(String aExamCode) throws OHServiceException {
 		return rowRepository.findAllByExam_CodeOrderByDescription(aExamCode);
     }

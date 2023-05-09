@@ -24,12 +24,10 @@ package org.isf.serviceprinting.manager;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.hospital.manager.HospitalBrowsingManager;
 import org.isf.hospital.model.Hospital;
@@ -40,14 +38,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.view.JasperViewer;
 
 @Component
 public class PrintManager {
@@ -65,7 +60,7 @@ public class PrintManager {
 	
 	public PrintManager() {}
 	
-	public void print(String filename, List<?> toPrint, int action) throws OHServiceException {
+	public void print(String filename, List<?> toPrint, Action action) throws OHServiceException {
 		
 		Map<String, Object> parameters = new HashMap<>();
 		Hospital hospital = hospitalManager.getHospital();
@@ -84,31 +79,7 @@ public class PrintManager {
 				.loadObject(jasperFile);
 				JasperPrint jasperPrint = JasperFillManager.fillReport(
 						jasperReport, parameters, dataSource);
-				switch (action) {
-				case 0:
-					if (GeneralData.INTERNALVIEWER) {
-						JasperViewer.viewReport(jasperPrint,false, new Locale(GeneralData.LANGUAGE));
-					} else {
-						String pdfFile = "rpt_base/PDF/" + filename + ".pdf";
-						JasperExportManager.exportReportToPdfFile(jasperPrint, pdfFile);
-						try {
-							Runtime rt = Runtime.getRuntime();
-							rt.exec(GeneralData.VIEWER +" "+ pdfFile);
-						} catch(Exception exception) {
-							LOGGER.error(exception.getMessage(), exception);
-						}
-					}
-					break;
-				case 1:
-					JasperExportManager.exportReportToPdfFile(jasperPrint,"rpt_base/PDF/"+
-							JOptionPane.showInputDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectapathforthepdffile.msg"), filename)
-							+".pdf");
-					break;
-				case 2:JasperPrintManager.printReport(jasperPrint, true);
-					break;
-				default:JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectacorrectaction.msg"));
-					break;
-				}
+				action.Print(jasperPrint, filename);
 			} else {
 				JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.notavalidfile.msg"));
 			}
