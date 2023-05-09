@@ -85,18 +85,6 @@ public class ExamBrowsingManager {
 	}
 
 	/**
-	 * Returns the list of {@link Exam}s
-	 *
-	 * @return the list of {@link Exam}s. It could be <code>null</code>
-	 * @throws OHServiceException
-	 * @deprecated use getExam() instead
-	 */
-	@Deprecated
-	public List<Exam> getExamsbyDesc() throws OHServiceException {
-		return this.getExams();
-	}
-
-	/**
 	 * Returns the list of {@link Exam}s that matches passed description
 	 *
 	 * @param description - the exam description
