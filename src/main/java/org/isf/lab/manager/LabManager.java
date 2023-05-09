@@ -85,7 +85,7 @@ public class LabManager {
 		}
 
 		// Check Exam Date
-		if (laboratory.getDate() == null) {
+		if (laboratory.getLabDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.pleaseinsertavalidexamdate.msg")));
 		}
 		// Check Patient
