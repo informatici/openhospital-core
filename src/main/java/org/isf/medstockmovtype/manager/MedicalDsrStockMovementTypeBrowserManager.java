@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.medstockmovtype.model.MovementType;
-import org.isf.medstockmovtype.service.MedicalStockMovementTypeIoOperation;
+import org.isf.medstockmovtype.service.MedicalDsrStockMovementTypeIoOperation;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
@@ -38,10 +38,10 @@ import org.springframework.stereotype.Component;
  * Manager class for the medical stock movement type.
  */
 @Component
-public class MedicalStockMovementTypeBrowserManager {
+public class MedicalDsrStockMovementTypeBrowserManager {
 
 	@Autowired
-	private MedicalStockMovementTypeIoOperation ioOperations;
+	private MedicalDsrStockMovementTypeIoOperation ioOperations;
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
@@ -82,34 +82,34 @@ public class MedicalStockMovementTypeBrowserManager {
 	 * @return all the medical stock movement types.
 	 * @throws OHServiceException
 	 */
-	public List<MovementType> getMedicaldsrstockmovType() throws OHServiceException {
-		return ioOperations.getMedicaldsrstockmovType();
+	public List<MovementType> getMedicalDsrStockMovementType() throws OHServiceException {
+		return ioOperations.getMedicalDsrStockMovementType();
 	}
 
 	/**
 	 * Save the specified {@link MovementType}.
 	 *
-	 * @param medicaldsrstockmovType
+	 * @param medicalDsrStockMovementType
 	 *            the medical stock movement type to save.
 	 * @return <code>true</code> if the medical stock movement type has been saved, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public MovementType newMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
-		validateMovementType(medicaldsrstockmovType, true);
-		return ioOperations.newMedicaldsrstockmovType(medicaldsrstockmovType);
+	public MovementType newMedicalDsrStockMovementType(MovementType medicalDsrStockMovementType) throws OHServiceException {
+		validateMovementType(medicalDsrStockMovementType, true);
+		return ioOperations.newMedicalDsrStockMovementType(medicalDsrStockMovementType);
 	}
 
 	/**
 	 * Updates the specified {@link MovementType}.
 	 *
-	 * @param medicaldsrstockmovType
+	 * @param medicalDsrStockMovementType
 	 *            the medical stock movement type to update.
 	 * @return <code>true</code> if the medical stock movement type has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public MovementType updateMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
-		validateMovementType(medicaldsrstockmovType, false);
-		return ioOperations.updateMedicaldsrstockmovType(medicaldsrstockmovType);
+	public MovementType updateMedicalDsrStockMovementType(MovementType medicalDsrStockMovementType) throws OHServiceException {
+		validateMovementType(medicalDsrStockMovementType, false);
+		return ioOperations.updateMedicalDsrStockMovementType(medicalDsrStockMovementType);
 	}
 
 	/**
@@ -127,13 +127,13 @@ public class MedicalStockMovementTypeBrowserManager {
 	/**
 	 * Deletes the specified {@link MovementType}.
 	 *
-	 * @param medicaldsrstockmovType
+	 * @param medicalDsrStockMovementType
 	 *            the medical stock movement type to delete.
 	 * @return <code>true</code> if the medical stock movement type has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
-		return ioOperations.deleteMedicaldsrstockmovType(medicaldsrstockmovType);
+	public boolean deleteMedicalDsrStockMovementType(MovementType medicalDsrStockMovementType) throws OHServiceException {
+		return ioOperations.deleteMedicalDsrStockMovementType(medicalDsrStockMovementType);
 	}
 
 	/**
