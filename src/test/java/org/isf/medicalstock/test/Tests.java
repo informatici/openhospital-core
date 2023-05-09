@@ -49,7 +49,7 @@ import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperationRepository;
 import org.isf.medicalstockward.service.MovementWardIoOperationRepository;
 import org.isf.medstockmovtype.model.MovementType;
-import org.isf.medstockmovtype.service.MedicalStockMovementTypeIoOperationRepository;
+import org.isf.medstockmovtype.service.MedicalDsrStockMovementTypeIoOperationRepository;
 import org.isf.medstockmovtype.test.TestMovementType;
 import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.service.MedicalTypeIoOperationRepository;
@@ -119,7 +119,7 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	MovementIoOperationRepository movementIoOperationRepository;
 	@Autowired
-	MedicalStockMovementTypeIoOperationRepository medicalStockMovementTypeIoOperationRepository;
+	MedicalDsrStockMovementTypeIoOperationRepository medicalDsrStockMovementTypeIoOperationRepository;
 	@Autowired
 	SupplierIoOperationRepository supplierIoOperationRepository;
 	@Autowired
@@ -267,7 +267,7 @@ public class Tests extends OHCoreTestCase {
 		MovementType dischargeMovementType = testMovementType.setup(false); //prepare discharge movement
 		dischargeMovementType.setCode("discharge");
 		dischargeMovementType.setType("-");
-		medicalStockMovementTypeIoOperationRepository.saveAndFlush(dischargeMovementType);
+		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(dischargeMovementType);
 
 		Movement dischargeMovement = new Movement(
 				medical,
@@ -1138,7 +1138,7 @@ public class Tests extends OHCoreTestCase {
 		Movement movement = testMovement.setup(medical, movementType, ward, lot, supplier, usingSet);
 		supplierIoOperationRepository.saveAndFlush(supplier);
 		wardIoOperationRepository.saveAndFlush(ward);
-		medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
+		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		lotIoOperationRepository.saveAndFlush(lot);

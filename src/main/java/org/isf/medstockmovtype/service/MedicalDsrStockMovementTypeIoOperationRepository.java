@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MedicalStockMovementTypeIoOperationRepository extends JpaRepository<MovementType, String> {
+public interface MedicalDsrStockMovementTypeIoOperationRepository extends JpaRepository<MovementType, String> {
 
 	List<MovementType> findAllByOrderByDescriptionAsc();
 
