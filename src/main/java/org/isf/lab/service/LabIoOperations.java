@@ -207,7 +207,7 @@ public class LabIoOperations {
 			pLaboratory.add(new LaboratoryForPrint(
 							laboratory.getCode(),
 							laboratory.getExam(),
-							laboratory.getDate(),
+							laboratory.getLabDate(),
 							laboratory.getResult(),
 							laboratory.getPatName(),
 							laboratory.getPatient().getCode()));
@@ -295,7 +295,7 @@ public class LabIoOperations {
 			pLaboratory.add(new LaboratoryForPrint(
 							laboratory.getCode(),
 							laboratory.getExam(),
-							laboratory.getDate(),
+							laboratory.getLabDate(),
 							laboratory.getResult()));
 		}
 		return pLaboratory;
