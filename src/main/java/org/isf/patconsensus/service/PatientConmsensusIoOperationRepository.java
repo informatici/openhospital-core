@@ -17,20 +17,21 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.isf.medstockmovtype.service;
+package org.isf.patconsensus.service;
 
-import java.util.List;
+import java.util.Optional;
 
-import org.isf.medstockmovtype.model.MovementType;
+import org.isf.patconsensus.model.PatientConsensus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MedicalStockMovementTypeIoOperationRepository extends JpaRepository<MovementType, String> {
+public interface PatientConmsensusIoOperationRepository extends JpaRepository<PatientConsensus, Integer> {
 
-	List<MovementType> findAllByOrderByDescriptionAsc();
+	Optional<PatientConsensus> findByPatient_Code(Integer patientId);
 
-	List<MovementType> findAllByCode(String code);
+	boolean existsByPatient_Code(Integer code);
+
 }

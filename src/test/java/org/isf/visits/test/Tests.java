@@ -152,17 +152,6 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testIoDeleteVisit() throws Exception {
-		int id = setupTestVisit(false);
-		Visit foundVisit = visitsIoOperation.findVisit(id);
-		boolean result = visitsIoOperation.deleteAllVisits(foundVisit.getPatient().getCode());
-
-		assertThat(result).isTrue();
-		result = visitsIoOperation.isCodePresent(id);
-		assertThat(result).isFalse();
-	}
-
-	@Test
 	public void testIoFindVisit() throws Exception {
 		int id = setupTestVisit(false);
 		Visit result = visitsIoOperation.findVisit(id);

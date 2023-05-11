@@ -90,18 +90,6 @@ public class BillBrowserManager {
 			throw new OHDataValidationException(errors);
 		}
 	}
-	
-	/**
-	 * Returns all the stored {@link BillItems}.
-	 * @return a list of {@link BillItems} or null if an error occurs.
-	 * @throws OHServiceException 
-	 * @deprecated this method should always be called with a parameter.
-	 * See {@link #getItems(int) getItems} method.
-	 */
-	@Deprecated
-	public List<BillItems> getItems() throws OHServiceException {
-		return ioOperations.getItems(0);
-	}
 
 	/**
 	 * Retrieves all the {@link BillItems} associated to the passed {@link Bill} id.
@@ -139,29 +127,14 @@ public class BillBrowserManager {
 	public List<BillPayments> getPayments(LocalDateTime dateFrom, LocalDateTime dateTo,Patient patient) throws OHServiceException {
 		return ioOperations.getPaymentsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
-	
-	/**
-	 * Retrieves all the stored {@link BillPayments}.
-	 * @return a list of bill payments or <code>null</code> if an error occurred.
-	 * @throws OHServiceException
-	 * @deprecated this method should always be called with a parameter.
-	 * See {@link #getPayments(int) getPayments} method.
-	 */
-	@Deprecated
-	public List<BillPayments> getPayments() throws OHServiceException {
-		return ioOperations.getPayments(0);
-	}
 
 	/**
 	 * Gets all the {@link BillPayments} for the specified {@link Bill}.
 	 * @param billID the bill id.
-	 * @return a list of {@link BillPayments} or <code>null</code> if an error occurred.
+	 * @return a list of {@link BillPayments}
 	 * @throws OHServiceException 
 	 */
 	public List<BillPayments> getPayments(int billID) throws OHServiceException {
-		if (billID == 0) {
-			return new ArrayList<>();
-		}
 		return ioOperations.getPayments(billID);
 	}
 	
@@ -265,17 +238,6 @@ public class BillBrowserManager {
 		return ioOperations.getPendingBills(patID);
 	}
 
-	/**
-	 * Get all the {@link Bill}s.
-	 * @return a list of bills or <code>null</code> if an error occurred.
-	 * @throws OHServiceException
-	 * @deprecated this method should not be called for its potentially huge resultset
-	 */
-	@Deprecated
-	public List<Bill> getBills() throws OHServiceException {
-		return ioOperations.getBills();
-	}
-	
 	/**
 	 * Get the {@link Bill} with specified billID
 	 * @param billID
