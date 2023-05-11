@@ -97,7 +97,7 @@ public class TestSqlDicomManager extends OHCoreTestCase {
 	@Test
 	public void testLoadDetailsLongObject() throws Exception {
 		long id = setupTestFileDicom(true);
-		FileDicom fileDicom = sqlDicomManager.loadDetails(new Long(id), 0, "TestSeriesNumber");
+		FileDicom fileDicom = sqlDicomManager.loadDetails(Long.valueOf(id), 0, "TestSeriesNumber");
 		testFileDicom.check(fileDicom);
 	}
 
