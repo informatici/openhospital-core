@@ -254,7 +254,7 @@ public class Tests extends OHCoreTestCase {
 		Bill foundBill = accountingBillIoOperationRepository.findById(id).get();
 		LocalDateTime dateFrom = foundBill.getDate().minusYears(1);
 		LocalDateTime dateTo = TimeTools.getNow();
-		List<Bill> billItems = accountingIoOperation.getBills(dateFrom, dateTo, foundBill.getBillPatient());
+		List<Bill> billItems = accountingIoOperation.getBillsBetweenDatesWherePatient(dateFrom, dateTo, foundBill.getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBill.getAmount(), offset(0.1));
 	}
@@ -340,7 +340,7 @@ public class Tests extends OHCoreTestCase {
 		Bill foundBill = accountingBillIoOperationRepository.findById(id).get();
 		LocalDateTime dateFrom = foundBill.getDate().minusYears(1);
 		LocalDateTime dateTo = TimeTools.getNow();
-		List<Bill> bills = accountingIoOperation.getBills(dateFrom, dateTo);
+		List<Bill> bills = accountingIoOperation.getBillsBetweenDates(dateFrom, dateTo);
 
 		assertThat(bills).contains(foundBill);
 	}
@@ -353,29 +353,29 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestBill(false);
 		Bill foundBill = accountingBillIoOperationRepository.findById(id).get();
 
-		List<Bill> bills = accountingIoOperation.getBills(dateFrom, dateTo);
+		List<Bill> bills = accountingIoOperation.getBillsBetweenDates(dateFrom, dateTo);
 		assertThat(bills).contains(foundBill);
 
-		bills = accountingIoOperation.getBills(LocalDateTime.of(10, 1, 1, 0, 0, 0), dateFrom);
+		bills = accountingIoOperation.getBillsBetweenDates(LocalDateTime.of(10, 1, 1, 0, 0, 0), dateFrom);
 		assertThat(bills).doesNotContain(foundBill);
 
-		bills = accountingIoOperation.getBills(dateTo, LocalDateTime.of(11, 1, 1, 0, 0, 0));
+		bills = accountingIoOperation.getBillsBetweenDates(dateTo, LocalDateTime.of(11, 1, 1, 0, 0, 0));
 		assertThat(bills).doesNotContain(foundBill);
 
 		id = setupTestBillItems(false);
 		BillItems foundBillItem = accountingBillItemsIoOperationRepository.findById(id).get();
 		foundBill = accountingBillIoOperationRepository.findById(foundBillItem.getBill().getId()).get();
 
-		bills = accountingIoOperation.getBills(dateFrom, dateTo, foundBillItem);
+		bills = accountingIoOperation.getBillsBetweenDatesWhereBillItem(dateFrom, dateTo, foundBillItem);
 		assertThat(bills).contains(foundBill);
 
-		bills = accountingIoOperation.getBills(dateFrom, dateTo, (BillItems) null);
+		bills = accountingIoOperation.getBillsBetweenDatesWhereBillItem(dateFrom, dateTo, (BillItems) null);
 		assertThat(bills).contains(foundBill);
 
 		id = setupTestBillItems(true);
 		foundBillItem = accountingBillItemsIoOperationRepository.findById(id).get();
 
-		bills = accountingIoOperation.getBills(dateFrom, dateTo, foundBillItem);
+		bills = accountingIoOperation.getBillsBetweenDatesWhereBillItem(dateFrom, dateTo, foundBillItem);
 		assertThat(bills).contains(foundBill);
 	}
 
@@ -480,7 +480,7 @@ public class Tests extends OHCoreTestCase {
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findById(id).get();
 		LocalDateTime dateFrom = LocalDateTime.of(1, 3, 2, 0, 0, 0, 0);
 		LocalDateTime dateTo = TimeTools.getNow();
-		List<BillPayments> billItems = accountingIoOperation.getPayments(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
+		List<BillPayments> billItems = accountingIoOperation.getPaymentsBetweenDatesWherePatient(dateFrom, dateTo, foundBillPayment.getBill().getBillPatient());
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
 	}
