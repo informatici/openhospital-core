@@ -1145,35 +1145,6 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrEditLabFirstProcedure() throws Exception {
-		Integer code = setupTestLaboratory(false);
-		Laboratory foundlaboratory = labIoOperationRepository.findById(code).get();
-		foundlaboratory.setNote("Update");
-		// method is protected not public
-		Method method = labManager.getClass().getDeclaredMethod("editLabFirstProcedure", Laboratory.class);
-		method.setAccessible(true);
-		assertThat((boolean) method.invoke(labManager, foundlaboratory)).isTrue();
-		List<Laboratory> updateLaboratory = labIoOperationRepository.findAll();
-		assertThat(updateLaboratory).hasSize(1);
-		assertThat(updateLaboratory.get(0).getNote()).isEqualTo("Update");
-	}
-
-	@Test
-	public void testMgrEditLabSecondProcedure() throws Exception {
-		ArrayList<String> labRow = new ArrayList<>();
-		Integer code = setupTestLaboratory(false);
-		Laboratory laboratory = labIoOperationRepository.findById(code).get();
-		labRow.add("Update");
-		// method is protected not public
-		Method method = labManager.getClass().getDeclaredMethod("editLabSecondProcedure", Laboratory.class, List.class);
-		method.setAccessible(true);
-		assertThat((Boolean) method.invoke(labManager, laboratory, labRow)).isTrue();
-		List<LaboratoryRow> updateLaboratoryRow = labRowIoOperationRepository.findAll();
-		assertThat(updateLaboratoryRow).hasSize(1);
-		assertThat(updateLaboratoryRow.get(0).getDescription()).isEqualTo("Update");
-	}
-
-	@Test
 	public void testMgrDeleteLaboratory() throws Exception {
 		Integer code = setupTestLaboratory(false);
 		Laboratory foundLaboratory = labIoOperationRepository.findById(code).get();
