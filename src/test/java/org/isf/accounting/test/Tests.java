@@ -492,7 +492,7 @@ public class Tests extends OHCoreTestCase {
 		assertThat(billItems).isEmpty();
 		billItems = billBrowserManager.getItems(99999);
 		assertThat(billItems).isEmpty();
-		billItems = billBrowserManager.getItems();
+		billItems = billBrowserManager.getItems(id);
 		assertThat(billItems).hasSize(1);
 	}
 
@@ -511,17 +511,9 @@ public class Tests extends OHCoreTestCase {
 	public void mgrGetAllPayments() throws Exception {
 		int id = setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findById(id).get();
-		List<BillPayments> billItems = billBrowserManager.getPayments();
+		List<BillPayments> billItems = billBrowserManager.getPayments(0);  // get all
 		assertThat(billItems).isNotEmpty();
 		assertThat(billItems.get(0).getAmount()).isCloseTo(foundBillPayment.getAmount(), offset(0.1));
-	}
-
-	@Test
-	public void mgrGetAllPaymentsWithZero() throws Exception {
-		int id = setupTestBillPayments(false);
-		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findById(id).get();
-		List<BillPayments> billItems = billBrowserManager.getPayments(0);
-		assertThat(billItems).isEmpty();
 	}
 
 	@Test
@@ -716,9 +708,6 @@ public class Tests extends OHCoreTestCase {
 		foundBillItem = accountingBillItemsIoOperationRepository.findById(id).get();
 
 		bills = billBrowserManager.getBills(dateFrom, dateTo, foundBillItem);
-		assertThat(bills).contains(foundBill);
-
-		bills = billBrowserManager.getBills();
 		assertThat(bills).contains(foundBill);
 	}
 
