@@ -395,7 +395,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkDiseaseIntoDb(String code) throws Exception {
-		Disease foundDisease = diseaseIoOperationRepository.getById(code);
+		Disease foundDisease = diseaseIoOperationRepository.getReferenceById(code);
 		testDisease.check(foundDisease);
 	}
 
