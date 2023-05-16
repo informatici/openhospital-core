@@ -484,15 +484,6 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrGetMovementWard() throws Exception {
-		int code = setupTestMovementWard(false);
-		MovementWard foundMovement = movementWardIoOperationRepository.findById(code).get();
-		List<MovementWard> movements = movWardBrowserManager.getMovementWard();
-		assertThat(movements).hasSize(1);
-		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
-	}
-
-	@Test
 	public void testMgrGetMedicalsWard() throws Exception {
 		MedicalWardId code = setupTestMedicalWard(false);
 		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());

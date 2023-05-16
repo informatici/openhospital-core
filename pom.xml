@@ -21,7 +21,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.framework.version>5.3.27</spring.framework.version>
 		<spring.boot.version>2.7.11</spring.boot.version>
-		<jasperreports.version>6.20.4</jasperreports.version>
+		<jasperreports.version>6.20.5</jasperreports.version>
 		<spring.cloud.starter.openfeign.version>3.1.7</spring.cloud.starter.openfeign.version>
 		<license.maven.plugin.version>4.2</license.maven.plugin.version>
 	</properties>
@@ -214,12 +214,6 @@
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
 			<version>${jasperreports.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.lowagie</groupId>
-					<artifactId>itext</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>

@@ -85,7 +85,7 @@ public class LabManager {
 		}
 
 		// Check Exam Date
-		if (laboratory.getDate() == null) {
+		if (laboratory.getLabDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.pleaseinsertavalidexamdate.msg")));
 		}
 		// Check Patient
@@ -385,34 +385,6 @@ public class LabManager {
 	 */
 	protected boolean newLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		return ioOperations.newLabSecondProcedure(laboratory, labRow);
-	}
-
-	/**
-	 * Update an already existing Laboratory exam {@link Laboratory} (Procedure One).
-	 * If old exam was Procedure Two all its releated result are deleted.
-	 *
-	 * @param laboratory - the {@link Laboratory} to update
-	 * @return <code>true</code> if the exam has been updated, <code>false</code> otherwise
-	 * @throws OHServiceException
-	 * @deprecated use updateLaboratory() for all procedures
-	 */
-	@Deprecated
-	protected boolean editLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
-		return ioOperations.updateLabFirstProcedure(laboratory);
-	}
-
-	/**
-	 * Update an already existing Laboratory exam {@link Laboratory} (Procedure Two).
-	 * Previous results are deleted and replaced with new ones.
-	 *
-	 * @param laboratory - the {@link Laboratory} to update
-	 * @return <code>true</code> if the exam has been updated with all its results, <code>false</code> otherwise
-	 * @throws OHServiceException
-	 * @deprecated use updateLaboratory() for all procedures
-	 */
-	@Deprecated
-	protected boolean editLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
-		return ioOperations.updateLabSecondProcedure(laboratory, labRow);
 	}
 
 	/**

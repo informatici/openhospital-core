@@ -92,19 +92,6 @@ public class PatientBrowserManager {
 	}
 
 	/**
-	 * Method that gets a Patient by his/her name
-	 *
-	 * @param name
-	 * @return the Patient that match specified name (could be null)
-	 * @throws OHServiceException
-	 * @deprecated use getPatient(Integer code) for one patient or getPatientsByOneOfFieldsLike(String regex) for a list
-	 */
-	@Deprecated
-	public Patient getPatientByName(String name) throws OHServiceException {
-		return ioOperations.getPatient(name);
-	}
-
-	/**
 	 * Method that get a Patient list by his/her name
 	 *
 	 * @param params

@@ -193,18 +193,18 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 
 	@Test
 	public void testLoadDetailsLongObject() throws Exception {
-		FileDicom fileDicom = fileSystemDicomManager.loadDetails(new Long(2), 1, "TestSeriesNumber");
+		FileDicom fileDicom = fileSystemDicomManager.loadDetails(Long.valueOf(2), 1, "TestSeriesNumber");
 		testFileDicom.check(fileDicom);
 	}
 
 	@Test
 	public void testLoadDetailsLongObjectSeriesNumberNull() throws Exception {
-		assertThat(fileSystemDicomManager.loadDetails(new Long(2), 1, null)).isNull();
+		assertThat(fileSystemDicomManager.loadDetails(Long.valueOf(2), 1, null)).isNull();
 	}
 
 	@Test
 	public void testLoadDetailsLongObjectSeriesNumberZeroLength() throws Exception {
-		assertThat(fileSystemDicomManager.loadDetails(new Long(2), 1, "     ")).isNull();
+		assertThat(fileSystemDicomManager.loadDetails(Long.valueOf(2), 1, "     ")).isNull();
 	}
 
 	@Test
@@ -214,7 +214,7 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 
 	@Test
 	public void testLoadDetailsLongObjectSeriesNumberNullString() throws Exception {
-		assertThat(fileSystemDicomManager.loadDetails(new Long(2), 1, "NuLl")).isNull();
+		assertThat(fileSystemDicomManager.loadDetails(Long.valueOf(2), 1, "NuLl")).isNull();
 	}
 
 	@Test
