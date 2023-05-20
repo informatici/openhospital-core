@@ -64,7 +64,7 @@ public class TestPatient {
 		if (usingSet) {
 			patient = new Patient();
 			patient.setPatientProfilePhoto(new PatientProfilePhoto());
-			patient.setPatientConsensus(new PatientConsensus(true, false, false, patient));
+			patient.setPatientConsensus(new PatientConsensus(true, false, patient));
 			setParameters(patient);
 		} else {
 			// Create Patient with all parameters
@@ -73,7 +73,7 @@ public class TestPatient {
 					bloodType, hasInsurance, parentTogether, taxCode, maritalStatus, profession);
 			patient.setAge(patient.getAge()); //IT WILL CHANGE WITH TIME
 			patient.setPatientProfilePhoto(new PatientProfilePhoto());
-			patient.setPatientConsensus(new PatientConsensus(true, false, false, patient));
+			patient.setPatientConsensus(new PatientConsensus(true, false, patient));
 			patient.setAllergies(allergies);
 			patient.setAnamnesis(anamnesis);
 
