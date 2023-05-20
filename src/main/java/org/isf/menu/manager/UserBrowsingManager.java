@@ -145,6 +145,14 @@ public class UserBrowsingManager {
 		ioOperations.updateUserLocked(user.getUserName(), true, user.getLockedTime());
 	}
 
+	public void unlockUser(User user) throws OHServiceException {
+		user.setAccountLocked(false);
+		user.setLockedTime(null);
+		user.setFailedAttempts(0);
+		ioOperations.updateFailedAttempts(user.getUserName(), 0);
+		ioOperations.updateUserLocked(user.getUserName(), false, null);
+	}
+
 	public boolean unlockWhenTimeExpired(User user) throws OHServiceException {
 		LocalDateTime lockedTime = user.getLockedTime();
 		if (lockedTime.plusMinutes(GeneralData.PASSWORDLOCKTIME).isBefore(TimeTools.getNow())) {
