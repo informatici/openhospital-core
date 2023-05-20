@@ -55,9 +55,6 @@ public class PatientConsensus extends Auditable<String> {
 	@Column(name = "PTC_CONSENSUS")
 	private boolean consensusFlag = true;
 
-	@Column(name = "PTC_ADMINISTRATIVE")
-	private boolean administrativeFlag;
-
 	@Column(name = "PTC_SERVICE")
 	private boolean serviceFlag;
 
@@ -69,10 +66,9 @@ public class PatientConsensus extends Auditable<String> {
 		super();
 	}
 
-	public PatientConsensus(boolean consensusFlag, boolean administrativeFlag, boolean serviceFlag, Patient patient) {
+	public PatientConsensus(boolean consensusFlag, boolean serviceFlag, Patient patient) {
 		super();
 		this.consensusFlag = consensusFlag;
-		this.administrativeFlag = administrativeFlag;
 		this.serviceFlag = serviceFlag;
 		this.patient = patient;
 	}
@@ -93,14 +89,6 @@ public class PatientConsensus extends Auditable<String> {
 		this.consensusFlag = consensusFlag;
 	}
 
-	public boolean isAdministrativeFlag() {
-		return administrativeFlag;
-	}
-
-	public void setAdministrativeFlag(boolean administrativeFlag) {
-		this.administrativeFlag = administrativeFlag;
-	}
-
 	public boolean isServiceFlag() {
 		return serviceFlag;
 	}
@@ -119,7 +107,7 @@ public class PatientConsensus extends Auditable<String> {
 
 	@Override
 	public String toString() {
-		return "PatientConsensus [id=" + id + ", consensusFlag=" + consensusFlag + ", administrativeFlag=" + administrativeFlag + ", serviceFlag=" + serviceFlag
+		return "PatientConsensus [id=" + id + ", consensusFlag=" + consensusFlag + ", serviceFlag=" + serviceFlag
 						+ ", patient=" + patient + "]";
 	}
 
