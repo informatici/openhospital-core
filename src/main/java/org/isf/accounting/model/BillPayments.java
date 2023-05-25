@@ -36,6 +36,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.isf.menu.model.User;
 import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -75,10 +76,10 @@ public class BillPayments extends Auditable<String> implements Comparable<BillPa
 	@NotNull
 	@Column(name="BLP_AMOUNT")
 	private double amount;
-
-	@NotNull
-	@Column(name="BLP_USR_ID_A")
-	private String user;
+	
+	@ManyToOne
+	@JoinColumn(name = "BLP_USR_ID_A") 
+	private User user;
 
 	@Transient
 	private volatile int hashCode;
@@ -88,7 +89,7 @@ public class BillPayments extends Auditable<String> implements Comparable<BillPa
 		super();
 	}
 	
-	public BillPayments(int id, Bill bill, LocalDateTime date, double amount, String user) {
+	public BillPayments(int id, Bill bill, LocalDateTime date, double amount, User user) {
 		super();
 		this.id = id;
 		this.bill = bill;
@@ -129,11 +130,11 @@ public class BillPayments extends Auditable<String> implements Comparable<BillPa
 		this.amount = amount;
 	}
 
-	public String getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(String user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	

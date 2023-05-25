@@ -38,6 +38,7 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.isf.disease.model.Disease;
+import org.isf.menu.model.User;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
@@ -130,12 +131,12 @@ public class Opd extends Auditable<String> {
 	@Column(name="OPD_REFERRAL_TO")
 	private String referralTo;		//R=referral to another unit; null=no referral to 
 
-	@NotNull
-	@Column(name="OPD_USR_ID_A")
-	private String userID;
+	@ManyToOne
+	@JoinColumn(name = "OPD_USR_ID_A") 
+	private User user;
 	
 	@ManyToOne
-	@JoinColumn(name = "OPD_NEXT_VISIT_ID")
+	@JoinColumn(name = "OPD_NEXT_VISIT_ID") 
 	private Visit nextVisit;
 
 	@Version
@@ -333,12 +334,12 @@ public class Opd extends Auditable<String> {
 		this.prog_year = progYear;
 	}
 
-	public String getUserID() {
-		return userID;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserID(String userID) {
-		this.userID = userID;
+	public void setUser(User user) {
+		this.user = user;
 	}
         
 	/*public String getReason() {

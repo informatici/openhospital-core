@@ -54,6 +54,12 @@ import org.isf.malnutrition.manager.MalnutritionManager;
 import org.isf.malnutrition.model.Malnutrition;
 import org.isf.malnutrition.service.MalnutritionIoOperation;
 import org.isf.malnutrition.service.MalnutritionIoOperationRepository;
+import org.isf.menu.model.User;
+import org.isf.menu.model.UserGroup;
+import org.isf.menu.service.UserGroupIoOperationRepository;
+import org.isf.menu.service.UserIoOperationRepository;
+import org.isf.menu.test.TestUser;
+import org.isf.menu.test.TestUserGroup;
 import org.isf.operation.model.Operation;
 import org.isf.operation.service.OperationIoOperationRepository;
 import org.isf.operation.test.TestOperation;
@@ -91,6 +97,8 @@ public class Tests extends OHCoreTestCase {
 	private static TestDeliveryType testDeliveryType;
 	private static TestDeliveryResultType testDeliveryResultType;
 	private static TestMalnutrition testMalnutrition;
+	private static TestUser testUser;
+	private static TestUserGroup testUserGroup;
 
 	@Autowired
 	MalnutritionIoOperation malnutritionIoOperation;
@@ -122,6 +130,10 @@ public class Tests extends OHCoreTestCase {
 	DeliveryTypeIoOperationRepository deliveryTypeIoOperationRepository;
 	@Autowired
 	DeliveryResultIoOperationRepository deliveryResultIoOperationRepository;
+	@Autowired
+	UserGroupIoOperationRepository userGroupIoOperationRepository;
+	@Autowired
+	UserIoOperationRepository userIoOperationRepository;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -138,6 +150,8 @@ public class Tests extends OHCoreTestCase {
 		testDeliveryType = new TestDeliveryType();
 		testDeliveryResultType = new TestDeliveryResultType();
 		testMalnutrition = new TestMalnutrition();
+		testUser = new TestUser();
+		testUserGroup = new TestUserGroup();
 	}
 
 	@Before
@@ -203,9 +217,11 @@ public class Tests extends OHCoreTestCase {
 		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
 		DeliveryType deliveryType = testDeliveryType.setup(false);
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
 				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, true);
+				deliveryType, deliveryResult, user, true);
 
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -221,6 +237,8 @@ public class Tests extends OHCoreTestCase {
 		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
 		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
 		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
 		admissionIoOperationRepository.saveAndFlush(admission);
 
 		Malnutrition malnutrition = testMalnutrition.setup(admission, true);
@@ -286,9 +304,11 @@ public class Tests extends OHCoreTestCase {
 		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
 		DeliveryType deliveryType = testDeliveryType.setup(false);
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
 				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, true);
+				deliveryType, deliveryResult, user, true);
 
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -304,6 +324,8 @@ public class Tests extends OHCoreTestCase {
 		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
 		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
 		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
 		admissionIoOperationRepository.saveAndFlush(admission);
 
 		Malnutrition malnutrition = testMalnutrition.setup(admission, true);
@@ -333,9 +355,11 @@ public class Tests extends OHCoreTestCase {
 			PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
 			DeliveryType deliveryType = testDeliveryType.setup(false);
 			DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+			UserGroup userGroup = testUserGroup.setup(false);		
+			User user = testUser.setup(userGroup, false);
 			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
 					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-					deliveryType, deliveryResult, true);
+					deliveryType, deliveryResult, user, true);
 
 			wardIoOperationRepository.saveAndFlush(ward);
 			patientIoOperationRepository.saveAndFlush(patient);
@@ -351,6 +375,8 @@ public class Tests extends OHCoreTestCase {
 			pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
 			deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
 			deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+			userGroupIoOperationRepository.saveAndFlush(userGroup);
+			userIoOperationRepository.saveAndFlush(user);
 			admissionIoOperationRepository.saveAndFlush(admission);
 
 			Malnutrition malnutrition = testMalnutrition.setup(admission, true);
@@ -383,9 +409,11 @@ public class Tests extends OHCoreTestCase {
 			PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
 			DeliveryType deliveryType = testDeliveryType.setup(false);
 			DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+			UserGroup userGroup = testUserGroup.setup(false);		
+			User user = testUser.setup(userGroup, false);
 			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
 					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-					deliveryType, deliveryResult, true);
+					deliveryType, deliveryResult, user, true);
 
 			wardIoOperationRepository.saveAndFlush(ward);
 			patientIoOperationRepository.saveAndFlush(patient);
@@ -401,6 +429,8 @@ public class Tests extends OHCoreTestCase {
 			pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
 			deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
 			deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+			userGroupIoOperationRepository.saveAndFlush(userGroup);
+			userIoOperationRepository.saveAndFlush(user);
 			admissionIoOperationRepository.saveAndFlush(admission);
 
 			Malnutrition malnutrition = testMalnutrition.setup(admission, true);
@@ -433,9 +463,11 @@ public class Tests extends OHCoreTestCase {
 			PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
 			DeliveryType deliveryType = testDeliveryType.setup(false);
 			DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+			UserGroup userGroup = testUserGroup.setup(false);		
+			User user = testUser.setup(userGroup, false);
 			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
 					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-					deliveryType, deliveryResult, true);
+					deliveryType, deliveryResult, user, true);
 
 			wardIoOperationRepository.saveAndFlush(ward);
 			patientIoOperationRepository.saveAndFlush(patient);
@@ -451,6 +483,8 @@ public class Tests extends OHCoreTestCase {
 			pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
 			deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
 			deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+			userGroupIoOperationRepository.saveAndFlush(userGroup);
+			userIoOperationRepository.saveAndFlush(user);
 			admissionIoOperationRepository.saveAndFlush(admission);
 
 			Malnutrition malnutrition = testMalnutrition.setup(admission, true);
@@ -484,9 +518,11 @@ public class Tests extends OHCoreTestCase {
 			PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
 			DeliveryType deliveryType = testDeliveryType.setup(false);
 			DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+			UserGroup userGroup = testUserGroup.setup(false);		
+			User user = testUser.setup(userGroup, false);
 			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
 					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-					deliveryType, deliveryResult, true);
+					deliveryType, deliveryResult, user, true);
 
 			wardIoOperationRepository.saveAndFlush(ward);
 			patientIoOperationRepository.saveAndFlush(patient);
@@ -502,6 +538,8 @@ public class Tests extends OHCoreTestCase {
 			pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
 			deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
 			deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+			userGroupIoOperationRepository.saveAndFlush(userGroup);
+			userIoOperationRepository.saveAndFlush(user);
 			admissionIoOperationRepository.saveAndFlush(admission);
 
 			Malnutrition malnutrition = testMalnutrition.setup(admission, true);
@@ -534,9 +572,11 @@ public class Tests extends OHCoreTestCase {
 			PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
 			DeliveryType deliveryType = testDeliveryType.setup(false);
 			DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+			UserGroup userGroup = testUserGroup.setup(false);		
+			User user = testUser.setup(userGroup, false);
 			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
 					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-					deliveryType, deliveryResult, true);
+					deliveryType, deliveryResult, user, true);
 
 			wardIoOperationRepository.saveAndFlush(ward);
 			patientIoOperationRepository.saveAndFlush(patient);
@@ -552,6 +592,8 @@ public class Tests extends OHCoreTestCase {
 			pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
 			deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
 			deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+			userGroupIoOperationRepository.saveAndFlush(userGroup);
+			userIoOperationRepository.saveAndFlush(user);
 			admissionIoOperationRepository.saveAndFlush(admission);
 
 			Malnutrition malnutrition = testMalnutrition.setup(admission, true);
@@ -582,9 +624,11 @@ public class Tests extends OHCoreTestCase {
 		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
 		DeliveryType deliveryType = testDeliveryType.setup(false);
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
 				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, true);
+				deliveryType, deliveryResult, user, true);
 
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -600,6 +644,8 @@ public class Tests extends OHCoreTestCase {
 		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
 		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
 		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
 		admissionIoOperationRepository.saveAndFlush(admission);
 
 		Malnutrition malnutrition = new Malnutrition(0, LocalDateTime.of(1, 1, 1, 0, 0, 0),
@@ -640,9 +686,11 @@ public class Tests extends OHCoreTestCase {
 		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
 		DeliveryType deliveryType = testDeliveryType.setup(false);
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
 				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, true);
+				deliveryType, deliveryResult, user, true);
 
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -658,6 +706,8 @@ public class Tests extends OHCoreTestCase {
 		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
 		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
 		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
 		admissionIoOperationRepository.saveAndFlush(admission);
 
 		Malnutrition malnutrition1 = new Malnutrition(0, LocalDateTime.of(1, 1, 1, 0, 0, 0),
@@ -735,9 +785,11 @@ public class Tests extends OHCoreTestCase {
 		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
 		DeliveryType deliveryType = testDeliveryType.setup(false);
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		Admission admission = testAdmission
 				.setup(ward, patient, admissionType, diseaseIn, diseaseOut1, diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-						deliveryType, deliveryResult, false);
+						deliveryType, deliveryResult, user, false);
 
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -753,6 +805,8 @@ public class Tests extends OHCoreTestCase {
 		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
 		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
 		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
 		admissionIoOperationRepository.saveAndFlush(admission);
 
 		Malnutrition malnutrition = testMalnutrition.setup(admission, usingSet);

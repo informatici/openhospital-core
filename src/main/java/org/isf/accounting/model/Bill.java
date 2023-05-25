@@ -37,6 +37,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.isf.admission.model.Admission;
+import org.isf.menu.model.User;
 import org.isf.patient.model.Patient;
 import org.isf.priceslist.model.PriceList;
 import org.isf.utils.db.Auditable;
@@ -106,9 +107,9 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	@Column(name="BLL_BALANCE")
 	private Double balance;
 
-	@NotNull
-	@Column(name="BLL_USR_ID_A")
-	private String user;
+	@ManyToOne
+	@JoinColumn(name = "BLL_USR_ID_A") 
+	private User user;
 	
 	@ManyToOne
 	@JoinColumn(name="BLL_ADM_ID")
@@ -130,12 +131,11 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 		this.status = "";
 		this.amount = 0.;
 		this.balance = 0.;
-		this.user = "admin";
 	}
 
 	public Bill(int id, LocalDateTime  date, LocalDateTime  update,
 			boolean isList, PriceList list, String listName, boolean isPatient,
-			Patient billPatient, String patName, String status, Double amount, Double balance, String user, Admission admission) {
+			Patient billPatient, String patName, String status, Double amount, Double balance, User user, Admission admission) {
 		super();
 		this.id = id;
 		this.date = TimeTools.truncateToSeconds(date);
@@ -231,11 +231,11 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 		this.balance = balance;
 	}
 
-	public String getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(String user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	

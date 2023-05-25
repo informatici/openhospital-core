@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.isf.generaldata.MessageBundle;
+import org.isf.menu.model.User;
 import org.isf.opd.model.Opd;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
@@ -105,7 +106,7 @@ public class OpdIoOperations {
 			int ageTo,
 			char sex,
 			char newPatient,
-			String user) throws OHServiceException {
+			User user) throws OHServiceException {
 		return repository.findAllOpdWhereParams(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user);
 	}
 	

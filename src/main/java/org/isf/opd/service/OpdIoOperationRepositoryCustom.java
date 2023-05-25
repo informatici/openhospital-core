@@ -24,12 +24,13 @@ package org.isf.opd.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.isf.menu.model.User;
 import org.isf.opd.model.Opd;
 import org.isf.ward.model.Ward;
 
 public interface OpdIoOperationRepositoryCustom {
 
 	List<Opd> findAllOpdWhereParams(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex,
-			char newPatient, String user);
+			char newPatient, User user);
 
 }

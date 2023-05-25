@@ -34,6 +34,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.isf.menu.model.User;
 import org.isf.opd.model.Opd;
 import org.isf.ward.model.Ward;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +57,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			int ageTo,
 			char sex,
 			char newPatient,
-			String user) {
+			User user) {
 		return getOpdQuery(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user).getResultList();
 	}	
 
@@ -70,7 +71,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			int ageTo,
 			char sex,
 			char newPatient,
-			String user) {
+			User user) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Opd> query = cb.createQuery(Opd.class);
 		Root<Opd> opd = query.from(Opd.class);
@@ -109,7 +110,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		}
 		if (user != null) {
 			predicates.add(
-					cb.equal(opd.get("userID"), user)
+					cb.equal(opd.get("user").get("userName"), user.getUserName())
 			);
 		}
 		predicates.add(

@@ -36,7 +36,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountingBillPaymentIoOperationRepository extends JpaRepository<BillPayments, Integer> {
 
-	@Query(value = "select distinct bp.user FROM BillPayments bp ORDER BY bp.user asc")
+	@Query(value = "select distinct bp.user.userName FROM BillPayments bp ORDER BY bp.user.userName asc")
 	List<String> findUserDistinctByOrderByUserAsc();
 
 	@Query(value = "SELECT BP FROM BillPayments BP where BP.date >= :start and BP.date < :end ORDER BY BP.id")

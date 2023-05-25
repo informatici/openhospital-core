@@ -31,6 +31,7 @@ import org.isf.disctype.model.DischargeType;
 import org.isf.disease.model.Disease;
 import org.isf.dlvrrestype.model.DeliveryResultType;
 import org.isf.dlvrtype.model.DeliveryType;
+import org.isf.menu.model.User;
 import org.isf.operation.model.Operation;
 import org.isf.patient.model.Patient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
@@ -56,7 +57,6 @@ public class TestAdmission {
 	private String note = "TestNote";
 	private Float transUnit = (float) 10.10;
 	private Float weight = (float) 20.20;
-	private String userID = "TestUserId";
 	private char deleted = 'N';
 
 	public Admission setup(
@@ -72,19 +72,20 @@ public class TestAdmission {
 			PregnantTreatmentType pregTreatmentType,
 			DeliveryType deliveryType,
 			DeliveryResultType deliveryResult,
+			User user,
 			boolean usingSet) throws OHException {
 		Admission admission;
 
 		if (usingSet) {
 			admission = new Admission();
 			setParameters(admission, ward, patient, admissionType, diseaseIn, diseaseOut1, diseaseOut2,
-					diseaseOut3, operation, dischargeType, pregTreatmentType, deliveryType, deliveryResult);
+					diseaseOut3, operation, dischargeType, pregTreatmentType, deliveryType, deliveryResult, user);
 		} else {
 			// Create Admission with all parameters 
 			admission = new Admission(id, admitted, type, ward, yProg, patient, ADMINDATE, admissionType, FHU, diseaseIn,
 					diseaseOut1, diseaseOut2, diseaseOut3, DISDATE, dischargeType, note,
 					transUnit, VISITDATE, pregTreatmentType, DELIVERYDATE, deliveryType, deliveryResult, weight,
-					CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted);
+					CTRLDATE1, CTRLDATE2, ABORTDATE, user, deleted);
 		}
 
 		return admission;
@@ -103,7 +104,8 @@ public class TestAdmission {
 			DischargeType dischargeType,
 			PregnantTreatmentType pregTreatmentType,
 			DeliveryType deliveryType,
-			DeliveryResultType deliveryResult) {
+			DeliveryResultType deliveryResult,
+			User user) {
 		admission.setAbortDate(ABORTDATE);
 		admission.setAdmDate(ADMINDATE);
 		admission.setAdmitted(admitted);
@@ -126,7 +128,7 @@ public class TestAdmission {
 		admission.setPregTreatmentType(pregTreatmentType);
 		admission.setTransUnit(transUnit);
 		admission.setType(type);
-		admission.setUserID(userID);
+		admission.setUser(user);
 		admission.setVisitDate(VISITDATE);
 		admission.setWard(ward);
 		admission.setWeight(weight);
@@ -146,7 +148,6 @@ public class TestAdmission {
 		assertThat(admission.getNote()).isEqualTo(note);
 		assertThat(admission.getTransUnit()).isEqualTo(transUnit);
 		assertThat(admission.getType()).isEqualTo(type);
-		assertThat(admission.getUserID()).isEqualTo(userID);
 		assertThat(admission.getVisitDate()).isEqualTo(VISITDATE);
 		assertThat(admission.getWeight()).isEqualTo(weight);
 		assertThat(admission.getYProg()).isEqualTo(yProg);

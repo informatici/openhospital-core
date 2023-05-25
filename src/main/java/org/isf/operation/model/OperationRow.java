@@ -258,6 +258,6 @@ public class OperationRow extends Auditable<String> {
 
     @Override
     public String toString() {
-        return this.operation.getDescription() + " " + this.admission.getUserID();
+        return this.operation.getDescription() + " " + this.admission.getUser();
     }
 }

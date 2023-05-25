@@ -600,7 +600,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testPatientOpdConstructor() throws Exception {
-		Opd opd = testOpd.setup(null, null, null, null, false);
+		Opd opd = testOpd.setup(null, null, null, null, null, false);
 		Patient patient = new Patient(opd);
 
 		assertThat(patient.getSex()).isEqualTo('F');

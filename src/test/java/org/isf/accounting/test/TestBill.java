@@ -29,6 +29,7 @@ import java.time.temporal.ChronoUnit;
 
 import org.isf.accounting.model.Bill;
 import org.isf.admission.model.Admission;
+import org.isf.menu.model.User;
 import org.isf.patient.model.Patient;
 import org.isf.priceslist.model.PriceList;
 import org.isf.utils.exception.OHException;
@@ -44,14 +45,13 @@ public class TestBill {
 	private static String status = "O";
 	private static Double amount = 10.10;
 	private static Double balance = 20.20;
-	private static String user = "TestUser";
 
-	public Bill setup(PriceList priceList, Patient patient, Admission admission, boolean usingSet) throws OHException {
+	public Bill setup(PriceList priceList, Patient patient, Admission admission, User user, boolean usingSet) throws OHException {
 		Bill bill;
 
 		if (usingSet) {
 			bill = new Bill();
-			setParameters(bill, priceList, patient, admission);
+			setParameters(bill, priceList, patient, admission, user);
 		} else {
 			// Create Bill with all parameters 
 			bill = new Bill(0, date, update, isList, priceList, listName, isPatient, patient, patName,
@@ -60,7 +60,7 @@ public class TestBill {
 		return bill;
 	}
 
-	public void setParameters(Bill bill, PriceList priceList, Patient patient, Admission admission) {
+	public void setParameters(Bill bill, PriceList priceList, Patient patient, Admission admission, User user) {
 		bill.setDate(date);
 		bill.setUpdate(update);
 		bill.setIsList(isList);
@@ -86,6 +86,5 @@ public class TestBill {
 		assertThat(bill.getStatus()).isEqualTo(status);
 		assertThat(bill.getAmount()).isEqualTo(amount);
 		assertThat(bill.getBalance()).isEqualTo(balance);
-		assertThat(bill.getUser()).isEqualTo(user);
 	}
 }

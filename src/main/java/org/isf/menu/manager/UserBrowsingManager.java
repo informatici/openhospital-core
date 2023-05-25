@@ -50,6 +50,10 @@ public class UserBrowsingManager {
 	public static String getCurrentUser() {
 		return MDC.get("OHUser");
 	}
+	
+	public User getCurrentOHUser() throws OHServiceException {
+		return ioOperations.getUserByName(getCurrentUser());
+	}
 
 	/**
 	 * Returns the list of {@link User}s.

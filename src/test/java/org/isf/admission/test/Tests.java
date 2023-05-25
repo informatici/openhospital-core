@@ -56,6 +56,12 @@ import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.dlvrtype.service.DeliveryTypeIoOperationRepository;
 import org.isf.dlvrtype.test.TestDeliveryType;
 import org.isf.generaldata.GeneralData;
+import org.isf.menu.model.User;
+import org.isf.menu.model.UserGroup;
+import org.isf.menu.service.UserGroupIoOperationRepository;
+import org.isf.menu.service.UserIoOperationRepository;
+import org.isf.menu.test.TestUser;
+import org.isf.menu.test.TestUserGroup;
 import org.isf.operation.model.Operation;
 import org.isf.operation.service.OperationIoOperationRepository;
 import org.isf.operation.test.TestOperation;
@@ -109,6 +115,8 @@ public class Tests extends OHCoreTestCase {
 	private static TestPregnantTreatmentType testPregnantTreatmentType;
 	private static TestDeliveryType testDeliveryType;
 	private static TestDeliveryResultType testDeliveryResultType;
+	private static TestUser testUser;
+	private static TestUserGroup testUserGroup;
 
 	@Autowired
 	AdmissionIoOperations admissionIoOperation;
@@ -138,6 +146,10 @@ public class Tests extends OHCoreTestCase {
 	DeliveryTypeIoOperationRepository deliveryTypeIoOperationRepository;
 	@Autowired
 	DeliveryResultIoOperationRepository deliveryResultIoOperationRepository;
+	@Autowired
+	UserGroupIoOperationRepository userGroupIoOperationRepository;
+	@Autowired
+	UserIoOperationRepository userIoOperationRepository;
 
 	public Tests(boolean maternityRestartInJune) {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
@@ -158,6 +170,8 @@ public class Tests extends OHCoreTestCase {
 		testPregnantTreatmentType = new TestPregnantTreatmentType();
 		testDeliveryType = new TestDeliveryType();
 		testDeliveryResultType = new TestDeliveryResultType();
+		testUser = new TestUser();
+		testUserGroup = new TestUserGroup();
 	}
 
 	@Before
@@ -1174,10 +1188,12 @@ public class Tests extends OHCoreTestCase {
 		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
 		DeliveryType deliveryType = testDeliveryType.setup(false);
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
 				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, usingSet);
+				deliveryType, deliveryResult, user, usingSet);
 
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -1193,6 +1209,8 @@ public class Tests extends OHCoreTestCase {
 		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
 		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
 		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
 		admissionIoOperationRepository.saveAndFlush(admission);
 		return admission.getId();
 	}
@@ -1221,6 +1239,8 @@ public class Tests extends OHCoreTestCase {
 		PregnantTreatmentType pregTreatmentType = testPregnantTreatmentType.setup(false);
 		DeliveryType deliveryType = testDeliveryType.setup(false);
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 
 		ward.setCode("A");
 		diseaseIn.setCode("555");
@@ -1242,10 +1262,12 @@ public class Tests extends OHCoreTestCase {
 		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregTreatmentType);
 		deliveryTypeIoOperationRepository.saveAndFlush(deliveryType);
 		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
 
 		return testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
 				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, true);
+				deliveryType, deliveryResult, user, true);
 	}
 
 }

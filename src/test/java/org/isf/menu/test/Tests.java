@@ -355,8 +355,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrNewUser() throws Exception {
 		UserGroup userGroup = testUserGroup.setup(false);
-		User user = testUser.setup(userGroup, false);
 		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		User user = testUser.setup(userGroup, false);
 		assertThat(userBrowsingManager.newUser(user)).isTrue();
 		checkUserIntoDb(user.getUserName());
 	}
@@ -682,8 +682,8 @@ public class Tests extends OHCoreTestCase {
 
 	private String setupTestUser(boolean usingSet) throws OHException {
 		UserGroup userGroup = testUserGroup.setup(usingSet);
-		User user = testUser.setup(userGroup, usingSet);
 		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		User user = testUser.setup(userGroup, usingSet);
 		userIoOperationRepository.saveAndFlush(user);
 		return user.getUserName();
 	}

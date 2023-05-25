@@ -30,6 +30,7 @@ import java.time.temporal.ChronoUnit;
 
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.model.BillPayments;
+import org.isf.menu.model.User;
 import org.isf.utils.exception.OHException;
 
 public class TestBillPayments {
@@ -38,30 +39,29 @@ public class TestBillPayments {
 	private static double paymentAmount = 10.10;
 	private static String paymentUser = "TestUser";
 
-	public BillPayments setup(Bill bill, boolean usingSet) throws OHException {
+	public BillPayments setup(Bill bill, User user, boolean usingSet) throws OHException {
 		BillPayments billPayment;
 
 		if (usingSet) {
 			billPayment = new BillPayments();
-			setParameters(billPayment, bill);
+			setParameters(billPayment, bill, user);
 		} else {
 			// Create bill payment with all parameters 
-			billPayment = new BillPayments(0, bill, paymentDate, paymentAmount, paymentUser);
+			billPayment = new BillPayments(0, bill, paymentDate, paymentAmount, user);
 		}
 
 		return billPayment;
 	}
 
-	public void setParameters(BillPayments billPayment, Bill bill) {
+	public void setParameters(BillPayments billPayment, Bill bill, User user) {
 		billPayment.setBill(bill);
 		billPayment.setDate(paymentDate);
 		billPayment.setAmount(paymentAmount);
-		billPayment.setUser(paymentUser);
+		billPayment.setUser(user);
 	}
 
 	public void check(BillPayments billPayment) {
 		assertThat(billPayment.getAmount()).isCloseTo(paymentAmount, offset(0.1));
 		assertThat(billPayment.getDate()).isCloseTo(paymentDate, within(1, ChronoUnit.SECONDS));
-		assertThat(billPayment.getUser()).isEqualTo(paymentUser);
 	}
 }

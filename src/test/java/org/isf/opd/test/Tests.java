@@ -38,6 +38,12 @@ import org.isf.distype.model.DiseaseType;
 import org.isf.distype.service.DiseaseTypeIoOperationRepository;
 import org.isf.distype.test.TestDiseaseType;
 import org.isf.generaldata.GeneralData;
+import org.isf.menu.model.User;
+import org.isf.menu.model.UserGroup;
+import org.isf.menu.service.UserGroupIoOperationRepository;
+import org.isf.menu.service.UserIoOperationRepository;
+import org.isf.menu.test.TestUser;
+import org.isf.menu.test.TestUserGroup;
 import org.isf.opd.manager.OpdBrowserManager;
 import org.isf.opd.model.Opd;
 import org.isf.opd.service.OpdIoOperationRepository;
@@ -82,6 +88,8 @@ public class Tests extends OHCoreTestCase {
 	private static TestDiseaseType testDiseaseType;
 	private static TestDisease testDisease;
 	private static TestWard testWard;
+	private static TestUser testUser;
+	private static TestUserGroup testUserGroup;
 	private static TestVisit testVisit;
 
 	@Autowired
@@ -92,6 +100,10 @@ public class Tests extends OHCoreTestCase {
 	PatientIoOperationRepository patientIoOperationRepository;
 	@Autowired
 	WardIoOperationRepository wardIoOperationRepository;
+	@Autowired
+	private UserIoOperationRepository userIoOperationRepository;
+	@Autowired
+	private UserGroupIoOperationRepository userGroupIoOperationRepository;
 	@Autowired
 	VisitsIoOperationRepository visitsIoOperationRepository;
 	@Autowired
@@ -114,6 +126,8 @@ public class Tests extends OHCoreTestCase {
 		testDisease = new TestDisease();
 		testDiseaseType = new TestDiseaseType();
 		testWard = new TestWard();
+		testUser = new TestUser();
+		testUserGroup = new TestUserGroup();
 		testVisit = new TestVisit();
 	}
 
@@ -156,7 +170,7 @@ public class Tests extends OHCoreTestCase {
 				foundOpd.getAge() + 1,
 				foundOpd.getSex(),
 				foundOpd.getNewPatient(),
-				foundOpd.getUserID());
+				foundOpd.getUser());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
 
@@ -178,10 +192,12 @@ public class Tests extends OHCoreTestCase {
 		disease.getType().setCode("angal.common.alltypes.txt");
 		
 		Ward ward = testWard.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, true);
 		LocalDate now = LocalDate.now();
 		opd.setDate(now.atStartOfDay());
 
@@ -189,8 +205,9 @@ public class Tests extends OHCoreTestCase {
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
-		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);		
 		opdIoOperationRepository.saveAndFlush(opd);
 
 		List<Opd> opds = opdIoOperation.getOpdList(0);
@@ -207,10 +224,12 @@ public class Tests extends OHCoreTestCase {
 		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Ward ward = testWard.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, true);
 		// set date to be today
 		LocalDate today = LocalDate.now();
 		opd.setDate(today.atStartOfDay());
@@ -219,6 +238,8 @@ public class Tests extends OHCoreTestCase {
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
 		
 		opdIoOperationRepository.saveAndFlush(opd);
@@ -229,10 +250,14 @@ public class Tests extends OHCoreTestCase {
 		
 		Ward ward2 = testWard.setup(false);
 		ward2.setCode("ZZ");
+		UserGroup userGroup2 = testUserGroup.setup(false);
+		userGroup2.setCode("ZZZ");
+		User user2 = testUser.setup(userGroup2, false);
+		user2.setUserName("zzzzz");
 		
 		Visit nextVisit2 = testVisit.setup(patient, true, ward2);
 
-		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, true);
+		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, user2, true);
 		// set date to be 14 days ago (not within the TODAY test)
 		opd2.setDate(today.minusDays(14).atStartOfDay());
 
@@ -240,6 +265,8 @@ public class Tests extends OHCoreTestCase {
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
 		diseaseIoOperationRepository.saveAndFlush(disease2);
 		wardIoOperationRepository.saveAndFlush(ward2);
+		userGroupIoOperationRepository.saveAndFlush(userGroup2);
+		userIoOperationRepository.saveAndFlush(user2);
 		visitsIoOperationRepository.saveAndFlush(nextVisit2);
 		opdIoOperationRepository.saveAndFlush(opd2);
 
@@ -258,10 +285,12 @@ public class Tests extends OHCoreTestCase {
 		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Ward ward = testWard.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, true);
 		LocalDate date = LocalDate.now();
 		// set date to be 3 days ago (within last week)
 		date.minusDays(3);
@@ -271,6 +300,8 @@ public class Tests extends OHCoreTestCase {
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
 		
 		opdIoOperationRepository.saveAndFlush(opd);
@@ -282,10 +313,14 @@ public class Tests extends OHCoreTestCase {
 
 		Ward ward2 = testWard.setup(false);
 		ward2.setCode("ZZ");
+		UserGroup userGroup2 = testUserGroup.setup(false);
+		userGroup2.setCode("ZZZ");
+		User user2 = testUser.setup(userGroup2, false);
+		user2.setUserName("zzzzz");
 		
 		Visit nextVisit2 = testVisit.setup(patient, true, ward2);
 
-		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, true);
+		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, user2, true);
 		LocalDate date2 = LocalDate.now();
 		// set date to be 13 days aga (not within last week)
 		date2 = date2.minusDays(13);
@@ -295,6 +330,8 @@ public class Tests extends OHCoreTestCase {
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
 		diseaseIoOperationRepository.saveAndFlush(disease2);
 		wardIoOperationRepository.saveAndFlush(ward2);
+		userGroupIoOperationRepository.saveAndFlush(userGroup2);
+		userIoOperationRepository.saveAndFlush(user2);
 		visitsIoOperationRepository.saveAndFlush(nextVisit2);
 		opdIoOperationRepository.saveAndFlush(opd2);
 
@@ -309,14 +346,18 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
 		Ward ward = testWard.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
 		
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, false);
 		Opd result = opdIoOperation.newOpd(opd);
 		assertThat(result).isNotNull();
 		checkOpdIntoDb(opd.getCode());
@@ -443,7 +484,7 @@ public class Tests extends OHCoreTestCase {
 				foundOpd.getAge() + 1,
 				foundOpd.getSex(),
 				foundOpd.getNewPatient(),
-				foundOpd.getUserID());
+				foundOpd.getUser());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
 
@@ -465,10 +506,12 @@ public class Tests extends OHCoreTestCase {
 		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Ward ward = testWard.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, true);
 		LocalDate now = LocalDate.now();
 		opd.setDate(now.atStartOfDay());
 
@@ -476,6 +519,8 @@ public class Tests extends OHCoreTestCase {
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);		
+		userIoOperationRepository.saveAndFlush(user);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
 		
 		opdIoOperationRepository.saveAndFlush(opd);
@@ -494,10 +539,12 @@ public class Tests extends OHCoreTestCase {
 		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Ward ward = testWard.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, true);
 		// set date to be today
 		LocalDate today = LocalDate.now();
 		opd.setDate(today.atStartOfDay());
@@ -506,6 +553,8 @@ public class Tests extends OHCoreTestCase {
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
 		
 		opdIoOperationRepository.saveAndFlush(opd);
@@ -517,10 +566,14 @@ public class Tests extends OHCoreTestCase {
 
 		Ward ward2 = testWard.setup(false);
 		ward2.setCode("ZZ");
+		UserGroup userGroup2 = testUserGroup.setup(false);
+		userGroup2.setCode("ZZZ");
+		User user2 = testUser.setup(userGroup2, false);
+		user2.setUserName("zzzzz");
 		
 		Visit nextVisit2 = testVisit.setup(patient, true, ward2);
 
-		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, true);
+		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, user2, true);
 		LocalDate now = LocalDate.now();
 		// set date to be 14 days ago (not within the TODAY test)
 		now = now.minusDays(14);
@@ -530,6 +583,8 @@ public class Tests extends OHCoreTestCase {
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
 		diseaseIoOperationRepository.saveAndFlush(disease2);
 		wardIoOperationRepository.saveAndFlush(ward2);
+		userGroupIoOperationRepository.saveAndFlush(userGroup2);
+		userIoOperationRepository.saveAndFlush(user2);
 		visitsIoOperationRepository.saveAndFlush(nextVisit2);
 		opdIoOperationRepository.saveAndFlush(opd2);
 
@@ -548,10 +603,12 @@ public class Tests extends OHCoreTestCase {
 		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Ward ward = testWard.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, true);
 		LocalDate date = LocalDate.now();
 		// set date to be 3 days ago (within last week)
 		date = date.minusDays(3);
@@ -561,6 +618,8 @@ public class Tests extends OHCoreTestCase {
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
 		
 		opdIoOperationRepository.saveAndFlush(opd);
@@ -572,10 +631,14 @@ public class Tests extends OHCoreTestCase {
 
 		Ward ward2 = testWard.setup(false);
 		ward2.setCode("ZZ");
+		UserGroup userGroup2 = testUserGroup.setup(false);
+		userGroup2.setCode("ZZZ");
+		User user2 = testUser.setup(userGroup2, false);
+		user2.setUserName("zzzzz");
 		
 		Visit nextVisit2 = testVisit.setup(patient, true, ward2);
 
-		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, true);
+		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, user2, true);
 		LocalDate date2 = LocalDate.now();
 		// set date to be 13 days ago (not within last week)
 		date2 = date2.minusDays(13);
@@ -585,6 +648,8 @@ public class Tests extends OHCoreTestCase {
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType2);
 		diseaseIoOperationRepository.saveAndFlush(disease2);
 		wardIoOperationRepository.saveAndFlush(ward2);
+		userGroupIoOperationRepository.saveAndFlush(userGroup2);
+		userIoOperationRepository.saveAndFlush(user2);
 		visitsIoOperationRepository.saveAndFlush(nextVisit2);
 		opdIoOperationRepository.saveAndFlush(opd2);
 
@@ -599,14 +664,19 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
 		Ward ward = testWard.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
+		
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
 		
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, true);
 		// Need this to pass validation checks in manager
 		Disease disease2 = new Disease("998", "TestDescription 2", diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease2);
@@ -624,14 +694,18 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
 		Ward ward = testWard.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
 		
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, true);
 		// Need this to pass validation checks in manager
 		Disease disease2 = new Disease("998", "TestDescription 2", diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease2);
@@ -714,14 +788,16 @@ public class Tests extends OHCoreTestCase {
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
 			Ward ward = testWard.setup(false);
+			UserGroup userGroup = testUserGroup.setup(false);		
+			User user = testUser.setup(userGroup, false);
 			Visit nextVisit = testVisit.setup(patient, false, ward);
-			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, false);
 			// Need this to pass validation checks in manager
 			opd.setDisease2(null);
 			opd.setDisease3(null);
 
 			// also let validation set userID
-			opd.setUserID(null);
+			opd.setUser(null);
 
 			opd.setDate(null);
 			opdBrowserManager.newOpd(opd);
@@ -744,8 +820,10 @@ public class Tests extends OHCoreTestCase {
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
 			Ward ward = testWard.setup(false);
+			UserGroup userGroup = testUserGroup.setup(false);		
+			User user = testUser.setup(userGroup, false);
 			Visit nextVisit = testVisit.setup(patient, false, ward);
-			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, false);
 			// Need this to pass validation checks in manager
 			opd.setDisease2(null);
 			opd.setDisease3(null);
@@ -768,8 +846,10 @@ public class Tests extends OHCoreTestCase {
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
 			Ward ward = testWard.setup(false);
+			UserGroup userGroup = testUserGroup.setup(false);		
+			User user = testUser.setup(userGroup, false);
 			Visit nextVisit = testVisit.setup(patient, false, ward);
-			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, false);
 			// Need this to pass validation checks in manager
 			opd.setDisease2(null);
 			opd.setDisease3(null);
@@ -792,8 +872,10 @@ public class Tests extends OHCoreTestCase {
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
 			Ward ward = testWard.setup(false);
+			UserGroup userGroup = testUserGroup.setup(false);		
+			User user = testUser.setup(userGroup, false);
 			Visit nextVisit = testVisit.setup(patient, false, ward);
-			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, false);
 			// Need this to pass validation checks in manager
 			opd.setDisease2(null);
 			opd.setDisease3(null);
@@ -817,8 +899,10 @@ public class Tests extends OHCoreTestCase {
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
 			Ward ward = testWard.setup(false);
+			UserGroup userGroup = testUserGroup.setup(false);		
+			User user = testUser.setup(userGroup, false);
 			Visit nextVisit = testVisit.setup(patient, false, ward);
-			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, false);
 			// Need this to pass validation checks in manager
 			opd.setDisease2(null);
 			opd.setDisease3(null);
@@ -841,8 +925,10 @@ public class Tests extends OHCoreTestCase {
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
 			Ward ward = testWard.setup(false);
+			UserGroup userGroup = testUserGroup.setup(false);		
+			User user = testUser.setup(userGroup, false);
 			Visit nextVisit = testVisit.setup(patient, false, ward);
-			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, false);
 
 			Disease disease2 = new Disease("997", "TestDescription 2", diseaseType);
 			opd.setDisease2(disease2);
@@ -863,8 +949,10 @@ public class Tests extends OHCoreTestCase {
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
 			Ward ward = testWard.setup(false);
+			UserGroup userGroup = testUserGroup.setup(false);		
+			User user = testUser.setup(userGroup, false);
 			Visit nextVisit = testVisit.setup(patient, false, ward);
-			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, false);
 
 			Disease disease3 = new Disease("998", "TestDescription 3", diseaseType);
 			opd.setDisease3(disease3);
@@ -885,8 +973,10 @@ public class Tests extends OHCoreTestCase {
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
 			Ward ward = testWard.setup(false);
+			UserGroup userGroup = testUserGroup.setup(false);		
+			User user = testUser.setup(userGroup, false);
 			Visit nextVisit = testVisit.setup(patient, false, ward);
-			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, false);
 
 			Disease disease2 = new Disease("998", "TestDescription 2", diseaseType);
 			opd.setDisease2(disease2);
@@ -906,8 +996,10 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
 		Ward ward = testWard.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		Visit nextVisit = testVisit.setup(patient, false, ward);
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, false);
 
 		Disease disease2 = new Disease("997", "TestDescription 2", diseaseType);
 		opd.setDisease2(disease2);
@@ -973,8 +1065,10 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
 		Ward ward = testWard.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		Visit nextVisit = testVisit.setup(patient, false, ward);
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, false);
 		// compute
 		int hashCode = opd.hashCode();
 		assertThat(hashCode).isEqualTo(23 * 133 + opd.getCode());
@@ -988,8 +1082,10 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
 		Ward ward = testWard.setup(false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
 		Visit nextVisit = testVisit.setup(patient, false, ward);
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, false);
 
 		assertThat(opd).isEqualTo(opd);
 		assertThat(opd)
@@ -1008,15 +1104,17 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = testDiseaseType.setup(false);
 		Disease disease = testDisease.setup(diseaseType, false);
 		Ward ward = testWard.setup(false);
-		Visit nextVisit = testVisit.setup(patient, false, ward);
-		
-		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
+		Visit nextVisit = testVisit.setup(patient, false, ward);		
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, user, false);
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
-		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
+		visitsIoOperationRepository.saveAndFlush(nextVisit);		
 		opdIoOperationRepository.saveAndFlush(opd);
 		return opd.getCode();
 	}

@@ -30,6 +30,7 @@ import org.isf.disease.model.Disease;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.UserBrowsingManager;
+import org.isf.menu.model.User;
 import org.isf.opd.model.Opd;
 import org.isf.opd.service.OpdIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
@@ -47,6 +48,9 @@ public class OpdBrowserManager {
 
 	@Autowired
 	private OpdIoOperations ioOperations;
+	
+	@Autowired
+	private UserBrowsingManager userBrowsingManager;
 
 	protected void setPatientConsistency(Opd opd) {
 		if (GeneralData.OPDEXTENDED && opd.getPatient() != null) {
@@ -71,10 +75,15 @@ public class OpdBrowserManager {
 		Disease disease2 = opd.getDisease2();
 		Disease disease3 = opd.getDisease3();
 		Ward ward = opd.getWard();
-		if (opd.getUserID() == null) {
-			opd.setUserID(UserBrowsingManager.getCurrentUser());
-		}
 		List<OHExceptionMessage> errors = new ArrayList<>();
+		if (opd.getUser() == null) {
+			try {
+				opd.setUser(userBrowsingManager.getCurrentOHUser());
+			} catch (OHServiceException e) {
+				errors.addAll(e.getMessages());
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.userbrowser.pleaseprovideavalidusername.msg")));
+			}
+		}
 		// Check Visit Date
 		if (opd.getDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.pleaseinsertattendancedate.msg")));
@@ -145,7 +154,7 @@ public class OpdBrowserManager {
 	 * @return the list of Opds. It could be <code>null</code>.
 	 * @throws OHServiceException
 	 */
-	public List<Opd> getOpd(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, String user)
+	public List<Opd> getOpd(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, User user)
 			throws OHServiceException {
 		return ioOperations.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user);
 	}

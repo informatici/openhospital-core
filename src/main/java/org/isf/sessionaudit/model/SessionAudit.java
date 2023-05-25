@@ -31,10 +31,13 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.isf.menu.model.User;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -52,9 +55,10 @@ public class SessionAudit extends Auditable<String> {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "SEA_ID")
 	private int code;
-
-	@Column(name = "SEA_US_ID_A")
-	private String userName;
+	
+	@ManyToOne
+	@JoinColumn(name = "SEA_US_ID_A") 
+	private User user;
 
 	/*
 	 * Date of this control
@@ -76,9 +80,9 @@ public class SessionAudit extends Auditable<String> {
 		super();
 	}
 
-	public SessionAudit(String userName, @NotNull LocalDateTime loginDate, LocalDateTime logoutDate) {
+	public SessionAudit(User user, @NotNull LocalDateTime loginDate, LocalDateTime logoutDate) {
 		super();
-		this.userName = userName;
+		this.user = user;
 		this.loginDate = loginDate;
 		this.logoutDate = logoutDate;
 	}
@@ -91,12 +95,12 @@ public class SessionAudit extends Auditable<String> {
 		return code;
 	}
 
-	public String getUserName() {
-		return userName;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public LocalDateTime getLoginDate() {
@@ -117,7 +121,7 @@ public class SessionAudit extends Auditable<String> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(code, hashCode, loginDate, logoutDate, userName);
+		return Objects.hash(code, hashCode, loginDate, logoutDate, user.getUserName());
 	}
 
 	@Override
@@ -133,7 +137,7 @@ public class SessionAudit extends Auditable<String> {
 		}
 		SessionAudit other = (SessionAudit) obj;
 		return code == other.code && hashCode == other.hashCode && Objects.equals(loginDate, other.loginDate) && Objects.equals(logoutDate, other.logoutDate)
-						&& Objects.equals(userName, other.userName);
+						&& Objects.equals(user, other.user);
 	}
 
 

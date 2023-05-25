@@ -67,6 +67,6 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 	@Query(value = "select bi.bill from BillItems bi where bi.itemDescription = :desc and bi.bill.date >= :dateFrom and bi.bill.date < :dateTo")
 	List<Bill> findAllWhereDatesAndBillItem(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, @Param("desc") String desc);
 
-	@Query(value = "select distinct b.user FROM Bill b ORDER BY b.user asc")
+	@Query(value = "select distinct b.user.userName FROM Bill b ORDER BY b.user.userName asc")
 	List<String> findUserDistinctByOrderByUserAsc();
 }

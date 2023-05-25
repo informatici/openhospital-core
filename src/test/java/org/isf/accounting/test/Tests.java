@@ -38,6 +38,12 @@ import org.isf.accounting.service.AccountingBillIoOperationRepository;
 import org.isf.accounting.service.AccountingBillItemsIoOperationRepository;
 import org.isf.accounting.service.AccountingBillPaymentIoOperationRepository;
 import org.isf.accounting.service.AccountingIoOperations;
+import org.isf.menu.model.User;
+import org.isf.menu.model.UserGroup;
+import org.isf.menu.service.UserGroupIoOperationRepository;
+import org.isf.menu.service.UserIoOperationRepository;
+import org.isf.menu.test.TestUser;
+import org.isf.menu.test.TestUserGroup;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.service.PatientIoOperationRepository;
@@ -59,6 +65,8 @@ public class Tests extends OHCoreTestCase {
 	private static TestBill testBill;
 	private static TestBillItems testBillItems;
 	private static TestBillPayments testBillPayments;
+	private static TestUser testUser;
+	private static TestUserGroup testUserGroup;
 	private static TestPatient testPatient;
 	private static TestPriceList testPriceList;
 
@@ -78,12 +86,18 @@ public class Tests extends OHCoreTestCase {
 	PricesListIoOperationRepository priceListIoOperationRepository;
 	@Autowired
 	PatientIoOperationRepository patientIoOperationRepository;
+	@Autowired
+	UserGroupIoOperationRepository userGroupIoOperationRepository;
+	@Autowired
+	UserIoOperationRepository userIoOperationRepository;
 
 	@BeforeClass
 	public static void setUpClass() {
 		testBill = new TestBill();
 		testBillItems = new TestBillItems();
 		testBillPayments = new TestBillPayments();
+		testUser = new TestUser();
+		testUserGroup = new TestUserGroup();
 		testPatient = new TestPatient();
 		testPriceList = new TestPriceList();
 	}
@@ -204,7 +218,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findById(id).get();
 		List<String> userIds = accountingIoOperation.getUsers();
-		assertThat(userIds).contains(foundBillPayment.getUser());
+		assertThat(userIds).contains(foundBillPayment.getUser().getUserName());
 	}
 
 	@Test
@@ -272,8 +286,12 @@ public class Tests extends OHCoreTestCase {
 	public void testIoNewBill() throws Exception {
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
-		Bill bill = testBill.setup(priceList, patient, null, false);
+		UserGroup userGroup = testUserGroup.setup(false);
+		User user = testUser.setup(userGroup, false);		
+		Bill bill = testBill.setup(priceList, patient, null, user, false);
 		priceListIoOperationRepository.saveAndFlush(priceList);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
 		patientIoOperationRepository.saveAndFlush(patient);
 		int id = accountingIoOperation.newBill(bill);
 		checkBillIntoDb(id);
@@ -303,7 +321,9 @@ public class Tests extends OHCoreTestCase {
 		BillPayments deleteBillPayment = accountingBillPaymentIoOperationRepository.findById(deleteId).get();
 
 		Bill bill = deleteBillPayment.getBill();
-		BillPayments insertBillPayment = testBillPayments.setup(null, false);
+		UserGroup userGroup = testUserGroup.setup(false);		
+		User user = testUser.setup(userGroup, false);
+		BillPayments insertBillPayment = testBillPayments.setup(null, user, false);
 		int insertId = deleteId + 1;
 		billPayments.add(insertBillPayment);
 		boolean result = accountingIoOperation.newBillPayments(bill, billPayments);
@@ -558,7 +578,11 @@ public class Tests extends OHCoreTestCase {
 		PriceList priceList = testPriceList.setup(false);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
-		Bill bill = testBill.setup(priceList, patient, null, false);
+		UserGroup userGroup = testUserGroup.setup(false);
+		User user = testUser.setup(userGroup, false);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
+		Bill bill = testBill.setup(priceList, patient, null, user, false);
 		boolean success = billBrowserManager.newBill(
 				bill,
 				new ArrayList<>(),
@@ -572,7 +596,11 @@ public class Tests extends OHCoreTestCase {
 		PriceList priceList = testPriceList.setup(false);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
-		Bill bill = testBill.setup(priceList, patient, null, false);
+		UserGroup userGroup = testUserGroup.setup(false);
+		User user = testUser.setup(userGroup, false);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
+		Bill bill = testBill.setup(priceList, patient, null, user, false);
 		BillItems insertBillItem = testBillItems.setup(null, false);
 		List<BillItems> billItems = new ArrayList<>();
 		billItems.add(insertBillItem);
@@ -589,8 +617,12 @@ public class Tests extends OHCoreTestCase {
 		PriceList priceList = testPriceList.setup(false);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
-		Bill bill = testBill.setup(priceList, patient, null, false);
-		BillPayments insertBillPayment = testBillPayments.setup(bill, false);
+		UserGroup userGroup = testUserGroup.setup(false);
+		User user = testUser.setup(userGroup, false);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
+		Bill bill = testBill.setup(priceList, patient, null, user, false);
+		BillPayments insertBillPayment = testBillPayments.setup(bill, user, false);
 		insertBillPayment.setDate(TimeTools.getNow());
 		List<BillPayments> billPayments = new ArrayList<>();
 		billPayments.add(insertBillPayment);
@@ -607,9 +639,13 @@ public class Tests extends OHCoreTestCase {
 		PriceList priceList = testPriceList.setup(false);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
-		Bill bill = testBill.setup(priceList, patient, null, false);
+		UserGroup userGroup = testUserGroup.setup(false);
+		User user = testUser.setup(userGroup, false);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
+		Bill bill = testBill.setup(priceList, patient, null, user, false);
 		BillItems insertBillItem = testBillItems.setup(bill, false);
-		BillPayments insertBillPayment = testBillPayments.setup(bill, false);
+		BillPayments insertBillPayment = testBillPayments.setup(bill, user, false);
 		insertBillPayment.setDate(TimeTools.getNow());
 		List<BillItems> billItems = new ArrayList<>();
 		billItems.add(insertBillItem);
@@ -626,12 +662,14 @@ public class Tests extends OHCoreTestCase {
 	public void mgrNewBillFailValidation() throws Exception {
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
-		Bill bill = testBill.setup(priceList, patient, null, false);
+		UserGroup userGroup = testUserGroup.setup(false);
+		User user = testUser.setup(userGroup, false);
+		Bill bill = testBill.setup(priceList, patient, null, user, false);
 		List<BillItems> billItems = new ArrayList<>();
 		BillItems insertBillItem = testBillItems.setup(bill, false);
 		billItems.add(insertBillItem);
 		List<BillPayments> billPayments = new ArrayList<>();
-		BillPayments payments = testBillPayments.setup(bill, false);
+		BillPayments payments = testBillPayments.setup(bill, user, false);
 		billPayments.add(payments);
 
 		assertThatThrownBy(() -> billBrowserManager.newBill(bill, billItems, billPayments))
@@ -754,13 +792,17 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestBillPayments(false);
 		BillPayments foundBillPayment = accountingBillPaymentIoOperationRepository.findById(id).get();
 		List<String> userIds = billBrowserManager.getUsers();
-		assertThat(userIds).contains(foundBillPayment.getUser());
+		assertThat(userIds).contains(foundBillPayment.getUser().getUserName());
 	}
 
 	private int setupTestBill(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
-		Bill bill = testBill.setup(priceList, patient, null, usingSet);
+		UserGroup userGroup = testUserGroup.setup(false);
+		User user = testUser.setup(userGroup, false);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
+		Bill bill = testBill.setup(priceList, patient, null, user, usingSet);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
 		accountingBillIoOperationRepository.saveAndFlush(bill);
@@ -777,7 +819,11 @@ public class Tests extends OHCoreTestCase {
 	private int setupTestBillItems(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
-		Bill bill = testBill.setup(priceList, patient, null, usingSet);
+		UserGroup userGroup = testUserGroup.setup(false);
+		User user = testUser.setup(userGroup, false);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
+		Bill bill = testBill.setup(priceList, patient, null, user, usingSet);
 		BillItems billItem = testBillItems.setup(bill, usingSet);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -797,8 +843,12 @@ public class Tests extends OHCoreTestCase {
 	private int setupTestBillPayments(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(false);
 		PriceList priceList = testPriceList.setup(false);
-		Bill bill = testBill.setup(priceList, patient, null, usingSet);
-		BillPayments billPayment = testBillPayments.setup(bill, usingSet);
+		UserGroup userGroup = testUserGroup.setup(false);
+		User user = testUser.setup(userGroup, false);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
+		Bill bill = testBill.setup(priceList, patient, null, user, usingSet);
+		BillPayments billPayment = testBillPayments.setup(bill, user, usingSet);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
 		accountingBillIoOperationRepository.saveAndFlush(bill);

@@ -45,6 +45,7 @@ import org.isf.disctype.model.DischargeType;
 import org.isf.disease.model.Disease;
 import org.isf.dlvrrestype.model.DeliveryResultType;
 import org.isf.dlvrtype.model.DeliveryType;
+import org.isf.menu.model.User;
 import org.isf.patient.model.Patient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.utils.db.Auditable;
@@ -176,9 +177,10 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 	@Column(name = "ADM_PRG_DATE_ABORT")        // SQL type: datetime
 	private LocalDateTime abortDate;    // ADM_PRG_DATE_ABORT
-
-	@Column(name = "ADM_USR_ID_A")
-	private String userID;                    // the user ID
+	
+	@ManyToOne
+	@JoinColumn(name = "ADM_USR_ID_A") 
+	private User user;
 
 	@Version
 	@Column(name = "ADM_LOCK")
@@ -222,7 +224,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	 * @param ctrlDate1
 	 * @param ctrlDate2
 	 * @param abortDate
-	 * @param userID
+	 * @param user
 	 * @param deleted
 	 */
 	public Admission(int id, int admitted, String type, Ward ward, int prog, Patient patient, LocalDateTime admDate, AdmissionType admType, String fhu,
@@ -230,7 +232,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 			LocalDateTime disDate, DischargeType disType, String note, Float transUnit, LocalDateTime visitDate,
 			PregnantTreatmentType pregTreatmentType, LocalDateTime deliveryDate, DeliveryType deliveryType, DeliveryResultType deliveryResult, Float weight,
 			LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
-			LocalDateTime abortDate, String userID, char deleted) {
+			LocalDateTime abortDate, User user, char deleted) {
 		super();
 		this.id = id;
 		this.admitted = admitted;
@@ -258,7 +260,7 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.ctrlDate1 = TimeTools.truncateToSeconds(ctrlDate1);
 		this.ctrlDate2 = TimeTools.truncateToSeconds(ctrlDate2);
 		this.abortDate = TimeTools.truncateToSeconds(abortDate);
-		this.userID = userID;
+		this.user = user;
 		this.deleted = deleted;
 	}
 
@@ -270,12 +272,12 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.transUnit = transUnit;
 	}
 
-	public String getUserID() {
-		return userID;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserID(String string) {
-		this.userID = string;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public LocalDateTime getAbortDate() {

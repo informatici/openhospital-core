@@ -34,6 +34,12 @@ import org.isf.admission.model.Admission;
 import org.isf.admission.service.AdmissionIoOperationRepository;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.admtype.service.AdmissionTypeIoOperationRepository;
+import org.isf.menu.model.User;
+import org.isf.menu.model.UserGroup;
+import org.isf.menu.service.UserGroupIoOperationRepository;
+import org.isf.menu.service.UserIoOperationRepository;
+import org.isf.menu.test.TestUser;
+import org.isf.menu.test.TestUserGroup;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
@@ -51,6 +57,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class Tests extends OHCoreTestCase {
 
 	private static TestWard testWard;
+	private static TestUser testUser;
+	private static TestUserGroup testUserGroup;
 
 	@Autowired
 	WardIoOperations wardIoOperation;
@@ -61,11 +69,17 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	AdmissionIoOperationRepository admissionIoOperationRepository;
 	@Autowired
+	private UserIoOperationRepository userIoOperationRepository;
+	@Autowired
+	private UserGroupIoOperationRepository userGroupIoOperationRepository;
+	@Autowired
 	AdmissionTypeIoOperationRepository admissionTypeIoOperationRepository;
 
 	@BeforeClass
 	public static void setUpClass() {
 		testWard = new TestWard();
+		testUser = new TestUser();
+		testUserGroup = new TestUserGroup();
 	}
 
 	@Before
@@ -96,15 +110,19 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetCurrentOccupation() throws Exception {
 		String code = setupTestWard(false);
 		Ward ward = wardIoOperationRepository.findById(code).get();
+		UserGroup userGroup = testUserGroup.setup(false);
+		User user = testUser.setup(userGroup, false);		
 		LocalDateTime admDate = TimeTools.getNow();
 		AdmissionType admissionType = new AdmissionType("ZZ", "TestDescription");
 		Admission admission1 = new Admission(0, 1, "N", ward, 0, null, admDate, admissionType,
 				"TestFHU", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-				"TestUserId", 'N');
+				user, 'N');
 		Admission admission2 = new Admission(0, 1, "N", ward, 0, null, admDate, admissionType,
 				"TestFHU", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-				"TestUserId", 'N');
+				user, 'N');
 		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
+		userGroupIoOperationRepository.saveAndFlush(userGroup);
+		userIoOperationRepository.saveAndFlush(user);
 		admissionIoOperationRepository.saveAndFlush(admission1);
 		admissionIoOperationRepository.saveAndFlush(admission2);
 		assertThat(wardIoOperation.getCurrentOccupation(ward)).isEqualTo(2);

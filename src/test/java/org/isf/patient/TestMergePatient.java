@@ -47,6 +47,13 @@ import org.isf.distype.test.TestDiseaseType;
 import org.isf.examination.model.PatientExamination;
 import org.isf.examination.service.ExaminationIoOperationRepository;
 import org.isf.examination.test.TestPatientExamination;
+import org.isf.menu.model.User;
+import org.isf.menu.model.UserGroup;
+import org.isf.menu.service.UserGroupIoOperationRepository;
+import org.isf.menu.service.UserIoOperationRepository;
+import org.isf.menu.test.TestUser;
+import org.isf.menu.test.TestUserGroup;
+import org.isf.menu.test.TestUserMenu;
 import org.isf.patient.manager.PatientBrowserManager;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
@@ -79,6 +86,8 @@ public class TestMergePatient extends OHCoreTestCase {
 	private static TestDisease testDisease;
 	private static TestDiseaseType testDiseaseType;
 	private static TestPriceList testPriceList;
+	private static TestUser testUser;
+	private static TestUserGroup testUserGroup;
 	private static TestVisit testVisit;
 	private static TestWard testWard;
 
@@ -96,6 +105,10 @@ public class TestMergePatient extends OHCoreTestCase {
 	TestPatientMergedEventListener testPatientMergedEventListener;
 	@Autowired
 	PricesListIoOperationRepository priceListIoOperationRepository;
+	@Autowired
+	UserGroupIoOperationRepository userGroupIoOperationRepository;
+	@Autowired
+	UserIoOperationRepository userIoOperationRepository;
 	@Autowired
 	AccountingBillIoOperationRepository accountingBillIoOperationRepository;
 	@Autowired
@@ -117,6 +130,8 @@ public class TestMergePatient extends OHCoreTestCase {
 		testAdmissionType = new TestAdmissionType();
 		testBill = new TestBill();
 		testBillPayments = new TestBillPayments();
+		testUser = new TestUser();
+		testUserGroup = new TestUserGroup();
 		testDisease = new TestDisease();
 		testDiseaseType = new TestDiseaseType();
 		testPriceList = new TestPriceList();
@@ -324,7 +339,11 @@ public class TestMergePatient extends OHCoreTestCase {
 		assertThatThrownBy(() -> {
 			Patient patient1 = testPatient.setup(false);
 			PriceList priceList = testPriceList.setup(false);
-			Bill bill = testBill.setup(priceList, patient1, null, true);
+			UserGroup userGroup = testUserGroup.setup(false);
+			User user = testUser.setup(userGroup, false);
+			userGroupIoOperationRepository.saveAndFlush(userGroup);
+			userIoOperationRepository.saveAndFlush(user);
+			Bill bill = testBill.setup(priceList, patient1, null, user, true);
 			priceListIoOperationRepository.saveAndFlush(priceList);
 			Patient mergedPatient = patientIoOperationRepository.saveAndFlush(patient1);
 			accountingBillIoOperationRepository.saveAndFlush(bill);
@@ -348,7 +367,11 @@ public class TestMergePatient extends OHCoreTestCase {
 
 			Patient patient2 = testPatient.setup(false);
 			PriceList priceList = testPriceList.setup(false);
-			Bill bill = testBill.setup(priceList, patient2, null, true);
+			UserGroup userGroup = testUserGroup.setup(false);
+			User user = testUser.setup(userGroup, false);
+			userGroupIoOperationRepository.saveAndFlush(userGroup);
+			userIoOperationRepository.saveAndFlush(user);
+			Bill bill = testBill.setup(priceList, patient2, null, user, true);
 			priceListIoOperationRepository.saveAndFlush(priceList);
 			Patient obsoletePatient = patientIoOperationRepository.saveAndFlush(patient2);
 			accountingBillIoOperationRepository.saveAndFlush(bill);
@@ -371,8 +394,10 @@ public class TestMergePatient extends OHCoreTestCase {
 			Disease diseaseIn = testDisease.setup(diseaseType, false);
 			Disease diseaseOut1 = testDisease.setup(diseaseType, false);
 			diseaseOut1.setCode("888");
+			UserGroup userGroup = testUserGroup.setup(false);		
+			User user = testUser.setup(userGroup, false);
 			Admission admission = testAdmission.setup(ward, patient1, admissionType, diseaseIn, diseaseOut1,
-					null, null, null, null, null, null, null, false);
+					null, null, null, null, null, null, null, user, false);
 
 			wardIoOperationRepository.saveAndFlush(ward);
 			Patient mergedPatient = patientIoOperationRepository.saveAndFlush(patient1);
@@ -380,6 +405,8 @@ public class TestMergePatient extends OHCoreTestCase {
 			diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 			diseaseIoOperationRepository.saveAndFlush(diseaseIn);
 			diseaseIoOperationRepository.saveAndFlush(diseaseOut1);
+			userGroupIoOperationRepository.saveAndFlush(userGroup);
+			userIoOperationRepository.saveAndFlush(user);
 			admissionIoOperationRepository.saveAndFlush(admission);
 
 			Patient patient2 = testPatient.setup(false);
@@ -406,8 +433,10 @@ public class TestMergePatient extends OHCoreTestCase {
 			Disease diseaseIn = testDisease.setup(diseaseType, false);
 			Disease diseaseOut1 = testDisease.setup(diseaseType, false);
 			diseaseOut1.setCode("888");
+			UserGroup userGroup = testUserGroup.setup(false);		
+			User user = testUser.setup(userGroup, false);
 			Admission admission = testAdmission.setup(ward, patient2, admissionType, diseaseIn, diseaseOut1,
-					null, null, null, null, null, null, null, false);
+					null, null, null, null, null, null, null, user, false);
 
 			wardIoOperationRepository.saveAndFlush(ward);
 			Patient obsoletePatient = patientIoOperationRepository.saveAndFlush(patient2);
@@ -415,6 +444,8 @@ public class TestMergePatient extends OHCoreTestCase {
 			diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 			diseaseIoOperationRepository.saveAndFlush(diseaseIn);
 			diseaseIoOperationRepository.saveAndFlush(diseaseOut1);
+			userGroupIoOperationRepository.saveAndFlush(userGroup);
+			userIoOperationRepository.saveAndFlush(user);
 			admissionIoOperationRepository.saveAndFlush(admission);
 
 			patientBrowserManager.mergePatient(mergedPatient, obsoletePatient);
