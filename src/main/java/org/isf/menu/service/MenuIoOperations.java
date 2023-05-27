@@ -176,6 +176,10 @@ public class MenuIoOperations
 		repository.updateUserLocked(isLocked, time, userName);
 	}
 
+	public void setLastLogin(String userName, LocalDateTime now) {
+		repository.setLastLogin(now, userName);
+	}
+
 	/**
 	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link User}
 	 * 
