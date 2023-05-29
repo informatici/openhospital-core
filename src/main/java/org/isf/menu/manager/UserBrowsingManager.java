@@ -130,7 +130,7 @@ public class UserBrowsingManager {
 	}
 
 	// TODO:  revisit the individual methods for failed attempts, locking, last login time, etc.
-	// The original idea is that last login in time gets called frequently, and number of failed attempts less oftent, and locking/unloking users 
+	// The original idea is that last login in time gets called frequently, and number of failed attempts less often, and locking/unloking users 
 	// even more infrequently, etc. and only one or two columns changed value.  The thought was that rewriting the entire object everytime for each
 	// operation was too heavy handed.
 	/**
