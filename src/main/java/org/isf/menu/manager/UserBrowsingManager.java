@@ -130,7 +130,7 @@ public class UserBrowsingManager {
 	}
 
 	/**
-	 * Increase the number of failed logon attemptes for {@link User}.
+	 * Increase the number of failed login attemptes for {@link User}.
 	 *
 	 * @param user the {@link User}
 	 */
