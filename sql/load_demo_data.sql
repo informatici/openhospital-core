@@ -6240,7 +6240,6 @@ CREATE TABLE `oh_user` (
   `US_ID_A` varchar(50) NOT NULL DEFAULT '',
   `US_UG_ID_A` varchar(50) NOT NULL DEFAULT '',
   `US_PASSWD` varchar(60) NOT NULL DEFAULT '',
-  `US_PASSWD` varchar(60) NOT NULL DEFAULT '',
   `US_DESC` varchar(128) DEFAULT NULL,
   `US_CREATED_BY` varchar(50) DEFAULT NULL,
   `US_CREATED_DATE` datetime DEFAULT NULL,
@@ -6263,8 +6262,8 @@ CREATE TABLE `oh_user` (
 
 LOCK TABLES `oh_user` WRITE;
 /*!40000 ALTER TABLE `oh_user` DISABLE KEYS */;
-INSERT INTO `oh_user` VALUES ('admin','admin','$2a$10$FI/PMO0oSHHosF2PX8l3QuB0DJepVfnynbLZ9Zm2711bF2ch8db2S','administrator',NULL,NULL,NULL,NULL,1,0,0,NULL,NULL,NULL);
-INSERT INTO `oh_user` VALUES ('guest','guest','$2a$10$b0WlANdaNV7Ukn/klFGt3.euZ7PaHuJI6TtBSM2vdxkavvkUDbpo2','guest',NULL,NULL,NULL,NULL,1,0,0,NULL,NULL,NULL);
+INSERT INTO `oh_user` VALUES ('admin','admin','$2a$10$FI/PMO0oSHHosF2PX8l3QuB0DJepVfnynbLZ9Zm2711bF2ch8db2S','administrator',NULL,NULL,NULL,NULL,1,0,0,NULL,NULL);
+INSERT INTO `oh_user` VALUES ('guest','guest','$2a$10$b0WlANdaNV7Ukn/klFGt3.euZ7PaHuJI6TtBSM2vdxkavvkUDbpo2','guest',NULL,NULL,NULL,NULL,1,0,0,NULL,NULL);
 /*!40000 ALTER TABLE `oh_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
