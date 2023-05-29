@@ -140,7 +140,7 @@ public class UserBrowsingManager {
 	}
 
 	/**
-	 * Reset the number of failed logon attemptes to zero for {@link User}.
+	 * Reset the number of failed login attemptes to zero for {@link User}.
 	 *
 	 * @param user the {@link User}
 	 */
