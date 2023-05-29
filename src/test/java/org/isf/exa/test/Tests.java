@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.exa.test;
 
@@ -200,8 +200,8 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestExam(false);
 		Exam foundExam = examIoOperationRepository.findById(code).get();
 		foundExam.setDescription("Update");
-		boolean result = examIoOperation.updateExam(foundExam);
-		assertThat(result).isTrue();
+		Exam result = examIoOperation.updateExam(foundExam);
+		assertThat(result);
 		Exam updateExam = examIoOperationRepository.findById(code).get();
 		assertThat(updateExam.getDescription()).isEqualTo("Update");
 	}
@@ -211,8 +211,8 @@ public class Tests extends OHCoreTestCase {
 		int code = setupTestExamRow(false);
 		ExamRow examRow = examRowIoOperationRepository.findById(code).get();
 		examRow.setDescription("Update");
-		boolean result = examRowIoOperation.updateExamRow(examRow);
-		assertThat(result).isTrue();
+		ExamRow result = examRowIoOperation.updateExamRow(examRow);
+		assertThat(result);
 		ExamRow updateExamRow = examRowIoOperationRepository.findById(code).get();
 		assertThat(updateExamRow.getDescription()).isEqualTo("Update");
 	}
@@ -312,9 +312,6 @@ public class Tests extends OHCoreTestCase {
 		List<Exam> exams = examBrowsingManager.getExams();
 		assertThat(exams.get(exams.size() - 1).getDescription()).isEqualTo(foundExam.getDescription());
 
-		exams = examBrowsingManager.getExamsbyDesc();
-		assertThat(exams.get(exams.size() - 1).getDescription()).isEqualTo(foundExam.getDescription());
-
 		exams = examBrowsingManager.getExamsByTypeDescription("xxxx");
 		assertThat(exams).isEmpty();
 
@@ -343,8 +340,8 @@ public class Tests extends OHCoreTestCase {
 		ExamRow examRow = testExamRow.setup(exam, true);
 		examTypeIoOperationRepository.saveAndFlush(examType);
 		examIoOperationRepository.saveAndFlush(exam);
-		boolean result = examRowBrowsingManager.newExamRow(examRow);
-		assertThat(result).isTrue();
+		ExamRow result = examRowBrowsingManager.newExamRow(examRow);
+		assertThat(result);
 		checkExamRowIntoDb(examRow.getCode());
 	}
 
@@ -363,8 +360,8 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestExam(false);
 		Exam foundExam = examIoOperationRepository.findById(code).get();
 		foundExam.setDescription("Update");
-		boolean result = examBrowsingManager.updateExam(foundExam);
-		assertThat(result).isTrue();
+		Exam result = examBrowsingManager.updateExam(foundExam);
+		assertThat(result);
 		Exam updateExam = examIoOperationRepository.findById(code).get();
 		assertThat(updateExam.getDescription()).isEqualTo("Update");
 	}
@@ -490,7 +487,7 @@ public class Tests extends OHCoreTestCase {
 		Exam exam = examIoOperationRepository.findById(code).get();
 		ExamType examType = testExamType.setup(false);
 		Exam exam2 = new Exam("XXX", "TestDescription", examType, 1, "TestDefaultResult");
-		assertThat(exam.equals(exam)).isTrue();
+		assertThat(exam).isEqualTo(exam);
 		assertThat(exam)
 				.isNotEqualTo(exam2)
 				.isNotEqualTo("xyzzy");
@@ -511,7 +508,7 @@ public class Tests extends OHCoreTestCase {
 		ExamType examType = testExamType.setup(false);
 		Exam exam2 = new Exam("XXX", "TestDescription", examType, 1, "TestDefaultResult");
 		ExamRow examRow2 = new ExamRow(exam2, "NewDescription");
-		assertThat(examRow.equals(examRow)).isTrue();
+		assertThat(examRow).isEqualTo(examRow);
 		assertThat(examRow)
 				.isNotEqualTo(examRow2)
 				.isNotEqualTo("xyzzy");

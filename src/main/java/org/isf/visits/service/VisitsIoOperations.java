@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.visits.service;
 
@@ -64,6 +64,10 @@ public class VisitsIoOperations {
 				repository.findAllByWardIsNullAndPatient_CodeOrderByPatient_CodeAscDateAsc(patID) :
 				repository.findAllByWardIsNullOrderByPatient_CodeAscDateAsc();
 	}
+	public Visit getVisit(int visitID) throws OHServiceException {
+		return repository.findAllByVisitID(visitID);
+				
+	}
 
 	/**
 	 * Returns the list of all {@link Visit}s related to a wardId
@@ -74,10 +78,11 @@ public class VisitsIoOperations {
 	public List<Visit> getVisitsWard(String wardId) throws OHServiceException {
 		List<Visit> visits = null;
 
-		if (wardId != null)
+		if (wardId != null) {
 			visits = repository.findAllWhereWardByOrderDateAsc(wardId);
-		else
+		} else {
 			visits = repository.findAllByOrderByPatient_CodeAscDateAsc();
+		}
 
 		return visits;
 	}
@@ -95,17 +100,15 @@ public class VisitsIoOperations {
 	}
 	
 	/**
-	 * Deletes all {@link Visit}s related to a patID
+	 * update {@link Visit} for a specified {@link Visit}
 	 * 
-	 * @param patID - the {@link Patient} ID
-	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
-	 * @throws OHServiceException
-	 * @deprecated OP-713 raised the need of a strong link with OPDs so deletions like this one could be done safely.
-	 * 				Before that it is not possible to use this method safely.
+	 * @param visit - the {@link Visit}.
+	 * @return the {@link Visit}
+	 * @throws OHServiceException 
 	 */
-	public boolean deleteAllVisits(int patID) throws OHServiceException {
-		repository.deleteByPatient_Code(patID);
-        return true;
+	@Transactional
+	public Visit updateVisit(Visit visit) throws OHServiceException {
+		return repository.save(visit);
 	}
 
 	/**
@@ -134,7 +137,7 @@ public class VisitsIoOperations {
 	 *
 	 * @param visit - the {@link Visit}
 	 */
-	public void deleteVisit(Visit visit) {
+	public void deleteVisit(Visit visit) throws OHServiceException {
 		repository.delete(visit);
 	}
 }

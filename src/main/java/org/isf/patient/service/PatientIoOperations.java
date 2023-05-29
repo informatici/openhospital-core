@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,18 +17,25 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.patient.service;
 
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+
 import org.hibernate.Hibernate;
+import org.hibernate.Session;
+import org.isf.generaldata.GeneralData;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
+import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
@@ -40,15 +47,12 @@ import org.springframework.transaction.annotation.Transactional;
  * PatientIoOperations - dB operations for the patient entity
  * -----------------------------------------
  * modification history
- * 05/05/2005 - giacomo  - first beta version
- * 03/11/2006 - ross - added toString method. Gestione apici per
- * nome, cognome, citta', indirizzo e note
- * 11/08/2008 - alessandro - added father & mother's names
- * 26/08/2008 - claudio    - added birth date
- * modified age
- * 01/01/2009 - Fabrizio   - changed the calls to PAT_AGE fields to
- * return again an int type
- * 03/12/2009 - Alex       - added method for merge two patients history
+ * 05/05/2005 - giacomo  - first beta version.
+ * 03/11/2006 - ross - added toString method.
+ * 11/08/2008 - alessandro - added father & mother's names.
+ * 26/08/2008 - claudio - added birth date modified age.
+ * 01/01/2009 - Fabrizio - changed the calls to PAT_AGE fields to return again an int type.
+ * 03/12/2009 - Alex - added method for merge two patients history.
  * ------------------------------------------
  */
 @Service
@@ -56,11 +60,23 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class PatientIoOperations {
 
-	public static final String NOT_DELETED_STATUS = "N";
+	private static final Logger LOGGER = LoggerFactory.getLogger(PatientIoOperations.class);
+
+	public static final String LOAD_FROM_DB = "DB";
+
+	public static final char NOT_DELETED_STATUS = 'N';
+
 	@Autowired
 	private PatientIoOperationRepository repository;
+
 	@Autowired
 	private ApplicationEventPublisher applicationEventPublisher;
+
+	@Autowired
+	private FileSystemPatientPhotoRepository fileSystemPatientPhotoRepository;
+
+	@Autowired
+	private EntityManager entityManager;
 
 	/**
 	 * Method that returns the full list of Patients not logically deleted
@@ -79,7 +95,7 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Patient> getPatients(Pageable pageable) throws OHServiceException {
-		return repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName("N", pageable);
+		return repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName('N', pageable);
 	}
 
 	/**
@@ -94,7 +110,8 @@ public class PatientIoOperations {
 	}
 
 	/**
-	 * Method that returns the full list of Patients not logically deleted, having the passed String in:<br>
+	 * Method that returns the full list of Patients not logically deleted, having
+	 * the passed String in:<br>
 	 * - code<br>
 	 * - firstName<br>
 	 * - secondName<br>
@@ -110,34 +127,34 @@ public class PatientIoOperations {
 	}
 
 	/**
-	 * Method that gets a Patient by his/her name
-	 *
-	 * @param name
-	 * @return the Patient that match specified name
-	 * @throws OHServiceException
-	 */
-	public Patient getPatient(String name) throws OHServiceException {
-		List<Patient> patients = repository.findByNameAndDeletedOrderByName(name, NOT_DELETED_STATUS);
-		if (!patients.isEmpty()) {
-			Patient patient = patients.get(patients.size() - 1);
-			Hibernate.initialize(patient.getPatientProfilePhoto());
-			return patient;
-		}
-		return null;
-	}
-
-	/**
 	 * Method that gets a Patient by his/her ID
 	 *
 	 * @param code
-	 * @return the Patient
+	 * @return the Patient that match specified ID
 	 * @throws OHServiceException
 	 */
 	public Patient getPatient(Integer code) throws OHServiceException {
 		List<Patient> patients = repository.findAllWhereIdAndDeleted(code, NOT_DELETED_STATUS);
 		if (!patients.isEmpty()) {
 			Patient patient = patients.get(patients.size() - 1);
-			Hibernate.initialize(patient.getPatientProfilePhoto());
+			retrievePatientProfilePhoto(patient);
+			return patient;
+		}
+		return null;
+	}
+
+	/**
+	 * Method that gets a Patient by his/her name
+	 * 
+	 * @param name
+	 * @return
+	 * @throws OHServiceException
+	 */
+	public Patient getPatient(String name) throws OHServiceException {
+		List<Patient> patients = repository.findByNameAndDeletedOrderByName(name, NOT_DELETED_STATUS);
+		if (!patients.isEmpty()) {
+			Patient patient = patients.get(patients.size() - 1);
+			retrievePatientProfilePhoto(patient);
 			return patient;
 		}
 		return null;
@@ -153,7 +170,7 @@ public class PatientIoOperations {
 	public Patient getPatientAll(Integer code) throws OHServiceException {
 		Patient patient = repository.findById(code).orElse(null);
 		if (patient != null) {
-			Hibernate.initialize(patient.getPatientProfilePhoto());
+			retrievePatientProfilePhoto(patient);
 		}
 		return patient;
 	}
@@ -165,7 +182,26 @@ public class PatientIoOperations {
 	 * @return saved / updated patient
 	 */
 	public Patient savePatient(Patient patient) {
-		return repository.save(patient);
+		boolean isLoadProfilePhotoFromDB = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
+		if (isLoadProfilePhotoFromDB) {
+			return repository.save(patient);
+		}
+		try {
+			PatientProfilePhoto photo = patient.getPatientProfilePhoto();
+			patient.setPatientProfilePhoto(null);
+			Patient patientSaved = repository.save(patient);
+			((Session) this.entityManager.getDelegate()).evict(patient);
+			if (photo != null && photo.getPhoto() != null) {
+				fileSystemPatientPhotoRepository.save(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode(), photo.getPhoto());
+			} else if (this.fileSystemPatientPhotoRepository.exist(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode())) {
+				this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());
+			}
+
+			return patientSaved;
+		} catch (OHServiceException e) {
+			LOGGER.error("Exception in savePatient method.", e);
+		}
+		return null;
 	}
 
 	/**
@@ -188,6 +224,12 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public boolean deletePatient(Patient patient) throws OHServiceException {
+		boolean isLoadProfilePhotoFromDB = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
+		if (isLoadProfilePhotoFromDB) {
+			repository.findById(patient.getCode()).get().setPatientProfilePhoto(null);
+		} else {
+			this.fileSystemPatientPhotoRepository.delete(GeneralData.PATIENTPHOTOSTORAGE, patient.getCode());
+		}
 		return repository.updateDeleted(patient.getCode()) > 0;
 	}
 
@@ -221,7 +263,6 @@ public class PatientIoOperations {
 	 * @return true - if no OHServiceExceptions occurred
 	 * @throws OHServiceException
 	 */
-	@Transactional
 	public boolean mergePatientHistory(Patient mergedPatient, Patient obsoletePatient) throws OHServiceException {
 		repository.updateDeleted(obsoletePatient.getCode());
 		applicationEventPublisher.publishEvent(new PatientMergedEvent(obsoletePatient, mergedPatient));
@@ -238,8 +279,29 @@ public class PatientIoOperations {
 	public boolean isCodePresent(Integer code) throws OHServiceException {
 		return repository.existsById(code);
 	}
-	
-	
+
+	/**
+	 * Method that get cities is going to be used.
+	 *
+	 * @return list of Cities
+	 * @throws OHServiceException
+	 */
+	public List<String> getCities() throws OHServiceException {
+		return repository.findCities();
+	}
+
+	public PatientProfilePhoto retrievePatientProfilePhoto(Patient patient) throws OHServiceException {
+		boolean isLoadProfilePhotoFromDB = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
+		if (isLoadProfilePhotoFromDB) {
+			Hibernate.initialize(patient.getPatientProfilePhoto());
+			return patient.getPatientProfilePhoto();
+		} else {
+			((Session) this.entityManager.getDelegate()).evict(patient);
+			fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
+			return patient.getPatientProfilePhoto();
+		}
+	}
+
 	/**
 	 * Count all active patients
 	 * 

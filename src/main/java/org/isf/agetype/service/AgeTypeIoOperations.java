@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.agetype.service;
 
@@ -68,6 +68,17 @@ public class AgeTypeIoOperations
 	 */
 	public AgeType getAgeTypeByCode(int index) throws OHServiceException {
 		String code = "d" + (index - 1);
+		return repository.findOneByCode(code);
+	}
+	
+	/**
+	 * Gets the {@link AgeType} from the code index.
+	 * @param code of agetype.
+	 * @return the retrieved element, <code>null</code> otherwise.
+	 * @throws OHServiceException if an error occurs retrieving the item.
+	 */
+	public AgeType getAgeTypeByCode(String code) throws OHServiceException {
+
 		return repository.findOneByCode(code);
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.accounting.service;
 
@@ -202,19 +202,6 @@ public class AccountingIoOperations {
 
 	/**
 	 * Retrieves all the {@link Bill}s for the specified date range.
-	 * @param dateFrom the low date range endpoint, inclusive. 
-	 * @param dateTo the high date range endpoint, inclusive.
-	 * @return a list of retrieved {@link Bill}s.
-	 * @throws OHServiceException if an error occurs retrieving the bill list.
-	 * @deprecated use {@link #getBillsBetweenDates(LocalDateTime, LocalDateTime)}
-	 */
-	@Deprecated
-	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
-		return getBillsBetweenDates(dateFrom, dateTo);
-	}
-
-	/**
-	 * Retrieves all the {@link Bill}s for the specified date range.
 	 * @param dateFrom the low date range endpoint, inclusive.
 	 * @param dateTo the high date range endpoint, inclusive.
 	 * @return a list of retrieved {@link Bill}s.
@@ -247,21 +234,6 @@ public class AccountingIoOperations {
 	public List<BillPayments> getPayments(List<Bill> bills) throws OHServiceException {
 		return billPaymentRepository.findAllByBillIn(bills);
 	}
-	
-	/**
-	 * Retrieves all billPayments for a given patient in the period dateFrom -> dateTo
-	 * @param dateFrom
-	 * @param dateTo
-	 * @param patient
-	 * @return
-	 * @throws OHServiceException
-	 * @deprecated use {@link #getPaymentsBetweenDatesWherePatient(LocalDateTime, LocalDateTime, Patient)}
-	 */
-	@Deprecated
-	public List<BillPayments> getPayments(LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient)
-			throws OHServiceException {
-		return getPaymentsBetweenDatesWherePatient(dateFrom, dateTo, patient);
-	}
 
 	/**
 	 * Retrieves all billPayments for a given patient in the period dateFrom -> dateTo
@@ -274,20 +246,6 @@ public class AccountingIoOperations {
 	public List<BillPayments> getPaymentsBetweenDatesWherePatient(LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient)
 			throws OHServiceException {
 		return billPaymentRepository.findByDateAndPatient(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo), patient.getCode());
-	}
-
-	/**
-	 * Retrieves all the bills for a given patient in the period dateFrom -> dateTo
-	 * @param dateFrom
-	 * @param dateTo
-	 * @param patient
-	 * @return the bill list
-	 * @throws OHServiceException
-	 * @deprecated use {@link #getBillsBetweenDatesWherePatient(LocalDateTime, LocalDateTime, Patient)}
-	 */
-	@Deprecated
-	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
-		return getBillsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
 
 	/**
@@ -330,23 +288,6 @@ public class AccountingIoOperations {
 	 */
 	public List<BillItems> getDistictsBillItems() throws OHServiceException {
 		return billItemsRepository.findAllGroupByDescription();
-	}
-	
-	/**
-	 * Return the bill list which date between dateFrom and dateTo and containing given billItem
-	 *
-	 * added by u2g
-	 *
-	 * @param dateFrom
-	 * @param dateTo
-	 * @param billItem
-	 * @return the bill list
-	 * @throws OHServiceException
-	 * @deprecated use {@link #getBillsBetweenDatesWhereBillItem(LocalDateTime, LocalDateTime, BillItems)}
-	 */
-	@Deprecated
-	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo, BillItems billItem) throws OHServiceException {
-		return getBillsBetweenDatesWhereBillItem(dateFrom, dateTo, billItem);
 	}
 
 	/**

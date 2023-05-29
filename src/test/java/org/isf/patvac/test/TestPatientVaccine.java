@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.patvac.test;
 
@@ -33,10 +33,10 @@ import org.isf.vaccine.model.Vaccine;
 
 public class TestPatientVaccine {
 
-	private int code = 0;
+	private int code;
 	private int progr = 10;
 	private LocalDateTime vaccineDate = LocalDateTime.of(1984, Month.AUGUST, 14, 9, 0, 0);
-	private int lock = 0;
+	private int lock;
 
 	public PatientVaccine setup(Patient patient, Vaccine vaccine, boolean usingSet) throws OHException {
 		PatientVaccine patientVaccine;

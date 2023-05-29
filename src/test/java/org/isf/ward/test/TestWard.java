@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.ward.test;
 
@@ -37,9 +37,10 @@ public class TestWard {
 	private Integer beds = 100;
 	private Integer nurs = 101;
 	private Integer docs = 102;
+	private boolean isOpd = true;
 	private boolean isPharmacy = true;
 	private boolean isFemale = true;
-	private boolean isMale = false;
+	private boolean isMale;
 	private int visitDuration = 30;
 
 	public Ward setup(boolean usingSet) throws OHException {
@@ -55,7 +56,7 @@ public class TestWard {
 		} else {
 			// Create Ward with all parameters 
 			ward = new Ward(code, description, telephone, fax, email, beds, nurs, docs,
-					isPharmacy, isMale, isFemale);
+					isOpd, isPharmacy, isMale, isFemale);
 		}
 		if (maternity) {
 			ward.setCode(maternityCode);
@@ -76,6 +77,7 @@ public class TestWard {
 		ward.setFemale(isFemale);
 		ward.setMale(isMale);
 		ward.setNurs(nurs);
+		ward.setOpd(isOpd);
 		ward.setPharmacy(isPharmacy);
 		ward.setTelephone(telephone);
 		ward.setVisitDuration(visitDuration);
@@ -91,6 +93,7 @@ public class TestWard {
 		assertThat(ward.isFemale()).isEqualTo(isFemale);
 		assertThat(ward.isMale()).isEqualTo(isMale);
 		assertThat(ward.getNurs()).isEqualTo(nurs);
+		assertThat(ward.isOpd()).isEqualTo(isOpd);
 		assertThat(ward.isPharmacy()).isEqualTo(isPharmacy);
 		assertThat(ward.getTelephone()).isEqualTo(telephone);
 		assertThat(ward.getVisitDuration()).isEqualTo(visitDuration);

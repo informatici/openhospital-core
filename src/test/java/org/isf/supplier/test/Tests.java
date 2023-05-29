@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.supplier.test;
 
@@ -74,9 +74,9 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoSupplierSaveOrUpdate() throws Exception {
 		Supplier supplier = testSupplier.setup(true);
-		boolean result = supplierIoOperation.saveOrUpdate(supplier);
+		Supplier result = supplierIoOperation.saveOrUpdate(supplier);
 
-		assertThat(result).isTrue();
+		assertThat(result);
 		checkSupplierIntoDb(supplier.getSupId());
 	}
 
@@ -106,7 +106,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrSupplierSaveOrUpdate() throws Exception {
 		Supplier supplier = testSupplier.setup(true);
-		assertThat(supplierBrowserManager.saveOrUpdate(supplier)).isTrue();
+		assertThat(supplierBrowserManager.saveOrUpdate(supplier));
 		checkSupplierIntoDb(supplier.getSupId());
 	}
 
@@ -160,7 +160,7 @@ public class Tests extends OHCoreTestCase {
 	public void testSupplierEquals() throws Exception {
 		Supplier supplier = new Supplier(1, "TestName", "TestAddress", "TestTax", "TestPhone", "TestFax", "TestEmail", "TestNode");
 
-		assertThat(supplier.equals(supplier)).isTrue();
+		assertThat(supplier).isEqualTo(supplier);
 		assertThat(supplier)
 				.isNotNull()
 				.isNotEqualTo("someString");

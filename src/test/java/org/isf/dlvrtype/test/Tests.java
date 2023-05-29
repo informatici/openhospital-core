@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.dlvrtype.test;
 
@@ -206,7 +206,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestDeliveryType(false);
 		DeliveryType deliveryType = deliveryTypeIoOperationRepository.findById(code).get();
 		DeliveryType deliveryType2 = new DeliveryType("someCode", "someDescription");
-		assertThat(deliveryType.equals(deliveryType)).isTrue();
+		assertThat(deliveryType).isEqualTo(deliveryType);
 		assertThat(deliveryType)
 				.isNotEqualTo(deliveryType2)
 				.isNotEqualTo("xyzzy");

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.therapy.manager;
 
@@ -38,6 +38,7 @@ import org.isf.sms.service.SmsOperations;
 import org.isf.therapy.model.Therapy;
 import org.isf.therapy.model.TherapyRow;
 import org.isf.therapy.service.TherapyIoOperations;
+import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,6 +170,7 @@ public class TherapyManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean newTherapies(List<TherapyRow> thRows) throws OHServiceException {
 		if (!thRows.isEmpty()) {
 
@@ -235,6 +237,7 @@ public class TherapyManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
+	@TranslateOHServiceException
 	public boolean deleteAllTherapies(Integer code) throws OHServiceException {
 		Patient patient = patientManager.getPatientById(code);
 		return ioOperations.deleteAllTherapies(patient);
@@ -248,6 +251,7 @@ public class TherapyManager {
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
+	@TranslateOHServiceException
 	public List<Medical> getMedicalsOutOfStock(List<Therapy> therapies) throws OHServiceException {
 		List<Medical> medOutStock = new ArrayList<>();
 		List<Medical> medArray = medManager.getMedicals();
@@ -264,8 +268,9 @@ public class TherapyManager {
 
 			int dayCount = 0;
 			for (LocalDateTime date : th.getDates()) {
-				if (date.isAfter(todayDate) || date.equals(todayDate))
+				if (date.isAfter(todayDate) || date.equals(todayDate)) {
 					dayCount++;
+				}
 			}
 
 			if (dayCount != 0) {

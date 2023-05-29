@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,10 +17,11 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.menu.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,7 +153,7 @@ public class MenuIoOperations {
 	 * @throws OHServiceException
 	 */
 	public boolean updateUser(User user) throws OHServiceException {
-		return repository.updateDescription(user.getDesc(), user.getUserName()) > 0;
+		return repository.updateUser(user.getDesc(), user.getUserGroupName(), user.getUserName()) > 0;
 	}
 	
 	/**
@@ -177,7 +178,15 @@ public class MenuIoOperations {
 		repository.delete(user);
 		return true;
 	}
-	
+
+	public void updateFailedAttempts(String userName, int newFailAttempts) {
+		repository.updateFailedAttempts(newFailAttempts, userName);
+	}
+
+	public void updateUserLocked(String userName, boolean isLocked, LocalDateTime time) {
+		repository.updateUserLocked(isLocked, time, userName);
+	}
+
 	/**
 	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link User}
 	 * 

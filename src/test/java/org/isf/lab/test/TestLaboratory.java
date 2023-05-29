@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,14 +17,13 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.lab.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -39,13 +38,14 @@ public class TestLaboratory {
 
 	private String material = "TestMaterial";
 	private LocalDateTime labDate = TimeTools.getNow();
-	private LocalDate examDate = labDate.toLocalDate();
+
 	private String result = "TestResult";
 	private String note = "TestNote";
 	private String patName = "TestPatientName";
 	private String InOutPatient = "O";
 	private Integer age = 37;
 	private String sex = "F";
+	private Integer code = 2;
 
 	public Laboratory setup(Exam exam, Patient patient, boolean usingSet) throws OHException {
 		Laboratory laboratory;
@@ -57,8 +57,7 @@ public class TestLaboratory {
 			// Create Laboratory with all parameters 
 			laboratory = new Laboratory(exam, labDate, result, note, patient, patName);
 			laboratory.setAge(age);
-			laboratory.setDate(labDate);
-			laboratory.setExamDate(examDate);
+			laboratory.setLabDate(labDate);
 			laboratory.setInOutPatient(InOutPatient);
 			laboratory.setMaterial(material);
 			laboratory.setResult(result);
@@ -70,9 +69,8 @@ public class TestLaboratory {
 
 	public void setParameters(Laboratory laboratory, Exam exam, Patient patient) {
 		laboratory.setAge(age);
-		laboratory.setDate(labDate);
+		laboratory.setLabDate(labDate);
 		laboratory.setExam(exam);
-		laboratory.setExamDate(examDate);
 		laboratory.setInOutPatient(InOutPatient);
 		laboratory.setMaterial(material);
 		laboratory.setNote(note);
@@ -93,8 +91,7 @@ public class TestLaboratory {
 			assertThat(laboratory.getAge()).isEqualTo(age);
 			assertThat(laboratory.getPatName()).isEqualTo(patName);
 		}
-		assertThat(laboratory.getDate()).isCloseTo(labDate, within(1, ChronoUnit.SECONDS));
-		assertThat(laboratory.getExamDate()).isEqualTo(examDate);
+		assertThat(laboratory.getLabDate()).isCloseTo(labDate, within(1, ChronoUnit.SECONDS));
 		assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
 		assertThat(laboratory.getMaterial()).isEqualTo(material);
 		assertThat(laboratory.getNote()).isEqualTo(note);

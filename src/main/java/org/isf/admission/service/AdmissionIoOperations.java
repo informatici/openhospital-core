@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.admission.service;
 
@@ -40,10 +40,12 @@ import org.isf.disctype.service.DischargeTypeIoOperationRepository;
 import org.isf.generaldata.GeneralData;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
+import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,10 +72,13 @@ public class AdmissionIoOperations {
 
 	@Autowired
 	private AdmissionIoOperationRepository repository;
+
 	@Autowired
 	private AdmissionTypeIoOperationRepository typeRepository;
+
 	@Autowired
 	private DischargeTypeIoOperationRepository dischargeRepository;
+
 	@Autowired
 	private PatientIoOperationRepository patientRepository;
 
@@ -110,19 +115,22 @@ public class AdmissionIoOperations {
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public List<AdmittedPatient> getAdmittedPatients(String searchTerms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange)
-			throws OHServiceException {
+					throws OHServiceException {
 		return repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
 	}
 
 	/**
 	 * Load patient together with the profile photo, or {@code null} if there is no patient with the given id
 	 */
-	public AdmittedPatient loadAdmittedPatient(final Integer patientId) {
+	public AdmittedPatient loadAdmittedPatient(final int patientId) {
+		boolean isLoadPatientProfilePhotoFromDb = PatientIoOperations.LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		final Patient patient = patientRepository.findById(patientId).orElse(null);
 		if (patient == null) {
 			return null;
 		}
-		Hibernate.initialize(patient.getPatientProfilePhoto());
+		if (isLoadPatientProfilePhotoFromDb) {
+			Hibernate.initialize(patient.getPatientProfilePhoto());
+		}
 		final Admission admission = repository.findOneWherePatientIn(patientId);
 		return new AdmittedPatient(patient, admission);
 	}
@@ -132,9 +140,8 @@ public class AdmissionIoOperations {
 	 *
 	 * @param patient the patient target of the admission.
 	 * @return the patient admission.
-	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public Admission getCurrentAdmission(Patient patient) throws OHServiceException {
+	public Admission getCurrentAdmission(Patient patient) {
 		return repository.findOneWherePatientIn(patient.getCode());
 	}
 
@@ -167,8 +174,8 @@ public class AdmissionIoOperations {
 	 * @return <code>true</code> if the admission has been successfully inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the insertion.
 	 */
-	public boolean newAdmission(Admission admission) throws OHServiceException {
-		return repository.save(admission) != null;
+	public Admission newAdmission(Admission admission) throws OHServiceException {
+		return repository.save(admission);
 	}
 
 	/**
@@ -190,8 +197,8 @@ public class AdmissionIoOperations {
 	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs.
 	 */
-	public boolean updateAdmission(Admission admission) throws OHServiceException {
-		return repository.save(admission) != null;
+	public Admission updateAdmission(Admission admission) throws OHServiceException {
+		return repository.save(admission);
 	}
 
 	/**
@@ -282,7 +289,7 @@ public class AdmissionIoOperations {
 	 */
 	public boolean setDeleted(int admissionId) throws OHServiceException {
 		Admission foundAdmission = repository.findById(admissionId).orElse(null);
-		foundAdmission.setDeleted("Y");
+		foundAdmission.setDeleted('Y');
 		Admission savedAdmission = repository.save(foundAdmission);
 		return savedAdmission != null;
 	}
@@ -312,5 +319,13 @@ public class AdmissionIoOperations {
 			foundPatient.getPatientProfilePhoto().setPhoto(null);
 		}
 		return patientRepository.save(foundPatient) != null;
+	}
+
+	public List<Admission> getAdmissionsByAdmissionDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		return repository.findAllWhereAdmissionDate(dateFrom, dateTo, pageable);
+	}
+
+	public List<Admission> getAdmissionsByDischargeDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		return repository.findAllWhereDischargeDate(dateFrom, dateTo, pageable);
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.pregtreattype.test;
 
@@ -89,8 +89,8 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestPregnantTreatmentType(false);
 		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).get();
 		foundPregnantTreatmentType.setDescription("Update");
-		boolean result = pregnantTreatmentTypeIoOperation.updatePregnantTreatmentType(foundPregnantTreatmentType);
-		assertThat(result).isTrue();
+		PregnantTreatmentType result = pregnantTreatmentTypeIoOperation.updatePregnantTreatmentType(foundPregnantTreatmentType);
+		assertThat(result);
 		PregnantTreatmentType updatePregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).get();
 		assertThat(updatePregnantTreatmentType.getDescription()).isEqualTo("Update");
 	}
@@ -98,9 +98,9 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoNewPregnantTreatmentType() throws Exception {
 		PregnantTreatmentType pregnantTreatmentType = testPregnantTreatmentType.setup(true);
-		boolean result = pregnantTreatmentTypeIoOperation.newPregnantTreatmentType(pregnantTreatmentType);
+		PregnantTreatmentType result = pregnantTreatmentTypeIoOperation.newPregnantTreatmentType(pregnantTreatmentType);
 
-		assertThat(result).isTrue();
+		assertThat(result);
 		checkPregnantTreatmentTypeIntoDb(pregnantTreatmentType.getCode());
 	}
 
@@ -147,7 +147,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestPregnantTreatmentType(false);
 		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).get();
 		foundPregnantTreatmentType.setDescription("Update");
-		assertThat(pregnantTreatmentTypeBrowserManager.updatePregnantTreatmentType(foundPregnantTreatmentType)).isTrue();
+		assertThat(pregnantTreatmentTypeBrowserManager.updatePregnantTreatmentType(foundPregnantTreatmentType));
 		PregnantTreatmentType updatePregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).get();
 		assertThat(updatePregnantTreatmentType.getDescription()).isEqualTo("Update");
 	}
@@ -155,7 +155,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrNewPregnantTreatmentType() throws Exception {
 		PregnantTreatmentType pregnantTreatmentType = testPregnantTreatmentType.setup(true);
-		assertThat(pregnantTreatmentTypeBrowserManager.newPregnantTreatmentType(pregnantTreatmentType)).isTrue();
+		assertThat(pregnantTreatmentTypeBrowserManager.newPregnantTreatmentType(pregnantTreatmentType));
 		checkPregnantTreatmentTypeIntoDb(pregnantTreatmentType.getCode());
 	}
 

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.serviceprinting.manager;
 
@@ -129,7 +129,9 @@ public class PrintReceipt {
 			} else {
 				printService = defaultPrintService;
 			}
-			if (printService == null) return;
+			if (printService == null) {
+				return;
+			}
 			getPrinterDetails(printService);
 			DocPrintJob job = printService.createPrintJob();
 			DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.accounting.test;
 
@@ -30,7 +30,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestBillItems {
 
-	private static boolean isPrice = false;
+	private static boolean isPrice;
 	private static String priceID = "TestPId";
 	private static String itemDescription = "TestItemDescription";
 	private static double itemAmount = 10.10;

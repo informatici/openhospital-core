@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.lab.model;
 
@@ -62,7 +62,7 @@ public class LaboratoryRow extends Auditable<String> {
 	private String description;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public LaboratoryRow() {
 	}
@@ -109,8 +109,9 @@ public class LaboratoryRow extends Auditable<String> {
 		}
 		
 		LaboratoryRow laboratoryRow = (LaboratoryRow)obj;
-		if (this.getCode() != null && laboratoryRow.getCode() != null)
+		if (this.getCode() != null && laboratoryRow.getCode() != null) {
 			return (this.getCode().equals(laboratoryRow.getCode()) );
+		}
 		return (this.getDescription().equals(laboratoryRow.getDescription()));
 	}
 	

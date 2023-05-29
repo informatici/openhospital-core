@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.exa.model;
 
@@ -70,7 +70,7 @@ public class ExamRow extends Auditable<String> {
 	private Exam exam;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public ExamRow() 
     {
@@ -112,6 +112,7 @@ public class ExamRow extends Auditable<String> {
 				&& getDescription().equalsIgnoreCase(((ExamRow) anObject).getDescription()) && getExamCode().equals(((ExamRow) anObject).getExamCode()));
 	}
 
+	@Override
 	public String toString() {
 		return getDescription();
 	}	

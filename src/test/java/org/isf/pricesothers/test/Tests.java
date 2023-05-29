@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.pricesothers.test;
 
@@ -99,11 +99,11 @@ public class Tests extends OHCoreTestCase {
 		foundPricesOthers.setDescription("Update");
 
 		// when:
-		boolean result = priceOthersIoOperations.updateOther(foundPricesOthers);
+		PricesOthers result = priceOthersIoOperations.updateOther(foundPricesOthers);
 		PricesOthers updatePricesOthers = priceOthersIoOperationRepository.findById(id).get();
 
 		// then:
-		assertThat(result).isTrue();
+		assertThat(result);
 		assertThat(updatePricesOthers.getDescription()).isEqualTo("Update");
 	}
 
@@ -113,10 +113,10 @@ public class Tests extends OHCoreTestCase {
 		PricesOthers pricesOthers = testPricesOthers.setup(true);
 
 		// when:
-		boolean result = priceOthersIoOperations.newOthers(pricesOthers);
+		PricesOthers result = priceOthersIoOperations.newOthers(pricesOthers);
 
 		// then:
-		assertThat(result).isTrue();
+		assertThat(result);
 		checkPricesOthersIntoDb(pricesOthers.getId());
 	}
 
@@ -155,7 +155,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestPricesOthers(false);
 		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
 		foundPricesOthers.setDescription("Update");
-		assertThat(pricesOthersManager.updateOther(foundPricesOthers)).isTrue();
+		assertThat(pricesOthersManager.updateOther(foundPricesOthers));
 		PricesOthers updatePricesOthers = priceOthersIoOperationRepository.findById(id).get();
 		assertThat(updatePricesOthers.getDescription()).isEqualTo("Update");
 	}
@@ -163,7 +163,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrNewPricesOther() throws Exception {
 		PricesOthers pricesOthers = testPricesOthers.setup(true);
-		assertThat(pricesOthersManager.newOther(pricesOthers)).isTrue();
+		assertThat(pricesOthersManager.newOther(pricesOthers));
 		checkPricesOthersIntoDb(pricesOthers.getId());
 	}
 
@@ -215,7 +215,7 @@ public class Tests extends OHCoreTestCase {
 	public void testPricesOthersEquals() throws Exception {
 		PricesOthers pricesOthers = new PricesOthers(-1, "TestCode", "TestDescription", true, false, false, true);
 
-		assertThat(pricesOthers.equals(pricesOthers)).isTrue();
+		assertThat(pricesOthers).isEqualTo(pricesOthers);
 		assertThat(pricesOthers)
 				.isNotNull()
 				.isNotEqualTo("someString");

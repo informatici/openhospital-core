@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.vactype.service;
 
@@ -63,8 +63,8 @@ public class VacTypeIoOperation {
 	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean newVaccineType(VaccineType vaccineType) throws OHServiceException {
-		return repository.save(vaccineType) != null;
+	public VaccineType newVaccineType(VaccineType vaccineType) throws OHServiceException {
+		return repository.save(vaccineType);
 	}
 	
 	/**
@@ -74,8 +74,8 @@ public class VacTypeIoOperation {
 	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException 
 	 */
-	public boolean updateVaccineType(VaccineType vaccineType) throws OHServiceException	{
-		return repository.save(vaccineType) != null;
+	public VaccineType updateVaccineType(VaccineType vaccineType) throws OHServiceException	{
+		return repository.save(vaccineType);
 	}
 	
 	/**

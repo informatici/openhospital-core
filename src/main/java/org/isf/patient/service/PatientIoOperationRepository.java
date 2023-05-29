@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.patient.service;
 
@@ -31,30 +31,31 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface PatientIoOperationRepository extends JpaRepository<Patient, Integer>, PatientIoOperationRepositoryCustom {
 
-	List<Patient> findByDeletedOrDeletedIsNull(String deletionStatus);
+	List<Patient> findByDeletedOrDeletedIsNull(char deletionStatus);
 
-	List<Patient> findAllByDeletedIsNullOrDeletedEqualsOrderByName(String patDeleted, Pageable pageable);
+	List<Patient> findAllByDeletedIsNullOrDeletedEqualsOrderByName(char patDeleted, Pageable pageable);
 
 	@Query("select p from Patient p where p.name = :name and (p.deleted = :deletedStatus or p.deleted is null) order by p.secondName, p.firstName")
-	List<Patient> findByNameAndDeletedOrderByName(@Param("name") String name, @Param("deletedStatus") String deletedStatus);
+	List<Patient> findByNameAndDeletedOrderByName(@Param("name") String name, @Param("deletedStatus") char deletedStatus);
 
 	@Query("select p from Patient p where p.code = :id and (p.deleted = :deletedStatus or p.deleted is null)")
-	List<Patient> findAllWhereIdAndDeleted(@Param("id") Integer id, @Param("deletedStatus") String deletedStatus);
+	List<Patient> findAllWhereIdAndDeleted(@Param("id") Integer id, @Param("deletedStatus") char deletedStatus);
 
 	@Modifying
-	@Transactional
 	@Query(value = "update Patient p set p.deleted = 'Y' where p.code = :id")
 	int updateDeleted(@Param("id") Integer id);
 
-	List<Patient> findByNameAndDeleted(String name, String deletedStatus);
+	List<Patient> findByNameAndDeleted(String name, char deletedStatus);
 
 	@Query(value = "select max(p.code) from Patient p")
 	Integer findMaxCode();
+	
+	@Query(value = "select distinct p.city from Patient p")
+	List<String> findCities();
 
 	List<Patient> getPatientsByParams(Map<String, Object> params);
 

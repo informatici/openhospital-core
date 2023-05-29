@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.pricesothers.test;
 
@@ -31,9 +31,9 @@ public class TestPricesOthers {
 	private String Code = "TestCode";
 	private String Description = "TestDescription";
 	private boolean opdInclude = true;
-	private boolean ipdInclude = false;
+	private boolean ipdInclude;
 	private boolean daily = true;
-	private boolean discharge = false;
+	private boolean discharge;
 	private boolean undefined = true;
 
 	public PricesOthers setup(boolean usingSet) throws OHException {

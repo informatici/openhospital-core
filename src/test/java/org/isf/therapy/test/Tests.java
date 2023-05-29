@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.therapy.test;
 
@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
+import org.isf.generaldata.GeneralData;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperationRepository;
 import org.isf.medicals.test.TestMedical;
@@ -195,6 +196,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewTherapiesWithSMSDateAfterToday() throws Exception {
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
 		Patient patient = testPatient.setup(false);
@@ -213,6 +215,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewTherapiesWithSMSDateAfterTodayTruncateMessage() throws Exception {
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
 		Patient patient = testPatient.setup(false);
@@ -279,6 +282,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrDeleteTherapyRow() throws Exception {
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		int id = setupTestTherapyRow(false);
 		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).get();
 		assertThat(therapyManager.deleteAllTherapies(foundTherapyRow.getPatient().getCode())).isTrue();
@@ -356,7 +360,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestTherapyRow(true);
 		TherapyRow therapyRow = therapyIoOperationRepository.findById(id).get();
 
-		assertThat(therapyRow.equals(therapyRow)).isTrue();
+		assertThat(therapyRow).isEqualTo(therapyRow);
 		assertThat(therapyRow)
 				.isNotNull()
 				.isNotEqualTo("someString");

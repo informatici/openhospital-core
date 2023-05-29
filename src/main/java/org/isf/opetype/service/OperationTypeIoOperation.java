@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.opetype.service;
 
@@ -55,8 +55,8 @@ public class OperationTypeIoOperation {
 	 * @return <code>true</code> if the {@link OperationType} has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean newOperationType(OperationType operationType) throws OHServiceException {
-		return repository.save(operationType) != null;
+	public OperationType newOperationType(OperationType operationType) throws OHServiceException {
+		return repository.save(operationType);
 	}
 	
 	/**
@@ -66,8 +66,8 @@ public class OperationTypeIoOperation {
 	 * @return <code>true</code> if the {@link OperationType} has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException 
 	 */
-	public boolean updateOperationType(OperationType operationType) throws OHServiceException {
-		return repository.save(operationType) != null;
+	public OperationType updateOperationType(OperationType operationType) throws OHServiceException {
+		return repository.save(operationType);
 	}
 	
 	/**

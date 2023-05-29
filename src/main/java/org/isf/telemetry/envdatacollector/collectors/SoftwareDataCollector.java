@@ -21,17 +21,11 @@
  */
 package org.isf.telemetry.envdatacollector.collectors;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.isf.generaldata.Version;
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
-import org.isf.utils.db.DbSingleConn;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,15 +64,8 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 			result.put(CollectorsConst.OS_MANUFACTURER, os.getManufacturer());
 			result.put(CollectorsConst.OS_BITNESS, String.valueOf(os.getBitness()));
 			result.put(CollectorsConst.OS_CODENAME, os.getVersionInfo().getCodeName());
-			
-			Connection con = DbSingleConn.getConnection();
-			DatabaseMetaData dbmd = con.getMetaData();
-			result.put(CollectorsConst.DBMS_DRIVER_NAME, dbmd.getDriverName());
-			result.put(CollectorsConst.DBMS_DRIVER_VERSION, dbmd.getDriverVersion());
-			result.put(CollectorsConst.DBMS_PRODUCT_NAME, dbmd.getDatabaseProductName());
-			result.put(CollectorsConst.DBMS_PRODUCT_VERSION, dbmd.getDatabaseProductVersion());
-			
-		} catch (RuntimeException | SQLException | IOException e) {
+
+		} catch (RuntimeException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());
 			throw new OHException("Data collector [" + ID + "]", e);

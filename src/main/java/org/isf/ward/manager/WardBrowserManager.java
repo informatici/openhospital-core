@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.ward.manager;
 
@@ -62,53 +62,38 @@ public class WardBrowserManager {
 	protected void validateWard(Ward ward, boolean insert) throws OHServiceException {
 		String key = ward.getCode();
 		String description = ward.getDescription();
-        List<OHExceptionMessage> errors = new ArrayList<>();
-        if (key.isEmpty()) {
-	        errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"),
-	        		OHSeverityLevel.ERROR));
-        }
-        if (key.length() > 1) {
-	        errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.common.thecodeistoolongmax1char.msg"),
-	        		OHSeverityLevel.ERROR));
-        }
-        if (description.isEmpty() ) {
-            errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-            		MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"), 
-            		OHSeverityLevel.ERROR));
-        }
-        if (ward.getBeds()<0) {
-        	errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-            		MessageBundle.getMessage("angal.ward.thenumberofbedsmustbepositive.msg"),
-            		OHSeverityLevel.ERROR));
+		List<OHExceptionMessage> errors = new ArrayList<>();
+		if (key.isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertacode.msg")));
 		}
-		if (ward.getNurs()<0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-            		MessageBundle.getMessage("angal.ward.thenumberofnursesmustbepositive.msg"),
-            		OHSeverityLevel.ERROR));
+		if (key.equals("OPD") && !ward.isOpd()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.opdwardmusthaveopdservicechecked.msg")));
 		}
-		if (ward.getDocs()<0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-            		MessageBundle.getMessage("angal.ward.thenumberofdoctorsmustbepositive.msg"),
-            		OHSeverityLevel.ERROR));
+		if (key.length() > 3) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeistoolongmax1char.msg")));
+		}
+		if (description.isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
+		}
+		if (ward.getBeds() < 0) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.thenumberofbedsmustbepositive.msg")));
+		}
+		if (ward.getNurs() < 0) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.thenumberofnursesmustbepositive.msg")));
+		}
+		if (ward.getDocs() < 0) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.thenumberofdoctorsmustbepositive.msg")));
 		}
 		if (!EmailValidator.isValid(ward.getEmail())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.ward.theemailmustbevalid.msg"),
-            		OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.theemailmustbevalid.msg")));
 		}
-		if (insert) {
-			if (isCodePresent(ward.getCode())) {
-				throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"), 
-						OHSeverityLevel.ERROR));
-			}
+		if (insert && isCodePresent(ward.getCode())) {
+			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
 		}
 		if (!errors.isEmpty()) {
-	        throw new OHDataValidationException(errors);
-	    }
-    }
+			throw new OHDataValidationException(errors);
+		}
+	}
 	
 	/**
 	 * Returns all stored wards.
@@ -119,7 +104,24 @@ public class WardBrowserManager {
 	public List<Ward> getWards() throws OHServiceException {
 		return ioOperations.getWards(null);
 	}
+	
+	/**
+	 * Retrieves all store {@link Ward}s with beds > {@code 0}
+	 * @return the list of wards
+	 */
+	public List<Ward> getIpdWards() {
+		return ioOperations.getIpdWards();
+	}
+	
+	/**
+	 * Retrieves all store {@link Ward}s with isOpd = {@code true}
+	 * @return the list of wards
+	 */
+	public List<Ward> getOpdWards() {
+		return ioOperations.getOpdWards();
+	}
 
+	//TODO: remove this method, findWard(String code) should be enough
 	public List<Ward> getWards(Ward ward) throws OHServiceException {
 		return ioOperations.getWards(ward.getCode());
 	}
@@ -168,21 +170,20 @@ public class WardBrowserManager {
 	 */
 	public boolean deleteWard(Ward ward) throws OHServiceException {
 		if (ward.getCode().equals("M")) {
-			throw new OHOperationNotAllowedException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.ward.cannotdeletematernityward.msg"),
-					OHSeverityLevel.ERROR));
+			throw new OHOperationNotAllowedException(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.cannotdeletematernityward.msg")));
+		}
+		if (ward.getCode().equals("OPD")) {
+			throw new OHOperationNotAllowedException(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.cannotdeleteopdward.msg")));
 		}
 		int noPatients = admManager.getUsedWardBed(ward.getCode());
-		
+
 		if (noPatients > 0) {
-			
+
 			List<OHExceptionMessage> messages = new ArrayList<>();
 			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.info.title"),
-					MessageBundle.formatMessage("angal.ward.theselectedwardhaspatients.fmt.msg",noPatients),
-					OHSeverityLevel.INFO));
-			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.ward.pleasecheckinadmissionpatients.msg"),
-					OHSeverityLevel.ERROR));
+			                                    MessageBundle.formatMessage("angal.ward.theselectedwardhaspatients.fmt.msg", noPatients),
+			                                    OHSeverityLevel.INFO));
+			messages.add(new OHExceptionMessage(MessageBundle.getMessage("angal.ward.pleasecheckinadmissionpatients.msg")));
 			throw new OHOperationNotAllowedException(messages);
 		}
 		return ioOperations.deleteWard(ward);
@@ -209,6 +210,7 @@ public class WardBrowserManager {
 	 * 'Beds' : 20,
 	 * 'Nurses' : 3,
 	 * 'Doctors' : 2,
+	 * 'isOpd' : false,
 	 * 'isPharmacy' : false,
 	 * 'isMale' : false,
 	 * 'isFemale' : true,
@@ -227,9 +229,45 @@ public class WardBrowserManager {
 				20, //Beds
 				3, //Nurses
 				2, //Doctors
+				false, //isOpd
 				false, //isPharmacy
 				false, //isMale
-				true);
+				true); //isFemale
+	}
+	
+	/**
+	 * Create default OPD {@link Ward} as follow:
+	 * {'code' : "M",
+	 * 'Description' : MessageBundle.getMessage("angal.ward.maternity.txt"),
+	 * 'Telephone' : "235/52544",
+	 * 'Fax' : "54325/5424",
+	 * 'Mail' :  "opd@stluke.org",
+	 * 'Beds' : 0,
+	 * 'Nurses' : 1,
+	 * 'Doctors' : 1,
+	 * 'isOpd' : true,
+	 * 'isPharmacy' : false,
+	 * 'isMale' : true,
+	 * 'isFemale' : true,
+	 * 'LOCK (version)' : 0,
+	 * }
+	 * 
+	 * @return OPD ward
+	 */
+	private Ward getDefaultOPDWard() {
+		return new Ward(
+				"OPD",
+				MessageBundle.getMessage("angal.ward.opd.txt").toUpperCase(),
+				"235/52544", //Telephone
+				"54325/5424", //Fax
+				"opd@stluke.org",
+				0, //Beds
+				1, //Nurses
+				1, //Doctors
+				true, //isOpd
+				false, //isPharmacy
+				true, //isMale
+				true); //isFemale
 	}
 	
 	/**
@@ -245,7 +283,27 @@ public class WardBrowserManager {
 			Ward maternity = getDefaultMaternityWard();
 			newWard(maternity);
 			return true;
-		} else return exists;
+		} else {
+			return exists;
+		}
+	}
+	
+	/**
+	 * Check if the OPD {@link Ward} with code "OPD" exists or not.
+	 * @param createIfNotExists - if {@code true} it will create the missing {@link Ward} (with default values)
+	 * 	and will return {@link true} 
+	 * @return <code>true</code> if the OPD {@link Ward} exists, <code>false</code> otherwise.
+	 * @throws OHServiceException 
+	 */
+	public boolean opdControl(boolean createIfNotExists) throws OHServiceException {
+		boolean exists = ioOperations.isOpdPresent();
+		if (!exists && createIfNotExists) {
+			Ward opd = getDefaultOPDWard();
+			newWard(opd);
+			return true;
+		} else {
+			return exists;
+		}
 	}
 	
 	/**

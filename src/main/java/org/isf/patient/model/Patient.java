@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.patient.model;
 
@@ -41,7 +41,9 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.isf.anamnesis.model.PatientHistory;
 import org.isf.opd.model.Opd;
+import org.isf.patconsensus.model.PatientConsensus;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -108,7 +110,8 @@ public class Patient extends Auditable<String> {
 	@NotNull
 	@Column(name="PAT_NAME")
 	private String name;
-	
+
+	@NotNull
 	@Column(name="PAT_BDATE")	// SQL type: date
 	private LocalDate birthDate;
 
@@ -116,57 +119,56 @@ public class Patient extends Auditable<String> {
 	@Column(name="PAT_AGE")
 	private int age;
 
-	@NotNull
 	@Column(name="PAT_AGETYPE")
 	private String agetype;
 
 	@NotNull
 	@Column(name="PAT_SEX")
 	private char sex;
-	
+
 	@Column(name="PAT_ADDR")
 	private String address;
 
 	@NotNull
 	@Column(name="PAT_CITY")
 	private String city;
-	
+
 	@Column(name="PAT_NEXT_KIN")
 	private String nextKin;
-	
+
 	@Column(name="PAT_TELE")
 	private String telephone;
-	
+
 	@Column(name="PAT_NOTE")
 	private String note;
 
 	@NotNull
 	@Column(name="PAT_MOTH_NAME")
 	private String motherName; // mother's name
-	
+
 	@Column(name="PAT_MOTH")
 	private char mother = ' '; // D=dead, A=alive
 
 	@NotNull
 	@Column(name="PAT_FATH_NAME")
 	private String fatherName; // father's name
-	
+
 	@Column(name="PAT_FATH")
 	private char father = ' '; // D=dead, A=alive
 
 	@NotNull
 	@Column(name="PAT_BTYPE")
 	private String bloodType; // (0-/+, A-/+ , B-/+, AB-/+)
-	
+
 	@Column(name="PAT_ESTA")
 	private char hasInsurance = ' '; // Y=Yes, N=no
-	
+
 	@Column(name="PAT_PTOGE")
 	private char parentTogether = ' '; // parents together: Y or N
-	
+
 	@Column(name="PAT_TAXCODE")
 	private String taxCode;
-	
+
 	@Column(name="PAT_MAR_STAT")
 	private String maritalStatus;
 
@@ -174,27 +176,44 @@ public class Patient extends Auditable<String> {
 	private String profession;
 
 	@NotNull
-	@Column(name="PAT_DELETED")
-	private String deleted = "N";
+	@Column(name="PAT_DELETED", columnDefinition = "char(1) default 'N'")
+	private char deleted = 'N';
+
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	@Column(name="PAT_ANAMNESIS")
+	private String anamnesis;
+
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	@Column(name="PAT_ALLERGIES")
+	private String allergies;
 
 	@Version
 	@Column(name="PAT_LOCK")
 	private int lock;
-	
+
 	@OneToOne(
 			fetch = FetchType.LAZY,
-			cascade = CascadeType.ALL
+			cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE },
+			orphanRemoval = true
 	)
-	@JoinColumn(name = "PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID")
-	private PatientProfilePhoto patientProfilePhoto;
-	
+	@JoinColumn(name = "PAT_PROFILE_PHOTO_ID", referencedColumnName = "PAT_PROFILE_PHOTO_ID", nullable = true)
+	private PatientProfilePhoto patientProfilePhoto; // nullable because user can choose to save on file system
+
 	@Transient
-	private volatile int hashCode = 0;
-	
+	private volatile int hashCode;
+
+	@OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
+	private PatientConsensus patientConsensus;
 
 	public Patient() {
 		this.firstName = "";
-		this.secondName = ""; 
+		this.secondName = "";
 		this.name = this.firstName + ' ' + this.secondName;
 		this.birthDate = null;
 		this.age = 0;
@@ -202,7 +221,7 @@ public class Patient extends Auditable<String> {
 		this.sex = ' ';
 		this.address = "";
 		this.city = "";
-		this.nextKin = ""; 
+		this.nextKin = "";
 		this.telephone = "";
 		this.motherName = "";
 		this.mother = ' ';
@@ -215,10 +234,10 @@ public class Patient extends Auditable<String> {
 		this.maritalStatus = "";
 		this.profession = "";
 	}
-	
+
 	public Patient(Opd opd) {
 		this.firstName = opd.getfirstName();
-		this.secondName = opd.getsecondName(); 
+		this.secondName = opd.getsecondName();
 		this.name = this.firstName + ' ' + this.secondName;
 		this.birthDate = null;
 		this.age = opd.getAge();
@@ -226,7 +245,7 @@ public class Patient extends Auditable<String> {
 		this.sex = opd.getSex();
 		this.address = opd.getaddress();
 		this.city = opd.getcity();
-		this.nextKin = opd.getnextKin(); 
+		this.nextKin = opd.getnextKin();
 		this.telephone = "";
 		this.motherName = "";
 		this.mother = ' ';
@@ -238,11 +257,11 @@ public class Patient extends Auditable<String> {
 		this.maritalStatus = "";
 		this.profession = "";
 	}
-	
+
 	public Patient(String firstName, String secondName, LocalDate birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone,
 			String motherName, char mother, String fatherName, char father,
-			String bloodType, char economicStatut, char parentTogether, String personalCode, 
+			String bloodType, char economicStatut, char parentTogether, String personalCode,
 			String maritalStatus, String profession) { //Changed EduLev with bloodType
 		this.firstName = firstName;
 		this.secondName = secondName;
@@ -266,7 +285,7 @@ public class Patient extends Auditable<String> {
 		this.maritalStatus = maritalStatus;
 		this.profession = profession;
 	}
-		
+
 	public Patient(int code, String firstName, String secondName, String name, LocalDate birthDate, int age, String agetype, char sex,
 			String address, String city, String nextKin, String telephone, String note,
 			String motherName, char mother, String fatherName, char father,
@@ -297,6 +316,15 @@ public class Patient extends Auditable<String> {
 		this.profession = profession;
 	}
 
+	public PatientConsensus getPatientConsensus() {
+		return patientConsensus;
+	}
+
+
+	public void setPatientConsensus(PatientConsensus patientConsensus) {
+		this.patientConsensus = patientConsensus;
+	}
+
 	public String getAddress() {
 		return address;
 	}
@@ -304,7 +332,7 @@ public class Patient extends Auditable<String> {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
+
 	public LocalDate getBirthDate() {
 		return birthDate;
 	}
@@ -320,7 +348,7 @@ public class Patient extends Auditable<String> {
 		}
 		return age;
 	}
-	
+
 	public void setAge(int age) {
 		this.age = age;
 	}
@@ -402,11 +430,11 @@ public class Patient extends Auditable<String> {
 	public String getBloodType() {
 	    return bloodType;
 	}
-	
+
 	public void setBloodType(String bloodType) {
 		this.bloodType = bloodType;
 	}
-	
+
 	public String getName() {
 		return this.name;
 	}
@@ -451,6 +479,7 @@ public class Patient extends Auditable<String> {
 		this.note = note;
 	}
 
+	@Override
 	public String toString() {
 		return getName();
 	}
@@ -478,7 +507,7 @@ public class Patient extends Auditable<String> {
 	public void setTaxCode(String taxCode) {
 		this.taxCode = taxCode;
 	}
-	
+
 	public String getMaritalStatus() {
 		return maritalStatus;
 	}
@@ -494,17 +523,61 @@ public class Patient extends Auditable<String> {
 	public void setProfession(String profession) {
 		this.profession = profession;
 	}
-	
-    public String getDeleted() {
+
+    public char getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(String deleted) {
+    public void setDeleted(char deleted) {
         this.deleted = deleted;
     }
 
 	public PatientProfilePhoto getPatientProfilePhoto() {
 		return patientProfilePhoto;
+	}
+
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	public String getAnamnesis() {
+		return anamnesis;
+	}
+
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	public void setAnamnesis(String anamnesis) {
+		this.anamnesis = anamnesis;
+	}
+
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	public String getAllergies() {
+		return allergies;
+	}
+
+	/**
+	 * field for "ui"
+	 * NOTE: to be replaced with {@link PatientHistory}
+	 */
+	public void setAllergies(String allergies) {
+		this.allergies = allergies;
+	}
+
+	/**
+	 * Method kept as POJO standard, but it ignores {@code name} param
+	 * and uses {@link #firstName} and {@link #secondName} to set
+	 * the field (as {@link #setFirstName} and {@link #setSecondName}
+	 * methods do as well).
+	 * 
+	 * @param name (ignored, uses {@code firstName} and {@code secondName} instead
+	 */
+	public void setName(String name) {
+		this.name = this.firstName + ' ' + this.secondName;
 	}
 
 	public void setPatientProfilePhoto(final PatientProfilePhoto patientProfilePhoto) {
@@ -523,29 +596,29 @@ public class Patient extends Auditable<String> {
 		if (this == obj) {
 			return true;
 		}
-		
+
 		if (!(obj instanceof Patient)) {
 			return false;
 		}
-		
+
 		Patient patient = (Patient)obj;
 		return (this.getCode().equals(patient.getCode()));
 	}
-	
+
 	@Override
 	public int hashCode() {
 	    if (this.hashCode == 0) {
 	        final int m = 23;
 	        int c = 133;
-	        
+
 	        c = m * c + ((code == null) ? 0 : code);
-	        
+
 	        this.hashCode = c;
 	    }
-	  
+
 	    return this.hashCode;
 	}
-	
+
 	public String getSearchString() {
 		StringBuilder sbName = new StringBuilder();
 		sbName.append(getCode());
@@ -556,13 +629,21 @@ public class Patient extends Auditable<String> {
 		sbName.append(' ');
 		sbName.append(getCity().toLowerCase());
 		sbName.append(' ');
-		if (getAddress() != null) sbName.append(getAddress().toLowerCase()).append(' ');
-		if (getTelephone() != null) sbName.append(getTelephone()).append(' ');
-		if (getNote() != null) sbName.append(getNote().toLowerCase()).append(' ');
-		if (getTaxCode() != null) sbName.append(getTaxCode().toLowerCase()).append(' ');
+		if (getAddress() != null) {
+			sbName.append(getAddress().toLowerCase()).append(' ');
+		}
+		if (getTelephone() != null) {
+			sbName.append(getTelephone()).append(' ');
+		}
+		if (getNote() != null) {
+			sbName.append(getNote().toLowerCase()).append(' ');
+		}
+		if (getTaxCode() != null) {
+			sbName.append(getTaxCode().toLowerCase()).append(' ');
+		}
 		return sbName.toString();
 	}
-	
+
 	public String getInformations() {
 		int i = 0;
 		StringBuilder infoBfr = new StringBuilder();

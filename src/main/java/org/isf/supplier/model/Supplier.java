@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.supplier.model;
 
@@ -77,11 +77,11 @@ public class Supplier extends Auditable<String> implements java.io.Serializable 
 	@Column(name="SUP_NOTE")
 	private String supNote;
 	
-	@Column(name="SUP_DELETED")
-	private Character supDeleted;
+	@Column(name="SUP_DELETED", columnDefinition = "char(1) default 'N'")
+	private char supDeleted;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public Supplier() {
 		super();
@@ -204,6 +204,7 @@ public class Supplier extends Auditable<String> implements java.io.Serializable 
 		this.supDeleted = supDeleted;
 	}
 
+	@Override
 	public String toString() {
 		return this.supName;
 	}

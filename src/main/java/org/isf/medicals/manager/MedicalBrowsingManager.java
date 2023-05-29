@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.medicals.manager;
 
@@ -32,7 +32,6 @@ import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -137,7 +136,7 @@ public class MedicalBrowsingManager {
 	 * @return <code>true</code> if the medical has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newMedical(Medical medical) throws OHServiceException {
+	public Medical newMedical(Medical medical) throws OHServiceException {
 		return newMedical(medical, false);
 	}
 
@@ -150,7 +149,7 @@ public class MedicalBrowsingManager {
 	 * @return <code>true</code> if the medical has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
+	public Medical newMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
 		checkMedicalForInsert(medical, ignoreSimilar);
 		return ioOperations.newMedical(medical);
 	}
@@ -159,11 +158,10 @@ public class MedicalBrowsingManager {
 	 * Updates the specified medical.
 	 *
 	 * @param medical - the medical to update.
-	 * @return <code>true</code> if update is successful, false if abortIfLocked == true and the record is locked.
-	 * Otherwise throws an OHServiceException
+	 * @return {@code Medical}
 	 * @throws OHServiceException
 	 */
-	public boolean updateMedical(Medical medical) throws OHServiceException {
+	public Medical updateMedical(Medical medical) throws OHServiceException {
 		return updateMedical(medical, false);
 	}
 
@@ -172,11 +170,10 @@ public class MedicalBrowsingManager {
 	 *
 	 * @param medical - the medical to update.
 	 * @param ignoreSimilar - if <code>true</code>, it ignore the warning "similarsFoundWarning".
-	 * @return <code>true</code> if update is successful, false if abortIfLocked == true and the record is locked.
-	 * Otherwise throws an OHServiceException
+	 * @return {@code Medical}
 	 * @throws OHServiceException
 	 */
-	public boolean updateMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
+	public Medical updateMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
 		checkMedicalForUpdate(medical, ignoreSimilar);
 		return ioOperations.updateMedical(medical);
 	}
@@ -192,9 +189,8 @@ public class MedicalBrowsingManager {
 		boolean inStockMovement = ioOperations.isMedicalReferencedInStockMovement(medical.getCode());
 
 		if (inStockMovement) {
-			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medicals.therearestockmovementsreferredtothismedical.msg"),
-					OHSeverityLevel.ERROR));
+			throw new OHDataIntegrityViolationException(
+					new OHExceptionMessage(MessageBundle.getMessage("angal.medicals.therearestockmovementsreferredtothismedical.msg")));
 		}
 
 		return ioOperations.deleteMedical(medical);
@@ -209,19 +205,13 @@ public class MedicalBrowsingManager {
 	private List<OHExceptionMessage> checkMedicalCommon(Medical medical) {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (medical.getMinqty() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medicals.minquantitycannotbelessthan0.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicals.minquantitycannotbelessthan0.msg")));
 		}
 		if (medical.getPcsperpck() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medicals.insertavalidpackaging.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicals.insertavalidpackaging.msg")));
 		}
 		if (medical.getDescription().equalsIgnoreCase("")) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
 		}
 		return errors;
 	}
@@ -270,26 +260,23 @@ public class MedicalBrowsingManager {
 		List<Medical> similarMedicals = ioOperations.medicalCheck(medical, update);
 
 		if (productCodeExists) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
 		} else if (medicalExists) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.medicals.thepairtypemedicalalreadyexists.fmt.msg", medical.getType().getDescription(), medical.toString()),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(
+					MessageBundle.formatMessage("angal.medicals.thepairtypemedicalalreadyexists.fmt.msg", medical.getType().getDescription(),
+					                            medical.toString())));
 		} else if (!ignoreSimilar && !similarMedicals.isEmpty()) {
 			StringBuilder message = new StringBuilder(MessageBundle.getMessage("angal.medicals.theinsertedmedicalisalreadyinuse.msg")).append('\n');
 			for (Medical med : similarMedicals) {
 				message.append('[').append(med.getType().getDescription()).append("] ");
-				if (!med.getProdCode().isEmpty())
+				if (!med.getProdCode().isEmpty()) {
 					message.append('[').append(med.getProdCode()).append("] ");
+				}
 				message.append(med).append('\n');
 			}
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					message.toString(),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(message.toString()));
 		}
-		
+
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.operation.manager;
 
@@ -27,6 +27,7 @@ import org.isf.admission.model.Admission;
 import org.isf.opd.model.Opd;
 import org.isf.operation.model.OperationRow;
 import org.isf.operation.service.OperationRowIoOperations;
+import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,7 +44,7 @@ public class OperationRowBrowserManager {
 	public List<OperationRow> getOperationRowByAdmission(Admission adm) throws OHServiceException {
 		return ioOperations.getOperationRowByAdmission(adm);
 	}
-
+	
 	public List<OperationRow> getOperationRowByOpd(Opd opd) throws OHServiceException {
 		return ioOperations.getOperationRowByOpd(opd);
 	}
@@ -52,14 +53,16 @@ public class OperationRowBrowserManager {
 		return ioOperations.deleteOperationRow(operationRow);
 	}
 
-	public boolean updateOperationRow(OperationRow opRow) throws OHServiceException {
-		ioOperations.updateOperationRow(opRow);
-		return true;
+	public OperationRow updateOperationRow(OperationRow opRow) throws OHServiceException {
+		return ioOperations.updateOperationRow(opRow);
 	}
 
-	public boolean newOperationRow(OperationRow opRow) throws OHServiceException {
-		ioOperations.newOperationRow(opRow);
-		return true;
+	public OperationRow newOperationRow(OperationRow opRow) throws OHServiceException {
+		return ioOperations.newOperationRow(opRow);
+	}
+	
+	public List<OperationRow> getOperationRowByPatientCode(Patient patient) throws OHServiceException {
+		return ioOperations.getOperationRowByPatient(patient);
 	}
 
 }

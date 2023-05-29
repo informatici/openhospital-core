@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,10 +17,11 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.menu.manager;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,7 +36,7 @@ import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
+import org.isf.utils.time.TimeTools;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -89,9 +90,8 @@ public class UserBrowsingManager {
 	public boolean newUser(User user) throws OHServiceException {
 		String username = user.getUserName();
 		if (ioOperations.isUserNamePresent(username)) {
-			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.userbrowser.theuseralreadyexists.fmt.msg", username),
-					OHSeverityLevel.ERROR));
+			throw new OHDataIntegrityViolationException(
+					new OHExceptionMessage(MessageBundle.formatMessage("angal.userbrowser.theuseralreadyexists.fmt.msg", username)));
 		}
 		return ioOperations.newUser(user);
 	}
@@ -124,11 +124,46 @@ public class UserBrowsingManager {
 	 */
 	public boolean deleteUser(User user) throws OHServiceException {
 		if (user.getUserName().equals("admin")) {
-			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.userbrowser.theadminusercannotbedeleted.msg"),
-					OHSeverityLevel.ERROR));
+			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.userbrowser.theadminusercannotbedeleted.msg")));
 		}
 		return ioOperations.deleteUser(user);
+	}
+
+
+	public void increaseFailedAttempts(User user) {
+		int newFailAttempts = user.getFailedAttempts() + 1;
+		ioOperations.updateFailedAttempts(user.getUserName(), newFailAttempts);
+	}
+
+	public void resetFailedAttempts(User user) {
+		ioOperations.updateFailedAttempts(user.getUserName(), 0);
+	}
+
+	public void lockUser(User user) throws OHServiceException {
+		user.setAccountLocked(true);
+		user.setLockedTime(TimeTools.getNow());
+		ioOperations.updateUserLocked(user.getUserName(), true, user.getLockedTime());
+	}
+
+	public void unlockUser(User user) throws OHServiceException {
+		user.setAccountLocked(false);
+		user.setLockedTime(null);
+		user.setFailedAttempts(0);
+		ioOperations.updateFailedAttempts(user.getUserName(), 0);
+		ioOperations.updateUserLocked(user.getUserName(), false, null);
+	}
+
+	public boolean unlockWhenTimeExpired(User user) throws OHServiceException {
+		LocalDateTime lockedTime = user.getLockedTime();
+		if (lockedTime.plusMinutes(GeneralData.PASSWORDLOCKTIME).isBefore(TimeTools.getNow())) {
+			user.setAccountLocked(false);
+			user.setLockedTime(null);
+			user.setFailedAttempts(0);
+			ioOperations.updateFailedAttempts(user.getUserName(), 0);
+			ioOperations.updateUserLocked(user.getUserName(), false,null);
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -189,15 +224,12 @@ public class UserBrowsingManager {
 	 */
 	public boolean deleteGroup(UserGroup aGroup) throws OHServiceException {
 		if (aGroup.getCode().equals("admin")) {
-			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.groupsbrowser.theadmingroupcannotbedeleted.msg"),
-					OHSeverityLevel.ERROR));
+			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.theadmingroupcannotbedeleted.msg")));
 		}
 		List<User> users = getUser(aGroup.getCode());
 		if (users != null && !users.isEmpty()) {
-			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.groupsbrowser.thisgrouphasusersandcannotbedeleted.msg"),
-					OHSeverityLevel.ERROR));
+			throw new OHDataIntegrityViolationException(
+					new OHExceptionMessage(MessageBundle.getMessage("angal.groupsbrowser.thisgrouphasusersandcannotbedeleted.msg")));
 		}
 		return ioOperations.deleteGroup(aGroup);
 	}
@@ -211,9 +243,8 @@ public class UserBrowsingManager {
 	public boolean newUserGroup(UserGroup aGroup) throws OHServiceException {
 		String code = aGroup.getCode();
 		if (ioOperations.isGroupNamePresent(code)) {
-			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.groupsbrowser.thegroupalreadyexists.fmt.msg", code),
-					OHSeverityLevel.ERROR));
+			throw new OHDataIntegrityViolationException(
+					new OHExceptionMessage(MessageBundle.formatMessage("angal.groupsbrowser.thegroupalreadyexists.fmt.msg", code)));
 		}
 		return ioOperations.newUserGroup(aGroup);
 	}

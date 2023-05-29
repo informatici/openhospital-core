@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.opetype.test;
 
@@ -84,8 +84,8 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestOperationType(false);
 		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
 		foundOperationType.setDescription("Update");
-		boolean result = operationTypeIoOperation.updateOperationType(foundOperationType);
-		assertThat(result).isTrue();
+		OperationType result = operationTypeIoOperation.updateOperationType(foundOperationType);
+		assertThat(result);
 		OperationType updateOperationType = operationTypeIoOperationRepository.findById(code).get();
 		assertThat(updateOperationType.getDescription()).isEqualTo("Update");
 	}
@@ -93,8 +93,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoNewOperationType() throws Exception {
 		OperationType operationType = testOperationType.setup(true);
-		boolean result = operationTypeIoOperation.newOperationType(operationType);
-		assertThat(result).isTrue();
+		OperationType result = operationTypeIoOperation.newOperationType(operationType);
+		assertThat(result);
 		checkOperationTypeIntoDb(operationType.getCode());
 	}
 
@@ -128,7 +128,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestOperationType(false);
 		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
 		foundOperationType.setDescription("Update");
-		assertThat(operationTypeBrowserManager.updateOperationType(foundOperationType)).isTrue();
+		assertThat(operationTypeBrowserManager.updateOperationType(foundOperationType));
 		OperationType updateOperationType = operationTypeIoOperationRepository.findById(code).get();
 		assertThat(updateOperationType.getDescription()).isEqualTo("Update");
 	}
@@ -136,7 +136,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrNewOperationType() throws Exception {
 		OperationType operationType = testOperationType.setup(true);
-		assertThat(operationTypeBrowserManager.newOperationType(operationType)).isTrue();
+		assertThat(operationTypeBrowserManager.newOperationType(operationType));
 		checkOperationTypeIntoDb(operationType.getCode());
 	}
 
@@ -224,7 +224,7 @@ public class Tests extends OHCoreTestCase {
 	public void testOperationTypeEquals() throws Exception {
 		OperationType operationType = new OperationType("Z", "description");
 
-		assertThat(operationType.equals(operationType)).isTrue();
+		assertThat(operationType).isEqualTo(operationType);
 		assertThat(operationType)
 				.isNotNull()
 				.isNotEqualTo("someString");

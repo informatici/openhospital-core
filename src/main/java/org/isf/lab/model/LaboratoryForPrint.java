@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.lab.model;
 
@@ -27,11 +27,13 @@ import java.time.format.DateTimeFormatter;
 import org.isf.exa.model.Exam;
 
 public class LaboratoryForPrint {
-	
+
 	private String exam;
-	private String date;
+	private LocalDateTime date;
 	private String result;
 	private Integer code;
+	private String patName;
+	private Integer patientCode;
 
 	public Integer getCode() {
 		return code;
@@ -41,10 +43,19 @@ public class LaboratoryForPrint {
 		this.code = code;
 	}
 
+	public LaboratoryForPrint(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult, String patientName, Integer patCode) {
+		code = aCode;
+		exam = aExam.getDescription();
+		date = aDate;
+		result = aResult;
+		patName = patientName;
+		patientCode = patCode;
+	}
+
 	public LaboratoryForPrint(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult) {
 		code = aCode;
 		exam = aExam.getDescription();
-		date = getConvertedString(aDate);
+		date = aDate;
 		result = aResult;
 	}
 
@@ -53,29 +64,32 @@ public class LaboratoryForPrint {
 		return time.format(formatter);
 	}
 
-    public String getDate() {
-        return this.date;
-    }
+	public LocalDateTime getDate() {
+		return this.date;
+	}
 
-    public void setDate(String aDate) {
-        this.date = aDate;
-    }
+	public void setDate(LocalDateTime aDate) {
+		this.date = aDate;
+	}
 
-    public String getExam() {
-        return this.exam;
-    }
+	public String getExam() {
+		return this.exam;
+	}
 
-    public void setExam(String aExam) {
-        this.exam = aExam;
-    }
+	public void setExam(String aExam) {
+		this.exam = aExam;
+	}
 
-    public String getResult() {
-        return this.result;
-    }
+	public String getResult() {
+		return this.result;
+	}
 
-    public void setResult(String aResult) {
-        this.result = aResult;
-    }
+	public void setResult(String aResult) {
+		this.result = aResult;
+	}
 
+	public String getPatName() {
+		return patName;
+	}
 
 }

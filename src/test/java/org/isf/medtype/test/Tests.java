@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.medtype.test;
 
@@ -85,8 +85,8 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestMedicalType(false);
 		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		foundMedicalType.setDescription("Update");
-		boolean result = medicalTypeIoOperation.updateMedicalType(foundMedicalType);
-		assertThat(result).isTrue();
+		MedicalType result = medicalTypeIoOperation.updateMedicalType(foundMedicalType);
+		assertThat(result);
 		MedicalType updateMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		assertThat(updateMedicalType.getDescription()).isEqualTo("Update");
 	}
@@ -94,8 +94,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoNewMedicalType() throws Exception {
 		MedicalType medicalType = testMedicalType.setup(true);
-		boolean result = medicalTypeIoOperation.newMedicalType(medicalType);
-		assertThat(result).isTrue();
+		MedicalType result = medicalTypeIoOperation.newMedicalType(medicalType);
+		assertThat(result);
 		checkMedicalTypeIntoDb(medicalType.getCode());
 	}
 
@@ -129,7 +129,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestMedicalType(false);
 		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		foundMedicalType.setDescription("Update");
-		assertThat(medicalTypeBrowserManager.updateMedicalType(foundMedicalType)).isTrue();
+		assertThat(medicalTypeBrowserManager.updateMedicalType(foundMedicalType));
 		MedicalType updateMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		assertThat(updateMedicalType.getDescription()).isEqualTo("Update");
 	}
@@ -137,7 +137,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrNewMedicalType() throws Exception {
 		MedicalType medicalType = testMedicalType.setup(true);
-		assertThat(medicalTypeBrowserManager.newMedicalType(medicalType)).isTrue();
+		assertThat(medicalTypeBrowserManager.newMedicalType(medicalType));
 		checkMedicalTypeIntoDb(medicalType.getCode());
 	}
 
@@ -211,7 +211,7 @@ public class Tests extends OHCoreTestCase {
 		MedicalType medicalType2 = new MedicalType("A", "description");
 		MedicalType medicalType3 = new MedicalType("Z", "otherDescription");
 
-		assertThat(medicalType1.equals(medicalType1)).isTrue();
+		assertThat(medicalType1).isEqualTo(medicalType1);
 		assertThat(medicalType1)
 				.isNotEqualTo("someString")
 				.isNotEqualTo(medicalType2)

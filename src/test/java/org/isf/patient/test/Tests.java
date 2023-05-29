@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.patient.test;
 
@@ -36,6 +36,7 @@ import java.util.Map;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
+import org.isf.generaldata.GeneralData;
 import org.isf.opd.model.Opd;
 import org.isf.opd.test.TestOpd;
 import org.isf.patient.manager.PatientBrowserManager;
@@ -47,6 +48,7 @@ import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -66,6 +68,7 @@ public class Tests extends OHCoreTestCase {
 
 	@BeforeClass
 	public static void setUpClass() {
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		testPatient = new TestPatient();
 		testOpd = new TestOpd();
 	}
@@ -102,7 +105,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private Pageable createPageRequest() {
-		return PageRequest.of(0, 10);   // Page size 10
+		return PageRequest.of(0, 10); // Page size 10
 	}
 
 	@Test
@@ -133,8 +136,8 @@ public class Tests extends OHCoreTestCase {
 		Patient foundPatient = patientIoOperation.getPatient(code);
 
 		// when:
-		List<Patient> patients = patientIoOperation
-				.getPatientsByOneOfFieldsLike(foundPatient.getFirstName().substring(1, foundPatient.getFirstName().length() - 2));
+		List<Patient> patients = patientIoOperation.getPatientsByOneOfFieldsLike(
+				foundPatient.getFirstName().substring(1, foundPatient.getFirstName().length() - 2));
 
 		// then:
 		testPatient.check(patients.get(0));
@@ -336,7 +339,8 @@ public class Tests extends OHCoreTestCase {
 		Integer code = setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
 
-		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(foundPatient.getFirstName().substring(1, foundPatient.getFirstName().length() - 2));
+		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike(
+				foundPatient.getFirstName().substring(1, foundPatient.getFirstName().length() - 2));
 		testPatient.check(patients.get(0));
 	}
 
@@ -369,19 +373,6 @@ public class Tests extends OHCoreTestCase {
 		setupTestPatient(false);
 		List<Patient> patients = patientBrowserManager.getPatientsByOneOfFieldsLike("dupa");
 		assertThat(patients).isEmpty();
-	}
-
-	@Test
-	public void testMgrGetPatientByName() throws Exception {
-		Integer code = setupTestPatient(false);
-		Patient foundPatient = patientIoOperation.getPatient(code);
-		Patient patient = patientBrowserManager.getPatientByName(foundPatient.getName());
-		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
-	}
-
-	@Test
-	public void testMgrGetPatientByNameDoesNotExist() throws Exception {
-		assertThat(patientBrowserManager.getPatientByName("someUnusualNameThatWillNotBeFound")).isNull();
 	}
 
 	@Test
@@ -505,11 +496,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setFirstName("");
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -520,11 +508,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setFirstName(null);
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -535,11 +520,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setSecondName("");
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -550,11 +532,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setSecondName(null);
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -565,11 +544,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setBirthDate(null);
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -580,11 +556,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setBirthDate(LocalDate.of(999, 1, 1));
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -596,11 +569,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setAge(-1);
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -612,11 +582,8 @@ public class Tests extends OHCoreTestCase {
 			patient.setAge(201);
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
@@ -627,25 +594,22 @@ public class Tests extends OHCoreTestCase {
 			patient.setSex(' ');
 
 			patientBrowserManager.savePatient(patient);
-		})
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
+		}).isInstanceOf(OHServiceException.class).has(new Condition<Throwable>(
+				(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error"));
 	}
 
 	@Test
 	public void testPatientOpdConstructor() throws Exception {
-		Opd opd = testOpd.setup(null, null, false);
+		Opd opd = testOpd.setup(null, null, null, null, false);
 		Patient patient = new Patient(opd);
 
 		assertThat(patient.getSex()).isEqualTo('F');
 		assertThat(patient.getCode()).isNull();
 		assertThat(patient.getBirthDate()).isNull();
 
-		assertThat(patient.getDeleted()).isEqualTo("N");
-		patient.setDeleted("Y");
-		assertThat(patient.getDeleted()).isEqualTo("Y");
+		assertThat(patient.getDeleted()).isEqualTo('N');
+		patient.setDeleted('Y');
+		assertThat(patient.getDeleted()).isEqualTo('Y');
 	}
 
 	@Test
@@ -680,7 +644,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testPatientEquals() throws Exception {
 		Patient patient = testPatient.setup(false);
-		assertThat(patient.equals(patient)).isTrue();
+		assertThat(patient).isEqualTo(patient);
 		assertThat(patient)
 				.isNotNull()
 				.isNotEqualTo("someString");
@@ -707,6 +671,8 @@ public class Tests extends OHCoreTestCase {
 		assertThat(patent2.hashCode()).isEqualTo(23 * 133);
 	}
 
+	// This test requires access to the opencv java native library
+	@Ignore
 	@Test
 	public void testPatientProfilePhoto() throws Exception {
 		Patient patient = testPatient.setup(true);
@@ -737,8 +703,8 @@ public class Tests extends OHCoreTestCase {
 	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) throws OHException {
 		Patient mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode()).get();
 		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).get();
-		assertThat(obsoletePatientResult.getDeleted()).isEqualTo("Y");
-		assertThat(mergedPatientResult.getDeleted()).isEqualTo("N");
+		assertThat(obsoletePatientResult.getDeleted()).isEqualTo('Y');
+		assertThat(mergedPatientResult.getDeleted()).isEqualTo('N');
 	}
 
 	private Integer setupTestPatient(boolean usingSet) throws OHException {

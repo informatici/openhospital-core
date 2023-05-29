@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,11 +17,12 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.dicom.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.within;
 
 import java.io.File;
@@ -29,17 +30,14 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.Iterator;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 import javax.swing.JFrame;
 
 import org.aspectj.util.FileUtil;
-import org.dcm4che2.data.DicomObject;
-import org.dcm4che2.data.Tag;
-import org.dcm4che2.imageio.plugins.dcm.DicomStreamMetaData;
+import org.dcm4che3.data.Attributes;
+import org.dcm4che3.data.Tag;
+import org.dcm4che3.io.DicomInputStream;
+import org.dcm4che3.io.DicomStreamException;
 import org.isf.OHCoreTestCase;
 import org.isf.dicom.manager.AbstractDicomLoader;
 import org.isf.dicom.manager.AbstractThumbnailViewGui;
@@ -54,6 +52,7 @@ import org.isf.dicomtype.model.DicomType;
 import org.isf.dicomtype.service.DicomTypeIoOperationRepository;
 import org.isf.dicomtype.test.TestDicomType;
 import org.isf.menu.manager.Context;
+import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHException;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -127,7 +126,7 @@ public class Tests extends OHCoreTestCase {
 		long code = setupTestFileDicom(false);
 		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
 		FileDicom dicom = dicomIoOperation.loadDetails(foundFileDicom.getIdFile(), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
-		FileDicom dicom2 = dicomIoOperation.loadDetails(new Long(foundFileDicom.getIdFile()), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
+		FileDicom dicom2 = dicomIoOperation.loadDetails(Long.valueOf(foundFileDicom.getIdFile()), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
 		assertThat(dicom2.getDicomInstanceUID()).isEqualTo(dicom.getDicomInstanceUID());
 		assertThat(dicom.getDicomSeriesDescription()).isEqualTo(foundFileDicom.getDicomSeriesDescription());
 	}
@@ -201,7 +200,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testSourceFilesLoadDicomWhenImageFormatIsJpeg() throws Exception {
+	public void testSourceFilesLoadDicomWhenImageFormatIsJpg() throws Exception {
 		File file = getFile("image.0007.jpg");
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
@@ -213,10 +212,21 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	public void testSourceFilesLoadDicomWhenImageFormatIsBadJpg() throws Exception {
+		File file = getFile("BadJPGFile.jpg");
+		DicomType dicomType = testDicomType.setup(true);
+		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
+		assertThatThrownBy(() -> SourceFiles.loadDicom(dicomFile, file, PATIENT_ID))
+				.isInstanceOf(OHDicomException.class);
+	}
+
+	@Test
 	public void testSourceFilesPreloadDicom() throws Exception {
 		File file = getFile("case3c_002.dcm");
-		LocalDateTime expectedStudyDate = LocalDateTime.ofInstant(getDicomObject(file).getDate(Tag.StudyDate, Tag.StudyTime).toInstant(), ZoneId.systemDefault());
-		LocalDateTime expectedSeriesDate= LocalDateTime.ofInstant(getDicomObject(file).getDate(Tag.SeriesDate, Tag.SeriesTime).toInstant(), ZoneId.systemDefault());
+		DicomInputStream dicomInputStream = new DicomInputStream(file);
+		Attributes attributes = dicomInputStream.readDataset();
+		LocalDateTime expectedSeriesDate = LocalDateTime.ofInstant(attributes.getDate(Tag.SeriesDateAndTime).toInstant(), ZoneId.systemDefault());
+		LocalDateTime expectedStudyDate = LocalDateTime.ofInstant(attributes.getDate(Tag.StudyDateAndTime).toInstant(), ZoneId.systemDefault());
 		FileDicom dicomFile = SourceFiles.preLoadDicom(file, 1);
 		assertThat(dicomFile.getFileName()).isEqualTo("case3c_002.dcm");
 		assertThat(dicomFile.getFrameCount()).isEqualTo(1);
@@ -224,13 +234,37 @@ public class Tests extends OHCoreTestCase {
 		assertThat(expectedSeriesDate).isCloseTo(dicomFile.getDicomSeriesDate(), within(1, ChronoUnit.SECONDS));
 	}
 
-	private DicomObject getDicomObject(File sourceFile) throws Exception {
-		Iterator<ImageReader> iter = ImageIO.getImageReadersByFormatName("DICOM");
-		ImageReader reader = iter.next();
-		ImageInputStream imageInputStream = ImageIO.createImageInputStream(sourceFile);
-		reader.setInput(imageInputStream, false);
-		DicomStreamMetaData dicomStreamMetaData = (DicomStreamMetaData) reader.getStreamMetadata();
-		return dicomStreamMetaData.getDicomObject();
+	@Test
+	public void testSourceFilesPreloadDicomTest9() throws Exception {
+		// has studydate but not seriesdate
+		File file = getFile("test9signed.dcm");
+		DicomInputStream dicomInputStream = new DicomInputStream(file);
+		Attributes attributes = dicomInputStream.readDataset();
+		LocalDateTime expectedStudyDate = LocalDateTime.ofInstant(attributes.getDate(Tag.StudyDateAndTime).toInstant(), ZoneId.systemDefault());
+		FileDicom dicomFile = SourceFiles.preLoadDicom(file, 1);
+		assertThat(dicomFile.getFileName()).isEqualTo("test9signed.dcm");
+		assertThat(dicomFile.getFrameCount()).isEqualTo(1);
+		assertThat(expectedStudyDate).isCloseTo(dicomFile.getDicomStudyDate(), within(1, ChronoUnit.SECONDS));
+	}
+
+	@Test
+	public void testSourceFilesPreloadDicomTest16() throws Exception {
+		// has studydate but not seriesdate
+		File file = getFile("test16unsigned.dcm");
+		DicomInputStream dicomInputStream = new DicomInputStream(file);
+		Attributes attributes = dicomInputStream.readDataset();
+		LocalDateTime expectedStudyDate = LocalDateTime.ofInstant(attributes.getDate(Tag.StudyDateAndTime).toInstant(), ZoneId.systemDefault());
+		FileDicom dicomFile = SourceFiles.preLoadDicom(file, 1);
+		assertThat(dicomFile.getFileName()).isEqualTo("test16unsigned.dcm");
+		assertThat(dicomFile.getFrameCount()).isEqualTo(1);
+		assertThat(expectedStudyDate).isCloseTo(dicomFile.getDicomStudyDate(), within(1, ChronoUnit.SECONDS));
+	}
+
+	@Test
+	public void testSourceFilesPreloadBadDicomFormat() throws Exception {
+		File file = getFile("BadDicomFile.dcm");
+		assertThatThrownBy(() -> new DicomInputStream(file))
+				.isInstanceOf(DicomStreamException.class);
 	}
 
 	@Test
@@ -283,7 +317,7 @@ public class Tests extends OHCoreTestCase {
 		DicomType dicomType = testDicomType.setup(false);
 		FileDicom fileDicom = testFileDicom.setup(dicomType, true);
 
-		assertThat(fileDicom.equals(fileDicom)).isTrue();
+		assertThat(fileDicom).isEqualTo(fileDicom);
 		assertThat(fileDicom)
 				.isNotNull()
 				.isNotEqualTo("someString");
@@ -314,6 +348,8 @@ public class Tests extends OHCoreTestCase {
 		assertThat(fileDicom.getDicomType()).isEqualTo(dicomType);
 	}
 
+	// This test requires access to the opencv native libraries
+	@Ignore
 	@Test
 	public void testFileDicomGetThumbnailasImage() throws Exception {
 		DicomType dicomType = testDicomType.setup(false);

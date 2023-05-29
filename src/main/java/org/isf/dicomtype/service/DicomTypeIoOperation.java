@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.dicomtype.service;
 
@@ -51,7 +51,7 @@ public class DicomTypeIoOperation {
 	/**
 	 * Method that updates an already existing DicomType
 	 * 
-	 * @param DicomType
+	 * @param dicomType
 	 * @return true - if the existing DicomType has been updated
 	 * @throws OHServiceException
 	 */
@@ -62,7 +62,7 @@ public class DicomTypeIoOperation {
 	/**
 	 * Method that create a new DicomType
 	 * 
-	 * @param DicomType
+	 * @param dicomType
 	 * @return true - if the new DicomType has been inserted
 	 * @throws OHServiceException
 	 */
@@ -73,7 +73,7 @@ public class DicomTypeIoOperation {
 	/**
 	 * Method that delete a DicomType
 	 * 
-	 * @param DicomType
+	 * @param dicomType
 	 * @return true - if the DicomType has been deleted
 	 * @throws OHServiceException
 	 */

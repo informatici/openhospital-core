@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.agetype.manager;
 
@@ -30,7 +30,6 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -91,6 +90,17 @@ public class AgeTypeBrowserManager {
 	public AgeType getTypeByCode(int index) throws OHServiceException {
 		return ioOperations.getAgeTypeByCode(index);
 	}
+	
+	/**
+	 * Gets the {@link AgeType} from the code.
+	 *
+	 * @param code of agetype.
+	 * @return the retrieved element, <code>null</code> otherwise.
+	 * @throws OHServiceException
+	 */
+	public AgeType getTypeByCode(String code) throws OHServiceException {
+		return ioOperations.getAgeTypeByCode(code);
+	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
@@ -102,15 +112,10 @@ public class AgeTypeBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		for (int i = 1; i < ageTypes.size(); i++) {
 			if (ageTypes.get(i).getFrom() <= ageTypes.get(i - 1).getTo()) {
-				errors.add(
-						new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-								MessageBundle.getMessage("angal.agetype.overlappedrangespleasecheckthevalues.msg"),
-								OHSeverityLevel.ERROR));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.agetype.overlappedrangespleasecheckthevalues.msg")));
 			}
 			if (ageTypes.get(i).getFrom() - ageTypes.get(i - 1).getTo() > 1) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.agetype.somerangesarenotdefinedpleasecheckthevalues.msg"),
-						OHSeverityLevel.ERROR));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.agetype.somerangesarenotdefinedpleasecheckthevalues.msg")));
 			}
 		}
 		if (!errors.isEmpty()) {

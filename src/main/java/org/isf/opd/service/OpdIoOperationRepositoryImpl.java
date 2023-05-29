@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.opd.service;
 
@@ -34,8 +34,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
+import org.isf.ward.model.Ward;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -47,6 +47,7 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 	@SuppressWarnings("unchecked")	
 	@Override
 	public List<Opd> findAllOpdWhereParams(
+			Ward ward,
 			String diseaseTypeCode,
 			String diseaseCode,
 			LocalDate dateFrom,
@@ -54,11 +55,13 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			int ageFrom,
 			int ageTo,
 			char sex,
-			char newPatient) {
-		return getOpdQuery(diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient).getResultList();
+			char newPatient,
+			String user) {
+		return getOpdQuery(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user).getResultList();
 	}	
 
 	private TypedQuery<Opd> getOpdQuery(
+			Ward ward, 
 			String diseaseTypeCode,
 			String diseaseCode,
 			LocalDate dateFrom,
@@ -66,19 +69,25 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 			int ageFrom, 
 			int ageTo,
 			char sex,
-			char newPatient) {
+			char newPatient,
+			String user) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Opd> query = cb.createQuery(Opd.class);
 		Root<Opd> opd = query.from(Opd.class);
 		List<Predicate> predicates = new ArrayList<>();
 
 		query.select(opd);
-		if (!(diseaseTypeCode.equals(MessageBundle.getMessage("angal.common.alltypes.txt")))) {
+		if (ward != null) {
+			predicates.add(
+					cb.equal(opd.join("ward").get("code"), ward.getCode())
+			);
+		}
+		if (diseaseTypeCode != null && !diseaseTypeCode.equals("")) {
 			predicates.add(
 					cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
 			);
 		}
-		if (!diseaseCode.equals(MessageBundle.getMessage("angal.opd.alldiseases.txt"))) {
+		if (diseaseCode != null && !diseaseCode.equals("")) {
 			predicates.add(
 					cb.equal(opd.join("disease").get("code"), diseaseCode)
 			);
@@ -96,6 +105,11 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 		if (newPatient != 'A') {
 			predicates.add(
 					cb.equal(opd.get("newPatient"), newPatient)
+			);
+		}
+		if (user != null) {
+			predicates.add(
+					cb.equal(opd.get("userID"), user)
 			);
 		}
 		predicates.add(

@@ -26,9 +26,11 @@ import java.sql.DatabaseMetaData;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.isf.telemetry.envdatacollector.AbstractDataCollector;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.hibernate.engine.spi.SessionImplementor;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
-import org.isf.utils.db.DbSingleConn;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +40,9 @@ import org.springframework.stereotype.Component;
 @Order(value = 20)
 @Component
 public class _DBMSDataCollector {
+
+	@PersistenceContext
+	private EntityManager em;
 
 	private static final String ID = "FUN_DBMS";
 	private static final Logger LOGGER = LoggerFactory.getLogger(_DBMSDataCollector.class);
@@ -55,8 +60,8 @@ public class _DBMSDataCollector {
 		Map<String, String> result = new HashMap<>();
 		Connection con = null;
 		try {
-			con = DbSingleConn.getConnection();
-			DatabaseMetaData dbmd = con.getMetaData();
+			SessionImplementor sessionImp = (SessionImplementor) em.getDelegate();
+			DatabaseMetaData dbmd = sessionImp.connection().getMetaData();
 			result.put(CollectorsConst.DBMS_DRIVER_NAME, dbmd.getDriverName());
 			result.put(CollectorsConst.DBMS_DRIVER_VERSION, dbmd.getDriverVersion());
 			result.put(CollectorsConst.DBMS_PRODUCT_NAME, dbmd.getDatabaseProductName());

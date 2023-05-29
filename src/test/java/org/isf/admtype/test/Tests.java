@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.admtype.test;
 
@@ -140,7 +140,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestAdmissionType(false);
 		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).get();
 		AdmissionType admissionType2 = new AdmissionType("someCode", "someDescription");
-		assertThat(admissionType.equals(admissionType)).isTrue();
+		assertThat(admissionType).isEqualTo(admissionType);
 		assertThat(admissionType)
 				.isNotEqualTo(admissionType2)
 				.isNotEqualTo("xyzzy");

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,11 +17,10 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.lab.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
@@ -80,10 +79,6 @@ public class Laboratory extends Auditable<String> {
 	@NotNull
 	@Column(name="LAB_DATE")		// SQL type: datetime
 	private LocalDateTime labDate;
-	
-	@Column(name="LAB_EXAM_DATE")
-	@Deprecated
-	private LocalDate examDate;	// SQL type: date
 
 	@NotNull
 	@Column(name="LAB_RES")
@@ -111,9 +106,12 @@ public class Laboratory extends Auditable<String> {
 
 	@Column(name="LAB_SEX")
 	private String sex;
+	
+	@Column(name="LAB_STATUS")
+	private String status;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public Laboratory() { }
 
@@ -139,7 +137,7 @@ public class Laboratory extends Auditable<String> {
 	public Exam getExam() {
 		return exam;
 	}
-	public LocalDateTime getDate() {
+	public LocalDateTime getLabDate() {
 		return labDate;
 	}
 	public String getResult() {
@@ -160,25 +158,10 @@ public class Laboratory extends Auditable<String> {
 	public void setLock(int aLock) {
 		lock = aLock;
 	}
-	/**
-	 * use <code>getCreatedDate()</code> instead
-	 * @deprecated 
-	 */
-	@Deprecated
-	public LocalDate getExamDate() {
-		return examDate;
-	}
-	/**
-	 * the field has been replaced by <code>createdDate()</code> and it's not meant to be managed by the user (Spring managed)
-	 * @deprecated 
-	 */
-	@Deprecated
-	public void setExamDate(LocalDate exDate) {
-		this.examDate = exDate;
-	}
-	public void setDate(LocalDateTime aDate) {
+	public void setLabDate(LocalDateTime aDate) {
 		labDate = TimeTools.truncateToSeconds(aDate);
 	}
+
 	public void setResult(String aResult) {
 		result = aResult;
 	}
@@ -241,6 +224,14 @@ public class Laboratory extends Auditable<String> {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -270,7 +261,7 @@ public class Laboratory extends Auditable<String> {
 	@Override
 	public String toString() {
 		return "-------------------------------------------\nLaboratory{" + "code=" + code + ", material=" + material
-				+ ", exam=" + exam + ", registrationDate=" + labDate + ", examDate=" + examDate + ", result="
+				+ ", exam=" + exam + ", registrationDate=" + createdDate + ", examDate=" + labDate + ", result="
 				+ result + ", lock=" + lock + ", note=" + note + ", patient=" + patient + ", patName=" + patName
 				+ ", InOutPatient=" + inOutPatient + ", age=" + age + ", sex=" + sex + ", hashCode=" + hashCode
 				+ "}\n---------------------------------------------";

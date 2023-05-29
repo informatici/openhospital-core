@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.menu.service;
 
@@ -29,7 +29,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface UserGroupIoOperationRepository extends JpaRepository<UserGroup, String> {
@@ -37,8 +36,8 @@ public interface UserGroupIoOperationRepository extends JpaRepository<UserGroup,
 	List<UserGroup> findAllByOrderByCodeAsc();
 
 	@Modifying
-	@Transactional
 	@Query(value = "update UserGroup ug set ug.desc=:description where ug.code=:id")
 	int updateDescription(@Param("description") String description, @Param("id") String id);
 
+	List<UserGroup> findByCodeIn(List<String> userGroupIds);
 }

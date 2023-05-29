@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.serviceprinting.manager;
 
@@ -77,7 +77,7 @@ public class PrintManager {
 		parameters.put("ospedaleMail", hospital.getEmail());
 
 		JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(toPrint);
-		File jasperFile = new File("rpt/" + filename + ".jasper");
+		File jasperFile = new File("rpt_base/" + filename + ".jasper");
 		try {
 			if (jasperFile.isFile()) {
 				JasperReport jasperReport = (JasperReport) JRLoader
@@ -86,10 +86,10 @@ public class PrintManager {
 						jasperReport, parameters, dataSource);
 				switch (action) {
 				case 0:
-					if (GeneralData.INTERNALVIEWER)
+					if (GeneralData.INTERNALVIEWER) {
 						JasperViewer.viewReport(jasperPrint,false, new Locale(GeneralData.LANGUAGE));
-					else { 
-						String pdfFile = "rpt/PDF/" + filename + ".pdf";
+					} else {
+						String pdfFile = "rpt_base/PDF/" + filename + ".pdf";
 						JasperExportManager.exportReportToPdfFile(jasperPrint, pdfFile);
 						try {
 							Runtime rt = Runtime.getRuntime();
@@ -100,7 +100,7 @@ public class PrintManager {
 					}
 					break;
 				case 1:
-					JasperExportManager.exportReportToPdfFile(jasperPrint,"rpt/PDF/"+
+					JasperExportManager.exportReportToPdfFile(jasperPrint,"rpt_base/PDF/"+
 							JOptionPane.showInputDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectapathforthepdffile.msg"), filename)
 							+".pdf");
 					break;
@@ -109,7 +109,9 @@ public class PrintManager {
 				default:JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.selectacorrectaction.msg"));
 					break;
 				}
-			} else JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.notavalidfile.msg"));
+			} else {
+				JOptionPane.showMessageDialog(null,MessageBundle.getMessage("angal.serviceprinting.notavalidfile.msg"));
+			}
 		} catch (JRException jrException) {
 			LOGGER.error(jrException.getMessage(), jrException);
 		}

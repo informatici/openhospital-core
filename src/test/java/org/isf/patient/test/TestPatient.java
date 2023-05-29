@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.patient.test;
 
@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.util.Calendar;
 
+import org.isf.patconsensus.model.PatientConsensus;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.utils.exception.OHException;
@@ -36,7 +37,7 @@ public class TestPatient {
 	private static String secondName = "TestSecondName";
 	private static LocalDate birthDate = LocalDate.of(1984, Calendar.AUGUST, 14);
 	private static int age = 31; //IT WILL CHANGE WITH TIME
-	private static String agetype = "Date";
+	private static String agetype = "d1";
 	private static char sex = 'F';
 	private static String address = "TestAddress";
 	private static String city = "TestCity";
@@ -52,7 +53,9 @@ public class TestPatient {
 	private static String taxCode = "TestTaxCode";
 	private static String maritalStatus = "divorced";
 	private static String profession = "business";
-	//private static Blob photo;	
+	private String anamnesis = "anamnesis";
+	private String allergies = "allergies";
+	//private static Blob photo;
 	//private static Image photoImage;
 
 	public Patient setup(boolean usingSet) throws OHException {
@@ -61,14 +64,19 @@ public class TestPatient {
 		if (usingSet) {
 			patient = new Patient();
 			patient.setPatientProfilePhoto(new PatientProfilePhoto());
+			patient.setPatientConsensus(new PatientConsensus(true, false, patient));
 			setParameters(patient);
 		} else {
-			// Create Patient with all parameters 
+			// Create Patient with all parameters
 			patient = new Patient(firstName, secondName, birthDate, age, agetype, sex,
 					address, city, nextKin, telephone, mother_name, mother, father_name, father,
 					bloodType, hasInsurance, parentTogether, taxCode, maritalStatus, profession);
 			patient.setAge(patient.getAge()); //IT WILL CHANGE WITH TIME
 			patient.setPatientProfilePhoto(new PatientProfilePhoto());
+			patient.setPatientConsensus(new PatientConsensus(true, false, patient));
+			patient.setAllergies(allergies);
+			patient.setAnamnesis(anamnesis);
+
 		}
 
 		return patient;
@@ -95,13 +103,14 @@ public class TestPatient {
 		patient.setTaxCode(taxCode);
 		patient.setMaritalStatus(maritalStatus);
 		patient.setProfession(profession);
+		patient.setAllergies(allergies);
+		patient.setAnamnesis(anamnesis);
 	}
 
 	public void check(Patient patient) {
 		assertThat(patient.getFirstName()).isEqualTo(firstName);
 		assertThat(patient.getSecondName()).isEqualTo(secondName);
 		assertThat(patient.getBirthDate()).isEqualTo(birthDate);
-		//assertThat(patient.getAge()).isEqualTo(age);
 		assertThat(patient.getAgetype()).isEqualTo(agetype);
 		assertThat(patient.getSex()).isEqualTo(sex);
 		assertThat(patient.getAddress()).isEqualTo(address);
@@ -118,5 +127,7 @@ public class TestPatient {
 		assertThat(patient.getTaxCode()).isEqualTo(taxCode);
 		assertThat(patient.getMaritalStatus()).isEqualTo(maritalStatus);
 		assertThat(patient.getProfession()).isEqualTo(profession);
+		assertThat(patient.getAllergies()).isEqualTo(allergies);
+		assertThat(patient.getAnamnesis()).isEqualTo(anamnesis);
 	}
 }

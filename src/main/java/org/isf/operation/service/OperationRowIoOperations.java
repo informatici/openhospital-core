@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.operation.service;
 
@@ -27,6 +27,7 @@ import java.util.List;
 import org.isf.admission.model.Admission;
 import org.isf.opd.model.Opd;
 import org.isf.operation.model.OperationRow;
+import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +69,7 @@ public class OperationRowIoOperations {
 		return false;
 	}
 
-	public void updateOperationRow(OperationRow opRow) throws OHServiceException {
+	public OperationRow updateOperationRow(OperationRow opRow) throws OHServiceException {
 		OperationRow found = repository.findById(opRow.getId());
 		if (found != null) {
 			found.setAdmission(opRow.getAdmission());
@@ -80,12 +81,16 @@ public class OperationRowIoOperations {
 			found.setPrescriber(opRow.getPrescriber());
 			found.setRemarks(opRow.getRemarks());
 			found.setTransUnit(opRow.getTransUnit());
-			repository.save(found);
+			return repository.save(found);
 		}
+		return null;
 	}
 
-    public void newOperationRow(OperationRow opRow) throws OHServiceException {
-        repository.save(opRow);
-    }
+	public OperationRow newOperationRow(OperationRow opRow) throws OHServiceException {
+		 return repository.save(opRow);
+	}
 
+	public List<OperationRow> getOperationRowByPatient(Patient patient) throws OHServiceException {
+		return repository.findByAdmissionPatientOrOpdPatient(patient, patient);
+	}
 }

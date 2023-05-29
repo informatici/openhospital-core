@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.therapy.test;
 
@@ -39,7 +39,7 @@ public class TestTherapy {
 	private int freqInDay = 11;
 	private int freqInPeriod = 12;
 	private String note = "TestNote";
-	private boolean notify = false;
+	private boolean notify;
 	private boolean sms = true;
 
 	public TherapyRow setup(Patient patient, Medical medical, boolean usingSet) throws OHException {

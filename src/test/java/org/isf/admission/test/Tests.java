@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.admission.test;
 
@@ -145,6 +145,7 @@ public class Tests extends OHCoreTestCase {
 
 	@BeforeClass
 	public static void setUpClass() {
+		GeneralData.PATIENTPHOTOSTORAGE = "DB";
 		testAdmission = new TestAdmission();
 		testWard = new TestWard();
 		testPatient = new TestPatient();
@@ -413,8 +414,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoNewAdmission() throws Exception {
 		Admission admission = buildNewAdmission();
-		boolean result = admissionIoOperation.newAdmission(admission);
-		assertThat(result).isTrue();
+		Admission result = admissionIoOperation.newAdmission(admission);
+		assertThat(result);
 		admission = admissionBrowserManager.getAdmission(admission.getId());
 		testAdmission.check(admission);
 	}
@@ -431,10 +432,10 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		foundAdmission.setNote("Update");
-		boolean result = admissionIoOperation.updateAdmission(foundAdmission);
+		Admission result = admissionIoOperation.updateAdmission(foundAdmission);
 		Admission updateAdmission = admissionIoOperation.getAdmission(id);
 
-		assertThat(result).isTrue();
+		assertThat(result);
 		assertThat(updateAdmission.getNote()).isEqualTo("Update");
 	}
 
@@ -557,7 +558,7 @@ public class Tests extends OHCoreTestCase {
 		foundAdmission.setPatient(null);
 		assertThat(foundAdmission.getPatient()).isNull();
 		foundAdmission.setPatient(foundPatient);
-		assertThat(foundAdmission.getPatient()).isEqualToComparingFieldByField(foundPatient);
+		assertThat(foundAdmission.getPatient()).usingRecursiveComparison().isEqualTo(foundPatient);
 		int lock = foundAdmission.getLock();
 		foundAdmission.setLock(-1);
 		assertThat(foundAdmission.getLock()).isEqualTo(-1);
@@ -582,12 +583,12 @@ public class Tests extends OHCoreTestCase {
 		admittedPatient.setPatient(null);
 		assertThat(admittedPatient.getPatient()).isNull();
 		admittedPatient.setPatient(patient);
-		assertThat(admittedPatient.getPatient()).isEqualToComparingFieldByField(patient);
+		assertThat(admittedPatient.getPatient()).usingRecursiveComparison().isEqualTo(patient);
 		Admission admission = admittedPatient.getAdmission();
 		admittedPatient.setAdmission(null);
 		assertThat(admittedPatient.getAdmission()).isNull();
 		admittedPatient.setAdmission(admission);
-		assertThat(admittedPatient.getAdmission()).isEqualToComparingFieldByField(admission);
+		assertThat(admittedPatient.getAdmission()).usingRecursiveComparison().isEqualTo(admission);
 	}
 
 	@Test
@@ -880,8 +881,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrNewAdmission() throws Exception {
 		Admission admission = buildNewAdmission();
-		boolean result = admissionBrowserManager.newAdmission(admission);
-		assertThat(result).isTrue();
+		Admission result = admissionBrowserManager.newAdmission(admission);
+		assertThat(result);
 		admission = admissionBrowserManager.getAdmission(admission.getId());
 		testAdmission.check(admission);
 	}
@@ -901,8 +902,8 @@ public class Tests extends OHCoreTestCase {
 		admissionBrowserManager.newAdmission(admission);
 		int id = admission.getId();
 		admission.setNote("Update");
-		boolean result = admissionBrowserManager.updateAdmission(admission);
-		assertThat(result).isTrue();
+		Admission result = admissionBrowserManager.updateAdmission(admission);
+		assertThat(result);
 		Admission updateAdmission = admissionBrowserManager.getAdmission(id);
 		assertThat(updateAdmission.getNote()).isEqualTo("Update");
 	}
@@ -952,7 +953,79 @@ public class Tests extends OHCoreTestCase {
 		admission.setYProg(0);
 		admission.setDisDate(disDate);
 
-		// Admin date future date
+		// Admission date future date
+		LocalDateTime admDate = admission.getAdmDate();
+		disDate = admission.getDisDate();
+		admission.setAdmDate(LocalDateTime.of(9999, 1, 1, 0, 0, 0));
+		admission.setDisDate(null);
+		assertThatThrownBy(() -> admissionBrowserManager.newAdmission(admission))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+
+		admission.setAdmDate(admDate);
+		admission.setDisDate(disDate);
+
+		// Discharge date is after today
+		disDate = admission.getDisDate();
+		admission.setDisDate(LocalDateTime.of(9999, 1, 1, 0, 0, 0));
+		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		// is null
+		admission.setDisDate(null);
+		assertThatThrownBy(() -> admissionBrowserManager.newAdmission(admission))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		admission.setDisDate(disDate);
+
+		// DiseaseOut1() == null && DisDate() != null
+		Disease disease = admission.getDiseaseOut1();
+		admission.setDiseaseOut1(null);
+		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
+				.isInstanceOf(OHDataValidationException.class);
+		admission.setDiseaseOut1(disease);
+
+		// DiseaseOut1() != null && DisDate() == null
+		admDate = admission.getDisDate();
+		admission.setDisDate(null);
+		assertThatThrownBy(() -> admissionBrowserManager.newAdmission(admission))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		admission.setDisDate(admDate);
+	}
+	
+	@Test
+	public void testMgrValidateMaternity() throws Exception {
+		int id = setupTestAdmission(false, true);
+		Admission admission = admissionBrowserManager.getAdmission(id);
+		GeneralData.LANGUAGE = "en";
+
+		// Bad progressive id
+		admission.setYProg(-1);
+		LocalDateTime disDate = admission.getDisDate();
+		admission.setDisDate(null);
+		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		admission.setYProg(0);
+		admission.setDisDate(disDate);
+
+		// Admission date future date
 		LocalDateTime admDate = admission.getAdmDate();
 		disDate = admission.getDisDate();
 		admission.setAdmDate(LocalDateTime.of(9999, 1, 1, 0, 0, 0));
@@ -1050,7 +1123,7 @@ public class Tests extends OHCoreTestCase {
 		Admission admission = admissionBrowserManager.getAdmission(id);
 		Admission admission2 = buildNewAdmission();
 		admission2.setId(id);   // no really legal but needed for these tests
-		assertThat(admission.equals(admission)).isTrue();
+		assertThat(admission).isEqualTo(admission);
 		assertThat(admission)
 				.isEqualTo(admission2)
 				.isNotEqualTo("xyzzy");

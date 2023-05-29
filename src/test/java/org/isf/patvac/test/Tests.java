@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.patvac.test;
 
@@ -158,8 +158,8 @@ public class Tests extends OHCoreTestCase {
 		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
 		LocalDateTime newDate = TimeTools.getNow();
 		foundPatientVaccine.setVaccineDate(newDate);
-		boolean result = patvacIoOperation.updatePatientVaccine(foundPatientVaccine);
-		assertThat(result).isTrue();
+		PatientVaccine result = patvacIoOperation.updatePatientVaccine(foundPatientVaccine);
+		assertThat(result);
 		PatientVaccine updatePatientVaccine = patVacIoOperationRepository.findById(code).get();
 		assertThat(updatePatientVaccine.getVaccineDate().equals(newDate));
 	}
@@ -173,8 +173,8 @@ public class Tests extends OHCoreTestCase {
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
 		vaccineIoOperationRepository.saveAndFlush(vaccine);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
-		boolean result = patvacIoOperation.newPatientVaccine(patientVaccine);
-		assertThat(result).isTrue();
+		PatientVaccine result = patvacIoOperation.newPatientVaccine(patientVaccine);
+		assertThat(result);
 		checkPatientVaccineIntoDb(patientVaccine.getCode());
 	}
 
@@ -195,8 +195,9 @@ public class Tests extends OHCoreTestCase {
 		setupTestPatientVaccine(true);
 		List<PatientVaccine> patientVaccineList = patvacIoOperation.getPatientVaccine(null, null, null, null, 'A', 0, 0);
 		for (PatientVaccine patVac : patientVaccineList) {
-			if (patVac.getProgr() > foundProgYear)
+			if (patVac.getProgr() > foundProgYear) {
 				foundProgYear = patVac.getProgr();
+			}
 		}
 		progYear = patvacIoOperation.getProgYear(0);
 		assertThat(progYear).isEqualTo(foundProgYear);
@@ -325,8 +326,8 @@ public class Tests extends OHCoreTestCase {
 		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).get();
 		LocalDateTime newDate = TimeTools.getNow();
 		foundPatientVaccine.setVaccineDate(newDate);
-		boolean result = patVacManager.updatePatientVaccine(foundPatientVaccine);
-		assertThat(result).isTrue();
+		PatientVaccine result = patVacManager.updatePatientVaccine(foundPatientVaccine);
+		assertThat(result);
 		PatientVaccine updatePatientVaccine = patVacIoOperationRepository.findById(code).get();
 		assertThat(updatePatientVaccine.getVaccineDate().equals(newDate));
 	}
@@ -340,8 +341,8 @@ public class Tests extends OHCoreTestCase {
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
 		vaccineIoOperationRepository.saveAndFlush(vaccine);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
-		boolean result = patVacManager.newPatientVaccine(patientVaccine);
-		assertThat(result).isTrue();
+		PatientVaccine result = patVacManager.newPatientVaccine(patientVaccine);
+		assertThat(result);
 		checkPatientVaccineIntoDb(patientVaccine.getCode());
 	}
 
@@ -360,8 +361,9 @@ public class Tests extends OHCoreTestCase {
 		setupTestPatientVaccine(true);
 		List<PatientVaccine> patientVaccineList = patVacManager.getPatientVaccine(null, null, null, null, 'A', 0, 0);
 		for (PatientVaccine patVac : patientVaccineList) {
-			if (patVac.getProgr() > foundProgYear)
+			if (patVac.getProgr() > foundProgYear) {
 				foundProgYear = patVac.getProgr();
+			}
 		}
 		progYear = patVacManager.getProgYear(0);
 		assertThat(progYear).isEqualTo(foundProgYear);
@@ -496,7 +498,7 @@ public class Tests extends OHCoreTestCase {
 		PatientVaccine patientVaccine1 = new PatientVaccine(0, 0, null, new Patient(), null, 0);
 		PatientVaccine patientVaccine2 = new PatientVaccine(0, 0, null, new Patient(), null, 0);
 
-		assertThat(patientVaccine1.equals(patientVaccine1)).isTrue();
+		assertThat(patientVaccine1).isEqualTo(patientVaccine1);
 		assertThat(patientVaccine1)
 				.isNotNull()
 				.isNotEqualTo("someString");

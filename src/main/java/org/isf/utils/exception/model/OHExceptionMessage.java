@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,11 +17,13 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.utils.exception.model;
 
 import java.io.Serializable;
+
+import org.isf.generaldata.MessageBundle;
 
 /**
  * Composed exception information
@@ -32,16 +34,26 @@ public class OHExceptionMessage implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private String title;
+	private ErrorDescription description;
 	private String message;
 	private OHSeverityLevel level;
 
+	public OHExceptionMessage(String message) {
+		this(MessageBundle.getMessage("angal.common.error.title"), message, OHSeverityLevel.ERROR);
+	}
 	public OHExceptionMessage(String title, String message, OHSeverityLevel level) {
 		super();
 		this.title = title;
 		this.message = message;
 		this.level = level;
 	}
-	
+	public OHExceptionMessage(String title, ErrorDescription description, String message, OHSeverityLevel level) {
+		super();
+		this.title = title;
+		this.description = description;
+		this.message = message;
+		this.level = level;
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -59,6 +71,12 @@ public class OHExceptionMessage implements Serializable{
 	}
 	public void setLevel(OHSeverityLevel level) {
 		this.level = level;
+	}
+	public ErrorDescription getDescription() {
+		return description;
+	}
+	public void setDescription(ErrorDescription description) {
+		this.description = description;
 	}
 	
 

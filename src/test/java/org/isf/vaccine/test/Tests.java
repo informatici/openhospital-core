@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.vaccine.test;
 
@@ -285,7 +285,7 @@ public class Tests extends OHCoreTestCase {
 		VaccineType vaccineType = testVaccineType.setup(true);
 		Vaccine vaccine = new Vaccine("aCode", "aDescription", vaccineType);
 
-		assertThat(vaccine.equals(vaccine)).isTrue();
+		assertThat(vaccine).isEqualTo(vaccine);
 		assertThat(vaccine)
 				.isNotNull()
 				.isNotEqualTo("someStringValue");

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.utils.db;
 
@@ -31,7 +31,6 @@ import org.isf.utils.exception.OHDataLockFailureException;
 import org.isf.utils.exception.OHInvalidSQLException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -49,36 +48,30 @@ public class OHServiceExceptionTranslator {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(OHServiceExceptionTranslator.class);
 
-	@Around("within(@org.isf.utils.db.TranslateOHServiceException *)")
+	@Around("within(@org.isf.utils.db.TranslateOHServiceException *) || @annotation(org.isf.utils.db.TranslateOHServiceException)")
 	public Object translateSqlExceptionToOHServiceException(ProceedingJoinPoint pjp) throws OHServiceException {
 		try {
 			return pjp.proceed();
 		} catch (DataIntegrityViolationException e) {
-			throw new OHDataIntegrityViolationException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere.msg"),
-					OHSeverityLevel.ERROR));
+			throw new OHDataIntegrityViolationException(e,
+			                                            new OHExceptionMessage(MessageBundle.getMessage("angal.sql.theselecteditemisstillusedsomewhere.msg")));
 		} catch (InvalidDataAccessResourceUsageException e) {
-			throw new OHInvalidSQLException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg"),
-					OHSeverityLevel.ERROR));
+			throw new OHInvalidSQLException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.sql.problemsoccurredwiththesqlinstruction.msg")));
 		} catch (CannotCreateTransactionException e) {
-			throw new OHDBConnectionException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg"),
-					OHSeverityLevel.ERROR));
-    	} catch (ObjectOptimisticLockingFailureException e) {
-			throw new OHDataLockFailureException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.sql.thedatahasbeenupdatedbysomeoneelse.msg"),
-					OHSeverityLevel.ERROR));
-    	} catch (OutOfMemoryError oome) {
-    		LOGGER.error(oome.getMessage(), oome);
-    		throw new OHServiceException(oome, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"), 
-					MessageBundle.getMessage("angal.sql.pleaseconsiderenablingtheenhancedsearchsettingseeadminmanualformoreinfo.msg"),
-					OHSeverityLevel.WARNING));
-    	} catch (Throwable throwable) {
-    		LOGGER.error(throwable.getMessage(), throwable);
-    		throw new OHServiceException(throwable, new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-				    MessageBundle.getMessage("angal.sql.anunexpectederroroccurredpleasecheckthelogs.msg"),
-				    OHSeverityLevel.ERROR));
+			throw new OHDBConnectionException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.sql.problemsoccurredwithserverconnection.msg")));
+		} catch (ObjectOptimisticLockingFailureException e) {
+			throw new OHDataLockFailureException(e, new OHExceptionMessage(MessageBundle.getMessage("angal.sql.thedatahasbeenupdatedbysomeoneelse.msg")));
+		} catch (OutOfMemoryError oome) {
+			LOGGER.error(oome.getMessage(), oome);
+			throw new OHServiceException(oome, new OHExceptionMessage(
+					MessageBundle.getMessage("angal.sql.pleaseconsiderenablingtheenhancedsearchsettingseeadminmanualformoreinfo.msg")));
+		} catch (OHServiceException e) {
+			LOGGER.warn("Nested translation for {}", e.getMessage());
+			throw e; // for nested translators
+		} catch (Throwable throwable) {
+			LOGGER.error(throwable.getMessage(), throwable);
+			throw new OHServiceException(throwable,
+			                             new OHExceptionMessage(MessageBundle.getMessage("angal.sql.anunexpectederroroccurredpleasecheckthelogs.msg")));
 		}
 	}
 

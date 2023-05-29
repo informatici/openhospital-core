@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.opd.model;
 
@@ -41,7 +41,11 @@ import org.isf.disease.model.Disease;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
+import org.isf.visits.model.Visit;
+import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.drew.lang.annotations.Nullable;
 
 /**
  * ------------------------------------------
@@ -74,13 +78,15 @@ public class Opd extends Auditable<String> {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="OPD_ID") 
 	private int code;
+	
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "OPD_WRD_ID_A")
+	private Ward ward;
 
 	@NotNull
 	@Column(name="OPD_DATE") // SQL type: datetime
 	private LocalDateTime date;
-
-	@Column(name="OPD_DATE_NEXT_VIS") // SQL type: datetime
-    private LocalDateTime nextVisitDate;
 
 	@ManyToOne
 	@JoinColumn(name="OPD_PAT_ID")
@@ -94,14 +100,14 @@ public class Opd extends Auditable<String> {
 	@Column(name="OPD_SEX")
 	private char sex;
 
-	@NotNull
+	@Nullable
 	@Column(name="OPD_NOTE")
 	private String note;
 
 	@NotNull
 	@Column(name="OPD_PROG_YEAR")	
 	private int prog_year;
-		
+
 	@ManyToOne
 	@JoinColumn(name="OPD_DIS_ID_A")
 	private Disease disease;
@@ -128,28 +134,71 @@ public class Opd extends Auditable<String> {
 	@Column(name="OPD_USR_ID_A")
 	private String userID;
 	
+	@ManyToOne
+	@JoinColumn(name = "OPD_NEXT_VISIT_ID")
+	private Visit nextVisit;
+
 	@Version
 	@Column(name="OPD_LOCK")
 	private int lock;
 	
+	/*@Column(name="OPD_REASON")
+   	private String reason; // ADDED: Arnaud
+
+	@Column(name="OPD_THERAPIES")
+	private String therapies; // ADDED: Arnaud*/
+	
+	/**
+	 * Field for "ui"
+	 */
+	@Nullable
+	@Column(name="OPD_PRESCRIPTION")
+	private String prescription; // ADDED: Arnaud
+	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 
 	public Opd() {
 	}
 	
 	/**
-     * @param aProgYear
-     * @param aSex
-     * @param aAge
-     * @param aDisease
-     */
+ 	 * @param aProgYear
+ 	 * @param aSex
+ 	 * @param aAge
+ 	 * @param aDisease
+ 	 */
 	public Opd(int aProgYear, char aSex, int aAge, Disease aDisease) {
 		prog_year = aProgYear;
 		sex = aSex;
 		age = aAge;
 		disease = aDisease;
+	}
+	
+	public String getFullName() {
+		return patient == null ? "" : patient.getName();
+	}
+
+	/**
+	 * Field for "ui"
+	 */
+	public String getPrescription() {
+		return prescription;
+	}
+
+	/**
+	 * Field for "ui"
+	 */
+	public void setPrescription(String prescription) {
+		this.prescription = prescription;
+	}
+
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
 	
 	public String getNote() {
@@ -160,18 +209,6 @@ public class Opd extends Auditable<String> {
 		this.note = note;
 	}
 	
-	public String getFullName() {
-		return patient == null ? "" : patient.getName();
-	}
-
-	public Patient getPatient() {
-		return patient;
-	}
-
-	public void setPatient(Patient patient) {
-		this.patient = patient;
-	}
-
 	public int getAge() {
 		return age;
 	}
@@ -224,33 +261,50 @@ public class Opd extends Auditable<String> {
 		this.referralFrom = referralFrom;
 	}
 	
+	public Ward getWard() {
+		return ward;
+	}
+	
+	public void setWard(Ward ward) {
+		this.ward = ward;
+	}
+
 	public int getCode() {
 		return code;
 	}
+
 	public void setCode(int code) {
 		this.code = code;
 	}
+	
 	public Disease getDisease() {
 		return disease;
 	}
+	
 	public Disease getDisease2() {
 		return disease2;
 	}
+	
 	public Disease getDisease3() {
 		return disease3;
 	}
+	
 	public void setDisease(Disease disease) {
 		this.disease = disease;
 	}
+	
 	public void setDisease2(Disease disease) {
 		this.disease2 = disease;
 	}
+	
 	public void setDisease3(Disease disease) {
 		this.disease3 = disease;
 	}
+	
 	public int getLock() {
 		return lock;
 	}
+	
 	public void setLock(int lock) {
 		this.lock = lock;
 	}
@@ -258,6 +312,7 @@ public class Opd extends Auditable<String> {
 	public LocalDateTime getDate() {
 		return date;
 	}
+	
 	public void setDate(LocalDateTime date) {
 		this.date = TimeTools.truncateToSeconds(date);
 	}
@@ -285,15 +340,39 @@ public class Opd extends Auditable<String> {
 	public void setUserID(String userID) {
 		this.userID = userID;
 	}
-
-	public LocalDateTime getNextVisitDate() {
-		return nextVisitDate;
+        
+	/*public String getReason() {
+		return reason;
+	}
+	
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 
-	public void setNextVisitDate(LocalDateTime nextVisitDate) {
-		this.nextVisitDate = TimeTools.truncateToSeconds(nextVisitDate);
+	public String getTherapies() {
+		return therapies;
 	}
 
+	public void setTherapies(String therapies) {
+		this.therapies = therapies;
+	}
+
+	public String getPrescription() {
+		return prescription;
+	}
+
+	public void setPrescription(String prescription) {
+		this.prescription = prescription;
+	}*/
+	
+	public Visit getNextVisit() {
+		return nextVisit;
+	}
+	
+	public void setNextVisit(Visit nextVisit) {
+		this.nextVisit = nextVisit;
+	}
+	
 	public boolean isPersisted() {
 		return code > 0;
 	}

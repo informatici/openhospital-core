@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.generaldata;
 
@@ -91,8 +91,9 @@ public abstract class ConfigurationProperties {
 			logger.info("File {} loaded.", fileProperties);
 		} catch (IOException e) {
 			logger.error(">> '{}' file not found.", fileProperties);
-			if (exitOnFail)
+			if (exitOnFail) {
 				System.exit(1);
+			}
 		}
 		return prop;
 	}

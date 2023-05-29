@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.medtype.service;
 
@@ -56,8 +56,8 @@ public class MedicalTypeIoOperation {
 	 * @return <code>true</code> if the medical type has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs updating the medical type.
 	 */
-	public boolean updateMedicalType(MedicalType medicalType) throws OHServiceException {
-		return repository.save(medicalType) != null;
+	public MedicalType updateMedicalType(MedicalType medicalType) throws OHServiceException {
+		return repository.save(medicalType);
 	}
 
 	/**
@@ -66,8 +66,8 @@ public class MedicalTypeIoOperation {
 	 * @return <code>true</code> if the medical type has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs storing the new medical type.
 	 */
-	public boolean newMedicalType(MedicalType medicalType) throws OHServiceException {
-		return repository.save(medicalType) != null;
+	public MedicalType newMedicalType(MedicalType medicalType) throws OHServiceException {
+		return repository.save(medicalType);
 	}
 
 	/**

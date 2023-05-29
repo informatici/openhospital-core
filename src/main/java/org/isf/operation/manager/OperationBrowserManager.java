@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.operation.manager;
 
@@ -97,7 +97,7 @@ public class OperationBrowserManager {
 	 * @return <code>true</code> if the operation has been inserted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean newOperation(Operation operation) throws OHServiceException {
+	public Operation newOperation(Operation operation) throws OHServiceException {
 		return ioOperations.newOperation(operation);
 	}
 
@@ -108,7 +108,7 @@ public class OperationBrowserManager {
 	 * @return <code>true</code> if the item has been updated. <code>false</code> other
 	 * @throws OHServiceException
 	 */
-	public boolean updateOperation(Operation operation) throws OHServiceException {
+	public Operation updateOperation(Operation operation) throws OHServiceException {
 		// the user has confirmed he wants to overwrite the record
 		return ioOperations.updateOperation(operation);
 	}
@@ -193,4 +193,5 @@ public class OperationBrowserManager {
 		}
 		return resultsListHashMap.get(resultDescKey);
 	}
+
 }

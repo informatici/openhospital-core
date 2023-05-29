@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.examination.test;
 
@@ -342,7 +342,7 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		PatientExamination patientExamination2 = testPatientExamination.setup(patient, false);
 		patientExamination2.setPex_ID(-1);
-		assertThat(patientExamination.equals(patientExamination)).isTrue();
+		assertThat(patientExamination).isEqualTo(patientExamination);
 		assertThat(patientExamination)
 				.isNotEqualTo(patientExamination2)
 				.isNotEqualTo("xyzzy");

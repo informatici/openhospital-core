@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.admission.model;
 
@@ -45,7 +45,6 @@ import org.isf.disctype.model.DischargeType;
 import org.isf.disease.model.Disease;
 import org.isf.dlvrrestype.model.DeliveryResultType;
 import org.isf.dlvrtype.model.DeliveryType;
-import org.isf.operation.model.Operation;
 import org.isf.patient.model.Patient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.utils.db.Auditable;
@@ -135,16 +134,6 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	@JoinColumn(name = "ADM_OUT_DIS_ID_A_3")
 	private Disease diseaseOut3;            // disease out key (null)
 
-	@ManyToOne
-	@JoinColumn(name = "ADM_OPE_ID_A")
-	private Operation operation;                // operation key (null)
-
-	@Column(name = "ADM_DATE_OP")        // SQL type: datetime
-	private LocalDateTime opDate;        // operation date (null)
-
-	@Column(name = "ADM_RESOP")
-	private String opResult;                // value is 'P' or 'N' (null)
-
 	@Column(name = "ADM_DATE_DIS")        // SQL type: datetime
 	private LocalDateTime disDate;        // discharge date (null)
 
@@ -196,11 +185,11 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	private int lock;                        // default 0
 
 	@NotNull
-	@Column(name = "ADM_DELETED")
-	private String deleted;                    // flag record deleted ; values are 'Y' OR 'N' default is 'N'
+	@Column(name = "ADM_DELETED", columnDefinition = "char(1) default 'N'")
+	private char deleted = 'N';                // flag record deleted ; values are 'Y' OR 'N' default is 'N'
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public Admission() {
 		super();
@@ -220,9 +209,6 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	 * @param diseaseOut1
 	 * @param diseaseOut2
 	 * @param diseaseOut3
-	 * @param operation
-	 * @param opResult
-	 * @param opDate
 	 * @param disDate
 	 * @param disType
 	 * @param note
@@ -241,11 +227,10 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 	 */
 	public Admission(int id, int admitted, String type, Ward ward, int prog, Patient patient, LocalDateTime admDate, AdmissionType admType, String fhu,
 			Disease diseaseIn, Disease diseaseOut1, Disease diseaseOut2, Disease diseaseOut3,
-			Operation operation, String opResult, LocalDateTime opDate, LocalDateTime disDate, DischargeType disType, String note, Float transUnit,
-			LocalDateTime visitDate,
+			LocalDateTime disDate, DischargeType disType, String note, Float transUnit, LocalDateTime visitDate,
 			PregnantTreatmentType pregTreatmentType, LocalDateTime deliveryDate, DeliveryType deliveryType, DeliveryResultType deliveryResult, Float weight,
 			LocalDateTime ctrlDate1, LocalDateTime ctrlDate2,
-			LocalDateTime abortDate, String userID, String deleted) {
+			LocalDateTime abortDate, String userID, char deleted) {
 		super();
 		this.id = id;
 		this.admitted = admitted;
@@ -260,9 +245,6 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.diseaseOut1 = diseaseOut1;
 		this.diseaseOut2 = diseaseOut2;
 		this.diseaseOut3 = diseaseOut3;
-		this.operation = operation;
-		this.opResult = opResult;
-		this.opDate = TimeTools.truncateToSeconds(opDate);
 		this.disDate = TimeTools.truncateToSeconds(disDate);
 		this.disType = disType;
 		this.note = note;
@@ -278,14 +260,6 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.abortDate = TimeTools.truncateToSeconds(abortDate);
 		this.userID = userID;
 		this.deleted = deleted;
-	}
-
-	public LocalDateTime getOpDate() {
-		return opDate;
-	}
-
-	public void setOpDate(LocalDateTime opDate) {
-		this.opDate = TimeTools.truncateToSeconds(opDate);
 	}
 
 	public Float getTransUnit() {
@@ -352,11 +326,11 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 		this.ctrlDate2 = TimeTools.truncateToSeconds(ctrlDate2);
 	}
 
-	public String getDeleted() {
+	public char getDeleted() {
 		return deleted;
 	}
 
-	public void setDeleted(String deleted) {
+	public void setDeleted(char deleted) {
 		this.deleted = deleted;
 	}
 
@@ -462,22 +436,6 @@ public class Admission extends Auditable<String> implements Comparable<Admission
 
 	public void setNote(String note) {
 		this.note = note;
-	}
-
-	public Operation getOperation() {
-		return operation;
-	}
-
-	public void setOperation(Operation operation) {
-		this.operation = operation;
-	}
-
-	public String getOpResult() {
-		return opResult;
-	}
-
-	public void setOpResult(String opResult) {
-		this.opResult = opResult;
 	}
 
 	public Patient getPatient() {

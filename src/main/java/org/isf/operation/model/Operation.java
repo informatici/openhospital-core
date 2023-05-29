@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.operation.model;
 
@@ -83,31 +83,30 @@ public class Operation extends Auditable<String> {
 	@Column(name="OPE_FOR")
     private String operFor;
 	
+	
 	@Version
 	@Column(name="OPE_LOCK")
     private Integer lock;
 
 	@Transient
-    private volatile int hashCode = 0;
+    private volatile int hashCode;
     
-    
-	public Operation() 
-    {
+	public Operation() {
 		super();
-    }
-	
-    /**
-     * @param aCode
-     * @param aDescription
-     * @param aType
-     */
-    public Operation(String aCode, String aDescription, OperationType aType, Integer major) {
-        super();
-        this.code = aCode;
-        this.description = aDescription;
-        this.type = aType;
-        this.major = major;
-    }
+	}
+
+	/**
+	 * @param aCode
+	 * @param aDescription
+	 * @param aType
+	 */
+	public Operation(String aCode, String aDescription, OperationType aType, Integer major) {
+		super();
+		this.code = aCode;
+		this.description = aDescription;
+		this.type = aType;
+		this.major = major;
+	}
     
     public String getCode() {
         return this.code;
@@ -189,6 +188,7 @@ public class Operation extends Auditable<String> {
 	    return this.hashCode;
 	}
 
+    @Override
     public String toString() {
         return this.description;
     }
