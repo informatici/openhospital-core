@@ -22,7 +22,7 @@
 package org.isf.lab.model;
 
 public enum LaboratoryStatus {
-	DRAFT("draft"), OPEN("open"), DONE("done");
+	DRAFT("draft"), OPEN("open"), DONE("done"), INVALID("invalid"), DELETED("deleted");
 
 	private String status;
 
