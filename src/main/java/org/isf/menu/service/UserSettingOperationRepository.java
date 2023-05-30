@@ -31,7 +31,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserSettingOperationRepository extends JpaRepository<UserSetting, Integer> {
 
-	@Query(value = "select * from usersetting where usersetting.user.code=:userId")
+	@Query(value = "select usersetting from UserSetting usersetting where usersetting.user=:userId")
 	List<UserSetting> findAllByUSerID(String userId);
 
 }
