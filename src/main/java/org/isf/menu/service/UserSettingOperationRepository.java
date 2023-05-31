@@ -26,12 +26,14 @@ import java.util.List;
 import org.isf.menu.model.UserSetting;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 
 @Repository
 public interface UserSettingOperationRepository extends JpaRepository<UserSetting, Integer> {
 
 	@Query(value = "select usersetting from UserSetting usersetting where usersetting.user=:userId")
-	List<UserSetting> findAllByUSerID(String userId);
+	List<UserSetting> findAllByUSerID(@Param("userId") String userId);
 
 }
