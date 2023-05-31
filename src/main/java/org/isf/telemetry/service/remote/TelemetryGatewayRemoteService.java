@@ -35,7 +35,7 @@ public interface TelemetryGatewayRemoteService {
 	// @formatter:off
 
 	@PostMapping(value = "/collect", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<String, String>> send(@RequestBody Map<String, Map<String, String>> request);
+	public ResponseEntity<Map<String, String>> send(@RequestBody String request);
 
 	// @formatter:on
 }

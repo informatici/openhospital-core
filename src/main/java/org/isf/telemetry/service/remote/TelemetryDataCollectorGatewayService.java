@@ -46,7 +46,7 @@ public class TelemetryDataCollectorGatewayService {
 	@Resource(name = "telemetryProperties")
 	private Properties properties;
 
-	public boolean send(Map<String, Map<String, String>> data) {
+	public boolean send(String data) {
 		TelemetryGatewayRemoteService httpClient = buildHttlClient();
 		LOGGER.debug(data.toString());
 		ResponseEntity<Map<String, String>> rs = httpClient.send(data);
