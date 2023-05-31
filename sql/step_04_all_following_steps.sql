@@ -88,3 +88,4 @@ source step_91_alter_laboratory_with_status.sql;
 source step_92_add_dicom_data_table.sql;
 source step_93_patient_consensus_table.sql;
 source step_94_login_idle.sql;
+source step_95_missing_user_related_fk.sql;
