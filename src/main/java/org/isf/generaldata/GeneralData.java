@@ -96,6 +96,7 @@ public final class GeneralData extends ConfigurationProperties {
 	public static int STRONGLENGTH;
 	public static int PASSWORDTRIES;
 	public static int PASSWORDLOCKTIME;
+	public static int PASSWORDIDLE;
 
 	private static final String DEFAULT_LANGUAGE = "en";
 	private static final boolean DEFAULT_SINGLEUSER = false;
@@ -146,6 +147,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final boolean DEFAULT_STRONGPASSWORD = true;
 	private static final int DEFAULT_PASSWORDTRIES = 5;
 	private static final int DEFAULT_PASSWORDLOCKTIME = 60; // minutes
+	private static final int DEFAULT_PASSWORDIDLE = 365; // days
 	private static final String DEFAULT_PATIENTPHOTOSTORAGE = "DB";
 	public static final int IMAGE_THUMBNAIL_MAX_WIDTH = 140;
 	public static final int MAX_PROFILE_IMAGE_FILE_SIZE_BYTES = 32768;
@@ -206,6 +208,7 @@ public final class GeneralData extends ConfigurationProperties {
 		PATIENTBILLGROUPED = myGetProperty("PATIENTBILLGROUPED", DEFAULT_PATIENTBILLGROUPED);
 		PATIENTBILLSTATEMENT = myGetProperty("PATIENTBILLSTATEMENT", DEFAULT_PATIENTBILLSTATEMENT);
 		DEBUG = myGetProperty("DEBUG", DEFAULT_DEBUG);
+
 		STRONGPASSWORD = myGetProperty("STRONGPASSWORD", DEFAULT_STRONGPASSWORD);
 		STRONGLENGTH = myGetProperty("STRONGLENGTH", DEFAULT_STRONGLENGTH);
 		// set same reasonable minimum and ensure it isn't negative; zero is used to skip length test
@@ -221,6 +224,11 @@ public final class GeneralData extends ConfigurationProperties {
 		// ensure reasonable non-negative value; is password retries is disabled then lock time isn't used
 		if (PASSWORDTRIES != 0 && PASSWORDLOCKTIME < DEFAULT_PASSWORDLOCKTIME) {
 			PASSWORDLOCKTIME = DEFAULT_PASSWORDLOCKTIME;
+		}
+		PASSWORDIDLE = myGetProperty("PASSWORDIDLE", DEFAULT_PASSWORDIDLE);
+		// Zero indicates no idle check
+		if (PASSWORDIDLE < 0) {
+			PASSWORDIDLE = 0;
 		}
 		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTOSTORAGE);
 		SESSIONTIMEOUT = myGetProperty("SESSIONTIMEOUT", DEFAULT_SESSIONTIMEOUT);
