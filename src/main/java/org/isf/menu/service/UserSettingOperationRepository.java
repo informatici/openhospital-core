@@ -35,5 +35,8 @@ public interface UserSettingOperationRepository extends JpaRepository<UserSettin
 
 	@Query(value = "select usersetting from UserSetting usersetting where usersetting.user=:userId")
 	List<UserSetting> findAllByUSerID(@Param("userId") String userId);
+	
+	@Query(value = "select usersetting from UserSetting usersetting where usersetting.user=:userId and configName=:dashboard")
+	UserSetting findUserSettingDashBoardByUSerID(@Param("userId") String userId, @Param("dashboard") String dashboard);
 
 }

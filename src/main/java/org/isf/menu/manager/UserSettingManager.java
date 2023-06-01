@@ -67,4 +67,14 @@ public class UserSettingManager {
 	public List<UserSetting> getUserSetting(String userId) throws OHServiceException {
 		return userSettingIoOperationRepository.findAllByUSerID(userId);
 	}
+	
+	/**
+	 * Returns the list of {@link UserSetting}s of the specified userId.
+	 *
+	 * @param userId - the user Id
+	 *  @return <code>{@link UserSetting}</code> if the userSetting exist, <code>null</code> otherwise.
+	 */
+	public UserSetting getUserSettingDashBoard(String userId, String dashBoard) throws OHServiceException {
+		return userSettingIoOperationRepository.findUserSettingDashBoardByUSerID(userId, dashBoard);
+	}
 }
