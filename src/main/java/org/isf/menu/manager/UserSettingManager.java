@@ -43,6 +43,18 @@ public class UserSettingManager {
 	 * @throws OHServiceException
 	 */
 	public UserSetting newUserSetting(UserSetting userSetting) throws OHServiceException {
+		
+		return userSettingIoOperationRepository.save(userSetting);
+	}
+	
+	/**
+	 * Updates a new {@link UserSetting} into the DB.
+	 *
+	 * @param userSetting - the {@link UserSetting} to insert
+	 * @return <code>{@link UserSetting}</code> if the userSetting has been updated, <code>null</code> otherwise.
+	 * @throws OHServiceException
+	 */
+	public UserSetting updateUserSetting(UserSetting userSetting) throws OHServiceException {
 		return userSettingIoOperationRepository.save(userSetting);
 	}
 	
