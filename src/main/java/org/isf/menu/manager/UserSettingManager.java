@@ -48,7 +48,7 @@ public class UserSettingManager {
 	}
 	
 	/**
-	 * Updates a new {@link UserSetting} into the DB.
+	 * Updates a upade {@link UserSetting} into the DB.
 	 *
 	 * @param userSetting - the {@link UserSetting} to insert
 	 * @return <code>{@link UserSetting}</code> if the userSetting has been updated, <code>null</code> otherwise.
@@ -69,12 +69,13 @@ public class UserSettingManager {
 	}
 	
 	/**
-	 * Returns the list of {@link UserSetting}s of the specified userId.
+	 * Returns {@link UserSetting}s of the specified userId.
 	 *
 	 * @param userId - the user Id
+	 * @param dashboard - the name of the user setting
 	 *  @return <code>{@link UserSetting}</code> if the userSetting exist, <code>null</code> otherwise.
 	 */
-	public UserSetting getUserSettingDashBoard(String userId, String dashBoard) throws OHServiceException {
-		return userSettingIoOperationRepository.findUserSettingDashBoardByUSerID(userId, dashBoard);
+	public UserSetting getUserSettingDashboard(String userId, String dashboard) throws OHServiceException {
+		return userSettingIoOperationRepository.findUserSettingDashboardByUSerID(userId, dashboard);
 	}
 }
