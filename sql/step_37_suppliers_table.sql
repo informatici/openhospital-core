@@ -10,7 +10,7 @@ CREATE TABLE SUPPLIER (
 	SUP_NOTE VARCHAR(200) NULL,
 	SUP_DELETED char(1) DEFAULT 'N',
 	PRIMARY KEY (SUP_ID)
-);
+) ENGINE=MyISAM;
 
 INSERT INTO MENUITEM VALUES ('supplier', 'angal.menu.btn.supplier', 'angal.menu.supplier', 'x', 'S', 'generaldata', 'org.isf.supplier.gui.SupplierBrowser','N', 8);
 INSERT INTO GROUPMENU (GM_UG_ID_A, GM_MNI_ID_A, GM_ACTIVE) VALUES ('admin','supplier','Y');
