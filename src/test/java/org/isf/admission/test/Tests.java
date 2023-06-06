@@ -597,7 +597,7 @@ public class Tests extends OHCoreTestCase {
 		foundAdmission.setPatient(null);
 		assertThat(foundAdmission.getPatient()).isNull();
 		foundAdmission.setPatient(foundPatient);
-		assertThat(foundAdmission.getPatient()).isEqualToComparingFieldByField(foundPatient);
+		assertThat(foundAdmission.getPatient()).usingRecursiveComparison().isEqualTo(foundPatient);
 		int lock = foundAdmission.getLock();
 		foundAdmission.setLock(-1);
 		assertThat(foundAdmission.getLock()).isEqualTo(-1);
@@ -622,12 +622,12 @@ public class Tests extends OHCoreTestCase {
 		admittedPatient.setPatient(null);
 		assertThat(admittedPatient.getPatient()).isNull();
 		admittedPatient.setPatient(patient);
-		assertThat(admittedPatient.getPatient()).isEqualToComparingFieldByField(patient);
+		assertThat(admittedPatient.getPatient()).usingRecursiveComparison().isEqualTo(patient);
 		Admission admission = admittedPatient.getAdmission();
 		admittedPatient.setAdmission(null);
 		assertThat(admittedPatient.getAdmission()).isNull();
 		admittedPatient.setAdmission(admission);
-		assertThat(admittedPatient.getAdmission()).isEqualToComparingFieldByField(admission);
+		assertThat(admittedPatient.getAdmission()).usingRecursiveComparison().isEqualTo(admission);
 	}
 
 	@Test
