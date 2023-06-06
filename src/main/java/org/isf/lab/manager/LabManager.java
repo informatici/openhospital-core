@@ -33,7 +33,6 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryForPrint;
 import org.isf.lab.model.LaboratoryRow;
-import org.isf.lab.model.LaboratoryStatus;
 import org.isf.lab.service.LabIoOperations;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -266,9 +265,6 @@ public class LabManager {
 	 */
 	public boolean newExamRequest(Laboratory laboratory) throws OHServiceException {
 		setPatientConsistency(laboratory);
-		LaboratoryStatus laboratoryStatus = LaboratoryStatus.DRAFT;
-		laboratory.setStatus(laboratoryStatus.toString());
-		laboratory.setResult("");
 		return ioOperations.newLabFirstProcedure(laboratory);
 	}
 	
@@ -280,11 +276,11 @@ public class LabManager {
 	 * @return <code>true</code> if the request has been update, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updateExamRequest(int code, LaboratoryStatus status) throws OHServiceException {
+	public boolean updateExamRequest(int code, String status) throws OHServiceException {
 		Optional<Laboratory> laboratory = ioOperations.getLaboratory(code);
 		if (laboratory.isPresent()) {
 			Laboratory lab = laboratory.get();
-			lab.setStatus(status.toString());
+			lab.setStatus(status);
 			return ioOperations.updateLabFirstProcedure(lab);
 		} else {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownexam.msg")));
