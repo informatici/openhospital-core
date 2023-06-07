@@ -47,7 +47,7 @@ import org.isf.medicalstockward.service.MedicalStockWardIoOperationRepository;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperations;
 import org.isf.medicalstockward.service.MovementWardIoOperationRepository;
 import org.isf.medstockmovtype.model.MovementType;
-import org.isf.medstockmovtype.service.MedicalStockMovementTypeIoOperationRepository;
+import org.isf.medstockmovtype.service.MedicalDsrStockMovementTypeIoOperationRepository;
 import org.isf.medstockmovtype.test.TestMovementType;
 import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.service.MedicalTypeIoOperationRepository;
@@ -100,7 +100,7 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	MedicalTypeIoOperationRepository medicalTypeIoOperationRepository;
 	@Autowired
-	MedicalStockMovementTypeIoOperationRepository medicalStockMovementTypeIoOperationRepository;
+	MedicalDsrStockMovementTypeIoOperationRepository medicalDsrStockMovementTypeIoOperationRepository;
 	@Autowired
 	WardIoOperationRepository wardIoOperationRepository;
 	@Autowired
@@ -484,15 +484,6 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrGetMovementWard() throws Exception {
-		int code = setupTestMovementWard(false);
-		MovementWard foundMovement = movementWardIoOperationRepository.findById(code).get();
-		List<MovementWard> movements = movWardBrowserManager.getMovementWard();
-		assertThat(movements).hasSize(1);
-		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
-	}
-
-	@Test
 	public void testMgrGetMedicalsWard() throws Exception {
 		MedicalWardId code = setupTestMedicalWard(false);
 		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
@@ -836,9 +827,9 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical1);
 		medicalsIoOperationRepository.saveAndFlush(medical2);
 		medicalsIoOperationRepository.saveAndFlush(medical3);
-		medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType1);
-		medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType2);
-		medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType3);
+		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(movementType1);
+		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(movementType2);
+		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(movementType3);
 		wardIoOperationRepository.saveAndFlush(ward);
 		wardIoOperationRepository.saveAndFlush(wardTo);
 		wardIoOperationRepository.saveAndFlush(wardFrom);
@@ -905,9 +896,9 @@ public class Tests extends OHCoreTestCase {
 		medicalsIoOperationRepository.saveAndFlush(medical1);
 		medicalsIoOperationRepository.saveAndFlush(medical2);
 		medicalsIoOperationRepository.saveAndFlush(medical3);
-		medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType1);
-		medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType2);
-		medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType3);
+		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(movementType1);
+		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(movementType2);
+		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(movementType3);
 		wardIoOperationRepository.saveAndFlush(ward);
 		wardIoOperationRepository.saveAndFlush(wardTo);
 		wardIoOperationRepository.saveAndFlush(wardFrom);

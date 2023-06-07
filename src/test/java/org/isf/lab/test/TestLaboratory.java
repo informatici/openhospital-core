@@ -57,7 +57,7 @@ public class TestLaboratory {
 			// Create Laboratory with all parameters 
 			laboratory = new Laboratory(exam, labDate, result, note, patient, patName);
 			laboratory.setAge(age);
-			laboratory.setDate(labDate);
+			laboratory.setLabDate(labDate);
 			laboratory.setInOutPatient(InOutPatient);
 			laboratory.setMaterial(material);
 			laboratory.setResult(result);
@@ -69,7 +69,7 @@ public class TestLaboratory {
 
 	public void setParameters(Laboratory laboratory, Exam exam, Patient patient) {
 		laboratory.setAge(age);
-		laboratory.setDate(labDate);
+		laboratory.setLabDate(labDate);
 		laboratory.setExam(exam);
 		laboratory.setInOutPatient(InOutPatient);
 		laboratory.setMaterial(material);
@@ -91,7 +91,7 @@ public class TestLaboratory {
 			assertThat(laboratory.getAge()).isEqualTo(age);
 			assertThat(laboratory.getPatName()).isEqualTo(patName);
 		}
-		assertThat(laboratory.getDate()).isCloseTo(labDate, within(1, ChronoUnit.SECONDS));
+		assertThat(laboratory.getLabDate()).isCloseTo(labDate, within(1, ChronoUnit.SECONDS));
 		assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
 		assertThat(laboratory.getMaterial()).isEqualTo(material);
 		assertThat(laboratory.getNote()).isEqualTo(note);

@@ -75,19 +75,6 @@ public class MovWardBrowserManager {
 	}
 
 	/**
-	 * Gets all the {@link MovementWard}s.
-	 * If an error occurs a message error is shown and the <code>null</code> value is returned.
-	 *
-	 * @return all the retrieved movements ward.
-	 * @throws OHServiceException
-	 * @deprecated
-	 */
-	@Deprecated
-	public List<MovementWard> getMovementWard() throws OHServiceException {
-		return ioOperations.getWardMovements(null, null, null);
-	}
-
-	/**
 	 * Gets all the {@link MedicalWard}s associated to the specified ward.
 	 *
 	 * @param wardId the ward id.

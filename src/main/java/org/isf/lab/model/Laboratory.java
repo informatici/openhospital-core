@@ -140,12 +140,6 @@ public class Laboratory extends Auditable<String> {
 	public LocalDateTime getLabDate() {
 		return labDate;
 	}
-	/*
-	 * @deprecated use getLabDate()
-	 */
-	public LocalDateTime getDate() {
-		return labDate;
-	}
 	public String getResult() {
 		return result;
 	}
@@ -167,12 +161,7 @@ public class Laboratory extends Auditable<String> {
 	public void setLabDate(LocalDateTime aDate) {
 		labDate = TimeTools.truncateToSeconds(aDate);
 	}
-	/*
-	 * @deprecated use setLabDate()
-	 */
-	public void setDate(LocalDateTime aDate) {
-		labDate = TimeTools.truncateToSeconds(aDate);
-	}
+
 	public void setResult(String aResult) {
 		result = aResult;
 	}
