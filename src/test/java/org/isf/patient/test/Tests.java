@@ -97,16 +97,9 @@ public class Tests extends OHCoreTestCase {
 		List<Patient> patients = patientIoOperation.getPatients();
 		testPatient.check(patients.get(patients.size() - 1));
 	}
-
-	@Test
-	public void testIoGetPatientsPageable() throws Exception {
-		setupTestPatient(false);
-		List<Patient> patients = patientIoOperation.getPatients(createPageRequest());
-		testPatient.check(patients.get(patients.size() - 1));
-	}
 	
 	@Test 
-	public void testIoGetPatientsPageable2() throws Exception {
+	public void testIoGetPatientsPageable() throws Exception {
 	  setupTestPatient(false); 
 	  PagedResponse<Patient> patients = patientIoOperation.getPatientsPageable(createPageRequest());
 	  testPatient.check(patients.getData().get(patients.getData().size() - 1)); 

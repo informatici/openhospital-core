@@ -60,8 +60,8 @@ public interface AdmissionIoOperationRepository extends JpaRepository<Admission,
 	List<Admission> findAllWhereDischargeDate(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
 	
 	@Query(value = "select a FROM Admission a WHERE a.admDate >= :dateFrom AND a.admDate <= :dateTo and a.deleted = 'N'")
-	Page<Admission> findAllWhereAdmissionDates(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
+	Page<Admission> findAllWhere_AdmissionDate_Paginated(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
 
 	@Query(value = "select a FROM Admission a WHERE a.disDate >= :dateFrom AND a.disDate <= :dateTo and a.deleted = 'N'")
-	Page<Admission> findAllWhereDischargeDates(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
+	Page<Admission> findAllWhere_DischargeDate_Paginated(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
 }

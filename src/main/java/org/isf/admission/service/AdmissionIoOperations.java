@@ -333,12 +333,12 @@ public class AdmissionIoOperations {
 	}
 
 	public PagedResponse<Admission> getAdmissionsByAdmissionDates(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
-		Page<Admission> pagedResult = repository.findAllWhereAdmissionDates(dateFrom, dateTo, pageable);
+		Page<Admission> pagedResult = repository.findAllWhere_AdmissionDate_Paginated(dateFrom, dateTo, pageable);
 		return setPaginationData(pagedResult);
 	}
 
 	public PagedResponse<Admission> getAdmissionsByDischargeDates(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
-		Page<Admission> pagedResult = repository.findAllWhereDischargeDates(dateFrom, dateTo, pageable);
+		Page<Admission> pagedResult = repository.findAllWhere_DischargeDate_Paginated(dateFrom, dateTo, pageable);
 		return setPaginationData(pagedResult);
 	}
 	

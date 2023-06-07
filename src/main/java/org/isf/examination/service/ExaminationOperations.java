@@ -98,7 +98,7 @@ public class ExaminationOperations {
 	}
 	
 	public PagedResponse<PatientExamination> getLastNByPatIDPageable(int patID, int number) throws OHServiceException {	
-		Page<PatientExamination> pagedResult = repository.findByPatient_CodeOrderByPexDateDescs(patID, PageRequest.of(0, number));
+		Page<PatientExamination> pagedResult = repository.findByPatient_CodeOrderByPexDateDesc_Paginated(patID, PageRequest.of(0, number));
 		return setPaginationData(pagedResult);
 	}
 

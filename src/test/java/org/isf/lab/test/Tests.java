@@ -175,34 +175,12 @@ public class Tests extends OHCoreTestCase {
 		int pageNo = 0;
 		int pageSize = 10;
 		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
-		List<Laboratory> laboratories = labIoOperation.getLaboratory(onWeek, pageNo, pageSize);
-		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
-	}
-	
-	@Test
-	public void testIoGetLaboratoryOnWeekPageable() throws Exception {
-		int id = setupTestLaboratory(false);
-		boolean onWeek = true;
-		int pageNo = 0;
-		int pageSize = 10;
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
-		List<Laboratory> laboratories = labIoOperation.getLaboratory(onWeek, pageNo, pageSize);
-		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
-	}
-	
-	@Test
-	public void testIoGetLaboratoryPageable2() throws Exception {
-		int id = setupTestLaboratory(false);
-		boolean onWeek = false;
-		int pageNo = 0;
-		int pageSize = 10;
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
 		PagedResponse<Laboratory> laboratories = labIoOperation.getLaboratoryPageable(onWeek, pageNo, pageSize);
 		assertThat(laboratories.getData().get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
 	
 	@Test
-	public void testIoGetLaboratoryOnWeekPageable2() throws Exception {
+	public void testIoGetLaboratoryOnWeekPageable() throws Exception {
 		int id = setupTestLaboratory(false);
 		boolean onWeek = true;
 		int pageNo = 0;
