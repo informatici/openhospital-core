@@ -101,9 +101,9 @@ public class LabIoOperations {
 		return repository.findAll(pageable).getContent();
 	}
 	
-	public PagedResponse<Laboratory> getLaboratoryPageable(boolean onWeek, int pageNo, int pageSize) throws OHServiceException {
+	public PagedResponse<Laboratory> getLaboratoryPageable(boolean oneWeek, int pageNo, int pageSize) throws OHServiceException {
 		Pageable pageable = PageRequest.of(pageNo, pageSize);
-		if (onWeek) {
+		if (oneWeek) {
 			LocalDateTime time2 = TimeTools.getDateToday24();
 			LocalDateTime time1 = time2.minusWeeks(1);
 			Page<Laboratory> pagedResult = repository.findByLabDateBetweenOrderByLabDateDesc(time1, time2, pageable);
