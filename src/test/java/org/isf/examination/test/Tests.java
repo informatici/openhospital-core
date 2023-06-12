@@ -44,6 +44,7 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.test.TestPatient;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PagedResponse;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -134,6 +135,16 @@ public class Tests extends OHCoreTestCase {
 		examinationIoOperationRepository.saveAndFlush(lastPatientExamination);
 		List<PatientExamination> foundExamination = examinationOperations.getLastNByPatID(patient.getCode(), 1);
 		checkPatientExaminationIntoDb(foundExamination.get(0).getPex_ID());
+	}
+	
+	@Test
+	public void testIoGetLastNByPatIDPaginated() throws Exception {
+		Patient patient = testPatient.setup(false);
+		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
+		patientIoOperationRepository.saveAndFlush(patient);
+		examinationIoOperationRepository.saveAndFlush(lastPatientExamination);
+		PagedResponse<PatientExamination> foundExamination = examinationOperations.getLastNByPatIDPageable(patient.getCode(), 1);
+		checkPatientExaminationIntoDb(foundExamination.getData().get(0).getPex_ID());
 	}
 
 	@Test

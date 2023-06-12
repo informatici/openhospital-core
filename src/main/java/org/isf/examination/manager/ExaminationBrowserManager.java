@@ -35,6 +35,7 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
 import org.isf.utils.validator.DefaultSorter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,6 +165,10 @@ public class ExaminationBrowserManager {
 
 	public List<PatientExamination> getLastNByPatID(int patID, int number) throws OHServiceException {
 		return ioOperations.getLastNByPatID(patID, number);
+	}
+	
+	public PagedResponse<PatientExamination> getLastNByPatIDPageable(int patID, int number) throws OHServiceException {
+		return ioOperations.getLastNByPatIDPageable(patID, number);
 	}
 
 	public List<PatientExamination> getByPatID(int patID) throws OHServiceException {

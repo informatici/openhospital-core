@@ -77,7 +77,10 @@ public class User extends Auditable<String> {
 
 	@Column(name="US_LOCK_TIME")
 	private LocalDateTime lockedTime;
-	
+
+	@Column(name="US_LAST_LOGIN")
+	private LocalDateTime lastLogin;
+
 	@Transient
 	private volatile int hashCode;
 
@@ -149,7 +152,14 @@ public class User extends Auditable<String> {
 		this.lockedTime = lockedTime;
 	}
 
-	@Override
+	public LocalDateTime getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(LocalDateTime lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+
 	public String toString() {
 		return getUserName();
 	}
