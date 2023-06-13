@@ -72,9 +72,9 @@ public class UserSettingManager {
 	 *
 	 * @param userId - the user Id
 	 * @param configName - the name of the user setting
-	 *  @return <code>{@link UserSetting}</code> if the userSetting exist, <code>null</code> otherwise.
+	 * @return <code>{@link UserSetting}</code> if the userSetting exist, <code>null</code> otherwise.
 	 */
-	public UserSetting getUserSettingDashboard(String userId, String configName) throws OHServiceException {
-		return userSettingIoOperationRepository.findUserSettingDashboardByUSerID(userId, configName);
+	public UserSetting getUserSetting(String userId, String configName) throws OHServiceException {
+		return userSettingIoOperationRepository.findUserSettingByUSerID(userId, configName);
 	}
 }
