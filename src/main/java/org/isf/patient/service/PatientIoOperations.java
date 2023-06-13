@@ -310,16 +310,6 @@ public class PatientIoOperations {
 		}
 	}
 
-	/**
-	 * Count all active patients
-	 * 
-	 * @return
-	 * @throws OHServiceException
-	 */
-	public long countAllActivePatients() throws OHServiceException {
-		return repository.countAllActivePatients();
-	}
-
 	public PagedResponse<Patient> setPaginationData(Page<Patient> pages){
 		PagedResponse<Patient> data = new PagedResponse<Patient>();
 		data.setData(pages.getContent());
