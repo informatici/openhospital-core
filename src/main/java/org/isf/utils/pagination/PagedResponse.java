@@ -19,19 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.lab.model;
+package org.isf.utils.pagination;
 
-public enum LaboratoryStatus {
-	DRAFT("draft"), OPEN("open"), DONE("done"), INVALID("invalid"), DELETED("deleted");
+import java.util.List;
 
-	private String status;
-
-	private LaboratoryStatus(String s) {
-		status = s;
+public class PagedResponse<T> {
+	
+	List<T> data;
+	PageInfo pageInfo;
+	
+	public List<T> getData() {
+		return data;
 	}
-
-	@Override
-	public String toString() {
-		return this.status;
+	public void setData(List<T> data) {
+		this.data = data;
 	}
+	public PageInfo getPageInfo() {
+		return pageInfo;
+	}
+	public void setPageInfo(PageInfo pageInfo) {
+		this.pageInfo = pageInfo;
+	}
+	
 }
