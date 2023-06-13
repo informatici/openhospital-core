@@ -129,38 +129,79 @@ public class UserBrowsingManager {
 		return ioOperations.deleteUser(user);
 	}
 
-
+	// TODO:  revisit the individual methods for failed attempts, locking, last login time, etc.
+	// The original idea is that last login in time gets called frequently, and number of failed attempts less often, and locking/unloking users 
+	// even more infrequently, etc. and only one or two columns changed value.  The thought was that rewriting the entire object everytime for each
+	// operation was too heavy handed.
+	/**
+	 * Increase the number of failed login attemptes for {@link User}.
+	 *
+	 * @param user the {@link User}
+	 */
 	public void increaseFailedAttempts(User user) {
 		int newFailAttempts = user.getFailedAttempts() + 1;
 		ioOperations.updateFailedAttempts(user.getUserName(), newFailAttempts);
 	}
 
+	/**
+	 * Reset the number of failed login attemptes to zero for {@link User}.
+	 *
+	 * @param user the {@link User}
+	 */
 	public void resetFailedAttempts(User user) {
 		ioOperations.updateFailedAttempts(user.getUserName(), 0);
 	}
 
+	/**
+	 * Lock the {@link User} from logging into the system.
+	 *
+	 * @param user the {@link User}
+	 */
 	public void lockUser(User user) throws OHServiceException {
 		user.setAccountLocked(true);
 		user.setLockedTime(TimeTools.getNow());
 		ioOperations.updateUserLocked(user.getUserName(), true, user.getLockedTime());
 	}
 
+	/**
+	 * Unlock the {@link User} so they can log into the system.
+	 *
+	 * @param user the {@link User}
+	 */
+	public void setLastLogin(User user) throws OHServiceException {
+		ioOperations.setLastLogin(user.getUserName(), TimeTools.getNow());
+	}
+
+	/**
+	 * Unlock the {@link User} so they can log into the system.
+	 *
+	 * @param user the {@link User}
+	 */
 	public void unlockUser(User user) throws OHServiceException {
 		user.setAccountLocked(false);
 		user.setLockedTime(null);
 		user.setFailedAttempts(0);
-		ioOperations.updateFailedAttempts(user.getUserName(), 0);
-		ioOperations.updateUserLocked(user.getUserName(), false, null);
+		String userName = user.getUserName();
+		ioOperations.updateFailedAttempts(userName, 0);
+		ioOperations.updateUserLocked(userName, false, null);
+		ioOperations.setLastLogin(userName, null);
 	}
 
+	/**
+	 * Unlock the {@link User} after the required "lock time" has expired.
+	 *
+	 * @param user the {@link User}
+	 */
 	public boolean unlockWhenTimeExpired(User user) throws OHServiceException {
 		LocalDateTime lockedTime = user.getLockedTime();
 		if (lockedTime.plusMinutes(GeneralData.PASSWORDLOCKTIME).isBefore(TimeTools.getNow())) {
 			user.setAccountLocked(false);
 			user.setLockedTime(null);
 			user.setFailedAttempts(0);
-			ioOperations.updateFailedAttempts(user.getUserName(), 0);
-			ioOperations.updateUserLocked(user.getUserName(), false,null);
+			String userName = user.getUserName();
+			ioOperations.updateFailedAttempts(userName, 0);
+			ioOperations.updateUserLocked(userName, false,null);
+			ioOperations.setLastLogin(userName, null);
 			return true;
 		}
 		return false;

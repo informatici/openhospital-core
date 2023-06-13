@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.isf.patient.model.Patient;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -37,7 +38,7 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
 
 	List<Patient> findByDeletedOrDeletedIsNull(char deletionStatus);
 
-	List<Patient> findAllByDeletedIsNullOrDeletedEqualsOrderByName(char patDeleted, Pageable pageable);
+	Page<Patient> findAllByDeletedIsNullOrDeletedEqualsOrderByName(char patDeleted, Pageable pageable);
 
 	@Query("select p from Patient p where p.name = :name and (p.deleted = :deletedStatus or p.deleted is null) order by p.secondName, p.firstName")
 	List<Patient> findByNameAndDeletedOrderByName(@Param("name") String name, @Param("deletedStatus") char deletedStatus);
