@@ -48,7 +48,7 @@ public class UserSettingManager {
 	}
 	
 	/**
-	 * Updates a upade {@link UserSetting} into the DB.
+	 * Updates a existing {@link UserSetting} in the DB.
 	 *
 	 * @param userSetting - the {@link UserSetting} to insert
 	 * @return <code>{@link UserSetting}</code> if the userSetting has been updated, <code>null</code> otherwise.
