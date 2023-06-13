@@ -42,8 +42,7 @@ public class UserSettingManager {
 	 * @return <code>{@link UserSetting}</code> if the userSetting has been inserted, <code>null</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public UserSetting newUserSetting(UserSetting userSetting) throws OHServiceException {
-		
+	public UserSetting newUserSetting(UserSetting userSetting) throws OHServiceException {	
 		return userSettingIoOperationRepository.save(userSetting);
 	}
 	
@@ -72,10 +71,10 @@ public class UserSettingManager {
 	 * Returns {@link UserSetting}s of the specified userId.
 	 *
 	 * @param userId - the user Id
-	 * @param dashboard - the name of the user setting
+	 * @param configName - the name of the user setting
 	 *  @return <code>{@link UserSetting}</code> if the userSetting exist, <code>null</code> otherwise.
 	 */
-	public UserSetting getUserSettingDashboard(String userId, String dashboard) throws OHServiceException {
-		return userSettingIoOperationRepository.findUserSettingDashboardByUSerID(userId, dashboard);
+	public UserSetting getUserSettingDashboard(String userId, String configName) throws OHServiceException {
+		return userSettingIoOperationRepository.findUserSettingDashboardByUSerID(userId, configName);
 	}
 }
