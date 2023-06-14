@@ -29,13 +29,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-
 @Repository
 public interface UserSettingOperationRepository extends JpaRepository<UserSetting, Integer> {
 
 	@Query(value = "select usersetting from UserSetting usersetting where usersetting.user=:userId")
 	List<UserSetting> findAllByUSerID(@Param("userId") String userId);
-	
+
 	@Query(value = "select usersetting from UserSetting usersetting where usersetting.user=:userId and configName=:configName")
 	UserSetting findUserSettingDashboardByUSerID(@Param("userId") String userId, @Param("dashboard") String configName);
 

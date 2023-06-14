@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserSettingManager {
-	
+
 	@Autowired
 	private UserSettingOperationRepository userSettingIoOperationRepository;
 
@@ -39,24 +39,26 @@ public class UserSettingManager {
 	 * Inserts a new {@link UserSetting} into the DB.
 	 *
 	 * @param userSetting - the {@link UserSetting} to insert
-	 * @return <code>{@link UserSetting}</code> if the userSetting has been inserted, <code>null</code> otherwise.
+	 * @return <code>{@link UserSetting}</code> if the userSetting has been
+	 *         inserted, <code>null</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public UserSetting newUserSetting(UserSetting userSetting) throws OHServiceException {	
+	public UserSetting newUserSetting(UserSetting userSetting) throws OHServiceException {
 		return userSettingIoOperationRepository.save(userSetting);
 	}
-	
+
 	/**
 	 * Updates a existing {@link UserSetting} in the DB.
 	 *
 	 * @param userSetting - the {@link UserSetting} to insert
-	 * @return <code>{@link UserSetting}</code> if the userSetting has been updated, <code>null</code> otherwise.
+	 * @return <code>{@link UserSetting}</code> if the userSetting has been updated,
+	 *         <code>null</code> otherwise.
 	 * @throws OHServiceException
 	 */
 	public UserSetting updateUserSetting(UserSetting userSetting) throws OHServiceException {
 		return userSettingIoOperationRepository.save(userSetting);
 	}
-	
+
 	/**
 	 * Returns the list of {@link UserSetting}s of the specified userId.
 	 *
@@ -66,13 +68,14 @@ public class UserSettingManager {
 	public List<UserSetting> getUserSetting(String userId) throws OHServiceException {
 		return userSettingIoOperationRepository.findAllByUSerID(userId);
 	}
-	
+
 	/**
 	 * Returns {@link UserSetting}s of the specified userId.
 	 *
-	 * @param userId - the user Id
+	 * @param userId     - the user Id
 	 * @param configName - the name of the user setting
-	 *  @return <code>{@link UserSetting}</code> if the userSetting exist, <code>null</code> otherwise.
+	 * @return <code>{@link UserSetting}</code> if the userSetting exist,
+	 *         <code>null</code> otherwise.
 	 */
 	public UserSetting getUserSettingDashboard(String userId, String configName) throws OHServiceException {
 		return userSettingIoOperationRepository.findUserSettingDashboardByUSerID(userId, configName);
