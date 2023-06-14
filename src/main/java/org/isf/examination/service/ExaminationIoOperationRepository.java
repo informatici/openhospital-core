@@ -38,5 +38,8 @@ public interface ExaminationIoOperationRepository extends JpaRepository<PatientE
 	List<PatientExamination> findByPatient_CodeOrderByPexDateDesc(@Param("patientCode") int patientCode);
 
 	@Query(value = "select p from PatientExamination p where p.patient.code = :patientCode order by p.pex_date desc")
-	Page<PatientExamination> findByPatient_CodeOrderByPexDateDesc(@Param("patientCode") int patientCode, Pageable pageable);
+	List<PatientExamination> findByPatient_CodeOrderByPexDateDesc(@Param("patientCode") int patientCode, Pageable pageable);
+	
+	@Query(value = "select p from PatientExamination p where p.patient.code = :patientCode order by p.pex_date desc")
+	Page<PatientExamination> findByPatient_CodeOrderByPexDateDesc_Paginated(@Param("patientCode") int patientCode, Pageable pageable);
 }
