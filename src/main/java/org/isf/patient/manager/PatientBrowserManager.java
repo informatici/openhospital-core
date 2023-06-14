@@ -38,6 +38,7 @@ import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.pagination.PagedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
@@ -89,6 +90,10 @@ public class PatientBrowserManager {
 	 */
 	public List<Patient> getPatient(int page, int size) throws OHServiceException {
 		return ioOperations.getPatients(PageRequest.of(page, size));
+	}
+	
+	public PagedResponse<Patient> getPatientsPageable(int page, int size) throws OHServiceException {
+		return ioOperations.getPatientsPageable(PageRequest.of(page, size));
 	}
 
 	/**

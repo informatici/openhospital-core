@@ -33,13 +33,13 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.lab.model.Laboratory;
 import org.isf.lab.model.LaboratoryForPrint;
 import org.isf.lab.model.LaboratoryRow;
-import org.isf.lab.model.LaboratoryStatus;
 import org.isf.lab.service.LabIoOperations;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.validator.DefaultSorter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -126,8 +126,12 @@ public class LabManager {
 	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
 	 * @throws OHServiceException
 	 */
-	public List<Laboratory> getLaboratory(boolean onWeek, int pageNo, int pageSize) throws OHServiceException {
-		return ioOperations.getLaboratory(onWeek, pageNo, pageSize);
+	public List<Laboratory> getLaboratory(boolean oneWeek, int pageNo, int pageSize) throws OHServiceException {
+		return ioOperations.getLaboratory(oneWeek, pageNo, pageSize);
+	}
+	
+	public PagedResponse<Laboratory> getLaboratoryPageable(boolean oneWeek, int pageNo, int pageSize) throws OHServiceException {
+		return ioOperations.getLaboratoryPageable(oneWeek, pageNo, pageSize);
 	}
 
 	/**
@@ -266,9 +270,6 @@ public class LabManager {
 	 */
 	public boolean newExamRequest(Laboratory laboratory) throws OHServiceException {
 		setPatientConsistency(laboratory);
-		LaboratoryStatus laboratoryStatus = LaboratoryStatus.DRAFT;
-		laboratory.setStatus(laboratoryStatus.toString());
-		laboratory.setResult("");
 		return ioOperations.newLabFirstProcedure(laboratory);
 	}
 	
@@ -280,11 +281,11 @@ public class LabManager {
 	 * @return <code>true</code> if the request has been update, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updateExamRequest(int code, LaboratoryStatus status) throws OHServiceException {
+	public boolean updateExamRequest(int code, String status) throws OHServiceException {
 		Optional<Laboratory> laboratory = ioOperations.getLaboratory(code);
 		if (laboratory.isPresent()) {
 			Laboratory lab = laboratory.get();
-			lab.setStatus(status.toString());
+			lab.setStatus(status);
 			return ioOperations.updateLabFirstProcedure(lab);
 		} else {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.lab.unknownexam.msg")));
