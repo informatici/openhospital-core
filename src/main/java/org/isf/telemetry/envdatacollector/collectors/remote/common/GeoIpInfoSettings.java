@@ -34,9 +34,9 @@ public class GeoIpInfoSettings {
 	private Environment env;
 
 	public String retrieveBaseUrl(String serviceName) {
-		return this.env.getProperty(serviceName + ".ribbon.base-url");
+		return this.env.getProperty(serviceName + ".ribbon.base-url").trim();
 	}
-	
+
 	public String get(String key) {
 		return this.env.getProperty(key);
 	}
