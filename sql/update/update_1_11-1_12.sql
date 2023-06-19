@@ -1,4 +1,4 @@
-# update_1_11-1_12_0.sql
+# sql script update_1_11-1_12.sql
 
 source ../step_71_drop_opd_date_vis_field.sql
 source ../step_72_hospital_changes.sql
