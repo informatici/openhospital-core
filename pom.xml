@@ -19,7 +19,7 @@
 		<oh.version>1.13.0</oh.version>
 		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.framework.version>5.3.27</spring.framework.version>
+		<spring.framework.version>5.3.28</spring.framework.version>
 		<spring.boot.version>2.7.12</spring.boot.version>
 		<jasperreports.version>6.20.5</jasperreports.version>
 		<spring.cloud.starter.openfeign.version>3.1.7</spring.cloud.starter.openfeign.version>
