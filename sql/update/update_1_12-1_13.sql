@@ -1,4 +1,4 @@
-# update_1_12-1_13.sql
+# sql script update_1_12-1_13.sql
 
 source ../step_90_login_retries.sql
 source ../step_91_alter_laboratory_with_status.sql
