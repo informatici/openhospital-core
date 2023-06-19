@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.isf.generaldata.GeneralData;
 import org.isf.telemetry.model.Telemetry;
 import org.isf.telemetry.model.TelemetryId;
 import org.isf.telemetry.service.TelemetryRepository;
@@ -87,7 +88,9 @@ public class TelemetryManager {
 
 	private Telemetry updateStatusCommon(String info) {
 		Telemetry telemetry = retrieveOrBuildNewTelemetry();
-		telemetry.setSentTimestamp(LocalDateTime.now());
+		if (!GeneralData.DEBUG) {
+			telemetry.setSentTimestamp(LocalDateTime.now());
+		}
 		telemetry.setInfo(info);
 		return this.telemetryRepository.save(telemetry);
 	}
