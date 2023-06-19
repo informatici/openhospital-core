@@ -26,7 +26,6 @@ import java.util.Map;
 
 import org.isf.menu.service.MenuIoOperations;
 import org.isf.patient.service.PatientIoOperations;
-import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;

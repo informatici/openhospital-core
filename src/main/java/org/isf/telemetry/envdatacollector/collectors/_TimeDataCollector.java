@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.isf.opd.service.OpdIoOperations;
-import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

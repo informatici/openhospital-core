@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.isf.generaldata.Version;
-import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
