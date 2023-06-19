@@ -35,7 +35,7 @@ public class GeoIpLookup extends GeoIpInfoBean implements Serializable {
 
 	@JsonProperty("ip")
 	private String ip;
-	
+
 	@JsonProperty("country_code")
 	private String countryCode;
 
@@ -74,5 +74,4 @@ public class GeoIpLookup extends GeoIpInfoBean implements Serializable {
 		this.currencyName = currencyName;
 	}
 
-	
 }

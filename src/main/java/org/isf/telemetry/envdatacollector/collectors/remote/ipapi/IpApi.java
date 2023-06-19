@@ -59,8 +59,8 @@ public class IpApi extends GeoIpInfoBean implements Serializable {
 
 	@JsonProperty("lon")
 	private Double longitude;
-	
+
 	@JsonProperty("currency")
 	private String currencyCode;
-	
+
 }

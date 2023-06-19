@@ -37,16 +37,17 @@ public class GeoIpLookupService extends GeoIpInfoCommonService {
 
 	@Autowired
 	private GeoIpInfoSettings settings;
-	
+
 	public GeoIpLookup retrieveIpInfo() {
-		GeoIpLookupRemoteService httpClient = super.buildHttlClient(this.settings.retrieveBaseUrl(this.getServiceName()), GeoIpLookupRemoteService.class, GeoIpLookupService.class);
+		GeoIpLookupRemoteService httpClient = super.buildHttlClient(this.settings.retrieveBaseUrl(this.getServiceName()), GeoIpLookupRemoteService.class,
+						GeoIpLookupService.class);
 		LOGGER.debug("GeoIpLookup request start");
 		ResponseEntity<GeoIpLookup> rs = httpClient.retrieveIpInfo();
 		GeoIpLookup result = rs.getBody();
 		LOGGER.debug("GeoIpLookup response: {}", result);
 		return result;
 	}
-	
+
 	public String getServiceName() {
 		return SERVICE_NAME;
 	}

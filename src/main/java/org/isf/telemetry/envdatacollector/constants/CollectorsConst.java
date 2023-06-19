@@ -68,6 +68,5 @@ public interface CollectorsConst {
 	public static final String LOC_TIMEZONE = "loc_timezone";
 	public static final String LOC_CURRENCY_CODE = "currency_code";
 	public static final String LOC_CURRENCY_NAME = "currency_name";
-	
-}
 
+}

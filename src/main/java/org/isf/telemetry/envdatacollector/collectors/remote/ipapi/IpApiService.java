@@ -30,7 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class IpApiService extends GeoIpInfoCommonService{
+public class IpApiService extends GeoIpInfoCommonService {
 
 	private static final String SERVICE_NAME = "ipapi-remote-service";
 	private static final Logger LOGGER = LoggerFactory.getLogger(IpApiService.class);
@@ -38,9 +38,8 @@ public class IpApiService extends GeoIpInfoCommonService{
 	@Autowired
 	private GeoIpInfoSettings settings;
 
-	
 	public IpApi retrieveIpInfo() {
-		IpApiRemoteservice httpClient = buildHttlClient(this.settings.retrieveBaseUrl(this.getServiceName()),IpApiRemoteservice.class, IpApiService.class);
+		IpApiRemoteservice httpClient = buildHttlClient(this.settings.retrieveBaseUrl(this.getServiceName()), IpApiRemoteservice.class, IpApiService.class);
 		LOGGER.debug("IpApi request start");
 		ResponseEntity<IpApi> rs = httpClient.retrieveIpInfo();
 		IpApi result = rs.getBody();
@@ -51,6 +50,5 @@ public class IpApiService extends GeoIpInfoCommonService{
 	public String getServiceName() {
 		return SERVICE_NAME;
 	}
-
 
 }

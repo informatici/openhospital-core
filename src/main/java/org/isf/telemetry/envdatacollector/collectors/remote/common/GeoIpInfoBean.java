@@ -22,7 +22,7 @@
 package org.isf.telemetry.envdatacollector.collectors.remote.common;
 
 public class GeoIpInfoBean {
-	
+
 	private String ip;
 	private String countryCode;
 	private String countryName;
@@ -33,7 +33,7 @@ public class GeoIpInfoBean {
 	private Double latitude;
 	private Double longitude;
 	private String currencyCode;
-	
+
 	public String getIp() {
 		return ip;
 	}
@@ -97,12 +97,9 @@ public class GeoIpInfoBean {
 	@Override
 	public String toString() {
 		return "GeoIpInfoBean [ip=" + ip + ", countryCode=" + countryCode + ", countryName=" + countryName
-				+ ", regionName=" + regionName + ", city=" + city + ", postalCode=" + postalCode + ", timeZone="
-				+ timeZone + ", latitude=" + latitude + ", longitude=" + longitude + ", currencyCode=" + currencyCode
-				+ "]";
+						+ ", regionName=" + regionName + ", city=" + city + ", postalCode=" + postalCode + ", timeZone="
+						+ timeZone + ", latitude=" + latitude + ", longitude=" + longitude + ", currencyCode=" + currencyCode
+						+ "]";
 	}
-	
-	
-	
 
 }

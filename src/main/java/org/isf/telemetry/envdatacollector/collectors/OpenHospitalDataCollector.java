@@ -59,13 +59,13 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 
 	@Autowired
 	private WardIoOperations wardIoOperations;
-	
+
 	@Autowired
 	private OpdIoOperations opdIoOperations;
-	
+
 	@Autowired
 	private List<GeoIpInfoCommonService> geoIpServices;
-	
+
 	@Autowired
 	private GeoIpInfoSettings settings;
 
@@ -84,7 +84,7 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 		LOGGER.debug("Collecting Open Hospital data...");
 		Map<String, String> result = new LinkedHashMap<>();
 		try {
-			
+
 			String geoIpServiceName = settings.get("telemetry.enabled.geo.ip.lookup.service");
 			LOGGER.debug(geoIpServiceName + " - " + geoIpServices.size());
 			this.geoIpServices.forEach(service -> {
@@ -101,18 +101,18 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 					return;
 				}
 			});
-			
+
 			Version.initialize();
 			result.put(CollectorsConst.APP_VERSION, Version.VER_MAJOR.concat(".").concat(Version.VER_MINOR).concat(".").concat(Version.VER_RELEASE));
-			//result.put(CollectorsConst.APP_VER_MAJOR, Version.VER_MAJOR);
-			//result.put(CollectorsConst.APP_VER_MINOR, Version.VER_MINOR);
-			//result.put(CollectorsConst.APP_RELEASE, Version.VER_RELEASE);
-			
+			// result.put(CollectorsConst.APP_VER_MAJOR, Version.VER_MAJOR);
+			// result.put(CollectorsConst.APP_VER_MINOR, Version.VER_MINOR);
+			// result.put(CollectorsConst.APP_RELEASE, Version.VER_RELEASE);
+
 			result.put(CollectorsConst.OH_TOTAL_ACTIVE_PATIENTS, String.valueOf(patientIoOperations.countAllActivePatients()));
 			result.put(CollectorsConst.OH_TOTAL_ACTIVE_USERS, String.valueOf(this.menuIoOperations.countAllActive()));
 			result.put(CollectorsConst.OH_TOTAL_ACTIVE_WARDS, String.valueOf(this.wardIoOperations.countAllActiveWards()));
 			result.put(CollectorsConst.OH_TOTAL_ACTIVE_BEDS, String.valueOf(this.wardIoOperations.countAllActiveBeds()));
-			
+
 			LocalDateTime lastUsedTime = opdIoOperations.lastOpdCreationDate();
 			if (lastUsedTime == null) {
 				lastUsedTime = LocalDateTime.now();

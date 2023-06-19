@@ -68,12 +68,12 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 			boolean isSendingMessageServiceActive = settings != null && settings.getActive() != null ? settings.getActive().booleanValue() : false;
 			if (!isSendingMessageServiceActive) {
 				LOGGER.debug("Telemetry module DISABLED (reloading settings in {} seconds)",
-						calculateReloadSettingsTime());
+								calculateReloadSettingsTime());
 			} else if (isSendingMessageServiceActive && isTimeToSendMessage()) {
 				try {
 					GeneralData.initialize();
 					this.telemetryUtils.sendTelemetryData(telemetryUtils.retrieveDataToSend(settings.getConsentMap()),
-							GeneralData.DEBUG);
+									GeneralData.DEBUG);
 				} catch (RuntimeException | OHException e) {
 					LOGGER.error("Something strange happened");
 					LOGGER.error(ExceptionUtils.retrieveExceptionStacktrace(e));
@@ -82,7 +82,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 				}
 			} else {
 				LOGGER.debug("Telemetry module: issue traking message already sent (reloading settings in {} seconds)",
-						calculateReloadSettingsTime());
+								calculateReloadSettingsTime());
 			}
 
 			try {
