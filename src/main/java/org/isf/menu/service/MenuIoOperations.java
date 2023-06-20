@@ -17,10 +17,11 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.menu.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,7 +167,19 @@ public class MenuIoOperations
 		repository.delete(user);
 		return true;
 	}
-	
+
+	public void updateFailedAttempts(String userName, int newFailAttempts) {
+		repository.updateFailedAttempts(newFailAttempts, userName);
+	}
+
+	public void updateUserLocked(String userName, boolean isLocked, LocalDateTime time) {
+		repository.updateUserLocked(isLocked, time, userName);
+	}
+
+	public void setLastLogin(String userName, LocalDateTime now) {
+		repository.setLastLogin(now, userName);
+	}
+
 	/**
 	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link User}
 	 * 

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.accounting.manager;
 
@@ -35,7 +35,6 @@ import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -73,45 +72,23 @@ public class BillBrowserManager {
 		bill.setUpdate(upDate);
         
 		if (billDate.isAfter(today)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.newbill.billsinthefuturearenotallowed.msg"),
-	        		OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.billsinthefuturearenotallowed.msg")));
 		}
 		if (lastPay.isAfter(today)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.newbill.payementsinthefuturearenotallowed.msg"),
-	        		OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.payementsinthefuturearenotallowed.msg")));
 		}
 		if (billDate.isAfter(firstPay)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.newbill.billdateaisfterthefirstpayment.msg"),
-	        		OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.billdateaisfterthefirstpayment.msg")));
 		}
 		if (bill.getPatName().isEmpty()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-	        		MessageBundle.getMessage("angal.newbill.pleaseinsertanameforthepatient.msg"),
-	        		OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.pleaseinsertanameforthepatient.msg")));
 		}
 		if (bill.getStatus().equals("C") && bill.getBalance() != 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.newbill.abillwithanoutstandingbalancecannotbeclosed.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.abillwithanoutstandingbalancecannotbeclosed.msg")));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
-	}
-	
-	/**
-	 * Returns all the stored {@link BillItems}.
-	 * @return a list of {@link BillItems} or null if an error occurs.
-	 * @throws OHServiceException 
-	 * @deprecated this method should always be called with a parameter.
-	 * See {@link #getItems(int) getItems} method.
-	 */
-	@Deprecated
-	public List<BillItems> getItems() throws OHServiceException {
-		return ioOperations.getItems(0);
 	}
 
 	/**
@@ -121,7 +98,9 @@ public class BillBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public List<BillItems> getItems(int billID) throws OHServiceException {
-		if (billID == 0) return new ArrayList<>();
+		if (billID == 0) {
+			return new ArrayList<>();
+		}
 		return ioOperations.getItems(billID);
 	}
 
@@ -148,27 +127,14 @@ public class BillBrowserManager {
 	public List<BillPayments> getPayments(LocalDateTime dateFrom, LocalDateTime dateTo,Patient patient) throws OHServiceException {
 		return ioOperations.getPaymentsBetweenDatesWherePatient(dateFrom, dateTo, patient);
 	}
-	
-	/**
-	 * Retrieves all the stored {@link BillPayments}.
-	 * @return a list of bill payments or <code>null</code> if an error occurred.
-	 * @throws OHServiceException
-	 * @deprecated this method should always be called with a parameter.
-	 * See {@link #getPayments(int) getPayments} method.
-	 */
-	@Deprecated
-	public List<BillPayments> getPayments() throws OHServiceException {
-		return ioOperations.getPayments(0);
-	}
 
 	/**
 	 * Gets all the {@link BillPayments} for the specified {@link Bill}.
 	 * @param billID the bill id.
-	 * @return a list of {@link BillPayments} or <code>null</code> if an error occurred.
+	 * @return a list of {@link BillPayments}
 	 * @throws OHServiceException 
 	 */
 	public List<BillPayments> getPayments(int billID) throws OHServiceException {
-		if (billID == 0) return new ArrayList<>();
 		return ioOperations.getPayments(billID);
 	}
 	
@@ -190,8 +156,12 @@ public class BillBrowserManager {
 		validateBill(newBill, billItems, billPayments);
 		int billId = newBill(newBill);
 		boolean result = billId > 0;
-		if (!billItems.isEmpty()) result = newBillItems(billId, billItems);
-		if (!billPayments.isEmpty()) result = result && newBillPayments(billId, billPayments);
+		if (!billItems.isEmpty()) {
+			result = newBillItems(billId, billItems);
+		}
+		if (!billPayments.isEmpty()) {
+			result = result && newBillPayments(billId, billPayments);
+		}
 		return result;
 	}
 
@@ -269,17 +239,6 @@ public class BillBrowserManager {
 	}
 
 	/**
-	 * Get all the {@link Bill}s.
-	 * @return a list of bills or <code>null</code> if an error occurred.
-	 * @throws OHServiceException
-	 * @deprecated this method should not be called for its potentially huge resultset
-	 */
-	@Deprecated
-	public List<Bill> getBills() throws OHServiceException {
-		return ioOperations.getBills();
-	}
-	
-	/**
 	 * Get the {@link Bill} with specified billID
 	 * @param billID
 	 * @return the {@link Bill} or <code>null</code> if an error occurred.
@@ -326,7 +285,9 @@ public class BillBrowserManager {
 	 * @throws OHServiceException 
 	 */
 	public List<Bill> getBills(List<BillPayments> billPayments) throws OHServiceException {
-		if (billPayments.isEmpty()) return new ArrayList<>();
+		if (billPayments.isEmpty()) {
+			return new ArrayList<>();
+		}
 		return ioOperations.getBills(billPayments);
 	}
 

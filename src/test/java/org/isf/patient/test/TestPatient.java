@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.patient.test;
 
@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.util.Calendar;
 
+import org.isf.patconsensus.model.PatientConsensus;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.utils.exception.OHException;
@@ -54,7 +55,7 @@ public class TestPatient {
 	private static String profession = "business";
 	private String anamnesis = "anamnesis";
 	private String allergies = "allergies";
-	//private static Blob photo;	
+	//private static Blob photo;
 	//private static Image photoImage;
 
 	public Patient setup(boolean usingSet) throws OHException {
@@ -63,17 +64,19 @@ public class TestPatient {
 		if (usingSet) {
 			patient = new Patient();
 			patient.setPatientProfilePhoto(new PatientProfilePhoto());
+			patient.setPatientConsensus(new PatientConsensus(true, false, patient));
 			setParameters(patient);
 		} else {
-			// Create Patient with all parameters 
+			// Create Patient with all parameters
 			patient = new Patient(firstName, secondName, birthDate, age, agetype, sex,
 					address, city, nextKin, telephone, mother_name, mother, father_name, father,
 					bloodType, hasInsurance, parentTogether, taxCode, maritalStatus, profession);
 			patient.setAge(patient.getAge()); //IT WILL CHANGE WITH TIME
 			patient.setPatientProfilePhoto(new PatientProfilePhoto());
+			patient.setPatientConsensus(new PatientConsensus(true, false, patient));
 			patient.setAllergies(allergies);
 			patient.setAnamnesis(anamnesis);
-			
+
 		}
 
 		return patient;

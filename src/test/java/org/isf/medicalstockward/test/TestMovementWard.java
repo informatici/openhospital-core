@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.medicalstockward.test;
 
@@ -39,7 +39,7 @@ public class TestMovementWard {
 
 	private LocalDateTime now = TimeTools.getNow();
 	private LocalDateTime date = now.withMonth(2).withDayOfMonth(2);
-	private boolean isPatient = false;
+	private boolean isPatient;
 	private int age = 10;
 	private float weight = 78;
 	private String description = "TestDescriptionm";

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.medicalstockward.manager;
 
@@ -41,7 +41,6 @@ import org.isf.serviceprinting.print.MovementWardForPrint;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -62,36 +61,17 @@ public class MovWardBrowserManager {
 		String description = mov.getDescription();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (description.isEmpty() && mov.isPatient()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.common.pleaseselectapatient.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseselectapatient.msg")));
 		}
 		if (description.isEmpty() && !mov.isPatient()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseinsertadescriptionfortheinternaluse.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstockwardedit.pleaseinsertadescriptionfortheinternaluse.msg")));
 		}
 		if (mov.getMedical() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug.msg")));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
-	}
-
-	/**
-	 * Gets all the {@link MovementWard}s.
-	 * If an error occurs a message error is shown and the <code>null</code> value is returned.
-	 *
-	 * @return all the retrieved movements ward.
-	 * @throws OHServiceException
-	 * @deprecated
-	 */
-	@Deprecated
-	public List<MovementWard> getMovementWard() throws OHServiceException {
-		return ioOperations.getWardMovements(null, null, null);
 	}
 
 	/**
@@ -175,9 +155,7 @@ public class MovWardBrowserManager {
 	public void newMovementWard(List<MovementWard> newMovements) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (newMovements.isEmpty()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstockwardedit.pleaseselectadrug.msg")));
 			throw new OHDataValidationException(errors);
 		}
 		for (MovementWard mov : newMovements) {

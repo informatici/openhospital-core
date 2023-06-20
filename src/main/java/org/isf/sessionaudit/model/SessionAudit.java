@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.sessionaudit.model;
 
@@ -70,7 +70,7 @@ public class SessionAudit extends Auditable<String> {
 	private LocalDateTime logoutDate;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public SessionAudit() {
 		super();
@@ -122,12 +122,15 @@ public class SessionAudit extends Auditable<String> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		SessionAudit other = (SessionAudit) obj;
 		return code == other.code && hashCode == other.hashCode && Objects.equals(loginDate, other.loginDate) && Objects.equals(logoutDate, other.logoutDate)
 						&& Objects.equals(userName, other.userName);

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.malnutrition.manager;
 
@@ -30,7 +30,6 @@ import org.isf.malnutrition.service.MalnutritionIoOperation;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -52,31 +51,21 @@ public class MalnutritionManager {
 	protected void validateMalnutrition(Malnutrition malnutrition) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (malnutrition.getDateSupp() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.malnutrition.pleaseinsertavalidvisitdate.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.malnutrition.pleaseinsertavalidvisitdate.msg")));
 		}
 		if (malnutrition.getDateConf() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.malnutrition.pleaseinsertavalidcontroldate.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.malnutrition.pleaseinsertavalidcontroldate.msg")));
 		}
 		if (malnutrition.getDateSupp() != null &&
 				malnutrition.getDateConf() != null &&
 				malnutrition.getDateConf().isBefore(malnutrition.getDateSupp())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.malnutrition.controldatemustbeaftervisitdate.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.malnutrition.controldatemustbeaftervisitdate.msg")));
 		}
 		if (malnutrition.getWeight() == 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.malnutrition.insertcorrectvalueinweightfield.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.malnutrition.insertcorrectvalueinweightfield.msg")));
 		}
 		if (malnutrition.getHeight() == 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.getMessage("angal.malnutrition.insertcorrectvalueinheightfield.msg"),
-					OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.malnutrition.insertcorrectvalueinheightfield.msg")));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);

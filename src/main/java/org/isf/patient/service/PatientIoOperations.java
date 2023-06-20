@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.patient.service;
 
@@ -34,29 +34,36 @@ import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PageInfo;
+import org.isf.utils.pagination.PagedResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * ------------------------------------------<br />
- * PatientIoOperations - dB operations for the patient entity<br />
- * -----------------------------------------<br />
- * modification history<br />
- * 05/05/2005 - giacomo  - first beta version.<br />
- * 03/11/2006 - ross - added toString method.<br />
- * 11/08/2008 - alessandro - added father & mother's names.<br />
- * 26/08/2008 - claudio - added birth date modified age.<br />
- * 01/01/2009 - Fabrizio - changed the calls to PAT_AGE fields to return again an int type.<br />
- * 03/12/2009 - Alex - added method for merge two patients history.<br />
+ * ------------------------------------------
+ * PatientIoOperations - dB operations for the patient entity
+ * -----------------------------------------
+ * modification history
+ * 05/05/2005 - giacomo  - first beta version.
+ * 03/11/2006 - ross - added toString method.
+ * 11/08/2008 - alessandro - added father & mother's names.
+ * 26/08/2008 - claudio - added birth date modified age.
+ * 01/01/2009 - Fabrizio - changed the calls to PAT_AGE fields to return again an int type.
+ * 03/12/2009 - Alex - added method for merge two patients history.
  * ------------------------------------------
  */
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class PatientIoOperations {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PatientIoOperations.class);
 
 	public static final String LOAD_FROM_DB = "DB";
 
@@ -90,7 +97,12 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Patient> getPatients(Pageable pageable) throws OHServiceException {
-		return repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName('N', pageable);
+		return repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName('N', pageable).getContent();
+	}
+	
+	public PagedResponse<Patient> getPatientsPageable(Pageable pageable) throws OHServiceException {
+		Page<Patient> pagedResult = repository.findAllByDeletedIsNullOrDeletedEqualsOrderByName('N', pageable);
+		return setPaginationData(pagedResult);
 	}
 
 	/**
@@ -194,7 +206,7 @@ public class PatientIoOperations {
 				
 			return patientSaved;
 		} catch (OHServiceException e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in savePatient method.", e);
 		}
 		return null;
 	}
@@ -297,4 +309,17 @@ public class PatientIoOperations {
 		}
 	}
 
+	public PagedResponse<Patient> setPaginationData(Page<Patient> pages){
+		PagedResponse<Patient> data = new PagedResponse<Patient>();
+		data.setData(pages.getContent());
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setSize(pages.getPageable().getPageSize());
+		pageInfo.setPage(pages.getPageable().getPageNumber());
+		pageInfo.setNbOfElements(pages.getNumberOfElements());
+		pageInfo.setTotalCount(pages.getTotalElements());
+		pageInfo.setHasPreviousPage(pages.hasPrevious());
+		pageInfo.setHasNextPage(pages.hasNext());
+		data.setPageInfo(pageInfo);
+		return data;
+	}
 }

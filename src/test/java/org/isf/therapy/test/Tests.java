@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.therapy.test;
 
@@ -360,7 +360,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestTherapyRow(true);
 		TherapyRow therapyRow = therapyIoOperationRepository.findById(id).get();
 
-		assertThat(therapyRow.equals(therapyRow)).isTrue();
+		assertThat(therapyRow).isEqualTo(therapyRow);
 		assertThat(therapyRow)
 				.isNotNull()
 				.isNotEqualTo("someString");

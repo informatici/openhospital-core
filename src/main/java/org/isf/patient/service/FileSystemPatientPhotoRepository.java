@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.patient.service;
 
@@ -35,7 +35,6 @@ import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientProfilePhoto;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -64,15 +63,12 @@ public class FileSystemPatientPhotoRepository {
 			patientProfilePhoto.setPatient(patient);
 			if (exist(path, patient.getCode())) {
 				Blob blob = this.load(patient.getCode(), path);
-				byte[] blobAsBytes = blob.getBytes(1, (int) blob.length());
+				byte[] blobAsBytes =  blob.getBytes(1, (int) blob.length());
 				patientProfilePhoto.setPhoto(blobAsBytes);
 			}
 		} catch (SQLException e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new OHServiceException(
-					new OHExceptionMessage(MessageBundle.getMessage(KEY_ERROR_TITLE),
-							MessageBundle.formatMessage(KEY_FILE_NOT_FOUND),
-							OHSeverityLevel.ERROR));
+			throw new OHServiceException(new OHExceptionMessage(MessageBundle.formatMessage(KEY_FILE_NOT_FOUND)));
 		}
 
 	}
@@ -85,11 +81,10 @@ public class FileSystemPatientPhotoRepository {
 			save(data, blob);
 		} catch (Exception exception) {
 			LOGGER.error(exception.getMessage(), exception);
-			throw new OHServiceException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-					MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg"), OHSeverityLevel.ERROR));
+			throw new OHServiceException(new OHExceptionMessage(MessageBundle.formatMessage("angal.dicommanager.genericerror.fmt.msg")));
 		}
 	}
-	
+
 	public void delete(String path, int patientId) {
 		File patientIdFolder = new File(path);
 		File fdc = new File(patientIdFolder, patientId + IMAGE_FORMAT);
@@ -108,13 +103,10 @@ public class FileSystemPatientPhotoRepository {
 			return new SerialBlob(byteArray);
 		} catch (IOException | SQLException e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new OHServiceException(
-					new OHExceptionMessage(MessageBundle.getMessage(KEY_ERROR_TITLE),
-							MessageBundle.formatMessage(KEY_FILE_NOT_FOUND),
-							OHSeverityLevel.ERROR));
+			throw new OHServiceException(new OHExceptionMessage(MessageBundle.formatMessage(KEY_FILE_NOT_FOUND)));
 		}
 	}
-	
+
 	private void recurse(File f) throws IOException {
 		if (f.exists()) {
 			return;

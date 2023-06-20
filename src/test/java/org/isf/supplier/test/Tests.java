@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.supplier.test;
 
@@ -160,7 +160,7 @@ public class Tests extends OHCoreTestCase {
 	public void testSupplierEquals() throws Exception {
 		Supplier supplier = new Supplier(1, "TestName", "TestAddress", "TestTax", "TestPhone", "TestFax", "TestEmail", "TestNode");
 
-		assertThat(supplier.equals(supplier)).isTrue();
+		assertThat(supplier).isEqualTo(supplier);
 		assertThat(supplier)
 				.isNotNull()
 				.isNotEqualTo("someString");

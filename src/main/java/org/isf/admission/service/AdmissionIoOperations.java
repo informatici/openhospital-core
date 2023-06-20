@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.admission.service;
 
@@ -43,8 +43,12 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PageInfo;
+import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,13 +75,13 @@ public class AdmissionIoOperations {
 
 	@Autowired
 	private AdmissionIoOperationRepository repository;
-	
+
 	@Autowired
 	private AdmissionTypeIoOperationRepository typeRepository;
-	
+
 	@Autowired
 	private DischargeTypeIoOperationRepository dischargeRepository;
-	
+
 	@Autowired
 	private PatientIoOperationRepository patientRepository;
 
@@ -114,14 +118,14 @@ public class AdmissionIoOperations {
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public List<AdmittedPatient> getAdmittedPatients(String searchTerms, LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange)
-			throws OHServiceException {
+					throws OHServiceException {
 		return repository.findPatientAdmissionsBySearchAndDateRanges(searchTerms, admissionRange, dischargeRange);
 	}
 
 	/**
 	 * Load patient together with the profile photo, or {@code null} if there is no patient with the given id
 	 */
-	public AdmittedPatient loadAdmittedPatient(final Integer patientId) {
+	public AdmittedPatient loadAdmittedPatient(final int patientId) {
 		boolean isLoadPatientProfilePhotoFromDb = PatientIoOperations.LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		final Patient patient = patientRepository.findById(patientId).orElse(null);
 		if (patient == null) {
@@ -318,5 +322,37 @@ public class AdmissionIoOperations {
 			foundPatient.getPatientProfilePhoto().setPhoto(null);
 		}
 		return patientRepository.save(foundPatient) != null;
+	}
+	
+	public List<Admission> getAdmissionsByAdmissionDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		return repository.findAllWhereAdmissionDate(dateFrom, dateTo, pageable);
+	}
+
+	public List<Admission> getAdmissionsByDischargeDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		return repository.findAllWhereDischargeDate(dateFrom, dateTo, pageable);
+	}
+
+	public PagedResponse<Admission> getAdmissionsByAdmissionDates(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		Page<Admission> pagedResult = repository.findAllWhere_AdmissionDate_Paginated(dateFrom, dateTo, pageable);
+		return setPaginationData(pagedResult);
+	}
+
+	public PagedResponse<Admission> getAdmissionsByDischargeDates(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+		Page<Admission> pagedResult = repository.findAllWhere_DischargeDate_Paginated(dateFrom, dateTo, pageable);
+		return setPaginationData(pagedResult);
+	}
+	
+	public PagedResponse<Admission> setPaginationData(Page<Admission> pages){
+		PagedResponse<Admission> data = new PagedResponse<Admission>();
+		data.setData(pages.getContent());
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setSize(pages.getPageable().getPageSize());
+		pageInfo.setPage(pages.getPageable().getPageNumber());
+		pageInfo.setNbOfElements(pages.getNumberOfElements());
+		pageInfo.setTotalCount(pages.getTotalElements());
+		pageInfo.setHasPreviousPage(pages.hasPrevious());
+		pageInfo.setHasNextPage(pages.hasNext());
+		data.setPageInfo(pageInfo);
+		return data;
 	}
 }

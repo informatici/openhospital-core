@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.utils.treetable;
 
@@ -134,9 +134,10 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
         for (int i = listeners.length-2; i>=0; i-=2) {
             if (listeners[i]==TreeModelListener.class) {
                 // Lazily create the event:
-                if (e == null)
-                    e = new TreeModelEvent(source, path, 
+                if (e == null) {
+                    e = new TreeModelEvent(source, path,
                                            childIndices, children);
+                }
                 ((TreeModelListener)listeners[i+1]).treeNodesChanged(e);
             }          
         }
@@ -160,9 +161,10 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
         for (int i = listeners.length-2; i>=0; i-=2) {
             if (listeners[i]==TreeModelListener.class) {
                 // Lazily create the event:
-                if (e == null)
-                    e = new TreeModelEvent(source, path, 
+                if (e == null) {
+                    e = new TreeModelEvent(source, path,
                                            childIndices, children);
+                }
                 ((TreeModelListener)listeners[i+1]).treeNodesInserted(e);
             }          
         }
@@ -186,9 +188,10 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
         for (int i = listeners.length-2; i>=0; i-=2) {
             if (listeners[i]==TreeModelListener.class) {
                 // Lazily create the event:
-                if (e == null)
-                    e = new TreeModelEvent(source, path, 
+                if (e == null) {
+                    e = new TreeModelEvent(source, path,
                                            childIndices, children);
+                }
                 ((TreeModelListener)listeners[i+1]).treeNodesRemoved(e);
             }          
         }
@@ -212,9 +215,10 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
         for (int i = listeners.length-2; i>=0; i-=2) {
             if (listeners[i]==TreeModelListener.class) {
                 // Lazily create the event:
-                if (e == null)
-                    e = new TreeModelEvent(source, path, 
+                if (e == null) {
+                    e = new TreeModelEvent(source, path,
                                            childIndices, children);
+                }
                 ((TreeModelListener)listeners[i+1]).treeStructureChanged(e);
             }          
         }

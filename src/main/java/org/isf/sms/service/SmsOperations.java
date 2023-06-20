@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.sms.service;
 
@@ -70,7 +70,7 @@ public class SmsOperations {
 	
 	/**
 	 * Returns a {@link Sms} with specified ID
-	 * @param ID - sms ID
+	 * @param id- sms ID
 	 * @return sms - the sms with specified ID
 	 * @throws OHServiceException 
 	 */

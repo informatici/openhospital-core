@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.opd.test;
 
@@ -991,7 +991,7 @@ public class Tests extends OHCoreTestCase {
 		Visit nextVisit = testVisit.setup(patient, false, ward);
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 
-		assertThat(opd.equals(opd)).isTrue();
+		assertThat(opd).isEqualTo(opd);
 		assertThat(opd)
 				.isNotNull()
 				.isNotEqualTo("someString");

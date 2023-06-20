@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.medicals.model;
 
@@ -134,7 +134,7 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 	private Integer lock;
 	
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 		
 
 	public Medical() { }
@@ -247,9 +247,15 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 
 	@Override
 	public boolean equals(Object anObject) {
-		if (!(anObject instanceof Medical)) return false;
-		if (getProdCode() == null || ((Medical) anObject).getProdCode() == null) return false;
-		if (getProdCode() != null && ((Medical) anObject).getProdCode() != null && !getProdCode().equals(((Medical) anObject).getProdCode())) return false;
+		if (!(anObject instanceof Medical)) {
+			return false;
+		}
+		if (getProdCode() == null || ((Medical) anObject).getProdCode() == null) {
+			return false;
+		}
+		if (getProdCode() != null && ((Medical) anObject).getProdCode() != null && !getProdCode().equals(((Medical) anObject).getProdCode())) {
+			return false;
+		}
 		return (getCode().equals(((Medical) anObject).getCode())
 						&& getDescription().equalsIgnoreCase(((Medical) anObject).getDescription())
 						&& getType().equals(((Medical) anObject).getType())
@@ -258,6 +264,7 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 						&& getOutqty()==(((Medical) anObject).getOutqty()));
 	}
 
+	@Override
 	public String toString() {
 		return getDescription();
 	}

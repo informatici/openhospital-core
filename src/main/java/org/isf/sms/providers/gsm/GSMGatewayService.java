@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.sms.providers.gsm;
 
@@ -93,8 +93,9 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 				LOGGER.debug("COM PORT found ({})", port);
 				break;
 
-			} else
+			} else {
 				portId = null;
+			}
 		}
 
 		if (portId != null) {
@@ -109,11 +110,13 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 						LOGGER.debug("Output stream OK");
 						connected = true;
 
-					} else
+					} else {
 						LOGGER.debug("A problem occured on output stream");
+					}
 
-				} else
+				} else {
 					LOGGER.debug("Not possible to open the stream");
+				}
 
 				try {
 					serialPort.addEventListener(this);
@@ -125,7 +128,7 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 			} catch (PortInUseException e) {
 				LOGGER.error("Port in use: {}", portId.getCurrentOwner());
 			} catch (Exception e) {
-				LOGGER.error("Failed to open port {} {}", portId.getName(), e);
+				LOGGER.error("Failed to open port {}", portId.getName(), e);
 			}
 		} else {
 			LOGGER.error("COM PORT not found ({})!!!", port);
@@ -153,8 +156,9 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 
 				// SET SMS MODE
 				LOGGER.trace(GSMParameters.CMGF);
-				if (!debug)
+				if (!debug) {
 					outputStream.write(GSMParameters.CMGF.getBytes());
+				}
 				Thread.sleep(1000);
 
 				// SET SMS PARAMETERS
@@ -164,19 +168,22 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 
 				// SET SMS NUMBER
 				LOGGER.trace(buildCMGS.toString());
-				if (!debug)
+				if (!debug) {
 					outputStream.write(buildCMGS.toString().getBytes());
+				}
 				Thread.sleep(1000);
 
 				// SET SMS TEXT
 				LOGGER.trace(text);
-				if (!debug)
+				if (!debug) {
 					outputStream.write(text.getBytes());
+				}
 				Thread.sleep(1000);
 
 				// SEND SMS
-				if (!debug)
+				if (!debug) {
 					outputStream.write("\u001A".getBytes()); // Ctrl-Z();
+				}
 				Thread.sleep(1000);
 
 				// FLUSH STREAM
@@ -215,7 +222,7 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 				sent = false;
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error("Exception in serialEvent method.", e);
 		}
 	}
 

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.admission.test;
 
@@ -71,6 +71,7 @@ import org.isf.pregtreattype.test.TestPregnantTreatmentType;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
@@ -84,6 +85,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 import org.springframework.transaction.annotation.Transactional;
@@ -271,6 +273,43 @@ public class Tests extends OHCoreTestCase {
 
 		// then:
 		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
+	}
+	
+	@Test
+	public void testIoGetAdmittionsByDatePageable() throws Exception {
+		// given:
+		int id = setupTestAdmission(false);
+		String str = "2000-01-01T10:11:30";
+		String str2 = "2023-05-05T10:11:30";
+		LocalDateTime dateFrom = LocalDateTime.parse(str);
+		LocalDateTime dateTo =  LocalDateTime.parse(str2);
+		int page = 0;
+		int size = 10;
+		Admission foundAdmission = admissionIoOperation.getAdmission(id);
+		// when:
+		PagedResponse<Admission> patients = admissionIoOperation.getAdmissionsByAdmissionDates(dateFrom, dateTo, PageRequest.of(page, size));
+
+		// then:
+		assertThat(patients.getData().get(0).getId()).isEqualTo(foundAdmission.getId());
+	}
+	
+	@Test
+	public void testIoGetDischargesByDatePageable() throws Exception {
+		// given:
+		int id = setupTestAdmission(false);
+		String str = "2000-01-01T10:11:30";
+		String str2 = "2023-05-05T10:11:30";
+		LocalDateTime dateFrom = LocalDateTime.parse(str);
+		LocalDateTime dateTo =  LocalDateTime.parse(str2);
+		int page = 0;
+		int size = 10;
+		Admission foundAdmission = admissionIoOperation.getAdmission(id);
+		// when:
+		PagedResponse<Admission> patients = admissionIoOperation.getAdmissionsByDischargeDates(dateFrom, dateTo, PageRequest.of(page, size));
+
+		// then:
+		
+		assertThat(patients.getData().get(0).getId()).isEqualTo(foundAdmission.getId());
 	}
 
 	@Test
@@ -558,7 +597,7 @@ public class Tests extends OHCoreTestCase {
 		foundAdmission.setPatient(null);
 		assertThat(foundAdmission.getPatient()).isNull();
 		foundAdmission.setPatient(foundPatient);
-		assertThat(foundAdmission.getPatient()).isEqualToComparingFieldByField(foundPatient);
+		assertThat(foundAdmission.getPatient()).usingRecursiveComparison().isEqualTo(foundPatient);
 		int lock = foundAdmission.getLock();
 		foundAdmission.setLock(-1);
 		assertThat(foundAdmission.getLock()).isEqualTo(-1);
@@ -583,12 +622,12 @@ public class Tests extends OHCoreTestCase {
 		admittedPatient.setPatient(null);
 		assertThat(admittedPatient.getPatient()).isNull();
 		admittedPatient.setPatient(patient);
-		assertThat(admittedPatient.getPatient()).isEqualToComparingFieldByField(patient);
+		assertThat(admittedPatient.getPatient()).usingRecursiveComparison().isEqualTo(patient);
 		Admission admission = admittedPatient.getAdmission();
 		admittedPatient.setAdmission(null);
 		assertThat(admittedPatient.getAdmission()).isNull();
 		admittedPatient.setAdmission(admission);
-		assertThat(admittedPatient.getAdmission()).isEqualToComparingFieldByField(admission);
+		assertThat(admittedPatient.getAdmission()).usingRecursiveComparison().isEqualTo(admission);
 	}
 
 	@Test
@@ -1123,7 +1162,7 @@ public class Tests extends OHCoreTestCase {
 		Admission admission = admissionBrowserManager.getAdmission(id);
 		Admission admission2 = buildNewAdmission();
 		admission2.setId(id);   // no really legal but needed for these tests
-		assertThat(admission.equals(admission)).isTrue();
+		assertThat(admission).isEqualTo(admission);
 		assertThat(admission)
 				.isEqualTo(admission2)
 				.isNotEqualTo("xyzzy");
