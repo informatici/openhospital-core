@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.priceslist.service;
 
@@ -155,7 +155,7 @@ public class PricesListIoOperations {
 		PriceList newList = insertNewPriceList(list);
 		boolean result = true;
 
-		List<Price> Prices = priceRepository.findByList_id(list.getId());
+		List<Price> Prices = (List<Price>) priceRepository.findByList_id(list.getId());
 		for (Price price : Prices) {
 			Price newPrice = new Price();
 

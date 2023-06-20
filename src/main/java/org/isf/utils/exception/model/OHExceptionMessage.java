@@ -17,13 +17,11 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.utils.exception.model;
 
 import java.io.Serializable;
-
-import org.isf.generaldata.MessageBundle;
 
 /**
  * Composed exception information
@@ -37,10 +35,8 @@ public class OHExceptionMessage implements Serializable{
 	private ErrorDescription description;
 	private String message;
 	private OHSeverityLevel level;
+	
 
-	public OHExceptionMessage(String message) {
-		this(MessageBundle.getMessage("angal.common.error.title"), message, OHSeverityLevel.ERROR);
-	}
 	public OHExceptionMessage(String title, String message, OHSeverityLevel level) {
 		super();
 		this.title = title;
@@ -50,7 +46,7 @@ public class OHExceptionMessage implements Serializable{
 	public OHExceptionMessage(String title, ErrorDescription description, String message, OHSeverityLevel level) {
 		super();
 		this.title = title;
-		this.description = description;
+		this.description = ErrorDescription.PASSWORD_TOO_SHORT;
 		this.message = message;
 		this.level = level;
 	}

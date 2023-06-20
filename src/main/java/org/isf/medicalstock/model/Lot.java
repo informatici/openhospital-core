@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.medicalstock.model;
 
@@ -124,7 +124,7 @@ public class Lot extends Auditable<String> {
 	private double overallQuantity;
 
 	@Transient
-	private volatile int hashCode;
+	private volatile int hashCode = 0;
 
 	public Lot() {
 	}
@@ -207,7 +207,6 @@ public class Lot extends Auditable<String> {
 		this.cost = cost;
 	}
 
-	@Override
 	public String toString() {
 		if (code == null) {
 			return MessageBundle.getMessage("angal.medicalstock.nolot.txt");
@@ -221,42 +220,32 @@ public class Lot extends Auditable<String> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		Lot other = (Lot) obj;
 		if (code == null) {
-			if (other.code != null) {
+			if (other.code != null)
 				return false;
-			}
-		} else if (!code.equals(other.code)) {
+		} else if (!code.equals(other.code))
 			return false;
-		}
 		if (cost != null) {
-			if (other.cost != null && cost.compareTo(other.cost) != 0) {
+			if (other.cost != null && cost.compareTo(other.cost) != 0)
 				return false;
-			}
 		}
 		if (dueDate == null) {
-			if (other.dueDate != null) {
+			if (other.dueDate != null)
 				return false;
-			}
-		} else if (!dueDate.equals(other.dueDate)) {
+		} else if (!dueDate.equals(other.dueDate))
 			return false;
-		}
 		if (preparationDate == null) {
-			if (other.preparationDate != null) {
+			if (other.preparationDate != null)
 				return false;
-			}
-		} else if (!preparationDate.equals(other.preparationDate)) {
+		} else if (!preparationDate.equals(other.preparationDate))
 			return false;
-		}
 		return mainStoreQuantity == other.mainStoreQuantity;
 	}
 

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.patvac.test;
 
@@ -195,9 +195,8 @@ public class Tests extends OHCoreTestCase {
 		setupTestPatientVaccine(true);
 		List<PatientVaccine> patientVaccineList = patvacIoOperation.getPatientVaccine(null, null, null, null, 'A', 0, 0);
 		for (PatientVaccine patVac : patientVaccineList) {
-			if (patVac.getProgr() > foundProgYear) {
+			if (patVac.getProgr() > foundProgYear)
 				foundProgYear = patVac.getProgr();
-			}
 		}
 		progYear = patvacIoOperation.getProgYear(0);
 		assertThat(progYear).isEqualTo(foundProgYear);
@@ -361,9 +360,8 @@ public class Tests extends OHCoreTestCase {
 		setupTestPatientVaccine(true);
 		List<PatientVaccine> patientVaccineList = patVacManager.getPatientVaccine(null, null, null, null, 'A', 0, 0);
 		for (PatientVaccine patVac : patientVaccineList) {
-			if (patVac.getProgr() > foundProgYear) {
+			if (patVac.getProgr() > foundProgYear)
 				foundProgYear = patVac.getProgr();
-			}
 		}
 		progYear = patVacManager.getProgYear(0);
 		assertThat(progYear).isEqualTo(foundProgYear);
@@ -498,7 +496,7 @@ public class Tests extends OHCoreTestCase {
 		PatientVaccine patientVaccine1 = new PatientVaccine(0, 0, null, new Patient(), null, 0);
 		PatientVaccine patientVaccine2 = new PatientVaccine(0, 0, null, new Patient(), null, 0);
 
-		assertThat(patientVaccine1).isEqualTo(patientVaccine1);
+		assertThat(patientVaccine1.equals(patientVaccine1)).isTrue();
 		assertThat(patientVaccine1)
 				.isNotNull()
 				.isNotEqualTo("someString");

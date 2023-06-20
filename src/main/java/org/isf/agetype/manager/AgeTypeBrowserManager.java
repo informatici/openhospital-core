@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.agetype.manager;
 
@@ -30,6 +30,7 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -112,10 +113,15 @@ public class AgeTypeBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		for (int i = 1; i < ageTypes.size(); i++) {
 			if (ageTypes.get(i).getFrom() <= ageTypes.get(i - 1).getTo()) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.agetype.overlappedrangespleasecheckthevalues.msg")));
+				errors.add(
+						new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+								MessageBundle.getMessage("angal.agetype.overlappedrangespleasecheckthevalues.msg"),
+								OHSeverityLevel.ERROR));
 			}
 			if (ageTypes.get(i).getFrom() - ageTypes.get(i - 1).getTo() > 1) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.agetype.somerangesarenotdefinedpleasecheckthevalues.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.agetype.somerangesarenotdefinedpleasecheckthevalues.msg"),
+						OHSeverityLevel.ERROR));
 			}
 		}
 		if (!errors.isEmpty()) {

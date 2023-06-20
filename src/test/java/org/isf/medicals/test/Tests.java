@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.medicals.test;
 
@@ -38,7 +38,7 @@ import org.isf.medicalstock.service.MovementIoOperationRepository;
 import org.isf.medicalstock.test.TestLot;
 import org.isf.medicalstock.test.TestMovement;
 import org.isf.medstockmovtype.model.MovementType;
-import org.isf.medstockmovtype.service.MedicalDsrStockMovementTypeIoOperationRepository;
+import org.isf.medstockmovtype.service.MedicalStockMovementTypeIoOperationRepository;
 import org.isf.medstockmovtype.test.TestMovementType;
 import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.service.MedicalTypeIoOperationRepository;
@@ -78,7 +78,7 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	MovementIoOperationRepository movementIoOperationRepository;
 	@Autowired
-	MedicalDsrStockMovementTypeIoOperationRepository medicalDsrStockMovementTypeIoOperationRepository;
+	MedicalStockMovementTypeIoOperationRepository medicalStockMovementTypeIoOperationRepository;
 	@Autowired
 	WardIoOperationRepository wardIoOperationRepository;
 	@Autowired
@@ -441,7 +441,7 @@ public class Tests extends OHCoreTestCase {
 			Movement movement = testMovement.setup(medical, movementType, ward, lot, supplier, true);
 			supplierIoOperationRepository.saveAndFlush(supplier);
 			wardIoOperationRepository.saveAndFlush(ward);
-			medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
+			medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
 			medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 			medicalsIoOperationRepository.saveAndFlush(medical);
 			lotIoOperationRepository.saveAndFlush(lot);
@@ -558,7 +558,7 @@ public class Tests extends OHCoreTestCase {
 		MedicalType medicalType3 = new MedicalType("code3", "description3");
 		Medical medical3 = new Medical(3, medicalType3, "TP3", "TestDescription2", 1, 2, 3, 4, 5);
 
-		assertThat(medical).isEqualTo(medical);
+		assertThat(medical.equals(medical)).isTrue();
 		assertThat(medical)
 				.isNotEqualTo("someString")
 				.isNotEqualTo(medical2);
@@ -624,7 +624,7 @@ public class Tests extends OHCoreTestCase {
 		Movement movement = testMovement.setup(medical, movementType, ward, lot, supplier, usingSet);
 		wardIoOperationRepository.saveAndFlush(ward);
 		supplierIoOperationRepository.saveAndFlush(supplier);
-		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
+		medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		lotIoOperationRepository.saveAndFlush(lot);

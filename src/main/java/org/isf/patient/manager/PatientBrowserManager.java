@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.patient.manager;
 
@@ -38,7 +38,7 @@ import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.pagination.PagedResponse;
+import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
@@ -64,8 +64,7 @@ public class PatientBrowserManager {
 	 *
 	 * @param patient
 	 * @return saved / updated patient
-	 * @throws OHServiceException
-	 *             when validation failed
+	 * @throws OHServiceException when validation failed
 	 */
 	public Patient savePatient(Patient patient) throws OHServiceException {
 		validatePatient(patient);
@@ -91,13 +90,23 @@ public class PatientBrowserManager {
 	public List<Patient> getPatient(int page, int size) throws OHServiceException {
 		return ioOperations.getPatients(PageRequest.of(page, size));
 	}
-	
-	public PagedResponse<Patient> getPatientsPageable(int page, int size) throws OHServiceException {
-		return ioOperations.getPatientsPageable(PageRequest.of(page, size));
+
+	/**
+	 * Method that gets a Patient by his/her name
+	 *
+	 * @param name
+	 * @return the Patient that match specified name (could be null)
+	 * @throws OHServiceException
+	 * @deprecated use getPatient(Integer code) for one patient or
+	 * getPatientsByOneOfFieldsLike(String regex) for a list
+	 */
+	@Deprecated
+	public Patient getPatientByName(String name) throws OHServiceException {
+		return ioOperations.getPatient(name);
 	}
 
 	/**
-	 * Method that get a Patient list by his/her name
+	 * method that get a Patient list by his/her name
 	 *
 	 * @param params
 	 * @return the list of Patients that match specified name
@@ -226,7 +235,9 @@ public class PatientBrowserManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (admissionManager.getCurrentAdmission(mergedPatient) != null || admissionManager.getCurrentAdmission(patient2) != null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.cannotmergeadmittedpatients.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.admission.cannotmergeadmittedpatients.msg"),
+					OHSeverityLevel.ERROR));
 		}
 
 		boolean billPending = false;
@@ -234,17 +245,22 @@ public class PatientBrowserManager {
 		List<Bill> bills = billManager.getPendingBills(mergedPatient.getCode());
 		if (bills != null && !bills.isEmpty()) {
 			billPending = true;
-		} else {
+		}
+		else {
 			bills = billManager.getPendingBills(patient2.getCode());
 			if (bills != null && !bills.isEmpty()) {
 				billPending = true;
 			}
 		}
 		if (billPending) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.cannotmergewithpendingbills.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.admission.cannotmergewithpendingbills.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		if (mergedPatient.getSex() != patient2.getSex()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.selectedpatientshavedifferentsex.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.admission.selectedpatientshavedifferentsex.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
@@ -254,8 +270,7 @@ public class PatientBrowserManager {
 	/**
 	 * Method that logically delete a Patient (not physically deleted)
 	 *
-	 * @param patient
-	 *            - the {@link Patient} to be deleted
+	 * @param patient - the {@link Patient} to be deleted
 	 * @return true - if the Patient has been deleted (logically)
 	 * @throws OHServiceException
 	 */
@@ -264,11 +279,10 @@ public class PatientBrowserManager {
 	}
 
 	/**
-	 * Method that checks if the patient's name is already present in the DB (the passed string 'name' should be a concatenation of firstName + " " +
-	 * secondName)
+	 * Method that checks if the patient's name is already present in the DB
+	 * (the passed string 'name' should be a concatenation of firstName + " " + secondName)
 	 *
-	 * @param name
-	 *            - name of the patient
+	 * @param name - name of the patient
 	 * @return true - if the patient is already present
 	 * @throws OHServiceException
 	 */
@@ -284,18 +298,19 @@ public class PatientBrowserManager {
 	 * - taxCode<br>
 	 * - note<br>
 	 *
-	 * @param keyword
-	 *            - String to search, <code>null</code> for full list
+	 * @param keyword - String to search, <code>null</code> for full list
 	 * @return the list of Patients (could be empty)
 	 * @throws OHServiceException
 	 */
 	public List<Patient> getPatientsByOneOfFieldsLike(String keyword) throws OHServiceException {
 		return ioOperations.getPatientsByOneOfFieldsLike(keyword);
 	}
-
+	
+	
 	public PatientProfilePhoto retrievePatientProfilePhoto(Patient patient) throws OHServiceException {
 		return ioOperations.retrievePatientProfilePhoto(patient);
 	}
+	
 
 	/**
 	 * Method that merges patients and all clinic details under the same PAT_ID
@@ -307,65 +322,54 @@ public class PatientBrowserManager {
 	 */
 	public boolean mergePatient(Patient mergedPatient, Patient patient2) throws OHServiceException {
 		if (mergedPatient.getBirthDate() != null && StringUtils.isEmpty(mergedPatient.getAgetype())) {
-			// mergedPatient only Age
+			//mergedPatient only Age
 			LocalDate bdate2 = patient2.getBirthDate();
 			int age2 = patient2.getAge();
 			String ageType2 = patient2.getAgetype();
 			if (bdate2 != null) {
-				// patient2 has BirthDate
+				//patient2 has BirthDate
 				mergedPatient.setAge(age2);
 				mergedPatient.setBirthDate(bdate2);
 			}
 			if (bdate2 != null && StringUtils.isNotEmpty(ageType2)) {
-				// patient2 has AgeType
+				//patient2 has AgeType
 				mergedPatient.setAge(age2);
 				mergedPatient.setAgetype(ageType2);
 			}
 		}
 
-		if (StringUtils.isEmpty(mergedPatient.getAddress())) {
+		if (StringUtils.isEmpty(mergedPatient.getAddress()))
 			mergedPatient.setAddress(patient2.getAddress());
-		}
 
-		if (StringUtils.isEmpty(mergedPatient.getCity())) {
+		if (StringUtils.isEmpty(mergedPatient.getCity()))
 			mergedPatient.setCity(patient2.getCity());
-		}
 
-		if (StringUtils.isEmpty(mergedPatient.getNextKin())) {
+		if (StringUtils.isEmpty(mergedPatient.getNextKin()))
 			mergedPatient.setNextKin(patient2.getNextKin());
-		}
 
-		if (StringUtils.isEmpty(mergedPatient.getTelephone())) {
+		if (StringUtils.isEmpty(mergedPatient.getTelephone()))
 			mergedPatient.setTelephone(patient2.getTelephone());
-		}
 
-		if (StringUtils.isEmpty(mergedPatient.getMotherName())) {
+		if (StringUtils.isEmpty(mergedPatient.getMotherName()))
 			mergedPatient.setMotherName(patient2.getMotherName());
-		}
 
-		if (mergedPatient.getMother() == 'U') {
+		if (mergedPatient.getMother() == 'U')
 			mergedPatient.setMother(patient2.getMother());
-		}
 
-		if (StringUtils.isEmpty(mergedPatient.getFatherName())) {
+		if (StringUtils.isEmpty(mergedPatient.getFatherName()))
 			mergedPatient.setFatherName(patient2.getFatherName());
-		}
 
-		if (mergedPatient.getFather() == 'U') {
+		if (mergedPatient.getFather() == 'U')
 			mergedPatient.setFather(patient2.getFather());
-		}
 
-		if (StringUtils.isEmpty(mergedPatient.getBloodType())) {
+		if (StringUtils.isEmpty(mergedPatient.getBloodType()))
 			mergedPatient.setBloodType(patient2.getBloodType());
-		}
 
-		if (mergedPatient.getHasInsurance() == 'U') {
+		if (mergedPatient.getHasInsurance() == 'U')
 			mergedPatient.setHasInsurance(patient2.getHasInsurance());
-		}
 
-		if (mergedPatient.getParentTogether() == 'U') {
+		if (mergedPatient.getParentTogether() == 'U')
 			mergedPatient.setParentTogether(patient2.getParentTogether());
-		}
 
 		if (StringUtils.isEmpty(mergedPatient.getNote())) {
 			mergedPatient.setNote(patient2.getNote());
@@ -382,28 +386,36 @@ public class PatientBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param patient
-	 * @throws OHDataValidationException
+	 * @throws OHDataValidationException 
 	 */
 	protected void validatePatient(Patient patient) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-
+		
 		if (StringUtils.isEmpty(patient.getFirstName())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patient.insertfirstname.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.patient.insertfirstname.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		if (StringUtils.isEmpty(patient.getSecondName())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patient.insertsecondname.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.patient.insertsecondname.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		if (!checkAge(patient)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patient.insertvalidage.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.patient.insertvalidage.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		if (' ' == patient.getSex()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patient.pleaseselectpatientssex.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.patient.pleaseselectpatientssex.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
 	}
-
+	
 	private boolean checkAge(Patient patient) {
 		LocalDate now = LocalDate.now();
 		LocalDate birthDate = patient.getBirthDate();
@@ -412,10 +424,9 @@ public class PatientBrowserManager {
 		}
 		return birthDate != null && !birthDate.isAfter(now);
 	}
-
+	
 	/**
 	 * Method that returns the full list of Cities of the patient not logically deleted: <br>
-	 * 
 	 * @return the list of Cities (could be empty)
 	 * @throws OHServiceException
 	 */

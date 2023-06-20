@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.sessionaudit.service;
 
@@ -44,8 +44,8 @@ public class SessionAuditIoOperation {
 	/**
 	 * Return the {@link SessionAudit} from the DB
 	 * 
-	 * @param sessionAuditId
-	 *            the session audit id
+	 * @param userCode
+	 *            the user id
 	 * @return the {@link SessionAudit}
 	 */
 	public Optional<SessionAudit> getSessionAuditById(int sessionAuditId) {
@@ -57,7 +57,7 @@ public class SessionAuditIoOperation {
 	 * 
 	 * @param sessionAudit
 	 *            the new session audit
-	 * @return the audit session code
+	 * @return true if it was saved
 	 */
 	public int saveSessionAudit(SessionAudit sessionAudit) {
 		return this.repository.save(sessionAudit).getCode();

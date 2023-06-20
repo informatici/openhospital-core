@@ -17,10 +17,11 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.examination.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
@@ -37,7 +38,6 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.isf.patient.model.Patient;
-import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -54,7 +54,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PEX_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "PEX_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PEX_LAST_MODIFIED_DATE"))
-public class PatientExamination extends Auditable<String> implements Comparable<PatientExamination> {
+public class PatientExamination implements Serializable, Comparable<PatientExamination> {
 
 	private static final long serialVersionUID = 1L;
 	public static final int PEX_NOTE_LENGTH = 2000;
@@ -116,7 +116,7 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 	private String pex_note;
 	
 	@Transient
-	private volatile int hashCode;
+	private volatile int hashCode = 0;
 
 	public PatientExamination() {
 		super();
@@ -425,9 +425,7 @@ public class PatientExamination extends Auditable<String> implements Comparable<
 			double height = pex_height * (1. / 100); // convert to m
 			double weight = pex_weight; // Kg
 			return Math.round(weight / Math.pow(height, 2) * temp) / temp ; //getting Kg/m2
-		} else {
-			return 0;
-		}
+		} else return 0;
 	}
 	
 	@Override

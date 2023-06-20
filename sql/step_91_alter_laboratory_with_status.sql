@@ -1,2 +1,0 @@
-ALTER TABLE OH_LABORATORY ADD COLUMN LAB_STATUS VARCHAR(7) NULL DEFAULT 'draft'; -- draft, open, done
-UPDATE OH_LABORATORY SET LAB_STATUS = 'done'; -- for previous data

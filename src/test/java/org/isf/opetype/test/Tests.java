@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.opetype.test;
 
@@ -224,7 +224,7 @@ public class Tests extends OHCoreTestCase {
 	public void testOperationTypeEquals() throws Exception {
 		OperationType operationType = new OperationType("Z", "description");
 
-		assertThat(operationType).isEqualTo(operationType);
+		assertThat(operationType.equals(operationType)).isTrue();
 		assertThat(operationType)
 				.isNotNull()
 				.isNotEqualTo("someString");

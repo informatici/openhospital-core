@@ -21,8 +21,6 @@ To run the tests simply issue:
 Tests are run against an in-memory database (H2).  
 To test the application against MySQL, you can change [`database.properties`][database.prop] and run the Docker container in the root folder with:
 
-    # clean previous build
-    docker compose rm --stop --volumes --force
     docker-compose up
 
 

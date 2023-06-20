@@ -4,7 +4,6 @@
 bin
 logs
 /target/
-/rsc/
 .idea/
 .vscode/
 *.iml

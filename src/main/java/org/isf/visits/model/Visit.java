@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.visits.model;
 
@@ -54,7 +54,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * ------------------------------------------
  */
 @Entity
-@Table(name = "OH_VISITS")
+@Table(name="OH_VISITS")
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name = "createdBy", column = @Column(name = "VST_CREATED_BY"))
 @AttributeOverride(name = "createdDate", column = @Column(name = "VST_CREATED_DATE"))
@@ -70,37 +70,35 @@ public class Visit extends Auditable<String> {
 
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "VST_PAT_ID")
+	@JoinColumn(name="VST_PAT_ID")
 	private Patient patient;
-
+	
 	/**
-	 * if {@code null} the visit is meant for OPD.
+	 * if {@code null} the visit is meant for OPD. 
 	 */
 	@ManyToOne
-	@JoinColumn(name = "VST_WRD_ID_A")
+	@JoinColumn(name="VST_WRD_ID_A")
 	private Ward ward;
 
 	@NotNull
-	@Column(name = "VST_DATE")        // SQL type: datetime
+	@Column(name="VST_DATE") 		// SQL type: datetime
 	private LocalDateTime date;
-
-	@Column(name = "VST_NOTE")
+	
+	@Column(name="VST_NOTE")	
 	private String note;
-
-	/**
-	 * Duration of the visit in minutes
-	 */
-	@Column(name = "VST_DURATION")
+	
+	@Column(name="VST_DURATION")	
 	private Integer duration;
-
-	@Column(name = "VST_SERVICE")
+	
+	@Column(name="VST_SERVICE")	
 	private String service;
-
-	@Column(name = "VST_SMS")
+	
+	@Column(name="VST_SMS")	
 	private boolean sms;
-
+	
 	@Transient
-	private volatile int hashCode;
+	private volatile int hashCode = 0;
+	
 
 	public Visit() {
 		super();
@@ -112,12 +110,12 @@ public class Visit extends Auditable<String> {
 		this.date = TimeTools.truncateToSeconds(date);
 		this.patient = patient;
 		this.note = note;
-		this.sms = sms;
+		this.sms = sms;		
 		this.ward = ward;
 		this.duration = duration;
 		this.service = service;
 	}
-
+	
 	public LocalDateTime getDate() {
 		return date;
 	}
@@ -141,7 +139,7 @@ public class Visit extends Auditable<String> {
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
-
+	
 	public Ward getWard() {
 		return ward;
 	}
@@ -157,11 +155,7 @@ public class Visit extends Auditable<String> {
 	public void setDuration(Integer duration) {
 		this.duration = duration;
 	}
-
-	public LocalDateTime getEnd() {
-		return date == null || duration == null ? null : date.plusMinutes(duration);
-	}
-
+	
 	public String getService() {
 		return service;
 	}
@@ -169,7 +163,6 @@ public class Visit extends Auditable<String> {
 	public void setService(String service) {
 		this.service = service;
 	}
-
 	public String getNote() {
 		return note;
 	}
@@ -177,7 +170,7 @@ public class Visit extends Auditable<String> {
 	public void setNote(String note) {
 		this.note = note;
 	}
-
+	
 	public boolean isSms() {
 		return sms;
 	}
@@ -185,8 +178,9 @@ public class Visit extends Auditable<String> {
 	public void setSms(boolean sms) {
 		this.sms = sms;
 	}
-
+	
 	public String toStringSMS() {
+		
 		return formatDateTimeSMS(this.date);
 	}
 
@@ -194,27 +188,26 @@ public class Visit extends Auditable<String> {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yy - HH:mm:ss");
 		return time.format(dtf);
 	}
-
+	
 	public String formatDateTimeSMS(LocalDateTime time) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
 		return time.format(dtf);
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}
-
+		
 		if (!(obj instanceof Visit)) {
 			return false;
 		}
-
-		Visit visit = (Visit) obj;
+		
+		Visit visit = (Visit)obj;
 		return (visitID == visit.getVisitID());
 	}
-
-	@Override
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		if (ward != null) {
@@ -226,21 +219,21 @@ public class Visit extends Auditable<String> {
 			sb.append(" - ").append(service);
 		}
 		sb.append(" - ").append(formatDateTime(this.date));
-
+		
 		return sb.toString();
 	}
-
+	
 	@Override
 	public int hashCode() {
-		if (this.hashCode == 0) {
-			final int m = 23;
-			int c = 133;
-
-			c = m * c + visitID;
-
-			this.hashCode = c;
-		}
-		return this.hashCode;
+	    if (this.hashCode == 0) {
+	        final int m = 23;
+	        int c = 133;
+	        
+	        c = m * c + visitID;
+	        
+	        this.hashCode = c;
+	    }
+	    return this.hashCode;
 	}
 
 }

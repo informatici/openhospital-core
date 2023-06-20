@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.supplier.model;
 
@@ -81,7 +81,7 @@ public class Supplier extends Auditable<String> implements java.io.Serializable 
 	private char supDeleted;
 	
 	@Transient
-	private volatile int hashCode;
+	private volatile int hashCode = 0;
 
 	public Supplier() {
 		super();
@@ -204,7 +204,6 @@ public class Supplier extends Auditable<String> implements java.io.Serializable 
 		this.supDeleted = supDeleted;
 	}
 
-	@Override
 	public String toString() {
 		return this.supName;
 	}

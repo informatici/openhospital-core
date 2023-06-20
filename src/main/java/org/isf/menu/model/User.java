@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,11 +17,9 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.menu.model;
-
-import java.time.LocalDateTime;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
@@ -67,22 +65,10 @@ public class User extends Auditable<String> {
 	private String passwd;
 
 	@Column(name="US_DESC")
-	private String desc;
-
-	@Column(name="US_FAILED_ATTEMPTS")
-	private int failedAttempts;
-
-	@Column(name="US_ACCOUNT_LOCKED")
-	private boolean isAccountLocked;
-
-	@Column(name="US_LOCK_TIME")
-	private LocalDateTime lockedTime;
-
-	@Column(name="US_LAST_LOGIN")
-	private LocalDateTime lastLogin;
-
+	private String desc;	
+	
 	@Transient
-	private volatile int hashCode;
+	private volatile int hashCode = 0;
 
 	public User() {
 	}
@@ -92,8 +78,6 @@ public class User extends Auditable<String> {
 		this.userGroupName = aGroup;
 		this.passwd = aPasswd;
 		this.desc = aDesc;
-		this.failedAttempts = 0;
-		this.isAccountLocked = false;
 	}
 
 	public String getDesc() {
@@ -126,38 +110,6 @@ public class User extends Auditable<String> {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-
-	public int getFailedAttempts() {
-		return failedAttempts;
-	}
-
-	public void setFailedAttempts(int failedAttempts) {
-		this.failedAttempts = failedAttempts;
-	}
-
-	public boolean isAccountLocked() {
-		return isAccountLocked;
-	}
-
-	public void setAccountLocked(boolean accountLocked) {
-		isAccountLocked = accountLocked;
-	}
-
-	public LocalDateTime getLockedTime() {
-		return lockedTime;
-	}
-
-	public void setLockedTime(LocalDateTime lockedTime) {
-		this.lockedTime = lockedTime;
-	}
-
-	public LocalDateTime getLastLogin() {
-		return lastLogin;
-	}
-
-	public void setLastLogin(LocalDateTime lastLogin) {
-		this.lastLogin = lastLogin;
 	}
 
 	public String toString() {

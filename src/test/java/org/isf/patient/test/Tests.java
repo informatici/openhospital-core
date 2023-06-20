@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.patient.test;
 
@@ -46,7 +46,6 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.service.PatientIoOperations;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.pagination.PagedResponse;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -97,14 +96,14 @@ public class Tests extends OHCoreTestCase {
 		List<Patient> patients = patientIoOperation.getPatients();
 		testPatient.check(patients.get(patients.size() - 1));
 	}
-	
-	@Test 
+
+	@Test
 	public void testIoGetPatientsPageable() throws Exception {
-		setupTestPatient(false); 
-		PagedResponse<Patient> patients = patientIoOperation.getPatientsPageable(createPageRequest());
-		testPatient.check(patients.getData().get(patients.getData().size() - 1)); 
+		setupTestPatient(false);
+		List<Patient> patients = patientIoOperation.getPatients(createPageRequest());
+		testPatient.check(patients.get(patients.size() - 1));
 	}
-	 
+
 	private Pageable createPageRequest() {
 		return PageRequest.of(0, 10); // Page size 10
 	}
@@ -377,6 +376,19 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	public void testMgrGetPatientByName() throws Exception {
+		Integer code = setupTestPatient(false);
+		Patient foundPatient = patientIoOperation.getPatient(code);
+		Patient patient = patientBrowserManager.getPatientByName(foundPatient.getName());
+		assertThat(patient.getName()).isEqualTo(foundPatient.getName());
+	}
+
+	@Test
+	public void testMgrGetPatientByNameDoesNotExist() throws Exception {
+		assertThat(patientBrowserManager.getPatientByName("someUnusualNameThatWillNotBeFound")).isNull();
+	}
+
+	@Test
 	public void testMgrGetPatientById() throws Exception {
 		Integer code = setupTestPatient(false);
 		Patient foundPatient = patientIoOperation.getPatient(code);
@@ -645,7 +657,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testPatientEquals() throws Exception {
 		Patient patient = testPatient.setup(false);
-		assertThat(patient).isEqualTo(patient);
+		assertThat(patient.equals(patient)).isTrue();
 		assertThat(patient)
 				.isNotNull()
 				.isNotEqualTo("someString");

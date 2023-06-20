@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.medicalstock.model;
 
@@ -104,7 +104,7 @@ public class Movement extends Auditable<String> {
 	private String refNo;
 
 	@Transient
-	private volatile int hashCode;
+	private volatile int hashCode = 0;
 	
 	public Movement() { }
 
@@ -195,7 +195,6 @@ public class Movement extends Auditable<String> {
 		this.refNo = refNo;
 	}
 
-	@Override
 	public String toString() {
 		return MessageBundle.formatMessage("angal.movement.tostring.fmt.txt",
 				medical != null ? medical.toString() : "NULL",

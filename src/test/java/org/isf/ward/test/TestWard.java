@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.ward.test;
 
@@ -40,7 +40,7 @@ public class TestWard {
 	private boolean isOpd = true;
 	private boolean isPharmacy = true;
 	private boolean isFemale = true;
-	private boolean isMale;
+	private boolean isMale = false;
 	private int visitDuration = 30;
 
 	public Ward setup(boolean usingSet) throws OHException {

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.patient.model;
 
@@ -56,6 +56,9 @@ public class PatientProfilePhoto implements Serializable {
 	private byte[] photo;
 
 
+	public byte[] getPhoto() {
+		return photo;
+	}
 
 	public Image getPhotoAsImage() {
 		try {
@@ -69,6 +72,9 @@ public class PatientProfilePhoto implements Serializable {
 		}
 	}
 
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
 
 	public Patient getPatient() {
 		return patient;
@@ -77,18 +83,4 @@ public class PatientProfilePhoto implements Serializable {
 	public void setPatient(final Patient patient) {
 		this.patient = patient;
 	}
-
-
-
-	public byte[] getPhoto() {
-		return photo;
-	}
-
-
-
-	public void setPhoto(byte[] photo) {
-		this.photo = photo;
-	}
-
-
 }

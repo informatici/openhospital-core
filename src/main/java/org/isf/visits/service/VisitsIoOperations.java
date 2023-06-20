@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.visits.service;
 
@@ -78,11 +78,10 @@ public class VisitsIoOperations {
 	public List<Visit> getVisitsWard(String wardId) throws OHServiceException {
 		List<Visit> visits = null;
 
-		if (wardId != null) {
+		if (wardId != null)
 			visits = repository.findAllWhereWardByOrderDateAsc(wardId);
-		} else {
+		else
 			visits = repository.findAllByOrderByPatient_CodeAscDateAsc();
-		}
 
 		return visits;
 	}
@@ -109,6 +108,20 @@ public class VisitsIoOperations {
 	@Transactional
 	public Visit updateVisit(Visit visit) throws OHServiceException {
 		return repository.save(visit);
+	}
+	
+	/**
+	 * Deletes all {@link Visit}s related to a patID
+	 * 
+	 * @param patID - the {@link Patient} ID
+	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
+	 * @throws OHServiceException
+	 * @deprecated OP-713 raised the need of a strong link with OPDs so deletions like this one could be done safely.
+	 * 				Before that it is not possible to use this method safely.
+	 */
+	public boolean deleteAllVisits(int patID) throws OHServiceException {
+		repository.deleteByPatient_Code(patID);
+        return true;
 	}
 
 	/**

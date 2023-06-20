@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.lab.model;
 
@@ -106,12 +106,9 @@ public class Laboratory extends Auditable<String> {
 
 	@Column(name="LAB_SEX")
 	private String sex;
-	
-	@Column(name="LAB_STATUS")
-	private String status;
 
 	@Transient
-	private volatile int hashCode;
+	private volatile int hashCode = 0;
 
 	public Laboratory() { }
 
@@ -140,6 +137,12 @@ public class Laboratory extends Auditable<String> {
 	public LocalDateTime getLabDate() {
 		return labDate;
 	}
+	/*
+	 * @deprecated use getLabDate()
+	 */
+	public LocalDateTime getDate() {
+		return labDate;
+	}
 	public String getResult() {
 		return result;
 	}
@@ -161,7 +164,12 @@ public class Laboratory extends Auditable<String> {
 	public void setLabDate(LocalDateTime aDate) {
 		labDate = TimeTools.truncateToSeconds(aDate);
 	}
-
+	/*
+	 * @deprecated use setLabDate()
+	 */
+	public void setDate(LocalDateTime aDate) {
+		labDate = TimeTools.truncateToSeconds(aDate);
+	}
 	public void setResult(String aResult) {
 		result = aResult;
 	}
@@ -223,14 +231,6 @@ public class Laboratory extends Auditable<String> {
 
 	public void setSex(String sex) {
 		this.sex = sex;
-	}
-	
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 	@Override

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.examination.manager;
 
@@ -35,7 +35,7 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.pagination.PagedResponse;
+import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.isf.utils.validator.DefaultSorter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,10 +166,6 @@ public class ExaminationBrowserManager {
 	public List<PatientExamination> getLastNByPatID(int patID, int number) throws OHServiceException {
 		return ioOperations.getLastNByPatID(patID, number);
 	}
-	
-	public PagedResponse<PatientExamination> getLastNByPatIDPageable(int patID, int number) throws OHServiceException {
-		return ioOperations.getLastNByPatIDPageable(patID, number);
-	}
 
 	public List<PatientExamination> getByPatID(int patID) throws OHServiceException {
 		return ioOperations.getByPatID(patID);
@@ -184,24 +180,18 @@ public class ExaminationBrowserManager {
 	}
 
 	public String getBMIdescription(double bmi) {
-		if (bmi < 16.5) {
+		if (bmi < 16.5)
 			return MessageBundle.getMessage("angal.examination.bmi.severeunderweight.txt");
-		}
-		if (bmi >= 16.5 && bmi < 18.5) {
+		if (bmi >= 16.5 && bmi < 18.5)
 			return MessageBundle.getMessage("angal.examination.bmi.underweight.txt");
-		}
-		if (bmi >= 18.5 && bmi < 24.5) {
+		if (bmi >= 18.5 && bmi < 24.5)
 			return MessageBundle.getMessage("angal.examination.bmi.normalweight.txt");
-		}
-		if (bmi >= 24.5 && bmi < 30) {
+		if (bmi >= 24.5 && bmi < 30)
 			return MessageBundle.getMessage("angal.examination.bmi.overweight.txt");
-		}
-		if (bmi >= 30 && bmi < 35) {
+		if (bmi >= 30 && bmi < 35)
 			return MessageBundle.getMessage("angal.examination.bmi.obesityclassilight.txt");
-		}
-		if (bmi >= 35 && bmi < 40) {
+		if (bmi >= 35 && bmi < 40)
 			return MessageBundle.getMessage("angal.examination.bmi.obesityclassiimedium.txt");
-		}
 		return MessageBundle.getMessage("angal.examination.bmi.obesityclassiiisevere.txt");
 	}
 
@@ -266,9 +256,8 @@ public class ExaminationBrowserManager {
 	}
 
 	public String getBowelDescriptionTranslated(String pexBowelDescKey) {
-		if (bowelDescriptionHashMap == null) {
+		if (bowelDescriptionHashMap == null)
 			buildBowelDescriptionHashMap();
-		}
 		return bowelDescriptionHashMap.get(pexBowelDescKey);
 	}
 
@@ -285,9 +274,8 @@ public class ExaminationBrowserManager {
 	}
 
 	public String getDiuresisDescriptionTranslated(String pexDiuresisDescKey) {
-		if (diuresisDescriptionHashMap == null) {
+		if (diuresisDescriptionHashMap == null)
 			buildDiuresisDescriptionHashMap();
-		}
 		return diuresisDescriptionHashMap.get(pexDiuresisDescKey);
 	}
 
@@ -315,17 +303,24 @@ public class ExaminationBrowserManager {
 		buildDiuresisDescriptionHashMap();
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		if (patex.getPex_note() != null && patex.getPex_note().length() > PatientExamination.PEX_NOTE_LENGTH) {
-			errors.add(
-					new OHExceptionMessage(MessageBundle.formatMessage("angal.common.thenoteistoolongmaxchars.fmt.msg", PatientExamination.PEX_NOTE_LENGTH)));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.formatMessage("angal.common.thenoteistoolongmaxchars.fmt.msg", PatientExamination.PEX_NOTE_LENGTH),
+							OHSeverityLevel.ERROR));
 		}
 		if (patex.getPex_diuresis_desc() != null && !diuresisDescriptionHashMap.containsKey(patex.getPex_diuresis_desc())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.examination.pleaseinsertavaliddiuresisdescription.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.examination.pleaseinsertavaliddiuresisdescription.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		if (patex.getPex_bowel_desc() != null && !bowelDescriptionHashMap.containsKey(patex.getPex_bowel_desc())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.examination.pleaseinsertavalidboweldescription.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.examination.pleaseinsertavalidboweldescription.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		if (patex.getPex_auscultation() != null && !auscultationHashMap.containsKey(patex.getPex_auscultation())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.examination.pleaseinsertavalidauscultationdescription.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.examination.pleaseinsertavalidauscultationdescription.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.opd.service;
 
@@ -82,12 +82,12 @@ public class OpdIoOperationRepositoryImpl implements OpdIoOperationRepositoryCus
 					cb.equal(opd.join("ward").get("code"), ward.getCode())
 			);
 		}
-		if (diseaseTypeCode != null && !diseaseTypeCode.equals("")) {
+		if (diseaseTypeCode != null) {
 			predicates.add(
 					cb.equal(opd.join("disease").join("diseaseType").get("code"), diseaseTypeCode)
 			);
 		}
-		if (diseaseCode != null && !diseaseCode.equals("")) {
+		if (diseaseCode != null) {
 			predicates.add(
 					cb.equal(opd.join("disease").get("code"), diseaseCode)
 			);

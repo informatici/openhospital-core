@@ -17,30 +17,28 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.dicom.model;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Blob;
 import java.time.LocalDateTime;
 
 import javax.imageio.ImageIO;
 import javax.persistence.AttributeOverride;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.sql.rowset.serial.SerialBlob;
@@ -78,14 +76,10 @@ public class FileDicom extends Auditable<String> {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "DM_FILE_ID")
 	private long idFile;
-
-	@OneToOne(
-			mappedBy = "fileDicom",
-			fetch = FetchType.EAGER,
-			cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE },
-			orphanRemoval = true
-	)
-	private DicomData dicomData;
+	
+	@Column(name = "DM_DATA")
+	@Lob
+	private Blob dicomData; //TODO: move to a separated entity
 
 	@NotNull
 	@Column(name="DM_PAT_ID")
@@ -124,7 +118,7 @@ public class FileDicom extends Auditable<String> {
 	private String dicomStudyId = "";
 
 	@Column(name = "DM_FILE_ST_DATE")	// SQL type: datetime
-	private LocalDateTime dicomStudyDate;
+	private LocalDateTime dicomStudyDate = null;
 
 	@Column(name = "DM_FILE_ST_DESCR")
 	private String dicomStudyDescription = "";
@@ -144,7 +138,7 @@ public class FileDicom extends Auditable<String> {
 	private String dicomSeriesDescriptionCodeSequence = "";
 
 	@Column(name = "DM_FILE_SER_DATE")	// SQL type: datetime
-	private LocalDateTime dicomSeriesDate;
+	private LocalDateTime dicomSeriesDate = null;
 
 	@Column(name = "DM_FILE_SER_DESC")
 	private String dicomSeriesDescription = "";
@@ -164,7 +158,7 @@ public class FileDicom extends Auditable<String> {
 	private int frameCount = -1;
 	
 	@Transient
-	private volatile int hashCode;
+	private volatile int hashCode = 0;
 	
 	@ManyToOne(optional=true) 
 	@JoinColumn(name="DM_DCMT_ID", nullable=true)
@@ -205,9 +199,10 @@ public class FileDicom extends Auditable<String> {
 	}
 
 	/**
-	 * Construct a Detailed DICOM Data Model
+	 * Construct an Detailed DICOM Data Model
 	 */
-	public FileDicom(int patId, DicomData dicomData, long idFile, String fileName, String dicomAccessionNumber, String dicomInstitutionName, String dicomPatientID,
+
+	public FileDicom(int patId, Blob dicomData, long idFile, String fileName, String dicomAccessionNumber, String dicomInstitutionName, String dicomPatientID, 
 			String dicomPatientName, String dicomPatientAddress, String dicomPatientAge, String dicomPatientSex, String dicomPatientBirthDate, 
 			String dicomStudyId, LocalDateTime dicomStudyDate, String dicomStudyDescription, String dicomSeriesUID, String dicomSeriesInstanceUID,
 			String dicomSeriesNumber, String dicomSeriesDescriptionCodeSequence, LocalDateTime dicomSeriesDate, String dicomSeriesDescription,
@@ -280,7 +275,7 @@ public class FileDicom extends Auditable<String> {
 	/**
 	 * @return the dicomData
 	 */
-	public DicomData getDicomData() {
+	public Blob getDicomData() {
 		return dicomData;
 	}
 
@@ -288,7 +283,7 @@ public class FileDicom extends Auditable<String> {
 	 * @param dicomData
 	 *            the dicomData to set
 	 */
-	public void setDicomData(DicomData dicomData) {
+	public void setDicomData(Blob dicomData) {
 		this.dicomData = dicomData;
 	}
 
@@ -299,10 +294,13 @@ public class FileDicom extends Auditable<String> {
 	 *            the dicomFile to set
 	 */
 	public void setDicomData(File dicomFile) {
-		DicomData dicomData = new DicomData();
-		dicomData.setData(dicomFile);
-		dicomData.setFileDicom(this);
-		this.dicomData = dicomData;
+		try (FileInputStream fis = new FileInputStream(dicomFile)) {
+			byte[] byteArray = new byte[fis.available()];
+			fis.read(byteArray);
+			this.dicomData = new SerialBlob(byteArray);
+		} catch (Exception exception) {
+			LOGGER.error(exception.getMessage(), exception);
+		}
 	}
 
 	/**

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.lab.test;
 
@@ -57,7 +57,7 @@ public class TestLaboratory {
 			// Create Laboratory with all parameters 
 			laboratory = new Laboratory(exam, labDate, result, note, patient, patName);
 			laboratory.setAge(age);
-			laboratory.setLabDate(labDate);
+			laboratory.setDate(labDate);
 			laboratory.setInOutPatient(InOutPatient);
 			laboratory.setMaterial(material);
 			laboratory.setResult(result);
@@ -69,7 +69,7 @@ public class TestLaboratory {
 
 	public void setParameters(Laboratory laboratory, Exam exam, Patient patient) {
 		laboratory.setAge(age);
-		laboratory.setLabDate(labDate);
+		laboratory.setDate(labDate);
 		laboratory.setExam(exam);
 		laboratory.setInOutPatient(InOutPatient);
 		laboratory.setMaterial(material);
@@ -91,7 +91,7 @@ public class TestLaboratory {
 			assertThat(laboratory.getAge()).isEqualTo(age);
 			assertThat(laboratory.getPatName()).isEqualTo(patName);
 		}
-		assertThat(laboratory.getLabDate()).isCloseTo(labDate, within(1, ChronoUnit.SECONDS));
+		assertThat(laboratory.getDate()).isCloseTo(labDate, within(1, ChronoUnit.SECONDS));
 		assertThat(laboratory.getInOutPatient()).isEqualTo(InOutPatient);
 		assertThat(laboratory.getMaterial()).isEqualTo(material);
 		assertThat(laboratory.getNote()).isEqualTo(note);

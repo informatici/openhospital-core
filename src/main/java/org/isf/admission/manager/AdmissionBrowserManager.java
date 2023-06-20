@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.admission.manager;
 
@@ -36,11 +36,10 @@ import org.isf.patient.model.Patient;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.pagination.PagedResponse;
+import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -80,11 +79,11 @@ public class AdmissionBrowserManager {
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
 	public List<AdmittedPatient> getAdmittedPatients(LocalDateTime[] admissionRange, LocalDateTime[] dischargeRange, String searchTerms)
-					throws OHServiceException {
+			throws OHServiceException {
 		return ioOperations.getAdmittedPatients(searchTerms, admissionRange, dischargeRange);
 	}
 
-	public AdmittedPatient loadAdmittedPatients(int patientId) {
+	public AdmittedPatient loadAdmittedPatients(Integer patientId) {
 		return ioOperations.loadAdmittedPatient(patientId);
 	}
 
@@ -118,34 +117,6 @@ public class AdmissionBrowserManager {
 	 */
 	public List<Admission> getAdmissions(Patient patient) throws OHServiceException {
 		return ioOperations.getAdmissions(patient);
-	}
-
-	/**
-	 * Method that returns the list of Admissions not logically deleted
-	 * within the specified date range, divided by pages
-	 *
-	 * @return the list of Admissions (could be empty)
-	 * @throws OHServiceException
-	 */
-	public List<Admission> getAdmissions(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
-		return ioOperations.getAdmissionsByAdmissionDate(dateFrom, dateTo, PageRequest.of(page, size));
-	}
-	public PagedResponse<Admission> getAdmissionsPageable(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
-		return ioOperations.getAdmissionsByAdmissionDates(dateFrom, dateTo, PageRequest.of(page, size));
-	}
-
-	/**
-	 * Method that returns the list of completed Admissions (Discharges) not logically deleted
-	 * within the specified date range, divided by pages
-	 *
-	 * @return the list of completed Admissions (could be empty)
-	 * @throws OHServiceException
-	 */
-	public List<Admission> getDischarges(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
-		return ioOperations.getAdmissionsByDischargeDate(dateFrom, dateTo, PageRequest.of(page, size));
-	}
-	public PagedResponse<Admission> getDischargesPageable(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
-		return ioOperations.getAdmissionsByDischargeDates(dateFrom, dateTo, PageRequest.of(page, size));
 	}
 
 	/**
@@ -270,21 +241,29 @@ public class AdmissionBrowserManager {
 		LocalDateTime today = TimeTools.getDateToday24();
 		// get year prog ( not null)
 		if (admission.getYProg() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertacorrectprogressiveid.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.admission.pleaseinsertacorrectprogressiveid.msg"),
+					OHSeverityLevel.ERROR));
 		}
-
+		
 		Ward ward = admission.getWard();
 		if (ward == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.admissionwardcannotbeempty.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.admission.admissionwardcannotbeempty.msg"),
+							OHSeverityLevel.ERROR));
 			throw new OHDataValidationException(errors);
 		}
 		LocalDateTime dateIn = admission.getAdmDate();
 		if (dateIn == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.admissiondatecannotbeempty.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.admission.admissiondatecannotbeempty.msg"),
+							OHSeverityLevel.ERROR));
 			throw new OHDataValidationException(errors);
 		}
 		if (dateIn.isAfter(today)) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.futuredatenotallowed.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.admission.futuredatenotallowed.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		if (dateIn.isBefore(today)) {
 			// check for invalid date
@@ -292,14 +271,18 @@ public class AdmissionBrowserManager {
 				if (!insert && ad.getId() == admission.getId()) {
 					continue;
 				}
-				if ((ad.getAdmDate().isBefore(dateIn) || ad.getAdmDate().isEqual(dateIn))
-								&& (ad.getDisDate() != null && ad.getDisDate().isAfter(dateIn))) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.ininserteddatepatientwasalreadyadmitted.msg")));
+				if ((ad.getAdmDate().isBefore(dateIn) || ad.getAdmDate().compareTo(dateIn) == 0)
+						&& (ad.getDisDate() != null && ad.getDisDate().isAfter(dateIn))) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.admission.ininserteddatepatientwasalreadyadmitted.msg"),
+							OHSeverityLevel.ERROR));
 				}
 			}
 		}
 		if (admission.getDiseaseIn() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisincannotbeempty.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.admission.diagnosisincannotbeempty.msg"),
+							OHSeverityLevel.ERROR));
 		}
 
 		Admission last;
@@ -310,15 +293,21 @@ public class AdmissionBrowserManager {
 		}
 		if (admission.getDisDate() == null && !insert && admission.getId() != last.getId()) {
 			// if we are editing an old admission
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.youareeditinganoldadmission.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.admission.youareeditinganoldadmission.msg"),
+					OHSeverityLevel.ERROR));
 		} else if (admission.getDisDate() != null) {
 			LocalDateTime dateOut = admission.getDisDate();
 			// date control
 			if (dateOut.isBefore(dateIn)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.dischargedatemustbeafteradmissiondate.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.admission.dischargedatemustbeafteradmissiondate.msg"),
+						OHSeverityLevel.ERROR));
 			}
 			if (dateOut.isAfter(today)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.futuredatenotallowed.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.admission.futuredatenotallowed.msg"),
+						OHSeverityLevel.ERROR));
 			} else {
 				// check for invalid date
 				boolean invalidDate = false;
@@ -332,10 +321,12 @@ public class AdmissionBrowserManager {
 					// found an open admission
 					// only if i close my own first of it
 					if (ad.getDisDate() == null) {
-						if (!dateOut.isAfter(ad.getAdmDate())) {
-							// ok
-						} else {
-							errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.intheselecteddatepatientwasadmittedagain.msg")));
+						if (!dateOut.isAfter(ad.getAdmDate()))
+							;// ok
+						else {
+							errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+									MessageBundle.getMessage("angal.admission.intheselecteddatepatientwasadmittedagain.msg"),
+									OHSeverityLevel.ERROR));
 						}
 					}
 					// general case
@@ -356,25 +347,33 @@ public class AdmissionBrowserManager {
 					}
 				}
 				if (invalidDate) {
-					errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.admission.invalidadmissionperiod.fmt.msg",
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.formatMessage("angal.admission.invalidadmissionperiod.fmt.msg",
 									DateTimeFormatter.ISO_LOCAL_DATE.format(invalidStart),
-									DateTimeFormatter.ISO_LOCAL_DATE.format(invalidEnd))));
+									DateTimeFormatter.ISO_LOCAL_DATE.format(invalidEnd)),
+							OHSeverityLevel.ERROR));
 				}
 			}
 
 			if (admission.getDiseaseOut1() == null && admission.getDisDate() != null) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseselectatleastfirstdiagnosisout.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.admission.pleaseselectatleastfirstdiagnosisout.msg"),
+						OHSeverityLevel.ERROR));
 			} else if (admission.getDiseaseOut1() != null && admission.getDisDate() == null) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertadischargedate.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.admission.pleaseinsertadischargedate.msg"),
+						OHSeverityLevel.ERROR));
 			}
 
 			Float f = admission.getWeight();
 			if (f != null && f < 0.0f) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidweightvalue.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.getMessage("angal.admission.pleaseinsertavalidweightvalue.msg"),
+						OHSeverityLevel.ERROR));
 			}
-
+			
 			if (ward != null && ward.getCode().equalsIgnoreCase("M")) {
-
+				
 				LocalDateTime visitDate = admission.getVisitDate();
 				if (visitDate != null) {
 					LocalDateTime limit;
@@ -384,10 +383,12 @@ public class AdmissionBrowserManager {
 						limit = admission.getDisDate();
 					}
 					if (visitDate.isBefore(dateIn) || visitDate.isAfter(limit)) {
-						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidvisitdate.msg")));
+						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+								MessageBundle.getMessage("angal.admission.pleaseinsertavalidvisitdate.msg"),
+								OHSeverityLevel.ERROR));
 					}
 				}
-
+				
 				if (admission.getDeliveryDate() != null) {
 					LocalDateTime deliveryDate = admission.getDeliveryDate();
 
@@ -407,7 +408,9 @@ public class AdmissionBrowserManager {
 					}
 
 					if (deliveryDate.isBefore(start) || deliveryDate.isAfter(limit)) {
-						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavaliddeliverydate.msg")));
+						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+								MessageBundle.getMessage("angal.admission.pleaseinsertavaliddeliverydate.msg"),
+								OHSeverityLevel.ERROR));
 					}
 				}
 
@@ -415,7 +418,9 @@ public class AdmissionBrowserManager {
 				if (ctrl1Date != null) {
 					// date control
 					if (admission.getDeliveryDate() == null) {
-						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.controln1datenodeliverydatefound.msg")));
+						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+								MessageBundle.getMessage("angal.admission.controln1datenodeliverydatefound.msg"),
+								OHSeverityLevel.ERROR));
 					}
 					LocalDateTime limit;
 					if (admission.getDisDate() == null) {
@@ -424,14 +429,18 @@ public class AdmissionBrowserManager {
 						limit = admission.getDisDate();
 					}
 					if (ctrl1Date.isBefore(admission.getDeliveryDate()) || ctrl1Date.isAfter(limit)) {
-						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidcontroln1date.msg")));
+						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+								MessageBundle.getMessage("angal.admission.pleaseinsertavalidcontroln1date.msg"),
+								OHSeverityLevel.ERROR));
 					}
 				}
 
 				LocalDateTime ctrl2Date = admission.getCtrlDate2();
 				if (ctrl2Date != null) {
 					if (admission.getCtrlDate1() == null) {
-						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.controldaten2controldaten1notfound.msg")));
+						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+								MessageBundle.getMessage("angal.admission.controldaten2controldaten1notfound.msg"),
+								OHSeverityLevel.ERROR));
 					}
 					// date control
 					LocalDateTime limit;
@@ -441,7 +450,9 @@ public class AdmissionBrowserManager {
 						limit = admission.getDisDate();
 					}
 					if (ctrl1Date != null && (ctrl2Date.isBefore(ctrl1Date) || ctrl2Date.isAfter(limit))) {
-						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidcontroln2date.msg")));
+						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+								MessageBundle.getMessage("angal.admission.pleaseinsertavalidcontroln2date.msg"),
+								OHSeverityLevel.ERROR));
 					}
 				}
 				LocalDateTime abortDate = admission.getAbortDate();
@@ -453,10 +464,11 @@ public class AdmissionBrowserManager {
 					} else {
 						limit = admission.getDisDate();
 					}
-					if (ctrl2Date != null && abortDate.isBefore(ctrl2Date) || ctrl1Date != null && abortDate.isBefore(ctrl1Date)
-									|| abortDate.isBefore(visitDate)
-									|| abortDate.isAfter(limit)) {
-						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidabortdate.msg")));
+					if (ctrl2Date != null && abortDate.isBefore(ctrl2Date) || ctrl1Date != null && abortDate.isBefore(ctrl1Date) || abortDate.isBefore(visitDate)
+							|| abortDate.isAfter(limit)) {
+						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+								MessageBundle.getMessage("angal.admission.pleaseinsertavalidabortdate.msg"),
+								OHSeverityLevel.ERROR));
 					}
 				}
 			}

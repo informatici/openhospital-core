@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.generaldata;
 
@@ -94,9 +94,6 @@ public final class GeneralData extends ConfigurationProperties {
 
 	public static boolean STRONGPASSWORD;
 	public static int STRONGLENGTH;
-	public static int PASSWORDTRIES;
-	public static int PASSWORDLOCKTIME;
-	public static int PASSWORDIDLE;
 
 	private static final String DEFAULT_LANGUAGE = "en";
 	private static final boolean DEFAULT_SINGLEUSER = false;
@@ -142,13 +139,11 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_PATIENTBILLGROUPED = "PatientBillGrouped";
 	private static final String DEFAULT_PATIENTBILLSTATEMENT = "PatientBillStatement";
 	private static final boolean DEFAULT_DEBUG = false;
-	private static final int DEFAULT_STRONGLENGTH = 6;
+	private static final int DEFAULT_STRONGLENGTH = 10;
 	private static final int DEFAULT_SESSIONTIMEOUT = 5;
 	private static final boolean DEFAULT_STRONGPASSWORD = true;
-	private static final int DEFAULT_PASSWORDTRIES = 5;
-	private static final int DEFAULT_PASSWORDLOCKTIME = 60; // minutes
-	private static final int DEFAULT_PASSWORDIDLE = 365; // days
 	private static final String DEFAULT_PATIENTPHOTOSTORAGE = "DB";
+	
 	public static final int IMAGE_THUMBNAIL_MAX_WIDTH = 140;
 	public static final int MAX_PROFILE_IMAGE_FILE_SIZE_BYTES = 32768;
 	
@@ -208,27 +203,11 @@ public final class GeneralData extends ConfigurationProperties {
 		PATIENTBILLGROUPED = myGetProperty("PATIENTBILLGROUPED", DEFAULT_PATIENTBILLGROUPED);
 		PATIENTBILLSTATEMENT = myGetProperty("PATIENTBILLSTATEMENT", DEFAULT_PATIENTBILLSTATEMENT);
 		DEBUG = myGetProperty("DEBUG", DEFAULT_DEBUG);
-
 		STRONGPASSWORD = myGetProperty("STRONGPASSWORD", DEFAULT_STRONGPASSWORD);
 		STRONGLENGTH = myGetProperty("STRONGLENGTH", DEFAULT_STRONGLENGTH);
-		// set same reasonable minimum and ensure it isn't negative; zero is used to skip length test
-		if (STRONGLENGTH != 0 && STRONGLENGTH < 0) {
-			STRONGLENGTH = DEFAULT_STRONGLENGTH;
-		}
-		PASSWORDTRIES = myGetProperty("PASSWORDTRIES", DEFAULT_PASSWORDTRIES);
-		// ensure reasonable non-negative value; zero is used to skip the password retries test
-		if (PASSWORDTRIES != 0 && PASSWORDTRIES < DEFAULT_PASSWORDTRIES) {
-			PASSWORDTRIES = DEFAULT_PASSWORDTRIES;
-		}
-		PASSWORDLOCKTIME = myGetProperty("PASSWORDLOCKTIME", DEFAULT_PASSWORDLOCKTIME);
-		// ensure reasonable non-negative value; is password retries is disabled then lock time isn't used
-		if (PASSWORDTRIES != 0 && PASSWORDLOCKTIME < DEFAULT_PASSWORDLOCKTIME) {
-			PASSWORDLOCKTIME = DEFAULT_PASSWORDLOCKTIME;
-		}
-		PASSWORDIDLE = myGetProperty("PASSWORDIDLE", DEFAULT_PASSWORDIDLE);
-		// Zero indicates no idle check
-		if (PASSWORDIDLE < 0) {
-			PASSWORDIDLE = 0;
+		// set same reasonable minimum and ensure it isn't negative
+		if (STRONGLENGTH < 6) {
+			STRONGLENGTH = 6;
 		}
 		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTOSTORAGE);
 		SESSIONTIMEOUT = myGetProperty("SESSIONTIMEOUT", DEFAULT_SESSIONTIMEOUT);

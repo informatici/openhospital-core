@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.malnutrition.test;
 
@@ -664,7 +664,7 @@ public class Tests extends OHCoreTestCase {
 				LocalDateTime.of(1, 10, 11, 0, 0, 0), admission, patient, 185.47f, 70.70f);
 
 		// matches itself
-		assertThat(malnutrition1).isEqualTo(malnutrition1);
+		assertThat(malnutrition1.equals(malnutrition1)).isTrue();
 
 		// does not match because wrong class
 		assertThat(malnutrition1)

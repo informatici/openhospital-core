@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.sessionaudit.manager;
 
@@ -42,7 +42,7 @@ public class SessionAuditManager {
 	/**
 	 * Retrieves the {@link SessionAudit} associated to the given user id.
 	 *
-	 * @param sessionAuditId the session audit id.
+	 * @param userCode the user id.
 	 * @return the users {@link SessionAudit}
 	 * @throws OHServiceException
 	 */
@@ -64,7 +64,7 @@ public class SessionAuditManager {
 	/**
 	 * Updates the specified {@link SessionAudit}.
 	 *
-	 * @param sessionAudit the {@link SessionAudit} to update
+	 * @param malnutrition the {@link SessionAudit} to update
 	 * @return the updated {@link SessionAudit}
 	 * @throws OHServiceException
 	 */

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.dicom.test;
 
@@ -126,7 +126,7 @@ public class Tests extends OHCoreTestCase {
 		long code = setupTestFileDicom(false);
 		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).get();
 		FileDicom dicom = dicomIoOperation.loadDetails(foundFileDicom.getIdFile(), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
-		FileDicom dicom2 = dicomIoOperation.loadDetails(Long.valueOf(foundFileDicom.getIdFile()), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
+		FileDicom dicom2 = dicomIoOperation.loadDetails(new Long(foundFileDicom.getIdFile()), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
 		assertThat(dicom2.getDicomInstanceUID()).isEqualTo(dicom.getDicomInstanceUID());
 		assertThat(dicom.getDicomSeriesDescription()).isEqualTo(foundFileDicom.getDicomSeriesDescription());
 	}
@@ -317,7 +317,7 @@ public class Tests extends OHCoreTestCase {
 		DicomType dicomType = testDicomType.setup(false);
 		FileDicom fileDicom = testFileDicom.setup(dicomType, true);
 
-		assertThat(fileDicom).isEqualTo(fileDicom);
+		assertThat(fileDicom.equals(fileDicom)).isTrue();
 		assertThat(fileDicom)
 				.isNotNull()
 				.isNotEqualTo("someString");

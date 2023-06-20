@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.utils.excel;
 
@@ -129,7 +129,9 @@ public class ExcelExporter {
 	 * @param jtable
 	 * @param file
 	 * @throws IOException
+	 * @deprecated use exportTableToExcel method
 	 */
+	@Deprecated
 	public void exportTableToCSV(JTable jtable, File file) throws IOException {
 		exportTableToCSV(jtable, file, ";");
 	}
@@ -183,11 +185,10 @@ public class ExcelExporter {
 					} else {
 						strVal = " ";
 					}
-					if (j == colCount - 1) {
+					if (j == colCount - 1)
 						outFile.write(strVal);
-					} else {
+					else
 						outFile.write(strVal + separator);
-					}
 				}
 				outFile.write("\n");
 			}
@@ -201,7 +202,9 @@ public class ExcelExporter {
 	 * @param exportFile
 	 * @throws IOException
 	 * @throws OHException
+	 * @deprecated use exportTableToExcel method
 	 */
+	@Deprecated
 	public void exportResultsetToCSV(ResultSet resultSet, File exportFile) throws IOException, OHException {
 		exportResultsetToCSV(resultSet, exportFile, ";");
 	}
@@ -232,11 +235,10 @@ public class ExcelExporter {
 
 				int colCount = rsmd.getColumnCount();
 				for (int i = 1; i <= colCount; i++) {
-					if (i == colCount - 1) {
+					if (i == colCount - 1)
 						output.write(rsmd.getColumnName(i));
-					} else {
+					else
 						output.write(rsmd.getColumnName(i) + separator);
-					}
 				}
 				output.write("\n");
 
@@ -261,11 +263,10 @@ public class ExcelExporter {
 						} else {
 							strVal = " ";
 						}
-						if (i == colCount - 1) {
+						if (i == colCount - 1)
 							output.write(strVal);
-						} else {
+						else
 							output.write(strVal + separator);
-						}
 
 					}
 					output.write("\n");
@@ -284,7 +285,9 @@ public class ExcelExporter {
 	 * @param exportFile
 	 * @throws IOException
 	 * @throws OHException
+	 * @deprecated use exportDataToExcel
 	 */
+	@Deprecated
 	public void exportDataToCSV(Collection data, File exportFile) throws IOException, OHException {
 
 		try (FileWriter outFile = new FileWriter(exportFile)) {
@@ -344,20 +347,13 @@ public class ExcelExporter {
 	 *
 	 * @param jtable
 	 * @param file
+	 * @param columnCount (optional) if not specified or -1 then get the column count from the table model; if specified use that number for the column count
 	 * @throws IOException
 	 */
 	public void exportTableToExcel(JTable jtable, File file) throws IOException {
 		exportTableToExcel(jtable, file, -1);
 	}
 
-	/**
-	 * Export a {@link JTable} to Excel using Apache POI library
-	 *
-	 * @param jtable
-	 * @param file
-	 * @param columnCount if -1 then get the column count from the table model; if specified use that number for the column count
-	 * @throws IOException
-	 */
 	public void exportTableToExcel(JTable jtable, File file, int columnCount) throws IOException {
 		TableModel model = jtable.getModel();
 		FileOutputStream fileStream = new FileOutputStream(file);
@@ -537,20 +533,13 @@ public class ExcelExporter {
 	 *
 	 * @param jtable
 	 * @param file
+	 * @param columnCount (optional) if not specified or -1 then get the column count from the table model; if specified use that number for the column count
 	 * @throws IOException
 	 */
 	public void exportTableToExcelOLD(JTable jtable, File file) throws IOException {
 		exportTableToExcelOLD(jtable, file, -1);
 	}
 
-	/**
-	 * Export a {@link JTable} to Excel 97-2003 using Apache POI library
-	 *
-	 * @param jtable
-	 * @param file
-	 * @param columnCount if -1 then get the column count from the table model; othereise use the specfied number for the column count
-	 * @throws IOException
-	 */
 	public void exportTableToExcelOLD(JTable jtable, File file, int columnCount) throws IOException {
 		TableModel model = jtable.getModel();
 		FileOutputStream fileStream = new FileOutputStream(file);

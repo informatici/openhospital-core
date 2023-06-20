@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.medicalstock.test;
 
@@ -49,7 +49,7 @@ import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperationRepository;
 import org.isf.medicalstockward.service.MovementWardIoOperationRepository;
 import org.isf.medstockmovtype.model.MovementType;
-import org.isf.medstockmovtype.service.MedicalDsrStockMovementTypeIoOperationRepository;
+import org.isf.medstockmovtype.service.MedicalStockMovementTypeIoOperationRepository;
 import org.isf.medstockmovtype.test.TestMovementType;
 import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.service.MedicalTypeIoOperationRepository;
@@ -119,7 +119,7 @@ public class Tests extends OHCoreTestCase {
 	@Autowired
 	MovementIoOperationRepository movementIoOperationRepository;
 	@Autowired
-	MedicalDsrStockMovementTypeIoOperationRepository medicalDsrStockMovementTypeIoOperationRepository;
+	MedicalStockMovementTypeIoOperationRepository medicalStockMovementTypeIoOperationRepository;
 	@Autowired
 	SupplierIoOperationRepository supplierIoOperationRepository;
 	@Autowired
@@ -267,7 +267,7 @@ public class Tests extends OHCoreTestCase {
 		MovementType dischargeMovementType = testMovementType.setup(false); //prepare discharge movement
 		dischargeMovementType.setCode("discharge");
 		dischargeMovementType.setType("-");
-		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(dischargeMovementType);
+		medicalStockMovementTypeIoOperationRepository.saveAndFlush(dischargeMovementType);
 
 		Movement dischargeMovement = new Movement(
 				medical,
@@ -1025,7 +1025,7 @@ public class Tests extends OHCoreTestCase {
 	public void testLotEquals() throws Exception {
 		String code = setupTestLot(true);
 		Lot lot = lotIoOperationRepository.findById(code).get();
-		assertThat(lot).isEqualTo(lot);
+		assertThat(lot.equals(lot)).isTrue();
 		assertThat(lot)
 				.isNotNull()
 				.isNotEqualTo("someString");
@@ -1084,7 +1084,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMovementEquals() throws Exception {
 		int code = setupTestMovement(false);
 		Movement movement = movementIoOperationRepository.findById(code).get();
-		assertThat(movement).isEqualTo(movement);
+		assertThat(movement.equals(movement)).isTrue();
 		assertThat(movement)
 				.isNotNull()
 				.isNotEqualTo("someString");
@@ -1138,7 +1138,7 @@ public class Tests extends OHCoreTestCase {
 		Movement movement = testMovement.setup(medical, movementType, ward, lot, supplier, usingSet);
 		supplierIoOperationRepository.saveAndFlush(supplier);
 		wardIoOperationRepository.saveAndFlush(ward);
-		medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
+		medicalStockMovementTypeIoOperationRepository.saveAndFlush(movementType);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		lotIoOperationRepository.saveAndFlush(lot);

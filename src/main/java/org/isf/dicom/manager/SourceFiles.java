@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.dicom.manager;
 
@@ -51,6 +51,7 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.file.FileTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +78,7 @@ public class SourceFiles extends Thread {
 	private FileDicom fileDicom;
 	private int patient;
 	private int filesCount;
-	private int filesLoaded;
+	private int filesLoaded = 0;
 	private AbstractDicomLoader dicomLoader;
 	private AbstractThumbnailViewGui thumbnail;
 
@@ -136,9 +137,8 @@ public class SourceFiles extends Thread {
 				}
 				filesLoaded++;
 				dicomLoader.setLoaded(filesLoaded);
-			} else if (!".".equals(value.getName()) && !"..".equals(value.getName())) {
+			} else if (!".".equals(value.getName()) && !"..".equals(value.getName()))
 				loadDicomDir(fileDicom, value, patient);
-			}
 		}
 	}
 
@@ -155,14 +155,14 @@ public class SourceFiles extends Thread {
 		for (File value : files) {
 			if (!value.isDirectory()) {
 				if (!checkSize(value)) {
-					throw new OHDicomException(new OHExceptionMessage(
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
 							MessageBundle.formatMessage("angal.dicom.afileinthefolderistoobigpleasesetdicommaxsizeindicomproperties.fmt.msg",
-							                            DicomManagerFactory.getMaxDicomSize())));
+									DicomManagerFactory.getMaxDicomSize()),
+							OHSeverityLevel.ERROR));
 				}
 				num++;
-			} else if (!".".equals(value.getName()) && !"..".equals(value.getName())) {
+			} else if (!".".equals(value.getName()) && !"..".equals(value.getName()))
 				num = num + countFiles(value, patient);
-			}
 		}
 		return num;
 	}
@@ -195,10 +195,11 @@ public class SourceFiles extends Thread {
 			} else if (isDicom) {
 				DicomInputStream dicomInputStream;
 				try {
-					dicomInputStream = new DicomInputStream(sourceFile);
-				} catch (DicomStreamException dicomStreamException) {
-					throw new OHDicomException(new OHExceptionMessage(
-							MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", fileName)));
+			        dicomInputStream = new DicomInputStream(sourceFile);
+				} catch(DicomStreamException dicomStreamException) {
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					                                                  MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", fileName),
+					                                                  OHSeverityLevel.ERROR));
 				}
 				Attributes attributes = dicomInputStream.readDataset();
 				seriesDate = getSeriesDateTime(attributes);
@@ -209,7 +210,9 @@ public class SourceFiles extends Thread {
 					LOGGER.error("DICOM: Unparsable SeriesNumber");
 				}
 			} else {
-				throw new OHDicomException(new OHExceptionMessage(MessageBundle.formatMessage("angal.dicom.dicomformatnotsupported.fmt.msg", fileName)));
+				throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+				                                                  MessageBundle.formatMessage("angal.dicom.dicomformatnotsupported.fmt.msg", fileName),
+				                                                  OHSeverityLevel.ERROR));
 			}
 			dicomFileDetail.setFrameCount(numfiles);
 			dicomFileDetail.setDicomData(sourceFile);
@@ -255,9 +258,8 @@ public class SourceFiles extends Thread {
 	public static synchronized void loadDicom(FileDicom dicomFileDetail, File sourceFile, int patient) throws Exception {
 		// installLibs();
 
-		if (".DS_Store".equals(sourceFile.getName())) {
+		if (".DS_Store".equals(sourceFile.getName()))
 			return;
-		}
 
 		try {
 			boolean isJpeg = StringUtils.endsWithIgnoreCase(sourceFile.getName(), ".jpg") || StringUtils.endsWithIgnoreCase(sourceFile.getName(), ".jpeg");
@@ -293,8 +295,9 @@ public class SourceFiles extends Thread {
 						sourceFile = f;
 					}
 				} catch (IIOException | RuntimeException exception) {
-					throw new OHDicomException(
-							new OHExceptionMessage(MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName())));
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName()),
+							OHSeverityLevel.ERROR));
 				}
 				imageInputStream.close();
 			} else if (isDicom) {
@@ -310,16 +313,17 @@ public class SourceFiles extends Thread {
 					reader.setInput(dicomStream);
 					originalImage = reader.read(0, param);
 				} catch (IOException | RuntimeException exception) {
-					throw new OHDicomException(
-							new OHExceptionMessage(MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName())));
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()), OHSeverityLevel.ERROR));
 				}
 				finally {
 					SafeClose.close(dicomStream);
 					SafeClose.close(byteArrayInputStream);
 				}
 			} else {
-				throw new OHDicomException(
-						new OHExceptionMessage(MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName())));
+				throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+						MessageBundle.formatMessage("angal.dicom.thefileisinanunknownformat.fmt.msg", sourceFile.getName()),
+						OHSeverityLevel.ERROR));
 			}
 
 			BufferedImage scaled = Scalr.resize(originalImage, 100);
@@ -359,9 +363,10 @@ public class SourceFiles extends Thread {
 				DicomInputStream dicomInputStream;
 				try {
 					dicomInputStream = new DicomInputStream(sourceFile);
-				} catch (DicomStreamException dicomStreamException) {
-					throw new OHDicomException(
-							new OHExceptionMessage(MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName())));
+				} catch(DicomStreamException dicomStreamException) {
+					throw new OHDicomException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+																	  MessageBundle.formatMessage("angal.dicom.thefileisnotindicomformat.fmt.msg", sourceFile.getName()),
+																	  OHSeverityLevel.ERROR));
 				}
 				Attributes attributes = dicomInputStream.readDataset();
 
@@ -402,75 +407,52 @@ public class SourceFiles extends Thread {
 			}
 
 			// Loaded... Update dicomFileDetail
-			if (sourceFile != null) {
+			if (sourceFile != null)
 				dicomFileDetail.setDicomData(sourceFile);
-			}
-			if (sourceFile.getName() != null) {
+			if (sourceFile.getName() != null)
 				dicomFileDetail.setFileName(sourceFile.getName());
-			}
-			if (accessionNumber != null) {
+			if (accessionNumber != null)
 				dicomFileDetail.setDicomAccessionNumber(accessionNumber);
-			}
-			if (instanceUID != null) {
+			if (instanceUID != null)
 				dicomFileDetail.setDicomInstanceUID(instanceUID);
-			}
-			if (institutionName != null) {
+			if (institutionName != null)
 				dicomFileDetail.setDicomInstitutionName(institutionName);
-			}
-			if (patientAddress != null) {
+			if (patientAddress != null)
 				dicomFileDetail.setDicomPatientAddress(patientAddress);
-			}
-			if (patientAge != null) {
+			if (patientAge != null)
 				dicomFileDetail.setDicomPatientAge(patientAge);
-			}
-			if (patientBirthDate != null) {
+			if (patientBirthDate != null)
 				dicomFileDetail.setDicomPatientBirthDate(patientBirthDate);
-			}
-			if (patientID != null) {
+			if (patientID != null)
 				dicomFileDetail.setDicomPatientID(patientID);
-			}
-			if (patientName != null) {
+			if (patientName != null)
 				dicomFileDetail.setDicomPatientName(patientName);
-			}
-			if (patientSex != null) {
+			if (patientSex != null)
 				dicomFileDetail.setDicomPatientSex(patientSex);
-			}
-			if (seriesDate != null) {
+			if (seriesDate != null)
 				dicomFileDetail.setDicomSeriesDate(seriesDate);
-			}
-			if (seriesDescription != null) {
+			if (seriesDescription != null)
 				dicomFileDetail.setDicomSeriesDescription(seriesDescription);
-			}
-			if (seriesDescriptionCodeSequence != null) {
+			if (seriesDescriptionCodeSequence != null)
 				dicomFileDetail.setDicomSeriesDescriptionCodeSequence(seriesDescriptionCodeSequence);
-			}
-			if (seriesInstanceUID != null) {
+			if (seriesInstanceUID != null)
 				dicomFileDetail.setDicomSeriesInstanceUID(seriesInstanceUID);
-			}
-			if (seriesNumber != null) {
+			if (seriesNumber != null)
 				dicomFileDetail.setDicomSeriesNumber(seriesNumber);
-			}
-			if (seriesUID != null) {
+			if (seriesUID != null)
 				dicomFileDetail.setDicomSeriesUID(seriesUID);
-			}
-			if (studyDate != null) {
+			if (studyDate != null)
 				dicomFileDetail.setDicomStudyDate(studyDate);
-			}
-			if (studyDescription != null) {
+			if (studyDescription != null)
 				dicomFileDetail.setDicomStudyDescription(studyDescription);
-			}
-			if (studyUID != null) {
+			if (studyUID != null)
 				dicomFileDetail.setDicomStudyId(studyUID);
-			}
-			if (patient != 0) {
+			if (patient != 0)
 				dicomFileDetail.setPatId(patient);
-			}
-			if (scaled != null) {
+			if (scaled != null)
 				dicomFileDetail.setDicomThumbnail(scaled);
-			}
-			if (modality != null) {
+			if (modality != null)
 				dicomFileDetail.setModality(modality);
-			}
 			dicomFileDetail.setIdFile(0); //it trigger the DB save with SqlDicomManager
 			try {
 				DicomManagerFactory.getManager().saveFile(dicomFileDetail);

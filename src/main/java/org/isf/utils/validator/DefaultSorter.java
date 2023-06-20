@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.utils.validator;
 
@@ -46,9 +46,8 @@ public class DefaultSorter implements Comparator<String> {
 	public int compare(String o1, String o2) {
 		if (o1.compareTo(defaultValue) == 0) {
 			return -1;
-		} else if (o2.compareTo(defaultValue) == 0) {
+		} else if (o2.compareTo(defaultValue) == 0)
 			return 1;
-		}
 		return o1.compareTo(o2);
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.admtype.test;
 
@@ -140,7 +140,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestAdmissionType(false);
 		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).get();
 		AdmissionType admissionType2 = new AdmissionType("someCode", "someDescription");
-		assertThat(admissionType).isEqualTo(admissionType);
+		assertThat(admissionType.equals(admissionType)).isTrue();
 		assertThat(admissionType)
 				.isNotEqualTo(admissionType2)
 				.isNotEqualTo("xyzzy");

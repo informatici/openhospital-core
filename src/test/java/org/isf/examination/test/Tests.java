@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.examination.test;
 
@@ -44,7 +44,6 @@ import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.test.TestPatient;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.pagination.PagedResponse;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -135,16 +134,6 @@ public class Tests extends OHCoreTestCase {
 		examinationIoOperationRepository.saveAndFlush(lastPatientExamination);
 		List<PatientExamination> foundExamination = examinationOperations.getLastNByPatID(patient.getCode(), 1);
 		checkPatientExaminationIntoDb(foundExamination.get(0).getPex_ID());
-	}
-	
-	@Test
-	public void testIoGetLastNByPatIDPaginated() throws Exception {
-		Patient patient = testPatient.setup(false);
-		PatientExamination lastPatientExamination = testPatientExamination.setup(patient, false);
-		patientIoOperationRepository.saveAndFlush(patient);
-		examinationIoOperationRepository.saveAndFlush(lastPatientExamination);
-		PagedResponse<PatientExamination> foundExamination = examinationOperations.getLastNByPatIDPageable(patient.getCode(), 1);
-		checkPatientExaminationIntoDb(foundExamination.getData().get(0).getPex_ID());
 	}
 
 	@Test
@@ -353,7 +342,7 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		PatientExamination patientExamination2 = testPatientExamination.setup(patient, false);
 		patientExamination2.setPex_ID(-1);
-		assertThat(patientExamination).isEqualTo(patientExamination);
+		assertThat(patientExamination.equals(patientExamination)).isTrue();
 		assertThat(patientExamination)
 				.isNotEqualTo(patientExamination2)
 				.isNotEqualTo("xyzzy");

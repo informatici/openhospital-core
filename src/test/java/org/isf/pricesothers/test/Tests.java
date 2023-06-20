@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.pricesothers.test;
 
@@ -215,7 +215,7 @@ public class Tests extends OHCoreTestCase {
 	public void testPricesOthersEquals() throws Exception {
 		PricesOthers pricesOthers = new PricesOthers(-1, "TestCode", "TestDescription", true, false, false, true);
 
-		assertThat(pricesOthers).isEqualTo(pricesOthers);
+		assertThat(pricesOthers.equals(pricesOthers)).isTrue();
 		assertThat(pricesOthers)
 				.isNotNull()
 				.isNotEqualTo("someString");

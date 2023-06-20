@@ -83,11 +83,4 @@ source step_86_permissions_and_grouppermission.sql;
 source step_87_alter_table_opd.sql;
 source step_88_alter_table_patient.sql;
 source step_89_alter_tables_innodb.sql;
-source step_90_login_retries.sql;
-source step_91_alter_laboratory_with_status.sql;
-source step_92_add_dicom_data_table.sql;
-source step_93_patient_consensus_table.sql;
-source step_94_login_idle.sql;
-source step_95_missing_user_related_fk.sql;
-source step_96_user_settings_table.sql;
-source step_97_fix_default_values.sql;
+

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.patvac.manager;
 
@@ -33,6 +33,7 @@ import org.isf.patvac.service.PatVacIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.exception.model.OHSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -141,19 +142,27 @@ public class PatVacManager {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (patientVaccine.getVaccineDate() == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patvac.pleaseinsertvaccinedate.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.patvac.pleaseinsertvaccinedate.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		if (patientVaccine.getProgr() < 0) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patvac.pleaseinsertavalidprogressive.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.patvac.pleaseinsertavalidprogressive.msg"),
+					OHSeverityLevel.ERROR));
 		}
-		if (patientVaccine.getVaccine() == null
-				|| patientVaccine.getVaccine().getDescription().equals(MessageBundle.getMessage("angal.patvac.allvaccine"))) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.patvac.pleaseselectavaccine.msg")));
+		if (patientVaccine.getVaccine() == null || 
+						patientVaccine.getVaccine().getDescription().equals(MessageBundle.getMessage("angal.patvac.allvaccine"))) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.patvac.pleaseselectavaccine.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		if (patientVaccine.getPatient() == null
 				|| StringUtils.isEmpty(patientVaccine.getPatName())
 				|| StringUtils.isEmpty(String.valueOf(patientVaccine.getPatSex()))) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseselectapatient.msg")));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+					MessageBundle.getMessage("angal.common.pleaseselectapatient.msg"),
+					OHSeverityLevel.ERROR));
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);

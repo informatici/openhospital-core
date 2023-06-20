@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.dicom.test;
 
@@ -193,18 +193,18 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 
 	@Test
 	public void testLoadDetailsLongObject() throws Exception {
-		FileDicom fileDicom = fileSystemDicomManager.loadDetails(Long.valueOf(2), 1, "TestSeriesNumber");
+		FileDicom fileDicom = fileSystemDicomManager.loadDetails(new Long(2), 1, "TestSeriesNumber");
 		testFileDicom.check(fileDicom);
 	}
 
 	@Test
 	public void testLoadDetailsLongObjectSeriesNumberNull() throws Exception {
-		assertThat(fileSystemDicomManager.loadDetails(Long.valueOf(2), 1, null)).isNull();
+		assertThat(fileSystemDicomManager.loadDetails(new Long(2), 1, null)).isNull();
 	}
 
 	@Test
 	public void testLoadDetailsLongObjectSeriesNumberZeroLength() throws Exception {
-		assertThat(fileSystemDicomManager.loadDetails(Long.valueOf(2), 1, "     ")).isNull();
+		assertThat(fileSystemDicomManager.loadDetails(new Long(2), 1, "     ")).isNull();
 	}
 
 	@Test
@@ -214,7 +214,7 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 
 	@Test
 	public void testLoadDetailsLongObjectSeriesNumberNullString() throws Exception {
-		assertThat(fileSystemDicomManager.loadDetails(Long.valueOf(2), 1, "NuLl")).isNull();
+		assertThat(fileSystemDicomManager.loadDetails(new Long(2), 1, "NuLl")).isNull();
 	}
 
 	@Test

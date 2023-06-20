@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.isf.examination.service;
 
@@ -26,11 +26,8 @@ import java.util.List;
 import org.isf.examination.model.PatientExamination;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.pagination.PageInfo;
-import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,14 +89,9 @@ public class ExaminationOperations {
 
 	public List<PatientExamination> getLastNByPatID(int patID, int number) throws OHServiceException {
 		if (number > 0) {
-			return repository.findByPatient_CodeOrderByPexDateDesc(patID, PageRequest.of(0, number));
+			return repository.findByPatient_CodeOrderByPexDateDesc(patID, PageRequest.of(0, number)).getContent();
 		}
 		return repository.findByPatient_CodeOrderByPexDateDesc(patID);
-	}
-	
-	public PagedResponse<PatientExamination> getLastNByPatIDPageable(int patID, int number) throws OHServiceException {	
-		Page<PatientExamination> pagedResult = repository.findByPatient_CodeOrderByPexDateDesc_Paginated(patID, PageRequest.of(0, number));
-		return setPaginationData(pagedResult);
 	}
 
 	public List<PatientExamination> getByPatID(int patID) throws OHServiceException	{
@@ -108,19 +100,5 @@ public class ExaminationOperations {
 
 	public void remove(List<PatientExamination> patexList) throws OHServiceException {
 		repository.deleteAll(patexList);
-	}
-	
-	public PagedResponse<PatientExamination> setPaginationData(Page<PatientExamination> pages){
-		PagedResponse<PatientExamination> data = new PagedResponse<PatientExamination>();
-		data.setData(pages.getContent());
-		PageInfo pageInfo = new PageInfo();
-		pageInfo.setSize(pages.getPageable().getPageSize());
-		pageInfo.setPage(pages.getPageable().getPageNumber());
-		pageInfo.setNbOfElements(pages.getNumberOfElements());
-		pageInfo.setTotalCount(pages.getTotalElements());
-		pageInfo.setHasPreviousPage(pages.hasPrevious());
-		pageInfo.setHasNextPage(pages.hasNext());
-		data.setPageInfo(pageInfo);
-		return data;
 	}
 }
