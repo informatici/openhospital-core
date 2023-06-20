@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2021 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.sms.test;
 
@@ -32,12 +32,12 @@ import org.isf.utils.exception.OHException;
 
 public class TestSms {
 
-	private int smsId = 0;
+	private int smsId;
 	private LocalDateTime smsDate = LocalDateTime.of(2010, 9, 8, 0, 0, 0);
 	private LocalDateTime smsDateSched = LocalDateTime.of(2011, 9, 8, 0, 0, 0);
 	private String smsNumber = "TestNumber";
 	private String smsText = "TestText";
-	private LocalDateTime smsDateSent = null;
+	private LocalDateTime smsDateSent;
 	private String smsUser = "TestUser";
 	private String module = "TestModule";
 	private String moduleID = "TestModId";

@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.exa.test;
 
@@ -312,9 +312,6 @@ public class Tests extends OHCoreTestCase {
 		List<Exam> exams = examBrowsingManager.getExams();
 		assertThat(exams.get(exams.size() - 1).getDescription()).isEqualTo(foundExam.getDescription());
 
-		exams = examBrowsingManager.getExamsbyDesc();
-		assertThat(exams.get(exams.size() - 1).getDescription()).isEqualTo(foundExam.getDescription());
-
 		exams = examBrowsingManager.getExamsByTypeDescription("xxxx");
 		assertThat(exams).isEmpty();
 
@@ -490,7 +487,7 @@ public class Tests extends OHCoreTestCase {
 		Exam exam = examIoOperationRepository.findById(code).get();
 		ExamType examType = testExamType.setup(false);
 		Exam exam2 = new Exam("XXX", "TestDescription", examType, 1, "TestDefaultResult");
-		assertThat(exam.equals(exam)).isTrue();
+		assertThat(exam).isEqualTo(exam);
 		assertThat(exam)
 				.isNotEqualTo(exam2)
 				.isNotEqualTo("xyzzy");
@@ -511,7 +508,7 @@ public class Tests extends OHCoreTestCase {
 		ExamType examType = testExamType.setup(false);
 		Exam exam2 = new Exam("XXX", "TestDescription", examType, 1, "TestDefaultResult");
 		ExamRow examRow2 = new ExamRow(exam2, "NewDescription");
-		assertThat(examRow.equals(examRow)).isTrue();
+		assertThat(examRow).isEqualTo(examRow);
 		assertThat(examRow)
 				.isNotEqualTo(examRow2)
 				.isNotEqualTo("xyzzy");

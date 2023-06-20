@@ -17,13 +17,17 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.visits.manager;
+
+import static java.util.stream.Collectors.toList;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.UserBrowsingManager;
@@ -37,7 +41,6 @@ import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
-import org.isf.utils.exception.model.OHSeverityLevel;
 import org.isf.utils.time.TimeTools;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperations;
@@ -58,52 +61,103 @@ public class VisitManager {
 
 	@Autowired
 	private SmsOperations smsOp;
-	
+
 	@Autowired
 	private OpdIoOperationRepository opdRepository;
 
 	@Autowired
 	private ApplicationContext applicationContext;
-	
+
 	/**
-	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * Verify if the visit is valid for CRUD, if not throws an {@link OHServiceException} listing the validation errors.
 	 *
-	 * @param visit
+	 * @param visit the visit to validate
 	 * @throws OHServiceException
 	 */
 	public void validateVisit(Visit visit) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		LocalDateTime visitDate = visit.getDate();
-		Patient patient = visit.getPatient();
 		if (visitDate == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.visit.pleasechooseadate.msg"),
-							OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.visit.pleasechooseadate.msg")));
+		}
+		Integer visitDuration = visit.getDuration();
+		if (visitDuration == null || visitDuration <= 0) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.visit.invalidvisitduration.msg")));
 		}
 		Ward ward = visit.getWard();
-		if (ward == null) { 
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.visit.pleasechooseaward.msg"),
-							OHSeverityLevel.ERROR));
-
+		if (ward == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.visit.pleasechooseaward.msg")));
 		}
+		Patient patient = visit.getPatient();
 		if (patient == null) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-							MessageBundle.getMessage("angal.visit.pleasechooseapatient.msg"),
-							OHSeverityLevel.ERROR));
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.visit.pleasechooseapatient.msg")));
 		}
 		if (errors.isEmpty()) {
 			String sex = String.valueOf(patient.getSex());
 			if ((sex.equalsIgnoreCase("F") && !ward.isFemale())
-				|| (sex.equalsIgnoreCase("M") && !ward.isMale())) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-						MessageBundle.getMessage("angal.visit.thepatientssexandwarddonotagree.msg"),
-						OHSeverityLevel.ERROR));
+					|| (sex.equalsIgnoreCase("M") && !ward.isMale())) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.visit.thepatientssexandwarddonotagree.msg")));
 			}
 		}
+		validateNoOverlappingPatientVisitsInDifferentWards(visit).ifPresent(errors::add);
+		validateVisitNotOverlappingAnyVisitsInSameWard(visit).ifPresent(errors::add);
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
+	}
+
+	private Optional<OHExceptionMessage> validateVisitNotOverlappingAnyVisitsInSameWard(Visit visit) throws OHServiceException {
+		LocalDateTime visitDate = visit.getDate();
+		Ward visitWard = visit.getWard();
+		if (visitDate == null || visitWard == null || visit.getDuration() == null || visit.getDuration() <= 0) {
+			// it's not possible to check overlapping visits if we don't know the new visit ward, date or duration
+			return Optional.empty();
+		}
+		// look if the visit overlaps any existing ones in the ward
+		LocalDateTime visitEnd = visit.getEnd();
+		List<Visit> overlappingVisits = getVisitsWard(visitWard.getCode()).stream()
+				.filter(otherVisit -> otherVisit.getVisitID() != visit.getVisitID()) // don't compare visit with its current state in the DB (if any)
+				.filter(otherVisit -> visitOverlaps(visitDate, visitEnd, otherVisit))
+				.collect(toList());
+		if (overlappingVisits.isEmpty()) {
+			return Optional.empty();
+		}
+		if (overlappingVisits.size() == 1) {
+			return Optional.of(new OHExceptionMessage(MessageBundle.formatMessage("angal.visit.overlappingvisitinward.msg", overlappingVisits.get(0))));
+		}
+		String visitsDescription = overlappingVisits.stream().map(Visit::toString).collect(Collectors.joining(", ", "", ""));
+		return Optional.of(new OHExceptionMessage(MessageBundle.formatMessage("angal.visit.overlappingmanyvisitsinward.msg", visitsDescription)));
+	}
+
+	private Optional<OHExceptionMessage> validateNoOverlappingPatientVisitsInDifferentWards(Visit visit) throws OHServiceException {
+		LocalDateTime visitDate = visit.getDate();
+		Ward visitWard = visit.getWard();
+		Patient visitPatient = visit.getPatient();
+		if (visitDate == null || visit.getDuration() == null || visit.getDuration() <= 0 || visitWard == null || visitPatient == null) {
+			// it's not possible to perform the check if we don't know the visit ward, patient, date or duration
+			return Optional.empty();
+		}
+		LocalDateTime visitEnd = visit.getEnd();
+		List<Visit> patientVisits = getVisits(visitPatient.getCode());
+		List<Visit> overlappingPatientVisitsInDifferentWards = patientVisits.stream()
+				.filter(otherVisit -> otherVisit.getVisitID() != visit.getVisitID()) // don't compare visit with its current state in the DB (if any)
+				.filter(otherVisit -> !visitWard.equals(otherVisit.getWard())) // different ward
+				.filter(otherVisit -> visitOverlaps(visitDate, visitEnd, otherVisit)) // overlapping visits
+				.collect(toList());
+		if (overlappingPatientVisitsInDifferentWards.isEmpty()) {
+			return Optional.empty();
+		}
+		if (overlappingPatientVisitsInDifferentWards.size() == 1) {
+			return Optional.of(new OHExceptionMessage(MessageBundle.formatMessage("angal.visit.overlappingpatientvisitsindifferentwards.msg",
+					overlappingPatientVisitsInDifferentWards.get(0).toString())));
+		}
+		String visitsDescription = overlappingPatientVisitsInDifferentWards.stream().map(Visit::toString).collect(Collectors.joining(", ", "", ""));
+		return Optional.of(new OHExceptionMessage(MessageBundle.formatMessage("angal.visit.manyoverlappingpatientvisitsindifferentwards.msg",
+				visitsDescription)));
+	}
+
+	private static boolean visitOverlaps(LocalDateTime visitStart, LocalDateTime visitEnd, Visit otherVisit) {
+		return visitStart.isBefore(otherVisit.getEnd()) && visitEnd.isAfter(otherVisit.getDate());
 	}
 
 	/**
@@ -116,7 +170,7 @@ public class VisitManager {
 	public List<Visit> getVisits(int patID) throws OHServiceException {
 		return ioOperations.getVisits(patID);
 	}
-	
+
 	/**
 	 * Returns the list of all {@link Visit}s related to a patID in OPD (Ward is {@code null}).
 	 *
@@ -129,9 +183,9 @@ public class VisitManager {
 	}
 
 	/**
-	 * Returns the list of all {@link Visit}s related to a wardId
-	 * @param wardId - if {@code null}, returns all visits for all wards
-	 * @return the list of {@link Visit}s
+	 * Returns the list of all {@link Visit}s for all wards
+	 *
+	 * @return the list of {@link Visit}s for all wards
 	 * @throws OHServiceException
 	 */
 	public List<Visit> getVisitsWard() throws OHServiceException {
@@ -140,6 +194,7 @@ public class VisitManager {
 
 	/**
 	 * Returns the list of all {@link Visit}s related to a wardId
+	 *
 	 * @param wardId - if {@code null}, returns all visits for all wards
 	 * @return the list of {@link Visit}s
 	 * @throws OHServiceException
@@ -159,7 +214,7 @@ public class VisitManager {
 		validateVisit(visit);
 		return ioOperations.newVisit(visit);
 	}
-	
+
 	/**
 	 * Update a new {@link Visit} for related Patient
 	 *
@@ -171,7 +226,7 @@ public class VisitManager {
 		validateVisit(visit);
 		return ioOperations.newVisit(visit);
 	}
-	
+
 	/**
 	 * Delete the {@link Visit} for related Patient
 	 *
@@ -181,13 +236,12 @@ public class VisitManager {
 	public void deleteVisit(Visit visit) throws OHServiceException {
 		ioOperations.deleteVisit(visit);
 	}
-	
+
 	/**
 	 * Inserts or replaces all {@link Visit}s related to a patID<br>
 	 * <br>
-	 * TODO: OP-722 add overall validation on {@code visits} beside single {@link validateVisit} 
 	 * to avoid visits overlapping and patients ubiquity
-	 * 
+	 *
 	 * @param visits - the list of {@link Visit}s related to patID.
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
 	 * @throws OHServiceException
@@ -197,15 +251,14 @@ public class VisitManager {
 	public boolean newVisits(List<Visit> visits) throws OHServiceException {
 		return newVisits(visits, new ArrayList<>());
 	}
-	
+
 	/**
 	 * Inserts or replaces all {@link Visit}s related to a patID<br>
 	 * <br>
-	 * TODO: OP-722 Add overall validation on {@code visits} beside single {@link validateVisit} 
 	 * to avoid visits overlapping and patients ubiquity
-	 * 
+	 *
 	 * @param visits - the list of {@link Visit}s related to patID.
-	 * @param removedVisits - the list of {@link Visits}s eventually removed
+	 * @param removedVisits - the list of {@link Visit}s eventually removed
 	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
@@ -219,16 +272,16 @@ public class VisitManager {
 				deleteVisit(visit);
 			}
 			smsOp.deleteByModuleModuleID("visit", String.valueOf(patID));
-			
+
 			for (Visit visit : visits) {
 				validateVisit(visit);
-				
+
 				int visitID = ioOperations.newVisit(visit).getVisitID();
 				if (visitID == 0) {
 					return false;
 				}
 				visit.setVisitID(visitID);
-				
+
 				if (visit.isSms()) {
 					LocalDateTime date = visit.getDate().minusDays(1);
 					if (visit.getDate().isAfter(TimeTools.getDateToday24())) {

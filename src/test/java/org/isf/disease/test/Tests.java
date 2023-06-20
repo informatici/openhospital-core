@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.disease.test;
 
@@ -309,7 +309,7 @@ public class Tests extends OHCoreTestCase {
 		Disease disease = diseaseBrowserManager.getDiseaseByCode(code);
 		DiseaseType diseaseType2 = testDiseaseType.setup(false);
 		Disease disease2 = new Disease("998", "someDescription", diseaseType2);
-		assertThat(disease.equals(disease)).isTrue();
+		assertThat(disease).isEqualTo(disease);
 		assertThat(disease)
 				.isNotEqualTo(disease2)
 				.isNotEqualTo("xyzzy");
@@ -395,7 +395,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkDiseaseIntoDb(String code) throws Exception {
-		Disease foundDisease = diseaseIoOperationRepository.getById(code);
+		Disease foundDisease = diseaseIoOperationRepository.getReferenceById(code);
 		testDisease.check(foundDisease);
 	}
 

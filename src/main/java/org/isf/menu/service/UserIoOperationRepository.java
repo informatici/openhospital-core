@@ -17,10 +17,11 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.menu.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.menu.model.User;
@@ -48,5 +49,17 @@ public interface UserIoOperationRepository extends JpaRepository<User, String> {
 	@Modifying
 	@Query(value = "update User set passwd=:password where userName=:id")
 	int updatePassword(@Param("password") String password, @Param("id") String id);
+
+	@Modifying
+	@Query(value = "update User set failedAttempts=:attempts where userName=:id")
+	void updateFailedAttempts(@Param("attempts") int failAttempts, @Param("id") String id);
+
+	@Modifying
+	@Query(value = "update User set isAccountLocked=:isLocked, lockedTime=:lockTime where userName=:id")
+	void updateUserLocked(@Param("isLocked") boolean isLocked, @Param("lockTime") LocalDateTime lockTime, @Param("id") String id);
+
+	@Modifying
+	@Query(value = "update User set lastLogin=:lastLoggedIn where userName=:id")
+	void setLastLogin(@Param("lastLoggedIn") LocalDateTime lockTime, @Param("id") String id);
 
 }

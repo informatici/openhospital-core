@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.operation.service;
 
@@ -69,7 +69,7 @@ public class OperationRowIoOperations {
 		return false;
 	}
 
-	public void updateOperationRow(OperationRow opRow) throws OHServiceException {
+	public OperationRow updateOperationRow(OperationRow opRow) throws OHServiceException {
 		OperationRow found = repository.findById(opRow.getId());
 		if (found != null) {
 			found.setAdmission(opRow.getAdmission());
@@ -81,12 +81,13 @@ public class OperationRowIoOperations {
 			found.setPrescriber(opRow.getPrescriber());
 			found.setRemarks(opRow.getRemarks());
 			found.setTransUnit(opRow.getTransUnit());
-			repository.save(found);
+			return repository.save(found);
 		}
+		return null;
 	}
 
-	public void newOperationRow(OperationRow opRow) throws OHServiceException {
-		repository.save(opRow);
+	public OperationRow newOperationRow(OperationRow opRow) throws OHServiceException {
+		 return repository.save(opRow);
 	}
 
 	public List<OperationRow> getOperationRowByPatient(Patient patient) throws OHServiceException {

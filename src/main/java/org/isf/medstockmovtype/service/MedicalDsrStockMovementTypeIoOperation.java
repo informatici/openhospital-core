@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.medstockmovtype.service;
 
@@ -36,48 +36,48 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
-public class MedicalStockMovementTypeIoOperation {
+public class MedicalDsrStockMovementTypeIoOperation {
 
 	@Autowired
-	private MedicalStockMovementTypeIoOperationRepository repository;
+	private MedicalDsrStockMovementTypeIoOperationRepository repository;
 	
 	/**
 	 * Retrieves all the stored {@link MovementType}.
 	 * @return all the stored {@link MovementType}s.
 	 * @throws OHServiceException if an error occurs retrieving the medical stock movement types.
 	 */
-	public List<MovementType> getMedicaldsrstockmovType() throws OHServiceException {
+	public List<MovementType> getMedicalDsrStockMovementType() throws OHServiceException {
 		return repository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
 	 * Updates the specified {@link MovementType}.
-	 * @param medicaldsrstockmovType the medical stock movement type to update.
+	 * @param medicalDsrStockMovementType the medical stock movement type to update.
 	 * @return <code>true</code> if the specified stock movement type has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public MovementType updateMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
-		return repository.save(medicaldsrstockmovType);
+	public MovementType updateMedicalDsrStockMovementType(MovementType medicalDsrStockMovementType) throws OHServiceException {
+		return repository.save(medicalDsrStockMovementType);
 	}
 
 	/**
 	 * Stores the specified {@link MovementType}.
-	 * @param medicaldsrstockmovType the medical stock movement type to store.
+	 * @param medicalDsrStockMovementType the medical stock movement type to store.
 	 * @return <code>true</code> if the medical movement type has been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
-	public MovementType newMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
-		return repository.save(medicaldsrstockmovType);
+	public MovementType newMedicalDsrStockMovementType(MovementType medicalDsrStockMovementType) throws OHServiceException {
+		return repository.save(medicalDsrStockMovementType);
 	}
 
 	/**
 	 * Deletes the specified {@link MovementType}.
-	 * @param medicaldsrstockmovType the medical stock movement type to delete.
+	 * @param medicalDsrStockMovementType the medical stock movement type to delete.
 	 * @return <code>true</code> if the medical stock movement type has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the delete operation.
 	 */
-	public boolean deleteMedicaldsrstockmovType(MovementType medicaldsrstockmovType) throws OHServiceException {
-		repository.delete(medicaldsrstockmovType);
+	public boolean deleteMedicalDsrStockMovementType(MovementType medicalDsrStockMovementType) throws OHServiceException {
+		repository.delete(medicalDsrStockMovementType);
 		return true;
 	}
 
