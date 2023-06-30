@@ -28,23 +28,23 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="OH_USER_SETTINGS")
+@Table(name = "OH_USER_SETTINGS")
 public class UserSetting {
-	
+
 	@Id
-	@Column(name="USS_ID")
+	@Column(name = "USS_ID")
 	private int id;
-	
+
 	@NotNull
-	@Column(name="USS_US_ID_A")
+	@Column(name = "USS_US_ID_A")
 	private String user;
-	
+
 	@NotNull
-	@Column(name="USS_CONFIG_NAME")
+	@Column(name = "USS_CONFIG_NAME")
 	private String configName;
-	
+
 	@NotNull
-	@Column(name="USS_CONFIG_VALUE")
+	@Column(name = "USS_CONFIG_VALUE")
 	private String configValue;
 
 	public int getId() {
@@ -78,6 +78,5 @@ public class UserSetting {
 	public void setConfigValue(String configValue) {
 		this.configValue = configValue;
 	}
-	
 
 }

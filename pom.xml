@@ -13,14 +13,14 @@
 	<groupId>org.isf</groupId>
 	<artifactId>OH-core</artifactId>
 	<packaging>jar</packaging>
-	<version>1.12.1-SNAPSHOT</version>
+	<version>1.13.0-SNAPSHOT</version>
 
 	<properties>
-		<oh.version>1.12.1-SNAPSHOT</oh.version>
+		<oh.version>1.13.0-SNAPSHOT</oh.version>
 		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.framework.version>5.3.28</spring.framework.version>
-		<spring.boot.version>2.7.12</spring.boot.version>
+		<spring.boot.version>2.7.13</spring.boot.version>
 		<jasperreports.version>6.20.5</jasperreports.version>
 		<spring.cloud.starter.openfeign.version>3.1.7</spring.cloud.starter.openfeign.version>
 		<license.maven.plugin.version>4.2</license.maven.plugin.version>
@@ -150,10 +150,6 @@
 								<exclude>doc/**/*.txt</exclude>
 								<exclude>lib/**</exclude>
 								<exclude>sql/**</exclude>
-								<exclude>repo/**</exclude>
-								<exclude>rpt_base/**</exclude>
-								<exclude>rpt_extra/**</exclude>
-								<exclude>rpt_stat/**</exclude>
 								<exclude>rsc/**</exclude>
 								<exclude>rsc-test/**</exclude>
 								<exclude>src/test/resources/**</exclude>
@@ -275,12 +271,12 @@
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-core</artifactId>
-			<version>4.0.2</version>
+			<version>4.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>
-			<version>4.0.2</version>
+			<version>4.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.activation</groupId>
