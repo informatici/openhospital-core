@@ -23,6 +23,9 @@ package org.isf.telemetry.envdatacollector.constants;
 
 public interface CollectorsConst {
 
+	// TEL_ID
+	public static final String TEL_UUID = "telemetry_uuid";
+
 	// TEL_DBMS
 	public static final String DBMS_DRIVER_NAME = "dbms_driver_name";
 	public static final String DBMS_DRIVER_VERSION = "dbms_driver_version";

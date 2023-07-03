@@ -21,11 +21,8 @@
  */
 package org.isf.telemetry.service.remote;
 
-import java.util.Map;
-
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -35,7 +32,7 @@ public interface TelemetryGatewayRemoteService {
 	// @formatter:off
 
 	@PostMapping(value = "/collect", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<String, String>> send(@RequestBody String request);
+	public String send(@RequestBody String request);
 
 	// @formatter:on
 }

@@ -21,7 +21,6 @@
  */
 package org.isf.telemetry.service.remote;
 
-import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Resource;
@@ -29,7 +28,6 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import feign.Feign;
@@ -39,7 +37,7 @@ import feign.slf4j.Slf4jLogger;
 public class TelemetryDataCollectorGatewayService {
 
 	private static final String SERVICE_NAME = "telemetry-gateway-service";
-	private static final String RESPONSE_SUCCESS = "true";
+	private static final String RESPONSE_SUCCESS = "OK";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TelemetryDataCollectorGatewayService.class);
 
@@ -49,17 +47,16 @@ public class TelemetryDataCollectorGatewayService {
 	public boolean send(String data) {
 		TelemetryGatewayRemoteService httpClient = buildHttlClient();
 		LOGGER.debug(data.toString());
-		ResponseEntity<Map<String, String>> rs = httpClient.send(data);
-		Map<String, String> result = rs.getBody();
+		String result = httpClient.send(data);
 		LOGGER.debug(result.toString());
-		boolean isSent = result != null && RESPONSE_SUCCESS.equals(result.get("status"));
+		boolean isSent = result != null && RESPONSE_SUCCESS.equals(result);
 		return isSent;
 	}
 
 	private TelemetryGatewayRemoteService buildHttlClient() {
 		String baseUrl = this.properties.getProperty(SERVICE_NAME + ".base-url").trim();
 		// For debug remember to update log level to: feign.Logger.Level.FULL. Happy debugging!
-		return Feign.builder().encoder(new CustomCommonEncoder()).decoder(new CustomCommonDecoder())
+		return Feign.builder()
 						.logger(new Slf4jLogger(TelemetryGatewayRemoteService.class)).logLevel(feign.Logger.Level.BASIC).contract(new SpringMvcContract())
 						.target(TelemetryGatewayRemoteService.class, baseUrl);
 	}

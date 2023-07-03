@@ -56,7 +56,7 @@ public class TelemetryManager {
 		return this.telemetryRepository.save(telemetry);
 	}
 
-	private Telemetry retrieveOrBuildNewTelemetry() {
+	public Telemetry retrieveOrBuildNewTelemetry() {
 		List<Telemetry> list = this.telemetryRepository.findAll();
 		Telemetry telemetry = null;
 		if (list.isEmpty()) {
