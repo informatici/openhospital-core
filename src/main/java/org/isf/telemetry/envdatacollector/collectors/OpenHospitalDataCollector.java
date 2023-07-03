@@ -35,6 +35,7 @@ import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoBean
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoCommonService;
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoSettings;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
+import org.isf.telemetry.manager.TelemetryManager;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.service.WardIoOperations;
@@ -44,12 +45,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-@Order(value = 30)
+@Order(value = 20)
 @Component
 public class OpenHospitalDataCollector extends AbstractDataCollector {
 
 	private static final String ID = "FUN_OH";
 	private static final Logger LOGGER = LoggerFactory.getLogger(OpenHospitalDataCollector.class);
+
+	@Autowired
+	private TelemetryManager telemetryManager;
 
 	@Autowired
 	private PatientIoOperations patientIoOperations;
@@ -84,6 +88,7 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 		LOGGER.debug("Collecting Open Hospital data...");
 		Map<String, String> result = new LinkedHashMap<>();
 		try {
+			result.put(CollectorsConst.LOC_UUID, telemetryManager.retrieveSettings().getId().getSoftwareUUID());
 
 			String geoIpServiceName = settings.get("telemetry.enabled.geo.ip.lookup.service");
 			LOGGER.debug(geoIpServiceName + " - " + geoIpServices.size());
