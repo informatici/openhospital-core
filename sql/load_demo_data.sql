@@ -2079,9 +2079,7 @@ CREATE TABLE `oh_laboratory` (
 
 LOCK TABLES `oh_laboratory` WRITE;
 /*!40000 ALTER TABLE `oh_laboratory` DISABLE KEYS */;
-INSERT INTO `oh_laboratory` VALUES (14,'URI','2022-11-02 00:41:59','Multiple results','',171,'Sterling Rott',
-                                    NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,26,'F',
-                                    'undefined','I','done',NULL,'2022-11-02 00:41:59','admin','2022-11-21 00:41:59',1);
+INSERT INTO `oh_laboratory` VALUES (14,'URI','2022-11-02 00:41:59','Multiple results','',171,'Sterling Rott',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,26,'F','undefined','I','done',NULL,'2022-11-02 00:41:59','admin','2022-11-21 00:41:59',1);
 INSERT INTO `oh_laboratory` VALUES (15,'03.01','2022-11-02 00:50:40','NEGATIVE','',364,'Georgette Tsuji',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,18,'F','undefined','I','done',NULL,'2022-11-02 00:50:40','admin','2022-11-21 00:50:40',1);
 INSERT INTO `oh_laboratory` VALUES (16,'01.02','2022-11-02 00:49:12','> 7000 (HIGH)','',336,'Emery Moreles',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,36,'M','undefined','O','done',NULL,'2022-11-02 00:49:12','admin','2022-11-21 00:49:12',1);
 INSERT INTO `oh_laboratory` VALUES (17,'URI','2022-11-02 00:50:14','Multiple results','',182,'Tod Baldonado',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,13,'M','undefined','I','done',NULL,'2022-11-02 00:50:14','admin','2022-11-21 00:50:14',1);
