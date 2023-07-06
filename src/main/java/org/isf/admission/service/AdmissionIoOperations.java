@@ -324,24 +324,78 @@ public class AdmissionIoOperations {
 		return patientRepository.save(foundPatient) != null;
 	}
 	
+	/**
+	 * Returns the list of Admissions by pages
+	 *
+	 * @param dateFrom.
+	 * @param daTo
+	 * @param pageable
+	 * @return the list of {@link Admission}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
 	public List<Admission> getAdmissionsByAdmissionDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
 		return repository.findAllWhereAdmissionDate(dateFrom, dateTo, pageable);
 	}
 
+	/**
+	 * Returns the list of Admissions
+	 *
+	 * @param dateFrom.
+	 * @param daTo
+	 * @return the list of {@link Admission}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public List<Admission> getAdmissionsByAdmDate(LocalDateTime dateFrom, LocalDateTime dateTo) {
+		return repository.findAllWhereAdmissionDate(dateFrom, dateTo);
+	}
+	
+	/**
+	 * Returns the list of Admissions with discharge
+	 *
+	 * @param dateFrom.
+	 * @param daTo
+	 * @param pageable
+	 * @return the list of {@link Admission}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
 	public List<Admission> getAdmissionsByDischargeDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
 		return repository.findAllWhereDischargeDate(dateFrom, dateTo, pageable);
 	}
 
+	/**
+	 * Returns the list of Admissions by page
+	 *
+	 * @param dateFrom.
+	 * @param daTo
+	 * @param pageable
+	 * @return the list of {@link Admission}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
 	public PagedResponse<Admission> getAdmissionsByAdmissionDates(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
 		Page<Admission> pagedResult = repository.findAllWhere_AdmissionDate_Paginated(dateFrom, dateTo, pageable);
 		return setPaginationData(pagedResult);
 	}
-
+	/**
+	 * Returns the list of Admissions with discharge by page
+	 *
+	 * @param dateFrom.
+	 * @param daTo
+	 * @param pageable
+	 * @return the list of {@link Admission}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
 	public PagedResponse<Admission> getAdmissionsByDischargeDates(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
 		Page<Admission> pagedResult = repository.findAllWhere_DischargeDate_Paginated(dateFrom, dateTo, pageable);
 		return setPaginationData(pagedResult);
 	}
 	
+	/**
+	 * Returns the list of Admissions with page info
+	 *
+	 * @param page of admission
+	 * @return {@link PagedResponse<Admission>}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
 	public PagedResponse<Admission> setPaginationData(Page<Admission> pages){
 		PagedResponse<Admission> data = new PagedResponse<Admission>();
 		data.setData(pages.getContent());

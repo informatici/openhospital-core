@@ -28,6 +28,8 @@ import org.isf.opetype.model.OperationType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -128,6 +130,11 @@ public class OperationIoOperations {
 	public boolean isDescriptionPresent(String description, String typeCode) throws OHServiceException {
 		Operation foundOperation = repository.findOneByDescriptionAndType_Code(description, typeCode);
 		return foundOperation != null && foundOperation.getDescription().compareTo(description) == 0;
+	}
+	
+	public Page<Operation> getOperationByTypeDescriptionPageable(int page, int size) throws OHServiceException {
+		return repository.findByOrderByDescriptionAscPageable(PageRequest.of(page, size));
+
 	}
 }
 
