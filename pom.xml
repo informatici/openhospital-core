@@ -22,7 +22,7 @@
 		<spring.framework.version>5.3.28</spring.framework.version>
 		<spring.boot.version>2.7.13</spring.boot.version>
 		<jasperreports.version>6.20.5</jasperreports.version>
-		<spring.cloud.starter.openfeign.version>3.1.7</spring.cloud.starter.openfeign.version>
+		<spring.cloud.starter.openfeign.version>3.1.8</spring.cloud.starter.openfeign.version>
 		<license.maven.plugin.version>4.2</license.maven.plugin.version>
 	</properties>
 
@@ -235,7 +235,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>2.1.214</version>
+			<version>2.2.220</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
