@@ -77,7 +77,7 @@ public class PageInfo {
 		return totalPage;
 	}
 
-	public void setTotalPages(long totalPages) {
+	public void setTotalPage(long totalPage) {
 		this.totalPage = totalPage;
 	}
 	
