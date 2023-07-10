@@ -25,7 +25,8 @@ public class PageInfo {
 	int size;
 	int page;
 	int nbOfElements;
-	long totalCount;
+	long totalNbOfElements;
+	long totalPage;
 	boolean hasPreviousPage;
 	boolean hasNextPage;
 	
@@ -51,12 +52,6 @@ public class PageInfo {
 	public void setNbOfElements(int nbOfElements) {
 		this.nbOfElements = nbOfElements;
 	}
-	public long getTotalCount() {
-		return totalCount;
-	}
-	public void setTotalCount(long l) {
-		this.totalCount = l;
-	}
 	public boolean isHasPreviousPage() {
 		return hasPreviousPage;
 	}
@@ -69,4 +64,21 @@ public class PageInfo {
 	public void setHasNextPage(boolean hasNextPage) {
 		this.hasNextPage = hasNextPage;
 	}
+
+	public long getTotalNbOfElements() {
+		return totalNbOfElements;
+	}
+
+	public void setTotalNbOfElements(long totalNbOfElements) {
+		this.totalNbOfElements = totalNbOfElements;
+	}
+
+	public long getTotalPage() {
+		return totalPage;
+	}
+
+	public void setTotalPage(long totalPage) {
+		this.totalPage = totalPage;
+	}
+	
 }
