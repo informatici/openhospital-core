@@ -202,7 +202,7 @@ public class OperationBrowserManager {
 		return setPaginationData(operations);
 	}
 	
-	public PagedResponse<Operation> setPaginationData(Page<Operation> pages){
+	public PagedResponse<Operation> setPaginationData(Page<Operation> pages) {
 		PagedResponse<Operation> data = new PagedResponse<Operation>();
 		data.setData(pages.getContent());
 		PageInfo pageInfo = new PageInfo();
