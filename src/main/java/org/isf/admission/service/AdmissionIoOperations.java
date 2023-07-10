@@ -396,7 +396,7 @@ public class AdmissionIoOperations {
 	 * @return {@link PagedResponse<Admission>}.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
-	public PagedResponse<Admission> setPaginationData(Page<Admission> pages){
+	public PagedResponse<Admission> setPaginationData(Page<Admission> pages) {
 		PagedResponse<Admission> data = new PagedResponse<Admission>();
 		data.setData(pages.getContent());
 		PageInfo pageInfo = new PageInfo();
