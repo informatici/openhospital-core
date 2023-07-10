@@ -264,7 +264,7 @@ public class OpdIoOperations {
 				setPaginationData(repository.findAllByPatient_CodeOrderByProgYearDescPageable(patID, PageRequest.of(page, size)));
 	}
 	
-	public PagedResponse<Opd> setPaginationData(Page<Opd> pages){
+	public PagedResponse<Opd> setPaginationData(Page<Opd> pages) {
 		PagedResponse<Opd> data = new PagedResponse<Opd>();
 		data.setData(pages.getContent());
 		PageInfo pageInfo = new PageInfo();
