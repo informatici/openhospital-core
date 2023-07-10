@@ -73,7 +73,7 @@ public class PageInfo {
 		this.totalNbOfElements = totalNbOfElements;
 	}
 
-	public long getTotalPage() {
+	public long getTotalPages() {
 		return totalPage;
 	}
 
