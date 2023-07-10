@@ -50,16 +50,16 @@ public interface LabIoOperationRepository extends JpaRepository<Laboratory, Inte
 	
 	Page<Laboratory> findByLabDateBetweenOrderByLabDateDesc(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
 	
-	@Query(value = "select lab from Laboratory lab where lab.labDate >= :dateFrom and lab.labDate < :dateTo")
+	@Query(value = "select lab from Laboratory lab where lab.labDate >= :dateFrom or lab.labDate < :dateTo")
 	Page<Laboratory> findByLabDateBetweenOrderByLabDateDescPage(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
 	
-	@Query(value = "select lab from Laboratory lab where (lab.labDate >= :dateFrom and lab.labDate < :dateTo) or lab.exam = :exam")
+	@Query(value = "select lab from Laboratory lab where (lab.labDate >= :dateFrom or lab.labDate < :dateTo) or lab.exam = :exam")
 	Page<Laboratory> findByLabDateBetweenAndExam_DescriptionOrderByLabDateDescPage(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, @Param("exam")Exam exam, Pageable pageable);
 	
-	@Query(value = "select lab from Laboratory lab where (lab.labDate >= :dateFrom and lab.labDate < :dateTo) or lab.patient = :patient")
+	@Query(value = "select lab from Laboratory lab where (lab.labDate >= :dateFrom or lab.labDate < :dateTo) or lab.patient = :patient")
 	Page<Laboratory> findByLabDateBetweenAndPatientCodePage(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, @Param("patient") Patient patient, Pageable pageable);
 	
-	@Query(value = "select lab from Laboratory lab where (lab.labDate >= :dateFrom and lab.labDate < :dateTo) or lab.exam = :exam or lab.patient = :patient")
+	@Query(value = "select lab from Laboratory lab where (lab.labDate >= :dateFrom or lab.labDate < :dateTo) or lab.exam = :exam or lab.patient = :patient")
 	Page<Laboratory> findByLabDateBetweenAndExamDescriptionAndPatientCodePage(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, @Param("exam") Exam exam, @Param("patient") Patient patient, Pageable pageable);
 
 }
