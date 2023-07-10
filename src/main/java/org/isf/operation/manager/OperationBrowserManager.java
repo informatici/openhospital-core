@@ -209,7 +209,8 @@ public class OperationBrowserManager {
 		pageInfo.setSize(pages.getPageable().getPageSize());
 		pageInfo.setPage(pages.getPageable().getPageNumber());
 		pageInfo.setNbOfElements(pages.getNumberOfElements());
-		pageInfo.setTotalCount(pages.getTotalElements());
+		pageInfo.setTotalNbOfElements(pages.getTotalElements());
+		pageInfo.setTotalPage(pages.getTotalPages());
 		pageInfo.setHasPreviousPage(pages.hasPrevious());
 		pageInfo.setHasNextPage(pages.hasNext());
 		data.setPageInfo(pageInfo);
