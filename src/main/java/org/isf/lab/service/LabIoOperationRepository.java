@@ -59,7 +59,7 @@ public interface LabIoOperationRepository extends JpaRepository<Laboratory, Inte
 	@Query(value = "select lab from Laboratory lab where (lab.labDate >= :dateFrom and lab.labDate < :dateTo) and lab.patient = :patient")
 	Page<Laboratory> findByLabDateBetweenAndPatientCodePage(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, @Param("patient") Patient patient, Pageable pageable);
 	
-	@Query(value = "select lab from Laboratory lab where (lab.labDate >= :dateFrom or lab.labDate < :dateTo) or lab.exam = :exam or lab.patient = :patient")
+	@Query(value = "select lab from Laboratory lab where (lab.labDate >= :dateFrom and lab.labDate < :dateTo) and lab.exam = :exam and lab.patient = :patient")
 	Page<Laboratory> findByLabDateBetweenAndExamDescriptionAndPatientCodePage(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, @Param("exam") Exam exam, @Param("patient") Patient patient, Pageable pageable);
 
 }
