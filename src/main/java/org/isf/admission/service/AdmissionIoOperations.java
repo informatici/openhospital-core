@@ -395,18 +395,10 @@ public class AdmissionIoOperations {
 	 * @param page of admission
 	 * @return {@link PagedResponse<Admission>}.
 	 */
-	public PagedResponse<Admission> setPaginationData(Page<Admission> pages) {
+	PagedResponse<Admission> setPaginationData(Page<Admission> pages) {
 		PagedResponse<Admission> data = new PagedResponse<Admission>();
 		data.setData(pages.getContent());
-		PageInfo pageInfo = new PageInfo();
-		pageInfo.setSize(pages.getPageable().getPageSize());
-		pageInfo.setPage(pages.getPageable().getPageNumber());
-		pageInfo.setNbOfElements(pages.getNumberOfElements());
-		pageInfo.setTotalNbOfElements(pages.getTotalElements());
-		pageInfo.setTotalPage(pages.getTotalPages());
-		pageInfo.setHasPreviousPage(pages.hasPrevious());
-		pageInfo.setHasNextPage(pages.hasNext());
-		data.setPageInfo(pageInfo);
+		data.setPageInfo(PageInfo.from(pages));
 		return data;
 	}
 }

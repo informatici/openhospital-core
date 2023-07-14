@@ -197,23 +197,23 @@ public class OperationBrowserManager {
 		return resultsListHashMap.get(resultDescKey);
 	}
 	
+	/**
+	 * Retrieves a page of {@link Operation}s
+	 * 
+	 * @param page - The page number of the operations to retrieve
+	 * @param size - The size of the page of operations to retrieve.
+	 * @return a {@link PagedResponse} object that contains the {@link Operation}s.
+	 * @throws OHServiceException 
+	 */
 	public PagedResponse<Operation> getOperationPageable(int page, int size) throws OHServiceException {
-		Page<Operation> operations= ioOperations.getOperationByTypeDescriptionPageable(page, size);
+		Page<Operation> operations= ioOperations.getOperationPageable(page, size);
 		return setPaginationData(operations);
 	}
 	
-	public PagedResponse<Operation> setPaginationData(Page<Operation> pages) {
+	PagedResponse<Operation> setPaginationData(Page<Operation> pages) {
 		PagedResponse<Operation> data = new PagedResponse<Operation>();
 		data.setData(pages.getContent());
-		PageInfo pageInfo = new PageInfo();
-		pageInfo.setSize(pages.getPageable().getPageSize());
-		pageInfo.setPage(pages.getPageable().getPageNumber());
-		pageInfo.setNbOfElements(pages.getNumberOfElements());
-		pageInfo.setTotalNbOfElements(pages.getTotalElements());
-		pageInfo.setTotalPage(pages.getTotalPages());
-		pageInfo.setHasPreviousPage(pages.hasPrevious());
-		pageInfo.setHasNextPage(pages.hasNext());
-		data.setPageInfo(pageInfo);
+		data.setPageInfo(PageInfo.from(pages));
 		return data;
 	}
 

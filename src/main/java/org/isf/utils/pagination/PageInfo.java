@@ -21,12 +21,14 @@
  */
 package org.isf.utils.pagination;
 
+import org.springframework.data.domain.Page;
+
 public class PageInfo {
 	int size;
 	int page;
 	int nbOfElements;
 	long totalNbOfElements;
-	long totalPage;
+	int totalPages;
 	boolean hasPreviousPage;
 	boolean hasNextPage;
 	
@@ -73,12 +75,29 @@ public class PageInfo {
 		this.totalNbOfElements = totalNbOfElements;
 	}
 
-	public long getTotalPages() {
-		return totalPage;
+	public int getTotalPages() {
+		return totalPages;
 	}
 
-	public void setTotalPage(long totalPage) {
-		this.totalPage = totalPage;
+	public void setTotalPages(int totalPages) {
+		this.totalPages = totalPages;
+	}
+	
+	public PageInfo(int size, int page, int nbOfElements, long totalNbOfElements, int totalPages,
+			boolean hasPreviousPage, boolean hasNextPage) {
+		super();
+		this.size = size;
+		this.page = page;
+		this.nbOfElements = nbOfElements;
+		this.totalNbOfElements = totalNbOfElements;
+		this.totalPages = totalPages;
+		this.hasPreviousPage = hasPreviousPage;
+		this.hasNextPage = hasNextPage;
+	}
+
+	public static PageInfo from(Page page) {
+		return new PageInfo(
+				page.getSize(), page.getNumber(), page.getNumberOfElements(), page.getTotalElements(), page.getTotalPages(), page.hasPrevious(), page.hasNext());
 	}
 	
 }

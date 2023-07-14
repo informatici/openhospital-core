@@ -232,6 +232,22 @@ public class OpdIoOperations {
 		return repository.findByProgYear(code);
 	}
 	
+	/**
+	 * Retrieves a page of {@link Opd}s within specified dates and parameters
+	 * 
+	 * @param ward 
+	 * @param diseaseTypeCode
+	 * @param diseaseCode
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param ageFrom
+	 * @param ageTo
+	 * @param sex
+	 * @param newPatient
+	 * @param user
+	 * @return a {@link PagedResponse} object that contains the  {@link Opd}s.
+	 * @throws OHServiceException 
+	 */
 	public PagedResponse<Opd> getOpdListPageable(
 			Ward ward, 
 			DiseaseType diseaseType,
@@ -264,18 +280,10 @@ public class OpdIoOperations {
 				setPaginationData(repository.findAllByPatient_CodeOrderByProgYearDescPageable(patID, PageRequest.of(page, size)));
 	}
 	
-	public PagedResponse<Opd> setPaginationData(Page<Opd> pages) {
+	PagedResponse<Opd> setPaginationData(Page<Opd> pages) {
 		PagedResponse<Opd> data = new PagedResponse<Opd>();
 		data.setData(pages.getContent());
-		PageInfo pageInfo = new PageInfo();
-		pageInfo.setSize(pages.getPageable().getPageSize());
-		pageInfo.setPage(pages.getPageable().getPageNumber());
-		pageInfo.setNbOfElements(pages.getNumberOfElements());
-		pageInfo.setTotalNbOfElements(pages.getTotalElements());
-		pageInfo.setTotalPage(pages.getTotalPages());
-		pageInfo.setHasPreviousPage(pages.hasPrevious());
-		pageInfo.setHasNextPage(pages.hasNext());
-		data.setPageInfo(pageInfo);
+		data.setPageInfo(PageInfo.from(pages));
 		return data;
 	}
 }
