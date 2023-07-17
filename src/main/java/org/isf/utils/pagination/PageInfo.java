@@ -21,11 +21,14 @@
  */
 package org.isf.utils.pagination;
 
+import org.springframework.data.domain.Page;
+
 public class PageInfo {
 	int size;
 	int page;
 	int nbOfElements;
-	long totalCount;
+	long totalNbOfElements;
+	int totalPages;
 	boolean hasPreviousPage;
 	boolean hasNextPage;
 	
@@ -51,12 +54,6 @@ public class PageInfo {
 	public void setNbOfElements(int nbOfElements) {
 		this.nbOfElements = nbOfElements;
 	}
-	public long getTotalCount() {
-		return totalCount;
-	}
-	public void setTotalCount(long l) {
-		this.totalCount = l;
-	}
 	public boolean isHasPreviousPage() {
 		return hasPreviousPage;
 	}
@@ -69,4 +66,38 @@ public class PageInfo {
 	public void setHasNextPage(boolean hasNextPage) {
 		this.hasNextPage = hasNextPage;
 	}
+
+	public long getTotalNbOfElements() {
+		return totalNbOfElements;
+	}
+
+	public void setTotalNbOfElements(long totalNbOfElements) {
+		this.totalNbOfElements = totalNbOfElements;
+	}
+
+	public int getTotalPages() {
+		return totalPages;
+	}
+
+	public void setTotalPages(int totalPages) {
+		this.totalPages = totalPages;
+	}
+	
+	public PageInfo(int size, int page, int nbOfElements, long totalNbOfElements, int totalPages,
+			boolean hasPreviousPage, boolean hasNextPage) {
+		super();
+		this.size = size;
+		this.page = page;
+		this.nbOfElements = nbOfElements;
+		this.totalNbOfElements = totalNbOfElements;
+		this.totalPages = totalPages;
+		this.hasPreviousPage = hasPreviousPage;
+		this.hasNextPage = hasNextPage;
+	}
+
+	public static PageInfo from(Page page) {
+		return new PageInfo(
+				page.getSize(), page.getNumber(), page.getNumberOfElements(), page.getTotalElements(), page.getTotalPages(), page.hasPrevious(), page.hasNext());
+	}
+	
 }

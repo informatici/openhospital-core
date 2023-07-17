@@ -24,6 +24,9 @@ package org.isf.operation.service;
 import java.util.List;
 
 import org.isf.operation.model.Operation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -47,5 +50,8 @@ public interface OperationIoOperationRepository extends JpaRepository<Operation,
 
 	@Query(value = "SELECT * FROM OH_OPERATION JOIN OH_OPERATIONTYPE ON OPE_OCL_ID_A = OCL_ID_A WHERE OCL_DESC LIKE :desc AND (OPE_FOR LIKE 1 OR OPE_FOR LIKE 2 OR OPE_FOR LIKE 3) ORDER BY OPE_DESC", nativeQuery = true)
 	List<Operation> findAllByType_DescriptionContainsOrderByDescriptionAsc(@Param("desc") String typeDescription);
+	
+	@Query(value = "SELECT * FROM OH_OPERATION ORDER BY OPE_DESC", nativeQuery = true)
+	Page<Operation> findAllPageable(Pageable pageable);
 
 }

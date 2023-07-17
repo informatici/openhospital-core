@@ -22,6 +22,7 @@
 package org.isf.distype.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.distype.model.DiseaseType;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -90,4 +91,20 @@ public class DiseaseTypeIoOperation {
 	public boolean isCodePresent(String code) throws OHServiceException {
 		return repository.existsById(code);
 	}
+	
+	/**
+	 * Returns {@link DiseaseType}s.
+	 * 
+	 * @Param code
+	 * @return a disease type.
+	 * @throws OHServiceException if an error occurs retrieving the diseases type.
+	 */
+	public DiseaseType getDiseaseTypes(String code) throws OHServiceException {
+		Optional<DiseaseType> diseaseType = repository.findById(code);
+		if ( diseaseType.isPresent()) {
+			return diseaseType.get();
+		}
+		return null;
+	}
+
 }
