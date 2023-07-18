@@ -236,7 +236,7 @@ public class OpdIoOperations {
 	 * Retrieves a page of {@link Opd}s within specified dates and parameters
 	 * 
 	 * @param ward 
-	 * @param diseaseTypeCode
+	 * @param diseaseType
 	 * @param diseaseCode
 	 * @param dateFrom
 	 * @param dateTo
@@ -245,7 +245,9 @@ public class OpdIoOperations {
 	 * @param sex
 	 * @param newPatient
 	 * @param user
-	 * @return a {@link PagedResponse} object that contains the  {@link Opd}s.
+	 * @param page
+	 * @param size
+	 * @return a {@link PagedResponse} object that contains the {@link Opd}s.
 	 * @throws OHServiceException 
 	 */
 	public PagedResponse<Opd> getOpdListPageable(

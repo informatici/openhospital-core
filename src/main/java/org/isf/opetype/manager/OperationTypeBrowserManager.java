@@ -77,7 +77,7 @@ public class OperationTypeBrowserManager {
 	 * Delete an {@link OperationType}
 	 *
 	 * @param operationType - the {@link OperationType} to delete
-	 * @return <code>true</code> if the {@link OperationType} has been delete, <code>false</code> otherwise.
+	 * @return <code>true</code> if the {@link OperationType} has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean deleteOperationType(OperationType operationType) throws OHServiceException {

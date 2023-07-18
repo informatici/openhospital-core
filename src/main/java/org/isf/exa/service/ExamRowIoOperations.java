@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * ------------------------------------------
- * ExamRowIoOperations - provides the I/OO operations for recovering and managing exam records from the database.
+ * ExamRowIoOperations - provides the I/O operations for recovering and managing exam records from the database.
  * -----------------------------------------
  * modification history
  * ??/??/2005 - Davide/Theo - first beta version
