@@ -310,7 +310,7 @@ public class PatientIoOperations {
 	}
 
 	PagedResponse<Patient> setPaginationData(Page<Patient> pages){
-		PagedResponse<Patient> data = new PagedResponse<Patient>();
+		PagedResponse<Patient> data = new PagedResponse<>();
 		data.setData(pages.getContent());
 		data.setPageInfo(PageInfo.from(pages));
 		return data;

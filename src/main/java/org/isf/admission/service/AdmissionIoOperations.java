@@ -396,7 +396,7 @@ public class AdmissionIoOperations {
 	 * @return {@link PagedResponse<Admission>}.
 	 */
 	PagedResponse<Admission> setPaginationData(Page<Admission> pages) {
-		PagedResponse<Admission> data = new PagedResponse<Admission>();
+		PagedResponse<Admission> data = new PagedResponse<>();
 		data.setData(pages.getContent());
 		data.setPageInfo(PageInfo.from(pages));
 		return data;

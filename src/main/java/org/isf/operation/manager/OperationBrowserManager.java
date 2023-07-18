@@ -211,7 +211,7 @@ public class OperationBrowserManager {
 	}
 	
 	PagedResponse<Operation> setPaginationData(Page<Operation> pages) {
-		PagedResponse<Operation> data = new PagedResponse<Operation>();
+		PagedResponse<Operation> data = new PagedResponse<>();
 		data.setData(pages.getContent());
 		data.setPageInfo(PageInfo.from(pages));
 		return data;

@@ -430,7 +430,7 @@ public class LabIoOperations {
 	}
 	
 	PagedResponse<Laboratory> setPaginationData(Page<Laboratory> pages) {
-		PagedResponse<Laboratory> data = new PagedResponse<Laboratory>();
+		PagedResponse<Laboratory> data = new PagedResponse<>();
 		data.setData(pages.getContent());
 		data.setPageInfo(PageInfo.from(pages));
 		return data;

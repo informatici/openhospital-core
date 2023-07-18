@@ -111,7 +111,7 @@ public class ExaminationOperations {
 	}
 	
 	PagedResponse<PatientExamination> setPaginationData(Page<PatientExamination> pages){
-		PagedResponse<PatientExamination> data = new PagedResponse<PatientExamination>();
+		PagedResponse<PatientExamination> data = new PagedResponse<>();
 		data.setData(pages.getContent());
 		data.setPageInfo(PageInfo.from(pages));
 		return data;

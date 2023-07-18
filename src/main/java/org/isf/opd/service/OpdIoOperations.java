@@ -281,7 +281,7 @@ public class OpdIoOperations {
 	}
 	
 	PagedResponse<Opd> setPaginationData(Page<Opd> pages) {
-		PagedResponse<Opd> data = new PagedResponse<Opd>();
+		PagedResponse<Opd> data = new PagedResponse<>();
 		data.setData(pages.getContent());
 		data.setPageInfo(PageInfo.from(pages));
 		return data;
