@@ -110,17 +110,10 @@ public class ExaminationOperations {
 		repository.deleteAll(patexList);
 	}
 	
-	public PagedResponse<PatientExamination> setPaginationData(Page<PatientExamination> pages){
-		PagedResponse<PatientExamination> data = new PagedResponse<PatientExamination>();
+	PagedResponse<PatientExamination> setPaginationData(Page<PatientExamination> pages){
+		PagedResponse<PatientExamination> data = new PagedResponse<>();
 		data.setData(pages.getContent());
-		PageInfo pageInfo = new PageInfo();
-		pageInfo.setSize(pages.getPageable().getPageSize());
-		pageInfo.setPage(pages.getPageable().getPageNumber());
-		pageInfo.setNbOfElements(pages.getNumberOfElements());
-		pageInfo.setTotalCount(pages.getTotalElements());
-		pageInfo.setHasPreviousPage(pages.hasPrevious());
-		pageInfo.setHasNextPage(pages.hasNext());
-		data.setPageInfo(pageInfo);
+		data.setPageInfo(PageInfo.from(pages));
 		return data;
 	}
 }

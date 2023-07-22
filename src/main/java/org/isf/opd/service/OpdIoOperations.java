@@ -26,12 +26,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.isf.distype.model.DiseaseType;
 import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PageInfo;
+import org.isf.utils.pagination.PagedResponse;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -225,5 +230,60 @@ public class OpdIoOperations {
 	 */
 	public List<Opd> getOpdByProgYear(Integer code) {
 		return repository.findByProgYear(code);
+	}
+	
+	/**
+	 * Retrieves a page of {@link Opd}s within specified dates and parameters
+	 * 
+	 * @param ward 
+	 * @param diseaseTypeCode
+	 * @param diseaseCode
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param ageFrom
+	 * @param ageTo
+	 * @param sex
+	 * @param newPatient
+	 * @param user
+	 * @return a {@link PagedResponse} object that contains the  {@link Opd}s.
+	 * @throws OHServiceException 
+	 */
+	public PagedResponse<Opd> getOpdListPageable(
+			Ward ward, 
+			DiseaseType diseaseType,
+			String diseaseCode,
+			LocalDateTime dateFrom,
+			LocalDateTime dateTo,
+			int ageFrom,
+			int ageTo,
+			char sex,
+			char newPatient,
+			String user,
+			int page,
+			int size) throws OHServiceException {
+		return setPaginationData(repository.findOpdListPageable(ward, diseaseType, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user, PageRequest.of(page, size)));
+	}
+	
+	/**
+	 * Return {@link List} of {@link Opd}s associated to specified patient ID
+	 * 
+	 * @param patID - the patient ID
+	 * @param page - page number
+	 * @param size - size of the list
+	 * @return the list of {@link Opd}s associated to specified patient ID.
+	 * 		   the whole list of {@link Opd}s if <code>0</code> is passed.
+	 * @throws OHServiceException 
+	 */
+	public PagedResponse<Opd> getOpdListPageables(int patID, int page, int size) throws OHServiceException {
+		return patID == 0 ?
+				setPaginationData(repository.findAllOrderByProgYearDescPageable(PageRequest.of(page, size))) :
+				setPaginationData(repository.findAllByPatient_CodeOrderByProgYearDescPageable(patID, PageRequest.of(page, size)));
+	}
+	
+	PagedResponse<Opd> setPaginationData(Page<Opd> pages) {
+		PagedResponse<Opd> data = new PagedResponse<>();
+		data.setData(pages.getContent());
+		data.setPageInfo(PageInfo.from(pages));
+		return data;
 	}
 }
