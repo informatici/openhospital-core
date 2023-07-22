@@ -125,5 +125,16 @@ public class DiseaseTypeBrowserManager {
 			throw new OHDataValidationException(errors);
 		}
 	}
+	
+	/**
+	 * Returns {@link DiseaseType}.
+	 *
+	 * @Param code
+	 * @return  object {@link DiseaseType}, <code>null</code> otherwise.
+	 * @throws OHServiceException
+	 */
+	public DiseaseType getDiseaseType(String code) throws OHServiceException {
+		return ioOperations.getDiseaseTypes(code);
+	}
 
 }

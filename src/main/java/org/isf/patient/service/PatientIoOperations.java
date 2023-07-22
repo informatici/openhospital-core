@@ -309,17 +309,10 @@ public class PatientIoOperations {
 		}
 	}
 
-	public PagedResponse<Patient> setPaginationData(Page<Patient> pages){
-		PagedResponse<Patient> data = new PagedResponse<Patient>();
+	PagedResponse<Patient> setPaginationData(Page<Patient> pages){
+		PagedResponse<Patient> data = new PagedResponse<>();
 		data.setData(pages.getContent());
-		PageInfo pageInfo = new PageInfo();
-		pageInfo.setSize(pages.getPageable().getPageSize());
-		pageInfo.setPage(pages.getPageable().getPageNumber());
-		pageInfo.setNbOfElements(pages.getNumberOfElements());
-		pageInfo.setTotalCount(pages.getTotalElements());
-		pageInfo.setHasPreviousPage(pages.hasPrevious());
-		pageInfo.setHasNextPage(pages.hasNext());
-		data.setPageInfo(pageInfo);
+		data.setPageInfo(PageInfo.from(pages));
 		return data;
 	}
 }

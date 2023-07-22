@@ -27,7 +27,10 @@ import org.isf.operation.model.Operation;
 import org.isf.opetype.model.OperationType;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PagedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -128,6 +131,19 @@ public class OperationIoOperations {
 	public boolean isDescriptionPresent(String description, String typeCode) throws OHServiceException {
 		Operation foundOperation = repository.findOneByDescriptionAndType_Code(description, typeCode);
 		return foundOperation != null && foundOperation.getDescription().compareTo(description) == 0;
+	}
+	
+	/**
+	 * Retrieves a page of {@link Operation}s
+	 * 
+	 * @param page - The page number of the operations to retrieve
+	 * @param size - The size of the page of operations to retrieve.
+	 * @return a {@link PagedResponse} object that contains the {@link Operation}s.
+	 * @throws OHServiceException 
+	 */
+	public Page<Operation> getOperationPageable(int page, int size) throws OHServiceException {
+		return repository.findAllPageable(PageRequest.of(page, size));
+
 	}
 }
 
