@@ -267,6 +267,7 @@ public class OpdIoOperations {
 	/**
 	 * Return {@link List} of {@link Opd}s associated to specified patient ID
 	 * 
+	 * @param ward - the ward of opd
 	 * @param patID - the patient ID
 	 * @param page - page number
 	 * @param size - size of the list
@@ -274,7 +275,12 @@ public class OpdIoOperations {
 	 * 		   the whole list of {@link Opd}s if <code>0</code> is passed.
 	 * @throws OHServiceException 
 	 */
-	public PagedResponse<Opd> getOpdListPageables(int patID, int page, int size) throws OHServiceException {
+	public PagedResponse<Opd> getOpdListPageables(Ward ward, int patID, int page, int size) throws OHServiceException {
+		if (ward != null) {
+			return patID == 0 ?
+					setPaginationData(repository.findAllByWardOrderByProgYearDescPageable(ward, PageRequest.of(page, size))) :
+					setPaginationData(repository.findAllByPatient_CodeAndWardOrderByProgYearDescPageable(ward, patID, PageRequest.of(page, size)));
+		}
 		return patID == 0 ?
 				setPaginationData(repository.findAllOrderByProgYearDescPageable(PageRequest.of(page, size))) :
 				setPaginationData(repository.findAllByPatient_CodeOrderByProgYearDescPageable(patID, PageRequest.of(page, size)));
