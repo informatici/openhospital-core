@@ -54,7 +54,7 @@ public class PatientConsensusBrowserManager {
 	/**
 	 * Update an {@link PatientConsensus}
 	 *
-	 * @param PatientConsensus - the {@link PatientConsensus} to update
+	 * @param patientConsensus - the {@link PatientConsensus} to update
 	 * @return the {@link PatientConsensus}.
 	 * @throws OHServiceException
 	 */
@@ -77,16 +77,14 @@ public class PatientConsensusBrowserManager {
 
 
 	/**
-	 * Checks if an <code>username</code> has a {@link PatientConsensus}
+	 * Checks if n user specified by its {@code code} has a {@link PatientConsensus}
 	 *
-	 * @param username - the username
+	 * @param code - the user's id code
 	 * @return <code>true</code> if the username has a PatientConsensus, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean existsByPatientCode(Integer code) throws OHServiceException {
 		return ioOperations.existsByPatientCode(code);
 	}
-
-
 
 }

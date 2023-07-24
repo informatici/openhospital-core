@@ -113,7 +113,7 @@ public class Lot extends Auditable<String> {
 	private double wardsTotalQuantity;
 	
 	/**
-	 * Automatic calculated field for a overall lot's quantity (MedicalStock + MedicalStockWards).<br>
+	 * Automatic calculated field for an overall lot's quantity (MedicalStock + MedicalStockWards).<br>
 	 * 
 	 * <i>
 	 * @see <a href="https://github.com/informatici/openhospital-doc/blob/develop/doc_admin/AdminManual.adoc#5-1-19-internalpharmacies">Admin Manual</a>
