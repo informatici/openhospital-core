@@ -53,7 +53,7 @@ public class TestOpd {
 
 		if (usingSet) {
 			opd = new Opd();
-			setParameters(patient, disease, ward,  nextVisit, opd);
+			setParameters(patient, disease, ward, nextVisit, opd);
 		} else {
 			// Create Opd with all parameters 
 			opd = new Opd(prog_year, sex, age, disease);
