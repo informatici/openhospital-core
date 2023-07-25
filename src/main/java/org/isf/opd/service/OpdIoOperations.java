@@ -247,7 +247,7 @@ public class OpdIoOperations {
 	 * @param user
 	 * @param page
 	 * @param size
-	 * @return a {@link PagedResponse} object that contains the  {@link Opd}s.
+	 * @return a {@link PagedResponse} object that contains the {@link Opd}s.
 	 * @throws OHServiceException 
 	 */
 	public PagedResponse<Opd> getOpdListPageable(
@@ -274,7 +274,6 @@ public class OpdIoOperations {
 	 * @param page - page number
 	 * @param size - size of the list
 	 * @return the list of {@link Opd}s associated to specified patient ID.
-	 * 		   the whole list of {@link Opd}s if <code>0</code> is passed.
 	 * @throws OHServiceException 
 	 */
 	public PagedResponse<Opd> getOpdListPageables(Ward ward, int patID, int page, int size) throws OHServiceException {
