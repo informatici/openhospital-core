@@ -236,7 +236,7 @@ public class OpdIoOperations {
 	 * Retrieves a page of {@link Opd}s within specified dates and parameters
 	 * 
 	 * @param ward 
-	 * @param diseaseTypeCode
+	 * @param diseaseType
 	 * @param diseaseCode
 	 * @param dateFrom
 	 * @param dateTo

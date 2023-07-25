@@ -60,7 +60,6 @@ public class TestOpd {
 			opd.setDate(date);
 			/*opd.setReason(reason);
 			opd.setTherapies(therapies);*/
-			opd.setWard(ward);
 			opd.setPrescription(prescription);
 			opd.setNewPatient(newPatient);
 			opd.setReferralFrom(referralFrom);
@@ -69,6 +68,7 @@ public class TestOpd {
 			opd.setPatient(patient);
 			opd.setDisease2(disease);
 			opd.setDisease3(disease);
+			opd.setWard(ward);
 			opd.setNextVisit(nextVisit);
 		}
 
@@ -92,8 +92,7 @@ public class TestOpd {
 		opd.setDisease2(disease);
 		opd.setDisease3(disease);
 		opd.setWard(ward);
-		opd.setNextVisit(nextVisit);
-		
+		opd.setNextVisit(nextVisit);	
 	}
 
 	public void check(Opd opd) {
