@@ -284,7 +284,7 @@ public class AdmissionIoOperations {
 	}
 
 	/**
-	 * Sets an admission record to deleted.
+	 * Sets an admission record as deleted.
 	 *
 	 * @param admissionId the admission id.
 	 * @return <code>true</code> if the record has been set to delete.
@@ -327,8 +327,8 @@ public class AdmissionIoOperations {
 	/**
 	 * Returns the list of Admissions by pages
 	 *
-	 * @param dateFrom.
-	 * @param daTo
+	 * @param dateFrom
+	 * @param dateTo
 	 * @param pageable
 	 * @return the list of {@link Admission}.
 	 * @throws OHServiceException if an error occurs during database request.
@@ -340,8 +340,8 @@ public class AdmissionIoOperations {
 	/**
 	 * Returns the list of Admissions
 	 *
-	 * @param dateFrom.
-	 * @param daTo
+	 * @param dateFrom
+	 * @param dateTo
 	 * @return the list of {@link Admission}.
 	 * @throws OHServiceException if an error occurs during database request.
 	 */
@@ -352,8 +352,8 @@ public class AdmissionIoOperations {
 	/**
 	 * Returns the list of Admissions with discharge
 	 *
-	 * @param dateFrom.
-	 * @param daTo
+	 * @param dateFrom
+	 * @param dateTo
 	 * @param pageable
 	 * @return the list of {@link Admission}.
 	 * @throws OHServiceException if an error occurs during database request.
@@ -365,8 +365,8 @@ public class AdmissionIoOperations {
 	/**
 	 * Returns the list of Admissions by page
 	 *
-	 * @param dateFrom.
-	 * @param daTo
+	 * @param dateFrom
+	 * @param dateTo
 	 * @param pageable
 	 * @return the list of {@link Admission}.
 	 * @throws OHServiceException if an error occurs during database request.
@@ -378,8 +378,8 @@ public class AdmissionIoOperations {
 	/**
 	 * Returns the list of Admissions with discharge by page
 	 *
-	 * @param dateFrom.
-	 * @param daTo
+	 * @param dateFrom
+	 * @param dateTo
 	 * @param pageable
 	 * @return the list of {@link Admission}.
 	 * @throws OHServiceException if an error occurs during database request.
@@ -392,7 +392,7 @@ public class AdmissionIoOperations {
 	/**
 	 * Returns the list of Admissions with page info
 	 *
-	 * @param page of admission
+	 * @param pages of admissions
 	 * @return {@link PagedResponse<Admission>}.
 	 */
 	PagedResponse<Admission> setPaginationData(Page<Admission> pages) {
