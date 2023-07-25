@@ -66,7 +66,7 @@ public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, O
 	Page<Opd> findAllByWardOrderByProgYearDescPageable(@Param("ward") Ward ward, Pageable pageable);
 	
 	@Query("select o from Opd o where o.patient.code = :code order by o.prog_year")
-	Page<Opd> findAllByPatient_CodeOrderByProgYearDescPageable(@Param("code") int code, Pageable pageable);
+	Page<Opd> findAllByPatient_CodeOrderByProgYearDescPageable(@Param("code") Integer code, Pageable pageable);
 	
 	@Query("select o from Opd o where o.patient.code = :code and o.ward = :ward order by o.prog_year")
 	Page<Opd> findAllByPatient_CodeAndWardOrderByProgYearDescPageable(@Param("ward") Ward ward, @Param("code") int code, Pageable pageable);
