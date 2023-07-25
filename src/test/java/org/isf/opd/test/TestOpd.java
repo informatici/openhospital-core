@@ -92,7 +92,7 @@ public class TestOpd {
 		opd.setDisease2(disease);
 		opd.setDisease3(disease);
 		opd.setWard(ward);
-		opd.setNextVisit(nextVisit);	
+		opd.setNextVisit(nextVisit);
 	}
 
 	public void check(Opd opd) {
