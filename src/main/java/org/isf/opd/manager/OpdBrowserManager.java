@@ -86,7 +86,7 @@ public class OpdBrowserManager {
 		if (GeneralData.OPDEXTENDED && opd.getPatient() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseselectapatient.msg")));
 		}
-		// Check Patient
+		// Check Ward
 		if (ward == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseselectaward.msg")));
 		} else {
@@ -253,6 +253,25 @@ public class OpdBrowserManager {
 		return ioOperations.getOpdByProgYear(code);
 	}
 	
+	/**
+	 * Returns {@link List} of {@link Opd}s associated to specified patient ID with page info.
+	 *
+	 * @param ward - the ward of opd
+	 * @param diseaseType - the disease type
+	 * @param diseaseCode - the Code of disease
+	 * @param dateFrom 
+	 * @param dateTo
+	 * @param ageFrom
+	 * @param ageTo
+	 * @param sex
+	 * @param newPatient
+	 * @param user
+	 * @param page
+	 * @param size
+	 * @return the list of {@link Opd}s associated to specified patient ID.
+	 * the whole list of {@link Opd}s if <code>0</code> is passed.
+	 * @throws OHServiceException
+	 */
 	public PagedResponse<Opd> getOpdPageable(Ward ward, DiseaseType diseaseType, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, String user, int page, int size)
 			throws OHServiceException {
 		LocalDateTime dateFr = dateFrom.atStartOfDay();
@@ -263,6 +282,7 @@ public class OpdBrowserManager {
 	/**
 	 * Returns {@link List} of {@link Opd}s associated to specified patient ID with page info.
 	 *
+	 * @param ward - the ward of opd
 	 * @param patientcode - the patient ID
 	 * @param page - the number of page
 	 * @param size - the size of the list 
@@ -270,7 +290,7 @@ public class OpdBrowserManager {
 	 * the whole list of {@link Opd}s if <code>0</code> is passed.
 	 * @throws OHServiceException
 	 */
-	public PagedResponse<Opd> getOpdListPageable(int patientcode, int page, int size) throws OHServiceException {
-		return ioOperations.getOpdListPageables(patientcode, page, size);
+	public PagedResponse<Opd> getOpdListPageable(Ward ward, int patientcode, int page, int size) throws OHServiceException {
+		return ioOperations.getOpdListPageables(ward, patientcode, page, size);
 	}
 }

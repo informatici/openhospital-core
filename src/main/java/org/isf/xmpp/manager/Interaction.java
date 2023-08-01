@@ -85,7 +85,7 @@ public class Interaction {
 
 	public String userFromAddress(String address) {
 		int index;
-		index = address.indexOf("@");
+		index = address.indexOf('@');
 		return address.substring(0, index);
 	}
 
