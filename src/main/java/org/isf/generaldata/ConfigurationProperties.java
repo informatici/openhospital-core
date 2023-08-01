@@ -66,7 +66,7 @@ public abstract class ConfigurationProperties {
 	 * @param fileProperties - the file name (to be available in the classpath)
 	 * @param logger - the {@link Logger} of the concrete class
 	 */
-	public static final Properties loadPropertiesFile(String fileProperties, Logger logger) {
+	public static Properties loadPropertiesFile(String fileProperties, Logger logger) {
 		return loadPropertiesFile(fileProperties, logger, false);
 	}
 
