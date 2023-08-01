@@ -125,7 +125,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			for (int i = 0; i < _longs.length; i++) {
 
 				try {
-					_longs[i] = Long.parseLong(files[i].getName().substring(0, files[i].getName().indexOf(".")));
+					_longs[i] = Long.parseLong(files[i].getName().substring(0, files[i].getName().indexOf('.')));
 				} catch (Exception e) {
 				}
 			}
@@ -578,7 +578,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 
 		for (int i = 0; i < _longs.length; i++) {
 			try {
-				_longs[i] = Long.parseLong(files[i].getName().substring(0, files[i].getName().indexOf(".")));
+				_longs[i] = Long.parseLong(files[i].getName().substring(0, files[i].getName().indexOf('.')));
 			} catch (Exception e) {
 			}
 		}

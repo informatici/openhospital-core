@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 import org.isf.medicals.model.Medical;
 
 /**
- * Bean to host Therapies informations extract from TherapyRow beans.
+ * Bean to host Therapies information extracted from TherapyRow beans.
  *
  * @author Mwithi
  */

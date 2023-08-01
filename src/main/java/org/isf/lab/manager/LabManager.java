@@ -121,7 +121,7 @@ public class LabManager {
 	/**
 	 * Return the list of exams ({@link Laboratory}s) divided by pages.
 	 * 
-	 * @param onWeek
+	 * @param oneWeek
 	 * @param pageNo
 	 * @param pageSize
 	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.

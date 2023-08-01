@@ -179,7 +179,7 @@ public class DiseaseBrowserManager {
 
 	/**
 	 * Updates the specified {@link Disease}.
-	 * If the disease has been updated concurrently a overwrite confirmation message is shown.
+	 * If the disease has been updated concurrently an overwrite confirmation message is shown.
 	 * In case of error a message error is shown and a <code>false</code> value is returned.
 	 *
 	 * @param disease the disease to update.
