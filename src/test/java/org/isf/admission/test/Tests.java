@@ -204,11 +204,9 @@ public class Tests extends OHCoreTestCase {
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
 		final LocalDateTime admissionDate = foundAdmission.getAdmDate();
 		final LocalDateTime dischargeDate = foundAdmission.getDisDate();
-		{
-			List<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null, null, null);
-			assertThat(searchResult).hasSameSizeAs(patients);
-			assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
-		}
+		List<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null, null, null);
+		assertThat(searchResult).hasSameSizeAs(patients);
+		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 		final LocalDateTime beforeAdmissionDate = admissionDate.minusDays(1);
 
 		final LocalDateTime oneDayAfterAdmissionDate = admissionDate.plusDays(1);
