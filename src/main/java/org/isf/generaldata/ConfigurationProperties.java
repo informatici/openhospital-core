@@ -144,7 +144,7 @@ public abstract class ConfigurationProperties {
 	}
 
 	/**
-	 * Method to retrieve an double property
+	 * Method to retrieve a double property
 	 *
 	 * @param property
 	 * @param defaultValue
