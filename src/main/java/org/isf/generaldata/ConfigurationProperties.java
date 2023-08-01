@@ -77,7 +77,7 @@ public abstract class ConfigurationProperties {
 	 * @param exitOnFail - if {@code true} the application will exit if configuration 
 	 * is missing, otherwise default values will be used
 	 */
-	private static final Properties loadPropertiesFile(String fileProperties, Logger logger, boolean exitOnFail) {
+	private static Properties loadPropertiesFile(String fileProperties, Logger logger, boolean exitOnFail) {
 		Properties prop = new Properties();
 		try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileProperties)) {
 			if (null == in) {
