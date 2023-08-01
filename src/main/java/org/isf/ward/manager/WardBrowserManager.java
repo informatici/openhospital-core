@@ -150,7 +150,7 @@ public class WardBrowserManager {
 
 	/**
 	 * Updates the specified {@link Ward}.
-	 * If the ward has been updated concurrently a overwrite confirmation message is shown.
+	 * If the ward has been updated concurrently an overwrite confirmation message is shown.
 	 * In case of error a message error is shown and a <code>false</code> value is returned.
 	 * @param ward the ward to update.
 	 * @return ward that has been updated
@@ -236,7 +236,7 @@ public class WardBrowserManager {
 	}
 	
 	/**
-	 * Create default OPD {@link Ward} as follow:
+	 * Create default OPD {@link Ward} as follows:
 	 * {'code' : "M",
 	 * 'Description' : MessageBundle.getMessage("angal.ward.maternity.txt"),
 	 * 'Telephone' : "235/52544",

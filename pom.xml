@@ -20,7 +20,7 @@
 		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.framework.version>5.3.29</spring.framework.version>
-		<spring.boot.version>2.7.13</spring.boot.version>
+		<spring.boot.version>2.7.14</spring.boot.version>
 		<jasperreports.version>6.20.5</jasperreports.version>
 		<spring.cloud.starter.openfeign.version>3.1.8</spring.cloud.starter.openfeign.version>
 		<license.maven.plugin.version>4.2</license.maven.plugin.version>
@@ -47,17 +47,13 @@
 			    <dependency>
 			        <groupId>org.junit.jupiter</groupId>
 			        <artifactId>junit-jupiter-engine</artifactId>
-			        <version>5.9.3</version>
+			        <version>5.10.0</version>
 			    </dependency>
 			  </dependencies>
 			  <configuration>
 			    <redirectTestOutputToFile>true</redirectTestOutputToFile>
 			    <reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>
 			  </configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.1.2</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -190,7 +186,7 @@
 			<dependency>
 				<groupId>org.junit</groupId>
 				<artifactId>junit-bom</artifactId>
-				<version>5.9.3</version>
+				<version>5.10.0</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

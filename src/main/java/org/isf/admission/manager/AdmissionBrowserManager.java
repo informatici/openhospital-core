@@ -259,7 +259,7 @@ public class AdmissionBrowserManager {
 	}
 
 	/**
-	 * Sets an admission record to deleted.
+	 * Sets an admission record as deleted.
 	 *
 	 * @param admissionId the admission id.
 	 * @return <code>true</code> if the record has been set to delete.

@@ -190,7 +190,7 @@ public class BillItems extends Auditable<String> {
 	}
 
 	/**
-	 * get the item ID
+	 * Get the item ID
 	 *
 	 * @return
 	 */
