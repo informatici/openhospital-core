@@ -232,7 +232,7 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.12.0</version>
+			<version>3.13.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.librepdf</groupId>
@@ -259,7 +259,7 @@
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
-			<version>8.0.33</version>
+			<version>8.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rxtx</groupId>
@@ -514,7 +514,7 @@
 		<dependency>
 			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-gson</artifactId>
-			<version>12.3</version>
+			<version>12.4</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.annotation</groupId>
