@@ -340,7 +340,7 @@ public class Tests extends OHCoreTestCase {
 
 		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, wardTo, null, lot, false);
 
-		ArrayList<MovementWard> movementWards = new ArrayList<>();
+		List<MovementWard> movementWards = new ArrayList<>();
 		movementWards.add(movementWard);
 
 		medicalStockWardIoOperations.newMovementWard(movementWards);
@@ -370,7 +370,7 @@ public class Tests extends OHCoreTestCase {
 
 		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, null, null, lot, false);
 
-		ArrayList<MovementWard> movementWards = new ArrayList<>();
+		List<MovementWard> movementWards = new ArrayList<>();
 		movementWards.add(movementWard);
 
 		medicalStockWardIoOperations.newMovementWard(movementWards);
@@ -588,7 +588,7 @@ public class Tests extends OHCoreTestCase {
 
 		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, wardTo, null, lot, false);
 
-		ArrayList<MovementWard> movementWards = new ArrayList<>();
+		List<MovementWard> movementWards = new ArrayList<>();
 		movementWards.add(movementWard);
 
 		movWardBrowserManager.newMovementWard(movementWards);
@@ -618,7 +618,7 @@ public class Tests extends OHCoreTestCase {
 
 		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, null, null, lot, false);
 
-		ArrayList<MovementWard> movementWards = new ArrayList<>();
+		List<MovementWard> movementWards = new ArrayList<>();
 		movementWards.add(movementWard);
 
 		movWardBrowserManager.newMovementWard(movementWards);
@@ -722,7 +722,7 @@ public class Tests extends OHCoreTestCase {
 		MovementWard movementWard3 = testMovementWard.setup(wardFrom, patient, medical, wardTo, ward, lot, false);
 		movementWard3.setDate(LocalDateTime.of(277, 11, 1, 0, 0, 0));
 
-		ArrayList<MovementWard> movementWards = new ArrayList<>();
+		List<MovementWard> movementWards = new ArrayList<>();
 		movementWards.add(movementWard1);
 		movementWards.add(movementWard2);
 		movementWards.add(movementWard3);
@@ -770,7 +770,7 @@ public class Tests extends OHCoreTestCase {
 		MovementWard movementWard2 = testMovementWard.setup(wardTo, patient, medical2, ward, wardFrom, lot, false);
 		MovementWard movementWard3 = testMovementWard.setup(wardFrom, patient, medical3, wardTo, ward, lot, false);
 
-		ArrayList<MovementWard> movementWards = new ArrayList<>();
+		List<MovementWard> movementWards = new ArrayList<>();
 		movementWards.add(movementWard3);
 		movementWards.add(movementWard2);
 		movementWards.add(movementWard1);
@@ -839,7 +839,7 @@ public class Tests extends OHCoreTestCase {
 		lotIoOperationRepository.saveAndFlush(lot2);
 		lotIoOperationRepository.saveAndFlush(lot3);
 
-		ArrayList<Movement> movements = new ArrayList<>();
+		List<Movement> movements = new ArrayList<>();
 		movements.add(movement2);
 		movements.add(movement1);
 		movements.add(movement3);
@@ -908,7 +908,7 @@ public class Tests extends OHCoreTestCase {
 		lotIoOperationRepository.saveAndFlush(lot2);
 		lotIoOperationRepository.saveAndFlush(lot3);
 
-		ArrayList<Movement> movements = new ArrayList<>();
+		List<Movement> movements = new ArrayList<>();
 		movements.add(movement2);
 		movements.add(movement1);
 		movements.add(movement3);
@@ -962,7 +962,7 @@ public class Tests extends OHCoreTestCase {
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard2);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard3);
 
-		ArrayList<MedicalWard> medicalWards = new ArrayList<>();
+		List<MedicalWard> medicalWards = new ArrayList<>();
 		medicalWards.add(medicalWard2);
 		medicalWards.add(medicalWard3);
 		medicalWards.add(medicalWard1);

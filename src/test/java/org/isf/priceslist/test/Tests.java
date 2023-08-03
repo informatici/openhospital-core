@@ -132,7 +132,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoUpdatePrices() throws Exception {
 		// given:
-		ArrayList<Price> prices = new ArrayList<>();
+		List<Price> prices = new ArrayList<>();
 		int deleteId = setupTestPrice(false);
 		Price deletePrice = priceIoOperationRepository.findById(deleteId).get();
 
@@ -237,7 +237,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrUpdatePrices() throws Exception {
-		ArrayList<Price> prices = new ArrayList<>();
+		List<Price> prices = new ArrayList<>();
 		int deleteId = setupTestPrice(false);
 		Price deletePrice = priceIoOperationRepository.findById(deleteId).get();
 		PriceList priceList = deletePrice.getList();
