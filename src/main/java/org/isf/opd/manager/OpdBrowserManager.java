@@ -89,10 +89,6 @@ public class OpdBrowserManager {
 		// Check Ward
 		if (ward == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseselectaward.msg")));
-		} else {
-			if (!ward.isOpd()) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifiedwardisnotenabledforopdservice.msg")));
-			}
 		}
 		// Check Sex and Age
 		if (opd.getAge() < 0) {
