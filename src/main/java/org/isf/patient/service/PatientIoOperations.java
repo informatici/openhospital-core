@@ -301,12 +301,11 @@ public class PatientIoOperations {
 		boolean isLoadProfilePhotoFromDB = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		if (isLoadProfilePhotoFromDB) {
 			Hibernate.initialize(patient.getPatientProfilePhoto());
-			return patient.getPatientProfilePhoto();
 		} else {
 			((Session) this.entityManager.getDelegate()).evict(patient);
 			fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
-			return patient.getPatientProfilePhoto();
 		}
+		return patient.getPatientProfilePhoto();
 	}
 
 	PagedResponse<Patient> setPaginationData(Page<Patient> pages){
