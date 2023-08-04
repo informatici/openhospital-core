@@ -251,7 +251,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoSetGroupMenu() throws Exception {
 		UserGroup userGroup = testUserGroup.setup(false);
 		UserMenuItem menuItem = testUserMenu.setup(false);
-		ArrayList<UserMenuItem> userMenuItems = new ArrayList<>();
+		List<UserMenuItem> userMenuItems = new ArrayList<>();
 		userMenuItems.add(menuItem);
 		assertThat(menuIoOperation.setGroupMenu(userGroup, userMenuItems, true)).isTrue();
 	}
@@ -447,7 +447,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrSetGroupMenu() throws Exception {
 		UserGroup userGroup = testUserGroup.setup(false);
 		UserMenuItem menuItem = testUserMenu.setup(false);
-		ArrayList<UserMenuItem> userMenuItems = new ArrayList<>();
+		List<UserMenuItem> userMenuItems = new ArrayList<>();
 		userMenuItems.add(menuItem);
 		assertThat(userBrowsingManager.setGroupMenu(userGroup, userMenuItems)).isTrue();
 	}

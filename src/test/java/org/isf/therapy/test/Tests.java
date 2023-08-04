@@ -188,7 +188,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewTherapiesWithSMSDateBeforeToday() throws Exception {
 		int id = setupTestTherapyRow(false);
 		TherapyRow therapyRow = therapyIoOperationRepository.findById(id).get();
-		ArrayList<TherapyRow> therapyRows = new ArrayList<>();
+		List<TherapyRow> therapyRows = new ArrayList<>();
 		therapyRows.add(therapyRow);
 		assertThat(therapyManager.newTherapies(therapyRows)).isTrue();
 		assertThat(smsOperations.getList()).isEmpty();
@@ -207,7 +207,7 @@ public class Tests extends OHCoreTestCase {
 		therapyRow.setStartDate(TimeTools.getNow());
 		therapyRow.setEndDate(TimeTools.getBeginningOfNextDay(therapyRow.getStartDate()));
 		therapyIoOperationRepository.saveAndFlush(therapyRow);
-		ArrayList<TherapyRow> therapyRows = new ArrayList<>();
+		List<TherapyRow> therapyRows = new ArrayList<>();
 		therapyRows.add(therapyRow);
 		assertThat(therapyManager.newTherapies(therapyRows)).isTrue();
 		assertThat(smsOperations.getList()).hasSize(1);
@@ -227,7 +227,7 @@ public class Tests extends OHCoreTestCase {
 				TimeTools.getBeginningOfNextDay(TimeTools.getNow()), medical, 10.0, 1, 1, 1,
 				longText + ' ' + longText, true, true);
 		therapyIoOperationRepository.saveAndFlush(therapyRow);
-		ArrayList<TherapyRow> therapyRows = new ArrayList<>();
+		List<TherapyRow> therapyRows = new ArrayList<>();
 		therapyRows.add(therapyRow);
 		assertThat(therapyManager.newTherapies(therapyRows)).isTrue();
 		assertThat(smsOperations.getList()).hasSize(1);
@@ -245,7 +245,7 @@ public class Tests extends OHCoreTestCase {
 		TherapyRow therapyRow = testTherapyRow.setup(patient, medical, true);
 		therapyRow.setSms(false);
 		therapyIoOperationRepository.saveAndFlush(therapyRow);
-		ArrayList<TherapyRow> therapyRows = new ArrayList<>();
+		List<TherapyRow> therapyRows = new ArrayList<>();
 		therapyRows.add(therapyRow);
 		assertThat(therapyManager.newTherapies(therapyRows)).isTrue();
 		assertThat(smsOperations.getList()).isEmpty();
@@ -301,7 +301,7 @@ public class Tests extends OHCoreTestCase {
 		LocalDateTime[] dates = { TimeTools.getNow(), TimeTools.getNow() };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 10.0, "", 1, "TestNote", true, true);
 
-		ArrayList<Therapy> therapies = new ArrayList<>();
+		List<Therapy> therapies = new ArrayList<>();
 		therapies.add(therapy);
 		List<Medical> medicals = therapyManager.getMedicalsOutOfStock(therapies);
 		assertThat(medicals).hasSize(1);
@@ -322,7 +322,7 @@ public class Tests extends OHCoreTestCase {
 		LocalDateTime[] dates = { TimeTools.getNow(), TimeTools.getNow() };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 1.0, "", 1, "TestNote", true, true);
 
-		ArrayList<Therapy> therapies = new ArrayList<>();
+		List<Therapy> therapies = new ArrayList<>();
 		therapies.add(therapy);
 		List<Medical> medicals = therapyManager.getMedicalsOutOfStock(therapies);
 		assertThat(medicals).isEmpty();
@@ -342,7 +342,7 @@ public class Tests extends OHCoreTestCase {
 		LocalDateTime[] dates = { yesterday, yesterday };
 		Therapy therapy = new Therapy(1, patient.getCode(), dates, medical, 10.0, "", 1, "TestNote", true, true);
 
-		ArrayList<Therapy> therapies = new ArrayList<>();
+		List<Therapy> therapies = new ArrayList<>();
 		therapies.add(therapy);
 		List<Medical> medicals = therapyManager.getMedicalsOutOfStock(therapies);
 		assertThat(medicals).isEmpty();

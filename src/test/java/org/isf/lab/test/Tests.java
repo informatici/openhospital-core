@@ -282,7 +282,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoNewLabSecondProcedure() throws Exception {
-		ArrayList<String> labRow = new ArrayList<>();
+		List<String> labRow = new ArrayList<>();
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 2, false);
 		Patient patient = testPatient.setup(false);
@@ -298,7 +298,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoNewLabSecondProcedureTransaction() throws Exception {
-		ArrayList<String> labRow = new ArrayList<>();
+		List<String> labRow = new ArrayList<>();
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 2, false);
 		Patient patient = testPatient.setup(false);
@@ -315,7 +315,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoNewLabSecondProcedure2() throws Exception {
-		ArrayList<LaboratoryRow> labRow = new ArrayList<>();
+		List<LaboratoryRow> labRow = new ArrayList<>();
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 2, false);
 		Patient patient = testPatient.setup(false);
@@ -345,7 +345,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testIoEditLabSecondProcedure() throws Exception {
-		ArrayList<String> labRow = new ArrayList<>();
+		List<String> labRow = new ArrayList<>();
 		Integer code = setupTestLaboratoryRow(false);
 		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(code).get();
 		labRow.add("Update");
@@ -472,7 +472,7 @@ public class Tests extends OHCoreTestCase {
 		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
 		// TODO: if resource bundles are made available this setResults() needs to change
 		foundLaboratory.setResult("angal.lab.multipleresults.txt");
-		ArrayList<String> labRow = new ArrayList<>();
+		List<String> labRow = new ArrayList<>();
 		labManager.updateLaboratory(foundLaboratory, labRow);
 		String description = foundLaboratory.getExam().getDescription();
 		String firstCharsOfDescription = description.substring(0, description.length() - 1);
@@ -552,7 +552,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewLaboratoryProcedureEquals2EmptyLabRows() {
 		assertThatThrownBy(() ->
 		{
-			ArrayList<String> labRow = new ArrayList<>();
+			List<String> labRow = new ArrayList<>();
 			ExamType examType = testExamType.setup(false);
 			Exam exam = testExam.setup(examType, 2, false);
 			Patient patient = testPatient.setup(false);
@@ -579,7 +579,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewLaboratoryExceptionsBadProcedureNumber() {
 		assertThatThrownBy(() ->
 		{
-			ArrayList<String> labRow = new ArrayList<>();
+			List<String> labRow = new ArrayList<>();
 			ExamType examType = testExamType.setup(false);
 			Exam exam = testExam.setup(examType, 99, false);
 			Patient patient = testPatient.setup(false);
@@ -610,7 +610,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewLaboratory2ProcedureEquals1() throws Exception {
-		ArrayList<LaboratoryRow> labRow = new ArrayList<>();
+		List<LaboratoryRow> labRow = new ArrayList<>();
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 1, false);
 		Patient patient = testPatient.setup(false);
@@ -629,7 +629,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewLaboratory2ProcedureEquals2() throws Exception {
-		ArrayList<LaboratoryRow> labRow = new ArrayList<>();
+		List<LaboratoryRow> labRow = new ArrayList<>();
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 2, false);
 		Patient patient = testPatient.setup(false);
@@ -650,7 +650,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrNewLaboratory2ProcedureEquals3() throws Exception {
-		ArrayList<LaboratoryRow> labRow = new ArrayList<>();
+		List<LaboratoryRow> labRow = new ArrayList<>();
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 3, false);
 		Patient patient = testPatient.setup(false);
@@ -684,7 +684,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewLaboratory2BadProcedureNumber() {
 		assertThatThrownBy(() ->
 		{
-			ArrayList<LaboratoryRow> labRow = new ArrayList<>();
+			List<LaboratoryRow> labRow = new ArrayList<>();
 			ExamType examType = testExamType.setup(false);
 			Exam exam = testExam.setup(examType, 99, false);
 			Patient patient = testPatient.setup(false);
@@ -703,7 +703,7 @@ public class Tests extends OHCoreTestCase {
 		examIoOperationRepository.saveAndFlush(exam);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		ArrayList<String> labRow = new ArrayList<>();
+		List<String> labRow = new ArrayList<>();
 		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 
 		assertThat(labManager.newLaboratory(laboratory, labRow)).isTrue();
@@ -720,7 +720,7 @@ public class Tests extends OHCoreTestCase {
 			examIoOperationRepository.saveAndFlush(exam);
 			patientIoOperationRepository.saveAndFlush(patient);
 
-			ArrayList<String> labRow = new ArrayList<>();
+			List<String> labRow = new ArrayList<>();
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 
 			laboratory.setLabDate(null);
@@ -744,7 +744,7 @@ public class Tests extends OHCoreTestCase {
 			patientIoOperationRepository.saveAndFlush(patient);
 
 			// laboratory 1, Procedure One
-			ArrayList<String> labRow = new ArrayList<>();
+			List<String> labRow = new ArrayList<>();
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 			laboratory.setPatient(null);
 
@@ -766,7 +766,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 
 		// laboratory 1, Procedure One
-		ArrayList<String> labRow = new ArrayList<>();
+		List<String> labRow = new ArrayList<>();
 		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 		labManager.newLaboratory(laboratory, labRow);
 
@@ -788,7 +788,7 @@ public class Tests extends OHCoreTestCase {
 			patientIoOperationRepository.saveAndFlush(patient);
 
 			// laboratory 1, Procedure One
-			ArrayList<String> labRow = new ArrayList<>();
+			List<String> labRow = new ArrayList<>();
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 
 			laboratory.setPatient(null);
@@ -811,7 +811,7 @@ public class Tests extends OHCoreTestCase {
 			patientIoOperationRepository.saveAndFlush(patient);
 
 			// laboratory 1, Procedure One
-			ArrayList<String> labRow = new ArrayList<>();
+			List<String> labRow = new ArrayList<>();
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 
 			laboratory.setPatient(null);
@@ -834,7 +834,7 @@ public class Tests extends OHCoreTestCase {
 			patientIoOperationRepository.saveAndFlush(patient);
 
 			// laboratory 1, Procedure One
-			ArrayList<String> labRow = new ArrayList<>();
+			List<String> labRow = new ArrayList<>();
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 
 			laboratory.setExam(null);
@@ -856,7 +856,7 @@ public class Tests extends OHCoreTestCase {
 			patientIoOperationRepository.saveAndFlush(patient);
 
 			// laboratory 1, Procedure One
-			ArrayList<String> labRow = new ArrayList<>();
+			List<String> labRow = new ArrayList<>();
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 
 			laboratory.setResult("");
@@ -878,7 +878,7 @@ public class Tests extends OHCoreTestCase {
 			patientIoOperationRepository.saveAndFlush(patient);
 
 			// laboratory 1, Procedure One
-			ArrayList<String> labRow = new ArrayList<>();
+			List<String> labRow = new ArrayList<>();
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 
 			laboratory.setMaterial("");
@@ -900,7 +900,7 @@ public class Tests extends OHCoreTestCase {
 			patientIoOperationRepository.saveAndFlush(patient);
 
 			// laboratory 1, Procedure One
-			ArrayList<String> labRow = new ArrayList<>();
+			List<String> labRow = new ArrayList<>();
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 
 			laboratory.setInOutPatient("");
@@ -923,7 +923,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrUpdateLaboratoryProcedure2() throws Exception {
-		ArrayList<String> labRow = new ArrayList<>();
+		List<String> labRow = new ArrayList<>();
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 2, false);
 		Patient patient = testPatient.setup(false);
@@ -964,7 +964,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrUpdateLaboratoryExceptionEmptyLabRows() {
 		assertThatThrownBy(() ->
 		{
-			ArrayList<String> labRow = new ArrayList<>();
+			List<String> labRow = new ArrayList<>();
 			ExamType examType = testExamType.setup(false);
 			Exam exam = testExam.setup(examType, 2, false);
 			Patient patient = testPatient.setup(false);
@@ -991,7 +991,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrUpdateLaboratoryExceptionBadProcedureNumber() {
 		assertThatThrownBy(() ->
 		{
-			ArrayList<String> labRow = new ArrayList<>();
+			List<String> labRow = new ArrayList<>();
 			ExamType examType = testExamType.setup(false);
 			Exam exam = testExam.setup(examType, 99, false);
 			Patient patient = testPatient.setup(false);
