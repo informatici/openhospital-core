@@ -160,6 +160,7 @@ public class User extends Auditable<String> {
 		this.lastLogin = lastLogin;
 	}
 
+	@Override
 	public String toString() {
 		return getUserName();
 	}
