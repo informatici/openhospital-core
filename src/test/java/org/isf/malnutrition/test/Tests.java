@@ -225,7 +225,7 @@ public class Tests extends OHCoreTestCase {
 
 		Malnutrition malnutrition = testMalnutrition.setup(admission, true);
 		Malnutrition result = malnutritionIoOperation.newMalnutrition(malnutrition);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkMalnutritionIntoDb(malnutrition.getCode());
 	}
 
@@ -308,7 +308,7 @@ public class Tests extends OHCoreTestCase {
 
 		Malnutrition malnutrition = testMalnutrition.setup(admission, true);
 		Malnutrition result = malnutritionManager.newMalnutrition(malnutrition);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkMalnutritionIntoDb(malnutrition.getCode());
 	}
 
