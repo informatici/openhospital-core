@@ -174,10 +174,6 @@ public class MovStockInsertingManager {
 		return errors;
 	}
 
-	private boolean isAutomaticLotIn() {
-		return GeneralData.AUTOMATICLOT_IN;
-	}
-
 	private boolean isAutomaticLotOut() {
 		return GeneralData.AUTOMATICLOT_OUT;
 	}
