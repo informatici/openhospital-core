@@ -146,7 +146,7 @@ public class Tests extends OHCoreTestCase {
 		List<Ward> wards = wardIoOperation.getIpdWards();
 		
 		// then:
-		assertThat(wards.size() == 1);
+		assertThat(wards).hasSize(1);
 		
 		// given:
 		foundWard.setBeds(0);
@@ -156,7 +156,7 @@ public class Tests extends OHCoreTestCase {
 		wards = wardIoOperation.getIpdWards();
 		
 		// then:
-		assertThat(wards.size() == 0);
+		assertThat(wards).hasSize(0);
 	}
 
 	@Test
@@ -169,7 +169,7 @@ public class Tests extends OHCoreTestCase {
 		List<Ward> wards = wardIoOperation.getOpdWards();
 		
 		// then:
-		assertThat(wards.size() == 0);
+		assertThat(wards).hasSize(1);
 		
 		// given:
 		foundWard.setBeds(0);
@@ -179,7 +179,7 @@ public class Tests extends OHCoreTestCase {
 		wards = wardIoOperation.getOpdWards();
 		
 		// then:
-		assertThat(wards.size() == 1);
+		assertThat(wards).hasSize(1);
 	}
 	
 	@Test
@@ -339,7 +339,7 @@ public class Tests extends OHCoreTestCase {
 		wardIoOperationRepository.saveAndFlush(opdWard);
 		
 		List<Ward> wards = wardBrowserManager.getIpdWards();
-		assertThat(wards.size() == 0);
+		assertThat(wards).hasSize(0);
 	}
 	
 	@Test
@@ -350,7 +350,7 @@ public class Tests extends OHCoreTestCase {
 		wardIoOperationRepository.saveAndFlush(opdWard);
 		
 		List<Ward> wards = wardBrowserManager.getOpdWards();
-		assertThat(wards.size() == 1);
+		assertThat(wards).hasSize(1);
 	}
 
 	@Test

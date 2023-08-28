@@ -88,8 +88,9 @@ public class Tests extends OHCoreTestCase {
 		VaccineType foundVaccineType = vaccineTypeIoOperation.findVaccineType(code);
 		foundVaccineType.setDescription("Update");
 		VaccineType result = vaccineTypeIoOperation.updateVaccineType(foundVaccineType);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		VaccineType updateVaccineType = vaccineTypeIoOperation.findVaccineType(code);
+		assertThat(updateVaccineType).isNotNull();
 		assertThat(updateVaccineType.getDescription()).isEqualTo("Update");
 	}
 
@@ -97,7 +98,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoNewVaccineType() throws Exception {
 		VaccineType vaccineType = testVaccineType.setup(true);
 		VaccineType result = vaccineTypeIoOperation.newVaccineType(vaccineType);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkVaccineTypeIntoDb(vaccineType.getCode());
 	}
 
@@ -139,15 +140,16 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestVaccineType(false);
 		VaccineType foundVaccineType = vaccineTypeBrowserManager.findVaccineType(code);
 		foundVaccineType.setDescription("Update");
-		assertThat(vaccineTypeBrowserManager.updateVaccineType(foundVaccineType));
+		assertThat(vaccineTypeBrowserManager.updateVaccineType(foundVaccineType)).isNotNull();
 		VaccineType updateVaccineType = vaccineTypeBrowserManager.findVaccineType(code);
+		assertThat(updateVaccineType).isNotNull();
 		assertThat(updateVaccineType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrNewVaccineType() throws Exception {
 		VaccineType vaccineType = testVaccineType.setup(true);
-		assertThat(vaccineTypeBrowserManager.newVaccineType(vaccineType));
+		assertThat(vaccineTypeBrowserManager.newVaccineType(vaccineType)).isNotNull();
 		checkVaccineTypeIntoDb(vaccineType.getCode());
 	}
 
