@@ -22,7 +22,6 @@
 package org.isf.lab.model;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import org.isf.exa.model.Exam;
 
@@ -57,11 +56,6 @@ public class LaboratoryForPrint {
 		exam = aExam.getDescription();
 		date = aDate;
 		result = aResult;
-	}
-
-	private String getConvertedString(LocalDateTime time) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy  HH:mm:ss");
-		return time.format(formatter);
 	}
 
 	public LocalDateTime getDate() {

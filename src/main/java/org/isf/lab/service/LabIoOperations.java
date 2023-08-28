@@ -273,17 +273,6 @@ public class LabIoOperations {
 		}
 		return result;
 	}
-	/**
-	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) 
-	 * within last year
-	 * @return the list of {@link LaboratoryForPrint}s 
-	 * @throws OHServiceException
-	 */
-	public List<LaboratoryForPrint> getLaboratoryForPrints() throws OHServiceException {
-		LocalDateTime time2 = TimeTools.getNow();
-		LocalDateTime time1 = time2.minusWeeks(1);
-		return getLaboratoryForPrint(null, time1, time2);
-	}
 
 	/**
 	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) 
