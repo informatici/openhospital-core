@@ -159,9 +159,10 @@ public class Tests extends OHCoreTestCase {
 		LocalDateTime newDate = TimeTools.getNow();
 		foundPatientVaccine.setVaccineDate(newDate);
 		PatientVaccine result = patvacIoOperation.updatePatientVaccine(foundPatientVaccine);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		PatientVaccine updatePatientVaccine = patVacIoOperationRepository.findById(code).get();
-		assertThat(updatePatientVaccine.getVaccineDate().equals(newDate));
+		assertThat(updatePatientVaccine).isNotNull();
+		assertThat(updatePatientVaccine.getVaccineDate()).isEqualTo(newDate);
 	}
 
 	@Test
@@ -174,7 +175,7 @@ public class Tests extends OHCoreTestCase {
 		vaccineIoOperationRepository.saveAndFlush(vaccine);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 		PatientVaccine result = patvacIoOperation.newPatientVaccine(patientVaccine);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkPatientVaccineIntoDb(patientVaccine.getCode());
 	}
 
@@ -327,9 +328,10 @@ public class Tests extends OHCoreTestCase {
 		LocalDateTime newDate = TimeTools.getNow();
 		foundPatientVaccine.setVaccineDate(newDate);
 		PatientVaccine result = patVacManager.updatePatientVaccine(foundPatientVaccine);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		PatientVaccine updatePatientVaccine = patVacIoOperationRepository.findById(code).get();
-		assertThat(updatePatientVaccine.getVaccineDate().equals(newDate));
+		assertThat(updatePatientVaccine).isNotNull();
+		assertThat(updatePatientVaccine.getVaccineDate()).isEqualTo(newDate);
 	}
 
 	@Test
@@ -342,7 +344,7 @@ public class Tests extends OHCoreTestCase {
 		vaccineIoOperationRepository.saveAndFlush(vaccine);
 		PatientVaccine patientVaccine = testPatientVaccine.setup(patient, vaccine, true);
 		PatientVaccine result = patVacManager.newPatientVaccine(patientVaccine);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkPatientVaccineIntoDb(patientVaccine.getCode());
 	}
 

@@ -86,8 +86,9 @@ public class Tests extends OHCoreTestCase {
 		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		foundMedicalType.setDescription("Update");
 		MedicalType result = medicalTypeIoOperation.updateMedicalType(foundMedicalType);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		MedicalType updateMedicalType = medicalTypeIoOperationRepository.findById(code).get();
+		assertThat(updateMedicalType).isNotNull();
 		assertThat(updateMedicalType.getDescription()).isEqualTo("Update");
 	}
 
@@ -95,7 +96,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoNewMedicalType() throws Exception {
 		MedicalType medicalType = testMedicalType.setup(true);
 		MedicalType result = medicalTypeIoOperation.newMedicalType(medicalType);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkMedicalTypeIntoDb(medicalType.getCode());
 	}
 
@@ -129,15 +130,16 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestMedicalType(false);
 		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).get();
 		foundMedicalType.setDescription("Update");
-		assertThat(medicalTypeBrowserManager.updateMedicalType(foundMedicalType));
+		assertThat(medicalTypeBrowserManager.updateMedicalType(foundMedicalType)).isNotNull();
 		MedicalType updateMedicalType = medicalTypeIoOperationRepository.findById(code).get();
+		assertThat(updateMedicalType).isNotNull();
 		assertThat(updateMedicalType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrNewMedicalType() throws Exception {
 		MedicalType medicalType = testMedicalType.setup(true);
-		assertThat(medicalTypeBrowserManager.newMedicalType(medicalType));
+		assertThat(medicalTypeBrowserManager.newMedicalType(medicalType)).isNotNull();
 		checkMedicalTypeIntoDb(medicalType.getCode());
 	}
 
