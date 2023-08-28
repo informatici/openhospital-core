@@ -88,8 +88,9 @@ public class Tests extends OHCoreTestCase {
 		ExamType foundExamType = examTypeIoOperationRepository.findById(code).get();
 		foundExamType.setDescription("Update");
 		ExamType result = examTypeIoOperation.updateExamType(foundExamType);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		ExamType updateExamType = examTypeIoOperationRepository.findById(code).get();
+		assertThat(updateExamType).isNotNull();
 		assertThat(updateExamType.getDescription()).isEqualTo("Update");
 	}
 
@@ -97,7 +98,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoNewExamType() throws Exception {
 		ExamType examType = testExamType.setup(true);
 		ExamType result = examTypeIoOperation.newExamType(examType);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkExamTypeIntoDb(examType.getCode());
 	}
 
@@ -132,8 +133,9 @@ public class Tests extends OHCoreTestCase {
 		ExamType foundExamType = examTypeIoOperationRepository.findById(code).get();
 		foundExamType.setDescription("Update");
 		ExamType result = examTypeBrowserManager.updateExamType(foundExamType);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		ExamType updateExamType = examTypeIoOperationRepository.findById(code).get();
+		assertThat(updateExamType).isNotNull();
 		assertThat(updateExamType.getDescription()).isEqualTo("Update");
 	}
 
@@ -141,7 +143,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewExamType() throws Exception {
 		ExamType examType = testExamType.setup(true);
 		ExamType result = examTypeBrowserManager.newExamType(examType);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkExamTypeIntoDb(examType.getCode());
 	}
 

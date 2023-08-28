@@ -60,7 +60,6 @@ public class PatVacIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<PatientVaccine> getPatientVaccine(boolean minusOneWeek) throws OHServiceException {
-		LocalDateTime now = TimeTools.getNow();
 		LocalDateTime timeTo = TimeTools.getDateToday24();
 		LocalDateTime timeFrom = TimeTools.getDateToday0();
 

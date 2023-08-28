@@ -75,7 +75,6 @@ public class PermissionIoOperations {
 
 		Permission permissionUpdated = this.repository.save(permission);
 		// retrieve groupPermission stored in DB
-		List<String> userGroupCodes = gp.stream().map(item -> item.getUserGroup().getCode()).collect(Collectors.toList());
 		List<GroupPermission> groupPermissionInDB = this.groupPermissionRepository.findByPermission_id(permission.getId());
 
 		// calculate GroupPermission to delete
