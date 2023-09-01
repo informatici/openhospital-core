@@ -70,12 +70,11 @@ public class PermissionIoOperations {
 	}
 
 	public Permission updatePermission(Permission permission) {
-		// All group permissions (could exists already on DB)
+		// All group permissions (could exist already in the DB)
 		List<GroupPermission> gp = permission.getGroupPermission();
 
 		Permission permissionUpdated = this.repository.save(permission);
 		// retrieve groupPermission stored in DB
-		List<String> userGroupCodes = gp.stream().map(item -> item.getUserGroup().getCode()).collect(Collectors.toList());
 		List<GroupPermission> groupPermissionInDB = this.groupPermissionRepository.findByPermission_id(permission.getId());
 
 		// calculate GroupPermission to delete

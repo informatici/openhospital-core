@@ -680,7 +680,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrPrepareChargingMovement() throws Exception {
 		int code = setupTestMovement(false);
 		Movement movement = movementIoOperationRepository.findById(code).get();
-		ArrayList<Movement> movements = new ArrayList<>(1);
+		List<Movement> movements = new ArrayList<>(1);
 		movements.add(movement);
 		assertThat(movStockInsertingManager.newMultipleChargingMovements(movements, "refNo")).isTrue();
 	}
@@ -692,7 +692,7 @@ public class Tests extends OHCoreTestCase {
 			int code = setupTestMovement(false);
 			Movement movement = movementIoOperationRepository.findById(code).get();
 			movement.setRefNo(null);
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
@@ -707,7 +707,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrPrepareDischargingMovement() throws Exception {
 		int code = setupTestMovement(false);
 		Movement movement = movementIoOperationRepository.findById(code).get();
-		ArrayList<Movement> movements = new ArrayList<>(1);
+		List<Movement> movements = new ArrayList<>(1);
 		movements.add(movement);
 		assertThat(movStockInsertingManager.newMultipleDischargingMovements(movements, "refNo")).isTrue();
 	}
@@ -719,7 +719,7 @@ public class Tests extends OHCoreTestCase {
 			int code = setupTestMovement(false);
 			Movement movement = movementIoOperationRepository.findById(code).get();
 			movement.setRefNo(null);
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			movStockInsertingManager.newMultipleDischargingMovements(movements, null);
 		})
@@ -734,7 +734,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrPrepareDischargingMovementIsAutomaticLotOut() throws Exception {
 		int code = setupTestMovement(false);
 		Movement movement = movementIoOperationRepository.findById(code).get();
-		ArrayList<Movement> movements = new ArrayList<>(1);
+		List<Movement> movements = new ArrayList<>(1);
 		movements.add(movement);
 		boolean isAutomaticLot_Out = GeneralData.AUTOMATICLOT_OUT;
 		GeneralData.AUTOMATICLOT_OUT = true;
@@ -756,7 +756,7 @@ public class Tests extends OHCoreTestCase {
 			int code = setupTestMovement(false);
 			Movement movement = movementIoOperationRepository.findById(code).get();
 			movement.setDate(LocalDateTime.of(2099, 1, 1, 0, 0, 0));
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, "refNo");
 		})
@@ -775,7 +775,7 @@ public class Tests extends OHCoreTestCase {
 			Movement movement = movementIoOperationRepository.findById(code).get();
 			LocalDateTime todayPlusAYear = LocalDateTime.of(TimeTools.getNow().getYear() + 2, 2, 2, 0, 0, 0, 0);
 			movement.setDate(todayPlusAYear);
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, "refNo");
 		})
@@ -792,7 +792,7 @@ public class Tests extends OHCoreTestCase {
 		{
 			int code = setupTestMovement(false);
 			Movement movement = movementIoOperationRepository.findById(code).get();
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
@@ -811,7 +811,7 @@ public class Tests extends OHCoreTestCase {
 			Movement movement = movementIoOperationRepository.findById(code).get();
 			movement.getType().setType("+");
 			movement.setSupplier(null);
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
@@ -830,7 +830,7 @@ public class Tests extends OHCoreTestCase {
 			Movement movement = movementIoOperationRepository.findById(code).get();
 			movement.getType().setType("-");
 			movement.setWard(null);
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
@@ -845,7 +845,7 @@ public class Tests extends OHCoreTestCase {
 			int code = setupTestMovement(false);
 			Movement movement = movementIoOperationRepository.findById(code).get();
 			movement.setQuantity(0);
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
@@ -863,7 +863,7 @@ public class Tests extends OHCoreTestCase {
 			int code = setupTestMovement(false);
 			Movement movement = movementIoOperationRepository.findById(code).get();
 			movement.setMedical(null);
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
@@ -881,7 +881,7 @@ public class Tests extends OHCoreTestCase {
 			int code = setupTestMovement(false);
 			Movement movement = movementIoOperationRepository.findById(code).get();
 			movement.setType(null);
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
@@ -899,7 +899,7 @@ public class Tests extends OHCoreTestCase {
 			int code = setupTestMovement(false);
 			Movement movement = movementIoOperationRepository.findById(code).get();
 			movement.getMedical().setCode(-99);
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
@@ -920,7 +920,7 @@ public class Tests extends OHCoreTestCase {
 			Lot lot = movement.getLot();
 			lot.setCost(new BigDecimal(0.));
 			lotIoOperationRepository.saveAndFlush(lot);
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			GeneralData.LOTWITHCOST = true;
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
@@ -938,7 +938,7 @@ public class Tests extends OHCoreTestCase {
 			Movement movement = movementIoOperationRepository.findById(code).get();
 			Lot lot = movement.getLot();
 			lot.setCode("thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong_thisIsWayTooLong");
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
@@ -958,7 +958,7 @@ public class Tests extends OHCoreTestCase {
 			Lot lot = movement.getLot();
 			lot.setDueDate(null);
 			lotIoOperationRepository.saveAndFlush(lot);
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
@@ -975,7 +975,7 @@ public class Tests extends OHCoreTestCase {
 			Lot lot = movement.getLot();
 			lot.setPreparationDate(null);
 			lotIoOperationRepository.saveAndFlush(lot);
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})
@@ -993,7 +993,7 @@ public class Tests extends OHCoreTestCase {
 			lot.setPreparationDate(LocalDateTime.of(99, 1, 1, 0, 0, 0));
 			lot.setDueDate(LocalDateTime.of(1, 1, 1, 0, 0, 0));
 			lotIoOperationRepository.saveAndFlush(lot);
-			ArrayList<Movement> movements = new ArrayList<>(1);
+			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
 			movStockInsertingManager.newMultipleChargingMovements(movements, null);
 		})

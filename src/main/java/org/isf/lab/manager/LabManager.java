@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.isf.exa.model.Exam;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.lab.model.Laboratory;
@@ -120,7 +121,7 @@ public class LabManager {
 	/**
 	 * Return the list of exams ({@link Laboratory}s) divided by pages.
 	 * 
-	 * @param onWeek
+	 * @param oneWeek
 	 * @param pageNo
 	 * @param pageSize
 	 * @return the list of {@link Laboratory}s. It could be <code>empty</code>.
@@ -499,6 +500,10 @@ public class LabManager {
 	 */
 	public List<LaboratoryRow> getLaboratoryRowList(Integer code) throws OHServiceException {
 		return ioOperations.getLabRow(code);
+	}
+	
+	public PagedResponse<Laboratory> getLaboratoryPageable(Exam exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient, int page, int size) throws OHServiceException {
+		return ioOperations.getLaboratoryPageable(exam, dateFrom, dateTo, patient, page, size);
 	}
 
 }

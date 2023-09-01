@@ -42,8 +42,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileSystemPatientPhotoRepository {
 
-	private static final String KEY_ERROR_TITLE = "angal.patient.patientphoto.error.title";
-
 	private static final String KEY_FILE_NOT_FOUND = "angal.patient.patientphoto.error.filenotfound.msg";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemPatientPhotoRepository.class);

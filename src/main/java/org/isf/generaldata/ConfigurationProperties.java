@@ -66,7 +66,7 @@ public abstract class ConfigurationProperties {
 	 * @param fileProperties - the file name (to be available in the classpath)
 	 * @param logger - the {@link Logger} of the concrete class
 	 */
-	public static final Properties loadPropertiesFile(String fileProperties, Logger logger) {
+	public static Properties loadPropertiesFile(String fileProperties, Logger logger) {
 		return loadPropertiesFile(fileProperties, logger, false);
 	}
 
@@ -77,7 +77,7 @@ public abstract class ConfigurationProperties {
 	 * @param exitOnFail - if {@code true} the application will exit if configuration 
 	 * is missing, otherwise default values will be used
 	 */
-	private static final Properties loadPropertiesFile(String fileProperties, Logger logger, boolean exitOnFail) {
+	private static Properties loadPropertiesFile(String fileProperties, Logger logger, boolean exitOnFail) {
 		Properties prop = new Properties();
 		try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileProperties)) {
 			if (null == in) {
@@ -144,7 +144,7 @@ public abstract class ConfigurationProperties {
 	}
 
 	/**
-	 * Method to retrieve an double property
+	 * Method to retrieve a double property
 	 *
 	 * @param property
 	 * @param defaultValue

@@ -69,7 +69,7 @@ public class HospitalIoOperations {
 	/**
 	 * Updates hospital information
 	 * 
-	 * @return <code>true</code> if the hospital informations have been updated, <code>false</code> otherwise
+	 * @return <code>true</code> if the hospital information has been updated, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
 	public Hospital updateHospital(Hospital hospital) throws OHServiceException {

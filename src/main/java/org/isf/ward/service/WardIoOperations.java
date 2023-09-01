@@ -169,8 +169,7 @@ public class WardIoOperations {
 
 	/**
 	 * Check if the maternity ward exists
-	 * 
-	 * @return <code>true</code> if is exist, <code>false</code> otherwise.
+	 * @return <code>true</code> if the word exists, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isMaternityPresent() throws OHServiceException {
@@ -179,7 +178,7 @@ public class WardIoOperations {
 
 	/**
 	 * Check if the OPD ward exists
-	 * @return <code>true</code> if is exist, <code>false</code> otherwise.
+	 * @return <code>true</code> if the OPD ward exists, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isOpdPresent() throws OHServiceException {

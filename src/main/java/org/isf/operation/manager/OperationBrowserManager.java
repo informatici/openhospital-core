@@ -31,8 +31,11 @@ import org.isf.operation.model.Operation;
 import org.isf.operation.service.OperationIoOperations;
 import org.isf.opetype.model.OperationType;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.pagination.PageInfo;
+import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.validator.DefaultSorter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 /**
@@ -192,6 +195,26 @@ public class OperationBrowserManager {
 			buildResultHashMap();
 		}
 		return resultsListHashMap.get(resultDescKey);
+	}
+	
+	/**
+	 * Retrieves a page of {@link Operation}s
+	 * 
+	 * @param page - The page number of the operations to retrieve
+	 * @param size - The size of the page of operations to retrieve.
+	 * @return a {@link PagedResponse} object that contains the {@link Operation}s.
+	 * @throws OHServiceException 
+	 */
+	public PagedResponse<Operation> getOperationPageable(int page, int size) throws OHServiceException {
+		Page<Operation> operations= ioOperations.getOperationPageable(page, size);
+		return setPaginationData(operations);
+	}
+	
+	PagedResponse<Operation> setPaginationData(Page<Operation> pages) {
+		PagedResponse<Operation> data = new PagedResponse<>();
+		data.setData(pages.getContent());
+		data.setPageInfo(PageInfo.from(pages));
+		return data;
 	}
 
 }

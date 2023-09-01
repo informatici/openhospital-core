@@ -22,11 +22,13 @@
 package org.isf.opd.manager;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.isf.disease.model.Disease;
+import org.isf.distype.model.DiseaseType;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.UserBrowsingManager;
@@ -35,6 +37,7 @@ import org.isf.opd.service.OpdIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.pagination.PagedResponse;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -83,7 +86,7 @@ public class OpdBrowserManager {
 		if (GeneralData.OPDEXTENDED && opd.getPatient() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseselectapatient.msg")));
 		}
-		// Check Patient
+		// Check Ward
 		if (ward == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseselectaward.msg")));
 		} else {
@@ -248,5 +251,46 @@ public class OpdBrowserManager {
 	 */
 	public List<Opd> getOpdByProgYear(int code) {
 		return ioOperations.getOpdByProgYear(code);
+	}
+	
+	/**
+	 * Returns {@link List} of {@link Opd}s associated to specified patient ID with page info.
+	 *
+	 * @param ward - the ward of opd
+	 * @param diseaseType - the disease type
+	 * @param diseaseCode - the Code of disease
+	 * @param dateFrom 
+	 * @param dateTo
+	 * @param ageFrom
+	 * @param ageTo
+	 * @param sex
+	 * @param newPatient
+	 * @param user
+	 * @param page
+	 * @param size
+	 * @return the list of {@link Opd}s associated to specified patient ID.
+	 * the whole list of {@link Opd}s if <code>0</code> is passed.
+	 * @throws OHServiceException
+	 */
+	public PagedResponse<Opd> getOpdPageable(Ward ward, DiseaseType diseaseType, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, String user, int page, int size)
+			throws OHServiceException {
+		LocalDateTime dateFr = dateFrom.atStartOfDay();
+		LocalDateTime dateT = dateTo.atStartOfDay();
+		return ioOperations.getOpdListPageable(ward, diseaseType, diseaseCode, dateFr, dateT, ageFrom, ageTo, sex, newPatient, user, page, size);
+	}
+	
+	/**
+	 * Returns {@link List} of {@link Opd}s associated to specified patient ID with page info.
+	 *
+	 * @param ward - the ward of opd
+	 * @param patientcode - the patient ID
+	 * @param page - the number of page
+	 * @param size - the size of the list 
+	 * @return the list of {@link Opd}s associated to specified patient ID.
+	 * the whole list of {@link Opd}s if <code>0</code> is passed.
+	 * @throws OHServiceException
+	 */
+	public PagedResponse<Opd> getOpdListPageable(Ward ward, int patientcode, int page, int size) throws OHServiceException {
+		return ioOperations.getOpdListPageables(ward, patientcode, page, size);
 	}
 }

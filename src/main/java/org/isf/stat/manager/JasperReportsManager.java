@@ -719,8 +719,8 @@ public class JasperReportsManager {
 			JRQuery query = jasperReport.getMainDataset().getQuery();
 			String queryString = query.getText();
 
-			queryString = queryString.replace("$P{fromdate}", "'" + java.sql.Date.valueOf(fromDate).toString() + "'");
-			queryString = queryString.replace("$P{todate}", "'" + java.sql.Date.valueOf(toDate).toString() + "'");
+			queryString = queryString.replace("$P{fromdate}", "'" + java.sql.Date.valueOf(fromDate) + "'");
+			queryString = queryString.replace("$P{todate}", "'" + java.sql.Date.valueOf(toDate) + "'");
 
 			DbQueryLogger dbQuery = new DbQueryLogger();
 			ResultSet resultSet = dbQuery.getData(queryString, true);
@@ -832,7 +832,7 @@ public class JasperReportsManager {
 		return parameters;
 	}
 
-	private HashMap<String, Object> compileGenericReportMYParameters(Integer month, Integer year, String jasperFileFolder, String jasperFileName)
+	private Map<String, Object> compileGenericReportMYParameters(Integer month, Integer year, String jasperFileFolder, String jasperFileName)
 					throws OHServiceException {
 		HashMap<String, Object> parameters = getHospitalParameters();
 		addBundleParameter(jasperFileFolder, jasperFileName, parameters);
@@ -897,7 +897,7 @@ public class JasperReportsManager {
 		}
 	}
 
-	private void addSubReportsBundleParameters(String jasperFileFolder, String jasperFileName, HashMap<String, Object> parameters) throws JRException {
+	private void addSubReportsBundleParameters(String jasperFileFolder, String jasperFileName, Map<String, Object> parameters) throws JRException {
 		File jasperFile = new File(compileJasperFilename(jasperFileFolder, jasperFileName));
 		final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
 		JRBand[] bands = jasperReport.getAllBands(); // Get all bands

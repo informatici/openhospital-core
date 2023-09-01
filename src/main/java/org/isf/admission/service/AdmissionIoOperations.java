@@ -284,7 +284,7 @@ public class AdmissionIoOperations {
 	}
 
 	/**
-	 * Sets an admission record to deleted.
+	 * Sets an admission record as deleted.
 	 *
 	 * @param admissionId the admission id.
 	 * @return <code>true</code> if the record has been set to delete.
@@ -324,35 +324,81 @@ public class AdmissionIoOperations {
 		return patientRepository.save(foundPatient) != null;
 	}
 	
-	public List<Admission> getAdmissionsByAdmissionDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+	/**
+	 * Returns the list of Admissions by pages
+	 *
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param pageable
+	 * @return the list of {@link Admission}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public List<Admission> getAdmissionsByAdmissionDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) throws OHServiceException {
 		return repository.findAllWhereAdmissionDate(dateFrom, dateTo, pageable);
 	}
 
-	public List<Admission> getAdmissionsByDischargeDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+	/**
+	 * Returns the list of Admissions
+	 *
+	 * @param dateFrom
+	 * @param dateTo
+	 * @return the list of {@link Admission}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public List<Admission> getAdmissionsByAdmDate(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+		return repository.findAllWhereAdmissionDate(dateFrom, dateTo);
+	}
+	
+	/**
+	 * Returns the list of Admissions with discharge
+	 *
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param pageable
+	 * @return the list of {@link Admission}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public List<Admission> getAdmissionsByDischargeDate(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) throws OHServiceException {
 		return repository.findAllWhereDischargeDate(dateFrom, dateTo, pageable);
 	}
 
-	public PagedResponse<Admission> getAdmissionsByAdmissionDates(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+	/**
+	 * Returns the list of Admissions by page
+	 *
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param pageable
+	 * @return the list of {@link Admission}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public PagedResponse<Admission> getAdmissionsByAdmissionDates(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) throws OHServiceException {
 		Page<Admission> pagedResult = repository.findAllWhere_AdmissionDate_Paginated(dateFrom, dateTo, pageable);
 		return setPaginationData(pagedResult);
 	}
-
-	public PagedResponse<Admission> getAdmissionsByDischargeDates(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+	/**
+	 * Returns the list of Admissions with discharge by page
+	 *
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param pageable
+	 * @return the list of {@link Admission}.
+	 * @throws OHServiceException if an error occurs during database request.
+	 */
+	public PagedResponse<Admission> getAdmissionsByDischargeDates(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) throws OHServiceException {
 		Page<Admission> pagedResult = repository.findAllWhere_DischargeDate_Paginated(dateFrom, dateTo, pageable);
 		return setPaginationData(pagedResult);
 	}
 	
-	public PagedResponse<Admission> setPaginationData(Page<Admission> pages){
-		PagedResponse<Admission> data = new PagedResponse<Admission>();
+	/**
+	 * Returns the list of Admissions with page info
+	 *
+	 * @param pages of admissions
+	 * @return {@link PagedResponse<Admission>}.
+	 */
+	PagedResponse<Admission> setPaginationData(Page<Admission> pages) {
+		PagedResponse<Admission> data = new PagedResponse<>();
 		data.setData(pages.getContent());
-		PageInfo pageInfo = new PageInfo();
-		pageInfo.setSize(pages.getPageable().getPageSize());
-		pageInfo.setPage(pages.getPageable().getPageNumber());
-		pageInfo.setNbOfElements(pages.getNumberOfElements());
-		pageInfo.setTotalCount(pages.getTotalElements());
-		pageInfo.setHasPreviousPage(pages.hasPrevious());
-		pageInfo.setHasNextPage(pages.hasNext());
-		data.setPageInfo(pageInfo);
+		data.setPageInfo(PageInfo.from(pages));
 		return data;
 	}
 }

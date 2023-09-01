@@ -48,6 +48,9 @@ public class AdmissionBrowserManager {
 
 	@Autowired
 	private AdmissionIoOperations ioOperations;
+	
+	// TODO: to centralize
+	protected static final int DEFAULT_PAGE_SIZE = 80;
 
 	/**
 	 * Returns all patients with ward in which they are admitted.
@@ -123,27 +126,67 @@ public class AdmissionBrowserManager {
 	/**
 	 * Method that returns the list of Admissions not logically deleted
 	 * within the specified date range, divided by pages
-	 *
+	 * @param dateFrom
+	 * @param dateTo
 	 * @return the list of Admissions (could be empty)
 	 * @throws OHServiceException
 	 */
-	public List<Admission> getAdmissions(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
-		return ioOperations.getAdmissionsByAdmissionDate(dateFrom, dateTo, PageRequest.of(page, size));
+	public List<Admission> getAdmissions(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+		return ioOperations.getAdmissionsByAdmissionDate(dateFrom, dateTo, PageRequest.of(0, DEFAULT_PAGE_SIZE));
 	}
+	
+	/**
+	 * Method that returns the list of Admissions not logically deleted
+	 * within the specified date range, divided by pages
+	 *
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param page
+	 * @param size
+	 * @return {@link PagedResponse<Admission>}.
+	 * @throws OHServiceException
+	 */
 	public PagedResponse<Admission> getAdmissionsPageable(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
 		return ioOperations.getAdmissionsByAdmissionDates(dateFrom, dateTo, PageRequest.of(page, size));
 	}
 
 	/**
+	 * Method that returns the list of Admissions not logically deleted
+	 * within the specified date range
+	 *
+	 * @param dateFrom
+	 * @param dateTo
+	 * @return the list of Admissions (could be empty)
+	 * @throws OHServiceException
+	 */
+	public List<Admission> getAdmissionsByDate(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+		return ioOperations.getAdmissionsByAdmDate(dateFrom, dateTo);
+	}
+	
+	/**
 	 * Method that returns the list of completed Admissions (Discharges) not logically deleted
 	 * within the specified date range, divided by pages
-	 *
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param page
+	 * @param size
 	 * @return the list of completed Admissions (could be empty)
 	 * @throws OHServiceException
 	 */
 	public List<Admission> getDischarges(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
 		return ioOperations.getAdmissionsByDischargeDate(dateFrom, dateTo, PageRequest.of(page, size));
 	}
+	
+	/**
+	 * Method that returns the list of completed Admissions (Discharges) not logically deleted
+	 * within the specified date range, divided by pages
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param page
+	 * @param size
+	 * @return {@link PagedResponse<Admission>}
+	 * @throws OHServiceException
+	 */
 	public PagedResponse<Admission> getDischargesPageable(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
 		return ioOperations.getAdmissionsByDischargeDates(dateFrom, dateTo, PageRequest.of(page, size));
 	}
@@ -216,7 +259,7 @@ public class AdmissionBrowserManager {
 	}
 
 	/**
-	 * Sets an admission record to deleted.
+	 * Sets an admission record as deleted.
 	 *
 	 * @param admissionId the admission id.
 	 * @return <code>true</code> if the record has been set to delete.

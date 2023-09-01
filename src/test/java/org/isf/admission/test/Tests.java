@@ -204,11 +204,9 @@ public class Tests extends OHCoreTestCase {
 		List<AdmittedPatient> patients = admissionIoOperation.getAdmittedPatients();
 		final LocalDateTime admissionDate = foundAdmission.getAdmDate();
 		final LocalDateTime dischargeDate = foundAdmission.getDisDate();
-		{
-			List<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null, null, null);
-			assertThat(searchResult).hasSameSizeAs(patients);
-			assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
-		}
+		List<AdmittedPatient> searchResult = admissionIoOperation.getAdmittedPatients(null, null, null);
+		assertThat(searchResult).hasSameSizeAs(patients);
+		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 		final LocalDateTime beforeAdmissionDate = admissionDate.minusDays(1);
 
 		final LocalDateTime oneDayAfterAdmissionDate = admissionDate.plusDays(1);
@@ -454,7 +452,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoNewAdmission() throws Exception {
 		Admission admission = buildNewAdmission();
 		Admission result = admissionIoOperation.newAdmission(admission);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		admission = admissionBrowserManager.getAdmission(admission.getId());
 		testAdmission.check(admission);
 	}
@@ -472,9 +470,9 @@ public class Tests extends OHCoreTestCase {
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		foundAdmission.setNote("Update");
 		Admission result = admissionIoOperation.updateAdmission(foundAdmission);
+		assertThat(result).isNotNull();
 		Admission updateAdmission = admissionIoOperation.getAdmission(id);
-
-		assertThat(result);
+		assertThat(updateAdmission).isNotNull();
 		assertThat(updateAdmission.getNote()).isEqualTo("Update");
 	}
 
@@ -942,8 +940,9 @@ public class Tests extends OHCoreTestCase {
 		int id = admission.getId();
 		admission.setNote("Update");
 		Admission result = admissionBrowserManager.updateAdmission(admission);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		Admission updateAdmission = admissionBrowserManager.getAdmission(id);
+		assertThat(updateAdmission).isNotNull();
 		assertThat(updateAdmission.getNote()).isEqualTo("Update");
 	}
 

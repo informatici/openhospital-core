@@ -302,25 +302,17 @@ public class PatientIoOperations {
 		boolean isLoadProfilePhotoFromDB = LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
 		if (isLoadProfilePhotoFromDB) {
 			Hibernate.initialize(patient.getPatientProfilePhoto());
-			return patient.getPatientProfilePhoto();
 		} else {
 			((Session) this.entityManager.getDelegate()).evict(patient);
 			fileSystemPatientPhotoRepository.loadInPatient(patient, GeneralData.PATIENTPHOTOSTORAGE);
-			return patient.getPatientProfilePhoto();
 		}
+		return patient.getPatientProfilePhoto();
 	}
 
-	public PagedResponse<Patient> setPaginationData(Page<Patient> pages){
-		PagedResponse<Patient> data = new PagedResponse<Patient>();
+	PagedResponse<Patient> setPaginationData(Page<Patient> pages){
+		PagedResponse<Patient> data = new PagedResponse<>();
 		data.setData(pages.getContent());
-		PageInfo pageInfo = new PageInfo();
-		pageInfo.setSize(pages.getPageable().getPageSize());
-		pageInfo.setPage(pages.getPageable().getPageNumber());
-		pageInfo.setNbOfElements(pages.getNumberOfElements());
-		pageInfo.setTotalCount(pages.getTotalElements());
-		pageInfo.setHasPreviousPage(pages.hasPrevious());
-		pageInfo.setHasNextPage(pages.hasNext());
-		data.setPageInfo(pageInfo);
+		data.setPageInfo(PageInfo.from(pages));
 		return data;
 	}
   

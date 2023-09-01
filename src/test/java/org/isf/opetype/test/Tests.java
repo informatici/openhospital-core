@@ -85,8 +85,9 @@ public class Tests extends OHCoreTestCase {
 		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
 		foundOperationType.setDescription("Update");
 		OperationType result = operationTypeIoOperation.updateOperationType(foundOperationType);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		OperationType updateOperationType = operationTypeIoOperationRepository.findById(code).get();
+		assertThat(updateOperationType).isNotNull();
 		assertThat(updateOperationType.getDescription()).isEqualTo("Update");
 	}
 
@@ -94,7 +95,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoNewOperationType() throws Exception {
 		OperationType operationType = testOperationType.setup(true);
 		OperationType result = operationTypeIoOperation.newOperationType(operationType);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkOperationTypeIntoDb(operationType.getCode());
 	}
 
@@ -128,15 +129,16 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestOperationType(false);
 		OperationType foundOperationType = operationTypeIoOperationRepository.findById(code).get();
 		foundOperationType.setDescription("Update");
-		assertThat(operationTypeBrowserManager.updateOperationType(foundOperationType));
+		assertThat(operationTypeBrowserManager.updateOperationType(foundOperationType)).isNotNull();
 		OperationType updateOperationType = operationTypeIoOperationRepository.findById(code).get();
+		assertThat(updateOperationType).isNotNull();
 		assertThat(updateOperationType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrNewOperationType() throws Exception {
 		OperationType operationType = testOperationType.setup(true);
-		assertThat(operationTypeBrowserManager.newOperationType(operationType));
+		assertThat(operationTypeBrowserManager.newOperationType(operationType)).isNotNull();
 		checkOperationTypeIntoDb(operationType.getCode());
 	}
 

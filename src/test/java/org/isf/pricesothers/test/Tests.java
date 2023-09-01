@@ -103,7 +103,8 @@ public class Tests extends OHCoreTestCase {
 		PricesOthers updatePricesOthers = priceOthersIoOperationRepository.findById(id).get();
 
 		// then:
-		assertThat(result);
+		assertThat(result).isNotNull();
+		assertThat(updatePricesOthers).isNotNull();
 		assertThat(updatePricesOthers.getDescription()).isEqualTo("Update");
 	}
 
@@ -116,7 +117,7 @@ public class Tests extends OHCoreTestCase {
 		PricesOthers result = priceOthersIoOperations.newOthers(pricesOthers);
 
 		// then:
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkPricesOthersIntoDb(pricesOthers.getId());
 	}
 
@@ -155,15 +156,16 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestPricesOthers(false);
 		PricesOthers foundPricesOthers = priceOthersIoOperationRepository.findById(id).get();
 		foundPricesOthers.setDescription("Update");
-		assertThat(pricesOthersManager.updateOther(foundPricesOthers));
+		assertThat(pricesOthersManager.updateOther(foundPricesOthers)).isNotNull();
 		PricesOthers updatePricesOthers = priceOthersIoOperationRepository.findById(id).get();
+		assertThat(updatePricesOthers).isNotNull();
 		assertThat(updatePricesOthers.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrNewPricesOther() throws Exception {
 		PricesOthers pricesOthers = testPricesOthers.setup(true);
-		assertThat(pricesOthersManager.newOther(pricesOthers));
+		assertThat(pricesOthersManager.newOther(pricesOthers)).isNotNull();
 		checkPricesOthersIntoDb(pricesOthers.getId());
 	}
 

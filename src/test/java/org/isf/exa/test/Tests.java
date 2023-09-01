@@ -201,8 +201,9 @@ public class Tests extends OHCoreTestCase {
 		Exam foundExam = examIoOperationRepository.findById(code).get();
 		foundExam.setDescription("Update");
 		Exam result = examIoOperation.updateExam(foundExam);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		Exam updateExam = examIoOperationRepository.findById(code).get();
+		assertThat(updateExam).isNotNull();
 		assertThat(updateExam.getDescription()).isEqualTo("Update");
 	}
 
@@ -212,8 +213,9 @@ public class Tests extends OHCoreTestCase {
 		ExamRow examRow = examRowIoOperationRepository.findById(code).get();
 		examRow.setDescription("Update");
 		ExamRow result = examRowIoOperation.updateExamRow(examRow);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		ExamRow updateExamRow = examRowIoOperationRepository.findById(code).get();
+		assertThat(updateExamRow).isNotNull();
 		assertThat(updateExamRow.getDescription()).isEqualTo("Update");
 	}
 
@@ -341,7 +343,7 @@ public class Tests extends OHCoreTestCase {
 		examTypeIoOperationRepository.saveAndFlush(examType);
 		examIoOperationRepository.saveAndFlush(exam);
 		ExamRow result = examRowBrowsingManager.newExamRow(examRow);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		checkExamRowIntoDb(examRow.getCode());
 	}
 
@@ -361,8 +363,9 @@ public class Tests extends OHCoreTestCase {
 		Exam foundExam = examIoOperationRepository.findById(code).get();
 		foundExam.setDescription("Update");
 		Exam result = examBrowsingManager.updateExam(foundExam);
-		assertThat(result);
+		assertThat(result).isNotNull();
 		Exam updateExam = examIoOperationRepository.findById(code).get();
+		assertThat(updateExam).isNotNull();
 		assertThat(updateExam.getDescription()).isEqualTo("Update");
 	}
 

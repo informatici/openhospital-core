@@ -614,7 +614,7 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease3);
 		opd.setDisease2(disease2);
 		opd.setDisease3(disease3);
-		assertThat(opdBrowserManager.newOpd(opd));
+		assertThat(opdBrowserManager.newOpd(opd)).isNotNull();
 		checkOpdIntoDb(opd.getCode());
 	}
 

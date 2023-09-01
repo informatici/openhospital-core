@@ -281,7 +281,7 @@ public class Tests extends OHCoreTestCase {
 		OperationType operationType = testOperationType.setup(false);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		Operation operation = testOperation.setup(operationType, true);
-		assertThat(operationIoOperations.newOperation(operation));
+		assertThat(operationIoOperations.newOperation(operation)).isNotNull();
 		checkOperationIntoDb(operation.getCode());
 	}
 
@@ -291,8 +291,9 @@ public class Tests extends OHCoreTestCase {
 		Operation foundOperation = operationIoOperations.findByCode(code);
 		int lock = foundOperation.getLock();
 		foundOperation.setDescription("Update");
-		assertThat(operationIoOperations.updateOperation(foundOperation));
+		assertThat(operationIoOperations.updateOperation(foundOperation)).isNotNull();
 		Operation updateOperation = operationIoOperations.findByCode(code);
+		assertThat(updateOperation).isNotNull();
 		assertThat(updateOperation.getDescription()).isEqualTo("Update");
 		assertThat(updateOperation.getLock().intValue()).isEqualTo(lock + 1);
 	}
@@ -412,7 +413,7 @@ public class Tests extends OHCoreTestCase {
 		OperationType operationType = testOperationType.setup(false);
 		operationTypeIoOperationRepository.saveAndFlush(operationType);
 		Operation operation = testOperation.setup(operationType, true);
-		assertThat(operationBrowserManager.newOperation(operation));
+		assertThat(operationBrowserManager.newOperation(operation)).isNotNull();
 		checkOperationIntoDb(operation.getCode());
 	}
 
@@ -422,8 +423,9 @@ public class Tests extends OHCoreTestCase {
 		Operation foundOperation = operationBrowserManager.getOperationByCode(code);
 		int lock = foundOperation.getLock();
 		foundOperation.setDescription("Update");
-		assertThat(operationBrowserManager.updateOperation(foundOperation));
+		assertThat(operationBrowserManager.updateOperation(foundOperation)).isNotNull();
 		Operation updateOperation = operationBrowserManager.getOperationByCode(code);
+		assertThat(updateOperation).isNotNull();
 		assertThat(updateOperation.getDescription()).isEqualTo("Update");
 		assertThat(updateOperation.getLock().intValue()).isEqualTo(lock + 1);
 	}
