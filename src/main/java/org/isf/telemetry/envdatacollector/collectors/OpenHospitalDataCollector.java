@@ -36,6 +36,7 @@ import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoComm
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoSettings;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
 import org.isf.telemetry.manager.TelemetryManager;
+import org.isf.telemetry.model.Telemetry;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.service.WardIoOperations;
@@ -88,7 +89,8 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 		LOGGER.debug("Collecting Open Hospital data...");
 		Map<String, String> result = new LinkedHashMap<>();
 		try {
-			result.put(CollectorsConst.LOC_UUID, telemetryManager.retrieveSettings().getId().getSoftwareUUID());
+			Telemetry telemetry = telemetryManager.retrieveOrBuildNewTelemetry();
+			result.put(CollectorsConst.LOC_UUID, telemetry.getId().getSoftwareUUID());
 
 			String geoIpServiceName = settings.get("telemetry.enabled.geo.ip.lookup.service");
 			LOGGER.debug(geoIpServiceName + " - " + geoIpServices.size());
