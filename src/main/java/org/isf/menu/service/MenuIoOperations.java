@@ -240,17 +240,15 @@ public class MenuIoOperations
 	 * 
 	 * @param aGroup - the {@link UserGroup}
 	 * @param menu - the list of {@link UserMenuItem}s
-	 * @param insert - specify if is an insert or an update
-	 * @return <code>true</code> if the menu has been replaced, <code>false</code> otherwise.
+	 * @return <code>true</code>
 	 * @throws OHServiceException 
 	 */
-	public boolean setGroupMenu(UserGroup aGroup, List<UserMenuItem> menu, boolean insert) throws OHServiceException {
-		boolean result = true;
-		result = deleteGroupMenu(aGroup);
+	public boolean setGroupMenu(UserGroup aGroup, List<UserMenuItem> menu) throws OHServiceException {
+		deleteGroupMenu(aGroup);
 		for (UserMenuItem item : menu) {
-			result = result && insertGroupMenu(aGroup, item, insert);
+			insertGroupMenu(aGroup, item);
 		}
-		return result;
+		return true;
 	}
 
 	private boolean deleteGroupMenu(UserGroup aGroup) throws OHServiceException {
@@ -258,7 +256,7 @@ public class MenuIoOperations
 		return true;
 	}
 
-	private boolean insertGroupMenu(UserGroup aGroup, UserMenuItem item, boolean insert) throws OHServiceException {
+	private boolean insertGroupMenu(UserGroup aGroup, UserMenuItem item) throws OHServiceException {
 		GroupMenu groupMenu = new GroupMenu();
 		groupMenu.setUserGroup(aGroup.getCode());
 		groupMenu.setMenuItem(item.getCode());
