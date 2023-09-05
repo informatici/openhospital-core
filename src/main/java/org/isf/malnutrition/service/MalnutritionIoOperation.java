@@ -78,8 +78,9 @@ public class MalnutritionIoOperation {
 	 * @throws OHServiceException if an error occurs updating the malnutrition.
 	 */
 	public Malnutrition getMalnutrition(int code) throws OHServiceException {
-		return repository.getById(code);
+		return repository.getReferenceById(code);
 	}
+
 	/**
 	 * Returns the last {@link Malnutrition} entry for specified patient ID
 	 * @param patientID - the patient ID
