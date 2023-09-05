@@ -70,16 +70,7 @@ public class MalnutritionIoOperation {
 	public Malnutrition updateMalnutrition(Malnutrition malnutrition) throws OHServiceException {
 		return repository.save(malnutrition);
 	}
-	
-	/**
-	 * Get the specified {@link Malnutrition}.
-	 * @param code of the malnutrition.
-	 * @return {@link Malnutrition}
-	 * @throws OHServiceException if an error occurs updating the malnutrition.
-	 */
-	public Malnutrition getMalnutrition(int code) throws OHServiceException {
-		return repository.getById(code);
-	}
+
 	/**
 	 * Returns the last {@link Malnutrition} entry for specified patient ID
 	 * @param patientID - the patient ID

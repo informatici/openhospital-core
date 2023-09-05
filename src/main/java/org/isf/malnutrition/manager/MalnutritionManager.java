@@ -119,17 +119,6 @@ public class MalnutritionManager {
 		validateMalnutrition(malnutrition);
 		return ioOperation.updateMalnutrition(malnutrition);
 	}
-	
-	/**
-	 * Get the specified {@link Malnutrition}.
-	 *
-	 * @param code of {@link Malnutrition}
-	 * @return the {@link Malnutrition}
-	 * @throws OHServiceException
-	 */
-	public Malnutrition getMalnutrition(int code) throws OHServiceException {
-		return ioOperation.getMalnutrition(code);
-	}
 
 	/**
 	 * Deletes the specified {@link Malnutrition}.
