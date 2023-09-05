@@ -24,7 +24,6 @@ package org.isf.permissions.model;
 import java.util.List;
 
 import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,12 +44,11 @@ import org.isf.utils.db.Auditable;
  *------------------------------------------*/
 @Entity
 @Table(name = "OH_PERMISSIONS")
-@AttributeOverrides({ 
-		@AttributeOverride(name = "createdBy", column = @Column(name = "P_CREATED_BY")), 
-		@AttributeOverride(name = "createdDate", column = @Column(name = "P_CREATED_DATE")), 
-		@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "P_LAST_MODIFIED_BY")),
-		@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "P_LAST_MODIFIED_DATE")), 
-		@AttributeOverride(name = "active", column = @Column(name = "P_ACTIVE"))})
+@AttributeOverride(name = "createdBy", column = @Column(name = "P_CREATED_BY"))
+@AttributeOverride(name = "createdDate", column = @Column(name = "P_CREATED_DATE"))
+@AttributeOverride(name = "lastModifiedBy", column = @Column(name = "P_LAST_MODIFIED_BY"))
+@AttributeOverride(name = "lastModifiedDate", column = @Column(name = "P_LAST_MODIFIED_DATE"))
+@AttributeOverride(name = "active", column = @Column(name = "P_ACTIVE"))
 public class Permission extends Auditable<String> {
 	
 	@Id
