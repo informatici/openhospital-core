@@ -39,20 +39,27 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TelemetryDaemon.class);
 	private static final String FILE_PROPERTIES = "telemetry.properties";
-	private static final int DEFAULT_DELAY = 10;
-	// XXX load it from properties? Perhaps it could be better...
-	private static final int RELOAD_SETTINGS_TIME = 30;
+	private static final int DEFAULT_DELAY = 30; // seconds
+
+	// Singleton instance
+	private static volatile TelemetryDaemon instance;
+	private Thread telemetryThread;
 
 	private TelemetryManager telemetryManager;
 	private TelemetryUtils telemetryUtils;
-
 	private Telemetry settings;
 
 	private boolean running = true;
 	private int customDelay = DEFAULT_DELAY;
 	private int updateSettingsCounter;
+	private boolean reloadSettings = true;
 
-	public TelemetryDaemon() {
+	public void start() {
+		telemetryThread = new Thread(this);
+		telemetryThread.start();
+	}
+
+	private TelemetryDaemon() {
 		super(FILE_PROPERTIES);
 		LOGGER.info("Telemetry daemon started...");
 		customDelay = myGetProperty("telemetry.daemon.thread.loop.seconds", DEFAULT_DELAY);
@@ -62,58 +69,87 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 		this.settings = telemetryManager.retrieveSettings();
 	}
 
+	// Singleton instance getter
+	public static TelemetryDaemon getTelemetryDaemon() {
+		if (instance == null) {
+			synchronized (TelemetryDaemon.class) {
+				if (instance == null) {
+					instance = new TelemetryDaemon();
+				}
+			}
+		}
+		return instance;
+	}
+
 	public void run() {
 		while (running) {
+			if (reloadSettings) {
+				this.settings = telemetryManager.retrieveSettings();
+				this.reloadSettings = false;
+			}
 			LOGGER.info("Telemetry module running ({})...", updateSettingsCounter);
 			boolean isSendingMessageServiceActive = settings != null && settings.getActive() != null ? settings.getActive().booleanValue() : false;
 			if (!isSendingMessageServiceActive) {
-				LOGGER.debug("Telemetry module DISABLED (reloading settings in {} seconds)",
-								calculateReloadSettingsTime());
+				LOGGER.info("No data selected.");
 			} else if (isSendingMessageServiceActive && isTimeToSendMessage()) {
 				try {
-					GeneralData.initialize();
+					// GeneralData.getGeneralData();
 					this.telemetryUtils.sendTelemetryData(telemetryUtils.retrieveDataToSend(settings.getConsentMap()),
 									GeneralData.DEBUG);
 				} catch (RuntimeException | OHException e) {
 					LOGGER.error("Something strange happened");
 					LOGGER.error(ExceptionUtils.retrieveExceptionStacktrace(e));
-					LOGGER.error("Stopping Telemetry Daemon...");
-					setRunning(false);
+					stop();
 				}
-			} else {
-				LOGGER.debug("Telemetry module: issue traking message already sent (reloading settings in {} seconds)",
-								calculateReloadSettingsTime());
 			}
-
 			try {
 				Thread.sleep((long) customDelay * 1000);
 				updateSettingsCounter++;
-				if (updateSettingsCounter % RELOAD_SETTINGS_TIME == 0) {
-					LOGGER.debug("Reloading telemetry settings (after {} seconds)...", RELOAD_SETTINGS_TIME);
-					this.settings = telemetryManager.retrieveSettings();
-					LOGGER.debug("settings {}", this.settings);
-				}
 			} catch (InterruptedException e) {
 				LOGGER.error(e.getMessage());
 				LOGGER.error(ExceptionUtils.retrieveExceptionStacktrace(e));
-				LOGGER.error("Stopping Telemetry Daemon...");
-				setRunning(false);
+				stop();
 			}
 		}
 	}
 
-	private int calculateReloadSettingsTime() {
-		return RELOAD_SETTINGS_TIME - (updateSettingsCounter % RELOAD_SETTINGS_TIME);
-	}
-
 	private boolean isTimeToSendMessage() {
-		return settings.getSentTimestamp() == null || !TimeTools.isSameDay(settings.getSentTimestamp(), LocalDateTime.now());
+		boolean isTime = settings.getSentTimestamp() == null || !TimeTools.isSameDay(settings.getSentTimestamp(), LocalDateTime.now());
+		LOGGER.info("Telemetry module : already sent today");
+		return isTime;
 	}
 
 	/**
 	 * @param running the running to set
 	 */
-	public void setRunning(boolean running) {
+	private void setRunning(boolean running) {
 		this.running = running;
 	}
+
+	/**
+	 * Stops the Telemetry Daemon
+	 */
+	public void stop() {
+		LOGGER.info("Stopping Telemetry Daemon...");
+		setRunning(false);
+	}
+
+	/**
+	 * Stops the Telemetry Daemon
+	 */
+	public void restart() {
+		LOGGER.info("Restarting Telemetry Daemon...");
+		setRunning(true);
+	}
+
+	/**
+	 * Reload settings at the next run, restart daemon if stopped.
+	 */
+	public void reloadSettings() {
+		this.reloadSettings = true;
+		if (!this.running) {
+			restart();
+		}
+	}
+
 }

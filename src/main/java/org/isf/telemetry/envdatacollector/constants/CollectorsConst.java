@@ -23,13 +23,19 @@ package org.isf.telemetry.envdatacollector.constants;
 
 public interface CollectorsConst {
 
-	// TEL_DBMS
+	// FUN_TEL
+	public static final String TEL_UUID = "tel_uuid";
+	public static final String TEL_SENT_DATE = "tel_sent_date";
+	public static final String TEL_OPTIN_DATE = "tel_optin_date";
+	public static final String TEL_OPTOUT_DATE = "tel_optout_date";
+
+	// FUN_DBMS
 	public static final String DBMS_DRIVER_NAME = "dbms_driver_name";
 	public static final String DBMS_DRIVER_VERSION = "dbms_driver_version";
 	public static final String DBMS_PRODUCT_NAME = "dbms_product_name";
 	public static final String DBMS_PRODUCT_VERSION = "dbms_product_version";
 
-	// TEL_HW
+	// FUN_HW
 	public static final String HW_CPU_NUM_PHYSICAL_PROCESSES = "hw_cpu_number_physical_processes";
 	public static final String HW_CPU_NUM_LOGICAL_PROCESSES = "hw_cpu_number_logical_processes";
 	public static final String HW_CPU_NAME = "hw_cpu_name";
@@ -40,14 +46,14 @@ public interface CollectorsConst {
 	public static final String HW_CPU_CTX_SWITCHES = "hw_cpu_context_switches";
 	public static final String HW_MEM_TOTAL = "hw_mem_total_memory";
 
-	// TEL_OS
+	// FUN_OS
 	public static final String OS_FAMILY = "os_family";
 	public static final String OS_VERSION = "os_version";
 	public static final String OS_MANUFACTURER = "os_manufacturer";
 	public static final String OS_BITNESS = "os_bitness";
 	public static final String OS_CODENAME = "os_codename";
 
-	// TEL_OH
+	// FUN_OH
 	public static final String APP_VERSION = "app_version";
 	public static final String APP_VER_MAJOR = "app_ver_major";
 	public static final String APP_VER_MINOR = "app_ver_minor";
@@ -58,8 +64,7 @@ public interface CollectorsConst {
 	public static final String OH_TOTAL_ACTIVE_BEDS = "oh_active_beds";
 	public static final String TIME_LAST_USED = "time_last_used";
 
-	// TEL_LOCATION
-	public static final String LOC_UUID = "loc_uuid";
+	// FUN_LOCATION
 	public static final String LOC_COUNTRY_NAME = "loc_country_name";
 	public static final String LOC_COUNTRY_CODE = "loc_country_code";
 	public static final String LOC_REGION_NAME = "loc_region_name";

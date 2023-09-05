@@ -45,6 +45,10 @@ public class TelemetryManager {
 		telemetry.setActive(Boolean.TRUE);
 		telemetry.setOptinDate(LocalDateTime.now());
 		telemetry.setOptoutDate(null);
+		return telemetry;
+	}
+
+	public Telemetry save(Telemetry telemetry) {
 		return this.telemetryRepository.save(telemetry);
 	}
 
@@ -53,7 +57,7 @@ public class TelemetryManager {
 		telemetry.setConsentMap(consentMap);
 		telemetry.setActive(Boolean.FALSE);
 		telemetry.setOptoutDate(LocalDateTime.now());
-		return this.telemetryRepository.save(telemetry);
+		return telemetry;
 	}
 
 	public Telemetry retrieveOrBuildNewTelemetry() {
