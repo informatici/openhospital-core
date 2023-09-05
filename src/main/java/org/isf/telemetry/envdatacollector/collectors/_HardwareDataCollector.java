@@ -39,7 +39,7 @@ import oshi.hardware.HardwareAbstractionLayer;
 @Component
 public class _HardwareDataCollector {
 
-	private static final String ID = "FUN_HW";
+	private static final String ID = "TEL_HW";
 	private static final Logger LOGGER = LoggerFactory.getLogger(_HardwareDataCollector.class);
 
 	public String getId() {

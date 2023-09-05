@@ -40,7 +40,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TelemetryDataCollector extends AbstractDataCollector {
 
-	private static final String ID = "FUN_TEL";
+	private static final String ID = "TEL_ID";
 	private static final Logger LOGGER = LoggerFactory.getLogger(TelemetryDataCollector.class);
 
 	@Autowired

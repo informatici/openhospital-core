@@ -37,7 +37,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class _TimeDataCollector {
 
-	private static final String ID = "FUN_TIME";
+	private static final String ID = "TEL_TIME";
 	private static final Logger LOGGER = LoggerFactory.getLogger(_TimeDataCollector.class);
 
 	@Autowired

@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class _ApplicationDataCollector {
 
-	private static final String ID = "FUN_APPLICATION";
+	private static final String ID = "TEL_APPLICATION";
 	private static final Logger LOGGER = LoggerFactory.getLogger(_ApplicationDataCollector.class);
 
 	public String getId() {

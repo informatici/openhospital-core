@@ -40,7 +40,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class _LocationDataCollector {
 
-	private static final String ID = "FUN_LOCATION";
+	private static final String ID = "TEL_LOCATION";
 	private static final Logger LOGGER = LoggerFactory.getLogger(_LocationDataCollector.class);
 
 	@Autowired

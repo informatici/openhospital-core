@@ -39,7 +39,7 @@ import oshi.software.os.OperatingSystem;
 @Component
 public class SoftwareDataCollector extends AbstractDataCollector {
 
-	private static final String ID = "FUN_SW";
+	private static final String ID = "TEL_SW";
 	private static final Logger LOGGER = LoggerFactory.getLogger(SoftwareDataCollector.class);
 
 	@Override

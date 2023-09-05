@@ -44,7 +44,7 @@ public class _DBMSDataCollector {
 	@PersistenceContext
 	private EntityManager em;
 
-	private static final String ID = "FUN_DBMS";
+	private static final String ID = "TEL_DBMS";
 	private static final Logger LOGGER = LoggerFactory.getLogger(_DBMSDataCollector.class);
 
 	public String getId() {

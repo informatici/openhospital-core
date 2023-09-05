@@ -42,7 +42,7 @@ import oshi.util.FormatUtil;
 @Component
 public class HardwareDataCollector extends AbstractDataCollector {
 
-	private static final String ID = "FUN_HW";
+	private static final String ID = "TEL_HW";
 	private static final Logger LOGGER = LoggerFactory.getLogger(HardwareDataCollector.class);
 
 	@Override

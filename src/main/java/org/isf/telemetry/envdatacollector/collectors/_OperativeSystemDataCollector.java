@@ -38,7 +38,7 @@ import oshi.software.os.OperatingSystem;
 @Component
 public class _OperativeSystemDataCollector {
 
-	private static final String ID = "FUN_OS";
+	private static final String ID = "TEL_OS";
 	private static final Logger LOGGER = LoggerFactory.getLogger(_OperativeSystemDataCollector.class);
 
 	public String getId() {

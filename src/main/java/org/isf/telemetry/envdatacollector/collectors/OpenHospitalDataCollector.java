@@ -48,7 +48,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OpenHospitalDataCollector extends AbstractDataCollector {
 
-	private static final String ID = "FUN_OH";
+	private static final String ID = "TEL_OH";
 	private static final Logger LOGGER = LoggerFactory.getLogger(OpenHospitalDataCollector.class);
 
 	@Autowired
