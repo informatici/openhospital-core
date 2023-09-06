@@ -476,15 +476,15 @@ public class JasperReportsManager {
 			JRQuery query = jasperReport.getMainDataset().getQuery();
 
 			String queryString = query.getText();
-			queryString = queryString.replace("$P{todate}", "'" + dateQuery + "'");
+			queryString = queryString.replace("$P{todate}", '\'' + dateQuery + '\'');
 			if (groupBy != null) {
-				queryString = queryString.replace("$P{groupBy}", "'" + groupBy + "'");
+				queryString = queryString.replace("$P{groupBy}", '\'' + groupBy + '\'');
 			}
 			if (sortBy != null) {
-				queryString = queryString.replace("$P!{sortBy}", "'" + sortBy + "'");
+				queryString = queryString.replace("$P!{sortBy}", '\'' + sortBy + '\'');
 			}
 			if (filter != null) {
-				queryString = queryString.replace("$P{filter}", "'" + filter + "'");
+				queryString = queryString.replace("$P{filter}", '\'' + filter + '\'');
 			}
 
 			DbQueryLogger dbQuery = new DbQueryLogger();
@@ -557,13 +557,13 @@ public class JasperReportsManager {
 			JRQuery query = jasperReport.getMainDataset().getQuery();
 
 			String queryString = query.getText();
-			queryString = queryString.replace("$P{fromdate}", "'" + dateFromQuery + "'");
-			queryString = queryString.replace("$P{todate}", "'" + dateToQuery + "'");
+			queryString = queryString.replace("$P{fromdate}", '\'' + dateFromQuery + '\'');
+			queryString = queryString.replace("$P{todate}", '\'' + dateToQuery + '\'');
 			if (medical != null) {
-				queryString = queryString.replace("$P{productID}", "'" + medical.getCode() + "'");
+				queryString = queryString.replace("$P{productID}", "'" + medical.getCode() + '\'');
 			}
 			if (ward != null) {
-				queryString = queryString.replace("$P{WardCode}", "'" + ward.getCode() + "'");
+				queryString = queryString.replace("$P{WardCode}", '\'' + ward.getCode() + '\'');
 			}
 
 			DbQueryLogger dbQuery = new DbQueryLogger();
@@ -719,8 +719,8 @@ public class JasperReportsManager {
 			JRQuery query = jasperReport.getMainDataset().getQuery();
 			String queryString = query.getText();
 
-			queryString = queryString.replace("$P{fromdate}", "'" + java.sql.Date.valueOf(fromDate) + "'");
-			queryString = queryString.replace("$P{todate}", "'" + java.sql.Date.valueOf(toDate) + "'");
+			queryString = queryString.replace("$P{fromdate}", "'" + java.sql.Date.valueOf(fromDate) + '\'');
+			queryString = queryString.replace("$P{todate}", "'" + java.sql.Date.valueOf(toDate) + '\'');
 
 			DbQueryLogger dbQuery = new DbQueryLogger();
 			ResultSet resultSet = dbQuery.getData(queryString, true);
@@ -749,8 +749,8 @@ public class JasperReportsManager {
 			String dateFromQuery = TimeTools.formatDateTime(TimeTools.getDate(fromDate, DD_MM_YYYY), YYYY_MM_DD);
 			String dateToQuery = TimeTools.formatDateTime(TimeTools.getDate(toDate, DD_MM_YYYY), YYYY_MM_DD);
 
-			queryString = queryString.replace("$P{fromdate}", "'" + dateFromQuery + "'");
-			queryString = queryString.replace("$P{todate}", "'" + dateToQuery + "'");
+			queryString = queryString.replace("$P{fromdate}", '\'' + dateFromQuery + '\'');
+			queryString = queryString.replace("$P{todate}", '\'' + dateToQuery + '\'');
 
 			DbQueryLogger dbQuery = new DbQueryLogger();
 			ResultSet resultSet = dbQuery.getData(queryString, true);
@@ -790,8 +790,8 @@ public class JasperReportsManager {
 			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperFile);
 			JRQuery query = jasperReport.getMainDataset().getQuery();
 			String queryString = query.getText();
-			queryString = queryString.replace("$P{year}", "'" + year + "'");
-			queryString = queryString.replace("$P{month}", "'" + month + "'");
+			queryString = queryString.replace("$P{year}", "'" + year + '\'');
+			queryString = queryString.replace("$P{month}", "'" + month + '\'');
 
 			DbQueryLogger dbQuery = new DbQueryLogger();
 			ResultSet resultSet = dbQuery.getData(queryString, true);
@@ -971,11 +971,11 @@ public class JasperReportsManager {
 		sbFilename.append(jasperFileName);
 		if (params != null) {
 			params.forEach(p -> {
-				sbFilename.append("_");
+				sbFilename.append('_');
 				sbFilename.append(p);
 			});
 		}
-		sbFilename.append(".");
+		sbFilename.append('.');
 		sbFilename.append(ext);
 		return sbFilename.toString();
 	}

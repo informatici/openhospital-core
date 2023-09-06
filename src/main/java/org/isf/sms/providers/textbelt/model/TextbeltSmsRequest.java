@@ -60,7 +60,7 @@ public class TextbeltSmsRequest implements Serializable {
 
 	@Override
 	public String toString() {
-		return "TextbeltSmsRequest [phone=***" + ", message=***" + ", key=***" + "]";
+		return "TextbeltSmsRequest [phone=***" + ", message=***" + ", key=***" + ']';
 	}
 
 }

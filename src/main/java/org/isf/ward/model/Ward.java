@@ -308,7 +308,7 @@ public class Ward extends Auditable<String> {
 		return "Ward [code=" + code + ", description=" + description + ", telephone=" + telephone + ", fax=" + fax
 				+ ", email=" + email + ", beds=" + beds + ", nurs=" + nurs + ", docs=" + docs + ", isPharmacy="
 				+ isPharmacy + ", isMale=" + isMale + ", isFemale=" + isFemale + ", lock=" + lock + ", hashCode="
-				+ hashCode + "]";
+				+ hashCode + ']';
 	}
 
 	@Override
