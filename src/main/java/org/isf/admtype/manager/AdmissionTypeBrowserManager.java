@@ -127,14 +127,14 @@ public class AdmissionTypeBrowserManager {
 	}
 
 	/**
-	 * Retrieves a list of {@link AdmissionType}s associated with a specific department.
+	 * A small method for testing the CI/CD pipeline.
+	 * This method checks if a number is even.
 	 *
-	 * @param departmentId the ID of the department to filter admission types.
-	 * @return a list of admission types for the specified department.
-	 * @throws OHServiceException if an error occurs while retrieving data.
+	 * @param number The number to check.
+	 * @return true if the number is even, false otherwise.
 	 */
-	public List<AdmissionType> getAdmissionTypesByDepartment(int departmentId) throws OHServiceException {
-	    return ioOperations.getAdmissionTypesByDepartment(departmentId);
+	public boolean isEven(int number) {
+	    return number % 2 == 0;
 	}
 
 }
