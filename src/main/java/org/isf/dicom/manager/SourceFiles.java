@@ -127,7 +127,7 @@ public class SourceFiles extends Thread {
 			if (!value.isDirectory()) {
 				try {
 					loadDicom(fileDicom, value, patient);
-				} catch(OHDicomException ohDicomException) {
+				} catch (OHDicomException ohDicomException) {
 					LOGGER.error("loadDicomDir: {}", ohDicomException.getMessages().get(0).getMessage());
 				} catch (Exception e) {
 					throw e;
