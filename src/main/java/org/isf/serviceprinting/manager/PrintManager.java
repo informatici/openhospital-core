@@ -93,7 +93,7 @@ public class PrintManager {
 						JasperExportManager.exportReportToPdfFile(jasperPrint, pdfFile);
 						try {
 							Runtime rt = Runtime.getRuntime();
-							rt.exec(GeneralData.VIEWER +" "+ pdfFile);
+							rt.exec(GeneralData.VIEWER + ' ' + pdfFile);
 						} catch(Exception exception) {
 							LOGGER.error(exception.getMessage(), exception);
 						}

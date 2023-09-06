@@ -80,7 +80,7 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 
 			if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
 
-				System.out.println("Port found: " + portId.getName() + " " + (portId.getPortType() == CommPortIdentifier.PORT_SERIAL ? "SERIAL" : "PARALLEL"));
+				System.out.println("Port found: " + portId.getName() + ' ' + (portId.getPortType() == CommPortIdentifier.PORT_SERIAL ? "SERIAL" : "PARALLEL"));
 			
 				try {
 					serialPort = (SerialPort) portId.open("SmsSender", 10);

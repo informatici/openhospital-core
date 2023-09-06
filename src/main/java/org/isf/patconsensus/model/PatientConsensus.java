@@ -108,7 +108,7 @@ public class PatientConsensus extends Auditable<String> {
 	@Override
 	public String toString() {
 		return "PatientConsensus [id=" + id + ", consensusFlag=" + consensusFlag + ", serviceFlag=" + serviceFlag
-						+ ", patient=" + patient + "]";
+						+ ", patient=" + patient + ']';
 	}
 
 

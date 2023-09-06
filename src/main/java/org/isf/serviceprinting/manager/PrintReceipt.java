@@ -150,7 +150,7 @@ public class PrintReceipt {
 					int i = 0;
 					while (!aLine.equals("")) {
 						zpl.append("^FO0,").append(i * charH);         //line position
-						zpl.append(font).append(",").append(charH);    //font size
+						zpl.append(font).append(',').append(charH);    //font size
 						zpl.append("^FD").append(aLine).append("^FS"); //line field
 						aLine = brStream.readLine();
 						i++;

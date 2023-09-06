@@ -277,11 +277,11 @@ public class TherapyRow extends Auditable<String> {
 		sb.append(medicalId);
 		sb.append(" - ");
 		sb.append(this.unitID);
-		sb.append(" ");
+		sb.append(' ');
 		sb.append(this.qty);
-		sb.append("/");
+		sb.append('/');
 		sb.append(freqInDay);
-		sb.append("/");
+		sb.append('/');
 		sb.append(this.freqInPeriod);
 		return sb.toString();
 	}

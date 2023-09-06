@@ -294,7 +294,7 @@ public class ExcelExporter {
 				if (!header) {
 					Set columns = thisMap.keySet();
 					for (Object column : columns) {
-						outFile.write(column.toString() + ";");
+						outFile.write(column.toString() + ';');
 					}
 					outFile.write("\n");
 					header = true;
@@ -304,7 +304,7 @@ public class ExcelExporter {
 				Collection values = thisMap.values();
 				for (Object value : values) {
 					strVal = convertValue(value);
-					outFile.write(strVal + ";");
+					outFile.write(strVal + ';');
 				}
 				outFile.write("\n");
 			}

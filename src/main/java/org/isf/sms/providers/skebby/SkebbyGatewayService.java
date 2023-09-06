@@ -111,7 +111,7 @@ public class SkebbyGatewayService implements SmsSenderInterface {
 		final String userKey = this.smsProperties.getProperty(KEY_USER_KEY);
 		final String token = this.smsProperties.getProperty(KEY_ACCESS_TOKEN);
 		if (userKey != null && !userKey.trim().isEmpty() && token != null && !token.trim().isEmpty()) {
-			return userKey + ";" + token;
+			return userKey + ';' + token;
 		}
 
 		final String username = this.smsProperties.getProperty(KEY_USERNAME);
