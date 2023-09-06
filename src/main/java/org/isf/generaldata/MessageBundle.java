@@ -43,7 +43,7 @@ public class MessageBundle {
 
 	private static ResourceBundle defaultResourceBundle;
 
-	public static void initialize() throws RuntimeException {
+	public static void initialize() {
 		try {
 			defaultResourceBundle = ResourceBundle.getBundle("language", new Locale("en"));
 			resourceBundle = ResourceBundle.getBundle("language", new Locale(GeneralData.LANGUAGE), new UTF8Control());

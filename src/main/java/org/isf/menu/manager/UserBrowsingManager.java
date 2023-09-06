@@ -244,7 +244,7 @@ public class UserBrowsingManager {
 	 * @return <code>true</code> if the menu has been replaced, <code>false</code> otherwise.
 	 */
 	public boolean setGroupMenu(UserGroup aGroup, List<UserMenuItem> menu) throws OHServiceException {
-		return ioOperations.setGroupMenu(aGroup, menu, false);
+		return ioOperations.setGroupMenu(aGroup, menu);
 	}
 
 	/**

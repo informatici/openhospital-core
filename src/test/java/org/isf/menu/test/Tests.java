@@ -253,7 +253,7 @@ public class Tests extends OHCoreTestCase {
 		UserMenuItem menuItem = testUserMenu.setup(false);
 		List<UserMenuItem> userMenuItems = new ArrayList<>();
 		userMenuItems.add(menuItem);
-		assertThat(menuIoOperation.setGroupMenu(userGroup, userMenuItems, true)).isTrue();
+		assertThat(menuIoOperation.setGroupMenu(userGroup, userMenuItems)).isTrue();
 	}
 
 	@Test

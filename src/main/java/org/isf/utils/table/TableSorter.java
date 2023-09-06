@@ -22,9 +22,6 @@
 package org.isf.utils.table;
 
 import java.awt.Component;
-import java.awt.event.InputEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,8 +30,6 @@ import java.util.Vector;
 
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import org.slf4j.Logger;
@@ -282,31 +277,6 @@ public class TableSorter extends TableMap {
 		sortingColumns.addElement(column);
 		sort(this);
 		super.tableChanged(new TableModelEvent(this));
-	}
-
-	// There is no-where else to put this.
-	// Add a mouse listener to the Table to trigger a table sort
-	// when a column heading is clicked in the JTable.
-	public void addMouseListenerToHeaderInTable(JTable table) {
-		final TableSorter sorter = this;
-		final JTable tableView = table;
-		tableView.setColumnSelectionAllowed(false);
-		MouseAdapter listMouseListener = new MouseAdapter() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				TableColumnModel columnModel = tableView.getColumnModel();
-				int viewColumn = columnModel.getColumnIndexAtX(e.getX());
-				int column = tableView.convertColumnIndexToModel(viewColumn);
-				if (e.getClickCount() == 1 && column != -1) {
-					int shiftPressed = e.getModifiers() & InputEvent.SHIFT_MASK;
-					boolean ascending = (shiftPressed == 0);
-					sorter.sortByColumn(column, ascending);
-				}
-			}
-		};
-		JTableHeader th = tableView.getTableHeader();
-		th.addMouseListener(listMouseListener);
 	}
 
 	public void updateRowHeights(JTable table) {
