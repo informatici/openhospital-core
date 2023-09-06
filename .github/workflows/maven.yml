@@ -1,7 +1,6 @@
 # This workflow will build, test, and deploy a Java project with Maven
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-
 name: Java CI with Maven and Docker
 
 on: [push, pull_request]
