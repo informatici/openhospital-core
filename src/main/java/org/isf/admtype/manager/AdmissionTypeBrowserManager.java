@@ -126,4 +126,15 @@ public class AdmissionTypeBrowserManager {
 		}
 	}
 
+	/**
+	 * Retrieves a list of {@link AdmissionType}s associated with a specific department.
+	 *
+	 * @param departmentId the ID of the department to filter admission types.
+	 * @return a list of admission types for the specified department.
+	 * @throws OHServiceException if an error occurs while retrieving data.
+	 */
+	public List<AdmissionType> getAdmissionTypesByDepartment(int departmentId) throws OHServiceException {
+	    return ioOperations.getAdmissionTypesByDepartment(departmentId);
+	}
+
 }
