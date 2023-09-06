@@ -44,6 +44,12 @@ jobs:
     - name: Run Tests with JaCoCo
       run: mvn clean test jacoco:report
 
+    - name: Upload JaCoCo Report
+      uses: actions/upload-artifact@v2
+      with:
+        name: jacoco-report
+        path: target/site/jacoco
+
   docker:
     runs-on: ubuntu-latest
     steps:
