@@ -32,7 +32,6 @@ public class LaboratoryForPrint {
 	private String result;
 	private Integer code;
 	private String patName;
-	private Integer patientCode;
 
 	public Integer getCode() {
 		return code;
@@ -48,7 +47,6 @@ public class LaboratoryForPrint {
 		date = aDate;
 		result = aResult;
 		patName = patientName;
-		patientCode = patCode;
 	}
 
 	public LaboratoryForPrint(Integer aCode, Exam aExam, LocalDateTime aDate, String aResult) {
