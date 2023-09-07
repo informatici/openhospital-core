@@ -82,7 +82,6 @@ public class Tests extends OHCoreTestCase {
 	private static TestMedicalWard testMedicalWard;
 	private static TestPatient testPatient;
 	private static TestMovementWard testMovementWard;
-	private static TestMovement testMovement;
 	private static TestMovementType testMovementType;
 	private static TestSupplier testSupplier;
 	private static TestLot testLot;
@@ -122,7 +121,7 @@ public class Tests extends OHCoreTestCase {
 		testMedicalWard = new TestMedicalWard();
 		testPatient = new TestPatient();
 		testMovementWard = new TestMovementWard();
-		testMovement = new TestMovement();
+		TestMovement testMovement = new TestMovement();
 		testMovementType = new TestMovementType();
 		testSupplier = new TestSupplier();
 		testLot = new TestLot();

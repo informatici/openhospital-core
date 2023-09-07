@@ -55,7 +55,6 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	
 	private Properties props;
 	private CommPortIdentifier portId;
-	private Enumeration<?> portList;
 	private SerialPort serialPort;
 	private InputStream inputStream;
 	
@@ -71,8 +70,8 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 		props = ConfigurationProperties.loadPropertiesFile(GSMParameters.FILE_PROPERTIES, LOGGER);
 		
 		String model = props.getProperty(GSMGatewayService.SERVICE_NAME + ".gmm");
-		
-		portList = CommPortIdentifier.getPortIdentifiers();
+
+		Enumeration<?> portList = CommPortIdentifier.getPortIdentifiers();
 		
 		while (portList.hasMoreElements()) {
 			
