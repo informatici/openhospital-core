@@ -90,13 +90,7 @@ public class TableSorter extends TableMap {
 			Number n2 = (Number) data.getValueAt(row2, column);
 			double d2 = n2.doubleValue();
 
-			if (d1 < d2) {
-				return -1;
-			} else if (d1 > d2) {
-				return 1;
-			} else {
-				return 0;
-			}
+			return Double.compare(d1, d2);
 		} else if ((o1 instanceof String) && (o2 instanceof String)) {
 
 			String str1 = data.getValueAt(row1, column).toString();
@@ -109,13 +103,7 @@ public class TableSorter extends TableMap {
 				long n1 = d1.getTime();
 				long n2 = d2.getTime();
 
-				if (n1 < n2) {
-					return -1;
-				} else if (n1 > n2) {
-					return 1;
-				} else {
-					return 0;
-				}
+				return Long.compare(n1, n2);
 			} catch (NumberFormatException | ParseException e3) {
 				LOGGER.info("Compare ({}) with ({})", str1, str2);
 				return str1.compareTo(str2);
@@ -127,13 +115,7 @@ public class TableSorter extends TableMap {
 			String s2 = v2.toString();
 			int result = s1.compareTo(s2);
 
-			if (result < 0) {
-				return -1;
-			} else if (result > 0) {
-				return 1;
-			} else {
-				return 0;
-			}
+			return Integer.compare(result, 0);
 		}
 	}
 
