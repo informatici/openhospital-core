@@ -95,7 +95,7 @@ public class OperationRow extends Auditable<String> {
     private Bill bill;
 
     @Column(name = "OPER_TRANS_UNIT", columnDefinition = "float default 0")
-    private Float transUnit = 0f;
+    private Float transUnit = 0.0f;
     
     @Transient
     private volatile int hashCode;

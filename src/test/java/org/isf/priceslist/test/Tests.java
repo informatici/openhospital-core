@@ -202,7 +202,7 @@ public class Tests extends OHCoreTestCase {
 		// then:
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
 		assertThat(copyPrice.getId()).isEqualTo(id + 1);
-		assertThat(copyPrice.getPrice()).isCloseTo(2 * price.getPrice(), within(0.10D));
+		assertThat(copyPrice.getPrice()).isCloseTo(2 * price.getPrice(), within(0.10d));
 	}
 
 	@Test
@@ -218,7 +218,7 @@ public class Tests extends OHCoreTestCase {
 		// then:
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
 		assertThat(copyPrice.getId()).isEqualTo(id + 1);
-		assertThat(copyPrice.getPrice()).isCloseTo(Math.round(2 * price.getPrice() / 3) * 3, within(0.10D));
+		assertThat(copyPrice.getPrice()).isCloseTo(Math.round(2 * price.getPrice() / 3) * 3, within(0.10d));
 	}
 
 	@Test
@@ -282,7 +282,7 @@ public class Tests extends OHCoreTestCase {
 		priceListManager.copyList(priceList, 2, 0);
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
 		assertThat(copyPrice.getId()).isEqualTo(id + 1);
-		assertThat(copyPrice.getPrice()).isCloseTo(2 * price.getPrice(), within(0.10D));
+		assertThat(copyPrice.getPrice()).isCloseTo(2 * price.getPrice(), within(0.10d));
 	}
 
 	@Test
@@ -293,7 +293,7 @@ public class Tests extends OHCoreTestCase {
 		priceListManager.copyList(priceList, 2, 3);
 		Price copyPrice = priceIoOperationRepository.findAll().get(1);
 		assertThat(copyPrice.getId()).isEqualTo(id + 1);
-		assertThat(copyPrice.getPrice()).isCloseTo(Math.round(2 * price.getPrice() / 3) * 3, within(0.10D));
+		assertThat(copyPrice.getPrice()).isCloseTo(Math.round(2 * price.getPrice() / 3) * 3, within(0.10d));
 	}
 
 	@Test

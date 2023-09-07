@@ -181,7 +181,7 @@ public class Tests extends OHCoreTestCase {
 		Malnutrition result = malnutritionIoOperation.updateMalnutrition(foundMalnutrition);
 		assertThat(result).isNotNull();
 		Malnutrition updateMalnutrition = malnutritionIoOperationRepository.findById(code).get();
-		assertThat(updateMalnutrition.getHeight()).isCloseTo(200.0F, within(0.000001F));
+		assertThat(updateMalnutrition.getHeight()).isCloseTo(200.0f, within(0.000001f));
 	}
 
 	@Test
@@ -264,7 +264,7 @@ public class Tests extends OHCoreTestCase {
 		Malnutrition result = malnutritionManager.updateMalnutrition(foundMalnutrition);
 		assertThat(result).isNotNull();
 		Malnutrition updateMalnutrition = malnutritionIoOperationRepository.findById(code).get();
-		assertThat(updateMalnutrition.getHeight()).isCloseTo(200.0F, within(0.000001F));
+		assertThat(updateMalnutrition.getHeight()).isCloseTo(200.0f, within(0.000001f));
 	}
 
 	@Test
