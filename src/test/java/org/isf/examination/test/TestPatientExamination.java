@@ -33,12 +33,12 @@ public class TestPatientExamination {
 
 	private LocalDateTime pex_date = LocalDateTime.of(2020, 1, 10, 0, 0, 0);
 	private Integer pex_height = 170;
-	private Double pex_weight = 60.;
+	private Double pex_weight = 60.0;
 	private Integer pex_ap_min = 80;
 	private Integer pex_ap_max = 120;
 	private Integer pex_hr = 60;
-	private Double pex_temp = 36.;
-	private Double pex_sat = 1.;
+	private Double pex_temp = 36.0;
+	private Double pex_sat = 1.0;
 	private Integer pex_hgt = 85;
 	private Integer pex_diuresis = 100;
 	private String pex_diuresis_desc = "physiological";

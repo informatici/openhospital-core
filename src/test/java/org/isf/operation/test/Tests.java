@@ -976,10 +976,10 @@ public class Tests extends OHCoreTestCase {
 				deliveryType, deliveryResult, false);
 
 		OperationRow operationRow1 = new OperationRow(operation, "prescriber", "opResult", LocalDateTime.of(2021, 1, 1, 0, 0, 0), "remarks", admission, new Opd(),
-				null, 10.0F);
+				null, 10.0f);
 
 		OperationRow operationRow2 = new OperationRow(1, operation, "prescriber", "opResult", LocalDateTime.of(2021, 1, 1, 0, 0, 0), "remarks", admission,
-				new Opd(), null, 10.0F);
+				new Opd(), null, 10.0f);
 
 		operationRow1.setId(1);
 		assertThat(operationRow1).isEqualTo(operationRow2);

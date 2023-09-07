@@ -144,7 +144,7 @@ public class MovStockInsertingManager {
 			}
 			if (GeneralData.LOTWITHCOST && chargingType) {
 				BigDecimal cost = lot.getCost();
-				if (cost == null || cost.doubleValue() <= 0.) {
+				if (cost == null || cost.doubleValue() <= 0.0) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.multiplecharging.zerocostsarenotallowed.msg")));
 				}
 			}

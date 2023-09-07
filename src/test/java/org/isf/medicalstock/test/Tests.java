@@ -918,7 +918,7 @@ public class Tests extends OHCoreTestCase {
 			int code = setupTestMovement(false);
 			Movement movement = movementIoOperationRepository.findById(code).get();
 			Lot lot = movement.getLot();
-			lot.setCost(new BigDecimal(0.));
+			lot.setCost(new BigDecimal(0.0));
 			lotIoOperationRepository.saveAndFlush(lot);
 			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);

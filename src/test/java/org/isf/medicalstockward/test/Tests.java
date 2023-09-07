@@ -281,10 +281,10 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		MedicalWard medicalWard = new MedicalWard(ward, medical, 10.0F, 5.0F, lot);
+		MedicalWard medicalWard = new MedicalWard(ward, medical, 10.0f, 5.0f, lot);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
 
-		MedicalWard medicalWardTo = new MedicalWard(wardTo, medical, 10.0F, 15.0F, lot);
+		MedicalWard medicalWardTo = new MedicalWard(wardTo, medical, 10.0f, 15.0f, lot);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWardTo);
 
 		medicalStockWardIoOperations.newMovementWard(movementWard);
@@ -310,10 +310,10 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		MedicalWard medicalWard = new MedicalWard(ward, medical, 10.0F, 5.0F, lot);
+		MedicalWard medicalWard = new MedicalWard(ward, medical, 10.0f, 5.0f, lot);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
 
-		MedicalWard medicalWardTo = new MedicalWard(wardTo, medical, 10.0F, 15.0F, lot);
+		MedicalWard medicalWardTo = new MedicalWard(wardTo, medical, 10.0f, 15.0f, lot);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWardTo);
 
 		medicalStockWardIoOperations.newMovementWard(movementWard);
@@ -407,8 +407,8 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetMedicalsWardStripEmptyLots() throws Exception {
 		MedicalWardId code = setupTestMedicalWard(false);
 		MedicalWard medicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(code.getWard().getCode(), code.getMedical().getCode());
-		medicalWard.setIn_quantity(10F);
-		medicalWard.setOut_quantity(10F);
+		medicalWard.setIn_quantity(10.0f);
+		medicalWard.setOut_quantity(10.0f);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
 		List<MedicalWard> medicalWards = medicalStockWardIoOperations.getMedicalsWard(medicalWard.getWard().getCode().charAt(0), true);
 		assertThat(medicalWards).isEmpty();
@@ -1139,7 +1139,7 @@ public class Tests extends OHCoreTestCase {
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);
 
-		assertThat(new MovementWard(ward, LocalDateTime.of(1, 1, 1, 0, 0, 0), true, patient, 32, 150.0F, "description", medical, 100D, "kilo")).isNotNull();
+		assertThat(new MovementWard(ward, LocalDateTime.of(1, 1, 1, 0, 0, 0), true, patient, 32, 150.0f, "description", medical, 100.0d, "kilo")).isNotNull();
 	}
 
 	@Test
@@ -1156,7 +1156,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		assertThat(new MovementWard(ward, LocalDateTime.of(1, 1, 1, 0, 0, 0), true, patient, 32, 150.0F, "description", medical, 100D, "kilo", lot)).isNotNull();
+		assertThat(new MovementWard(ward, LocalDateTime.of(1, 1, 1, 0, 0, 0), true, patient, 32, 150.0f, "description", medical, 100.0d, "kilo", lot)).isNotNull();
 	}
 
 	@Test
@@ -1173,7 +1173,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		assertThat(new MovementWard(ward, lot, "description", medical, 100D, "kilo")).isNotNull();
+		assertThat(new MovementWard(ward, lot, "description", medical, 100.0d, "kilo")).isNotNull();
 	}
 
 	@Test
@@ -1190,8 +1190,8 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		MovementWard movementWard1 = new MovementWard(ward, lot, "description", medical, 100D, "kilo");
-		MovementWard movementWard2 = new MovementWard(ward, lot, "description", medical, 100D, "kilo");
+		MovementWard movementWard1 = new MovementWard(ward, lot, "description", medical, 100.0d, "kilo");
+		MovementWard movementWard2 = new MovementWard(ward, lot, "description", medical, 100.0d, "kilo");
 		movementWard2.setCode(-1);
 
 		assertThat(movementWard1).isEqualTo(movementWard1);
@@ -1219,7 +1219,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		MovementWard movementWard = new MovementWard(ward, lot, "description", medical, 100D, "kilo");
+		MovementWard movementWard = new MovementWard(ward, lot, "description", medical, 100.0d, "kilo");
 		movementWard.setCode(1);
 
 		// generate hashCode
@@ -1234,7 +1234,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMedicalWardConstructorWith2Parameters() throws Exception {
 		MedicalType medicalType = testMedicalType.setup(true);
 		Medical medical = testMedical.setup(medicalType, true);
-		assertThat(new MedicalWard(medical, 10.0D)).isNotNull();
+		assertThat(new MedicalWard(medical, 10.0d)).isNotNull();
 	}
 
 	@Test
@@ -1242,7 +1242,7 @@ public class Tests extends OHCoreTestCase {
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, true);
 		Lot lot = testLot.setup(medical, true);
-		MedicalWard medicalWard = new MedicalWard(medical, 10.0D, lot);
+		MedicalWard medicalWard = new MedicalWard(medical, 10.0d, lot);
 		assertThat(medicalWard.getLot()).isEqualTo(lot);
 	}
 
@@ -1252,7 +1252,7 @@ public class Tests extends OHCoreTestCase {
 		Medical medical = testMedical.setup(medicalType, false);
 		Lot lot = testLot.setup(medical, true);
 		Ward ward = testWard.setup(true);
-		MedicalWard medicalWard = new MedicalWard(medical, 10.0D, lot);
+		MedicalWard medicalWard = new MedicalWard(medical, 10.0d, lot);
 		medicalWard.setId(ward, medical, lot);
 		assertThat(medicalWard.getId()).isEqualTo(new MedicalWardId(ward, medical, lot));
 	}
@@ -1263,7 +1263,7 @@ public class Tests extends OHCoreTestCase {
 		Medical medical = testMedical.setup(medicalType, false);
 		Lot lot = testLot.setup(medical, true);
 		Ward ward = testWard.setup(true);
-		MedicalWard medicalWard = new MedicalWard(medical, 10.0D, lot);
+		MedicalWard medicalWard = new MedicalWard(medical, 10.0d, lot);
 		assertThat(medicalWard.getLot()).isEqualTo(lot);
 	}
 
@@ -1273,14 +1273,14 @@ public class Tests extends OHCoreTestCase {
 		Medical medical1 = testMedical.setup(medicalType1, false);
 		Lot lot1 = testLot.setup(medical1, true);
 		Ward ward1 = testWard.setup(true);
-		MedicalWard medicalWard1 = new MedicalWard(medical1, 10.0D, lot1);
+		MedicalWard medicalWard1 = new MedicalWard(medical1, 10.0d, lot1);
 
 		MedicalType medicalType2 = testMedicalType.setup(true);
 		Medical medical2 = testMedical.setup(medicalType2, false);
 		Lot lot2 = testLot.setup(medical2, true);
 		lot2.setCode("second");
 		Ward ward2 = testWard.setup(true);
-		MedicalWard medicalWard2 = new MedicalWard(medical2, 10.0D, lot2);
+		MedicalWard medicalWard2 = new MedicalWard(medical2, 10.0d, lot2);
 
 		assertThat(medicalWard1.compareTo(1)).isZero();
 		assertThat(medicalWard1.compareTo(medicalWard2)).isZero();
@@ -1299,14 +1299,14 @@ public class Tests extends OHCoreTestCase {
 		Medical medical1 = testMedical.setup(medicalType1, false);
 		Lot lot1 = testLot.setup(medical1, true);
 		Ward ward1 = testWard.setup(true);
-		MedicalWard medicalWard1 = new MedicalWard(medical1, 10.0D, lot1);
+		MedicalWard medicalWard1 = new MedicalWard(medical1, 10.0d, lot1);
 
 		MedicalType medicalType2 = testMedicalType.setup(true);
 		Medical medical2 = testMedical.setup(medicalType2, false);
 		Lot lot2 = testLot.setup(medical2, true);
 		lot2.setCode("second");
 		Ward ward2 = testWard.setup(true);
-		MedicalWard medicalWard2 = new MedicalWard(medical2, 10.0D, lot2);
+		MedicalWard medicalWard2 = new MedicalWard(medical2, 10.0d, lot2);
 
 		assertThat(medicalWard1).isEqualTo(medicalWard1);
 		assertThat(medicalWard1)
