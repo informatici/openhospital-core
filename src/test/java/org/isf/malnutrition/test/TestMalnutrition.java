@@ -38,8 +38,8 @@ public class TestMalnutrition {
 	private LocalDateTime now = TimeTools.getNow();
 	private LocalDateTime dateSupp = now.withMonth(1).withDayOfMonth(1);
 	private LocalDateTime dateConf = now.withMonth(10).withDayOfMonth(11);
-	private float height = (float) 185.47;
-	private float weight = (float) 70.70;
+	private float height = 185.47f;
+	private float weight = 70.70f;
 
 	public Malnutrition setup(Admission admission, boolean usingSet) throws OHException {
 		Malnutrition malnutrition;

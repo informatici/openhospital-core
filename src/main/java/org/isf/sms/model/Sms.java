@@ -205,7 +205,7 @@ public class Sms {
 	@Override
 	public String toString() {
 		return "Sms [smsId=" + smsId + ", smsDate=" + smsDate + ", smsDateSched=" + smsDateSched + ", smsNumber=***" + ", smsText=***" + ", smsDateSent="
-						+ smsDateSent + ", smsUser=" + smsUser + ", module=" + module + ", moduleID=" + moduleID + ", hashCode=" + hashCode + "]";
+						+ smsDateSent + ", smsUser=" + smsUser + ", module=" + module + ", moduleID=" + moduleID + ", hashCode=" + hashCode + ']';
 	}
 
 }

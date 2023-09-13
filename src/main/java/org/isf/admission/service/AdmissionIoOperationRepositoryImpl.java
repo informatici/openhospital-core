@@ -86,22 +86,22 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 
 				if (admissionRange[0] != null) {
 					rangePredicate.append(" and ").append("DATE(ADM_DATE_ADM) >= '").append(TimeTools.formatDateTime(admissionRange[0], YYYY_MM_DD))
-									.append("'");
+									.append('\'');
 				}
 				if (admissionRange[1] != null) {
 					rangePredicate.append(" and ").append("DATE(ADM_DATE_ADM) <= '").append(TimeTools.formatDateTime(admissionRange[1], YYYY_MM_DD))
-									.append("'");
+									.append('\'');
 				}
 			}
 			if (dischargeRange != null) {
 
 				if (dischargeRange[0] != null) {
 					rangePredicate.append(" and ").append("DATE(ADM_DATE_DIS) >= '").append(TimeTools.formatDateTime(dischargeRange[0], YYYY_MM_DD))
-									.append("'");
+									.append('\'');
 				}
 				if (dischargeRange[1] != null) {
 					rangePredicate.append(" and ").append("DATE(ADM_DATE_DIS) <= '").append(TimeTools.formatDateTime(dischargeRange[1], YYYY_MM_DD))
-									.append("'");
+									.append('\'');
 				}
 			}
 			Query nativeQuery = this.entityManager.createNativeQuery(nativeQueryRanges.replace("param1", rangePredicate.toString()), "AdmittedPatient");
@@ -135,7 +135,7 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 
 		// result of type "%term0%term1%...%termN%"
 		for (String term : terms) {
-			sb.append(term).append("%");
+			sb.append(term).append('%');
 		}
 		return sb.toString();
 	}

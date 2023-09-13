@@ -41,7 +41,7 @@ public class TestOperationRow {
 	private Admission admission;
 	private Opd opd;
 	private Bill bill;
-	private Float transUnit = 10.F;
+	private Float transUnit = 10.0f;
 
 	public OperationRow setup(Operation operation, boolean usingSet) throws OHException {
 		OperationRow operationRow;

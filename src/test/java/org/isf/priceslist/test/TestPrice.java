@@ -33,7 +33,6 @@ public class TestPrice {
 	private static String item = "TestItem";
 	private static String desc = "TestDescription";
 	private static Double priceValue = 10.10;
-	private static boolean editable = true;
 
 	public Price setup(PriceList list, boolean usingSet) throws OHException {
 		Price price;
@@ -51,6 +50,7 @@ public class TestPrice {
 
 	public void setParameters(PriceList list, Price price) {
 		price.setDesc(desc);
+		boolean editable = true;
 		price.setEditable(editable);
 		price.setGroup(group);
 		price.setItem(item);

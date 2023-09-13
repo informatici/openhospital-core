@@ -129,7 +129,7 @@ public class Vaccine extends Auditable<String> {
 	}
 
 	public String print() {
-		return "Vaccine code =." + getCode() + ". description =." + getDescription() + ".";
+		return "Vaccine code =." + getCode() + ". description =." + getDescription() + '.';
 	}
 
 	@Override

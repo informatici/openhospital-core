@@ -54,8 +54,8 @@ public class TestAdmission {
 	private int yProg;
 	private String FHU = "TestFHU";
 	private String note = "TestNote";
-	private Float transUnit = (float) 10.10;
-	private Float weight = (float) 20.20;
+	private Float transUnit = 10.10f;
+	private Float weight = 20.20f;
 	private String userID = "TestUserId";
 	private char deleted = 'N';
 

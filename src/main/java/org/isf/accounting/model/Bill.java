@@ -127,8 +127,8 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 		this.isPatient = false;
 		this.patName = "";
 		this.status = "";
-		this.amount = 0.;
-		this.balance = 0.;
+		this.amount = 0.0;
+		this.balance = 0.0;
 		this.user = "admin";
 	}
 
