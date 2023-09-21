@@ -6,7 +6,7 @@ The Core component is used by the [Java Swing desktop GUI][openhospital-gui], an
 
 ## How to build
 
-After having installed Java JDK 8+ and Maven, to build this project issue:  
+After having installed Java JDK 11+ and Maven (or using the provided Maven Wrapper `mvnw`), to build this project issue:  
 
     mvn package
 
