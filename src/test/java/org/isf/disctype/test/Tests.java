@@ -179,7 +179,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestDischargeType(false);
 		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
 		foundDischargeType.setDescription("Update");
-		boolean result = dischargeTypeBrowserManager.updateDischargeType(foundDischargeType);
+		dischargeTypeBrowserManager.updateDischargeType(foundDischargeType);
 		// empty string
 		foundDischargeType.setCode("");
 		assertThatThrownBy(() -> dischargeTypeBrowserManager.updateDischargeType(foundDischargeType))

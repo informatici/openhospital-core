@@ -373,7 +373,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrValidationInsert() throws Exception {
 		String code = setupTestDisease(false);
-		Disease disease = diseaseBrowserManager.getDiseaseByCode(code);
+		diseaseBrowserManager.getDiseaseByCode(code);
 		// code already exists and same description used
 		DiseaseType diseaseType = new DiseaseType("ZZ", "TestDescription");
 		Disease disease2 = testDisease.setup(diseaseType, false);

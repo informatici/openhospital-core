@@ -217,7 +217,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void ioGetAllItems() throws Exception {
-		int billItemID = setupTestBillItems(false);
+		setupTestBillItems(false);
 		List<BillItems> billItems = accountingIoOperation.getItems(0);
 		assertThat(billItems).isNotEmpty();
 	}
