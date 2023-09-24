@@ -166,7 +166,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestDeliveryType(false);
 		DeliveryType deliveryType = deliveryTypeIoOperationRepository.findById(code).get();
 		deliveryType.setDescription("Update");
-		boolean result = deliveryTypeBrowserManager.updateDeliveryType(deliveryType);
+		deliveryTypeBrowserManager.updateDeliveryType(deliveryType);
 		// empty string
 		deliveryType.setCode("");
 		assertThatThrownBy(() -> deliveryTypeBrowserManager.updateDeliveryType(deliveryType))

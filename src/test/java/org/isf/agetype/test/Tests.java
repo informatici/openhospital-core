@@ -134,7 +134,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetTypeByAge() throws Exception {
 		String code = setupTestAgeType(false);
-		AgeType ageType = ageTypeIoOperationRepository.findOneByCode(code);
+		ageTypeIoOperationRepository.findOneByCode(code);
 		String foundCode = ageTypeBrowserManager.getTypeByAge(9);
 		assertThat(foundCode).isEqualTo(code);
 

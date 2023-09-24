@@ -141,7 +141,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestHospital(false);
 		Hospital hospital = hospitalIoOperationRepository.findById(code).get();
 
-		Integer lock = hospital.getLock();
+		hospital.getLock();
 		hospital.setLock(-1);
 		assertThat(hospital.getLock()).isEqualTo(-1);
 	}

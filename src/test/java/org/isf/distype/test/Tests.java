@@ -202,7 +202,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrValidationInsert() throws Exception {
 		String code = setupTestDiseaseType(false);
-		DiseaseType diseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
+		diseaseTypeIoOperationRepository.getReferenceById(code);
 		// code already exists
 		DiseaseType diseaseType2 = new DiseaseType("ZZ", "TestDescription");
 		diseaseType2.setCode(code);
