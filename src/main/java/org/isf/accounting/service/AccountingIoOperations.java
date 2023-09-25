@@ -188,7 +188,6 @@ public class AccountingIoOperations {
 	/**
 	 * Deletes the specified {@link Bill}.
 	 * @param deleteBill the bill to delete.
-	 * @return <code>true</code> if the bill has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs deleting the bill.
 	 */
 	public void deleteBill(Bill deleteBill) throws OHServiceException {
