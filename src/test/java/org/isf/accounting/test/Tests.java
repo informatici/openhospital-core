@@ -289,10 +289,9 @@ public class Tests extends OHCoreTestCase {
 		BillItems insertBillItem = testBillItems.setup(null, false);
 		int insertId = deleteId + 1;
 		billItems.add(insertBillItem);
-		boolean result = accountingIoOperation.newBillItems(bill, billItems);
+		accountingIoOperation.newBillItems(bill, billItems);
 
 		BillItems foundBillItems = accountingBillItemsIoOperationRepository.findById(insertId).get();
-		assertThat(result).isTrue();
 		assertThat(foundBillItems.getBill().getId()).isEqualTo(bill.getId());
 	}
 
@@ -306,10 +305,9 @@ public class Tests extends OHCoreTestCase {
 		BillPayments insertBillPayment = testBillPayments.setup(null, false);
 		int insertId = deleteId + 1;
 		billPayments.add(insertBillPayment);
-		boolean result = accountingIoOperation.newBillPayments(bill, billPayments);
+		accountingIoOperation.newBillPayments(bill, billPayments);
 
 		BillPayments foundBillPayments = accountingBillPaymentIoOperationRepository.findById(insertId).get();
-		assertThat(result).isTrue();
 		assertThat(foundBillPayments.getBill().getId()).isEqualTo(bill.getId());
 	}
 
@@ -329,9 +327,8 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestBill(true);
 		Bill bill = accountingBillIoOperationRepository.findById(id).get();
 
-		boolean result = accountingIoOperation.deleteBill(bill);
-
-		assertThat(result).isTrue();
+		accountingIoOperation.deleteBill(bill);
+		assertThat(accountingBillIoOperationRepository.findById(id)).isEmpty();
 	}
 
 	@Test
@@ -559,11 +556,13 @@ public class Tests extends OHCoreTestCase {
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
 		Bill bill = testBill.setup(priceList, patient, null, false);
-		boolean success = billBrowserManager.newBill(
+		billBrowserManager.newBill(
 				bill,
 				new ArrayList<>(),
 				new ArrayList<>());
-		assertThat(success).isTrue();
+		assertThat(billBrowserManager.getBill(bill.getId()).getId()).isEqualTo(bill.getId());
+		assertThat(billBrowserManager.getItems(bill.getId())).isEmpty();
+		assertThat(billBrowserManager.getPayments(bill.getId())).isEmpty();
 	}
 
 	@Test
@@ -576,12 +575,14 @@ public class Tests extends OHCoreTestCase {
 		BillItems insertBillItem = testBillItems.setup(null, false);
 		List<BillItems> billItems = new ArrayList<>();
 		billItems.add(insertBillItem);
-		boolean success = billBrowserManager.newBill(
+		billBrowserManager.newBill(
 				bill,
 				billItems,
 				new ArrayList<>());
-		assertThat(success).isTrue();
-	}
+		assertThat(billBrowserManager.getBill(bill.getId()).getId()).isEqualTo(bill.getId());
+		assertThat(billBrowserManager.getItems(bill.getId())).isNotEmpty();
+		assertThat(billBrowserManager.getPayments(bill.getId())).isEmpty();
+		}
 
 	@Test
 	public void mgrNewBillNoItemsAndPayments() throws Exception {
@@ -594,12 +595,14 @@ public class Tests extends OHCoreTestCase {
 		insertBillPayment.setDate(TimeTools.getNow());
 		List<BillPayments> billPayments = new ArrayList<>();
 		billPayments.add(insertBillPayment);
-		boolean success = billBrowserManager.newBill(
+		billBrowserManager.newBill(
 				bill,
 				new ArrayList<>(),
 				billPayments);
-		assertThat(success).isTrue();
-	}
+		assertThat(billBrowserManager.getBill(bill.getId()).getId()).isEqualTo(bill.getId());
+		assertThat(billBrowserManager.getItems(bill.getId())).isEmpty();
+		assertThat(billBrowserManager.getPayments(bill.getId())).isNotEmpty();
+		}
 
 	@Test
 	public void mgrNewBillItemsAndPayments() throws Exception {
@@ -615,11 +618,13 @@ public class Tests extends OHCoreTestCase {
 		billItems.add(insertBillItem);
 		List<BillPayments> billPayments = new ArrayList<>();
 		billPayments.add(insertBillPayment);
-		boolean success = billBrowserManager.newBill(
+		billBrowserManager.newBill(
 				bill,
 				billItems,
 				billPayments);
-		assertThat(success).isTrue();
+		assertThat(billBrowserManager.getBill(bill.getId()).getId()).isEqualTo(bill.getId());
+		assertThat(billBrowserManager.getItems(bill.getId())).isNotEmpty();
+		assertThat(billBrowserManager.getPayments(bill.getId())).isNotEmpty();
 	}
 
 	@Test
@@ -733,20 +738,19 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestBill(true);
 		Bill bill = accountingBillIoOperationRepository.findById(id).get();
 		bill.setAmount(12.34);
-		assertThat(billBrowserManager.updateBill(
+		Bill updatedBill = billBrowserManager.updateBill(
 				bill,
 				new ArrayList<>(),
-				new ArrayList<>())).isTrue();
-		bill = accountingBillIoOperationRepository.findById(id).get();
-		assertThat(bill.getAmount()).isCloseTo(12.34, offset(0.1));
+				new ArrayList<>());
+		assertThat(updatedBill.getAmount()).isCloseTo(12.34, offset(0.1));
 	}
 
 	@Test
-	public void msgDeleteBill() throws Exception {
+	public void mgrDeleteBill() throws Exception {
 		int id = setupTestBill(true);
 		Bill bill = accountingBillIoOperationRepository.findById(id).get();
-		boolean result = billBrowserManager.deleteBill(bill);
-		assertThat(result).isTrue();
+		billBrowserManager.deleteBill(bill);
+		assertThat(accountingBillIoOperationRepository.findById(id)).isEmpty();
 	}
 
 	@Test

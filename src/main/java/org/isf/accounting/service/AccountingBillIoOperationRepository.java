@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.isf.accounting.model.Bill;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -41,10 +40,6 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 	List<Bill> findAllByOrderByDateDesc();
 
 	List<Bill> findByBillPatientCode(int patientCode);
-
-	@Modifying
-	@Query(value = "update Bill b set b.status='D' where b.id = :billId")
-	void updateDeleteWhereId(@Param("billId") Integer billId);
 
 	@Query(value = "select b from Bill b where b.date >= :dateFrom and b.date < :dateTo")
 	List<Bill> findByDateBetween(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo);

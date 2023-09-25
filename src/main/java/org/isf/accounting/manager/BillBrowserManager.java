@@ -143,26 +143,22 @@ public class BillBrowserManager {
 	 * @param newBill - the bill to store.
 	 * @param billItems - the list of bill's items
 	 * @param billPayments - the list of bill's payments
-	 * @return <code>true</code> if the bill has been stored, <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	@TranslateOHServiceException
-	public boolean newBill(
+	public void newBill(
 			Bill newBill,
 			List<BillItems> billItems,
-			List<BillPayments> billPayments) throws OHServiceException
-	{
+			List<BillPayments> billPayments) throws OHServiceException {
 		validateBill(newBill, billItems, billPayments);
 		int billId = newBill(newBill);
-		boolean result = billId > 0;
 		if (!billItems.isEmpty()) {
-			result = newBillItems(billId, billItems);
+			newBillItems(billId, billItems);
 		}
 		if (!billPayments.isEmpty()) {
-			result = result && newBillPayments(billId, billPayments);
+			newBillPayments(billId, billPayments);
 		}
-		return result;
 	}
 
 	/**
@@ -179,22 +175,20 @@ public class BillBrowserManager {
 	 * Stores a list of {@link BillItems} associated to a {@link Bill}.
 	 * @param billID the bill id.
 	 * @param billItems the bill items to store.
-	 * @return <code>true</code> if the {@link BillItems} have been store, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	private boolean newBillItems(int billID, List<BillItems> billItems) throws OHServiceException {
-		return ioOperations.newBillItems(ioOperations.getBill(billID), billItems);
+	private void newBillItems(int billID, List<BillItems> billItems) throws OHServiceException {
+		ioOperations.newBillItems(ioOperations.getBill(billID), billItems);
 	}
 	
 	/**
 	 * Stores a list of {@link BillPayments} associated to a {@link Bill}.
 	 * @param billID the bill id.
 	 * @param payItems the bill payments.
-	 * @return <code>true</code> if the payments have been stored, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	private boolean newBillPayments(int billID, List<BillPayments> payItems) throws OHServiceException {
-		return ioOperations.newBillPayments(ioOperations.getBill(billID), payItems);
+	private void newBillPayments(int billID, List<BillPayments> payItems) throws OHServiceException {
+		ioOperations.newBillPayments(ioOperations.getBill(billID), payItems);
 	}
 	
 	/**
@@ -202,29 +196,28 @@ public class BillBrowserManager {
 	 * @param updateBill - the bill to update.
 	 * @param billItems - the list of bill's items
 	 * @param billPayments - the list of bill's payments
-	 * @return <code>true</code> if the bill has been updated, <code>false</code> otherwise.
+	 * @return the updated Bill object
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	@TranslateOHServiceException
-	public boolean updateBill(Bill updateBill,
+	public Bill updateBill(Bill updateBill,
 			List<BillItems> billItems,
 			List<BillPayments> billPayments) throws OHServiceException {
 		validateBill(updateBill, billItems, billPayments);
-		boolean result = updateBill(updateBill);
-		result = result && newBillItems(updateBill.getId(), billItems);
-		result = result && newBillPayments(updateBill.getId(), billPayments);
-		return result;
-
+		Bill updatedBill = updateBill(updateBill);
+		newBillItems(updateBill.getId(), billItems);
+		newBillPayments(updateBill.getId(), billPayments);
+		return updatedBill;
 	}
 
 	/**
 	 * Updates the specified {@link Bill}.
 	 * @param updateBill the bill to update.
-	 * @return <code>true</code> if the bill has been updated, <code>false</code> otherwise.
+	 * @return the updated Bill object
 	 * @throws OHServiceException 
 	 */
-	private boolean updateBill(Bill updateBill) throws OHServiceException {
+	private Bill updateBill(Bill updateBill) throws OHServiceException {
 		return ioOperations.updateBill(updateBill);
 	}
 	
@@ -260,11 +253,10 @@ public class BillBrowserManager {
 	/**
 	 * Deletes the specified {@link Bill}.
 	 * @param deleteBill the bill to delete.
-	 * @return <code>true</code> if the bill has been deleted, <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean deleteBill(Bill deleteBill) throws OHServiceException {
-		return ioOperations.deleteBill(deleteBill);
+	public void deleteBill(Bill deleteBill) throws OHServiceException {
+		ioOperations.deleteBill(deleteBill);
 	}
 
 	/**
