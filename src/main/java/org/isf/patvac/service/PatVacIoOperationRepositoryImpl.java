@@ -102,7 +102,7 @@ public class PatVacIoOperationRepositoryImpl implements PatVacIoOperationReposit
 				cb.between(pvRoot.join("patient").<Integer>get("age"), ageFrom, ageTo)
 			);
 		}
-		query.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+		query.where(cb.and(predicates.toArray(new Predicate[0])));
 		query.orderBy(cb.desc(pvRoot.get("vaccineDate")), cb.asc(pvRoot.get("code")));
 
 		return query;
