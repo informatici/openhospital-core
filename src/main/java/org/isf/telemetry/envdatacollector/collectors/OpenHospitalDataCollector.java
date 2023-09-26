@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.telemetry.envdatacollector.collectors;
 
@@ -85,7 +85,7 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 		Map<String, String> result = new LinkedHashMap<>();
 		try {
 			String geoIpServiceName = settings.get("telemetry.enabled.geo.ip.lookup.service");
-			LOGGER.debug(geoIpServiceName + " - " + geoIpServices.size());
+			LOGGER.debug("{} - {}", geoIpServiceName, geoIpServices.size());
 			this.geoIpServices.forEach(service -> {
 				if (service.getServiceName().equals(geoIpServiceName)) {
 					GeoIpInfoBean json = service.retrieveIpInfo();

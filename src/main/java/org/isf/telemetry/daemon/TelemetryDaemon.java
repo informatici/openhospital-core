@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.telemetry.daemon;
 
@@ -63,7 +63,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 		super(FILE_PROPERTIES);
 		LOGGER.info("Telemetry daemon started...");
 		customDelay = myGetProperty("telemetry.daemon.thread.loop.seconds", DEFAULT_DELAY);
-		LOGGER.info("Telemetry daemon loop set to {} seconds.", Integer.valueOf(customDelay));
+		LOGGER.info("Telemetry daemon loop set to {} seconds.", customDelay);
 		this.telemetryManager = Context.getApplicationContext().getBean(TelemetryManager.class);
 		this.telemetryUtils = Context.getApplicationContext().getBean(TelemetryUtils.class);
 		this.settings = telemetryManager.retrieveSettings();

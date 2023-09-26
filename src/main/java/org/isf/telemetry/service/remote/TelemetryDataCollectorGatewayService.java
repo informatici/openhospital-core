@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.telemetry.service.remote;
 
@@ -46,10 +46,10 @@ public class TelemetryDataCollectorGatewayService {
 
 	public boolean send(String data) {
 		TelemetryGatewayRemoteService httpClient = buildHttlClient();
-		LOGGER.debug(data.toString());
+		LOGGER.debug(data);
 		String result = httpClient.send(data);
-		LOGGER.debug(result.toString());
-		boolean isSent = result != null && RESPONSE_SUCCESS.equals(result);
+		LOGGER.debug(result);
+		boolean isSent = RESPONSE_SUCCESS.equals(result);
 		return isSent;
 	}
 

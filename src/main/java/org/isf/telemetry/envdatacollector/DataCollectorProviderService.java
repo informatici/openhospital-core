@@ -17,7 +17,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.telemetry.envdatacollector;
 
@@ -69,9 +69,9 @@ public class DataCollectorProviderService {
 	 */
 	public Map<String, Map<String, String>> collectData(List<String> listDataCollectorFunction, boolean ignoreErrors) throws OHException {
 		Map<String, Map<String, String>> result = new LinkedHashMap<>();
-		OHException exception[] = { null };
+		OHException[] exception = { null };
 		this.dataCollectors.stream().forEach(collector -> {
-			if (listDataCollectorFunction.contains((collector.getId()))) {
+			if (listDataCollectorFunction.contains(collector.getId())) {
 				try {
 					result.put(collector.getId(), collector.retrieveData());
 				} catch (OHException e) {
