@@ -32,7 +32,7 @@ public interface IpApiRemoteservice {
 	// @formatter:off
 
 	@GetMapping(value = "/?fields=country,countryCode,region,regionName,city,district,zip,lat,lon,timezone,currency,query,status,message", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<IpApi> retrieveIpInfo();
+	ResponseEntity<IpApi> retrieveIpInfo();
 
 	// @formatter:on
 }
