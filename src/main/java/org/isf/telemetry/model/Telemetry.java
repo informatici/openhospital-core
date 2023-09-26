@@ -65,7 +65,7 @@ public class Telemetry {
 	private LocalDateTime optoutDate;
 
 	@Transient
-	private volatile int hashCode = 0;
+	private volatile int hashCode;
 
 	public Telemetry() {
 	}
