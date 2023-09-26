@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.isf.utils.ExceptionUtils;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
@@ -79,7 +78,7 @@ public class DataCollectorProviderService {
 						exception[0] = e;
 						return;
 					}
-					LOGGER.error(ExceptionUtils.retrieveExceptionStacktrace(e));
+					LOGGER.error(e.getMessage(), e);
 				}
 			}
 		});

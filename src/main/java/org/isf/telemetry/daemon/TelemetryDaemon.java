@@ -29,7 +29,6 @@ import org.isf.menu.manager.Context;
 import org.isf.telemetry.manager.TelemetryManager;
 import org.isf.telemetry.model.Telemetry;
 import org.isf.telemetry.util.TelemetryUtils;
-import org.isf.utils.ExceptionUtils;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.time.TimeTools;
 import org.slf4j.Logger;
@@ -98,7 +97,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 									GeneralData.DEBUG);
 				} catch (RuntimeException | OHException e) {
 					LOGGER.error("Something strange happened");
-					LOGGER.error(ExceptionUtils.retrieveExceptionStacktrace(e));
+					LOGGER.error(e.getMessage(), e);
 					stop();
 				}
 			}
@@ -107,7 +106,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 				updateSettingsCounter++;
 			} catch (InterruptedException e) {
 				LOGGER.error(e.getMessage());
-				LOGGER.error(ExceptionUtils.retrieveExceptionStacktrace(e));
+				LOGGER.error(e.getMessage(), e);
 				stop();
 			}
 		}
