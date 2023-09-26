@@ -23,6 +23,6 @@ package org.isf.telemetry.constants;
 
 public interface TelemetryConstants {
 
-	public static final String MENU_ID = "telemetry";
+	String MENU_ID = "telemetry";
 
 }
