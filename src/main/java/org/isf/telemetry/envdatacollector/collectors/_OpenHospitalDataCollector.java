@@ -26,7 +26,7 @@ import java.util.Map;
 
 import org.isf.menu.service.MenuIoOperations;
 import org.isf.patient.service.PatientIoOperations;
-import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.service.WardIoOperations;
@@ -64,10 +64,10 @@ public class _OpenHospitalDataCollector {
 		LOGGER.debug("Collecting Open Hospital data...");
 		Map<String, String> result = new HashMap<>();
 		try {
-			result.put(CollectorsConst.OH_TOTAL_ACTIVE_PATIENTS, String.valueOf(patientIoOperations.countAllActivePatients()));
-			result.put(CollectorsConst.OH_TOTAL_ACTIVE_USERS, String.valueOf(this.menuIoOperations.countAllActive()));
-			result.put(CollectorsConst.OH_TOTAL_ACTIVE_WARDS, String.valueOf(this.wardIoOperations.countAllActiveWards()));
-			result.put(CollectorsConst.OH_TOTAL_ACTIVE_BEDS, String.valueOf(this.wardIoOperations.countAllActiveBeds()));
+			result.put(CollectorsConstants.OH_TOTAL_ACTIVE_PATIENTS, String.valueOf(patientIoOperations.countAllActivePatients()));
+			result.put(CollectorsConstants.OH_TOTAL_ACTIVE_USERS, String.valueOf(this.menuIoOperations.countAllActive()));
+			result.put(CollectorsConstants.OH_TOTAL_ACTIVE_WARDS, String.valueOf(this.wardIoOperations.countAllActiveWards()));
+			result.put(CollectorsConstants.OH_TOTAL_ACTIVE_BEDS, String.valueOf(this.wardIoOperations.countAllActiveBeds()));
 		} catch (OHServiceException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());

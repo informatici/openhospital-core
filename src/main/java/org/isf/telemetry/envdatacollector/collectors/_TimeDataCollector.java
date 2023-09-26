@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.isf.opd.service.OpdIoOperations;
-import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class _TimeDataCollector {
 		if (lastUsedTime == null) {
 			lastUsedTime = LocalDateTime.now();
 		}
-		result.put(CollectorsConst.TIME_LAST_USED, String.valueOf(lastUsedTime));
+		result.put(CollectorsConstants.TIME_LAST_USED, String.valueOf(lastUsedTime));
 		return result;
 	}
 

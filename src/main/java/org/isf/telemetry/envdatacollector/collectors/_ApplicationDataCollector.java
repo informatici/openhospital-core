@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.isf.generaldata.Version;
-import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,9 +52,9 @@ public class _ApplicationDataCollector {
 		Map<String, String> result = new HashMap<>();
 		try {
 			Version.initialize();
-			result.put(CollectorsConst.APP_VER_MAJOR, Version.VER_MAJOR);
-			result.put(CollectorsConst.APP_VER_MINOR, Version.VER_MINOR);
-			result.put(CollectorsConst.APP_RELEASE, Version.VER_RELEASE);
+			result.put(CollectorsConstants.APP_VER_MAJOR, Version.VER_MAJOR);
+			result.put(CollectorsConstants.APP_VER_MINOR, Version.VER_MINOR);
+			result.put(CollectorsConstants.APP_RELEASE, Version.VER_RELEASE);
 			return result;
 		} catch (Exception e) {
 			LOGGER.error("Something went wrong with " + ID);

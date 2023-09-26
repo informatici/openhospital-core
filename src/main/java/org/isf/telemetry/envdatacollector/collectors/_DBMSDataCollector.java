@@ -30,7 +30,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.hibernate.engine.spi.SessionImplementor;
-import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,10 +62,10 @@ public class _DBMSDataCollector {
 		try {
 			SessionImplementor sessionImp = (SessionImplementor) em.getDelegate();
 			DatabaseMetaData dbmd = sessionImp.connection().getMetaData();
-			result.put(CollectorsConst.DBMS_DRIVER_NAME, dbmd.getDriverName());
-			result.put(CollectorsConst.DBMS_DRIVER_VERSION, dbmd.getDriverVersion());
-			result.put(CollectorsConst.DBMS_PRODUCT_NAME, dbmd.getDatabaseProductName());
-			result.put(CollectorsConst.DBMS_PRODUCT_VERSION, dbmd.getDatabaseProductVersion());
+			result.put(CollectorsConstants.DBMS_DRIVER_NAME, dbmd.getDriverName());
+			result.put(CollectorsConstants.DBMS_DRIVER_VERSION, dbmd.getDriverVersion());
+			result.put(CollectorsConstants.DBMS_PRODUCT_NAME, dbmd.getDatabaseProductName());
+			result.put(CollectorsConstants.DBMS_PRODUCT_VERSION, dbmd.getDatabaseProductVersion());
 			return result;
 		} catch (Exception e) {
 			LOGGER.error("Something went wrong with " + ID + " (1)");

@@ -25,7 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
-import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.isf.telemetry.manager.TelemetryManager;
 import org.isf.telemetry.model.Telemetry;
 import org.isf.utils.exception.OHException;
@@ -62,15 +62,15 @@ public class TelemetryDataCollector extends AbstractDataCollector {
 		Map<String, String> result = new LinkedHashMap<>();
 		try {
 			Telemetry telemetry = telemetryManager.retrieveOrBuildNewTelemetry();
-			result.put(CollectorsConst.TEL_UUID, telemetry.getId().getSoftwareUUID());
+			result.put(CollectorsConstants.TEL_UUID, telemetry.getId().getSoftwareUUID());
 			if (null != telemetry.getSentTimestamp()) {
-				result.put(CollectorsConst.TEL_SENT_DATE, TimeTools.formatDateTimeReport(telemetry.getSentTimestamp()));
+				result.put(CollectorsConstants.TEL_SENT_DATE, TimeTools.formatDateTimeReport(telemetry.getSentTimestamp()));
 			}
 			if (null != telemetry.getOptinDate()) {
-				result.put(CollectorsConst.TEL_OPTIN_DATE, TimeTools.formatDateTimeReport(telemetry.getOptinDate()));
+				result.put(CollectorsConstants.TEL_OPTIN_DATE, TimeTools.formatDateTimeReport(telemetry.getOptinDate()));
 			}
 			if (null != telemetry.getOptoutDate()) {
-				result.put(CollectorsConst.TEL_OPTOUT_DATE, TimeTools.formatDateTimeReport(telemetry.getOptoutDate()));
+				result.put(CollectorsConstants.TEL_OPTOUT_DATE, TimeTools.formatDateTimeReport(telemetry.getOptoutDate()));
 			}
 		} catch (RuntimeException e) {
 			LOGGER.error("Something went wrong with " + ID);

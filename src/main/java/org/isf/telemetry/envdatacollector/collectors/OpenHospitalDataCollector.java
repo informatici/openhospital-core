@@ -34,7 +34,7 @@ import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoBean;
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoCommonService;
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoSettings;
-import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.ward.service.WardIoOperations;
@@ -90,32 +90,32 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 				if (service.getServiceName().equals(geoIpServiceName)) {
 					GeoIpInfoBean json = service.retrieveIpInfo();
 					LOGGER.debug(json.toString());
-					result.put(CollectorsConst.LOC_COUNTRY_NAME, json.getCountryName());
-					result.put(CollectorsConst.LOC_COUNTRY_CODE, json.getCountryCode());
-					result.put(CollectorsConst.LOC_REGION_NAME, json.getRegionName());
-					result.put(CollectorsConst.LOC_CITY, json.getCity());
-					result.put(CollectorsConst.LOC_ZIP_CODE, json.getPostalCode());
-					result.put(CollectorsConst.LOC_TIMEZONE, json.getTimeZone());
-					result.put(CollectorsConst.LOC_CURRENCY_CODE, json.getCurrencyCode());
+					result.put(CollectorsConstants.LOC_COUNTRY_NAME, json.getCountryName());
+					result.put(CollectorsConstants.LOC_COUNTRY_CODE, json.getCountryCode());
+					result.put(CollectorsConstants.LOC_REGION_NAME, json.getRegionName());
+					result.put(CollectorsConstants.LOC_CITY, json.getCity());
+					result.put(CollectorsConstants.LOC_ZIP_CODE, json.getPostalCode());
+					result.put(CollectorsConstants.LOC_TIMEZONE, json.getTimeZone());
+					result.put(CollectorsConstants.LOC_CURRENCY_CODE, json.getCurrencyCode());
 				}
 			});
 
 			Version.initialize();
-			result.put(CollectorsConst.APP_VERSION, Version.VER_MAJOR.concat(".").concat(Version.VER_MINOR).concat(".").concat(Version.VER_RELEASE));
+			result.put(CollectorsConstants.APP_VERSION, Version.VER_MAJOR.concat(".").concat(Version.VER_MINOR).concat(".").concat(Version.VER_RELEASE));
 			// result.put(CollectorsConst.APP_VER_MAJOR, Version.VER_MAJOR);
 			// result.put(CollectorsConst.APP_VER_MINOR, Version.VER_MINOR);
 			// result.put(CollectorsConst.APP_RELEASE, Version.VER_RELEASE);
 
-			result.put(CollectorsConst.OH_TOTAL_ACTIVE_PATIENTS, String.valueOf(patientIoOperations.countAllActivePatients()));
-			result.put(CollectorsConst.OH_TOTAL_ACTIVE_USERS, String.valueOf(this.menuIoOperations.countAllActive()));
-			result.put(CollectorsConst.OH_TOTAL_ACTIVE_WARDS, String.valueOf(this.wardIoOperations.countAllActiveWards()));
-			result.put(CollectorsConst.OH_TOTAL_ACTIVE_BEDS, String.valueOf(this.wardIoOperations.countAllActiveBeds()));
+			result.put(CollectorsConstants.OH_TOTAL_ACTIVE_PATIENTS, String.valueOf(patientIoOperations.countAllActivePatients()));
+			result.put(CollectorsConstants.OH_TOTAL_ACTIVE_USERS, String.valueOf(this.menuIoOperations.countAllActive()));
+			result.put(CollectorsConstants.OH_TOTAL_ACTIVE_WARDS, String.valueOf(this.wardIoOperations.countAllActiveWards()));
+			result.put(CollectorsConstants.OH_TOTAL_ACTIVE_BEDS, String.valueOf(this.wardIoOperations.countAllActiveBeds()));
 
 			LocalDateTime lastUsedTime = opdIoOperations.lastOpdCreationDate();
 			if (lastUsedTime == null) {
 				lastUsedTime = LocalDateTime.now();
 			}
-			result.put(CollectorsConst.TIME_LAST_USED, String.valueOf(lastUsedTime));
+			result.put(CollectorsConstants.TIME_LAST_USED, String.valueOf(lastUsedTime));
 		} catch (OHServiceException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());

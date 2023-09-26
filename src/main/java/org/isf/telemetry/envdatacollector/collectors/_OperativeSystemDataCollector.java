@@ -24,7 +24,7 @@ package org.isf.telemetry.envdatacollector.collectors;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,11 +55,11 @@ public class _OperativeSystemDataCollector {
 		try {
 			SystemInfo si = new SystemInfo();
 			OperatingSystem os = si.getOperatingSystem();
-			result.put(CollectorsConst.OS_FAMILY, os.getFamily());
-			result.put(CollectorsConst.OS_VERSION, os.getVersionInfo().getVersion());
-			result.put(CollectorsConst.OS_MANUFACTURER, os.getManufacturer());
-			result.put(CollectorsConst.OS_BITNESS, String.valueOf(os.getBitness()));
-			result.put(CollectorsConst.OS_CODENAME, os.getVersionInfo().getCodeName());
+			result.put(CollectorsConstants.OS_FAMILY, os.getFamily());
+			result.put(CollectorsConstants.OS_VERSION, os.getVersionInfo().getVersion());
+			result.put(CollectorsConstants.OS_MANUFACTURER, os.getManufacturer());
+			result.put(CollectorsConstants.OS_BITNESS, String.valueOf(os.getBitness()));
+			result.put(CollectorsConstants.OS_CODENAME, os.getVersionInfo().getCodeName());
 		} catch (RuntimeException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());

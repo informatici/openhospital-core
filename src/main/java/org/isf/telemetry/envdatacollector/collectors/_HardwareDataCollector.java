@@ -24,7 +24,7 @@ package org.isf.telemetry.envdatacollector.collectors;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,14 +57,14 @@ public class _HardwareDataCollector {
 			SystemInfo si = new SystemInfo();
 			HardwareAbstractionLayer hard = si.getHardware();
 			CentralProcessor cpu = hard.getProcessor();
-			result.put(CollectorsConst.HW_CPU_NUM_PHYSICAL_PROCESSES, String.valueOf(cpu.getPhysicalProcessorCount()));
-			result.put(CollectorsConst.HW_CPU_NUM_LOGICAL_PROCESSES, String.valueOf(cpu.getLogicalProcessorCount()));
-			result.put(CollectorsConst.HW_CPU_NAME, cpu.getProcessorIdentifier().getName());
-			result.put(CollectorsConst.HW_CPU_IDENTIFIER, cpu.getProcessorIdentifier().getIdentifier());
-			result.put(CollectorsConst.HW_CPU_MODEL, cpu.getProcessorIdentifier().getModel());
-			result.put(CollectorsConst.HW_CPU_ARCHITECTURE, cpu.getProcessorIdentifier().getMicroarchitecture());
-			result.put(CollectorsConst.HW_CPU_VENDOR, cpu.getProcessorIdentifier().getVendor());
-			result.put(CollectorsConst.HW_CPU_CTX_SWITCHES, String.valueOf(cpu.getContextSwitches()));
+			result.put(CollectorsConstants.HW_CPU_NUM_PHYSICAL_PROCESSES, String.valueOf(cpu.getPhysicalProcessorCount()));
+			result.put(CollectorsConstants.HW_CPU_NUM_LOGICAL_PROCESSES, String.valueOf(cpu.getLogicalProcessorCount()));
+			result.put(CollectorsConstants.HW_CPU_NAME, cpu.getProcessorIdentifier().getName());
+			result.put(CollectorsConstants.HW_CPU_IDENTIFIER, cpu.getProcessorIdentifier().getIdentifier());
+			result.put(CollectorsConstants.HW_CPU_MODEL, cpu.getProcessorIdentifier().getModel());
+			result.put(CollectorsConstants.HW_CPU_ARCHITECTURE, cpu.getProcessorIdentifier().getMicroarchitecture());
+			result.put(CollectorsConstants.HW_CPU_VENDOR, cpu.getProcessorIdentifier().getVendor());
+			result.put(CollectorsConstants.HW_CPU_CTX_SWITCHES, String.valueOf(cpu.getContextSwitches()));
 		} catch (RuntimeException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());

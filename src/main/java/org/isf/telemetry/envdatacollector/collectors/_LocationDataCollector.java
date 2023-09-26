@@ -28,7 +28,7 @@ import java.util.Map;
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoBean;
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoCommonService;
 import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoSettings;
-import org.isf.telemetry.envdatacollector.constants.CollectorsConst;
+import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,13 +68,13 @@ public class _LocationDataCollector {
 				if (service.getServiceName().equals(geoIpServiceName)) {
 					GeoIpInfoBean json = service.retrieveIpInfo();
 					LOGGER.debug(json.toString());
-					result.put(CollectorsConst.LOC_COUNTRY_NAME, json.getCountryName());
-					result.put(CollectorsConst.LOC_COUNTRY_CODE, json.getCountryCode());
-					result.put(CollectorsConst.LOC_REGION_NAME, json.getRegionName());
-					result.put(CollectorsConst.LOC_CITY, json.getCity());
-					result.put(CollectorsConst.LOC_ZIP_CODE, json.getPostalCode());
-					result.put(CollectorsConst.LOC_TIMEZONE, json.getTimeZone());
-					result.put(CollectorsConst.LOC_CURRENCY_CODE, json.getCurrencyCode());
+					result.put(CollectorsConstants.LOC_COUNTRY_NAME, json.getCountryName());
+					result.put(CollectorsConstants.LOC_COUNTRY_CODE, json.getCountryCode());
+					result.put(CollectorsConstants.LOC_REGION_NAME, json.getRegionName());
+					result.put(CollectorsConstants.LOC_CITY, json.getCity());
+					result.put(CollectorsConstants.LOC_ZIP_CODE, json.getPostalCode());
+					result.put(CollectorsConstants.LOC_TIMEZONE, json.getTimeZone());
+					result.put(CollectorsConstants.LOC_CURRENCY_CODE, json.getCurrencyCode());
 				}
 			});
 		} catch (RuntimeException e) {
