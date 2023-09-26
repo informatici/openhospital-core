@@ -75,7 +75,6 @@ public class _LocationDataCollector {
 					result.put(CollectorsConst.LOC_ZIP_CODE, json.getPostalCode());
 					result.put(CollectorsConst.LOC_TIMEZONE, json.getTimeZone());
 					result.put(CollectorsConst.LOC_CURRENCY_CODE, json.getCurrencyCode());
-					return;
 				}
 			});
 		} catch (RuntimeException e) {
