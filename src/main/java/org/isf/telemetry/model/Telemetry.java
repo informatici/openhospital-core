@@ -128,16 +128,11 @@ public class Telemetry {
 
 	public Map<String, Boolean> getConsentMap() {
 		if (this.consentData != null && !this.consentData.isEmpty()) {
-			Type type = generateTypeToken().getType();
+			Type type = TypeToken.getParameterized(Map.class, String.class, Boolean.class).getType();
 			Gson gson = new Gson();
 			return gson.fromJson(this.getConsentData(), type);
 		}
 		return null;
-	}
-
-	private TypeToken<Map<String, Boolean>> generateTypeToken() {
-		return new TypeToken<Map<String, Boolean>>() {
-		};
 	}
 
 	public void setConsentMap(Map<String, Boolean> consentMap) {
