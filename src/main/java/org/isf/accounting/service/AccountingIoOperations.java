@@ -140,11 +140,11 @@ public class AccountingIoOperations {
 	/**
 	 * Stores a new {@link Bill}.
 	 * @param newBill the bill to store.
-	 * @return the generated {@link Bill} id.
+	 * @return the persisted Bill object
 	 * @throws OHServiceException if an error occurs storing the bill.
 	 */
-	public int newBill(Bill newBill) throws OHServiceException {
-		return billRepository.save(newBill).getId();
+	public Bill newBill(Bill newBill) throws OHServiceException {
+		return billRepository.save(newBill);
 	}
 
 	/**
@@ -186,7 +186,8 @@ public class AccountingIoOperations {
 	}
 
 	/**
-	 * Deletes the specified {@link Bill}.
+	 * Deletes the specified {@link Bill}.   If the argument is NULL then an error is thrown.
+	 * If the Bill is not found it is silently ignored.
 	 * @param deleteBill the bill to delete.
 	 * @throws OHServiceException if an error occurs deleting the bill.
 	 */

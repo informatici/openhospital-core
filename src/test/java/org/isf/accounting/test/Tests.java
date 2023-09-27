@@ -275,8 +275,8 @@ public class Tests extends OHCoreTestCase {
 		Bill bill = testBill.setup(priceList, patient, null, false);
 		priceListIoOperationRepository.saveAndFlush(priceList);
 		patientIoOperationRepository.saveAndFlush(patient);
-		int id = accountingIoOperation.newBill(bill);
-		checkBillIntoDb(id);
+		Bill newBill = accountingIoOperation.newBill(bill);
+		checkBillIntoDb(newBill.getId());
 	}
 
 	@Test

@@ -140,34 +140,37 @@ public class BillBrowserManager {
 	
 	/**
 	 * Stores a new {@link Bill} along with all its {@link BillItems} and {@link BillPayments}
-	 * @param newBill - the bill to store.
+	 * @param bill - the bill to store.
 	 * @param billItems - the list of bill's items
 	 * @param billPayments - the list of bill's payments
+	 * @returns the persisted Bill object
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor=OHServiceException.class)
 	@TranslateOHServiceException
-	public void newBill(
-			Bill newBill,
+	public Bill newBill(
+			Bill bill,
 			List<BillItems> billItems,
 			List<BillPayments> billPayments) throws OHServiceException {
-		validateBill(newBill, billItems, billPayments);
-		int billId = newBill(newBill);
+		validateBill(bill, billItems, billPayments);
+		Bill newBill = newBill(bill);
+		int billId = newBill.getId();
 		if (!billItems.isEmpty()) {
 			newBillItems(billId, billItems);
 		}
 		if (!billPayments.isEmpty()) {
 			newBillPayments(billId, billPayments);
 		}
+		return newBill;
 	}
 
 	/**
 	 * Stores a new {@link Bill}.
 	 * @param newBill the bill to store.
-	 * @return the generated id.
+	 * @return the persisted Bill object
 	 * @throws OHServiceException
 	 */
-	private int newBill(Bill newBill) throws OHServiceException {
+	private Bill newBill(Bill newBill) throws OHServiceException {
 		return ioOperations.newBill(newBill);
 	}
 
@@ -251,7 +254,8 @@ public class BillBrowserManager {
 	}
 
 	/**
-	 * Deletes the specified {@link Bill}.
+	 * Deletes the specified {@link Bill}.   If the argument is NULL then an error is thrown.
+	 * If the Bill is not found it is silently ignored.
 	 * @param deleteBill the bill to delete.
 	 * @throws OHServiceException
 	 */
