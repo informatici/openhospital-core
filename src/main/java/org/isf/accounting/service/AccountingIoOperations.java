@@ -140,64 +140,59 @@ public class AccountingIoOperations {
 	/**
 	 * Stores a new {@link Bill}.
 	 * @param newBill the bill to store.
-	 * @return the generated {@link Bill} id.
+	 * @return the persisted Bill object
 	 * @throws OHServiceException if an error occurs storing the bill.
 	 */
-	public int newBill(Bill newBill) throws OHServiceException {
-		return billRepository.save(newBill).getId();
+	public Bill newBill(Bill newBill) throws OHServiceException {
+		return billRepository.save(newBill);
 	}
 
 	/**
 	 * Stores a list of {@link BillItems} associated to a {@link Bill}.
 	 * @param bill the bill.
 	 * @param billItems the bill items to store.
-	 * @return <code>true</code> if the {@link BillItems} have been store, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
-	public boolean newBillItems(Bill bill, List<BillItems> billItems) throws OHServiceException {
+	public void newBillItems(Bill bill, List<BillItems> billItems) throws OHServiceException {
 		billItemsRepository.deleteWhereId(bill.getId());
 		for (BillItems item : billItems) {
 			item.setBill(bill);
 			billItemsRepository.save(item);
 		}
-		return true;
 	}
 
 	/**
 	 * Stores a list of {@link BillPayments} associated to a {@link Bill}.
 	 * @param bill the bill.
 	 * @param payItems the bill payments.
-	 * @return <code>true</code> if the payment have stored, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the store procedure.
 	 */
-	public boolean newBillPayments(Bill bill, List<BillPayments> payItems) throws OHServiceException {
+	public void newBillPayments(Bill bill, List<BillPayments> payItems) throws OHServiceException {
 		billPaymentRepository.deleteWhereId(bill.getId());
 		for (BillPayments payment : payItems) {
 			payment.setBill(bill);
 			billPaymentRepository.save(payment);
 		}
-		return true;
 	}
 
 	/**
 	 * Updates the specified {@link Bill}.
 	 * @param updateBill the bill to update.
-	 * @return <code>true</code> if the bill has been updated, <code>false</code> otherwise.
+	 * @return the updated Bill object
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateBill(Bill updateBill) throws OHServiceException {
-		return billRepository.save(updateBill) != null;
+	public Bill updateBill(Bill updateBill) throws OHServiceException {
+		return billRepository.save(updateBill);
 	}
 
 	/**
-	 * Deletes the specified {@link Bill}.
+	 * Deletes the specified {@link Bill}.   If the argument is NULL then an error is thrown.
+	 * If the Bill is not found it is silently ignored.
 	 * @param deleteBill the bill to delete.
-	 * @return <code>true</code> if the bill has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs deleting the bill.
 	 */
-	public boolean deleteBill(Bill deleteBill) throws OHServiceException {
-		billRepository.updateDeleteWhereId(deleteBill.getId());
-		return true;
+	public void deleteBill(Bill deleteBill) throws OHServiceException {
+		billRepository.deleteById(deleteBill.getId());
 	}
 
 	/**
