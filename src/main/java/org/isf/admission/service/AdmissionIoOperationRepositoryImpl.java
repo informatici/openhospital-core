@@ -62,8 +62,8 @@ public class AdmissionIoOperationRepositoryImpl implements AdmissionIoOperationR
 	private EntityManager entityManager;
 
 	@Override
-	public List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(final String searchTerms, final LocalDateTime[] admissionRange,
-					final LocalDateTime[] dischargeRange) throws OHServiceException {
+	public List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(String searchTerms, LocalDateTime[] admissionRange,
+					LocalDateTime[] dischargeRange) throws OHServiceException {
 		String[] terms = getTermsToSearch(searchTerms);
 		List<AdmittedPatient> admittedPatients = new ArrayList<>();
 		if (terms.length == 1) {

@@ -508,9 +508,10 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoSetDeleted() throws Exception {
 		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		boolean result = admissionIoOperation.setDeleted(foundAdmission.getId());
-		assertThat(result).isTrue();
+		Admission admission = admissionIoOperation.getAdmission(id);
+		Admission deletedAdmission = admissionIoOperation.setDeleted(admission.getId());
+		assertThat(deletedAdmission).isNotNull();
+		assertThat(deletedAdmission.getDeleted()).isEqualTo('Y');
 	}
 
 	@Test
@@ -525,10 +526,10 @@ public class Tests extends OHCoreTestCase {
 	@Transactional // requires active session because of lazy loading of patient photo
 	public void testIoDeletePatientPhoto() throws Exception {
 		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionIoOperation.getAdmission(id);
-		boolean result = admissionIoOperation.deletePatientPhoto(foundAdmission.getPatient().getCode());
-		assertThat(result).isTrue();
-		assertThat(foundAdmission.getPatient().getPatientProfilePhoto().getPhoto()).isNull();
+		Admission admission = admissionIoOperation.getAdmission(id);
+		Patient updatedPatient = admissionIoOperation.deletePatientPhoto(admission.getPatient().getCode());
+		assertThat(updatedPatient).isNotNull();
+		assertThat(updatedPatient.getPatientProfilePhoto().getPhoto()).isNull();
 	}
 
 	@Test
@@ -949,9 +950,10 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrSetDeleted() throws Exception {
 		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
-		boolean result = admissionBrowserManager.setDeleted(foundAdmission.getId());
-		assertThat(result).isTrue();
+		Admission admission = admissionBrowserManager.getAdmission(id);
+		Admission deletedAdmission = admissionBrowserManager.setDeleted(admission.getId());
+		assertThat(deletedAdmission).isNotNull();
+		assertThat(deletedAdmission.getDeleted()).isEqualTo('Y');
 	}
 
 	@Test
@@ -966,10 +968,10 @@ public class Tests extends OHCoreTestCase {
 	@Transactional // requires active session because of lazy loading of patient photo
 	public void testMgrDeletePatientPhoto() throws Exception {
 		int id = setupTestAdmission(false);
-		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
-		boolean result = admissionBrowserManager.deletePatientPhoto(foundAdmission.getPatient().getCode());
-		assertThat(result).isTrue();
-		assertThat(foundAdmission.getPatient().getPatientProfilePhoto().getPhoto()).isNull();
+		Admission admission = admissionBrowserManager.getAdmission(id);
+		Patient updatedPatient = admissionBrowserManager.deletePatientPhoto(admission.getPatient().getCode());
+		assertThat(updatedPatient).isNotNull();
+		assertThat(updatedPatient.getPatientProfilePhoto().getPhoto()).isNull();
 	}
 
 	@Test
