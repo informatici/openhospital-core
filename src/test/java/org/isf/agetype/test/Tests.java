@@ -89,9 +89,9 @@ public class Tests extends OHCoreTestCase {
 		foundAgeType.setTo(40);
 		List<AgeType> ageTypes = new ArrayList<>();
 		ageTypes.add(foundAgeType);
-		boolean result = ageTypeIoOperations.updateAgeType(ageTypes);
-		AgeType updateAgeType = ageTypeIoOperationRepository.findOneByCode(code);
-		assertThat(result).isTrue();
+		List<AgeType> updatedAgeTypes = ageTypeIoOperations.updateAgeType(ageTypes);
+		AgeType updateAgeType = ageTypeIoOperationRepository.findOneByCode(updatedAgeTypes.get(0).getCode());
+		assertThat(updateAgeType).isNotNull();
 		assertThat(updateAgeType.getFrom()).isEqualTo(4);
 		assertThat(updateAgeType.getTo()).isEqualTo(40);
 	}
@@ -124,9 +124,9 @@ public class Tests extends OHCoreTestCase {
 		foundAgeType.setTo(40);
 		List<AgeType> ageTypes = new ArrayList<>();
 		ageTypes.add(foundAgeType);
-		boolean result = ageTypeBrowserManager.updateAgeType(ageTypes);
-		AgeType updateAgeType = ageTypeIoOperationRepository.findOneByCode(code);
-		assertThat(result).isTrue();
+		List<AgeType> updatedAgeTypes = ageTypeBrowserManager.updateAgeType(ageTypes);
+		AgeType updateAgeType = ageTypeIoOperationRepository.findOneByCode(updatedAgeTypes.get(0).getCode());
+		assertThat(updateAgeType).isNotNull();
 		assertThat(updateAgeType.getFrom()).isEqualTo(4);
 		assertThat(updateAgeType.getTo()).isEqualTo(40);
 	}
@@ -159,8 +159,8 @@ public class Tests extends OHCoreTestCase {
 		AgeType ageType2 = new AgeType(ageType.getCode(), ageType.getDescription());
 		ageType2.setFrom(ageType.getFrom());
 		ageType2.setTo(ageType.getTo());
-		assertThat(ageType).isEqualTo(ageType);
 		assertThat(ageType)
+				.isEqualTo(ageType)
 				.isEqualTo(ageType2)
 				.isNotEqualTo("xyzzy");
 		ageType2.setCode("xxxx");
