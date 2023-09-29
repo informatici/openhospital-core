@@ -63,8 +63,7 @@ public class AdmissionType extends Auditable<String> {
 	@Transient
 	private volatile int hashCode;
 	
-	public AdmissionType() 
-    {
+	public AdmissionType() {
 		super();
     }
 	 
@@ -77,13 +76,11 @@ public class AdmissionType extends Auditable<String> {
 	    this.description = aDescription;
     }
     
-    public String getCode() 
-    {
+    public String getCode() {
         return this.code;
     }
     
-    public void setCode(String aCode) 
-    {
+    public void setCode(String aCode) {
         this.code = aCode;
     }
 
@@ -111,7 +108,7 @@ public class AdmissionType extends Auditable<String> {
 		}
 		
 		AdmissionType admissionType = (AdmissionType)obj;
-		return (this.getCode().equals(admissionType.getCode()));
+		return this.getCode().equals(admissionType.getCode());
 	}
 	
 	@Override

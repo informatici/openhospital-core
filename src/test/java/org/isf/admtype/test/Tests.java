@@ -83,20 +83,19 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoUpdateAdmissionType() throws Exception {
 		String code = setupTestAdmissionType(false);
-		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findById(code).get();
-		foundAdmissionType.setDescription("Update");
-		boolean result = admissionTypeIoOperation.updateAdmissionType(foundAdmissionType);
-		assertThat(result).isTrue();
-		AdmissionType updateAdmissionType = admissionTypeIoOperationRepository.findById(code).get();
-		assertThat(updateAdmissionType.getDescription()).isEqualTo("Update");
+		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).get();
+		admissionType.setDescription("Update");
+		AdmissionType updatedAdmissionType = admissionTypeIoOperation.updateAdmissionType(admissionType);
+		assertThat(updatedAdmissionType).isNotNull();
+		assertThat(updatedAdmissionType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testIoNewAdmissionType() throws Exception {
 		AdmissionType admissionType = testAdmissionType.setup(true);
-		boolean result = admissionTypeIoOperation.newAdmissionType(admissionType);
-		assertThat(result).isTrue();
-		checkAdmissionTypeIntoDb(admissionType.getCode());
+		AdmissionType newAdmissionType = admissionTypeIoOperation.newAdmissionType(admissionType);
+		assertThat(newAdmissionType).isNotNull();
+		checkAdmissionTypeIntoDb(newAdmissionType.getCode());
 	}
 
 	@Test
@@ -110,10 +109,8 @@ public class Tests extends OHCoreTestCase {
 	public void testIoDeleteAdmissionType() throws Exception {
 		String code = setupTestAdmissionType(false);
 		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findById(code).get();
-		boolean result = admissionTypeIoOperation.deleteAdmissionType(foundAdmissionType);
-		assertThat(result).isTrue();
-		result = admissionTypeIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		admissionTypeIoOperation.deleteAdmissionType(foundAdmissionType);
+		assertThat(admissionTypeIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
@@ -127,12 +124,11 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrUpdateAdmissionType() throws Exception {
 		String code = setupTestAdmissionType(false);
-		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findById(code).get();
-		foundAdmissionType.setDescription("Update");
-		boolean result = admissionTypeBrowserManager.updateAdmissionType(foundAdmissionType);
-		assertThat(result).isTrue();
-		AdmissionType updateAdmissionType = admissionTypeIoOperationRepository.findById(code).get();
-		assertThat(updateAdmissionType.getDescription()).isEqualTo("Update");
+		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).get();
+		admissionType.setDescription("Update");
+		AdmissionType updatedAdmissionType = admissionTypeBrowserManager.updateAdmissionType(admissionType);
+		assertThat(updatedAdmissionType).isNotNull();
+		assertThat(updatedAdmissionType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
@@ -197,9 +193,9 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrNewAdmissionType() throws Exception {
 		AdmissionType admissionType = testAdmissionType.setup(true);
-		boolean result = admissionTypeBrowserManager.newAdmissionType(admissionType);
-		assertThat(result).isTrue();
-		checkAdmissionTypeIntoDb(admissionType.getCode());
+		AdmissionType newAdmissionType = admissionTypeBrowserManager.newAdmissionType(admissionType);
+		assertThat(newAdmissionType).isNotNull();
+		checkAdmissionTypeIntoDb(newAdmissionType.getCode());
 	}
 
 	@Test
@@ -213,10 +209,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrDeleteAdmissionType() throws Exception {
 		String code = setupTestAdmissionType(false);
 		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findById(code).get();
-		boolean result = admissionTypeBrowserManager.deleteAdmissionType(foundAdmissionType);
-		assertThat(result).isTrue();
-		result = admissionTypeBrowserManager.isCodePresent(code);
-		assertThat(result).isFalse();
+		admissionTypeBrowserManager.deleteAdmissionType(foundAdmissionType);
+		assertThat(admissionTypeBrowserManager.isCodePresent(code)).isFalse();
 	}
 
 	private String setupTestAdmissionType(boolean usingSet) throws OHException {
