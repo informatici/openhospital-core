@@ -83,7 +83,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoUpdateAdmissionType() throws Exception {
 		String code = setupTestAdmissionType(false);
-		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).get();
+		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(admissionType).isNotNull();
 		admissionType.setDescription("Update");
 		AdmissionType updatedAdmissionType = admissionTypeIoOperation.updateAdmissionType(admissionType);
 		assertThat(updatedAdmissionType).isNotNull();
@@ -108,7 +109,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoDeleteAdmissionType() throws Exception {
 		String code = setupTestAdmissionType(false);
-		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findById(code).get();
+		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundAdmissionType).isNotNull();
 		admissionTypeIoOperation.deleteAdmissionType(foundAdmissionType);
 		assertThat(admissionTypeIoOperation.isCodePresent(code)).isFalse();
 	}
@@ -124,7 +126,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrUpdateAdmissionType() throws Exception {
 		String code = setupTestAdmissionType(false);
-		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).get();
+		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(admissionType).isNotNull();
 		admissionType.setDescription("Update");
 		AdmissionType updatedAdmissionType = admissionTypeBrowserManager.updateAdmissionType(admissionType);
 		assertThat(updatedAdmissionType).isNotNull();
@@ -134,10 +137,11 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testAdmissionTypeEqualHashToString() throws Exception {
 		String code = setupTestAdmissionType(false);
-		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).get();
+		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(admissionType).isNotNull();
 		AdmissionType admissionType2 = new AdmissionType("someCode", "someDescription");
-		assertThat(admissionType).isEqualTo(admissionType);
 		assertThat(admissionType)
+				.isEqualTo(admissionType)
 				.isNotEqualTo(admissionType2)
 				.isNotEqualTo("xyzzy");
 		admissionType2.setCode(code);
@@ -151,7 +155,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrAdmissionValidation() throws Exception {
 		String code = setupTestAdmissionType(false);
-		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).get();
+		AdmissionType admissionType = admissionTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(admissionType).isNotNull();
 
 		// Empty string
 		admissionType.setCode("");
@@ -208,7 +213,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrDeleteAdmissionType() throws Exception {
 		String code = setupTestAdmissionType(false);
-		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findById(code).get();
+		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundAdmissionType).isNotNull();
 		admissionTypeBrowserManager.deleteAdmissionType(foundAdmissionType);
 		assertThat(admissionTypeBrowserManager.isCodePresent(code)).isFalse();
 	}
@@ -220,7 +226,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkAdmissionTypeIntoDb(String code) throws OHException {
-		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findById(code).get();
+		AdmissionType foundAdmissionType = admissionTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundAdmissionType).isNotNull();
 		testAdmissionType.check(foundAdmissionType);
 	}
 }
