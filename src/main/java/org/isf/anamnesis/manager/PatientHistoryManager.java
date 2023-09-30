@@ -33,13 +33,11 @@ public class PatientHistoryManager {
 	private PatientHistoryIoOperations ioOperations;
 
 	public PatientHistory getByPatientId(int patientId) {
-		return this.ioOperations.getByPatientId(patientId);
-
+		return ioOperations.getByPatientId(patientId);
 	}
 
-	public void saveOrUpdate(PatientHistory patHis) {
-		this.ioOperations.saveOrUpdate(patHis);
+	public PatientHistory saveOrUpdate(PatientHistory patHis) {
+		return ioOperations.saveOrUpdate(patHis);
 	}
-
 
 }
