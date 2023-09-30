@@ -37,10 +37,10 @@ public class PatientHistoryIoOperations {
 	private PatientHistoryIoOperationRepository repository;
 
 	public PatientHistory getByPatientId(int patId) {
-		return this.repository.findByPatientId(patId);
+		return repository.findByPatientId(patId);
 	}
 
 	public PatientHistory saveOrUpdate(PatientHistory patHis) {
-		return this.repository.save(patHis);
+		return repository.save(patHis);
 	}
 }
