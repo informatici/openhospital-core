@@ -27,14 +27,16 @@ import java.util.List;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.admtype.service.AdmissionTypeIoOperation;
 import org.isf.generaldata.MessageBundle;
-import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
-import org.isf.utils.exception.model.OHExceptionMessage;
+import org.isf.utils.tuple.JPAImmutableTriple;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AdmissionTypeBrowserManager {
+	private static final Logger LOGGER = LoggerFactory.getLogger(AdmissionTypeBrowserManager.class);
 
 	@Autowired
 	private AdmissionTypeIoOperation ioOperations;
@@ -42,7 +44,7 @@ public class AdmissionTypeBrowserManager {
 	/**
 	 * Returns all the available {@link AdmissionType}s.
 	 *
-	 * @return a list of admission types or <code>null</code> if the operation fails.
+	 * @return a list of admission types or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
 	public List<AdmissionType> getAdmissionType() throws OHServiceException {
@@ -52,78 +54,96 @@ public class AdmissionTypeBrowserManager {
 	/**
 	 * Stores a new {@link AdmissionType}.
 	 *
-	 * @param admissionType the admission type to store.
-	 * @return <code>true</code> if the admission type has been stored, <code>false</code> otherwise.
-	 * @throws OHServiceException
+	 * @param admissionType the admission type object to store.
+	 * @return {@code JPAImmutableTriple}
 	 */
-	public boolean newAdmissionType(AdmissionType admissionType) throws OHServiceException {
-		validateAdmissionType(admissionType, true);
-		return ioOperations.newAdmissionType(admissionType);
+	public JPAImmutableTriple newAdmissionType(AdmissionType admissionType) {
+		List<String> errors = validateAdmissionType(admissionType, true);
+		if (!errors.isEmpty()) {
+			return new JPAImmutableTriple(false, null, errors);
+		}
+		try {
+			AdmissionType newAdmissionType = ioOperations.newAdmissionType(admissionType);
+			return new JPAImmutableTriple(true, newAdmissionType, null);
+		} catch (OHServiceException ohServiceException) {
+			errors.add(ohServiceException.getMessage());
+			return new JPAImmutableTriple(false, null, errors);
+		}
 	}
 
 	/**
 	 * Updates the specified {@link AdmissionType}.
 	 *
 	 * @param admissionType the admission type to update.
-	 * @return <code>true</code> if the admission type has been updated, <code>false</code> otherwise.
-	 * @throws OHServiceException
+	 * @return {@code JPAImmutableTriple}
 	 */
-	public boolean updateAdmissionType(AdmissionType admissionType) throws OHServiceException {
-		validateAdmissionType(admissionType, false);
-		return ioOperations.updateAdmissionType(admissionType);
+	public JPAImmutableTriple updateAdmissionType(AdmissionType admissionType) {
+		List<String> errors = validateAdmissionType(admissionType, false);
+		if (!errors.isEmpty()) {
+			return new JPAImmutableTriple(false, null, errors);
+		}
+		try {
+			AdmissionType updatedAdmissionType = ioOperations.updateAdmissionType(admissionType);
+			return new JPAImmutableTriple(true, updatedAdmissionType, null);
+		} catch (OHServiceException ohServiceException) {
+			errors.add(ohServiceException.getMessage());
+			return new JPAImmutableTriple(false, null, errors);
+		}
 	}
 
 	/**
 	 * Checks if the specified Code is already used by others {@link AdmissionType}s.
 	 *
 	 * @param code the admission type code to check.
-	 * @return <code>true</code> if the code is already used, <code>false</code> otherwise.
-	 * @throws OHServiceException
+	 * @return {@code true} if the code is already used, {@code false} otherwise.
 	 */
-	public boolean isCodePresent(String code) throws OHServiceException {
-		return ioOperations.isCodePresent(code);
+	public boolean isCodePresent(String code) {
+		try {
+			return ioOperations.isCodePresent(code);
+		} catch (OHServiceException ohServiceException) {
+			LOGGER.error(ohServiceException.getMessage(), ohServiceException);
+			return false;
+		}
 	}
 
 	/**
 	 * Deletes the specified {@link AdmissionType}.
 	 *
 	 * @param admissionType the admission type to delete.
-	 * @return <code>true</code> if the admission type has been deleted, <code>false</code> otherwise.
-	 * @throws OHServiceException
+	 * @return {@code true} if the admission type has been deleted, {@code false} otherwise.
 	 */
-	public boolean deleteAdmissionType(AdmissionType admissionType) throws OHServiceException {
-		return ioOperations.deleteAdmissionType(admissionType);
+	public boolean deleteAdmissionType(AdmissionType admissionType) {
+		try {
+			ioOperations.deleteAdmissionType(admissionType);
+			return true;
+		} catch (OHServiceException ohServiceException) {
+			LOGGER.error(ohServiceException.getMessage(), ohServiceException);
+			return false;
+		}
 	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param admissionType
-	 * @param insert <code>true</code> or updated <code>false</code>
-	 * @throws OHDataValidationException
+	 * @param insert {@code true} or updated {@code false}
 	 */
-	protected void validateAdmissionType(AdmissionType admissionType, boolean insert) throws OHServiceException {
-		List<OHExceptionMessage> errors = new ArrayList<>();
+	protected List<String> validateAdmissionType(AdmissionType admissionType, boolean insert) {
+		List<String> errors = new ArrayList<>();
 		String key = admissionType.getCode();
-		if (key.equals("")) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertacode.msg")));
+		if (key.isEmpty()) {
+			errors.add(MessageBundle.getMessage("angal.common.pleaseinsertacode.msg"));
 		}
 		if (key.length() > 10) {
-			errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 10)));
+			errors.add(MessageBundle.formatMessage("angal.common.thecodeistoolongmaxchars.fmt.msg", 10));
 		}
-
-		if (insert) {
-			if (isCodePresent(key)) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
-			}
+		if (insert && isCodePresent(key)) {
+			errors.add(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg"));
 		}
-		if (admissionType.getDescription().equals("")) {
-			errors.add(
-					new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
+		if (admissionType.getDescription().isEmpty()) {
+			errors.add(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg"));
 		}
-		if (!errors.isEmpty()) {
-			throw new OHDataValidationException(errors);
-		}
+		return errors;
 	}
 
 }
