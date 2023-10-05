@@ -122,8 +122,7 @@ public class OpdBrowserManager {
 	/**
 	 * Return all Opds of today or since one week ago
 	 *
-	 * @param oneWeek - if <code>true</code> return the last week, only today
-	 *                otherwise.
+	 * @param oneWeek - if <code>true</code> return the last week, only today otherwise.
 	 * @return the list of Opds. It could be <code>null</code>.
 	 * @throws OHServiceException
 	 */
@@ -155,7 +154,7 @@ public class OpdBrowserManager {
 	 * Returns all {@link Opd}s associated to specified patient ID
 	 *
 	 * @param patientcode - the patient ID
-	 * @return the list of {@link Opd}s associated to specified patient ID. 
+	 * @return the list of {@link Opd}s associated to specified patient ID.
 	 * the whole list of {@link Opd}s if <code>0</code> is passed.
 	 * @throws OHServiceException
 	 */
