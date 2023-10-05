@@ -36,7 +36,9 @@ import org.isf.utils.pagination.PagedResponse;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -252,10 +254,10 @@ public class OpdIoOperations {
 	 */
 	public PagedResponse<Opd> getOpdListPageable(
 			Ward ward, 
-			DiseaseType diseaseType,
+			String diseaseTypeCode,
 			String diseaseCode,
-			LocalDateTime dateFrom,
-			LocalDateTime dateTo,
+			LocalDate dateFrom,
+			LocalDate dateTo,
 			int ageFrom,
 			int ageTo,
 			char sex,
@@ -263,7 +265,13 @@ public class OpdIoOperations {
 			String user,
 			int page,
 			int size) throws OHServiceException {
-		return setPaginationData(repository.findOpdListPageable(ward, diseaseType, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user, PageRequest.of(page, size)));
+		Pageable pageRequest = PageRequest.of(page, size);
+		List<Opd> ops = this.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, null);
+		int start = (int) pageRequest.getOffset();
+	    int end = Math.min((start + pageRequest.getPageSize()), ops.size());
+
+	    List<Opd> pageContent = ops.subList(start, end);
+		return setPaginationData(new PageImpl<Opd>(pageContent, pageRequest, ops.size()));
 	}
 	
 	/**
@@ -277,9 +285,16 @@ public class OpdIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public PagedResponse<Opd> getOpdListPageables(Ward ward, int patID, int page, int size) throws OHServiceException {
-		return patID == 0 ?
-				setPaginationData(repository.findAllByWardOrderByProgYearDescPageable(ward, PageRequest.of(page, size))) :
-				setPaginationData(repository.findAllByPatient_CodeAndWardOrderByProgYearDescPageable(patID, ward, PageRequest.of(page, size)));
+		if (ward == null && patID == 0) {
+			return setPaginationData(repository.findAll(PageRequest.of(page, size)));
+		}
+		if (ward == null && patID != 0) {
+			return setPaginationData(repository.findAllByPatientIDOrderByProgYearDescPageable(patID, PageRequest.of(page, size)));
+		}
+		if (ward != null && patID == 0) {
+			return setPaginationData(repository.findAllByWardOrderByProgYearDescPageable(ward, PageRequest.of(page, size)));
+		}
+		return setPaginationData(repository.findAllByPatient_CodeAndWardOrderByProgYearDescPageable(patID, ward, PageRequest.of(page, size)));			
 	}
 	
 	PagedResponse<Opd> setPaginationData(Page<Opd> pages) {
