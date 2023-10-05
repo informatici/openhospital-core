@@ -262,10 +262,10 @@ public class AdmissionBrowserManager {
 	 * Sets an admission record as deleted.
 	 *
 	 * @param admissionId the admission id.
-	 * @return <code>true</code> if the record has been set to delete.
+	 * @return return the "deleted" admission or null if the admissionis not found
 	 * @throws OHServiceException
 	 */
-	public boolean setDeleted(int admissionId) throws OHServiceException {
+	public Admission setDeleted(int admissionId) throws OHServiceException {
 		return ioOperations.setDeleted(admissionId);
 	}
 
@@ -284,10 +284,10 @@ public class AdmissionBrowserManager {
 	 * Deletes the patient photo.
 	 *
 	 * @param id the patient id.
-	 * @return <code>true</code> if the photo has been deleted, <code>false</code> otherwise.
+	 * @return the updated patient object or null if not found
 	 * @throws OHServiceException
 	 */
-	public boolean deletePatientPhoto(int id) throws OHServiceException {
+	public Patient deletePatientPhoto(int id) throws OHServiceException {
 		return ioOperations.deletePatientPhoto(id);
 	}
 
@@ -416,7 +416,7 @@ public class AdmissionBrowserManager {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidweightvalue.msg")));
 			}
 
-			if (ward != null && ward.getCode().equalsIgnoreCase("M")) {
+			if (ward != null && "M".equalsIgnoreCase(ward.getCode())) {
 
 				LocalDateTime visitDate = admission.getVisitDate();
 				if (visitDate != null) {
