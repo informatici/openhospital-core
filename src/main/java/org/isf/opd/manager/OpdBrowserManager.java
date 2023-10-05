@@ -89,8 +89,7 @@ public class OpdBrowserManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseselectaward.msg")));
 		} else {
 			if (!ward.isOpd()) {
-				errors.add(new OHExceptionMessage(
-						MessageBundle.getMessage("angal.opd.specifiedwardisnotenabledforopdservice.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifiedwardisnotenabledforopdservice.msg")));
 			}
 		}
 		// Check Sex and Age
