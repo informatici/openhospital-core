@@ -53,10 +53,10 @@ public class AdmissionTypeBrowserManager {
 	 * Stores a new {@link AdmissionType}.
 	 *
 	 * @param admissionType the admission type to store.
-	 * @return <code>true</code> if the admission type has been stored, <code>false</code> otherwise.
+	 * @return the new AdmissionType object that is persisted.
 	 * @throws OHServiceException
 	 */
-	public boolean newAdmissionType(AdmissionType admissionType) throws OHServiceException {
+	public AdmissionType newAdmissionType(AdmissionType admissionType) throws OHServiceException {
 		validateAdmissionType(admissionType, true);
 		return ioOperations.newAdmissionType(admissionType);
 	}
@@ -65,10 +65,10 @@ public class AdmissionTypeBrowserManager {
 	 * Updates the specified {@link AdmissionType}.
 	 *
 	 * @param admissionType the admission type to update.
-	 * @return <code>true</code> if the admission type has been updated, <code>false</code> otherwise.
+	 * @return the updated AdmissionType object that is persisted.
 	 * @throws OHServiceException
 	 */
-	public boolean updateAdmissionType(AdmissionType admissionType) throws OHServiceException {
+	public AdmissionType updateAdmissionType(AdmissionType admissionType) throws OHServiceException {
 		validateAdmissionType(admissionType, false);
 		return ioOperations.updateAdmissionType(admissionType);
 	}
@@ -88,11 +88,10 @@ public class AdmissionTypeBrowserManager {
 	 * Deletes the specified {@link AdmissionType}.
 	 *
 	 * @param admissionType the admission type to delete.
-	 * @return <code>true</code> if the admission type has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteAdmissionType(AdmissionType admissionType) throws OHServiceException {
-		return ioOperations.deleteAdmissionType(admissionType);
+	public void deleteAdmissionType(AdmissionType admissionType) throws OHServiceException {
+		ioOperations.deleteAdmissionType(admissionType);
 	}
 
 	/**
@@ -105,7 +104,7 @@ public class AdmissionTypeBrowserManager {
 	protected void validateAdmissionType(AdmissionType admissionType, boolean insert) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		String key = admissionType.getCode();
-		if (key.equals("")) {
+		if (key.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertacode.msg")));
 		}
 		if (key.length() > 10) {
@@ -117,7 +116,7 @@ public class AdmissionTypeBrowserManager {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
 			}
 		}
-		if (admissionType.getDescription().equals("")) {
+		if (admissionType.getDescription().isEmpty()) {
 			errors.add(
 					new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
 		}
