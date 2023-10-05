@@ -268,33 +268,9 @@ public class OpdIoOperations {
 		Pageable pageRequest = PageRequest.of(page, size);
 		List<Opd> ops = this.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, null);
 		int start = (int) pageRequest.getOffset();
-	    int end = Math.min((start + pageRequest.getPageSize()), ops.size());
-
-	    List<Opd> pageContent = ops.subList(start, end);
+		int end = Math.min((start + pageRequest.getPageSize()), ops.size());
+		List<Opd> pageContent = ops.subList(start, end);
 		return setPaginationData(new PageImpl<Opd>(pageContent, pageRequest, ops.size()));
-	}
-	
-	/**
-	 * Return {@link List} of {@link Opd}s associated to specified patient ID
-	 * 
-	 * @param ward - the ward of opd
-	 * @param patID - the patient ID
-	 * @param page - page number
-	 * @param size - size of the list
-	 * @return the list of {@link Opd}s associated to specified patient ID.
-	 * @throws OHServiceException 
-	 */
-	public PagedResponse<Opd> getOpdListPageables(Ward ward, int patID, int page, int size) throws OHServiceException {
-		if (ward == null && patID == 0) {
-			return setPaginationData(repository.findAll(PageRequest.of(page, size)));
-		}
-		if (ward == null && patID != 0) {
-			return setPaginationData(repository.findAllByPatientIDOrderByProgYearDescPageable(patID, PageRequest.of(page, size)));
-		}
-		if (ward != null && patID == 0) {
-			return setPaginationData(repository.findAllByWardOrderByProgYearDescPageable(ward, PageRequest.of(page, size)));
-		}
-		return setPaginationData(repository.findAllByPatient_CodeAndWardOrderByProgYearDescPageable(patID, ward, PageRequest.of(page, size)));			
 	}
 	
 	PagedResponse<Opd> setPaginationData(Page<Opd> pages) {

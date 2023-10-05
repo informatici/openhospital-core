@@ -148,18 +148,16 @@ public class OpdBrowserManager {
 	 * @return the list of Opds. It could be <code>null</code>.
 	 * @throws OHServiceException
 	 */
-	public List<Opd> getOpd(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo,
-			int ageFrom, int ageTo, char sex, char newPatient, String user) throws OHServiceException {
-		return ioOperations.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex,
-				newPatient, user);
+	public List<Opd> getOpd(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, String user) throws OHServiceException {
+		return ioOperations.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex,newPatient, user);
 	}
 
 	/**
 	 * Returns all {@link Opd}s associated to specified patient ID
 	 *
 	 * @param patientcode - the patient ID
-	 * @return the list of {@link Opd}s associated to specified patient ID. the
-	 *         whole list of {@link Opd}s if <code>0</code> is passed.
+	 * @return the list of {@link Opd}s associated to specified patient ID. 
+	 * the whole list of {@link Opd}s if <code>0</code> is passed.
 	 * @throws OHServiceException
 	 */
 	public List<Opd> getOpdList(int patientcode) throws OHServiceException {
@@ -228,7 +226,7 @@ public class OpdBrowserManager {
 	 * Check if the given {@code opdNum} does already exist for the give {@code year}
 	 *
 	 * @param opdNum - the OPD progressive in year
-	 * @param year   - the year
+	 * @param year - the year
 	 * @return <code>true</code> if the given number exists in year, <code>false</code> otherwise
 	 */
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
@@ -256,8 +254,7 @@ public class OpdBrowserManager {
 	}
 
 	/**
-	 * Returns {@link List} of {@link Opd}s associated to specified patient ID with
-	 * page info.
+	 * Returns {@link List} of {@link Opd}s associated to specified patient ID with page info.
 	 *
 	 * @param ward - the ward of opd
 	 * @param diseaseType - the disease type
@@ -275,26 +272,7 @@ public class OpdBrowserManager {
 	 * the whole list of {@link Opd}s if <code>0</code> is passed.
 	 * @throws OHServiceException
 	 */
-	public PagedResponse<Opd> getOpdPageable(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom,
-			LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, int page, int size)
-			throws OHServiceException {
+	public PagedResponse<Opd> getOpdPageable(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, int page, int size) throws OHServiceException {
 		return ioOperations.getOpdListPageable(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, null, page, size);
-	}
-
-	/**
-	 * Returns {@link List} of {@link Opd}s associated to specified patient ID with
-	 * page info.
-	 *
-	 * @param ward - the ward of opd
-	 * @param patientcode - the patient ID
-	 * @param page - the number of page
-	 * @param size - the size of the list
-	 * @return the list of {@link Opd}s associated to specified patient ID. 
-	 * the whole list of {@link Opd}s if <code>0</code> is passed.
-	 * @throws OHServiceException
-	 */
-	public PagedResponse<Opd> getOpdListPageable(Ward ward, int patientcode, int page, int size)
-			throws OHServiceException {
-		return ioOperations.getOpdListPageables(ward, patientcode, page, size);
 	}
 }

@@ -55,21 +55,5 @@ public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, O
 	List<Opd> findByProgYear(@Param("prog_year") Integer prog_year);
 
 	@Query(value = "select op from Opd op where op.prog_year = :prog_year and op.date >= :dateVisitFrom and op.date < :dateVisitTo")
-	List<Opd> findByProgYearAndDateBetween(@Param("prog_year") Integer prog_year, @Param("dateVisitFrom") LocalDateTime dateVisitFrom, 
-			@Param("dateVisitTo") LocalDateTime dateVisitTo);
-
-	@Query("select o from Opd o order by o.prog_year")
-	Page<Opd> findAllOrderByProgYearDescPageable(Pageable pageable);
-
-	@Query("select o from Opd o where o.ward = :ward order by o.prog_year")
-	Page<Opd> findAllByWardOrderByProgYearDescPageable(@Param("ward") Ward ward, Pageable pageable);
-
-	@Query("select o from Opd o where o.patient.code = :patID order by o.prog_year")
-	Page<Opd> findAllByPatientIDOrderByProgYearDescPageable(@Param("patID") int patID, Pageable pageable);
-
-	@Query("select o from Opd o where o.patient.code = :code order by o.prog_year")
-	Page<Opd> findAllByPatient_CodeOrderByProgYearDescPageable(@Param("code") Integer code, Pageable pageable);
-
-	@Query("select o from Opd o where o.patient.code = :code and o.ward = :ward order by o.prog_year")
-	Page<Opd> findAllByPatient_CodeAndWardOrderByProgYearDescPageable(@Param("code") int code, @Param("ward") Ward ward, Pageable pageable);
+	List<Opd> findByProgYearAndDateBetween(@Param("prog_year") Integer prog_year, @Param("dateVisitFrom") LocalDateTime dateVisitFrom, @Param("dateVisitTo") LocalDateTime dateVisitTo);
 }
