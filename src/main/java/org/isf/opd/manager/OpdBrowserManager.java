@@ -106,16 +106,13 @@ public class OpdBrowserManager {
 		} else {
 			// Check double diseases
 			if (disease2 != null && disease.getCode().equals(disease2.getCode())) {
-				errors.add(new OHExceptionMessage(
-						MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
 			}
 			if (disease3 != null && disease.getCode().equals(disease3.getCode())) {
-				errors.add(new OHExceptionMessage(
-						MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
 			}
 			if (disease2 != null && disease3 != null && disease2.getCode().equals(disease3.getCode())) {
-				errors.add(new OHExceptionMessage(
-						MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
 			}
 		}
 		if (!errors.isEmpty()) {
@@ -198,8 +195,7 @@ public class OpdBrowserManager {
 	 * Delete an {@link Opd} from the db
 	 *
 	 * @param opd - the {@link Opd} to delete
-	 * @return <code>true</code> if the item has been deleted. <code>false</code>
-	 *         otherwise.
+	 * @return <code>true</code> if the item has been deleted. <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean deleteOpd(Opd opd) throws OHServiceException {
@@ -207,8 +203,7 @@ public class OpdBrowserManager {
 	}
 
 	/**
-	 * Returns the max progressive number within specified year or within current
-	 * year if <code>0</code>.
+	 * Returns the max progressive number within specified year or within current year if <code>0</code>.
 	 *
 	 * @param year
 	 * @return <code>int</code> - the progressive number in the year
@@ -230,13 +225,11 @@ public class OpdBrowserManager {
 	}
 
 	/**
-	 * Check if the given {@code opdNum} does already exist for the give
-	 * {@code year}
+	 * Check if the given {@code opdNum} does already exist for the give {@code year}
 	 *
 	 * @param opdNum - the OPD progressive in year
 	 * @param year   - the year
-	 * @return <code>true</code> if the given number exists in year,
-	 *         <code>false</code> otherwise
+	 * @return <code>true</code> if the given number exists in year, <code>false</code> otherwise
 	 */
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
 		return ioOperations.isExistOpdNum(opdNum, year);
@@ -266,7 +259,7 @@ public class OpdBrowserManager {
 	 * Returns {@link List} of {@link Opd}s associated to specified patient ID with
 	 * page info.
 	 *
-	 * @param ward        - the ward of opd
+	 * @param ward - the ward of opd
 	 * @param diseaseType - the disease type
 	 * @param diseaseCode - the Code of disease
 	 * @param dateFrom
@@ -278,27 +271,26 @@ public class OpdBrowserManager {
 	 * @param user
 	 * @param page
 	 * @param size
-	 * @return the list of {@link Opd}s associated to specified patient ID. the
-	 *         whole list of {@link Opd}s if <code>0</code> is passed.
+	 * @return the list of {@link Opd}s associated to specified patient ID.
+	 * the whole list of {@link Opd}s if <code>0</code> is passed.
 	 * @throws OHServiceException
 	 */
 	public PagedResponse<Opd> getOpdPageable(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom,
 			LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, int page, int size)
 			throws OHServiceException {
-		return ioOperations.getOpdListPageable(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo,
-				sex, newPatient, null, page, size);
+		return ioOperations.getOpdListPageable(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, null, page, size);
 	}
 
 	/**
 	 * Returns {@link List} of {@link Opd}s associated to specified patient ID with
 	 * page info.
 	 *
-	 * @param ward        - the ward of opd
+	 * @param ward - the ward of opd
 	 * @param patientcode - the patient ID
-	 * @param page        - the number of page
-	 * @param size        - the size of the list
-	 * @return the list of {@link Opd}s associated to specified patient ID. the
-	 *         whole list of {@link Opd}s if <code>0</code> is passed.
+	 * @param page - the number of page
+	 * @param size - the size of the list
+	 * @return the list of {@link Opd}s associated to specified patient ID. 
+	 * the whole list of {@link Opd}s if <code>0</code> is passed.
 	 * @throws OHServiceException
 	 */
 	public PagedResponse<Opd> getOpdListPageable(Ward ward, int patientcode, int page, int size)
