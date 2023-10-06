@@ -6613,7 +6613,7 @@ LOCK TABLES `oh_usergroup` WRITE;
 /*!40000 ALTER TABLE `oh_usergroup` DISABLE KEYS */;
 INSERT INTO `oh_usergroup` VALUES ('admin','USER with all the privileges',NULL,NULL,NULL,NULL,1);
 INSERT INTO `oh_usergroup` VALUES ('guest','Read Only Users',NULL,NULL,NULL,NULL,1);
-INSERT INTO `oh_usergroup` VALUES ('laboratorist','Access Only on laboratory activity',NULL,NULL,NULL,NULL,1);
+INSERT INTO `oh_usergroup` VALUES ('laboratorist','Access only laboratory',NULL,NULL,NULL,NULL,1);
 INSERT INTO `oh_usergroup` VALUES ('doctor','Access everywhere except the laboratory',NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `oh_usergroup` ENABLE KEYS */;
 UNLOCK TABLES;
