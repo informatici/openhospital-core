@@ -45,7 +45,7 @@ public class DiseaseTypeBrowserManager {
 	/**
 	 * Returns all the stored {@link DiseaseType}s.
 	 *
-	 * @return a list of disease type, <code>null</code> if the operation is failed.
+	 * @return a list of disease type, {@code null} if the operation is failed.
 	 * @throws OHServiceException
 	 */
 	public List<DiseaseType> getDiseaseType() throws OHServiceException {
@@ -56,10 +56,10 @@ public class DiseaseTypeBrowserManager {
 	 * Store the specified {@link DiseaseType}.
 	 *
 	 * @param diseaseType the disease type to store.
-	 * @return <code>true</code> if the {@link DiseaseType} has been stored, <code>false</code> otherwise.
+	 * @return the newly stored {@link DiseaseType} object.
 	 * @throws OHServiceException
 	 */
-	public boolean newDiseaseType(DiseaseType diseaseType) throws OHServiceException {
+	public DiseaseType newDiseaseType(DiseaseType diseaseType) throws OHServiceException {
 		validateDiseaseType(diseaseType, true);
 		return ioOperations.newDiseaseType(diseaseType);
 	}
@@ -68,10 +68,10 @@ public class DiseaseTypeBrowserManager {
 	 * Updates the specified {@link DiseaseType}.
 	 *
 	 * @param diseaseType the disease type to update.
-	 * @return <code>true</code> if the disease type has been updated, false otherwise.
+	 * @return the updated {@link DiseaseType} object.
 	 * @throws OHServiceException
 	 */
-	public boolean updateDiseaseType(DiseaseType diseaseType) throws OHServiceException {
+	public DiseaseType updateDiseaseType(DiseaseType diseaseType) throws OHServiceException {
 		validateDiseaseType(diseaseType, false);
 		return ioOperations.updateDiseaseType(diseaseType);
 	}
@@ -80,7 +80,7 @@ public class DiseaseTypeBrowserManager {
 	 * Checks if the specified code is already used by any {@link DiseaseType}.
 	 *
 	 * @param code the code to check.
-	 * @return <code>true</code> if the code is used, false otherwise.
+	 * @return {@code true} if the code is used, false otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -91,24 +91,23 @@ public class DiseaseTypeBrowserManager {
 	 * Deletes the specified {@link DiseaseType}.
 	 *
 	 * @param diseaseType the disease type to remove.
-	 * @return <code>true</code> if the disease has been removed, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteDiseaseType(DiseaseType diseaseType) throws OHServiceException {
-		return ioOperations.deleteDiseaseType(diseaseType);
+	public void deleteDiseaseType(DiseaseType diseaseType) throws OHServiceException {
+		ioOperations.deleteDiseaseType(diseaseType);
 	}
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param diseaseType
-	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @param insert {@code true} or updated <code>false</code>
 	 * @throws OHServiceException
 	 */
 	protected void validateDiseaseType(DiseaseType diseaseType, boolean insert) throws OHServiceException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
 		String key = diseaseType.getCode();
-		if (key.equals("")) {
+		if (key.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertacode.msg")));
 		}
 		if (key.length() > 2) {
@@ -118,7 +117,7 @@ public class DiseaseTypeBrowserManager {
 		if (insert && isCodePresent(key)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
 		}
-		if (diseaseType.getDescription().equals("")) {
+		if (diseaseType.getDescription().isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
 		}
 		if (!errors.isEmpty()) {
@@ -129,8 +128,8 @@ public class DiseaseTypeBrowserManager {
 	/**
 	 * Returns {@link DiseaseType}.
 	 *
-	 * @Param code
-	 * @return  object {@link DiseaseType}, <code>null</code> otherwise.
+	 * @param code
+	 * @return  object {@link DiseaseType}, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
 	public DiseaseType getDiseaseType(String code) throws OHServiceException {

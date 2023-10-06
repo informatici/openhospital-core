@@ -89,18 +89,15 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestDiseaseType(false);
 		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
 		foundDiseaseType.setDescription("Update");
-		boolean result = diseaseTypeIoOperation.updateDiseaseType(foundDiseaseType);
-		DiseaseType updateDiseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
-		assertThat(result).isTrue();
-		assertThat(updateDiseaseType.getDescription()).isEqualTo("Update");
+		DiseaseType updatedDiseaseType = diseaseTypeIoOperation.updateDiseaseType(foundDiseaseType);
+		assertThat(updatedDiseaseType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testIoNewDiseaseType() throws Exception {
 		DiseaseType diseaseType = testDiseaseType.setup(true);
-		boolean result = diseaseTypeIoOperation.newDiseaseType(diseaseType);
-		assertThat(result).isTrue();
-		checkDiseaseTypeIntoDb(diseaseType.getCode());
+		DiseaseType newDiseaseType = diseaseTypeIoOperation.newDiseaseType(diseaseType);
+		checkDiseaseTypeIntoDb(newDiseaseType.getCode());
 	}
 
 	@Test
@@ -133,18 +130,15 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestDiseaseType(false);
 		DiseaseType foundDiseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
 		foundDiseaseType.setDescription("Update");
-		boolean result = diseaseTypeBrowserManager.updateDiseaseType(foundDiseaseType);
-		DiseaseType updateDiseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
-		assertThat(result).isTrue();
-		assertThat(updateDiseaseType.getDescription()).isEqualTo("Update");
+		DiseaseType updatedDiseaseType = diseaseTypeBrowserManager.updateDiseaseType(foundDiseaseType);
+		assertThat(updatedDiseaseType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrNewDiseaseType() throws Exception {
 		DiseaseType diseaseType = testDiseaseType.setup(true);
-		boolean result = diseaseTypeBrowserManager.newDiseaseType(diseaseType);
-		assertThat(result).isTrue();
-		checkDiseaseTypeIntoDb(diseaseType.getCode());
+		DiseaseType newDiseaseType = diseaseTypeBrowserManager.newDiseaseType(diseaseType);
+		checkDiseaseTypeIntoDb(newDiseaseType.getCode());
 	}
 
 	@Test
@@ -219,8 +213,8 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestDiseaseType(false);
 		DiseaseType diseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
 		DiseaseType diseaseType2 = new DiseaseType("code", "description");
-		assertThat(diseaseType).isEqualTo(diseaseType);
 		assertThat(diseaseType)
+				.isEqualTo(diseaseType)
 				.isNotEqualTo(diseaseType2)
 				.isNotEqualTo("xyzzy");
 		diseaseType2.setCode(diseaseType.getCode());
