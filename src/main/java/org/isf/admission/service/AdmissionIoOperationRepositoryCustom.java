@@ -45,7 +45,7 @@ public interface AdmissionIoOperationRepositoryCustom {
 		 */
 		private final Integer admissionId;
 
-		public PatientAdmission(final Integer patientId, final Integer admissionId) {
+		public PatientAdmission(Integer patientId, Integer admissionId) {
 			this.patientId = patientId;
 			this.admissionId = admissionId;
 		}
