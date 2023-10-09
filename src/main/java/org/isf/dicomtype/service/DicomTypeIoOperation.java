@@ -52,34 +52,32 @@ public class DicomTypeIoOperation {
 	 * Method that updates an already existing DicomType
 	 * 
 	 * @param dicomType
-	 * @return true - if the existing DicomType has been updated
+	 * @return returns the saved DicomType object.
 	 * @throws OHServiceException
 	 */
-	public boolean updateDicomType(DicomType dicomType) throws OHServiceException {
-		return repository.save(dicomType) != null;
+	public DicomType updateDicomType(DicomType dicomType) throws OHServiceException {
+		return repository.save(dicomType);
 	}
 
 	/**
 	 * Method that create a new DicomType
 	 * 
 	 * @param dicomType
-	 * @return true - if the new DicomType has been inserted
+	 * @return returns the updated DicomType object.
 	 * @throws OHServiceException
 	 */
-	public boolean newDicomType(DicomType dicomType) throws OHServiceException {
-		return repository.save(dicomType) != null;
+	public DicomType newDicomType(DicomType dicomType) throws OHServiceException {
+		return repository.save(dicomType);
 	}
 
 	/**
 	 * Method that delete a DicomType
 	 * 
 	 * @param dicomType
-	 * @return true - if the DicomType has been deleted
 	 * @throws OHServiceException
 	 */
-	public boolean deleteDicomType(DicomType dicomType) throws OHServiceException {
+	public void deleteDicomType(DicomType dicomType) throws OHServiceException {
 		repository.delete(dicomType);
-		return true;
 	}
 
 	/**

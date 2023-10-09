@@ -54,32 +54,30 @@ public class DiseaseTypeIoOperation {
 	/**
 	 * Updates the specified {@link DiseaseType}.
 	 * @param diseaseType the disease type to update.
-	 * @return <code>true</code> if the disease type has been updated, false otherwise.
+	 * @return the updated {@link DiseaseType} object.
 	 * @throws OHServiceException if an error occurs during the update operation.
 	 */
-	public boolean updateDiseaseType(DiseaseType diseaseType) throws OHServiceException {
-		return repository.save(diseaseType) != null;
+	public DiseaseType updateDiseaseType(DiseaseType diseaseType) throws OHServiceException {
+		return repository.save(diseaseType);
 	}
 
 	/**
 	 * Store the specified {@link DiseaseType}.
 	 * @param diseaseType the disease type to store.
-	 * @return <code>true</code> if the {@link DiseaseType} has been stored, <code>false</code> otherwise.
+	 * @return the new stored {@link DiseaseType} object.
 	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
-	public boolean newDiseaseType(DiseaseType diseaseType) throws OHServiceException {
-		return repository.save(diseaseType) != null;
+	public DiseaseType newDiseaseType(DiseaseType diseaseType) throws OHServiceException {
+		return repository.save(diseaseType);
 	}
 
 	/**
 	 * Deletes the specified {@link DiseaseType}.
 	 * @param diseaseType the disease type to remove.
-	 * @return <code>true</code> if the disease has been removed, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the delete procedure.
 	 */
-	public boolean deleteDiseaseType(DiseaseType diseaseType) throws OHServiceException {
+	public void deleteDiseaseType(DiseaseType diseaseType) throws OHServiceException {
 		repository.delete(diseaseType);
-		return true;
 	}
 
 	/**
