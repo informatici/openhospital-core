@@ -96,8 +96,8 @@ public class DeliveryType extends Auditable<String> {
 
 	@Override
     public boolean equals(Object anObject) {
-        return anObject instanceof DeliveryType && (getCode().equals(((DeliveryType) anObject).getCode())
-		        && getDescription().equalsIgnoreCase(((DeliveryType) anObject).getDescription()));
+        return anObject instanceof DeliveryType && getCode().equals(((DeliveryType) anObject).getCode())
+                && getDescription().equalsIgnoreCase(((DeliveryType) anObject).getDescription());
     }
 
     @Override
