@@ -53,10 +53,10 @@ public class AgeTypeBrowserManager {
 	 * Updates the list of {@link AgeType}s.
 	 *
 	 * @param ageTypes the {@link AgeType}s to update.
-	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise.
+	 * @return the updated list of {@link AgeType}s.
 	 * @throws OHServiceException
 	 */
-	public boolean updateAgeType(List<AgeType> ageTypes) throws OHServiceException {
+	public List<AgeType> updateAgeType(List<AgeType> ageTypes) throws OHServiceException {
 		validateAgeTypes(ageTypes);
 		return ioOperations.updateAgeType(ageTypes);
 	}

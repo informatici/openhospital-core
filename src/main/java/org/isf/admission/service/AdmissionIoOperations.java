@@ -125,16 +125,16 @@ public class AdmissionIoOperations {
 	/**
 	 * Load patient together with the profile photo, or {@code null} if there is no patient with the given id
 	 */
-	public AdmittedPatient loadAdmittedPatient(final int patientId) {
+	public AdmittedPatient loadAdmittedPatient(int patientId) {
 		boolean isLoadPatientProfilePhotoFromDb = PatientIoOperations.LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE);
-		final Patient patient = patientRepository.findById(patientId).orElse(null);
+		Patient patient = patientRepository.findById(patientId).orElse(null);
 		if (patient == null) {
 			return null;
 		}
 		if (isLoadPatientProfilePhotoFromDb) {
 			Hibernate.initialize(patient.getPatientProfilePhoto());
 		}
-		final Admission admission = repository.findOneWherePatientIn(patientId);
+		Admission admission = repository.findOneWherePatientIn(patientId);
 		return new AdmittedPatient(patient, admission);
 	}
 
@@ -174,7 +174,7 @@ public class AdmissionIoOperations {
 	 * Inserts a new admission.
 	 *
 	 * @param admission the admission to insert.
-	 * @return <code>true</code> if the admission has been successfully inserted, <code>false</code> otherwise.
+	 * @return the new/saved Admission object.
 	 * @throws OHServiceException if an error occurs during the insertion.
 	 */
 	public Admission newAdmission(Admission admission) throws OHServiceException {
@@ -189,15 +189,15 @@ public class AdmissionIoOperations {
 	 * @throws OHServiceException if an error occurs during the insertion.
 	 */
 	public int newAdmissionReturnKey(Admission admission) throws OHServiceException {
-		newAdmission(admission);
-		return admission.getId();
+		Admission newAdmission = newAdmission(admission);
+		return newAdmission.getId();
 	}
 
 	/**
 	 * Updates the specified {@link Admission} object.
 	 *
 	 * @param admission the admission object to update.
-	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
+	 * @return the updated Admission object
 	 * @throws OHServiceException if an error occurs.
 	 */
 	public Admission updateAdmission(Admission admission) throws OHServiceException {
@@ -237,7 +237,7 @@ public class AdmissionIoOperations {
 		LocalDateTime first;
 		LocalDateTime last;
 
-		if (wardId.equalsIgnoreCase("M") && GeneralData.MATERNITYRESTARTINJUNE) {
+		if ("M".equalsIgnoreCase(wardId) && GeneralData.MATERNITYRESTARTINJUNE) {
 			if (now.getMonthValue() < Month.JUNE.getValue()) {
 				first = now.minusYears(1).withMonth(Month.JULY.getValue()).withDayOfMonth(1).with(LocalTime.MIN).truncatedTo(ChronoUnit.SECONDS);
 				last = now.withMonth(Month.JUNE.getValue()).withDayOfMonth(30).with(LocalTime.MAX).truncatedTo(ChronoUnit.SECONDS);
@@ -287,14 +287,16 @@ public class AdmissionIoOperations {
 	 * Sets an admission record as deleted.
 	 *
 	 * @param admissionId the admission id.
-	 * @return <code>true</code> if the record has been set to delete.
+	 * @return return the "deleted" admission object or null if the admission is not found
 	 * @throws OHServiceException if an error occurs.
 	 */
-	public boolean setDeleted(int admissionId) throws OHServiceException {
+	public Admission setDeleted(int admissionId) throws OHServiceException {
 		Admission foundAdmission = repository.findById(admissionId).orElse(null);
+		if (foundAdmission == null) {
+			return null;
+		}
 		foundAdmission.setDeleted('Y');
-		Admission savedAdmission = repository.save(foundAdmission);
-		return savedAdmission != null;
+		return repository.save(foundAdmission);
 	}
 
 	/**
@@ -313,15 +315,18 @@ public class AdmissionIoOperations {
 	 * Deletes the patient photo.
 	 *
 	 * @param patientId the patient id.
-	 * @return <code>true</code> if the photo has been deleted, <code>false</code> otherwise.
+	 * @return the updated patient object or null if patient is not found
 	 * @throws OHServiceException if an error occurs.
 	 */
-	public boolean deletePatientPhoto(int patientId) throws OHServiceException {
+	public Patient deletePatientPhoto(int patientId) throws OHServiceException {
 		Patient foundPatient = patientRepository.findById(patientId).orElse(null);
+		if (foundPatient == null) {
+			return null;
+		}
 		if (foundPatient.getPatientProfilePhoto() != null && foundPatient.getPatientProfilePhoto().getPhoto() != null) {
 			foundPatient.getPatientProfilePhoto().setPhoto(null);
 		}
-		return patientRepository.save(foundPatient) != null;
+		return patientRepository.save(foundPatient);
 	}
 	
 	/**
@@ -375,6 +380,7 @@ public class AdmissionIoOperations {
 		Page<Admission> pagedResult = repository.findAllWhere_AdmissionDate_Paginated(dateFrom, dateTo, pageable);
 		return setPaginationData(pagedResult);
 	}
+
 	/**
 	 * Returns the list of Admissions with discharge by page
 	 *

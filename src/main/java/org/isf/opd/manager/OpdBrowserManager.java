@@ -22,13 +22,11 @@
 package org.isf.opd.manager;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.isf.disease.model.Disease;
-import org.isf.distype.model.DiseaseType;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
 import org.isf.menu.manager.UserBrowsingManager;
@@ -131,11 +129,11 @@ public class OpdBrowserManager {
 	public List<Opd> getOpd(boolean oneWeek) throws OHServiceException {
 		return ioOperations.getOpdList(oneWeek);
 	}
-	
+
 	/**
 	 * Return all Opds within specified dates and parameters
 	 * 
-	 * @param ward 
+	 * @param ward
 	 * @param diseaseTypeCode
 	 * @param diseaseCode
 	 * @param dateFrom
@@ -148,11 +146,9 @@ public class OpdBrowserManager {
 	 * @return the list of Opds. It could be <code>null</code>.
 	 * @throws OHServiceException
 	 */
-	public List<Opd> getOpd(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, String user)
-			throws OHServiceException {
-		return ioOperations.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, user);
+	public List<Opd> getOpd(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, String user) throws OHServiceException {
+		return ioOperations.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex,newPatient, user);
 	}
-	
 
 	/**
 	 * Returns all {@link Opd}s associated to specified patient ID
@@ -234,9 +230,10 @@ public class OpdBrowserManager {
 	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
 		return ioOperations.isExistOpdNum(opdNum, year);
 	}
-	
+
 	/**
 	 * Get an OPD by its code
+	 * 
 	 * @param code - the OPD code
 	 * @return an OPD or {@code null}
 	 */
@@ -246,20 +243,21 @@ public class OpdBrowserManager {
 
 	/**
 	 * Get a list of OPD with specified Progressive in Year number
+	 * 
 	 * @param code - the OPD code
 	 * @return a list of OPD or an empty list
 	 */
 	public List<Opd> getOpdByProgYear(int code) {
 		return ioOperations.getOpdByProgYear(code);
 	}
-	
+
 	/**
 	 * Returns {@link List} of {@link Opd}s associated to specified patient ID with page info.
 	 *
 	 * @param ward - the ward of opd
 	 * @param diseaseType - the disease type
 	 * @param diseaseCode - the Code of disease
-	 * @param dateFrom 
+	 * @param dateFrom
 	 * @param dateTo
 	 * @param ageFrom
 	 * @param ageTo
@@ -272,25 +270,7 @@ public class OpdBrowserManager {
 	 * the whole list of {@link Opd}s if <code>0</code> is passed.
 	 * @throws OHServiceException
 	 */
-	public PagedResponse<Opd> getOpdPageable(Ward ward, DiseaseType diseaseType, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, String user, int page, int size)
-			throws OHServiceException {
-		LocalDateTime dateFr = dateFrom.atStartOfDay();
-		LocalDateTime dateT = dateTo.atStartOfDay();
-		return ioOperations.getOpdListPageable(ward, diseaseType, diseaseCode, dateFr, dateT, ageFrom, ageTo, sex, newPatient, user, page, size);
-	}
-	
-	/**
-	 * Returns {@link List} of {@link Opd}s associated to specified patient ID with page info.
-	 *
-	 * @param ward - the ward of opd
-	 * @param patientcode - the patient ID
-	 * @param page - the number of page
-	 * @param size - the size of the list 
-	 * @return the list of {@link Opd}s associated to specified patient ID.
-	 * the whole list of {@link Opd}s if <code>0</code> is passed.
-	 * @throws OHServiceException
-	 */
-	public PagedResponse<Opd> getOpdListPageable(Ward ward, int patientcode, int page, int size) throws OHServiceException {
-		return ioOperations.getOpdListPageables(ward, patientcode, page, size);
+	public PagedResponse<Opd> getOpdPageable(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, int page, int size) throws OHServiceException {
+		return ioOperations.getOpdListPageable(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, null, page, size);
 	}
 }
