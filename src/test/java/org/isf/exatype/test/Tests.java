@@ -77,7 +77,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetExamType() throws Exception {
 		String code = setupTestExamType(false);
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).get();
+		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamType).isNotNull();
 		List<ExamType> examTypes = examTypeIoOperation.getExamType();
 		assertThat(examTypes).contains(foundExamType);
 	}
@@ -85,21 +86,20 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoUpdateExamType() throws Exception {
 		String code = setupTestExamType(false);
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).get();
+		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamType).isNotNull();
 		foundExamType.setDescription("Update");
-		ExamType result = examTypeIoOperation.updateExamType(foundExamType);
-		assertThat(result).isNotNull();
-		ExamType updateExamType = examTypeIoOperationRepository.findById(code).get();
-		assertThat(updateExamType).isNotNull();
-		assertThat(updateExamType.getDescription()).isEqualTo("Update");
+		ExamType updatedExamType = examTypeIoOperation.updateExamType(foundExamType);
+		assertThat(updatedExamType).isNotNull();
+		assertThat(updatedExamType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testIoNewExamType() throws Exception {
 		ExamType examType = testExamType.setup(true);
-		ExamType result = examTypeIoOperation.newExamType(examType);
-		assertThat(result).isNotNull();
-		checkExamTypeIntoDb(examType.getCode());
+		ExamType newExamType = examTypeIoOperation.newExamType(examType);
+		assertThat(newExamType).isNotNull();
+		checkExamTypeIntoDb(newExamType.getCode());
 	}
 
 	@Test
@@ -112,17 +112,17 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoDeleteExamType() throws Exception {
 		String code = setupTestExamType(false);
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).get();
-		boolean result = examTypeIoOperation.deleteExamType(foundExamType);
-		assertThat(result).isTrue();
-		result = examTypeIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamType).isNotNull();
+		examTypeIoOperation.deleteExamType(foundExamType);
+		assertThat(examTypeIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
 	public void testMgrGetExamType() throws Exception {
 		String code = setupTestExamType(false);
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).get();
+		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamType).isNotNull();
 		List<ExamType> examTypes = examTypeBrowserManager.getExamType();
 		assertThat(examTypes).contains(foundExamType);
 	}
@@ -130,21 +130,20 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrUpdateExamType() throws Exception {
 		String code = setupTestExamType(false);
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).get();
+		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamType).isNotNull();
 		foundExamType.setDescription("Update");
-		ExamType result = examTypeBrowserManager.updateExamType(foundExamType);
-		assertThat(result).isNotNull();
-		ExamType updateExamType = examTypeIoOperationRepository.findById(code).get();
-		assertThat(updateExamType).isNotNull();
-		assertThat(updateExamType.getDescription()).isEqualTo("Update");
+		ExamType updatedExamType = examTypeBrowserManager.updateExamType(foundExamType);
+		assertThat(updatedExamType).isNotNull();
+		assertThat(updatedExamType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrNewExamType() throws Exception {
 		ExamType examType = testExamType.setup(true);
-		ExamType result = examTypeBrowserManager.newExamType(examType);
-		assertThat(result).isNotNull();
-		checkExamTypeIntoDb(examType.getCode());
+		ExamType newExamType = examTypeBrowserManager.newExamType(examType);
+		assertThat(newExamType).isNotNull();
+		checkExamTypeIntoDb(newExamType.getCode());
 	}
 
 	@Test
@@ -157,17 +156,17 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrDeleteExamType() throws Exception {
 		String code = setupTestExamType(false);
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).get();
-		boolean result = examTypeBrowserManager.deleteExamType(foundExamType);
-		assertThat(result).isTrue();
-		result = examTypeBrowserManager.isCodePresent(code);
-		assertThat(result).isFalse();
+		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamType).isNotNull();
+		examTypeBrowserManager.deleteExamType(foundExamType);
+		assertThat(examTypeBrowserManager.isCodePresent(code)).isFalse();
 	}
 
 	@Test
 	public void testMgrExamTypeValidation() throws Exception {
 		String code = setupTestExamType(false);
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).get();
+		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamType).isNotNull();
 
 		// code is empty
 		foundExamType.setCode("");
@@ -211,7 +210,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testPatientExamTypeHashToString() throws Exception {
 		String code = setupTestExamType(false);
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).get();
+		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamType).isNotNull();
 
 		assertThat(foundExamType.hashCode()).isPositive();
 
@@ -225,7 +225,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkExamTypeIntoDb(String code) throws OHException {
-		ExamType foundExamType = examTypeIoOperationRepository.findById(code).get();
+		ExamType foundExamType = examTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundExamType).isNotNull();
 		testExamType.check(foundExamType);
 	}
 }

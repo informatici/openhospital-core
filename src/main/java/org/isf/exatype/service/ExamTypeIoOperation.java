@@ -50,7 +50,7 @@ public class ExamTypeIoOperation {
 	/**
 	 * Update an already existing {@link ExamType}.
 	 * @param examType - the {@link ExamType} to update
-	 * @return <code>true</code> if the examType has been updated, <code>false</code> otherwise.
+	 * @return the updated {@link ExamType}.
 	 * @throws OHServiceException
 	 */
 	public ExamType updateExamType(ExamType examType) throws OHServiceException {
@@ -60,7 +60,7 @@ public class ExamTypeIoOperation {
 	/**
 	 * Insert a new {@link ExamType} in the DB.
 	 * @param examType - the {@link ExamType} to insert.
-	 * @return <code>true</code> if the examType has been inserted, <code>false</code> otherwise.
+	 * @return the newly persisted {@link ExamType}.
 	 * @throws OHServiceException
 	 */
 	public ExamType newExamType(ExamType examType) throws OHServiceException {
@@ -70,19 +70,17 @@ public class ExamTypeIoOperation {
 	/**
 	 * Delete the passed {@link ExamType}.
 	 * @param examType - the {@link ExamType} to delete.
-	 * @return <code>true</code> if the examType has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteExamType(ExamType examType) throws OHServiceException {
+	public void deleteExamType(ExamType examType) throws OHServiceException {
 		repository.delete(examType);
-		return true;
 	}
 	
 	/**
 	 * This function controls the presence of a record with the same code as in
 	 * the parameter.
 	 * @param code - the code
-	 * @return <code>true</code> if the code is present, <code>false</code> otherwise.
+	 * @return {@code true} if the code is present, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
