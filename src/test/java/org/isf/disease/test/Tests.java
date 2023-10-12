@@ -86,6 +86,7 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestDisease(false);
 		Disease foundDisease = diseaseIoOperation.getDiseaseByCode(code);
 		//Disease foundDisease = diseaseIoOperationRepository.findOneByCode(code);
+		assertThat(foundDisease).isNotNull();
 		testDisease.check(foundDisease);
 	}
 
@@ -158,18 +159,17 @@ public class Tests extends OHCoreTestCase {
 	public void testIoHasDiseaseModified() throws Exception {
 		String code = setupTestDisease(false);
 		Disease foundDisease = diseaseIoOperation.getDiseaseByCode(code);
-		boolean result = diseaseIoOperation.deleteDisease(foundDisease);
-		assertThat(result).isTrue();
+		diseaseIoOperation.deleteDisease(foundDisease);
 		assertThat(foundDisease.getIpdInInclude()).isFalse();
 		assertThat(foundDisease.getIpdOutInclude()).isFalse();
+		assertThat(foundDisease.getOpdInclude()).isFalse();
 	}
 
 	@Test
 	public void testIoDeleteDisease() throws Exception {
 		String code = setupTestDisease(false);
 		Disease foundDisease = diseaseIoOperation.getDiseaseByCode(code);
-		boolean result = diseaseIoOperation.deleteDisease(foundDisease);
-		assertThat(result).isTrue();
+		diseaseIoOperation.deleteDisease(foundDisease);
 		assertThat(foundDisease.getIpdInInclude()).isFalse();
 		assertThat(foundDisease.getIpdOutInclude()).isFalse();
 		assertThat(foundDisease.getOpdInclude()).isFalse();
@@ -271,18 +271,17 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrHasDiseaseModified() throws Exception {
 		String code = setupTestDisease(false);
 		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(code);
-		boolean result = diseaseBrowserManager.deleteDisease(foundDisease);
-		assertThat(result).isTrue();
+		diseaseBrowserManager.deleteDisease(foundDisease);
 		assertThat(foundDisease.getIpdInInclude()).isFalse();
 		assertThat(foundDisease.getIpdOutInclude()).isFalse();
+		assertThat(foundDisease.getOpdInclude()).isFalse();
 	}
 
 	@Test
 	public void testMgrDeleteDisease() throws Exception {
 		String code = setupTestDisease(false);
 		Disease foundDisease = diseaseBrowserManager.getDiseaseByCode(code);
-		boolean result = diseaseBrowserManager.deleteDisease(foundDisease);
-		assertThat(result).isTrue();
+		diseaseBrowserManager.deleteDisease(foundDisease);
 		assertThat(foundDisease.getIpdInInclude()).isFalse();
 		assertThat(foundDisease.getIpdOutInclude()).isFalse();
 		assertThat(foundDisease.getOpdInclude()).isFalse();
@@ -309,8 +308,8 @@ public class Tests extends OHCoreTestCase {
 		Disease disease = diseaseBrowserManager.getDiseaseByCode(code);
 		DiseaseType diseaseType2 = testDiseaseType.setup(false);
 		Disease disease2 = new Disease("998", "someDescription", diseaseType2);
-		assertThat(disease).isEqualTo(disease);
 		assertThat(disease)
+				.isEqualTo(disease)
 				.isNotEqualTo(disease2)
 				.isNotEqualTo("xyzzy");
 		disease2.setCode(disease.getCode());

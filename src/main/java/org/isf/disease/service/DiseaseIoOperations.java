@@ -58,7 +58,7 @@ public class DiseaseIoOperations {
 	/**
 	 * Gets a {@link Disease} with the specified code.
 	 * @param code the disease code.
-	 * @return the found disease, <code>null</code> if no disease has found.
+	 * @return the found disease, {@code null} if no disease has found.
 	 * @throws OHServiceException if an error occurred getting the disease.
 	 */
 	public Disease getDiseaseByCode(String code) throws OHServiceException {
@@ -67,12 +67,12 @@ public class DiseaseIoOperations {
 	
 	/**
 	 * Retrieves stored disease with the specified search parameters. 
-	 * Booleans <code>opd</code>, <code>ipdIn</code> and <code>ipdOut</code> in AND logic between 
-	 * each other only when <code>true</code>, ignored otherwise
-	 * @param disTypeCode - not <code>null</code> apply to disease type
-	 * @param opd - if <code>true</code> retrieves diseases related to outpatients
-	 * @param ipdIn - if <code>true</code> retrieves diseases related to inpatients' admissions
-	 * @param ipdOut - if <code>true</code> retrieves diseases related to inpatients' discharges
+	 * Booleans {@code opd}, {@code ipdIn} and {@code ipdOut} in AND logic between
+	 * each other only when {@code true}, ignored otherwise
+	 * @param disTypeCode - not {@code null} apply to disease type
+	 * @param opd - if {@code true} retrieves diseases related to outpatients
+	 * @param ipdIn - if {@code true} retrieves diseases related to inpatients' admissions
+	 * @param ipdOut - if {@code true} retrieves diseases related to inpatients' discharges
 	 * @return the retrieved diseases.
 	 * @throws OHServiceException if an error occurs retrieving the diseases.
 	 */
@@ -169,21 +169,19 @@ public class DiseaseIoOperations {
 	/**
 	 * Mark as deleted the specified {@link Disease}.
 	 * @param disease the disease to make delete.
-	 * @return <code>true</code> if the disease has been marked, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurred during the delete operation.
 	 */
-	public boolean deleteDisease(Disease disease) throws OHServiceException {
+	public void deleteDisease(Disease disease) throws OHServiceException {
 		disease.setOpdInclude(false);
 		disease.setIpdInInclude(false);
 		disease.setIpdOutInclude(false);
 		repository.save(disease);
-		return true;
 	}
 
 	/**
 	 * Check if the specified code is used by other {@link Disease}s.
 	 * @param code the code to check.
-	 * @return <code>true</code> if it is already used, <code>false</code> otherwise.
+	 * @return {@code true} if it is already used, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -194,11 +192,11 @@ public class DiseaseIoOperations {
 	 * Checks if the specified description is used by a disease with the specified type code.
 	 * @param description the description to check.
 	 * @param typeCode the disease type code.
-	 * @return <code>true</code> if is used, <code>false</code> otherwise.
+	 * @return {@code true} if is used, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isDescriptionPresent(String description, String typeCode) throws OHServiceException {
 		Disease foundDisease = repository.findOneByDescriptionAndTypeCode(description, typeCode);
-		return (foundDisease != null && foundDisease.getDescription().compareTo(description) == 0);
+		return foundDisease != null && foundDisease.getDescription().compareTo(description) == 0;
 	}
 }
