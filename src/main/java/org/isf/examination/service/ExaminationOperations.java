@@ -50,7 +50,7 @@ public class ExaminationOperations {
 	}
 
 	/**
-	 * Get from last PatientExamination (only height, weight & note)
+	 * Get from last PatientExamination
 	 */
 	public PatientExamination getFromLastPatientExamination(PatientExamination lastPatientExamination) {
 		return new PatientExamination(TimeTools.getNow(),
@@ -77,8 +77,8 @@ public class ExaminationOperations {
 	 *            - the PatientExamination to save
 	 * @throws OHServiceException
 	 */
-	public void saveOrUpdate(PatientExamination patex) throws OHServiceException {
-		repository.save(patex);
+	public PatientExamination saveOrUpdate(PatientExamination patex) throws OHServiceException {
+		return repository.save(patex);
 	}
 
 	public PatientExamination getByID(int id) throws OHServiceException {
