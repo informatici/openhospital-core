@@ -155,7 +155,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetLabRowByLabId() throws Exception {
 		Integer id = setupTestLaboratoryRow(false);
-		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).get();
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
 		List<LaboratoryRow> laboratoryRows = labIoOperation.getLabRow(foundLaboratoryRow.getLabId().getCode());
 		assertThat(laboratoryRows).contains(foundLaboratoryRow);
 	}
@@ -163,7 +164,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetLaboratory() throws Exception {
 		int id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 		List<Laboratory> laboratories = labIoOperation.getLaboratory();
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
@@ -171,29 +173,32 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetLaboratoryPageable() throws Exception {
 		int id = setupTestLaboratory(false);
-		boolean onWeek = false;
+		boolean oneWeek = false;
 		int pageNo = 0;
 		int pageSize = 10;
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
-		PagedResponse<Laboratory> laboratories = labIoOperation.getLaboratoryPageable(onWeek, pageNo, pageSize);
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
+		PagedResponse<Laboratory> laboratories = labIoOperation.getLaboratoryPageable(oneWeek, pageNo, pageSize);
 		assertThat(laboratories.getData().get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
 	
 	@Test
 	public void testIoGetLaboratoryOnWeekPageable() throws Exception {
 		int id = setupTestLaboratory(false);
-		boolean onWeek = true;
+		boolean oneWeek = true;
 		int pageNo = 0;
 		int pageSize = 10;
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
-		PagedResponse<Laboratory> laboratories = labIoOperation.getLaboratoryPageable(onWeek, pageNo, pageSize);
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
+		PagedResponse<Laboratory> laboratories = labIoOperation.getLaboratoryPageable(oneWeek, pageNo, pageSize);
 		assertThat(laboratories.getData().get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
 
 	@Test
 	public void testIoGetLaboratoryWithDates() throws Exception {
 		int id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 		List<Laboratory> laboratories = labIoOperation
 				.getLaboratory(foundLaboratory.getExam().getDescription(), foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -203,7 +208,8 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetLaboratoryWithoutDescription() throws Exception {
 		// given:
 		int id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 
 		// when:
 		List<Laboratory> laboratories = labIoOperation.getLaboratory(null, foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
@@ -215,7 +221,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetLaboratoryFromPatient() throws Exception {
 		int id = setupTestLaboratoryRow(false);
-		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).get();
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
 		List<Laboratory> laboratories = labIoOperation.getLaboratory(foundLaboratoryRow.getLabId().getPatient());
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratoryRow.getLabId().getCode());
 	}
@@ -223,7 +230,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetLaboratoryForPrint() throws Exception {
 		Integer id = setupTestLaboratory(true);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint();
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
@@ -231,7 +239,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetLaboratoryForPrintWithDates() throws Exception {
 		Integer id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 		List<LaboratoryForPrint> laboratories = labIoOperation
 				.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -241,7 +250,8 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetLaboratoryForPrintWithExamDescriptionLikePersistedOne() throws Exception {
 		// given:
 		Integer id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 		String description = foundLaboratory.getExam().getDescription();
 		String firstCharsOfDescription = description.substring(0, description.length() - 1);
 
@@ -257,7 +267,8 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetLaboratoryForPrintWithNullExamDescription() throws Exception {
 		// given:
 		Integer id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 
 		// when:
 		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint(null, foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
@@ -335,34 +346,33 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoUpdateLaboratory() throws Exception {
 		Integer code = setupTestLaboratory(false);
-		Laboratory foundlaboratory = labIoOperationRepository.findById(code).get();
-		foundlaboratory.setNote("Update");
-		boolean result = labIoOperation.updateLabFirstProcedure(foundlaboratory);
-		assertThat(result).isTrue();
-		Laboratory updateLaboratory = labIoOperationRepository.findById(code).get();
-		assertThat(updateLaboratory.getNote()).isEqualTo("Update");
+		Laboratory foundLaboratory = labIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
+		foundLaboratory.setNote("Update");
+		Laboratory updatedLaboratory = labIoOperation.updateLabFirstProcedure(foundLaboratory);
+		assertThat(updatedLaboratory.getNote()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testIoEditLabSecondProcedure() throws Exception {
 		List<String> labRow = new ArrayList<>();
 		Integer code = setupTestLaboratoryRow(false);
-		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(code).get();
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
 		labRow.add("Update");
-		boolean result = labIoOperation.updateLabSecondProcedure(foundLaboratoryRow.getLabId(), labRow);
-		assertThat(result).isTrue();
-		LaboratoryRow updateLaboratoryRow = labRowIoOperationRepository.findById(code + 1).get();
-		assertThat(updateLaboratoryRow.getDescription()).isEqualTo("Update");
+		labIoOperation.updateLabSecondProcedure(foundLaboratoryRow.getLabId(), labRow);
+		LaboratoryRow updatedLaboratoryRow = labRowIoOperationRepository.findById(code + 1).orElse(null);
+		assertThat(updatedLaboratoryRow).isNotNull();
+		assertThat(updatedLaboratoryRow.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testIoDeleteLaboratory() throws Exception {
 		Integer code = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(code).get();
-		boolean result = labIoOperation.deleteLaboratory(foundLaboratory);
-		assertThat(result).isTrue();
-		result = labIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
+		labIoOperation.deleteLaboratory(foundLaboratory);
+		assertThat(labIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
@@ -375,16 +385,15 @@ public class Tests extends OHCoreTestCase {
 		examIoOperationRepository.saveAndFlush(exam);
 		patientIoOperationRepository.saveAndFlush(patient);
 		labIoOperationRepository.saveAndFlush(laboratory);
-		boolean result = labIoOperation.deleteLaboratory(laboratory);
-		assertThat(result).isTrue();
-		result = labIoOperation.isCodePresent(laboratory.getCode());
-		assertThat(result).isFalse();
+		labIoOperation.deleteLaboratory(laboratory);
+		assertThat(labIoOperation.isCodePresent(laboratory.getCode())).isFalse();
 	}
 
 	@Test
 	public void testMgrGetLaboratory() throws Exception {
 		int id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 		List<Laboratory> laboratories = labManager.getLaboratory();
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
 	}
@@ -392,7 +401,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testRowMgrGetLabRowByLabId() throws Exception {
 		Integer id = setupTestLaboratoryRow(false);
-		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).get();
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
 		List<LaboratoryRow> laboratoryRows = labRowManager.getLabRowByLabId(foundLaboratoryRow.getLabId().getCode());
 		assertThat(laboratoryRows).contains(foundLaboratoryRow);
 	}
@@ -400,7 +410,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetLaboratoryRelatedToPatient() throws Exception {
 		int id = setupTestLaboratoryRow(false);
-		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).get();
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
 		List<Laboratory> laboratories = labManager.getLaboratory(foundLaboratoryRow.getLabId().getPatient());
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratoryRow.getLabId().getCode());
 	}
@@ -408,7 +419,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetLaboratoryWithDatesAndExam() throws Exception {
 		int id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 		List<Laboratory> laboratories = labManager
 				.getLaboratory(foundLaboratory.getExam().getDescription(), foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -418,7 +430,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetLaboratoryWithoutExamName() throws Exception {
 		// given:
 		int id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 
 		// when:
 		List<Laboratory> laboratories = labManager.getLaboratory(null, foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
@@ -430,7 +443,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetLaboratoryForPrintWithDates() throws Exception {
 		Integer id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 		List<LaboratoryForPrint> laboratories = labManager
 				.getLaboratoryForPrint(foundLaboratory.getExam().getDescription(), foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
 		assertThat(laboratories.get(0).getCode()).isEqualTo(foundLaboratory.getCode());
@@ -440,7 +454,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetLaboratoryForPrintWithExamDescriptionLikePersistedOne() throws Exception {
 		// given:
 		Integer id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 		String description = foundLaboratory.getExam().getDescription();
 		String firstCharsOfDescription = description.substring(0, description.length() - 1);
 
@@ -456,7 +471,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetLaboratoryForPrintWithNullExamDescription() throws Exception {
 		// given:
 		Integer id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 
 		// when:
 		List<LaboratoryForPrint> laboratories = labManager.getLaboratoryForPrint(null, foundLaboratory.getLabDate(), foundLaboratory.getLabDate());
@@ -469,7 +485,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrGetLaboratoryForPrintMultipeResultsNoRows() throws Exception {
 		// given:
 		Integer id = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(id).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 		// TODO: if resource bundles are made available this setResults() needs to change
 		foundLaboratory.setResult("angal.lab.multipleresults.txt");
 		List<String> labRow = new ArrayList<>();
@@ -644,7 +661,8 @@ public class Tests extends OHCoreTestCase {
 		boolean result = labManager.newLaboratory2(laboratory, labRow);
 		assertThat(result).isTrue();
 		// TODO: if resource bundles are made available this must change
-		Laboratory foundLaboratory = labIoOperationRepository.findById(laboratory.getCode()).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(laboratory.getCode()).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 		assertThat(laboratory.getResult()).isEqualTo("angal.lab.multipleresults.txt");
 	}
 
@@ -770,7 +788,8 @@ public class Tests extends OHCoreTestCase {
 		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 		labManager.newLaboratory(laboratory, labRow);
 
-		Laboratory foundLaboratory = labIoOperationRepository.findById(laboratory.getCode()).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(laboratory.getCode()).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 		assertThat(laboratory.getPatName()).isEqualTo(laboratory.getPatient().getName());
 		assertThat(laboratory.getAge()).isEqualTo(laboratory.getPatient().getAge());
 		assertThat(laboratory.getSex()).isEqualTo(String.valueOf(laboratory.getPatient().getSex()));
@@ -913,12 +932,11 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrUpdateLaboratoryProcedure1() throws Exception {
 		Integer code = setupTestLaboratory(false);
-		Laboratory foundlaboratory = labIoOperationRepository.findById(code).get();
-		foundlaboratory.setNote("Update");
-		boolean result = labManager.updateLaboratory(foundlaboratory, null);
-		assertThat(result).isTrue();
-		Laboratory updateLaboratory = labIoOperationRepository.findById(code).get();
-		assertThat(updateLaboratory.getNote()).isEqualTo("Update");
+		Laboratory foundLaboratory = labIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
+		foundLaboratory.setNote("Update");
+		Laboratory updatedLaboratory = labManager.updateLaboratory(foundLaboratory, null);
+		assertThat(updatedLaboratory.getNote()).isEqualTo("Update");
 	}
 
 	@Test
@@ -932,18 +950,16 @@ public class Tests extends OHCoreTestCase {
 		examIoOperationRepository.saveAndFlush(exam);
 		patientIoOperationRepository.saveAndFlush(patient);
 		labIoOperationRepository.saveAndFlush(laboratory);
-		Laboratory foundlaboratory = labIoOperationRepository.findById(laboratory.getCode()).get();
-		foundlaboratory.setNote("Update");
+		Laboratory foundLaboratory = labIoOperationRepository.findById(laboratory.getCode()).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
+		foundLaboratory.setNote("Update");
 		labRow.add("laboratoryRow");
-		boolean result = labManager.updateLaboratory(foundlaboratory, labRow);
-		assertThat(result).isTrue();
-		Laboratory updateLaboratory = labIoOperationRepository.findById(foundlaboratory.getCode()).get();
-		assertThat(updateLaboratory.getNote()).isEqualTo("Update");
+		Laboratory updatedLaboratory = labManager.updateLaboratory(foundLaboratory, labRow);
+		assertThat(updatedLaboratory.getNote()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrUpdateLaboratoryProcedure3() throws Exception {
-		ArrayList<String> labRow = new ArrayList<>();
 		ExamType examType = testExamType.setup(false);
 		Exam exam = testExam.setup(examType, 3, false);
 		Patient patient = testPatient.setup(false);
@@ -952,12 +968,11 @@ public class Tests extends OHCoreTestCase {
 		examIoOperationRepository.saveAndFlush(exam);
 		patientIoOperationRepository.saveAndFlush(patient);
 		labIoOperationRepository.saveAndFlush(laboratory);
-		Laboratory foundlaboratory = labIoOperationRepository.findById(laboratory.getCode()).get();
-		foundlaboratory.setNote("Update");
-		boolean result = labManager.updateLaboratory(foundlaboratory, null);
-		assertThat(result).isTrue();
-		Laboratory updateLaboratory = labIoOperationRepository.findById(foundlaboratory.getCode()).get();
-		assertThat(updateLaboratory.getNote()).isEqualTo("Update");
+		Laboratory foundLaboratory = labIoOperationRepository.findById(laboratory.getCode()).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
+		foundLaboratory.setNote("Update");
+		Laboratory updatedLaboratory = labManager.updateLaboratory(foundLaboratory, null);
+		assertThat(updatedLaboratory.getNote()).isEqualTo("Update");
 	}
 
 	@Test
@@ -1126,7 +1141,6 @@ public class Tests extends OHCoreTestCase {
 			examIoOperationRepository.saveAndFlush(exam);
 			patientIoOperationRepository.saveAndFlush(patient);
 
-			List<LaboratoryRow> labRow = new ArrayList<>();
 			Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 			labIoOperationRepository.saveAndFlush(laboratory);
 
@@ -1170,11 +1184,10 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrDeleteLaboratory() throws Exception {
 		Integer code = setupTestLaboratory(false);
-		Laboratory foundLaboratory = labIoOperationRepository.findById(code).get();
-		boolean result = labManager.deleteLaboratory(foundLaboratory);
-		assertThat(result).isTrue();
-		result = labIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
+		labManager.deleteLaboratory(foundLaboratory);
+		assertThat(labIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
@@ -1187,10 +1200,8 @@ public class Tests extends OHCoreTestCase {
 		examIoOperationRepository.saveAndFlush(exam);
 		patientIoOperationRepository.saveAndFlush(patient);
 		labIoOperationRepository.saveAndFlush(laboratory);
-		boolean result = labManager.deleteLaboratory(laboratory);
-		assertThat(result).isTrue();
-		result = labIoOperation.isCodePresent(laboratory.getCode());
-		assertThat(result).isFalse();
+		labManager.deleteLaboratory(laboratory);
+		assertThat(labIoOperation.isCodePresent(laboratory.getCode())).isFalse();
 	}
 
 	@Test
@@ -1225,7 +1236,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetMaterialLIst() {
 		assertThat(labManager.getMaterialList()).hasSize(9);
-		List materailList = labManager.getMaterialList();
+		List<String> materailList = labManager.getMaterialList();
 		// TODO: if resource bundles are made available this needs to change
 		assertThat(materailList.get(0)).isEqualTo("angal.lab.undefined.txt");
 		materailList.remove(0);   // Remove the default value that is placed first in the list even if out of order
@@ -1236,7 +1247,8 @@ public class Tests extends OHCoreTestCase {
 	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() throws Exception {
 		// given:
 		int id = setupTestLaboratory(false);
-		Laboratory found = labIoOperationRepository.findById(id).get();
+		Laboratory found = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(found).isNotNull();
 		Patient mergedPatient = testPatient.setup(true);
 		patientIoOperationRepository.saveAndFlush(mergedPatient);
 
@@ -1244,11 +1256,12 @@ public class Tests extends OHCoreTestCase {
 		applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
 
 		// then:
-		Laboratory result = labIoOperationRepository.findById(id).get();
-		assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
-		assertThat(result.getPatName()).isEqualTo(mergedPatient.getName());
-		assertThat(Long.valueOf(result.getAge())).isEqualTo(Long.valueOf(mergedPatient.getAge()));
-		assertThat(result.getSex()).isEqualTo(String.valueOf(mergedPatient.getSex()));
+		Laboratory laboratory = labIoOperationRepository.findById(id).orElse(null);
+		assertThat(laboratory).isNotNull();
+		assertThat(laboratory.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
+		assertThat(laboratory.getPatName()).isEqualTo(mergedPatient.getName());
+		assertThat(laboratory.getAge()).isEqualTo(mergedPatient.getAge());
+		assertThat(laboratory.getSex()).isEqualTo(String.valueOf(mergedPatient.getSex()));
 	}
 
 	@Test
@@ -1276,10 +1289,11 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testLaboratoryEqualsHashToString() throws Exception {
 		int code = setupTestLaboratory(false);
-		Laboratory laboratory = labIoOperationRepository.findById(code).get();
+		Laboratory laboratory = labIoOperationRepository.findById(code).orElse(null);
+		assertThat(laboratory).isNotNull();
 		Laboratory laboratory2 = new Laboratory(code + 1, null, TimeTools.getNow(), "result", "note", null, "name");
-		assertThat(laboratory).isEqualTo(laboratory);
 		assertThat(laboratory)
+				.isEqualTo(laboratory)
 				.isNotEqualTo(laboratory2)
 				.isNotEqualTo("xyzzy");
 		laboratory2.setCode(code);
@@ -1309,10 +1323,11 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testLaboratoryRowEqualsHash() throws Exception {
 		int code = setupTestLaboratoryRow(false);
-		LaboratoryRow laboratoryRow = labRowIoOperationRepository.findById(code).get();
+		LaboratoryRow laboratoryRow = labRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(laboratoryRow).isNotNull();
 		LaboratoryRow laboratoryRow2 = new LaboratoryRow(code + 1, null, "description");
-		assertThat(laboratoryRow).isEqualTo(laboratoryRow);
 		assertThat(laboratoryRow)
+				.isEqualTo(laboratoryRow)
 				.isNotEqualTo(laboratoryRow2)
 				.isNotEqualTo("xyzzy");
 		laboratoryRow2.setCode(code);
@@ -1329,7 +1344,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testLaboratoryForPrintGetterSetter() throws Exception {
-		Integer id = setupTestLaboratory(false);
+		setupTestLaboratory(false);
 		List<LaboratoryForPrint> laboratories = labIoOperation.getLaboratoryForPrint();
 
 		LaboratoryForPrint laboratoryForPrint = laboratories.get(0);
@@ -1357,7 +1372,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkLaboratoryIntoDb(Integer code) {
-		Laboratory foundLaboratory = labIoOperationRepository.findById(code).get();
+		Laboratory foundLaboratory = labIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundLaboratory).isNotNull();
 		testLaboratory.check(foundLaboratory);
 	}
 
@@ -1376,7 +1392,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkLaboratoryRowIntoDb(Integer code) {
-		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(code).get();
+		LaboratoryRow foundLaboratoryRow = labRowIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundLaboratoryRow).isNotNull();
 		testLaboratoryRow.check(foundLaboratoryRow);
 	}
 }

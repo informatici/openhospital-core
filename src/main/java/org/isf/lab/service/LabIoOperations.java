@@ -34,6 +34,7 @@ import org.isf.lab.model.LaboratoryRow;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.pagination.PageInfo;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
@@ -73,9 +74,10 @@ public class LabIoOperations {
 	private LabRowIoOperationRepository rowRepository;
 
 	/**
-	 * Return a list of results ({@link LaboratoryRow}s) for passed lab entry.
+	 * Return a list of results ({@link LaboratoryRow}s) for passed lab code.
+	 *
 	 * @param code - the {@link Laboratory} record ID.
-	 * @return the list of {@link LaboratoryRow}s. It could be <code>empty</code>
+	 * @return the list of {@link LaboratoryRow}s. It could be {@code empty}
 	 * @throws OHServiceException
 	 */
 	public List<LaboratoryRow> getLabRow(Integer code) throws OHServiceException {
@@ -85,15 +87,15 @@ public class LabIoOperations {
 	/**
 	 * Return the list of exams ({@link Laboratory}s) divided by pages.
 	 * 
-	 * @param onWeek
+	 * @param oneWeek
 	 * @param pageNo
 	 * @param pageSize
 	 * @return the list of {@link Laboratory}s (could be empty)
 	 * @throws OHServiceException
 	 */
-	public List<Laboratory> getLaboratory(boolean onWeek, int pageNo, int pageSize) throws OHServiceException {
+	public List<Laboratory> getLaboratory(boolean oneWeek, int pageNo, int pageSize) throws OHServiceException {
 		Pageable pageable = PageRequest.of(pageNo, pageSize);
-		if (onWeek) {
+		if (oneWeek) {
 			LocalDateTime time2 = TimeTools.getDateToday24();
 			LocalDateTime time1 = time2.minusWeeks(1);
 			return repository.findByLabDateBetweenOrderByLabDateDesc(time1, time2, pageable).getContent();
@@ -115,7 +117,8 @@ public class LabIoOperations {
 	}
 	
 	/**
-	 * Return the whole list of exams ({@link Laboratory}s) within last week.
+	 * Return the whole list of exams ({@link Laboratory}s) within the last week.
+	 *
 	 * @return the list of {@link Laboratory}s 
 	 * @throws OHServiceException
 	 */
@@ -126,8 +129,9 @@ public class LabIoOperations {
 	}
 
 	/**
-	 * Return a list of exams ({@link Laboratory}s) between specified dates and matching passed exam name
-	 * @param exam - the exam name as <code>String</code>
+	 * Return a list of exams ({@link Laboratory}s) between specified dates and matching passed exam name.
+	 *
+	 * @param exam - the exam name as {@code String}
 	 * @param dateFrom - the lower date for the range
 	 * @param dateTo - the highest date for the range
 	 * @return the list of {@link Laboratory}s 
@@ -142,8 +146,9 @@ public class LabIoOperations {
 	}
 
 	/**
-	 * Return a list of exams ({@link Laboratory}s) between specified dates and matching passed exam name
-	 * @param exam - the exam name as <code>String</code>
+	 * Return a list of exams ({@link Laboratory}s) between specified dates and matching passed exam name.
+	 *
+	 * @param exam - the exam name as {@code String}
 	 * @param dateFrom - the lower date for the range
 	 * @param dateTo - the highest date for the range
 	 * @param patient - the object of patient 
@@ -153,16 +158,16 @@ public class LabIoOperations {
 	public List<Laboratory> getLaboratory(String exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient) throws OHServiceException {
 		List<Laboratory> laboritories = new ArrayList<>();
 
-		if (!exam.equals("") && patient != null) {
+		if (!exam.isEmpty() && patient != null) {
 			laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCode(dateFrom, dateTo, exam, patient.getCode());
 		}
-		if (!exam.equals("") && patient == null) {
+		if (!exam.isEmpty() && patient == null) {
 			laboritories = repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(dateFrom, dateTo, exam);
 		}
-		if (patient != null && exam.equals("")) {
+		if (patient != null && exam.isEmpty()) {
 			laboritories = repository.findByLabDateBetweenAndPatientCode(dateFrom, dateTo, patient.getCode());
 		}
-		if (patient == null && exam.equals("")) {
+		if (patient == null && exam.isEmpty()) {
 			laboritories = repository.findByLabDateBetweenOrderByLabDateDesc(dateFrom, dateTo);
 		}
 		return laboritories;
@@ -170,6 +175,7 @@ public class LabIoOperations {
 
 	/**
 	 * Return a list of exams ({@link Laboratory}s) related to a {@link Patient}.
+	 *
 	 * @param aPatient - the {@link Patient}.
 	 * @return the list of {@link Laboratory}s related to the {@link Patient}.
 	 * @throws OHServiceException
@@ -179,8 +185,8 @@ public class LabIoOperations {
 	}
 
 	/**
-	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) 
-	 * within last year
+	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) within the last week.
+	 *
 	 * @return the list of {@link LaboratoryForPrint}s 
 	 * @throws OHServiceException
 	 */
@@ -192,8 +198,9 @@ public class LabIoOperations {
 
 	/**
 	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) 
-	 * between specified dates and matching passed exam name
-	 * @param exam - the exam name as <code>String</code>
+	 * between specified dates and matching passed exam name.
+	 *
+	 * @param exam - the exam name as {@code String}
 	 * @param dateFrom - the lower date for the range
 	 * @param dateTo - the highest date for the range
 	 * @return the list of {@link LaboratoryForPrint}s 
@@ -229,9 +236,10 @@ public class LabIoOperations {
 	}
 
 	/**
-	 * Insert a Laboratory exam {@link Laboratory} and return generated key. No commit is performed.
+	 * Insert a new Laboratory exam {@link Laboratory} and return the generated laboratory code.
+	 *
 	 * @param laboratory - the {@link Laboratory} to insert
-	 * @return the generated key
+	 * @return the laboratory code for the new {@link Laboratory} object.
 	 * @throws OHServiceException
 	 */
 	private Integer newLaboratory(Laboratory laboratory) throws OHServiceException {
@@ -241,8 +249,9 @@ public class LabIoOperations {
 
 	/**
 	 * Inserts one Laboratory exam {@link Laboratory} (Procedure One)
+	 *
 	 * @param laboratory - the {@link Laboratory} to insert
-	 * @return <code>true</code> if the exam has been inserted, <code>false</code> otherwise
+	 * @return {@code true} if the exam has been inserted, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
 	public boolean newLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
@@ -254,32 +263,29 @@ public class LabIoOperations {
 	 *
 	 * @param laboratory - the {@link Laboratory} to insert
 	 * @param labRow - the list of results ({@link String}s)
-	 * @return <code>true</code> if the exam has been inserted with all its results, <code>false</code> otherwise
+	 * @return {@code true} if the exam has been inserted with all its results, throws an exception otherwise
 	 * @throws OHServiceException
 	 */
 	public boolean newLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
-		boolean result = true;
-
 		int newCode = newLaboratory(laboratory);
 		if (newCode > 0) {
 			for (String aLabRow : labRow) {
 				LaboratoryRow laboratoryRow = new LaboratoryRow();
 				laboratoryRow.setLabId(laboratory);
 				laboratoryRow.setDescription(aLabRow);
-
-				LaboratoryRow savedLaboratoryRow = rowRepository.save(laboratoryRow);
-				result = result && (savedLaboratoryRow != null);
+				rowRepository.save(laboratoryRow);
 			}
 		}
-		return result;
+		return true;
 	}
 
 	/**
 	 * Return a list of exams suitable for printing ({@link LaboratoryForPrint}s) 
-	 * between specified dates and matching passed exam name
-	 * @param exam - the exam name as <code>String</code>
-	 * @param dateFrom - the lower date for the range
-	 * @param dateTo - the highest date for the range
+	 * between specified dates and matching passed exam name.
+	 *
+	 * @param exam - the exam name as {@code String}
+	 * @param dateFrom - the starting date for the date range
+	 * @param dateTo - the ending date for the date range
 	 * @return the list of {@link LaboratoryForPrint}s 
 	 * @throws OHServiceException
 	 */
@@ -307,89 +313,89 @@ public class LabIoOperations {
 	 *
 	 * @param laboratory - the {@link Laboratory} to insert
 	 * @param labRow - the list of results ({@link String}s)
-	 * @return <code>true</code> if the exam has been inserted with all its results, <code>false</code> otherwise
+	 * @return {@code true} if the exam has been inserted with all its results, throws an exception otherwise
 	 * @throws OHServiceException
 	 */
 	public boolean newLabSecondProcedure2(Laboratory laboratory, List<LaboratoryRow> labRow) throws OHServiceException {
-		boolean result = true;
-
 		int newCode = newLaboratory(laboratory);
 		if (newCode > 0) {
 			laboratory = repository.findById(newCode).orElse(null);
+			if (laboratory == null) {
+				throw new OHServiceException(new OHExceptionMessage("Laboratory with code '" + newCode + "' not found"));
+			}
 			for (LaboratoryRow aLabRow : labRow) {
 				aLabRow.setLabId(laboratory);
-				LaboratoryRow savedLaboratoryRow = rowRepository.save(aLabRow);
-				result = result && (savedLaboratoryRow != null);
+				rowRepository.save(aLabRow);
 			}
 		}
-		return result;
+		return true;
 	}
 
 	/**
-	 * Update an already existing Laboratory exam {@link Laboratory}. No commit is performed.
+	 * Update an already existing Laboratory exam {@link Laboratory}.
+	 *
 	 * @param laboratory - the {@link Laboratory} to update
-	 * @return <code>true</code> if the exam has been updated with all its results, <code>false</code> otherwise
+	 * @return the updated {@link Laboratory} object.
 	 * @throws OHServiceException
 	 */
-	private boolean updateLaboratory(Laboratory laboratory) throws OHServiceException {
-		Laboratory savedLaboratory = repository.save(laboratory);
-		return savedLaboratory != null;
+	private Laboratory updateLaboratory(Laboratory laboratory) throws OHServiceException {
+		return repository.save(laboratory);
 	}
 
 	/**
 	 * Update an already existing Laboratory exam {@link Laboratory} (Procedure One).
-	 * If old exam was Procedure Two all its releated result are deleted.
+	 * If the old exam was Procedure Two then all its related results are deleted.
+	 *
 	 * @param laboratory - the {@link Laboratory} to update
-	 * @return <code>true</code> if the exam has been updated, <code>false</code> otherwise
+	 * @return {@code true} if the exam has been updated, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updateLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
-		boolean result = updateLaboratory(laboratory);
-		rowRepository.deleteByLaboratory_Code(laboratory.getCode());
-		return result;
+	public Laboratory updateLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
+		Laboratory updatedLaborator = updateLaboratory(laboratory);
+		rowRepository.deleteByLaboratory_Code(updatedLaborator.getCode());
+		return updatedLaborator;
 	}
 
 	/**
 	 * Update an already existing Laboratory exam {@link Laboratory} (Procedure Two).
 	 * Previous results are deleted and replaced with new ones.
 	 * @param laboratory - the {@link Laboratory} to update
-	 * @return <code>true</code> if the exam has been updated with all its results, <code>false</code> otherwise
+	 * @return the updated {@link Laboratory} object.
 	 * @throws OHServiceException
 	 */
-	public boolean updateLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
-		boolean result = updateLabFirstProcedure(laboratory);
-		if (result) {
-			for (String aLabRow : labRow) {
-				LaboratoryRow laboratoryRow = new LaboratoryRow();
-				laboratoryRow.setLabId(laboratory);
-				laboratoryRow.setDescription(aLabRow);
-				rowRepository.save(laboratoryRow);
-			}
+	public Laboratory updateLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
+		Laboratory updatedLaboratory = updateLabFirstProcedure(laboratory);
+		for (String aLabRow : labRow) {
+			LaboratoryRow laboratoryRow = new LaboratoryRow();
+			laboratoryRow.setLabId(laboratory);
+			laboratoryRow.setDescription(aLabRow);
+			rowRepository.save(laboratoryRow);
 		}
-		return result;
+		return updatedLaboratory;
 	}
 
 	/**
 	 * Delete a Laboratory exam {@link Laboratory} (Procedure One or Two).
 	 * Previous results, if any, are deleted as well.
 	 * @param aLaboratory - the {@link Laboratory} to delete
-	 * @return <code>true</code> if the exam has been deleted with all its results, if any. <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean deleteLaboratory(Laboratory aLaboratory) throws OHServiceException {
+	public void deleteLaboratory(Laboratory aLaboratory) throws OHServiceException {
 		Laboratory objToRemove = repository.findById(aLaboratory.getCode()).orElse(null);
+		if (objToRemove == null) {
+			throw new OHServiceException(new OHExceptionMessage("Laboratory object not found to delete"));
+		}
 		if (objToRemove.getExam().getProcedure() == 2) {
 			rowRepository.deleteByLaboratory_Code(objToRemove.getCode());
 		}
 		repository.deleteById(objToRemove.getCode());
-		return true;
 	}
 
 	/**
 	 * Checks if the code is already in use
 	 *
 	 * @param code - the laboratory code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
