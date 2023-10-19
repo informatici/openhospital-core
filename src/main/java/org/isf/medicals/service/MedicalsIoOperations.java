@@ -73,7 +73,7 @@ public class MedicalsIoOperations
 
 	/**
 	 * Retrieves all stored {@link Medical}s.
-	 * If a description value is provides the medicals are filtered.
+	 * If a description value is provided, the medicals are filtered by the description.
 	 * @param description the medical description.
 	 * @return the stored medicals.
 	 * @throws OHServiceException if an error occurs retrieving the stored medicals.
@@ -89,7 +89,7 @@ public class MedicalsIoOperations
 	 * Retrieves all stored {@link Medical}s.
 	 * If a description value is provided the medicals are filtered.
 	 * @param type the medical type description.
-	 * @param nameSorted if <code>true</code> return the list in alphabetical order, by code otherwise
+	 * @param nameSorted if {@code true} return the list in alphabetical order, by code otherwise
 	 * @return the stored medicals.
 	 * @throws OHServiceException if an error occurs retrieving the stored medicals.
 	 */
@@ -102,9 +102,9 @@ public class MedicalsIoOperations
 
 	/**
 	 * Retrieves the stored {@link Medical}s based on the specified filter criteria.
-	 * @param description the medical description or <code>null</code>
-	 * @param type the medical type or <code>null</code>
-	 * @param critical <code>true</code> if include only medicals under critical level.
+	 * @param description the medical description or {@code null}
+	 * @param type the medical type or {@code null}
+	 * @param critical {@code true} if include only medicals under critical level.
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException if an error occurs retrieving the medicals.
 	 */
@@ -146,7 +146,7 @@ public class MedicalsIoOperations
 	/**
 	 * Checks if the specified {@link Medical} exists or not.
 	 * @param medical - the medical to check.
-	 * @param update - if <code>true</code> excludes the actual {@link Medical}
+	 * @param update - if {@code true} excludes the actual {@link Medical}
 	 * @return all {@link Medical} with similar description
 	 * @throws OHServiceException if an SQL error occurs during the check.
 	 */
@@ -160,8 +160,8 @@ public class MedicalsIoOperations
 	/**
 	 * Checks if the specified {@link Medical} ProductCode exists or not.
 	 * @param medical - the medical to check.
-	 * @param update - if <code>true</code> excludes the actual {@link Medical}
-	 * @return <code>true</code> if exists, <code>false</code> otherwise.
+	 * @param update - if {@code true} excludes the actual {@link Medical}
+	 * @return {@code true} if exists, {@code false} otherwise.
 	 * @throws OHServiceException if an SQL error occurs during the check.
 	 */
 	public boolean productCodeExists(Medical medical, boolean update) throws OHServiceException {
@@ -178,8 +178,8 @@ public class MedicalsIoOperations
 	/**
 	 * Checks if the specified {@link Medical} exists or not.
 	 * @param medical the medical to check.
-	 * @param update - if <code>true</code> exclude the current medical itself from search
-	 * @return <code>true</code> if exists <code>false</code> otherwise.
+	 * @param update - if {@code true} exclude the current medical itself from search
+	 * @return {@code true} if exists {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean medicalExists(Medical medical, boolean update) throws OHServiceException {
@@ -195,7 +195,7 @@ public class MedicalsIoOperations
 	/**
 	 * Stores the specified {@link Medical}.
 	 * @param medical the medical to store.
-	 * @return <code>true</code> if the medical has been stored, <code>false</code> otherwise.
+	 * @return the newly stored {@link Medical} object.
 	 * @throws OHServiceException if an error occurs storing the medical.
 	 */
 	public Medical newMedical(Medical medical) throws OHServiceException {
@@ -205,7 +205,7 @@ public class MedicalsIoOperations
 	/**
 	 * Updates the specified {@link Medical}.
 	 * @param medical the medical to update.
-	 * @return <code>true</code> if the medical has been updated <code>false</code> otherwise.
+	 * @return the persisted {@link Medical} object.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
 	public Medical updateMedical(Medical medical) throws OHServiceException {
@@ -215,7 +215,7 @@ public class MedicalsIoOperations
 	/**
 	 * Checks if the specified {@link Medical} is referenced in stock movement.
 	 * @param code the medical code.
-	 * @return <code>true</code> if the medical is referenced, <code>false</code> otherwise.
+	 * @return {@code true} if the medical is referenced, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isMedicalReferencedInStockMovement(int code) throws OHServiceException {
@@ -225,12 +225,10 @@ public class MedicalsIoOperations
 	/**
 	 * Deletes the specified {@link Medical}.
 	 * @param medical the medical to delete.
-	 * @return <code>true</code> if the medical has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the medical deletion.
 	 */
-	public boolean deleteMedical(Medical medical) throws OHServiceException {
+	public void deleteMedical(Medical medical) throws OHServiceException {
 		repository.delete(medical);
-		return true;
 	}
 
 	/**
@@ -255,7 +253,7 @@ public class MedicalsIoOperations
 	 * @return sorted List of medicals or empty list if none found.
 	 * @throws OHServiceException
 	 */
-	private List<Medical> getMedicalsByType(String type, boolean nameSorted) {
+	private List<Medical> getMedicalsByType(String type, boolean nameSorted) throws OHServiceException {
 		if (nameSorted) {
 			return repository.findAllWhereTypeOrderByDescription(type);
 		}
