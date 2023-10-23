@@ -242,7 +242,6 @@ public class Tests extends OHCoreTestCase {
 		assertThat(malnutritionIoOperation.isCodePresent(code)).isFalse();
 	}
 
-	// ===================================
 	@Test
 	public void testMgrGetMalnutrition() throws Exception {
 		int code = setupTestMalnutrition(false);
