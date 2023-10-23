@@ -51,7 +51,6 @@ public class MedicalBrowsingManager {
 
 	/**
 	 * Returns the requested medical.
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
 	 *
 	 * @param code the medical code.
 	 * @return the retrieved medical.
@@ -63,7 +62,6 @@ public class MedicalBrowsingManager {
 
 	/**
 	 * Returns all the medicals.
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
 	 *
 	 * @return all the medicals.
 	 * @throws OHServiceException
@@ -74,7 +72,6 @@ public class MedicalBrowsingManager {
 
 	/**
 	 * Returns all the medicals sorted by Name.
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
 	 *
 	 * @return all the medicals.
 	 */
@@ -84,7 +81,6 @@ public class MedicalBrowsingManager {
 
 	/**
 	 * Returns all the medicals sorted by code.
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
 	 *
 	 * @return all the medicals.
 	 */
@@ -105,11 +101,10 @@ public class MedicalBrowsingManager {
 
 	/**
 	 * Returns all the medicals with the specified description.
-	 * In case of error a message error is shown and a <code>null</code> value is returned.
 	 *
 	 * @param type the medical type description.
 	 * @return all the medicals with the specified description.
-	 * @param nameSorted if <code>true</code> return the list in alphabetical order, by code otherwise
+	 * @param nameSorted if {@code true} return the list in alphabetical order, by code otherwise
 	 */
 	public List<Medical> getMedicals(String type, boolean nameSorted) throws OHServiceException {
 		return ioOperations.getMedicals(type, nameSorted);
@@ -118,9 +113,9 @@ public class MedicalBrowsingManager {
 	/**
 	 * Return all the medicals with the specified criteria.
 	 *
-	 * @param description the medical description or <code>null</code>
-	 * @param type the medical type or <code>null</code>.
-	 * @param critical <code>true</code> to include only medicals under critical level.
+	 * @param description the medical description or {@code null}
+	 * @param type the medical type or {@code null}.
+	 * @param critical {@code true} to include only medicals under critical level.
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException
 	 */
@@ -130,10 +125,9 @@ public class MedicalBrowsingManager {
 
 	/**
 	 * Saves the specified {@link Medical}. The medical is updated with the generated id.
-	 * In case of wrong parameters values a message error is shown and a <code>false</code> value is returned.
 	 *
 	 * @param medical - the medical to store.
-	 * @return <code>true</code> if the medical has been stored, <code>false</code> otherwise.
+	 * @return {@code true} if the medical has been stored, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public Medical newMedical(Medical medical) throws OHServiceException {
@@ -142,11 +136,10 @@ public class MedicalBrowsingManager {
 
 	/**
 	 * Saves the specified {@link Medical}. The medical is updated with the generated id.
-	 * In case of wrong parameters values a message error is shown and a <code>false</code> value is returned.
 	 *
 	 * @param medical - the medical to store.
-	 * @param ignoreSimilar - if <code>true</code>, it ignore the warning "similarsFoundWarning".
-	 * @return <code>true</code> if the medical has been stored, <code>false</code> otherwise.
+	 * @param ignoreSimilar - if {@code true}, it ignore the warning "similarsFoundWarning".
+	 * @return {@code true} if the medical has been stored, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public Medical newMedical(Medical medical, boolean ignoreSimilar) throws OHServiceException {
@@ -169,7 +162,7 @@ public class MedicalBrowsingManager {
 	 * Updates the specified medical.
 	 *
 	 * @param medical - the medical to update.
-	 * @param ignoreSimilar - if <code>true</code>, it ignore the warning "similarsFoundWarning".
+	 * @param ignoreSimilar - if {@code true}, it ignore the warning "similarsFoundWarning".
 	 * @return {@code Medical}
 	 * @throws OHServiceException
 	 */
@@ -182,22 +175,19 @@ public class MedicalBrowsingManager {
 	 * Deletes the specified medical.
 	 *
 	 * @param medical the medical to delete.
-	 * @return <code>true</code> if the medical has been deleted.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteMedical(Medical medical) throws OHServiceException {
+	public void deleteMedical(Medical medical) throws OHServiceException {
 		boolean inStockMovement = ioOperations.isMedicalReferencedInStockMovement(medical.getCode());
-
 		if (inStockMovement) {
 			throw new OHDataIntegrityViolationException(
 					new OHExceptionMessage(MessageBundle.getMessage("angal.medicals.therearestockmovementsreferredtothismedical.msg")));
 		}
-
-		return ioOperations.deleteMedical(medical);
+		ioOperations.deleteMedical(medical);
 	}
 
 	/**
-	 * Common checks to validate a {@link Medical} for insert or update
+	 * Common checks to validate a {@link Medical} for insert or update.
 	 *
 	 * @param medical - the {@link Medical} to insert or update
 	 * @return list of {@link OHExceptionMessage}
@@ -220,7 +210,7 @@ public class MedicalBrowsingManager {
 	 * Perform several checks on the provided medical, useful for insert
 	 *
 	 * @param medical - the {@link Medical} to check
-	 * @param ignoreSimilar - if <code>true</code>, it will not perform a similarity check.
+	 * @param ignoreSimilar - if {@code true}, it will not perform a similarity check.
 	 * {@code warning}: same Medical description in the same {@link MedicalType} category is not allowed anyway
 	 * @throws OHServiceException
 	 */
@@ -232,7 +222,7 @@ public class MedicalBrowsingManager {
 	 * Perform several checks on the provided medical, useful for update
 	 *
 	 * @param medical - the {@link Medical} to check
-	 * @param ignoreSimilar - if <code>true</code>, it will not perform a similarity check.
+	 * @param ignoreSimilar - if {@code true}, it will not perform a similarity check.
 	 * {@code warning}: same Medical description in the same {@link MedicalType} category is not allowed anyway
 	 * @throws OHServiceException
 	 */
@@ -244,9 +234,9 @@ public class MedicalBrowsingManager {
 	 * Perform several checks on the provided medical, useful for update
 	 *
 	 * @param medical - the {@link Medical} to check
-	 * @param ignoreSimilar - if <code>true</code>, it will not perform a similarity check.
+	 * @param ignoreSimilar - if {@code true}, it will not perform a similarity check.
 	 * {@code warning}: same Medical description in the same {@link MedicalType} category is not allowed anyway
-	 * @param update - if <code>true</code>, it will not consider the actual {@link Medical}
+	 * @param update - if {@code true}, it will not consider the actual {@link Medical}
 	 * @throws OHServiceException
 	 */
 	public void checkMedical(Medical medical, boolean ignoreSimilar, boolean update) throws OHServiceException {
