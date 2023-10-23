@@ -286,9 +286,8 @@ public class Tests extends OHCoreTestCase {
 		examIoOperationRepository.saveAndFlush(exam);
 		patientIoOperationRepository.saveAndFlush(patient);
 		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
-		boolean result = labIoOperation.newLabFirstProcedure(laboratory);
-		assertThat(result).isTrue();
-		checkLaboratoryIntoDb(laboratory.getCode());
+		Laboratory newLaboratory = labIoOperation.newLabFirstProcedure(laboratory);
+		checkLaboratoryIntoDb(newLaboratory.getCode());
 	}
 
 	@Test
@@ -302,9 +301,8 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 		labRow.add("TestLabRow");
-		boolean result = labIoOperation.newLabSecondProcedure(laboratory, labRow);
-		assertThat(result).isTrue();
-		checkLaboratoryIntoDb(laboratory.getCode());
+		Laboratory newLaboratory = labIoOperation.newLabSecondProcedure(laboratory, labRow);
+		checkLaboratoryIntoDb(newLaboratory.getCode());
 	}
 
 	@Test
@@ -319,9 +317,8 @@ public class Tests extends OHCoreTestCase {
 		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 		labRow.add("TestLabRow");
 		labRow.add("TestLabRowTestLabRowTestLabRowTestLabRowTestLabRowTestLabRow"); // Causing rollback
-		boolean result = labIoOperation.newLabSecondProcedure(laboratory, labRow);
-		assertThat(result).isTrue();
-		checkLaboratoryIntoDb(laboratory.getCode());
+		Laboratory newLaboratory = labIoOperation.newLabSecondProcedure(laboratory, labRow);
+		checkLaboratoryIntoDb(newLaboratory.getCode());
 	}
 
 	@Test
@@ -338,9 +335,8 @@ public class Tests extends OHCoreTestCase {
 		LaboratoryRow laboratoryRow = testLaboratoryRow.setup(laboratory, false);
 		labRowIoOperationRepository.saveAndFlush(laboratoryRow);
 		labRow.add(laboratoryRow);
-		boolean result = labIoOperation.newLabSecondProcedure2(laboratory, labRow);
-		assertThat(result).isTrue();
-		checkLaboratoryIntoDb(laboratory.getCode());
+		Laboratory newLaboratory = labIoOperation.newLabSecondProcedure2(laboratory, labRow);
+		checkLaboratoryIntoDb(newLaboratory.getCode());
 	}
 
 	@Test
@@ -543,8 +539,8 @@ public class Tests extends OHCoreTestCase {
 		// method is protected not public thus use of reflection
 		Method method = labManager.getClass().getDeclaredMethod("newLabFirstProcedure", Laboratory.class);
 		method.setAccessible(true);
-		assertThat((Boolean) method.invoke(labManager, laboratory)).isTrue();
-		checkLaboratoryIntoDb(laboratory.getCode());
+		Laboratory newLaboratory = (Laboratory) method.invoke(labManager, laboratory);
+		checkLaboratoryIntoDb(newLaboratory.getCode());
 	}
 
 	@Test
@@ -561,8 +557,8 @@ public class Tests extends OHCoreTestCase {
 		// method is protected not public thus use of reflection
 		Method method = labManager.getClass().getDeclaredMethod("newLabSecondProcedure", Laboratory.class, List.class);
 		method.setAccessible(true);
-		assertThat((Boolean) method.invoke(labManager, laboratory, labRow)).isTrue();
-		checkLaboratoryIntoDb(laboratory.getCode());
+		Laboratory newLaboratory = (Laboratory) method.invoke(labManager, laboratory, labRow);
+		checkLaboratoryIntoDb(newLaboratory.getCode());
 	}
 
 	@Test
@@ -621,8 +617,8 @@ public class Tests extends OHCoreTestCase {
 		// method is protected not public thus use of reflection
 		Method method = labManager.getClass().getDeclaredMethod("newLabSecondProcedure", Laboratory.class, List.class);
 		method.setAccessible(true);
-		assertThat((Boolean) method.invoke(labManager, laboratory, labRow)).isTrue();
-		checkLaboratoryIntoDb(laboratory.getCode());
+		Laboratory newLaboratory = (Laboratory) method.invoke(labManager, laboratory, labRow);
+		checkLaboratoryIntoDb(newLaboratory.getCode());
 	}
 
 	@Test
@@ -639,9 +635,8 @@ public class Tests extends OHCoreTestCase {
 		LaboratoryRow laboratoryRow = testLaboratoryRow.setup(laboratory, false);
 		labRowIoOperationRepository.saveAndFlush(laboratoryRow);
 		labRow.add(laboratoryRow);
-		boolean result = labManager.newLaboratory2(laboratory, labRow);
-		assertThat(result).isTrue();
-		checkLaboratoryIntoDb(laboratory.getCode());
+		Laboratory newLaboratory = labManager.newLaboratory2(laboratory, labRow);
+		checkLaboratoryIntoDb(newLaboratory.getCode());
 	}
 
 	@Test
@@ -658,12 +653,9 @@ public class Tests extends OHCoreTestCase {
 		LaboratoryRow laboratoryRow = testLaboratoryRow.setup(laboratory, false);
 		labRowIoOperationRepository.saveAndFlush(laboratoryRow);
 		labRow.add(laboratoryRow);
-		boolean result = labManager.newLaboratory2(laboratory, labRow);
-		assertThat(result).isTrue();
+		Laboratory newLaboratory = labManager.newLaboratory2(laboratory, labRow);
 		// TODO: if resource bundles are made available this must change
-		Laboratory foundLaboratory = labIoOperationRepository.findById(laboratory.getCode()).orElse(null);
-		assertThat(foundLaboratory).isNotNull();
-		assertThat(laboratory.getResult()).isEqualTo("angal.lab.multipleresults.txt");
+		assertThat(newLaboratory.getResult()).isEqualTo("angal.lab.multipleresults.txt");
 	}
 
 	@Test
@@ -680,9 +672,8 @@ public class Tests extends OHCoreTestCase {
 		LaboratoryRow laboratoryRow = testLaboratoryRow.setup(laboratory, false);
 		labRowIoOperationRepository.saveAndFlush(laboratoryRow);
 		labRow.add(laboratoryRow);
-		boolean result = labManager.newLaboratory2(laboratory, labRow);
-		assertThat(result).isTrue();
-		checkLaboratoryIntoDb(laboratory.getCode());
+		Laboratory newLaboratory = labManager.newLaboratory2(laboratory, labRow);
+		checkLaboratoryIntoDb(newLaboratory.getCode());
 	}
 
 	@Test
@@ -724,7 +715,8 @@ public class Tests extends OHCoreTestCase {
 		List<String> labRow = new ArrayList<>();
 		Laboratory laboratory = testLaboratory.setup(exam, patient, false);
 
-		assertThat(labManager.newLaboratory(laboratory, labRow)).isTrue();
+		Laboratory newLaboratory = labManager.newLaboratory(laboratory, labRow);
+		checkLaboratoryIntoDb(newLaboratory.getCode());
 	}
 
 	@Test
@@ -1043,10 +1035,8 @@ public class Tests extends OHCoreTestCase {
 		labRow.add("TestLabRowTestLabRowTestLabRowTestLabRowTestLabRowTestLabRow"); // Causing rollback
 		labRowList.add(labRow);
 
-		boolean result = labManager.newLaboratory(laboratories, labRowList);
-
-		assertThat(result).isTrue();
-		checkLaboratoryIntoDb(laboratory.getCode());
+		Laboratory newLaboratory  = labManager.newLaboratory(laboratories, labRowList);
+		checkLaboratoryIntoDb(newLaboratory.getCode());
 	}
 
 	@Test
@@ -1121,10 +1111,8 @@ public class Tests extends OHCoreTestCase {
 		labRow.add(laboratoryRow); // Causing rollback
 		labRowList.add(labRow);
 
-		boolean result = labManager.newLaboratory2(labList, labRowList);
-
-		assertThat(result).isTrue();
-		checkLaboratoryIntoDb(laboratory.getCode());
+		Laboratory newLaboratory = labManager.newLaboratory2(labList, labRowList);
+		checkLaboratoryIntoDb(newLaboratory.getCode());
 	}
 
 	@Test

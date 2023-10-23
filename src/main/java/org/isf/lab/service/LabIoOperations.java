@@ -239,23 +239,22 @@ public class LabIoOperations {
 	 * Insert a new Laboratory exam {@link Laboratory} and return the generated laboratory code.
 	 *
 	 * @param laboratory - the {@link Laboratory} to insert
-	 * @return the laboratory code for the new {@link Laboratory} object.
+	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
 	 */
-	private Integer newLaboratory(Laboratory laboratory) throws OHServiceException {
-		Laboratory savedLaboratory = repository.save(laboratory);
-		return savedLaboratory.getCode();
+	private Laboratory newLaboratory(Laboratory laboratory) throws OHServiceException {
+		return repository.save(laboratory);
 	}
 
 	/**
 	 * Inserts one Laboratory exam {@link Laboratory} (Procedure One)
 	 *
 	 * @param laboratory - the {@link Laboratory} to insert
-	 * @return {@code true} if the exam has been inserted, {@code false} otherwise
+	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
 	 */
-	public boolean newLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
-		return newLaboratory(laboratory) > 0;
+	public Laboratory newLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
+		return newLaboratory(laboratory);
 	}
 
 	/**
@@ -263,12 +262,12 @@ public class LabIoOperations {
 	 *
 	 * @param laboratory - the {@link Laboratory} to insert
 	 * @param labRow - the list of results ({@link String}s)
-	 * @return {@code true} if the exam has been inserted with all its results, throws an exception otherwise
+	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
 	 */
-	public boolean newLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
-		int newCode = newLaboratory(laboratory);
-		if (newCode > 0) {
+	public Laboratory newLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
+		Laboratory newLaboratory = newLaboratory(laboratory);
+		if (newLaboratory.getCode() > 0) {
 			for (String aLabRow : labRow) {
 				LaboratoryRow laboratoryRow = new LaboratoryRow();
 				laboratoryRow.setLabId(laboratory);
@@ -276,7 +275,7 @@ public class LabIoOperations {
 				rowRepository.save(laboratoryRow);
 			}
 		}
-		return true;
+		return newLaboratory;
 	}
 
 	/**
@@ -313,11 +312,12 @@ public class LabIoOperations {
 	 *
 	 * @param laboratory - the {@link Laboratory} to insert
 	 * @param labRow - the list of results ({@link String}s)
-	 * @return {@code true} if the exam has been inserted with all its results, throws an exception otherwise
+	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
 	 */
-	public boolean newLabSecondProcedure2(Laboratory laboratory, List<LaboratoryRow> labRow) throws OHServiceException {
-		int newCode = newLaboratory(laboratory);
+	public Laboratory newLabSecondProcedure2(Laboratory laboratory, List<LaboratoryRow> labRow) throws OHServiceException {
+		Laboratory newLaboratory = newLaboratory(laboratory);
+		int newCode = newLaboratory.getCode();
 		if (newCode > 0) {
 			laboratory = repository.findById(newCode).orElse(null);
 			if (laboratory == null) {
@@ -328,7 +328,7 @@ public class LabIoOperations {
 				rowRepository.save(aLabRow);
 			}
 		}
-		return true;
+		return newLaboratory;
 	}
 
 	/**

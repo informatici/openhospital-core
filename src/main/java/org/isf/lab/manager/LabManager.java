@@ -221,10 +221,10 @@ public class LabManager {
 	 *
 	 * @param laboratory - the laboratory with its result (Procedure 1)
 	 * @param labRow - the list of results (Procedure 2) - it can be {@code null}
-	 * @return {@code true} if the exam has been inserted, {@code false} otherwise
+	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
 	 */
-	public boolean newLaboratory(Laboratory laboratory, List<String> labRow) throws OHServiceException {
+	public Laboratory newLaboratory(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		validateLaboratory(laboratory);
 		setPatientConsistency(laboratory);
 		procedure = laboratory.getExam().getProcedure();
@@ -248,10 +248,10 @@ public class LabManager {
 	 *
 	 * @param laboratory - the laboratory with its result (Procedure 1)
 	 * @param labRow - the list of results (Procedure 2) - it can be {@code null}
-	 * @return {@code true} if the exam has been inserted, {@code false} otherwise
+	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
 	 */
-	public boolean newLaboratory2(Laboratory laboratory, List<LaboratoryRow> labRow) throws OHServiceException {
+	public Laboratory newLaboratory2(Laboratory laboratory, List<LaboratoryRow> labRow) throws OHServiceException {
 		validateLaboratory(laboratory);
 		setPatientConsistency(laboratory);
 		procedure = laboratory.getExam().getProcedure();
@@ -271,10 +271,10 @@ public class LabManager {
 	 * Inserts one Laboratory request (All Procedures).
 	 *
 	 * @param laboratory - the laboratory without result
-	 * @return {@code true} if the request has been inserted, {@code false} otherwise
+	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
 	 */
-	public boolean newExamRequest(Laboratory laboratory) throws OHServiceException {
+	public Laboratory newExamRequest(Laboratory laboratory) throws OHServiceException {
 		setPatientConsistency(laboratory);
 		return ioOperations.newLabFirstProcedure(laboratory);
 	}
@@ -329,23 +329,23 @@ public class LabManager {
 	 *
 	 * @param labList - the laboratory list with results
 	 * @param labRowList - the list of results, it can be {@code null}
-	 * @return {@code true} if the exam has been inserted, {@code false} otherwise
+	 * @return the first of the newly persisted {@link Laboratory} objects in the list.
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
 	@TranslateOHServiceException
-	public boolean newLaboratory(List<Laboratory> labList, List<List<String>> labRowList) throws OHServiceException {
+	public Laboratory newLaboratory(List<Laboratory> labList, List<List<String>> labRowList) throws OHServiceException {
 		if (labList.isEmpty()) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.labnew.noexamsinserted.msg")));
 		}
 		if (labList.size() != labRowList.size()) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg")));
 		}
-		boolean result = true;
-		for (int i = 0; i < labList.size(); i++) {
-			result = result && newLaboratory(labList.get(i), labRowList.get(i));
+		Laboratory newLaboratory = newLaboratory(labList.get(0), labRowList.get(0));
+		for (int i = 1; i < labList.size(); i++) {
+			newLaboratory(labList.get(i), labRowList.get(i));
 		}
-		return result;
+		return newLaboratory;
 	}
 
 	/**
@@ -353,23 +353,23 @@ public class LabManager {
 	 *
 	 * @param labList - the laboratory list with results
 	 * @param labRowList - the list of results, it can be {@code null}
-	 * @return {@code true} if the exam has been inserted, {@code false} otherwise
+	 * @return the first of the newly persisted {@link Laboratory} objects in the list.
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
 	@TranslateOHServiceException
-	public boolean newLaboratory2(List<Laboratory> labList, List<List<LaboratoryRow>> labRowList) throws OHServiceException {
+	public Laboratory newLaboratory2(List<Laboratory> labList, List<List<LaboratoryRow>> labRowList) throws OHServiceException {
 		if (labList.isEmpty()) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.labnew.noexamsinserted.msg")));
 		}
 		if (labList.size() != labRowList.size()) {
 			throw new OHDataValidationException(new OHExceptionMessage(MessageBundle.getMessage("angal.labnew.someexamswithoutresultpleasecheck.msg")));
 		}
-		boolean result = true;
-		for (int i = 0; i < labList.size(); i++) {
-			result = result && newLaboratory2(labList.get(i), labRowList.get(i));
+		Laboratory newLaboratory = newLaboratory2(labList.get(0), labRowList.get(0));
+		for (int i = 1; i < labList.size(); i++) {
+			newLaboratory2(labList.get(i), labRowList.get(i));
 		}
-		return result;
+		return newLaboratory;
 	}
 
 	/**
@@ -379,7 +379,7 @@ public class LabManager {
 	 * @return {@code true} if the exam has been inserted, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
-	protected boolean newLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
+	protected Laboratory newLabFirstProcedure(Laboratory laboratory) throws OHServiceException {
 		return ioOperations.newLabFirstProcedure(laboratory);
 	}
 
@@ -388,10 +388,10 @@ public class LabManager {
 	 *
 	 * @param laboratory - the {@link Laboratory} to insert
 	 * @param labRow - the list of results ({@link String}s)
-	 * @return {@code true} if the exam has been inserted with all its results, {@code false} otherwise
+	 * @return the newly persisted {@link Laboratory} object.
 	 * @throws OHServiceException
 	 */
-	protected boolean newLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
+	protected Laboratory newLabSecondProcedure(Laboratory laboratory, List<String> labRow) throws OHServiceException {
 		return ioOperations.newLabSecondProcedure(laboratory, labRow);
 	}
 
