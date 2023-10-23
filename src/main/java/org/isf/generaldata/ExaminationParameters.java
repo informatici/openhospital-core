@@ -96,8 +96,7 @@ public final class ExaminationParameters extends ConfigurationProperties {
 	public static int SAT_MIN;
 	private static final int DEFAULT_SAT_MIN = 50;
 	
-	public static int SAT_MAX;
-	private static final int DEFAULT_SAT_MAX = 100;
+	public static int SAT_MAX = 100;
 
 	public static int SAT_INIT;
 	private static final int DEFAULT_SAT_INIT = 90;
