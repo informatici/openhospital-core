@@ -152,7 +152,6 @@ public final class ExaminationParameters extends ConfigurationProperties {
 		TEMP_STEP = myGetProperty("TEMP_STEP", DEFAULT_TEMP_STEP);
 
 		SAT_MIN = myGetProperty("SAT_MIN", DEFAULT_SAT_MIN);
-		SAT_MAX = myGetProperty("SAT_MAX", DEFAULT_SAT_MAX);
 		SAT_INIT = myGetProperty("SAT_INIT", DEFAULT_SAT_INIT);
 		SAT_STEP = myGetProperty("SAT_STEP", DEFAULT_SAT_STEP);
 		
