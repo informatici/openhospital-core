@@ -43,7 +43,7 @@ public class MalnutritionManager {
 	private MalnutritionIoOperation ioOperation;
 
 	/**
-	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * Verify if the object is valid for CRUD and return a list of errors, if any.
 	 *
 	 * @param malnutrition
 	 * @throws OHDataValidationException
@@ -74,11 +74,9 @@ public class MalnutritionManager {
 
 	/**
 	 * Retrieves all the {@link Malnutrition} associated to the given admission id.
-	 * In case of wrong parameters an error message is shown and <code>null</code> value is returned.
-	 * In case of error a message error is shown and an empty list is returned.
 	 *
 	 * @param admissionID the admission id to use as filter.
-	 * @return all the retrieved malnutrition or <code>null</code> if the specified admission id is <code>null</code>.
+	 * @return all the retrieved malnutrition or {@code null} if the specified admission id is {@code null}.
 	 * @throws OHServiceException
 	 */
 	public List<Malnutrition> getMalnutrition(String admissionID) throws OHServiceException {
@@ -89,7 +87,7 @@ public class MalnutritionManager {
 	 * Returns the last {@link Malnutrition} entry for specified patient ID
 	 *
 	 * @param patientID - the patient ID
-	 * @return the last {@link Malnutrition} for specified patient ID. <code>null</code> if none.
+	 * @return the last {@link Malnutrition} for specified patient ID. {@code null} if none.
 	 * @throws OHServiceException
 	 */
 	public Malnutrition getLastMalnutrition(int patientID) throws OHServiceException {
@@ -100,7 +98,7 @@ public class MalnutritionManager {
 	 * Stores a new {@link Malnutrition}. The malnutrition object is updated with the generated id.
 	 *
 	 * @param malnutrition the malnutrition to store.
-	 * @return <code>true</code> if the malnutrition has been stored
+	 * @return the newly stored new {@link Malnutrition} object.
 	 * @throws OHServiceException
 	 */
 	public Malnutrition newMalnutrition(Malnutrition malnutrition) throws OHServiceException {
@@ -109,10 +107,10 @@ public class MalnutritionManager {
 	}
 
 	/**
-	 * Updates the specified {@link Malnutrition}.
+	 * Update the specified {@link Malnutrition}.
 	 *
-	 * @param malnutrition the {@link Malnutrition} to update
-	 * @return the updated {@link Malnutrition}
+	 * @param malnutrition the {@link Malnutrition} to update.
+	 * @return the updated {@link Malnutrition} object.
 	 * @throws OHServiceException
 	 */
 	public Malnutrition updateMalnutrition(Malnutrition malnutrition) throws OHServiceException {
@@ -133,14 +131,11 @@ public class MalnutritionManager {
 
 	/**
 	 * Deletes the specified {@link Malnutrition}.
-	 * In case of wrong parameters an error message is shown and <code>false</code> value is returned.
-	 * In case of error a message error is shown and a <code>false</code> value is returned.
 	 *
 	 * @param malnutrition the malnutrition to delete.
-	 * @return <code>true</code> if the malnutrition has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteMalnutrition(Malnutrition malnutrition) throws OHServiceException {
-		return ioOperation.deleteMalnutrition(malnutrition);
+	public void deleteMalnutrition(Malnutrition malnutrition) throws OHServiceException {
+		ioOperation.deleteMalnutrition(malnutrition);
 	}
 }
