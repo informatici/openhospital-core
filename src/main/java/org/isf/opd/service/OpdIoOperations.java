@@ -26,7 +26,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import org.isf.distype.model.DiseaseType;
 import org.isf.generaldata.MessageBundle;
 import org.isf.opd.model.Opd;
 import org.isf.utils.db.TranslateOHServiceException;
@@ -55,7 +54,7 @@ import org.springframework.transaction.annotation.Transactional;
  *                   - fix:  getSurgery() method should not add 1 day to toDate
  * 05/09/2008 - alex - added method for patient related Opd query
  * 05/01/2009 - ross - fix: in insert, referralfrom was written both in referralfrom and referralto
- * 09/01/2009 - fabrizio - Modified queried to accomodate type change of date field in Opd class.
+ * 09/01/2009 - fabrizio - Modified queried to accommodate type change of date field in Opd class.
  *                         Modified construction of queries, concatenation is performed with
  *                         StringBuilders instead than operator +. Removed some nested try-catch
  *                         blocks. Modified methods to format dates.                          
@@ -70,10 +69,10 @@ public class OpdIoOperations {
 	private OpdIoOperationRepository repository;
 	
 	/**
-	 * Return all Opds of today or one week ago
+	 * Return all {@link Opd}s for today or one week ago.
 	 * 
-	 * @param oneWeek - if <code>true</code> return the last week, only today otherwise.
-	 * @return the list of Opds. It could be <code>empty</code>.
+	 * @param oneWeek - if {@code true} return the last week, only today otherwise.
+	 * @return the list of Opds. It could be {@code empty}.
 	 * @throws OHServiceException 
 	 */
 	public List<Opd> getOpdList(boolean oneWeek) throws OHServiceException {
@@ -87,7 +86,7 @@ public class OpdIoOperations {
 	}
 	
 	/**
-	 * Return all {@link Opd}s within specified dates and parameters
+	 * Return all {@link Opd}s within specified dates and parameters.
 	 * 
 	 * @param ward 
 	 * @param diseaseTypeCode
@@ -99,7 +98,7 @@ public class OpdIoOperations {
 	 * @param sex
 	 * @param newPatient
 	 * @param user
-	 * @return the list of Opds. It could be <code>empty</code>.
+	 * @return the list of Opds. It could be {@code empty}.
 	 * @throws OHServiceException 
 	 */
 	public List<Opd> getOpdList(
@@ -117,11 +116,11 @@ public class OpdIoOperations {
 	}
 	
 	/**
-	 * Return all {@link Opd}s associated to specified patient ID
+	 * Return all {@link Opd}s associated to specified patient ID.
 	 * 
 	 * @param patID - the patient ID
 	 * @return the list of {@link Opd}s associated to specified patient ID.
-	 * 		   the whole list of {@link Opd}s if <code>0</code> is passed.
+	 * 		   the whole list of {@link Opd}s if {@code 0} is passed.
 	 * @throws OHServiceException 
 	 */
 	public List<Opd> getOpdList(int patID) throws OHServiceException {
@@ -131,10 +130,10 @@ public class OpdIoOperations {
 	}
 		
 	/**
-	 * Insert a new item in the db
+	 * Insert a new {@link Opd} into the db.
 	 * 
 	 * @param opd - an {@link Opd}
-	 * @return <code>true</code> if the item has been inserted
+	 * @return the newly inserted {@link Opd} object.
 	 * @throws OHServiceException 
 	 */
 	public Opd newOpd(Opd opd) throws OHServiceException {
@@ -142,10 +141,10 @@ public class OpdIoOperations {
 	}
 	
 	/**
-	 * Modify an {@link Opd} in the db
+	 * Modify an {@link Opd} in the db.
 	 * 
 	 * @param opd - an {@link Opd}
-	 * @return the updated {@link Opd}.
+	 * @return the updated {@link Opd} object.
 	 * @throws OHServiceException 
 	 */
 	public Opd updateOpd(Opd opd) throws OHServiceException {
@@ -153,22 +152,20 @@ public class OpdIoOperations {
 	}
 	
 	/**
-	 * Delete an {@link Opd} from the db
+	 * Delete an {@link Opd} from the db.
 	 * 
 	 * @param opd - the {@link Opd} to delete
-	 * @return <code>true</code> if the item has been deleted. <code>false</code> otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean deleteOpd(Opd opd) throws OHServiceException {
+	public void deleteOpd(Opd opd) throws OHServiceException {
 		repository.delete(opd);
-		return true;
 	}
 	
 	/**
-	 * Returns the max progressive number within specified year or within current year if <code>0</code>.
+	 * Returns the max progressive number within specified year or within current year if {@code 0}.
 	 * 
 	 * @param year
-	 * @return <code>int</code> - the progressive number in the year
+	 * @return {@code int} - the progressive number in the year
 	 * @throws OHServiceException 
 	 */
 	public int getProgYear(int year) throws OHServiceException {
@@ -182,7 +179,7 @@ public class OpdIoOperations {
 	 * Return the last {@link Opd} in time associated with specified patient ID.
 	 * 
 	 * @param patID - the patient ID
-	 * @return last Opd associated with specified patient ID or <code>null</code>
+	 * @return last Opd associated with specified patient ID or {@code null}
 	 * @throws OHServiceException 
 	 */
 	public Opd getLastOpd(int patID) throws OHServiceException {
@@ -191,10 +188,10 @@ public class OpdIoOperations {
 	}
 
 	/**
-	 * Checks if the code is already in use
+	 * Checks if the code is already in use.
 	 *
 	 * @param code - the opd code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
@@ -202,14 +199,14 @@ public class OpdIoOperations {
 	}
 	
 	/**
-	 * Check if the given {@code opdNum} does already exist for the give {@code year}
+	 * Check if the given {@code opdNum} does already exist for the given {@code year}.
 	 * 
 	 * @param opdNum - the OPD progressive in year
 	 * @param year - the year
-	 * @return <code>true</code> if the given number exists in year, <code>false</code> otherwise
+	 * @return {@code true} if the given number exists in year, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
-	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
+	public boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
 		List<Opd> opds = year == 0 ?
 			repository.findByProgYear(opdNum) :
 			repository.findByProgYearAndDateBetween(opdNum, LocalDateTime.of(year, 1, 1, 0, 0), LocalDateTime.of(year + 1, 1, 1, 0, 0));
@@ -217,7 +214,7 @@ public class OpdIoOperations {
 	}
 
 	/**
-	 * Get an OPD by its code
+	 * Get an {@link Opd} by its code.
 	 * @param code - the OPD code
 	 * @return an OPD or {@code null}
 	 */
@@ -226,7 +223,7 @@ public class OpdIoOperations {
 	}
 
 	/**
-	 * Get a list of OPD with specified Progressive in Year number
+	 * Get a list of {@link Opd}s with the specified Progressive in Year number.
 	 * @param code - the OPD code
 	 * @return a list of OPD or an empty list
 	 */
@@ -235,10 +232,10 @@ public class OpdIoOperations {
 	}
 	
 	/**
-	 * Retrieves a page of {@link Opd}s within specified dates and parameters
+	 * Retrieves a page of {@link Opd}s within specified dates and parameters.
 	 * 
-	 * @param ward 
-	 * @param diseaseType
+	 * @param ward
+	 * @param diseaseTypeCode
 	 * @param diseaseCode
 	 * @param dateFrom
 	 * @param dateTo
@@ -268,9 +265,9 @@ public class OpdIoOperations {
 		Pageable pageRequest = PageRequest.of(page, size);
 		List<Opd> ops = this.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, null);
 		int start = (int) pageRequest.getOffset();
-		int end = Math.min((start + pageRequest.getPageSize()), ops.size());
+		int end = Math.min(start + pageRequest.getPageSize(), ops.size());
 		List<Opd> pageContent = ops.subList(start, end);
-		return setPaginationData(new PageImpl<Opd>(pageContent, pageRequest, ops.size()));
+		return setPaginationData(new PageImpl<>(pageContent, pageRequest, ops.size()));
 	}
 	
 	PagedResponse<Opd> setPaginationData(Page<Opd> pages) {
