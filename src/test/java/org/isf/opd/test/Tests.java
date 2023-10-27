@@ -652,8 +652,6 @@ public class Tests extends OHCoreTestCase {
 		Opd newOpd = opdBrowserManager.newOpd(opd);
 		newOpd.setNote("Update");
 		Opd updatedOpd = opdBrowserManager.updateOpd(newOpd);
-//		Opd updateOpd = opdIoOperationRepository.findById(opd.getCode()).orElse(null);
-//		assertThat(updateOpd).isNotNull();
 		/*assertThat(updatedOpd.getReason()).isEqualTo("update reason");
 		assertThat(updatedOpd.getAnamnesis()).isEqualTo("update anamnesis");
 		assertThat(updatedOpd.getTherapies()).isEqualTo("update therapies");
