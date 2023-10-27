@@ -63,7 +63,7 @@ public class OpdBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param opd
-	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHDataValidationException
 	 */
 	protected void validateOpd(Opd opd, boolean insert) throws OHDataValidationException {
@@ -122,8 +122,8 @@ public class OpdBrowserManager {
 	/**
 	 * Return all Opds of today or since one week ago
 	 *
-	 * @param oneWeek - if <code>true</code> return the last week, only today otherwise.
-	 * @return the list of Opds. It could be <code>null</code>.
+	 * @param oneWeek - if {@code true} return the last week, only today otherwise.
+	 * @return the list of Opds. It could be {@code null}.
 	 * @throws OHServiceException
 	 */
 	public List<Opd> getOpd(boolean oneWeek) throws OHServiceException {
@@ -143,7 +143,7 @@ public class OpdBrowserManager {
 	 * @param sex
 	 * @param newPatient
 	 * @param user
-	 * @return the list of Opds. It could be <code>null</code>.
+	 * @return the list of Opds. It could be {@code null}.
 	 * @throws OHServiceException
 	 */
 	public List<Opd> getOpd(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, String user) throws OHServiceException {
@@ -155,7 +155,7 @@ public class OpdBrowserManager {
 	 *
 	 * @param patientcode - the patient ID
 	 * @return the list of {@link Opd}s associated to specified patient ID.
-	 * the whole list of {@link Opd}s if <code>0</code> is passed.
+	 * the whole list of {@link Opd}s if {@code 0} is passed.
 	 * @throws OHServiceException
 	 */
 	public List<Opd> getOpdList(int patientcode) throws OHServiceException {
@@ -166,7 +166,7 @@ public class OpdBrowserManager {
 	 * Insert a new item in the db
 	 *
 	 * @param opd an {@link Opd}
-	 * @return <code>true</code> if the item has been inserted
+	 * @return {@code true} if the item has been inserted
 	 * @throws OHServiceException
 	 */
 	public Opd newOpd(Opd opd) throws OHServiceException {
@@ -191,18 +191,17 @@ public class OpdBrowserManager {
 	 * Delete an {@link Opd} from the db
 	 *
 	 * @param opd - the {@link Opd} to delete
-	 * @return <code>true</code> if the item has been deleted. <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteOpd(Opd opd) throws OHServiceException {
-		return ioOperations.deleteOpd(opd);
+	public void deleteOpd(Opd opd) throws OHServiceException {
+		ioOperations.deleteOpd(opd);
 	}
 
 	/**
-	 * Returns the max progressive number within specified year or within current year if <code>0</code>.
+	 * Returns the max progressive number within specified year or within current year if {@code 0}.
 	 *
 	 * @param year
-	 * @return <code>int</code> - the progressive number in the year
+	 * @return {@code int} - the progressive number in the year
 	 * @throws OHServiceException
 	 */
 	public int getProgYear(int year) throws OHServiceException {
@@ -213,7 +212,7 @@ public class OpdBrowserManager {
 	 * Return the last {@link Opd} in time associated with specified patient ID.
 	 *
 	 * @param patientcode - the patient ID
-	 * @return last Opd associated with specified patient ID or <code>null</code>
+	 * @return last Opd associated with specified patient ID or {@code null}
 	 * @throws OHServiceException
 	 */
 	public Opd getLastOpd(int patientcode) throws OHServiceException {
@@ -225,9 +224,9 @@ public class OpdBrowserManager {
 	 *
 	 * @param opdNum - the OPD progressive in year
 	 * @param year - the year
-	 * @return <code>true</code> if the given number exists in year, <code>false</code> otherwise
+	 * @return {@code true} if the given number exists in year, {@code false} otherwise
 	 */
-	public Boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
+	public boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
 		return ioOperations.isExistOpdNum(opdNum, year);
 	}
 
@@ -255,7 +254,7 @@ public class OpdBrowserManager {
 	 * Returns {@link List} of {@link Opd}s associated to specified patient ID with page info.
 	 *
 	 * @param ward - the ward of opd
-	 * @param diseaseType - the disease type
+	 * @param diseaseTypeCode - the disease type
 	 * @param diseaseCode - the Code of disease
 	 * @param dateFrom
 	 * @param dateTo
@@ -263,11 +262,10 @@ public class OpdBrowserManager {
 	 * @param ageTo
 	 * @param sex
 	 * @param newPatient
-	 * @param user
 	 * @param page
 	 * @param size
 	 * @return the list of {@link Opd}s associated to specified patient ID.
-	 * the whole list of {@link Opd}s if <code>0</code> is passed.
+	 * the whole list of {@link Opd}s if {@code 0} is passed.
 	 * @throws OHServiceException
 	 */
 	public PagedResponse<Opd> getOpdPageable(Ward ward, String diseaseTypeCode, String diseaseCode, LocalDate dateFrom, LocalDate dateTo, int ageFrom, int ageTo, char sex, char newPatient, int page, int size) throws OHServiceException {

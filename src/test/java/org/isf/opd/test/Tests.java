@@ -145,7 +145,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetOpdList() throws Exception {
 		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).get();
+		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOpd).isNotNull();
 		List<Opd> opds = opdIoOperation.getOpdList(
 				foundOpd.getWard(),
 				foundOpd.getDisease().getType().getCode(),
@@ -163,7 +164,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetOpdListPatientId() throws Exception {
 		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).get();
+		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOpd).isNotNull();
 		List<Opd> opds = opdIoOperation.getOpdList(foundOpd.getPatient().getCode());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
@@ -317,52 +319,51 @@ public class Tests extends OHCoreTestCase {
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
 		
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
-		Opd result = opdIoOperation.newOpd(opd);
-		assertThat(result).isNotNull();
-		checkOpdIntoDb(opd.getCode());
+		Opd newOpd = opdIoOperation.newOpd(opd);
+		checkOpdIntoDb(newOpd.getCode());
 	}
 
 	@Test
 	public void testIoUpdateOpd() throws Exception {
 		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).get();
+		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOpd).isNotNull();
 		/*foundOpd.setReason("update reason");
 		foundOpd.setAnamnesis("update anamnesis");
 		foundOpd.setTherapies("update therapie");
 		foundOpd.setAllergies("update allergies");
 		foundOpd.setPrescription("update presciption");*/
-		Opd result = opdIoOperation.updateOpd(foundOpd);
-		Opd updateOpd = opdIoOperationRepository.findById(code).get();
-		assertThat(result).isNotNull();
-		/*assertThat(updateOpd.getReason()).isEqualTo("update reason");
-		assertThat(updateOpd.getAnamnesis()).isEqualTo("update anamnesis");
-		assertThat(updateOpd.getTherapies()).isEqualTo("update therapies");
-		assertThat(updateOpd.getAllergies()).isEqualTo("update allergies");
-		assertThat(updateOpd.getPrescription()).isEqualTo("update prescription");*/
+		Opd updatedOpd = opdIoOperation.updateOpd(foundOpd);
+		/*assertThat(updatedOpd.getReason()).isEqualTo("update reason");
+		assertThat(updatedOpd.getAnamnesis()).isEqualTo("update anamnesis");
+		assertThat(updatedOpd.getTherapies()).isEqualTo("update therapies");
+		assertThat(updatedOpd.getAllergies()).isEqualTo("update allergies");
+		assertThat(updatedOpd.getPrescription()).isEqualTo("update prescription");*/
 	}
 
 	@Test
 	public void testIoDeleteOpd() throws Exception {
 		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).get();
-		boolean result = opdIoOperation.deleteOpd(foundOpd);
-		assertThat(result).isTrue();
-		result = opdIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOpd).isNotNull();
+		opdIoOperation.deleteOpd(foundOpd);
+		assertThat(opdIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
 	public void testIoGetProgYearZero() throws Exception {
 		int code = setupTestOpd(false);
 		int progYear = opdIoOperation.getProgYear(0);
-		Opd foundOpd = opdIoOperationRepository.findById(code).get();
+		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOpd).isNotNull();
 		assertThat(progYear).isEqualTo(foundOpd.getProgYear());
 	}
 
 	@Test
 	public void testIoGetProgYear() throws Exception {
 		int code = setupTestOpd(false);
-		Opd opd = opdIoOperationRepository.findById(code).get();
+		Opd opd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(opd).isNotNull();
 		int progYear = opdIoOperation.getProgYear(opd.getDate().getYear());
 		assertThat(progYear).isEqualTo(opd.getProgYear());
 	}
@@ -371,7 +372,8 @@ public class Tests extends OHCoreTestCase {
 	public void testIoIsExistsOpdNumShouldReturnTrueWhenOpdWithGivenOPDProgressiveYearAndVisitYearExists() throws Exception {
 		// given:
 		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).get();
+		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOpd).isNotNull();
 
 		// when:
 		boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), foundOpd.getDate().getYear());
@@ -384,10 +386,11 @@ public class Tests extends OHCoreTestCase {
 	public void testIoIsExistsOpdNumShouldReturnTrueWhenOpdNumExistsAndVisitYearIsNotProvided() throws Exception {
 		// given:
 		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).get();
+		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOpd).isNotNull();
 
 		// when:
-		Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 0);
+		boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 0);
 
 		// then:
 		assertThat(result).isTrue();
@@ -397,10 +400,11 @@ public class Tests extends OHCoreTestCase {
 	public void testIoIsExistsOpdNumShouldReturnFalseWhenOpdNumExistsAndVisitYearIsIncorrect() throws Exception {
 		// given:
 		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).get();
+		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOpd).isNotNull();
 
 		// when:
-		Boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 1488);
+		boolean result = opdIoOperation.isExistOpdNum(foundOpd.getProgYear(), 1488);
 
 		// then:
 		assertThat(result).isFalse();
@@ -409,7 +413,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetLastOpd() throws Exception {
 		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).get();
+		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOpd).isNotNull();
 		Opd lastOpd = opdIoOperation.getLastOpd(foundOpd.getPatient().getCode());
 		assertThat(lastOpd.getCode()).isEqualTo(foundOpd.getCode());
 	}
@@ -418,21 +423,24 @@ public class Tests extends OHCoreTestCase {
 	public void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() throws Exception {
 		// given:
 		int id = setupTestOpd(false);
-		Opd found = opdIoOperationRepository.findById(id).get();
+		Opd foundOpd = opdIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundOpd).isNotNull();
 		Patient mergedPatient = setupTestPatient(false);
 
 		// when:
-		applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
+		applicationEventPublisher.publishEvent(new PatientMergedEvent(foundOpd.getPatient(), mergedPatient));
 
 		// then:
-		Opd result = opdIoOperationRepository.findById(id).get();
+		Opd result = opdIoOperationRepository.findById(id).orElse(null);
+		assertThat(result).isNotNull();
 		assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 	}
 
 	@Test
 	public void testMgrGetOpd() throws Exception {
 		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).get();
+		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOpd).isNotNull();
 		List<Opd> opds = opdBrowserManager.getOpd(
 				foundOpd.getWard(),
 				foundOpd.getDisease().getType().getCode(),
@@ -450,7 +458,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrGetOpdListPatientId() throws Exception {
 		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).get();
+		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOpd).isNotNull();
 		List<Opd> opds = opdBrowserManager.getOpdList(foundOpd.getPatient().getCode());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
@@ -614,8 +623,8 @@ public class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease3);
 		opd.setDisease2(disease2);
 		opd.setDisease3(disease3);
-		assertThat(opdBrowserManager.newOpd(opd)).isNotNull();
-		checkOpdIntoDb(opd.getCode());
+		Opd newOpd = opdBrowserManager.newOpd(opd);
+		checkOpdIntoDb(newOpd.getCode());
 	}
 
 	@Test
@@ -640,39 +649,39 @@ public class Tests extends OHCoreTestCase {
 		opd.setDisease2(disease2);
 		opd.setDisease3(disease3);
 		opd.setDate(TimeTools.getNow());
-		assertThat(opdBrowserManager.newOpd(opd)).isNotNull();
-		opd.setNote("Update");
-		assertThat(opdBrowserManager.updateOpd(opd)).isNotNull();
-		Opd updateOpd = opdIoOperationRepository.findById(opd.getCode()).get();
-		/*assertThat(updateOpd.getReason()).isEqualTo("update reason");
-		assertThat(updateOpd.getAnamnesis()).isEqualTo("update anamnesis");
-		assertThat(updateOpd.getTherapies()).isEqualTo("update therapies");
-		assertThat(updateOpd.getAllergies()).isEqualTo("update allergies");*/
-		assertThat(updateOpd.getNote()).isEqualTo("Update");
+		Opd newOpd = opdBrowserManager.newOpd(opd);
+		newOpd.setNote("Update");
+		Opd updatedOpd = opdBrowserManager.updateOpd(newOpd);
+		/*assertThat(updatedOpd.getReason()).isEqualTo("update reason");
+		assertThat(updatedOpd.getAnamnesis()).isEqualTo("update anamnesis");
+		assertThat(updatedOpd.getTherapies()).isEqualTo("update therapies");
+		assertThat(updatedOpd.getAllergies()).isEqualTo("update allergies");*/
+		assertThat(updatedOpd.getNote()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrDeleteOpd() throws Exception {
 		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).get();
-		boolean result = opdBrowserManager.deleteOpd(foundOpd);
-		assertThat(result).isTrue();
-		result = opdIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOpd).isNotNull();
+		opdBrowserManager.deleteOpd(foundOpd);
+		assertThat(opdIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
 	public void testMgrGetProgYearZero() throws Exception {
 		int code = setupTestOpd(false);
 		int progYear = opdBrowserManager.getProgYear(0);
-		Opd foundOpd = opdIoOperationRepository.findById(code).get();
+		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOpd).isNotNull();
 		assertThat(progYear).isEqualTo(foundOpd.getProgYear());
 	}
 
 	@Test
 	public void testMgrGetProgYear() throws Exception {
 		int code = setupTestOpd(false);
-		Opd opd = opdIoOperationRepository.findById(code).get();
+		Opd opd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(opd).isNotNull();
 		int progYear = opdBrowserManager.getProgYear(opd.getDate().getYear());
 		assertThat(progYear).isEqualTo(opd.getProgYear());
 	}
@@ -680,28 +689,32 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrIsExistsOpdNumShouldReturnTrueWhenOpdWithGivenOPDProgressiveYearAndVisitYearExists() throws Exception {
 		int code = setupTestOpd(false);
-		Opd opd = opdIoOperationRepository.findById(code).get();
+		Opd opd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(opd).isNotNull();
 		assertThat(opdBrowserManager.isExistOpdNum(opd.getProgYear(), opd.getDate().getYear())).isTrue();
 	}
 
 	@Test
 	public void testMgrIsExistsOpdNumShouldReturnTrueWhenOpdNumExistsAndVisitYearIsNotProvided() throws Exception {
 		int code = setupTestOpd(false);
-		Opd opd = opdIoOperationRepository.findById(code).get();
+		Opd opd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(opd).isNotNull();
 		assertThat(opdBrowserManager.isExistOpdNum(opd.getProgYear(), 0)).isTrue();
 	}
 
 	@Test
 	public void testMgrIsExistsOpdNumShouldReturnFalseWhenOpdNumExistsAndVisitYearIsIncorrect() throws Exception {
 		int code = setupTestOpd(false);
-		Opd opd = opdIoOperationRepository.findById(code).get();
+		Opd opd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(opd).isNotNull();
 		assertThat(opdBrowserManager.isExistOpdNum(opd.getProgYear(), 1488)).isFalse();
 	}
 
 	@Test
 	public void testMgrGetLastOpd() throws Exception {
 		int code = setupTestOpd(false);
-		Opd foundOpd = opdIoOperationRepository.findById(code).get();
+		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOpd).isNotNull();
 		Opd lastOpd = opdBrowserManager.getLastOpd(foundOpd.getPatient().getCode());
 		assertThat(lastOpd.getCode()).isEqualTo(foundOpd.getCode());
 	}
@@ -1022,7 +1035,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkOpdIntoDb(int code) throws OHException {
-		Opd foundOpd = opdIoOperationRepository.findById(code).get();
+		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundOpd).isNotNull();
 		testOpd.check(foundOpd);
 	}
 }
