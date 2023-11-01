@@ -106,10 +106,8 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestVaccine(false);
 		Vaccine foundVaccine = vaccineIoOperation.findVaccine(code);
 		foundVaccine.setDescription("Update");
-		Vaccine result = vaccineIoOperation.updateVaccine(foundVaccine);
-		assertThat(result.getDescription()).isEqualTo("Update");
-		Vaccine updateVaccine = vaccineIoOperation.findVaccine(code);
-		assertThat(updateVaccine.getDescription()).isEqualTo("Update");
+		Vaccine updatedVaccine = vaccineIoOperation.updateVaccine(foundVaccine);
+		assertThat(updatedVaccine.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
@@ -117,19 +115,17 @@ public class Tests extends OHCoreTestCase {
 		VaccineType vaccineType = testVaccineType.setup(false);
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
 		Vaccine vaccine = testVaccine.setup(vaccineType, true);
-		Vaccine result = vaccineIoOperation.newVaccine(vaccine);
-		assertThat(result.getCode()).isEqualTo("Z");
-		checkVaccineIntoDb(vaccine.getCode());
+		Vaccine newVaccine = vaccineIoOperation.newVaccine(vaccine);
+		assertThat(newVaccine.getCode()).isEqualTo("Z");
+		checkVaccineIntoDb(newVaccine.getCode());
 	}
 
 	@Test
 	public void testIoDeleteVaccine() throws Exception {
 		String code = setupTestVaccine(false);
 		Vaccine foundVaccine = vaccineIoOperation.findVaccine(code);
-		boolean result = vaccineIoOperation.deleteVaccine(foundVaccine);
-		assertThat(result).isTrue();
-		result = vaccineIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		vaccineIoOperation.deleteVaccine(foundVaccine);
+		assertThat(vaccineIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
@@ -150,7 +146,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoFindVaccineNull() throws Exception {
 		assertThatThrownBy(() -> vaccineIoOperation.findVaccine(null))
-				.isInstanceOf(RuntimeException.class);
+			.isInstanceOf(OHServiceException.class);
 	}
 
 	@Test
@@ -173,9 +169,8 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestVaccine(false);
 		Vaccine foundVaccine = vaccineBrowserManager.findVaccine(code);
 		foundVaccine.setDescription("Update");
-		assertThat(vaccineBrowserManager.updateVaccine(foundVaccine)).isNotNull();
-		Vaccine updateVaccine = vaccineBrowserManager.findVaccine(code);
-		assertThat(updateVaccine.getDescription()).isEqualTo("Update");
+		Vaccine updatedVaccine = vaccineBrowserManager.updateVaccine(foundVaccine);
+		assertThat(updatedVaccine.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
@@ -183,15 +178,15 @@ public class Tests extends OHCoreTestCase {
 		VaccineType vaccineType = testVaccineType.setup(false);
 		vaccineTypeIoOperationRepository.saveAndFlush(vaccineType);
 		Vaccine vaccine = testVaccine.setup(vaccineType, true);
-		assertThat(vaccineBrowserManager.newVaccine(vaccine)).isNotNull();
-		checkVaccineIntoDb(vaccine.getCode());
+		Vaccine newVaccine = vaccineBrowserManager.newVaccine(vaccine);
+		checkVaccineIntoDb(newVaccine.getCode());
 	}
 
 	@Test
 	public void testMgrDeleteVaccine() throws Exception {
 		String code = setupTestVaccine(false);
 		Vaccine foundVaccine = vaccineBrowserManager.findVaccine(code);
-		assertThat(vaccineBrowserManager.deleteVaccine(foundVaccine)).isTrue();
+		vaccineBrowserManager.deleteVaccine(foundVaccine);
 		assertThat(vaccineBrowserManager.isCodePresent(code)).isFalse();
 	}
 
@@ -212,7 +207,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrFindVaccineNull() throws Exception {
 		assertThatThrownBy(() -> vaccineBrowserManager.findVaccine(null))
-				.isInstanceOf(RuntimeException.class);
+			.isInstanceOf(OHServiceException.class);
 	}
 
 	@Test
@@ -221,11 +216,11 @@ public class Tests extends OHCoreTestCase {
 		Vaccine vaccine = vaccineBrowserManager.findVaccine(code);
 		vaccine.setCode("");
 		assertThatThrownBy(() -> vaccineBrowserManager.newVaccine(vaccine))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -234,11 +229,11 @@ public class Tests extends OHCoreTestCase {
 		Vaccine vaccine = vaccineBrowserManager.findVaccine(code);
 		vaccine.setCode("thisIsACodeThatIsTooLong");
 		assertThatThrownBy(() -> vaccineBrowserManager.newVaccine(vaccine))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -250,7 +245,7 @@ public class Tests extends OHCoreTestCase {
 				.isInstanceOf(OHDataIntegrityViolationException.class)
 				.has(
 						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
 				);
 	}
 
@@ -262,7 +257,7 @@ public class Tests extends OHCoreTestCase {
 				.isInstanceOf(OHDataIntegrityViolationException.class)
 				.has(
 						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
 				);
 	}
 
@@ -285,8 +280,8 @@ public class Tests extends OHCoreTestCase {
 		VaccineType vaccineType = testVaccineType.setup(true);
 		Vaccine vaccine = new Vaccine("aCode", "aDescription", vaccineType);
 
-		assertThat(vaccine).isEqualTo(vaccine);
 		assertThat(vaccine)
+				.isEqualTo(vaccine)
 				.isNotNull()
 				.isNotEqualTo("someStringValue");
 
