@@ -177,7 +177,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrFindVaccineTypeNull() throws Exception {
 		assertThatThrownBy(() -> vaccineTypeBrowserManager.findVaccineType(null))
-				.isInstanceOf(RuntimeException.class);
+			.isInstanceOf(RuntimeException.class);
 	}
 
 	@Test
@@ -186,11 +186,11 @@ public class Tests extends OHCoreTestCase {
 		VaccineType vaccineType = vaccineTypeBrowserManager.findVaccineType(code);
 		vaccineType.setCode("");
 		assertThatThrownBy(() -> vaccineTypeBrowserManager.newVaccineType(vaccineType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -199,11 +199,11 @@ public class Tests extends OHCoreTestCase {
 		VaccineType vaccineType = vaccineTypeBrowserManager.findVaccineType(code);
 		vaccineType.setCode("thisIsACodeThatIsTooLong");
 		assertThatThrownBy(() -> vaccineTypeBrowserManager.newVaccineType(vaccineType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -212,11 +212,11 @@ public class Tests extends OHCoreTestCase {
 		VaccineType vaccineType = vaccineTypeBrowserManager.findVaccineType(code);
 		vaccineType.setDescription("");
 		assertThatThrownBy(() -> vaccineTypeBrowserManager.newVaccineType(vaccineType))
-				.isInstanceOf(OHDataIntegrityViolationException.class)
-				.has(
-						new Condition<Throwable>(
-                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataIntegrityViolationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -224,11 +224,11 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestVaccineType(true);
 		VaccineType vaccineType = vaccineTypeBrowserManager.findVaccineType(code);
 		assertThatThrownBy(() -> vaccineTypeBrowserManager.newVaccineType(vaccineType))
-				.isInstanceOf(OHDataIntegrityViolationException.class)
-				.has(
-						new Condition<Throwable>(
-                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataIntegrityViolationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
