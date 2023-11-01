@@ -74,7 +74,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetPregnantTreatmentType() throws Exception {
 		String code = setupTestPregnantTreatmentType(false);
-		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).get();
+		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPregnantTreatmentType).isNotNull();
 		List<PregnantTreatmentType> pregnantTreatmentTypes = pregnantTreatmentTypeIoOperation.getPregnantTreatmentType();
 
 		for (PregnantTreatmentType pregnantTreatmentType : pregnantTreatmentTypes) {
@@ -87,21 +88,19 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoUpdatePregnantTreatmentType() throws Exception {
 		String code = setupTestPregnantTreatmentType(false);
-		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).get();
+		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPregnantTreatmentType).isNotNull();
 		foundPregnantTreatmentType.setDescription("Update");
-		PregnantTreatmentType result = pregnantTreatmentTypeIoOperation.updatePregnantTreatmentType(foundPregnantTreatmentType);
-		assertThat(result).isNotNull();
-		PregnantTreatmentType updatePregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).get();
-		assertThat(updatePregnantTreatmentType).isNotNull();
-		assertThat(updatePregnantTreatmentType.getDescription()).isEqualTo("Update");
+		PregnantTreatmentType updatedPregnantTreatmentType = pregnantTreatmentTypeIoOperation.updatePregnantTreatmentType(foundPregnantTreatmentType);
+		assertThat(updatedPregnantTreatmentType).isNotNull();
+		assertThat(updatedPregnantTreatmentType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testIoNewPregnantTreatmentType() throws Exception {
 		PregnantTreatmentType pregnantTreatmentType = testPregnantTreatmentType.setup(true);
-		PregnantTreatmentType result = pregnantTreatmentTypeIoOperation.newPregnantTreatmentType(pregnantTreatmentType);
-		assertThat(result).isNotNull();
-		checkPregnantTreatmentTypeIntoDb(pregnantTreatmentType.getCode());
+		PregnantTreatmentType newPregnantTreatmentType = pregnantTreatmentTypeIoOperation.newPregnantTreatmentType(pregnantTreatmentType);
+		checkPregnantTreatmentTypeIntoDb(newPregnantTreatmentType.getCode());
 	}
 
 	@Test
@@ -114,17 +113,17 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoDeletePregnantTreatmentType() throws Exception {
 		String code = setupTestPregnantTreatmentType(false);
-		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).get();
-		boolean result = pregnantTreatmentTypeIoOperation.deletePregnantTreatmentType(foundPregnantTreatmentType);
-		assertThat(result).isTrue();
-		result = pregnantTreatmentTypeIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPregnantTreatmentType).isNotNull();
+		pregnantTreatmentTypeIoOperation.deletePregnantTreatmentType(foundPregnantTreatmentType);
+		assertThat(pregnantTreatmentTypeIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
 	public void testMgrGetPregnantTreatmentType() throws Exception {
 		String code = setupTestPregnantTreatmentType(false);
-		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).get();
+		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPregnantTreatmentType).isNotNull();
 		PregnantTreatmentType pregnantTreatmentType2 = new PregnantTreatmentType("AA", "AA description");
 		pregnantTreatmentTypeIoOperationRepository.saveAndFlush(pregnantTreatmentType2);
 		PregnantTreatmentType pregnantTreatmentType3 = new PregnantTreatmentType("BB", "BB description");
@@ -145,19 +144,19 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrUpdatePregnantTreatmentType() throws Exception {
 		String code = setupTestPregnantTreatmentType(false);
-		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).get();
+		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPregnantTreatmentType).isNotNull();
 		foundPregnantTreatmentType.setDescription("Update");
-		assertThat(pregnantTreatmentTypeBrowserManager.updatePregnantTreatmentType(foundPregnantTreatmentType)).isNotNull();
-		PregnantTreatmentType updatePregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).get();
-		assertThat(updatePregnantTreatmentType).isNotNull();
-		assertThat(updatePregnantTreatmentType.getDescription()).isEqualTo("Update");
+		PregnantTreatmentType updatedPregnantTreatmentType = pregnantTreatmentTypeBrowserManager.updatePregnantTreatmentType(foundPregnantTreatmentType);
+		assertThat(updatedPregnantTreatmentType).isNotNull();
+		assertThat(updatedPregnantTreatmentType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrNewPregnantTreatmentType() throws Exception {
 		PregnantTreatmentType pregnantTreatmentType = testPregnantTreatmentType.setup(true);
-		assertThat(pregnantTreatmentTypeBrowserManager.newPregnantTreatmentType(pregnantTreatmentType)).isNotNull();
-		checkPregnantTreatmentTypeIntoDb(pregnantTreatmentType.getCode());
+		PregnantTreatmentType newPregnantTreatmentType = pregnantTreatmentTypeBrowserManager.newPregnantTreatmentType(pregnantTreatmentType);
+		checkPregnantTreatmentTypeIntoDb(newPregnantTreatmentType.getCode());
 	}
 
 	@Test
@@ -169,8 +168,9 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrDeletePregnantTreatmentType() throws Exception {
 		String code = setupTestPregnantTreatmentType(false);
-		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).get();
-		assertThat(pregnantTreatmentTypeBrowserManager.deletePregnantTreatmentType(foundPregnantTreatmentType)).isTrue();
+		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPregnantTreatmentType).isNotNull();
+		pregnantTreatmentTypeBrowserManager.deletePregnantTreatmentType(foundPregnantTreatmentType);
 		assertThat(pregnantTreatmentTypeBrowserManager.isCodePresent(code)).isFalse();
 	}
 
@@ -275,7 +275,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkPregnantTreatmentTypeIntoDb(String code) {
-		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).get();
+		PregnantTreatmentType foundPregnantTreatmentType = pregnantTreatmentTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundPregnantTreatmentType).isNotNull();
 		testPregnantTreatmentType.check(foundPregnantTreatmentType);
 	}
 }
