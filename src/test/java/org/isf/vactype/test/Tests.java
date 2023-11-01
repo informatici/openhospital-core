@@ -78,6 +78,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetVaccineType() throws Exception {
 		String code = setupTestVaccineType(false);
 		VaccineType foundVaccineType = vaccineTypeIoOperation.findVaccineType(code);
+		assertThat(foundVaccineType).isNotNull();
 		List<VaccineType> vaccineTypes = vaccineTypeIoOperation.getVaccineType();
 		assertThat(vaccineTypes.get(vaccineTypes.size() - 1).getDescription()).isEqualTo(foundVaccineType.getDescription());
 	}
@@ -86,51 +87,48 @@ public class Tests extends OHCoreTestCase {
 	public void testIoUpdateVaccineType() throws Exception {
 		String code = setupTestVaccineType(false);
 		VaccineType foundVaccineType = vaccineTypeIoOperation.findVaccineType(code);
+		assertThat(foundVaccineType).isNotNull();
 		foundVaccineType.setDescription("Update");
-		VaccineType result = vaccineTypeIoOperation.updateVaccineType(foundVaccineType);
-		assertThat(result).isNotNull();
-		VaccineType updateVaccineType = vaccineTypeIoOperation.findVaccineType(code);
-		assertThat(updateVaccineType).isNotNull();
-		assertThat(updateVaccineType.getDescription()).isEqualTo("Update");
+		VaccineType updatedVaccineType = vaccineTypeIoOperation.updateVaccineType(foundVaccineType);
+		assertThat(updatedVaccineType).isNotNull();
+		assertThat(updatedVaccineType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testIoNewVaccineType() throws Exception {
 		VaccineType vaccineType = testVaccineType.setup(true);
-		VaccineType result = vaccineTypeIoOperation.newVaccineType(vaccineType);
-		assertThat(result).isNotNull();
-		checkVaccineTypeIntoDb(vaccineType.getCode());
+		VaccineType newVaccineType = vaccineTypeIoOperation.newVaccineType(vaccineType);
+		checkVaccineTypeIntoDb(newVaccineType.getCode());
 	}
 
 	@Test
 	public void testIoIsCodePresent() throws Exception {
 		String code = setupTestVaccineType(false);
-		boolean result = vaccineTypeIoOperation.isCodePresent(code);
-		assertThat(result).isTrue();
+		assertThat(vaccineTypeIoOperation.isCodePresent(code)).isTrue();
 	}
 
 	@Test
 	public void testIoDeleteVaccineType() throws Exception {
 		String code = setupTestVaccineType(false);
 		VaccineType foundVaccineType = vaccineTypeIoOperation.findVaccineType(code);
-		boolean result = vaccineTypeIoOperation.deleteVaccineType(foundVaccineType);
-		assertThat(result).isTrue();
-		result = vaccineTypeIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		assertThat(foundVaccineType).isNotNull();
+		vaccineTypeIoOperation.deleteVaccineType(foundVaccineType);
+		assertThat(vaccineTypeIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
 	public void testIoFindVaccineType() throws Exception {
 		String code = setupTestVaccineType(false);
-		VaccineType result = vaccineTypeIoOperation.findVaccineType(code);
-		assertThat(result).isNotNull();
-		assertThat(result.getCode()).isEqualTo(code);
+		VaccineType foundVaccineType = vaccineTypeIoOperation.findVaccineType(code);
+		assertThat(foundVaccineType).isNotNull();
+		assertThat(foundVaccineType.getCode()).isEqualTo(code);
 	}
 
 	@Test
 	public void testMgrGetVaccineType() throws Exception {
 		String code = setupTestVaccineType(false);
 		VaccineType foundVaccineType = vaccineTypeBrowserManager.findVaccineType(code);
+		assertThat(foundVaccineType).isNotNull();
 		List<VaccineType> vaccineTypes = vaccineTypeBrowserManager.getVaccineType();
 		assertThat(vaccineTypes.get(vaccineTypes.size() - 1).getDescription()).isEqualTo(foundVaccineType.getDescription());
 	}
@@ -139,11 +137,11 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrUpdateVaccineType() throws Exception {
 		String code = setupTestVaccineType(false);
 		VaccineType foundVaccineType = vaccineTypeBrowserManager.findVaccineType(code);
+		assertThat(foundVaccineType).isNotNull();
 		foundVaccineType.setDescription("Update");
-		assertThat(vaccineTypeBrowserManager.updateVaccineType(foundVaccineType)).isNotNull();
-		VaccineType updateVaccineType = vaccineTypeBrowserManager.findVaccineType(code);
-		assertThat(updateVaccineType).isNotNull();
-		assertThat(updateVaccineType.getDescription()).isEqualTo("Update");
+		VaccineType updatedVaccineType = vaccineTypeBrowserManager.updateVaccineType(foundVaccineType);
+		assertThat(updatedVaccineType).isNotNull();
+		assertThat(updatedVaccineType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
@@ -163,22 +161,23 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrDeleteVaccineType() throws Exception {
 		String code = setupTestVaccineType(false);
 		VaccineType foundVaccineType = vaccineTypeIoOperation.findVaccineType(code);
-		assertThat(vaccineTypeBrowserManager.deleteVaccineType(foundVaccineType)).isTrue();
+		assertThat(foundVaccineType).isNotNull();
+		vaccineTypeBrowserManager.deleteVaccineType(foundVaccineType);
 		assertThat(vaccineTypeBrowserManager.isCodePresent(code)).isFalse();
 	}
 
 	@Test
 	public void testMgrFindVaccineType() throws Exception {
 		String code = setupTestVaccineType(false);
-		VaccineType result = vaccineTypeBrowserManager.findVaccineType(code);
-		assertThat(result).isNotNull();
-		assertThat(result.getCode()).isEqualTo(code);
+		VaccineType foundVaccineType = vaccineTypeBrowserManager.findVaccineType(code);
+		assertThat(foundVaccineType).isNotNull();
+		assertThat(foundVaccineType.getCode()).isEqualTo(code);
 	}
 
 	@Test
 	public void testMgrFindVaccineTypeNull() throws Exception {
 		assertThatThrownBy(() -> vaccineTypeBrowserManager.findVaccineType(null))
-				.isInstanceOf(RuntimeException.class);
+			.isInstanceOf(RuntimeException.class);
 	}
 
 	@Test
@@ -187,11 +186,11 @@ public class Tests extends OHCoreTestCase {
 		VaccineType vaccineType = vaccineTypeBrowserManager.findVaccineType(code);
 		vaccineType.setCode("");
 		assertThatThrownBy(() -> vaccineTypeBrowserManager.newVaccineType(vaccineType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -200,11 +199,11 @@ public class Tests extends OHCoreTestCase {
 		VaccineType vaccineType = vaccineTypeBrowserManager.findVaccineType(code);
 		vaccineType.setCode("thisIsACodeThatIsTooLong");
 		assertThatThrownBy(() -> vaccineTypeBrowserManager.newVaccineType(vaccineType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -213,11 +212,11 @@ public class Tests extends OHCoreTestCase {
 		VaccineType vaccineType = vaccineTypeBrowserManager.findVaccineType(code);
 		vaccineType.setDescription("");
 		assertThatThrownBy(() -> vaccineTypeBrowserManager.newVaccineType(vaccineType))
-				.isInstanceOf(OHDataIntegrityViolationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataIntegrityViolationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -225,11 +224,11 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestVaccineType(true);
 		VaccineType vaccineType = vaccineTypeBrowserManager.findVaccineType(code);
 		assertThatThrownBy(() -> vaccineTypeBrowserManager.newVaccineType(vaccineType))
-				.isInstanceOf(OHDataIntegrityViolationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataIntegrityViolationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -243,6 +242,7 @@ public class Tests extends OHCoreTestCase {
 	public void testVaccinePrint() throws Exception {
 		String code = setupTestVaccineType(true);
 		VaccineType vaccineType = vaccineTypeBrowserManager.findVaccineType(code);
+		assertThat(vaccineType).isNotNull();
 		assertThat(vaccineType.print()).isEqualTo("vaccineType code=." + vaccineType.getCode() + ". description=." + vaccineType.getDescription() + '.');
 	}
 
@@ -250,8 +250,8 @@ public class Tests extends OHCoreTestCase {
 	public void testVaccineEquals() throws Exception {
 		VaccineType vaccineType = testVaccineType.setup(true);
 
-		assertThat(vaccineType).isEqualTo(vaccineType);
 		assertThat(vaccineType)
+				.isEqualTo(vaccineType)
 				.isNotNull()
 				.isNotEqualTo("someStringValue");
 
@@ -282,6 +282,7 @@ public class Tests extends OHCoreTestCase {
 
 	private void checkVaccineTypeIntoDb(String code) throws OHServiceException {
 		VaccineType foundVaccineType = vaccineTypeIoOperation.findVaccineType(code);
+		assertThat(foundVaccineType).isNotNull();
 		testVaccineType.check(foundVaccineType);
 	}
 }
