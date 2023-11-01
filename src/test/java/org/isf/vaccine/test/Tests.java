@@ -242,11 +242,11 @@ public class Tests extends OHCoreTestCase {
 		Vaccine vaccine = vaccineBrowserManager.findVaccine(code);
 		vaccine.setDescription("");
 		assertThatThrownBy(() -> vaccineBrowserManager.newVaccine(vaccine))
-				.isInstanceOf(OHDataIntegrityViolationException.class)
-				.has(
-						new Condition<Throwable>(
-                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataIntegrityViolationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -254,11 +254,11 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestVaccine(true);
 		Vaccine vaccine = vaccineBrowserManager.findVaccine(code);
 		assertThatThrownBy(() -> vaccineBrowserManager.newVaccine(vaccine))
-				.isInstanceOf(OHDataIntegrityViolationException.class)
-				.has(
-						new Condition<Throwable>(
-                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataIntegrityViolationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
