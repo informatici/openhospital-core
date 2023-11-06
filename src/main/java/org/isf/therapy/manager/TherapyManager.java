@@ -141,7 +141,7 @@ public class TherapyManager {
 	/**
 	 * Return the list of {@link TherapyRow}s (therapies) for specified Patient ID
 	 * or
-	 * return all {@link TherapyRow}s (therapies) if <code>0</code> is passed
+	 * return all {@link TherapyRow}s (therapies) if {@code 0} is passed
 	 *
 	 * @param code - the Patient ID
 	 * @return the list of {@link TherapyRow}s (therapies)
@@ -166,7 +166,7 @@ public class TherapyManager {
 	 * Replace all {@link TherapyRow}s (therapies) for related Patient
 	 *
 	 * @param thRows - the list of {@link TherapyRow}s (therapies)
-	 * @return <code>true</code> if the row has been inserted, <code>false</code> otherwise
+	 * @return {@code true} if the row has been inserted, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
@@ -233,14 +233,14 @@ public class TherapyManager {
 	 * Delete all {@link TherapyRow}s (therapies) for specified Patient ID
 	 *
 	 * @param code - the Patient ID
-	 * @return <code>true</code> if the therapies have been deleted, <code>false</code> otherwise
+	 * @return {@code true} if the therapies have been deleted, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
 	@TranslateOHServiceException
-	public boolean deleteAllTherapies(Integer code) throws OHServiceException {
+	public void deleteAllTherapies(Integer code) throws OHServiceException {
 		Patient patient = patientManager.getPatientById(code);
-		return ioOperations.deleteAllTherapies(patient);
+		ioOperations.deleteAllTherapies(patient);
 	}
 
 	/**
@@ -283,10 +283,8 @@ public class TherapyManager {
 				int currentQuantity = wardManager.getCurrentQuantityInWard(null, med);
 				actualQty += currentQuantity;
 
-				if (neededQty > actualQty) {
-					if (!medOutStock.contains(med)) {
-						medOutStock.add(med);
-					}
+				if (neededQty > actualQty && !medOutStock.contains(med)) {
+					medOutStock.add(med);
 				}
 			}
 		}

@@ -31,25 +31,25 @@ public final class ExaminationParameters extends ConfigurationProperties {
 	private static final String FILE_PROPERTIES = "examination.properties";
 	
 	public static int HEIGHT_MIN;
-	private static int DEFAULT_HEIGHT_MIN;
+	private static int DEFAULT_HEIGHT_MIN = 0;
 
 	public static int HEIGHT_MAX;
 	private static final int DEFAULT_HEIGHT_MAX = 250;
 	
 	public static int HEIGHT_INIT;
-	private static final int DEFAULT_HEIGHT_INIT = 170;
+	private static final int DEFAULT_HEIGHT_INIT = 0;
 	
 	public static int WEIGHT_MIN;
 	private static final int DEFAULT_WEIGHT_MIN = 0;
 	
 	public static int WEIGHT_MAX;
-	private static final int DEFAULT_WEIGHT_MAX = 400;
+	private static final int DEFAULT_WEIGHT_MAX = 200;
 	
 	public static double WEIGHT_STEP;
 	private static final double DEFAULT_WEIGHT_STEP = 0.1;
 	
 	public static int WEIGHT_INIT;
-	private static int DEFAULT_WEIGHT_INIT = 80;
+	private static int DEFAULT_WEIGHT_INIT = 0;
 	
 	public static int AP_MIN_INIT;
 	private static final int DEFAULT_AP_MIN_INIT = 80;
@@ -73,7 +73,7 @@ public final class ExaminationParameters extends ConfigurationProperties {
 	private static final int DEFAULT_RR_MAX = 100;
 	
 	public static int RR_INIT;
-	private static final int DEFAULT_RR_INIT = 15;
+	private static final int DEFAULT_RR_INIT = 20;
 
 	public static String AUSCULTATION_INIT = "normal";
 	
@@ -82,7 +82,7 @@ public final class ExaminationParameters extends ConfigurationProperties {
 	public static String BOWEL_DESC_INIT = "regular";
 	
 	public static int TEMP_MIN;
-	private static final int DEFAULT_TEMP_MIN = 0;
+	private static final int DEFAULT_TEMP_MIN = 30;
 	
 	public static int TEMP_MAX;
 	private static final int DEFAULT_TEMP_MAX = 50;
@@ -95,6 +95,8 @@ public final class ExaminationParameters extends ConfigurationProperties {
 	
 	public static int SAT_MIN;
 	private static final int DEFAULT_SAT_MIN = 50;
+	
+	public static int SAT_MAX = 100;
 
 	public static int SAT_INIT;
 	private static final int DEFAULT_SAT_INIT = 90;

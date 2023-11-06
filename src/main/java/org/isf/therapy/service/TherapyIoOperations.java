@@ -40,10 +40,10 @@ public class TherapyIoOperations {
 	private TherapyIoOperationRepository repository;
 
 	/**
-	 * Insert a new {@link TherapyRow} (therapy) in the DB
+	 * Insert a new {@link TherapyRow} (therapy) into the DB.
 	 *
 	 * @param thRow - the {@link TherapyRow} (therapy)
-	 * @return the therapyID
+	 * @return the newly inserted {@link TherapyRow} object.
 	 * @throws OHServiceException
 	 */
 	public TherapyRow newTherapy(TherapyRow thRow) throws OHServiceException {
@@ -53,7 +53,7 @@ public class TherapyIoOperations {
 	/**
 	 * Return the list of {@link TherapyRow}s (therapies) for specified Patient ID
 	 * or
-	 * return all {@link TherapyRow}s (therapies) if <code>0</code> is passed
+	 * return all {@link TherapyRow}s (therapies) if {@code 0} is passed
 	 *
 	 * @param patID - the Patient ID
 	 * @return the list of {@link TherapyRow}s (therapies)
@@ -65,22 +65,20 @@ public class TherapyIoOperations {
 	}
 
 	/**
-	 * Delete all {@link TherapyRow}s (therapies) for specified {@link Patient}
+	 * Delete all {@link TherapyRow}s (therapies) for specified {@link Patient}.
 	 *
 	 * @param patient - the {@link Patient}
-	 * @return <code>true</code> if the therapies have been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean deleteAllTherapies(Patient patient) throws OHServiceException {
+	public void deleteAllTherapies(Patient patient) throws OHServiceException {
 		repository.deleteByPatient(patient);
-		return true;
 	}
 
 	/**
-	 * Checks if the code is already in use
+	 * Checks if the code is already in use.
 	 *
 	 * @param code - the therapy code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {

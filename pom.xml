@@ -274,12 +274,12 @@
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-core</artifactId>
-			<version>4.0.3</version>
+			<version>4.0.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>
-			<version>4.0.3</version>
+			<version>4.0.4</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.activation</groupId>
@@ -289,22 +289,22 @@
 		<dependency>
 			<groupId>org.dcm4che</groupId>
 			<artifactId>dcm4che-core</artifactId>
-			<version>5.31.0</version>
+			<version>5.31.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.dcm4che</groupId>
 			<artifactId>dcm4che-image</artifactId>
-			<version>5.31.0</version>
+			<version>5.31.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.dcm4che</groupId>
 			<artifactId>dcm4che-imageio</artifactId>
-			<version>5.31.0</version>
+			<version>5.31.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.dcm4che</groupId>
 			<artifactId>dcm4che-imageio-opencv</artifactId>
-			<version>5.31.0</version>
+			<version>5.31.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
