@@ -49,10 +49,10 @@ public class VaccineTypeBrowserManager {
 	private VacTypeIoOperation ioOperations;
 
 	/**
-	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * Verify if the object is valid for CRUD and return a list of errors, if any.
 	 *
 	 * @param vaccineType
-	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
 	 */
 	protected void validateVaccineType(VaccineType vaccineType, boolean insert) throws OHServiceException {
@@ -77,7 +77,7 @@ public class VaccineTypeBrowserManager {
 	}
 
 	/**
-	 * This method returns all {@link VaccineType}s from DB
+	 * This method returns all {@link VaccineType}s from the DB.
 	 *
 	 * @return the list of {@link VaccineType}s
 	 * @throws OHServiceException
@@ -87,10 +87,10 @@ public class VaccineTypeBrowserManager {
 	}
 
 	/**
-	 * Inserts a new {@link VaccineType} into DB
+	 * Inserts a new {@link VaccineType} into the DB.
 	 *
 	 * @param vaccineType - the {@link VaccineType} to insert
-	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
+	 * @return the newly inserted {@link VaccineType} object.
 	 * @throws OHServiceException
 	 */
 	public VaccineType newVaccineType(VaccineType vaccineType) throws OHServiceException {
@@ -99,10 +99,10 @@ public class VaccineTypeBrowserManager {
 	}
 
 	/**
-	 * Update a {@link VaccineType} in the DB
+	 * Update a {@link VaccineType} in the DB.
 	 *
 	 * @param vaccineType - the item to update
-	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
+	 * @return the updated {@link VaccineType} object.
 	 * @throws OHServiceException
 	 */
 	public VaccineType updateVaccineType(VaccineType vaccineType) throws OHServiceException {
@@ -111,21 +111,20 @@ public class VaccineTypeBrowserManager {
 	}
 
 	/**
-	 * Deletes a {@link VaccineType} in the DB
+	 * Deletes a {@link VaccineType} in the DB.
 	 *
 	 * @param vaccineType - the item to delete
-	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean deleteVaccineType(VaccineType vaccineType) throws OHServiceException {
-		return ioOperations.deleteVaccineType(vaccineType);
+	public void deleteVaccineType(VaccineType vaccineType) throws OHServiceException {
+		ioOperations.deleteVaccineType(vaccineType);
 	}
 
 	/**
-	 * Checks if the code is already in use
+	 * Checks if the code is already in use.
 	 *
 	 * @param code - the {@link VaccineType} code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -133,10 +132,10 @@ public class VaccineTypeBrowserManager {
 	}
 
 	/**
-	 * Returns the {@link VaccineType} based on vaccine type code
+	 * Returns the {@link VaccineType} based on vaccine type code.
 	 *
 	 * @param code - the  {@link VaccineType} code.
-	 * @return the {@link VaccineType}
+	 * @return the {@link VaccineType} or {@literal null} if none found
 	 */
 	public VaccineType findVaccineType(String code) {
 		return ioOperations.findVaccineType(code);

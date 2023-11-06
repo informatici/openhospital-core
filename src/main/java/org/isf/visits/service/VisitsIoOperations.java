@@ -40,9 +40,9 @@ public class VisitsIoOperations {
 	private VisitsIoOperationRepository repository;
 	
 	/**
-	 * Returns the list of all {@link Visit}s related to a patID
+	 * Returns the list of all {@link Visit}s related to a {@link Patient} ID.
 	 * 
-	 * @param patID - the {@link Patient} ID. If <code>0</code> return the list of all {@link Visit}s
+	 * @param patID - the {@link Patient} ID. If {@code 0} return the list of all {@link Visit}s
 	 * @return the list of {@link Visit}s
 	 * @throws OHServiceException 
 	 */
@@ -53,9 +53,9 @@ public class VisitsIoOperations {
 	}
 	
 	/**
-	 * Returns the list of all {@link Visit}s related to a patID in OPD (Ward is {@code null}).
+	 * Returns the list of all {@link Visit}s related to a {@link Patient} ID in OPD (Ward is {@code null}).
 	 *
-	 * @param patID - the {@link Patient} ID. If <code>0</code> return the list of all OPD {@link Visit}s
+	 * @param patID - the {@link Patient} ID. If {@code 0} return the list of all OPD {@link Visit}s
 	 * @return the list of {@link Visit}s
 	 * @throws OHServiceException
 	 */
@@ -70,29 +70,28 @@ public class VisitsIoOperations {
 	}
 
 	/**
-	 * Returns the list of all {@link Visit}s related to a wardId
+	 * Returns the list of all {@link Visit}s related to a wardId.
+	 *
 	 * @param wardId - if {@code null}, returns all visits for all wards
 	 * @return the list of {@link Visit}s
 	 * @throws OHServiceException
 	 */
 	public List<Visit> getVisitsWard(String wardId) throws OHServiceException {
-		List<Visit> visits = null;
-
+		List<Visit> visits;
 		if (wardId != null) {
 			visits = repository.findAllWhereWardByOrderDateAsc(wardId);
 		} else {
 			visits = repository.findAllByOrderByPatient_CodeAscDateAsc();
 		}
-
 		return visits;
 	}
 
 
 	/**
-	 * Insert a new {@link Visit} for a specified {@link Visit}
+	 * Insert a new {@link Visit}.
 	 * 
 	 * @param visit - the {@link Visit}.
-	 * @return the {@link Visit}
+	 * @return the inserted {@link Visit} object.
 	 * @throws OHServiceException 
 	 */
 	public Visit newVisit(Visit visit) throws OHServiceException {
@@ -100,10 +99,10 @@ public class VisitsIoOperations {
 	}
 	
 	/**
-	 * update {@link Visit} for a specified {@link Visit}
+	 * Update a {@link Visit}.
 	 * 
 	 * @param visit - the {@link Visit}.
-	 * @return the {@link Visit}
+	 * @return the updated {@link Visit} object.
 	 * @throws OHServiceException 
 	 */
 	@Transactional
@@ -112,10 +111,10 @@ public class VisitsIoOperations {
 	}
 
 	/**
-	 * Checks if the code is already in use
+	 * Checks if the code is already in use.
 	 *
-	 * @param code - the visit code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @param code - the {@link Visit} code
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
@@ -123,7 +122,7 @@ public class VisitsIoOperations {
 	}
 
 	/**
-	 * Returns the {@link Visit} based on the Visit id
+	 * Returns a {@link Visit} based on the Visit id.
 	 *
 	 * @param id - the id
 	 * @return the {@link Visit} or {@literal null} if none found
@@ -133,7 +132,7 @@ public class VisitsIoOperations {
 	}
 
 	/**
-	 * Delete the {@link Visit} for related Patient
+	 * Delete a {@link Visit}.
 	 *
 	 * @param visit - the {@link Visit}
 	 */
