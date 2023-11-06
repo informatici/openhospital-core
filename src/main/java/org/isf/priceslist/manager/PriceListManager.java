@@ -118,7 +118,7 @@ public class PriceListManager {
 	 * @throws OHServiceException
 	 */
 	public boolean copyList(PriceList list) throws OHServiceException {
-		return copyList(list, 1., 0.);
+		return copyList(list, 1.0, 0.0);
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class PriceListManager {
 	public List<PriceForPrint> convertPrice(PriceList listSelected, Iterable<Price> prices) {
 		List<PriceForPrint> pricePrint = new ArrayList<>();
 		for (Price price : prices) {
-			if (price.getList().getId() == listSelected.getId() && price.getPrice() != 0.) {
+			if (price.getList().getId() == listSelected.getId() && price.getPrice() != 0.0) {
 				PriceForPrint price4print = new PriceForPrint();
 				price4print.setList(listSelected.getName());
 				price4print.setCurrency(listSelected.getCurrency());

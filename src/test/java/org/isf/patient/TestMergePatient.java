@@ -75,7 +75,6 @@ public class TestMergePatient extends OHCoreTestCase {
 	private static TestAdmission testAdmission;
 	private static TestAdmissionType testAdmissionType;
 	private static TestBill testBill;
-	private static TestBillPayments testBillPayments;
 	private static TestDisease testDisease;
 	private static TestDiseaseType testDiseaseType;
 	private static TestPriceList testPriceList;
@@ -116,7 +115,7 @@ public class TestMergePatient extends OHCoreTestCase {
 		testAdmission = new TestAdmission();
 		testAdmissionType = new TestAdmissionType();
 		testBill = new TestBill();
-		testBillPayments = new TestBillPayments();
+		TestBillPayments testBillPayments = new TestBillPayments();
 		testDisease = new TestDisease();
 		testDiseaseType = new TestDiseaseType();
 		testPriceList = new TestPriceList();

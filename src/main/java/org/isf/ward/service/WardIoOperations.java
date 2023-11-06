@@ -61,7 +61,7 @@ public class WardIoOperations {
 	}
 	
 	/**
-	 * Retrieves all stored {@link Ward}s with flag maternity equals <code>false</code>.
+	 * Retrieves all stored {@link Ward}s with flag maternity equals {@code false}.
 	 * @return the retrieved wards.
 	 * @throws OHServiceException if an error occurs retrieving the diseases.
 	 */
@@ -71,14 +71,14 @@ public class WardIoOperations {
 	
 	/**
 	 * Retrieves all stored {@link Ward}s with the specified ward ID.
-	 * @param wardID - the ward ID, can be <code>null</code>
+	 * @param wardID - the ward ID, can be {@code null}
 	 * @return the retrieved wards.
 	 * @throws OHServiceException if an error occurs retrieving the wards.
 	 * 
 	 * TODO: remove this method, findWard(String code) should be enough
 	 */
 	public List<Ward> getWards(String wardID) throws OHServiceException {
-		if (wardID != null && wardID.trim().length() > 0) {
+		if (wardID != null && !wardID.trim().isEmpty()) {
 			return repository.findByCodeContains(wardID);
 		}
 		return repository.findAll();
@@ -123,18 +123,16 @@ public class WardIoOperations {
 	/**
 	 * Mark as deleted the specified {@link Ward}.
 	 * @param ward the ward to make delete.
-	 * @return <code>true</code> if the ward has been marked, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurred during the delete operation.
 	 */
-	public boolean deleteWard(Ward ward) throws OHServiceException {
+	public void deleteWard(Ward ward) throws OHServiceException {
 		repository.delete(ward);
-		return true;
 	}
 	
 	/**
 	 * Check if the specified code is used by other {@link Ward}s.
 	 * @param code the code to check.
-	 * @return <code>true</code> if it is already used, <code>false</code> otherwise.
+	 * @return {@code true} if it is already used, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -142,8 +140,8 @@ public class WardIoOperations {
 	}
 	
 	/**
-	 * Check if the maternity ward exists
-	 * @return <code>true</code> if the word exists, <code>false</code> otherwise.
+	 * Check if the maternity ward exists.
+	 * @return {@code true} if the word exists, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isMaternityPresent() throws OHServiceException {
@@ -151,8 +149,8 @@ public class WardIoOperations {
 	}
 	
 	/**
-	 * Check if the OPD ward exists
-	 * @return <code>true</code> if the OPD ward exists, <code>false</code> otherwise.
+	 * Check if the OPD ward exists.
+	 * @return {@code true} if the OPD ward exists, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isOpdPresent() throws OHServiceException {
@@ -160,18 +158,14 @@ public class WardIoOperations {
 	}
 
 	/**
-	 * Returns the {@link Ward} based on code
+	 * Returns the {@link Ward} based on its code.
 	 *
 	 * @param code - the code, must not be {@literal null}
 	 * @return the {@link Ward} or {@literal null} if none found
 	 * @throws OHServiceException
-	 * @throws IllegalArgumentException if {@code code} is {@literal null}
 	 */
 	public Ward findWard(String code) throws OHServiceException {
-		if (code != null) {
-			return repository.findById(code).orElse(null);
-		}
-		throw new IllegalArgumentException("code must not be null");
+		return repository.findById(code).orElse(null);
 	}
 
 }

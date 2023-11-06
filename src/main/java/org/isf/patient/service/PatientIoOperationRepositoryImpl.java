@@ -83,7 +83,7 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 				cb.isNull(patientRoot.get("deleted"))
 		));
 
-		query.where(cb.and(where.toArray(new Predicate[where.size()])));
+		query.where(cb.and(where.toArray(new Predicate[0])));
 		query.orderBy(cb.desc(patientRoot.get("code")));
 
 		return query;
@@ -103,7 +103,7 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 	}
 
 	private String like(String word) {
-		return "%" + word + "%";
+		return '%' + word + '%';
 	}
 
 	public List<Patient> getPatientsByParams(Map<String, Object> params) {
@@ -132,7 +132,7 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 				}
 			}
 		}
-		query.select(patient).where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+		query.select(patient).where(cb.and(predicates.toArray(new Predicate[0])));
 
 		return entityManager.createQuery(query).getResultList();
 	}

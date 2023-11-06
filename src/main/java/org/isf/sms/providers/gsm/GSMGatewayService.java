@@ -51,7 +51,6 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 
 	private Enumeration< ? > portList;
 	private CommPortIdentifier portId;
-	private String port;
 	private SerialPort serialPort;
 	private boolean connected;
 	private OutputStream outputStream;
@@ -83,7 +82,7 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortEventLis
 		LOGGER.debug("Initialize...");
 		connected = false;
 		portList = CommPortIdentifier.getPortIdentifiers();
-		port = GSMParameters.PORT;
+		String port = GSMParameters.PORT;
 		while (portList.hasMoreElements()) {
 
 			portId = (CommPortIdentifier) portList.nextElement();

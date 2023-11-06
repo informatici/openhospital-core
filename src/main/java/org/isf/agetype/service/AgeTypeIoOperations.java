@@ -36,8 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
-public class AgeTypeIoOperations 
-{
+public class AgeTypeIoOperations {
 	@Autowired
 	private AgeTypeIoOperationRepository repository;
 	
@@ -53,11 +52,11 @@ public class AgeTypeIoOperations
 	/**
 	 * Updates the list of {@link AgeType}s.
 	 * @param ageType the {@link AgeType} to update.
-	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise.
+	 * @return a list of updated {@link AgeType}s.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateAgeType(List<AgeType> ageType) throws OHServiceException {
-		return repository.saveAll(ageType) != null;
+	public List<AgeType> updateAgeType(List<AgeType> ageType) throws OHServiceException {
+		return repository.saveAll(ageType);
 	}
 
 	/**

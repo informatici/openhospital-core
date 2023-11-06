@@ -19,48 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.sms.providers.textbelt.model;
+package org.isf.examination.model;
 
-import java.io.Serializable;
-
-public class TextbeltSmsRequest implements Serializable {
-
-	private static final long serialVersionUID = 6019474639994796818L;
-
-	private String phone;
-	private String message;
-	private String key;
-
-	public TextbeltSmsRequest() {
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	@Override
-	public String toString() {
-		return "TextbeltSmsRequest [phone=***" + ", message=***" + ", key=***" + ']';
-	}
-
+public enum Bowel {
+	constipation, regular, diarrheal, irregular
 }

@@ -95,7 +95,7 @@ public class OperationRow extends Auditable<String> {
     private Bill bill;
 
     @Column(name = "OPER_TRANS_UNIT", columnDefinition = "float default 0")
-    private Float transUnit = 0f;
+    private Float transUnit = 0.0f;
     
     @Transient
     private volatile int hashCode;
@@ -258,6 +258,6 @@ public class OperationRow extends Auditable<String> {
 
     @Override
     public String toString() {
-        return this.operation.getDescription() + " " + this.admission.getUserID();
+        return this.operation.getDescription() + ' ' + this.admission.getUserID();
     }
 }

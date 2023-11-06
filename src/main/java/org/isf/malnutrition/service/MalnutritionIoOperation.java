@@ -54,7 +54,7 @@ public class MalnutritionIoOperation {
 	/**
 	 * Stores a new {@link Malnutrition}. The malnutrition object is updated with the generated id.
 	 * @param malnutrition the malnutrition to store.
-	 * @return <code>true</code> if the malnutrition has been stored, <code>false</code> otherwise.
+	 * @return the newly stored new {@link Malnutrition} object.
 	 * @throws OHServiceException if an error occurs storing the malnutrition.
 	 */
 	public Malnutrition newMalnutrition(Malnutrition malnutrition) throws OHServiceException {
@@ -64,7 +64,7 @@ public class MalnutritionIoOperation {
 	/**
 	 * Updates the specified {@link Malnutrition}.
 	 * @param malnutrition the malnutrition to update.
-	 * @return the updated {@link Malnutrition}
+	 * @return the updated {@link Malnutrition} object.
 	 * @throws OHServiceException if an error occurs updating the malnutrition.
 	 */
 	public Malnutrition updateMalnutrition(Malnutrition malnutrition) throws OHServiceException {
@@ -78,35 +78,37 @@ public class MalnutritionIoOperation {
 	 * @throws OHServiceException if an error occurs updating the malnutrition.
 	 */
 	public Malnutrition getMalnutrition(int code) throws OHServiceException {
-		return repository.getById(code);
+		return repository.getReferenceById(code);
 	}
+
 	/**
 	 * Returns the last {@link Malnutrition} entry for specified patient ID
 	 * @param patientID - the patient ID
-	 * @return the last {@link Malnutrition} for specified patient ID. <code>null</code> if none.
+	 * @return the last {@link Malnutrition} for specified patient ID. {@code null} if none.
 	 * @throws OHServiceException
 	 */
 	public Malnutrition getLastMalnutrition(int patientID) throws OHServiceException {
 		List<Malnutrition> malnutritions = repository.findAllWhereAdmissionByOrderDateDesc(patientID);
+		if (malnutritions.isEmpty()) {
+			return null;
+		}
 		return malnutritions.get(0);
 	}
 
 	/**
 	 * Deletes the specified {@link Malnutrition}.
 	 * @param malnutrition the malnutrition to delete.
-	 * @return <code>true</code> if the malnutrition has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs deleting the specified malnutrition.
 	 */
-	public boolean deleteMalnutrition(Malnutrition malnutrition) throws OHServiceException {
+	public void deleteMalnutrition(Malnutrition malnutrition) throws OHServiceException {
 		repository.delete(malnutrition);
-		return true;
 	}
 
 	/**
-	 * Checks if the code is already in use
+	 * Checks if the code is already in use.
 	 *
 	 * @param code - the malnutrition code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
