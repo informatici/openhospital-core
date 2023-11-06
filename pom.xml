@@ -289,7 +289,7 @@
 		<dependency>
 			<groupId>org.dcm4che</groupId>
 			<artifactId>dcm4che-core</artifactId>
-			<version>5.31.0</version>
+			<version>5.31.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.dcm4che</groupId>
