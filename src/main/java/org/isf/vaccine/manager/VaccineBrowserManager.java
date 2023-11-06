@@ -50,10 +50,10 @@ public class VaccineBrowserManager {
 	private VaccineIoOperations ioOperations;
 
 	/**
-	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * Verify if the object is valid for CRUD and return a list of errors, if any.
 	 *
-	 * @param vaccine
-	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @param vaccine the {@link Vaccine object to validate
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
 	 */
 	protected void validateVaccine(Vaccine vaccine, boolean insert) throws OHServiceException {
@@ -78,7 +78,7 @@ public class VaccineBrowserManager {
 	}
 
 	/**
-	 * Returns the list of {@link Vaccine}s in the DB
+	 * Returns the list of {@link Vaccine}s in the DB.
 	 *
 	 * @return the list of {@link Vaccine}s
 	 */
@@ -87,7 +87,7 @@ public class VaccineBrowserManager {
 	}
 
 	/**
-	 * Returns the list of {@link Vaccine}s based on vaccine type code
+	 * Returns the list of {@link Vaccine}s based on vaccine type code.
 	 *
 	 * @param vaccineTypeCode - the type code.
 	 * @return the list of {@link Vaccine}s
@@ -97,10 +97,10 @@ public class VaccineBrowserManager {
 	}
 
 	/**
-	 * Inserts a new {@link Vaccine} in the DB
+	 * Inserts a new {@link Vaccine} into the DB.
 	 *
-	 * @param vaccine - the item to insert
-	 * @return vaccine that has been inserted
+	 * @param vaccine - the {@link Vaccine} object to insert
+	 * @return the newly inserted {@link Vaccine} object.
 	 */
 	public Vaccine newVaccine(Vaccine vaccine) throws OHServiceException {
 		validateVaccine(vaccine, true);
@@ -111,7 +111,7 @@ public class VaccineBrowserManager {
 	 * Updates the specified {@link Vaccine} object.
 	 *
 	 * @param vaccine - the {@link Vaccine} object to update.
-	 * @return vaccine that has been updated.
+	 * @return the updated {@link Vaccine} object.
 	 */
 	public Vaccine updateVaccine(Vaccine vaccine) throws OHServiceException {
 		validateVaccine(vaccine, false);
@@ -119,32 +119,31 @@ public class VaccineBrowserManager {
 	}
 
 	/**
-	 * Deletes a {@link Vaccine} in the DB
+	 * Deletes a {@link Vaccine} in the DB.
 	 *
 	 * @param vaccine - the item to delete
-	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
 	 */
-	public boolean deleteVaccine(Vaccine vaccine) throws OHServiceException {
-		return ioOperations.deleteVaccine(vaccine);
+	public void deleteVaccine(Vaccine vaccine) throws OHServiceException {
+		ioOperations.deleteVaccine(vaccine);
 	}
 
 	/**
-	 * Checks if the code is already in use
+	 * Checks if the code is already in use.
 	 *
 	 * @param code - the vaccine code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
 		return ioOperations.isCodePresent(code);
 	}
 
 	/**
-	 * Returns the {@link Vaccine} based on vaccine code
+	 * Returns the {@link Vaccine} based on vaccine code.
 	 *
-	 * @param code - the  {@link Vaccine} code.
+	 * @param code - the {@link Vaccine} code.
 	 * @return the {@link Vaccine}
 	 */
-	public Vaccine findVaccine(String code) {
+	public Vaccine findVaccine(String code) throws OHServiceException {
 		return ioOperations.findVaccine(code);
 	}
 

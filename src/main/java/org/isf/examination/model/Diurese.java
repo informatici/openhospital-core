@@ -19,25 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.anamnesis.manager;
+package org.isf.examination.model;
 
-import org.isf.anamnesis.model.PatientHistory;
-import org.isf.anamnesis.service.PatientHistoryIoOperations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-@Component
-public class PatientHistoryManager {
-
-	@Autowired
-	private PatientHistoryIoOperations ioOperations;
-
-	public PatientHistory getByPatientId(int patientId) {
-		return ioOperations.getByPatientId(patientId);
-	}
-
-	public PatientHistory saveOrUpdate(PatientHistory patHis) {
-		return ioOperations.saveOrUpdate(patHis);
-	}
-
+public enum Diurese {
+	physiological, oliguria, anuria, frequent, nocturia, stranguria, hematuria, pyuria
 }

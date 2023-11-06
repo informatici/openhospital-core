@@ -24,7 +24,6 @@ package org.isf.opd.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.isf.distype.model.DiseaseType;
 import org.isf.opd.model.Opd;
 import org.isf.patient.model.Patient;
 import org.isf.ward.model.Ward;
@@ -56,8 +55,7 @@ public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, O
 	List<Opd> findByProgYear(@Param("prog_year") Integer prog_year);
 
 	@Query(value = "select op from Opd op where op.prog_year = :prog_year and op.date >= :dateVisitFrom and op.date < :dateVisitTo")
-	List<Opd> findByProgYearAndDateBetween(@Param("prog_year") Integer prog_year, @Param("dateVisitFrom") LocalDateTime dateVisitFrom,
-					@Param("dateVisitTo") LocalDateTime dateVisitTo);
+	List<Opd> findByProgYearAndDateBetween(@Param("prog_year") Integer prog_year, @Param("dateVisitFrom") LocalDateTime dateVisitFrom, @Param("dateVisitTo") LocalDateTime dateVisitTo);
 
 	@Query("select o from Opd o order by o.prog_year")
 	Page<Opd> findAllOrderByProgYearDescPageable(Pageable pageable);

@@ -40,7 +40,7 @@ public class PregnantTreatmentTypeIoOperation {
 	
 	
 	/**
-	 * Return the list of {@link PregnantTreatmentType}s
+	 * Return the list of {@link PregnantTreatmentType}s.
 	 * 
 	 * @return the list of {@link PregnantTreatmentType}s
 	 * @throws OHServiceException 
@@ -50,10 +50,10 @@ public class PregnantTreatmentTypeIoOperation {
 	}
 	
 	/**
-	 * Insert a {@link PregnantTreatmentType} in the DB
+	 * Insert a {@link PregnantTreatmentType} into the DB.
 	 * 
 	 * @param pregnantTreatmentType - the {@link PregnantTreatmentType} to insert
-	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
+	 * @return the newly inserted {@link PregnantTreatmentType} object.
 	 * @throws OHServiceException 
 	 */
 	public PregnantTreatmentType newPregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
@@ -61,10 +61,10 @@ public class PregnantTreatmentTypeIoOperation {
 	}
 	
 	/**
-	 * Update a {@link PregnantTreatmentType} in the DB
+	 * Update a {@link PregnantTreatmentType} in the DB.
 	 * 
 	 * @param pregnantTreatmentType - the {@link PregnantTreatmentType} to update
-	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
+	 * @return the updated {@link PregnantTreatmentType} object.
 	 * @throws OHServiceException 
 	 */
 	public PregnantTreatmentType updatePregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
@@ -75,19 +75,17 @@ public class PregnantTreatmentTypeIoOperation {
 	 * Delete a {@link PregnantTreatmentType} in the DB
 	 * 
 	 * @param pregnantTreatmentType - the {@link PregnantTreatmentType} to delete
-	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean deletePregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
+	public void deletePregnantTreatmentType(PregnantTreatmentType pregnantTreatmentType) throws OHServiceException {
 		repository.delete(pregnantTreatmentType);
-		return true;
 	}
 	
 	/**
-	 * Check if the code is already in use
+	 * Check if the code is already in use.
 	 * 
 	 * @param code - the code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {

@@ -76,7 +76,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoGetDischargeType() throws Exception {
 		String code = setupTestDischargeType(false);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundDischargeType).isNotNull();
 		List<DischargeType> dischargeTypes = dischargeTypeIoOperation.getDischargeType();
 		assertThat(dischargeTypes.get(dischargeTypes.size() - 1).getDescription()).isEqualTo(foundDischargeType.getDescription());
 	}
@@ -84,9 +85,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoNewDischargeType() throws Exception {
 		DischargeType dischargeType = testDischargeType.setup(true);
-		boolean result = dischargeTypeIoOperation.newDischargeType(dischargeType);
-		assertThat(result).isTrue();
-		checkDischargeTypeIntoDb(dischargeType.getCode());
+		DischargeType newDischargeType = dischargeTypeIoOperation.newDischargeType(dischargeType);
+		checkDischargeTypeIntoDb(newDischargeType.getCode());
 	}
 
 	@Test
@@ -99,28 +99,27 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoDeleteDischargeType() throws Exception {
 		String code = setupTestDischargeType(false);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
-		boolean result = dischargeTypeIoOperation.deleteDischargeType(foundDischargeType);
-		assertThat(result).isTrue();
-		result = dischargeTypeIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundDischargeType).isNotNull();
+		dischargeTypeIoOperation.deleteDischargeType(foundDischargeType);
+		assertThat(dischargeTypeIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
 	public void testIoUpdateDischargeType() throws Exception {
 		String code = setupTestDischargeType(false);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundDischargeType).isNotNull();
 		foundDischargeType.setDescription("Update");
-		boolean result = dischargeTypeIoOperation.updateDischargeType(foundDischargeType);
-		assertThat(result).isTrue();
-		DischargeType updateDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
-		assertThat(updateDischargeType.getDescription()).isEqualTo("Update");
+		DischargeType updatedDischargeType = dischargeTypeIoOperation.updateDischargeType(foundDischargeType);
+		assertThat(updatedDischargeType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrGetDischargeType() throws Exception {
 		String code = setupTestDischargeType(false);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundDischargeType).isNotNull();
 		List<DischargeType> dischargeTypes = dischargeTypeBrowserManager.getDischargeType();
 		assertThat(dischargeTypes.get(dischargeTypes.size() - 1).getDescription()).isEqualTo(foundDischargeType.getDescription());
 	}
@@ -128,9 +127,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrNewDischargeType() throws Exception {
 		DischargeType dischargeType = testDischargeType.setup(true);
-		boolean result = dischargeTypeBrowserManager.newDischargeType(dischargeType);
-		assertThat(result).isTrue();
-		checkDischargeTypeIntoDb(dischargeType.getCode());
+		DischargeType newDischargeType = dischargeTypeBrowserManager.newDischargeType(dischargeType);
+		checkDischargeTypeIntoDb(newDischargeType.getCode());
 	}
 
 	@Test
@@ -143,29 +141,28 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrDeleteDischargeType() throws Exception {
 		String code = setupTestDischargeType(false);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
-		boolean result = dischargeTypeBrowserManager.deleteDischargeType(foundDischargeType);
-		assertThat(result).isTrue();
-		result = dischargeTypeBrowserManager.isCodePresent(code);
-		assertThat(result).isFalse();
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundDischargeType).isNotNull();
+		dischargeTypeBrowserManager.deleteDischargeType(foundDischargeType);
+		assertThat(dischargeTypeBrowserManager.isCodePresent(code)).isFalse();
 	}
 
 	@Test
 	public void testMgrUpdateDischargeType() throws Exception {
 		String code = setupTestDischargeType(false);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundDischargeType).isNotNull();
 		foundDischargeType.setDescription("Update");
-		boolean result = dischargeTypeBrowserManager.updateDischargeType(foundDischargeType);
-		assertThat(result).isTrue();
-		DischargeType updateDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
-		assertThat(updateDischargeType.getDescription()).isEqualTo("Update");
+		DischargeType updatedDischargeType = dischargeTypeBrowserManager.updateDischargeType(foundDischargeType);
+		assertThat(updatedDischargeType.getDescription()).isEqualTo("Update");
 	}
 
 	@Test
 	public void testMgrValidateDeleteDischargeType() throws Exception {
 		DischargeType dischargeType = new DischargeType("D", "TestDescription");
 		dischargeTypeIoOperationRepository.saveAndFlush(dischargeType);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(dischargeType.getCode()).get();
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(dischargeType.getCode()).orElse(null);
+		assertThat(foundDischargeType).isNotNull();
 		assertThatThrownBy(() -> dischargeTypeBrowserManager.deleteDischargeType(foundDischargeType))
 				.isInstanceOf(OHDataValidationException.class)
 				.has(
@@ -177,9 +174,10 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrValidateDischargeType() throws Exception {
 		String code = setupTestDischargeType(false);
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundDischargeType).isNotNull();
 		foundDischargeType.setDescription("Update");
-		boolean result = dischargeTypeBrowserManager.updateDischargeType(foundDischargeType);
+		dischargeTypeBrowserManager.updateDischargeType(foundDischargeType);
 		// empty string
 		foundDischargeType.setCode("");
 		assertThatThrownBy(() -> dischargeTypeBrowserManager.updateDischargeType(foundDischargeType))
@@ -217,10 +215,11 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testDischargeTypeEqualHashToString() throws Exception {
 		String code = setupTestDischargeType(false);
-		DischargeType dischargeType = dischargeTypeIoOperationRepository.findById(code).get();
+		DischargeType dischargeType = dischargeTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(dischargeType).isNotNull();
 		DischargeType dischargeType2 = new DischargeType("someCode", "someDescription");
-		assertThat(dischargeType).isEqualTo(dischargeType);
 		assertThat(dischargeType)
+				.isEqualTo(dischargeType)
 				.isNotEqualTo(dischargeType2)
 				.isNotEqualTo("xyzzy");
 		dischargeType2.setCode(code);
@@ -238,7 +237,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkDischargeTypeIntoDb(String code) throws OHException {
-		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).get();
+		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(code).orElse(null);
+		assertThat(foundDischargeType).isNotNull();
 		testDischargeType.check(foundDischargeType);
 	}
 }
