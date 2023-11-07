@@ -323,7 +323,7 @@ public class PatientIoOperations {
 	 * @throws OHServiceException
 	 */
 	public long countAllActivePatients() throws OHServiceException {
-		return repository.countAllActivePatients();
+		return repository.countAllActiveNotDeletedPatients();
 	}
 
 }

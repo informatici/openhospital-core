@@ -328,7 +328,7 @@ public class AdmissionIoOperations {
 		}
 		return patientRepository.save(foundPatient);
 	}
-	
+
 	/**
 	 * Returns the list of Admissions by pages
 	 *
@@ -353,7 +353,7 @@ public class AdmissionIoOperations {
 	public List<Admission> getAdmissionsByAdmDate(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return repository.findAllWhereAdmissionDate(dateFrom, dateTo);
 	}
-	
+
 	/**
 	 * Returns the list of Admissions with discharge
 	 *
@@ -394,7 +394,7 @@ public class AdmissionIoOperations {
 		Page<Admission> pagedResult = repository.findAllWhere_DischargeDate_Paginated(dateFrom, dateTo, pageable);
 		return setPaginationData(pagedResult);
 	}
-	
+
 	/**
 	 * Returns the list of Admissions with page info
 	 *
@@ -407,4 +407,15 @@ public class AdmissionIoOperations {
 		data.setPageInfo(PageInfo.from(pages));
 		return data;
 	}
+
+	/**
+	 * Count not deleted {@link Admission}s
+	 * 
+	 * @return the number of recorded {@link Admission}s
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveAdmissions() {
+		return this.repository.countAllActiveNotDeletedAdmissions();
+	}
+
 }

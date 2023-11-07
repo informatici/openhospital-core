@@ -55,13 +55,50 @@ public interface CollectorsConstants {
 
 	// TEL_OH
 	String APP_VERSION = "app_version";
-	String APP_VER_MAJOR = "app_ver_major";
-	String APP_VER_MINOR = "app_ver_minor";
-	String APP_RELEASE = "app_release";
-	String OH_TOTAL_ACTIVE_PATIENTS = "oh_active_patients";
-	String OH_TOTAL_ACTIVE_USERS = "oh_active_users";
-	String OH_TOTAL_ACTIVE_WARDS = "oh_active_wards";
-	String OH_TOTAL_ACTIVE_BEDS = "oh_active_beds";
+	String APP_MODE = "app_mode";
+	String APP_DEMODATA = "app_demodata";
+	String APP_APISERVER = "app_apiserver";
+	String APP_LANGUAGE = "app_language";
+	String APP_SINGLEUSER = "app_singleuser";
+	String APP_DEBUG = "app_debug";
+	String APP_INTERNALVIEWER = "app_internaluser";
+	String APP_SMSENABLED = "app_smsenabled";
+	String APP_VIDEOMODULEENABLED = "app_videomoduleenabled";
+	String APP_XMPPMODULEENABLED = "app_xmppmoduleenabled";
+	String APP_ENHANCEDSEARCH = "app_enhancedsearch";
+	String APP_INTERNALPHARMACIES = "app_internalpharmacies";
+	String APP_LABEXTENDED = "app_labextended";
+	String APP_LABMULTIPLEINSERT = "app_labmultipleinsert";
+	String APP_MATERNITYRESTARTINJUNE = "app_maternityrestartinjune";
+	String APP_MERGEFUNCTION = "app_mergefunction";
+	String APP_OPDEXTENDED = "app_opdextended";
+	String APP_PATIENTEXTENDED = "app_patientextended";
+	String APP_PATIENTVACCINEEXTENDED = "app_patientvaccineextended";
+	String APP_MAINMENUALWAYSONTOP = "app_mainmenualwaysontop";
+	String APP_ALLOWMULTIPLEOPENEDBILL = "app_allowmultipleopenedbill";
+	String APP_ALLOWPRINTOPENEDBILL = "app_allowprintopenedbill";
+	String APP_RECEIPTPRINTER = "app_receiptprinter";
+	String APP_AUTOMATICLOT_IN = "app_automaticlot_in";
+	String APP_AUTOMATICLOT_OUT = "app_automaticlot_out";
+	String APP_AUTOMATICLOTWARD_TOWARD = "app_automaticlotward_toward";
+	String APP_LOTWITHCOST = "app_lotwithcost";
+	String APP_DICOMMODULEENABLED = "app_dicommoduleenabled";
+	String APP_DICOMTHUMBNAILS = "app_dicomthumbnails";
+	String OH_NUMBER_OF_PATIENTS = "oh_patients";
+	String OH_NUMBER_OF_USERS = "oh_users";
+	String OH_NUMBER_OF_ROLES = "oh_roles";
+	String OH_NUMBER_OF_WARDS = "oh_wards";
+	String OH_NUMBER_OF_BEDS = "oh_beds";
+	String OH_NUMBER_OF_OPDS = "oh_opds";
+	String OH_NUMBER_OF_ADMISSIONS = "oh_admissions";
+	String OH_NUMBER_OF_EXAMS = "oh_exams";
+	String OH_NUMBER_OF_VACCINES = "oh_vaccines";
+	String OH_NUMBER_OF_OPERATIONS = "oh_operations";
+	String OH_NUMBER_OF_STOCKMOVEMENTS = "oh_stockmovements";
+	String OH_NUMBER_OF_STOCKWMOVEMENTSWARDS = "oh_stockmovementswards";
+	String OH_NUMBER_OF_THERAPIES = "oh_therapies";
+	String OH_NUMBER_OF_APPOINTMENTS = "oh_appointments";
+	String OH_NUMBER_OF_BILLS = "oh_bills";
 	String TIME_LAST_USED = "time_last_used";
 
 	// TEL_LOCATION

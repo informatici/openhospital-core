@@ -94,6 +94,16 @@ public class OpdIoOperations {
 	}
 
 	/**
+	 * Count not deleted {@link Opd}s
+	 * 
+	 * @return the number of recorded {@link Opd}s
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveOpds() {
+		return this.repository.countAllActiveOpds();
+	}
+
+	/**
 	 * Return all {@link Opd}s within specified dates and parameters.
 	 * 
 	 * @param ward 
@@ -212,9 +222,8 @@ public class OpdIoOperations {
 	 * @throws OHServiceException
 	 */
 	public boolean isExistOpdNum(int opdNum, int year) throws OHServiceException {
-		List<Opd> opds = year == 0 ?
-			repository.findByProgYear(opdNum) :
-			repository.findByProgYearAndDateBetween(opdNum, LocalDateTime.of(year, 1, 1, 0, 0), LocalDateTime.of(year + 1, 1, 1, 0, 0));
+		List<Opd> opds = year == 0 ? repository.findByProgYear(opdNum)
+						: repository.findByProgYearAndDateBetween(opdNum, LocalDateTime.of(year, 1, 1, 0, 0), LocalDateTime.of(year + 1, 1, 1, 0, 0));
 		return !opds.isEmpty();
 	}
 
@@ -235,7 +244,7 @@ public class OpdIoOperations {
 	public List<Opd> getOpdByProgYear(Integer code) {
 		return repository.findByProgYear(code);
 	}
-	
+
 	/**
 	 * Retrieves a page of {@link Opd}s within specified dates and parameters.
 	 * 
@@ -255,18 +264,18 @@ public class OpdIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public PagedResponse<Opd> getOpdListPageable(
-			Ward ward, 
-			String diseaseTypeCode,
-			String diseaseCode,
-			LocalDate dateFrom,
-			LocalDate dateTo,
-			int ageFrom,
-			int ageTo,
-			char sex,
-			char newPatient,
-			String user,
-			int page,
-			int size) throws OHServiceException {
+					Ward ward,
+					String diseaseTypeCode,
+					String diseaseCode,
+					LocalDate dateFrom,
+					LocalDate dateTo,
+					int ageFrom,
+					int ageTo,
+					char sex,
+					char newPatient,
+					String user,
+					int page,
+					int size) throws OHServiceException {
 		Pageable pageRequest = PageRequest.of(page, size);
 		List<Opd> ops = this.getOpdList(ward, diseaseTypeCode, diseaseCode, dateFrom, dateTo, ageFrom, ageTo, sex, newPatient, null);
 		int start = (int) pageRequest.getOffset();
@@ -274,7 +283,7 @@ public class OpdIoOperations {
 		List<Opd> pageContent = ops.subList(start, end);
 		return setPaginationData(new PageImpl<>(pageContent, pageRequest, ops.size()));
 	}
-	
+
 	PagedResponse<Opd> setPaginationData(Page<Opd> pages) {
 		PagedResponse<Opd> data = new PagedResponse<>();
 		data.setData(pages.getContent());

@@ -36,7 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class MenuIoOperations {
 
@@ -48,7 +48,7 @@ public class MenuIoOperations {
 	private UserMenuItemIoOperationRepository menuRepository;
 	@Autowired
 	private GroupMenuIoOperationRepository groupMenuRepository;
-	
+
 	/**
 	 * Returns the list of {@link User}s
 	 * 
@@ -60,12 +60,21 @@ public class MenuIoOperations {
 	}
 
 	/**
-	 * Count all active users
+	 * Count all active {@link User}s
 	 * 
 	 * @return
 	 */
-	public long countAllActive() {
-		return repository.countAllActive();
+	public long countAllActiveUsers() {
+		return repository.countAllActiveUsers();
+	}
+
+	/**
+	 * Count all active {@link UserGroup}s
+	 * 
+	 * @return
+	 */
+	public long countAllActiveGroups() {
+		return repository.countAllActiveGroups();
 	}
 
 	/**
@@ -78,7 +87,7 @@ public class MenuIoOperations {
 	public List<User> getUser(String groupID) throws OHServiceException {
 		return repository.findAllWhereUserGroupNameByOrderUserNameAsc(groupID);
 	}
-	
+
 	/**
 	 * Returns {@link User} from its username
 	 * 
@@ -89,7 +98,7 @@ public class MenuIoOperations {
 	public User getUserByName(String userName) throws OHServiceException {
 		return repository.findByUserName(userName);
 	}
-	
+
 	/**
 	 * Returns {@link User} description from its username
 	 * 
@@ -101,7 +110,7 @@ public class MenuIoOperations {
 		User user = repository.findById(userName).orElse(null);
 		return user.getDesc();
 	}
-	
+
 	/**
 	 * Returns the list of {@link UserGroup}s
 	 * 
@@ -111,7 +120,7 @@ public class MenuIoOperations {
 	public List<UserGroup> getUserGroup() throws OHServiceException {
 		return groupRepository.findAllByOrderByCodeAsc();
 	}
-	
+
 	/**
 	 * Checks if the specified {@link User} code is already present.
 	 * 
@@ -122,7 +131,7 @@ public class MenuIoOperations {
 	public boolean isUserNamePresent(String userName) throws OHServiceException {
 		return repository.existsById(userName);
 	}
-	
+
 	/**
 	 * Checks if the specified {@link UserGroup} code is already present.
 	 * 
@@ -133,7 +142,7 @@ public class MenuIoOperations {
 	public boolean isGroupNamePresent(String groupName) throws OHServiceException {
 		return groupRepository.existsById(groupName);
 	}
-	
+
 	/**
 	 * Inserts a new {@link User} in the DB
 	 * 
@@ -144,7 +153,7 @@ public class MenuIoOperations {
 	public boolean newUser(User user) throws OHServiceException {
 		return repository.save(user) != null;
 	}
-		
+
 	/**
 	 * Updates an existing {@link User} in the DB
 	 * 
@@ -155,7 +164,7 @@ public class MenuIoOperations {
 	public boolean updateUser(User user) throws OHServiceException {
 		return repository.updateUser(user.getDesc(), user.getUserGroupName(), user.getUserName()) > 0;
 	}
-	
+
 	/**
 	 * Updates the password of an existing {@link User} in the DB
 	 * 
@@ -275,7 +284,7 @@ public class MenuIoOperations {
 		groupMenuRepository.save(groupMenu);
 		return true;
 	}
-	
+
 	/**
 	 * Deletes a {@link UserGroup}
 	 * 

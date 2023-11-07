@@ -52,7 +52,7 @@ public class HardwareDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		return "Hardware information (ex. CPU Intel, RAM, etc.)";
+		return "Hardware information (CPU, RAM)";
 	}
 
 	@Override

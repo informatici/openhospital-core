@@ -53,7 +53,7 @@ public class TelemetryDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		return "Telemetry ID (this instance)";
+		return "Telemetry Unique ID (this instance)";
 	}
 
 	@Override

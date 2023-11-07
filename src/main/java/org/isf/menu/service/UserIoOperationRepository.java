@@ -63,6 +63,9 @@ public interface UserIoOperationRepository extends JpaRepository<User, String> {
 	void setLastLogin(@Param("lastLoggedIn") LocalDateTime lockTime, @Param("id") String id);
 
 	@Query("select count(u) from User u where active=1")
-	long countAllActive();
+	long countAllActiveUsers();
+
+	@Query("select count(g) from UserGroup g where active=1")
+	long countAllActiveGroups();
 
 }

@@ -80,4 +80,7 @@ public interface OpdIoOperationRepository extends JpaRepository<Opd, Integer>, O
 
 	@Query(value = "SELECT OPD_CREATED_DATE FROM OH_OPD O WHERE OPD_ACTIVE=1 ORDER BY OPD_ID DESC LIMIT 1", nativeQuery = true)
 	LocalDateTime lastOpdCreationDate();
+
+	@Query("select count(o) from Opd o where active=1")
+	long countAllActiveOpds();
 }

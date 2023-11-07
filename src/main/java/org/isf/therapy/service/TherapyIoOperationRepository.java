@@ -27,11 +27,18 @@ import org.isf.patient.model.Patient;
 import org.isf.therapy.model.TherapyRow;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface TherapyIoOperationRepository extends JpaRepository<TherapyRow, Integer> {
+
 	List<TherapyRow> findAllByOrderByPatientAscTherapyIDAsc();
+
 	List<TherapyRow> findByPatientCodeOrderByPatientCodeAscTherapyIDAsc(Integer patient);
+
 	@Modifying
 	void deleteByPatient(@Param("patient") Patient patient);
+
+	@Query("select count(t) from TherapyRow t where active=1")
+	long countAllActiveTherapies();
 }

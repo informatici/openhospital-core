@@ -45,7 +45,11 @@ public final class GeneralData extends ConfigurationProperties {
 
 	private final boolean SINGLEUSER;
 	private final boolean USERSLISTLOGIN;
-	
+
+	public static String MODE;
+	public static boolean DEMODATA;
+	public static boolean APISERVER;
+
 	public static String LANGUAGE;
 	public static boolean AUTOMATICLOT_IN;
 	public static boolean AUTOMATICLOT_OUT;
@@ -102,6 +106,9 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_LANGUAGE = "en";
 	private static final boolean DEFAULT_SINGLEUSER = false;
 	private static final boolean DEFAULT_USERSLISTLOGIN = false;
+	private static final String DEFAULT_MODE = "";
+	private static final boolean DEFAULT_DEMODATA = false;
+	private static final boolean DEFAULT_APISERVER = false;
 	private static final boolean DEFAULT_AUTOMATICLOT_IN = true;
 	private static final boolean DEFAULT_AUTOMATICLOT_OUT = true;
 	private static final boolean DEFAULT_AUTOMATICLOTWARD_TOWARD = true;
@@ -118,7 +125,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_BILLSREPORTMONTHLY = "BillsReportMonthly";
 	private static final String DEFAULT_PHARMACEUTICALORDER = "PharmaceuticalOrder";
 	private static final String DEFAULT_PHARMACEUTICALSTOCK = "PharmaceuticalStock_ver4";
-	private static final String DEFAULT_PHARMACEUTICALSTOCKLOT = "PharmaceuticalStock_ver5"; //TODO: verify if really used
+	private static final String DEFAULT_PHARMACEUTICALSTOCKLOT = "PharmaceuticalStock_ver5"; // TODO: verify if really used
 	private static final String DEFAULT_PHARMACEUTICALAMC = "PharmaceuticalAMC";
 	private static final boolean DEFAULT_PATIENTEXTENDED = false;
 	private static final boolean DEFAULT_OPDEXTENDED = false;
@@ -153,18 +160,20 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_PATIENTPHOTOSTORAGE = "DB";
 	public static final int IMAGE_THUMBNAIL_MAX_WIDTH = 140;
 	public static final int MAX_PROFILE_IMAGE_FILE_SIZE_BYTES = 32768;
-	
+
 	private static GeneralData mySingleData;
-	
+
 	public static void reset() {
 		mySingleData = null;
 	}
-	
-	
+
 	private GeneralData(String fileProperties) {
 		super(fileProperties, EXIT_ON_FAIL);
 		SINGLEUSER = myGetProperty("SINGLEUSER", DEFAULT_SINGLEUSER);
 		USERSLISTLOGIN = myGetProperty("USERSLISTLOGIN", DEFAULT_USERSLISTLOGIN);
+		MODE = myGetProperty("MODE", DEFAULT_MODE);
+		DEMODATA = myGetProperty("DEMODATA", DEFAULT_DEMODATA);
+		APISERVER = myGetProperty("APISERVER", DEFAULT_APISERVER);
 		LANGUAGE = myGetProperty("LANGUAGE", DEFAULT_LANGUAGE);
 		AUTOMATICLOT_IN = myGetProperty("AUTOMATICLOT_IN", DEFAULT_AUTOMATICLOT_IN);
 		AUTOMATICLOT_OUT = myGetProperty("AUTOMATICLOT_OUT", DEFAULT_AUTOMATICLOT_OUT);
@@ -235,7 +244,7 @@ public final class GeneralData extends ConfigurationProperties {
 		}
 		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTOSTORAGE);
 		SESSIONTIMEOUT = myGetProperty("SESSIONTIMEOUT", DEFAULT_SESSIONTIMEOUT);
-}
+	}
 
 	public static GeneralData getGeneralData() {
 		if (mySingleData == null) {
@@ -254,7 +263,7 @@ public final class GeneralData extends ConfigurationProperties {
 	public boolean getSINGLEUSER() {
 		return SINGLEUSER;
 	}
-	
+
 	/**
 	 * @return the USERSLISTLOGIN
 	 */

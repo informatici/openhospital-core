@@ -21,9 +21,17 @@
  */
 package org.isf.telemetry.envdatacollector.collectors;
 
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.hibernate.engine.spi.SessionImplementor;
+import org.isf.generaldata.GeneralData;
+import org.isf.generaldata.Version;
 import org.isf.telemetry.envdatacollector.AbstractDataCollector;
 import org.isf.telemetry.envdatacollector.constants.CollectorsConstants;
 import org.isf.utils.exception.OHException;
@@ -41,6 +49,10 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 
 	private static final String ID = "TEL_SW";
 	private static final Logger LOGGER = LoggerFactory.getLogger(SoftwareDataCollector.class);
+	private String version;
+
+	@PersistenceContext
+	private EntityManager em;
 
 	@Override
 	public String getId() {
@@ -49,7 +61,9 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		return "Software information (ex. Ubuntu 12.04, MySQL 5.7.36, etc.)";
+		Version.initialize();
+		version = Version.VER_MAJOR.concat(".").concat(Version.VER_MINOR).concat(".").concat(Version.VER_RELEASE);
+		return "Software information versions and usage (ex. Ubuntu 22.04, MariaDB 10.6, Open Hospital " + version + ")";
 	}
 
 	@Override
@@ -65,7 +79,46 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 			result.put(CollectorsConstants.OS_BITNESS, String.valueOf(os.getBitness()));
 			result.put(CollectorsConstants.OS_CODENAME, os.getVersionInfo().getCodeName());
 
-		} catch (RuntimeException e) {
+			SessionImplementor sessionImp = (SessionImplementor) em.getDelegate();
+			DatabaseMetaData dbmd = sessionImp.connection().getMetaData();
+			result.put(CollectorsConstants.DBMS_DRIVER_NAME, dbmd.getDriverName());
+			result.put(CollectorsConstants.DBMS_DRIVER_VERSION, dbmd.getDriverVersion());
+			result.put(CollectorsConstants.DBMS_PRODUCT_NAME, dbmd.getDatabaseProductName());
+			result.put(CollectorsConstants.DBMS_PRODUCT_VERSION, dbmd.getDatabaseProductVersion());
+
+			Version.initialize();
+			result.put(CollectorsConstants.APP_VERSION, version);
+			result.put(CollectorsConstants.APP_MODE, GeneralData.MODE);
+			result.put(CollectorsConstants.APP_DEMODATA, String.valueOf(GeneralData.DEMODATA));
+			result.put(CollectorsConstants.APP_APISERVER, String.valueOf(GeneralData.APISERVER));
+			result.put(CollectorsConstants.APP_LANGUAGE, GeneralData.LANGUAGE);
+			// result.put(CollectorsConstants.APP_SINGLEUSER, GeneralData.getSINGLEUSER());
+			result.put(CollectorsConstants.APP_DEBUG, String.valueOf(GeneralData.DEBUG));
+			result.put(CollectorsConstants.APP_INTERNALVIEWER, String.valueOf(GeneralData.INTERNALVIEWER));
+			result.put(CollectorsConstants.APP_SMSENABLED, String.valueOf(GeneralData.SMSENABLED));
+			result.put(CollectorsConstants.APP_VIDEOMODULEENABLED, String.valueOf(GeneralData.VIDEOMODULEENABLED));
+			result.put(CollectorsConstants.APP_XMPPMODULEENABLED, String.valueOf(GeneralData.XMPPMODULEENABLED));
+			result.put(CollectorsConstants.APP_ENHANCEDSEARCH, String.valueOf(GeneralData.ENHANCEDSEARCH));
+			result.put(CollectorsConstants.APP_INTERNALPHARMACIES, String.valueOf(GeneralData.INTERNALPHARMACIES));
+			result.put(CollectorsConstants.APP_LABEXTENDED, String.valueOf(GeneralData.LABEXTENDED));
+			result.put(CollectorsConstants.APP_LABMULTIPLEINSERT, String.valueOf(GeneralData.LABMULTIPLEINSERT));
+			result.put(CollectorsConstants.APP_MATERNITYRESTARTINJUNE, String.valueOf(GeneralData.MATERNITYRESTARTINJUNE));
+			result.put(CollectorsConstants.APP_MERGEFUNCTION, String.valueOf(GeneralData.MERGEFUNCTION));
+			result.put(CollectorsConstants.APP_OPDEXTENDED, String.valueOf(GeneralData.OPDEXTENDED));
+			result.put(CollectorsConstants.APP_PATIENTEXTENDED, String.valueOf(GeneralData.PATIENTEXTENDED));
+			result.put(CollectorsConstants.APP_PATIENTVACCINEEXTENDED, String.valueOf(GeneralData.PATIENTVACCINEEXTENDED));
+			result.put(CollectorsConstants.APP_MAINMENUALWAYSONTOP, String.valueOf(GeneralData.MAINMENUALWAYSONTOP));
+			result.put(CollectorsConstants.APP_ALLOWMULTIPLEOPENEDBILL, String.valueOf(GeneralData.ALLOWMULTIPLEOPENEDBILL));
+			result.put(CollectorsConstants.APP_ALLOWPRINTOPENEDBILL, String.valueOf(GeneralData.ALLOWPRINTOPENEDBILL));
+			result.put(CollectorsConstants.APP_RECEIPTPRINTER, String.valueOf(GeneralData.RECEIPTPRINTER));
+			result.put(CollectorsConstants.APP_AUTOMATICLOT_IN, String.valueOf(GeneralData.AUTOMATICLOT_IN));
+			result.put(CollectorsConstants.APP_AUTOMATICLOT_OUT, String.valueOf(GeneralData.AUTOMATICLOT_OUT));
+			result.put(CollectorsConstants.APP_AUTOMATICLOTWARD_TOWARD, String.valueOf(GeneralData.AUTOMATICLOTWARD_TOWARD));
+			result.put(CollectorsConstants.APP_LOTWITHCOST, String.valueOf(GeneralData.LOTWITHCOST));
+			result.put(CollectorsConstants.APP_DICOMMODULEENABLED, String.valueOf(GeneralData.DICOMMODULEENABLED));
+			result.put(CollectorsConstants.APP_DICOMTHUMBNAILS, String.valueOf(GeneralData.DICOMTHUMBNAILS));
+
+		} catch (RuntimeException | SQLException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());
 			throw new OHException("Data collector [" + ID + "]", e);
