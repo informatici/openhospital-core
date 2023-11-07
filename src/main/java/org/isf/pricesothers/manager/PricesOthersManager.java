@@ -41,7 +41,7 @@ public class PricesOthersManager {
 	private PriceOthersIoOperations ioOperations;
 
 	/**
-	 * Return the list of {@link PricesOthers}s in the DB
+	 * Return a list of {@link PricesOthers}s.
 	 *
 	 * @return the list of {@link PricesOthers}s
 	 * @throws OHServiceException
@@ -51,10 +51,10 @@ public class PricesOthersManager {
 	}
 
 	/**
-	 * Insert a new {@link PricesOthers} in the DB
+	 * Insert a new {@link PricesOthers} object.
 	 *
 	 * @param other - the {@link PricesOthers} to insert
-	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
+	 * @return the newly inserted {@link PricesOthers} object.
 	 * @throws OHServiceException
 	 */
 	public PricesOthers newOther(PricesOthers other) throws OHServiceException {
@@ -63,21 +63,20 @@ public class PricesOthersManager {
 	}
 
 	/**
-	 * Delete a {@link PricesOthers} in the DB
+	 * Delete a {@link PricesOthers} object.
 	 *
 	 * @param other - the {@link PricesOthers} to delete
-	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean deleteOther(PricesOthers other) throws OHServiceException {
-		return ioOperations.deleteOthers(other);
+	public void deleteOther(PricesOthers other) throws OHServiceException {
+		ioOperations.deleteOthers(other);
 	}
 
 	/**
-	 * Update a {@link PricesOthers} in the DB
+	 * Update a {@link PricesOthers} object.
 	 *
 	 * @param other - the {@link PricesOthers} to update
-	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
+	 * @return the newly updated {@link PricesOthers} object.
 	 * @throws OHServiceException
 	 */
 	public PricesOthers updateOther(PricesOthers other) throws OHServiceException {
