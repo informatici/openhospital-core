@@ -42,35 +42,35 @@ public class SessionAuditIoOperation {
 	private SessionAuditIoOperationRepository repository;
 
 	/**
-	 * Return the {@link SessionAudit} from the DB
+	 * Return the {@link SessionAudit} given the session audit id.
 	 * 
 	 * @param sessionAuditId
 	 *            the session audit id
 	 * @return the {@link SessionAudit}
 	 */
 	public Optional<SessionAudit> getSessionAuditById(int sessionAuditId) {
-		return this.repository.findById(sessionAuditId);
+		return repository.findById(sessionAuditId);
 	}
 
 	/**
-	 * Saves the {@link SessionAudit} to the DB
+	 * Saves the {@link SessionAudit}.
 	 * 
 	 * @param sessionAudit
 	 *            the new session audit
 	 * @return the audit session code
 	 */
 	public int saveSessionAudit(SessionAudit sessionAudit) {
-		return this.repository.save(sessionAudit).getCode();
+		return repository.save(sessionAudit).getCode();
 	}
 
 	/**
-	 * Updates the {@link SessionAudit} to the DB
+	 * Updates the {@link SessionAudit}.
 	 * 
 	 * @param sessionAudit
 	 *            the updated session audit
-	 * @return true if it was saved
+	 * @return the updated {@link SessionAudit} object.
 	 */
-	public boolean updateSessionAudit(SessionAudit sessionAudit) {
-		return this.repository.save(sessionAudit) != null;
+	public SessionAudit updateSessionAudit(SessionAudit sessionAudit) {
+		return repository.save(sessionAudit);
 	}
 }
