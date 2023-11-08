@@ -40,7 +40,7 @@ public class SessionAuditManager {
 
 	
 	/**
-	 * Retrieves the {@link SessionAudit} associated to the given user id.
+	 * Retrieves the {@link SessionAudit} associated with the given user id.
 	 *
 	 * @param sessionAuditId the session audit id.
 	 * @return the users {@link SessionAudit}
@@ -51,10 +51,10 @@ public class SessionAuditManager {
 	}
 
 	/**
-	 * Stores the {@link SessionAudit} associated to the given user id in the db.
+	 * Stores the {@link SessionAudit} associated to the given user id.
 	 *
 	 * @param sessionAudit the {link SessionAudit}.
-	 * @return the result of saving operation
+	 * @return the audit session code
 	 * @throws OHServiceException
 	 */
 	public int newSessionAudit(SessionAudit sessionAudit) throws OHServiceException {
@@ -65,10 +65,10 @@ public class SessionAuditManager {
 	 * Updates the specified {@link SessionAudit}.
 	 *
 	 * @param sessionAudit the {@link SessionAudit} to update
-	 * @return the updated {@link SessionAudit}
+	 * @return the updated {@link SessionAudit} object.
 	 * @throws OHServiceException
 	 */
-	public boolean updateSessionAudit(SessionAudit sessionAudit) throws OHServiceException {
+	public SessionAudit updateSessionAudit(SessionAudit sessionAudit) throws OHServiceException {
 		return ioOperation.updateSessionAudit(sessionAudit);
 	}
 
