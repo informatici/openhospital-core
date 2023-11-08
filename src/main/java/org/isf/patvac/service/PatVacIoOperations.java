@@ -55,7 +55,7 @@ public class PatVacIoOperations {
 	/**
 	 * Returns all {@link PatientVaccine}s of today or one week ago
 	 *
-	 * @param minusOneWeek - if <code>true</code> return the last week
+	 * @param minusOneWeek - if {@code true} return the last week
 	 * @return the list of {@link PatientVaccine}s
 	 * @throws OHServiceException
 	 */
@@ -71,8 +71,8 @@ public class PatVacIoOperations {
 	}
 
 	/**
-	 * Returns all {@link PatientVaccine}s within <code>dateFrom</code> and
-	 * <code>dateTo</code>
+	 * Returns all {@link PatientVaccine}s within {@code dateFrom} and
+	 * {@code dateTo}
 	 *
 	 * @param vaccineTypeCode
 	 * @param vaccineCode
@@ -101,10 +101,10 @@ public class PatVacIoOperations {
 	}
 
 	/**
-	 * Inserts a {@link PatientVaccine} in the DB
+	 * Inserts a {@link PatientVaccine} object.
 	 *
 	 * @param patVac - the {@link PatientVaccine} to insert
-	 * @return <code>true</code> if the item has been inserted, <code>false</code> otherwise
+	 * @return the newly inserted {@link PatientVaccine} object.
 	 * @throws OHServiceException
 	 */
 	public PatientVaccine newPatientVaccine(PatientVaccine patVac) throws OHServiceException {
@@ -112,10 +112,10 @@ public class PatVacIoOperations {
 	}
 
 	/**
-	 * Updates a {@link PatientVaccine}
+	 * Updates a {@link PatientVaccine}.
 	 *
 	 * @param patVac - the {@link PatientVaccine} to update
-	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise
+	 * @return the newly updated {@link PatientVaccine} object.
 	 * @throws OHServiceException
 	 */
 	public PatientVaccine updatePatientVaccine(PatientVaccine patVac) throws OHServiceException {
@@ -123,22 +123,20 @@ public class PatVacIoOperations {
 	}
 
 	/**
-	 * Deletes a {@link PatientVaccine}
+	 * Delete a {@link PatientVaccine}.
 	 *
 	 * @param patVac - the {@link PatientVaccine} to delete
-	 * @return <code>true</code> if the item has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean deletePatientVaccine(PatientVaccine patVac) throws OHServiceException {
+	public void deletePatientVaccine(PatientVaccine patVac) throws OHServiceException {
 		repository.delete(patVac);
-		return true;
 	}
 
 	/**
-	 * Returns the max progressive number within specified year or within current year if <code>0</code>.
+	 * Returns the max progressive number within specified year or within current year if {@code 0}.
 	 *
 	 * @param year
-	 * @return <code>int</code> - the progressive number in the year
+	 * @return {@code int} - the progressive number in the year
 	 * @throws OHServiceException
 	 */
 	public int getProgYear(int year) throws OHServiceException {
@@ -150,10 +148,10 @@ public class PatVacIoOperations {
 	}
 
 	/**
-	 * Checks if the code is already in use
+	 * Checks if the code is already in use.
 	 *
 	 * @param code - the patient vaccine code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {
