@@ -54,10 +54,10 @@ public class SupplierBrowserManager {
 	}
 
 	/**
-	 * Returns the {@link HashMap} of all {@link Supplier}s
+	 * Returns the {@link HashMap} of all {@link Supplier}'s ids and names.
 	 *
-	 * @param all - if <code>true</code> it will return deleted ones also
-	 * @return the {@link HashMap} of all {@link Supplier}s
+	 * @param all - if {@code true} it will return deleted ones also
+	 * @return the {@link HashMap} of all {@link Supplier}'s ids and names.
 	 * @throws OHServiceException
 	 */
 	public Map<Integer, String> getHashMap(boolean all) throws OHServiceException {
