@@ -48,7 +48,7 @@ public class DicomIoOperations
 	private DicomIoOperationRepository repository;
 	
 	/**
-	 * Load a list of file iss for a series.
+	 * Load a list of file id for a series.
 	 * 
 	 * @param patientID, the patient id
 	 * @param seriesNumber, the series number
