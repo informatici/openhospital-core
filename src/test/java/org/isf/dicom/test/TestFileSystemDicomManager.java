@@ -169,7 +169,7 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 		dicomProperties.load(fr);
 		fr.close();
 		assertThat(dicomFileDir.listFiles()).hasSize(3);
-		assertThat(dicomProperties.getProperty("dicomInstanceUID")).isEqualTo("TestInteanceUid");
+		assertThat(dicomProperties.getProperty("dicomInstanceUID")).isEqualTo("TestInstanceUid");
 
 		cleanupDicomFiles(dicomFile.getPatId());
 	}
@@ -218,24 +218,24 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testGetSerieDetail() throws Exception {
-		Long[] result = fileSystemDicomManager.getSerieDetail(1, "TestSeriesNumber");
+	public void testGetSeriesDetail() throws Exception {
+		Long[] result = fileSystemDicomManager.getSeriesDetail(1, "TestSeriesNumber");
 		assertThat(result).isNotEmpty();
 	}
 
 	@Test
-	public void testGetSerieDetailSeriesNumberNull() throws Exception {
-		assertThat(fileSystemDicomManager.getSerieDetail(1, null)).isNull();
+	public void testGetSeriesDetailSeriesNumberNull() throws Exception {
+		assertThat(fileSystemDicomManager.getSeriesDetail(1, null)).isNull();
 	}
 
 	@Test
-	public void testGetSerieDetailSeriesNumberEmptyString() throws Exception {
-		assertThat(fileSystemDicomManager.getSerieDetail(1, "     ")).isNull();
+	public void testGetSeriesDetailSeriesNumberEmptyString() throws Exception {
+		assertThat(fileSystemDicomManager.getSeriesDetail(1, "     ")).isNull();
 	}
 
 	@Test
-	public void testGetSerieDetailSeriesNumberNullString() throws Exception {
-		assertThat(fileSystemDicomManager.getSerieDetail(1, "nuLL")).isNull();
+	public void testGetSeriesDetailSeriesNumberNullString() throws Exception {
+		assertThat(fileSystemDicomManager.getSeriesDetail(1, "nuLL")).isNull();
 	}
 
 	@Test
@@ -258,31 +258,43 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testDeleteSerie() throws Exception {
+	public void testDeleteSeries() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 		dicomFile.setDicomSeriesNumber("SeriesNumber");
 		dicomFile.setPatId(2);
 		fileSystemDicomManager.saveFile(dicomFile);
-		boolean serieDeleted = fileSystemDicomManager.deleteSerie(2, "SeriesNumber");
-		assertThat(serieDeleted).isTrue();
+		fileSystemDicomManager.deleteSeries(2, "SeriesNumber");
+		assertThat(fileSystemDicomManager.exist(2, "SeriesNumber")).isFalse();
 
 		cleanupDicomFiles(dicomFile.getPatId());
 	}
 
 	@Test
-	public void testDeleteSerieDetailSeriesNumberNull() throws Exception {
-		assertThat(fileSystemDicomManager.deleteSerie(1, null)).isFalse();
+	public void testDeleteSeriesDetailSeriesNumberNull() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			fileSystemDicomManager.deleteSeries(1, null);
+		})
+			.isInstanceOf(OHDicomException.class);
 	}
 
 	@Test
-	public void testDeleteSerieDetailSeriesNumberEmptyString() throws Exception {
-		assertThat(fileSystemDicomManager.deleteSerie(1, "     ")).isFalse();
+	public void testDeleteSeriesDetailSeriesNumberEmptyString() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			fileSystemDicomManager.deleteSeries(1, "     ");
+		})
+			.isInstanceOf(OHDicomException.class);
 	}
 
 	@Test
-	public void testDelteSerieDetailSeriesNumberNullString() throws Exception {
-		assertThat(fileSystemDicomManager.deleteSerie(1, "nuLL")).isFalse();
+	public void testDeleteSeriesDetailSeriesNumberNullString() throws Exception {
+		assertThatThrownBy(() ->
+		{
+			fileSystemDicomManager.deleteSeries(1, "nuLL");
+		})
+			.isInstanceOf(OHDicomException.class);
 	}
 
 	private static void cleanupDicomFiles(int patientId) {
