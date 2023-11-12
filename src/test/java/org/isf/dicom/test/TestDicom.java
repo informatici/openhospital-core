@@ -49,7 +49,7 @@ public class TestDicom {
 	private int patId;
 	private String fileName = "TestFileName";
 	private String dicomAccessionNumber = "TestAccessionNumber";
-	private String dicomInstitutionName = "TestInsitutionName";
+	private String dicomInstitutionName = "TestInstitutionName";
 	private String dicomPatientID = "TestPatientId";
 	private String dicomPatientName = "TestPatientName";
 	private String dicomPatientAddress = "TestPatientAddress";
@@ -65,7 +65,7 @@ public class TestDicom {
 	private String dicomSeriesDescriptionCodeSequence = "TestSeriesDescription";
 	private LocalDateTime dicomSeriesDate = LocalDateTime.parse(DATE_TIME_STRING, DATE_TIME_FORMATTER);
 	private String dicomSeriesDescription = "TestSeriesDescription";
-	private String dicomInstanceUID = "TestInteanceUid";
+	private String dicomInstanceUID = "TestInstanceUid";
 	private String modality = "TestModality";
 	private Blob dicomThumbnail = createRandomBlob(66);
 

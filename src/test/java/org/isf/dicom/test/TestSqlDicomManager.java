@@ -102,9 +102,9 @@ public class TestSqlDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testGetSerieDetail() throws Exception {
+	public void testGetSeriesDetail() throws Exception {
 		long id = setupTestFileDicom(true);
-		Long[] result = sqlDicomManager.getSerieDetail(0, "TestSeriesNumber");
+		Long[] result = sqlDicomManager.getSeriesDetail(0, "TestSeriesNumber");
 		assertThat(result).isNotEmpty();
 	}
 
@@ -141,15 +141,15 @@ public class TestSqlDicomManager extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testDeleteSerie() throws Exception {
+	public void testDeleteSeries() throws Exception {
 		DicomType dicomType = testDicomType.setup(true);
 		dicomTypeIoOperationRepository.saveAndFlush(dicomType);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 		dicomFile.setDicomSeriesNumber("SeriesNumber");
 		dicomFile.setPatId(2);
 		sqlDicomManager.saveFile(dicomFile);
-		boolean serieDeleted = sqlDicomManager.deleteSerie(2, "SeriesNumber");
-		assertThat(serieDeleted).isTrue();
+		sqlDicomManager.deleteSeries(2, "SeriesNumber");
+		assertThat(sqlDicomManager.exist(2, "SeriesNumber")).isFalse();
 	}
 
 	private long setupTestFileDicom(boolean usingSet) throws OHException {

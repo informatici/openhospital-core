@@ -43,7 +43,7 @@ public class SqlDicomManager implements DicomManagerInterface {
 	}
 
 	/**
-	 * Load a list of id file for series
+	 * Load a list of id file for a series.
 	 *
 	 * @param patientID, the patient id
 	 * @param seriesNumber, the series number
@@ -51,8 +51,8 @@ public class SqlDicomManager implements DicomManagerInterface {
 	 * @throws OHServiceException
 	 */
 	@Override
-	public Long[] getSerieDetail(int patientID, String seriesNumber) throws OHServiceException {
-		return ioOperations.getSerieDetail(patientID, seriesNumber);
+	public Long[] getSeriesDetail(int patientID, String seriesNumber) throws OHServiceException {
+		return ioOperations.getSeriesDetail(patientID, seriesNumber);
 	}
 
 	/**
@@ -60,12 +60,11 @@ public class SqlDicomManager implements DicomManagerInterface {
 	 *
 	 * @param patientID, the id of patient
 	 * @param seriesNumber, the series number to delete
-	 * @return true if success
 	 * @throws OHServiceException
 	 */
 	@Override
-	public boolean deleteSerie(int patientID, String seriesNumber) throws OHServiceException {
-		return ioOperations.deleteSerie(patientID, seriesNumber);
+	public void deleteSeries(int patientID, String seriesNumber) throws OHServiceException {
+		ioOperations.deleteSeries(patientID, seriesNumber);
 	}
 
 	/**

@@ -40,17 +40,16 @@ public interface DicomManagerInterface {
 	 * @return
 	 * @throws OHServiceException
 	 */
-	Long[] getSerieDetail(int patientID, String seriesNumber) throws OHServiceException;
+	Long[] getSeriesDetail(int patientID, String seriesNumber) throws OHServiceException;
 
 	/**
 	 * Delete series
 	 *
 	 * @param patientID, the id of patient
 	 * @param seriesNumber, the series number to delete
-	 * @return true if success
 	 * @throws OHServiceException
 	 */
-	boolean deleteSerie(int patientID, String seriesNumber) throws OHServiceException;
+	void deleteSeries(int patientID, String seriesNumber) throws OHServiceException;
 
 	/**
 	 * Check if dicom is loaded

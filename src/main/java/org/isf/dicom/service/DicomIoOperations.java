@@ -48,14 +48,14 @@ public class DicomIoOperations
 	private DicomIoOperationRepository repository;
 	
 	/**
-	 * Load a list of id file for series
+	 * Load a list of file id for a series.
 	 * 
 	 * @param patientID, the patient id
 	 * @param seriesNumber, the series number
 	 * @return
 	 * @throws OHServiceException 
 	 */
-	public Long[] getSerieDetail(int patientID, String seriesNumber) throws OHServiceException {
+	public Long[] getSeriesDetail(int patientID, String seriesNumber) throws OHServiceException {
 		List<FileDicom> dicomList = repository.findAllWhereIdAndNumberByOrderNameAsc(patientID, seriesNumber);
 		Long[] dicomIdArray = new Long[dicomList.size()];
 
@@ -67,41 +67,23 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * Delete series from DB
+	 * Delete a series.
 	 * 
 	 * @param patientID, the id of patient
 	 * @param seriesNumber, the series number to delete
-	 * @return true if success
 	 * @throws OHServiceException 
 	 */
-	public boolean deleteSerie(int patientID, String seriesNumber) throws OHServiceException {
+	public void deleteSeries(int patientID, String seriesNumber) throws OHServiceException {
 		repository.deleteByIdAndNumber(patientID, seriesNumber);
-		return true;
 	}
 
 	/**
-	 * Load the Detail of DICOM
+	 * Load the details of DICOM.
 	 * 
 	 * @param idFile
 	 * @param patientID
 	 * @param seriesNumber
-	 * @return FileDicom
-	 * @throws OHServiceException 
-	 */
-	public FileDicom loadDetails(Long idFile, int patientID, String seriesNumber) throws OHServiceException {
-		if (idFile == null) {
-			return null;
-		}
-		return loadDetails(idFile.longValue(), patientID, seriesNumber);
-	}
-
-	/**
-	 * Load the Detail of DICOM
-	 * 
-	 * @param idFile
-	 * @param patientID
-	 * @param seriesNumber
-	 * @return FileDicom
+	 * @return {@link FileDicom} or {@code null)}
 	 * @throws OHServiceException 
 	 */
 	public FileDicom loadDetails(long idFile, int patientID, String seriesNumber) throws OHServiceException {
@@ -109,7 +91,7 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * Load metadata from DICOM files stored in database for the patient
+	 * Load metadata from {@link FileDicom} files stored in database for the patient.
 	 * 
 	 * @param patientID
 	 * @return FileDicom array
@@ -119,18 +101,16 @@ public class DicomIoOperations
 		List<FileDicom> dicomList = repository.findAllWhereIdGroupBySeriesInstanceUIDOrderSerDateDesc(patientID);
 
 		FileDicom[] dicoms = new FileDicom[dicomList.size()];	
-		for (int i = 0; i < dicomList.size(); i++)
-		{
+		for (int i = 0; i < dicomList.size(); i++) {
 			int count = repository.countFramesInSeries(dicomList.get(i).getDicomSeriesInstanceUID(), patientID);
 			dicoms[i] = dicomList.get(i);
 			dicoms[i].setFrameCount(count);
 		}
-
 		return dicoms;
 	}
 
 	/**
-	 * Check if dicom is loaded
+	 * Check if {@link FileDicom} is loaded.
 	 *
 	 * @param dicom, the detail od dicom
 	 * @return true if file exist
@@ -142,20 +122,21 @@ public class DicomIoOperations
 	}
 
 	/**
-	 * Save the DICOM file and metadata in the database
+	 * Save the {@link FileDicom} and metadata in the database.
 	 * 
 	 * @param dicom
+	 * @returns the persisted {@link FileDicom} object.
 	 * @throws OHServiceException 
 	 */
-	public void saveFile(FileDicom dicom) throws OHServiceException {
-		repository.save(dicom);
+	public FileDicom saveFile(FileDicom dicom) throws OHServiceException {
+		return repository.save(dicom);
 	}
 
 	/**
-	 * Checks if the code is already in use
+	 * Checks if the code is already in use.
 	 *
 	 * @param code - the DICOM code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Long code) throws OHServiceException {
@@ -166,14 +147,11 @@ public class DicomIoOperations
 	 * Checks if the series number is already in use
 	 *
 	 * @param dicomSeriesNumber - the series number to check
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
 	public boolean isSeriesPresent(String dicomSeriesNumber) throws OHServiceException {
-		int result;
-
-		result = repository.seriesExists(dicomSeriesNumber);
-
-		return result > 0;
+		return repository.seriesExists(dicomSeriesNumber) > 0;
 	}
+
 }
