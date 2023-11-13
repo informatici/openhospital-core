@@ -1,0 +1,48 @@
+1;OB;Prerje Cezariane;1;0
+2;OB;Hysterectomy;1;0
+3;OB;Mitra e këputur;1;0
+4;OB;Mitra e dëmtuar;1;0
+5;OB;Evakuimet;1;0
+6;OB;Abort jo komplet;1;0
+7;OB;Abort Septik;1;0
+8;OB;Dilatim dhe kuretazh;1;0
+9;OB;Riparimi i fistulës veziko-vaginale (vvf);1;0
+10;GY;Abdomen akut;1;0
+11;GY;Shtatëzëni ektopike;1;0
+12;GY;Peritoniti;1;0
+13;GY;Abscesi i legenit;1;0
+14;GY;Mioma e mitrës;1;0
+15;GY;Tumoret e vezoreve;1;0
+16;GY;Prolapsi i mitrës;1;0
+17;GY;Cistocela;1;0
+18;MG;Circumcision;1;0
+19;MG;Fimoza;1;0
+20;MG;Parafimoza;1;0
+21;MG;Çarje dorsale-Perfomoza;1;0
+22;MG;Striktura-bougienage uretrale;1;0
+23;MG;Hidrocelektomi;1;0
+24;MG;Tumoret e testikujve;1;0
+25;MG;Prostatektomia;1;0
+26;MG;Biopsi prostate;1;0
+27;MG;Biopsia e fshikëzës;1;0
+28;AG;Hernia (inguinale & femorale);1;0
+29;AG;I mbytur;1;0
+30;AG;I pa mbytur;1;0
+31;AG;Hernie Epigastrike;1;0
+32;AG;Obstruksion intestinal;1;0
+33;AG;Mekanike;1;0
+34;AG;Volvulus;1;0
+35;AG;Laparotomi;1;0
+36;AG;Lëndimet depërtuese të barkut;1;0
+37;AG;Peritoniti;1;0
+38;AG;Appendicitis;1;0
+39;AG;Kolecistiti;1;0
+40;AG;Tumoret e barkut;1;0
+41;OR;Reduktimi i frakturave;1;0
+42;OR;Gjymtyrët e sipërme;1;0
+43;OR;Gjymtyrët e poshtme;1;0
+44;OR;Osteomieliti - sekuestrektomia;1;0
+45;OS;Prerje & Drenazh;1;0
+46;OS;Debridement;1;0
+47;OS;Mise -a- plat;1;0
+48;OS;Tualeti dhe qepja kirurgjikale;1;0
