@@ -90,7 +90,7 @@ public class UserSettingManager {
 	 * Returns {@link UserSetting}s of the specified userId.
 	 *
 	 * @param userName     - the user name
-	 * @return <code>{@link UserSetting}</code> if the userSetting exist, <code>null</code> otherwise.
+	 * @return {@link UserSetting} if the userSetting exist, {@code null} otherwise.
 	 */
 	public UserSetting getUserSettingById(int userSettingId) throws OHServiceException {
 		Optional<UserSetting> us = userSettingIoOperationRepository.findById(userSettingId);
