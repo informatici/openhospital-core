@@ -36,17 +36,12 @@ public class UserSettingManager {
 	@Autowired
 	private UserSettingOperationRepository userSettingIoOperationRepository;
 
-	public UserSettingManager(UserSettingOperationRepository userSettingIoOperationRepository) {
-		super();
-		this.userSettingIoOperationRepository = userSettingIoOperationRepository;
-	}
-
 	/**
 	 * Inserts a new {@link UserSetting} into the DB.
 	 *
 	 * @param userSetting - the {@link UserSetting} to insert
-	 * @return <code>{@link UserSetting}</code> if the userSetting has been
-	 *         inserted, <code>null</code> otherwise.
+	 * @return {@link UserSetting} if the userSetting has been
+	 *         inserted, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
 	public UserSetting newUserSetting(UserSetting userSetting) throws OHServiceException {
@@ -57,8 +52,8 @@ public class UserSettingManager {
 	 * Updates an existing {@link UserSetting} in the DB.
 	 *
 	 * @param userSetting - the {@link UserSetting} to insert
-	 * @return <code>{@link UserSetting}</code> if the userSetting has been updated,
-	 *         <code>null</code> otherwise.
+	 * @return {@link UserSetting} if the userSetting has been updated,
+	 *         {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
 	public UserSetting updateUserSetting(UserSetting userSetting) throws OHServiceException {
@@ -80,7 +75,7 @@ public class UserSettingManager {
 	 *
 	 * @param userName     - the user name
 	 * @param configName - the name of the user setting
-	 * @return <code>{@link UserSetting}</code> if the userSetting exist, <code>null</code> otherwise.
+	 * @return {@link UserSetting} if the userSetting exist, {@code null} otherwise.
 	 */
 	public UserSetting getUserSettingByUserNameConfigName(String userName, String configName) throws OHServiceException {
 		return userSettingIoOperationRepository.findByUserNameAndConfigName(userName, configName);
