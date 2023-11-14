@@ -36,6 +36,6 @@ public interface UserSettingOperationRepository extends JpaRepository<UserSettin
 	List<UserSetting> findAllByUSerName(@Param("userName") String userName);
 
 	@Query(value = "select uss from UserSetting uss where uss.user = :userName and uss.configName = :configName")
-	UserSetting findUserNameAndConfigName(@Param("userName") String userName, @Param("configName") String configName);
+	UserSetting findByUserNameAndConfigName(@Param("userName") String userName, @Param("configName") String configName);
 
 }

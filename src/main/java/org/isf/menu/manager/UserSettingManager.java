@@ -83,7 +83,7 @@ public class UserSettingManager {
 	 * @return <code>{@link UserSetting}</code> if the userSetting exist, <code>null</code> otherwise.
 	 */
 	public UserSetting getUserSettingByUserNameConfigName(String userName, String configName) throws OHServiceException {
-		return userSettingIoOperationRepository.findUserNameAndConfigName(userName, configName);
+		return userSettingIoOperationRepository.findByUserNameAndConfigName(userName, configName);
 	}
 	
 	/**
