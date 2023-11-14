@@ -89,7 +89,7 @@ public class UserSettingManager {
 	 */
 	public UserSetting getUserSettingById(int userSettingId) throws OHServiceException {
 		Optional<UserSetting> us = userSettingIoOperationRepository.findById(userSettingId);
-		if (us != null)
+		if (us.isPresent())
 			return us.get();
 		return null;
 	}
