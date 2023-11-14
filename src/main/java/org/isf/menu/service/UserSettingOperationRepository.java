@@ -31,11 +31,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserSettingOperationRepository extends JpaRepository<UserSetting, Integer> {
+	
+	@Query(value = "select uss from UserSetting uss where uss.user = :userName")
+	List<UserSetting> findAllByUSerName(@Param("userName") String userName);
 
-	@Query(value = "select usersetting from UserSetting usersetting where usersetting.user=:userId")
-	List<UserSetting> findAllByUSerID(@Param("userId") String userId);
-
-	@Query(value = "select usersetting from UserSetting usersetting where usersetting.user=:userId and configName=:configName")
-	UserSetting findUserSettingByUSerID(@Param("userId") String userId, @Param("configName") String configName);
+	@Query(value = "select uss from UserSetting uss where uss.user = :userName and uss.configName = :configName")
+	UserSetting findUserNameAndConfigName(@Param("userName") String userName, @Param("configName") String configName);
 
 }
