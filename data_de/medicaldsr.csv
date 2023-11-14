@@ -1,0 +1,397 @@
+1;K;Glukoseteststreifen
+2;L;Eisessig 1 lt
+3;L;Aceton 99 % 1 Liter
+4;L;Kupfer 11 Sulfat 500g
+5;L;EDTA-Dinatriumsalz 100g
+6;L;Absolutes Ethanol 1 ltr
+7;L;Formaldehydlφsung 35-38 % 1lt
+8;L;Salzsδure 30-33% 1lt
+9;L;Jodkristalle 100 g
+10;L;Methanol 99% 1lt
+11;L;Phenolkristalle 1 kg
+12;L;Kaliumjodid 100 g
+13;L;Wasserfreies Natriumcarbonat 500 g
+14;L;Natriumcitrat 100 g
+15;L;Natriumsulfat 500 g
+16;L;Natriumnitrat 25 g
+17;L;Sulfosalicylsδure 500 g
+18;L;Schwefelsδure konz. 1lt
+19;L;Xylol 2,5 lt
+20;L;Natriumfluorid
+21;L;Kaliumoxalat
+22;L;Brillantes Kresylblau
+23;L;Ammoniumoxalat
+24;L;4 Dimethylaminobenzaldehyd
+25;L;Trichloressigsδure
+26;L;Nr. 111 Chlorid (Eisenchlorid)
+27;L;Wasserfreies Natriumcarbonat
+28;L;Trinatriumcitrat
+29;L;Kristallviolett
+30;K;GPT (ALT) 200 ml (Kein NAOH)
+31;K;GOT (AST) 200 ml ohne NAOH) AS 101
+32;K;GOT (AST) 200 ml (kalorimetrisch) AS 147
+33;K;HIV 1/2 Capillus Kit 100Test
+34;K;HIV-Tupfer fόr definiertes Kit
+35;K;HIV-Test 1/11 (Abbott) 100 Tests
+36;K;HIV UNIGOLD 1/11 Testkits 20 Tests
+37;K;Schwangerschaft (HGG Latex) 50 Tests
+38;K;RPR 125 mm x 75 mm
+39;K;Antigen RPR (VDRL Carbon) 5 ml
+40;D;Adrenalin 1 mg/ml 1 ml Amp
+41;D;Aminophyllin 25 mg/ml, 10 ml Amp
+42;D;Amphotericin B 50 mg Flδschchen
+43;D;Ampicillin 500 mg Flδschchen
+44;D;Atropin 1 mg/ml 1 ml Amp
+45;D;Benzathin-Penicillin 2,4 MIU Flδschchen
+46;D;Flδschchen Benzylpenicillin 1 MIU
+47;D;Flδschchen Benzylpenicillin 5 MIU
+48;D;Chloramphenicol 1g Flδschchen
+49;D;Chloroquin 40 mg Base/ml 5 ml Amp
+50;D;Chlorpromazin 25 mg/ml/2 ml Amp
+51;D;Cloxacillin 500 mg Flδschchen
+52;D;Cyclophosphamid 200 mg
+53;D;Cyclophosphamid 500 mg
+54;D;Diazepam 5 mg/ml 2 ml Amp
+55;D;Diclofenac 25 mg/ml 3 ml Amp
+56;D;Digoxin 0,25 mg/ml 2 ml Amp
+57;D;Furosemid 10 mg/ml 2 ml Amp
+58;D;Gentamicin 40 mg/ml 2 ml
+59;D;Haloperidol 5 mg/ml 1 ml Amp
+60;D;Haloperidol Decanoat 50 mg/ml 1 ml Amp
+61;D;Hydralazin-Durchstechflasche 20 mg
+62;D;Flδschchen mit Hydrocortison 100 mg
+63;D;Hyoscine Butylbromid 20 mg/ml/Ampere
+64;D;Lφslich in Insulin 100 IU/ml, Flδschchen 10 ml
+65;D;Insulin Isophane 100IU/ml Flδschchen 10 ml
+66;D;Insulin Mixtard 30/70 100 IE/ml, Flδschchen 10 ml
+67;D;Insulin Mixtard 30/70 100IU/ml Kartuschen 5x3ml
+68;D;Insulin Isophan 40IU/ml 10ml
+69;D;Eisen-Dextran 10 mg/ml, 2-ml-Flδschchen
+70;D;Ketamin 10 mg/ml 20 ml Flδschchen
+71;D;Ketamin 10 mg/ml 10 ml Flδschchen
+72;D;Lignocain 2 % 20 ml Flδschchen
+73;D;Lignocain 2 % Adrenaline Dent.Patronen
+74;D;Spinales Lignocain 50 mg/ml 2 ml Amp
+75;D;Methylergometrin 0,2 mg/ml 1 ml Amp
+76;D;Methylergometrin 0,5 mg/ml 1 ml Amp
+77;D;Metoclopramid 5 mg/ml 100 ml Amp
+78;D;Metronidazol 5 mg/ml 2 ml i.v
+79;D;Morphin 15 mg/ml 1 ml Amp
+80;D;Oxytocin 10 IU/ml 1 ml Amp
+81;D;Pethidin 100 mg/ml 2 ml Amp
+82;D;Pethidin 50 mg/ml 1 ml Amp
+83;D;Phenobarbital 100 mg/ml 2 ml Amp
+84;D;Phytomenadion 10 mg/ml 1 ml Amp
+85;D;Phytomenadion 1 mg/ml 1 ml Amp
+86;D;Mit Procain und Penicillin angereichertes Flδschchen mit 4 MIU
+87;D;Promethazin 25 mg/ml 2 ml Amp
+88;D;Chinin Di-HCI 300 mg/ml 2 ml Amp
+89;D;Ranitidin 25 mg/ml 2 ml Amp
+90;D;Streptomycin 1g Flδschchen
+91;D;Suxamethonium 500 mg Flδschchen
+92;D;Suxamethon 500 mg/ml 2 ml Amp
+93;D;Tetanus-Antitoxin 1500 IE 1 ml Amp
+94;D;Flδschchen Thiopental-Natrium 500 mg
+95;D;Flasche Wasser zur Injektion 10 ml
+96;D;Natriumchlorid 0,9 % IV 500 ml
+97;D;Natriumlactat-Zusammensetzung IV 500 ml
+98;D;Acetazolamid 250 mg Tab
+99;D;Aciclovir 200 mg Tab
+100;D;Aciclovir
+101;D;Aminophyllin 100 mg Tab
+102;D;Albendazol 400 mg Tab
+103;D;Albendazol 200 mg Tab
+104;D;Amitriptylin 25 mg Tab
+105;D;Amoxicillin 250 mg Kap
+106;D;Amoxicillin/Clavulanat 375 mg Tab
+107;D;Ascorbinsδure-Tablette 100 mg
+108;D;Aspirin 300 mg Tab
+109;D;Atenolol 50 mg Tab
+110;D;Atenolol 100 mg Tab
+111;D;Bendrofluazid 5 mg Tab
+112;D;Benzhexol 2 mg Tab
+113;D;Benzhexol 5 mg Tab
+114;D;Bisacodyl 5 mg Tab
+115;D;Calciumlactat 300 mg Tab
+116;D;Carbamazepin 200 mg Tab
+117;D;Carbimazol 5 mg Tab
+118;D;Kohle 250 mg Tab
+119;D;Chloramphenicol 250 mg Kap
+120;D;Unbeschichtetes Chloroquin 150 mg Tab
+121;D;Beschichtet mit Chloroquin 150 mg Tab
+122;K;Kalorimetrische Tests mit Harnstoff 300
+123;D;Chlorpheniramin 4 mg Tab
+124;D;Chlorpromazin 100 mg Tab
+125;D;Chlorpromazin 25 mg Tab
+126;D;Cimetidin 200 mg Tab
+127;D;Cimetidin 400 mg Tab
+128;D;Ciprofloxacin 500 mg Tab
+129;D;Ciprofloxacin 250 mg Tab
+130;D;Cloxacillin 250 mg Tab
+131;D;Codeinphosphat 30 mg Tab
+132;D;Cotrimoxazol 100/20 mg Paed Tab
+133;D;Cotrimoxazol 400/80 mg Tab
+134;D;Darrows halbe Stδrke 500 ml
+135;D;Dexamethason 4 mg/ml 2 ml Amp
+136;D;Dexamethason 4 mg/ml 1 ml Amp
+137;D;Dextrose 5 % IV 500 ml
+138;D;Dextrose 30 % IV 100 ml
+139;D;Dextrose 50 % IV 100 ml
+140;D;Dexamethason 0,5 mg Tab
+141;D;Diazepam 5 mg Tab
+142;D;Diclofenac 50 mg Tab
+143;D;Diethylcarbamazin 50 mg Tab
+144;D;Digoxin 0,25 mg Tab
+145;D;Doxycyclin 100 mg Tab
+146;D;Ephedrin 30 mg Tab
+147;D;Erythromycin 250 mg Tab
+148;D;Tab Fansidar 500/25 mg (50 Dosenx3)
+149;D;Fansidar 500/25 mg Tab
+150;D;Eisensulfat 200 mg Tab
+151;D;Fluconazol 100 mg Tab
+152;D;Fluconazol 100 mg 24 Kapseln
+153;D;Folsδure 1 mg Tab
+154;D;Folsδure 5 mg Tab
+155;D;Folsδure/Eisenschwefel 0,5/200 mg Tab
+156;D;Folsδure 15 mg Tab
+157;D;Frusemid 40 mg Tab
+158;D;Glibenclamid 5 mg Tab
+159;D;Griseofulvin 500 mg Tab
+160;D;Haloperidol 5 mg Tab
+161;D;Haloperidol 5 mg
+162;D;Hydralazin 25 mg Tab
+163;D;Hyoscine 10 mg Tab
+164;D;Ibuprofen 200 mg Tab
+165;D;Imipramin 25 mg Tab
+166;D;Indomethacin 25 mg Tab
+167;D;Isoniazid 300 mg Tab
+168;D;Ketoconazol 200 mg Tab
+169;D;Salbutamol 4 mg Tab
+170;D;Spironolacton 25 mg Tab
+171;D;Tolbutamid 500 mg Tablette
+172;D;Vitamin A 200.000 IE Kapseln
+173;D;Tab. Vitamin-B-Komplex
+174;D;Orale Rehydrationssalze (ORS)
+175;D;Paracetamolsirup 120 mg/5 ml
+176;D;Paracetamol 120 mg/5 ml 100 ml
+177;D;Chininsirup 100 mg/5 ml 100 ml
+178;D;Alkohol 95% unvergδllt 20Ltr
+179;D;Chlorhexidin/Cetrimide 1,5/15 % 1Ltr
+180;D;Chlorhexidin/Cetrimide 1,5/15 % 5Ltr
+181;D;Enzianviolett 25g Dose
+182;D;Wasserstoffperoxid 6 % 250 ml
+183;D;Jodlφsung 2% 500ml
+184;D;Natriumhypochloritlφsung 0,75 Ltr
+185;D;Flόssigwaschmittel 5Ltr parfόmiert
+186;D;Blaue Seife 550g
+187;D;Flόssigwaschmittel 20Ltr
+188;D;Handwaschseifenpulver 5 kg
+189;D;Natriumhypochloritlφsung 5Ltr
+190;D;Betamethason 0,1 % Augen-/Ohren-/Nasentropfen
+191;D;Betamethason 0,1 % Neomycin 0,35 % Augentropfen 7,5 ml
+192;D;Chloramphenicol 0,5 % Augentropfen 10 ml
+193;D;Chloramphenicol 1 % Augensalbe 3,5 g
+194;D;Gentamicin 0,3 % Augen-/Ohrentropfen 10 ml
+195;D;Hydrocortison 1 % Augentropfen 5 ml
+196;D;Tetracyclin-Augensalbe 1 % 3,5 g
+197;D;Beclomethason-Inhalator 50 ΅g
+198;K;Urinteststreifen 3 Parameter 100 Tests
+199;D;Salbutamol-Lφsung zur Inhalation 5 ml
+200;D;Salbutamol-Inhalator 10 ml
+201;D;Clotrimazol 500 mg Pessare
+202;D;Clotrimazol 100 mg Pessare
+203;D;Diazepam 2 mg/ml 2,5 ml Rektalrφhrchen
+204;D;Antihδmorrhoiden-Zδpfchen
+205;D;Nystatin 100.000 IE Pessare
+206;D;Apyrogen Dextrose-Monohydrat 25 kg
+207;D;Amoxicillin 125 mg/5 ml Pulver. 100 ml mischen
+208;D;Chloramphenicol 125 mg/5 ml Susp 3Ltr
+209;D;Chloramphenicol 125 mg/5 ml Susp 100 ml
+210;D;Cotrimoxazol 200+40mg/5ml Susp 3Ltr
+211;D;Cotrimoxazol 200+40 mg/5 ml Susp 100 ml
+212;D;Nystatin 500.000 IE/ Susp/ Drop
+213;D;Pyridoxin 50 mg Tab
+214;D;Chinin 300 mg Tab
+215;D;Ranitidin 150 mg Tab
+216;D;Rifampicin/Isoniazid 150/100 Tab
+217;D;Apyrogen Natriumchlorid 50 kg
+218;K;Feldflecken A und B
+219;K;Genitian-Veilchen
+220;K;Neutrales Rot
+221;K;Gelbes Eosin
+222;K;Giemsa-Fleck
+223;K;Anti-Serum A 10 ml
+224;S;Entlόftungsset verfόgbar
+225;S;Bluttransfusionsbeutel 300 ml
+226;S;100IU-Insulinspritze mit G26/29-Nadel
+227;S;G16 IV-Kanόle mit Port
+228;S;G18 IV-Kanόle mit Port
+229;S;G20 IV-Kanόle mit Port
+230;S;G22 IV-Kanόle mit Port
+231;S;G24 IV-Kanόle ohne Port
+232;S;IV-Kanόle G24 mit Port
+233;S;IV-Geschenkset erhδltlich
+234;S;Kontaminierter Einweg-Nadelbehδlter
+235;S;Luer G20-Nadeln erhδltlich
+236;S;Luer G21-Nadel erhδltlich
+237;S;Luer G22-Nadeln erhδltlich
+238;S;Luer G23-Nadel erhδltlich
+239;S;Spinalnadel G20x75-120mm
+240;S;Spinalnadel G22x75-120mm
+241;S;Spinalnadel G25x75-120mm
+242;S;Spinalnadel G22x40mm
+243;S;Kopfhautvenen-G19-Infusionsset
+244;S;Kopfhautvenen-G21-Infusionsset
+245;S;Kopfhautvenen-G23-Infusionsset
+246;S;Kopfhautvenen-G25-Infusionsset
+247;S;Fόttern/Bewδssern mit 50/60-ml-Spritze
+248;S;Luer-Spritze 2 ml mit Einwegnadel
+249;S;Luer-Spritze 10 ml mit Einwegnadel
+250;S;Luer-Spritze 20 ml mit Einwegnadel
+251;S;Luer 5 ml Spritze mit Einwegnadel
+252;S;Airway Guedel Grφίe 00
+253;S;Atemwegs-Guedel Grφίe 0
+254;S;Atemwegs-Guedel Grφίe 1
+255;S;Atemwegs-Guedel Grφίe 2
+256;S;Atemwegs-Guedel Grφίe 3
+257;S;Sterile Augenpads
+258;S;Klebeband 2,5 cm x 5 m
+259;S;Klebeband 7,5 cm x 5 m
+260;S;Watte 500G
+261;S;Watte 200 g
+262;S;Elastische Binde 10 cm x 4,5 m
+263;S;Elastische Binde 7,5 cm x 4,5 m
+264;S;Mullbinde 7,5cm x 3,65-4m
+265;S;Mullbinde 10cm x 4m
+266;S;Unsterile Mulltupfer 10 cm x 10 cm
+267;S;Sterile Mulltupfer 10 cm x 10 cm
+268;S;Hydrophile Gaze 90 cm x 91 cm
+269;S;Gips 10cm
+270;S;Gips 15cm
+271;S;Foley-Katheter CH20 3-Wege-Ballon
+272;S;Foley-Katheter CH8 3-Wege-Ballon
+273;S;Foley-Katheter CH10 3-Wege-Ballon
+274;S;Foley-Katheter CH12 3-Wege-Ballon
+275;S;Foley-Katheter CH14 3-Wege-Ballon
+276;S;Foley-Katheter CH16 3-Wege-Ballon
+277;S;Foley-Katheter CH18 3-Wege-Ballon
+278;S;Katheterstopfen fόr alle Grφίen
+279;S;G5-Nasensonde (Kinder)
+280;S;G8-Nasensonde (Kinder)
+281;S;G6-Nasensonde (Kinder)
+282;S;Magensonde G10 (Kinder)
+283;S;Magensonde G14 (Kinder)
+284;S;Magensonde G16 (Kinder)
+285;S;Rektalschlauch CH24
+286;S;Rektalschlauch CH26
+287;S;Absaugkatheter der Grφίe 6 erhδltlich
+288;S;Absaugkatheter Grφίe 8 verfόgbar
+289;S;Absaugkatheter Grφίe 16 verfόgbar
+290;S;Absaugkatheter Grφίe 12 verfόgbar
+291;S;Absaugkatheter Grφίe 14 verfόgbar
+292;S;Absaugkatheter Grφίe 10 verfόgbar
+293;S;Haushaltshandschuhe
+294;S;Unsterile Hochrisikohandschuhe
+295;S;Gynδkologische Handschuhe 7,5-8
+296;S;Mittlere unsterile Einweghandschuhe
+297;S;Groίe unsterile Einweghandschuhe
+298;S;Sterile OP-Handschuhe 6
+299;S;Sterile OP-Handschuhe 6.5
+300;S;Sterile OP-Handschuhe 7
+301;S;Sterile OP-Handschuhe 7.5
+302;S;Sterile OP-Handschuhe 8
+303;S;Sterile OP-Handschuhe 8.5
+304;S;Sprachdepressor verfόgbar
+305;S;Autoklavierbare Kunststoffkappe
+306;S;Bett aus Edelstahl
+307;S;Leichensack 70 x 215 cm (Erwachsener)
+308;S;Schόssel ohne Deckel 7 x 12 cm Edelstahl
+309;S;Schόssel ohne Deckel 8 x 16 cm Edelstahl
+310;S;Edelstahlschόssel ohne Deckel 10 x 24 cm
+311;S;Satz Luftringe 43x15cm, Gummi mit Pumpe
+312;S;30 mm geschlossener Kolostomiebeutel, Grφίe 2
+313;S;30 mm geschlossener Kolostomiebeutel, Grφίe 3
+314;S;Wiederverwendbarer offener Kolostomiebeutel 35 mm
+315;S;60 ml Gummi-Ohrspritze
+316;S;Erste-Hilfe-Kasten
+317;S;Edelstahltopf 300 ml/15 cm
+318;S;Edelstahltopf 200 ml/10 cm
+319;S;2-Liter-Wδrmflasche
+320;S;Instrumentenkasten mit Deckel 20x10x5cm
+321;S;Instrumententablett 30 x 20 x 2 cm
+322;S;Gieίkanne mit Zubehφr
+323;S;Nierenbehδlter aus Edelstahl 24 cm
+324;S;Nierenbehδlter aus Edelstahl 20 cm
+325;S;Behδlter fόr Nieren Polypropylen 24cm
+326;S;Mackintosh Plastic (Schόrze) fόr 1 m
+327;S;Mackintosh Brown Gummi (Platte) fόr 1 m
+328;S;Graduierter Messbecher 25 ml
+329;S;Kleine Nackenstόtze
+330;S;Mittlere Nackenstόtze
+331;S;Tolle Nackenstόtze
+332;S;Medizinlφffel 5ml
+333;S;Wiederverwendbare Plastikschόrze
+334;S;Lokale wiederverwendbare Plastikschόrze
+335;S;Unsterile Schόrze aus Polyethylen
+336;S;Einwegrasierer 5St
+337;S;Fetales Metallstethoskop
+338;S;Fetales Stethoskop aus Holz
+339;S;Chirurgische Bόrste (Reinigung)
+340;S;12 x 15 chirurgische Paste
+341;S;Tablett zum Zδhlen von Tabletten
+342;S;Toilettenpapierrollen
+343;S;Abschleppset fόr Kinder
+344;S;Abschleppsatz fόr Erwachsene
+345;S;Flaches Fieberthermometer
+346;S;Klinisches prismatisches Thermometer
+347;S;Unsterile Nabelschnurverbindung 100 m
+348;S;Anschluss einer sterilen Nabelschnur 22m
+349;S;Urin 1Ltr / 2Ltr
+350;S;Beutel zum Sammeln von sterilem Urin 2Ltr
+351;S;Insektenspray 400g
+352;S;Mittel gesδttigt mit Moskitonetzen
+353;S;Groίe, gesδttigte Moskitonetze
+354;S;Ungesδttigtes mittelgroίes Moskitonetz
+355;S;Groίes, nicht durchnδsstes Moskitonetz
+356;S;Imprδgniertablette mit Moskitonetz
+357;S;Imprδgnierungsflόssigkeit fόr Moskitonetze, 500 ml
+358;S;Moskito-Wandspray-Pulver 80g
+359;S;Griff fόr chirurgische Klinge Nr. 3
+360;S;Griff fόr chirurgische Klinge Nr. 4
+361;S;Chirurgische Klinge Nr. 20
+362;S;Chirurgische Klinge Nr. 21
+363;S;Chirurgische Klinge Nr. 22
+364;S;Chirurgische Klinge Nr. 23
+365;S;Mit Nadel Nr. 5 in Runden nδhen
+366;S;Naht mit Nadel Nr. durchtrennen. 5
+367;S;Mit Nadel Nr. 6 in Runden nδhen
+368;S;Chromic Cutgut-Nahtmaterial (0)
+369;S;Chromic Cutgut-Nahtmaterial (2) RN22240TH
+370;S;Chromic Cutgut-Nahtmaterial (2/0) RN22230TH
+371;S;Chromic Cutgut-Nahtmaterial (3/0) RN2325TF
+372;S;Einfaches Cutgut-Nahtmaterial (2/0) RN1230TF
+373;S;Seidennaht (1) S595
+374;S;Nahtseide (2/0) RN5230TF
+375;S;PGA-Naht (3/0) RN3330TF
+376;S;Bleischόrze 100cmx60cm
+377;S;Rφntgenentwickler 2,6 kg fόr 22,5 Liter
+378;S;Rφntgenfilm 18x24cm
+379;S;Rφntgenfilm 20x40cm
+380;S;Rφntgenfilm 24x30cm
+381;S;Rφntgenfilm 30x40cm
+382;S;Rφntgenfilm 35x35cm
+383;S;Rφntgenfilm 43x35cm
+384;S;Rφntgenfilmkassette 18x24cm mit Schirm
+385;S;Rφntgenfilmkassette 24x30cm mit Schirm
+386;S;Rφntgenfilmkassette 30x40cm mit Schirm
+387;S;Rφntgenfilmkassette 35x35cm mit Bildschirm
+388;S;Rφntgenfilmkassette 35x43cm mit Bildschirm
+389;S;Rφntgenfixierer 3,3 kg fόr 22,5 Liter
+390;S;Bariumsulfat fόr Rφntgen 1 kg
+391;S;Diatrizoat Meglumin Sod 76 % 20 ml Amp
+392;K;Anti-Serum B 10 ml
+393;K;Anti-Serum AB 10 ml
+394;K;Anti-Serum D 10ml
+395;K;Kreatinin 200 ml (kalorimetrisch)
+396;K;Glucose GOD PAD 6 x 100 ml (kolorimetrisch)
+397;K;Glukoseteststreifen (Hyloguard)
