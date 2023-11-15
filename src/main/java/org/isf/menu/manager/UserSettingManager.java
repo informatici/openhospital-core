@@ -40,8 +40,7 @@ public class UserSettingManager {
 	 * Inserts a new {@link UserSetting} into the DB.
 	 *
 	 * @param userSetting - the {@link UserSetting} to insert
-	 * @return {@link UserSetting} if the userSetting has been
-	 *         inserted, {@code null} otherwise.
+	 * @return {@link UserSetting} if the userSetting has been inserted, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
 	public UserSetting newUserSetting(UserSetting userSetting) throws OHServiceException {
@@ -52,8 +51,7 @@ public class UserSettingManager {
 	 * Updates an existing {@link UserSetting} in the DB.
 	 *
 	 * @param userSetting - the {@link UserSetting} to insert
-	 * @return {@link UserSetting} if the userSetting has been updated,
-	 *         {@code null} otherwise.
+	 * @return {@link UserSetting} if the userSetting has been updated, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
 	public UserSetting updateUserSetting(UserSetting userSetting) throws OHServiceException {
@@ -65,6 +63,7 @@ public class UserSettingManager {
 	 *
 	 * @param userName - the user name
 	 * @return the list of {@link UserSetting}s
+	 * @throws OHServiceException
 	 */
 	public List<UserSetting> getUserSettingByUserName(String userName) throws OHServiceException {
 		return userSettingIoOperationRepository.findAllByUSerName(userName);
@@ -76,6 +75,7 @@ public class UserSettingManager {
 	 * @param userName     - the user name
 	 * @param configName - the name of the user setting
 	 * @return {@link UserSetting} if the userSetting exist, {@code null} otherwise.
+	 * @throws OHServiceException
 	 */
 	public UserSetting getUserSettingByUserNameConfigName(String userName, String configName) throws OHServiceException {
 		return userSettingIoOperationRepository.findByUserNameAndConfigName(userName, configName);
@@ -84,25 +84,22 @@ public class UserSettingManager {
 	/**
 	 * Returns {@link UserSetting}s of the specified userId.
 	 *
-	 * @param userName     - the user name
+	 * @param userName - the user name
 	 * @return {@link UserSetting} if the userSetting exist, {@code null} otherwise.
+	 * @throws OHServiceException
 	 */
-	public UserSetting getUserSettingById(int userSettingId) throws OHServiceException {
-		Optional<UserSetting> us = userSettingIoOperationRepository.findById(userSettingId);
-		if (us.isPresent())
-			return us.get();
-		return null;
+	public Optional<UserSetting> getUserSettingById(int userSettingId) throws OHServiceException {
+		 return userSettingIoOperationRepository.findById(userSettingId);
 	}
 
 	/**
 	 * Delete the {@link UserSetting}.
+	 * 
 	 * @param userSetting - the userSetting to delete
-	 * @return {@code true} if the {@link UserSetting} has been deleted, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
-	public Boolean deleteUserSetting(UserSetting userSetting) throws OHServiceException {
+	public void deleteUserSetting(UserSetting userSetting) throws OHServiceException {
 		// TODO Auto-generated method stub
 		userSettingIoOperationRepository.delete(userSetting);
-		return true;
 	}
 }
