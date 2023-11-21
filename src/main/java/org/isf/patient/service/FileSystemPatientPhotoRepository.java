@@ -51,7 +51,7 @@ public class FileSystemPatientPhotoRepository {
 	public boolean exist(String path, Integer patientId) {
 		File patientIdFolder = new File(path);
 		File f = new File(patientIdFolder, patientId + IMAGE_FORMAT);
-		return (f.exists() && !f.isDirectory());
+		return f.exists() && !f.isDirectory();
 	}
 
 	public void loadInPatient(Patient patient, String path) throws OHServiceException {

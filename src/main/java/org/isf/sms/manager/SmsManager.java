@@ -121,14 +121,6 @@ public class SmsManager {
 		smsOperations.delete(smsToDelete);
 	}
 
-	public int getMaxLength() {
-		return MAX_LENGHT;
-	}
-
-	public String getNUMBER_REGEX() {
-		return NUMBER_REGEX;
-	}
-
 	private String[] split(String text) {
 		int len = text.length();
 		if (len <= MAX_LENGHT) {
