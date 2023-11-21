@@ -47,9 +47,9 @@ public class SupplierOperations {
 	}
 
 	/**
-	 * Save or Update a {@link Supplier}
+	 * Save or update a {@link Supplier}.
 	 * @param supplier - the {@link Supplier} to save or update
-	 * return <code>true</code> if data has been saved, <code>false</code> otherwise. 
+	 * return the recently saved or updated {@link Supplier} object.
 	 * @throws OHServiceException 
 	 */
 	public Supplier saveOrUpdate(Supplier supplier) throws OHServiceException {
@@ -59,7 +59,7 @@ public class SupplierOperations {
 	/**
 	 * Returns a {@link Supplier} with specified ID
 	 * @param id - supplier ID
-	 * @return supplier - the supplier with specified ID
+	 * @return supplier - the {@link Supplier} object with specified ID or {@code null} if not found
 	 * @throws OHServiceException 
 	 */
 	public Supplier getByID(int id) throws OHServiceException {

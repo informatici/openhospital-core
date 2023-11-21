@@ -49,29 +49,29 @@ public class SmsOperations {
 	public SmsOperations() {}
 	
 	/**
-	 * Save or Update a {@link Sms}
+	 * Save or update a {@link Sms}.
 	 * @param sms - the {@link Sms} to save or update
-	 * @return <code>true</code> if data has been saved, <code>false</code> otherwise. 
+	 * @return the newly inserted or updated {@link Sms} object.
 	 * @throws OHServiceException 
 	 */
-	public boolean saveOrUpdate(Sms sms) throws OHServiceException {
-		return repository.save(sms) != null;
+	public Sms saveOrUpdate(Sms sms) throws OHServiceException {
+		return repository.save(sms);
 	}
 	
 	/**
-	 * Save or Update a list of {@link Sms}s
+	 * Save or update a list of {@link Sms}s.
 	 * @param smsList - the list of {@link Sms} to save or update
-	 * @return <code>true</code> if data has been saved, <code>false</code> otherwise. 
+	 * @return the newly inserted or updated list of {@link Sms} objects.
 	 * @throws OHServiceException 
 	 */
-	public boolean saveOrUpdate(List<Sms> smsList) throws OHServiceException {
-		return repository.saveAll(smsList) != null;
+	public List<Sms> saveOrUpdate(List<Sms> smsList) throws OHServiceException {
+		return repository.saveAll(smsList);
 	}
 	
 	/**
-	 * Returns a {@link Sms} with specified ID
+	 * Returns a {@link Sms} with specified ID.
 	 * @param id- sms ID
-	 * @return sms - the sms with specified ID
+	 * @return the {@link Sms} with specified ID or null if not found.
 	 * @throws OHServiceException 
 	 */
 	public Sms getByID(int id) throws OHServiceException {
@@ -79,8 +79,8 @@ public class SmsOperations {
 	}
 	
 	/**
-	 * Returns the list of all {@link Sms}s, sent and not sent, between the two dates
-	 * @return smsList - the list of {@link Sms}s
+	 * Returns the list of all {@link Sms}s, sent and not sent, between the two dates.
+	 * @return smsList - the list of {@link Sms}s objects.
 	 * @throws OHServiceException 
 	 */
 	public List<Sms> getAll(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
@@ -88,8 +88,8 @@ public class SmsOperations {
 	}
 	
 	/**
-	 * Returns the list of not sent {@link Sms}s between the two dates
-	 * @return smsList - the list of {@link Sms}s
+	 * Returns the list of not sent {@link Sms}s between the two dates.
+	 * @return smsList - the list of {@link Sms}s objects.
 	 * @throws OHServiceException 
 	 */
 	public List<Sms> getList(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
@@ -98,8 +98,8 @@ public class SmsOperations {
 	}
 	
 	/**
-	 * Returns the list of not sent {@link Sms}s
-	 * @return smsList - the list of {@link Sms}s
+	 * Returns the list of not sent {@link Sms}s objects.
+	 * @return smsList - the list of {@link Sms}s objects.
 	 * @throws OHServiceException 
 	 */
 	public List<Sms> getList() throws OHServiceException {
@@ -107,8 +107,8 @@ public class SmsOperations {
 	}
 	
 	/**
-	 * Delete the specified {@link Sms}
-	 * @param sms - the {@link Sms}s to delete
+	 * Delete the specified {@link Sms} object.
+	 * @param sms - the {@link Sms}s to delete.
 	 * @throws OHServiceException 
 	 */
 	public void delete(Sms sms) throws OHServiceException {
@@ -116,8 +116,8 @@ public class SmsOperations {
 	}
 
 	/**
-	 * Delete the specified list of {@link Sms}
-	 * @param smsList - the list of {@link Sms}s to delete
+	 * Delete the specified list of {@link Sms} objects.
+	 * @param smsList - the list of {@link Sms}s objects to delete.
 	 * @throws OHServiceException 
 	 */
 	public void delete(List<Sms> smsList) throws OHServiceException	{
@@ -138,7 +138,7 @@ public class SmsOperations {
 	 * Checks if the code is already in use
 	 *
 	 * @param code - the Sms code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer code) throws OHServiceException {

@@ -232,7 +232,7 @@ public class Tests extends OHCoreTestCase {
 		params.put("birthDate", LocalDateTime.of(1984, Calendar.AUGUST, 14, 0, 0, 0));
 		params.put("address", "TestAddress");
 		List<Patient> patients = patientIoOperation.getPatients(params);
-		assertThat(patients.size()).isPositive();
+		assertThat(patients).isNotEmpty();
 	}
 
 	@Test
@@ -246,8 +246,7 @@ public class Tests extends OHCoreTestCase {
 		Integer code = setupTestPatient(false);
 		Patient patient = patientIoOperation.getPatient(code);
 		patient.setFirstName("someNewFirstName");
-		assertThat(patientIoOperation.updatePatient(patient)).isTrue();
-		Patient updatedPatient = patientIoOperation.getPatient(code);
+		Patient updatedPatient = patientIoOperation.updatePatient(patient);
 		assertThat(updatedPatient.getFirstName()).isEqualTo(patient.getFirstName());
 	}
 
@@ -255,8 +254,9 @@ public class Tests extends OHCoreTestCase {
 	public void testIoDeletePatient() throws Exception {
 		Integer code = setupTestPatient(false);
 		Patient patient = patientIoOperation.getPatient(code);
-		boolean result = patientIoOperation.deletePatient(patient);
-		assertThat(result).isTrue();
+		patientIoOperation.deletePatient(patient);
+		Patient deletedPatient = patientIoOperation.getPatient(patient.getName());
+		assertThat(deletedPatient).isNull();
 	}
 
 	@Test
@@ -417,7 +417,9 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrDeletePatient() throws Exception {
 		Integer code = setupTestPatient(false);
 		Patient patient = patientIoOperation.getPatient(code);
-		assertThat(patientBrowserManager.deletePatient(patient)).isTrue();
+		patientBrowserManager.deletePatient(patient);
+		Patient deletedPatient = patientIoOperation.getPatient(patient.getName());
+		assertThat(deletedPatient).isNull();
 	}
 
 	@Test
@@ -645,8 +647,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testPatientEquals() throws Exception {
 		Patient patient = testPatient.setup(false);
-		assertThat(patient).isEqualTo(patient);
 		assertThat(patient)
+				.isEqualTo(patient)
 				.isNotNull()
 				.isNotEqualTo("someString");
 		Patient patient2 = testPatient.setup(true);
@@ -702,8 +704,10 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void assertThatObsoletePatientWasDeletedAndMergedIsTheActiveOne(Patient mergedPatient, Patient obsoletePatient) throws OHException {
-		Patient mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode()).get();
-		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).get();
+		Patient mergedPatientResult = patientIoOperationRepository.findById(mergedPatient.getCode()).orElse(null);
+		assertThat(mergedPatientResult).isNotNull();
+		Patient obsoletePatientResult = patientIoOperationRepository.findById(obsoletePatient.getCode()).orElse(null);
+		assertThat(obsoletePatientResult).isNotNull();
 		assertThat(obsoletePatientResult.getDeleted()).isEqualTo('Y');
 		assertThat(mergedPatientResult.getDeleted()).isEqualTo('N');
 	}

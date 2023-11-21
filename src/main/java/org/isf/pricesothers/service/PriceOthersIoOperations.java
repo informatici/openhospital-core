@@ -39,7 +39,7 @@ public class PriceOthersIoOperations {
 	private PriceOthersIoOperationRepository repository;
 	
 	/**
-	 * Return the list of {@link PricesOthers}s in the DB
+	 * Return the list of {@link PricesOthers}s.
 	 * 
 	 * @return the list of {@link PricesOthers}s
 	 * @throws OHServiceException 
@@ -49,10 +49,10 @@ public class PriceOthersIoOperations {
 	}
 
 	/**
-	 * Insert a new {@link PricesOthers} in the DB
+	 * Insert a new {@link PricesOthers}.
 	 * 
 	 * @param other - the {@link PricesOthers} to insert
-	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
+	 * @return the newly inserted {@link PricesOthers} object.
 	 * @throws OHServiceException 
 	 */
 	public PricesOthers newOthers(PricesOthers other) throws OHServiceException {
@@ -63,19 +63,17 @@ public class PriceOthersIoOperations {
 	 * Delete a {@link PricesOthers} in the DB
 	 * 
 	 * @param other - the {@link PricesOthers} to delete
-	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean deleteOthers(PricesOthers other) throws OHServiceException {
+	public void deleteOthers(PricesOthers other) throws OHServiceException {
 		repository.delete(other);
-		return true;
 	}
 
 	/**
-	 * Update a {@link PricesOthers} in the DB
+	 * Update a {@link PricesOthers}.
 	 * 
 	 * @param other - the {@link PricesOthers} to update
-	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
+	 * @return the updated {@link PricesOthers} object.
 	 * @throws OHServiceException 
 	 */
 	public PricesOthers updateOther(PricesOthers other) throws OHServiceException {
@@ -83,10 +81,10 @@ public class PriceOthersIoOperations {
 	}
 
 	/**
-	 * Checks if the code is already in use
+	 * Checks if the code is already in use.
 	 *
 	 * @param id - the price other code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise
+	 * @return {@code true} if the code is already in use, {@code false} otherwise
 	 * @throws OHServiceException 
 	 */
 	public boolean isCodePresent(Integer id) throws OHServiceException {
