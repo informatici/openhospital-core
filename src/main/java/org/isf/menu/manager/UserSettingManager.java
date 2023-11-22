@@ -99,7 +99,6 @@ public class UserSettingManager {
 	 * @throws OHServiceException
 	 */
 	public void deleteUserSetting(UserSetting userSetting) throws OHServiceException {
-		// TODO Auto-generated method stub
 		userSettingIoOperationRepository.delete(userSetting);
 	}
 }
