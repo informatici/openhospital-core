@@ -49,8 +49,8 @@ public class OperationRowBrowserManager {
 		return ioOperations.getOperationRowByOpd(opd);
 	}
 
-	public boolean deleteOperationRow(OperationRow operationRow) throws OHServiceException {
-		return ioOperations.deleteOperationRow(operationRow);
+	public void deleteOperationRow(OperationRow operationRow) throws OHServiceException {
+		ioOperations.deleteOperationRow(operationRow);
 	}
 
 	public OperationRow updateOperationRow(OperationRow opRow) throws OHServiceException {
