@@ -7092,8 +7092,8 @@ LOCK TABLES `oh_user` WRITE;
 /*!40000 ALTER TABLE `oh_user` DISABLE KEYS */;
 INSERT INTO `oh_user` VALUES ('admin','admin','$2a$10$FI/PMO0oSHHosF2PX8l3QuB0DJepVfnynbLZ9Zm2711bF2ch8db2S','administrator',NULL,NULL,NULL,NULL,1,0,0,NULL,NULL);
 INSERT INTO `oh_user` VALUES ('guest','guest','$2a$10$b0WlANdaNV7Ukn/klFGt3.euZ7PaHuJI6TtBSM2vdxkavvkUDbpo2','guest',NULL,NULL,NULL,NULL,1,0,0,NULL,NULL);
-INSERT INTO `oh_user` VALUES ('doctor','doctor','$2a$04$yWST9gUFvRzAAi2ikmkdRePFg/KGNRSjQg7m6FdVBboS4JgXfLuje','doctor',NULL,NULL,NULL,NULL,1,0,0,NULL,NULL);
-INSERT INTO `oh_user` VALUES ('laboratorist','laboratorist','$2a$04$r3uWrupP6hvNohY3j1ACxeY8.w1v5LO3Q21Kr0zJbpQ7vnOXR5Rgq','laboratorist',NULL,NULL,NULL,NULL,1,0,0,NULL,NULL);
+INSERT INTO `oh_user` VALUES ('doctor','doctor','$2a$04$iqB3DZzyvQos4wCQrSHKyuf/Spr8LyOFF23dihNbS1AWpkIPu..MG','doctor',NULL,NULL,NULL,NULL,1,0,0,NULL,NULL);
+INSERT INTO `oh_user` VALUES ('laboratorist','laboratorist','$2a$04$mhtLe0xVdhYcUqav2glGXeGULLErkgv8KHMQ1yYLh3TTYnE.V1qOO','laboratorist',NULL,NULL,NULL,NULL,1,0,0,NULL,NULL);
 /*!40000 ALTER TABLE `oh_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
