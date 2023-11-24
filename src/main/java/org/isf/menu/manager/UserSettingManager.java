@@ -66,7 +66,7 @@ public class UserSettingManager {
 	 * @throws OHServiceException
 	 */
 	public List<UserSetting> getUserSettingByUserName(String userName) throws OHServiceException {
-		return userSettingIoOperationRepository.findAllByUSerName(userName);
+		return userSettingIoOperationRepository.findAllByUserName(userName);
 	}
 
 	/**

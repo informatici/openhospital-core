@@ -33,7 +33,7 @@ import org.springframework.stereotype.Repository;
 public interface UserSettingOperationRepository extends JpaRepository<UserSetting, Integer> {
 	
 	@Query(value = "select uss from UserSetting uss where uss.user = :userName")
-	List<UserSetting> findAllByUSerName(@Param("userName") String userName);
+	List<UserSetting> findAllByUserName(@Param("userName") String userName);
 
 	@Query(value = "select uss from UserSetting uss where uss.user = :userName and uss.configName = :configName")
 	UserSetting findByUserNameAndConfigName(@Param("userName") String userName, @Param("configName") String configName);
