@@ -507,6 +507,7 @@ public class AdmissionBrowserManager {
 			throw new OHDataValidationException(errors);
 		}
 	}
+
 	public boolean isAdmissionActiveOnDate(Admission admission, LocalDateTime checkDate) {
 		return (admission.getAdmDate().isBefore(checkDate) || admission.getAdmDate().isEqual(checkDate))
 			&& (admission.getDisDate() != null && admission.getDisDate().isAfter(checkDate));
