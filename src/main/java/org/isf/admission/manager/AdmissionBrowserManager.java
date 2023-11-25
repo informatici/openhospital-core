@@ -335,8 +335,7 @@ public class AdmissionBrowserManager {
 				if (!insert && ad.getId() == admission.getId()) {
 					continue;
 				}
-				if ((ad.getAdmDate().isBefore(dateIn) || ad.getAdmDate().isEqual(dateIn))
-								&& (ad.getDisDate() != null && ad.getDisDate().isAfter(dateIn))) {
+				if (isAdmissionActiveOnDate(ad, dateIn)) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.ininserteddatepatientwasalreadyadmitted.msg")));
 				}
 			}
@@ -507,5 +506,9 @@ public class AdmissionBrowserManager {
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
+	}
+	public boolean isAdmissionActiveOnDate(Admission admission, LocalDateTime checkDate) {
+		return (admission.getAdmDate().isBefore(checkDate) || admission.getAdmDate().isEqual(checkDate))
+			&& (admission.getDisDate() != null && admission.getDisDate().isAfter(checkDate));
 	}
 }
