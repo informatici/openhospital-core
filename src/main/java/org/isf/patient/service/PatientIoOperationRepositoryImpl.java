@@ -59,7 +59,7 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 	private String[] getWordsToSearchForInPatientsRepository(String regex) {
 		String[] words = new String[0];
 
-		if ((regex != null) && (!regex.equals(""))) {
+		if (regex != null && !regex.isEmpty()) {
 			String string = regex.trim().toLowerCase();
 			words = string.split(" ");
 		}

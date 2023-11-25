@@ -71,15 +71,15 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testSmsSaveOrUpdate() throws Exception {
 		Sms sms = testSms.setup(true);
-		boolean result = smsIoOperation.saveOrUpdate(sms);
-		assertThat(result).isTrue();
-		checksmsIntoDb(sms.getSmsId());
+		Sms newSaveUpdateSms = smsIoOperation.saveOrUpdate(sms);
+		checksmsIntoDb(newSaveUpdateSms.getSmsId());
 	}
 
 	@Test
 	public void testSmsGetByID() throws Exception {
 		int code = setupTestSms(false);
 		Sms foundSms = smsIoOperation.getByID(code);
+		assertThat(foundSms).isNotNull();
 		checksmsIntoDb(foundSms.getSmsId());
 	}
 
@@ -89,6 +89,7 @@ public class Tests extends OHCoreTestCase {
 		LocalDateTime smsDateEnd = LocalDateTime.of(2011, 9, 9, 0, 0, 0);
 		int code = setupTestSms(false);
 		Sms foundSms = smsIoOperation.getByID(code);
+		assertThat(foundSms).isNotNull();
 		List<Sms> sms = smsIoOperation.getAll(smsDateStart, smsDateEnd);
 		assertThat(sms.get(0).getSmsText()).isEqualTo(foundSms.getSmsText());
 	}
@@ -97,6 +98,7 @@ public class Tests extends OHCoreTestCase {
 	public void testSmsGetList() throws Exception {
 		int code = setupTestSms(false);
 		Sms foundSms = smsIoOperation.getByID(code);
+		assertThat(foundSms).isNotNull();
 		List<Sms> sms = smsIoOperation.getList();
 		assertThat(sms.get(0).getSmsText()).isEqualTo(foundSms.getSmsText());
 	}
@@ -105,6 +107,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoDeleteSms() throws Exception {
 		int code = setupTestSms(false);
 		Sms foundSms = smsIoOperation.getByID(code);
+		assertThat(foundSms).isNotNull();
 		smsIoOperation.delete(foundSms);
 		boolean result = smsIoOperation.isCodePresent(code);
 		assertThat(result).isFalse();
@@ -114,6 +117,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoDeleteByModuleModuleID() throws Exception {
 		int code = setupTestSms(false);
 		Sms foundSms = smsIoOperation.getByID(code);
+		assertThat(foundSms).isNotNull();
 		smsIoOperation.deleteByModuleModuleID(foundSms.getModule(), foundSms.getModuleID());
 
 		boolean result = smsIoOperation.isCodePresent(code);
@@ -128,6 +132,7 @@ public class Tests extends OHCoreTestCase {
 
 	private void checksmsIntoDb(int code) throws OHServiceException {
 		Sms foundSms = smsIoOperation.getByID(code);
+		assertThat(foundSms).isNotNull();
 		testSms.check(foundSms);
 	}
 }
