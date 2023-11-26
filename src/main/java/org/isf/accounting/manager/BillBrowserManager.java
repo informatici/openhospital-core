@@ -55,7 +55,6 @@ public class BillBrowserManager {
 	 */
 	protected void validateBill(Bill bill, List<BillItems> billItems, List<BillPayments> billPayments) throws OHDataValidationException {
 		List<OHExceptionMessage> errors = new ArrayList<>();
-
 		LocalDateTime today = TimeTools.getNow();
 		LocalDateTime upDate;
 		LocalDateTime firstPay = LocalDateTime.from(today);
