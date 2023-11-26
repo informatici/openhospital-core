@@ -48,6 +48,7 @@ public class Tests extends OHCoreTestCase {
 	SupplierIoOperationRepository supplierIoOperationRepository;
 	@Autowired
 	SupplierBrowserManager supplierBrowserManager;
+	SupplierOperations supplierOperations;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -143,15 +144,15 @@ public class Tests extends OHCoreTestCase {
 		Supplier foundSupplier = supplierBrowserManager.getByID(code);
 		assertThat(foundSupplier).isNotNull();
 		// get all (including deleted)
-		Map<Integer, String> allSuppliers = supplierBrowserManager.getHashMap(true);
+		Map<Integer, String> allSuppliers = supplierOperations.getHashMap(true);
 		// get all (not including deleted)
-		Map<Integer, String> suppliers = supplierBrowserManager.getHashMap(false);
+		Map<Integer, String> suppliers = supplierOperations.getHashMap(false);
 		assertThat(allSuppliers).isEqualTo(suppliers);
 		// "delete" a supplier
 		foundSupplier.setSupDeleted('Y');
 		supplierBrowserManager.saveOrUpdate(foundSupplier);
 		// get all (not including delete)
-		suppliers = supplierBrowserManager.getHashMap(false);
+		suppliers = supplierOperations.getHashMap(false);
 		assertThat(allSuppliers).isNotEqualTo(suppliers);
 	}
 
