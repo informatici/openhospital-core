@@ -277,12 +277,12 @@ public class Medical extends Auditable<String> implements Comparable<Medical>, C
 	@Override
 	public int hashCode() {
 	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
+	        final int multiplier = 23;
+	        int hashValueMultiplier = 133;
 	        
-	        c = m * c + code.hashCode();
+	        hashValueMultiplier = multiplier * hashValueMultiplier + code.hashCode();
 	        
-	        this.hashCode = c;
+	        this.hashCode = hashValueMultiplier;
 	    }
 	  
 	    return this.hashCode;
