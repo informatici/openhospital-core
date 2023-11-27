@@ -259,7 +259,7 @@ public class FileSystemDicomManager implements DicomManagerInterface {
 			// some times this number could be null, it's wrong, but I add
 			// line to avoid exception
 			if (seriesNumber == null || seriesNumber.trim().isEmpty() || seriesNumber.equalsIgnoreCase("null")) {
-				seriesNumber = SourceFiles.generateSeriesNumber(patId);
+				seriesNumber = DicomLoader.generateSeriesNumber(patId);
 				dicom.setDicomSeriesNumber(seriesNumber);
 				dicom.setDicomSeriesInstanceUID("<org_root>."+seriesNumber);
 			}
