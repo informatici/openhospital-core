@@ -23,11 +23,12 @@ package org.isf.patconsensus.service;
 
 import java.util.Optional;
 
-import org.isf.opetype.model.OperationType;
 import org.isf.patconsensus.model.PatientConsensus;
+import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,9 +45,9 @@ public class PatientConsensusIoOperation {
 	private PatientIoOperationRepository patientRepository;
 
 	/**
-	 * Return the PatientConsensus if exists {@link PatientConsensus}s
+	 * Return the {@link PatientConsensus} if patient code exists.
 	 *
-	 * @return the {@link PatientConsensus}s. It could be <code>empty</code>.
+	 * @return the {@link PatientConsensus}. It could be {@code empty}.
 	 * @throws OHServiceException
 	 */
 	public Optional<PatientConsensus> getPatientConsensusByUserId(Integer patientId) throws OHServiceException {
@@ -55,25 +56,28 @@ public class PatientConsensusIoOperation {
 
 
 	/**
-	 * Update an {@link PatientConsensus}
+	 * Update an {@link PatientConsensus}.
 	 *
 	 * @param patientConsensus
 	 *            - the {@link PatientConsensus} to update
-	 * @return <code>PatientConsensus</code>.
+	 * @return the updated {@link PatientConsensus}.
 	 * @throws OHServiceException
 	 */
 	public PatientConsensus updatePatientConsensus(PatientConsensus patientConsensus) throws OHServiceException {
-		patientConsensus.setPatient(this.patientRepository.findById(patientConsensus.getPatient().getCode()).get());
-		return repository.save(patientConsensus);
+		Optional<Patient> foundPatient = patientRepository.findById(patientConsensus.getPatient().getCode());
+		if (foundPatient.isPresent()) {
+			patientConsensus.setPatient(foundPatient.get());
+			return repository.save(patientConsensus);
+		}
+		throw new OHServiceException(new OHExceptionMessage("Patient not found."));
 	}
 
-
 	/**
-	 * Checks if an {@link OperationType} code has already been used
+	 * Checks if the {@link PatientConsensus} with the specified code has already been used.
 	 *
 	 * @param code
 	 *            - the code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise.
+	 * @return {@code true} if the code is already in use, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean existsByPatientCode(Integer code) throws OHServiceException {

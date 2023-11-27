@@ -30,6 +30,7 @@ import org.isf.operation.model.OperationRow;
 import org.isf.patient.model.Patient;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,13 +61,13 @@ public class OperationRowIoOperations {
 		return new ArrayList<>();
 	}
 
-	public boolean deleteOperationRow(OperationRow operationRow) throws OHServiceException {
+	public void deleteOperationRow(OperationRow operationRow) throws OHServiceException {
 		OperationRow found = repository.findById(operationRow.getId());
 		if (found != null) {
 			repository.delete(found);
-			return true;
+		} else {
+			throw new OHServiceException(new OHExceptionMessage("angal.operationrow.not.found.msg"));
 		}
-		return false;
 	}
 
 	public OperationRow updateOperationRow(OperationRow opRow) throws OHServiceException {
