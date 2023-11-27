@@ -27,6 +27,7 @@ import org.isf.menu.model.UserGroup;
 import org.isf.permissions.model.GroupPermission;
 import org.isf.permissions.model.Permission;
 import org.isf.permissions.service.GroupPermissionIoOperations;
+import org.isf.utils.exception.OHServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,16 +37,17 @@ public class GroupPermissionManager {
 	@Autowired
 	private GroupPermissionIoOperations operations;
 
-	public List<GroupPermission> findByIdIn(List<Integer> ids) {
-		return this.operations.findByIdIn(ids);
+	public List<GroupPermission> findByIdIn(List<Integer> ids) throws OHServiceException {
+		return operations.findByIdIn(ids);
 	}
 
-	public List<GroupPermission> findByPermissionIdAndUserGroupCodes(Integer permissionId, List<String> userGroupCodes) {
-		return this.operations.findByPermissionIdAndUserGroupCodes(permissionId, userGroupCodes);
+	public List<GroupPermission> findByPermissionIdAndUserGroupCodes(Integer permissionId, List<String> userGroupCodes)
+			throws OHServiceException {
+		return operations.findByPermissionIdAndUserGroupCodes(permissionId, userGroupCodes);
 	}
 
-	public List<GroupPermission> generateGroupPermissionList(Permission model, List<UserGroup> userGroups) {
-		return this.operations.generateGroupPermissionList(model, userGroups);
+	public List<GroupPermission> generateGroupPermissionList(Permission model, List<UserGroup> userGroups) throws OHServiceException {
+		return operations.generateGroupPermissionList(model, userGroups);
 	}
 
 }
