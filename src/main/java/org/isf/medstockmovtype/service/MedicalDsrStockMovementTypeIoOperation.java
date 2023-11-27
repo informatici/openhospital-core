@@ -53,7 +53,7 @@ public class MedicalDsrStockMovementTypeIoOperation {
 	/**
 	 * Updates the specified {@link MovementType}.
 	 * @param medicalDsrStockMovementType the medical stock movement type to update.
-	 * @return <code>true</code> if the specified stock movement type has been updated, <code>false</code> otherwise.
+	 * @return the update {@link MovementType} object.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
 	public MovementType updateMedicalDsrStockMovementType(MovementType medicalDsrStockMovementType) throws OHServiceException {
@@ -63,7 +63,7 @@ public class MedicalDsrStockMovementTypeIoOperation {
 	/**
 	 * Stores the specified {@link MovementType}.
 	 * @param medicalDsrStockMovementType the medical stock movement type to store.
-	 * @return <code>true</code> if the medical movement type has been stored, <code>false</code> otherwise.
+	 * @return the newly stored {@link MovementType} object.
 	 * @throws OHServiceException if an error occurs during the store operation.
 	 */
 	public MovementType newMedicalDsrStockMovementType(MovementType medicalDsrStockMovementType) throws OHServiceException {
@@ -73,18 +73,16 @@ public class MedicalDsrStockMovementTypeIoOperation {
 	/**
 	 * Deletes the specified {@link MovementType}.
 	 * @param medicalDsrStockMovementType the medical stock movement type to delete.
-	 * @return <code>true</code> if the medical stock movement type has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the delete operation.
 	 */
-	public boolean deleteMedicalDsrStockMovementType(MovementType medicalDsrStockMovementType) throws OHServiceException {
+	public void deleteMedicalDsrStockMovementType(MovementType medicalDsrStockMovementType) throws OHServiceException {
 		repository.delete(medicalDsrStockMovementType);
-		return true;
 	}
 
 	/**
 	 * Checks if the specified medical stock movement type is already used.
 	 * @param code the code to check.
-	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
+	 * @return {@code true} if the code is used, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
