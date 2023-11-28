@@ -74,7 +74,7 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 			SystemInfo si = new SystemInfo();
 			OperatingSystem os = si.getOperatingSystem();
 			result.put(CollectorsConstants.OS_FAMILY, os.getFamily());
-			result.put(CollectorsConstants.OS_VERSION, os.getVersionInfo().getVersion());
+			result.put(CollectorsConstants.OS_VERSION, String.valueOf(os.getVersionInfo().getVersion()));
 			result.put(CollectorsConstants.OS_MANUFACTURER, os.getManufacturer());
 			result.put(CollectorsConstants.OS_BITNESS, String.valueOf(os.getBitness()));
 			result.put(CollectorsConstants.OS_CODENAME, os.getVersionInfo().getCodeName());
