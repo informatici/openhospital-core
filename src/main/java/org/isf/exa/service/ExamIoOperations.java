@@ -54,9 +54,6 @@ public class ExamIoOperations extends ExamOperations{
 	
 	@Autowired
 	private ExamRowIoOperationRepository rowRepository;
-	
-	@Autowired
-	private ExamTypeIoOperationRepository typeRepository;
 
 	/**
 	 * Returns the list of {@link Exam}s
