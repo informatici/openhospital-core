@@ -1,0 +1,437 @@
+A01;Typhus und Paratyphus;AB;0;1;1
+A06;Amцbiasis;AB;0;1;1
+A07;Andere intestinale Protozoenerkrankungen;AB;0;1;1
+A07.1;Giardiasis;AB;0;1;1
+A09;Durchfall und Gastroenteritis vermutlich infektiцsen Ursprungs;AB;0;1;1
+A09.0;Gastroenteritis und Kolitis unbekannter Herkunft;AB;0;1;1
+A15;Atemwegstuberkulose, bakteriologisch und histologisch bestдtigt;AB;0;1;1
+A16;Atemwegstuberkulose, weder bakteriologisch noch histologisch bestдtigt;AB;0;1;1
+A18;Tuberkulose anderer Organe;AB;0;1;1
+A19;Miliartuberkulose;AB;0;1;1
+A20;Pest;AB;0;1;1
+A28;Andere zoonotische bakterielle Erkrankungen, die nicht anderweitig klassifiziert sind;AB;0;1;1
+A30;Lepra [Hansen-Krankheit];AB;0;1;1
+A35;Noch ein Tetanus;AB;0;1;1
+A36;Diphtherie;AB;0;1;1
+A37;Guter Husten;AB;0;1;1
+A38;Scharlach;AB;0;1;1
+A50;Angeborene Syphilis;AB;0;1;1
+A51;Frьhe Syphilis;AB;0;1;1
+A52;Spдtsyphilis;AB;0;1;1
+A54;Gonokokken-Infektion;AB;0;1;1
+A55;Chlamydien-Lymphogranulom (Venereum);AB;0;1;1
+A56;Andere durch Chlamydien verursachte sexuell ьbertragbare Krankheiten;AB;0;1;1
+A57;Chancroid;AB;0;1;1
+A59;Trichomoniasis;AB;0;1;1
+A60;Anogenitale Herpesvirus-Infektion [Herpes simplex];AB;0;1;1
+A64;Andere hauptsдchlich sexuell ьbertragbare Krankheiten, die nicht anderweitig klassifiziert sind;AB;0;1;1
+A80;Akute Poliomyelitis;AB;0;1;1
+A87;Virale Meningitis;AB;0;1;1
+A89;Nicht nдher bezeichnete Virusinfektion des Zentralnervensystems;AB;0;1;1
+A92;Andere Virusfieberarten, die durch Mьcken ьbertragen werden;AB;0;1;1
+A99;Nicht nдher bezeichnetes virales hдmorrhagisches Fieber;AB;0;1;1
+B00;Herpesvirale Infektionen [Herpes simplex];AB;0;1;1
+B01;Varizellen [Windpocken];AB;0;1;1
+B02;Zoster [Herpes Zoster];AB;0;1;1
+B05;Masern;AB;0;1;1
+B06;Rцteln [deutsche Masern];AB;0;1;1
+B07;Viruswarzen;AB;0;1;1
+B09;Nicht nдher bezeichnete Virusinfektion, die durch Lдsionen der Haut und der Schleimhдute gekennzeichnet ist;AB;0;1;1
+B16;Akute Hepatitis B;AB;0;1;1
+B17;Andere akute Virushepatitis;AB;0;1;1
+B17.1;Akute Hepatitis C;AB;0;1;1
+B24;Nicht nдher bezeichnete HIV-Erkrankung;AB;0;1;1
+B26;Mumps;AB;0;1;1
+B34;Virusinfektion an unbekannter Stelle;AB;0;1;1
+B37;Candidiasis;AB;0;1;1
+B47;Myzetom;AB;0;1;1
+B49;Mykose nicht angegeben;AB;0;1;1
+B53;Andere parasitologisch bestдtigte Malaria;AB;0;1;1
+B54;Malaria nicht nдher bezeichnet;AB;0;1;1
+B65;Schistosomiasis [Bilharziose];AB;0;1;1
+B67;Echinokokkose;AB;0;1;1
+B68;Taeniasis;AB;0;1;1
+B69;Zisterzienser;AB;0;1;1
+B73;Onchozerkose;AB;0;1;1
+B74;Filariose;AB;0;1;1
+B77;Ascariasis;AB;0;1;1
+B79;Trikuriasis;AB;0;1;1
+B82;Nicht nдher bezeichneter Darmparasitismus;AB;0;1;1
+B83;Andere Helminthiasis;AB;0;1;1
+B85;Pedikulose und Phthiriasis;AB;0;1;1
+B86;Rдude;AB;0;1;1
+B99;Andere ansteckende und nicht nдher bezeichnete Krankheiten;AB;0;1;1
+C14;Bцsartige Neubildungen an anderen und schlecht abgegrenzten Stellen der Lippen, der Mundhцhle und des Rachens;CD;0;1;1
+C16;Bцsartige Neubildung des Magens;CD;0;1;1
+C17;Bцsartige Neubildungen des Dьnndarms;CD;0;1;1
+C18;Bцsartige Neubildung des Dickdarms;CD;0;1;1
+C23;Bцsartige Neubildung der Gallenblase;CD;0;1;1
+C26;Bцsartige Neubildungen anderer Verdauungsorgane, die als erkrankt gelten;CD;0;1;1
+C43;Bцsartiges Melanom der Haut;CD;0;1;1
+C44;Andere bцsartige Neubildungen der Haut;CD;0;1;1
+C50;Bцsartige Neubildung der Brust;CD;0;1;1
+C53;Bцsartige Neubildung des Gebдrmutterhalses;CD;0;1;1
+C54;Bцsartige Neubildung des Uteruskorpus;CD;0;1;1
+C56;Bцsartige Neubildung des Eierstocks;CD;0;1;1
+C62;Bцsartige Neubildung des Hodens;CD;0;1;1
+C63;Bцsartige Neubildung anderer und nicht nдher bezeichneter mдnnlicher Geschlechtsorgane;CD;0;1;1
+C64;Bцsartige Neubildungen der Nieren, mit Ausnahme des Nierenbeckens;CD;0;1;1
+C66;Bцsartige Neubildung des Harnleiters;CD;0;1;1
+C73;Bцsartige Neubildung der Schilddrьse;CD;0;1;1
+C80;Bцsartige Neubildung, ohne Ortsangabe;CD;0;1;1
+D12;Gutartige Neubildung des Dickdarms, des Mastdarms, des Anus und des Analkanals;CD;0;1;1
+D18;Hдmangiom und Lymphangiom, beliebige Lokalisation;CD;0;1;1
+D22;Melanozytдre Nдvi;CD;0;1;1
+D23;Andere gutartige Neubildungen der Haut;CD;0;1;1
+D24;Gutartige Neubildung der Brust;CD;0;1;1
+D25;Leiomyom der Gebдrmutter;CD;0;1;1
+D27;Gutartige Neubildung der Eierstцcke;CD;0;1;1
+D29;Gutartige Neubildung der mдnnlichen Geschlechtsorgane;CD;0;1;1
+D34;Gutartige Neoplasie der Schilddrьse;CD;0;1;1
+D36;Gutartige Neubildung an anderen und nicht nдher bezeichneten Stellen;CD;0;1;1
+D53;Andere ernдhrungsbedingte Anдmien;D;0;1;1
+D58;Andere erbliche hдmolytische Anдmien;D;0;1;1
+D62;Akute posthдmorrhagische Anдmie;D;0;1;1
+D63;Anдmie bei chronischen Krankheiten, die anderswo klassifiziert sind;D;0;1;1
+D64;Andere Anдmien;D;0;1;1
+D72;Andere Erkrankungen der weiяen Blutkцrperchen;D;0;1;1
+D73;Erkrankungen der Milz;D;0;1;1
+D75;Sonstige Erkrankungen des Blutes und der blutbildenden Organe;D;0;1;1
+E00;Angeborenes Jodmangelsyndrom;E;0;1;1
+E03;Andere Hypothyreose;E;0;1;1
+E05;Thyreotoxikose [Hyperthyreose];E;0;1;1
+E07;Andere Schilddrьsenerkrankungen;E;0;1;1
+E10;Diabetes mellitus Typ 1;E;0;1;1
+E11;Typ 2 Diabetes mellitus;E;0;1;1
+E15;Nichtdiabetisches hypoglykдmisches Koma;E;0;1;1
+E27;Andere Erkrankungen der Nebenniere;E;0;1;1
+E43;Schwere, nicht nдher bezeichnete Protein-Energie-Mangelernдhrung;E;0;1;1
+E45;Entwicklungsverzцgerung nach Protein-Energie-Mangelernдhrung;E;0;1;1
+E46;Nicht nдher bezeichnete Protein-Energie-Mangelernдhrung;E;0;1;1
+E63.9;Mangelernдhrung, nicht nдher bezeichnet;E;0;1;1
+E68;Folgen der Hyperalimentation;E;0;1;1
+E73;Laktoseintoleranz;E;0;1;1
+E86;Lautstдrke runter;E;0;1;1
+F03;Demenz nicht nдher bezeichnet;F;0;1;1
+F10;Psychische und Verhaltensstцrungen aufgrund von Alkoholkonsum;F;0;1;1
+F19;Psychische und Verhaltensstцrungen aufgrund von Mehrfachkonsum von Drogen und anderen psychoaktiven Substanzen;F;0;1;1
+F20;Schizophrenie;F;0;1;1
+F23;Akute und vorьbergehende psychotische Stцrungen;F;0;1;1
+F39;Nicht nдher bezeichnete affektive Stimmungsstцrung;F;0;1;1
+F41;Andere Angststцrungen;F;0;1;1
+F45;Somatoforme Stцrungen;F;0;1;1
+F50;Essstцrungen;F;0;1;1
+F52;Sexuelle Dysfunktion, die nicht durch eine organische Stцrung oder Krankheit verursacht wird;F;0;1;1
+F69;Nicht nдher bezeichnete Persцnlichkeits- und Verhaltensstцrung bei Erwachsenen;F;0;1;1
+F79;Nicht nдher bezeichnete geistige Behinderung;F;0;1;1
+F80;Spezifische Stцrungen der Sprech- und Sprachentwicklung;F;0;1;1
+F82;Spezifische Entwicklungsstцrung der motorischen Funktion;F;0;1;1
+F90;Hyperkinetische Stцrungen;F;0;1;1
+F98;Weitere Verhaltens- und emotionale Stцrungen beginnen meist im Kindes- und Jugendalter;F;0;1;1
+G02;Meningitis bei anderen anderenorts klassifizierten Infektions- und Parasitenkrankheiten;G;0;1;1
+G03;Meningitis aufgrund anderer und nicht nдher bezeichneter Ursachen;G;0;1;1
+G04;Enzephalitis, Myelitis und Enzephalomyelitis;G;0;1;1
+G12;Spinale Muskelatrophie und verwandte Syndrome;G;0;1;1
+G14;Postpolio-Syndrom;G;0;1;1
+G20;Parkinson-Krankheit;G;0;1;1
+G30;Alzheimer-Erkrankung;G;0;1;1
+G40;Epilepsie;G;0;1;1
+G41;Status epilepticus;G;0;1;1
+G43;Migrдne;G;0;1;1
+G44;Andere Kopfschmerzsyndrome;G;0;1;1
+G45;Vorьbergehende zerebrale ischдmische Anfдlle und verwandte Syndrome;G;0;1;1
+G46;Hirngefдяsyndrome bei zerebrovaskulдren Erkrankungen;G;0;1;1
+G47;Schlafstцrungen;G;0;1;1
+G53;Hirnnervenstцrungen bei anderenorts klassifizierten Krankheiten;G;0;1;1
+G54;Stцrungen der Nervenwurzel und des Nervengeflechts;G;0;1;1
+G60;Hereditдre und idiopathische Neuropathie;G;0;1;1
+G63;Polyneuropathie bei anderenorts klassifizierten Krankheiten;G;0;1;1
+G71;Primдre Muskelerkrankungen;G;0;1;1
+G80;Zerebralparese;G;0;1;1
+G91;Hydrozephalus;G;0;1;1
+G92;Toxische Enzephalopathie;G;0;1;1
+H00;Hordeolum und Chalazion;H1;0;1;1
+H10;Bindehautentzuendung;H1;0;1;1
+H17;Anzeichen und Trьbungen der Hornhaut;H1;0;1;1
+H25;Alterskatarakt;H1;0;1;1
+H40;Glaukom;H1;0;1;1
+H50;Anderer Strabismus;H1;0;1;1
+H53;Sehstцrungen;H1;0;1;1
+H54;Sehbehinderung einschlieяlich Blindheit (binokular oder monokular);H1;0;1;1
+H57;Andere Erkrankungen des Auges und der Adnexe;H1;0;1;1
+H60;Auяenohrentzьndung;H2;0;1;1
+H72;Perforation des Trommelfells;H2;0;1;1
+H74;Andere Erkrankungen des Mittelohrs und des Warzenfortsatzes;H2;0;1;1
+H81;Stцrungen der Vestibularfunktion;H2;0;1;1
+H90;Schallleitungs- und Schallempfindungsschwerhцrigkeit;H2;0;1;1
+H93;Andere Ohrenerkrankungen, die nicht anderweitig klassifiziert sind;H2;0;1;1
+I00;Rheumatisches Fieber ohne Angabe einer Herzbeteiligung;I;0;1;1
+I10;Essentielle (primдre) Hypertonie.;I;0;1;1
+I11;Hypertensive Herzerkrankungen;I;0;1;1
+I12;Hypertensive Nierenerkrankung;I;0;1;1
+I15;Sekundдre Hypertonie;I;0;1;1
+I20;Angina pectoris;I;0;1;1
+I21;Akuter Myokardinfarkt;I;0;1;1
+I22;Nachfolgender Myokardinfarkt;I;0;1;1
+I26;Lungenembolie;I;0;1;1
+I27;Andere Lungenherzerkrankungen;I;0;1;1
+I42;Kardiomyopathie;I;0;1;1
+I46;Herzstillstand;I;0;1;1
+I47;Paroxysmale Tachykardie;I;0;1;1
+I49;Andere Herzrhythmusstцrungen;I;0;1;1
+I50;Verstoя;I;0;1;1
+I63;Hirninfarkt;I;0;1;1
+I72;Aneurysma und andere Dissektionen;I;0;1;1
+I80;Venenentzьndung und Thrombophlebitis;I;0;1;1
+I82;Embolie und andere Venenthrombosen;I;0;1;1
+I83;Krampfadern der unteren Extremitдten;I;0;1;1
+I85;÷sophagusvarizen;I;0;1;1
+I88;Unspezifische Lymphadenitis;I;0;1;1
+I95;Hypotonie;I;0;1;1
+J00;Akute Nasopharyngitis [Erkдltung];J;0;1;1
+J01;Akute Sinusitis;J;0;1;1
+J02;Akute Pharyngitis;J;0;1;1
+J03;Akute Mandelentzьndung;J;0;1;1
+J04;Akute Laryngitis und Tracheitis;J;0;1;1
+J10.0;Influenza mit Lungenentzьndung, saisonales Influenzavirus identifiziert;J;0;1;1
+J11;Influenza, unbekanntes Virus;J;0;1;1
+J12;Viruspneumonie, nicht anderweitig klassifiziert;J;0;1;1
+J15;Bakterielle Lungenentzьndung, nicht anderweitig klassifiziert;J;0;1;1
+J16;Lungenentzьndung durch andere infektiцse Organismen, nicht anderweitig klassifiziert;J;0;1;1
+J20;Akute Bronchitis;J;0;1;1
+J21;Akute Bronchiolitis;J;0;1;1
+J30;Vasomotorische und allergische Rhinitis;J;0;1;1
+J31;Chronische Rhinitis, Nasopharyngitis und Pharyngitis;J;0;1;1
+J32;Chronische Sinusitis;J;0;1;1
+J36;Peritonsillarabszess;J;0;1;1
+J39;Andere Erkrankungen der oberen Atemwege;J;0;1;1
+J43;Emphysem;J;0;1;1
+J45;Asthma;J;0;1;1
+J80;Atemnotsyndrom bei Erwachsenen;J;0;1;1
+J81;Lungenцdem;J;0;1;1
+J86;Pyothorax;J;0;1;1
+J90;Pleuraerguss, nicht anderweitig klassifiziert;J;0;1;1
+J93;Pneumothorax;J;0;1;1
+J94;Andere Pleuraerkrankungen;J;0;1;1
+J96;Atemversagen, nicht anderweitig klassifiziert;J;0;1;1
+J98;Andere Atemwegserkrankungen;J;0;1;1
+K01;Eingelagerte und impaktierte Zдhne;K;0;1;1
+K02;Karies;K;0;1;1
+K04;Erkrankungen der Pulpa und des periapikalen Gewebes;K;0;1;1
+K05;Gingivitis und Parodontitis;K;0;1;1
+K11;Erkrankungen der Speicheldrьsen;K;0;1;1
+K12;Stomatitis und damit verbundene Lдsionen;K;0;1;1
+K13;Andere Erkrankungen der Lippen- und Mundschleimhaut;K;0;1;1
+K14;Erkrankungen der Sprache;K;0;1;1
+K25;Magengeschwьr;K;0;1;1
+K26;Zwцlffingerdarmgeschwьr;K;0;1;1
+K29;Gastritis und Duodenitis;K;0;1;1
+K35;Akute Blinddarmentzьndung;K;0;1;1
+K40;Leistenbruch;K;0;1;1
+K42;Nabelbruch;K;0;1;1
+K43;Bauchhernie;K;0;1;1
+K45;Andere Bauchhernien;K;0;1;1
+K51;Colitis ulcerosa;K;0;1;1
+K56;Paralytischer Ileus und Darmverschluss ohne Hernie;K;0;1;1
+K57;Divertikelerkrankung des Darms;K;0;1;1
+K59;Andere funktionelle Darmstцrungen;K;0;1;1
+K60;Fissur und Fistel im Anal- und Rektumbereich;K;0;1;1
+K61;Abszess der Anal- und Rektalregion;K;0;1;1
+K64;Hдmorrhoiden und perianale Venenthrombose;K;0;1;1
+K65;Peritonitis;K;0;1;1
+K74;Fibrose und Leberzirrhose;K;0;1;1
+K75;Andere entzьndliche Erkrankungen der Leber;K;0;1;1
+K80;Cholelithiasis;K;0;1;1
+K81;Cholezystitis;K;0;1;1
+K90;Darm-Malabsorption;K;0;1;1
+K92;Andere Erkrankungen des Verdauungssystems;K;0;1;1
+L02;Kutaner Abszess, Furunkel und Karbunkel;L;0;1;1
+L10;Pemphigus;L;0;1;1
+L13;Andere bullцse Erkrankungen;L;0;1;1
+L21;Seborrhoische Dermatitis;L;0;1;1
+L22;Windeldermatitis [Tьcher];L;0;1;1
+L23;Allergische Kontaktdermatitis;L;0;1;1
+L26;Peeling-Dermatitis;L;0;1;1
+L30;Andere Dermatitis;L;0;1;1
+L44;Andere papulosquamцse Erkrankungen;L;0;1;1
+L50;Urtikaria;L;0;1;1
+L53;Andere erythematцse Erkrankungen;L;0;1;1
+L63;Alopecia areata;L;0;1;1
+L70;Akne;L;0;1;1
+L72;Follikulдre Zysten der Haut und des Unterhautgewebes;L;0;1;1
+L80;Vitiligo;L;0;1;1
+L82;Seborrhoische Keratose;L;0;1;1
+L89;Druckgeschwьr und Druckbereich;L;0;1;1
+L91;Hypertrophe Hauterkrankungen;L;0;1;1
+L93;Lupus erythematцs;L;0;1;1
+L97;Geschwьr der unteren Extremitдt, nicht anderweitig klassifiziert;L;0;1;1
+M00;Pyogene Arthritis;M;0;1;1
+M06;Andere rheumatoide Arthritis;M;0;1;1
+M08;Jugendarthritis;M;0;1;1
+M10;Gicht;M;0;1;1
+M13;Andere Arthritis;M;0;1;1
+M15;Polyarthrose;M;0;1;1
+M16;Coxarthrose [Arthrose der Hьfte];M;0;1;1
+M17;Gonarthrose [Arthrose des Knies];M;0;1;1
+M19;Andere Arthrose;M;0;1;1
+M20;Erworbene Deformationen der Finger und Zehen;M;0;1;1
+M24;Andere spezifische Gelenkerkrankungen;M;0;1;1
+M41;Skoliose;M;0;1;1
+M45;Spondylitis ankylosans;M;0;1;1
+M54;Dorsalgie;M;0;1;1
+M60;Myositis;M;0;1;1
+M70;Weichteilerkrankungen im Zusammenhang mit Beanspruchung, №berbeanspruchung und Druck;M;0;1;1
+M75;Schulterlдsionen;M;0;1;1
+M86;Osteomyelitis;M;0;1;1
+M89;Andere Knochenerkrankungen;M;0;1;1
+M95;Weitere erworbene Deformationen des Bewegungsapparates und des Bindegewebes;M;0;1;1
+N02;Wiederkehrende und anhaltende Hдmaturie;N;0;1;1
+N04;Nephrotisches Syndrom;N;0;1;1
+N13;Obstruktive Uropathie und Reflux;N;0;1;1
+N17;Akutes Nierenversagen;N;0;1;1
+N18;Chronisches Nierenleiden;N;0;1;1
+N20;Berechnung von Niere und Harnleiter;N;0;1;1
+N21;Berechnung der unteren Harnwege;N;0;1;1
+N28;Andere Erkrankungen der Niere und des Harnleiters, die keiner anderen Kategorie zugeordnet sind;N;0;1;1
+N30;Zystitis;N;0;1;1
+N31;Neuromuskulдre Dysfunktion der Blase, nicht anderweitig klassifiziert;N;0;1;1
+N35;Harnrцhrenstriktur;N;0;1;1
+N36;Andere Erkrankungen der Harnrцhre;N;0;1;1
+N40;Hyperplasie der Prostata;N;0;1;1
+N41;Entzьndliche Erkrankungen der Prostata;N;0;1;1
+N43;Hydrozele und Spermatozele;N;0;1;1
+N44;Hodentorsion;N;0;1;1
+N45;Orchitis und Nebenhodenentzьndung;N;0;1;1
+N46;Mдnnliche Unfruchtbarkeit;N;0;1;1
+N47;№bermдяige Vorhaut, Phimose und Paraphimose;N;0;1;1
+N49;Entzьndliche Erkrankungen der mдnnlichen Genitalien, nicht anderweitig klassifiziert;N;0;1;1
+N61;Entzьndliche Erkrankungen der Brust;N;0;1;1
+N62;Brusthypertrophie;N;0;1;1
+N63;Nicht nдher bezeichneter Knoten in der Brust;N;0;1;1
+N64;Andere Brusterkrankungen;N;0;1;1
+N70;Salpingitis und Oophoritis;N;0;1;1
+N73;Andere entzьndliche Erkrankungen des weiblichen Beckens;N;0;1;1
+N76;Andere Entzьndungen der Vagina und Vulva;N;0;1;1
+N80;Endometriose;N;0;1;1
+N81;Weiblicher Genitalprolaps;N;0;1;1
+N82;Fistel im weiblichen Genitaltrakt;N;0;1;1
+N84;Polyp des weiblichen Genitaltrakts;N;0;1;1
+N85;Andere nicht entzьndliche Erkrankungen der Gebдrmutter, mit Ausnahme des Gebдrmutterhalses;N;0;1;1
+N91;Fehlende, spдrliche und seltene Menstruation;N;0;1;1
+N92;№bermдяige, hдufige und unregelmдяige Menstruation;N;0;1;1
+N93;Andere abnormale Uterus- und Vaginalblutungen;N;0;1;1
+N96;Hдufige Abtreibung;N;0;1;1
+N97;Weibliche Sterilitдt;N;0;1;1
+O00;Eileiterschwangerschaft;O;0;1;1
+O03;Spontane Abtreibung;O;0;1;1
+O04;Medizinische Abtreibung;O;0;1;1
+O07;Ein gescheiterter Abtreibungsversuch;O;0;1;1
+O10;Vorbestehender Bluthochdruck erschwert Schwangerschaft, Geburt und Wochenbett;O;0;1;1
+O13;Schwangerschaftshypertonie [verursacht durch Schwangerschaft];O;0;1;1
+O15;Eklampsie;O;0;1;1
+O16;Nicht nдher bezeichneter mьtterlicher Bluthochdruck;O;0;1;1
+O23;Infektionen des Urogenitaltrakts in der Schwangerschaft;O;0;1;1
+O24;Diabetes mellitus in der Schwangerschaft;O;0;1;1
+O30;Multiple Schwangerschaft;O;0;1;1
+O41;Andere Stцrungen des Fruchtwassers und der Membranen;O;0;1;1
+O42;Vorzeitiger Blasensprung;O;0;1;1
+O44;Plazenta praevia;O;0;1;1
+O45;Vorzeitige Ablцsung der Plazenta [Abruptio placentae];O;0;1;1
+O60;Vorzeitige Wehen und Entbindungen;O;0;1;1
+O63;Lange Arbeit;O;0;1;1
+O67;Wehen und Entbindung werden durch eine intrapartale Blutung erschwert, nicht anderweitig klassifiziert;O;0;1;1
+O70;Dammriss wдhrend der Geburt;O;0;1;1
+O71;Anderes geburtshilfliches Trauma;O;0;1;1
+O72;Postpartale Blutung;O;0;1;1
+O73;Plazenta und Membranen erhalten keine Blutung;O;0;1;1
+O80;Einzelne Spontangeburt;O;0;1;1
+O82;Die einzige Kaiserschnittgeburt;O;0;1;1
+O84;Mehrfachgeburt;O;0;1;1
+O92;Andere Brust- und Laktationsstцrungen im Zusammenhang mit der Geburt;O;0;1;1
+O95;Geburtsbedingter Tod aus unbekannter Ursache;O;0;1;1
+P02;Fцtus und Neugeborenes sind von Komplikationen der Plazenta, der Nabelschnur und der Membranen betroffen;P;0;1;1
+P03;Fцtus und Neugeborenes sind von anderen Komplikationen wдhrend der Wehen und der Entbindung betroffen;P;0;1;1
+P04;Fцtus und Neugeborenes sind von schдdlichen Einflьssen betroffen, die ьber die Plazenta oder die Muttermilch ьbertragen werden;P;0;1;1
+P05;Langsames fetales Wachstum und fetale Unterernдhrung;P;0;1;1
+P08;Stцrungen im Zusammenhang mit einer langen Schwangerschaft und einem hohen Geburtsgewicht;P;0;1;1
+P15;Andere Geburtsverletzungen;P;0;1;1
+P21;Erstickung bei der Geburt;P;0;1;1
+P22;Atemnot des Neugeborenen;P;0;1;1
+P36;Bakterielle Sepsis des Neugeborenen;P;0;1;1
+P37;Andere angeborene Infektions- und Parasitenerkrankungen;P;0;1;1
+P54;Andere Blutungen bei Neugeborenen;P;0;1;1
+P57;Kernikterus;P;0;1;1
+P59;Neugeborenen-Gelbsucht aus anderen und nicht nдher bezeichneten Ursachen;P;0;1;1
+P61;Andere perinatale hдmatologische Stцrungen;P;0;1;1
+P75;Mekoniumileus bei Mukoviszidose;P;0;1;1
+P80;Unterkьhlung des Neugeborenen;P;0;1;1
+P95;Fцtaler Tod aus unbekannter Ursache;P;0;1;1
+Q02;Mikrozephalie;Q;0;1;1
+Q15;Andere angeborene Fehlbildungen des Auges;Q;0;1;1
+Q17;Andere angeborene Fehlbildungen des Ohrs;Q;0;1;1
+Q18;Andere angeborene Fehlbildungen im Gesicht und am Hals;Q;0;1;1
+Q24;Andere angeborene Fehlbildungen des Herzens;Q;0;1;1
+Q27;Andere angeborene Fehlbildungen des peripheren Gefдяsystems;Q;0;1;1
+Q28;Andere angeborene Fehlbildungen des Kreislaufsystems;Q;0;1;1
+Q34;Andere angeborene Fehlbildungen des Atmungssystems;Q;0;1;1
+Q36;Lippenspalte;Q;0;1;1
+Q38;Andere angeborene Fehlbildungen der Zunge, des Mundes und des Rachens;Q;0;1;1
+Q43;Andere angeborene Darmfehlbildungen;Q;0;1;1
+Q45;Andere angeborene Fehlbildungen des Verdauungssystems;Q;0;1;1
+Q52;Andere angeborene Fehlbildungen der weiblichen Geschlechtsorgane;Q;0;1;1
+Q53;Hodenhochstand;Q;0;1;1
+Q54;Hypospadie;Q;0;1;1
+Q55;Andere angeborene Fehlbildungen der mдnnlichen Geschlechtsorgane;Q;0;1;1
+Q63;Andere angeborene Nierenfehlbildungen;Q;0;1;1
+Q64;Andere angeborene Fehlbildungen des Harnsystems;Q;0;1;1
+Q74;Andere angeborene Fehlbildungen der Gliedmaяen;Q;0;1;1
+Q75;Andere angeborene Fehlbildungen der Schдdel- und Gesichtsknochen;Q;0;1;1
+Q76;Angeborene Fehlbildungen der Wirbelsдule und des knцchernen Brustkorbs;Q;0;1;1
+Q89;Andere angeborene Fehlbildungen, die nicht anderweitig klassifiziert sind;Q;0;1;1
+Q90;Down-Syndrom;Q;0;1;1
+R33;Harnverhaltung;R;0;1;1
+R40;Schlдfrigkeit, Stupor und Koma;R;0;1;1
+R50;Fieber anderer und unbekannter Herkunft;R;0;1;1
+R51;Kopfschmerzen;R;0;1;1
+S00;Oberflдchliche Kopfverletzung;ST;0;1;1
+S01;Offene Kopfwunde;ST;0;1;1
+S10;Oberflдchliche Nackenverletzung;ST;0;1;1
+S19;Andere und nicht nдher bezeichnete Nackenverletzungen;ST;0;1;1
+S20;Oberflдchliche Brustverletzung;ST;0;1;1
+S21;Offene Brustwunde;ST;0;1;1
+S29;Andere und nicht nдher bezeichnete Brustverletzungen;ST;0;1;1
+S30;Oberflдchliche Verletzung von Bauch, Rьcken und Becken;ST;0;1;1
+S31;Offene Wunde an Bauch, Rьcken und Becken;ST;0;1;1
+S36;Verletzung intraabdominaler Organe;ST;0;1;1
+S39;Andere und nicht nдher bezeichnete Bauch-, Rьcken- und Beckenverletzungen;ST;0;1;1
+S40 ;Oberflдchliche Schulter- und Oberarmverletzung;ST;0;1;1
+S49;Andere und nicht nдher bezeichnete Schulter- und Oberarmverletzungen;ST;0;1;1
+S50;Oberflдchliche Verletzung des Unterarms;ST;0;1;1
+S59;Andere und nicht nдher bezeichnete Unterarmverletzungen;ST;0;1;1
+S60;Oberflдchliche Verletzung von Handgelenk und Hand;ST;0;1;1
+S69;Andere und nicht nдher bezeichnete Verletzungen des Handgelenks und der Hand;ST;0;1;1
+S70;Oberflдchliche Verletzung der Hьfte und des Oberschenkels;ST;0;1;1
+S79;Andere und nicht nдher bezeichnete Oberschenkelverletzungen;ST;0;1;1
+S80;Oberflдchliche Verletzung des Unterschenkels;ST;0;1;1
+S89;Andere und nicht nдher bezeichnete Unterschenkelverletzungen;ST;0;1;1
+S90;Oberflдchliche Knцchel- und Fuяverletzung;ST;0;1;1
+S99;Andere und nicht nдher bezeichnete Knцchel- und Fuяverletzungen;ST;0;1;1
+T02;Oberflдchliche Verletzungen, die viele Kцrperregionen betreffen;ST;0;1;1
+T05;Traumatische Amputationen, die mehrere Kцrperregionen betreffen;ST;0;1;1
+T07;Mehrere nicht nдher bezeichnete Verletzungen;ST;0;1;1
+T14;Verletzung eines nicht nдher bezeichneten Kцrperbereichs;ST;0;1;1
+T29;Verbrennungen und Korrosion mehrerer Kцrperbereiche;ST;0;1;1
+T30;Verbrennungen und Korrosion, nicht nдher bezeichnete Kцrperregion;ST;0;1;1
+T50;Vergiftung mit Diuretika und anderen und nicht nдher bezeichneten Arzneimitteln, Arzneimitteln und biologischen Substanzen;ST;0;1;1
+T51;Die toxische Wirkung von Alkohol;ST;0;1;1
+T65;Toxische Wirkung anderer und nicht nдher bezeichneter Stoffe;ST;0;1;1
+T75;Folgen anderer дuяerer Ursachen;ST;0;1;1
+T78;Nebenwirkungen, nicht anderweitig klassifiziert;ST;0;1;1
+T78.2;Anaphylaktischer Schock, nicht nдher bezeichnet;ST;0;1;1
+T78.3;Angioneurotisches ÷dem;ST;0;1;1
+W53;Von einer Maus gebissen;VY;0;1;1
+W55;Von anderen Sдugetieren gebissen oder geschlagen;VY;0;1;1
+W56;Kontakt mit Meerestieren;VY;0;1;1
+W57;Von ungiftigen Insekten und anderen ungiftigen Arthropoden gebissen oder gestochen;VY;0;1;1
+Z00;Untersuchung und allgemeine Untersuchung von Personen ohne Beschwerden und gemeldeter Diagnose;Z;0;1;1
+Z04;Untersuchung und Beobachtung aus anderen Grьnden;Z;0;1;1
