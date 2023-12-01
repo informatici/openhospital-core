@@ -47,8 +47,8 @@ public class TelemetryDataCollectorGatewayService {
 	public boolean send(String data) {
 		ParamsData paramsDataClient = ParamsData.getInstance();
 		String telemetryUrl = paramsDataClient.getTelemetryUrl();
-		if (telemetryUrl == null || telemetryUrl.isEmpty() || !telemetryUrl.startsWith("http://")) {
-			LOGGER.warn("Missing or malformed Telemetry URL (must start with 'http://'): {}", telemetryUrl);
+		if (telemetryUrl == null || telemetryUrl.isEmpty() || (!telemetryUrl.startsWith("http://") && !telemetryUrl.startsWith("https://"))) {
+			LOGGER.warn("Missing or malformed Telemetry URL (must start with 'http://' or 'https://'): {}", telemetryUrl);
 			return false;
 		}
 		LOGGER.debug("Telemetry server is: {}", telemetryUrl);
