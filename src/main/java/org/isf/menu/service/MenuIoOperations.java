@@ -31,6 +31,7 @@ import org.isf.menu.model.UserGroup;
 import org.isf.menu.model.UserMenuItem;
 import org.isf.utils.db.TranslateOHServiceException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,6 +109,9 @@ public class MenuIoOperations {
 	 */
 	public String getUsrInfo(String userName) throws OHServiceException {
 		User user = repository.findById(userName).orElse(null);
+		if (user == null) {
+			throw new OHServiceException(new OHExceptionMessage("User not found."));
+		}
 		return user.getDesc();
 	}
 
@@ -125,7 +129,7 @@ public class MenuIoOperations {
 	 * Checks if the specified {@link User} code is already present.
 	 * 
 	 * @param userName - the {@link User} code to check.
-	 * @return <code>true</code> if the medical code is already stored, <code>false</code> otherwise.
+	 * @return {@code true} if the medical code is already stored, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isUserNamePresent(String userName) throws OHServiceException {
@@ -136,7 +140,7 @@ public class MenuIoOperations {
 	 * Checks if the specified {@link UserGroup} code is already present.
 	 * 
 	 * @param groupName - the {@link UserGroup} code to check.
-	 * @return <code>true</code> if the medical code is already stored, <code>false</code> otherwise.
+	 * @return {@code true} if the medical code is already stored, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isGroupNamePresent(String groupName) throws OHServiceException {
@@ -147,18 +151,18 @@ public class MenuIoOperations {
 	 * Inserts a new {@link User} in the DB
 	 * 
 	 * @param user - the {@link User} to insert
-	 * @return <code>true</code> if the user has been inserted, <code>false</code> otherwise.
+	 * @return the new {@link User} added to the DB
 	 * @throws OHServiceException
 	 */
-	public boolean newUser(User user) throws OHServiceException {
-		return repository.save(user) != null;
+	public User newUser(User user) throws OHServiceException {
+		return repository.save(user);
 	}
 
 	/**
 	 * Updates an existing {@link User} in the DB
 	 * 
 	 * @param user - the {@link User} to update
-	 * @return <code>true</code> if the user has been updated, <code>false</code> otherwise.
+	 * @return new {@link User}
 	 * @throws OHServiceException
 	 */
 	public boolean updateUser(User user) throws OHServiceException {
@@ -169,7 +173,7 @@ public class MenuIoOperations {
 	 * Updates the password of an existing {@link User} in the DB
 	 * 
 	 * @param user - the {@link User} to update
-	 * @return <code>true</code> if the user has been updated, <code>false</code> otherwise.
+	 * @return {@code true} if the user has been updated, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean updatePassword(User user) throws OHServiceException {
@@ -180,12 +184,10 @@ public class MenuIoOperations {
 	 * Deletes an existing {@link User}
 	 * 
 	 * @param user - the {@link User} to delete
-	 * @return <code>true</code> if the user has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteUser(User user) throws OHServiceException {
+	public void deleteUser(User user) throws OHServiceException {
 		repository.delete(user);
-		return true;
 	}
 
 	public void updateFailedAttempts(String userName, int newFailAttempts) {
@@ -260,7 +262,7 @@ public class MenuIoOperations {
 	 * 
 	 * @param aGroup - the {@link UserGroup}
 	 * @param menu - the list of {@link UserMenuItem}s
-	 * @return <code>true</code>
+	 * @return {@code true}
 	 * @throws OHServiceException 
 	 */
 	public boolean setGroupMenu(UserGroup aGroup, List<UserMenuItem> menu) throws OHServiceException {
@@ -271,50 +273,46 @@ public class MenuIoOperations {
 		return true;
 	}
 
-	private boolean deleteGroupMenu(UserGroup aGroup) throws OHServiceException {
+	private void deleteGroupMenu(UserGroup aGroup) throws OHServiceException {
 		groupMenuRepository.deleteWhereUserGroup(aGroup.getCode());
-		return true;
 	}
 
-	private boolean insertGroupMenu(UserGroup aGroup, UserMenuItem item) throws OHServiceException {
+	private GroupMenu insertGroupMenu(UserGroup aGroup, UserMenuItem item) throws OHServiceException {
 		GroupMenu groupMenu = new GroupMenu();
 		groupMenu.setUserGroup(aGroup.getCode());
 		groupMenu.setMenuItem(item.getCode());
-		groupMenu.setActive((item.isActive() ? 1 : 0));
-		groupMenuRepository.save(groupMenu);
-		return true;
+		groupMenu.setActive(item.isActive() ? 1 : 0);
+		return groupMenuRepository.save(groupMenu);
 	}
 
 	/**
 	 * Deletes a {@link UserGroup}
 	 * 
 	 * @param aGroup - the {@link UserGroup} to delete
-	 * @return <code>true</code> if the group has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteGroup(UserGroup aGroup) throws OHServiceException {
+	public void deleteGroup(UserGroup aGroup) throws OHServiceException {
 		groupMenuRepository.deleteWhereUserGroup(aGroup.getCode());
 		groupRepository.delete(aGroup);
-		return true;
 	}
 
 	/**
 	 * Insert a new {@link UserGroup} with a minimum set of rights
 	 * 
 	 * @param aGroup - the {@link UserGroup} to insert
-	 * @return <code>true</code> if the group has been inserted, <code>false</code> otherwise.
-	 * @throws OHServiceException
+	 * @return the new {@link UserGroup}
+	 * @throws OHServiceException 
 	 */
-	public boolean newUserGroup(UserGroup aGroup) throws OHServiceException {
-		return groupRepository.save(aGroup) != null;
+	public UserGroup newUserGroup(UserGroup aGroup) throws OHServiceException {
+		return groupRepository.save(aGroup);
 	}
 
 	/**
 	 * Updates an existing {@link UserGroup} in the DB
 	 * 
 	 * @param aGroup - the {@link UserGroup} to update
-	 * @return <code>true</code> if the group has been updated, <code>false</code> otherwise.
-	 * @throws OHServiceException
+	 * @return {@code true} if the group has been updated, {@code false} otherwise.
+	 * @throws OHServiceException 
 	 */
 	public boolean updateUserGroup(UserGroup aGroup) throws OHServiceException {
 		return groupRepository.updateDescription(aGroup.getDesc(), aGroup.getCode()) > 0;
