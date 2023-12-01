@@ -25,6 +25,7 @@ import java.util.Properties;
 
 import javax.annotation.Resource;
 
+import org.isf.generaldata.ParamsData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
@@ -36,7 +37,6 @@ import feign.slf4j.Slf4jLogger;
 @Component
 public class TelemetryDataCollectorGatewayService {
 
-	private static final String SERVICE_NAME = "telemetry-gateway-service";
 	private static final String RESPONSE_SUCCESS = "OK";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TelemetryDataCollectorGatewayService.class);
@@ -45,7 +45,14 @@ public class TelemetryDataCollectorGatewayService {
 	private Properties properties;
 
 	public boolean send(String data) {
-		TelemetryGatewayRemoteService httpClient = buildHttlClient();
+		ParamsData paramsDataClient = ParamsData.getInstance();
+		String telemetryUrl = paramsDataClient.getTelemetryUrl();
+		if (telemetryUrl == null || telemetryUrl.isEmpty() || !telemetryUrl.startsWith("http://")) {
+			LOGGER.warn("Missing or malformed Telemetry URL (must start with 'http'): {}", telemetryUrl);
+			return false;
+		}
+		LOGGER.debug("Telemetry server is: {}", telemetryUrl);
+		TelemetryGatewayRemoteService httpClient = buildHttlClient(telemetryUrl);
 		LOGGER.debug(data);
 		String result = httpClient.send(data);
 		LOGGER.debug(result);
@@ -53,12 +60,11 @@ public class TelemetryDataCollectorGatewayService {
 		return isSent;
 	}
 
-	private TelemetryGatewayRemoteService buildHttlClient() {
-		String baseUrl = this.properties.getProperty(SERVICE_NAME + ".base-url").trim();
+	private TelemetryGatewayRemoteService buildHttlClient(String url) {
 		// For debug remember to update log level to: feign.Logger.Level.FULL. Happy debugging!
 		return Feign.builder()
 						.logger(new Slf4jLogger(TelemetryGatewayRemoteService.class)).logLevel(feign.Logger.Level.BASIC).contract(new SpringMvcContract())
-						.target(TelemetryGatewayRemoteService.class, baseUrl);
+						.target(TelemetryGatewayRemoteService.class, url);
 	}
 
 }

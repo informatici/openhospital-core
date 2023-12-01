@@ -61,8 +61,7 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 
 	@Override
 	public String getDescription() {
-		Version.initialize();
-		version = Version.VER_MAJOR.concat(".").concat(Version.VER_MINOR).concat(".").concat(Version.VER_RELEASE);
+		version = Version.getVersion().toString();
 		return "Software information versions and usage (ex. Ubuntu 22.04, MariaDB 10.6, Open Hospital " + version + ")";
 	}
 

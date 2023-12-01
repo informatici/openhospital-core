@@ -96,6 +96,7 @@ public final class GeneralData extends ConfigurationProperties {
 	public static boolean DEBUG;
 	public static String PATIENTPHOTOSTORAGE;
 	public static Integer SESSIONTIMEOUT;
+	public static String PARAMSURL;
 
 	public static boolean STRONGPASSWORD;
 	public static int STRONGLENGTH;
@@ -160,6 +161,7 @@ public final class GeneralData extends ConfigurationProperties {
 	private static final String DEFAULT_PATIENTPHOTOSTORAGE = "DB";
 	public static final int IMAGE_THUMBNAIL_MAX_WIDTH = 140;
 	public static final int MAX_PROFILE_IMAGE_FILE_SIZE_BYTES = 32768;
+	public static final String DEFAULT_PARAMSURL = "";
 
 	private static GeneralData mySingleData;
 
@@ -244,6 +246,7 @@ public final class GeneralData extends ConfigurationProperties {
 		}
 		PATIENTPHOTOSTORAGE = myGetProperty("PATIENTPHOTOSTORAGE", DEFAULT_PATIENTPHOTOSTORAGE);
 		SESSIONTIMEOUT = myGetProperty("SESSIONTIMEOUT", DEFAULT_SESSIONTIMEOUT);
+		PARAMSURL = myGetProperty("PARAMSURL", DEFAULT_PARAMSURL);
 	}
 
 	public static GeneralData getGeneralData() {

@@ -96,7 +96,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 					this.telemetryUtils.sendTelemetryData(telemetryUtils.retrieveDataToSend(settings.getConsentMap()),
 									GeneralData.DEBUG);
 				} catch (RuntimeException | OHException e) {
-					LOGGER.error("Something strange happened");
+					LOGGER.error("Something strange happened.");
 					LOGGER.error(e.getMessage(), e);
 					stop();
 				}
