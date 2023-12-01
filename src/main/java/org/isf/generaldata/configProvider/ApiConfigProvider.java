@@ -21,6 +21,8 @@
  */
 package org.isf.generaldata.configProvider;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Map;
 
 import org.isf.generaldata.GeneralData;
@@ -78,7 +80,13 @@ class ApiConfigProvider implements ConfigProvider {
 
 	@Override
 	public void close() {
-		// Implement close logic for ApiConfigProvider if needed
+		if (api != null && api instanceof Closeable) {
+			try {
+				((Closeable) api).close();
+			} catch (IOException e) {
+				LOGGER.error("Error while closing Feign client: {}", e.getMessage());
+			}
+		}
 	}
 
 	private Map<String, Object> fetchData() {

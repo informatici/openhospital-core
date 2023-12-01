@@ -34,8 +34,6 @@ import org.isf.generaldata.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 class JsonFileConfigProvider implements ConfigProvider {
@@ -96,28 +94,7 @@ class JsonFileConfigProvider implements ConfigProvider {
 
 	@Override
 	public void close() throws IOException {
-		// Implement close logic for JsonFileConfigProvider if needed
+		// No operation, as there are no resources to explicitly close
 	}
 
-	private String parseJson(String json, String param) {
-		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			JsonNode rootNode = objectMapper.readTree(json);
-
-			JsonNode versionNode = rootNode.path(VERSION);
-			if (versionNode.isMissingNode()) {
-				versionNode = rootNode.path("default");
-			}
-
-			JsonNode paramNode = versionNode.path(param);
-			if (paramNode.isTextual()) {
-				return paramNode.textValue();
-			} else {
-				LOGGER.error("Invalid JSON structure: {} not found.", param);
-			}
-		} catch (IOException e) {
-			LOGGER.error("Error parsing JSON: {}", e.getMessage());
-		}
-		return null;
-	}
 }
