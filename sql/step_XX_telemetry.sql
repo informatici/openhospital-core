@@ -1,14 +1,14 @@
 DROP TABLE IF EXISTS OH_TELEMETRY;
 CREATE TABLE OH_TELEMETRY (
-  # identification
+  -- identification
   TEL_UUID VARCHAR(36) NOT NULL COMMENT 'Software ID',
   TEL_DBID VARCHAR(36) NOT NULL COMMENT 'Database ID',
   TEL_HWID VARCHAR(36) NOT NULL COMMENT 'Hardware ID',
   TEL_OSID VARCHAR(36) NOT NULL COMMENT 'Operative System ID',
-  # settings
+  -- settings
   TEL_ACTIVE TINYINT(1) COMMENT 'true|false|null',
   TEL_CONSENT TEXT COMMENT 'User consent informations',
-  # history
+  -- history
   TEL_INFO TEXT COMMENT 'Last collected data',
   TEL_SENT_TIME DATETIME COMMENT 'Timestamp when it send message',
   TEL_OPTIN_DATE DATETIME COMMENT 'When user enables telemetry',

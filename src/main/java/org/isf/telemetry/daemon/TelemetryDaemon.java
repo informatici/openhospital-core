@@ -105,7 +105,6 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 				Thread.sleep((long) customDelay * 1000);
 				updateSettingsCounter++;
 			} catch (InterruptedException e) {
-				LOGGER.error(e.getMessage());
 				LOGGER.error(e.getMessage(), e);
 				stop();
 			}

@@ -72,7 +72,7 @@ public class TelemetryUtils {
 			LOGGER.debug("Data sent: {}", jsonToSend);
 		} else {
 			this.telemetryManager.updateStatusFail((new Gson()).toJson(dataToSend));
-			LOGGER.debug("Something strange happened while trying to send data.");
+			LOGGER.error("Something strange happened while trying to send data.");
 		}
 	}
 

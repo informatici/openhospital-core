@@ -21,6 +21,7 @@
  */
 package org.isf.generaldata;
 
+import java.io.Closeable;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -29,72 +30,34 @@ import org.slf4j.LoggerFactory;
 import feign.Feign;
 import feign.gson.GsonDecoder;
 
-public class ParamsData {
+public class ParamsData implements Closeable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ParamsData.class);
 
 	private static ParamsData instance;
 	private final ParamsApi api;
-	private final String baseUrl;
 	private final String version;
 
-	private String telemetryUrl;
-	private String otherParam; // placeholder
+	// parameters
+	private final String OH_TELEMETRY_URL = "oh_telemetry_url";
+	private final String telemetryUrl;
 
-	private ParamsData() {
-		GeneralData.getGeneralData();
-		this.version = Version.getVersion().toString();
-		this.baseUrl = GeneralData.PARAMSURL;
-		if (baseUrl == null || baseUrl.isEmpty() || !baseUrl.startsWith("http://")) {
-			LOGGER.warn("Missing or malformed configuration URL (must start with 'http://'): {}", baseUrl);
-			this.api = null;
-		} else {
-			LOGGER.debug("Configuration URL is: {}", baseUrl);
-			this.api = Feign.builder()
-							.decoder(new GsonDecoder())
-							.target(ParamsApi.class, baseUrl);
-		}
+	public String getTelemetryUrl() {
+		return telemetryUrl;
 	}
 
-	public static ParamsData getInstance() {
+	public static synchronized ParamsData getInstance() {
 		if (instance == null) {
 			instance = new ParamsData();
 		}
 		return instance;
 	}
 
-	private void getParamsData() {
-		Map<String, Object> response = getResponse();
-		if (response != null) {
-			// Access data dynamically based on the structure
-			Object versionData = response.getOrDefault(version, response.get("default"));
-			if (versionData instanceof Map) {
-				Object param;
-
-				param = ((Map<String, Object>) versionData).get("oh_telemetry_url");
-				if (param instanceof String) {
-					telemetryUrl = (String) param;
-					LOGGER.debug("Telemetry URL for v{} is: {}", version, telemetryUrl);
-				}
-
-				param = ((Map<String, Object>) versionData).get("oh_other_param");
-				if (param instanceof String) {
-					otherParam = (String) param;
-					LOGGER.debug("otherParam for v{} is: {}", version, otherParam);
-				}
-			}
-		}
-	}
-
-	private Map<String, Object> getResponse() {
-		if (api != null) {
-			try {
-				return api.getData();
-			} catch (Exception e) {
-				LOGGER.error("Error during API call: {}", e.getMessage());
-			}
-		}
-		return null;
+	private ParamsData() {
+		GeneralData.getGeneralData();
+		this.version = Version.getVersion().toString();
+		this.api = createApi();
+		this.telemetryUrl = fetchData(OH_TELEMETRY_URL);
 	}
 
 	private interface ParamsApi {
@@ -104,17 +67,48 @@ public class ParamsData {
 		Map<String, Object> getData();
 	}
 
-	public String getTelemetryUrl() {
-		if (telemetryUrl == null || telemetryUrl.isEmpty()) {
-			getParamsData();
+	private ParamsApi createApi() {
+		String baseUrl = GeneralData.PARAMSURL;
+		if (baseUrl == null || baseUrl.isEmpty() || !baseUrl.startsWith("http://")) {
+			LOGGER.warn("Missing or malformed configuration URL (must start with 'http://'): {}", baseUrl);
+			return null;
+		} else {
+			LOGGER.debug("Configuration URL is: {}", baseUrl);
+			return Feign.builder()
+							.decoder(new GsonDecoder())
+							.target(ParamsApi.class, baseUrl);
 		}
-		return telemetryUrl;
 	}
 
-	public String getOtherParam() {
-		if (otherParam == null || otherParam.isEmpty()) {
-			getParamsData();
+	private String fetchData(String paramName) {
+		if (api != null) {
+			try {
+				Map<String, Object> response = api.getData();
+				if (response != null) {
+					Object versionData = response.getOrDefault(version, response.get("default"));
+					if (versionData instanceof Map) {
+						Object param = ((Map<String, Object>) versionData).get(paramName);
+						if (param instanceof String) {
+							return (String) param;
+						}
+					}
+				}
+			} catch (Exception e) {
+				LOGGER.error("Error during API call: {}", e.getMessage());
+			}
 		}
-		return otherParam;
+		return null;
 	}
+
+	@Override
+	public void close() {
+		if (api != null && api instanceof Closeable) {
+			try {
+				((Closeable) api).close();
+			} catch (Exception e) {
+				LOGGER.error("Error while closing Feign client: {}", e.getMessage());
+			}
+		}
+	}
+
 }
