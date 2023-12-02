@@ -1,4 +1,4 @@
-# Purpose of this folder
+-- Purpose of this folder
 
 The SQL scripts contained in this folder can be used for updating an existing Open Hospital database.
 The scripts must be executed in order; as an example, to upgrade a 1.10 installation to 1.13 the following steps should be perfomed:
