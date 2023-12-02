@@ -88,7 +88,10 @@ class JsonFileConfigProvider implements ConfigProvider {
 
 	@Override
 	public String get(String paramName) {
-		Object value = configData.get(paramName);
+		Object value = null;
+		if (configData != null) {
+			value = configData.get(paramName);
+		}
 		return (value != null) ? value.toString() : null;
 	}
 
