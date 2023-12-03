@@ -1,4 +1,4 @@
-# sql script update_1_10-1_11.sql
+-- sql script update_1_10-1_11.sql
 
 source ../step_64_operations_in_opd.sql
 source ../step_65_daily_worksheet_for_services.sql
