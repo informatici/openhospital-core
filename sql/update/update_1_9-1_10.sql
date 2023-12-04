@@ -1,4 +1,4 @@
-# sql script update_1_9-1_10.sql
+-- sql script update_1_9-1_10.sql
 
 source ../step_59_audit_to_all_tables.sql
 source ../step_60_examination_changes.sql

@@ -1,4 +1,4 @@
-# SQL script for database creation - french
+-- SQL script for database creation - french
 source step_01_create_structure.sql;
 source step_02_dump_menu.sql;
 source step_03_dump_default_data_fr.sql;

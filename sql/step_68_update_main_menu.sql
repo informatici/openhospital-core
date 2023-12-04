@@ -1,15 +1,15 @@
-# Remove "exit" and "file"
+-- Remove "exit" and "file"
 DELETE FROM MENUITEM WHERE MNI_ID_A IN ('exit', 'file');
 DELETE FROM GROUPMENU WHERE GM_MNI_ID_A IN ('exit', 'file');
 
-# "General Data" is now "Settings" so change shortcut key
-# Note: the label is set in the properties file
+-- "General Data" is now "Settings" so change shortcut key
+-- Note: the label is set in the properties file
 UPDATE MENUITEM SET MNI_SHORTCUT='S' WHERE MNI_ID_A='generaldata';
 
-# Move the "Users" menu to the end of "Settings"
+-- Move the "Users" menu to the end of "Settings"
 UPDATE MENUITEM SET MNI_SUBMENU="generaldata", MNI_POSITION=10 WHERE MNI_ID_A="users";
 
-# Rearrange main menu
+-- Rearrange main menu
 UPDATE MENUITEM SET MNI_POSITION=1 WHERE MNI_ID_A="opd";
 UPDATE MENUITEM SET MNI_POSITION=2 WHERE MNI_ID_A="admission";
 UPDATE MENUITEM SET MNI_POSITION=3 WHERE MNI_ID_A="laboratory";
