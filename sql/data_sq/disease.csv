@@ -1,0 +1,437 @@
+A01;Ethet tifoide dhe paratifoide;AB;0;1;1
+A06;Amebiaza;AB;0;1;1
+A07;Sëmundje të tjera protozoale të zorrëve;AB;0;1;1
+A07.1;Giardiasis [lambioza];AB;0;1;1
+A09;Diarre dhe gastroenterit me origjinë të supozuar infektive;AB;0;1;1
+A09.0;Gastroenteriti dhe koliti me origjinë të paspecifikuar;AB;0;1;1
+A15;Tuberkulozi respirator, i konfirmuar bakteriologjikisht dhe histologjikisht;AB;0;1;1
+A16;Tuberkulozi respirator, i pa konfirmuar bakteriologjikisht ose histologjikisht;AB;0;1;1
+A18;Tuberkuloz i organeve të tjera;AB;0;1;1
+A19;Tuberkulozi miliar;AB;0;1;1
+A20;Murtajë;AB;0;1;1
+A28;Sëmundje të tjera bakteriale zoonotike, të pa klasifikuara diku tjetër;AB;0;1;1
+A30;Leprozë [Sëmundja Hansen];AB;0;1;1
+A35;Tetanoz tjetër;AB;0;1;1
+A36;Difteria;AB;0;1;1
+A37;Kolla e mirë;AB;0;1;1
+A38;Skarlatina;AB;0;1;1
+A50;Sifilizi kongjenital;AB;0;1;1
+A51;Sifilizi i hershëm;AB;0;1;1
+A52;Sifiliz i vonshëm;AB;0;1;1
+A54;Infeksion gonokokal;AB;0;1;1
+A55;Limfogranuloma klamidike (venereum);AB;0;1;1
+A56;Sëmundje të tjera klamidiale të transmetueshme seksualisht;AB;0;1;1
+A57;Kankroidi;AB;0;1;1
+A59;Trikomoniaza;AB;0;1;1
+A60;Infeksion herpesviral anogjenital [herpes simplex];AB;0;1;1
+A64;Sëmundje të tjera kryesisht seksualisht të transmetueshme, të pa klasifikuara diku tjetër;AB;0;1;1
+A80;Poliomelit akut;AB;0;1;1
+A87;Meningjit viral;AB;0;1;1
+A89;Infeksion viral i paspecifikuar i sistemit nervor qendror;AB;0;1;1
+A92;Ethet e tjera virale që transmetohen nga mushkonjat;AB;0;1;1
+A99;Ethe hemorragjike virale e papërcaktuar;AB;0;1;1
+B00;Infeksionet herpesvirale [herpes simplex];AB;0;1;1
+B01;Variçela [lia e dhenve];AB;0;1;1
+B02;Zoster [herpes zoster];AB;0;1;1
+B05;Fruthi;AB;0;1;1
+B06;Rubeola [fruthi gjerman];AB;0;1;1
+B07;Lythat virale;AB;0;1;1
+B09;Infeksion viral i paspecifikuar i karakterizuar nga lezione të lëkurës dhe mukozave;AB;0;1;1
+B16;Hepatitis B akut;AB;0;1;1
+B17;Hepatite të tjera akute virale;AB;0;1;1
+B17.1;Hepatiti akut C;AB;0;1;1
+B24;Sëmundja e papërcaktuar e virusit të imunitetit të njeriut [HIV];AB;0;1;1
+B26;Shytat;AB;0;1;1
+B34;Infeksion viral i vendit të paspecifikuar;AB;0;1;1
+B37;Kandidiaza;AB;0;1;1
+B47;Mycetomë;AB;0;1;1
+B49;Mykozë e pa specifikuar;AB;0;1;1
+B53;Malarie të tjera të konfirmuara nga ana parazitologjike;AB;0;1;1
+B54;Malaria e pa specifikuar;AB;0;1;1
+B65;Shistozomiaza [bilharziaza];AB;0;1;1
+B67;Ekinokokoza;AB;0;1;1
+B68;Taeniaza;AB;0;1;1
+B69;Cisticerkoza;AB;0;1;1
+B73;Onkocerciaza;AB;0;1;1
+B74;Filariaza;AB;0;1;1
+B77;Askariaza;AB;0;1;1
+B79;Trikuriaza;AB;0;1;1
+B82;Parazitizëm intestinal i paspecifikuar;AB;0;1;1
+B83;Helminthiaza të tjera;AB;0;1;1
+B85;Pedikuloza dhe ftiriaza;AB;0;1;1
+B86;Zgjebe;AB;0;1;1
+B99;Sëmundje të tjera infektive dhe të paspecifikuara;AB;0;1;1
+C14;Neoplazitë malinje të vendeve të tjera dhe të keqpërcaktuara në buzë, zgavrën me gojë dhe faring;CD;0;1;1
+C16;Neoplazi malinje e stomakut;CD;0;1;1
+C17;Neoplazitë malinje të zorrëve të holla;CD;0;1;1
+C18;Neoplazi malinje e zorres se trashe;CD;0;1;1
+C23;Neoplazi malinje e fshikëzës së tëmthit;CD;0;1;1
+C26;Neoplazitë malinje të organeve të tjera të tretjes dhe të përcaktuara si të sëmura;CD;0;1;1
+C43;Melanoma malinje e lëkurës;CD;0;1;1
+C44;Neoplazite te tjera malinje te lekures;CD;0;1;1
+C50;Neoplazi malinje e gjirit;CD;0;1;1
+C53;Neoplazi malinje e qafës së mitrës;CD;0;1;1
+C54;Neoplazi malinje e korpusit të mitrës;CD;0;1;1
+C56;Neoplazi malinje e vezores;CD;0;1;1
+C62;Neoplazi malinje e testisit;CD;0;1;1
+C63;Neoplazi malinje e organeve gjenitale të tjera dhe të paspecifikuara mashkullore;CD;0;1;1
+C64;Neoplazitë malinje të veshkave, përveç legenit renal;CD;0;1;1
+C66;Neoplazi malinje e ureterit;CD;0;1;1
+C73;Neoplazi malinje e gjëndrës tiroide;CD;0;1;1
+C80;Neoplazi malinje, pa specifikim të vendndodhjes;CD;0;1;1
+D12;Neoplazi beninje e kolonit, rektumit, anusit dhe kanalit anal;CD;0;1;1
+D18;Hemangioma dhe limfangioma, çdo vend;CD;0;1;1
+D22;Nevuset melanocitare;CD;0;1;1
+D23;Neoplazi të tjera beninje të lëkurës;CD;0;1;1
+D24;Neoplazi beninje e gjirit;CD;0;1;1
+D25;Leiomyoma e mitrës;CD;0;1;1
+D27;Neoplazi beninje e vezores;CD;0;1;1
+D29;Neoplazi beninje e organeve gjenitale mashkullore;CD;0;1;1
+D34;Neoplazi beninje e gjëndrës tiroide;CD;0;1;1
+D36;Neoplazi beninje e vendeve të tjera dhe të paspecifikuara;CD;0;1;1
+D53;Anemi të tjera ushqyese;D;0;1;1
+D58;Anemi të tjera hemolitike të trashëgueshme;D;0;1;1
+D62;Anemia akute posthemorragjike;D;0;1;1
+D63;Anemia në sëmundjet kronike të klasifikuara diku tjetër;D;0;1;1
+D64;Anemi të tjera;D;0;1;1
+D72;Çrregullime të tjera të qelizave të bardha të gjakut;D;0;1;1
+D73;Sëmundjet e shpretkës;D;0;1;1
+D75;Sëmundje të tjera të gjakut dhe organeve gjakformuese;D;0;1;1
+E00;Sindroma kongjenitale e mungesës së jodit;E;0;1;1
+E03;Hipotiroidizëm tjetër;E;0;1;1
+E05;Tireotoksikoza [hipertiroidizmi];E;0;1;1
+E07;Çrregullime të tjera të tiroides;E;0;1;1
+E10;Diabeti mellitus i tipit 1;E;0;1;1
+E11;Diabeti mellitus i tipit 2;E;0;1;1
+E15;Koma hipoglikemike jodiabetike;E;0;1;1
+E27;Çrregullime të tjera të gjëndrës mbiveshkore;E;0;1;1
+E43;Kequshqyerja e rëndë e paspecifikuar me proteina-energji;E;0;1;1
+E45;Zhvillimi i vonuar pas kequshqyerjes me energji proteinike;E;0;1;1
+E46;Kequshqyerja e paspecifikuar me energji proteinike;E;0;1;1
+E63.9;Mangësi ushqyese, e paspecifikuar;E;0;1;1
+E68;Pasojat e hiperalimentimit;E;0;1;1
+E73;Intoleranca ndaj laktozës;E;0;1;1
+E86;Pakësimi i volumit;E;0;1;1
+F03;Demenca e paspecifikuar;F;0;1;1
+F10;Çrregullime mendore dhe të sjelljes për shkak të përdorimit të alkoolit;F;0;1;1
+F19;Çrregullime mendore dhe të sjelljes për shkak të përdorimit të shumëfishtë të drogës dhe përdorimit të substancave të tjera psikoaktive;F;0;1;1
+F20;Skizofrenia;F;0;1;1
+F23;Çrregullime psikotike akute dhe kalimtare;F;0;1;1
+F39;Çrregullim i paspecifikuar i humorit [afektiv];F;0;1;1
+F41;Çrregullime të tjera ankthi;F;0;1;1
+F45;Çrregullime somatoforme;F;0;1;1
+F50;Çregullime te ngrenies;F;0;1;1
+F52;Mosfunksionim seksual, jo i shkaktuar nga çrregullime ose sëmundje organike;F;0;1;1
+F69;Çrregullim i paspecifikuar i personalitetit dhe sjelljes së të rriturve;F;0;1;1
+F79;Prapambetje mendore e paspecifikuar;F;0;1;1
+F80;Çrregullime specifike të zhvillimit të të folurit dhe gjuhës;F;0;1;1
+F82;Çrregullim specifik zhvillimor i funksionit motorik;F;0;1;1
+F90;Çrregullime hiperkinetike;F;0;1;1
+F98;Çrregullime të tjera të sjelljes dhe emocionale me fillim zakonisht ndodhin në fëmijëri dhe adoleshencë;F;0;1;1
+G02;Meningjiti në sëmundje të tjera infektive dhe parazitare të klasifikuara diku tjetër;G;0;1;1
+G03;Meningjiti për shkak të shkaqeve të tjera dhe të paspecifikuara;G;0;1;1
+G04;Encefaliti, mieliti dhe encefalomieliti;G;0;1;1
+G12;Atrofia muskulare kurrizore dhe sindromat e lidhura me to;G;0;1;1
+G14;Sindroma postpolio;G;0;1;1
+G20;Sëmundja e Parkinsonit;G;0;1;1
+G30;Sëmundja e Alzheimerit;G;0;1;1
+G40;Epilepsia;G;0;1;1
+G41;Statusi epileptik;G;0;1;1
+G43;Migrenë;G;0;1;1
+G44;Sindroma të tjera të dhimbjes së kokës;G;0;1;1
+G45;Sulmet ishemike cerebrale kalimtare dhe sindromat e lidhura me to;G;0;1;1
+G46;Sindromat vaskulare të trurit në sëmundjet cerebrovaskulare;G;0;1;1
+G47;Çrregullime të gjumit;G;0;1;1
+G53;Çrregullime nervore kraniale në sëmundjet e klasifikuara diku tjetër;G;0;1;1
+G54;Çrregullime të rrënjëve nervore dhe të pleksusit;G;0;1;1
+G60;Neuropatia trashëgimore dhe idiopatike;G;0;1;1
+G63;Polineuropatia në sëmundjet e klasifikuara diku tjetër;G;0;1;1
+G71;Çrregullime primare të muskujve;G;0;1;1
+G80;Paraliza cerebrale;G;0;1;1
+G91;Hidrocefalus;G;0;1;1
+G92;Encefalopatia toksike;G;0;1;1
+H00;Hordeolum dhe chalazion;H1;0;1;1
+H10;Konjuktiviti;H1;0;1;1
+H17;Shenjat dhe paqartësitë e kornesë;H1;0;1;1
+H25;Katarakt senile;H1;0;1;1
+H40;Glaukoma;H1;0;1;1
+H50;Strabizëm tjetër;H1;0;1;1
+H53;Çrregullime vizuale;H1;0;1;1
+H54;Dëmtimi i shikimit duke përfshirë verbërinë (binokulare ose monokulare);H1;0;1;1
+H57;Çrregullime të tjera të syrit dhe adnexas;H1;0;1;1
+H60;Otiti i jashtëm;H2;0;1;1
+H72;Perforimi i membranës timpanike;H2;0;1;1
+H74;Çrregullime të tjera të veshit të mesëm dhe mastoidit;H2;0;1;1
+H81;Çrregullime të funksionit vestibular;H2;0;1;1
+H90;Humbja e dëgjimit konduktive dhe sensorineural;H2;0;1;1
+H93;Çrregullime të tjera të veshit, të pa klasifikuara diku tjetër;H2;0;1;1
+I00;Ethet reumatizmale pa përmendur përfshirjen e zemrës;I;0;1;1
+I10;Hipertensioni esencial (primar).;I;0;1;1
+I11;Sëmundjet hipertensive të zemrës;I;0;1;1
+I12;Sëmundje renale hipertensionale;I;0;1;1
+I15;Hipertensioni sekondar;I;0;1;1
+I20;Angina pectoris;I;0;1;1
+I21;Infarkti akut i miokardit;I;0;1;1
+I22;Infarkti i mëvonshëm i miokardit;I;0;1;1
+I26;Emboli pulmonare;I;0;1;1
+I27;Sëmundje të tjera të zemrës pulmonare;I;0;1;1
+I42;Kardiomiopatia;I;0;1;1
+I46;Arrest kardiak;I;0;1;1
+I47;Takikardi paroksizmale;I;0;1;1
+I49;Aritmi të tjera kardiake;I;0;1;1
+I50;Infrakt;I;0;1;1
+I63;Infarkti cerebral;I;0;1;1
+I72;Aneurizëm dhe diseksion tjetër;I;0;1;1
+I80;Flebiti dhe tromboflebiti;I;0;1;1
+I82;Emboli dhe trombozë të tjera venoze;I;0;1;1
+I83;Venat me variçe të ekstremiteteve të poshtme;I;0;1;1
+I85;Variçet e ezofagut;I;0;1;1
+I88;Limfadeniti jospecifik;I;0;1;1
+I95;Hipotensioni;I;0;1;1
+J00;Nazofaringiti akut [ftohja e zakonshme];J;0;1;1
+J01;Sinusiti akut;J;0;1;1
+J02;Faringjiti akut;J;0;1;1
+J03;Tonsiliti akut;J;0;1;1
+J04;Laringiti akut dhe trakeiti;J;0;1;1
+J10.0;Gripi me pneumoni, virusi i gripit sezonal i identifikuar;J;0;1;1
+J11;Gripi, virusi i paidentifikuar;J;0;1;1
+J12;Pneumonia virale, e pa klasifikuar diku tjetër;J;0;1;1
+J15;Pneumonia bakteriale, e pa klasifikuar diku tjetër;J;0;1;1
+J16;Pneumonia për shkak të organizmave të tjerë infektivë, të pa klasifikuar diku tjetër;J;0;1;1
+J20;Bronkit akut;J;0;1;1
+J21;Bronkioliti akut;J;0;1;1
+J30;Riniti vazomotor dhe alergjik;J;0;1;1
+J31;Rinit kronik, nazofaringit dhe faringjit;J;0;1;1
+J32;Sinusiti kronik;J;0;1;1
+J36;Abscesi peritonsillar;J;0;1;1
+J39;Sëmundje të tjera të traktit të sipërm respirator;J;0;1;1
+J43;Emfizema;J;0;1;1
+J45;Astma;J;0;1;1
+J80;Sindroma e shqetësimit të frymëmarrjes së të rriturve;J;0;1;1
+J81;Edemë pulmonare;J;0;1;1
+J86;Piotoraks;J;0;1;1
+J90;Efuzioni pleural, i pa klasifikuar diku tjetër;J;0;1;1
+J93;Pneumotoraks;J;0;1;1
+J94;Gjendje të tjera pleurale;J;0;1;1
+J96;Dështimi i frymëmarrjes, i pa klasifikuar diku tjetër;J;0;1;1
+J98;Çrregullime të tjera të frymëmarrjes;J;0;1;1
+K01;Dhëmbët e ngulitur dhe të impaktuar;K;0;1;1
+K02;Kariesi dentar;K;0;1;1
+K04;Sëmundjet e pulpës dhe indeve periapikale;K;0;1;1
+K05;Gingiviti dhe sëmundjet periodontale;K;0;1;1
+K11;Sëmundjet e gjëndrave të pështymës;K;0;1;1
+K12;Stomatiti dhe lezionet e lidhura me to;K;0;1;1
+K13;Sëmundje të tjera të mukozës së buzëve dhe të gojës;K;0;1;1
+K14;Sëmundjet e gjuhës;K;0;1;1
+K25;Ulçera gastrike;K;0;1;1
+K26;Ulçera duodenale;K;0;1;1
+K29;Gastriti dhe duodeniti;K;0;1;1
+K35;Apendiciti akut;K;0;1;1
+K40;Hernia inguinale;K;0;1;1
+K42;Hernia e kërthizës;K;0;1;1
+K43;Hernia ventrale;K;0;1;1
+K45;Hernie të tjera të barkut;K;0;1;1
+K51;Koliti ulceroz;K;0;1;1
+K56;Ileusi paralitik dhe obstruksioni intestinal pa hernie;K;0;1;1
+K57;Sëmundja divertikulare e zorrëve;K;0;1;1
+K59;Çrregullime të tjera funksionale të zorrëve;K;0;1;1
+K60;Fisura dhe fistula e regjioneve anale dhe rektale;K;0;1;1
+K61;Abscesi i rajoneve anale dhe rektale;K;0;1;1
+K64;Hemorroide dhe tromboza venoze perianale;K;0;1;1
+K65;Peritoniti;K;0;1;1
+K74;Fibroza dhe cirroza e mëlçisë;K;0;1;1
+K75;Sëmundje të tjera inflamatore të mëlçisë;K;0;1;1
+K80;Kolelitiaza;K;0;1;1
+K81;Kolecistiti;K;0;1;1
+K90;Malabsorbimi i zorrëve;K;0;1;1
+K92;Sëmundje të tjera të sistemit të tretjes;K;0;1;1
+L02;Abscesi kutan, furunkula dhe karbunkuli;L;0;1;1
+L10;Pemfigusi;L;0;1;1
+L13;Çrregullime të tjera bulloze;L;0;1;1
+L21;Dermatiti seborrhoeik;L;0;1;1
+L22;Dermatiti i pelenës [pecetë];L;0;1;1
+L23;Dermatiti alergjik i kontaktit;L;0;1;1
+L26;Dermatiti eksfoliativ;L;0;1;1
+L30;Dermatiti tjetër;L;0;1;1
+L44;Çrregullime të tjera papuloskuamoze;L;0;1;1
+L50;Urtikaria;L;0;1;1
+L53;Gjendje të tjera eritematoze;L;0;1;1
+L63;Alopecia areata;L;0;1;1
+L70;Aknet;L;0;1;1
+L72;Kistet folikulare të lëkurës dhe indit nënlëkuror;L;0;1;1
+L80;Vitiligo;L;0;1;1
+L82;Keratoza seborreike;L;0;1;1
+L89;Ulçera e dekubitit dhe zona e presionit;L;0;1;1
+L91;Çrregullime hipertrofike të lëkurës;L;0;1;1
+L93;Lupus eritematoz;L;0;1;1
+L97;Ulçera e gjymtyrëve të poshtme, e pa klasifikuar diku tjetër;L;0;1;1
+M00;Artriti piogjen;M;0;1;1
+M06;Artrit të tjerë reumatoid;M;0;1;1
+M08;Artriti juvenil;M;0;1;1
+M10;Përdhes;M;0;1;1
+M13;Artrit të tjerë;M;0;1;1
+M15;Polyartroza;M;0;1;1
+M16;Koksartroza [artroza e ijeve];M;0;1;1
+M17;Gonartroza [artroza e gjurit];M;0;1;1
+M19;Artroza të tjera;M;0;1;1
+M20;Deformime të fituara të gishtërinjve dhe këmbëve;M;0;1;1
+M24;Çrregullime të tjera specifike të kyçeve;M;0;1;1
+M41;Skolioza;M;0;1;1
+M45;Spondiliti ankiloz;M;0;1;1
+M54;Dorsalgjia;M;0;1;1
+M60;Mioziti;M;0;1;1
+M70;Çrregullime të indeve të buta që lidhen me përdorimin, mbipërdorimin dhe presionin;M;0;1;1
+M75;Lezionet e shpatullave;M;0;1;1
+M86;Osteomieliti;M;0;1;1
+M89;Çrregullime të tjera të kockave;M;0;1;1
+M95;Deformime të tjera të fituara të sistemit muskuloskeletor dhe indit lidhës;M;0;1;1
+N02;Hematuria e përsëritur dhe e vazhdueshme;N;0;1;1
+N04;Sindroma nefrotike;N;0;1;1
+N13;Uropati obstruktive dhe refluks;N;0;1;1
+N17;Dështimi akut i veshkave;N;0;1;1
+N18;Sëmundja kronike e veshkave;N;0;1;1
+N20;Llogaritja e veshkave dhe ureterit;N;0;1;1
+N21;Llogaritja e traktit urinar të poshtëm;N;0;1;1
+N28;Çrregullime të tjera të veshkave dhe ureterit, të pa klasifikuara diku tjetër;N;0;1;1
+N30;Cistiti;N;0;1;1
+N31;Mosfunksionim neuromuskular i fshikëzës, i pa klasifikuar diku tjetër;N;0;1;1
+N35;Striktura e uretrës;N;0;1;1
+N36;Çrregullime të tjera të uretrës;N;0;1;1
+N40;Hiperplazia e prostatës;N;0;1;1
+N41;Sëmundjet inflamatore të prostatës;N;0;1;1
+N43;Hidrocela dhe spermatocela;N;0;1;1
+N44;Përdredhja e testisit;N;0;1;1
+N45;Orkiti dhe epididymitis;N;0;1;1
+N46;Steriliteti mashkullor;N;0;1;1
+N47;Prepucë e tepërt, fimozë dhe parafimozë;N;0;1;1
+N49;Çrregullime inflamatore të organeve gjenitale mashkullore, të pa klasifikuara diku tjetër;N;0;1;1
+N61;Çrregullime inflamatore të gjirit;N;0;1;1
+N62;Hipertrofia e gjirit;N;0;1;1
+N63;Grumbull i paspecifikuar në gji;N;0;1;1
+N64;Çrregullime të tjera të gjirit;N;0;1;1
+N70;Salpingiti dhe ooforiti;N;0;1;1
+N73;Sëmundje të tjera inflamatore të legenit femëror;N;0;1;1
+N76;Inflamacion tjetër i vaginës dhe vulvës;N;0;1;1
+N80;Endometrioza;N;0;1;1
+N81;Prolapsi gjenital femëror;N;0;1;1
+N82;Fistula që përfshin traktin gjenital femëror;N;0;1;1
+N84;Polip i traktit gjenital femëror;N;0;1;1
+N85;Çrregullime të tjera jo-inflamatore të mitrës, përveç qafës së mitrës;N;0;1;1
+N91;Menstruacione të munguara, të pakta dhe të rralla;N;0;1;1
+N92;Menstruacione të tepërta, të shpeshta dhe të parregullta;N;0;1;1
+N93;Gjakderdhje të tjera jonormale të mitrës dhe vaginale;N;0;1;1
+N96;Abort i zakonshëm;N;0;1;1
+N97;Steriliteti femëror;N;0;1;1
+O00;Shtatzëni ektopike;O;0;1;1
+O03;Aborti spontan;O;0;1;1
+O04;Aborti mjekësor;O;0;1;1
+O07;Një tentativë e dështuar për abortin;O;0;1;1
+O10;Hipertensioni paraekzistues që ndërlikon shtatzëninë, lindjen dhe puerperiumin;O;0;1;1
+O13;Hipertensioni gestacional [i shkaktuar nga shtatzënia];O;0;1;1
+O15;Eklampsia;O;0;1;1
+O16;Hipertensioni i paspecifikuar i nënës;O;0;1;1
+O23;Infeksionet e traktit gjenitourinar në shtatzëni;O;0;1;1
+O24;Diabeti mellitus në shtatzëni;O;0;1;1
+O30;Shtatzënia e shumëfishtë;O;0;1;1
+O41;Çrregullime të tjera të lëngut amniotik dhe membranave;O;0;1;1
+O42;Thyerja e parakohshme e membranave;O;0;1;1
+O44;Placenta praevia;O;0;1;1
+O45;Ndarja e parakohshme e placentës [abruptio placentae];O;0;1;1
+O60;Lindja e parakohshme dhe lindja;O;0;1;1
+O63;Punë e gjatë;O;0;1;1
+O67;Lindja dhe lindja e komplikuar nga hemorragjia intrapartum, e pa klasifikuar diku tjetër;O;0;1;1
+O70;Çarje perineale gjatë lindjes;O;0;1;1
+O71;Trauma të tjera obstetrike;O;0;1;1
+O72;Hemorragji pas lindjes;O;0;1;1
+O73;Placenta dhe membranat e mbajtura, pa hemorragji;O;0;1;1
+O80;Dorëzimi i vetëm spontan;O;0;1;1
+O82;Lindja e vetme me prerje cezariane;O;0;1;1
+O84;Dorëzimi i shumëfishtë;O;0;1;1
+O92;Çrregullime të tjera të gjirit dhe laktacionit të lidhura me lindjen e fëmijës;O;0;1;1
+O95;Vdekja obstetrike me një shkak të paspecifikuar;O;0;1;1
+P02;Fetusi dhe i porsalinduri i prekur nga komplikimet e placentës, kordonit dhe membranave;P;0;1;1
+P03;Fetusi dhe i porsalinduri i prekur nga komplikime të tjera të lindjes dhe lindjes;P;0;1;1
+P04;Fetusi dhe i porsalinduri i prekur nga ndikimet e dëmshme që transmetohen nëpërmjet placentës ose qumështit të gjirit;P;0;1;1
+P05;Rritja e ngadaltë e fetusit dhe kequshqyerja e fetusit;P;0;1;1
+P08;Çrregullime të lidhura me shtatzëninë e gjatë dhe peshën e lartë të lindjes;P;0;1;1
+P15;Lëndime të tjera të lindjes;P;0;1;1
+P21;Asfiksia e lindjes;P;0;1;1
+P22;Distres respirator i të porsalindurit;P;0;1;1
+P36;Sepsis bakterial i të porsalindurit;P;0;1;1
+P37;Sëmundje të tjera kongjenitale infektive dhe parazitare;P;0;1;1
+P54;Hemorragji të tjera neonatale;P;0;1;1
+P57;Kernikterus;P;0;1;1
+P59;Verdhëza neonatale nga shkaqe të tjera dhe të paspecifikuara;P;0;1;1
+P61;Çrregullime të tjera hematologjike perinatale;P;0;1;1
+P75;Ileusi mekonium në fibrozën cistike;P;0;1;1
+P80;Hipotermia e të porsalindurit;P;0;1;1
+P95;Vdekja fetale me një shkak të paspecifikuar;P;0;1;1
+Q02;Mikrocefalia;Q;0;1;1
+Q15;Keqformime të tjera kongjenitale të syrit;Q;0;1;1
+Q17;Keqformime të tjera kongjenitale të veshit;Q;0;1;1
+Q18;Keqformime të tjera kongjenitale të fytyrës dhe qafës;Q;0;1;1
+Q24;Keqformime të tjera kongjenitale të zemrës;Q;0;1;1
+Q27;Keqformime të tjera kongjenitale të sistemit vaskular periferik;Q;0;1;1
+Q28;Keqformime të tjera kongjenitale të sistemit të qarkullimit të gjakut;Q;0;1;1
+Q34;Keqformime të tjera kongjenitale të sistemit të frymëmarrjes;Q;0;1;1
+Q36;Buzë e çarë;Q;0;1;1
+Q38;Keqformime të tjera kongjenitale të gjuhës, gojës dhe faringut;Q;0;1;1
+Q43;Keqformime të tjera kongjenitale të zorrëve;Q;0;1;1
+Q45;Keqformime të tjera kongjenitale të sistemit të tretjes;Q;0;1;1
+Q52;Keqformime të tjera kongjenitale të organeve gjenitale femërore;Q;0;1;1
+Q53;Testikul i pazbritur;Q;0;1;1
+Q54;Hipospadias;Q;0;1;1
+Q55;Keqformime të tjera kongjenitale të organeve gjenitale mashkullore;Q;0;1;1
+Q63;Keqformime të tjera kongjenitale të veshkave;Q;0;1;1
+Q64;Keqformime të tjera kongjenitale të sistemit urinar;Q;0;1;1
+Q74;Keqformime të tjera kongjenitale të gjymtyrëve;Q;0;1;1
+Q75;Keqformime të tjera kongjenitale të kockave të kafkës dhe fytyrës;Q;0;1;1
+Q76;Keqformime kongjenitale të shtyllës kurrizore dhe kraharorit kockor;Q;0;1;1
+Q89;Keqformime të tjera kongjenitale, të pa klasifikuara diku tjetër;Q;0;1;1
+Q90;sindromi Down;Q;0;1;1
+R33;Mbajtja e urinës;R;0;1;1
+R40;Përgjumje, stupor dhe koma;R;0;1;1
+R50;Ethet me origjinë tjetër dhe të panjohur;R;0;1;1
+R51;Dhimbje koke;R;0;1;1
+S00;Lëndim sipërfaqësor i kokës;ST;0;1;1
+S01;Plagë e hapur e kokës;ST;0;1;1
+S10;Lëndim sipërfaqësor i qafës;ST;0;1;1
+S19;Lëndime të tjera dhe të paspecifikuara të qafës;ST;0;1;1
+S20;Lëndimi sipërfaqësor i kraharorit;ST;0;1;1
+S21;Plagë e hapur e kraharorit;ST;0;1;1
+S29;Lëndime të tjera dhe të paspecifikuara të kraharorit;ST;0;1;1
+S30;Lëndim sipërfaqësor i barkut, shpinës dhe legenit;ST;0;1;1
+S31;Plagë e hapur e barkut, shpinës dhe legenit;ST;0;1;1
+S36;Lëndimi i organeve intra-abdominale;ST;0;1;1
+S39;Lëndime të tjera dhe të paspecifikuara të barkut, shpinës dhe legenit;ST;0;1;1
+S40 ;Lëndim sipërfaqësor i shpatullës dhe i krahut të sipërm;ST;0;1;1
+S49;Lëndime të tjera dhe të paspecifikuara të shpatullës dhe të krahut të sipërm;ST;0;1;1
+S50;Lëndim sipërfaqësor i parakrahut;ST;0;1;1
+S59;Lëndime të tjera dhe të paspecifikuara të parakrahut;ST;0;1;1
+S60;Lëndim sipërfaqësor i kyçit të dorës dhe dorës;ST;0;1;1
+S69;Lëndime të tjera dhe të paspecifikuara të kyçit të dorës dhe dorës;ST;0;1;1
+S70;Lëndim sipërfaqësor i kofshës dhe kofshës;ST;0;1;1
+S79;Lëndime të tjera dhe të paspecifikuara të kofshës;ST;0;1;1
+S80;Lëndim sipërfaqësor i këmbës së poshtme;ST;0;1;1
+S89;Lëndime të tjera dhe të paspecifikuara të këmbës së poshtme;ST;0;1;1
+S90;Lëndim sipërfaqësor i kyçit të këmbës dhe këmbës;ST;0;1;1
+S99;Lëndime të tjera dhe të paspecifikuara të kyçit të këmbës dhe këmbës;ST;0;1;1
+T02;Lëndimet sipërfaqësore që përfshijnë shumë rajone të trupit;ST;0;1;1
+T05;Amputimet traumatike që përfshijnë shumë rajone të trupit;ST;0;1;1
+T07;Lëndime të shumta të paspecifikuara;ST;0;1;1
+T14;Lëndim i zonës së paspecifikuar të trupit;ST;0;1;1
+T29;Djegiet dhe korrozioni i zonave të shumta të trupit;ST;0;1;1
+T30;Djegia dhe korrozioni, rajoni i trupit i paspecifikuar;ST;0;1;1
+T50;Helmimi me diuretikë dhe medikamente të tjera dhe të paspecifikuara, medikamente dhe substanca biologjike;ST;0;1;1
+T51;Efekti toksik i alkoolit;ST;0;1;1
+T65;Efekti toksik i substancave të tjera dhe të paspecifikuara;ST;0;1;1
+T75;Pasojat e shkaqeve të tjera të jashtme;ST;0;1;1
+T78;Efektet anësore, të pa klasifikuara diku tjetër;ST;0;1;1
+T78.2;Shoku anafilaktik, i paspecifikuar;ST;0;1;1
+T78.3;Edemë angioneurotike;ST;0;1;1
+W53;Kafshuar nga miu;VY;0;1;1
+W55;Kafshuar ose goditur nga gjitarë të tjerë;VY;0;1;1
+W56;Kontakti me kafshët detare;VY;0;1;1
+W57;Kafshuar ose pickuar nga insektet jo helmuese dhe artropodët e tjerë jo helmues;VY;0;1;1
+Z00;Ekzaminimi dhe hetimi i përgjithshëm i personave pa ankesë dhe diagnozë të raportuar;Z;0;1;1
+Z04;Ekzaminimi dhe vëzhgimi për arsye të tjera;Z;0;1;1

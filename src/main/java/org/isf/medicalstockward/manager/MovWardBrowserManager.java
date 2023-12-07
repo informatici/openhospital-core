@@ -78,7 +78,7 @@ public class MovWardBrowserManager {
 	 * Gets all the {@link MedicalWard}s associated to the specified ward.
 	 *
 	 * @param wardId the ward id.
-	 * @param stripeEmpty - if <code>true</code>, stripes the empty lots
+	 * @param stripeEmpty - if {@code true}, stripes the empty lots
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException
 	 */
@@ -168,10 +168,9 @@ public class MovWardBrowserManager {
 	 * Updates the specified {@link MovementWard}.
 	 *
 	 * @param updateMovement the movement ward to update.
-	 * @return <code>true</code> if the movement has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean updateMovementWard(MovementWard updateMovement) throws OHServiceException {
+	public MovementWard updateMovementWard(MovementWard updateMovement) throws OHServiceException {
 		return ioOperations.updateMovementWard(updateMovement);
 	}
 

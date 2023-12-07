@@ -1,0 +1,397 @@
+1;K;Shirit për Testimin e Glukozës
+2;L;Acid acetik Glacial 1 lt
+3;L;Aceton 99% 1 litër
+4;L;Bakër 11 Sulfat 500g
+5;L;EDTA kripë dinatriumi 100g
+6;L;Etanol Absolut 1 ltr
+7;L;Tretësirë formaldehid 35-38% 1lt
+8;L;Acid klorhidrik 30-33% 1lt
+9;L;Kristal Jodi 100 g
+10;L;Metanol 99% 1lt
+11;L;Kristal fenoli 1 kg
+12;L;Jodur kaliumi 100 g
+13;L;Karbonat Natriumi Anhydrous 500g
+14;L;Citrati i natriumit 100 g
+15;L;Sulfat natriumi 500 g
+16;L;Nitrat natriumi 25 g
+17;L;Acid sulfosalicilik 500 g
+18;L;Acid sulfurik Konc 1lt
+19;L;Ksilen 2.5 lt
+20;L;Fluori i natriumit
+21;L;Oksalati i kaliumit
+22;L;Brilliant Cresyl Blue
+23;L;Oksalati i amonit
+24;L;4 Dimetil Aminobenzaldelid
+25;L;Acidi trikloro acetik
+26;L;Klorur jo 111 (klorur hekuri)
+27;L;Karbonat natriumi anhidrik
+28;L;Citrati i trisodiumit
+29;L;Kristal Violet
+30;K;GPT (ALT) 200 ml (Nuk ka NAOH)
+31;K;GOT (AST) 200 ml nuk ka NAOH) AS 101
+32;K;GOT ( AST) 200 ml (kalorimetrike) AS 147
+33;K;HIV 1/2 Capillus Kit 100Test
+34;K;Tampon HIV për Kit të përcaktuar
+35;K;HIV Determine 1/11 (Abbott) 100Teste
+36;K;HIV UNIGOLD 1/11 Komplete Testi 20 Teste
+37;K;Shtatzënia (HGG Latex) 50 teste
+38;K;RPR 125 mm x 75 mm
+39;K;Antigjen RPR ( VDRL Carbon ) 5ml
+40;D;Adrenalinë 1mg/ml 1ml Amp
+41;D;Aminofilinë 25 mg/ml, 10 ml Amp
+42;D;Amfotericin B 50mg Shishkë
+43;D;Ampicilinë 500 mg flakon
+44;D;Atropine 1mg/ml 1ml Amp
+45;D;Shishkë Benzathine Penicilin 2.4 MIU
+46;D;Shishkë Benzyl Penicilinë 1 MIU
+47;D;Shishkë Benzyl Penicilinë 5 MIU
+48;D;Kloramfenikol 1g Shishkë
+49;D;Chloroquine 40mg Bazë/ml 5ml Amp
+50;D;Klorpromazinë 25mg/ml/2ml Amp
+51;D;Cloksacillin 500mg Shishkë
+52;D;Shiklofosfamidi 200 mg
+53;D;Shiklofosfamidi 500 mg
+54;D;Diazepam 5mg/ml 2ml Amp
+55;D;Diklofenak 25mg/ml 3ml Amp
+56;D;Digoksin 0.25 mg/ml 2ml Amp
+57;D;Furosemide 10mg/ml 2ml Amp
+58;D;Gentamicin 40mg/ml 2ml
+59;D;Haloperidol 5mg/ml 1ml Amp
+60;D;Haloperidol Decanoate 50mg/ml 1ml Amp
+61;D;Shishkë Hydralazine 20 mg
+62;D;Shishkë me hidrokortizon 100 mg
+63;D;Hyoscine Butyl Bromide 20mg/ml/Amp
+64;D;I tretshëm në insulinë 100IU/ml Shishkë 10ml
+65;D;Insulin Isophane 100IU/ml Shishkë 10ml
+66;D;Insulin Mixtard 30/70 100IU/ml Shishkë 10ml
+67;D;Insulin Mixtard 30/70 100IU/ml fishekë 5x3ml
+68;D;Insulinë Isophane 40IU/ml 10ml
+69;D;Iron Dextran 10mg/ml 2ml Shishkë
+70;D;Ketamine 10mg/ml 20ml Shishkë
+71;D;Ketamine 10mg/ml 10ml Shishkë
+72;D;Lignokainë 2% 20ml Shishkë
+73;D;Lignokainë 2% Adrenaline Dent.fishekë
+74;D;Lignokainë spinale 50mg/ml 2ml Amp
+75;D;Metilergomeatrinë 0.2mg/ml 1ml Amp
+76;D;Metilergomeatrinë 0.5mg/ml 1ml Amp
+77;D;Metoklopramid 5mg/ml 100ml Amp
+78;D;Metronidazol 5mg/ml 2ml IV
+79;D;Morfinë 15mg/ml 1ml Amp
+80;D;Oksitocinë 10 IU/ml 1ml Amp
+81;D;Petidinë 100mg/ml 2ml Amp
+82;D;Petidinë 50mg/ml 1ml Amp
+83;D;Fenobarbital 100mg/ml 2ml Amp
+84;D;Fitomenadion 10mg/ml 1ml Amp
+85;D;Fitomenadion 1mg/ml 1ml Amp
+86;D;Procaine Penicilin Fortified 4 MIU Vial
+87;D;Prometazinë 25mg/ml 2ml Amp
+88;D;Kuininë Di-HCI 300mg/ml 2ml Amp
+89;D;Ranitidine 25mg/ml 2ml Amp
+90;D;Streptomicinë 1g Shishkë
+91;D;Shishkë Suxamethonium 500 mg
+92;D;Suksametoni 500mg/ml 2ml Amp
+93;D;tetanoz Antitoxin 1500 IU 1ml Amp
+94;D;Shishkë Tiopental Sodium 500 mg
+95;D;Shishe Ujë për Injeksion 10ml
+96;D;Klorur natriumi 0.9% IV 500ml
+97;D;Përbërja e laktatit të natriumit IV 500 ml
+98;D;Acetazolamide 250 mg Tab
+99;D;Acyclovir 200 mg Tab
+100;D;Aciclovir
+101;D;Aminofilinë 100 mg Tab
+102;D;Albendazol 400 mg Tab
+103;D;Albendazol 200 mg Tab
+104;D;Amitriptyline 25 mg Tab
+105;D;Amoksicilinë 250 mg kapele
+106;D;Amoksicilinë /Klavulanat 375 mg Tab
+107;D;Tabela e acidit askorbik 100 mg
+108;D;Aspirinë 300 mg Tab
+109;D;Atenolol 50 mg Tab
+110;D;Atenolol 100 mg Tab
+111;D;Bendrofluazide 5 mg Tab
+112;D;Benzhexol 2 mg Tab
+113;D;Benzhexol 5 mg Tab
+114;D;Bisakodyl 5 mg Tab
+115;D;Laktat kalciumi 300 mg Tab
+116;D;Karbamazepinë 200 mg Tab
+117;D;Karbimazol 5 mg Tab
+118;D;Qymyr druri 250 mg Tab
+119;D;Kloramfenikol 250 mg kapele
+120;D;Klorokinë e pa veshur 150 mg Tab
+121;D;Të veshura me klorokinë 150 mg Tab
+122;K;Testet kalorimetrike ure 300
+123;D;Klorfeniminë 4 mg Tab
+124;D;Klorpromazinë 100 mg Tab
+125;D;Klorpromazinë 25 mg Tab
+126;D;Cimetidine 200 mg Tab
+127;D;Cimetidine 400 mg Tab
+128;D;Ciprofloxacine 500 mg Tab
+129;D;Ciprofloxacine 250 mg Tab
+130;D;Cloksacillin 250 mg Tab
+131;D;Kodeinë fosfat 30 mg Tab
+132;D;Cotrimoxazole 100/20 mg Paed Tab
+133;D;Kotrimoksazol 400/80 mg Tab
+134;D;Darrows Half Strength 500ml
+135;D;Dexamethasone 4mg/ml 2ml Amp
+136;D;Dexamethasone 4mg/ml 1ml Amp
+137;D;Dekstrozë 5% IV 500 ml
+138;D;Dekstrozë 30% IV 100 ml
+139;D;Dekstrozë 50% IV 100 ml
+140;D;Dexamethasone 0.5 mg Tab
+141;D;Diazepam 5 mg Tab
+142;D;Diklofenak 50 mg Tab
+143;D;Dietilkarbamazinë 50 mg Tab
+144;D;Digoksin 0.25 mg Tab
+145;D;Doksiciklinë 100 mg Tab
+146;D;Ephedrine 30 mg Tab
+147;D;Eritromicinë 250 mg Tab
+148;D;Tab Fansidar 500/25 mg (50 dozax3)
+149;D;Fansidar 500/25 mg Tab
+150;D;Sulfat hekuri 200 mg Tab
+151;D;Flukonazol 100 mg Tab
+152;D;Flukonazol 100 mg 24 kapele
+153;D;Acidi folik 1 mg Tab
+154;D;Acidi folik 5 mg Tab
+155;D;Acidi folik/sulp hekuri 0,5/200 mg Tab
+156;D;Acidi folik 15 mg Tab
+157;D;Frusemide 40 mg Tab
+158;D;Glibenclamide 5 mg Tab
+159;D;Griseofulvin 500 mg Tab
+160;D;Haloperidol 5 mg Tab
+161;D;Haloperidol 5 mg
+162;D;Hydralazine 25 mg Tab
+163;D;Hyoscine 10 mg Tab
+164;D;Ibuprofen 200 mg Tab
+165;D;Imipramine 25 mg Tab
+166;D;Indometacina 25 mg Tab
+167;D;Isoniazid 300 mg Tab
+168;D;Ketokonazol 200 mg Tab
+169;D;Salbutamol 4 mg Tab
+170;D;Spironolactone 25 mg Tab
+171;D;Tabela Tolbutamide 500 mg
+172;D;Vitamina A 200.000 IU Kapele
+173;D;Tab. Kompleksi i vitaminës B
+174;D;Kripë e rihidrimit oral (ORS)
+175;D;Shurup paracetamol 120 mg/5 ml
+176;D;Paracetamol 120mg/5ml 100ml
+177;D;Shurup kinine 100mg/5ml 100ml
+178;D;Alkool 95% i pa denatyruar 20Ltr
+179;D;Klorheksidin/Cetrimid 1.5/15% 1Ltr
+180;D;Klorheksidin/Cetrimid 1.5/15% 5Ltr
+181;D;Gentian Violet 25g Kallaj
+182;D;Peroksid hidrogjeni 6% 250ml
+183;D;Tretësirë jodi 2% 500ml
+184;D;Tretësirë e hipoklorit të natriumit 0,75 Ltr
+185;D;detergjent i lëngshëm 5Ltr I parfumuar
+186;D;Sapun blu 550g
+187;D;Detergjent i lëngshëm 20Ltr
+188;D;Pluhur sapuni Larës me dorë 5 kg
+189;D;Tretësirë e hipoklorit natriumi 5Ltr
+190;D;Betamethasone 0.1% pika për sy/vesh/hundë
+191;D;Betamethasone 0.1% Neomycin 0.35% pika për sy 7.5ml
+192;D;Kloramfenikol 0.5% pika sysh 10 ml
+193;D;Kloramfenikol 1% Pomada e Syve 3.5g
+194;D;Gentamicin 0.3% pika për sy/vesh 10ml
+195;D;Hidrokortizon 1% pika syri 5ml
+196;D;Pomadë për sytë tetraciklin 1% 3.5g
+197;D;Inhalator Beclomethasone 50 mcg
+198;K;Shiritat e testit të urinës 3 Parametrat 100 teste
+199;D;Zgjidhje salbutamoli për inhalim 5ml
+200;D;Inhalator Salbutamol 10 ml
+201;D;Klotrimazol 500 mg Pessaries
+202;D;Klotrimazol 100 mg Pessaries
+203;D;Diazepam 2mg/ml 2.5ml Tube Rektale
+204;D;Supozitorët antihemorroide
+205;D;Nystatin 100.000 IU Pessaries
+206;D;Apirogen dekstrozë monohidrat 25 kg
+207;D;Amoxicillin 125 mg/5 ml pluhur. Thurni 100 ml
+208;D;Kloramfenikol 125mg/5ml Susp 3Ltr
+209;D;Kloramfenikol 125mg/5ml Susp 100ml
+210;D;Cotrimoksazol 200+40mg/5ml Susp 3Ltr
+211;D;Cotrimoxazole 200+40mg/5ml Susp 100ml
+212;D;Nystatin 500.000 IU/ Susp/ Pika
+213;D;Piridoksinë 50 mg Tab
+214;D;Kininë 300 mg Tab
+215;D;Ranitidine 150 mg Tab
+216;D;Rifampicin/Isoniazid 150/100 Tab
+217;D;Klorur natriumi Apirogen 50 kg
+218;K;Njolla në terren A dhe B
+219;K;Genitian Violet
+220;K;E kuqe neutrale
+221;K;Eozina e verdhë
+222;K;Njolla Giemsa
+223;K;Anti Serum A 10ml
+224;S;Set gjakderdhjeje e disponueshme
+225;S;Qese për Transferimin e Gjakut 300ml
+226;S;Shiringë insuline 100IU me gjilpërë G26/29
+227;S;Kanula IV G16 me Port
+228;S;Kanula IV G18 me Port
+229;S;Kanula IV G20 me Port
+230;S;Kanula IV G22 me Port
+231;S;Kanula IV G24 pa port
+232;S;Kanula IV G24 me Port
+233;S;IV Set dhurate E disponueshme
+234;S;Enë gjilpërë e disponueshme e kontaminuar
+235;S;Gjilpëra Luer G20 të disponueshme
+236;S;Gjilpëra Luer G21 e disponueshme
+237;S;Gjilpërat Luer G22 të disponueshme
+238;S;Gjilpëra Luer G23 e disponueshme
+239;S;Gjilpëra Spinal G20x75-120mm
+240;S;Gjilpëra Spinal G22x75-120mm
+241;S;Gjilpëra Spinal G25x75-120mm
+242;S;Gjilpëra Spinal G22x40mm
+243;S;Scalp Vein G19 Set infuzion
+244;S;Scalp Vein G21 Set infuzioni
+245;S;Scalp Vein G23 Set infuzion
+246;S;Scalp Vein G25 Set infuzion
+247;S;Ushqyerja/Ujitja me shiringë 50/60ml
+248;S;Shiringë Luer 2ml Me Gjilpër e disponueshme
+249;S;Shiringë Luer 10ml Me Gjilpër e disponueshme
+250;S;Shiringë Luer 20ml Me Gjilpër e disponueshme
+251;S;Shiringë Luer 5ml Me Gjilpër e disponueshme
+252;S;Airway Guedel Size 00
+253;S;Rruga ajrore Guedel Madhësia 0
+254;S;Rruga ajrore Guedel Madhësia 1
+255;S;Rruga ajrore Guedel Madhësia 2
+256;S;Rruga ajrore Guedel Madhësia 3
+257;S;Blloqe sysh sterile
+258;S;Shirit ngjitës 2.5cm x 5m
+259;S;Shirit ngjitës 7.5cm x 5m
+260;S;Lesh pambuku 500G
+261;S;Lesh pambuku 200 g
+262;S;Fashë elastike 10cm x 4.5m
+263;S;Fashë elastike 7.5cm x 4.5m
+264;S;Fashë garzë 7.5cm x 3.65-4m
+265;S;Fashë garzë 10cm x 4m
+266;S;Pads garzë Jo sterile 10cm x 10cm
+267;S;Pads Garze Sterile 10cm x 10cm
+268;S;Garzë Hidrofilike 90cm x 91cm
+269;S;Suva e Parisit 10cm
+270;S;Suva e Parisit 15cm
+271;S;Kateteri Foley CH20 Balon 3 drejtimesh
+272;S;Kateteri Foley CH8 Balon 3 drejtimesh
+273;S;Kateteri Foley CH10 Balon 3 drejtimesh
+274;S;Kateteri Foley CH12 Balon 3 drejtimesh
+275;S;Kateteri Foley CH14 Balon me 3 drejtime
+276;S;Kateteri Foley CH16 Balon 3 drejtimesh
+277;S;Kateteri Foley CH18 Balon 3 drejtimesh
+278;S;Ndalues kateteri për të gjitha madhësitë
+279;S;Tub Nazogastrik G5 (Fëmijët)
+280;S;Tub Nazogastrik G8 (Fëmijët)
+281;S;Tubi Nazogastrik G6 (Fëmijët)
+282;S;Tub nazogastrik G10 (Fëmijët)
+283;S;Tub nazogastrik G14 (Fëmijët)
+284;S;Tub nazogastrik G16 (Fëmijët)
+285;S;Tubi rektal CH24
+286;S;Tubi rektal CH26
+287;S;Kateteri thithës i madhësisë 6 i disponueshëm
+288;S;Kateteri thithës Madhësia 8 E disponueshme
+289;S;Kateteri thithës Madhësia 16 E disponueshme
+290;S;Kateteri thithës Madhësia 12 E disponueshme
+291;S;Kateteri thithës Madhësia 14 E disponueshme
+292;S;Kateteri thithës Madhësia 10 E disponueshme
+293;S;Doreza shtëpiake
+294;S;Doreza Jo sterile me rrezik të lartë
+295;S;Doreza Gjinekologjike 7.5-8
+296;S;Doreza jo sterile të mesme të disponueshme
+297;S;Doreza jo sterile të mëdha të disponueshme
+298;S;Doreza sterile kirurgjikale 6
+299;S;Doreza sterile kirurgjikale 6.5
+300;S;Doreza sterile kirurgjikale 7
+301;S;Doreza sterile kirurgjikale 7.5
+302;S;Doreza sterile kirurgjikale 8
+303;S;Doreza sterile kirurgjikale 8.5
+304;S;Depresor gjuhe I disponueshem
+305;S;Tapa Plastike e Autoklavueshme
+306;S;Krevati çelik inox
+307;S;Çanta trupi 70 x 215 cm (të rritur)
+308;S;Tas pa kapak 7 x 12 cm inox
+309;S;Tas pa kapak 8 x 16 cm inox
+310;S;Tas pa kapak çelik inox 10 x 24 cm
+311;S;Set unaze ajri 43x15cm, gome me pompe
+312;S;Çanta kolostomie e mbyllur 30 mm, madhësia 2
+313;S;Çanta kolostomike e mbyllur 30 mm, madhësia 3
+314;S;Çanta Colostomy e hapur e ripërdorshme 35mm
+315;S;Shiringë veshi gome 60ml
+316;S;Kompleti i ndihmës së parë
+317;S;Galipot inox 300ml/15cm
+318;S;Galipot inox 200ml/10cm
+319;S;Shishe me ujë të ngrohtë 2 litra
+320;S;Kuti Instrumenti Me Kapak 20x10x5cm
+321;S;Tabaka e instrumentit 30 x 20 x 2cm
+322;S;Kanaçe për ujitje me aksesorë
+323;S;Enë për veshka inox 24cm
+324;S;Enë për veshka inox 20cm
+325;S;Enë për veshka Polipropileni 24cm
+326;S;Mackintosh Plastikë (Përparëse) për 1 m
+327;S;Mackintosh Kafe gome (çarçaf) për 1 m
+328;S;Kupa matëse e diplomuar 25ml
+329;S;Mbështetje e qafës e vogël
+330;S;Mbështetje e mesme e qafës
+331;S;Mbështetja e qafës e madhe
+332;S;Ilaç i lugës 5ml
+333;S;Përparëse Plastike e Ripërdorshme
+334;S;Përparëse Plastike e ripërdorshme lokale
+335;S;Përparëse polietileni jo sterile
+336;S;Brisqe njëpërdorimshe 5pc
+337;S;Stetoskop Fetal Metal
+338;S;Dru fetal stetoskop
+339;S;Furça kirurgjikale (pastrim)
+340;S;Pastë kirurgjikale 12 x 15
+341;S;Tabaka e numërimit të tabletave
+342;S;Rrotulla letre tualeti
+343;S;Kompleti i tërheqjes për fëmijë
+344;S;Kompleti i tërheqjes për të rritur
+345;S;Termometri klinik i tipit të sheshtë
+346;S;Lloji prizmatik klinik i termometrit
+347;S;Lidhja e kordonit kërthizor jo sterile 100m
+348;S;Lidhja e kordonit kërthizor sterile 22m
+349;S;Urina 1Ltr / 2Ltr
+350;S;Qese për grumbullimin e urinës sterile 2Ltr
+351;S;Spray me insekte 400g
+352;S;Medium i ngopur me rrjetë mushkonjash
+353;S;Rrjet mushkonjash të ngopura të mëdha
+354;S;Rrjeta e mushkonjave të mesme jo të ngopura
+355;S;Rrjeta e mushkonjave të mëdha jo të ngopura
+356;S;Tabletë impregnimi me rrjetë mushkonjash
+357;S;Lëng impregnimi i rrjetës së mushkonjave 500ml
+358;S;Pluhur sprej muri mushkonjash 80g
+359;S;Dorezë për tehun kirurgjik nr 3
+360;S;Dorezë për tehun kirurgjikale nr 4
+361;S;Tehe kirurgjikale nr 20
+362;S;Tehe kirurgjikale nr 21
+363;S;Tehe kirurgjikale nr 22
+364;S;Tehe kirurgjikale nr 23
+365;S;Qepja me gjilpërë nr 5 e rrumbullakët
+366;S;Prerje suture me gjilpërë nr. 5
+367;S;Qepja me gjilpërë nr 6 e rrumbullakët
+368;S;Suture Cutgut Chromic (0)
+369;S;Suture Cutgut Chromic (2) RN22240TH
+370;S;Suture Cutgut Chromic (2/0) RN22230TH
+371;S;Suture Cutgut Chromic (3/0) RN2325TF
+372;S;Suture Cutgut Plain (2/0) RN1230TF
+373;S;Suture Silk (1) S595
+374;S;Suture Silk (2/0) RN5230TF
+375;S;Qepje PGA (3/0) RN3330TF
+376;S;Përparëse plumbi 100cmx60cm
+377;S;Zhvilluesi i rrezeve X 2,6 kg për 22,5 litra
+378;S;Film me rreze X 18x24cm
+379;S;Film me rreze X 20x40cm
+380;S;Film me rreze X 24x30cm
+381;S;Film me rreze X 30x40cm
+382;S;Film me rreze X 35x35cm
+383;S;Film me rreze X 43x35cm
+384;S;Kasetë filmi me rreze X 18x24cm me ekran
+385;S;Kasetë filmi me rreze X 24x30cm me ekran
+386;S;Kasetë filmi me rreze X 30x40cm me ekran
+387;S;Kasetë filmi me rreze X 35x35cm me ekran
+388;S;Kasetë filmi me rreze X 35x43cm me ekran
+389;S;Fikser me rreze X 3,3 kg për 22,5 litra
+390;S;Sulfat bariumi për rreze X 1 kg
+391;S;Diatrizoate Meglumin Sod 76% 20ml Amp
+392;K;Anti Serum B 10ml
+393;K;Anti Serum AB 10ml
+394;K;Anti Serum D 10ml
+395;K;Kreatininë 200 ml (kalorimetrike)
+396;K;Glucose GOD PAD 6 x 100ml (kolorimetrike)
+397;K;Shiritat e testit të glukozës (Hyloguard)
