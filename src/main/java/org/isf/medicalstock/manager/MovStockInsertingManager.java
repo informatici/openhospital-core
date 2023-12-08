@@ -138,8 +138,8 @@ public class MovStockInsertingManager {
 			}
 
 			List<Integer> medicalIds = ioOperations.getMedicalsFromLot(lot.getCode());
-			if (movement.getMedical() != null && !(medicalIds.isEmpty() || (medicalIds.size() == 1 && medicalIds.get(0).intValue() == movement
-					.getMedical().getCode().intValue()))) {
+			if (movement.getMedical() != null && !(medicalIds.isEmpty() || medicalIds.size() == 1 && medicalIds.get(0).intValue() == movement
+					.getMedical().getCode().intValue())) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thislotreferstoanothermedical.msg")));
 			}
 			if (GeneralData.LOTWITHCOST && chargingType) {
@@ -159,7 +159,7 @@ public class MovStockInsertingManager {
 	 * Verify if the referenceNumber is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param referenceNumber - the lot to validate
-	 * @return list of {@link OHExceptionMessage}
+	 * @return list of {@link OHExceptionMessage}s
 	 * @throws OHServiceException
 	 */
 	protected List<OHExceptionMessage> checkReferenceNumber(String referenceNumber) throws OHServiceException {
@@ -182,7 +182,7 @@ public class MovStockInsertingManager {
 	 * Retrieves all the {@link Lot} associated to the specified {@link Medical}, expiring first on top
 	 *
 	 * @param medical the medical.
-	 * @return the retrieved lots.
+	 * @return the list of retrieved {@link Lot}s.
 	 * @throws OHServiceException
 	 */
 	public List<Lot> getLotByMedical(Medical medical) throws OHServiceException {
@@ -197,7 +197,7 @@ public class MovStockInsertingManager {
 	 *
 	 * @param medicalSelected the selected medical.
 	 * @param specifiedQuantity the quantity provided by the user.
-	 * @return <code>true</code> if is under the limit, false otherwise.
+	 * @return {@code true} if is under the limit, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean alertCriticalQuantity(Medical medicalSelected, int specifiedQuantity) throws OHServiceException {
@@ -208,7 +208,7 @@ public class MovStockInsertingManager {
 	}
 
 	/**
-	 * Returns the date of the last movement
+	 * Returns the date of the last movement.
 	 *
 	 * @return
 	 * @throws OHServiceException
@@ -218,10 +218,9 @@ public class MovStockInsertingManager {
 	}
 
 	/**
-	 * Check if the reference number is already used
+	 * Check if the reference number is already used.
 	 *
-	 * @return <code>true</code> if is already used, <code>false</code>
-	 * otherwise.
+	 * @return {@code true} if is already used,{@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean refNoExists(String refNo) throws OHServiceException {
@@ -234,14 +233,13 @@ public class MovStockInsertingManager {
 	 * @param movements - the list of {@link Movement}s
 	 * @param referenceNumber - the reference number to be set for all movements
 	 * if {@link null}, each movements must have a different referenceNumber
-	 * @return
+	 * @return a list of inserted {@link Movement}s.
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
 	@TranslateOHServiceException
-	public boolean newMultipleChargingMovements(List<Movement> movements, String referenceNumber) throws OHServiceException {
+	public List<Movement> newMultipleChargingMovements(List<Movement> movements, String referenceNumber) throws OHServiceException {
 
-		boolean ok = true;
 		boolean checkReference = referenceNumber == null; // referenceNumber == null, each movement should have referenceNumber set
 		if (!checkReference) {
 			// referenceNumber != null, all movement will have same referenceNumber, we check only once for all
@@ -250,9 +248,10 @@ public class MovStockInsertingManager {
 				throw new OHDataValidationException(errors);
 			}
 		}
+		List<Movement> insertedMovements = new ArrayList<>();
 		for (Movement mov : movements) {
 			try {
-				prepareChargingMovement(mov, checkReference);
+				insertedMovements.add(prepareChargingMovement(mov, checkReference));
 			} catch (OHServiceException e) {
 				List<OHExceptionMessage> errors = e.getMessages();
 				errors.add(new OHExceptionMessage(
@@ -260,26 +259,33 @@ public class MovStockInsertingManager {
 				throw new OHDataValidationException(errors);
 			}
 		}
-		return ok;
+		return insertedMovements;
 	}
 
 	/**
-	 * Prepare the insert of the specified charging {@link Movement}
+	 * Prepare the insert of the specified charging {@link Movement}.
 	 *
 	 * @param movement - the movement to store.
 	 * @param checkReference - if {@code true} every movement must have unique reference number
-	 * @return <code>true</code> if the movement has been stored,
-	 * <code>false</code> otherwise.
+	 * @return the prepared {@link Movement}.
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	protected boolean prepareChargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
+	protected Movement prepareChargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
 		validateMovement(movement, checkReference);
 		return ioOperations.prepareChargingMovement(movement);
 	}
 
-	public boolean storeLot(String lotCode, Lot lot, Medical med) throws OHServiceException {
-		return ioOperations.storeLot(lotCode, lot, med);
+	/**
+	 * Stores the specified {@link Lot}.
+	 * @param lotCode the {@link Lot} code.
+	 * @param lot the lot to store.
+	 * @param medical
+	 * @return the stored {@link Lot} object.
+	 * @throws OHServiceException if an error occurred storing the lot.
+	 */
+	public Lot storeLot(String lotCode, Lot lot, Medical medical) throws OHServiceException {
+		return ioOperations.storeLot(lotCode, lot, medical);
 	}
 
 	/**
@@ -288,13 +294,12 @@ public class MovStockInsertingManager {
 	 * @param movements - the list of {@link Movement}s
 	 * @param referenceNumber - the reference number to be set for all movements
 	 * if {@link null}, each movements must have a different referenceNumber
-	 * @return
+	 * @return a list of {@Link Movement}s.
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public boolean newMultipleDischargingMovements(List<Movement> movements, String referenceNumber) throws OHServiceException {
+	public List<Movement> newMultipleDischargingMovements(List<Movement> movements, String referenceNumber) throws OHServiceException {
 
-		boolean ok = true;
 		boolean checkReference = referenceNumber == null; // referenceNumber == null, each movement should have referenceNumber set
 		if (!checkReference) {
 			// referenceNumber != null, all movement will have same referenceNumber, we check only once for all
@@ -303,16 +308,17 @@ public class MovStockInsertingManager {
 				throw new OHDataValidationException(errors);
 			}
 		}
+		List<Movement> dischargingMovements = new ArrayList<>();
 		for (Movement mov : movements) {
 			try {
-				prepareDishargingMovement(mov, checkReference);
+				dischargingMovements.addAll(prepareDishargingMovement(mov, checkReference));
 			} catch (OHServiceException e) {
 				List<OHExceptionMessage> errors = e.getMessages();
 				errors.add(new OHExceptionMessage(mov.getMedical().getDescription()));
 				throw new OHDataValidationException(errors);
 			}
 		}
-		return ok;
+		return dischargingMovements;
 	}
 
 	/**
@@ -320,15 +326,16 @@ public class MovStockInsertingManager {
 	 *
 	 * @param movement - the movement to store.
 	 * @param checkReference - if {@code true} every movement must have unique reference number
-	 * @return <code>true</code> if the movement has been stored,
-	 * <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	private boolean prepareDishargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
+	private List<Movement> prepareDishargingMovement(Movement movement, boolean checkReference) throws OHServiceException {
 		validateMovement(movement, checkReference);
 		if (isAutomaticLotOut()) {
 			return ioOperations.newAutomaticDischargingMovement(movement);
+		} else {
+			List<Movement> dischargeMovement = new ArrayList<>();
+			dischargeMovement.add(ioOperations.prepareDischargingMovement(movement));
+			return dischargeMovement;
 		}
-		return ioOperations.prepareDischargingMovement(movement);
 	}
 }
