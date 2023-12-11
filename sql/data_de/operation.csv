@@ -1,0 +1,48 @@
+1;OB;Kaiserschnitt;1;0
+2;OB;Hysterektomie;1;0
+3;OB;Zerrissene Gebärmutter;1;0
+4;OB;Beschädigte Gebärmutter;1;0
+5;OB;Evakuierungen;1;0
+6;OB;Unvollständige Abtreibung;1;0
+7;OB;Septische Abtreibung;1;0
+8;OB;Dilatation und Kürettage;1;0
+9;OB;Reparatur der vesikovaginalen Fistel (VVF).;1;0
+10;GY;Akuter Abdomen;1;0
+11;GY;Eileiterschwangerschaft;1;0
+12;GY;Peritonitis;1;0
+13;GY;Beckenabszess;1;0
+14;GY;Myom der Gebärmutter;1;0
+15;GY;Eierstocktumoren;1;0
+16;GY;Uterusprolaps;1;0
+17;GY;Zystozele;1;0
+18;MG;Beschneidung;1;0
+19;MG;Phimose;1;0
+20;MG;Paraphimose;1;0
+21;MG;Rückenfissur-Perfomose;1;0
+22;MG;Harnröhrenstriktur-Bougiene;1;0
+23;MG;Hydrozelektomie;1;0
+24;MG;Tumoren der Hoden;1;0
+25;MG;Prostatektomie;1;0
+26;MG;Prostatabiopsie;1;0
+27;MG;Blasenbiopsie;1;0
+28;AG;Hernie (Leisten- und Oberschenkelhernie);1;0
+29;AG;Ertrank;1;0
+30;AG;Nicht ertrunken;1;0
+31;AG;Epigastrische Hernie;1;0
+32;AG;Darmverschluss;1;0
+33;AG;Maschinenbau;1;0
+34;AG;Volvulus;1;0
+35;AG;Laparotomie;1;0
+36;AG;Penetrierende Bauchverletzungen;1;0
+37;AG;Peritonitis;1;0
+38;AG;Appendizitis;1;0
+39;AG;Cholezystitis;1;0
+40;AG;Bauchtumoren;1;0
+41;OR;Reduzierung von Frakturen;1;0
+42;OR;Obere Gliedmaßen;1;0
+43;OR;Untere Gliedmaßen;1;0
+44;OR;Osteomyelitis – Sequestrektomie;1;0
+45;OS;Schneiden und Entwässern;1;0
+46;OS;Debridement;1;0
+47;OS;Mise-a-plat;1;0
+48;OS;Toiletten- und chirurgische Naht;1;0

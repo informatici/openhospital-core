@@ -1,18 +1,18 @@
-#version 7-4-2006
-#version 27-8-2006
-#version 29-8-2006  EXAM,LABORATORY
-#version 17-9-2006  ADMISSION, MENU , MENUITEM
-#version 17-11-2006 OPD (new) SURGERY (deleted), DISEASE, EXAM, LABORATORY modified
-#	DISEASE	(added DIS_OPD_INCLUDE, DIS_IPD_INCLUDE)
-#	EXAM	(EXA_DESC from 50 to 100)
-#	LABORATORY (added LAB_AGE, LAB_SEX, LAB_MATERIAL, LAB_EXAM_DATE, LAB_PAT_INOUT)
-#version 17-6-2008
-#	OPD (added OPD_REFERRAL_FROM, OPD_REFERRAL_TO, OPD_PAT_ID, OPD_PAT_FNAME, OPD_PAT_SNAME, OPD_PAT_NEXT_KIN, OPD_PAT_ADDR, OPD_PAT_CITY)
-#version 10-12-2012
-#	IMPORTANT MYSQL SETTINGS:
-#   If you are using InnoDB tables, you should set this variable to 1 on all platforms 
-#   to force names to be converted to lowercase.
-#   lower_case_table_names = 1   
+-- version 7-4-2006
+-- version 27-8-2006
+-- version 29-8-2006  EXAM,LABORATORY
+-- version 17-9-2006  ADMISSION, MENU , MENUITEM
+-- version 17-11-2006 OPD (new) SURGERY (deleted), DISEASE, EXAM, LABORATORY modified
+-- 	DISEASE	(added DIS_OPD_INCLUDE, DIS_IPD_INCLUDE)
+-- 	EXAM	(EXA_DESC from 50 to 100)
+-- 	LABORATORY (added LAB_AGE, LAB_SEX, LAB_MATERIAL, LAB_EXAM_DATE, LAB_PAT_INOUT)
+-- version 17-6-2008
+-- 	OPD (added OPD_REFERRAL_FROM, OPD_REFERRAL_TO, OPD_PAT_ID, OPD_PAT_FNAME, OPD_PAT_SNAME, OPD_PAT_NEXT_KIN, OPD_PAT_ADDR, OPD_PAT_CITY)
+-- version 10-12-2012
+-- 	IMPORTANT MYSQL SETTINGS:
+--   If you are using InnoDB tables, you should set this variable to 1 on all platforms 
+--   to force names to be converted to lowercase.
+--   lower_case_table_names = 1   
 
 --
 -- TABLES creation

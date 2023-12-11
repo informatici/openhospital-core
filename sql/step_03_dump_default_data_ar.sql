@@ -1,4 +1,3 @@
--- version 10-06-2014
 delete from HOSPITAL;
 delete from MEDICALDSR;
 delete from MEDICALDSRTYPE;

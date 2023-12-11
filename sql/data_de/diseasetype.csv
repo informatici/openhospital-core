@@ -1,0 +1,21 @@
+AB;A00-B99 Infektiös und parasitär
+CD;C00-D48 Neoplasma
+D;D50-D89 Blut, blutbildende Organe und Immunmechanismus
+E;E00-E90 Endokrine, Ernährungs- und Stoffwechselerkrankungen
+F;F00-F99 Psychische und Verhaltensstörungen
+G;G00-G99 Nervensystem
+H1;H00-H59 Auge und Adnexe
+H2;H60-H95 Ohrmuschel und Warzenfortsatz
+I;I00-I99 Kreislaufsystem
+J;J00-J99 Atmungssystem
+K;K00-K93 Verdauungssystem
+L;L00-L99 Haut und Unterhautgewebe
+M;M00-M99 Bewegungsapparat und Bindegewebe
+N;N00-N99 Urogenitalsystem
+O;O00-O99 Schwangerschaft, Geburt und Wochenbett
+P;P00-P96 Erkrankungen mit Ursprung in der Perinatalperiode
+Q;Q00-Q99 Angeborene Fehlbildungen, Deformitäten und Chromosomenanomalien
+R;R00-R99 Abnormale klinische und Laborsymptome, Anzeichen und Befunde, nicht anderweitig klassifiziert
+ST;S00-T98 Verletzung, Vergiftung und einige andere Folgen äußerer Ursachen
+VY;V01-Y98 Äußere Ursachen für Morbidität und Mortalität
+Z;Z00-Z99 Faktoren, die den Gesundheitszustand und den Kontakt mit Gesundheitsdiensten beeinflussen
