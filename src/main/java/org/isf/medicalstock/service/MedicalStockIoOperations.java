@@ -246,6 +246,7 @@ public class MedicalStockIoOperations {
 	 * @return the stored {@link Lot} object.
 	 * @throws OHServiceException if an error occurred storing the lot.
 	 */
+	// TODO: verify why lotCode and medical params are needed
 	public Lot storeLot(String lotCode, Lot lot, Medical medical) throws OHServiceException {
 		lot.setCode(lotCode);
 		lot.setMedical(medical);
