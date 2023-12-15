@@ -50,6 +50,7 @@ import org.isf.hospital.manager.HospitalBrowsingManager;
 import org.isf.hospital.model.Hospital;
 import org.isf.medicals.model.Medical;
 import org.isf.patient.model.Patient;
+import org.isf.patient.service.PatientIoOperations;
 import org.isf.stat.dto.JasperReportResultDto;
 import org.isf.utils.db.DbQueryLogger;
 import org.isf.utils.db.UTF8Control;
@@ -89,15 +90,13 @@ public class JasperReportsManager {
 	private static final String STAT_REPORTERROR_MSG = "angal.stat.reporterror.msg";
 
 	private static final String RPT_BASE = "rpt_base";
-	
-	
+
 	@Autowired
 	private HospitalBrowsingManager hospitalManager;
 
 	@Autowired
 	private DataSource dataSource;
 
-	
 	public JasperReportResultDto getExamsListPdf() throws OHServiceException {
 
 		try {
@@ -156,14 +155,17 @@ public class JasperReportsManager {
 		}
 	}
 
-	public JasperReportResultDto getGenericReportAdmissionPdf(int admID, int patID, String jasperFileName) throws OHServiceException {
+	public JasperReportResultDto getGenericReportAdmissionPdf(int admID, int patientID, String jasperFileName) throws OHServiceException {
 
 		try {
 			HashMap<String, Object> parameters = getHospitalParameters();
 			addBundleParameter(RPT_BASE, jasperFileName, parameters);
 
+			String patID = String.valueOf(patientID);
+			
+			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
 			parameters.put("admID", String.valueOf(admID)); // real param
-			parameters.put("patientID", String.valueOf(patID)); // real param
+			parameters.put("patientID", patID); // real param
 
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(patID)), "pdf");
 
@@ -278,12 +280,15 @@ public class JasperReportsManager {
 		}
 	}
 
-	public JasperReportResultDto getGenericReportOpdPdf(int opdID, int patID, String jasperFileName) throws OHServiceException {
+	public JasperReportResultDto getGenericReportOpdPdf(int opdID, int patientID, String jasperFileName) throws OHServiceException {
 
 		try {
 			HashMap<String, Object> parameters = getHospitalParameters();
 			addBundleParameter(RPT_BASE, jasperFileName, parameters);
 
+			String patID = String.valueOf(patientID);
+			
+			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
 			parameters.put("opdID", String.valueOf(opdID)); // real param
 			parameters.put("patientID", String.valueOf(patID)); // real param
 
@@ -304,6 +309,9 @@ public class JasperReportsManager {
 			HashMap<String, Object> parameters = new HashMap<>();
 			addBundleParameter(RPT_BASE, jasperFileName, parameters);
 
+			String patID = String.valueOf(patientID);
+			
+			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
 			parameters.put("examId", examId);
 
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(patientID)), "pdf");
@@ -364,6 +372,7 @@ public class JasperReportsManager {
 					String jasperFileName) throws OHServiceException {
 
 		try {
+
 			HashMap<String, Object> parameters = getHospitalParameters();
 			addBundleParameter(RPT_BASE, jasperFileName, parameters);
 
@@ -372,8 +381,10 @@ public class JasperReportsManager {
 			dateTo = dateTo.plusDays(1);
 			String dateFromQuery = dateFrom.format(dtf);
 			String dateToQuery = dateTo.format(dtf);
-
-			parameters.put("patientID", String.valueOf(patientID));
+			String patID = String.valueOf(patientID);
+			
+			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
+			parameters.put("patientID", patID);
 			parameters.put("All", parametersString.contains("All"));
 			parameters.put("Drugs", parametersString.contains("Drugs"));
 			parameters.put("Examination", parametersString.contains("Examination"));
@@ -650,14 +661,17 @@ public class JasperReportsManager {
 		}
 	}
 
-	public JasperReportResultDto getGenericReportDischargePdf(int admID, int patID, String jasperFileName) throws OHServiceException {
+	public JasperReportResultDto getGenericReportDischargePdf(int admID, int patientID, String jasperFileName) throws OHServiceException {
 
 		try {
 			HashMap<String, Object> parameters = getHospitalParameters();
 			addBundleParameter(RPT_BASE, jasperFileName, parameters);
 
+			String patID = String.valueOf(patientID);
+			
+			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
 			parameters.put("admID", String.valueOf(admID)); // real param
-			parameters.put("patientID", String.valueOf(patID)); // real param
+			parameters.put("patientID", patID); // real param
 
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(admID)), "pdf");
 
@@ -863,7 +877,7 @@ public class JasperReportsManager {
 		parameters.put("Currency", hosp.getCurrencyCod());
 		return parameters;
 	}
-	
+
 	private void addBundleParameter(String jasperFileFolder, String jasperFileName, HashMap<String, Object> parameters) {
 
 		/*
@@ -928,6 +942,15 @@ public class JasperReportsManager {
 				}
 			}
 		}
+	}
+
+	private String getPatientPhotoFile(String patID) {
+		String patientPhotoFile = null;
+		if (!PatientIoOperations.LOAD_FROM_DB.equals(GeneralData.PATIENTPHOTOSTORAGE)) {
+			patientPhotoFile = GeneralData.PATIENTPHOTOSTORAGE + File.separatorChar + patID + ".png";
+			LOGGER.debug("PATIENT_PHOTO = {}", patientPhotoFile);
+		}
+		return patientPhotoFile;
 	}
 
 	private void addReportBundleParameter(String jasperParameter, String jasperFileName, Map<String, Object> parameters) {
