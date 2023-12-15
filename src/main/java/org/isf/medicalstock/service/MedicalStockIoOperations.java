@@ -354,7 +354,8 @@ public class MedicalStockIoOperations {
 	 */
 	public List<Movement> getMovements(String wardId, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		List<Movement> pMovement = new ArrayList<>();
-
+         	// TODO: investigate whether findMovementWhereDatesAndId() could return a List<Movement> directly 
+		// to remove the need to fetch the movements later in the loop below
 		List<Integer> pMovementCode = movRepository.findMovementWhereDatesAndId(wardId, TimeTools.truncateToSeconds(dateFrom),
 		                                                                        TimeTools.truncateToSeconds(dateTo));
 		for (int i = 0; i < pMovementCode.size(); i++) {
