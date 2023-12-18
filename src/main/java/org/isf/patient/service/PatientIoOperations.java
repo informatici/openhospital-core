@@ -320,7 +320,7 @@ public class PatientIoOperations {
 	}
   
 	/**
-	 * Count all active patients
+	 * Count all active {@link Patient}s
 	 * 
 	 * @return
 	 * @throws OHServiceException
