@@ -48,14 +48,19 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 	private TelemetryUtils telemetryUtils;
 	private Telemetry settings;
 
-	private boolean running = true;
+	private boolean running;
 	private int customDelay = DEFAULT_DELAY;
 	private int updateSettingsCounter;
-	private boolean reloadSettings = true;
+	private boolean reloadSettings;
 
+	/**
+	 * Starts the Telemetry Daemon
+	 */
 	public void start() {
 		telemetryThread = new Thread(this);
 		telemetryThread.start();
+		setRunning(true);
+		setReloadSettings(true);
 	}
 
 	private TelemetryDaemon() {
@@ -84,7 +89,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 		while (running) {
 			if (reloadSettings) {
 				this.settings = telemetryManager.retrieveSettings();
-				this.reloadSettings = false;
+				setReloadSettings(false);
 			}
 			LOGGER.info("Telemetry module running ({})...", updateSettingsCounter);
 			boolean isSendingMessageServiceActive = settings != null && settings.getActive() != null ? settings.getActive().booleanValue() : false;
@@ -125,11 +130,19 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 	}
 
 	/**
+	 * @param running the running to set
+	 */
+	private void setReloadSettings(boolean reload) {
+		this.reloadSettings = reload;
+	}
+
+	/**
 	 * Stops the Telemetry Daemon
 	 */
 	public void stop() {
 		LOGGER.info("Stopping Telemetry Daemon...");
 		setRunning(false);
+		telemetryThread.interrupt();
 	}
 
 	/**
@@ -144,7 +157,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 	 * Reload settings at the next run, restart daemon if stopped.
 	 */
 	public void reloadSettings() {
-		this.reloadSettings = true;
+		setReloadSettings(true);
 		if (!this.running) {
 			restart();
 		}
