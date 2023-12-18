@@ -87,7 +87,7 @@ public class OpdIoOperations {
 
 	/**
 	 * Retrieves creation date of the last Opd
-	 * @return reation date of the last Opd
+	 * @return creation date of the last Opd
 	 */
 	public LocalDateTime lastOpdCreationDate() {
 		return this.repository.lastOpdCreationDate();
