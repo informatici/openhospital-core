@@ -102,7 +102,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 									GeneralData.DEBUG);
 				} catch (RuntimeException | OHException e) {
 					LOGGER.error("Something strange happened.");
-					LOGGER.error(e.getMessage(), e);
+					LOGGER.debug(e.getMessage(), e);
 					stop();
 				}
 			}
