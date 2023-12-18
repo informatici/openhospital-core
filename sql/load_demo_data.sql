@@ -3975,7 +3975,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `oh_opd`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;\
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `oh_opd` (
   `OPD_ID` int(11) NOT NULL AUTO_INCREMENT,
   `OPD_WRD_ID_A` char(3) NOT NULL,
