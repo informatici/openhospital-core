@@ -22,6 +22,7 @@
 package org.isf.telemetry.service.remote;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
@@ -44,7 +45,7 @@ public class CustomCommonDecoder implements Decoder {
 	}
 
 	@Override
-	public Object decode(Response response, java.lang.reflect.Type type) throws IOException, DecodeException, FeignException {
+	public Object decode(Response response, Type type) throws IOException, DecodeException, FeignException {
 		feign.Response responseFeing = (feign.Response) response;
 		HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter(new ObjectMapper());
 		ObjectFactory<HttpMessageConverters> objectFactory = () -> new HttpMessageConverters(jacksonConverter);
