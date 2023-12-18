@@ -130,7 +130,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 	}
 
 	/**
-	 * @param running the running to set
+	 * @param reload the reload to set
 	 */
 	private void setReloadSettings(boolean reload) {
 		this.reloadSettings = reload;
