@@ -34,15 +34,6 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Ward - model for the ward entity; represents a ward
- * -----------------------------------------
- * modification history
- * 21-jan-2006 - bob - first version
- * 30/09/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_WARD")
 @EntityListeners(AuditingEntityListener.class)
