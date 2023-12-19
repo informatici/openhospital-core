@@ -30,20 +30,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * ------------------------------------------
- * DicomIoOperations - IO operations for the DICOM entity
- * -----------------------------------------
- * modification history
- * ? -  Pietro Castellucci - first version
- * 29/08/2016 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException
-public class DicomIoOperations 
-{
+public class DicomIoOperations {
+
 	@Autowired
 	private DicomIoOperationRepository repository;
 	

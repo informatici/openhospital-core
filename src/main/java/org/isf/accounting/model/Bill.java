@@ -43,15 +43,6 @@ import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Bill - model for the bill entity
- * -----------------------------------------
- * modification history
- * ? - Mwithi - first version
- * 25/08/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_BILLS")
 @EntityListeners(AuditingEntityListener.class)
