@@ -24,6 +24,8 @@ package org.isf.dicom.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.within;
+import static org.isf.dicom.manager.DicomLoader.generateSeriesNumber;
+import static org.isf.dicom.manager.DicomLoader.loadDicom;
 
 import java.io.File;
 import java.text.ParseException;
@@ -77,6 +79,8 @@ public class Tests extends OHCoreTestCase {
 	DicomTypeIoOperationRepository dicomTypeIoOperationRepository;
 	@Autowired
 	private ApplicationContext applicationContext;
+
+	DicomLoader dicomLoader;
 
 	@BeforeClass
 	public static void setUpClass() throws ParseException {
@@ -183,7 +187,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testSourceFilesGenerateSeriesNumber() throws Exception {
-		String seriesNumber = SourceFiles.generateSeriesNumber(PATIENT_ID);
+		String seriesNumber = generateSeriesNumber(PATIENT_ID);
 		assertThat(seriesNumber).isNotEmpty();
 	}
 
@@ -192,7 +196,7 @@ public class Tests extends OHCoreTestCase {
 		File file = getFile("case3c_002.dcm");
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
-		SourceFiles.loadDicom(dicomFile, file, PATIENT_ID);
+		loadDicom(dicomFile, file, PATIENT_ID);
 		assertThat(dicomFile.getFileName()).isEqualTo("case3c_002.dcm");
 		assertThat(dicomFile.getDicomInstitutionName()).isEqualTo("Anonymized Hospital");
 		assertThat(dicomFile.getDicomStudyDescription()).isEqualTo("MRT Oberbauch");
@@ -205,7 +209,7 @@ public class Tests extends OHCoreTestCase {
 		File file = getFile("image.0007.jpg");
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
-		SourceFiles.loadDicom(dicomFile, file, PATIENT_ID);
+		loadDicom(dicomFile, file, PATIENT_ID);
 		String fileName = dicomFile.getFileName();
 		assertThat(fileName).isEqualTo("image.0007.jpg");
 
@@ -217,7 +221,7 @@ public class Tests extends OHCoreTestCase {
 		File file = getFile("BadJPGFile.jpg");
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
-		assertThatThrownBy(() -> SourceFiles.loadDicom(dicomFile, file, PATIENT_ID))
+		assertThatThrownBy(() -> loadDicom(dicomFile, file, PATIENT_ID))
 				.isInstanceOf(OHDicomException.class);
 	}
 

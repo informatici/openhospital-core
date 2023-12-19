@@ -21,7 +21,9 @@
  */
 package org.isf.supplier.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.isf.generaldata.ExaminationParameters;
 import org.isf.supplier.model.Supplier;
@@ -83,4 +85,26 @@ public class SupplierOperations {
 	public List<Supplier> getList() throws OHServiceException {
 		return repository.findAllWhereNotDeleted();
 	}
+
+	/**
+	 * Returns the {@link HashMap} of all {@link Supplier}'s ids and names.
+	 *
+	 * @param all - if {@code true} it will return deleted ones also
+	 * @return the {@link HashMap} of all {@link Supplier}'s ids and names.
+	 * @throws OHServiceException
+	 */
+	public Map<Integer, String> getHashMap(boolean all) throws OHServiceException {
+		List<Supplier> supList;
+		if (all) {
+			supList = getAll();
+		} else {
+			supList = getList();
+		}
+		Map<Integer, String> supMap = new HashMap<>();
+		for (Supplier sup : supList) {
+			supMap.put(sup.getSupId(), sup.getSupName());
+		}
+		return supMap;
+	}
+
 }

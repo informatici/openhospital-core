@@ -52,25 +52,4 @@ public class SupplierBrowserManager {
 	public List<Supplier> getList() throws OHServiceException {
 		return ioOperations.getList();
 	}
-
-	/**
-	 * Returns the {@link HashMap} of all {@link Supplier}'s ids and names.
-	 *
-	 * @param all - if {@code true} it will return deleted ones also
-	 * @return the {@link HashMap} of all {@link Supplier}'s ids and names.
-	 * @throws OHServiceException
-	 */
-	public Map<Integer, String> getHashMap(boolean all) throws OHServiceException {
-		List<Supplier> supList;
-		if (all) {
-			supList = ioOperations.getAll();
-		} else {
-			supList = ioOperations.getList();
-		}
-		Map<Integer, String> supMap = new HashMap<>();
-		for (Supplier sup : supList) {
-			supMap.put(sup.getSupId(), sup.getSupName());
-		}
-		return supMap;
-	}
 }

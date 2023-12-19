@@ -29,7 +29,7 @@ import javax.swing.JList;
  * @author Mwithi
  * @version 1.0.0
  */
-public abstract class AbstractThumbnailViewGui extends JList {
+public class AbstractThumbnailViewGui extends JList {
 
 	private static final long serialVersionUID = 1L;
 
