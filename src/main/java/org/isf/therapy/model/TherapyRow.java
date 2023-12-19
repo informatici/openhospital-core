@@ -42,15 +42,6 @@ import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * TherapyRow : Bean to collect data from DB table THERAPIES
- * -----------------------------------------
- * modification history
- * ? - Mwithi - first version
- * 1/08/2016 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_THERAPIES")
 @EntityListeners(AuditingEntityListener.class)

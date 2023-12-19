@@ -35,15 +35,6 @@ import javax.persistence.Transient;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * GroupMenu
- * -----------------------------------------
- * modification history
- * ? - ? - first version
- * 07/05/2016 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_GROUPMENU")
 @EntityListeners(AuditingEntityListener.class) 

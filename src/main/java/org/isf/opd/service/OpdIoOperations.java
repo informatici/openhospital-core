@@ -41,25 +41,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * ----------------------------------------------------
- * (org.isf.opd.service)OpdIoOperations - services for opd class
- * ---------------------------------------------------
- * modification history
- * 11/12/2005 - Vero, Rick  - first beta version 
- * 03/01/2008 - ross - selection for opd browser is performed on Opd_DATE_VIS instead of Opd_DATE
- *                   - selection now is less than or equal, before was only less than
- * 21/06/2008 - ross - for multilanguage version, the test for "all type" and "all disease"
- *                     must be done on the translated resource, not in english
- *                   - fix:  getSurgery() method should not add 1 day to toDate
- * 05/09/2008 - alex - added method for patient related Opd query
- * 05/01/2009 - ross - fix: in insert, referralfrom was written both in referralfrom and referralto
- * 09/01/2009 - fabrizio - Modified queried to accommodate type change of date field in Opd class.
- *                         Modified construction of queries, concatenation is performed with
- *                         StringBuilders instead than operator +. Removed some nested try-catch
- *                         blocks. Modified methods to format dates.                          
- * ------------------------------------------
- */
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException

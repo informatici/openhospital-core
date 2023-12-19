@@ -47,19 +47,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * ------------------------------------------
- * PatientIoOperations - dB operations for the patient entity
- * -----------------------------------------
- * modification history
- * 05/05/2005 - giacomo  - first beta version.
- * 03/11/2006 - ross - added toString method.
- * 11/08/2008 - alessandro - added father & mother's names.
- * 26/08/2008 - claudio - added birth date modified age.
- * 01/01/2009 - Fabrizio - changed the calls to PAT_AGE fields to return again an int type.
- * 03/12/2009 - Alex - added method for merge two patients history.
- * ------------------------------------------
- */
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException

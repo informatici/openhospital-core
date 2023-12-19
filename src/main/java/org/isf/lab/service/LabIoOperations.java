@@ -45,23 +45,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * ------------------------------------------
- * lab.service.LabIoOperations - laboratory exam database io operations
- * -----------------------------------------
- * modification history
- * 02/03/2006 - theo - first beta version
- * 10/11/2006 - ross - added editing capability.
- * 					   new fields data esame, sex, age, material, inout flag added
- * 21/06/2008 - ross - do not add 1 to toDate!.
- *                     the selection date switched to exam date,
- * 04/01/2009 - ross - do not use roll, use add(week,-1)!
- *                     roll does not change the year!
- * 16/11/2012 - mwithi - added logging capability
- * 					   - to do lock management
- * 04/02/2013 - mwithi - lock management done
- * ------------------------------------------
- */
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
