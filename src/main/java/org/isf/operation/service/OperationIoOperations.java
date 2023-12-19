@@ -71,8 +71,8 @@ public class OperationIoOperations {
 	 * Insert an {@link Operation} in the DBs
 	 * 
 	 * @param operation - the {@link Operation} to insert
-	 * @return {@code true} if the operation has been inserted, {@code false} otherwise.
-	 * @throws OHServiceException 
+	 * @return the newly saved {@link Operation} object
+	 * @throws OHServiceException
 	 */
 	public Operation newOperation(Operation operation) throws OHServiceException {
 		return repository.save(operation);
@@ -82,7 +82,7 @@ public class OperationIoOperations {
 	 * Updates an {@link Operation} in the DB
 	 * 
 	 * @param operation - the {@link Operation} to update
-	 * @return {@code true} if the item has been updated, {@code false} otherwise.
+	 * @return the newly updated {@link Operation} object
 	 * @throws OHServiceException 
 	 */
 	public Operation updateOperation(Operation operation) throws OHServiceException {
@@ -92,12 +92,10 @@ public class OperationIoOperations {
 	/** 
 	 * Delete a {@link Operation} in the DB
 	 * @param operation - the {@link Operation} to delete
-	 * @return {@code true} if the item has been updated, {@code false} otherwise.
-	 * @throws OHServiceException 
+	 * @throws OHServiceException
 	 */
-	public boolean deleteOperation(Operation operation) throws OHServiceException {
+	public void deleteOperation(Operation operation) throws OHServiceException {
 		repository.delete(operation);
-		return true;
 	}
 	
 	/**
@@ -136,4 +134,3 @@ public class OperationIoOperations {
 
 	}
 }
-
