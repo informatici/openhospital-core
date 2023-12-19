@@ -35,15 +35,6 @@ import javax.validation.constraints.NotNull;
 
 import org.isf.utils.db.Auditable;
 
-/**
- * ------------------------------------------
- * User - model for the user entity
- * -----------------------------------------
- * modification history
- * ? - ? - first version
- * 07/05/2016 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_USER")
 @AttributeOverride(name = "createdBy", column = @Column(name = "US_CREATED_BY"))

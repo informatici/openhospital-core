@@ -32,17 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * ------------------------------------------
- * ExamRowIoOperations - provides the I/O operations for recovering and managing exam records from the database.
- * -----------------------------------------
- * modification history
- * ??/??/2005 - Davide/Theo - first beta version
- * 07/11/2006 - ross - modified to accept, within the description, the character quote (')
- *                     (to do this, just double every quote. replaceall("'","''")
- *                     when record locked all data is saved now, not only descritpion
- * ------------------------------------------
- */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException

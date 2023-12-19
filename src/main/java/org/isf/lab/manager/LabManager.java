@@ -46,14 +46,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * ------------------------------------------
- * LabManager - laboratory exam manager class
- * -----------------------------------------
- * modification history
- * 10/11/2006 - ross - added editing capability
- * ------------------------------------------
- */
 @Component
 public class LabManager {
 
