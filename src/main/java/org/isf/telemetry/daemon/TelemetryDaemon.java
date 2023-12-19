@@ -22,10 +22,13 @@
 package org.isf.telemetry.daemon;
 
 import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.isf.generaldata.ConfigurationProperties;
 import org.isf.generaldata.GeneralData;
 import org.isf.menu.manager.Context;
+import org.isf.telemetry.envdatacollector.collectors.remote.common.GeoIpInfoCommonService;
 import org.isf.telemetry.manager.TelemetryManager;
 import org.isf.telemetry.model.Telemetry;
 import org.isf.telemetry.util.TelemetryUtils;
@@ -38,7 +41,9 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TelemetryDaemon.class);
 	private static final String FILE_PROPERTIES = "telemetry.properties";
-	private static final int DEFAULT_DELAY = 30; // seconds
+	private static final int DEFAULT_DELAY = 14400; // seconds
+	private Map<String, String> geoIpServicesUrlMap;
+	private String geoIpServiceSelected;
 
 	// Singleton instance
 	private static volatile TelemetryDaemon instance;
@@ -65,12 +70,28 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 
 	private TelemetryDaemon() {
 		super(FILE_PROPERTIES);
-		LOGGER.info("Telemetry daemon started...");
-		customDelay = myGetProperty("telemetry.daemon.thread.loop.seconds", DEFAULT_DELAY);
-		LOGGER.info("Telemetry daemon loop set to {} seconds.", customDelay);
-		this.telemetryManager = Context.getApplicationContext().getBean(TelemetryManager.class);
-		this.telemetryUtils = Context.getApplicationContext().getBean(TelemetryUtils.class);
-		this.settings = telemetryManager.retrieveSettings();
+		if (isInitialized()) {
+			LOGGER.info("Telemetry daemon started...");
+			customDelay = myGetProperty("telemetry.daemon.thread.loop.seconds", DEFAULT_DELAY);
+			LOGGER.info("Telemetry daemon loop set to {} seconds.", customDelay);
+			geoIpServiceSelected = myGetProperty("telemetry.enabled.geo.ip.lookup.service");
+			geoIpServicesUrlMap = retrieveGeoIpServices();
+
+			this.telemetryManager = Context.getApplicationContext().getBean(TelemetryManager.class);
+			this.telemetryUtils = Context.getApplicationContext().getBean(TelemetryUtils.class);
+			this.settings = telemetryManager.retrieveSettings();
+		} else {
+			setRunning(false);
+		}
+	}
+
+	private Map<String, String> retrieveGeoIpServices() {
+		Map<String, GeoIpInfoCommonService> geoIpServicesMap = Context.getApplicationContext().getBeansOfType(GeoIpInfoCommonService.class);
+		return geoIpServicesMap.values().stream()
+						.peek(service -> LOGGER.debug(service.getServiceName()))
+						.collect(Collectors.toMap(
+										GeoIpInfoCommonService::getServiceName,
+										service -> myGetProperty(service.getServiceName() + ".ribbon.base-url")));
 	}
 
 	// Singleton instance getter
@@ -110,7 +131,7 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 				Thread.sleep((long) customDelay * 1000);
 				updateSettingsCounter++;
 			} catch (InterruptedException e) {
-				LOGGER.debug(e.getMessage(), e);
+				LOGGER.debug(e.getMessage());
 			}
 		}
 	}
@@ -160,6 +181,22 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 		if (!this.running) {
 			restart();
 		}
+	}
+
+	/**
+	 * Returns the available geoIpServicesUrlMap as {@code Map<"service-name", "service-url">}
+	 * @return the geoIpServicesUrlMap
+	 */
+	public Map<String, String> getGeoIpServicesUrlMap() {
+		return geoIpServicesUrlMap;
+	}
+
+	/**
+	 * Returns the neame of the geoIpService selected
+	 * @return the geoIpService
+	 */
+	public String getGeoIpServiceSelected() {
+		return geoIpServiceSelected;
 	}
 
 }

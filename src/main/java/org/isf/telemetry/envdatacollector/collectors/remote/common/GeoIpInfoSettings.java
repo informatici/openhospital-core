@@ -21,24 +21,18 @@
  */
 package org.isf.telemetry.envdatacollector.collectors.remote.common;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
+import org.isf.telemetry.daemon.TelemetryDaemon;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource("classpath:telemetry.properties")
 public class GeoIpInfoSettings {
 
-	@Autowired
-	private Environment env;
-
 	public String retrieveBaseUrl(String serviceName) {
-		return this.env.getProperty(serviceName + ".ribbon.base-url").trim();
+		return TelemetryDaemon.getTelemetryDaemon().getGeoIpServicesUrlMap().get(serviceName);
 	}
 
-	public String get(String key) {
-		return this.env.getProperty(key);
+	public String getSelectedService() {
+		return TelemetryDaemon.getTelemetryDaemon().getGeoIpServiceSelected();
 	}
 
 }

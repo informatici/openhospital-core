@@ -119,7 +119,7 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 		LOGGER.debug("Collecting Open Hospital data...");
 		Map<String, String> result = new LinkedHashMap<>();
 		try {
-			String geoIpServiceName = settings.get("telemetry.enabled.geo.ip.lookup.service");
+			String geoIpServiceName = settings.getSelectedService();
 			LOGGER.debug("{} - {}", geoIpServiceName, geoIpServices.size());
 			this.geoIpServices.forEach(service -> {
 				if (service.getServiceName().equals(geoIpServiceName)) {
