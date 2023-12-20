@@ -36,16 +36,6 @@ import org.isf.utils.db.Auditable;
 import org.isf.vactype.model.VaccineType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * Pure Model Vaccine (Hospital vaccines): represents a vaccine
- *
- * @author Eva
- *
- * modification history
- * 20/10/2011 - Cla - insert vaccinetype managment
- * 18/11/2011 - Cla - inserted print method
- * 04/06/2015 - Antonio - ported to JPA
- */
 @Entity
 @Table(name="OH_VACCINE")
 @EntityListeners(AuditingEntityListener.class)

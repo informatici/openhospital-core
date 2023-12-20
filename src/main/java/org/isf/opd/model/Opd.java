@@ -47,23 +47,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.drew.lang.annotations.Nullable;
 
-/**
- * ------------------------------------------
- * Opd - model for OPD
- * -----------------------------------------
- * modification history
- * 11/12/2005 - Vero, Rick  pupo
- * 21/11/2006 - ross - renamed from Surgery 
- *                   - added visit date, disease 2, diseas3
- *                   - disease is not mandatory if re-attendance
- * 			         - version is now 1.0 
- * 12/06/2008 - ross - added referral from / to
- * 16/06/2008 - ross - added patient detail
- * 05/09/2008 - alex - added fullname e notefield
- * 09/01/2009 - fabrizio - date field modified to type Date
- * 02/06/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_OPD")
 @EntityListeners(AuditingEntityListener.class)

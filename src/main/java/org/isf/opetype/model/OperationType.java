@@ -33,15 +33,6 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * OperationType - model for the operation type
- * -----------------------------------------
- * modification history
- * ? - bob - first version
- * 07/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_OPERATIONTYPE")
 @EntityListeners(AuditingEntityListener.class)

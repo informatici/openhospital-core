@@ -47,29 +47,6 @@ import org.isf.patconsensus.model.PatientConsensus;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Patient - model for the patient entity
- * -----------------------------------------
- * modification history
- * 05/05/2005 - giacomo  - first beta version
- * 03/11/2006 - ross - added toString method
- * 11/08/2008 - Alessandro
- * - added mother and father names textfield
- * - added birthdate and age check
- * 19/08/2008 - Mex        - substitute EduLevel with BloodType
- * 22/08/2008 - Claudio
- * - added birth date field
- * - modified age field
- * 01/01/2009 - Fabrizio
- * - modified age field type back to int
- * - removed unuseful super() call in constructor
- * - removed unuseful todo comment
- * - removed assignment to attribute hasInsurance since it had no effect
- * 16/09/2009 - Alessandro - added equals override to support comparing and filtering
- * 17/10/2011 - Alessandro - added height and weight (from malnutritionalcontrol)
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_PATIENT")
 @EntityListeners(AuditingEntityListener.class)
@@ -80,19 +57,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PAT_LAST_MODIFIED_DATE"))
 
 public class Patient extends Auditable<String> {
-	/*
-	 * PAT_ID int NOT NULL AUTO_INCREMENT , PAT_FNAME varchar (50) NOT NULL ,
-	 * --first name (nome) PAT_SNAME varchar (50) NOT NULL , --second name
-	 * (cognome) PAT_AGE int NOT NULL , --age PAT_SEX char (1) NOT NULL , --sex :
-	 * M or F PAT_ADDR varchar (50) NULL , --address (via , n.) PAT_CITY varchar
-	 * (50) NOT NULL , --city PAT_NEXT_KIN varchar (50) NULL , --next kin
-	 * (parente prossimo, figlio di..) PAT_TELE varchar (50) NULL , --telephone
-	 * number PAT_MOTH char (1) NULL , --mother: D=dead, A=alive PAT_FATH char
-	 * (1) NULL , --father: D=dead, A=alive PAT_LEDU char (1) NULL , --level of
-	 * education: 1 or 2 or 3 or 4 PAT_ESTA char (1) NULL , --economic status:
-	 * R=rich, P=poor PAT_PTOGE char (1) NULL , --parents together: Y or N
-	 * PAT_LOCK int NOT NULL default 0, PRIMARY KEY ( PAT_ID )
-	 */
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -215,7 +179,7 @@ public class Patient extends Auditable<String> {
 		this.firstName = "";
 		this.secondName = "";
 		this.name = this.firstName + ' ' + this.secondName;
-		this.birthDate = null;
+		this.birthDate = null;    // TODO the field is marked as "@NotNull"
 		this.age = 0;
 		this.agetype = "";
 		this.sex = ' ';
@@ -239,7 +203,7 @@ public class Patient extends Auditable<String> {
 		this.firstName = opd.getfirstName();
 		this.secondName = opd.getsecondName();
 		this.name = this.firstName + ' ' + this.secondName;
-		this.birthDate = null;
+		this.birthDate = null;    // TODO the field is marked as "@NotNull"
 		this.age = opd.getAge();
 		this.agetype = "";
 		this.sex = opd.getSex();
@@ -580,7 +544,7 @@ public class Patient extends Auditable<String> {
 		this.name = this.firstName + ' ' + this.secondName;
 	}
 
-	public void setPatientProfilePhoto(final PatientProfilePhoto patientProfilePhoto) {
+	public void setPatientProfilePhoto(PatientProfilePhoto patientProfilePhoto) {
 		if (patientProfilePhoto == null) {
 			if (this.patientProfilePhoto != null) {
 				this.patientProfilePhoto.setPatient(null);

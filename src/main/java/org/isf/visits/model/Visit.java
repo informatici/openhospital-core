@@ -44,15 +44,6 @@ import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Visits
- * -----------------------------------------
- * modification history
- * ? - ? - first version
- * 1/08/2016 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name = "OH_VISITS")
 @EntityListeners(AuditingEntityListener.class)

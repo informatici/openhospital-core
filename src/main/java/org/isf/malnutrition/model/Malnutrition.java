@@ -43,14 +43,6 @@ import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Malnutrition - malnutrition control model
- * -----------------------------------------
- * modification history
- * 11/01/2016 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_MALNUTRITIONCONTROL")
 @EntityListeners(AuditingEntityListener.class)

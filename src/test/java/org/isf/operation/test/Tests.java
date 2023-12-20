@@ -304,7 +304,8 @@ public class Tests extends OHCoreTestCase {
 	public void testIoDeleteOperation() throws Exception {
 		String code = setupTestOperation(false);
 		Operation foundOperation = operationIoOperations.findByCode(code);
-		assertThat(operationIoOperations.deleteOperation(foundOperation)).isTrue();
+		operationIoOperations.deleteOperation(foundOperation);
+		assertThat(operationIoOperations.isCodePresent(code)).isFalse();
 	}
 
 	@Test
@@ -436,7 +437,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrDeleteOperation() throws Exception {
 		String code = setupTestOperation(false);
 		Operation foundOperation = operationBrowserManager.getOperationByCode(code);
-		assertThat(operationBrowserManager.deleteOperation(foundOperation)).isTrue();
+		operationBrowserManager.deleteOperation(foundOperation);
+		assertThat(operationBrowserManager.isCodePresent(code)).isFalse();
 	}
 
 	@Test

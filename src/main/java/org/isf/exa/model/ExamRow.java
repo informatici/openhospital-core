@@ -37,14 +37,6 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * ExamRow - model for the exam row entity
- * -----------------------------------------
- * modification history
- * 05/01/2016 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_EXAMROW")
 @EntityListeners(AuditingEntityListener.class)

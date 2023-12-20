@@ -37,16 +37,6 @@ import org.isf.opetype.model.OperationType;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Operation - model for the bill entity
- * -----------------------------------------
- * modification history
- * ? - bob - first version
- * 13/02/09 - Alex - added Major/Minor control
- * 007/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_OPERATION")
 @EntityListeners(AuditingEntityListener.class)

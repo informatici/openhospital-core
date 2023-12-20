@@ -43,15 +43,6 @@ import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Medical Lot - model for the medical lot entity
- * -----------------------------------------
- * modification history
- * ? - ?
- * 17/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_MEDICALDSRLOT")
 @EntityListeners(AuditingEntityListener.class)
@@ -90,7 +81,7 @@ public class Lot extends Auditable<String> {
 	 * NB: COALESCE is needed for legacy connection to lots migrated from a version prior v1.11.0;
 	 * in theory, there should not exist lots without an initial charge movement
 	 * in the main MedicalStock, but sometimes it could happen if 
-	 * {@link MedicalStockWardIoOperations} are enabled (with {@link GeneralData}<code>.INTERNALPHARMACIES=true</code>) 
+	 * {@link MedicalStockWardIoOperations} are enabled (with {@link GeneralData}{@code .INTERNALPHARMACIES=true})
 	 * and some lots are registered directly there at the time of the first inventory.
 	 * 
 	 * @see <a href="https://github.com/informatici/openhospital-doc/blob/develop/doc_admin/AdminManual.adoc#5-1-19-internalpharmacies">Admin Manual</a>

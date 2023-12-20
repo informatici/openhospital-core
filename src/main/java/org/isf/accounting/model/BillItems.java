@@ -37,15 +37,6 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * BillItems - model an item in the Bill
- * -----------------------------------------
- * modification history
- * ? - Mwithi - first version
- * 23/08/2051 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_BILLITEMS")
 @EntityListeners(AuditingEntityListener.class)

@@ -51,21 +51,12 @@ import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Admission - model for a patient admission
- * -----------------------------------------
- * modification history
- * ? - ? - first version
- * 30/09/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_ADMISSION")
 @SqlResultSetMapping(name="AdmittedPatient",
 entities={
-		@EntityResult(entityClass=org.isf.patient.model.Patient.class),
-		@EntityResult(entityClass=org.isf.admission.model.Admission.class)}
+		@EntityResult(entityClass=Patient.class),
+		@EntityResult(entityClass=Admission.class)}
 )
 @EntityListeners(AuditingEntityListener.class)
 @AttributeOverride(name="createdBy", column=@Column(name="ADM_CREATED_BY", updatable = false))

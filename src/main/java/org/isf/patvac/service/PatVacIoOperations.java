@@ -34,16 +34,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * ------------------------------------------
- * PatVacIoOperations  - Patient Vaccine Io operations
- * -----------------------------------------
- * modification history
- * 25/08/2011 - claudia - first beta version
- * 20/10/2011 - insert vaccine type management
- * 14/11/2011 - claudia - inserted search condition on date
- * ------------------------------------------
- */
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException

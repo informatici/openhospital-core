@@ -34,14 +34,6 @@ import org.isf.vactype.service.VacTypeIoOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * ------------------------------------------
- * VaccineTypeBrowserManager -
- * -----------------------------------------
- * modification history
- * 19/10/2011 - Cla - version is now 1.0
- * ------------------------------------------
- */
 @Component
 public class VaccineTypeBrowserManager {
 

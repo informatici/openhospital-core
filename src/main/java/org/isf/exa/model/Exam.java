@@ -37,15 +37,6 @@ import org.isf.exatype.model.ExamType;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * -----------------------------------------
- * Exam - model for the exam (laboratory exams) entity
- * -----------------------------------------
- * modification history
- * 20-jan-2006 - bob - first version
- * 05/01/2016 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_EXAM")
 @EntityListeners(AuditingEntityListener.class)
