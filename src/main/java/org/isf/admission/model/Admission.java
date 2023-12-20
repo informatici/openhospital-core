@@ -68,8 +68,8 @@ entities={
 		@EntityResult(entityClass=org.isf.admission.model.Admission.class)}
 )
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name="createdBy", column=@Column(name="ADM_CREATED_BY"))
-@AttributeOverride(name="createdDate", column=@Column(name="ADM_CREATED_DATE"))
+@AttributeOverride(name="createdBy", column=@Column(name="ADM_CREATED_BY", updatable = false))
+@AttributeOverride(name="createdDate", column=@Column(name="ADM_CREATED_DATE", updatable = false))
 @AttributeOverride(name="lastModifiedBy", column=@Column(name="ADM_LAST_MODIFIED_BY"))
 @AttributeOverride(name="active", column=@Column(name="ADM_ACTIVE"))
 @AttributeOverride(name="lastModifiedDate", column=@Column(name="ADM_LAST_MODIFIED_DATE"))

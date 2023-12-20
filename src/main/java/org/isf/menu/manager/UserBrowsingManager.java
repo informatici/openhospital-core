@@ -32,12 +32,12 @@ import org.isf.menu.model.User;
 import org.isf.menu.model.UserGroup;
 import org.isf.menu.model.UserMenuItem;
 import org.isf.menu.service.MenuIoOperations;
+import org.isf.sessionaudit.model.UserSession;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,7 +48,7 @@ public class UserBrowsingManager {
 	private MenuIoOperations ioOperations;
 
 	public static String getCurrentUser() {
-		return MDC.get("OHUser");
+		return UserSession.getUser().getUserName();
 	}
 
 	/**

@@ -46,8 +46,8 @@ import org.isf.utils.db.Auditable;
  */
 @Entity
 @Table(name="OH_USER")
-@AttributeOverride(name = "createdBy", column = @Column(name = "US_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "US_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "US_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "US_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "US_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "US_LAST_MODIFIED_DATE"))
 @AttributeOverride(name = "active", column = @Column(name = "US_ACTIVE"))
