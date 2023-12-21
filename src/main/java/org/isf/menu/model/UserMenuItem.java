@@ -34,21 +34,11 @@ import javax.validation.constraints.NotNull;
 
 import org.isf.generaldata.MessageBundle;
 
-/**
- * ------------------------------------------
- * UserUserMenuItem - an item in user menu
- * not pure model class
- * -----------------------------------------
- * modification history
- * ? 		  - flavio - first version
- * 07/05/2016 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_MENUITEM")
 @SqlResultSetMapping(name="UserMenuItemWithStatus",
 	entities={
-	    @EntityResult(entityClass=org.isf.menu.model.UserMenuItem.class, fields={
+	    @EntityResult(entityClass=UserMenuItem.class, fields={
                 @FieldResult(name="code", column="MNI_ID_A"),
                 @FieldResult(name="buttonLabel", column="MNI_BTN_LABEL"), 
                 @FieldResult(name="altLabel", column="MNI_LABEL"),
@@ -62,8 +52,8 @@ import org.isf.generaldata.MessageBundle;
 	columns={
 	    @ColumnResult(name="is_active")}
 	)
-public class UserMenuItem 
-{
+public class UserMenuItem {
+
 	@Id 
 	@Column(name="MNI_ID_A")	
 	private String 	code;

@@ -35,15 +35,6 @@ import org.isf.utils.db.Auditable;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Medical Ward - model for the medical ward entity
- * -----------------------------------------
- * modification history
- * ? - ?
- * 17/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_MEDICALDSRWARD")
 @EntityListeners(AuditingEntityListener.class)

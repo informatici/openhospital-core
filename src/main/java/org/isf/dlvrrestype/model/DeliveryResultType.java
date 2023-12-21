@@ -28,19 +28,10 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-/**
- * ------------------------------------------
- * Delivery Type - model for the delivery type entity
- * -----------------------------------------
- * modification history
- * ? - bob - first version
- * 11/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_DELIVERYRESULTTYPE")
-public class DeliveryResultType 
-{
+public class DeliveryResultType {
+
 	@Id 
 	@Column(name="DRT_ID_A")	    
     private String code;
