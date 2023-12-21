@@ -30,15 +30,6 @@ import javax.persistence.Transient;
 
 import org.isf.utils.db.Auditable;
 
-/**
- * ------------------------------------------
- * UserGroup
- * -----------------------------------------
- * modification history
- * ? - ? - first version
- * 07/05/2016 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_USERGROUP")
 @AttributeOverride(name = "createdBy", column = @Column(name = "UG_CREATED_BY"))
