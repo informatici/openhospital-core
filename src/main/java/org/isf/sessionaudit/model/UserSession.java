@@ -10,13 +10,14 @@ import org.slf4j.LoggerFactory;
 
 public class UserSession {
 
-	private static final int LOGIN_FAILED = 2;
+	protected static final int LOGIN_FAILED = 2;
 	private static final String LOGOUT_TIMER = "logoutTimer";
 	private static final String USER = "user";
+	private static final String SESSION_ID = "sessionAuditId";
 
 	private static Map<String, Object> map = new HashMap<>();
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UserSession.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(UserSession.class);
 
 	public static DelayTimer getTimer() {
 		return (DelayTimer) map.get(LOGOUT_TIMER);
@@ -40,5 +41,13 @@ public class UserSession {
 
 	public static void removeUser() {
 		map.remove(USER);
+	}
+	
+	public static void setSessionAuditId(int sessionId) {
+		map.put(SESSION_ID, sessionId);
+	}
+	
+	public static Integer getSessionAuditId() {
+		return (Integer) map.get(SESSION_ID);
 	}
 }
