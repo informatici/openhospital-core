@@ -68,18 +68,17 @@ public class PriceListManager {
 	 *
 	 * @param list - the {@link PriceList}
 	 * @param prices - the list of {@link Price}s
-	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean updatePrices(PriceList list, List<Price> prices) throws OHServiceException {
-		return ioOperations.updatePrices(list, prices);
+	public void updatePrices(PriceList list, List<Price> prices) throws OHServiceException {
+		ioOperations.updatePrices(list, prices);
 	}
 
 	/**
 	 * Insert a new {@link PriceList} in the DB
 	 *
 	 * @param list - the {@link PriceList}
-	 * @return <code>true</code> if the list has been inserted, <code>false</code> otherwise
+	 * @return {@code true} if the list has been inserted, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
 	public PriceList newList(PriceList list) throws OHServiceException {
@@ -91,7 +90,7 @@ public class PriceListManager {
 	 * Update a {@link PriceList} in the DB
 	 *
 	 * @param updateList - the {@link PriceList} to update
-	 * @return <code>true</code> if the list has been updated, <code>false</code> otherwise
+	 * @return {@code true} if the list has been updated, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
 	public PriceList updateList(PriceList updateList) throws OHServiceException {
@@ -103,34 +102,33 @@ public class PriceListManager {
 	 * Delete a {@link PriceList} in the DB
 	 *
 	 * @param deleteList - the {@link PriceList} to delete
-	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
 	 * @throws OHServiceException
 	 */
-	public boolean deleteList(PriceList deleteList) throws OHServiceException {
-		return ioOperations.deleteList(deleteList);
+	public void deleteList(PriceList deleteList) throws OHServiceException {
+		ioOperations.deleteList(deleteList);
 	}
 
 	/**
-	 * Duplicate specified {@link PriceList}
+	 * Duplicate specified {@link PriceList}.
 	 *
 	 * @param list
-	 * @return <code>true</code> if the list has been duplicated, <code>false</code> otherwise
+	 * @return the duplicated {@link PriceList}
 	 * @throws OHServiceException
 	 */
-	public boolean copyList(PriceList list) throws OHServiceException {
+	public PriceList copyList(PriceList list) throws OHServiceException {
 		return copyList(list, 1.0, 0.0);
 	}
 
 	/**
-	 * Duplicate {@link PriceList} multiplying by <code>factor</code> and rounding by <code>step</code>
+	 * Duplicate {@link PriceList} multiplying by {@code factor} and rounding by {@code step}.
 	 *
 	 * @param list - the {@link PriceList} to be duplicated
 	 * @param factor - the multiplying factor
 	 * @param step - the rounding step
-	 * @return <code>true</code> if the list has been duplicated, <code>false</code> otherwise
+	 * @return the duplicated {@link PriceList}
 	 * @throws OHServiceException
 	 */
-	public boolean copyList(PriceList list, double factor, double step) throws OHServiceException {
+	public PriceList copyList(PriceList list, double factor, double step) throws OHServiceException {
 		return ioOperations.copyList(list, factor, step);
 	}
 
@@ -152,13 +150,13 @@ public class PriceListManager {
 	}
 
 	/**
-	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * Verify if the object is valid for CRUD and return a list of errors, if any.
 	 *
-	 * @param priceList
+	 * @param priceList the {@link PriceList} to validate
 	 * @throws OHDataValidationException
 	 */
 	protected void validatePriceList(PriceList priceList) throws OHDataValidationException {
-		java.util.List<OHExceptionMessage> errors = new ArrayList<>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (StringUtils.isEmpty(priceList.getCode())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertacode.msg")));

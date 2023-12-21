@@ -1,27 +1,27 @@
-#v 17-11-2006  (ADDED 3 NEW MENU ITEMS, printing, examlist, diseaselist)
+-- v 17-11-2006  (ADDED 3 NEW MENU ITEMS, printing, examlist, diseaselist)
 
-#
-# deleting existing data
-#
+-- 
+--  deleting existing data
+-- 
 delete from GROUPMENU;
 delete from MENUITEM;
 delete from USER;
 delete from USERGROUP;
 
-#
-# Dumping data for table 'USERGROUP'
-#
+-- 
+--  Dumping data for table 'USERGROUP'
+-- 
 INSERT INTO USERGROUP VALUES("admin","User with all the privileges");
 
-#
-# Dumping data for table 'USER'
-#
+-- 
+--  Dumping data for table 'USER'
+-- 
 INSERT INTO USER VALUES("admin","admin","admin","administrator");
 
 
-#
-# Dumping data for table 'MENUITEM'
-#
+-- 
+--  Dumping data for table 'MENUITEM'
+-- 
 INSERT INTO MENUITEM (MNI_ID_A,MNI_BTN_LABEL,MNI_LABEL,MNI_TOOLTIP,MNI_SHORTCUT,MNI_SUBMENU,MNI_CLASS,MNI_IS_SUBMENU,MNI_POSITION) VALUES 
  ('admission','Admission/Patient','Admission/Patient','x','A','main','org.isf.admission.gui.AdmittedPatientBrowser','N',5),
  ('admtype','Admission Type','AdmissionType','x','A','types','org.isf.admtype.gui.AdmissionTypeBrowser','N',0),
@@ -60,9 +60,9 @@ INSERT INTO MENUITEM (MNI_ID_A,MNI_BTN_LABEL,MNI_LABEL,MNI_TOOLTIP,MNI_SHORTCUT,
  ('vaccine','Vaccine','Vaccine','x','V','generaldata','org.isf.vaccine.gui.VaccineBrowser','N',6),
  ('ward','Ward','Ward','x','W','generaldata','org.isf.ward.gui.WardBrowser','N',2);
 
-#
-# Dumping data for table 'GROUPMENU'
-#
+-- 
+--  Dumping data for table 'GROUPMENU'
+-- 
 INSERT INTO GROUPMENU (GM_ID,GM_UG_ID_A,GM_MNI_ID_A,GM_ACTIVE) VALUES 
  ( 1,'admin','admtype','Y'),
  ( 2,'admin','disctype','Y'),

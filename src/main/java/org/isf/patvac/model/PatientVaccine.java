@@ -42,15 +42,6 @@ import org.isf.utils.time.TimeTools;
 import org.isf.vaccine.model.Vaccine;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * PatientVaccine - class
- * -----------------------------------------
- * modification history
- * 25/08/2011 - claudia - first beta version
- * 04/06/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_PATIENTVACCINE")
 @EntityListeners(AuditingEntityListener.class)
