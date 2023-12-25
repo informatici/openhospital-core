@@ -22,6 +22,7 @@
 package org.isf.sms.providers.common;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
@@ -43,7 +44,7 @@ public class CustomCommonDecoder implements Decoder {
 	}
 
 	@Override
-	public Object decode(Response response, java.lang.reflect.Type type) throws IOException, FeignException {
+	public Object decode(Response response, Type type) throws IOException, FeignException {
 		HttpMessageConverter<Object> jacksonConverter = new MappingJackson2HttpMessageConverter(new ObjectMapper());
 		ObjectFactory<HttpMessageConverters> objectFactory = () -> new HttpMessageConverters(jacksonConverter);
 		return new ResponseEntityDecoder(new SpringDecoder(objectFactory)).decode(response, type);

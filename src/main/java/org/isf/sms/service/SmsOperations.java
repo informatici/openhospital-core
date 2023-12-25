@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Mwithi
- * @see org.isf.sms.model.Sms
+ * @see Sms
  *
  * Generated 31-gen-2014 15.39.04 by Hibernate Tools 3.4.0.CR1
  */
