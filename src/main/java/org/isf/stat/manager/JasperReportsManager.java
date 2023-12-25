@@ -167,7 +167,7 @@ public class JasperReportsManager {
 			parameters.put("admID", String.valueOf(admID)); // real param
 			parameters.put("patientID", patID); // real param
 
-			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(patID)), "pdf");
+			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(patID), "pdf");
 
 			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
 			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
@@ -290,7 +290,7 @@ public class JasperReportsManager {
 			
 			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
 			parameters.put("opdID", String.valueOf(opdID)); // real param
-			parameters.put("patientID", String.valueOf(patID)); // real param
+			parameters.put("patientID", patID); // real param
 
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(opdID)), "pdf");
 
