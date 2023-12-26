@@ -48,7 +48,9 @@ public class UserBrowsingManager {
 	private MenuIoOperations ioOperations;
 
 	public static String getCurrentUser() {
-		return UserSession.getUser().getUserName();
+		if (UserSession.getUser() != null)
+			return UserSession.getUser().getUserName();
+		return null;
 	}
 
 	/**
