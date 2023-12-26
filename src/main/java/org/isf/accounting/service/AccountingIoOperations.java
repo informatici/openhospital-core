@@ -101,7 +101,7 @@ public class AccountingIoOperations {
 	/**
 	 * Returns the {@link BillItems} associated to the specified {@link Bill} id or all 
 	 * the stored {@link BillItems} if no id is provided. 
-	 * @param billID the bill id or <code>0</code>.
+	 * @param billID the bill id or {@code 0}.
 	 * @return a list of {@link BillItems} associated to the bill id or all the stored bill items.
 	 * @throws OHServiceException if an error occurs retrieving the bill items.
 	 */
@@ -126,7 +126,7 @@ public class AccountingIoOperations {
 	/**
 	 * Retrieves all the {@link BillPayments} for the specified {@link Bill} id, or all 
 	 * the stored {@link BillPayments} if no id is indicated.
-	 * @param billID the bill id or <code>0</code>.
+	 * @param billID the bill id or {@code 0}.
 	 * @return the list of bill payments.
 	 * @throws OHServiceException if an error occurs retrieving the bill payments.
 	 */

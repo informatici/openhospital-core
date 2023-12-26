@@ -94,7 +94,7 @@ public class BillBrowserManager {
 	/**
 	 * Retrieves all the {@link BillItems} associated to the passed {@link Bill} id.
 	 * @param billID the bill id.
-	 * @return a list of {@link BillItems} or <code>null</code> if an error occurred.
+	 * @return a list of {@link BillItems} or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public List<BillItems> getItems(int billID) throws OHServiceException {
@@ -227,7 +227,7 @@ public class BillBrowserManager {
 	/**
 	 * Returns all the pending {@link Bill}s for the specified patient.
 	 * @param patID the patient id.
-	 * @return the list of pending bills or <code>null</code> if an error occurred.
+	 * @return the list of pending bills or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public List<Bill> getPendingBills(int patID) throws OHServiceException {
@@ -237,7 +237,7 @@ public class BillBrowserManager {
 	/**
 	 * Get the {@link Bill} with specified billID
 	 * @param billID
-	 * @return the {@link Bill} or <code>null</code> if an error occurred.
+	 * @return the {@link Bill} or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public Bill getBill(int billID) throws OHServiceException {
@@ -246,7 +246,7 @@ public class BillBrowserManager {
 
 	/**
 	 * Returns all user ids related to a {@link BillPayments}.
-	 * @return a list of user id or <code>null</code> if an error occurred.
+	 * @return a list of user id or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public List<String> getUsers() throws OHServiceException {
@@ -267,7 +267,7 @@ public class BillBrowserManager {
 	 * Retrieves all the {@link Bill}s for the specified date range.
 	 * @param dateFrom the low date range endpoint, inclusive. 
 	 * @param dateTo the high date range endpoint, inclusive.
-	 * @return a list of retrieved {@link Bill}s or <code>null</code> if an error occurred.
+	 * @return a list of retrieved {@link Bill}s or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public List<Bill> getBills(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
@@ -277,7 +277,7 @@ public class BillBrowserManager {
 	/**
 	 * Gets all the {@link Bill}s associated to the passed {@link BillPayments}.
 	 * @param billPayments the {@link BillPayments} associated to the bill to retrieve.
-	 * @return a list of {@link Bill} associated to the passed {@link BillPayments} or <code>null</code> if an error occurred.
+	 * @return a list of {@link Bill} associated to the passed {@link BillPayments} or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public List<Bill> getBills(List<BillPayments> billPayments) throws OHServiceException {
@@ -291,7 +291,7 @@ public class BillBrowserManager {
 	 * Retrieves all the {@link BillPayments} for the specified date range.
 	 * @param dateFrom low endpoint, inclusive, for the date range. 
 	 * @param dateTo high endpoint, inclusive, for the date range.
-	 * @return a list of {@link BillPayments} for the specified date range or <code>null</code> if an error occurred.
+	 * @return a list of {@link BillPayments} for the specified date range or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public List<BillPayments> getPayments(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
@@ -301,7 +301,7 @@ public class BillBrowserManager {
 	/**
 	 * Retrieves all the {@link BillPayments} associated to the passed {@link Bill} list.
 	 * @param billArray the bill array list of {@link Bill}s.
-	 * @return a list of {@link BillPayments} associated to the passed bill list or <code>null</code> if an error occurred. 
+	 * @return a list of {@link BillPayments} associated to the passed bill list or {@code null} if an error occurred.
 	 * @throws OHServiceException 
 	 */
 	public List<BillPayments> getPayments(List<Bill> billArray) throws OHServiceException {

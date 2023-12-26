@@ -1016,7 +1016,7 @@ public class JasperReportsManager {
 	 * 
 	 * @param localDateTime
 	 *            the localDateTime to convert.
-	 * @return the converted value or <code>null</code> if the passed value is <code>null</code>.
+	 * @return the converted value or {@code null} if the passed value is {@code null}.
 	 */
 	private static Date toDate(LocalDateTime localDateTime) {
 		return Optional.ofNullable(localDateTime).map(ldt -> Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant())).orElse(null);

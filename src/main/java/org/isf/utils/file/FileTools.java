@@ -107,7 +107,7 @@ public class FileTools {
 	 * Retrieve timestamp from filename
 	 *
 	 * @param file
-	 * @return the list of retrieved date or <code>null</code> if nothing is found
+	 * @return the list of retrieved date or {@code null} if nothing is found
 	 */
 	public static List<Date> getTimestampFromName(File file) {
 		return getTimestampFromName(file.getName());
