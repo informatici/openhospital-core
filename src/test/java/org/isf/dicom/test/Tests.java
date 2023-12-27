@@ -126,7 +126,7 @@ public class Tests extends OHCoreTestCase {
 		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundFileDicom).isNotNull();
 		FileDicom dicom = dicomIoOperation.loadDetails(foundFileDicom.getIdFile(), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
-		FileDicom dicom2 = dicomIoOperation.loadDetails(Long.valueOf(foundFileDicom.getIdFile()), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
+		FileDicom dicom2 = dicomIoOperation.loadDetails(foundFileDicom.getIdFile(), foundFileDicom.getPatId(), foundFileDicom.getDicomSeriesNumber());
 		assertThat(dicom2.getDicomInstanceUID()).isEqualTo(dicom.getDicomInstanceUID());
 		assertThat(dicom.getDicomSeriesDescription()).isEqualTo(foundFileDicom.getDicomSeriesDescription());
 	}

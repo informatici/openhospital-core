@@ -80,7 +80,7 @@ public class ExamTypeIoOperation {
 	 * This function controls the presence of a record with the same code as in
 	 * the parameter.
 	 * @param code - the code
-	 * @return {@code true} if the code is present, <code>false</code> otherwise.
+	 * @return {@code true} if the code is present, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {

@@ -163,7 +163,7 @@ public class VisitManager {
 	/**
 	 * Returns the list of all {@link Visit}s related to a patID
 	 *
-	 * @param patID - the {@link Patient} ID. If <code>0</code> return the list of all {@link Visit}s
+	 * @param patID - the {@link Patient} ID. If {@code 0} return the list of all {@link Visit}s
 	 * @return the list of {@link Visit}s
 	 * @throws OHServiceException
 	 */
@@ -174,7 +174,7 @@ public class VisitManager {
 	/**
 	 * Returns the list of all {@link Visit}s related to a patID in OPD (Ward is {@code null}).
 	 *
-	 * @param patID - the {@link Patient} ID. If <code>0</code> return the list of all {@link Visit}s
+	 * @param patID - the {@link Patient} ID. If {@code 0} return the list of all {@link Visit}s
 	 * @return the list of {@link Visit}s
 	 * @throws OHServiceException
 	 */
@@ -243,7 +243,7 @@ public class VisitManager {
 	 * to avoid visits overlapping and patients ubiquity
 	 *
 	 * @param visits - the list of {@link Visit}s related to patID.
-	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
+	 * @return {@code true} if the list has been replaced, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
@@ -259,7 +259,7 @@ public class VisitManager {
 	 *
 	 * @param visits - the list of {@link Visit}s related to patID.
 	 * @param removedVisits - the list of {@link Visit}s eventually removed
-	 * @return <code>true</code> if the list has been replaced, <code>false</code> otherwise
+	 * @return {@code true} if the list has been replaced, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
@@ -305,7 +305,7 @@ public class VisitManager {
 	 * Deletes all {@link Visit}s related to a patID
 	 *
 	 * @param patID - the {@link Patient} ID
-	 * @return <code>true</code> if the list has been deleted, <code>false</code> otherwise
+	 * @return {@code true} if the list has been deleted, {@code false} otherwise
 	 * @throws OHServiceException
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
