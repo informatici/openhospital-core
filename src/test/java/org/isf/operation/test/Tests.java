@@ -22,6 +22,7 @@
 package org.isf.operation.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -70,6 +71,7 @@ import org.isf.patient.test.TestPatient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperationRepository;
 import org.isf.pregtreattype.test.TestPregnantTreatmentType;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperationRepository;
 import org.isf.visits.test.TestVisit;
@@ -302,7 +304,8 @@ public class Tests extends OHCoreTestCase {
 	public void testIoDeleteOperation() throws Exception {
 		String code = setupTestOperation(false);
 		Operation foundOperation = operationIoOperations.findByCode(code);
-		assertThat(operationIoOperations.deleteOperation(foundOperation)).isTrue();
+		operationIoOperations.deleteOperation(foundOperation);
+		assertThat(operationIoOperations.isCodePresent(code)).isFalse();
 	}
 
 	@Test
@@ -434,7 +437,8 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrDeleteOperation() throws Exception {
 		String code = setupTestOperation(false);
 		Operation foundOperation = operationBrowserManager.getOperationByCode(code);
-		assertThat(operationBrowserManager.deleteOperation(foundOperation)).isTrue();
+		operationBrowserManager.deleteOperation(foundOperation);
+		assertThat(operationBrowserManager.isCodePresent(code)).isFalse();
 	}
 
 	@Test
@@ -611,15 +615,15 @@ public class Tests extends OHCoreTestCase {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, true);
 		OperationRow operationRow = testOperationRow.setup(operation, true);
-
-		assertThat(operationRowIoOperations.deleteOperationRow(operationRow)).isFalse();
+		assertThatThrownBy(() -> operationRowIoOperations.deleteOperationRow(operationRow))
+			.isInstanceOf(OHServiceException.class);
 	}
 
 	@Test
 	public void testRowIoDeleteOperationRow() throws Exception {
 		int id = setupTestOperationRow(false);
 		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
-		assertThat(operationRowIoOperations.deleteOperationRow(operationRow)).isTrue();
+		operationRowIoOperations.deleteOperationRow(operationRow);
 		assertThat(operationRowIoOperationRepository.findById(id)).isNull();
 	}
 
@@ -800,15 +804,15 @@ public class Tests extends OHCoreTestCase {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, true);
 		OperationRow operationRow = testOperationRow.setup(operation, true);
-
-		assertThat(operationRowBrowserManager.deleteOperationRow(operationRow)).isFalse();
+		assertThatThrownBy(() -> operationRowBrowserManager.deleteOperationRow(operationRow))
+			.isInstanceOf(OHServiceException.class);
 	}
 
 	@Test
 	public void testMgrRowDeleteOperationRow() throws Exception {
 		int id = setupTestOperationRow(false);
 		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
-		assertThat(operationRowBrowserManager.deleteOperationRow(operationRow)).isTrue();
+		operationRowBrowserManager.deleteOperationRow(operationRow);
 		assertThat(operationRowIoOperationRepository.findById(id)).isNull();
 	}
 
@@ -902,8 +906,8 @@ public class Tests extends OHCoreTestCase {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, true);
 
-		assertThat(operation).isEqualTo(operation);
 		assertThat(operation)
+				.isEqualTo(operation)
 				.isNotNull()
 				.isNotEqualTo("a string");
 
@@ -991,8 +995,8 @@ public class Tests extends OHCoreTestCase {
 		Operation operation = testOperation.setup(operationType, true);
 		OperationRow operationRow = testOperationRow.setup(operation, false);
 
-		assertThat(operationRow).isEqualTo(operationRow);
 		assertThat(operationRow)
+				.isEqualTo(operationRow)
 				.isNotNull()
 				.isNotEqualTo("some string");
 	}

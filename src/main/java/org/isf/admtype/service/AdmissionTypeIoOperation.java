@@ -83,7 +83,7 @@ public class AdmissionTypeIoOperation
 	/**
 	 * Checks if the specified Code is already used by others {@link AdmissionType}s.
 	 * @param code the admission type code to check.
-	 * @return <code>true</code> if the code is already used, <code>false</code> otherwise.
+	 * @return {@code true} if the code is already used, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {

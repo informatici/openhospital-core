@@ -25,6 +25,8 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -43,6 +45,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class UserSetting extends Auditable<String> {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "USS_ID")
 	private int id;
 

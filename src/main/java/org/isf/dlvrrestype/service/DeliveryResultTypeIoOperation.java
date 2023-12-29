@@ -82,7 +82,7 @@ public class DeliveryResultTypeIoOperation {
 	/**
 	 * Checks if the specified code is already used by other {@link DeliveryResultType}s.
 	 * @param code the code to check.
-	 * @return <code>true</code> if the code is used, <code>false</code> otherwise.
+	 * @return {@code true} if the code is used, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {

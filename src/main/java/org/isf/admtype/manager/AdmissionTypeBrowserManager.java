@@ -42,7 +42,7 @@ public class AdmissionTypeBrowserManager {
 	/**
 	 * Returns all the available {@link AdmissionType}s.
 	 *
-	 * @return a list of admission types or <code>null</code> if the operation fails.
+	 * @return a list of admission types or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
 	public List<AdmissionType> getAdmissionType() throws OHServiceException {
@@ -77,7 +77,7 @@ public class AdmissionTypeBrowserManager {
 	 * Checks if the specified Code is already used by others {@link AdmissionType}s.
 	 *
 	 * @param code the admission type code to check.
-	 * @return <code>true</code> if the code is already used, <code>false</code> otherwise.
+	 * @return {@code true} if the code is already used, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -98,7 +98,7 @@ public class AdmissionTypeBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param admissionType
-	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHDataValidationException
 	 */
 	protected void validateAdmissionType(AdmissionType admissionType, boolean insert) throws OHServiceException {

@@ -47,7 +47,7 @@ public class DeliveryResultTypeBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param deliveryResultType
-	 * @param insert {@code true} or updated <code>false</code>
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
 	 */
 	protected void validateDeliveryResultType(DeliveryResultType deliveryResultType, boolean insert) throws OHServiceException {
@@ -113,7 +113,7 @@ public class DeliveryResultTypeBrowserManager {
 	 * In case of error a message error is shown and a {@code false} value is returned.
 	 *
 	 * @param code the code to check.
-	 * @return {@code true} if the code is used, <code>false</code> otherwise.
+	 * @return {@code true} if the code is used, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
