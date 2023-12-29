@@ -26,13 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Path;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 import org.isf.patient.model.Patient;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,10 +43,9 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Patient> findByFieldsContainingWordsFromLiteral(String literal) {
-		return this.entityManager.
+		return entityManager.
 				createQuery(buildSearchQuery(literal)).
 				getResultList();
 	}
@@ -79,12 +78,13 @@ public class PatientIoOperationRepositoryImpl implements PatientIoOperationRepos
 		}
 
 		where.add(cb.or(
-				cb.equal(patientRoot.get("deleted"), 'N'),
+				cb.equal(patientRoot.get("deleted"), "N"),
 				cb.isNull(patientRoot.get("deleted"))
 		));
 
 		query.where(cb.and(where.toArray(new Predicate[0])));
 		query.orderBy(cb.desc(patientRoot.get("code")));
+
 
 		return query;
 	}

@@ -39,6 +39,6 @@ public interface WardIoOperationRepository extends JpaRepository<Ward, String> {
 
 	List<Ward> findByIsOpdIsTrue();
 
-	@Query(value = "SELECT w FROM Ward w WHERE WRD_NBEDS > 0 ORDER BY WRD_NAME")
+	@Query(value = "SELECT w FROM Ward w WHERE w.beds > 0 ORDER BY w.description")
 	List<Ward> findByBedsGreaterThanZero();
 }

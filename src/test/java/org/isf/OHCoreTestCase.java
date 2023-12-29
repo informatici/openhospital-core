@@ -21,38 +21,42 @@
  */
 package org.isf;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import org.isf.dicom.manager.SourceFiles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+@SpringBootTest
+@Transactional
+public class OHCoreTestCase {
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public abstract class OHCoreTestCase {
+	private static final Logger LOGGER = LoggerFactory.getLogger(OHCoreTestCase.class);
 
-	@Autowired
-	private EntityManagerFactory entityManagerFactory;
+	@PersistenceContext
+	public EntityManager entityManager;
 
 	public void cleanH2InMemoryDb() {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		entityManager.getTransaction().begin();
-		List<Object[]> showTables = entityManager.createNativeQuery("SHOW TABLES").getResultList();
-		showTables
-				.stream()
-				.map(result -> (String) result[0])
-				.forEach(s -> truncateTable(s, entityManager));
-		entityManager.getTransaction().commit();
-		entityManager.close();
-	}
-
-	public void truncateTable(String name, EntityManager entityManager) {
+		List<Object[]> showTables = entityManager.createNativeQuery("SHOW TABLES")
+			.getResultList();
 		entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
-		entityManager.createNativeQuery("TRUNCATE TABLE " + name).executeUpdate();
+		showTables.stream()
+			.map(result -> (String) result[0])
+			.forEach(s -> {
+				try {
+					entityManager.createNativeQuery("TRUNCATE TABLE " + s).executeUpdate();
+				} catch (Exception e) {
+					LOGGER.error("Could not delete table ", e);
+				}
+			});
 		entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
 	}
+
 }

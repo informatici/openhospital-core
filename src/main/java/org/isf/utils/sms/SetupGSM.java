@@ -21,18 +21,15 @@
  */
 package org.isf.utils.sms;
 
-import java.awt.HeadlessException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Enumeration;
-import java.util.Properties;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import gnu.io.CommPortIdentifier;
+import gnu.io.SerialPort;
+import gnu.io.SerialPortEvent;
+import gnu.io.SerialPortEventListener;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.isf.generaldata.ConfigurationProperties;
 import org.isf.sms.providers.gsm.GSMGatewayService;
 import org.isf.sms.providers.gsm.GSMParameters;
@@ -40,10 +37,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.server.PortInUseException;
 
-import gnu.io.CommPortIdentifier;
-import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Enumeration;
+import java.util.Properties;
+
 
 /**
  * @author Mwithi
@@ -52,12 +53,11 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(SetupGSM.class);
-	
 	private Properties props;
 	private CommPortIdentifier portId;
 	private SerialPort serialPort;
 	private InputStream inputStream;
-	
+
 	/**
 	 * @param args
 	 */
@@ -65,41 +65,41 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 		new SetupGSM();
 		System.exit(0);
 	}
-	
+
 	public SetupGSM() {
 		props = ConfigurationProperties.loadPropertiesFile(GSMParameters.FILE_PROPERTIES, LOGGER);
-		
+
 		String model = props.getProperty(GSMGatewayService.SERVICE_NAME + ".gmm");
 
 		Enumeration<?> portList = CommPortIdentifier.getPortIdentifiers();
-		
+
 		while (portList.hasMoreElements()) {
-			
+
 			portId = (CommPortIdentifier) portList.nextElement();
 
 			if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
 
 				System.out.println("Port found: " + portId.getName() + ' ' + (portId.getPortType() == CommPortIdentifier.PORT_SERIAL ? "SERIAL" : "PARALLEL"));
-			
+
 				try {
 					serialPort = (SerialPort) portId.open("SmsSender", 10);
 					serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 					serialPort.addEventListener(this);
-			        serialPort.notifyOnDataAvailable(true);
-					
+					serialPort.notifyOnDataAvailable(true);
+
 					OutputStream outputStream = serialPort.getOutputStream();
 					if (outputStream != null) {
 						System.out.println("Output stream OK");
 					} else {
 						System.out.println("Output stream not found");
 					}
-					
-					inputStream = serialPort.getInputStream(); 
+
+					inputStream = serialPort.getInputStream();
 					byte[] command = model.getBytes();
-			        outputStream.write(command);
-			        
-			        Thread.sleep(5000);
-			        
+					outputStream.write(command);
+
+					Thread.sleep(5000);
+
 				} catch (PortInUseException e) {
 					LOGGER.error("Port in use.");
 				} catch (Exception exception) {
@@ -152,21 +152,26 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 			LOGGER.error(exception.getMessage(), exception);
 			LOGGER.error("outofbound: '{}'", answer);
 		}
-		System.out.println(answer.trim());
+		LOGGER.info(answer.trim());
 
-		return JOptionPane.showConfirmDialog(this, "Found modem: "+answer+" on port " + port + "\nConfirm?");
+		return JOptionPane.showConfirmDialog(this, "Found modem: " + answer + " on port " + port + "\nConfirm?");
 	}
 
 	/**
 	 * @param port
 	 */
 	private void save(String port) {
-		PropertiesConfiguration config;
+
+		FileBasedConfigurationBuilder<PropertiesConfiguration> builder = new FileBasedConfigurationBuilder<>(PropertiesConfiguration.class)
+			.configure(new Parameters().properties()
+				.setFileName(GSMParameters.FILE_PROPERTIES)
+				.setThrowExceptionOnMissing(true)
+				.setListDelimiterHandler(new DefaultListDelimiterHandler(';'))
+				.setIncludesAllowed(false));
 		try {
-			config = new PropertiesConfiguration(GSMParameters.FILE_PROPERTIES);
-			config.setProperty(GSMGatewayService.SERVICE_NAME + ".port", port);
-			config.save();
-			System.out.println("Port saved in " + GSMParameters.FILE_PROPERTIES);
+			builder.getConfiguration().setProperty(GSMGatewayService.SERVICE_NAME + ".port", port);
+			builder.save();
+			LOGGER.info("Port saved in " + GSMParameters.FILE_PROPERTIES);
 		} catch (ConfigurationException ce) {
 			LOGGER.error(ce.getMessage(), ce);
 		}

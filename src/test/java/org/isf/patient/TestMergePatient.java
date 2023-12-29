@@ -5,7 +5,7 @@
  * Open Hospital is a free and open source software for healthcare data management.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU General License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
@@ -14,61 +14,61 @@
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU General License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU General License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 package org.isf.patient;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import java.time.LocalDate;
-
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
+import org.isf.accounting.TestBill;
+import org.isf.accounting.TestBillPayments;
 import org.isf.accounting.model.Bill;
 import org.isf.accounting.service.AccountingBillIoOperationRepository;
-import org.isf.accounting.test.TestBill;
-import org.isf.accounting.test.TestBillPayments;
+import org.isf.admission.TestAdmission;
 import org.isf.admission.model.Admission;
 import org.isf.admission.service.AdmissionIoOperationRepository;
-import org.isf.admission.test.TestAdmission;
+import org.isf.admtype.TestAdmissionType;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.admtype.service.AdmissionTypeIoOperationRepository;
-import org.isf.admtype.test.TestAdmissionType;
+import org.isf.disease.TestDisease;
 import org.isf.disease.model.Disease;
 import org.isf.disease.service.DiseaseIoOperationRepository;
-import org.isf.disease.test.TestDisease;
+import org.isf.distype.TestDiseaseType;
 import org.isf.distype.model.DiseaseType;
 import org.isf.distype.service.DiseaseTypeIoOperationRepository;
-import org.isf.distype.test.TestDiseaseType;
+import org.isf.examination.TestPatientExamination;
 import org.isf.examination.model.PatientExamination;
 import org.isf.examination.service.ExaminationIoOperationRepository;
-import org.isf.examination.test.TestPatientExamination;
 import org.isf.patient.manager.PatientBrowserManager;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
 import org.isf.patient.service.PatientIoOperations;
-import org.isf.patient.test.TestPatient;
+import org.isf.priceslist.TestPriceList;
 import org.isf.priceslist.model.PriceList;
 import org.isf.priceslist.service.PricesListIoOperationRepository;
-import org.isf.priceslist.test.TestPriceList;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.visits.TestVisit;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperationRepository;
-import org.isf.visits.test.TestVisit;
+import org.isf.ward.TestWard;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
-import org.isf.ward.test.TestWard;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestMergePatient extends OHCoreTestCase {
+import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+
+class TestMergePatient extends OHCoreTestCase {
 
 	private static TestPatient testPatient;
 	private static TestPatientExamination testPatientExamination;
@@ -80,7 +80,6 @@ public class TestMergePatient extends OHCoreTestCase {
 	private static TestPriceList testPriceList;
 	private static TestVisit testVisit;
 	private static TestWard testWard;
-
 	@Autowired
 	PatientIoOperations patientIoOperation;
 	@Autowired
@@ -108,8 +107,8 @@ public class TestMergePatient extends OHCoreTestCase {
 	@Autowired
 	WardIoOperationRepository wardIoOperationRepository;
 
-	@BeforeClass
-	public static void setUpClass() {
+	@BeforeAll
+	static void setUpClass() {
 		testPatient = new TestPatient();
 		testPatientExamination = new TestPatientExamination();
 		testAdmission = new TestAdmission();
@@ -123,14 +122,14 @@ public class TestMergePatient extends OHCoreTestCase {
 		testWard = new TestWard();
 	}
 
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp() {
 		cleanH2InMemoryDb();
 		testPatientMergedEventListener.setShouldFail(false);
 	}
 
 	@Test
-	public void testMergePatientHistory() throws Exception {
+	void testMergePatientHistory() throws Exception {
 		// given:
 		Patient mergedPatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
 		Patient obsoletePatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
@@ -148,7 +147,7 @@ public class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testWholeMergeOperationShouldBeRolledBackWhenOneOfUpdateOperationsFails() throws OHException {
+	void testWholeMergeOperationShouldBeRolledBackWhenOneOfUpdateOperationsFails() throws OHException {
 		// given:
 		Patient mergedPatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
 		Patient obsoletePatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
@@ -170,7 +169,7 @@ public class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrMergePatient() throws Exception {
+	void testMgrMergePatient() throws Exception {
 		// given:
 		Patient mergedPatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
 		Patient obsoletePatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
@@ -188,18 +187,18 @@ public class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrMergePatientPatient1MissingInformation() throws Exception {
+	void testMgrMergePatientPatient1MissingInformation() throws Exception {
 		// given:
 		Patient patient1 = testPatient.setup(false);
 		patient1.setAddress(null);
-		patient1.setCity(null);
+		patient1.setCity("TestCity");
 		patient1.setNextKin(null);
 		patient1.setTelephone(null);
-		patient1.setMotherName(null);
+		patient1.setMotherName("TestMotherName");
 		patient1.setMother('U');
-		patient1.setFatherName(null);
+		patient1.setFatherName("TestFatherName");
 		patient1.setFather('U');
-		patient1.setBloodType(null);
+		patient1.setBloodType("0-/+");
 		patient1.setHasInsurance('U');
 		patient1.setParentTogether('U');
 		patient1.setNote(null);
@@ -219,7 +218,7 @@ public class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrMergePatientMergeNotes() throws Exception {
+	void testMgrMergePatientMergeNotes() throws Exception {
 		// given:
 		Patient patient1 = testPatient.setup(false);
 		patient1.setNote("Note 1");
@@ -236,7 +235,7 @@ public class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrMergePatientMergeBirthDateMissingAgeTypePatient2HasBirthDate() throws Exception {
+	void testMgrMergePatientMergeBirthDateMissingAgeTypePatient2HasBirthDate() throws Exception {
 		// given:
 		Patient patient1 = testPatient.setup(false);
 		patient1.setBirthDate(LocalDate.of(50, 1, 1));
@@ -257,7 +256,7 @@ public class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrMergePatientMergeBirthDatePatient2HasAgeType() throws Exception {
+	void testMgrMergePatientMergeBirthDatePatient2HasAgeType() throws Exception {
 		// given:
 		Patient patient1 = testPatient.setup(false);
 		patient1.setBirthDate(LocalDate.of(50, 1, 1));
@@ -278,7 +277,7 @@ public class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrWholeMergeOperationShouldBeRolledBackWhenOneOfUpdateOperationsFails() throws OHException {
+	void testMgrWholeMergeOperationShouldBeRolledBackWhenOneOfUpdateOperationsFails() throws OHException {
 		// given:
 		Patient mergedPatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
 		Patient obsoletePatient = patientIoOperationRepository.saveAndFlush(testPatient.setup(false));
@@ -300,7 +299,7 @@ public class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrMergeValidationSexNotTheSame() {
+	void testMgrMergeValidationSexNotTheSame() {
 		assertThatThrownBy(() -> {
 			Patient patient1 = testPatient.setup(false);
 			patient1.setSex('F');
@@ -319,7 +318,7 @@ public class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrMergeValidationPatient1PendingBills() {
+	void testMgrMergeValidationPatient1PendingBills() {
 		assertThatThrownBy(() -> {
 			Patient patient1 = testPatient.setup(false);
 			PriceList priceList = testPriceList.setup(false);
@@ -340,7 +339,7 @@ public class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrMergeValidationPatient2PendingBills() {
+	void testMgrMergeValidationPatient2PendingBills() {
 		assertThatThrownBy(() -> {
 			Patient patient1 = testPatient.setup(false);
 			Patient mergedPatient = patientIoOperationRepository.saveAndFlush(patient1);
@@ -361,7 +360,7 @@ public class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrMergeValidationPatient1Admitted() {
+	void testMgrMergeValidationPatient1Admitted() {
 		assertThatThrownBy(() -> {
 			Ward ward = testWard.setup(false, false);
 			Patient patient1 = testPatient.setup(false);
@@ -393,7 +392,7 @@ public class TestMergePatient extends OHCoreTestCase {
 	}
 
 	@Test
-	public void testMgrMergeValidationPatient2Admitted() {
+	void testMgrMergeValidationPatient2Admitted() {
 		assertThatThrownBy(() -> {
 			Patient patient1 = testPatient.setup(false);
 			Patient mergedPatient = patientIoOperationRepository.saveAndFlush(patient1);

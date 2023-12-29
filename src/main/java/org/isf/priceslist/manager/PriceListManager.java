@@ -158,7 +158,7 @@ public class PriceListManager {
 	 * @throws OHDataValidationException
 	 */
 	protected void validatePriceList(PriceList priceList) throws OHDataValidationException {
-		java.util.List<OHExceptionMessage> errors = new ArrayList<>();
+		List<OHExceptionMessage> errors = new ArrayList<>();
 
 		if (StringUtils.isEmpty(priceList.getCode())) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertacode.msg")));

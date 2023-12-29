@@ -68,7 +68,7 @@ public class VaccineTypeBrowserManager {
 		if (description.isEmpty()) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.pleaseinsertavaliddescription.msg")));
 		}
-		if (insert && isCodePresent(vaccineType.getCode())) {
+		if (insert && !key.isEmpty() && isCodePresent(vaccineType.getCode())) {
 			throw new OHDataIntegrityViolationException(new OHExceptionMessage(MessageBundle.getMessage("angal.common.thecodeisalreadyinuse.msg")));
 		}
 		if (!errors.isEmpty()) {

@@ -52,9 +52,12 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class DiseaseIoOperations {
 
-	@Autowired
-	private DiseaseIoOperationRepository repository;
-	
+	private final DiseaseIoOperationRepository repository;
+
+	public DiseaseIoOperations(DiseaseIoOperationRepository repository) {
+		this.repository = repository;
+	}
+
 	/**
 	 * Gets a {@link Disease} with the specified code.
 	 * @param code the disease code.

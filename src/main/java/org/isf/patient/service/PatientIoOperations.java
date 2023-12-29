@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -71,17 +71,21 @@ public class PatientIoOperations {
 
 	public static final char NOT_DELETED_STATUS = 'N';
 	
-	@Autowired
-	private PatientIoOperationRepository repository;
+	private final PatientIoOperationRepository repository;
 	
-	@Autowired
-	private ApplicationEventPublisher applicationEventPublisher;
+	private final ApplicationEventPublisher applicationEventPublisher;
  
-	@Autowired
-	private FileSystemPatientPhotoRepository fileSystemPatientPhotoRepository;
+	private final FileSystemPatientPhotoRepository fileSystemPatientPhotoRepository;
 
-	@Autowired
-	private EntityManager entityManager;
+	private final EntityManager entityManager;
+
+	public PatientIoOperations(PatientIoOperationRepository repository, ApplicationEventPublisher applicationEventPublisher, FileSystemPatientPhotoRepository fileSystemPatientPhotoRepository, EntityManager entityManager) {
+		this.repository = repository;
+		this.applicationEventPublisher = applicationEventPublisher;
+		this.fileSystemPatientPhotoRepository = fileSystemPatientPhotoRepository;
+		this.entityManager = entityManager;
+	}
+
 	/**
 	 * Method that returns the full list of {@link Patient}s not logically deleted,
 	 *

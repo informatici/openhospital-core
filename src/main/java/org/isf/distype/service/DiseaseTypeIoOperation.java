@@ -39,9 +39,12 @@ import org.springframework.transaction.annotation.Transactional;
 @TranslateOHServiceException
 public class DiseaseTypeIoOperation {
 
-	@Autowired
-	private DiseaseTypeIoOperationRepository repository;
-	
+	private final DiseaseTypeIoOperationRepository repository;
+
+	public DiseaseTypeIoOperation(DiseaseTypeIoOperationRepository repository) {
+		this.repository = repository;
+	}
+
 	/**
 	 * Returns all the stored {@link DiseaseType}s.
 	 * @return a list of disease type.

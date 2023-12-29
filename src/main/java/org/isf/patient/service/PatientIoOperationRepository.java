@@ -46,8 +46,8 @@ public interface PatientIoOperationRepository extends JpaRepository<Patient, Int
 	@Query("select p from Patient p where p.code = :id and (p.deleted = :deletedStatus or p.deleted is null)")
 	List<Patient> findAllWhereIdAndDeleted(@Param("id") Integer id, @Param("deletedStatus") char deletedStatus);
 
-	@Modifying
-	@Query(value = "update Patient p set p.deleted = 'Y' where p.code = :id")
+	@Modifying(clearAutomatically = true)
+	@Query(value = "update Patient p set p.deleted ='Y' where p.code = :id")
 	int updateDeleted(@Param("id") Integer id);
 
 	List<Patient> findByNameAndDeleted(String name, char deletedStatus);

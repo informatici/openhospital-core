@@ -21,10 +21,8 @@
  */
 package org.isf.sms.providers.textbelt;
 
-import java.util.Properties;
-
-import javax.annotation.Resource;
-
+import feign.Feign;
+import feign.slf4j.Slf4jLogger;
 import org.isf.sms.model.Sms;
 import org.isf.sms.providers.SmsSenderInterface;
 import org.isf.sms.providers.common.CustomCommonDecoder;
@@ -36,25 +34,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import feign.Feign;
-import feign.slf4j.Slf4jLogger;
 
 @Component
+@PropertySource("classpath:sms.properties")
 public class TextbeltGatewayService implements SmsSenderInterface {
 
 	private static final String SERVICE_NAME = "textbelt-gateway-service";
 	private static final Boolean RESPONSE_SUCCESS = Boolean.TRUE;
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(TextbeltGatewayService.class);
+	private final Environment smsProperties;
+	private final TextbeltGatewayConverter textbeltGatewayConverter;
 
-	@Resource(name = "smsProperties")
-	private Properties smsProperties;
-
-	@Autowired
-	private TextbeltGatewayConverter textbeltGatewayConverter;
+	public TextbeltGatewayService(TextbeltGatewayConverter textbeltGatewayConverter, Environment smsProperties) {
+		this.textbeltGatewayConverter = textbeltGatewayConverter;
+		this.smsProperties = smsProperties;
+	}
 
 	@Override
 	public boolean sendSMS(Sms sms) {
@@ -72,7 +71,7 @@ public class TextbeltGatewayService implements SmsSenderInterface {
 		String baseUrl = this.smsProperties.getProperty(this.getRootKey() + ".ribbon.base-url");
 		// For debug remember to update log level to: feign.Logger.Level.FULL. Happy debugging!
 		return Feign.builder().encoder(new CustomCommonEncoder()).decoder(new CustomCommonDecoder()).logger(new Slf4jLogger(TextbeltGatewayService.class))
-						.logLevel(feign.Logger.Level.BASIC).contract(new SpringMvcContract()).target(TextbeltGatewayRemoteService.class, baseUrl);
+			.logLevel(feign.Logger.Level.BASIC).contract(new SpringMvcContract()).target(TextbeltGatewayRemoteService.class, baseUrl);
 	}
 
 	private String retrieveSessionKey() {

@@ -46,18 +46,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class PatientBrowserManager {
 
-	@Autowired
-	private PatientIoOperations ioOperations;
+	private final PatientIoOperations ioOperations;
 
-	@Autowired
-	private AdmissionBrowserManager admissionManager;
+	private final AdmissionBrowserManager admissionManager;
 
-	@Autowired
-	private BillBrowserManager billManager;
+	private final BillBrowserManager billManager;
 
 	protected LinkedHashMap<String, String> maritalHashMap;
 
 	protected LinkedHashMap<String, String> professionHashMap;
+
+	public PatientBrowserManager(PatientIoOperations ioOperations, AdmissionBrowserManager admissionManager, BillBrowserManager billManager) {
+		this.ioOperations = ioOperations;
+		this.admissionManager = admissionManager;
+		this.billManager = billManager;
+	}
 
 	/**
 	 * Method that inserts a new {@link Patient}.

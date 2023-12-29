@@ -21,18 +21,20 @@
  */
 package org.isf.menu.model;
 
-import javax.persistence.Column;
-import javax.persistence.ColumnResult;
-import javax.persistence.Entity;
-import javax.persistence.EntityResult;
-import javax.persistence.FieldResult;
-import javax.persistence.Id;
-import javax.persistence.SqlResultSetMapping;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Column;
+import jakarta.persistence.ColumnResult;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityResult;
+import jakarta.persistence.FieldResult;
+import jakarta.persistence.Id;
+import jakarta.persistence.SqlResultSetMapping;
+import jakarta.persistence.Table;
+
+import jakarta.validation.constraints.NotNull;
 
 import org.isf.generaldata.MessageBundle;
+import org.springframework.data.annotation.Transient;
+
 
 /**
  * ------------------------------------------
@@ -50,7 +52,7 @@ import org.isf.generaldata.MessageBundle;
 	entities={
 	    @EntityResult(entityClass=org.isf.menu.model.UserMenuItem.class, fields={
                 @FieldResult(name="code", column="MNI_ID_A"),
-                @FieldResult(name="buttonLabel", column="MNI_BTN_LABEL"), 
+                @FieldResult(name="buttonLabel", column="MNI_BTN_LABEL"),
                 @FieldResult(name="altLabel", column="MNI_LABEL"),
                 @FieldResult(name="tooltip", column="MNI_TOOLTIP"),
                 @FieldResult(name="shortcut", column="MNI_SHORTCUT"),
@@ -62,10 +64,10 @@ import org.isf.generaldata.MessageBundle;
 	columns={
 	    @ColumnResult(name="is_active")}
 	)
-public class UserMenuItem 
+public class UserMenuItem
 {
-	@Id 
-	@Column(name="MNI_ID_A")	
+	@Id
+	@Column(name="MNI_ID_A")
 	private String 	code;
 
 	@NotNull
@@ -100,10 +102,10 @@ public class UserMenuItem
 
 	@Transient
 	private boolean isActive;
-	
+
 	@Transient
 	private volatile int hashCode;
-	
+
 	public UserMenuItem() {
 		super();
 	}
@@ -122,9 +124,9 @@ public class UserMenuItem
 		this.position = position;
 		this.isActive = isActive;
 	}
-	
+
 	public String getAltLabel() {
-		return MessageBundle.getMessage(altLabel); 
+		return MessageBundle.getMessage(altLabel);
 	}
 	public void setAltLabel(String altLabel) {
 		this.altLabel = altLabel;
