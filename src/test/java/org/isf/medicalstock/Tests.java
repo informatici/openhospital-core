@@ -21,7 +21,6 @@
  */
 package org.isf.medicalstock;
 
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -117,6 +116,14 @@ class Tests extends OHCoreTestCase {
 	@Autowired
 	ApplicationEventPublisher applicationEventPublisher;
 
+	@DisplayName("Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@ParameterizedTest
+	@MethodSource("automaticlot")
+	@Retention(RetentionPolicy.RUNTIME)
+	private @interface TestParameterized {
+
+	}
+
 	public static Stream<Arguments> automaticlot() {
 		return Stream.of(
 			Arguments.of(false, false, false),
@@ -131,13 +138,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 
-	@DisplayName("Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
-	@ParameterizedTest
-	@MethodSource("automaticlot")
-	@Retention(RetentionPolicy.RUNTIME)
-	private @interface TestParameterized {
 
-	}
 
 	private static void setGeneralData(boolean in, boolean out, boolean toward) {
 		GeneralData.AUTOMATICLOT_IN = in;
@@ -237,8 +238,8 @@ class Tests extends OHCoreTestCase {
 		setGeneralData(in, out, toward);
 		int code = setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findById(code).get();
-		boolean result = medicalStockIoOperation.newAutomaticDischargingMovement(foundMovement);
-		assertThat(result).isTrue();
+		List<Movement> result = medicalStockIoOperation.newAutomaticDischargingMovement(foundMovement);
+		assertThat(result).isNotEmpty();
 	}
 
 	@TestParameterized
@@ -248,7 +249,7 @@ class Tests extends OHCoreTestCase {
 		Movement foundMovement = movementIoOperationRepository.findById(code).get();
 		foundMovement.getLot().setMainStoreQuantity(10);
 		foundMovement.setQuantity(100);
-		assertThat(medicalStockIoOperation.newAutomaticDischargingMovement(foundMovement)).isTrue();
+		assertThat(medicalStockIoOperation.newAutomaticDischargingMovement(foundMovement)).isNotNull();
 	}
 
 	@TestParameterized
@@ -317,7 +318,7 @@ class Tests extends OHCoreTestCase {
 			10, // new lot with 10 quantitye
 			supplier,
 			"newReference");
-		assertThat(medicalStockIoOperation.newMovement(newMovement)).isTrue();
+		assertThat(medicalStockIoOperation.newMovement(newMovement)).isNotNull();
 	}
 
 	@TestParameterized
@@ -339,7 +340,7 @@ class Tests extends OHCoreTestCase {
 			10, // new lot with 10 quantitye
 			supplier,
 			"newReference");
-		assertThat(medicalStockIoOperation.newMovement(newMovement)).isTrue();
+		assertThat(medicalStockIoOperation.newMovement(newMovement)).isNotNull();
 	}
 
 	@TestParameterized
@@ -347,8 +348,8 @@ class Tests extends OHCoreTestCase {
 		setGeneralData(in, out, toward);
 		int code = setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findById(code).get();
-		boolean result = medicalStockIoOperation.newMovement(foundMovement);
-		assertThat(result).isTrue();
+		Movement result = medicalStockIoOperation.newMovement(foundMovement);
+		assertThat(result).isNotNull();
 	}
 
 	@TestParameterized
@@ -358,7 +359,7 @@ class Tests extends OHCoreTestCase {
 		Movement foundMovement = movementIoOperationRepository.findById(code).get();
 		boolean automaticLotMode = GeneralData.AUTOMATICLOT_IN;
 		GeneralData.AUTOMATICLOT_IN = true;
-		assertThat(medicalStockIoOperation.newMovement(foundMovement)).isTrue();
+		assertThat(medicalStockIoOperation.newMovement(foundMovement)).isNotNull();
 		GeneralData.AUTOMATICLOT_IN = automaticLotMode;
 	}
 
@@ -373,7 +374,7 @@ class Tests extends OHCoreTestCase {
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
 		Movement newMovement = new Movement(movement.getMedical(), medicalType, movement.getWard(), movement.getLot(),
 			TimeTools.getNow(), 10, movement.getSupplier(), "newReference");
-		assertThat(medicalStockIoOperation.newMovement(newMovement)).isTrue();
+		assertThat(medicalStockIoOperation.newMovement(newMovement)).isNotNull();
 	}
 
 	@TestParameterized
@@ -381,8 +382,8 @@ class Tests extends OHCoreTestCase {
 		setGeneralData(in, out, toward);
 		int code = setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findById(code).get();
-		boolean result = medicalStockIoOperation.prepareChargingMovement(foundMovement);
-		assertThat(result).isTrue();
+		Movement result = medicalStockIoOperation.prepareChargingMovement(foundMovement);
+		assertThat(result).isNotNull();
 	}
 
 	@TestParameterized
@@ -390,8 +391,8 @@ class Tests extends OHCoreTestCase {
 		setGeneralData(in, out, toward);
 		int code = setupTestMovement(false);
 		Movement foundMovement = movementIoOperationRepository.findById(code).get();
-		boolean result = medicalStockIoOperation.prepareDischargingMovement(foundMovement);
-		assertThat(result).isTrue();
+		Movement result = medicalStockIoOperation.prepareDischargingMovement(foundMovement);
+		assertThat(result).isNotNull();
 	}
 
 	@TestParameterized
@@ -725,7 +726,7 @@ class Tests extends OHCoreTestCase {
 		Movement movement = movementIoOperationRepository.findById(code).get();
 		List<Movement> movements = new ArrayList<>(1);
 		movements.add(movement);
-		assertThat(movStockInsertingManager.newMultipleChargingMovements(movements, "refNo")).isTrue();
+		assertThat(movStockInsertingManager.newMultipleChargingMovements(movements, "refNo")).isNotEmpty();
 	}
 
 	@TestParameterized
@@ -754,7 +755,7 @@ class Tests extends OHCoreTestCase {
 		Movement movement = movementIoOperationRepository.findById(code).get();
 		List<Movement> movements = new ArrayList<>(1);
 		movements.add(movement);
-		assertThat(movStockInsertingManager.newMultipleDischargingMovements(movements, "refNo")).isTrue();
+		assertThat(movStockInsertingManager.newMultipleDischargingMovements(movements, "refNo")).isNotEmpty();
 	}
 
 	@TestParameterized
@@ -785,7 +786,7 @@ class Tests extends OHCoreTestCase {
 		movements.add(movement);
 		boolean isAutomaticLot_Out = GeneralData.AUTOMATICLOT_OUT;
 		GeneralData.AUTOMATICLOT_OUT = true;
-		assertThat(movStockInsertingManager.newMultipleDischargingMovements(movements, "refNo")).isTrue();
+		assertThat(movStockInsertingManager.newMultipleDischargingMovements(movements, "refNo")).isNotEmpty();
 		GeneralData.AUTOMATICLOT_OUT = isAutomaticLot_Out;
 	}
 
@@ -794,7 +795,7 @@ class Tests extends OHCoreTestCase {
 		setGeneralData(in, out, toward);
 		int code = setupTestMovement(false);
 		Movement movement = movementIoOperationRepository.findById(code).get();
-		assertThat(movStockInsertingManager.storeLot(movement.getLot().getCode(), movement.getLot(), movement.getMedical())).isTrue();
+		assertThat(movStockInsertingManager.storeLot(movement.getLot().getCode(), movement.getLot(), movement.getMedical())).isNotNull();
 	}
 
 	@TestParameterized

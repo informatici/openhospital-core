@@ -39,19 +39,6 @@ import org.isf.medtype.model.MedicalType;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * MedicalDSR - model for the Medical DSR (Drugs Surgery Rest): represents a medical
- * -----------------------------------------
- * modification history
- * 11-dec-2005 - bob - first version
- * 14-jan-2006
- * ? - modified by alex
- * 			- product code
- * 			- pieces per packet
- * 13/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_MEDICALDSR")
 @EntityListeners(AuditingEntityListener.class)

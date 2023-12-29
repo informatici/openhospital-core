@@ -33,15 +33,6 @@ import jakarta.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * AgeType - model for the age type entity; represent age's ranges
- * -----------------------------------------
- * modification history
- * ? - bob - first version
- * 17/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_AGETYPE")
 @EntityListeners(AuditingEntityListener.class)

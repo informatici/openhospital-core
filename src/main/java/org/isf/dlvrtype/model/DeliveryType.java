@@ -33,15 +33,6 @@ import jakarta.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Delivery Type - model for the delivery type entity
- * -----------------------------------------
- * modification history
- * ? - bob - first version
- * 11/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_DELIVERYTYPE")
 @EntityListeners(AuditingEntityListener.class)

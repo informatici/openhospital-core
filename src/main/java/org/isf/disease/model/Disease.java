@@ -39,15 +39,6 @@ import org.isf.distype.model.DiseaseType;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Disease - model for a disease
- * -----------------------------------------
- * modification history
- * 21-jan-2006 - bob - first version
- * 03/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_DISEASE")
 @EntityListeners(AuditingEntityListener.class)

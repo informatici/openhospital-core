@@ -33,15 +33,6 @@ import jakarta.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * ExamType - model for the exam type entity
- * -----------------------------------------
- * modification history
- * 20-jan-2006 - bob - first version
- * 18/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_EXAMTYPE")
 @EntityListeners(AuditingEntityListener.class)

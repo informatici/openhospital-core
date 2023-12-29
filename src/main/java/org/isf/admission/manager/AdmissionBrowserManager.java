@@ -226,7 +226,7 @@ public class AdmissionBrowserManager {
 	 * Inserts a new admission.
 	 *
 	 * @param admission the admission to insert.
-	 * @return <code>true</code> if the admission has been successfully inserted, <code>false</code> otherwise.
+	 * @return {@code true} if the admission has been successfully inserted, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public Admission newAdmission(Admission admission) throws OHServiceException {
@@ -250,7 +250,7 @@ public class AdmissionBrowserManager {
 	 * Updates the specified {@link Admission} object.
 	 *
 	 * @param admission the admission object to update.
-	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
+	 * @return {@code true} if has been updated, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public Admission updateAdmission(Admission admission) throws OHServiceException {
@@ -295,7 +295,7 @@ public class AdmissionBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param admission
-	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHDataValidationException
 	 */
 	protected void validateAdmission(Admission admission, boolean insert) throws OHServiceException {

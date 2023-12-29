@@ -115,10 +115,8 @@ public class Tests extends OHCoreTestCase {
 	public void testIoDeleteMovementType() throws Exception {
 		String code = setupTestMovementType(false);
 		MovementType foundMovementType = medicalDsrStockMovementTypeIoOperation.findOneByCode(code);
-		boolean result = medicalDsrStockMovementTypeIoOperation.deleteMedicalDsrStockMovementType(foundMovementType);
-		assertThat(result).isTrue();
-		result = medicalDsrStockMovementTypeIoOperation.isCodePresent(code);
-		assertThat(result).isFalse();
+		medicalDsrStockMovementTypeIoOperation.deleteMedicalDsrStockMovementType(foundMovementType);
+		assertThat(medicalDsrStockMovementTypeIoOperation.isCodePresent(code)).isFalse();
 	}
 
 	@Test
@@ -162,7 +160,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrDeleteMovementType() throws Exception {
 		String code = setupTestMovementType(false);
 		MovementType foundMovementType = medicalDsrStockMovementTypeBrowserManager.getMovementType(code);
-		assertThat(medicalDsrStockMovementTypeBrowserManager.deleteMedicalDsrStockMovementType(foundMovementType)).isTrue();
+		medicalDsrStockMovementTypeBrowserManager.deleteMedicalDsrStockMovementType(foundMovementType);
 		assertThat(medicalDsrStockMovementTypeBrowserManager.isCodePresent(code)).isFalse();
 	}
 

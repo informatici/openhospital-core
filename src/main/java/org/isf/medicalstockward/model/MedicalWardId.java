@@ -32,20 +32,10 @@ import org.isf.medicals.model.Medical;
 import org.isf.medicalstock.model.Lot;
 import org.isf.ward.model.Ward;
 
-/**
- * ------------------------------------------
- * Medical Ward - model for the medical ward ID entity
- * -----------------------------------------
- * modification history
- * ? - ?
- * 17/01/2015 - Antonio - ported to JPA
- * 29/01/2020 - Mwithi - redefined embeddable entity
- * ------------------------------------------
- */
 @SuppressWarnings("serial")
 @Embeddable
-public class MedicalWardId implements Serializable 
-{	
+public class MedicalWardId implements Serializable {
+
 	@NotNull
 	@ManyToOne
 	@JoinColumn(name="MDSRWRD_WRD_ID_A")

@@ -32,17 +32,6 @@ import jakarta.persistence.Transient;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Medical Type - model for the medical type entity
- * Defines a medical type: D: k: S: R:
- * -----------------------------------------
- * modification history
- * 11-dec-2005 - bob - first version
- * 14-jan-2006
- * 18/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_MEDICALDSRTYPE")
 @EntityListeners(AuditingEntityListener.class)

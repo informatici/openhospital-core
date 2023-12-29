@@ -44,15 +44,6 @@ import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * -----------------------------------------
- * Medical Ward - model for the medical ward entity
- * -----------------------------------------
- * modification history
- * ? - mwithi
- * 17/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_MEDICALDSRSTOCKMOVWARD")
 @EntityListeners(AuditingEntityListener.class)

@@ -35,15 +35,6 @@ import jakarta.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * PricesOthers : represents an other entry for prices
- * -----------------------------------------
- * modification history
- * ? - Alex - first version
- * 1/08/2016 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_PRICESOTHERS")
 @EntityListeners(AuditingEntityListener.class)

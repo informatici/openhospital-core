@@ -30,23 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * -----------------------------------------
- * This class offers the io operations for recovering and managing
- * diseases records from the database
- * 
- * @author Rick, Vero
- * <p>
- * modification history
- * 25/01/2006 - Rick, Vero, Pupo  - first beta version
- * 08/11/2006 - ross - added support for OPD and IPD flags
- * 09/06/2007 - ross - when updating, now the user can change the "dis type" also
- * 02/09/2008 - alex - added method for getting a Disease by his code
- * 					   added method for getting a DiseaseType by his code
- * 13/02/2009 - alex - modified query for ordering resultset
- *                     by description only
- * ------------------------------------------
- */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException

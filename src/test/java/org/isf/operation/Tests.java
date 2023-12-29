@@ -65,12 +65,14 @@ import org.isf.patient.TestPatient;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperationRepository;
 import org.isf.pregtreattype.TestPregnantTreatmentType;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperationRepository;
 import org.isf.visits.TestVisit;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
 import org.isf.ward.TestWard;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -302,7 +304,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoDeleteOperation() throws Exception {
 		String code = setupTestOperation(false);
 		Operation foundOperation = operationIoOperations.findByCode(code);
-		assertThat(operationIoOperations.deleteOperation(foundOperation)).isTrue();
+		Assertions.assertDoesNotThrow(() -> operationIoOperations.deleteOperation(foundOperation));
 	}
 
 	@Test
@@ -434,7 +436,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrDeleteOperation() throws Exception {
 		String code = setupTestOperation(false);
 		Operation foundOperation = operationBrowserManager.getOperationByCode(code);
-		assertThat(operationBrowserManager.deleteOperation(foundOperation)).isTrue();
+		Assertions.assertDoesNotThrow(() ->operationBrowserManager.deleteOperation(foundOperation));
 	}
 
 	@Test
@@ -612,14 +614,14 @@ public class Tests extends OHCoreTestCase {
 		Operation operation = testOperation.setup(operationType, true);
 		OperationRow operationRow = testOperationRow.setup(operation, true);
 
-		assertThat(operationRowIoOperations.deleteOperationRow(operationRow)).isFalse();
+		Assertions.assertThrows(OHServiceException.class, () -> operationRowIoOperations.deleteOperationRow(operationRow));
 	}
 
 	@Test
 	public void testRowIoDeleteOperationRow() throws Exception {
 		int id = setupTestOperationRow(false);
 		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
-		assertThat(operationRowIoOperations.deleteOperationRow(operationRow)).isTrue();
+		Assertions.assertDoesNotThrow(() -> operationRowIoOperations.deleteOperationRow(operationRow));
 		assertThat(operationRowIoOperationRepository.findById(id)).isNull();
 	}
 
@@ -801,14 +803,14 @@ public class Tests extends OHCoreTestCase {
 		Operation operation = testOperation.setup(operationType, true);
 		OperationRow operationRow = testOperationRow.setup(operation, true);
 
-		assertThat(operationRowBrowserManager.deleteOperationRow(operationRow)).isFalse();
+		Assertions.assertThrows(OHServiceException.class, () -> operationRowBrowserManager.deleteOperationRow(operationRow));
 	}
 
 	@Test
 	public void testMgrRowDeleteOperationRow() throws Exception {
 		int id = setupTestOperationRow(false);
 		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
-		assertThat(operationRowBrowserManager.deleteOperationRow(operationRow)).isTrue();
+		Assertions.assertDoesNotThrow(() ->operationRowBrowserManager.deleteOperationRow(operationRow));
 		assertThat(operationRowIoOperationRepository.findById(id)).isNull();
 	}
 

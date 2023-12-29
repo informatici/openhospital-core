@@ -30,15 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * This class offers the io operations for recovering and managing
- * vaccine records from the database
- *
- * @author Eva
- * 
- * modification history
- * 20/10/2011 - Cla - insert vaccinetype managment
- */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException

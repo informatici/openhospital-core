@@ -86,7 +86,7 @@ public class DiseaseTypeIoOperation {
 	/**
 	 * Checks if the specified code is already used by any {@link DiseaseType}.
 	 * @param code the code to check.
-	 * @return <code>true</code> if the code is used, false otherwise.
+	 * @return {@code true} if the code is used, false otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {

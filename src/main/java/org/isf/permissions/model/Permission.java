@@ -35,13 +35,6 @@ import jakarta.persistence.Table;
 
 import org.isf.utils.db.Auditable;
 
-/*------------------------------------------
- * User - model for the user entity
- * -----------------------------------------
- * modification history
- * 24/12/2020 - Andrei - first version
- * 
- *------------------------------------------*/
 @Entity
 @Table(name = "OH_PERMISSIONS")
 @AttributeOverride(name = "createdBy", column = @Column(name = "P_CREATED_BY"))
