@@ -38,10 +38,10 @@ public class TestOperationRow {
 	private final String opResult = "opResult";
 	private final LocalDateTime opDate = LocalDateTime.of(2020, 1, 1, 0, 0);
 	private final String remarks = "remarks";
+	private final Float transUnit = 10.0f;
 	private Admission admission;
 	private Opd opd;
 	private Bill bill;
-	private final Float transUnit = 10.0f;
 
 	public OperationRow setup(Operation operation, boolean usingSet) throws OHException {
 		OperationRow operationRow;

@@ -47,17 +47,16 @@ public class TestAdmission {
 	private static final LocalDateTime CTRLDATE1 = LocalDateTime.of(2005, 3, 1, 0, 0);
 	private static final LocalDateTime CTRLDATE2 = LocalDateTime.of(2005, 3, 2, 0, 0);
 	private static final LocalDateTime DISDATE = LocalDateTime.of(2006, 12, 1, 0, 0);
-
-	private int id;
 	private final int admitted = 1;
 	private final String type = "T";
-	private int yProg;
 	private final String FHU = "TestFHU";
 	private final String note = "TestNote";
 	private final Float transUnit = 10.10f;
 	private final Float weight = 20.20f;
 	private final String userID = "TestUserId";
 	private final char deleted = 'N';
+	private int id;
+	private int yProg;
 
 	public Admission setup(
 		Ward ward,

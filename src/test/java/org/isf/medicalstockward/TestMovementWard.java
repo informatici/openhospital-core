@@ -39,12 +39,12 @@ public class TestMovementWard {
 
 	private final LocalDateTime now = TimeTools.getNow();
 	private final LocalDateTime date = now.withMonth(2).withDayOfMonth(2);
-	private boolean isPatient;
 	private final int age = 10;
 	private final float weight = 78;
 	private final String description = "TestDescriptionm";
 	private final Double quantity = 46.0;
 	private final String units = "TestUni";
+	private boolean isPatient;
 
 	public MovementWard setup(
 		Ward ward,

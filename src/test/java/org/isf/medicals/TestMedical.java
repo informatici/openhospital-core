@@ -30,7 +30,6 @@ import org.isf.utils.exception.OHException;
 
 public class TestMedical {
 
-	private Integer code;
 	private final String prod_code = "TP1";
 	private final String description = "TestDescription";
 	private final double initialqty = 10.10;
@@ -38,6 +37,7 @@ public class TestMedical {
 	private final double inqty = 20.20;
 	private final double outqty = 30.30;
 	private final double minqty = 40.40;
+	private Integer code;
 
 	public Medical setup(MedicalType medicalType, boolean usingSet) throws OHException {
 		Medical medical;

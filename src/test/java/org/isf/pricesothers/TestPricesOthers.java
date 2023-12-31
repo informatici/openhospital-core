@@ -31,10 +31,10 @@ public class TestPricesOthers {
 	private final String Code = "TestCode";
 	private final String Description = "TestDescription";
 	private final boolean opdInclude = true;
-	private boolean ipdInclude;
 	private final boolean daily = true;
-	private boolean discharge;
 	private final boolean undefined = true;
+	private boolean ipdInclude;
+	private boolean discharge;
 
 	public PricesOthers setup(boolean usingSet) throws OHException {
 		PricesOthers pricesOthers;

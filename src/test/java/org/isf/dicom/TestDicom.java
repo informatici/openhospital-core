@@ -44,8 +44,6 @@ public class TestDicom {
 	private static final String DICOM_DATE_FORMAT_ZONED = "EEE MMM dd HH:mm:ss z yyyy";
 	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DICOM_DATE_FORMAT_ZONED, new Locale("en"));
 	private final Blob data = createRandomBlob(100);
-	private DicomData dicomData;
-	private int patId;
 	private final String fileName = "TestFileName";
 	private final String dicomAccessionNumber = "TestAccessionNumber";
 	private final String dicomInstitutionName = "TestInstitutionName";
@@ -67,6 +65,8 @@ public class TestDicom {
 	private final String dicomInstanceUID = "TestInstanceUid";
 	private final String modality = "TestModality";
 	private final Blob dicomThumbnail = createRandomBlob(66);
+	private DicomData dicomData;
+	private int patId;
 
 	public TestDicom() throws ParseException {
 	}

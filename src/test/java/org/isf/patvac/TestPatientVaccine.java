@@ -33,9 +33,9 @@ import org.isf.vaccine.model.Vaccine;
 
 public class TestPatientVaccine {
 
-	private int code;
 	private final int progr = 10;
 	private final LocalDateTime vaccineDate = LocalDateTime.of(1984, Month.AUGUST, 14, 9, 0, 0);
+	private int code;
 	private int lock;
 
 	public PatientVaccine setup(Patient patient, Vaccine vaccine, boolean usingSet) throws OHException {

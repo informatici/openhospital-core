@@ -28,7 +28,6 @@ import org.isf.utils.exception.OHException;
 
 public class TestSupplier {
 
-	private Integer supId;
 	private final String supName = "TestName";
 	private final String supAddress = "TestAddress";
 	private final String supTaxcode = "TestTax";
@@ -37,6 +36,7 @@ public class TestSupplier {
 	private final String supEmail = "TestEmail";
 	private final String supNote = "TestNote";
 	private final Character supDeleted = 'N';
+	private Integer supId;
 
 	public Supplier setup(boolean usingSet) throws OHException {
 		Supplier supplier;
