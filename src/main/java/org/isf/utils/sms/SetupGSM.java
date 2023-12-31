@@ -21,10 +21,16 @@
  */
 package org.isf.utils.sms;
 
-import gnu.io.CommPortIdentifier;
-import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
+import java.awt.HeadlessException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Enumeration;
+import java.util.Properties;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
@@ -37,14 +43,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.server.PortInUseException;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Enumeration;
-import java.util.Properties;
-
+import gnu.io.CommPortIdentifier;
+import gnu.io.SerialPort;
+import gnu.io.SerialPortEvent;
+import gnu.io.SerialPortEventListener;
 
 /**
  * @author Mwithi

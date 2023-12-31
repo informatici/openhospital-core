@@ -21,18 +21,26 @@
  */
 package org.isf.dicom;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.io.File;
+import java.io.FileReader;
+import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.util.Properties;
+
 import org.aspectj.util.FileUtil;
 import org.isf.OHCoreTestCase;
-import org.isf.dicom.TestDicom;
 import org.isf.dicom.manager.DicomManagerFactory;
 import org.isf.dicom.manager.DicomManagerInterface;
 import org.isf.dicom.manager.FileSystemDicomManager;
 import org.isf.dicom.model.FileDicom;
 import org.isf.dicom.service.DicomIoOperationRepository;
 import org.isf.dicom.service.DicomIoOperations;
+import org.isf.dicomtype.TestDicomType;
 import org.isf.dicomtype.model.DicomType;
 import org.isf.dicomtype.service.DicomTypeIoOperationRepository;
-import org.isf.dicomtype.TestDicomType;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHException;
@@ -44,15 +52,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.FileSystemUtils;
-
-import java.io.File;
-import java.io.FileReader;
-import java.lang.reflect.Field;
-import java.text.ParseException;
-import java.util.Properties;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class TestFileSystemDicomManager extends OHCoreTestCase {
 
@@ -104,7 +103,7 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 			properties.setProperty("dicom.manager.impl", "FileSystemDicomManager");
 			new FileSystemDicomManager(properties);
 		})
-				.isInstanceOf(OHDicomException.class);
+			.isInstanceOf(OHDicomException.class);
 	}
 
 	@Test
@@ -150,7 +149,7 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 			props.set(clazz, properties);
 			DicomManagerFactory.getMaxDicomSizeLong();
 		})
-				.isInstanceOf(OHDicomException.class);
+			.isInstanceOf(OHDicomException.class);
 		Class clazz = Class.forName("org.isf.dicom.manager.DicomManagerFactory");
 		// reset/clear properties
 		Field props = clazz.getDeclaredField("props");
