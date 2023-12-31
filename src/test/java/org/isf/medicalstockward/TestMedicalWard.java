@@ -32,8 +32,8 @@ import org.isf.ward.model.Ward;
 
 public class TestMedicalWard {
 
-	private float in_quantity = 100.100f;
-	private float out_quantity = 30.30f;
+	private final float in_quantity = 100.100f;
+	private final float out_quantity = 30.30f;
 
 	public MedicalWard setup(Medical medical, Ward ward, Lot lot, boolean usingSet) throws OHException {
 		MedicalWard medicalward;

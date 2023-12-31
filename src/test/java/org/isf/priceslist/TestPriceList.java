@@ -28,10 +28,10 @@ import org.isf.utils.exception.OHException;
 
 public class TestPriceList {
 
-	private static String listCode = "Code";
-	private static String listName = "TestName";
-	private static String listDescription = "TestDescription";
-	private static String listCurrency = "Curr";
+	private static final String listCode = "Code";
+	private static final String listName = "TestName";
+	private static final String listDescription = "TestDescription";
+	private static final String listCurrency = "Curr";
 
 	public PriceList setup(boolean usingSet) throws OHException {
 		PriceList priceList;

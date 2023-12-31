@@ -40,34 +40,33 @@ import org.isf.utils.exception.OHException;
 
 public class TestDicom {
 
-	private static String DICOM_DATE_FORMAT_ZONED = "EEE MMM dd HH:mm:ss z yyyy";
-	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DICOM_DATE_FORMAT_ZONED, new Locale("en"));
 	private static final String DATE_TIME_STRING = "Sat Aug 01 10:02:03 AST 2020";
-
-	private Blob data = createRandomBlob(100);
+	private static final String DICOM_DATE_FORMAT_ZONED = "EEE MMM dd HH:mm:ss z yyyy";
+	private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DICOM_DATE_FORMAT_ZONED, new Locale("en"));
+	private final Blob data = createRandomBlob(100);
 	private DicomData dicomData;
 	private int patId;
-	private String fileName = "TestFileName";
-	private String dicomAccessionNumber = "TestAccessionNumber";
-	private String dicomInstitutionName = "TestInstitutionName";
-	private String dicomPatientID = "TestPatientId";
-	private String dicomPatientName = "TestPatientName";
-	private String dicomPatientAddress = "TestPatientAddress";
-	private String dicomPatientAge = "TestPatientAge";
-	private String dicomPatientSex = "TestPatientSex";
-	private String dicomPatientBirthDate = "TestPatientBirth";
-	private String dicomStudyId = "TestStudyId";
-	private LocalDateTime dicomStudyDate = LocalDateTime.parse(DATE_TIME_STRING, DATE_TIME_FORMATTER);
-	private String dicomStudyDescription = "TestStudyDescription";
-	private String dicomSeriesUID = "TestSeriesUid";
-	private String dicomSeriesInstanceUID = "TestSeriesInstanceUid";
-	private String dicomSeriesNumber = "TestSeriesNumber";
-	private String dicomSeriesDescriptionCodeSequence = "TestSeriesDescription";
-	private LocalDateTime dicomSeriesDate = LocalDateTime.parse(DATE_TIME_STRING, DATE_TIME_FORMATTER);
-	private String dicomSeriesDescription = "TestSeriesDescription";
-	private String dicomInstanceUID = "TestInstanceUid";
-	private String modality = "TestModality";
-	private Blob dicomThumbnail = createRandomBlob(66);
+	private final String fileName = "TestFileName";
+	private final String dicomAccessionNumber = "TestAccessionNumber";
+	private final String dicomInstitutionName = "TestInstitutionName";
+	private final String dicomPatientID = "TestPatientId";
+	private final String dicomPatientName = "TestPatientName";
+	private final String dicomPatientAddress = "TestPatientAddress";
+	private final String dicomPatientAge = "TestPatientAge";
+	private final String dicomPatientSex = "TestPatientSex";
+	private final String dicomPatientBirthDate = "TestPatientBirth";
+	private final String dicomStudyId = "TestStudyId";
+	private final LocalDateTime dicomStudyDate = LocalDateTime.parse(DATE_TIME_STRING, DATE_TIME_FORMATTER);
+	private final String dicomStudyDescription = "TestStudyDescription";
+	private final String dicomSeriesUID = "TestSeriesUid";
+	private final String dicomSeriesInstanceUID = "TestSeriesInstanceUid";
+	private final String dicomSeriesNumber = "TestSeriesNumber";
+	private final String dicomSeriesDescriptionCodeSequence = "TestSeriesDescription";
+	private final LocalDateTime dicomSeriesDate = LocalDateTime.parse(DATE_TIME_STRING, DATE_TIME_FORMATTER);
+	private final String dicomSeriesDescription = "TestSeriesDescription";
+	private final String dicomInstanceUID = "TestInstanceUid";
+	private final String modality = "TestModality";
+	private final Blob dicomThumbnail = createRandomBlob(66);
 
 	public TestDicom() throws ParseException {
 	}
@@ -82,10 +81,10 @@ public class TestDicom {
 		} else {
 			// Create FileDicom with all parameters 
 			dicom = new FileDicom(patId, dicomData, 0, fileName, dicomAccessionNumber, dicomInstitutionName, dicomPatientID,
-					dicomPatientName, dicomPatientAddress, dicomPatientAge, dicomPatientSex, dicomPatientBirthDate,
-					dicomStudyId, dicomStudyDate, dicomStudyDescription, dicomSeriesUID, dicomSeriesInstanceUID,
-					dicomSeriesNumber, dicomSeriesDescriptionCodeSequence, dicomSeriesDate, dicomSeriesDescription,
-					dicomInstanceUID, modality, dicomThumbnail, dicomType);
+				dicomPatientName, dicomPatientAddress, dicomPatientAge, dicomPatientSex, dicomPatientBirthDate,
+				dicomStudyId, dicomStudyDate, dicomStudyDescription, dicomSeriesUID, dicomSeriesInstanceUID,
+				dicomSeriesNumber, dicomSeriesDescriptionCodeSequence, dicomSeriesDate, dicomSeriesDescription,
+				dicomInstanceUID, modality, dicomThumbnail, dicomType);
 		}
 		return dicom;
 	}

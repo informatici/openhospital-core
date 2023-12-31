@@ -29,17 +29,16 @@ import java.util.List;
 
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
+import org.isf.medicals.TestMedical;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperationRepository;
-import org.isf.medicals.TestMedical;
+import org.isf.medtype.TestMedicalType;
 import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.service.MedicalTypeIoOperationRepository;
-import org.isf.medtype.TestMedicalType;
-import org.isf.menu.manager.UserBrowsingManager;
+import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.service.PatientIoOperationRepository;
-import org.isf.patient.TestPatient;
 import org.isf.sms.manager.SmsManager;
 import org.isf.sms.service.SmsOperations;
 import org.isf.therapy.manager.TherapyManager;
@@ -50,8 +49,8 @@ import org.isf.therapy.service.TherapyIoOperations;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.time.TimeTools;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +88,7 @@ class Tests extends OHCoreTestCase {
 		testMedicalType = new TestMedicalType();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -233,8 +232,8 @@ class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		String longText = "This is a very long note that should cause the SMS code to truncate the entire message to 160 characters.";
 		TherapyRow therapyRow = therapyManager.newTherapy(1, patient.getCode(), TimeTools.getNow(),
-				TimeTools.getBeginningOfNextDay(TimeTools.getNow()), medical, 10.0, 1, 1, 1,
-				longText + ' ' + longText, true, true);
+			TimeTools.getBeginningOfNextDay(TimeTools.getNow()), medical, 10.0, 1, 1, 1,
+			longText + ' ' + longText, true, true);
 		therapyIoOperationRepository.saveAndFlush(therapyRow);
 		List<TherapyRow> therapyRows = new ArrayList<>(1);
 		therapyRows.add(therapyRow);
@@ -364,8 +363,8 @@ class Tests extends OHCoreTestCase {
 	void testTherapyRowToString() throws Exception {
 		int id = setupTestTherapyRow(false);
 		TherapyRow foundTherapyRow = therapyIoOperationRepository.findById(id).orElse(null);
-        Assertions.assertNotNull(foundTherapyRow);
-        Assertions.assertEquals(10, foundTherapyRow.getUnitID());
+		Assertions.assertNotNull(foundTherapyRow);
+		Assertions.assertEquals(10, foundTherapyRow.getUnitID());
 		Assertions.assertEquals(9.9, foundTherapyRow.getQty());
 		Assertions.assertEquals(11, foundTherapyRow.getFreqInDay());
 		Assertions.assertEquals(12, foundTherapyRow.getFreqInPeriod());
@@ -378,9 +377,9 @@ class Tests extends OHCoreTestCase {
 		assertThat(foundTherapyRow).isNotNull();
 
 		assertThat(foundTherapyRow)
-				.isEqualTo(foundTherapyRow)
-				.isNotNull()
-				.isNotEqualTo("someString");
+			.isEqualTo(foundTherapyRow)
+			.isNotNull()
+			.isNotEqualTo("someString");
 
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);

@@ -28,8 +28,8 @@ import org.isf.utils.exception.OHException;
 
 public class TestDiseaseType {
 
-	private String code = "ZZ";
-	private String description = "TestDescription";
+	private final String code = "ZZ";
+	private final String description = "TestDescription";
 
 	public DiseaseType setup(boolean usingSet) throws OHException {
 		DiseaseType diseaseType;

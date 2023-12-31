@@ -28,15 +28,15 @@ import org.isf.utils.exception.OHException;
 
 public class TestUserMenu {
 
-	private String code = "Z";
-	private String buttonLabel = "TestButtonLabel";
-	private String altLabel = "TestAltLabel";
-	private String tooltip = "TestToolTip";
-	private char shortcut = 'Y';
-	private String mySubmenu = "TestMySubmenu";
-	private String myClass = "TestMyClass";
-	private boolean isASubMenu = true;
-	private int position = 11;
+	private final String code = "Z";
+	private final String buttonLabel = "TestButtonLabel";
+	private final String altLabel = "TestAltLabel";
+	private final String tooltip = "TestToolTip";
+	private final char shortcut = 'Y';
+	private final String mySubmenu = "TestMySubmenu";
+	private final String myClass = "TestMyClass";
+	private final boolean isASubMenu = true;
+	private final int position = 11;
 
 	public UserMenuItem setup(boolean usingSet) throws OHException {
 		UserMenuItem userMenuItem;

@@ -21,6 +21,19 @@
  */
 package org.isf.dicom;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.within;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+
+import javax.swing.JFrame;
+
 import org.aspectj.util.FileUtil;
 import org.dcm4che3.data.Attributes;
 import org.dcm4che3.data.Tag;
@@ -36,9 +49,9 @@ import org.isf.dicom.manager.SourceFiles;
 import org.isf.dicom.model.FileDicom;
 import org.isf.dicom.service.DicomIoOperationRepository;
 import org.isf.dicom.service.DicomIoOperations;
+import org.isf.dicomtype.TestDicomType;
 import org.isf.dicomtype.model.DicomType;
 import org.isf.dicomtype.service.DicomTypeIoOperationRepository;
-import org.isf.dicomtype.TestDicomType;
 import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHException;
@@ -50,19 +63,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.ResourceUtils;
-
-import javax.swing.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.Objects;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.within;
 
 public class Tests extends OHCoreTestCase {
 
@@ -84,6 +84,11 @@ public class Tests extends OHCoreTestCase {
 	public static void setUpClass() throws ParseException {
 		testFileDicom = new TestDicom();
 		testDicomType = new TestDicomType();
+	}
+
+	private static void cleanupDicomFiles(int patientId) {
+		FileSystemUtils.deleteRecursively(new File("rsc-test/dicom/" + patientId));
+		FileUtil.deleteContents(new File("rsc-test/dicom/dicom.storage"));
 	}
 
 	@BeforeEach
@@ -220,7 +225,7 @@ public class Tests extends OHCoreTestCase {
 		DicomType dicomType = testDicomType.setup(true);
 		FileDicom dicomFile = testFileDicom.setup(dicomType, true);
 		assertThatThrownBy(() -> SourceFiles.loadDicom(dicomFile, file, PATIENT_ID))
-				.isInstanceOf(OHDicomException.class);
+			.isInstanceOf(OHDicomException.class);
 	}
 
 	@Test
@@ -267,7 +272,7 @@ public class Tests extends OHCoreTestCase {
 	public void testSourceFilesPreloadBadDicomFormat() throws Exception {
 		File file = getFile("test/BadDicomFile.dcm");
 		assertThatThrownBy(() -> new DicomInputStream(file))
-				.isInstanceOf(DicomStreamException.class);
+			.isInstanceOf(DicomStreamException.class);
 	}
 
 	@Test
@@ -284,7 +289,7 @@ public class Tests extends OHCoreTestCase {
 		ThumbnailViewGui thumbnailViewGui = new ThumbnailViewGui();
 		thumbnailViewGui.initialize();
 		SourceFiles sourceFiles = new SourceFiles(new FileDicom(), new File("src/test/resources/org/isf/dicom/test/dicomdir/"), 2, 1, thumbnailViewGui,
-				new DicomLoader(1, new JFrame()));
+			new DicomLoader(1, new JFrame()));
 		assertThat(sourceFiles).isNotNull();
 		assertThat(sourceFiles.working()).isTrue();
 		while (sourceFiles.working()) {
@@ -294,34 +299,15 @@ public class Tests extends OHCoreTestCase {
 		cleanupDicomFiles(2);
 	}
 
-	class ThumbnailViewGui extends AbstractThumbnailViewGui {
-
-		@Override
-		public void initialize() {
-
-		}
-	}
-
-	class DicomLoader extends AbstractDicomLoader {
-
-		public DicomLoader(int numfiles, JFrame owner) {
-			super(numfiles, owner);
-		}
-
-		@Override
-		public void setLoaded(int loaded) {
-		}
-	}
-
 	@Test
 	public void testFileDicomEquals() throws Exception {
 		DicomType dicomType = testDicomType.setup(false);
 		FileDicom fileDicom = testFileDicom.setup(dicomType, true);
 
 		assertThat(fileDicom)
-				.isNotNull()
-				.isEqualTo(fileDicom)
-				.isNotEqualTo("someString");
+			.isNotNull()
+			.isEqualTo(fileDicom)
+			.isNotEqualTo("someString");
 
 		FileDicom fileDicom2 = testFileDicom.setup(dicomType, true);
 		fileDicom2.setIdFile(99L);
@@ -349,18 +335,12 @@ public class Tests extends OHCoreTestCase {
 		assertThat(fileDicom.getDicomType()).isEqualTo(dicomType);
 	}
 
-
 	@Disabled("This test requires access to the opencv native libraries")
 	@Test
 	public void testFileDicomGetThumbnailsAsImage() throws Exception {
 		DicomType dicomType = testDicomType.setup(false);
 		FileDicom fileDicom = testFileDicom.setup(dicomType, false);
 		assertThat(fileDicom.getDicomThumbnailAsImage()).isNull();
-	}
-
-	private static void cleanupDicomFiles(int patientId) {
-		FileSystemUtils.deleteRecursively(new File("rsc-test/dicom/" + patientId));
-		FileUtil.deleteContents(new File("rsc-test/dicom/dicom.storage"));
 	}
 
 	private File getFile(String fileName) throws FileNotFoundException {
@@ -379,5 +359,24 @@ public class Tests extends OHCoreTestCase {
 		FileDicom foundFileDicom = dicomIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundFileDicom).isNotNull();
 		testFileDicom.check(foundFileDicom);
+	}
+
+	class ThumbnailViewGui extends AbstractThumbnailViewGui {
+
+		@Override
+		public void initialize() {
+
+		}
+	}
+
+	class DicomLoader extends AbstractDicomLoader {
+
+		public DicomLoader(int numfiles, JFrame owner) {
+			super(numfiles, owner);
+		}
+
+		@Override
+		public void setLoaded(int loaded) {
+		}
 	}
 }

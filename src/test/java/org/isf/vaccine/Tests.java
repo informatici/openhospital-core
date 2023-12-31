@@ -26,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 
-import jakarta.transaction.Transactional;
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
@@ -37,12 +36,11 @@ import org.isf.vaccine.manager.VaccineBrowserManager;
 import org.isf.vaccine.model.Vaccine;
 import org.isf.vaccine.service.VaccineIoOperationRepository;
 import org.isf.vaccine.service.VaccineIoOperations;
+import org.isf.vactype.TestVaccineType;
 import org.isf.vactype.model.VaccineType;
 import org.isf.vactype.service.VaccineTypeIoOperationRepository;
-import org.isf.vactype.TestVaccineType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -66,7 +64,7 @@ public class Tests extends OHCoreTestCase {
 		testVaccineType = new TestVaccineType();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -95,7 +93,7 @@ public class Tests extends OHCoreTestCase {
 	public void testIoGetVaccineShouldFindAllVaccinesWhenNoCodeProvided() throws Exception {
 		// given:
 		setupTestVaccine(false);
-		
+
 		// when:
 		List<Vaccine> vaccines = vaccineIoOperation.getVaccine(null);
 
@@ -226,7 +224,6 @@ public class Tests extends OHCoreTestCase {
 			);
 	}
 
-
 	@Test
 	public void testMgrValidationCodeTooLong() throws Exception {
 		String code = setupTestVaccine(true);
@@ -287,9 +284,9 @@ public class Tests extends OHCoreTestCase {
 		Vaccine vaccine = new Vaccine("aCode", "aDescription", vaccineType);
 
 		assertThat(vaccine)
-				.isEqualTo(vaccine)
-				.isNotNull()
-				.isNotEqualTo("someStringValue");
+			.isEqualTo(vaccine)
+			.isNotNull()
+			.isNotEqualTo("someStringValue");
 
 		VaccineType vaccineType2 = new VaccineType("A", "adescription");
 		Vaccine vaccine2 = new Vaccine("bCode", "bDescription", vaccineType2);

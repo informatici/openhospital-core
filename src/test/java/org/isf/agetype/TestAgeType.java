@@ -28,10 +28,10 @@ import org.isf.utils.exception.OHException;
 
 public class TestAgeType {
 
-	private String code = "d8";
-	private String description = "TestDescription";
-	private int from = 1;
-	private int to = 100;
+	private final String code = "d8";
+	private final String description = "TestDescription";
+	private final int from = 1;
+	private final int to = 100;
 
 	public AgeType setup(boolean usingSet) throws OHException {
 		AgeType ageType;

@@ -27,22 +27,22 @@ import org.junit.jupiter.api.Test;
 
 public class TestBCrypt {
 
-	String testVectors[][] = {   // [0] = plain;  [1] = salt; [2] = expected
-			{ "",
-					"$2a$06$DCq7YPn5Rq63x1Lad4cll.",
-					"$2a$06$DCq7YPn5Rq63x1Lad4cll.TV4S6ytwfsfvkgY8jIucDrjc8deX1s." },
-			{ "a",
-					"$2a$06$m0CrhHm10qJ3lXRY.5zDGO",
-					"$2a$06$m0CrhHm10qJ3lXRY.5zDGO3rS2KdeeWLuGmsfGlMfOxih58VYVfxe" },
-			{ "abc",
-					"$2a$06$If6bvum7DFjUnE9p2uDeDu",
-					"$2a$06$If6bvum7DFjUnE9p2uDeDu0YHzrHM6tf.iqN8.yx.jNN1ILEf7h0i" },
-			{ "abcdefghijklmnopqrstuvwxyz",
-					"$2a$06$.rCVZVOThsIa97pEDOxvGu",
-					"$2a$06$.rCVZVOThsIa97pEDOxvGuRRgzG64bvtJ0938xuqzv18d3ZpQhstC" },
-			{ "~!@#$%^&*()      ~!@#$%^&*()PNBFRD",
-					"$2a$06$fPIsBO8qRqkjj273rfaOI.",
-					"$2a$06$fPIsBO8qRqkjj273rfaOI.HtSV9jLDpTbZn782DC6/t7qT67P6FfO" },
+	String[][] testVectors = {   // [0] = plain;  [1] = salt; [2] = expected
+		{ "",
+			"$2a$06$DCq7YPn5Rq63x1Lad4cll.",
+			"$2a$06$DCq7YPn5Rq63x1Lad4cll.TV4S6ytwfsfvkgY8jIucDrjc8deX1s." },
+		{ "a",
+			"$2a$06$m0CrhHm10qJ3lXRY.5zDGO",
+			"$2a$06$m0CrhHm10qJ3lXRY.5zDGO3rS2KdeeWLuGmsfGlMfOxih58VYVfxe" },
+		{ "abc",
+			"$2a$06$If6bvum7DFjUnE9p2uDeDu",
+			"$2a$06$If6bvum7DFjUnE9p2uDeDu0YHzrHM6tf.iqN8.yx.jNN1ILEf7h0i" },
+		{ "abcdefghijklmnopqrstuvwxyz",
+			"$2a$06$.rCVZVOThsIa97pEDOxvGu",
+			"$2a$06$.rCVZVOThsIa97pEDOxvGuRRgzG64bvtJ0938xuqzv18d3ZpQhstC" },
+		{ "~!@#$%^&*()      ~!@#$%^&*()PNBFRD",
+			"$2a$06$fPIsBO8qRqkjj273rfaOI.",
+			"$2a$06$fPIsBO8qRqkjj273rfaOI.HtSV9jLDpTbZn782DC6/t7qT67P6FfO" },
 	};
 
 	@Test

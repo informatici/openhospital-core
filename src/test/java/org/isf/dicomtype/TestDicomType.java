@@ -28,8 +28,8 @@ import org.isf.utils.exception.OHException;
 
 public class TestDicomType {
 
-	private String dicomTypeId = "ZZZ";
-	private String dicomTypeDescription = "TestDicomTypeDescription";
+	private final String dicomTypeId = "ZZZ";
+	private final String dicomTypeDescription = "TestDicomTypeDescription";
 
 	public DicomType setup(boolean usingSet) throws OHException {
 		DicomType dicomType;

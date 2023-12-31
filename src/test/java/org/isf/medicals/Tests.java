@@ -31,29 +31,29 @@ import org.isf.medicals.manager.MedicalBrowsingManager;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperationRepository;
 import org.isf.medicals.service.MedicalsIoOperations;
+import org.isf.medicalstock.TestLot;
+import org.isf.medicalstock.TestMovement;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
-import org.isf.medicalstock.TestLot;
-import org.isf.medicalstock.TestMovement;
+import org.isf.medstockmovtype.TestMovementType;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.medstockmovtype.service.MedicalDsrStockMovementTypeIoOperationRepository;
-import org.isf.medstockmovtype.TestMovementType;
+import org.isf.medtype.TestMedicalType;
 import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.service.MedicalTypeIoOperationRepository;
-import org.isf.medtype.TestMedicalType;
+import org.isf.supplier.TestSupplier;
 import org.isf.supplier.model.Supplier;
 import org.isf.supplier.service.SupplierIoOperationRepository;
-import org.isf.supplier.TestSupplier;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
+import org.isf.ward.TestWard;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
-import org.isf.ward.TestWard;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -97,7 +97,7 @@ public class Tests extends OHCoreTestCase {
 		testSupplier = new TestSupplier();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -488,7 +488,7 @@ public class Tests extends OHCoreTestCase {
 			movementIoOperationRepository.saveAndFlush(movement);
 			medicalBrowsingManager.deleteMedical(medical);
 		})
-				.isInstanceOf(OHDataIntegrityViolationException.class);
+			.isInstanceOf(OHDataIntegrityViolationException.class);
 	}
 
 	@Test
@@ -500,7 +500,7 @@ public class Tests extends OHCoreTestCase {
 			medical.setMinqty(-1);
 			medicalBrowsingManager.checkMedical(medical, false, false);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -512,7 +512,7 @@ public class Tests extends OHCoreTestCase {
 			medical.setPcsperpck(-1);
 			medicalBrowsingManager.checkMedical(medical, false, false);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -524,7 +524,7 @@ public class Tests extends OHCoreTestCase {
 			medical.setDescription("");
 			medicalBrowsingManager.checkMedical(medical, false, false);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -536,7 +536,7 @@ public class Tests extends OHCoreTestCase {
 			assertThat(medical).isNotNull();
 			medicalBrowsingManager.checkMedical(medical, false, false);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -549,7 +549,7 @@ public class Tests extends OHCoreTestCase {
 			medical.setProdCode("");
 			medicalBrowsingManager.checkMedical(medical, false, false);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -565,7 +565,7 @@ public class Tests extends OHCoreTestCase {
 			medical.setType(medicalType);
 			medicalBrowsingManager.checkMedical(medical, false, false);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -604,9 +604,9 @@ public class Tests extends OHCoreTestCase {
 		Medical medical3 = new Medical(3, medicalType3, "TP3", "TestDescription2", 1, 2, 3, 4, 5);
 
 		assertThat(medical)
-				.isEqualTo(medical)
-				.isNotEqualTo("someString")
-				.isNotEqualTo(medical2);
+			.isEqualTo(medical)
+			.isNotEqualTo("someString")
+			.isNotEqualTo(medical2);
 
 		medical2.setProdCode(null);
 		medical3.setProdCode(null);

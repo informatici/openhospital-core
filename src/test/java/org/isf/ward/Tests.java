@@ -26,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,8 +46,8 @@ import org.isf.ward.manager.WardBrowserManager;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
 import org.isf.ward.service.WardIoOperations;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -74,7 +73,7 @@ class Tests extends OHCoreTestCase {
 		testWard = new TestWard();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -110,11 +109,11 @@ class Tests extends OHCoreTestCase {
 		LocalDateTime admDate = TimeTools.getNow();
 		AdmissionType admissionType = new AdmissionType("ZZ", "TestDescription");
 		Admission admission1 = new Admission(0, 1, "N", ward, 0, patient, admDate, admissionType,
-				"TestFHU", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-				"TestUserId", 'N');
+			"TestFHU", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+			"TestUserId", 'N');
 		Admission admission2 = new Admission(0, 1, "N", ward, 0, patient, admDate, admissionType,
-				"TestFHU", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-				"TestUserId", 'N');
+			"TestFHU", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+			"TestUserId", 'N');
 		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
 		admissionIoOperationRepository.saveAndFlush(admission1);
 		admissionIoOperationRepository.saveAndFlush(admission2);
@@ -148,27 +147,27 @@ class Tests extends OHCoreTestCase {
 		// then:
 		assertThat(wards.get(0).getDescription()).isEqualTo(foundWard.getDescription());
 	}
-	
+
 	@Test
 	void testIoGetIpdWards() throws Exception {
 		// given:
 		String code = setupTestWard(false);
 		Ward foundWard = wardIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundWard).isNotNull();
-		
+
 		// when:
 		List<Ward> wards = wardIoOperation.getIpdWards();
-		
+
 		// then:
 		assertThat(wards).hasSize(1);
-		
+
 		// given:
 		foundWard.setBeds(0);
 		wardIoOperationRepository.saveAndFlush(foundWard);
-		
+
 		// when:
 		wards = wardIoOperation.getIpdWards();
-		
+
 		// then:
 		assertThat(wards).hasSize(0);
 	}
@@ -179,24 +178,24 @@ class Tests extends OHCoreTestCase {
 		String code = setupTestWard(false);
 		Ward foundWard = wardIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundWard).isNotNull();
-		
+
 		// when:
 		List<Ward> wards = wardIoOperation.getOpdWards();
-		
+
 		// then:
 		assertThat(wards).hasSize(1);
-		
+
 		// given:
 		foundWard.setBeds(0);
 		wardIoOperationRepository.saveAndFlush(foundWard);
-		
+
 		// when:
 		wards = wardIoOperation.getOpdWards();
-		
+
 		// then:
 		assertThat(wards).hasSize(1);
 	}
-	
+
 	@Test
 	void testIoGetWardsGetAll() throws Exception {
 		String code = setupTestWard(false);
@@ -292,7 +291,7 @@ class Tests extends OHCoreTestCase {
 
 		assertThat(result).isTrue();
 	}
-	
+
 	@Test
 	void testIoFindWard() throws Exception {
 		String code = setupTestWard(false);
@@ -324,12 +323,12 @@ class Tests extends OHCoreTestCase {
 		patient.setBirthDate(LocalDate.now().minusYears(45));
 		patientIoOperationRepository.save(patient);
 		AdmissionType admissionType = new AdmissionType("ZZ", "TestDescription");
-		Admission admission1 = new Admission(1, 1, "N", ward, 1, patient, LocalDateTime.now(),admissionType , null, null,
-				null, null, null, null, null, null, null, null, null, null,
-				null, null, null, null, null, null, null, 'N');
+		Admission admission1 = new Admission(1, 1, "N", ward, 1, patient, LocalDateTime.now(), admissionType, null, null,
+			null, null, null, null, null, null, null, null, null, null,
+			null, null, null, null, null, null, null, 'N');
 		Admission admission2 = new Admission(2, 1, "N", ward, 1, patient, LocalDateTime.now(), admissionType, null, null,
-				null, null, null, null, null, null, null, null, null, null,
-				null, null, null, null, null, null, null, 'N');
+			null, null, null, null, null, null, null, null, null, null,
+			null, null, null, null, null, null, null, 'N');
 		admissionTypeIoOperationRepository.saveAndFlush(admissionType);
 		admissionIoOperationRepository.saveAndFlush(admission1);
 		admissionIoOperationRepository.saveAndFlush(admission2);
@@ -353,25 +352,25 @@ class Tests extends OHCoreTestCase {
 		List<Ward> wards = wardBrowserManager.getWards(ward);
 		assertThat(wards.get(0).getDescription()).isEqualTo(ward.getDescription());
 	}
-	
+
 	@Test
 	void testMgrGetIpdWards() throws Exception {
 		String code = setupTestWard(false);
 		Ward opdWard = wardBrowserManager.findWard(code);
 		opdWard.setBeds(0);
 		wardIoOperationRepository.saveAndFlush(opdWard);
-		
+
 		List<Ward> wards = wardBrowserManager.getIpdWards();
 		assertThat(wards).hasSize(0);
 	}
-	
+
 	@Test
 	void testMgrGetOpdWards() throws Exception {
 		String code = setupTestWard(false);
 		Ward opdWard = wardBrowserManager.findWard(code);
 		opdWard.setBeds(0);
 		wardIoOperationRepository.saveAndFlush(opdWard);
-		
+
 		List<Ward> wards = wardBrowserManager.getOpdWards();
 		assertThat(wards).hasSize(1);
 	}
@@ -623,8 +622,8 @@ class Tests extends OHCoreTestCase {
 		Ward ward = testWard.setup(false);
 		assertThat(ward).isEqualTo(ward);
 		assertThat(ward)
-				.isNotNull()
-				.isNotEqualTo("someString");
+			.isNotNull()
+			.isNotEqualTo("someString");
 
 		Ward ward2 = testWard.setup(false);
 		ward2.setCode("-1");
@@ -672,7 +671,7 @@ class Tests extends OHCoreTestCase {
 	void testWardDebug() throws Exception {
 		Ward ward = testWard.setup(true);
 		assertThat(ward.debug()).isEqualTo(
-				"Ward [code=Z, description=TestDescription, telephone=TestTelephone, fax=TestFac, email=TestEmail@gmail.com, beds=100, nurs=101, docs=102, isPharmacy=true, isMale=false, isFemale=true, lock=null, hashCode=0]");
+			"Ward [code=Z, description=TestDescription, telephone=TestTelephone, fax=TestFac, email=TestEmail@gmail.com, beds=100, nurs=101, docs=102, isPharmacy=true, isMale=false, isFemale=true, lock=null, hashCode=0]");
 	}
 
 	@Test

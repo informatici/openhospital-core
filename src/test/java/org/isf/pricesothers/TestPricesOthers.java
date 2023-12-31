@@ -28,13 +28,13 @@ import org.isf.utils.exception.OHException;
 
 public class TestPricesOthers {
 
-	private String Code = "TestCode";
-	private String Description = "TestDescription";
-	private boolean opdInclude = true;
+	private final String Code = "TestCode";
+	private final String Description = "TestDescription";
+	private final boolean opdInclude = true;
 	private boolean ipdInclude;
-	private boolean daily = true;
+	private final boolean daily = true;
 	private boolean discharge;
-	private boolean undefined = true;
+	private final boolean undefined = true;
 
 	public PricesOthers setup(boolean usingSet) throws OHException {
 		PricesOthers pricesOthers;

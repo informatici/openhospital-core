@@ -34,8 +34,8 @@ import org.isf.medstockmovtype.service.MedicalDsrStockMovementTypeIoOperationRep
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -55,7 +55,7 @@ public class Tests extends OHCoreTestCase {
 		testMovementType = new TestMovementType();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -171,7 +171,7 @@ public class Tests extends OHCoreTestCase {
 			MovementType movementType = new MovementType("", "TestDescription", "+");
 			medicalDsrStockMovementTypeBrowserManager.newMedicalDsrStockMovementType(movementType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -181,7 +181,7 @@ public class Tests extends OHCoreTestCase {
 			MovementType movementType = new MovementType("abcdefghijklmnopqrstuvwxyz", "TestDescription", "+");
 			medicalDsrStockMovementTypeBrowserManager.newMedicalDsrStockMovementType(movementType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -191,7 +191,7 @@ public class Tests extends OHCoreTestCase {
 			MovementType movementType = new MovementType("ZZABCD", "TestDescription", "+++++");
 			medicalDsrStockMovementTypeBrowserManager.newMedicalDsrStockMovementType(movementType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -201,7 +201,7 @@ public class Tests extends OHCoreTestCase {
 			MovementType movementType = new MovementType("ZZABCD", "", "+");
 			medicalDsrStockMovementTypeBrowserManager.newMedicalDsrStockMovementType(movementType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -213,7 +213,7 @@ public class Tests extends OHCoreTestCase {
 			MovementType movementType2 = new MovementType(movementType.getCode(), movementType.getDescription(), movementType.getType());
 			medicalDsrStockMovementTypeBrowserManager.newMedicalDsrStockMovementType(movementType2);
 		})
-				.isInstanceOf(OHDataIntegrityViolationException.class);
+			.isInstanceOf(OHDataIntegrityViolationException.class);
 	}
 
 	@Test
@@ -231,10 +231,10 @@ public class Tests extends OHCoreTestCase {
 
 		assertThat(movementType1).isEqualTo(movementType1);
 		assertThat(movementType1)
-				.isNotEqualTo("someString")
-				.isNotEqualTo(movementType2)
-				.isEqualTo(movementType3)
-				.isEqualTo(movementType4);
+			.isNotEqualTo("someString")
+			.isNotEqualTo(movementType2)
+			.isEqualTo(movementType3)
+			.isEqualTo(movementType4);
 	}
 
 	@Test

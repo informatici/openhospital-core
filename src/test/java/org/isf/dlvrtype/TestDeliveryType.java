@@ -28,8 +28,8 @@ import org.isf.utils.exception.OHException;
 
 public class TestDeliveryType {
 
-	private String code = "Z";
-	private String description = "TestDescription";
+	private final String code = "Z";
+	private final String description = "TestDescription";
 
 	public DeliveryType setup(boolean usingSet) throws OHException {
 		DeliveryType deliveryType;

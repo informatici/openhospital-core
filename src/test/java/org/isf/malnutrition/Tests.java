@@ -29,50 +29,50 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.OHCoreTestCase;
+import org.isf.admission.TestAdmission;
 import org.isf.admission.model.Admission;
 import org.isf.admission.service.AdmissionIoOperationRepository;
-import org.isf.admission.TestAdmission;
+import org.isf.admtype.TestAdmissionType;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.admtype.service.AdmissionTypeIoOperationRepository;
-import org.isf.admtype.TestAdmissionType;
+import org.isf.disctype.TestDischargeType;
 import org.isf.disctype.model.DischargeType;
 import org.isf.disctype.service.DischargeTypeIoOperationRepository;
-import org.isf.disctype.TestDischargeType;
+import org.isf.disease.TestDisease;
 import org.isf.disease.model.Disease;
 import org.isf.disease.service.DiseaseIoOperationRepository;
-import org.isf.disease.TestDisease;
+import org.isf.distype.TestDiseaseType;
 import org.isf.distype.model.DiseaseType;
 import org.isf.distype.service.DiseaseTypeIoOperationRepository;
-import org.isf.distype.TestDiseaseType;
+import org.isf.dlvrrestype.TestDeliveryResultType;
 import org.isf.dlvrrestype.model.DeliveryResultType;
 import org.isf.dlvrrestype.service.DeliveryResultIoOperationRepository;
-import org.isf.dlvrrestype.TestDeliveryResultType;
+import org.isf.dlvrtype.TestDeliveryType;
 import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.dlvrtype.service.DeliveryTypeIoOperationRepository;
-import org.isf.dlvrtype.TestDeliveryType;
 import org.isf.malnutrition.manager.MalnutritionManager;
 import org.isf.malnutrition.model.Malnutrition;
 import org.isf.malnutrition.service.MalnutritionIoOperation;
 import org.isf.malnutrition.service.MalnutritionIoOperationRepository;
+import org.isf.operation.TestOperation;
 import org.isf.operation.model.Operation;
 import org.isf.operation.service.OperationIoOperationRepository;
-import org.isf.operation.TestOperation;
+import org.isf.opetype.TestOperationType;
 import org.isf.opetype.model.OperationType;
 import org.isf.opetype.service.OperationTypeIoOperationRepository;
-import org.isf.opetype.TestOperationType;
+import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
-import org.isf.patient.TestPatient;
+import org.isf.pregtreattype.TestPregnantTreatmentType;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperationRepository;
-import org.isf.pregtreattype.TestPregnantTreatmentType;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
+import org.isf.ward.TestWard;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
-import org.isf.ward.TestWard;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -140,7 +140,7 @@ public class Tests extends OHCoreTestCase {
 		testMalnutrition = new TestMalnutrition();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -208,8 +208,8 @@ public class Tests extends OHCoreTestCase {
 		DeliveryType deliveryType = testDeliveryType.setup(false);
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, true);
+			diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+			deliveryType, deliveryResult, true);
 
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -292,8 +292,8 @@ public class Tests extends OHCoreTestCase {
 		DeliveryType deliveryType = testDeliveryType.setup(false);
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, true);
+			diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+			deliveryType, deliveryResult, true);
 
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -339,8 +339,8 @@ public class Tests extends OHCoreTestCase {
 			DeliveryType deliveryType = testDeliveryType.setup(false);
 			DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-					deliveryType, deliveryResult, true);
+				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+				deliveryType, deliveryResult, true);
 
 			wardIoOperationRepository.saveAndFlush(ward);
 			patientIoOperationRepository.saveAndFlush(patient);
@@ -364,7 +364,7 @@ public class Tests extends OHCoreTestCase {
 
 			malnutritionManager.newMalnutrition(malnutrition);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -389,8 +389,8 @@ public class Tests extends OHCoreTestCase {
 			DeliveryType deliveryType = testDeliveryType.setup(false);
 			DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-					deliveryType, deliveryResult, true);
+				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+				deliveryType, deliveryResult, true);
 
 			wardIoOperationRepository.saveAndFlush(ward);
 			patientIoOperationRepository.saveAndFlush(patient);
@@ -414,7 +414,7 @@ public class Tests extends OHCoreTestCase {
 
 			malnutritionManager.newMalnutrition(malnutrition);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -439,8 +439,8 @@ public class Tests extends OHCoreTestCase {
 			DeliveryType deliveryType = testDeliveryType.setup(false);
 			DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-					deliveryType, deliveryResult, true);
+				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+				deliveryType, deliveryResult, true);
 
 			wardIoOperationRepository.saveAndFlush(ward);
 			patientIoOperationRepository.saveAndFlush(patient);
@@ -465,7 +465,7 @@ public class Tests extends OHCoreTestCase {
 
 			malnutritionManager.newMalnutrition(malnutrition);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -490,8 +490,8 @@ public class Tests extends OHCoreTestCase {
 			DeliveryType deliveryType = testDeliveryType.setup(false);
 			DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-					deliveryType, deliveryResult, true);
+				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+				deliveryType, deliveryResult, true);
 
 			wardIoOperationRepository.saveAndFlush(ward);
 			patientIoOperationRepository.saveAndFlush(patient);
@@ -515,7 +515,7 @@ public class Tests extends OHCoreTestCase {
 
 			malnutritionManager.newMalnutrition(malnutrition);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -540,8 +540,8 @@ public class Tests extends OHCoreTestCase {
 			DeliveryType deliveryType = testDeliveryType.setup(false);
 			DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 			Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-					diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-					deliveryType, deliveryResult, true);
+				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+				deliveryType, deliveryResult, true);
 
 			wardIoOperationRepository.saveAndFlush(ward);
 			patientIoOperationRepository.saveAndFlush(patient);
@@ -565,7 +565,7 @@ public class Tests extends OHCoreTestCase {
 
 			malnutritionManager.newMalnutrition(malnutrition);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -588,8 +588,8 @@ public class Tests extends OHCoreTestCase {
 		DeliveryType deliveryType = testDeliveryType.setup(false);
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, true);
+			diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+			deliveryType, deliveryResult, true);
 
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -608,7 +608,7 @@ public class Tests extends OHCoreTestCase {
 		admissionIoOperationRepository.saveAndFlush(admission);
 
 		Malnutrition malnutrition = new Malnutrition(0, LocalDateTime.of(1, 1, 1, 0, 0, 0),
-				LocalDateTime.of(1, 10, 11, 0, 0, 0), admission, patient, 185.47f, 70.70f);
+			LocalDateTime.of(1, 10, 11, 0, 0, 0), admission, patient, 185.47f, 70.70f);
 		assertThat(malnutrition).isNotNull();
 		assertThat(malnutrition.getCode()).isZero();
 	}
@@ -647,8 +647,8 @@ public class Tests extends OHCoreTestCase {
 		DeliveryType deliveryType = testDeliveryType.setup(false);
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, true);
+			diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+			deliveryType, deliveryResult, true);
 
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -667,24 +667,24 @@ public class Tests extends OHCoreTestCase {
 		admissionIoOperationRepository.saveAndFlush(admission);
 
 		Malnutrition malnutrition1 = new Malnutrition(0, LocalDateTime.of(1, 1, 1, 0, 0, 0),
-				LocalDateTime.of(1, 10, 11, 0, 0, 0), admission, patient, 185.47f, 70.70f);
+			LocalDateTime.of(1, 10, 11, 0, 0, 0), admission, patient, 185.47f, 70.70f);
 
 		// matches itself
 		assertThat(malnutrition1).isEqualTo(malnutrition1);
 
 		// does not match because wrong class
 		assertThat(malnutrition1)
-				.isNotNull()
-				.isNotEqualTo("xyzzy");
+			.isNotNull()
+			.isNotEqualTo("xyzzy");
 
 		Malnutrition malnutrition2 = new Malnutrition(0, LocalDateTime.of(11, 1, 1, 0, 0, 0),
-				LocalDateTime.of(11, 10, 11, 0, 0, 0), admission, patient, 1185.47f, 170.70f);
+			LocalDateTime.of(11, 10, 11, 0, 0, 0), admission, patient, 1185.47f, 170.70f);
 
 		// does not match because dates do not match
 		assertThat(malnutrition1).isNotEqualTo(malnutrition2);
 
 		Malnutrition malnutrition3 = new Malnutrition(0, LocalDateTime.of(111, 1, 1, 0, 0, 0),
-				LocalDateTime.of(111, 10, 11, 0, 0, 0), admission, patient, 4185.47f, 470.70f);
+			LocalDateTime.of(111, 10, 11, 0, 0, 0), admission, patient, 4185.47f, 470.70f);
 
 		malnutrition2.setDateConf(null);
 		malnutrition2.setDateSupp(null);
@@ -696,7 +696,7 @@ public class Tests extends OHCoreTestCase {
 		assertThat(malnutrition2).isNotEqualTo(malnutrition3);
 
 		Malnutrition malnutrition4 = new Malnutrition(0, LocalDateTime.of(1, 1, 1, 0, 0, 0),
-				LocalDateTime.of(1, 10, 11, 0, 0, 0), admission, patient, 185.47f, 70.70f);
+			LocalDateTime.of(1, 10, 11, 0, 0, 0), admission, patient, 185.47f, 70.70f);
 
 		// matches because all the same values
 		assertThat(malnutrition4).isEqualTo(malnutrition1);
@@ -742,8 +742,8 @@ public class Tests extends OHCoreTestCase {
 		DeliveryType deliveryType = testDeliveryType.setup(false);
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 		Admission admission = testAdmission
-				.setup(ward, patient, admissionType, diseaseIn, diseaseOut1, diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-						deliveryType, deliveryResult, false);
+			.setup(ward, patient, admissionType, diseaseIn, diseaseOut1, diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+				deliveryType, deliveryResult, false);
 
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);

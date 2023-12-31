@@ -21,6 +21,11 @@
  */
 package org.isf.dlvrrestype;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.List;
+
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.dlvrrestype.manager.DeliveryResultTypeBrowserManager;
@@ -35,11 +40,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class Tests extends OHCoreTestCase {
 
@@ -57,7 +57,7 @@ public class Tests extends OHCoreTestCase {
 		testDeliveryResultType = new TestDeliveryResultType();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -138,7 +138,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrNewDeliveryResultType() throws Exception {
 		DeliveryResultType deliveryResultType = testDeliveryResultType.setup(true);
-		DeliveryResultType newDeliveryResultType  = deliveryResultTypeBrowserManager.newDeliveryResultType(deliveryResultType);
+		DeliveryResultType newDeliveryResultType = deliveryResultTypeBrowserManager.newDeliveryResultType(deliveryResultType);
 		checkDeliveryResultTypeIntoDb(newDeliveryResultType.getCode());
 	}
 
@@ -169,35 +169,35 @@ public class Tests extends OHCoreTestCase {
 		// empty string
 		deliveryResultType.setCode("");
 		assertThatThrownBy(() -> deliveryResultTypeBrowserManager.updateDeliveryResultType(deliveryResultType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		// too long
 		deliveryResultType.setCode("123456789ABCDEF");
 		assertThatThrownBy(() -> deliveryResultTypeBrowserManager.updateDeliveryResultType(deliveryResultType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		// key already exists
 		deliveryResultType.setCode(code);
 		assertThatThrownBy(() -> deliveryResultTypeBrowserManager.newDeliveryResultType(deliveryResultType))
-				.isInstanceOf(OHDataIntegrityViolationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataIntegrityViolationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		// description empty
 		deliveryResultType.setDescription("");
 		assertThatThrownBy(() -> deliveryResultTypeBrowserManager.updateDeliveryResultType(deliveryResultType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@Test

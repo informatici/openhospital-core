@@ -35,9 +35,9 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
+import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
-import org.isf.patient.TestPatient;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
 import org.isf.utils.exception.OHDataValidationException;
@@ -49,11 +49,11 @@ import org.isf.visits.manager.VisitManager;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperationRepository;
 import org.isf.visits.service.VisitsIoOperations;
+import org.isf.ward.TestWard;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
-import org.isf.ward.TestWard;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +84,7 @@ class Tests extends OHCoreTestCase {
 		testWard = new TestWard();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -322,11 +322,11 @@ class Tests extends OHCoreTestCase {
 
 		// test param: visit datetime, visit duration (will be better as a JUnit 5 parameterized test)
 		List<Pair<LocalDateTime, Integer>> invalidVisitsParams = List.of(
-				Pair.of(existingVisitDateTime, existingVisitDuration), // exactly same visit time
-				Pair.of(existingVisitDateTime.plusMinutes(existingVisitDuration - 1), existingVisitDuration), // overlaps the end
-				Pair.of(existingVisitDateTime.minusMinutes(existingVisitDuration - 1), existingVisitDuration), // overlaps the start
-				Pair.of(existingVisitDateTime.plusMinutes(existingVisitDuration / 2), existingVisitDuration / 4), // inside existing visit time
-				Pair.of(existingVisitDateTime.minusMinutes(5), existingVisitDuration + 10) // encompassing existing visit time
+			Pair.of(existingVisitDateTime, existingVisitDuration), // exactly same visit time
+			Pair.of(existingVisitDateTime.plusMinutes(existingVisitDuration - 1), existingVisitDuration), // overlaps the end
+			Pair.of(existingVisitDateTime.minusMinutes(existingVisitDuration - 1), existingVisitDuration), // overlaps the start
+			Pair.of(existingVisitDateTime.plusMinutes(existingVisitDuration / 2), existingVisitDuration / 4), // inside existing visit time
+			Pair.of(existingVisitDateTime.minusMinutes(5), existingVisitDuration + 10) // encompassing existing visit time
 		);
 		for (Pair<LocalDateTime, Integer> invalidVisitParams : invalidVisitsParams) {
 			// given
@@ -335,11 +335,11 @@ class Tests extends OHCoreTestCase {
 			invalidVisit.setDuration(invalidVisitParams.getRight());
 			// when
 			OHDataValidationException ohDataValidationException = catchThrowableOfType(() -> visitManager.validateVisit(invalidVisit),
-					OHDataValidationException.class);
+				OHDataValidationException.class);
 			// then
 			then(ohDataValidationException)
-					.as("should have detected an invalid visit at %s lasting %s minutes", invalidVisit.getDate(), invalidVisit.getDuration())
-					.isNotNull();
+				.as("should have detected an invalid visit at %s lasting %s minutes", invalidVisit.getDate(), invalidVisit.getDuration())
+				.isNotNull();
 			then(ohDataValidationException.getMessages()).hasSize(1);
 			OHExceptionMessage ohExceptionMessage = ohDataValidationException.getMessages().get(0);
 			then(ohExceptionMessage.getTitle()).isEqualTo("angal.common.error.title");
@@ -378,12 +378,12 @@ class Tests extends OHCoreTestCase {
 
 		// when
 		OHDataValidationException ohDataValidationException = catchThrowableOfType(() -> visitManager.validateVisit(invalidVisit),
-				OHDataValidationException.class);
+			OHDataValidationException.class);
 
 		// then
 		then(ohDataValidationException)
-				.as("should have detected an invalid visit %s lasting %s minutes", invalidVisit, invalidVisit.getDuration())
-				.isNotNull();
+			.as("should have detected an invalid visit %s lasting %s minutes", invalidVisit, invalidVisit.getDuration())
+			.isNotNull();
 		then(ohDataValidationException.getMessages()).hasSize(1);
 		OHExceptionMessage ohExceptionMessage = ohDataValidationException.getMessages().get(0);
 		then(ohExceptionMessage.getTitle()).isEqualTo("angal.common.error.title");
@@ -413,11 +413,11 @@ class Tests extends OHCoreTestCase {
 
 		// test param: visit datetime, visit duration (will be better as a JUnit 5 parameterized test)
 		List<Pair<LocalDateTime, Integer>> invalidVisitsParams = List.of(
-				Pair.of(existingVisitDateTime, existingVisitDuration), // exactly same visit time
-				Pair.of(existingVisitDateTime.plusMinutes(existingVisitDuration - 1), existingVisitDuration), // overlaps the end
-				Pair.of(existingVisitDateTime.minusMinutes(existingVisitDuration - 1), existingVisitDuration), // overlaps the start
-				Pair.of(existingVisitDateTime.plusMinutes(existingVisitDuration / 2), existingVisitDuration / 4), // inside existing visit time
-				Pair.of(existingVisitDateTime.minusMinutes(5), existingVisitDuration + 10) // encompassing existing visit time
+			Pair.of(existingVisitDateTime, existingVisitDuration), // exactly same visit time
+			Pair.of(existingVisitDateTime.plusMinutes(existingVisitDuration - 1), existingVisitDuration), // overlaps the end
+			Pair.of(existingVisitDateTime.minusMinutes(existingVisitDuration - 1), existingVisitDuration), // overlaps the start
+			Pair.of(existingVisitDateTime.plusMinutes(existingVisitDuration / 2), existingVisitDuration / 4), // inside existing visit time
+			Pair.of(existingVisitDateTime.minusMinutes(5), existingVisitDuration + 10) // encompassing existing visit time
 		);
 		for (Pair<LocalDateTime, Integer> invalidVisitParams : invalidVisitsParams) {
 			// given
@@ -426,11 +426,11 @@ class Tests extends OHCoreTestCase {
 			invalidVisit.setDuration(invalidVisitParams.getRight());
 			// when
 			OHDataValidationException ohDataValidationException = catchThrowableOfType(() -> visitManager.validateVisit(invalidVisit),
-					OHDataValidationException.class);
+				OHDataValidationException.class);
 			// then
 			then(ohDataValidationException)
-					.as("should have detected an invalid visit at %s lasting %s minutes", invalidVisit.getDate(), invalidVisit.getDuration())
-					.isNotNull();
+				.as("should have detected an invalid visit at %s lasting %s minutes", invalidVisit.getDate(), invalidVisit.getDuration())
+				.isNotNull();
 			then(ohDataValidationException.getMessages()).hasSize(1);
 			OHExceptionMessage ohExceptionMessage = ohDataValidationException.getMessages().get(0);
 			then(ohExceptionMessage.getTitle()).isEqualTo("angal.common.error.title");
@@ -471,12 +471,12 @@ class Tests extends OHCoreTestCase {
 
 		// when
 		OHDataValidationException ohDataValidationException = catchThrowableOfType(() -> visitManager.validateVisit(invalidVisit),
-				OHDataValidationException.class);
+			OHDataValidationException.class);
 
 		// then
 		then(ohDataValidationException)
-				.as("should have detected an invalid visit at %s lasting %s minutes", invalidVisit.getDate(), invalidVisit.getDuration())
-				.isNotNull();
+			.as("should have detected an invalid visit at %s lasting %s minutes", invalidVisit.getDate(), invalidVisit.getDuration())
+			.isNotNull();
 		then(ohDataValidationException.getMessages()).hasSize(1);
 		OHExceptionMessage ohExceptionMessage = ohDataValidationException.getMessages().get(0);
 		then(ohExceptionMessage.getTitle()).isEqualTo("angal.common.error.title");
@@ -504,8 +504,8 @@ class Tests extends OHCoreTestCase {
 
 		// test param: visit datetime, visit duration
 		List<Pair<LocalDateTime, Integer>> validVisitsParams = List.of(
-				Pair.of(existingVisitDateTime.plusMinutes(existingVisitDuration), 20), // starts after existing visit time
-				Pair.of(existingVisitDateTime.minusMinutes(existingVisitDuration + 30), 20) // ends before existing visit time
+			Pair.of(existingVisitDateTime.plusMinutes(existingVisitDuration), 20), // starts after existing visit time
+			Pair.of(existingVisitDateTime.minusMinutes(existingVisitDuration + 30), 20) // ends before existing visit time
 		);
 		for (Pair<LocalDateTime, Integer> validVisitParams : validVisitsParams) {
 			// given
@@ -528,7 +528,7 @@ class Tests extends OHCoreTestCase {
 		invalidVisit.setDuration(0);
 		// when
 		OHDataValidationException ohDataValidationException = catchThrowableOfType(() -> visitManager.validateVisit(invalidVisit),
-				OHDataValidationException.class);
+			OHDataValidationException.class);
 		// then
 		then(ohDataValidationException).as("should have detected an invalid visit").isNotNull();
 		then(ohDataValidationException.getMessages()).hasSize(1);
@@ -599,8 +599,8 @@ class Tests extends OHCoreTestCase {
 
 		assertThat(visit).isEqualTo(visit);
 		assertThat(visit)
-				.isNotNull()
-				.isNotEqualTo("someString");
+			.isNotNull()
+			.isNotEqualTo("someString");
 
 		Visit visit2 = new Visit(-1, null, null, null, false, null, null, null);
 		assertThat(visit).isNotEqualTo(visit2);

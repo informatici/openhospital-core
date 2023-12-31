@@ -28,20 +28,20 @@ import org.isf.ward.model.Ward;
 
 public class TestWard {
 
-	private String code = "Z";
-	private String maternityCode = "M";
-	private String description = "TestDescription";
-	private String telephone = "TestTelephone";
-	private String fax = "TestFac";
-	private String email = "TestEmail@gmail.com";
-	private Integer beds = 100;
-	private Integer nurs = 101;
-	private Integer docs = 102;
-	private boolean isOpd = true;
-	private boolean isPharmacy = true;
-	private boolean isFemale = true;
+	private final String code = "Z";
+	private final String maternityCode = "M";
+	private final String description = "TestDescription";
+	private final String telephone = "TestTelephone";
+	private final String fax = "TestFac";
+	private final String email = "TestEmail@gmail.com";
+	private final Integer beds = 100;
+	private final Integer nurs = 101;
+	private final Integer docs = 102;
+	private final boolean isOpd = true;
+	private final boolean isPharmacy = true;
+	private final boolean isFemale = true;
 	private boolean isMale;
-	private int visitDuration = 30;
+	private final int visitDuration = 30;
 
 	public Ward setup(boolean usingSet) throws OHException {
 		return setup(usingSet, false);
@@ -56,7 +56,7 @@ public class TestWard {
 		} else {
 			// Create Ward with all parameters 
 			ward = new Ward(code, description, telephone, fax, email, beds, nurs, docs,
-					isOpd, isPharmacy, isMale, isFemale);
+				isOpd, isPharmacy, isMale, isFemale);
 		}
 		if (maternity) {
 			ward.setCode(maternityCode);

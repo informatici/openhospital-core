@@ -34,9 +34,9 @@ import org.isf.utils.exception.OHException;
 
 public class TestBillPayments {
 
+	private static final double paymentAmount = 10.10;
+	private static final String paymentUser = "TestUser";
 	public LocalDateTime paymentDate = LocalDateTime.of(4, 3, 2, 0, 0, 0);
-	private static double paymentAmount = 10.10;
-	private static String paymentUser = "TestUser";
 
 	public BillPayments setup(Bill bill, boolean usingSet) throws OHException {
 		BillPayments billPayment;

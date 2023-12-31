@@ -21,14 +21,17 @@
  */
 package org.isf.dicom;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.text.ParseException;
+
 import org.isf.OHCoreTestCase;
 import org.isf.dicom.manager.DicomManagerInterface;
 import org.isf.dicom.model.FileDicom;
 import org.isf.dicom.service.DicomIoOperationRepository;
+import org.isf.dicomtype.TestDicomType;
 import org.isf.dicomtype.model.DicomType;
 import org.isf.dicomtype.service.DicomTypeIoOperationRepository;
-import org.isf.dicomtype.TestDicomType;
-import org.isf.menu.manager.Context;
 import org.isf.utils.exception.OHDicomException;
 import org.isf.utils.exception.OHException;
 import org.junit.jupiter.api.AfterAll;
@@ -36,11 +39,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-
-import java.text.ParseException;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestSqlDicomManager extends OHCoreTestCase {
 
@@ -61,15 +59,15 @@ public class TestSqlDicomManager extends OHCoreTestCase {
 		System.setProperty("dicom.manager.impl", "SqlDicomManager");
 	}
 
+	@AfterAll
+	public static void tearDownClass() throws Exception {
+		System.clearProperty("dicom.manager.impl");
+	}
+
 	@BeforeEach
 	public void setUp() throws OHException, OHDicomException {
 		cleanH2InMemoryDb();
 
-	}
-
-	@AfterAll
-	public static void tearDownClass() throws Exception {
-		System.clearProperty("dicom.manager.impl");
 	}
 
 	@Test

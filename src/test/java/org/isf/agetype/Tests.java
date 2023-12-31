@@ -21,6 +21,12 @@
  */
 package org.isf.agetype;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.agetype.manager.AgeTypeBrowserManager;
@@ -32,12 +38,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class Tests extends OHCoreTestCase {
 
@@ -160,9 +160,9 @@ public class Tests extends OHCoreTestCase {
 		ageType2.setFrom(ageType.getFrom());
 		ageType2.setTo(ageType.getTo());
 		assertThat(ageType)
-				.isEqualTo(ageType)
-				.isEqualTo(ageType2)
-				.isNotEqualTo("xyzzy");
+			.isEqualTo(ageType)
+			.isEqualTo(ageType2)
+			.isNotEqualTo("xyzzy");
 		ageType2.setCode("xxxx");
 		assertThat(ageType).isNotEqualTo(ageType2);
 
@@ -186,11 +186,11 @@ public class Tests extends OHCoreTestCase {
 
 		// Range overlap
 		assertThatThrownBy(() -> ageTypeBrowserManager.updateAgeType(ageTypes))
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		// Age range not defined
 		foundAgeType2.setFrom(90);
 		foundAgeType2.setTo(100);
@@ -198,11 +198,11 @@ public class Tests extends OHCoreTestCase {
 		ageTypes2.add(foundAgeType);
 		ageTypes2.add(foundAgeType2);
 		assertThatThrownBy(() -> ageTypeBrowserManager.updateAgeType(ageTypes2))
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	private String setupTestAgeType(boolean usingSet) throws Exception {

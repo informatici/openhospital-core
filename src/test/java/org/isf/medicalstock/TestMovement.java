@@ -37,17 +37,17 @@ import org.isf.ward.model.Ward;
 
 public class TestMovement {
 
-	private LocalDateTime date = LocalDateTime.of(2000, 2, 2, 0, 0, 0, 0);
-	private int quantity = 10;
-	private String refNo = "TestRef";
+	private final LocalDateTime date = LocalDateTime.of(2000, 2, 2, 0, 0, 0, 0);
+	private final int quantity = 10;
+	private final String refNo = "TestRef";
 
 	public Movement setup(
-			Medical medical,
-			MovementType movementType,
-			Ward ward,
-			Lot lot,
-			Supplier supplier,
-			boolean usingSet) throws OHException {
+		Medical medical,
+		MovementType movementType,
+		Ward ward,
+		Lot lot,
+		Supplier supplier,
+		boolean usingSet) throws OHException {
 		Movement movement;
 
 		if (usingSet) {
@@ -62,12 +62,12 @@ public class TestMovement {
 	}
 
 	public void setParameters(
-			Movement movement,
-			Medical medical,
-			MovementType movementType,
-			Ward ward,
-			Lot lot,
-			Supplier supplier) {
+		Movement movement,
+		Medical medical,
+		MovementType movementType,
+		Ward ward,
+		Lot lot,
+		Supplier supplier) {
 		movement.setDate(date);
 		movement.setLot(lot);
 		movement.setMedical(medical);

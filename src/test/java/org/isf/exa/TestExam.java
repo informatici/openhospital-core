@@ -29,9 +29,9 @@ import org.isf.utils.exception.OHException;
 
 public class TestExam {
 
-	private String code = "ZZ";
-	private String description = "TestDescription";
-	private String defaultResult = "TestDefaultResult";
+	private final String code = "ZZ";
+	private final String description = "TestDescription";
+	private final String defaultResult = "TestDefaultResult";
 
 	public Exam setup(ExamType examtype, int procedure, boolean usingSet) throws OHException {
 		Exam exam;

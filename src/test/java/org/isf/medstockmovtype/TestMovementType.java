@@ -28,9 +28,9 @@ import org.isf.utils.exception.OHException;
 
 public class TestMovementType {
 
-	private String code = "ZZABCD";
-	private String description = "TestDescription";
-	private String type = "+";
+	private final String code = "ZZABCD";
+	private final String description = "TestDescription";
+	private final String type = "+";
 
 	public MovementType setup(boolean usingSet) throws OHException {
 		MovementType movementType;

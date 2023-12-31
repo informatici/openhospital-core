@@ -33,8 +33,8 @@ import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperation;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperationRepository;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -54,7 +54,7 @@ public class Tests extends OHCoreTestCase {
 		testPregnantTreatmentType = new TestPregnantTreatmentType();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -183,7 +183,7 @@ public class Tests extends OHCoreTestCase {
 			pregnantTreatmentType.setDescription("someDescription");
 			pregnantTreatmentTypeBrowserManager.newPregnantTreatmentType(pregnantTreatmentType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -195,7 +195,7 @@ public class Tests extends OHCoreTestCase {
 			pregnantTreatmentType.setDescription("someDescription");
 			pregnantTreatmentTypeBrowserManager.newPregnantTreatmentType(pregnantTreatmentType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -208,7 +208,7 @@ public class Tests extends OHCoreTestCase {
 			pregnantTreatmentType.setDescription("someDescription");
 			pregnantTreatmentTypeBrowserManager.newPregnantTreatmentType(pregnantTreatmentType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -220,7 +220,7 @@ public class Tests extends OHCoreTestCase {
 			pregnantTreatmentType.setDescription("");
 			pregnantTreatmentTypeBrowserManager.newPregnantTreatmentType(pregnantTreatmentType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -230,9 +230,9 @@ public class Tests extends OHCoreTestCase {
 		pregnantTreatmentType.setDescription("someDescription");
 
 		assertThat(pregnantTreatmentType)
-				.isEqualTo(pregnantTreatmentType)
-				.isNotNull()
-				.isNotEqualTo("someString");
+			.isEqualTo(pregnantTreatmentType)
+			.isNotNull()
+			.isNotEqualTo("someString");
 
 		PregnantTreatmentType pregnantTreatmentType2 = new PregnantTreatmentType();
 		pregnantTreatmentType.setCode("XX");

@@ -21,27 +21,27 @@
  */
 package org.isf.disease;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.List;
+
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.disease.manager.DiseaseBrowserManager;
 import org.isf.disease.model.Disease;
 import org.isf.disease.service.DiseaseIoOperationRepository;
 import org.isf.disease.service.DiseaseIoOperations;
+import org.isf.distype.TestDiseaseType;
 import org.isf.distype.model.DiseaseType;
 import org.isf.distype.service.DiseaseTypeIoOperation;
 import org.isf.distype.service.DiseaseTypeIoOperationRepository;
-import org.isf.distype.TestDiseaseType;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class Tests extends OHCoreTestCase {
 
@@ -311,9 +311,9 @@ class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType2 = testDiseaseType.setup(false);
 		Disease disease2 = new Disease("998", "someDescription", diseaseType2);
 		assertThat(disease)
-				.isEqualTo(disease)
-				.isNotEqualTo(disease2)
-				.isNotEqualTo("xyzzy");
+			.isEqualTo(disease)
+			.isNotEqualTo(disease2)
+			.isNotEqualTo("xyzzy");
 		disease2.setCode(disease.getCode());
 		disease2.setType(disease.getType());
 		disease2.setDescription(disease.getDescription());
@@ -338,11 +338,11 @@ class Tests extends OHCoreTestCase {
 		Disease disease = testDisease.setup(diseaseType, false);
 		disease.setCode("");
 		assertThatThrownBy(() -> diseaseBrowserManager.newDisease(disease))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -351,11 +351,11 @@ class Tests extends OHCoreTestCase {
 		Disease disease = testDisease.setup(diseaseType, false);
 		disease.setCode("12345678901234567");
 		assertThatThrownBy(() -> diseaseBrowserManager.newDisease(disease))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -364,11 +364,11 @@ class Tests extends OHCoreTestCase {
 		Disease disease = testDisease.setup(diseaseType, false);
 		disease.setDescription("");
 		assertThatThrownBy(() -> diseaseBrowserManager.updateDisease(disease))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -380,11 +380,11 @@ class Tests extends OHCoreTestCase {
 		Disease disease2 = testDisease.setup(diseaseType, false);
 		disease2.setCode(code);
 		assertThatThrownBy(() -> diseaseBrowserManager.newDisease(disease2))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 2), "Expecting two validation errors")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 2), "Expecting two validation errors")
+			);
 	}
 
 	private String setupTestDisease(boolean usingSet) throws Exception {

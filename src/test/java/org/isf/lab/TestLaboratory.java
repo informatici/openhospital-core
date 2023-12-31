@@ -36,16 +36,16 @@ import org.isf.utils.time.TimeTools;
 
 public class TestLaboratory {
 
-	private String material = "TestMaterial";
-	private LocalDateTime labDate = TimeTools.getNow();
+	private final String material = "TestMaterial";
+	private final LocalDateTime labDate = TimeTools.getNow();
 
-	private String result = "TestResult";
-	private String note = "TestNote";
-	private String patName = "TestPatientName";
-	private String InOutPatient = "O";
-	private Integer age = 37;
-	private String sex = "F";
-	private Integer code = 2;
+	private final String result = "TestResult";
+	private final String note = "TestNote";
+	private final String patName = "TestPatientName";
+	private final String InOutPatient = "O";
+	private final Integer age = 37;
+	private final String sex = "F";
+	private final Integer code = 2;
 
 	public Laboratory setup(Exam exam, Patient patient, boolean usingSet) throws OHException {
 		Laboratory laboratory;

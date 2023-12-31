@@ -21,13 +21,23 @@
  */
 package org.isf.lab;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
+import static org.isf.generaldata.GeneralData.LABEXTENDED;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.isf.OHCoreTestCase;
+import org.isf.exa.TestExam;
 import org.isf.exa.model.Exam;
 import org.isf.exa.service.ExamIoOperationRepository;
-import org.isf.exa.TestExam;
+import org.isf.exatype.TestExamType;
 import org.isf.exatype.model.ExamType;
 import org.isf.exatype.service.ExamTypeIoOperationRepository;
-import org.isf.exatype.TestExamType;
 import org.isf.lab.manager.LabManager;
 import org.isf.lab.manager.LabRowManager;
 import org.isf.lab.model.Laboratory;
@@ -36,10 +46,10 @@ import org.isf.lab.model.LaboratoryRow;
 import org.isf.lab.service.LabIoOperationRepository;
 import org.isf.lab.service.LabIoOperations;
 import org.isf.lab.service.LabRowIoOperationRepository;
+import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.service.PatientIoOperationRepository;
-import org.isf.patient.TestPatient;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.pagination.PagedResponse;
@@ -52,17 +62,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assumptions.assumeThat;
-import static org.isf.generaldata.GeneralData.LABEXTENDED;
-
 
 class Tests extends OHCoreTestCase {
 
@@ -99,14 +98,13 @@ class Tests extends OHCoreTestCase {
 		testPatient = new TestPatient();
 	}
 
+	static Stream<Arguments> generalDataLab() {
+		return Stream.of(Arguments.of(false), Arguments.of(true));
+	}
+
 	@BeforeEach
 	void setUp() {
 		cleanH2InMemoryDb();
-	}
-
-
-	static Stream<Arguments> generalDataLab() {
-		return Stream.of(Arguments.of(false),Arguments.of(true));
 	}
 
 	@Test
@@ -746,6 +744,7 @@ class Tests extends OHCoreTestCase {
 		})
 			.isInstanceOf(OHDataValidationException.class);
 	}
+
 	@ParameterizedTest(name = "Test with LABEXTENDED={0}")
 	@MethodSource("generalDataLab")
 	void testMgrValidationLABEXTENDEDPatient(boolean labextended) throws Exception {

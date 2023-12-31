@@ -29,10 +29,10 @@ public class GeneralDataTest {
 
 	@Test
 	public void testGetGeneralData() {
-		GeneralData generalData =  GeneralData.getGeneralData();
-		
+		GeneralData generalData = GeneralData.getGeneralData();
+
 		assertThat(generalData).isNotNull();
-		
+
 		assertThat(GeneralData.LANGUAGE).isEqualTo("es");
 	}
 

@@ -21,7 +21,18 @@
  */
 package org.isf.medicalstock;
 
-import jakarta.validation.ValidationException;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
@@ -66,18 +77,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import jakarta.validation.ValidationException;
 
 @Transactional
 class Tests extends OHCoreTestCase {
@@ -116,14 +116,6 @@ class Tests extends OHCoreTestCase {
 	@Autowired
 	ApplicationEventPublisher applicationEventPublisher;
 
-	@DisplayName("Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
-	@ParameterizedTest
-	@MethodSource("automaticlot")
-	@Retention(RetentionPolicy.RUNTIME)
-	private @interface TestParameterized {
-
-	}
-
 	public static Stream<Arguments> automaticlot() {
 		return Stream.of(
 			Arguments.of(false, false, false),
@@ -136,9 +128,6 @@ class Tests extends OHCoreTestCase {
 			Arguments.of(true, true, true)
 		);
 	}
-
-
-
 
 	private static void setGeneralData(boolean in, boolean out, boolean toward) {
 		GeneralData.AUTOMATICLOT_IN = in;
@@ -157,11 +146,6 @@ class Tests extends OHCoreTestCase {
 		testSupplier = new TestSupplier();
 	}
 
-	@BeforeEach
-	void setUp() throws OHException {
-		cleanH2InMemoryDb();
-	}
-
 	@AfterAll
 	static void tearDownClass() {
 		testLot = null;
@@ -171,6 +155,11 @@ class Tests extends OHCoreTestCase {
 		testMovementType = null;
 		testWard = null;
 		testSupplier = null;
+	}
+
+	@BeforeEach
+	void setUp() throws OHException {
+		cleanH2InMemoryDb();
 	}
 
 	@TestParameterized
@@ -960,7 +949,7 @@ class Tests extends OHCoreTestCase {
 			int code = setupTestMovement(false);
 			Movement movement = movementIoOperationRepository.findById(code).get();
 			Lot lot = movement.getLot();
-			lot.setCost(new BigDecimal(0.0));
+			lot.setCost(new BigDecimal("0.0"));
 			lotIoOperationRepository.saveAndFlush(lot);
 			List<Movement> movements = new ArrayList<>(1);
 			movements.add(movement);
@@ -1193,5 +1182,13 @@ class Tests extends OHCoreTestCase {
 	private void checkMovementIntoDb(int code) {
 		Movement foundMovement = movementIoOperationRepository.findById(code).get();
 		testMovement.check(foundMovement);
+	}
+
+	@DisplayName("Test with AUTOMATICLOT_IN={0}, AUTOMATICLOT_OUT={1}, AUTOMATICLOTWARD_TOWARD={2}")
+	@ParameterizedTest
+	@MethodSource("automaticlot")
+	@Retention(RetentionPolicy.RUNTIME)
+	private @interface TestParameterized {
+
 	}
 }

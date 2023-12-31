@@ -28,8 +28,8 @@ import org.isf.utils.exception.OHException;
 
 public class TestUserGroup {
 
-	private String code = "Z";
-	private String description = "TestDescription";
+	private final String code = "Z";
+	private final String description = "TestDescription";
 
 	public UserGroup setup(boolean usingSet) throws OHException {
 		UserGroup userGroup;

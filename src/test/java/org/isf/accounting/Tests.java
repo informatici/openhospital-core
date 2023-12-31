@@ -21,6 +21,14 @@
  */
 package org.isf.accounting;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.data.Offset.offset;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.isf.OHCoreTestCase;
 import org.isf.accounting.manager.BillBrowserManager;
 import org.isf.accounting.model.Bill;
@@ -30,13 +38,13 @@ import org.isf.accounting.service.AccountingBillIoOperationRepository;
 import org.isf.accounting.service.AccountingBillItemsIoOperationRepository;
 import org.isf.accounting.service.AccountingBillPaymentIoOperationRepository;
 import org.isf.accounting.service.AccountingIoOperations;
+import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.service.PatientIoOperationRepository;
-import org.isf.patient.TestPatient;
+import org.isf.priceslist.TestPriceList;
 import org.isf.priceslist.model.PriceList;
 import org.isf.priceslist.service.PricesListIoOperationRepository;
-import org.isf.priceslist.TestPriceList;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.time.TimeTools;
@@ -45,16 +53,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.test.annotation.DirtiesContext;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.data.Offset.offset;
 
 class Tests extends OHCoreTestCase {
 
@@ -191,8 +189,8 @@ class Tests extends OHCoreTestCase {
 
 		assertThat(bill).isEqualTo(bill);
 		assertThat(bill)
-				.isNotEqualTo(TimeTools.getNow())
-				.isEqualTo(foundBill);
+			.isNotEqualTo(TimeTools.getNow())
+			.isEqualTo(foundBill);
 		foundBill2.setId(-1);
 		assertThat(bill).isNotEqualTo(foundBill2);
 		assertThat(bill.compareTo(foundBill2)).isEqualTo(id + 1);   // id - (-1)
@@ -368,7 +366,7 @@ class Tests extends OHCoreTestCase {
 		bills = accountingIoOperation.getBillsBetweenDatesWhereBillItem(dateFrom, dateTo, foundBillItem);
 		assertThat(bills).contains(foundBill);
 
-		bills = accountingIoOperation.getBillsBetweenDatesWhereBillItem(dateFrom, dateTo, (BillItems) null);
+		bills = accountingIoOperation.getBillsBetweenDatesWhereBillItem(dateFrom, dateTo, null);
 		assertThat(bills).contains(foundBill);
 
 		id = setupTestBillItems(true);
@@ -418,8 +416,8 @@ class Tests extends OHCoreTestCase {
 		BillPayments billPayment = payments.get(0);
 		assertThat(foundBillPayment).isEqualTo(foundBillPayment);
 		assertThat(foundBillPayment)
-				.isNotEqualTo(TimeTools.getNow())
-				.isEqualTo(billPayment);
+			.isNotEqualTo(TimeTools.getNow())
+			.isEqualTo(billPayment);
 		int id2 = setupTestBillPayments(false);
 		BillPayments foundBillPayment2 = accountingBillPaymentIoOperationRepository.findById(id2).get();
 		foundBillPayment2.setId(-1);
@@ -449,8 +447,8 @@ class Tests extends OHCoreTestCase {
 		BillItems billItem = billItems.get(0);
 		assertThat(foundBillItem).isEqualTo(foundBillItem);
 		assertThat(foundBillItem)
-				.isNotEqualTo(TimeTools.getNow())
-				.isEqualTo(billItem);
+			.isNotEqualTo(TimeTools.getNow())
+			.isEqualTo(billItem);
 		int id2 = setupTestBillItems(false);
 		BillItems foundBillItem2 = accountingBillItemsIoOperationRepository.findById(id2).get();
 		foundBillItem2.setId(-1);
@@ -560,9 +558,9 @@ class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		Bill bill = testBill.setup(priceList, patient, null, false);
 		billBrowserManager.newBill(
-				bill,
-				new ArrayList<>(),
-				new ArrayList<>());
+			bill,
+			new ArrayList<>(),
+			new ArrayList<>());
 		assertThat(billBrowserManager.getBill(bill.getId()).getId()).isEqualTo(bill.getId());
 		assertThat(billBrowserManager.getItems(bill.getId())).isEmpty();
 		assertThat(billBrowserManager.getPayments(bill.getId())).isEmpty();
@@ -579,13 +577,13 @@ class Tests extends OHCoreTestCase {
 		List<BillItems> billItems = new ArrayList<>();
 		billItems.add(insertBillItem);
 		billBrowserManager.newBill(
-				bill,
-				billItems,
-				new ArrayList<>());
+			bill,
+			billItems,
+			new ArrayList<>());
 		assertThat(billBrowserManager.getBill(bill.getId()).getId()).isEqualTo(bill.getId());
 		assertThat(billBrowserManager.getItems(bill.getId())).isNotEmpty();
 		assertThat(billBrowserManager.getPayments(bill.getId())).isEmpty();
-		}
+	}
 
 	@Test
 	void mgrNewBillNoItemsAndPayments() throws Exception {
@@ -599,13 +597,13 @@ class Tests extends OHCoreTestCase {
 		List<BillPayments> billPayments = new ArrayList<>();
 		billPayments.add(insertBillPayment);
 		billBrowserManager.newBill(
-				bill,
-				new ArrayList<>(),
-				billPayments);
+			bill,
+			new ArrayList<>(),
+			billPayments);
 		assertThat(billBrowserManager.getBill(bill.getId()).getId()).isEqualTo(bill.getId());
 		assertThat(billBrowserManager.getItems(bill.getId())).isEmpty();
 		assertThat(billBrowserManager.getPayments(bill.getId())).isNotEmpty();
-		}
+	}
 
 	@Test
 	void mgrNewBillItemsAndPayments() throws Exception {
@@ -622,9 +620,9 @@ class Tests extends OHCoreTestCase {
 		List<BillPayments> billPayments = new ArrayList<>();
 		billPayments.add(insertBillPayment);
 		billBrowserManager.newBill(
-				bill,
-				billItems,
-				billPayments);
+			bill,
+			billItems,
+			billPayments);
 		assertThat(billBrowserManager.getBill(bill.getId()).getId()).isEqualTo(bill.getId());
 		assertThat(billBrowserManager.getItems(bill.getId())).isNotEmpty();
 		assertThat(billBrowserManager.getPayments(bill.getId())).isNotEmpty();
@@ -643,7 +641,7 @@ class Tests extends OHCoreTestCase {
 		billPayments.add(payments);
 
 		assertThatThrownBy(() -> billBrowserManager.newBill(bill, billItems, billPayments))
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -742,9 +740,9 @@ class Tests extends OHCoreTestCase {
 		Bill bill = accountingBillIoOperationRepository.findById(id).get();
 		bill.setAmount(12.34);
 		Bill updatedBill = billBrowserManager.updateBill(
-				bill,
-				new ArrayList<>(),
-				new ArrayList<>());
+			bill,
+			new ArrayList<>(),
+			new ArrayList<>());
 		assertThat(updatedBill.getAmount()).isCloseTo(12.34, offset(0.1));
 	}
 
@@ -792,7 +790,7 @@ class Tests extends OHCoreTestCase {
 		accountingBillItemsIoOperationRepository.saveAndFlush(billItem);
 		return billItem.getId();
 	}
-	
+
 	private void checkBillItemsIntoDb(int id) throws OHException {
 		BillItems foundBillItem = accountingBillItemsIoOperationRepository.findById(id).get();
 		testBillItems.check(foundBillItem);

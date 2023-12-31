@@ -29,7 +29,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestExamRow {
 
-	private String description = "TestDescription";
+	private final String description = "TestDescription";
 
 	public ExamRow setup(Exam exam, boolean usingSet) throws OHException {
 		ExamRow examRow;

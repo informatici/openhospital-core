@@ -21,6 +21,11 @@
  */
 package org.isf.distype;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.List;
+
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.distype.manager.DiseaseTypeBrowserManager;
@@ -30,16 +35,11 @@ import org.isf.distype.service.DiseaseTypeIoOperationRepository;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Transactional
 public class Tests extends OHCoreTestCase {
@@ -58,7 +58,7 @@ public class Tests extends OHCoreTestCase {
 		testDiseaseType = new TestDiseaseType();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -162,11 +162,11 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = new DiseaseType("ZZ", "TestDescription");
 		diseaseType.setCode("");
 		assertThatThrownBy(() -> diseaseTypeBrowserManager.newDiseaseType(diseaseType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -174,11 +174,11 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = new DiseaseType("ZZ", "TestDescription");
 		diseaseType.setCode("12345678901234567");
 		assertThatThrownBy(() -> diseaseTypeBrowserManager.newDiseaseType(diseaseType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -186,11 +186,11 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = new DiseaseType("ZZ", "TestDescription");
 		diseaseType.setDescription("");
 		assertThatThrownBy(() -> diseaseTypeBrowserManager.newDiseaseType(diseaseType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -201,11 +201,11 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType2 = new DiseaseType("ZZ", "TestDescription");
 		diseaseType2.setCode(code);
 		assertThatThrownBy(() -> diseaseTypeBrowserManager.newDiseaseType(diseaseType2))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -214,9 +214,9 @@ public class Tests extends OHCoreTestCase {
 		DiseaseType diseaseType = diseaseTypeIoOperationRepository.getReferenceById(code);
 		DiseaseType diseaseType2 = new DiseaseType("code", "description");
 		assertThat(diseaseType)
-				.isEqualTo(diseaseType)
-				.isNotEqualTo(diseaseType2)
-				.isNotEqualTo("xyzzy");
+			.isEqualTo(diseaseType)
+			.isNotEqualTo(diseaseType2)
+			.isNotEqualTo("xyzzy");
 		diseaseType2.setCode(diseaseType.getCode());
 		diseaseType2.setDescription(diseaseType.getDescription());
 		assertThat(diseaseType).isEqualTo(diseaseType2);

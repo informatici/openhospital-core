@@ -21,6 +21,11 @@
  */
 package org.isf.admtype;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.List;
+
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.admtype.manager.AdmissionTypeBrowserManager;
@@ -33,11 +38,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class Tests extends OHCoreTestCase {
 
@@ -141,9 +141,9 @@ public class Tests extends OHCoreTestCase {
 		assertThat(admissionType).isNotNull();
 		AdmissionType admissionType2 = new AdmissionType("someCode", "someDescription");
 		assertThat(admissionType)
-				.isEqualTo(admissionType)
-				.isNotEqualTo(admissionType2)
-				.isNotEqualTo("xyzzy");
+			.isEqualTo(admissionType)
+			.isNotEqualTo(admissionType2)
+			.isNotEqualTo("xyzzy");
 		admissionType2.setCode(code);
 		assertThat(admissionType).isEqualTo(admissionType2);
 
@@ -161,37 +161,37 @@ public class Tests extends OHCoreTestCase {
 		// Empty string
 		admissionType.setCode("");
 		assertThatThrownBy(() -> admissionTypeBrowserManager.updateAdmissionType(admissionType))
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		// Code is too long
 		admissionType.setCode("123456789ABCDEF");
 		assertThatThrownBy(() -> admissionTypeBrowserManager.updateAdmissionType(admissionType))
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		// Description is empty
 		admissionType.setCode(code);
 		String description = admissionType.getDescription();
 		admissionType.setDescription("");
 		assertThatThrownBy(() -> admissionTypeBrowserManager.updateAdmissionType(admissionType))
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		// Code already exists
 		admissionType.setDescription(description);
 		assertThatThrownBy(() -> admissionTypeBrowserManager.newAdmissionType(admissionType))
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 
 	}
 

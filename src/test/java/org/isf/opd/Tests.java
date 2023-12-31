@@ -21,6 +21,13 @@
  */
 package org.isf.opd;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.disease.TestDisease;
@@ -56,15 +63,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 class Tests extends OHCoreTestCase {
-
 
 	private static TestOpd testOpd;
 	private static TestPatient testPatient;
@@ -102,16 +101,15 @@ class Tests extends OHCoreTestCase {
 		testVisit = new TestVisit();
 	}
 
+	static Stream<Arguments> opdExtended() {
+		return Stream.of(Arguments.of(false), Arguments.of(true));
+	}
+
 	@BeforeEach
 	void setUp() {
 		cleanH2InMemoryDb();
 	}
-	
-	static Stream<Arguments> opdExtended() {
-		return Stream.of(Arguments.of(false),Arguments.of(true));
-	}
 
-	
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
 	@MethodSource("opdExtended")
 	void testOpdGets(boolean opdExtended) throws Exception {
@@ -136,21 +134,21 @@ class Tests extends OHCoreTestCase {
 		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundOpd).isNotNull();
 		List<Opd> opds = opdIoOperation.getOpdList(
-				foundOpd.getWard(),
-				foundOpd.getDisease().getType().getCode(),
-				foundOpd.getDisease().getCode(),
-				foundOpd.getDate().toLocalDate(),
-				foundOpd.getDate().toLocalDate(),
-				foundOpd.getAge() - 1,
-				foundOpd.getAge() + 1,
-				foundOpd.getSex(),
-				foundOpd.getNewPatient(),
-				foundOpd.getUserID());
+			foundOpd.getWard(),
+			foundOpd.getDisease().getType().getCode(),
+			foundOpd.getDisease().getCode(),
+			foundOpd.getDate().toLocalDate(),
+			foundOpd.getDate().toLocalDate(),
+			foundOpd.getAge() - 1,
+			foundOpd.getAge() + 1,
+			foundOpd.getSex(),
+			foundOpd.getNewPatient(),
+			foundOpd.getUserID());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testIoGetOpdListPatientId(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
@@ -161,7 +159,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testIoGetOpdListPatientIdZero(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
@@ -170,9 +168,9 @@ class Tests extends OHCoreTestCase {
 		Disease disease = testDisease.setup(diseaseType, false);
 		disease.setCode("angal.opd.alldiseases.txt");
 		disease.getType().setCode("angal.common.alltypes.txt");
-		
+
 		Ward ward = testWard.setup(false);
-		
+
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
@@ -184,7 +182,7 @@ class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
+
 		opdIoOperationRepository.saveAndFlush(opd);
 
 		List<Opd> opds = opdIoOperation.getOpdList(0);
@@ -192,7 +190,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testIoGetOpdListToday(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
@@ -203,7 +201,7 @@ class Tests extends OHCoreTestCase {
 		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Ward ward = testWard.setup(false);
-		
+
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
@@ -216,16 +214,16 @@ class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
+
 		opdIoOperationRepository.saveAndFlush(opd);
 		Patient patient2 = testPatient.setup(false);
 		DiseaseType diseaseType2 = testDiseaseType.setup(false);
 
 		Disease disease2 = testDisease.setup(diseaseType2, false);
-		
+
 		Ward ward2 = testWard.setup(false);
 		ward2.setCode("ZZ");
-		
+
 		Visit nextVisit2 = testVisit.setup(patient, true, ward2);
 
 		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, true);
@@ -245,7 +243,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testIoGetOpdListLastWeek(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
@@ -256,7 +254,7 @@ class Tests extends OHCoreTestCase {
 		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Ward ward = testWard.setup(false);
-		
+
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
@@ -270,7 +268,7 @@ class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
+
 		opdIoOperationRepository.saveAndFlush(opd);
 
 		Patient patient2 = testPatient.setup(false);
@@ -280,7 +278,7 @@ class Tests extends OHCoreTestCase {
 
 		Ward ward2 = testWard.setup(false);
 		ward2.setCode("ZZ");
-		
+
 		Visit nextVisit2 = testVisit.setup(patient, true, ward2);
 
 		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, true);
@@ -302,7 +300,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testIoNewOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
@@ -315,14 +313,14 @@ class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
+
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 		Opd newOpd = opdIoOperation.newOpd(opd);
 		checkOpdIntoDb(newOpd.getCode());
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testIoUpdateOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
@@ -342,7 +340,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testIoDeleteOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
@@ -353,7 +351,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testIoGetProgYearZero(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
@@ -364,7 +362,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testIoGetProgYear(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
@@ -375,7 +373,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testIoIsExistsOpdNumShouldReturnTrueWhenOpdWithGivenOPDProgressiveYearAndVisitYearExists(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		// given:
@@ -391,7 +389,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testIoIsExistsOpdNumShouldReturnTrueWhenOpdNumExistsAndVisitYearIsNotProvided(boolean opdExtended) throws Exception {
 		// given:
 		GeneralData.OPDEXTENDED = opdExtended;
@@ -407,7 +405,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testIoIsExistsOpdNumShouldReturnFalseWhenOpdNumExistsAndVisitYearIsIncorrect(boolean opdExtended) throws Exception {
 		// given:
 		GeneralData.OPDEXTENDED = opdExtended;
@@ -423,7 +421,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testIoGetLastOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
@@ -434,7 +432,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		// given:
@@ -453,28 +451,28 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrGetOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
 		Opd foundOpd = opdIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundOpd).isNotNull();
 		List<Opd> opds = opdBrowserManager.getOpd(
-				foundOpd.getWard(),
-				foundOpd.getDisease().getType().getCode(),
-				foundOpd.getDisease().getCode(),
-				foundOpd.getDate().toLocalDate(),
-				foundOpd.getDate().toLocalDate(),
-				foundOpd.getAge() - 1,
-				foundOpd.getAge() + 1,
-				foundOpd.getSex(),
-				foundOpd.getNewPatient(),
-				foundOpd.getUserID());
+			foundOpd.getWard(),
+			foundOpd.getDisease().getType().getCode(),
+			foundOpd.getDisease().getCode(),
+			foundOpd.getDate().toLocalDate(),
+			foundOpd.getDate().toLocalDate(),
+			foundOpd.getAge() - 1,
+			foundOpd.getAge() + 1,
+			foundOpd.getSex(),
+			foundOpd.getNewPatient(),
+			foundOpd.getUserID());
 		assertThat(opds.get(opds.size() - 1).getCode()).isEqualTo(foundOpd.getCode());
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrGetOpdListPatientId(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
@@ -485,7 +483,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrGetOpdListPatientIdZero(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
@@ -496,7 +494,7 @@ class Tests extends OHCoreTestCase {
 		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Ward ward = testWard.setup(false);
-		
+
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
@@ -508,7 +506,7 @@ class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
+
 		opdIoOperationRepository.saveAndFlush(opd);
 
 		List<Opd> opds = opdBrowserManager.getOpdList(0);
@@ -516,7 +514,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrGetOpdToday(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
@@ -527,7 +525,7 @@ class Tests extends OHCoreTestCase {
 		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Ward ward = testWard.setup(false);
-		
+
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
@@ -540,7 +538,7 @@ class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
+
 		opdIoOperationRepository.saveAndFlush(opd);
 
 		Patient patient2 = testPatient.setup(false);
@@ -550,7 +548,7 @@ class Tests extends OHCoreTestCase {
 
 		Ward ward2 = testWard.setup(false);
 		ward2.setCode("ZZ");
-		
+
 		Visit nextVisit2 = testVisit.setup(patient, true, ward2);
 
 		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, true);
@@ -572,7 +570,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrGetOpdLastWeek(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
@@ -583,7 +581,7 @@ class Tests extends OHCoreTestCase {
 		disease.getType().setCode("angal.common.alltypes.txt");
 
 		Ward ward = testWard.setup(false);
-		
+
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
@@ -597,7 +595,7 @@ class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
+
 		opdIoOperationRepository.saveAndFlush(opd);
 
 		Patient patient2 = testPatient.setup(false);
@@ -607,7 +605,7 @@ class Tests extends OHCoreTestCase {
 
 		Ward ward2 = testWard.setup(false);
 		ward2.setCode("ZZ");
-		
+
 		Visit nextVisit2 = testVisit.setup(patient, true, ward2);
 
 		Opd opd2 = testOpd.setup(patient2, disease2, ward2, nextVisit2, true);
@@ -629,7 +627,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrNewOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
@@ -642,7 +640,7 @@ class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
+
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
 		// Need this to pass validation checks in manager
 		Disease disease2 = new Disease("998", "TestDescription 2", diseaseType);
@@ -656,7 +654,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrUpdateOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
@@ -669,7 +667,7 @@ class Tests extends OHCoreTestCase {
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
+
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
 		// Need this to pass validation checks in manager
 		Disease disease2 = new Disease("998", "TestDescription 2", diseaseType);
@@ -690,7 +688,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrDeleteOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
@@ -701,7 +699,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrGetProgYearZero(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
@@ -712,7 +710,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrGetProgYear(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
@@ -723,7 +721,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrIsExistsOpdNumShouldReturnTrueWhenOpdWithGivenOPDProgressiveYearAndVisitYearExists(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
@@ -733,7 +731,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrIsExistsOpdNumShouldReturnTrueWhenOpdNumExistsAndVisitYearIsNotProvided(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
@@ -743,7 +741,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrIsExistsOpdNumShouldReturnFalseWhenOpdNumExistsAndVisitYearIsIncorrect(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
@@ -753,7 +751,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrGetLastOpd(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		int code = setupTestOpd(false);
@@ -764,7 +762,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrValidationVisitDateNull(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		assertThatThrownBy(() ->
@@ -785,15 +783,15 @@ class Tests extends OHCoreTestCase {
 			opd.setDate(null);
 			opdBrowserManager.newOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrValidationOPDEXTENDEDPatientNull(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		if (!GeneralData.OPDEXTENDED) {
@@ -814,15 +812,15 @@ class Tests extends OHCoreTestCase {
 			opd.setPatient(null);
 			opdBrowserManager.newOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrValidationAgeIsLessThanZero(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		assertThatThrownBy(() ->
@@ -840,15 +838,15 @@ class Tests extends OHCoreTestCase {
 			opd.setAge(-99);
 			opdBrowserManager.updateOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrValidationSexIsEmpty(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		assertThatThrownBy(() ->
@@ -867,15 +865,15 @@ class Tests extends OHCoreTestCase {
 			opd.setSex(' ');
 			opdBrowserManager.newOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrValidationDiseaseIsEmpty(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		assertThatThrownBy(() ->
@@ -893,15 +891,15 @@ class Tests extends OHCoreTestCase {
 			opd.setDisease(null);
 			opdBrowserManager.newOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrValidationDiseaseIsEqualToDisease2(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		assertThatThrownBy(() ->
@@ -917,15 +915,15 @@ class Tests extends OHCoreTestCase {
 			opd.setDisease2(disease2);
 			opdBrowserManager.newOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrValidationDiseaseIsEqualToDisease3(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		assertThatThrownBy(() ->
@@ -941,15 +939,15 @@ class Tests extends OHCoreTestCase {
 			opd.setDisease3(disease3);
 			opdBrowserManager.newOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testMgrValidationDisease2IsEqualToDisease3(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		assertThatThrownBy(() ->
@@ -966,15 +964,15 @@ class Tests extends OHCoreTestCase {
 			opd.setDisease3(disease2);
 			opdBrowserManager.newOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testOpdGetSet(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
@@ -1037,13 +1035,13 @@ class Tests extends OHCoreTestCase {
 
 		opd.setLock(-1);
 		assertThat(opd.getLock()).isEqualTo(-1);
-		
+
 		opd.setNextVisit(null);
 		assertThat(opd.getNextVisit()).isNull();
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testOpdHashCode(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
@@ -1060,7 +1058,7 @@ class Tests extends OHCoreTestCase {
 	}
 
 	@ParameterizedTest(name = "Test with OPDEXTENDED={0}")
-    @MethodSource("opdExtended")
+	@MethodSource("opdExtended")
 	void testOpdEquals(boolean opdExtended) throws Exception {
 		GeneralData.OPDEXTENDED = opdExtended;
 		Patient patient = testPatient.setup(false);
@@ -1072,8 +1070,8 @@ class Tests extends OHCoreTestCase {
 
 		assertThat(opd).isEqualTo(opd);
 		assertThat(opd)
-				.isNotNull()
-				.isNotEqualTo("someString");
+			.isNotNull()
+			.isNotEqualTo("someString");
 	}
 
 	private Patient setupTestPatient(boolean usingSet) throws Exception {
@@ -1088,14 +1086,14 @@ class Tests extends OHCoreTestCase {
 		Disease disease = testDisease.setup(diseaseType, false);
 		Ward ward = testWard.setup(false);
 		Visit nextVisit = testVisit.setup(patient, false, ward);
-		
+
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 		patientIoOperationRepository.saveAndFlush(patient);
 		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
 		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
-		
+
 		opdIoOperationRepository.saveAndFlush(opd);
 		return opd.getCode();
 	}

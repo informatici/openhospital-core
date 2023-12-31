@@ -41,8 +41,8 @@ import org.isf.menu.service.UserMenuItemIoOperationRepository;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -74,7 +74,7 @@ public class Tests extends OHCoreTestCase {
 		testGroupMenu = new TestGroupMenu();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -347,7 +347,7 @@ public class Tests extends OHCoreTestCase {
 			userGroupIoOperationRepository.saveAndFlush(userGroup);
 			userBrowsingManager.deleteGroup(userGroup);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -359,7 +359,7 @@ public class Tests extends OHCoreTestCase {
 			assertThat(user).isNotNull();
 			userBrowsingManager.deleteGroup(user.getUserGroupName());
 		})
-				.isInstanceOf(OHDataIntegrityViolationException.class);
+			.isInstanceOf(OHDataIntegrityViolationException.class);
 	}
 
 	@Test
@@ -391,7 +391,7 @@ public class Tests extends OHCoreTestCase {
 			userIoOperationRepository.saveAndFlush(user);
 			userBrowsingManager.newUser(user);
 		})
-				.isInstanceOf(OHDataIntegrityViolationException.class);
+			.isInstanceOf(OHDataIntegrityViolationException.class);
 	}
 
 	@Test
@@ -438,7 +438,7 @@ public class Tests extends OHCoreTestCase {
 			foundUser.setUserName("admin");
 			userBrowsingManager.deleteUser(foundUser);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -496,7 +496,7 @@ public class Tests extends OHCoreTestCase {
 			assertThat(foundUserGroup).isNotNull();
 			userBrowsingManager.newUserGroup(foundUserGroup);
 		})
-				.isInstanceOf(OHDataIntegrityViolationException.class);
+			.isInstanceOf(OHDataIntegrityViolationException.class);
 	}
 
 	@Test
@@ -532,8 +532,8 @@ public class Tests extends OHCoreTestCase {
 		groupMenu.setCode(1);
 
 		assertThat(groupMenu)
-				.isNotNull()
-				.isNotEqualTo("aString");
+			.isNotNull()
+			.isNotEqualTo("aString");
 
 		GroupMenu groupMenu1 = testGroupMenu.setup(false);
 		groupMenu1.setCode(-1);
@@ -568,8 +568,8 @@ public class Tests extends OHCoreTestCase {
 		User user = testUser.setup(userGroup, true);
 
 		assertThat(user)
-				.isNotNull()
-				.isNotEqualTo("someString");
+			.isNotNull()
+			.isNotEqualTo("someString");
 
 		User user1 = testUser.setup(userGroup, false);
 		user1.setUserName("someOtherName");
@@ -605,8 +605,8 @@ public class Tests extends OHCoreTestCase {
 		UserGroup userGroup = testUserGroup.setup(true);
 
 		assertThat(userGroup)
-				.isNotNull()
-				.isNotEqualTo("someString");
+			.isNotNull()
+			.isNotEqualTo("someString");
 
 		UserGroup userGroup1 = testUserGroup.setup(false);
 
@@ -636,8 +636,8 @@ public class Tests extends OHCoreTestCase {
 		UserMenuItem userMenuItem = testUserMenu.setup(true);
 
 		assertThat(userMenuItem)
-				.isNotNull()
-				.isNotEqualTo("someString");
+			.isNotNull()
+			.isNotEqualTo("someString");
 
 		UserMenuItem userMenuItem1 = testUserMenu.setup(false);
 		userMenuItem.setCode("code1");

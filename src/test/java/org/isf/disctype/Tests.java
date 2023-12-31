@@ -21,6 +21,11 @@
  */
 package org.isf.disctype;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.List;
+
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.disctype.manager.DischargeTypeBrowserManager;
@@ -34,11 +39,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class Tests extends OHCoreTestCase {
 
@@ -164,11 +164,11 @@ public class Tests extends OHCoreTestCase {
 		DischargeType foundDischargeType = dischargeTypeIoOperationRepository.findById(dischargeType.getCode()).orElse(null);
 		assertThat(foundDischargeType).isNotNull();
 		assertThatThrownBy(() -> dischargeTypeBrowserManager.deleteDischargeType(foundDischargeType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -181,35 +181,35 @@ public class Tests extends OHCoreTestCase {
 		// empty string
 		foundDischargeType.setCode("");
 		assertThatThrownBy(() -> dischargeTypeBrowserManager.updateDischargeType(foundDischargeType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		// too long
 		foundDischargeType.setCode("123456789ABCDEF");
 		assertThatThrownBy(() -> dischargeTypeBrowserManager.updateDischargeType(foundDischargeType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		// key already exists
 		foundDischargeType.setCode(code);
 		assertThatThrownBy(() -> dischargeTypeBrowserManager.newDischargeType(foundDischargeType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		// description empty
 		foundDischargeType.setDescription("");
 		assertThatThrownBy(() -> dischargeTypeBrowserManager.updateDischargeType(foundDischargeType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -219,9 +219,9 @@ public class Tests extends OHCoreTestCase {
 		assertThat(dischargeType).isNotNull();
 		DischargeType dischargeType2 = new DischargeType("someCode", "someDescription");
 		assertThat(dischargeType)
-				.isEqualTo(dischargeType)
-				.isNotEqualTo(dischargeType2)
-				.isNotEqualTo("xyzzy");
+			.isEqualTo(dischargeType)
+			.isNotEqualTo(dischargeType2)
+			.isNotEqualTo("xyzzy");
 		dischargeType2.setCode(code);
 		assertThat(dischargeType).isEqualTo(dischargeType2);
 

@@ -31,10 +31,10 @@ import org.isf.utils.exception.OHException;
 public class TestBillItems {
 
 	private static boolean isPrice;
-	private static String priceID = "TestPId";
-	private static String itemDescription = "TestItemDescription";
-	private static double itemAmount = 10.10;
-	private static int itemQuantity = 20;
+	private static final String priceID = "TestPId";
+	private static final String itemDescription = "TestItemDescription";
+	private static final double itemAmount = 10.10;
+	private static final int itemQuantity = 20;
 
 	public BillItems setup(Bill bill, boolean usingSet) throws OHException {
 		BillItems billItem;

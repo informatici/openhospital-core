@@ -21,33 +21,38 @@
  */
 package org.isf.operation;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.isf.OHCoreTestCase;
+import org.isf.admission.TestAdmission;
 import org.isf.admission.manager.AdmissionBrowserManager;
 import org.isf.admission.model.Admission;
 import org.isf.admission.service.AdmissionIoOperationRepository;
 import org.isf.admission.service.AdmissionIoOperations;
-import org.isf.admission.TestAdmission;
+import org.isf.admtype.TestAdmissionType;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.admtype.service.AdmissionTypeIoOperationRepository;
-import org.isf.admtype.TestAdmissionType;
+import org.isf.disctype.TestDischargeType;
 import org.isf.disctype.model.DischargeType;
 import org.isf.disctype.service.DischargeTypeIoOperationRepository;
-import org.isf.disctype.TestDischargeType;
+import org.isf.disease.TestDisease;
 import org.isf.disease.model.Disease;
 import org.isf.disease.service.DiseaseIoOperationRepository;
-import org.isf.disease.TestDisease;
+import org.isf.distype.TestDiseaseType;
 import org.isf.distype.model.DiseaseType;
 import org.isf.distype.service.DiseaseTypeIoOperationRepository;
-import org.isf.distype.TestDiseaseType;
+import org.isf.dlvrrestype.TestDeliveryResultType;
 import org.isf.dlvrrestype.model.DeliveryResultType;
 import org.isf.dlvrrestype.service.DeliveryResultIoOperationRepository;
-import org.isf.dlvrrestype.TestDeliveryResultType;
+import org.isf.dlvrtype.TestDeliveryType;
 import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.dlvrtype.service.DeliveryTypeIoOperationRepository;
-import org.isf.dlvrtype.TestDeliveryType;
+import org.isf.opd.TestOpd;
 import org.isf.opd.model.Opd;
 import org.isf.opd.service.OpdIoOperationRepository;
-import org.isf.opd.TestOpd;
 import org.isf.operation.manager.OperationBrowserManager;
 import org.isf.operation.manager.OperationRowBrowserManager;
 import org.isf.operation.model.Operation;
@@ -56,32 +61,27 @@ import org.isf.operation.service.OperationIoOperationRepository;
 import org.isf.operation.service.OperationIoOperations;
 import org.isf.operation.service.OperationRowIoOperationRepository;
 import org.isf.operation.service.OperationRowIoOperations;
+import org.isf.opetype.TestOperationType;
 import org.isf.opetype.model.OperationType;
 import org.isf.opetype.service.OperationTypeIoOperationRepository;
-import org.isf.opetype.TestOperationType;
+import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
-import org.isf.patient.TestPatient;
+import org.isf.pregtreattype.TestPregnantTreatmentType;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperationRepository;
-import org.isf.pregtreattype.TestPregnantTreatmentType;
 import org.isf.utils.exception.OHServiceException;
+import org.isf.visits.TestVisit;
 import org.isf.visits.model.Visit;
 import org.isf.visits.service.VisitsIoOperationRepository;
-import org.isf.visits.TestVisit;
+import org.isf.ward.TestWard;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
-import org.isf.ward.TestWard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class Tests extends OHCoreTestCase {
 
@@ -436,7 +436,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrDeleteOperation() throws Exception {
 		String code = setupTestOperation(false);
 		Operation foundOperation = operationBrowserManager.getOperationByCode(code);
-		Assertions.assertDoesNotThrow(() ->operationBrowserManager.deleteOperation(foundOperation));
+		Assertions.assertDoesNotThrow(() -> operationBrowserManager.deleteOperation(foundOperation));
 	}
 
 	@Test
@@ -494,8 +494,8 @@ public class Tests extends OHCoreTestCase {
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, false);
+			diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+			deliveryType, deliveryResult, false);
 		operationRow.setAdmission(admission);
 
 		wardIoOperationRepository.saveAndFlush(ward);
@@ -545,8 +545,8 @@ public class Tests extends OHCoreTestCase {
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, false);
+			diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+			deliveryType, deliveryResult, false);
 		// Don't set admission; leave it as default value of null;  operationRow.setAdmission(admission);
 
 		wardIoOperationRepository.saveAndFlush(ward);
@@ -683,8 +683,8 @@ public class Tests extends OHCoreTestCase {
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, false);
+			diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+			deliveryType, deliveryResult, false);
 		operationRow.setAdmission(admission);
 
 		wardIoOperationRepository.saveAndFlush(ward);
@@ -734,8 +734,8 @@ public class Tests extends OHCoreTestCase {
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, false);
+			diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+			deliveryType, deliveryResult, false);
 		// Don't set admission; leave it as default value of null;  operationRow.setAdmission(admission);
 
 		wardIoOperationRepository.saveAndFlush(ward);
@@ -810,7 +810,7 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrRowDeleteOperationRow() throws Exception {
 		int id = setupTestOperationRow(false);
 		OperationRow operationRow = operationRowIoOperationRepository.findById(id);
-		Assertions.assertDoesNotThrow(() ->operationRowBrowserManager.deleteOperationRow(operationRow));
+		Assertions.assertDoesNotThrow(() -> operationRowBrowserManager.deleteOperationRow(operationRow));
 		assertThat(operationRowIoOperationRepository.findById(id)).isNull();
 	}
 
@@ -858,8 +858,8 @@ public class Tests extends OHCoreTestCase {
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-		                                          diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-		                                          deliveryType, deliveryResult, false);
+			diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+			deliveryType, deliveryResult, false);
 		operationRow.setAdmission(admission);
 
 		wardIoOperationRepository.saveAndFlush(ward);
@@ -905,10 +905,9 @@ public class Tests extends OHCoreTestCase {
 		OperationType operationType = testOperationType.setup(false);
 		Operation operation = testOperation.setup(operationType, true);
 
-		assertThat(operation).isEqualTo(operation);
 		assertThat(operation)
-				.isNotNull()
-				.isNotEqualTo("a string");
+			.isNotNull()
+			.isNotEqualTo("a string");
 
 		OperationType operationType1 = testOperationType.setup(false);
 		Operation operation1 = testOperation.setup(operationType, true);
@@ -975,14 +974,15 @@ public class Tests extends OHCoreTestCase {
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, false);
+			diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+			deliveryType, deliveryResult, false);
 
-		OperationRow operationRow1 = new OperationRow(operation, "prescriber", "opResult", LocalDateTime.of(2021, 1, 1, 0, 0, 0), "remarks", admission, new Opd(),
-				null, 10.0f);
+		OperationRow operationRow1 = new OperationRow(operation, "prescriber", "opResult", LocalDateTime.of(2021, 1, 1, 0, 0, 0), "remarks", admission,
+			new Opd(),
+			null, 10.0f);
 
 		OperationRow operationRow2 = new OperationRow(1, operation, "prescriber", "opResult", LocalDateTime.of(2021, 1, 1, 0, 0, 0), "remarks", admission,
-				new Opd(), null, 10.0f);
+			new Opd(), null, 10.0f);
 
 		operationRow1.setId(1);
 		assertThat(operationRow1).isEqualTo(operationRow2);
@@ -994,10 +994,9 @@ public class Tests extends OHCoreTestCase {
 		Operation operation = testOperation.setup(operationType, true);
 		OperationRow operationRow = testOperationRow.setup(operation, false);
 
-		assertThat(operationRow).isEqualTo(operationRow);
 		assertThat(operationRow)
-				.isNotNull()
-				.isNotEqualTo("some string");
+			.isNotNull()
+			.isNotEqualTo("some string");
 	}
 
 	@Test
@@ -1021,8 +1020,8 @@ public class Tests extends OHCoreTestCase {
 
 		Patient patient = testPatient.setup(false);
 		Admission admission = testAdmission.setup(null, patient, null, null, null,
-				null, null, operation, null, null,
-				null, null, false);
+			null, null, operation, null, null,
+			null, null, false);
 		admission.setUserID("UserID");
 		operationRow.setAdmission(admission);
 
@@ -1075,8 +1074,8 @@ public class Tests extends OHCoreTestCase {
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-		                                          diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-		                                          deliveryType, deliveryResult, false);
+			diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+			deliveryType, deliveryResult, false);
 		operationRow.setAdmission(admission);
 
 		wardIoOperationRepository.saveAndFlush(ward);
@@ -1100,7 +1099,7 @@ public class Tests extends OHCoreTestCase {
 		operationRowIoOperationRepository.saveAndFlush(operationRow);
 		return operationRow.getId();
 	}
-	
+
 	private void checkOperationRowIntoDb(int id) throws Exception {
 		OperationRow foundOperationRow = operationRowIoOperationRepository.findById(id);
 		testOperationRow.check(foundOperationRow);

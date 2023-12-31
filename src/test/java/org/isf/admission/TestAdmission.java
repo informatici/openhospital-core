@@ -46,64 +46,64 @@ public class TestAdmission {
 	private static final LocalDateTime DELIVERYDATE = LocalDateTime.of(2004, 12, 1, 0, 0);
 	private static final LocalDateTime CTRLDATE1 = LocalDateTime.of(2005, 3, 1, 0, 0);
 	private static final LocalDateTime CTRLDATE2 = LocalDateTime.of(2005, 3, 2, 0, 0);
-	private static final LocalDateTime DISDATE =  LocalDateTime.of(2006, 12, 1, 0, 0);
+	private static final LocalDateTime DISDATE = LocalDateTime.of(2006, 12, 1, 0, 0);
 
 	private int id;
-	private int admitted = 1;
-	private String type = "T";
+	private final int admitted = 1;
+	private final String type = "T";
 	private int yProg;
-	private String FHU = "TestFHU";
-	private String note = "TestNote";
-	private Float transUnit = 10.10f;
-	private Float weight = 20.20f;
-	private String userID = "TestUserId";
-	private char deleted = 'N';
+	private final String FHU = "TestFHU";
+	private final String note = "TestNote";
+	private final Float transUnit = 10.10f;
+	private final Float weight = 20.20f;
+	private final String userID = "TestUserId";
+	private final char deleted = 'N';
 
 	public Admission setup(
-			Ward ward,
-			Patient patient,
-			AdmissionType admissionType,
-			Disease diseaseIn,
-			Disease diseaseOut1,
-			Disease diseaseOut2,
-			Disease diseaseOut3,
-			Operation operation,
-			DischargeType dischargeType,
-			PregnantTreatmentType pregTreatmentType,
-			DeliveryType deliveryType,
-			DeliveryResultType deliveryResult,
-			boolean usingSet) throws OHException {
+		Ward ward,
+		Patient patient,
+		AdmissionType admissionType,
+		Disease diseaseIn,
+		Disease diseaseOut1,
+		Disease diseaseOut2,
+		Disease diseaseOut3,
+		Operation operation,
+		DischargeType dischargeType,
+		PregnantTreatmentType pregTreatmentType,
+		DeliveryType deliveryType,
+		DeliveryResultType deliveryResult,
+		boolean usingSet) throws OHException {
 		Admission admission;
 
 		if (usingSet) {
 			admission = new Admission();
 			setParameters(admission, ward, patient, admissionType, diseaseIn, diseaseOut1, diseaseOut2,
-					diseaseOut3, operation, dischargeType, pregTreatmentType, deliveryType, deliveryResult);
+				diseaseOut3, operation, dischargeType, pregTreatmentType, deliveryType, deliveryResult);
 		} else {
 			// Create Admission with all parameters 
 			admission = new Admission(id, admitted, type, ward, yProg, patient, ADMINDATE, admissionType, FHU, diseaseIn,
-					diseaseOut1, diseaseOut2, diseaseOut3, DISDATE, dischargeType, note,
-					transUnit, VISITDATE, pregTreatmentType, DELIVERYDATE, deliveryType, deliveryResult, weight,
-					CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted);
+				diseaseOut1, diseaseOut2, diseaseOut3, DISDATE, dischargeType, note,
+				transUnit, VISITDATE, pregTreatmentType, DELIVERYDATE, deliveryType, deliveryResult, weight,
+				CTRLDATE1, CTRLDATE2, ABORTDATE, userID, deleted);
 		}
 
 		return admission;
 	}
 
 	public void setParameters(
-			Admission admission,
-			Ward ward,
-			Patient patient,
-			AdmissionType admissionType,
-			Disease diseaseIn,
-			Disease diseaseOut1,
-			Disease diseaseOut2,
-			Disease diseaseOut3,
-			Operation operation,
-			DischargeType dischargeType,
-			PregnantTreatmentType pregTreatmentType,
-			DeliveryType deliveryType,
-			DeliveryResultType deliveryResult) {
+		Admission admission,
+		Ward ward,
+		Patient patient,
+		AdmissionType admissionType,
+		Disease diseaseIn,
+		Disease diseaseOut1,
+		Disease diseaseOut2,
+		Disease diseaseOut3,
+		Operation operation,
+		DischargeType dischargeType,
+		PregnantTreatmentType pregTreatmentType,
+		DeliveryType deliveryType,
+		DeliveryResultType deliveryResult) {
 		admission.setAbortDate(ABORTDATE);
 		admission.setAdmDate(ADMINDATE);
 		admission.setAdmitted(admitted);

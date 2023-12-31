@@ -29,8 +29,8 @@ import org.isf.vactype.model.VaccineType;
 
 public class TestVaccine {
 
-	private String code = "Z";
-	private String description = "TestDescription";
+	private final String code = "Z";
+	private final String description = "TestDescription";
 
 	public Vaccine setup(VaccineType vaccineType, boolean usingSet) throws OHException {
 		Vaccine vaccine;

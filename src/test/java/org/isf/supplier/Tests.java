@@ -33,8 +33,8 @@ import org.isf.supplier.service.SupplierIoOperationRepository;
 import org.isf.supplier.service.SupplierOperations;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -54,7 +54,7 @@ public class Tests extends OHCoreTestCase {
 		testSupplier = new TestSupplier();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -166,9 +166,9 @@ public class Tests extends OHCoreTestCase {
 		Supplier supplier = new Supplier(1, "TestName", "TestAddress", "TestTax", "TestPhone", "TestFax", "TestEmail", "TestNode");
 
 		assertThat(supplier)
-				.isEqualTo(supplier)
-				.isNotNull()
-				.isNotEqualTo("someString");
+			.isEqualTo(supplier)
+			.isNotNull()
+			.isNotEqualTo("someString");
 
 		Supplier supplier2 = new Supplier(2, "TestName", "TestAddress", "TestTax", "TestPhone", "TestFax", "TestEmail", "TestNode");
 		assertThat(supplier).isNotEqualTo(supplier2);

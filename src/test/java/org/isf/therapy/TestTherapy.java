@@ -32,15 +32,15 @@ import org.isf.utils.exception.OHException;
 
 public class TestTherapy {
 
-	private LocalDateTime startDate = LocalDateTime.of(10, 9, 8, 0, 0, 0);
-	private LocalDateTime endDate = LocalDateTime.of(11, 10, 9, 0, 0, 0);
-	private Double qty = 9.9;
-	private int unitID = 10;
-	private int freqInDay = 11;
-	private int freqInPeriod = 12;
-	private String note = "TestNote";
+	private final LocalDateTime startDate = LocalDateTime.of(10, 9, 8, 0, 0, 0);
+	private final LocalDateTime endDate = LocalDateTime.of(11, 10, 9, 0, 0, 0);
+	private final Double qty = 9.9;
+	private final int unitID = 10;
+	private final int freqInDay = 11;
+	private final int freqInPeriod = 12;
+	private final String note = "TestNote";
 	private boolean notify;
-	private boolean sms = true;
+	private final boolean sms = true;
 
 	public TherapyRow setup(Patient patient, Medical medical, boolean usingSet) throws OHException {
 		TherapyRow therapyRow;
@@ -51,7 +51,7 @@ public class TestTherapy {
 		} else {
 			// Create TherapyRow with all parameters 
 			therapyRow = new TherapyRow(0, patient, startDate, endDate,
-					medical, qty, unitID, freqInDay, freqInPeriod, note, notify, sms);
+				medical, qty, unitID, freqInDay, freqInPeriod, note, notify, sms);
 		}
 
 		return therapyRow;

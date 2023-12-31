@@ -30,18 +30,18 @@ import org.isf.utils.exception.OHException;
 
 public class TestHospital {
 
-	private String code = "ZZ";
-	private String description = "TestDescription";
-	private String address = "TestAddress";
-	private String city = "TestCity";
-	private String telephone = "Testtelephone";
-	private String fax = "TestFax";
-	private String email = "TestEmail";
-	private String currencyCod = "Cod";
-	private Time startHour = Time.valueOf(Hospital.VISIT_START_TIME);
-	private Time endHour = Time.valueOf(Hospital.VISIT_END_TIME);
-	private int visitIncreemnt = Hospital.VISIT_INCREMENT;
-	private int visitDuration = Hospital.VISIT_DURATION;
+	private final String code = "ZZ";
+	private final String description = "TestDescription";
+	private final String address = "TestAddress";
+	private final String city = "TestCity";
+	private final String telephone = "Testtelephone";
+	private final String fax = "TestFax";
+	private final String email = "TestEmail";
+	private final String currencyCod = "Cod";
+	private final Time startHour = Time.valueOf(Hospital.VISIT_START_TIME);
+	private final Time endHour = Time.valueOf(Hospital.VISIT_END_TIME);
+	private final int visitIncreemnt = Hospital.VISIT_INCREMENT;
+	private final int visitDuration = Hospital.VISIT_DURATION;
 
 	public Hospital setup(boolean usingSet) throws OHException {
 		Hospital hospital;

@@ -28,8 +28,8 @@ import org.isf.vactype.model.VaccineType;
 
 public class TestVaccineType {
 
-	private String code = "Z";
-	private String description = "TestDescription";
+	private final String code = "Z";
+	private final String description = "TestDescription";
 
 	public VaccineType setup(boolean usingSet) throws OHException {
 		VaccineType vaccineType;

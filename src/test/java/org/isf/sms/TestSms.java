@@ -33,14 +33,14 @@ import org.isf.utils.exception.OHException;
 public class TestSms {
 
 	private int smsId;
-	private LocalDateTime smsDate = LocalDateTime.of(2010, 9, 8, 0, 0, 0);
-	private LocalDateTime smsDateSched = LocalDateTime.of(2011, 9, 8, 0, 0, 0);
-	private String smsNumber = "TestNumber";
-	private String smsText = "TestText";
+	private final LocalDateTime smsDate = LocalDateTime.of(2010, 9, 8, 0, 0, 0);
+	private final LocalDateTime smsDateSched = LocalDateTime.of(2011, 9, 8, 0, 0, 0);
+	private final String smsNumber = "TestNumber";
+	private final String smsText = "TestText";
 	private LocalDateTime smsDateSent;
-	private String smsUser = "TestUser";
-	private String module = "TestModule";
-	private String moduleID = "TestModId";
+	private final String smsUser = "TestUser";
+	private final String module = "TestModule";
+	private final String moduleID = "TestModId";
 
 	public Sms setup(boolean usingSet) throws OHException {
 		Sms sms;

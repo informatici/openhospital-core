@@ -36,8 +36,8 @@ import org.isf.vactype.manager.VaccineTypeBrowserManager;
 import org.isf.vactype.model.VaccineType;
 import org.isf.vactype.service.VacTypeIoOperation;
 import org.isf.vactype.service.VaccineTypeIoOperationRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -57,7 +57,7 @@ class Tests extends OHCoreTestCase {
 		testVaccineType = new TestVaccineType();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -252,9 +252,9 @@ class Tests extends OHCoreTestCase {
 		VaccineType vaccineType = testVaccineType.setup(true);
 
 		assertThat(vaccineType)
-				.isEqualTo(vaccineType)
-				.isNotNull()
-				.isNotEqualTo("someStringValue");
+			.isEqualTo(vaccineType)
+			.isNotNull()
+			.isNotEqualTo("someStringValue");
 
 		VaccineType vaccineType2 = new VaccineType("A", "adescription");
 		assertThat(vaccineType).isNotEqualTo(vaccineType2);

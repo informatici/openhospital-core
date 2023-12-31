@@ -39,8 +39,8 @@ import org.isf.priceslist.service.PricesListIoOperations;
 import org.isf.serviceprinting.print.PriceForPrint;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -64,7 +64,7 @@ public class Tests extends OHCoreTestCase {
 		testPrice = new TestPrice();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -338,8 +338,8 @@ public class Tests extends OHCoreTestCase {
 		List<PriceForPrint> priceForPrints = priceListManager.convertPrice(priceList, priceListManager.getPrices());
 		assertThat(priceForPrints).isNotNull();
 		assertThat(priceForPrints.get(0))
-				.extracting(PriceForPrint::getPrice, PriceForPrint::getCurrency)
-				.containsExactly(price.getPrice(), priceList.getCurrency());
+			.extracting(PriceForPrint::getPrice, PriceForPrint::getCurrency)
+			.containsExactly(price.getPrice(), priceList.getCurrency());
 	}
 
 	@Test
@@ -415,9 +415,9 @@ public class Tests extends OHCoreTestCase {
 		Price price = new Price(priceList, "TG", "TestItem", "TestDescription", 10.10);
 
 		assertThat(price)
-				.isEqualTo(price)
-				.isNotNull()
-				.isNotEqualTo("someString");
+			.isEqualTo(price)
+			.isNotNull()
+			.isNotEqualTo("someString");
 
 		PriceList priceList2 = testPriceList.setup(true);
 		Price price2 = new Price(priceList2, "TG", "TestItem", "TestDescriptionOther", 10.10);
@@ -468,9 +468,9 @@ public class Tests extends OHCoreTestCase {
 		PriceList priceList = testPriceList.setup(true);
 
 		assertThat(priceList)
-				.isEqualTo(priceList)
-				.isNotNull()
-				.isNotEqualTo("someString");
+			.isEqualTo(priceList)
+			.isNotNull()
+			.isNotEqualTo("someString");
 
 		PriceList priceList2 = testPriceList.setup(true);
 		priceList.setId(-1);

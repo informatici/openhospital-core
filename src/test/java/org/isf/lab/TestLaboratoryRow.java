@@ -29,7 +29,7 @@ import org.isf.utils.exception.OHException;
 
 public class TestLaboratoryRow {
 
-	private String description = "TestDescription";
+	private final String description = "TestDescription";
 
 	public LaboratoryRow setup(Laboratory laboratory, boolean usingSet) throws OHException {
 		LaboratoryRow laboratoryRow;

@@ -29,9 +29,9 @@ import org.isf.utils.exception.OHException;
 
 public class TestUser {
 
-	private String name = "TestName";
-	private String passwd = "TestPaswd";
-	private String desc = "TestDesc";
+	private final String name = "TestName";
+	private final String passwd = "TestPaswd";
+	private final String desc = "TestDesc";
 
 	public User setup(UserGroup userGroupName, boolean usingSet) throws OHException {
 		User user;

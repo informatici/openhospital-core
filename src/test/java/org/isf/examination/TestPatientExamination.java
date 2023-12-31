@@ -31,21 +31,21 @@ import org.isf.utils.exception.OHException;
 
 public class TestPatientExamination {
 
-	private LocalDateTime pex_date = LocalDateTime.of(2020, 1, 10, 0, 0, 0);
-	private Integer pex_height = 170;
-	private Double pex_weight = 60.0;
-	private Integer pex_ap_min = 80;
-	private Integer pex_ap_max = 120;
-	private Integer pex_hr = 60;
-	private Double pex_temp = 36.0;
-	private Double pex_sat = 1.0;
-	private Integer pex_hgt = 85;
-	private Integer pex_diuresis = 100;
-	private String pex_diuresis_desc = "physiological";
-	private String pex_bowel_desc = "regular";
-	private Integer pex_rr = 20;
-	private String pex_ausc = "normal";
-	private String pex_note = "";
+	private final LocalDateTime pex_date = LocalDateTime.of(2020, 1, 10, 0, 0, 0);
+	private final Integer pex_height = 170;
+	private final Double pex_weight = 60.0;
+	private final Integer pex_ap_min = 80;
+	private final Integer pex_ap_max = 120;
+	private final Integer pex_hr = 60;
+	private final Double pex_temp = 36.0;
+	private final Double pex_sat = 1.0;
+	private final Integer pex_hgt = 85;
+	private final Integer pex_diuresis = 100;
+	private final String pex_diuresis_desc = "physiological";
+	private final String pex_bowel_desc = "regular";
+	private final Integer pex_rr = 20;
+	private final String pex_ausc = "normal";
+	private final String pex_note = "";
 
 	public PatientExamination setup(Patient patient, boolean usingSet) throws OHException {
 		PatientExamination patientExamination;
@@ -56,8 +56,8 @@ public class TestPatientExamination {
 		} else {
 			// Create Patient Examination with all parameters 
 			patientExamination = new PatientExamination(pex_date, patient, pex_height, pex_weight,
-					pex_ap_min, pex_ap_max, pex_hr, pex_temp, pex_sat,
-					pex_hgt, pex_diuresis, pex_diuresis_desc, pex_bowel_desc, pex_rr, pex_ausc, pex_note);
+				pex_ap_min, pex_ap_max, pex_hr, pex_temp, pex_sat,
+				pex_hgt, pex_diuresis, pex_diuresis_desc, pex_bowel_desc, pex_rr, pex_ausc, pex_note);
 		}
 
 		return patientExamination;

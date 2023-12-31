@@ -35,7 +35,7 @@ public class UserBrowsingManagerTest extends OHCoreTestCase {
 	@Autowired
 	UserBrowsingManager userBrowsingManager;
 
-	@BeforeEach 
+	@BeforeEach
 	public void setup() {
 		GeneralData.STRONGPASSWORD = true;
 	}

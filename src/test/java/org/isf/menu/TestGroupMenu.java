@@ -28,8 +28,8 @@ import org.isf.utils.exception.OHException;
 
 public class TestGroupMenu {
 
-	private String userGroup = "TestDescription";
-	private String menuItem = "TestDescription";
+	private final String userGroup = "TestDescription";
+	private final String menuItem = "TestDescription";
 
 	public GroupMenu setup(boolean usingSet) throws OHException {
 		GroupMenu groupMenu;

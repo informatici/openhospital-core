@@ -35,11 +35,11 @@ import org.isf.utils.time.TimeTools;
 public class TestMalnutrition {
 
 	private int code;
-	private LocalDateTime now = TimeTools.getNow();
-	private LocalDateTime dateSupp = now.withMonth(1).withDayOfMonth(1);
-	private LocalDateTime dateConf = now.withMonth(10).withDayOfMonth(11);
-	private float height = 185.47f;
-	private float weight = 70.70f;
+	private final LocalDateTime now = TimeTools.getNow();
+	private final LocalDateTime dateSupp = now.withMonth(1).withDayOfMonth(1);
+	private final LocalDateTime dateConf = now.withMonth(10).withDayOfMonth(11);
+	private final float height = 185.47f;
+	private final float weight = 70.70f;
 
 	public Malnutrition setup(Admission admission, boolean usingSet) throws OHException {
 		Malnutrition malnutrition;

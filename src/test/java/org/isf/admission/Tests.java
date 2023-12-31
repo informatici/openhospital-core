@@ -21,7 +21,16 @@
  */
 package org.isf.admission;
 
-import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.admission.manager.AdmissionBrowserManager;
@@ -30,70 +39,55 @@ import org.isf.admission.model.AdmittedPatient;
 import org.isf.admission.service.AdmissionIoOperationRepository;
 import org.isf.admission.service.AdmissionIoOperationRepositoryCustom;
 import org.isf.admission.service.AdmissionIoOperations;
+import org.isf.admtype.TestAdmissionType;
 import org.isf.admtype.model.AdmissionType;
 import org.isf.admtype.service.AdmissionTypeIoOperationRepository;
-import org.isf.admtype.TestAdmissionType;
+import org.isf.disctype.TestDischargeType;
 import org.isf.disctype.model.DischargeType;
 import org.isf.disctype.service.DischargeTypeIoOperationRepository;
-import org.isf.disctype.TestDischargeType;
+import org.isf.disease.TestDisease;
 import org.isf.disease.model.Disease;
 import org.isf.disease.service.DiseaseIoOperationRepository;
-import org.isf.disease.TestDisease;
+import org.isf.distype.TestDiseaseType;
 import org.isf.distype.model.DiseaseType;
 import org.isf.distype.service.DiseaseTypeIoOperationRepository;
-import org.isf.distype.TestDiseaseType;
+import org.isf.dlvrrestype.TestDeliveryResultType;
 import org.isf.dlvrrestype.model.DeliveryResultType;
 import org.isf.dlvrrestype.service.DeliveryResultIoOperationRepository;
-import org.isf.dlvrrestype.TestDeliveryResultType;
+import org.isf.dlvrtype.TestDeliveryType;
 import org.isf.dlvrtype.model.DeliveryType;
 import org.isf.dlvrtype.service.DeliveryTypeIoOperationRepository;
-import org.isf.dlvrtype.TestDeliveryType;
 import org.isf.generaldata.GeneralData;
+import org.isf.operation.TestOperation;
 import org.isf.operation.model.Operation;
 import org.isf.operation.service.OperationIoOperationRepository;
-import org.isf.operation.TestOperation;
+import org.isf.opetype.TestOperationType;
 import org.isf.opetype.model.OperationType;
 import org.isf.opetype.service.OperationTypeIoOperationRepository;
-import org.isf.opetype.TestOperationType;
+import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
-import org.isf.patient.TestPatient;
+import org.isf.pregtreattype.TestPregnantTreatmentType;
 import org.isf.pregtreattype.model.PregnantTreatmentType;
 import org.isf.pregtreattype.service.PregnantTreatmentTypeIoOperationRepository;
-import org.isf.pregtreattype.TestPregnantTreatmentType;
-import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.utils.time.TimeTools;
+import org.isf.ward.TestWard;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
-import org.isf.ward.TestWard;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-
 class Tests extends OHCoreTestCase {
-
 
 	private static TestAdmission testAdmission;
 	private static TestWard testWard;
@@ -137,7 +131,6 @@ class Tests extends OHCoreTestCase {
 	@Autowired
 	DeliveryResultIoOperationRepository deliveryResultIoOperationRepository;
 
-
 	@BeforeAll
 	static void setUpClass() {
 		GeneralData.PATIENTPHOTOSTORAGE = "DB";
@@ -155,17 +148,16 @@ class Tests extends OHCoreTestCase {
 		testDeliveryResultType = new TestDeliveryResultType();
 	}
 
+	static Collection<Object[]> maternityRestartInJune() {
+		return Arrays.asList(new Object[][] {
+			{ false },
+			{ true }
+		});
+	}
+
 	@BeforeEach
 	void setUp() {
 		cleanH2InMemoryDb();
-	}
-
-	
-	static Collection<Object[]> maternityRestartInJune() {
-		return Arrays.asList(new Object[][] {
-				{ false },
-				{ true }
-		});
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
@@ -198,7 +190,7 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testGetAdmittedPatientWithDateRanges(boolean maternityRestartInJune)  throws Exception {
+	void testGetAdmittedPatientWithDateRanges(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
@@ -222,37 +214,37 @@ class Tests extends OHCoreTestCase {
 
 		// search by admission date
 		List<AdmittedPatient> searchOneresult = admissionIoOperation.getAdmittedPatients(null,
-				new LocalDateTime[] { beforeAdmissionDate, oneDayAfterAdmissionDate },
-				null);
+			new LocalDateTime[] { beforeAdmissionDate, oneDayAfterAdmissionDate },
+			null);
 		assertThat(searchOneresult).hasSameSizeAs(patients);
 		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 
 		List<AdmittedPatient> searchTwoResult = admissionIoOperation.getAdmittedPatients(null,
-				new LocalDateTime[] { oneDayAfterAdmissionDate, twoDaysAfterAdmissionDate },
-				null);
+			new LocalDateTime[] { oneDayAfterAdmissionDate, twoDaysAfterAdmissionDate },
+			null);
 		assertThat(searchTwoResult).isEmpty();
 
 		// search by discharge date
 		searchOneresult = admissionIoOperation.getAdmittedPatients(null, null,
-				new LocalDateTime[] { beforeDischargeDate, oneDayAfterDischargeDate });
+			new LocalDateTime[] { beforeDischargeDate, oneDayAfterDischargeDate });
 		assertThat(searchOneresult).hasSameSizeAs(patients);
 		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 
 		searchTwoResult = admissionIoOperation.getAdmittedPatients(null, null,
-				new LocalDateTime[] { oneDayAfterDischargeDate, twoDaysAfterDischargeDate });
+			new LocalDateTime[] { oneDayAfterDischargeDate, twoDaysAfterDischargeDate });
 		assertThat(searchTwoResult).isEmpty();
 
 		// complex search by both admission and discharge date
 		searchOneresult = admissionIoOperation.getAdmittedPatients(null,
-				new LocalDateTime[] { beforeAdmissionDate, oneDayAfterAdmissionDate },
-				new LocalDateTime[] { beforeDischargeDate, oneDayAfterDischargeDate });
+			new LocalDateTime[] { beforeAdmissionDate, oneDayAfterAdmissionDate },
+			new LocalDateTime[] { beforeDischargeDate, oneDayAfterDischargeDate });
 		assertThat(searchOneresult).hasSameSizeAs(patients);
 		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 	}
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	void testIoGetAdmittedPatients(boolean maternityRestartInJune)  throws Exception {
+	void testIoGetAdmittedPatients(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
@@ -277,7 +269,7 @@ class Tests extends OHCoreTestCase {
 		// then:
 		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 	}
-	
+
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
 	void testIoGetAdmittionsByDatePageable(boolean maternityRestartInJune) throws Exception {
@@ -287,7 +279,7 @@ class Tests extends OHCoreTestCase {
 		String str = "2000-01-01T10:11:30";
 		String str2 = "2023-05-05T10:11:30";
 		LocalDateTime dateFrom = LocalDateTime.parse(str);
-		LocalDateTime dateTo =  LocalDateTime.parse(str2);
+		LocalDateTime dateTo = LocalDateTime.parse(str2);
 		int page = 0;
 		int size = 10;
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
@@ -297,7 +289,7 @@ class Tests extends OHCoreTestCase {
 		// then:
 		assertThat(patients.getData().get(0).getId()).isEqualTo(foundAdmission.getId());
 	}
-	
+
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
 	void testIoGetDischargesByDatePageable(boolean maternityRestartInJune) throws Exception {
@@ -307,7 +299,7 @@ class Tests extends OHCoreTestCase {
 		String str = "2000-01-01T10:11:30";
 		String str2 = "2023-05-05T10:11:30";
 		LocalDateTime dateFrom = LocalDateTime.parse(str);
-		LocalDateTime dateTo =  LocalDateTime.parse(str2);
+		LocalDateTime dateTo = LocalDateTime.parse(str2);
 		int page = 0;
 		int size = 10;
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
@@ -315,7 +307,7 @@ class Tests extends OHCoreTestCase {
 		PagedResponse<Admission> patients = admissionIoOperation.getAdmissionsByDischargeDates(dateFrom, dateTo, PageRequest.of(page, size));
 
 		// then:
-		
+
 		assertThat(patients.getData().get(0).getId()).isEqualTo(foundAdmission.getId());
 	}
 
@@ -407,12 +399,12 @@ class Tests extends OHCoreTestCase {
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		Patient foundPatient = foundAdmission.getPatient();
 		LocalDateTime[] admissionRange = {
-				foundAdmission.getAdmDate().minusDays(2),
-				foundAdmission.getAdmDate().minusDays(1)
+			foundAdmission.getAdmDate().minusDays(2),
+			foundAdmission.getAdmDate().minusDays(1)
 		};
 		LocalDateTime[] dischargeRange = {
-				foundAdmission.getDisDate().minusDays(1),
-				foundAdmission.getDisDate().plusDays(1)
+			foundAdmission.getDisDate().minusDays(1),
+			foundAdmission.getDisDate().plusDays(1)
 		};
 
 		// when:
@@ -431,12 +423,12 @@ class Tests extends OHCoreTestCase {
 		Admission foundAdmission = admissionIoOperation.getAdmission(id);
 		Patient foundPatient = foundAdmission.getPatient();
 		LocalDateTime[] admissionRange = {
-				foundAdmission.getAdmDate().minusDays(1),
-				foundAdmission.getAdmDate().plusDays(1)
+			foundAdmission.getAdmDate().minusDays(1),
+			foundAdmission.getAdmDate().plusDays(1)
 		};
 		LocalDateTime[] dischargeRange = {
-				foundAdmission.getDisDate().minusDays(2),
-				foundAdmission.getDisDate().minusDays(1)
+			foundAdmission.getDisDate().minusDays(2),
+			foundAdmission.getDisDate().minusDays(1)
 		};
 
 		// when:
@@ -569,7 +561,8 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	@Transactional // requires active session because of lazy loading of patient photo
+	@Transactional
+		// requires active session because of lazy loading of patient photo
 	void testIoDeletePatientPhoto(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
@@ -726,28 +719,28 @@ class Tests extends OHCoreTestCase {
 
 		// search by admission date
 		List<AdmittedPatient> searchOneresult = admissionBrowserManager.getAdmittedPatients(
-				new LocalDateTime[] { beforeAdmissionDate, oneDayAfterAdmissionDate }, null, null);
+			new LocalDateTime[] { beforeAdmissionDate, oneDayAfterAdmissionDate }, null, null);
 		assertThat(searchOneresult).hasSameSizeAs(patients);
 		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 
 		List<AdmittedPatient> searchTwoResult = admissionBrowserManager.getAdmittedPatients(null,
-				new LocalDateTime[] { oneDayAfterAdmissionDate, twoDaysAfterAdmissionDate }, null);
+			new LocalDateTime[] { oneDayAfterAdmissionDate, twoDaysAfterAdmissionDate }, null);
 		assertThat(searchTwoResult).isEmpty();
 
 		// search by discharge date
 		searchOneresult = admissionBrowserManager.getAdmittedPatients(null,
-				new LocalDateTime[] { beforeDischargeDate, oneDayAfterDischargeDate }, null);
+			new LocalDateTime[] { beforeDischargeDate, oneDayAfterDischargeDate }, null);
 		assertThat(searchOneresult).hasSameSizeAs(patients);
 		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 
 		searchTwoResult = admissionBrowserManager.getAdmittedPatients(
-				new LocalDateTime[] { oneDayAfterDischargeDate, twoDaysAfterDischargeDate }, null, null);
+			new LocalDateTime[] { oneDayAfterDischargeDate, twoDaysAfterDischargeDate }, null, null);
 		assertThat(searchTwoResult).isEmpty();
 
 		// complex search by both admission and discharge date
 		searchOneresult = admissionBrowserManager.getAdmittedPatients(
-				new LocalDateTime[] { beforeAdmissionDate, oneDayAfterAdmissionDate },
-				new LocalDateTime[] { beforeDischargeDate, oneDayAfterDischargeDate }, null);
+			new LocalDateTime[] { beforeAdmissionDate, oneDayAfterAdmissionDate },
+			new LocalDateTime[] { beforeDischargeDate, oneDayAfterDischargeDate }, null);
 		assertThat(searchOneresult).hasSameSizeAs(patients);
 		assertThat(patients.get(0).getAdmission().getId()).isEqualTo(foundAdmission.getId());
 	}
@@ -868,12 +861,12 @@ class Tests extends OHCoreTestCase {
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		Patient foundPatient = foundAdmission.getPatient();
 		LocalDateTime[] admissionRange = {
-				foundAdmission.getAdmDate().minusDays(2),
-				foundAdmission.getAdmDate().minusDays(1)
+			foundAdmission.getAdmDate().minusDays(2),
+			foundAdmission.getAdmDate().minusDays(1)
 		};
 		LocalDateTime[] dischargeRange = {
-				foundAdmission.getDisDate().minusDays(1),
-				foundAdmission.getDisDate().plusDays(1)
+			foundAdmission.getDisDate().minusDays(1),
+			foundAdmission.getDisDate().plusDays(1)
 		};
 
 		// when:
@@ -892,12 +885,12 @@ class Tests extends OHCoreTestCase {
 		Admission foundAdmission = admissionBrowserManager.getAdmission(id);
 		Patient foundPatient = foundAdmission.getPatient();
 		LocalDateTime[] admissionRange = {
-				foundAdmission.getAdmDate().minusDays(1),
-				foundAdmission.getAdmDate().plusDays(1)
+			foundAdmission.getAdmDate().minusDays(1),
+			foundAdmission.getAdmDate().plusDays(1)
 		};
 		LocalDateTime[] dischargeRange = {
-				foundAdmission.getDisDate().minusDays(2),
-				foundAdmission.getDisDate().minusDays(1)
+			foundAdmission.getDisDate().minusDays(2),
+			foundAdmission.getDisDate().minusDays(1)
 		};
 
 		// when:
@@ -1073,7 +1066,8 @@ class Tests extends OHCoreTestCase {
 
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
 	@MethodSource("maternityRestartInJune")
-	@Transactional // requires active session because of lazy loading of patient photo
+	@Transactional
+		// requires active session because of lazy loading of patient photo
 	void testMgrDeletePatientPhoto(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		int id = setupTestAdmission(false);
@@ -1082,8 +1076,9 @@ class Tests extends OHCoreTestCase {
 		assertThat(updatedPatient).isNotNull();
 		assertThat(updatedPatient.getPatientProfilePhoto().getPhoto()).isNull();
 	}
- //TODO "This Test is not working anymore , since Junit 5 , somehow Junit 4 'admission.setDisDate(null);' did not set to null," +
- //		" deactivate this until its fixed because i would need to change validation and there the knowledge is missing"
+
+	//TODO "This Test is not working anymore , since Junit 5 , somehow Junit 4 'admission.setDisDate(null);' did not set to null," +
+	//		" deactivate this until its fixed because i would need to change validation and there the knowledge is missing"
 	@Disabled("This Test is not working anymore , since Junit 5 , somehow Junit 4 'admission.setDisDate(null);' did not set to null," +
 		" deactivate this until its fixed because i would need to change validation and there the knowledge is missing")
 	@ParameterizedTest(name = "Test with MATERNITYRESTARTINJUNE={0}")
@@ -1098,8 +1093,9 @@ class Tests extends OHCoreTestCase {
 		admission.setYProg(-1);
 		LocalDateTime disDate = admission.getDisDate();
 		admission.setDisDate(null);
-		OHDataValidationException ohDataValidationException1 = assertThrows(OHDataValidationException.class, () -> admissionBrowserManager.updateAdmission(admission));
-        assertEquals(1, ohDataValidationException1.getMessages().size());
+		OHDataValidationException ohDataValidationException1 = assertThrows(OHDataValidationException.class,
+			() -> admissionBrowserManager.updateAdmission(admission));
+		assertEquals(1, ohDataValidationException1.getMessages().size());
 		assertEquals("angal.admission.pleaseinsertacorrectprogressiveid.msg", ohDataValidationException1.getMessages().get(0).getMessage());
 		admission.setYProg(0);
 		admission.setDisDate(disDate);
@@ -1109,7 +1105,8 @@ class Tests extends OHCoreTestCase {
 		disDate = admission.getDisDate();
 		admission.setAdmDate(LocalDateTime.of(9999, 1, 1, 0, 0, 0));
 		admission.setDisDate(null);
-		OHDataValidationException ohDataValidationException2 = assertThrows(OHDataValidationException.class, () ->  admissionBrowserManager.newAdmission(admission));
+		OHDataValidationException ohDataValidationException2 = assertThrows(OHDataValidationException.class,
+			() -> admissionBrowserManager.newAdmission(admission));
 		assertEquals(1, ohDataValidationException2.getMessages().size());
 		assertEquals("angal.admission.futuredatenotallowed.msg", ohDataValidationException2.getMessages().get(0).getMessage());
 
@@ -1119,13 +1116,15 @@ class Tests extends OHCoreTestCase {
 		// Discharge date is after today
 		disDate = admission.getDisDate();
 		admission.setDisDate(LocalDateTime.of(9999, 1, 1, 0, 0, 0));
-		OHDataValidationException ohDataValidationException3 = assertThrows(OHDataValidationException.class, () ->  admissionBrowserManager.updateAdmission(admission));
+		OHDataValidationException ohDataValidationException3 = assertThrows(OHDataValidationException.class,
+			() -> admissionBrowserManager.updateAdmission(admission));
 		assertEquals(1, ohDataValidationException3.getMessages().size());
 		assertEquals("angal.admission.futuredatenotallowed.msg", ohDataValidationException3.getMessages().get(0).getMessage());
 
 		// is null
 		admission.setDisDate(null);
-		OHDataValidationException ohDataValidationException4 = assertThrows(OHDataValidationException.class, () ->  admissionBrowserManager.newAdmission(admission));
+		OHDataValidationException ohDataValidationException4 = assertThrows(OHDataValidationException.class,
+			() -> admissionBrowserManager.newAdmission(admission));
 		assertEquals(1, ohDataValidationException4.getMessages().size());
 		assertEquals("angal.admission.ininserteddatepatientwasalreadyadmitted.msg", ohDataValidationException4.getMessages().get(0).getMessage());
 
@@ -1135,13 +1134,14 @@ class Tests extends OHCoreTestCase {
 		Disease disease = admission.getDiseaseOut1();
 		admission.setDiseaseOut1(null);
 		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 		admission.setDiseaseOut1(disease);
 
 		// DiseaseOut1() != null && DisDate() == null
 		admDate = admission.getDisDate();
 		admission.setDisDate(null);
-		OHDataValidationException ohDataValidationException5 = assertThrows(OHDataValidationException.class, () ->  admissionBrowserManager.newAdmission(admission));
+		OHDataValidationException ohDataValidationException5 = assertThrows(OHDataValidationException.class,
+			() -> admissionBrowserManager.newAdmission(admission));
 		assertEquals(1, ohDataValidationException5.getMessages().size());
 		assertEquals("angal.admission.futuredatenotallowed.msg", ohDataValidationException5.getMessages().get(0).getMessage());
 		admission.setDisDate(admDate);
@@ -1160,11 +1160,11 @@ class Tests extends OHCoreTestCase {
 		LocalDateTime disDate = admission.getDisDate();
 		admission.setDisDate(null);
 		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		admission.setYProg(0);
 		admission.setDisDate(disDate);
 
@@ -1174,11 +1174,11 @@ class Tests extends OHCoreTestCase {
 		admission.setAdmDate(LocalDateTime.of(9999, 1, 1, 0, 0, 0));
 		admission.setDisDate(null);
 		assertThatThrownBy(() -> admissionBrowserManager.newAdmission(admission))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 
 		admission.setAdmDate(admDate);
 		admission.setDisDate(disDate);
@@ -1187,64 +1187,64 @@ class Tests extends OHCoreTestCase {
 		disDate = admission.getDisDate();
 		admission.setDisDate(LocalDateTime.of(9999, 1, 1, 0, 0, 0));
 		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		// is null
 		admission.setDisDate(null);
 		assertThatThrownBy(() -> admissionBrowserManager.newAdmission(admission))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		admission.setDisDate(disDate);
 
 		// DiseaseOut1() == null && DisDate() != null
 		Disease disease = admission.getDiseaseOut1();
 		admission.setDiseaseOut1(null);
 		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 		admission.setDiseaseOut1(disease);
 
 		// DiseaseOut1() != null && DisDate() == null
 		admDate = admission.getDisDate();
 		admission.setDisDate(null);
 		assertThatThrownBy(() -> admissionBrowserManager.newAdmission(admission))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		admission.setDisDate(admDate);
 
 		// control dates after discharge dates
 		LocalDateTime ctrlDate = admission.getCtrlDate1();
 		admission.setCtrlDate1(LocalDateTime.of(9999, 1, 1, 0, 0, 0));
 		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 		admission.setCtrlDate1(ctrlDate);
 		ctrlDate = admission.getCtrlDate2();
 		admission.setCtrlDate2(LocalDateTime.of(9999, 1, 1, 0, 0, 0));
 		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		admission.setCtrlDate2(ctrlDate);
 
 		// controlDate2 != null && controlDate1 == null
 		admDate = admission.getCtrlDate1();
 		admission.setCtrlDate1(null);
 		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		admission.setCtrlDate1(admDate);
 
 		// abort date before visit date
@@ -1252,11 +1252,11 @@ class Tests extends OHCoreTestCase {
 		LocalDateTime changeDate = admission.getVisitDate().minusMonths(1);
 		admission.setAbortDate(changeDate);
 		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 		admission.setAbortDate(abortDate);
 	}
 
@@ -1270,8 +1270,8 @@ class Tests extends OHCoreTestCase {
 		admission2.setId(id);   // no really legal but needed for these tests
 		assertThat(admission).isEqualTo(admission);
 		assertThat(admission)
-				.isEqualTo(admission2)
-				.isNotEqualTo("xyzzy");
+			.isEqualTo(admission2)
+			.isNotEqualTo("xyzzy");
 
 		assertThat(admission.compareTo(admission2)).isZero();
 		admission2.setId(9999);
@@ -1285,18 +1285,9 @@ class Tests extends OHCoreTestCase {
 	void testIoAdmissionIoOperationRepositoryCustom(boolean maternityRestartInJune) throws Exception {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
 		AdmissionIoOperationRepositoryCustom.PatientAdmission patientAdmission =
-				new AdmissionIoOperationRepositoryCustom.PatientAdmission(1, 2);
+			new AdmissionIoOperationRepositoryCustom.PatientAdmission(1, 2);
 		assertThat(patientAdmission.getPatientId()).isEqualTo(1);
 		assertThat(patientAdmission.getAdmissionId()).isEqualTo(2);
-	}
-
-	class MyAdmissionIoOperationRepositoryCustom implements AdmissionIoOperationRepositoryCustom {
-
-		@Override
-		public List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(String searchTerms, LocalDateTime[] admissionRange,
-				LocalDateTime[] dischargeRange) throws OHServiceException {
-			return null;
-		}
 	}
 
 	private int setupTestAdmission(boolean usingSet) throws OHException {
@@ -1323,8 +1314,8 @@ class Tests extends OHCoreTestCase {
 		DeliveryResultType deliveryResult = testDeliveryResultType.setup(false);
 
 		Admission admission = testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, usingSet);
+			diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+			deliveryType, deliveryResult, usingSet);
 
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -1391,8 +1382,17 @@ class Tests extends OHCoreTestCase {
 		deliveryResultIoOperationRepository.saveAndFlush(deliveryResult);
 
 		return testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
-				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
-				deliveryType, deliveryResult, true);
+			diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
+			deliveryType, deliveryResult, true);
+	}
+
+	class MyAdmissionIoOperationRepositoryCustom implements AdmissionIoOperationRepositoryCustom {
+
+		@Override
+		public List<AdmittedPatient> findPatientAdmissionsBySearchAndDateRanges(String searchTerms, LocalDateTime[] admissionRange,
+			LocalDateTime[] dischargeRange) throws OHServiceException {
+			return null;
+		}
 	}
 
 }

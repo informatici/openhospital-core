@@ -21,6 +21,11 @@
  */
 package org.isf.dicomtype;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.List;
+
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
 import org.isf.dicomtype.manager.DicomTypeBrowserManager;
@@ -35,11 +40,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class Tests extends OHCoreTestCase {
 
@@ -57,7 +57,7 @@ public class Tests extends OHCoreTestCase {
 		testDicomType = new TestDicomType();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -165,11 +165,11 @@ public class Tests extends OHCoreTestCase {
 		assertThat(dicomType).isNotNull();
 		dicomType.setDicomTypeID("");
 		assertThatThrownBy(() -> dicomTypeBrowserManager.updateDicomType(dicomType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -179,22 +179,22 @@ public class Tests extends OHCoreTestCase {
 		assertThat(dicomType).isNotNull();
 		dicomType.setDicomTypeID("thisIsAKeyThatIsTooLong");
 		assertThatThrownBy(() -> dicomTypeBrowserManager.updateDicomType(dicomType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@Test
 	public void testMgrValidationDescriptionIsEmpty() throws Exception {
 		DicomType dicomType = new DicomType("id", "");
 		assertThatThrownBy(() -> dicomTypeBrowserManager.newDicomType(dicomType))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -203,11 +203,11 @@ public class Tests extends OHCoreTestCase {
 		DicomType dicomType = dicomTypeIoOperationRepository.findById(typeId).orElse(null);
 		assertThat(dicomType).isNotNull();
 		assertThatThrownBy(() -> dicomTypeBrowserManager.newDicomType(dicomType))
-				.isInstanceOf(OHDataIntegrityViolationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataIntegrityViolationException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@Test

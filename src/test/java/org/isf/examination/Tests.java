@@ -38,15 +38,15 @@ import org.isf.examination.model.GenderPatientExamination;
 import org.isf.examination.model.PatientExamination;
 import org.isf.examination.service.ExaminationIoOperationRepository;
 import org.isf.examination.service.ExaminationOperations;
+import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.service.PatientIoOperationRepository;
-import org.isf.patient.TestPatient;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.pagination.PagedResponse;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -73,7 +73,7 @@ public class Tests extends OHCoreTestCase {
 		testPatientExamination = new TestPatientExamination();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -136,7 +136,7 @@ public class Tests extends OHCoreTestCase {
 		List<PatientExamination> foundExamination = examinationOperations.getLastNByPatID(patient.getCode(), 1);
 		checkPatientExaminationIntoDb(foundExamination.get(0).getPex_ID());
 	}
-	
+
 	@Test
 	public void testIoGetLastNByPatIDPaginated() throws Exception {
 		Patient patient = testPatient.setup(false);
@@ -250,18 +250,18 @@ public class Tests extends OHCoreTestCase {
 		resetHashMaps();
 
 		assertThat(examinationBrowserManager.getAuscultationTranslated("normal"))
-				.isNotEmpty()
-				.startsWith("angal");
+			.isNotEmpty()
+			.startsWith("angal");
 		assertThat(examinationBrowserManager.getAuscultationTranslated("not there")).isNull();
 
 		assertThat(examinationBrowserManager.getBowelDescriptionTranslated("regular"))
-				.isNotEmpty()
-				.startsWith("angal");
+			.isNotEmpty()
+			.startsWith("angal");
 		assertThat(examinationBrowserManager.getBowelDescriptionTranslated("not there")).isNull();
 
 		assertThat(examinationBrowserManager.getDiuresisDescriptionTranslated("frequent"))
-				.isNotEmpty()
-				.startsWith("angal");
+			.isNotEmpty()
+			.startsWith("angal");
 		assertThat(examinationBrowserManager.getDiuresisDescriptionTranslated("not there")).isNull();
 	}
 
@@ -317,33 +317,33 @@ public class Tests extends OHCoreTestCase {
 		patientExamination.setPex_auscultation(null);
 
 		assertThatThrownBy(() -> examinationBrowserManager.saveOrUpdate(patientExamination))
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 
 		patientExamination.setPex_diuresis_desc(null);
 		patientExamination.setPex_bowel_desc("somethingNotThere");
 		patientExamination.setPex_auscultation(null);
 
 		assertThatThrownBy(() -> examinationBrowserManager.saveOrUpdate(patientExamination))
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 
 		patientExamination.setPex_diuresis_desc(null);
 		patientExamination.setPex_bowel_desc(null);
 		patientExamination.setPex_auscultation("somethingNotThere");
 
 		assertThatThrownBy(() -> examinationBrowserManager.saveOrUpdate(patientExamination))
-				.isInstanceOf(OHServiceException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHServiceException.class)
+			.has(
+				new Condition<Throwable>(
+					(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -355,8 +355,8 @@ public class Tests extends OHCoreTestCase {
 		patientExamination2.setPex_ID(-1);
 		assertThat(patientExamination).isEqualTo(patientExamination);
 		assertThat(patientExamination)
-				.isNotEqualTo(patientExamination2)
-				.isNotEqualTo("xyzzy");
+			.isNotEqualTo(patientExamination2)
+			.isNotEqualTo("xyzzy");
 		patientExamination2.setPex_ID(patientExamination.getPex_ID());
 		assertThat(patientExamination).isEqualTo(patientExamination2);
 		assertThat(patientExamination.compareTo(patientExamination2)).isZero();

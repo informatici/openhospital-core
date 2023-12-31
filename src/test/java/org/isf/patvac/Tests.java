@@ -29,24 +29,24 @@ import java.util.List;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
+import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.service.PatientIoOperationRepository;
-import org.isf.patient.TestPatient;
 import org.isf.patvac.manager.PatVacManager;
 import org.isf.patvac.model.PatientVaccine;
 import org.isf.patvac.service.PatVacIoOperationRepository;
 import org.isf.patvac.service.PatVacIoOperations;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
+import org.isf.vaccine.TestVaccine;
 import org.isf.vaccine.model.Vaccine;
 import org.isf.vaccine.service.VaccineIoOperationRepository;
-import org.isf.vaccine.TestVaccine;
+import org.isf.vactype.TestVaccineType;
 import org.isf.vactype.model.VaccineType;
 import org.isf.vactype.service.VaccineTypeIoOperationRepository;
-import org.isf.vactype.TestVaccineType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -82,7 +82,7 @@ class Tests extends OHCoreTestCase {
 		testVaccineType = new TestVaccineType();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -142,18 +142,19 @@ class Tests extends OHCoreTestCase {
 		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundPatientVaccine).isNotNull();
 		List<PatientVaccine> patientVaccines = patvacIoOperation.getPatientVaccine(
-				foundPatientVaccine.getVaccine().getVaccineType().getCode(),
-				foundPatientVaccine.getVaccine().getCode(),
-				foundPatientVaccine.getVaccineDate(),
-				foundPatientVaccine.getVaccineDate(),
-				foundPatientVaccine.getPatient().getSex(),
-				foundPatientVaccine.getPatient().getAge(),
-				foundPatientVaccine.getPatient().getAge());
+			foundPatientVaccine.getVaccine().getVaccineType().getCode(),
+			foundPatientVaccine.getVaccine().getCode(),
+			foundPatientVaccine.getVaccineDate(),
+			foundPatientVaccine.getVaccineDate(),
+			foundPatientVaccine.getPatient().getSex(),
+			foundPatientVaccine.getPatient().getAge(),
+			foundPatientVaccine.getPatient().getAge());
 		assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(foundPatientVaccine.getPatName());
 	}
 
 	@Test
-	@Transactional // requires active session because of lazy loading patient
+	@Transactional
+		// requires active session because of lazy loading patient
 	void testIoUpdatePatientVaccine() throws Exception {
 		int code = setupTestPatientVaccine(false);
 		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).orElse(null);
@@ -311,18 +312,19 @@ class Tests extends OHCoreTestCase {
 		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundPatientVaccine).isNotNull();
 		List<PatientVaccine> patientVaccines = patVacManager.getPatientVaccine(
-				foundPatientVaccine.getVaccine().getVaccineType().getCode(),
-				foundPatientVaccine.getVaccine().getCode(),
-				foundPatientVaccine.getVaccineDate(),
-				foundPatientVaccine.getVaccineDate(),
-				foundPatientVaccine.getPatient().getSex(),
-				foundPatientVaccine.getPatient().getAge(),
-				foundPatientVaccine.getPatient().getAge());
+			foundPatientVaccine.getVaccine().getVaccineType().getCode(),
+			foundPatientVaccine.getVaccine().getCode(),
+			foundPatientVaccine.getVaccineDate(),
+			foundPatientVaccine.getVaccineDate(),
+			foundPatientVaccine.getPatient().getSex(),
+			foundPatientVaccine.getPatient().getAge(),
+			foundPatientVaccine.getPatient().getAge());
 		assertThat(patientVaccines.get(patientVaccines.size() - 1).getPatName()).isEqualTo(foundPatientVaccine.getPatName());
 	}
 
 	@Test
-	@Transactional // requires active session because of lazy loading patient
+	@Transactional
+		// requires active session because of lazy loading patient
 	void testMgrUpdatePatientVaccine() throws Exception {
 		int code = setupTestPatientVaccine(false);
 		PatientVaccine foundPatientVaccine = patVacIoOperationRepository.findById(code).orElse(null);
@@ -501,9 +503,9 @@ class Tests extends OHCoreTestCase {
 		PatientVaccine patientVaccine2 = new PatientVaccine(0, 0, null, new Patient(), null, 0);
 
 		assertThat(patientVaccine1)
-				.isNotNull()
-				.isEqualTo(patientVaccine1)
-				.isNotEqualTo("someString");
+			.isNotNull()
+			.isEqualTo(patientVaccine1)
+			.isNotEqualTo("someString");
 
 		patientVaccine2.setCode(-99);
 		assertThat(patientVaccine1).isNotEqualTo(patientVaccine2);

@@ -35,16 +35,16 @@ import org.isf.utils.exception.OHException;
 
 public class TestBill {
 
-	private static LocalDateTime date = LocalDateTime.of(10, 9, 8, 0, 0, 0);
-	private static LocalDateTime update = LocalDateTime.of(7, 6, 5, 0, 0, 0);
+	private static final LocalDateTime date = LocalDateTime.of(10, 9, 8, 0, 0, 0);
+	private static final LocalDateTime update = LocalDateTime.of(7, 6, 5, 0, 0, 0);
 	private static boolean isList;
-	private static String listName = "TestListName";
-	private static boolean isPatient = true;
-	private static String patName = "TestPatName";
-	private static String status = "O";
-	private static Double amount = 10.10;
-	private static Double balance = 20.20;
-	private static String user = "TestUser";
+	private static final String listName = "TestListName";
+	private static final boolean isPatient = true;
+	private static final String patName = "TestPatName";
+	private static final String status = "O";
+	private static final Double amount = 10.10;
+	private static final Double balance = 20.20;
+	private static final String user = "TestUser";
 
 	public Bill setup(PriceList priceList, Patient patient, Admission admission, boolean usingSet) throws OHException {
 		Bill bill;
@@ -55,7 +55,7 @@ public class TestBill {
 		} else {
 			// Create Bill with all parameters 
 			bill = new Bill(0, date, update, isList, priceList, listName, isPatient, patient, patName,
-					status, amount, balance, user, admission);
+				status, amount, balance, user, admission);
 		}
 		return bill;
 	}

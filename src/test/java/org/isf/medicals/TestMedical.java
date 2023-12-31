@@ -31,13 +31,13 @@ import org.isf.utils.exception.OHException;
 public class TestMedical {
 
 	private Integer code;
-	private String prod_code = "TP1";
-	private String description = "TestDescription";
-	private double initialqty = 10.10;
-	private Integer pcsperpck = 11;
-	private double inqty = 20.20;
-	private double outqty = 30.30;
-	private double minqty = 40.40;
+	private final String prod_code = "TP1";
+	private final String description = "TestDescription";
+	private final double initialqty = 10.10;
+	private final Integer pcsperpck = 11;
+	private final double inqty = 20.20;
+	private final double outqty = 30.30;
+	private final double minqty = 40.40;
 
 	public Medical setup(MedicalType medicalType, boolean usingSet) throws OHException {
 		Medical medical;

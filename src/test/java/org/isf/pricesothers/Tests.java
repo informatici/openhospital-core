@@ -34,8 +34,8 @@ import org.isf.pricesothers.service.PriceOthersIoOperationRepository;
 import org.isf.pricesothers.service.PriceOthersIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -55,7 +55,7 @@ public class Tests extends OHCoreTestCase {
 		testPricesOthers = new TestPricesOthers();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -218,9 +218,9 @@ public class Tests extends OHCoreTestCase {
 		PricesOthers pricesOthers = new PricesOthers(-1, "TestCode", "TestDescription", true, false, false, true);
 
 		assertThat(pricesOthers)
-				.isNotNull()
-				.isEqualTo(pricesOthers)
-				.isNotEqualTo("someString");
+			.isNotNull()
+			.isEqualTo(pricesOthers)
+			.isNotEqualTo("someString");
 
 		PricesOthers pricesOthers2 = testPricesOthers.setup(true);
 		pricesOthers2.setId(-99);

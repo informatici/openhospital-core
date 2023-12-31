@@ -29,8 +29,8 @@ import org.isf.utils.exception.OHException;
 
 public class TestDisease {
 
-	private String code = "999";
-	private String description = "TestDescription";
+	private final String code = "999";
+	private final String description = "TestDescription";
 
 	public Disease setup(DiseaseType diseaseType, boolean usingSet) throws OHException {
 		Disease disease;

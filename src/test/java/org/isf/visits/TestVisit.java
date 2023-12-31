@@ -34,11 +34,11 @@ import org.isf.ward.model.Ward;
 
 public class TestVisit {
 
-	private LocalDateTime date = LocalDateTime.of(10, 9, 8, 0, 0, 0);
-	private String note = "TestNote";
-	private boolean sms = true;
-	private Integer duration = 10;
-	private String service = "testService";
+	private final LocalDateTime date = LocalDateTime.of(10, 9, 8, 0, 0, 0);
+	private final String note = "TestNote";
+	private final boolean sms = true;
+	private final Integer duration = 10;
+	private final String service = "testService";
 	private Ward ward;
 	private Patient patient;
 

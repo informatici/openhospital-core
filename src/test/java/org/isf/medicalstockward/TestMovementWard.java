@@ -37,23 +37,23 @@ import org.isf.ward.model.Ward;
 
 public class TestMovementWard {
 
-	private LocalDateTime now = TimeTools.getNow();
-	private LocalDateTime date = now.withMonth(2).withDayOfMonth(2);
+	private final LocalDateTime now = TimeTools.getNow();
+	private final LocalDateTime date = now.withMonth(2).withDayOfMonth(2);
 	private boolean isPatient;
-	private int age = 10;
-	private float weight = 78;
-	private String description = "TestDescriptionm";
-	private Double quantity = 46.0;
-	private String units = "TestUni";
+	private final int age = 10;
+	private final float weight = 78;
+	private final String description = "TestDescriptionm";
+	private final Double quantity = 46.0;
+	private final String units = "TestUni";
 
 	public MovementWard setup(
-			Ward ward,
-			Patient patient,
-			Medical medical,
-			Ward wardTo,
-			Ward wardFrom,
-			Lot lot,
-			boolean usingSet) throws OHException {
+		Ward ward,
+		Patient patient,
+		Medical medical,
+		Ward wardTo,
+		Ward wardFrom,
+		Lot lot,
+		boolean usingSet) throws OHException {
 		MovementWard movementWard;
 
 		if (usingSet) {
@@ -68,13 +68,13 @@ public class TestMovementWard {
 	}
 
 	public void setParameters(
-			MovementWard movementWard,
-			Ward ward,
-			Patient patient,
-			Medical medical,
-			Ward wardTo,
-			Ward wardFrom,
-			Lot lot) {
+		MovementWard movementWard,
+		Ward ward,
+		Patient patient,
+		Medical medical,
+		Ward wardTo,
+		Ward wardFrom,
+		Lot lot) {
 		movementWard.setAge(age);
 		movementWard.setDate(date);
 		movementWard.setDescription(description);

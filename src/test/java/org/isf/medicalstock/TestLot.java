@@ -33,10 +33,10 @@ import org.isf.utils.exception.OHException;
 
 public class TestLot {
 
-	private String code = "123456";
-	private LocalDateTime preparationDate = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
-	private LocalDateTime dueDate = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
-	private BigDecimal cost = new BigDecimal(10.10);
+	private final String code = "123456";
+	private final LocalDateTime preparationDate = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
+	private final LocalDateTime dueDate = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
+	private final BigDecimal cost = new BigDecimal("10.10");
 
 	public Lot setup(Medical medical, boolean usingSet) throws OHException {
 		Lot lot;

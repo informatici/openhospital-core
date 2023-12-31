@@ -34,8 +34,8 @@ import org.isf.medtype.service.MedicalTypeIoOperationRepository;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -55,7 +55,7 @@ public class Tests extends OHCoreTestCase {
 		testMedicalType = new TestMedicalType();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -166,7 +166,7 @@ public class Tests extends OHCoreTestCase {
 			MedicalType medicalType = new MedicalType("", "description");
 			medicalTypeBrowserManager.newMedicalType(medicalType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -176,7 +176,7 @@ public class Tests extends OHCoreTestCase {
 			MedicalType medicalType = new MedicalType("thisIsTooLong", "description");
 			medicalTypeBrowserManager.newMedicalType(medicalType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -186,7 +186,7 @@ public class Tests extends OHCoreTestCase {
 			MedicalType medicalType = new MedicalType("Z", "");
 			medicalTypeBrowserManager.newMedicalType(medicalType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -199,7 +199,7 @@ public class Tests extends OHCoreTestCase {
 			MedicalType medicalType = new MedicalType(foundMedicalType.getCode(), foundMedicalType.getDescription());
 			medicalTypeBrowserManager.newMedicalType(medicalType);
 		})
-				.isInstanceOf(OHDataIntegrityViolationException.class);
+			.isInstanceOf(OHDataIntegrityViolationException.class);
 	}
 
 	@Test
@@ -207,8 +207,8 @@ public class Tests extends OHCoreTestCase {
 		String code = setupTestMedicalType(false);
 		MedicalType foundMedicalType = medicalTypeIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundMedicalType)
-				.isNotNull()
-				.hasToString(foundMedicalType.getDescription());
+			.isNotNull()
+			.hasToString(foundMedicalType.getDescription());
 	}
 
 	@Test
@@ -218,10 +218,10 @@ public class Tests extends OHCoreTestCase {
 		MedicalType medicalType3 = new MedicalType("Z", "otherDescription");
 
 		assertThat(medicalType1)
-				.isEqualTo(medicalType1)
-				.isNotEqualTo("someString")
-				.isNotEqualTo(medicalType2)
-				.isNotEqualTo(medicalType3);
+			.isEqualTo(medicalType1)
+			.isNotEqualTo("someString")
+			.isNotEqualTo(medicalType2)
+			.isNotEqualTo(medicalType3);
 	}
 
 	@Test

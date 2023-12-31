@@ -28,8 +28,8 @@ import org.isf.utils.exception.OHException;
 
 public class TestOperationType {
 
-	private String code = "ZZ";
-	private String description = "TestDescription";
+	private final String code = "ZZ";
+	private final String description = "TestDescription";
 
 	public OperationType setup(boolean usingSet) throws OHException {
 		OperationType operationType;

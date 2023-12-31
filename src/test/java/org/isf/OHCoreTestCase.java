@@ -21,18 +21,15 @@
  */
 package org.isf;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
-import org.isf.dicom.manager.SourceFiles;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @SpringBootTest
 @Transactional

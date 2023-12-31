@@ -29,12 +29,12 @@ import org.isf.utils.exception.OHException;
 
 public class TestOperation {
 
-	private String code = "ZZ";
-	private String description = "TestDescription";
-	private Integer major = 99;
+	private final String code = "ZZ";
+	private final String description = "TestDescription";
+	private final Integer major = 99;
 
 	public Operation setup(OperationType operationType,
-			boolean usingSet) throws OHException {
+		boolean usingSet) throws OHException {
 		Operation operation;
 
 		if (usingSet) {
@@ -49,7 +49,7 @@ public class TestOperation {
 	}
 
 	public void setParameters(Operation operation,
-			OperationType operationType) {
+		OperationType operationType) {
 		operation.setCode(code);
 		operation.setDescription(description);
 		operation.setType(operationType);

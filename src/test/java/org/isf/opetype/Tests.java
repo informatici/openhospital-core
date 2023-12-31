@@ -21,6 +21,11 @@
  */
 package org.isf.opetype;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.List;
+
 import org.isf.OHCoreTestCase;
 import org.isf.opetype.manager.OperationTypeBrowserManager;
 import org.isf.opetype.model.OperationType;
@@ -29,15 +34,10 @@ import org.isf.opetype.service.OperationTypeIoOperationRepository;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class Tests extends OHCoreTestCase {
 
@@ -173,7 +173,7 @@ public class Tests extends OHCoreTestCase {
 			operationType.setCode(null);
 			operationTypeBrowserManager.updateOperationType(operationType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -184,7 +184,7 @@ public class Tests extends OHCoreTestCase {
 			operationType.setCode("");
 			operationTypeBrowserManager.updateOperationType(operationType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -195,7 +195,7 @@ public class Tests extends OHCoreTestCase {
 			operationType.setCode("keyIsTooLong");
 			operationTypeBrowserManager.updateOperationType(operationType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -206,7 +206,7 @@ public class Tests extends OHCoreTestCase {
 			operationType.setDescription(null);
 			operationTypeBrowserManager.updateOperationType(operationType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -217,7 +217,7 @@ public class Tests extends OHCoreTestCase {
 			operationType.setDescription("");
 			operationTypeBrowserManager.updateOperationType(operationType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -228,7 +228,7 @@ public class Tests extends OHCoreTestCase {
 			operationTypeBrowserManager.newOperationType(operationType);
 			operationTypeBrowserManager.newOperationType(operationType);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+			.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -236,9 +236,9 @@ public class Tests extends OHCoreTestCase {
 		OperationType operationType = new OperationType("Z", "description");
 
 		assertThat(operationType)
-				.isEqualTo(operationType)
-				.isNotNull()
-				.isNotEqualTo("someString");
+			.isEqualTo(operationType)
+			.isNotNull()
+			.isNotEqualTo("someString");
 
 		OperationType operationType1 = new OperationType("Z", "description");
 		assertThat(operationType).isEqualTo(operationType1);

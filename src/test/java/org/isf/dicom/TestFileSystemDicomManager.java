@@ -76,6 +76,11 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 		testDicomType = new TestDicomType();
 	}
 
+	private static void cleanupDicomFiles(int patientId) {
+		FileSystemUtils.deleteRecursively(new File("rsc-test/dicom/" + patientId));
+		FileUtil.deleteContents(new File("rsc-test/dicom/dicom.storage"));
+	}
+
 	@BeforeEach
 	public void setUp() throws OHException, OHDicomException {
 		cleanH2InMemoryDb();
@@ -295,10 +300,5 @@ public class TestFileSystemDicomManager extends OHCoreTestCase {
 			fileSystemDicomManager.deleteSeries(1, "nuLL");
 		})
 			.isInstanceOf(OHDicomException.class);
-	}
-
-	private static void cleanupDicomFiles(int patientId) {
-		FileSystemUtils.deleteRecursively(new File("rsc-test/dicom/" + patientId));
-		FileUtil.deleteContents(new File("rsc-test/dicom/dicom.storage"));
 	}
 }

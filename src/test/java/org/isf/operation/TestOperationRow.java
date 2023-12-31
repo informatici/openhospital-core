@@ -34,14 +34,14 @@ import org.isf.utils.exception.OHException;
 
 public class TestOperationRow {
 
-	private String prescriber = "prescriber";
-	private String opResult = "opResult";
-	private LocalDateTime opDate = LocalDateTime.of(2020, 1, 1, 0, 0);
-	private String remarks = "remarks";
+	private final String prescriber = "prescriber";
+	private final String opResult = "opResult";
+	private final LocalDateTime opDate = LocalDateTime.of(2020, 1, 1, 0, 0);
+	private final String remarks = "remarks";
 	private Admission admission;
 	private Opd opd;
 	private Bill bill;
-	private Float transUnit = 10.0f;
+	private final Float transUnit = 10.0f;
 
 	public OperationRow setup(Operation operation, boolean usingSet) throws OHException {
 		OperationRow operationRow;

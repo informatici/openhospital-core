@@ -32,8 +32,8 @@ import org.isf.sms.service.SmsIoOperationRepository;
 import org.isf.sms.service.SmsOperations;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -51,7 +51,7 @@ public class Tests extends OHCoreTestCase {
 		testSms = new TestSms();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}

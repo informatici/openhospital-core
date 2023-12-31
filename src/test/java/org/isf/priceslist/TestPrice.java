@@ -29,10 +29,10 @@ import org.isf.utils.exception.OHException;
 
 public class TestPrice {
 
-	private static String group = "TG";
-	private static String item = "TestItem";
-	private static String desc = "TestDescription";
-	private static Double priceValue = 10.10;
+	private static final String group = "TG";
+	private static final String item = "TestItem";
+	private static final String desc = "TestDescription";
+	private static final Double priceValue = 10.10;
 
 	public Price setup(PriceList list, boolean usingSet) throws OHException {
 		Price price;

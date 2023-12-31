@@ -37,15 +37,15 @@ import org.isf.exa.service.ExamIoOperationRepository;
 import org.isf.exa.service.ExamIoOperations;
 import org.isf.exa.service.ExamRowIoOperationRepository;
 import org.isf.exa.service.ExamRowIoOperations;
+import org.isf.exatype.TestExamType;
 import org.isf.exatype.model.ExamType;
 import org.isf.exatype.service.ExamTypeIoOperationRepository;
-import org.isf.exatype.TestExamType;
 import org.isf.utils.exception.OHDataIntegrityViolationException;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
 import org.isf.utils.exception.OHServiceException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -77,7 +77,7 @@ public class Tests extends OHCoreTestCase {
 		testExamRow = new TestExamRow();
 	}
 
-	@BeforeEach 
+	@BeforeEach
 	public void setUp() {
 		cleanH2InMemoryDb();
 	}
@@ -450,20 +450,20 @@ public class Tests extends OHCoreTestCase {
 		// code = ""
 		exam.setCode("");
 		assertThatThrownBy(() -> examBrowsingManager.updateExam(exam))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 		// description = ""
 		exam.setCode(code);
 		exam.setDescription("");
 		assertThatThrownBy(() -> examBrowsingManager.updateExam(exam))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -474,11 +474,11 @@ public class Tests extends OHCoreTestCase {
 		Exam exam2 = testExam.setup(examType, 1, false);
 		exam2.setCode(code);
 		assertThatThrownBy(() -> examBrowsingManager.newExam(exam2))
-				.isInstanceOf(OHDataIntegrityViolationException.class)
-				.has(
-						new Condition<Throwable>(
-                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataIntegrityViolationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -489,11 +489,11 @@ public class Tests extends OHCoreTestCase {
 		// description = ""
 		examRow.setDescription("");
 		assertThatThrownBy(() -> examRowBrowsingManager.newExamRow(examRow))
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-                                e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -504,9 +504,9 @@ public class Tests extends OHCoreTestCase {
 		ExamType examType = testExamType.setup(false);
 		Exam exam2 = new Exam("XXX", "TestDescription", examType, 1, "TestDefaultResult");
 		assertThat(exam)
-				.isEqualTo(exam)
-				.isNotEqualTo(exam2)
-				.isNotEqualTo("xyzzy");
+			.isEqualTo(exam)
+			.isNotEqualTo(exam2)
+			.isNotEqualTo("xyzzy");
 		exam2.setCode(exam.getCode());
 		exam2.setDescription(exam.getDescription());
 		exam2.setExamtype(exam.getExamtype());
@@ -526,9 +526,9 @@ public class Tests extends OHCoreTestCase {
 		Exam exam2 = new Exam("XXX", "TestDescription", examType, 1, "TestDefaultResult");
 		ExamRow examRow2 = new ExamRow(exam2, "NewDescription");
 		assertThat(examRow)
-				.isEqualTo(examRow)
-				.isNotEqualTo(examRow2)
-				.isNotEqualTo("xyzzy");
+			.isEqualTo(examRow)
+			.isNotEqualTo(examRow2)
+			.isNotEqualTo("xyzzy");
 		examRow2.setCode(examRow.getCode());
 		examRow2.setExamCode(examRow.getExamCode());
 		examRow2.setDescription(examRow.getDescription());

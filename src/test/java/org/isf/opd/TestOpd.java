@@ -37,15 +37,15 @@ import org.isf.ward.model.Ward;
 
 public class TestOpd {
 
-	private LocalDateTime date = LocalDateTime.of(1984, 8, 14, 8, 0, 0);
-	private int age = 9;
-	private char sex = 'F';
-	private int prog_year = 2008;
-	private char newPatient = 'N';
-	private String referralFrom = "R";
-	private String referralTo = "R";
-	private String userID = "TestUser";
-	private String prescription = "prescription";
+	private final LocalDateTime date = LocalDateTime.of(1984, 8, 14, 8, 0, 0);
+	private final int age = 9;
+	private final char sex = 'F';
+	private final int prog_year = 2008;
+	private final char newPatient = 'N';
+	private final String referralFrom = "R";
+	private final String referralTo = "R";
+	private final String userID = "TestUser";
+	private final String prescription = "prescription";
 
 	public Opd setup(Patient patient, Disease disease, Ward ward, Visit nextVisit, boolean usingSet) throws OHException {
 
