@@ -21,6 +21,12 @@
  */
 package org.isf.utils.db;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -32,9 +38,33 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class JpaConfig {
-    
-    @Bean
-    public AuditorAware<String> auditorAware() {
-        return new AuditorAwareImpl();
-    }
+
+	@Autowired(required = false)
+	private AuditorAwareInterface auditorAwareImpl;
+
+	@Bean
+	public AuditorAware<String> auditorAware() {
+		if (auditorAwareImpl != null) {
+			return () -> auditorAwareImpl.getCurrentAuditor();
+		}
+		return () -> Optional.of("defaultAuditor");
+	}
+
+	@Bean
+	@ConditionalOnClass(name = "org.isf.security.ApiAuditorAwareImpl")
+	public AuditorAwareInterface auditorAwareCustomizer() {
+		try {
+			Class< ? > customAuditorAwareImplClass = Class.forName("org.isf.security.ApiAuditorAwareImpl");
+			return (AuditorAwareInterface) customAuditorAwareImplClass.getDeclaredConstructor().newInstance();
+		} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+			return new DefaultAuditorAwareImpl();
+		}
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(AuditorAwareInterface.class)
+	public AuditorAwareInterface defaultAuditorAwareCustomizer() {
+		return new DefaultAuditorAwareImpl();
+	}
+
 }
