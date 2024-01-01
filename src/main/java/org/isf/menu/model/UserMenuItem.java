@@ -29,76 +29,64 @@ import jakarta.persistence.FieldResult;
 import jakarta.persistence.Id;
 import jakarta.persistence.SqlResultSetMapping;
 import jakarta.persistence.Table;
-
 import jakarta.validation.constraints.NotNull;
 
 import org.isf.generaldata.MessageBundle;
 import org.springframework.data.annotation.Transient;
 
-
-/**
- * ------------------------------------------
- * UserUserMenuItem - an item in user menu
- * not pure model class
- * -----------------------------------------
- * modification history
- * ? 		  - flavio - first version
- * 07/05/2016 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
-@Table(name="OH_MENUITEM")
-@SqlResultSetMapping(name="UserMenuItemWithStatus",
-	entities={
-	    @EntityResult(entityClass=org.isf.menu.model.UserMenuItem.class, fields={
-                @FieldResult(name="code", column="MNI_ID_A"),
-                @FieldResult(name="buttonLabel", column="MNI_BTN_LABEL"),
-                @FieldResult(name="altLabel", column="MNI_LABEL"),
-                @FieldResult(name="tooltip", column="MNI_TOOLTIP"),
-                @FieldResult(name="shortcut", column="MNI_SHORTCUT"),
-                @FieldResult(name="mySubmenu", column="MNI_SUBMENU"),
-                @FieldResult(name="myClass", column="MNI_CLASS"),
-                @FieldResult(name="isASubMenu", column="MNI_IS_SUBMENU"),
-                @FieldResult(name="isActive", column="IS_ACTIVE"),
-                @FieldResult(name="position", column="MNI_POSITION")})},
-	columns={
-	    @ColumnResult(name="is_active")}
-	)
-public class UserMenuItem
-{
+@Table(name = "OH_MENUITEM")
+@SqlResultSetMapping(name = "UserMenuItemWithStatus",
+	entities = {
+		@EntityResult(entityClass = UserMenuItem.class, fields = {
+			@FieldResult(name = "code", column = "MNI_ID_A"),
+			@FieldResult(name = "buttonLabel", column = "MNI_BTN_LABEL"),
+			@FieldResult(name = "altLabel", column = "MNI_LABEL"),
+			@FieldResult(name = "tooltip", column = "MNI_TOOLTIP"),
+			@FieldResult(name = "shortcut", column = "MNI_SHORTCUT"),
+			@FieldResult(name = "mySubmenu", column = "MNI_SUBMENU"),
+			@FieldResult(name = "myClass", column = "MNI_CLASS"),
+			@FieldResult(name = "isASubMenu", column = "MNI_IS_SUBMENU"),
+			@FieldResult(name = "isActive", column = "IS_ACTIVE"),
+			@FieldResult(name = "position", column = "MNI_POSITION") }) },
+	columns = {
+		@ColumnResult(name = "is_active") }
+)
+public class UserMenuItem {
+
 	@Id
-	@Column(name="MNI_ID_A")
-	private String 	code;
+	@Column(name = "MNI_ID_A")
+	private String code;
 
 	@NotNull
-	@Column(name="MNI_BTN_LABEL")
-	private String 	buttonLabel;
+	@Column(name = "MNI_BTN_LABEL")
+	private String buttonLabel;
 
 	@NotNull
-	@Column(name="MNI_LABEL")
-	private String 	altLabel;
+	@Column(name = "MNI_LABEL")
+	private String altLabel;
 
-	@Column(name="MNI_TOOLTIP")
-	private String 	tooltip;
+	@Column(name = "MNI_TOOLTIP")
+	private String tooltip;
 
-	@Column(name="MNI_SHORTCUT")
-	private char	shortcut;
-
-	@NotNull
-	@Column(name="MNI_SUBMENU")
-	private String	mySubmenu;
+	@Column(name = "MNI_SHORTCUT")
+	private char shortcut;
 
 	@NotNull
-	@Column(name="MNI_CLASS")
-	private String	myClass;
+	@Column(name = "MNI_SUBMENU")
+	private String mySubmenu;
 
 	@NotNull
-	@Column(name="MNI_IS_SUBMENU")
-	private boolean	isASubMenu;
+	@Column(name = "MNI_CLASS")
+	private String myClass;
 
 	@NotNull
-	@Column(name="MNI_POSITION")
-	private int 	position;
+	@Column(name = "MNI_IS_SUBMENU")
+	private boolean isASubMenu;
+
+	@NotNull
+	@Column(name = "MNI_POSITION")
+	private int position;
 
 	@Transient
 	private boolean isActive;
@@ -111,7 +99,7 @@ public class UserMenuItem
 	}
 
 	public UserMenuItem(String code, String buttonLabel, String altLabel, String tooltip, char shortcut, String mySubmenu, String myClass, boolean isASubMenu,
-			int position, boolean isActive) {
+		int position, boolean isActive) {
 		super();
 		this.code = code;
 		this.buttonLabel = buttonLabel;
@@ -128,60 +116,79 @@ public class UserMenuItem
 	public String getAltLabel() {
 		return MessageBundle.getMessage(altLabel);
 	}
+
 	public void setAltLabel(String altLabel) {
 		this.altLabel = altLabel;
 	}
+
 	public String getButtonLabel() {
 		return MessageBundle.getMessage(buttonLabel);
 	}
+
 	public void setButtonLabel(String buttonLabel) {
 		this.buttonLabel = buttonLabel;
 	}
+
 	public String getCode() {
 		return code;
 	}
+
 	public void setCode(String code) {
 		this.code = code;
 	}
+
 	public boolean isActive() {
 		return isActive;
 	}
+
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
+
 	public boolean isASubMenu() {
 		return isASubMenu;
 	}
+
 	public void setASubMenu(boolean isASubMenu) {
 		this.isASubMenu = isASubMenu;
 	}
+
 	public String getMyClass() {
 		return myClass;
 	}
+
 	public void setMyClass(String myClass) {
 		this.myClass = myClass;
 	}
+
 	public String getMySubmenu() {
 		return mySubmenu;
 	}
+
 	public void setMySubmenu(String mySubmenu) {
 		this.mySubmenu = mySubmenu;
 	}
+
 	public int getPosition() {
 		return position;
 	}
+
 	public void setPosition(int position) {
 		this.position = position;
 	}
+
 	public char getShortcut() {
 		return shortcut;
 	}
+
 	public void setShortcut(char shortcut) {
 		this.shortcut = shortcut;
 	}
+
 	public String getTooltip() {
 		return tooltip;
 	}
+
 	public void setTooltip(String tooltip) {
 		this.tooltip = tooltip;
 	}
@@ -189,16 +196,16 @@ public class UserMenuItem
 	@Override
 	public boolean equals(Object anObject) {
 		return anObject instanceof UserMenuItem
-				&& (getCode().equals(((UserMenuItem) anObject).getCode())
-				&& getButtonLabel().equalsIgnoreCase(((UserMenuItem) anObject).getButtonLabel())
-				&& getAltLabel().equals(((UserMenuItem) anObject).getAltLabel())
-				&& getTooltip().equals(((UserMenuItem) anObject).getTooltip())
-				&& getShortcut() == ((UserMenuItem) anObject).getShortcut()
-				&& getMySubmenu().equals(((UserMenuItem) anObject).getMySubmenu())
-				&& getMyClass().equals(((UserMenuItem) anObject).getMyClass())
-				&& isASubMenu() == ((UserMenuItem) anObject).isASubMenu()
-				&& getPosition() == ((UserMenuItem) anObject).getPosition()
-				&& (isActive() == ((UserMenuItem) anObject).isActive()));
+			&& (getCode().equals(((UserMenuItem) anObject).getCode())
+			&& getButtonLabel().equalsIgnoreCase(((UserMenuItem) anObject).getButtonLabel())
+			&& getAltLabel().equals(((UserMenuItem) anObject).getAltLabel())
+			&& getTooltip().equals(((UserMenuItem) anObject).getTooltip())
+			&& getShortcut() == ((UserMenuItem) anObject).getShortcut()
+			&& getMySubmenu().equals(((UserMenuItem) anObject).getMySubmenu())
+			&& getMyClass().equals(((UserMenuItem) anObject).getMyClass())
+			&& isASubMenu() == ((UserMenuItem) anObject).isASubMenu()
+			&& getPosition() == ((UserMenuItem) anObject).getPosition()
+			&& (isActive() == ((UserMenuItem) anObject).isActive()));
 	}
 
 	@Override
