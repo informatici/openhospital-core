@@ -29,6 +29,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
@@ -38,14 +39,16 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class JpaConfig {
+	private final AuditorAwareInterface auditorAwareImpl;
 
-	@Autowired(required = false)
-	private AuditorAwareInterface auditorAwareImpl;
+	public JpaConfig(@Lazy AuditorAwareInterface auditorAwareImpl) {
+		this.auditorAwareImpl = auditorAwareImpl;
+	}
 
 	@Bean
 	public AuditorAware<String> auditorAware() {
 		if (auditorAwareImpl != null) {
-			return () -> auditorAwareImpl.getCurrentAuditor();
+			return auditorAwareImpl::getCurrentAuditor;
 		}
 		return () -> Optional.of("defaultAuditor");
 	}

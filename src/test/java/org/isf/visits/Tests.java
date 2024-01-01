@@ -35,9 +35,11 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.isf.OHCoreTestCase;
 import org.isf.generaldata.GeneralData;
+import org.isf.menu.model.User;
 import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.service.PatientIoOperationRepository;
+import org.isf.sessionaudit.model.UserSession;
 import org.isf.sms.model.Sms;
 import org.isf.sms.service.SmsOperations;
 import org.isf.utils.exception.OHDataValidationException;
@@ -79,6 +81,7 @@ class Tests extends OHCoreTestCase {
 
 	@BeforeAll
 	static void setUpClass() {
+		UserSession.setUser(new User("TestUser", null, "testpass", "test"));
 		testVisit = new TestVisit();
 		testPatient = new TestPatient();
 		testWard = new TestWard();
@@ -252,7 +255,6 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testMgrNewVisitsSMSTrueDateFuture() throws Exception {
 		GeneralData.PATIENTPHOTOSTORAGE = "DB";
-		MDC.put("OHUser", "Testuser");
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
 		LocalDateTime date = TimeTools.getNow();
@@ -260,7 +262,6 @@ class Tests extends OHCoreTestCase {
 		visit.setDate(date.plusMonths(1));
 		visits.add(visit);
 		assertThat(visitManager.newVisits(visits)).isTrue();
-
 		List<Sms> sms = smsOperations.getAll(date, date.plusMonths(1));
 		assertThat(sms).hasSize(1);
 		LocalDateTime scheduledDate = visit.getDate().minusDays(1);
@@ -270,7 +271,6 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testMgrNewVisitsSMSTrueMessageTooLong() throws Exception {
 		GeneralData.PATIENTPHOTOSTORAGE = "DB";
-		MDC.put("OHUser", "Testuser");
 		List<Visit> visits = new ArrayList<>();
 		int id = setupTestVisit(false);
 		Visit visit = visitsIoOperationRepository.findById(id).get();

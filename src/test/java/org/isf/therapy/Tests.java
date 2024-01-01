@@ -35,10 +35,12 @@ import org.isf.medicals.service.MedicalsIoOperationRepository;
 import org.isf.medtype.TestMedicalType;
 import org.isf.medtype.model.MedicalType;
 import org.isf.medtype.service.MedicalTypeIoOperationRepository;
+import org.isf.menu.model.User;
 import org.isf.patient.TestPatient;
 import org.isf.patient.model.Patient;
 import org.isf.patient.model.PatientMergedEvent;
 import org.isf.patient.service.PatientIoOperationRepository;
+import org.isf.sessionaudit.model.UserSession;
 import org.isf.sms.manager.SmsManager;
 import org.isf.sms.service.SmsOperations;
 import org.isf.therapy.manager.TherapyManager;
@@ -82,6 +84,7 @@ class Tests extends OHCoreTestCase {
 
 	@BeforeAll
 	static void setUpClass() {
+		UserSession.setUser(new User("TestUser", null, "testpass", "test"));
 		testTherapyRow = new TestTherapy();
 		testPatient = new TestPatient();
 		testMedical = new TestMedical();
@@ -204,7 +207,6 @@ class Tests extends OHCoreTestCase {
 	@Test
 	void testMgrNewTherapiesWithSMSDateAfterToday() throws Exception {
 		GeneralData.PATIENTPHOTOSTORAGE = "DB";
-		MDC.put("OHUser", "Testuser");
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
 		Patient patient = testPatient.setup(false);
