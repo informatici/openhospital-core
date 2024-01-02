@@ -43,20 +43,11 @@ import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Bill - model for the bill entity
- * -----------------------------------------
- * modification history
- * ? - Mwithi - first version
- * 25/08/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_BILLS")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "BLL_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "BLL_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "BLL_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "BLL_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "BLL_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "BLL_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "BLL_LAST_MODIFIED_DATE"))

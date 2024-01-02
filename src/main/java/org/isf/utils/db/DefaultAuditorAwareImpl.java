@@ -19,31 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.lab.manager;
+package org.isf.utils.db;
 
-import java.util.List;
+import java.util.Optional;
 
-import org.isf.lab.model.Laboratory;
-import org.isf.lab.model.LaboratoryRow;
-import org.isf.lab.service.LabIoOperations;
-import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.isf.menu.manager.UserBrowsingManager;
 
-@Component
-public class LabRowManager {
+public class DefaultAuditorAwareImpl implements AuditorAwareInterface {
 
-	@Autowired
-	private LabIoOperations ioOperations;
-
-	/**
-	 * Return a list of results ({@link LaboratoryRow}s) for passed lab entry.
-	 *
-	 * @param code - the {@link Laboratory} record ID.
-	 * @return the list of {@link LaboratoryRow}s. It could be {@code empty}
-	 * @throws OHServiceException
-	 */
-	public List<LaboratoryRow> getLabRowByLabId(Integer code) throws OHServiceException {
-		return ioOperations.getLabRow(code);
+	@Override
+	public Optional<String> getCurrentAuditor() {
+		return Optional.ofNullable(UserBrowsingManager.getCurrentUser());
 	}
 }

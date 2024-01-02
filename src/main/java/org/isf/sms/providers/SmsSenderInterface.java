@@ -32,7 +32,7 @@ public interface SmsSenderInterface {
 	 * 
 	 * @param sms
 	 *            - the {@link Sms} to send
-	 * @return <code>true</code> if the SMS has been sent, <code>false</code> otherwise
+	 * @return {@code true} if the SMS has been sent, {@code false} otherwise
 	 */
 	boolean sendSMS(Sms sms);
 

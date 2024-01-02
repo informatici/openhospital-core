@@ -167,7 +167,7 @@ public class JasperReportsManager {
 			parameters.put("admID", String.valueOf(admID)); // real param
 			parameters.put("patientID", patID); // real param
 
-			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(patID)), "pdf");
+			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(patID), "pdf");
 
 			JasperReportResultDto result = generateJasperReport(compileJasperFilename(RPT_BASE, jasperFileName), pdfFilename, parameters);
 			JasperExportManager.exportReportToPdfFile(result.getJasperPrint(), pdfFilename);
@@ -290,7 +290,7 @@ public class JasperReportsManager {
 			
 			parameters.put("PATIENT_PHOTO", getPatientPhotoFile(patID));
 			parameters.put("opdID", String.valueOf(opdID)); // real param
-			parameters.put("patientID", String.valueOf(patID)); // real param
+			parameters.put("patientID", patID); // real param
 
 			String pdfFilename = compilePDFFilename(RPT_BASE, jasperFileName, Arrays.asList(String.valueOf(opdID)), "pdf");
 
@@ -1016,7 +1016,7 @@ public class JasperReportsManager {
 	 * 
 	 * @param localDateTime
 	 *            the localDateTime to convert.
-	 * @return the converted value or <code>null</code> if the passed value is <code>null</code>.
+	 * @return the converted value or {@code null} if the passed value is {@code null}.
 	 */
 	private static Date toDate(LocalDateTime localDateTime) {
 		return Optional.ofNullable(localDateTime).map(ldt -> Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant())).orElse(null);

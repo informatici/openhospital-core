@@ -23,17 +23,7 @@ package org.isf.utils.db;
 
 import java.util.Optional;
 
-import org.isf.menu.manager.UserBrowsingManager;
-import org.springframework.data.domain.AuditorAware;
+public interface AuditorAwareInterface {
 
-/**
- * @author uni2grow
- */
-public class AuditorAwareImpl implements AuditorAware<String>{
-
-	@Override
-	public Optional<String> getCurrentAuditor() {
-		return Optional.ofNullable(UserBrowsingManager.getCurrentUser());
-	}
-
+	Optional<String> getCurrentAuditor();
 }

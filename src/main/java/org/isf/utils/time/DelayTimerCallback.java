@@ -19,31 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.lab.manager;
+package org.isf.utils.time;
 
-import java.util.List;
+public interface DelayTimerCallback {
 
-import org.isf.lab.model.Laboratory;
-import org.isf.lab.model.LaboratoryRow;
-import org.isf.lab.service.LabIoOperations;
-import org.isf.utils.exception.OHServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+	void trigger();
 
-@Component
-public class LabRowManager {
-
-	@Autowired
-	private LabIoOperations ioOperations;
-
-	/**
-	 * Return a list of results ({@link LaboratoryRow}s) for passed lab entry.
-	 *
-	 * @param code - the {@link Laboratory} record ID.
-	 * @return the list of {@link LaboratoryRow}s. It could be {@code empty}
-	 * @throws OHServiceException
-	 */
-	public List<LaboratoryRow> getLabRowByLabId(Integer code) throws OHServiceException {
-		return ioOperations.getLabRow(code);
-	}
 }

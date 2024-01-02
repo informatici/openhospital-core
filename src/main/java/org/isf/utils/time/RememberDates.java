@@ -23,21 +23,6 @@ package org.isf.utils.time;
 
 import java.time.LocalDateTime;
 
-/**
- * -------------------------------------------------------------------
- * Static class RememberDates: useful class in order to remember the last date inserted when
- * are performed recursive inserting of past datas. The aim of the class is to avoid the user
- * to manually select the date in each new window
- * -----------------------------------------
- * modification history
- * =====================
- * 08/11/06 - ross - creazione
- * 09/11/06 - ross - modificata per fornire, la prima volta, la data di sistema (metodi get gregorian)
- * 11/08/10 - claudia - inserita la voce per PATIENTVACCINE
- * 11/12/14 - mwithi - completely changed the behaviour: no more {Date} type, only {GregorianCalendar}
- * 					   and only date kept, time is up to date.
- * -------------------------------------------------------------------
- */
 public class RememberDates {
 
 	private static LocalDateTime lastOpdVisitDate;
