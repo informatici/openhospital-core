@@ -1119,6 +1119,7 @@ public class Tests extends OHCoreTestCase {
 								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
 				);
 		admission.setDisDate(admDate);
+		
 		// control dates after discharge dates
 		LocalDateTime ctrlDate = admission.getCtrlDate1();
 		admission.setCtrlDate1(LocalDateTime.of(9999, 1, 1, 0, 0, 0));
@@ -1310,9 +1311,9 @@ public class Tests extends OHCoreTestCase {
 	public void checkAdmisionWithDiseaseIpdOut() throws Exception {
 		// Given
 		int id = setupTestAdmission(false, true);
-		// Then
 		Admission admission = admissionBrowserManager.getAdmission(id);
 		String diseaseCode = "20";
+		// When
 		Disease diseaseOut = diseaseManager.getDiseaseByCode(diseaseCode);
 		Disease diseaseOut1 = admission.getDiseaseOut1();
 		admission.setDiseaseOut1(diseaseOut);
@@ -1320,7 +1321,7 @@ public class Tests extends OHCoreTestCase {
 		admission.setDiseaseOut2(diseaseOut);
 		Disease diseaseOut3 = admission.getDiseaseOut3();
 		admission.setDiseaseOut3(diseaseOut);
-		// When
+		// Then
 		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
 				.isInstanceOf(OHDataValidationException.class)
 				.has(
