@@ -43,6 +43,7 @@ import org.isf.admtype.test.TestAdmissionType;
 import org.isf.disctype.model.DischargeType;
 import org.isf.disctype.service.DischargeTypeIoOperationRepository;
 import org.isf.disctype.test.TestDischargeType;
+import org.isf.disease.manager.DiseaseBrowserManager;
 import org.isf.disease.model.Disease;
 import org.isf.disease.service.DiseaseIoOperationRepository;
 import org.isf.disease.test.TestDisease;
@@ -140,6 +141,8 @@ public class Tests extends OHCoreTestCase {
 	DeliveryTypeIoOperationRepository deliveryTypeIoOperationRepository;
 	@Autowired
 	DeliveryResultIoOperationRepository deliveryResultIoOperationRepository;
+	@Autowired
+	DiseaseBrowserManager diseaseManager;
 
 	public Tests(boolean maternityRestartInJune) {
 		GeneralData.MATERNITYRESTARTINJUNE = maternityRestartInJune;
@@ -1116,7 +1119,7 @@ public class Tests extends OHCoreTestCase {
 								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
 				);
 		admission.setDisDate(admDate);
-
+		
 		// control dates after discharge dates
 		LocalDateTime ctrlDate = admission.getCtrlDate1();
 		admission.setCtrlDate1(LocalDateTime.of(9999, 1, 1, 0, 0, 0));
@@ -1286,6 +1289,49 @@ public class Tests extends OHCoreTestCase {
 		return testAdmission.setup(ward, patient, admissionType, diseaseIn, diseaseOut1,
 				diseaseOut2, diseaseOut3, operation, dischargeType, pregTreatmentType,
 				deliveryType, deliveryResult, true);
+	}
+	
+	@Test
+	public void checkAdmisionWithDiseaseIpdIn() throws Exception  {
+		//Given
+		int id = setupTestAdmission(false, true);
+		Admission admission = admissionBrowserManager.getAdmission(id);
+		String diseaseCode = "20";
+		//when
+		Disease diseaseIn1 = diseaseManager.getDiseaseByCode(diseaseCode);
+		Disease diseaseIn11 = admission.getDiseaseIn();
+		admission.setDiseaseIn(diseaseIn1);
+		// Then
+		assertThatThrownBy(() -> admissionBrowserManager.newAdmission(admission))
+				.isInstanceOf(OHDataValidationException.class);
+		admission.setDiseaseIn(diseaseIn11);
+	}
+	
+	@Test
+	public void checkAdmisionWithDiseaseIpdOut() throws Exception {
+		int id = setupTestAdmission(false, true);
+		Admission admission = admissionBrowserManager.getAdmission(id);
+		// DiseaseOut1() != null &&  DiseaseOut1 is not in the list of DiseaseBrowserManager.getDiseaseIpdOut()
+		String diseaseCode = "20";
+		Disease diseaseOut = diseaseManager.getDiseaseByCode(diseaseCode);
+		Disease diseaseOut1 = admission.getDiseaseOut1();
+		admission.setDiseaseOut1(diseaseOut);
+		Disease diseaseOut2 = admission.getDiseaseOut2();
+		admission.setDiseaseOut2(diseaseOut);
+		Disease diseaseOut3 = admission.getDiseaseOut3();
+		admission.setDiseaseOut3(diseaseOut);
+		
+		// DiseaseOut3() != null &&  DiseaseOut3 is not in the list of DiseaseBrowserManager.getDiseaseIpdOut()
+		
+		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
+				.isInstanceOf(OHDataValidationException.class)
+				.has(
+						new Condition<Throwable>(
+								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
+				);
+		admission.setDiseaseOut1(diseaseOut1);
+		admission.setDiseaseOut2(diseaseOut2);
+		admission.setDiseaseOut3(diseaseOut3);
 	}
 
 }
