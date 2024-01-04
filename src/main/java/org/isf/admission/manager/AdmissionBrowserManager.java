@@ -353,7 +353,7 @@ public class AdmissionBrowserManager {
 		} else {
 			List<Disease> diseases = diseaseManager.getDiseaseIpdIn().stream().filter(dis -> dis == admission.getDiseaseIn()).collect(Collectors.toList());
 			if ( diseases.size() > 0) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisincannotbeempty.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisinisnotallowed.msg")));
 				throw new OHDataValidationException(errors);
 			}
 		}
@@ -427,15 +427,15 @@ public class AdmissionBrowserManager {
 				throw new OHDataValidationException(errors);
 			}
 			if (admission.getDiseaseOut1() != null && diseaseIpdOuts1.size() > 0) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertadischargedate.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisout1isnotallowed.msg")));
 				throw new OHDataValidationException(errors);
 			}
 			if (admission.getDiseaseOut2() != null && diseaseIpdOuts2.size() > 0) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertadischargedate.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisout2isnotallowed.msg")));
 				throw new OHDataValidationException(errors);
 			}
 			if (admission.getDiseaseOut3() != null && diseaseIpdOuts3.size() > 0) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertadischargedate.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisout3isnotallowed.msg")));
 				throw new OHDataValidationException(errors);
 			}
 			Float f = admission.getWeight();

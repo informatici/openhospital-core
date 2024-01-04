@@ -1309,9 +1309,10 @@ public class Tests extends OHCoreTestCase {
 	
 	@Test
 	public void checkAdmisionWithDiseaseIpdOut() throws Exception {
+		// Given
 		int id = setupTestAdmission(false, true);
+		// Then
 		Admission admission = admissionBrowserManager.getAdmission(id);
-		// DiseaseOut1() != null &&  DiseaseOut1 is not in the list of DiseaseBrowserManager.getDiseaseIpdOut()
 		String diseaseCode = "20";
 		Disease diseaseOut = diseaseManager.getDiseaseByCode(diseaseCode);
 		Disease diseaseOut1 = admission.getDiseaseOut1();
@@ -1320,9 +1321,7 @@ public class Tests extends OHCoreTestCase {
 		admission.setDiseaseOut2(diseaseOut);
 		Disease diseaseOut3 = admission.getDiseaseOut3();
 		admission.setDiseaseOut3(diseaseOut);
-		
-		// DiseaseOut3() != null &&  DiseaseOut3 is not in the list of DiseaseBrowserManager.getDiseaseIpdOut()
-		
+		// When
 		assertThatThrownBy(() -> admissionBrowserManager.updateAdmission(admission))
 				.isInstanceOf(OHDataValidationException.class)
 				.has(
