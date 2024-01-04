@@ -1119,7 +1119,6 @@ public class Tests extends OHCoreTestCase {
 								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
 				);
 		admission.setDisDate(admDate);
-		
 		// control dates after discharge dates
 		LocalDateTime ctrlDate = admission.getCtrlDate1();
 		admission.setCtrlDate1(LocalDateTime.of(9999, 1, 1, 0, 0, 0));
