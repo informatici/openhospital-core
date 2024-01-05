@@ -325,10 +325,12 @@ public class AdmissionBrowserManager {
 		Ward ward = admission.getWard();
 		if (ward == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.admissionwardcannotbeempty.msg")));
+			throw new OHDataValidationException(errors);
 		}
 		LocalDateTime dateIn = admission.getAdmDate();
 		if (dateIn == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.admissiondatecannotbeempty.msg")));
+			throw new OHDataValidationException(errors);
 		}
 		if (dateIn.isAfter(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.futuredatenotallowed.msg")));
@@ -349,7 +351,7 @@ public class AdmissionBrowserManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisincannotbeempty.msg")));
 		} else {
 			List<Disease> diseases = diseaseManager.getDiseaseIpdIn().stream().filter(dis -> dis == admission.getDiseaseIn()).collect(Collectors.toList());
-			if (diseases.size() > 0) {
+			if ( diseases.size() > 0) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisinisnotallowed.msg")));
 			}
 		}
