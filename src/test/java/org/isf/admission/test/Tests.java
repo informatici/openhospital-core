@@ -1297,7 +1297,7 @@ public class Tests extends OHCoreTestCase {
 		int id = setupTestAdmission(false, true);
 		Admission admission = admissionBrowserManager.getAdmission(id);
 		String diseaseCode = "20";
-		//when
+		// When
 		Disease diseaseIn1 = diseaseManager.getDiseaseByCode(diseaseCode);
 		Disease diseaseIn11 = admission.getDiseaseIn();
 		admission.setDiseaseIn(diseaseIn1);
