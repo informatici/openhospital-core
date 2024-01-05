@@ -352,7 +352,7 @@ public class AdmissionBrowserManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisincannotbeempty.msg")));
 		} else {
 			List<Disease> diseases = diseaseManager.getDiseaseIpdIn().stream().filter(dis -> dis == admission.getDiseaseIn()).collect(Collectors.toList());
-			if ( diseases.size() > 0) {
+			if (diseases.size() > 0) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisinisnotallowed.msg")));
 				throw new OHDataValidationException(errors);
 			}
