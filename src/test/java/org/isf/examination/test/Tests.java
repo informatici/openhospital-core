@@ -102,7 +102,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testIoSaveOrUpdate() throws Exception {
 		int id = setupTestPatientExamination(false);
-		PatientExamination patientExamination = examinationIoOperationRepository.findById(id).get();
+		PatientExamination patientExamination = examinationIoOperationRepository.findById(id).orElse(null);
+		assertThat(patientExamination).isNotNull();
 		Integer pex_hr = patientExamination.getPex_hr();
 		patientExamination.setPex_hr(pex_hr + 1);
 		examinationOperations.saveOrUpdate(patientExamination);
@@ -171,14 +172,16 @@ public class Tests extends OHCoreTestCase {
 	public void testIoListenerShouldUpdatePatientToMergedWhenPatientMergedEventArrive() throws Exception {
 		// given:
 		int id = setupTestPatientExamination(false);
-		PatientExamination found = examinationIoOperationRepository.findById(id).get();
+		PatientExamination found = examinationIoOperationRepository.findById(id).orElse(null);
+		assertThat(found).isNotNull();
 		Patient mergedPatient = setupTestPatient(false);
 
 		// when:
 		applicationEventPublisher.publishEvent(new PatientMergedEvent(found.getPatient(), mergedPatient));
 
 		// then:
-		PatientExamination result = examinationIoOperationRepository.findById(id).get();
+		PatientExamination result = examinationIoOperationRepository.findById(id).orElse(null);
+		assertThat(result).isNotNull();
 		assertThat(result.getPatient().getCode()).isEqualTo(mergedPatient.getCode());
 	}
 
@@ -194,7 +197,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrSaveOrUpdate() throws Exception {
 		int id = setupTestPatientExamination(false);
-		PatientExamination patientExamination = examinationIoOperationRepository.findById(id).get();
+		PatientExamination patientExamination = examinationIoOperationRepository.findById(id).orElse(null);
+		assertThat(patientExamination).isNotNull();
 		Integer pex_hr = patientExamination.getPex_hr();
 		patientExamination.setPex_hr(pex_hr + 1);
 		resetHashMaps();
@@ -238,7 +242,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrRemove() throws Exception {
 		int id = setupTestPatientExamination(false);
-		PatientExamination patientExamination = examinationIoOperationRepository.findById(id).get();
+		PatientExamination patientExamination = examinationIoOperationRepository.findById(id).orElse(null);
+		assertThat(patientExamination).isNotNull();
 		List<PatientExamination> patexList = new ArrayList<>(1);
 		patexList.add(patientExamination);
 		examinationBrowserManager.remove(patexList);
@@ -310,7 +315,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrExaminationValidation() throws Exception {
 		int id = setupTestPatientExamination(false);
-		PatientExamination patientExamination = examinationIoOperationRepository.findById(id).get();
+		PatientExamination patientExamination = examinationIoOperationRepository.findById(id).orElse(null);
+		assertThat(patientExamination).isNotNull();
 
 		patientExamination.setPex_diuresis_desc("somethingNotThere");
 		patientExamination.setPex_bowel_desc(null);
@@ -349,7 +355,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testPatientExaminationEqualHashCompareTo() throws Exception {
 		int code = setupTestPatientExamination(false);
-		PatientExamination patientExamination = examinationIoOperationRepository.findById(code).get();
+		PatientExamination patientExamination = examinationIoOperationRepository.findById(code).orElse(null);
+		assertThat(patientExamination).isNotNull();
 		Patient patient = testPatient.setup(false);
 		PatientExamination patientExamination2 = testPatientExamination.setup(patient, false);
 		patientExamination2.setPex_ID(-1);
@@ -367,7 +374,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testPatientExaminationGetBMI() throws Exception {
 		int code = setupTestPatientExamination(false);
-		PatientExamination patientExamination = examinationIoOperationRepository.findById(code).get();
+		PatientExamination patientExamination = examinationIoOperationRepository.findById(code).orElse(null);
+		assertThat(patientExamination).isNotNull();
 		assertThat(patientExamination.getBMI()).isPositive();
 		patientExamination.setPex_height(null);
 		assertThat(patientExamination.getBMI()).isZero();
@@ -376,7 +384,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testPatientExaminationGettersSetters() throws Exception {
 		int code = setupTestPatientExamination(false);
-		PatientExamination patientExamination = examinationIoOperationRepository.findById(code).get();
+		PatientExamination patientExamination = examinationIoOperationRepository.findById(code).orElse(null);
+		assertThat(patientExamination).isNotNull();
 
 		int hgt = patientExamination.getPex_hgt();
 		patientExamination.setPex_hgt(-1);
@@ -402,7 +411,8 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testGenderPatientExamination() throws Exception {
 		int code = setupTestPatientExamination(false);
-		PatientExamination patientExamination = examinationIoOperationRepository.findById(code).get();
+		PatientExamination patientExamination = examinationIoOperationRepository.findById(code).orElse(null);
+		assertThat(patientExamination).isNotNull();
 
 		GenderPatientExamination genderPatientExamination = new GenderPatientExamination(patientExamination, false);
 		assertThat(genderPatientExamination.isMale()).isFalse();
@@ -431,7 +441,8 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	private void checkPatientExaminationIntoDb(int id) throws OHException {
-		PatientExamination foundPatientExamination = examinationIoOperationRepository.findById(id).get();
+		PatientExamination foundPatientExamination = examinationIoOperationRepository.findById(id).orElse(null);
+		assertThat(foundPatientExamination).isNotNull();
 		testPatientExamination.check(foundPatientExamination);
 		testPatient.check(foundPatientExamination.getPatient());
 	}
