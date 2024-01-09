@@ -23,27 +23,12 @@ package org.isf.utils.db;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.AuditorAware;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.isf.menu.manager.UserBrowsingManager;
 
-/**
- * @author uni2grow
- */
-@Configuration
-@EnableJpaAuditing(auditorAwareRef = "auditorAware")
-public class JpaConfig {
+public class DefaultAuditorAwareImpl implements AuditorAwareInterface {
 
-	@Autowired(required = false)
-	private AuditorAwareInterface auditorAwareImpl;
-
-	@Bean
-	public AuditorAware<String> auditorAware() {
-		if (auditorAwareImpl != null) {
-			return () -> auditorAwareImpl.getCurrentAuditor();
-		}
-		return () -> Optional.of("defaultAuditor");
+	@Override
+	public Optional<String> getCurrentAuditor() {
+		return Optional.ofNullable(UserBrowsingManager.getCurrentUser());
 	}
 }

@@ -19,31 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.utils.db;
+package org.isf.utils.time;
 
-import java.util.Optional;
+public interface DelayTimerCallback {
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.AuditorAware;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+	void trigger();
 
-/**
- * @author uni2grow
- */
-@Configuration
-@EnableJpaAuditing(auditorAwareRef = "auditorAware")
-public class JpaConfig {
-
-	@Autowired(required = false)
-	private AuditorAwareInterface auditorAwareImpl;
-
-	@Bean
-	public AuditorAware<String> auditorAware() {
-		if (auditorAwareImpl != null) {
-			return () -> auditorAwareImpl.getCurrentAuditor();
-		}
-		return () -> Optional.of("defaultAuditor");
-	}
 }
