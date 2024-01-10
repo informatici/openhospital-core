@@ -415,9 +415,10 @@ public class AdmissionBrowserManager {
 									DateTimeFormatter.ISO_LOCAL_DATE.format(invalidEnd))));
 				}
 			}
-			List<Disease> diseaseIpdOuts1 = diseaseManager.getDiseaseIpdOut().stream().filter(dis -> dis == admission.getDiseaseOut1()).collect(Collectors.toList());
-			List<Disease> diseaseIpdOuts2 = diseaseManager.getDiseaseIpdOut().stream().filter(dis-> dis == admission.getDiseaseOut2()).collect(Collectors.toList());
-			List<Disease> diseaseIpdOuts3 = diseaseManager.getDiseaseIpdOut().stream().filter(dis-> dis == admission.getDiseaseOut3()).collect(Collectors.toList());
+			List<Disease> allowedDiseaseIpdOut = diseaseManager.getDiseaseIpdOut();
+			List<Disease> diseaseIpdOuts1 = allowedDiseaseIpdOut .stream().filter(dis -> dis.equals(admission.getDiseaseOut1())).collect(Collectors.toList());
+			List<Disease> diseaseIpdOuts2 = allowedDiseaseIpdOut .stream().filter(dis -> dis.equals(admission.getDiseaseOut2())).collect(Collectors.toList());
+			List<Disease> diseaseIpdOuts3 = allowedDiseaseIpdOut .stream().filter(dis -> dis.equals(admission.getDiseaseOut3())).collect(Collectors.toList());
 			if (admission.getDiseaseOut1() == null && admission.getDisDate() != null) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseselectatleastfirstdiagnosisout.msg")));
 			} else if (admission.getDiseaseOut1() != null && admission.getDisDate() == null) {
