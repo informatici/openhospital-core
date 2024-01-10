@@ -424,13 +424,13 @@ public class AdmissionBrowserManager {
 			} else if (admission.getDiseaseOut1() != null && admission.getDisDate() == null) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertadischargedate.msg")));
 			}
-			if (admission.getDiseaseOut1() != null && diseaseIpdOuts1.size() > 0) {
+			if (admission.getDiseaseOut1() != null && diseaseIpdOuts1.isEmpty()) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisout1isnotallowed.msg")));
 			}
-			if (admission.getDiseaseOut2() != null && diseaseIpdOuts2.size() > 0) {
+			if (admission.getDiseaseOut2() != null && diseaseIpdOuts2.isEmpty()) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisout2isnotallowed.msg")));
 			}
-			if (admission.getDiseaseOut3() != null && diseaseIpdOuts3.size() > 0) {
+			if (admission.getDiseaseOut3() != null && diseaseIpdOuts3.isEmpty()) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisout3isnotallowed.msg")));
 			}
 			Float f = admission.getWeight();
