@@ -92,3 +92,4 @@ source step_95_missing_user_related_fk.sql;
 source step_96_user_settings_table.sql;
 source step_97_fix_default_values.sql;
 source step_98_reset_permissions.sql;
+source step_99_telemetry.sql;

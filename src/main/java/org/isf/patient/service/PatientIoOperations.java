@@ -57,18 +57,19 @@ public class PatientIoOperations {
 	public static final String LOAD_FROM_DB = "DB";
 
 	public static final char NOT_DELETED_STATUS = 'N';
-	
+
 	@Autowired
 	private PatientIoOperationRepository repository;
-	
+
 	@Autowired
 	private ApplicationEventPublisher applicationEventPublisher;
- 
+
 	@Autowired
 	private FileSystemPatientPhotoRepository fileSystemPatientPhotoRepository;
 
 	@Autowired
 	private EntityManager entityManager;
+
 	/**
 	 * Method that returns the full list of {@link Patient}s not logically deleted,
 	 *
@@ -276,7 +277,7 @@ public class PatientIoOperations {
 	public boolean isCodePresent(Integer code) throws OHServiceException {
 		return repository.existsById(code);
 	}
-	
+
 	/**
 	 * Method that returns a list of cities to be used.
 	 *
@@ -304,4 +305,15 @@ public class PatientIoOperations {
 		data.setPageInfo(PageInfo.from(pages));
 		return data;
 	}
+  
+	/**
+	 * Count all active {@link Patient}s
+	 * 
+	 * @return
+	 * @throws OHServiceException
+	 */
+	public long countAllActivePatients() throws OHServiceException {
+		return repository.countAllActiveNotDeletedPatients();
+	}
+
 }
