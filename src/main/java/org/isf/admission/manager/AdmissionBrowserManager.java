@@ -350,8 +350,8 @@ public class AdmissionBrowserManager {
 		if (admission.getDiseaseIn() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisincannotbeempty.msg")));
 		} else {
-			List<Disease> diseases = diseaseManager.getDiseaseIpdIn().stream().filter(dis -> dis == admission.getDiseaseIn()).collect(Collectors.toList());
-			if (diseases.size() > 0) {
+			List<Disease> diseases = diseaseManager.getDiseaseIpdIn().stream().filter(dis -> dis.equals( admission.getDiseaseIn()).collect(Collectors.toList());
+			if (diseases.size().isEmpty()) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisinisnotallowed.msg")));
 			}
 		}
