@@ -84,7 +84,7 @@ public class UserSettingManager {
 	/**
 	 * Returns {@link UserSetting}s of the specified userId.
 	 *
-	 * @param userName - the user name
+	 * @param userSettingId - the user id
 	 * @return {@link UserSetting} if the userSetting exist, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */

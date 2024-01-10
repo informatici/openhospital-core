@@ -44,7 +44,7 @@ public class ExamTypeBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param examType
-	 * @param insert {@code true} or updated <code>false</code>
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
 	 */
 	protected void validateExamType(ExamType examType, boolean insert) throws OHServiceException {
@@ -107,7 +107,7 @@ public class ExamTypeBrowserManager {
 	 * the parameter.
 	 *
 	 * @param code - the code
-	 * @return {@code true} if the code is present, <code>false</code> otherwise.
+	 * @return {@code true} if the code is present, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
