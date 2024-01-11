@@ -25,7 +25,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
+import org.isf.medicals.model.Medical;
+import org.isf.medicals.service.MedicalsIoOperations;
+import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
+import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
@@ -39,6 +43,12 @@ public class MovBrowserManager {
 
 	@Autowired
 	private MedicalStockIoOperations ioOperations;
+	
+	@Autowired
+	private LotIoOperationRepository lotRepository;
+	
+	@Autowired
+	private MedicalsIoOperations medicalsIoOperation;
 
 	/**
 	 * Retrieves all the {@link Movement}s.
@@ -120,6 +130,35 @@ public class MovBrowserManager {
 				throw new OHDataValidationException(
 						new OHExceptionMessage(MessageBundle.getMessage(errMsgKey)));
 			}
+		}
+	}
+
+
+	public void deleteDischargeMovement() throws OHServiceException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void deleteChargeMovement() throws OHDataValidationException, OHServiceException {
+		// TODO Auto-generated method stub
+		String type = "-";
+		List<Movement> lastMovements = ioOperations.getLastMovementByType(type);
+		if (lastMovements == null) {
+			throw new OHDataValidationException(
+							new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.failedtodeletelastchargemovement.msg")));
+		}
+		Movement lastMovement = lastMovements.get(0);
+		List<Movement> movWithSameRef = ioOperations.getMovementsByReference(lastMovement.getRefNo());
+		for (Movement mov : movWithSameRef) {
+			Lot lot = mov.getLot();
+			List<Integer> lastMovWithSameLot = ioOperations.getMedicalsFromLot(lot.getCode());
+			if (lastMovWithSameLot.size() == 1) {
+				lotRepository.delete(lot);
+			}
+			Medical medical = mov.getMedical();
+			medical.setInqty(medical.getInqty() - mov.getQuantity());
+			medicalsIoOperation.updateMedical(medical);
+			ioOperations.deleteMovement(mov);
 		}
 	}
 }

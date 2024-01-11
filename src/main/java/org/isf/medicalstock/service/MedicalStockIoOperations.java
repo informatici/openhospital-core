@@ -498,4 +498,12 @@ public class MedicalStockIoOperations {
 		return movRepository.findAllByRefNo(refNo);
 	}
 
+	public List<Movement> getLastMovementByType(String type) throws OHServiceException {
+		return movRepository.findMovementByType(type);
+	}
+	
+	public void deleteMovement(Movement mov) throws OHServiceException {
+		movRepository.delete(mov);
+	}
+
 }

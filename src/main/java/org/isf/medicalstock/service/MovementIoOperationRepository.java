@@ -61,4 +61,9 @@ public interface MovementIoOperationRepository extends JpaRepository<Movement, I
 
 	@Query(value = "select mov.refNo from Movement mov where mov.refNo like :refNo")
 	List<String> findAllWhereRefNo(@Param("refNo") String refNo);
+
+	@Query("SELECT mov FROM OH_MEDICALDSRSTOCKMOV mov "
+					+ "join mov.type movtype "
+					+ "where movtype.type = :type order by mov.date DESC")
+	List<Movement> findMovementByType(@Param("type") String type);
 }
