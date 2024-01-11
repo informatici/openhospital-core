@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.isf.vaccine.model.Vaccine;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -33,5 +34,8 @@ public interface VaccineIoOperationRepository extends JpaRepository<Vaccine, Str
 	List<Vaccine> findAllByOrderByDescriptionAsc();
 
 	List<Vaccine> findByVaccineType_CodeOrderByDescriptionAsc(String code);
+
+	@Query("select count(v) from Vaccine v where active=1")
+	long countAllActiveVaccinations();
 
 }

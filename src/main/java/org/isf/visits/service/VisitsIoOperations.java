@@ -32,13 +32,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class VisitsIoOperations {
 
 	@Autowired
 	private VisitsIoOperationRepository repository;
-	
+
 	/**
 	 * Returns the list of all {@link Visit}s related to a {@link Patient} ID.
 	 * 
@@ -47,11 +47,9 @@ public class VisitsIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public List<Visit> getVisits(Integer patID) throws OHServiceException {
-		return patID != 0 ?
-				repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID) :
-				repository.findAllByOrderByPatient_CodeAscDateAsc();
+		return patID != 0 ? repository.findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(patID) : repository.findAllByOrderByPatient_CodeAscDateAsc();
 	}
-	
+
 	/**
 	 * Returns the list of all {@link Visit}s related to a {@link Patient} ID in OPD (Ward is {@code null}).
 	 *
@@ -60,13 +58,12 @@ public class VisitsIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Visit> getVisitsOPD(Integer patID) throws OHServiceException {
-		return patID != 0 ?
-				repository.findAllByWardIsNullAndPatient_CodeOrderByPatient_CodeAscDateAsc(patID) :
-				repository.findAllByWardIsNullOrderByPatient_CodeAscDateAsc();
+		return patID != 0 ? repository.findAllByWardIsNullAndPatient_CodeOrderByPatient_CodeAscDateAsc(patID)
+						: repository.findAllByWardIsNullOrderByPatient_CodeAscDateAsc();
 	}
 	public Visit getVisit(int visitID) throws OHServiceException {
 		return repository.findAllByVisitID(visitID);
-				
+
 	}
 
 	/**
@@ -86,7 +83,6 @@ public class VisitsIoOperations {
 		return visits;
 	}
 
-
 	/**
 	 * Insert a new {@link Visit}.
 	 * 
@@ -97,7 +93,7 @@ public class VisitsIoOperations {
 	public Visit newVisit(Visit visit) throws OHServiceException {
 		return repository.save(visit);
 	}
-	
+
 	/**
 	 * Update a {@link Visit}.
 	 * 
@@ -139,4 +135,15 @@ public class VisitsIoOperations {
 	public void deleteVisit(Visit visit) throws OHServiceException {
 		repository.delete(visit);
 	}
+
+	/**
+	 * Count active {@link Visit}s
+	 * 
+	 * @return the number of recorded {@link Visit}s
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveAppointments() {
+		return this.repository.countAllActiveAppointments();
+	}
+
 }
