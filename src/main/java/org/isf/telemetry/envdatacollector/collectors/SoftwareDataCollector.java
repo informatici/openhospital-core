@@ -62,7 +62,7 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 	@Override
 	public String getDescription() {
 		version = Version.getVersion().toString();
-		return "Software information versions and usage (ex. Ubuntu 22.04, MariaDB 10.6, Open Hospital " + version + ")";
+		return "Software information versions and usage (ex. Ubuntu 22.04, MariaDB 10.6, Open Hospital " + version + ')';
 	}
 
 	@Override
@@ -120,7 +120,7 @@ public class SoftwareDataCollector extends AbstractDataCollector {
 		} catch (RuntimeException | SQLException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());
-			throw new OHException("Data collector [" + ID + "]", e);
+			throw new OHException("Data collector [" + ID + ']', e);
 		}
 		return result;
 	}

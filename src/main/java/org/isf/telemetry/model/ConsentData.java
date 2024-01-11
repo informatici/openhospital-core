@@ -87,7 +87,7 @@ public class ConsentData {
 	@Override
 	public String toString() {
 		return "ConsentData [application=" + application + ", oss=" + oss + ", dbms=" + dbms + ", location=" + location + ", hospital=" + hospital + ", time="
-						+ time + "]";
+						+ time + ']';
 	}
 
 }

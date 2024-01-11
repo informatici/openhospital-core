@@ -76,7 +76,7 @@ public class HardwareDataCollector extends AbstractDataCollector {
 		} catch (RuntimeException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.error(e.toString());
-			throw new OHException("Data collector [" + ID + "]", e);
+			throw new OHException("Data collector [" + ID + ']', e);
 		}
 		return result;
 	}
