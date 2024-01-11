@@ -31,7 +31,7 @@ import javax.swing.JFrame;
  * @author Mwithi
  * @version 1.0.0
  */
-public abstract class AbstractDicomLoader extends Window {
+public class AbstractDicomLoader extends Window {
 
 	private static final long serialVersionUID = 1L;
 

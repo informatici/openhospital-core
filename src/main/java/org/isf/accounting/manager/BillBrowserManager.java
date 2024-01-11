@@ -53,9 +53,10 @@ public class BillBrowserManager {
 	 * @param billPayments
 	 * @throws OHDataValidationException
 	 */
-	protected void validateBill(Bill bill, List<BillItems> billItems, List<BillPayments> billPayments) throws OHDataValidationException {
-        List<OHExceptionMessage> errors = new ArrayList<>();
 
+
+	protected void validateBill(Bill bill, List<BillItems> billItems, List<BillPayments> billPayments) throws OHDataValidationException {
+		List<OHExceptionMessage> errors = new ArrayList<>();
 		LocalDateTime today = TimeTools.getNow();
 		LocalDateTime upDate;
 		LocalDateTime firstPay = LocalDateTime.from(today);
@@ -70,7 +71,17 @@ public class BillBrowserManager {
 			upDate = billDate;
 		}
 		bill.setUpdate(upDate);
-        
+
+		validateBillDates(billDate, firstPay, lastPay, today, errors);
+		validateBillStatus(bill, errors);
+		validateBillPatName(bill, errors);
+
+		if (!errors.isEmpty()) {
+			throw new OHDataValidationException(errors);
+		}
+	}
+
+	private void validateBillDates(LocalDateTime billDate, LocalDateTime firstPay, LocalDateTime lastPay, LocalDateTime today, List<OHExceptionMessage> errors) {
 		if (billDate.isAfter(today)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.billsinthefuturearenotallowed.msg")));
 		}
@@ -80,14 +91,17 @@ public class BillBrowserManager {
 		if (billDate.isAfter(firstPay)) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.billdateaisfterthefirstpayment.msg")));
 		}
-		if (bill.getPatName().isEmpty()) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.pleaseinsertanameforthepatient.msg")));
-		}
+	}
+
+	private void validateBillStatus(Bill bill, List<OHExceptionMessage> errors) {
 		if (bill.getStatus().equals("C") && bill.getBalance() != 0) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.abillwithanoutstandingbalancecannotbeclosed.msg")));
 		}
-		if (!errors.isEmpty()) {
-			throw new OHDataValidationException(errors);
+	}
+
+	private void validateBillPatName(Bill bill, List<OHExceptionMessage> errors) {
+		if (bill.getPatName().isEmpty()) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.newbill.pleaseinsertanameforthepatient.msg")));
 		}
 	}
 

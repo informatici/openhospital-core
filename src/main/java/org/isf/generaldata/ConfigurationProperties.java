@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  * @author Mwithi
  *
  */
-public abstract class ConfigurationProperties {
+public class ConfigurationProperties {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationProperties.class);
 	private static final boolean EXIT_ON_FAIL = false;
