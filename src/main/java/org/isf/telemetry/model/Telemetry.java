@@ -151,7 +151,7 @@ public class Telemetry {
 	@Override
 	public String toString() {
 		return "Telemetry [id=" + id + ", sentTimestamp=" + sentTimestamp + ", active=" + active + ", optinDate=" + optinDate + ", optoutDate=" + optoutDate
-						+ ", consentData=" + consentData + ", info=" + info + ", hashCode=" + hashCode + "]";
+						+ ", consentData=" + consentData + ", info=" + info + ", hashCode=" + hashCode + ']';
 	}
 
 }

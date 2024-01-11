@@ -99,7 +99,7 @@ public class GeoIpInfoBean {
 		return "GeoIpInfoBean [ip=" + ip + ", countryCode=" + countryCode + ", countryName=" + countryName
 						+ ", regionName=" + regionName + ", city=" + city + ", postalCode=" + postalCode + ", timeZone="
 						+ timeZone + ", latitude=" + latitude + ", longitude=" + longitude + ", currencyCode=" + currencyCode
-						+ "]";
+						+ ']';
 	}
 
 }
