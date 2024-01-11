@@ -34,6 +34,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface LabIoOperationRepository extends JpaRepository<Laboratory, Integer> {
+
 	List<Laboratory> findByLabDateBetweenOrderByLabDateDesc(LocalDateTime dateFrom, LocalDateTime dateTo);
 
 	List<Laboratory> findByLabDateBetweenAndExam_DescriptionOrderByLabDateDesc(LocalDateTime dateFrom, LocalDateTime dateTo, String exam);
@@ -42,24 +43,32 @@ public interface LabIoOperationRepository extends JpaRepository<Laboratory, Inte
 
 	List<Laboratory> findByLabDateBetweenOrderByExam_Examtype_DescriptionDesc(LocalDateTime dateFrom, LocalDateTime dateTo);
 
-	List<Laboratory> findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(LocalDateTime dateFrom, LocalDateTime dateTo, String exam);
+	List<Laboratory> findByLabDateBetweenAndExam_DescriptionContainingOrderByExam_Examtype_DescriptionDesc(LocalDateTime dateFrom, LocalDateTime dateTo,
+					String exam);
 
 	List<Laboratory> findByLabDateBetweenAndPatientCode(LocalDateTime dateFrom, LocalDateTime dateTo, Integer patientCode);
-	
+
 	List<Laboratory> findByLabDateBetweenAndExamDescriptionAndPatientCode(LocalDateTime dateFrom, LocalDateTime dateTo, String exam, Integer patient);
-	
+
 	Page<Laboratory> findByLabDateBetweenOrderByLabDateDesc(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable);
-	
+
 	@Query(value = "select lab from Laboratory lab where lab.labDate >= :dateFrom and lab.labDate < :dateTo order by lab.labDate desc")
-	Page<Laboratory> findByLabDateBetweenOrderByLabDateDescPage(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
-	
-	@Query(value = "select lab from Laboratory lab where (lab.labDate >= :dateFrom and lab.labDate < :dateTo) and lab.exam = :exam order by lab.labDate desc") 
-	Page<Laboratory> findByLabDateBetweenAndExam_DescriptionOrderByLabDateDescPage(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, @Param("exam")Exam exam, Pageable pageable);
-	
+	Page<Laboratory> findByLabDateBetweenOrderByLabDateDescPage(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo,
+					Pageable pageable);
+
+	@Query(value = "select lab from Laboratory lab where (lab.labDate >= :dateFrom and lab.labDate < :dateTo) and lab.exam = :exam order by lab.labDate desc")
+	Page<Laboratory> findByLabDateBetweenAndExam_DescriptionOrderByLabDateDescPage(@Param("dateFrom") LocalDateTime dateFrom,
+					@Param("dateTo") LocalDateTime dateTo, @Param("exam") Exam exam, Pageable pageable);
+
 	@Query(value = "select lab from Laboratory lab where (lab.labDate >= :dateFrom and lab.labDate < :dateTo) and lab.patient = :patient order by lab.labDate desc")
-	Page<Laboratory> findByLabDateBetweenAndPatientCodePage(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, @Param("patient") Patient patient, Pageable pageable);
-	
+	Page<Laboratory> findByLabDateBetweenAndPatientCodePage(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo,
+					@Param("patient") Patient patient, Pageable pageable);
+
 	@Query(value = "select lab from Laboratory lab where (lab.labDate >= :dateFrom and lab.labDate < :dateTo) and lab.exam = :exam and lab.patient = :patient order by lab.labDate desc")
-	Page<Laboratory> findByLabDateBetweenAndExamDescriptionAndPatientCodePage(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, @Param("exam") Exam exam, @Param("patient") Patient patient, Pageable pageable);
+	Page<Laboratory> findByLabDateBetweenAndExamDescriptionAndPatientCodePage(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo,
+					@Param("exam") Exam exam, @Param("patient") Patient patient, Pageable pageable);
+
+	@Query("select count(l) from Laboratory l where active=1")
+	long countAllActiveLabs();
 
 }

@@ -37,7 +37,7 @@
 			</plugin>
 			<plugin>
 			  <artifactId>maven-surefire-plugin</artifactId>
-			  <version>3.2.3</version>
+			  <version>3.2.5</version>
 			  <dependencies>
 				<dependency>
 			        <groupId>org.junit.vintage</groupId>
@@ -203,6 +203,16 @@
 			<groupId>com.googlecode.gstreamer-java</groupId>
 			<artifactId>gstreamer-java</artifactId>
 			<version>1.6</version>
+			<exclusions>
+				<exclusion>
+					<groupId>net.java.dev.jna</groupId>
+					<artifactId>jna</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.java.dev.jna</groupId>
+					<artifactId>platform</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>commons-configuration</groupId>
@@ -223,6 +233,11 @@
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
 			<version>${jasperreports.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.oshi</groupId>
+			<artifactId>oshi-core</artifactId>
+			<version>5.8.1</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
