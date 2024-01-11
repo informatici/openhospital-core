@@ -160,7 +160,7 @@ public class OpenHospitalDataCollector extends AbstractDataCollector {
 		} catch (OHServiceException e) {
 			LOGGER.error("Something went wrong with " + ID);
 			LOGGER.debug(e.getMessage(), e);
-			throw new OHException("Data collector [" + ID + "]", e);
+			throw new OHException("Data collector [" + ID + ']', e);
 		}
 		return result;
 	}
