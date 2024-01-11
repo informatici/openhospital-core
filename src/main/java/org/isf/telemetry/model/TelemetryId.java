@@ -22,6 +22,7 @@
 package org.isf.telemetry.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -79,4 +80,23 @@ public class TelemetryId implements Serializable {
 	public void setOperativeSystemUUID(String operativeSystemUUID) {
 		this.operativeSystemUUID = operativeSystemUUID;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(databaseUUID, hardwareUUID, operativeSystemUUID, softwareUUID);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TelemetryId other = (TelemetryId) obj;
+		return Objects.equals(databaseUUID, other.databaseUUID) && Objects.equals(hardwareUUID, other.hardwareUUID)
+						&& Objects.equals(operativeSystemUUID, other.operativeSystemUUID) && Objects.equals(softwareUUID, other.softwareUUID);
+	}
+
 }
