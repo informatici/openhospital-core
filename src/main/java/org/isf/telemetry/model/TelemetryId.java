@@ -88,15 +88,18 @@ public class TelemetryId implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		TelemetryId other = (TelemetryId) obj;
 		return Objects.equals(databaseUUID, other.databaseUUID) && Objects.equals(hardwareUUID, other.hardwareUUID)
-						&& Objects.equals(operativeSystemUUID, other.operativeSystemUUID) && Objects.equals(softwareUUID, other.softwareUUID);
+			&& Objects.equals(operativeSystemUUID, other.operativeSystemUUID) && Objects.equals(softwareUUID, other.softwareUUID);
 	}
 
 }
