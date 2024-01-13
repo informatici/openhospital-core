@@ -85,7 +85,7 @@ public class MovStockInsertingManager {
 		if (movement.getType() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.pleasechooseatype.msg")));
 		} else {
-			chargingType = movement.getType().getType().contains("+"); //else discharging
+			chargingType = movement.getType().getType().contains("+"); // else discharging
 
 			// Check supplier
 			if (chargingType) {
@@ -112,41 +112,40 @@ public class MovStockInsertingManager {
 		}
 
 		// Check Lot
-		if (!isAutomaticLotOut()) {
-			Lot lot = movement.getLot();
-			if (lot != null) {
+		Lot lot = movement.getLot();
+		if (lot != null) {
 
-				if (lot.getCode().length() >= 50) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thelotidistoolongmax50chars.msg")));
-				}
-
-				if (lot.getDueDate() == null) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.insertavalidduedate.msg")));
-				}
-
-				if (lot.getPreparationDate() == null) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.insertavalidpreparationdate.msg")));
-				}
-
-				if (lot.getPreparationDate() != null && lot.getDueDate() != null && lot.getPreparationDate().isAfter(lot.getDueDate())) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thepreparationdatecannotbyaftertheduedate.msg")));
-				}
+			if (lot.getCode().length() >= 50) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thelotidistoolongmax50chars.msg")));
 			}
+
+			if (lot.getDueDate() == null) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.insertavalidduedate.msg")));
+			}
+
+			if (lot.getPreparationDate() == null) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.insertavalidpreparationdate.msg")));
+			}
+
+			if (lot.getPreparationDate() != null && lot.getDueDate() != null && lot.getPreparationDate().isAfter(lot.getDueDate())) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thepreparationdatecannotbyaftertheduedate.msg")));
+			}
+		}
+		List<Integer> medicalIds = ioOperations.getMedicalsFromLot(lot.getCode());
+		if (movement.getMedical() != null && !(medicalIds.isEmpty() || medicalIds.size() == 1 && medicalIds.get(0).intValue() == movement
+						.getMedical().getCode().intValue())) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thislotreferstoanothermedical.msg")));
+		}
+		if (GeneralData.LOTWITHCOST && chargingType) {
+			BigDecimal cost = lot.getCost();
+			if (cost == null || cost.doubleValue() <= 0.0) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.multiplecharging.zerocostsarenotallowed.msg")));
+			}
+		}
+		if (!isAutomaticLotOut()) {
 
 			if (movement.getType() != null && !chargingType && movement.getQuantity() > lot.getMainStoreQuantity()) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof.msg")));
-			}
-
-			List<Integer> medicalIds = ioOperations.getMedicalsFromLot(lot.getCode());
-			if (movement.getMedical() != null && !(medicalIds.isEmpty() || medicalIds.size() == 1 && medicalIds.get(0).intValue() == movement
-					.getMedical().getCode().intValue())) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thislotreferstoanothermedical.msg")));
-			}
-			if (GeneralData.LOTWITHCOST && chargingType) {
-				BigDecimal cost = lot.getCost();
-				if (cost == null || cost.doubleValue() <= 0.0) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.multiplecharging.zerocostsarenotallowed.msg")));
-				}
 			}
 		}
 
@@ -255,7 +254,8 @@ public class MovStockInsertingManager {
 			} catch (OHServiceException e) {
 				List<OHExceptionMessage> errors = e.getMessages();
 				errors.add(new OHExceptionMessage(
-						mov.getMedical() != null ? mov.getMedical().getDescription() : MessageBundle.getMessage("angal.medicalstock.nodescription.txt")));
+								mov.getMedical() != null ? mov.getMedical().getDescription()
+												: MessageBundle.getMessage("angal.medicalstock.nodescription.txt")));
 				throw new OHDataValidationException(errors);
 			}
 		}
