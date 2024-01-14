@@ -55,6 +55,8 @@ public class MovStockInsertingManager {
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * 
+	 * TODO: verify the need of checkReference param
 	 *
 	 * @param movement - the movement to validate
 	 * @param checkReference - if {@code true} it will use {@link #checkReferenceNumber(String) checkReferenceNumber}
@@ -111,7 +113,12 @@ public class MovStockInsertingManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.chooseamedical.msg")));
 		}
 
-		// Check Lot
+		/*
+		 * Check Lot.
+		 * 
+		 * If null, it will be randomly generated for charge movements or automatically selected for discharge ones if isAutomaticLotOut.
+		 * 
+		 */
 		Lot lot = movement.getLot();
 		if (lot != null) {
 
@@ -130,22 +137,27 @@ public class MovStockInsertingManager {
 			if (lot.getPreparationDate() != null && lot.getDueDate() != null && lot.getPreparationDate().isAfter(lot.getDueDate())) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thepreparationdatecannotbyaftertheduedate.msg")));
 			}
-		}
-		List<Integer> medicalIds = ioOperations.getMedicalsFromLot(lot.getCode());
-		if (movement.getMedical() != null && !(medicalIds.isEmpty() || medicalIds.size() == 1 && medicalIds.get(0).intValue() == movement
-						.getMedical().getCode().intValue())) {
-			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thislotreferstoanothermedical.msg")));
-		}
-		if (GeneralData.LOTWITHCOST && chargingType) {
-			BigDecimal cost = lot.getCost();
-			if (cost == null || cost.doubleValue() <= 0.0) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.multiplecharging.zerocostsarenotallowed.msg")));
+			List<Integer> medicalIds = ioOperations.getMedicalsFromLot(lot.getCode());
+			if (movement.getMedical() != null && !(medicalIds.isEmpty() || medicalIds.size() == 1 && medicalIds.get(0).intValue() == movement
+							.getMedical().getCode().intValue())) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thislotreferstoanothermedical.msg")));
 			}
-		}
-		if (!isAutomaticLotOut()) {
+			if (GeneralData.LOTWITHCOST && chargingType) {
+				BigDecimal cost = lot.getCost();
+				if (cost == null || cost.doubleValue() <= 0.0) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.multiplecharging.zerocostsarenotallowed.msg")));
+				}
+			}
+			if (!isAutomaticLotOut()) {
 
-			if (movement.getType() != null && !chargingType && movement.getQuantity() > lot.getMainStoreQuantity()) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof.msg")));
+				if (movement.getType() != null && !chargingType && movement.getQuantity() > lot.getMainStoreQuantity()) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof.msg")));
+				}
+			}
+		} else {
+			if (!chargingType && !isAutomaticLotOut()) {
+
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.choosealot.msg")));
 			}
 		}
 
@@ -239,6 +251,7 @@ public class MovStockInsertingManager {
 	@TranslateOHServiceException
 	public List<Movement> newMultipleChargingMovements(List<Movement> movements, String referenceNumber) throws OHServiceException {
 
+		// TODO: verify the need of this checkReference in the whole class
 		boolean checkReference = referenceNumber == null; // referenceNumber == null, each movement should have referenceNumber set
 		if (!checkReference) {
 			// referenceNumber != null, all movement will have same referenceNumber, we check only once for all
