@@ -27,6 +27,7 @@ import java.util.List;
 import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -59,11 +60,13 @@ public interface MovementIoOperationRepository extends JpaRepository<Movement, I
 	@Query(value = "select max(mov.date) from Movement mov")
 	LocalDateTime findMaxDate();
 
-	@Query(value = "select mov.refNo from Movement mov where mov.refNo like :refNo")
+	@Query(value = "select mov from Movement mov where mov.refNo like :refNo")
 	List<String> findAllWhereRefNo(@Param("refNo") String refNo);
-
-	@Query("SELECT mov FROM OH_MEDICALDSRSTOCKMOV mov "
-					+ "join mov.type movtype "
-					+ "where movtype.type = :type order by mov.date DESC")
-	List<Movement> findMovementByType(@Param("type") String type);
+	
+	@Query(value = "SELECT * FROM OH_MEDICALDSRSTOCKMOV ORDER BY MMV_ID DESC limit 1", nativeQuery = true)
+	Movement findLastMovement();
+	
+	@Modifying
+	@Query(value = "delete from Movement mov where mov.code = :code")
+	void deleteByCode(@Param("code") int code);
 }

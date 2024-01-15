@@ -279,4 +279,16 @@ public class MedicalStockWardIoOperations {
 		}
 		return medicalWardsQty;
 	}
+	
+	public MovementWard getlastMovWardByWardCode(String wardCode) throws OHServiceException {	
+		return movementRepository.findLastWardMovementWithWardCode(wardCode);
+    }
+	
+	public MedicalWard getMedicalWardByWardAndMedical(String wardCode, int medical) throws OHServiceException {
+		return repository.findOneWhereCodeAndMedical(wardCode, medical);
+	}
+	
+	public void updateMedicalWard(MedicalWard medWard) throws OHServiceException {
+		repository.save(medWard);
+	}
 }

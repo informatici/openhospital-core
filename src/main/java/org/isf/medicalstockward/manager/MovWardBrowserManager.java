@@ -224,6 +224,22 @@ public class MovWardBrowserManager {
 		Collections.sort(drugPrint);
 		return drugPrint;
 	}
+	
+	public MovementWard getlastMovWardByWardCode(String wardCode) throws OHServiceException {
+		return ioOperations.getlastMovWardByWardCode(wardCode);
+	}
+	
+	public MedicalWard getMedicalWardByWardAndMedical(String wardCode, int medical) throws OHServiceException {
+		return ioOperations.getMedicalWardByWardAndMedical(wardCode, medical);
+	}
+	
+	public void deleteMovWard(MovementWard movWard) throws OHServiceException {
+		ioOperations.deleteMovementWard(movWard);
+	}
+	
+	public void updateMedicalWard(MedicalWard medWard) throws OHServiceException {
+		ioOperations.updateMedicalWard(medWard);
+	}
 
 	class ComparatorMovementWardForPrint implements Comparator<MovementWardForPrint> {
 
