@@ -30,7 +30,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WardIoOperationRepository extends JpaRepository<Ward, String> {
-	
+
 	List<Ward> findAllByOrderByDescriptionAsc();
 
 	List<Ward> findByCodeNot(String code);
@@ -41,4 +41,10 @@ public interface WardIoOperationRepository extends JpaRepository<Ward, String> {
 
 	@Query(value = "SELECT w FROM Ward w WHERE WRD_NBEDS > 0 ORDER BY WRD_NAME")
 	List<Ward> findByBedsGreaterThanZero();
+
+	@Query("select count(w) from Ward w where active=1")
+	long countAllActiveWards();
+
+	@Query("select sum(w.beds) from Ward w where active=1")
+	long countAllActiveBeds();
 }

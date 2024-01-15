@@ -37,7 +37,7 @@
 			</plugin>
 			<plugin>
 			  <artifactId>maven-surefire-plugin</artifactId>
-			  <version>3.2.3</version>
+			  <version>3.2.5</version>
 			  <dependencies>
 				<dependency>
 			        <groupId>org.junit.vintage</groupId>
@@ -203,6 +203,16 @@
 			<groupId>com.googlecode.gstreamer-java</groupId>
 			<artifactId>gstreamer-java</artifactId>
 			<version>1.6</version>
+			<exclusions>
+				<exclusion>
+					<groupId>net.java.dev.jna</groupId>
+					<artifactId>jna</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.java.dev.jna</groupId>
+					<artifactId>platform</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>commons-configuration</groupId>
@@ -225,6 +235,11 @@
 			<version>${jasperreports.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.github.oshi</groupId>
+			<artifactId>oshi-core</artifactId>
+			<version>5.8.1</version>
+		</dependency>
+		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports-fonts</artifactId>
 			<version>${jasperreports.version}</version>
@@ -237,7 +252,7 @@
 		<dependency>
 			<groupId>com.github.librepdf</groupId>
 			<artifactId>openpdf</artifactId>
-			<version>1.3.33</version>
+			<version>1.3.35</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -289,22 +304,22 @@
 		<dependency>
 			<groupId>org.dcm4che</groupId>
 			<artifactId>dcm4che-core</artifactId>
-			<version>5.31.2</version>
+			<version>5.31.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.dcm4che</groupId>
 			<artifactId>dcm4che-image</artifactId>
-			<version>5.31.2</version>
+			<version>5.31.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.dcm4che</groupId>
 			<artifactId>dcm4che-imageio</artifactId>
-			<version>5.31.2</version>
+			<version>5.31.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.dcm4che</groupId>
 			<artifactId>dcm4che-imageio-opencv</artifactId>
-			<version>5.31.2</version>
+			<version>5.31.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -468,7 +483,7 @@
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.24.2</version>
+			<version>3.25.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
