@@ -112,13 +112,13 @@ public class OpdBrowserManager {
 		} else {
 			// Check double diseases
 			if (disease2 != null && disease.getCode().equals(disease2.getCode())) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.opd.specifyingduplicatediseasesisnotallowed.fmt.msg", "1", "2")));
 			}
 			if (disease3 != null && disease.getCode().equals(disease3.getCode())) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.opd.specifyingduplicatediseasesisnotallowed.fmt.msg", "1", "3")));
 			}
 			if (disease2 != null && disease3 != null && disease2.getCode().equals(disease3.getCode())) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
+				errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.opd.specifyingduplicatediseasesisnotallowed.fmt.msg", "2", "3")));
 			}
 		}
 		try {
@@ -126,19 +126,19 @@ public class OpdBrowserManager {
 			if (disease != null) {
 				opdDisease = diseaseBrowserManager.getOPDDiseaseByCode(disease.getCode());
 				if (opdDisease == null) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifieddiseaseisnoenabledforopdservice.msg")));
+					errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.opd.specifieddiseaseisnoenabledforopdservice.fmt.msg", "1")));
 				}
 			}
 			if (disease2 != null) {
 				opdDisease = diseaseBrowserManager.getOPDDiseaseByCode(disease2.getCode());
 				if (opdDisease == null) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifieddiseaseisnoenabledforopdservice.msg")));
+					errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.opd.specifieddiseaseisnoenabledforopdservice.fmt.msg", "2")));
 				}
 			}
 			if (disease3 != null) {
 				opdDisease = diseaseBrowserManager.getOPDDiseaseByCode(disease3.getCode());
 				if (opdDisease == null) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifieddiseaseisnoenabledforopdservice.msg")));
+					errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.opd.specifieddiseaseisnoenabledforopdservice.fmt.msg", "3")));
 				}
 			}
 		} catch(OHServiceException serviceException) {
