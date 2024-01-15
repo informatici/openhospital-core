@@ -42,17 +42,17 @@ public interface MovementIoOperationRepository extends JpaRepository<Movement, I
 	Movement findAllByMedicalCodeOrderByLot_(@Param("code") Integer code);
 
 	@Query(value = "select distinct med.code from Movement mov " +
-			"join mov.medical med " +
-			"join mov.type movtype " +
-			"join mov.lot lot " +
-			"where lot.code=:lot")
+					"join mov.medical med " +
+					"join mov.type movtype " +
+					"join mov.lot lot " +
+					"where lot.code=:lot")
 	List<Integer> findAllByLot(@Param("lot") String lot);
 
 	@Query(value = "select mov from Movement mov " +
-			"join mov.type movtype " +
-			"left join mov.lot lot " +
-			"left join mov.ward ward " +
-			"where mov.refNo = :refNo order by mov.date, mov.refNo")
+					"join mov.type movtype " +
+					"left join mov.lot lot " +
+					"left join mov.ward ward " +
+					"where mov.refNo = :refNo order by mov.date, mov.refNo")
 	List<Movement> findAllByRefNo(@Param("refNo") String refNo);
 
 	List<Movement> findByLot(Lot lot);
@@ -69,4 +69,8 @@ public interface MovementIoOperationRepository extends JpaRepository<Movement, I
 	@Modifying
 	@Query(value = "delete from Movement mov where mov.code = :code")
 	void deleteByCode(@Param("code") int code);
+
+	@Query("select count(m) from Movement m where active=1")
+	long countAllActiveMovements();
+
 }

@@ -35,8 +35,8 @@ public interface MovementWardIoOperationRepository extends JpaRepository<Movemen
 
 	@Query(value = "select movWard from MovementWard movWard where movWard.wardTo.code=:idWardTo and (movWard.date>= :dateFrom and movWard.date < :dateTo)")
 	List<MovementWard> findWardMovements(@Param("idWardTo") String idWardTo,
-			@Param("dateFrom") LocalDateTime dateFrom,
-			@Param("dateTo") LocalDateTime dateTo);
+					@Param("dateFrom") LocalDateTime dateFrom,
+					@Param("dateTo") LocalDateTime dateTo);
 
 	List<MovementWard> findByPatient_code(int code);
 
@@ -45,5 +45,8 @@ public interface MovementWardIoOperationRepository extends JpaRepository<Movemen
 	
 	@Query(value = "SELECT * FROM OH_MEDICALDSRSTOCKMOVWARD WHERE MMVN_WRD_ID_A = :wardCode ORDER BY MMVN_ID DESC limit 1", nativeQuery = true)
 	MovementWard findLastWardMovementWithWardCode(@Param("wardCode") String wardCode);
+
+	@Query("select count(m) from MovementWard m where active=1")
+	long countAllActiveMovementsWard();
 
 }

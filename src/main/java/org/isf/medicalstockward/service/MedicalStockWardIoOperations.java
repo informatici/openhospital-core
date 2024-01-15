@@ -44,17 +44,19 @@ import org.springframework.transaction.annotation.Transactional;
  * @author mwithi
  */
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class MedicalStockWardIoOperations {
 
 	@Autowired
 	private MedicalStockWardIoOperationRepository repository;
+
 	@Autowired
 	private MovementWardIoOperationRepository movementRepository;
+
 	@Autowired
 	private LotIoOperationRepository lotRepository;
-	
+
 	/**
 	 * Get all {@link MovementWard}s with the specified criteria.
 	 * @param wardId the ward id.
@@ -67,15 +69,15 @@ public class MedicalStockWardIoOperations {
 		List<MovementWard> pMovementWard = new ArrayList<>();
 
 		List<Integer> pMovementWardCode = new ArrayList<>(repository.findAllWardMovement(wardId, TimeTools.truncateToSeconds(dateFrom),
-		                                                                                 TimeTools.truncateToSeconds(dateTo)));
+						TimeTools.truncateToSeconds(dateTo)));
 		for (Integer code : pMovementWardCode) {
 			MovementWard movementWard = movementRepository.findById(code).orElse(null);
 			pMovementWard.add(movementWard);
 		}
 		return pMovementWard;
 	}
-        
-    /**
+
+	/**
 	 * Get all {@link MovementWard}s with the specified criteria.
 	 * @param idwardTo the target ward id.
 	 * @param dateFrom the lower bound for the movement date range.
@@ -83,9 +85,9 @@ public class MedicalStockWardIoOperations {
 	 * @return the retrieved movements.
 	 * @throws OHServiceException if an error occurs retrieving the movements.
 	 */
-    public List<MovementWard> getWardMovementsToWard(String idwardTo, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
-	    return movementRepository.findWardMovements(idwardTo, TimeTools.truncateToSeconds(dateFrom), TimeTools.truncateToSeconds(dateTo));
-    }
+	public List<MovementWard> getWardMovementsToWard(String idwardTo, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+		return movementRepository.findWardMovements(idwardTo, TimeTools.truncateToSeconds(dateFrom), TimeTools.truncateToSeconds(dateTo));
+	}
 
 	/**
 	 * Gets the current quantity for the specified {@link Medical} and specified {@link Ward}.
@@ -102,7 +104,7 @@ public class MedicalStockWardIoOperations {
 		}
 		return (int) (mainQuantity != null ? mainQuantity : 0.0);
 	}
-	
+
 	/**
 	 * Gets the current quantity for the specified {@link Ward} and {@link Lot}.
 	 * @param ward - if {@code null} the quantity is counted for the whole hospital
@@ -255,7 +257,6 @@ public class MedicalStockWardIoOperations {
 		return movementRepository.findWardMovementPat(patId);
 	}
 
-
 	/**
 	 * Gets all the {@link MedicalWard}s associated to the specified ward summarized by lot
 	 * (total quantity, regardless the lot)
@@ -278,6 +279,16 @@ public class MedicalStockWardIoOperations {
 			}
 		}
 		return medicalWardsQty;
+	}
+
+	/**
+	 * Count active {@link MovementWard}
+	 * 
+	 * @return the number of recorded {@link MovementWard}
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveMovementsWard() {
+		return this.movementRepository.countAllActiveMovementsWard();
 	}
 	
 	public MovementWard getlastMovWardByWardCode(String wardCode) throws OHServiceException {	

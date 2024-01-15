@@ -40,8 +40,16 @@
 	</bean>
 
 
-	<bean id="smsProperties"
-		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+	<bean id="telemetryProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath:telemetry.properties</value>
+			</list>
+		</property>
+		<property name="ignoreResourceNotFound" value="true" />
+	</bean>
+	
+	<bean id="smsProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="locations">
 			<list>
 				<value>classpath:sms.properties</value>
