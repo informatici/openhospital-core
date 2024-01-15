@@ -51,10 +51,10 @@ public class AdmissionBrowserManager {
 
 	@Autowired
 	private AdmissionIoOperations ioOperations;
-	
+
 	@Autowired
 	private DiseaseBrowserManager diseaseManager;
-	
+
 	// TODO: to centralize
 	protected static final int DEFAULT_PAGE_SIZE = 80;
 
@@ -140,7 +140,7 @@ public class AdmissionBrowserManager {
 	public List<Admission> getAdmissions(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return ioOperations.getAdmissionsByAdmissionDate(dateFrom, dateTo, PageRequest.of(0, DEFAULT_PAGE_SIZE));
 	}
-	
+
 	/**
 	 * Method that returns the list of Admissions not logically deleted
 	 * within the specified date range, divided by pages
@@ -168,7 +168,7 @@ public class AdmissionBrowserManager {
 	public List<Admission> getAdmissionsByDate(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return ioOperations.getAdmissionsByAdmDate(dateFrom, dateTo);
 	}
-	
+
 	/**
 	 * Method that returns the list of completed Admissions (Discharges) not logically deleted
 	 * within the specified date range, divided by pages
@@ -182,7 +182,7 @@ public class AdmissionBrowserManager {
 	public List<Admission> getDischarges(LocalDateTime dateFrom, LocalDateTime dateTo, int page, int size) throws OHServiceException {
 		return ioOperations.getAdmissionsByDischargeDate(dateFrom, dateTo, PageRequest.of(page, size));
 	}
-	
+
 	/**
 	 * Method that returns the list of completed Admissions (Discharges) not logically deleted
 	 * within the specified date range, divided by pages
@@ -415,119 +415,139 @@ public class AdmissionBrowserManager {
 									DateTimeFormatter.ISO_LOCAL_DATE.format(invalidEnd))));
 				}
 			}
-			List<Disease> allowedDiseaseIpdOut = diseaseManager.getDiseaseIpdOut();
-			List<Disease> diseaseIpdOuts1 = allowedDiseaseIpdOut .stream().filter(dis -> dis.equals(admission.getDiseaseOut1())).collect(Collectors.toList());
-			List<Disease> diseaseIpdOuts2 = allowedDiseaseIpdOut .stream().filter(dis -> dis.equals(admission.getDiseaseOut2())).collect(Collectors.toList());
-			List<Disease> diseaseIpdOuts3 = allowedDiseaseIpdOut .stream().filter(dis -> dis.equals(admission.getDiseaseOut3())).collect(Collectors.toList());
-			if (admission.getDiseaseOut1() == null && admission.getDisDate() != null) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseselectatleastfirstdiagnosisout.msg")));
-			} else if (admission.getDiseaseOut1() != null && admission.getDisDate() == null) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertadischargedate.msg")));
-			}
-			if (admission.getDiseaseOut1() != null && diseaseIpdOuts1.isEmpty()) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisout1isnotallowed.msg")));
-			}
-			if (admission.getDiseaseOut2() != null && diseaseIpdOuts2.isEmpty()) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisout2isnotallowed.msg")));
-			}
-			if (admission.getDiseaseOut3() != null && diseaseIpdOuts3.isEmpty()) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisout3isnotallowed.msg")));
-			}
-			Float f = admission.getWeight();
-			if (f != null && f < 0.0f) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidweightvalue.msg")));
+		}
+		List<Disease> allowedDiseaseIpdOut = diseaseManager.getDiseaseIpdOut();
+		Disease diseaseOut1 = admission.getDiseaseOut1();
+		Disease diseaseOut2 = admission.getDiseaseOut2();
+		Disease diseaseOut3 = admission.getDiseaseOut3();
+		if (diseaseOut1 == null && admission.getDisDate() != null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseselectatleastfirstdiagnosisout.msg")));
+		} else if (diseaseOut1 != null && admission.getDisDate() == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertadischargedate.msg")));
+		}
+		if (admission.getDisDate() != null && diseaseOut1 != null) {
+
+			// Check duplicated diseases
+			if (checkDuplicatedDiseaseOut(diseaseOut1, diseaseOut2, diseaseOut3)) {
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.specifyingduplicatediseasesisnotallowed.msg")));
 			}
 
-			if (ward != null && "M".equalsIgnoreCase(ward.getCode())) {
+			// Check allowed diseases
+			List<Disease> diseaseIpdOuts1 = allowedDiseaseIpdOut.stream().filter(dis -> dis.equals(diseaseOut1)).collect(Collectors.toList());
+			List<Disease> diseaseIpdOuts2 = allowedDiseaseIpdOut.stream().filter(dis -> dis.equals(diseaseOut2)).collect(Collectors.toList());
+			List<Disease> diseaseIpdOuts3 = allowedDiseaseIpdOut.stream().filter(dis -> dis.equals(diseaseOut3)).collect(Collectors.toList());
 
-				LocalDateTime visitDate = admission.getVisitDate();
-				if (visitDate != null) {
-					LocalDateTime limit;
-					if (admission.getDisDate() == null) {
-						limit = today;
-					} else {
-						limit = admission.getDisDate();
-					}
-					if (visitDate.isBefore(dateIn) || visitDate.isAfter(limit)) {
-						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidvisitdate.msg")));
-					}
+			if (diseaseOut1 != null && diseaseIpdOuts1.isEmpty()) {
+				errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.admission.specifieddiseaseoutisnoenabledforipd.fmt.msg", "1")));
+			}
+			if (diseaseOut2 != null && diseaseIpdOuts2.isEmpty()) {
+				errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.admission.specifieddiseaseoutisnoenabledforipd.fmt.msg", "2")));
+			}
+			if (diseaseOut3 != null && diseaseIpdOuts3.isEmpty()) {
+				errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.admission.specifieddiseaseoutisnoenabledforipd.fmt.msg", "3")));
+			}
+		}
+
+		Float f = admission.getWeight();
+		if (f != null && f < 0.0f) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidweightvalue.msg")));
+		}
+
+		if (ward != null && "M".equalsIgnoreCase(ward.getCode())) {
+
+			LocalDateTime visitDate = admission.getVisitDate();
+			if (visitDate != null) {
+				LocalDateTime limit;
+				if (admission.getDisDate() == null) {
+					limit = today;
+				} else {
+					limit = admission.getDisDate();
+				}
+				if (visitDate.isBefore(dateIn) || visitDate.isAfter(limit)) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidvisitdate.msg")));
+				}
+			}
+
+			if (admission.getDeliveryDate() != null) {
+				LocalDateTime deliveryDate = admission.getDeliveryDate();
+
+				// date control
+				LocalDateTime start;
+				if (admission.getVisitDate() == null) {
+					start = admission.getAdmDate();
+				} else {
+					start = admission.getVisitDate();
 				}
 
-				if (admission.getDeliveryDate() != null) {
-					LocalDateTime deliveryDate = admission.getDeliveryDate();
-
-					// date control
-					LocalDateTime start;
-					if (admission.getVisitDate() == null) {
-						start = admission.getAdmDate();
-					} else {
-						start = admission.getVisitDate();
-					}
-
-					LocalDateTime limit;
-					if (admission.getDisDate() == null) {
-						limit = today;
-					} else {
-						limit = admission.getDisDate();
-					}
-
-					if (deliveryDate.isBefore(start) || deliveryDate.isAfter(limit)) {
-						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavaliddeliverydate.msg")));
-					}
+				LocalDateTime limit;
+				if (admission.getDisDate() == null) {
+					limit = today;
+				} else {
+					limit = admission.getDisDate();
 				}
 
-				LocalDateTime ctrl1Date = admission.getCtrlDate1();
-				if (ctrl1Date != null) {
-					// date control
-					if (admission.getDeliveryDate() == null) {
-						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.controln1datenodeliverydatefound.msg")));
-					}
-					LocalDateTime limit;
-					if (admission.getDisDate() == null) {
-						limit = today;
-					} else {
-						limit = admission.getDisDate();
-					}
-					if (ctrl1Date.isBefore(admission.getDeliveryDate()) || ctrl1Date.isAfter(limit)) {
-						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidcontroln1date.msg")));
-					}
+				if (deliveryDate.isBefore(start) || deliveryDate.isAfter(limit)) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavaliddeliverydate.msg")));
 				}
+			}
 
-				LocalDateTime ctrl2Date = admission.getCtrlDate2();
-				if (ctrl2Date != null) {
-					if (admission.getCtrlDate1() == null) {
-						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.controldaten2controldaten1notfound.msg")));
-					}
-					// date control
-					LocalDateTime limit;
-					if (admission.getDisDate() == null) {
-						limit = today;
-					} else {
-						limit = admission.getDisDate();
-					}
-					if (ctrl1Date != null && (ctrl2Date.isBefore(ctrl1Date) || ctrl2Date.isAfter(limit))) {
-						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidcontroln2date.msg")));
-					}
+			LocalDateTime ctrl1Date = admission.getCtrlDate1();
+			if (ctrl1Date != null) {
+				// date control
+				if (admission.getDeliveryDate() == null) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.controln1datenodeliverydatefound.msg")));
 				}
-				LocalDateTime abortDate = admission.getAbortDate();
-				if (abortDate != null) {
-					// date control
-					LocalDateTime limit;
-					if (admission.getDisDate() == null) {
-						limit = today;
-					} else {
-						limit = admission.getDisDate();
-					}
-					if (ctrl2Date != null && abortDate.isBefore(ctrl2Date) || ctrl1Date != null && abortDate.isBefore(ctrl1Date)
-									|| abortDate.isBefore(visitDate)
-									|| abortDate.isAfter(limit)) {
-						errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidabortdate.msg")));
-					}
+				LocalDateTime limit;
+				if (admission.getDisDate() == null) {
+					limit = today;
+				} else {
+					limit = admission.getDisDate();
+				}
+				if (ctrl1Date.isBefore(admission.getDeliveryDate()) || ctrl1Date.isAfter(limit)) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidcontroln1date.msg")));
+				}
+			}
+
+			LocalDateTime ctrl2Date = admission.getCtrlDate2();
+			if (ctrl2Date != null) {
+				if (admission.getCtrlDate1() == null) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.controldaten2controldaten1notfound.msg")));
+				}
+				// date control
+				LocalDateTime limit;
+				if (admission.getDisDate() == null) {
+					limit = today;
+				} else {
+					limit = admission.getDisDate();
+				}
+				if (ctrl1Date != null && (ctrl2Date.isBefore(ctrl1Date) || ctrl2Date.isAfter(limit))) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidcontroln2date.msg")));
+				}
+			}
+			LocalDateTime abortDate = admission.getAbortDate();
+			if (abortDate != null) {
+				// date control
+				LocalDateTime limit;
+				if (admission.getDisDate() == null) {
+					limit = today;
+				} else {
+					limit = admission.getDisDate();
+				}
+				if (ctrl2Date != null && abortDate.isBefore(ctrl2Date) || ctrl1Date != null && abortDate.isBefore(ctrl1Date)
+								|| abortDate.isBefore(visitDate)
+								|| abortDate.isAfter(limit)) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.pleaseinsertavalidabortdate.msg")));
 				}
 			}
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
 		}
+	}
+
+	private boolean checkDuplicatedDiseaseOut(Disease diseaseOut1, Disease diseaseOut2, Disease diseaseOut3) {
+		return (diseaseOut2 != null && diseaseOut1.getCode().equals(diseaseOut2.getCode()))
+						|| (diseaseOut3 != null && diseaseOut1.getCode().equals(diseaseOut3.getCode()))
+						|| (diseaseOut2 != null && diseaseOut3 != null && diseaseOut2.getCode().equals(diseaseOut3.getCode()));
 	}
 }
