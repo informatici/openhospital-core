@@ -25,7 +25,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.isf.admission.model.Admission;
 import org.isf.admission.model.AdmittedPatient;
@@ -268,7 +267,7 @@ public class AdmissionBrowserManager {
 	 * Sets an admission record as deleted.
 	 *
 	 * @param admissionId the admission id.
-	 * @return return the "deleted" admission or null if the admissionis not found
+	 * @return return the "deleted" admission or null if the admission is not found
 	 * @throws OHServiceException
 	 */
 	public Admission setDeleted(int admissionId) throws OHServiceException {
@@ -347,11 +346,12 @@ public class AdmissionBrowserManager {
 				}
 			}
 		}
-		if (admission.getDiseaseIn() == null) {
+		Disease diseaseIn = admission.getDiseaseIn();
+		if (diseaseIn == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisincannotbeempty.msg")));
 		} else {
-			List<Disease> diseases = diseaseManager.getDiseaseIpdIn().stream().filter(dis -> dis.equals(admission.getDiseaseIn())).collect(Collectors.toList());
-			if (diseases.isEmpty()) {
+			Disease disease = diseaseManager.getIpdInDiseaseByCode(diseaseIn.getCode());
+			if (disease == null) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.diagnosisinisnotallowed.msg")));
 			}
 		}
@@ -416,7 +416,6 @@ public class AdmissionBrowserManager {
 				}
 			}
 		}
-		List<Disease> allowedDiseaseIpdOut = diseaseManager.getDiseaseIpdOut();
 		Disease diseaseOut1 = admission.getDiseaseOut1();
 		Disease diseaseOut2 = admission.getDiseaseOut2();
 		Disease diseaseOut3 = admission.getDiseaseOut3();
@@ -432,19 +431,24 @@ public class AdmissionBrowserManager {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.admission.specifyingduplicatediseasesisnotallowed.msg")));
 			}
 
-			// Check allowed diseases
-			List<Disease> diseaseIpdOuts1 = allowedDiseaseIpdOut.stream().filter(dis -> dis.equals(diseaseOut1)).collect(Collectors.toList());
-			List<Disease> diseaseIpdOuts2 = allowedDiseaseIpdOut.stream().filter(dis -> dis.equals(diseaseOut2)).collect(Collectors.toList());
-			List<Disease> diseaseIpdOuts3 = allowedDiseaseIpdOut.stream().filter(dis -> dis.equals(diseaseOut3)).collect(Collectors.toList());
-
-			if (diseaseOut1 != null && diseaseIpdOuts1.isEmpty()) {
-				errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.admission.specifieddiseaseoutisnoenabledforipd.fmt.msg", "1")));
+			Disease disease;
+			if (diseaseOut1 != null) {
+				disease = diseaseManager.getIpdOutDiseaseByCode(diseaseOut1.getCode());
+				if (disease == null) {
+					errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.opd.specifieddiseaseisnoenabledforopdservice.fmt.msg", "1")));
+				}
 			}
-			if (diseaseOut2 != null && diseaseIpdOuts2.isEmpty()) {
-				errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.admission.specifieddiseaseoutisnoenabledforipd.fmt.msg", "2")));
+			if (diseaseOut2 != null) {
+				disease = diseaseManager.getIpdOutDiseaseByCode(diseaseOut2.getCode());
+				if (disease == null) {
+					errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.opd.specifieddiseaseisnoenabledforopdservice.fmt.msg", "2")));
+				}
 			}
-			if (diseaseOut3 != null && diseaseIpdOuts3.isEmpty()) {
-				errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.admission.specifieddiseaseoutisnoenabledforipd.fmt.msg", "3")));
+			if (diseaseOut3 != null) {
+				disease = diseaseManager.getIpdOutDiseaseByCode(diseaseOut3.getCode());
+				if (disease == null) {
+					errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.opd.specifieddiseaseisnoenabledforopdservice.fmt.msg", "3")));
+				}
 			}
 		}
 
