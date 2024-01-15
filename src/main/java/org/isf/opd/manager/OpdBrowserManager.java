@@ -112,13 +112,13 @@ public class OpdBrowserManager {
 		} else {
 			// Check double diseases
 			if (disease2 != null && disease.getCode().equals(disease2.getCode())) {
-				errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.opd.specifyingduplicatediseasesisnotallowed.fmt.msg", "1", "2")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
 			}
 			if (disease3 != null && disease.getCode().equals(disease3.getCode())) {
-				errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.opd.specifyingduplicatediseasesisnotallowed.fmt.msg", "1", "3")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
 			}
 			if (disease2 != null && disease3 != null && disease2.getCode().equals(disease3.getCode())) {
-				errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.opd.specifyingduplicatediseasesisnotallowed.fmt.msg", "2", "3")));
+				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
 			}
 		}
 		try {
