@@ -47,7 +47,18 @@ public class DiseaseIoOperations {
 	public Disease getDiseaseByCode(String code) throws OHServiceException {
 		return repository.findOneByCode(code);
 	}
-	
+
+	/**
+	 * Determine if the disease is one of the OPD diseases
+	 *
+	 * @param code the disease code
+	 * @return the Disease if it is an OPD release disease, {@code null} otherwise
+	 * @throws OHServiceException
+	 */
+	public Disease getOPDDiseaseByCode(String code) throws OHServiceException {
+		return repository.findOpdByCode(code);
+	}
+
 	/**
 	 * Retrieves stored disease with the specified search parameters. 
 	 * Booleans {@code opd}, {@code ipdIn} and {@code ipdOut} in AND logic between
