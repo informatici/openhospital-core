@@ -23,6 +23,10 @@ package org.isf.medicalstock.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -30,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -1193,6 +1198,13 @@ public class Tests extends OHCoreTestCase {
 		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
 		assertThat(movement).isNotNull();
 		assertThat(movement.getSupplier()).isEqualTo(movement.getOrigin());
+	}
+	
+	@Test
+	public void testDeleteLastMovement() throws Exception {
+		int code = setupTestMovement(false);
+		Optional<Movement> movement = movementIoOperationRepository.findById(code); 
+		assertAll(()-> movBrowserManager.deleteLastMovement(movement.get()));
 	}
 
 	private String setupTestLot(boolean usingSet) throws OHException {

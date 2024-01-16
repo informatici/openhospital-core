@@ -35,7 +35,6 @@ import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.medicalstockward.manager.MovWardBrowserManager;
 import org.isf.medicalstockward.model.MedicalWard;
-import org.isf.medicalstockward.model.MovementWard;
 import org.isf.medstockmovtype.manager.MedicalDsrStockMovementTypeBrowserManager;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.utils.exception.OHDataValidationException;
@@ -63,10 +62,14 @@ public class MovBrowserManager {
 	@Autowired
 	private MovWardBrowserManager movWardBrowserManager;
 
-	public MovBrowserManager(MedicalStockIoOperations ioOperations, LotIoOperationRepository lotRepository, MedicalsIoOperations medicalsIoOperation) {
+	public MovBrowserManager(MedicalStockIoOperations ioOperations, LotIoOperationRepository lotRepository, MedicalsIoOperations medicalsIoOperation,
+					MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager, MovWardBrowserManager movWardBrowserManager) {
 		this.ioOperations = ioOperations;
 		this.lotRepository = lotRepository;
 		this.medicalsIoOperation = medicalsIoOperation;
+		this.medicalDsrStockMovTypeManager = medicalDsrStockMovTypeManager;
+		this.movWardBrowserManager = movWardBrowserManager;
+		
 	}
 
 	/**
@@ -151,62 +154,64 @@ public class MovBrowserManager {
 			}
 		}
 	}
+	
+	/**
+	 * Get the last Movement.
+	 *
+	 *@return the retrieved movement.
+	 * @throws OHServiceException
+	 */
+	public Movement getLastMovement() throws OHServiceException {
+		return ioOperations.getLastMovement();
+	}
 
 	/**
-	 * Delete the last Movement in Medical Stock.
+	 * Delete the last Movement.
 	 *
 	 * @throws OHServiceException
 	 */
 	@Transactional
-	public void deleteLastMovement() throws OHDataValidationException, OHServiceException {
-		
-		Movement lastMovement = ioOperations.getLastMovement();
-		
-		if (lastMovement == null) {
-			throw new OHDataValidationException(
-							new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.lastmovementnotfound.msg")));
-		} else {
-			MovementType movType = medicalDsrStockMovTypeManager.getMovementType(lastMovement.getType().getCode());
+	public void deleteLastMovement(Movement lastMovement) throws OHServiceException {
+
+		MovementType movType = medicalDsrStockMovTypeManager.getMovementType(lastMovement.getType().getCode());
 			
-			if (movType.getType().equals("+")) {
+		if (movType.getType().equals("+")) {
+			Lot lot = lastMovement.getLot();
+			String lotCode = lot.getCode();
+			int code = lastMovement.getCode();
+			Medical medical = lastMovement.getMedical();
+			int quantity = lastMovement.getQuantity();
 				
-				Lot lot = lastMovement.getLot();
-				String lotCode = lot.getCode();
-				int code = lastMovement.getCode();
-				Medical medical = lastMovement.getMedical();
-				int quantity = lastMovement.getQuantity();
+			medical.setInqty(medical.getInqty() - quantity);
+			medicalsIoOperation.updateMedical(medical);
 				
-				medical.setInqty(medical.getInqty() - quantity);
-				medicalsIoOperation.updateMedical(medical);
+			List<Integer> lastMovWithSameLot = ioOperations.getMedicalsFromLot(lotCode);
 				
-				List<Integer> lastMovWithSameLot = ioOperations.getMedicalsFromLot(lotCode);
-				
-				if (lastMovWithSameLot.size() == 1) {
-					lotRepository.deleteById(lotCode);
-				}
-				
-				ioOperations.deleteMovement(code);
-				
-			} else {
-				
-				Ward ward = lastMovement.getWard();
-				String wardCode = ward.getCode();
-				Medical medical = lastMovement.getMedical();
-				int code = lastMovement.getCode();
-				int quantity = lastMovement.getQuantity();
-				int medicalCode = medical.getCode();
-				String lotCode = lastMovement.getLot().getCode();
-				
-				MedicalWard medWard = movWardBrowserManager.getMedicalWardByWardAndMedical(wardCode, medicalCode, lotCode);
-				
-				medWard.setIn_quantity(medWard.getIn_quantity() - quantity);
-				movWardBrowserManager.updateMedicalWard(medWard);
-				
-				medical.setInqty(medical.getInqty() - quantity);
-				medicalsIoOperation.updateMedical(medical);
-				
-				ioOperations.deleteMovement(code);
+			if (lastMovWithSameLot.size() == 1) {
+				lotRepository.deleteById(lotCode);
 			}
+				
+			ioOperations.deleteMovement(code);
+				
+		} else {
+				
+			Ward ward = lastMovement.getWard();
+			String wardCode = ward.getCode();
+			Medical medical = lastMovement.getMedical();
+			int code = lastMovement.getCode();
+			int quantity = lastMovement.getQuantity();
+			int medicalCode = medical.getCode();
+			String lotCode = lastMovement.getLot().getCode();
+				
+			MedicalWard medWard = movWardBrowserManager.getMedicalWardByWardAndMedical(wardCode, medicalCode, lotCode);
+				
+			medWard.setIn_quantity(medWard.getIn_quantity() - quantity);
+			movWardBrowserManager.updateMedicalWard(medWard);
+				
+			medical.setInqty(medical.getInqty() - quantity);
+			medicalsIoOperation.updateMedical(medical);
+				
+			ioOperations.deleteMovement(code);
 		}
 	}
 }
