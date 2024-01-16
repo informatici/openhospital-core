@@ -110,6 +110,7 @@ public class MedicalStockIoOperations {
 			return dischargingMovements;
 		}
 		for (Lot lot : lots) {
+			String lotCode = lot.getCode();
 			Movement splitMovement = new Movement(medical, movement.getType(), movement.getWard(),
 							null, // lot to be set
 							movement.getDate(),
@@ -120,7 +121,7 @@ public class MedicalStockIoOperations {
 			if (qtLot < qty) {
 				splitMovement.setQuantity(qtLot);
 				try {
-					dischargingMovements.add(storeMovement(splitMovement, lot.getCode()));
+					dischargingMovements.add(storeMovement(splitMovement, lotCode));
 					// medical stock movement inserted updates quantity of the medical
 					updateStockQuantity(splitMovement);
 				} catch (OHServiceException serviceException) {
@@ -130,7 +131,7 @@ public class MedicalStockIoOperations {
 			} else {
 				splitMovement.setQuantity(qty);
 				try {
-					dischargingMovements.add(storeMovement(splitMovement, lot.getCode()));
+					dischargingMovements.add(storeMovement(splitMovement, lotCode));
 					// medical stock movement inserted updates quantity of the medical
 					updateStockQuantity(splitMovement);
 				} catch (OHServiceException serviceException) {
