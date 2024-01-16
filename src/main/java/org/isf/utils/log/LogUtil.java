@@ -31,6 +31,10 @@ import org.apache.log4j.Logger;
 
 public class LogUtil {
 
+	private LogUtil() {
+		super();
+	}
+
 	/**
 	 * Gets the application log file ({@code openhospital.log}) absolute path defined in the {@code log4j.properties}
 	 * 
@@ -40,7 +44,7 @@ public class LogUtil {
 		Logger rootLogger = Logger.getRootLogger();
 		Appender appender = rootLogger.getAppender("RollingFile");
 
-		if (appender != null && appender instanceof DailyRollingFileAppender) {
+		if (appender instanceof DailyRollingFileAppender) {
 			DailyRollingFileAppender rollingFileAppender = (DailyRollingFileAppender) appender;
 			String relativePath = rollingFileAppender.getFile();
 			String absolutePath = new File(relativePath).getAbsolutePath();
@@ -53,7 +57,6 @@ public class LogUtil {
 	/**
 	 * Opens the application log file ({@code openhospital.log}) folder with the System default file explorer.
 	 *
-	 * @param path the path
 	 * @throws IOException 
 	 */
 	public static void openLogFileLocation() throws IOException {
