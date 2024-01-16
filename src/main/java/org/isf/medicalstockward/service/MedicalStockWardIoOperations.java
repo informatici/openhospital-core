@@ -291,14 +291,25 @@ public class MedicalStockWardIoOperations {
 		return this.movementRepository.countAllActiveMovementsWard();
 	}
 	
-	public MovementWard getlastMovWardByWardCode(String wardCode) throws OHServiceException {	
-		return movementRepository.findLastWardMovementWithWardCode(wardCode);
-    }
-	
-	public MedicalWard getMedicalWardByWardAndMedical(String wardCode, int medical) throws OHServiceException {
-		return repository.findOneWhereCodeAndMedical(wardCode, medical);
+	/**
+	 * Get the {@link Medical} associated to specified criteria.
+	 * @param wardCode the ward code.
+	 * @param medical the medical code
+	 * @param lotCode the lot code
+	 * 
+	 * @return the retrieved medical.
+	 * @throws OHServiceException if an error occurs during the medical retrieving.
+	 */
+	public MedicalWard getMedicalWardByWardAndMedical(String wardCode, int medical, String lot) throws OHServiceException {
+		return repository.findOneWhereCodeAndMedicalAndLot(wardCode, medical, lot);
 	}
 	
+	/**
+	 * Updates the specified {@link MedicalWard}.
+	 * @param medWard the medical ward to update.
+	 * @return the updated {@link MedicalWard} object.
+	 * @throws OHServiceException if an error occurs during the update.
+	 */
 	public void updateMedicalWard(MedicalWard medWard) throws OHServiceException {
 		repository.save(medWard);
 	}

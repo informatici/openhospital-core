@@ -225,18 +225,35 @@ public class MovWardBrowserManager {
 		return drugPrint;
 	}
 	
-	public MovementWard getlastMovWardByWardCode(String wardCode) throws OHServiceException {
-		return ioOperations.getlastMovWardByWardCode(wardCode);
+	/**
+	 * Get the  MedicalWard for the specified criteria.
+	 *
+	 * @param wardCode - the ward id  
+	 * @param medical - the mecical id 
+	 * @param lot - the lot id
+	 * @return the retrieved medical.
+	 * @throws OHServiceException if an error occurs retrieving the medical.
+	 */
+	public MedicalWard getMedicalWardByWardAndMedical(String wardCode, int medical, String lotCode) throws OHServiceException {
+		return ioOperations.getMedicalWardByWardAndMedical(wardCode, medical, lotCode);
 	}
 	
-	public MedicalWard getMedicalWardByWardAndMedical(String wardCode, int medical) throws OHServiceException {
-		return ioOperations.getMedicalWardByWardAndMedical(wardCode, medical);
-	}
-	
+	/**
+	 * Delete the  MovementWard.
+	 *
+	 * @param movWard - the MovementWard to delete. 
+	 * @throws OHServiceException.
+	 */
 	public void deleteMovWard(MovementWard movWard) throws OHServiceException {
 		ioOperations.deleteMovementWard(movWard);
 	}
 	
+	/**
+	 * Update the  MedicalWard.
+	 *
+	 * @param MedicalWard - the MedicalWard to update. 
+	 * @throws OHServiceException.
+	 */
 	public void updateMedicalWard(MedicalWard medWard) throws OHServiceException {
 		ioOperations.updateMedicalWard(medWard);
 	}

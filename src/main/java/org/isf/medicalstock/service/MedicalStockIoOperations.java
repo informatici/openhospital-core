@@ -498,10 +498,21 @@ public class MedicalStockIoOperations {
 		return movRepository.findAllByRefNo(refNo);
 	}
 	
+	/**
+	 * Retrieves the last movement.
+	 * 
+	 * @return the retrieved movement.
+	 * @throws OHServiceException 
+	 */
 	public Movement getLastMovement() throws OHServiceException {
 		return movRepository.findLastMovement();
 	}
 	
+	/**
+	 * Delete the movement associated to the specified code.
+	 * 
+	 * @throws OHServiceException 
+	 */
 	public void deleteMovement(int code) throws OHServiceException {
 		movRepository.deleteByCode(code);
 	}
