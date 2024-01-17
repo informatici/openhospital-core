@@ -23,7 +23,9 @@ package org.isf.medicalstock.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -354,7 +356,7 @@ public class MedicalStockIoOperations {
 	 */
 	public List<Movement> getMovements(String wardId, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		List<Movement> pMovement = new ArrayList<>();
-         	// TODO: investigate whether findMovementWhereDatesAndId() could return a List<Movement> directly 
+		// TODO: investigate whether findMovementWhereDatesAndId() could return a List<Movement> directly
 		// to remove the need to fetch the movements later in the loop below
 		List<Integer> pMovementCode = movRepository.findMovementWhereDatesAndId(wardId, TimeTools.truncateToSeconds(dateFrom),
 						TimeTools.truncateToSeconds(dateTo));
@@ -460,13 +462,46 @@ public class MedicalStockIoOperations {
 	 */
 	public List<Lot> getLotsByMedical(Medical medical) throws OHServiceException {
 		List<Lot> lots = lotRepository.findByMedicalOrderByDueDate(medical.getCode());
-		// retrieve quantities
-		lots.forEach(lot -> {
-			lot.setMainStoreQuantity(lotRepository.getMainStoreQuantity(lot));
-			lot.setWardsTotalQuantity(lotRepository.getWardsTotalQuantity(lot));
-		});
-		// remove empty lots
-		return lots.stream().filter(lot -> lot.getMainStoreQuantity() > 0).collect(Collectors.toList());
+
+		if (lots.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		// Get all lot IDs
+		List<String> lotCodes = lots.stream().map(Lot::getCode).collect(Collectors.toList());
+
+		// Retrieve quantities in batch
+		List<Object[]> mainStoreQuantities = lotRepository.getMainStoreQuantities(lotCodes);
+		List<Object[]> wardsTotalQuantities = lotRepository.getWardsTotalQuantities(lotCodes);
+
+		// Process mainStoreQuantities and update lots
+		for (Object[] result : mainStoreQuantities) {
+			String lotCode = (String) result[0];
+			Integer mainStoreQuantity = ((Long) result[1]).intValue();
+
+			// Find the corresponding lot in the lots list
+			Optional<Lot> matchingLot = lots.stream().filter(lot -> lot.getCode().equals(lotCode)).findFirst();
+
+			// Update the lot if found
+			matchingLot.ifPresent(lot -> lot.setMainStoreQuantity(mainStoreQuantity));
+		}
+
+		// Process wardsTotalQuantities and update lots
+		for (Object[] result : wardsTotalQuantities) {
+			String lotCode = (String) result[0];
+			Double wardsTotalQuantity = (Double) result[1];
+
+			// Find the corresponding lot in the lots list
+			Optional<Lot> matchingLot = lots.stream().filter(lot -> lot.getCode().equals(lotCode)).findFirst();
+
+			// Update the lot if found
+			matchingLot.ifPresent(lot -> lot.setWardsTotalQuantity(wardsTotalQuantity));
+		}
+
+		// Remove empty lots
+		lots.removeIf(lot -> lot.getMainStoreQuantity() <= 0);
+
+		return lots;
 	}
 
 	/**
