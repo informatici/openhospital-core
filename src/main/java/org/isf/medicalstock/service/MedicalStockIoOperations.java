@@ -41,6 +41,8 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +58,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class MedicalStockIoOperations {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(MedicalStockIoOperations.class);
 
 	@Autowired
 	private MovementIoOperationRepository movRepository;
@@ -98,12 +102,18 @@ public class MedicalStockIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<Movement> newAutomaticDischargingMovement(Movement movement) throws OHServiceException {
-		List<Lot> lots = getLotsByMedical(movement.getMedical());
-
-		int qty = movement.getQuantity(); // movement initial quantity
 		List<Movement> dischargingMovements = new ArrayList<>();
+		List<Lot> lots = getLotsByMedical(movement.getMedical());
+		Medical medical = movement.getMedical();
+		int qty = movement.getQuantity(); // movement initial quantity
+
+		if (lots.isEmpty()) {
+			LOGGER.warn("No lots with available quantity found for medical {}", medical.getDescription());
+			return dischargingMovements;
+		}
 		for (Lot lot : lots) {
-			Movement splitMovement = new Movement(movement.getMedical(), movement.getType(), movement.getWard(),
+			String lotCode = lot.getCode();
+			Movement splitMovement = new Movement(medical, movement.getType(), movement.getWard(),
 							null, // lot to be set
 							movement.getDate(),
 							qty, // quantity can remain the same or changed if greater than lot quantity
@@ -113,7 +123,7 @@ public class MedicalStockIoOperations {
 			if (qtLot < qty) {
 				splitMovement.setQuantity(qtLot);
 				try {
-					dischargingMovements.add(storeMovement(splitMovement, lot.getCode()));
+					dischargingMovements.add(storeMovement(splitMovement, lotCode));
 					// medical stock movement inserted updates quantity of the medical
 					updateStockQuantity(splitMovement);
 				} catch (OHServiceException serviceException) {
@@ -123,7 +133,7 @@ public class MedicalStockIoOperations {
 			} else {
 				splitMovement.setQuantity(qty);
 				try {
-					dischargingMovements.add(storeMovement(splitMovement, lot.getCode()));
+					dischargingMovements.add(storeMovement(splitMovement, lotCode));
 					// medical stock movement inserted updates quantity of the medical
 					updateStockQuantity(splitMovement);
 				} catch (OHServiceException serviceException) {
