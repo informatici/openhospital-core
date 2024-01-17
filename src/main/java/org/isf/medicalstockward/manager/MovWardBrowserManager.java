@@ -251,7 +251,7 @@ public class MovWardBrowserManager {
 	/**
 	 * Updates the  MedicalWard.
 	 *
-	 * @param MedicalWard - the MedicalWard to update. 
+	 * @param medWard - the MedicalWard to update. 
 	 * @throws OHServiceException.
 	 */
 	public MedicalWard updateMedicalWard(MedicalWard medWard) throws OHServiceException {
