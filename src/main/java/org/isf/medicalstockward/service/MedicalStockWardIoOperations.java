@@ -292,8 +292,8 @@ public class MedicalStockWardIoOperations {
 	}
 	
 	/**
-	 * Get the {@link Medical} associated to specified criteria.
-	 * @param wardCode the ward code.
+	 * Get the {@link MedicalWard} associated to specified criteria.
+	 * @param wardCode the ward code
 	 * @param medical the medical code
 	 * @param lotCode the lot code
 	 * 
@@ -306,7 +306,7 @@ public class MedicalStockWardIoOperations {
 	
 	/**
 	 * Updates the specified {@link MedicalWard}.
-	 * @param medWard the medical ward to update.
+	 * @param medWard the medical ward to update
 	 * @return the updated {@link MedicalWard} object.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
@@ -316,7 +316,7 @@ public class MedicalStockWardIoOperations {
 
 	/**
 	 * Deletes the specified {@link MedicalWard}.
-	 * @param medWard the medical ward to delete.
+	 * @param medWard the medical ward to delete
 	 * @throws OHServiceException if an error occurs during the delete.
 	 */
 	public void deleteMedicalWard(MedicalWard medWard) {

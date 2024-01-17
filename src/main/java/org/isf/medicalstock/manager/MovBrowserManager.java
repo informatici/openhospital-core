@@ -83,8 +83,7 @@ public class MovBrowserManager {
 	/**
 	 * Retrieves all the movement associated to the specified {@link Ward}.
 	 *
-	 * @param wardId
-	 *            the ward id.
+	 * @param wardId the ward id.
 	 * @param dateTo
 	 * @param dateFrom
 	 * @return the retrieved movements.
@@ -97,8 +96,7 @@ public class MovBrowserManager {
 	/**
 	 * Retrieves all the movement associated to the specified reference number.
 	 *
-	 * @param refNo
-	 *            the reference number.
+	 * @param refNo the reference number.
 	 * @return the retrieved movements.
 	 * @throws OHServiceException
 	 */
@@ -109,26 +107,16 @@ public class MovBrowserManager {
 	/**
 	 * Retrieves all the {@link Movement}s with the specified criteria.
 	 *
-	 * @param medicalCode
-	 *            the medical code.
-	 * @param medicalType
-	 *            the medical type.
-	 * @param wardId
-	 *            the ward type.
-	 * @param movType
-	 *            the movement type.
-	 * @param movFrom
-	 *            the lower bound for the movement date range.
-	 * @param movTo
-	 *            the upper bound for the movement date range.
-	 * @param lotPrepFrom
-	 *            the lower bound for the lot preparation date range.
-	 * @param lotPrepTo
-	 *            the upper bound for the lot preparation date range.
-	 * @param lotDueFrom
-	 *            the lower bound for the lot due date range.
-	 * @param lotDueTo
-	 *            the lower bound for the lot due date range.
+	 * @param medicalCode the medical code.
+	 * @param medicalType the medical type.
+	 * @param wardId the ward type.
+	 * @param movType the movement type.
+	 * @param movFrom the lower bound for the movement date range.
+	 * @param movTo the upper bound for the movement date range.
+	 * @param lotPrepFrom the lower bound for the lot preparation date range.
+	 * @param lotPrepTo the upper bound for the lot preparation date range.
+	 * @param lotDueFrom the lower bound for the lot due date range.
+	 * @param lotDueTo the lower bound for the lot due date range.
 	 * @return the retrieved movements.
 	 * @throws OHServiceException
 	 */
