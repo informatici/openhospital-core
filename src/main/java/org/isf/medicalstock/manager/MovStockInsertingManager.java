@@ -134,8 +134,7 @@ public class MovStockInsertingManager {
 		Lot lot = movement.getLot();
 		if (lot != null) {
 
-			if (isCharge && !isAutomaticLotIn() ||
-							!isCharge && !isAutomaticLotOut()) {
+			if (isCharge && !isAutomaticLotIn() || !isCharge && !isAutomaticLotOut()) {
 				// check everything
 				validateLot(errors, lot, true);
 			}
