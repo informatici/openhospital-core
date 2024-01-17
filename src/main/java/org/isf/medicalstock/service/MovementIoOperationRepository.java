@@ -65,10 +65,6 @@ public interface MovementIoOperationRepository extends JpaRepository<Movement, I
 	
 	@Query(value = "SELECT * FROM OH_MEDICALDSRSTOCKMOV ORDER BY MMV_ID DESC limit 1", nativeQuery = true)
 	Movement findLastMovement();
-	
-	@Modifying
-	@Query(value = "delete from Movement mov where mov.code = :code")
-	void deleteByCode(@Param("code") int code);
 
 	@Query("select count(m) from Movement m where active=1")
 	long countAllActiveMovements();

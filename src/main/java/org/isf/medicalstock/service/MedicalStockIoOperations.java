@@ -513,8 +513,8 @@ public class MedicalStockIoOperations {
 	 * 
 	 * @throws OHServiceException 
 	 */
-	public void deleteMovement(int code) throws OHServiceException {
-		movRepository.deleteByCode(code);
+	public void deleteMovement(Movement movement) throws OHServiceException {
+		movRepository.delete(movement);
 	}
 
 	/**

@@ -239,25 +239,25 @@ public class MovWardBrowserManager {
 	}
 	
 	/**
-	 * Delete the  MovementWard.
+	 * Deletes the  MovementWard.
 	 *
 	 * @param movWard - the MovementWard to delete. 
 	 * @throws OHServiceException.
 	 */
-	public void deleteMovWard(MovementWard movWard) throws OHServiceException {
-		ioOperations.deleteMovementWard(movWard);
+	public void deleteMedicalWard(MedicalWard medWard) throws OHServiceException {
+		ioOperations.deleteMedicalWard(medWard);
 	}
 	
 	/**
-	 * Update the  MedicalWard.
+	 * Updates the  MedicalWard.
 	 *
 	 * @param MedicalWard - the MedicalWard to update. 
 	 * @throws OHServiceException.
 	 */
-	public void updateMedicalWard(MedicalWard medWard) throws OHServiceException {
-		ioOperations.updateMedicalWard(medWard);
+	public MedicalWard updateMedicalWard(MedicalWard medWard) throws OHServiceException {
+		return ioOperations.updateMedicalWard(medWard);
 	}
-
+	
 	class ComparatorMovementWardForPrint implements Comparator<MovementWardForPrint> {
 
 		@Override
@@ -283,4 +283,5 @@ public class MovWardBrowserManager {
 			}
 		}
 	}
+
 }

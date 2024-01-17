@@ -310,7 +310,16 @@ public class MedicalStockWardIoOperations {
 	 * @return the updated {@link MedicalWard} object.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public void updateMedicalWard(MedicalWard medWard) throws OHServiceException {
-		repository.save(medWard);
+	public MedicalWard updateMedicalWard(MedicalWard medWard) throws OHServiceException {
+		return repository.save(medWard);
+	}
+
+	/**
+	 * Deletes the specified {@link MedicalWard}.
+	 * @param medWard the medical ward to delete.
+	 * @throws OHServiceException if an error occurs during the delete.
+	 */
+	public void deleteMedicalWard(MedicalWard medWard) {
+		repository.delete(medWard);
 	}
 }

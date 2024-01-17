@@ -29,7 +29,6 @@ import javax.transaction.Transactional;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperations;
-import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
@@ -49,16 +48,16 @@ public class MovBrowserManager {
 
 	@Autowired
 	private MedicalStockIoOperations ioOperations;
-	
+
 	@Autowired
 	private LotIoOperationRepository lotRepository;
-	
+
 	@Autowired
 	private MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager;
-	
+
 	@Autowired
 	private MedicalsIoOperations medicalsIoOperation;
-	
+
 	@Autowired
 	private MovWardBrowserManager movWardBrowserManager;
 
@@ -69,7 +68,7 @@ public class MovBrowserManager {
 		this.medicalsIoOperation = medicalsIoOperation;
 		this.medicalDsrStockMovTypeManager = medicalDsrStockMovTypeManager;
 		this.movWardBrowserManager = movWardBrowserManager;
-		
+
 	}
 
 	/**
@@ -85,7 +84,8 @@ public class MovBrowserManager {
 	/**
 	 * Retrieves all the movement associated to the specified {@link Ward}.
 	 *
-	 * @param wardId the ward id.
+	 * @param wardId
+	 *            the ward id.
 	 * @param dateTo
 	 * @param dateFrom
 	 * @return the retrieved movements.
@@ -98,7 +98,8 @@ public class MovBrowserManager {
 	/**
 	 * Retrieves all the movement associated to the specified reference number.
 	 *
-	 * @param refNo the reference number.
+	 * @param refNo
+	 *            the reference number.
 	 * @return the retrieved movements.
 	 * @throws OHServiceException
 	 */
@@ -109,33 +110,43 @@ public class MovBrowserManager {
 	/**
 	 * Retrieves all the {@link Movement}s with the specified criteria.
 	 *
-	 * @param medicalCode the medical code.
-	 * @param medicalType the medical type.
-	 * @param wardId the ward type.
-	 * @param movType the movement type.
-	 * @param movFrom the lower bound for the movement date range.
-	 * @param movTo the upper bound for the movement date range.
-	 * @param lotPrepFrom the lower bound for the lot preparation date range.
-	 * @param lotPrepTo the upper bound for the lot preparation date range.
-	 * @param lotDueFrom the lower bound for the lot due date range.
-	 * @param lotDueTo the lower bound for the lot due date range.
+	 * @param medicalCode
+	 *            the medical code.
+	 * @param medicalType
+	 *            the medical type.
+	 * @param wardId
+	 *            the ward type.
+	 * @param movType
+	 *            the movement type.
+	 * @param movFrom
+	 *            the lower bound for the movement date range.
+	 * @param movTo
+	 *            the upper bound for the movement date range.
+	 * @param lotPrepFrom
+	 *            the lower bound for the lot preparation date range.
+	 * @param lotPrepTo
+	 *            the upper bound for the lot preparation date range.
+	 * @param lotDueFrom
+	 *            the lower bound for the lot due date range.
+	 * @param lotDueTo
+	 *            the lower bound for the lot due date range.
 	 * @return the retrieved movements.
 	 * @throws OHServiceException
 	 */
 	public List<Movement> getMovements(Integer medicalCode, String medicalType,
-			String wardId, String movType, LocalDateTime movFrom, LocalDateTime movTo,
-			LocalDateTime lotPrepFrom, LocalDateTime lotPrepTo,
-			LocalDateTime lotDueFrom, LocalDateTime lotDueTo) throws OHServiceException {
+					String wardId, String movType, LocalDateTime movFrom, LocalDateTime movTo,
+					LocalDateTime lotPrepFrom, LocalDateTime lotPrepTo,
+					LocalDateTime lotDueFrom, LocalDateTime lotDueTo) throws OHServiceException {
 
 		if (medicalCode == null &&
-				medicalType == null &&
-				movType == null &&
-				movFrom == null &&
-				movTo == null &&
-				lotPrepFrom == null &&
-				lotPrepTo == null &&
-				lotDueFrom == null &&
-				lotDueTo == null) {
+						medicalType == null &&
+						movType == null &&
+						movFrom == null &&
+						movTo == null &&
+						lotPrepFrom == null &&
+						lotPrepTo == null &&
+						lotDueFrom == null &&
+						lotDueTo == null) {
 			return getMovements();
 		}
 
@@ -150,15 +161,15 @@ public class MovBrowserManager {
 		if (from == null || to == null) {
 			if (!(from == null && to == null)) {
 				throw new OHDataValidationException(
-						new OHExceptionMessage(MessageBundle.getMessage(errMsgKey)));
+								new OHExceptionMessage(MessageBundle.getMessage(errMsgKey)));
 			}
 		}
 	}
-	
+
 	/**
 	 * Get the last Movement.
 	 *
-	 *@return the retrieved movement.
+	 * @return the retrieved movement.
 	 * @throws OHServiceException
 	 */
 	public Movement getLastMovement() throws OHServiceException {
@@ -174,44 +185,40 @@ public class MovBrowserManager {
 	public void deleteLastMovement(Movement lastMovement) throws OHServiceException {
 
 		MovementType movType = medicalDsrStockMovTypeManager.getMovementType(lastMovement.getType().getCode());
-			
+		String lotCode = lastMovement.getLot().getCode();
+		Medical medical = lastMovement.getMedical();
+		int medicalCode = medical.getCode();
+		int quantity = lastMovement.getQuantity();
+
 		if (movType.getType().equals("+")) {
-			Lot lot = lastMovement.getLot();
-			String lotCode = lot.getCode();
-			int code = lastMovement.getCode();
-			Medical medical = lastMovement.getMedical();
-			int quantity = lastMovement.getQuantity();
-				
 			medical.setInqty(medical.getInqty() - quantity);
 			medicalsIoOperation.updateMedical(medical);
-				
+
 			List<Integer> lastMovWithSameLot = ioOperations.getMedicalsFromLot(lotCode);
-				
+
 			if (lastMovWithSameLot.size() == 1) {
 				lotRepository.deleteById(lotCode);
 			}
-				
-			ioOperations.deleteMovement(code);
-				
+
+			ioOperations.deleteMovement(lastMovement);
+
 		} else {
-				
 			Ward ward = lastMovement.getWard();
 			String wardCode = ward.getCode();
-			Medical medical = lastMovement.getMedical();
-			int code = lastMovement.getCode();
-			int quantity = lastMovement.getQuantity();
-			int medicalCode = medical.getCode();
-			String lotCode = lastMovement.getLot().getCode();
-				
+
 			MedicalWard medWard = movWardBrowserManager.getMedicalWardByWardAndMedical(wardCode, medicalCode, lotCode);
-				
 			medWard.setIn_quantity(medWard.getIn_quantity() - quantity);
-			movWardBrowserManager.updateMedicalWard(medWard);
-				
+
+			if (medWard.getIn_quantity() == medWard.getOut_quantity()) {
+				movWardBrowserManager.deleteMedicalWard(medWard);
+			} else {
+				movWardBrowserManager.updateMedicalWard(medWard);
+			}
+
 			medical.setInqty(medical.getInqty() - quantity);
 			medicalsIoOperation.updateMedical(medical);
-				
-			ioOperations.deleteMovement(code);
+
+			ioOperations.deleteMovement(lastMovement);
 		}
 	}
 }
