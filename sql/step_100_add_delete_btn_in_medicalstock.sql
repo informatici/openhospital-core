@@ -1,2 +1,2 @@
-INSERT INTO `oh_menuitem` VALUES ('btnpharmstockcmovdelete','angal.medicalstock.deletemovement.btn','angal.medicalstock.deletemovement.btn','x','X','medicalstock','none','N',3);
+INSERT INTO `oh_menuitem` VALUES ('btnpharmstockcmovdelete','angal.common.delete.btn','angal.common.delete.btn','x','X','medicalstock','none','N',3);
 INSERT INTO `oh_groupmenu` VALUES (433,'admin','btnpharmstockcmovdelete',0,NULL,NULL,NULL,NULL);
