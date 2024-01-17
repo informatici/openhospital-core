@@ -197,12 +197,10 @@ public class MovStockInsertingManager {
 	}
 
 	private void validateLot(List<OHExceptionMessage> errors, Lot lot, boolean checkCode) {
-		if (checkCode) {
-			if (lot.getCode().length() >= 50) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
-								MessageBundle.getMessage("angal.medicalstock.thelotidistoolongmax50chars.msg"),
-								OHSeverityLevel.ERROR));
-			}
+		if (checkCode && lot.getCode().length() >= 50) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
+							MessageBundle.getMessage("angal.medicalstock.thelotidistoolongmax50chars.msg"),
+							OHSeverityLevel.ERROR));
 		}
 		if (lot.getPreparationDate() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.common.error.title"),
