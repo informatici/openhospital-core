@@ -230,7 +230,7 @@ public class MovWardBrowserManager {
 	 *
 	 * @param wardCode - the ward id  
 	 * @param medical - the mecical id 
-	 * @param lot - the lot id
+	 * @param lotCode - the lot id
 	 * @return the retrieved medical.
 	 * @throws OHServiceException if an error occurs retrieving the medical.
 	 */
