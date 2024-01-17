@@ -1201,7 +1201,9 @@ public class Tests extends OHCoreTestCase {
 	public void testDeleteLastMovement() throws Exception {
 		int code = setupTestMovement(false);
 		Optional<Movement> movement = movementIoOperationRepository.findById(code); 
-		assertAll(()-> movBrowserManager.deleteLastMovement(movement.get()));
+		movBrowserManager.deleteLastMovement(movement.get());
+		Optional<Movement> movement2 = movementIoOperationRepository.findById(code); 
+		assertThat(movement2).isNotPresent();
 	}
 
 	private String setupTestLot(boolean usingSet) throws OHException {
