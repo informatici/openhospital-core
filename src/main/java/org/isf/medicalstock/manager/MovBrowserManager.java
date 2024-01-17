@@ -148,7 +148,7 @@ public class MovBrowserManager {
 		if (from == null || to == null) {
 			if (!(from == null && to == null)) {
 				throw new OHDataValidationException(
-								new OHExceptionMessage(MessageBundle.getMessage(errMsgKey)));
+						new OHExceptionMessage(MessageBundle.getMessage(errMsgKey)));
 			}
 		}
 	}
