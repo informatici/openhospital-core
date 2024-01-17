@@ -295,7 +295,7 @@ public class MedicalStockWardIoOperations {
 	 * Get the {@link MedicalWard} associated to specified criteria.
 	 * @param wardCode the ward code
 	 * @param medical the medical code
-	 * @param lotCode the lot code
+	 * @param lot the lot code
 	 * 
 	 * @return the retrieved medical.
 	 * @throws OHServiceException if an error occurs during the medical retrieving.
