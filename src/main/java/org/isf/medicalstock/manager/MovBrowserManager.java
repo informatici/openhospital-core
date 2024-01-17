@@ -121,19 +121,19 @@ public class MovBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public List<Movement> getMovements(Integer medicalCode, String medicalType,
-					String wardId, String movType, LocalDateTime movFrom, LocalDateTime movTo,
-					LocalDateTime lotPrepFrom, LocalDateTime lotPrepTo,
-					LocalDateTime lotDueFrom, LocalDateTime lotDueTo) throws OHServiceException {
+		 	String wardId, String movType, LocalDateTime movFrom, LocalDateTime movTo,
+			LocalDateTime lotPrepFrom, LocalDateTime lotPrepTo,
+			LocalDateTime lotDueFrom, LocalDateTime lotDueTo) throws OHServiceException {
 
 		if (medicalCode == null &&
-						medicalType == null &&
-						movType == null &&
-						movFrom == null &&
-						movTo == null &&
-						lotPrepFrom == null &&
-						lotPrepTo == null &&
-						lotDueFrom == null &&
-						lotDueTo == null) {
+					medicalType == null &&
+					movType == null &&
+					movFrom == null &&
+					movTo == null &&
+					lotPrepFrom == null &&
+					lotPrepTo == null &&
+					lotDueFrom == null &&
+					lotDueTo == null) {
 			return getMovements();
 		}
 
@@ -164,7 +164,7 @@ public class MovBrowserManager {
 	}
 
 	/**
-	 * Delete the last Movement.
+	 * Deletes the last Movement.
 	 *
 	 * @throws OHServiceException
 	 */
