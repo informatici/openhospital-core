@@ -218,6 +218,39 @@ public class DiseaseBrowserManager {
 	}
 
 	/**
+	 * Determine if the disease is one of the OPD diseases
+	 *
+	 * @param code the disease code
+	 * @return the Disease if it is an OPD release disease, {@code null} otherwise
+	 * @throws OHServiceException
+	 */
+	public Disease getOPDDiseaseByCode(String code) throws OHServiceException {
+		return ioOperations.getOPDDiseaseByCode(code);
+	}
+
+	/**
+	 * Determine if the disease is one of the {@code includeIpdIn} diseases
+	 *
+	 * @param code the disease code
+	 * @return the Disease if it is a disease with {@code includeIpdIn=true}, {@code null} otherwise
+	 * @throws OHServiceException
+	 */
+	public Disease getIpdInDiseaseByCode(String code) throws OHServiceException {
+		return ioOperations.getIpdInDiseaseByCode(code);
+	}
+
+	/**
+	 * Determine if the disease is one of the {@code includeIpdOut} diseases
+	 *
+	 * @param code the disease code
+	 * @return the Disease if it is a disease with {@code includeIpdOut=true}, {@code null} otherwise
+	 * @throws OHServiceException
+	 */
+	public Disease getIpdOutDiseaseByCode(String code) throws OHServiceException {
+		return ioOperations.getIpdOutDiseaseByCode(code);
+	}
+
+	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param disease
