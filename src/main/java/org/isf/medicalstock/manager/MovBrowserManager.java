@@ -165,7 +165,7 @@ public class MovBrowserManager {
 	/**
 	 * Deletes the last Movement.
 	 *
-	 *@param lastMovement - the last movement to delete
+	 * @param lastMovement - the last movement to delete
 	 * @throws OHServiceException
 	 */
 	@Transactional
