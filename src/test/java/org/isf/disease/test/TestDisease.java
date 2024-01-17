@@ -33,15 +33,24 @@ public class TestDisease {
 	private String description = "TestDescription";
 
 	public Disease setup(DiseaseType diseaseType, boolean usingSet) throws OHException {
+		return setup(diseaseType, false, false, false, usingSet);
+	}
+
+	public Disease setup(DiseaseType diseaseType, boolean includeIpdIn, boolean includeIpdOut, boolean includeOpd, boolean usingSet) throws OHException {
 		Disease disease;
 
 		if (usingSet) {
 			disease = new Disease();
 			setParameters(disease, diseaseType);
+
 		} else {
-			// Create Disease with all parameters 
+			// Create Disease with all parameters
 			disease = new Disease(code, description, diseaseType);
 		}
+
+		disease.setIpdInInclude(includeIpdIn);
+		disease.setIpdOutInclude(includeIpdOut);
+		disease.setOpdInclude(includeOpd);
 
 		return disease;
 	}
