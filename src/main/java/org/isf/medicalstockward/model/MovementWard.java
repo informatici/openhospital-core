@@ -44,20 +44,11 @@ import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * -----------------------------------------
- * Medical Ward - model for the medical ward entity
- * -----------------------------------------
- * modification history
- * ? - mwithi
- * 17/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_MEDICALDSRSTOCKMOVWARD")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "MMVN_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "MMVN_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "MMVN_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "MMVN_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "MMVN_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "MMVN_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "MMVN_LAST_MODIFIED_DATE"))

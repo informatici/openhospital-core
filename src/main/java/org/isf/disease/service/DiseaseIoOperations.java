@@ -30,31 +30,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * -----------------------------------------
- * This class offers the io operations for recovering and managing
- * diseases records from the database
- * 
- * @author Rick, Vero
- * <p>
- * modification history
- * 25/01/2006 - Rick, Vero, Pupo  - first beta version
- * 08/11/2006 - ross - added support for OPD and IPD flags
- * 09/06/2007 - ross - when updating, now the user can change the "dis type" also
- * 02/09/2008 - alex - added method for getting a Disease by his code
- * 					   added method for getting a DiseaseType by his code
- * 13/02/2009 - alex - modified query for ordering resultset
- *                     by description only
- * ------------------------------------------
- */
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class DiseaseIoOperations {
 
 	@Autowired
 	private DiseaseIoOperationRepository repository;
-	
+
 	/**
 	 * Gets a {@link Disease} with the specified code.
 	 * @param code the disease code.
@@ -64,7 +47,40 @@ public class DiseaseIoOperations {
 	public Disease getDiseaseByCode(String code) throws OHServiceException {
 		return repository.findOneByCode(code);
 	}
-	
+
+	/**
+	 * Determine if the disease is one of the OPD diseases
+	 *
+	 * @param code the disease code
+	 * @return the Disease if it is an OPD release disease, {@code null} otherwise
+	 * @throws OHServiceException
+	 */
+	public Disease getOPDDiseaseByCode(String code) throws OHServiceException {
+		return repository.findOpdByCode(code);
+	}
+
+	/**
+	 * Determine if the disease is one of the {@code includeIpdIn} diseases
+	 *
+	 * @param code the disease code
+	 * @return the Disease if it is a disease with {@code includeIpdIn=true}, {@code null} otherwise
+	 * @throws OHServiceException
+	 */
+	public Disease getIpdInDiseaseByCode(String code) throws OHServiceException {
+		return repository.findIpdInByCode(code);
+	}
+
+	/**
+	 * Determine if the disease is one of the {@code includeIpdOut} diseases
+	 *
+	 * @param code the disease code
+	 * @return the Disease if it is a disease with {@code includeIpdOut=true}, {@code null} otherwise
+	 * @throws OHServiceException
+	 */
+	public Disease getIpdOutDiseaseByCode(String code) throws OHServiceException {
+		return repository.findIpdOutByCode(code);
+	}
+
 	/**
 	 * Retrieves stored disease with the specified search parameters. 
 	 * Booleans {@code opd}, {@code ipdIn} and {@code ipdOut} in AND logic between
@@ -145,7 +161,7 @@ public class DiseaseIoOperations {
 		}
 		return diseases;
 	}
-	
+
 	/**
 	 * Stores the specified {@link Disease}. 
 	 * @param disease the disease to store.

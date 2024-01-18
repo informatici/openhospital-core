@@ -42,7 +42,7 @@ public class AgeTypeBrowserManager {
 	/**
 	 * Returns all available age types.
 	 *
-	 * @return a list of {@link AgeType} or <code>null</code> if the operation fails.
+	 * @return a list of {@link AgeType} or {@code null} if the operation fails.
 	 * @throws OHServiceException
 	 */
 	public List<AgeType> getAgeType() throws OHServiceException {
@@ -65,7 +65,7 @@ public class AgeTypeBrowserManager {
 	 * Retrieves the {@link AgeType} code using the age value.
 	 *
 	 * @param age the age value.
-	 * @return the retrieved code, <code>null</code> if age value is out of any range.
+	 * @return the retrieved code, {@code null} if age value is out of any range.
 	 * @throws OHServiceException
 	 */
 	public String getTypeByAge(int age) throws OHServiceException {
@@ -84,7 +84,7 @@ public class AgeTypeBrowserManager {
 	 * Gets the {@link AgeType} from the code index.
 	 *
 	 * @param index the code index.
-	 * @return the retrieved element, <code>null</code> otherwise.
+	 * @return the retrieved element, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
 	public AgeType getTypeByCode(int index) throws OHServiceException {
@@ -95,7 +95,7 @@ public class AgeTypeBrowserManager {
 	 * Gets the {@link AgeType} from the code.
 	 *
 	 * @param code of agetype.
-	 * @return the retrieved element, <code>null</code> otherwise.
+	 * @return the retrieved element, {@code null} otherwise.
 	 * @throws OHServiceException
 	 */
 	public AgeType getTypeByCode(String code) throws OHServiceException {

@@ -33,20 +33,11 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * ExamType - model for the exam type entity
- * -----------------------------------------
- * modification history
- * 20-jan-2006 - bob - first version
- * 18/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_EXAMTYPE")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "EXC_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "EXC_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "EXC_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "EXC_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "EXC_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "EXC_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "EXC_LAST_MODIFIED_DATE"))

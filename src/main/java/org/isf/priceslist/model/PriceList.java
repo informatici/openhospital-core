@@ -35,15 +35,6 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * -----------------------------------------
- * PriceList - model for a price list entity
- * -----------------------------------------
- * modification history
- * ? - Mwithi - first version
- * 25/08/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_PRICELISTS")
 @EntityListeners(AuditingEntityListener.class)

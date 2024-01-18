@@ -62,4 +62,10 @@ public interface UserIoOperationRepository extends JpaRepository<User, String> {
 	@Query(value = "update User set lastLogin=:lastLoggedIn where userName=:id")
 	void setLastLogin(@Param("lastLoggedIn") LocalDateTime lockTime, @Param("id") String id);
 
+	@Query("select count(u) from User u where active=1")
+	long countAllActiveUsers();
+
+	@Query("select count(g) from UserGroup g where active=1")
+	long countAllActiveGroups();
+
 }

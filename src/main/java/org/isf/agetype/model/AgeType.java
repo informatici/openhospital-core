@@ -33,20 +33,11 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * AgeType - model for the age type entity; represent age's ranges
- * -----------------------------------------
- * modification history
- * ? - bob - first version
- * 17/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_AGETYPE")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "AT_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "AT_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "AT_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "AT_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "AT_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "AT_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "AT_LAST_MODIFIED_DATE"))

@@ -71,7 +71,7 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortDataList
 	/**
 	 * Method that looks for the port specified
 	 * 
-	 * @return <code>true</code> if the COM port is ready to be used, <code>false</code> otherwise.
+	 * @return {@code true} if the COM port is ready to be used, {@code false} otherwise.
 	 */
 	@Override
 	public boolean initialize() {

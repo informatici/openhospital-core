@@ -42,20 +42,11 @@ import org.isf.utils.time.TimeTools;
 import org.isf.vaccine.model.Vaccine;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * PatientVaccine - class
- * -----------------------------------------
- * modification history
- * 25/08/2011 - claudia - first beta version
- * 04/06/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_PATIENTVACCINE")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "PAV_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "PAV_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "PAV_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "PAV_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "PAV_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "PAV_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "PAV_LAST_MODIFIED_DATE"))

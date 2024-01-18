@@ -45,23 +45,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * ------------------------------------------
- * lab.service.LabIoOperations - laboratory exam database io operations
- * -----------------------------------------
- * modification history
- * 02/03/2006 - theo - first beta version
- * 10/11/2006 - ross - added editing capability.
- * 					   new fields data esame, sex, age, material, inout flag added
- * 21/06/2008 - ross - do not add 1 to toDate!.
- *                     the selection date switched to exam date,
- * 04/01/2009 - ross - do not use roll, use add(week,-1)!
- *                     roll does not change the year!
- * 16/11/2012 - mwithi - added logging capability
- * 					   - to do lock management
- * 04/02/2013 - mwithi - lock management done
- * ------------------------------------------
- */
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
@@ -103,7 +86,7 @@ public class LabIoOperations {
 		}
 		return repository.findAll(pageable).getContent();
 	}
-	
+
 	public PagedResponse<Laboratory> getLaboratoryPageable(boolean oneWeek, int pageNo, int pageSize) throws OHServiceException {
 		Pageable pageable = PageRequest.of(pageNo, pageSize);
 		if (oneWeek) {
@@ -115,7 +98,7 @@ public class LabIoOperations {
 		Page<Laboratory> pagedResult = repository.findAll(pageable);
 		return setPaginationData(pagedResult);
 	}
-	
+
 	/**
 	 * Return the whole list of exams ({@link Laboratory}s) within the last week.
 	 *
@@ -405,29 +388,41 @@ public class LabIoOperations {
 	public Optional<Laboratory> getLaboratory(int code) throws OHServiceException {
 		return repository.findById(code);
 	}
-	
-	public PagedResponse<Laboratory> getLaboratoryPageable(Exam exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient, int page, int size) throws OHServiceException {
+
+	public PagedResponse<Laboratory> getLaboratoryPageable(Exam exam, LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient, int page, int size)
+					throws OHServiceException {
 		Page<Laboratory> laboritories = null;
 
 		if (exam != null && patient != null) {
 			laboritories = repository.findByLabDateBetweenAndExamDescriptionAndPatientCodePage(dateFrom, dateTo, exam, patient, PageRequest.of(page, size));
 		}
 		if (exam != null && patient == null) {
-			laboritories = repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDescPage(dateFrom, dateTo, exam,  PageRequest.of(page, size));
+			laboritories = repository.findByLabDateBetweenAndExam_DescriptionOrderByLabDateDescPage(dateFrom, dateTo, exam, PageRequest.of(page, size));
 		}
 		if (patient != null && exam == null) {
-			laboritories = repository.findByLabDateBetweenAndPatientCodePage(dateFrom, dateTo, patient,  PageRequest.of(page, size));
+			laboritories = repository.findByLabDateBetweenAndPatientCodePage(dateFrom, dateTo, patient, PageRequest.of(page, size));
 		}
 		if (patient == null && exam == null) {
-			laboritories = repository.findByLabDateBetweenOrderByLabDateDescPage(dateFrom, dateTo,  PageRequest.of(page, size));
+			laboritories = repository.findByLabDateBetweenOrderByLabDateDescPage(dateFrom, dateTo, PageRequest.of(page, size));
 		}
 		return setPaginationData(laboritories);
 	}
-	
+
 	PagedResponse<Laboratory> setPaginationData(Page<Laboratory> pages) {
 		PagedResponse<Laboratory> data = new PagedResponse<>();
 		data.setData(pages.getContent());
 		data.setPageInfo(PageInfo.from(pages));
 		return data;
 	}
+
+	/**
+	 * Count active {@link Laboratory}s
+	 * 
+	 * @return the number of recorded {@link Laboratory}s
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveLabs() {
+		return this.repository.countAllActiveLabs();
+	}
+
 }

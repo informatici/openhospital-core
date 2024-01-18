@@ -38,12 +38,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-/**
- * Class that provides gui separation from database operations and gives some
- * useful logic manipulations of the dynamic data (memory)
- *
- * @author Rick, Vero, Pupo
- */
 @Component
 public class OperationBrowserManager {
 
@@ -55,7 +49,7 @@ public class OperationBrowserManager {
 	/**
 	 * Return the list of {@link Operation}s
 	 *
-	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
+	 * @return the list of {@link Operation}s. It could be {@code empty} or {@code null}.
 	 * @throws OHServiceException
 	 */
 	//TODO: Evaluate the use of a parameter in one method only
@@ -86,7 +80,7 @@ public class OperationBrowserManager {
 	 * Return the {@link Operation}s whose {@link OperationType} matches specified string
 	 *
 	 * @param typecode - a type description
-	 * @return the list of {@link Operation}s. It could be <code>empty</code> or <code>null</code>.
+	 * @return the list of {@link Operation}s. It could be {@code empty} or {@code null}.
 	 * @throws OHServiceException
 	 */
 	public List<Operation> getOperationByTypeDescription(String typecode) throws OHServiceException {
@@ -97,7 +91,7 @@ public class OperationBrowserManager {
 	 * Insert an {@link Operation} in the DB
 	 *
 	 * @param operation - the {@link Operation} to insert
-	 * @return <code>true</code> if the operation has been inserted, <code>false</code> otherwise.
+	 * @return the newly inserted {@link Operation} object
 	 * @throws OHServiceException
 	 */
 	public Operation newOperation(Operation operation) throws OHServiceException {
@@ -108,7 +102,7 @@ public class OperationBrowserManager {
 	 * Updates an {@link Operation} in the DB
 	 *
 	 * @param operation - the {@link Operation} to update
-	 * @return <code>true</code> if the item has been updated. <code>false</code> other
+	 * @return the newly updated {@link Operation} object
 	 * @throws OHServiceException
 	 */
 	public Operation updateOperation(Operation operation) throws OHServiceException {
@@ -120,18 +114,17 @@ public class OperationBrowserManager {
 	 * Delete a {@link Operation} in the DB
 	 *
 	 * @param operation - the {@link Operation} to delete
-	 * @return <code>true</code> if the item has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException
 	 */
-	public boolean deleteOperation(Operation operation) throws OHServiceException {
-		return ioOperations.deleteOperation(operation);
+	public void deleteOperation(Operation operation) throws OHServiceException {
+		ioOperations.deleteOperation(operation);
 	}
 
 	/**
 	 * Checks if an {@link Operation} code has already been used
 	 *
 	 * @param code - the code
-	 * @return <code>true</code> if the code is already in use, <code>false</code> otherwise.
+	 * @return {@code true} if the code is already in use, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
@@ -143,7 +136,7 @@ public class OperationBrowserManager {
 	 *
 	 * @param description - the {@link Operation} description
 	 * @param typeCode - the {@link OperationType} code
-	 * @return <code>true</code> if the description is already in use, <code>false</code> otherwise.
+	 * @return {@code true} if the description is already in use, {@code false} otherwise.
 	 * @throws OHServiceException
 	 */
 	public boolean descriptionControl(String description, String typeCode) throws OHServiceException {
@@ -151,7 +144,7 @@ public class OperationBrowserManager {
 	}
 
 	/**
-	 * Get the list of possible operation results
+	 * Get the list of possible {@link Operation} objects
 	 *
 	 * @return the found list
 	 */
