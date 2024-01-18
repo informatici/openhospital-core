@@ -22,6 +22,7 @@
 package org.isf.opd.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
@@ -118,8 +119,9 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Before
-	public void setUp() {
+	public void setUp() throws Exception {
 		cleanH2InMemoryDb();
+		setupDiseaseRecords();
 	}
 
 	@Parameterized.Parameters(name = "Test with OPDEXTENDED={0}")
@@ -266,7 +268,7 @@ public class Tests extends OHCoreTestCase {
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
 		LocalDate date = LocalDate.now();
 		// set date to be 3 days ago (within last week)
-		date.minusDays(3);
+		date = date.minusDays(3);
 		opd.setDate(date.atStartOfDay());
 
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -605,22 +607,17 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrNewOpd() throws Exception {
 		Patient patient = testPatient.setup(false);
-		DiseaseType diseaseType = testDiseaseType.setup(false);
-		Disease disease = testDisease.setup(diseaseType, false);
+		Disease disease = diseaseIoOperationRepository.findOneByCode("1");
 		Ward ward = testWard.setup(false);
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 		patientIoOperationRepository.saveAndFlush(patient);
-		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
-		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
 		
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
 		// Need this to pass validation checks in manager
-		Disease disease2 = new Disease("998", "TestDescription 2", diseaseType);
-		diseaseIoOperationRepository.saveAndFlush(disease2);
-		Disease disease3 = new Disease("997", "TestDescription 3", diseaseType);
-		diseaseIoOperationRepository.saveAndFlush(disease3);
+		Disease disease2 = diseaseIoOperationRepository.findOneByCode("2");
+		Disease disease3 = diseaseIoOperationRepository.findOneByCode("3");
 		opd.setDisease2(disease2);
 		opd.setDisease3(disease3);
 		Opd newOpd = opdBrowserManager.newOpd(opd);
@@ -630,22 +627,17 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrUpdateOpd() throws Exception {
 		Patient patient = testPatient.setup(false);
-		DiseaseType diseaseType = testDiseaseType.setup(false);
-		Disease disease = testDisease.setup(diseaseType, false);
+		Disease disease = diseaseIoOperationRepository.findOneByCode("1");
 		Ward ward = testWard.setup(false);
 		Visit nextVisit = testVisit.setup(patient, true, ward);
 		patientIoOperationRepository.saveAndFlush(patient);
-		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
-		diseaseIoOperationRepository.saveAndFlush(disease);
 		wardIoOperationRepository.saveAndFlush(ward);
 		visitsIoOperationRepository.saveAndFlush(nextVisit);
 		
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, true);
 		// Need this to pass validation checks in manager
-		Disease disease2 = new Disease("998", "TestDescription 2", diseaseType);
-		diseaseIoOperationRepository.saveAndFlush(disease2);
-		Disease disease3 = new Disease("997", "TestDescription 3", diseaseType);
-		diseaseIoOperationRepository.saveAndFlush(disease3);
+		Disease disease2 = diseaseIoOperationRepository.findOneByCode("2");
+		Disease disease3 = diseaseIoOperationRepository.findOneByCode("3");
 		opd.setDisease2(disease2);
 		opd.setDisease3(disease3);
 		opd.setDate(TimeTools.getNow());
@@ -726,6 +718,7 @@ public class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
+			disease.setCode("1");
 			Ward ward = testWard.setup(false);
 			Visit nextVisit = testVisit.setup(patient, false, ward);
 			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
@@ -739,11 +732,11 @@ public class Tests extends OHCoreTestCase {
 			opd.setDate(null);
 			opdBrowserManager.newOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -756,6 +749,7 @@ public class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
+			disease.setCode("1");
 			Ward ward = testWard.setup(false);
 			Visit nextVisit = testVisit.setup(patient, false, ward);
 			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
@@ -766,11 +760,11 @@ public class Tests extends OHCoreTestCase {
 			opd.setPatient(null);
 			opdBrowserManager.newOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -780,6 +774,7 @@ public class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
+			disease.setCode("2");
 			Ward ward = testWard.setup(false);
 			Visit nextVisit = testVisit.setup(patient, false, ward);
 			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
@@ -790,11 +785,11 @@ public class Tests extends OHCoreTestCase {
 			opd.setAge(-99);
 			opdBrowserManager.updateOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -804,6 +799,7 @@ public class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
+			disease.setCode("3");
 			Ward ward = testWard.setup(false);
 			Visit nextVisit = testVisit.setup(patient, false, ward);
 			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
@@ -815,11 +811,11 @@ public class Tests extends OHCoreTestCase {
 			opd.setSex(' ');
 			opdBrowserManager.newOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -839,11 +835,11 @@ public class Tests extends OHCoreTestCase {
 			opd.setDisease(null);
 			opdBrowserManager.newOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -853,19 +849,21 @@ public class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
+			disease.setCode("1");
 			Ward ward = testWard.setup(false);
 			Visit nextVisit = testVisit.setup(patient, false, ward);
 			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 
-			Disease disease2 = new Disease("997", "TestDescription 2", diseaseType);
+			Disease disease2 = new Disease("1", "TestDescription 2", diseaseType);
 			opd.setDisease2(disease2);
+			opd.setDisease3(null);
 			opdBrowserManager.newOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -875,19 +873,22 @@ public class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
+			disease.setCode("1");
 			Ward ward = testWard.setup(false);
 			Visit nextVisit = testVisit.setup(patient, false, ward);
 			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 
-			Disease disease3 = new Disease("998", "TestDescription 3", diseaseType);
+			Disease disease2 = new Disease("3", "TestDescription 2", diseaseType);
+			opd.setDisease2(disease2);
+			Disease disease3 = new Disease("1", "TestDescription 3", diseaseType);
 			opd.setDisease3(disease3);
 			opdBrowserManager.newOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -897,20 +898,20 @@ public class Tests extends OHCoreTestCase {
 			Patient patient = testPatient.setup(false);
 			DiseaseType diseaseType = testDiseaseType.setup(false);
 			Disease disease = testDisease.setup(diseaseType, false);
+			disease.setCode("1");
 			Ward ward = testWard.setup(false);
 			Visit nextVisit = testVisit.setup(patient, false, ward);
 			Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
-
-			Disease disease2 = new Disease("998", "TestDescription 2", diseaseType);
+			Disease disease2 = new Disease("2", "TestDescription 2", diseaseType);
 			opd.setDisease2(disease2);
 			opd.setDisease3(disease2);
 			opdBrowserManager.newOpd(opd);
 		})
-				.isInstanceOf(OHDataValidationException.class)
-				.has(
-						new Condition<Throwable>(
-								(e -> ((OHServiceException) e).getMessages().size() == 1), "Expecting single validation error")
-				);
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHServiceException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
 	}
 
 	@Test
@@ -922,10 +923,10 @@ public class Tests extends OHCoreTestCase {
 		Visit nextVisit = testVisit.setup(patient, false, ward);
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 
-		Disease disease2 = new Disease("997", "TestDescription 2", diseaseType);
+		Disease disease2 = new Disease("3", "TestDescription 2", diseaseType);
 		opd.setDisease2(disease2);
 
-		Disease disease3 = new Disease("998", "TestDescription 3", diseaseType);
+		Disease disease3 = new Disease("2", "TestDescription 3", diseaseType);
 		opd.setDisease3(disease3);
 
 		opd.getPatient().setFirstName("John");
@@ -1004,10 +1005,154 @@ public class Tests extends OHCoreTestCase {
 		Visit nextVisit = testVisit.setup(patient, false, ward);
 		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
 
-		assertThat(opd).isEqualTo(opd);
-		assertThat(opd)
+		assertThat(opd).isEqualTo(opd)
 				.isNotNull()
 				.isNotEqualTo("someString");
+	}
+
+	@Test
+	public void testValidateOpdDiseasesSingleDiseaseValid() throws Exception {
+		Patient patient = testPatient.setup(false);
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+		Disease disease = testDisease.setup(diseaseType, false);
+		disease.setCode("1");
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, false, ward);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+		opd.setDisease2(null);
+		opd.setDisease3(null);
+		assertThatNoException().isThrownBy(() -> opdBrowserManager.validateOpd(opd, false));
+	}
+
+	@Test
+	public void testValidateOpdDiseasesTwoDiseasesValid() throws Exception {
+		Patient patient = testPatient.setup(false);
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+		Disease disease = testDisease.setup(diseaseType, false);
+		disease.setCode("1");
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, false, ward);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+		Disease disease2 = testDisease.setup(diseaseType, false);
+		disease2.setCode("2");
+		opd.setDisease2(disease2);
+		opd.setDisease3(null);
+		assertThatNoException().isThrownBy(() -> opdBrowserManager.validateOpd(opd, false));
+	}
+
+	@Test
+	public void testValidateOpdDiseasesThreeDiseasesValid() throws Exception {
+		Patient patient = testPatient.setup(false);
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+		Disease disease = testDisease.setup(diseaseType, false);
+		disease.setCode("1");
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, false, ward);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+		Disease disease2 = testDisease.setup(diseaseType, false);
+		disease2.setCode("2");
+		opd.setDisease2(disease2);
+		Disease disease3 = testDisease.setup(diseaseType, false);
+		disease3.setCode("3");
+		opd.setDisease3(disease3);
+		assertThatNoException().isThrownBy(() -> opdBrowserManager.validateOpd(opd, false));
+	}
+
+	@Test
+	public void testValidateOpdDiseasesSingleDiseaseException() throws Exception {
+		Patient patient = testPatient.setup(false);
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+		Disease disease = testDisease.setup(diseaseType, false);
+		disease.setCode("101");
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, false, ward);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+		opd.setDisease2(null);
+		opd.setDisease3(null);
+		assertThatThrownBy(() -> opdBrowserManager.validateOpd(opd, false))
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHDataValidationException) e).getMessages().size() == 1, "Expecting single validation error")
+			);
+	}
+
+	@Test
+	public void testValidateOpdDiseasesTwoDiseasesException() throws Exception {
+		Patient patient = testPatient.setup(false);
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+		Disease disease = testDisease.setup(diseaseType, false);
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, false, ward);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+		Disease disease2 = testDisease.setup(diseaseType, false);
+		disease2.setCode("102");
+		opd.setDisease2(disease2);
+		opd.setDisease3(null);
+		assertThatThrownBy(() -> opdBrowserManager.validateOpd(opd, false))
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHDataValidationException) e).getMessages().size() == 2, "Expecting two validation errors")
+			);
+	}
+
+	@Test
+	public void testValidateOpdDiseasesThreeDiseasesException() throws Exception {
+		Patient patient = testPatient.setup(false);
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+		Disease disease = testDisease.setup(diseaseType, false);
+		Ward ward = testWard.setup(false);
+		Visit nextVisit = testVisit.setup(patient, false, ward);
+		Opd opd = testOpd.setup(patient, disease, ward, nextVisit, false);
+		Disease disease2 = testDisease.setup(diseaseType, false);
+		disease2.setCode("102");
+		opd.setDisease2(disease2);
+		Disease disease3 = testDisease.setup(diseaseType, false);
+		disease3.setCode("103");
+		opd.setDisease3(disease3);
+		assertThatThrownBy(() -> opdBrowserManager.validateOpd(opd, false))
+			.isInstanceOf(OHDataValidationException.class)
+			.has(
+				new Condition<Throwable>(
+					e -> ((OHDataValidationException) e).getMessages().size() == 3, "Expecting three validation errors")
+			);
+	}
+
+	private void setupDiseaseRecords() throws Exception {
+		DiseaseType diseaseType = testDiseaseType.setup(false);
+		Disease disease = testDisease.setup(diseaseType, false);
+		diseaseTypeIoOperationRepository.saveAndFlush(diseaseType);
+
+		disease.setCode("1");
+		disease.setOpdInclude(true);
+		disease.setDescription("code = 1 and is OPD");
+		diseaseIoOperationRepository.saveAndFlush(disease);
+
+		disease.setCode("2");
+		disease.setOpdInclude(true);
+		disease.setDescription("code = 2 and is OPD");
+		diseaseIoOperationRepository.saveAndFlush(disease);
+
+		disease.setCode("3");
+		disease.setOpdInclude(true);
+		disease.setDescription("code = 3 and is OPD");
+		diseaseIoOperationRepository.saveAndFlush(disease);
+
+		disease.setCode("101");
+		disease.setOpdInclude(false);
+		disease.setDescription("code = 101 and is NOT OPD");
+		diseaseIoOperationRepository.saveAndFlush(disease);
+
+		disease.setCode("102");
+		disease.setOpdInclude(false);
+		disease.setDescription("code = 102 and is NOT OPD");
+		diseaseIoOperationRepository.saveAndFlush(disease);
+
+		disease.setCode("103");
+		disease.setOpdInclude(false);
+		disease.setDescription("code = 103 and is NOT OPD");
+		diseaseIoOperationRepository.saveAndFlush(disease);
 	}
 
 	private Patient setupTestPatient(boolean usingSet) throws Exception {
