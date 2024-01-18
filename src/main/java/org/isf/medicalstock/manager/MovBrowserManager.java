@@ -27,6 +27,7 @@ import java.util.List;
 import org.isf.generaldata.MessageBundle;
 import org.isf.medicals.model.Medical;
 import org.isf.medicals.service.MedicalsIoOperations;
+import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
@@ -172,22 +173,22 @@ public class MovBrowserManager {
 	public void deleteLastMovement(Movement lastMovement) throws OHServiceException {
 
 		MovementType movType = medicalDsrStockMovTypeManager.getMovementType(lastMovement.getType().getCode());
-		String lotCode = lastMovement.getLot().getCode();
+		Lot lot = lastMovement.getLot();
 		Medical medical = lastMovement.getMedical();
 		int medicalCode = medical.getCode();
 		int quantity = lastMovement.getQuantity();
 		if (movType.getType().contains("+")) {
 			medical.setInqty(medical.getInqty() - quantity);
 			medicalsIoOperation.updateMedical(medical);
-			List<Integer> lastMovWithSameLot = ioOperations.getMedicalsFromLot(lotCode);
+			List<Movement> lastMovWithSameLot = ioOperations.getMovementByLot(lot);
 			if (lastMovWithSameLot.size() == 1) {
-				lotRepository.deleteById(lotCode);
+				lotRepository.deleteById(lot.getCode());
 			}
 			ioOperations.deleteMovement(lastMovement);
 		} else {
 			Ward ward = lastMovement.getWard();
 			String wardCode = ward.getCode();
-			MedicalWard medWard = movWardBrowserManager.getMedicalWardByWardAndMedical(wardCode, medicalCode, lotCode);
+			MedicalWard medWard = movWardBrowserManager.getMedicalWardByWardAndMedical(wardCode, medicalCode, lot.getCode());
 			medWard.setIn_quantity(medWard.getIn_quantity() - quantity);
 			if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity() == 0) {
 				movWardBrowserManager.deleteMedicalWard(medWard);
