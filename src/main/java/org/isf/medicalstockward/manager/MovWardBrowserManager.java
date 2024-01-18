@@ -226,7 +226,7 @@ public class MovWardBrowserManager {
 	}
 	
 	/**
-	 * Get the  MedicalWard for the specified criteria.
+	 * Get the MedicalWard for the specified criteria.
 	 *
 	 * @param wardCode - the ward id  
 	 * @param medical - the mecical id 
