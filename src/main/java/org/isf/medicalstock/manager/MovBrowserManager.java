@@ -194,7 +194,7 @@ public class MovBrowserManager {
 			} else {
 				movWardBrowserManager.updateMedicalWard(medWard);
 			}
-			medical.setInqty(medical.getInqty() - quantity);
+			medical.setOutqty(medical.getOutqty() - quantity);
 			medicalsIoOperation.updateMedical(medical);
 
 			ioOperations.deleteMovement(lastMovement);
