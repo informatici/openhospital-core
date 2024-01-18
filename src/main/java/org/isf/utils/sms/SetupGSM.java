@@ -68,23 +68,23 @@ public class SetupGSM extends JFrame implements SerialPortDataListener {
 		String model = props.getProperty(GSMGatewayService.SERVICE_NAME + ".gmm");
 
 		SerialPort[] portList = SerialPort.getCommPorts();
-		System.out.println("Found " + portList.length + " ports: " + portList.toString());
+		LOGGER.info("Found {} ports: {}", portList.length, portList.toString());
 
 		for (SerialPort comPort : portList) {
 
-			// System.out.println("Port found: " + portId.getName() + ' ' + (portId.getPortType() == CommPortIdentifier.PORT_SERIAL ? "SERIAL" : "PARALLEL"));
+			// LOGGER.info("Port {}", comPort.getDescriptivePortName());
 
 			try {
-				System.out.println("Opening port...");
+				LOGGER.info("Opening port...");
 				comPort.openPort();
 				comPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
 				comPort.addDataListener(this);
 
 				OutputStream outputStream = comPort.getOutputStream();
 				if (outputStream != null) {
-					System.out.println("Output stream OK");
+					LOGGER.info("Output stream OK");
 				} else {
-					System.out.println("Output stream not found");
+					LOGGER.info("Output stream not found");
 				}
 
 				inputStream = comPort.getInputStream();
@@ -101,11 +101,11 @@ public class SetupGSM extends JFrame implements SerialPortDataListener {
 				LOGGER.error("Failed to open port '{}'", comPort);
 				LOGGER.error(exception.getMessage(), exception);
 			} finally {
-				System.out.println("Closing port...");
+				LOGGER.info("Closing port...");
 				comPort.closePort();
 			}
 		}
-		System.out.println("End.");
+		LOGGER.info("End.");
 	}
 
 	@Override
@@ -116,7 +116,6 @@ public class SetupGSM extends JFrame implements SerialPortDataListener {
 		byte[] buffer = new byte[1];
 		try {
 			while (inputStream.available() > 0) {
-				int len = inputStream.read(buffer);
 				sb.append(new String(buffer));
 			}
 			String answer = sb.toString();
@@ -147,7 +146,7 @@ public class SetupGSM extends JFrame implements SerialPortDataListener {
 			LOGGER.error(exception.getMessage(), exception);
 			LOGGER.error("outofbound: '{}'", answer);
 		}
-		System.out.println(answer.trim());
+		LOGGER.info(answer.trim());
 
 		return JOptionPane.showConfirmDialog(this, "Found modem: " + answer + " on port " + port + "\nConfirm?");
 	}
@@ -161,7 +160,7 @@ public class SetupGSM extends JFrame implements SerialPortDataListener {
 			config = new PropertiesConfiguration(GSMParameters.FILE_PROPERTIES);
 			config.setProperty(GSMGatewayService.SERVICE_NAME + ".port", port);
 			config.save();
-			System.out.println("Port saved in " + GSMParameters.FILE_PROPERTIES);
+			LOGGER.error("Port saved in {}", GSMParameters.FILE_PROPERTIES);
 		} catch (ConfigurationException ce) {
 			LOGGER.error(ce.getMessage(), ce);
 		}
