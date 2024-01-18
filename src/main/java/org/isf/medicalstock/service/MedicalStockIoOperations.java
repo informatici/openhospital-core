@@ -82,7 +82,7 @@ public class MedicalStockIoOperations {
 	/**
 	 * Retrieves all movements referencing the specified lot.
 	 * @param lot - the lot.
-	 * @return the movement referencing the specified lot.
+	 * @return the movements referencing the specified lot.
 	 * @throws OHServiceException if an error occurs retrieving the referencing movement.
 	 */
 	public List<Movement> getMovementByLot(Lot lot) throws OHServiceException {
