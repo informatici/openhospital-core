@@ -80,7 +80,7 @@ public class MedicalStockIoOperations {
 	}
 
 	/**
-	 * Retrieves all movement referencing the specified lot.
+	 * Retrieves all movements referencing the specified lot.
 	 * @param lot - the lot.
 	 * @return the movement referencing the specified lot.
 	 * @throws OHServiceException if an error occurs retrieving the referencing movement.
