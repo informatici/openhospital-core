@@ -181,7 +181,7 @@ public class MovBrowserManager {
 			medical.setInqty(medical.getInqty() - quantity);
 			medicalsIoOperation.updateMedical(medical);
 			List<Movement> movementWithSameLot = ioOperations.getMovementByLot(lot);
-			if (lastMovWithSameLot.size() == 1) {
+			if (movementWithSameLot.size() == 1) {
 				lotRepository.deleteById(lot.getCode());
 			}
 			ioOperations.deleteMovement(lastMovement);
