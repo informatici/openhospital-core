@@ -176,7 +176,7 @@ public class MovBrowserManager {
 		Medical medical = lastMovement.getMedical();
 		int medicalCode = medical.getCode();
 		int quantity = lastMovement.getQuantity();
-		if (movType.getType().equals("+")) {
+		if (movType.getType().contains("+")) {
 			medical.setInqty(medical.getInqty() - quantity);
 			medicalsIoOperation.updateMedical(medical);
 			List<Integer> lastMovWithSameLot = ioOperations.getMedicalsFromLot(lotCode);
