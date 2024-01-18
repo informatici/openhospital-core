@@ -68,6 +68,9 @@ public interface DiseaseIoOperationRepository extends JpaRepository<Disease, Str
 	@Query(value = "select d FROM Disease d where d.opdInclude=true order BY d.description")
 	List<Disease> findAllByOpd();
 
+	@Query(value = "select d FROM Disease d where d.code=:code and d.opdInclude=true")
+	Disease findOpdByCode(@Param("code") String code);
+
 	@Query(value = "select d FROM Disease d where d.ipdInInclude=true order BY d.description")
 	List<Disease> findAllByIpdIn();
 
@@ -85,4 +88,11 @@ public interface DiseaseIoOperationRepository extends JpaRepository<Disease, Str
 
 	@Query(value = "select d FROM Disease d where d.opdInclude=true and d.ipdInInclude=true and d.ipdOutInclude=true order BY d.description")
 	List<Disease> findAllByOpdAndIpdInAndIpdOut();
+
+	@Query(value = "select d FROM Disease d where d.code=:code and d.ipdInInclude=true")
+	Disease findIpdInByCode(@Param("code") String code);
+
+	@Query(value = "select d FROM Disease d where d.code=:code and d.ipdOutInclude=true")
+	Disease findIpdOutByCode(@Param("code") String code);
+
 }
