@@ -23,7 +23,6 @@ package org.isf.medicalstock.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -1201,6 +1200,7 @@ public class Tests extends OHCoreTestCase {
 	public void testDeleteLastMovement() throws Exception {
 		int code = setupTestMovement(false);
 		Optional<Movement> movement = movementIoOperationRepository.findById(code); 
+		assertThat(movement).isPresent();
 		movBrowserManager.deleteLastMovement(movement.get());
 		Optional<Movement> movement2 = movementIoOperationRepository.findById(code); 
 		assertThat(movement2).isNotPresent();

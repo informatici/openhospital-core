@@ -59,7 +59,7 @@ public interface MovementIoOperationRepository extends JpaRepository<Movement, I
 	@Query(value = "select max(mov.date) from Movement mov")
 	LocalDateTime findMaxDate();
 
-	@Query(value = "select mov from Movement mov where mov.refNo = :refNo")
+	@Query(value = "select mov.refNo from Movement mov where mov.refNo like :refNo")
 	List<Movement> findAllWhereRefNo(@Param("refNo") String refNo);
 	
 	@Query(value = "SELECT * FROM OH_MEDICALDSRSTOCKMOV ORDER BY MMV_ID DESC limit 1", nativeQuery = true)
