@@ -239,7 +239,7 @@ public class MovWardBrowserManager {
 	}
 	
 	/**
-	 * Deletes the  MedicalWard.
+	 * Deletes the specified {@link MedicalWard}.
 	 *
 	 * @param medWard - the MedicalWard to delete. 
 	 * @throws OHServiceException.
