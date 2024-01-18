@@ -249,7 +249,7 @@ public class MovWardBrowserManager {
 	}
 	
 	/**
-	 * Updates the  MedicalWard.
+	 * Updates the specified {@link MedicalWard}.
 	 *
 	 * @param medWard - the MedicalWard to update. 
 	 * @throws OHServiceException.
