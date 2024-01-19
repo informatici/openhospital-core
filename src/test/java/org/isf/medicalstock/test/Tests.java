@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -1193,6 +1194,16 @@ public class Tests extends OHCoreTestCase {
 		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
 		assertThat(movement).isNotNull();
 		assertThat(movement.getSupplier()).isEqualTo(movement.getOrigin());
+	}
+	
+	@Test
+	public void testDeleteLastMovement() throws Exception {
+		int code = setupTestMovement(false);
+		Optional<Movement> movement = movementIoOperationRepository.findById(code); 
+		assertThat(movement).isPresent();
+		movBrowserManager.deleteLastMovement(movement.get());
+		Optional<Movement> movement2 = movementIoOperationRepository.findById(code); 
+		assertThat(movement2).isNotPresent();
 	}
 
 	private String setupTestLot(boolean usingSet) throws OHException {
