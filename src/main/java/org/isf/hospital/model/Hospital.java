@@ -36,20 +36,11 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Hospital - model representing the Hospital
- * -----------------------------------------
- * modification history
- * 21-jan-2006 - bob - first version
- * 06/01/2016 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_HOSPITAL")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "HOS_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "HOS_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "HOS_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "HOS_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "HOS_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "HOS_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "HOS_LAST_MODIFIED_DATE"))
@@ -114,9 +105,9 @@ public class Hospital extends Auditable<String> {
 	public Hospital() {
 		super();
 		this.code = null;
-		this.description = null;
-		this.address = null;
-		this.city = null;
+		this.description = null;    // TODO field is marked as "@NotNull"
+		this.address = null;        // TODO field is marked as "@NotNull"
+		this.city = null;           // TODO field is marked as "@NotNull"
 		this.telephone = null;
 		this.fax = null;
 		this.email = null;

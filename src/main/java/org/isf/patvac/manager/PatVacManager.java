@@ -36,15 +36,6 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * ------------------------------------------
- * PatVacManager - patient-vaccine manager
- * -----------------------------------------
- * modification history
- * 25/08/2011 - claudia - first beta version
- * 14/11/2011 - claudia - inserted search condition on date
- * ------------------------------------------
- */
 @Component
 public class PatVacManager {
 

@@ -36,21 +36,11 @@ import org.isf.utils.db.Auditable;
 import org.isf.vactype.model.VaccineType;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * Pure Model Vaccine (Hospital vaccines): represents a vaccine
- *
- * @author Eva
- *
- * modification history
- * 20/10/2011 - Cla - insert vaccinetype managment
- * 18/11/2011 - Cla - inserted print method
- * 04/06/2015 - Antonio - ported to JPA
- */
 @Entity
 @Table(name="OH_VACCINE")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "VAC_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "VAC_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "VAC_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "VAC_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "VAC_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "VAC_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "VAC_LAST_MODIFIED_DATE"))

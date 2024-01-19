@@ -34,15 +34,15 @@ import org.springframework.stereotype.Repository;
 public interface VisitsIoOperationRepository extends JpaRepository<Visit, Integer> {
 
 	List<Visit> findAllByOrderByPatient_CodeAscDateAsc();
-	
+
 	Visit findAllByVisitID(@Param("visitID") int visitID);
 
 	List<Visit> findAllByPatient_CodeOrderByPatient_CodeAscDateAsc(@Param("patient") Integer patient);
-	
+
 	List<Visit> findAllByWardIsNullOrderByPatient_CodeAscDateAsc();
 
 	List<Visit> findAllByWardIsNullAndPatient_CodeOrderByPatient_CodeAscDateAsc(@Param("patient") Integer patient);
-	
+
 	@Modifying
 	void deleteByPatient_Code(@Param("patient") Integer patient);
 
@@ -51,5 +51,8 @@ public interface VisitsIoOperationRepository extends JpaRepository<Visit, Intege
 
 	@Query(value = "SELECT * FROM OH_VISITS WHERE VST_PAT_ID = :patient ORDER BY VST_PAT_ID, VST_DATE", nativeQuery = true)
 	List<Visit> findAllWherePatientByOrderPatientAndDateAsc(@Param("patient") Integer patient);
+
+	@Query("select count(v) from Visit v where active=1")
+	long countAllActiveAppointments();
 
 }

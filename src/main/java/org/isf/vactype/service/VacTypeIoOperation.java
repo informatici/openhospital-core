@@ -30,14 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * ------------------------------------------
- * VacTypeIoOperation - methods to interact with DB
- * -----------------------------------------
- * modification history
- * 19/10/2011 - Cla - version is now 1.0
- * ------------------------------------------
- */
 @Service
 @Transactional(rollbackFor=OHServiceException.class)
 @TranslateOHServiceException

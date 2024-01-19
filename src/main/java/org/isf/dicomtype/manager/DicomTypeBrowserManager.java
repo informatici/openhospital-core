@@ -62,7 +62,7 @@ public class DicomTypeBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param dicomType
-	 * @param insert <code>true</code> or updated <code>false</code>
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
 	 */
 	protected void validateDicomType(DicomType dicomType, boolean insert) throws OHServiceException {

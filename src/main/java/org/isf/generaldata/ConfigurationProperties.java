@@ -38,6 +38,7 @@ public abstract class ConfigurationProperties {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationProperties.class);
 	private static final boolean EXIT_ON_FAIL = false;
+	private static boolean initialized = true;
 
 	private Properties prop;
 
@@ -82,6 +83,7 @@ public abstract class ConfigurationProperties {
 		try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileProperties)) {
 			if (null == in) {
 				logger.error(">> '{}' file not found.", fileProperties);
+				initialized = false;
 				if (exitOnFail) {
 					System.exit(1);
 				}
@@ -91,6 +93,7 @@ public abstract class ConfigurationProperties {
 			logger.info("File {} loaded.", fileProperties);
 		} catch (IOException e) {
 			logger.error(">> '{}' file not found.", fileProperties);
+			initialized = false;
 			if (exitOnFail) {
 				System.exit(1);
 			}
@@ -176,5 +179,14 @@ public abstract class ConfigurationProperties {
 			return defaultValue;
 		}
 		return value;
+	}
+
+	/**
+	 * Method to know the {@link ConfigurationProperties} initialization status.
+	 * 
+	 * @return {@code true} if the ConfigurationProperties is initialized, {@code false} otherwise
+	 */
+	public boolean isInitialized() {
+		return initialized;
 	}
 }

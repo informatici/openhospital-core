@@ -52,22 +52,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * ---------------------------------------------------------
- * modification history
- * ====================
- * 10/11/06 - ross - removed from the list the deleted patients
- * the list is now in alphabetical  order
- * 11/08/08 - alessandro - addedd getFather&Mother Names
- * 26/08/08 - claudio - changed getAge for managing varchar type
- * - added getBirthDate
- * 01/01/09 - Fabrizio - changed the calls to PAT_AGE fields to
- * return again an integer type
- * 20/01/09 - Chiara -   restart of progressive number of maternity
- * ward on 1st July conditioned to parameter
- * MATERNITYRESTARTINJUNE in generalData.properties
- * -----------------------------------------------------------
- */
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
@@ -328,7 +312,7 @@ public class AdmissionIoOperations {
 		}
 		return patientRepository.save(foundPatient);
 	}
-	
+
 	/**
 	 * Returns the list of Admissions by pages
 	 *
@@ -353,7 +337,7 @@ public class AdmissionIoOperations {
 	public List<Admission> getAdmissionsByAdmDate(LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
 		return repository.findAllWhereAdmissionDate(dateFrom, dateTo);
 	}
-	
+
 	/**
 	 * Returns the list of Admissions with discharge
 	 *
@@ -394,7 +378,7 @@ public class AdmissionIoOperations {
 		Page<Admission> pagedResult = repository.findAllWhere_DischargeDate_Paginated(dateFrom, dateTo, pageable);
 		return setPaginationData(pagedResult);
 	}
-	
+
 	/**
 	 * Returns the list of Admissions with page info
 	 *
@@ -407,4 +391,15 @@ public class AdmissionIoOperations {
 		data.setPageInfo(PageInfo.from(pages));
 		return data;
 	}
+
+	/**
+	 * Count not deleted {@link Admission}s
+	 * 
+	 * @return the number of recorded {@link Admission}s
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveAdmissions() {
+		return this.repository.countAllActiveNotDeletedAdmissions();
+	}
+
 }

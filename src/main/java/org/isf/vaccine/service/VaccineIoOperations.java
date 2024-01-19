@@ -30,23 +30,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * This class offers the io operations for recovering and managing
- * vaccine records from the database
- *
- * @author Eva
- * 
- * modification history
- * 20/10/2011 - Cla - insert vaccinetype managment
- */
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class VaccineIoOperations {
 
 	@Autowired
 	private VaccineIoOperationRepository repository;
-	
+
 	/**
 	 * Returns the list of {@link Vaccine}s based on vaccine type code.
 	 *
@@ -55,9 +46,7 @@ public class VaccineIoOperations {
 	 * @throws OHServiceException 
 	 */
 	public List<Vaccine> getVaccine(String vaccineTypeCode) throws OHServiceException {
-		return vaccineTypeCode != null ?
-				repository.findByVaccineType_CodeOrderByDescriptionAsc(vaccineTypeCode) :
-				repository.findAllByOrderByDescriptionAsc();
+		return vaccineTypeCode != null ? repository.findByVaccineType_CodeOrderByDescriptionAsc(vaccineTypeCode) : repository.findAllByOrderByDescriptionAsc();
 	}
 
 	/**
@@ -70,7 +59,7 @@ public class VaccineIoOperations {
 	public Vaccine newVaccine(Vaccine vaccine) throws OHServiceException {
 		return repository.save(vaccine);
 	}
-	
+
 	/**
 	 * Updates a {@link Vaccine} in the DB.
 	 *
@@ -102,7 +91,7 @@ public class VaccineIoOperations {
 	public boolean isCodePresent(String code) throws OHServiceException {
 		return repository.existsById(code);
 	}
-	
+
 	/**
 	 * Returns the {@link Vaccine} based on its code.
 	 *
@@ -111,6 +100,16 @@ public class VaccineIoOperations {
 	 */
 	public Vaccine findVaccine(String code) throws OHServiceException {
 		return repository.findById(code).orElse(null);
+	}
+
+	/**
+	 * Count active {@link Vaccine}s
+	 * 
+	 * @return the number of recorded {@link Vaccine}s
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveVaccinations() {
+		return this.repository.countAllActiveVaccinations();
 	}
 
 }

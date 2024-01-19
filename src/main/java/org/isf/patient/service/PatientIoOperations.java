@@ -47,19 +47,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * ------------------------------------------
- * PatientIoOperations - dB operations for the patient entity
- * -----------------------------------------
- * modification history
- * 05/05/2005 - giacomo  - first beta version.
- * 03/11/2006 - ross - added toString method.
- * 11/08/2008 - alessandro - added father & mother's names.
- * 26/08/2008 - claudio - added birth date modified age.
- * 01/01/2009 - Fabrizio - changed the calls to PAT_AGE fields to return again an int type.
- * 03/12/2009 - Alex - added method for merge two patients history.
- * ------------------------------------------
- */
 @Service
 @Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
@@ -70,18 +57,19 @@ public class PatientIoOperations {
 	public static final String LOAD_FROM_DB = "DB";
 
 	public static final char NOT_DELETED_STATUS = 'N';
-	
+
 	@Autowired
 	private PatientIoOperationRepository repository;
-	
+
 	@Autowired
 	private ApplicationEventPublisher applicationEventPublisher;
- 
+
 	@Autowired
 	private FileSystemPatientPhotoRepository fileSystemPatientPhotoRepository;
 
 	@Autowired
 	private EntityManager entityManager;
+
 	/**
 	 * Method that returns the full list of {@link Patient}s not logically deleted,
 	 *
@@ -289,7 +277,7 @@ public class PatientIoOperations {
 	public boolean isCodePresent(Integer code) throws OHServiceException {
 		return repository.existsById(code);
 	}
-	
+
 	/**
 	 * Method that returns a list of cities to be used.
 	 *
@@ -317,4 +305,15 @@ public class PatientIoOperations {
 		data.setPageInfo(PageInfo.from(pages));
 		return data;
 	}
+  
+	/**
+	 * Count all active {@link Patient}s
+	 * 
+	 * @return
+	 * @throws OHServiceException
+	 */
+	public long countAllActivePatients() throws OHServiceException {
+		return repository.countAllActiveNotDeletedPatients();
+	}
+
 }

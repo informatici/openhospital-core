@@ -42,18 +42,17 @@ import org.springframework.transaction.annotation.Transactional;
  * Persistence class for Accounting module.
  */
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
-public class AccountingIoOperations {	
-	
+public class AccountingIoOperations {
+
 	@Autowired
 	private AccountingBillIoOperationRepository billRepository;
 	@Autowired
 	private AccountingBillPaymentIoOperationRepository billPaymentRepository;
 	@Autowired
 	private AccountingBillItemsIoOperationRepository billItemsRepository;
-	
-	
+
 	/**
 	 * Returns all the pending {@link Bill}s for the specified patient.
 	 * @param patID the patient id.
@@ -66,7 +65,7 @@ public class AccountingIoOperations {
 		}
 		return billRepository.findByStatusOrderByDateDesc("O");
 	}
-	
+
 	/**
 	 * Get all the {@link Bill}s.
 	 * @return a list of bills.
@@ -75,7 +74,7 @@ public class AccountingIoOperations {
 	public List<Bill> getBills() throws OHServiceException {
 		return billRepository.findAllByOrderByDateDesc();
 	}
-	
+
 	/**
 	 * Get the {@link Bill} with specified billID.
 	 * @param billID
@@ -91,17 +90,17 @@ public class AccountingIoOperations {
 	 * @return a list of user id.
 	 * @throws OHServiceException if an error occurs retrieving the users list.
 	 */
-    public List<String> getUsers() throws OHServiceException {
-    	Set<String> accountingUsers = new TreeSet<>(String::compareTo);
-    	accountingUsers.addAll(billRepository.findUserDistinctByOrderByUserAsc());
-    	accountingUsers.addAll(billPaymentRepository.findUserDistinctByOrderByUserAsc());
+	public List<String> getUsers() throws OHServiceException {
+		Set<String> accountingUsers = new TreeSet<>(String::compareTo);
+		accountingUsers.addAll(billRepository.findUserDistinctByOrderByUserAsc());
+		accountingUsers.addAll(billPaymentRepository.findUserDistinctByOrderByUserAsc());
 		return new ArrayList<>(accountingUsers);
 	}
 
 	/**
 	 * Returns the {@link BillItems} associated to the specified {@link Bill} id or all 
 	 * the stored {@link BillItems} if no id is provided. 
-	 * @param billID the bill id or <code>0</code>.
+	 * @param billID the bill id or {@code 0}.
 	 * @return a list of {@link BillItems} associated to the bill id or all the stored bill items.
 	 * @throws OHServiceException if an error occurs retrieving the bill items.
 	 */
@@ -126,7 +125,7 @@ public class AccountingIoOperations {
 	/**
 	 * Retrieves all the {@link BillPayments} for the specified {@link Bill} id, or all 
 	 * the stored {@link BillPayments} if no id is indicated.
-	 * @param billID the bill id or <code>0</code>.
+	 * @param billID the bill id or {@code 0}.
 	 * @return the list of bill payments.
 	 * @throws OHServiceException if an error occurs retrieving the bill payments.
 	 */
@@ -239,7 +238,7 @@ public class AccountingIoOperations {
 	 * @throws OHServiceException
 	 */
 	public List<BillPayments> getPaymentsBetweenDatesWherePatient(LocalDateTime dateFrom, LocalDateTime dateTo, Patient patient)
-			throws OHServiceException {
+					throws OHServiceException {
 		return billPaymentRepository.findByDateAndPatient(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo), patient.getCode());
 	}
 
@@ -299,6 +298,17 @@ public class AccountingIoOperations {
 			return billRepository.findByDateBetween(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo));
 		}
 		return billRepository.findAllWhereDatesAndBillItem(TimeTools.getBeginningOfDay(dateFrom), TimeTools.getBeginningOfNextDay(dateTo),
-				billItem.getItemDescription());
+						billItem.getItemDescription());
 	}
+
+	/**
+	 * Count active {@link Bill}s
+	 * 
+	 * @return the number of recorded {@link Bill}s
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveBills() {
+		return this.billRepository.countAllActiveBills();
+	}
+
 }

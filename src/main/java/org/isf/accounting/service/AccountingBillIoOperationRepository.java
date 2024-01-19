@@ -46,7 +46,7 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 
 	@Query(value = "select b from Bill b where b.billPatient.id = :patientCode and b.date >= :dateFrom and b.date < :dateTo")
 	List<Bill> findByDateAndPatient(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo,
-			@Param("patientCode") Integer patientCode);
+					@Param("patientCode") Integer patientCode);
 
 	@Query(value = "select b from Bill b where b.status='O' and b.billPatient.id = :patID")
 	List<Bill> findAllPendindBillsByBillPatient(@Param("patID") int patID);
@@ -64,4 +64,7 @@ public interface AccountingBillIoOperationRepository extends JpaRepository<Bill,
 
 	@Query(value = "select distinct b.user FROM Bill b ORDER BY b.user asc")
 	List<String> findUserDistinctByOrderByUserAsc();
+
+	@Query("select count(b) from Bill b where active=1")
+	long countAllActiveBills();
 }

@@ -22,16 +22,5 @@
 package org.isf.lab.model;
 
 public enum LaboratoryStatus {
-	DRAFT("draft"), OPEN("open"), DONE("done"), INVALID("invalid"), DELETED("deleted");
-
-	private String status;
-
-	private LaboratoryStatus(String s) {
-		status = s;
-	}
-
-	@Override
-	public String toString() {
-		return this.status;
-	}
+	draft, open, done, invalid, deleted;
 }
