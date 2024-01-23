@@ -18,11 +18,12 @@ To run the tests simply issue:
 
     mvn test
 
-Tests are run against an in-memory database (H2).  
-To test the application against MySQL, you can change [`database.properties`][database.prop] and run the Docker container in the root folder with:
+Tests are ran against an in-memory database (H2). To run tests against a MariaDB instance, you can change [`src/test/resources/resources/database.properties`][database.prop] and run the Docker container in the root folder with:
 
-    # clean previous build
+    # clean previous builds
     docker compose rm --stop --volumes --force
+    
+    # build and run a mariadb instance at localhost:3306
     docker-compose up
 
 
