@@ -23,6 +23,7 @@ package org.isf.medicalstock.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.assertj.core.api.Condition;
@@ -1205,6 +1207,13 @@ public class Tests extends OHCoreTestCase {
 		Optional<Movement> movement2 = movementIoOperationRepository.findById(code); 
 		assertThat(movement2).isNotPresent();
 	}
+	
+	@Test
+    public void testDeleteLastMovementDenied() throws Exception {
+		int code = setupTestMovement(false);
+		Optional<Movement> movement = movementIoOperationRepository.findById(code - 1); 
+        assertThrows(NoSuchElementException.class, () -> movBrowserManager.deleteLastMovement(movement.get()));
+    }
 
 	private String setupTestLot(boolean usingSet) throws OHException {
 		MedicalType medicalType = testMedicalType.setup(false);
