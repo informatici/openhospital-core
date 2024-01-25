@@ -25,7 +25,6 @@ import java.awt.HeadlessException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Enumeration;
 import java.util.Properties;
 
 import javax.swing.JFrame;
@@ -40,24 +39,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.server.PortInUseException;
 
-import gnu.io.CommPortIdentifier;
-import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
+import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.SerialPortDataListener;
+import com.fazecast.jSerialComm.SerialPortEvent;
 
 /**
  * @author Mwithi
  */
-public class SetupGSM extends JFrame implements SerialPortEventListener {
+public class SetupGSM extends JFrame implements SerialPortDataListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(SetupGSM.class);
-	
+
 	private Properties props;
-	private CommPortIdentifier portId;
-	private SerialPort serialPort;
 	private InputStream inputStream;
-	
+
 	/**
 	 * @param args
 	 */
@@ -65,49 +61,48 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 		new SetupGSM();
 		System.exit(0);
 	}
-	
+
 	public SetupGSM() {
 		props = ConfigurationProperties.loadPropertiesFile(GSMParameters.FILE_PROPERTIES, LOGGER);
-		
+
 		String model = props.getProperty(GSMGatewayService.SERVICE_NAME + ".gmm");
 
-		Enumeration<?> portList = CommPortIdentifier.getPortIdentifiers();
-		
-		while (portList.hasMoreElements()) {
-			
-			portId = (CommPortIdentifier) portList.nextElement();
+		SerialPort[] portList = SerialPort.getCommPorts();
+		System.out.println("Found " + portList.length + " ports: " + portList.toString());
 
-			if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
+		for (SerialPort comPort : portList) {
 
-				System.out.println("Port found: " + portId.getName() + ' ' + (portId.getPortType() == CommPortIdentifier.PORT_SERIAL ? "SERIAL" : "PARALLEL"));
-			
-				try {
-					serialPort = (SerialPort) portId.open("SmsSender", 10);
-					serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-					serialPort.addEventListener(this);
-			        serialPort.notifyOnDataAvailable(true);
-					
-					OutputStream outputStream = serialPort.getOutputStream();
-					if (outputStream != null) {
-						System.out.println("Output stream OK");
-					} else {
-						System.out.println("Output stream not found");
-					}
-					
-					inputStream = serialPort.getInputStream(); 
-					byte[] command = model.getBytes();
-			        outputStream.write(command);
-			        
-			        Thread.sleep(5000);
-			        
-				} catch (PortInUseException e) {
-					LOGGER.error("Port in use.");
-				} catch (Exception exception) {
-					LOGGER.error("Failed to open port '{}'", portId.getName());
-					LOGGER.error(exception.getMessage(), exception);
-				} finally {
-					serialPort.close();
+			// System.out.println("Port found: " + portId.getName() + ' ' + (portId.getPortType() == CommPortIdentifier.PORT_SERIAL ? "SERIAL" : "PARALLEL"));
+
+			try {
+				System.out.println("Opening port...");
+				comPort.openPort();
+				comPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
+				comPort.addDataListener(this);
+
+				OutputStream outputStream = comPort.getOutputStream();
+				if (outputStream != null) {
+					System.out.println("Output stream OK");
+				} else {
+					System.out.println("Output stream not found");
 				}
+
+				inputStream = comPort.getInputStream();
+				byte[] command = model.getBytes();
+				outputStream.write(command);
+
+				Thread.sleep(5000);
+
+			} catch (PortInUseException e) {
+				LOGGER.error("Port in use.");
+			} catch (RuntimeException re) {
+				LOGGER.error("Something strange happened.", re);
+			} catch (Exception exception) {
+				LOGGER.error("Failed to open port '{}'", comPort);
+				LOGGER.error(exception.getMessage(), exception);
+			} finally {
+				System.out.println("Closing port...");
+				comPort.closePort();
 			}
 		}
 		System.out.println("End.");
@@ -116,7 +111,7 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 	@Override
 	public void serialEvent(SerialPortEvent event) {
 		SerialPort serialPort = (SerialPort) event.getSource();
-		String port = serialPort.getName();
+		String port = serialPort.getSystemPortName();
 		StringBuilder sb = new StringBuilder();
 		byte[] buffer = new byte[1];
 		try {
@@ -154,7 +149,7 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 		}
 		System.out.println(answer.trim());
 
-		return JOptionPane.showConfirmDialog(this, "Found modem: "+answer+" on port " + port + "\nConfirm?");
+		return JOptionPane.showConfirmDialog(this, "Found modem: " + answer + " on port " + port + "\nConfirm?");
 	}
 
 	/**
@@ -170,6 +165,11 @@ public class SetupGSM extends JFrame implements SerialPortEventListener {
 		} catch (ConfigurationException ce) {
 			LOGGER.error(ce.getMessage(), ce);
 		}
+	}
+
+	@Override
+	public int getListeningEvents() {
+		return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
 	}
 
 }
