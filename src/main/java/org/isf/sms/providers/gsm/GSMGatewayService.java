@@ -46,7 +46,6 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortDataList
 	private static final Logger LOGGER = LoggerFactory.getLogger(GSMGatewayService.class);
 	private static final String EOF = "\r";
 
-	private SerialPort[] portList;
 	private SerialPort serialPort;
 	private boolean connected;
 	private OutputStream outputStream;
@@ -77,7 +76,7 @@ public class GSMGatewayService implements SmsSenderInterface, SerialPortDataList
 	public boolean initialize() {
 		LOGGER.debug("Initialize...");
 		connected = false;
-		portList = SerialPort.getCommPorts();
+		SerialPort[] portList = SerialPort.getCommPorts();
 		String port = GSMParameters.PORT;
 		for (SerialPort comPort : portList) {
 
