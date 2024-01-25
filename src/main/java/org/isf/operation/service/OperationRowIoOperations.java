@@ -39,20 +39,20 @@ import org.springframework.transaction.annotation.Transactional;
  * @author hp
  */
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class OperationRowIoOperations {
-	
-    @Autowired
-    private OperationRowIoOperationRepository repository;
-    
-    public List<OperationRow> getOperationRow() throws OHServiceException{
-        return repository.findByOrderByOpDateDesc();
-    }
 
-    public List<OperationRow> getOperationRowByAdmission(Admission adm) throws OHServiceException{
-        return repository.findByAdmission(adm);
-    }
+	@Autowired
+	private OperationRowIoOperationRepository repository;
+
+	public List<OperationRow> getOperationRow() throws OHServiceException {
+		return repository.findByOrderByOpDateDesc();
+	}
+
+	public List<OperationRow> getOperationRowByAdmission(Admission adm) throws OHServiceException {
+		return repository.findByAdmission(adm);
+	}
 
 	public List<OperationRow> getOperationRowByOpd(Opd opd) throws OHServiceException {
 		if (opd.isPersisted()) {
@@ -88,10 +88,21 @@ public class OperationRowIoOperations {
 	}
 
 	public OperationRow newOperationRow(OperationRow opRow) throws OHServiceException {
-		 return repository.save(opRow);
+		return repository.save(opRow);
 	}
 
 	public List<OperationRow> getOperationRowByPatient(Patient patient) throws OHServiceException {
 		return repository.findByAdmissionPatientOrOpdPatient(patient, patient);
 	}
+
+	/**
+	 * Count active {@link OperationRow}s
+	 * 
+	 * @return the number of recorded {@link OperationRow}s
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveOperations() {
+		return this.repository.countAllActiveOperations();
+	}
+
 }

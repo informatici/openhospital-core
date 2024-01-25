@@ -61,7 +61,7 @@ public class TherapyIoOperations {
 	 */
 	public List<TherapyRow> getTherapyRows(int patID) throws OHServiceException {
 		return patID != 0 ? repository.findByPatientCodeOrderByPatientCodeAscTherapyIDAsc(patID)
-				: repository.findAllByOrderByPatientAscTherapyIDAsc();
+						: repository.findAllByOrderByPatientAscTherapyIDAsc();
 	}
 
 	/**
@@ -84,4 +84,15 @@ public class TherapyIoOperations {
 	public boolean isCodePresent(Integer code) throws OHServiceException {
 		return repository.existsById(code);
 	}
+
+	/**
+	 * Count active {@link TherapyRow}s
+	 * 
+	 * @return the number of recorded {@link TherapyRow}s
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveTherapies() {
+		return this.repository.countAllActiveTherapies();
+	}
+
 }
