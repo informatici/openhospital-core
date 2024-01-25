@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Rick
  */
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
 public class WardIoOperations {
 
@@ -48,9 +48,10 @@ public class WardIoOperations {
 	private WardIoOperationRepository repository;
 	@Autowired
 	private AdmissionIoOperationRepository admissionRepository;
-	
+
 	/**
 	 * Retrieves the number of patients currently admitted in the {@link Ward}
+	 * 
 	 * @param ward - the ward
 	 * @return the number of patients currently admitted
 	 * @throws OHServiceException
@@ -59,7 +60,27 @@ public class WardIoOperations {
 		List<Admission> admissions = new ArrayList<>(admissionRepository.findAllWhereWard(ward.getCode()));
 		return admissions.size();
 	}
-	
+
+	/**
+	 * Retrieve number of total active wards
+	 * 
+	 * @return number of active wards
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveWards() throws OHServiceException {
+		return repository.countAllActiveWards();
+	}
+
+	/**
+	 * Retrieve number of total active beds
+	 * 
+	 * @return number of active beds
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveBeds() throws OHServiceException {
+		return repository.countAllActiveBeds();
+	}
+
 	/**
 	 * Retrieves all stored {@link Ward}s with flag maternity equals {@code false}.
 	 * @return the retrieved wards.
@@ -68,7 +89,7 @@ public class WardIoOperations {
 	public List<Ward> getWardsNoMaternity() throws OHServiceException {
 		return new ArrayList<>(repository.findByCodeNot("M"));
 	}
-	
+
 	/**
 	 * Retrieves all stored {@link Ward}s with the specified ward ID.
 	 * @param wardID - the ward ID, can be {@code null}
@@ -83,25 +104,26 @@ public class WardIoOperations {
 		}
 		return repository.findAll();
 	}
-	
+
 	/**
-	 * Retrieves all store {@link Ward}s with beds > {@code 0}
+	 * Retrieves all stored {@link Ward}s with beds > {@code 0}
 	 * @return
 	 */
 	public List<Ward> getIpdWards() {
 		return repository.findByBedsGreaterThanZero();
 	}
-	
+
 	/**
-	 * Retrieves all store {@link Ward}s with isOpd = {@code true}
+	 * Retrieves all stored {@link Ward}s with isOpd = {@code true}
 	 * @return
 	 */
 	public List<Ward> getOpdWards() {
 		return repository.findByIsOpdIsTrue();
 	}
-	
+
 	/**
 	 * Stores the specified {@link Ward}. 
+	 * 
 	 * @param ward the ward to store.
 	 * @return ward that has been stored.
 	 * @throws OHServiceException if an error occurs storing the ward.
@@ -109,36 +131,37 @@ public class WardIoOperations {
 	public Ward newWard(Ward ward) throws OHServiceException {
 		return repository.save(ward);
 	}
-	
+
 	/**
 	 * Updates the specified {@link Ward}.
-	 * @param ward the {@link Ward} to update.
+	 * 
+	 * @param ward - the {@link Ward} to update.
 	 * @return ward that has been updated.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
 	public Ward updateWard(Ward ward) throws OHServiceException {
 		return repository.save(ward);
 	}
-	
+
 	/**
 	 * Mark as deleted the specified {@link Ward}.
-	 * @param ward the ward to make delete.
+	 * @param ward - the ward to make delete.
 	 * @throws OHServiceException if an error occurred during the delete operation.
 	 */
 	public void deleteWard(Ward ward) throws OHServiceException {
 		repository.delete(ward);
 	}
-	
+
 	/**
 	 * Check if the specified code is used by other {@link Ward}s.
-	 * @param code the code to check.
+	 * @param code - the code to check.
 	 * @return {@code true} if it is already used, {@code false} otherwise.
 	 * @throws OHServiceException if an error occurs during the check.
 	 */
 	public boolean isCodePresent(String code) throws OHServiceException {
 		return repository.existsById(code);
 	}
-	
+
 	/**
 	 * Check if the maternity ward exists.
 	 * @return {@code true} if the word exists, {@code false} otherwise.
@@ -147,7 +170,7 @@ public class WardIoOperations {
 	public boolean isMaternityPresent() throws OHServiceException {
 		return isCodePresent("M");
 	}
-	
+
 	/**
 	 * Check if the OPD ward exists.
 	 * @return {@code true} if the OPD ward exists, {@code false} otherwise.

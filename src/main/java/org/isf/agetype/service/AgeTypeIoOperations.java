@@ -62,7 +62,7 @@ public class AgeTypeIoOperations {
 	/**
 	 * Gets the {@link AgeType} from the code index.
 	 * @param index the code index.
-	 * @return the retrieved element, <code>null</code> otherwise.
+	 * @return the retrieved element, {@code null} otherwise.
 	 * @throws OHServiceException if an error occurs retrieving the item.
 	 */
 	public AgeType getAgeTypeByCode(int index) throws OHServiceException {
@@ -73,7 +73,7 @@ public class AgeTypeIoOperations {
 	/**
 	 * Gets the {@link AgeType} from the code index.
 	 * @param code of agetype.
-	 * @return the retrieved element, <code>null</code> otherwise.
+	 * @return the retrieved element, {@code null} otherwise.
 	 * @throws OHServiceException if an error occurs retrieving the item.
 	 */
 	public AgeType getAgeTypeByCode(String code) throws OHServiceException {

@@ -44,18 +44,19 @@ import org.springframework.transaction.annotation.Transactional;
  * @author mwithi
  */
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
-public class MedicalStockWardIoOperations 
-{
+public class MedicalStockWardIoOperations {
 
 	@Autowired
 	private MedicalStockWardIoOperationRepository repository;
+
 	@Autowired
 	private MovementWardIoOperationRepository movementRepository;
+
 	@Autowired
 	private LotIoOperationRepository lotRepository;
-	
+
 	/**
 	 * Get all {@link MovementWard}s with the specified criteria.
 	 * @param wardId the ward id.
@@ -68,15 +69,15 @@ public class MedicalStockWardIoOperations
 		List<MovementWard> pMovementWard = new ArrayList<>();
 
 		List<Integer> pMovementWardCode = new ArrayList<>(repository.findAllWardMovement(wardId, TimeTools.truncateToSeconds(dateFrom),
-		                                                                                 TimeTools.truncateToSeconds(dateTo)));
+						TimeTools.truncateToSeconds(dateTo)));
 		for (Integer code : pMovementWardCode) {
 			MovementWard movementWard = movementRepository.findById(code).orElse(null);
 			pMovementWard.add(movementWard);
 		}
 		return pMovementWard;
 	}
-        
-    /**
+
+	/**
 	 * Get all {@link MovementWard}s with the specified criteria.
 	 * @param idwardTo the target ward id.
 	 * @param dateFrom the lower bound for the movement date range.
@@ -84,9 +85,9 @@ public class MedicalStockWardIoOperations
 	 * @return the retrieved movements.
 	 * @throws OHServiceException if an error occurs retrieving the movements.
 	 */
-    public List<MovementWard> getWardMovementsToWard(String idwardTo, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
-	    return movementRepository.findWardMovements(idwardTo, TimeTools.truncateToSeconds(dateFrom), TimeTools.truncateToSeconds(dateTo));
-    }
+	public List<MovementWard> getWardMovementsToWard(String idwardTo, LocalDateTime dateFrom, LocalDateTime dateTo) throws OHServiceException {
+		return movementRepository.findWardMovements(idwardTo, TimeTools.truncateToSeconds(dateFrom), TimeTools.truncateToSeconds(dateTo));
+	}
 
 	/**
 	 * Gets the current quantity for the specified {@link Medical} and specified {@link Ward}.
@@ -103,7 +104,7 @@ public class MedicalStockWardIoOperations
 		}
 		return (int) (mainQuantity != null ? mainQuantity : 0.0);
 	}
-	
+
 	/**
 	 * Gets the current quantity for the specified {@link Ward} and {@link Lot}.
 	 * @param ward - if {@code null} the quantity is counted for the whole hospital
@@ -159,31 +160,28 @@ public class MedicalStockWardIoOperations
 	/**
 	 * Updates the specified {@link MovementWard}.
 	 * @param movement the movement ward to update.
-	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
+	 * @return the updated {@link MovementWard} object.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	public boolean updateMovementWard(MovementWard movement) throws OHServiceException {
-		return movementRepository.save(movement) != null;
+	public MovementWard updateMovementWard(MovementWard movement) throws OHServiceException {
+		return movementRepository.save(movement);
 	}
 
 	/**
 	 * Deletes the specified {@link MovementWard}.
 	 * @param movement the movement ward to delete.
-	 * @return <code>true</code> if the movement has been deleted, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the delete.
 	 */
-	public boolean deleteMovementWard(MovementWard movement) throws OHServiceException {
+	public void deleteMovementWard(MovementWard movement) throws OHServiceException {
 		movementRepository.delete(movement);
-		return true;
 	}
 
 	/**
 	 * Updates the quantity for the specified movement ward.
 	 * @param movement the movement ward to update.
-	 * @return <code>true</code> if has been updated, <code>false</code> otherwise.
 	 * @throws OHServiceException if an error occurs during the update.
 	 */
-	protected boolean updateStockWardQuantity(MovementWard movement) throws OHServiceException {
+	protected void updateStockWardQuantity(MovementWard movement) throws OHServiceException {
 		Double qty = movement.getQuantity();
 		String ward = movement.getWard().getCode();
 		String lot = movement.getLot().getCode();
@@ -193,7 +191,6 @@ public class MedicalStockWardIoOperations
 			wardTo = movement.getWardTo().getCode();
 		}
 		Integer medical = movement.getMedical().getCode();
-		boolean result = true;
 
 		if (wardTo != null) {
 			MedicalWard medicalWardTo = repository.findOneWhereCodeAndMedicalAndLot(wardTo, medical, lot);
@@ -209,7 +206,7 @@ public class MedicalStockWardIoOperations
 				repository.save(medicalWard);
 			}
 			repository.updateOutQuantity(Math.abs(qty), ward, medical, lot);
-			return result;
+			return;
 		}
 
 		MedicalWard medicalWard = repository.findOneWhereCodeAndMedicalAndLot(ward, medical, lot);
@@ -228,13 +225,12 @@ public class MedicalStockWardIoOperations
 				repository.updateOutQuantity(qty, ward, medical, lot); // TODO: change to jpa
 			}
 		}
-		return result;
 	}
 
 	/**
 	 * Gets all the {@link Medical}s associated to specified {@link Ward}.
 	 * @param wardId the ward id.
-	 * @param stripeEmpty - if <code>true</code>, stripes the empty lots
+	 * @param stripeEmpty - if {@code true}, stripes the empty lots
 	 * @return the retrieved medicals.
 	 * @throws OHServiceException if an error occurs during the medical retrieving.
 	 */
@@ -261,7 +257,6 @@ public class MedicalStockWardIoOperations
 		return movementRepository.findWardMovementPat(patId);
 	}
 
-
 	/**
 	 * Gets all the {@link MedicalWard}s associated to the specified ward summarized by lot
 	 * (total quantity, regardless the lot)
@@ -285,4 +280,15 @@ public class MedicalStockWardIoOperations
 		}
 		return medicalWardsQty;
 	}
+
+	/**
+	 * Count active {@link MovementWard}
+	 * 
+	 * @return the number of recorded {@link MovementWard}
+	 * @throws OHServiceException
+	 */
+	public long countAllActiveMovementsWard() {
+		return this.movementRepository.countAllActiveMovementsWard();
+	}
+
 }

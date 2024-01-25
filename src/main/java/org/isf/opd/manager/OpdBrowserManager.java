@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.isf.disease.manager.DiseaseBrowserManager;
 import org.isf.disease.model.Disease;
 import org.isf.generaldata.GeneralData;
 import org.isf.generaldata.MessageBundle;
@@ -37,6 +38,8 @@ import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.utils.pagination.PagedResponse;
 import org.isf.ward.model.Ward;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -46,8 +49,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class OpdBrowserManager {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(OpdBrowserManager.class);
+
 	@Autowired
 	private OpdIoOperations ioOperations;
+	@Autowired
+	private DiseaseBrowserManager diseaseBrowserManager;
 
 	protected void setPatientConsistency(Opd opd) {
 		if (GeneralData.OPDEXTENDED && opd.getPatient() != null) {
@@ -66,7 +73,7 @@ public class OpdBrowserManager {
 	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHDataValidationException
 	 */
-	protected void validateOpd(Opd opd, boolean insert) throws OHDataValidationException {
+	public void validateOpd(Opd opd, boolean insert) throws OHDataValidationException {
 
 		Disease disease = opd.getDisease();
 		Disease disease2 = opd.getDisease2();
@@ -113,6 +120,29 @@ public class OpdBrowserManager {
 			if (disease2 != null && disease3 != null && disease2.getCode().equals(disease3.getCode())) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.opd.specifyingduplicatediseasesisnotallowed.msg")));
 			}
+		}
+		try {
+			Disease opdDisease;
+			if (disease != null) {
+				opdDisease = diseaseBrowserManager.getOPDDiseaseByCode(disease.getCode());
+				if (opdDisease == null) {
+					errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.opd.specifieddiseaseisnoenabledforopdservice.fmt.msg", "1")));
+				}
+			}
+			if (disease2 != null) {
+				opdDisease = diseaseBrowserManager.getOPDDiseaseByCode(disease2.getCode());
+				if (opdDisease == null) {
+					errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.opd.specifieddiseaseisnoenabledforopdservice.fmt.msg", "2")));
+				}
+			}
+			if (disease3 != null) {
+				opdDisease = diseaseBrowserManager.getOPDDiseaseByCode(disease3.getCode());
+				if (opdDisease == null) {
+					errors.add(new OHExceptionMessage(MessageBundle.formatMessage("angal.opd.specifieddiseaseisnoenabledforopdservice.fmt.msg", "3")));
+				}
+			}
+		} catch(OHServiceException serviceException) {
+			LOGGER.error("Unable to validate diseases within OPD diseases.", serviceException);
 		}
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);

@@ -33,16 +33,6 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * ------------------------------------------
- * DiseaseBrowserManager - Class that provides gui separation from database operations and gives some
- * useful logic manipulations of the dinamic data (memory)
- * -----------------------------------------
- * modification history
- * 25/01/2006 - Rick, Vero, Pupo  - first beta version
- * 08/11/2006 - ross - added getDiseaseOpd members, and getDiseaseIpd to get only opd/ipd related diseases
- * ------------------------------------------
- */
 @Component
 public class DiseaseBrowserManager {
 
@@ -225,6 +215,39 @@ public class DiseaseBrowserManager {
 	 */
 	public boolean descriptionControl(String description, String typeCode) throws OHServiceException {
 		return ioOperations.isDescriptionPresent(description, typeCode);
+	}
+
+	/**
+	 * Determine if the disease is one of the OPD diseases
+	 *
+	 * @param code the disease code
+	 * @return the Disease if it is an OPD release disease, {@code null} otherwise
+	 * @throws OHServiceException
+	 */
+	public Disease getOPDDiseaseByCode(String code) throws OHServiceException {
+		return ioOperations.getOPDDiseaseByCode(code);
+	}
+
+	/**
+	 * Determine if the disease is one of the {@code includeIpdIn} diseases
+	 *
+	 * @param code the disease code
+	 * @return the Disease if it is a disease with {@code includeIpdIn=true}, {@code null} otherwise
+	 * @throws OHServiceException
+	 */
+	public Disease getIpdInDiseaseByCode(String code) throws OHServiceException {
+		return ioOperations.getIpdInDiseaseByCode(code);
+	}
+
+	/**
+	 * Determine if the disease is one of the {@code includeIpdOut} diseases
+	 *
+	 * @param code the disease code
+	 * @return the Disease if it is a disease with {@code includeIpdOut=true}, {@code null} otherwise
+	 * @throws OHServiceException
+	 */
+	public Disease getIpdOutDiseaseByCode(String code) throws OHServiceException {
+		return ioOperations.getIpdOutDiseaseByCode(code);
 	}
 
 	/**

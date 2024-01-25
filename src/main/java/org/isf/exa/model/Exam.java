@@ -37,20 +37,11 @@ import org.isf.exatype.model.ExamType;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * -----------------------------------------
- * Exam - model for the exam (laboratory exams) entity
- * -----------------------------------------
- * modification history
- * 20-jan-2006 - bob - first version
- * 05/01/2016 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_EXAM")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "EXA_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "EXA_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "EXA_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "EXA_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "EXA_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "EXA_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "EXA_LAST_MODIFIED_DATE"))

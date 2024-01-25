@@ -37,21 +37,11 @@ import org.isf.opetype.model.OperationType;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Operation - model for the bill entity
- * -----------------------------------------
- * modification history
- * ? - bob - first version
- * 13/02/09 - Alex - added Major/Minor control
- * 007/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_OPERATION")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "OPE_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "OPE_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "OPE_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "OPE_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "OPE_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "OPE_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "OPE_LAST_MODIFIED_DATE"))

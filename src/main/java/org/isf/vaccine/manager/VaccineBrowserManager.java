@@ -34,15 +34,6 @@ import org.isf.vaccine.service.VaccineIoOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * Class that provides gui separation from database operations and gives some
- * useful logic manipulations of the dynamic data (memory)
- *
- * @author Eva
- *
- * modification history
- * 20/10/2011 - Cla - insert vaccinetype managment
- */
 @Component
 public class VaccineBrowserManager {
 

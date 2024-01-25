@@ -43,21 +43,11 @@ import org.isf.utils.db.Auditable;
 import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * ------------------------------------------
- * Laboratory - laboratory execution model
- * -----------------------------------------
- * modification history
- * 02/03/2006 - theo - first beta version
- * 10/11/2006 - ross - new fields data esame, sex, age, material, inout flag added
- * 06/01/2016 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_LABORATORY")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "LAB_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "LAB_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "LAB_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "LAB_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "LAB_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "LAB_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "LAB_LAST_MODIFIED_DATE"))

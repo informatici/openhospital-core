@@ -33,24 +33,16 @@ import javax.validation.constraints.NotNull;
 import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * -----------------------------------------
- * Discharge Type - model for the disease type entity
- * -----------------------------------------
- * modification history
- * ? - bob - first version
- * 10/01/2015 - Antonio - ported to JPA
- * ------------------------------------------
- */
 @Entity
 @Table(name="OH_DISCHARGETYPE")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "DIST_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "DIST_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "DIST_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "DIST_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "DIST_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "DIST_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "DIST_LAST_MODIFIED_DATE"))
 public class DischargeType extends Auditable<String> {
+
 	@Id 
 	@Column(name="DIST_ID_A")	    
     private String code;
