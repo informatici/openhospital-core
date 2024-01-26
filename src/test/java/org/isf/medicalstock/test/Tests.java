@@ -1211,8 +1211,16 @@ public class Tests extends OHCoreTestCase {
 	@Test
     public void testDeleteLastMovementDenied() throws Exception {
 		int code = setupTestMovement(false);
-		Optional<Movement> movement = movementIoOperationRepository.findById(code - 1); 
-        assertThrows(NoSuchElementException.class, () -> movBrowserManager.deleteLastMovement(movement.get()));
+		Optional<Movement> movement1 = movementIoOperationRepository.findById(code); 
+		assertThat(movement1).isPresent();
+		int code2 = setupTestMovement(false);
+		Optional<Movement> movement2 = movementIoOperationRepository.findById(code2); 
+		assertThat(movement2).isPresent();
+		List<Movement> movements = medicalStockIoOperation.getMovements();
+		assertThat(movements).isNotEmpty();
+		int size = movements.size();
+		Movement movementTodelete = movements.get(size - 1);
+		assertThrows(NoSuchElementException.class, () -> movBrowserManager.deleteLastMovement(movementTodelete));
     }
 
 	private String setupTestLot(boolean usingSet) throws OHException {

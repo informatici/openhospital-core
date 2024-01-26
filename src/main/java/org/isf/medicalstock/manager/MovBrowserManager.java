@@ -33,6 +33,7 @@ import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.medicalstockward.manager.MovWardBrowserManager;
 import org.isf.medicalstockward.model.MedicalWard;
+import org.isf.medicalstockward.model.MovementWard;
 import org.isf.medstockmovtype.manager.MedicalDsrStockMovementTypeBrowserManager;
 import org.isf.medstockmovtype.model.MovementType;
 import org.isf.utils.exception.OHDataValidationException;
@@ -169,7 +170,7 @@ public class MovBrowserManager {
 	 * @param lastMovement - the last movement to delete
 	 * @throws OHServiceException
 	 */
-	@Transactional
+	@Transactional(rollbackFor = OHServiceException.class)
 	public void deleteLastMovement(Movement lastMovement) throws OHServiceException {
 
 		MovementType movType = medicalDsrStockMovTypeManager.getMovementType(lastMovement.getType().getCode());
@@ -188,7 +189,8 @@ public class MovBrowserManager {
 		} else {
 			Ward ward = lastMovement.getWard();
 			String wardCode = ward.getCode();
-			MedicalWard medWard = movWardBrowserManager.getMedicalWardByWardAndMedical(wardCode, medicalCode, lot.getCode());
+			String lotCode = lot.getCode();
+			MedicalWard medWard = movWardBrowserManager.getMedicalWardByWardAndMedical(wardCode, medicalCode, lotCode);
 			medWard.setIn_quantity(medWard.getIn_quantity() - quantity);
 			if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity() == 0) {
 				movWardBrowserManager.deleteMedicalWard(medWard);

@@ -319,7 +319,19 @@ public class MedicalStockWardIoOperations {
 	 * @param medWard the medical ward to delete
 	 * @throws OHServiceException if an error occurs during the delete.
 	 */
-	public void deleteMedicalWard(MedicalWard medWard) {
+	public void deleteMedicalWard(MedicalWard medWard) throws OHServiceException {
 		repository.delete(medWard);
 	}
+	
+	/**
+	 * Get {@link MovementWard}s with the specified criteria.
+	 * @param medID the code of medical
+	 * @return the retrieved movements.
+	 * @throws OHServiceException if an error occurs retrieving the movements.
+	 */
+	public List<MovementWard> getMovementWardByMedical(int medID) {
+		return movementRepository.findByMedicalCode(medID);
+	}
+	
+	
 }

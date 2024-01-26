@@ -258,6 +258,17 @@ public class MovWardBrowserManager {
 		return ioOperations.updateMedicalWard(medWard);
 	}
 	
+	/* * 
+	 * Get the MovementWard for the specified criteria.
+	 *
+	 * @param medID - the mecical id 
+	 * @return all the retrieved MovementWards.
+	 * @throws OHServiceException if an error occurs retrieving the medical.
+	 */
+	public List<MovementWard> getMovementWardByMedical(int medID) {
+		return ioOperations.getMovementWardByMedical(medID);
+	}
+	
 	class ComparatorMovementWardForPrint implements Comparator<MovementWardForPrint> {
 
 		@Override
