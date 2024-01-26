@@ -44,71 +44,70 @@ import org.isf.utils.time.TimeTools;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name="OH_BILLS")
+@Table(name = "OH_BILLS")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "BLL_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "BLL_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "BLL_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "BLL_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "BLL_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "BLL_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "BLL_LAST_MODIFIED_DATE"))
 public class Bill extends Auditable<String> implements Cloneable, Comparable<Bill> {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="BLL_ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "BLL_ID")
 	private int id;
-	
+
 	@NotNull
-	@Column(name="BLL_DATE")		// SQL type: datetime
+	@Column(name = "BLL_DATE") // SQL type: datetime
 	private LocalDateTime date;
 
 	@NotNull
-	@Column(name="BLL_UPDATE")		// SQL type: datetime
+	@Column(name = "BLL_UPDATE") // SQL type: datetime
 	private LocalDateTime update;
 
 	@NotNull
-	@Column(name="BLL_IS_LST")
+	@Column(name = "BLL_IS_LST")
 	private boolean isList;
-	
+
 	@ManyToOne
-	@JoinColumn(name="BLL_ID_LST")
+	@JoinColumn(name = "BLL_ID_LST")
 	private PriceList list;
-	
-	@Column(name="BLL_LST_NAME")
+
+	@Column(name = "BLL_LST_NAME")
 	private String listName;
 
 	@NotNull
-	@Column(name="BLL_IS_PAT")
+	@Column(name = "BLL_IS_PAT")
 	private boolean isPatient;
-	
+
 	@ManyToOne
-	@JoinColumn(name="BLL_ID_PAT")
+	@JoinColumn(name = "BLL_ID_PAT")
 	private Patient billPatient;
-		
-	@Column(name="BLL_PAT_NAME")
+
+	@Column(name = "BLL_PAT_NAME")
 	private String patName;
-	
-	@Column(name="BLL_STATUS")
+
+	@Column(name = "BLL_STATUS")
 	private String status;
-	
-	@Column(name="BLL_AMOUNT")
+
+	@Column(name = "BLL_AMOUNT")
 	private Double amount;
-	
-	@Column(name="BLL_BALANCE")
+
+	@Column(name = "BLL_BALANCE")
 	private Double balance;
 
 	@NotNull
-	@Column(name="BLL_USR_ID_A")
+	@Column(name = "BLL_USR_ID_A")
 	private String user;
-	
+
 	@ManyToOne
-	@JoinColumn(name="BLL_ADM_ID")
+	@JoinColumn(name = "BLL_ADM_ID")
 	private Admission admission;
 
 	@Transient
 	private volatile int hashCode;
-	
-	
+
 	public Bill() {
 		super();
 		this.id = 0;
@@ -124,9 +123,9 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 		this.user = "admin";
 	}
 
-	public Bill(int id, LocalDateTime  date, LocalDateTime  update,
-			boolean isList, PriceList list, String listName, boolean isPatient,
-			Patient billPatient, String patName, String status, Double amount, Double balance, String user, Admission admission) {
+	public Bill(int id, LocalDateTime date, LocalDateTime update,
+					boolean isList, PriceList list, String listName, boolean isPatient,
+					Patient billPatient, String patName, String status, Double amount, Double balance, String user, Admission admission) {
 		super();
 		this.id = id;
 		this.date = TimeTools.truncateToSeconds(date);
@@ -147,7 +146,7 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	public int getId() {
 		return id;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -229,11 +228,11 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	public void setUser(String user) {
 		this.user = user;
 	}
-	
+
 	public Admission getAdmission() {
 		return admission;
 	}
-	
+
 	public void setAdmission(Admission admission) {
 		this.admission = admission;
 	}
@@ -242,35 +241,35 @@ public class Bill extends Auditable<String> implements Cloneable, Comparable<Bil
 	public int compareTo(Bill obj) {
 		return this.id - obj.getId();
 	}
-		
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}
-		
+
 		if (!(obj instanceof Bill)) {
 			return false;
 		}
-		
-		Bill bill = (Bill)obj;
+
+		Bill bill = (Bill) obj;
 		return (id == bill.getId());
 	}
-	
+
 	@Override
 	public int hashCode() {
-	    if (this.hashCode == 0) {
-	        final int m = 23;
-	        int c = 133;
-	        
-	        c = m * c + id;
-	        
-	        this.hashCode = c;
-	    }
-	  
-	    return this.hashCode;
+		if (this.hashCode == 0) {
+			final int m = 23;
+			int c = 133;
+
+			c = m * c + id;
+
+			this.hashCode = c;
+		}
+
+		return this.hashCode;
 	}
-	
+
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();

@@ -55,6 +55,8 @@ public class MovStockInsertingManager {
 
 	/**
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
+	 * 
+	 * TODO: verify the need of checkReference param
 	 *
 	 * @param movement - the movement to validate
 	 * @param checkReference - if {@code true} it will use {@link #checkReferenceNumber(String) checkReferenceNumber}
@@ -81,14 +83,14 @@ public class MovStockInsertingManager {
 		}
 
 		// Check Movement Type
-		boolean chargingType = false;
+		boolean isCharge = false;
 		if (movement.getType() == null) {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.pleasechooseatype.msg")));
 		} else {
-			chargingType = movement.getType().getType().contains("+"); //else discharging
+			isCharge = movement.getType().getType().contains("+"); // else discharging
 
 			// Check supplier
-			if (chargingType) {
+			if (isCharge) {
 				Object supplier = movement.getSupplier();
 				if (null == supplier) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.multiplecharging.pleaseselectasupplier.msg")));
@@ -111,47 +113,99 @@ public class MovStockInsertingManager {
 			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.chooseamedical.msg")));
 		}
 
-		// Check Lot
-		if (!isAutomaticLotOut()) {
-			Lot lot = movement.getLot();
-			if (lot != null) {
+		/*
+		 * Check Lot: it should be not null, but with some informations.
+		 * 
+		 * Depending on the operation type and the modality AUTOMATICLOT_IN/AUTOMATICLOT_OUT, some properties will be checked.
+		 * 
+		 * - charge:
+		 * 
+		 * AUTOMATICLOT_IN=no, Lot(String, GregorianCalendar, GregorianCalendar) check everything
+		 * 
+		 * AUTOMATICLOT_IN=yes, Lot("", GregorianCalendar, GregorianCalendar) check everything but the code, it will be generated
+		 * 
+		 * - discharge:
+		 * 
+		 * AUTOMATICLOT_OUT=no, Lot(String, GregorianCalendar, GregorianCalendar) check everything
+		 * 
+		 * AUTOMATICLOT_OUT=yes, Lot("", null, null) no checks, the lot will be automatically selected
+		 * 
+		 */
+		Lot lot = movement.getLot();
+		if (lot != null) {
 
-				if (lot.getCode().length() >= 50) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thelotidistoolongmax50chars.msg")));
-				}
-
-				if (lot.getDueDate() == null) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.insertavalidduedate.msg")));
-				}
-
-				if (lot.getPreparationDate() == null) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.insertavalidpreparationdate.msg")));
-				}
-
-				if (lot.getPreparationDate() != null && lot.getDueDate() != null && lot.getPreparationDate().isAfter(lot.getDueDate())) {
-					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thepreparationdatecannotbyaftertheduedate.msg")));
-				}
+			if (isCharge && !isAutomaticLotIn() || !isCharge && !isAutomaticLotOut()) {
+				// check everything
+				validateLot(errors, lot, true);
 			}
 
-			if (movement.getType() != null && !chargingType && movement.getQuantity() > lot.getMainStoreQuantity()) {
-				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof.msg")));
+			if (isCharge && isAutomaticLotIn()) {
+				// check everything but the code
+				validateLot(errors, lot, false);
 			}
 
+			/*
+			 * Check Lot code: it must be unique per Lot-Medical
+			 * 
+			 */
 			List<Integer> medicalIds = ioOperations.getMedicalsFromLot(lot.getCode());
 			if (movement.getMedical() != null && !(medicalIds.isEmpty() || medicalIds.size() == 1 && medicalIds.get(0).intValue() == movement
-					.getMedical().getCode().intValue())) {
+							.getMedical().getCode().intValue())) {
 				errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thislotreferstoanothermedical.msg")));
 			}
-			if (GeneralData.LOTWITHCOST && chargingType) {
+
+			/*
+			 * Check cost.
+			 * 
+			 * - charge:
+			 * 
+			 * LOTWITHCOSTS=yes, Lot(..., cost) with cost > 0.0, otherwise error
+			 * 
+			 * LOTWITHCOSTS=no, no check: with or without cost, the cost will be ignored
+			 * 
+			 */
+			if (isCharge && GeneralData.LOTWITHCOST) {
 				BigDecimal cost = lot.getCost();
 				if (cost == null || cost.doubleValue() <= 0.0) {
 					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.multiplecharging.zerocostsarenotallowed.msg")));
 				}
 			}
+
+			/*
+			 * Check quantity.
+			 * 
+			 * AUTOMATICLOT_OUT=no, specified quantity must be equal or lower than the lot quantity
+			 * 
+			 * AUTOMATICLOT_OUT=yes, no check: the quantity will be split automatically between available lots
+			 */
+			if (!isAutomaticLotOut()) {
+
+				if (movement.getType() != null && !isCharge && movement.getQuantity() > lot.getMainStoreQuantity()) {
+					errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.movementquantityisgreaterthanthequantityof.msg")));
+				}
+			}
+
+		} else {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.choosealot.msg")));
 		}
 
 		if (!errors.isEmpty()) {
 			throw new OHDataValidationException(errors);
+		}
+	}
+
+	private void validateLot(List<OHExceptionMessage> errors, Lot lot, boolean checkCode) {
+		if (checkCode && lot.getCode().length() >= 50) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thelotidistoolongmax50chars.msg")));
+		}
+		if (lot.getPreparationDate() == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.insertavalidpreparationdate.msg")));
+		}
+		if (lot.getDueDate() == null) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.insertavalidduedate.msg")));
+		}
+		if (lot.getPreparationDate() != null && lot.getDueDate() != null && lot.getPreparationDate().compareTo(lot.getDueDate()) > 0) {
+			errors.add(new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.thepreparationdatecannotbyaftertheduedate.msg")));
 		}
 	}
 
@@ -172,6 +226,10 @@ public class MovStockInsertingManager {
 			}
 		}
 		return errors;
+	}
+
+	private boolean isAutomaticLotIn() {
+		return GeneralData.AUTOMATICLOT_IN;
 	}
 
 	private boolean isAutomaticLotOut() {
@@ -240,6 +298,7 @@ public class MovStockInsertingManager {
 	@TranslateOHServiceException
 	public List<Movement> newMultipleChargingMovements(List<Movement> movements, String referenceNumber) throws OHServiceException {
 
+		// TODO: verify the need of this checkReference in the whole class
 		boolean checkReference = referenceNumber == null; // referenceNumber == null, each movement should have referenceNumber set
 		if (!checkReference) {
 			// referenceNumber != null, all movement will have same referenceNumber, we check only once for all
@@ -255,7 +314,8 @@ public class MovStockInsertingManager {
 			} catch (OHServiceException e) {
 				List<OHExceptionMessage> errors = e.getMessages();
 				errors.add(new OHExceptionMessage(
-						mov.getMedical() != null ? mov.getMedical().getDescription() : MessageBundle.getMessage("angal.medicalstock.nodescription.txt")));
+								mov.getMedical() != null ? mov.getMedical().getDescription()
+												: MessageBundle.getMessage("angal.medicalstock.nodescription.txt")));
 				throw new OHDataValidationException(errors);
 			}
 		}

@@ -19,21 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-package org.isf.utils.db;
+package org.isf.telemetry.service.remote;
 
-import java.util.Optional;
+import java.lang.reflect.Type;
 
-import org.isf.menu.manager.UserBrowsingManager;
-import org.springframework.data.domain.AuditorAware;
+import feign.RequestTemplate;
+import feign.codec.EncodeException;
+import feign.codec.Encoder;
+import feign.gson.GsonEncoder;
 
-/**
- * @author uni2grow
- */
-public class AuditorAwareImpl implements AuditorAware<String>{
+public class CustomCommonEncoder implements Encoder {
 
-	@Override
-	public Optional<String> getCurrentAuditor() {
-		return Optional.ofNullable(UserBrowsingManager.getCurrentUser());
+	public CustomCommonEncoder() {
+		super();
 	}
 
+	@Override
+	public void encode(Object object, Type bodyType, RequestTemplate template) throws EncodeException {
+		GsonEncoder gson = new GsonEncoder();
+		gson.encode(object, bodyType, template);
+	}
 }

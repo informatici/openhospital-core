@@ -101,7 +101,7 @@ public class DiseaseTypeBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param diseaseType
-	 * @param insert {@code true} or updated <code>false</code>
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
 	 */
 	protected void validateDiseaseType(DiseaseType diseaseType, boolean insert) throws OHServiceException {

@@ -115,7 +115,7 @@ public class DischargeTypeBrowserManager {
 	 * Verify if the object is valid for CRUD and return a list of errors, if any
 	 *
 	 * @param dischargeType
-	 * @param insert {@code true} or updated <code>false</code>
+	 * @param insert {@code true} or updated {@code false}
 	 * @throws OHServiceException
 	 */
 	protected void validateDischargeType(DischargeType dischargeType, boolean insert) throws OHServiceException {

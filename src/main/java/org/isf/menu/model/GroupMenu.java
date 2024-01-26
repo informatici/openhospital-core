@@ -35,24 +35,24 @@ import org.isf.utils.db.Auditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name="OH_GROUPMENU")
+@Table(name = "OH_GROUPMENU")
 @EntityListeners(AuditingEntityListener.class)
-@AttributeOverride(name = "createdBy", column = @Column(name = "GM_CREATED_BY"))
-@AttributeOverride(name = "createdDate", column = @Column(name = "GM_CREATED_DATE"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "GM_CREATED_BY", updatable = false))
+@AttributeOverride(name = "createdDate", column = @Column(name = "GM_CREATED_DATE", updatable = false))
 @AttributeOverride(name = "lastModifiedBy", column = @Column(name = "GM_LAST_MODIFIED_BY"))
 @AttributeOverride(name = "active", column = @Column(name = "GM_ACTIVE"))
 @AttributeOverride(name = "lastModifiedDate", column = @Column(name = "GM_LAST_MODIFIED_DATE"))
 public class GroupMenu extends Auditable<String> {
 
 	@Id
-	@Column(name="GM_ID")
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name = "GM_ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer code;
-	
-	@Column(name="GM_UG_ID_A")
+
+	@Column(name = "GM_UG_ID_A")
 	private String userGroup;
-	
-	@Column(name="GM_MNI_ID_A")
+
+	@Column(name = "GM_MNI_ID_A")
 	private String menuItem;
 
 	@Transient
@@ -99,13 +99,13 @@ public class GroupMenu extends Auditable<String> {
 	public void setActive(int active) {
 		this.active = active;
 	}
-	
+
 	@Override
 	public boolean equals(Object anObject) {
-        return anObject instanceof GroupMenu && (getCode().equals(((GroupMenu) anObject).getCode())
-		        && getUserGroup().equalsIgnoreCase(((GroupMenu) anObject).getUserGroup())
-		        && getMenuItem().equals(((GroupMenu) anObject).getMenuItem())
-		        && getActive() == ((GroupMenu) anObject).getActive());
-    }
+		return anObject instanceof GroupMenu && (getCode().equals(((GroupMenu) anObject).getCode())
+						&& getUserGroup().equalsIgnoreCase(((GroupMenu) anObject).getUserGroup())
+						&& getMenuItem().equals(((GroupMenu) anObject).getMenuItem())
+						&& getActive() == ((GroupMenu) anObject).getActive());
+	}
 
 }

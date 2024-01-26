@@ -37,10 +37,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(rollbackFor=OHServiceException.class)
+@Transactional(rollbackFor = OHServiceException.class)
 @TranslateOHServiceException
-public class MenuIoOperations 
-{
+public class MenuIoOperations {
+
 	@Autowired
 	private UserIoOperationRepository repository;
 	@Autowired
@@ -49,7 +49,7 @@ public class MenuIoOperations
 	private UserMenuItemIoOperationRepository menuRepository;
 	@Autowired
 	private GroupMenuIoOperationRepository groupMenuRepository;
-	
+
 	/**
 	 * Returns the list of {@link User}s
 	 * 
@@ -58,6 +58,24 @@ public class MenuIoOperations
 	 */
 	public List<User> getUser() throws OHServiceException {
 		return repository.findAllByOrderByUserNameAsc();
+	}
+
+	/**
+	 * Count all active {@link User}s
+	 * 
+	 * @return
+	 */
+	public long countAllActiveUsers() {
+		return repository.countAllActiveUsers();
+	}
+
+	/**
+	 * Count all active {@link UserGroup}s
+	 * 
+	 * @return
+	 */
+	public long countAllActiveGroups() {
+		return repository.countAllActiveGroups();
 	}
 
 	/**
@@ -70,9 +88,10 @@ public class MenuIoOperations
 	public List<User> getUser(String groupID) throws OHServiceException {
 		return repository.findAllWhereUserGroupNameByOrderUserNameAsc(groupID);
 	}
-	
+
 	/**
 	 * Returns {@link User} from its username
+	 * 
 	 * @param userName - the {@link User}'s username
 	 * @return {@link User}
 	 * @throws OHServiceException
@@ -80,9 +99,10 @@ public class MenuIoOperations
 	public User getUserByName(String userName) throws OHServiceException {
 		return repository.findByUserName(userName);
 	}
-	
+
 	/**
 	 * Returns {@link User} description from its username
+	 * 
 	 * @param userName - the {@link User}'s username
 	 * @return the {@link User}'s description
 	 * @throws OHServiceException
@@ -94,7 +114,7 @@ public class MenuIoOperations
 		}
 		return user.getDesc();
 	}
-	
+
 	/**
 	 * Returns the list of {@link UserGroup}s
 	 * 
@@ -104,7 +124,7 @@ public class MenuIoOperations
 	public List<UserGroup> getUserGroup() throws OHServiceException {
 		return groupRepository.findAllByOrderByCodeAsc();
 	}
-	
+
 	/**
 	 * Checks if the specified {@link User} code is already present.
 	 * 
@@ -115,7 +135,7 @@ public class MenuIoOperations
 	public boolean isUserNamePresent(String userName) throws OHServiceException {
 		return repository.existsById(userName);
 	}
-	
+
 	/**
 	 * Checks if the specified {@link UserGroup} code is already present.
 	 * 
@@ -126,7 +146,7 @@ public class MenuIoOperations
 	public boolean isGroupNamePresent(String groupName) throws OHServiceException {
 		return groupRepository.existsById(groupName);
 	}
-	
+
 	/**
 	 * Inserts a new {@link User} in the DB
 	 * 
@@ -137,7 +157,7 @@ public class MenuIoOperations
 	public User newUser(User user) throws OHServiceException {
 		return repository.save(user);
 	}
-		
+
 	/**
 	 * Updates an existing {@link User} in the DB
 	 * 
@@ -148,7 +168,7 @@ public class MenuIoOperations
 	public boolean updateUser(User user) throws OHServiceException {
 		return repository.updateUser(user.getDesc(), user.getUserGroupName(), user.getUserName()) > 0;
 	}
-	
+
 	/**
 	 * Updates the password of an existing {@link User} in the DB
 	 * 
@@ -186,7 +206,7 @@ public class MenuIoOperations
 	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link User}
 	 * 
 	 * @param aUser - the {@link User}
-	 * @return the list of {@link UserMenuItem}s 
+	 * @return the list of {@link UserMenuItem}s
 	 * @throws OHServiceException
 	 */
 	public List<UserMenuItem> getMenu(User aUser) throws OHServiceException {
@@ -213,7 +233,7 @@ public class MenuIoOperations
 	 * Returns the list of {@link UserMenuItem}s that compose the menu for specified {@link UserGroup}
 	 * 
 	 * @param aGroup - the {@link UserGroup}
-	 * @return the list of {@link UserMenuItem}s 
+	 * @return the list of {@link UserMenuItem}s
 	 * @throws OHServiceException
 	 */
 	public List<UserMenuItem> getGroupMenu(UserGroup aGroup) throws OHServiceException {
@@ -264,7 +284,7 @@ public class MenuIoOperations
 		groupMenu.setActive(item.isActive() ? 1 : 0);
 		return groupMenuRepository.save(groupMenu);
 	}
-	
+
 	/**
 	 * Deletes a {@link UserGroup}
 	 * 
