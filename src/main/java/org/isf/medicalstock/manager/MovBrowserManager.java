@@ -197,6 +197,11 @@ public class MovBrowserManager {
 			} else {
 				movWardBrowserManager.updateMedicalWard(medWard);
 			}
+			List<MovementWard> movWard = movWardBrowserManager.getMovementWardByMedical(lastMovement.getMedical().getCode());
+			if (movWard.size() > 0) {
+				throw new OHDataValidationException(
+								new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.deletelastmovementdenied.msg")));
+			}
 			medical.setOutqty(medical.getOutqty() - quantity);
 			medicalsIoOperation.updateMedical(medical);
 
