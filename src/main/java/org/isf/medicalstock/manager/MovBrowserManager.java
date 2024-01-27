@@ -200,7 +200,8 @@ public class MovBrowserManager {
 			List<MovementWard> movWard = movWardBrowserManager.getMovementWardByMedical(lastMovement.getMedical().getCode());
 			if (movWard.size() > 0) {
 				throw new OHDataValidationException(
-								new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.deletelastmovementdenied.msg")));
+								new OHExceptionMessage(MessageBundle.formatMessage("angal.medicalstock.notpossibletodeletethismovementthemedicalhasbeenusedafterbeenreceivedinward.fmt.msg",
+												lastMovement.getMedical().getDescription(), lastMovement.getWard().getDescription())));
 			}
 			medical.setOutqty(medical.getOutqty() - quantity);
 			medicalsIoOperation.updateMedical(medical);

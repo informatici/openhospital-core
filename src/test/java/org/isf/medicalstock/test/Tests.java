@@ -25,13 +25,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.lang.reflect.UndeclaredThrowableException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.assertj.core.api.Condition;
@@ -1211,16 +1211,12 @@ public class Tests extends OHCoreTestCase {
 	@Test
     public void testDeleteLastMovementDenied() throws Exception {
 		int code = setupTestMovement(false);
-		Optional<Movement> movement1 = movementIoOperationRepository.findById(code); 
-		assertThat(movement1).isPresent();
-		int code2 = setupTestMovement(false);
-		Optional<Movement> movement2 = movementIoOperationRepository.findById(code2); 
-		assertThat(movement2).isPresent();
-		List<Movement> movements = medicalStockIoOperation.getMovements();
-		assertThat(movements).isNotEmpty();
-		int size = movements.size();
-		Movement movementTodelete = movements.get(size - 1);
-		assertThrows(NoSuchElementException.class, () -> movBrowserManager.deleteLastMovement(movementTodelete));
+		Optional<Movement> movement = movementIoOperationRepository.findById(code); 
+		assertThat(movement).isPresent();
+		Movement mov = movement.get();
+		MovementType movType = new MovementType("discharge","Discharge","-");
+		mov.setType(movType);
+		assertThrows(UndeclaredThrowableException.class, () -> movBrowserManager.deleteLastMovement(mov));
     }
 
 	private String setupTestLot(boolean usingSet) throws OHException {
