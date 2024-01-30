@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -23,6 +23,7 @@ package org.isf.medicalstock.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.assertj.core.api.Condition;
 import org.isf.OHCoreTestCase;
@@ -46,6 +48,7 @@ import org.isf.medicalstock.service.MedicalStockIoOperations;
 import org.isf.medicalstock.service.MedicalStockIoOperations.MovementOrder;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
 import org.isf.medicalstockward.model.MedicalWard;
+import org.isf.medicalstockward.model.MovementWard;
 import org.isf.medicalstockward.service.MedicalStockWardIoOperationRepository;
 import org.isf.medicalstockward.service.MovementWardIoOperationRepository;
 import org.isf.medstockmovtype.model.MovementType;
@@ -1193,6 +1196,51 @@ public class Tests extends OHCoreTestCase {
 		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
 		assertThat(movement).isNotNull();
 		assertThat(movement.getSupplier()).isEqualTo(movement.getOrigin());
+	}
+	
+	@Test
+	public void testDeleteLastMovement() throws Exception {
+		int code = setupTestMovement(false);
+		Optional<Movement> movement = movementIoOperationRepository.findById(code); 
+		assertThat(movement).isPresent();
+		movBrowserManager.deleteLastMovement(movement.get());
+		Optional<Movement> movement2 = movementIoOperationRepository.findById(code); 
+		assertThat(movement2).isNotPresent();
+	}
+	
+	@Test
+	public void testDeleteLastMovementDenied() throws Exception {
+		int code = setupTestMovement(false);
+		Movement movement = movementIoOperationRepository.findById(code).orElse(null);
+		assertThat(movement).isNotNull();
+		Medical medical = movement.getMedical();
+		MovementType medicalType = movement.getType();
+		medicalType.setType("-");
+		medicalType = medicalDsrStockMovementTypeIoOperationRepository.saveAndFlush(medicalType);
+		Ward ward = movement.getWard();
+		Supplier supplier = movement.getSupplier();
+		Lot lot = movement.getLot();
+		Movement newMovement = new Movement(
+				medical,
+				medicalType,
+				ward,
+				lot,
+				TimeTools.getNow(),
+				10,
+				supplier,
+				"newReference");
+		Movement storedMovement = medicalStockIoOperation.newMovement(newMovement);
+		MovementWard movementWard = new MovementWard(ward,lot, "newDescription", medical, 10.0, "newUnits");
+		MovementWard saveMovWard = movementWardIoOperationRepository.saveAndFlush(movementWard);
+		MovementWard foundMovWard = movementWardIoOperationRepository.findById(saveMovWard.getCode()).orElse(null);
+		assertThat(foundMovWard).isNotNull();
+		Movement lastMovement = movementIoOperationRepository.findById(storedMovement.getCode()).orElse(null);
+		assertThat(lastMovement).isNotNull();
+		assertThat(lastMovement.getType().getType()).isEqualTo("-");
+		assertThat(lastMovement.getMedical()).isEqualTo(foundMovWard.getMedical());
+		List<MovementWard> movWards = movementWardIoOperationRepository.findByMedicalCode(lastMovement.getMedical().getCode());
+		assertThat(movWards.size()).isGreaterThan(0);
+		assertThrows(OHServiceException.class, () -> movBrowserManager.deleteLastMovement(lastMovement));
 	}
 
 	private String setupTestLot(boolean usingSet) throws OHException {

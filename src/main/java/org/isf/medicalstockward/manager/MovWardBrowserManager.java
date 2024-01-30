@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -224,7 +224,51 @@ public class MovWardBrowserManager {
 		Collections.sort(drugPrint);
 		return drugPrint;
 	}
-
+	
+	/**
+	 * Get the MedicalWard for the specified criteria.
+	 *
+	 * @param wardCode - the ward id  
+	 * @param medical - the mecical id 
+	 * @param lotCode - the lot id
+	 * @return the retrieved medical.
+	 * @throws OHServiceException if an error occurs retrieving the medical.
+	 */
+	public MedicalWard getMedicalWardByWardAndMedical(String wardCode, int medical, String lotCode) throws OHServiceException {
+		return ioOperations.getMedicalWardByWardAndMedical(wardCode, medical, lotCode);
+	}
+	
+	/**
+	 * Deletes the specified {@link MedicalWard}.
+	 *
+	 * @param medWard - the MedicalWard to delete. 
+	 * @throws OHServiceException.
+	 */
+	public void deleteMedicalWard(MedicalWard medWard) throws OHServiceException {
+		ioOperations.deleteMedicalWard(medWard);
+	}
+	
+	/**
+	 * Updates the specified {@link MedicalWard}.
+	 *
+	 * @param medWard - the MedicalWard to update. 
+	 * @throws OHServiceException.
+	 */
+	public MedicalWard updateMedicalWard(MedicalWard medWard) throws OHServiceException {
+		return ioOperations.updateMedicalWard(medWard);
+	}
+	
+	/* * 
+	 * Get the MovementWard for the specified criteria.
+	 *
+	 * @param medID - the mecical id 
+	 * @return all the retrieved MovementWards.
+	 * @throws OHServiceException if an error occurs retrieving the medical.
+	 */
+	public List<MovementWard> getMovementWardByMedical(int medID) {
+		return ioOperations.getMovementWardByMedical(medID);
+	}
+	
 	class ComparatorMovementWardForPrint implements Comparator<MovementWardForPrint> {
 
 		@Override
@@ -250,4 +294,5 @@ public class MovWardBrowserManager {
 			}
 		}
 	}
+
 }
