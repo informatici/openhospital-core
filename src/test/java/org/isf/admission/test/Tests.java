@@ -925,7 +925,9 @@ public class Tests extends OHCoreTestCase {
 	public void testMgrNewAdmission() throws Exception {
 		Admission admission = buildNewAdmission();
 		Admission result = admissionBrowserManager.newAdmission(admission);
-		assertThat(result).isNotNull();
+		assertThat(result)
+			.isNotNull()
+			.isEqualTo(admission);
 		admission = admissionBrowserManager.getAdmission(admission.getId());
 		testAdmission.check(admission);
 	}
