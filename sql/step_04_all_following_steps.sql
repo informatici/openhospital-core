@@ -94,4 +94,4 @@ source step_97_fix_default_values.sql;
 source step_98_reset_permissions.sql;
 source step_99_telemetry.sql;
 source step_a100_logviewer.sql;
-source step_aXXX_add_delete_btn_in_medicalstock.sql;
+source step_a101_add_delete_btn_in_medicalstock.sql;
