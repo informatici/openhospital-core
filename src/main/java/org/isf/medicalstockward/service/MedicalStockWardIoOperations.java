@@ -290,5 +290,48 @@ public class MedicalStockWardIoOperations {
 	public long countAllActiveMovementsWard() {
 		return this.movementRepository.countAllActiveMovementsWard();
 	}
+	
+	/**
+	 * Get the {@link MedicalWard} associated to specified criteria.
+	 * @param wardCode the ward code
+	 * @param medical the medical code
+	 * @param lot the lot code
+	 * 
+	 * @return the retrieved medical.
+	 * @throws OHServiceException if an error occurs during the medical retrieving.
+	 */
+	public MedicalWard getMedicalWardByWardAndMedical(String wardCode, int medical, String lot) throws OHServiceException {
+		return repository.findOneWhereCodeAndMedicalAndLot(wardCode, medical, lot);
+	}
+	
+	/**
+	 * Updates the specified {@link MedicalWard}.
+	 * @param medWard the medical ward to update
+	 * @return the updated {@link MedicalWard} object.
+	 * @throws OHServiceException if an error occurs during the update.
+	 */
+	public MedicalWard updateMedicalWard(MedicalWard medWard) throws OHServiceException {
+		return repository.save(medWard);
+	}
 
+	/**
+	 * Deletes the specified {@link MedicalWard}.
+	 * @param medWard the medical ward to delete
+	 * @throws OHServiceException if an error occurs during the delete.
+	 */
+	public void deleteMedicalWard(MedicalWard medWard) throws OHServiceException {
+		repository.delete(medWard);
+	}
+	
+	/**
+	 * Get {@link MovementWard}s with the specified criteria.
+	 * @param medID the code of medical
+	 * @return the retrieved movements.
+	 * @throws OHServiceException if an error occurs retrieving the movements.
+	 */
+	public List<MovementWard> getMovementWardByMedical(int medID) {
+		return movementRepository.findByMedicalCode(medID);
+	}
+	
+	
 }

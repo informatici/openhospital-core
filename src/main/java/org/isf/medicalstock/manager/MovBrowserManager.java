@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -25,20 +25,51 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.isf.generaldata.MessageBundle;
+import org.isf.medicals.model.Medical;
+import org.isf.medicals.service.MedicalsIoOperations;
+import org.isf.medicalstock.model.Lot;
 import org.isf.medicalstock.model.Movement;
+import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstock.service.MedicalStockIoOperations;
+import org.isf.medicalstockward.manager.MovWardBrowserManager;
+import org.isf.medicalstockward.model.MedicalWard;
+import org.isf.medicalstockward.model.MovementWard;
+import org.isf.medstockmovtype.manager.MedicalDsrStockMovementTypeBrowserManager;
+import org.isf.medstockmovtype.model.MovementType;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class MovBrowserManager {
 
 	@Autowired
 	private MedicalStockIoOperations ioOperations;
+
+	@Autowired
+	private LotIoOperationRepository lotRepository;
+
+	@Autowired
+	private MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager;
+
+	@Autowired
+	private MedicalsIoOperations medicalsIoOperation;
+
+	@Autowired
+	private MovWardBrowserManager movWardBrowserManager;
+
+	public MovBrowserManager(MedicalStockIoOperations ioOperations, LotIoOperationRepository lotRepository, MedicalsIoOperations medicalsIoOperation,
+					MedicalDsrStockMovementTypeBrowserManager medicalDsrStockMovTypeManager, MovWardBrowserManager movWardBrowserManager) {
+		this.ioOperations = ioOperations;
+		this.lotRepository = lotRepository;
+		this.medicalsIoOperation = medicalsIoOperation;
+		this.medicalDsrStockMovTypeManager = medicalDsrStockMovTypeManager;
+		this.movWardBrowserManager = movWardBrowserManager;
+	}
 
 	/**
 	 * Retrieves all the {@link Movement}s.
@@ -120,6 +151,62 @@ public class MovBrowserManager {
 				throw new OHDataValidationException(
 						new OHExceptionMessage(MessageBundle.getMessage(errMsgKey)));
 			}
+		}
+	}
+
+	/**
+	 * Get the last Movement.
+	 *
+	 * @return the retrieved movement.
+	 * @throws OHServiceException
+	 */
+	public Movement getLastMovement() throws OHServiceException {
+		return ioOperations.getLastMovement();
+	}
+
+	/**
+	 * Deletes the last Movement.
+	 *
+	 * @param lastMovement - the last movement to delete
+	 * @throws OHServiceException
+	 */
+	@Transactional(rollbackFor = OHServiceException.class)
+	public void deleteLastMovement(Movement lastMovement) throws OHServiceException {
+
+		MovementType movType = medicalDsrStockMovTypeManager.getMovementType(lastMovement.getType().getCode());
+		Lot lot = lastMovement.getLot();
+		Medical medical = lastMovement.getMedical();
+		int medicalCode = medical.getCode();
+		int quantity = lastMovement.getQuantity();
+		if (movType.getType().contains("+")) {
+			medical.setInqty(medical.getInqty() - quantity);
+			medicalsIoOperation.updateMedical(medical);
+			List<Movement> movementWithSameLot = ioOperations.getMovementByLot(lot);
+			if (movementWithSameLot.size() == 1) {
+				lotRepository.deleteById(lot.getCode());
+			}
+			ioOperations.deleteMovement(lastMovement);
+		} else {
+			Ward ward = lastMovement.getWard();
+			String wardCode = ward.getCode();
+			String lotCode = lot.getCode();
+			MedicalWard medWard = movWardBrowserManager.getMedicalWardByWardAndMedical(wardCode, medicalCode, lotCode);
+			medWard.setIn_quantity(medWard.getIn_quantity() - quantity);
+			if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity() == 0) {
+				movWardBrowserManager.deleteMedicalWard(medWard);
+			} else {
+				movWardBrowserManager.updateMedicalWard(medWard);
+			}
+			List<MovementWard> movWard = movWardBrowserManager.getMovementWardByMedical(lastMovement.getMedical().getCode());
+			if (movWard.size() > 0) {
+				throw new OHDataValidationException(
+								new OHExceptionMessage(MessageBundle.formatMessage("angal.medicalstock.notpossibletodeletethismovementthemedicalhasbeenusedafterbeenreceivedinward.fmt.msg",
+												lastMovement.getMedical().getDescription(), lastMovement.getWard().getDescription())));
+			}
+			medical.setOutqty(medical.getOutqty() - quantity);
+			medicalsIoOperation.updateMedical(medical);
+
+			ioOperations.deleteMovement(lastMovement);
 		}
 	}
 }
