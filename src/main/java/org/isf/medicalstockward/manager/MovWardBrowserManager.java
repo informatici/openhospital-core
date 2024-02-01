@@ -265,7 +265,7 @@ public class MovWardBrowserManager {
 	 * @return all the retrieved MovementWards.
 	 * @throws OHServiceException if an error occurs retrieving the medical.
 	 */
-	public List<MovementWard> getMovementWardByMedical(int medID) {
+	public List<MovementWard> getMovementWardByMedical(int medID) throws OHServiceException {
 		return ioOperations.getMovementWardByMedical(medID);
 	}
 	
@@ -294,5 +294,19 @@ public class MovWardBrowserManager {
 			}
 		}
 	}
+
+	public void deleteLastMovementWard(MovementWard movSelected) throws OHServiceException {
+		MedicalWard medWard = this.getMedicalWardByWardAndMedical(movSelected.getWard().getCode(), movSelected.getMedical().getCode(), movSelected.getLot().getCode());
+		float movQte = Double.valueOf(movSelected.getQuantity()).floatValue();
+		float quantity = medWard.getOut_quantity() - movQte;
+		medWard.setOut_quantity(quantity);
+		ioOperations.updateMedicalWard(medWard);
+		ioOperations.deleteMovementWard(movSelected);
+	}
+
+	public MovementWard getLastMovementWard(Ward ward) throws OHServiceException {
+		return ioOperations.getLastMovementWard(ward);
+	}
+
 
 }

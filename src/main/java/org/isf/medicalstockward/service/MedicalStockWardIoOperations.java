@@ -329,8 +329,18 @@ public class MedicalStockWardIoOperations {
 	 * @return the retrieved movements.
 	 * @throws OHServiceException if an error occurs retrieving the movements.
 	 */
-	public List<MovementWard> getMovementWardByMedical(int medID) {
+	public List<MovementWard> getMovementWardByMedical(int medID) throws OHServiceException {
 		return movementRepository.findByMedicalCode(medID);
+	}
+
+	/**
+	 * Get the last {@link MovementWard}.
+	 * 
+	 * @return the retrieved the last movement.
+	 * @throws OHServiceException if an error occurs retrieving the movements.
+	 */
+	public MovementWard getLastMovementWard(Ward ward) throws OHServiceException {
+		return movementRepository.findLastMovement(ward.getCode());
 	}
 	
 	

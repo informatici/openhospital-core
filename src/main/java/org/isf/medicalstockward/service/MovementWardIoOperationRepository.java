@@ -48,4 +48,7 @@ public interface MovementWardIoOperationRepository extends JpaRepository<Movemen
 
 	@Query(value = "select movWard from MovementWard movWard where movWard.medical.code = :medID")
 	List<MovementWard> findByMedicalCode(@Param("medID") int medID);
+
+	@Query(value = "SELECT * FROM OH_MEDICALDSRSTOCKMOVWARD WHERE MMVN_WRD_ID_A = :wardID ORDER BY MMVN_ID LIMIT 1", nativeQuery = true)
+	MovementWard findLastMovement(@Param("wardID") String wardID);
 }
