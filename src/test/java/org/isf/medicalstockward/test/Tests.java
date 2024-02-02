@@ -24,12 +24,10 @@ package org.isf.medicalstockward.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.data.Offset.offset;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.isf.OHCoreTestCase;
 import org.isf.medicals.model.Medical;
@@ -66,7 +64,6 @@ import org.isf.supplier.service.SupplierIoOperationRepository;
 import org.isf.supplier.test.TestSupplier;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
-import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
@@ -1369,7 +1366,7 @@ public class Tests extends OHCoreTestCase {
 		MedicalWard foundMedicalWard = medicalStockWardIoOperationRepository.findOneWhereCodeAndMedical(id.getWard().getCode(), id.getMedical().getCode());
 		testMedicalWard.check(foundMedicalWard);
 	}
-	
+
 	private int setupTestMovementWard(boolean usingSet) throws OHException {
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
