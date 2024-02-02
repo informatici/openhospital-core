@@ -21,7 +21,12 @@
  */
 package org.isf.utils.file;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -30,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +45,9 @@ import org.isf.generaldata.MessageBundle;
 import org.isf.utils.exception.OHException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 /**
  * @author Mwithi
@@ -47,15 +56,15 @@ public class FileTools {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileTools.class);
 
-	private static final String[] BINARY_UNITS = { "B", "M", "G" }; //Byte, Megabyte, Gigabyte 
+	private static final String[] BINARY_UNITS = { "B", "M", "G" }; // Byte, Megabyte, Gigabyte
 
 	// TODO: consider more specific versions of \d that do "some" validation
-	// DAY:   (0[1-9]|[12][0-9]|3[01])
+	// DAY: (0[1-9]|[12][0-9]|3[01])
 	// MONTH: (0[1-9]|1[012])
-	// YEAR:  (2\d\d\d)
+	// YEAR: (2\d\d\d)
 
-	// HOUR:  (0[0-9]|1[0-9]|2[0-3])
-	// MIN:   ([0-5][0-9])
+	// HOUR: (0[0-9]|1[0-9]|2[0-3])
+	// MIN: ([0-5][0-9])
 
 	private static final String[][] dateTimeFormats = {
 			{ "yyyy-MM-dd_HHmmss", "(?<![0-9])(\\d{4}-\\d{2}-\\d{2}_\\d{6})(?![0-9])" },
@@ -195,6 +204,29 @@ public class FileTools {
 			throw new OHException(MessageBundle.formatMessage("angal.dicom.unknownsizeformatpleasesetdicommaxsizeproperty.fmt.msg", string));
 		}
 		return size;
+	}
+
+	public static String readFileToStringLineByLine(String path, boolean createHtml) {
+		ResourceLoader resourceLoader = new DefaultResourceLoader();
+		Resource resource = resourceLoader.getResource(path);
+		StringBuilder text = new StringBuilder();
+		if (createHtml) {
+			text.append("<html>");
+		}
+		try (Scanner scanner = new Scanner(new InputStreamReader(resource.getInputStream(), UTF_8))) {
+			while (scanner.hasNextLine()) {
+				text.append(scanner.nextLine());
+				if (scanner.hasNextLine() && createHtml) {
+					text.append("<br>");
+				}
+			}
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
+		if (createHtml) {
+			text.append("</html>");
+		}
+		return text.toString();
 	}
 
 }
