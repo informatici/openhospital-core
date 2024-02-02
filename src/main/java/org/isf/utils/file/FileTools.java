@@ -206,24 +206,32 @@ public class FileTools {
 		return size;
 	}
 
-	public static String readFileToStringLineByLine(String path, boolean createHtml) {
+	/**
+	 * Read a text file into string, with option to wrap with {@code <html>} tags
+	 * 
+	 * @param path the path to the file to read
+	 * @param makeHtml if {@code true}, wrap the text with {@code <html>} tags and {@code <br>} for new lines
+	 * @return
+	 */
+	public static String readFileToStringLineByLine(String path, boolean makeHtml) {
 		ResourceLoader resourceLoader = new DefaultResourceLoader();
 		Resource resource = resourceLoader.getResource(path);
 		StringBuilder text = new StringBuilder();
-		if (createHtml) {
+		if (makeHtml) {
 			text.append("<html>");
 		}
 		try (Scanner scanner = new Scanner(new InputStreamReader(resource.getInputStream(), UTF_8))) {
 			while (scanner.hasNextLine()) {
 				text.append(scanner.nextLine());
-				if (scanner.hasNextLine() && createHtml) {
+				if (scanner.hasNextLine() && makeHtml) {
 					text.append("<br>");
 				}
 			}
 		} catch (IOException e) {
+			LOGGER.error("Unable to read {} file", path);
 			throw new UncheckedIOException(e);
 		}
-		if (createHtml) {
+		if (makeHtml) {
 			text.append("</html>");
 		}
 		return text.toString();
