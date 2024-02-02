@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -334,9 +334,10 @@ public class MedicalStockWardIoOperations {
 	}
 
 	/**
-	 * Get the last {@link MovementWard}.
+	 * Get the last {@link MovementWard} with the specified criteria.
 	 * 
-	 * @return the retrieved the last movement.
+	 * @param ward - the ward.
+	 * @return the retrieved the movement.
 	 * @throws OHServiceException if an error occurs retrieving the movements.
 	 */
 	public MovementWard getLastMovementWard(Ward ward) throws OHServiceException {
