@@ -302,6 +302,11 @@ public class MovWardBrowserManager {
 	 * @throws OHServiceException if an error occurs retrieving the medical.
 	 */
 	public void deleteLastMovementWard(MovementWard movWard) throws OHServiceException {
+		MovementWard movementWard = ioOperations.getLastMovementWard(movWard.getWard());
+		if (movementWard.getCode() != movWard.getCode()) {
+			throw new OHDataValidationException(
+							new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.onlythelastmovementcanbedeleted.msg")));
+		}
 		MedicalWard medWard = this.getMedicalWardByWardAndMedical(movWard.getWard().getCode(), movWard.getMedical().getCode(), movWard.getLot().getCode());
 		float movQty = Double.valueOf(movWard.getQuantity()).floatValue();
 		float quantity = medWard.getOut_quantity() - movQty;
