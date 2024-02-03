@@ -303,8 +303,8 @@ public class MovWardBrowserManager {
 	 */
 	public void deleteLastMovementWard(MovementWard movWard) throws OHServiceException {
 		MedicalWard medWard = this.getMedicalWardByWardAndMedical(movWard.getWard().getCode(), movWard.getMedical().getCode(), movWard.getLot().getCode());
-		float movQte = Double.valueOf(movWard.getQuantity()).floatValue();
-		float quantity = medWard.getOut_quantity() - movQte;
+		float movQty = Double.valueOf(movWard.getQuantity()).floatValue();
+		float quantity = medWard.getOut_quantity() - movQty;
 		medWard.setOut_quantity(quantity);
 		ioOperations.updateMedicalWard(medWard);
 		ioOperations.deleteMovementWard(movWard);
