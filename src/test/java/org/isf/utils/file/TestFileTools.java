@@ -22,7 +22,12 @@
 package org.isf.utils.file;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -530,5 +535,40 @@ public class TestFileTools {
 		assertThat(FileTools.humanReadableByteCount(16777216L, Locale.US)).isEqualTo("16.0 M");
 		assertThat(FileTools.humanReadableByteCount(268435456L, Locale.US)).isEqualTo("256.0 M");
 		assertThat(FileTools.humanReadableByteCount(1073741824L, Locale.US)).isEqualTo("1.0 G");
+	}
+
+	@Test
+	public void testReadFileToStringLineByLineWithHtml() {
+		File file = getFile("testFile.txt");
+		String result = FileTools.readFileToStringLineByLine(file.getAbsolutePath(), true);
+
+		assertNotNull(result);
+		assertTrue(result.startsWith("<html>"));
+		assertTrue(result.endsWith("</html>"));
+		assertTrue(result.contains("<br>"));
+		assertTrue(result.contains("This could be one line text"));
+		assertTrue(result.contains("or text with"));
+	}
+
+	@Test
+	public void testReadFileToStringLineByLineWithoutHtml() {
+		File file = getFile("testFile.txt");
+		String result = FileTools.readFileToStringLineByLine(file.getAbsolutePath(), false);
+
+		assertNotNull(result);
+		assertFalse(result.contains("<html>"));
+		assertFalse(result.contains("</html>"));
+		assertFalse(result.contains("<br>"));
+		assertTrue(result.contains("This could be one line text"));
+		assertTrue(result.contains("or text with"));
+	}
+
+	@Test
+	public void testReadNonExistentFile() {
+		assertThrows(IllegalArgumentException.class, () -> FileTools.readFileToStringLineByLine("nonexistent.txt", true));
+	}
+
+	private File getFile(String fileName) {
+		return new File(getClass().getResource(fileName).getFile());
 	}
 }
