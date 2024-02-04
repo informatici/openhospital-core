@@ -22,10 +22,7 @@
 package org.isf.utils.file;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.Calendar;
@@ -542,12 +539,12 @@ public class TestFileTools {
 		File file = getFile("testFile.txt");
 		String result = FileTools.readFileToStringLineByLine(file.getAbsolutePath(), true);
 
-		assertNotNull(result);
-		assertTrue(result.startsWith("<html>"));
-		assertTrue(result.endsWith("</html>"));
-		assertTrue(result.contains("<br>"));
-		assertTrue(result.contains("This could be one line text"));
-		assertTrue(result.contains("or text with"));
+		assertThat(result).isNotNull();
+		assertThat(result).startsWith("<html>");
+		assertThat(result).endsWith("</html>");
+		assertThat(result).contains("<br>");
+		assertThat(result).contains("This could be one line text");
+		assertThat(result).contains("or text with");
 	}
 
 	@Test
@@ -555,12 +552,12 @@ public class TestFileTools {
 		File file = getFile("testFile.txt");
 		String result = FileTools.readFileToStringLineByLine(file.getAbsolutePath(), false);
 
-		assertNotNull(result);
-		assertFalse(result.contains("<html>"));
-		assertFalse(result.contains("</html>"));
-		assertFalse(result.contains("<br>"));
-		assertTrue(result.contains("This could be one line text"));
-		assertTrue(result.contains("or text with"));
+		assertThat(result).isNotNull();
+		assertThat(result).doesNotStartWith("<html>");
+		assertThat(result).doesNotEndWith("</html>");
+		assertThat(result).doesNotContain("<br>");
+		assertThat(result).contains("This could be one line text");
+		assertThat(result).contains("or text with");
 	}
 
 	@Test
