@@ -21,12 +21,10 @@
  */
 package org.isf.utils.file;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -211,30 +209,49 @@ public class FileTools {
 	 * 
 	 * @param path the path to the file to read
 	 * @param makeHtml if {@code true}, wrap the text with {@code <html>} tags and {@code <br>} for new lines
-	 * @return
+	 * @return the file content as plain text or html
 	 */
 	public static String readFileToStringLineByLine(String path, boolean makeHtml) {
-		ResourceLoader resourceLoader = new DefaultResourceLoader();
-		Resource resource = resourceLoader.getResource(path);
-		StringBuilder text = new StringBuilder();
-		if (makeHtml) {
-			text.append("<html>");
+		File file = new File(path);
+		StringBuilder content = new StringBuilder();
+
+		if (!file.exists() || !file.isFile()) {
+			throw new IllegalArgumentException("File not found: " + path);
 		}
-		try (Scanner scanner = new Scanner(new InputStreamReader(resource.getInputStream(), UTF_8))) {
+
+		try (Scanner scanner = new Scanner(file, StandardCharsets.UTF_8)) {
+			if (makeHtml) {
+				content.append("<html>");
+			}
 			while (scanner.hasNextLine()) {
-				text.append(scanner.nextLine());
+				content.append(scanner.nextLine());
 				if (scanner.hasNextLine() && makeHtml) {
-					text.append("<br>");
+					content.append("<br>");
 				}
 			}
+			if (makeHtml) {
+				content.append("</html>");
+			}
 		} catch (IOException e) {
-			LOGGER.error("Unable to read {} file", path);
+			LOGGER.error("Error to read file {}", path);
 			throw new UncheckedIOException(e);
 		}
-		if (makeHtml) {
-			text.append("</html>");
-		}
-		return text.toString();
+		return content.toString();
 	}
 
+	/**
+	 * Get file from classpath
+	 * @param filename
+	 * @return the File if it is found in the classpath
+	 */
+	public static File getFile(String filename) {
+		ResourceLoader resourceLoader = new DefaultResourceLoader();
+		Resource resource = resourceLoader.getResource(filename);
+		try {
+			return resource.getFile();
+		} catch (IOException e) {
+			LOGGER.debug("No {} file found", filename);
+		}
+		return null;
+	}
 }
