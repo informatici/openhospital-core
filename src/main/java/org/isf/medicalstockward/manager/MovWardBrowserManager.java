@@ -303,13 +303,30 @@ public class MovWardBrowserManager {
 	 */
 	public void deleteLastMovementWard(MovementWard movWard) throws OHServiceException {
 		MovementWard movementWard = ioOperations.getLastMovementWard(movWard.getWard());
+		System.out.println();
 		if (movementWard.getCode() != movWard.getCode()) {
+			System.out.println("Erreur code incorrect");
 			throw new OHDataValidationException(
 							new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.onlythelastmovementcanbedeleted.msg")));
 		}
+		if (movementWard.getWardTo() != null) {
+			MovementWard movementWardTo = ioOperations.getLastMovementWard(movementWard.getWardTo());
+			if (movementWardTo.getWard().getCode().equals(movementWard.getWardTo().getCode())) {
+				MedicalWard medWard = this.getMedicalWardByWardAndMedical(movementWardTo.getWard().getCode(), movementWardTo.getMedical().getCode(), movementWardTo.getLot().getCode());
+				float movQty = Double.valueOf(movementWardTo.getQuantity()).floatValue();
+				float quantity = medWard.getOut_quantity() - movQty;
+				medWard.setIn_quantity(quantity);
+				ioOperations.updateMedicalWard(medWard);
+				ioOperations.deleteMovementWard(movementWardTo);
+			} else {
+				throw new OHDataValidationException(
+								new OHExceptionMessage(MessageBundle.formatMessage("angal.medicalstock.notpossibletodeletethismovementthemedicalhasbeenusedafterbeenreceivedinward.fmt.msg",
+												movementWardTo.getMedical().getDescription(), movementWardTo.getWard().getDescription())));
+			}
+		}
 		MedicalWard medWard = this.getMedicalWardByWardAndMedical(movWard.getWard().getCode(), movWard.getMedical().getCode(), movWard.getLot().getCode());
 		float movQty = Double.valueOf(movWard.getQuantity()).floatValue();
-		float quantity = medWard.getOut_quantity() - movQty;
+		float quantity = medWard.getOut_quantity() + movQty;
 		medWard.setOut_quantity(quantity);
 		ioOperations.updateMedicalWard(medWard);
 		ioOperations.deleteMovementWard(movWard);
@@ -325,6 +342,4 @@ public class MovWardBrowserManager {
 	public MovementWard getLastMovementWard(Ward ward) throws OHServiceException {
 		return ioOperations.getLastMovementWard(ward);
 	}
-
-
 }
