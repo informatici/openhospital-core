@@ -299,7 +299,7 @@ public class MovWardBrowserManager {
 	/* * 
 	 * Delete the MovementWard for the specified criteria.
 	 *
-	 * @param movWard - the movement ward
+	 * @param movWardToDelete - the movement ward
 	 * @throws OHServiceException if an error occurs retrieving the medical.
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
