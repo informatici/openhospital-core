@@ -1356,7 +1356,7 @@ public class Tests extends OHCoreTestCase {
 	}
 	
 	@Test
-	public void testDeleteLastMovementWarsDenied() throws Exception {
+	public void testDeleteLastMovementWardDenied() throws Exception {
 		int code = setupTestMovementWardWithMedicalWard(false);
 		MovementWard movementWard = movementWardIoOperationRepository.findById(code).orElse(null);
 		assertThat(movementWard).isNotNull();
