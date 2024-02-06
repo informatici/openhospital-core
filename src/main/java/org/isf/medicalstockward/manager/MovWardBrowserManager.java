@@ -303,7 +303,7 @@ public class MovWardBrowserManager {
 	 * @throws OHServiceException if an error occurs retrieving the medical.
 	 */
 	@Transactional(rollbackFor = OHServiceException.class)
-	public void deleteLastMovementWard(MovementWard movWardToDelete ) throws OHServiceException {
+	public void deleteLastMovementWard(MovementWard movWardToDelete) throws OHServiceException {
 		MovementWard lastMovementWard = ioOperations.getLastMovementWard(movWardToDelete.getWard());
 		if (lastMovementWard.getCode() != movWardToDelete.getCode()) {
 			throw new OHDataValidationException(
