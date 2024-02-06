@@ -44,6 +44,7 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class MovWardBrowserManager {
@@ -301,6 +302,7 @@ public class MovWardBrowserManager {
 	 * @param movWard - the movement ward
 	 * @throws OHServiceException if an error occurs retrieving the medical.
 	 */
+	@Transactional(rollbackFor = OHServiceException.class)
 	public void deleteLastMovementWard(MovementWard movWardToDelete ) throws OHServiceException {
 		MovementWard lastMovementWard = ioOperations.getLastMovementWard(movWardToDelete.getWard());
 		if (lastMovementWard.getCode() != movWardToDelete.getCode()) {
