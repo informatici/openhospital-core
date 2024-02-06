@@ -1363,7 +1363,7 @@ public class Tests extends OHCoreTestCase {
 		Medical medical = movementWard.getMedical();
 		Ward ward = movementWard.getWard();
 		Lot lot = movementWard.getLot();
-		MovementWard  lastMovementWard = new MovementWard(ward,lot, "newDescription", medical, 10.0, "newUnits");
+		MovementWard lastMovementWard = new MovementWard(ward,lot, "newDescription", medical, 10.0, "newUnits");
 		movementWardIoOperationRepository.saveAndFlush(lastMovementWard);
 		assertThrows(OHServiceException.class, () -> movWardBrowserManager.deleteLastMovementWard(movementWard));
 	}
