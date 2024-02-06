@@ -303,9 +303,7 @@ public class MovWardBrowserManager {
 	 */
 	public void deleteLastMovementWard(MovementWard movWardToDelete ) throws OHServiceException {
 		MovementWard lastMovementWard = ioOperations.getLastMovementWard(movWardToDelete.getWard());
-		System.out.println();
 		if (lastMovementWard.getCode() != movWardToDelete.getCode()) {
-			System.out.println("Erreur code incorrect");
 			throw new OHDataValidationException(
 							new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.onlythelastmovementcanbedeleted.msg")));
 		}
