@@ -151,6 +151,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	// FIX: rephrase this test because makes no sense
 	public void testTotalQuantityShouldFindMovementWardByWardCodeAndDates() throws Exception {
 		// given:
 		int code = setupTestMovementWard(false);
