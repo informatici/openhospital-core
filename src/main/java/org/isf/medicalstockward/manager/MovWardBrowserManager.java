@@ -185,7 +185,7 @@ public class MovWardBrowserManager {
 	public int getCurrentQuantityInWard(Ward ward, Medical medical) throws OHServiceException {
 		return ioOperations.getCurrentQuantityInWard(ward, medical);
 	}
-	
+
 	/**
 	 * Gets the current quantity for the specified {@link Ward} and {@link Lot}.
 	 *
@@ -224,7 +224,7 @@ public class MovWardBrowserManager {
 		Collections.sort(drugPrint);
 		return drugPrint;
 	}
-	
+
 	/**
 	 * Get the MedicalWard for the specified criteria.
 	 *
@@ -237,7 +237,7 @@ public class MovWardBrowserManager {
 	public MedicalWard getMedicalWardByWardAndMedical(String wardCode, int medical, String lotCode) throws OHServiceException {
 		return ioOperations.getMedicalWardByWardAndMedical(wardCode, medical, lotCode);
 	}
-	
+
 	/**
 	 * Deletes the specified {@link MedicalWard}.
 	 *
@@ -247,7 +247,7 @@ public class MovWardBrowserManager {
 	public void deleteMedicalWard(MedicalWard medWard) throws OHServiceException {
 		ioOperations.deleteMedicalWard(medWard);
 	}
-	
+
 	/**
 	 * Updates the specified {@link MedicalWard}.
 	 *
@@ -257,18 +257,20 @@ public class MovWardBrowserManager {
 	public MedicalWard updateMedicalWard(MedicalWard medWard) throws OHServiceException {
 		return ioOperations.updateMedicalWard(medWard);
 	}
-	
-	/* * 
-	 * Get the MovementWard for the specified criteria.
-	 *
-	 * @param medID - the mecical id 
-	 * @return all the retrieved MovementWards.
-	 * @throws OHServiceException if an error occurs retrieving the medical.
+
+	/**
+	 * Get {@code MovementWard}s for the specified criteria
+	 * 
+	 * @param wardCode
+	 * @param medicalCode
+	 * @param lotCode
+	 * @param date
+	 * @return
 	 */
-	public List<MovementWard> getMovementWardByMedical(int medID) {
-		return ioOperations.getMovementWardByMedical(medID);
+	public List<MovementWard> getMovementWardByWardMedicalAndLotAfterOrSameDate(String wardCode, int medicalCode, String lotCode, LocalDateTime date) {
+		return ioOperations.getMovementWardByWardMedicalAndLotAfterOrSameDate(wardCode, medicalCode, lotCode, date);
 	}
-	
+
 	class ComparatorMovementWardForPrint implements Comparator<MovementWardForPrint> {
 
 		@Override
@@ -294,5 +296,4 @@ public class MovWardBrowserManager {
 			}
 		}
 	}
-
 }

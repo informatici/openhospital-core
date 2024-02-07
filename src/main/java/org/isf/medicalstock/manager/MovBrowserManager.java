@@ -122,19 +122,19 @@ public class MovBrowserManager {
 	 * @throws OHServiceException
 	 */
 	public List<Movement> getMovements(Integer medicalCode, String medicalType,
-			String wardId, String movType, LocalDateTime movFrom, LocalDateTime movTo,
-			LocalDateTime lotPrepFrom, LocalDateTime lotPrepTo,
-			LocalDateTime lotDueFrom, LocalDateTime lotDueTo) throws OHServiceException {
+					String wardId, String movType, LocalDateTime movFrom, LocalDateTime movTo,
+					LocalDateTime lotPrepFrom, LocalDateTime lotPrepTo,
+					LocalDateTime lotDueFrom, LocalDateTime lotDueTo) throws OHServiceException {
 
 		if (medicalCode == null &&
-				medicalType == null &&
-				movType == null &&
-				movFrom == null &&
-				movTo == null &&
-				lotPrepFrom == null &&
-				lotPrepTo == null &&
-				lotDueFrom == null &&
-				lotDueTo == null) {
+						medicalType == null &&
+						movType == null &&
+						movFrom == null &&
+						movTo == null &&
+						lotPrepFrom == null &&
+						lotPrepTo == null &&
+						lotDueFrom == null &&
+						lotDueTo == null) {
 			return getMovements();
 		}
 
@@ -149,7 +149,7 @@ public class MovBrowserManager {
 		if (from == null || to == null) {
 			if (!(from == null && to == null)) {
 				throw new OHDataValidationException(
-						new OHExceptionMessage(MessageBundle.getMessage(errMsgKey)));
+								new OHExceptionMessage(MessageBundle.getMessage(errMsgKey)));
 			}
 		}
 	}
@@ -178,6 +178,8 @@ public class MovBrowserManager {
 		Medical medical = lastMovement.getMedical();
 		int medicalCode = medical.getCode();
 		int quantity = lastMovement.getQuantity();
+		LocalDateTime date = lastMovement.getDate();
+
 		if (movType.getType().contains("+")) {
 			medical.setInqty(medical.getInqty() - quantity);
 			medicalsIoOperation.updateMedical(medical);
@@ -190,18 +192,19 @@ public class MovBrowserManager {
 			Ward ward = lastMovement.getWard();
 			String wardCode = ward.getCode();
 			String lotCode = lot.getCode();
+			List<MovementWard> movWard = movWardBrowserManager.getMovementWardByWardMedicalAndLotAfterOrSameDate(wardCode, medicalCode, lotCode, date);
+			if (movWard.size() > 0) {
+				throw new OHDataValidationException(
+								new OHExceptionMessage(MessageBundle.formatMessage(
+												"angal.medicalstock.notpossibletodeletethismovementthemedicalhasbeenusedafterbeenreceivedinward.fmt.msg",
+												lastMovement.getMedical().getDescription(), lastMovement.getWard().getDescription())));
+			}
 			MedicalWard medWard = movWardBrowserManager.getMedicalWardByWardAndMedical(wardCode, medicalCode, lotCode);
 			medWard.setIn_quantity(medWard.getIn_quantity() - quantity);
 			if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity() == 0) {
 				movWardBrowserManager.deleteMedicalWard(medWard);
 			} else {
 				movWardBrowserManager.updateMedicalWard(medWard);
-			}
-			List<MovementWard> movWard = movWardBrowserManager.getMovementWardByMedical(lastMovement.getMedical().getCode());
-			if (movWard.size() > 0) {
-				throw new OHDataValidationException(
-								new OHExceptionMessage(MessageBundle.formatMessage("angal.medicalstock.notpossibletodeletethismovementthemedicalhasbeenusedafterbeenreceivedinward.fmt.msg",
-												lastMovement.getMedical().getDescription(), lastMovement.getWard().getDescription())));
 			}
 			medical.setOutqty(medical.getOutqty() - quantity);
 			medicalsIoOperation.updateMedical(medical);

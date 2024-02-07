@@ -290,7 +290,7 @@ public class MedicalStockWardIoOperations {
 	public long countAllActiveMovementsWard() {
 		return this.movementRepository.countAllActiveMovementsWard();
 	}
-	
+
 	/**
 	 * Get the {@link MedicalWard} associated to specified criteria.
 	 * @param wardCode the ward code
@@ -303,7 +303,7 @@ public class MedicalStockWardIoOperations {
 	public MedicalWard getMedicalWardByWardAndMedical(String wardCode, int medical, String lot) throws OHServiceException {
 		return repository.findOneWhereCodeAndMedicalAndLot(wardCode, medical, lot);
 	}
-	
+
 	/**
 	 * Updates the specified {@link MedicalWard}.
 	 * @param medWard the medical ward to update
@@ -322,16 +322,17 @@ public class MedicalStockWardIoOperations {
 	public void deleteMedicalWard(MedicalWard medWard) throws OHServiceException {
 		repository.delete(medWard);
 	}
-	
+
 	/**
 	 * Get {@link MovementWard}s with the specified criteria.
-	 * @param medID the code of medical
-	 * @return the retrieved movements.
-	 * @throws OHServiceException if an error occurs retrieving the movements.
+	 * @param wardCode
+	 * @param medicalCode
+	 * @param lotCode
+	 * @param date
+	 * @return
 	 */
-	public List<MovementWard> getMovementWardByMedical(int medID) {
-		return movementRepository.findByMedicalCode(medID);
+	public List<MovementWard> getMovementWardByWardMedicalAndLotAfterOrSameDate(String wardCode, int medicalCode, String lotCode, LocalDateTime date) {
+		return movementRepository.findByWardMedicalAndLotAfterOrSameDate(wardCode, medicalCode, lotCode, date);
 	}
-	
-	
+
 }
