@@ -1416,13 +1416,14 @@ public class Tests extends OHCoreTestCase {
 		Patient patient = testPatient.setup(false);
 		Lot lot = testLot.setup(medical, false);
 		MedicalWard medicalWard = testMedicalWard.setup(medical, ward, lot, false);
+		medicalWard.setOut_quantity(0);
 		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
 		medicalsIoOperationRepository.saveAndFlush(medical);
 		wardIoOperationRepository.saveAndFlush(ward);
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
-		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, ward, ward, lot, usingSet);
+		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, null, null, lot, usingSet);
 		movementWardIoOperationRepository.saveAndFlush(movementWard);
 		return movementWard.getCode();
 	}

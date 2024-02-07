@@ -310,17 +310,24 @@ public class MovWardBrowserManager {
 							new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.onlythelastmovementcanbedeleted.msg")));
 		}
 		if (movWardToDelete.getWardTo() != null) {
-			MovementWard lastMovInWardTo = ioOperations.getLastMovementWard(movWardToDelete.getWardTo());
-			MedicalWard medWard = this.getMedicalWardByWardAndMedical(lastMovInWardTo.getWard().getCode(), lastMovInWardTo.getMedical().getCode(), lastMovInWardTo.getLot().getCode());
-			float movQty = Double.valueOf(lastMovInWardTo.getQuantity()).floatValue();
-			float quantity = medWard.getIn_quantity() + movQty;
-			medWard.setIn_quantity(quantity);
-			if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity() == 0) {
-				ioOperations.deleteMedicalWard(medWard);
+			List<MovementWard> lastMovWardWithMed = ioOperations.getMovWardWithWardMedLotDate(movWardToDelete.getWardTo().getCode(), movWardToDelete.getMedical().getCode(), movWardToDelete.getLot().getCode(), movWardToDelete.getDate());
+			if (lastMovWardWithMed.size() == 1) {
+				MovementWard lastMovInWardTo = ioOperations.getLastMovementWard(movWardToDelete.getWardTo());
+				MedicalWard medWard = this.getMedicalWardByWardAndMedical(lastMovInWardTo.getWard().getCode(), lastMovInWardTo.getMedical().getCode(), lastMovInWardTo.getLot().getCode());
+				float movQty = Double.valueOf(lastMovInWardTo.getQuantity()).floatValue();
+				float quantity = medWard.getIn_quantity() + movQty;
+				medWard.setIn_quantity(quantity);
+				if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity() == 0) {
+					ioOperations.deleteMedicalWard(medWard);
+				} else {
+					ioOperations.updateMedicalWard(medWard);
+				}
+				ioOperations.deleteMovementWard(lastMovInWardTo);
 			} else {
-				ioOperations.updateMedicalWard(medWard);
+				throw new OHDataValidationException(
+								new OHExceptionMessage(MessageBundle.formatMessage("angal.medicalstock.notpossibletodeletethismovementthemedicalhasbeenusedafterbeenreceivedinward.fmt.msg",
+												movWardToDelete.getMedical().getDescription(), movWardToDelete.getWardTo().getDescription())));
 			}
-			ioOperations.deleteMovementWard(lastMovInWardTo);
 		}
 		MedicalWard medWard = this.getMedicalWardByWardAndMedical(movWardToDelete.getWard().getCode(), movWardToDelete.getMedical().getCode(), movWardToDelete.getLot().getCode());
 		float movQty = Double.valueOf(movWardToDelete.getQuantity()).floatValue();

@@ -343,6 +343,20 @@ public class MedicalStockWardIoOperations {
 	public MovementWard getLastMovementWard(Ward ward) throws OHServiceException {
 		return movementRepository.findLastMovement(ward.getCode());
 	}
+
+	/**
+	 * Get all {@link MovementWard} with the specified criteria.
+	 * 
+	 * @param WardCode - the ward code.
+	 * @param medID - the medical code.
+	 * @param lotCode - the lot code.
+	 * @param date - the date of the movement.
+	 * @return the retrieved all the movements.
+	 * @throws OHServiceException if an error occurs retrieving the movements.
+	 */
+	public List<MovementWard> getMovWardWithWardMedLotDate(String WardCode, int medID, String lotCode, LocalDateTime date) throws OHServiceException {
+		return movementRepository.findWardMovementWithWardMedLotDate(WardCode, medID, lotCode, date);
+	}
 	
 	
 }
