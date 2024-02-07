@@ -1200,7 +1200,7 @@ public class Tests extends OHCoreTestCase {
 		assertThat(lastMovement).isNotNull();
 		assertThat(lastMovement.getType().getType()).isEqualTo("-");
 		assertThat(lastMovement.getMedical()).isEqualTo(foundMovWard.getMedical());
-		List<MovementWard> movWards = movementWardIoOperationRepository.findByWardMedicalLotDate(ward.getCode(), medical.getCode(), lot.getCode(),
+		List<MovementWard> movWards = movementWardIoOperationRepository.findByWardMedicalLotAfterOrSameDate(ward.getCode(), medical.getCode(), lot.getCode(),
 						storedMovement.getDate());
 		assertThat(movWards.size()).isGreaterThan(0);
 		assertThrows(OHServiceException.class, () -> movBrowserManager.deleteLastMovement(lastMovement));
@@ -1235,7 +1235,7 @@ public class Tests extends OHCoreTestCase {
 		assertThat(lastMovement).isNotNull();
 		assertThat(lastMovement.getType().getType()).isEqualTo("-");
 		assertThat(lastMovement.getMedical()).isEqualTo(foundMovWard.getMedical());
-		List<MovementWard> movWards = movementWardIoOperationRepository.findByWardMedicalLotDate(ward.getCode(), medical.getCode(), lot.getCode(),
+		List<MovementWard> movWards = movementWardIoOperationRepository.findByWardMedicalLotAfterOrSameDate(ward.getCode(), medical.getCode(), lot.getCode(),
 						storedMovement.getDate());
 		assertThat(movWards.size()).isGreaterThan(0);
 		assertThrows(OHServiceException.class, () -> movBrowserManager.deleteLastMovement(lastMovement));
@@ -1254,7 +1254,7 @@ public class Tests extends OHCoreTestCase {
 		Optional<Movement> followingMovement = movementIoOperationRepository.findById(code2);
 		assertThat(followingMovement).isPresent();
 		Movement movement2 = followingMovement.get();
-		movWards = movementWardIoOperationRepository.findByWardMedicalLotDate(movement2.getWard().getCode(),
+		movWards = movementWardIoOperationRepository.findByWardMedicalLotAfterOrSameDate(movement2.getWard().getCode(),
 						movement2.getMedical().getCode(),
 						movement2.getLot().getCode(),
 						movement2.getDate());

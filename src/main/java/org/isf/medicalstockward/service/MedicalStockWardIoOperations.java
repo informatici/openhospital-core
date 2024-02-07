@@ -331,8 +331,8 @@ public class MedicalStockWardIoOperations {
 	 * @param date
 	 * @return
 	 */
-	public List<MovementWard> getMovementWardByWardMedicalLotAndDate(String wardCode, int medicalCode, String lotCode, LocalDateTime date) {
-		return movementRepository.findByWardMedicalLotDate(wardCode, medicalCode, lotCode, date);
+	public List<MovementWard> getMovementWardByWardMedicalLotAfterOrSameDate(String wardCode, int medicalCode, String lotCode, LocalDateTime date) {
+		return movementRepository.findByWardMedicalLotAfterOrSameDate(wardCode, medicalCode, lotCode, date);
 	}
 
 }

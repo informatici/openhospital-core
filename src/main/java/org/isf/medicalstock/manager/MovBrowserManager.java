@@ -192,7 +192,7 @@ public class MovBrowserManager {
 			Ward ward = lastMovement.getWard();
 			String wardCode = ward.getCode();
 			String lotCode = lot.getCode();
-			List<MovementWard> movWard = movWardBrowserManager.getMovementWardByWardMedicalLotAndDate(wardCode, medicalCode, lotCode, date);
+			List<MovementWard> movWard = movWardBrowserManager.getMovementWardByWardMedicalLotAfterOrSameDate(wardCode, medicalCode, lotCode, date);
 			if (movWard.size() > 0) {
 				throw new OHDataValidationException(
 								new OHExceptionMessage(MessageBundle.formatMessage(

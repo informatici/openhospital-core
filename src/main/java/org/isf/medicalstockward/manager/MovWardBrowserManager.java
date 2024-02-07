@@ -267,8 +267,8 @@ public class MovWardBrowserManager {
 	 * @param date
 	 * @return
 	 */
-	public List<MovementWard> getMovementWardByWardMedicalLotAndDate(String wardCode, int medicalCode, String lotCode, LocalDateTime date) {
-		return ioOperations.getMovementWardByWardMedicalLotAndDate(wardCode, medicalCode, lotCode, date);
+	public List<MovementWard> getMovementWardByWardMedicalLotAfterOrSameDate(String wardCode, int medicalCode, String lotCode, LocalDateTime date) {
+		return ioOperations.getMovementWardByWardMedicalLotAfterOrSameDate(wardCode, medicalCode, lotCode, date);
 	}
 	
 	class ComparatorMovementWardForPrint implements Comparator<MovementWardForPrint> {

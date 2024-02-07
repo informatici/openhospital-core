@@ -47,7 +47,7 @@ public interface MovementWardIoOperationRepository extends JpaRepository<Movemen
 	long countAllActiveMovementsWard();
 
 	@Query(value = "select movWard from MovementWard movWard where movWard.ward.code = :wardCode and movWard.medical.code = :medicalCode and movWard.lot.code = :lotCode and movWard.date >= :date")
-	List<MovementWard> findByWardMedicalLotDate(@Param("wardCode") String wardCode,
+	List<MovementWard> findByWardMedicalLotAfterOrSameDate(@Param("wardCode") String wardCode,
 					@Param("medicalCode") int medicalCode,
 					@Param("lotCode") String lotCode,
 					@Param("date") LocalDateTime date);
