@@ -1258,7 +1258,7 @@ public class Tests extends OHCoreTestCase {
 						movement2.getMedical().getCode(),
 						movement2.getLot().getCode(),
 						movement2.getDate());
-		assertThat(movWards.size()).isEqualTo(0);
+		assertThat(movWards).isEmpty();
 		movBrowserManager.deleteLastMovement(movement2);
 		Optional<Movement> followingMovement2 = movementIoOperationRepository.findById(code2);
 		assertThat(followingMovement2).isNotPresent();
