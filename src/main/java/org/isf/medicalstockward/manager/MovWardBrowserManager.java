@@ -259,7 +259,7 @@ public class MovWardBrowserManager {
 	}
 
 	/**
-	 * Get the MedicalWard for the specified criteria
+	 * Get {@code MovementWard}s for the specified criteria
 	 * 
 	 * @param wardCode
 	 * @param medicalCode
@@ -267,10 +267,10 @@ public class MovWardBrowserManager {
 	 * @param date
 	 * @return
 	 */
-	public List<MovementWard> getMovementWardByWardMedicalLotAfterOrSameDate(String wardCode, int medicalCode, String lotCode, LocalDateTime date) {
-		return ioOperations.getMovementWardByWardMedicalLotAfterOrSameDate(wardCode, medicalCode, lotCode, date);
+	public List<MovementWard> getMovementWardByWardMedicalAndLotAfterOrSameDate(String wardCode, int medicalCode, String lotCode, LocalDateTime date) {
+		return ioOperations.getMovementWardByWardMedicalAndLotAfterOrSameDate(wardCode, medicalCode, lotCode, date);
 	}
-	
+
 	class ComparatorMovementWardForPrint implements Comparator<MovementWardForPrint> {
 
 		@Override
