@@ -354,7 +354,7 @@ public class MedicalStockWardIoOperations {
 	 * @return the retrieved all the movements.
 	 * @throws OHServiceException if an error occurs retrieving the movements.
 	 */
-	public List<MovementWard> getMovWardWithWardMedLotDate(String WardCode, int medID, String lotCode, LocalDateTime date) throws OHServiceException {
+	public List<MovementWard> getMovementWardByWardMedicalLotAfterOrSameDate(String WardCode, int medID, String lotCode, LocalDateTime date) throws OHServiceException {
 		return movementRepository.findWardMovementWithWardMedLotDate(WardCode, medID, lotCode, date);
 	}
 	

@@ -235,7 +235,7 @@ public class MovWardBrowserManager {
 	 * @return the retrieved medical.
 	 * @throws OHServiceException if an error occurs retrieving the medical.
 	 */
-	public MedicalWard getMedicalWardByWardAndMedical(String wardCode, int medical, String lotCode) throws OHServiceException {
+	public MedicalWard getMedicalWardByWardMedicalAndLot(String wardCode, int medical, String lotCode) throws OHServiceException {
 		return ioOperations.getMedicalWardByWardAndMedical(wardCode, medical, lotCode);
 	}
 	
@@ -329,7 +329,7 @@ public class MovWardBrowserManager {
 												movWardToDelete.getMedical().getDescription(), movWardToDelete.getWardTo().getDescription())));
 			}
 		}
-		MedicalWard medWard = this.getMedicalWardByWardAndMedical(movWardToDelete.getWard().getCode(), movWardToDelete.getMedical().getCode(), movWardToDelete.getLot().getCode());
+		MedicalWard medWard = this.getMedicalWardByWardMedicalAndLot(movWardToDelete.getWard().getCode(), movWardToDelete.getMedical().getCode(), movWardToDelete.getLot().getCode());
 		float movQty = Double.valueOf(movWardToDelete.getQuantity()).floatValue();
 		float quantity = medWard.getOut_quantity() - movQty;
 		medWard.setOut_quantity(quantity);
