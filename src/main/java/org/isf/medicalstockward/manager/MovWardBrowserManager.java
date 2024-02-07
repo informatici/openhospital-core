@@ -310,7 +310,7 @@ public class MovWardBrowserManager {
 							new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.onlythelastmovementcanbedeleted.msg")));
 		}
 		if (movWardToDelete.getWardTo() != null) {
-			List<MovementWard> lastMovWardWithMed = ioOperations.getMovWardWithWardMedLotDate(movWardToDelete.getWardTo().getCode(), movWardToDelete.getMedical().getCode(), movWardToDelete.getLot().getCode(), movWardToDelete.getDate());
+			List<MovementWard> lastMovWardWithMed = ioOperations.getMovWardByWardMedicalLotDate(movWardToDelete.getWardTo().getCode(), movWardToDelete.getMedical().getCode(), movWardToDelete.getLot().getCode(), movWardToDelete.getDate());
 			if (lastMovWardWithMed.size() == 1) {
 				MovementWard lastMovInWardTo = ioOperations.getLastMovementWard(movWardToDelete.getWardTo());
 				MedicalWard medWard = this.getMedicalWardByWardAndMedical(lastMovInWardTo.getWard().getCode(), lastMovInWardTo.getMedical().getCode(), lastMovInWardTo.getLot().getCode());
