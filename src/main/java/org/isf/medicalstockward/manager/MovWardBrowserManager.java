@@ -298,7 +298,7 @@ public class MovWardBrowserManager {
 		}
 	}
 
-	/* * 
+	/**
 	 * Delete a {@link MovementWard}
 	 *
 	 * @param movWardToDelete - the movement ward
