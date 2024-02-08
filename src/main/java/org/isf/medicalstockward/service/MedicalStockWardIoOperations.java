@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -290,7 +290,7 @@ public class MedicalStockWardIoOperations {
 	public long countAllActiveMovementsWard() {
 		return this.movementRepository.countAllActiveMovementsWard();
 	}
-	
+
 	/**
 	 * Get the {@link MedicalWard} associated to specified criteria.
 	 * @param wardCode the ward code
@@ -303,7 +303,7 @@ public class MedicalStockWardIoOperations {
 	public MedicalWard getMedicalWardByWardAndMedical(String wardCode, int medical, String lot) throws OHServiceException {
 		return repository.findOneWhereCodeAndMedicalAndLot(wardCode, medical, lot);
 	}
-	
+
 	/**
 	 * Updates the specified {@link MedicalWard}.
 	 * @param medWard the medical ward to update
@@ -322,16 +322,41 @@ public class MedicalStockWardIoOperations {
 	public void deleteMedicalWard(MedicalWard medWard) throws OHServiceException {
 		repository.delete(medWard);
 	}
-	
+
 	/**
 	 * Get {@link MovementWard}s with the specified criteria.
-	 * @param medID the code of medical
-	 * @return the retrieved movements.
-	 * @throws OHServiceException if an error occurs retrieving the movements.
+	 * @param wardCode
+	 * @param medicalCode
+	 * @param lotCode
+	 * @param date
+	 * @return
 	 */
-	public List<MovementWard> getMovementWardByMedical(int medID) {
+	public List<MovementWard> getMovementWardByMedical(int medID) throws OHServiceException {
 		return movementRepository.findByMedicalCode(medID);
 	}
-	
-	
+
+	/**
+	 * Get the last {@link MovementWard} with the specified criteria.
+	 * 
+	 * @param ward - the ward.
+	 * @return the retrieved the movement.
+	 * @throws OHServiceException if an error occurs retrieving the movements.
+	 */
+	public MovementWard getLastMovementWard(Ward ward) throws OHServiceException {
+		return movementRepository.findLastMovement(ward.getCode());
+	}
+
+	/**
+	 * Get all {@link MovementWard} with the specified criteria.
+	 * 
+	 * @param WardCode - the ward code.
+	 * @param medID - the medical code.
+	 * @param lotCode - the lot code.
+	 * @param date - the date of the movement.
+	 * @return the retrieved all the movements.
+	 * @throws OHServiceException if an error occurs retrieving the movements.
+	 */
+	public List<MovementWard> getMovementWardByWardMedicalAndLotAfterOrSameDate(String wardCode, int medicalCode, String lotCode, LocalDateTime date) {
+		return movementRepository.findByWardMedicalAndLotAfterOrSameDate(wardCode, medicalCode, lotCode, date);
+	}
 }
