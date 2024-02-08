@@ -345,10 +345,10 @@ public class MovWardBrowserManager {
 		ioOperations.deleteMovementWard(movWardToDelete);
 	}
 
-	/* * 
-	 * Get the last MovementWard for the specified criteria.
+	/**
+	 * Get the last {@link MovementWard} for the specified criteria.
 	 *
-	 * @param ward - the ward
+	 * @param ward
 	 * @return the retrieved movement.
 	 * @throws OHServiceException if an error occurs retrieving the medical.
 	 */
