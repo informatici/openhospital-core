@@ -190,7 +190,7 @@ public class MovBrowserManager {
 			Ward ward = lastMovement.getWard();
 			String wardCode = ward.getCode();
 			String lotCode = lot.getCode();
-			MedicalWard medWard = movWardBrowserManager.getMedicalWardByWardAndMedical(wardCode, medicalCode, lotCode);
+			MedicalWard medWard = movWardBrowserManager.getMedicalWardByWardMedicalAndLot(wardCode, medicalCode, lotCode);
 			medWard.setIn_quantity(medWard.getIn_quantity() - quantity);
 			if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity() == 0) {
 				movWardBrowserManager.deleteMedicalWard(medWard);
