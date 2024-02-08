@@ -154,6 +154,7 @@ public class Tests extends OHCoreTestCase {
 	}
 
 	@Test
+	// FIX: rephrase this test because makes no sense
 	public void testTotalQuantityShouldFindMovementWardByWardCodeAndDates() throws Exception {
 		// given:
 		int code = setupTestMovementWard(false);
@@ -185,9 +186,9 @@ public class Tests extends OHCoreTestCase {
 		MovementWard foundMovement = movementWardIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundMovement).isNotNull();
 		List<MovementWard> movements = medicalStockWardIoOperations.getWardMovements(
-				foundMovement.getWard().getCode(),
-				fromDate,
-				toDate);
+						foundMovement.getWard().getCode(),
+						fromDate,
+						toDate);
 		assertThat(movements.get(0).getCode()).isEqualTo(foundMovement.getCode());
 	}
 
@@ -540,8 +541,8 @@ public class Tests extends OHCoreTestCase {
 		int code = setupTestMovementWard(false);
 		MovementWard foundMovement = movementWardIoOperationRepository.findById(code).orElse(null);
 		assertThat(foundMovement).isNotNull();
-		LocalDateTime  startDate = foundMovement.getDate().minusDays(1);
-		LocalDateTime  endDate = foundMovement.getDate().plusDays(1);
+		LocalDateTime startDate = foundMovement.getDate().minusDays(1);
+		LocalDateTime endDate = foundMovement.getDate().plusDays(1);
 		List<MovementWard> wardMovementsToWard = movWardBrowserManager.getWardMovementsToWard(foundMovement.getWard().getCode(), startDate, endDate);
 		assertThat(wardMovementsToWard).hasSize(1);
 		assertThat(wardMovementsToWard.get(0).getCode()).isEqualTo(foundMovement.getCode());
@@ -573,7 +574,7 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testMgrNewMovementWardError() throws Exception {
 		assertThatThrownBy(() -> movWardBrowserManager.newMovementWard(new ArrayList<>()))
-				.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -736,8 +737,8 @@ public class Tests extends OHCoreTestCase {
 
 		List<MovementWardForPrint> movementWardForPrints = movWardBrowserManager.convertMovementWardForPrint(movementWards);
 		assertThat(movementWardForPrints)
-				.extracting(MovementWardForPrint::getWard)
-				.containsExactly("Ward 3", "Ward 2", "Ward 1");
+						.extracting(MovementWardForPrint::getWard)
+						.containsExactly("Ward 3", "Ward 2", "Ward 1");
 	}
 
 	@Test
@@ -784,8 +785,8 @@ public class Tests extends OHCoreTestCase {
 
 		List<MovementWardForPrint> movementWardForPrints = movWardBrowserManager.convertMovementWardForPrint(movementWards);
 		assertThat(movementWardForPrints)
-				.extracting(MovementWardForPrint::getWard)
-				.containsExactly("Ward 1", "Ward 2", "Ward 3");
+						.extracting(MovementWardForPrint::getWard)
+						.containsExactly("Ward 1", "Ward 2", "Ward 3");
 	}
 
 	@Test
@@ -803,7 +804,7 @@ public class Tests extends OHCoreTestCase {
 		lot2.setCode("second");
 		Lot lot3 = testLot.setup(medical3, false);
 		lot3.setCode("third");
-		
+
 		MovementType movementType1 = testMovementType.setup(false);
 		MovementType movementType2 = testMovementType.setup(false);
 		movementType2.setCode("ABCDZZ");
@@ -853,8 +854,8 @@ public class Tests extends OHCoreTestCase {
 
 		List<MovementForPrint> movementForPrints = movWardBrowserManager.convertMovementForPrint(movements);
 		assertThat(movementForPrints)
-				.extracting(MovementForPrint::getWard)
-				.containsExactly("Ward 3", "Ward 2", "Ward 1");
+						.extracting(MovementForPrint::getWard)
+						.containsExactly("Ward 3", "Ward 2", "Ward 1");
 	}
 
 	@Test
@@ -922,8 +923,8 @@ public class Tests extends OHCoreTestCase {
 
 		List<MovementForPrint> movementForPrints = movWardBrowserManager.convertMovementForPrint(movements);
 		assertThat(movementForPrints)
-				.extracting(MovementForPrint::getWard)
-				.containsExactly("Ward 1", "Ward 2", "Ward 3");
+						.extracting(MovementForPrint::getWard)
+						.containsExactly("Ward 1", "Ward 2", "Ward 3");
 	}
 
 	@Test
@@ -983,8 +984,7 @@ public class Tests extends OHCoreTestCase {
 
 	@Test
 	public void testMgrValidationDescriptionEmptyIsPatient() throws Exception {
-		assertThatThrownBy(() ->
-		{
+		assertThatThrownBy(() -> {
 			MedicalType medicalType = testMedicalType.setup(false);
 			Medical medical = testMedical.setup(medicalType, false);
 			Ward ward = testWard.setup(false);
@@ -1006,13 +1006,12 @@ public class Tests extends OHCoreTestCase {
 			movementWard.setPatient(true);
 			movWardBrowserManager.newMovementWard(movementWard);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
 	public void testMgrValidationDescriptionEmptyNotIsPatient() throws Exception {
-		assertThatThrownBy(() ->
-		{
+		assertThatThrownBy(() -> {
 			MedicalType medicalType = testMedicalType.setup(false);
 			Medical medical = testMedical.setup(medicalType, false);
 			Ward ward = testWard.setup(false);
@@ -1034,13 +1033,12 @@ public class Tests extends OHCoreTestCase {
 			movementWard.setPatient(false);
 			movWardBrowserManager.newMovementWard(movementWard);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
 	public void testMgrValidationMedicalNull() throws Exception {
-		assertThatThrownBy(() ->
-		{
+		assertThatThrownBy(() -> {
 			MedicalType medicalType = testMedicalType.setup(false);
 			Medical medical = testMedical.setup(medicalType, false);
 			Ward ward = testWard.setup(false);
@@ -1061,7 +1059,7 @@ public class Tests extends OHCoreTestCase {
 			movementWard.setMedical(null);
 			movWardBrowserManager.newMovementWard(movementWard);
 		})
-				.isInstanceOf(OHDataValidationException.class);
+						.isInstanceOf(OHDataValidationException.class);
 	}
 
 	@Test
@@ -1098,8 +1096,8 @@ public class Tests extends OHCoreTestCase {
 
 		assertThat(medicalWardId1).isEqualTo(medicalWardId1);
 		assertThat(medicalWardId1)
-				.isNotEqualTo("someString")
-				.isNotNull();
+						.isNotEqualTo("someString")
+						.isNotNull();
 
 		// medical doesn't match
 		assertThat(medicalWardId1).isNotEqualTo(medicalWardId2);
@@ -1163,7 +1161,8 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		assertThat(new MovementWard(ward, LocalDateTime.of(1, 1, 1, 0, 0, 0), true, patient, 32, 150.0f, "description", medical, 100.0d, "kilo", lot)).isNotNull();
+		assertThat(new MovementWard(ward, LocalDateTime.of(1, 1, 1, 0, 0, 0), true, patient, 32, 150.0f, "description", medical, 100.0d, "kilo", lot))
+						.isNotNull();
 	}
 
 	@Test
@@ -1180,7 +1179,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		assertThat(new MovementWard(ward, lot, "description", medical, 100.0d, "kilo")).isNotNull();
+		assertThat(new MovementWard(TimeTools.getNow(), ward, lot, "description", medical, 100.0d, "kilo")).isNotNull();
 	}
 
 	@Test
@@ -1197,14 +1196,14 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		MovementWard movementWard1 = new MovementWard(ward, lot, "description", medical, 100.0d, "kilo");
-		MovementWard movementWard2 = new MovementWard(ward, lot, "description", medical, 100.0d, "kilo");
+		MovementWard movementWard1 = new MovementWard(TimeTools.getNow(), ward, lot, "description", medical, 100.0d, "kilo");
+		MovementWard movementWard2 = new MovementWard(TimeTools.getNow(), ward, lot, "description", medical, 100.0d, "kilo");
 		movementWard2.setCode(-1);
 
 		assertThat(movementWard1).isEqualTo(movementWard1);
 		assertThat(movementWard1)
-				.isNotEqualTo("someString")
-				.isNotEqualTo(movementWard2);
+						.isNotEqualTo("someString")
+						.isNotEqualTo(movementWard2);
 
 		// set the codes equal
 		movementWard2.setCode(movementWard1.getCode());
@@ -1226,7 +1225,7 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 
-		MovementWard movementWard = new MovementWard(ward, lot, "description", medical, 100.0d, "kilo");
+		MovementWard movementWard = new MovementWard(TimeTools.getNow(), ward, lot, "description", medical, 100.0d, "kilo");
 		movementWard.setCode(1);
 
 		// generate hashCode
@@ -1316,10 +1315,10 @@ public class Tests extends OHCoreTestCase {
 		MedicalWard medicalWard2 = new MedicalWard(medical2, 10.0d, lot2);
 
 		assertThat(medicalWard1)
-				.isEqualTo(medicalWard1)
-				.isNotNull()
-				.isNotEqualTo("some String")
-				.isNotEqualTo(medicalWard2);
+						.isEqualTo(medicalWard1)
+						.isNotNull()
+						.isNotEqualTo("some String")
+						.isNotEqualTo(medicalWard2);
 
 		medicalWard2.setMedical(medicalWard1.getMedical());
 		assertThat(medicalWard1).isEqualTo(medicalWard2);
