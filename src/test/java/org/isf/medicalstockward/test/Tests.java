@@ -1369,13 +1369,15 @@ public class Tests extends OHCoreTestCase {
 		Ward wardTo = new Ward("C", "description", "telephone", "fax", "email", 5, 2, 1, false, false, true, true);
 		wardIoOperationRepository.saveAndFlush(wardTo);
 		secondMovementWard.setWardTo(wardTo);
-		MovementWard thirdMovementWard = new MovementWard(date, wardTo, lot, "newDescription", medical, -10.0, "newUnits");
+		MovementWard thirdMovementWard = new MovementWard(date.plusMinutes(1), wardTo, lot, "newDescription", medical, -10.0, "newUnits");
 		thirdMovementWard.setWardFrom(ward);
-		MovementWard fourthMovementWard = new MovementWard(wardTo, date.plusMinutes(1), true, patient, age, 50.5f, "description", medical, 5.0, "units", null, null, lot);
+		MovementWard fourthMovementWard = new MovementWard(wardTo, date.plusMinutes(2), true, patient, age, 50.5f, "description", medical, 5.0, "units", null, null, lot);
 		movementWardIoOperationRepository.saveAndFlush(secondMovementWard);
 		movementWardIoOperationRepository.saveAndFlush(thirdMovementWard);
 		movementWardIoOperationRepository.saveAndFlush(fourthMovementWard);
 		assertThrows(OHServiceException.class, () -> movWardBrowserManager.deleteLastMovementWard(firstmovementWard));
+		List<MovementWard> latestMovementWardList = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(wardTo.getCode(), medical.getCode(), lot.getCode(), secondMovementWard.getDate());
+		assertThat(latestMovementWardList.size()).isEqualTo(2);
 		assertThrows(OHServiceException.class, () -> movWardBrowserManager.deleteLastMovementWard(secondMovementWard));
 	}
 	
