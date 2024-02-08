@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -28,6 +28,7 @@ import static org.assertj.core.data.Offset.offset;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.isf.OHCoreTestCase;
 import org.isf.medicals.model.Medical;
@@ -38,7 +39,6 @@ import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
 import org.isf.medicalstock.test.TestLot;
-import org.isf.medicalstock.test.TestMovement;
 import org.isf.medicalstockward.manager.MovWardBrowserManager;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MedicalWardId;
@@ -64,6 +64,7 @@ import org.isf.supplier.service.SupplierIoOperationRepository;
 import org.isf.supplier.test.TestSupplier;
 import org.isf.utils.exception.OHDataValidationException;
 import org.isf.utils.exception.OHException;
+import org.isf.utils.exception.OHServiceException;
 import org.isf.utils.time.TimeTools;
 import org.isf.ward.model.Ward;
 import org.isf.ward.service.WardIoOperationRepository;
@@ -121,7 +122,6 @@ public class Tests extends OHCoreTestCase {
 		testMedicalWard = new TestMedicalWard();
 		testPatient = new TestPatient();
 		testMovementWard = new TestMovementWard();
-		TestMovement testMovement = new TestMovement();
 		testMovementType = new TestMovementType();
 		testSupplier = new TestSupplier();
 		testLot = new TestLot();
@@ -1341,6 +1341,47 @@ public class Tests extends OHCoreTestCase {
 		assertThat(medicalWard.hashCode()).isEqualTo(hashCode);
 	}
 
+	@Test
+	public void testDeleteLastMovementWard() throws Exception {
+		int code = setupTestMovementWardWithMedicalWard(false);
+		Optional<MovementWard> lastMovementWard = movementWardIoOperationRepository.findById(code);
+		assertThat(lastMovementWard).isPresent();
+		movWardBrowserManager.deleteLastMovementWard(lastMovementWard.get());
+		Optional<MovementWard> movement = movementWardIoOperationRepository.findById(code);
+		assertThat(movement).isNotPresent();
+	}
+
+	@Test
+	public void testDeleteLastMovementWardDenied() throws Exception {
+		int code = setupTestMovementWardWithMedicalWard(false);
+		MovementWard firstmovementWard = movementWardIoOperationRepository.findById(code).orElse(null);
+		assertThat(firstmovementWard).isNotNull();
+		Medical medical = firstmovementWard.getMedical();
+		Ward ward = firstmovementWard.getWard();
+		Lot lot = firstmovementWard.getLot();
+		Patient patient = firstmovementWard.getPatient();
+		int age = patient.getAge();
+		LocalDateTime date = LocalDateTime.now();
+		MovementWard secondMovementWard = new MovementWard(date, ward, lot, "newDescription", medical, 10.0, "newUnits");
+		Ward wardTo = new Ward("C", "description", "telephone", "fax", "email", 5, 2, 1, false, false, true, true);
+		wardIoOperationRepository.saveAndFlush(wardTo);
+		secondMovementWard.setWardTo(wardTo);
+		MovementWard thirdMovementWard = new MovementWard(date.plusMinutes(1), wardTo, lot, "newDescription", medical, -10.0, "newUnits");
+		thirdMovementWard.setWardFrom(ward);
+		MovementWard fourthMovementWard = new MovementWard(wardTo, date.plusMinutes(2), true, patient, age, 50.5f, "description", medical, 5.0, "units", null,
+						null, lot);
+		movementWardIoOperationRepository.saveAndFlush(secondMovementWard);
+		movementWardIoOperationRepository.saveAndFlush(thirdMovementWard);
+		movementWardIoOperationRepository.saveAndFlush(fourthMovementWard);
+		assertThatThrownBy(() -> movWardBrowserManager.deleteLastMovementWard(firstmovementWard))
+						.isInstanceOf(OHServiceException.class);
+		List<MovementWard> latestMovementWardList = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(wardTo.getCode(),
+						medical.getCode(), lot.getCode(), secondMovementWard.getDate());
+		assertThat(latestMovementWardList.size()).isEqualTo(2);
+		assertThatThrownBy(() -> movWardBrowserManager.deleteLastMovementWard(secondMovementWard))
+						.isInstanceOf(OHServiceException.class);
+	}
+
 	private Patient setupTestPatient(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(usingSet);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -1378,6 +1419,25 @@ public class Tests extends OHCoreTestCase {
 		patientIoOperationRepository.saveAndFlush(patient);
 		lotIoOperationRepository.saveAndFlush(lot);
 		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, ward, ward, lot, usingSet);
+		movementWardIoOperationRepository.saveAndFlush(movementWard);
+		return movementWard.getCode();
+	}
+
+	private int setupTestMovementWardWithMedicalWard(boolean usingSet) throws OHException {
+		MedicalType medicalType = testMedicalType.setup(false);
+		Medical medical = testMedical.setup(medicalType, false);
+		Ward ward = testWard.setup(false);
+		Patient patient = testPatient.setup(false);
+		Lot lot = testLot.setup(medical, false);
+		MedicalWard medicalWard = testMedicalWard.setup(medical, ward, lot, false);
+		medicalWard.setOut_quantity(0);
+		medicalTypeIoOperationRepository.saveAndFlush(medicalType);
+		medicalsIoOperationRepository.saveAndFlush(medical);
+		wardIoOperationRepository.saveAndFlush(ward);
+		patientIoOperationRepository.saveAndFlush(patient);
+		lotIoOperationRepository.saveAndFlush(lot);
+		medicalStockWardIoOperationRepository.saveAndFlush(medicalWard);
+		MovementWard movementWard = testMovementWard.setup(ward, patient, medical, null, null, lot, usingSet);
 		movementWardIoOperationRepository.saveAndFlush(movementWard);
 		return movementWard.getCode();
 	}
