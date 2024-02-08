@@ -268,7 +268,6 @@ public class MovWardBrowserManager {
 	 * @param date
 	 * @return
 	 */
-
 	public List<MovementWard> getMovementWardByWardMedicalAndLotAfterOrSameDate(String wardCode, int medicalCode, String lotCode, LocalDateTime date) {
 		return ioOperations.getMovementWardByWardMedicalAndLotAfterOrSameDate(wardCode, medicalCode, lotCode, date);
 	}
