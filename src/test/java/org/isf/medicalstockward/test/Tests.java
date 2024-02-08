@@ -24,7 +24,6 @@ package org.isf.medicalstockward.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.data.Offset.offset;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,7 +39,6 @@ import org.isf.medicalstock.model.Movement;
 import org.isf.medicalstock.service.LotIoOperationRepository;
 import org.isf.medicalstock.service.MovementIoOperationRepository;
 import org.isf.medicalstock.test.TestLot;
-import org.isf.medicalstock.test.TestMovement;
 import org.isf.medicalstockward.manager.MovWardBrowserManager;
 import org.isf.medicalstockward.model.MedicalWard;
 import org.isf.medicalstockward.model.MedicalWardId;
@@ -124,7 +122,6 @@ public class Tests extends OHCoreTestCase {
 		testMedicalWard = new TestMedicalWard();
 		testPatient = new TestPatient();
 		testMovementWard = new TestMovementWard();
-		TestMovement testMovement = new TestMovement();
 		testMovementType = new TestMovementType();
 		testSupplier = new TestSupplier();
 		testLot = new TestLot();
@@ -1347,13 +1344,13 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testDeleteLastMovementWard() throws Exception {
 		int code = setupTestMovementWardWithMedicalWard(false);
-		Optional<MovementWard> lastMovementWard = movementWardIoOperationRepository.findById(code); 
+		Optional<MovementWard> lastMovementWard = movementWardIoOperationRepository.findById(code);
 		assertThat(lastMovementWard).isPresent();
 		movWardBrowserManager.deleteLastMovementWard(lastMovementWard.get());
-		Optional<MovementWard> movement = movementWardIoOperationRepository.findById(code); 
+		Optional<MovementWard> movement = movementWardIoOperationRepository.findById(code);
 		assertThat(movement).isNotPresent();
 	}
-	
+
 	@Test
 	public void testDeleteLastMovementWardDenied() throws Exception {
 		int code = setupTestMovementWardWithMedicalWard(false);
@@ -1371,16 +1368,20 @@ public class Tests extends OHCoreTestCase {
 		secondMovementWard.setWardTo(wardTo);
 		MovementWard thirdMovementWard = new MovementWard(date.plusMinutes(1), wardTo, lot, "newDescription", medical, -10.0, "newUnits");
 		thirdMovementWard.setWardFrom(ward);
-		MovementWard fourthMovementWard = new MovementWard(wardTo, date.plusMinutes(2), true, patient, age, 50.5f, "description", medical, 5.0, "units", null, null, lot);
+		MovementWard fourthMovementWard = new MovementWard(wardTo, date.plusMinutes(2), true, patient, age, 50.5f, "description", medical, 5.0, "units", null,
+						null, lot);
 		movementWardIoOperationRepository.saveAndFlush(secondMovementWard);
 		movementWardIoOperationRepository.saveAndFlush(thirdMovementWard);
 		movementWardIoOperationRepository.saveAndFlush(fourthMovementWard);
-		assertThrows(OHServiceException.class, () -> movWardBrowserManager.deleteLastMovementWard(firstmovementWard));
-		List<MovementWard> latestMovementWardList = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(wardTo.getCode(), medical.getCode(), lot.getCode(), secondMovementWard.getDate());
+		assertThatThrownBy(() -> movWardBrowserManager.deleteLastMovementWard(firstmovementWard))
+						.isInstanceOf(OHServiceException.class);
+		List<MovementWard> latestMovementWardList = movementWardIoOperationRepository.findByWardMedicalAndLotAfterOrSameDate(wardTo.getCode(),
+						medical.getCode(), lot.getCode(), secondMovementWard.getDate());
 		assertThat(latestMovementWardList.size()).isEqualTo(2);
-		assertThrows(OHServiceException.class, () -> movWardBrowserManager.deleteLastMovementWard(secondMovementWard));
+		assertThatThrownBy(() -> movWardBrowserManager.deleteLastMovementWard(secondMovementWard))
+						.isInstanceOf(OHServiceException.class);
 	}
-	
+
 	private Patient setupTestPatient(boolean usingSet) throws OHException {
 		Patient patient = testPatient.setup(usingSet);
 		patientIoOperationRepository.saveAndFlush(patient);
@@ -1421,7 +1422,7 @@ public class Tests extends OHCoreTestCase {
 		movementWardIoOperationRepository.saveAndFlush(movementWard);
 		return movementWard.getCode();
 	}
-	
+
 	private int setupTestMovementWardWithMedicalWard(boolean usingSet) throws OHException {
 		MedicalType medicalType = testMedicalType.setup(false);
 		Medical medical = testMedical.setup(medicalType, false);
