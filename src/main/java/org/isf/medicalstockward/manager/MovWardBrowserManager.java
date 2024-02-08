@@ -300,7 +300,7 @@ public class MovWardBrowserManager {
 	}
 
 	/* * 
-	 * Delete the MovementWard for the specified criteria.
+	 * Delete a {@link MovementWard}
 	 *
 	 * @param movWardToDelete - the movement ward
 	 * @throws OHServiceException if an error occurs retrieving the medical.
