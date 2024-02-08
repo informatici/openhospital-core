@@ -318,10 +318,7 @@ public class MovWardBrowserManager {
 			List<MovementWard> latestMovementWardList = ioOperations.getMovementWardByWardMedicalAndLotAfterOrSameDate(wardTo.getCode(), medical.getCode(), lot.getCode(), movWardToDelete.getDate());
 			if (latestMovementWardList.size() == 1) {
 				MovementWard lastMovInWardTo = ioOperations.getLastMovementWard(wardTo);
-				Ward lastwardTo = lastMovInWardTo.getWardTo();
-				Medical medicalLastWardTo = lastMovInWardTo.getMedical();
-				Lot lotLastWardTo = lastMovInWardTo.getLot();
-				MedicalWard medWard = this.getMedicalWardByWardMedicalAndLot(lastwardTo.getCode(), medicalLastWardTo.getCode(), lotLastWardTo.getCode());
+				MedicalWard medWard = getMedicalWardByWardMedicalAndLot(wardTo.getCode(), medical.getCode(), lot.getCode());
 				float movQty = Double.valueOf(lastMovInWardTo.getQuantity()).floatValue();
 				float quantity = medWard.getIn_quantity() + movQty;
 				medWard.setIn_quantity(quantity);
