@@ -309,6 +309,9 @@ public class MovWardBrowserManager {
 			throw new OHDataValidationException(
 							new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.onlythelastmovementcanbedeleted.msg")));
 		}
+		Ward wardTo = movWardToDelete.getWardTo();
+		Medical medical = movWardToDelete.getMedical();
+		Lot lot = movWardToDelete.getLot();
 		if (movWardToDelete.getWardTo() != null) {
 			List<MovementWard> latestMovementWardList = ioOperations.getMovementWardByWardMedicalLotAfterOrSameDate(movWardToDelete.getWardTo().getCode(), movWardToDelete.getMedical().getCode(), movWardToDelete.getLot().getCode(), movWardToDelete.getDate());
 			if (lastMovWardWithMed.size() == 1) {
