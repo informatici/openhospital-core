@@ -1357,15 +1357,26 @@ public class Tests extends OHCoreTestCase {
 	@Test
 	public void testDeleteLastMovementWardDenied() throws Exception {
 		int code = setupTestMovementWardWithMedicalWard(false);
-		MovementWard movementWard = movementWardIoOperationRepository.findById(code).orElse(null);
-		assertThat(movementWard).isNotNull();
-		Medical medical = movementWard.getMedical();
-		Ward ward = movementWard.getWard();
-		Lot lot = movementWard.getLot();
+		MovementWard firstmovementWard = movementWardIoOperationRepository.findById(code).orElse(null);
+		assertThat(firstmovementWard).isNotNull();
+		Medical medical = firstmovementWard.getMedical();
+		Ward ward = firstmovementWard.getWard();
+		Lot lot = firstmovementWard.getLot();
+		Patient patient = firstmovementWard.getPatient();
+		int age = patient.getAge();
 		LocalDateTime date = LocalDateTime.now();
-		MovementWard lastMovementWard = new MovementWard(date, ward, lot, "newDescription", medical, 10.0, "newUnits");
-		movementWardIoOperationRepository.saveAndFlush(lastMovementWard);
-		assertThrows(OHServiceException.class, () -> movWardBrowserManager.deleteLastMovementWard(movementWard));
+		MovementWard secondMovementWard = new MovementWard(date, ward, lot, "newDescription", medical, 10.0, "newUnits");
+		Ward wardTo = new Ward("C", "description", "telephone", "fax", "email", 5, 2, 1, false, false, true, true);
+		wardIoOperationRepository.saveAndFlush(wardTo);
+		secondMovementWard.setWardTo(wardTo);
+		MovementWard thirdMovementWard = new MovementWard(date, wardTo, lot, "newDescription", medical, -10.0, "newUnits");
+		thirdMovementWard.setWardFrom(ward);
+		MovementWard fourthMovementWard = new MovementWard(wardTo, date.plusMinutes(1), true, patient, age, 50.5f, "description", medical, 5.0, "units", null, null, lot);
+		movementWardIoOperationRepository.saveAndFlush(secondMovementWard);
+		movementWardIoOperationRepository.saveAndFlush(thirdMovementWard);
+		movementWardIoOperationRepository.saveAndFlush(fourthMovementWard);
+		assertThrows(OHServiceException.class, () -> movWardBrowserManager.deleteLastMovementWard(firstmovementWard));
+		assertThrows(OHServiceException.class, () -> movWardBrowserManager.deleteLastMovementWard(secondMovementWard));
 	}
 	
 	private Patient setupTestPatient(boolean usingSet) throws OHException {

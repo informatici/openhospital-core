@@ -314,7 +314,7 @@ public class MovWardBrowserManager {
 		Ward wardTo = movWardToDelete.getWardTo();
 		Medical medical = movWardToDelete.getMedical();
 		Lot lot = movWardToDelete.getLot();
-		if (movWardToDelete.getWardTo() != null) {
+		if (wardTo != null) {
 			List<MovementWard> latestMovementWardList = ioOperations.getMovementWardByWardMedicalAndLotAfterOrSameDate(wardTo.getCode(), medical.getCode(), lot.getCode(), movWardToDelete.getDate());
 			if (latestMovementWardList.size() == 1) {
 				MovementWard lastMovInWardTo = ioOperations.getLastMovementWard(wardTo);
