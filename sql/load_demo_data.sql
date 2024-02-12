@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.6.16-MariaDB, for linux-systemd (x86_64)
 --
--- Host: localhost    Database: ohdemo
+-- Host: localhost    Database: oh
 -- ------------------------------------------------------
 -- Server version	10.6.16-MariaDB
 
