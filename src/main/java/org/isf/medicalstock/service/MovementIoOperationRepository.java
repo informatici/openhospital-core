@@ -61,7 +61,11 @@ public interface MovementIoOperationRepository extends JpaRepository<Movement, I
 
 	@Query(value = "select mov.refNo from Movement mov where mov.refNo like :refNo")
 	List<String> findAllWhereRefNo(@Param("refNo") String refNo);
+	
+	@Query(value = "SELECT * FROM OH_MEDICALDSRSTOCKMOV ORDER BY MMV_ID DESC limit 1", nativeQuery = true)
+	Movement findLastMovement();
 
 	@Query("select count(m) from Movement m where active=1")
 	long countAllActiveMovements();
+
 }
