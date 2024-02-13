@@ -162,7 +162,9 @@ public class TelemetryDaemon extends ConfigurationProperties implements Runnable
 	public void stop() {
 		LOGGER.info("Stopping Telemetry Daemon...");
 		setRunning(false);
-		telemetryThread.interrupt();
+		if (telemetryThread != null) {
+			telemetryThread.interrupt();
+		}
 	}
 
 	/**
