@@ -43,11 +43,9 @@ public class LogUtil {
 		Logger rootLogger = Logger.getRootLogger();
 		Appender appender = rootLogger.getAppender("RollingFile");
 
-		if (appender instanceof RollingFileAppender) {
-		if (appender instanceof RollingFileAppender rollingFileAppender) {	
+		if (appender instanceof RollingFileAppender rollingFileAppender) {
 			String relativePath = rollingFileAppender.getFile();
-			String absolutePath = new File(relativePath).getAbsolutePath();
-			return absolutePath;
+			return new File(relativePath).getAbsolutePath();
 		} else {
 			return "No appender found with the name 'RollingFile' in the root logger.";
 		}
