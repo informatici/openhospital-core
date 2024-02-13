@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -93,6 +93,16 @@ public class MedicalStockIoOperations {
 	 */
 	public List<Integer> getMedicalsFromLot(String lotCode) throws OHServiceException {
 		return movRepository.findAllByLot(lotCode);
+	}
+	
+	/**
+	 * Retrieves all movements referencing the specified lot.
+	 * @param lot - the lot.
+	 * @return the movements referencing the specified lot.
+	 * @throws OHServiceException if an error occurs retrieving the referencing movement.
+	 */
+	public List<Movement> getMovementByLot(Lot lot) throws OHServiceException {
+		return movRepository.findByLot(lot);
 	}
 
 	/**
@@ -541,6 +551,26 @@ public class MedicalStockIoOperations {
 	 */
 	public List<Movement> getMovementsByReference(String refNo) throws OHServiceException {
 		return movRepository.findAllByRefNo(refNo);
+	}
+	
+	/**
+	 * Retrieves the last movement.
+	 * 
+	 * @return the retrieved movement.
+	 * @throws OHServiceException 
+	 */
+	public Movement getLastMovement() throws OHServiceException {
+		return movRepository.findLastMovement();
+	}
+	
+	/**
+	 * Deletes the movement.
+	 * 
+	 * @param movement - the movement to delete
+	 * @throws OHServiceException 
+	 */
+	public void deleteMovement(Movement movement) throws OHServiceException {
+		movRepository.delete(movement);
 	}
 
 	/**
