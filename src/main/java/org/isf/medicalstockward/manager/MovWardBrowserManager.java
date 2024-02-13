@@ -1,6 +1,6 @@
 /*
  * Open Hospital (www.open-hospital.org)
- * Copyright © 2006-2023 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
+ * Copyright © 2006-2024 Informatici Senza Frontiere (info@informaticisenzafrontiere.org)
  *
  * Open Hospital is a free and open source software for healthcare data management.
  *
@@ -44,6 +44,7 @@ import org.isf.utils.exception.model.OHExceptionMessage;
 import org.isf.ward.model.Ward;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class MovWardBrowserManager {
@@ -185,7 +186,7 @@ public class MovWardBrowserManager {
 	public int getCurrentQuantityInWard(Ward ward, Medical medical) throws OHServiceException {
 		return ioOperations.getCurrentQuantityInWard(ward, medical);
 	}
-	
+
 	/**
 	 * Gets the current quantity for the specified {@link Ward} and {@link Lot}.
 	 *
@@ -225,6 +226,52 @@ public class MovWardBrowserManager {
 		return drugPrint;
 	}
 
+	/**
+	 * Get the MedicalWard for the specified criteria.
+	 *
+	 * @param wardCode - the ward id  
+	 * @param medical - the mecical id 
+	 * @param lotCode - the lot id
+	 * @return the retrieved medical.
+	 * @throws OHServiceException if an error occurs retrieving the medical.
+	 */
+	public MedicalWard getMedicalWardByWardMedicalAndLot(String wardCode, int medical, String lotCode) throws OHServiceException {
+		return ioOperations.getMedicalWardByWardAndMedical(wardCode, medical, lotCode);
+	}
+
+	/**
+	 * Deletes the specified {@link MedicalWard}.
+	 *
+	 * @param medWard - the MedicalWard to delete. 
+	 * @throws OHServiceException.
+	 */
+	public void deleteMedicalWard(MedicalWard medWard) throws OHServiceException {
+		ioOperations.deleteMedicalWard(medWard);
+	}
+
+	/**
+	 * Updates the specified {@link MedicalWard}.
+	 *
+	 * @param medWard - the MedicalWard to update. 
+	 * @throws OHServiceException.
+	 */
+	public MedicalWard updateMedicalWard(MedicalWard medWard) throws OHServiceException {
+		return ioOperations.updateMedicalWard(medWard);
+	}
+
+	/**
+	 * Get {@code MovementWard}s for the specified criteria
+	 * 
+	 * @param wardCode
+	 * @param medicalCode
+	 * @param lotCode
+	 * @param date
+	 * @return
+	 */
+	public List<MovementWard> getMovementWardByWardMedicalAndLotAfterOrSameDate(String wardCode, int medicalCode, String lotCode, LocalDateTime date) {
+		return ioOperations.getMovementWardByWardMedicalAndLotAfterOrSameDate(wardCode, medicalCode, lotCode, date);
+	}
+
 	class ComparatorMovementWardForPrint implements Comparator<MovementWardForPrint> {
 
 		@Override
@@ -249,5 +296,68 @@ public class MovWardBrowserManager {
 				return o1.getMedical().compareTo(o2.getMedical());
 			}
 		}
+	}
+
+	/**
+	 * Delete a {@link MovementWard}
+	 *
+	 * @param movWardToDelete - the movement ward
+	 * @throws OHServiceException if an error occurs retrieving the medical.
+	 */
+	@Transactional(rollbackFor = OHServiceException.class)
+	public void deleteLastMovementWard(MovementWard movWardToDelete) throws OHServiceException {
+		MovementWard lastMovementWard = ioOperations.getLastMovementWard(movWardToDelete.getWard());
+		if (lastMovementWard.getCode() != movWardToDelete.getCode()) {
+			throw new OHDataValidationException(
+							new OHExceptionMessage(MessageBundle.getMessage("angal.medicalstock.onlythelastmovementcanbedeleted.msg")));
+		}
+		Ward wardTo = movWardToDelete.getWardTo();
+		Medical medical = movWardToDelete.getMedical();
+		Lot lot = movWardToDelete.getLot();
+		if (wardTo != null) {
+			List<MovementWard> latestMovementWardList = ioOperations.getMovementWardByWardMedicalAndLotAfterOrSameDate(wardTo.getCode(), medical.getCode(),
+							lot.getCode(), movWardToDelete.getDate());
+			if (latestMovementWardList.size() == 1) {
+				/*
+				 * If the medical has not been used in the destination ward, the movements for that Ward, Medical and Lot after the movWardToDelete Date will be
+				 * exactly 1, i.e. the incoming movement from the origin ward
+				 *
+				 */
+				MovementWard lastMovInWardTo = ioOperations.getLastMovementWard(wardTo);
+				MedicalWard medWard = getMedicalWardByWardMedicalAndLot(wardTo.getCode(), medical.getCode(), lot.getCode());
+				float movQty = Double.valueOf(lastMovInWardTo.getQuantity()).floatValue();
+				float quantity = medWard.getIn_quantity() + movQty;
+				medWard.setIn_quantity(quantity);
+				if (medWard.getIn_quantity() == 0 && medWard.getOut_quantity() == 0) {
+					ioOperations.deleteMedicalWard(medWard);
+				} else {
+					ioOperations.updateMedicalWard(medWard);
+				}
+				ioOperations.deleteMovementWard(lastMovInWardTo);
+			} else {
+				throw new OHDataValidationException(
+								new OHExceptionMessage(MessageBundle.formatMessage(
+												"angal.medicalstock.notpossibletodeletethismovementthemedicalhasbeenusedafterbeenreceivedinward.fmt.msg",
+												medical.getDescription(), wardTo.getDescription())));
+			}
+		}
+		MedicalWard medWard = this.getMedicalWardByWardMedicalAndLot(movWardToDelete.getWard().getCode(), movWardToDelete.getMedical().getCode(),
+						movWardToDelete.getLot().getCode());
+		float movQty = Double.valueOf(movWardToDelete.getQuantity()).floatValue();
+		float quantity = medWard.getOut_quantity() - movQty;
+		medWard.setOut_quantity(quantity);
+		ioOperations.updateMedicalWard(medWard);
+		ioOperations.deleteMovementWard(movWardToDelete);
+	}
+
+	/**
+	 * Get the last {@link MovementWard} for the specified criteria.
+	 *
+	 * @param ward
+	 * @return the retrieved movement.
+	 * @throws OHServiceException if an error occurs retrieving the medical.
+	 */
+	public MovementWard getLastMovementWard(Ward ward) throws OHServiceException {
+		return ioOperations.getLastMovementWard(ward);
 	}
 }
