@@ -15,7 +15,6 @@
 	<version>1.14.0-SNAPSHOT</version>
 
 	<properties>
-		<oh.version>1.14.0-SNAPSHOT</oh.version>
 		<java.version>17</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.framework.version>5.3.31</spring.framework.version>
